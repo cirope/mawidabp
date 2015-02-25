@@ -7,7 +7,7 @@ class BenefitsController < ApplicationController
 
   # GET /benefits
   def index
-    @benefits = Benefit.list.order(kind: :desc).page(params[:page])
+    @benefits = Benefit.list.order(kind: :desc, created_at: :asc).page(params[:page])
   end
 
   # GET /benefits/1

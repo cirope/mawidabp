@@ -59,7 +59,7 @@ module WeaknessesHelper
   private
 
     def weakness_achievements_for benefits
-      benefits.map do |benefit|
+      benefits.order(created_at: :asc).map do |benefit|
         achievement = @weakness.achievements.detect { |a| a.benefit_id == benefit.id }
 
         achievement || @weakness.achievements.new(benefit_id: benefit.id)
