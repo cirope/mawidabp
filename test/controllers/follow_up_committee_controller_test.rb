@@ -9,10 +9,9 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
   test 'public and private actions' do
     public_actions = []
     private_actions = [:index, :synthesis_report, :weaknesses_by_risk_report,
-      :fixed_weaknesses_report, :rescheduled_being_implemented_weaknesses_report,
-      :control_objective_stats, :process_control_stats, :create_synthesis_report,
+      :fixed_weaknesses_report, :control_objective_stats,
+      :process_control_stats, :create_synthesis_report,
       :create_weaknesses_by_risk_report, :create_fixed_weaknesses_report,
-      :create_rescheduled_being_implemented_weaknesses_report,
       :create_control_objective_stats, :create_process_control_stats]
 
     private_actions.each do |action|
@@ -132,8 +131,8 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
     assert_nothing_raised do
       get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
@@ -147,13 +146,15 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     login
 
     get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date,
-      :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'three'
-    },
-    :controller_name => 'follow_up',
-    :final => false
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'three',
+        :finding_status => Finding::STATUS[:being_implemented],
+        :finding_title => 'a'
+      },
+      :controller_name => 'follow_up',
+      :final => false
 
     assert_response :success
     assert_template 'follow_up_committee/weaknesses_by_risk_report'
@@ -187,8 +188,8 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
     assert_nothing_raised do
       get :fixed_weaknesses_report, :fixed_weaknesses_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
@@ -202,10 +203,12 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     login
 
     get :fixed_weaknesses_report, :fixed_weaknesses_report => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date,
-      :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'three'
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'three',
+        :finding_status => Finding::STATUS[:being_implemented],
+        :finding_title => 'a'
       },
       :controller_name => 'follow_up',
       :final => false
@@ -233,60 +236,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       'fixed_weaknesses_report', 0)
   end
 
-  test 'rescheduled being implemented weaknesses report' do
-    login
-
-    get :rescheduled_being_implemented_weaknesses_report
-    assert_response :success
-    assert_template 'follow_up_committee/rescheduled_being_implemented_weaknesses_report'
-
-    assert_nothing_raised do
-      get :rescheduled_being_implemented_weaknesses_report,
-        :rescheduled_being_implemented_weaknesses_report => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
-          }
-    end
-
-    assert_response :success
-    assert_template 'follow_up_committee/rescheduled_being_implemented_weaknesses_report'
-  end
-
-  test 'filtered rescheduled weaknesses report' do
-    login
-
-    get :rescheduled_being_implemented_weaknesses_report,
-      :rescheduled_being_implemented_weaknesses_report => {
-        :from_date => 2.years.ago.to_date,
-        :to_date => 2.years.from_now.to_date,
-        :rescheduling => 2,
-        :detailed => 1
-      }
-
-    assert_response :success
-    assert_template 'follow_up_committee/rescheduled_being_implemented_weaknesses_report'
-  end
-
-  test 'create rescheduled weaknesses report' do
-    login
-
-    get :create_rescheduled_being_implemented_weaknesses_report,
-    :rescheduled_being_implemented_weaknesses_report => {
-      :from_date => 2.years.ago.to_date,
-      :to_date => 2.years.from_now.to_date,
-      :rescheduling => 1,
-      :detailed => 1
-      },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
-
-    assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('follow_up_committee_report.rescheduled_being_implemented_weaknesses_report.pdf_name',
-        :from_date => 2.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 2.years.from_now.to_date.to_formatted_s(:db)),
-      'rescheduled_being_implemented_weaknesses_report', 0)
-  end
-
   test 'control objective stats report' do
     login
 
@@ -296,8 +245,8 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
     assert_nothing_raised do
       get :control_objective_stats, :control_objective_stats => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
@@ -311,11 +260,13 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     login
 
     get :control_objective_stats, :control_objective_stats => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date,
-      :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'one',
-      :control_objective => 'a'
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'one',
+        :control_objective => 'a',
+        :finding_status => Finding::STATUS[:being_implemented],
+        :finding_title => 'a'
       },
       :controller_name => 'follow_up',
       :final => false
@@ -352,8 +303,8 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
     assert_nothing_raised do
       get :process_control_stats, :process_control_stats => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
@@ -367,10 +318,12 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     login
 
     get :process_control_stats, :process_control_stats => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date,
-      :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'one'
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'one',
+        :finding_status => Finding::STATUS[:being_implemented],
+        :finding_title => 'a'
       },
       :controller_name => 'follow_up',
       :final => false

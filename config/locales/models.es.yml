@@ -6,6 +6,9 @@ es: &common
 
   activerecord:
     models:
+      achievement:
+        one: 'Beneficio estimado'
+        other: 'Beneficios estimados'
       answer:
         one: 'Respuesta'
         other: 'Respuestas'
@@ -18,6 +21,9 @@ es: &common
       answer_written:
         one: 'Respuesta escrita'
         other: 'Respuestas escritas'
+      benefit:
+        one: 'Beneficio'
+        other: 'Beneficios'
       best_practice:
         one: 'Buena práctica'
         other: 'Buenas prácticas'
@@ -71,12 +77,19 @@ es: &common
         other: 'Clases de recursos'
 
     attributes:
+      achievement:
+        benefit: 'Beneficio estimado'
+        amount: 'Monto'
+        comment: 'Comentario'
       answer:
         answer: 'Respuesta'
         comments: 'Comentarios respuesta'
         question: 'Pregunta'
       answers:
         answer_option: 'Opción'
+      benefit:
+        name: 'Nombre'
+        kind: 'Tipo'
       best_practice:
         name: 'Nombre'
         description: 'Descripción'

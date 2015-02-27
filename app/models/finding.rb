@@ -2,6 +2,7 @@ class Finding < ActiveRecord::Base
   include ActsAsTree
   include Auditable
   include Comparable
+  include Findings::Achievements
   include Findings::Answers
   include Findings::Confirmation
   include Findings::CreateValidation
@@ -40,6 +41,9 @@ class Finding < ActiveRecord::Base
     where(
       "#{quoted_table_name}.#{qcn('review_code')} LIKE ?", "#{prefix}%"
     ).order(review_code: :asc)
+  }
+  scope :with_title, ->(title) {
+    where "#{quoted_table_name}.#{qcn('title')} LIKE ?", "%#{title}%"
   }
   scope :all_for_reallocation_with_review, ->(review) {
     includes(:control_objective_item => :review).references(:reviews).where(
@@ -326,7 +330,7 @@ class Finding < ActiveRecord::Base
       pdf.move_down PDF_FONT_SIZE * 3
 
       self.work_papers.each do |wp|
-        pdf.text wp.inspect, :justification => :center,
+        pdf.text wp.inspect, :align => :center,
           :font_size => PDF_FONT_SIZE
       end
     else

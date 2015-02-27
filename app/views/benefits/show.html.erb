@@ -1,0 +1,11 @@
+<div class="page-header">
+  <h2><%= Benefit.model_name.human %>: <%= @benefit.name %></h2>
+</div>
+
+<p>
+  <strong><%= Benefit.human_attribute_name 'kind' %></strong>:
+  <%= t "benefits.kinds.#{@benefit.kind}" %>
+</p>
+
+<%= link_to_edit [:edit, @benefit] %> |
+<%= link_to_index benefits_path %>

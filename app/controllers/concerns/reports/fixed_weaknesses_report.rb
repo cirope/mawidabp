@@ -13,34 +13,42 @@ module Reports::FixedWeaknessesReport
     @column_order = ['business_unit_report_name', 'score', 'fixed_weaknesses']
     @filters = []
     @reviews = {}
-    conclusion_reviews = final ? ConclusionFinalReview.list_all_by_final_solution_date(
-      @from_date, @to_date) :
-      ConclusionFinalReview.list_all_by_solution_date(
-      @from_date, @to_date)
+    weaknesses_conditions = {}
+    conclusion_reviews = final ?
+      ConclusionFinalReview.list_all_by_final_solution_date(@from_date, @to_date) :
+      ConclusionFinalReview.list_all_by_solution_date(@from_date, @to_date)
 
     if params[:fixed_weaknesses_report]
       risk = params[:fixed_weaknesses_report][:risk]
 
-      unless params[:fixed_weaknesses_report][:business_unit_type].blank?
-        @selected_business_unit = BusinessUnitType.find(
-          params[:fixed_weaknesses_report][:business_unit_type])
-        conclusion_reviews = conclusion_reviews.by_business_unit_type(
-          @selected_business_unit.id)
-        @filters << "<b>#{BusinessUnitType.model_name.human}</b> = " +
-          "\"#{@selected_business_unit.name.strip}\""
+      if params[:fixed_weaknesses_report][:business_unit_type].present?
+        @selected_business_unit = BusinessUnitType.find(params[:fixed_weaknesses_report][:business_unit_type])
+        conclusion_reviews = conclusion_reviews.by_business_unit_type(@selected_business_unit.id)
+        @filters << "<b>#{BusinessUnitType.model_name.human}</b> = \"#{@selected_business_unit.name.strip}\""
       end
 
-      unless params[:fixed_weaknesses_report][:business_unit].blank?
+      if params[:fixed_weaknesses_report][:business_unit].present?
         business_units = params[:fixed_weaknesses_report][:business_unit].split(
           SPLIT_AND_TERMS_REGEXP
         ).uniq.map(&:strip)
 
-        unless business_units.empty?
-          conclusion_reviews = conclusion_reviews.by_business_unit_names(
-            *business_units)
-          @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
-            "\"#{params[:fixed_weaknesses_report][:business_unit].strip}\""
+        if business_units.present?
+          conclusion_reviews = conclusion_reviews.by_business_unit_names *business_units
+          @filters << "<b>#{BusinessUnit.model_name.human}</b> = \"#{params[:fixed_weaknesses_report][:business_unit].strip}\""
         end
+      end
+
+      if params[:fixed_weaknesses_report][:finding_status].present?
+        weaknesses_conditions[:state] = params[:fixed_weaknesses_report][:finding_status]
+        state_text = t "finding.status_#{Finding::STATUS.invert[weaknesses_conditions[:state].to_i]}"
+
+        @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text}\""
+      end
+
+      if params[:fixed_weaknesses_report][:finding_title].present?
+        weaknesses_conditions[:title] = params[:fixed_weaknesses_report][:finding_title]
+
+        @filters << "<b>#{Finding.human_attribute_name('title')}</b> = \"#{weaknesses_conditions[:title]}\""
       end
     end
 
@@ -51,19 +59,19 @@ module Reports::FixedWeaknessesReport
         columns = {
           'business_unit_report_name' => [but.business_unit_label, 15],
           'score' => [Review.human_attribute_name(:score), 15],
-          'fixed_weaknesses' =>
-            [t("#{@controller}_committee_report.fixed_weaknesses"), 70]
+          'fixed_weaknesses' => [t("#{@controller}_committee_report.fixed_weaknesses"), 70]
         }
         column_data = []
         name = but.name
         conclusion_review_per_unit_type =
-          conclusion_reviews.for_period(period).with_business_unit_type(but.id)
+          conclusion_reviews.for_period(period).by_business_unit_type(but.id)
 
         conclusion_review_per_unit_type.each do |c_r|
           fixed_weaknesses = []
           weaknesses = final ? c_r.review.final_weaknesses : c_r.review.weaknesses
-          weaknesses_by_risk = weaknesses.with_solution_date_between(
-            @from_date, @to_date).by_risk(risk)
+          weaknesses = weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
+          weaknesses = weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
+          weaknesses_by_risk = weaknesses.with_solution_date_between(@from_date, @to_date).by_risk(risk)
 
           weaknesses_by_risk.each do |w|
             audited = w.users.select(&:audited?).map do |u|

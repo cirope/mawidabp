@@ -256,6 +256,52 @@
     ) unless frozen %>
   </div>
 
+  <% if tangible_benefit_exists? %>
+    <br />
+    <h4>
+      <%= Achievement.model_name.human count: 0 %> / <%= t 'benefits.kind.tangible' %>
+    </h4>
+    <div class="row">
+      <div class="col-md-6">
+        <h5><strong><%= Achievement.human_attribute_name 'benefit' %></strong></h5>
+      </div>
+      <div class="col-md-6">
+        <h5>
+          <strong><%= Achievement.human_attribute_name 'amount' %></strong>
+        </h5>
+      </div>
+    </div>
+
+    <div id="tangible_achievements">
+      <%= f.simple_fields_for :achievements, weakness_tangible_achievements do |a_f| %>
+        <%= render 'achievements/achievement', f: a_f, frozen: frozen %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if intangible_benefit_exists? %>
+    <br />
+    <h4>
+      <%= Achievement.model_name.human count: 0 %> / <%= t 'benefits.kind.intangible' %>
+    </h4>
+    <div class="row">
+      <div class="col-md-6">
+        <h5><strong><%= Achievement.human_attribute_name 'benefit' %></strong></h5>
+      </div>
+      <div class="col-md-6">
+        <h5>
+          <strong><%= Achievement.human_attribute_name 'comment' %></strong>
+        </h5>
+      </div>
+    </div>
+
+    <div id="intangible_achievements">
+      <%= f.simple_fields_for :achievements, weakness_intangible_achievements do |a_f| %>
+        <%= render 'achievements/achievement', f: a_f, frozen: frozen %>
+      <% end %>
+    </div>
+  <% end %>
+
   <hr />
 
   <div class="form-actions">

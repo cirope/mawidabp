@@ -588,7 +588,7 @@ class Review < ActiveRecord::Base
 
     pdf.move_down PDF_FONT_SIZE
 
-    pdf.text self.survey, :font_size => PDF_FONT_SIZE, :justification => :full
+    pdf.text self.survey, :font_size => PDF_FONT_SIZE, :align => :justify
 
     pdf.move_down PDF_FONT_SIZE * 2
 
@@ -689,11 +689,11 @@ class Review < ActiveRecord::Base
       pdf.text "<b>#{I18n.t('review.notes')}</b>:",
         :font_size => (PDF_FONT_SIZE * 0.75).round, :inline_format => true
       pdf.text "<i>* #{I18n.t('review.review_qualification_explanation')}</i>",
-        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :align => :justify,
         :inline_format => true
       pdf.text(
         "<i>** #{I18n.t('review.process_control_qualification_explanation')}</i>",
-        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :align => :justify,
         :inline_format => true)
     end
     weaknesses = self.final_weaknesses.all_for_report
@@ -943,11 +943,11 @@ class Review < ActiveRecord::Base
       pdf.text "<b>#{I18n.t('review.notes')}</b>:",
         :font_size => (PDF_FONT_SIZE * 0.75).round, :inline_format => true
       pdf.text "<i>* #{I18n.t('review.review_qualification_explanation')}</i>",
-        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :align => :justify,
         :inline_format => true
       pdf.text(
         "<i>** #{I18n.t('review.process_control_qualification_explanation')}</i>",
-        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :align => :justify,
         :inline_format => true)
     end
 

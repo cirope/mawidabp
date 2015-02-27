@@ -4,8 +4,7 @@
     <div class="row">
       <div class="col-md-10">
         <% forms.sort { |f1, f2| f1.second.to_s <=> f2.second.to_s }.each do |f_name, display| %>
-          <%= render partial: "shared/filters/#{f_name}",
-            locals: { f: f, display: display, action: action } %>
+          <%= render "shared/filters/#{f_name}", f: f, display: display, action: action %>
         <% end %>
       </div>
       <div class="filter col-md-2">

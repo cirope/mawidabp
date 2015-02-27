@@ -266,11 +266,11 @@ module Prawn
       end
 
       def page_usable_width
-        @_page_usable_width ||= self.bounds.width
+        bounds.width
       end
 
       def percent_width(width)
-        (self.page_usable_width * (width / 100.0)).round
+        (page_usable_width * (width / 100.0)).round
       end
 
       def custom_save_as(filename, sub_directory, id = 0)

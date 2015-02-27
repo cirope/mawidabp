@@ -12,6 +12,10 @@ es: &common
         notice: '%{resource_name} eliminado'
         alert:  '%{resource_name} no pudo ser eliminado'
 
+    benefits:
+      destroy:
+        alert: 'El beneficio no pudo ser eliminado, ya fue utilizado en observaciones'
+
     best_practices:
       create:
         notice: 'Buenas prácticas agregadas correctamente'

@@ -160,4 +160,16 @@ module FindingsHelper
   def finding_complete_or_incomplete_label
     t "finding.#{params[:completed]}"
   end
+
+  def finding_status_options
+    Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).map do |k, v|
+      [t("finding.status_#{k}"), v.to_s]
+    end
+  end
+
+  def finding_fixed_status_options
+    Finding::STATUS.slice(:implemented_audited, :assumed_risk).map do |k, v|
+      [t("finding.status_#{k}"), v.to_s]
+    end
+  end
 end

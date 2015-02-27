@@ -154,8 +154,8 @@ class FollowUpManagementControllerTest < ActionController::TestCase
 
     assert_nothing_raised do
       get :control_objective_stats, :control_objective_stats => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
@@ -169,11 +169,13 @@ class FollowUpManagementControllerTest < ActionController::TestCase
     login
 
     get :control_objective_stats, :control_objective_stats => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date,
-      :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'one',
-      :control_objective => 'a'
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'one',
+        :control_objective => 'a',
+        :finding_status => Finding::STATUS[:being_implemented],
+        :finding_title => 'a'
       },
       :controller_name => 'follow_up',
       :final => false
@@ -210,8 +212,8 @@ class FollowUpManagementControllerTest < ActionController::TestCase
 
     assert_nothing_raised do
       get :process_control_stats, :process_control_stats => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
@@ -225,10 +227,12 @@ class FollowUpManagementControllerTest < ActionController::TestCase
     login
 
     get :process_control_stats, :process_control_stats => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date,
-      :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'one'
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'one',
+        :finding_status => Finding::STATUS[:being_implemented],
+        :finding_title => 'a'
       },
       :controller_name => 'follow_up',
       :final => false

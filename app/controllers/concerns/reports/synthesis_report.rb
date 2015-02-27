@@ -272,7 +272,7 @@ module Reports::SynthesisReport
       t("#{@controller}_committee_report.synthesis_report.references", :risk_types => @risk_levels.to_sentence)
 
     pdf.text references, :font_size => (PDF_FONT_SIZE * 0.75).round,
-      :justification => :full
+      :align => :justify
   end
 
   def add_repeated_text(pdf, repeated_count)

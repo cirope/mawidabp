@@ -20,7 +20,7 @@ module Reports::WeaknessesByRisk
     @repeated_counts = {}
     @being_implemented_resumes = {}
     @highest_being_implemented_resumes = {}
-    highest_risk = RISK_TYPES.sort {|r1, r2| r1[1] <=> r2[1]}.last
+    highest_risk = RISK_TYPES.sort { |r1, r2| r1[1] <=> r2[1] }.last
 
     @periods.each do |period|
       total_weaknesses_count = {}
