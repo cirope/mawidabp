@@ -9,5 +9,6 @@ uploads/
 # No ignorar
 !doc/README_FOR_APP
 
-# Ignore application configuration
+# Ignore application and database configuration
 config/application.yml
+config/database.yml

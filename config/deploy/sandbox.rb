@@ -1,6 +1,7 @@
 set :stage, :sandbox
 set :rails_env, 'sandbox'
 set :ssh_options, port: 2222
+set :branch, 'oracle'
 
 role :web, %w{deployer@localhost}
 role :app, %w{deployer@localhost}

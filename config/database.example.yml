@@ -13,9 +13,9 @@ test:
   database: db/test.sqlite3
 
 production:
-  database: mawidabp_production
+  database: xe
   <<: *common
 
 sandbox:
-  database: mawidabp_production
+  database: xe
   <<: *common
