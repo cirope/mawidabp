@@ -15,7 +15,7 @@ preload_app true
 # "current" directory that Capistrano sets up.
 working_directory app_path
 
-listen '/var/tmp/unicorn.sock', backlog: 1024
+listen '/run/unicorn/unicorn.sock', backlog: 1024
 
 # nuke workers after 180 seconds
 timeout 360
