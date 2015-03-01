@@ -122,7 +122,7 @@ module Reports::CostAnalysis
       add_period_title(pdf, period)
       @column_headers, @column_widths = [], []
       unless @total_cost_data[period].blank?
-        set_columns(pdf)
+        set_cost_analysis_columns(pdf)
         add_total_cost_table(pdf, period)
       else
         pdf.text(
@@ -156,7 +156,7 @@ module Reports::CostAnalysis
     end
   end
 
-  def set_columns(pdf)
+  def set_cost_analysis_columns(pdf)
     @column_order.each do |column|
       @column_headers <<
         "<b>#{t("conclusion_audit_report.cost_analysis.general_column_#{column.first}")}</b>"

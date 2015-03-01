@@ -1,6 +1,19 @@
 <br />
 <div class="row">
   <div class="col-md-6">
+    <%= link_to t('follow_up_committee_report.synthesis_report_title'),
+      { :action => :synthesis_report, :controller_name => 'follow_up' },
+      class: 'btn btn-default btn-lg btn-block' %>
+  </div>
+  <div class="col-md-6">
+    <%= link_to t('follow_up_committee_report.qa_indicators_title'),
+      { :action => :qa_indicators }, class: 'btn btn-default btn-lg btn-block' %>
+  </div>
+</div>
+
+<br />
+<div class="row">
+  <div class="col-md-6">
     <%= link_to t('follow_up_audit.weaknesses_by_state_title'),
       { :action => :weaknesses_by_state, :controller_name => 'follow_up', :final => false },
       class: 'btn btn-default btn-lg btn-block' %>

@@ -44,21 +44,13 @@ es: &common
     conclusion:
       draft_reviews: 'Informe borrador'
       final_reviews: 'Informe definitivo'
-      reports_title: 'Reportes'
-      reports:
-        audit: 'Reportes de auditoría'
-        committee: 'Reportes de comité'
-        management: 'Reportes de la gerencia'
+      reports: 'Reportes'
     follow_up_title: 'Seguimiento'
     follow_up:
       pending_findings: 'Hallazgos pendientes'
       complete_findings: 'Hallazgos solucionados'
       notifications: 'Notificaciones'
-      reports_title: 'Reportes'
-      reports:
-        committee: 'Reportes de comité'
-        audit: 'Reportes de auditoría'
-        management: 'Reportes de la gerencia'
+      reports: 'Reportes'
     help_title: 'Ayuda'
 
 public_es:

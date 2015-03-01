@@ -6,7 +6,7 @@ module Reports::QAIndicators
     calculate_ancient_weaknesses_data
 
     @periods.each do |period|
-      init_period_vars(period)
+      init_qa_period_vars(period)
       calculate_indexes(period)
       add_indicators(period)
     end
@@ -26,7 +26,7 @@ module Reports::QAIndicators
     @indicators = {}
   end
 
-  def init_period_vars(period)
+  def init_qa_period_vars(period)
     @indexes = {}
     @cfrs = @conclusion_reviews.for_period(period).list_all_by_date(@from_date, @to_date)
     @row_order = [

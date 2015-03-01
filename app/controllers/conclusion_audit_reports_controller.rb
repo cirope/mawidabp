@@ -1,4 +1,5 @@
 class ConclusionAuditReportsController < ApplicationController
+  include Reports::SynthesisReport
   include Reports::WeaknessesByState
   include Reports::WeaknessesByRisk
   include Reports::WeaknessesByAuditType
@@ -26,22 +27,24 @@ class ConclusionAuditReportsController < ApplicationController
   private
     def load_privileges #:nodoc:
       @action_privileges.update(
-        :weaknesses_by_state => :read,
-        :create_weaknesses_by_state => :read,
-        :weaknesses_by_risk => :read,
-        :create_weaknesses_by_risk => :read,
-        :weaknesses_by_audit_type => :read,
-        :create_weaknesses_by_audit_type => :read,
-        :cost_analysis => :read,
-        :create_cost_analysis => :read,
-        :high_risk_weaknesses_report => :read,
-        :create_high_risk_weaknesses_report => :read,
-        :fixed_weaknesses_report => :read,
-        :create_fixed_weaknesses_report => :read,
-        :control_objective_stats => :read,
-        :create_control_objective_stats => :read,
-        :process_control_stats => :read,
-        :create_process_control_stats => :read
+        synthesis_report: :read,
+        create_synthesis_report: :read,
+        weaknesses_by_state: :read,
+        create_weaknesses_by_state: :read,
+        weaknesses_by_risk: :read,
+        create_weaknesses_by_risk: :read,
+        weaknesses_by_audit_type: :read,
+        create_weaknesses_by_audit_type: :read,
+        cost_analysis: :read,
+        create_cost_analysis: :read,
+        high_risk_weaknesses_report: :read,
+        create_high_risk_weaknesses_report: :read,
+        fixed_weaknesses_report: :read,
+        create_fixed_weaknesses_report: :read,
+        control_objective_stats: :read,
+        create_control_objective_stats: :read,
+        process_control_stats: :read,
+        create_process_control_stats: :read
       )
     end
 end

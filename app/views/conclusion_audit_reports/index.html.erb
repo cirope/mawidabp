@@ -1,13 +1,13 @@
 <br />
 <div class="row">
   <div class="col-md-6">
-    <%= link_to t('conclusion_committee_report.weaknesses_by_state_title'),
-      { :action => :weaknesses_by_state, :controller_name => 'conclusion', :final => true },
-      class: 'btn btn-default btn-lg btn-block' %>
+    <%= link_to t('conclusion_committee_report.synthesis_report_title'),
+      { action: :synthesis_report, controller_name: 'conclusion' },
+    class: 'btn btn-default btn-lg btn-block' %>
   </div>
   <div class="col-md-6">
-    <%= link_to t('conclusion_committee_report.weaknesses_by_risk_title'),
-      { :action => :weaknesses_by_risk, :controller_name => 'conclusion', :final => true },
+    <%= link_to t('conclusion_audit_report.fixed_weaknesses_report_title'),
+      { action: :fixed_weaknesses_report, controller_name: 'conclusion', final: true },
       class: 'btn btn-default btn-lg btn-block' %>
   </div>
 </div>
@@ -16,12 +16,12 @@
 <div class="row">
   <div class="col-md-6">
     <%= link_to t('conclusion_committee_report.weaknesses_by_audit_type_title'),
-      { :action => :weaknesses_by_audit_type, :controller_name => 'conclusion', :final => true },
+      { action: :weaknesses_by_audit_type, controller_name: 'conclusion', final: true },
       class: 'btn btn-default btn-lg btn-block' %>
   </div>
   <div class="col-md-6">
     <%= link_to t('conclusion_committee_report.control_objective_stats_title'),
-      { :action => :control_objective_stats, :controller_name => 'conclusion', :final => true },
+      { action: :control_objective_stats, controller_name: 'conclusion', final: true },
       class: 'btn btn-default btn-lg btn-block' %>
   </div>
 </div>
@@ -30,12 +30,12 @@
 <div class="row">
   <div class="col-md-6">
     <%= link_to t('conclusion_committee_report.process_control_stats_title'),
-      { :action => :process_control_stats, :controller_name => 'conclusion', :final => true },
+      { action: :process_control_stats, controller_name: 'conclusion', final: true },
       class: 'btn btn-default btn-lg btn-block' %>
   </div>
   <div class="col-md-6">
     <%= link_to t('conclusion_audit_report.cost_analysis_title'),
-      { :action => :cost_analysis }, class: 'btn btn-default btn-lg btn-block' %>
+      { action: :cost_analysis }, class: 'btn btn-default btn-lg btn-block' %>
   </div>
 </div>
 
@@ -48,7 +48,7 @@
   </div>
   <div class="col-md-6">
     <%= link_to t('conclusion_audit_report.weaknesses_by_risk_report_title'),
-      { :action => :weaknesses_by_risk_report, :controller_name => 'conclusion', :final => true },
+      { action: :weaknesses_by_risk_report, controller_name: 'conclusion', final: true },
       class: 'btn btn-default btn-lg btn-block' %>
   </div>
 </div>
@@ -56,15 +56,24 @@
 <br />
 <div class="row">
   <div class="col-md-6">
-    <%= link_to t('conclusion_audit_report.fixed_weaknesses_report_title'),
-      { :action => :fixed_weaknesses_report, :controller_name => 'conclusion', :final => true },
+    <%= link_to t('conclusion_committee_report.weaknesses_by_state_title'),
+      { action: :weaknesses_by_state, controller_name: 'conclusion', final: true },
       class: 'btn btn-default btn-lg btn-block' %>
   </div>
-  <% if @quality_management %>
   <div class="col-md-6">
-    <%= link_to t('conclusion_audit_report.nonconformities_report_title'),
-      { :action => :nonconformities_report, :controller_name => 'conclusion', :final => true },
+    <%= link_to t('conclusion_committee_report.weaknesses_by_risk_title'),
+      { action: :weaknesses_by_risk, controller_name: 'conclusion', final: true },
       class: 'btn btn-default btn-lg btn-block' %>
   </div>
 </div>
+
+<% if @quality_management %>
+  <br />
+  <div class="row">
+    <div class="col-md-6">
+      <%= link_to t('conclusion_audit_report.nonconformities_report_title'),
+        { action: :nonconformities_report, controller_name: 'conclusion', final: true },
+        class: 'btn btn-default btn-lg btn-block' %>
+    </div>
+  </div>
 <% end %>

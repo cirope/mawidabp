@@ -8,10 +8,12 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   # y no accesibles las privadas
   test 'public and private actions' do
     public_actions = []
-    private_actions = [:index, :weaknesses_by_state, :weaknesses_by_risk,
+    private_actions = [
+      :index, :synthesis_report, :weaknesses_by_state, :weaknesses_by_risk,
       :weaknesses_by_audit_type, :weaknesses_by_audit_type, :cost_analysis,
       :weaknesses_by_risk_report, :fixed_weaknesses_report,
-      :nonconformities_report]
+      :nonconformities_report
+    ]
 
     private_actions.each do |action|
       get action
@@ -31,6 +33,58 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:title)
     assert_template 'conclusion_audit_reports/index'
+  end
+
+  test 'synthesis report' do
+    login
+
+    get :synthesis_report, :controller_name => 'conclusion'
+    assert_response :success
+    assert_template 'conclusion_audit_reports/synthesis_report'
+
+    assert_nothing_raised do
+      get :synthesis_report, :synthesis_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion'
+    end
+
+    assert_response :success
+    assert_template 'conclusion_audit_reports/synthesis_report'
+  end
+
+  test 'filtered synthesis report' do
+    login
+    get :synthesis_report, :synthesis_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :business_unit_type => business_unit_types(:cycle).id,
+      :business_unit => 'one'
+      },
+      :controller_name => 'conclusion'
+
+    assert_response :success
+    assert_not_nil assigns(:filters)
+    assert_equal 2, assigns(:filters).count
+    assert_template 'conclusion_audit_reports/synthesis_report'
+  end
+
+  test 'create synthesis report' do
+    login
+
+    post :create_synthesis_report, :synthesis_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion'
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.synthesis_report.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'synthesis_report', 0)
   end
 
   test 'weaknesses by state report' do
@@ -488,7 +542,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
