@@ -1,0 +1,14 @@
+common: &common
+  adapter: sqlite3
+
+development:
+  database: db/development.sqlite3
+  <<: *common
+
+test:
+  database: db/test.sqlite3
+  <<: *common
+
+production:
+  database: db/production.sqlite3
+  <<: *common
