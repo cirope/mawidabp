@@ -1,4 +1,6 @@
 class FollowUpAuditController < ApplicationController
+  include Reports::SynthesisReport
+  include Reports::QAIndicators
   include Reports::WeaknessesByState
   include Reports::WeaknessesByRisk
   include Reports::WeaknessesByAuditType
@@ -26,6 +28,10 @@ class FollowUpAuditController < ApplicationController
   private
     def load_privileges #:nodoc:
       @action_privileges.update(
+        :qa_indicators => :read,
+        :create_qa_indicators => :read,
+        :synthesis_report => :read,
+        :create_synthesis_report => :read,
         :weaknesses_by_state => :read,
         :create_weaknesses_by_state => :read,
         :weaknesses_by_risk => :read,

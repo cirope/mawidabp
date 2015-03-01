@@ -218,27 +218,8 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :reports,
         order: 3,
-        url: { controller: '/conclusion_audit_reports' },
-        children: [
-          MenuItem.new(
-            :audit,
-            order: 1,
-            controllers: :conclusion_audit_reports,
-            url: { controller: '/conclusion_audit_reports' }
-          ),
-          MenuItem.new(
-            :committee,
-            order: 2,
-            controllers: :conclusion_committee_reports,
-            url: { controller: '/conclusion_committee_reports' }
-          ),
-          MenuItem.new(
-            :management,
-            order: 3,
-            controllers: :conclusion_management_reports,
-            url: { controller: '/conclusion_management_reports' }
-          )
-        ]
+        controllers: :conclusion_reports,
+        url: { controller: '/conclusion_reports' }
       )
     ]
   ),
@@ -270,27 +251,8 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :reports,
         order: 4,
-        url: { controller: '/follow_up_audit' },
-        children: [
-          MenuItem.new(
-            :audit,
-            order: 1,
-            controllers: :follow_up_audit,
-            url: { controller: '/follow_up_audit' }
-          ),
-          MenuItem.new(
-            :committee,
-            order: 2,
-            controllers: :follow_up_committee,
-            url: { controller: '/follow_up_committee' }
-          ),
-          MenuItem.new(
-            :management,
-            order: 3,
-            controllers: :follow_up_management,
-            url: { controller: '/follow_up_management' }
-          )
-        ]
+        controllers: :follow_up_audit,
+        url: { controller: '/follow_up_audit' }
       )
     ]
   )
@@ -541,27 +503,8 @@ APP_AUDITOR_QM_MENU_ITEMS = [
       MenuItem.new(
         :reports,
         order: 3,
-        url: { controller: '/conclusion_audit_reports' },
-        children: [
-          MenuItem.new(
-            :audit,
-            order: 1,
-            controllers: :conclusion_audit_reports,
-            url: { controller: '/conclusion_audit_reports' }
-          ),
-          MenuItem.new(
-            :committee,
-            order: 2,
-            controllers: :conclusion_committee_reports,
-            url: { controller: '/conclusion_committee_reports' }
-          ),
-          MenuItem.new(
-            :management,
-            order: 3,
-            controllers: :conclusion_management_reports,
-            url: { controller: '/conclusion_management_reports' }
-          )
-        ]
+        controllers: :conclusion_reports,
+        url: { controller: '/conclusion_reports' }
       )
     ]
   ),
@@ -593,27 +536,8 @@ APP_AUDITOR_QM_MENU_ITEMS = [
       MenuItem.new(
         :reports,
         order: 4,
-        url: { controller: '/follow_up_audit' },
-        children: [
-          MenuItem.new(
-            :audit,
-            order: 1,
-            controllers: :follow_up_audit,
-            url: { controller: '/follow_up_audit' }
-          ),
-          MenuItem.new(
-            :committee,
-            order: 2,
-            controllers: :follow_up_committee,
-            url: { controller: '/follow_up_committee' }
-          ),
-          MenuItem.new(
-            :management,
-            order: 3,
-            controllers: :follow_up_management,
-            url: { controller: '/follow_up_management' }
-          )
-        ]
+        controllers: :follow_up_audit,
+        url: { controller: '/follow_up_audit' }
       )
     ]
   )

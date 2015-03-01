@@ -126,8 +126,8 @@ es:
     last_verified_date: "La última comprobación se realizó el %{date}"
     has_final_review: "Ya se emitió un informe definitivo y por lo tanto no es posible seguir trabajando con el informe borrador"
 
-  conclusion_audit_report:
-    index_title: "Reportes de auditoría"
+  conclusion_report:
+    index_title: "Reportes de conclusión"
     cost_analysis_title: "Análisis de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
@@ -1537,14 +1537,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
   actioncontroller:
     best_practices: "Buenas prácticas"
     business_unit_types: "Unidades de negocio"
-    follow_up_audit: "Reportes de auditoría (Seguimiento)"
-    follow_up_committee: "Reportes de comité (Seguimiento)"
-    follow_up_management: "Reportes de la gerencia (Seguimiento)"
-    conclusion_audit_reports: "Reportes de auditoría (Conclusión)"
-    conclusion_committee_reports: "Reportes de comité (Conclusion)"
+    follow_up_audit: "Reportes de seguimiento"
+    conclusion_reports: "Reportes de conclusión"
     conclusion_draft_reviews: "Informe borrador"
     conclusion_final_reviews: "Informe definitivo"
-    conclusion_management_reports: "Reportes de la gerencia (Conclusión)"
     control_objective_items: "Objetivos de control"
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"

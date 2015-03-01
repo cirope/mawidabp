@@ -1,17 +1,19 @@
 require 'test_helper'
 
 # Pruebas para el controlador de reportes de auditoría
-class ConclusionAuditReportsControllerTest < ActionController::TestCase
+class ConclusionReportsControllerTest < ActionController::TestCase
   fixtures :findings
 
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
     public_actions = []
-    private_actions = [:index, :weaknesses_by_state, :weaknesses_by_risk,
+    private_actions = [
+      :index, :synthesis_report, :weaknesses_by_state, :weaknesses_by_risk,
       :weaknesses_by_audit_type, :weaknesses_by_audit_type, :cost_analysis,
       :weaknesses_by_risk_report, :fixed_weaknesses_report,
-      :nonconformities_report]
+      :nonconformities_report
+    ]
 
     private_actions.each do |action|
       get action
@@ -30,7 +32,59 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:title)
-    assert_template 'conclusion_audit_reports/index'
+    assert_template 'conclusion_reports/index'
+  end
+
+  test 'synthesis report' do
+    login
+
+    get :synthesis_report, :controller_name => 'conclusion'
+    assert_response :success
+    assert_template 'conclusion_reports/synthesis_report'
+
+    assert_nothing_raised do
+      get :synthesis_report, :synthesis_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion'
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/synthesis_report'
+  end
+
+  test 'filtered synthesis report' do
+    login
+    get :synthesis_report, :synthesis_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :business_unit_type => business_unit_types(:cycle).id,
+      :business_unit => 'one'
+      },
+      :controller_name => 'conclusion'
+
+    assert_response :success
+    assert_not_nil assigns(:filters)
+    assert_equal 2, assigns(:filters).count
+    assert_template 'conclusion_reports/synthesis_report'
+  end
+
+  test 'create synthesis report' do
+    login
+
+    post :create_synthesis_report, :synthesis_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion'
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.synthesis_report.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'synthesis_report', 0)
   end
 
   test 'weaknesses by state report' do
@@ -38,7 +92,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :weaknesses_by_state
     assert_response :success
-    assert_template 'conclusion_audit_reports/weaknesses_by_state'
+    assert_template 'conclusion_reports/weaknesses_by_state'
 
     assert_nothing_raised do
       get :weaknesses_by_state, :weaknesses_by_state => {
@@ -50,7 +104,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/weaknesses_by_state'
+    assert_template 'conclusion_reports/weaknesses_by_state'
   end
 
   test 'create weaknesses by state report' do
@@ -76,7 +130,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :weaknesses_by_risk
     assert_response :success
-    assert_template 'conclusion_audit_reports/weaknesses_by_risk'
+    assert_template 'conclusion_reports/weaknesses_by_risk'
 
     assert_nothing_raised do
       get :weaknesses_by_risk, :weaknesses_by_risk => {
@@ -88,7 +142,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/weaknesses_by_risk'
+    assert_template 'conclusion_reports/weaknesses_by_risk'
   end
 
   test 'create weaknesses by risk' do
@@ -114,7 +168,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :weaknesses_by_audit_type
     assert_response :success
-    assert_template 'conclusion_audit_reports/weaknesses_by_audit_type'
+    assert_template 'conclusion_reports/weaknesses_by_audit_type'
 
     assert_nothing_raised do
       get :weaknesses_by_audit_type, :weaknesses_by_audit_type => {
@@ -126,7 +180,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/weaknesses_by_audit_type'
+    assert_template 'conclusion_reports/weaknesses_by_audit_type'
   end
 
   test 'create weaknesses by audit type report' do
@@ -150,12 +204,12 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
   test 'cost analysis report' do
     login
-    expected_title = I18n.t 'conclusion_audit_report.cost_analysis_title'
+    expected_title = I18n.t 'conclusion_report.cost_analysis_title'
 
     get :cost_analysis
     assert_response :success
     assert_equal assigns(:title), expected_title
-    assert_template 'conclusion_audit_reports/cost_analysis'
+    assert_template 'conclusion_reports/cost_analysis'
 
     assert_nothing_raised do
       get :cost_analysis, :cost_analysis => {
@@ -165,7 +219,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/cost_analysis'
+    assert_template 'conclusion_reports/cost_analysis'
   end
 
   test 'create cost analysis report' do
@@ -179,7 +233,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :report_title => 'New title'
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('conclusion_audit_report.cost_analysis.pdf_name',
+      I18n.t('conclusion_report.cost_analysis.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'cost_analysis', 0)
@@ -187,12 +241,12 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
   test 'detailed cost analysis report' do
     login
-    expected_title = I18n.t 'conclusion_audit_report.detailed_cost_analysis_title'
+    expected_title = I18n.t 'conclusion_report.detailed_cost_analysis_title'
 
     get :cost_analysis, :include_details => 1
     assert_response :success
     assert_equal assigns(:title), expected_title
-    assert_template 'conclusion_audit_reports/cost_analysis'
+    assert_template 'conclusion_reports/cost_analysis'
 
     assert_nothing_raised do
       get :cost_analysis, :include_details => 1, :cost_analysis => {
@@ -202,7 +256,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/cost_analysis'
+    assert_template 'conclusion_reports/cost_analysis'
   end
 
   test 'create detailed cost analysis report' do
@@ -216,7 +270,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :report_title => 'New title'
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('conclusion_audit_report.cost_analysis.pdf_name',
+      I18n.t('conclusion_report.cost_analysis.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'cost_analysis', 0)
@@ -227,7 +281,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :weaknesses_by_risk_report
     assert_response :success
-    assert_template 'conclusion_audit_reports/weaknesses_by_risk_report'
+    assert_template 'conclusion_reports/weaknesses_by_risk_report'
 
     assert_nothing_raised do
       get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
@@ -239,7 +293,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/weaknesses_by_risk_report'
+    assert_template 'conclusion_reports/weaknesses_by_risk_report'
   end
 
   test 'filtered weaknesses by risk report' do
@@ -255,7 +309,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :final => true
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/weaknesses_by_risk_report'
+    assert_template 'conclusion_reports/weaknesses_by_risk_report'
   end
 
   test 'create weaknesses by risk report' do
@@ -282,7 +336,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :fixed_weaknesses_report
     assert_response :success
-    assert_template 'conclusion_audit_reports/fixed_weaknesses_report'
+    assert_template 'conclusion_reports/fixed_weaknesses_report'
 
     assert_nothing_raised do
       get :fixed_weaknesses_report, :fixed_weaknesses_report => {
@@ -294,7 +348,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/fixed_weaknesses_report'
+    assert_template 'conclusion_reports/fixed_weaknesses_report'
   end
 
   test 'filtered fixed weaknesses report' do
@@ -310,7 +364,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :final => true
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/fixed_weaknesses_report'
+    assert_template 'conclusion_reports/fixed_weaknesses_report'
   end
 
   test 'create fixed weaknesses report' do
@@ -337,7 +391,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :control_objective_stats
     assert_response :success
-    assert_template 'conclusion_audit_reports/control_objective_stats'
+    assert_template 'conclusion_reports/control_objective_stats'
 
     assert_nothing_raised do
       get :control_objective_stats, :control_objective_stats => {
@@ -349,7 +403,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/control_objective_stats'
+    assert_template 'conclusion_reports/control_objective_stats'
   end
 
   test 'filtered control objective stats report' do
@@ -366,7 +420,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :final => true
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/control_objective_stats'
+    assert_template 'conclusion_reports/control_objective_stats'
   end
 
   test 'create control objective stats report' do
@@ -393,7 +447,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :process_control_stats
     assert_response :success
-    assert_template 'conclusion_audit_reports/process_control_stats'
+    assert_template 'conclusion_reports/process_control_stats'
 
     assert_nothing_raised do
       get :process_control_stats, :process_control_stats => {
@@ -405,7 +459,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/process_control_stats'
+    assert_template 'conclusion_reports/process_control_stats'
   end
 
   test 'filtered process control stats report' do
@@ -421,7 +475,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :final => true
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/process_control_stats'
+    assert_template 'conclusion_reports/process_control_stats'
   end
 
   test 'create process control stats report' do
@@ -448,7 +502,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :nonconformities_report
     assert_response :success
-    assert_template 'conclusion_audit_reports/nonconformities_report'
+    assert_template 'conclusion_reports/nonconformities_report'
 
     assert_nothing_raised do
       get :nonconformities_report, :nonconformities_report => {
@@ -460,7 +514,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/nonconformities_report'
+    assert_template 'conclusion_reports/nonconformities_report'
   end
 
   test 'filtered nonconformities report' do
@@ -476,7 +530,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :final => true
 
     assert_response :success
-    assert_template 'conclusion_audit_reports/nonconformities_report'
+    assert_template 'conclusion_reports/nonconformities_report'
   end
 
   test 'create nonconformities report' do
@@ -488,7 +542,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_redirected_to Prawn::Document.relative_path(

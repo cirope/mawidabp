@@ -5,7 +5,7 @@ module Reports::FollowUpCostAnalysis
     init_follow_up_cost_vars
 
     @periods.each do |period|
-      init_period_vars(period)
+      init_cost_analysis_period_vars(period)
 
       unless @weaknesses_by_review.blank?
         calculate_weaknesses_costs(period)
@@ -29,7 +29,7 @@ module Reports::FollowUpCostAnalysis
     @oportunities_data = {}
   end
 
-  def init_period_vars(period)
+  def init_cost_analysis_period_vars(period)
     @weaknesses_data[period] ||= []
     @oportunities_data[period] ||= []
     @total_weaknesses_audit_cost, @total_weaknesses_audited_cost = 0, 0

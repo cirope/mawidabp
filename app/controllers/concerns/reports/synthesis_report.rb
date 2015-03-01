@@ -15,7 +15,7 @@ module Reports::SynthesisReport
 
     @periods.each do |period|
       @business_unit_types.each do |but|
-        set_columns(but)
+        set_synthesis_columns(but)
         init_business_unit_type_vars
 
         @conclusion_reviews.for_period(period).each do |c_r|
@@ -70,7 +70,7 @@ module Reports::SynthesisReport
     end
   end
 
-  def set_columns(but)
+  def set_synthesis_columns(but)
     @columns = {'business_unit_report_name' => [but.business_unit_label, 15],
       'review' => [Review.model_name.human, 16],
       'score' => ["#{Review.human_attribute_name(:score)} (1)", 15],
@@ -213,9 +213,9 @@ module Reports::SynthesisReport
       add_average_score(period, pdf) if !@selected_business_unit
 
       @audits_by_business_unit[period].each do |data|
-        prepare_columns(pdf, data[:columns])
+        prepare_synthesis_columns(pdf, data[:columns])
         add_pdf_titles(pdf, data[:external], data[:name])
-        prepare_rows(data[:column_data])
+        prepare_synthesis_rows(data[:column_data])
 
         if @column_data.present?
           add_pdf_table(pdf)
@@ -248,7 +248,7 @@ module Reports::SynthesisReport
     end
   end
 
-  def prepare_rows(column_data)
+  def prepare_synthesis_rows(column_data)
     @column_data = []
 
     column_data.each do |row|
@@ -337,7 +337,7 @@ module Reports::SynthesisReport
       :font_size => (PDF_FONT_SIZE * 0.75).round)
   end
 
-  def prepare_columns(pdf, columns)
+  def prepare_synthesis_columns(pdf, columns)
     @column_headers, @column_widths = [], []
 
     @column_order.each do |col_name|
