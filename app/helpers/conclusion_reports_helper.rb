@@ -1,4 +1,4 @@
-module ConclusionAuditReportsHelper
+module ConclusionReportsHelper
   def audit_by_type_reviews_array(conclusion_reviews)
     conclusion_reviews.map do |cr|
       findings_count = cr.review.final_weaknesses.size +

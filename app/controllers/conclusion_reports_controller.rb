@@ -1,4 +1,4 @@
-class ConclusionAuditReportsController < ApplicationController
+class ConclusionReportsController < ApplicationController
   include Reports::SynthesisReport
   include Reports::WeaknessesByState
   include Reports::WeaknessesByRisk
@@ -14,9 +14,9 @@ class ConclusionAuditReportsController < ApplicationController
 
   # Muestra una lista con los reportes disponibles
   #
-  # * GET /conclusion_audit_reports
+  # * GET /conclusion_report
   def index
-    @title = t('conclusion_audit_report.index_title')
+    @title = t('conclusion_report.index_title')
     @quality_management = current_organization.kind.eql? 'quality_management'
 
     respond_to do |format|

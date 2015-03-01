@@ -13,7 +13,7 @@
         <tr>
           <% @column_order.each do |col_name, col_width| %>
             <th>
-              <%= t :"conclusion_audit_report.cost_analysis.general_column_#{col_name}" %>
+              <%= t :"conclusion_report.cost_analysis.general_column_#{col_name}" %>
             </th>
           <% end %>
         </tr>
@@ -30,7 +30,7 @@
     </table>
   <% else %>
     <p style="margin: 1em;">
-      <em><%= t 'conclusion_audit_report.cost_analysis.without_audits_in_the_period' %></em>
+      <em><%= t 'conclusion_report.cost_analysis.without_audits_in_the_period' %></em>
     </p>
   <% end %>
 
@@ -42,7 +42,7 @@
           <tr>
             <% @detailed_column_order.each do |col_name, col_width| %>
               <th>
-                <%= t :"conclusion_audit_report.cost_analysis.detailed_column_#{col_name}" %>
+                <%= t :"conclusion_report.cost_analysis.detailed_column_#{col_name}" %>
               </th>
             <% end %>
           </tr>
@@ -82,8 +82,8 @@
         :name => :report_title,
         :label => t('customize_report_form.title'),
         :value => t(params[:include_details].blank? ?
-            'conclusion_audit_report.cost_analysis.general_title' :
-            'conclusion_audit_report.cost_analysis.detailed_title')
+            'conclusion_report.cost_analysis.general_title' :
+            'conclusion_report.cost_analysis.detailed_title')
       }
     ]
   }

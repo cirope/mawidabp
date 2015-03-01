@@ -218,8 +218,8 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :reports,
         order: 3,
-        controllers: :conclusion_audit_reports,
-        url: { controller: '/conclusion_audit_reports' }
+        controllers: :conclusion_reports,
+        url: { controller: '/conclusion_reports' }
       )
     ]
   ),
@@ -503,8 +503,8 @@ APP_AUDITOR_QM_MENU_ITEMS = [
       MenuItem.new(
         :reports,
         order: 3,
-        controllers: :conclusion_audit_reports,
-        url: { controller: '/conclusion_audit_reports' }
+        controllers: :conclusion_reports,
+        url: { controller: '/conclusion_reports' }
       )
     ]
   ),

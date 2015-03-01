@@ -6,7 +6,7 @@
     class: 'btn btn-default btn-lg btn-block' %>
   </div>
   <div class="col-md-6">
-    <%= link_to t('conclusion_audit_report.fixed_weaknesses_report_title'),
+    <%= link_to t('conclusion_report.fixed_weaknesses_report_title'),
       { action: :fixed_weaknesses_report, controller_name: 'conclusion', final: true },
       class: 'btn btn-default btn-lg btn-block' %>
   </div>
@@ -34,7 +34,7 @@
       class: 'btn btn-default btn-lg btn-block' %>
   </div>
   <div class="col-md-6">
-    <%= link_to t('conclusion_audit_report.cost_analysis_title'),
+    <%= link_to t('conclusion_report.cost_analysis_title'),
       { action: :cost_analysis }, class: 'btn btn-default btn-lg btn-block' %>
   </div>
 </div>
@@ -42,12 +42,12 @@
 <br />
 <div class="row">
   <div class="col-md-6">
-    <%= link_to t('conclusion_audit_report.detailed_cost_analysis_title'),
-      detailed_cost_analysis_conclusion_audit_reports_path,
+    <%= link_to t('conclusion_report.detailed_cost_analysis_title'),
+      detailed_cost_analysis_conclusion_reports_path,
       class: 'btn btn-default btn-lg btn-block' %>
   </div>
   <div class="col-md-6">
-    <%= link_to t('conclusion_audit_report.weaknesses_by_risk_report_title'),
+    <%= link_to t('conclusion_report.weaknesses_by_risk_report_title'),
       { action: :weaknesses_by_risk_report, controller_name: 'conclusion', final: true },
       class: 'btn btn-default btn-lg btn-block' %>
   </div>
@@ -71,7 +71,7 @@
   <br />
   <div class="row">
     <div class="col-md-6">
-      <%= link_to t('conclusion_audit_report.nonconformities_report_title'),
+      <%= link_to t('conclusion_report.nonconformities_report_title'),
         { action: :nonconformities_report, controller_name: 'conclusion', final: true },
         class: 'btn btn-default btn-lg btn-block' %>
     </div>

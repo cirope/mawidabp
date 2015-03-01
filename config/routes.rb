@@ -70,8 +70,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'conclusion_audit_reports', as: 'conclusion_audit_reports',
-    to: 'conclusion_audit_reports#index'
+  get 'conclusion_reports', as: 'conclusion_reports', to: 'conclusion_reports#index'
   get 'follow_up_audit', as: 'follow_up_audit', to: 'follow_up_audit#index'
 
   [
@@ -86,9 +85,9 @@ Rails.application.routes.draw do
     'fixed_weaknesses_report',
     'nonconformities_report'
   ].each do |action|
-    get "conclusion_audit_reports/#{action}",
-      as: "#{action}_conclusion_audit_reports",
-      to: "conclusion_audit_reports##{action}"
+    get "conclusion_reports/#{action}",
+      as: "#{action}_conclusion_reports",
+      to: "conclusion_reports##{action}"
     get "follow_up_audit/#{action}",
       as: "#{action}_follow_up_audit",
       to: "follow_up_audit##{action}"
@@ -106,23 +105,23 @@ Rails.application.routes.draw do
     'create_fixed_weaknesses_report',
     'create_nonconformities_report'
   ].each do |action|
-    post "conclusion_audit_reports/#{action}",
-      as: "#{action}_conclusion_audit_reports",
-      to: "conclusion_audit_reports##{action}"
+    post "conclusion_reports/#{action}",
+      as: "#{action}_conclusion_reports",
+      to: "conclusion_reports##{action}"
     post "follow_up_audit/#{action}",
       as: "#{action}_follow_up_audit",
       to: "follow_up_audit##{action}"
   end
 
-  get "conclusion_audit_reports/cost_analysis",
-    as: 'cost_analysis_conclusion_audit_reports',
-    to: 'conclusion_audit_reports#cost_analysis'
-  post "conclusion_audit_reports/create_cost_analysis",
-    as: 'create_cost_analysis_conclusion_audit_reports',
-    to: 'conclusion_audit_reports#create_cost_analysis'
-  get 'conclusion_audit_reports/cost_analysis/detailed',
-    as: 'detailed_cost_analysis_conclusion_audit_reports',
-    to: 'conclusion_audit_reports#cost_analysis',
+  get "conclusion_reports/cost_analysis",
+    as: 'cost_analysis_conclusion_reports',
+    to: 'conclusion_reports#cost_analysis'
+  post "conclusion_reports/create_cost_analysis",
+    as: 'create_cost_analysis_conclusion_reports',
+    to: 'conclusion_reports#create_cost_analysis'
+  get 'conclusion_reports/cost_analysis/detailed',
+    as: 'detailed_cost_analysis_conclusion_reports',
+    to: 'conclusion_reports#cost_analysis',
     include_details: 1
 
   get 'follow_up_audit/follow_up_cost_analysis',
