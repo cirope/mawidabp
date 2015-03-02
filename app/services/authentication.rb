@@ -71,7 +71,7 @@ class Authentication
     end
 
     def authenticate
-      if @current_organization.ldap_config
+      if @current_organization.try(:ldap_config)
         ldap_auth
       else
         local_auth
