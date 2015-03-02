@@ -29,7 +29,6 @@ GEM
       activemodel (= 4.1.9)
       activesupport (= 4.1.9)
       arel (~> 5.0.0)
-    activerecord-oracle_enhanced-adapter (1.5.5)
     activesupport (4.1.9)
       i18n (~> 0.6, >= 0.6.9)
       json (~> 1.7, >= 1.7.7)
@@ -184,7 +183,6 @@ GEM
     redis (3.2.1)
     redis-namespace (1.5.1)
       redis (~> 3.0, >= 3.0.4)
-    ruby-oci8 (2.1.7)
     rubyzip (1.1.7)
     safe_yaml (0.9.7)
     sass (3.4.13)
@@ -256,7 +254,6 @@ PLATFORMS
 
 DEPENDENCIES
   RedCloth
-  activerecord-oracle_enhanced-adapter
   acts_as_tree
   bloggy
   capistrano
@@ -280,7 +277,6 @@ DEPENDENCIES
   prawn
   prawn-table
   rails (~> 4.1.9)
-  ruby-oci8
   rubyzip
   sass-rails
   search_cop
