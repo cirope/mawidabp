@@ -4,11 +4,11 @@ module LdapConfigs::Validation
   included do
     attr_accessor :test_user, :test_password
 
-    validates :test_user, :test_password, :hostname, :port, :basedn,
+    validates :test_user, :test_password, :hostname, :port, :basedn, :filter,
       :login_mask, :username_attribute, :name_attribute,
       :last_name_attribute, :email_attribute, :roles_attribute,
       presence: true
-    validates :hostname, :basedn, :login_mask, :username_attribute,
+    validates :hostname, :basedn, :filter, :login_mask, :username_attribute,
       :name_attribute, :last_name_attribute, :email_attribute,
       :roles_attribute, length: { maximum: 255 }
     validates :port, numericality: { only_integer: true, greater_than: 0, less_than: 65536 }

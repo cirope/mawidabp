@@ -3,13 +3,13 @@ module LdapConfigs::LDAPImport
 
   def import username, password
     ldap        = ldap username, password
-    filter      = Net::LDAP::Filter.eq 'CN', '*'
+    ldap_filter = Net::LDAP::Filter.construct filter
     users_by_dn = {}
     managers    = {}
     users       = []
 
     User.transaction do
-      ldap.search(base: basedn, filter: filter) do |entry|
+      ldap.search(base: basedn, filter: ldap_filter) do |entry|
         if entry[email_attribute].present?
           users << (result = process_entry entry)
           user   = result[:user]

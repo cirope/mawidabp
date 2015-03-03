@@ -9,6 +9,7 @@ class LdapConfigTest < ActiveSupport::TestCase
     @ldap_config.hostname = ''
     @ldap_config.port = nil
     @ldap_config.basedn = ''
+    @ldap_config.filter = ''
     @ldap_config.login_mask = ''
     @ldap_config.username_attribute = ''
     @ldap_config.name_attribute = ''
@@ -20,6 +21,7 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_error @ldap_config, :hostname, :blank
     assert_error @ldap_config, :port, :blank
     assert_error @ldap_config, :basedn, :blank
+    assert_error @ldap_config, :filter, :blank
     assert_error @ldap_config, :login_mask, :blank
     assert_error @ldap_config, :username_attribute, :blank
     assert_error @ldap_config, :name_attribute, :blank
