@@ -22,8 +22,8 @@ es: &common
         one: 'Respuesta escrita'
         other: 'Respuestas escritas'
       benefit:
-        one: 'Beneficio'
-        other: 'Beneficios'
+        one: 'Beneficio / Perjuicio'
+        other: 'Beneficios / Perjuicios'
       best_practice:
         one: 'Buena práctica'
         other: 'Buenas prácticas'

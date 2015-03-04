@@ -40,29 +40,15 @@ module WeaknessesHelper
     "#{code_prefix} #{next_number}"
   end
 
-  def weakness_tangible_achievements
-    weakness_achievements_for Benefit.list.tangible
+  def benefit_exists?
+    Benefit.list.exists?
   end
 
-  def weakness_intangible_achievements
-    weakness_achievements_for Benefit.list.intangible
-  end
+  def weakness_achievements_for kind
+    Benefit.list.where(kind: kind).order(created_at: :asc).map do |benefit|
+      achievement = @weakness.achievements.detect { |a| a.benefit_id == benefit.id }
 
-  def tangible_benefit_exists?
-    Benefit.list.tangible.exists?
-  end
-
-  def intangible_benefit_exists?
-    Benefit.list.intangible.exists?
-  end
-
-  private
-
-    def weakness_achievements_for benefits
-      benefits.order(created_at: :asc).map do |benefit|
-        achievement = @weakness.achievements.detect { |a| a.benefit_id == benefit.id }
-
-        achievement || @weakness.achievements.new(benefit_id: benefit.id)
-      end
+      achievement || @weakness.achievements.new(benefit_id: benefit.id)
     end
+  end
 end

@@ -27,16 +27,18 @@ es: &common
 
   benefits:
     index:
-      title: 'Listado de beneficios'
+      title: 'Listado de beneficios / perjuicios'
     kinds:
-      tangible: 'Tangible'
-      intangible: 'Intangible'
+      benefit_tangible: 'Beneficio tangible'
+      benefit_intangible: 'Beneficio intangible'
+      damage_tangible: 'Perjuicio tangible'
+      damage_intangible: 'Perjuicio intangible'
     show:
-      title: 'Detalles del beneficio'
+      title: 'Detalles del beneficio / perjuicio'
     new:
-      title: 'Agregar beneficio'
+      title: 'Agregar beneficio / perjuicio'
     edit:
-      title: 'Modificar beneficio'
+      title: 'Modificar beneficio / perjuicio'
 
   best_practices:
     index:

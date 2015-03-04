@@ -23,7 +23,7 @@ class BenefitsControllerTest < ActionController::TestCase
 
     assert_difference 'organization.benefits.count' do
       post :create, benefit: {
-        name: 'New', kind: 'tangible'
+        name: 'New', kind: 'benefit_tangible'
       }
     end
 

@@ -1,8 +1,11 @@
 module BenefitsHelper
   def benefit_kinds
-    ['tangible', 'intangible'].map do |k|
-      [t("benefits.kinds.#{k}"), k]
-    end
+    [
+      'benefit_tangible',
+      'benefit_intangible',
+      'damage_tangible',
+      'damage_intangible'
+    ].map { |k| [t("benefits.kinds.#{k}"), k] }
   end
 
   def allow_benefit_kind_edition?

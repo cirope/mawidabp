@@ -13,7 +13,7 @@ es: &common
         roles: 'Perfiles y Privilegios'
       best_practices: 'Buenas prácticas'
       settings: 'Configuraciones'
-      benefits: 'Beneficios'
+      benefits: 'Beneficios / Perjuicios'
       e_mails: 'Correos'
       questionnaires_title: 'Cuestionarios'
       questionnaires:

@@ -11,9 +11,9 @@ module Achievements::Validations
   private
 
     def value_attribute_present?
-      if benefit.try(:kind) == 'tangible'
+      if benefit.try(:kind).to_s.match /_tangible/
         errors.add :amount, :blank if amount.blank?
-      elsif benefit.try(:kind) == 'intangible'
+      elsif benefit.try(:kind).to_s.match /_intangible/
         errors.add :comment, :blank if comment.blank?
       end
     end
