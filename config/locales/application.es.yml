@@ -423,9 +423,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     incomplete: "Pendientes"
     complete: "Solucionados o reiterados"
     as_owner: "%{kind} como dueño de proceso"
-    download: "Descargar listado general"
-    download_detailed: "Descargar listado detallado"
-    download_xml: 'Descargar listado en XML'
     work_papers: "Papeles de trabajo"
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
@@ -479,13 +476,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     without_conclusion_final_review: "Sin informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
-    pdf:
-      pdf_name: "listado_de_observaciones_y_oportunidades_de_mejora.pdf"
-      size_warning: "El listado es demasiado grande, se ha truncado a %{count} observaciones / oportunidades de mejora."
-      filtered_by:
-        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
-        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
-      sorted_by: "El listado fue ordenado por la columna %{column}"
     important_dates:
       title: "Fechas a considerar"
       expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *%{date}* si ningún auditado proporciona una respuesta"
