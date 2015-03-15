@@ -34,6 +34,7 @@ es: &common
         hostname: 'Dominio o dirección IP'
         port: 'Por ejemplo: 389'
         basedn: 'CN=Users,DC=dominio,DC=com'
+        filter: 'CN=*'
         login_mask: '%{user}@dominio.com, Dominio\%{user} o %{user},%{basedn}'
         username_attribute: 'Por ejemplo: samaccountname'
         name_attribute: 'Por ejemplo: givenname'

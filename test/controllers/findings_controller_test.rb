@@ -39,21 +39,6 @@ class FindingsControllerTest < ActionController::TestCase
     assert_template 'findings/index'
   end
 
-  test 'list findings in xml' do
-    login
-    get :index, :completed => 'incomplete', :format => :xml
-    assert_response :success
-    assert_not_nil assigns(:findings)
-    assert @response.headers['Content-Type'].start_with?('application/xml')
-  end
-
-  test 'list findings in csv' do
-    login
-    get :export_to_csv, :completed => 'incomplete', :format => :csv
-    assert_response :success
-    assert @response.headers['Content-Type'].start_with?('text/csv')
-  end
-
   test 'list findings for follow_up_committee' do
     login user: users(:committee_user)
     get :index, :completed => 'incomplete'
@@ -498,59 +483,6 @@ class FindingsControllerTest < ActionController::TestCase
     assert_redirected_to edit_finding_url('incomplete', assigns(:finding))
     assert_not_nil assigns(:finding)
     assert_equal 'Updated description', assigns(:finding).description
-  end
-
-  test 'export list to pdf' do
-    login
-
-    assert_nothing_raised do
-      get :export_to_pdf, :completed => 'incomplete'
-    end
-
-    assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('finding.pdf.pdf_name'), Finding.table_name)
-  end
-
-  test 'export detailed list to pdf' do
-    login
-
-    assert_nothing_raised do
-      get :export_to_pdf, :completed => 'incomplete', :include_details => 1
-    end
-
-    assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('finding.pdf.pdf_name'), Finding.table_name)
-  end
-
-  test 'export list with search' do
-    login
-
-    assert_nothing_raised do
-      get :export_to_pdf, :completed => 'incomplete', :search => {
-      :query => '1 2 4 y w',
-      :columns => ['title', 'review'],
-      :order => 'review'
-    }
-    end
-
-    assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('finding.pdf.pdf_name'), Finding.table_name)
-  end
-
-  test 'export detailed list with search' do
-    login
-
-    assert_nothing_raised do
-      get :export_to_pdf, :completed => 'incomplete', :include_details => 1,
-        :search => {
-          :query => '1 2 4 y w',
-          :columns => ['title', 'review'],
-          :order => 'review'
-        }
-    end
-
-    assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('finding.pdf.pdf_name'), Finding.table_name)
   end
 
   test 'follow up pdf' do

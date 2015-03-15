@@ -41,6 +41,10 @@
               <strong><%= ldap.basedn %></strong>
             </li>
             <li>
+              <%= LdapConfig.human_attribute_name 'filter' %>:
+              <strong><%= ldap.filter %></strong>
+            </li>
+            <li>
               <%= LdapConfig.human_attribute_name 'login_mask' %>:
               <strong><%= ldap.login_mask %></strong>
             </li>

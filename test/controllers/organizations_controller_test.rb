@@ -53,6 +53,7 @@ class OrganizationsControllerTest < ActionController::TestCase
             hostname: 'localhost',
             port: ENV['TRAVIS'] ? 3389 : 389,
             basedn: 'ou=people,dc=test,dc=com',
+            filter: 'CN=*',
             login_mask: 'cn=%{user},%{basedn}',
             username_attribute: 'cn',
             name_attribute: 'givenname',

@@ -3,13 +3,13 @@ module LdapConfigs::LDAPImport
 
   def import username, password
     ldap        = ldap username, password
-    filter      = Net::LDAP::Filter.eq 'CN', '*'
+    ldap_filter = Net::LDAP::Filter.construct filter
     users_by_dn = {}
     managers    = {}
     users       = []
 
     User.transaction do
-      ldap.search(base: basedn, filter: filter) do |entry|
+      ldap.search(base: basedn, filter: ldap_filter) do |entry|
         if entry[email_attribute].present?
           users << (result = process_entry entry)
           user   = result[:user]
@@ -35,7 +35,7 @@ module LdapConfigs::LDAPImport
       role_names = entry[roles_attribute].map { |r| r.try(:force_encoding, 'UTF-8').sub(/.*?cn=(.*?),.*/i, '\1') }
       manager_dn = manager_attribute && entry[manager_attribute].first.try(:force_encoding, 'UTF-8')
       data       = trivial_data entry
-      roles      = Role.list.where name: role_names
+      roles      = clean_roles Role.list.where(name: role_names)
       user       = User.where(email: data[:email]).take
       new        = !user
 
@@ -57,6 +57,14 @@ module LdapConfigs::LDAPImport
         function:  function_attribute && entry[function_attribute].first.try(:force_encoding, 'UTF-8'),
         enable:    true
       }
+    end
+
+    def clean_roles roles
+      if roles.all?(&:audited?)
+        roles
+      else
+        roles.reject(&:audited?)
+      end
     end
 
     def update_user user: nil, data: nil, roles: nil

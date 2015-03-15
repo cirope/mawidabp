@@ -83,13 +83,9 @@ class UsersController < ApplicationController
     end
 
     def conditions
-      default_conditions = [
-        [
-          "#{Organization.quoted_table_name}.#{Organization.qcn('id')} = :organization_id",
-          "#{Organization.quoted_table_name}.#{Organization.qcn('id')} IS NULL"
-        ].join(' OR '),
-        { organization_id: current_organization.id }
-      ]
+      default_conditions = {
+        organization_roles: { organization_id: current_organization.id }
+      }
 
       build_search_conditions User, default_conditions
     end

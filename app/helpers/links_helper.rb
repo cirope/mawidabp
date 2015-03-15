@@ -26,7 +26,7 @@ module LinksHelper
   end
 
   def link_to_clone(*args)
-    link_with_icon({ action: 'copy', icon: 'glyphicon-file' }, *args)
+    link_with_icon({ action: 'copy', icon: 'glyphicon-duplicate' }, *args)
   end
 
   private

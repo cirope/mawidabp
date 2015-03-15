@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150225025253) do
+ActiveRecord::Schema.define(version: 20150303153258) do
 
   create_table "achievements", force: true do |t|
     t.integer  "benefit_id", precision: 38, scale: 0, null: false
@@ -427,6 +427,7 @@ ActiveRecord::Schema.define(version: 20150225025253) do
     t.integer  "organization_id",     precision: 38, scale: 0,               null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "filter"
   end
 
   add_index "ldap_configs", ["organization_id"], name: "i_ldap_configs_organization_id"

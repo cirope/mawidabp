@@ -16,7 +16,7 @@ class Authentication
     authenticate
 
     if @valid
-      unless @current_organization.ldap_config
+      unless @current_organization.try(:ldap_config)
         verify_days_for_password_expiration
         verify_pending_poll
         verify_if_must_change_the_password
@@ -71,7 +71,7 @@ class Authentication
     end
 
     def authenticate
-      if @current_organization.ldap_config
+      if @current_organization.try(:ldap_config)
         ldap_auth
       else
         local_auth
