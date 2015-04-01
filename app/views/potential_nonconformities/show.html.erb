@@ -13,6 +13,11 @@
   <%= @potential_nonconformity.review_code %>
 </p>
 
+<p>
+  <strong><%= PotentialNonconformity.human_attribute_name :title %>:</strong>
+  <%= @potential_nonconformity.title %>
+</p>
+
 <div>
   <strong><%= PotentialNonconformity.human_attribute_name :description %>:</strong>
   <%= simple_format @potential_nonconformity.description %>

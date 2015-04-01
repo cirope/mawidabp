@@ -50,11 +50,9 @@ class RoleTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates formated attributes' do
-    @role.name = '?nil'
     @role.organization_id = 'xx'
 
     assert @role.invalid?
-    assert_error @role, :name, :invalid
     assert_error @role, :organization_id, :not_a_number
   end
 

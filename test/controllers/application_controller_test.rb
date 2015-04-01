@@ -155,7 +155,7 @@ class ApplicationControllerTest < ActionController::TestCase
   test 'build search conditions' do
     search_string = []
     filters = {}
-    default_conditions = {"#{Organization.table_name}.organization_id" => 1}
+    default_conditions = {"#{Organization.quoted_table_name}.organization_id" => 1}
     @controller.send(:params)[:search] = {
       :query => 'query',
       :columns => ['name', 'user']

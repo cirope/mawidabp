@@ -9,9 +9,9 @@
       <th></th>
       <%= make_filterable_column User.human_attribute_name('user'), nil, 'user' %>
       <%= make_filterable_column User.human_attribute_name('name'), nil, 'name', 'last_name' %>
-      <%= make_filterable_column User.human_attribute_name('function'), { 'hidden-xs' => true}, 'function' %>
-      <%= make_not_available_column User.human_attribute_name('last_access'), 'hidden-xs' => true %>
-      <%= make_not_available_column User.human_attribute_name('failed_attempts'), 'hidden-xs' => true %>
+      <%= make_filterable_column User.human_attribute_name('function'), { :class => 'hidden-xs'}, 'function' %>
+      <%= make_not_available_column User.human_attribute_name('last_access'), :class => 'hidden-xs' %>
+      <%= make_not_available_column User.human_attribute_name('failed_attempts'), :class => 'hidden-xs' %>
       <th colspan="3" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -37,5 +37,8 @@
 <div>
   <%= paginate @users %>
   <%= link_to t('label.new'), new_user_path, class: 'btn btn-primary' %> |
+  <% if current_organization.ldap_config %>
+    <%= link_to t('.import_from_ldap'), new_users_import_path %> |
+  <% end %>
   <%= link_to t('label.download'), users_path(search: params[:search], _ts: Time.now.to_i, format: :pdf) %>
 </div>

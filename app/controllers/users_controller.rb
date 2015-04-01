@@ -65,7 +65,7 @@ class UsersController < ApplicationController
 
     def users
       User.includes(:organizations).where(conditions).not_hidden.order(
-        "#{User.table_name}.user ASC"
+        "#{User.quoted_table_name}.#{User.qcn('user')} ASC"
       ).references(:organizations).page(params[:page])
     end
 
@@ -83,13 +83,9 @@ class UsersController < ApplicationController
     end
 
     def conditions
-      default_conditions = [
-        [
-          "#{Organization.table_name}.id = :organization_id",
-          "#{Organization.table_name}.id IS NULL"
-        ].join(' OR '),
-        { organization_id: current_organization.id }
-      ]
+      default_conditions = {
+        organization_roles: { organization_id: current_organization.id }
+      }
 
       build_search_conditions User, default_conditions
     end

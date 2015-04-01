@@ -13,21 +13,22 @@ class ControlObjective < ActiveRecord::Base
 
   # Named scopes
   scope :list, -> {
-    order(['process_control_id ASC', "#{table_name}.order ASC"])
+    order([
+      "#{quoted_table_name}.#{qcn('process_control_id')} ASC",
+      "#{quoted_table_name}.#{qcn('order')} ASC"
+    ])
   }
   scope :list_for_process_control, ->(process_control) {
-    where(process_control_id: process_control.id).order(
-      ['process_control_id ASC', "#{table_name}.order ASC"]
-    )
+    where(process_control_id: process_control.id).order([
+      "#{quoted_table_name}.#{qcn('process_control_id')} ASC",
+      "#{quoted_table_name}.#{qcn('order')} ASC"
+    ])
   }
 
   # Restricciones
   validates :name, presence: true
   validates :relevance, :risk, numericality: { only_integer: true },
     allow_nil: true, allow_blank: true
-  validates :name, uniqueness: {
-    case_sensitive: false, scope: :process_control_id
-  }
   validates_each :control do |record, attr, value|
     has_active_control = value && !value.marked_for_destruction?
 
@@ -38,7 +39,7 @@ class ControlObjective < ActiveRecord::Base
   belongs_to :process_control
   has_many :control_objective_items, inverse_of: :control_objective,
     dependent: :nullify
-  has_one :control, -> { order("#{Control.table_name}.order ASC") },
+  has_one :control, -> { order("#{Control.quoted_table_name}.#{Control.qcn('order')} ASC") },
     as: :controllable, dependent: :destroy
 
   accepts_nested_attributes_for :control, allow_destroy: true

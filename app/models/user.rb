@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
   has_many :error_records, dependent: :destroy
   has_many :notifications, dependent: :destroy
   has_many :review_user_assignments, dependent: :destroy
-  has_many :reviews, -> { uniq }, through: :review_user_assignments
+  has_many :reviews, through: :review_user_assignments
 
   def <=>(other)
     other.kind_of?(User) ? id <=> other.id : -1

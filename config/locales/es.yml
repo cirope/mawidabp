@@ -126,8 +126,8 @@
     last_verified_date: "La última comprobación se realizó el %{date}"
     has_final_review: "Ya se emitió un informe definitivo y por lo tanto no es posible seguir trabajando con el informe borrador"
 
-  conclusion_audit_report:
-    index_title: "Reportes de auditoría"
+  conclusion_report:
+    index_title: "Reportes de conclusión"
     cost_analysis_title: "Análisis de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Hallazgos totales por estado"
@@ -457,10 +457,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     incomplete: "Pendientes"
     complete: "Solucionados o reiterados"
     as_owner: "%{kind} como dueño de proceso"
-    download: "Descargar listado general"
-    download_detailed: "Descargar listado detallado"
-    download_xml: "Descargar listado en XML"
-    download_csv: "Descargar listado en CSV"
     work_papers: "Papeles de trabajo"
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
@@ -518,13 +514,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     errors:
       correction_date_on_or_before: "La fecha de corrección/acción inmediata debe ser anterior a la fecha de análisis de causa"
       cause_analysis_date_on_or_before: "La fecha de análisis de causa debe ser anterior a la fecha de implementación"
-    pdf:
-      pdf_name: "listado_de_hallazgos.pdf"
-      size_warning: "El listado es demasiado grande, se ha truncado a %{count} hallazgos."
-      filtered_by:
-        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
-        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
-      sorted_by: "El listado fue ordenado por la columna %{column}"
     important_dates:
       title: "Fechas a considerar"
       expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *%{date}* si ningún auditado proporciona una respuesta"
@@ -590,8 +579,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     detailed_report: "Reporte detallado"
-    rescheduled_being_implemented_weaknesses_report_title: "Observaciones en proceso reprogramadas"
-    rescheduling : "Reprogramaciones"
     qa_indicators_title: "Indicadores de calidad"
     weakness_summary: "Resumen de observaciones"
     weaknesses_by_risk: "Observaciones por riesgo"
@@ -701,10 +688,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         oportunities_solution_rate: "Solución de Oportunidades de Mejora"
         ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Riesgo Medio"
         ancient_highest_risk_weaknesses: "Anticuación de Observaciones de Riesgo Alto"
-    rescheduled_being_implemented_weaknesses_report:
-      without_data: "Sin datos para el rango de fechas ingresado"
-      title: "INFORME DE OBSERVACIONES EN PROCESO REPROGRAMADAS"
-      pdf_name: "observaciones_reprogramadas_%{from_date}_al_%{to_date}.pdf"
     synthesis_report:
       pdf_name: "informe_de_sintesis_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Hallazgos Auditoría Interna"
@@ -1040,6 +1023,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     add_user_assignment: "Agregar usuario relacionado"
     suggest_findings: 'Sugerir hallazgos pendientes'
     without_suggested_findings: 'Sin hallazgos pendientes'
+    suggested_findings_for: 'Hallazgos sugeridos para %{process_control}'
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
@@ -1346,6 +1330,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         file: "Archivo"
       finding:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "Hallazgo"
         type: "Tipo"
         repeated_of_id: "Reiterada de"
@@ -1433,6 +1418,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         responsible_auditor: 'Auditor referente'
       fortress:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "Fortaleza"
         review_code: "Código en el informe"
         user_ids: "Responsable"
@@ -1455,6 +1441,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         size: "Imagen (tamaño)"
       nonconformity:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "No conformidad"
         review_code: "Código en el informe"
         audit_recommendations: "Recomendaciones de auditoría"
@@ -1490,6 +1477,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         password: "Contraseña"
       oportunity:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "Oportunidad de mejora"
         review_code: "Código en el informe"
         answer: "Respuesta/Acción de mejora"
@@ -1540,6 +1528,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         total_resources_cost: "Costo total"
       potential_nonconformity:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "No conformidad potencial"
         review_code: "Código en el informe"
         answer: "Respuesta/Acción preventiva"
@@ -1597,6 +1586,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         privileges: "Privilegios"
       weakness:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "Observación"
         review_code: "Código en el informe"
         audit_recommendations: "Recomendaciones de auditoría"
@@ -1762,14 +1752,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
   actioncontroller:
     best_practices: "Buenas prácticas"
     business_unit_types: "Unidades de negocio"
-    follow_up_audit: "Reportes de auditoría (Seguimiento)"
-    follow_up_committee: "Reportes de comité (Seguimiento)"
-    follow_up_management: "Reportes de la gerencia (Seguimiento)"
-    conclusion_audit_reports: "Reportes de auditoría (Conclusión)"
-    conclusion_committee_reports: "Reportes de comité (Conclusion)"
+    follow_up_audit: "Reportes de seguimiento"
+    conclusion_reports: "Reportes de conclusión"
     conclusion_draft_reviews: "Informe borrador"
     conclusion_final_reviews: "Informe definitivo"
-    conclusion_management_reports: "Reportes de la gerencia (Conclusión)"
     control_objective_items: "Objetivos de control"
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"

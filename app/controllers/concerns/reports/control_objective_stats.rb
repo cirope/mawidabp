@@ -8,10 +8,10 @@ module Reports::ControlObjectiveStats
 
     if params[:control_objective_stats]
       conclusion_reviews_by_business_unit_type if params[:control_objective_stats][:business_unit_type].present?
-
-      conclusion_reviews_by_business_unit if params[:control_objective_stats][:business_unit].present?
-
-      conclusion_reviews_by_control_objective if params[:control_objective_stats][:control_objective].present?
+      conclusion_reviews_by_business_unit      if params[:control_objective_stats][:business_unit].present?
+      conclusion_reviews_by_control_objective  if params[:control_objective_stats][:control_objective].present?
+      conclusion_reviews_by_finding_status     if params[:control_objective_stats][:finding_status].present?
+      conclusion_reviews_by_finding_title      if params[:control_objective_stats][:finding_title].present?
     end
 
     @periods.each do |period|
@@ -29,8 +29,7 @@ module Reports::ControlObjectiveStats
           @weaknesses_count = @coi_data[:weaknesses]
 
           if @weaknesses_count.values.sum == 0
-            @weaknesses_count_text = t(
-              "#{@controller}_committee_report.control_objective_stats.without_weaknesses")
+            @weaknesses_count_text = t "#{@controller}_committee_report.control_objective_stats.without_weaknesses"
           else
             group_findings_by_risk(period, pc, co, @coi_data)
           end
@@ -70,6 +69,7 @@ module Reports::ControlObjectiveStats
     @reviews_score_data = {}
     @control_objectives = []
     @control_objectives_data = {}
+    @weaknesses_conditions = {}
 
     @periods.each do |period|
       @control_objectives_data[period] = {}
@@ -77,13 +77,10 @@ module Reports::ControlObjectiveStats
   end
 
   def conclusion_reviews_by_business_unit_type
-    @selected_business_unit = BusinessUnitType.find(
-      params[:control_objective_stats][:business_unit_type])
-    @filters << "<b>#{BusinessUnitType.model_name.human}</b> = " +
-      "\"#{@selected_business_unit.name.strip}\""
+    @selected_business_unit = BusinessUnitType.find params[:control_objective_stats][:business_unit_type]
+    @filters << "<b>#{BusinessUnitType.model_name.human}</b> = \"#{@selected_business_unit.name.strip}\""
 
-    @conclusion_reviews = @conclusion_reviews.by_business_unit_type(
-      @selected_business_unit.id)
+    @conclusion_reviews = @conclusion_reviews.by_business_unit_type @selected_business_unit.id
   end
 
   def conclusion_reviews_by_business_unit
@@ -92,27 +89,35 @@ module Reports::ControlObjectiveStats
     ).uniq.map(&:strip)
 
     unless business_units.empty?
-      @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
-        "\"#{params[:control_objective_stats][:business_unit].strip}\""
+      @filters << "<b>#{BusinessUnit.model_name.human}</b> = \"#{params[:control_objective_stats][:business_unit].strip}\""
 
-      @conclusion_reviews = @conclusion_reviews.by_business_unit_names(
-        *business_units)
+      @conclusion_reviews = @conclusion_reviews.by_business_unit_names *business_units
     end
   end
 
   def conclusion_reviews_by_control_objective
-    @control_objectives =
-      params[:control_objective_stats][:control_objective].split(
-        SPLIT_AND_TERMS_REGEXP
-      ).uniq.map(&:strip)
+    @control_objectives = params[:control_objective_stats][:control_objective].split(
+      SPLIT_AND_TERMS_REGEXP
+    ).uniq.map(&:strip)
 
-    unless @control_objectives.empty?
-      @filters << "<b>#{ControlObjective.model_name.human}</b> = " +
-        "\"#{params[:control_objective_stats][:control_objective].strip}\""
+    if @control_objectives.present?
+      @filters << "<b>#{ControlObjective.model_name.human}</b> = \"#{params[:control_objective_stats][:control_objective].strip}\""
 
-      @conclusion_reviews = @conclusion_reviews.by_control_objective_names(
-        *@control_objectives)
+      @conclusion_reviews = @conclusion_reviews.by_control_objective_names *@control_objectives
     end
+  end
+
+  def conclusion_reviews_by_finding_status
+    @weaknesses_conditions[:state] = params[:control_objective_stats][:finding_status]
+    state_text = t "finding.status_#{Finding::STATUS.invert[@weaknesses_conditions[:state].to_i]}"
+
+    @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text}\""
+  end
+
+  def conclusion_reviews_by_finding_title
+    @weaknesses_conditions[:title] = params[:control_objective_stats][:finding_title]
+
+    @filters << "<b>#{Finding.human_attribute_name('title')}</b> = \"#{@weaknesses_conditions[:title]}\""
   end
 
   def get_effectiveness(effectiveness)
@@ -213,6 +218,8 @@ module Reports::ControlObjectiveStats
     @coi_data[:weaknesses_ids] ||= {}
     @weaknesses_count = {}
     @weaknesses = @final ? coi.final_weaknesses.not_revoked : coi.weaknesses.not_revoked
+    @weaknesses = @weaknesses.where(state: @weaknesses_conditions[:state]) if @weaknesses_conditions[:state]
+    @weaknesses = @weaknesses.with_title(@weaknesses_conditions[:title])   if @weaknesses_conditions[:title]
 
     @coi_data[:weaknesses] ||= {}
     @coi_data[:effectiveness] ||= []

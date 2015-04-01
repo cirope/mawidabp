@@ -9,20 +9,18 @@ class Weakness < Finding
   scope :all_for_report, -> { where(
     :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
     :final => true
-    ).order(['risk DESC', 'state ASC'])
+    ).order(:risk => :desc, :state => :asc)
   }
   scope :with_highest_risk, -> { where(
-    "#{table_name}.highest_risk = #{table_name}.risk"
+    "#{quoted_table_name}.#{qcn('highest_risk')} = #{table_name}.risk"
     )
   }
   scope :with_medium_risk, -> { where(
-    "#{table_name}.risk = (#{table_name}.highest_risk - 1) "
+    "#{quoted_table_name}.#{qcn('risk')} = (#{table_name}.highest_risk - 1) "
     )
   }
   scope :by_risk, ->(risk) {
-    where(
-      "#{table_name}.risk = #{risk}"
-    )
+    where("#{quoted_table_name}.#{qcn('risk')} = ?", risk)
   }
 
   # Restricciones
@@ -54,7 +52,7 @@ class Weakness < Finding
     Finding.columns_for_sort.dup.merge(
       :follow_up_date => {
         :name => Weakness.human_attribute_name(:follow_up_date),
-        :field => "#{Weakness.table_name}.follow_up_date ASC"
+        :field => "#{Weakness.quoted_table_name}.#{Weakness.qcn('follow_up_date')} ASC"
       }
     )
   end

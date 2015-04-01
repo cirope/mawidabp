@@ -18,24 +18,24 @@ class WeaknessesController < ApplicationController
     parameters = { boolean_true: true, boolean_false: false }
 
     if params[:control_objective].to_i > 0
-      default_conditions << "#{Weakness.table_name}.control_objective_item_id = " +
+      default_conditions << "#{Weakness.quoted_table_name}.#{Weakness.qcn('control_objective_item_id')} = " +
         ":control_objective_id"
       parameters[:control_objective_id] = params[:control_objective].to_i
     end
 
     if params[:ids]
-      default_conditions << "#{Weakness.table_name}.id IN (:ids)"
+      default_conditions << "#{Weakness.quoted_table_name}.#{Weakness.qcn('id')} IN (:ids)"
       parameters[:ids] = params[:ids].map(&:to_i)
     else
       default_conditions <<
       [
         [
-          "#{ConclusionReview.table_name}.review_id IS NULL",
-          "#{Weakness.table_name}.final = :boolean_false"
+          "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL",
+          "#{Weakness.quoted_table_name}.#{Weakness.qcn('final')} = :boolean_false"
         ].join(' AND '),
         [
-          "#{ConclusionReview.table_name}.review_id IS NOT NULL",
-          "#{Weakness.table_name}.final = :boolean_true"
+          "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL",
+          "#{Weakness.quoted_table_name}.#{Weakness.qcn('final')} = :boolean_true"
         ].join(' AND ')
       ].map { |condition| "(#{condition})" }.join(' OR ')
     end
@@ -50,8 +50,8 @@ class WeaknessesController < ApplicationController
       }
     ).where(@conditions, parameters).order(
       @order_by || [
-        "#{Review.table_name}.identification DESC",
-        "#{Weakness.table_name}.review_code ASC"
+        "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
+        "#{Weakness.quoted_table_name}.#{Weakness.qcn('review_code')} ASC"
       ]
     ).references(:periods, :conclusion_reviews).page(params[:page])
 
@@ -74,6 +74,7 @@ class WeaknessesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
+      format.json # show.json.jbuilder
       format.xml  { render xml: @weakness }
     end
   end
@@ -171,11 +172,14 @@ class WeaknessesController < ApplicationController
   private
     def weakness_params
       params.require(:weakness).permit(
-        :control_objective_item_id, :review_code, :description, :answer,
+        :control_objective_item_id, :review_code, :title, :description, :answer,
         :cause_analysis, :cause_analysis_date, :correction, :correction_date,
         :audit_comments, :state, :origination_date, :solution_date, :repeated_of_id,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
         :users_for_notification, :lock_version,
+        achievements_attributes: [
+          :id, :benefit_id, :amount, :comment, :_destroy
+        ],
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ],

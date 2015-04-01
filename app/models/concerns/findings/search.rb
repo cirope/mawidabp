@@ -7,7 +7,7 @@ module Findings::Search
       review:      review_options,
       project:     project_options,
       review_code: review_code_options,
-      description: description_options
+      title:       title_options
     }.with_indifferent_access
   end
 
@@ -16,7 +16,7 @@ module Findings::Search
 
       def issue_date_options
         {
-          column:            "#{ConclusionReview.table_name}.issue_date",
+          column:            "#{ConclusionReview.table_name}.#{ConclusionReview.qcn('issue_date')}",
           operator:          SEARCH_ALLOWED_OPERATORS.values,
           mask:              "%s",
           conversion_method: ->(value) { Timeliness.parse(value, :date).to_s(:db) },
@@ -25,19 +25,19 @@ module Findings::Search
       end
 
       def review_options
-        string_column_options_for "#{Review.table_name}.identification"
+        string_column_options_for "#{Review.quoted_table_name}.#{Review.qcn('identification')}"
       end
 
       def project_options
-        string_column_options_for "#{PlanItem.table_name}.project"
+        string_column_options_for "#{PlanItem.quoted_table_name}.#{PlanItem.qcn('project')}"
       end
 
       def review_code_options
-        string_column_options_for "#{table_name}.review_code"
+        string_column_options_for "#{quoted_table_name}.#{qcn('review_code')}"
       end
 
-      def description_options
-        string_column_options_for "#{table_name}.description"
+      def title_options
+        string_column_options_for "#{quoted_table_name}.#{qcn('title')}"
       end
 
       def string_column_options_for column

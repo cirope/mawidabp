@@ -8,7 +8,7 @@ module ErrorRecords::Scopes
       list.
       includes(:user).
       where(conditions).
-      order("#{table_name}.created_at DESC").
+      order("#{quoted_table_name}.#{qcn('created_at')} DESC").
       references(:users)
     }
   end

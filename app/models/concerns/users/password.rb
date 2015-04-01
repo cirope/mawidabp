@@ -27,7 +27,7 @@ module Users::Password
   def last_passwords
     limit = get_parameter(:password_count).to_i - 1
 
-    old_passwords.order('created_at DESC').limit(limit > 0 ? limit : 0)
+    old_passwords.order(created_at: :desc).limit(limit > 0 ? limit : 0)
   end
 
   def reset_password organization, notify: true

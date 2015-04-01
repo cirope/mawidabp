@@ -1,7 +1,5 @@
 // Mantiene el estado de la aplicación
 var State = {
-  // Hash con el contenido del menú
-  menu: {},
   // Contador para generar un ID único
   newIdCounter: 0,
   // Registra la variación en el contenido de los formularios
@@ -13,7 +11,24 @@ var State = {
   // Variable para indicar si la sesión ha expirado
   sessionExpire: false,
   // Mensaje de error para mostrar cuando falla la validación en línea
-  validationFailedMessage: undefined
+  validationFailedMessage: undefined,
+  // Reinicia los timers con los mensajes diferidos
+  resetTimers: function () {
+    $.each(State.showMessages, function() {
+      if(!State.sessionExpire) {
+        window.clearTimeout(this.timer_id);
+        $('#time-left').addClass('hidden');
+
+        var message = this.message;
+        var expired = this.expired;
+
+        this.timer_id = window.setTimeout(
+          "Helper.showMessage('" + message + "', " + expired + ")",
+          this.time * 1000
+        );
+      }
+    });
+  }
 }
 
 // Utilidades para manipular algunos comportamientos del navegador
@@ -500,22 +515,6 @@ jQuery(function($) {
   }
 
   $(document).bind({
-    // Reinicia los timers con los mensajes diferidos
-    ajaxStart: function() {
-      $.each(State.showMessages, function() {
-        if(!State.sessionExpire) {
-          window.clearTimeout(this.timer_id);
-          $('#time-left').addClass('hidden');
-
-          var message = this.message;
-          var expired = this.expired;
-
-          this.timer_id = window.setTimeout(
-            "Helper.showMessage('" + message + "', " + expired + ")",
-            this.time * 1000
-          );
-        }
-      });
-    }
+    ajaxStart: State.resetTimers
   });
 });

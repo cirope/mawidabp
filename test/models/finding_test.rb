@@ -18,6 +18,7 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal finding.repeated_of_id, @finding.repeated_of_id
     assert_equal finding.control_objective_item_id,
       @finding.control_objective_item_id
+    assert_equal finding.title, @finding.title
     assert_equal finding.review_code, @finding.review_code
     assert_equal finding.description, @finding.description
     assert_equal finding.answer, @finding.answer
@@ -38,6 +39,7 @@ class FindingTest < ActiveSupport::TestCase
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'O020',
+        :title => 'Title',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -82,6 +84,7 @@ class FindingTest < ActiveSupport::TestCase
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
         :review_code => 'O020',
+        :title => 'Title',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -121,13 +124,26 @@ class FindingTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @finding.control_objective_item_id = nil
     @finding.review_code = '   '
+    @finding.title = '   '
     @finding.description = '   '
 
     assert @finding.invalid?
     assert_error @finding, :control_objective_item_id, :blank
     assert_error @finding, :review_code, :blank
     assert_error @finding, :review_code, :invalid
+    assert_error @finding, :title, :blank
     assert_error @finding, :description, :blank
+  end
+
+  test 'avoid title validation when audited' do
+    Finding.current_user = users :audited_user
+
+    @finding.title = '  '
+    @finding.valid?
+
+    assert @finding.errors[:title].blank?
+
+    Finding.current_user = nil
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -197,9 +213,11 @@ class FindingTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @finding.review_code = 'abcdd' * 52
+    @finding.title = 'abcdd' * 52
 
     assert @finding.invalid?
     assert_error @finding, :review_code, :too_long, count: 255
+    assert_error @finding, :title, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -577,6 +595,7 @@ class FindingTest < ActiveSupport::TestCase
     finding = @finding.class.new(@finding.attributes.merge(
         'state' => Finding::STATUS[:incomplete],
         'review_code' => 'O099',
+        'title' => 'Title',
         'control_objective_item_id' => control_objective_items(
           :bcra_A4609_security_management_responsible_dependency_item_editable).id,
         'finding_user_assignments_attributes' => fuas
@@ -842,17 +861,17 @@ class FindingTest < ActiveSupport::TestCase
     header = Finding.to_csv(detailed, 'incomplete')
     row = @finding.to_csv(detailed, 'incomplete')
 
-    assert_equal header[10], 'Fecha de implementación'
-    assert_equal header.count, 13
-    assert_equal row.count, 13
+    assert_equal header[11], 'Fecha de implementación'
+    assert_equal header.count, 14
+    assert_equal row.count, 14
 
     detailed = false
     header = Finding.to_csv(detailed, 'complete')
     row = @finding.to_csv(detailed, 'complete')
 
-    assert_equal header[10], 'Fecha de solución'
-    assert_equal header.count, 11
-    assert_equal row.count, 11
+    assert_equal header[11], 'Fecha de solución'
+    assert_equal header.count, 12
+    assert_equal row.count, 12
   end
 
   test 'notify users if they are selected for notification' do
@@ -880,6 +899,7 @@ class FindingTest < ActiveSupport::TestCase
     finding = @finding.class.new(@finding.attributes.merge(
         'state' => Finding::STATUS[:incomplete],
         'review_code' => 'O099',
+        'title' => 'Title',
         'control_objective_item_id' => control_objective_items(
           :bcra_A4609_security_management_responsible_dependency_item_editable).id,
         'finding_user_assignments_attributes' => fuas

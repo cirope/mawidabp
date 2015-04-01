@@ -17,25 +17,25 @@ class NonconformitiesController < ApplicationController
     default_conditions = [
       [
         [
-          "#{ConclusionReview.table_name}.review_id IS NULL",
-          "#{Nonconformity.table_name}.final = :boolean_false"
+          "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL",
+          "#{Nonconformity.quoted_table_name}.#{Nonconformity.qcn('final')} = :boolean_false"
         ].join(' AND '),
         [
-          "#{ConclusionReview.table_name}.review_id IS NOT NULL",
-          "#{Nonconformity.table_name}.final = :boolean_true"
+          "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL",
+          "#{Nonconformity.quoted_table_name}.#{Nonconformity.qcn('final')} = :boolean_true"
         ].join(' AND ')
       ].map { |condition| "(#{condition})" }.join(' OR ')
     ]
     parameters = { :boolean_true => true, :boolean_false => false }
 
     if params[:control_objective].to_i > 0
-      default_conditions << "#{Nonconformity.table_name}.control_objective_item_id = " +
+      default_conditions << "#{Nonconformity.quoted_table_name}.#{Nonconformity.qcn('control_objective_item_id')} = " +
         ":control_objective_id"
       parameters[:control_objective_id] = params[:control_objective].to_i
     end
 
     if params[:ids]
-      default_conditions << "#{Nonconformity.table_name}.id IN(:ids)"
+      default_conditions << "#{Nonconformity.quoted_table_name}.#{Nonconformity.qcn('id')} IN(:ids)"
       parameters[:ids] = params[:ids]
     end
 
@@ -49,10 +49,10 @@ class NonconformitiesController < ApplicationController
       }
     ).where(@conditions, parameters).order(
       @order_by || [
-        "#{Review.table_name}.identification DESC",
-        "#{Nonconformity.table_name}.review_code ASC"
+        "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
+        "#{Nonconformity.quoted_table_name}.#{Nonconformity.qcn('review_code')} ASC"
       ]
-    ).page(params[:page])
+    ).references(control_objective_item: :review).page(params[:page])
 
     respond_to do |format|
       format.html {
@@ -170,10 +170,11 @@ class NonconformitiesController < ApplicationController
   private
     def nonconformity_params
       params.require(:nonconformity).permit(
-        :control_objective_item_id, :review_code, :description, :answer, :audit_comments,
-        :cause_analysis, :cause_analysis_date, :correction, :correction_date,
-        :state, :origination_date, :solution_date, :audit_recommendations, :effect, :risk,
-        :priority, :follow_up_date, :lock_version, :repeated_of_id,
+        :control_objective_item_id, :review_code, :title, :description, :answer,
+        :audit_comments, :cause_analysis, :cause_analysis_date, :correction,
+        :correction_date, :state, :origination_date, :solution_date,
+        :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
+        :lock_version, :repeated_of_id,
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ],

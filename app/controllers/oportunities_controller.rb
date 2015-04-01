@@ -17,25 +17,25 @@ class OportunitiesController < ApplicationController
     default_conditions = [
       [
         [
-          "#{ConclusionReview.table_name}.review_id IS NULL",
-          "#{Oportunity.table_name}.final = :boolean_false"
+          "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL",
+          "#{Oportunity.quoted_table_name}.#{Oportunity.qcn('final')} = :boolean_false"
         ].join(' AND '),
         [
-          "#{ConclusionReview.table_name}.review_id IS NOT NULL",
-          "#{Oportunity.table_name}.final = :boolean_true"
+          "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL",
+          "#{Oportunity.quoted_table_name}.#{Oportunity.qcn('final')} = :boolean_true"
         ].join(' AND ')
       ].map {|condition| "(#{condition})"}.join(' OR ')
     ]
     parameters = { :boolean_true => true, :boolean_false => false }
 
     if params[:control_objective].to_i > 0
-      default_conditions << "#{Weakness.table_name}.control_objective_item_id = " +
+      default_conditions << "#{Weakness.quoted_table_name}.#{Weakness.qcn('control_objective_item_id')} = " +
         ":control_objective_id"
       parameters[:control_objective_id] = params[:control_objective].to_i
     end
 
     if params[:review].to_i > 0
-      default_conditions << "#{Review.table_name}.id = :review_id"
+      default_conditions << "#{Review.quoted_table_name}.#{Review.qcn('id')} = :review_id"
       parameters[:review_id] = params[:review].to_i
     end
 
@@ -49,10 +49,10 @@ class OportunitiesController < ApplicationController
       }
     ).where([@conditions, parameters]).order(
       @order_by || [
-        "#{Review.table_name}.identification DESC",
-        "#{Oportunity.table_name}.review_code ASC"
+        "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
+        "#{Oportunity.quoted_table_name}.#{Oportunity.qcn('review_code')} ASC"
       ]
-    ).page(params[:page])
+    ).references(control_objective_item: :review).page(params[:page])
 
     respond_to do |format|
       format.html {
@@ -73,6 +73,7 @@ class OportunitiesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
+      format.json # show.json.jbuilder
       format.xml  { render :xml => @oportunity }
     end
   end
@@ -179,10 +180,10 @@ class OportunitiesController < ApplicationController
 
     def oportunity_params
       params.require(:oportunity).permit(
-        :control_objective_item_id, :review_code, :description, :answer, :audit_comments,
-        :cause_analysis, :cause_analysis_date, :correction, :correction_date, :follow_up_date,
-        :state, :organization_date, :solution_date, :lock_version, :repeated_of_id,
-        :origination_date,
+        :control_objective_item_id, :review_code, :title, :description, :answer,
+        :audit_comments, :cause_analysis, :cause_analysis_date, :correction,
+        :correction_date, :follow_up_date, :state, :organization_date,
+        :solution_date, :lock_version, :repeated_of_id, :origination_date,
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ],

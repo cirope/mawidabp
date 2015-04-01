@@ -13,7 +13,7 @@ class WorkflowsController < ApplicationController
   def index
     @title = t 'workflow.index_title'
     @workflows = Workflow.list.includes(:review).order(
-      "#{Review.table_name}.identification DESC").page(
+      "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC").page(
       params[:page]
     ).references(:reviews)
 

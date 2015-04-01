@@ -26,6 +26,7 @@ module Findings::XML
       xml.tag! 'follow-up-date',   follow_up_date
       xml.tag! 'description',      description
       xml.tag! 'review-code',      review_code
+      xml.tag! 'title',            title
       xml.tag! 'answer',           answer
       xml.tag! 'risk-text',        (risk_text if respond_to?(:risk_text))
       xml.tag! 'state-text',       state_text

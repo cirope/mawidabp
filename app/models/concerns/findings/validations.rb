@@ -3,7 +3,8 @@ module Findings::Validations
 
   included do
     validates :control_objective_item_id, :description, :review_code, :organization_id, presence: true
-    validates :review_code, length: { maximum: 255 }, allow_blank: true
+    validates :title, presence: true, if: :title_should_be_present?
+    validates :review_code, :title, length: { maximum: 255 }, allow_blank: true
     validates :audit_comments, presence: true, if: :revoked?
     validates :follow_up_date, :solution_date, :origination_date, :first_notification_date,
       timeliness: { type: :date }, allow_blank: true
@@ -19,6 +20,10 @@ module Findings::Validations
 
     def check_dates?
       !incomplete? && !revoked? && !repeated?
+    end
+
+    def title_should_be_present?
+      !final? && !current_user.try(:audited?)
     end
 
     def validate_follow_up_date

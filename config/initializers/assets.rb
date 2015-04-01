@@ -8,4 +8,4 @@ Rails.application.config.assets.version = '1.0'
 
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-Rails.application.config.assets.precompile += %w( *.svg *.eot *.woff *.ttf *.png graphs.js ie/boxsizing.htc application-ie.css application-ie.js )
+Rails.application.config.assets.precompile += %w( *.svg *.eot *.woff *.woff2 *.ttf *.png graphs.js ie/boxsizing.htc application-ie.css application-ie.js )

@@ -141,12 +141,12 @@
       var count = 0;
 
       $.each(designElement.get(0).options, function(i, e) {
-        if(parseInt(e.value) > maxValue) { maxValue = parseInt(e.value) }
+        if(+e.value > maxValue) { maxValue = +e.value }
       });
 
-      selectedValues.push(parseInt(designElement.val()));
-      selectedValues.push(parseInt(complianceElement.val()));
-      selectedValues.push(parseInt(sustantiveElement.val()));
+      selectedValues.push(+designElement.val());
+      selectedValues.push(+complianceElement.val());
+      selectedValues.push(+sustantiveElement.val());
 
       $.each(selectedValues, function(i, e) {
         if(e) {
@@ -158,9 +158,9 @@
       var percentage = count == 0 || maxValue == 0 ?
         100 : ((total / count) * 100.0 / maxValue).toFixed(0);
 
-      $('#effectiveness').val(percentage + '%');
+      $('#control_objective_item_effectiveness').val(percentage + '%');
 
-      $('#effectiveness').css('border-color', '#47ae00').delay(1000).animate(
+      $('#control_objective_item_effectiveness').css('border-color', '#47ae00').delay(1000).animate(
         { 'border-color': '#c2bfB7' }, 50
       );
     }

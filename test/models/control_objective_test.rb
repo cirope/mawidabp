@@ -88,20 +88,6 @@ class ControlObjectiveTest < ActiveSupport::TestCase
     assert_error @control_objective, :risk, :not_a_number
   end
 
-  test 'validates duplicated attributes' do
-    @control_objective.name =
-      control_objectives(:iso_27000_security_organization_4_1).name
-
-    assert @control_objective.invalid?
-    assert_error @control_objective, :name, :taken
-
-    # Nombres iguales pero distintos procesos de negocio
-    @control_objective.name =
-      control_objectives(:bcra_A4609_data_proccessing_impact_analisys).name
-    assert @control_objective.valid?,
-      @control_objective.errors.full_messages.join('; ')
-  end
-
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates that have at least one control' do
     assert @control_objective.valid?

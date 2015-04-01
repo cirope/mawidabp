@@ -20,10 +20,10 @@
 
   <p>
     <%= t 'notifier_mailer.welcome_email.organizations_sites',
-      :count => @user.organizations.count %>
+      :count => @user.organizations.uniq.count %>
   </p>
   <ul>
-    <% @user.organizations.reload.each do |organization| %>
+    <% @user.organizations.uniq.each do |organization| %>
       <li>
       <%= link_to(
         root_url(host: URL_HOST, subdomain: organization.prefix),

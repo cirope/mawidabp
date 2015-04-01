@@ -41,7 +41,7 @@ class FortressesControllerTest < ActionController::TestCase
     login
     get :index, :search => {
       :query => '1 2 4',
-      :columns => ['description', 'review'],
+      :columns => ['title', 'review'],
       :order => 'review'
     }
 
@@ -60,7 +60,7 @@ class FortressesControllerTest < ActionController::TestCase
     login
     get :index, :search => {
       :query => '1 2 4 y 1f',
-      :columns => ['description', 'review']
+      :columns => ['title', 'review']
     }
 
     assert_redirected_to fortress_url(
@@ -97,6 +97,7 @@ class FortressesControllerTest < ActionController::TestCase
           :control_objective_item_id => control_objective_items(
             :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
           :review_code => 'F020',
+          :title => 'Title',
           :description => 'New description',
           :origination_date => 1.day.ago.to_date.to_s(:db),
           :finding_user_assignments_attributes => [
@@ -146,6 +147,7 @@ class FortressesControllerTest < ActionController::TestCase
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_security_management_responsible_dependency_item_editable).id,
             :review_code => 'F005',
+            :title => 'Title',
             :description => 'Updated description',
             :origination_date => 1.day.ago.to_date.to_s(:db),
             :finding_user_assignments_attributes => [

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get '/users/login', to: redirect('/') # _Backward compatibility_
+  get '/touch', to: 'touch#index', as: 'touch'
 
   # Sessions
   get    'login',    to: 'sessions#new',     as: 'login'
@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   delete 'logout',   to: 'sessions#destroy', as: 'logout'
 
   resources :settings, only: [:index, :show, :edit, :update]
+
+  resources :benefits
 
   resources :questionnaires do
     resources :polls, only: [:index]
@@ -68,133 +70,58 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'conclusion_audit_reports', as: 'conclusion_audit_reports',
-    to: 'conclusion_audit_reports#index'
-  get 'conclusion_committee_reports', as: 'conclusion_committee_reports',
-    to: 'conclusion_committee_reports#index'
-  get 'conclusion_management_reports', as: 'conclusion_management_reports',
-    to: 'conclusion_management_reports#index'
+  get 'conclusion_reports', as: 'conclusion_reports', to: 'conclusion_reports#index'
   get 'follow_up_audit', as: 'follow_up_audit', to: 'follow_up_audit#index'
-  get 'follow_up_committee', as: 'follow_up_committee', to: 'follow_up_committee#index'
-  get 'follow_up_management', as: 'follow_up_management', to: 'follow_up_management#index'
 
   [
+    'synthesis_report',
     'weaknesses_by_state',
     'weaknesses_by_risk',
     'weaknesses_by_audit_type',
     'control_objective_stats',
-    'process_control_stats'
-  ].each do |action|
-    get "conclusion_management_reports/#{action}",
-      as: "#{action}_conclusion_management_reports",
-      to: "conclusion_management_reports##{action}"
-    get "conclusion_audit_reports/#{action}",
-      as: "#{action}_conclusion_audit_reports",
-      to: "conclusion_audit_reports##{action}"
-    get "follow_up_management/#{action}",
-      as: "#{action}_follow_up_management",
-      to: "follow_up_management##{action}"
-    get "follow_up_audit/#{action}", as: "#{action}_follow_up_audit",
-      to: "follow_up_audit##{action}"
-  end
-
-  [
-    'create_weaknesses_by_state',
-    'create_weaknesses_by_risk',
-    'create_weaknesses_by_audit_type',
-    'create_control_objective_stats',
-    'create_process_control_stats'
-  ].each do |action|
-    post "conclusion_management_reports/#{action}",
-      as: "#{action}_conclusion_management_reports",
-      to: "conclusion_management_reports##{action}"
-    post "conclusion_audit_reports/#{action}",
-      as: "#{action}_conclusion_audit_reports",
-      to: "conclusion_audit_reports##{action}"
-    post "follow_up_management/#{action}",
-      as: "#{action}_follow_up_management",
-      to: "follow_up_management##{action}"
-    post "follow_up_audit/#{action}", as: "#{action}_follow_up_audit",
-      to: "follow_up_audit##{action}"
-  end
-
-  [
-    'qa_indicators',
-    'synthesis_report',
-    'control_objective_stats',
     'process_control_stats',
-    'rescheduled_being_implemented_weaknesses_report'
-  ].each do |action|
-    get "conclusion_committee_reports/#{action}",
-      as: "#{action}_conclusion_committee_reports",
-      to: "conclusion_committee_reports##{action}"
-    get "follow_up_committee/#{action}",
-      as: "#{action}_follow_up_committee",
-      to: "follow_up_committee##{action}"
-  end
-
-  [
-    'create_qa_indicators',
-    'create_synthesis_report',
-    'create_control_objective_stats',
-    'create_process_control_stats',
-    'create_rescheduled_being_implemented_weaknesses_report'
-  ].each do |action|
-    post "conclusion_committee_reports/#{action}",
-      as: "#{action}_conclusion_committee_reports",
-      to: "conclusion_committee_reports##{action}"
-    post "follow_up_committee/#{action}",
-      as: "#{action}_follow_up_committee",
-      to: "follow_up_committee##{action}"
-  end
-
-  [
+    'qa_indicators',
     'weaknesses_by_risk_report',
     'fixed_weaknesses_report',
-    'nonconformities_report',
+    'nonconformities_report'
   ].each do |action|
-    get "conclusion_committee_reports/#{action}",
-      as: "#{action}_conclusion_committee_reports",
-      to: "conclusion_committee_reports##{action}"
-    get "follow_up_committee/#{action}",
-      as: "#{action}_follow_up_committee",
-      to: "follow_up_committee##{action}"
-    get "conclusion_audit_reports/#{action}",
-      as: "#{action}_conclusion_audit_reports",
-      to: "conclusion_audit_reports##{action}"
+    get "conclusion_reports/#{action}",
+      as: "#{action}_conclusion_reports",
+      to: "conclusion_reports##{action}"
     get "follow_up_audit/#{action}",
       as: "#{action}_follow_up_audit",
       to: "follow_up_audit##{action}"
   end
 
   [
+    'create_synthesis_report',
+    'create_weaknesses_by_state',
+    'create_weaknesses_by_risk',
+    'create_weaknesses_by_audit_type',
+    'create_control_objective_stats',
+    'create_process_control_stats',
+    'create_qa_indicators',
     'create_weaknesses_by_risk_report',
     'create_fixed_weaknesses_report',
     'create_nonconformities_report'
   ].each do |action|
-    post "conclusion_committee_reports/#{action}",
-      as: "#{action}_conclusion_committee_reports",
-      to: "conclusion_committee_reports##{action}"
-    post "follow_up_committee/#{action}",
-      as: "#{action}_follow_up_committee",
-      to: "follow_up_committee##{action}"
-    post "conclusion_audit_reports/#{action}",
-      as: "#{action}_conclusion_audit_reports",
-      to: "conclusion_audit_reports##{action}"
+    post "conclusion_reports/#{action}",
+      as: "#{action}_conclusion_reports",
+      to: "conclusion_reports##{action}"
     post "follow_up_audit/#{action}",
       as: "#{action}_follow_up_audit",
       to: "follow_up_audit##{action}"
   end
 
-  get "conclusion_audit_reports/cost_analysis",
-    as: 'cost_analysis_conclusion_audit_reports',
-    to: 'conclusion_audit_reports#cost_analysis'
-  post "conclusion_audit_reports/create_cost_analysis",
-    as: 'create_cost_analysis_conclusion_audit_reports',
-    to: 'conclusion_audit_reports#create_cost_analysis'
-  get 'conclusion_audit_reports/cost_analysis/detailed',
-    as: 'detailed_cost_analysis_conclusion_audit_reports',
-    to: 'conclusion_audit_reports#cost_analysis',
+  get "conclusion_reports/cost_analysis",
+    as: 'cost_analysis_conclusion_reports',
+    to: 'conclusion_reports#cost_analysis'
+  post "conclusion_reports/create_cost_analysis",
+    as: 'create_cost_analysis_conclusion_reports',
+    to: 'conclusion_reports#create_cost_analysis'
+  get 'conclusion_reports/cost_analysis/detailed',
+    as: 'detailed_cost_analysis_conclusion_reports',
+    to: 'conclusion_reports#cost_analysis',
     include_details: 1
 
   get 'follow_up_audit/follow_up_cost_analysis',
@@ -274,6 +201,7 @@ Rails.application.routes.draw do
     member do
       get :survey_pdf
       get :suggested_findings
+      get :suggested_process_control_findings
       get :review_data
       get :weaknesses_and_oportunities
       get :download_work_papers
@@ -406,6 +334,7 @@ Rails.application.routes.draw do
     resources :releases, only: [:edit, :update]
     resources :roles, only: [:index]
     resources :status, only: [:show]
+    resources :imports, only: [:new, :create]
   end
 
   resources :users

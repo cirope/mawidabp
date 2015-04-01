@@ -39,12 +39,13 @@ module FindingsHelper
     else
       review = form.object.control_objective_item.try(:review)
       fras = (review.try(:finding_review_assignments) || []).reject do |fra|
-        fra.finding.repeated?
+        fra.finding.repeated? && fra.finding.class != form.object.class
       end
       findings = fras.map { |fra| [fra.finding, fra.finding_id.to_i] }
+      url = url_for controller: form.object.class.to_s.tableize, action: :show, id: '[FINDING_ID]'
 
       form.input :repeated_of_id, collection: findings, prompt: true,
-        label: false, input_html: { disabled: readonly }
+        label: false, input_html: { disabled: readonly, data: { repeated_url: url } }
     end
   end
 
@@ -86,11 +87,8 @@ module FindingsHelper
     content_tag(:abbr, h(review.identification), :title => review_data)
   end
 
-  def show_finding_review_code_with_control_objective_as_abbr(finding)
-    control_objective_text = "#{ControlObjectiveItem.model_name.human}: " +
-      finding.control_objective_item.to_s
-
-    content_tag(:abbr, h(finding.review_code), :title => control_objective_text)
+  def show_finding_review_code_with_decription_as_abbr(finding)
+    content_tag(:abbr, finding.review_code, :title => finding.description)
   end
 
 
@@ -161,5 +159,17 @@ module FindingsHelper
 
   def finding_complete_or_incomplete_label
     t "finding.#{params[:completed]}"
+  end
+
+  def finding_status_options
+    Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).map do |k, v|
+      [t("finding.status_#{k}"), v.to_s]
+    end
+  end
+
+  def finding_fixed_status_options
+    Finding::STATUS.slice(:implemented_audited, :assumed_risk).map do |k, v|
+      [t("finding.status_#{k}"), v.to_s]
+    end
   end
 end

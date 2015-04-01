@@ -52,6 +52,8 @@ mc_es:
     mc_es: 'Control de gestión'
 
   message:
+    welcome: 'Bienvenido'
+    ldap_error: 'El servidor de autenticación no está disponible, intente nuevamente más tarde'
     change_weakness_risk: "El riesgo del desvío ha cambiado"
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
@@ -129,8 +131,8 @@ mc_es:
     last_verified_date: "La última comprobación se realizó el %{date}"
     has_final_review: "Ya se emitió un informe definitivo y por lo tanto no es posible seguir trabajando con el informe borrador"
 
-  conclusion_audit_report:
-    index_title: "Reportes de auditoría"
+  conclusion_report:
+    index_title: "Reportes de conclusión"
     cost_analysis_title: "Análisis de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Desvíos / Oportunidades de Mejora totales por estado"
@@ -433,10 +435,6 @@ mc_es:
     incomplete: "Pendientes"
     complete: "Solucionados o reiterados"
     as_owner: "%{kind} como dueño de proceso"
-    download: "Descargar listado general"
-    download_detailed: "Descargar listado detallado"
-    download_xml: "Descargar listado en XML"
-    download_csv: "Descargar listado en CSV"
     work_papers: "Papeles de trabajo"
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
@@ -491,13 +489,6 @@ mc_es:
     without_conclusion_final_review: "Sin informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
-    pdf:
-      pdf_name: "listado_de_desvíos_y_oportunidades_de_mejora.pdf"
-      size_warning: "El listado es demasiado grande, se ha truncado a %{count} desvíos / oportunidades de mejora."
-      filtered_by:
-        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
-        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
-      sorted_by: "El listado fue ordenado por la columna %{column}"
     important_dates:
       title: "Fechas a considerar"
       expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *%{date}* si ningún auditado proporciona una respuesta"
@@ -552,9 +543,7 @@ mc_es:
     synthesis_report_title: "Informe de síntesis al directorio"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     fixed_weaknesses_report_title: "Desvíos por riesgo solucionados"
-    rescheduled_being_implemented_weaknesses_report_title: "Desvíos en trámite reprogramadas"
     detailed_report: "Reporte detallado"
-    rescheduling : "Reprogramaciones"
     qa_indicators_title: "Indicadores de calidad"
     weakness_summary: "Resumen de desvíos"
     high_risk_weaknesses: "Desvíos de riesgo alto"
@@ -655,10 +644,6 @@ mc_es:
         oportunities_solution_rate: "Solución de Oportunidades de Mejora"
         ancient_medium_risk_weaknesses: "Anticuación de Desvíos de Riesgo Medio"
         ancient_highest_risk_weaknesses: "Anticuación de Desvíos de Riesgo Alto"
-    rescheduled_being_implemented_weaknesses_report:
-      without_data: "Sin datos para el rango de fechas ingresado"
-      title: "INFORME DE DESVÍOS EN TRÁMITE REPROGRAMADAS"
-      pdf_name: "desvíos_reprogramadas_%{from_date}_al_%{to_date}.pdf"
     synthesis_report:
       pdf_name: "informe_de_sintesis_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Desvíos / Oportunidades de Mejora Auditoría Interna"
@@ -929,6 +914,7 @@ mc_es:
     add_user_assignment: "Agregar usuario relacionado"
     suggest_findings: 'Sugerir desvíos / oportunidades de mejora pendientes'
     without_suggested_findings: 'Sin desvíos / oportunidades de mejora pendientes'
+    suggested_findings_for: 'Hallazgos sugeridos para %{process_control}'
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
@@ -1223,6 +1209,7 @@ mc_es:
         file: "Archivo"
       finding:
         control_objective_item_id: "Objetivo/Meta"
+        title: "Título"
         description: "Desvío / Oportunidad"
         type: "Tipo"
         repeated_of_id: "Reiterada de"
@@ -1339,6 +1326,7 @@ mc_es:
         password: "Contraseña"
       oportunity:
         control_objective_item_id: "Objetivo/Meta"
+        title: "Título"
         description: "Oportunidad de mejora"
         review_code: "Código en el informe"
         answer: "Respuesta"
@@ -1438,6 +1426,7 @@ mc_es:
         privileges: "Privilegios"
       weakness:
         control_objective_item_id: "Objetivo/Meta"
+        title: "Título"
         description: "Desvío"
         review_code: "Código en el informe"
         audit_recommendations: "Recomendaciones"
@@ -1600,14 +1589,10 @@ mc_es:
   actioncontroller:
     best_practices: "Buenas prácticas"
     business_unit_types: "Unidades organizativas"
-    follow_up_audit: "Reportes de auditoría (Seguimiento)"
-    follow_up_committee: "Reportes de comité (Seguimiento)"
-    follow_up_management: "Reportes de la gerencia (Seguimiento)"
-    conclusion_audit_reports: "Reportes de auditoría (Conclusión)"
-    conclusion_committee_reports: "Reportes de comité (Conclusion)"
+    follow_up_audit: "Reportes de seguimiento"
+    conclusion_reports: "Reportes de conclusión"
     conclusion_draft_reviews: "Informe borrador"
     conclusion_final_reviews: "Informe definitivo"
-    conclusion_management_reports: "Reportes de la gerencia (Conclusión)"
     control_objective_items: "Objetivos/Metas"
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"

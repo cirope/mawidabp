@@ -23,6 +23,7 @@ module Reports::ProcessControlStats
     @process_control_ids_data = {}
     @reviews_score_data = {}
     reviews_score_data = {}
+    weaknesses_conditions = {}
 
     if params[:process_control_stats]
       if params[:process_control_stats][:business_unit_type].present?
@@ -41,6 +42,19 @@ module Reports::ProcessControlStats
           @filters << "<b>#{BusinessUnit.model_name.human}</b> = \"#{params[:process_control_stats][:business_unit].strip}\""
         end
       end
+
+      if params[:process_control_stats][:finding_status].present?
+        weaknesses_conditions[:state] = params[:process_control_stats][:finding_status]
+        state_text = t "finding.status_#{Finding::STATUS.invert[weaknesses_conditions[:state].to_i]}"
+
+        @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text}\""
+      end
+
+      if params[:process_control_stats][:finding_title].present?
+        weaknesses_conditions[:title] = params[:process_control_stats][:finding_title]
+
+        @filters << "<b>#{Finding.human_attribute_name('title')}</b> = \"#{weaknesses_conditions[:title]}\""
+      end
     end
 
     @periods.each do |period|
@@ -57,6 +71,8 @@ module Reports::ProcessControlStats
           pc_data[:review_ids] << id if pc_data[:review_ids].exclude? id
           weaknesses_count = {}
           weaknesses = final ? coi.final_weaknesses : coi.weaknesses
+          weaknesses = weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
+          weaknesses = weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
 
           weaknesses.not_revoked.each do |w|
             @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }

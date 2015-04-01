@@ -21,8 +21,6 @@ class WorkflowItem < ActiveRecord::Base
   validates :task, :order_number, :presence => true
   validates :predecessors, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
-  validates :task, :uniqueness =>
-    {:case_sensitive => false, :scope => :workflow_id}
   validates :order_number, :workflow_id, :numericality =>
     {:only_integer => true}, :allow_nil => true
   validates_date :start
@@ -101,7 +99,6 @@ class WorkflowItem < ActiveRecord::Base
   belongs_to :workflow
   has_many :resource_utilizations, :as => :resource_consumer,
     :dependent => :destroy
-  has_many :resources, -> { uniq }, :through => :resource_utilizations
 
   accepts_nested_attributes_for :resource_utilizations, :allow_destroy => true
 
@@ -111,6 +108,14 @@ class WorkflowItem < ActiveRecord::Base
     else
       -1
     end
+  end
+
+  def start
+    super.try :to_date
+  end
+
+  def end
+    super.try :to_date
   end
 
   def material_resource_utilizations

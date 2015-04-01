@@ -27,7 +27,7 @@ class FindingAnswer < ActiveRecord::Base
 
   # Relaciones
   belongs_to :finding
-  belongs_to :user, -> { where("#{User.table_name}.hidden" => [true,false]) }
+  belongs_to :user, -> { where("#{User.table_name}.hidden" => [true, false]) }
   belongs_to :file_model, :dependent => :destroy
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true

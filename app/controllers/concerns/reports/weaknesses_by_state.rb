@@ -37,8 +37,7 @@ module Reports::WeaknessesByState
             @weaknesses_counts[period]["#{key}_weaknesses"] =
               Weakness.list_all_by_date(@from_date, @to_date, false).
                 with_status_for_report.send("#{audit_type_symbol}_audit").
-                for_period(period).finals(final).where(conditions).group(
-                :state).count
+                for_period(period).finals(final).where(conditions).group(:state).count
             @weaknesses_counts[period]["#{key}_oportunities"] =
               Oportunity.list_all_by_date(@from_date, @to_date, false).
               with_status_for_report.send("#{audit_type_symbol}_audit").

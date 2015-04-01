@@ -2,6 +2,7 @@ class Finding < ActiveRecord::Base
   include ActsAsTree
   include Auditable
   include Comparable
+  include Findings::Achievements
   include Findings::Answers
   include Findings::Confirmation
   include Findings::CreateValidation
@@ -37,7 +38,12 @@ class Finding < ActiveRecord::Base
   # Named scopes
   scope :list, -> { where(organization_id: Organization.current_id) }
   scope :with_prefix, ->(prefix) {
-    where('review_code LIKE ?', "#{prefix}%").order('review_code ASC')
+    where(
+      "#{quoted_table_name}.#{qcn('review_code')} LIKE ?", "#{prefix}%"
+    ).order(review_code: :asc)
+  }
+  scope :with_title, ->(title) {
+    where "#{quoted_table_name}.#{qcn('title')} LIKE ?", "%#{title}%"
   }
   scope :all_for_reallocation_with_review, ->(review) {
     includes(:control_objective_item => :review).references(:reviews).where(
@@ -45,27 +51,26 @@ class Finding < ActiveRecord::Base
     )
   }
   scope :finals, ->(use_finals) { where(:final => use_finals) }
-  scope :sort_by_code, -> { order('review_code ASC') }
+  scope :sort_by_code, -> { order(review_code: :asc) }
   scope :for_current_organization, -> { list }
 
   # Relaciones
   belongs_to :organization
   belongs_to :control_objective_item
   has_one :review, :through => :control_objective_item
-  has_one :control_objective, :through => :control_objective_item,
-    :class_name => 'ControlObjective'
+  has_one :control_objective, :through => :control_objective_item
   has_many :notification_relations, :as => :model, :dependent => :destroy
-  has_many :notifications, -> { order('created_at').uniq },
+  has_many :notifications, -> { order(:created_at) },
     :through => :notification_relations
   has_many :costs, :as => :item, :dependent => :destroy
-  has_many :comments, -> { order('created_at ASC') }, :as => :commentable,
+  has_many :comments, -> { order(:created_at => :asc) }, :as => :commentable,
     :dependent => :destroy
   has_many :finding_user_assignments, :dependent => :destroy,
     :inverse_of => :finding, :before_add => :check_for_final_review,
     :before_remove => :check_for_final_review
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :finding
-  has_many :users, -> { order('last_name ASC') }, :through => :finding_user_assignments
+  has_many :users, -> { order(:last_name => :asc) }, :through => :finding_user_assignments
 
   accepts_nested_attributes_for :costs, :allow_destroy => false
   accepts_nested_attributes_for :comments, :allow_destroy => false
@@ -95,14 +100,14 @@ class Finding < ActiveRecord::Base
   end
 
   def to_s
-    "#{self.review_code} - #{self.control_objective_item.try(:review)}"
+    "#{review_code} - #{title} - #{control_objective_item.try(:review)}"
   end
 
   alias_method :label, :to_s
 
   def informal
-    text = "<strong>#{Finding.human_attribute_name(:description)}</strong>: "
-    text << self.description
+    text = "<strong>#{Finding.human_attribute_name(:title)}</strong>: "
+    text << self.title.to_s
     text << "<br /><strong>#{Finding.human_attribute_name(:review_code)}</strong>: "
     text << self.review_code
     text << "<br /><strong>#{Review.model_name.human}</strong>: "
@@ -244,6 +249,8 @@ class Finding < ActiveRecord::Base
       self.control_objective_item.to_s, 0, false)
     pdf.add_description_item(self.class.human_attribute_name('review_code'),
       self.review_code, 0, false)
+    pdf.add_description_item(self.class.human_attribute_name('title'),
+      self.title, 0, false)
     pdf.add_description_item(self.class.human_attribute_name('description'),
       self.description, 0, false)
 
@@ -317,13 +324,13 @@ class Finding < ActiveRecord::Base
 
       pdf.add_title(ControlObjectiveItem.human_attribute_name('work_papers'),
         (PDF_FONT_SIZE * 1.5).round, :center, false)
-      pdf.add_title("#{self.class.model_name.human} #{self.review_code}",
+      pdf.add_title("#{self.class.model_name.human} #{review_code} - #{title}",
         (PDF_FONT_SIZE * 1.5).round, :center, false)
 
       pdf.move_down PDF_FONT_SIZE * 3
 
       self.work_papers.each do |wp|
-        pdf.text wp.inspect, :justification => :center,
+        pdf.text wp.inspect, :align => :center,
           :font_size => PDF_FONT_SIZE
       end
     else
@@ -367,6 +374,8 @@ class Finding < ActiveRecord::Base
       "#{self.review.long_identification} (#{issue_date})", 0, false)
     pdf.add_description_item(Finding.human_attribute_name(:review_code),
       self.review_code, 0, false)
+    pdf.add_description_item(Finding.human_attribute_name(:title),
+      self.title, 0, false)
 
     pdf.add_description_item(ProcessControl.model_name.human,
       self.control_objective_item.process_control.name, 0, false)
@@ -689,6 +698,7 @@ class Finding < ActiveRecord::Base
     column_data = [
       self.review.to_s,
       self.review_code,
+      self.title,
       self.kind_of?(Fortress) ? '' : self.state_text,
       self.respond_to?(:risk_text) ? self.risk_text : '',
       self.respond_to?(:risk_text) ? self.priority_text : '',
@@ -714,6 +724,7 @@ class Finding < ActiveRecord::Base
       column_headers = [
         "#{Review.model_name.human} - #{PlanItem.human_attribute_name(:project)}",
         Weakness.human_attribute_name(:review_code),
+        Weakness.human_attribute_name(:title),
         Weakness.human_attribute_name(:state),
         Weakness.human_attribute_name(:risk),
         Weakness.human_attribute_name(:priority),

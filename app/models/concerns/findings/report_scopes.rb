@@ -24,7 +24,10 @@ module Findings::ReportScopes
       ).where(
         "#{ConclusionReview.table_name}.issue_date" => from_date..to_date
       ).references(:conslusion_reviews, :periods).order(
-        order && ["#{Period.table_name}.start ASC", "#{Period.table_name}.end ASC"]
+        order && [
+          "#{Period.quoted_table_name}.#{Period.qcn('start')} ASC",
+          "#{Period.quoted_table_name}.#{Period.qcn('end')} ASC"
+        ]
       )
     end
 
@@ -33,8 +36,8 @@ module Findings::ReportScopes
         control_objective_item: { review: [:period, :conclusion_final_review] }
       ).where(
         [
-          "#{Review.table_name}.created_at BETWEEN :begin AND :end",
-          "#{ConclusionFinalReview.table_name}.review_id IS NULL"
+          "#{Review.quoted_table_name}.#{Review.qcn('created_at')} BETWEEN :begin AND :end",
+          "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('review_id')} IS NULL"
         ].join(' AND '),
         { begin: from_date, end: to_date }
       ).references(:reviews, :periods, :conclusion_reviews)

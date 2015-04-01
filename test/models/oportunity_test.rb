@@ -19,6 +19,7 @@ class OportunityTest < ActiveSupport::TestCase
     assert_equal oportunity.control_objective_item_id,
       @oportunity.control_objective_item_id
     assert_equal oportunity.review_code, @oportunity.review_code
+    assert_equal oportunity.title, @oportunity.title
     assert_equal oportunity.description, @oportunity.description
     assert_equal oportunity.answer, @oportunity.answer
     assert_equal oportunity.state, @oportunity.state
@@ -33,6 +34,7 @@ class OportunityTest < ActiveSupport::TestCase
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'OM20',
+        :title => 'Title',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -68,6 +70,7 @@ class OportunityTest < ActiveSupport::TestCase
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
         :review_code => 'OM20',
+        :title => 'Title',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -135,9 +138,11 @@ class OportunityTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @oportunity.review_code = 'abcdd' * 52
+    @oportunity.title = 'abcdd' * 52
 
     assert @oportunity.invalid?
     assert_error @oportunity, :review_code, :too_long, count: 255
+    assert_error @oportunity, :title, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

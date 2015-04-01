@@ -4,10 +4,11 @@ class Nonconformity < Finding
   attr_reader :approval_errors
 
   # Named scopes
-  scope :all_for_report, -> { where(
-    :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
-    :final => true
-    ).order(['risk DESC', 'state ASC'])
+  scope :all_for_report, -> {
+    where(
+      :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
+      :final => true
+    ).order(:risk => :desc, :state => :asc)
   }
 
   # Restricciones
@@ -39,7 +40,7 @@ class Nonconformity < Finding
     Finding.columns_for_sort.dup.merge(
       :follow_up_date => {
         :name => Nonconformity.human_attribute_name(:follow_up_date),
-        :field => "#{Nonconformity.table_name}.follow_up_date ASC"
+        :field => "#{Nonconformity.quoted_table_name}.#{Nonconformity.qcn('follow_up_date')} ASC"
       }
     )
   end

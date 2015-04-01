@@ -1,7 +1,7 @@
 <div class="navbar navbar-default navbar-fixed-top" role="banner">
   <div class="container">
     <div class="navbar-header">
-      <% if @auth_user && @auth_user.password && current_organization %>
+      <% if show_menu? %>
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -13,7 +13,7 @@
     </div>
 
     <div class="collapse navbar-collapse" role="navigation">
-      <% if @auth_user && @auth_user.password && current_organization %>
+      <% if show_menu? %>
         <ul class="nav navbar-nav">
           <%= render(
             partial: 'shared/menu_item',
@@ -22,7 +22,7 @@
           ) %>
         </ul>
         <%= render partial: 'shared/user_actions', locals: { user: @auth_user } %>
-      <% elsif @auth_user && @auth_user.password %>
+      <% elsif show_logout? %>
         <ul class="nav navbar-nav navbar-right">
           <li>
             <%= link_to t('navigation.logout'), logout_path, data: { method: :delete } %>

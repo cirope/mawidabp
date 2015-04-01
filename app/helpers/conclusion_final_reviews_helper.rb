@@ -165,6 +165,11 @@ module ConclusionFinalReviewsHelper
       :review_code)}:</strong> #{finding.review_code}"
     end
 
+    if finding.title.present?
+      body_rows << "<strong>#{finding.class.human_attribute_name(
+      :title)}:</strong> #{finding.title}"
+    end
+
     if finding.repeated_ancestors.present? && (weakness || oportunity)
       body_rows << "<strong>#{finding.class.human_attribute_name(
       :repeated_of_id)}:</strong> #{finding.repeated_ancestors.join(' | ')}"

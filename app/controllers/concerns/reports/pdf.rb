@@ -62,12 +62,12 @@ module Reports::Pdf
     end
   end
 
-  def get_weaknesses_synthesis_table_data(weaknesses_count,
-      weaknesses_count_by_risk, risk_levels)
+  def get_weaknesses_synthesis_table_data(weaknesses_count, weaknesses_count_by_risk, risk_levels)
     total_count = weaknesses_count_by_risk.sum(&:second)
 
     unless total_count == 0
       risk_level_values = risk_levels.map { |rl| rl[0] }.reverse
+      highest_risk = risk_levels.sort {|r1, r2| r1[1] <=> r2[1]}.last
       statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
         sort { |s1, s2| s1.last <=> s2.last }
       column_order = ['state', risk_level_values, 'count'].flatten
@@ -85,7 +85,6 @@ module Reports::Pdf
         column_row = {'state' => "<strong>#{t("finding.status_#{state.first}")}</strong>"}
 
         risk_levels.each do |rl|
-          highest_risk = risk_levels.sort {|r1, r2| r1[1] <=> r2[1]}.last
           count = weaknesses_count[state.last][rl.last]
           percentage = sub_total_count > 0 ?
             (count * 100.0 / sub_total_count).round(2) : 0.0
@@ -132,6 +131,7 @@ module Reports::Pdf
 
     total_weaknesses = weaknesses_count.values.sum
     total_oportunities = oportunities_count.values.sum
+
     if sqm
       total_nonconformities = nonconformities_count.values.sum
       total_potential_nonconformities = potential_nonconformities_count.values.sum
@@ -284,7 +284,7 @@ module Reports::Pdf
     pdf.move_down PDF_FONT_SIZE
     pdf.text t("#{controller}_committee_report.applied_filters",
       :filters => filters.to_sentence, :count => filters.size),
-      :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
+      :font_size => (PDF_FONT_SIZE * 0.75).round, :align => :justify,
       :inline_format => true
   end
 

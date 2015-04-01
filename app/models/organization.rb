@@ -7,6 +7,7 @@ class Organization < ActiveRecord::Base
   include Organizations::DestroyValidation
   include Organizations::Group
   include Organizations::Images
+  include Organizations::LdapConfigs
   include Organizations::Parameters
   include Organizations::Roles
   include Organizations::Scopes
@@ -15,15 +16,16 @@ class Organization < ActiveRecord::Base
 
   trimmed_fields :name, :prefix
 
+  has_many :benefits, dependent: :destroy
   has_many :best_practices, dependent: :destroy
-  has_many :business_unit_types, -> { order('name ASC') }, dependent: :destroy
+  has_many :business_unit_types, -> { order(name: :asc) }, dependent: :destroy
   has_many :error_records, dependent: :destroy
   has_many :login_records, dependent: :destroy
   has_many :periods, dependent: :destroy
   has_many :polls, dependent: :destroy
   has_many :questionnaires, dependent: :destroy
   has_many :resource_classes, dependent: :destroy
-  has_many :users, -> { readonly.uniq }, through: :organization_roles
+  has_many :users, -> { readonly }, through: :organization_roles
   has_many :work_papers, dependent: :destroy
 
   def to_s

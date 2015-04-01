@@ -60,7 +60,8 @@ class ApplicationController < ActionController::Base
 
         session[:back_to] = nil if action == :index
 
-        if @auth_user.try(:must_change_the_password?) &&
+        if current_organization.try(:ldap_config).blank? &&
+            @auth_user.try(:must_change_the_password?) &&
             ![:edit_password, :update_password].include?(action)
           flash.notice ||= t 'message.must_change_the_password'
           redirect_to edit_users_password_url(@auth_user)
@@ -90,9 +91,9 @@ class ApplicationController < ActionController::Base
     # expirado. Puede deshabilitarse con el parámetro
     # :_session_expire_time_
     def check_access_time #:doc:
-      session_expire = current_organization ? parameter_in(current_organization.id,
-        :session_expire_time).to_i : 30
-      last_access = session[:last_access] || 10.years.ago
+      last_access    = session[:last_access] || 10.years.ago
+      session_expire = current_organization ?
+        parameter_in(current_organization.id, :session_expire_time).to_i : 30
 
       if session_expire == 0 || last_access >= session_expire.minutes.ago
         session[:last_access] = Time.now

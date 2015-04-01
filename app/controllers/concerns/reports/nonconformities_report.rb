@@ -54,13 +54,12 @@ module Reports::NonconformitiesReport
         column_data = []
         name = but.name
         conclusion_review_per_unit_type =
-          conclusion_reviews.for_period(period).with_business_unit_type(but.id)
+          conclusion_reviews.for_period(period).by_business_unit_type(but.id)
 
         conclusion_review_per_unit_type.each do |c_r|
           nonconformities = []
-          review_nonconformities = final ? c_r.review.final_nonconformities :
-            c_r.review.nonconformities  
-          
+          review_nonconformities = final ?  c_r.review.final_nonconformities : c_r.review.nonconformities
+
           review_nonconformities.each do |nc|
             audited = nc.users.select(&:audited?).map do |u|
               nc.process_owners.include?(u) ?
@@ -71,6 +70,7 @@ module Reports::NonconformitiesReport
             nonconformities << [
               "<b>#{Review.model_name.human}</b>: #{nc.review.to_s}",
               "<b>#{Nonconformity.human_attribute_name(:review_code)}</b>: #{nc.review_code}",
+              "<b>#{Nonconformity.human_attribute_name(:title)}</b>: #{nc.title}",
               "<b>#{Nonconformity.human_attribute_name(:state)}</b>: #{nc.state_text}",
               "<b>#{Nonconformity.human_attribute_name(:risk)}</b>: #{nc.risk_text}",
               ("<b>#{Nonconformity.human_attribute_name(:follow_up_date)}</b>: #{l(nc.follow_up_date, :format => :long)}" if nc.follow_up_date),

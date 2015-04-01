@@ -13,30 +13,30 @@ class PlanItem < ActiveRecord::Base
   scope :list_unused, ->(period_id) {
     includes(:review, :plan).where(
       [
-        "#{Plan.table_name}.period_id = :period_id",
-        "#{Review.table_name}.plan_item_id IS NULL",
-        "#{table_name}.business_unit_id IS NOT NULL",
+        "#{Plan.quoted_table_name}.#{Plan.qcn('period_id')} = :period_id",
+        "#{Review.quoted_table_name}.#{Review.qcn('plan_item_id')} IS NULL",
+        "#{quoted_table_name}.#{qcn('business_unit_id')} IS NOT NULL",
       ].join(' AND '),
       { :period_id => period_id }
     ).references(:plans, :reviews).order(
       [
-        "#{PlanItem.table_name}.order_number ASC",
-        "#{PlanItem.table_name}.project ASC"
+        "#{PlanItem.quoted_table_name}.#{PlanItem.qcn('order_number')} ASC",
+        "#{PlanItem.quoted_table_name}.#{PlanItem.qcn('project')} ASC"
       ]
     )
   }
   scope :for_business_unit_type, ->(business_unit_type) {
     if business_unit_type.to_i > 0
-      condition = "#{BusinessUnit.table_name}.business_unit_type_id = :but_id"
+      condition = "#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('business_unit_type_id')} = :but_id"
     elsif !business_unit_type.blank?
-      condition = "#{BusinessUnit.table_name}.business_unit_type_id IS NULL"
+      condition = "#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('business_unit_type_id')} IS NULL"
     end
 
     includes(:business_unit).where(
       condition, :but_id => business_unit_type.to_i
-    ).order('order_number ASC').references(:business_units)
+    ).order(:order_number => :asc).references(:business_units)
   }
-  scope :with_business_unit, -> { where("#{table_name}.business_unit_id IS NOT NULL") }
+  scope :with_business_unit, -> { where("#{quoted_table_name}.#{qcn('business_unit_id')} IS NOT NULL") }
 
   # Callbacks
   before_destroy :can_be_destroyed?
@@ -161,6 +161,14 @@ class PlanItem < ActiveRecord::Base
     end
   end
 
+  def start
+    super.try :to_date
+  end
+
+  def end
+    super.try :to_date
+  end
+
   def material_resource_utilizations
     self.resource_utilizations.select(&:material?)
   end
@@ -235,7 +243,7 @@ class PlanItem < ActiveRecord::Base
 
   def self.between(_start, _end)
     where(
-      "#{table_name}.start >= :start AND #{table_name}.end <= :end",
+      "#{quoted_table_name}.#{qcn('start')} >= :start AND #{quoted_table_name}.#{qcn('end')} <= :end",
       :start => _start, :end => _end
     )
   end

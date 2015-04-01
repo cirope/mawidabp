@@ -49,6 +49,7 @@ es:
 
   message:
     welcome: 'Bienvenido'
+    ldap_error: 'El servidor de autenticación no está disponible, intente nuevamente más tarde'
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
     insufficient_privileges: "No tiene permisos para realizar la operación"
@@ -125,8 +126,8 @@ es:
     last_verified_date: "La última comprobación se realizó el %{date}"
     has_final_review: "Ya se emitió un informe definitivo y por lo tanto no es posible seguir trabajando con el informe borrador"
 
-  conclusion_audit_report:
-    index_title: "Reportes de auditoría"
+  conclusion_report:
+    index_title: "Reportes de conclusión"
     cost_analysis_title: "Análisis de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
@@ -422,9 +423,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     incomplete: "Pendientes"
     complete: "Solucionados o reiterados"
     as_owner: "%{kind} como dueño de proceso"
-    download: "Descargar listado general"
-    download_detailed: "Descargar listado detallado"
-    download_xml: 'Descargar listado en XML'
     work_papers: "Papeles de trabajo"
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
@@ -478,13 +476,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     without_conclusion_final_review: "Sin informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
-    pdf:
-      pdf_name: "listado_de_observaciones_y_oportunidades_de_mejora.pdf"
-      size_warning: "El listado es demasiado grande, se ha truncado a %{count} observaciones / oportunidades de mejora."
-      filtered_by:
-        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
-        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
-      sorted_by: "El listado fue ordenado por la columna %{column}"
     important_dates:
       title: "Fechas a considerar"
       expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *%{date}* si ningún auditado proporciona una respuesta"
@@ -868,6 +859,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     add_user_assignment: "Agregar usuario relacionado"
     suggest_findings: 'Sugerir observaciones / oportunidades de mejora pendientes'
     without_suggested_findings: 'Sin observaciones / oportunidades de mejora pendientes'
+    suggested_findings_for: 'Hallazgos sugeridos para %{process_control}'
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
@@ -1150,6 +1142,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         size: "Archivo (tamaño)"
       finding:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "Observación / Oportunidad"
         type: "Tipo"
         repeated_of_id: "Reiterada de"
@@ -1171,6 +1164,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         work_papers: "Papeles de trabajo"
         finding_answers: "Respuestas"
         rescheduled: "Reprogramada"
+      finding/achievements:
+        one: "Beneficio estimado"
+        amount: "Monto"
+        comment: "Comentario"
       finding/costs:
         one: "Tiempo dedicado"
         cost: "Tiempo dedicado"
@@ -1264,6 +1261,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         password: "Contraseña"
       oportunity:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "Oportunidad de mejora"
         review_code: "Código en el informe"
         answer: "Respuesta"
@@ -1367,6 +1365,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         privileges: "Privilegios"
       weakness:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "Observación"
         review_code: "Código en el informe"
         audit_recommendations: "Recomendaciones de auditoría"
@@ -1528,14 +1527,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
   actioncontroller:
     best_practices: "Buenas prácticas"
     business_unit_types: "Unidades de negocio"
-    follow_up_audit: "Reportes de auditoría (Seguimiento)"
-    follow_up_committee: "Reportes de comité (Seguimiento)"
-    follow_up_management: "Reportes de la gerencia (Seguimiento)"
-    conclusion_audit_reports: "Reportes de auditoría (Conclusión)"
-    conclusion_committee_reports: "Reportes de comité (Conclusion)"
+    follow_up_audit: "Reportes de seguimiento"
+    conclusion_reports: "Reportes de conclusión"
     conclusion_draft_reviews: "Informe borrador"
     conclusion_final_reviews: "Informe definitivo"
-    conclusion_management_reports: "Reportes de la gerencia (Conclusión)"
     control_objective_items: "Objetivos de control"
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"

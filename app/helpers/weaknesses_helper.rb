@@ -39,4 +39,16 @@ module WeaknessesHelper
 
     "#{code_prefix} #{next_number}"
   end
+
+  def benefit_exists?
+    Benefit.list.exists?
+  end
+
+  def weakness_achievements_for kind
+    Benefit.list.where(kind: kind).order(created_at: :asc).map do |benefit|
+      achievement = @weakness.achievements.detect { |a| a.benefit_id == benefit.id }
+
+      achievement || @weakness.achievements.new(benefit_id: benefit.id)
+    end
+  end
 end

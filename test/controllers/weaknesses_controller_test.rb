@@ -44,7 +44,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
     get :index, search: {
       query: '1 2 4',
-      columns: ['description', 'review'],
+      columns: ['title', 'review'],
       order: 'review'
     }
     assert_response :success
@@ -77,7 +77,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
     get :index, search: {
       query: '1 2 4 y 1w',
-      columns: ['description', 'review']
+      columns: ['title', 'review']
     }
     assert_redirected_to weakness_url(
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness))
@@ -93,6 +93,19 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_template 'weaknesses/show'
   end
 
+  test 'show weakness in json' do
+    weakness = findings :bcra_A4609_data_proccessing_impact_analisys_weakness
+
+    login
+    get :show, :completed => 'incomplete', :id => weakness.id, :format => :json
+    assert_response :success
+    assert_not_nil assigns(:weakness)
+
+    decoded_weakness = ActiveSupport::JSON.decode @response.body
+
+    assert_equal weakness.id, decoded_weakness['id']
+  end
+
   test 'new weakness' do
     login
     get :new, control_objective_item: control_objective_items(
@@ -103,7 +116,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'create weakness' do
-    counts_array = ['Weakness.count', 'WorkPaper.count', 'FindingRelation.count']
+    counts_array = ['Weakness.count', 'WorkPaper.count', 'FindingRelation.count', 'Achievement.count']
 
     login
 
@@ -113,6 +126,7 @@ class WeaknessesControllerTest < ActionController::TestCase
           control_objective_item_id: control_objective_items(
             :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
           review_code: 'O020',
+          title: 'Title',
           description: 'New description',
           answer: 'New answer',
           audit_comments: 'New audit comments',
@@ -139,6 +153,12 @@ class WeaknessesControllerTest < ActionController::TestCase
               user_id: users(:administrator_user).id, process_owner: '0'
             }
           ],
+          achievements_attributes: [
+            {
+              benefit_id: benefits(:productivity).id,
+              amount: '2000.01'
+            }
+          ],
           work_papers_attributes: [
             {
               name: 'New workpaper name',
@@ -146,8 +166,7 @@ class WeaknessesControllerTest < ActionController::TestCase
               number_of_pages: '10',
               description: 'New workpaper description',
               file_model_attributes: {
-                file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
-                  'text/plain')
+                file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
               }
             }
           ],
@@ -181,6 +200,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             control_objective_item_id: control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item).id,
             review_code: 'O020',
+            title: 'Title',
             description: 'Updated description',
             answer: 'Updated answer',
             audit_comments: 'Updated audit comments',

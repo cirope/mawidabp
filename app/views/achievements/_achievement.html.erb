@@ -1,0 +1,16 @@
+<% frozen = frozen rescue true %>
+<% id = f.object.object_id %>
+<fieldset class="achievement" id="<%= id %>">
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :benefit_id, as: :hidden %>
+      <%= f.object.benefit %>
+    </div>
+    <div class="col-md-4">
+      <%= f.input :comment, as: :string, label: false, input_html: { class: 'input-sm', readonly: frozen } %>
+    </div>
+    <div class="col-md-2">
+      <%= f.input :amount, label: false, input_html: { class: 'input-sm', readonly: frozen } %>
+    </div>
+  </div>
+</fieldset>

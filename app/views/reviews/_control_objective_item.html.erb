@@ -1,7 +1,7 @@
 <% control_objective_item = f.object %>
 <fieldset class="control_objective_item">
   <% if control_objective_item.new_record? %>
-    <div style="display: none;">
+    <div class="hidden">
       <%= f.input :control_objective_id, as: :hidden %>
       <%= f.input :control_objective_text, as: :hidden %>
       <%= f.simple_fields_for :control do |c_f| %>
@@ -28,6 +28,17 @@
           <% end %>
           <%= f.input :id, as: :hidden %>
           <%= f.input :order_number, as: :hidden, input_html: { class: 'sort_number' } %>
+        <% end %>
+        <% if control_objective_item.weaknesses.exists? %>
+          <ul>
+            <% control_objective_item.weaknesses.each do |weakness| %>
+              <li>
+                <span class="text-danger">
+                  <%= [weakness.review_code, weakness.title].compact.join(' - ') %>
+                </span>
+              </li>
+            <% end %>
+          </ul>
         <% end %>
       </li>
     </ul>

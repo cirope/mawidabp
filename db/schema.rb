@@ -11,10 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150121213653) do
+ActiveRecord::Schema.define(version: 20150303153258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "achievements", force: true do |t|
+    t.integer  "benefit_id",                          null: false
+    t.decimal  "amount",     precision: 15, scale: 2
+    t.text     "comment"
+    t.integer  "finding_id",                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "achievements", ["benefit_id"], name: "index_achievements_on_benefit_id", using: :btree
+  add_index "achievements", ["finding_id"], name: "index_achievements_on_finding_id", using: :btree
 
   create_table "answer_options", force: true do |t|
     t.text     "option"
@@ -41,6 +53,16 @@ ActiveRecord::Schema.define(version: 20150121213653) do
   add_index "answers", ["poll_id"], name: "index_answers_on_poll_id", using: :btree
   add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
   add_index "answers", ["type", "id"], name: "index_answers_on_type_and_id", using: :btree
+
+  create_table "benefits", force: true do |t|
+    t.string   "name",            null: false
+    t.string   "kind",            null: false
+    t.integer  "organization_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "benefits", ["organization_id"], name: "index_benefits_on_organization_id", using: :btree
 
   create_table "best_practices", force: true do |t|
     t.string   "name"
@@ -295,6 +317,7 @@ ActiveRecord::Schema.define(version: 20150121213653) do
     t.text     "cause_analysis"
     t.date     "cause_analysis_date"
     t.integer  "organization_id"
+    t.string   "title"
   end
 
   add_index "findings", ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id", using: :btree
@@ -306,6 +329,7 @@ ActiveRecord::Schema.define(version: 20150121213653) do
   add_index "findings", ["parent_id"], name: "index_findings_on_parent_id", using: :btree
   add_index "findings", ["repeated_of_id"], name: "index_findings_on_repeated_of_id", using: :btree
   add_index "findings", ["state"], name: "index_findings_on_state", using: :btree
+  add_index "findings", ["title"], name: "index_findings_on_title", using: :btree
   add_index "findings", ["type"], name: "index_findings_on_type", using: :btree
   add_index "findings", ["updated_at"], name: "index_findings_on_updated_at", using: :btree
 
@@ -332,6 +356,26 @@ ActiveRecord::Schema.define(version: 20150121213653) do
     t.datetime "updated_at"
     t.datetime "image_updated_at"
   end
+
+  create_table "ldap_configs", force: true do |t|
+    t.string   "hostname",                          null: false
+    t.integer  "port",                default: 389, null: false
+    t.string   "basedn",                            null: false
+    t.string   "login_mask",                        null: false
+    t.string   "username_attribute",                null: false
+    t.string   "name_attribute",                    null: false
+    t.string   "last_name_attribute",               null: false
+    t.string   "email_attribute",                   null: false
+    t.string   "function_attribute"
+    t.string   "roles_attribute",                   null: false
+    t.string   "manager_attribute"
+    t.integer  "organization_id",                   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "filter"
+  end
+
+  add_index "ldap_configs", ["organization_id"], name: "index_ldap_configs_on_organization_id", using: :btree
 
   create_table "login_records", force: true do |t|
     t.integer  "user_id"
@@ -732,6 +776,11 @@ ActiveRecord::Schema.define(version: 20150121213653) do
   add_index "workflows", ["review_id"], name: "index_workflows_on_review_id", using: :btree
 
   Foreigner.load
+  add_foreign_key "achievements", "benefits", name: "achievements_benefit_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "achievements", "findings", name: "achievements_finding_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+
+  add_foreign_key "benefits", "organizations", name: "benefits_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+
   add_foreign_key "best_practices", "organizations", name: "best_practices_organization_id_fk", dependent: :restrict
 
   add_foreign_key "business_unit_types", "organizations", name: "business_unit_types_organization_id_fk", dependent: :restrict
@@ -767,6 +816,8 @@ ActiveRecord::Schema.define(version: 20150121213653) do
 
   add_foreign_key "findings", "control_objective_items", name: "findings_control_objective_item_id_fk", dependent: :restrict
   add_foreign_key "findings", "findings", name: "findings_repeated_of_id_fk", column: "repeated_of_id", dependent: :restrict
+
+  add_foreign_key "ldap_configs", "organizations", name: "ldap_configs_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
   add_foreign_key "login_records", "organizations", name: "login_records_organization_id_fk", dependent: :restrict
   add_foreign_key "login_records", "users", name: "login_records_user_id_fk", dependent: :restrict

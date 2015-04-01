@@ -201,6 +201,8 @@ module Users::Reassigns
 
       content << "\n* #{model.human_attribute_name('review_code')}: "
       content << "_#{finding.review_code}_"
+      content << "\n** #{model.human_attribute_name('title')}: "
+      content << "_#{finding.title}_"
       content << "\n** #{model.human_attribute_name('description')}: "
       content << "_#{finding.description}_"
 

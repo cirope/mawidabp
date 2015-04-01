@@ -4,11 +4,11 @@ module LoginRecords::Search
   included do
     COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
       user: {
-        column: "LOWER(#{User.table_name}.user)", operator: 'LIKE',
+        column: "LOWER(#{User.quoted_table_name}.#{User.qcn('user')})", operator: 'LIKE',
         mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
       },
       data: {
-        column: "LOWER(#{table_name}.data)", operator: 'LIKE',
+        column: "LOWER(#{quoted_table_name}.#{qcn('data')})", operator: 'LIKE',
         mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
       }
     })

@@ -33,7 +33,7 @@ class Plan < ActiveRecord::Base
   # Relaciones
   belongs_to :period
   belongs_to :organization
-  has_many :plan_items, -> { order("#{PlanItem.table_name}.order_number ASC") },
+  has_many :plan_items, -> { order("#{PlanItem.quoted_table_name}.#{PlanItem.qcn('order_number')} ASC") },
     :dependent => :destroy
 
   accepts_nested_attributes_for :plan_items, :allow_destroy => true

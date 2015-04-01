@@ -1,0 +1,69 @@
+# ldapadd -x -h localhost -p 389 -D "cn=admin,dc=test,dc=com" -w secret -f base.ldif
+
+dn: dc=test,dc=com
+objectClass: dcObject
+objectClass: organizationalUnit
+dc: test
+ou: Test
+
+dn: ou=people,dc=test,dc=com
+objectClass: organizationalUnit
+ou: people
+
+dn: ou=groups,dc=test,dc=com
+objectClass: organizationalUnit
+ou: groups
+
+dn: cn=admin,ou=people,dc=test,dc=com
+objectClass: inetOrgPerson
+sn: Doe
+givenname: John
+title: Administrator
+description: cn=Administrator Second,ou=people,dc=test,dc=com
+description: cn=Auditor Second,ou=people,dc=test,dc=com
+uid: admin@test.com
+mail: administrator@administrator.com
+cn: admin
+userPassword: {SSHA}e1GIPfRS5AhGYeKAYi7cTJEaQWMbELnJ
+
+dn: cn=admin_second,ou=people,dc=test,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+sn: Other
+givenname: John
+title: Another administrator
+description: cn=Administrator Second,ou=people,dc=test,dc=com
+uid: admin_second@test.com
+mail: administrator_second@administrator.com
+cn: admin_second
+userPassword: {SSHA}jZeYUeNAd/8acSrOfPNWxWbxKyaQgxRP
+
+dn: cn=general_manager_user,ou=people,dc=test,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+sn: New
+givenname: User
+title: This should be imported as new
+description: cn=Auditor Second,ou=people,dc=test,dc=com
+manager: cn=admin,ou=people,dc=test,dc=com
+uid: new_user@test.com
+cn: new_user
+mail: new_user@test.com
+userPassword: {SSHA}pULtb+MrlssbA09LY4j5OfaVWI8NUC0k
+
+dn: cn=admins,ou=groups,dc=test,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+uniqueMember: cn=admin,ou=people,dc=test,dc=com
+uniqueMember: cn=admin_second,ou=people,dc=test,dc=com
+cn: admins
+
+dn: cn=users,ou=groups,dc=test,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+uniqueMember: cn=general_manager_user,ou=people,dc=test,dc=com
+cn: users

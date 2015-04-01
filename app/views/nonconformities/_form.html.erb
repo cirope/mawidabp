@@ -14,18 +14,25 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <%= f.input :review, label: Review.model_name.human(count: 1),
-          input_html: { value: review.try(:identification), readonly: true } %>
-        <%= f.input :review_code, input_html: { maxlength: 255, readonly: true } %>
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :review, label: Review.model_name.human(count: 1),
+              input_html: { value: review.try(:identification), readonly: true } %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :review_code, input_html: { maxlength: 255, readonly: true } %>
+          </div>
+        </div>
+        <%= f.input :title, input_html: { autofocus: true, maxlength: 255, readonly: readonly } %>
         <div>
-          <label for="weakness_control_objective_item">
+          <label for="nonconformity_control_objective_item">
             <%= ControlObjective.model_name.human %>
           </label>
           <% if !readonly && !@nonconformity.new_record? %>
             <%= f.input :control_objective_item, label: false, input_html: {
               value: @nonconformity.control_objective_item.try(:control_objective_text),
               title: t('label.search'),
-              autocomplete: :off, autofocus: true,
+              autocomplete: :off,
               data: {
                 autocomplete_params: ({ review_id: @nonconformity.review.id } if @nonconformity.review),
                 autocomplete_url: auto_complete_for_control_objective_item_nonconformities_path,
