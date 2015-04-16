@@ -30,6 +30,7 @@ gem 'sidekiq'
 gem 'sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
+gem 'sprockets', '~> 2' # TODO: see https://github.com/capistrano/rails/pull/112
 
 gem 'unicorn'
 
