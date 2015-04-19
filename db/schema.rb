@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 20150418222125) do
     t.datetime "updated_at"
     t.boolean  "obsolete",        default: false
     t.boolean  "shared",          default: false, null: false
-    t.integer  "group_id"
+    t.integer  "group_id",                        null: false
   end
 
   add_index "best_practices", ["created_at"], name: "index_best_practices_on_created_at", using: :btree
