@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150303153258) do
+ActiveRecord::Schema.define(version: 20150418222125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,9 +72,12 @@ ActiveRecord::Schema.define(version: 20150303153258) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "obsolete",        default: false
+    t.boolean  "shared",          default: false, null: false
+    t.integer  "group_id"
   end
 
   add_index "best_practices", ["created_at"], name: "index_best_practices_on_created_at", using: :btree
+  add_index "best_practices", ["group_id"], name: "index_best_practices_on_group_id", using: :btree
   add_index "best_practices", ["obsolete"], name: "index_best_practices_on_obsolete", using: :btree
   add_index "best_practices", ["organization_id"], name: "index_best_practices_on_organization_id", using: :btree
 
@@ -781,6 +784,7 @@ ActiveRecord::Schema.define(version: 20150303153258) do
 
   add_foreign_key "benefits", "organizations", name: "benefits_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
+  add_foreign_key "best_practices", "groups", name: "best_practices_group_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
   add_foreign_key "best_practices", "organizations", name: "best_practices_organization_id_fk", dependent: :restrict
 
   add_foreign_key "business_unit_types", "organizations", name: "business_unit_types_organization_id_fk", dependent: :restrict

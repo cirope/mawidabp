@@ -1,17 +1,23 @@
 iso_27001:
   organization: cirope
+  group: main_group
   name: ISO 27001
   description: Gestión de Seguridad de la Información
   obsolete: false
+  shared: false
 
 bcra_A4609:
   organization: cirope
+  group: main_group
   name: Comunicación "A" 4609 - BCRA
   description: Requisitos mínimos de Tecnología de Información
   obsolete: false
+  shared: false
 
 useless_best_practice:
   organization: cirope
+  group: main_group
   name: Useless best practice
   description: Useless best practice
   obsolete: false
+  shared: false

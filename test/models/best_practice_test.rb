@@ -10,8 +10,9 @@ class BestPracticeTest < ActiveSupport::TestCase
 
   test 'create' do
     assert_difference 'BestPractice.count' do
-      @best_practice = BestPractice.list.create(
-        name: 'New name', description: 'New description'
+      @best_practice = BestPractice.create(
+        name: 'New name',
+        description: 'New description'
       )
     end
 
@@ -42,10 +43,13 @@ class BestPracticeTest < ActiveSupport::TestCase
 
   test 'validates blank atrtributes' do
     @best_practice = BestPractice.new name: ''
+    @best_practice.group_id = nil
+    @best_practice.organization_id = nil
 
     assert @best_practice.invalid?
     assert_error @best_practice, :name, :blank
     assert_error @best_practice, :organization_id, :blank
+    assert_error @best_practice, :group_id, :blank
   end
 
   test 'validates length of attributes' do

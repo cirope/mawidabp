@@ -25,6 +25,7 @@ class ApplicationController < ActionController::Base
   private
 
     def scope_current_organization
+      Group.current_id        = current_organization.try(:group_id)
       Organization.current_id = current_organization.try(:id)
     end
 

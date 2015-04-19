@@ -94,6 +94,7 @@ es: &common
         name: 'Nombre'
         description: 'Descripción'
         obsolete: 'Obsoleta'
+        shared: 'Compartida'
       best_practice/process_controls:
         name: 'Proceso'
         order: 'Proceso (orden)'
