@@ -3,7 +3,7 @@
 <fieldset class="control_objective">
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-5">
         <%= f.input :name, autofocus: true, input_html: { rows: 4 } %>
       </div>
 
@@ -12,6 +12,14 @@
       </div>
       <div class="col-md-2">
         <%= f.input :risk, collection: risks, prompt: true %>
+      </div>
+      <div class="col-md-1">
+        <label for="control_objective_continuous_<%= id %>">
+          <%= ControlObjective.human_attribute_name 'continuous' %>
+        </label>
+        <div>
+          <%= f.check_box :continuous, id: "control_objective_continuous_#{id}", disabled: f.object.continuous %>
+        </div>
       </div>
       <div class="col-md-1">
         <label for="control_objective_obsolete_<%= id %>">

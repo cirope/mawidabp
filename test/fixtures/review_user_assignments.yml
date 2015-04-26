@@ -57,3 +57,33 @@ review_approved_with_conclusion_auditor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:auditor] %>
   review: review_approved_with_conclusion
   user: auditor_user
+
+review_without_conclusion_and_without_findings_audited:
+  assignment_type: <%= ReviewUserAssignment::TYPES[:audited] %>
+  review: review_without_conclusion_and_without_findings
+  user: audited_user
+
+review_without_conclusion_and_without_findings_supervisor:
+  assignment_type: <%= ReviewUserAssignment::TYPES[:supervisor] %>
+  review: review_without_conclusion_and_without_findings
+  user: supervisor_user
+
+review_without_conclusion_and_without_findings_auditor:
+  assignment_type: <%= ReviewUserAssignment::TYPES[:auditor] %>
+  review: review_without_conclusion_and_without_findings
+  user: auditor_user
+
+review_without_conclusion_audited:
+  assignment_type: <%= ReviewUserAssignment::TYPES[:audited] %>
+  review: review_without_conclusion
+  user: audited_user
+
+review_without_conclusion_supervisor:
+  assignment_type: <%= ReviewUserAssignment::TYPES[:supervisor] %>
+  review: review_without_conclusion
+  user: supervisor_user
+
+review_without_conclusion_auditor:
+  assignment_type: <%= ReviewUserAssignment::TYPES[:auditor] %>
+  review: review_without_conclusion
+  user: auditor_user

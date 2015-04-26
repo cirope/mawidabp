@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150418222125) do
+ActiveRecord::Schema.define(version: 20150425201710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,19 @@ ActiveRecord::Schema.define(version: 20150418222125) do
   add_index "best_practices", ["group_id"], name: "index_best_practices_on_group_id", using: :btree
   add_index "best_practices", ["obsolete"], name: "index_best_practices_on_obsolete", using: :btree
   add_index "best_practices", ["organization_id"], name: "index_best_practices_on_organization_id", using: :btree
+
+  create_table "business_unit_scores", force: true do |t|
+    t.integer  "design_score"
+    t.integer  "compliance_score"
+    t.integer  "sustantive_score"
+    t.integer  "business_unit_id"
+    t.integer  "control_objective_item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "business_unit_scores", ["business_unit_id"], name: "index_business_unit_scores_on_business_unit_id", using: :btree
+  add_index "business_unit_scores", ["control_objective_item_id"], name: "index_business_unit_scores_on_control_objective_item_id", using: :btree
 
   create_table "business_unit_types", force: true do |t|
     t.string   "name"
@@ -171,6 +184,7 @@ ActiveRecord::Schema.define(version: 20150418222125) do
     t.integer  "relevance"
     t.integer  "risk"
     t.boolean  "obsolete",           default: false
+    t.boolean  "continuous"
   end
 
   add_index "control_objectives", ["obsolete"], name: "index_control_objectives_on_obsolete", using: :btree
@@ -786,6 +800,9 @@ ActiveRecord::Schema.define(version: 20150418222125) do
 
   add_foreign_key "best_practices", "groups", name: "best_practices_group_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
   add_foreign_key "best_practices", "organizations", name: "best_practices_organization_id_fk", dependent: :restrict
+
+  add_foreign_key "business_unit_scores", "business_units", name: "business_unit_scores_business_unit_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "business_unit_scores", "control_objective_items", name: "business_unit_scores_control_objective_item_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
   add_foreign_key "business_unit_types", "organizations", name: "business_unit_types_organization_id_fk", dependent: :restrict
 

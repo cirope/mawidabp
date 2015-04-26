@@ -1,0 +1,39 @@
+<% id = f.object.object_id %>
+<fieldset class="business_unit_score">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-4">
+        <% copy_attribute_errors(:business_unit_id, :auto_business_unit_name, f) %>
+        <%= f.input :auto_business_unit_name, label: false, autofocus: true,
+          input_html: {
+            value: f.object.try(:business_unit).try(:name),
+            id: "business_unit_score_business_unit_#{id}",
+            title: t('label.search'),
+            readonly: readonly,
+            data: {
+              autocomplete_url: auto_complete_for_business_unit_control_objective_items_path,
+              autocomplete_id_target: "#auto_business_unit_id_#{id}"
+            }
+          } %>
+        <%= f.input :business_unit_id, as: :hidden, input_html: { id: "auto_business_unit_id_#{id}" } %>
+      </div>
+      <div class="col-md-2">
+        <%= f.input :design_score, label: false, collection: qualifications,
+          include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
+      </div>
+      <div class="col-md-2">
+        <%= f.input :compliance_score, label: false, collection: qualifications,
+          include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
+      </div>
+      <div class="col-md-2">
+        <%= f.input :sustantive_score, label: false, collection: qualifications,
+          include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
+      </div>
+      <div class="col-md-2">
+        <div class="toggle-visibility">
+          <%= link_to_remove_nested_item(f) unless readonly %>
+        </div>
+      </div>
+    </div>
+  </div>
+</fieldset>

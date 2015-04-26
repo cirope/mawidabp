@@ -375,11 +375,11 @@ class UserTest < ActiveSupport::TestCase
     old_user = users :audited_user
     user = users :audited_second_user
     reviews_to_reassign = old_user.reviews.reject &:has_final_review?
-    notifications = reviews_to_reassign.size
 
     assert reviews_to_reassign.any? { |r| r.users.exclude?(user) }
 
-    assert_difference 'ActionMailer::Base.deliveries.size', notifications do
+    # One email each user...
+    assert_difference 'ActionMailer::Base.deliveries.size', 2 do
       assert_difference 'Notification.count' do
          old_user.reassign_to user, with_reviews: true
       end

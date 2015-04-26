@@ -61,7 +61,8 @@ class BestPracticesController < ApplicationController
       params.require(:best_practice).permit(
         :name, :description, :obsolete, :shared, :lock_version, process_controls_attributes: [
           :id, :name, :order, :obsolete, :_destroy, control_objectives_attributes: [
-            :id, :name, :relevance, :risk, :obsolete, :order, :_destroy, control_attributes: [
+            :id, :name, :relevance, :risk, :obsolete, :continuous, :order, :_destroy,
+            control_attributes: [
               :id, :control, :effects, :design_tests, :compliance_tests, :sustantive_tests, :_destroy
             ]
           ]

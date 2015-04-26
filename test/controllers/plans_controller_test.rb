@@ -322,7 +322,7 @@ class PlansControllerTest < ActionController::TestCase
 
   test 'auto complete for business_unit business_unit' do
     login
-    get :auto_complete_for_business_unit_business_unit_id, {
+    get :auto_complete_for_business_unit, {
       :q => 'fifth', :format => :json
     }
     assert_response :success
@@ -331,7 +331,7 @@ class PlansControllerTest < ActionController::TestCase
 
     assert_equal 0, business_units.size # Fifth is in another organization
 
-    get :auto_complete_for_business_unit_business_unit_id, {
+    get :auto_complete_for_business_unit, {
       :q => 'one', :format => :json
     }
     assert_response :success
@@ -341,7 +341,7 @@ class PlansControllerTest < ActionController::TestCase
     assert_equal 1, business_units.size # One only
     assert business_units.all? { |u| (u['label'] + u['informal']).match /one/i }
 
-    get :auto_complete_for_business_unit_business_unit_id, {
+    get :auto_complete_for_business_unit, {
       :q => 'business', :format => :json
     }
     assert_response :success
@@ -351,7 +351,7 @@ class PlansControllerTest < ActionController::TestCase
     assert_equal 4, business_units.size # All in the organization (one, two, three and four)
     assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
 
-    get :auto_complete_for_business_unit_business_unit_id, {
+    get :auto_complete_for_business_unit, {
       :q => 'business',
       :business_unit_type_id => business_unit_types(:cycle).id,
       :format => :json

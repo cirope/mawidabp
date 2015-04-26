@@ -29,7 +29,7 @@ review_without_conclusion:
   survey: Review Without Conclusion Survey
   plan_item: current_plan_item_3
   organization: cirope
-  
+
 review_without_conclusion_and_without_findings:
   period: current_period
   identification: 1 2 6
@@ -37,7 +37,7 @@ review_without_conclusion_and_without_findings:
   survey: Review Without Conclusion and Without Findings Survey
   plan_item: current_plan_item_4
   organization: cirope
-  
+
 review_approved_with_conclusion:
   period: current_period
   identification: 1 2 7

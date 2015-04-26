@@ -366,6 +366,7 @@ public_es:
     add_oportunity: "Agregar nueva oportunidad de mejora"
     add_weakness: "Agregar nueva observación"
     add_work_paper: "Agregar papel de trabajo"
+    add_business_unit_score: "Agregar calificación de unidad de negocio"
     readonly: "El objetivo de control no puede ser modificado, ya se emitió el informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     has_work_papers: "Papeles de trabajo"
@@ -1176,25 +1177,30 @@ public_es:
         effectiveness: "Efectividad de control"
         weaknesses: "Observaciones"
         oportunities: "Oportunidades de mejora"
-        control:
-          order: "Objetivo de control (orden)"
-          control: "Objetivo de control (controles)"
-          effects: "Objetivo de control (efectos)"
-          design_tests: "Objetivo de control (evaluación de diseño)"
-          compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
-          sustantive_tests: "Objetivo de control (pruebas sustantivas)"
-        work_papers:
-          one: "Papel de trabajo"
-          other: "Papeles de trabajo"
-          name: "Papel de trabajo (nombre)"
-          code: "Papel de trabajo (código)"
-          description: "Papel de trabajo (descripción)"
-          number_of_pages: "Papel de trabajo (páginas)"
-          file_model:
-            one: "Papel de trabajo (archivo)"
-            file_file_name: "Papel de trabajo (nombre de archivo)"
-            file_content_type: "Papel de trabajo (tipo de archivo)"
-            file_file_size: "Papel de trabajo (tamaño de archivo)"
+      control_objective_item/control:
+        order: "Objetivo de control (orden)"
+        control: "Objetivo de control (controles)"
+        effects: "Objetivo de control (efectos)"
+        design_tests: "Objetivo de control (evaluación de diseño)"
+        compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
+        sustantive_tests: "Objetivo de control (pruebas sustantivas)"
+      control_objective_item/work_papers:
+        one: "Papel de trabajo"
+        other: "Papeles de trabajo"
+        name: "Papel de trabajo (nombre)"
+        code: "Papel de trabajo (código)"
+        description: "Papel de trabajo (descripción)"
+        number_of_pages: "Papel de trabajo (páginas)"
+      control_objective_item/work_papers/file_model:
+        one: "Papel de trabajo (archivo)"
+        file_file_name: "Papel de trabajo (nombre de archivo)"
+        file_content_type: "Papel de trabajo (tipo de archivo)"
+        file_file_size: "Papel de trabajo (tamaño de archivo)"
+      control_objective_item/business_unit_scores:
+        business_unit_id: 'Calificación de unidad de negocio (unidad de negocio)'
+        design_score: 'Calificación de unidad de negocio (evaluación de diseño)'
+        compliance_score: 'Calificación de unidad de negocio (pruebas de cumplimiento)'
+        sustantive_score: 'Calificación de unidad de negocio (pruebas sustantivas)'
       cost:
         cost: "Tiempo dedicado"
         description: "Descripción de las actividades realizadas"

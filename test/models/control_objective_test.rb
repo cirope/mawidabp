@@ -52,10 +52,12 @@ class ControlObjectiveTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de una buena práctica
   test 'destroy' do
-    # Objetivo de control sin items asociados
+    control_objective = control_objectives :iso_27000_security_organization_4_4_continuous
+
+    control_objective.control_objective_items.clear
+
     assert_difference 'ControlObjective.count', -1 do
-      ControlObjective.find(control_objectives(
-          :iso_27000_security_organization_4_4).id).destroy
+      control_objective.destroy
     end
   end
 

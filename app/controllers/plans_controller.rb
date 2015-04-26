@@ -1,4 +1,6 @@
 class PlansController < ApplicationController
+  include AutoCompleteFor::BusinessUnit
+
   before_action :auth, :load_privileges, :check_privileges,
     :find_business_unit_type
   before_action :set_plan, only: [
@@ -142,42 +144,6 @@ class PlansController < ApplicationController
     end
   end
 
-  # * GET /plans/auto_complete_for_business_unit_business_unit_id
-  def auto_complete_for_business_unit_business_unit_id
-    @tokens = params[:q][0..100].split(/[\s,]/).uniq
-    @tokens.reject! {|t| t.blank?}
-    conditions = [
-      "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('organization_id')} = :organization_id"
-    ]
-    parameters = {:organization_id => current_organization.id}
-
-    if params[:business_unit_type_id].to_i > 0
-      conditions << "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('id')} = :but_id"
-      parameters[:but_id] = params[:business_unit_type_id].to_i
-    end
-
-    @tokens.each_with_index do |t, i|
-      conditions << [
-        "LOWER(#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')}) LIKE :business_unit_data_#{i}"
-      ].join(' OR ')
-
-      parameters[:"business_unit_data_#{i}"] = "%#{t.mb_chars.downcase}%"
-    end
-
-    @business_units = BusinessUnit.includes(:business_unit_type).where(
-      [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
-    ).order(
-      [
-        "#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')} ASC",
-        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC"
-      ]
-    ).references(:business_unit_type).limit(10)
-
-    respond_to do |format|
-      format.json { render :json => @business_units }
-    end
-  end
-
   # * GET /plans/resource_data/1
   def resource_data
     resource = Resource.find(params[:id])
@@ -221,7 +187,7 @@ class PlansController < ApplicationController
     def load_privileges
       @action_privileges.update(
         :export_to_pdf => :read,
-        :auto_complete_for_business_unit_business_unit_id => :read,
+        :auto_complete_for_business_unit => :read,
         :resource_data => :read
       )
     end

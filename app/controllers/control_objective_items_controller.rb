@@ -1,9 +1,11 @@
 class ControlObjectiveItemsController < ApplicationController
-  before_action :auth, :check_privileges
+  include AutoCompleteFor::BusinessUnit
+
+  before_action :auth, :load_privileges, :check_privileges
   before_action :set_control_objective_item, only: [
     :show, :edit, :update, :destroy
   ]
-  layout proc{ |controller| controller.request.xhr? ? false : 'application' }
+  layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   # Lista los objetivos de control
   #
@@ -136,7 +138,15 @@ class ControlObjectiveItemsController < ApplicationController
         ], work_papers_attributes: [
           :id, :name, :code, :number_of_pages, :description, :_destroy, :lock_version,
           file_model_attributes: [:id, :file, :file_cache]
+        ], business_unit_scores_attributes: [
+          :id, :business_unit_id, :design_score, :compliance_score, :sustantive_score, :_destroy
         ]
+      )
+    end
+
+    def load_privileges
+      @action_privileges.update(
+        auto_complete_for_business_unit: :read
       )
     end
 end
