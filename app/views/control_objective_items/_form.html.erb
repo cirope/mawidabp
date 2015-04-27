@@ -43,15 +43,18 @@
       </div>
       <div class="col-md-6">
         <%= f.input :design_score, collection: qualifications,
-          include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
+          include_blank: t('control_objective_item.not_rated'),
+          input_html: { data: { score_target: 'design' }, disabled: readonly } %>
         <%= yield :design_tests %>
 
         <%= f.input :compliance_score, collection: qualifications,
-          include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
+          include_blank: t('control_objective_item.not_rated'),
+          input_html: { data: { score_target: 'compliance' }, disabled: readonly } %>
         <%= yield :compliance_tests %>
 
         <%= f.input :sustantive_score, collection: qualifications,
-          include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
+          include_blank: t('control_objective_item.not_rated'),
+          input_html: { data: { score_target: 'sustantive' }, disabled: readonly } %>
         <%= yield :sustantive_tests %>
 
         <%= f.input :auditor_comment, input_html: { readonly: readonly, rows: 5 } %>

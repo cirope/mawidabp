@@ -9,12 +9,12 @@ class BusinessUnitScoreTest < ActiveSupport::TestCase
     @business_unit_score.design_score     = nil
     @business_unit_score.compliance_score = nil
     @business_unit_score.sustantive_score = nil
-    @business_unit_score.business_unit    = nil
+    @business_unit_score.business_unit_id = nil
 
     assert @business_unit_score.invalid?
     assert_error @business_unit_score, :design_score,     :blank
     assert_error @business_unit_score, :compliance_score, :blank
     assert_error @business_unit_score, :sustantive_score, :blank
-    assert_error @business_unit_score, :business_unit,    :blank
+    assert_error @business_unit_score, :business_unit_id, :blank
   end
 end
