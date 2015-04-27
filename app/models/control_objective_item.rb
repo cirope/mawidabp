@@ -82,6 +82,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   has_many :work_papers, -> { order(code: :asc) }, as: :owner, dependent: :destroy,
     before_add: [:check_for_final_review, :prepare_work_paper],
     before_remove: :check_for_final_review
+  has_many :business_units, through: :business_unit_scores
   has_one :control, -> { order("#{Control.quoted_table_name}.#{Control.qcn('order')} ASC") }, as: :controllable,
     dependent: :destroy
 

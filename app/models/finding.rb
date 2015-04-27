@@ -71,6 +71,8 @@ class Finding < ActiveRecord::Base
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :finding
   has_many :users, -> { order(:last_name => :asc) }, :through => :finding_user_assignments
+  has_many :business_unit_findings, :dependent => :destroy
+  has_many :business_units, :through => :business_unit_findings
 
   accepts_nested_attributes_for :costs, :allow_destroy => false
   accepts_nested_attributes_for :comments, :allow_destroy => false

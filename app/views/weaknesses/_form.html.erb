@@ -184,6 +184,14 @@
     </table>
   <% end %>
 
+  <% unless weakness_business_units.empty? %>
+    <br />
+    <h4>
+      <%= BusinessUnit.model_name.human count: 0 %>
+    </h4>
+    <%=  f.input :business_unit_ids, label: false, collection: weakness_business_units, as: :check_boxes %>
+  <% end %>
+
   <% unless @weakness.finding_answers.blank? %>
     <br />
     <h4>
@@ -260,7 +268,7 @@
     <br />
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title" role="tab" id="achievement-heading">
+        <h3 class="panel-title" id="achievement-heading">
           <a data-toggle="collapse" href="#achievements" aria-expanded="true" aria-controls="achievements">
             <%= Benefit.model_name.human count: 0 %>
           </a>

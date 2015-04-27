@@ -177,6 +177,7 @@ class WeaknessesController < ApplicationController
         :audit_comments, :state, :origination_date, :solution_date, :repeated_of_id,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
         :users_for_notification, :lock_version,
+        business_unit_ids: [],
         achievements_attributes: [
           :id, :benefit_id, :amount, :comment, :_destroy
         ],

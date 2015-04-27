@@ -27,6 +27,9 @@ es: &common
       best_practice:
         one: 'Buena práctica'
         other: 'Buenas prácticas'
+      business_unit:
+        one: 'Unidad de negocio'
+        other: 'Unidades de negocio'
       business_unit_score:
         one: 'Calificación unidad de negocio'
         other: 'Calificaciones de unidades de negocio'

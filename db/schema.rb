@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150425201710) do
+ActiveRecord::Schema.define(version: 20150427051208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,16 @@ ActiveRecord::Schema.define(version: 20150425201710) do
   add_index "best_practices", ["group_id"], name: "index_best_practices_on_group_id", using: :btree
   add_index "best_practices", ["obsolete"], name: "index_best_practices_on_obsolete", using: :btree
   add_index "best_practices", ["organization_id"], name: "index_best_practices_on_organization_id", using: :btree
+
+  create_table "business_unit_findings", force: true do |t|
+    t.integer  "business_unit_id"
+    t.integer  "finding_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "business_unit_findings", ["business_unit_id"], name: "index_business_unit_findings_on_business_unit_id", using: :btree
+  add_index "business_unit_findings", ["finding_id"], name: "index_business_unit_findings_on_finding_id", using: :btree
 
   create_table "business_unit_scores", force: true do |t|
     t.integer  "design_score"
@@ -296,8 +306,8 @@ ActiveRecord::Schema.define(version: 20150425201710) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "process_owner",                   default: false
-    t.string   "finding_type",        limit: nil
+    t.boolean  "process_owner",       default: false
+    t.string   "finding_type"
     t.boolean  "responsible_auditor"
   end
 
@@ -800,6 +810,9 @@ ActiveRecord::Schema.define(version: 20150425201710) do
 
   add_foreign_key "best_practices", "groups", name: "best_practices_group_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
   add_foreign_key "best_practices", "organizations", name: "best_practices_organization_id_fk", dependent: :restrict
+
+  add_foreign_key "business_unit_findings", "business_units", name: "business_unit_findings_business_unit_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "business_unit_findings", "findings", name: "business_unit_findings_finding_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
   add_foreign_key "business_unit_scores", "business_units", name: "business_unit_scores_business_unit_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
   add_foreign_key "business_unit_scores", "control_objective_items", name: "business_unit_scores_control_objective_item_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
