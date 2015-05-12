@@ -1,6 +1,6 @@
 set :stage, :production
 set :rails_env, 'production'
-set :branch, 'no-ssl'
+set :branch, 'oracle'
 
 role :web, %w{deployer@application.tmawidabp.petersen.corp}
 role :app, %w{deployer@application.tmawidabp.petersen.corp}
