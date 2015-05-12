@@ -5,6 +5,7 @@
     <%= f.input :name, autofocus: true, input_html: { maxlength: 255 } %>
     <%= f.input :description %>
     <%= f.input :obsolete %>
+    <%= f.input :shared, input_html: { disabled: @best_practice.shared } %>
   </div>
 
   <div class="row">

@@ -114,7 +114,7 @@ iso_27000_security_organization_4_2_item_editable:
   control_objective: iso_27000_security_organization_4_2
   review: review_without_conclusion
   organization: cirope
-  
+
 iso_27000_security_organization_4_3_item_editable_without_findings:
   control_objective_text: "4.3) Seguridad frente al acceso por parte de terceros."
   relevance: <%= ControlObjectiveItem.relevances_values.last %>
@@ -128,7 +128,7 @@ iso_27000_security_organization_4_3_item_editable_without_findings:
   control_objective: iso_27000_security_organization_4_3
   review: review_without_conclusion_and_without_findings
   organization: cirope
-  
+
 bcra_A4609_security_management_responsible_dependency_item_approved_and_editable:
   control_objective_text: Dependencia del área responsible
   relevance: <%= ControlObjectiveItem.relevances_values.last %>
@@ -141,4 +141,18 @@ bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
   exclude_from_score: false
   control_objective: bcra_A4609_security_management_responsible_dependency
   review: review_approved_with_conclusion
+  organization: cirope
+
+iso_27000_security_organization_4_4_continuous_item:
+  control_objective_text: "4.4) Seguridad frente al acceso por parte de terceros (cont)."
+  relevance: <%= ControlObjectiveItem.relevances_values.last %>
+  design_score: <%= ControlObjectiveItem.qualifications_values.last %>
+  compliance_score: <%= ControlObjectiveItem.qualifications_values.last %>
+  sustantive_score: <%= ControlObjectiveItem.qualifications_values.last %>
+  audit_date: <%= 1.year.ago.to_date.to_s(:db) %>
+  auditor_comment: Auditor comment
+  finished: true
+  exclude_from_score: false
+  control_objective: iso_27000_security_organization_4_4_continuous
+  review: review_without_conclusion
   organization: cirope

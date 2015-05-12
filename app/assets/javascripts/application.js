@@ -28,6 +28,7 @@
 //= require ui
 //= require file_input
 //= require best_practices
+//= require control_objective_items
 //= require findings
 //= require organizations
 //= require touch

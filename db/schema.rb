@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150303153258) do
+ActiveRecord::Schema.define(version: 20150427051208) do
 
   create_table "achievements", force: true do |t|
     t.integer  "benefit_id", precision: 38, scale: 0, null: false
@@ -69,11 +69,37 @@ ActiveRecord::Schema.define(version: 20150303153258) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "obsolete",                                 default: false
+    t.boolean  "shared",                                   default: false, null: false
+    t.integer  "group_id",        precision: 38, scale: 0,                 null: false
   end
 
   add_index "best_practices", ["created_at"], name: "i_best_practices_created_at"
+  add_index "best_practices", ["group_id"], name: "i_best_practices_group_id"
   add_index "best_practices", ["obsolete"], name: "i_best_practices_obsolete"
   add_index "best_practices", ["organization_id"], name: "i_bes_pra_org_id"
+
+  create_table "business_unit_findings", force: true do |t|
+    t.integer  "business_unit_id", precision: 38, scale: 0
+    t.integer  "finding_id",       precision: 38, scale: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "business_unit_findings", ["business_unit_id"], name: "i_bus_uni_fin_bus_uni_id"
+  add_index "business_unit_findings", ["finding_id"], name: "i_bus_uni_fin_fin_id"
+
+  create_table "business_unit_scores", force: true do |t|
+    t.integer  "design_score",              precision: 38, scale: 0
+    t.integer  "compliance_score",          precision: 38, scale: 0
+    t.integer  "sustantive_score",          precision: 38, scale: 0
+    t.integer  "business_unit_id",          precision: 38, scale: 0
+    t.integer  "control_objective_item_id", precision: 38, scale: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "business_unit_scores", ["business_unit_id"], name: "i_bus_uni_sco_bus_uni_id"
+  add_index "business_unit_scores", ["control_objective_item_id"], name: "i_bus_uni_sco_con_obj_ite_id"
 
   create_table "business_unit_types", force: true do |t|
     t.string   "name"
@@ -165,6 +191,7 @@ ActiveRecord::Schema.define(version: 20150303153258) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "obsolete",                                    default: false
+    t.boolean  "continuous"
   end
 
   add_index "control_objectives", ["obsolete"], name: "i_control_objectives_obsolete"
@@ -835,7 +862,14 @@ ActiveRecord::Schema.define(version: 20150303153258) do
 
   add_foreign_key "benefits", "organizations", name: "benefits_organization_id_fk"
 
+  add_foreign_key "best_practices", "groups", name: "best_practices_group_id_fk"
   add_foreign_key "best_practices", "organizations", name: "bes_pra_org_id_fk"
+
+  add_foreign_key "business_unit_findings", "business_units", name: "bus_uni_fin_bus_uni_id_fk"
+  add_foreign_key "business_unit_findings", "findings", name: "bus_uni_fin_fin_id_fk"
+
+  add_foreign_key "business_unit_scores", "business_units", name: "bus_uni_sco_bus_uni_id_fk"
+  add_foreign_key "business_unit_scores", "control_objective_items", name: "bus_uni_sco_con_obj_ite_id_fk"
 
   add_foreign_key "business_unit_types", "organizations", name: "bus_uni_typ_org_id_fk"
 

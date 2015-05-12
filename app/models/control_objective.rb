@@ -6,8 +6,6 @@ class ControlObjective < ActiveRecord::Base
     organization_id: ->(model) { Organization.current_id }
   }
 
-  alias_attribute :label, :name
-
   # Callbacks
   before_destroy :can_be_destroyed?
 
@@ -57,6 +55,10 @@ class ControlObjective < ActiveRecord::Base
     }
 
     super(default_options.merge(options || {}))
+  end
+
+  def label
+    continuous ? "#{name} (#{I18n.t('activerecord.attributes.control_objective.continuous')})" : name
   end
 
   def informal

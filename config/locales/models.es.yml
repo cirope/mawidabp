@@ -27,6 +27,12 @@ es: &common
       best_practice:
         one: 'Buena práctica'
         other: 'Buenas prácticas'
+      business_unit:
+        one: 'Unidad de negocio'
+        other: 'Unidades de negocio'
+      business_unit_score:
+        one: 'Calificación unidad de negocio'
+        other: 'Calificaciones de unidades de negocio'
       control_objective:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
@@ -94,6 +100,7 @@ es: &common
         name: 'Nombre'
         description: 'Descripción'
         obsolete: 'Obsoleta'
+        shared: 'Compartida'
       best_practice/process_controls:
         name: 'Proceso'
         order: 'Proceso (orden)'
@@ -102,11 +109,17 @@ es: &common
         name: 'Objetivo de control'
         relevance: 'Objetivo de control (importancia)'
         risk: 'Objetivo de control (riesgo)'
+      business_unit_score:
+        business_unit_id: 'Unidad de negocio'
+        design_score: 'Calificación evaluación de diseño'
+        compliance_score: 'Calificación pruebas de cumplimiento'
+        sustantive_score: 'Calificación pruebas sustantivas'
       control_objective:
         name: 'Objetivo de control'
         relevance: 'Importancia'
         risk: 'Riesgo'
         obsolete: 'Obsoleto'
+        continuous: 'Contínuo'
       e_mail:
         to: 'Para'
         subject: 'Asunto'
@@ -139,13 +152,13 @@ es: &common
       organization:
         description: 'Descripción'
         kind: 'Tipo de organización'
-        image_model:
-          image_file_name: 'Isologotipo (nombre de archivo)'
-          image_content_type: 'Isologotipo (tipo de archivo)'
-          image_file_size: 'Isologotipo (tamaño)'
-          one: 'Isologotipo'
         name: 'Nombre'
         prefix: 'Prefijo'
+      organization/image_model:
+        image_file_name: 'Isologotipo (nombre de archivo)'
+        image_content_type: 'Isologotipo (tipo de archivo)'
+        image_file_size: 'Isologotipo (tamaño)'
+        one: 'Isologotipo'
       setting:
         name: 'Nombre'
         value: 'Valor'
@@ -189,9 +202,9 @@ es: &common
         answered: 'Contestada'
         questionnaire: 'Cuestionario'
         user: 'Usuario'
-        answers:
-          answer: 'Respuesta'
-          answer_option: 'Opción'
+      poll/answers:
+        answer: 'Respuesta'
+        answer_option: 'Opción'
       process_control:
         name: 'Proceso'
         order: 'Orden'

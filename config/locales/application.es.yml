@@ -356,6 +356,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     add_oportunity: "Agregar nueva oportunidad de mejora"
     add_weakness: "Agregar nueva observación"
     add_work_paper: "Agregar papel de trabajo"
+    add_business_unit_score: "Agregar calificación de unidad de negocio"
     readonly: "El objetivo de control no puede ser modificado, ya se emitió el informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     has_work_papers: "Papeles de trabajo"
@@ -1130,6 +1131,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         file_file_name: "Papel de trabajo (nombre de archivo)"
         file_content_type: "Papel de trabajo (tipo de archivo)"
         file_file_size: "Papel de trabajo (tamaño de archivo)"
+      control_objective_item/business_unit_scores:
+        business_unit_id: 'Calificación de unidad de negocio (unidad de negocio)'
+        design_score: 'Calificación de unidad de negocio (evaluación de diseño)'
+        compliance_score: 'Calificación de unidad de negocio (pruebas de cumplimiento)'
+        sustantive_score: 'Calificación de unidad de negocio (pruebas sustantivas)'
       cost:
         cost: "Tiempo dedicado"
         description: "Descripción de las actividades realizadas"

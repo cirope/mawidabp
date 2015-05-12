@@ -43,15 +43,18 @@
       </div>
       <div class="col-md-6">
         <%= f.input :design_score, collection: qualifications,
-          include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
+          include_blank: t('control_objective_item.not_rated'),
+          input_html: { data: { score_target: 'design' }, disabled: readonly } %>
         <%= yield :design_tests %>
 
         <%= f.input :compliance_score, collection: qualifications,
-          include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
+          include_blank: t('control_objective_item.not_rated'),
+          input_html: { data: { score_target: 'compliance' }, disabled: readonly } %>
         <%= yield :compliance_tests %>
 
         <%= f.input :sustantive_score, collection: qualifications,
-          include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
+          include_blank: t('control_objective_item.not_rated'),
+          input_html: { data: { score_target: 'sustantive' }, disabled: readonly } %>
         <%= yield :sustantive_tests %>
 
         <%= f.input :auditor_comment, input_html: { readonly: readonly, rows: 5 } %>
@@ -89,9 +92,41 @@
     <%= render 'potential_nonconformities_summary', readonly: readonly %>
   <% end %>
 
+  <% if @control_objective_item.continuous %>
+    <br />
+    <h4>
+      <%= BusinessUnitScore.model_name.human count: @control_objective_item.business_unit_scores.size %>
+    </h4>
+    <div class="row">
+      <div class="col-md-4">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'business_unit_id' %></strong></h5>
+      </div>
+      <div class="col-md-2">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'design_score' %></strong></h5>
+      </div>
+      <div class="col-md-2">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'compliance_score' %></strong></h5>
+      </div>
+      <div class="col-md-2">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'sustantive_score' %></strong></h5>
+      </div>
+    </div>
+
+    <div id="business_unit_scores">
+      <%= f.simple_fields_for :business_unit_scores do |bus_f| %>
+        <%= render 'business_unit_score', f: bus_f, readonly: readonly %>
+      <% end %>
+
+      <%= link_to_add_fields(
+        t('control_objective_item.add_business_unit_score'),
+        f, :business_unit_scores, nil, {}, { readonly: readonly }
+      ) unless readonly %>
+    </div>
+  <% end %>
+
   <br />
   <h4>
-    <%= ControlObjectiveItem.human_attribute_name 'work_papers', count: @control_objective_item.work_papers.size %>
+    <%= WorkPaper.model_name.human count: @control_objective_item.work_papers.size %>
   </h4>
   <div class="row">
     <div class="col-md-3">

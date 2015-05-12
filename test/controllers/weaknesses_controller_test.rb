@@ -116,7 +116,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'create weakness' do
-    counts_array = ['Weakness.count', 'WorkPaper.count', 'FindingRelation.count', 'Achievement.count']
+    counts_array = ['Weakness.count', 'WorkPaper.count', 'FindingRelation.count', 'Achievement.count', 'BusinessUnitFinding.count']
 
     login
 
@@ -138,6 +138,7 @@ class WeaknessesControllerTest < ActionController::TestCase
           risk: Weakness.risks_values.first,
           priority: Weakness.priorities_values.first,
           follow_up_date: 2.days.from_now.to_date,
+          business_unit_ids: [business_units(:business_unit_three).id],
           finding_user_assignments_attributes: [
             {
               user_id: users(:bare_user).id, process_owner: '0'

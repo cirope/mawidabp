@@ -160,6 +160,18 @@
   </table>
 <% end %>
 
+<% unless @weakness.business_units.blank? %>
+  <h3>
+    <%= BusinessUnit.model_name.human count: 0 %>
+  </h3>
+
+  <ul>
+    <% @weakness.business_units.each do |bu| %>
+      <li><%= bu.name %></li>
+    <% end %>
+  </ul>
+<% end %>
+
 <% unless @weakness.finding_answers.blank? %>
   <h3>
     <%= t('finding.finding_answers') %>
