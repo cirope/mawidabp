@@ -45,7 +45,9 @@ class Authentication
 
     def set_valid_user
       conditions = ["LOWER(#{User.quoted_table_name}.#{User.qcn('user')}) = :user"]
-      parameters = { user: @params[:user].to_s.downcase.strip }
+      parameters = @current_organization.try(:ldap_config) ?
+        { user: @params[:user].to_s.strip } :
+        { user: @params[:user].to_s.downcase.strip }
 
       if @admin_mode
         conditions << "#{User.quoted_table_name}.#{User.qcn('group_admin')} = :true"

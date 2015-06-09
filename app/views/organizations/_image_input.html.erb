@@ -1,6 +1,6 @@
 <% if @organization.persisted? %>
   <label>
-    <%= Organization.human_attribute_name 'image_model' %>
+    <%= Organization.human_attribute_name 'image_model.one' %>
   </label>
 
   <p><%= organization_image_tag %></p>
