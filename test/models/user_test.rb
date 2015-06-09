@@ -125,6 +125,14 @@ class UserTest < ActiveSupport::TestCase
     assert_error @user, :email, :taken
   end
 
+  test 'validates can duplicate user if ldap' do
+    Organization.current_id = organizations(:google).id
+
+    @user.user = users(:bare_user).user
+
+    assert @user.valid?
+  end
+
   test 'validates confirmated attributes' do
     @user.password = 'admin124'
     @user.password_confirmation = 'admin125'

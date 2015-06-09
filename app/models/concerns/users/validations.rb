@@ -2,7 +2,8 @@ module Users::Validations
   extend ActiveSupport::Concern
 
   included do
-    validates :user, :email, uniqueness: { case_sensitive: false }
+    validates :email, uniqueness: { case_sensitive: false }
+    validates :user, uniqueness: { case_sensitive: false }, unless: :ldap?
     validates :user, length: { in: 5..30 }
     validates :name, :last_name, :email, presence: true, length: { maximum: 100 }
     validates :password, length: { maximum: 128 }, allow_nil: true, allow_blank: true
@@ -17,6 +18,10 @@ module Users::Validations
   end
 
   private
+
+    def ldap?
+      LdapConfig.exists? organization_id: Organization.current_id
+    end
 
     def validate_manager
       if parent

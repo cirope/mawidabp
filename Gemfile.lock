@@ -141,7 +141,7 @@ GEM
     parslet (1.5.0)
       blankslate (~> 2.0)
     pdf-core (0.5.1)
-    pg (0.18.1)
+    pg (0.18.2)
     polyglot (0.3.5)
     posix-spawn (0.3.11)
     prawn (2.0.1)
