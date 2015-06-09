@@ -45,9 +45,7 @@ class Authentication
 
     def set_valid_user
       conditions = ["LOWER(#{User.quoted_table_name}.#{User.qcn('user')}) = :user"]
-      parameters = @current_organization.try(:ldap_config) ?
-        { user: @params[:user].to_s.strip } :
-        { user: @params[:user].to_s.downcase.strip }
+      parameters = { user: @params[:user].to_s.downcase.strip }
 
       if @admin_mode
         conditions << "#{User.quoted_table_name}.#{User.qcn('group_admin')} = :true"
@@ -85,7 +83,7 @@ class Authentication
 
       @valid = ldap.bind
 
-      if @valid
+      if @valid && @valid_user
         register_login
 
         @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }
@@ -189,7 +187,7 @@ class Authentication
     end
 
     def register_login
-      if @current_organization && @valid_user
+      if @current_organization
         login_record = LoginRecord.list.create!(user: @valid_user, request: @request)
         @session[:record_id] = login_record.id
       end
