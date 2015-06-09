@@ -1,10 +1,7 @@
 class PlanItem < ActiveRecord::Base
+  include Auditable
   include ParameterSelector
   include Comparable
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
 
   # Atributos no persistentes
   attr_accessor :business_unit_data, :overloaded
