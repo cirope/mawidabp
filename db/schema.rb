@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150427051208) do
+ActiveRecord::Schema.define(version: 20150610121431) do
 
   create_table "achievements", force: true do |t|
     t.integer  "benefit_id", precision: 38, scale: 0, null: false
@@ -794,7 +794,7 @@ ActiveRecord::Schema.define(version: 20150427051208) do
   add_index "users", ["hidden"], name: "index_users_on_hidden"
   add_index "users", ["manager_id"], name: "index_users_on_manager_id"
   add_index "users", ["resource_id"], name: "index_users_on_resource_id"
-  add_index "users", ["user"], name: "index_users_on_user", unique: true
+  add_index "users", ["user"], name: "index_users_on_user"
 
   create_table "versions", force: true do |t|
     t.integer  "item_id",         precision: 38, scale: 0
