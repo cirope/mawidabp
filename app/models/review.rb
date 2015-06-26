@@ -651,7 +651,8 @@ class Review < ActiveRecord::Base
         e[3] ? t : t + e[2]
       end.to_f
       effectiveness_average = coi_data.inject(0) do |t, e|
-        e[3] ? t : t + (e[1] * e[2])  / coi_relevance_count
+        coi_relevance_count > 0 ?
+          e[3] ? t : t + (e[1] * e[2])  / coi_relevance_count : 100
       end
       exclude_from_score = coi_data.all? { |e| e[3] }
 
@@ -914,7 +915,8 @@ class Review < ActiveRecord::Base
         e[3] ? t : t + e[2]
       end.to_f
       effectiveness_average = coi_data.inject(0) do |t, e|
-        e[3] ? t : t + (e[1] * e[2])  / coi_relevance_count
+        coi_relevance_count > 0 ?
+          e[3] ? t : t + (e[1] * e[2]) / coi_relevance_count : 100
       end
       exclude_from_score = coi_data.all? { |e| e[3] }
 
