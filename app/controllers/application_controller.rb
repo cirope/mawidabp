@@ -228,21 +228,20 @@ class ApplicationController < ActionController::Base
     end
 
     def build_search_conditions(model, default_conditions = {})
-      if params[:search] && !params[:search][:order].blank?
+      if params[:search] && params[:search][:order].present?
         @order_by = model.columns_for_sort[params[:search][:order]][:field]
-        @order_by_column_name =
-          model.columns_for_sort[params[:search][:order]][:name]
+        @order_by_column_name = model.columns_for_sort[params[:search][:order]][:name]
       end
 
-      if params[:search] && !params[:search][:query].blank?
+      if params[:search] && params[:search][:query].present?
         raw_query = params[:search][:query].to_s.mb_chars.downcase.to_s
-        and_query = raw_query.split(SEARCH_AND_REGEXP).reject { |q| q.blank? }
+        and_query = raw_query.split(SEARCH_AND_REGEXP).reject(&:blank?)
         @query = and_query.map do |query|
-          query.split(SEARCH_OR_REGEXP).reject { |q| q.blank? }
+          query.split(SEARCH_OR_REGEXP).reject(&:blank?)
         end
         @columns = params[:search][:columns] || []
         search_string = []
-        filters = {:boolean_false => false}
+        filters = { :boolean_false => false }
 
 
         @query.each_with_index do |or_queries, i|
@@ -252,8 +251,7 @@ class ApplicationController < ActionController::Base
             @columns.each do |column|
               clean_or_query, operator = *extract_operator(or_query)
 
-              if clean_or_query =~ model.get_column_regexp(column) &&
-                  (!operator || model.allow_search_operator?(operator, column))
+              if clean_or_query =~ model.get_column_regexp(column) && (!operator || model.allow_search_operator?(operator, column))
                 index = i * 1000 + j
                 conversion_method = model.get_column_conversion_method(column)
                 filter = "#{model.get_column_name(column)} "
@@ -269,23 +267,19 @@ class ApplicationController < ActionController::Base
                   casted_value = clean_or_query.strip.send(conversion_method) rescue nil
                 end
 
-                filters["#{column}_filter_#{index}".to_sym] =
-                  model.get_column_mask(column) % casted_value
-              else
-                or_search_string << ':boolean_false'
+                filters[:"#{column}_filter_#{index}"] = model.get_column_mask(column) % casted_value
               end
             end
           end
 
-          unless or_search_string.blank?
+          if or_search_string.present?
             search_string << "(#{or_search_string.join(' OR ')})"
           end
         end
 
         @conditions = @columns.empty? || search_string.empty? ?
           default_conditions :
-          model.prepare_search_conditions(default_conditions,
-            [search_string.join(' AND '), filters])
+          model.prepare_search_conditions(default_conditions, [search_string.join(' AND '), filters])
       else
         @columns = []
         @conditions = default_conditions
