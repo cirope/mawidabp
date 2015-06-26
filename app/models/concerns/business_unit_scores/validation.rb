@@ -2,7 +2,7 @@ module BusinessUnitScores::Validation
   extend ActiveSupport::Concern
 
   included do
-    validates :business_unit_id, presence: true
+    validates :business_unit_id, presence: true, uniqueness: { scope: :control_objective_item_id }
     validate :score_completion
   end
 
