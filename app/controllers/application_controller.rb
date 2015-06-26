@@ -268,13 +268,11 @@ class ApplicationController < ActionController::Base
                 end
 
                 filters[:"#{column}_filter_#{index}"] = model.get_column_mask(column) % casted_value
-              else
-                or_search_string << ':boolean_false'
               end
             end
           end
 
-          unless or_search_string.blank?
+          if or_search_string.present?
             search_string << "(#{or_search_string.join(' OR ')})"
           end
         end
