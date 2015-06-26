@@ -14,11 +14,12 @@
         <th><%= Control.human_attribute_name 'sustantive_tests' %></th>
         <th><%= Control.human_attribute_name 'effects' %></th>
         <th><%= ControlObjective.human_attribute_name 'risk' %></th>
+        <th><%= ControlObjective.human_attribute_name 'continuous' %></th>
       </tr>
     </thead>
     <tbody>
       <% pc.control_objectives.each do |co| %>
-        <tr>
+        <tr <%== 'class="text-muted strike"' if co.obsolete %>>
           <td><%= simple_format co.name %></td>
           <td><%= simple_format co.control.control %></td>
           <td><%= simple_format co.control.design_tests %></td>
@@ -26,6 +27,7 @@
           <td><%= simple_format co.control.sustantive_tests %></td>
           <td><%= simple_format co.control.effects %></td>
           <td><%= co.risk_text %></td>
+          <td><%= t co.continuous ? 'label.yes' : 'label.no' %></td>
         </tr>
       <% end %>
     </tbody>
