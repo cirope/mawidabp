@@ -3,6 +3,14 @@ module FindingsHelper
     finding = form.object
     statuses = finding.repeated? ?
       finding.next_status_list : finding.next_status_list.except(:repeated)
+
+    if finding.errors[:state].present?
+      state_was = finding.new_record? ?
+        Finding::STATUS[:incomplete] : Finding.find(finding.id).state
+
+      statuses.merge! finding.next_status_list(state_was)
+    end
+
     options = statuses.map { |k, v| [t(:"finding.status_#{k}"), v] }
 
     form.input :state, collection: sort_options_array(options), label: false,
