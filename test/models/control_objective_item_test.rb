@@ -136,6 +136,17 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       high_qualification_value, @control_objective_item.effectiveness
   end
 
+  test 'business unit type ids' do
+    assert @control_objective_item.business_unit_scores.blank?
+    assert_difference '@control_objective_item.business_unit_scores.size', 2 do
+      @control_objective_item.business_unit_type_ids = [business_unit_types(:cycle).id]
+    end
+
+    assert_no_difference '@control_objective_item.business_unit_scores.size' do
+      @control_objective_item.business_unit_type_ids = [business_unit_types(:cycle).id]
+    end
+  end
+
   test 'review effectiveness modification' do
     min_qualification_value = ControlObjectiveItem.qualifications_values.min
     review = @control_objective_item.review
