@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.1.10'
+gem 'rails', '~> 4.1.12'
 
 gem 'pg'
 gem 'foreigner'
