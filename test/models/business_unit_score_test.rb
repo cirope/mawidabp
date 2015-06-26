@@ -17,4 +17,11 @@ class BusinessUnitScoreTest < ActiveSupport::TestCase
     assert_error @business_unit_score, :sustantive_score, :blank
     assert_error @business_unit_score, :business_unit_id, :blank
   end
+
+  test 'unique attributes' do
+    business_unit_score = @business_unit_score.dup
+
+    assert business_unit_score.invalid?
+    assert_error business_unit_score, :business_unit_id, :taken
+  end
 end
