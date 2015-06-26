@@ -357,6 +357,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     add_weakness: "Agregar nueva observación"
     add_work_paper: "Agregar papel de trabajo"
     add_business_unit_score: "Agregar calificación de unidad de negocio"
+    add_business_unit_type: "Agregar unidades de negocio por tipo"
     readonly: "El objetivo de control no puede ser modificado, ya se emitió el informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     has_work_papers: "Papeles de trabajo"

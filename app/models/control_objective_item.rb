@@ -87,7 +87,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     dependent: :destroy
 
   accepts_nested_attributes_for :control, allow_destroy: true
-  accepts_nested_attributes_for :business_unit_scores, allow_destroy: true
+  accepts_nested_attributes_for :business_unit_scores, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :work_papers, allow_destroy: true
 
   def initialize(attributes = nil, options = {})
@@ -158,6 +158,27 @@ class ControlObjectiveItem < ActiveRecord::Base
       end
     else
       false
+    end
+  end
+
+  def business_unit_type_ids=(ids)
+    (ids || []).uniq.each do |but_id|
+      if BusinessUnitType.exists?(but_id)
+        bus = []
+        but = BusinessUnitType.find(but_id)
+        business_unit_scores_ids = business_unit_scores.map(&:business_unit_id)
+
+        but.business_units.each do |bu|
+          if business_unit_scores_ids.exclude?(bu.id)
+            bus << {
+              business_unit_id: bu.id,
+              compliance_score: 10
+            }
+          end
+        end
+
+        business_unit_scores.build(bus) unless bus.empty?
+      end
     end
   end
 

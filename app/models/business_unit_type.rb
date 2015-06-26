@@ -7,6 +7,8 @@ class BusinessUnitType < ActiveRecord::Base
     organization_id: ->(model) { Organization.current_id }
   }
 
+  alias_attribute :label, :name
+
   # Named scopes
   scope :list, -> {
     where(organization_id: Organization.current_id).order(
@@ -43,5 +45,14 @@ class BusinessUnitType < ActiveRecord::Base
 
   def can_be_destroyed?
     self.business_units.all?(&:can_be_destroyed?)
+  end
+
+  def as_json(options = nil)
+    default_options = {
+      :only => [:id],
+      :methods => [:label]
+    }
+
+    super(default_options.merge(options || {}))
   end
 end

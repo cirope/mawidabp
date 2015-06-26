@@ -1,5 +1,6 @@
 class ControlObjectiveItemsController < ApplicationController
   include AutoCompleteFor::BusinessUnit
+  include AutoCompleteFor::BusinessUnitType
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_control_objective_item, only: [
@@ -141,13 +142,15 @@ class ControlObjectiveItemsController < ApplicationController
           file_model_attributes: [:id, :file, :file_cache]
         ], business_unit_scores_attributes: [
           :id, :business_unit_id, :design_score, :compliance_score, :sustantive_score, :_destroy
-        ]
+        ],
+        business_unit_type_ids: []
       )
     end
 
     def load_privileges
       @action_privileges.update(
-        auto_complete_for_business_unit: :read
+        auto_complete_for_business_unit: :read,
+        auto_complete_for_business_unit_type: :read
       )
     end
 end

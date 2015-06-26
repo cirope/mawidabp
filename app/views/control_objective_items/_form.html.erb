@@ -122,6 +122,15 @@
         f, :business_unit_scores, nil, {}, { readonly: readonly }
       ) unless readonly %>
     </div>
+
+    <hr>
+
+    <div id="business_unit_types">
+      <%= link_to_add_fields(
+        t('control_objective_item.add_business_unit_type'),
+        f, :business_unit_scores, 'business_unit_type', {}, { readonly: readonly }
+      ) unless readonly %>
+    </div>
   <% end %>
 
   <br />

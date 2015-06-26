@@ -151,7 +151,8 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
   test 'update continuous control_objective_item' do
     assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
-      assert_difference 'BusinessUnitScore.count' do
+      # One explicit and two via business unit type
+      assert_difference 'BusinessUnitScore.count', 3 do
         login
 
         patch :update, {
@@ -180,7 +181,8 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :compliance_score => ControlObjectiveItem.qualifications_values.last,
                 :sustantive_score => ControlObjectiveItem.qualifications_values.last
               }
-            ]
+            ],
+            :business_unit_type_ids => [business_unit_types(:consolidated_substantive).id.to_s]
           }
 	      }
       end
@@ -233,5 +235,27 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
     assert_equal 4, business_units.size # All in the organization (one, two, three and four)
     assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
+  end
+
+  test 'auto complete for business unit type' do
+    login
+    get :auto_complete_for_business_unit_type, {
+      :q => 'noway', :format => :json
+    }
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, business_unit_types.size # Fifth is in another organization
+
+    get :auto_complete_for_business_unit_type, {
+      :q => 'cycle', :format => :json
+    }
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, business_unit_types.size # One only
+    assert business_unit_types.all? { |u| u['label'].match /cycle/i }
   end
 end
