@@ -68,7 +68,7 @@ if File.exist? database_file
     when /oracle/
       group :development, :production do
         gem 'ruby-oci8'
-        gem 'activerecord-oracle_enhanced-adapter'
+        gem 'activerecord-oracle_enhanced-adapter', '~> 1.5.0'
       end
     end
   end
