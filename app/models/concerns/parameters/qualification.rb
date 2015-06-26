@@ -1,4 +1,4 @@
-module Parameters::Qualification 
+module Parameters::Qualification
   extend ActiveSupport::Concern
 
   QUALIFICATION_TYPES = {

@@ -172,7 +172,7 @@ class ControlObjectiveItem < ActiveRecord::Base
           if business_unit_scores_ids.exclude?(bu.id)
             bus << {
               business_unit_id: bu.id,
-              compliance_score: 10
+              compliance_score: Parameters::Qualification::QUALIFICATION_TYPES[:excellent]
             }
           end
         end
