@@ -55,6 +55,8 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     finding = user.findings.recently_notified
 
+    ActionMailer::Base.deliveries.clear
+
     assert ActionMailer::Base.deliveries.empty?
 
     response = NotifierMailer.notify_new_findings(user).deliver_now
