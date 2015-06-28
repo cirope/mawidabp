@@ -5,6 +5,6 @@ class AddSharedToBestPractices < ActiveRecord::Migration
       t.references :group, index: true
     end
 
-    add_foreign_key :best_practices, :groups, FOREIGN_KEY_OPTIONS
+    add_foreign_key :best_practices, :groups, FOREIGN_KEY_OPTIONS.dup
   end
 end

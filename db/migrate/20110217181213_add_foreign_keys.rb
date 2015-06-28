@@ -1,147 +1,147 @@
 class AddForeignKeys < ActiveRecord::Migration
   def self.up
     # Tabla users
-    add_foreign_key :users, :resources, FOREIGN_KEY_OPTIONS
-    add_foreign_key :users, :users, FOREIGN_KEY_OPTIONS.merge(:column => :manager_id)
+    add_foreign_key :users, :resources, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :users, :users, FOREIGN_KEY_OPTIONS.dup.merge(:column => 'manager_id')
 
     # Tabla login_records
-    add_foreign_key :login_records, :users, FOREIGN_KEY_OPTIONS
-    add_foreign_key :login_records, :organizations, FOREIGN_KEY_OPTIONS
+    add_foreign_key :login_records, :users, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :login_records, :organizations, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla error_records
-    add_foreign_key :error_records, :users, FOREIGN_KEY_OPTIONS
-    add_foreign_key :error_records, :organizations, FOREIGN_KEY_OPTIONS
+    add_foreign_key :error_records, :users, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :error_records, :organizations, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla privileges
-    add_foreign_key :privileges, :roles, FOREIGN_KEY_OPTIONS
+    add_foreign_key :privileges, :roles, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla roles
-    add_foreign_key :roles, :organizations, FOREIGN_KEY_OPTIONS
+    add_foreign_key :roles, :organizations, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla old_passwords
-    add_foreign_key :old_passwords, :users, FOREIGN_KEY_OPTIONS
+    add_foreign_key :old_passwords, :users, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla organizations
-    add_foreign_key :organizations, :groups, FOREIGN_KEY_OPTIONS
-    add_foreign_key :organizations, :image_models, FOREIGN_KEY_OPTIONS
+    add_foreign_key :organizations, :groups, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :organizations, :image_models, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla work_papers
-    add_foreign_key :work_papers, :file_models, FOREIGN_KEY_OPTIONS
-    add_foreign_key :work_papers, :organizations, FOREIGN_KEY_OPTIONS
+    add_foreign_key :work_papers, :file_models, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :work_papers, :organizations, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla business_units
-    add_foreign_key :business_units, :business_unit_types, FOREIGN_KEY_OPTIONS
+    add_foreign_key :business_units, :business_unit_types, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla findings
-    add_foreign_key :findings, :control_objective_items, FOREIGN_KEY_OPTIONS
+    add_foreign_key :findings, :control_objective_items, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla periods
-    add_foreign_key :periods, :organizations, FOREIGN_KEY_OPTIONS
+    add_foreign_key :periods, :organizations, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla best_practices
-    add_foreign_key :best_practices, :organizations, FOREIGN_KEY_OPTIONS
+    add_foreign_key :best_practices, :organizations, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla process_controls
-    add_foreign_key :process_controls, :best_practices, FOREIGN_KEY_OPTIONS
+    add_foreign_key :process_controls, :best_practices, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla control_objectives
-    add_foreign_key :control_objectives, :process_controls, FOREIGN_KEY_OPTIONS
+    add_foreign_key :control_objectives, :process_controls, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla procedure_control_subitems
-    add_foreign_key :procedure_control_subitems, :control_objectives, FOREIGN_KEY_OPTIONS
-    add_foreign_key :procedure_control_subitems, :procedure_control_items, FOREIGN_KEY_OPTIONS
+    add_foreign_key :procedure_control_subitems, :control_objectives, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :procedure_control_subitems, :procedure_control_items, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla procedure_control_items
-    add_foreign_key :procedure_control_items, :process_controls, FOREIGN_KEY_OPTIONS
-    add_foreign_key :procedure_control_items, :procedure_controls, FOREIGN_KEY_OPTIONS
+    add_foreign_key :procedure_control_items, :process_controls, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :procedure_control_items, :procedure_controls, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla procedure_controls
-    add_foreign_key :procedure_controls, :periods, FOREIGN_KEY_OPTIONS
+    add_foreign_key :procedure_controls, :periods, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla resource_classes
-    add_foreign_key :resource_classes, :organizations, FOREIGN_KEY_OPTIONS
+    add_foreign_key :resource_classes, :organizations, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla resources
-    add_foreign_key :resources, :resource_classes, FOREIGN_KEY_OPTIONS
+    add_foreign_key :resources, :resource_classes, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla plan_items
-    add_foreign_key :plan_items, :plans, FOREIGN_KEY_OPTIONS
-    add_foreign_key :plan_items, :business_units, FOREIGN_KEY_OPTIONS
+    add_foreign_key :plan_items, :plans, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :plan_items, :business_units, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla plans
-    add_foreign_key :plans, :periods, FOREIGN_KEY_OPTIONS
+    add_foreign_key :plans, :periods, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla control_objective_items
-    add_foreign_key :control_objective_items, :control_objectives, FOREIGN_KEY_OPTIONS
-    add_foreign_key :control_objective_items, :reviews, FOREIGN_KEY_OPTIONS
+    add_foreign_key :control_objective_items, :control_objectives, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :control_objective_items, :reviews, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla reviews
-    add_foreign_key :reviews, :periods, FOREIGN_KEY_OPTIONS
-    add_foreign_key :reviews, :plan_items, FOREIGN_KEY_OPTIONS
-    add_foreign_key :reviews, :file_models, FOREIGN_KEY_OPTIONS
+    add_foreign_key :reviews, :periods, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :reviews, :plan_items, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :reviews, :file_models, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla conclusion_reviews
-    add_foreign_key :conclusion_reviews, :reviews, FOREIGN_KEY_OPTIONS
+    add_foreign_key :conclusion_reviews, :reviews, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla workflow_items
-    add_foreign_key :workflow_items, :workflows, FOREIGN_KEY_OPTIONS
+    add_foreign_key :workflow_items, :workflows, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla workflows
-    add_foreign_key :workflows, :reviews, FOREIGN_KEY_OPTIONS
-    add_foreign_key :workflows, :periods, FOREIGN_KEY_OPTIONS
+    add_foreign_key :workflows, :reviews, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :workflows, :periods, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla finding_answers
-    add_foreign_key :finding_answers, :findings, FOREIGN_KEY_OPTIONS
-    add_foreign_key :finding_answers, :users, FOREIGN_KEY_OPTIONS
-    add_foreign_key :finding_answers, :file_models, FOREIGN_KEY_OPTIONS
+    add_foreign_key :finding_answers, :findings, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :finding_answers, :users, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :finding_answers, :file_models, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla versions
-    add_foreign_key :versions, :organizations, FOREIGN_KEY_OPTIONS
+    add_foreign_key :versions, :organizations, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla review_user_assignments
-    add_foreign_key :review_user_assignments, :reviews, FOREIGN_KEY_OPTIONS
-    add_foreign_key :review_user_assignments, :users, FOREIGN_KEY_OPTIONS
+    add_foreign_key :review_user_assignments, :reviews, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :review_user_assignments, :users, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla notifications
-    add_foreign_key :notifications, :users, FOREIGN_KEY_OPTIONS
-    add_foreign_key :notifications, :users, FOREIGN_KEY_OPTIONS.merge(:column => :user_who_confirm_id)
+    add_foreign_key :notifications, :users, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :notifications, :users, FOREIGN_KEY_OPTIONS.dup.merge(:column => 'user_who_confirm_id')
 
     # Tabla notification_relations
-    add_foreign_key :notification_relations, :notifications, FOREIGN_KEY_OPTIONS
+    add_foreign_key :notification_relations, :notifications, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla help_items
-    add_foreign_key :help_items, :help_contents, FOREIGN_KEY_OPTIONS
-    add_foreign_key :help_items, :help_items, FOREIGN_KEY_OPTIONS.merge(:column => :parent_id)
+    add_foreign_key :help_items, :help_contents, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :help_items, :help_items, FOREIGN_KEY_OPTIONS.dup.merge(:column => 'parent_id')
 
     # Tabla costs
-    add_foreign_key :costs, :users, FOREIGN_KEY_OPTIONS
+    add_foreign_key :costs, :users, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla organization_roles
-    add_foreign_key :organization_roles, :organizations, FOREIGN_KEY_OPTIONS
-    add_foreign_key :organization_roles, :users, FOREIGN_KEY_OPTIONS
-    add_foreign_key :organization_roles, :roles, FOREIGN_KEY_OPTIONS
+    add_foreign_key :organization_roles, :organizations, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :organization_roles, :users, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :organization_roles, :roles, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla comments
-    add_foreign_key :comments, :users, FOREIGN_KEY_OPTIONS
+    add_foreign_key :comments, :users, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla detracts
-    add_foreign_key :detracts, :organizations, FOREIGN_KEY_OPTIONS
-    add_foreign_key :detracts, :users, FOREIGN_KEY_OPTIONS
+    add_foreign_key :detracts, :organizations, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :detracts, :users, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla finding_relations
-    add_foreign_key :finding_relations, :findings, FOREIGN_KEY_OPTIONS
-    add_foreign_key :finding_relations, :findings, FOREIGN_KEY_OPTIONS.merge(:column => :related_finding_id)
+    add_foreign_key :finding_relations, :findings, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :finding_relations, :findings, FOREIGN_KEY_OPTIONS.dup.merge(:column => 'related_finding_id')
 
     # Tabla business_unit_types
-    add_foreign_key :business_unit_types, :organizations, FOREIGN_KEY_OPTIONS
+    add_foreign_key :business_unit_types, :organizations, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla finding_user_assignments
-    add_foreign_key :finding_user_assignments, :findings, FOREIGN_KEY_OPTIONS
-    add_foreign_key :finding_user_assignments, :users, FOREIGN_KEY_OPTIONS
+    add_foreign_key :finding_user_assignments, :findings, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :finding_user_assignments, :users, FOREIGN_KEY_OPTIONS.dup
 
     # Tabla finding_review_assignments
-    add_foreign_key :finding_review_assignments, :findings, FOREIGN_KEY_OPTIONS
-    add_foreign_key :finding_review_assignments, :reviews, FOREIGN_KEY_OPTIONS
+    add_foreign_key :finding_review_assignments, :findings, FOREIGN_KEY_OPTIONS.dup
+    add_foreign_key :finding_review_assignments, :reviews, FOREIGN_KEY_OPTIONS.dup
   end
 
   def self.down
