@@ -34,7 +34,7 @@ FINDING_WARNING_EXPIRE_DAYS = 7
 # Cantidad de días a los que se debe enviar una nueva solicitud de confirmación
 FINDING_STALE_UNCONFIRMED_DAYS = 1
 # Opciones para crear claves foráneas
-FOREIGN_KEY_OPTIONS='ON UPDATE RESTRICT ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED'
+FOREIGN_KEY_OPTIONS={ on_delete: :restrict, on_update: :restrict }
 # Días a los que se consideran anticuadas las notificaciones
 NOTIFICATIONS_STALE_DAYS = 2
 # Cadena para separar las enumeraciones cuando son concatenadas

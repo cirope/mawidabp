@@ -7,7 +7,7 @@ class CreateBusinessUnitFindings < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_foreign_key :business_unit_findings, :business_units, options: FOREIGN_KEY_OPTIONS
-    add_foreign_key :business_unit_findings, :findings, options: FOREIGN_KEY_OPTIONS
+    add_foreign_key :business_unit_findings, :business_units, FOREIGN_KEY_OPTIONS
+    add_foreign_key :business_unit_findings, :findings, FOREIGN_KEY_OPTIONS
   end
 end

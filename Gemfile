@@ -3,7 +3,6 @@ source 'https://rubygems.org'
 gem 'rails', '~> 4.2.3'
 
 gem 'pg'
-gem 'foreigner'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'responders'

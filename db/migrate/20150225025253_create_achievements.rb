@@ -9,7 +9,7 @@ class CreateAchievements < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_foreign_key :achievements, :benefits, options: FOREIGN_KEY_OPTIONS
-    add_foreign_key :achievements, :findings, options: FOREIGN_KEY_OPTIONS
+    add_foreign_key :achievements, :benefits, FOREIGN_KEY_OPTIONS
+    add_foreign_key :achievements, :findings, FOREIGN_KEY_OPTIONS
   end
 end

@@ -8,6 +8,6 @@ class CreateBenefits < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_foreign_key :benefits, :organizations, options: FOREIGN_KEY_OPTIONS
+    add_foreign_key :benefits, :organizations, FOREIGN_KEY_OPTIONS
   end
 end
