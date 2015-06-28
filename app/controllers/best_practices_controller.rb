@@ -28,7 +28,7 @@ class BestPracticesController < ApplicationController
 
   # * POST /best_practices
   def create
-    @best_practice = BestPractice.list.new best_practice_params
+    @best_practice = BestPractice.new best_practice_params
 
     @best_practice.save
     respond_with @best_practice
@@ -59,9 +59,10 @@ class BestPracticesController < ApplicationController
 
     def best_practice_params
       params.require(:best_practice).permit(
-        :name, :description, :obsolete, :lock_version, process_controls_attributes: [
+        :name, :description, :obsolete, :shared, :lock_version, process_controls_attributes: [
           :id, :name, :order, :obsolete, :_destroy, control_objectives_attributes: [
-            :id, :name, :relevance, :risk, :obsolete, :order, :_destroy, control_attributes: [
+            :id, :name, :relevance, :risk, :obsolete, :continuous, :order, :_destroy,
+            control_attributes: [
               :id, :control, :effects, :design_tests, :compliance_tests, :sustantive_tests, :_destroy
             ]
           ]

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.2.0'
+gem 'rails', '~> 4.2.3'
 
 gem 'pg'
 gem 'foreigner'
@@ -13,7 +13,7 @@ gem 'newrelic_rpm'
 gem 'validates_timeliness', github: 'francocatena/validates_timeliness'
 gem 'RedCloth'
 gem 'whenever'
-gem 'paper_trail', '4.0.0.beta2'
+gem 'paper_trail', '4.0.0.rc1'
 gem 'carrierwave'
 gem 'dynamic_form'
 gem 'acts_as_tree'

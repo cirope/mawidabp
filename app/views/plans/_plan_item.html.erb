@@ -22,7 +22,7 @@
           title: t('label.search'),
           autofocus: true, data: {
             autocomplete_params: ({ business_unit_type_id: @business_unit_type.id } if @business_unit_type),
-            autocomplete_url: auto_complete_for_business_unit_business_unit_id_plans_path,
+            autocomplete_url: auto_complete_for_business_unit_plans_path,
             autocomplete_id_target: "#hidden_business_unit_id_#{id}"
           }
         } %>

@@ -51,4 +51,8 @@ module WeaknessesHelper
       achievement || @weakness.achievements.new(benefit_id: benefit.id)
     end
   end
+
+  def weakness_business_units
+    @weakness.control_objective_item.business_units
+  end
 end

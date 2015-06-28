@@ -1,47 +1,11 @@
 class ControlObjectiveItem < ActiveRecord::Base
+  include Auditable
+  include Comparable
   include Parameters::Relevance
   include Parameters::Qualification
   include ParameterSelector
-  include Comparable
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
-
-  # Constantes
-  COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
-    review: {
-      column: "LOWER(#{Review.quoted_table_name}.#{Review.qcn('identification')})",
-      operator: 'LIKE', mask: "%%%s%%", conversion_method: :to_s,
-      regexp: /.*/
-    },
-    process_control: {
-      column: "LOWER(#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn('name')})",
-      operator: 'LIKE', mask: "%%%s%%", conversion_method: :to_s,
-      regexp: /.*/
-    },
-    control_objective_text: {
-      column: "LOWER(#{quoted_table_name}.#{qcn('control_objective_text')})",
-      operator: 'LIKE', mask: "%%%s%%", conversion_method: :to_s,
-      regexp: /.*/
-    }
-  })
-
-  scope :list, -> { where(organization_id: Organization.current_id) }
-  scope :not_excluded_from_score, -> { where(exclude_from_score: false) }
-  scope :with_names, ->(*control_objective_names) {
-    conditions = []
-    parameters = {}
-
-    control_objective_names.each_with_index do |control_objective_name, i|
-      conditions << "LOWER(#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('name')}) LIKE :co_#{i}"
-      parameters[:"co_#{i}"] = "%#{control_objective_name.mb_chars.downcase}%"
-    end
-
-    includes(:control_objective).where(
-      conditions.join(' OR '), parameters
-    ).references(:control_objectives)
-  }
+  include ControlObjectiveItems::Scopes
+  include ControlObjectiveItems::Search
 
   # Atributos no persistentes
   attr_reader :approval_errors
@@ -98,6 +62,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   belongs_to :organization
   belongs_to :control_objective, inverse_of: :control_objective_items
   belongs_to :review, inverse_of: :control_objective_items
+  has_many :business_unit_scores, dependent: :destroy
   has_many :weaknesses, -> { where(final: false) }, dependent: :destroy
   has_many :oportunities, -> { where(final: false) }, dependent: :destroy
   has_many :fortresses, -> { where(final: false) }, dependent: :destroy
@@ -117,21 +82,21 @@ class ControlObjectiveItem < ActiveRecord::Base
   has_many :work_papers, -> { order(code: :asc) }, as: :owner, dependent: :destroy,
     before_add: [:check_for_final_review, :prepare_work_paper],
     before_remove: :check_for_final_review
+  has_many :business_units, through: :business_unit_scores
   has_one :control, -> { order("#{Control.quoted_table_name}.#{Control.qcn('order')} ASC") }, as: :controllable,
     dependent: :destroy
 
   accepts_nested_attributes_for :control, allow_destroy: true
+  accepts_nested_attributes_for :business_unit_scores, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :work_papers, allow_destroy: true
 
   def initialize(attributes = nil, options = {})
-    super(attributes, options)
+    super attributes, options
 
-    if self.control_objective
-      self.relevance ||= self.control_objective.relevance
-    end
+    self.relevance ||= control_objective.relevance if control_objective
 
     self.finished ||= false
-    self.build_control unless self.control
+    self.build_control unless control
     self.organization_id ||= Organization.current_id
   end
 
@@ -196,6 +161,27 @@ class ControlObjectiveItem < ActiveRecord::Base
     end
   end
 
+  def business_unit_type_ids=(ids)
+    (ids || []).uniq.each do |but_id|
+      if BusinessUnitType.exists?(but_id)
+        bus = []
+        but = BusinessUnitType.find(but_id)
+        business_unit_scores_ids = business_unit_scores.map(&:business_unit_id)
+
+        but.business_units.each do |bu|
+          if business_unit_scores_ids.exclude?(bu.id)
+            bus << {
+              business_unit_id: bu.id,
+              compliance_score: Parameters::Qualification::QUALIFICATION_TYPES[:excellent]
+            }
+          end
+        end
+
+        business_unit_scores.build(bus) unless bus.empty?
+      end
+    end
+  end
+
   def score_completion
     if self.finished && !self.exclude_from_score
       if !self.design_score && !self.compliance_score && !self.sustantive_score
@@ -230,6 +216,10 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   def process_control
     self.control_objective.try(:process_control)
+  end
+
+  def continuous
+    self.control_objective.try(:continuous)
   end
 
   def must_be_approved?

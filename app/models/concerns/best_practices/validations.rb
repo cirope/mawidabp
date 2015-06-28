@@ -2,7 +2,7 @@ module BestPractices::Validations
   extend ActiveSupport::Concern
 
   included do
-    validates :name, :organization_id, presence: true
+    validates :name, :organization_id, :group_id, presence: true
     validates :name, length: { maximum: 255 }, allow_nil: true, allow_blank: true
     validates :organization_id, numericality: { only_integer: true },
       allow_blank: true, allow_nil: true

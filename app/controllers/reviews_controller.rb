@@ -288,11 +288,13 @@ class ReviewsController < ApplicationController
   def auto_complete_for_control_objective
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
+    best_practice_conditions = BestPractice.list_conditions
+
     conditions = [
-      "#{BestPractice.quoted_table_name}.#{BestPractice.qcn('organization_id')} = :organization_id",
+      best_practice_conditions.first,
       "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('obsolete')} = :false"
     ]
-    parameters = { organization_id: current_organization.id, false: false }
+    parameters = best_practice_conditions.last.merge(false: false)
 
     @tokens.each_with_index do |t, i|
       conditions << [
@@ -323,11 +325,13 @@ class ReviewsController < ApplicationController
   def auto_complete_for_process_control
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
+    best_practice_conditions = BestPractice.list_conditions
+
     conditions = [
-      "#{BestPractice.quoted_table_name}.#{BestPractice.qcn('organization_id')} = :organization_id",
+      best_practice_conditions.first,
       "#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn('obsolete')} = :false"
     ]
-    parameters = { organization_id: current_organization.id, false: false }
+    parameters = best_practice_conditions.last.merge(false: false)
 
     @tokens.each_with_index do |t, i|
       conditions << [

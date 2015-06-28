@@ -254,9 +254,9 @@ Rails.application.routes.draw do
   end
 
   resources :control_objective_items do
-    member do
-      get :suggest_next_work_paper_code
-    end
+    get :suggest_next_work_paper_code, on: :member
+    get :auto_complete_for_business_unit, on: :collection
+    get :auto_complete_for_business_unit_type, on: :collection
   end
 
   namespace :plans do
@@ -268,7 +268,7 @@ Rails.application.routes.draw do
 
     collection do
       get :resource_data
-      get :auto_complete_for_business_unit_business_unit_id
+      get :auto_complete_for_business_unit
     end
   end
 

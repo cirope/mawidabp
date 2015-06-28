@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150303153258) do
+ActiveRecord::Schema.define(version: 20150610121431) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,11 +72,37 @@ ActiveRecord::Schema.define(version: 20150303153258) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "obsolete",        default: false
+    t.boolean  "shared",          default: false
+    t.integer  "group_id"
   end
 
   add_index "best_practices", ["created_at"], name: "index_best_practices_on_created_at", using: :btree
+  add_index "best_practices", ["group_id"], name: "index_best_practices_on_group_id", using: :btree
   add_index "best_practices", ["obsolete"], name: "index_best_practices_on_obsolete", using: :btree
   add_index "best_practices", ["organization_id"], name: "index_best_practices_on_organization_id", using: :btree
+
+  create_table "business_unit_findings", force: true do |t|
+    t.integer  "business_unit_id"
+    t.integer  "finding_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "business_unit_findings", ["business_unit_id"], name: "index_business_unit_findings_on_business_unit_id", using: :btree
+  add_index "business_unit_findings", ["finding_id"], name: "index_business_unit_findings_on_finding_id", using: :btree
+
+  create_table "business_unit_scores", force: true do |t|
+    t.integer  "design_score"
+    t.integer  "compliance_score"
+    t.integer  "sustantive_score"
+    t.integer  "business_unit_id"
+    t.integer  "control_objective_item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "business_unit_scores", ["business_unit_id"], name: "index_business_unit_scores_on_business_unit_id", using: :btree
+  add_index "business_unit_scores", ["control_objective_item_id"], name: "index_business_unit_scores_on_control_objective_item_id", using: :btree
 
   create_table "business_unit_types", force: true do |t|
     t.string   "name"
@@ -95,13 +121,13 @@ ActiveRecord::Schema.define(version: 20150303153258) do
 
   create_table "business_units", force: true do |t|
     t.string   "name"
+    t.integer  "business_unit_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "business_unit_type_id"
   end
 
-  add_index "business_units", ["business_unit_type_id"], name: "index_business_unit_on_business_unit_type_id", using: :btree
-  add_index "business_units", ["name"], name: "index_business_unit_on_name", using: :btree
+  add_index "business_units", ["business_unit_type_id"], name: "index_business_units_on_business_unit_type_id", using: :btree
+  add_index "business_units", ["name"], name: "index_business_units_on_name", using: :btree
 
   create_table "comments", force: true do |t|
     t.text     "comment"
@@ -120,13 +146,13 @@ ActiveRecord::Schema.define(version: 20150303153258) do
     t.string   "type"
     t.integer  "review_id"
     t.date     "issue_date"
+    t.date     "close_date"
+    t.text     "applied_procedures"
     t.text     "conclusion"
+    t.boolean  "approved"
     t.integer  "lock_version",       default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "applied_procedures"
-    t.boolean  "approved"
-    t.date     "close_date"
     t.integer  "organization_id"
   end
 
@@ -138,19 +164,19 @@ ActiveRecord::Schema.define(version: 20150303153258) do
 
   create_table "control_objective_items", force: true do |t|
     t.text     "control_objective_text"
+    t.integer  "order_number"
     t.integer  "relevance"
     t.integer  "design_score"
     t.integer  "compliance_score"
+    t.integer  "sustantive_score"
     t.date     "audit_date"
     t.text     "auditor_comment"
+    t.boolean  "finished"
     t.integer  "control_objective_id"
     t.integer  "review_id"
     t.integer  "lock_version",           default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "finished"
-    t.integer  "sustantive_score"
-    t.integer  "order_number"
     t.boolean  "exclude_from_score",     default: false, null: false
     t.integer  "organization_id"
   end
@@ -161,13 +187,14 @@ ActiveRecord::Schema.define(version: 20150303153258) do
 
   create_table "control_objectives", force: true do |t|
     t.text     "name"
+    t.integer  "risk"
+    t.integer  "relevance"
     t.integer  "order"
     t.integer  "process_control_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "relevance"
-    t.integer  "risk"
     t.boolean  "obsolete",           default: false
+    t.boolean  "continuous"
   end
 
   add_index "control_objectives", ["obsolete"], name: "index_control_objectives_on_obsolete", using: :btree
@@ -176,27 +203,27 @@ ActiveRecord::Schema.define(version: 20150303153258) do
   create_table "controls", force: true do |t|
     t.text     "control"
     t.text     "effects"
-    t.text     "compliance_tests"
     t.text     "design_tests"
+    t.text     "compliance_tests"
+    t.text     "sustantive_tests"
     t.integer  "order"
     t.integer  "controllable_id"
     t.string   "controllable_type"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "sustantive_tests"
   end
 
   add_index "controls", ["controllable_type", "controllable_id"], name: "index_controls_on_controllable_type_and_controllable_id", using: :btree
 
   create_table "costs", force: true do |t|
     t.text     "description"
+    t.string   "cost_type"
     t.decimal  "cost",        precision: 15, scale: 2
     t.integer  "item_id"
     t.string   "item_type"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "cost_type"
   end
 
   add_index "costs", ["cost_type"], name: "index_costs_on_cost_type", using: :btree
@@ -233,21 +260,21 @@ ActiveRecord::Schema.define(version: 20150303153258) do
     t.string   "file_file_name"
     t.string   "file_content_type"
     t.integer  "file_file_size"
+    t.datetime "file_updated_at"
     t.integer  "lock_version",      default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "file_updated_at"
   end
 
   create_table "finding_answers", force: true do |t|
     t.text     "answer"
     t.text     "auditor_comments"
+    t.date     "commitment_date"
     t.integer  "finding_id"
     t.integer  "user_id"
+    t.integer  "file_model_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "file_model_id"
-    t.date     "commitment_date"
   end
 
   add_index "finding_answers", ["file_model_id"], name: "index_finding_answers_on_file_model_id", using: :btree
@@ -255,11 +282,11 @@ ActiveRecord::Schema.define(version: 20150303153258) do
   add_index "finding_answers", ["user_id"], name: "index_finding_answers_on_user_id", using: :btree
 
   create_table "finding_relations", force: true do |t|
+    t.string   "description",        null: false
     t.integer  "finding_id"
     t.integer  "related_finding_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "description",        null: false
   end
 
   add_index "finding_relations", ["finding_id"], name: "index_finding_relations_on_finding_id", using: :btree
@@ -275,43 +302,43 @@ ActiveRecord::Schema.define(version: 20150303153258) do
   add_index "finding_review_assignments", ["finding_id", "review_id"], name: "index_finding_review_assignments_on_finding_id_and_review_id", using: :btree
 
   create_table "finding_user_assignments", force: true do |t|
+    t.boolean  "process_owner",       default: false
     t.integer  "finding_id"
+    t.string   "finding_type"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "process_owner",                   default: false
-    t.string   "finding_type",        limit: nil
     t.boolean  "responsible_auditor"
   end
 
-  add_index "finding_user_assignments", ["finding_id", "finding_type", "user_id"], name: "index_finding_user_assignments_on_finding_id_finding_type_and_u", using: :btree
+  add_index "finding_user_assignments", ["finding_id", "finding_type", "user_id"], name: "finding_user_assignments_on_id_type_and_user_id", using: :btree
   add_index "finding_user_assignments", ["finding_id", "finding_type"], name: "index_finding_user_assignments_on_finding_id_and_finding_type", using: :btree
 
   create_table "findings", force: true do |t|
     t.string   "type"
-    t.integer  "control_objective_item_id"
     t.string   "review_code"
     t.text     "description"
     t.text     "answer"
-    t.integer  "state"
+    t.text     "audit_comments"
     t.date     "solution_date"
+    t.date     "first_notification_date"
+    t.date     "confirmation_date"
+    t.date     "origination_date"
+    t.boolean  "final"
+    t.integer  "parent_id"
+    t.integer  "state"
+    t.integer  "notification_level",        default: 0
     t.integer  "lock_version",              default: 0
+    t.integer  "control_objective_item_id"
     t.text     "audit_recommendations"
     t.text     "effect"
     t.integer  "risk"
+    t.integer  "highest_risk"
     t.integer  "priority"
     t.date     "follow_up_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "audit_comments"
-    t.date     "first_notification_date"
-    t.date     "confirmation_date"
-    t.boolean  "final"
-    t.integer  "parent_id"
-    t.integer  "notification_level",        default: 0
-    t.date     "origination_date"
     t.integer  "repeated_of_id"
-    t.integer  "highest_risk"
     t.text     "correction"
     t.date     "correction_date"
     t.text     "cause_analysis"
@@ -351,10 +378,10 @@ ActiveRecord::Schema.define(version: 20150303153258) do
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
+    t.datetime "image_updated_at"
     t.integer  "lock_version",       default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "image_updated_at"
   end
 
   create_table "ldap_configs", force: true do |t|
@@ -403,15 +430,15 @@ ActiveRecord::Schema.define(version: 20150303153258) do
   add_index "notification_relations", ["notification_id"], name: "index_notification_relations_on_notification_id", using: :btree
 
   create_table "notifications", force: true do |t|
+    t.integer  "status"
     t.string   "confirmation_hash"
+    t.text     "notes"
+    t.datetime "confirmation_date"
     t.integer  "user_id"
+    t.integer  "user_who_confirm_id"
+    t.integer  "lock_version",        default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "user_who_confirm_id"
-    t.integer  "status"
-    t.text     "notes"
-    t.integer  "lock_version",        default: 0
-    t.datetime "confirmation_date"
   end
 
   add_index "notifications", ["confirmation_hash"], name: "index_notifications_on_confirmation_hash", unique: true, using: :btree
@@ -445,11 +472,11 @@ ActiveRecord::Schema.define(version: 20150303153258) do
     t.string   "name"
     t.string   "prefix"
     t.text     "description"
+    t.integer  "group_id"
     t.integer  "image_model_id"
     t.integer  "lock_version",              default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "group_id"
     t.boolean  "public",                    default: false
     t.boolean  "system_quality_management"
     t.text     "kind",                      default: "private"
@@ -526,10 +553,10 @@ ActiveRecord::Schema.define(version: 20150303153258) do
     t.boolean  "read",                   default: false
     t.boolean  "modify",                 default: false
     t.boolean  "erase",                  default: false
+    t.boolean  "approval",               default: false
     t.integer  "role_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "approval",               default: false
   end
 
   add_index "privileges", ["role_id"], name: "index_privileges_on_role_id", using: :btree
@@ -586,11 +613,11 @@ ActiveRecord::Schema.define(version: 20150303153258) do
   create_table "resource_classes", force: true do |t|
     t.string   "name"
     t.integer  "unit"
+    t.integer  "resource_class_type"
     t.integer  "organization_id"
     t.integer  "lock_version",        default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "resource_class_type"
   end
 
   add_index "resource_classes", ["name"], name: "index_resource_classes_on_name", using: :btree
@@ -635,16 +662,16 @@ ActiveRecord::Schema.define(version: 20150303153258) do
   create_table "reviews", force: true do |t|
     t.string   "identification"
     t.text     "description"
-    t.integer  "period_id"
-    t.integer  "plan_item_id"
-    t.integer  "lock_version",    default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "file_model_id"
     t.text     "survey"
     t.integer  "score"
     t.integer  "top_scale"
     t.integer  "achieved_scale"
+    t.integer  "period_id"
+    t.integer  "plan_item_id"
+    t.integer  "file_model_id"
+    t.integer  "lock_version",    default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "organization_id"
   end
 
@@ -656,11 +683,11 @@ ActiveRecord::Schema.define(version: 20150303153258) do
 
   create_table "roles", force: true do |t|
     t.string   "name"
+    t.integer  "role_type"
     t.integer  "organization_id"
     t.integer  "lock_version",    default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "role_type"
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
@@ -686,22 +713,22 @@ ActiveRecord::Schema.define(version: 20150303153258) do
     t.string   "language",             limit: 10
     t.string   "email",                limit: 100
     t.string   "user",                 limit: 30
+    t.string   "function"
     t.string   "password",             limit: 128
+    t.string   "salt"
+    t.string   "change_password_hash"
     t.date     "password_changed"
-    t.boolean  "enable"
+    t.boolean  "enable",                           default: false
+    t.boolean  "logged_in",                        default: false
+    t.boolean  "group_admin",                      default: false
+    t.integer  "resource_id"
+    t.datetime "last_access"
+    t.integer  "manager_id"
     t.integer  "failed_attempts",                  default: 0
+    t.text     "notes"
     t.integer  "lock_version",                     default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "last_access"
-    t.boolean  "logged_in",                        default: false
-    t.string   "salt"
-    t.string   "change_password_hash"
-    t.string   "function"
-    t.integer  "resource_id"
-    t.integer  "manager_id"
-    t.boolean  "group_admin",                      default: false
-    t.text     "notes"
     t.datetime "hash_changed"
     t.boolean  "hidden",                           default: false
   end
@@ -712,7 +739,7 @@ ActiveRecord::Schema.define(version: 20150303153258) do
   add_index "users", ["hidden"], name: "index_users_on_hidden", using: :btree
   add_index "users", ["manager_id"], name: "index_users_on_manager_id", using: :btree
   add_index "users", ["resource_id"], name: "index_users_on_resource_id", using: :btree
-  add_index "users", ["user"], name: "index_users_on_user", unique: true, using: :btree
+  add_index "users", ["user"], name: "index_users_on_user", using: :btree
 
   create_table "versions", force: true do |t|
     t.integer  "item_id"
@@ -721,8 +748,8 @@ ActiveRecord::Schema.define(version: 20150303153258) do
     t.integer  "whodunnit"
     t.text     "object"
     t.datetime "created_at"
-    t.integer  "organization_id"
     t.boolean  "important"
+    t.integer  "organization_id"
   end
 
   add_index "versions", ["created_at"], name: "index_versions_on_created_at", using: :btree
@@ -734,15 +761,15 @@ ActiveRecord::Schema.define(version: 20150303153258) do
   create_table "work_papers", force: true do |t|
     t.string   "name"
     t.string   "code"
+    t.integer  "number_of_pages"
     t.text     "description"
+    t.integer  "owner_id"
+    t.string   "owner_type"
     t.integer  "file_model_id"
     t.integer  "organization_id"
     t.integer  "lock_version",    default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "number_of_pages"
-    t.integer  "owner_id"
-    t.string   "owner_type"
   end
 
   add_index "work_papers", ["file_model_id"], name: "index_work_papers_on_file_model_id", using: :btree
@@ -781,96 +808,103 @@ ActiveRecord::Schema.define(version: 20150303153258) do
 
   add_foreign_key "benefits", "organizations", name: "benefits_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "best_practices", "organizations", name: "best_practices_organization_id_fk", dependent: :restrict
+  add_foreign_key "best_practices", "groups", name: "best_practices_group_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "best_practices", "organizations", name: "best_practices_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "business_unit_types", "organizations", name: "business_unit_types_organization_id_fk", dependent: :restrict
+  add_foreign_key "business_unit_findings", "business_units", name: "business_unit_findings_business_unit_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "business_unit_findings", "findings", name: "business_unit_findings_finding_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "business_units", "business_unit_types", name: "business_units_business_unit_type_id_fk", dependent: :restrict
+  add_foreign_key "business_unit_scores", "business_units", name: "business_unit_scores_business_unit_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "business_unit_scores", "control_objective_items", name: "business_unit_scores_control_objective_item_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "comments", "users", name: "comments_user_id_fk", dependent: :restrict
+  add_foreign_key "business_unit_types", "organizations", name: "business_unit_types_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "conclusion_reviews", "reviews", name: "conclusion_reviews_review_id_fk", dependent: :restrict
+  add_foreign_key "business_units", "business_unit_types", name: "business_units_business_unit_type_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "control_objective_items", "control_objectives", name: "control_objective_items_control_objective_id_fk", dependent: :restrict
-  add_foreign_key "control_objective_items", "reviews", name: "control_objective_items_review_id_fk", dependent: :restrict
+  add_foreign_key "comments", "users", name: "comments_user_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "control_objectives", "process_controls", name: "control_objectives_process_control_id_fk", dependent: :restrict
+  add_foreign_key "conclusion_reviews", "reviews", name: "conclusion_reviews_review_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "costs", "users", name: "costs_user_id_fk", dependent: :restrict
+  add_foreign_key "control_objective_items", "control_objectives", name: "control_objective_items_control_objective_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "control_objective_items", "reviews", name: "control_objective_items_review_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "error_records", "organizations", name: "error_records_organization_id_fk", dependent: :restrict
-  add_foreign_key "error_records", "users", name: "error_records_user_id_fk", dependent: :restrict
+  add_foreign_key "control_objectives", "process_controls", name: "control_objectives_process_control_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "finding_answers", "file_models", name: "finding_answers_file_model_id_fk", dependent: :restrict
-  add_foreign_key "finding_answers", "findings", name: "finding_answers_finding_id_fk", dependent: :restrict
-  add_foreign_key "finding_answers", "users", name: "finding_answers_user_id_fk", dependent: :restrict
+  add_foreign_key "costs", "users", name: "costs_user_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "finding_relations", "findings", name: "finding_relations_finding_id_fk", dependent: :restrict
-  add_foreign_key "finding_relations", "findings", name: "finding_relations_related_finding_id_fk", column: "related_finding_id", dependent: :restrict
+  add_foreign_key "error_records", "organizations", name: "error_records_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "error_records", "users", name: "error_records_user_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "finding_review_assignments", "findings", name: "finding_review_assignments_finding_id_fk", dependent: :restrict
-  add_foreign_key "finding_review_assignments", "reviews", name: "finding_review_assignments_review_id_fk", dependent: :restrict
+  add_foreign_key "finding_answers", "file_models", name: "finding_answers_file_model_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "finding_answers", "findings", name: "finding_answers_finding_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "finding_answers", "users", name: "finding_answers_user_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "finding_user_assignments", "findings", name: "finding_user_assignments_finding_id_fk", dependent: :restrict
-  add_foreign_key "finding_user_assignments", "users", name: "finding_user_assignments_user_id_fk", dependent: :restrict
+  add_foreign_key "finding_relations", "findings", name: "finding_relations_finding_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "finding_relations", "findings", name: "finding_relations_related_finding_id_fk", column: "related_finding_id", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "findings", "control_objective_items", name: "findings_control_objective_item_id_fk", dependent: :restrict
-  add_foreign_key "findings", "findings", name: "findings_repeated_of_id_fk", column: "repeated_of_id", dependent: :restrict
+  add_foreign_key "finding_review_assignments", "findings", name: "finding_review_assignments_finding_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "finding_review_assignments", "reviews", name: "finding_review_assignments_review_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+
+  add_foreign_key "finding_user_assignments", "findings", name: "finding_user_assignments_finding_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "finding_user_assignments", "users", name: "finding_user_assignments_user_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+
+  add_foreign_key "findings", "control_objective_items", name: "findings_control_objective_item_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "findings", "findings", name: "findings_repeated_of_id_fk", column: "repeated_of_id", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
   add_foreign_key "ldap_configs", "organizations", name: "ldap_configs_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "login_records", "organizations", name: "login_records_organization_id_fk", dependent: :restrict
-  add_foreign_key "login_records", "users", name: "login_records_user_id_fk", dependent: :restrict
+  add_foreign_key "login_records", "organizations", name: "login_records_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "login_records", "users", name: "login_records_user_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "notification_relations", "notifications", name: "notification_relations_notification_id_fk", dependent: :restrict
+  add_foreign_key "notification_relations", "notifications", name: "notification_relations_notification_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "notifications", "users", name: "notifications_user_id_fk", dependent: :restrict
-  add_foreign_key "notifications", "users", name: "notifications_user_who_confirm_id_fk", column: "user_who_confirm_id", dependent: :restrict
+  add_foreign_key "notifications", "users", name: "notifications_user_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "notifications", "users", name: "notifications_user_who_confirm_id_fk", column: "user_who_confirm_id", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "old_passwords", "users", name: "old_passwords_user_id_fk", dependent: :restrict
+  add_foreign_key "old_passwords", "users", name: "old_passwords_user_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "organization_roles", "organizations", name: "organization_roles_organization_id_fk", dependent: :restrict
-  add_foreign_key "organization_roles", "roles", name: "organization_roles_role_id_fk", dependent: :restrict
-  add_foreign_key "organization_roles", "users", name: "organization_roles_user_id_fk", dependent: :restrict
+  add_foreign_key "organization_roles", "organizations", name: "organization_roles_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "organization_roles", "roles", name: "organization_roles_role_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "organization_roles", "users", name: "organization_roles_user_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "organizations", "groups", name: "organizations_group_id_fk", dependent: :restrict
-  add_foreign_key "organizations", "image_models", name: "organizations_image_model_id_fk", dependent: :restrict
+  add_foreign_key "organizations", "groups", name: "organizations_group_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "organizations", "image_models", name: "organizations_image_model_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "periods", "organizations", name: "periods_organization_id_fk", dependent: :restrict
+  add_foreign_key "periods", "organizations", name: "periods_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "plan_items", "business_units", name: "plan_items_business_unit_id_fk", dependent: :restrict
-  add_foreign_key "plan_items", "plans", name: "plan_items_plan_id_fk", dependent: :restrict
+  add_foreign_key "plan_items", "business_units", name: "plan_items_business_unit_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "plan_items", "plans", name: "plan_items_plan_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "plans", "periods", name: "plans_period_id_fk", dependent: :restrict
+  add_foreign_key "plans", "periods", name: "plans_period_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "privileges", "roles", name: "privileges_role_id_fk", dependent: :restrict
+  add_foreign_key "privileges", "roles", name: "privileges_role_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "process_controls", "best_practices", name: "process_controls_best_practice_id_fk", dependent: :restrict
+  add_foreign_key "process_controls", "best_practices", name: "process_controls_best_practice_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "resource_classes", "organizations", name: "resource_classes_organization_id_fk", dependent: :restrict
+  add_foreign_key "resource_classes", "organizations", name: "resource_classes_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "resources", "resource_classes", name: "resources_resource_class_id_fk", dependent: :restrict
+  add_foreign_key "resources", "resource_classes", name: "resources_resource_class_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "review_user_assignments", "reviews", name: "review_user_assignments_review_id_fk", dependent: :restrict
-  add_foreign_key "review_user_assignments", "users", name: "review_user_assignments_user_id_fk", dependent: :restrict
+  add_foreign_key "review_user_assignments", "reviews", name: "review_user_assignments_review_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "review_user_assignments", "users", name: "review_user_assignments_user_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "reviews", "file_models", name: "reviews_file_model_id_fk", dependent: :restrict
-  add_foreign_key "reviews", "periods", name: "reviews_period_id_fk", dependent: :restrict
-  add_foreign_key "reviews", "plan_items", name: "reviews_plan_item_id_fk", dependent: :restrict
+  add_foreign_key "reviews", "file_models", name: "reviews_file_model_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "reviews", "periods", name: "reviews_period_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "reviews", "plan_items", name: "reviews_plan_item_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "roles", "organizations", name: "roles_organization_id_fk", dependent: :restrict
+  add_foreign_key "roles", "organizations", name: "roles_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "settings", "organizations", name: "settings_organization_id_fk", dependent: :restrict
+  add_foreign_key "settings", "organizations", name: "settings_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "users", "resources", name: "users_resource_id_fk", dependent: :restrict
-  add_foreign_key "users", "users", name: "users_manager_id_fk", column: "manager_id", dependent: :restrict
+  add_foreign_key "users", "resources", name: "users_resource_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "users", "users", name: "users_manager_id_fk", column: "manager_id", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "work_papers", "file_models", name: "work_papers_file_model_id_fk", dependent: :restrict
-  add_foreign_key "work_papers", "organizations", name: "work_papers_organization_id_fk", dependent: :restrict
+  add_foreign_key "work_papers", "file_models", name: "work_papers_file_model_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "work_papers", "organizations", name: "work_papers_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "workflow_items", "workflows", name: "workflow_items_workflow_id_fk", dependent: :restrict
+  add_foreign_key "workflow_items", "workflows", name: "workflow_items_workflow_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
-  add_foreign_key "workflows", "periods", name: "workflows_period_id_fk", dependent: :restrict
-  add_foreign_key "workflows", "reviews", name: "workflows_review_id_fk", dependent: :restrict
+  add_foreign_key "workflows", "periods", name: "workflows_period_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "workflows", "reviews", name: "workflows_review_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
 end

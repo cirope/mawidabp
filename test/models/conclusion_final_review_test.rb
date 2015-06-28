@@ -72,7 +72,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     assert findings.size > 0
 
     assert_difference 'Finding.repeated.count' do
-      assert review.update(
+      assert review.update!(
         :finding_review_assignments_attributes => {
           :new_1 => {:finding_id => repeated_id}
         }

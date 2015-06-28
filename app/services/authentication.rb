@@ -83,7 +83,7 @@ class Authentication
 
       @valid = ldap.bind
 
-      if @valid
+      if @valid && @valid_user
         register_login
 
         @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }

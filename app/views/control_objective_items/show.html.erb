@@ -81,9 +81,33 @@
   <%= render :partial => 'potential_nonconformities_summary', :locals => {:readonly => true} %>
 <% end %>
 
+<% unless @control_objective_item.business_unit_scores.empty? %>
+  <h3><%= BusinessUnitScore.model_name.human :count => @control_objective_item.business_unit_scores.size %></h3>
+  <table class="table table-condensed table-striped">
+    <caption></caption>
+    <thead>
+      <tr>
+        <th><%= BusinessUnitScore.human_attribute_name 'business_unit_id' %></th>
+        <th><%= BusinessUnitScore.human_attribute_name 'design_score' %></th>
+        <th><%= BusinessUnitScore.human_attribute_name 'compliance_score' %></th>
+        <th><%= BusinessUnitScore.human_attribute_name 'sustantive_score' %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @control_objective_item.business_unit_scores.each do |bus| %>
+        <tr>
+          <td><%= bus.business_unit.name %></td>
+          <td><%= bus.design_score || '-' %></td>
+          <td><%= bus.compliance_score || '-' %></td>
+          <td><%= bus.sustantive_score || '-' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
 <% unless @control_objective_item.work_papers.empty? %>
-  <h3><%= ControlObjectiveItem.human_attribute_name(:work_papers,
-      :count => @control_objective_item.work_papers.size) %></h3>
+  <h3><%= WorkPaper.model_name.human :count => @control_objective_item.work_papers.size %></h3>
   <table class="table table-condensed table-striped">
     <caption></caption>
     <thead>
