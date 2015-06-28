@@ -14,7 +14,7 @@ class CreateControlObjectiveItems < ActiveRecord::Migration
       t.references :review
       t.integer :lock_version, :default => 0
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :control_objective_items, :control_objective_id

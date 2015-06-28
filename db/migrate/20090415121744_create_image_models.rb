@@ -7,7 +7,7 @@ class CreateImageModels < ActiveRecord::Migration
       t.datetime :image_updated_at
       t.integer :lock_version, :default => 0
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 

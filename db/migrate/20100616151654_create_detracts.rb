@@ -7,7 +7,7 @@ class CreateDetracts < ActiveRecord::Migration
       t.references :organization
       t.integer :lock_version, :default => 0
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :detracts, :user_id

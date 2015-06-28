@@ -14,7 +14,7 @@ class CreateLdapConfigs < ActiveRecord::Migration
       t.string :manager_attribute
       t.references :organization, index: true, null: false
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_foreign_key :ldap_configs, :organizations, FOREIGN_KEY_OPTIONS.dup

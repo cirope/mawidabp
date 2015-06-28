@@ -5,7 +5,7 @@ class CreateOrganizationRoles < ActiveRecord::Migration
       t.references :organization
       t.references :role
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :organization_roles, :user_id

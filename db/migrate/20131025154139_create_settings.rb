@@ -7,7 +7,7 @@ class CreateSettings < ActiveRecord::Migration
       t.references :organization, null: false, index: true
       t.integer :lock_version, default: 0
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :settings, :name

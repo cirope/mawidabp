@@ -12,7 +12,7 @@ class CreateReviews < ActiveRecord::Migration
       t.references :file_model
       t.integer :lock_version, :default => 0
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :reviews, :period_id

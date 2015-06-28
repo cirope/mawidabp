@@ -4,7 +4,7 @@ class CreateOldPasswords < ActiveRecord::Migration
       t.string :password
       t.references :user
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :old_passwords, :user_id

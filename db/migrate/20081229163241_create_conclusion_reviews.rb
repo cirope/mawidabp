@@ -11,7 +11,7 @@ class CreateConclusionReviews < ActiveRecord::Migration
       t.boolean :approved
       t.integer :lock_version, :default => 0
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :conclusion_reviews, :review_id

@@ -21,8 +21,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.decimal  "amount",     precision: 15, scale: 2
     t.text     "comment"
     t.integer  "finding_id",                          null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
   add_index "achievements", ["benefit_id"], name: "index_achievements_on_benefit_id", using: :btree
@@ -32,8 +32,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.text     "option"
     t.integer  "question_id"
     t.integer  "lock_version", default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   add_index "answer_options", ["option", "question_id"], name: "index_answer_options_on_option_and_question_id", using: :btree
@@ -46,8 +46,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "lock_version",     default: 0
     t.text     "answer"
     t.integer  "answer_option_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   add_index "answers", ["poll_id"], name: "index_answers_on_poll_id", using: :btree
@@ -58,8 +58,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.string   "name",            null: false
     t.string   "kind",            null: false
     t.integer  "organization_id", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   add_index "benefits", ["organization_id"], name: "index_benefits_on_organization_id", using: :btree
@@ -69,8 +69,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.text     "description"
     t.integer  "organization_id"
     t.integer  "lock_version",    default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.boolean  "obsolete",        default: false
     t.boolean  "shared",          default: false
     t.integer  "group_id"
@@ -84,8 +84,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
   create_table "business_unit_findings", force: :cascade do |t|
     t.integer  "business_unit_id"
     t.integer  "finding_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   add_index "business_unit_findings", ["business_unit_id"], name: "index_business_unit_findings_on_business_unit_id", using: :btree
@@ -97,8 +97,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "sustantive_score"
     t.integer  "business_unit_id"
     t.integer  "control_objective_item_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   add_index "business_unit_scores", ["business_unit_id"], name: "index_business_unit_scores_on_business_unit_id", using: :btree
@@ -111,8 +111,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.string   "project_label"
     t.integer  "organization_id"
     t.integer  "lock_version",        default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
   add_index "business_unit_types", ["external"], name: "index_business_unit_types_on_external", using: :btree
@@ -122,8 +122,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
   create_table "business_units", force: :cascade do |t|
     t.string   "name"
     t.integer  "business_unit_type_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
   end
 
   add_index "business_units", ["business_unit_type_id"], name: "index_business_units_on_business_unit_type_id", using: :btree
@@ -134,8 +134,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "commentable_id"
     t.string   "commentable_type"
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   add_index "comments", ["commentable_id"], name: "index_comments_on_commentable_id", using: :btree
@@ -151,8 +151,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.text     "conclusion"
     t.boolean  "approved"
     t.integer  "lock_version",       default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "organization_id"
   end
 
@@ -175,8 +175,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "control_objective_id"
     t.integer  "review_id"
     t.integer  "lock_version",           default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
     t.boolean  "exclude_from_score",     default: false, null: false
     t.integer  "organization_id"
   end
@@ -191,8 +191,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "relevance"
     t.integer  "order"
     t.integer  "process_control_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.boolean  "obsolete",           default: false
     t.boolean  "continuous"
   end
@@ -209,8 +209,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "order"
     t.integer  "controllable_id"
     t.string   "controllable_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   add_index "controls", ["controllable_type", "controllable_id"], name: "index_controls_on_controllable_type_and_controllable_id", using: :btree
@@ -222,8 +222,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "item_id"
     t.string   "item_type"
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
   end
 
   add_index "costs", ["cost_type"], name: "index_costs_on_cost_type", using: :btree
@@ -235,8 +235,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.text     "subject"
     t.text     "body"
     t.text     "attachments"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.integer  "organization_id"
   end
 
@@ -248,8 +248,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "error"
     t.integer  "user_id"
     t.integer  "organization_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   add_index "error_records", ["created_at"], name: "index_error_records_on_created_at", using: :btree
@@ -262,8 +262,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
     t.integer  "lock_version",      default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   create_table "finding_answers", force: :cascade do |t|
@@ -273,8 +273,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "finding_id"
     t.integer  "user_id"
     t.integer  "file_model_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   add_index "finding_answers", ["file_model_id"], name: "index_finding_answers_on_file_model_id", using: :btree
@@ -285,8 +285,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.string   "description",        null: false
     t.integer  "finding_id"
     t.integer  "related_finding_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
 
   add_index "finding_relations", ["finding_id"], name: "index_finding_relations_on_finding_id", using: :btree
@@ -295,8 +295,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
   create_table "finding_review_assignments", force: :cascade do |t|
     t.integer  "finding_id"
     t.integer  "review_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "finding_review_assignments", ["finding_id", "review_id"], name: "index_finding_review_assignments_on_finding_id_and_review_id", using: :btree
@@ -306,8 +306,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "finding_id"
     t.string   "finding_type"
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.boolean  "responsible_auditor"
   end
 
@@ -336,8 +336,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "highest_risk"
     t.integer  "priority"
     t.date     "follow_up_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.integer  "repeated_of_id"
     t.text     "correction"
     t.date     "correction_date"
@@ -366,8 +366,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.string   "admin_hash"
     t.text     "description"
     t.integer  "lock_version", default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   add_index "groups", ["admin_email"], name: "index_groups_on_admin_email", unique: true, using: :btree
@@ -380,8 +380,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.integer  "lock_version",       default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   create_table "ldap_configs", force: :cascade do |t|
@@ -397,8 +397,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.string   "roles_attribute",                   null: false
     t.string   "manager_attribute"
     t.integer  "organization_id",                   null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.string   "filter"
   end
 
@@ -422,8 +422,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "notification_id"
     t.integer  "model_id"
     t.string   "model_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   add_index "notification_relations", ["model_type", "model_id"], name: "index_notification_relations_on_model_type_and_model_id", using: :btree
@@ -437,8 +437,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "user_id"
     t.integer  "user_who_confirm_id"
     t.integer  "lock_version",        default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
   end
 
   add_index "notifications", ["confirmation_hash"], name: "index_notifications_on_confirmation_hash", unique: true, using: :btree
@@ -449,8 +449,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
   create_table "old_passwords", force: :cascade do |t|
     t.string   "password"
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "old_passwords", ["created_at"], name: "index_old_passwords_on_created_at", using: :btree
@@ -460,8 +460,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "user_id"
     t.integer  "organization_id"
     t.integer  "role_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   add_index "organization_roles", ["organization_id"], name: "index_organization_roles_on_organization_id", using: :btree
@@ -475,8 +475,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "group_id"
     t.integer  "image_model_id"
     t.integer  "lock_version",              default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
     t.boolean  "public",                    default: false
     t.boolean  "system_quality_management"
     t.text     "kind",                      default: "private"
@@ -494,8 +494,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.date     "end"
     t.integer  "organization_id"
     t.integer  "lock_version",    default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   add_index "periods", ["end"], name: "index_periods_on_end", using: :btree
@@ -511,8 +511,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "order_number"
     t.integer  "plan_id"
     t.integer  "business_unit_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   add_index "plan_items", ["business_unit_id"], name: "index_plan_items_on_business_unit_id", using: :btree
@@ -521,8 +521,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
   create_table "plans", force: :cascade do |t|
     t.integer  "period_id"
     t.integer  "lock_version",    default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.integer  "organization_id"
   end
 
@@ -537,8 +537,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "questionnaire_id"
     t.integer  "pollable_id"
     t.string   "pollable_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.integer  "organization_id"
     t.string   "access_token"
     t.string   "customer_email"
@@ -555,8 +555,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.boolean  "erase",                  default: false
     t.boolean  "approval",               default: false
     t.integer  "role_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
   end
 
   add_index "privileges", ["role_id"], name: "index_privileges_on_role_id", using: :btree
@@ -565,8 +565,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.string   "name"
     t.integer  "order"
     t.integer  "best_practice_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.boolean  "obsolete",         default: false
   end
 
@@ -576,8 +576,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
   create_table "questionnaires", force: :cascade do |t|
     t.string   "name"
     t.integer  "lock_version",        default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.integer  "organization_id"
     t.string   "pollable_type"
     t.string   "email_subject"
@@ -595,8 +595,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.text     "question"
     t.integer  "questionnaire_id"
     t.integer  "lock_version",     default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   add_index "questions", ["question", "questionnaire_id"], name: "index_questions_on_question_and_questionnaire_id", using: :btree
@@ -604,8 +604,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
   create_table "related_user_relations", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "related_user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   add_index "related_user_relations", ["user_id", "related_user_id"], name: "index_related_user_relations_on_user_id_and_related_user_id", using: :btree
@@ -616,8 +616,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "resource_class_type"
     t.integer  "organization_id"
     t.integer  "lock_version",        default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
   end
 
   add_index "resource_classes", ["name"], name: "index_resource_classes_on_name", using: :btree
@@ -630,8 +630,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.string   "resource_consumer_type"
     t.integer  "resource_id"
     t.string   "resource_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
   end
 
   add_index "resource_utilizations", ["resource_consumer_id", "resource_consumer_type"], name: "resource_utilizations_consumer_consumer_type_idx", using: :btree
@@ -643,8 +643,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.decimal  "cost_per_unit",     precision: 15, scale: 2
     t.integer  "resource_class_id"
     t.integer  "lock_version",                               default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
   end
 
   add_index "resources", ["resource_class_id"], name: "index_resources_on_resource_class_id", using: :btree
@@ -653,8 +653,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "assignment_type"
     t.integer  "review_id"
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   add_index "review_user_assignments", ["review_id", "user_id"], name: "index_review_user_assignments_on_review_id_and_user_id", using: :btree
@@ -670,8 +670,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "plan_item_id"
     t.integer  "file_model_id"
     t.integer  "lock_version",    default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.integer  "organization_id"
   end
 
@@ -686,8 +686,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "role_type"
     t.integer  "organization_id"
     t.integer  "lock_version",    default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
@@ -699,8 +699,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.text     "description"
     t.integer  "organization_id",             null: false
     t.integer  "lock_version",    default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   add_index "settings", ["name", "organization_id"], name: "index_settings_on_name_and_organization_id", unique: true, using: :btree
@@ -727,8 +727,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "failed_attempts",                  default: 0
     t.text     "notes"
     t.integer  "lock_version",                     default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
     t.datetime "hash_changed"
     t.boolean  "hidden",                           default: false
   end
@@ -768,8 +768,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "file_model_id"
     t.integer  "organization_id"
     t.integer  "lock_version",    default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   add_index "work_papers", ["file_model_id"], name: "index_work_papers_on_file_model_id", using: :btree
@@ -783,8 +783,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.string   "predecessors"
     t.integer  "order_number"
     t.integer  "workflow_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   add_index "workflow_items", ["workflow_id"], name: "index_workflow_items_on_workflow_id", using: :btree
@@ -793,8 +793,8 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.integer  "review_id"
     t.integer  "period_id"
     t.integer  "lock_version",    default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.integer  "organization_id"
   end
 

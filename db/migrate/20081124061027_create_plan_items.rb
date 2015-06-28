@@ -9,7 +9,7 @@ class CreatePlanItems < ActiveRecord::Migration
       t.references :plan
       t.references :business_unit
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :plan_items, :plan_id

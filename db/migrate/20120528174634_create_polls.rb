@@ -7,10 +7,9 @@ class CreatePolls < ActiveRecord::Migration
       t.references :user
       t.references :questionnaire
       t.references :pollable, :polymorphic => true
-      t.timestamps
+      t.timestamps null: false
     end
-  
+
     add_index :polls, :questionnaire_id
-    
   end
 end

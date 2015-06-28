@@ -6,7 +6,7 @@ class CreateAchievements < ActiveRecord::Migration
       t.text :comment
       t.references :finding, index: true, null: false
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_foreign_key :achievements, :benefits, FOREIGN_KEY_OPTIONS.dup
