@@ -7,11 +7,11 @@ class CreateSettings < ActiveRecord::Migration
       t.references :organization, null: false, index: true
       t.integer :lock_version, default: 0
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :settings, :name
     add_index :settings, [:name, :organization_id], unique: true
-    add_foreign_key :settings, :organizations, options: FOREIGN_KEY_OPTIONS
+    add_foreign_key :settings, :organizations, FOREIGN_KEY_OPTIONS.dup
   end
 end

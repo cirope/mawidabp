@@ -4,7 +4,7 @@ class CreateNotificationRelations < ActiveRecord::Migration
       t.references :notification
       t.references :model, :polymorphic => true
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :notification_relations, [:model_type, :model_id]

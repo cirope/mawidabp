@@ -5,9 +5,9 @@ class CreateComments < ActiveRecord::Migration
       t.references :commentable, :polymorphic => true
       t.references :user
 
-      t.timestamps
+      t.timestamps null: false
     end
-    
+
     add_index :comments, :commentable_type
     add_index :comments, :commentable_id
     add_index :comments, :user_id

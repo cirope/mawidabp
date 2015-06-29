@@ -6,7 +6,7 @@ class CreateInlineHelps < ActiveRecord::Migration
       t.text :content
       t.integer :lock_version, :default => 0
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :inline_helps, :name

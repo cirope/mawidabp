@@ -10,12 +10,11 @@ class CreateAnswers < ActiveRecord::Migration
       t.text :answer
       # AnswerMultiChoice
       t.references :answer_option 
-      t.timestamps
+      t.timestamps null: false
     end
-    
+
     add_index :answers, :question_id
     add_index :answers, :poll_id
     add_index :answers, [:type, :id]
-    
   end
 end

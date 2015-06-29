@@ -8,7 +8,7 @@ class CreateHelpItems < ActiveRecord::Migration
       t.references :parent
       t.integer :lock_version, :default => 0
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :help_items, :help_content_id

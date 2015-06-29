@@ -517,6 +517,11 @@ class ControlObjectiveItem < ActiveRecord::Base
         "</b> #{finding.audit_comments.chomp}\n"
     end
 
+    if finding.business_units.present?
+      body << "<b>#{BusinessUnit.model_name.human count: finding.business_units.size}:" +
+        "</b> #{finding.business_units.map(&:name).join(', ')}\n"
+    end
+
     { column: head, text: body }
   end
 

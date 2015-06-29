@@ -5,9 +5,9 @@ class CreateBenefits < ActiveRecord::Migration
       t.string :kind, null: false
       t.references :organization, index: true, null: false
 
-      t.timestamps
+      t.timestamps null: false
     end
 
-    add_foreign_key :benefits, :organizations, options: FOREIGN_KEY_OPTIONS
+    add_foreign_key :benefits, :organizations, FOREIGN_KEY_OPTIONS.dup
   end
 end

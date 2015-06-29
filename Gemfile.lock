@@ -9,36 +9,47 @@ GEM
   remote: https://rubygems.org/
   specs:
     RedCloth (4.2.9)
-    actionmailer (4.1.12)
-      actionpack (= 4.1.12)
-      actionview (= 4.1.12)
+    actionmailer (4.2.3)
+      actionpack (= 4.2.3)
+      actionview (= 4.2.3)
+      activejob (= 4.2.3)
       mail (~> 2.5, >= 2.5.4)
-    actionpack (4.1.12)
-      actionview (= 4.1.12)
-      activesupport (= 4.1.12)
-      rack (~> 1.5.2)
+      rails-dom-testing (~> 1.0, >= 1.0.5)
+    actionpack (4.2.3)
+      actionview (= 4.2.3)
+      activesupport (= 4.2.3)
+      rack (~> 1.6)
       rack-test (~> 0.6.2)
-    actionview (4.1.12)
-      activesupport (= 4.1.12)
+      rails-dom-testing (~> 1.0, >= 1.0.5)
+      rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    actionview (4.2.3)
+      activesupport (= 4.2.3)
       builder (~> 3.1)
       erubis (~> 2.7.0)
-    activemodel (4.1.12)
-      activesupport (= 4.1.12)
+      rails-dom-testing (~> 1.0, >= 1.0.5)
+      rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    activejob (4.2.3)
+      activesupport (= 4.2.3)
+      globalid (>= 0.3.0)
+    activemodel (4.2.3)
+      activesupport (= 4.2.3)
       builder (~> 3.1)
-    activerecord (4.1.12)
-      activemodel (= 4.1.12)
-      activesupport (= 4.1.12)
-      arel (~> 5.0.0)
-    activerecord-oracle_enhanced-adapter (1.5.6)
-    activesupport (4.1.12)
-      i18n (~> 0.6, >= 0.6.9)
+    activerecord (4.2.3)
+      activemodel (= 4.2.3)
+      activesupport (= 4.2.3)
+      arel (~> 6.0)
+    activerecord-oracle_enhanced-adapter (1.6.0)
+    activesupport (4.2.3)
+      i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
-      thread_safe (~> 0.1)
+      thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     acts_as_tree (2.2.0)
       activerecord (>= 3.0.0)
-    arel (5.0.1.20140414130214)
+    arel (6.0.0)
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
     blankslate (2.1.2.4)
     bloggy (0.3)
       jekyll (~> 1.4.2)
@@ -46,6 +57,8 @@ GEM
       rails
       rdiscount
     builder (3.2.2)
+    byebug (5.0.0)
+      columnize (= 0.9.0)
     capistrano (3.4.0)
       i18n
       rake (>= 10.0.0)
@@ -81,18 +94,22 @@ GEM
     coffee-script-source (1.9.1.1)
     colorator (0.1)
     colorize (0.7.7)
+    columnize (0.9.0)
     commander (4.1.6)
       highline (~> 1.6.11)
     connection_pool (2.2.0)
+    debug_inspector (0.0.2)
     dynamic_form (1.1.4)
     erubis (2.7.0)
     execjs (2.5.2)
     fast-stemmer (1.0.2)
-    ffi (1.9.8)
+    ffi (1.9.9)
     figaro (1.1.1)
       thor (~> 0.14)
     foreigner (1.7.4)
       activerecord (>= 3.0.0)
+    globalid (0.3.5)
+      activesupport (>= 4.1.0)
     highline (1.6.21)
     hitimes (1.2.2)
     i18n (0.7.0)
@@ -112,8 +129,9 @@ GEM
       redcarpet (~> 2.3.0)
       safe_yaml (~> 0.9.7)
       toml (~> 0.1.0)
-    jquery-rails (3.1.3)
-      railties (>= 3.0, < 5.0)
+    jquery-rails (4.0.4)
+      rails-dom-testing (~> 1.0)
+      railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (5.0.5)
       railties (>= 3.2.16)
@@ -124,11 +142,14 @@ GEM
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
+    loofah (2.0.2)
+      nokogiri (>= 1.5.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     maruku (0.7.2)
     mime-types (2.6.1)
     mini_magick (4.2.7)
+    mini_portile (0.6.2)
     minitest (5.7.0)
     multi_json (1.11.1)
     net-ldap (0.11)
@@ -136,9 +157,12 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (2.9.2)
     newrelic_rpm (3.12.0.288)
-    paper_trail (3.0.8)
-      activerecord (>= 3.0, < 5.0)
-      activesupport (>= 3.0, < 5.0)
+    nokogiri (1.6.6.2)
+      mini_portile (~> 0.6.0)
+    paper_trail (4.0.0.rc1)
+      activerecord (>= 3.0, < 6.0)
+      activesupport (>= 3.0, < 6.0)
+      request_store (~> 1.1.0)
     parslet (1.5.0)
       blankslate (~> 2.0)
     pdf-core (0.5.1)
@@ -151,24 +175,33 @@ GEM
     pygments.rb (0.5.4)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
-    rack (1.5.5)
+    rack (1.6.4)
     rack-contrib (1.2.0)
       rack (>= 0.9.1)
     rack-test (0.6.3)
       rack (>= 1.0)
-    rails (4.1.12)
-      actionmailer (= 4.1.12)
-      actionpack (= 4.1.12)
-      actionview (= 4.1.12)
-      activemodel (= 4.1.12)
-      activerecord (= 4.1.12)
-      activesupport (= 4.1.12)
+    rails (4.2.3)
+      actionmailer (= 4.2.3)
+      actionpack (= 4.2.3)
+      actionview (= 4.2.3)
+      activejob (= 4.2.3)
+      activemodel (= 4.2.3)
+      activerecord (= 4.2.3)
+      activesupport (= 4.2.3)
       bundler (>= 1.3.0, < 2.0)
-      railties (= 4.1.12)
-      sprockets-rails (~> 2.0)
-    railties (4.1.12)
-      actionpack (= 4.1.12)
-      activesupport (= 4.1.12)
+      railties (= 4.2.3)
+      sprockets-rails
+    rails-deprecated_sanitizer (1.0.3)
+      activesupport (>= 4.2.0.alpha)
+    rails-dom-testing (1.0.6)
+      activesupport (>= 4.2.0.beta, < 5.0)
+      nokogiri (~> 1.6.0)
+      rails-deprecated_sanitizer (>= 1.0.1)
+    rails-html-sanitizer (1.0.2)
+      loofah (~> 2.0)
+    railties (4.2.3)
+      actionpack (= 4.2.3)
+      activesupport (= 4.2.3)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     raindrops (0.14.0)
@@ -183,6 +216,9 @@ GEM
     redis (3.2.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
+    request_store (1.1.0)
+    responders (2.1.0)
+      railties (>= 4.2.0, < 5)
     ruby-oci8 (2.1.8)
     rubyzip (1.1.7)
     safe_yaml (0.9.7)
@@ -240,6 +276,11 @@ GEM
     unicorn-rails (2.2.0)
       rack
       unicorn
+    web-console (2.1.3)
+      activemodel (>= 4.0)
+      binding_of_caller (>= 0.7.2)
+      railties (>= 4.0)
+      sprockets-rails (>= 2.0, < 4.0)
     whenever (0.9.4)
       chronic (>= 0.6.3)
     will_paginate (3.0.7)
@@ -252,9 +293,10 @@ PLATFORMS
 
 DEPENDENCIES
   RedCloth
-  activerecord-oracle_enhanced-adapter (~> 1.5.0)
+  activerecord-oracle_enhanced-adapter
   acts_as_tree
   bloggy
+  byebug
   capistrano
   capistrano-bundler
   capistrano-rails
@@ -272,10 +314,11 @@ DEPENDENCIES
   mini_magick
   net-ldap
   newrelic_rpm
-  paper_trail
+  paper_trail (= 4.0.0.rc1)
   prawn
   prawn-table
-  rails (~> 4.1.12)
+  rails (~> 4.2.3)
+  responders
   ruby-oci8
   rubyzip
   sass-rails
@@ -290,9 +333,10 @@ DEPENDENCIES
   unicorn
   unicorn-rails
   validates_timeliness!
+  web-console
   whenever
   will_paginate
   will_paginate-bootstrap
 
 BUNDLED WITH
-   1.10.4
+   1.10.5

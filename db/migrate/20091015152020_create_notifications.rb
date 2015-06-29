@@ -9,7 +9,7 @@ class CreateNotifications < ActiveRecord::Migration
       t.references :user_who_confirm
       t.integer :lock_version, :default => 0
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :notifications, :confirmation_hash, :unique => true

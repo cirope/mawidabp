@@ -8,7 +8,7 @@ class CreateProcedureControlItems < ActiveRecord::Migration
       t.references :procedure_control
       t.integer :lock_version, :default => 0
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :procedure_control_items, :process_control_id

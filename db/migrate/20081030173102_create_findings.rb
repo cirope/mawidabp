@@ -25,7 +25,7 @@ class CreateFindings < ActiveRecord::Migration
       t.integer :priority
       t.date :follow_up_date
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :findings, :control_objective_item_id

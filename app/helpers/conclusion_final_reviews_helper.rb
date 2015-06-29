@@ -34,8 +34,7 @@ module ConclusionFinalReviewsHelper
         content_tag(:tbody, content_tag(:tr, footer)), class: 'table table-condensed table-striped')
   end
 
-  def conclusion_review_process_control_weakness_details_table(process_control,
-      cois, use_finals = false)
+  def conclusion_review_process_control_weakness_details_table(process_control, cois, use_finals = false)
     has_observations = cois.any? do |coi|
       !(use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.blank?
     end
@@ -44,8 +43,7 @@ module ConclusionFinalReviewsHelper
       header = String.new.html_safe
       body = String.new.html_safe
 
-      header = content_tag :tr, content_tag(:td,
-        "#{ProcessControl.model_name.human}: #{process_control.name}")
+      header = content_tag :tr, content_tag(:td, "#{ProcessControl.model_name.human}: #{process_control.name}")
 
       cois.each do |coi|
         (use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.each do |w|
@@ -242,8 +240,7 @@ module ConclusionFinalReviewsHelper
             " (#{FindingUserAssignment.human_attribute_name(:process_owner)})" : '')
       end
 
-      body_rows << "<strong>#{finding.class.human_attribute_name(
-      :user_ids)}:</strong> #{users.join('; ')}"
+      body_rows << "<strong>#{finding.class.human_attribute_name(:user_ids)}:</strong> #{users.join('; ')}"
     end
 
     if finding.state_text.present? && (weakness || oportunity)
@@ -252,11 +249,14 @@ module ConclusionFinalReviewsHelper
     end
 
     if finding.audit_comments.present?
-      body_rows << "<strong>#{finding.class.human_attribute_name(
-      :audit_comments)}: </strong> #{finding.audit_comments}"
+      body_rows << "<strong>#{finding.class.human_attribute_name(:audit_comments)}: </strong> #{finding.audit_comments}"
     end
 
-    content_tag(:tr, content_tag(:td,
-        raw(body_rows.map {|r| content_tag(:p, raw(r))}.join)))
+    if finding.business_units.present?
+      body_rows << "<strong>#{BusinessUnit.model_name.human count: finding.business_units.size}:</strong> " +
+        "<ul>#{finding.business_units.map { |bu| "<li>#{bu.name}</li>" }.join}</ul>"
+    end
+
+    content_tag(:tr, content_tag(:td, raw(body_rows.map { |r| content_tag(:div, raw(r)) }.join)))
   end
 end

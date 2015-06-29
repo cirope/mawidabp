@@ -7,7 +7,7 @@ class CreateProcedureControlSubitems < ActiveRecord::Migration
       t.references :control_objective
       t.references :procedure_control_item
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :procedure_control_subitems, :control_objective_id

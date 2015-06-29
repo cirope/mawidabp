@@ -31,7 +31,7 @@ module Findings::UpdateCallbacks
     def send_users_notifications
       finding_user_assignments.each do |fua|
         if users_for_notification.to_a.map(&:to_i).include? fua.user_id
-          NotifierMailer.delay.notify_new_finding(fua.user, self)
+          NotifierMailer.notify_new_finding(fua.user, self).deliver_later
         end
       end
     end
@@ -44,15 +44,15 @@ module Findings::UpdateCallbacks
 
     def notify_changes
       if users_added.present? && users_removed.present?
-        NotifierMailer.delay.reassigned_findings_notification(
+        NotifierMailer.reassigned_findings_notification(
           users_added, users_removed, self, false
-        )
+        ).deliver_later
       elsif users_added.blank? && users_removed.present?
-        NotifierMailer.delay.changes_notification(
+        NotifierMailer.changes_notification(
           users_removed,
           title: responsibility_removed_title,
           organizations: [organization]
-        )
+        ).deliver_later
       end
     end
 

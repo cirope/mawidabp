@@ -6,7 +6,7 @@ class CreateResourceUtilizations < ActiveRecord::Migration
       t.references :resource_consumer, :polymorphic => true
       t.references :resource, :polymorphic => true
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :resource_utilizations, [:resource_consumer_id,

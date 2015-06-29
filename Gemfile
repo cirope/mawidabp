@@ -1,16 +1,17 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.1.12'
+gem 'rails', '~> 4.2.3'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+gem 'responders'
 gem 'mini_magick'
 gem 'simple_form'
 gem 'newrelic_rpm'
 gem 'validates_timeliness', github: 'francocatena/validates_timeliness'
 gem 'RedCloth'
 gem 'whenever'
-gem 'paper_trail'
+gem 'paper_trail', '4.0.0.rc1'
 gem 'carrierwave'
 gem 'dynamic_form'
 gem 'acts_as_tree'
@@ -35,7 +36,6 @@ gem 'sprockets'
 gem 'unicorn'
 
 group :development do
-  gem 'spring'
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
@@ -48,6 +48,12 @@ group :test do
   gem 'sqlite3'
   gem 'foreigner'
   gem 'timecop'
+end
+
+group :development, :test do
+  gem 'spring'
+  gem 'byebug'
+  gem 'web-console'
 end
 
 # Include database gems for the adapters found in the database configuration file
@@ -64,11 +70,10 @@ if File.exist? database_file
     case adapter
     when /postgresql/
       gem 'pg'
-      gem 'foreigner'
     when /oracle/
       group :development, :production do
         gem 'ruby-oci8'
-        gem 'activerecord-oracle_enhanced-adapter', '~> 1.5.0'
+        gem 'activerecord-oracle_enhanced-adapter'
       end
     end
   end

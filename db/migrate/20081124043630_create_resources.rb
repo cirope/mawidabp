@@ -7,7 +7,7 @@ class CreateResources < ActiveRecord::Migration
       t.references :resource_class
       t.integer :lock_version, :default => 0
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :resources, :resource_class_id

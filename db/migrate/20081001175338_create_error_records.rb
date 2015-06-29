@@ -6,7 +6,7 @@ class CreateErrorRecords < ActiveRecord::Migration
       t.references :user
       t.references :organization
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :error_records, :user_id

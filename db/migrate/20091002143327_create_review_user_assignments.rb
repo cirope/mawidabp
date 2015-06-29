@@ -5,7 +5,7 @@ class CreateReviewUserAssignments < ActiveRecord::Migration
       t.references :review
       t.references :user
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :review_user_assignments, [:review_id, :user_id]

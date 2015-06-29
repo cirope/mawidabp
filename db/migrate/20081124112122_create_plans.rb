@@ -4,7 +4,7 @@ class CreatePlans < ActiveRecord::Migration
       t.references :period
       t.integer :lock_version, :default => 0
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :plans, :period_id

@@ -7,7 +7,7 @@ class CreateCosts < ActiveRecord::Migration
       t.references :item, :polymorphic => true
       t.references :user
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :costs, [:item_type, :item_id]

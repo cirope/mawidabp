@@ -111,7 +111,7 @@ module Findings::ScaffoldNotifications
 
     # No notificar si no hace falta
     if level_users.any? && !has_audited_comments
-      NotifierMailer.delay.unanswered_finding_to_manager_notification(self, level_users | users, level)
+      NotifierMailer.unanswered_finding_to_manager_notification(self, level_users | users, level).deliver_later
     end
 
     update_column :notification_level, level_users.empty? ? -1 : level

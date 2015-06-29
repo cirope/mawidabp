@@ -5,7 +5,7 @@ class CreateFindingUserAssignments < ActiveRecord::Migration
       t.references :finding, :polymorphic => true
       t.references :user
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :finding_user_assignments, [:finding_id, :finding_type, :user_id],

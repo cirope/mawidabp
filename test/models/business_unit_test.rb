@@ -47,7 +47,7 @@ class BusinessUnitTest < ActiveSupport::TestCase
       @business_unit.errors.full_messages.first
 
     assert_difference 'BusinessUnit.count', -1 do
-      BusinessUnit.find(business_units(:business_unit_four)).destroy
+      business_units(:business_unit_four).destroy
     end
   end
 

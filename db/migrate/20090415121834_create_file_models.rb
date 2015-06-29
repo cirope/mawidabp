@@ -7,7 +7,7 @@ class CreateFileModels < ActiveRecord::Migration
       t.datetime :file_updated_at
       t.integer :lock_version, :default => 0
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 

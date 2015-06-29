@@ -8,7 +8,7 @@ class CreatePrivileges < ActiveRecord::Migration
       t.boolean :approval, :default => false
       t.references :role
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :privileges, :role_id
