@@ -10,7 +10,9 @@ ActionView::Base.send :include, ActionView::Helpers::DateHelper::CustomExtension
 class ActiveRecord::Base
   def version_of(date = nil)
     if date && date.to_time <= Time.now && respond_to?(:versions)
-      versions.where('created_at > ?', date.to_time).first.try(:reify) || self
+      condition = "#{PaperTrail::Version.quoted_table_name}.#{PaperTrail::Version.qcn 'created_at'} > ?"
+
+      versions.where(condition, date.to_time).first.try(:reify) || self
     else
       self
     end
@@ -21,7 +23,7 @@ class ActiveRecord::Base
   end
 
   def self.prepare_search_conditions(*conditions)
-    (conditions.reject(&:blank?) || []).map { |c| "(#{sanitize_sql(c)})" }.join(' AND ')
+    (conditions.reject(&:blank?) || []).map { |c| "(#{sanitize(c)})" }.join(' AND ')
   end
 
   def self.get_column_name(column)
@@ -53,6 +55,28 @@ class ActiveRecord::Base
       operators == operator
     end
   end
+
+  private
+
+    def self.sanitize condition, table_name = self.table_name
+      return nil if condition.blank?
+
+      case condition
+      when Array; sanitize_sql_array condition
+      when Hash;  sanitize_hash condition, table_name
+      else        condition
+      end
+    end
+
+    def self.sanitize_hash attrs, default_table_name = self.table_name
+      attrs = ActiveRecord::PredicateBuilder.resolve_column_aliases self, attrs
+      attrs = expand_hash_conditions_for_aggregates attrs
+      table = Arel::Table.new(table_name, arel_engine).alias default_table_name
+
+      ActiveRecord::PredicateBuilder.build_from_hash(self, attrs, table).map do |b|
+        connection.visitor.compile b
+      end.join ' AND '
+    end
 end
 
 module Prawn
