@@ -7,6 +7,6 @@ class CreateAnswerOptions < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    add_index :answer_options, [:option, :question_id]
+    add_index :answer_options, :question_id
   end
 end
