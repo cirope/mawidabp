@@ -9,6 +9,6 @@ class CreateQuestions < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    add_index :questions, [:question, :questionnaire_id]
+    add_index :questions, :questionnaire_id
   end
 end
