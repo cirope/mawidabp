@@ -3,9 +3,12 @@ cache: bundler
 sudo: false
 rvm:
   - 2.2.2
-before_install:
-  - apt-get update -qq
-  - apt-get install -qq imagemagick slapd ldap-utils
+addons:
+  apt:
+    packages:
+    - imagemagick
+    - slapd
+    - ldap-utils
 before_script:
   - 'cp config/application.example.yml config/application.yml'
   - "psql -c 'create database mawidabp_test;' -U postgres"
