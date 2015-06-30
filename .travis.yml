@@ -1,10 +1,15 @@
 language: ruby
+cache: bundler
+sudo: false
 rvm:
   - 2.2.2
 bundler_args: '--without development production'
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq imagemagick slapd ldap-utils
+addons:
+  apt:
+    packages:
+    - imagemagick
+    - slapd
+    - ldap-utils
 before_script:
   - 'cp config/application.example.yml config/application.yml'
   - 'cp config/database.travis.yml config/database.yml'
