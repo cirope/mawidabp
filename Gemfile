@@ -46,7 +46,6 @@ end
 
 group :test do
   gem 'sqlite3'
-  gem 'foreigner'
   gem 'timecop'
 end
 
