@@ -367,13 +367,20 @@ class ControlObjectiveItem < ActiveRecord::Base
       self.control.effects, 0, false)
     pdf.add_description_item(Control.human_attribute_name(:control),
       self.control.control, 0, false)
+    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
+        :design_score), self.design_score_text(true), 0, false)
+    pdf.add_description_item(Control.human_attribute_name(:design_tests),
+      self.control.design_tests, 0, false)
+    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
+        :compliance_score), self.compliance_score_text(true), 0, false)
     pdf.add_description_item(Control.human_attribute_name(:compliance_tests),
       self.control.compliance_tests, 0, false)
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
-        :auditor_comment), self.auditor_comment, 0, false)
+        :sustantive_score), self.sustantive_score_text(true), 0, false)
+    pdf.add_description_item(Control.human_attribute_name(:sustantive_tests),
+      self.control.sustantive_tests, 0, false)
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
-        :compliance_score), self.compliance_score_text(true),
-      0, false)
+        :auditor_comment), self.auditor_comment, 0, false)
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
         :effectiveness), "#{self.effectiveness}%", 0, false)
 
@@ -381,8 +388,7 @@ class ControlObjectiveItem < ActiveRecord::Base
       pdf.start_new_page
       pdf.move_down PDF_FONT_SIZE * 3
 
-      pdf.add_title(ControlObjectiveItem.human_attribute_name(:work_papers),
-        (PDF_FONT_SIZE * 1.5).round, :center, false)
+      pdf.add_title(WorkPaper.model_name.human(count: 0), (PDF_FONT_SIZE * 1.5).round, :center, false)
 
       pdf.move_down PDF_FONT_SIZE * 3
 
@@ -527,7 +533,7 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   private
     def qualification_text(score, show_value)
-      if score
+      if score.present?
         text = I18n.t("qualification_types.#{score.first}")
 
         return show_value ? [text, "(#{score.last})"].join(' ') : text

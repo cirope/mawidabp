@@ -71,9 +71,8 @@ module Prawn
         self.move_down margin_down.pt if margin_down != 0
       end
 
-      def add_description_item(term, description, left = 0, underline = true,
-          font_size = 12)
-        if !term.try(:blank?) && !description.try(:blank?)
+      def add_description_item(term, description, left = 0, underline = true, font_size = 12)
+        if term.present? && description.present?
           formated_term = underline ? "<u><b>#{term}</b></u>" : "<b>#{term}</b>"
 
           self.text "#{formated_term}: #{description}", :size => font_size,
