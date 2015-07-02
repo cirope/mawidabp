@@ -13,6 +13,19 @@ module Users::Password
     def digest string, salt
       Digest::SHA512.hexdigest "#{salt}-#{string}"
     end
+
+    def with_valid_confirmation_hash confirmation_hash
+      where(
+        [
+          "#{quoted_table_name}.#{qcn 'change_password_hash'} = :confirmation_hash",
+          "#{quoted_table_name}.#{qcn 'hash_changed'} > :time"
+        ].join(' AND '),
+        {
+          confirmation_hash: confirmation_hash,
+          time: BLANK_PASSWORD_STALE_DAYS.days.ago,
+        }
+      )
+    end
   end
 
   def encrypt_password
@@ -34,9 +47,9 @@ module Users::Password
     self.change_password_hash = SecureRandom.urlsafe_base64
     self.hash_changed = Time.now
 
-    NotifierMailer.restore_password(self, organization).deliver_later if notify
-
     save!
+
+    NotifierMailer.restore_password(self, organization).deliver_later if notify
   end
 
   def password_was_encrypted

@@ -21,6 +21,7 @@ class Users::PasswordsControllerTest < ActionController::TestCase
     assert_redirected_to login_url
     assert_not_nil user.reload.change_password_hash
     assert_not_equal original_hash, user.change_password_hash
+    assert user.hash_changed > 1.minute.ago
   end
 
   test 'edit password' do
