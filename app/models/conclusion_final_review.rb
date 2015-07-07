@@ -146,7 +146,6 @@ class ConclusionFinalReview < ConclusionReview
     findings = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked +
       self.review.nonconformities.not_revoked + self.review.potential_nonconformities.not_revoked +
       self.review.fortresses
-    all_created = false
 
     begin
       findings.all? do |f|
@@ -175,18 +174,10 @@ class ConclusionFinalReview < ConclusionReview
         self.review.nonconformities.revoked + self.review.potential_nonconformities.revoked
 
       revoked_findings.each { |rf| rf.final = true; rf.save! }
-
-      all_created = true
     rescue ActiveRecord::RecordInvalid
+      errors.add :base, I18n.t('conclusion_final_review.stale_object_error')
+
       raise ActiveRecord::Rollback
-    end
-
-    if all_created
-      true
-    else
-      self.errors.add :base, I18n.t('conclusion_final_review.stale_object_error')
-
-      false
     end
   end
 
