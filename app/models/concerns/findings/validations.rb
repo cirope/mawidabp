@@ -83,7 +83,9 @@ module Findings::Validations
     end
 
     def validate_state_user_if_final
-      if state && state_changed? && state.presence_in(Finding::FINAL_STATUS)
+      skip_validation = new_record? && final # comes from a final review _clone_
+
+      if !skip_validation && state && state_changed? && state.presence_in(Finding::FINAL_STATUS)
         errors.add :state, :must_be_done_by_supervisor unless current_user.try(:supervisor?)
       end
     end
