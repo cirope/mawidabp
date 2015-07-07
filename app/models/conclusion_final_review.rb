@@ -78,9 +78,7 @@ class ConclusionFinalReview < ConclusionReview
   }
   scope :next_to_expire, -> {
     where(
-      'close_date = :warning_date',
-      warning_date:
-        CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date
+      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date
     )
   }
 
@@ -204,7 +202,7 @@ class ConclusionFinalReview < ConclusionReview
       # Si es viernes notifico también los que cierran el fin de semana
       if wday == 5
         cfrs = ConclusionFinalReview.where(
-          'close_date BETWEEN :from AND :to',
+          "#{quoted_table_name}.#{qcn 'close_date'} BETWEEN :from AND :to",
           from: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date,
           to: (CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS + 2).days.from_now_in_business.to_date
         )
