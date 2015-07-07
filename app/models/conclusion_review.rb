@@ -251,7 +251,6 @@ class ConclusionReview < ActiveRecord::Base
         end
 
         if has_fortresses
-          pc_id = process_control.id.to_s
           column_headers, column_widths = [], []
 
           column_headers << "<b><i>#{ProcessControl.model_name.human}: " +
@@ -309,7 +308,6 @@ class ConclusionReview < ActiveRecord::Base
         end
 
         if has_nonconformities
-          pc_id = process_control.id.to_s
           column_headers, column_widths = [], []
 
           column_headers << "<b><i>#{ProcessControl.model_name.human}: " +
@@ -351,61 +349,43 @@ class ConclusionReview < ActiveRecord::Base
       end
     end
 
-    review_has_observations = grouped_control_objectives.any? do |_, cois|
-      cois.any? do |coi|
-        !(use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.blank?
-      end
-    end
+    weaknesses = (use_finals ? review.final_weaknesses : review.weaknesses).not_revoked.sort_for_review
 
-    if review_has_observations
-      pdf.add_subtitle(
-        I18n.t('conclusion_review.findings'), PDF_FONT_SIZE, PDF_FONT_SIZE)
+    if weaknesses.any?
+      pdf.add_subtitle I18n.t('conclusion_review.findings'), PDF_FONT_SIZE, PDF_FONT_SIZE
 
-      grouped_control_objectives.each do |process_control, cois|
-        has_observations = cois.any? do |coi|
-          !(use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.blank?
-        end
+      weaknesses.each do |w|
+        column_headers, column_widths = [], []
+        coi = w.control_objective_item
+        process_control = coi.process_control
+        header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
+        header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
+        column_headers << header
+        column_widths << pdf.percent_width(100)
 
-        if has_observations
-          pc_id = process_control.id.to_s
-          column_headers, column_widths = [], []
-          header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
-          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
-          column_headers << header
-          column_widths << pdf.percent_width(100)
+        column_data = []
+        w_data = coi.pdf_data(w)
 
-          cois.each do |coi|
-            weaknesses = (
-              use_finals ? coi.final_weaknesses : coi.weaknesses
-            ).not_revoked.order(review_code: :asc)
+        if w_data[:column].present?
+          column_data << column_headers
+          column_data << w_data[:column]
 
-            weaknesses.each do |w|
-              column_data = []
-              w_data = coi.pdf_data(w)
+          pdf.move_down PDF_FONT_SIZE
 
-              unless w_data[:column].blank?
-                column_data << column_headers
-                column_data << w_data[:column]
+          pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+            table_options = pdf.default_table_options(column_widths)
 
-                pdf.move_down PDF_FONT_SIZE
-
-                pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-                  table_options = pdf.default_table_options(column_widths)
-
-                  pdf.table(column_data, table_options) do
-                    row(0).style(
-                      :background_color => 'cccccc',
-                      :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-                    )
-                  end
-                end
-              end
-
-              pdf.move_down PDF_FONT_SIZE
-              pdf.text w_data[:text], :align => :justify, :inline_format => true
+            pdf.table(column_data, table_options) do
+              row(0).style(
+                :background_color => 'cccccc',
+                :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+              )
             end
           end
         end
+
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text w_data[:text], :align => :justify, :inline_format => true
       end
     end
 
@@ -425,7 +405,6 @@ class ConclusionReview < ActiveRecord::Base
         end
 
         if has_potential_nonconformities
-          pc_id = process_control.id.to_s
           column_headers, column_widths = [], []
 
           column_headers << "<b><i>#{ProcessControl.model_name.human}: " +
@@ -480,7 +459,6 @@ class ConclusionReview < ActiveRecord::Base
         end
 
         if has_oportunities
-          pc_id = process_control.id.to_s
           column_headers, column_widths = [], []
           header = "<b><i>#{ProcessControl.model_name.human}: " +
               "#{process_control.name}</i></b>"
