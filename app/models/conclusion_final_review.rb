@@ -96,9 +96,7 @@ class ConclusionFinalReview < ConclusionReview
   validates :review_id, uniqueness: true, allow_blank: true,
     allow_nil: true
   validates_date :close_date, allow_nil: true, allow_blank: true,
-    on: :create, on_or_after: lambda { |conclusion_review|
-      conclusion_review.issue_date || Date.today
-    }
+    on: :create, on_or_after: :issue_date
   validates_each :review_id do |record, attr, value|
     if record.review && record.review.conclusion_draft_review
       unless record.review.conclusion_draft_review.approved?
