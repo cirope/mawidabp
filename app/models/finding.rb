@@ -51,8 +51,9 @@ class Finding < ActiveRecord::Base
     )
   }
   scope :finals, ->(use_finals) { where(:final => use_finals) }
-  scope :sort_by_code, -> { order(review_code: :asc) }
   scope :for_current_organization, -> { list }
+  scope :sort_by_code, -> { order(review_code: :asc) }
+  scope :sort_for_review, -> { order risk: :desc, priority: :desc, review_code: :asc }
 
   # Relaciones
   belongs_to :organization
