@@ -75,15 +75,17 @@ end %>
   </table>
 <% end %>
 
-<% weaknesses = @conclusion_final_review.review.final_weaknesses.not_revoked.sort_for_review %>
+<% review_has_observations = grouped_control_objectives.any? do |_, cois|
+  cois.any? { |coi| !coi.final_weaknesses.not_revoked.blank? }
+end %>
 
-<% if weaknesses.any? %>
+<% if review_has_observations %>
   <br />
   <h4><%= t('conclusion_review.findings') %></h4>
 
   <table class="table table-condensed table-striped">
-    <% weaknesses.each do |w| %>
-      <%= conclusion_review_process_control_weakness_details_table w %>
+    <% grouped_control_objectives.each do |process_control, cois| %>
+      <%= conclusion_review_process_control_weakness_details_table(process_control, cois, true) %>
     <% end %>
   </table>
 <% end %>

@@ -34,15 +34,25 @@ module ConclusionFinalReviewsHelper
         content_tag(:tbody, content_tag(:tr, footer)), class: 'table table-condensed table-striped')
   end
 
-  def conclusion_review_process_control_weakness_details_table weakness
-    body = String.new.html_safe
-    coi = weakness.control_objective_item
-    process_control = coi.process_control
+  def conclusion_review_process_control_weakness_details_table(process_control, cois, use_finals = false)
+    has_observations = cois.any? do |coi|
+      (use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.present?
+    end
 
-    header = content_tag :tr, content_tag(:td, "#{ProcessControl.model_name.human}: #{process_control.name}")
-    body = finding_row_data(coi, weakness)
+    if has_observations
+      header = String.new.html_safe
+      body = String.new.html_safe
 
-    header + body
+      header = content_tag :tr, content_tag(:td, "#{ProcessControl.model_name.human}: #{process_control.name}")
+
+      cois.each do |coi|
+        (use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.sort_for_review.each do |w|
+          body << finding_row_data(coi, w)
+        end
+      end
+
+      header + body
+    end
   end
 
   def conclusion_review_process_control_nonconformity_details_table(process_control,
