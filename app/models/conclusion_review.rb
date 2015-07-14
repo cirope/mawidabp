@@ -529,7 +529,8 @@ class ConclusionReview < ActiveRecord::Base
     pdf.move_down PDF_FONT_SIZE
 
     pdf.add_review_auditors_table(
-      self.review.review_user_assignments.reject { |rua| rua.audited? })
+      review.review_user_assignments.reject { |rua| rua.audited? || rua.auditor? }
+    )
 
     pdf.custom_save_as self.pdf_name, ConclusionReview.table_name, self.id
   end
