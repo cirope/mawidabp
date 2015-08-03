@@ -1,7 +1,7 @@
 module Findings::Confirmation
   extend ActiveSupport::Concern
 
-  def mark_as_unconfirmed!
+  def mark_as_unconfirmed
     self.first_notification_date = Time.zone.today unless unconfirmed?
     self.state = Finding::STATUS[:unconfirmed] if notify?
 

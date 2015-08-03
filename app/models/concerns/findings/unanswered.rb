@@ -68,8 +68,8 @@ module Findings::Unanswered
         stale_parameters.each_with_index.map do |stale_parameter, i|
           [
             [
-              "confirmation_date < :stale_confirmed_date_#{i}",
-              "first_notification_date < :stale_first_notification_date_#{i}"
+              "#{quoted_table_name}.#{qcn 'confirmation_date'} < :stale_confirmed_date_#{i}",
+              "#{quoted_table_name}.#{qcn 'first_notification_date'} < :stale_first_notification_date_#{i}"
             ].join(' OR '),
             "#{Period.quoted_table_name}.#{Period.qcn('organization_id')} = :organization_id_#{i}",
           ].map { |c| "(#{c})" }.join(' AND ')
@@ -96,16 +96,16 @@ module Findings::Unanswered
 
       def confirmed_fix_conditions
         [
-          'state = :state',
-          'final = :boolean_false',
-          'notification_level = :notification_level'
+          "#{quoted_table_name}.#{qcn 'state'} = :state",
+          "#{quoted_table_name}.#{qcn 'final'} = :boolean_false",
+          "#{quoted_table_name}.#{qcn 'notification_level'} = :notification_level"
         ].join(' AND ')
       end
 
       def unconfirmed_pre_conditions
         stale_parameters.each_with_index.map do |stale_parameter, i|
           [
-            "first_notification_date < :stale_unconfirmed_date_#{i}",
+            "#{quoted_table_name}.#{qcn 'first_notification_date'} < :stale_unconfirmed_date_#{i}",
             "#{Period.quoted_table_name}.#{Period.qcn('organization_id')} = :organization_id_#{i}",
           ].join(' AND ')
         end
@@ -128,7 +128,10 @@ module Findings::Unanswered
       end
 
       def unconfirmed_fix_conditions
-        ['state = :state', 'final = :boolean_false'].join(' AND ')
+        [
+          "#{quoted_table_name}.#{qcn 'state'} = :state",
+          "#{quoted_table_name}.#{qcn 'final'} = :boolean_false"
+        ].join(' AND ')
       end
 
       def stale_parameters
