@@ -2,6 +2,7 @@
 doc/
 log/
 private/
+public/help
 spring/
 tmp/
 uploads/

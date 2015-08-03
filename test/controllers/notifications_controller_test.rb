@@ -4,36 +4,11 @@ require 'test_helper'
 class NotificationsControllerTest < ActionController::TestCase
   fixtures :notifications
 
-  # Prueba que sin realizar autenticación esten accesibles las partes publicas
-  # y no accesibles las privadas
-  test 'public and private actions' do
-    id_param = {:id => notifications(
-      :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param}
-    public_actions = [
-      [:get, :confirm, id_param]
-    ]
-    private_actions = [
-      [:get, :index],
-      [:get, :show, id_param],
-      [:get, :edit, id_param],
-      [:patch, :update, id_param],
-    ]
-
-    private_actions.each do |action|
-      send *action
-      assert_redirected_to login_url
-      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
-    end
-
-    public_actions.each do |action|
-      flash.alert = nil
-      send *action
-      assert_not_equal I18n.t('message.must_be_authenticated'), flash.alert
-    end
+  setup do
+    login
   end
 
   test 'list notifications' do
-    login
     get :index
     assert_response :success
     assert_not_nil assigns(:notifications)
@@ -41,7 +16,6 @@ class NotificationsControllerTest < ActionController::TestCase
   end
 
   test 'show notification' do
-    login
     get :show, :id => notifications(
       :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param
     assert_response :success
@@ -50,7 +24,6 @@ class NotificationsControllerTest < ActionController::TestCase
   end
 
   test 'edit notification' do
-    login
     get :edit, :id => notifications(
       :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param
     assert_response :success
@@ -60,7 +33,6 @@ class NotificationsControllerTest < ActionController::TestCase
 
   test 'update notification' do
     assert_no_difference 'User.count' do
-      login
       patch :update, {
         :id => notifications(
           :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param,
@@ -82,8 +54,6 @@ class NotificationsControllerTest < ActionController::TestCase
 
     assert !notification.notified?
     get :confirm, :id => notification.confirmation_hash
-    assert_redirected_to login_url
-    assert_equal I18n.t('notification.confirmed'), flash.notice
     assert notification.reload.notified?
     assert notification.confirmed?
   end
@@ -94,11 +64,7 @@ class NotificationsControllerTest < ActionController::TestCase
     notification = Notification.find notification_id
 
     assert !notification.notified?
-    assert_nil session[:go_to]
     get :confirm, :id => notification.confirmation_hash, :reject => 1
-    assert_redirected_to login_url
-    assert_not_nil session[:go_to]
-    assert_equal I18n.t('notification.rejected'), flash.notice
     assert notification.reload.notified?
     assert notification.rejected?
   end

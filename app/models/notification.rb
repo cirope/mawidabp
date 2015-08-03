@@ -90,7 +90,7 @@ class Notification < ActiveRecord::Base
         )
 
         self.findings.each do |finding|
-          finding.confirmed! if self.user.can_act_as_audited?
+          finding.confirmed! user if user.can_act_as_audited?
 
           finding.notifications.uniq.each do |notification|
             restrictions = !notification.notified? && notification != self &&

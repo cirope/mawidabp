@@ -512,7 +512,7 @@ class FindingTest < ActiveSupport::TestCase
       :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id
 
     assert finding.notify?
-    assert finding.mark_as_unconfirmed!
+    assert finding.mark_as_unconfirmed
     assert finding.unconfirmed?
     assert_equal Date.today, finding.first_notification_date
   end
@@ -528,7 +528,7 @@ class FindingTest < ActiveSupport::TestCase
       :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id
 
     assert_equal 0, finding.important_dates.size
-    assert finding.mark_as_unconfirmed!
+    assert finding.mark_as_unconfirmed
     # Fecha de notificación y de cambio de estado a Sin Respuesta
     assert_equal 2, finding.important_dates.size
 

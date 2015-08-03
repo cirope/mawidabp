@@ -12,7 +12,7 @@ module Organizations::Roles
 
     def create_initial_roles
       Role::TYPES.each do |type, value|
-        role = roles.build name: "#{type}_#{prefix}", role_type: value
+        role = roles.build name: I18n.t("role.type_#{type}"), role_type: value
 
         role.inject_auth_privileges Hash.new(Hash.new(true))
 

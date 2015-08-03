@@ -51,7 +51,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   test 'notify new findings' do
     user = User.find(users(:administrator_user).id)
 
-    assert user.findings.for_notification.all?(&:mark_as_unconfirmed!)
+    assert user.findings.for_notification.all?(&:mark_as_unconfirmed)
 
     finding = user.findings.recently_notified
     response = NotifierMailer.notify_new_findings(user).deliver_now
