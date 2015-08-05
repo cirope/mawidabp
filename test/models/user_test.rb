@@ -142,10 +142,10 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'validates length of attributes' do
-    @user.user = 'abcd'
+    @user.user = 'ab'
 
     assert @user.invalid?
-    assert_error @user, :user, :too_short, count: 5
+    assert_error @user, :user, :too_short, count: 3
 
     @user.user = 'abcd' * 10
     @user.name = 'abcde' * 21

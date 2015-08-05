@@ -4,7 +4,7 @@ module Users::Validations
   included do
     validates :email, uniqueness: { case_sensitive: false }
     validates :user, uniqueness: { case_sensitive: false }, unless: :ldap?
-    validates :user, length: { in: 5..30 }
+    validates :user, length: { in: 3..30 }
     validates :name, :last_name, :email, presence: true, length: { maximum: 100 }
     validates :password, length: { maximum: 128 }, allow_nil: true, allow_blank: true
     validates :function, :salt, :change_password_hash, length: { maximum: 255 },
