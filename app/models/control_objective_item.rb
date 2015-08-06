@@ -421,8 +421,12 @@ class ControlObjectiveItem < ActiveRecord::Base
   def pdf_data(finding)
     weakness = finding.kind_of?(Weakness) || finding.kind_of?(Nonconformity)
     oportunity = finding.kind_of?(Oportunity) || finding.kind_of?(PotentialNonconformity)
-    head = []
-    body = "<b>#{ControlObjective.model_name.human}:</b> #{self.to_s}\n"
+    body = ''
+
+    if finding.review_code.present?
+      body << "<b>#{finding.class.human_attribute_name(:review_code)}:</b> " +
+        "#{finding.review_code.chomp}\n"
+    end
 
     if finding.title.present?
       body << "<b>#{finding.class.human_attribute_name(:title)}:</b> " +
@@ -432,11 +436,6 @@ class ControlObjectiveItem < ActiveRecord::Base
     if finding.description.present?
       body << "<b>#{finding.class.human_attribute_name(:description)}:</b> " +
         "#{finding.description.chomp}\n"
-    end
-
-    if finding.review_code.present?
-      head << "<b>#{finding.class.human_attribute_name(:review_code)}:</b> " +
-        "#{finding.review_code.chomp}\n"
     end
 
     if finding.repeated_ancestors.present?
@@ -528,7 +527,7 @@ class ControlObjectiveItem < ActiveRecord::Base
         "</b> #{finding.business_units.map(&:name).join(', ')}\n"
     end
 
-    { column: head, text: body }
+    body
   end
 
   private

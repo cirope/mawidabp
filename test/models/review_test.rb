@@ -132,7 +132,7 @@ class ReviewTest < ActiveSupport::TestCase
       :current_plan_item_4_without_business_unit).id
 
     assert @review.invalid?
-    assert_error @review, :plan_item, :invalid
+    assert_error @review, :plan_item_id, :invalid
   end
 
   test 'can be modified' do
