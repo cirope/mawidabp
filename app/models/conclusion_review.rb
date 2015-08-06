@@ -231,8 +231,8 @@ class ConclusionReview < ActiveRecord::Base
 
     unless self.conclusion.blank?
       pdf.move_down PDF_FONT_SIZE
-      pdf.text self.conclusion, :align => :justify,
-        :font_size => PDF_FONT_SIZE
+      pdf.text self.conclusion, :align => :justify, :font_size => PDF_FONT_SIZE,
+        :inline_format => true
     end
 
     review_has_fortresses = grouped_control_objectives.any? do |_, cois|

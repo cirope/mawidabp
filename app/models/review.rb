@@ -110,7 +110,7 @@ class Review < ActiveRecord::Base
   }
 
   # Restricciones
-  validates :identification, :format => {:with => /\A\w[\w\s]*\z/},
+  validates :identification, :format => {:with => /\A\w[\w\s-]*\z/},
     :allow_nil => true, :allow_blank => true
   validates :identification, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
