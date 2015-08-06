@@ -20,7 +20,7 @@ class PlanItem < ActiveRecord::Base
         "#{PlanItem.quoted_table_name}.#{PlanItem.qcn('order_number')} ASC",
         "#{PlanItem.quoted_table_name}.#{PlanItem.qcn('project')} ASC"
       ]
-    )
+    ).order(project: :asc)
   }
   scope :for_business_unit_type, ->(business_unit_type) {
     if business_unit_type.to_i > 0

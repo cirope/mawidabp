@@ -131,7 +131,7 @@ class Review < ActiveRecord::Base
   validates_each :review_user_assignments do |record, attr, value|
     record.errors.add attr, :invalid unless Review.check_user_roles(record)
   end
-  validates_each :plan_item do |record, attr, value|
+  validates_each :plan_item_id do |record, attr, value|
     record.errors.add attr, :invalid if value && !value.business_unit
   end
 

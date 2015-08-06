@@ -1341,7 +1341,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         audit_type: "Tipo de auditoría"
         business_unit: "Unidad de negocio"
         period_id: "Periodo"
-        plan_item: "Proyecto"
+        plan_item_id: "Proyecto"
         file_model_id: "Anexos"
         score: "Calificación"
         work_papers: "Papeles de trabajo"
