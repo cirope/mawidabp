@@ -132,7 +132,9 @@ class Review < ActiveRecord::Base
     record.errors.add attr, :invalid unless Review.check_user_roles(record)
   end
   validates_each :plan_item_id do |record, attr, value|
-    record.errors.add attr, :invalid if value && !value.business_unit
+    if value && !PlanItem.find_by(:id => value).try(:business_unit)
+      record.errors.add attr, :invalid
+    end
   end
 
   # Relaciones
