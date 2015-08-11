@@ -126,6 +126,7 @@ public_es:
     generate_global_score_sheet: "Descargar planilla de calificación global"
     download_work_papers: "Descargar papeles de trabajo"
     download_without_score: "Descargar sin calificación"
+    download_brief: "Descargar resumido"
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     last_verified_date: "La última comprobación se realizó el %{date}"
@@ -290,7 +291,9 @@ public_es:
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     download_without_control_objectives_excluded_from_score: "Descargar sin objetivos de control no calificados"
+    download_brief: "Descargar resumido"
     hide_control_objectives_excluded_from_score: "Ocultar objetivos de control no calificados"
+    send_brief: "Informe resumido"
     pdf:
       pdf_name: "listado_de_informes_definitivos.pdf"
       filtered_by:

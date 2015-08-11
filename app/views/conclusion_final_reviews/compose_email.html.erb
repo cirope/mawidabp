@@ -5,20 +5,29 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <div class="form-group">
-          <%= content_tag :label, t('conclusion_review.include_global_score_sheet'),
-            for: :conclusion_review_include_global_score_sheet %>
-          <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, false %>
+        <div class="checkbox">
+          <label for="conclusion_review_include_global_score_sheet">
+            <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, false %>
+            <%= t 'conclusion_review.include_global_score_sheet' %>
+          </label>
         </div>
-        <div class="form-group">
-          <%= content_tag :label, t('conclusion_review.include_score_sheet'),
-            for: :conclusion_review_include_score_sheet %>
-          <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false %>
+        <div class="checkbox">
+          <label for="conclusion_review_include_score_sheet">
+            <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false %>
+            <%= t 'conclusion_review.include_score_sheet' %>
+          </label>
         </div>
-        <div class="form-group">
-          <%= content_tag :label, t('conclusion_final_review.hide_control_objectives_excluded_from_score'),
-            for: :export_options_hide_control_objectives_excluded_from_score %>
-          <%= check_box_tag 'export_options[hide_control_objectives_excluded_from_score]', 1, false %>
+        <div class="checkbox">
+          <label for="export_options_hide_control_objectives_excluded_from_score">
+            <%= check_box_tag 'export_options[hide_control_objectives_excluded_from_score]', 1, false %>
+            <%= t 'conclusion_final_review.hide_control_objectives_excluded_from_score' %>
+          </label>
+        </div>
+        <div class="checkbox">
+          <label for="export_options_brief">
+            <%= check_box_tag 'export_options[brief]', 1, false %>
+            <%= t 'conclusion_final_review.send_brief' %>
+          </label>
         </div>
         <div class="form-group">
           <%= f.label t('conclusion_review.email_note'), for: :conclusion_review_email_note %>
