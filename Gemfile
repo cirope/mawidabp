@@ -2,8 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2.3'
 
-gem 'arel', '6.0.0' # Temporal 6.0.2 fix
-
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'responders'

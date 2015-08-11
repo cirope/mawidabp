@@ -180,53 +180,57 @@ class ConclusionReview < ActiveRecord::Base
       )
     )
 
-    pdf.add_subtitle I18n.t('conclusion_review.objectives_and_scopes'),
-      PDF_FONT_SIZE, PDF_FONT_SIZE
-
     grouped_control_objectives = self.review.grouped_control_objective_items(
       :hide_excluded_from_score => options[:hide_control_objectives_excluded_from_score] == '1'
     )
 
-    grouped_control_objectives.each do |process_control, cois|
-      process_control_text = "<b>#{ProcessControl.model_name.human}: " +
-          "<i>#{process_control.name}</i></b>"
-      process_control_text += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
-      pdf.text process_control_text, :align => :justify,
-          :inline_format => true
+    if options[:brief].blank?
+      pdf.add_subtitle I18n.t('conclusion_review.objectives_and_scopes'),
+        PDF_FONT_SIZE, PDF_FONT_SIZE
 
-      coi_columns = []
+      grouped_control_objectives.each do |process_control, cois|
+        process_control_text = "<b>#{ProcessControl.model_name.human}: " +
+            "<i>#{process_control.name}</i></b>"
+        process_control_text += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
+        pdf.text process_control_text, :align => :justify,
+            :inline_format => true
 
-      cois.sort.each do |coi|
-        coi_columns << ['•', coi.to_s]
-      end
+        coi_columns = []
 
-      if coi_columns.present?
-        pdf.indent(PDF_FONT_SIZE) do
-          pdf.table coi_columns, :cell_style => {
-            :align => :justify, :border_width => 0, :padding => [0, 0, 5, 0]
-          }
+        cois.sort.each do |coi|
+          coi_columns << ['•', coi.to_s]
+        end
+
+        if coi_columns.present?
+          pdf.indent(PDF_FONT_SIZE) do
+            pdf.table coi_columns, :cell_style => {
+              :align => :justify, :border_width => 0, :padding => [0, 0, 5, 0]
+            }
+          end
         end
       end
-    end
 
-    unless self.applied_procedures.blank?
-      pdf.add_subtitle I18n.t('conclusion_review.applied_procedures'),
-        PDF_FONT_SIZE
-      pdf.text self.applied_procedures, :align => :justify
-    end
-
-    pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
-
-    unless options[:hide_score]
-      pdf.move_down PDF_FONT_SIZE
-      self.review.add_score_details_table(pdf)
-
-      pdf.move_down((PDF_FONT_SIZE * 0.75).round)
-
-      pdf.font_size((PDF_FONT_SIZE * 0.6).round) do
-        pdf.text "<i>#{I18n.t('review.review_qualification_explanation')}</i>",
-          :align => :justify, :inline_format => true
+      unless self.applied_procedures.blank?
+        pdf.add_subtitle I18n.t('conclusion_review.applied_procedures'),
+          PDF_FONT_SIZE
+        pdf.text self.applied_procedures, :align => :justify
       end
+
+      pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
+
+      unless options[:hide_score]
+        pdf.move_down PDF_FONT_SIZE
+        self.review.add_score_details_table(pdf)
+
+        pdf.move_down((PDF_FONT_SIZE * 0.75).round)
+
+        pdf.font_size((PDF_FONT_SIZE * 0.6).round) do
+          pdf.text "<i>#{I18n.t('review.review_qualification_explanation')}</i>",
+            :align => :justify, :inline_format => true
+        end
+      end
+    else
+      pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
     end
 
     unless self.conclusion.blank?

@@ -197,6 +197,20 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
+  test 'export conclusion draft review brief' do
+    login
+
+    conclusion_review = ConclusionFinalReview.find(
+      conclusion_reviews(:conclusion_past_final_review).id)
+
+    assert_nothing_raised do
+      get :export_to_pdf, :id => conclusion_review.id,
+        :export_options => {:brief => '1'}
+    end
+
+    assert_redirected_to conclusion_review.relative_pdf_path
+  end
+
   test 'score sheet of final review' do
     login
 
