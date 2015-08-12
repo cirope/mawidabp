@@ -262,7 +262,7 @@ class ConclusionReview < ActiveRecord::Base
           column_headers << header
           column_widths << pdf.percent_width(100)
 
-          cois.each do |coi|
+          cois.sort.each do |coi|
             if (use_finals ? coi.final_fortresses : coi.fortresses).not_revoked.present?
               column_data = []
               fortresses = (
@@ -318,7 +318,7 @@ class ConclusionReview < ActiveRecord::Base
           column_headers << header
           column_widths << pdf.percent_width(100)
 
-          cois.each do |coi|
+          cois.sort.each do |coi|
             if (use_finals ? coi.final_nonconformities : coi.nonconformities).not_revoked.present?
               column_data = []
               nonconformities = (
@@ -374,7 +374,7 @@ class ConclusionReview < ActiveRecord::Base
           column_headers << header
           column_widths << pdf.percent_width(100)
 
-          cois.each do |coi|
+          cois.sort.each do |coi|
             if (use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.present?
               column_data = []
               weaknesses = (
@@ -430,7 +430,7 @@ class ConclusionReview < ActiveRecord::Base
           column_headers << header
           column_widths << pdf.percent_width(100)
 
-          cois.each do |coi|
+          cois.sort.each do |coi|
             if (use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.present?
               column_data = []
               potential_nonconformities = (
@@ -486,7 +486,7 @@ class ConclusionReview < ActiveRecord::Base
           column_headers << header
           column_widths << pdf.percent_width(100)
 
-          cois.each do |coi|
+          cois.sort.each do |coi|
             if (use_finals ? coi.final_oportunities : coi.oportunities).not_revoked.present?
               column_data = []
               oportunities = (
@@ -744,7 +744,7 @@ class ConclusionReview < ActiveRecord::Base
       pdf.add_description_item("#{ProcessControl.model_name.human}",
         process_control.name, 0, false)
 
-      cois.each do |coi|
+      cois.sort.each do |coi|
         pdf.move_down PDF_FONT_SIZE
         pdf.add_description_item(
           "• #{ControlObjectiveItem.model_name.human}", coi.to_s,
