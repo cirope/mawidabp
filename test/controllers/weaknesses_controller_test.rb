@@ -116,7 +116,14 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'create weakness' do
-    counts_array = ['Weakness.count', 'WorkPaper.count', 'FindingRelation.count', 'Achievement.count', 'BusinessUnitFinding.count']
+    counts_array = [
+      'Weakness.count',
+      'WorkPaper.count',
+      'FindingRelation.count',
+      'Achievement.count',
+      'BusinessUnitFinding.count',
+      'Comment.count'
+    ]
 
     login
 
@@ -175,6 +182,12 @@ class WeaknessesControllerTest < ActionController::TestCase
             {
               description: 'Duplicated',
               related_finding_id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+            }
+          ],
+          comments_attributes: [
+            {
+              comment: 'Test',
+              user_id: users(:administrator_user).id
             }
           ]
         }
