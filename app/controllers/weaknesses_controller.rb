@@ -194,6 +194,9 @@ class WeaknessesController < ApplicationController
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
+        ],
+        comments_attributes: [
+          :user_id, :comment
         ]
       )
     end
