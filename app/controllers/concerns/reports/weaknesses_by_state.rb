@@ -31,9 +31,7 @@ module Reports::WeaknessesByState
         unless audit_type.last.empty?
           audit_type.last.each do |audit_types|
             key = "#{audit_type_symbol}_#{audit_types.last}"
-            conditions = {
-              "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('id')}" => audit_types.last
-            }
+            conditions = {"#{BusinessUnitType.table_name}.id" => audit_types.last}
             @weaknesses_counts[period]['total_weaknesses'] ||= {}
             @weaknesses_counts[period]['total_oportunities'] ||= {}
             @weaknesses_counts[period]["#{key}_weaknesses"] =

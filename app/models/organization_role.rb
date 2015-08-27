@@ -8,7 +8,7 @@ class OrganizationRole < ActiveRecord::Base
   # Named scopes
   scope :for_group, ->(group_id) {
     includes(:organization).where(
-      "#{Organization.quoted_table_name}.#{Organization.qcn 'group_id'}" => group_id
+      "#{Organization.table_name}.group_id" => group_id
     ).references(:organizations)
   }
 
