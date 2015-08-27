@@ -6,7 +6,7 @@ module Reports::NonconformitiesReport
 
   def nonconformities_report
     @controller = params[:controller_name]
-    final = params[:final]
+    final = params[:final] == 'true'
     @title = t("#{@controller}_committee_report.nonconformities_report_title")
     @from_date, @to_date = *make_date_range(params[:nonconformities_report])
     @periods = periods_for_interval
