@@ -200,7 +200,8 @@ class FindingsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     difference_counts = ['WorkPaper.count', 'FindingAnswer.count', 'Cost.count',
-      'ActionMailer::Base.deliveries.size', 'FindingRelation.count']
+                         'ActionMailer::Base.deliveries.size',
+                         'FindingRelation.count', 'BusinessUnitFinding.count']
 
     assert_no_difference 'Finding.count' do
       assert_difference difference_counts do
@@ -225,6 +226,7 @@ class FindingsControllerTest < ActionController::TestCase
               :risk => Finding.risks_values.first,
               :priority => Finding.priorities_values.first,
               :follow_up_date => '',
+              :business_unit_ids => [business_units(:business_unit_three).id],
               :finding_user_assignments_attributes => [
                 {
                   :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id,

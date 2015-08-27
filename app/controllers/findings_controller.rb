@@ -183,7 +183,9 @@ class FindingsController < ApplicationController
         :answer, :audit_comments, :state, :origination_date, :solution_date,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
         :correction, :correction_date, :cause_analysis, :cause_analysis_date,
-        :nested_user, :lock_version, users_for_notification: [],
+        :nested_user, :lock_version,
+        users_for_notification: [],
+        business_unit_ids: [],
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ],
