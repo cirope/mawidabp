@@ -154,6 +154,12 @@ class ConclusionFinalReview < ConclusionReview
         finding.parent = f
         finding.origination_date ||= f.origination_date ||= self.issue_date
 
+        f.business_unit_findings.each do |buf|
+          finding.business_unit_findings.build(
+            buf.attributes.dup.merge('id' => nil, 'finding_id' => nil)
+          )
+        end
+
         f.finding_user_assignments.each do |fua|
           finding.finding_user_assignments.build(
             fua.attributes.dup.merge('id' => nil, 'finding_id' => nil)
