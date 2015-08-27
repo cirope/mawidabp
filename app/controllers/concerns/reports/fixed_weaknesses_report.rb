@@ -71,9 +71,10 @@ module Reports::FixedWeaknessesReport
           weaknesses = final ? c_r.review.final_weaknesses : c_r.review.weaknesses
           weaknesses = weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
           weaknesses = weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
-          weaknesses_by_risk = weaknesses.with_solution_date_between(@from_date, @to_date).by_risk(risk)
+          weaknesses = weaknesses.with_solution_date_between(@from_date, @to_date)
+          weaknesses = weaknesses.by_risk(risk) if risk.present?
 
-          weaknesses_by_risk.each do |w|
+          weaknesses.each do |w|
             audited = w.users.select(&:audited?).map do |u|
               w.process_owners.include?(u) ?
                 "<b>#{u.full_name} (#{FindingUserAssignment.human_attribute_name(:process_owner)})</b>" :
