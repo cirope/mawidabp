@@ -135,6 +135,18 @@
   </table>
 <% end %>
 
+<% unless @finding.business_units.blank? %>
+  <h4>
+    <%= BusinessUnit.model_name.human count: 0 %>
+  </h4>
+
+  <ul>
+    <% @finding.business_units.each do |bu| %>
+      <li><%= bu.name %></li>
+    <% end %>
+  </ul>
+<% end %>
+
 <% unless @finding.finding_answers.blank? %>
   <h4>
     <%= t('finding.finding_answers') %>

@@ -190,6 +190,14 @@
     </table>
   <% end %>
 
+  <% unless @finding.control_objective_item.business_units.empty? %>
+    <br />
+    <h4>
+      <%= BusinessUnit.model_name.human count: 0 %>
+    </h4>
+    <%=  f.input :business_unit_ids, label: false, collection: @finding.control_objective_item.business_units, as: :check_boxes %>
+  <% end %>
+
   <br />
   <h4>
     <%= t('finding.finding_answers') %>
