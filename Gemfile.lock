@@ -315,7 +315,7 @@ DEPENDENCIES
   paper_trail
   prawn
   prawn-table
-  rails (~> 4.2.3)
+  rails (~> 4.2.4)
   responders
   ruby-oci8
   rubyzip

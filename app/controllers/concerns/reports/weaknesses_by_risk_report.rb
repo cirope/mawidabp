@@ -76,7 +76,8 @@ module Reports::WeaknessesByRiskReport
         conclusion_review_per_unit_type.each do |c_r|
           weaknesses_by_risk = []
           weaknesses = final ? c_r.review.final_weaknesses : c_r.review.weaknesses
-          report_weaknesses = weaknesses.by_risk(risk).with_pending_status_for_report
+          weaknesses = weaknesses.by_risk(risk) if risk.present?
+          report_weaknesses = weaknesses.with_pending_status_for_report
           report_weaknesses = report_weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
           report_weaknesses = report_weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
 

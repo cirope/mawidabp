@@ -5,7 +5,7 @@
         <% selected = params[action] ? params[action][:risk] : nil %>
         <%= f.label :risk, Weakness.human_attribute_name(:risk), class: 'col-md-3' %>
         <div class="col-md-9">
-          <%= f.input :risk, collection: risks, label: false, selected: selected %>
+          <%= f.input :risk, collection: risks, label: false, selected: selected, prompt: true %>
         </div>
       </div>
     </div>
