@@ -16,11 +16,12 @@ jQuery ($) ->
         $.each fields, (i, field) ->
           $("[name$=\"[#{field}]\"]").val finding[field]
 
-        followUpDate = new Date finding['follow_up_date']
+        $.each ['follow_up_date', 'origination_date'], (i, dateField) ->
+          date = new Date finding[dateField]
 
-        followUpDate.setMinutes new Date().getTimezoneOffset()
-        $('[name$="[follow_up_date]"]').datepicker()
-        $('[name$="[follow_up_date]"]').datepicker('setDate', followUpDate)
+          date.setMinutes new Date().getTimezoneOffset()
+          $("[name$='[#{dateField}]']").datepicker()
+          $("[name$='[#{dateField}]']").datepicker('setDate', date)
       .always -> repeatedSelect.prop 'disabled', false
     else
       $.each fields, (i, field) -> $("[name$=\"[#{field}]\"]").val ''
