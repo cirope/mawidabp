@@ -5,7 +5,7 @@ module Reports::WeaknessesByRisk
 
   def weaknesses_by_risk
     @controller = params[:controller_name]
-    final = params[:final]
+    final = params[:final] == 'true'
     @title = t("#{@controller}_committee_report.weaknesses_by_risk_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk])
     @periods = periods_for_interval

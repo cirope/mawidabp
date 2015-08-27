@@ -6,7 +6,7 @@ module Reports::FixedWeaknessesReport
 
   def fixed_weaknesses_report
     @controller = params[:controller_name]
-    final = params[:final]
+    final = params[:final] == 'true'
     @title = t("#{@controller}_committee_report.fixed_weaknesses_report_title")
     @from_date, @to_date = *make_date_range(params[:fixed_weaknesses_report])
     @periods = periods_by_solution_date_for_interval

@@ -6,7 +6,7 @@ module Reports::WeaknessesByState
 
   def weaknesses_by_state
     @controller = params[:controller_name]
-    final = params[:final]
+    final = params[:final] == 'true'
     @title = t("#{@controller}_committee_report.weaknesses_by_state_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
     @periods = periods_for_interval
