@@ -16,7 +16,7 @@ module Polls::Search
         mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
       },
       answered: {
-        column: "#{Poll.table_name}.#{Poll.qcn('answered')}", operator: '=',
+        column: "#{Poll.quoted_table_name}.#{Poll.qcn('answered')}", operator: '=',
         mask: '%s', regexp: /\Asi|no\z/i,
         conversion_method: ->(value) { value.downcase == 'si' }
       }

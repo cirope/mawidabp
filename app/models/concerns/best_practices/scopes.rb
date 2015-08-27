@@ -4,8 +4,8 @@ module BestPractices::Scopes
   module ClassMethods
     def list_conditions
       conditions       = [
-        "#{table_name}.#{qcn 'shared'} = :false AND #{table_name}.#{qcn 'organization_id'} = :organization_id",
-        "#{table_name}.#{qcn 'shared'} = :true  AND #{table_name}.#{qcn 'group_id'} = :group_id"
+        "#{quoted_table_name}.#{qcn 'shared'} = :false AND #{quoted_table_name}.#{qcn 'organization_id'} = :organization_id",
+        "#{quoted_table_name}.#{qcn 'shared'} = :true  AND #{quoted_table_name}.#{qcn 'group_id'} = :group_id"
       ].map { |c| "(#{c})" }.join(' OR ')
 
       [

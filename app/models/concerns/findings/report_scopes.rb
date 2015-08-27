@@ -3,7 +3,7 @@ module Findings::ReportScopes
 
   included do
     scope :being_implemented, -> { where state: Finding::STATUS[:being_implemented] }
-    scope :not_incomplete,    -> { where "state <> ?", Finding::STATUS[:incomplete] }
+    scope :not_incomplete,    -> { where "#{quoted_table_name}.#{qcn 'state'} <> ?", Finding::STATUS[:incomplete] }
     scope :internal_audit,    -> { with_business_unit_external false }
     scope :external_audit,    -> { with_business_unit_external true }
     scope :with_status_for_report, -> {
@@ -14,7 +14,7 @@ module Findings::ReportScopes
   module ClassMethods
     def for_period period
       includes(control_objective_item: { review: :period }).where(
-        "#{Period.table_name}.id" => period.id
+        "#{Period.quoted_table_name}.#{Period.qcn 'id'}" => period.id
       ).references(:periods)
     end
 
@@ -22,7 +22,7 @@ module Findings::ReportScopes
       list.includes(
         review: [:period, :conclusion_final_review, {plan_item: :business_unit}]
       ).where(
-        "#{ConclusionReview.table_name}.issue_date" => from_date..to_date
+        "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn 'issue_date'}" => from_date..to_date
       ).references(:conslusion_reviews, :periods).order(
         order && [
           "#{Period.quoted_table_name}.#{Period.qcn('start')} ASC",
@@ -44,7 +44,7 @@ module Findings::ReportScopes
     end
 
     def with_solution_date_between from_date, to_date
-      where "#{table_name}.solution_date" => from_date..to_date
+      where "#{quoted_table_name}.#{qcn 'solution_date'}" => from_date..to_date
     end
 
     def with_business_unit_external external
@@ -55,7 +55,7 @@ module Findings::ReportScopes
           }
         }
       ).where(
-        "#{BusinessUnitType.table_name}.external" => external
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn 'external'}" => external
       ).references(:business_unit_types)
     end
   end

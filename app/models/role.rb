@@ -25,8 +25,8 @@ class Role < ActiveRecord::Base
   }
   scope :list_by_organization_and_group, ->(organization, group) {
     includes(:organization).where(
-      "#{table_name}.organization_id" => organization.id,
-      "#{Organization.table_name}.group_id" => group.id
+      "#{quoted_table_name}.#{qcn 'organization_id'}" => organization.id,
+      "#{Organization.quoted_table_name}.#{Organization.qcn 'group_id'}" => group.id
     ).references(:organizations)
   }
 

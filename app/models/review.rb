@@ -97,14 +97,14 @@ class Review < ActiveRecord::Base
   scope :internal_audit, -> {
     includes(
       :plan_item => {:business_unit => :business_unit_type}
-    ).where("#{BusinessUnitType.table_name}.external" => false).references(
+    ).where("#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn 'external'}" => false).references(
       :business_unit_types
     )
   }
   scope :external_audit, -> {
     includes(
       :plan_item => {:business_unit => :business_unit_type}
-    ).where("#{BusinessUnitType.table_name}.external" => true).references(
+    ).where("#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn 'external'}" => true).references(
       :business_unit_types
     )
   }

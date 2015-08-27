@@ -12,11 +12,11 @@ class Weakness < Finding
     ).order(:risk => :desc, :state => :asc)
   }
   scope :with_highest_risk, -> { where(
-    "#{quoted_table_name}.#{qcn('highest_risk')} = #{table_name}.risk"
+    "#{quoted_table_name}.#{qcn('highest_risk')} = #{quoted_table_name}.#{qcn 'risk'}"
     )
   }
   scope :with_medium_risk, -> { where(
-    "#{quoted_table_name}.#{qcn('risk')} = (#{table_name}.highest_risk - 1) "
+    "#{quoted_table_name}.#{qcn 'risk'} = (#{quoted_table_name}.#{qcn 'highest_risk'} - 1) "
     )
   }
   scope :by_risk, ->(risk) {

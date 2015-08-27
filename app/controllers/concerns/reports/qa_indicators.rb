@@ -141,7 +141,7 @@ module Reports::QAIndicators
       last_day_count = p.plan_items.references(:conclusion_final_review).includes(
         :review => :conclusion_final_review,
       ).with_business_unit.between(@from_date, @to_date).where(
-        "#{ConclusionFinalReview.table_name}.review_id" => nil, end: @to_date
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'review_id'}" => nil, end: @to_date
       ).count
 
       final_review_count + last_day_count

@@ -16,7 +16,7 @@ module Findings::Search
 
       def issue_date_options
         {
-          column:            "#{ConclusionReview.table_name}.#{ConclusionReview.qcn('issue_date')}",
+          column:            "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('issue_date')}",
           operator:          SEARCH_ALLOWED_OPERATORS.values,
           mask:              "%s",
           conversion_method: ->(value) { Timeliness.parse(value, :date).to_s(:db) },
