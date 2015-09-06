@@ -25,4 +25,8 @@ module OportunitiesHelper
     review ? review.next_oportunities_code(oportunity.prefix) :
       "#{oportunity.prefix}1".strip
   end
+
+  def oportunity_business_units
+    @oportunity.control_objective_item.business_units
+  end
 end

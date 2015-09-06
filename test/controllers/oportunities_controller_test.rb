@@ -101,8 +101,12 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'create oportunity' do
-    counts_array = ['Oportunity.count', 'WorkPaper.count',
-      'FindingRelation.count']
+    counts_array = [
+      'Oportunity.count',
+      'WorkPaper.count',
+      'BusinessUnitFinding.count',
+      'FindingRelation.count'
+    ]
 
     login
     assert_difference counts_array do
@@ -117,6 +121,7 @@ class OportunitiesControllerTest < ActionController::TestCase
           :audit_comments => 'New audit comments',
           :origination_date => 1.day.ago.to_date.to_s(:db),
           :state => Finding::STATUS[:being_implemented],
+          :business_unit_ids => [business_units(:business_unit_three).id],
           :finding_user_assignments_attributes => [
             {
               :user_id => users(:bare_user).id, :process_owner => '0'
