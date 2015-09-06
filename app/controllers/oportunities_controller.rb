@@ -184,6 +184,7 @@ class OportunitiesController < ApplicationController
         :audit_comments, :cause_analysis, :cause_analysis_date, :correction,
         :correction_date, :follow_up_date, :state, :organization_date,
         :solution_date, :lock_version, :repeated_of_id, :origination_date,
+        business_unit_ids: [],
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ],
