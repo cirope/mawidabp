@@ -106,7 +106,7 @@ module Findings::Unanswered
         stale_parameters.each_with_index.map do |stale_parameter, i|
           [
             "#{quoted_table_name}.#{qcn 'first_notification_date'} < :stale_unconfirmed_date_#{i}",
-            "#{Period.quoted_table_name}.#{Period.qcn('organization_id')} = :organization_id_#{i}",
+            "#{Period.quoted_table_name}.#{Period.qcn 'organization_id'} = :organization_id_#{i}",
           ].join(' AND ')
         end
       end
@@ -137,6 +137,5 @@ module Findings::Unanswered
       def stale_parameters
         Organization.all_parameters 'finding_stale_confirmed_days'
       end
-
   end
 end
