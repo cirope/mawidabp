@@ -24,7 +24,7 @@ class ImageModel < ActiveRecord::Base
     dimensions = {}
     path = get_version(version).path
 
-    if File.exists?(path)
+    if path && File.exists?(path)
       MiniMagick::Image.open(path)[:dimensions].tap do |dimension|
         dimensions.merge!(width: dimension.first, height: dimension.last)
       end
