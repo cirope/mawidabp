@@ -81,7 +81,7 @@ class Authentication
     def ldap_auth
       ldap = @current_organization.ldap_config.ldap @user.user, @user.password
 
-      @valid = ldap.bind
+      @valid = @user.password.present? && ldap.bind
 
       if @valid && @valid_user
         register_login

@@ -20,7 +20,7 @@ module FileModelHelper
     model_cache = model.respond_to?(:file_cache) ? :file_cache : :image_cache
 
     if model.send(model_cache)
-      options = { class: 'glyphicon-file', title: model.identifier.titleize }
+      options = { class: 'glyphicon-file', title: model.identifier.to_s.titleize }
     end
 
     content_tag :span, class: 'btn btn-default file', title: options[:title] do
