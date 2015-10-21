@@ -1,5 +1,6 @@
 class ConclusionReview < ActiveRecord::Base
   include ParameterSelector
+  include ConclusionReviews::Scopes
 
   has_paper_trail meta: {
     organization_id: ->(model) { Organization.current_id }
@@ -45,19 +46,6 @@ class ConclusionReview < ActiveRecord::Base
     includes(:review => { :plan_item => :business_unit }).where(
       :business_units => { :business_unit_type_id => business_unit_type_id }
     ).references(:business_units)
-  }
-  scope :by_business_unit_names, ->(*business_unit_names) {
-    conditions = []
-    parameters = {}
-
-    business_unit_names.each_with_index do |business_unit_name, i|
-      conditions << "LOWER(#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')}) LIKE :bu_#{i}"
-      parameters[:"bu_#{i}"] = "%#{business_unit_name.mb_chars.downcase}%"
-    end
-
-    includes(:plan_item => :business_unit).where(
-      conditions.join(' OR '), parameters
-    ).references(:bussiness_unit_types)
   }
   scope :by_control_objective_names, ->(*control_objective_names) {
     conditions = []

@@ -34,6 +34,7 @@ module Reports::SynthesisReport
 
   def init_synthesis_vars
     @controller = params[:controller_name]
+    @final = @controller == 'conclusion'
     @title = t("#{@controller}_committee_report.synthesis_report_title")
     @from_date, @to_date = *make_date_range(params[:synthesis_report])
     @periods = periods_for_interval
@@ -63,8 +64,7 @@ module Reports::SynthesisReport
     ).uniq.map(&:strip)
 
     unless business_units.empty?
-      @conclusion_reviews = @conclusion_reviews.by_business_unit_names(
-        *business_units)
+      @conclusion_reviews = @conclusion_reviews.by_business_unit_names(@final, *business_units)
       @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
         "\"#{params[:synthesis_report][:business_unit].strip}\""
     end
@@ -113,7 +113,7 @@ module Reports::SynthesisReport
 
   def count_weaknesses(c_r)
     weaknesses_count = {}
-    weaknesses = @controller.eql?('conclusion') ? c_r.review.final_weaknesses.not_revoked :
+    weaknesses = @final ? c_r.review.final_weaknesses.not_revoked :
       c_r.review.weaknesses.not_revoked
 
     weaknesses.each do |w|

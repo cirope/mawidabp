@@ -232,7 +232,7 @@
         one: "%{count} informe con observaciones en el O.C"
         other: "%{count} informes con observaciones en el O.C."
       without_weaknesses: "Sin observaciones"
-      without_audits_in_the_period: "Sin auditorías en el period"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
       review_score_average: "Promedio de calificaciones de los informes: <b>%{score}%</b>"
     qa_indicators:
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"

@@ -42,8 +42,7 @@ module Reports::CostAnalysis
     @total_cost_data = {}
     @detailed_data = {}
     @currency_mask = "#{I18n.t('number.currency.format.unit')}%.2f"
-    @conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
-      @to_date)
+    @conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date, @to_date)
   end
 
   def calculate_total_cost_data(conclusion_review, period)
