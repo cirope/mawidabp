@@ -37,8 +37,7 @@ module Reports::WeaknessesByRiskReport
           ).uniq.map(&:strip)
 
         if business_units.present?
-          conclusion_reviews = conclusion_reviews.by_business_unit_names(
-            *business_units)
+          conclusion_reviews = conclusion_reviews.by_business_unit_names(final, *business_units)
           @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
             "\"#{params[:weaknesses_by_risk_report][:business_unit].strip}\""
         end

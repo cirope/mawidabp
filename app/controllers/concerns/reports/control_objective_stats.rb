@@ -87,11 +87,12 @@ module Reports::ControlObjectiveStats
     business_units = params[:control_objective_stats][:business_unit].split(
       SPLIT_AND_TERMS_REGEXP
     ).uniq.map(&:strip)
+    @business_unit_ids = business_units.present? && BusinessUnit.by_names(*business_units).pluck('id')
 
     unless business_units.empty?
       @filters << "<b>#{BusinessUnit.model_name.human}</b> = \"#{params[:control_objective_stats][:business_unit].strip}\""
 
-      @conclusion_reviews = @conclusion_reviews.by_business_unit_names *business_units
+      @conclusion_reviews = @conclusion_reviews.by_business_unit_names @final, *business_units
     end
   end
 
@@ -191,24 +192,30 @@ module Reports::ControlObjectiveStats
 
   def count_weaknesses_by_risk(weaknesses)
     weaknesses.each do |w|
-      @weaknesses_count[w.risk_text] ||= 0
-      @weaknesses_count[w.risk_text] += 1
+      show = @business_unit_ids.blank? ||
+        @business_unit_ids.include?(w.review.business_unit.id) ||
+        w.business_unit_ids.any? { |bu_id| @business_unit_ids.include?(bu_id) }
 
-      @weaknesses_status_count[w.risk_text] ||= { :incomplete => 0, :complete => 0 }
-      @coi_data[:weaknesses_ids][w.risk_text] ||= { :incomplete => [], :complete => [] }
+      if show
+        @weaknesses_count[w.risk_text] ||= 0
+        @weaknesses_count[w.risk_text] += 1
 
-      if Finding::PENDING_STATUS.include? w.state
-        @weaknesses_status_count[w.risk_text][:incomplete] += 1
-        @coi_data[:weaknesses_ids][w.risk_text][:incomplete] << w.id
-      else
-        @weaknesses_status_count[w.risk_text][:complete] += 1
-        @coi_data[:weaknesses_ids][w.risk_text][:complete] << w.id
+        @weaknesses_status_count[w.risk_text] ||= { :incomplete => 0, :complete => 0 }
+        @coi_data[:weaknesses_ids][w.risk_text] ||= { :incomplete => [], :complete => [] }
+
+        if Finding::PENDING_STATUS.include? w.state
+          @weaknesses_status_count[w.risk_text][:incomplete] += 1
+          @coi_data[:weaknesses_ids][w.risk_text][:incomplete] << w.id
+        else
+          @weaknesses_status_count[w.risk_text][:complete] += 1
+          @coi_data[:weaknesses_ids][w.risk_text][:complete] << w.id
+        end
       end
-    end
 
-    @weaknesses_count.each do |r, c|
-      @coi_data[:weaknesses][r] ||= 0
-      @coi_data[:weaknesses][r] += c
+      @weaknesses_count.each do |r, c|
+        @coi_data[:weaknesses][r] ||= 0
+        @coi_data[:weaknesses][r] += c
+      end
     end
   end
 

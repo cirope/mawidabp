@@ -43,7 +43,7 @@ class Polls::BusinessUnitsController < ApplicationController
         business_units = parameters[:business_unit].split(SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
 
         if business_units.present?
-          @report.cr = @report.cr.by_business_unit_names(*business_units)
+          @report.cr = @report.cr.by_business_unit_names(true, *business_units)
         end
       end
     end

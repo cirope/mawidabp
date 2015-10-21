@@ -36,9 +36,10 @@ module Reports::ProcessControlStats
         business_units = params[:process_control_stats][:business_unit].split(
           SPLIT_AND_TERMS_REGEXP
         ).uniq.map(&:strip)
+        business_unit_ids = business_units.present? && BusinessUnit.by_names(*business_units).pluck('id')
 
         unless business_units.empty?
-          conclusion_reviews = conclusion_reviews.by_business_unit_names(*business_units)
+          conclusion_reviews = conclusion_reviews.by_business_unit_names(final, *business_units)
           @filters << "<b>#{BusinessUnit.model_name.human}</b> = \"#{params[:process_control_stats][:business_unit].strip}\""
         end
       end
@@ -76,11 +77,16 @@ module Reports::ProcessControlStats
 
           weaknesses.not_revoked.each do |w|
             @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
+            show = business_unit_ids.blank? ||
+              business_unit_ids.include?(c_r.review.business_unit.id) ||
+              w.business_unit_ids.any? { |bu_id| business_unit_ids.include?(bu_id) }
 
-            weaknesses_count[w.risk_text] ||= 0
-            weaknesses_count[w.risk_text] += 1
-            pc_data[:weaknesses_ids][w.risk_text] ||= []
-            pc_data[:weaknesses_ids][w.risk_text] << w.id
+            if show
+              weaknesses_count[w.risk_text] ||= 0
+              weaknesses_count[w.risk_text] += 1
+              pc_data[:weaknesses_ids][w.risk_text] ||= []
+              pc_data[:weaknesses_ids][w.risk_text] << w.id
+            end
           end
 
           pc_data[:reviews] += 1 if weaknesses.size > 0

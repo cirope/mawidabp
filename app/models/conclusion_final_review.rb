@@ -13,13 +13,14 @@ class ConclusionFinalReview < ConclusionReview
 
   # Named scopes
   scope :list_all_by_date, ->(from_date, to_date) {
-    list.includes(
-      review: [
-        { plan_item: { business_unit: :business_unit_type } }
-      ]
-    ).where(
+    list.where(
       'issue_date BETWEEN :from_date AND :to_date',
       from_date: from_date, to_date: to_date
+    )
+  }
+  scope :ordered, -> {
+    includes(
+      review: { plan_item: { business_unit: :business_unit_type } }
     ).references(:business_unit_types).order(
       [
         "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
