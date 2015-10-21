@@ -189,7 +189,7 @@
     <h4>
       <%= BusinessUnit.model_name.human count: 0 %>
     </h4>
-    <%=  f.input :business_unit_ids, label: false, collection: weakness_business_units, as: :check_boxes, readonly: readonly %>
+    <%=  f.input :business_unit_ids, label: false, collection: weakness_business_units, as: :check_boxes, input_html: { disabled: readonly } %>
   <% end %>
 
   <% unless @weakness.finding_answers.blank? %>

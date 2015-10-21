@@ -182,7 +182,7 @@
     <h4>
       <%= BusinessUnit.model_name.human count: 0 %>
     </h4>
-    <%=  f.input :business_unit_ids, label: false, collection: oportunity_business_units, as: :check_boxes, readonly: readonly %>
+    <%=  f.input :business_unit_ids, label: false, collection: oportunity_business_units, as: :check_boxes, input_html: { disabled: readonly } %>
   <% end %>
 
   <% unless @oportunity.finding_answers.blank? %>
