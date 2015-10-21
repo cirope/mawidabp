@@ -73,9 +73,11 @@ module Prawn
 
       def add_description_item(term, description, left = 0, underline = true, font_size = 12)
         if term.present? && description.present?
+          options = { invalid: :replace, undef: :replace, replace: '?' }
           formated_term = underline ? "<u><b>#{term}</b></u>" : "<b>#{term}</b>"
+          encoded_text = "#{formated_term}: #{description}".encode 'windows-1252', 'UTF-8', options
 
-          self.text "#{formated_term}: #{description}", :size => font_size,
+          self.text encoded_text, :size => font_size,
             :inline_format => true, :indent_paragraphs => left.pt
         end
       end
