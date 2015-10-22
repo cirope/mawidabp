@@ -129,7 +129,7 @@ class Authentication
     def register_login_error
       user = User.find_by user: @user.user
 
-      if user && @current_organization.ldap_config.blank?
+      if user && @current_organization && @current_organization.ldap_config.blank?
         create_error_record user: user, error_type: :on_login
         user.failed_attempts += 1
 
