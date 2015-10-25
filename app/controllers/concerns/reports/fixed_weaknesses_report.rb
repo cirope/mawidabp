@@ -31,6 +31,7 @@ module Reports::FixedWeaknessesReport
         business_units = params[:fixed_weaknesses_report][:business_unit].split(
           SPLIT_AND_TERMS_REGEXP
         ).uniq.map(&:strip)
+        business_unit_ids = business_units.present? && BusinessUnit.by_names(*business_units).pluck('id')
 
         if business_units.present?
           conclusion_reviews = conclusion_reviews.by_business_unit_names final, *business_units
@@ -75,6 +76,9 @@ module Reports::FixedWeaknessesReport
           weaknesses = weaknesses.by_risk(risk) if risk.present?
 
           weaknesses.each do |w|
+            show = business_unit_ids.blank? ||
+              business_unit_ids.include?(w.review.business_unit.id) ||
+              w.business_unit_ids.any? { |bu_id| business_unit_ids.include?(bu_id) }
             audited = w.users.select(&:audited?).map do |u|
               w.process_owners.include?(u) ?
                 "<b>#{u.full_name} (#{FindingUserAssignment.human_attribute_name(:process_owner)})</b>" :
@@ -93,7 +97,7 @@ module Reports::FixedWeaknessesReport
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}",
               "<b>#{Weakness.human_attribute_name(:audit_comments)}</b>: #{w.audit_comments}",
               "<b>#{Weakness.human_attribute_name(:answer)}</b>: #{w.answer}"
-            ].compact.join("\n")
+            ].compact.join("\n") if show
           end
 
           unless fixed_weaknesses.blank?
