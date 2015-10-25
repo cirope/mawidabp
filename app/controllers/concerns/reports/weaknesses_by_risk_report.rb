@@ -31,15 +31,14 @@ module Reports::WeaknessesByRiskReport
       end
 
       if params[:weaknesses_by_risk_report][:business_unit].present?
-        business_units =
-          params[:weaknesses_by_risk_report][:business_unit].split(
-            SPLIT_AND_TERMS_REGEXP
-          ).uniq.map(&:strip)
+        business_units = params[:weaknesses_by_risk_report][:business_unit].split(
+          SPLIT_AND_TERMS_REGEXP
+        ).uniq.map(&:strip)
+        business_unit_ids = business_units.present? && BusinessUnit.by_names(*business_units).pluck('id')
 
         if business_units.present?
           conclusion_reviews = conclusion_reviews.by_business_unit_names(final, *business_units)
-          @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
-            "\"#{params[:weaknesses_by_risk_report][:business_unit].strip}\""
+          @filters << "<b>#{BusinessUnit.model_name.human}</b> = \"#{params[:weaknesses_by_risk_report][:business_unit].strip}\""
         end
       end
 
@@ -81,6 +80,9 @@ module Reports::WeaknessesByRiskReport
           report_weaknesses = report_weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
 
           report_weaknesses.each do |w|
+            show = business_unit_ids.blank? ||
+              business_unit_ids.include?(w.review.business_unit.id) ||
+              w.business_unit_ids.any? { |bu_id| business_unit_ids.include?(bu_id) }
             audited = w.users.select(&:audited?).map do |u|
               w.process_owners.include?(u) ?
                 "<b>#{u.full_name} (#{FindingUserAssignment.human_attribute_name(:process_owner)})</b>" :
@@ -99,7 +101,7 @@ module Reports::WeaknessesByRiskReport
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}",
               "<b>#{Weakness.human_attribute_name(:audit_comments)}</b>: #{w.audit_comments}",
               "<b>#{Weakness.human_attribute_name(:answer)}</b>: #{w.answer}"
-            ].compact.join("\n")
+            ].compact.join("\n") if show
           end
 
           if weaknesses_by_risk.present?
