@@ -196,7 +196,9 @@ class ReviewsController < ApplicationController
       ].join(' AND '),
       boolean_false: false,
       states: [
-        Finding::STATUS[:being_implemented], Finding::STATUS[:implemented]
+        Finding::STATUS[:being_implemented],
+        Finding::STATUS[:implemented],
+        Finding::STATUS[:unanswered]
       ],
       business_unit_id: plan_item.business_unit_id
     ).includes(

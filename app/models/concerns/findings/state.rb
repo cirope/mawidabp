@@ -86,7 +86,7 @@ module Findings::State
       end
 
       def unanswered_transitions
-        [:unanswered, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :revoked]
+        [:unanswered, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :repeated, :revoked]
       end
 
       def being_implemented_transitions
