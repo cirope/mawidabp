@@ -337,7 +337,7 @@ class FindingTest < ActiveSupport::TestCase
     @finding.solution_date = 1.month.from_now
 
     assert @finding.invalid?
-    assert_error @finding, :state, :must_be_done_by_supervisor
+    assert_error @finding, :state, :must_be_done_by_proper_role
 
     Finding.current_user = users :supervisor_user
 
