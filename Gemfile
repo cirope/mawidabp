@@ -45,6 +45,7 @@ group :development do
 end
 
 group :test do
+  gem 'test_after_commit' # TODO: remove when Rails 5.0
   gem 'timecop'
 end
 
