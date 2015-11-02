@@ -46,6 +46,7 @@ end
 
 group :test do
   gem 'sqlite3'
+  gem 'test_after_commit' # TODO: remove when Rails 5.0
   gem 'timecop'
 end
 
