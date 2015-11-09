@@ -208,24 +208,29 @@ class ConclusionFinalReviewsController < ApplicationController
 
     users = []
     users_without_poll = []
+    export_options = params[:export_options] || {}
 
     if params[:conclusion_review]
-      include_score_sheet =
-        params[:conclusion_review][:include_score_sheet] == '1'
-      include_global_score_sheet =
-        params[:conclusion_review][:include_global_score_sheet] == '1'
+      include_score_sheet = params[:conclusion_review][:include_score_sheet] == '1'
+      include_global_score_sheet = params[:conclusion_review][:include_global_score_sheet] == '1'
       note = params[:conclusion_review][:email_note]
+      review_type = params[:conclusion_review][:review_type]
+
+      if review_type == 'brief'
+        export_options[:brief] = '1'
+      elsif review_type == 'without_score'
+        export_options[:hide_score] = '1'
+      end
     end
 
-    @conclusion_final_review.to_pdf(current_organization, params[:export_options])
+    @conclusion_final_review.to_pdf(current_organization, export_options)
 
     if include_score_sheet
       @conclusion_final_review.review.score_sheet current_organization, false
     end
 
     if include_global_score_sheet
-      @conclusion_final_review.review.global_score_sheet(current_organization,
-        false)
+      @conclusion_final_review.review.global_score_sheet(current_organization, false)
     end
 
     (params[:user].try(:values).try(:reject, &:blank?) || []).each do |user_data|
