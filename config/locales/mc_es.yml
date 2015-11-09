@@ -291,9 +291,13 @@ mc_es:
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     download_without_control_objectives_excluded_from_score: "Descargar sin objetivos/metas no calificados"
+    download_without_score: "Descargar sin calificación"
     download_brief: "Descargar resumido"
     hide_control_objectives_excluded_from_score: "Ocultar objetivos/metas no calificados"
-    send_brief: "Informe resumido"
+    send_type:
+      normal: "Informe completo"
+      brief: "Informe resumido"
+      without_score: "Informe sin calificación"
     pdf:
       pdf_name: "listado_de_informes_definitivos.pdf"
       filtered_by:

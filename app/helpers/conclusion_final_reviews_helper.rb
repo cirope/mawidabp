@@ -259,4 +259,12 @@ module ConclusionFinalReviewsHelper
 
     content_tag(:tr, content_tag(:td, raw(body_rows.map { |r| content_tag(:div, raw(r)) }.join)))
   end
+
+  def send_review_options
+    options = ['normal', 'brief', 'without_score'].map do |type|
+      [t("conclusion_final_review.send_type.#{type}"), type]
+    end
+
+    options_for_select options, 'normal'
+  end
 end
