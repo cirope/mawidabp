@@ -443,7 +443,7 @@ mc_es:
     stale_object_error: "La respuesta al desvío / oportunidad de mejora no fue actualizada, intente nuevamente."
     incomplete: "Pendientes"
     complete: "Solucionados o reiterados"
-    as_owner: "%{kind} como dueño de proceso"
+    as_owner: "%{kind} como responsable"
     work_papers: "Papeles de trabajo"
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
@@ -1259,7 +1259,7 @@ mc_es:
           one: "Usuario relacionado"
           user: 'Usuario relacionado (usuario)'
           user_id: 'Usuario relacionado (usuario)'
-          process_owner: 'Dueño del proceso (usuario)'
+          process_owner: 'Responsable (usuario)'
         finding_answers:
           one: "Comentarios"
           answer: "Comentario"
@@ -1307,7 +1307,7 @@ mc_es:
         finding_id: 'Desvío / Oportunidad de mejora'
         user_id: 'Usuario'
         user: 'Usuario'
-        process_owner: 'Dueño del proceso'
+        process_owner: 'Responsable'
         responsible_auditor: 'Auditor referente'
       group:
         name: "Nombre"
