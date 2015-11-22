@@ -1,7 +1,0 @@
-procedure_control_iso_27001:
-  period: current_period
-  organization: default_organization
-
-procedure_control_bcra_A4609:
-  period: past_period
-  organization: default_organization

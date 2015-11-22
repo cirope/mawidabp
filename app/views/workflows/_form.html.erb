@@ -1,148 +1,106 @@
-<!--[form:workflow]-->
-<%= form_for @workflow do |w_f| %>
-  <% js_extra = "var workflow_item='#{generate_template(w_f, :workflow_items)}';" %>
-  <%= w_f.error_messages %>
+<%= simple_form_for @workflow do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form_column_left">
-    <p class="form_item">
-      <% if @workflow.new_record? %>
-        <%= w_f.label :period_id, raw(Workflow.human_attribute_name(:period_id) +
-            link_to_add(new_period_path(:back_to => new_workflow_path))), :class => :inline %>
-        <%= w_f.select :period_id, Period.list.map { |p| [p.inspect, p.id] },
-          {:prompt => true}, {:class => :inline_item} %>
-      <% else %>
-        <label class="inline"><%= Workflow.human_attribute_name :period_id %>:</label>
-        <%= text_field_tag :period_description, @workflow.period.inspect,
-          :class => :inline_item, :size => nil, :readonly => true %>
-        <%=  %>
-      <% end %>
-    </p>
-  </div>
-  <div class="form_column_right">
-     <p class="form_item">
-      <% if @workflow.new_record? %>
-        <%= w_f.label :review_id, nil, :class => :inline %>
-        <% with_period = @workflow.period_id && @workflow.period_id > 0 %>
-        <%= w_f.select :review_id,
-            (with_period ? Review.list_without_final_review.
-              list_all_without_workflow(@workflow.period_id).
-              map { |r| [r.identification, r.id] } : []),
-          {:prompt => true},
-          (with_period && @workflow.new_record? ? {} : {:disabled => true}).merge(:class => :inline_item) %>
-      <% else %>
-        <label class="inline"><%= Workflow.human_attribute_name :review_id %>:</label>
-        <%= text_field_tag :review_description, @workflow.review,
-          :class => :inline_item, :size => nil, :readonly => true %>
-        <%=  %>
-      <% end %>
-    </p>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <% if @workflow.new_record? %>
+          <%= f.input :period_id, label: raw(Workflow.human_attribute_name(:period_id) +
+            link_to_add(new_period_path(:back_to => new_workflow_path))),
+            collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true %>
+        <% else %>
+          <%= f.input :period_description, label: Workflow.human_attribute_name('period_id'),
+            input_html: { value: @workflow.period.inspect, readonly: true } %>
+        <% end %>
+      </div>
+      <div class="col-md-6">
+        <% if @workflow.new_record? %>
+          <%= review_id_field f %>
+        <% else %>
+          <%= f.input :review_description, label: Workflow.human_attribute_name('review_id'),
+            input_html: { value: @workflow.review, readonly: true } %>
+        <% end %>
+      </div>
+    </div>
   </div>
 
-  <table class="summary_table" style="clear: both; margin-top: 0em;">
+  <table class="table table-condensed">
     <thead>
       <tr>
-        <th style="width: 10%;"></th>
-        <th style="width: 45%;"><%= t('workflow.column_real') %></th>
-        <th style="width: 45%;"><%= t('workflow.column_estimated') %></th>
+        <th></th>
+        <th><%= t('workflow.column_real') %></th>
+        <th><%= t('workflow.column_estimated') %></th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><b><%= t('workflow.row_time') %></b></td>
+        <td><strong><%= t('workflow.row_time') %></strong></td>
         <td>
           <%= @workflow.new_record? ? '-' : show_detailed_distance_of_time(@workflow.begining, @workflow.ending) %>
-          | <%= t(:worked_hours, :scope => [:workflow], :count => ('%.2f' % @workflow.human_unit_cost)) %>
+          <span>|</span>
+          <%= t(:worked_hours, :scope => [:workflow], :count => ('%.2f' % @workflow.human_unit_cost)) %>
         </td>
         <td><%= @workflow.plan_item ? show_detailed_distance_of_time(@workflow.plan_item.start, @workflow.plan_item.end) : '-' %></td>
       </tr>
       <tr style="vertical-align: text-top;">
-        <td><b><%= t('workflow.row_cost') %></b></td>
+        <td><strong><%= t('workflow.row_cost') %></strong></td>
         <td><%= t('number.currency.format.unit') %><span id="workflow_cost"><%= '%.2f' %  @workflow.cost %></span>
           <%= link_to t('workflow.calculate_estimated_amount'), '#', :onclick =>
             "calculateCost(); return false;", :style => 'margin-left: .5em;' %></td>
         <td>
           <div id="estimated_amount">
-            <%= render :partial => 'estimated_amount',
-              :locals => {:plan_item => @workflow.review.try(:plan_item)} %>
+            <%= render 'estimated_amount', plan_item: @workflow.review.try(:plan_item) %>
           </div>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <div class="items">
-    <div class="column_headers nested_items">
-      <div class="item_column" style="width: 5%;">
-        <h3><%= WorkflowItem.human_attribute_name :order_number %></h3>
-      </div>
-      <div class="item_column" style="width: 50%;">
-        <h3><%= raw(WorkflowItem.human_attribute_name(:task) +
-          show_inline_help_for(:workflow_task)) %></h3>
-      </div>
-      <div class="item_column" style="width: 10%;">
-        <h3><%= WorkflowItem.human_attribute_name :start %></h3>
-      </div>
-      <div class="item_column" style="width: 10%;">
-        <h3><%= WorkflowItem.human_attribute_name :end %></h3>
-      </div>
-      <div class="item_column" style="width: 10%;">
-        <h3><%= raw(WorkflowItem.human_attribute_name(:predecessors) +
-          show_inline_help_for(:workflow_predecessors)) %></h3>
-      </div>
-      <div class="item_column" style="width: 10%;"></div>
-      <div class="clear"></div>
+  <div class="row">
+    <div class="col-md-4 col-md-offset-1">
+      <h5><strong><%= WorkflowItem.human_attribute_name(:task) %></strong></h5>
     </div>
-
-    <div id="workflow_items">
-      <%= w_f.fields_for :workflow_items, @workflow.workflow_items.sort! do |wi_f| %>
-        <% hru_template ||= generate_template(wi_f, :resource_utilizations,
-          :object => ResourceUtilization.new(:resource_type => 'User'),
-          :partial => 'human_resource_utilization',
-          :child_index => 'NEW_SUBRECORD') %>
-        <% mru_template ||= generate_template(wi_f, :resource_utilizations,
-          :object => ResourceUtilization.new(:resource_type => 'Resource'),
-          :partial => 'material_resource_utilization',
-          :child_index => 'NEW_SUBRECORD') %>
-        <% js_extra << "var material_resource_utilization = '#{mru_template}';" unless mru_template == 0 %>
-        <% js_extra << "var human_resource_utilization = '#{hru_template}';" unless hru_template == 0 %>
-        <% mru_template = 0 %>
-        <% hru_template = 0 %>
-        <%= render :partial => 'workflow_item', :locals =>
-          {:f => wi_f, :is_dynamic => false} %>
-      <% end %>
+    <div class="col-md-2">
+      <h5><strong><%= WorkflowItem.human_attribute_name :start %></strong></h5>
+    </div>
+    <div class="col-md-2">
+      <h5><strong><%= WorkflowItem.human_attribute_name :end %></strong></h5>
+    </div>
+    <div class="col-md-2">
+      <h5><strong><%= WorkflowItem.human_attribute_name(:predecessors) %></strong></h5>
     </div>
   </div>
 
-  <p class="add_item">
-    <%= link_to t('label.add_item'), '#', 'data-template' => :workflow_item,
-      'data-event' => 'addNestedItem', 'data-container' => '#workflow_items' %>
-  </p>
+  <div id="workflow_items">
+    <%= f.simple_fields_for :workflow_items, workflow_items do |wi_f| %>
+      <%= render 'workflow_item', f: wi_f %>
+    <% end %>
+
+    <%= link_to_add_fields(t('label.add_item'), f, :workflow_items) %>
+  </div>
 
   <% if @workflow.overloaded? %>
-    <p class="form_item">
-      <%= w_f.label :allow_overload, t('workflow.allow_overload'),
-        :class => 'inline error_field' %>
-      <%= w_f.check_box :allow_overload, :class => :inline_item %>
+    <p>
+      <%= f.input :allow_overload, as: :boolean, label: false,
+        inline_label: t('workflow.allow_overload') %>
     </p>
   <% end %>
 
-  <%= hidden_lock_version(w_f) %>
+  <hr />
 
-  <p>
-    <span class="button"><%= w_f.submit %></span>
-  </p>
-  <%= content_for :js_extra do %>
-    <%= raw js_extra %>
-  <% end %>
+  <div class="form-actions">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
 <% end %>
-<!--[eoform:workflow] -->
 <script type="text/javascript">
 function calculateCost() {
   var costElement = $('#workflow_cost');
   var estimatedCost = 0;
 
   $('input[name$="[cost_per_unit]"]').each(function(i, e) {
-    var unitsString = $(e).closest('.item').find('input[name$="[units]"]').val();
+    var unitsString = $(e).closest('fieldset').find('input[name$="[units]"]').val();
     var units = parseFloat(unitsString) || 0;
     estimatedCost += (parseFloat($(e).val()) || 0) * units;
   });
@@ -153,11 +111,11 @@ function calculateCost() {
 }
 
 jQuery(function() {
-  $(document).on('autocomplete:update', 'input.autocomplete_field', function() {
+  $(document).on('autocomplete:update', 'input[data-autocomplete-url]', function() {
     var item = $(this).data('item');
 
     if (item.cost_per_unit) {
-      $(this).parents('.item:first').find('input[name$="[cost_per_unit]"]').val(
+      $(this).closest('fieldset').find('input[name$="[cost_per_unit]"]').val(
         item.cost_per_unit
       );
     }
@@ -199,7 +157,7 @@ jQuery(function() {
     });
   });
 
-  Helper.makeSortable('#workflow_items', 'div.workflow_item', 'a.move');
+  Helper.makeSortable('#workflow_items', 'fieldset.workflow_item', 'a.move');
   FormUtil.completeSortNumbers();
 });
 </script>

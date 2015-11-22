@@ -1,6 +1,6 @@
 administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed:
   status: <%= Notification::STATUS[:confirmed] %>
-  confirmation_hash: <%= UUIDTools::UUID.random_create.to_s %>
+  confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date: <%= Time.now.to_s(:db) %>
   user: administrator_user
   user_who_confirm: administrator_user
@@ -8,7 +8,7 @@ administrator_user_bcra_A4609_security_management_responsible_dependency_weaknes
 
 administrator_user_iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   status: <%= Notification::STATUS[:unconfirmed] %>
-  confirmation_hash: <%= UUIDTools::UUID.random_create.to_s %>
+  confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date: <%= Time.now.to_s(:db) %>
   user: administrator_user
   user_who_confirm: administrator_user
@@ -16,7 +16,7 @@ administrator_user_iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for
 
 administrator_user_bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   status: <%= Notification::STATUS[:unconfirmed] %>
-  confirmation_hash: <%= UUIDTools::UUID.random_create.to_s %>
+  confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date: <%= Time.now.to_s(:db) %>
   user: administrator_user
   user_who_confirm: administrator_user
@@ -24,42 +24,42 @@ administrator_user_bcra_A4609_data_proccessing_impact_analisys_editable_oportuni
 
 administrator_user_bcra_A4609_security_management_responsible_dependency_notify_oportunity_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
-  confirmation_hash: <%= UUIDTools::UUID.random_create.to_s %>
+  confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
   user: administrator_user
   notes: Notification notes
 
 bare_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
-  confirmation_hash: <%= UUIDTools::UUID.random_create.to_s %>
+  confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
   user: bare_user
   notes: Notification notes
 
 audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
-  confirmation_hash: <%= UUIDTools::UUID.random_create.to_s %>
+  confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
   user: audited_user
   notes: Notification notes
 
 audited_second_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
-  confirmation_hash: <%= UUIDTools::UUID.random_create.to_s %>
+  confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
   user: audited_second_user
   notes: Notification notes
 
 administrator_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
-  confirmation_hash: <%= UUIDTools::UUID.random_create.to_s %>
+  confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
   user: administrator_user
   notes: Notification notes
 
 bare_user_bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_unconfirmed_for_notification:
   status: <%= Notification::STATUS[:unconfirmed] %>
-  confirmation_hash: <%= UUIDTools::UUID.random_create.to_s %>
+  confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date: 
   user: bare_user
   created_at: <%= NOTIFICATIONS_STALE_DAYS.next.days.ago %>
@@ -67,7 +67,7 @@ bare_user_bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_uncon
 
 audited_user_iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   status: <%= Notification::STATUS[:unconfirmed] %>
-  confirmation_hash: <%= UUIDTools::UUID.random_create.to_s %>
+  confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
   user: audited_user
   created_at: <%= NOTIFICATIONS_STALE_DAYS.next.days.ago %>

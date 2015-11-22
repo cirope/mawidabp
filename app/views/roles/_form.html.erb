@@ -1,28 +1,25 @@
-<!--[form:role]-->
-<%= form_for @role do |r_f| %>
-  <%= r_f.error_messages %>
-  <div class="form_column_left">
-    <p class="form_item">
-      <%= r_f.label :name, nil, :class => :inline %>
-      <%= r_f.text_field :name, :maxlength => 255, :class => :inline_item,
-        :autofocus => true %>
-    </p>
-  </div>
-  <div class="form_column_right">
-    <p class="form_item">
-      <%= r_f.label :role_type, nil, :class => :inline %>
-      <%= role_type_field(r_f) %>
-    </p>
+<%= simple_form_for @role do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
+      </div>
+      <div class="col-md-6">
+        <%= role_type_field(f) %>
+      </div>
+    </div>
   </div>
 
-  <table class="summary_table clear">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
-        <th><%= Privilege.model_name.human %></th>
-        <th style="width: 5%;"><%= Privilege.human_attribute_name :read %></th>
-        <th style="width: 5%;"><%= Privilege.human_attribute_name :modify %></th>
-        <th style="width: 5%;"><%= Privilege.human_attribute_name :erase %></th>
-        <th style="width: 5%;"><%= Privilege.human_attribute_name :approval %></th>
+        <th class="text-center"><%= Privilege.model_name.human %></th>
+        <th><%= Privilege.human_attribute_name :read %></th>
+        <th><%= Privilege.human_attribute_name :modify %></th>
+        <th><%= Privilege.human_attribute_name :erase %></th>
+        <th><%= Privilege.human_attribute_name :approval %></th>
       </tr>
     </thead>
     <tbody>
@@ -32,32 +29,31 @@
         <% menu_items = @role.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
       <% end %>
       <% menu_items.each do |menu_item| %>
-        <%= render :partial => 'menu_item', :locals => {
-          :menu_item => menu_item, :role_form => r_f} %>
+        <%= render 'menu_item', menu_item: menu_item, role_form: f %>
       <% end %>
     </tbody>
   </table>
 
-  <%= hidden_lock_version(r_f) %>
-  <p>
-    <span class="button"><%= r_f.submit %></span>
-  </p>
+  <hr />
+
+  <div class="form-actions">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
 <% end %>
-<!--[eoform:role] -->
 <script type="text/javascript">
 
 var Privileges = {
   markChildren: function(element, checked) {
-    var parent = element.parents('.menu_item').attr('id');
+    var parent = element.closest('tr').attr('id');
     var type = element.data('type');
-    var children = $('*[data-parent="' + parent + '"] :checkbox[data-type="' + type + '"]');
+    var children = $('[data-parent="' + parent + '"] :checkbox[data-type="' + type + '"]');
 
-    children.attr('checked', checked).trigger('click').attr('checked', checked);
+    children.trigger('click');
   },
   markSiblings: function(element, type, checked) {
-    var siblings = element.parents('.menu_item').find(
-      '[data-type="' + type + '"]'
-    );
+    var siblings = element.parents('tr').find('[data-type="' + type + '"]');
 
     siblings.attr('checked', checked);
   }

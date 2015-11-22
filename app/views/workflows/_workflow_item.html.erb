@@ -1,86 +1,80 @@
-<% id = "workflow_item_#{(is_dynamic ? 'NEW_RECORD' : rand(100000000000))}" %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="workflow_item item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
-  <div>
-    <div class="show_hide_field">
-      <%= link_to_show_hide "resource_utilizations_for_#{id}",
-        t('workflow.show_resource_utilization'),
-        t('workflow.hide_resource_utilization') %>
-    </div>
-    <div class="item_field" style="width: 5%;">
-      <%= f.text_field :order_number, :size => nil, :class => :sort_number,
-        :readonly => true %>
-    </div>
-    <div class="item_field" style="width: 50%;">
-      <%= f.text_area :task, :style => 'height: 5em;', :autofocus => true %>
-    </div>
-    <div class="item_field" style="width: 10%;">
-      <%= calendar_text_field f, :start, false, nil, :class => :date %>
-    </div>
-    <div class="item_field" style="width: 10%;">
-      <%= calendar_text_field f, :end, false, nil, :class => :date %>
-    </div>
-    <div class="item_field" style="width: 10%;">
-      <%= f.text_field :plain_predecessors, :maxlength => 255, :size => 10,
-        :class => (:error_field unless f.object.errors[:predecessors].blank?) %>
-    </div>
-    <div class="item_field item_controls" style="width: 10%;">
-      <%= f.hidden_field :id %>
-      <%= insert_record_link(f) %> |
-      <%= remove_item_link(f) %> |
-      <%= link_to_move %>
-    </div>
-
-    <div class="items hidden_items" id="resource_utilizations_for_<%= id %>" style="display: none;">
-      <div>
-        <div class="column_headers">
-          <div class="item_column" style="width: 30%;">
-            <h3>
-              <%= ResourceUtilization.human_attribute_name :resource_id %>
-            </h3>
-          </div>
-          <div class="item_column" style="width: 20%;">
-            <h3><%= ResourceUtilization.human_attribute_name :units %></h3>
-          </div>
-          <div class="item_column" style="width: 20%;">
-            <h3>
-              <%= ResourceUtilization.human_attribute_name :cost_per_unit %>
-            </h3>
-          </div>
-          <div class="item_column" style="width: 10%;"></div>
-          <div class="clear"></div>
+<% id = f.object.object_id %>
+<fieldset class="workflow_item">
+  <div class="row">
+    <div class="col-md-1">
+      <div class="media">
+        <div class="pull-left">
+          <%= link_to_show_hide "resource_utilizations_for_#{id}" %>
         </div>
-
-        <div class="material_resource_utilizations">
-          <%= f.fields_for :resource_utilizations, f.object.material_resource_utilizations do |ru_f| %>
-            <%= render :partial => 'material_resource_utilization',
-              :locals => {:f => ru_f, :is_dynamic => false} %>
-          <% end %>
+        <div class="media-body">
+          <%= f.input :order_number, as: :string, label: false,
+            input_html: { class: :sort_number, readonly: true } %>
         </div>
-        <div class="human_resource_utilizations">
-          <%= f.fields_for :resource_utilizations, f.object.human_resource_utilizations do |ru_f| %>
-            <%= render :partial => 'human_resource_utilization',
-              :locals => {:f => ru_f, :is_dynamic => false} %>
-          <% end %>
-        </div>
-
-        <p style="margin-bottom: 1em;">
-          <%= link_to t('workflow.add_material_resource_utilization'), '#',
-            'data-template' => :material_resource_utilization,
-            'data-event' => 'addNestedSubitem', 'data-parent' => :workflow_item,
-            'data-child' => :material_resource_utilizations %> |
-          <%= link_to t('workflow.add_human_resource_utilization'), '#',
-            'data-template' => :human_resource_utilization,
-            'data-event' => 'addNestedSubitem', 'data-parent' => :workflow_item,
-            'data-child' => :human_resource_utilizations %>
-        </p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <%= f.input :task, label: false, input_html: { autofocus: true } %>
+    </div>
+    <div class="col-md-2">
+      <%= f.input :start, as: :date_picker, label: false %>
+    </div>
+    <div class="col-md-2">
+      <%= f.input :end, as: :date_picker, label: false %>
+    </div>
+    <div class="col-md-2">
+      <%= f.input :plain_predecessors, label: false, input_html: { maxlength: 255 } %>
+    </div>
+    <div class="col-md-1">
+      <div class="toggle-visibility">
+        <%= f.input :id, as: :hidden %>
+        <%= link_to_insert_field f %>
+        <% unless f.object.try(:review) %>
+          <span class="text-muted">|</span>
+          <%= link_to_remove_nested_item(f) %>
+        <% end %>
+        <span class="text-muted">|</span>
+        <%= link_to_move %>
       </div>
     </div>
   </div>
-</div>
-<% if is_dynamic %>
+
+  <div id="resource_utilizations_for_<%= id %>" style="display: none;">
+    <div class="row nested">
+      <div class="col-md-5">
+        <h5><strong><%= ResourceUtilization.human_attribute_name 'resource' %></strong></h5>
+      </div>
+      <div class="col-md-3">
+        <h5><strong><%= ResourceUtilization.human_attribute_name 'units' %></strong></h5>
+      </div>
+      <div class="col-md-3">
+        <h5><strong><%= ResourceUtilization.human_attribute_name 'cost_per_unit' %></strong></h5>
+      </div>
+    </div>
+
+    <div id="material_resource_utilizations_<%= id %>">
+      <%= f.simple_fields_for :resource_utilizations, f.object.material_resource_utilizations do |ru_f| %>
+        <%= render 'material_resource_utilization', f: ru_f %>
+      <% end %>
+    </div>
+
+    <div id="human_resource_utilizations_<%= id %>">
+      <%= f.simple_fields_for :resource_utilizations, f.object.human_resource_utilizations do |ru_f| %>
+        <%= render 'human_resource_utilization', f: ru_f %>
+      <% end %>
+    </div>
+
+    <p class="nested">
+      <%= link_to_add_fields(t('workflow.add_material_resource_utilization'), f, :resource_utilizations,
+        'material_resource_utilization', {
+        insert_into: "#material_resource_utilizations_#{id}", association: 'material_resource_utilizations'
+      } ) %>
+      <%= link_to_add_fields(t('workflow.add_human_resource_utilization'), f, :resource_utilizations,
+        'human_resource_utilization', {
+        insert_into: "#human_resource_utilizations_#{id}", association: 'human_resource_utilizations'
+      } ) %>
+    </p>
+  </div>
+</fieldset>
 <script type="text/javascript">
-  Helper.showItem('#<%= id %>');
   FormUtil.completeSortNumbers();
 </script>
-<% end %>

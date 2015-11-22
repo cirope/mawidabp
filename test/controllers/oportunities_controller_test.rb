@@ -31,82 +31,97 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'list oportunities' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:oportunities)
-    assert_select '#error_body', false
     assert_template 'oportunities/index'
   end
 
   test 'list oportunities with search and sort' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 4',
-      :columns => ['description', 'review'],
+      :columns => ['title', 'review'],
       :order => 'review'
     }
 
     assert_response :success
     assert_not_nil assigns(:oportunities)
-    assert_equal 2, assigns(:oportunities).size
+    assert_equal 2, assigns(:oportunities).count
     assert(assigns(:oportunities).all? do |o|
       o.review.identification.match(/1 2 4/i)
     end)
     assert_equal assigns(:oportunities).map {|o| o.review.identification}.sort,
       assigns(:oportunities).map {|o| o.review.identification}
-    assert_select '#error_body', false
     assert_template 'oportunities/index'
   end
 
   test 'edit oportunity when search match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 4 y 1o',
-      :columns => ['description', 'review']
+      :columns => ['title', 'review']
     }
 
     assert_redirected_to oportunity_url(
       findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity))
     assert_not_nil assigns(:oportunities)
-    assert_equal 1, assigns(:oportunities).size
+    assert_equal 1, assigns(:oportunities).count
   end
 
   test 'show oportunity' do
-    perform_auth
+    login
     get :show, :id => findings(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity).id
     assert_response :success
     assert_not_nil assigns(:oportunity)
-    assert_select '#error_body', false
     assert_template 'oportunities/show'
   end
 
+  test 'show oportunity in json' do
+    oportunity = findings :bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity
+
+    login
+    get :show, :completed => 'incomplete', :id => oportunity.id, :format => :json
+    assert_response :success
+    assert_not_nil assigns(:oportunity)
+
+    decoded_oportunity = ActiveSupport::JSON.decode @response.body
+
+    assert_equal oportunity.id, decoded_oportunity['id']
+  end
+
   test 'new oportunity' do
-    perform_auth
+    login
     get :new, :control_objective_item => control_objective_items(
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
     assert_not_nil assigns(:oportunity)
-    assert_select '#error_body', false
     assert_template 'oportunities/new'
   end
 
   test 'create oportunity' do
-    counts_array = ['Oportunity.count', 'WorkPaper.count',
-      'FindingRelation.count']
+    counts_array = [
+      'Oportunity.count',
+      'WorkPaper.count',
+      'BusinessUnitFinding.count',
+      'FindingRelation.count'
+    ]
 
-    perform_auth
+    login
     assert_difference counts_array do
       post :create, {
         :oportunity => {
           :control_objective_item_id => control_objective_items(
             :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
           :review_code => 'OM020',
+          :title => 'Title',
           :description => 'New description',
           :answer => 'New answer',
           :audit_comments => 'New audit comments',
           :origination_date => 1.day.ago.to_date.to_s(:db),
           :state => Finding::STATUS[:being_implemented],
+          :business_unit_ids => [business_units(:business_unit_three).id],
           :finding_user_assignments_attributes => [
             {
               :user_id => users(:bare_user).id, :process_owner => '0'
@@ -150,17 +165,16 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'edit oportunity' do
-    perform_auth
+    login
     get :edit, :id => findings(
       :bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity).id
     assert_response :success
     assert_not_nil assigns(:oportunity)
-    assert_select '#error_body', false
     assert_template 'oportunities/edit'
   end
 
   test 'update oportunity' do
-    perform_auth
+    login
     assert_no_difference 'Oportunity.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
         patch :update, {
@@ -170,6 +184,7 @@ class OportunitiesControllerTest < ActionController::TestCase
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item).id,
             :review_code => 'OM020',
+            :title => 'Title',
             :description => 'Updated description',
             :answer => 'Updated answer',
             :audit_comments => 'Updated audit comments',
@@ -237,11 +252,11 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'follow up pdf' do
-    perform_auth
+    login
     oportunity = Oportunity.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_oportunity).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :follow_up_pdf, :id => oportunity.id
     end
 
@@ -249,7 +264,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'undo reiteration' do
-    perform_auth
+    login
     review = Review.find(reviews(:review_with_conclusion).id)
 
     assert_difference 'review.finding_review_assignments.count' do
@@ -277,37 +292,11 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_equal repeated_of_original_state, repeated_of.state
   end
 
-  test 'auto complete for user' do
-    perform_auth
-    get :auto_complete_for_user, { :q => 'adm', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size # Sólo Admin (Admin second es de otra organización)
-    assert users.all? { |u| (u['label'] + u['informal']).match /adm/i }
-
-    get :auto_complete_for_user, { :q => 'bare', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size # Sólo Bare
-    assert users.all? { |u| (u['label'] + u['informal']).match /bare/i }
-
-    get :auto_complete_for_user, { :q => 'x_nobody', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 0, users.size # Sin resultados
-  end
-
   test 'auto complete for finding relation' do
     finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id)
 
-    perform_auth
+    login
     get :auto_complete_for_finding_relation, {
       :q => 'O001',
       :finding_id => finding.id,
@@ -365,7 +354,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for control objective item' do
-    perform_auth
+    login
     get :auto_complete_for_control_objective_item, {
       :q => 'dependencia',
       :review_id => reviews(:review_with_conclusion).id,

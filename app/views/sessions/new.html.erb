@@ -1,27 +1,33 @@
-<div id="login">
-  <div id="logo">
-    <%= image_tag 'logo_mini.gif', :size => '139x27', :alt => t('app_name') %>
-  </div>
-  <% if current_organization || @group_admin_mode %>
-    <!--[form:user]-->
-    <%= form_for @user, url: sessions_path do |f| %>
-      <p>
-        <%= f.label :user %>
-        <%= f.text_field :user, :maxlength => 30, :size => 10, :autofocus => true %>
-      </p>
-      <p>
-        <%= f.label :password %>
-        <%= f.password_field :password, :maxlength => 128, :size => 10 %>
-      </p>
-      <div class="submit">
-        <span class="button"><%= f.submit t('user.enter') %></span>
-        <%= link_to t('user.reset_password_title'), reset_password_users_path %>
-      </div>
-    <% end %>
-    <!--[eoform:user] -->
-  <% else %>
-    <div id="no_organization" class="rounded_top_left rounded_top_right rounded_bottom_left rounded_bottom_right">
-      <%= t 'message.no_organization' %>
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+    <div class="well">
+      <%= form_tag sessions_path, novalidate: 'novalidate', data: { no_observe_changes: true } do %>
+        <div class="form-inputs">
+          <div class="form-group">
+            <%= label_tag :user, t('.user'), class: 'control-label' %>
+            <div class="controls">
+              <%= text_field_tag :user, params[:user], class: 'form-control',
+                autofocus: true, autocomplete: 'off', maxlength: 30 %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= label_tag :password, t('.password'), class: 'control-label' %>
+            <div class="controls">
+              <%= password_field_tag :password, nil, class: 'form-control',
+                maxlength: 128, autocomplete: 'off' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <%= submit_tag t('.log_in'), class: 'btn btn-default' %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
+
+    <% if current_organization.blank? || current_organization.ldap_config.blank? %>
+      <%= link_to t('sessions.new.forgot_password'), new_users_password_path %>
+    <% end %>
+  </div>
 </div>

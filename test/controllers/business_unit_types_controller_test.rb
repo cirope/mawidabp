@@ -32,35 +32,32 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
   end
 
   test 'list business_unit_types' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:business_unit_types)
-    assert_select '#error_body', false
     assert_template 'business_unit_types/index'
   end
 
   test 'show business_unit_type' do
-    perform_auth
+    login
     get :show, :id => business_unit_types(:cycle).id
     assert_response :success
     assert_not_nil assigns(:business_unit_type)
-    assert_select '#error_body', false
     assert_template 'business_unit_types/show'
   end
 
   test 'new business_unit_type' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:business_unit_type)
-    assert_select '#error_body', false
     assert_template 'business_unit_types/new'
   end
 
   test 'create business_unit_type' do
     assert_difference ['BusinessUnitType.count', 'BusinessUnit.count'] do
-      perform_auth
+      login
       post :create, {
         :business_unit_type => {
           :name => 'New business unit type',
@@ -82,17 +79,16 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
   end
 
   test 'edit business_unit_type' do
-    perform_auth
+    login
     get :edit, :id => business_unit_types(:cycle).id
     assert_response :success
     assert_not_nil assigns(:business_unit_type)
-    assert_select '#error_body', false
     assert_template 'business_unit_types/edit'
   end
 
   test 'update business_unit_type' do
     assert_no_difference ['BusinessUnitType.count', 'BusinessUnit.count'] do
-      perform_auth
+      login
       patch :update, {
         :id => business_unit_types(:cycle).id,
         :business_unit_type => {
@@ -122,7 +118,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
   end
 
   test 'destroy business_unit_type' do
-    perform_auth
+    login
     assert_difference 'BusinessUnitType.count', -1 do
       delete :destroy, :id => business_unit_types(:bcra).id
     end

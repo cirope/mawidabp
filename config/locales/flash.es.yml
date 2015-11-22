@@ -1,0 +1,93 @@
+es: &common
+  flash:
+    actions:
+      create:
+        notice: '%{resource_name} creado'
+        alert:  ''
+      update:
+        notice: '%{resource_name} actualizado'
+        alert:  ''
+        stale: '%{resource_name} no pudo ser actualizado, intente nuevamente'
+      destroy:
+        notice: '%{resource_name} eliminado'
+        alert:  '%{resource_name} no pudo ser eliminado'
+
+    benefits:
+      destroy:
+        alert: 'El beneficio no pudo ser eliminado, ya fue utilizado en observaciones'
+
+    best_practices:
+      create:
+        notice: 'Buenas prácticas agregadas correctamente'
+      update:
+        notice: 'Buenas prácticas actualizadas correctamente'
+        stale: 'Las buenas prácticas no fueron actualizadas, intente nuevamente'
+      destroy:
+        notice: 'Buena práctica eliminada'
+        alert: 'La buena práctica no puede ser eliminada, ya ha sido utilizada en informes'
+
+    organizations:
+      create:
+        notice: 'Organización agregada correctamente'
+      update:
+        notice: 'Organización actualizada correctamente'
+        stale: 'La organización no fue actualizada, intente nuevamente'
+
+    periods:
+      create:
+        notice: 'Período agregado correctamente'
+      update:
+        notice: 'Período actualizado correctamente'
+        stale: 'El período no fue actualizado, intente nuevamente'
+
+    polls:
+      create:
+        notice: 'La encuesta ha sido agregada correctamente'
+      update:
+        notice: 'La encuesta ha sido guardada correctamente. ¡Muchas gracias!'
+        stale: 'La encuesta no fue guardada, intente nuevamente'
+      destroy:
+        notice: 'Encuesta eliminada'
+        alert: 'La encuesta no pudo ser eliminada'
+
+    questionnaires:
+      create:
+        notice: 'El cuestionario ha sido agregado correctamente'
+      update:
+        notice: 'El cuestionario ha sido actualizado correctamente'
+        stale: 'El cuestionario no fue actualizado, intente nuevamente'
+
+    resource_classes:
+      create:
+        notice: 'Clase de recurso agregada correctamente'
+      update:
+        notice: 'Clase de recurso actualizada correctamente'
+        stale: 'La clase de recurso no fue actualizada, intente nuevamente'
+      destroy:
+        notice: 'Clase de recurso eliminada'
+        alert: 'La clase de recurso no pudo ser eliminada'
+
+    settings:
+      update:
+        notice: 'Configuración actualizada correctamente'
+        stale: 'La configuración no fue actualizada, intente nuevamente'
+
+    users:
+      profiles:
+        update:
+          notice: 'Actualización de perfil correcta'
+          alert: 'No se pudo actualizar el perfil'
+      reassignments:
+        update:
+          notice: 'Reasignación de responsabilidades finalizada correctamente'
+          alert: 'La reasignación de responsabilidades no puede realizarse'
+      releases:
+        update:
+          notice: 'Liberación de responsabilidades finalizada correctamente'
+          alert: 'La liberación de responsabilidades no puede realizarse, deberá en algunos casos reasignarlas'
+
+public_es:
+  <<: *common
+
+mc_es:
+  <<: *common

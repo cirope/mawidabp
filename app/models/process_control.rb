@@ -7,29 +7,24 @@ class ProcessControl < ActiveRecord::Base
     organization_id: ->(model) { Organization.current_id }
   }
 
+  alias_attribute :label, :name
+
   # Callbacks
   #before_destroy :can_be_destroyed?
 
   # Named scopes
   scope :list, -> {
-    order(['best_practice_id ASC', "#{table_name}.order ASC"])
+    order([
+      "#{quoted_table_name}.#{qcn('best_practice_id')} ASC",
+      "#{quoted_table_name}.#{qcn('order')} ASC"
+    ])
   }
-  scope :list_for_period, ->(period_id) {
-    select(connection.distinct('process_controls.id, name', 'name')).includes(
-      :procedure_control_items => [:procedure_control]
-    ).where(
-      :procedure_control_items => {
-        :procedure_controls => {:period_id => period_id}
-      }
-    ).order("#{table_name}.order ASC").references(:process_controls, :procedure_controls)
-  }
-  scope :list_for_log, ->(id) { where(:id => id)  }
+  scope :list_for_log, ->(id) { where(id: id)  }
 
   # Restricciones
-  validates :name, :order, :presence => true
-  validates :name, :length => {:maximum => 255}, :allow_nil => true,
-    :allow_blank => true
-  validates :order, :numericality => {:only_integer => true}
+  validates :name, :order, presence: true
+  validates :name, length: { maximum: 255 }, allow_nil: true, allow_blank: true
+  validates :order, numericality: { only_integer: true }
   validates_each :name do |record, attr, value|
     best_practice = record.best_practice
 
@@ -44,18 +39,17 @@ class ProcessControl < ActiveRecord::Base
     record.errors.add attr, :taken if is_duplicated
   end
   validates_each :control_objectives do |record, attr, value|
-    unless value.all? {|co| !co.marked_for_destruction? || co.can_be_destroyed?}
+    unless value.all? { |co| !co.marked_for_destruction? || co.can_be_destroyed? }
       record.errors.add attr, :locked
     end
   end
 
   # Relaciones
   belongs_to :best_practice
-  has_many :procedure_control_items, :dependent => :destroy
-  has_many :control_objectives, -> { order("#{ControlObjective.table_name}.order ASC") },
-    :dependent => :destroy
+  has_many :control_objectives, -> { order("#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('order')} ASC") },
+    dependent: :destroy
 
-  accepts_nested_attributes_for :control_objectives, :allow_destroy => true
+  accepts_nested_attributes_for :control_objectives, allow_destroy: true
 
   def <=>(other)
     if other.kind_of?(ProcessControl)
@@ -67,6 +61,19 @@ class ProcessControl < ActiveRecord::Base
     else
       -1
     end
+  end
+
+  def as_json(options = nil)
+    default_options = {
+      only: [:id],
+      methods: [:label, :informal]
+    }
+
+    super(default_options.merge(options || {}))
+  end
+
+  def informal
+    best_practice.try(:name)
   end
 
   def can_be_destroyed?

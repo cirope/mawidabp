@@ -1,13 +1,13 @@
 module RolesHelper
-  def role_type_field(form, inline = true)
+  def role_type_field(form)
     options = Role::TYPES.map { |k, v| [t("role.type_#{k}"), v] }
 
-    form.select :role_type, sort_options_array(options),
-      {:prompt => true}, {:class => (:inline_item if inline)}
+    form.input :role_type, collection: sort_options_array(options), prompt: true
   end
 
-  def role_type_text(type, html_class = :bold)
-    content_tag(:span, role_type_name_for(type), :class => html_class)
+  def role_type_text(type, strong = nil)
+    tag = strong ? :strong : :span
+    content_tag(tag, role_type_name_for(type))
   end
 
   def role_type_name_for(type)

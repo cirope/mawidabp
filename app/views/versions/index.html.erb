@@ -1,0 +1,35 @@
+<%= render partial: 'shared/filter_form',
+  locals: { action: :index, extra_params: {}, forms: { date_range: true }
+} %>
+
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th><%= PaperTrail::Version.human_attribute_name 'created_at' %></th>
+      <th><%= PaperTrail::Version.human_attribute_name 'whodunnit' %></th>
+      <th class="hidden-xs"><%= PaperTrail::Version.human_attribute_name 'item' %></th>
+      <th class="hidden-xs"><%= PaperTrail::Version.human_attribute_name 'event' %></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @versions.each do |version| %>
+      <tr>
+        <td><%= l(version.created_at, format: :short) %></td>
+        <td><%= show_whodunnit(version.whodunnit) %></td>
+        <td class="hidden-xs"><%= version.item ?
+          super_truncate("#{version.item.class.model_name.human} (#{version.item})", 30) : '-' %></td>
+        <td class="hidden-xs"><%= t("versions.events.#{version.event}") %></td>
+        <td><%= link_to_show version_path(version) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<hr />
+
+<%= paginate @versions %>
+<%= link_to t('label.back'), choose_login_records_path %> |
+<%= link_to t('label.download'), { action: :index, index: params[:index],
+  format: :pdf, _ts: Time.now.to_i } %>

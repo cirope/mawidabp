@@ -1,0 +1,6 @@
+iso_27000_security_organization_4_4_continuous_score:
+  design_score: <%= ControlObjectiveItem.qualifications_values.last %>
+  compliance_score: <%= ControlObjectiveItem.qualifications_values.last %>
+  sustantive_score: <%= ControlObjectiveItem.qualifications_values.last %>
+  control_objective_item: iso_27000_security_organization_4_4_continuous_item
+  business_unit: business_unit_one

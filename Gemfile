@@ -1,46 +1,56 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.2'
+gem 'rails', '~> 4.2.5'
 
 gem 'pg'
-gem 'foreigner'
-gem 'ya2yaml'
-gem 'memcache-client'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+gem 'responders'
 gem 'mini_magick'
-gem 'uuidtools'
+gem 'simple_form'
 gem 'newrelic_rpm'
-gem 'validates_timeliness'
+gem 'validates_timeliness', github: 'francocatena/validates_timeliness'
 gem 'RedCloth'
 gem 'whenever'
-gem 'will_paginate'
-gem 'paper_trail', '3.0.0.rc2'
+gem 'paper_trail'
 gem 'carrierwave'
 gem 'dynamic_form'
 gem 'acts_as_tree'
-gem 'unicode'
+gem 'net-ldap'
 gem 'rubyzip', require: 'zip'
 gem 'prawn'
-gem 'dalli'
+gem 'prawn-table'
+gem 'figaro'
+gem 'bloggy', require: false
+gem 'irreverent'
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'
+gem 'search_cop'
+gem 'jbuilder'
+gem 'sidekiq'
 
 gem 'sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
 
-gem 'capistrano'
-gem 'capistrano-bundler'
-gem 'capistrano-rails'
-gem 'capistrano-rbenv', github: 'capistrano/rbenv'
+gem 'unicorn'
 
 group :development do
-  gem 'unicorn'
+  gem 'capistrano'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'capistrano-rbenv'
+  gem 'capistrano-sidekiq'
   gem 'unicorn-rails'
 end
 
 group :test do
-  gem 'rake' # Travis CI need this
+  gem 'test_after_commit' # TODO: remove when Rails 5.0
   gem 'timecop'
-  gem 'minitest', require: false
-  gem 'turn'
+end
+
+group :development, :test do
+  gem 'spring'
+  gem 'byebug'
+  gem 'web-console'
 end

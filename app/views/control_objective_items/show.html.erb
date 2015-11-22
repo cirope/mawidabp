@@ -1,124 +1,143 @@
-<div id="showed_data">
-  <div class="show_item">
-    <b><%= ProcessControl.model_name.human %>:</b>
-    <%= h @control_objective_item.control_objective.process_control.name %>
-  </div>
+<p>
+  <strong><%= ProcessControl.model_name.human %>:</strong>
+  <%= @control_objective_item.control_objective.process_control.name %>
+</p>
 
-  <div class="show_item">
-    <b><%= ControlObjectiveItem.human_attribute_name :control_objective_text %>:</b>
-    <%= simple_format h(@control_objective_item.to_s) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= raw(Control.human_attribute_name(:effects) +
-      show_inline_help_for(:control_objective_item_effects)) %>:</b>
-    <%= simple_format h(@control_objective_item.control.effects) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= raw(ControlObjectiveItem.human_attribute_name(:relevance) +
-      show_inline_help_for(:control_objective_item_relevance)) %>:</b>
-    <%=h @control_objective_item.relevance_text %>
-  </div>
-
-  <div class="show_item">
-    <b><%= raw(Control.human_attribute_name(:control) +
-      show_inline_help_for(:control_objective_item_control)) %>:</b>
-    <%= simple_format h(@control_objective_item.control.control) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= ControlObjectiveItem.human_attribute_name :design_score %>:</b>
-    <%=h @control_objective_item.design_score_text %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Control.human_attribute_name :design_tests %>:</b>
-    <%= simple_format h(@control_objective_item.control.design_tests) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</b>
-    <%=h @control_objective_item.compliance_score_text %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Control.human_attribute_name :compliance_tests %>:</b>
-    <%= simple_format h(@control_objective_item.control.compliance_tests) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</b>
-    <%=h @control_objective_item.sustantive_score_text %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Control.human_attribute_name :sustantive_tests %>:</b>
-    <%= simple_format h(@control_objective_item.control.sustantive_tests) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</b>
-    <%=h l(@control_objective_item.audit_date, :format => :long) if @control_objective_item.audit_date %>
-  </div>
-
-  <div class="show_item">
-    <b><%= ControlObjectiveItem.human_attribute_name :auditor_comment %>:</b>
-    <%= simple_format h(@control_objective_item.auditor_comment) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= raw(ControlObjectiveItem.human_attribute_name(:effectiveness) +
-      show_inline_help_for(:control_objective_item_effectiveness)) %>:</b>
-    <%= "#{@control_objective_item.effectiveness}%" %>
-  </div>
-
-  <div class="show_item">
-    <b><%= raw(ControlObjectiveItem.human_attribute_name(:finished) +
-      show_inline_help_for(:control_objective_item_finished)) %>:</b>
-    <%=t @control_objective_item.finished? ? 'label.yes' : 'label.no' %>
-  </div>
-
-  <%= render :partial => 'weaknesses_summary', :locals => {:readonly => true} %>
-  <%= render :partial => 'oportunities_summary', :locals => {:readonly => true} %>
-  <% if current_organization.kind.eql? 'quality_management' %>
-    <%= render :partial => 'fortresses_summary', :locals => {:readonly => true} %>
-    <%= render :partial => 'nonconformities_summary', :locals => {:readonly => true} %>
-    <%= render :partial => 'potential_nonconformities_summary', :locals => {:readonly => true} %>
-  <% end %>
-
-  <% unless @control_objective_item.work_papers.empty? %>
-    <h1 class="clear"><%= raw(ControlObjectiveItem.human_attribute_name(:work_papers,
-        :count => @control_objective_item.work_papers.size) +
-        show_inline_help_for(:control_objective_item_work_papers)) %></h1>
-    <table class="summary_table">
-      <thead>
-        <tr>
-          <th><%= WorkPaper.human_attribute_name :name %></th>
-          <th><%= WorkPaper.human_attribute_name :code %></th>
-          <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
-          <th><%= WorkPaper.human_attribute_name :description %></th>
-          <th><%= WorkPaper.human_attribute_name :file_model %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @control_objective_item.work_papers.each do |wp| %>
-          <tr>
-            <td><%=h wp.name %></td>
-            <td><%=h wp.code %></td>
-            <td><%=h wp.number_of_pages %></td>
-            <td><%= simple_format h(wp.description) %></td>
-            <td><%= wp.file_model.try(:file?) ?
-              link_to(t('label.download'), wp.file_model.file.url) : '---' %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
+<div>
+  <strong><%= ControlObjectiveItem.human_attribute_name :control_objective_text %>:</strong>
+  <%= simple_format @control_objective_item.to_s %>
 </div>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_control_objective_item_path(@control_objective_item) %> |
-  <%= link_to t('label.list'), control_objective_items_path %> |
+<div>
+  <strong><%= Control.human_attribute_name(:effects) %>:</strong>
+  <%= simple_format @control_objective_item.control.effects %>
+</div>
+
+<p>
+  <strong><%= ControlObjectiveItem.human_attribute_name(:relevance) %>:</strong>
+  <%= @control_objective_item.relevance_text %>
+</p>
+
+<div>
+  <strong><%= Control.human_attribute_name(:control) %>:</strong>
+  <%= simple_format @control_objective_item.control.control %>
+</div>
+
+<p>
+  <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
+  <%= @control_objective_item.design_score_text %>
+</p>
+
+<div>
+  <strong><%= Control.human_attribute_name :design_tests %>:</strong>
+  <%= simple_format @control_objective_item.control.design_tests %>
+</div>
+
+<p>
+  <strong><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</strong>
+  <%= @control_objective_item.compliance_score_text %>
+</p>
+
+<div>
+  <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
+  <%= simple_format @control_objective_item.control.compliance_tests %>
+</div>
+
+<p>
+  <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
+  <%= @control_objective_item.sustantive_score_text %>
+</p>
+
+<div>
+  <strong><%= Control.human_attribute_name :sustantive_tests %>:</strong>
+  <%= simple_format @control_objective_item.control.sustantive_tests %>
+</div>
+
+<p>
+  <strong><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</strong>
+  <%= l(@control_objective_item.audit_date, :format => :long) if @control_objective_item.audit_date %>
+</p>
+
+<div>
+  <strong><%= ControlObjectiveItem.human_attribute_name :auditor_comment %>:</strong>
+  <%= simple_format @control_objective_item.auditor_comment %>
+</div>
+
+<p>
+  <strong><%= ControlObjectiveItem.human_attribute_name(:effectiveness) %>:</strong>
+  <%= "#{@control_objective_item.effectiveness}%" %>
+</p>
+
+<p>
+  <strong><%= ControlObjectiveItem.human_attribute_name(:finished) %>:</strong>
+  <%= t @control_objective_item.finished? ? 'label.yes' : 'label.no' %>
+</p>
+
+<%= render :partial => 'weaknesses_summary', :locals => {:readonly => true} %>
+<%= render :partial => 'oportunities_summary', :locals => {:readonly => true} %>
+<% if current_organization.kind.eql? 'quality_management' %>
+  <%= render :partial => 'fortresses_summary', :locals => {:readonly => true} %>
+  <%= render :partial => 'nonconformities_summary', :locals => {:readonly => true} %>
+  <%= render :partial => 'potential_nonconformities_summary', :locals => {:readonly => true} %>
+<% end %>
+
+<% unless @control_objective_item.business_unit_scores.empty? %>
+  <h3><%= BusinessUnitScore.model_name.human :count => @control_objective_item.business_unit_scores.size %></h3>
+  <table class="table table-condensed table-striped">
+    <caption></caption>
+    <thead>
+      <tr>
+        <th><%= BusinessUnitScore.human_attribute_name 'business_unit_id' %></th>
+        <th><%= BusinessUnitScore.human_attribute_name 'design_score' %></th>
+        <th><%= BusinessUnitScore.human_attribute_name 'compliance_score' %></th>
+        <th><%= BusinessUnitScore.human_attribute_name 'sustantive_score' %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @control_objective_item.business_unit_scores.each do |bus| %>
+        <tr>
+          <td><%= bus.business_unit.name %></td>
+          <td><%= bus.design_score || '-' %></td>
+          <td><%= bus.compliance_score || '-' %></td>
+          <td><%= bus.sustantive_score || '-' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% unless @control_objective_item.work_papers.empty? %>
+  <h3><%= WorkPaper.model_name.human :count => @control_objective_item.work_papers.size %></h3>
+  <table class="table table-condensed table-striped">
+    <caption></caption>
+    <thead>
+      <tr>
+        <th><%= WorkPaper.human_attribute_name :name %></th>
+        <th><%= WorkPaper.human_attribute_name :code %></th>
+        <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
+        <th><%= WorkPaper.human_attribute_name :description %></th>
+        <th><%= WorkPaper.human_attribute_name :file_model %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @control_objective_item.work_papers.each do |wp| %>
+        <tr>
+          <td><%= wp.name %></td>
+          <td><%= wp.code %></td>
+          <td><%= wp.number_of_pages %></td>
+          <td><%= simple_format wp.description %></td>
+          <td><%= wp.file_model.try(:file?) ?
+            link_to(t('label.download'), wp.file_model.file.url) : '---' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<hr />
+
+<div>
+  <%= link_to_edit edit_control_objective_item_path(@control_objective_item) %> |
+  <%= link_to_index control_objective_items_path %> |
   <%= link_to_back %>
 </div>

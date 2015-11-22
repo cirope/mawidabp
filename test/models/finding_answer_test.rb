@@ -70,10 +70,6 @@ class FindingAnswerTest < ActiveSupport::TestCase
   test 'auditor create with notification' do
     counts_array = ['FindingAnswer.count', 'ActionMailer::Base.deliveries.size']
 
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-
     assert_difference counts_array do
       @finding_answer = FindingAnswer.create(
         :answer => 'New answer',
@@ -89,10 +85,6 @@ class FindingAnswerTest < ActiveSupport::TestCase
   # Prueba la creación de una respuesta a una observación
   test 'audited create with notification' do
     counts_array = ['FindingAnswer.count', 'ActionMailer::Base.deliveries.size']
-
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
 
     assert_difference counts_array do
       @finding_answer = FindingAnswer.create(

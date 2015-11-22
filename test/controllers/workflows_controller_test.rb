@@ -32,34 +32,31 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'list workflows' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:workflows)
-    assert_select '#error_body', false
     assert_template 'workflows/index'
   end
 
   test 'show workflow' do
-    perform_auth
+    login
     get :show, :id => workflows(:current_workflow).id
     assert_response :success
     assert_not_nil assigns(:workflow)
-    assert_select '#error_body', false
     assert_template 'workflows/show'
   end
 
   test 'new workflow' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:workflow)
-    assert_select '#error_body', false
     assert_template 'workflows/new'
   end
 
   test 'clone workflow' do
-    perform_auth
+    login
     workflow = Workflow.find workflows(:current_workflow).id
 
     get :new, :clone_from => workflow.id
@@ -71,7 +68,6 @@ class WorkflowsControllerTest < ActionController::TestCase
     assert workflow.workflow_items.map { |pi| pi.resource_utilizations.size }.sum > 0
     assert_equal workflow.workflow_items.map { |pi| pi.resource_utilizations.size }.sum,
       assigns(:workflow).workflow_items.map { |pi| pi.resource_utilizations.size }.sum
-    assert_select '#error_body', false
     assert_template 'workflows/new'
   end
 
@@ -80,7 +76,7 @@ class WorkflowsControllerTest < ActionController::TestCase
       'ResourceUtilization.material.count', 'ResourceUtilization.human.count']
 
     assert_difference counts_array do
-      perform_auth
+      login
       post :create, {
         :workflow => {
           :period_id => periods(:current_period).id,
@@ -113,18 +109,17 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'edit workflow' do
-    perform_auth
+    login
     get :edit, :id => workflows(:current_workflow).id
     assert_response :success
     assert_not_nil assigns(:workflow)
-    assert_select '#error_body', false
     assert_template 'workflows/edit'
   end
 
   test 'update workflow' do
     assert_no_difference ['Workflow.count', 'ResourceUtilization.count'] do
       assert_difference 'WorkflowItem.count', -1 do
-        perform_auth
+        login
         patch :update, {
           :id => workflows(:with_conclusion_workflow).id,
           :workflow => {
@@ -206,7 +201,7 @@ class WorkflowsControllerTest < ActionController::TestCase
     }
 
     assert_no_difference ['Workflow.count', 'WorkflowItem.count'] do
-      perform_auth
+      login
       post :create, values
     end
 
@@ -219,7 +214,7 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'destroy workflow' do
-    perform_auth
+    login
     assert_difference 'Workflow.count', -1 do
       delete :destroy, :id => workflows(:with_conclusion_workflow).id
     end
@@ -228,49 +223,23 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'export to pdf' do
-    perform_auth
+    login
 
     workflow = Workflow.find(workflows(:current_workflow).id)
 
-    assert_nothing_raised(Exception) { get :export_to_pdf, :id => workflow.id }
+    assert_nothing_raised { get :export_to_pdf, :id => workflow.id }
 
     assert_redirected_to workflow.relative_pdf_path
   end
 
-  test 'auto complete for user' do
-    perform_auth
-    get :auto_complete_for_user, { :q => 'admin', :format => :json }
-    assert_response :success
-    
-    users = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 1, users.size # Administrator
-    assert users.all? { |u| (u['label'] + u['informal']).match /admin/i }
-
-    get :auto_complete_for_user, { :q=> 'blank', :format => :json }
-    assert_response :success
-    
-    users = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 2, users.size # Blank and Expired blank
-    assert users.all? { |u| (u['label'] + u['informal']).match /blank/i }
-
-    get :auto_complete_for_user, { :q => 'xyz', :format => :json }
-    assert_response :success
-    
-    users = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 0, users.size # None
-  end
-
   test 'reviews for period' do
-    perform_auth
+    login
     get :reviews_for_period, :period => periods(:current_period).id
     assert_response :success
 
     reviews = nil
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       reviews = ActiveSupport::JSON.decode(@response.body)
     end
 
@@ -280,13 +249,13 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'resource data' do
-    perform_auth
+    login
 
     resource_data = nil
 
     xhr :get, :resource_data, :id => resources(:auditor_resource).id
     assert_response :success
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       resource_data = ActiveSupport::JSON.decode(@response.body)
     end
 
@@ -295,11 +264,10 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'estimated amount' do
-    perform_auth
+    login
     get :estimated_amount, :id => reviews(:current_review).id
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'workflows/_estimated_amount'
   end
 end

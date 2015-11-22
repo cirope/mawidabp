@@ -1,0 +1,34 @@
+<div class="navbar navbar-default navbar-fixed-top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <% if show_menu? %>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      <% end %>
+
+      <%= link_to t('app_name'), root_url, class: 'navbar-brand' %>
+    </div>
+
+    <div class="collapse navbar-collapse" role="navigation">
+      <% if show_menu? %>
+        <ul class="nav navbar-nav">
+          <%= render(
+            partial: 'shared/menu_item',
+            collection: @auth_user.get_menu(current_organization.kind),
+            as: :menu_item
+          ) %>
+        </ul>
+        <%= render partial: 'shared/user_actions', locals: { user: @auth_user } %>
+      <% elsif show_logout? %>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <%= link_to t('navigation.logout'), logout_path, data: { method: :delete } %>
+          </li>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</div>

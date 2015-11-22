@@ -1,0 +1,24 @@
+<% if table_data.kind_of?(Hash) %>
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <% table_data[:order].each do |column| %>
+          <th><%= raw table_data[:columns][column].first %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% table_data[:data].each do |row_data| %>
+        <tr>
+          <% table_data[:order].each do |column| %>
+            <td><%= raw row_data[column] %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p style="margin: 1em;">
+    <em><%= t('follow_up_committee_report.without_weaknesses') %></em>
+  </p>
+<% end %>

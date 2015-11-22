@@ -1,0 +1,55 @@
+es: &common
+  simple_form:
+    "yes": 'Si'
+    "no": 'No'
+    required:
+      text: 'requerido'
+      mark: '*'
+      # You can uncomment the line below if you need to overwrite the whole required html.
+      # When using html, text and mark won't be used.
+      # html: '<abbr title="required">*</abbr>'
+    error_notification:
+      default_message: 'Se encontraron algunos problemas, por favor revise los datos...'
+    # Examples
+    # labels:
+    #   defaults:
+    #     password: 'Password'
+    #   user:
+    #     new:
+    #       email: 'E-mail to sign in.'
+    #     edit:
+    #       email: 'E-mail.'
+    # hints:
+    #   defaults:
+    #     username: 'User name to sign in.'
+    #     password: 'No special characters, please.'
+    # include_blanks:
+    #   defaults:
+    #     age: 'Rather not say'
+    # prompts:
+    #   defaults:
+    #     age: 'Select your age'
+    hints:
+      ldap_config:
+        hostname: 'Dominio o dirección IP'
+        port: 'Por ejemplo: 389'
+        basedn: 'CN=Users,DC=dominio,DC=com'
+        filter: 'CN=*'
+        login_mask: '%{user}@dominio.com, Dominio\%{user} o %{user},%{basedn}'
+        username_attribute: 'Por ejemplo: samaccountname'
+        name_attribute: 'Por ejemplo: givenname'
+        last_name_attribute: 'Por ejemplo: sn'
+        email_attribute: 'Por ejemplo: mail'
+        function_attribute: 'Por ejemplo: title'
+        roles_attribute: 'Por ejemplo: memberof'
+        manager_attribute: 'Por ejemplo: manager'
+        test_user: 'Usuario válido en el servidor para probar la conexión'
+        test_password: 'Contraseña del usuario para probar la conexión'
+      import:
+        username: 'Usuario con permisos para consultar la base de usuarios LDAP'
+
+public_es:
+  <<: *common
+
+mc_es:
+  <<: *common

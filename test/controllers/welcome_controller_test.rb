@@ -23,18 +23,16 @@ class WelcomeControllerTest < ActionController::TestCase
   end
 
   test 'show auditor welcome' do
-    perform_auth
+    login
     get :index
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'welcome/auditor_index'
   end
 
   test 'show audited welcome' do
-    perform_auth users(:audited_user)
+    login user: users(:audited_user)
     get :index
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'welcome/audited_index'
   end
 end

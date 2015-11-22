@@ -1,11 +1,8 @@
 class Plan < ActiveRecord::Base
+  include Auditable
   include ParameterSelector
   include Associations::DestroyPaperTrail
   include Associations::DestroyInBatches
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
 
   # Callbacks
   before_validation :set_proper_parent
@@ -21,11 +18,11 @@ class Plan < ActiveRecord::Base
   scope :list, -> { where(organization_id: Organization.current_id) }
 
   # Restricciones
-  validates :period_id, :organization, :presence => true
-  validates :period_id, :uniqueness => true, :allow_nil => true,
-    :allow_blank => true
-  validates :period_id, :numericality => {:only_integer => true},
-    :allow_nil => true
+  validates :period_id, :organization, presence: true
+  validates :period_id, uniqueness: true, allow_nil: true,
+    allow_blank: true
+  validates :period_id, numericality: {only_integer: true},
+    allow_nil: true
   validates_each :plan_items do |record, attr, value|
     unless value.all? {|pi| !pi.marked_for_destruction? || pi.can_be_destroyed?}
       record.errors.add attr, :locked
@@ -35,10 +32,11 @@ class Plan < ActiveRecord::Base
   # Relaciones
   belongs_to :period
   belongs_to :organization
-  has_many :plan_items, -> { order("#{PlanItem.table_name}.order_number ASC") },
-    :dependent => :destroy
+  has_many :plan_items,
+    dependent: :destroy
+  has_many :resource_utilizations, through: :plan_items
 
-  accepts_nested_attributes_for :plan_items, :allow_destroy => true
+  accepts_nested_attributes_for :plan_items, allow_destroy: true
 
   def set_proper_parent
     self.plan_items.each { |pi| pi.plan = self }
@@ -148,9 +146,9 @@ class Plan < ActiveRecord::Base
       :center
 
     pdf.add_description_item(I18n.t('plan.period.title',
-        :number => self.period.number), I18n.t('plan.period.range',
-        :from_date => I18n.l(self.period.start, :format => :long),
-        :to_date => I18n.l(self.period.end, :format => :long)), 0, false)
+        number: self.period.number), I18n.t('plan.period.range',
+        from_date: I18n.l(self.period.start, format: :long),
+        to_date: I18n.l(self.period.end, format: :long)), 0, false)
 
     column_order.each do |col_name, col_with|
       column_headers << "<b>#{PlanItem.human_attribute_name(col_name)}</b>"
@@ -177,8 +175,8 @@ class Plan < ActiveRecord::Base
           plan_item.business_unit ?
             plan_item.business_unit.name : '',
           plan_item.project,
-          I18n.l(plan_item.start, :format => :default),
-          I18n.l(plan_item.end, :format => :default),
+          I18n.l(plan_item.start, format: :default),
+          I18n.l(plan_item.end, format: :default),
           currency_mask % plan_item.human_cost,
           currency_mask % plan_item.material_cost,
           total_resource_text
@@ -197,15 +195,15 @@ class Plan < ActiveRecord::Base
 
           pdf.table(column_data.insert(0, column_headers), table_options) do
             row(0).style(
-              :background_color => 'cccccc',
-              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+              background_color: 'cccccc',
+              padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
             )
           end
         end
       end
 
       pdf.text "\n#{I18n.t('plan.item_status.note')}",
-        :font_size => (PDF_FONT_SIZE * 0.75).round
+        font_size: (PDF_FONT_SIZE * 0.75).round
 
       if include_details &&
           !items.all? { |pi| pi.resource_utilizations.blank? }
@@ -234,7 +232,7 @@ class Plan < ActiveRecord::Base
   end
 
   def pdf_name
-    I18n.t('plan.pdf.pdf_name', :period => self.period.number)
+    I18n.t('plan.pdf.pdf_name', period: self.period.number)
   end
 
   def cost

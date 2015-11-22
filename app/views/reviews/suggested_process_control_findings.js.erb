@@ -1,0 +1,11 @@
+var container = $('#suggested_process_control_findings')
+var processId = 'suggested-findings-process-control-<%= @process_control.id %>'
+
+if (! container.find('#' + processId).length)
+  container.append($('<div></div>').attr('id', processId))
+
+container.find('#' + processId).
+  html('<%= j render(template: 'reviews/suggested_process_control_findings.html') %>').
+  effect('highlight', {}, 2000)
+
+window.location.hash = processId

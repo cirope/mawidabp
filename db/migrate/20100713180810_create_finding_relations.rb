@@ -5,7 +5,7 @@ class CreateFindingRelations < ActiveRecord::Migration
       t.references :finding
       t.references :related_finding
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :finding_relations, :finding_id

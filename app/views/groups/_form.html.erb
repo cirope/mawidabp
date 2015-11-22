@@ -1,61 +1,40 @@
-<!--[form:group]-->
-<%= form_for @group do |g_f| %>
-  <% content_for :js_extra do %>
-    <%= raw "var organization='#{generate_template(g_f, :organizations)}';" %>
-  <% end %>
-  <%= g_f.error_messages %>
+<%= simple_form_for @group do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form_column_left">
-    <p>
-      <%= g_f.label :name %>
-      <%= g_f.text_field :name, :maxlength => 255, :size => 10 %>
-    </p>
-    <p>
-      <%= g_f.label :admin_email %>
-      <%= g_f.text_field :admin_email, :maxlength => 100, :size => 10 %>
-    </p>
-    <p>
-      <%= g_f.label :description %>
-      <%= g_f.text_area :description %>
-    </p>
-    <p class="form_item">
-      <%= g_f.label :send_notification_email, nil, :class => :inline %>
-      <%= g_f.check_box :send_notification_email, {:class => :inline_item}, '1', '' %>
-    </p>
-  </div>
-
-  <div class="items">
-    <div class="column_headers">
-      <div class="item_column" style="width: 30%;">
-        <h3><%= Organization.human_attribute_name :name %></h3>
-      </div>
-      <div class="item_column" style="width: 30%;">
-        <h3><%= Organization.human_attribute_name :prefix %></h3>
-      </div>
-      <div class="item_column" style="width: 30%;">
-        <h3><%= Organization.human_attribute_name :description %></h3>
-      </div>
-      <div class="item_column" style="width: 5%;"></div>
-      <div class="clear"></div>
-    </div>
-
-    <div id="organizations">
-      <%= g_f.fields_for :organizations do |o_f| %>
-        <%= render :partial => 'organization', :locals =>
-          {:f => o_f, :is_dynamic => false} %>
-      <% end %>
+  <div class="form-inputs">
+    <div class="row">
+      <%= f.input :name, input_html: { maxlength: 255 } %>
+      <%= f.input :admin_email, input_html: { maxlength: 100 } %>
+      <%= f.input :description %>
+      <%= f.input :send_notification_email, as: :boolean, label: false, inline_label: true %>
     </div>
   </div>
 
-  <p class="add_item">
-    <%= link_to t('group.add_organization'), '#',
-      'data-template' => :organization,
-      'data-event' => 'addNestedItem', 'data-container' => '#organizations' %>
-  </p>
+  <div class="row">
+    <div class="col-md-4">
+      <h5><strong><%= Organization.human_attribute_name :name %></strong></h5>
+    </div>
+    <div class="col-md-2">
+      <h5><strong><%= Organization.human_attribute_name :prefix %></strong></h5>
+    </div>
+    <div class="col-md-4">
+      <h5><strong><%= Organization.human_attribute_name :description %></strong></h5>
+    </div>
+  </div>
 
-  <%= hidden_lock_version(g_f) %>
-  <p>
-    <span class="button"><%= g_f.submit %></span>
-  </p>
+  <div id="organizations">
+    <%= f.simple_fields_for :organizations do |o_f| %>
+      <%= render 'organization', f: o_f %>
+    <% end %>
+
+    <%= link_to_add_fields(t('group.add_organization'), f, :organizations) %>
+  </div>
+
+  <hr />
+
+  <div class="form-actions">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
 <% end %>
-<!--[eoform:group] -->

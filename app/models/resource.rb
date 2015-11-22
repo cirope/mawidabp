@@ -1,30 +1,18 @@
 class Resource < ActiveRecord::Base
+  include Auditable
   include ParameterSelector
   include Associations::DestroyPaperTrail
+  include Resources::Validation
+  include Trimmer
 
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
-
-  # Restricciones
-  validates :name, :presence => true
-  validates :name, :length => {:maximum => 255}, :allow_nil => true,
-    :allow_blank => true
-  validates :name, :uniqueness =>
-    {:case_sensitive => false, :scope => :resource_class_id}
-  validates :cost_per_unit, :numericality => {:greater_than_or_equal_to => 0},
-    :allow_nil => true
-  validates :resource_class_id, :numericality => {:only_integer => true},
-    :allow_nil => true
-
-  # Relaciones
   belongs_to :resource_class
   has_many :users, dependent: :nullify
-  has_many :resource_utilizations, :as => :resource, :dependent => :destroy
+  has_many :resource_utilizations, as: :resource, dependent: :destroy
+
+  trimmed_fields :name, :description
 
   def to_s
-    self.name
+    name
   end
-
   alias_method :resource_name, :to_s
 end

@@ -1,17 +1,20 @@
-<h1 style="clear: both; margin-bottom: 0em;">
-  <%= ControlObjectiveItem.human_attribute_name('fortresses') %>
-</h1>
-<br>
+<h4>
+  <%= ControlObjectiveItem.human_attribute_name 'fortresses' %>
+</h4>
+<br />
+
 <h4>
   <%= t('label.total') %>:
     <%= @control_objective_item.is_in_a_final_review? ? @control_objective_item.final_fortresses.count :
         @control_objective_item.fortresses.count %>
 </h4>
-<br>
+<br />
+
 <p style="margin-bottom: 1.2em;">
   <%= link_to_unless @control_objective_item.fortresses.blank?,
     t('control_objective_item.view_all_fortresses'),
-    fortresses_path(:control_objective => @control_objective_item) %> |
+    fortresses_path(:control_objective => @control_objective_item) %>
+  <span class="text-muted">|</span>
   <%= link_to_unless readonly, t('control_objective_item.add_fortress'),
     new_fortress_path(:control_objective_item => @control_objective_item) %>
 </p>

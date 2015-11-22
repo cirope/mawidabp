@@ -7,7 +7,7 @@ class CreateControlObjectives < ActiveRecord::Migration
       t.integer :order
       t.references :process_control
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :control_objectives, :process_control_id

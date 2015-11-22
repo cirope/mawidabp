@@ -1,87 +1,89 @@
 <% currency_mask = "#{t('number.currency.format.unit')}%.2f" %>
-<div id="showed_data">
-  <h1><%=h @workflow.review %></h1>
-
-  <p>
-    <b><%= Workflow.human_attribute_name :period_id %>:</b>
-    <%=h @workflow.period.inspect %>
-  </p>
-
-  <table class="summary_table">
-    <thead>
-      <tr>
-        <th><%= WorkflowItem.human_attribute_name :order_number %></th>
-        <th><%= raw(WorkflowItem.human_attribute_name(:task) +
-              show_inline_help_for(:workflow_task)) %></th>
-        <th><%= WorkflowItem.human_attribute_name :start %></th>
-        <th><%= WorkflowItem.human_attribute_name :end %></th>
-        <th><%= raw(WorkflowItem.human_attribute_name(:predecessors) +
-              show_inline_help_for(:workflow_predecessors)) %></th>
-        <th><%= WorkflowItem.human_attribute_name :human_resources_cost %></th>
-        <th><%= WorkflowItem.human_attribute_name :material_resources_cost %></th>
-        <th><%= WorkflowItem.human_attribute_name :total_resources_cost %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @workflow.workflow_items.each do |workflow_item| %>
-        <tr>
-          <td><%= h workflow_item.order_number %></td>
-          <td><%= simple_format h(workflow_item.task) %></td>
-          <td><%= l workflow_item.start %></td>
-          <td><%= l workflow_item.end %></td>
-          <td><%= h workflow_item.plain_predecessors %></td>
-          <td><%= currency_mask % workflow_item.human_cost %></td>
-          <td><%= currency_mask % workflow_item.material_cost %></td>
-          <td><%= currency_mask % workflow_item.cost %></td>
-        </tr>
-      <% end %>
-      <tr>
-        <td colspan="7"></td>
-        <td><b><%= @workflow.cost %></b></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <% unless @workflow.workflow_items.all? { |wi| wi.resource_utilizations.blank? } %>
-    <h1><%= t('workflow.pdf.resources_utilization') %></h1>
-
-    <% @workflow.workflow_items.each do |workflow_item| %>
-      <% unless workflow_item.resource_utilizations.blank? %>
-        <h2 style="font-weight: normal;">
-          <b>(<%= workflow_item.order_number %>)</b> <%= workflow_item.task %>
-        </h2>
-        <table class="summary_table">
-          <thead>
-            <tr>
-              <th><%= ResourceUtilization.human_attribute_name :resource_id %></th>
-              <th><%= ResourceUtilization.human_attribute_name :units %></th>
-              <th><%= ResourceUtilization.human_attribute_name :cost_per_unit %></th>
-              <th><%= ResourceUtilization.human_attribute_name :cost %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% workflow_item.resource_utilizations.each do |ru| %>
-              <tr>
-                <td><%= ru.resource.resource_name %></td>
-                <td><%= ru.units %></td>
-                <td><%= currency_mask % ru.cost_per_unit %></td>
-                <td><%= currency_mask % ru.cost %></td>
-              </tr>
-            <% end %>
-            <tr>
-              <td colspan="3"></td>
-              <td><b><%= workflow_item.cost %></b></td>
-            </tr>
-          </tbody>
-        </table>
-      <% end %>
-    <% end %>
-  <% end %>
+<div class="page-header">
+  <h2><%= @workflow.review %></h2>
 </div>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_workflow_path(@workflow) %> |
-  <%= link_to t('label.list'), workflows_path %> |
+<p>
+  <strong><%= Workflow.human_attribute_name :period_id %>:</strong>
+  <%= @workflow.period.inspect %>
+</p>
+
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th><%= WorkflowItem.human_attribute_name :order_number %></th>
+      <th><%= WorkflowItem.human_attribute_name(:task) %></th>
+      <th><%= WorkflowItem.human_attribute_name :start %></th>
+      <th><%= WorkflowItem.human_attribute_name :end %></th>
+      <th><%= WorkflowItem.human_attribute_name(:predecessors) %></th>
+      <th><%= WorkflowItem.human_attribute_name :human_resources_cost %></th>
+      <th><%= WorkflowItem.human_attribute_name :material_resources_cost %></th>
+      <th><%= WorkflowItem.human_attribute_name :total_resources_cost %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @workflow.workflow_items.each do |workflow_item| %>
+      <tr>
+        <td><%= workflow_item.order_number %></td>
+        <td><%= simple_format workflow_item.task %></td>
+        <td><%= l workflow_item.start %></td>
+        <td><%= l workflow_item.end %></td>
+        <td><%= workflow_item.plain_predecessors %></td>
+        <td><%= currency_mask % workflow_item.human_cost %></td>
+        <td><%= currency_mask % workflow_item.material_cost %></td>
+        <td><%= currency_mask % workflow_item.cost %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td colspan="7"></td>
+      <td><strong><%= @workflow.cost %></strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<% unless @workflow.workflow_items.all? { |wi| wi.resource_utilizations.blank? } %>
+  <div class="page-header">
+    <h2><%= t('workflow.pdf.resources_utilization') %></h2>
+  </div>
+
+  <% @workflow.workflow_items.each do |workflow_item| %>
+    <% unless workflow_item.resource_utilizations.blank? %>
+      <h4>
+        (<%= workflow_item.order_number %>) <%= workflow_item.task %>
+      </h4>
+      <table class="table table-condensed table-striped">
+        <thead>
+          <tr>
+            <th><%= ResourceUtilization.human_attribute_name :resource %></th>
+            <th><%= ResourceUtilization.human_attribute_name :units %></th>
+            <th><%= ResourceUtilization.human_attribute_name :cost_per_unit %></th>
+            <th><%= ResourceUtilization.human_attribute_name :cost %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% workflow_item.resource_utilizations.each do |ru| %>
+            <tr>
+              <td><%= ru.resource.resource_name %></td>
+              <td><%= ru.units %></td>
+              <td><%= currency_mask % ru.cost_per_unit %></td>
+              <td><%= currency_mask % ru.cost %></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td colspan="3"></td>
+            <td><strong><%= workflow_item.cost %></strong></td>
+          </tr>
+        </tbody>
+      </table>
+    <% end %>
+  <% end %>
+<% end %>
+
+<hr />
+
+<div>
+  <%= link_to_edit edit_workflow_path(@workflow) %> |
+  <%= link_to_index workflows_path %> |
   <%= link_to t('workflow.download_global_workflow'),
     export_to_pdf_workflow_path(:_ts => Time.now.to_i) %> |
   <%= link_to t('workflow.download_detailed_workflow'),

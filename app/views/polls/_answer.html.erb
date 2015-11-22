@@ -2,35 +2,24 @@
 <div class="answer item">
   <h4><%= "#{question.sort_order} - #{question.question}" %></h4>
   <br />
-  
-  <div class="item_field" style="width: 46%;">
-    <p>
+
+  <div class="row form-inputs">
+    <div class="col-md-6">
       <% if question.answer_multi_choice? %>
-        <% question.answer_options.each do |ao| %> 
-          <% option = ao.option %>
-          <%= f.radio_button :answer_option_id, ao.id, :id => "answer_option_id_#{ao.id}" %>
-          <%= f.label :answer_option_id, t("activerecord.attributes.answer_option.options.#{option}"), :for => "answer_option_id_#{ao.id}", :class => 'plain_label' %> 
-          <br />
-        <% end %>
-        <%= f.hidden_field :type, :value => AnswerMultiChoice.name %>
+        <%= answer_options_collection f %>
+        <%= f.input :type, as: :hidden, input_html: { value: AnswerMultiChoice.name } %>
       <% elsif question.answer_written? %>
-        <%= f.label :answer  %>
-        <%= f.text_area :answer %>
-        <%= f.hidden_field :type, :value => AnswerWritten.name %>
+        <%= f.input :answer %>
+        <%= f.input :type, as: :hidden, input_html: { value: AnswerWritten.name } %>
       <% end %>
-    </p>
-  </div>
-  <div class="item_field" style="width: 35%;">
-    <%= f.label(
-      "#{Answer.human_attribute_name('comments')} (#{t 'label.optional'})",
-      :id => "answer_comments_label_#{f.object.id}",
-      :for => "answer_comments_#{f.object.id}"
-    ) %>
-    <%= f.text_area :comments, :id => "answer_comments_#{f.object.id}" %>
-    
-    <%= f.hidden_field :question_id, :value => question.id %>
-    <%= hidden_lock_version(f) %>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :comments, label: "#{Answer.human_attribute_name('comments')} (#{t 'label.optional'})",
+        input_html: { id: "answer_comments_#{f.object.id}" }
+      %>
+      <%= f.input :question_id, as: :hidden, input_html: { value: question.id } %>
+      <%= f.input :lock_version, as: :hidden %>
+    </div>
   </div>
 </div>
-<br />
 <br />

@@ -1,26 +1,24 @@
-<div id="showed_data">
 <p>
-  <b><%= User.model_name.human %>:</b>
-  <%=h @error_record.user ? @error_record.user.user : t('error_record.void_user') %>
+  <strong><%= ErrorRecord.human_attribute_name 'user_id' %></strong>:
+  <%= @error_record %>
 </p>
 
 <p>
-  <b><%= ErrorRecord.human_attribute_name 'error' %>:</b>
-  <%=h @error_record.error_text %>
+  <strong><%= ErrorRecord.human_attribute_name 'error' %></strong>:
+  <%= @error_record.error_text %>
 </p>
 
 <p>
-  <b><%= ErrorRecord.human_attribute_name 'data' %>:</b>
-  <%=h @error_record.data %>
+  <strong><%= ErrorRecord.human_attribute_name 'data' %></strong>:
+  <%= @error_record.data %>
 </p>
 
 <p>
-  <b><%= ErrorRecord.human_attribute_name 'created_at' %>:</b>
-  <%=l @error_record.created_at, :format => :short if @error_record.created_at %>
+  <strong><%= ErrorRecord.human_attribute_name 'created_at' %></strong>:
+  <%= l @error_record.created_at, format: :short %>
 </p>
-</div>
 
-<div id="links">
-<%= link_to t('label.list'), error_records_path %> |
+<hr />
+
+<%= link_to_index error_records_path %> |
 <%= link_to_back %>
-</div>

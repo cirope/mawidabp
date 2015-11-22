@@ -2,6 +2,7 @@
 bcra_A4609_security_management_responsible_dependency_weakness_being_implemented:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  title: Title 1w
   review_code: O001
   description: Description 1w
   answer: Answer 1w
@@ -21,11 +22,12 @@ bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
+  title: Title 2w iso
   review_code: O002
   description: Description 2w iso
   answer: Answer 2w
@@ -45,13 +47,14 @@ iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 <% (1..4).each do |level| %>
 
 iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification:
   type: Weakness
   control_objective_item: iso_27000_security_organization_4_2_item_editable
+  title: Title <%= level %>w
   review_code: <%= "O00#{level}" %>
   description: Description <%= level %>w
   answer: Answer <%= level %>w
@@ -72,13 +75,14 @@ iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_
   first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: <%= level - 1 %>
-  organization: default_organization
+  organization: cirope
 
 <% end %>
 
 iso_27000_security_organization_4_2_item_editable_weakness_incomplete:
   type: Weakness
   control_objective_item: iso_27000_security_organization_4_2_item_editable
+  title: Title incomplete_w
   review_code: O005
   description: Description incomplete_w
   answer: Answer incomplete_w
@@ -99,11 +103,12 @@ iso_27000_security_organization_4_2_item_editable_weakness_incomplete:
   first_notification_date: <%= Date.today.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
+  title: Title 3w iso
   review_code: O003
   description: Description 3w iso
   answer: Answer 3w
@@ -123,11 +128,12 @@ iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_security_management_responsible_dependency_fortress:
   type: Fortress
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  title: Title 1f
   review_code: F001
   description: Description 1f
   answer:
@@ -146,11 +152,12 @@ bcra_A4609_security_management_responsible_dependency_fortress:
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
   notification_level:
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_security_management_responsible_dependency_fortress_2:
   type: Fortress
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  title: Title 2f
   review_code: F002
   description: Description 2f
   answer:
@@ -169,11 +176,12 @@ bcra_A4609_security_management_responsible_dependency_fortress_2:
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
   notification_level:
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_security_management_responsible_dependency_nonconformity_being_implemented:
   type: Nonconformity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  title: Title 1nc bcra
   review_code: NC001
   description: Description 1nc bcra
   answer: Answer 1nc
@@ -192,11 +200,12 @@ bcra_A4609_security_management_responsible_dependency_nonconformity_being_implem
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 iso_27000_security_policy_3_1_item_nonconformity_unconfirmed_for_notification:
   type: Nonconformity
   control_objective_item: iso_27000_security_policy_3_1_item
+  title: Title 2nc
   review_code: NC002
   description: Description 2nc
   answer: Answer 2nc
@@ -216,13 +225,14 @@ iso_27000_security_policy_3_1_item_nonconformity_unconfirmed_for_notification:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 <% (1..4).each do |level| %>
 
 iso_27000_security_organization_4_2_item_editable_nonconformity_unanswered_for_level_<%= level %>_notification:
   type: Nonconformity
   control_objective_item: iso_27000_security_organization_4_2_item_editable
+  title: Title <%= level %>nc iso 2700
   review_code: <%= "NC00#{level}" %>
   description: Description <%= level %>nc iso 2700
   answer: Answer <%= level %>nc
@@ -242,13 +252,14 @@ iso_27000_security_organization_4_2_item_editable_nonconformity_unanswered_for_l
   first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: <%= level - 1 %>
-  organization: default_organization
+  organization: cirope
 
 <% end %>
 
 iso_27000_security_organization_4_2_item_editable_nonconformity_incomplete:
   type: Nonconformity
   control_objective_item: iso_27000_security_organization_4_2_item_editable
+  title: Title incomplete_nc
   review_code: NC005
   description: Description incomplete_nc
   answer: Answer incomplete_nc
@@ -268,11 +279,12 @@ iso_27000_security_organization_4_2_item_editable_nonconformity_incomplete:
   first_notification_date: <%= Date.today.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 iso_27000_security_policy_3_1_item_nonconformity_2_unconfirmed_for_notification:
   type: Nonconformity
   control_objective_item: iso_27000_security_policy_3_1_item
+  title: Title 3nc iso
   review_code: NC003
   description: Description 3nc iso
   answer: Answer 3nc
@@ -292,11 +304,12 @@ iso_27000_security_policy_3_1_item_nonconformity_2_unconfirmed_for_notification:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_nonconformity:
   type: Nonconformity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  title: Title 3nc bcra
   review_code: NC003
   description: Description 3nc bcra
   answer: Answer 3nc
@@ -315,11 +328,12 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_data_proccessing_impact_analisys_nonconformity:
   type: Nonconformity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
+  title: Title 2nc bcra
   review_code: NC002
   description: Description 2nc bcra
   answer: Answer 2nc
@@ -338,11 +352,12 @@ bcra_A4609_data_proccessing_impact_analisys_nonconformity:
   follow_up_date:
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity:
   type: Nonconformity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
+  title: Title 1nc
   review_code: NC001
   description: Description 1nc
   answer: Answer 1nc
@@ -362,11 +377,12 @@ bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity:
   follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 iso_27000_security_policy_3_1_item_nonconformity:
   type: Nonconformity
   control_objective_item: iso_27000_security_policy_3_1_item
+  title: Title 1nc iso
   review_code: NC001
   description: Description 1nc iso
   answer: Answer 1nc
@@ -385,11 +401,12 @@ iso_27000_security_policy_3_1_item_nonconformity:
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_nonconformity:
   type: Nonconformity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
+  title: Title 1nc bi
   review_code: NC001
   description: Description 1nc bi
   answer: Answer 1nc
@@ -408,11 +425,12 @@ bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_security_management_responsible_dependency_notify_potential_nonconformity:
   type: PotentialNonconformity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  title: Title 5ncp
   review_code: NCP005
   description: Description 5ncp
   answer: Answer 5ncp
@@ -422,11 +440,12 @@ bcra_A4609_security_management_responsible_dependency_notify_potential_nonconfor
   solution_date:
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_security_management_responsible_dependency_notify_potential_nonconformity_2:
   type: PotentialNonconformity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  title: Title 4ncp
   review_code: NCP004
   description: Description 4ncp
   answer: Answer 4ncp
@@ -436,11 +455,12 @@ bcra_A4609_security_management_responsible_dependency_notify_potential_nonconfor
   solution_date:
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_potential_nonconformity:
   type: PotentialNonconformity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  title: Title 1ncp
   review_code: NCP001
   description: Description 1ncp
   answer: Answer 1ncp
@@ -450,11 +470,12 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   solution_date:
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_data_proccessing_impact_analisys_editable_potential_nonconformity:
   type: PotentialNonconformity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
+  title: Title 3ncp
   review_code: NCP003
   description: Description 3ncp
   answer: Answer 3ncp
@@ -466,11 +487,12 @@ bcra_A4609_data_proccessing_impact_analisys_editable_potential_nonconformity:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 iso_27000_security_organization_4_2_item_editable_potential_nonconformity:
   type: PotentialNonconformity
   control_objective_item: iso_27000_security_organization_4_2_item_editable
+  title: Title ncp
   review_code: NCP001
   description: Description ncp
   answer: Answer ncp
@@ -481,11 +503,12 @@ iso_27000_security_organization_4_2_item_editable_potential_nonconformity:
   confirmation_date: <%= Date.today.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_data_proccessing_impact_analisys_item_potential_nonconformity:
   type: PotentialNonconformity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
+  title: Title ncp
   review_code: NCP001
   description: Description ncp
   answer: Answer ncp
@@ -496,11 +519,12 @@ bcra_A4609_data_proccessing_impact_analisys_item_potential_nonconformity:
   confirmation_date: <%= Date.today.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_data_proccessing_impact_analisys_confirmed_potential_nonconformity:
   type: PotentialNonconformity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
+  title: Title ncp006
   review_code: NCP006
   description: Description ncp006
   answer: Answer 5ncp
@@ -511,11 +535,12 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_potential_nonconformity:
   confirmation_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  title: Title 1o
   review_code: OM001
   description: Description 1o
   answer: Answer 1o
@@ -525,11 +550,12 @@ bcra_A4609_security_management_responsible_dependency_notify_oportunity:
   solution_date:
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_2:
   type: Oportunity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  title: Title 3o
   review_code: OM003
   description: Description 3o
   answer: Answer 3o
@@ -539,11 +565,12 @@ bcra_A4609_security_management_responsible_dependency_notify_oportunity_2:
   solution_date:
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  title: Title 1o
   review_code: OM001
   description: Description 1o
   answer: Answer 1o
@@ -553,11 +580,12 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   solution_date:
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  title: Title 3w bcra
   review_code: O003
   description: Description 3w bcra
   answer: Answer 3w
@@ -576,11 +604,12 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_data_proccessing_impact_analisys_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
+  title: Title 2w bcra
   review_code: O002
   description: Description 2w bcra
   answer: Answer 2w
@@ -595,11 +624,12 @@ bcra_A4609_data_proccessing_impact_analisys_weakness:
   follow_up_date:
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
+  title: Title 1w bi
   review_code: O001
   description: Description 1w bi
   answer: Answer 1w
@@ -614,11 +644,12 @@ bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
   follow_up_date:
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
+  title: Title 3o
   review_code: OM003
   description: Description 3o
   answer: Answer 3o
@@ -630,11 +661,12 @@ bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 iso_27000_security_organization_4_2_item_editable_oportunity:
   type: Oportunity
   control_objective_item: iso_27000_security_organization_4_2_item_editable
+  title: Title o
   review_code: OM001
   description: Description o
   answer: Answer o
@@ -645,11 +677,12 @@ iso_27000_security_organization_4_2_item_editable_oportunity:
   confirmation_date: <%= Date.today.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
+  title: Title 2o
   review_code: OM002
   description: Description 2o
   answer: Answer 2o
@@ -660,11 +693,12 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
   confirmation_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 iso_27000_security_policy_3_1_item_weakness:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
+  title: Title 1wx
   review_code: O001
   description: Description 1wx
   answer: Answer 1w
@@ -683,11 +717,12 @@ iso_27000_security_policy_3_1_item_weakness:
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
+  title: Title 1w
   review_code: O001
   description: Description 1w
   answer: Answer 1w
@@ -706,4 +741,4 @@ bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  organization: default_organization
+  organization: cirope

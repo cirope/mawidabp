@@ -5,7 +5,7 @@ class CreateProcessControls < ActiveRecord::Migration
       t.integer :order
       t.references :best_practice
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :process_controls, :best_practice_id

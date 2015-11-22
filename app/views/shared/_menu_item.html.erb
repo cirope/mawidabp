@@ -1,0 +1,18 @@
+<% active = menu_item.submenu_names.include?(@current_module) %>
+
+<% if menu_item.children.present? %>
+  <li class="dropdown <%= 'active' if active %>">
+    <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
+      <%= menu_item.to_s %>
+      <b class="caret"></b>
+    <% end %>
+    <ul class="dropdown-menu">
+      <% menu_item.children.each do |submenu_item| %>
+        <li><%= link_to submenu_item.to_s, submenu_item.url %></li>
+        <%= render 'shared/submenu', submenu_item: submenu_item %>
+      <% end %>
+    </ul>
+  </li>
+<% else %>
+  <li><%= link_to menu_item.to_s, menu_item.url %></li>
+<% end %>

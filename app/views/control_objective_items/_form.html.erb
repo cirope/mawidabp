@@ -1,210 +1,178 @@
 <% readonly = @control_objective_item.is_in_a_final_review? %>
 <% frozen = @control_objective_item.review.try(:is_frozen?) %>
-<!--[form:control_objective_item]-->
-<%= form_for @control_objective_item, :html => {:multipart => true} do |co_f| %>
-  <% unless frozen %>
+
+<%= simple_form_for @control_objective_item do |f| %>
     <% content_for :js_extra do %>
-      <%= raw "var lastWorkPaperCode = '#{next_control_objective_work_paper_code(
-        @control_objective_item)}';" %>
-      <%= raw "var work_paper='#{generate_template(co_f, :work_papers,
-        {:form_builder_local => :wp_f,
-        :partial => 'work_papers/work_paper',
-        :locals => {:child_index => 'NEW_RECORD', :frozen => false},
-        :object => WorkPaper.new(:organization_id => current_organization.id)})}';" %>
+      <%= raw("var lastWorkPaperCode = '#{next_control_objective_work_paper_code(@control_objective_item)}';") unless frozen %>
     <% end %>
-  <% end %>
-  <%= co_f.error_messages %>
-  <div class="form_column_left">
-    <p class="form_item">
-      <label class="inline"><%= Review.model_name.human %></label>
-      <%= text_field_tag :review_identification,
-        @control_objective_item.review.identification,
-        :size => nil, :class => :inline_item, :readonly => true %>
-    </p>
+  <%= render 'shared/error_explanation', f: f %>
 
-    <p class="form_item">
-      <label class="inline"><%= ProcessControl.model_name.human %></label>
-      <%= text_field_tag :process_control_name,
-        @control_objective_item.control_objective.process_control.name,
-        :size => nil, :class => :inline_item, :readonly => true %>
-    </p>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :review_identification, label: Review.model_name.human, input_html: {
+          value: @control_objective_item.review.identification, readonly: true
+        } %>
+        <%= f.input :process_control_name, label: ProcessControl.model_name.human, input_html: {
+          value: @control_objective_item.control_objective.process_control.name, readonly: true
+        } %>
+        <%= f.input :period, label: Period.model_name.human, input_html: {
+          value: @control_objective_item.review.period.inspect, readonly: true
+        } %>
+        <%= f.input :relevance, collection: relevances,
+          include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
+        <%= f.input :audit_date, as: :date_picker, input_html: { disabled: readonly } %>
+        <%= f.input :control_objective_text, input_html: { autofocus: true, readonly: readonly, rows: 5 } %>
 
-    <p class="form_item">
-      <label class="inline"><%= Period.model_name.human %></label>
-      <%= text_field_tag :period, @control_objective_item.review.period.inspect,
-        :size => nil, :class => :inline_item, :readonly => true %>
-    </p>
-    <p class="form_item">
-      <%= co_f.label :relevance, raw(
-        ControlObjectiveItem.human_attribute_name(:relevance) +
-          show_inline_help_for(:control_objective_item_relevance)),
-        :class => :inline %>
-      <%= relevance_field(co_f,
-        { include_blank: t('control_objective_item.not_rated') },
-        { class: :inline_item, disabled: readonly }
-      ) %>
-    </p>
-    <p class="form_item">
-      <%= co_f.label :audit_date, nil, :class => :inline %>
-      <%= calendar_text_field co_f, :audit_date, false, nil,
-        :class => :inline_item, :disabled => readonly %>
-    </p>
-    <p>
-      <%= co_f.label :control_objective_text %>
-      <%= co_f.text_area :control_objective_text, :autofocus => true,
-        :readonly => readonly %>
-    </p>
-    <%= co_f.fields_for :control do |c_f| %>
-      <p>
-        <%= c_f.label :effects, raw(Control.human_attribute_name(:effects) +
-            show_inline_help_for(:control_objective_item_effects)) %>
-        <%= c_f.text_area :effects, :readonly => readonly %>
-      </p>
-      <p>
-        <%= c_f.label :control, raw(Control.human_attribute_name(:control) +
-            show_inline_help_for(:control_objective_item_control)) %>
-        <%= c_f.text_area :control, :readonly => readonly %>
-      </p>
+        <%= f.simple_fields_for :control do |c_f| %>
+          <%= c_f.input :effects, label: Control.human_attribute_name(:effects), input_html: { readonly: readonly, rows: 5 } %>
+          <%= c_f.input :control, label: Control.human_attribute_name(:control), input_html: { readonly: readonly, rows: 5 } %>
+          <%= f.input :effectiveness, label: ControlObjectiveItem.human_attribute_name(:effectiveness),
+            input_html: { value: "#{@control_objective_item.effectiveness}%", readonly: true } %>
 
-      <p class="form_item">
-        <%= content_tag :label, raw(
-          ControlObjectiveItem.human_attribute_name(:effectiveness) +
-            show_inline_help_for(:control_objective_item_effectiveness)),
-          :class => :inline %>
-        <%= text_field_tag :effectiveness,
-          "#{@control_objective_item.effectiveness}%", :class => :inline_item,
-          :readonly => true %>
-      </p>
-      <p class="form_item">
-        <%= co_f.label :finished, raw(
-          ControlObjectiveItem.human_attribute_name(:finished) +
-            show_inline_help_for(:control_objective_item_finished)),
-          :class => :inline %>
-        <%= co_f.check_box :finished, :class => :inline_item,
-          :disabled => readonly %>
-      </p>
-      <p class="form_item">
-        <%= co_f.label :exclude_from_score, raw(
-          ControlObjectiveItem.human_attribute_name(:exclude_from_score) +
-            show_inline_help_for(:control_objective_item_exclude_from_score)),
-          :class => :inline %>
-        <%= co_f.check_box :exclude_from_score, :class => :inline_item,
-          :disabled => readonly %>
-      </p>
+          <% content_for :design_tests do %>
+            <%= c_f.input :design_tests, input_html: { readonly: readonly, rows: 5 } %>
+          <% end %>
+          <% content_for :compliance_tests do %>
+            <%= c_f.input :compliance_tests, input_html: { readonly: readonly, rows: 5 } %>
+          <% end %>
+          <% content_for :sustantive_tests do %>
+            <%= c_f.input :sustantive_tests, input_html: { readonly: readonly, rows: 5 } %>
+          <% end %>
+        <% end %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :design_score, collection: qualifications,
+          include_blank: t('control_objective_item.not_rated'),
+          input_html: { data: { score_target: 'design' }, disabled: readonly } %>
+        <%= yield :design_tests %>
 
-      <% content_for :design_tests do %>
-        <%= c_f.label :design_tests %>
-        <%= c_f.text_area :design_tests, :readonly => readonly %>
-      <% end %>
+        <%= f.input :compliance_score, collection: qualifications,
+          include_blank: t('control_objective_item.not_rated'),
+          input_html: { data: { score_target: 'compliance' }, disabled: readonly } %>
+        <%= yield :compliance_tests %>
 
-      <% content_for :compliance_tests do %>
-        <%= c_f.label :compliance_tests %>
-        <%= c_f.text_area :compliance_tests, :readonly => readonly %>
-      <% end %>
+        <%= f.input :sustantive_score, collection: qualifications,
+          include_blank: t('control_objective_item.not_rated'),
+          input_html: { data: { score_target: 'sustantive' }, disabled: readonly } %>
+        <%= yield :sustantive_tests %>
 
-      <% content_for :sustantive_tests do %>
-        <%= c_f.label :sustantive_tests %>
-        <%= c_f.text_area :sustantive_tests, :readonly => readonly %>
-      <% end %>
-    <% end %>
-  </div>
-  <div class="form_column_right">
-    <p>
-      <%= co_f.label :design_score %>
-      <%= qualification_field(co_f, :design_score,
-        { include_blank: t('control_objective_item.not_rated') },
-        { disabled: readonly }
-      )%>
-    </p>
-    <p>
-      <%= yield :design_tests %>
-    </p>
-    <p>
-      <%= co_f.label :compliance_score %>
-      <%= qualification_field(co_f, :compliance_score,
-        { include_blank: t('control_objective_item.not_rated') },
-        { disabled: readonly }
-      )%>
-    </p>
-    <p>
-      <%= yield :compliance_tests %>
-    </p>
-    <p>
-      <%= co_f.label :sustantive_score %>
-      <%= qualification_field(co_f, :sustantive_score,
-        { include_blank: t('control_objective_item.not_rated') },
-        { disabled: readonly }
-      )%>
-    </p>
-    <p>
-      <%= yield :sustantive_tests %>
-    </p>
-    <p>
-      <%= co_f.label :auditor_comment %>
-      <%= co_f.text_area :auditor_comment, :readonly => readonly %>
-    </p>
+        <%= f.input :auditor_comment, input_html: { readonly: readonly, rows: 5 } %>
+
+        <br />
+
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :finished, as: :boolean, label: false, inline_label:
+              ControlObjectiveItem.human_attribute_name(:finished),
+              input_html: { disabled: readonly } %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :exclude_from_score, as: :boolean, label: false, inline_label:
+              ControlObjectiveItem.human_attribute_name(:exclude_from_score),
+              input_html: { disabled: readonly } %>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <%= render :partial => 'weaknesses_summary', :locals => {:readonly => readonly} %>
-  <%= render :partial => 'oportunities_summary', :locals => {:readonly => readonly} %>
+  <br />
+  <%= render 'weaknesses_summary', readonly: readonly %>
+
+  <br />
+
+  <%= render 'oportunities_summary', readonly: readonly %>
   <% if current_organization.kind.eql? 'quality_management' %>
-    <%= render :partial => 'fortresses_summary', :locals => {:readonly => readonly} %>
-    <%= render :partial => 'nonconformities_summary', :locals => {:readonly => readonly} %>
-    <%= render :partial => 'potential_nonconformities_summary', :locals => {:readonly => readonly} %>
+    <br />
+    <%= render 'fortresses_summary', readonly: readonly %>
+    <br />
+    <%= render 'nonconformities_summary', readonly: readonly %>
+    <br />
+    <%= render 'potential_nonconformities_summary', readonly: readonly %>
   <% end %>
 
-  <h1>
-    <%= raw(ControlObjectiveItem.human_attribute_name(:work_papers,
-      :count => @control_objective_item.work_papers.size) +
-      show_inline_help_for(:control_objective_item_work_papers)) %>
-  </h1>
-
-  <div>
-    <div class="column_headers">
-      <div class="item_column" style="width: 20%;">
-        <h3><%= WorkPaper.human_attribute_name :name %></h3>
+  <% if @control_objective_item.continuous %>
+    <br />
+    <h4>
+      <%= BusinessUnitScore.model_name.human count: @control_objective_item.business_unit_scores.size %>
+    </h4>
+    <div class="row">
+      <div class="col-md-4">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'business_unit_id' %></strong></h5>
       </div>
-      <div class="item_column" style="width: 20%;">
-        <h3><%= WorkPaper.human_attribute_name :code %></h3>
+      <div class="col-md-2">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'design_score' %></strong></h5>
       </div>
-      <div class="item_column" style="width: 15%;">
-        <h3><%= WorkPaper.human_attribute_name :number_of_pages %></h3>
+      <div class="col-md-2">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'compliance_score' %></strong></h5>
       </div>
-      <div class="item_column" style="width: 25%;">
-        <h3><%= WorkPaper.human_attribute_name :description %></h3>
+      <div class="col-md-2">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'sustantive_score' %></strong></h5>
       </div>
-      <div class="item_column" style="width: 10%;">
-        <h3><%= WorkPaper.human_attribute_name :file_model %></h3>
-      </div>
-      <div class="item_column" style="width: 10%;"></div>
-      <div class="clear"></div>
     </div>
 
-    <div id="work_papers">
-      <%= co_f.fields_for :work_papers do |wp_f| %>
-        <%= render :partial => 'work_papers/work_paper', :locals =>
-          {:wp_f => wp_f, :is_dynamic => false, :frozen => frozen,
-          :child_index => 'NEW_RECORD'} %>
+    <div id="business_unit_scores">
+      <%= f.simple_fields_for :business_unit_scores do |bus_f| %>
+        <%= render 'business_unit_score', f: bus_f, readonly: readonly %>
       <% end %>
+
+      <%= link_to_add_fields(
+        t('control_objective_item.add_business_unit_score'),
+        f, :business_unit_scores, nil, {}, { readonly: readonly }
+      ) unless readonly %>
+    </div>
+
+    <hr>
+
+    <div id="business_unit_types">
+      <%= link_to_add_fields(
+        t('control_objective_item.add_business_unit_type'),
+        f, :business_unit_scores, 'business_unit_type', {}, { readonly: readonly }
+      ) unless readonly %>
+    </div>
+  <% end %>
+
+  <br />
+  <h4>
+    <%= WorkPaper.model_name.human count: @control_objective_item.work_papers.size %>
+  </h4>
+  <div class="row">
+    <div class="col-md-3">
+      <h5><strong><%= WorkPaper.human_attribute_name 'name' %></strong></h5>
+    </div>
+    <div class="col-md-1">
+      <h5><strong><%= WorkPaper.human_attribute_name 'code' %></strong></h5>
+    </div>
+    <div class="col-md-1">
+      <h5><strong><%= WorkPaper.human_attribute_name 'number_of_pages' %></strong></h5>
+    </div>
+    <div class="col-md-4">
+      <h5><strong><%= WorkPaper.human_attribute_name 'description' %></strong></h5>
+    </div>
+    <div class="col-md-2">
+      <h5><strong><%= WorkPaper.human_attribute_name 'file_model' %></strong></h5>
     </div>
   </div>
 
-  <p class="add_item">
-    <%= link_to_unless frozen, t('control_objective_item.add_work_paper'),
-      '#', 'data-template' => :work_paper,
-      'data-event' => 'addNestedItem',
-      'data-container' => '#work_papers' %>
-  </p>
+  <div id="work_papers">
+    <%= f.simple_fields_for :work_papers do |wp_f| %>
+      <%= render 'work_papers/work_paper', f: wp_f, frozen: frozen %>
+    <% end %>
 
-  <%= hidden_lock_version(co_f) %>
+    <%= link_to_add_fields(t('control_objective_item.add_work_paper'), f, :work_papers,
+      'work_papers/work_paper') unless frozen %>
+  </div>
 
-  <div style="display:none"><%= co_f.hidden_field :control_objective_id %></div>
+  <hr />
 
-  <p>
-    <span class="button"><%= co_f.submit %></span>
-  </p>
+  <div class="form-actions">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.input :control_objective_id, as: :hidden %>
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
 <% end %>
-<!--[eoform:control_objective_item] -->
 <script type="text/javascript">
   var ControlObjectiveCalcs = {
     effectiveness: function() {
@@ -217,12 +185,12 @@
       var count = 0;
 
       $.each(designElement.get(0).options, function(i, e) {
-        if(parseInt(e.value) > maxValue) { maxValue = parseInt(e.value) }
+        if(+e.value > maxValue) { maxValue = +e.value }
       });
 
-      selectedValues.push(parseInt(designElement.val()));
-      selectedValues.push(parseInt(complianceElement.val()));
-      selectedValues.push(parseInt(sustantiveElement.val()));
+      selectedValues.push(+designElement.val());
+      selectedValues.push(+complianceElement.val());
+      selectedValues.push(+sustantiveElement.val());
 
       $.each(selectedValues, function(i, e) {
         if(e) {
@@ -234,9 +202,9 @@
       var percentage = count == 0 || maxValue == 0 ?
         100 : ((total / count) * 100.0 / maxValue).toFixed(0);
 
-      $('#effectiveness').val(percentage + '%');
+      $('#control_objective_item_effectiveness').val(percentage + '%');
 
-      $('#effectiveness').css('border-color', '#47ae00').delay(1000).animate(
+      $('#control_objective_item_effectiveness').css('border-color', '#47ae00').delay(1000).animate(
         { 'border-color': '#c2bfB7' }, 50
       );
     }

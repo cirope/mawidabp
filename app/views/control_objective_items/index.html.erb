@@ -2,45 +2,43 @@
   :options => {},
   :columns => @query.blank? ? ControlObjectiveItem::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
-<table class="list">
+<table class="table table-condensed table-striped">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column Review.model_name.human, nil, 'review' %>
-      <%= make_filterable_column ProcessControl.model_name.human, {:expendable => true}, 'process_control' %>
+      <%= make_filterable_column ProcessControl.model_name.human, { :class => 'hidden-xs' }, 'process_control' %>
       <%= make_filterable_column ControlObjective.model_name.human, nil, 'control_objective_text' %>
-      <%= make_not_available_column raw(ControlObjectiveItem.human_attribute_name(:finished) + show_inline_help_for(:control_objective_item_finished)), :expendable => true %>
-      <%= make_not_available_column raw(ControlObjectiveItem.human_attribute_name(:relevance) + show_inline_help_for(:control_objective_item_relevance)), :expendable => true %>
-      <%= make_not_available_column raw(ControlObjectiveItem.human_attribute_name(:effectiveness) + show_inline_help_for(:control_objective_item_effectiveness)), :expendable => true %>
-      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:weaknesses), :expendable => true %>
-      <%= make_not_available_column raw(t('control_objective_item.has_work_papers') + show_inline_help_for(:control_objective_item_work_papers)), :expendable => true %>
-      <th colspan="3" style="text-align: right;"><%= link_to_search %></th>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:finished), :class => 'hidden-xs' %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:relevance), :class => 'hidden-xs' %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:effectiveness), :class => 'hidden-xs' %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:weaknesses), :class => 'hidden-xs' %>
+      <%= make_not_available_column t('control_objective_item.has_work_papers'), :class => 'hidden-xs' %>
+      <th colspan="3" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
 
   <tbody>
     <% @control_objectives.each do |control_objective| %>
-      <% html_class = "#{cycle('even', 'odd')} " %>
-      <% html_class << (control_objective.is_in_a_final_review? ?
-        'readonly_item' : 'writable_item').to_s %>
-      <tr class="<%= html_class %>">
+      <tr <%== 'class="text-muted"' if control_objective.is_in_a_final_review? %>>
         <td class="nowrap"><%= show_review_with_close_date_as_abbr control_objective.review %></td>
-        <td class="expendable"><%= super_truncate(control_objective.process_control.name, 30) %></td>
+        <td class="hidden-xs"><%= super_truncate(control_objective.process_control.name, 30) %></td>
         <td><%= super_truncate(control_objective.to_s, 30) %></td>
-        <td class="expendable"><%= t control_objective.finished? ? 'label.yes' : 'label.no' %></td>
-        <td class="expendable"><%= control_objective_relevance_text(control_objective) %></td>
-        <td class="expendable"><%= control_objective_effectiveness(control_objective) %></td>
-        <td class="expendable"><%= control_objective_weaknesses_link(control_objective) %></td>
-        <td class="expendable"><%= t control_objective.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
+        <td class="hidden-xs"><%= t control_objective.finished? ? 'label.yes' : 'label.no' %></td>
+        <td class="hidden-xs"><%= control_objective_relevance_text(control_objective) %></td>
+        <td class="hidden-xs"><%= control_objective_effectiveness(control_objective) %></td>
+        <td class="hidden-xs"><%= control_objective_weaknesses_link(control_objective) %></td>
+        <td class="hidden-xs"><%= t control_objective.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show control_objective_item_path(control_objective) %></td>
         <td><%= link_to_edit edit_control_objective_item_path(control_objective) %></td>
-        <td><%= button_to_destroy(control_objective_item_path(control_objective,
+        <td><%= link_to_destroy(control_objective_item_path(control_objective,
             params.slice(:period, :review))) if control_objective.can_be_destroyed? %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @control_objectives %>
-  <div class="clear"></div>
+<hr />
+
+<div>
+  <%= paginate @control_objectives %>
 </div>

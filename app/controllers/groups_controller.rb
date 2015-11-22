@@ -2,7 +2,7 @@
 #
 # Lista, muestra, crea, modifica y elimina grupos (#Group)
 class GroupsController < ApplicationController
-  layout 'application_clean'
+  layout 'clean'
   before_action :auth, :check_group_admin
 
   # Lista los grupos
@@ -11,9 +11,7 @@ class GroupsController < ApplicationController
   # * GET /groups.xml
   def index
     @title = t 'group.index_title'
-    @groups = Group.order('name ASC').paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
-    )
+    @groups = Group.order(name: :asc).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

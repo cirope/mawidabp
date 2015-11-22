@@ -1,12 +1,8 @@
-# =Controlador de informes definitivos
-#
-# Lista, muestra, crea, modifica y elimina informes definitivos
-# (#ConclusionFinalReview)
 class ConclusionFinalReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_final_review, only: [
     :show, :edit, :update, :export_to_pdf, :score_sheet, :download_work_papers,
-    :bundle, :create_bundle, :compose_email, :send_by_email
+    :create_bundle, :compose_email, :send_by_email
   ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
@@ -19,18 +15,17 @@ class ConclusionFinalReviewsController < ApplicationController
 
     build_search_conditions ConclusionFinalReview
 
-    order = @order_by || "issue_date DESC"
-    order << ", #{ConclusionFinalReview.table_name}.created_at DESC"
+    order = @order_by || "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')} DESC"
+    order << ", #{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('created_at')} DESC"
 
     @conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, { plan_item: :business_unit }]
-    ).where(@conditions).order(order).paginate(
-      page: params[:page], per_page: APP_LINES_PER_PAGE
-    ).references(:periods, :reviews, :business_units)
+    ).where(@conditions).order(order).page(params[:page])
+    .references(:periods, :reviews, :business_units)
 
     respond_to do |format|
       format.html {
-        if @conclusion_final_reviews.size == 1 && !@query.blank? &&
+        if @conclusion_final_reviews.count == 1 && !@query.blank? &&
             !params[:page]
           redirect_to(
             conclusion_final_review_url(@conclusion_final_reviews.first)
@@ -103,7 +98,7 @@ class ConclusionFinalReviewsController < ApplicationController
   def create
     @title = t 'conclusion_final_review.new_title'
     @conclusion_final_review =
-      ConclusionFinalReview.list.new(conclusion_final_review_params)
+      ConclusionFinalReview.list.new(conclusion_final_review_params, {}, false)
 
     respond_to do |format|
       if @conclusion_final_review.save
@@ -180,13 +175,6 @@ class ConclusionFinalReviewsController < ApplicationController
     redirect_to review.relative_work_papers_zip_path
   end
 
-  # Muestra las opciones editables del legajo
-  #
-  # * GET /conclusion_final_reviews/bundle/1
-  def bundle
-    @title = t 'conclusion_final_review.bundle_title'
-  end
-
   # Crea el legajo completo del informe
   #
   # * POST /conclusion_final_reviews/create_bundle
@@ -194,7 +182,12 @@ class ConclusionFinalReviewsController < ApplicationController
     @conclusion_final_review.create_bundle_zip current_organization,
       params[:index_items]
 
-    redirect_to @conclusion_final_review.relative_bundle_zip_path
+    @report_path = @conclusion_final_review.relative_bundle_zip_path
+
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js { render 'shared/pdf_report' }
+    end
   end
 
   # Confecciona el correo con el informe
@@ -211,30 +204,37 @@ class ConclusionFinalReviewsController < ApplicationController
   def send_by_email
     @title = t 'conclusion_final_review.send_by_email'
 
+    @questionnaires = Questionnaire.list.by_pollable_type 'ConclusionReview'
+
     users = []
     users_without_poll = []
+    export_options = params[:export_options] || {}
 
     if params[:conclusion_review]
-      include_score_sheet =
-        params[:conclusion_review][:include_score_sheet] == '1'
-      include_global_score_sheet =
-        params[:conclusion_review][:include_global_score_sheet] == '1'
+      include_score_sheet = params[:conclusion_review][:include_score_sheet] == '1'
+      include_global_score_sheet = params[:conclusion_review][:include_global_score_sheet] == '1'
       note = params[:conclusion_review][:email_note]
+      review_type = params[:conclusion_review][:review_type]
+
+      if review_type == 'brief'
+        export_options[:brief] = '1'
+      elsif review_type == 'without_score'
+        export_options[:hide_score] = '1'
+      end
     end
 
-    @conclusion_final_review.to_pdf(current_organization, params[:export_options])
+    @conclusion_final_review.to_pdf(current_organization, export_options)
 
     if include_score_sheet
       @conclusion_final_review.review.score_sheet current_organization, false
     end
 
     if include_global_score_sheet
-      @conclusion_final_review.review.global_score_sheet(current_organization,
-        false)
+      @conclusion_final_review.review.global_score_sheet(current_organization, false)
     end
 
-    (params[:user].try(:values) || []).each do |user_data|
-      user = User.find(user_data[:id]) if user_data[:id]
+    (params[:user].try(:values).try(:reject, &:blank?) || []).each do |user_data|
+      user = User.find_by(id: user_data[:id]) if user_data[:id]
       send_options = {
         note: note,
         include_score_sheet: include_score_sheet,
@@ -267,7 +267,7 @@ class ConclusionFinalReviewsController < ApplicationController
     unless users.blank?
       flash.notice = t('conclusion_review.review_sended')
       unless users_without_poll.empty?
-        flash.notice <<  "<br /> #{t('poll.already_exists')} #{users_without_poll.join(', ').inspect}"
+        flash.notice << "#{t('polls.already_exists')} #{users_without_poll.join(', ').inspect}"
       end
       redirect_to edit_conclusion_final_review_url(@conclusion_final_review)
     else
@@ -284,7 +284,7 @@ class ConclusionFinalReviewsController < ApplicationController
     conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, { plan_item: :business_unit }]
     ).where(@conditions).references(:periods, :reviews, :business_units).order(
-      @order_by || 'issue_date DESC'
+      @order_by || "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')} DESC"
     )
 
     pdf = Prawn::Document.create_generic_pdf :landscape
@@ -293,12 +293,13 @@ class ConclusionFinalReviewsController < ApplicationController
     pdf.add_title t('conclusion_final_review.index_title')
 
     column_order = [
-      ['period', Review.human_attribute_name(:period_id), 10],
-      ['identification', Review.human_attribute_name(:identification), 10],
+      ['period', Review.human_attribute_name(:period_id), 5],
+      ['identification', Review.human_attribute_name(:identification), 8],
       ['business_unit', PlanItem.human_attribute_name(:business_unit_id), 30],
       ['project', PlanItem.human_attribute_name(:project), 30],
       ['issue_date', ConclusionDraftReview.human_attribute_name(:issue_date), 10],
       ['close_date', ConclusionDraftReview.human_attribute_name(:close_date), 10],
+      ['score', Review.human_attribute_name(:score), 7]
     ]
 
     columns = {}
@@ -317,6 +318,7 @@ class ConclusionFinalReviewsController < ApplicationController
         cfr.review.plan_item.project,
         "<b>#{cfr.issue_date ? l(cfr.issue_date, format: :minimal) : ''}</b>",
         (cfr.close_date ? l(cfr.close_date, format: :minimal) : ''),
+        cfr.review.score.to_s + '%'
       ]
     end
 
@@ -363,38 +365,6 @@ class ConclusionFinalReviewsController < ApplicationController
     redirect_to Prawn::Document.relative_path(pdf_name, ConclusionFinalReview.table_name)
   end
 
-  # Método para el autocompletado de usuarios
-  #
-  # * POST /reviews/auto_complete_for_user
-  def auto_complete_for_user
-    @tokens = params[:q][0..100].split(/[\s,]/).uniq
-    @tokens.reject! {|t| t.blank?}
-    conditions = [
-      "#{Organization.table_name}.id = :organization_id",
-      "#{User.table_name}.hidden = false"
-    ]
-    parameters = {organization_id: current_organization.id}
-    @tokens.each_with_index do |t, i|
-      conditions << [
-        "LOWER(users.name) LIKE :user_data_#{i}",
-        "LOWER(users.last_name) LIKE :user_data_#{i}",
-        "LOWER(users.email) LIKE :user_data_#{i}"
-      ].join(' OR ')
-
-      parameters[:"user_data_#{i}"] = "%#{Unicode::downcase(t)}%"
-    end
-
-    @users = User.includes(:organizations).where(
-      [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
-    ).order(
-      ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
-    ).references(:organizations).limit(10)
-
-    respond_to do |format|
-      format.json { render json: @users }
-    end
-  end
-
   private
     def set_conclusion_final_review
       @conclusion_final_review = ConclusionFinalReview.list.includes(
@@ -425,7 +395,6 @@ class ConclusionFinalReviewsController < ApplicationController
           bundle: :read,
           create_bundle: :read,
           export_list_to_pdf: :read,
-          auto_complete_for_user: :read,
           compose_email: :modify,
           send_by_email: :modify
         })

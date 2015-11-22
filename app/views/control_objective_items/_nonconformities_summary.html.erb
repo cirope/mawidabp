@@ -1,8 +1,8 @@
-<h1 style="clear: both; margin-bottom: 0em;">
-  <%= ControlObjectiveItem.human_attribute_name(:nonconformities) %>
-</h1>
+<h4>
+  <%= ControlObjectiveItem.human_attribute_name 'nonconformities' %>
+</h4>
 
-<table class="summary_table">
+<table class="table table-condensed">
   <thead>
     <tr>
       <%= raw control_objective_nonconformities_summary_headers %>
@@ -18,7 +18,8 @@
 <p style="margin-bottom: 1.2em;">
   <%= link_to_unless @control_objective_item.nonconformities.blank?,
     t('control_objective_item.view_all_nonconformities'),
-    nonconformities_path(:control_objective => @control_objective_item) %> |
+    nonconformities_path(:control_objective => @control_objective_item) %>
+  <span class="text-muted">|</span>
   <%= link_to_unless readonly, t('control_objective_item.add_nonconformity'),
     new_nonconformity_path(:control_objective_item => @control_objective_item) %>
 </p>

@@ -32,59 +32,55 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list reviews' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:reviews)
-    assert_not_equal 0, assigns(:reviews).size
-    assert_select '#error_body', false
+    assert_not_equal 0, assigns(:reviews).count
     assert_template 'reviews/index'
   end
 
   test 'list reviews with search' do
-    perform_auth
+    login
     get :index, search: {
       query: '1 2',
       columns: ['identification', 'project']
     }
     assert_response :success
     assert_not_nil assigns(:reviews)
-    assert_equal 5, assigns(:reviews).size
-    assert_select '#error_body', false
+    assert_equal 5, assigns(:reviews).count
     assert_template 'reviews/index'
   end
 
   test 'edit review when search match only one result' do
-    perform_auth
+    login
     get :index, search: {
       query: '1 1',
       columns: ['identification', 'project']
     }
     assert_redirected_to review_url(reviews(:past_review))
     assert_not_nil assigns(:reviews)
-    assert_equal 1, assigns(:reviews).size
+    assert_equal 1, assigns(:reviews).count
   end
 
   test 'show review' do
-    perform_auth
+    login
     get :show, id: reviews(:current_review).id
     assert_response :success
     assert_not_nil assigns(:review)
-    assert_select '#error_body', false
     assert_template 'reviews/show'
   end
 
   test 'new review' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:review)
-    assert_select '#error_body', false
     assert_template 'reviews/new'
   end
 
   test 'clone review' do
-    perform_auth
+    login
     review = Review.find reviews(:current_review).id
 
     get :new, clone_from: review.id
@@ -96,70 +92,69 @@ class ReviewsControllerTest < ActionController::TestCase
     assert review.review_user_assignments.size > 0
     assert_equal review.review_user_assignments.size,
       assigns(:review).review_user_assignments.size
-    assert_select '#error_body', false
     assert_template 'reviews/new'
   end
 
   test 'create review' do
-    perform_auth
+    login
     assert_difference ['Review.count', 'FindingReviewAssignment.count'] do
-      # Se crean 2 con los datos y uno con 'procedure_control_subitem_ids'
-      assert_difference 'FileModel.count' do
-        assert_difference 'ReviewUserAssignment.count', 4 do
-          post :create, {
-            review: {
-              identification: 'New Identification',
-              description: 'New Description',
-              survey: 'New survey',
-              period_id: periods(:current_period).id,
-              plan_item_id: plan_items(:past_plan_item_3).id,
-              procedure_control_subitem_ids:
-                [procedure_control_subitems(:procedure_control_subitem_bcra_A4609_1_1).id],
-              file_model_attributes: {
+      # Se crean 2 con el 'process_control_ids' y uno con 'control_objective_ids'
+      assert_difference 'ControlObjectiveItem.count', 3 do
+        assert_difference 'FileModel.count' do
+          assert_difference 'ReviewUserAssignment.count', 4 do
+            post :create, {
+              review: {
+                identification: 'New Identification',
+                description: 'New Description',
+                survey: 'New survey',
+                period_id: periods(:current_period).id,
+                plan_item_id: plan_items(:past_plan_item_3).id,
+                process_control_ids: [process_controls(:bcra_A4609_security_management).id],
+                control_objective_ids: [control_objectives(:iso_27000_security_policy_3_1).id],
+                file_model_attributes: {
                   file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
-              },
-              finding_review_assignments_attributes: [
-                {
-                  finding_id:
-                    findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id.to_s
-                }
-              ],
-              review_user_assignments_attributes: [
-                {
-                  assignment_type: ReviewUserAssignment::TYPES[:auditor],
-                  user_id: users(:first_time_user).id
-                }, {
-                  assignment_type:
-                    ReviewUserAssignment::TYPES[:supervisor],
-                  user_id: users(:supervisor_user).id
-                }, {
-                  assignment_type: ReviewUserAssignment::TYPES[:manager],
-                  user_id: users(:supervisor_second_user).id
-                }, {
-                  assignment_type: ReviewUserAssignment::TYPES[:audited],
-                  user_id: users(:audited_user).id
-                }
-              ]
+                },
+                finding_review_assignments_attributes: [
+                  {
+                    finding_id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id.to_s
+                  }
+                ],
+                review_user_assignments_attributes: [
+                  {
+                    assignment_type: ReviewUserAssignment::TYPES[:auditor],
+                    user_id: users(:first_time_user).id
+                  }, {
+                    assignment_type:
+                      ReviewUserAssignment::TYPES[:supervisor],
+                    user_id: users(:supervisor_user).id
+                  }, {
+                    assignment_type: ReviewUserAssignment::TYPES[:manager],
+                    user_id: users(:supervisor_second_user).id
+                  }, {
+                    assignment_type: ReviewUserAssignment::TYPES[:audited],
+                    user_id: users(:audited_user).id
+                  }
+                ]
+              }
             }
-          }
+          end
         end
       end
     end
   end
 
   test 'edit review' do
-    perform_auth
+    login
     get :edit, id: reviews(:current_review).id
     assert_response :success
     assert_not_nil assigns(:review)
-    assert_select '#error_body', false
     assert_template 'reviews/edit'
   end
 
   test 'update review' do
     counts_array = ['Review.count', 'ControlObjectiveItem.count',
       'ReviewUserAssignment.count', 'FileModel.count', 'Control.count']
-    perform_auth
+    login
     assert_no_difference counts_array do
       patch :update, {
         id: reviews(:review_with_conclusion).id,
@@ -195,7 +190,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'destroy review' do
-    perform_auth
+    login
     assert_difference 'Review.count', -1 do
       delete :destroy, id: reviews(:review_without_conclusion_and_without_findings).id
     end
@@ -204,7 +199,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'destroy with final review' do
-    perform_auth
+    login
     assert_no_difference 'Review.count' do
       delete :destroy, id: reviews(:current_review).id
     end
@@ -214,14 +209,14 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'review data' do
-    perform_auth
+    login
 
     review_data = nil
-    
+
     xhr :get, :review_data, id: reviews(:current_review).id,
       format: 'json'
     assert_response :success
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       review_data = ActiveSupport::JSON.decode(@response.body)
     end
 
@@ -234,13 +229,13 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'plan item data' do
-    perform_auth
+    login
 
     plan_item_data = nil
 
     xhr :get, :plan_item_data, id: plan_items(:current_plan_item_1).id
     assert_response :success
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       plan_item_data = ActiveSupport::JSON.decode(@response.body)
     end
 
@@ -249,22 +244,11 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_not_nil plan_item_data['business_unit_type']
   end
 
-  test 'procedure control data' do
-    perform_auth
-
-    get :procedure_control_data,
-      id: procedure_controls(:procedure_control_iso_27001).id
-    assert_response :success
-    assert_not_nil assigns(:procedure_control)
-    assert_select '#error_body', false
-    assert_template 'procedure_controls/show'
-  end
-
   test 'survey pdf' do
-    perform_auth
+    login
     review = Review.find reviews(:current_review).id
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :survey_pdf, id: review.id
     end
 
@@ -272,29 +256,45 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'suggested findings' do
-    perform_auth
+    login
     review = Review.find reviews(:current_review).id
 
     get :suggested_findings, id: review.plan_item_id
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert assigns(:findings).size > 0
+    assert assigns(:findings).count > 0
     assert assigns(:findings).all?(&:pending?)
     assert(
       assigns(:findings).all? do |f|
         f.review.plan_item.business_unit_id == review.plan_item.business_unit_id
       end
     )
-    assert_select '#error_body', false
     assert_template 'reviews/suggested_findings'
   end
 
+  test 'suggested process control findings' do
+    login
+    process_control = process_controls :iso_27000_security_policy
+
+    get :suggested_process_control_findings, id: process_control.id
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert assigns(:findings).count > 0
+    assert assigns(:findings).all?(&:pending?)
+    assert(
+      assigns(:findings).all? do |f|
+        f.control_objective.process_control_id == process_control.id
+      end
+    )
+    assert_template 'reviews/suggested_process_control_findings'
+  end
+
   test 'download work papers' do
-    perform_auth
+    login
 
     review = Review.find reviews(:current_review).id
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :download_work_papers, id: review.id
     end
 
@@ -302,103 +302,116 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'estimated amount' do
-    perform_auth
+    login
     get :estimated_amount, id: plan_items(:past_plan_item_1).id
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'reviews/_estimated_amount'
   end
 
-  test 'auto complete for user' do
-    perform_auth
-    get :auto_complete_for_user, { q: 'admin', format: :json }
+  test 'auto complete for control objectives' do
+    login
+    get :auto_complete_for_control_objective, {
+      q: 'acceso', format: :json
+    }
     assert_response :success
-    
-    users = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 1, users.size # Administrator
-    assert users.all? { |u| (u['label'] + u['informal']).match /admin/i }
 
-    get :auto_complete_for_user, { q: 'blank', format: :json }
-    assert_response :success
-    
-    users = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 2, users.size # Blank and Expired blank
-    assert users.all? { |u| (u['label'] + u['informal']).match /blank/i }
+    control_objectives = ActiveSupport::JSON.decode(@response.body)
 
-    post :auto_complete_for_user, { q: 'xyz', format: :json }
+    assert_equal 3, control_objectives.size
+    assert(
+      control_objectives.all? do |co|
+        (co['label'] + co['informal']).match /acceso/i
+      end
+    )
+
+    get :auto_complete_for_control_objective, {
+      q: 'responsable', format: :json
+    }
     assert_response :success
-    
-    users = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 0, users.size
+
+    control_objectives = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, control_objectives.size
+    assert(
+      control_objectives.all? do |co|
+        (co['label'] + co['informal']).match /responsable/i
+      end
+    )
+
+    get :auto_complete_for_control_objective, {
+      q: 'xyz', format: :json
+    }
+    assert_response :success
+
+    control_objectives = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, control_objectives.size # None
   end
 
-  test 'auto complete for procedure control subitem' do
-    perform_auth
-    get :auto_complete_for_procedure_control_subitem, {
-      q: 'ges seg', period_id: periods(:past_period).id, format: :json
+  test 'auto complete for process controls' do
+    login
+    get :auto_complete_for_process_control, {
+      q: 'seg', format: :json
     }
     assert_response :success
-    
-    procedure_control_subitems = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 2, procedure_control_subitems.size # Gestión de la seguridad
+
+    process_controls = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 3, process_controls.size
     assert(
-      procedure_control_subitems.all? do
-        |pcs| (pcs['label'] + pcs['informal']).match /ges.*seg/i
+      process_controls.all? do |pc|
+        (pc['label'] + pc['informal']).match /seg/i
       end
     )
 
-    get :auto_complete_for_procedure_control_subitem, {
-      q: 'depen', period_id: periods(:past_period).id, format: :json
+    get :auto_complete_for_process_control, {
+      q: 'clasi', format: :json
     }
     assert_response :success
-    
-    procedure_control_subitems = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 1, procedure_control_subitems.size # Dependencia del área responsable
+
+    process_controls = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, process_controls.size
     assert(
-      procedure_control_subitems.all? do
-        |pcs| (pcs['label'] + pcs['informal']).match /depen/i
+      process_controls.all? do |pc|
+        (pc['label'] + pc['informal']).match /clasi/i
       end
     )
 
-    get :auto_complete_for_procedure_control_subitem, {
-      q: 'xyz', period_id: periods(:past_period).id, format: :json
+    get :auto_complete_for_process_control, {
+      q: 'xyz', format: :json
     }
     assert_response :success
-    
-    procedure_control_subitems = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 0, procedure_control_subitems.size # None
+
+    process_controls = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, process_controls.size # None
   end
 
   test 'auto complete for finding relation' do
-    perform_auth
+    login
     get :auto_complete_for_finding, { q: 'O001', format: :json }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
     get :auto_complete_for_finding, { q: 'O001, 1 2 3', format: :json }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, findings.size # Solo O01 del informe 1 2 3
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001.*1 2 3/i }
 
     get :auto_complete_for_finding, { q: 'x_none', format: :json }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, findings.size # Sin resultados
   end
 end

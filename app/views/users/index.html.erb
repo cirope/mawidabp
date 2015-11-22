@@ -1,50 +1,44 @@
-<%= render :partial => 'shared/search', :locals => {
-  :options => {},
-  :columns => @query.blank? ? User::COLUMNS_FOR_SEARCH.keys : @columns
+<%= render partial: 'shared/search', locals: {
+  options: {},
+  columns: @query.blank? ? User::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
-<table class="list">
+
+<table class="table table-condensed table-striped">
   <thead id="column_headers">
     <tr>
       <th></th>
-      <%= make_filterable_column User.human_attribute_name(:user), nil, 'user' %>
-      <%= make_filterable_column User.human_attribute_name(:name), nil, 'name', 'last_name' %>
-      <%= make_filterable_column User.human_attribute_name(:function), {:expendable => true}, 'function' %>
-      <%= make_not_available_column User.human_attribute_name(:logged_in), :expendable => true %>
-      <%= make_not_available_column User.human_attribute_name(:last_access), :expendable => true %>
-      <%= make_not_available_column User.human_attribute_name(:failed_attempts), :expendable => true %>
-      <th colspan="3" style="text-align: right;"><%= link_to_search %></th>
+      <%= make_filterable_column User.human_attribute_name('user'), nil, 'user' %>
+      <%= make_filterable_column User.human_attribute_name('name'), nil, 'name', 'last_name' %>
+      <%= make_filterable_column User.human_attribute_name('function'), { :class => 'hidden-xs'}, 'function' %>
+      <%= make_not_available_column User.human_attribute_name('last_access'), :class => 'hidden-xs' %>
+      <%= make_not_available_column User.human_attribute_name('failed_attempts'), :class => 'hidden-xs' %>
+      <th colspan="3" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
   <tbody>
     <% @users.each do |user| %>
-      <% expire_time = parameter_in(current_organization.id,
-        :session_expire_time, user.created_at).to_i %>
-      <tr class="<%= cycle('even', 'odd') %> <%= user.enable? ? :enabled_item : :disabled_item %>">
-        <td>
-          <% if user.organizations.blank? %>
-            <%= show_info(t('user.without_organization'), :class => :red) %>
-          <% elsif !user.notes.blank? %>
-            <%= show_info(user.notes) %>
-          <% end %>
-        </td>
+      <tr class="<%= user.enable? ? 'enabled_item' : 'disabled_item' %>">
+        <td><%= user_info user %></td>
         <td class="nowrap"><%= show_user_with_email_as_abbr(user) %></td>
         <td><%= user.full_name %></td>
-        <td class="expendable"><%= super_truncate(user.function || '-', 40) %></td>
-        <td class="expendable"><%= t user.logged_in? && user.last_access && user.last_access >= expire_time.minutes.ago ? 'label.yes' : 'label.no' %></td>
-        <td class="expendable"><%= l user.last_access, :format => :short if user.last_access %></td>
-        <td class="expendable"><%= user.failed_attempts %></td>
+        <td class="hidden-xs"><%= super_truncate user.function || '-', 40 %></td>
+        <td class="hidden-xs"><%= l user.last_access, format: :minimal if user.last_access %></td>
+        <td class="hidden-xs"><%= user.failed_attempts %></td>
         <td><%= link_to_show user %></td>
-        <td><%= link_to_edit edit_user_path(user) %></td>
-        <td><%= button_to_destroy user, {:label => t('label.disable')} %></td>
+        <td><%= link_to_edit [:edit, user] %></td>
+        <td><%= link_to_destroy user, title: t('label.disable') %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @users %>
-  <%= link_to t('label.new'), new_user_path %> |
-  <%= link_to t('label.download'), export_to_pdf_users_path(
-    :search => params[:search], :_ts => Time.now.to_i) %>
-  <div class="clear"></div>
+<hr />
+
+<div>
+  <%= paginate @users %>
+  <%= link_to t('label.new'), new_user_path, class: 'btn btn-primary' %> |
+  <% if current_organization.ldap_config %>
+    <%= link_to t('.import_from_ldap'), new_users_import_path %> |
+  <% end %>
+  <%= link_to t('label.download'), users_path(search: params[:search], _ts: Time.now.to_i, format: :pdf) %>
 </div>

@@ -1,0 +1,85 @@
+<%= render :partial => 'shared/filter_form',
+  :locals => {:action => :follow_up_cost_analysis, :extra_params => {},
+  :forms => {:date_range => true}} %>
+
+<% @periods.each do |period| %>
+  <div class="page-header">
+    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+  </div>
+
+  <h4><%= t 'follow_up_audit.cost_analysis.weaknesses' %></h4>
+  <% unless @weaknesses_data[period].blank? %>
+    <table class="table table-condensed table-striped">
+      <thead>
+        <tr>
+          <% @column_order.each do |col_name, col_width| %>
+            <th><%= t :"follow_up_audit.cost_analysis.column_#{col_name}" %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @weaknesses_data[period].each do |columns| %>
+          <tr>
+            <% columns.each do |column| %>
+              <td><%= raw column %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p style="margin: 1em;">
+      <em><%= t 'follow_up_audit.cost_analysis.without_weaknesses' %></em>
+    </p>
+  <% end %>
+
+  <h4><%= t 'follow_up_audit.cost_analysis.oportunities' %></h4>
+  <% unless @oportunities_data[period].blank? %>
+    <table class="table table-condensed table-striped">
+      <thead>
+        <tr>
+          <% @column_order.each do |col_name, col_width| %>
+            <th><%= t :"follow_up_audit.cost_analysis.column_#{col_name}" %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @oportunities_data[period].each do |columns| %>
+          <tr>
+            <% columns.each do |column| %>
+              <td><%= raw column %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p style="margin: 1em;">
+      <em><%= t 'follow_up_audit.cost_analysis.without_oportunities' %></em>
+    </p>
+  <% end %>
+<% end %>
+
+<hr />
+
+<div>
+  <%= link_to t('label.back'), :action => :index %> |
+  <%= link_to t('label.download'), '#',
+    data: { toggle: 'modal', target: "#customize_report" } %>
+</div>
+
+<%= render :partial => 'shared/customize_report_form', :locals => {
+  :options => {
+    :form_name => 'report',
+    :url => request.query_parameters.merge(
+      {:action => :create_follow_up_cost_analysis, :_ts => Time.now.to_i}
+    ),
+    :fields => [
+      {
+        :name => :report_title,
+        :label => t('customize_report_form.title'),
+        :value => t('follow_up_audit.cost_analysis.title')
+      }
+    ]
+  }
+} %>

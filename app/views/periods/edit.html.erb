@@ -1,7 +1,7 @@
-<%= render :partial => 'form' %>
+<%= content_for :form_actions do %>
+  <%= link_to_show @period %> |
+  <%= link_to_index periods_path %> |
+  <%= link_to_back %>
+<% end %>
 
-<div id="links">
-<%= link_to t('label.show'), @period %> |
-<%= link_to t('label.list'), periods_path %> |
-<%= link_to_back %>
-</div>
+<%= render 'form' %>

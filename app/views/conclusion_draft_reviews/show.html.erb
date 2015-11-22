@@ -1,176 +1,175 @@
-<div id="showed_data">
-  <h1 class="plain" style="margin-top: 1em;">
+<div class="page-header">
+  <h2>
     <%= Review.model_name.human %>
     <%= @conclusion_draft_review.review.identification %>
-  </h1>
-  <h1 class="plain"><%= @conclusion_draft_review.review.plan_item.project %></h1>
-  <h2 style="margin-top: 2em;"><%= @conclusion_draft_review.review.plan_item.business_unit.name %></h2>
-  <h2 style="margin-bottom: 2em;"><%= l @conclusion_draft_review.issue_date, :format => :long %></h2>
-
-  <p>
-    <b><%= raw(t('conclusion_review.issue_date_title') +
-      show_inline_help_for(:conclusion_review_issue_date)) %></b>:
-    <%= l(@conclusion_draft_review.issue_date, :format => :long) %>
-  </p>
-  <p>
-    <b><%= @conclusion_draft_review.review.business_unit.business_unit_type.business_unit_label %></b>:
-    <%= @conclusion_draft_review.review.business_unit.name %>
-  </p>
-
-  <% unless @conclusion_draft_review.review.business_unit.business_unit_type.project_label.blank? %>
-    <p>
-      <b><%= @conclusion_draft_review.review.business_unit.business_unit_type.project_label %></b>:
-      <%= @conclusion_draft_review.review.plan_item.project %>
-    </p>
-  <% end %>
-
-  <p>
-    <b><%= t('conclusion_review.audit_period_title') %></b>:
-    <%= t('conclusion_review.audit_period',
-        :start => I18n.l(@conclusion_draft_review.review.plan_item.start, :format => :long),
-        :end => I18n.l(@conclusion_draft_review.review.plan_item.end, :format => :long)) %>
-  </p>
-
-  <h2 style="margin: 1em 0em; text-decoration: underline;"><%= t('conclusion_review.objectives_and_scopes') %></h2>
-  <% grouped_control_objectives = @conclusion_draft_review.review.grouped_control_objective_items %>
-  <% grouped_control_objectives.each do |process_control, cois| %>
-    <p>
-      <b><%= ProcessControl.model_name.human %></b>:
-      <%= process_control.name %>
-    </p>
-    <ul class="raw_list">
-      <% cois.sort.each do |coi| %>
-        <li><%= coi.to_s %></li>
-      <% end %>
-    </ul>
-  <% end %>
-
-  <% unless @conclusion_draft_review.applied_procedures.blank? %>
-    <h2 style="margin: 1em 0em; text-decoration: underline;">
-      <%= t('conclusion_review.applied_procedures') %>
-    </h2>
-    <p><%= @conclusion_draft_review.applied_procedures %></p>
-  <% end %>
-
-  <h2 style="margin-top: 1em; text-decoration: underline;">
-    <%= t('conclusion_review.conclusion') %>
   </h2>
-  <%= conclusion_review_score_details_table @conclusion_draft_review.review %>
-
-  <p class="note"><%= t('review.review_qualification_explanation') %></p>
-
-  <% unless @conclusion_draft_review.conclusion.blank? %>
-    <p><%= @conclusion_draft_review.conclusion %></p>
-  <% end %>
-
-  <% review_has_fortresses = grouped_control_objectives.any? do |_, cois|
-    cois.any? { |coi| !coi.fortresses.blank? }
-  end %>
-
-  <% if review_has_fortresses %>
-    <h2 style="margin: 1em 0em; text-decoration: underline;">
-      <%= t('conclusion_review.fortresses') %>
-    </h2>
-
-    <table class="summary_table">
-      <% grouped_control_objectives.each do |process_control, cois| %>
-        <%= conclusion_review_process_control_fortress_details_table(process_control, cois, false) %>
-      <% end %>
-    </table>
-  <% end %>
-
-  <% review_has_nonconformities = grouped_control_objectives.any? do |_, cois|
-    cois.any? { |coi| !coi.nonconformities.not_revoked.blank? }
-  end %>
-
-  <% if review_has_nonconformities %>
-    <h2 style="margin: 1em 0em; text-decoration: underline;">
-      <%= t('conclusion_review.nonconformities') %>
-    </h2>
-
-    <table class="summary_table">
-      <% grouped_control_objectives.each do |process_control, cois| %>
-        <%= conclusion_review_process_control_nonconformity_details_table(process_control, cois, false) %>
-      <% end %>
-    </table>
-  <% end %>
-
-  <% review_has_observations = grouped_control_objectives.any? do |_, cois|
-    cois.any? { |coi| !coi.weaknesses.not_revoked.blank? }
-  end %>
-
-  <% if review_has_observations %>
-    <h2 style="margin: 1em 0em; text-decoration: underline;">
-      <%= t('conclusion_review.findings') %>
-    </h2>
-
-    <table class="summary_table">
-      <% grouped_control_objectives.each do |process_control, cois| %>
-        <%= conclusion_review_process_control_weakness_details_table(process_control, cois, false) %>
-      <% end %>
-    </table>
-  <% end %>
-
-  <% review_has_oportunities = grouped_control_objectives.any? do |_, cois|
-    cois.any? { |coi| !coi.oportunities.not_revoked.blank? }
-  end %>
-
-  <% if review_has_oportunities %>
-    <h2 style="margin: 1em 0em; text-decoration: underline;">
-      <%= t('conclusion_review.oportunities') %>
-    </h2>
-
-    <table class="summary_table">
-      <% grouped_control_objectives.each do |process_control, cois| %>
-        <%= conclusion_review_process_control_oportunity_details_table(process_control, cois, false) %>
-      <% end %>
-    </table>
-  <% end %>
-
-  <% review_has_potential_nonconformities = grouped_control_objectives.any? do |_, cois|
-    cois.any? { |coi| !coi.potential_nonconformities.not_revoked.blank? }
-  end %>
-
-  <% if review_has_potential_nonconformities %>
-    <h2 style="margin: 1em 0em; text-decoration: underline;">
-      <%= t('conclusion_review.potential_nonconformities') %>
-    </h2>
-
-    <table class="summary_table">
-      <% grouped_control_objectives.each do |process_control, cois| %>
-        <%= conclusion_review_process_control_potential_nonconformity_details_table(process_control, cois, false) %>
-      <% end %>
-    </table>
-  <% end %>
 </div>
+<h3><%= @conclusion_draft_review.review.plan_item.project %></h3>
 
-<div id="links">
+<br />
+<h4><%= @conclusion_draft_review.review.plan_item.business_unit.name %></h4>
+<p>
+  <strong><%= t('conclusion_review.issue_date_title') %></strong>:
+  <%= l(@conclusion_draft_review.issue_date, :format => :long) %>
+</p>
+<p>
+  <strong><%= @conclusion_draft_review.review.business_unit.business_unit_type.business_unit_label %></strong>:
+  <%= @conclusion_draft_review.review.business_unit.name %>
+</p>
+
+<% unless @conclusion_draft_review.review.business_unit.business_unit_type.project_label.blank? %>
+  <p>
+    <strong><%= @conclusion_draft_review.review.business_unit.business_unit_type.project_label %></strong>:
+    <%= @conclusion_draft_review.review.plan_item.project %>
+  </p>
+<% end %>
+<p>
+  <strong><%= t('conclusion_review.audit_period_title') %></strong>:
+  <%= t('conclusion_review.audit_period',
+      :start => I18n.l(@conclusion_draft_review.review.plan_item.start, :format => :long),
+      :end => I18n.l(@conclusion_draft_review.review.plan_item.end, :format => :long)) %>
+</p>
+
+<br />
+<h4><%= t('conclusion_review.objectives_and_scopes') %></h4>
+<% grouped_control_objectives = @conclusion_draft_review.review.grouped_control_objective_items %>
+<% grouped_control_objectives.each do |process_control, cois| %>
+  <p>
+    <strong><%= ProcessControl.model_name.human %></strong>:
+    <%= process_control.name %>
+  </p>
+  <ul>
+    <% cois.sort.each do |coi| %>
+      <li><%= coi.to_s %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% unless @conclusion_draft_review.applied_procedures.blank? %>
+  <br />
+  <h4><%= t('conclusion_review.applied_procedures') %></h4>
+  <p><%= @conclusion_draft_review.applied_procedures %></p>
+<% end %>
+
+<br />
+<h4><%= t('conclusion_review.conclusion') %></h4>
+<%= conclusion_review_score_details_table @conclusion_draft_review.review %>
+
+<p><small><%= t('review.review_qualification_explanation') %></small></p>
+
+<% unless @conclusion_draft_review.conclusion.blank? %>
+  <p><%= @conclusion_draft_review.conclusion %></p>
+<% end %>
+
+<% review_has_fortresses = grouped_control_objectives.any? do |_, cois|
+  cois.any? { |coi| !coi.fortresses.blank? }
+end %>
+
+<% if review_has_fortresses %>
+  <br />
+  <h4><%= t('conclusion_review.fortresses') %></h4>
+
+  <table class="table table-condensed table-striped">
+    <% grouped_control_objectives.each do |process_control, cois| %>
+      <%= conclusion_review_process_control_fortress_details_table(process_control, cois, false) %>
+    <% end %>
+  </table>
+<% end %>
+
+<% review_has_nonconformities = grouped_control_objectives.any? do |_, cois|
+  cois.any? { |coi| !coi.nonconformities.not_revoked.blank? }
+end %>
+
+<% if review_has_nonconformities %>
+  <br />
+  <h4><%= t('conclusion_review.nonconformities') %></h4>
+
+  <table class="table table-condensed table-striped">
+    <% grouped_control_objectives.each do |process_control, cois| %>
+      <%= conclusion_review_process_control_nonconformity_details_table(process_control, cois, false) %>
+    <% end %>
+  </table>
+<% end %>
+
+<% review_has_observations = grouped_control_objectives.any? do |_, cois|
+  cois.any? { |coi| coi.weaknesses.not_revoked.present? }
+end %>
+
+<% if review_has_observations %>
+  <br />
+  <h4><%= t('conclusion_review.findings') %></h4>
+
+  <table class="table table-condensed table-striped">
+    <% grouped_control_objectives.each do |process_control, cois| %>
+      <%= conclusion_review_process_control_weakness_details_table(process_control, cois, false) %>
+    <% end %>
+  </table>
+<% end %>
+
+<% review_has_oportunities = grouped_control_objectives.any? do |_, cois|
+  cois.any? { |coi| !coi.oportunities.not_revoked.blank? }
+end %>
+
+<% if review_has_oportunities %>
+  <br />
+  <h4><%= t('conclusion_review.oportunities') %></h4>
+
+  <table class="table table-condensed table-striped">
+    <% grouped_control_objectives.each do |process_control, cois| %>
+      <%= conclusion_review_process_control_oportunity_details_table(process_control, cois, false) %>
+    <% end %>
+  </table>
+<% end %>
+
+<% review_has_potential_nonconformities = grouped_control_objectives.any? do |_, cois|
+  cois.any? { |coi| !coi.potential_nonconformities.not_revoked.blank? }
+end %>
+
+<% if review_has_potential_nonconformities %>
+  <br />
+  <h4><%= t('conclusion_review.potential_nonconformities') %></h4>
+
+  <table class="table table-condensed table-striped">
+    <% grouped_control_objectives.each do |process_control, cois| %>
+      <%= conclusion_review_process_control_potential_nonconformity_details_table(process_control, cois, false) %>
+    <% end %>
+  </table>
+<% end %>
+
+<hr />
+
+<div>
   <% if @conclusion_draft_review.approved? && !@conclusion_draft_review.has_final_review? %>
     <%= link_to t('conclusion_draft_review.new_conclusion_final_review'),
       new_conclusion_final_review_path(:review => @conclusion_draft_review.review_id) %> |
   <% end %>
-  <%= link_to t('label.edit'), edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
-  <%= link_to t('label.list'), conclusion_draft_reviews_path %> |
-  <div class="inline_menu">
-    <h3><%= link_to t('label.show_downloads').html_safe, '#' %> |</h3>
-    <ul style="display: none;">
-      <li><%= link_to t('label.download'), :action => :export_to_pdf,
-        :id => @conclusion_draft_review, :_ts => Time.now.to_i %></li>
-      <li><%= link_to t('conclusion_draft_review.download_without_score'),
+  <%= link_to_edit edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
+  <%= link_to_index conclusion_draft_reviews_path %> |
+  <%= render('shared/downloads',
+    links: [
+      link_to(t('label.download'), :action => :export_to_pdf,
+        :id => @conclusion_draft_review, :_ts => Time.now.to_i),
+      link_to(t('conclusion_draft_review.download_brief'),
         :action => :export_to_pdf, :id => @conclusion_draft_review,
-        :export_options => {:hide_score => '1'}, :_ts => Time.now.to_i %></li>
-      <li><%= link_to t('conclusion_draft_review.generate_score_sheet'),
+        :export_options => {:brief => '1'}, :_ts => Time.now.to_i),
+      link_to(t('conclusion_draft_review.download_without_score'),
+        :action => :export_to_pdf, :id => @conclusion_draft_review,
+        :export_options => {:hide_score => '1'}, :_ts => Time.now.to_i),
+      link_to(t('conclusion_draft_review.generate_score_sheet'),
         :action => :score_sheet, :id => @conclusion_draft_review,
-        :_ts => Time.now.to_i %></li>
-      <li><%= link_to t('conclusion_draft_review.generate_global_score_sheet'),
+        :_ts => Time.now.to_i),
+      link_to(t('conclusion_draft_review.generate_global_score_sheet'),
         :action => :score_sheet, :id => @conclusion_draft_review, :global => 1,
-        :_ts => Time.now.to_i %></li>
-      <li><%= link_to t('conclusion_draft_review.download_work_papers'),
+        :_ts => Time.now.to_i),
+      link_to(t('conclusion_draft_review.download_work_papers'),
         :action => :download_work_papers, :id => @conclusion_draft_review,
-        :_ts => Time.now.to_i %></li>
-    </ul>
-  </div>
-  <%= link_to t('conclusion_draft_review.create_bundle'),
-    :action => :bundle, :id => @conclusion_draft_review %> |
+        :_ts => Time.now.to_i)
+    ]
+  ) %>
+  <span>|</span>
+  <%= link_to t('conclusion_draft_review.create_bundle'), '#',
+    data: { toggle: 'modal', target: "#customize_report" } %> |
   <%= link_to_back %>
 </div>
+
+<%= render 'bundle' %>

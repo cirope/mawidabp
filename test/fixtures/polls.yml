@@ -5,5 +5,5 @@ poll_one:
   comments: Encuesta al administrador
   pollable_id: <%= ActiveRecord::FixtureSet.identify(:conclusion_current_final_review) %>
   pollable_type: ConclusionReview
-  organization: default_organization
+  organization: cirope
   access_token: <%= SecureRandom.hex %>

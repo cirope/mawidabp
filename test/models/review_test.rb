@@ -120,7 +120,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert_error @review, :identification, :taken
     assert_error @review, :plan_item_id, :taken
 
-    @review.period_id = periods(:current_period_second_organization).id
+    @review.period_id = periods(:current_period_google).id
     @review.period.reload
 
     assert @review.invalid?
@@ -132,7 +132,7 @@ class ReviewTest < ActiveSupport::TestCase
       :current_plan_item_4_without_business_unit).id
 
     assert @review.invalid?
-    assert_error @review, :plan_item, :invalid
+    assert_error @review, :plan_item_id, :invalid
   end
 
   test 'can be modified' do
@@ -222,7 +222,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert finding.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
-    assert finding.allow_destruction!
+    def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
     finding = Weakness.new(
@@ -239,7 +239,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert finding.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
-    assert finding.allow_destruction!
+    def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
     finding = Weakness.new finding.attributes.merge(
@@ -252,8 +252,10 @@ class ReviewTest < ActiveSupport::TestCase
     assert finding.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
-    assert finding.allow_destruction!
+    def finding.can_be_destroyed?; true; end
     assert finding.destroy
+
+    Finding.current_user = users :supervisor_user
 
     finding = Weakness.new finding.attributes.merge(
       'state' => Finding::STATUS[:assumed_risk]
@@ -264,9 +266,11 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert finding.save
 
+    Finding.current_user = nil
+
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?
-    assert finding.allow_destruction!
+    def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
     finding = Weakness.new finding.attributes.merge(
@@ -283,7 +287,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert !@review.reload.must_be_approved?
     assert_equal 2, @review.approval_errors.size
     assert !@review.can_be_approved_by_force
-    assert finding.allow_destruction!
+    def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
     finding = Weakness.new finding.attributes.merge(
@@ -362,8 +366,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_audited?
     assert @review.valid?
 
-    audited = @review.review_user_assignments.select { |a| a.audited? }
-    @review.review_user_assignments.delete audited
+    @review.review_user_assignments.delete_all(&:audited?)
 
     assert !@review.has_audited?
     assert @review.invalid?
@@ -373,11 +376,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_manager? || @review.has_supervisor?
     assert @review.valid?
 
-    managers = @review.review_user_assignments.select { |a| a.manager? || a.supervisor? }
-    @review.review_user_assignments.delete managers
-
-    supervisors = @review.review_user_assignments.select {|a| a.supervisor?}
-    @review.review_user_assignments.delete supervisors
+    @review.review_user_assignments.delete_all { |a| a.manager? || a.supervisor? }
 
     assert !@review.has_supervisor? && !@review.has_manager?
     assert @review.invalid?
@@ -387,23 +386,31 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_auditor?
     assert @review.valid?
 
-    auditors = @review.review_user_assignments.select { |a| a.auditor? }
-    @review.review_user_assignments.delete auditors
+    @review.review_user_assignments.delete_all(&:auditor?)
 
     assert !@review.has_auditor?
     assert @review.invalid?
   end
 
-  test 'procedure control subitem ids' do
-    assert !@review.control_objective_items.empty?
-    assert_difference '@review.control_objective_items.size' do
-      @review.procedure_control_subitem_ids =
-        [procedure_control_subitems(:procedure_control_subitem_iso_27001_1_1).id]
+  test 'process control ids' do
+    assert @review.control_objective_items.present?
+    assert_difference '@review.control_objective_items.size', 5 do
+      @review.process_control_ids = [process_controls(:iso_27000_security_policy).id]
     end
 
     assert_no_difference '@review.control_objective_items.size' do
-      @review.procedure_control_subitem_ids =
-        [procedure_control_subitems(:procedure_control_subitem_bcra_A4609_1_1).id]
+      @review.process_control_ids = [process_controls(:iso_27000_security_policy).id]
+    end
+  end
+
+  test 'procedure control subitem ids' do
+    assert @review.control_objective_items.present?
+    assert_difference '@review.control_objective_items.size' do
+      @review.control_objective_ids = [control_objectives(:iso_27000_security_organization_4_1).id]
+    end
+
+    assert_no_difference '@review.control_objective_items.size' do
+      @review.control_objective_ids = [control_objectives(:iso_27000_security_organization_4_1).id]
     end
   end
 
@@ -504,8 +511,8 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'score sheet pdf' do
-    assert_nothing_raised(Exception) do
-      @review.score_sheet(organizations(:default_organization))
+    assert_nothing_raised do
+      @review.score_sheet(organizations(:cirope))
     end
 
     assert File.exist?(@review.absolute_score_sheet_path)
@@ -515,8 +522,8 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'global score sheet pdf' do
-    assert_nothing_raised(Exception) do
-      @review.global_score_sheet(organizations(:default_organization))
+    assert_nothing_raised do
+      @review.global_score_sheet(organizations(:cirope))
     end
 
     assert File.exist?(@review.absolute_global_score_sheet_path)
@@ -526,7 +533,7 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'zip all work papers' do
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       @review.zip_all_work_papers
     end
 

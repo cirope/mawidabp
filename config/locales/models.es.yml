@@ -1,0 +1,252 @@
+es: &common
+  attributes:
+    created_at: 'Creación'
+    updated_at: 'Última actualización'
+    lock_version: 'Versión'
+
+  activerecord:
+    models:
+      achievement:
+        one: 'Beneficio estimado'
+        other: 'Beneficios estimados'
+      answer:
+        one: 'Respuesta'
+        other: 'Respuestas'
+      answer_multi_choice:
+        one: 'Múltiple opción'
+        other: 'Múltiples opciones'
+      answer_option:
+        one: 'Opción de respuesta'
+        other: 'Opciones de respuesta'
+      answer_written:
+        one: 'Respuesta escrita'
+        other: 'Respuestas escritas'
+      benefit:
+        one: 'Beneficio / Perjuicio'
+        other: 'Beneficios / Perjuicios'
+      best_practice:
+        one: 'Buena práctica'
+        other: 'Buenas prácticas'
+      business_unit:
+        one: 'Unidad de negocio'
+        other: 'Unidades de negocio'
+      business_unit_score:
+        one: 'Calificación unidad de negocio'
+        other: 'Calificaciones de unidades de negocio'
+      control_objective:
+        one: 'Objetivo de control'
+        other: 'Objetivos de control'
+      e_mail:
+        one: 'Correo'
+        other: 'Correos'
+      error_record:
+        one: 'Registro de error'
+        other: 'Registros de errores'
+      ldap_config:
+        one: 'Configuración LDAP'
+        other: 'Configuraciones LDAP'
+      login_record:
+        one: 'Registro de ingreso'
+        other: 'Registros de ingreso'
+      organization:
+        one: 'Organización'
+        other: 'Organizaciones'
+      setting:
+        one: 'Configuración'
+        other: 'Configuraciones'
+      user:
+        one: 'Usuario'
+        other: 'Usuarios'
+      paper_trail/version:
+        one: 'Versión'
+        other: 'Versiones'
+      period:
+        one: 'Período'
+        other: 'Periodos'
+      poll:
+        one: 'Encuesta'
+        other: 'Encuestas'
+      process_control:
+        one: 'Proceso'
+        other: 'Procesos'
+      question:
+        one: 'Pregunta'
+        other: 'Preguntas'
+      questionnaire:
+        one: 'Cuestionario'
+        other: 'Cuestionarios'
+      resource:
+        one: 'Recurso'
+        other: 'Recursos'
+      resource_class:
+        one: 'Clase de recurso'
+        other: 'Clases de recursos'
+      work_paper:
+        one: 'Papel de trabajo'
+        other: 'Papeles de trabajo'
+
+    attributes:
+      achievement:
+        benefit: 'Beneficio estimado'
+        amount: 'Monto'
+        comment: 'Comentario'
+      answer:
+        answer: 'Respuesta'
+        comments: 'Comentarios respuesta'
+        question: 'Pregunta'
+      answers:
+        answer_option: 'Opción'
+      benefit:
+        name: 'Nombre'
+        kind: 'Tipo'
+      best_practice:
+        name: 'Nombre'
+        description: 'Descripción'
+        obsolete: 'Obsoleta'
+        shared: 'Compartida'
+      best_practice/process_controls:
+        name: 'Proceso'
+        order: 'Proceso (orden)'
+        control_objectives: 'Objetivos de control'
+      best_practice/process_controls/control_objectives:
+        name: 'Objetivo de control'
+        relevance: 'Objetivo de control (importancia)'
+        risk: 'Objetivo de control (riesgo)'
+      business_unit_score:
+        business_unit_id: 'Unidad de negocio'
+        design_score: 'Calificación evaluación de diseño'
+        compliance_score: 'Calificación pruebas de cumplimiento'
+        sustantive_score: 'Calificación pruebas sustantivas'
+      control_objective:
+        name: 'Objetivo de control'
+        relevance: 'Importancia'
+        risk: 'Riesgo'
+        obsolete: 'Obsoleto'
+        continuous: 'Contínuo'
+      e_mail:
+        to: 'Para'
+        subject: 'Asunto'
+        body: 'Contenido'
+        attachments: 'Adjuntos'
+      error_record:
+        data: 'Datos'
+        error: 'Error'
+        user_id: 'Usuario'
+      ldap_config:
+        hostname: 'Dirección del servidor'
+        port: 'Puerto'
+        basedn: 'Nombre distinguido de base'
+        filter: 'Filtro'
+        login_mask: 'Máscara de autenticación'
+        username_attribute: 'Atributo con el nombre de usuario'
+        name_attribute: 'Atributo con el nombre'
+        last_name_attribute: 'Atributo con el apellido'
+        email_attribute: 'Atributo con el correo electrónico'
+        function_attribute: 'Atributo con el cargo'
+        roles_attribute: 'Atributo con los perfiles'
+        manager_attribute: 'Atributo con el superior'
+        test_user: 'Usuario'
+        test_password: 'Contraseña'
+      login_record:
+        data: 'Datos'
+        end: 'Fin'
+        start: 'Inicio'
+        user_id: 'Usuario'
+      organization:
+        description: 'Descripción'
+        kind: 'Tipo de organización'
+        name: 'Nombre'
+        prefix: 'Prefijo'
+      organization/image_model:
+        image_file_name: 'Isologotipo (nombre de archivo)'
+        image_content_type: 'Isologotipo (tipo de archivo)'
+        image_file_size: 'Isologotipo (tamaño)'
+        one: 'Isologotipo'
+      setting:
+        name: 'Nombre'
+        value: 'Valor'
+        description: 'Descripción'
+      user:
+        email: 'Correo'
+        enable: 'Habilitado'
+        failed_attempts: 'Intentos fallidos'
+        function: 'Cargo'
+        hidden: 'Oculto'
+        language: 'Lenguaje'
+        last_access: 'Último acceso'
+        last_name: 'Apellido'
+        logged_in: 'Conectado'
+        manager_id: 'Superior'
+        name: 'Nombre'
+        notes: 'Notas'
+        organization_roles: 'Perfiles'
+        password: 'Contraseña'
+        password_changed: 'Contraseña cambiada'
+        password_confirmation: 'Confirmación'
+        resource: 'Tipo de recurso'
+        roles: 'Perfiles'
+        send_notification_email: 'Enviar notificación'
+        user: 'Usuario'
+      paper_trail/version:
+        created_at: 'Fecha'
+        event: 'Evento'
+        item: 'Objeto'
+        whodunnit: 'Ejecutor'
+      period:
+        number: 'Número'
+        description: 'Descripción'
+        start: 'Inicio'
+        end: 'Fin'
+      poll:
+        comments: 'Comentarios'
+        customer_email: 'Correo cliente'
+        send_date: 'Fecha envío'
+        answer_date: 'Fecha contestación'
+        answered: 'Contestada'
+        questionnaire: 'Cuestionario'
+        user: 'Usuario'
+      poll/answers:
+        answer: 'Respuesta'
+        answer_option: 'Opción'
+      process_control:
+        name: 'Proceso'
+        order: 'Orden'
+        control_objectives: 'Objetivos de control'
+        obsolete: 'Obsoleto'
+      question:
+        sort_order: 'Orden'
+        question: 'Pregunta'
+        answer_type: 'Tipo de respuesta'
+      questionnaire:
+        name: 'Nombre'
+        questions: 'Preguntas'
+        polls: 'Encuestas'
+        pollable_type: 'Clase encuestable'
+        email_subject: 'Asunto del correo'
+        email_link: 'Texto del enlace'
+        email_text: 'Texto del correo'
+        email_clarification: 'Aclaración del correo'
+      resource:
+        name: 'Recurso'
+        description: 'Descripción'
+        cost_per_unit: 'Costo por unidad'
+        resource_class: 'Clase'
+      resource_class:
+        name: 'Clase de recurso'
+        unit: 'Unidad de medida'
+        resource_class_type: 'Tipo'
+      resource_class/resources:
+        name: 'Recurso'
+        resource_class: 'Clase'
+      resource_utilization:
+        units: 'Cantidad de unidades'
+        cost_per_unit: 'Costo por unidad'
+        cost: 'Costo'
+        resource: 'Recurso'
+        resource_consumer: 'Utilización de recurso'
+
+public_es:
+  <<: *common
+
+mc_es:
+  <<: *common

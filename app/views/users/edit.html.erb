@@ -1,24 +1,18 @@
-<%= render_form t('label.modify'), :url => user_path(@user) %>
+<%= content_for :form_actions do %>
+  <div class="dropdown dropup inline">
+    <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
+      <%= t '.other_actions' %>
+      <span class="caret"></span>
+    <% end %>
+    <ul class="dropdown-menu">
+      <li><%= link_to t('users.status.show.title'), users_status_path(@user, graph: true) %></li>
+      <li><%= link_to t('users.reassignments.edit.title'), edit_users_reassignment_path(@user) %></li>
+      <li><%= link_to t('users.releases.edit.title'), edit_users_release_path(@user) %></li>
+    </ul>
+  </div> |
+  <%= link_to_destroy @user %> |
+  <%= link_to_show @user %> |
+  <%= link_to_index users_path %>
+<% end %>
 
-<div id="links">
-  <div id="actions">
-    <div class="button">
-      <%= button_to_destroy @user, {:label => t('label.disable')} %>
-    </div>
-    <div class="button">
-      <%= button_to t('user.reset_password'),
-          { :action => :blank_password, :id => @user },
-          :data => { :confirm => t('message.confirmation_question') },
-          :method => :patch, :class => :shadowed_button,
-          :title => t('user.reset_password') %>
-    </div>
-  </div>
-  <%= link_to t('label.show'), @user %> |
-  <%= link_to t('user.status'), user_status_user_path(@user) %> |
-  <%= link_to t('label.list'), users_path %> |
-  <%= link_to t('user.reassign_to_another_user'),
-    reassignment_edit_user_path(@user) %> |
-  <%= link_to t('user.release'), release_edit_user_path(@user) %> |
-  <%= link_to_back %>
-  <div class="clear"></div>
-</div>
+<%= render 'form' %>

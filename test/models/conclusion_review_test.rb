@@ -126,8 +126,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   test 'pdf conversion' do
-    assert_nothing_raised(Exception) do
-      @conclusion_review.to_pdf(organizations(:default_organization))
+    assert_nothing_raised do
+      @conclusion_review.to_pdf(organizations(:cirope))
     end
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)
@@ -135,9 +135,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
     FileUtils.rm @conclusion_review.absolute_pdf_path
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       @conclusion_review.to_pdf(
-        organizations(:default_organization), :hide_score => true
+        organizations(:cirope), :hide_score => true
       )
     end
 
@@ -145,11 +145,19 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
     assert_not_equal size, new_size
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       @conclusion_review.to_pdf(
-        organizations(:default_organization),
+        organizations(:cirope),
         :hide_control_objectives_excluded_from_score => '1'
       )
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+    assert_not_equal size, new_size
+
+    assert_nothing_raised do
+      @conclusion_review.to_pdf organizations(:cirope), :brief => '1'
     end
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)
@@ -164,8 +172,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
     assert !File.exist?(@conclusion_review.absolute_bundle_zip_path)
 
-    assert_nothing_raised(Exception) do
-      @conclusion_review.create_bundle_zip(organizations(:default_organization),
+    assert_nothing_raised do
+      @conclusion_review.create_bundle_zip(organizations(:cirope),
         "one\ntwo")
     end
 
@@ -182,8 +190,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
     assert !File.exist?(@conclusion_review.absolute_bundle_index_pdf_path)
 
-    assert_nothing_raised(Exception) do
-      @conclusion_review.bundle_index_pdf(organizations(:default_organization),
+    assert_nothing_raised do
+      @conclusion_review.bundle_index_pdf(organizations(:cirope),
         "one\ntwo")
     end
 
@@ -200,9 +208,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
     assert !File.exist?(@conclusion_review.absolute_cover_pdf_path('test.pdf'))
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       @conclusion_review.create_cover_pdf(Organization.find(organizations(
-            :default_organization).id), 'test text', 'test.pdf')
+            :cirope).id), 'test text', 'test.pdf')
     end
 
     assert File.exist?(@conclusion_review.absolute_cover_pdf_path('test.pdf'))
@@ -214,9 +222,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   test 'create workflow pdf' do
     assert !File.exist?(@conclusion_review.absolute_workflow_pdf_path)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       @conclusion_review.create_workflow_pdf(organizations(
-          :default_organization))
+          :cirope))
     end
 
     assert File.exist?(@conclusion_review.absolute_workflow_pdf_path)
@@ -230,9 +238,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
     assert !File.exist?(conclusion_review.absolute_findings_sheet_pdf_path)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       conclusion_review.create_findings_sheet_pdf(organizations(
-          :default_organization))
+          :cirope))
     end
 
     assert File.exist?(conclusion_review.absolute_findings_sheet_pdf_path)
@@ -248,9 +256,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
     assert !File.exist?(file_path)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       conclusion_review.create_findings_follow_up_pdf(organizations(
-          :default_organization))
+          :cirope))
     end
 
     assert File.exist?(file_path)

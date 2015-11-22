@@ -17,16 +17,16 @@ module ReviewsHelper
 
     grouped_plan_items = PlanItem.list_unused(@review.period_id).group_by(
       &:business_unit_type)
-    
+
     business_unit_types = grouped_plan_items.map do |but, plan_items|
       sorted_plan_items = plan_items.sort_by(&:project)
-      
+
       OpenStruct.new({:name => but.name, :plan_items => sorted_plan_items})
     end
 
     form.grouped_collection_select :plan_item_id, business_unit_types,
       :plan_items, :name, :id, :project, {:prompt => true},
-      {:class => :inline_item, :disabled => readonly}
+      {:class => 'form-control', :disabled => readonly}
   end
 
   def review_business_unit_type_text(review)
@@ -42,9 +42,8 @@ module ReviewsHelper
       [t("review.user_assignment.type_#{k}"), v]
     end
 
-    form.select :assignment_type, sort_options_array(options),
-      {:prompt => true},
-      {:class => (:inline_item if inline), :disabled => disabled}
+    form.input :assignment_type, collection: sort_options_array(options),
+      prompt: true, label: false, input_html: { disabled: disabled }
   end
 
   def user_assignment_type_text(type)
@@ -62,24 +61,6 @@ module ReviewsHelper
       "#{code_prefix} 0".strip
   end
 
-  def link_to_procedure_control_for_review(review)
-    procedure_control = ProcedureControl.list_by_period(review.period_id).first
-
-    if procedure_control
-      link_to(
-        t('review.view_procedure_control_for_the_period'),
-        {
-          :action => :procedure_control_data,
-          :id => procedure_control,
-          :format => :html
-        },
-        :remote => true, :id => :procedure_control_link
-      )
-    else
-      content_tag :span, t('review.view_procedure_control_for_the_period')
-    end
-  end
-  
   def show_readonly_review_survey(review)
     link_for_download = link_to(
       t('label.download'),
@@ -88,13 +69,23 @@ module ReviewsHelper
     link_for_download_attachment = link_to(
       t('review.survey.download_attachment'), review.file_model.file.url
     ).html_safe if review.file_model.try(:file?)
-    
+
     out = "<b>#{Review.human_attribute_name(:survey)}</b>"
-    
+
     out << " | #{link_for_download}" unless review.survey.blank?
     out << " | #{link_for_download_attachment}" if review.file_model.try(:file?)
-    out << "#{show_inline_help_for(:review_survey)}:"
-    
-    raw(out + simple_format(h(review.survey)))
+
+    raw(out + simple_format(review.survey))
+  end
+
+  def link_to_suggested_process_control_findings(process_control)
+    options = {
+      title: t('review.suggested_findings_for', process_control: process_control.name),
+      data:  { remote: true }
+    }
+
+    link_to suggested_process_control_findings_review_path(process_control.id), options do
+      content_tag :span, nil, class: 'glyphicon glyphicon-eye-open'
+    end
   end
 end

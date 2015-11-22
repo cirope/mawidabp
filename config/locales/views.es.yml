@@ -1,0 +1,353 @@
+es: &common
+  messages:
+    confirmation: '¿Está seguro?'
+    not_authorized: 'Debe ingresar para ver el contenido'
+
+  navigation:
+    back: 'Volver'
+    copy: 'Copiar'
+    destroy: 'Eliminar'
+    download: 'Descargar'
+    edit: 'Editar'
+    index: 'Listado'
+    loading: 'Cargando...'
+    logout: 'Salir'
+    new: 'Nuevo'
+    show: 'Ver'
+    upload: 'Adjuntar'
+    _yes: 'Si'
+    _no: 'No'
+
+  answer_options:
+    strongly_disagree: 'Muy en desacuerdo'
+    disagree: 'En desacuerdo'
+    neither_agree_nor_disagree: 'Ni acuerdo ni desacuerdo'
+    agree: 'De acuerdo'
+    strongly_agree: 'Muy de acuerdo'
+
+  benefits:
+    index:
+      title: 'Listado de beneficios / perjuicios'
+    kinds:
+      benefit_tangible: 'Beneficio tangible'
+      benefit_intangible: 'Beneficio intangible'
+      damage_tangible: 'Perjuicio tangible'
+      damage_intangible: 'Perjuicio intangible'
+    show:
+      title: 'Detalles del beneficio / perjuicio'
+    new:
+      title: 'Agregar beneficio / perjuicio'
+    edit:
+      title: 'Modificar beneficio / perjuicio'
+
+  best_practices:
+    index:
+      title: 'Listado de buenas prácticas'
+    show:
+      title: 'Detalle buenas prácticas'
+    new:
+      title: 'Agregar buenas prácticas'
+    edit:
+      title: 'Modificar buenas prácticas'
+    process_controls:
+      new: 'Agregar proceso'
+    control_objectives:
+      new: 'Agregar objetivo'
+
+  e_mails:
+    index:
+      title: 'Listado de correos'
+    show:
+      title: 'Detalles del correo'
+
+  error_records:
+    error_on_login: 'Ingreso erróneo'
+    error_on_password_change: 'Cambio de contraseña incorrecto'
+    error_user_disabled: 'Usuario deshabilitado'
+    index:
+      title: 'Registros de error'
+    pdf_list_name: 'registros_de_error_%{from_date}_%{to_date}.pdf'
+    period:
+      title: 'Intervalo'
+      range: 'desde el %{from_date} al %{to_date}'
+    show:
+      title: 'Detalles del registro'
+      list: 'Ver registros de error'
+    void_user: 'Inexistente'
+
+  login_records:
+    choose:
+      title: 'Reportes de seguridad'
+    index:
+      title: 'Registros de ingreso'
+    pdf_list_name: 'listado_de_registros_de_ingreso_%{from_date}_%{to_date}.pdf'
+    period:
+      title: 'Intervalo'
+      range: 'desde el %{from_date} al %{to_date}'
+    show:
+      title: 'Detalles del registro de ingreso'
+      list: 'Ver registros de ingreso'
+
+  organizations:
+    index:
+      title: 'Listado de organizaciones'
+    kinds:
+      management_control: 'Control de gestión'
+      private: 'Privada'
+      public: 'Pública'
+      quality_management: 'Gestión de calidad'
+    show:
+      title: 'Detalles de la organización'
+    new:
+      title: 'Agregar organización'
+    edit:
+      title: 'Modificar organización'
+    new_organization_can_not_have_image: 'Podrá cargar un isologotipo de la organización luego de haberla creado'
+
+  periods:
+    edit:
+      title: 'Modificar período'
+    errors:
+      can_not_be_destroyed: 'El período no puede ser eliminado'
+      plans:
+        one: 'Tiene un plan asociado'
+        other: 'Tiene %{count} planes asociados'
+      reviews:
+        one: 'Tiene un informe asociado'
+        other: 'Tiene %{count} informes asociados'
+      workflows:
+        one: 'Tiene un programa de trabajo asociado'
+        other: 'Tiene %{count} programas de trabajo asociados'
+    index:
+      title: 'Listado de periodos'
+    new:
+      title: 'Agregar período'
+    show:
+      title: 'Detalles del período'
+
+  profiles:
+    edit:
+      title: 'Mis datos'
+      submit: 'Actualizar mis datos'
+    update:
+      success: 'Tus datos se actualizaron correctamente'
+
+  polls:
+    access_denied: 'La encuesta ya ha sido contestada.'
+    already_exists: 'La encuesta ya existe y no fue enviada al usuario'
+    answer_poll: '¿Contestar encuesta?'
+    answers:
+      index:
+        title: 'Resumen de respuestas'
+    business_units:
+      index:
+        title: 'Resumen por unidad organizativa'
+    customer_polls_sended: 'Se enviaron satisfactoriamente %{count} encuestas'
+    index:
+      title: 'Listado de encuestas'
+    import_csv: 'Importar clientes CSV'
+    edit:
+      title: 'Modificar encuesta'
+    error_csv_file_extension: 'Debe seleccionar un archivo CSV'
+    must_answer_poll: 'Tiene una encuesta pendiente por responder.'
+    new:
+      title: 'Agregar encuesta'
+    not_found: 'No se encontró la encuesta o la misma ya ha sido contestada.'
+    pdf:
+      name: 'resumen_encuestas_del_%{from_date}_al_%{to_date}.pdf'
+    questionnaires:
+      index:
+        title: 'Resumen por tipo de cuestionario'
+    reports:
+      title: 'Reportes de encuestas'
+    show:
+      title: 'Detalles de la encuesta'
+    total_answered: 'Total encuestas contestadas'
+    total_unanswered: 'Total encuestas no contestadas'
+    without_data: 'Sin datos para los filtros ingresados'
+    score: 'Nivel de satisfacción promedio'
+
+  questionnaires:
+    index:
+      title: 'Listado de cuestionarios'
+    edit:
+      title: 'Modificar cuestionario'
+    new:
+      title: 'Agregar cuestionario'
+    show:
+      title: 'Detalles del cuestionario'
+    questions:
+      new: 'Agregar cuestión'
+
+  report:
+    index_title: 'Listado de reportes'
+
+  reports:
+    customization_titles: 'Personalización de títulos'
+    generating: 'Generando reporte...'
+
+  resource_classes:
+    edit:
+      title: 'Modificar clase de recurso'
+    index:
+      title: 'Listado de clases de recursos'
+    new:
+      title: 'Agregar clase de recurso'
+    show:
+      title: 'Detalles de la clase de recurso'
+    resources:
+      new: 'Agregar recurso'
+    types:
+      human: 'Personas'
+      material: 'Materiales'
+
+  sessions:
+    new:
+      title: 'Ingreso'
+      log_in: 'Ingresar'
+      email: 'Correo'
+      user: 'Usuario'
+      password: 'Contraseña'
+      remember_me: 'Recordarme'
+      forgot_password: '¿Olvidaste tu contraseña?'
+    create:
+      invalid: 'Tu correo y/o contraseña no están bien =('
+      logged_in: 'Bienvenido'
+    destroy:
+      logged_out: 'Hasta la próxima'
+
+  settings:
+    index:
+      title: 'Listado de configuraciones'
+    show:
+      title: 'Detalles de la configuración'
+    new:
+      title: 'Agregar configuración'
+    edit:
+      title: 'Modificar configuración'
+    finding_stale_confirmed_days: 'Cantidad de días que deben pasar para que una observación sin responder se considere desatendida'
+    review_code_expresion: 'Formato del código de identificación de informes'
+    account_expire_time: 'Días para la eliminación de cuentas inactivas'
+    allow_concurrent_sessions: 'Permitir sesiones simultáneas para el mismo usuario'
+    attempts_count: 'Cantidad de intentos fallidos de conexión'
+    expire_notification: 'Aviso de caducidad de la contraseña'
+    password_constraint: 'Control de composición de contraseñas'
+    password_count: 'Historia de contraseña'
+    password_expire_time: 'Duración máxima de la contraseña'
+    password_minimum_length: 'Longitud mínima de la contraseña'
+    password_minimum_time: 'Duración mínima de la contraseña'
+    session_expire_time: 'Desconexión por inactividad'
+
+  users:
+    index:
+      title: 'Listado de usuarios'
+      import_from_ldap: 'Importar desde LDAP'
+    show:
+      title: 'Detalles de usuario'
+      profiles: 'Perfiles'
+      organizations: 'Organizaciones'
+    new:
+      title: 'Nuevo usuario'
+    edit:
+      title: 'Editar usuario'
+      other_actions: 'Acciones'
+    form:
+      unlink_manager: 'Desvincular'
+      children: 'Personal a cargo'
+      add_child: 'Agregar persona a cargo'
+      add_related_user_relations: 'Agregar usuario relacionado'
+      add_organization_role: 'Agregar un nuevo perfil'
+
+    imports:
+      new:
+        title: 'Importar usuarios desde LDAP'
+        credentials: 'Credenciales'
+        import: 'Importar'
+      create:
+        title: 'Resultados de la importación'
+        empty: 'No se importó ningún usuario'
+        connection: 'No se pudo conectar con el servidor, revise el usuario y la contraseña'
+        record_invalid: 'Se produjo un error en la importación, algunos usuarios tienen campos no válidos'
+        created: 'Creado'
+        updated: 'Actualizado'
+        error: 'Con errores'
+        deprecated_users: 'Usuarios ausentes en el servidor LDAP'
+    passwords:
+      edit:
+        title: 'Cambiar contraseña'
+        update: 'Actualizar contraseña'
+        new_password: 'Nueva contraseña'
+      update:
+        success: 'Contraseña cambiada correctamente'
+        expired: 'El enlace ha expirado, pida de nuevo las instrucciones'
+      new:
+        title: 'Restablecer contraseña'
+        email: 'Correo'
+        send_instructions: 'Enviar instrucciones'
+        back: 'Volver'
+        note: 'Para restablecer su contraseña ingrese su dirección de correo electrónico'
+      create:
+        success: 'Se enviaron instrucciones a tu correo para restablecer la contraseña'
+        not_found: 'El correo que ingresaste no está registrado, verifica que no esté mal escrito'
+    profiles:
+      edit:
+        title: 'Modificar información personal'
+    reassignments:
+      edit:
+        title: 'Reasignar responsabilidades'
+        new_user: 'Nuevo responsable'
+        old_user: 'Responsable anterior'
+        with_findings: '¿Incluir hallazgos pendientes?'
+        with_reviews: '¿Incluir informes en ejecución?'
+        submit: 'Reasignar'
+      must_select_a_user: 'Debe seleccionar un usuario'
+
+    releases:
+      edit:
+        title: 'Liberar responsabilidades'
+        with_findings: '¿Incluir hallazgos pendientes?'
+        with_reviews: '¿Incluir informes en ejecución?'
+        submit: 'Liberar responsabilidades'
+
+    status:
+      show:
+        title: 'Estado'
+        table: 'Ver tabla'
+        graph: 'Ver gráfico'
+        pending_weaknesses:
+          one: "*Una* observación *pendiente*"
+          other: "*%{count}* observaciones *pendientes*"
+        high_risk_weaknesses:
+          one: '*Una* observación de *riesgo alto*'
+          other: '*%{count}* observaciones de *riesgo alto*'
+        weaknesses:
+          pending:
+            one: '*Una* observación pendiente'
+            other: '*%{count}* observaciones pendientes'
+          complete:
+            one: '*Una* observación solucionada'
+            other: '*%{count}* observaciones solucionadas'
+
+  versions:
+    index:
+      title: 'Ver reporte de cambios de seguridad'
+    security_changes_report:
+      title: 'Reporte de cambios de seguridad'
+    show:
+      title: 'Detalles del registro de cambios'
+    events:
+      create: 'Alta'
+      update: 'Modificación'
+      destroy: 'Baja'
+    changes: 'Cambios'
+    column_attribute: 'Atributo'
+    column_new_value: 'Valor nuevo'
+    column_old_value: 'Valor anterior'
+    without_changes: 'Sin cambios'
+    pdf_list_name: 'reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf'
+
+public_es:
+  <<: *common
+
+mc_es:
+  <<: *common

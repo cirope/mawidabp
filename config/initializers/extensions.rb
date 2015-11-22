@@ -10,14 +10,20 @@ ActionView::Base.send :include, ActionView::Helpers::DateHelper::CustomExtension
 class ActiveRecord::Base
   def version_of(date = nil)
     if date && date.to_time <= Time.now && respond_to?(:versions)
-      versions.where('created_at > ?', date.to_time).first.try(:reify) || self
+      condition = "#{PaperTrail::Version.quoted_table_name}.#{PaperTrail::Version.qcn 'created_at'} > ?"
+
+      versions.where(condition, date.to_time).first.try(:reify) || self
     else
       self
     end
   end
 
+  def self.qcn(name)
+    connection.quote_table_name(name)
+  end
+
   def self.prepare_search_conditions(*conditions)
-    (conditions.reject(&:blank?) || []).map { |c| "(#{sanitize_sql(c)})" }.join(' AND ')
+    (conditions.reject(&:blank?) || []).map { |c| "(#{sanitize(c)})" }.join(' AND ')
   end
 
   def self.get_column_name(column)
@@ -49,31 +55,28 @@ class ActiveRecord::Base
       operators == operator
     end
   end
-end
 
-# Reescribe el comportamiento por defecto del etiquetado de los campos con
-# errores de validación
-ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
-    # msg = instance.error_message
-    error_class = 'error_field'
+  private
 
-    if html_tag =~ /<(input|textarea|select|label)[^>]+class=/
-        class_attribute = html_tag =~ /class=['"]/
-        html_tag.insert(class_attribute + 7, "#{error_class} ")
-    elsif html_tag =~ /<(input|textarea|select|label)/
-        first_whitespace = html_tag =~ /\s/
-        html_tag[first_whitespace] = " class=\"#{error_class}\" "
+    def self.sanitize condition, table_name = self.table_name
+      return nil if condition.blank?
+
+      case condition
+      when Array; sanitize_sql_array condition
+      when Hash;  sanitize_hash condition, table_name
+      else        condition
+      end
     end
 
-    html_tag
-end
+    def self.sanitize_hash attrs, default_table_name = self.table_name
+      attrs = ActiveRecord::PredicateBuilder.resolve_column_aliases self, attrs
+      attrs = expand_hash_conditions_for_aggregates attrs
+      table = Arel::Table.new(table_name, arel_engine).alias default_table_name
 
-module ActsAsTree
-  module InstanceMethods
-    def descendants
-      (children.to_a + children.map(&:descendants)).flatten
+      ActiveRecord::PredicateBuilder.build_from_hash(self, attrs, table).map do |b|
+        connection.visitor.compile b
+      end.join ' AND '
     end
-  end
 end
 
 module Prawn
@@ -125,40 +128,5 @@ class String
 
   def sanitized_for_filename
     @_sanitized_for_filename ||= self.gsub /[^A-Za-z0-9\.\-]+/, '_'
-  end
-end
-
-class PaperTrail::Version
-  def changes_until(other)
-    changes = []
-    old_attributes = reify(has_one: false).try(:attributes) || {}
-    new_attributes = (other.try(:reify, has_one: false) || item).try(:attributes) || {}
-    item_class = self.try(:class) || item.try(:class)
-
-    old_attributes.each do |attribute, old_value|
-      new_value = new_attributes.delete attribute
-
-      if old_value != new_value && !(old_value.blank? && new_value.blank?)
-        changes << HashWithIndifferentAccess.new({
-          attribute: item_class.human_attribute_name(attribute),
-          old_value: old_value.to_translated_string.split_if_no_space_in(50),
-          new_value: new_value.to_translated_string.split_if_no_space_in(50)
-        })
-      end
-    end
-
-    new_attributes.each do |attribute, new_value|
-      changes << HashWithIndifferentAccess.new(
-        attribute: item_class.human_attribute_name(attribute),
-        old_value: '-',
-        new_value: new_value
-      )
-    end
-
-    changes
-  end
-
-  def changes_from_next
-    changes_until(self.next)
   end
 end

@@ -1,17 +1,18 @@
-<div class="finding_review_assignment align-top">
-  <div>
-    <ul class="raw_list">
+<fieldset class="finding_review_assignment">
+  <div class="form-inputs">
+    <ul>
       <li>
-        <%= f.hidden_field :finding_id, :value => f.object.finding_id,
-          :id => "hidden_finding_id_#{f.object.finding_id}" %>
+        <%= f.input :finding_id, as: :hidden, input_html: {
+          value: f.object.finding_id, id: "hidden_finding_id_#{f.object.finding_id}"
+        } %>
         <%= f.object.finding.try(:to_s) %>
         <strong>[<%= f.object.finding.try(:state_text) %>]</strong> |
         <% if f.object.finding %>
-          <%= link_to t('label.show'), finding_path(
+          <%= link_to_show finding_path(
             f.object.finding.pending? ? 'incomplete' : 'complete', f.object.finding) %> |
         <% end %>
-        <%= remove_item_link(f) unless readonly %>
+        <%= link_to_remove_nested_item(f) unless readonly %>
       </li>
     </ul>
   </div>
-</div>
+</fieldset>

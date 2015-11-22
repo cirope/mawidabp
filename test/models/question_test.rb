@@ -4,19 +4,9 @@ class QuestionTest < ActiveSupport::TestCase
   def setup
     set_organization
 
-    @question = Question.find questions(:question_multi_choice).id
+    @question = questions :question_multi_choice
   end
 
-  # Prueba que se realicen las búsquedas como se espera
-  test 'search' do
-    assert_kind_of Question, @question
-    assert_equal questions(:question_multi_choice).question, @question.question
-    assert_equal questions(:question_multi_choice).sort_order, @question.sort_order
-    assert_equal questions(:question_multi_choice).answer_type, @question.answer_type
-    assert_equal questions(:question_multi_choice).questionnaire_id, @question.questionnaire_id
-  end
-
-  # Prueba la creación de una cuestión
   test 'create' do
     assert_difference 'Question.count' do
       Question.create(
@@ -27,7 +17,6 @@ class QuestionTest < ActiveSupport::TestCase
     end
   end
 
-  # Prueba de actualización de una cuestión
   test 'update' do
     assert @question.update(:question => 'Updated question'),
       @question.errors.full_messages.join('; ')
@@ -35,16 +24,12 @@ class QuestionTest < ActiveSupport::TestCase
     assert_equal 'Updated question', @question.question
   end
 
-  # Prueba de eliminación de una cuestión
-  test 'delete' do
+  test 'should delete' do
     assert_difference 'Question.count', -1 do
-      assert_difference 'AnswerOption.count', -5 do
-        @question.destroy
-      end
+      @question.destroy
     end
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @question.sort_order = nil
     @question.question = '  '

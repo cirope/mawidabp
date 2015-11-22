@@ -1,51 +1,49 @@
-<div id="showed_data">
-  <p>
-    <% if @poll.user.present? %>
-      <b><%= Poll.human_attribute_name :user_id %>: </b>
-        <%= @poll.user.informal_name  %>
-    <% elsif @poll.customer_email.present? %>
-      <b><%= Poll.human_attribute_name :customer_email %>: </b>
-        <%= @poll.customer_email  %>
-    <% end %>
-  </p>
-  <p>
-    <b><%= Poll.human_attribute_name :answered %>: </b>
-      <%= @poll.answered ? t('label.yes') : t('label.no')  %>
-  </p>
-  <p>
-    <b><%= Questionnaire.human_attribute_name :questions %>:</b>
-  </p>
-  <ol>
-    <% @poll.answers.each do |answer| %>
-      <li><b><%= answer.question.question %></b>
-        <% if @poll.answered? %>
-          <% if answer.question.answer_multi_choice? %>
-            <%= ": #{t "activerecord.attributes.answer_option.options.#{answer.answer_option.option}"}" %>
-          <% elsif answer.question.answer_written? %>
-            <%= ": #{answer.answer}" %>
-          <% end %>
+<p>
+  <% if @poll.user.present? %>
+    <strong><%= Poll.human_attribute_name :user %>:</strong>
+    <%= @poll.user.informal_name  %>
+  <% elsif @poll.customer_email.present? %>
+    <strong><%= Poll.human_attribute_name :customer_email %>:</strong>
+    <%= @poll.customer_email  %>
+  <% end %>
+</p>
+<p>
+  <strong><%= Poll.human_attribute_name :answered %>:</strong>
+  <%= t_boolean @poll.answered %>
+</p>
+<p>
+  <strong><%= Questionnaire.human_attribute_name :questions %>:</strong>
+</p>
+<ol>
+  <% @poll.answers.each do |answer| %>
+    <li><strong><%= answer.question.question %></strong>
+      <% if @poll.answered? %>
+        <% if answer.question.answer_multi_choice? && answer.answer_option %>
+          <%= ": #{t "answer_options.#{answer.answer_option.option}"}" %>
+        <% elsif answer.question.answer_written? %>
+          <%= ": #{answer.answer}" %>
         <% end %>
-      </li>
+      <% end %>
       <% if answer.comments.present? %>
         <p>
-          <b><%= Answer.human_attribute_name :comments %>: </b>
+          <strong><%= Answer.human_attribute_name :comments %>:</strong>
           <%= answer.comments %>
         </p>
       <% end %>
-    <% end %>
-  </ol>
-
-  <% if @poll.comments.present? %>
-    <p>
-      <b><%= Poll.human_attribute_name :comments %>: </b>
-      <%= @poll.comments %>
-    </p>
+    </li>
   <% end %>
-</div>
+</ol>
 
-<% if @layout.eql? 'application' %>
-  <div id="links">
-    <%= link_to t('label.list'), polls_path %> |
-    <%= link_to_back %>
-  </div>
+<% if @poll.comments.present? %>
+  <p>
+    <strong><%= Poll.human_attribute_name :comments %>: </strong>
+    <%= @poll.comments %>
+  </p>
+<% end %>
+
+<hr />
+
+<% if @auth_user %>
+  <%= link_to_index polls_path %> |
+  <%= link_to_back %>
 <% end %>

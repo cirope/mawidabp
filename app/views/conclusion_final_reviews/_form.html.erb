@@ -1,80 +1,48 @@
 <% readonly = !@conclusion_final_review.new_record? %>
-<!--[form:conclusion_final_review]-->
-<%= form_for @conclusion_final_review do |cfr_f| %>
-  <%= cfr_f.error_messages %>
 
-  <div class="form_column_left">
-    <p class="form_item">
-      <% unless @conclusion_final_review.review %>
-        <%= cfr_f.label :review_id, nil, :class => :inline %>
-        <%= conclusion_final_review_review_field(cfr_f,
-          @conclusion_final_review.review) %>
-      <% else %>
-        <%= content_tag :label,
-          ConclusionFinalReview.human_attribute_name(:review_id),
-          :class => :inline %>
-        <%= text_field_tag :review,
-          @conclusion_final_review.review.identification,
-          :class => :inline_item, :readonly => true %>
-        <%= cfr_f.hidden_field :review_id %>
-      <% end %>
-    </p>
-    <p class="form_item">
-      <%= label_tag :business_unit,
-        ConclusionReview.human_attribute_name(:business_unit),
-        :class => :inline %>
-      <%= text_field_tag :business_unit,
-        (@conclusion_final_review.review.business_unit.name if @conclusion_final_review.review),
-        :class => :inline_item, :readonly => true %>
-    </p>
-    <p class="form_item">
-      <%= label_tag :project, ConclusionReview.human_attribute_name(:project),
-        :class => :inline %>
-      <%= text_field_tag :project,
-        (@conclusion_final_review.review.plan_item.project if @conclusion_final_review.review),
-        :class => :inline_item, :readonly => true %>
-    </p>
-    <p>
-      <%= cfr_f.label :applied_procedures %>
-      <%= cfr_f.text_area :applied_procedures, :readonly => readonly %>
-    </p>
-  </div>
-  <div class="form_column_right">
-    <p>
-      <%= cfr_f.label :conclusion %>
-      <%= cfr_f.text_area :conclusion, :readonly => readonly %>
-    </p>
-    <p class="form_item">
-      <%= label_tag :score, Review.human_attribute_name(:score),
-        :class => :inline %>
-      <%= text_field_tag :score,
-        (@conclusion_final_review.review.score_text if @conclusion_final_review.review),
-        :class => :inline_item, :readonly => true %>
-    </p>
-    <p class="form_item">
-      <%= cfr_f.label :issue_date, raw(
-        ConclusionFinalReview.human_attribute_name(:issue_date) +
-          show_inline_help_for(:conclusion_review_issue_date)),
-        :class => :inline %>
-      <%= calendar_text_field cfr_f, :issue_date, false, nil,
-        :class => :inline_item, :readonly => readonly %>
-    </p>
-    <p class="form_item">
-      <%= cfr_f.label :close_date, raw(
-        ConclusionFinalReview.human_attribute_name(:close_date) +
-          show_inline_help_for(:conclusion_review_close_date)), :class => :inline %>
-      <%= calendar_text_field cfr_f, :close_date, false, nil,
-        :class => :inline_item, :readonly => readonly %>
-    </p>
+<%= simple_form_for @conclusion_final_review do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <% unless @conclusion_final_review.review %>
+          <%= conclusion_final_review_review_field f, @conclusion_final_review.review %>
+        <% else %>
+          <%= f.input :review, label: ConclusionFinalReview.human_attribute_name(:review_id),
+            input_html: { value: @conclusion_final_review.review.identification, readonly: true } %>
+          <%= f.input :review_id, as: :hidden %>
+        <% end %>
+        <%= f.input :business_unit, input_html: {
+          value: (@conclusion_final_review.review.business_unit.name if @conclusion_final_review.review),
+          readonly: true } %>
+        <%= f.input :project, input_html: {
+          value: (@conclusion_final_review.review.plan_item.project if @conclusion_final_review.review),
+          readonly: true } %>
+        <%= f.input :applied_procedures, input_html: { readonly: readonly, rows: 5 } %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :conclusion, input_html: { readonly: readonly, rows: 5 } %>
+        <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
+          value: (@conclusion_final_review.review.score_text if @conclusion_final_review.review),
+          readonly: true } %>
+        <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
+        <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
+      </div>
+    </div>
   </div>
 
-  <%= hidden_lock_version(cfr_f) %>
-  
-  <p>
-    <span class="button"><%= cfr_f.submit %></span>
-  </p>
+  <hr />
+
+  <div class="form-actions">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
 <% end %>
-<!--[eoform:conclusion_final_review] -->
+
+<%= render 'bundle' %>
+
 <script type="text/javascript">
 //<![CDATA[
   $('#conclusion_final_review_review_id').change(function() {
@@ -85,21 +53,20 @@
       var url = '<%= new_conclusion_final_review_path :format => :json %>';
 
       Helper.showLoading(element);
-      
+
       $.get(url, { review: element.val() }, function(data) {
-        //var finalReview = data.conclusion_final_review;
-        
+
         for(var key in data) {
           var target = $('#conclusion_final_review_' + key);
-          
+
           if($.inArray(key, elementsForUpdate) != -1) {
             target.html(data[key] || '');
           }
         }
 
-        $('#business_unit').val(data.review.business_unit.name);
-        $('#project').val(data.review.plan_item.project);
-        $('#score').val(data.review.score_text);
+        $('#conclusion_final_review_business_unit').val(data.review.business_unit.name);
+        $('#conclusion_final_review_project').val(data.review.plan_item.project);
+        $('#conclusion_final_review_score').val(data.review.score_text);
         $('#conclusion_final_review_applied_procedures').focus();
       }).complete(function() {
         Helper.hideLoading(element);
@@ -108,10 +75,10 @@
       $.each(elementsForUpdate, function(i, e) {
         $('#conclusion_final_review_' + e).html('');
       });
-      
-      $('#business_unit').val('');
-      $('#project').val('');
-      $('#score').val('');
+
+      $('#conclusion_final_review_business_unit').val('');
+      $('#conclusion_final_review_project').val('');
+      $('#conclusion_final_review_score').val('');
     }
   });
 //]]>

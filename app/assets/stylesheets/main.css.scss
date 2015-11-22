@@ -1,0 +1,98 @@
+body {
+  padding-top: 70px;
+  margin-bottom: 20px;
+}
+
+.file-container {
+  position: relative;
+  overflow: hidden;
+  margin-right: 15px;
+
+  input[type="file"] {
+    opacity: 0;
+    filter: alpha(opacity = 0);
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+  }
+}
+
+.alert-sm {
+  padding: 0 15px;
+  margin-bottom: 0;
+}
+
+.filter {
+  margin: 0.5em 0;
+}
+
+.inline {
+  display: inline;
+}
+
+.list-padding {
+  padding: 1em 3em;
+}
+
+.loading-caption {
+  position: fixed;
+  top: 0%;
+  left: 50%;
+  width: 10em;
+  margin: 0em 0em 0em -5em;
+  padding: .25em 1em;
+  text-align: center;
+  line-height: 42px;
+  z-index: 1100;
+}
+
+.navbar-brand {
+  padding-right: 15px;
+}
+
+.nested {
+  padding-left: 2em;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.pagination, .pager {
+  margin: 0;
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+.submenu {
+  margin-bottom: 15px;
+}
+
+.toggle-visibility {
+  margin-top: 7px;
+}
+
+table th.disabled {
+  color: #7b7b7b;
+}
+
+table th.filterable {
+  cursor: default;
+}
+
+table th.not_available {
+  text-decoration: line-through;
+  color: #888;
+}
+
+[data-controller="best_practices"] {
+  fieldset {
+    textarea, select {
+      padding-left: 3px;
+      padding-right: 0;
+    }
+  }
+}

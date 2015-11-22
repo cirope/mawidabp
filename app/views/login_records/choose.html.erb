@@ -1,9 +1,14 @@
-<ul class="menu_list">
-  <li><%= link_to t('login_record.show_list'), :action => :index %></li>
-  <li><%= link_to t('error_record.show_list'), :controller => :error_records,
-    :action => :index %></li>
-  <li><%= link_to t('version.show_security_changes_report'),
-    :controller => :versions, :action => :security_changes_report %></li>
-</ul>
-
-<div class="clear"></div>
+<div class="row">
+  <div class="col-md-4">
+    <%= link_to t('login_records.show.list'), { action: :index },
+      class: 'btn btn-default btn-lg btn-block' %>
+  </div>
+  <div class="col-md-4">
+    <%= link_to t('error_records.show.list'), { controller: :error_records, action: :index },
+      class: 'btn btn-default btn-lg btn-block' %>
+  </div>
+  <div class="col-md-4">
+    <%= link_to t('versions.index.title'), versions_path,
+      class: 'btn btn-default btn-lg btn-block' %>
+  </div>
+</div>

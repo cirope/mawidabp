@@ -199,11 +199,16 @@ module Reports::WeaknessesByStateExecution
         to_date: @to_date.to_formatted_s(:db)),
       'execution_weaknesses_by_state', 0)
 
-    redirect_to Prawn::Document.relative_path(
+    @report_path = Prawn::Document.relative_path(
       t('execution_reports.weaknesses_by_state.pdf_name',
         from_date: @from_date.to_formatted_s(:db),
         to_date: @to_date.to_formatted_s(:db)),
       'execution_weaknesses_by_state', 0)
+
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js { render 'shared/pdf_report' }
+    end
   end
 
   def add_pdf_table(pdf)

@@ -1,0 +1,84 @@
+<h1><%= t '.title' %></h1>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4><%= t '.credentials' %></h4>
+      </div>
+      <div class="panel-body">
+        <%= simple_form_for :import, url: users_imports_path do |f| %>
+          <div class="form-inputs">
+            <%= f.input :username, label: LdapConfig.human_attribute_name('test_user'), input_html: { autofocus: true } %>
+            <%= f.input :password, label: LdapConfig.human_attribute_name('test_password') %>
+          </div>
+
+          <div class="form-actions">
+            <%= f.submit t('.import'), class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4><%= LdapConfig.model_name.human count: 1 %></h4>
+      </div>
+      <div class="panel-body">
+        <% current_organization.ldap_config.tap do |ldap| %>
+          <ul>
+            <li>
+              <%= LdapConfig.human_attribute_name 'hostname' %>:
+              <strong><%= ldap.hostname %></strong>
+            </li>
+            <li>
+              <%= LdapConfig.human_attribute_name 'port' %>:
+              <strong><%= ldap.port %></strong>
+            </li>
+            <li>
+              <%= LdapConfig.human_attribute_name 'basedn' %>:
+              <strong><%= ldap.basedn %></strong>
+            </li>
+            <li>
+              <%= LdapConfig.human_attribute_name 'filter' %>:
+              <strong><%= ldap.filter %></strong>
+            </li>
+            <li>
+              <%= LdapConfig.human_attribute_name 'login_mask' %>:
+              <strong><%= ldap.login_mask %></strong>
+            </li>
+            <li>
+              <%= LdapConfig.human_attribute_name 'username_attribute' %>:
+              <strong><%= ldap.username_attribute %></strong>
+            </li>
+            <li>
+              <%= LdapConfig.human_attribute_name 'name_attribute' %>:
+              <strong><%= ldap.name_attribute %></strong>
+            </li>
+            <li>
+              <%= LdapConfig.human_attribute_name 'last_name_attribute' %>:
+              <strong><%= ldap.last_name_attribute %></strong>
+            </li>
+            <li>
+              <%= LdapConfig.human_attribute_name 'email_attribute' %>:
+              <strong><%= ldap.email_attribute %></strong>
+            </li>
+            <li>
+              <%= LdapConfig.human_attribute_name 'function_attribute' %>:
+              <strong><%= ldap.function_attribute %></strong>
+            </li>
+            <li>
+              <%= LdapConfig.human_attribute_name 'roles_attribute' %>:
+              <strong><%= ldap.roles_attribute %></strong>
+            </li>
+            <li>
+              <%= LdapConfig.human_attribute_name 'manager_attribute' %>:
+              <strong><%= ldap.manager_attribute %></strong>
+            </li>
+          </ul>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

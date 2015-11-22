@@ -1,48 +1,19 @@
-<% id = dynamic_object_id('organization_role', f) %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<% roles = f.object.organization ? Role.list : [] %>
-<div class="organization_role item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
-  <div>
-    <div class="item_field" style="width: 40%;">
-    <%= user_organizations_field(f, id) %>
+<% id = f.object.object_id %>
+<fieldset class="organization_role">
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :organization_id, collection: user_organizations, prompt: true, label: false, input_html: {
+        id: "organization_id_#{id}", data: { update_role: "#role_id_#{id}", roles_url: user_roles_path }
+      } %>
     </div>
-    <div class="item_field" style="width: 40%;">
-    <%= f.select :role_id, sorted_options_array_for(roles, :name, :id),
-      {:prompt => true},
-      {:disabled => f.object.organization.nil?, :class => :role_select} %>
+    <div class="col-md-4">
+      <%= f.input :role_id, collection: roles_for(f.object), prompt: true, label: false,
+        disabled: f.object.organization.nil?, input_html: { id: "role_id_#{id}" } %>
     </div>
-    <div class="item_field item_controls" style="width: 10%;">
-    <%= remove_item_link(f) %>
+    <div class="col-md-2">
+      <div class="toggle-visibility">
+        <%= link_to_remove_nested_item f %>
+      </div>
     </div>
   </div>
-</div>
-<% if is_dynamic %>
-  <script type="text/javascript">Helper.showItem('#<%= id %>');</script>
-<% end %>
-  <script type="text/javascript">
-    $('#<%= id %>_organization_id').change(function() {
-      var element = $(this);
-      var roleSelect = $('.role_select', element.parents('.organization_role'));
-
-      if(!$(element).val().match(/^\s*$/)) {
-        var url = '<%= url_for(:action => (@auth_user ? :roles : :initial_roles),
-          :hash => params[:hash]) %>';
-
-        Helper.showLoading(element);
-
-        $.get(url, { id: $(element).val(), format: 'json' }, function(data) {
-          HTMLUtil.updateOptions(
-            roleSelect,
-            HTMLUtil.optionsFromArray(data)
-          );
-
-          roleSelect.val('');
-        }).complete(function() {
-          Helper.hideLoading(element);
-        });
-      } else {
-        roleSelect.html('');
-        roleSelect.attr('disabled', true);
-      }
-    });
-  </script>
+</fieldset>

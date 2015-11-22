@@ -1,0 +1,9 @@
+<% organization = @conclusion_review.review.try(:organization) if @conclusion_review %>
+<div style="font-family: verdana, sans-serif, arial, helvetica;">
+  <h2><%= organization.name %></h2>
+
+  <%= textilize @body_title %>
+  <%= textilize h(@note) unless @note.blank? %>
+
+  <%= render :partial => 'footer' %>
+</div>

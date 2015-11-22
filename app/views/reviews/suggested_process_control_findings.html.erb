@@ -1,0 +1,21 @@
+<h3><%= t 'review.suggested_findings_for', process_control: @process_control.name %></h3>
+
+<% if @findings.empty? %>
+  <div class="alert alert-success">
+    <p><%= t 'review.without_suggested_findings' %></p>
+  </div>
+<% else %>
+  <% @findings.each_with_index do |finding, i| %>
+    <ul class="finding_review_assignment">
+      <li>
+        <%= hidden_field_tag "review[finding_review_assignments_attributes][#{@process_control.id * 1000 + i}][finding_id]",
+          finding.id, id: "hidden_finding_id_#{finding.id}" %>
+        <%= finding %> |
+        <%= link_to_show finding %> |
+        <%= remove_item_link nil, 'finding_review_assignment' %>
+      </li>
+    </ul>
+  <% end %>
+<% end %>
+
+<hr>

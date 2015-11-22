@@ -1,5 +1,5 @@
 class NotificationsController < ApplicationController
-  before_action :auth, :check_privileges, :except => :confirm
+  before_action :auth, :check_privileges
   before_action :set_notification, only: [:show, :edit, :update]
 
   # * GET /notifications
@@ -7,8 +7,8 @@ class NotificationsController < ApplicationController
   def index
     @title = t 'notification.index_title'
     @notifications = Notification.where(:user_id => @auth_user.id).order(
-      ['status ASC', 'created_at DESC']
-    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+      :status => :asc, :created_at => :desc
+    ).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -67,28 +67,18 @@ class NotificationsController < ApplicationController
       :confirmation_hash => params[:id]
     ).first
 
-    current_organization =
-      @notification.try(:user).try(:organizations).try(:first)
-
-    @notification.notify!(params[:reject].blank?) if @notification
+    @notification.notify! params[:reject].blank? if @notification
 
     go_to = {:controller => :notifications, :action => :edit,
       :id => @notification.to_param}
 
-    unless login_check
-      message = t('notification.confirmed') if @notification.try(:confirmed?)
-      message = t('notification.rejected') if @notification.try(:rejected?)
-      session[:go_to] = go_to unless params[:reject].blank?
-
-      redirect_to_login message
-    else
-      redirect_to params[:reject].blank? ? :back : go_to
-    end
+    redirect_to params[:reject].blank? ? :back : go_to
   rescue ActionController::RedirectBackError
     redirect_to notifications_url
   end
 
   private
+
     def set_notification
       @notification = Notification.where(
         confirmation_hash: params[:id], user_id: @auth_user.id
@@ -96,6 +86,6 @@ class NotificationsController < ApplicationController
     end
 
     def notification_params
-      params.require(:notification).permit(:notes, :lock_version)
+      params.require(:notification).permit :notes, :lock_version
     end
 end

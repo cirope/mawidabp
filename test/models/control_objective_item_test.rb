@@ -136,6 +136,17 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       high_qualification_value, @control_objective_item.effectiveness
   end
 
+  test 'business unit type ids' do
+    assert @control_objective_item.business_unit_scores.blank?
+    assert_difference '@control_objective_item.business_unit_scores.size', 2 do
+      @control_objective_item.business_unit_type_ids = [business_unit_types(:cycle).id]
+    end
+
+    assert_no_difference '@control_objective_item.business_unit_scores.size' do
+      @control_objective_item.business_unit_type_ids = [business_unit_types(:cycle).id]
+    end
+  end
+
   test 'review effectiveness modification' do
     min_qualification_value = ControlObjectiveItem.qualifications_values.min
     review = @control_objective_item.review
@@ -227,15 +238,15 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert @control_objective_item.errors[:sustantive_score].blank?
     assert_error @control_objective_item.control, :design_tests, :blank
   end
-  
+
   test 'validations when is excluded from score' do
     @control_objective_item.finished = false
     @control_objective_item.auditor_comment = '   '
-    
+
     assert @control_objective_item.valid?
-    
+
     @control_objective_item.exclude_from_score = true
-    
+
     assert @control_objective_item.invalid?
     assert_error @control_objective_item, :auditor_comment, :blank
   end
@@ -357,7 +368,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
               :code => 'PTOC 20',
               :number_of_pages => '10',
               :description => 'New workpaper description',
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :file_model_attributes => {
                 :file => fixture_file_upload(TEST_FILE, 'text/plain')
               }
@@ -381,7 +392,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
               :code => 'New workpaper code',
               :number_of_pages => '10',
               :description => 'New post_workpaper description',
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :file_model_attributes => {
                 :file => fixture_file_upload(TEST_FILE, 'text/plain')
               }
@@ -395,8 +406,8 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   test 'to pdf' do
     assert !File.exist?(@control_objective_item.absolute_pdf_path)
 
-    assert_nothing_raised(Exception) do
-      @control_objective_item.to_pdf(organizations(:default_organization))
+    assert_nothing_raised do
+      @control_objective_item.to_pdf(organizations(:cirope))
     end
 
     assert File.exist?(@control_objective_item.absolute_pdf_path)

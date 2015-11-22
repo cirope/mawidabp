@@ -1,10 +1,17 @@
 language: ruby
+cache: bundler
+sudo: false
 rvm:
-  - 2.0.0
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq nodejs imagemagick
+  - 2.2.3
+addons:
+  apt:
+    packages:
+    - imagemagick
+    - slapd
+    - ldap-utils
 before_script:
-  - 'cp config/app_config.example.yml config/app_config.yml'
-  - "psql -c 'create database mawida_test;' -U postgres"
+  - 'cp config/application.example.yml config/application.yml'
+  - "psql -c 'create database mawidabp_test;' -U postgres"
   - 'bundle exec rake db:migrate'
+  - 'slapd -f test/fixtures/ldap/slapd.conf -h ldap://localhost:3389'
+  - 'bundle exec rake ldap:reset'

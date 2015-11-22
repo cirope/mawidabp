@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ page.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% stylesheet application %}
+    {% javascript application %}
+  </head>
+  <body>
+    <div class="container">
+      {% include header.html %}
+      {{ content }}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+<div style="font-family: verdana, sans-serif, arial, helvetica;">
+  <% @grouped_findings.each do |organization, findings| %>
+    <% Organization.current_id = organization.id %>
+    <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
+    <h3><%= t('notifier_mailer.findings_expiration_warning.body_title',
+      :count => findings.size) %></h3>
+    <% findings.each do |finding| %>
+      <%= render :partial => 'finding', :locals => {:finding => finding} %><br />
+    <% end %>
+  <% end %>
+  <%= render :partial => 'footer' %>
+</div>

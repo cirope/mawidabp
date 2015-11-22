@@ -1,32 +1,28 @@
-<div id="showed_data">
-  <p>
-    <b><%= raw(ResourceClass.human_attribute_name(:name) +
-        show_inline_help_for(:resource_class_name)) %>:</b>
-    <%=h @resource_class.name %>
-  </p>
+<div class="page-header">
+  <h2><%= @resource_class.name %></h2>
+</div>
 
-  <table class="summary_table">
-    <thead>
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th><%= Resource.human_attribute_name 'name' %></th>
+      <th><%= Resource.human_attribute_name 'description' %></th>
+      <th><%= Resource.human_attribute_name 'cost_per_unit' %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @resource_class.resources.each do |resource| %>
       <tr>
-        <th><%= Resource.human_attribute_name :name %></th>
-        <th><%= Resource.human_attribute_name :description %></th>
-        <th><%= Resource.human_attribute_name :cost_per_unit %></th>
+        <td><%= resource.name %></td>
+        <td><%= resource.description %></td>
+        <td><%= resource.cost_per_unit %></td>
       </tr>
-    </thead>
-    <tbody>
-      <% @resource_class.resources.each do |resource| %>
-        <tr>
-          <td><%= h resource.name %></td>
-          <td><%= h resource.description %></td>
-          <td><%= h resource.cost_per_unit %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+    <% end %>
+  </tbody>
+</table>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_resource_class_path(@resource_class) %> |
-  <%= link_to t('label.list'), resource_classes_path %> |
-  <%= link_to_back %>
-</div>
+<hr />
+
+<%= link_to_edit edit_resource_class_path(@resource_class) %> |
+<%= link_to_index resource_classes_path %> |
+<%= link_to_back %>

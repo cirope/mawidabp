@@ -5,16 +5,32 @@
 // the compiled file.
 //
 //= require jquery
-//= require jquery.ui.all
 //= require jquery_ujs
+//= require jquery-ui/autocomplete
+//= require jquery-ui/datepicker
+//= require jquery-ui/datepicker-es
+//= require jquery-ui/effect-highlight
+//= require jquery-ui/dialog
+//= require jquery-ui/sortable
 //= require jquery-ui-timepicker-addon
-//= require datepicker/jquery.ui.datepicker-es
+//= require bootstrap
+//= require autocomplete
+//= require ajax
 //= require jquery.url
 //= require jquery.mw
+//= require dynamic_form
+//= require effect_helper
+//= require date_pickers
 //= require common
-//= require autocomplete
 //= require extensions
 //= require form_modification
-//= require mobile_style
 //= require validation
 //= require ui
+//= require file_input
+//= require best_practices
+//= require control_objective_items
+//= require findings
+//= require organizations
+//= require touch
+//= require users
+//= require work_papers

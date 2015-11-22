@@ -1,21 +1,24 @@
-<div id="showed_data">
 <p>
-  <b><%= LoginRecord.human_attribute_name 'start' %>:</b>
-  <%=h l(@login_record.start, :format => :short) if @login_record.start %>
+  <strong><%= ErrorRecord.human_attribute_name 'user_id' %></strong>:
+  <%= @login_record %>
 </p>
 
 <p>
-  <b><%= LoginRecord.human_attribute_name 'end' %>:</b>
-  <%=h l(@login_record.end, :format => :short) if @login_record.end %>
+  <strong><%= LoginRecord.human_attribute_name 'start' %></strong>:
+  <%= l(@login_record.start, format: :short) if @login_record.start %>
 </p>
 
 <p>
-  <b><%= LoginRecord.human_attribute_name 'data' %>:</b>
-  <%=h @login_record.data %>
+  <strong><%= LoginRecord.human_attribute_name 'end' %></strong>:
+  <%= l(@login_record.end, format: :short) if @login_record.end %>
 </p>
-</div>
 
-<div id="links">
-<%= link_to t('label.list'), login_records_path %> |
+<p>
+  <strong><%= LoginRecord.human_attribute_name 'data' %></strong>:
+  <%= @login_record.data %>
+</p>
+
+<hr />
+
+<%= link_to_index login_records_path %> |
 <%= link_to_back %>
-</div>

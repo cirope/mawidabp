@@ -1,0 +1,21 @@
+encoding: utf-8
+markdown: rdiscount
+permalink: pretty
+highlighter: pygments
+assets:
+  baseurl: /help/assets/
+  js_compressor: uglifier
+  css_compressor: sass
+  sources:
+    - _assets/images
+    - _assets/javascripts
+    - _assets/stylesheets
+    - _vendor/assets/stylesheets
+    - _vendor/assets/javascripts
+    - _vendor/assets/fonts
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - .git
+  - .gitignore
+languages: ['es']

@@ -1,139 +1,122 @@
-<!--[form:plan]-->
-<%= form_for @plan do |p_f| %>
-  <% content_for :js_extra do %>
-    <%= raw "var plan_item='#{generate_template(p_f, :plan_items)}';" %>
-  <% end %>
-  <%= p_f.error_messages %>
+<%= simple_form_for @plan do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
+
   <% unless params[:business_unit_type].blank? %>
-    <%= show_plan_business_unit_type_info %>
+    <div class="page-header">
+      <%= show_plan_business_unit_type_info %>
+    </div>
   <% end %>
 
-  <div class="form_column_left">
-    <% if @plan.new_record? %>
-      <p class="form_item">
-        <%= p_f.label :period_id, nil, :class => :inline %>
-        <%= p_f.select :period_id,
-          Period.list_all_without_plans.map { |p| [p.inspect, p.id] },
-          {:prompt => true},
-          {:class => :inline_item, :autofocus => true} %>
-      </p>
-    <% else %>
-      <p class="form_item">
-        <%= p_f.hidden_field :period_id %>
-        <%= label_tag :period, Plan.human_attribute_name('period_id'),
-          :class => :inline %>
-        <%= text_field_tag :period, @plan.period.try(:inspect),
-          :readonly => true, :class => :inline_item %>
-      </p>
-    <% end %>
-  </div>
-  <div class="form_column_right">
-    <p>
-      <%= Plan.human_attribute_name :estimated_amount %>:
-      <b><%= t('number.currency.format.unit') %><span id="estimated_amount"><%= '%.2f' % @plan.estimated_amount(params[:business_unit_type]) %></span></b>
-      <% unless params[:business_unit_type].blank? %>
-        <%= link_to t('plan.calculate_estimated_amount'), '#', :onclick =>
-          "calculateEstimatedAmount(); return false;", :style => 'margin-left: .5em;' %>
-      <% end %>
-    </p>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-5">
+        <% if @plan.new_record? %>
+          <%= f.association :period, collection: Period.list_all_without_plans,
+            label_method: :inspect, value_method: :id, prompt: true,
+            label: Plan.human_attribute_name('period_id'), input_html: { autofocus: true }
+          %>
+        <% else %>
+          <%= f.input :period_id, as: :hidden %>
+          <%= f.input :period, label: Plan.human_attribute_name('period_id'), input_html: {
+            value: @plan.period.try(:inspect), readonly: true
+          } %>
+        <% end %>
+      </div>
+      <div class="col-md-5 col-md-offset-2">
+        <div class="alert alert-warning">
+          <%= Plan.human_attribute_name :estimated_amount %>:
+          <strong>
+            <%= t('number.currency.format.unit') %>
+            <span id="estimated_amount">
+              <%= '%.2f' % @plan.estimated_amount(params[:business_unit_type]) %>
+            </span>
+          </strong>
+          <% unless params[:business_unit_type].blank? %>
+            <%= link_to t('plan.calculate_estimated_amount'), '#', onclick:
+              "calculateEstimatedAmount(); return false;", style: 'margin-left: .5em;' %>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
 
   <% if params[:business_unit_type].blank? %>
     <%= show_plan_business_unit_type_list %>
   <% else %>
-    <div class="items">
-      <div class="column_headers" style="padding-left: 2.1em;">
-        <div class="item_column" style="width: 5%; padding-left: .3em;">
-          <h3><%= PlanItem.human_attribute_name :order_number %></h3>
-        </div>
-        <div class="item_column" style="width: 20%; padding-left: .3em;">
-          <h3><%= raw(BusinessUnit.model_name.human +
-            show_inline_help_for(:plan_business_unit)) %></h3>
-        </div>
-        <div class="item_column" style="width: 20%; padding-left: .3em;">
-          <h3><%= raw(PlanItem.human_attribute_name(:project) +
-            show_inline_help_for(:plan_project)) %></h3>
-        </div>
-        <div class="item_column" style="width: 13%; padding-left: .3em;">
-          <h3><%= raw(PlanItem.human_attribute_name(:start) +
-            show_inline_help_for(:plan_start)) %></h3>
-        </div>
-        <div class="item_column" style="width: 13%; padding-left: .3em;">
-          <h3><%= raw(PlanItem.human_attribute_name(:end) +
-            show_inline_help_for(:plan_end)) %></h3>
-        </div>
-        <div class="item_column" style="width: 13%; padding-left: .3em;">
-          <h3><%= raw(PlanItem.human_attribute_name(:predecessors) +
-            show_inline_help_for(:plan_predecessors)) %></h3>
-        </div>
-        <div class="item_column" style="width: 10%;"></div>
-        <div class="clear"></div>
-      </div>
+    <hr />
 
-      <div id="plan_items">
-        <% count = 0 # TODO: esto debería desaparecer cuando corrijan un error en Rails %>
-        <% plan_items_for_selected_business_unit_type.each do |pi| %>
-          <% index = (pi.new_record? ? 100000000 : 0) + (count += 1) %>
-          <%= p_f.fields_for :plan_items, pi, :child_index => index do |pi_f| %>
-            <% mru_template = nil %>
-            <% content_for :js_extra do %>
-              <% hru_template ||= generate_template(pi_f, :resource_utilizations,
-                :object => ResourceUtilization.new(:resource_type => 'User'),
-                :partial => 'human_resource_utilization',
-                :child_index => 'NEW_SUBRECORD') %>
-              <% mru_template ||= generate_template(pi_f, :resource_utilizations,
-                :object => ResourceUtilization.new(:resource_type => 'Resource'),
-                :partial => 'material_resource_utilization',
-                :child_index => 'NEW_SUBRECORD') %>
-              <%= raw "var material_resource_utilization = '#{mru_template}';" unless mru_template == 0 %>
-              <%= raw "var human_resource_utilization = '#{hru_template}';" unless hru_template == 0 %>
-              <% mru_template = 0 %>
-              <% hru_template = 0 %>
-            <% end %>
-            <%= render :partial => 'plan_item', :locals =>
-              {:f => pi_f, :is_dynamic => false} %>
-          <% end %>
-        <% end %>
+    <div class="row">
+      <div class="col-md-3 col-md-offset-1">
+        <h5><strong><%= BusinessUnit.model_name.human %></strong></h5>
+      </div>
+      <div class="col-md-2">
+        <h5><strong><%= PlanItem.human_attribute_name(:project) %></strong></h5>
+      </div>
+      <div class="col-md-3">
+        <div class="row">
+          <div class="col-md-6">
+            <h5><strong><%= PlanItem.human_attribute_name(:start) %></strong></h5>
+          </div>
+          <div class="col-md-6">
+            <h5><strong><%= PlanItem.human_attribute_name(:end) %></strong></h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <h5><strong><%= PlanItem.human_attribute_name(:predecessors) %></strong></h5>
       </div>
     </div>
 
-    <p class="add_item">
-      <%= link_to t('plan.add_plan_item'), '#', 'data-template' => :plan_item,
-        'data-event' => 'addNestedItem', 'data-container' => '#plan_items' %>
-    </p>
+    <div id="plan_items">
+      <% plan_items_for_selected_business_unit_type.each do |pi| %>
+        <%= f.simple_fields_for :plan_items, pi do |pi_f| %>
+          <%= render 'plan_item', f: pi_f %>
+        <% end %>
+      <% end %>
+
+      <%= link_to_add_fields t('plan.add_plan_item'), f, :plan_items %>
+    </div>
   <% end %>
 
-  <% if @plan.has_duplication? %>
-    <p class="form_item">
-      <%= p_f.label :allow_duplication, t('plan.allow_duplication'),
-        :class => 'inline error_field' %>
-      <%= p_f.check_box :allow_duplication, :class => :inline_item %>
-    </p>
+  <% if @plan.has_duplication? || @plan.overloaded? %>
+    <br/>
+    <div class="row">
+      <% if @plan.has_duplication? %>
+        <div class="col-md-6">
+          <div class="alert alert-sm alert-danger">
+            <%= f.input :allow_duplication, as: :boolean, label: false,
+              inline_label: t('plan.allow_duplication') %>
+          </div>
+        </div>
+      <% end %>
+      <% if @plan.overloaded? %>
+        <div class="col-md-6">
+          <div class="alert alert-sm alert-danger">
+            <%= f.input :allow_overload, as: :boolean, label: false,
+              inline_label: t('plan.allow_overload') %>
+          </div>
+        </div>
+      <% end %>
+    </div>
   <% end %>
 
-  <% if @plan.overloaded? %>
-    <p class="form_item">
-      <%= p_f.label :allow_overload, t('plan.allow_overload'),
-        :class => 'inline error_field' %>
-      <%= p_f.check_box :allow_overload, :class => :inline_item %>
-    </p>
-  <% end %>
+  <hr />
 
-  <%= hidden_lock_version(p_f) %>
-  <%= hidden_field_tag :business_unit_type, params[:business_unit_type] %>
-  <%= hidden_field_tag :clone_from, params[:clone_from] %>
-  <p>
-    <span class="button"><%= p_f.submit %></span>
-  </p>
+  <div class="form-actions">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.input :lock_version, as: :hidden %>
+    <%= hidden_field_tag :business_unit_type, params[:business_unit_type] %>
+    <%= hidden_field_tag :clone_from, params[:clone_from] %>
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
 <% end %>
-<!--[eoform:plan] -->
 <script type="text/javascript">
 function calculateEstimatedAmount() {
   var estimatedTotal = 0;
 
   $('input[name$="[cost_per_unit]"]').each(function(i, e) {
     var value = $(e).val();
-    var unitsString = $(e).parents('.item').find('input[name$="[units]"]').val();
+    var unitsString = $(e).closest('fieldset').find('input[name$="[units]"]').val();
     var units = parseFloat(unitsString) || 0;
 
     estimatedTotal += (parseFloat(value) || 0) * units;
@@ -145,16 +128,16 @@ function calculateEstimatedAmount() {
 }
 
 jQuery(function() {
-  $(document).on('autocomplete:update', 'input.autocomplete_field', function() {
+  $(document).on('autocomplete:update', 'input[data-autocomplete-url]', function() {
     var item = $(this).data('item');
-    
+
     if (item.cost_per_unit) {
-      $(this).parents('.item:first').find('input[name$="[cost_per_unit]"]').val(
+      $(this).closest('fieldset').find('input[name$="[cost_per_unit]"]').val(
         item.cost_per_unit
       );
     }
   });
-  
-  Helper.makeSortable('#plan_items', 'div.plan_item', 'a.move');
+
+  Helper.makeSortable('#plan_items', 'fieldset.plan_item', 'a.move');
 });
 </script>

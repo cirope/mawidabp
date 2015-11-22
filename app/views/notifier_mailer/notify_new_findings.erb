@@ -1,0 +1,23 @@
+<% first_organization = @grouped_findings.keys.first %>
+<div style="font-family: verdana, sans-serif, arial, helvetica;">
+  <h2><%= t('notifier_mailer.notify_new_findings.title') %></h2>
+
+  <% @grouped_findings.each do |organization, findings| %>
+    <% Organization.current_id = organization.id %>
+    <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
+    <h3 style="text-decoration: underline;">
+      <%= t('notifier_mailer.notify_new_findings.created_title',
+        :count => findings.size) %>
+    </h3>
+
+    <% findings.each do |finding| %>
+      <%= render :partial => 'finding', :locals => {:finding => finding} %><br />
+    <% end %>
+  <% end %>
+
+  <%= link_to t('notifier_mailer.notification.confirm'),
+        confirm_notification_url(@notification,
+          :host => ("#{first_organization.prefix}.#{URL_HOST}" if first_organization)) %>
+
+  <%= render :partial => 'footer' %>
+</div>

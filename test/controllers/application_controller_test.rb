@@ -6,8 +6,6 @@ class ApplicationControllerTest < ActionController::TestCase
   def setup
     @controller.send(:reset_session)
     @controller.send(:session)[:user_id] = users(:administrator_user).id
-    @controller.send(:session)[:organization_id] =
-      organizations(:default_organization).id
     @controller.send(:session)[:last_access] = 30.seconds.ago
     @controller.send('response=', @response)
     @controller.send('request=', @request)
@@ -17,7 +15,6 @@ class ApplicationControllerTest < ActionController::TestCase
 
   test 'sucess login check function' do
     assert session[:user_id]
-    assert session[:organization_id]
 
     User.find(users(:administrator_user).id).update_attribute(:logged_in, true)
 
@@ -28,8 +25,8 @@ class ApplicationControllerTest < ActionController::TestCase
 
   test 'failed login check function' do
     assert session[:user_id]
-    assert session[:organization_id]
 
+    User.find(users(:administrator_user).id).update_attribute(:enable, false)
     assert !@controller.send(:login_check)
   end
 
@@ -120,7 +117,7 @@ class ApplicationControllerTest < ActionController::TestCase
     @controller.send('action_name=', 'index')
 
     @controller.send(:check_privileges)
-    assert_not_nil  @controller.send(:flash)[:alert]
+    assert_not_nil @controller.send(:flash)[:alert]
     assert_redirected_to login_url
   end
 
@@ -158,7 +155,7 @@ class ApplicationControllerTest < ActionController::TestCase
   test 'build search conditions' do
     search_string = []
     filters = {}
-    default_conditions = {"#{Organization.table_name}.organization_id" => 1}
+    default_conditions = {"#{Organization.quoted_table_name}.organization_id" => 1}
     @controller.send(:params)[:search] = {
       :query => 'query',
       :columns => ['name', 'user']
@@ -179,6 +176,14 @@ class ApplicationControllerTest < ActionController::TestCase
       ["(#{search_string.join(' OR ')})", filters])
 
     assert_equal expected_search_string, generated_search_string
+  end
+
+  test 'set file download headers' do
+    assert_nil response.headers['Cache-Control']
+
+    @controller.send :set_file_download_headers
+
+    assert_equal 'private, no-store', response.headers['Cache-Control']
   end
 
   private

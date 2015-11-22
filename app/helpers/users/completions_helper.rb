@@ -1,0 +1,2 @@
+module Users::CompletionsHelper
+end

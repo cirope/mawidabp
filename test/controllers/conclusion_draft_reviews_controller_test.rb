@@ -7,7 +7,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
   def setup
-    @request.host = "#{organizations(:default_organization).prefix}.localhost.i"
+    @request.host = "#{organizations(:cirope).prefix}.localhost.i"
   end
 
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
@@ -37,29 +37,27 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list conclusion_draft_reviews' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_reviews)
-    assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/index'
   end
 
   test 'list conclusion_draft_reviews with search' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2',
       :columns => ['identification', 'project']
     }
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_reviews)
-    assert_equal 3, assigns(:conclusion_draft_reviews).size
-    assert_select '#error_body', false
+    assert_equal 3, assigns(:conclusion_draft_reviews).count
     assert_template 'conclusion_draft_reviews/index'
   end
 
   test 'list conclusion_draft_reviews with search by date and sort' do
-    perform_auth
+    login
     get :index, :search => {
       :query => "> #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
       :columns => ['issue_date']
@@ -67,25 +65,24 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_reviews)
-    assert_equal 3, assigns(:conclusion_draft_reviews).size
+    assert_equal 3, assigns(:conclusion_draft_reviews).count
     assert assigns(:conclusion_draft_reviews).all? {|cdr| cdr.issue_date > 3.months.ago.to_date}
-    assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/index'
   end
 
   test 'edit conclusion_draft_reviews when search match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 4',
       :columns => ['identification', 'project']
     }
     assert_redirected_to conclusion_draft_review_url(conclusion_reviews(:conclusion_with_conclusion_draft_review))
     assert_not_nil assigns(:conclusion_draft_reviews)
-    assert_equal 1, assigns(:conclusion_draft_reviews).size
+    assert_equal 1, assigns(:conclusion_draft_reviews).count
   end
 
   test 'edit conclusion_draft_reviews when search by date match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => "< #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
       :columns => ['issue_date']
@@ -95,42 +92,39 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       conclusion_reviews(:conclusion_with_conclusion_draft_review)
     )
     assert_not_nil assigns(:conclusion_draft_reviews)
-    assert_equal 1, assigns(:conclusion_draft_reviews).size
+    assert_equal 1, assigns(:conclusion_draft_reviews).count
   end
 
   test 'list only one conclusion_draft_reviews with search on one with final' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 1',
       :columns => ['identification', 'project']
     }
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_reviews)
-    assert_equal 1, assigns(:conclusion_draft_reviews).size
-    assert_select '#error_body', false
+    assert_equal 1, assigns(:conclusion_draft_reviews).count
     assert_template 'conclusion_draft_reviews/index'
   end
 
   test 'show conclusion_draft_review' do
-    perform_auth
+    login
     get :show, :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_review)
-    assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/show'
   end
 
   test 'new conclusion_draft_review' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_review)
-    assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/new'
   end
 
   test 'create conclusion_draft_review' do
-    perform_auth
+    login
     assert_difference 'ConclusionDraftReview.count' do
       post :create, {
         :conclusion_draft_review => {
@@ -142,22 +136,21 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
         }
       }
     end
-    
+
     assert_redirected_to edit_conclusion_draft_review_url(assigns(:conclusion_draft_review))
   end
 
   test 'edit conclusion_draft_review' do
-    perform_auth
+    login
     get :edit, :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_review)
-    assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/edit'
   end
 
   test 'update conclusion_draft_review' do
     assert_no_difference 'ConclusionDraftReview.count' do
-      perform_auth
+      login
       patch :update, {
         :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id,
         :conclusion_draft_review => {
@@ -177,25 +170,25 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'export conclusion draft review' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_to_pdf, :id => conclusion_review.id
     end
 
     assert_redirected_to conclusion_review.relative_pdf_path
   end
-  
+
   test 'export conclusion draft review without score' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_to_pdf, :id => conclusion_review.id,
         :export_options => { :hide_score => '1' }
     end
@@ -204,18 +197,18 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'score sheet of final review' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :score_sheet, :id => conclusion_review.id
     end
 
     assert_redirected_to conclusion_review.review.relative_score_sheet_path
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :score_sheet, :id => conclusion_review.id, :global => 1
     end
 
@@ -224,34 +217,25 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'download work papers' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :download_work_papers, :id => conclusion_review.id
     end
 
     assert_redirected_to conclusion_review.review.relative_work_papers_zip_path
   end
 
-  test 'bundle' do
-    perform_auth
-    get :bundle, :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
-    assert_response :success
-    assert_not_nil assigns(:conclusion_draft_review)
-    assert_select '#error_body', false
-    assert_template 'conclusion_draft_reviews/bundle'
-  end
-
   test 'download bundle' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       post :create_bundle, :id => conclusion_review.id,
         :index_items => "one\ntwo"
     end
@@ -261,14 +245,14 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'check for approval' do
-    perform_auth
+    login
     get :check_for_approval, :id => reviews(:current_review).id,
       :format => :json
     assert_response :success
 
     approval_hash = nil
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       approval_hash = ActiveSupport::JSON.decode(@response.body)
     end
 
@@ -279,17 +263,16 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'compose email' do
-    perform_auth
+    login
     get :compose_email,
       :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_review)
-    assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/compose_email'
   end
 
   test 'send by email' do
-    perform_auth
+    login
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_approved_with_conclusion_draft_review).id
     )
@@ -340,7 +323,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'send by email with multiple attachments' do
-    perform_auth
+    login
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_approved_with_conclusion_draft_review).id
     )
@@ -400,7 +383,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'can not send by email with final review' do
-    perform_auth
+    login
     conclusion_review = ConclusionDraftReview.find(conclusion_reviews(
         :conclusion_current_draft_review).id)
 
@@ -423,31 +406,5 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     # Produce un error cuando se trata de buscar un informe borrador que ya
     # tiene definitivo
     assert_redirected_to :action => :index
-  end
-
-  test 'auto complete for user' do
-    perform_auth
-    get :auto_complete_for_user, { :q => 'admin', :format => :json }
-    assert_response :success
-    
-    users = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 1, users.size # Administrator
-    assert users.all? { |u| (u['label'] + u['informal']).match /admin/i }
-
-    get :auto_complete_for_user, { :q => 'blank', :format => :json }
-    assert_response :success
-    
-    users = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 2, users.size # Blank and Expired blank
-    assert users.all? { |u| (u['label'] + u['informal']).match /blank/i }
-
-    get :auto_complete_for_user, { :q => 'xyz', :format => :json }
-    assert_response :success
-    
-    users = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 0, users.size # None
   end
 end

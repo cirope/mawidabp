@@ -5,14 +5,14 @@ module Reports::ProcessControlStats
 
   def process_control_stats
     @controller = params[:controller_name]
-    final = params[:final]
+    final = params[:final] == 'true'
     @title = t("#{@controller}_committee_report.process_control_stats_title")
     @from_date, @to_date = *make_date_range(params[:process_control_stats])
     @periods = periods_for_interval
     @risk_levels = []
     @filters = []
     @columns = [
-      ['process_control', BestPractice.human_attribute_name(:process_controls), 60],
+      ['process_control', BestPractice.human_attribute_name('process_controls.name'), 60],
       ['effectiveness', t("#{@controller}_committee_report.process_control_stats.average_effectiveness"), 20],
       ['weaknesses_count', t('review.weaknesses_count'), 20]
     ]
@@ -23,28 +23,38 @@ module Reports::ProcessControlStats
     @process_control_ids_data = {}
     @reviews_score_data = {}
     reviews_score_data = {}
+    weaknesses_conditions = {}
 
     if params[:process_control_stats]
-      unless params[:process_control_stats][:business_unit_type].blank?
-        @selected_business_unit = BusinessUnitType.find(
-          params[:process_control_stats][:business_unit_type])
-        conclusion_reviews = conclusion_reviews.by_business_unit_type(
-          @selected_business_unit.id)
-        @filters << "<b>#{BusinessUnitType.model_name.human}</b> = " +
-          "\"#{@selected_business_unit.name.strip}\""
+      if params[:process_control_stats][:business_unit_type].present?
+        @selected_business_unit = BusinessUnitType.find(params[:process_control_stats][:business_unit_type])
+        conclusion_reviews = conclusion_reviews.by_business_unit_type(@selected_business_unit.id)
+        @filters << "<b>#{BusinessUnitType.model_name.human}</b> = \"#{@selected_business_unit.name.strip}\""
       end
 
-      unless params[:process_control_stats][:business_unit].blank?
+      if params[:process_control_stats][:business_unit].present?
         business_units = params[:process_control_stats][:business_unit].split(
           SPLIT_AND_TERMS_REGEXP
         ).uniq.map(&:strip)
+        business_unit_ids = business_units.present? && BusinessUnit.by_names(*business_units).pluck('id')
 
         unless business_units.empty?
-          conclusion_reviews = conclusion_reviews.by_business_unit_names(
-            *business_units)
-          @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
-            "\"#{params[:process_control_stats][:business_unit].strip}\""
+          conclusion_reviews = conclusion_reviews.by_business_unit_names(final, *business_units)
+          @filters << "<b>#{BusinessUnit.model_name.human}</b> = \"#{params[:process_control_stats][:business_unit].strip}\""
         end
+      end
+
+      if params[:process_control_stats][:finding_status].present?
+        weaknesses_conditions[:state] = params[:process_control_stats][:finding_status]
+        state_text = t "finding.status_#{Finding::STATUS.invert[weaknesses_conditions[:state].to_i]}"
+
+        @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text}\""
+      end
+
+      if params[:process_control_stats][:finding_title].present?
+        weaknesses_conditions[:title] = params[:process_control_stats][:finding_title]
+
+        @filters << "<b>#{Finding.human_attribute_name('title')}</b> = \"#{weaknesses_conditions[:title]}\""
       end
     end
 
@@ -56,20 +66,30 @@ module Reports::ProcessControlStats
         c_r.review.control_objective_items.not_excluded_from_score.each do |coi|
           pc_data = process_controls[coi.process_control.name] ||= {}
           pc_data[:weaknesses_ids] ||= {}
-          pc_data[:reviews] ||= []
+          pc_data[:reviews] ||= 0
+          id = coi.review.id
+          pc_data[:review_ids] ||= []
+          pc_data[:review_ids] << id if pc_data[:review_ids].exclude? id
           weaknesses_count = {}
           weaknesses = final ? coi.final_weaknesses : coi.weaknesses
+          weaknesses = weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
+          weaknesses = weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
 
           weaknesses.not_revoked.each do |w|
             @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
+            show = business_unit_ids.blank? ||
+              business_unit_ids.include?(c_r.review.business_unit.id) ||
+              w.business_unit_ids.any? { |bu_id| business_unit_ids.include?(bu_id) }
 
-            weaknesses_count[w.risk_text] ||= 0
-            weaknesses_count[w.risk_text] += 1
-            pc_data[:weaknesses_ids][w.risk_text] ||= []
-            pc_data[:weaknesses_ids][w.risk_text] << w.id
+            if show
+              weaknesses_count[w.risk_text] ||= 0
+              weaknesses_count[w.risk_text] += 1
+              pc_data[:weaknesses_ids][w.risk_text] ||= []
+              pc_data[:weaknesses_ids][w.risk_text] << w.id
+            end
           end
 
-          pc_data[:reviews] << coi.review_id if weaknesses.size > 0
+          pc_data[:reviews] += 1 if weaknesses.size > 0
 
           pc_data[:weaknesses] ||= {}
           pc_data[:effectiveness] ||= []
@@ -116,11 +136,8 @@ module Reports::ProcessControlStats
 
         @process_control_data[period] << {
           'process_control' => pc,
-          'effectiveness' => t(
-            "#{@controller}_committee_report.process_control_stats.average_effectiveness_resume",
-            :effectiveness => "#{'%.2f' % effectiveness}%",
-            :count => pc_data[:reviews].uniq.size
-          ),
+          'effectiveness' => effectiveness_label(
+            effectiveness, pc_data[:reviews], pc_data[:review_ids]),
           'weaknesses_count' => weaknesses_count_text
         }
       end
@@ -132,6 +149,23 @@ module Reports::ProcessControlStats
         ef1 <=> ef2
       end
     end
+  end
+
+  def effectiveness_label(effectiveness, reviews, review_ids)
+    effectiveness_label = []
+
+   effectiveness_label << t(
+      "#{@controller}_committee_report.process_control_stats.average_effectiveness_resume",
+      :effectiveness => "#{'%.2f' % effectiveness}%",
+      :count => review_ids.count
+    )
+
+    effectiveness_label <<  t(
+      "#{@controller}_committee_report.process_control_stats.reviews_with_weaknesses",
+      :count => reviews
+    )
+
+    effectiveness_label.join(' / ')
   end
 
   def create_process_control_stats

@@ -1,12 +1,8 @@
-# =Controlador de informes borradores
-#
-# Lista, muestra, crea, modifica y elimina informes borradores
-# (#ConclusionDraftReview)
 class ConclusionDraftReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_draft_review, only: [
     :show, :edit, :update, :export_to_pdf, :score_sheet,
-    :download_work_papers, :bundle, :create_bundle, :compose_email,
+    :download_work_papers, :create_bundle, :compose_email,
     :send_by_email
   ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
@@ -30,14 +26,14 @@ class ConclusionDraftReviewsController < ApplicationController
       :reviews, :business_units
     ).order(
       [
-        "#{ConclusionDraftReview.table_name}.issue_date DESC",
-        "#{ConclusionFinalReview.table_name}.created_at DESC"
+        "#{ConclusionDraftReview.quoted_table_name}.#{ConclusionDraftReview.qcn('issue_date')} DESC",
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('created_at')} DESC"
       ].join(', ')
-    ).paginate(page: params[:page], per_page: APP_LINES_PER_PAGE)
+    ).page(params[:page])
 
     respond_to do |format|
       format.html {
-        if @conclusion_draft_reviews.size == 1 && !@query.blank? &&
+        if @conclusion_draft_reviews.count == 1 && !@query.blank? &&
             !params[:page] && !@conclusion_draft_reviews.first.has_final_review?
           redirect_to(
             conclusion_draft_review_url(@conclusion_draft_reviews.first)
@@ -166,13 +162,6 @@ class ConclusionDraftReviewsController < ApplicationController
     redirect_to review.relative_work_papers_zip_path
   end
 
-  # Muestra las opciones editables del legajo
-  #
-  # * GET /conclusion_draft_reviews/bundle/1
-  def bundle
-    @title = t 'conclusion_draft_review.bundle_title'
-  end
-
   # Crea el legajo completo del informe
   #
   # * POST /conclusion_draft_reviews/create_bundle
@@ -180,7 +169,12 @@ class ConclusionDraftReviewsController < ApplicationController
     @conclusion_draft_review.create_bundle_zip current_organization,
       params[:index_items]
 
-    redirect_to @conclusion_draft_review.relative_bundle_zip_path
+    @report_path = @conclusion_draft_review.relative_bundle_zip_path
+
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js { render 'shared/pdf_report' }
+    end
   end
 
   # Confecciona el correo con el informe
@@ -219,8 +213,8 @@ class ConclusionDraftReviewsController < ApplicationController
           true)
       end
 
-      (params[:user].try(:values) || []).each do |user_data|
-        user = User.find(user_data[:id]) if user_data[:id]
+      (params[:user].try(:values).try(:reject, &:blank?) || []).each do |user_data|
+        user = User.find_by(id: user_data[:id]) if user_data[:id]
         send_options = {
           note: note,
           include_score_sheet: include_score_sheet,
@@ -247,38 +241,6 @@ class ConclusionDraftReviewsController < ApplicationController
       render action: :compose_email
     else
       redirect_to conclusion_draft_reviews_url
-    end
-  end
-
-  # Método para el autocompletado de usuarios
-  #
-  # * POST /reviews/auto_complete_for_user
-  def auto_complete_for_user
-    @tokens = params[:q][0..100].split(/[\s,]/).uniq
-    @tokens.reject! {|t| t.blank?}
-    conditions = [
-      "#{Organization.table_name}.id = :organization_id",
-      "#{User.table_name}.hidden = false"
-    ]
-    parameters = {organization_id: current_organization.id}
-    @tokens.each_with_index do |t, i|
-      conditions << [
-        "LOWER(users.name) LIKE :user_data_#{i}",
-        "LOWER(users.last_name) LIKE :user_data_#{i}",
-        "LOWER(users.email) LIKE :user_data_#{i}"
-      ].join(' OR ')
-
-      parameters[:"user_data_#{i}"] = "%#{Unicode::downcase(t)}%"
-    end
-
-    @users = User.includes(:organizations).where(
-      [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
-    ).order(
-      ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
-    ).references(:organizations).limit(10)
-
-    respond_to do |format|
-      format.json { render json: @users }
     end
   end
 
@@ -320,7 +282,7 @@ class ConclusionDraftReviewsController < ApplicationController
     def conclusion_draft_review_params
       params.require(:conclusion_draft_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
-        :lock_version
+        :force_approval, :lock_version
       )
     end
 
@@ -331,7 +293,6 @@ class ConclusionDraftReviewsController < ApplicationController
         download_work_papers: :read,
         bundle: :read,
         create_bundle: :read,
-        auto_complete_for_user: :read,
         check_for_approval: :read,
         compose_email: :modify,
         send_by_email: :modify

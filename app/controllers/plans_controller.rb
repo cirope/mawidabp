@@ -1,8 +1,6 @@
-# =Controlador de planes de trabajo
-#
-# Lista, muestra, crea, modifica y elimina planes de trabajo (#Plan) y sus ítems
-# (#PlanItem)
 class PlansController < ApplicationController
+  include AutoCompleteFor::BusinessUnit
+
   before_action :auth, :load_privileges, :check_privileges,
     :find_business_unit_type
   before_action :set_plan, only: [
@@ -17,11 +15,9 @@ class PlansController < ApplicationController
   # * GET /plans.xml
   def index
     @title = t 'plan.index_title'
-    @plans = Plan.list.includes(:period).order(
-      "#{Period.table_name}.start DESC"
-    ).paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
-    )
+    @plans = Plan.list.includes(:period).references(:period).order(
+      "#{Period.quoted_table_name}.#{Period.qcn('start')} DESC"
+    ).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -148,76 +144,6 @@ class PlansController < ApplicationController
     end
   end
 
-  # * GET /plans/auto_complete_for_business_unit_business_unit_id
-  def auto_complete_for_business_unit_business_unit_id
-    @tokens = params[:q][0..100].split(/[\s,]/).uniq
-    @tokens.reject! {|t| t.blank?}
-    conditions = [
-      "#{BusinessUnitType.table_name}.organization_id = :organization_id"
-    ]
-    parameters = {:organization_id => current_organization.id}
-
-    if params[:business_unit_type_id].to_i > 0
-      conditions << "#{BusinessUnitType.table_name}.id = :but_id"
-      parameters[:but_id] = params[:business_unit_type_id].to_i
-    end
-
-    @tokens.each_with_index do |t, i|
-      conditions << [
-        "LOWER(#{BusinessUnit.table_name}.name) LIKE :business_unit_data_#{i}"
-      ].join(' OR ')
-
-      parameters[:"business_unit_data_#{i}"] = "%#{Unicode::downcase(t)}%"
-    end
-
-    @business_units = BusinessUnit.includes(:business_unit_type).where(
-      [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
-    ).order(
-      [
-        "#{BusinessUnit.table_name}.name ASC",
-        "#{BusinessUnitType.table_name}.name ASC"
-      ]
-    ).limit(10)
-
-    respond_to do |format|
-      format.json { render :json => @business_units }
-    end
-  end
-
-  # * GET /plans/auto_complete_for_user
-  def auto_complete_for_user
-    @tokens = params[:q][0..100].split(/[\s,]/).uniq
-    @tokens.reject! {|t| t.blank?}
-    conditions = [
-      "#{Organization.table_name}.id = :organization_id",
-      "#{User.table_name}.hidden = false"
-    ]
-    parameters = {:organization_id => current_organization.id}
-    @tokens.each_with_index do |t, i|
-      conditions << [
-        "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
-        "LOWER(#{User.table_name}.last_name) LIKE :user_data_#{i}",
-        "LOWER(#{Resource.table_name}.name) LIKE :user_data_#{i}"
-      ].join(' OR ')
-
-      parameters[:"user_data_#{i}"] = "%#{Unicode::downcase(t)}%"
-    end
-
-    @users = User.includes(:organizations, :resource).where(
-      [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
-    ).order(
-      ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
-    ).limit(10).references(:organizations)
-
-    respond_to do |format|
-      format.json {
-        render :json => @users.to_json(
-          :methods => [:label, :informal, :cost_per_unit]
-        )
-      }
-    end
-  end
-
   # * GET /plans/resource_data/1
   def resource_data
     resource = Resource.find(params[:id])
@@ -261,8 +187,7 @@ class PlansController < ApplicationController
     def load_privileges
       @action_privileges.update(
         :export_to_pdf => :read,
-        :auto_complete_for_business_unit_business_unit_id => :read,
-        :auto_complete_for_user => :read,
+        :auto_complete_for_business_unit => :read,
         :resource_data => :read
       )
     end

@@ -1,0 +1,2 @@
+module Polls::BusinessUnitsHelper
+end

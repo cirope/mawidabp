@@ -35,9 +35,10 @@ class Workflow < ActiveRecord::Base
   has_one :plan_item, :through => :review
 
   has_many :workflow_items, -> {
-    order("#{WorkflowItem.table_name}.order_number ASC,
-      #{WorkflowItem.table_name}.start ASC,
-      #{WorkflowItem.table_name}.end ASC"
+    order(
+      "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('order_number')} ASC",
+      "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('start')} ASC",
+      "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('end')} ASC"
     )
   }, :dependent => :destroy
   has_many :resource_utilizations, :through => :workflow_items

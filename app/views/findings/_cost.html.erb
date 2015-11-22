@@ -1,13 +1,18 @@
-<div class="cost item">
-  <div class="item_field" style="width: 20%;">
-    <%= f.text_field :raw_cost, :maxlength => 255, :size => 10,
-      :class => "required #{:error_field unless f.object.errors[:cost].blank?}" %>
+<fieldset class="cost">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-2">
+        <%= f.input :raw_cost, label: false, input_html: {
+          maxlength: 255, data: { required: true }
+        } %>
+      </div>
+      <div class="col-md-10">
+        <%= f.input :description, label: false, input_html: { rows: 1 } %>
+      </div>
+    </div>
   </div>
-  <div class="item_field" style="width: 75%;">
-    <%= f.text_field :description %>
+  <div class="form-actions">
+    <%= f.input :user_id, as: :hidden %>
+    <%= f.input :cost_type, as: :hidden %>
   </div>
-  <div style="display: none;">
-    <%= f.hidden_field :user_id %>
-    <%= f.hidden_field :cost_type %>
-  </div>
-</div>
+</fieldset>

@@ -1,58 +1,24 @@
-<!--[form:organization]-->
-<%= form_for @organization, :html => { :multipart => true } do |o_f| %>
-  <%= o_f.error_messages %>
+<%= simple_form_for @organization do |f| %>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :name, autofocus: true %>
+      <%= f.input :prefix unless action_name.presence_in %w(edit update) %>
+      <%= f.input :kind, collection: organization_kinds, prompt: true %>
 
-  <div class="form_column_left">
-    <p>
-      <%= o_f.label :name %>
-      <%= o_f.text_field :name, :maxlength => 255, :autofocus => true %>
-    </p>
-    <% unless [:edit, :update].include?(controller.action_name.to_sym) %>
-    <p>
-      <%= o_f.label :prefix %>
-      <%= o_f.text_field :prefix, :maxlength => 255, :size => 10 %>
-    </p>
-    <% end %>
-    <p>
-      <%= o_f.label :kind %>
-      <%= o_f.select :kind, ORGANIZATION_KINDS.collect { |kind|
-            [t("activerecord.attributes.organization.kind_options.#{kind}"), kind] },
-          {:selected => @organization.kind} %>
-    </p>
-    <% unless @organization.new_record? %>
-      <p class="form_item">
-        <% @organization.build_image_model unless @organization.image_model %>
-        <%= o_f.fields_for :image_model do |im_f| %>
-          <%= im_f.label :image,
-            Organization.human_attribute_name(:image_model), :class => :inline %>
-          <span class="file_container">
-            <%= im_f.file_field :image, :class => 'inline_item file', :size => nil %>
-          </span>
-        <% end %>
-        <% if @organization.image_model && @organization.image_model.valid? &&
-          @organization.errors.empty? %>
-          <%= link_to_download @organization.image_model.image.url,
-            style: 'margin-left: 5px;' %>
-        <% end %>
-      </p>
-    <% else %>
-      <p>
-        <%= t('organization.new_organization_can_not_have_image') %>
-      </p>
-    <% end %>
-  </div>
-  <div class="form_column_right">
-    <p>
-      <%= o_f.label :description %>
-      <%= o_f.text_area :description %>
-    </p>
+      <%= render 'image_input', f: f %>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :description, input_html: { rows: 5 } %>
+    </div>
   </div>
 
-  <%= hidden_lock_version(o_f) %>
+  <%= render 'ldap_config', f: f %>
 
-  <p>
-    <span class="button"><%= o_f.submit %></span>
-  </p>
+  <hr />
+
+  <div class="form-actions">
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit class: 'btn btn-primary' %>
+    <div class="pull-right"><%= yield :form_actions %></div>
+  </div>
 <% end %>
-<!--[eoform:organization] -->
-<script type="text/javascript">HTMLUtil.stylizeAllInputFiles();</script>

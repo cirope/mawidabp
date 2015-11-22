@@ -1,5 +1,3 @@
-# Funciones para seleccionar la correcta versión de parámetros que debe
-# utilizarse
 module ParameterSelector
   def parameter_in(organization_id, param_name, param_date = nil, show_value = false)
     organization_id = Organization.current_id unless organization_id

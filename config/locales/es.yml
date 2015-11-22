@@ -39,7 +39,7 @@
     search: "Buscar"
     send: "Enviar"
     show: "Ver"
-    show_downloads: "Ver descargas &#x25BC;"
+    downloads: "Descargas"
     update: "Actualizar"
     without_data: "Sin datos"
 
@@ -47,71 +47,6 @@
     es: 'Español'
     public_es: 'Público'
     mc_es: 'Control de gestión'
-
-  menu:
-    exit: "Salir"
-    show_menu: "Ver menú"
-    hide_menu: "Ocultar menú"
-    administration_title: "ADMINISTRACIÓN"
-    administration:
-      organization_title: "Organización"
-      organization:
-        management: "Gestión"
-        business_units: "Unidades de negocio"
-      security_title: "Seguridad"
-      security:
-        reports: "Reportes de seguridad"
-        users: "Usuarios"
-        roles: "Perfiles y Privilegios"
-      best_practices: "Buenas prácticas"
-      settings: 'Configuraciones'
-      e_mails: "Correos"
-      questionnaires_title: "Cuestionarios"
-      questionnaires:
-        definition: "Definición"
-        polls: "Encuestas"
-        reports: "Reportes"
-    planning_title: "PLANIFICACIÓN"
-    planning:
-      periods: "Periodos"
-      resources: "Recursos"
-      audit_title: "Plan de auditoría"
-      audit:
-        plans: "Plan de trabajo"
-        procedure_controls: "Procedimientos y pruebas de control"
-    execution_title: "EJECUCIÓN"
-    execution:
-      findings_title: "Hallazgos"
-      reviews: "Informes"
-      workflows: "Programa de trabajo"
-      control_objectives: "Objetivos de control"
-      findings:
-        weaknesses: "Observaciones"
-        oportunities: "Oportunidades de mejora"
-        fortresses: "Fortalezas"
-        nonconformities: "No conformidades"
-        potential_nonconformities: "No conformidades potenciales"
-      reports: "Reportes"
-    conclusion_title: "CONCLUSIÓN"
-    conclusion:
-      draft_reviews: "Informe borrador"
-      final_reviews: "Informe definitivo"
-      reports_title: "Reportes"
-      reports:
-        audit: "Reportes de auditoría"
-        committee: "Reportes de comité"
-        management: "Reportes de la gerencia"
-    follow_up_title: "SEGUIMIENTO"
-    follow_up:
-      pending_findings: "Hallazgos pendientes"
-      complete_findings: "Hallazgos solucionados o reiterados"
-      notifications: "Notificaciones"
-      reports_title: "Reportes"
-      reports:
-        committee: "Reportes de comité"
-        audit: "Reportes de auditoría"
-        management: "Reportes de la gerencia"
-    help_title: "AYUDA"
 
   message:
     change_weakness_risk: "El riesgo de la observación ha cambiado"
@@ -141,6 +76,7 @@
     you_are_already_logged: "Este usuario ya ha iniciado sesión"
     empty_result: "Sin resultados, modifique el criterio"
     automatic_by_the_system: "Realizado de forma automática por el sistema"
+    compatibility_warning_html: 'Está usando un navegador <strong>obsoleto</strong>. Por favor considere <a href="http://browsehappy.com/">actualizarlo</a>'
 
   error:
     title: "Error"
@@ -168,21 +104,6 @@
       can_not_be_destroyed: "El tipo de unidad de negocio no puede ser eliminado"
       business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
 
-  best_practice:
-    index_title: "Listado de buenas prácticas"
-    show_title: "Detalle buenas prácticas"
-    new_title: "Agregar buenas prácticas"
-    edit_title: "Modificar buenas prácticas"
-    correctly_created: "Buenas prácticas agregadas correctamente."
-    correctly_updated: "Buenas prácticas actualizadas correctamente."
-    stale_object_error: "Las buenas prácticas no fueron actualizadas, intente nuevamente."
-    add_process_control: "Agregar proceso de negocio"
-    add_control_objective: "Agregar objetivo de control"
-    show_control_objectives: "Ver objetivos de control"
-    hide_control_objectives: "Ocultar objetivos de control"
-    errors:
-      related_control_objectives: "La buena práctica no puede ser eliminada, contiene objetivos de control ya utilizados en informes"
-
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
     show_title: "Detalle del informe borrador"
@@ -200,13 +121,14 @@
     generate_global_score_sheet: "Descargar planilla de calificación global"
     download_work_papers: "Descargar papeles de trabajo"
     download_without_score: "Descargar sin calificación"
+    download_brief: "Descargar resumido"
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     last_verified_date: "La última comprobación se realizó el %{date}"
     has_final_review: "Ya se emitió un informe definitivo y por lo tanto no es posible seguir trabajando con el informe borrador"
 
-  conclusion_audit_report:
-    index_title: "Reportes de auditoría"
+  conclusion_report:
+    index_title: "Reportes de conclusión"
     cost_analysis_title: "Análisis de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Hallazgos totales por estado"
@@ -261,8 +183,11 @@
       subtitle: "INFORMES DEFINITIVOS"
       average_effectiveness: "Efectividad promedio"
       average_effectiveness_resume:
-        one: "%{effectiveness} en un informe"
-        other: "%{effectiveness} en %{count} informes"
+        one: "%{effectiveness} - %{count} informe evaluado"
+        other: "%{effectiveness} - %{count} informes evaluados"
+      reviews_with_weaknesses:
+        one: "%{count} informe con observaciones en el O.C"
+        other: "%{count} informes con observaciones en el O.C."
       without_weaknesses: "Sin observaciones"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       review_score_average: "Promedio de calificaciones de los informes: <b>%{score}%</b>"
@@ -301,10 +226,13 @@
       subtitle: "INFORMES DEFINITIVOS"
       average_effectiveness: "Efectividad promedio"
       average_effectiveness_resume:
-        one: "%{effectiveness} con observaciones en un informe"
-        other: "%{effectiveness} con observaciones en %{count} informes"
+        one: "%{effectiveness} - %{count} informe evaluado"
+        other: "%{effectiveness} - %{count} informes evaluados"
+      reviews_with_weaknesses:
+        one: "%{count} informe con observaciones en el O.C"
+        other: "%{count} informes con observaciones en el O.C."
       without_weaknesses: "Sin observaciones"
-      without_audits_in_the_period: "Sin auditorías en el period"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
       review_score_average: "Promedio de calificaciones de los informes: <b>%{score}%</b>"
     qa_indicators:
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
@@ -374,7 +302,13 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     download_without_control_objectives_excluded_from_score: "Descargar sin objetivos de control no calificados"
+    download_without_score: "Descargar sin calificación"
+    download_brief: "Descargar resumido"
     hide_control_objectives_excluded_from_score: "Ocultar objetivos de control no calificados"
+    send_type:
+      normal: "Informe completo"
+      brief: "Informe resumido"
+      without_score: "Informe sin calificación"
     pdf:
       pdf_name: "listado_de_informes_definitivos.pdf"
       filtered_by:
@@ -459,6 +393,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     add_oportunity: "Agregar nueva oportunidad de mejora"
     add_weakness: "Agregar nueva observación"
     add_work_paper: "Agregar papel de trabajo"
+    add_business_unit_score: "Agregar calificación de unidad de negocio"
+    add_business_unit_type: "Agregar unidades de negocio por tipo"
     readonly: "El objetivo de control no puede ser modificado, ya se emitió el informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     has_work_papers: "Papeles de trabajo"
@@ -484,23 +420,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     create: "Generar"
     title: "Título"
     subtitle: "Subtítulo"
-
-  email:
-    index_title: "Listado de correos"
-    show_title: "Detalles del correo"
-
-  error_record:
-    index_title: "Registros de error"
-    show_title: "Detalles del registro"
-    error_on_login: "Ingreso erróneo"
-    error_on_password_change: "Cambio de contraseña incorrecto"
-    error_user_disabled: "Usuario deshabilitado"
-    void_user: "Inexistente"
-    show_list: "Ver registros de error"
-    pdf_list_name: "registros_de_error_%{from_date}_%{to_date}.pdf"
-    period:
-      title: "Intervalo"
-      range: "desde el %{from_date} al %{to_date}"
 
   execution_reports:
     detailed_management_report:
@@ -544,17 +463,16 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     edit_title: "Modificar respuesta a un hallazgo"
     correctly_updated: "Respuesta a hallazgo actualizada correctamente."
     stale_object_error: "La respuesta al hallazgo no fue actualizada, intente nuevamente."
-    download: "Descargar listado general"
-    download_detailed: "Descargar listado detallado"
-    download_xml: "Descargar listado en XML"
-    download_csv: "Descargar listado en CSV"
+    incomplete: "Pendientes"
+    complete: "Solucionados o reiterados"
+    as_owner: "%{kind} como responsable"
     work_papers: "Papeles de trabajo"
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
-    csv_name: "listado_de_hallazgos"
+    download_csv: "Descargar CSV"
     add_finding_relation: "Agregar relación"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
@@ -578,7 +496,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     responsibles:
       one: "Responsable"
       other: "Responsables"
-    send_notification: "¿Enviar notificación?"
+    send_notification: "¿Notificar?"
     show_status_change_history: "Ver historial de cambios de estado"
     status_change_history: "Historial de cambios de estado"
     status_confirmed: "Confirmada"
@@ -605,13 +523,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     errors:
       correction_date_on_or_before: "La fecha de corrección/acción inmediata debe ser anterior a la fecha de análisis de causa"
       cause_analysis_date_on_or_before: "La fecha de análisis de causa debe ser anterior a la fecha de implementación"
-    pdf:
-      pdf_name: "listado_de_hallazgos.pdf"
-      size_warning: "El listado es demasiado grande, se ha truncado a %{count} hallazgos."
-      filtered_by:
-        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
-        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
-      sorted_by: "El listado fue ordenado por la columna %{column}"
     important_dates:
       title: "Fechas a considerar"
       expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *%{date}* si ningún auditado proporciona una respuesta"
@@ -677,8 +588,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     detailed_report: "Reporte detallado"
-    rescheduled_being_implemented_weaknesses_report_title: "Observaciones en proceso reprogramadas"
-    rescheduling : "Reprogramaciones"
     qa_indicators_title: "Indicadores de calidad"
     weakness_summary: "Resumen de observaciones"
     weaknesses_by_risk: "Observaciones por riesgo"
@@ -719,11 +628,16 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       subtitle: "SEGUIMIENTO DE INFORMES"
       average_effectiveness: 'Efectividad promedio'
       average_effectiveness_resume:
-        one: "%{effectiveness} en un informe"
-        other: "%{effectiveness} en %{count} informes"
+        one: "%{effectiveness} - %{count} informe evaluado"
+        other: "%{effectiveness} - %{count} informes evaluados"
+      reviews_with_weaknesses:
+        one: "%{count} informe con observaciones en el O.C"
+        other: "%{count} informes con observaciones en el O.C."
       without_weaknesses: "Sin observaciones"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       review_score_average: "Promedio de calificaciones de los informes: <b>%{score}%</b>"
+    follow_up_cost_analysis:
+      pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
     fixed_weaknesses_report:
       pdf_name: "observaciones_por_riesgo_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
@@ -759,8 +673,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       subtitle: "SEGUIMIENTO DE INFORMES"
       average_effectiveness: "Efectividad promedio"
       average_effectiveness_resume:
-        one: "%{effectiveness} con observaciones en un informe"
-        other: "%{effectiveness} con observaciones en %{count} informes"
+        one: "%{effectiveness} - %{count} informe evaluado"
+        other: "%{effectiveness} - %{count} informes evaluados"
+      reviews_with_weaknesses:
+        one: "%{count} informe con observaciones en el O.C"
+        other: "%{count} informes con observaciones en el O.C."
       without_weaknesses: "Sin observaciones"
       review_score_average: "Promedio de calificaciones de los informes: <b>%{score}%</b>"
     qa_indicators:
@@ -780,10 +697,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         oportunities_solution_rate: "Solución de Oportunidades de Mejora"
         ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Riesgo Medio"
         ancient_highest_risk_weaknesses: "Anticuación de Observaciones de Riesgo Alto"
-    rescheduled_being_implemented_weaknesses_report:
-      without_data: "Sin datos para el rango de fechas ingresado"
-      title: "INFORME DE OBSERVACIONES EN PROCESO REPROGRAMADAS"
-      pdf_name: "observaciones_reprogramadas_%{from_date}_al_%{to_date}.pdf"
     synthesis_report:
       pdf_name: "informe_de_sintesis_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Hallazgos Auditoría Interna"
@@ -854,50 +767,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     stale_object_error: "El grupo no fue actualizado, intente nuevamente."
     add_organization: "Agregar organización"
 
-  help_content:
-    index_title: "Listado de contenidos de ayuda"
-    show_title: "Detalles del contenido de ayuda"
-    new_title: "Agregar contenido de ayuda"
-    edit_title: "Modificar contenido de ayuda"
-    correctly_created: "Contenido de ayuda agregado correctamente."
-    correctly_updated: "Contenido de ayuda actualizado correctamente."
-    stale_object_error: "El contenido de ayuda no fue actualizado, intente nuevamente."
-    content_title: "Contenido"
-    help_title: "Ayuda"
-    last_modification: "Esta sección se modificó por última vez hace *%{last_modification}*"
-
-  help_item:
-    index_title: "Listado de registros de ayuda"
-    show_title: "Detalles del registro de ayuda"
-    new_title: "Agregar registro de ayuda"
-    edit_title: "Modificar registro de ayuda"
-    correctly_created: "Registro de ayuda agregado correctamente."
-    correctly_updated: "Registro de ayuda actualizado correctamente."
-    stale_object_error: "El registro de ayuda no fue actualizado, intente nuevamente."
-    show_help_item_children: "Ver subtemas"
-    hide_help_item_children: "Ocultar subtemas"
-
-  inline_help:
-    index_title: "Listado de registros de ayuda en línea"
-    show_title: "Detalles del registro de ayuda en línea"
-    new_title: "Agregar registro de ayuda en línea"
-    edit_title: "Modificar registro de ayuda en línea"
-    correctly_created: "Registro de ayuda en línea agregado correctamente."
-    correctly_updated: "Registro de ayuda en línea actualizado correctamente."
-    stale_object_error: "El registro de ayuda en línea no fue actualizado, intente nuevamente."
-    link_title: "Haga click para ver la ayuda en línea de este elemento"
-    inline_title: 'Ayuda'
-
-  login_record:
-    index_title: "Registros de ingreso"
-    choose: "Reportes de seguridad"
-    show_title: "Detalles del registro de ingreso"
-    show_list: "Ver registros de ingreso"
-    pdf_list_name: "listado_de_registros_de_ingreso_%{from_date}_%{to_date}.pdf"
-    period:
-      title: "Intervalo"
-      range: "desde el %{from_date} al %{to_date}"
-
   nonconformity:
     index_title: "Listado de no conformidades"
     show_title: "Detalles de la no conformidad"
@@ -941,7 +810,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     status_rejected: "Rechazada"
     type: "Tipo"
 
-  notifier:
+  notifier_mailer:
     notify_new_finding:
       title: "Tiene un nuevo hallazgo"
       created_title: "Nuevo hallazgo"
@@ -971,8 +840,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     footer:
       email_label: "Correo"
       warning: "Por favor, *no contestar* el presente correo."
-      title: "Correo enviado por el sistema 'MawidaBP'. Cualquier inquietud comunicarse al área de soporte:"
-      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 7 o superior*"
+      title: "Correo enviado por el sistema 'Mawidabp'. Cualquier inquietud comunicarse al área de soporte:"
+      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 8 o superior*"
     notification:
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"
@@ -1013,12 +882,12 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       title: "El grupo %{name} ha sido creado"
       initial_user: "Para comenzar a utilizar el sistema debe primero crear un usuario"
       create_user: "Crear usuario"
-      clarification: "Ha recibido este correo porque se le ha asignado un grupo en el sistema 'MawidaBP'"
+      clarification: "Ha recibido este correo porque se le ha asignado un grupo en el sistema 'Mawidabp'"
     welcome_email:
       title: "%{name}, su cuenta ha sido creada"
       initial_password: "Para comenzar a utilizar el sistema debe primero establecer su contraseña"
       change_password: "Establecer contraseña"
-      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'MawidaBP' del área de Auditoría Interna."
+      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'Mawidabp' del área de Auditoría Interna."
       organizations_sites:
         one: "Luego puede ingresar en la siguiente dirección:"
         other: "Luego puede ingresar en cualquiera de las siguientes direcciones (dependiendo de la organización que seleccione):"
@@ -1082,27 +951,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     review_identification: "Número de informe %{review}"
     draft: "Borrador"
 
-  period:
-    index_title: "Listado de periodos"
-    show_title: "Detalles del periodo"
-    new_title: "Agregar periodo"
-    edit_title: "Modificar periodo"
-    correctly_created: "Periodo agregado correctamente."
-    correctly_updated: "Periodo actualizado correctamente."
-    stale_object_error: "El periodo no fue actualizado, intente nuevamente."
-    errors:
-      can_not_be_destroyed: "El periodo no puede ser eliminado"
-      has_plans:
-        one: "Tiene un plan asociado"
-        other: "Tiene %{count} planes asociados"
-      has_procedure_controls: "Está asociado a procedimientos y pruebas de control (%{count})"
-      has_reviews:
-        one: "Tiene un informe asociado"
-        other: "Tiene %{count} informes asociados"
-      has_workflows:
-        one: "Tiene un programa de trabajo asociado"
-        other: "Tiene %{count} programas de trabajo asociados"
-
   plan:
     index_title: "Listado de planes de trabajo"
     show_title: "Detalles del plan de trabajo"
@@ -1149,49 +997,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       can_not_be_destroyed: "El plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
       plan_item_related: "El item del plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
 
-  poll:
-    answer_poll: "¿Contestar encuesta?"
-    import_csv_customers_title: "Importar clientes CSV"
-    error_csv_file_extension: "Debe seleccionar un archivo CSV"
-    customer_polls_sended: "Se enviaron satisfactoriamente %{count} encuestas"
-    index_title: "Listado de encuestas"
-    edit_title: "Modificar encuesta"
-    new_title: "Agregar encuesta"
-    show_title: "Detalles de la encuesta"
-    reports_title: "Reportes de encuestas"
-    correctly_created: "La encuesta ha sido agregada correctamente."
-    correctly_updated: "La encuesta ha sido guardada correctamente. ¡Muchas gracias!"
-    stale_object_error: "La encuesta no fue guardada, intente nuevamente."
-    already_exists: "La encuesta ya existe y no fue enviada al usuario"
-    must_answer_poll: "Tiene una encuesta pendiente por responder."
-    not_found: "No se encontró la encuesta o la misma ya ha sido contestada."
-    access_denied: "La encuesta ya ha sido contestada."
-    score: "Nivel de satisfacción promedio"
-    summary_by_questionnaire: "Resumen por tipo de cuestionario"
-    summary_by_answers: "Resumen de respuestas"
-    summary_by_business_unit_subtitle: "RESUMEN POR UNIDAD DE NEGOCIO"
-    summary_by_answers_subtitle: "RESUMEN DE RESPUESTAS"
-    summary_by_questionnaire_subtitle: "RESUMEN POR TIPO DE CUESTIONARIO"
-    report_title: "ENCUESTAS"
-    summary_pdf_name: "resumen_encuestas_del_%{from_date}_al_%{to_date}.pdf"
-    summary_by_business_unit: "Resumen por unidad de negocio"
-    total_answered: "Total encuestas contestadas"
-    total_unanswered: "Total encuestas no contestadas"
-    without_data: "Sin datos para los filtros ingresados"
-  procedure_control:
-    index_title: "Listado de procedimientos y pruebas de control"
-    show_title: "Detalles del procedimiento y prueba de control"
-    new_title: "Agregar procedimiento y prueba de control"
-    edit_title: "Modificar procedimiento y prueba de control"
-    correctly_created: "Procedimiento y prueba de control agregado correctamente."
-    correctly_updated: "Procedimiento y prueba de control actualizado correctamente."
-    stale_object_error: "El procedimiento y prueba de control no fue actualizado, intente nuevamente."
-    copy: "Copiar"
-    add_procedure_control_item: "Agregar proceso de negocio"
-    add_procedure_control_subitem: "Agregar procedimiento de control"
-    show_procedure_control_subitems: "Ver procedimientos de control"
-    hide_procedure_control_subitems: "Ocultar procedimientos de control"
-
   questionnaire:
     index_title: "Listado de cuestionarios"
     edit_title: "Modificar cuestionario"
@@ -1207,18 +1012,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
   report:
     index_title: "Listado de reportes"
 
-  resource_class:
-    index_title: "Listado de clases de recursos"
-    show_title: "Detalles de la clase de recurso"
-    new_title: "Agregar clase de recurso"
-    edit_title: "Modificar clase de recurso"
-    correctly_created: "Clase de recurso agregada correctamente."
-    correctly_updated: "Clase de recurso actualizada correctamente."
-    stale_object_error: "La clase de recurso no fue actualizada, intente nuevamente."
-    add_resource: "Agregar recurso"
-    type_human: "Personas"
-    type_material: "Materiales"
-
   review:
     index_title: "Listado de informes"
     show_title: "Detalles del informes"
@@ -1229,16 +1022,17 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     stale_object_error: "El informe no fue actualizado, intente nuevamente."
     control_objective_items_label: "Objetivos de control"
     add_control_objective: "Agregar un nuevo objetivo de control"
+    add_process_control: "Agregar un nuevo proceso"
     associated: "Asociados"
     available: "Disponibles"
     bundle: "Legajo"
     copy: "Copiar"
-    view_procedure_control_for_the_period: "Ver procedimientos y pruebas definidos para el periodo"
     findings_label: "Hallazgos pendientes"
     add_finding_assignment: "Agregar hallazgo pendiente"
     add_user_assignment: "Agregar usuario relacionado"
     suggest_findings: 'Sugerir hallazgos pendientes'
     without_suggested_findings: 'Sin hallazgos pendientes'
+    suggested_findings_for: 'Hallazgos sugeridos para %{process_control}'
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
@@ -1333,73 +1127,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     type_executive_manager: "Gerente"
 
   user:
-    enter: "Ingresar"
-    index_title: "Listado de usuarios"
-    login_title: "Autenticación de usuarios"
-    show_title: "Detalle usuario"
-    new_title: "Nuevo usuario"
-    graph_mode: "Modo gráfico"
-    table_mode: "Modo tabla"
-    edit_title: "Modificar usuario"
-    profiles_label: "Perfiles"
-    organizations_label: "Organizaciones"
-    reset_password: "Blanquear contraseña"
-    new_password: "Nueva contraseña"
-    change_password_title: "Establecer contraseña"
-    confirmation_link_invalid: "El enlace que ha utilizado está vencido o no es válido"
-    change_personal_data: "Modificar información personal"
-    correctly_created: "Usuario agregado correctamente."
-    correctly_updated: "Usuario actualizado correctamente."
-    correctly_disabled: "Usuario deshabilitado correctamente."
-    stale_object_error: "El usuario no pudo ser actualizado, intente nuevamente."
-    password_reseted: "La contraseña del usuario %{user} ha sido blanqueada."
-    password_reset_sended: "Se ha enviado un correo a su dirección con instrucciones para restablecer su contraseña"
-    password_correctly_updated: "Contraseña actualizada correctamente."
-    password_stale_object_error: "La contraseña no pudo ser actualizada, intente nuevamente."
-    reset_password_title: "Restablecer contraseña"
-    reset_password_note: "Para restablecer su contraseña ingrese su dirección de correo electrónico"
-    status: "Estado"
-    status_title: "Estado"
-    unknown_email: "Dirección de correo no encontrada"
-    send: "Enviar"
     will_be_orphan_findings: "No se eliminó el usuario, tiene a la fecha hallazgos pendientes, deberá reasignarlas primero"
-    add_child: "Agregar nueva persona a cargo"
-    add_organization_role: "Agregar un nuevo perfil dentro de una organización"
-    add_related_user_relations: "Agregar usuario relacionado"
-    children: "Personal a cargo"
-    reassign: "Reasignar"
-    reassign_to_another_user: "Reasignar responsabilidades"
-    release: "Liberar responsabilidades"
-    unlink_manager: "Desvincular"
-    user_reassignment: "Reasignación de responsabilidades"
-    user_reassignment_failed: "La reasignación de responsabilidades no puede realizarse entre los usuarios seleccionados"
-    user_reassignment_completed: "Reasignación de responsabilidades finalizada correctamente"
-    user_release: "Liberar responsabilidades"
-    user_release_failed: "La liberación de responsabilidades no puede realizarse, deberá en algunos casos reasignarlas"
-    user_release_completed: "Liberación de responsabilidades finalizada correctamente"
-    new_user_label: "Nuevo responsable"
-    old_user_label: "Responsable anterior"
-    pending_weaknesses_detailed:
-      one: "*Una* observación *pendiente*"
-      other: "*%{count}* observaciones *pendientes*"
-    reassign_with_findings: "¿Incluir hallazgos pendientes?"
-    reassign_with_reviews: "¿Incluir informes en ejecución?"
-    release_with_findings: "¿Incluir hallazgos pendientes?"
-    release_with_reviews: "¿Incluir informes en ejecución?"
     disabled: "Deshabilitado"
     without_organization: "El usuario no tiene asignado ningún perfil, por lo tanto no pertenece a ninguna organización y no puede ingresar al sistema"
-    high_risk_weaknesses:
-      one: '*Una* observación de *riesgo alto*'
-      other: '*%{count}* observaciones de *riesgo alto*'
-      image_label: 'Observaciones de riesgo alto'
-    weaknesses:
-      pending:
-        one: '*Una* observación pendiente'
-        other: '*%{count}* observaciones pendientes'
-      complete:
-        one: '*Una* observación solucionada'
-        other: '*%{count}* observaciones solucionadas'
-      image_label: 'Observaciones'
     responsibility_modification:
       title: "Modificación de responsabilidades"
       old_responsible: "Responsable anterior: %{responsible}"
@@ -1413,28 +1143,12 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     responsibility_release:
       title: "Liberación de responsabilidades"
     unconfirmed_findings: "Observaciones sin confirmar a la fecha"
-    errors:
-      must_select_a_user: "Debe seleccionar un usuario"
     pdf:
       pdf_name: "listado_de_usuarios.pdf"
       users_count: "Cantidad de usuarios: %{count}"
       filtered_by:
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
         other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
-
-  version:
-    show_title: "Detalles del registro de cambios"
-    show_security_changes_report: "Ver reporte de cambios de seguridad"
-    security_changes_report_title: "Reporte de cambios de seguridad"
-    event_create: "Alta"
-    event_update: "Modificación"
-    event_destroy: "Baja"
-    changes: "Cambios"
-    column_attribute: "Atributo"
-    column_new_value: "Valor nuevo"
-    column_old_value: "Valor anterior"
-    without_changes: "Sin cambios"
-    pdf_list_name: "reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf"
 
   weakness:
     index_title: "Listado de observaciones"
@@ -1508,110 +1222,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       planned_resources_utilization: "Recursos estimados en el plan de trabajo (*)"
       planned_resources_utilization_explanation: "(*) No forman parte del costo total del programa de trabajo"
 
-  number:
-    currency:
-      format:
-        delimiter: .
-        format: ! '%u%n'
-        precision: 2
-        separator: ! ','
-        significant: false
-        strip_insignificant_zeros: false
-        unit: $
-    format:
-      delimiter: .
-      precision: 2
-      separator: ! ','
-      significant: false
-      strip_insignificant_zeros: false
-    human:
-      decimal_units:
-        format: ! '%n %u'
-        units:
-          billion: mil millones
-          million: millón
-          quadrillion: mil billones
-          thousand: mil
-          trillion: billón
-          unit: ''
-      format:
-        delimiter: ''
-        precision: 1
-        significant: true
-        strip_insignificant_zeros: true
-      storage_units:
-        format: ! '%n %u'
-        units:
-          byte:
-            one: Byte
-            other: Bytes
-          gb: GB
-          kb: KB
-          mb: MB
-          tb: TB
-    percentage:
-      format:
-        delimiter: ''
-    precision:
-      format:
-        delimiter: ''
-
-  # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
-  datetime:
-    distance_in_words:
-      half_a_minute: "medio minuto"
-      less_than_x_seconds:
-        one: "menos de 1 segundo"
-        other: "menos de %{count} segundos"
-      x_seconds:
-        one: "1 segundo"
-        other: "%{count} segundos"
-      less_than_x_minutes:
-        one: "menos de 1 minuto"
-        other: "menos de %{count} minutos"
-      x_minutes:
-        one: "1 minuto"
-        other: "%{count} minutos"
-      about_x_hours:
-        one: "alrededor de 1 hora"
-        other: "alrededor de %{count} horas"
-      x_hours:
-        one: "1 hora"
-        other: "%{count} horas"
-      x_days:
-        one: "1 día"
-        other: "%{count} días"
-      about_x_weeks:
-        one: "alrededor de 1 semana"
-        other: "alrededor de %{count} semanas"
-      x_weeks:
-        one: "1 semana"
-        other: "%{count} semanas"
-      about_x_months:
-        one: "alrededor de 1 mes"
-        other: "alrededor de %{count} meses"
-      x_months:
-        one: "1 mes"
-        other: "%{count} meses"
-      about_x_years:
-        one: "alrededor de 1 año"
-        other: "alrededor de %{count} años"
-      over_x_years:
-        one: "más de 1 año"
-        other: "más de %{count} años"
-
-  attributes:
-    created_at: "Creación"
-    updated_at: "Última actualización"
-    lock_version: "Versión"
-
   activerecord:
     models:
-      answer: "Respuesta"
-      answer_multi_choice: "Múltiple opción"
-      answer_option: "Opción de respuesta"
-      answer_written: "Respuesta escrita"
-      best_practice: "Buena práctica"
       business_unit: "Unidad de negocio"
       business_unit_type: "Tipo de unidad de negocio"
       comment: "Comentario"
@@ -1619,76 +1231,30 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       conclusion_final_review: "Informe definitivo"
       conclusion_draft_review: "Informe borrador"
       control: "Control"
-      control_objective: "Objetivo de control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
-      e_mail: "Correo"
-      error_record: "Registro de error"
       finding: "Hallazgo"
       finding_answer: "Respuesta a hallazgo"
       finding_review_assignment: "Asignación de observación a informe"
       fortress: "Fortaleza"
       group: "Grupo"
-      help_content: "Contenido de ayuda"
-      help_item: "Registro de ayuda"
-      inline_help: "Registro de ayuda en línea"
-      login_record: "Registro de ingreso"
       nonconformity: "No conformidad"
       notification: "Notificación"
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
-      organization: "Organización"
-      period: "Periodo"
       plan: "Plan de trabajo"
       plan_item: "Registro de plan"
-      poll: "Encuesta"
       potential_nonconformity: "No conformidad potencial"
       privilege: "Privilegio"
-      procedure_control: "Procedimientos y pruebas de control"
-      procedure_control_item: "Registro del procedimiento de control"
-      procedure_control_subitem: "Subítem del procedimiento de control"
-      process_control: "Proceso de negocio"
-      question: "Pregunta"
-      questionnaire: "Cuestionario"
       review: "Informe"
       review_user_assignment: "Asignación de usuario a informe"
-      resource: "Recurso"
-      resource_class: "Clase de recurso"
       role: "Perfil"
-      setting: 'Configuración'
-      user: "Usuario"
       weakness: "Observación"
       workflow: "Programa de trabajo"
       workflow_item: "Registro de programa de trabajo"
       work_paper: "Papel de trabajo"
 
     attributes:
-      answer:
-        comments: "Comentarios respuesta"
-        answer: "Respuesta"
-        question: "Pregunta"
-      answer_option:
-        option: "Opción"
-        options:
-          strongly_disagree: "Muy en desacuerdo"
-          disagree: "En desacuerdo"
-          neither_agree_nor_disagree: "Ni acuerdo ni desacuerdo"
-          agree: "De acuerdo"
-          strongly_agree: "Muy de acuerdo"
-      best_practice:
-        name: "Nombre"
-        description: "Descripción"
-        process_controls:
-          one: "Proceso de negocio"
-          other: "Procesos de negocio"
-          name: "Proceso de negocio"
-          order: "Proceso de negocio (orden)"
-          control_objectives:
-            one: "Objetivo de control"
-            other: "Objetivos de control"
-            name: "Objetivo de control"
-            relevance: "Objetivo de control (importancia)"
-            risk: "Objetivo de control (riesgo)"
       business_unit:
         name: "Nombre"
       business_unit_type:
@@ -1723,10 +1289,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         design_tests: "Evaluación de diseño"
         compliance_tests: "Pruebas de cumplimiento"
         sustantive_tests: "Pruebas sustantivas"
-      control_objective:
-        name: "Objetivo de control"
-        relevance: "Importancia"
-        risk: "Riesgo"
       control_objective_item:
         control_objective_id: "Objetivo de control"
         control_objective_text: "Objetivo de control"
@@ -1745,40 +1307,36 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         fortresses: "Fortalezas"
         nonconformities: "No conformidades"
         potential_nonconformities: "No conformidades potenciales"
-        control:
-          order: "Objetivo de control (orden)"
-          control: "Objetivo de control (controles)"
-          effects: "Objetivo de control (efectos)"
-          design_tests: "Objetivo de control (evaluación de diseño)"
-          compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
-          sustantive_tests: "Objetivo de control (pruebas sustantivas)"
-        work_papers:
-          one: "Papel de trabajo"
-          other: "Papeles de trabajo"
-          name: "Papel de trabajo (nombre)"
-          code: "Papel de trabajo (código)"
-          description: "Papel de trabajo (descripción)"
-          number_of_pages: "Papel de trabajo (cantidad de páginas)"
-          file_model:
-            one: "Papel de trabajo (archivo)"
-            file_file_name: "Papel de trabajo (nombre de archivo)"
-            file_content_type: "Papel de trabajo (tipo de archivo)"
-            file_file_size: "Papel de trabajo (tamaño de archivo)"
+      control_objective_item/control:
+        order: "Objetivo de control (orden)"
+        control: "Objetivo de control (controles)"
+        effects: "Objetivo de control (efectos)"
+        design_tests: "Objetivo de control (evaluación de diseño)"
+        compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
+        sustantive_tests: "Objetivo de control (pruebas sustantivas)"
+      control_objective_item/work_papers:
+        one: "Papel de trabajo"
+        other: "Papeles de trabajo"
+        name: "Papel de trabajo (nombre)"
+        code: "Papel de trabajo (código)"
+        description: "Papel de trabajo (descripción)"
+        number_of_pages: "Papel de trabajo (páginas)"
+      control_objective_item/work_papers/file_model:
+        one: "Papel de trabajo (archivo)"
+        file_file_name: "Papel de trabajo (nombre de archivo)"
+        file_content_type: "Papel de trabajo (tipo de archivo)"
+        file_file_size: "Papel de trabajo (tamaño de archivo)"
+      control_objective_item/business_unit_scores:
+        business_unit_id: 'Calificación de unidad de negocio (unidad de negocio)'
+        design_score: 'Calificación de unidad de negocio (evaluación de diseño)'
+        compliance_score: 'Calificación de unidad de negocio (pruebas de cumplimiento)'
+        sustantive_score: 'Calificación de unidad de negocio (pruebas sustantivas)'
       cost:
         cost: "Tiempo dedicado"
         description: "Descripción de las actividades realizadas"
         user_id: "Usuario"
         item_id: "Item"
         item_type: "Item (tipo)"
-      e_mail:
-        to: "Para"
-        subject: "Asunto"
-        body: "Contenido"
-        attachments: "Adjuntos"
-      error_record:
-        user_id: "Usuario"
-        error: "Error"
-        data: "Datos"
       file_model:
         uploaded_data: "Archivo"
         content_type: "Archivo (tipo)"
@@ -1786,6 +1344,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         file: "Archivo"
       finding:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "Hallazgo"
         type: "Tipo"
         repeated_of_id: "Reiterada de"
@@ -1821,7 +1380,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           one: "Usuario relacionado"
           user: 'Usuario relacionado (usuario)'
           user_id: 'Usuario relacionado (usuario)'
-          process_owner: 'Dueño del proceso (usuario)'
+          process_owner: 'Responsable (usuario)'
         finding_answers:
           one: "Comentarios"
           answer: "Comentario"
@@ -1840,7 +1399,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           name: "Papel de trabajo (nombre)"
           code: "Papel de trabajo (código)"
           description: "Papel de trabajo (descripción)"
-          number_of_pages: "Papel de trabajo (cantidad de páginas)"
+          number_of_pages: "Papel de trabajo (páginas)"
           file_model:
             one: "Papel de trabajo (archivo)"
             file_file_name: "Papel de trabajo (nombre de archivo)"
@@ -1869,10 +1428,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         finding_id: 'Hallazgo'
         user_id: 'Usuario'
         user: 'Usuario'
-        process_owner: 'Dueño del proceso'
+        process_owner: 'Responsable'
         responsible_auditor: 'Auditor referente'
       fortress:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "Fortaleza"
         review_code: "Código en el informe"
         user_ids: "Responsable"
@@ -1889,39 +1449,13 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           name: "Organización (nombre)"
           prefix: "Organización (prefijo)"
           description: "Organización (descripción)"
-      help_content:
-        language: "Idioma"
-        help_items:
-          name: "Ítem (nombre)"
-          description: "Ítem (contenido)"
-          order_number: "Ítem (orden)"
-          children: "Ítem (temas incluidos)"
-      help_item:
-        name: "Nombre"
-        description: "Contenido"
-        order_number: "Orden"
-        children:
-          one: "Temas incluidos"
-          name: "Ítem (nombre)"
-          description: "Ítem (contenido)"
-          order_number: "Ítem (orden)"
-          children: "Ítem (temas incluidos)"
-        parent: "Tema referente"
       image_model:
         uploaded_data: "Imagen"
         content_type: "Imagen (tipo)"
         size: "Imagen (tamaño)"
-      inline_help:
-        language: "Idioma"
-        name: "Nombre"
-        content: "Contenido"
-      login_record:
-        user_id: "Usuario"
-        start: "Inicio"
-        end: "Fin"
-        data: "Datos"
       nonconformity:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "No conformidad"
         review_code: "Código en el informe"
         audit_recommendations: "Recomendaciones de auditoría"
@@ -1957,6 +1491,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         password: "Contraseña"
       oportunity:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "Oportunidad de mejora"
         review_code: "Código en el informe"
         answer: "Respuesta/Acción de mejora"
@@ -1967,35 +1502,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         origination_date: "Fecha de origen"
         follow_up_date: "Fecha de implementación/Acción de mejora"
         solution_date: "Fecha de solución"
-      organization:
-        name: "Nombre"
-        prefix: "Prefijo"
-        description: "Descripción"
-        kind: "Tipo de organización"
-        kind_options:
-          quality_management: "Gestión de calidad"
-          public: "Pública"
-          private: "Privada"
-          management_control: "Control de gestión"
-        image_model:
-          one: "Isologotipo"
-          image_file_name: "Isologotipo (nombre de archivo)"
-          image_content_type: "Isologotipo (tipo de archivo)"
-          image_file_size: "Isologotipo (tamaño)"
       organization_role:
         user_id: "Usuario"
         organization_id: "Organización"
         role_id: "Perfil"
-      paper_trail/version:
-        item: "Objeto"
-        event: "Evento"
-        whodunnit: "Ejecutor"
-        created_at: "Fecha"
-      period:
-        number: "Número"
-        description: "Descripción"
-        start: "Inicio"
-        end: "Fin"
       plan:
         organization_id: "Organización"
         period_id: "Periodo"
@@ -2030,19 +1540,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         human_resources_cost: "Costo recursos humanos"
         material_resources_cost: "Costo recursos materiales"
         total_resources_cost: "Costo total"
-      poll:
-        comments: "Comentarios generales de la encuesta"
-        customer_email: "Email cliente"
-        send_date: "Fecha envío"
-        answer_date: "Fecha contestación"
-        answered: "Contestada"
-        questionnaire_id: "Cuestionario"
-        user_id: "Usuario"
-        answers:
-          answer: "Respuesta"
-          answer_option: "Opción"
       potential_nonconformity:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "No conformidad potencial"
         review_code: "Código en el informe"
         answer: "Respuesta/Acción preventiva"
@@ -2059,69 +1559,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         modify: "Modificación"
         erase: "Baja"
         approval: "Aprobación"
-      procedure_control:
-        period_id: "Periodo"
-        procedure_control_items:
-          one: "Proceso de negocio"
-          other: "Procesos de negocio"
-          process_control_id: "Proceso de negocio"
-          aproach: "Proceso de negocio (enfoque)"
-          frequency: "Proceso de negocio (frecuencia)"
-          procedure_control_subitems:
-            one: "Procedimiento de control"
-            other: "Procedimientos de control"
-            control_objective_text: "Procedimiento de control (objetivo de control)"
-            relevance: "Procedimiento de control (importancia)"
-            control_objective_id: "Procedimiento de control (objetivo de control)"
-      procedure_control_item:
-        aproach: "Enfoque"
-        frequency: "Frecuencia"
-        process_control_id: "Proceso de negocio"
-      procedure_control_subitem:
-        control_objective_text: "Objetivo de control"
-        relevance: "Importancia"
-        control_objective_id: "Objetivo de control"
-      process_control:
-        name: "Proceso de negocio"
-        order: "Orden"
-        control_objectives: "Objetivos de control"
-      question:
-        sort_order: "Orden"
-        question: "Pregunta"
-        answer_type: "Tipo de respuesta"
-      questionnaire:
-        name: "Nombre"
-        questions: "Preguntas"
-        polls: "Encuestas"
-        pollable_type: "Clase encuestable"
-        email_subject: "Asunto email"
-        email_link: "Link email"
-        email_text: "Texto email"
-        email_clarification: "Aclaración email"
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
-      resource:
-        name: "Recurso"
-        description: "Descripción"
-        cost_per_unit: "Costo por unidad"
-        resource_class_id: "Clase"
-      resource_class:
-        name: "Clase de recurso"
-        resource_class_type: "Tipo"
-        resources:
-          one: "Recurso"
-          other: "Recursos"
-          name: "Recurso"
-          description: "Recurso (descripción)"
-          cost_per_unit: "Recurso (costo por unidad)"
-      resource_utilization:
-        units: "Cantidad de unidades"
-        cost_per_unit: "Costo por unidad"
-        cost: "Costo"
-        resource_id: "Recurso"
-        resource_consumer_id: "Consumidor de recurso"
-        resource_consumer: "Utilización de recurso"
       review:
         identification: "Identificación"
         description: "Descripción"
@@ -2129,7 +1569,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         audit_type: "Tipo de auditoría"
         business_unit: "Unidad de negocio"
         period_id: "Periodo"
-        plan_item_id: "Proyecto"
+        plan_item: "Proyecto"
         file_model_id: "Anexos"
         score: "Calificación"
         work_papers: "Papeles de trabajo"
@@ -2158,29 +1598,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         name: "Perfil"
         role_type: "Tipo perfil"
         privileges: "Privilegios"
-      user:
-        user: "Usuario"
-        password: "Contraseña"
-        password_confirmation: "Confirmación"
-        password_changed: "Contraseña cambiada"
-        name: "Nombre"
-        last_name: "Apellido"
-        email: "E-Mail"
-        function: "Cargo"
-        language: "Lenguaje"
-        notes: "Notas"
-        failed_attempts: "Intentos fallidos"
-        enable: "Habilitado"
-        hidden: "Oculto"
-        last_access: "Último acceso"
-        logged_in: "Conectado"
-        organization_roles: "Perfiles"
-        resource_id: "Tipo de recurso"
-        manager_id: "Superior"
-        send_notification_email: "Enviar notificación"
-        roles: 'Perfiles'
       weakness:
         control_objective_item_id: "Objetivo de control"
+        title: "Título"
         description: "Observación"
         review_code: "Código en el informe"
         audit_recommendations: "Recomendaciones de auditoría"
@@ -2204,7 +1624,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         code: "Código"
         description: "Descripción"
         file_model: "Archivo"
-        number_of_pages: "Cantidad de páginas"
+        number_of_pages: "Páginas"
       workflow:
         organization_id: "Organización"
         period_id: "Periodo"
@@ -2241,46 +1661,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         total_resources_cost: "Costo total"
 
     errors:
-      template:
-        header:
-          one: "No se realizaron cambios porque se encontró un error"
-          other: "No se realizaron cambios porque se encontraron %{count} errores"
-        # The variable :count is also available
-        body: "Los siguientes problemas deben solucionarse:"
-
-      messages:
-        inclusion: "no está incluido en la lista"
-        exclusion: "está reservado"
-        invalid: "no es válido"
-        confirmation: "no coincide con la confirmación"
-        accepted: "debe ser aceptado"
-        empty: "no puede estar vacío"
-        blank: "no puede estar en blanco"
-        too_long: "es demasiado largo (%{count} caracteres máximo)"
-        too_short: "es demasiado corto (%{count} caracteres mínimo)"
-        wrong_length: "no tiene la longitud correcta (%{count} caracteres exactos)"
-        taken: "ya está en uso"
-        record_invalid: "no es válido"
-        not_a_number: "no es un número"
-        not_an_integer: "no es un número entero"
-        greater_than: "debe ser mayor que %{count}"
-        greater_than_or_equal_to: "debe ser mayor que o igual a %{count}"
-        equal_to: "debe ser igual a %{count}"
-        less_than: "debe ser menor que %{count}"
-        less_than_or_equal_to: "debe ser menor que o igual a %{count}"
-        odd: "debe ser impar"
-        even: "debe ser par"
-        out_of_period: "debe estar dentro del periodo"
-        # Timeliness
-        invalid_date: 'no es una fecha válida'
-        invalid_time: 'no es un tiempo válido'
-        invalid_datetime: 'no es una fecha y hora válida'
-        is_at: 'debería estar en %{restriction}'
-        before: 'debería ser anterior a %{restriction}'
-        on_or_before: 'debería ser anterior o igual a %{restriction}'
-        after: 'debería ser posterior a %{restriction}'
-        on_or_after: 'debería ser posterior o igual a %{restriction}'
-
       # Append your own errors here or at the model/attributes scope.
       models:
         best_practice:
@@ -2311,6 +1691,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
               must_have_a_comment: "debe tener adjunto un comentario para esta transición"
               can_not_be_revoked: "no puede ser 'Anulado', posiblemente se deba a una reiteración o a que el hallazgo ya se encuentra en un informe definitivo"
               must_have_a_work_paper: "debe tener asociado al menos un papel de trabajo"
+              must_be_done_by_proper_role: "solo puede ser cambiado por un usuario supervisor o gerente"
             users:
               invalid: "debe contener como mínimo un auditor, un auditado, un gerente y un supervisor"
         finding_user_assignment:
@@ -2330,7 +1711,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         poll:
           attributes:
             base:
-              invalid: "debe tener un usuario asociado o un email de cliente"
+              invalid: "debe tener un usuario asociado o un correo de cliente"
         plan:
           attributes:
             plan_items:
@@ -2354,8 +1735,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         review:
           attributes:
             review_user_assignments:
-              invalid: "debe tener al menos un auditor, un gerente y un auditado o
-                un auditor, un supervisor y un auditado"
+              invalid: "debe tener al menos un auditor, un gerente y un auditado o un auditor, un supervisor y un auditado"
             plan_item:
               invalid: "debe tener una unidad de negocio asignada en la planificación"
         review_user_assignment:
@@ -2386,29 +1766,21 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
   actioncontroller:
     best_practices: "Buenas prácticas"
     business_unit_types: "Unidades de negocio"
-    follow_up_audit: "Reportes de auditoría (Seguimiento)"
-    follow_up_committee: "Reportes de comité (Seguimiento)"
-    follow_up_management: "Reportes de la gerencia (Seguimiento)"
-    conclusion_audit_reports: "Reportes de auditoría (Conclusión)"
-    conclusion_committee_reports: "Reportes de comité (Conclusion)"
+    follow_up_audit: "Reportes de seguimiento"
+    conclusion_reports: "Reportes de conclusión"
     conclusion_draft_reviews: "Informe borrador"
     conclusion_final_reviews: "Informe definitivo"
-    conclusion_management_reports: "Reportes de la gerencia (Conclusión)"
     control_objective_items: "Objetivos de control"
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"
     findings: "Seguimiento de observaciones"
     groups: "Grupos"
-    help_contents: "Contenidos de ayuda"
-    help_items: "Registros de ayuda"
-    inline_helps: "Registros de ayuda en línea"
     login_records: "Registros de ingreso"
     notifications: "Notificaciones"
     oportunities: "Oportunidades de mejora"
     organizations: "Organizaciones"
     periods: "Periodos"
     plans: "Planes de trabajo"
-    procedure_controls: "Procedimientos y pruebas de control"
     resource_classes: "Recursos"
     reviews: "Informes"
     roles: "Perfiles"
@@ -2417,61 +1789,3 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses: "Observaciones"
     welcome: "Bienvenida"
     workflows: "Programas de trabajo"
-
-  date:
-    formats:
-      # Use the strftime parameters for formats.
-      # When no format has been given, it uses default.
-      # You can provide other formats here if you like!
-      default: "%d/%m/%Y"
-      minimal: "%d/%m/%y"
-      short: "%e de %b de %Y"
-      long: "%e de %B de %Y"
-
-    day_names: [Domingo, Lunes, Martes, Miércoles, Jueves, Viernes, Sábado]
-    abbr_day_names: [Dom, Lun, Mar, Mie, Jue, Vie, Sab]
-
-    # Don't forget the nil at the beginning; there's no such thing as a 0th month
-    month_names: [~, Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre]
-    abbr_month_names: [~, Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Sep, Oct, Nov, Dic]
-    # Used in date_select and datime_select.
-    order:
-      - day
-      - month
-      - year
-
-  helpers:
-    select:
-      prompt: "Seleccionar ..."
-    submit:
-      create: "Guardar %{model}"
-      update: "Actualizar %{model}"
-      submit: "Guardar %{model}"
-
-  time:
-    formats:
-      default: "%A, %e de %B de %Y %H:%M:%S %z"
-      minimal: "%d/%m/%y %H:%M:%S"
-      short: "%e de %b de %Y %H:%M"
-      long: "%e de %B de %Y %H:%M"
-      validation: "%d/%m/%Y %H:%M:%S"
-    am: "am"
-    pm: "pm"
-
-  # Used in array.to_sentence.
-  support:
-    array:
-      words_connector: ", "
-      two_words_connector: " y "
-      last_word_connector: " y "
-
-  validates_timeliness:
-    error_value_formats:
-      date: '%d/%m/%Y'
-      time: '%H:%M:%S'
-      datetime: '%d/%m/%Y %H:%M:%S'
-
-  will_paginate:
-    previous_label: "&laquo; Anterior"
-    next_label: "Siguiente &raquo;"
-    page_gap: "..."

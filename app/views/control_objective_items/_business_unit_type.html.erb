@@ -1,0 +1,24 @@
+<% id = f.object.object_id %>
+<fieldset class="business_unit_type">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-4">
+        <% copy_attribute_errors(:business_unit_type_id, :auto_business_unit_type_name, f) %>
+        <%= f.input :auto_business_unit_type_name, label: false, autofocus: true,
+          input_html: {
+            value: f.object.try(:business_unit_type).try(:name),
+            id: "business_unit_type_#{id}",
+            title: t('label.search'),
+            readonly: readonly,
+            data: {
+              autocomplete_url: auto_complete_for_business_unit_type_control_objective_items_path,
+              autocomplete_id_target: "#auto_business_unit_type_id_#{id}"
+            }
+          } %>
+        <%= f.input "hidden_business_unit_type_#{id}", as: :hidden, input_html: {
+          name: 'control_objective_item[business_unit_type_ids][]', value: f.object.id,
+          id: "auto_business_unit_type_id_#{id}" } %>
+      </div>
+    </div>
+  </div>
+</fieldset>

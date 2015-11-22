@@ -1,240 +1,250 @@
-<div id="showed_data">
-  <div class="show_item">
-    <b><%= Review.model_name.human %>:</b>
-    <%=h @weakness.review.try(:identification) %>
-  </div>
+<p>
+  <strong><%= Review.model_name.human %>:</strong>
+  <%= @weakness.review.try(:identification) %>
+</p>
 
-  <div class="show_item">
-    <b><%= ControlObjective.model_name.human %>:</b>
-    <%= simple_format h(@weakness.control_objective_item.try(:to_s)) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Weakness.human_attribute_name :review_code %>:</b>
-    <%=h @weakness.review_code %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Weakness.human_attribute_name :description %>:</b>
-    <%= simple_format h(@weakness.description) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Weakness.human_attribute_name :audit_recommendations %>:</b>
-    <%= simple_format h(@weakness.audit_recommendations) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Weakness.human_attribute_name :answer %>:</b>
-    <%= simple_format h(@weakness.answer) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Weakness.human_attribute_name :effect %>:</b>
-    <%= simple_format h(@weakness.effect) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Weakness.human_attribute_name :risk %>:</b>
-    <%=h @weakness.risk_text %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Weakness.human_attribute_name :priority %>:</b>
-    <%=h @weakness.priority_text %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Weakness.human_attribute_name :audit_comments %>:</b>
-    <%= simple_format h(@weakness.audit_comments) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= raw(Weakness.human_attribute_name(:state) +
-      show_inline_help_for(:finding_state)) %>:</b>
-    <%=h @weakness.state_text %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Weakness.human_attribute_name :correction %>:</b>
-    <%= @weakness.correction if @weakness.correction %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Weakness.human_attribute_name :cause_analysis %>:</b>
-    <%= @weakness.cause_analysis if @weakness.cause_analysis %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Weakness.human_attribute_name :correction_date %>:</b>
-    <%=l @weakness.correction_date, :format => :long if @weakness.correction_date %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Weakness.human_attribute_name :cause_analysis_date %>:</b>
-    <%=l @weakness.cause_analysis_date, :format => :long if @weakness.cause_analysis_date %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Weakness.human_attribute_name :origination_date %>:</b>
-    <%=l @weakness.origination_date, :format => :long if @weakness.origination_date %>
-  </div>
-
-  <div class="show_item">
-    <b><%= raw(Weakness.human_attribute_name(:follow_up_date) +
-      show_inline_help_for(:finding_follow_up_date)) %>:</b>
-    <%=l @weakness.follow_up_date, :format => :long if @weakness.follow_up_date %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Weakness.human_attribute_name :solution_date %>:</b>
-    <%=l @weakness.solution_date, :format => :long if @weakness.solution_date %>
-  </div>
-
-  <h3><%= raw(t('finding.responsibles', :count => @weakness.users.size) +
-    show_inline_help_for(:finding_responsibles)) %></h3>
-  <%= finding_responsibles_list(@weakness) %>
-
-  <% unless (repeated_ancestors = @weakness.repeated_ancestors).blank? %>
-    <h3><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h3>
-    <ul class="raw_list">
-      <% repeated_ancestors.each do |repeated_ancestor| %>
-        <li><%= repeated_ancestor %></li>
-      <% end %>
-    </ul>
-  <% end %>
-
-  <% unless (repeated_children = @weakness.repeated_children).blank? %>
-    <h3><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h3>
-    <ul class="raw_list">
-      <% repeated_children.each do |repeated_child| %>
-        <li><%= repeated_child %></li>
-      <% end %>
-    </ul>
-  <% end %>
-
-  <% unless @weakness.finding_relations.blank? %>
-    <h3>
-      <%= t('finding.finding_relations') %>
-      <%= show_inline_help_for(:finding_relations) %>
-    </h3>
-
-    <table class="summary_table">
-      <thead>
-        <tr>
-          <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
-          <th><%= FindingRelation.human_attribute_name :description %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @weakness.finding_relations.each do |fr| %>
-          <tr>
-            <td><%= fr.related_finding %></td>
-            <td><%= fr.description %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-
-  <% unless @weakness.inverse_finding_relations.blank? %>
-    <h3>
-      <%= t('finding.inverse_finding_relations') %>
-      <%= show_inline_help_for(:inverse_finding_relations) %>
-    </h3>
-
-    <table class="summary_table">
-      <thead>
-        <tr>
-          <th><%= FindingRelation.human_attribute_name :finding_id %></th>
-          <th><%= FindingRelation.human_attribute_name :description %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @weakness.inverse_finding_relations.each do |ifr| %>
-          <tr>
-            <td><%= ifr.finding %></td>
-            <td><%= ifr.description %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-
-  <% unless @weakness.finding_answers.blank? %>
-    <h3>
-      <%= t('finding.finding_answers') %>
-      <%= show_inline_help_for(:finding_comments) %>
-    </h3>
-
-    <table class="summary_table">
-      <thead>
-        <tr>
-          <th><%= User.model_name.human %></th>
-          <th><%= FindingAnswer.human_attribute_name :answer %></th>
-          <th>
-            <%= FindingAnswer.human_attribute_name :file_model %>
-            <%= show_inline_help_for(:finding_file_model) %>
-          </th>
-          <th>
-            <%= FindingAnswer.human_attribute_name :created_at %>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @weakness.finding_answers.each do |finding_answer| %>
-          <tr>
-            <td><%= h finding_answer.user.full_name %></td>
-            <td><%= simple_format h(finding_answer.answer) %></td>
-            <td>
-              <%= finding_answer.file_model.try(:file?) ?
-                link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
-            </td>
-            <td>
-              <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
-              <% if finding_answer.commitment_date %>
-                <br />
-                <br /><b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
-                <br /><%= l(finding_answer.commitment_date, :format => :long) %>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-
-  <% unless @weakness.work_papers.empty? %>
-    <h3><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
-    <table class="summary_table">
-      <thead>
-        <tr>
-          <th><%= WorkPaper.human_attribute_name :name %></th>
-          <th><%= WorkPaper.human_attribute_name :code %></th>
-          <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
-          <th><%= WorkPaper.human_attribute_name :description %></th>
-          <th><%= WorkPaper.human_attribute_name :file_model %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @weakness.work_papers.each do |wp| %>
-          <tr>
-            <td><%=h wp.name %></td>
-            <td><%=h wp.code %></td>
-            <td><%=h wp.number_of_pages %></td>
-            <td><%= simple_format h(wp.description) %></td>
-            <td><%= wp.file_model.try(:file?) ?
-              link_to(t('label.download'), wp.file_model.file.url) : '---' %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
+<div>
+  <strong><%= ControlObjective.model_name.human %>:</strong>
+  <%= simple_format @weakness.control_objective_item.try(:to_s) %>
 </div>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_weakness_path(@weakness) %> |
-  <%= link_to t('label.list'), weaknesses_path %> |
+<p>
+  <strong><%= Weakness.human_attribute_name :review_code %>:</strong>
+  <%= @weakness.review_code %>
+</p>
+
+<p>
+  <strong><%= Weakness.human_attribute_name :title %>:</strong>
+  <%= @weakness.title %>
+</p>
+
+<div>
+  <strong><%= Weakness.human_attribute_name :description %>:</strong>
+  <%= simple_format @weakness.description %>
+</div>
+
+<div>
+  <strong><%= Weakness.human_attribute_name :audit_recommendations %>:</strong>
+  <%= simple_format @weakness.audit_recommendations %>
+</div>
+
+<div>
+  <strong><%= Weakness.human_attribute_name :answer %>:</strong>
+  <%= simple_format @weakness.answer %>
+</div>
+
+<div>
+  <strong><%= Weakness.human_attribute_name :effect %>:</strong>
+  <%= simple_format @weakness.effect %>
+</div>
+
+<p>
+  <strong><%= Weakness.human_attribute_name :risk %>:</strong>
+  <%= @weakness.risk_text %>
+</p>
+
+<p>
+  <strong><%= Weakness.human_attribute_name :priority %>:</strong>
+  <%= @weakness.priority_text %>
+</p>
+
+<div>
+  <strong><%= Weakness.human_attribute_name :audit_comments %>:</strong>
+  <%= simple_format @weakness.audit_comments %>
+</div>
+
+<p>
+  <strong><%= Weakness.human_attribute_name(:state) %>:</strong>
+  <%= @weakness.state_text %>
+</p>
+
+<p>
+  <strong><%= Weakness.human_attribute_name :correction %>:</strong>
+  <%= @weakness.correction if @weakness.correction %>
+</p>
+
+<p>
+  <strong><%= Weakness.human_attribute_name :cause_analysis %>:</strong>
+  <%= @weakness.cause_analysis if @weakness.cause_analysis %>
+</p>
+
+<p>
+  <strong><%= Weakness.human_attribute_name :correction_date %>:</strong>
+  <%=l @weakness.correction_date, :format => :long if @weakness.correction_date %>
+</p>
+
+<p>
+  <strong><%= Weakness.human_attribute_name :cause_analysis_date %>:</strong>
+  <%=l @weakness.cause_analysis_date, :format => :long if @weakness.cause_analysis_date %>
+</p>
+
+<p>
+  <strong><%= Weakness.human_attribute_name :origination_date %>:</strong>
+  <%=l @weakness.origination_date, :format => :long if @weakness.origination_date %>
+</p>
+
+<p>
+  <strong><%= Weakness.human_attribute_name(:follow_up_date) %>:</strong>
+  <%=l @weakness.follow_up_date, :format => :long if @weakness.follow_up_date %>
+</p>
+
+<p>
+  <strong><%= Weakness.human_attribute_name :solution_date %>:</strong>
+  <%=l @weakness.solution_date, :format => :long if @weakness.solution_date %>
+</p>
+
+<h3><%= t('finding.responsibles', :count => @weakness.users.size) %></h3>
+<%= finding_responsibles_list(@weakness) %>
+
+<% unless (repeated_ancestors = @weakness.repeated_ancestors).blank? %>
+  <h3><%= t('finding.repeated_ancestors') %></h3>
+  <ul>
+    <% repeated_ancestors.each do |repeated_ancestor| %>
+      <li><%= repeated_ancestor %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% unless (repeated_children = @weakness.repeated_children).blank? %>
+  <h3><%= t('finding.repeated_children') %></h3>
+  <ul>
+    <% repeated_children.each do |repeated_child| %>
+      <li><%= repeated_child %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% unless @weakness.finding_relations.blank? %>
+  <h3>
+    <%= t('finding.finding_relations') %>
+  </h3>
+
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
+        <th><%= FindingRelation.human_attribute_name :description %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @weakness.finding_relations.each do |fr| %>
+        <tr>
+          <td><%= fr.related_finding %></td>
+          <td><%= fr.description %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% unless @weakness.inverse_finding_relations.blank? %>
+  <h3>
+    <%= t('finding.inverse_finding_relations') %>
+  </h3>
+
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= FindingRelation.human_attribute_name :finding_id %></th>
+        <th><%= FindingRelation.human_attribute_name :description %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @weakness.inverse_finding_relations.each do |ifr| %>
+        <tr>
+          <td><%= ifr.finding %></td>
+          <td><%= ifr.description %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% unless @weakness.business_units.blank? %>
+  <h3>
+    <%= BusinessUnit.model_name.human count: 0 %>
+  </h3>
+
+  <ul>
+    <% @weakness.business_units.each do |bu| %>
+      <li><%= bu.name %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% unless @weakness.finding_answers.blank? %>
+  <h3>
+    <%= t('finding.finding_answers') %>
+  </h3>
+
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= User.model_name.human %></th>
+        <th><%= FindingAnswer.human_attribute_name :answer %></th>
+        <th>
+          <%= FindingAnswer.human_attribute_name :file_model %>
+        </th>
+        <th>
+          <%= FindingAnswer.human_attribute_name :created_at %>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @weakness.finding_answers.each do |finding_answer| %>
+        <tr>
+          <td><%= finding_answer.user.full_name %></td>
+          <td><%= simple_format finding_answer.answer %></td>
+          <td>
+            <%= finding_answer.file_model.try(:file?) ?
+              link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
+          </td>
+          <td>
+            <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
+            <% if finding_answer.commitment_date %>
+              <br />
+              <br /><strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
+              <br /><%= l(finding_answer.commitment_date, :format => :long) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% unless @weakness.work_papers.empty? %>
+  <h3><%= t('finding.work_papers') %></h3>
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= WorkPaper.human_attribute_name :name %></th>
+        <th><%= WorkPaper.human_attribute_name :code %></th>
+        <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
+        <th><%= WorkPaper.human_attribute_name :description %></th>
+        <th><%= WorkPaper.human_attribute_name :file_model %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @weakness.work_papers.each do |wp| %>
+        <tr>
+          <td><%= wp.name %></td>
+          <td><%= wp.code %></td>
+          <td><%= wp.number_of_pages %></td>
+          <td><%= simple_format wp.description %></td>
+          <td><%= wp.file_model.try(:file?) ?
+            link_to(t('label.download'), wp.file_model.file.url) : '---' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<hr />
+
+<div>
+  <%= link_to_edit edit_weakness_path(@weakness) %> |
+  <%= link_to_index weaknesses_path %> |
   <% if !@weakness.is_in_a_final_review? && @weakness.pending? && !@weakness.incomplete? %>
     <%= link_to t('weakness.show_follow_up'), finding_path('incomplete', @weakness) %> |
   <% end %>

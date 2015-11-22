@@ -32,35 +32,33 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'list nonconformities' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:nonconformities)
-    assert_select '#error_body', false
     assert_template 'nonconformities/index'
   end
 
   test 'list nonconformities with search and sort' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 4',
-      :columns => ['description', 'review'],
+      :columns => ['title', 'review'],
       :order => 'review'
     }
     assert_response :success
     assert_not_nil assigns(:nonconformities)
-    assert_equal 2, assigns(:nonconformities).size
+    assert_equal 2, assigns(:nonconformities).count
     assert(assigns(:nonconformities).all? do |w|
       w.review.identification.match(/1 2 4/i)
     end)
     assert_equal assigns(:nonconformities).map {|w| w.review.identification}.sort,
       assigns(:nonconformities).map {|w| w.review.identification}
-    assert_select '#error_body', false
     assert_template 'nonconformities/index'
   end
 
   test 'list nonconformities for specific ids' do
-    perform_auth
+    login
     ids = [
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity).id,
       findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_nonconformity).id
@@ -69,40 +67,37 @@ class NonconformitiesControllerTest < ActionController::TestCase
     get :index, :ids => ids
     assert_response :success
     assert_not_nil assigns(:nonconformities)
-    assert_equal 2, assigns(:nonconformities).size
+    assert_equal 2, assigns(:nonconformities).count
     assert assigns(:nonconformities).all? { |w| ids.include?(w.id) }
-    assert_select '#error_body', false
     assert_template 'nonconformities/index'
   end
 
   test 'edit nonconformity when search match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 4 y 1nc',
-      :columns => ['description', 'review']
+      :columns => ['title', 'review']
     }
     assert_redirected_to nonconformity_url(
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity))
     assert_not_nil assigns(:nonconformities)
-    assert_equal 1, assigns(:nonconformities).size
+    assert_equal 1, assigns(:nonconformities).count
   end
 
   test 'show nonconformity' do
-    perform_auth
+    login
     get :show, :id => findings(:bcra_A4609_data_proccessing_impact_analisys_nonconformity).id
     assert_response :success
     assert_not_nil assigns(:nonconformity)
-    assert_select '#error_body', false
     assert_template 'nonconformities/show'
   end
 
   test 'new nonconformity' do
-    perform_auth
+    login
     get :new, :control_objective_item => control_objective_items(
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
     assert_not_nil assigns(:nonconformity)
-    assert_select '#error_body', false
     assert_template 'nonconformities/new'
   end
 
@@ -110,13 +105,14 @@ class NonconformitiesControllerTest < ActionController::TestCase
     counts_array = ['Nonconformity.count', 'WorkPaper.count',
       'FindingRelation.count']
 
-    perform_auth
+    login
     assert_difference counts_array do
       post :create, {
         :nonconformity => {
           :control_objective_item_id => control_objective_items(
             :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
           :review_code => 'NC020',
+          :title => 'Title',
           :description => 'New description',
           :answer => 'New answer',
           :audit_comments => 'New audit comments',
@@ -154,7 +150,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
               :code => 'PTNC 20',
               :number_of_pages => '10',
               :description => 'New workpaper description',
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :file_model_attributes => {
                 :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
                   'text/plain')
@@ -173,16 +169,15 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'edit nonconformity' do
-    perform_auth
+    login
     get :edit, :id => findings(:bcra_A4609_data_proccessing_impact_analisys_nonconformity).id
     assert_response :success
     assert_not_nil assigns(:nonconformity)
-    assert_select '#error_body', false
     assert_template 'nonconformities/edit'
   end
 
   test 'update nonconformity' do
-    perform_auth
+    login
     assert_no_difference 'Nonconformity.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
         patch :update, {
@@ -192,6 +187,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item).id,
             :review_code => 'NC020',
+            :title => 'Title',
             :description => 'Updated description',
             :answer => 'Updated answer',
             :audit_comments => 'Updated audit comments',
@@ -231,7 +227,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
                 :code => 'PTNC 20',
                 :number_of_pages => '10',
                 :description => 'New workpaper description',
-                :organization_id => organizations(:default_organization).id,
+                :organization_id => organizations(:cirope).id,
                 :file_model_attributes => {
                   :file => Rack::Test::UploadedFile.new(
                     TEST_FILE_FULL_PATH, 'text/plain')
@@ -255,11 +251,11 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'follow up pdf' do
-    perform_auth
+    login
     nonconformity = Nonconformity.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :follow_up_pdf, :id => nonconformity.id
     end
 
@@ -267,7 +263,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'undo reiteration' do
-    perform_auth
+    login
     nonconformity = Finding.find(findings(
         :iso_27000_security_organization_4_2_item_editable_nonconformity_unanswered_for_level_1_notification).id)
     repeated_of = Finding.find(findings(
@@ -287,37 +283,11 @@ class NonconformitiesControllerTest < ActionController::TestCase
     assert_equal repeated_of_original_state, repeated_of.state
   end
 
-  test 'auto complete for user' do
-    perform_auth
-    get :auto_complete_for_user, { :q => 'adm', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size # Sólo Admin (Admin second es de otra organización)
-    assert users.all? { |u| (u['label'] + u['informal']).match /adm/i }
-
-    get :auto_complete_for_user, { :q => 'bare', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size # Sólo Bare
-    assert users.all? { |u| (u['label'] + u['informal']).match /bare/i }
-
-    get :auto_complete_for_user, { :q => 'x_nobody', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 0, users.size # Sin resultados
-  end
-
   test 'auto complete for finding relation' do
     finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_nonconformity).id)
 
-    perform_auth
+    login
     get :auto_complete_for_finding_relation, {
       :q => 'NC001',
       :finding_id => finding.id,
@@ -375,7 +345,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for control objective item' do
-    perform_auth
+    login
     get :auto_complete_for_control_objective_item, {
       :q => 'dependencia',
       :review_id => reviews(:review_with_conclusion).id,

@@ -4,36 +4,34 @@
     :columns => @query.blank? ? Weakness::COLUMNS_FOR_SEARCH.keys : @columns
   } %>
 <% end %>
-<table class="list">
+<table class="table table-condensed table-striped">
   <thead id="column_headers">
     <tr>
       <th></th>
       <%= make_filterable_column Review.model_name.human, nil, 'review' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), {:expendable => true}, 'project' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'hidden-xs'}, 'project' %>
       <%= make_filterable_column Weakness.human_attribute_name(:code), nil, 'review_code' %>
-      <%= make_filterable_column Weakness.human_attribute_name(:description), {:expendable => true}, 'description' %>
-      <%= make_not_available_column raw(Weakness.human_attribute_name(:state) + show_inline_help_for(:finding_state)), :expendable => true %>
-      <%= make_not_available_column raw(Weakness.human_attribute_name(:follow_up_date) + show_inline_help_for(:finding_follow_up_date)), :expendable => true %>
-      <%= make_not_available_column Weakness.human_attribute_name(:risk), :expendable => true %>
-      <%= make_not_available_column Weakness.human_attribute_name(:priority), :expendable => true %>
-      <%= make_not_available_column raw(t('finding.has_work_papers') + show_inline_help_for(:finding_work_papers)), :expendable => true %>
-      <th colspan="2" style="text-align: right;"><%= link_to_search if params[:control_objective].blank? %></th>
+      <%= make_filterable_column Weakness.human_attribute_name(:title), { :class => 'hidden-xs'}, 'title' %>
+      <%= make_not_available_column Weakness.human_attribute_name(:state), :class => 'hidden-xs' %>
+      <%= make_not_available_column Weakness.human_attribute_name(:follow_up_date), class: 'hidden-xs hidden-sm hidden-md' %>
+      <%= make_not_available_column Weakness.human_attribute_name(:risk), :class => 'hidden-xs' %>
+      <%= make_not_available_column t('finding.has_work_papers'), :class => 'hidden-xs' %>
+      <th colspan="2" class="text-right"><%= link_to_search if params[:control_objective].blank? %></th>
     </tr>
   </thead>
 
   <tbody>
     <% @weaknesses.each do |weakness| %>
-      <tr class="<%= cycle('even', 'odd') %> <%= weakness.is_in_a_final_review? ? :readonly_item : :writable_item %>">
+      <tr <%== 'class="text-muted"' if weakness.is_in_a_final_review? %>>
         <td><%= finding_updated_at_text weakness %></td>
         <td class="nowrap"><%= show_review_with_close_date_as_abbr weakness.review %></td>
-        <td class="expendable"><%= super_truncate weakness.review.try(:plan_item).try(:project), 20 %></td>
-        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(weakness) %></td>
-        <td class="expendable"><%= super_truncate weakness.description, 20 %></td>
-        <td class="expendable"><%= weakness.state_text %></td>
-        <td class="expendable"><%= l weakness.follow_up_date, :format => :short if weakness.follow_up_date %></td>
-        <td class="expendable"><%= weakness.risk_text %></td>
-        <td class="expendable"><%= weakness.priority_text %></td>
-        <td class="expendable"><%= t weakness.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
+        <td class="hidden-xs"><%= super_truncate weakness.review.try(:plan_item).try(:project), 20 %></td>
+        <td class="nowrap"><%= show_finding_review_code_with_decription_as_abbr(weakness) %></td>
+        <td class="hidden-xs"><%= super_truncate weakness.title, 20 %></td>
+        <td class="hidden-xs"><%= weakness.state_text %></td>
+        <td class="hidden-xs hidden-sm hidden-md"><%= l weakness.follow_up_date, :format => :short if weakness.follow_up_date %></td>
+        <td class="hidden-xs"><%= weakness.risk_text %></td>
+        <td class="hidden-xs"><%= t weakness.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show weakness %></td>
         <td><%= link_to_edit edit_weakness_path(weakness) %></td>
       </tr>
@@ -41,12 +39,14 @@
   </tbody>
 </table>
 
-<div id="links">
-<%= pagination_links @weaknesses %>
-<% if params[:control_objective].to_i > 0 %>
-  <%= link_to t('label.new'), new_weakness_path(
-    :control_objective_item => params[:control_objective]) %>
-  | <%= link_to t('weakness.see_all'), weaknesses_path, :class => 'red bold' %>
-<% end %>
-<div class="clear"></div>
+<hr />
+
+<div class="clearfix">
+  <%= paginate @weaknesses %>
+
+  <% if params[:control_objective].to_i > 0 %>
+    <%= link_to t('label.new'), new_weakness_path(
+      :control_objective_item => params[:control_objective]), class: 'btn btn-primary' %> |
+    <%= link_to t('weakness.see_all'), weaknesses_path %>
+  <% end %>
 </div>

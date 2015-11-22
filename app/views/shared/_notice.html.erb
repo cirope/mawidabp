@@ -1,8 +1,0 @@
-<div id="notice">
-  <p><%= raw flash.notice %></p>
-  <div id="close_notice">
-    <%= link_to 'X', '#', :onclick => "$('#notice').stop().slideUp(); return false;",
-      :title => t('label.close') %>
-  </div>
-</div>
-<%= javascript_tag "$('#notice').delay(7000).slideUp();"%>

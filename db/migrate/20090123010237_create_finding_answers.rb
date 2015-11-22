@@ -8,7 +8,7 @@ class CreateFindingAnswers < ActiveRecord::Migration
       t.references :user
       t.references :file_model
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :finding_answers, :finding_id

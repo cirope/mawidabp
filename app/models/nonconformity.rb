@@ -3,14 +3,12 @@ class Nonconformity < Finding
   # Acceso a los atributos
   attr_reader :approval_errors
 
-  # Callbacks
-  before_save :assign_highest_risk
-
   # Named scopes
-  scope :all_for_report, -> { where(
-    :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
-    :final => true
-    ).order(['risk DESC', 'state ASC'])
+  scope :all_for_report, -> {
+    where(
+      :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
+      :final => true
+    ).order(:risk => :desc, :state => :asc)
   }
 
   # Restricciones
@@ -36,26 +34,21 @@ class Nonconformity < Finding
     super(attributes, options, import_users)
 
     self.review_code ||= self.next_code
-    self.risk = self.assign_highest_risk
   end
 
   def self.columns_for_sort
     Finding.columns_for_sort.dup.merge(
       :follow_up_date => {
         :name => Nonconformity.human_attribute_name(:follow_up_date),
-        :field => "#{Nonconformity.table_name}.follow_up_date ASC"
+        :field => "#{Nonconformity.quoted_table_name}.#{Nonconformity.qcn('follow_up_date')} ASC"
       }
     )
   end
 
   def prepare_work_paper(work_paper)
     work_paper.code_prefix = self.finding_prefix ?
-      I18n.t('code_prefixes.work_papers_in_weaknesses_follow_up') :
+      I18n.t('code_prefixes.work_papers_in_nonconformities') :
       work_paper_prefix
-  end
-
-  def assign_highest_risk
-    self.highest_risk = self.class.risks_values.max
   end
 
   def risk_text

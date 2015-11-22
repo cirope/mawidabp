@@ -11,7 +11,7 @@ bcra_A4609_security_management_responsible_dependency_item:
   exclude_from_score: false
   control_objective: bcra_A4609_security_management_responsible_dependency
   review: current_review
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_data_proccessing_impact_analisys_item:
   control_objective_text: Análisis de impacto
@@ -26,7 +26,7 @@ bcra_A4609_data_proccessing_impact_analisys_item:
   exclude_from_score: false
   control_objective: bcra_A4609_data_proccessing_impact_analisys
   review: current_review
-  organization: default_organization
+  organization: cirope
 
 iso_27000_security_policy_3_1_item:
   control_objective_text: "3.1) Política de seguridad de la información.\nProporcionar orientación y apoyo a la alta dirección de la seguridad de la información."
@@ -41,7 +41,7 @@ iso_27000_security_policy_3_1_item:
   exclude_from_score: false
   control_objective: iso_27000_security_policy_3_1
   review: past_review
-  organization: default_organization
+  organization: cirope
 
 iso_27000_security_organization_4_1_item:
   control_objective_text: "4.1) Infraestructura de seguridad de la información."
@@ -56,7 +56,7 @@ iso_27000_security_organization_4_1_item:
   exclude_from_score: false
   control_objective: iso_27000_security_organization_4_1
   review: past_review
-  organization: default_organization
+  organization: cirope
 
 iso_27000_security_organization_4_2_item:
   control_objective_text: "4.2) Seguridad frente al acceso por parte de terceros."
@@ -71,7 +71,7 @@ iso_27000_security_organization_4_2_item:
   exclude_from_score: true
   control_objective: iso_27000_security_organization_4_2
   review: past_review
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_security_management_responsible_dependency_item_editable:
   control_objective_text: Dependencia del área responsible
@@ -85,7 +85,7 @@ bcra_A4609_security_management_responsible_dependency_item_editable:
   exclude_from_score: false
   control_objective: bcra_A4609_security_management_responsible_dependency
   review: review_with_conclusion
-  organization: default_organization
+  organization: cirope
 
 bcra_A4609_data_proccessing_impact_analisys_item_editable:
   control_objective_text: Análisis de impacto
@@ -99,7 +99,7 @@ bcra_A4609_data_proccessing_impact_analisys_item_editable:
   exclude_from_score: false
   control_objective: bcra_A4609_data_proccessing_impact_analisys
   review: review_with_conclusion
-  organization: default_organization
+  organization: cirope
 
 iso_27000_security_organization_4_2_item_editable:
   control_objective_text: "4.2) Seguridad frente al acceso por parte de terceros."
@@ -113,8 +113,8 @@ iso_27000_security_organization_4_2_item_editable:
   exclude_from_score: false
   control_objective: iso_27000_security_organization_4_2
   review: review_without_conclusion
-  organization: default_organization
-  
+  organization: cirope
+
 iso_27000_security_organization_4_3_item_editable_without_findings:
   control_objective_text: "4.3) Seguridad frente al acceso por parte de terceros."
   relevance: <%= ControlObjectiveItem.relevances_values.last %>
@@ -127,8 +127,8 @@ iso_27000_security_organization_4_3_item_editable_without_findings:
   exclude_from_score: false
   control_objective: iso_27000_security_organization_4_3
   review: review_without_conclusion_and_without_findings
-  organization: default_organization
-  
+  organization: cirope
+
 bcra_A4609_security_management_responsible_dependency_item_approved_and_editable:
   control_objective_text: Dependencia del área responsible
   relevance: <%= ControlObjectiveItem.relevances_values.last %>
@@ -141,4 +141,18 @@ bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
   exclude_from_score: false
   control_objective: bcra_A4609_security_management_responsible_dependency
   review: review_approved_with_conclusion
-  organization: default_organization
+  organization: cirope
+
+iso_27000_security_organization_4_4_continuous_item:
+  control_objective_text: "4.4) Seguridad frente al acceso por parte de terceros (cont)."
+  relevance: <%= ControlObjectiveItem.relevances_values.last %>
+  design_score: <%= ControlObjectiveItem.qualifications_values.last %>
+  compliance_score: <%= ControlObjectiveItem.qualifications_values.last %>
+  sustantive_score: <%= ControlObjectiveItem.qualifications_values.last %>
+  audit_date: <%= 1.year.ago.to_date.to_s(:db) %>
+  auditor_comment: Auditor comment
+  finished: true
+  exclude_from_score: false
+  control_objective: iso_27000_security_organization_4_4_continuous
+  review: review_without_conclusion
+  organization: cirope

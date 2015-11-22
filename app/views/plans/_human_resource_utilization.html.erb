@@ -1,49 +1,43 @@
-<% id = dynamic_object_id('human_resource_utilization', f) %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="human_resource_utilization item" id="<%= id %>" <%= raw 'style="display: none;"' if hide %>>
-  <div>
-    <div class="item_field" style="width: 30%;">
+<% id = f.object.object_id %>
+<fieldset class="human_resource_utilization">
+  <div class="row nested">
+    <div class="col-md-5">
       <% if f.object.new_record? %>
-        <div class="search">
-          <% field_classes = [:search, :autocomplete_field] %>
-          <% field_classes << :error_field unless f.object.errors[:resource_id].blank? %>
-          <%= text_field_tag 'resource_utilization[user_data]',
-            f.object.resource.try(:full_name_with_resource),
-            :id => "resource_utilization_user_#{id}",
-            :class => field_classes.join(' '),
-            :title => t('label.search'),
-            :autocomplete => :off,
-            :autofocus => true,
-            'data-autocomplete-url' => auto_complete_for_user_plans_path(:format => :json) %>
-          <%= f.hidden_field :resource_id, :value => f.object.resource_id,
-            :id => "hidden_user_id_#{id}", :class => :autocomplete_id %>
-        </div>
+        <%= f.input :resource_id, as: :string, label: false, autofocus: true,
+          input_html: {
+            name: 'resource_utilization[user_data]',
+            value: f.object.resource.try(:full_name_with_resource),
+            id: "resource_utilization_user_#{id}",
+            title: t('label.search'),
+            data: {
+              'autocomplete-url' => plans_users_path,
+              'autocomplete-id-target' => "#hidden_resource_id_#{id}"
+            }
+          } %>
       <% else %>
-        <%= f.hidden_field :resource_id, :value => f.object.resource_id,
-          :id => "hidden_user_id_#{id}" %>
-        <%= text_field_tag "resource_utilization_user_#{id}",
-          f.object.resource.try(:full_name_with_function, f.object.created_at),
-          :readonly => true %>
+        <%= f.input :resource_id, as: :string, label: false, input_html: {
+          name: "resource_utilization_user_#{id}",
+          value: f.object.resource.try(:full_name_with_function, f.object.created_at),
+          readonly: true
+        } %>
       <% end %>
+      <%= f.input :resource_id, as: :hidden, input_html: {
+        value: f.object.resource_id, id: "hidden_resource_id_#{id}"
+      } %>
     </div>
-    <div class="item_field" style="width: 20%;">
-    <%= f.text_field :units %>
+    <div class="col-md-3">
+      <%= f.input :units, as: :string, label: false %>
     </div>
-    <div class="item_field" style="width: 20%;">
-    <%= f.text_field :cost_per_unit, :id => "#{id}_cost_per_unit" %>
+    <div class="col-md-3">
+      <%= f.input :cost_per_unit, as: :string, label: false, input_html: { id: "#{id}_cost_per_unit" } %>
     </div>
-    <div class="item_field item_controls" style="width: 10%;">
-      <%= insert_record_link(f, 'data-event' => 'insertRecordSubitem',
-        'data-parent' => :plan_item,
-        :class_to_insert => :human_resource_utilization) %> |
-      <%= remove_item_link(f, 'human_resource_utilization') %>
-      <%= f.hidden_field :resource_type %>
+    <div class="col-md-1">
+      <div class="toggle-visibility">
+        <%= link_to_insert_field(f, 'human_resource_utilizations') %>
+        <span class="text-muted">|</span>
+        <%= link_to_remove_nested_item(f) %>
+        <%= f.input :resource_type, as: :hidden, input_html: { value: 'User' } %>
+      </div>
     </div>
   </div>
-</div>
-<% if is_dynamic %>
-  <script type="text/javascript">
-    Helper.showItem('#<%= id %>');
-    AutoComplete.observeAll();
-  </script>
-<% end %>
+</fieldset>

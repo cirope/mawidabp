@@ -65,11 +65,15 @@ class Notification < ActiveRecord::Base
     super(attributes, options)
 
     self.status ||= STATUS[:unconfirmed]
-    self.confirmation_hash ||= UUIDTools::UUID.random_create.to_s
+    self.confirmation_hash ||= SecureRandom.urlsafe_base64
   end
 
   def <=>(other)
-    self.id <=> other.id
+    if other.kind_of?(Notification)
+      self.id <=> other.id
+    else
+      -1
+    end
   end
 
   def to_param
@@ -86,9 +90,9 @@ class Notification < ActiveRecord::Base
         )
 
         self.findings.each do |finding|
-          finding.confirmed! if self.user.can_act_as_audited?
+          finding.confirmed! user if user.can_act_as_audited?
 
-          finding.notifications.each do |notification|
+          finding.notifications.uniq.each do |notification|
             restrictions = !notification.notified? && notification != self &&
               self.user.can_act_as_audited? &&
               !notification.user.can_act_as_audited?

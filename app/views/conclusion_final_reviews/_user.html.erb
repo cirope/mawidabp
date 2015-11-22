@@ -1,65 +1,49 @@
-<% id = user.id || 'NEW_RECORD' %>
-<% hide = is_dynamic || user.marked_for_destruction? %>
-<div class="user item" <%= raw 'style="display: none;"' if hide %> id="user_<%= id %>">
-  <div>
-    <div class="item_field" style="width: 50%;">
-      <% if is_dynamic %>
-        <div class="search">
-          <% field_classes = [:search, :autocomplete_field] %>
+<%
+  user = item
+  id = user.id || item.object_id
+%>
+<fieldset class="user" style="margin-bottom: 10px;">
+  <div class="form-inputs">
+    <div class="row">
+      <% if user.new_record? %>
+        <div class="col-md-6">
           <%= text_field_tag "user[#{id}][data]", '',
-            :id => "user_#{id}_data",
-            :class => field_classes.join(' '),
-            :title => t('label.search'),
-            :autocomplete => :off,
-            :autofocus => true,
-            'data-autocomplete-url' => auto_complete_for_user_conclusion_final_reviews_path(:format => :json) %>
-          <%= hidden_field_tag "user[#{id}][id]", user.id,
-            :class => :autocomplete_id %>
-        </div>
-    </div>
-
-    <div class="item_field" style="width: 30%;">
-
-
-      <div id="questionnaire_<%= id %>" style="opacity: 0;">
-        <%= collection_select "user[#{id}]", :questionnaire_id, @questionnaires, :id,
-          :name, :prompt => t('label.no') %>
-      </div>
-    </div>
-
-   <% else %>
-        <%= hidden_field_tag "user[#{id}][id]", user.id %>
-        <%= text_field_tag "user[#{id}][data]",
-          user.new_record? ? nil : user.full_name_with_function,
-          :readonly => true %>
-  </div>
-
-    <div class="item_field" style="width: 30%;">
-      <% if user.can_act_as_audited? %>
-        <div class="questionnaire">
-          <%= collection_select "user[#{id}]", :questionnaire_id, @questionnaires, :id,
-            :name, :prompt => t('label.no') %>
+            id: "user_#{id}_data",
+            class: 'form-control',
+            title: t('label.search'),
+            autocomplete: :off,
+            autofocus: true, data: {
+              autocomplete_url: conclusion_final_reviews_users_path,
+              autocomplete_id_target: "#user_#{id}_id"
+            } %>
         </div>
       <% else %>
-        &nbsp;
+        <div class="col-md-6">
+          <%= text_field_tag "user[#{id}][data]", user.try(:full_name_with_function),
+            readonly: true, class: 'form-control' %>
+        </div>
       <% end %>
-    </div>
-
-<% end %>
-
-    <div class="item_field item_controls" style="width: 10%;">
-      <%= remove_item_link nil, 'user' %>
+      <%= hidden_field_tag "user[#{id}][id]", user.id %>
+      <div class="col-md-4">
+        <% if user.can_act_as_audited? || user.new_record? %>
+          <%= select_tag "user[#{id}][questionnaire_id]", options_from_collection_for_select(
+            @questionnaires, :id, :name), prompt: t('label.no'),
+            class: "form-control #{('hidden' if user.new_record?)}" %>
+        <% end %>
+      </div>
+      <div class="col-md-2">
+        <%= link_to_remove_child_item(nil) %>
+      </div>
     </div>
   </div>
-</div>
-
-<% if is_dynamic %>
+</fieldset>
+<% if user.new_record? %>
   <script type="text/javascript">
-    Helper.showItem('#user_<%= id %>');
-    AutoComplete.observeAll();
     $('#user_<%= id %>_data').on('autocomplete:update', function() {
       if ($(this).data('item')['can_act_as_audited?']) {
-        $('#questionnaire_<%= id %>').animate({opacity: 1});
+        $('#user_<%= id %>_questionnaire_id').removeClass('hidden');
+      } else {
+        $('#user_<%= id %>_questionnaire_id').addClass('hidden');
       }
     });
   </script>

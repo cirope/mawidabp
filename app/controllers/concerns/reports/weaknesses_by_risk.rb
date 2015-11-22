@@ -5,13 +5,13 @@ module Reports::WeaknessesByRisk
 
   def weaknesses_by_risk
     @controller = params[:controller_name]
-    final = params[:final]
+    final = params[:final] == 'true'
     @title = t("#{@controller}_committee_report.weaknesses_by_risk_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk])
     @periods = periods_for_interval
     @audit_types = [
-      [:internal, BusinessUnitType.internal_audit.map {|but| [but.name, but.id]}],
-      [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
+      [:internal, BusinessUnitType.list.internal_audit.map {|but| [but.name, but.id]}],
+      [:external, BusinessUnitType.list.external_audit.map {|but| [but.name, but.id]}]
     ]
     @tables_data = {}
     statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
@@ -20,7 +20,7 @@ module Reports::WeaknessesByRisk
     @repeated_counts = {}
     @being_implemented_resumes = {}
     @highest_being_implemented_resumes = {}
-    highest_risk = RISK_TYPES.sort {|r1, r2| r1[1] <=> r2[1]}.last
+    highest_risk = RISK_TYPES.sort { |r1, r2| r1[1] <=> r2[1] }.last
 
     @periods.each do |period|
       total_weaknesses_count = {}
@@ -134,7 +134,7 @@ module Reports::WeaknessesByRisk
             @highest_being_implemented_resumes[period] ||= {}
             @highest_being_implemented_resumes[period][key] =
               being_implemented_resume_from_counts(highest_being_implemented_counts)
-            
+
             @tables_data[period] ||= {}
             @tables_data[period][key] = get_weaknesses_synthesis_table_data(
               weaknesses_count, weaknesses_count_by_risk, RISK_TYPES)
@@ -191,7 +191,7 @@ module Reports::WeaknessesByRisk
 
             if @repeated_counts[period][key] > 0
               pdf.move_down((PDF_FONT_SIZE * 0.5).round)
-              pdf.text t('follow_up_committee.repeated_count',
+              pdf.text t('follow_up_committee_report.repeated_count',
                 :count => @repeated_counts[period][key],
                 :font_size => PDF_FONT_SIZE)
             end
@@ -207,7 +207,7 @@ module Reports::WeaknessesByRisk
       pdf.move_down PDF_FONT_SIZE
 
       add_weaknesses_synthesis_table(pdf, @tables_data[period]['total'])
-    
+
       add_being_implemented_resume(pdf,
         @being_implemented_resumes[period]['total'])
       add_being_implemented_resume(pdf,
@@ -215,7 +215,7 @@ module Reports::WeaknessesByRisk
 
       if @repeated_counts[period]['total'] > 0
         pdf.move_down((PDF_FONT_SIZE * 0.5).round)
-        pdf.text t('follow_up_committee.repeated_count',
+        pdf.text t('follow_up_committee_report.repeated_count',
           :count => @repeated_counts[period]['total'],
           :font_size => PDF_FONT_SIZE)
       end

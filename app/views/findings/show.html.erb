@@ -1,281 +1,284 @@
-<div id="showed_data">
-  <div class="show_item">
-    <b><%= Review.model_name.human %></b>:
-    <%= h @finding.review.try(:identification) %>
+<p>
+  <strong><%= Review.model_name.human %></strong>:
+  <%= @finding.review.try(:identification) %>
+</p>
+<p>
+  <strong><%= PlanItem.human_attribute_name(:project) %></strong>:
+  <%= @finding.review.try(:plan_item).try(:project) %>
+</p>
+<p>
+  <strong><%= Finding.human_attribute_name :review_code %></strong>
+  <%= @finding.review_code %>
+</p>
+<p>
+  <strong><%= Finding.human_attribute_name :title %></strong>
+  <%= @finding.title %>
+</p>
+<% if @finding.control_objective_item %>
+  <div>
+    <strong><%= ControlObjective.model_name.human %></strong>:
+    <%= simple_format "#{@finding.control_objective_item.to_s} (#{@finding.control_objective_item.process_control.name})" %>
   </div>
-  <div class="show_item">
-    <b><%= PlanItem.human_attribute_name(:project) %></b>:
-    <%= h @finding.review.try(:plan_item).try(:project) %>
+<% end %>
+<p>
+  <strong><%= ConclusionFinalReview.human_attribute_name(:issue_date) %></strong>:
+  <%= @finding.issue_date ? l(@finding.issue_date, :format => :long) :
+    t('finding.without_conclusion_final_review') %>
+</p>
+<div>
+  <strong><%= Finding.human_attribute_name :description %></strong>
+  <%= simple_format @finding.description %>
+</div>
+<% if @finding.kind_of? Weakness %>
+  <div>
+    <strong><%= Weakness.human_attribute_name :audit_recommendations %></strong>:
+    <%= simple_format @finding.audit_recommendations %>
   </div>
-  <div class="show_item">
-    <b><%= Finding.human_attribute_name :review_code %></b>
-    <%= h @finding.review_code %>
-  </div>
-  <% if @finding.control_objective_item %>
-    <div class="show_item">
-      <b><%= ControlObjective.model_name.human %></b>:
-      <%= simple_format h("#{@finding.control_objective_item.to_s} (#{@finding.control_objective_item.process_control.name})") %>
-    </div>
-  <% end %>
-  <div class="show_item">
-    <b><%= raw(ConclusionFinalReview.human_attribute_name(:issue_date) +
-      show_inline_help_for(:finding_issue_date)) %></b>:
-    <%= @finding.issue_date ? l(@finding.issue_date, :format => :long) :
-      t('finding.without_conclusion_final_review') %>
-  </div>
-  <div class="show_item">
-    <b><%= Finding.human_attribute_name :description %></b>
-    <%= simple_format h(@finding.description) %>
-  </div>
-  <% if @finding.kind_of? Weakness %>
-    <div class="show_item">
-      <b><%= Weakness.human_attribute_name :audit_recommendations %></b>:
-      <%= simple_format h(@finding.audit_recommendations) %>
-    </div>
-    <div class="show_item">
-      <b><%= Weakness.human_attribute_name :risk %></b>:
-      <%= @finding.risk_text %>
-    </div>
-    <div class="show_item">
-      <b><%= Weakness.human_attribute_name :priority %></b>:
-      <%= @finding.priority_text %>
-    </div>
-  <% end %>
-  <div class="show_item">
-    <b><%= raw(Finding.human_attribute_name(:state) +
-      show_inline_help_for(:finding_state)) %></b>:
-    <%= @finding.state_text %>
-  </div>
-  <div class="show_item">
-    <b><%= raw(Finding.human_attribute_name(:origination_date) +
-      show_inline_help_for(:finding_origination_date)) %></b>:
-    <%= l(@finding.origination_date, :format => :long) if @finding.origination_date %>
-  </div>
-  <% if @finding.kind_of? Weakness %>
-    <div class="show_item">
-      <b><%= raw(Weakness.human_attribute_name(:follow_up_date) +
-        show_inline_help_for(:finding_follow_up_date)) %></b>:
-      <%= l(@finding.follow_up_date, :format => :long) if @finding.follow_up_date %>
-    </div>
-    <%= show_weakness_previous_follow_up_dates @finding %>
-  <% end %>
-  <div class="show_item">
-    <b><%= raw(Finding.human_attribute_name(:solution_date) +
-      show_inline_help_for(:finding_solution_date)) %></b>:
-    <%= l(@finding.solution_date, :format => :long) if @finding.solution_date %>
-  </div>
-  <div class="show_item">
-    <b><%= Finding.human_attribute_name :effect %></b>:
-    <%= simple_format h(@finding.effect) %>
-  </div>
-  <div class="show_item">
-    <b><%= Finding.human_attribute_name :answer %></b>:
-    <%= simple_format h(@finding.answer) %>
-  </div>
-  <div class="show_item">
-    <b><%= Finding.human_attribute_name :audit_comments %></b>:
-    <%= simple_format h(@finding.audit_comments) %>
-  </div>
-
-  <% unless @finding.important_dates.blank? %>
-    <h1 class="clear">
-      <%= t('finding.important_dates.title') %>
-      <%= show_inline_help_for(:finding_important_dates) %>
-    </h1>
-    <ul class="raw_list">
-      <% @finding.important_dates.each do |important_date| %>
-        <li><%= textilize_without_paragraph important_date %></li>
-      <% end %>
-    </ul>
-  <% end %>
-
-  <h3><%= t('finding.responsibles', :count => @finding.users.size) %></h3>
-  <%= finding_responsibles_list(@finding) %>
-  
-  <% unless @finding.finding_relations.blank? %>
-    <h3>
-      <%= t('finding.finding_relations') %>
-      <%= show_inline_help_for(:finding_relations) %>
-    </h3>
-    
-    <table class="summary_table">
-      <thead>
-        <tr>
-          <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
-          <th><%= FindingRelation.human_attribute_name :description %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @finding.finding_relations.each do |fr| %>
-          <tr>
-            <td><%= fr.related_finding %></td>
-            <td><%= fr.description %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-  
-  <% unless @finding.inverse_finding_relations.blank? %>
-    <h3>
-      <%= t('finding.inverse_finding_relations') %>
-      <%= show_inline_help_for(:inverse_finding_relations) %>
-    </h3>
-    
-    <table class="summary_table">
-      <thead>
-        <tr>
-          <th><%= FindingRelation.human_attribute_name :finding_id %></th>
-          <th><%= FindingRelation.human_attribute_name :description %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @finding.inverse_finding_relations.each do |ifr| %>
-          <tr>
-            <td><%= ifr.finding %></td>
-            <td><%= ifr.description %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-  
-  <% unless @finding.finding_answers.blank? %>
-    <h3>
-      <%= t('finding.finding_answers') %>
-      <%= show_inline_help_for(:finding_comments) %>
-    </h3>
-
-    <table class="summary_table">
-      <thead>
-        <tr>
-          <th><%= User.model_name.human %></th>
-          <th><%= FindingAnswer.human_attribute_name :answer %></th>
-          <th>
-            <%= FindingAnswer.human_attribute_name :file_model %>
-            <%= show_inline_help_for(:finding_file_model) %>
-          </th>
-          <th>
-            <%= FindingAnswer.human_attribute_name :created_at %>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @finding.finding_answers.each do |finding_answer| %>
-          <tr>
-            <td><%= finding_answer.user.full_name %></td>
-            <td><%= simple_format finding_answer.answer %></td>
-            <td>
-              <%= finding_answer.file_model.try(:file?) ?
-                link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
-            </td>
-            <td>
-              <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
-              <% if finding_answer.commitment_date %>
-                <br />
-                <br /><b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
-                <br /><%= l(finding_answer.commitment_date, :format => :long) %>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-
-  <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
-    <h3><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h3>
-    <ul class="raw_list">
-      <% repeated_ancestors.each do |repeated_ancestor| %>
-        <li><%= repeated_ancestor %></li>
-      <% end %>
-    </ul>
-  <% end %>
-
-  <% unless (repeated_children = @finding.repeated_children).blank? %>
-    <h3><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h3>
-    <ul class="raw_list">
-      <% repeated_children.each do |repeated_child| %>
-        <li><%= repeated_child %></li>
-      <% end %>
-    </ul>
-  <% end %>
-
-  <% unless @finding.work_papers.blank? %>
-    <h3><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
-
-    <table class="summary_table">
-      <thead>
-        <tr>
-          <th><%= WorkPaper.human_attribute_name :name %></th>
-          <th><%= WorkPaper.human_attribute_name :code %></th>
-          <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
-          <th><%= WorkPaper.human_attribute_name :description %></th>
-          <th><%= WorkPaper.human_attribute_name :file_model %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @finding.work_papers.each do |work_paper| %>
-          <tr>
-            <td><%= h work_paper.name %></td>
-            <td><%= h work_paper.code %></td>
-            <td><%= work_paper.number_of_pages %></td>
-            <td><%= simple_format h(work_paper.description) %></td>
-            <td><%= work_paper.file_model.try(:file?) ?
-              link_to(t('label.download'), work_paper.file_model.file.url) : '---' %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-
-  <div class="title" style="font-weight: normal;">
-    <%= textilize t('finding.costs',
-      :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
-  </div>
-
-  <% unless @finding.costs.blank? %>
-    <p style="margin-bottom: 1em;">
-      <%= link_to t('finding.view_cost_details'), '#', :onclick =>
-        "$('#cost_details').slideToggle(); return false;" %>
-    </p>
-    <div id="cost_details" style="display: none;">
-      <div>
-        <table class="summary_table">
-          <thead>
-            <tr>
-              <th><%= Cost.human_attribute_name :created_at %></th>
-              <th><%= Cost.human_attribute_name :cost %></th>
-              <th><%= Cost.human_attribute_name :description %></th>
-              <th><%= Cost.human_attribute_name :user_id %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @finding.costs.each do |cost| %>
-              <tr>
-                <td><%= l(cost.created_at, :format => :long) %></td>
-                <td><%= time_in_words_with_abbr(cost.cost.hours) %></td>
-                <td><%= simple_format h(cost.description.blank? ? '-' : cost.description) %></td>
-                <td><%= h cost.user.full_name %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  <% end %>
+  <p>
+    <strong><%= Weakness.human_attribute_name :risk %></strong>:
+    <%= @finding.risk_text %>
+  </p>
+  <p>
+    <strong><%= Weakness.human_attribute_name :priority %></strong>:
+    <%= @finding.priority_text %>
+  </p>
+<% end %>
+<p>
+  <strong><%= Finding.human_attribute_name(:state) %></strong>:
+  <%= @finding.state_text %>
+</p>
+<p>
+  <strong><%= Finding.human_attribute_name(:origination_date) %></strong>:
+  <%= l(@finding.origination_date, :format => :long) if @finding.origination_date %>
+</p>
+<% if @finding.kind_of? Weakness %>
+  <p>
+    <strong><%= Weakness.human_attribute_name(:follow_up_date) %></strong>:
+    <%= l(@finding.follow_up_date, :format => :long) if @finding.follow_up_date %>
+  </p>
+  <%= show_weakness_previous_follow_up_dates @finding %>
+<% end %>
+<p>
+  <strong><%= Finding.human_attribute_name(:solution_date) %></strong>:
+  <%= l(@finding.solution_date, :format => :long) if @finding.solution_date %>
+</p>
+<div>
+  <strong><%= Finding.human_attribute_name :effect %></strong>:
+  <%= simple_format @finding.effect %>
+</div>
+<div>
+  <strong><%= Finding.human_attribute_name :answer %></strong>:
+  <%= simple_format @finding.answer %>
+</div>
+<div>
+  <strong><%= Finding.human_attribute_name :audit_comments %></strong>:
+  <%= simple_format @finding.audit_comments %>
 </div>
 
-<div id="links">
+<% unless @finding.important_dates.blank? %>
+  <h4>
+    <%= t('finding.important_dates.title') %>
+  </h4>
+  <ul>
+    <% @finding.important_dates.each do |important_date| %>
+      <li><%= textilize_without_paragraph important_date %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
+<%= finding_responsibles_list(@finding) %>
+
+<% unless @finding.finding_relations.blank? %>
+  <h4>
+    <%= t('finding.finding_relations') %>
+  </h4>
+
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
+        <th><%= FindingRelation.human_attribute_name :description %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @finding.finding_relations.each do |fr| %>
+        <tr>
+          <td><%= fr.related_finding %></td>
+          <td><%= fr.description %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% unless @finding.inverse_finding_relations.blank? %>
+  <h4>
+    <%= t('finding.inverse_finding_relations') %>
+  </h4>
+
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= FindingRelation.human_attribute_name :finding_id %></th>
+        <th><%= FindingRelation.human_attribute_name :description %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @finding.inverse_finding_relations.each do |ifr| %>
+        <tr>
+          <td><%= ifr.finding %></td>
+          <td><%= ifr.description %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% unless @finding.business_units.blank? %>
+  <h4>
+    <%= BusinessUnit.model_name.human count: 0 %>
+  </h4>
+
+  <ul>
+    <% @finding.business_units.each do |bu| %>
+      <li><%= bu.name %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% unless @finding.finding_answers.blank? %>
+  <h4>
+    <%= t('finding.finding_answers') %>
+  </h4>
+
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= User.model_name.human %></th>
+        <th><%= FindingAnswer.human_attribute_name :answer %></th>
+        <th>
+          <%= FindingAnswer.human_attribute_name :file_model %>
+        </th>
+        <th>
+          <%= FindingAnswer.human_attribute_name :created_at %>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @finding.finding_answers.each do |finding_answer| %>
+        <tr>
+          <td><%= finding_answer.user.full_name %></td>
+          <td><%= simple_format finding_answer.answer %></td>
+          <td>
+            <%= finding_answer.file_model.try(:file?) ?
+              link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
+          </td>
+          <td>
+            <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
+            <% if finding_answer.commitment_date %>
+              <br />
+              <br /><strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
+              <br /><%= l(finding_answer.commitment_date, :format => :long) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
+  <h4><%= t('finding.repeated_ancestors') %></h4>
+  <ul>
+    <% repeated_ancestors.each do |repeated_ancestor| %>
+      <li><%= repeated_ancestor %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% unless (repeated_children = @finding.repeated_children).blank? %>
+  <h4><%= t('finding.repeated_children') %></h4>
+  <ul>
+    <% repeated_children.each do |repeated_child| %>
+      <li><%= repeated_child %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% unless @finding.work_papers.blank? %>
+  <h4><%= t('finding.work_papers') %></h4>
+
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= WorkPaper.human_attribute_name :name %></th>
+        <th><%= WorkPaper.human_attribute_name :code %></th>
+        <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
+        <th><%= WorkPaper.human_attribute_name :description %></th>
+        <th><%= WorkPaper.human_attribute_name :file_model %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @finding.work_papers.each do |work_paper| %>
+        <tr>
+          <td><%= work_paper.name %></td>
+          <td><%= work_paper.code %></td>
+          <td><%= work_paper.number_of_pages %></td>
+          <td><%= simple_format work_paper.description %></td>
+          <td><%= work_paper.file_model.try(:file?) ?
+            link_to(t('label.download'), work_paper.file_model.file.url) : '---' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<%= textilize t('finding.costs',
+  :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
+
+<% unless @finding.costs.blank? %>
+  <p>
+    <%= link_to t('finding.view_cost_details'), '#', :onclick =>
+      "$('#cost_details').slideToggle(); return false;" %>
+  </p>
+  <div id="cost_details" style="display: none;">
+    <div>
+      <table class="table table-condensed table-striped">
+        <thead>
+          <tr>
+            <th><%= Cost.human_attribute_name :created_at %></th>
+            <th><%= Cost.human_attribute_name :cost %></th>
+            <th><%= Cost.human_attribute_name :description %></th>
+            <th><%= Cost.human_attribute_name :user_id %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @finding.costs.each do |cost| %>
+            <tr>
+              <td><%= l(cost.created_at, :format => :long) %></td>
+              <td><%= time_in_words_with_abbr(cost.cost.hours) %></td>
+              <td><%= simple_format cost.description.blank? ? '-' : cost.description %></td>
+              <td><%= cost.user.full_name %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+<hr />
+
+<div>
   <% if @finding.pending? %>
-    <b><%= link_to t('label.edit'), edit_finding_path(params[:completed],
-      @finding, :user_id => params[:user_id]) %></b> |
+    <strong><%= link_to_edit edit_finding_path(params[:completed],
+      @finding, :user_id => params[:user_id]) %></strong> |
   <% end %>
   <% unless @auth_user.audited? %>
     <%= link_to t('finding.follow_up_report.download'),
       :action => :follow_up_pdf, :id => @finding, :_ts => Time.now.to_i %> |
   <% end %>
-  <%= link_to t('label.list'), findings_path(params[:completed],
-    :user_id => params[:user_id]) %> |
+  <%= link_to_index findings_path(params[:completed], :user_id => params[:user_id]) %> |
   <%= link_to_back %>
 </div>

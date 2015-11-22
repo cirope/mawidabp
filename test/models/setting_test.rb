@@ -2,23 +2,20 @@ require 'test_helper'
 
 class SettingTest < ActiveSupport::TestCase
   setup do
-    @setting = settings(:parameter_finding_stale_confirmed_days_default)
+    @setting = settings :parameter_finding_stale_confirmed_days_default
   end
 
   test 'blank attributes' do
-    @setting.name = ''
-    @setting.value = ''
-    @setting.organization_id = nil
+    @setting = Setting.new name: ''
 
     assert @setting.invalid?
     assert_error @setting, :name, :blank
     assert_error @setting, :value, :blank
-    assert_error @setting, :organization_id, :blank
+    assert_error @setting, :organization, :blank
   end
 
   test 'validates attributes length' do
-    @setting.name = 'abcde' * 52
-    @setting.value = 'abcde' * 52
+    @setting.name = @setting.value = 'abcde' * 52
 
     assert @setting.invalid?
     assert_error @setting, :name, :too_long, count: 255

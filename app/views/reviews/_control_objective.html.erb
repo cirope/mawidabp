@@ -1,0 +1,28 @@
+<% id = f.object.object_id %>
+<fieldset class="control_objective">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-10">
+        <%= f.input :id, as: :string, label: false,
+          input_html: {
+            id: "control_objective_#{id}",
+            name: 'control_objective[control_objective_data]',
+            title: t('label.search'),
+            autofocus: true,
+            data: {
+              autocomplete_url: auto_complete_for_control_objective_reviews_path,
+              autocomplete_id_target: "#hidden_control_objective_#{id}"
+            }
+          } %>
+          <%= f.input "hidden_control_objective_#{id}", as: :hidden, input_html: {
+            name: 'review[control_objective_ids][]', value: f.object.id,
+            id: "hidden_control_objective_#{id}" } %>
+      </div>
+      <div class="col-md-2">
+        <div class="toggle-visibility">
+          <%= link_to_remove_nested_item f %>
+        </div>
+      </div>
+    </div>
+  </div>
+</fieldset>

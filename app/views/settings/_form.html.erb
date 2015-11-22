@@ -1,27 +1,22 @@
-<%= form_for(@setting) do |f| %>
-  <%= f.error_messages %>
+<%= simple_form_for @setting do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form_column_left">
-    <div class="form_item field">
-      <%= f.label :name, class: 'inline' %>
-      <%= f.text_field :name, value: t("setting.#{@setting.name}"),
-          readonly: true, class: 'inline_item' %>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-inputs">
+        <%= f.input :name, readonly: true,
+          input_html: { value: t("settings.#{@setting.name}") } %>
+        <%= f.input :value, input_html: { autofocus: true } %>
+        <%= f.input :description %>
+        <%= f.input :lock_version, as: :hidden %>
+      </div>
     </div>
-    <div class="field">
-      <%= f.label :value %>
-      <%= f.text_field :value, autofocus: true %>
-    </div>
-    <div class="field">
-      <%= f.label :description %>
-      <%= f.text_area :description %>
-    </div>
-  
-    <div style="display:none">
-      <%= f.hidden_field :lock_version %>
-    </div>
+  </div>
 
-    <div class="actions">
-      <span class="button"><%= f.submit %></span>
-    </div>
+  <hr />
+
+  <div class="form-actions">
+    <%= f.submit class: 'btn btn-primary' %>
+    <div class="pull-right"><%= yield :form_actions %></div>
   </div>
 <% end %>

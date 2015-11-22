@@ -24,23 +24,21 @@ class ExecutionReportsControllerTest < ActionController::TestCase
   end
 
   test 'list reports' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:title)
-    assert_select '#error_body', false
     assert_template 'execution_reports/index'
   end
 
   test 'detailed management report' do
-    perform_auth
+    login
 
     get :detailed_management_report
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'execution_reports/detailed_management_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :detailed_management_report, detailed_management_report: {
         from_date: 10.years.ago.to_date,
         to_date: 10.years.from_now.to_date
@@ -48,12 +46,11 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'execution_reports/detailed_management_report'
   end
 
   test 'create detailed management report' do
-    perform_auth
+    login
 
     post :create_detailed_management_report, detailed_management_report: {
       from_date: 10.years.ago.to_date,
@@ -70,14 +67,13 @@ class ExecutionReportsControllerTest < ActionController::TestCase
   end
 
   test 'weaknesses by state execution report' do
-    perform_auth
+    login
 
     get :weaknesses_by_state_execution
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'execution_reports/weaknesses_by_state_execution'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :weaknesses_by_state_execution, weaknesses_by_state_execution: {
         from_date: 10.years.ago.to_date,
         to_date: 10.years.from_now.to_date
@@ -85,12 +81,11 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'execution_reports/weaknesses_by_state_execution'
   end
 
   test 'create weaknesses by state execution report' do
-    perform_auth
+    login
     post :create_weaknesses_by_state_execution, weaknesses_by_state_execution: {
       from_date: 10.years.ago.to_date,
       to_date: 10.years.from_now.to_date

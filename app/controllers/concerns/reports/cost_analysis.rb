@@ -31,8 +31,8 @@ module Reports::CostAnalysis
 
   def init_cost_vars
     @title = t(params[:include_details].blank? ?
-      'conclusion_audit_report.cost_analysis_title' :
-      'conclusion_audit_report.detailed_cost_analysis_title')
+      'conclusion_report.cost_analysis_title' :
+      'conclusion_report.detailed_cost_analysis_title')
     @from_date, @to_date = *make_date_range(params[:cost_analysis])
     @periods = periods_for_interval
     @column_order = [['business_unit', 20], ['review', 35],
@@ -42,8 +42,7 @@ module Reports::CostAnalysis
     @total_cost_data = {}
     @detailed_data = {}
     @currency_mask = "#{I18n.t('number.currency.format.unit')}%.2f"
-    @conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
-      @to_date)
+    @conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date, @to_date)
   end
 
   def calculate_total_cost_data(conclusion_review, period)
@@ -120,13 +119,13 @@ module Reports::CostAnalysis
 
     @periods.each do |period|
       add_period_title(pdf, period)
-      @column_headers, @column_widths = [], []                                                                                                                                          
+      @column_headers, @column_widths = [], []
       unless @total_cost_data[period].blank?
-        set_columns(pdf)
+        set_cost_analysis_columns(pdf)
         add_total_cost_table(pdf, period)
       else
         pdf.text(
-          t('conclusion_audit_report.cost_analysis.without_audits_in_the_period'), 
+          t('conclusion_report.cost_analysis.without_audits_in_the_period'),
             :font_size => PDF_FONT_SIZE)
       end
 
@@ -141,20 +140,25 @@ module Reports::CostAnalysis
 
   def save_and_redirect_to_pdf(pdf)
     pdf.custom_save_as(
-      t('conclusion_audit_report.cost_analysis.pdf_name',
+      t('conclusion_report.cost_analysis.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'cost_analysis', 0)
 
-    redirect_to Prawn::Document.relative_path(
-      t('conclusion_audit_report.cost_analysis.pdf_name',
+    @report_path = Prawn::Document.relative_path(
+      t('conclusion_report.cost_analysis.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'cost_analysis', 0)
+
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js { render 'shared/pdf_report' }
+    end
   end
 
-  def set_columns(pdf)
+  def set_cost_analysis_columns(pdf)
     @column_order.each do |column|
       @column_headers <<
-        "<b>#{t("conclusion_audit_report.cost_analysis.general_column_#{column.first}")}</b>"
+        "<b>#{t("conclusion_report.cost_analysis.general_column_#{column.first}")}</b>"
       @column_widths << pdf.percent_width(column.last)
     end
 
@@ -191,7 +195,7 @@ module Reports::CostAnalysis
         @currency_mask % estimated_amount,
         @currency_mask % real_amount,
         deviation_text
-      ]                                                                                                                                                                               
+      ]
     end
   end
 
@@ -200,7 +204,7 @@ module Reports::CostAnalysis
     @column_headers, @column_widths = [], []
     @detailed_column_order.each do |col_name, col_width|
       @column_headers <<
-        "<b>#{t("conclusion_audit_report.cost_analysis.detailed_column_#{col_name}")}</b>"
+        "<b>#{t("conclusion_report.cost_analysis.detailed_column_#{col_name}")}</b>"
       @column_widths << pdf.percent_width(col_width)
     end
   end

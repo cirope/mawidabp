@@ -8,7 +8,7 @@ class FindingAnswer < ActiveRecord::Base
   }
 
   # Callbacks
-  after_create :send_notification_to_users
+  after_commit :send_notification_to_users
 
   # Atributos no persistentes
   attr_accessor :notify_users
@@ -29,8 +29,8 @@ class FindingAnswer < ActiveRecord::Base
 
   # Relaciones
   belongs_to :finding
-  belongs_to :user, -> { where("#{User.table_name}.hidden" => [true,false]) }
-  belongs_to :file_model
+  belongs_to :user, -> { where("#{User.table_name}.hidden" => [true, false]) }
+  belongs_to :file_model, :dependent => :destroy
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true
 
@@ -45,7 +45,7 @@ class FindingAnswer < ActiveRecord::Base
       users = self.finding.users - [self.user]
 
       if !users.blank? && !self.answer.blank?
-        Notifier.notify_new_finding_answer(users, self).deliver
+        NotifierMailer.notify_new_finding_answer(users, self).deliver_later
       end
     end
   end

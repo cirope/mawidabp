@@ -106,7 +106,7 @@ class WorkflowTest < ActiveSupport::TestCase
   test 'can be modified' do
     uneditable_workflow = Workflow.find(workflows(:past_workflow).id)
 
-    @workflow.period_id = periods(:current_period_second_organization).id
+    @workflow.period_id = periods(:current_period_google).id
 
     assert !@workflow.is_frozen?
     assert @workflow.valid?
@@ -117,7 +117,7 @@ class WorkflowTest < ActiveSupport::TestCase
     # atributos
     assert uneditable_workflow.valid?
 
-    uneditable_workflow.period_id = periods(:past_period_second_organization).id
+    uneditable_workflow.period_id = periods(:past_period_google).id
 
     # No puede ser actualizado porque se ha modificado un atributo
     assert !uneditable_workflow.valid?
@@ -133,8 +133,8 @@ class WorkflowTest < ActiveSupport::TestCase
       FileUtils.rm @workflow.absolute_pdf_path
     end
 
-    assert_nothing_raised(Exception) do
-      @workflow.to_pdf(organizations(:default_organization))
+    assert_nothing_raised do
+      @workflow.to_pdf(organizations(:cirope))
     end
 
     assert File.exist?(@workflow.absolute_pdf_path)

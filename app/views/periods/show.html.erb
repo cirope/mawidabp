@@ -1,28 +1,23 @@
-<div id="showed_data">
-<p>
-  <b><%= raw(Period.human_attribute_name(:number) +
-      show_inline_help_for(:period_number)) %>:</b>
-  <%=h @period.number %>
-</p>
-
-<p>
-  <b><%= Period.human_attribute_name :description %>:</b>
-  <%=h @period.description %>
-</p>
-
-<p>
-  <b><%= Period.human_attribute_name :start %>:</b>
-  <%=l @period.start, :format => :long %>
-</p>
-
-<p>
-  <b><%= Period.human_attribute_name :end %>:</b>
-  <%=l @period.end, :format => :long %>
-</p>
+<div class="page-header">
+  <h2><%= @period.number %></h2>
 </div>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_period_path(@period) %> |
-  <%= link_to t('label.list'), periods_path %> |
-  <%= link_to_back %>
-</div>
+<p class="lead">
+  <%= @period.description %>
+</p>
+
+<p>
+  <strong><%= Period.human_attribute_name 'start' %></strong>:
+  <%= l @period.start, format: :long %>
+</p>
+
+<p>
+  <strong><%= Period.human_attribute_name 'end' %></strong>:
+  <%= l @period.end, format: :long %>
+</p>
+
+<hr />
+
+<%= link_to_edit edit_period_path(@period) %> |
+<%= link_to_index periods_path %> |
+<%= link_to_back %>

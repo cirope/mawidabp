@@ -1,0 +1,9 @@
+productivity:
+  name: Productivity increse
+  kind: benefit_tangible
+  organization: cirope
+
+quality_of_service:
+  name: Quality of service
+  kind: benefit_intangible
+  organization: cirope

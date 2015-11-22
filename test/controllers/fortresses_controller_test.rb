@@ -30,63 +30,59 @@ class FortressesControllerTest < ActionController::TestCase
   end
 
   test 'list fortresses' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:fortresses)
-    assert_select '#error_body', false
     assert_template 'fortresses/index'
   end
 
   test 'list fortresses with search and sort' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 4',
-      :columns => ['description', 'review'],
+      :columns => ['title', 'review'],
       :order => 'review'
     }
 
     assert_response :success
     assert_not_nil assigns(:fortresses)
-    assert_equal 2, assigns(:fortresses).size
+    assert_equal 2, assigns(:fortresses).count
     assert(assigns(:fortresses).all? do |o|
       o.review.identification.match(/1 2 4/i)
     end)
     assert_equal assigns(:fortresses).map {|o| o.review.identification}.sort,
       assigns(:fortresses).map {|o| o.review.identification}
-    assert_select '#error_body', false
     assert_template 'fortresses/index'
   end
 
   test 'edit fortress when search match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 4 y 1f',
-      :columns => ['description', 'review']
+      :columns => ['title', 'review']
     }
 
     assert_redirected_to fortress_url(
       findings(:bcra_A4609_security_management_responsible_dependency_fortress))
     assert_not_nil assigns(:fortresses)
-    assert_equal 1, assigns(:fortresses).size
+    assert_equal 1, assigns(:fortresses).count
   end
 
   test 'show fortress' do
-    perform_auth
+    login
     get :show, :id => findings(:bcra_A4609_security_management_responsible_dependency_fortress).id
     assert_response :success
     assert_not_nil assigns(:fortress)
-    assert_select '#error_body', false
     assert_template 'fortresses/show'
   end
 
   test 'new fortress' do
-    perform_auth
+    login
     get :new, :control_objective_item => control_objective_items(
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
     assert_not_nil assigns(:fortress)
-    assert_select '#error_body', false
     assert_template 'fortresses/new'
   end
 
@@ -94,13 +90,14 @@ class FortressesControllerTest < ActionController::TestCase
     counts_array = ['Fortress.count', 'WorkPaper.count',
       'FindingRelation.count']
 
-    perform_auth
+    login
     assert_difference counts_array do
       post :create, {
         :fortress => {
           :control_objective_item_id => control_objective_items(
             :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
           :review_code => 'F020',
+          :title => 'Title',
           :description => 'New description',
           :origination_date => 1.day.ago.to_date.to_s(:db),
           :finding_user_assignments_attributes => [
@@ -131,17 +128,16 @@ class FortressesControllerTest < ActionController::TestCase
   end
 
   test 'edit fortress' do
-    perform_auth
+    login
     get :edit, :id => findings(
       :bcra_A4609_security_management_responsible_dependency_fortress).id
     assert_response :success
     assert_not_nil assigns(:fortress)
-    assert_select '#error_body', false
     assert_template 'fortresses/edit'
   end
 
   test 'update fortress' do
-    perform_auth
+    login
     assert_no_difference 'Fortress.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
         patch :update, {
@@ -151,6 +147,7 @@ class FortressesControllerTest < ActionController::TestCase
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_security_management_responsible_dependency_item_editable).id,
             :review_code => 'F005',
+            :title => 'Title',
             :description => 'Updated description',
             :origination_date => 1.day.ago.to_date.to_s(:db),
             :finding_user_assignments_attributes => [
@@ -176,7 +173,7 @@ class FortressesControllerTest < ActionController::TestCase
                 :code => 'PTF 20',
                 :number_of_pages => '10',
                 :description => 'New workpaper description',
-                :organization_id => organizations(:default_organization).id,
+                :organization_id => organizations(:cirope).id,
                 :file_model_attributes => {
                   :file => Rack::Test::UploadedFile.new(
                     TEST_FILE_FULL_PATH, 'text/plain')
@@ -199,34 +196,8 @@ class FortressesControllerTest < ActionController::TestCase
     assert_equal 'F005', assigns(:fortress).review_code
   end
 
-  test 'auto complete for user' do
-    perform_auth
-    get :auto_complete_for_user, { :q => 'adm', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size
-    assert users.all? { |u| (u['label'] + u['informal']).match /adm/i }
-
-    get :auto_complete_for_user, { :q => 'bar', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size
-    assert users.all? { |u| (u['label'] + u['informal']).match /bar/i }
-
-    get :auto_complete_for_user, { :q => 'x_nobody', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 0, users.size # Sin resultados
-  end
-
   test 'auto complete for control objective item' do
-    perform_auth
+    login
     get :auto_complete_for_control_objective_item, {
       :q => 'dependencia',
       :review_id => reviews(:review_with_conclusion).id,

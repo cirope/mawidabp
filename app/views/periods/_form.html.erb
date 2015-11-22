@@ -1,35 +1,26 @@
-<!--[form:period]-->
-<%= form_for @period do |f| %>
-  <%= f.error_messages %>
+<%= simple_form_for @period do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form_column_left">
-    <p class="form_item">
-      <%= f.label :number, raw(Period.human_attribute_name(:number) +
-          show_inline_help_for(:period_number)), :class => :inline %>
-      <%= f.text_field :number, :class => :inline_item, :autofocus => true %>
-    </p>
-    <p>
-      <%= f.label :description %>
-      <%= f.text_area :description %>
-    </p>
-    <p class="form_item">
-      <%= f.label :start, nil, :class => :inline %>
-      <%= calendar_text_field f, :start, false, nil,
-        :class => :inline_item %>
-    </p>
-    <p class="form_item">
-      <%= f.label :end, nil, :class => :inline %>
-      <%= calendar_text_field f, :end, false, nil,
-        :class => :inline_item %>
-    </p>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :number, as: :string, autofocus: true,
+          label: Period.human_attribute_name('number')
+        %>
+        <%= f.input :start, as: :date_picker %>
+        <%= f.input :end, as: :date_picker %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :description, input_html: { rows: 5 } %>
+      </div>
+    </div>
   </div>
 
-  <div style="display:none">
-  <%= f.hidden_field :lock_version %>
-  </div>
+  <hr />
 
-  <p>
-    <span class="button"><%= f.submit %></span>
-  </p>
+  <div class="form-actions">
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit class: 'btn btn-primary' %>
+    <div class="pull-right"><%= yield :form_actions %></div>
+  </div>
 <% end %>
-<!--[eoform:period] -->

@@ -1,35 +1,27 @@
-<% id = dynamic_object_id('finding_review_assignment', f) %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="finding_review_assignment item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
-  <div>
-    <div class="item_field" style="width: 95%;">
-      <% if is_dynamic %>
-        <div class="search">
-          <% errors_on_finding = f.object.errors[:finding_id] | f.object.errors[:finding] %>
-          <% field_classes = [:search, :autocomplete_field] %>
-          <% field_classes << :error_field unless errors_on_finding.blank? %>
-          <%= text_field_tag 'finding_review_assignment[finding_data]',
-            f.object.finding.try(:to_s),
-            :id => "finding_review_assignment_finding_#{id}",
-            :class => field_classes.join(' '),
-            :style => 'width: 95%;',
-            :title => t('label.search'),
-            :autocomplete => :off,
-            :autofocus => true,
-            'data-autocomplete-url' => auto_complete_for_finding_reviews_path(:format => :json) %>
-          <%= f.hidden_field :finding_id, :value => f.object.finding_id,
-            :id => "hidden_finding_id_#{id}", :class => :autocomplete_id %>
+<% id = f.object.object_id %>
+<fieldset class="finding_review_assignment">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-10">
+        <%= f.input 'finding_review_assignment[finding_data]', label: false,
+          input_html: {
+            value: f.object.try(:finding).try(:to_s),
+            name: 'finding_review_assignment[finding_data]',
+            id: "finding_review_assignment_finding_#{id}",
+            title: t('label.search'),
+            autofocus: true,
+            data: {
+              'autocomplete-url' => auto_complete_for_finding_reviews_path,
+              'autocomplete-id-target' => "#hidden_finding_id_#{id}"
+            }
+        } %>
+        <%= f.input :finding_id, as: :hidden, input_html: { id: "hidden_finding_id_#{id}" } %>
+      </div>
+      <div class="col-md-2">
+        <div class="toggle-visibility">
+          <%= link_to_remove_nested_item(f) %>
         </div>
-      <% end %>
-    </div>
-    <div class="item_field item_controls" style="width: 5%;">
-      <%= remove_item_link(f) unless readonly %>
+      </div>
     </div>
   </div>
-</div>
-<% if is_dynamic %>
-<script type="text/javascript">
-  Helper.showItem('#<%= id %>');
-  AutoComplete.observeAll();
-</script>
-<% end %>
+</fieldset>

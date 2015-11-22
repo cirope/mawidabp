@@ -1,92 +1,91 @@
-<div id="showed_data">
-  <p>
-    <b><%= User.human_attribute_name :user %>:</b>
-    <%= @user.user %>
-  </p>
+<div class="page-header">
+  <h1>
+    <%= @user.informal_name %>
+    <small><%= @user %></small>
+  </h1>
+</div>
 
-  <p>
-    <b><%= User.human_attribute_name :name %>:</b>
-    <%= @user.name %>
-  </p>
-
-  <p>
-    <b><%= User.human_attribute_name :last_name %>:</b>
-    <%= @user.last_name %>
-  </p>
-
-  <p>
-    <b><%= User.human_attribute_name :email %>:</b>
-    <%= @user.email %>
-  </p>
-
-  <p>
-    <b><%= User.human_attribute_name :function %>:</b>
-    <%= @user.function %>
-  </p>
-
-  <p>
-    <b><%= User.human_attribute_name :language %>:</b>
-    <%= @user.language %>
-  </p>
-
-  <p>
-    <b><%= User.human_attribute_name :resource_id %>:</b>
-    <%= @user.resource %>
-  </p>
-
-  <p>
-    <b><%= User.human_attribute_name :enable %>:</b>
-    <%=t @user.enable? ? 'label.yes' : 'label.no' %>
-  </p>
-
-  <p>
-    <b><%= User.human_attribute_name :logged_in %>:</b>
-    <%=t @user.logged_in? ? 'label.yes' : 'label.no' %>
-  </p>
-
-  <p>
-    <b><%= User.human_attribute_name :failed_attempts %>:</b>
-    <%= @user.failed_attempts %>
-  </p>
-
-  <p>
-    <b><%= User.human_attribute_name :password_changed %>:</b>
-    <%= l(@user.password_changed, :format => :long) %>
-  </p>
-
-  <p>
-    <b><%= t('user.profiles_label') %>:</b>
-    <%= @user.organization_roles.map(&:to_s).join(APP_ENUM_SEPARATOR) %>
-  </p>
-
-  <p>
-    <b><%= t('user.organizations_label') %>:</b>
-    <%= @user.organizations.map(&:name).join(APP_ENUM_SEPARATOR) %>
-  </p>
-  <% if @user.parent %>
+<div class="row">
+  <div class="col-md-6">
     <p>
-      <b><%= User.human_attribute_name(:manager_id) %>:</b>
-      <%= link_to @user.parent.full_name, @user.parent %>
+      <strong><%= User.human_attribute_name 'email' %></strong>:
+      <%= @user.email %>
     </p>
-  <% end %>
-  <% unless @user.children.blank? %>
-    <p><strong><%= t('user.children') %></strong></p>
-    <ul class="raw_list">
-      <% @user.children.each do |child| %>
-        <li><%= link_to child.full_name, child %></li>
-      <% end %>
-    </ul>
-  <% end %>
 
-  <div>
-    <b><%= User.human_attribute_name :notes %>:</b>
+    <p>
+      <strong><%= User.human_attribute_name 'function' %></strong>:
+      <%= @user.function %>
+    </p>
+
+    <p>
+      <strong><%= User.human_attribute_name 'language' %></strong>:
+      <%= @user.language %>
+    </p>
+
+    <p>
+      <strong><%= User.human_attribute_name 'resource' %></strong>:
+      <%= @user.resource %>
+    </p>
+
+    <p>
+      <strong><%= User.human_attribute_name 'enable' %></strong>:
+      <%= t_boolean @user.enable? %>
+    </p>
+
+    <p>
+      <strong><%= User.human_attribute_name 'logged_in' %></strong>:
+      <%= t_boolean @user.logged_in? %>
+    </p>
+
+    <p>
+      <strong><%= User.human_attribute_name 'failed_attempts' %></strong>:
+      <%= @user.failed_attempts %>
+    </p>
+
+    <p>
+      <strong><%= User.human_attribute_name 'password_changed' %></strong>:
+      <%= l @user.password_changed, format: :long %>
+    </p>
+  </div>
+  <div class="col-md-6">
+    <% if @user.organization_roles.any? %>
+      <p><strong><%= t '.profiles' %></strong></p>
+      <ul>
+        <% @user.organization_roles.each do |organization_role| %>
+          <li><%= organization_role %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <% if @user.parent %>
+      <p>
+        <strong><%= User.human_attribute_name 'manager_id' %></strong>:
+        <%= link_to @user.parent.full_name, @user.parent %>
+      </p>
+    <% end %>
+
+    <% if @user.children.any? %>
+      <p><strong><%= t 'users.form.children' %></strong></p>
+      <ul>
+        <% @user.children.each do |child| %>
+          <li><%= link_to child.full_name, child %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+  <div class="col-md-6">
+    <strong><%= User.human_attribute_name 'notes' %></strong>
     <%= simple_format @user.notes %>
   </div>
 </div>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_user_path(@user) %> |
-  <%= link_to t('user.status'), user_status_user_path(@user) %> |
-  <%= link_to t('label.list'), users_path %> |
-  <%= link_to_back %>
-</div>
+<hr />
+
+<%= link_to_edit edit_user_path(@user) %> |
+<%= link_to t('users.status.show.title'), users_status_path(@user, graph: true) %> |
+<%= link_to_index users_path %> |
+<%= link_to_back %>

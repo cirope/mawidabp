@@ -6,8 +6,7 @@ class FindingTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    @finding = Finding.find(
-      findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id)
+    @finding = Finding.find findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
 
     set_organization
   end
@@ -19,6 +18,7 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal finding.repeated_of_id, @finding.repeated_of_id
     assert_equal finding.control_objective_item_id,
       @finding.control_objective_item_id
+    assert_equal finding.title, @finding.title
     assert_equal finding.review_code, @finding.review_code
     assert_equal finding.description, @finding.description
     assert_equal finding.answer, @finding.answer
@@ -39,6 +39,7 @@ class FindingTest < ActiveSupport::TestCase
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'O020',
+        :title => 'Title',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -83,6 +84,7 @@ class FindingTest < ActiveSupport::TestCase
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
         :review_code => 'O020',
+        :title => 'Title',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -122,13 +124,26 @@ class FindingTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @finding.control_objective_item_id = nil
     @finding.review_code = '   '
+    @finding.title = '   '
     @finding.description = '   '
 
     assert @finding.invalid?
     assert_error @finding, :control_objective_item_id, :blank
     assert_error @finding, :review_code, :blank
     assert_error @finding, :review_code, :invalid
+    assert_error @finding, :title, :blank
     assert_error @finding, :description, :blank
+  end
+
+  test 'avoid title validation when audited' do
+    Finding.current_user = users :audited_user
+
+    @finding.title = '  '
+    @finding.valid?
+
+    assert @finding.errors[:title].blank?
+
+    Finding.current_user = nil
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -144,10 +159,14 @@ class FindingTest < ActiveSupport::TestCase
     assert_error @finding, :follow_up_date, :blank
     assert_error @finding, :answer, :blank
 
+    Finding.current_user = users :supervisor_user
+
     assert @finding.reload.update(
       :state => Finding::STATUS[:implemented_audited],
       :solution_date => 1.month.from_now)
     @finding.solution_date = nil
+
+    Finding.current_user = nil
 
     assert @finding.invalid?
     assert_error @finding, :solution_date, :blank
@@ -194,26 +213,28 @@ class FindingTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @finding.review_code = 'abcdd' * 52
-    @finding.type = 'abcdd' * 52
+    @finding.title = 'abcdd' * 52
 
     assert @finding.invalid?
     assert_error @finding, :review_code, :too_long, count: 255
-    assert_error @finding, :review_code, :invalid
-    assert_error @finding, :type, :too_long, count: 255
+    assert_error @finding, :title, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
-    assert @finding.update_attribute :state, Finding::STATUS[:incomplete]
+    @finding.update_column :state, Finding::STATUS[:incomplete]
+    @finding.reload
 
-    @finding.control_objective_item_id = '?nil'
-    @finding.first_notification_date = '15/13/12'
-    @finding.follow_up_date = '15/13/12'
-    @finding.solution_date = '15/13/12'
-    @finding.origination_date = '15/13/12'
+    @finding.first_notification_date = '13/13/13'
+    @finding.follow_up_date          = '13/13/13'
+    @finding.solution_date           = '13/13/13'
+    @finding.origination_date        = '13/13/13'
 
     assert @finding.invalid?
-    assert_error @finding, :control_objective_item_id, :not_a_number
+    assert_error @finding, :first_notification_date, :invalid_date
+    assert_error @finding, :follow_up_date,          :invalid_date
+    assert_error @finding, :solution_date,           :invalid_date
+    assert_error @finding, :origination_date,        :invalid_date
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -306,6 +327,23 @@ class FindingTest < ActiveSupport::TestCase
     assert_error @finding, :finding_user_assignments, :invalid
   end
 
+  test 'validate final state change only by supervisors' do
+    Finding.current_user = users :auditor_user
+
+    @finding = Finding.find(
+      findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
+    )
+    @finding.state = Finding::STATUS[:implemented_audited]
+    @finding.solution_date = 1.month.from_now
+
+    assert @finding.invalid?
+    assert_error @finding, :state, :must_be_done_by_proper_role
+
+    Finding.current_user = users :supervisor_user
+
+    assert @finding.valid?
+  end
+
   test 'stale function' do
     @finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
@@ -319,8 +357,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'next status list function' do
     Finding::STATUS.each do |status, value|
-      @finding.state = value
-      keys = @finding.next_status_list.keys
+      keys = @finding.next_status_list(value).keys
       expected_keys = Finding::STATUS_TRANSITIONS[status].map(&:to_s)
 
       assert_equal expected_keys.size, keys.size
@@ -460,9 +497,14 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 1, @finding.status_change_history.size
     assert @finding.update(:audit_comments => 'Updated comments')
     assert_equal 1, @finding.status_change_history.size
+
+    Finding.current_user = users :supervisor_user
+
     assert @finding.update(:state => Finding::STATUS[:assumed_risk],
       :solution_date => Date.today)
     assert_equal 2, @finding.status_change_history.size
+
+    Finding.current_user = nil
   end
 
   test 'mark as unconfirmed' do
@@ -470,7 +512,7 @@ class FindingTest < ActiveSupport::TestCase
       :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id
 
     assert finding.notify?
-    assert finding.mark_as_unconfirmed!
+    assert finding.mark_as_unconfirmed
     assert finding.unconfirmed?
     assert_equal Date.today, finding.first_notification_date
   end
@@ -486,7 +528,7 @@ class FindingTest < ActiveSupport::TestCase
       :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id
 
     assert_equal 0, finding.important_dates.size
-    assert finding.mark_as_unconfirmed!
+    assert finding.mark_as_unconfirmed
     # Fecha de notificación y de cambio de estado a Sin Respuesta
     assert_equal 2, finding.important_dates.size
 
@@ -553,6 +595,7 @@ class FindingTest < ActiveSupport::TestCase
     finding = @finding.class.new(@finding.attributes.merge(
         'state' => Finding::STATUS[:incomplete],
         'review_code' => 'O099',
+        'title' => 'Title',
         'control_objective_item_id' => control_objective_items(
           :bcra_A4609_security_management_responsible_dependency_item_editable).id,
         'finding_user_assignments_attributes' => fuas
@@ -790,8 +833,8 @@ class FindingTest < ActiveSupport::TestCase
   test 'follow up pdf' do
     assert !File.exist?(@finding.absolute_follow_up_pdf_path)
 
-    assert_nothing_raised(Exception) do
-      @finding.follow_up_pdf(organizations(:default_organization))
+    assert_nothing_raised do
+      @finding.follow_up_pdf(organizations(:cirope))
     end
 
     assert File.exist?(@finding.absolute_follow_up_pdf_path)
@@ -803,8 +846,8 @@ class FindingTest < ActiveSupport::TestCase
   test 'to pdf' do
     assert !File.exist?(@finding.absolute_pdf_path)
 
-    assert_nothing_raised(Exception) do
-      @finding.to_pdf(organizations(:default_organization))
+    assert_nothing_raised do
+      @finding.to_pdf(organizations(:cirope))
     end
 
     assert File.exist?(@finding.absolute_pdf_path)
@@ -814,21 +857,10 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'to csv' do
-    detailed = true
-    header = Finding.to_csv(detailed, 'incomplete')
-    row = @finding.to_csv(detailed, 'incomplete')
+    csv = Finding.all.to_csv
+    rows = CSV.parse csv, col_sep: ';'
 
-    assert_equal header[10], 'Fecha de implementación'
-    assert_equal header.count, 13
-    assert_equal row.count, 13
-
-    detailed = false
-    header = Finding.to_csv(detailed, 'complete')
-    row = @finding.to_csv(detailed, 'complete')
-
-    assert_equal header[10], 'Fecha de solución'
-    assert_equal header.count, 11
-    assert_equal row.count, 11
+    assert_equal Finding.count + 1, rows.length
   end
 
   test 'notify users if they are selected for notification' do
@@ -845,7 +877,7 @@ class FindingTest < ActiveSupport::TestCase
     response = ActionMailer::Base.deliveries.first
 
     assert response.subject.include?(
-      I18n.t('notifier.notify_new_finding.title')
+      I18n.t('notifier_mailer.notify_new_finding.title')
     )
   end
 
@@ -856,6 +888,7 @@ class FindingTest < ActiveSupport::TestCase
     finding = @finding.class.new(@finding.attributes.merge(
         'state' => Finding::STATUS[:incomplete],
         'review_code' => 'O099',
+        'title' => 'Title',
         'control_objective_item_id' => control_objective_items(
           :bcra_A4609_security_management_responsible_dependency_item_editable).id,
         'finding_user_assignments_attributes' => fuas
@@ -1127,7 +1160,7 @@ class FindingTest < ActiveSupport::TestCase
                 :code => 'PTO 20',
                 :number_of_pages => '10',
                 :description => 'New post_workpaper description',
-                :organization_id => organizations(:default_organization).id,
+                :organization_id => organizations(:cirope).id,
                 :file_model_attributes => {
                   :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
                     'text/plain')
@@ -1153,7 +1186,7 @@ class FindingTest < ActiveSupport::TestCase
               :code => 'New post_workpaper code',
               :number_of_pages => '10',
               :description => 'New post_workpaper description',
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :file_model_attributes => {
                 :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
                   'text/plain')

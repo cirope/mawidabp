@@ -9,7 +9,7 @@ class CreateControls < ActiveRecord::Migration
       t.integer :order
       t.references :controllable, :polymorphic => true
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :controls, [:controllable_type, :controllable_id]

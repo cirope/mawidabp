@@ -12,7 +12,7 @@ namespace :epilady do
     organizations = Organization.where(prefix: identifications)
     organizations_ids = organizations.map(&:id)
 
-    organizations.map(&:destroy)
+    organizations.map(&:destroy!)
 
     PaperTrail::Version.find_each do |version|
       begin

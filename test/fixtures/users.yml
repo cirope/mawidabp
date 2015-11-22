@@ -1,4 +1,4 @@
-<% PLAIN_PASSWORDS = { :admin => 'admin123' }.with_indifferent_access %>
+<% ::PLAIN_PASSWORDS = { :admin => 'admin123' }.with_indifferent_access %>
 <% salt = Digest::SHA512.hexdigest("admin#{rand}") %>
 administrator_user:
   name: Administrator
@@ -18,8 +18,8 @@ administrator_user:
   resource: auditor_resource
   notes: User notes
   hidden: false
-  
-<% PLAIN_PASSWORDS[:poll_user] = 'poll_user123' %>
+
+<% ::PLAIN_PASSWORDS[:poll_user] = 'poll_user123' %>
 <% salt = Digest::SHA512.hexdigest("poll_user#{rand}") %>
 poll_user:
   name: Poll User
@@ -40,7 +40,7 @@ poll_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:admin_second] = 'admin123' %>
+<% ::PLAIN_PASSWORDS[:admin_second] = 'admin123' %>
 <% salt = Digest::SHA512.hexdigest("admin_second#{rand}") %>
 administrator_second_user:
   name: Administrator Second
@@ -62,7 +62,7 @@ administrator_second_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:bare_user] = 'bare123' %>
+<% ::PLAIN_PASSWORDS[:bare_user] = 'bare123' %>
 <% salt = Digest::SHA512.hexdigest("bare#{rand}") %>
 bare_user:
   name: Bare
@@ -84,7 +84,7 @@ bare_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:first_time_user] = 'first_time_user' %>
+<% ::PLAIN_PASSWORDS[:first_time_user] = 'first_time_user' %>
 <% salt = Digest::SHA512.hexdigest("first_time_user#{rand}") %>
 first_time_user:
   name: First Time
@@ -105,7 +105,7 @@ first_time_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:expired] = 'expired123' %>
+<% ::PLAIN_PASSWORDS[:expired] = 'expired123' %>
 <% salt = Digest::SHA512.hexdigest("expired#{rand}") %>
 expired_user:
   name: Expired
@@ -128,7 +128,7 @@ expired_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:disabled] = 'diasabled123' %>
+<% ::PLAIN_PASSWORDS[:disabled] = 'diasabled123' %>
 <% salt = Digest::SHA512.hexdigest("disabled#{rand}") %>
 disabled_user:
   name: Diasabled
@@ -150,7 +150,7 @@ disabled_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:blank_password] = 'blank_password123' %>
+<% ::PLAIN_PASSWORDS[:blank_password] = 'blank_password123' %>
 <% salt = Digest::SHA512.hexdigest("blank_password#{rand}") %>
 blank_password_user:
   name: Blank
@@ -168,13 +168,13 @@ blank_password_user:
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
+  change_password_hash: <%= SecureRandom.urlsafe_base64 %>
   hash_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:expired_blank_password] = 'expired_blank_password123' %>
+<% ::PLAIN_PASSWORDS[:expired_blank_password] = 'expired_blank_password123' %>
 <% salt = Digest::SHA512.hexdigest("expired_blank_password#{rand}") %>
 expired_blank_password_user:
   name: Expired Blank
@@ -192,12 +192,12 @@ expired_blank_password_user:
   group_admin: false
   password_changed: <%= BLANK_PASSWORD_STALE_DAYS.next.days.ago.to_s(:db) %>
   resource: auditor_resource
-  change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
+  change_password_hash: <%= SecureRandom.urlsafe_base64 %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:president_user] = 'president123' %>
+<% ::PLAIN_PASSWORDS[:president_user] = 'president123' %>
 <% salt = Digest::SHA512.hexdigest("president#{rand}") %>
 president_user:
   name: President
@@ -218,7 +218,7 @@ president_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:general_manager_user] = 'general_manager123' %>
+<% ::PLAIN_PASSWORDS[:general_manager_user] = 'general_manager123' %>
 <% salt = Digest::SHA512.hexdigest("general_manager#{rand}") %>
 general_manager_user:
   name: General Manager
@@ -240,7 +240,7 @@ general_manager_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:general_manager_user] = 'coordinator_manager123' %>
+<% ::PLAIN_PASSWORDS[:general_manager_user] = 'coordinator_manager123' %>
 <% salt = Digest::SHA512.hexdigest("coordinator_manager#{rand}") %>
 coordinator_manager_user:
   name: Coordinator Manager
@@ -262,7 +262,7 @@ coordinator_manager_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:plain_manager_user] = 'plain_manager123' %>
+<% ::PLAIN_PASSWORDS[:plain_manager_user] = 'plain_manager123' %>
 <% salt = Digest::SHA512.hexdigest("plain_manager#{rand}") %>
 plain_manager_user:
   name: Plain Manager
@@ -284,7 +284,7 @@ plain_manager_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:manager_user] = 'manager123' %>
+<% ::PLAIN_PASSWORDS[:manager_user] = 'manager123' %>
 <% salt = Digest::SHA512.hexdigest("manager#{rand}") %>
 manager_user:
   name: Manager
@@ -306,7 +306,7 @@ manager_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:manager_second_user] = 'manager_second123' %>
+<% ::PLAIN_PASSWORDS[:manager_second_user] = 'manager_second123' %>
 <% salt = Digest::SHA512.hexdigest("manager_second#{rand}") %>
 manager_second_user:
   name: Manager Second
@@ -328,7 +328,7 @@ manager_second_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:plain_manager_second_user] = 'plain_manager_second123' %>
+<% ::PLAIN_PASSWORDS[:plain_manager_second_user] = 'plain_manager_second123' %>
 <% salt = Digest::SHA512.hexdigest("plain_manager_second#{rand}") %>
 plain_manager_second_user:
   name: Plain Manager Second
@@ -350,7 +350,7 @@ plain_manager_second_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:supervisor_user] = 'supervisor123' %>
+<% ::PLAIN_PASSWORDS[:supervisor_user] = 'supervisor123' %>
 <% salt = Digest::SHA512.hexdigest("supervisor#{rand}") %>
 supervisor_user:
   name: Supervisor
@@ -372,7 +372,7 @@ supervisor_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:supervisor_second_user] = 'supervisor_second123' %>
+<% ::PLAIN_PASSWORDS[:supervisor_second_user] = 'supervisor_second123' %>
 <% salt = Digest::SHA512.hexdigest("supervisor_second#{rand}") %>
 supervisor_second_user:
   name: Supervisor Second
@@ -394,7 +394,7 @@ supervisor_second_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:audited_user] = 'audited123' %>
+<% ::PLAIN_PASSWORDS[:audited_user] = 'audited123' %>
 <% salt = Digest::SHA512.hexdigest("audited#{rand}") %>
 audited_user:
   name: Audited
@@ -416,7 +416,7 @@ audited_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:audited_second_user] = 'audited_second123' %>
+<% ::PLAIN_PASSWORDS[:audited_second_user] = 'audited_second123' %>
 <% salt = Digest::SHA512.hexdigest("audited_second#{rand}") %>
 audited_second_user:
   name: Audited Second
@@ -438,7 +438,7 @@ audited_second_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:committee] = 'committee123' %>
+<% ::PLAIN_PASSWORDS[:committee] = 'committee123' %>
 <% salt = Digest::SHA512.hexdigest("committee#{rand}") %>
 committee_user:
   name: Committee
@@ -460,7 +460,7 @@ committee_user:
   notes: User notes
   hidden: false
 
-<% PLAIN_PASSWORDS[:auditor_user] = 'auditor123' %>
+<% ::PLAIN_PASSWORDS[:auditor_user] = 'auditor123' %>
 <% salt = Digest::SHA512.hexdigest("auditor#{rand}") %>
 auditor_user:
   name: Auditor

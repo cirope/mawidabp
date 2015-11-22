@@ -1,0 +1,21 @@
+---
+title: Controles al crear un hallazgo
+layout: articles
+category: findings
+article_order: 2
+---
+
+<h3>Controles al crear un hallazgo</h3>
+
+<p>
+  Los controles descritos a continuación se ejecutan al momento de guardar el hallazgo:
+  <ul>
+    <li>Si tiene el estado <strong>Implementado/Auditado</strong>, debe tener Fecha
+      de solución y Respuesta</li>
+    <li>Si el estado <strong>Implementado</strong>, debe tener Fecha de implementación,
+      Respuesta y no debe tener Fecha de solución</li>
+    <li>Si tiene el estado <strong>En Proceso de implementación</strong>, debe tener
+      Fecha de implementación, Respuesta y no debe tener Fecha de solución</li>
+    <li>Si tiene el estado <strong>Riesgo asumido</strong>, debe tener Fecha de solución</li>
+  </ul>
+</p>

@@ -52,10 +52,12 @@ class ControlObjectiveTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de una buena práctica
   test 'destroy' do
-    # Objetivo de control sin items asociados
+    control_objective = control_objectives :iso_27000_security_organization_4_4_continuous
+
+    control_objective.control_objective_items.clear
+
     assert_difference 'ControlObjective.count', -1 do
-      ControlObjective.find(control_objectives(
-          :iso_27000_security_organization_4_4).id).destroy
+      control_objective.destroy
     end
   end
 
@@ -86,20 +88,6 @@ class ControlObjectiveTest < ActiveSupport::TestCase
     assert @control_objective.invalid?
     assert_error @control_objective, :relevance, :not_an_integer
     assert_error @control_objective, :risk, :not_a_number
-  end
-
-  test 'validates duplicated attributes' do
-    @control_objective.name =
-      control_objectives(:iso_27000_security_organization_4_1).name
-
-    assert @control_objective.invalid?
-    assert_error @control_objective, :name, :taken
-
-    # Nombres iguales pero distintos procesos de negocio
-    @control_objective.name =
-      control_objectives(:bcra_A4609_data_proccessing_impact_analisys).name
-    assert @control_objective.valid?,
-      @control_objective.errors.full_messages.join('; ')
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

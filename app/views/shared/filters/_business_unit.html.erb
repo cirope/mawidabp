@@ -1,32 +1,24 @@
 <div id="business_unit_filter" class="filter" <%= 'style="display: none;"' unless display %>>
-  <div>
-    <table class="generic_filter">
-      <tbody>
-        <tr>
-          <td>
-            <p class="form_item" style="margin: 0em;">
-              <% selected = params[action] ?
-                params[action][:business_unit_type] : nil %>
-              <%= f.label :business_unit_type, BusinessUnitType.model_name.human,
-                :class => :inline %>
-              <%= f.select :business_unit_type,
-                BusinessUnitType.list.map { |but| [but.name, but.id.to_s] },
-                {:include_blank => t('helpers.select.prompt'), :selected => selected},
-                {:class => :inline_item} %>
-            </p>
-          </td>
-          <td>
-            <p class="form_item" style="margin: 0em;">
-              <% business_unit_filter = params[action] ?
-                params[action][:business_unit] : nil %>
-              <%= f.label :business_unit, BusinessUnit.model_name.human,
-                :class => :inline %>
-              <%= f.text_field :business_unit, :value => business_unit_filter,
-                :maxlength => 3072, :size => nil, :class => :inline_item %>
-            </p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="row">
+    <div class="col-md-6">
+       <div class="form-group">
+          <% selected = params[action] ? params[action][:business_unit_type] : nil %>
+          <%= f.label :business_unit_type, BusinessUnitType.model_name.human, class: 'col-md-3' %>
+          <div class="col-md-9">
+            <%= f.select :business_unit_type, BusinessUnitType.list.map { |but| [but.name, but.id.to_s] },
+              { include_blank: t('helpers.select.prompt'), selected: selected }, class: 'form-control' %>
+          </div>
+       </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <% business_unit_filter = params[action] ? params[action][:business_unit] : nil %>
+        <%= f.label :business_unit, BusinessUnit.model_name.human, class: 'col-md-3' %>
+        <div class="col-md-9">
+          <%= f.text_field :business_unit, value: business_unit_filter, maxlength: 3072,
+          class: 'form-control' %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

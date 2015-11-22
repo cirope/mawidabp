@@ -4,72 +4,69 @@
   },
   :forms => {:date_range => true}} %>
 
-<div style="margin: 1em;">
-  <% @periods.each do |period| %>
-    <h1 class="simple_title with_border_bottom">
-      <strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong>
-    </h1>
-    <% @audit_types.each do |audit_type| %>
-      <% unless audit_type.last.empty? %>
-        <% audit_type_symbol = audit_type.first %>
-        <h1 class="center_title">
-          <%= t("conclusion_committee_report.weaknesses_type_#{audit_type_symbol}") %>
-        </h1>
-        <% audit_type.last.each do |audit_types| %>
-          <% key = "#{audit_type_symbol}_#{audit_types.last}" %>
-          <h2 class="simple_title"><%= audit_types.first %></h2>
-          <%= render :partial => 'weaknesses_synthesis_table', :locals => {
-            :table_data => @tables_data[period][key],
-            :being_implemented_resume => @being_implemented_resumes[period][key],
-            :highest_being_implemented_resume => @highest_being_implemented_resumes[period][key]} %>
-          <% if @repeated_counts[period][key] > 0 %>
-            <p>
-              <%= t('follow_up_committee.repeated_count',
-                :count => @repeated_counts[period][key]) %>
-            </p>
-          <% end %>
+<% @periods.each do |period| %>
+  <div class="page-header">
+    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+  </div>
+  <% @audit_types.each do |audit_type| %>
+    <% unless audit_type.last.empty? %>
+      <% audit_type_symbol = audit_type.first %>
+      <h3 class="text-center">
+        <%= t("conclusion_committee_report.weaknesses_type_#{audit_type_symbol}") %>
+      </h3>
+      <% audit_type.last.each do |audit_types| %>
+        <% key = "#{audit_type_symbol}_#{audit_types.last}" %>
+        <h4><%= audit_types.first %></h4>
+        <%= render :partial => 'weaknesses_synthesis_table', :locals => {
+          :table_data => @tables_data[period][key],
+          :being_implemented_resume => @being_implemented_resumes[period][key],
+          :highest_being_implemented_resume => @highest_being_implemented_resumes[period][key]} %>
+        <% if @repeated_counts[period][key] > 0 %>
+          <p>
+            <%= t('follow_up_committee_report.repeated_count',
+              :count => @repeated_counts[period][key]) %>
+          </p>
         <% end %>
       <% end %>
     <% end %>
-
-    <h1 class="center_title">
-      <%= t('follow_up_committee.weaknesses_by_risk.period_summary',
-        :period => period.inspect) %>
-    </h1>
-    <%= render :partial => 'weaknesses_synthesis_table', :locals => {
-      :table_data => @tables_data[period]['total'],
-      :being_implemented_resume => @being_implemented_resumes[period]['total'],
-      :highest_being_implemented_resume => @highest_being_implemented_resumes[period]['total']} %>
-    <% if @repeated_counts[period]['total'] > 0 %>
-      <p>
-        <%= t('follow_up_committee.repeated_count',
-          :count => @repeated_counts[period]['total']) %>
-      </p>
-    <% end %>
   <% end %>
+
+  <h3 class="text-center">
+    <%= t('follow_up_committee_report.weaknesses_by_risk.period_summary',
+      :period => period.inspect) %>
+  </h3>
+  <%= render :partial => 'weaknesses_synthesis_table', :locals => {
+    :table_data => @tables_data[period]['total'],
+    :being_implemented_resume => @being_implemented_resumes[period]['total'],
+    :highest_being_implemented_resume => @highest_being_implemented_resumes[period]['total']} %>
+  <% if @repeated_counts[period]['total'] > 0 %>
+    <p>
+      <%= t('follow_up_committee_report.repeated_count',
+        :count => @repeated_counts[period]['total']) %>
+    </p>
+  <% end %>
+<% end %>
+
+<hr />
+
+<div>
+  <%= link_to t('label.back'), :action => :index %> |
+  <%= link_to t('label.download'), '#',
+    data: { toggle: 'modal', target: "#customize_report" } %>
 </div>
 
-<div id="links">
-  <%= link_to t('label.back'), :action => :index %> |
-  <%= link_to t('label.download'), '#', :onclick =>
-    "Helper.showItem('#customize_report_form'); return false;" %>
-</div>
-<div id="customize_report_form" style="display: none;">
-  <div>
-  <%= render :partial => 'shared/customize_report_form', :locals => {
-    :options => {
-      :form_name => 'report',
-      :url => request.query_parameters.merge(
-        {:action => :create_weaknesses_by_risk, :_ts => Time.now.to_i}
-      ),
-      :fields => [
-        {
-          :name => :report_title,
-          :label => t('customize_report_form.title'),
-          :value => t('follow_up_committee.weaknesses_by_risk.title')
-        }
-      ]
-    }
-  } %>
-  </div>
-</div>
+<%= render :partial => 'shared/customize_report_form', :locals => {
+  :options => {
+    :form_name => 'report',
+    :url => request.query_parameters.merge(
+      {:action => :create_weaknesses_by_risk, :_ts => Time.now.to_i}
+    ),
+    :fields => [
+      {
+        :name => :report_title,
+        :label => t('customize_report_form.title'),
+        :value => t('follow_up_committee_report.weaknesses_by_risk.title')
+      }
+    ]
+  }
+} %>

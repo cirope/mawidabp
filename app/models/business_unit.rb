@@ -1,4 +1,6 @@
 class BusinessUnit < ActiveRecord::Base
+  include BusinessUnits::Scopes
+  include ParameterSelector
   include Trimmer
   include ParameterSelector
   include Associations::DestroyPaperTrail

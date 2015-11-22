@@ -1,57 +1,47 @@
-<!--[form:resource_class]-->
-<%= form_for @resource_class do |rc_f| %>
-  <% content_for :js_extra do %>
-    <%= raw "var resource='#{generate_template(rc_f, :resources)}'" %>
-  <% end %>
-  <%= rc_f.error_messages %>
+<%= simple_form_for @resource_class do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form_column_left">
-    <p>
-      <%= rc_f.label :name, raw(ResourceClass.human_attribute_name(:name) +
-          show_inline_help_for(:resource_class_name)) %>
-      <%= rc_f.text_field :name, :maxlength => 255, :autofocus => true %>
-    </p>
-    <p class="form_item">
-      <%= rc_f.label :resource_class_type, nil, :class => :inline %>
-      <%= resource_class_type_field(rc_f) %>
-    </p>
-  </div>
-
-  <div class="items">
-    <div class="column_headers">
-      <div class="item_column" style="width: 30%;">
-        <h3><%= Resource.human_attribute_name :name %></h3>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :name, input_html: { maxlength: 255, autofocus: true },
+          label: ResourceClass.human_attribute_name(:name) %>
       </div>
-      <div class="item_column" style="width: 50%;">
-        <h3><%= Resource.human_attribute_name :description %></h3>
+      <div class="col-md-6">
+        <%= f.input :resource_class_type,
+          collection: sort_options_array(resource_class_types),
+          prompt: true, disabled: !f.object.new_record? %>
       </div>
-      <div class="item_column" style="width: 10%;">
-        <h3><%= Resource.human_attribute_name :cost_per_unit %></h3>
-      </div>
-      <div class="item_column" style="width: 5%;"></div>
-      <div class="clear"></div>
-    </div>
-
-    <div id="resources">
-      <%= rc_f.fields_for :resources do |r_f| %>
-        <%= render :partial => 'resource', :locals =>
-          {:f => r_f, :is_dynamic => false} %>
-      <% end %>
     </div>
   </div>
 
-  <p class="add_item">
-    <%= link_to t('resource_class.add_resource'), '#',
-      'data-template' => :resource, 'data-event' => 'addNestedItem',
-      'data-container' => '#resources' %>
-  </p>
+  <hr />
 
-  <div style="display:none">
-  <%= rc_f.hidden_field :lock_version %>
+  <div class="row">
+    <div class="col-md-4">
+      <h5><strong><%= Resource.human_attribute_name 'name' %></strong></h5>
+    </div>
+    <div class="col-md-4">
+      <h5><strong><%= Resource.human_attribute_name 'description' %></strong></h5>
+    </div>
+    <div class="col-md-3">
+      <h5><strong><%= Resource.human_attribute_name 'cost_per_unit' %></strong></h5>
+    </div>
   </div>
 
-  <p>
-    <span class="button"><%= rc_f.submit %></span>
-  </p>
+  <div id="resources">
+    <%= f.simple_fields_for :resources, resources do |r_f| %>
+      <%= render 'resource', f: r_f %>
+    <% end %>
+
+    <%= link_to_add_fields t('resource_classes.resources.new'), f, :resources %>
+  </div>
+
+  <hr />
+
+  <div class="form-actions">
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit class: 'btn btn-primary' %>
+    <div class="pull-right"><%= yield :form_actions %></div>
+  </div>
 <% end %>
-<!--[eoform:resource_class] -->

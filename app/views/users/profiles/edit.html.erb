@@ -1,0 +1,24 @@
+<%= simple_form_for @auth_user, url: users_profile_path(@auth_user) do |f| %>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :name, input_html: { maxlength: 100, autofocus: true } %>
+        <%= f.input :last_name, input_html: { maxlength: 100 } %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :email, input_html: { maxlength: 100 } %>
+        <%= f.input :function, input_html: { maxlength: 255 } %>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="form-actions">
+    <div class="pull-right">
+      <%= link_to t('users.passwords.edit.title'), edit_users_password_path(@auth_user) %> |
+      <%= link_to t('users.status.show.title'), users_status_path(@auth_user, graph: true) %>
+    </div>
+    <%= f.submit t('label.modify'), class: 'btn btn-primary' %>
+  </div>
+<% end %>

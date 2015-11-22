@@ -1,115 +1,107 @@
-<% id = dynamic_object_id('plan_item', f) %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="plan_item item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
-  <div>
-    <div class="item_field" style="margin-right: 1em;">
-      <%= show_plan_item_info(f.object) %>
-    </div>
-    <div class="show_hide_field">
-    <%= link_to_show_hide "resource_utilizations_for_#{id}",
-      t('plan.show_resource_utilization'),
-      t('plan.hide_resource_utilization') %>
-    </div>
-    <div class="item_field" style="width: 5%;">
-    <%= f.text_field :order_number, :class => :sort_number,
-      :readonly => true %>
-    </div>
-    <div class="item_field" style="width: 20%;">
-      <% unless f.object.business_unit %>
-      <div class="search">
-        <% field_classes = [:search, :autocomplete_field] %>
-        <% field_classes << :error_field unless f.object.errors[:business_unit_id].blank? %>
-        <%= text_field_tag 'plan_item[business_unit_data]', '',
-          :id => "plan_item_business_unit_#{id}",
-          :class => field_classes.join(' '),
-          :title => t('label.search'),
-          :autocomplete => :off,
-          :autofocus => true,
-          'data-autocomplete-params' => ("{business_unit_type_id: #{@business_unit_type.id}}" if @business_unit_type),
-          'data-autocomplete-url' => auto_complete_for_business_unit_business_unit_id_plans_path(:format => :json) %>
-        <%= f.hidden_field :business_unit_id, :value => f.object.business_unit_id,
-          :id => "hidden_business_unit_id_#{id}", :class => :autocomplete_id %>
+<% id = f.object.object_id %>
+<fieldset class="plan_item">
+  <div class="row">
+    <div class="col-md-1">
+      <div class="media">
+        <div class="pull-left">
+          <%= show_plan_item_info(f.object) %>
+        </div>
+        <div class="pull-left">
+          <%= link_to_show_hide "resource_utilizations_for_#{id}" %>
+        </div>
+        <div class="media-body">
+          <%= f.input :order_number, as: :string, label: false,
+            input_html: { class: 'sort_number', readonly: true } %>
+        </div>
       </div>
+    </div>
+    <div class="col-md-3">
+      <% unless f.object.business_unit %>
+        <%= f.input :business_unit_id, as: :string, label: false, input_html: {
+          name: 'plan_item[business_unit_data]', id: "plan_item_business_unit_#{id}",
+          title: t('label.search'),
+          autofocus: true, data: {
+            autocomplete_params: ({ business_unit_type_id: @business_unit_type.id } if @business_unit_type),
+            autocomplete_url: auto_complete_for_business_unit_plans_path,
+            autocomplete_id_target: "#hidden_business_unit_id_#{id}"
+          }
+        } %>
       <% else %>
-        <%= text_field_tag "plan_item_business_unit_#{id}",
-          f.object.business_unit.name, :disabled => true %>
-        <%= f.hidden_field :business_unit_id,
-          :value => f.object.business_unit_id,
-          :id => "hidden_business_unit_id_#{id}" %>
+        <%= f.input "plan_item_business_unit_#{id}", label: false, input_html: {
+          value: f.object.business_unit.name, disabled: true } %>
       <% end %>
+      <%= f.input :business_unit_id, as: :hidden, input_html: {
+        value: f.object.business_unit_id, id: "hidden_business_unit_id_#{id}" } %>
     </div>
-    <div class="item_field" style="width: 20%;">
-    <%= f.text_field :project, :maxlength => 255, :size => 10 %>
+    <div class="col-md-2">
+      <%= f.input :project, label: false, input_html: { maxlength: 255 } %>
     </div>
-    <div class="item_field" style="width: 13%;">
-    <%= calendar_text_field f, :start, false, nil, :class => :date %>
-    </div>
-    <div class="item_field" style="width: 13%;">
-    <%= calendar_text_field f, :end, false, nil, :class => :date %>
-    </div>
-    <div class="item_field" style="width: 13%;">
-    <%= f.text_field :plain_predecessors, :maxlength => 255, :size => 10,
-      :class => (:error_field unless f.object.errors[:predecessors].blank?) %>
-    </div>
-    <div class="item_field item_controls" style="width: 10%;">
-      <%= f.hidden_field :id %>
-      <%= insert_record_link(f) %> |
-      <%= link_to_move %>
-      <% unless f.object.try(:review) %>
-        | <%= remove_item_link(f)  %>
-      <% end %>
-    </div>
-
-    <div class="items hidden_items" id="resource_utilizations_for_<%= id %>" style="display: none;">
-      <div>
-        <div class="column_headers">
-          <div class="item_column" style="width: 30%;">
-            <h3><%= ResourceUtilization.human_attribute_name :resource_id %></h3>
-          </div>
-          <div class="item_column" style="width: 20%;">
-            <h3><%= ResourceUtilization.human_attribute_name :units %></h3>
-          </div>
-          <div class="item_column" style="width: 20%;">
-            <h3><%= ResourceUtilization.human_attribute_name :cost_per_unit %></h3>
-          </div>
-          <div class="item_column" style="width: 10%;"></div>
-          <div class="clear"></div>
+    <div class="col-md-3">
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :start, as: :date_picker, label: false %>
         </div>
-
-        <div class="material_resource_utilizations">
-          <%= f.fields_for :resource_utilizations, f.object.material_resource_utilizations do |ru_f| %>
-            <%= render :partial => 'material_resource_utilization',
-              :locals => {:f => ru_f, :is_dynamic => false} %>
-          <% end %>
+        <div class="col-md-6">
+          <%= f.input :end, as: :date_picker, label: false %>
         </div>
-
-        <div class="human_resource_utilizations">
-          <%= f.fields_for :resource_utilizations, f.object.human_resource_utilizations do |ru_f| %>
-            <%= render :partial => 'human_resource_utilization',
-              :locals => {:f => ru_f, :is_dynamic => false} %>
-          <% end %>
-        </div>
-
-        <p style="margin-bottom: 1em;">
-          <%= link_to t('plan.add_material_resource_utilization'), '#',
-            'data-template' => :material_resource_utilization,
-            'data-event' => 'addNestedSubitem', 'data-parent' => :plan_item,
-            'data-child' => :material_resource_utilizations %> |
-          <%= link_to t('plan.add_human_resource_utilization'), '#',
-            'data-template' => :human_resource_utilization,
-            'data-event' => 'addNestedSubitem', 'data-parent' => :plan_item,
-            'data-child' => :human_resource_utilizations %>
-        </p>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <%= f.input :plain_predecessors, label: false, input_html: { maxlength: 255 } %>
+    </div>
+    <div class="col-md-1">
+      <div class="toggle-visibility">
+        <%= f.input :id, as: :hidden %>
+        <%= link_to_insert_field(f) %>
+        <span class="text-muted">|</span>
+        <% unless f.object.try(:review) %>
+          <%= link_to_remove_nested_item(f) %>
+          <span class="text-muted">|</span>
+        <% end %>
+        <%= link_to_move %>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="hidden_items" id="resource_utilizations_for_<%= id %>" style="display: none;">
+    <div class="row nested">
+      <div class="col-md-5">
+        <h5><strong><%= ResourceUtilization.human_attribute_name 'resource' %></strong></h5>
+      </div>
+      <div class="col-md-3">
+        <h5><strong><%= ResourceUtilization.human_attribute_name 'units' %></strong></h5>
+      </div>
+      <div class="col-md-3">
+        <h5><strong><%= ResourceUtilization.human_attribute_name 'cost_per_unit' %></strong></h5>
+      </div>
+    </div>
+
+    <div id="material_resource_utilizations_<%= id %>">
+      <%= f.simple_fields_for :resource_utilizations, f.object.material_resource_utilizations do |ru_f| %>
+        <%= render 'material_resource_utilization', f: ru_f %>
+      <% end %>
+    </div>
+
+    <div id="human_resource_utilizations_<%= id %>">
+      <%= f.simple_fields_for :resource_utilizations, f.object.human_resource_utilizations do |ru_f| %>
+        <%= render 'human_resource_utilization', f: ru_f %>
+      <% end %>
+    </div>
+
+    <div class="nested">
+      <p>
+        <%= link_to_add_fields(t('plan.add_material_resource_utilization'), f, :resource_utilizations,
+          'material_resource_utilization', {
+          insert_into: "#material_resource_utilizations_#{id}", association: 'material_resource_utilizations'
+        } ) %>
+        <%= link_to_add_fields(t('plan.add_human_resource_utilization'), f, :resource_utilizations,
+          'human_resource_utilization', {
+          insert_into: "#human_resource_utilizations_#{id}", association: 'human_resource_utilizations'
+        } ) %>
+      </p>
+    </div>
+  </div>
+</fieldset>
 <script type="text/javascript">
   FormUtil.completeSortNumbers();
 </script>
-<% if is_dynamic %>
-<script type="text/javascript">
-  Helper.showItem('#<%= id %>');
-  AutoComplete.observeAll();
-</script>
-<% end %>

@@ -1,47 +1,41 @@
-<% id = "#{dynamic_object_id('finding_relation', f)}#{'_NEW_RECORD' if is_dynamic}" %>
-<% finding_relation = f.object %>
-<% hide = is_dynamic || finding_relation.marked_for_destruction? %>
-<div class="finding_relation item" id="<%= id %>" <%= raw 'style="display: none;"' if hide %>>
-  <div>
-    <div class="item_field" style="width: 60%;">
-      <% if is_dynamic %>
-        <div class="search">
-          <% extra_parameters = "review_id: #{@finding.control_objective_item.try(:review).try(:id) || '""'}"  %>
-          <% extra_parameters << ",finding_id: #{@finding.id}" unless @finding.new_record? %>
-          <% field_classes = [:search, :autocomplete_field, :required] %>
-          <% field_classes << :error_field unless finding_relation.errors[:related_finding_id].blank? %>
-          <%= text_field_tag 'finding[nested_finding_relation]',
-            finding_relation.related_finding.to_s,
-            :id => "finding_finding_relation_#{id}",
-            :class => field_classes.join(' '),
-            :title => t('label.search'),
-            :autocomplete => :off,
-            :autofocus => true,
-            'data-autocomplete-params' => ("{#{extra_parameters}}"),
-            'data-autocomplete-url' => auto_complete_for_finding_relation_findings_path(:format => :json) %>
-          <%= f.hidden_field :related_finding_id,
-            :id => "hidden_related_finding_#{id}", :class => :autocomplete_id %>
+<%
+  id = f.object.object_id
+  finding = f.object.finding || parent.object
+  finding_relation = f.object
+%>
+<fieldset class="finding_relation">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <% if finding_relation.related_finding.blank? %>
+          <% extra_parameters = { review_id: finding.try(:review).try(:id) || '' } %>
+          <% extra_parameters[:finding_id] = finding.id unless finding.new_record? %>
+          <%= f.input :related_finding_id, as: :string, label: false, input_html: {
+            value: finding_relation.related_finding.to_s,
+            id: "finding_finding_relation_#{id}",
+            title: t('label.search'), autocomplete: :off, autofocus: true,
+            data: {
+              autocomplete_params: extra_parameters,
+              autocomplete_url: url_for([:auto_complete_for_finding_relation, finding.class]),
+              autocomplete_id_target: "#hidden_related_finding_#{id}"
+            }
+          } %>
+        <% else %>
+          <%= f.input "finding_finding_relation_#{id}", label: false, input_html: {
+            value: finding_relation.related_finding.to_s, readonly: true } %>
+        <% end %>
+        <%= f.input :related_finding_id, as: :hidden,
+          input_html: { id: "hidden_related_finding_#{id}" } %>
+      </div>
+      <div class="col-md-4">
+        <%= f.input :description, label: false %>
+      </div>
+      <div class="col-md-2">
+        <div class="toggle-visibility">
+          <%= f.input :finding_id, as: :hidden %>
+          <%= link_to_remove_nested_item(f) %>
         </div>
-      <% else %>
-        <%= f.hidden_field :related_finding_id,
-          :id => "hidden_related_finding_#{id}" %>
-        <%= text_field_tag "finding_finding_relation_#{id}",
-          finding_relation.related_finding.try(:to_s), :readonly => true,
-          :class => (:error_field unless finding_relation.errors[:related_finding_id].blank?) %>
-      <% end %>
-    </div>
-    <div class="item_field" style="width: 30%;">
-      <%= f.text_field :description %>
-    </div>
-    <div class="item_field item_controls" style="width: 5%;">
-      <%= f.hidden_field :finding_id %>
-      <%= remove_item_link(f) %>
+      </div>
     </div>
   </div>
-</div>
-<% if is_dynamic %>
-  <script type="text/javascript">
-    Helper.showItem('#<%= id %>');
-    AutoComplete.observeAll();
-  </script>
-<% end %>
+</fieldset>

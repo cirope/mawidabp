@@ -3,8 +3,8 @@ class CreateBusinessUnits < ActiveRecord::Migration
     create_table :business_units do |t|
       t.string :name
       t.references :business_unit_type
-      
-      t.timestamps
+
+      t.timestamps null: false
     end
 
     add_index :business_units, :name

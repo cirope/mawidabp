@@ -6,8 +6,6 @@ class OrganizationRole < ActiveRecord::Base
     important: true
   }
 
-  after_destroy :destroy_user
-
   # Named scopes
   scope :for_group, ->(group_id) {
     includes(:organization).where(
@@ -54,11 +52,4 @@ class OrganizationRole < ActiveRecord::Base
   def to_s
     "#{self.role.name} (#{self.organization.name})"
   end
-
-  private
-    def destroy_user
-      if OrganizationRole.where(user_id: self.user.id).blank?
-        self.user.destroy!
-      end
-    end
 end

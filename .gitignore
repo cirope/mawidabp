@@ -1,15 +1,14 @@
-*.swp
-config/app_config.yml
+/.bundle
 doc/
 log/
 private/
-public/error_files/
-uploads/
-[#]*
-# Descomentar cuando esté estable la ayuda
-public/images/help
+public/help
+spring/
 tmp/
-vendor/cache/
+uploads/
 
 # No ignorar
 !doc/README_FOR_APP
+
+# Ignore application configuration
+config/application.yml

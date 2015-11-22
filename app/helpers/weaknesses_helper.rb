@@ -27,10 +27,32 @@ module WeaknessesHelper
       review.last_weakness_work_paper_code(code_prefix) :
       "#{code_prefix} 0".strip
 
-    code_from_weakness = weakness.work_papers.reject(
+    work_paper_codes = weakness.work_papers.reject(
       &:marked_for_destruction?).map(
-      &:code).select { |c| c =~ /#{code_prefix}\s\d+/ }.sort.last
+      &:code).select { |c| c =~ /#{code_prefix}\s\d+/ }
 
-    [code_from_review, code_from_weakness].compact.max
+    last_code = work_paper_codes.map do |code|
+      code.match(/\d+\Z/)[0].to_i if code =~ /\d+\Z/
+    end.compact.sort.last.to_i
+
+    next_number = [code_from_review.match(/\d+\Z/)[0].to_i, last_code].max
+
+    "#{code_prefix} #{next_number}"
+  end
+
+  def benefit_exists?
+    Benefit.list.exists?
+  end
+
+  def weakness_achievements_for kind
+    Benefit.list.where(kind: kind).order(created_at: :asc).map do |benefit|
+      achievement = @weakness.achievements.detect { |a| a.benefit_id == benefit.id }
+
+      achievement || @weakness.achievements.new(benefit_id: benefit.id)
+    end
+  end
+
+  def weakness_business_units
+    @weakness.control_objective_item.business_units
   end
 end

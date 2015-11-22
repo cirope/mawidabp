@@ -1,9 +1,0 @@
-es_review_identification:
-  language: es
-  name: review_identification
-  content: Review identification explanation
-
-es_review_score:
-  language: es
-  name: review_score
-  content: Review score explanation

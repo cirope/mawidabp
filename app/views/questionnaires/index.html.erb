@@ -1,4 +1,4 @@
-<table class="list">
+<table class="table table-condensed table-striped">
   <thead>
     <tr>
       <th><%= Questionnaire.human_attribute_name :name %></th>
@@ -8,18 +8,17 @@
 
   <tbody>
     <% @questionnaires.each do |questionnaire| %>
-      <tr class="<%= cycle('even', 'odd') %>">
+      <tr>
         <td><%= questionnaire.name %></td>
         <td><%= link_to_show questionnaire %></td>
         <td><%= link_to_edit edit_questionnaire_path(questionnaire) %></td>
-        <td><%= button_to_destroy questionnaire %></td>
+        <td><%= link_to_destroy questionnaire %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @questionnaires %>
-  <%= link_to t('label.new'), new_questionnaire_path %>
-  <div class="clear"></div>
-</div>
+<hr />
+
+<%= paginate @questionnaires %>
+<%= link_to_new new_questionnaire_path, class: 'btn btn-primary' %>

@@ -94,14 +94,6 @@ class WorkflowItemTest < ActiveSupport::TestCase
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'validates duplicated attributes' do
-    @workflow_item.task = workflow_items(:with_conclusion_workflow_item_2).task
-
-    assert @workflow_item.invalid?
-    assert_error @workflow_item, :task, :taken
-  end
-
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates relative date attributes' do
     @workflow_item.end = @workflow_item.start.yesterday
 

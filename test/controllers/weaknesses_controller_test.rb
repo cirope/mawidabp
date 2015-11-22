@@ -33,35 +33,33 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'list weaknesses' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:weaknesses)
-    assert_select '#error_body', false
     assert_template 'weaknesses/index'
   end
 
   test 'list weaknesses with search and sort' do
-    perform_auth
+    login
     get :index, search: {
       query: '1 2 4',
-      columns: ['description', 'review'],
+      columns: ['title', 'review'],
       order: 'review'
     }
     assert_response :success
     assert_not_nil assigns(:weaknesses)
-    assert_equal 2, assigns(:weaknesses).size
+    assert_equal 2, assigns(:weaknesses).count
     assert(assigns(:weaknesses).all? do |w|
       w.review.identification.match(/1 2 4/i)
     end)
     assert_equal assigns(:weaknesses).map {|w| w.review.identification}.sort,
       assigns(:weaknesses).map {|w| w.review.identification}
-    assert_select '#error_body', false
     assert_template 'weaknesses/index'
   end
 
   test 'list weaknesses for specific ids' do
-    perform_auth
+    login
     ids = [
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
       findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id
@@ -70,47 +68,64 @@ class WeaknessesControllerTest < ActionController::TestCase
     get :index, ids: ids
     assert_response :success
     assert_not_nil assigns(:weaknesses)
-    assert_equal 2, assigns(:weaknesses).size
+    assert_equal 2, assigns(:weaknesses).count
     assert assigns(:weaknesses).all? { |w| ids.include?(w.id) }
-    assert_select '#error_body', false
     assert_template 'weaknesses/index'
   end
 
   test 'edit weakness when search match only one result' do
-    perform_auth
+    login
     get :index, search: {
       query: '1 2 4 y 1w',
-      columns: ['description', 'review']
+      columns: ['title', 'review']
     }
     assert_redirected_to weakness_url(
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness))
     assert_not_nil assigns(:weaknesses)
-    assert_equal 1, assigns(:weaknesses).size
+    assert_equal 1, assigns(:weaknesses).count
   end
 
   test 'show weakness' do
-    perform_auth
+    login
     get :show, id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:weakness)
-    assert_select '#error_body', false
     assert_template 'weaknesses/show'
   end
 
+  test 'show weakness in json' do
+    weakness = findings :bcra_A4609_data_proccessing_impact_analisys_weakness
+
+    login
+    get :show, :completed => 'incomplete', :id => weakness.id, :format => :json
+    assert_response :success
+    assert_not_nil assigns(:weakness)
+
+    decoded_weakness = ActiveSupport::JSON.decode @response.body
+
+    assert_equal weakness.id, decoded_weakness['id']
+  end
+
   test 'new weakness' do
-    perform_auth
+    login
     get :new, control_objective_item: control_objective_items(
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
     assert_not_nil assigns(:weakness)
-    assert_select '#error_body', false
     assert_template 'weaknesses/new'
   end
 
   test 'create weakness' do
-    counts_array = ['Weakness.count', 'WorkPaper.count', 'FindingRelation.count']
+    counts_array = [
+      'Weakness.count',
+      'WorkPaper.count',
+      'FindingRelation.count',
+      'Achievement.count',
+      'BusinessUnitFinding.count',
+      'Comment.count'
+    ]
 
-    perform_auth
+    login
 
     assert_difference counts_array do
       post :create, {
@@ -118,6 +133,7 @@ class WeaknessesControllerTest < ActionController::TestCase
           control_objective_item_id: control_objective_items(
             :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
           review_code: 'O020',
+          title: 'Title',
           description: 'New description',
           answer: 'New answer',
           audit_comments: 'New audit comments',
@@ -129,6 +145,7 @@ class WeaknessesControllerTest < ActionController::TestCase
           risk: Weakness.risks_values.first,
           priority: Weakness.priorities_values.first,
           follow_up_date: 2.days.from_now.to_date,
+          business_unit_ids: [business_units(:business_unit_three).id],
           finding_user_assignments_attributes: [
             {
               user_id: users(:bare_user).id, process_owner: '0'
@@ -144,6 +161,12 @@ class WeaknessesControllerTest < ActionController::TestCase
               user_id: users(:administrator_user).id, process_owner: '0'
             }
           ],
+          achievements_attributes: [
+            {
+              benefit_id: benefits(:productivity).id,
+              amount: '2000.01'
+            }
+          ],
           work_papers_attributes: [
             {
               name: 'New workpaper name',
@@ -151,8 +174,7 @@ class WeaknessesControllerTest < ActionController::TestCase
               number_of_pages: '10',
               description: 'New workpaper description',
               file_model_attributes: {
-                file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
-                  'text/plain')
+                file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
               }
             }
           ],
@@ -161,6 +183,12 @@ class WeaknessesControllerTest < ActionController::TestCase
               description: 'Duplicated',
               related_finding_id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
             }
+          ],
+          comments_attributes: [
+            {
+              comment: 'Test',
+              user_id: users(:administrator_user).id
+            }
           ]
         }
       }
@@ -168,16 +196,15 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'edit weakness' do
-    perform_auth
+    login
     get :edit, id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:weakness)
-    assert_select '#error_body', false
     assert_template 'weaknesses/edit'
   end
 
   test 'update weakness' do
-    perform_auth
+    login
     assert_no_difference 'Weakness.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
         patch :update, {
@@ -187,6 +214,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             control_objective_item_id: control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item).id,
             review_code: 'O020',
+            title: 'Title',
             description: 'Updated description',
             answer: 'Updated answer',
             audit_comments: 'Updated audit comments',
@@ -254,11 +282,11 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'follow up pdf' do
-    perform_auth
+    login
     weakness = Weakness.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :follow_up_pdf, id: weakness.id
     end
 
@@ -266,7 +294,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'undo reiteration' do
-    perform_auth
+    login
     weakness = Finding.find(findings(
         :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
     repeated_of = Finding.find(findings(
@@ -286,37 +314,11 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_equal repeated_of_original_state, repeated_of.state
   end
 
-  test 'auto complete for user' do
-    perform_auth
-    get :auto_complete_for_user, { q: 'adm', format: :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size # Sólo Admin (Admin second es de otra organización)
-    assert users.all? { |u| (u['label'] + u['informal']).match /adm/i }
-
-    get :auto_complete_for_user, { q: 'bare', format: :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size # Sólo Bare
-    assert users.all? { |u| (u['label'] + u['informal']).match /bare/i }
-
-    get :auto_complete_for_user, { q: 'x_nobody', format: :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 0, users.size # Sin resultados
-  end
-
   test 'auto complete for finding relation' do
     finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
 
-    perform_auth
+    login
     get :auto_complete_for_finding_relation, {
       q: 'O001',
       finding_id: finding.id,
@@ -374,7 +376,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for control objective item' do
-    perform_auth
+    login
     get :auto_complete_for_control_objective_item, {
       q: 'dependencia',
       review_id: reviews(:review_with_conclusion).id,

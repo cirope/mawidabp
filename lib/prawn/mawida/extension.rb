@@ -1,3 +1,4 @@
+require 'prawn/table'
 require 'prawn/measurement_extensions'
 
 module Prawn
@@ -70,12 +71,13 @@ module Prawn
         self.move_down margin_down.pt if margin_down != 0
       end
 
-      def add_description_item(term, description, left = 0, underline = true,
-          font_size = 12)
-        if !term.try(:blank?) && !description.try(:blank?)
+      def add_description_item(term, description, left = 0, underline = true, font_size = 12)
+        if term.present? && description.present?
+          options = { invalid: :replace, undef: :replace, replace: '?' }
           formated_term = underline ? "<u><b>#{term}</b></u>" : "<b>#{term}</b>"
+          encoded_text = "#{formated_term}: #{description}".encode 'windows-1252', 'UTF-8', options
 
-          self.text "#{formated_term}: #{description}", :size => font_size,
+          self.text encoded_text, :size => font_size,
             :inline_format => true, :indent_paragraphs => left.pt
         end
       end
@@ -265,11 +267,11 @@ module Prawn
       end
 
       def page_usable_width
-        @_page_usable_width ||= self.bounds.width
+        bounds.width
       end
 
       def percent_width(width)
-        (self.page_usable_width * (width / 100.0)).round
+        (page_usable_width * (width / 100.0)).round
       end
 
       def custom_save_as(filename, sub_directory, id = 0)

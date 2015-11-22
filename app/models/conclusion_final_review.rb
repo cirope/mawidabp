@@ -2,7 +2,7 @@ class ConclusionFinalReview < ConclusionReview
   # Constantes
   COLUMNS_FOR_SEARCH = {
     close_date: {
-      column: "#{table_name}.close_date",
+      column: "#{table_name}.#{qcn('close_date')}",
       operator: SEARCH_ALLOWED_OPERATORS.values, mask: "%s",
       conversion_method: lambda { |value|
         Timeliness.parse(value, :date).to_s(:db)
@@ -13,18 +13,19 @@ class ConclusionFinalReview < ConclusionReview
 
   # Named scopes
   scope :list_all_by_date, ->(from_date, to_date) {
-    list.includes(
-      review: [
-        { plan_item: { business_unit: :business_unit_type } }
-      ]
-    ).where(
+    list.where(
       'issue_date BETWEEN :from_date AND :to_date',
       from_date: from_date, to_date: to_date
+    )
+  }
+  scope :ordered, -> {
+    includes(
+      review: { plan_item: { business_unit: :business_unit_type } }
     ).references(:business_unit_types).order(
       [
-        "#{BusinessUnitType.table_name}.external ASC",
-        "#{BusinessUnitType.table_name}.name ASC",
-        'issue_date ASC'
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')}"
       ]
     )
   }
@@ -35,13 +36,13 @@ class ConclusionFinalReview < ConclusionReview
         { control_objective_items: :weaknesses }
       ]
     ).where(
-      "#{Weakness.table_name}.solution_date BETWEEN :from_date AND :to_date",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn('solution_date')} BETWEEN :from_date AND :to_date",
       from_date: from_date, to_date: to_date
     ).references(:findings, :business_unit_types).order(
       [
-        "#{BusinessUnitType.table_name}.external ASC",
-        "#{BusinessUnitType.table_name}.name ASC",
-        'issue_date ASC'
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')}"
       ]
     )
   }
@@ -52,13 +53,13 @@ class ConclusionFinalReview < ConclusionReview
         { control_objective_items: :final_weaknesses }
       ]
     ).where(
-      "#{Weakness.table_name}.solution_date BETWEEN :from_date AND :to_date",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn('solution_date')} BETWEEN :from_date AND :to_date",
       from_date: from_date, to_date: to_date
     ).references(:findings, :business_unit_types).order(
       [
-        "#{BusinessUnitType.table_name}.external ASC",
-        "#{BusinessUnitType.table_name}.name ASC",
-        'issue_date ASC'
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')}"
       ]
     )
   }
@@ -78,9 +79,7 @@ class ConclusionFinalReview < ConclusionReview
   }
   scope :next_to_expire, -> {
     where(
-      'close_date = :warning_date',
-      warning_date:
-        CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date
+      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date
     )
   }
 
@@ -96,9 +95,7 @@ class ConclusionFinalReview < ConclusionReview
   validates :review_id, uniqueness: true, allow_blank: true,
     allow_nil: true
   validates_date :close_date, allow_nil: true, allow_blank: true,
-    on: :create, on_or_after: lambda { |conclusion_review|
-      conclusion_review.issue_date || Date.today
-    }
+    on: :create, on_or_after: :issue_date
   validates_each :review_id do |record, attr, value|
     if record.review && record.review.conclusion_draft_review
       unless record.review.conclusion_draft_review.approved?
@@ -117,7 +114,7 @@ class ConclusionFinalReview < ConclusionReview
     ConclusionReview.columns_for_sort.dup.merge(
       close_date: {
         name: ConclusionReview.human_attribute_name(:close_date),
-        field: "#{ConclusionReview.table_name}.close_date ASC"
+        field: "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('close_date')} ASC"
       }
     )
   end
@@ -150,7 +147,6 @@ class ConclusionFinalReview < ConclusionReview
     findings = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked +
       self.review.nonconformities.not_revoked + self.review.potential_nonconformities.not_revoked +
       self.review.fortresses
-    all_created = false
 
     begin
       findings.all? do |f|
@@ -158,6 +154,12 @@ class ConclusionFinalReview < ConclusionReview
         finding.final = true
         finding.parent = f
         finding.origination_date ||= f.origination_date ||= self.issue_date
+
+        f.business_unit_findings.each do |buf|
+          finding.business_unit_findings.build(
+            buf.attributes.dup.merge('id' => nil, 'finding_id' => nil)
+          )
+        end
 
         f.finding_user_assignments.each do |fua|
           finding.finding_user_assignments.build(
@@ -179,18 +181,10 @@ class ConclusionFinalReview < ConclusionReview
         self.review.nonconformities.revoked + self.review.potential_nonconformities.revoked
 
       revoked_findings.each { |rf| rf.final = true; rf.save! }
-
-      all_created = true
     rescue ActiveRecord::RecordInvalid
+      errors.add :base, I18n.t('conclusion_final_review.stale_object_error')
+
       raise ActiveRecord::Rollback
-    end
-
-    if all_created
-      true
-    else
-      self.errors.add :base, I18n.t('conclusion_final_review.stale_object_error')
-
-      false
     end
   end
 
@@ -206,7 +200,7 @@ class ConclusionFinalReview < ConclusionReview
       # Si es viernes notifico también los que cierran el fin de semana
       if wday == 5
         cfrs = ConclusionFinalReview.where(
-          'close_date BETWEEN :from AND :to',
+          "#{quoted_table_name}.#{qcn 'close_date'} BETWEEN :from AND :to",
           from: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date,
           to: (CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS + 2).days.from_now_in_business.to_date
         )
@@ -220,7 +214,7 @@ class ConclusionFinalReview < ConclusionReview
           ruas.each do |rua|
             # si no es gerente o auditado
             unless rua.assignment_type == 2 || rua.assignment_type == -1
-              Notifier.conclusion_final_review_expiration_warning(rua.user, cfr).deliver
+              NotifierMailer.conclusion_final_review_expiration_warning(rua.user, cfr).deliver_later
             end
           end
         end

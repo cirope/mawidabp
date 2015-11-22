@@ -40,7 +40,7 @@ class ReviewUserAssignment < ActiveRecord::Base
 
       if (record.auditor? && !user.auditor?) ||
           (record.supervisor? && !user.supervisor?) ||
-          (record.manager? && !user.supervisor?) ||
+          (record.manager? && (!user.supervisor? && !user.manager?)) ||
           (record.audited? && !user.can_act_as_audited?)
         record.errors.add attr, :invalid
       end
@@ -52,7 +52,7 @@ class ReviewUserAssignment < ActiveRecord::Base
   belongs_to :user
 
   def <=>(other)
-    if self.review_id == other.review_id
+    if other.kind_of?(ReviewUserAssignment) && self.review_id == other.review_id
       self.user_id <=> other.user_id
     else
       -1
@@ -132,13 +132,17 @@ class ReviewUserAssignment < ActiveRecord::Base
             :responsible => new_user.full_name_with_function)
         ]
 
-        Notifier.changes_notification([new_user, old_user],
-          :title => notification_title, :body => notification_body,
-          :content => notification_content).deliver
+        NotifierMailer.changes_notification(
+          [new_user, old_user],
+          title: notification_title, body: notification_body,
+          content: notification_content,
+          organizations: [review.organization]
+        ).deliver_later
 
         unless unconfirmed_findings.blank?
-          Notifier.reassigned_findings_notification(new_user, old_user,
-            unconfirmed_findings).deliver
+          NotifierMailer.reassigned_findings_notification(
+            new_user, old_user, unconfirmed_findings
+          ).deliver_later
         end
       else
         self.errors.add :base,
@@ -177,7 +181,9 @@ class ReviewUserAssignment < ActiveRecord::Base
       title = I18n.t('review_user_assignment.responsibility_removed',
         :review => self.review.try(:identification))
 
-      Notifier.changes_notification(self.user, :title => title).deliver
+      NotifierMailer.changes_notification(
+        self.user, title: title, organizations: [review.organization]
+      ).deliver_later
     end
 
     all_valid

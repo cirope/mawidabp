@@ -1,0 +1,109 @@
+<%= render partial: 'shared/filter_form',
+  locals: { action: 'index', extra_params: {},
+  forms: { poll_date_range: true, questionnaire: true, answered: true }
+} %>
+
+<br />
+<% if @report.polls.blank? %>
+  <div class="alert alert-warning"><%= t('polls.without_data') %></div>
+<% else %>
+  <% @report.polls.each do |poll| %>
+    <p>
+      <% if poll.user.present? %>
+        <strong><%= Poll.human_attribute_name 'user' %>:</strong>
+        <%= poll.user.informal_name %>
+      <% elsif poll.customer_email.present? %>
+        <strong><%= Poll.human_attribute_name 'customer_email' %>:</strong>
+        <%= poll.customer_email %>
+      <% end %>
+    </p>
+    <p>
+      <strong><%= Poll.human_attribute_name 'answered' %>:</strong>
+      <%= t_boolean poll.answered %>
+    </p>
+    <p>
+      <strong><%= Poll.human_attribute_name 'send_date' %>:</strong>
+      <%= l poll.created_at.to_date, format: :long %>
+    </p>
+    <% if poll.answered? %>
+      <p>
+        <strong><%= Poll.human_attribute_name 'answer_date' %>:</strong>
+        <%= l poll.updated_at.to_date, format: :long %>
+      </p>
+    <% end %>
+    <p>
+      <strong><%= Questionnaire.human_attribute_name 'questions' %>:</strong>
+    </p>
+    <ol>
+      <% poll.answers.each do |answer| %>
+        <li>
+          <%= answer.question.question %>
+          <% if poll.answered? %>
+            <% if answer.question.answer_multi_choice? %>
+              <strong>
+                <%= t "answer_options.#{answer.answer_option.option}" %>
+              </strong>
+            <% elsif answer.question.answer_written? %>
+              <%= answer.answer %>
+            <% end %>
+          <% end %>
+          <br>
+          <% if answer.comments.present? %>
+            <%= Answer.human_attribute_name :comments %>:
+            <%= answer.comments %>
+          <% end %>
+        </li>
+      <% end %>
+    </ol>
+
+    <% if poll.comments.present? %>
+      <p>
+        <strong><%= Poll.human_attribute_name :comments %>:</strong>
+        <%= poll.comments %>
+      </p>
+    <% end %>
+    <hr />
+  <% end %>
+  <p>
+    <strong><%= t 'polls.total_answered' %>:</strong>
+    <%= @report.answered %>
+  </p>
+  <p>
+    <strong><%= t 'polls.total_unanswered' %>:</strong>
+    <%= @report.unanswered %>
+  </p>
+  <p>
+    <strong><%= t 'polls.score' %>:</strong>
+    <%= number_to_percentage @report.calification, precision: 0 %>
+  </p>
+<% end %>
+
+<hr />
+
+<div>
+  <%= link_to t('label.back'), reports_polls_path %> |
+  <%= link_to t('label.download'), '#',
+    data: { toggle: 'modal', target: "#customize_report" } %>
+</div>
+
+<%= render partial: 'shared/customize_report_form', locals: {
+  options: {
+    form_name: 'report',
+    url: request.query_parameters.merge(
+      { action: 'index', _ts: Time.now.to_i }
+    ),
+    method: :get,
+    fields: [
+      {
+        name: :report_title,
+        label: t('customize_report_form.title'),
+        value: t('polls.reports.title').upcase
+      },
+      {
+        name: :report_subtitle,
+        label: t('customize_report_form.subtitle'),
+        value: t('polls.answers.index.title').upcase
+      }
+    ]
+  }
+} %>

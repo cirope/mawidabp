@@ -1,94 +1,92 @@
 <% currency_mask = "#{t('number.currency.format.unit')}%.2f" %>
-<div id="showed_data">
-  <p>
-    <b><%= Plan.human_attribute_name :period_id %></b>:
-    <%= @plan.period.try(:inspect) %>
-  </p>
-  <p>
-    <b><%= Plan.human_attribute_name :estimated_amount %></b>:
-    <b><%= currency_mask % @plan.estimated_amount %></b>
-  </p>
+<p>
+  <strong><%= Plan.human_attribute_name :period_id %></strong>:
+  <%= @plan.period.try(:inspect) %>
+</p>
+<p>
+  <strong><%= Plan.human_attribute_name :estimated_amount %></strong>:
+  <strong><%= currency_mask % @plan.estimated_amount %></strong>
+</p>
 
-  <table class="summary_table">
-    <thead>
-      <tr>
-        <th></th>
-        <th><%= PlanItem.human_attribute_name :order_number %></th>
-        <th><%= raw(BusinessUnit.model_name.human +
-          show_inline_help_for(:plan_business_unit)) %></th>
-        <th><%= raw(PlanItem.human_attribute_name(:project) +
-          show_inline_help_for(:plan_project)) %></th>
-        <th><%= raw(PlanItem.human_attribute_name(:start) +
-          show_inline_help_for(:plan_start)) %></th>
-        <th><%= raw(PlanItem.human_attribute_name(:end) +
-          show_inline_help_for(:plan_end)) %></th>
-        <th><%= PlanItem.human_attribute_name :human_resources_cost %></th>
-        <th><%= PlanItem.human_attribute_name :material_resources_cost %></th>
-        <th><%= PlanItem.human_attribute_name :total_resources_cost %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @plan.plan_items.each do |plan_item| %>
-        <tr>
-          <td><%= show_plan_item_info(plan_item) %></td>
-          <td><%= h plan_item.order_number %></td>
-          <td><%= h plan_item.business_unit.try(:name) %></td>
-          <td><%= h plan_item.project %></td>
-          <td><%= l plan_item.start %></td>
-          <td><%= l plan_item.end %></td>
-          <td><%= currency_mask % plan_item.human_cost %></td>
-          <td><%= currency_mask % plan_item.material_cost %></td>
-          <td><%= currency_mask % plan_item.cost %></td>
-        </tr>
-      <% end %>
-      <tr>
-        <td colspan="8"></td>
-        <td><b><%= @plan.cost %></b></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <% unless @plan.plan_items.all? { |pi| pi.resource_utilizations.blank? } %>
-    <h1><%= t('plan.pdf.resource_utilization') %></h1>
-    
+<table class="table table-striped table-condensed">
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= PlanItem.human_attribute_name :order_number %></th>
+      <th><%= BusinessUnit.model_name.human %></th>
+      <th><%= PlanItem.human_attribute_name(:project) %></th>
+      <th><%= PlanItem.human_attribute_name(:start) %></th>
+      <th><%= PlanItem.human_attribute_name(:end) %></th>
+      <th><%= PlanItem.human_attribute_name :human_resources_cost %></th>
+      <th><%= PlanItem.human_attribute_name :material_resources_cost %></th>
+      <th><%= PlanItem.human_attribute_name :total_resources_cost %></th>
+    </tr>
+  </thead>
+  <tbody>
     <% @plan.plan_items.each do |plan_item| %>
-      <% unless plan_item.resource_utilizations.blank? %>
-        <h2 style="font-weight: normal;">
-          <b>(<%= plan_item.order_number %>)</b> <%= plan_item.project %>
-          (<%= plan_item.business_unit.try(:name) %>)
-        </h2>
-        <table class="summary_table">
-          <thead>
+      <tr>
+        <td><%= show_plan_item_info(plan_item) %></td>
+        <td><%= plan_item.order_number %></td>
+        <td><%= plan_item.business_unit.try(:name) %></td>
+        <td><%= plan_item.project %></td>
+        <td><%= l plan_item.start, format: :minimal %></td>
+        <td><%= l plan_item.end, format: :minimal %></td>
+        <td><%= currency_mask % plan_item.human_cost %></td>
+        <td><%= currency_mask % plan_item.material_cost %></td>
+        <td><%= currency_mask % plan_item.cost %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td colspan="8"></td>
+      <td><strong><%= @plan.cost %></strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<% unless @plan.plan_items.all? { |pi| pi.resource_utilizations.blank? } %>
+  <div class="page-header">
+    <h2><%= t('plan.pdf.resource_utilization') %></h2>
+  </div>
+
+  <% @plan.plan_items.each do |plan_item| %>
+    <% unless plan_item.resource_utilizations.blank? %>
+      <h4>
+        (<%= plan_item.order_number %>) <%= plan_item.project %>
+        (<%= plan_item.business_unit.try(:name) %>)
+      </h4>
+      <table class="table table-striped table-condensed">
+        <thead>
+          <tr>
+            <th><%= ResourceUtilization.human_attribute_name :resource %></th>
+            <th><%= ResourceUtilization.human_attribute_name :units %></th>
+            <th><%= ResourceUtilization.human_attribute_name :cost_per_unit %></th>
+            <th><%= ResourceUtilization.human_attribute_name :cost %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% plan_item.resource_utilizations.each do |ru| %>
             <tr>
-              <th><%= ResourceUtilization.human_attribute_name :resource_id %></th>
-              <th><%= ResourceUtilization.human_attribute_name :units %></th>
-              <th><%= ResourceUtilization.human_attribute_name :cost_per_unit %></th>
-              <th><%= ResourceUtilization.human_attribute_name :cost %></th>
+              <td><%= ru.resource.resource_name %></td>
+              <td><%= ru.units %></td>
+              <td><%= currency_mask % ru.cost_per_unit %></td>
+              <td><%= currency_mask % ru.cost %></td>
             </tr>
-          </thead>
-          <tbody>
-            <% plan_item.resource_utilizations.each do |ru| %>
-              <tr>
-                <td><%= ru.resource.resource_name %></td>
-                <td><%= ru.units %></td>
-                <td><%= currency_mask % ru.cost_per_unit %></td>
-                <td><%= currency_mask % ru.cost %></td>
-              </tr>
-            <% end %>
-            <tr>
-              <td colspan="3"></td>
-              <td><b><%= plan_item.cost %></b></td>
-            </tr>
-          </tbody>
-        </table>
-      <% end %>
+          <% end %>
+          <tr>
+            <td colspan="3"></td>
+            <td><strong><%= plan_item.cost %></strong></td>
+          </tr>
+        </tbody>
+      </table>
     <% end %>
   <% end %>
-</div>
+<% end %>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_plan_path(@plan) %> |
-  <%= link_to t('label.list'), plans_path %> |
+<hr />
+
+<div>
+  <%= link_to_edit edit_plan_path(@plan) %> |
+  <%= link_to_index plans_path %> |
   <%= link_to t('plan.download_global_plan'), export_to_pdf_plan_path(@plan,
     :_ts => Time.now.to_i) %> |
   <%= link_to t('plan.download_detailed_plan'), export_to_pdf_plan_path(@plan,

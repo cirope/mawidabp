@@ -1,12 +1,14 @@
-<%= render :partial => 'form' %>
-
-<div id="links">
-  <%= link_to t('label.show'), @potential_nonconformity %> |
-  <%= link_to t('label.list'), oportunities_path %> |
-  <%= link_to t('potential_nonconformity.edit_control_objective'),
-    edit_control_objective_item_path(@potential_nonconformity.control_objective_item) %> |
+<%= content_for :form_actions do %>
+  <%= link_to_show @potential_nonconformity %> |
+  <%= link_to_index oportunities_path %> |
+  <% if @potential_nonconformity.control_objective_item %>
+    <%= link_to t('potential_nonconformity.edit_control_objective'),
+      edit_control_objective_item_path(@potential_nonconformity.control_objective_item) %> |
+    <% end %>
   <% if !@potential_nonconformity.is_in_a_final_review? && @potential_nonconformity.pending? && !@potential_nonconformity.incomplete? %>
     <%= link_to t('potential_nonconformity.edit_follow_up'), edit_finding_path('incomplete', @potential_nonconformity) %> |
   <% end %>
   <%= link_to_back %>
-</div>
+<% end %>
+
+<%= render 'form' %>

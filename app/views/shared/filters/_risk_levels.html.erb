@@ -1,20 +1,13 @@
 <div id="risk_levels_filter" class="filter" <%= 'style="display: none;"' unless display %>>
-  <div>
-    <table class="generic_filter">
-      <tbody>
-        <tr>
-          <td>
-            <p class="form_item" style="margin: 0em;">
-              <% selected = params[action] ? params[action][:risk] : nil %>
-              <%= f.label :risk, Weakness.human_attribute_name(:risk),
-                :class => :inline %>
-              <%= risk_field(f, { selected: selected }, { class: :inline_item }) %>
-            </p>
-          </td>
-          <td>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <% selected = params[action] ? params[action][:risk] : nil %>
+        <%= f.label :risk, Weakness.human_attribute_name(:risk), class: 'col-md-3' %>
+        <div class="col-md-9">
+          <%= f.input :risk, collection: risks, label: false, selected: selected, prompt: true %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -1,63 +1,60 @@
-<!--[form:notification]-->
-<%= form_for @notification do |n_f| %>
-  <div class="form_column_left">
-    <% unless @notification.findings.blank? %>
-      <p>
-        <b><%= Notification.human_attribute_name :findings %>:</b>
-      </p>
-      <ul class="raw_list">
-        <% @notification.findings.map do |f| %>
-          <li><%= link_to_if f.users.include?(@auth_user),
-            "#{f.review_code} (#{f.review.identification})",
-            finding_path(f.try(:pending?) ? 'incomplete' : 'complete', f) %></li>
+<%= simple_form_for @notification do |f| %>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <% unless @notification.findings.blank? %>
+          <p>
+            <strong><%= Notification.human_attribute_name :findings %>:</strong>
+          </p>
+          <ul>
+            <% @notification.findings.uniq.map do |f| %>
+              <li><%= link_to_if f.users.include?(@auth_user),
+                "#{f.review_code} - #{f.title} (#{f.review.identification})",
+                finding_path(f.try(:pending?) ? 'incomplete' : 'complete', f) %></li>
+            <% end %>
+          </ul>
         <% end %>
-      </ul>
-    <% end %>
-    <% unless @notification.conclusion_reviews.blank? %>
-      <p>
-        <b><%= Notification.human_attribute_name :conclusion_reviews %>:</b>
-      </p>
-      <ul style="margin: .5em 0em .5em 3em;">
-        <% @notification.conclusion_reviews.map do |cr| %>
-          <li><%= link_to cr.review.identification, cr.kind_of?(ConclusionFinalReview) ?
-            conclusion_final_review_path(cr) : conclusion_draft_review_path(cr) %></li>
+        <% unless @notification.conclusion_reviews.blank? %>
+          <p>
+            <strong><%= Notification.human_attribute_name :conclusion_reviews %>:</strong>
+          </p>
+          <ul>
+            <% @notification.conclusion_reviews.map do |cr| %>
+              <li><%= link_to cr.review.identification, cr.kind_of?(ConclusionFinalReview) ?
+                conclusion_final_review_path(cr) : conclusion_draft_review_path(cr) %></li>
+            <% end %>
+          </ul>
         <% end %>
-      </ul>
-    <% end %>
-    <p>
-      <b><%= Notification.human_attribute_name :status %>:</b>
-      <%=h @notification.status_text %>
-    </p>
-
-    <p>
-      <b><%= Notification.human_attribute_name :user_who_confirm %>:</b>
-      <%=h @notification.user_who_confirm.full_name if @notification.user_who_confirm %>
-    </p>
-
-    <p>
-      <b><%= Notification.human_attribute_name :created_at %>:</b>
-      <%=l @notification.created_at, :format => :long %>
-    </p>
-
-    <p>
-      <b><%= Notification.human_attribute_name :confirmation_date %>:</b>
-      <%=l @notification.confirmation_date, :format => :long if @notification.confirmation_date %>
-    </p>
-    <p style="margin-top: 1em;">
-      <%= n_f.label :notes %>
-      <%= n_f.text_area :notes, :readonly => @notification.unconfirmed? %>
-    </p>
+        <p>
+          <strong><%= Notification.human_attribute_name :status %>:</strong>
+          <%= @notification.status_text %>
+        </p>
+        <p>
+          <strong><%= Notification.human_attribute_name :user_who_confirm %>:</strong>
+          <%= @notification.user_who_confirm.full_name if @notification.user_who_confirm %>
+        </p>
+        <p>
+          <strong><%= Notification.human_attribute_name :created_at %>:</strong>
+          <%= l @notification.created_at, format: :long %>
+        </p>
+        <p>
+          <strong><%= Notification.human_attribute_name :confirmation_date %>:</strong>
+          <%= l @notification.confirmation_date, format: :long if @notification.confirmation_date %>
+        </p>
+        <%= f.input :notes, input_html: { rows: 5, readonly: @notification.unconfirmed? } %>
+      </div>
+    </div>
   </div>
 
-  <%= hidden_lock_version(n_f) %>
-  <p>
-     <span class="button"><%= n_f.submit t('label.save') %></span>
-  </p>
-<% end %>
-<!--[eoform:notification] -->
+  <hr />
 
-<div id="links">
-  <%= link_to t('label.show'), @notification %> |
-  <%= link_to t('label.list'), notifications_path %> |
-  <%= link_to_back %>
-</div>
+  <div>
+    <div class="pull-right">
+      <%= link_to_show @notification %> |
+      <%= link_to_index notifications_path %> |
+      <%= link_to_back %>
+    </div>
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit t('label.save'), class: 'btn btn-primary' %>
+  </div>
+<% end %>

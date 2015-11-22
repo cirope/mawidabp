@@ -62,12 +62,12 @@ module Reports::Pdf
     end
   end
 
-  def get_weaknesses_synthesis_table_data(weaknesses_count,
-      weaknesses_count_by_risk, risk_levels)
+  def get_weaknesses_synthesis_table_data(weaknesses_count, weaknesses_count_by_risk, risk_levels)
     total_count = weaknesses_count_by_risk.sum(&:second)
 
     unless total_count == 0
       risk_level_values = risk_levels.map { |rl| rl[0] }.reverse
+      highest_risk = risk_levels.sort {|r1, r2| r1[1] <=> r2[1]}.last
       statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
         sort { |s1, s2| s1.last <=> s2.last }
       column_order = ['state', risk_level_values, 'count'].flatten
@@ -82,10 +82,9 @@ module Reports::Pdf
       statuses.each do |state|
         sub_total_count = weaknesses_count[state.last].sum(&:second)
         percentage_total = 0
-        column_row = {'state' => "<b>#{t("finding.status_#{state.first}")}</b>"}
+        column_row = {'state' => "<strong>#{t("finding.status_#{state.first}")}</strong>"}
 
         risk_levels.each do |rl|
-          highest_risk = risk_levels.sort {|r1, r2| r1[1] <=> r2[1]}.last
           count = weaknesses_count[state.last][rl.last]
           percentage = sub_total_count > 0 ?
             (count * 100.0 / sub_total_count).round(2) : 0.0
@@ -100,7 +99,7 @@ module Reports::Pdf
         end
 
         column_row['count'] = sub_total_count > 0 ?
-          "<b>#{sub_total_count} (#{'%.1f' % percentage_total}%)</b>" : '-'
+          "<strong>#{sub_total_count} (#{'%.1f' % percentage_total}%)</strong>" : '-'
 
         if state.first.to_s == 'being_implemented' && sub_total_count != 0
           column_row['count'] << '*'
@@ -110,19 +109,19 @@ module Reports::Pdf
       end
 
       column_row = {
-        'state' => "<b>#{t('follow_up_committee.weaknesses_by_risk.total')}</b>",
-        'count' => "<b>#{total_count}</b>"
+        'state' => "<strong>#{t('follow_up_committee_report.weaknesses_by_risk.total')}</strong>",
+        'count' => "<strong>#{total_count}</strong>"
       }
 
       weaknesses_count_by_risk.each do |risk, count|
-        column_row[risk] = "<b>#{count}</b>"
+        column_row[risk] = "<strong>#{count}</strong>"
       end
 
       column_data << column_row
 
       {:order => column_order, :data => column_data, :columns => columns}
     else
-      t('follow_up_committee.without_weaknesses')
+      t('follow_up_committee_report.without_weaknesses')
     end
   end
 
@@ -132,6 +131,7 @@ module Reports::Pdf
 
     total_weaknesses = weaknesses_count.values.sum
     total_oportunities = oportunities_count.values.sum
+
     if sqm
       total_nonconformities = nonconformities_count.values.sum
       total_potential_nonconformities = potential_nonconformities_count.values.sum
@@ -163,7 +163,7 @@ module Reports::Pdf
       column_headers, column_widths = [], []
 
       columns.each do |col_data|
-        column_headers << "<b>#{col_data.first}</b>"
+        column_headers << "<strong>#{col_data.first}</strong>"
         column_widths << pdf.percent_width(col_data.last)
       end
 
@@ -176,7 +176,7 @@ module Reports::Pdf
           o_count.to_f / total_oportunities * 100 : 0.0
 
         column_data << [
-          "<b>#{t("finding.status_#{state.first}")}</b>",
+          "<strong>#{t("finding.status_#{state.first}")}</strong>",
           "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)"
         ]
 
@@ -201,16 +201,16 @@ module Reports::Pdf
       end
 
       column_data << [
-        "<b>#{t('follow_up_committee.weaknesses_by_state.total')}</b>",
-        "<b>#{total_weaknesses}</b>"
+        "<strong>#{t('follow_up_committee_report.weaknesses_by_state.total')}</strong>",
+        "<strong>#{total_weaknesses}</strong>"
       ]
 
       if audit_type_symbol == :internal && !sqm
-        column_data.last << "<b>#{total_oportunities}</b>"
+        column_data.last << "<strong>#{total_oportunities}</strong>"
       elsif audit_type_symbol == :internal && sqm
-        column_data.last << "<b>#{total_oportunities}</b>"
-        column_data.last << "<b>#{total_nonconformities}</b>"
-        column_data.last << "<b>#{total_potential_nonconformities}</b>"
+        column_data.last << "<strong>#{total_oportunities}</strong>"
+        column_data.last << "<strong>#{total_nonconformities}</strong>"
+        column_data.last << "<strong>#{total_potential_nonconformities}</strong>"
       end
 
       unless column_data.blank?
@@ -230,11 +230,11 @@ module Reports::Pdf
 
       if repeated_count > 0
         pdf.move_down((PDF_FONT_SIZE * 0.5).round)
-        pdf.text t('follow_up_committee.repeated_count',
+        pdf.text t('follow_up_committee_report.repeated_count',
           :count => repeated_count, :font_size => PDF_FONT_SIZE)
       end
     else
-      pdf.text t('follow_up_committee.without_weaknesses'),
+      pdf.text t('follow_up_committee_report.without_weaknesses'),
         :font_size => PDF_FONT_SIZE, :style => :italic
     end
   end
@@ -260,7 +260,7 @@ module Reports::Pdf
         0.00 : (count.to_f / total_of_being_implemented) * 100
       sub_status_resume = "<b>#{count}</b> "
       sub_status_resume << t(
-        "follow_up_committee.weaknesses_being_implemented_#{sub_status}",
+        "follow_up_committee_report.weaknesses_being_implemented_#{sub_status}",
         :count => count)
       sub_status_resume << " (#{'%.2f' % sub_status_percentage}%)"
 
@@ -284,7 +284,7 @@ module Reports::Pdf
     pdf.move_down PDF_FONT_SIZE
     pdf.text t("#{controller}_committee_report.applied_filters",
       :filters => filters.to_sentence, :count => filters.size),
-      :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
+      :font_size => (PDF_FONT_SIZE * 0.75).round, :align => :justify,
       :inline_format => true
   end
 
@@ -297,10 +297,15 @@ module Reports::Pdf
   end
 
   def redirect_to_pdf(controller, from_date, to_date, sub_directory, id = 0)
-    redirect_to Prawn::Document.relative_path(
+    @report_path = Prawn::Document.relative_path(
       t("#{controller}_committee_report.#{sub_directory}.pdf_name",
         :from_date => from_date.to_formatted_s(:db),
         :to_date => to_date.to_formatted_s(:db)), sub_directory, id
     )
+
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js { render 'shared/pdf_report' }
+    end
   end
 end

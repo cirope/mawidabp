@@ -1,11 +1,15 @@
-# =Helper de la aplicación
-#
-# Helper del que heredan los demás helpers de la aplicación.
-#
-# Todas las funciones definidas aquí están disponibles para *TODOS* los demás
-# helpers y quedan también disponibles en las vistas
 module ApplicationHelper
   include ParameterSelector
+
+  def t_boolean field
+    t "navigation.#{field ? '_yes' : '_no'}"
+  end
+
+  def copy_attribute_errors(from, to, form_builder)
+    form_builder.object.errors[from].each do |message|
+      form_builder.object.errors.add(to, message)
+    end
+  end
 
   def textilize(text)
     if text.blank?
@@ -51,17 +55,12 @@ module ApplicationHelper
         :count => ('%.2f' % (time_in_seconds / 3600)))).html_safe
   end
 
-  def show_inline_help_for(name, link_name = nil)
-    render(:partial => 'inline_helps/show_inline', :locals => {:name => name,
-      :link_name => (link_name || name)}).html_safe
-  end
-
   def show_info(text, html_options = {})
-    content_tag(:span, !text.blank? ?
-        content_tag(
-          :abbr, 'i', :title => text,
-          :class => "info #{html_options[:class]}"
-        ) : '&nbsp;'.html_safe, :class => 'info_box'
+    content_tag(:div, !text.blank? ?
+      content_tag(
+        :span, nil, title: text,
+        class: "#{html_options[:class]} glyphicon glyphicon-info-sign"
+      ) : nil
     ).html_safe
   end
 
@@ -107,12 +106,12 @@ module ApplicationHelper
       list = array.map do |e|
         if e.kind_of?(Array) && e.first.kind_of?(String) &&
             e.second.kind_of?(Array)
-          content_tag(:li, raw("#{textilize(e.shift)}\n#{array_to_ul(e)}"))
+          content_tag(:li, raw("#{textilize_without_paragraph(e.shift)}\n#{array_to_ul(e)}"))
         else
           if e.kind_of?(Array)
-            e.map { |item| content_tag(:li, textilize(item)) }.join("\n")
+            e.map { |item| content_tag(:li, textilize_without_paragraph(item)) }.join("\n")
           else
-            content_tag(:li, textilize(e))
+            content_tag(:li, textilize_without_paragraph(e))
           end
         end
       end
@@ -139,25 +138,6 @@ module ApplicationHelper
   def hidden_lock_version(form)
     content_tag(:div, form.hidden_field(:lock_version),
       :style => 'display: none;').html_safe
-  end
-
-  # Devuelve el HTML con los links para navegar una lista paginada
-  #
-  # * _objects_:: Objetos con los que se genera la lista paginada
-  def pagination_links(objects)
-    result = will_paginate objects, :inner_window => 1, :outer_window => 1
-
-    result ||= content_tag(
-      :div,
-        content_tag(:span, raw(t('will_paginate.previous_label')),
-        :class => 'disabled prev_page') +
-        content_tag(:em, 1) +
-        content_tag(:span, raw(t('will_paginate.next_label')),
-        :class => 'disabled next_page'),
-      :class => :pagination
-    )
-
-    result
   end
 
   # Devuelve el nombre de un valor de una lista de opciones para un select.
@@ -200,7 +180,7 @@ module ApplicationHelper
 
     html_classes << (@query.blank? || columns.any?{|c| @columns.include?(c)} ?
       'selected' : 'disabled')
-    html_classes << 'expendable' if options[:expendable]
+    html_classes << options[:class] if options[:class]
 
     columns.each do |column|
       content << hidden_field_tag("column_#{column}_for_filter", column)
@@ -214,7 +194,7 @@ module ApplicationHelper
     html_classes = []
 
     html_classes << :not_available unless @query.blank? && @order_by.blank?
-    html_classes << :expendable if options[:expendable]
+    html_classes << options[:class] if options[:class]
 
     content_tag(:th, title,
       :class => (html_classes.join(' ') unless html_classes.blank?))
@@ -234,73 +214,31 @@ module ApplicationHelper
       :style => 'display: none;')
   end
 
-  # Devuelve el HTML de un vínculo para editar un ítem.
-  #
-  # * <em>*args</em>:: Las mismas opciones que link_to sin la etiqueta
-  def link_to_edit(*args)
-    html_options = {:class => :image_link}
-    options = {:label => t('label.edit')}
-    options.merge!(args.pop) if args.last.kind_of?(Hash)
-    html_options.merge!(args.pop) if args.last.kind_of?(Hash)
-
-    link_to(image_tag('edit.gif', :size => '19x18', :alt => options[:label],
-        :title => options.delete(:label)), *(args << html_options))
-  end
-
-  # Devuelve el HTML de un vínculo para mostrar un ítem.
-  #
-  # * <em>*args</em>:: Las mismas opciones que link_to sin la etiqueta
-  def link_to_show(*args)
-    html_options = {:class => :image_link}
-    options = {:label => t('label.show')}
-    options.merge!(args.pop) if args.last.kind_of?(Hash)
-    html_options.merge!(args.pop) if args.last.kind_of?(Hash)
-
-    link_to(image_tag('view.gif', :size => '24x20', :alt => options[:label],
-        :title => options.delete(:label)), *(args << html_options))
-  end
-
-  # Devuelve el HTML de un vínculo para descargar algo relacionado a un ítem.
-  #
-  # * <em>*args</em>:: Las mismas opciones que link_to sin la etiqueta
-  def link_to_download(*args)
-    options = {:label => t('label.download')}
-    html_options = {:class => :image_link}
-    options.merge!(args.shift) if args.first.kind_of?(Hash)
-    html_options.merge!(args.pop) if args.last.kind_of?(Hash)
-
-    link_to(image_tag('download.gif', :size => '23x24',
-        :alt => options[:label], :title => options.delete(:label)),
-      *(args.empty? ? [options, html_options] : args << html_options))
-  end
-
   # Devuelve el HTML de un control para mostrar y ocultar el contenido de un
   # contenedor.
   #
   # * _element_id_:: ID del elemento que se va a mostrar y ocultar
   # * _show_text_:: Texto que se va a mostrar en el title del link para mostrar
   # * _hide_text_:: Texto que se va a mostrar en el title del link para ocultar
-  def link_to_show_hide(element_id, show_text, hide_text, displayed = false)
-    out = content_tag(:div,
+  def link_to_show_hide(element_id, show_text = nil, hide_text = nil, displayed = false)
+    out = content_tag(:span,
       link_to(
-        image_tag(
-          'grayarrow.gif', :size => '11x11', :alt => '>', :title => show_text
-        ),
-        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;", :class => :image_link
+        content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-right'),
+        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
       ),
-      :id => "show_element_#{element_id}_content", :class => :show_hide,
-      :style => (displayed ? 'display: none' : nil)
+      :id => "show_element_#{element_id}_content",
+      :style => (displayed ? 'display: none' : nil),
+      :class => 'media-object'
     )
-    out << content_tag(:div,
+    out << content_tag(:span,
       link_to(
-        image_tag(
-          'grayarrowdown.gif', :size => '11x11', :alt => '>',
-          :title => hide_text
-        ),
-        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;", :class => :image_link
+        content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-down'),
+        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
       ),
-      :id => "hide_element_#{element_id}_content", :class => :show_hide,
-      :style => (displayed ? nil : 'display: none'))
+      :id => "hide_element_#{element_id}_content",
+      :style => (displayed ? nil : 'display: none'),
+      :class => 'media-object'
+    )
   end
 
   # Devuelve el HTML de un vínculo para mover un ítem.
@@ -314,7 +252,7 @@ module ApplicationHelper
     }
     options.merge!(args.pop) if args.last.kind_of?(Hash)
 
-    link_to(image_tag('move.gif', :size => '6x14', :alt => '[M]'), '#',
+    link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-move'), '#',
       *(args << options))
   end
 
@@ -341,7 +279,8 @@ module ApplicationHelper
 
     out << fields.hidden_field(:_destroy, :class => 'destroy',
       :value => fields.object.marked_for_destruction? ? 1 : 0) unless new_record
-    out << link_to('X', '#', link_options.merge(options))
+    out << link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-remove-circle'),
+      '#', link_options.merge(options))
   end
 
   # Devuelve HTML con un link para eliminar un componente de una lista de un
@@ -349,7 +288,8 @@ module ApplicationHelper
   #
   # * _fields_:: El objeto form para el que se va a generar el link
   def remove_list_item_link(fields, remove_class = nil)
-    link_to('X', '#', :title => t('label.delete'),
+    link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-remove'),
+      '#', :title => t('label.delete'),
       'data-target' => ".#{remove_class || fields.object.class.name.underscore}",
       'data-event' => 'removeListItem')
   end
@@ -360,26 +300,13 @@ module ApplicationHelper
   def link_to_add(*args)
     options = {
       :class => 'action_link add_link',
-      :title => t('label.add')
+      :title => t('label.add'),
+      :style => 'margin: 0 5px;'
     }
     options.merge!(args.pop) if args.last.kind_of?(Hash)
 
     out = String.new.html_safe
-    out << link_to('+', *(args << options))
-  end
-
-  # Devuelve el HTML de un vínculo para clonar un ítem.
-  #
-  # * <em>*args</em>:: Las mismas opciones que link_to sin la etiqueta
-  def link_to_clone(*args)
-    html_options = {:class => :image_link}
-    options = {:label => t('label.copy')}
-    options.merge!(args.pop) if args.last.kind_of?(Hash)
-    html_options.merge!(args.pop) if args.last.kind_of?(Hash)
-
-    link_to(image_tag('copy_document.gif', :size => '20x21',
-        :alt => options[:label], :title => options.delete(:label)),
-      *(args << html_options))
+    out << link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-plus'), *(args << options))
   end
 
   def link_to_delete_attachment(form, name, *args)
@@ -390,7 +317,7 @@ module ApplicationHelper
       :value => form.object.marked_for_destruction? ? 1 : 0
     )
     out << link_to(
-      'X', '#', {
+      content_tag(:span, nil, class: 'glyphicon glyphicon-remove'), '#', {
         :title => t('label.delete_file'), 'data-event' => 'removeAttachment'
       }.merge(options)
     )
@@ -410,8 +337,8 @@ module ApplicationHelper
     target = ".#{options[:class_to_insert]}" unless options[:class_to_insert].blank?
 
     link_to(
-      image_tag('insert.gif', :size => '19x13', :alt => options[:label],
-        :title => options.delete(:label), :class => options[:class]), "#",
+      content_tag(:div, nil, title: options.delete(:label),
+        class: 'glyphicon glyphicon-indent-left'), "#",
       {
         'data-template' => options.delete(:class_to_insert) ||
           fields.object.class.name.underscore,
@@ -453,7 +380,7 @@ module ApplicationHelper
       :is_dynamic => true
     }.merge(user_options)
 
-    form_builder.fields_for(method, options[:object],
+    form_builder.simple_fields_for(method, options[:object],
       :child_index => options[:child_index]) do |f|
       render(:partial => options[:partial], :locals => {
           options[:form_builder_local] => f,

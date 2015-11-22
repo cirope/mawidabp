@@ -1,39 +1,41 @@
-<div id="showed_data">
-  <h1><%= BestPractice.model_name.human %>: <%=h @best_practice.name %></h1>
+<div class="page-header">
+  <h2><%= BestPractice.model_name.human %>: <%= @best_practice.name %></h2>
+</div>
 
-  <% @best_practice.process_controls.each do |pc| %>
-    <h3><%= "#{@best_practice.name} (#{pc.name})" %></h3>
-    <table class="summary_table">
-      <thead>
-        <tr>
-          <th><%= ControlObjective.human_attribute_name :name %></th>
-          <th><%= Control.human_attribute_name :control %></th>
-          <th><%= Control.human_attribute_name :design_tests %></th>
-          <th><%= Control.human_attribute_name :compliance_tests %></th>
-          <th><%= Control.human_attribute_name :sustantive_tests %></th>
-          <th><%= Control.human_attribute_name :effects %></th>
-          <th><%= ControlObjective.human_attribute_name :risk %></th>
+<% @best_practice.process_controls.each do |pc| %>
+  <h4><%= "#{@best_practice.name} (#{pc.name})" %></h4>
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= ControlObjective.human_attribute_name 'name' %></th>
+        <th><%= Control.human_attribute_name 'control' %></th>
+        <th><%= Control.human_attribute_name 'design_tests' %></th>
+        <th><%= Control.human_attribute_name 'compliance_tests' %></th>
+        <th><%= Control.human_attribute_name 'sustantive_tests' %></th>
+        <th><%= Control.human_attribute_name 'effects' %></th>
+        <th><%= ControlObjective.human_attribute_name 'risk' %></th>
+        <th><%= ControlObjective.human_attribute_name 'continuous' %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% pc.control_objectives.each do |co| %>
+        <tr <%== 'class="text-muted strike"' if co.obsolete %>>
+          <td><%= simple_format co.name %></td>
+          <td><%= simple_format co.control.control %></td>
+          <td><%= simple_format co.control.design_tests %></td>
+          <td><%= simple_format co.control.compliance_tests %></td>
+          <td><%= simple_format co.control.sustantive_tests %></td>
+          <td><%= simple_format co.control.effects %></td>
+          <td><%= co.risk_text %></td>
+          <td><%= t co.continuous ? 'label.yes' : 'label.no' %></td>
         </tr>
-      </thead>
-      <tbody>
-        <% pc.control_objectives.each do |co| %>
-          <tr>
-            <td><%= simple_format h(co.name) %></td>
-            <td><%= simple_format h(co.control.control) %></td>
-            <td><%= simple_format h(co.control.design_tests) %></td>
-            <td><%= simple_format h(co.control.compliance_tests) %></td>
-            <td><%= simple_format h(co.control.sustantive_tests) %></td>
-            <td><%= simple_format h(co.control.effects) %></td>
-            <td><%= co.risk_text %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-</div>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_best_practice_path(@best_practice) %> |
-  <%= link_to t('label.list'), best_practices_path %> |
-  <%= link_to_back %>
-</div>
+<hr />
+
+<%= link_to_edit edit_best_practice_path(@best_practice) %> |
+<%= link_to_index best_practices_path %> |
+<%= link_to_back %>

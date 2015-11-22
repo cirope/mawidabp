@@ -1,16 +1,20 @@
-<div id="time_left" style="display: none;">
-  <span class="message"></span>
-</div>
-<script type="text/javascript">
-  State.showMessages[0] = {
-    time: <%= time_left - 2 %> * 60,
-    message: '<%= t('message.session_expires_in_less_than_two_minutes') %>',
-    expired: false
-  };
+<% time_left = parameter_in(current_organization.try(:id), :session_expire_time).to_i %>
+<% if current_organization && time_left > 0 %>
+  <div id="time-left" class="alert alert-danger alert-dismissable fade in hidden">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <p class="message text-center"></p>
+  </div>
+  <script type="text/javascript">
+    State.showMessages[0] = {
+      time: <%= time_left - 2 %> * 60,
+      message: '<%= t('message.session_expires_in_less_than_two_minutes') %>',
+      expired: false
+    };
 
-  State.showMessages[1] = {
-    time: <%= time_left %> * 60,
-    message: '<%= t('message.session_time_expired') %>',
-    expired: true
-  };
-</script>
+    State.showMessages[1] = {
+      time: <%= time_left %> * 60,
+      message: '<%= t('message.session_time_expired') %>',
+      expired: true
+    };
+  </script>
+<% end %>

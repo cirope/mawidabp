@@ -126,8 +126,8 @@ class PlanTest < ActiveSupport::TestCase
   test 'pdf conversion' do
     FileUtils.rm @plan.absolute_pdf_path if File.exist?(@plan.absolute_pdf_path)
 
-    assert_nothing_raised(Exception) do
-      @plan.to_pdf(organizations(:default_organization), false)
+    assert_nothing_raised do
+      @plan.to_pdf(organizations(:cirope), false)
     end
 
     assert File.exist?(@plan.absolute_pdf_path)
@@ -141,8 +141,8 @@ class PlanTest < ActiveSupport::TestCase
 
     FileUtils.rm @plan.absolute_pdf_path if File.exist?(@plan.absolute_pdf_path)
 
-    assert_nothing_raised(Exception) do
-      @plan.to_pdf(organizations(:default_organization), true)
+    assert_nothing_raised do
+      @plan.to_pdf(organizations(:cirope), true)
     end
 
     assert File.exist?(@plan.absolute_pdf_path)

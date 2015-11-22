@@ -6,7 +6,7 @@ module Reports::WeaknessesByState
 
   def weaknesses_by_state
     @controller = params[:controller_name]
-    final = params[:final]
+    final = params[:final] == 'true'
     @title = t("#{@controller}_committee_report.weaknesses_by_state_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
     @periods = periods_for_interval
@@ -15,8 +15,8 @@ module Reports::WeaknessesByState
     @status = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
         sort { |s1, s2| s1.last <=> s2.last }
     @audit_types = [
-      [:internal, BusinessUnitType.internal_audit.map {|but| [but.name, but.id]}],
-      [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
+      [:internal, BusinessUnitType.list.internal_audit.map {|but| [but.name, but.id]}],
+      [:external, BusinessUnitType.list.external_audit.map {|but| [but.name, but.id]}]
     ]
     @sqm = current_organization.kind.eql? 'quality_management'
 
@@ -37,8 +37,7 @@ module Reports::WeaknessesByState
             @weaknesses_counts[period]["#{key}_weaknesses"] =
               Weakness.list_all_by_date(@from_date, @to_date, false).
                 with_status_for_report.send("#{audit_type_symbol}_audit").
-                for_period(period).finals(final).where(conditions).group(
-                :state).count
+                for_period(period).finals(final).where(conditions).group(:state).count
             @weaknesses_counts[period]["#{key}_oportunities"] =
               Oportunity.list_all_by_date(@from_date, @to_date, false).
               with_status_for_report.send("#{audit_type_symbol}_audit").
@@ -87,11 +86,11 @@ module Reports::WeaknessesByState
 
             being_implemented_counts = {:current => 0, :stale => 0,
               :current_rescheduled => 0, :stale_rescheduled => 0}
-          
+
             @weaknesses_counts[period]['total_repeated'] ||= 0
             @weaknesses_counts[period]['total_repeated'] +=
               @weaknesses_counts[period]["#{key}_repeated"]
-          
+
             @status.each do |state|
               if state.first.to_s == 'being_implemented'
                 being_implemented = Weakness.with_status_for_report.

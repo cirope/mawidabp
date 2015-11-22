@@ -70,8 +70,7 @@ module Reports::DetailedManagement
     @columns = {
       'business_unit_report_name' => [but_label, 15],
       'review' => [Review.model_name.human, 16],
-      'process_control' =>
-        ["#{BestPractice.human_attribute_name(:process_controls)}", 45],
+      'process_control' => ["#{BestPractice.human_attribute_name('process_controls.name')}", 45],
       'weaknesses_count' => ["#{t('review.weaknesses_count')} (1)", 12]
     }
     if @sqm
@@ -211,22 +210,28 @@ module Reports::DetailedManagement
         to_date: @to_date.to_formatted_s(:db)),
       'detailed_management_report', 0)
 
-    redirect_to Prawn::Document.relative_path(
+    @report_path = Prawn::Document.relative_path(
       t('execution_reports.detailed_management_report.pdf_name',
-        from_date: @from_date.to_formatted_s(:db),
-        to_date: @to_date.to_formatted_s(:db)),
-      'detailed_management_report', 0)
+      from_date: @from_date.to_formatted_s(:db),
+      to_date: @to_date.to_formatted_s(:db)),
+      'detailed_management_report', 0
+    )
+
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js { render 'shared/pdf_report' }
+    end
   end
 
   def add_report_references(pdf)
     pdf.move_down PDF_FONT_SIZE
     if @sqm
       pdf.text t('execution_reports.detailed_management_report.sqm_references'),
-        font_size: (PDF_FONT_SIZE * 0.75).round, justification: :full
+        font_size: (PDF_FONT_SIZE * 0.75).round, align: :justify
     else
       pdf.text t('execution_reports.detailed_management_report.references',
         risk_types: @risk_levels.to_sentence),
-        font_size: (PDF_FONT_SIZE * 0.75).round, justification: :full
+        font_size: (PDF_FONT_SIZE * 0.75).round, align: :justify
     end
   end
 

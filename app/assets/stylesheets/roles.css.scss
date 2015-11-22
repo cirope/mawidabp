@@ -1,0 +1,12 @@
+[data-controller="roles"] {
+  .form-group {
+    margin-bottom: 0px;
+  }
+
+  .table {
+    .checkbox {
+      min-height: 0 !important;
+      margin: 0 !important;
+    }
+  }
+}

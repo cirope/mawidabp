@@ -11,9 +11,5 @@ module Parameters::Score
     def scores
       SCORE_TYPES
     end
-
-    def scores_values
-      SCORE_TYPES.values
-    end
   end
 end

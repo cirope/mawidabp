@@ -1,35 +1,33 @@
-<table class="list">
+<table class="table table-condensed table-striped">
   <thead>
     <tr>
       <th><%= Period.model_name.human %></th>
       <th><%= Plan.human_attribute_name :created_at %></th>
-      <th class="expendable"><%= Period.human_attribute_name :start %></th>
-      <th class="expendable"><%= Period.human_attribute_name :end %></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th class="hidden-xs"><%= Period.human_attribute_name :start %></th>
+      <th class="hidden-xs"><%= Period.human_attribute_name :end %></th>
+      <th colspan="4"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @plans.each do |plan| %>
-      <tr class="<%= cycle('even', 'odd') %>">
+      <tr>
         <td><%= show_period_with_dates_as_abbr plan.period %></td>
-        <td><%= h l(plan.created_at, :format => :short) %></td>
-        <td class="expendable"><%= h l(plan.period.start, :format => :short) %></td>
-        <td class="expendable"><%= h l(plan.period.end, :format => :short) %></td>
-        <td><%= link_to_clone new_plan_path(:clone_from => plan.id), :label => t('plan.copy') %></td>
+        <td><%= l(plan.created_at, :format => :short) %></td>
+        <td class="hidden-xs"><%= l(plan.period.start, :format => :short) %></td>
+        <td class="hidden-xs"><%= l(plan.period.end, :format => :short) %></td>
+        <td><%= link_to_clone new_plan_path(:clone_from => plan.id) %></td>
         <td><%= link_to_show plan %></td>
         <td><%= link_to_edit edit_plan_path(plan) %></td>
-        <td><%= button_to_destroy plan %></td>
+        <td><%= link_to_destroy plan %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @plans %>
-  <%= link_to t('label.new'), new_plan_path %>
-  <div class="clear"></div>
+<hr />
+
+<div>
+  <%= paginate @plans %>
+  <%= link_to t('label.new'), new_plan_path, class: 'btn btn-primary' %>
 </div>

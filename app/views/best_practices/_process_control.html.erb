@@ -1,71 +1,37 @@
-<% id = "process_control_#{(is_dynamic ? 'NEW_RECORD' : rand(100000000000))}" %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="process_control item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
-  <div>
-    <div class="show_hide_field">
-      <%= link_to_show_hide "control_objectives_for_#{id}",
-        t('best_practice.show_control_objectives'),
-        t('best_practice.hide_control_objectives') %>
-    </div>
-    <div class="item_field" style="width: 50%;">
-      <%= f.text_field :name, :maxlength => 255, :autofocus => true %>
-    </div>
-    <div class="item_field item_controls" style="width: 35%;">
-      <%= f.hidden_field :id %>
-      <%= f.hidden_field :order, :class => :sort_number %>
-      <%= insert_record_link(f) %> |
-      <%= remove_item_link(f) %>
-    </div>
-
-    <div class="items hidden_items" id="control_objectives_for_<%= id %>" style="display: none;">
-      <div>
-        <div class="column_headers">
-          <div class="item_column" style="width: 11%;">
-            <h3><%= ControlObjective.human_attribute_name :name %></h3>
-          </div>
-          <div class="item_column" style="width: 11%;">
-            <h3><%= Control.human_attribute_name :control %></h3>
-          </div>
-          <div class="item_column" style="width: 11%;">
-            <h3><%= Control.human_attribute_name :design_tests %></h3>
-          </div>
-          <div class="item_column" style="width: 11%;">
-            <h3><%= Control.human_attribute_name :compliance_tests %></h3>
-          </div>
-          <div class="item_column" style="width: 11%;">
-            <h3><%= Control.human_attribute_name :sustantive_tests %></h3>
-          </div>
-          <div class="item_column" style="width: 11%;">
-            <h3><%= Control.human_attribute_name :effects %></h3>
-          </div>
-          <div class="item_column" style="width: 11%;">
-            <h3><%= ControlObjective.human_attribute_name :relevance %></h3>
-          </div>
-          <div class="item_column" style="width: 11%;">
-            <h3><%= ControlObjective.human_attribute_name :risk %></h3>
-          </div>
-          <div class="item_column" style="width: 5%;"></div>
-          <div class="clear"></div>
+<% id = f.object.object_id %>
+<fieldset class="process_control">
+  <div class="form-inputs row">
+    <div class="col-md-10">
+      <div class="media">
+        <div class="pull-left toggle-visibility">
+          <%= link_to_show_hide "control_objectives_for_#{id}" %>
         </div>
-
-        <div class="control_objectives">
-          <%= f.fields_for :control_objectives do |co_f| %>
-            <%= render :partial => 'control_objective', :locals =>
-              {:f => co_f, :is_dynamic => false} %>
-          <% end %>
+        <div class="media-body">
+          <%= f.input :name, label: false, input_html: { maxlength: 255 } %>
         </div>
-        <p style="margin-bottom: 1em;">
-          <%= link_to t('best_practice.add_control_objective'), '#',
-            'data-template' => :control_objective,
-            'data-event' => 'addNestedSubitem',
-            'data-parent' => :process_control,
-            'data-child' => :control_objectives %>
-        </p>
       </div>
     </div>
+    <div class="col-md-1">
+      <%= f.input :obsolete, label: false, input_html: { data: { process_control: id } } %>
+    </div>
+    <div class="col-md-1 toggle-visibility">
+      <%= link_to_insert_field(f) %>
+      <span class="text-muted">|</span>
+      <%= link_to_remove_nested_item(f) %>
+      <%= f.input :id, as: :hidden %>
+      <%= f.input :order, as: :hidden, input_html: { class: 'sort_number' } %>
+    </div>
   </div>
-</div>
+
+  <div id="control_objectives_for_<%= id %>" class="nested" style="display: none;">
+    <div class="control_objectives">
+      <%= f.simple_fields_for :control_objectives do |co_f| %>
+        <%= render 'control_objective', f: co_f, process_control_id: id %>
+      <% end %>
+
+      <%= link_to_add_fields t('best_practices.control_objectives.new'), f, :control_objectives %>
+    </div>
+    <br />
+  </div>
+</fieldset>
 <script type="text/javascript">FormUtil.completeSortNumbers();</script>
-<% if is_dynamic %>
-  <script type="text/javascript">Helper.showItem('#<%= id %>');</script>
-<% end %>

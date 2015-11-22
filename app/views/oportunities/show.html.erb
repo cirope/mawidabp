@@ -1,199 +1,210 @@
-<div id="showed_data">
-  <div class="show_item">
-    <b><%= Review.model_name.human %>:</b>
-    <%=h @oportunity.review.try(:identification) %>
-  </div>
+<p>
+  <strong><%= Review.model_name.human %>:</strong>
+  <%= @oportunity.review.try(:identification) %>
+</p>
 
-  <div class="show_item">
-    <b><%= ControlObjective.model_name.human %>:</b>
-    <%= simple_format h(@oportunity.control_objective_item.try(:to_s)) %>
-  </div>
-  
-  <div class="show_item">
-    <b><%= Oportunity.human_attribute_name :review_code %>:</b>
-    <%=h @oportunity.review_code %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Oportunity.human_attribute_name :description %>:</b>
-    <%= simple_format h(@oportunity.description) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Oportunity.human_attribute_name :answer %>:</b>
-    <%= simple_format h(@oportunity.answer) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Oportunity.human_attribute_name :audit_comments %>:</b>
-    <%= simple_format h(@oportunity.audit_comments) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= raw(Oportunity.human_attribute_name(:state) +
-      show_inline_help_for(:finding_state)) %>:</b>
-    <%=h @oportunity.state_text %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Oportunity.human_attribute_name :origination_date %>:</b>
-    <%=l @oportunity.origination_date, :format => :long if @oportunity.origination_date %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Oportunity.human_attribute_name :follow_up_date %>:</b>
-    <%=l @oportunity.follow_up_date, :format => :long if @oportunity.follow_up_date %>
-  </div>
-
-  <div class="show_item">
-    <b><%= Oportunity.human_attribute_name :solution_date %>:</b>
-    <%=l @oportunity.solution_date, :format => :long if @oportunity.solution_date %>
-  </div>
-
-  <h3><%= raw(t('finding.responsibles', :count => @oportunity.users.size) +
-      show_inline_help_for(:finding_responsibles)) %></h3>
-  <%= finding_responsibles_list(@oportunity) %>
-
-  <% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
-    <h3><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h3>
-    <ul class="raw_list">
-      <% repeated_ancestors.each do |repeated_ancestor| %>
-        <li><%= repeated_ancestor %></li>
-      <% end %>
-    </ul>
-  <% end %>
-
-  <% unless (repeated_children = @oportunity.repeated_children).blank? %>
-    <h3><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h3>
-    <ul class="raw_list">
-      <% repeated_children.each do |repeated_child| %>
-        <li><%= repeated_child %></li>
-      <% end %>
-    </ul>
-  <% end %>
-  
-  <% unless @oportunity.finding_relations.blank? %>
-    <h3>
-      <%= t('finding.finding_relations') %>
-      <%= show_inline_help_for(:finding_relations) %>
-    </h3>
-    
-    <table class="summary_table">
-      <thead>
-        <tr>
-          <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
-          <th><%= FindingRelation.human_attribute_name :description %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @oportunity.finding_relations.each do |fr| %>
-          <tr>
-            <td><%= fr.related_finding %></td>
-            <td><%= fr.description %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-  
-  <% unless @oportunity.inverse_finding_relations.blank? %>
-    <h3>
-      <%= t('finding.inverse_finding_relations') %>
-      <%= show_inline_help_for(:inverse_finding_relations) %>
-    </h3>
-    
-    <table class="summary_table">
-      <thead>
-        <tr>
-          <th><%= FindingRelation.human_attribute_name :finding_id %></th>
-          <th><%= FindingRelation.human_attribute_name :description %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @oportunity.inverse_finding_relations.each do |ifr| %>
-          <tr>
-            <td><%= ifr.finding %></td>
-            <td><%= ifr.description %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-  
-  <% unless @oportunity.finding_answers.blank? %>
-    <h3>
-      <%= t('finding.finding_answers') %>
-      <%= show_inline_help_for(:finding_comments) %>
-    </h3>
-
-    <table class="summary_table">
-      <thead>
-        <tr>
-          <th><%= User.model_name.human %></th>
-          <th><%= FindingAnswer.human_attribute_name :answer %></th>
-          <th>
-            <%= FindingAnswer.human_attribute_name :file_model %>
-            <%= show_inline_help_for(:finding_file_model) %>
-          </th>
-          <th>
-            <%= FindingAnswer.human_attribute_name :created_at %>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @oportunity.finding_answers.each do |finding_answer| %>
-          <tr>
-            <td><%= h finding_answer.user.full_name %></td>
-            <td><%= simple_format h(finding_answer.answer) %></td>
-            <td>
-              <%= finding_answer.file_model.try(:file?) ?
-                link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
-            </td>
-            <td>
-              <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
-              <% if finding_answer.commitment_date %>
-                <br />
-                <br /><b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
-                <br /><%= l(finding_answer.commitment_date, :format => :long) %>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-
-  <% unless @oportunity.work_papers.empty? %>
-    <h3><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
-    <table class="summary_table">
-      <thead>
-        <tr>
-          <th><%= WorkPaper.human_attribute_name :name %></th>
-          <th><%= WorkPaper.human_attribute_name :code %></th>
-          <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
-          <th><%= WorkPaper.human_attribute_name :description %></th>
-          <th><%= WorkPaper.human_attribute_name :file_model %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @oportunity.work_papers.each do |wp| %>
-          <tr>
-            <td><%=h wp.name %></td>
-            <td><%=h wp.code %></td>
-            <td><%=h wp.number_of_pages %></td>
-            <td><%= simple_format h(wp.description) %></td>
-            <td><%= wp.file_model.try(:file?) ?
-              link_to(t('label.download'), wp.file_model.file.url) : '---' %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
+<div>
+  <strong><%= ControlObjective.model_name.human %>:</strong>
+  <%= simple_format @oportunity.control_objective_item.try(:to_s) %>
 </div>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_oportunity_path(@oportunity) %> |
-  <%= link_to t('label.list'), oportunities_path %> |
+<p>
+  <strong><%= Oportunity.human_attribute_name :review_code %>:</strong>
+  <%= @oportunity.review_code %>
+</p>
+
+<p>
+  <strong><%= Oportunity.human_attribute_name :title %>:</strong>
+  <%= @oportunity.title %>
+</p>
+
+<div>
+  <strong><%= Oportunity.human_attribute_name :description %>:</strong>
+  <%= simple_format @oportunity.description %>
+</div>
+
+<div>
+  <strong><%= Oportunity.human_attribute_name :answer %>:</strong>
+  <%= simple_format @oportunity.answer %>
+</div>
+
+<div>
+  <strong><%= Oportunity.human_attribute_name :audit_comments %>:</strong>
+  <%= simple_format @oportunity.audit_comments %>
+</div>
+
+<p>
+  <strong><%= Oportunity.human_attribute_name(:state) %>:</strong>
+  <%= @oportunity.state_text %>
+</p>
+
+<p>
+  <strong><%= Oportunity.human_attribute_name :origination_date %>:</strong>
+  <%=l @oportunity.origination_date, :format => :long if @oportunity.origination_date %>
+</p>
+
+<p>
+  <strong><%= Oportunity.human_attribute_name :follow_up_date %>:</strong>
+  <%=l @oportunity.follow_up_date, :format => :long if @oportunity.follow_up_date %>
+</p>
+
+<p>
+  <strong><%= Oportunity.human_attribute_name :solution_date %>:</strong>
+  <%=l @oportunity.solution_date, :format => :long if @oportunity.solution_date %>
+</p>
+
+<h3><%= t('finding.responsibles', :count => @oportunity.users.size) %></h3>
+<%= finding_responsibles_list(@oportunity) %>
+
+<% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
+  <h3><%= t('finding.repeated_ancestors') %></h3>
+  <ul>
+    <% repeated_ancestors.each do |repeated_ancestor| %>
+      <li><%= repeated_ancestor %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% unless (repeated_children = @oportunity.repeated_children).blank? %>
+  <h3><%= t('finding.repeated_children') %></h3>
+  <ul>
+    <% repeated_children.each do |repeated_child| %>
+      <li><%= repeated_child %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% unless @oportunity.finding_relations.blank? %>
+  <h3>
+    <%= t('finding.finding_relations') %>
+  </h3>
+
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
+        <th><%= FindingRelation.human_attribute_name :description %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @oportunity.finding_relations.each do |fr| %>
+        <tr>
+          <td><%= fr.related_finding %></td>
+          <td><%= fr.description %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% unless @oportunity.inverse_finding_relations.blank? %>
+  <h3>
+    <%= t('finding.inverse_finding_relations') %>
+  </h3>
+
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= FindingRelation.human_attribute_name :finding_id %></th>
+        <th><%= FindingRelation.human_attribute_name :description %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @oportunity.inverse_finding_relations.each do |ifr| %>
+        <tr>
+          <td><%= ifr.finding %></td>
+          <td><%= ifr.description %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% unless @oportunity.business_units.blank? %>
+  <h3>
+    <%= BusinessUnit.model_name.human count: 0 %>
+  </h3>
+
+  <ul>
+    <% @oportunity.business_units.each do |bu| %>
+      <li><%= bu.name %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% unless @oportunity.finding_answers.blank? %>
+  <h3>
+    <%= t('finding.finding_answers') %>
+  </h3>
+
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= User.model_name.human %></th>
+        <th><%= FindingAnswer.human_attribute_name :answer %></th>
+        <th>
+          <%= FindingAnswer.human_attribute_name :file_model %>
+        </th>
+        <th>
+          <%= FindingAnswer.human_attribute_name :created_at %>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @oportunity.finding_answers.each do |finding_answer| %>
+        <tr>
+          <td><%= finding_answer.user.full_name %></td>
+          <td><%= simple_format finding_answer.answer %></td>
+          <td>
+            <%= finding_answer.file_model.try(:file?) ?
+              link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
+          </td>
+          <td>
+            <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
+            <% if finding_answer.commitment_date %>
+              <br />
+              <br /><strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
+              <br /><%= l(finding_answer.commitment_date, :format => :long) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% unless @oportunity.work_papers.empty? %>
+  <h3><%= t('finding.work_papers') %></h3>
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= WorkPaper.human_attribute_name :name %></th>
+        <th><%= WorkPaper.human_attribute_name :code %></th>
+        <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
+        <th><%= WorkPaper.human_attribute_name :description %></th>
+        <th><%= WorkPaper.human_attribute_name :file_model %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @oportunity.work_papers.each do |wp| %>
+        <tr>
+          <td><%= wp.name %></td>
+          <td><%= wp.code %></td>
+          <td><%= wp.number_of_pages %></td>
+          <td><%= simple_format wp.description %></td>
+          <td><%= wp.file_model.try(:file?) ?
+            link_to(t('label.download'), wp.file_model.file.url) : '---' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<hr />
+
+<div>
+  <%= link_to_edit edit_oportunity_path(@oportunity) %> |
+  <%= link_to_index oportunities_path %> |
   <% if !@oportunity.is_in_a_final_review? && @oportunity.pending? && !@oportunity.incomplete? %>
     <%= link_to t('oportunity.show_follow_up'), finding_path('incomplete', @oportunity) %> |
   <% end %>

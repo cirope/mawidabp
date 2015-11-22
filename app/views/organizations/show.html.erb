@@ -1,35 +1,31 @@
-<div id="showed_data">
+<div class="page-header">
+  <h1>
+    <%= @organization %>
+    <small><%= @organization.prefix %></small>
+  </h1>
+</div>
+
 <p>
-  <b><%= Organization.human_attribute_name 'name' %>:</b>
-  <%= @organization.name %>
+  <strong><%= Organization.human_attribute_name 'kind' %></strong>:
+  <%= t "organizations.kinds.#{@organization.kind}" %>
 </p>
 
 <p>
-  <b><%= Organization.human_attribute_name 'prefix' %>:</b>
-  <%= @organization.prefix %>
-</p>
-
-<p>
-  <b><%= Organization.human_attribute_name 'kind' %>:</b>
-  <%= t "activerecord.attributes.organization.kind_options.#{@organization.kind}" %>
-</p>
-
-<p>
-  <b><%= Organization.human_attribute_name 'description' %>:</b>
+  <strong><%= Organization.human_attribute_name 'description' %></strong>:
   <%= @organization.description %>
 </p>
 
 <p>
-  <b><%= Organization.human_attribute_name 'image_model' %>:</b>
+  <strong><%= Organization.human_attribute_name 'image_model' %></strong>:
 </p>
 
 <% if @organization.image_model %>
-  <div style="margin-top: 1em;"><%= organization_image_tag %></div>
+  <br />
+  <div><%= organization_image_tag %></div>
 <% end %>
-</div>
 
-<div id="links">
-<%= link_to t('label.edit'), edit_organization_path(@organization) %> |
-<%= link_to t('label.list'), organizations_path %> |
+<hr />
+
+<%= link_to_edit edit_organization_path(@organization) %> |
+<%= link_to_index organizations_path %> |
 <%= link_to_back %>
-</div>

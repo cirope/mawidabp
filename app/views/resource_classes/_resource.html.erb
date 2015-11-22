@@ -1,20 +1,23 @@
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="resource item" <%= raw 'style="display: none;"' if hide %>>
-  <div>
-    <div class="item_field" style="width: 30%;">
-      <%= f.text_field :name, :maxlength => 255, :autofocus => true %>
-    </div>
-    <div class="item_field" style="width: 50%;">
-      <%= f.text_area :description %>
-    </div>
-    <div class="item_field" style="width: 10%;">
-      <%= f.text_field :cost_per_unit %>
-    </div>
-    <div class="item_field item_controls" style="width: 5%;">
-      <%= remove_item_link(f) %>
+<% id = f.object.object_id %>
+<fieldset>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-4">
+        <%= f.input :name, label: false, autofocus: true,
+          input_html: { id: "resource_name_#{id}", maxlength: 255 }
+        %>
+      </div>
+      <div class="col-md-4">
+        <%= f.input :description, label: false,
+          input_html: { id: "resource_description_#{id}", rows: 1 } %>
+      </div>
+      <div class="col-md-3">
+        <%= f.input :cost_per_unit, as: :string, label: false,
+          input_html: { id: "resource_cost_per_unit_#{id}" } %>
+      </div>
+      <div class="col-md-1">
+        <%= link_to_remove_nested_item f %>
+      </div>
     </div>
   </div>
-</div>
-<% if is_dynamic %>
-  <script type="text/javascript">Helper.showLastItem('.resource');</script>
-<% end %>
+</fieldset>

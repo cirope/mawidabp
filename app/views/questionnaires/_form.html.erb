@@ -1,71 +1,50 @@
-<%= form_for(@questionnaire) do |qe_f| %>
-  <%= content_for :js_extra do %>
-    <%= raw "var question='#{generate_template(qe_f, :questions)}';" %>
-  <% end %>
-  <%= qe_f.error_messages %>
-  <div class="form_column_left">
-    <p>
-      <%= qe_f.label :name %>
-      <%= qe_f.text_field :name, :maxlength => 255, :autofocus => true %>
-    </p>
-    <p>                                                                                                                                                                               
-      <%= qe_f.label :email_subject %>
-      <%= qe_f.text_field :email_subject, :maxlength => 255 %>
-    </p>
-    <p>                                                                                                                                                                               
-      <%= qe_f.label :email_link %>
-      <%= qe_f.text_field :email_link, :maxlength => 255 %>
-    </p>
-    <p>                                                                                                                                                                               
-      <%= qe_f.label :email_text %>
-      <%= qe_f.text_area :email_text, :maxlength => 255 %>
-    </p>
-    <p>                                                                                                                                                                               
-      <%= qe_f.label :email_clarification %>
-      <%= qe_f.text_area :email_clarification, :maxlength => 255 %>
-    </p>
-    <p>
-      <%= qe_f.label :pollable_type %>
-      <%= qe_f.select :pollable_type, Questionnaire::POLLABLE_TYPES.map{ |type|
-            [type.constantize.model_name.human, type]
-          }, { :prompt => t('helpers.select.prompt') }
-      %>
-    </p>
+<%= simple_form_for(@questionnaire) do |f| %>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
+        <%= f.input :email_subject, input_html: { maxlength: 255 } %>
+        <%= f.input :email_link, input_html: { maxlength: 255 } %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :email_text, input_html: { maxlength: 255 } %>
+        <%= f.input :email_clarification, input_html: { maxlength: 255 } %>
+        <%= f.input :pollable_type, collection: pollable_types, prompt: true %>
+      </div>
+    </div>
   </div>
 
-  <div class="items">
-    <div class="column_headers">
-      <div class="item_column" style="width: 50%;">
-        <h3><%= t 'activerecord.attributes.questionnaire.questions' %></h3>
-      </div>
-      <div class="item_column" style="width: 35%;">
-        <h3><%= Question.human_attribute_name :answer_type %></h3>
-      </div>
-      <div class="item_column" style="width: 10%;"></div>
-      <div class="clear"></div>
-    </div>
+  <hr />
 
-    <div id="questions">
-      <% @questionnaire.questions.build if @questionnaire.questions.empty? %>
-      <%= qe_f.fields_for :questions do |qn_f| %>
-        <%= render :partial => 'question', :locals => {
-          :f => qn_f, :is_dynamic => false
-        } %>
-      <% end %>
+  <div class="row">
+    <div class="col-md-6">
+      <h5>
+        <strong><%= Question.model_name.human(count: 0) %></strong>
+      </h5>
     </div>
-
-    <p class="add_item">
-      <%= link_to t('questionnaire.add_question'), '#',
-        'data-template' => 'question', 'data-event' => 'addNestedItem',
-        'data-container' => '#questions' %>
-    </p>
+    <div class="col-md-4">
+      <h5>
+        <strong><%= Question.human_attribute_name :answer_type %></strong>
+      </h5>
+    </div>
   </div>
-  <%= hidden_lock_version(qe_f) %>
-  <p>
-    <span class="button"><%= qe_f.submit %></span>
-  </p>
+
+  <div id="questions">
+    <%= f.simple_fields_for :questions, questions do |qn_f| %>
+      <%= render 'question', f: qn_f %>
+    <% end %>
+
+    <%= link_to_add_fields(t('questionnaire.add_question'), f, :questions) %>
+  </div>
+
+  <hr />
+
+  <div class="form-actions">
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit class: 'btn btn-primary' %>
+    <div class="pull-right"><%= yield :form_actions %></div>
+  </div>
 <% end %>
-<!--[eoform:help_content] -->
 <script type="text/javascript">
-  Helper.makeSortable('#questions', 'div.question', 'a.move');
+  Helper.makeSortable('#questions', 'fieldset.question', 'a.move');
 </script>

@@ -1,7 +1,7 @@
-'es':
+es: &common
   approach_types:
     control: 'Control'
-    sustantive: 'Sustativo'
+    sustantive: 'Sustantivo'
     control_sustantive: 'Control/Sustantivo'
   frequency_types:
     monthly: 'Mensual'
@@ -38,3 +38,9 @@
     satisfactory: 'Satisfactorio'
     improve: 'Necesita mejorar'
     unsatisfactory: 'No satisfactorio'
+
+public_es:
+  <<: *common
+
+mc_es:
+  <<: *common

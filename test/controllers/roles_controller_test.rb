@@ -32,35 +32,32 @@ class RolesControllerTest < ActionController::TestCase
   end
 
   test 'list roles' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:roles)
-    assert_select '#error_body', false
     assert_template 'roles/index'
   end
 
   test 'show role' do
-    perform_auth
+    login
     get :show, id: roles(:admin_role).id
     assert_response :success
     assert_not_nil assigns(:role)
-    assert_select '#error_body', false
     assert_template 'roles/show'
   end
 
   test 'new role' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:role)
-    assert_select '#error_body', false
     assert_template 'roles/new'
   end
 
   test 'create role' do
     assert_difference ['Role.count', 'Privilege.count'] do
-      perform_auth
+      login
       post :create, {
         role: {
           name: 'New role',
@@ -80,11 +77,10 @@ class RolesControllerTest < ActionController::TestCase
   end
 
   test 'edit role' do
-    perform_auth
+    login
     get :edit, id: roles(:admin_role).id
     assert_response :success
     assert_not_nil assigns(:role)
-    assert_select '#error_body', false
     assert_template 'roles/edit'
   end
 
@@ -93,7 +89,7 @@ class RolesControllerTest < ActionController::TestCase
     assert privilege.approval
 
     assert_no_difference ['Role.count', 'Privilege.count'] do
-      perform_auth
+      login
       patch :update, {
         id: roles(:admin_role).id,
         role: {
@@ -120,7 +116,7 @@ class RolesControllerTest < ActionController::TestCase
   end
 
   test 'destroy role' do
-    perform_auth
+    login
     assert_difference 'Role.count', -1 do
       delete :destroy, id: roles(:auditor_senior_role).id
     end

@@ -1,7 +1,7 @@
 <% if @query.blank? %>
-  <%= render :partial => 'shared/filter_form',
-    :locals => {:action => :index, :extra_params => {},
-    :forms => {:date_range => {:avoid_inline_help => true}}} %>
+  <%= render partial: 'shared/filter_form',
+    locals: { action: :index, extra_params: {},
+    forms: { date_range: true }} %>
 <% end %>
 
 <%= render :partial => 'shared/search', :locals => {
@@ -9,36 +9,33 @@
   :columns => @query.blank? ? ErrorRecord::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
 
-<table class="list">
+<table class="table table-condensed table-striped">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column User.model_name.human, nil, 'user' %>
-      <%= make_not_available_column ErrorRecord.human_attribute_name(:created_at) %>
-      <%= make_not_available_column ErrorRecord.human_attribute_name(:error), :expendable => true %>
-      <%= make_filterable_column ErrorRecord.human_attribute_name(:data), {:expendable => true}, 'data' %>
-      <th style="text-align: right;"><%= link_to_search %></th>
+      <%= make_not_available_column ErrorRecord.human_attribute_name('created_at') %>
+      <%= make_not_available_column ErrorRecord.human_attribute_name('error'), :class => 'hidden-xs' %>
+      <%= make_filterable_column ErrorRecord.human_attribute_name('data'), { :class => 'hidden-xs' }, 'data' %>
+      <th class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
-  
+
   <tbody>
-  <% @error_records.each do |error_record| %>
-    <tr class="<%= cycle('even', 'odd') %>">
-      <td><%=h error_record.user ? error_record.user.user : t('error_record.void_user') %></td>
-      <td><%=h l(error_record.created_at, :format => :short) %></td>
-      <td class="expendable"><%=h error_record.error_text %></td>
-      <td class="expendable"><%= super_truncate(error_record.data, 40) %></td>
-      <td><%= link_to_show error_record %></td>
-    </tr>
-  <% end %>
+    <% @error_records.each do |error_record| %>
+      <tr>
+        <td><%= error_record %></td>
+        <td><%= l(error_record.created_at, format: :short) %></td>
+        <td class="hidden-xs"><%= error_record.error_text %></td>
+        <td class="hidden-xs"><%= super_truncate(error_record.data, 40) %></td>
+        <td><%= link_to_show error_record %></td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
 
-<div id="links">
-<%= pagination_links @error_records %>
-<%= link_to t('label.back'), :controller => :login_records,
-  :action => :choose %> |
-<%= link_to t('label.download'), :action => :export_to_pdf,
-  :range => {:from_date => @from_date, :to_date => @to_date},
-  :_ts => Time.now.to_i %>
-<div class="clear"></div>
-</div>
+<hr />
+
+<%= paginate @error_records %>
+<%= link_to t('label.back'), choose_login_records_path %> |
+<%= link_to t('label.download'), error_records_path(format: :pdf,
+  index: params[:index], search: params[:search], _ts: Time.now.to_i) %>

@@ -1,38 +1,38 @@
-<div id="showed_data">
-  <p>
-    <b><%= Group.human_attribute_name :name %>:</b>
-    <%= h @group.name %>
-  </p>
+<p>
+  <strong><%= Group.human_attribute_name :name %>:</strong>
+  <%= @group.name %>
+</p>
 
-  <p>
-    <b><%= Group.human_attribute_name :description %>:</b>
-    <%= h @group.description %>
-  </p>
+<p>
+  <strong><%= Group.human_attribute_name :description %>:</strong>
+  <%= @group.description %>
+</p>
 
-  <% unless @group.organizations.empty? %>
-    <table class="summary_table">
-      <thead>
+<% unless @group.organizations.empty? %>
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= Organization.human_attribute_name :name %></th>
+        <th><%= Organization.human_attribute_name :prefix %></th>
+        <th><%= Organization.human_attribute_name :description %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @group.organizations.each do |organization| %>
         <tr>
-          <th><%= Organization.human_attribute_name :name %></th>
-          <th><%= Organization.human_attribute_name :prefix %></th>
-          <th><%= Organization.human_attribute_name :description %></th>
+          <td><%= organization.name %></td>
+          <td><%= organization.prefix %></td>
+          <td><%= organization.description %></td>
         </tr>
-      </thead>
-      <tbody>
-        <% @group.organizations.each do |organization| %>
-          <tr>
-            <td><%= organization.name %></td>
-            <td><%= organization.prefix %></td>
-            <td><%= organization.description %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-</div>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_group_path(@group) %> |
-  <%= link_to t('label.list'), groups_path %> |
+<hr />
+
+<div>
+  <%= link_to_edit edit_group_path(@group) %> |
+  <%= link_to_index groups_path %> |
   <%= link_to_back %>
 </div>

@@ -1,49 +1,11 @@
 class ControlObjectiveItem < ActiveRecord::Base
+  include Auditable
+  include Comparable
   include Parameters::Relevance
   include Parameters::Qualification
   include ParameterSelector
-  include Comparable
-  include Associations::DestroyPaperTrail
-  include Associations::DestroyInBatches
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
-
-  # Constantes
-  COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
-    review: {
-      column: "LOWER(#{Review.table_name}.identification)",
-      operator: 'LIKE', mask: "%%%s%%", conversion_method: :to_s,
-      regexp: /.*/
-    },
-    process_control: {
-      column: "LOWER(#{ProcessControl.table_name}.name)",
-      operator: 'LIKE', mask: "%%%s%%", conversion_method: :to_s,
-      regexp: /.*/
-    },
-    control_objective_text: {
-      column: "LOWER(#{table_name}.control_objective_text)",
-      operator: 'LIKE', mask: "%%%s%%", conversion_method: :to_s,
-      regexp: /.*/
-    }
-  })
-
-  scope :list, -> { where(organization_id: Organization.current_id) }
-  scope :not_excluded_from_score, -> { where(exclude_from_score: false) }
-  scope :with_names, ->(*control_objective_names) {
-    conditions = []
-    parameters = {}
-
-    control_objective_names.each_with_index do |control_objective_name, i|
-      conditions << "LOWER(#{ControlObjective.table_name}.name) LIKE :co_#{i}"
-      parameters[:"co_#{i}"] = Unicode::downcase("%#{control_objective_name}%")
-    end
-
-    includes(:control_objective).where(
-      conditions.join(' OR '), parameters
-    ).references(:control_objectives)
-  }
+  include ControlObjectiveItems::Scopes
+  include ControlObjectiveItems::Search
 
   # Atributos no persistentes
   attr_reader :approval_errors
@@ -100,6 +62,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   belongs_to :organization
   belongs_to :control_objective, inverse_of: :control_objective_items
   belongs_to :review, inverse_of: :control_objective_items
+  has_many :business_unit_scores, dependent: :destroy
   has_many :weaknesses, -> { where(final: false) }, dependent: :destroy
   has_many :oportunities, -> { where(final: false) }, dependent: :destroy
   has_many :fortresses, -> { where(final: false) }, dependent: :destroy
@@ -122,17 +85,16 @@ class ControlObjectiveItem < ActiveRecord::Base
     dependent: :destroy
 
   accepts_nested_attributes_for :control, allow_destroy: true
+  accepts_nested_attributes_for :business_unit_scores, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :work_papers, allow_destroy: true
 
   def initialize(attributes = nil, options = {})
-    super(attributes, options)
+    super attributes, options
 
-    if self.control_objective
-      self.relevance ||= self.control_objective.relevance
-    end
+    self.relevance ||= control_objective.relevance if control_objective
 
     self.finished ||= false
-    self.build_control unless self.control
+    self.build_control unless control
     self.organization_id ||= Organization.current_id
   end
 
@@ -197,6 +159,27 @@ class ControlObjectiveItem < ActiveRecord::Base
     end
   end
 
+  def business_unit_type_ids=(ids)
+    (ids || []).uniq.each do |but_id|
+      if BusinessUnitType.exists?(but_id)
+        bus = []
+        but = BusinessUnitType.find(but_id)
+        business_unit_scores_ids = business_unit_scores.map(&:business_unit_id)
+
+        but.business_units.each do |bu|
+          if business_unit_scores_ids.exclude?(bu.id)
+            bus << {
+              business_unit_id: bu.id,
+              compliance_score: Parameters::Qualification::QUALIFICATION_TYPES[:excellent]
+            }
+          end
+        end
+
+        business_unit_scores.build(bus) unless bus.empty?
+      end
+    end
+  end
+
   def score_completion
     if self.finished && !self.exclude_from_score
       if !self.design_score && !self.compliance_score && !self.sustantive_score
@@ -231,6 +214,10 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   def process_control
     self.control_objective.try(:process_control)
+  end
+
+  def continuous
+    self.control_objective.try(:continuous)
   end
 
   def must_be_approved?
@@ -378,13 +365,20 @@ class ControlObjectiveItem < ActiveRecord::Base
       self.control.effects, 0, false)
     pdf.add_description_item(Control.human_attribute_name(:control),
       self.control.control, 0, false)
+    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
+        :design_score), self.design_score_text(true), 0, false)
+    pdf.add_description_item(Control.human_attribute_name(:design_tests),
+      self.control.design_tests, 0, false)
+    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
+        :compliance_score), self.compliance_score_text(true), 0, false)
     pdf.add_description_item(Control.human_attribute_name(:compliance_tests),
       self.control.compliance_tests, 0, false)
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
-        :auditor_comment), self.auditor_comment, 0, false)
+        :sustantive_score), self.sustantive_score_text(true), 0, false)
+    pdf.add_description_item(Control.human_attribute_name(:sustantive_tests),
+      self.control.sustantive_tests, 0, false)
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
-        :compliance_score), self.compliance_score_text(true),
-      0, false)
+        :auditor_comment), self.auditor_comment, 0, false)
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
         :effectiveness), "#{self.effectiveness}%", 0, false)
 
@@ -392,13 +386,12 @@ class ControlObjectiveItem < ActiveRecord::Base
       pdf.start_new_page
       pdf.move_down PDF_FONT_SIZE * 3
 
-      pdf.add_title(ControlObjectiveItem.human_attribute_name(:work_papers),
-        (PDF_FONT_SIZE * 1.5).round, :center, false)
+      pdf.add_title(WorkPaper.model_name.human(count: 0), (PDF_FONT_SIZE * 1.5).round, :center, false)
 
       pdf.move_down PDF_FONT_SIZE * 3
 
       self.work_papers.each do |wp|
-        pdf.text wp.inspect, justification: :center,
+        pdf.text wp.inspect, align: :center,
           font_size: PDF_FONT_SIZE
       end
     else
@@ -426,17 +419,21 @@ class ControlObjectiveItem < ActiveRecord::Base
   def pdf_data(finding)
     weakness = finding.kind_of?(Weakness) || finding.kind_of?(Nonconformity)
     oportunity = finding.kind_of?(Oportunity) || finding.kind_of?(PotentialNonconformity)
-    head = []
-    body = "<b>#{ControlObjective.model_name.human}:</b> #{self.to_s}\n"
+    body = ''
+
+    if finding.review_code.present?
+      body << "<b>#{finding.class.human_attribute_name(:review_code)}:</b> " +
+        "#{finding.review_code.chomp}\n"
+    end
+
+    if finding.title.present?
+      body << "<b>#{finding.class.human_attribute_name(:title)}:</b> " +
+        "#{finding.title.chomp}\n"
+    end
 
     if finding.description.present?
       body << "<b>#{finding.class.human_attribute_name(:description)}:</b> " +
         "#{finding.description.chomp}\n"
-    end
-
-    if finding.review_code.present?
-      head << "<b>#{finding.class.human_attribute_name(:review_code)}:</b> " +
-        "#{finding.review_code.chomp}\n"
     end
 
     if finding.repeated_ancestors.present?
@@ -523,12 +520,17 @@ class ControlObjectiveItem < ActiveRecord::Base
         "</b> #{finding.audit_comments.chomp}\n"
     end
 
-    { column: head, text: body }
+    if finding.business_units.present?
+      body << "<b>#{BusinessUnit.model_name.human count: finding.business_units.size}:" +
+        "</b> #{finding.business_units.map(&:name).join(', ')}\n"
+    end
+
+    body
   end
 
   private
     def qualification_text(score, show_value)
-      if score
+      if score.present?
         text = I18n.t("qualification_types.#{score.first}")
 
         return show_value ? [text, "(#{score.last})"].join(' ') : text

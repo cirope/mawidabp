@@ -1,25 +1,28 @@
 <% unless menu_item.exclude_from_privileges %>
   <% privilege = @role.privileges.detect { |p| p.module == menu_item.menu_name } ||
     @role.privileges.build(:module => menu_item.menu_name) %>
-  <%= role_form.fields_for :privileges, privilege do |f| %>
-    <% parent_name_attribute = "data-parent=\"#{menu_item.parent.try(:menu_name)}\"" if menu_item.parent.try(:menu_name) %>
-    <% classes = ['menu_item', 'highlight_on_hover', ('bold' unless menu_item.parent)].compact %>
-    <tr id="<%= menu_item.menu_name %>" class="<%= classes.join(' ') %>" <%= raw parent_name_attribute %>>
+  <%= role_form.simple_fields_for :privileges, privilege do |f| %>
+    <% parent_name_attribute = "data-parent=\"#{menu_item.parent.menu_name}\"" if menu_item.parent %>
+    <tr id="<%= menu_item.menu_name %>" <%= raw parent_name_attribute %>>
       <td>
-        <span <%= raw "style=\"padding-left: #{menu_item.self_and_ancestors.size * 2 - 2}em;\"" %> <%= raw 'class="red bold"' if privilege.errors.size > 0 %>>
-          <%= menu_item.to_s %>
+        <span <%= raw "style=\"padding-left: #{menu_item.self_and_ancestors.size * 2 - 2}em;\"" %>
+          <%= raw 'class="text-danger"' if privilege.errors.size > 0 %>>
+          <% if menu_item.parent %>
+            <%= menu_item.to_s %>
+          <% else %>
+            <strong><%= menu_item.to_s %></strong>
+          <% end %>
         </span>
-        <%= f.hidden_field :module %>
-        <%= f.hidden_field :id unless privilege.new_record? %>
+        <%= f.input :module, as: :hidden %>
+        <%= f.input :id, as: :hidden unless privilege.new_record? %>
       </td>
-      <td><%= f.check_box :read, 'data-type' => :read %></td>
-      <td><%= f.check_box :modify, 'data-type' => :modify %></td>
-      <td><%= f.check_box :erase, 'data-type' => :erase %></td>
-      <td><%= f.check_box :approval, 'data-type' => :approval %></td>
+      <td><%= f.input :read, as: :boolean, label: false, input_html: { data: { type: 'read' } } %></td>
+      <td><%= f.input :modify, as: :boolean, label: false, input_html: { data: { type: 'modify' } } %></td>
+      <td><%= f.input :erase, as: :boolean, label: false, input_html: { data: { type: 'erase' } } %></td>
+      <td><%= f.input :approval, as: :boolean, label: false, input_html: { data: { type: 'approval' } } %></td>
     </tr>
   <% end %>
   <% menu_item.children.each do |submenu_item| %>
-    <%= render :partial => 'menu_item', :locals => {
-      :menu_item => submenu_item, :role_form => role_form} %>
+    <%= render 'menu_item', menu_item: submenu_item, role_form: role_form %>
   <% end %>
 <% end %>

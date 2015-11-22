@@ -1,31 +1,37 @@
-<%= render :partial => 'form' %>
-
-<div id="links">
-  <%= link_to t('label.show'), @conclusion_final_review %> |
-  <%= link_to t('label.list'), conclusion_final_reviews_path %> |
-  <div class="inline_menu">
-    <h3><%= link_to t('label.show_downloads').html_safe, '#' %> |</h3>
-    <ul style="display: none;">
-      <li><%= link_to t('label.download'), :action => :export_to_pdf,
-        :id => @conclusion_final_review, :_ts => Time.now.to_i %></li>
-      <li><%= link_to t('conclusion_final_review.download_without_control_objectives_excluded_from_score'),
+<%= content_for :form_actions do %>
+  <%= link_to_show @conclusion_final_review %> |
+  <%= link_to_index conclusion_final_reviews_path %> |
+  <%= render('shared/downloads',
+    links: [
+      link_to(t('label.download'), :action => :export_to_pdf,
+        :id => @conclusion_final_review, :_ts => Time.now.to_i),
+      link_to(t('conclusion_final_review.download_brief'),
+        :action => :export_to_pdf, :id => @conclusion_final_review,
+        :export_options => {:brief => '1'}, :_ts => Time.now.to_i),
+      link_to(t('conclusion_final_review.download_without_score'),
+        :action => :export_to_pdf, :id => @conclusion_final_review,
+        :export_options => {:hide_score => '1'}, :_ts => Time.now.to_i),
+      link_to(t('conclusion_final_review.download_without_control_objectives_excluded_from_score'),
         :action => :export_to_pdf, :id => @conclusion_final_review,
         :export_options => {:hide_control_objectives_excluded_from_score => '1'},
-        :_ts => Time.now.to_i %></li>
-      <li><%= link_to t('conclusion_final_review.generate_score_sheet'),
+        :_ts => Time.now.to_i),
+      link_to(t('conclusion_final_review.generate_score_sheet'),
         :action => :score_sheet, :id => @conclusion_final_review,
-        :_ts => Time.now.to_i %></li>
-      <li><%= link_to t('conclusion_final_review.generate_global_score_sheet'),
+        :_ts => Time.now.to_i),
+      link_to(t('conclusion_final_review.generate_global_score_sheet'),
         :action => :score_sheet, :id => @conclusion_final_review, :global => 1,
-        :_ts => Time.now.to_i %></li>
-      <li><%= link_to t('conclusion_final_review.download_work_papers'),
+        :_ts => Time.now.to_i),
+      link_to(t('conclusion_final_review.download_work_papers'),
         :action => :download_work_papers, :id => @conclusion_final_review,
-        :_ts => Time.now.to_i %></li>
-    </ul>
-  </div>
-  <%= link_to t('conclusion_final_review.create_bundle'),
-    :action => :bundle, :id => @conclusion_final_review %> |
+        :_ts => Time.now.to_i)
+    ]
+  ) %>
+  <span>|</span>
+  <%= link_to t('conclusion_final_review.create_bundle'), '#',
+    data: { toggle: 'modal', target: "#customize_report" } %> |
   <%= link_to t('conclusion_final_review.send_by_email'),
     :action => :compose_email, :id => @conclusion_final_review %> |
   <%= link_to_back %>
-</div>
+<% end %>
+
+<%= render 'form' %>

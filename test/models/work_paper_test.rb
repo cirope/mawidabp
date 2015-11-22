@@ -36,7 +36,7 @@ class WorkPaperTest < ActiveSupport::TestCase
         :code => 'PTOC 20',
         :number_of_pages => '10',
         :description => 'New description',
-        :organization => organizations(:default_organization),
+        :organization => organizations(:cirope),
         :code_prefix => 'PTOC',
         :file_model_attributes => {
           :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
@@ -115,7 +115,7 @@ class WorkPaperTest < ActiveSupport::TestCase
         :code => 'PTOC 20',
         :number_of_pages => '10',
         :description => 'New description',
-        :organization => organizations(:default_organization),
+        :organization => organizations(:cirope),
         :code_prefix => 'PTOC',
         :file_model_attributes => {
           :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
@@ -173,11 +173,14 @@ class WorkPaperTest < ActiveSupport::TestCase
     )
 
     assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
+    assert_equal 'application/zip', @work_paper.file_model.file.content_type
     assert @work_paper.update(:number_of_pages => 1234)
     assert @work_paper.update(:name => 'Updated test name')
-    assert_equal '.zip', File.extname(@work_paper.file_model.file.path)
+    assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
+    assert_equal 'application/zip', @work_paper.file_model.file.content_type
     assert_nothing_raised { @work_paper.unzip_if_necesary }
-    assert_equal '.zip', File.extname(@work_paper.file_model.file.path)
+    assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
+    assert_equal 'application/zip', @work_paper.file_model.file.content_type
 
     count = 0
 
@@ -204,7 +207,7 @@ class WorkPaperTest < ActiveSupport::TestCase
             :code => other_work_paper.code,
             :number_of_pages => '10',
             :description => 'New description',
-            :organization => organizations(:default_organization),
+            :organization => organizations(:cirope),
             :code_prefix => 'PTO',
             :file_model_attributes => {
               :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)

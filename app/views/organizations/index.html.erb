@@ -1,30 +1,27 @@
-<table class="list">
+<table class="table table-condensed table-striped">
   <thead>
     <tr>
-      <th><%= Organization.human_attribute_name :name %></th>
-      <th class="expendable"><%= Organization.human_attribute_name :prefix %></th>
-      <th><%= Organization.human_attribute_name :kind %></th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th><%= Organization.human_attribute_name 'name' %></th>
+      <th class="hidden-xs"><%= Organization.human_attribute_name 'prefix' %></th>
+      <th><%= Organization.human_attribute_name 'kind' %></th>
+      <th colspan="3"></th>
     </tr>
   </thead>
   <tbody>
     <% @organizations.each do |organization| %>
-      <tr class="<%= cycle('even', 'odd') %>">
+      <tr>
         <td><%= organization.name %></td>
-        <td class="expendable"><strong><%= organization.prefix %></strong></td>
-        <td><%= t "activerecord.attributes.organization.kind_options.#{organization.kind}" %></td>
+        <td class="hidden-xs"><strong><%= organization.prefix %></strong></td>
+        <td><%= t "organizations.kinds.#{organization.kind}" %></td>
         <td><%= link_to_show organization %></td>
-        <td><%= link_to_edit edit_organization_path(organization) %></td>
-        <td><%= button_to_destroy organization %></td>
+        <td><%= link_to_edit [:edit, organization] %></td>
+        <td><%= link_to_destroy organization %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @organizations %>
-  <%= link_to t('label.new'), new_organization_path %>
-  <div class="clear"></div>
-</div>
+<hr />
+
+<%= paginate @organizations %>
+<%= link_to t('label.new'), new_organization_path, class: 'btn btn-primary' %>

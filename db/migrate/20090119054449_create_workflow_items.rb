@@ -8,7 +8,7 @@ class CreateWorkflowItems < ActiveRecord::Migration
       t.integer :order_number
       t.references :workflow
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :workflow_items, :workflow_id

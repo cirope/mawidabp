@@ -1,0 +1,16 @@
+<div style="font-family: verdana, sans-serif, arial, helvetica;">
+  <p><b><%= @user + ', ' %></b></p>
+  <p><%= @poll.questionnaire.email_text %></p>
+  <p>
+    <%= link_to @poll.questionnaire.email_link,
+      edit_poll_url(
+        @poll, token: @poll.access_token,
+        host: "#{@organization.prefix}.#{URL_HOST}"
+      )
+    %>
+  </p>
+  <% if @poll.questionnaire.email_clarification? %>
+    <p><%= @poll.questionnaire.email_clarification %></p>
+  <% end %>
+  <%= render 'footer' %>
+</div>

@@ -1,13 +1,12 @@
-# =Controlador de objetivos de control
-#
-# Lista, muestra, modifica y elimina objetivos de control
-# (#ControlObjectiveItem)
 class ControlObjectiveItemsController < ApplicationController
-  before_action :auth, :check_privileges
+  include AutoCompleteFor::BusinessUnit
+  include AutoCompleteFor::BusinessUnitType
+
+  before_action :auth, :load_privileges, :check_privileges
   before_action :set_control_objective_item, only: [
     :show, :edit, :update, :destroy
   ]
-  layout proc{ |controller| controller.request.xhr? ? false : 'application' }
+  layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   # Lista los objetivos de control
   #
@@ -19,17 +18,18 @@ class ControlObjectiveItemsController < ApplicationController
     build_search_conditions ControlObjectiveItem
 
     @control_objectives = ControlObjectiveItem.list.includes(
-        :weaknesses,
-        :work_papers,
-        {review: :period},
-        {control_objective: :process_control}
-    ).where(@conditions).order(
-      "#{Review.table_name}.identification DESC"
-    ).paginate(page: params[:page], per_page: APP_LINES_PER_PAGE)
+      :weaknesses,
+      :work_papers,
+      { review: :period },
+      { control_objective: :process_control }
+    ).where(@conditions).references(:review).order(
+      "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
+      "#{ControlObjectiveItem.quoted_table_name}.#{ControlObjectiveItem.qcn('id')} DESC"
+    ).page(params[:page])
 
     respond_to do |format|
       format.html {
-        if @control_objectives.size == 1 && !@query.blank? && !params[:page]
+        if @control_objectives.count == 1 && !@query.blank? && !params[:page]
           redirect_to control_objective_item_url(@control_objectives.first)
         end
       } # index.html.erb
@@ -60,7 +60,7 @@ class ControlObjectiveItemsController < ApplicationController
       @control_objective_item = ControlObjectiveItem.list.includes(:review).where(
         control_objective_id: params[:control_objective],
         review_id: params[:review]
-      ).order('created_at DESC').first
+      ).order(created_at: :desc).first
       session[:back_to] = edit_review_url(params[:review].to_i)
     end
 
@@ -140,7 +140,17 @@ class ControlObjectiveItemsController < ApplicationController
         ], work_papers_attributes: [
           :id, :name, :code, :number_of_pages, :description, :_destroy, :lock_version,
           file_model_attributes: [:id, :file, :file_cache]
-        ]
+        ], business_unit_scores_attributes: [
+          :id, :business_unit_id, :design_score, :compliance_score, :sustantive_score, :_destroy
+        ],
+        business_unit_type_ids: []
+      )
+    end
+
+    def load_privileges
+      @action_privileges.update(
+        auto_complete_for_business_unit: :read,
+        auto_complete_for_business_unit_type: :read
       )
     end
 end

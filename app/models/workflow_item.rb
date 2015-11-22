@@ -22,8 +22,6 @@ class WorkflowItem < ActiveRecord::Base
   validates :task, :order_number, :presence => true
   validates :predecessors, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
-  validates :task, :uniqueness =>
-    {:case_sensitive => false, :scope => :workflow_id}
   validates :order_number, :workflow_id, :numericality =>
     {:only_integer => true}, :allow_nil => true
   validates_date :start
@@ -102,12 +100,23 @@ class WorkflowItem < ActiveRecord::Base
   belongs_to :workflow
   has_many :resource_utilizations, :as => :resource_consumer,
     :dependent => :destroy
-  has_many :resources, -> { uniq }, :through => :resource_utilizations
 
   accepts_nested_attributes_for :resource_utilizations, :allow_destroy => true
 
   def <=>(other)
-    self.order_number <=> other.order_number
+    if other.kind_of?(WorkflowItem)
+      self.order_number <=> other.order_number
+    else
+      -1
+    end
+  end
+
+  def start
+    super.try :to_date
+  end
+
+  def end
+    super.try :to_date
   end
 
   def material_resource_utilizations
@@ -137,7 +146,7 @@ class WorkflowItem < ActiveRecord::Base
   end
 
   def human_unit_cost
-    self.human_resource_utilizations.sum(&:units)
+    self.human_resource_utilizations.map(&:units).compact.sum
   end
 
   def material_cost

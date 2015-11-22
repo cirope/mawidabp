@@ -1,6 +1,7 @@
 class ConclusionReview < ActiveRecord::Base
   include ParameterSelector
   include Associations::DestroyPaperTrail
+  include ConclusionReviews::Scopes
 
   has_paper_trail meta: {
     organization_id: ->(model) { Organization.current_id }
@@ -9,7 +10,7 @@ class ConclusionReview < ActiveRecord::Base
   # Constantes
   GENERIC_COLUMNS_FOR_SEARCH = {
     :issue_date => {
-      :column => "#{table_name}.issue_date",
+      :column => "#{quoted_table_name}.#{qcn('issue_date')}",
       :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
       :conversion_method => lambda { |value|
         Timeliness.parse(value, :date).to_s(:db)
@@ -17,20 +18,20 @@ class ConclusionReview < ActiveRecord::Base
       :regexp => SEARCH_DATE_REGEXP
     },
     :period => {
-      :column => "#{Period.table_name}.number", :operator => '=', :mask => "%d",
+      :column => "#{Period.quoted_table_name}.#{Period.qcn('number')}", :operator => '=', :mask => "%d",
       :conversion_method => :to_i, :regexp => /\A\s*\d+\s*\Z/
     },
     :identification => {
-      :column => "LOWER(#{Review.table_name}.identification)",
+      :column => "LOWER(#{Review.quoted_table_name}.#{Review.qcn('identification')})",
       :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
       :regexp => /.*/
     },
     :business_unit => {
-      :column => "LOWER(#{BusinessUnit.table_name}.name)", :operator => 'LIKE',
+      :column => "LOWER(#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     },
     :project => {
-      :column => "LOWER(#{PlanItem.table_name}.project)", :operator => 'LIKE',
+      :column => "LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn('project')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     }
   }.with_indifferent_access
@@ -39,53 +40,26 @@ class ConclusionReview < ActiveRecord::Base
   scope :list, -> { where(organization_id: Organization.current_id) }
   scope :for_period, ->(period) {
     includes(:review =>:period).where(
-      "#{Period.table_name}.id" => period.id
+      :periods => { :id => period.id }
     ).references(:periods)
   }
-  scope :by_business_unit_type, ->(business_unit_type) {
-    includes(
-      :review => {:plan_item => {:business_unit => :business_unit_type}}
-    ).where(
-      "#{BusinessUnitType.table_name}.id" => business_unit_type
-    ).references(:bussiness_unit_types)
-  }
-  scope :by_business_unit_names, ->(*business_unit_names) {
-    conditions = []
-    parameters = {}
-
-    business_unit_names.each_with_index do |business_unit_name, i|
-      conditions << "LOWER(#{BusinessUnit.table_name}.name) LIKE :bu_#{i}"
-      parameters[:"bu_#{i}"] = Unicode::downcase("%#{business_unit_name}%")
-    end
-
-    includes(:plan_item => :business_unit).where(
-      conditions.join(' OR '), parameters
-    ).references(:bussiness_unit_types)
+  scope :by_business_unit_type, ->(business_unit_type_id) {
+    includes(:review => { :plan_item => :business_unit }).where(
+      :business_units => { :business_unit_type_id => business_unit_type_id }
+    ).references(:business_units)
   }
   scope :by_control_objective_names, ->(*control_objective_names) {
     conditions = []
     parameters = {}
 
     control_objective_names.each_with_index do |control_objective_name, i|
-      conditions << "LOWER(#{ControlObjective.table_name}.name) LIKE :co_#{i}"
-      parameters[:"co_#{i}"] = Unicode::downcase("%#{control_objective_name}%")
+      conditions << "LOWER(#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('name')}) LIKE :co_#{i}"
+      parameters[:"co_#{i}"] = "%#{control_objective_name.mb_chars.downcase}%"
     end
 
     includes(:review => {:control_objective_items => :control_objective}).where(
       conditions.join(' OR '), parameters
     ).references(:control_objectives)
-  }
-  scope :notorious, ->(final) {
-     includes(:review => {
-         :control_objective_items => (final ? :final_weaknesses : :weaknesses)}
-     ).where(
-       "#{Weakness.table_name}.risk = #{Weakness.table_name}.highest_risk"
-    ).references(:findings)
-  }
-  scope :with_business_unit_type, ->(but_id) {
-    includes(:review => :business_unit).where(
-      "#{BusinessUnit.table_name}.business_unit_type_id" => but_id
-    ).references(:business_units)
   }
 
   # Callbacks
@@ -111,15 +85,15 @@ class ConclusionReview < ActiveRecord::Base
     HashWithIndifferentAccess.new({
       :issue_date => {
         :name => ConclusionReview.human_attribute_name(:issue_date),
-        :field => "#{ConclusionReview.table_name}.issue_date ASC"
+        :field => "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('issue_date')} ASC"
       },
       :period => {
         :name => Period.model_name.human,
-        :field => "#{Period.table_name}.number ASC"
+        :field => "#{Period.quoted_table_name}.#{Period.qcn('number')} ASC"
       },
       :identification => {
         :name => Review.human_attribute_name(:identification),
-        :field => "#{Review.table_name}.identification ASC"
+        :field => "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC"
       }
     })
   end
@@ -139,7 +113,10 @@ class ConclusionReview < ActiveRecord::Base
   end
 
   def send_by_email_to(user, options = {})
-    Notifier.conclusion_review_notification(user, self, options).deliver
+    NotifierMailer.conclusion_review_notification(
+      user, self,
+      options.merge(organization_id: Organization.current_id, user_id: PaperTrail.whodunnit)
+    ).deliver_later
   end
 
   def to_pdf(organization = nil, *args)
@@ -192,50 +169,63 @@ class ConclusionReview < ActiveRecord::Base
       )
     )
 
-    pdf.add_subtitle I18n.t('conclusion_review.objectives_and_scopes'),
-      PDF_FONT_SIZE, PDF_FONT_SIZE
-
     grouped_control_objectives = self.review.grouped_control_objective_items(
       :hide_excluded_from_score => options[:hide_control_objectives_excluded_from_score] == '1'
     )
 
-    grouped_control_objectives.each do |process_control, cois|
-      process_control_text = "<b>#{ProcessControl.model_name.human}: " +
-          "<i>#{process_control.name}</i></b>"
-      process_control_text += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
-      pdf.text process_control_text, :justification => :full,
-          :inline_format => true
+    if options[:brief].blank?
+      pdf.add_subtitle I18n.t('conclusion_review.objectives_and_scopes'),
+        PDF_FONT_SIZE, PDF_FONT_SIZE
 
-      cois.sort.each do |coi|
-        pdf.text " • #{coi}", :left => PDF_FONT_SIZE * 2,
-          :justification => :full
+      grouped_control_objectives.each do |process_control, cois|
+        process_control_text = "<b>#{ProcessControl.model_name.human}: " +
+            "<i>#{process_control.name}</i></b>"
+        process_control_text += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
+        pdf.text process_control_text, :align => :justify,
+            :inline_format => true
+
+        coi_columns = []
+
+        cois.sort.each do |coi|
+          coi_columns << ['•', coi.to_s]
+        end
+
+        if coi_columns.present?
+          pdf.indent(PDF_FONT_SIZE) do
+            pdf.table coi_columns, :cell_style => {
+              :align => :justify, :border_width => 0, :padding => [0, 0, 5, 0]
+            }
+          end
+        end
       end
-    end
 
-    unless self.applied_procedures.blank?
-      pdf.add_subtitle I18n.t('conclusion_review.applied_procedures'),
-        PDF_FONT_SIZE
-      pdf.text self.applied_procedures, :justification => :full
-    end
-
-    pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
-
-    unless options[:hide_score]
-      pdf.move_down PDF_FONT_SIZE
-      self.review.add_score_details_table(pdf)
-
-      pdf.move_down((PDF_FONT_SIZE * 0.75).round)
-
-      pdf.font_size((PDF_FONT_SIZE * 0.6).round) do
-        pdf.text "<i>#{I18n.t('review.review_qualification_explanation')}</i>",
-          :justification => :full, :inline_format => true
+      unless self.applied_procedures.blank?
+        pdf.add_subtitle I18n.t('conclusion_review.applied_procedures'),
+          PDF_FONT_SIZE
+        pdf.text self.applied_procedures, :align => :justify
       end
+
+      pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
+
+      unless options[:hide_score]
+        pdf.move_down PDF_FONT_SIZE
+        self.review.add_score_details_table(pdf)
+
+        pdf.move_down((PDF_FONT_SIZE * 0.75).round)
+
+        pdf.font_size((PDF_FONT_SIZE * 0.6).round) do
+          pdf.text "<i>#{I18n.t('review.review_qualification_explanation')}</i>",
+            :align => :justify, :inline_format => true
+        end
+      end
+    else
+      pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
     end
 
     unless self.conclusion.blank?
       pdf.move_down PDF_FONT_SIZE
-      pdf.text self.conclusion, :justification => :full,
-        :font_size => PDF_FONT_SIZE
+      pdf.text self.conclusion, :align => :justify, :font_size => PDF_FONT_SIZE,
+        :inline_format => true
     end
 
     review_has_fortresses = grouped_control_objectives.any? do |_, cois|
@@ -250,46 +240,44 @@ class ConclusionReview < ActiveRecord::Base
 
       grouped_control_objectives.each do |process_control, cois|
         has_fortresses = cois.any? do |coi|
-          !(use_finals ? coi.final_fortresses : coi.fortresses).blank?
+          (use_finals ? coi.final_fortresses : coi.fortresses).not_revoked.present?
         end
 
         if has_fortresses
-          pc_id = process_control.id.to_s
           column_headers, column_widths = [], []
+          header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
 
-          column_headers << "<b><i>#{ProcessControl.model_name.human}: " +
-              "#{process_control.name}</i></b>"
+          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
+          column_headers << header
           column_widths << pdf.percent_width(100)
 
-          cois.each do |coi|
-            fortresses = (
-              use_finals ? coi.final_fortresses : coi.fortresses
-            ).order('review_code ASC')
-
-            fortresses.each do |f|
+          cois.sort.each do |coi|
+            if (use_finals ? coi.final_fortresses : coi.fortresses).not_revoked.present?
               column_data = []
-              f_data = coi.pdf_data(f)
+              fortresses = (
+                use_finals ? coi.final_fortresses : coi.fortresses
+              ).not_revoked.sort_for_review
 
-              if f_data[:column].present?
-                column_data << column_headers
-                column_data << f_data[:column]
+              column_data << column_headers
+              column_data << ["<b>#{ControlObjective.model_name.human}:</b> #{coi.to_s}\n"]
 
-                pdf.move_down PDF_FONT_SIZE
+              pdf.move_down PDF_FONT_SIZE
 
-                pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-                  table_options = pdf.default_table_options(column_widths)
+              pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+                table_options = pdf.default_table_options(column_widths)
 
-                  pdf.table(column_data, table_options) do
-                    row(0).style(
-                      :background_color => 'cccccc',
-                      :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-                    )
-                  end
+                pdf.table(column_data, table_options) do
+                  row(0).style(
+                    :background_color => 'cccccc',
+                    :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+                  )
                 end
               end
 
-              pdf.move_down PDF_FONT_SIZE
-              pdf.text f_data[:text], :justification => :full, :inline_format => true
+              fortresses.each do |w|
+                pdf.move_down PDF_FONT_SIZE
+                pdf.text coi.pdf_data(w), :align => :justify, :inline_format => true
+              end
             end
           end
         end
@@ -308,46 +296,44 @@ class ConclusionReview < ActiveRecord::Base
 
       grouped_control_objectives.each do |process_control, cois|
         has_nonconformities = cois.any? do |coi|
-          !(use_finals ? coi.final_nonconformities : coi.nonconformities).not_revoked.blank?
+          (use_finals ? coi.final_nonconformities : coi.nonconformities).not_revoked.present?
         end
 
         if has_nonconformities
-          pc_id = process_control.id.to_s
           column_headers, column_widths = [], []
+          header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
 
-          column_headers << "<b><i>#{ProcessControl.model_name.human}: " +
-              "#{process_control.name}</i></b>"
+          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
+          column_headers << header
           column_widths << pdf.percent_width(100)
 
-          cois.each do |coi|
-            nonconformities = (
-              use_finals ? coi.final_nonconformities : coi.nonconformities
-            ).not_revoked.order('review_code ASC')
-
-            nonconformities.each do |nc|
+          cois.sort.each do |coi|
+            if (use_finals ? coi.final_nonconformities : coi.nonconformities).not_revoked.present?
               column_data = []
-              nc_data = coi.pdf_data(nc)
+              nonconformities = (
+                use_finals ? coi.final_nonconformities : coi.nonconformities
+              ).not_revoked.sort_for_review
 
-              if nc_data[:column].present?
-                column_data << column_headers
-                column_data << nc_data[:column]
+              column_data << column_headers
+              column_data << ["<b>#{ControlObjective.model_name.human}:</b> #{coi.to_s}\n"]
 
-                pdf.move_down PDF_FONT_SIZE
+              pdf.move_down PDF_FONT_SIZE
 
-                pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-                  table_options = pdf.default_table_options(column_widths)
+              pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+                table_options = pdf.default_table_options(column_widths)
 
-                  pdf.table(column_data, table_options) do
-                    row(0).style(
-                      :background_color => 'cccccc',
-                      :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-                    )
-                  end
+                pdf.table(column_data, table_options) do
+                  row(0).style(
+                    :background_color => 'cccccc',
+                    :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+                  )
                 end
               end
 
-              pdf.move_down PDF_FONT_SIZE
-              pdf.text nc_data[:text], :justification => :full, :inline_format => true
+              nonconformities.each do |w|
+                pdf.move_down PDF_FONT_SIZE
+                pdf.text coi.pdf_data(w), :align => :justify, :inline_format => true
+              end
             end
           end
         end
@@ -366,47 +352,44 @@ class ConclusionReview < ActiveRecord::Base
 
       grouped_control_objectives.each do |process_control, cois|
         has_observations = cois.any? do |coi|
-          !(use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.blank?
+          (use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.present?
         end
 
         if has_observations
-          pc_id = process_control.id.to_s
           column_headers, column_widths = [], []
-          header = "<b><i>#{ProcessControl.model_name.human}: " +
-              "#{process_control.name}</i></b>"
+          header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
+
           header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
           column_headers << header
           column_widths << pdf.percent_width(100)
 
-          cois.each do |coi|
-            weaknesses = (
-              use_finals ? coi.final_weaknesses : coi.weaknesses
-            ).not_revoked.order('review_code ASC')
-
-            weaknesses.each do |w|
+          cois.sort.each do |coi|
+            if (use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.present?
               column_data = []
-              w_data = coi.pdf_data(w)
+              weaknesses = (
+                use_finals ? coi.final_weaknesses : coi.weaknesses
+              ).not_revoked.sort_for_review
 
-              unless w_data[:column].blank?
-                column_data << column_headers
-                column_data << w_data[:column]
+              column_data << column_headers
+              column_data << ["<b>#{ControlObjective.model_name.human}:</b> #{coi.to_s}\n"]
 
-                pdf.move_down PDF_FONT_SIZE
+              pdf.move_down PDF_FONT_SIZE
 
-                pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-                  table_options = pdf.default_table_options(column_widths)
+              pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+                table_options = pdf.default_table_options(column_widths)
 
-                  pdf.table(column_data, table_options) do
-                    row(0).style(
-                      :background_color => 'cccccc',
-                      :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-                    )
-                  end
+                pdf.table(column_data, table_options) do
+                  row(0).style(
+                    :background_color => 'cccccc',
+                    :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+                  )
                 end
               end
 
-              pdf.move_down PDF_FONT_SIZE
-              pdf.text w_data[:text], :justification => :full, :inline_format => true
+              weaknesses.each do |w|
+                pdf.move_down PDF_FONT_SIZE
+                pdf.text coi.pdf_data(w), :align => :justify, :inline_format => true
+              end
             end
           end
         end
@@ -425,43 +408,44 @@ class ConclusionReview < ActiveRecord::Base
 
       grouped_control_objectives.each do |process_control, cois|
         has_potential_nonconformities = cois.any? do |coi|
-          !(use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.blank?
+          (use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.present?
         end
 
         if has_potential_nonconformities
-          pc_id = process_control.id.to_s
           column_headers, column_widths = [], []
+          header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
 
-          column_headers << "<b><i>#{ProcessControl.model_name.human}: " +
-              "#{process_control.name}</i></b>"
+          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
+          column_headers << header
           column_widths << pdf.percent_width(100)
 
-          cois.each do |coi|
-            (use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.each do |pnc|
-              pnc_data = coi.pdf_data(pnc)
-
+          cois.sort.each do |coi|
+            if (use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.present?
               column_data = []
+              potential_nonconformities = (
+                use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities
+              ).not_revoked.sort_for_review
 
-              unless pnc_data[:column].blank?
-                column_data << column_headers
-                column_data << pnc_data[:column]
+              column_data << column_headers
+              column_data << ["<b>#{ControlObjective.model_name.human}:</b> #{coi.to_s}\n"]
 
-                pdf.move_down PDF_FONT_SIZE
+              pdf.move_down PDF_FONT_SIZE
 
-                pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-                  table_options = pdf.default_table_options(column_widths)
+              pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+                table_options = pdf.default_table_options(column_widths)
 
-                  pdf.table(column_data, table_options) do
-                    row(0).style(
-                      :background_color => 'cccccc',
-                      :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-                    )
-                  end
+                pdf.table(column_data, table_options) do
+                  row(0).style(
+                    :background_color => 'cccccc',
+                    :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+                  )
                 end
               end
 
-              pdf.move_down PDF_FONT_SIZE
-              pdf.text pnc_data[:text], :justification => :full, :inline_format => true
+              potential_nonconformities.each do |w|
+                pdf.move_down PDF_FONT_SIZE
+                pdf.text coi.pdf_data(w), :align => :justify, :inline_format => true
+              end
             end
           end
         end
@@ -480,45 +464,44 @@ class ConclusionReview < ActiveRecord::Base
 
       grouped_control_objectives.each do |process_control, cois|
         has_oportunities = cois.any? do |coi|
-          !(use_finals ? coi.final_oportunities : coi.oportunities).not_revoked.blank?
+          (use_finals ? coi.final_oportunities : coi.oportunities).not_revoked.present?
         end
 
         if has_oportunities
-          pc_id = process_control.id.to_s
           column_headers, column_widths = [], []
-          header = "<b><i>#{ProcessControl.model_name.human}: " +
-              "#{process_control.name}</i></b>"
-          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
+          header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
 
+          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
           column_headers << header
           column_widths << pdf.percent_width(100)
 
-          cois.each do |coi|
-            (use_finals ? coi.final_oportunities : coi.oportunities).not_revoked.each do |o|
-              o_data = coi.pdf_data(o)
-
+          cois.sort.each do |coi|
+            if (use_finals ? coi.final_oportunities : coi.oportunities).not_revoked.present?
               column_data = []
+              oportunities = (
+                use_finals ? coi.final_oportunities : coi.oportunities
+              ).not_revoked.sort_for_review
 
-              unless o_data[:column].blank?
-                column_data << column_headers
-                column_data << o_data[:column]
+              column_data << column_headers
+              column_data << ["<b>#{ControlObjective.model_name.human}:</b> #{coi.to_s}\n"]
 
-                pdf.move_down PDF_FONT_SIZE
+              pdf.move_down PDF_FONT_SIZE
 
-                pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-                  table_options = pdf.default_table_options(column_widths)
+              pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+                table_options = pdf.default_table_options(column_widths)
 
-                  pdf.table(column_data, table_options) do
-                    row(0).style(
-                      :background_color => 'cccccc',
-                      :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-                    )
-                  end
+                pdf.table(column_data, table_options) do
+                  row(0).style(
+                    :background_color => 'cccccc',
+                    :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+                  )
                 end
               end
 
-              pdf.move_down PDF_FONT_SIZE
-              pdf.text o_data[:text], :justification => :full, :inline_format => true
+              oportunities.each do |w|
+                pdf.move_down PDF_FONT_SIZE
+                pdf.text coi.pdf_data(w), :align => :justify, :inline_format => true
+              end
             end
           end
         end
@@ -538,7 +521,8 @@ class ConclusionReview < ActiveRecord::Base
     pdf.move_down PDF_FONT_SIZE
 
     pdf.add_review_auditors_table(
-      self.review.review_user_assignments.reject { |rua| rua.audited? })
+      review.review_user_assignments.reject { |rua| rua.audited? || rua.auditor? }
+    )
 
     pdf.custom_save_as self.pdf_name, ConclusionReview.table_name, self.id
   end
@@ -749,7 +733,7 @@ class ConclusionReview < ActiveRecord::Base
       pdf.add_description_item("#{ProcessControl.model_name.human}",
         process_control.name, 0, false)
 
-      cois.each do |coi|
+      cois.sort.each do |coi|
         pdf.move_down PDF_FONT_SIZE
         pdf.add_description_item(
           "• #{ControlObjectiveItem.model_name.human}", coi.to_s,
@@ -760,10 +744,10 @@ class ConclusionReview < ActiveRecord::Base
           pdf.move_down PDF_FONT_SIZE
           pdf.text "<b>#{I18n.t(
             'conclusion_review.workflow.control_objective_work_papers')}</b>:",
-              :left => PDF_FONT_SIZE * 4, :inline_format => true
+              :indent_paragraphs => PDF_FONT_SIZE * 4, :inline_format => true
 
           coi.work_papers.each do |wp|
-            pdf.text wp.inspect, :left => PDF_FONT_SIZE * 6, :inline_format => true
+            pdf.text wp.inspect, :indent_paragraphs => PDF_FONT_SIZE * 6, :inline_format => true
           end
         end
 
@@ -771,20 +755,20 @@ class ConclusionReview < ActiveRecord::Base
           pdf.move_down PDF_FONT_SIZE
           pdf.text "<b>#{I18n.t(
             'conclusion_review.workflow.control_objective_weaknesses')}</b>:",
-              :left => PDF_FONT_SIZE * 4, :inline_format => true
+              :indent_paragraphs => PDF_FONT_SIZE * 4, :inline_format => true
 
           (use_finals ? coi.final_weaknesses : coi.weaknesses).each do |w|
-            pdf.text [w.review_code, w.risk_text, w.state_text].join(' - '),
-              :left => PDF_FONT_SIZE * 6
+            pdf.text [w.review_code, w.title, w.risk_text, w.state_text].join(' - '),
+              :indent_paragraphs => PDF_FONT_SIZE * 6
 
             unless w.work_papers.blank?
               pdf.move_down PDF_FONT_SIZE
               pdf.text "<b>#{I18n.t(
                 'conclusion_review.workflow.weakness_work_papers')}</b>:",
-                  :left => PDF_FONT_SIZE * 8, :inline_format => true
+                  :indent_paragraphs => PDF_FONT_SIZE * 8, :inline_format => true
 
               w.work_papers.each do |wp|
-                pdf.text wp.inspect, :left => PDF_FONT_SIZE * 10
+                pdf.text wp.inspect, :indent_paragraphs => PDF_FONT_SIZE * 10
               end
 
               pdf.move_down PDF_FONT_SIZE
@@ -797,20 +781,20 @@ class ConclusionReview < ActiveRecord::Base
             'conclusion_review.workflow.control_objective_oportunities')
 
           pdf.move_down PDF_FONT_SIZE
-          pdf.text "<b>#{title}</b>:", :left => PDF_FONT_SIZE * 4, :inline_format => true
+          pdf.text "<b>#{title}</b>:", :indent_paragraphs => PDF_FONT_SIZE * 4, :inline_format => true
 
           (use_finals ? coi.final_oportunities : coi.oportunities).each do |o|
-            pdf.text [o.review_code, o.state_text].join(' - '),
-              :left => PDF_FONT_SIZE * 6
+            pdf.text [o.review_code, o.title, o.state_text].join(' - '),
+              :indent_paragraphs => PDF_FONT_SIZE * 6
 
             unless o.work_papers.blank?
               pdf.move_down PDF_FONT_SIZE
               pdf.text "• <b>#{I18n.t(
                 'conclusion_review.workflow.oportunity_work_papers')}</b>:",
-                  :left => PDF_FONT_SIZE * 8, :inline_format => true
+                  :indent_paragraphs => PDF_FONT_SIZE * 8, :inline_format => true
 
               o.work_papers.each do |wp|
-                pdf.text wp.inspect, :left => PDF_FONT_SIZE * 10, :inline_format => true
+                pdf.text wp.inspect, :indent_paragraphs => PDF_FONT_SIZE * 10, :inline_format => true
               end
 
               pdf.move_down PDF_FONT_SIZE
@@ -859,12 +843,12 @@ class ConclusionReview < ActiveRecord::Base
 
       pdf.move_down((PDF_FONT_SIZE * 1.5).round)
 
-      weaknesses.sort {|w1, w2| w1.review_code <=> w2.review_code}.each do |w|
-        pdf.text [w.review_code, w.risk_text, w.state_text].join(' - '),
+      weaknesses.sort { |w1, w2| w1.review_code <=> w2.review_code }.each do |w|
+        pdf.text [w.review_code, w.title, w.risk_text, w.state_text].join(' - '),
           :font_size => PDF_FONT_SIZE
 
         w.work_papers.each do |wp|
-          pdf.text wp.inspect, :left => PDF_FONT_SIZE * 2
+          pdf.text wp.inspect, :indent_paragraphs => PDF_FONT_SIZE * 2
         end
       end
 
@@ -898,14 +882,14 @@ class ConclusionReview < ActiveRecord::Base
 
     weaknesses = weaknesses.select do |w|
       w.implemented? || w.being_implemented? || w.unanswered?
-    end.sort {|w1, w2| w1.review_code <=> w2.review_code}
+    end.sort { |w1, w2| w1.review_code <=> w2.review_code }
     oportunities = oportunities.select do |o|
       o.implemented? || o.being_implemented? || o.unanswered?
-    end.sort {|o1, o2| o1.review_code <=> o2.review_code}
+    end.sort { |o1, o2| o1.review_code <=> o2.review_code }
 
     unless (weaknesses + oportunities).blank?
       pdf = Prawn::Document.create_generic_pdf(:portrait, false)
-      column_order = [['review_code', 30], ['risk', 30], ['state', 40]]
+      column_order = [['review_code', 20], ['title', 40], ['risk', 20], ['state', 20]]
       column_data, column_widths, column_headers = [], [], []
       pdf.add_watermark(I18n.t('pdf.draft')) unless use_finals
       pdf.add_review_header organization || self.organization,
@@ -928,6 +912,7 @@ class ConclusionReview < ActiveRecord::Base
       weaknesses.each do |weakness|
         column_data << [
           weakness.review_code,
+          weakness.title,
           weakness.risk_text,
           weakness.state_text
         ]
@@ -947,7 +932,7 @@ class ConclusionReview < ActiveRecord::Base
 
         pdf.text "\n#{
           I18n.t('conclusion_review.findings_follow_up.index_clarification')}",
-            :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
+            :font_size => (PDF_FONT_SIZE * 0.75).round, :align => :justify
       end
 
       column_data = []
@@ -961,6 +946,7 @@ class ConclusionReview < ActiveRecord::Base
       oportunities.each do |oportunity|
         column_data << [
           oportunity.review_code,
+          oportunity.title,
           oportunity.state_text
         ]
       end
@@ -979,7 +965,7 @@ class ConclusionReview < ActiveRecord::Base
 
         pdf.text "\n#{
           I18n.t('conclusion_review.findings_follow_up.index_clarification')}",
-            :font_size => (PDF_FONT_SIZE * 0.75), :justification => :full
+            :font_size => (PDF_FONT_SIZE * 0.75), :align => :justify
       end
 
       weaknesses.each do |weakness|
@@ -992,9 +978,8 @@ class ConclusionReview < ActiveRecord::Base
 
         pdf.move_down((PDF_FONT_SIZE * 1.5).round)
 
-        pdf.text [weakness.review_code, weakness.risk_text,
-          weakness.state_text].join(' - '), :font_size => PDF_FONT_SIZE,
-          :justification => :center
+        pdf.text [weakness.review_code, weakness.title, weakness.risk_text, weakness.state_text].join(' - '),
+          :font_size => PDF_FONT_SIZE, :align => :center
       end
 
       oportunities.each do |oportunity|
@@ -1007,8 +992,8 @@ class ConclusionReview < ActiveRecord::Base
 
         pdf.move_down((PDF_FONT_SIZE * 1.5).round)
 
-        pdf.text [oportunity.review_code, oportunity.state_text].join(' - '),
-          :font_size => PDF_FONT_SIZE, :justification => :center
+        pdf.text [oportunity.review_code, oportunity.title, oportunity.state_text].join(' - '),
+          :font_size => PDF_FONT_SIZE, :align => :center
       end
 
       pdf.custom_save_as self.findings_follow_up_name(index),

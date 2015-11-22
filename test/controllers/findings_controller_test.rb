@@ -32,59 +32,39 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings' do
-    perform_auth
+    login
     get :index, :completed => 'incomplete'
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_select '#error_body', false
     assert_template 'findings/index'
   end
 
-  test 'list findings in xml' do
-    perform_auth
-    get :index, :completed => 'incomplete', :format => :xml
-    assert_response :success
-    assert_not_nil assigns(:findings)
-    assert @response.headers['Content-Type'].start_with?('application/xml')
-  end
-
-  test 'list findings in csv' do
-    perform_auth
-    findings = Finding.limit 3
-
-    assert_nothing_raised(Exception) do
-      get :export_to_csv, :completed => 'incomplete', :findings => findings.to_a, :format => :csv
-    end
-  end
-
   test 'list findings for follow_up_committee' do
-    perform_auth users(:committee_user)
+    login user: users(:committee_user)
     get :index, :completed => 'incomplete'
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_select '#error_body', false
     assert_template 'findings/index'
   end
 
   test 'list findings with search and sort' do
-    perform_auth
+    login
     get :index, :completed => 'incomplete', :search => {
       :query => '1 2 4 y w',
-      :columns => ['description', 'review'],
+      :columns => ['title', 'review'],
       :order => 'review'
     }
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 2, assigns(:findings).size
+    assert_equal 2, assigns(:findings).count
     assert assigns(:findings).all? {|f| f.review.identification.match(/1 2 4/i)}
     assert_equal assigns(:findings).map {|f| f.review.identification}.sort,
       assigns(:findings).map {|f| f.review.identification}
-    assert_select '#error_body', false
     assert_template 'findings/index'
   end
 
   test 'list findings with search by date and sort' do
-    perform_auth
+    login
     get :index, :completed => 'incomplete', :search => {
       :query => "> #{I18n.l(4.days.ago.to_date, :format => :minimal)}",
       :columns => ['review', 'issue_date']
@@ -92,38 +72,45 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 10, assigns(:findings).size
+    assert_equal 10, assigns(:findings).count
     assert assigns(:findings).all? {|f| f.review.conclusion_final_review.issue_date > 4.days.ago.to_date}
-    assert_select '#error_body', false
     assert_template 'findings/index'
   end
 
   test 'list findings for user' do
-    perform_auth
+    login
     user = User.find(users(:first_time_user).id)
     get :index, :completed => 'incomplete', :user_id => user.id
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 2, assigns(:findings).size
+    assert_equal 2, assigns(:findings).count
     assert assigns(:findings).all? { |f| f.users.include?(user) }
-    assert_select '#error_body', false
     assert_template 'findings/index'
   end
 
   test 'list findings for responsible auditor' do
-    perform_auth
+    login
     user = User.find(users(:first_time_user).id)
     get :index, :completed => 'incomplete', :user_id => user.id, :as_responsible => true
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 1, assigns(:findings).size
+    assert_equal 1, assigns(:findings).count
     assert assigns(:findings).all? { |f| f.users.include?(user) }
-    assert_select '#error_body', false
     assert_template 'findings/index'
   end
 
+  test 'list findings for process owner' do
+    user = users :audited_user
+
+    login user: user
+    get :index, :completed => 'incomplete', :as_owner => true
+    assert_response :success
+    assert assigns(:findings).any?
+    assert assigns(:findings).all? { |f| f.finding_user_assignments.owners.map(&:user).include?(user) }
+  end
+
   test 'list findings for specific ids' do
-    perform_auth
+    login
     ids = [
       findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id,
       findings(:iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id
@@ -132,69 +119,71 @@ class FindingsControllerTest < ActionController::TestCase
     get :index, :completed => 'incomplete', :ids => ids
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 2, assigns(:findings).size
+    assert_equal 2, assigns(:findings).count
     assert assigns(:findings).all? { |f| ids.include?(f.id) }
-    assert_select '#error_body', false
     assert_template 'findings/index'
   end
 
+  test 'list findings as CSV' do
+    login
+    get :index, :completed => 'incomplete', :format => :csv
+    assert_response :success
+    assert_equal Mime::CSV.to_s, @response.content_type
+  end
+
   test 'edit finding when search match only one result' do
-    perform_auth
+    login
     get :index, :completed => 'incomplete', :search => {
       :query => '1 2 4 y 1w',
-      :columns => ['description', 'review']
+      :columns => ['title', 'review']
     }
 
     assert_redirected_to finding_url('incomplete',
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness))
     assert_not_nil assigns(:findings)
-    assert_equal 1, assigns(:findings).size
+    assert_equal 1, assigns(:findings).count
   end
 
   test 'show finding' do
-    perform_auth
+    login
     get :show, :completed => 'incomplete',
       :id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:finding)
-    assert_select '#error_body', false
     assert_template 'findings/show'
   end
 
   test 'show finding for follow_up_committee' do
-    perform_auth users(:committee_user)
+    login user: users(:committee_user)
     get :show, :completed => 'incomplete', :id => findings(
       :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id
     assert_response :success
     assert_not_nil assigns(:finding)
-    assert_select '#error_body', false
     assert_template 'findings/show'
   end
 
   test 'edit finding' do
-    perform_auth
+    login
     get :edit, :completed => 'incomplete', :id =>
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:finding)
-    assert_select '#error_body', false
     assert_template 'findings/edit'
 
     auditor_response = @response.body.dup
 
-    perform_auth users(:audited_user)
+    login user: users(:audited_user)
     get :edit, :completed => 'incomplete', :id =>
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:finding)
-    assert_select '#error_body', false
     assert_template 'findings/edit'
     # Diferentes forms
     assert_not_equal auditor_response, @response.body
   end
 
   test 'unauthorized edit finding' do
-    perform_auth users(:audited_second_user)
+    login user: users(:audited_second_user)
     get :edit, :completed => 'complete',
       :id => findings(:iso_27000_security_policy_3_1_item_weakness).id
     # No está autorizado el usuario a ver la observación
@@ -202,7 +191,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'unauthorized edit incomplete finding' do
-    perform_auth users(:audited_user)
+    login user: users(:audited_user)
     get :edit, :completed => 'incomplete',
       :id => findings(:iso_27000_security_organization_4_2_item_editable_weakness_incomplete).id
 
@@ -211,14 +200,15 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'update finding' do
-    perform_auth
+    login
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
     difference_counts = ['WorkPaper.count', 'FindingAnswer.count', 'Cost.count',
-      'ActionMailer::Base.deliveries.size', 'FindingRelation.count']
+                         'ActionMailer::Base.deliveries.size',
+                         'FindingRelation.count', 'BusinessUnitFinding.count']
 
     assert_no_difference 'Finding.count' do
       assert_difference difference_counts do
@@ -231,6 +221,7 @@ class FindingsControllerTest < ActionController::TestCase
               :control_objective_item_id => control_objective_items(
                 :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
               :review_code => 'O020',
+              :title => 'Title',
               :description => 'Updated description',
               :answer => 'Updated answer',
               :audit_comments => 'Updated audit comments',
@@ -242,6 +233,7 @@ class FindingsControllerTest < ActionController::TestCase
               :risk => Finding.risks_values.first,
               :priority => Finding.priorities_values.first,
               :follow_up_date => '',
+              :business_unit_ids => [business_units(:business_unit_three).id],
               :finding_user_assignments_attributes => [
                 {
                   :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id,
@@ -324,7 +316,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'update finding with audited user' do
-    perform_auth users(:audited_user)
+    login user: users(:audited_user)
     no_difference_count = ['Finding.count', 'WorkPaper.count',
       'FindingRelation.count']
     difference_count = ['FindingAnswer.count', 'Cost.count', 'FileModel.count']
@@ -339,6 +331,7 @@ class FindingsControllerTest < ActionController::TestCase
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
             :review_code => 'O020',
+            :title => 'Title',
             :description => 'Updated description',
             :answer => 'Updated answer',
             :audit_comments => 'Updated audit comments',
@@ -386,7 +379,7 @@ class FindingsControllerTest < ActionController::TestCase
                 :code => 'PTSO 20',
                 :number_of_pages => '10',
                 :description => 'New workpaper description',
-                :organization_id => organizations(:default_organization).id,
+                :organization_id => organizations(:cirope).id,
                 :file_model_attributes => {
                   :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
                     'text/plain')
@@ -430,7 +423,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'update finding and notify to the new user' do
-    perform_auth
+    login
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -446,6 +439,7 @@ class FindingsControllerTest < ActionController::TestCase
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item).id,
             :review_code => 'O020',
+            :title => 'Title',
             :description => 'Updated description',
             :answer => 'Updated answer',
             :audit_comments => 'Updated audit comments',
@@ -500,102 +494,23 @@ class FindingsControllerTest < ActionController::TestCase
     assert_equal 'Updated description', assigns(:finding).description
   end
 
-  test 'export list to pdf' do
-    perform_auth
-
-    assert_nothing_raised(Exception) do
-      get :export_to_pdf, :completed => 'incomplete'
-    end
-
-    assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('finding.pdf.pdf_name'), Finding.table_name)
-  end
-
-  test 'export detailed list to pdf' do
-    perform_auth
-
-    assert_nothing_raised(Exception) do
-      get :export_to_pdf, :completed => 'incomplete', :include_details => 1
-    end
-
-    assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('finding.pdf.pdf_name'), Finding.table_name)
-  end
-
-  test 'export list with search' do
-    perform_auth
-
-    assert_nothing_raised(Exception) do
-      get :export_to_pdf, :completed => 'incomplete', :search => {
-      :query => '1 2 4 y w',
-      :columns => ['description', 'review'],
-      :order => 'review'
-    }
-    end
-
-    assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('finding.pdf.pdf_name'), Finding.table_name)
-  end
-
-  test 'export detailed list with search' do
-    perform_auth
-
-    assert_nothing_raised(Exception) do
-      get :export_to_pdf, :completed => 'incomplete', :include_details => 1,
-        :search => {
-          :query => '1 2 4 y w',
-          :columns => ['description', 'review'],
-          :order => 'review'
-        }
-    end
-
-    assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('finding.pdf.pdf_name'), Finding.table_name)
-  end
-
   test 'follow up pdf' do
-    perform_auth
+    login
     finding = Finding.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :follow_up_pdf, :completed => 'incomplete', :id => finding.id
     end
 
     assert_redirected_to finding.relative_follow_up_pdf_path
   end
 
-  test 'auto complete for user' do
-    perform_auth
-    get :auto_complete_for_user, { :completed => 'incomplete', :q => 'adm', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size # Sólo Admin (Admin second es de otra organización)
-    assert users.all? { |u| (u['label'] + u['informal']).match /adm/i }
-
-    get :auto_complete_for_user, { :completed => 'incomplete', :q => 'bare', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size # Sólo Bare
-    assert users.all? { |u| (u['label'] + u['informal']).match /bare/i }
-
-    get :auto_complete_for_user, { :completed => 'incomplete', :q => 'x_nobody', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 0, users.size # Sin resultados
-  end
-
   test 'auto complete for finding relation' do
     finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
 
-    perform_auth
+    login
     get :auto_complete_for_finding_relation, {
       :completed => 'incomplete',
       :q => 'O001',

@@ -1,0 +1,53 @@
+<%= simple_form_for @user, url: users_release_path(@user) do |f| %>
+  <% if @user.reallocation_errors.present? %>
+    <div>
+      <%= link_to '#details', data: { toggle: 'collapse' } do %>
+        <%= t 'label.details' %>
+        <span class="glyphicon glyphicon-info-sign text-danger"></span>
+      <% end %>
+      <div id="details" class="collapse">
+        <%= array_to_ul @user.reallocation_errors %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="form-inputs">
+    <div class="checkbox">
+      <label>
+        <%= check_box_tag 'with_findings', 1, true, autofocus: true %> <%= t '.with_findings' %>
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <%= check_box_tag 'with_reviews', 1, true %> <%= t '.with_reviews' %>
+      </label>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <h3><%= User.model_name.human %></h3>
+  </div>
+
+  <p>
+    <strong><%= User.human_attribute_name 'user' %>:</strong>
+    <%= @user.user %>
+  </p>
+
+  <p>
+    <strong><%= User.human_attribute_name 'name' %></strong>:
+    <%= @user.full_name %>
+  </p>
+
+  <hr />
+
+  <div class="form-actions">
+    <div class="pull-right">
+      <%= link_to_index users_path %> |
+      <%= link_to_show @user %> |
+      <%= link_to_edit edit_user_path(@user) %> |
+      <%= link_to_back %>
+    </div>
+
+    <%= f.submit t('.submit'), class: 'btn btn-primary' %>
+  </div>
+<% end %>

@@ -1,6 +1,6 @@
-<%= render_form t('label.save') %>
-
-<div id="links">
-  <%= link_to t('label.list'), business_unit_types_path %> |
+<%= content_for :form_actions do %>
+  <%= link_to_index business_unit_types_path %> |
   <%= link_to_back %>
-</div>
+<% end %>
+
+<%= render 'form' %>

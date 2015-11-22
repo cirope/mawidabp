@@ -1,13 +1,12 @@
-<%= render :partial => "#{@auth_user.audited? ? 'audited' : 'auditor'}_form" %>
-
-<div id="links">
-  <%= link_to t('label.show'), finding_path(params[:completed], @finding,
+<%= content_for :form_actions do %>
+  <%= link_to_show finding_path(params[:completed], @finding,
     :user_id => params[:user_id]) %> |
-  <%= link_to t('label.list'), findings_path(params[:completed],
-    :user_id => params[:user_id]) %> |
+  <%= link_to_index findings_path(params[:completed], user_id: params[:user_id]) %> |
   <% unless @auth_user.audited? || @finding.new_record? %>
     <%= link_to t('finding.follow_up_report.download'),
       :action => :follow_up_pdf, :id => @finding, :_ts => Time.now.to_i %> |
   <% end %>
   <%= link_to_back %>
-</div>
+<% end %>
+
+<%= render partial: "#{@auth_user.audited? ? 'audited' : 'auditor'}_form" %>

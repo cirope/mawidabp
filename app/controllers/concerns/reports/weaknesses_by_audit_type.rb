@@ -5,7 +5,7 @@ module Reports::WeaknessesByAuditType
 
   def weaknesses_by_audit_type
     @controller = params[:controller_name]
-    @final = params[:final]
+    @final = params[:final] == 'true'
     @title = t("#{@controller}_committee_report.weaknesses_by_audit_type_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_audit_type])
     @periods = periods_for_interval
@@ -96,7 +96,7 @@ module Reports::WeaknessesByAuditType
                   weaknesses_count[s[1]] ||= {}
                   weaknesses_count[s[1]][rl[1]] = count_for_risk
                   weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
-      
+
                   if s.first.to_s == 'being_implemented'
                     being_implemented = weaknesses_for_status.select do |w|
                       w.risk == rl[1]
@@ -201,8 +201,8 @@ module Reports::WeaknessesByAuditType
               pdf.move_down PDF_FONT_SIZE
 
               bu_data[:conclusion_reviews].each do |cr|
-              
-                if @final  
+
+                if @final
                   findings_count = cr.review.final_weaknesses.size +
                     cr.review.final_oportunities.size
                 else
@@ -217,7 +217,7 @@ module Reports::WeaknessesByAuditType
                   text << " (#{t("#{@controller}_committee_report.weaknesses_by_audit_type.without_weaknesses")})"
                 end
 
-                pdf.text text, :left => PDF_FONT_SIZE * 2, :inline_format => true
+                pdf.text text, :indent_paragraphs => PDF_FONT_SIZE * 2, :inline_format => true
               end
 
               pdf.move_down PDF_FONT_SIZE
@@ -267,20 +267,20 @@ module Reports::WeaknessesByAuditType
                     end
                   end
                 else
-                  pdf.text t('follow_up_committee.without_oportunities'), :style => :italic
+                  pdf.text t('follow_up_committee_report.without_oportunities'), :style => :italic
                 end
               end
-              
+
               if bu_data[:repeated_count] > 0
                 pdf.move_down((PDF_FONT_SIZE * 0.5).round)
-                pdf.text t('follow_up_committee.repeated_count',
+                pdf.text t('follow_up_committee_report.repeated_count',
                   :count => bu_data[:repeated_count],
                   :font_size => PDF_FONT_SIZE)
-              end      
+              end
             end
           end
         else
-          pdf.text t('follow_up_committee.without_weaknesses'), :style => :italic
+          pdf.text t('follow_up_committee_report.without_weaknesses'), :style => :italic
         end
       end
     end

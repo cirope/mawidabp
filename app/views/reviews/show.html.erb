@@ -1,134 +1,134 @@
-<div id="showed_data">
-  <div class="show_item">
-    <b><%= raw(Review.human_attribute_name(:identification) +
-      show_inline_help_for(:review_identification)) %>:</b>
-    <%=h @review.identification %>
-  </div>
+<p>
+  <strong><%= Review.human_attribute_name(:identification) %>:</strong>
+  <%= @review.identification %>
+</p>
 
-  <div class="show_item">
-    <b><%= Review.human_attribute_name :period_id %>:</b>
-    <%=h @review.period.inspect %>
-  </div>
+<p>
+  <strong><%= Review.human_attribute_name :period_id %>:</strong>
+  <%= @review.period.inspect %>
+</p>
 
-  <div class="show_item">
-    <b><%= Review.human_attribute_name :plan_item_id %>:</b>
-    <%=h @review.plan_item.project %>
-  </div>
+<p>
+  <strong><%= Review.human_attribute_name :plan_item %>:</strong>
+  <%= @review.plan_item.project %>
+</p>
 
-  <div class="show_item">
-    <b><%= Review.human_attribute_name :business_unit %>:</b>
-    <%=h review_business_unit_text(@review) %>
-  </div>
+<p>
+  <strong><%= Review.human_attribute_name :business_unit %>:</strong>
+  <%= review_business_unit_text(@review) %>
+</p>
 
-  <div class="show_item">
-    <b><%= raw(Review.human_attribute_name(:audit_type) +
-      show_inline_help_for(:review_audit_type)) %>:</b>
-    <%=h review_business_unit_type_text(@review) %>
-  </div>
+<p>
+  <strong><%= Review.human_attribute_name(:audit_type) %>:</strong>
+  <%= review_business_unit_type_text(@review) %>
+</p>
 
-  <div class="show_item">
-    <%= show_readonly_review_survey(@review) %>
-  </div>
-
-  <div class="show_item">
-    <b><%= raw(Review.human_attribute_name(:description) +
-      show_inline_help_for(:review_description)) %>:</b>
-    <%= simple_format h(@review.description) %>
-  </div>
-
-  <table class="summary_table">
-    <thead>
-      <tr>
-        <th><%= ReviewUserAssignment.human_attribute_name :user %></th>
-        <th><%= raw(ReviewUserAssignment.human_attribute_name(:assignment_type) +
-            show_inline_help_for(:review_user_assignment_type)) %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @review.review_user_assignments.each do |rua| %>
-        <tr>
-          <td><%= rua.user.full_name %></td>
-          <td><%= rua.type_text %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-  
-  <% @review.grouped_control_objective_items.each do |pc, cois| %>
-    <h1><%= pc.name %></h1>
-
-    <% cois.sort.each do |coi| %>
-      <h2><%=h coi.to_s %></h2>
-      <div style="margin: 1em;">
-        <div class="show_item">
-          <b><%= ControlObjectiveItem.human_attribute_name :relevance %>:</b>
-          <%= h(coi.relevance_text(false)) %>
-        </div>
-        <div class="show_item">
-          <b><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</b>
-          <%= l(coi.audit_date) if coi.audit_date %>
-        </div>
-        <div class="show_item">
-          <b><%= Control.human_attribute_name :effects %>:</b>
-          <%= simple_format h(coi.control.effects) %>
-        </div>
-        <div class="show_item">
-          <b><%= Control.human_attribute_name :control %>:</b>
-          <%= simple_format h(coi.control.control) %>
-        </div>
-        <div class="show_item">
-          <b><%= ControlObjectiveItem.human_attribute_name :effectiveness %>:</b>
-          <%= "#{coi.effectiveness}%" %>
-        </div>
-        <div class="show_item">
-          <b><%= ControlObjectiveItem.human_attribute_name :design_score %>:</b>
-          <%= h(coi.design_score_text) %>
-        </div>
-        <div class="show_item">
-          <b><%= Control.human_attribute_name :design_tests %>:</b>
-          <%= simple_format h(coi.control.design_tests) %>
-        </div>
-        <div class="show_item">
-          <b><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</b>
-          <%= h(coi.compliance_score_text) %>
-        </div>
-        <div class="show_item">
-          <b><%= Control.human_attribute_name :compliance_tests %>:</b>
-          <%= simple_format h(coi.control.compliance_tests) %>
-        </div>
-        <div class="show_item">
-          <b><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</b>
-          <%= h(coi.sustantive_score_text) %>
-        </div>
-        <div class="show_item">
-          <b><%= Control.human_attribute_name :sustantive_tests %>:</b>
-          <%= simple_format h(coi.control.sustantive_tests) %>
-        </div>
-        <div class="show_item">
-          <b><%= ControlObjectiveItem.human_attribute_name :auditor_comment %>:</b>
-          <%= simple_format h(coi.auditor_comment) %>
-        </div>
-        <div class="show_item">
-          <b><%= ControlObjectiveItem.human_attribute_name :finished %>:</b>
-          <%= t coi.finished ? 'label.yes' : 'label.no' %>
-        </div>
-      </div>
-    <% end %>
-  <% end %>
-
-  <% unless @review.finding_review_assignments.empty? %>
-    <h1><%= t('review.findings_label') %></h1>
-
-    <ul class="raw_list">
-      <% @review.finding_review_assignments.each do |fra| %>
-        <li><%= fra.finding %></li>
-      <% end %>
-    </ul>
-  <% end %>
+<div>
+  <%= show_readonly_review_survey(@review) %>
 </div>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_review_path(@review) %> |
-  <%= link_to t('label.list'), reviews_path %> |
+<div>
+  <strong><%= Review.human_attribute_name(:description) %>:</strong>
+  <%= simple_format @review.description %>
+</div>
+
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th><%= ReviewUserAssignment.human_attribute_name :user %></th>
+      <th><%= ReviewUserAssignment.human_attribute_name(:assignment_type) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @review.review_user_assignments.each do |rua| %>
+      <tr>
+        <td><%= rua.user.full_name %></td>
+        <td><%= rua.type_text %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% @review.grouped_control_objective_items.each do |pc, cois| %>
+  <div class="page-header">
+    <h2><%= pc.name %></h2>
+  </div>
+
+  <% cois.sort.each do |coi| %>
+    <h4><strong><%= coi.to_s %></strong></h4>
+    <div style="margin: 1em;">
+      <p>
+        <strong><%= ControlObjectiveItem.human_attribute_name :relevance %>:</strong>
+        <%= coi.relevance_text(false) %>
+      </p>
+      <p>
+        <strong><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</strong>
+        <%= l(coi.audit_date) if coi.audit_date %>
+      </p>
+      <div>
+        <strong><%= Control.human_attribute_name :effects %>:</strong>
+        <%= simple_format coi.control.effects %>
+      </div>
+      <div>
+        <strong><%= Control.human_attribute_name :control %>:</strong>
+        <%= simple_format coi.control.control %>
+      </div>
+      <p>
+        <strong><%= ControlObjectiveItem.human_attribute_name :effectiveness %>:</strong>
+        <%= "#{coi.effectiveness}%" %>
+      </p>
+      <p>
+        <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
+        <%= coi.design_score_text %>
+      </p>
+      <div>
+        <strong><%= Control.human_attribute_name :design_tests %>:</strong>
+        <%= simple_format coi.control.design_tests %>
+      </div>
+      <p>
+        <strong><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</strong>
+        <%= coi.compliance_score_text %>
+      </p>
+      <div>
+        <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
+        <%= simple_format coi.control.compliance_tests %>
+      </div>
+      <p>
+        <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
+        <%= coi.sustantive_score_text %>
+      </p>
+      <div>
+        <strong><%= Control.human_attribute_name :sustantive_tests %>:</strong>
+        <%= simple_format coi.control.sustantive_tests %>
+      </div>
+      <div>
+        <strong><%= ControlObjectiveItem.human_attribute_name :auditor_comment %>:</strong>
+        <%= simple_format coi.auditor_comment %>
+      </div>
+      <p>
+        <strong><%= ControlObjectiveItem.human_attribute_name :finished %>:</strong>
+        <%= t coi.finished ? 'label.yes' : 'label.no' %>
+      </p>
+    </div>
+  <% end %>
+<% end %>
+
+<% unless @review.finding_review_assignments.empty? %>
+  <div class="page-header">
+    <h3><%= t('review.findings_label') %></h3>
+  </div>
+
+  <ul>
+    <% @review.finding_review_assignments.each do |fra| %>
+      <li><%= fra.finding %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<hr />
+
+<div>
+  <%= link_to_edit edit_review_path(@review) %> |
+  <%= link_to_index reviews_path %> |
   <%= link_to_back %>
 </div>

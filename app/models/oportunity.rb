@@ -7,7 +7,7 @@ class Oportunity < Finding
     where(
       :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
       :final => true
-    ).order('state ASC')
+    ).order(:state => :asc)
   }
 
   # Restricciones

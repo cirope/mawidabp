@@ -1,29 +1,17 @@
-<div class="div_menu_level_<%= level %>" <%= raw("id=\"menu_#{menu_item.menu_name}\" style=\"display: none;\"") unless display %>>
-  <ul class="menu_level_<%= level %>" data-level="<%= level %>" <%= raw "id=\"ul_#{menu_item.menu_name}\"" unless display %>>
-    <% menu_item.children.each do |submenu_item| %>
-      <% selected = submenu_item.submenu_names.include?(@current_module) %>
-      <li <%= raw 'class="selected"' if selected %>>
-        <%= raw generate_menu_link(submenu_item.submenu_names, include_dynamic ?
-          @current_module : nil, submenu_item.to_s, url_for(submenu_item.url),
-          :class => submenu_item.html_class) %>
-      </li>
-    <% end %>
-    <li class="mobile_link">
-      <% link_label = t('label.back') + '<div class="aditional_link_info">' + (menu_item.ancestors.map(&:to_s) + [menu_item.to_s]).join(' | ') + '</div>' %>
-      <%= link_to raw(link_label), '#', :class => :back %>
-    </li>
-  </ul>
-</div>
-
-<% if include_dynamic %>
-  <% content_for :javascript_menu do %>
-    <%= raw "State.menu['menu_#{menu_item.menu_name}'] = '#{escape_javascript(
-      render(:partial => 'shared/submenu', :locals => {
-        :menu_item => menu_item,
-        :controller_name => controller_name,
-        :display => true,
-        :level => level,
-        :include_dynamic => false
-      }))}';" %>
+<% if submenu_item.children.present? &&
+  submenu_item.submenu_names.include?(@current_module) %>
+  <%= content_for :submenu do %>
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="submenu nav nav-tabs">
+          <% submenu_item.children.each do |sub_submenu_item| %>
+            <% active = sub_submenu_item.submenu_names.include?(@current_module) %>
+            <li <%== 'class="active"' if active %>>
+              <%= link_to sub_submenu_item.to_s, sub_submenu_item.url %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
   <% end %>
 <% end %>

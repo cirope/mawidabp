@@ -1,0 +1,35 @@
+<%= javascript_include_tag :graphs %>
+
+<div class="page-header">
+  <h2><%= @user.informal_name %></h2>
+</div>
+
+<div class="row">
+  <div class="col-md-4 text-center">
+    <h5>
+      <%= textilize_without_paragraph t('.high_risk_weaknesses', count: @weaknesses.with_highest_risk.count) %>
+    </h5>
+    <%= high_risk_weaknesses_graph_placeholder %>
+  </div>
+
+  <div class="col-md-4 text-center">
+    <h5>
+      <%== user_weaknesses_links %>
+    </h5>
+    <%= weaknesses_graph_placeholder %>
+  </div>
+
+  <div class="col-md-4 text-center">
+    <h5>
+      <%= textilize_without_paragraph t('.pending_weaknesses', count: @weaknesses.with_pending_status.count) %>
+    </h5>
+    <%= pending_weaknesses_graph_placeholder %>
+  </div>
+</div>
+
+<hr />
+
+<%= link_to_show user_path(@user) %> |
+<%= link_to_index users_path %> |
+<%= link_to t('.table'), users_status_path %> |
+<%= link_to_back %>

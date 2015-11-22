@@ -6,9 +6,9 @@ class CreateEMails < ActiveRecord::Migration
       t.text :body
       t.text :attachments
 
-      t.timestamps
+      t.timestamps null: false
     end
-    
+
     add_index :e_mails, :created_at
   end
 end

@@ -9,7 +9,7 @@ class ImageUploader < CarrierWave::Uploader::Base
     organization_id = (
       '%08d' % (Organization.current_id || 0)
     ).scan(/\d{4}/).join('/')
-  
+
     "private/#{organization_id}/#{model.class.to_s.underscore.pluralize}/#{id}"
   end
 
