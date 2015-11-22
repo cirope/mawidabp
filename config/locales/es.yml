@@ -472,7 +472,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     finding_answers: "Comentarios de seguimiento"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
-    csv_name: "listado_de_hallazgos"
+    download_csv: "Descargar CSV"
     add_finding_relation: "Agregar relación"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"

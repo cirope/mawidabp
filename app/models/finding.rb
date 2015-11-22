@@ -6,6 +6,7 @@ class Finding < ActiveRecord::Base
   include Findings::Answers
   include Findings::Confirmation
   include Findings::CreateValidation
+  include Findings::Csv
   include Findings::CustomAttributes
   include Findings::DestroyValidation
   include Findings::Expiration
@@ -655,96 +656,4 @@ class Finding < ActiveRecord::Base
 
     I18n.t('finding.follow_up_report.pdf_name', :code => code)
   end
-
-  def to_csv(detailed = false, completed = 'incomplete')
-    date = completed == 'incomplete' ? self.follow_up_date :
-      self.solution_date
-    origination_date = self.origination_date
-    date_text = I18n.l(date, :format => :minimal) if date
-    origination_date_text = I18n.l(origination_date, :format => :minimal) if origination_date
-    being_implemented = self.kind_of?(Weakness) || self.kind_of?(Nonconformity) && self.being_implemented?
-    rescheduled_text = ''
-
-    if being_implemented && self.rescheduled?
-      dates = []
-      follow_up_dates = self.all_follow_up_dates
-
-      if follow_up_dates.last == self.follow_up_date
-        follow_up_dates.slice(-1)
-      end
-
-      follow_up_dates.each { |fud| dates << I18n.l(fud, :format => :minimal) }
-
-      rescheduled_text << dates.join("\n")
-    end
-
-    audited = self.reload.users.select(&:audited?).map do |u|
-      self.process_owners.include?(u) ?
-        "#{u.full_name} (#{FindingUserAssignment.human_attribute_name(:process_owner)})" :
-        u.full_name
-    end
-
-    description = self.description || ''
-
-    unless (repeated_ancestors = self.repeated_ancestors).blank?
-      description << "\n#{I18n.t('finding.repeated_ancestors')}: "
-      description << repeated_ancestors.map(&:to_s).join(' | ')
-    end
-
-    unless (repeated_children = self.repeated_children).blank?
-      description << "\n#{I18n.t('finding.repeated_children')}: "
-      description << repeated_children.map(&:to_s).join(' | ')
-    end
-
-    rescheduled_text = I18n.t('label.no') if rescheduled_text.blank?
-
-    column_data = [
-      self.review.to_s,
-      self.review_code,
-      self.title,
-      self.kind_of?(Fortress) ? '' : self.state_text,
-      self.respond_to?(:risk_text) ? self.risk_text : '',
-      self.respond_to?(:risk_text) ? self.priority_text : '',
-      audited.join('; '),
-      description,
-      self.control_objective_item.control_objective_text,
-      rescheduled_text,
-      origination_date_text,
-      date_text
-    ]
-
-    if detailed
-      column_data << self.audit_comments
-      column_data << self.answer
-    end
-
-    column_data
-  end
-
-  private
-
-    def self.to_csv(detailed = false, completed = 'incomplete')
-      column_headers = [
-        "#{Review.model_name.human} - #{PlanItem.human_attribute_name(:project)}",
-        Weakness.human_attribute_name(:review_code),
-        Weakness.human_attribute_name(:title),
-        Weakness.human_attribute_name(:state),
-        Weakness.human_attribute_name(:risk),
-        Weakness.human_attribute_name(:priority),
-        I18n.t('finding.audited', :count => 0),
-        Finding.human_attribute_name(:description),
-        ControlObjectiveItem.human_attribute_name(:control_objective_text),
-        (I18n.t('weakness.previous_follow_up_dates') + " (#{Finding.human_attribute_name(:rescheduled)})"),
-        Finding.human_attribute_name(:origination_date),
-        (Finding.human_attribute_name((completed == 'incomplete') ?
-          :follow_up_date : :solution_date))
-      ]
-
-      if detailed
-        column_headers << Finding.human_attribute_name(:audit_comments)
-        column_headers << Finding.human_attribute_name(:answer)
-      end
-
-      column_headers
-    end
 end

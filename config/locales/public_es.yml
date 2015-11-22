@@ -450,7 +450,7 @@ public_es:
     finding_answers: "Comentarios de seguimiento"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
-    csv_name: "listado_de_observaciones-oportunidades_de_mejora"
+    download_csv: "Descargar CSV"
     add_finding_relation: "Agregar relación"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
