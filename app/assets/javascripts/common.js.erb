@@ -465,15 +465,6 @@ jQuery(function($) {
     }
   });
 
-  // Cuando se remueve o se oculta un papel de trabajo reutilizar el código
-  $(document).on('item:removed', '.work_paper', function() {
-    var workPaperCode = $(this).find('input[name$="[code]"]').val();
-
-    if(workPaperCode == lastWorkPaperCode) {
-      lastWorkPaperCode = lastWorkPaperCode.previous(2);
-    }
-  });
-
   $('.popup').dialog({
     autoOpen: false,
     draggable: false,

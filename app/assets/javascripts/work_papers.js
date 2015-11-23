@@ -11,4 +11,11 @@ jQuery(function ($) {
     else
       fileInput.addClass('hidden')
   })
+
+  $(document).on('dynamic-item.removed', '.work_paper', function() {
+    var workPaperCode = $(this).find('input[name$="[code]"]').val()
+
+    if(workPaperCode === lastWorkPaperCode)
+      lastWorkPaperCode = lastWorkPaperCode.previous(3)
+  });
 })
