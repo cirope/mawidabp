@@ -3,7 +3,7 @@ window.EffectHelper =
 
   remove: (element, callback) ->
     $(element).stop().fadeOut 200, ->
-      $(this).remove()
+      setTimeout (-> $(this).remove()), 200
       callback() if jQuery.isFunction(callback)
 
   show: (e, callback) -> $(e).stop().fadeIn(1000, callback)

@@ -10,7 +10,7 @@ class WorkPaper < ActiveRecord::Base
   scope :list, -> { where(organization_id: Organization.current_id) }
   scope :sorted_by_code, -> { order(code: :asc) }
   scope :with_prefix, ->(prefix) {
-    where('code LIKE :code', :code => "#{prefix}%").sorted_by_code
+    where("#{quoted_table_name}.#{qcn 'code'} LIKE ?", "#{prefix}%").sorted_by_code
   }
 
   # Restricciones de los atributos
@@ -164,14 +164,17 @@ class WorkPaper < ActiveRecord::Base
     pdf.save_as self.absolute_cover_path(filename)
   end
 
-  def pdf_cover_name(filename = nil)
+  def pdf_cover_name(filename = nil, short = false)
     if self.file_model.try(:file?)
+      code = sanitized_code
+      short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
       filename ||= self.file_model.identifier.sanitized_for_filename
-      filename = filename.sanitized_for_filename.sub(
-        /^(#{Regexp.quote(self.sanitized_code)})?\-?(zip-)*/i, '')
+      filename = filename.sanitized_for_filename.
+        sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
+        sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
     end
 
-    I18n.t 'work_paper.cover_name', :prefix => "#{self.sanitized_code}-",
+    I18n.t 'work_paper.cover_name', :prefix => "#{short ? short_code : code}-",
       :filename => File.basename(filename, File.extname(filename))
   end
 
@@ -187,9 +190,11 @@ class WorkPaper < ActiveRecord::Base
     filename = self.file_model.identifier.sub /^(zip-)*/i, ''
     filename = filename.sanitized_for_filename
     code_suffix = File.extname(filename) == '.zip' ? '-zip' : ''
+    code = sanitized_code
+    short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
 
-    filename.starts_with?(self.sanitized_code) ?
-      filename : "#{self.sanitized_code}#{code_suffix}-#{filename}"
+    filename.starts_with?(code, short_code) ?
+      filename : "#{code}#{code_suffix}-#{filename}"
   end
 
   def create_zip
@@ -197,10 +202,13 @@ class WorkPaper < ActiveRecord::Base
 
     original_filename = self.file_model.file.path
     directory = File.dirname original_filename
+    code = sanitized_code
+    short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
     filename = File.basename original_filename, File.extname(original_filename)
-    filename = filename.sanitized_for_filename.sub(
-      /^(#{Regexp.quote(self.sanitized_code)})?\-?(zip-)*/i, '')
-    zip_filename = File.join directory, "#{self.sanitized_code}-#{filename}.zip"
+    filename = filename.sanitized_for_filename.
+      sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
+      sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
+    zip_filename = File.join directory, "#{code}-#{filename}.zip"
     pdf_filename = self.absolute_cover_path
 
     self.create_pdf_cover
@@ -225,10 +233,12 @@ class WorkPaper < ActiveRecord::Base
 
   def unzip_if_necesary
     file_name = self.file_model.try(:identifier) || ''
+    code = sanitized_code
+    short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
 
     if File.extname(file_name) == '.zip' &&
-        file_name.start_with?(self.sanitized_code) &&
-        !file_name.start_with?("#{self.sanitized_code}-zip")
+        file_name.start_with?(code, short_code) &&
+        !file_name.start_with?("#{code}-zip", "#{short_code}-zip")
       zip_path = self.file_model.file.path
       base_dir = File.dirname self.file_model.file.path
 
@@ -241,7 +251,8 @@ class WorkPaper < ActiveRecord::Base
             entry.extract(filename)
           end
 
-          if File.basename(filename) != self.pdf_cover_name
+          if File.basename(filename) != pdf_cover_name &&
+              File.basename(filename) != pdf_cover_name(nil, true)
             self.file_model.update_column :file_file_name, File.basename(filename)
             self.file_model.file_file_size = File.size(filename)
             self.file_model.save!

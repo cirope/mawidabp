@@ -857,21 +857,10 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'to csv' do
-    detailed = true
-    header = Finding.to_csv(detailed, 'incomplete')
-    row = @finding.to_csv(detailed, 'incomplete')
+    csv = Finding.all.to_csv
+    rows = CSV.parse csv, col_sep: ';'
 
-    assert_equal header[11], 'Fecha de implementación'
-    assert_equal header.count, 14
-    assert_equal row.count, 14
-
-    detailed = false
-    header = Finding.to_csv(detailed, 'complete')
-    row = @finding.to_csv(detailed, 'complete')
-
-    assert_equal header[11], 'Fecha de solución'
-    assert_equal header.count, 12
-    assert_equal row.count, 12
+    assert_equal Finding.count + 1, rows.length
   end
 
   test 'notify users if they are selected for notification' do

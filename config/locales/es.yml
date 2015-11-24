@@ -465,14 +465,14 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     stale_object_error: "La respuesta al hallazgo no fue actualizada, intente nuevamente."
     incomplete: "Pendientes"
     complete: "Solucionados o reiterados"
-    as_owner: "%{kind} como dueño de proceso"
+    as_owner: "%{kind} como responsable"
     work_papers: "Papeles de trabajo"
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
-    csv_name: "listado_de_hallazgos"
+    download_csv: "Descargar CSV"
     add_finding_relation: "Agregar relación"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
@@ -1380,7 +1380,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           one: "Usuario relacionado"
           user: 'Usuario relacionado (usuario)'
           user_id: 'Usuario relacionado (usuario)'
-          process_owner: 'Dueño del proceso (usuario)'
+          process_owner: 'Responsable (usuario)'
         finding_answers:
           one: "Comentarios"
           answer: "Comentario"
@@ -1428,7 +1428,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         finding_id: 'Hallazgo'
         user_id: 'Usuario'
         user: 'Usuario'
-        process_owner: 'Dueño del proceso'
+        process_owner: 'Responsable'
         responsible_auditor: 'Auditor referente'
       fortress:
         control_objective_item_id: "Objetivo de control"

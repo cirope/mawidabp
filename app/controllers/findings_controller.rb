@@ -3,10 +3,7 @@ class FindingsController < ApplicationController
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_finding, only: [:show, :edit, :update]
-  layout proc{ |controller| controller.request.xhr? ? false : 'application' }
-
-  autoload :CSV, 'csv'
-  respond_to :csv
+  layout proc { |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista las debilidades y oportunidades
   #
@@ -71,6 +68,7 @@ class FindingsController < ApplicationController
           redirect_to finding_url(params[:completed], @findings.first)
         end
       } # index.html.erb
+      format.csv { render csv: @findings.to_csv(params[:completed]), filename: @title.downcase }
     end
   end
 

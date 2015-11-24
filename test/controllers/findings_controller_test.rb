@@ -124,6 +124,13 @@ class FindingsControllerTest < ActionController::TestCase
     assert_template 'findings/index'
   end
 
+  test 'list findings as CSV' do
+    login
+    get :index, :completed => 'incomplete', :format => :csv
+    assert_response :success
+    assert_equal Mime::CSV.to_s, @response.content_type
+  end
+
   test 'edit finding when search match only one result' do
     login
     get :index, :completed => 'incomplete', :search => {

@@ -99,6 +99,8 @@
 
 <%= paginate @findings %>
 
+<%= link_to t('finding.download_csv'), findings_path(request.query_parameters.merge(format: :csv)) %>
+
 <script type="text/javascript">
   $('#user_id_select').change(function() {
     if($(this).val()) {
