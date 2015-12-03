@@ -89,6 +89,7 @@ GEM
       execjs
     coffee-script-source (1.10.0)
     colorator (0.1)
+    colorize (0.7.7)
     commander (4.1.6)
       highline (~> 1.6.11)
     concurrent-ruby (1.0.0)
@@ -239,7 +240,8 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
-    sshkit (1.8.0)
+    sshkit (1.7.1)
+      colorize (>= 0.7.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     test_after_commit (0.4.2)
@@ -314,6 +316,7 @@ DEPENDENCIES
   sidekiq
   simple_form
   spring
+  sshkit (~> 1.7.1)
   test_after_commit
   timecop
   uglifier
