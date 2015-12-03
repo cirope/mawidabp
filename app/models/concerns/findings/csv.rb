@@ -7,11 +7,12 @@ module Findings::Csv
       review.plan_item.project,
       review_code,
       title,
+      description,
       state_text,
       respond_to?(:risk_text) ? risk_text : '',
       respond_to?(:risk_text) ? priority_text : '',
       auditeds_as_process_owner.join('; '),
-      auditeds.join('; '),
+      audited_users.join('; '),
       best_practice.name,
       process_control.name,
       control_objective_item.control_objective_text,
@@ -39,7 +40,7 @@ module Findings::Csv
       process_owners.map &:full_name
     end
 
-    def auditeds
+    def audited_users
       auditeds = users.select do |u|
         u.can_act_as_audited? && process_owners.exclude?(u)
       end
@@ -82,6 +83,7 @@ module Findings::Csv
           PlanItem.human_attribute_name('project'),
           Weakness.human_attribute_name('review_code'),
           Weakness.human_attribute_name('title'),
+          Weakness.human_attribute_name('description'),
           Weakness.human_attribute_name('state'),
           Weakness.human_attribute_name('risk'),
           Weakness.human_attribute_name('priority'),
