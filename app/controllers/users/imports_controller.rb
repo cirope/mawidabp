@@ -7,7 +7,7 @@ class Users::ImportsController < ApplicationController
   def create
     ldap_config = current_organization.ldap_config
     @imports = ldap_config.import import_params[:username], import_params[:password]
-    imported_user_ids = @imports.map { |i| i[:user].id }
+    imported_user_ids = @imports.map { |i| i[:user].id }.compact
     conditions = []
     parameters = {}
 
