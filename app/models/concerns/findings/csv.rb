@@ -41,7 +41,7 @@ module Findings::Csv
     end
 
     def audited_users
-      auditeds = users.select do |u|
+      auditeds = users.reload.select do |u|
         u.can_act_as_audited? && process_owners.exclude?(u)
       end
 
