@@ -10,7 +10,10 @@ module Findings::Csv
       state_text,
       respond_to?(:risk_text) ? risk_text : '',
       respond_to?(:risk_text) ? priority_text : '',
-      audited.join('; '),
+      auditeds_as_process_owner.join('; '),
+      auditeds.join('; '),
+      best_practice.name,
+      process_control.name,
       control_objective_item.control_objective_text,
       origination_date_text,
       date_text,
@@ -32,12 +35,24 @@ module Findings::Csv
       I18n.l origination_date, format: :minimal if origination_date
     end
 
-    def audited
-      process_owner_label = FindingUserAssignment.human_attribute_name 'process_owner'
+    def auditeds_as_process_owner
+      process_owners.map &:full_name
+    end
 
-      users.reload.select(&:can_act_as_audited?).map do |u|
-        process_owners.include?(u) ? "#{u.full_name} (#{process_owner_label})" : u.full_name
+    def auditeds
+      auditeds = users.select do |u|
+        u.can_act_as_audited? && process_owners.exclude?(u)
       end
+
+      auditeds.map &:full_name
+    end
+
+    def process_control
+      control_objective_item.control_objective.process_control
+    end
+
+    def best_practice
+      control_objective_item.control_objective.process_control.best_practice
     end
 
     def finding_answers_text
@@ -70,7 +85,10 @@ module Findings::Csv
           Weakness.human_attribute_name('state'),
           Weakness.human_attribute_name('risk'),
           Weakness.human_attribute_name('priority'),
+          FindingUserAssignment.human_attribute_name('process_owner'),
           I18n.t('finding.audited', count: 0),
+          BestPractice.model_name.human,
+          ProcessControl.model_name.human,
           ControlObjectiveItem.human_attribute_name('control_objective_text'),
           Finding.human_attribute_name('origination_date'),
           date_label(completed),
