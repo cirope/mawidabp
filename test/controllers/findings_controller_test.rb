@@ -128,7 +128,7 @@ class FindingsControllerTest < ActionController::TestCase
     login
     get :index, :completed => 'incomplete', :format => :csv
     assert_response :success
-    assert_equal Mime::CSV.to_s, @response.content_type
+    assert_equal "#{Mime::CSV}; charset=utf-8", @response.content_type
   end
 
   test 'edit finding when search match only one result' do
