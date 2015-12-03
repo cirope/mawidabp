@@ -41,6 +41,7 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   gem 'capistrano-sidekiq'
+  gem 'sshkit', '~> 1.7.1'
   gem 'unicorn-rails'
 end
 
