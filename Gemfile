@@ -42,6 +42,7 @@ group :development do
   gem 'capistrano-rbenv'
   gem 'capistrano-sidekiq'
   gem 'unicorn-rails'
+  gem 'web-console'
 end
 
 group :test do
@@ -52,5 +53,4 @@ end
 group :development, :test do
   gem 'spring'
   gem 'byebug'
-  gem 'web-console'
 end
