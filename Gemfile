@@ -41,8 +41,8 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   gem 'capistrano-sidekiq'
-  gem 'sshkit', '~> 1.7.1'
   gem 'unicorn-rails'
+  gem 'web-console'
 end
 
 group :test do
@@ -54,7 +54,6 @@ end
 group :development, :test do
   gem 'spring'
   gem 'byebug'
-  gem 'web-console'
 end
 
 # Include database gems for the adapters found in the database configuration file
