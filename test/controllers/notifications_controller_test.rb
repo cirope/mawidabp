@@ -5,7 +5,7 @@ class NotificationsControllerTest < ActionController::TestCase
   fixtures :notifications
 
   setup do
-    login
+    login user: users(:audited_user)
   end
 
   test 'list notifications' do
@@ -17,7 +17,7 @@ class NotificationsControllerTest < ActionController::TestCase
 
   test 'show notification' do
     get :show, :id => notifications(
-      :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param
+      :audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).to_param
     assert_response :success
     assert_not_nil assigns(:notification)
     assert_template 'notifications/show'
@@ -25,7 +25,7 @@ class NotificationsControllerTest < ActionController::TestCase
 
   test 'edit notification' do
     get :edit, :id => notifications(
-      :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param
+      :audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).to_param
     assert_response :success
     assert_not_nil assigns(:notification)
     assert_template 'notifications/edit'
@@ -35,7 +35,7 @@ class NotificationsControllerTest < ActionController::TestCase
     assert_no_difference 'User.count' do
       patch :update, {
         :id => notifications(
-          :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param,
+          :audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).to_param,
         :notification => {
           :notes => 'Updated notes'
         }
@@ -49,7 +49,7 @@ class NotificationsControllerTest < ActionController::TestCase
 
   test 'confirm' do
     notification_id = notifications(
-      :bare_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id
+      :audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id
     notification = Notification.find notification_id
 
     assert !notification.notified?
@@ -60,7 +60,7 @@ class NotificationsControllerTest < ActionController::TestCase
 
   test 'reject' do
     notification_id = notifications(
-      :bare_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id
+      :audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id
     notification = Notification.find notification_id
 
     assert !notification.notified?

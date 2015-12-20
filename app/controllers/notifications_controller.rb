@@ -1,5 +1,5 @@
 class NotificationsController < ApplicationController
-  before_action :auth, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   before_action :set_notification, only: [:show, :edit, :update]
 
   # * GET /notifications
@@ -87,5 +87,11 @@ class NotificationsController < ApplicationController
 
     def notification_params
       params.require(:notification).permit :notes, :lock_version
+    end
+
+    def load_privileges
+      @action_privileges.update(
+        confirm: :modify
+      )
     end
 end
