@@ -13,7 +13,7 @@
 
   insertNestedItem: (e) ->
     source = e.data('dynamic-source')
-    template = $(source).data('dynamic-template')
+    template = DynamicFormHelper.findInNearestFieldset(e, source).data('dynamic-template')
     regexp = new RegExp(e.data('id'), 'g')
 
     e.closest('fieldset').before DynamicFormHelper.replaceIds(template, regexp)
@@ -36,6 +36,16 @@
 
   replaceIds: (s, regex) ->
     s.replace(regex, new Date().getTime() + DynamicFormHelper.newIdCounter++)
+
+  findInNearestFieldset: (element, selector) ->
+    fieldset = $(element).parents 'fieldset'
+    result = fieldset.find selector
+
+    while fieldset.length && ! result.length
+      fieldset = fieldset.parents 'fieldset'
+      result = fieldset.find selector
+
+    result.length && result || $(selector)
 
 jQuery ($) ->
   linkSelector = 'a[data-dynamic-form-event]'
