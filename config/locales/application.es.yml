@@ -1318,7 +1318,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
         units: "Recurso (cantidad de unidades)"
         cost_per_unit: "Recurso (costo por unidad)"
         cost: "Recurso (costo)"
-        resource_id: "Recurso"
+        resource: "Recurso"
       plan_item:
         project: "Proyecto"
         start: "Inicio"
