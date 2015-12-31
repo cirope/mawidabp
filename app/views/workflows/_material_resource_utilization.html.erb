@@ -12,8 +12,6 @@
     </div>
     <div class="col-md-1">
       <div class="toggle-visibility">
-        <%= link_to_insert_field(f, 'material_resource_utilizations') %>
-        <span class="text-muted">|</span>
         <%= link_to_remove_nested_item(f) %>
         <%= f.input :resource_type, as: :hidden, input_html: { value: 'Resource' } %>
       </div>
