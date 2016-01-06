@@ -2,11 +2,10 @@ set :application, 'mawidabp.com'
 set :user, 'deployer'
 set :repo_url, 'https://github.com/cirope/mawidabp.git'
 
-set :deploy_to, "/var/www/#{fetch(:application)}"
-
 set :format, :pretty
 set :log_level, :info
 
+set :deploy_to, "/var/www/#{fetch(:application)}"
 set :deploy_via, :remote_cache
 set :scm, :git
 
@@ -15,7 +14,6 @@ set :linked_dirs, %w{log private tmp/pids}
 
 set :rbenv_type, :user
 set :rbenv_ruby, '2.3.0'
-set :rbenv_custom_path, '$HOME/.rbenv'
 
 set :keep_releases, 5
 
