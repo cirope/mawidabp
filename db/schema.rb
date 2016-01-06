@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.datetime "updated_at",               null: false
   end
 
-  add_index "answer_options", ["option", "question_id"], name: "index_answer_options_on_option_and_question_id", using: :btree
+  add_index "answer_options", ["question_id"], name: "index_answer_options_on_question_id", using: :btree
 
   create_table "answers", force: :cascade do |t|
     t.text     "comments"
@@ -599,7 +599,7 @@ ActiveRecord::Schema.define(version: 20150610121431) do
     t.datetime "updated_at",                   null: false
   end
 
-  add_index "questions", ["question", "questionnaire_id"], name: "index_questions_on_question_and_questionnaire_id", using: :btree
+  add_index "questions", ["questionnaire_id"], name: "index_questions_on_questionnaire_id", using: :btree
 
   create_table "related_user_relations", force: :cascade do |t|
     t.integer  "user_id"
