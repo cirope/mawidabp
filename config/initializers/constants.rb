@@ -17,7 +17,7 @@ APP_FILES_PATH = File.join(PRIVATE_PATH, 'file_models', File::SEPARATOR).freeze
 APP_IMAGES_PATH = File.join(PRIVATE_PATH, 'image_models', File::SEPARATOR).freeze
 # Variable con los idiomas disponibles (Debería reemplazarse con
 # I18.available_locales cuando se haya completado la traducción a Inglés)
-AVAILABLE_LOCALES = [:public_es, :es, :mc_es].freeze
+AVAILABLE_LOCALES = [:es].freeze
 # Cantidad de días en los que es posible cambiar la contraseña luego de un
 # blanqueo
 BLANK_PASSWORD_STALE_DAYS = 3

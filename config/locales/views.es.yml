@@ -1,4 +1,4 @@
-es: &common
+es:
   messages:
     confirmation: '¿Está seguro?'
     not_authorized: 'Debe ingresar para ver el contenido'
@@ -345,9 +345,3 @@ es: &common
     column_old_value: 'Valor anterior'
     without_changes: 'Sin cambios'
     pdf_list_name: 'reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf'
-
-public_es:
-  <<: *common
-
-mc_es:
-  <<: *common

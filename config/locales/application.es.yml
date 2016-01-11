@@ -44,8 +44,6 @@ es:
 
   lang:
     es: 'Español'
-    public_es: 'Público'
-    mc_es: 'Control de gestión'
 
   message:
     welcome: 'Bienvenido'

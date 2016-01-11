@@ -45,8 +45,6 @@
 
   lang:
     es: 'Español'
-    public_es: 'Público'
-    mc_es: 'Control de gestión'
 
   message:
     change_weakness_risk: "El riesgo de la observación ha cambiado"

@@ -1,4 +1,4 @@
-es: &common
+es:
   attributes:
     created_at: 'Creación'
     updated_at: 'Última actualización'
@@ -244,9 +244,3 @@ es: &common
         cost: 'Costo'
         resource: 'Recurso'
         resource_consumer: 'Utilización de recurso'
-
-public_es:
-  <<: *common
-
-mc_es:
-  <<: *common

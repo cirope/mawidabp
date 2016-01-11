@@ -1,4 +1,4 @@
-es: &common
+es:
   flash:
     actions:
       create:
@@ -85,9 +85,3 @@ es: &common
         update:
           notice: 'Liberación de responsabilidades finalizada correctamente'
           alert: 'La liberación de responsabilidades no puede realizarse, deberá en algunos casos reasignarlas'
-
-public_es:
-  <<: *common
-
-mc_es:
-  <<: *common

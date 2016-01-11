@@ -1,4 +1,4 @@
-es: &common
+es:
   menu:
     administration_title: 'Administración'
     administration:
@@ -52,9 +52,3 @@ es: &common
       notifications: 'Notificaciones'
       reports: 'Reportes'
     help_title: 'Ayuda'
-
-public_es:
-  <<: *common
-
-mc_es:
-  <<: *common
