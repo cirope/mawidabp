@@ -53,10 +53,6 @@
         <%= f.input :description, autofocus: true, input_html: { readonly: readonly, rows: 5 } %>
         <%= f.input :effect, input_html: { readonly: readonly, rows: 5 } %>
         <%= f.input :audit_recommendations, input_html: { readonly: readonly, rows: 5 } %>
-        <% if current_organization.kind.eql? 'quality_management' %>
-          <%= f.input :correction, input_html: { readonly: readonly, rows: 5 } %>
-          <%= f.input :correction_date, as: :date_picker, input_html: { disabled: readonly } %>
-        <% end %>
       </div>
       <div class="col-md-6">
         <%= f.input :origination_date, as: :date_picker, input_html: { disabled: readonly } %>
@@ -77,10 +73,6 @@
             <%= c_f.input :comment %>
             <%= c_f.input :user_id, as: :hidden %>
           <% end %>
-        <% end %>
-        <% if current_organization.kind.eql? 'quality_management' %>
-          <%= f.input :cause_analysis, input_html: { readonly: readonly, rows: 5 } %>
-          <%= f.input :cause_analysis_date, as: :date_picker, input_html: { disabled: readonly } %>
         <% end %>
         <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
         <%= f.input :follow_up_date, as: :date_picker, input_html: { disabled: readonly } %>

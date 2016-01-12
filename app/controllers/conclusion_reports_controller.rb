@@ -7,7 +7,6 @@ class ConclusionReportsController < ApplicationController
   include Reports::ProcessControlStats
   include Reports::WeaknessesByRiskReport
   include Reports::FixedWeaknessesReport
-  include Reports::NonconformitiesReport
   include Reports::CostAnalysis
 
   before_action :auth, :load_privileges, :check_privileges
@@ -17,7 +16,6 @@ class ConclusionReportsController < ApplicationController
   # * GET /conclusion_report
   def index
     @title = t('conclusion_report.index_title')
-    @quality_management = current_organization.kind.eql? 'quality_management'
 
     respond_to do |format|
       format.html

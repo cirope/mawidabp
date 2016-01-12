@@ -11,8 +11,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     private_actions = [
       :index, :synthesis_report, :weaknesses_by_state, :weaknesses_by_risk,
       :weaknesses_by_audit_type, :weaknesses_by_audit_type, :cost_analysis,
-      :weaknesses_by_risk_report, :fixed_weaknesses_report,
-      :nonconformities_report
+      :weaknesses_by_risk_report, :fixed_weaknesses_report
     ]
 
     private_actions.each do |action|
@@ -495,60 +494,5 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'process_control_stats', 0)
-  end
-
-  test 'nonconformities report' do
-    login
-
-    get :nonconformities_report
-    assert_response :success
-    assert_template 'conclusion_reports/nonconformities_report'
-
-    assert_nothing_raised do
-      get :nonconformities_report, :nonconformities_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
-        },
-        :controller_name => 'conclusion',
-        :final => true
-    end
-
-    assert_response :success
-    assert_template 'conclusion_reports/nonconformities_report'
-  end
-
-  test 'filtered nonconformities report' do
-    login
-
-    get :nonconformities_report, :nonconformities_report => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date,
-      :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'one'
-      },
-      :controller_name => 'conclusion',
-      :final => true
-
-    assert_response :success
-    assert_template 'conclusion_reports/nonconformities_report'
-  end
-
-  test 'create nonconformities report' do
-    login
-
-    get :create_nonconformities_report, :nonconformities_report => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
-      },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',
-      :final => true
-
-    assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('conclusion_committee_report.nonconformities_report.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
-      'nonconformities_report', 0)
   end
 end

@@ -35,23 +35,6 @@ module ControlObjectiveItemsHelper
     [code_from_review, code_from_control_objective].compact.max
   end
 
-  def control_objective_nonconformities_summary_headers
-    Finding::STATUS.except(:repeated).keys.map do |status|
-      content_tag :th, t("finding.status_#{status}")
-    end.join
-  end
-
-  def control_objective_nonconformities_summary_row(control_objective_item)
-    Finding::STATUS.except(:repeated).keys.map do |status|
-      nonconformities =  control_objective_item.is_in_a_final_review? ?
-        control_objective_item.final_nonconformities :
-        control_objective_item.nonconformities
-      nonconformities_count = nonconformities.select { |w| w.send "#{status}?" }.size
-
-      content_tag :td, nonconformities_count
-    end.join
-  end
-
   def control_objective_weaknesses_summary_headers
     Finding::STATUS.except(:repeated).keys.map do |status|
       content_tag :th, t("finding.status_#{status}")
@@ -83,23 +66,6 @@ module ControlObjectiveItemsHelper
       oportunities_count = oportunities.select { |w| w.send "#{status}?" }.size
 
       content_tag :td, oportunities_count
-    end.join
-  end
-
-  def control_objective_potential_nonconformities_summary_headers
-    Finding::STATUS.except(:repeated).keys.map do |status|
-      content_tag :th, t("finding.status_#{status}")
-    end.join
-  end
-
-  def control_objective_potential_nonconformities_summary_row(control_objective_item)
-    Finding::STATUS.except(:repeated).keys.map do |status|
-      potential_nonconformities =  control_objective_item.is_in_a_final_review? ?
-        control_objective_item.final_potential_nonconformities :
-        control_objective_item.potential_nonconformities
-      potential_nonconformities_count = potential_nonconformities.select { |w| w.send "#{status}?" }.size
-
-      content_tag :td, potential_nonconformities_count
     end.join
   end
 

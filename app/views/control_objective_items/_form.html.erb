@@ -81,14 +81,7 @@
   <%= render 'weaknesses_summary', readonly: readonly %>
 
   <br />
-
   <%= render 'oportunities_summary', readonly: readonly %>
-  <% if current_organization.kind.eql? 'quality_management' %>
-    <br />
-    <%= render 'nonconformities_summary', readonly: readonly %>
-    <br />
-    <%= render 'potential_nonconformities_summary', readonly: readonly %>
-  <% end %>
 
   <% if @control_objective_item.continuous %>
     <br />

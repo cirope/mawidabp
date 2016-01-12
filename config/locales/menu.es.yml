@@ -37,8 +37,6 @@ es:
       findings:
         weaknesses: 'Observaciones'
         oportunities: 'Oportunidades de mejora'
-        nonconformities: 'No conformidades'
-        potential_nonconformities: 'No conformidades potenciales'
     conclusion_title: 'Conclusión'
     conclusion:
       draft_reviews: 'Informe borrador'

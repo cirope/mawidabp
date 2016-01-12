@@ -17,28 +17,16 @@
         <% oportunities_count = counts[:oportunities] %>
         <% total_weaknesses = weaknesses_count.values.sum %>
         <% total_oportunities = oportunities_count.values.sum %>
-        <% if @sqm %>
-          <% nonconformities_count = counts[:nonconformities] %>
-          <% potential_nonconformities_count = counts[:potential_nonconformities] %>
-          <% total_nonconformities = nonconformities_count.values.sum %>
-          <% total_potential_nonconformities = potential_nonconformities_count.values.sum %>
-        <% end %>
         <h4><%= "#{Review.model_name.human}: #{review}" %></h4>
         <% totals = total_weaknesses + total_oportunities %>
-        <% totals+= (total_nonconformities + total_potential_nonconformities) if @sqm %>
         <% unless totals == 0 %>
           <table class="table table-condensed table-striped">
             <thead>
               <tr>
                 <th><%= Finding.human_attribute_name 'state' %></th>
-                <% if type == :internal && !@sqm %>
+                <% if type == :internal %>
                   <th><%= t 'execution_reports.weaknesses_by_state.weaknesses_column' %></th>
                   <th><%= t 'execution_reports.weaknesses_by_state.oportunities_column' %></th>
-                <% elsif type == :internal && @sqm %>
-                  <th><%= t 'execution_reports.weaknesses_by_state.weaknesses_column' %></th>
-                  <th><%= t 'execution_reports.weaknesses_by_state.oportunities_column' %></th>
-                  <th><%= t 'execution_reports.weaknesses_by_state.nonconformities_column' %></th>
-                  <th><%= t 'execution_reports.weaknesses_by_state.potential_nonconformities_column' %></th>
                 <% else %>
                   <th><%= t 'execution_reports.weaknesses_by_state.weaknesses_column' %></th>
                 <% end %>
@@ -50,21 +38,11 @@
                 <% o_count = oportunities_count[state.last] || 0 %>
                 <% weaknesses_percentage = total_weaknesses > 0 ? w_count.to_f / total_weaknesses * 100 : 0.0 %>
                 <% oportunities_percentage = total_oportunities > 0 ? o_count.to_f / total_oportunities * 100 : 0.0 %>
-                <% if @sqm %>
-                  <% nc_count = nonconformities_count[state.last] || 0 %>
-                  <% pnc_count = potential_nonconformities_count[state.last] || 0 %>
-                  <% nonconformities_percentage = total_nonconformities > 0 ? nc_count.to_f / total_nonconformities * 100 : 0.0 %>
-                  <% potential_nonconformities_percentage = total_potential_nonconformities > 0 ? pnc_count.to_f / total_potential_nonconformities * 100 : 0.0 %>
-                <% end %>
                 <tr>
                   <td><strong><%= t "finding.status_#{state.first}" %></strong></td>
                   <td><%= "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)" %></td>
-                  <% if type == :internal && !@sqm %>
+                  <% if type == :internal %>
                     <td><%= "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)" %></td>
-                  <% elsif type == :internal && @sqm %>
-                    <td><%= "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)" %></td>
-                    <td><%= "#{nc_count} (#{'%.2f' % nonconformities_percentage.round(2)}%)" %></td>
-                    <td><%= "#{pnc_count} (#{'%.2f' % potential_nonconformities_percentage.round(2)}%)" %></td>
                   <% end %>
                 </tr>
               <% end %>
@@ -73,12 +51,8 @@
                   <strong><%= t 'execution_reports.weaknesses_by_state.total' %></strong>
                 </td>
                 <td><strong><%= total_weaknesses %></strong></td>
-                <% if type == :internal && !@sqm %>
+                <% if type == :internal %>
                   <td><strong><%= total_oportunities %></strong></td>
-                <% elsif type == :internal && @sqm %>
-                  <td><strong><%= total_oportunities %></strong></td>
-                  <td><strong><%= total_nonconformities %></strong></td>
-                  <td><strong><%= total_potential_nonconformities %></strong></td>
                 <% end %>
               </tr>
             </tbody>

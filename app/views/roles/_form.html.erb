@@ -23,11 +23,8 @@
       </tr>
     </thead>
     <tbody>
-      <% if current_organization.kind.eql? 'quality_management' %>
-        <% menu_items = @role.audited? ? APP_AUDITED_QM_MENU_ITEMS : APP_AUDITOR_QM_MENU_ITEMS %>
-      <% else %>
-        <% menu_items = @role.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
-      <% end %>
+      <% menu_items = @role.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
+
       <% menu_items.each do |menu_item| %>
         <%= render 'menu_item', menu_item: menu_item, role_form: f %>
       <% end %>

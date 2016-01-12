@@ -25,12 +25,6 @@
             :being_implemented_resume => @being_implemented_resumes[period][key],
             :audit_type_symbol => audit_type_symbol
           }
-          if @sqm
-            locals.merge!(
-              :nonconformities_count => @weaknesses_counts[period]["#{key}_nonconformities"],
-              :potential_nonconformities_count => @weaknesses_counts[period]["#{key}_potential_nonconformities"]
-            )
-          end
         %>
         <%= render :partial => 'weaknesses_by_state_table', :locals => locals %>
       <% end %>
@@ -48,12 +42,6 @@
        :being_implemented_resume => @being_implemented_resumes[period]['total'],
        :audit_type_symbol => :internal
      }
-     if @sqm
-       locals.merge!(
-         :nonconformities_count => @weaknesses_counts[period]['total_nonconformities'],
-         :potential_nonconformities_count => @weaknesses_counts[period]['total_potential_nonconformities']
-       )
-     end
   %>
   <%= render :partial => 'weaknesses_by_state_table', :locals => locals %>
 <% end %>

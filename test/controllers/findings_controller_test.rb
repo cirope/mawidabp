@@ -72,7 +72,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 10, assigns(:findings).count
+    assert_equal 5, assigns(:findings).count
     assert assigns(:findings).all? {|f| f.review.conclusion_final_review.issue_date > 4.days.ago.to_date}
     assert_template 'findings/index'
   end

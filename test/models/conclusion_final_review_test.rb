@@ -31,8 +31,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   # Prueba la creación de un informe final
   test 'create' do
     review = Review.find reviews(:review_approved_with_conclusion).id
-    findings_count = (review.weaknesses + review.oportunities + review.nonconformities +
-                        review.potential_nonconformities).size
+    findings_count = (review.weaknesses + review.oportunities).size
 
     assert findings_count > 0
 
@@ -52,9 +51,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       end
     end
 
-    final_findings_count =
-      (review.final_weaknesses + review.final_oportunities + review.final_nonconformities +
-         review.final_potential_nonconformities).size
+    final_findings_count = (review.final_weaknesses + review.final_oportunities).size
 
     assert_equal findings_count, final_findings_count
     assert_not_equal 0, Finding.finals(true).count
@@ -64,8 +61,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   # Prueba la creación de un informe final con observaciones reiteradas
   test 'create with repeated findings' do
     review = Review.find reviews(:review_approved_with_conclusion).id
-    findings = (review.weaknesses + review.oportunities + review.nonconformities +
-                  review.potential_nonconformities)
+    findings = review.weaknesses + review.oportunities
     repeated_id = findings(
       :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
 
@@ -98,9 +94,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       end
     end
 
-    final_findings_count =
-      (review.final_weaknesses + review.final_oportunities + review.final_nonconformities +
-         review.final_potential_nonconformities).size
+    final_findings_count = (review.final_weaknesses + review.final_oportunities).size
 
     assert_equal findings.size, final_findings_count
     assert_not_equal 0, Finding.finals(true).count
@@ -221,11 +215,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'duplicate review findings' do
     review = Review.find reviews(:review_approved_with_conclusion).id
     review = review.reload
-    findings = review.weaknesses + review.oportunities + review.nonconformities +
-      review.potential_nonconformities
-
-    final_findings = review.final_weaknesses + review.final_oportunities +
-      review.final_nonconformities + review.final_potential_nonconformities
+    findings = review.weaknesses + review.oportunities
+    final_findings = review.final_weaknesses + review.final_oportunities
     work_papers_count = findings.inject(0) { |acc, f| acc + f.work_papers.size }
     final_work_papers_count = final_findings.inject(0) do |acc, f|
       acc + f.work_papers.size
@@ -247,12 +238,9 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
         @conclusion_review.errors.full_messages.join('; ')
     end
 
-    findings = review.weaknesses(true) + review.oportunities(true) + review.potential_nonconformities(true) +
-      review.potential_nonconformities(true) + review.nonconformities(true)
+    findings = review.weaknesses(true) + review.oportunities(true)
     work_papers_count = findings.inject(0) { |acc, f| acc + f.work_papers.size }
-    final_findings = review.reload.final_weaknesses(true) +
-      review.reload.final_nonconformities(true) + review.reload.final_potential_nonconformities(true) +
-      review.reload.final_oportunities(true)
+    final_findings = review.reload.final_weaknesses(true) + review.reload.final_oportunities(true)
     final_work_papers_count = final_findings.inject(0) do |acc, f|
       acc + f.work_papers.size
     end

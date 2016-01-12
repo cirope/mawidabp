@@ -32,11 +32,7 @@ module Users::Roles
   end
 
   def get_menu type = nil
-    if type == 'quality_management'
-      audited? ? APP_AUDITED_QM_MENU_ITEMS : APP_AUDITOR_QM_MENU_ITEMS
-    else
-      audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS
-    end
+    audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS
   end
 
   def get_type

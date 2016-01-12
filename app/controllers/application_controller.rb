@@ -129,11 +129,7 @@ class ApplicationController < ActionController::Base
 
     def module_name_for(controller_name)
       if current_organization
-        if current_organization.kind == 'quality_management'
-          modules =  @auth_user.audited? ? APP_AUDITED_QM_MENU_ITEMS : APP_AUDITOR_QM_MENU_ITEMS
-        else
-          modules =  @auth_user.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS
-        end
+        modules = @auth_user.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS
       end
 
       top_level_menu = true

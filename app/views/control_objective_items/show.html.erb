@@ -75,10 +75,6 @@
 
 <%= render :partial => 'weaknesses_summary', :locals => {:readonly => true} %>
 <%= render :partial => 'oportunities_summary', :locals => {:readonly => true} %>
-<% if current_organization.kind.eql? 'quality_management' %>
-  <%= render :partial => 'nonconformities_summary', :locals => {:readonly => true} %>
-  <%= render :partial => 'potential_nonconformities_summary', :locals => {:readonly => true} %>
-<% end %>
 
 <% unless @control_objective_item.business_unit_scores.empty? %>
   <h3><%= BusinessUnitScore.model_name.human :count => @control_objective_item.business_unit_scores.size %></h3>

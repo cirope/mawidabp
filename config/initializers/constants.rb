@@ -39,8 +39,6 @@ FOREIGN_KEY_OPTIONS={ on_delete: :restrict, on_update: :restrict }
 NOTIFICATIONS_STALE_DAYS = 2
 # Cadena para separar las enumeraciones cuando son concatenadas
 APP_ENUM_SEPARATOR = ' / '.freeze
-# Tipos de organizaciones
-ORGANIZATION_KINDS = ['private', 'public', 'quality_management', 'management_control'].freeze
 # Márgenes a dejar en los reportes generados en PDF (T, R, B, L)
 PDF_MARGINS = [25, 20, 20, 25].freeze
 # Tamaño de la página a usar en los reportes generados en PDF

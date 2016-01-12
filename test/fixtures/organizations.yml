@@ -4,7 +4,6 @@ cirope:
   description: ''
   image_model: image_one
   group: main_group
-  kind: quality_management
 
 google:
   name: Google Inc.
@@ -12,4 +11,3 @@ google:
   description: ''
   image_model: image_two
   group: second_group
-  kind: private

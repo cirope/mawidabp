@@ -65,17 +65,10 @@ class ControlObjectiveItem < ActiveRecord::Base
   has_many :business_unit_scores, dependent: :destroy
   has_many :weaknesses, -> { where(final: false) }, dependent: :destroy
   has_many :oportunities, -> { where(final: false) }, dependent: :destroy
-  has_many :nonconformities, -> { where(final: false) }, dependent: :destroy
-  has_many :potential_nonconformities, -> { where(final: false) },
-    dependent: :destroy
   has_many :final_weaknesses, -> { where(final: true) }, dependent: :destroy,
     class_name: 'Weakness'
   has_many :final_oportunities, -> { where(final: true) }, dependent: :destroy,
     class_name: 'Oportunity'
-  has_many :final_nonconformities, -> { where(final: true) },
-    dependent: :destroy, class_name: 'Nonconformity'
-  has_many :final_potential_nonconformities, -> { where(final: true) },
-    dependent: :destroy, class_name: 'PotentialNonconformity'
   has_many :work_papers, -> { order(code: :asc) }, as: :owner, dependent: :destroy,
     before_add: [:check_for_final_review, :prepare_work_paper],
     before_remove: :check_for_final_review
@@ -416,8 +409,8 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def pdf_data(finding)
-    weakness = finding.kind_of?(Weakness) || finding.kind_of?(Nonconformity)
-    oportunity = finding.kind_of?(Oportunity) || finding.kind_of?(PotentialNonconformity)
+    weakness = finding.kind_of?(Weakness)
+    oportunity = finding.kind_of?(Oportunity)
     body = ''
 
     if finding.review_code.present?

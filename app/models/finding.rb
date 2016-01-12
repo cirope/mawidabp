@@ -150,10 +150,6 @@ class Finding < ActiveRecord::Base
       (self.repeated_of || self.is_in_a_final_review?)
   end
 
-  def audited_and_system_quality_management?
-    current_user.try(:can_act_as_audited?) && self.organization.kind.eql?('quality_management')
-  end
-
   def next_code(review = nil)
     raise 'Must be implemented in the subclasses'
   end
@@ -260,7 +256,7 @@ class Finding < ActiveRecord::Base
 
     pdf.move_down((PDF_FONT_SIZE * 2.5).round)
 
-    if self.kind_of?(Weakness) || self.kind_of?(Nonconformity)
+    if self.kind_of?(Weakness)
       pdf.add_description_item(Weakness.human_attribute_name('risk'),
         self.risk_text, 0, false)
       pdf.add_description_item(Weakness.human_attribute_name('priority'),
@@ -274,7 +270,7 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(self.class.human_attribute_name('answer'),
       self.answer, 0, false) unless self.unanswered?
 
-    if (self.kind_of?(Weakness) || self.kind_of?(Nonconformity)) && (self.implemented? || self.being_implemented?)
+    if self.kind_of?(Weakness) && (self.implemented? || self.being_implemented?)
       pdf.add_description_item(Weakness.human_attribute_name('follow_up_date'),
         (I18n.l(self.follow_up_date, :format => :long) if self.follow_up_date),
         0, false)
@@ -387,7 +383,7 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(self.class.human_attribute_name(:state),
       self.state_text, 0, false)
 
-    if self.kind_of?(Weakness) || self.kind_of?(Nonconformity)
+    if self.kind_of?(Weakness)
       pdf.add_description_item(self.class.human_attribute_name(:risk),
         self.risk_text, 0, false)
       pdf.add_description_item(self.class.human_attribute_name(:priority),

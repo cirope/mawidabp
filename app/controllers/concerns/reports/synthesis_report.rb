@@ -38,10 +38,8 @@ module Reports::SynthesisReport
     @title = t("#{@controller}_committee_report.synthesis_report_title")
     @from_date, @to_date = *make_date_range(params[:synthesis_report])
     @periods = periods_for_interval
-    @sqm = current_organization.kind.eql? 'quality_management'
     @column_order = ['business_unit_report_name', 'review', 'score',
-        'process_control', 'weaknesses_count']
-    @column_order << (@sqm ? 'nonconformities_count' : 'oportunities_count')
+        'process_control', 'weaknesses_count', 'oportunities_count']
     @filters = []
     @risk_levels = []
     @audits_by_business_unit = {}
@@ -75,13 +73,9 @@ module Reports::SynthesisReport
       'review' => [Review.model_name.human, 16],
       'score' => ["#{Review.human_attribute_name(:score)} (1)", 15],
       'process_control' => ["#{BestPractice.human_attribute_name('process_controls.name')} (2)", 30],
-      'weaknesses_count' => ["#{t('review.weaknesses_count')} (3)", 12]
+      'weaknesses_count' => ["#{t('review.weaknesses_count')} (3)", 12],
+      'oportunities_count' => ["#{t('review.oportunities_count')} (4)", 12]
     }
-    if @sqm
-      @columns['nonconformities_count'] = ["#{t('review.nonconformities_count')} (4)", 12]
-    else
-      @columns['oportunities_count'] = ["#{t('review.oportunities_count')} (4)", 12]
-    end
   end
 
   def init_business_unit_type_vars
@@ -148,12 +142,6 @@ module Reports::SynthesisReport
     end.map { |pc| "#{pc[0]} (#{'%.2f' % pc[1]}%)" }
   end
 
-  def get_nonconformities_count_text(c_r)
-    c_r.review.nonconformities.not_revoked.count > 0 ?
-      c_r.review.nonconformities.not_revoked.count.to_s :
-      t("#{@controller}_committee_report.synthesis_report.without_nonconformities")
-  end
-
   def get_oportunities_count_text(c_r)
     c_r.review.oportunities.not_revoked.count > 0 ?
       c_r.review.final_oportunities.not_revoked.count.to_s :
@@ -162,11 +150,8 @@ module Reports::SynthesisReport
 
   def set_column_data(c_r)
     process_control_text = get_process_controls_text
-    if @sqm
-      nonconformities_count_text = get_nonconformities_count_text(c_r)
-    else
-      oportunities_count_text = get_oportunities_count_text(c_r)
-    end
+    oportunities_count_text = get_oportunities_count_text(c_r)
+
     @review_scores << c_r.review.score
     @column_data << [
       c_r.review.business_unit.name,
@@ -175,8 +160,7 @@ module Reports::SynthesisReport
       process_control_text,
       @risk_levels.blank? ?
         t('follow_up_committee_report.synthesis_report.without_weaknesses') :
-        @weaknesses_count_text,
-      @sqm ? nonconformities_count_text : oportunities_count_text
+        @weaknesses_count_text, oportunities_count_text
     ]
   end
 
@@ -267,9 +251,7 @@ module Reports::SynthesisReport
   def add_pdf_references(pdf)
     pdf.move_down PDF_FONT_SIZE
 
-    references = @sqm ? t("#{@controller}_committee_report.synthesis_report.sqm_references",
-      :risk_types => @risk_levels.to_sentence) :
-      t("#{@controller}_committee_report.synthesis_report.references", :risk_types => @risk_levels.to_sentence)
+    references = t("#{@controller}_committee_report.synthesis_report.references", :risk_types => @risk_levels.to_sentence)
 
     pdf.text references, :font_size => (PDF_FONT_SIZE * 0.75).round,
       :align => :justify

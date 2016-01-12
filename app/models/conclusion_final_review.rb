@@ -144,8 +144,7 @@ class ConclusionFinalReview < ConclusionReview
   end
 
   def duplicate_review_findings
-    findings = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked +
-      self.review.nonconformities.not_revoked + self.review.potential_nonconformities.not_revoked
+    findings = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked
 
     begin
       findings.all? do |f|
@@ -176,8 +175,7 @@ class ConclusionFinalReview < ConclusionReview
         f.save!
       end
 
-      revoked_findings = self.review.weaknesses.revoked + self.review.oportunities.revoked +
-        self.review.nonconformities.revoked + self.review.potential_nonconformities.revoked
+      revoked_findings = self.review.weaknesses.revoked + self.review.oportunities.revoked
 
       revoked_findings.each { |rf| rf.final = true; rf.save! }
     rescue ActiveRecord::RecordInvalid

@@ -4,7 +4,7 @@
   {:method => :patch, :id => "edit_finding_#{@finding.id}"} do |f| %>
 
   <% content_for :js_extra do %>
-    <%= raw "var lastWorkPaperCode = '#{@finding.kind_of?(Weakness || Nonconformity) ?
+    <%= raw "var lastWorkPaperCode = '#{@finding.kind_of?(Weakness) ?
         next_weakness_work_paper_code(@finding, true) :
         next_oportunity_work_paper_code(@finding)}';" %>
   <% end %>
@@ -38,13 +38,13 @@
           <%= f.input :control_objective_item_id, as: :hidden %>
         <% end %>
         <%= f.input :description, input_html: { readonly: true, rows: 5 } %>
-        <% if @finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity) %>
+        <% if @finding.kind_of?(Weakness) %>
           <%= f.input :effect, input_html: { readonly: true, rows: 4 } %>
           <%= f.input :audit_recommendations, input_html: { readonly: true, rows: 2 } %>
         <% end %>
       </div>
       <div class="col-md-6">
-        <% if @finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity) %>
+        <% if @finding.kind_of?(Weakness) %>
           <%= f.input :risk, collection: risks, prompt: true, input_html: { autofocus: true } %>
           <%= f.input :priority, collection: priorities, prompt: true %>
         <% end %>
@@ -64,13 +64,6 @@
         <% end %>
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
-        <% if current_organization.kind.eql?('quality_management') &&
-          (@finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity)) %>
-          <%= f.input :correction %>
-          <%= f.input :correction_date, as: :date_picker %>
-          <%= f.input :cause_analysis %>
-          <%= f.input :cause_analysis_date, as: :date_picker %>
-        <% end %>
         <%= f.input :answer, input_html: { rows: 5 } %>
         <%= f.input :follow_up_date, as: :date_picker, label:
           @finding.class.human_attribute_name(:follow_up_date) %>

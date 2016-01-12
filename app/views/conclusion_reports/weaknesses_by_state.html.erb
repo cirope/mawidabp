@@ -21,12 +21,7 @@
              :oportunities_count => @weaknesses_counts[period]["#{key}_oportunities"],
              :audit_type_symbol => audit_type_symbol
            }
-           if @sqm
-             locals.merge!(
-               :nonconformities_count => @weaknesses_counts[period]["#{key}_nonconformities"],
-               :potential_nonconformities_count => @weaknesses_counts[period]["#{key}_potential_nonconformities"]
-             )
-           end %>
+        %>
         <%= render :partial => 'weaknesses_by_state_table', :locals => locals %>
       <% end %>
     <% end %>
@@ -41,12 +36,6 @@
        :oportunities_count => @weaknesses_counts[period]['total_oportunities'],
        :audit_type_symbol => :internal
      }
-     if @sqm
-       locals.merge!(
-         :nonconformities_count => @weaknesses_counts[period]['total_nonconformities'],
-         :potential_nonconformities_count => @weaknesses_counts[period]['total_potential_nonconformities']
-       )
-     end
   %>
   <%= render :partial => 'weaknesses_by_state_table', :locals => locals %>
 <% end %>

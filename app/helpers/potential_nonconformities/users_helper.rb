@@ -1,2 +1,0 @@
-module PotentialNonconformities::UsersHelper
-end

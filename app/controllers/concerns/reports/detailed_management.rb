@@ -24,8 +24,7 @@ module Reports::DetailedManagement
               process_controls,
               @risk_levels.blank? ?
                 t('execution_reports.detailed_management_report.without_weaknesses') :
-                @weaknesses_count_text,
-              @sqm ? @nonconformities_count_text : @oportunities_count_text
+                @weaknesses_count_text, @oportunities_count_text
             ]
           end
         end
@@ -48,10 +47,8 @@ module Reports::DetailedManagement
   def init_vars
     @title = t 'execution_reports.detailed_management_report_title'
     @from_date, @to_date = *make_date_range(params[:detailed_management_report])
-    @sqm = current_organization.kind.eql? 'quality_management'
     @column_order = ['business_unit_report_name', 'review', 'process_control',
-      'weaknesses_count']
-    @column_order << (@sqm ? 'nonconformities_count' : 'oportunities_count')
+      'weaknesses_count', 'oportunities_count']
     @risk_levels = []
     @audits_by_period = []
   end
@@ -71,13 +68,9 @@ module Reports::DetailedManagement
       'business_unit_report_name' => [but_label, 15],
       'review' => [Review.model_name.human, 16],
       'process_control' => ["#{BestPractice.human_attribute_name('process_controls.name')}", 45],
-      'weaknesses_count' => ["#{t('review.weaknesses_count')} (1)", 12]
+      'weaknesses_count' => ["#{t('review.weaknesses_count')} (1)", 12],
+      'oportunities_count' => ["#{t('review.oportunities_count')} (2)", 12]
     }
-    if @sqm
-      @columns['nonconformities_count'] = ["#{t('review.nonconformities_count')} (2)", 12]
-    else
-      @columns['oportunities_count'] = ["#{t('review.oportunities_count')} (2)", 12]
-    end
   end
 
   def get_review_process_controls(review)
@@ -110,15 +103,10 @@ module Reports::DetailedManagement
           "#{risk_text}: #{weaknesses_count[risk_text] || 0}"
         end
       end
-    if @sqm
-      @nonconformities_count_text = review.nonconformities.count > 0 ?
-        review.nonconformities.count.to_s :
-        t('execution_reports.detailed_management_report.without_nonconformities')
-    else
-      @oportunities_count_text = review.oportunities.count > 0 ?
-        review.oportunities.count.to_s :
-        t('execution_reports.detailed_management_report.without_oportunities')
-    end
+
+    @oportunities_count_text = review.oportunities.count > 0 ?
+      review.oportunities.count.to_s :
+      t('execution_reports.detailed_management_report.without_oportunities')
   end
 
   def create_detailed_management_report
@@ -225,14 +213,9 @@ module Reports::DetailedManagement
 
   def add_report_references(pdf)
     pdf.move_down PDF_FONT_SIZE
-    if @sqm
-      pdf.text t('execution_reports.detailed_management_report.sqm_references'),
-        font_size: (PDF_FONT_SIZE * 0.75).round, align: :justify
-    else
-      pdf.text t('execution_reports.detailed_management_report.references',
-        risk_types: @risk_levels.to_sentence),
-        font_size: (PDF_FONT_SIZE * 0.75).round, align: :justify
-    end
+    pdf.text t('execution_reports.detailed_management_report.references',
+      risk_types: @risk_levels.to_sentence),
+      font_size: (PDF_FONT_SIZE * 0.75).round, align: :justify
   end
 
   def add_pdf_title(pdf, data)

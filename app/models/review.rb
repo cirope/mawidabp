@@ -149,11 +149,7 @@ class Review < ActiveRecord::Base
   has_many :control_objective_items, :dependent => :destroy, :after_add => :assign_review
   has_many :weaknesses, :through => :control_objective_items
   has_many :oportunities, :through => :control_objective_items
-  has_many :nonconformities, :through => :control_objective_items
-  has_many :potential_nonconformities, :through => :control_objective_items
   has_many :final_weaknesses, :through => :control_objective_items
-  has_many :final_nonconformities, :through => :control_objective_items
-  has_many :final_potential_nonconformities, :through => :control_objective_items
   has_many :final_oportunities, :through => :control_objective_items
   has_many :review_user_assignments, :dependent => :destroy
   has_many :finding_review_assignments, :dependent => :destroy,
@@ -375,37 +371,11 @@ class Review < ActiveRecord::Base
         ]
       end
 
-      coi.nonconformities.each do |nc|
-        unless nc.must_be_approved?
-          self.can_be_approved_by_force = false
-          errors << [
-            "#{Nonconformity.model_name.human} #{nc.review_code} - #{nc.title}",
-            nc.approval_errors
-          ]
-        end
-      end
-
-      coi.nonconformities.select(&:unconfirmed?).each do |nc|
-        errors << [
-          "#{Nonconformity.model_name.human} #{nc.review_code} - #{nc.title}",
-          [I18n.t('nonconformity.errors.is_unconfirmed')]
-        ]
-      end
-
       coi.oportunities.each do |o|
         unless o.must_be_approved?
           errors << [
             "#{Oportunity.model_name.human} #{o.review_code} - #{o.title}",
             o.approval_errors
-          ]
-        end
-      end
-
-      coi.potential_nonconformities.each do |p_nc|
-        unless p_nc.must_be_approved?
-          errors << [
-            "#{PotentialNonconformity.model_name.human} #{p_nc.review_code} - #{p_nc.title}",
-            p_nc.approval_errors
           ]
         end
       end
@@ -483,26 +453,6 @@ class Review < ActiveRecord::Base
     last_work_paper_code(prefix, work_papers)
   end
 
-  def last_nonconformity_work_paper_code(prefix = nil)
-    work_papers = []
-
-    (self.nonconformities + self.final_nonconformities).each do |w|
-      work_papers.concat(w.work_papers.with_prefix(prefix))
-    end
-
-    last_work_paper_code(prefix, work_papers)
-  end
-
-  def last_potential_nonconformity_work_paper_code(prefix = nil)
-    work_papers = []
-
-    (self.potential_nonconformities + self.final_potential_nonconformities).each do |w|
-      work_papers.concat(w.work_papers.with_prefix(prefix))
-    end
-
-    last_work_paper_code(prefix, work_papers)
-  end
-
   def last_oportunity_work_paper_code(prefix = nil)
     work_papers = []
 
@@ -515,14 +465,6 @@ class Review < ActiveRecord::Base
 
   def next_weakness_code(prefix = nil)
     next_finding_code prefix, self.weaknesses.with_prefix(prefix)
-  end
-
-  def next_nonconformity_code(prefix = nil)
-    next_finding_code prefix, self.nonconformities.with_prefix(prefix)
-  end
-
-  def next_potential_nonconformity_code(prefix = nil)
-    next_finding_code prefix, self.potential_nonconformities.with_prefix(prefix)
   end
 
   def next_oportunity_code(prefix = nil)
@@ -722,41 +664,6 @@ class Review < ActiveRecord::Base
       end
     end
 
-    nonconformities = self.final_nonconformities.all_for_report
-
-    unless nonconformities.blank?
-      pdf.add_subtitle I18n.t('review.nonconformities_summary'), PDF_FONT_SIZE, PDF_FONT_SIZE
-
-      column_headers, column_widths, column_data = [], [], []
-      column_names = [['description', 60], ['risk', 15], ['state', 25]]
-
-      column_names.each do |col_name, col_size|
-        column_headers << Nonconformity.human_attribute_name(col_name)
-        column_widths << pdf.percent_width(col_size)
-      end
-
-      nonconformities.each do |nonconformity|
-        column_data << [
-          "<b>#{nonconformity.review_code}</b>: #{nonconformity.title}",
-          nonconformity.risk_text,
-          nonconformity.state_text
-        ]
-      end
-
-      unless column_data.blank?
-       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-         table_options = pdf.default_table_options(column_widths)
-
-         pdf.table(column_data.insert(0, column_headers), table_options) do
-           row(0).style(
-             :background_color => 'cccccc',
-             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-           )
-          end
-        end
-      end
-    end
-
     oportunities = self.final_oportunities.all_for_report
 
     unless oportunities.blank?
@@ -775,44 +682,6 @@ class Review < ActiveRecord::Base
         column_data << [
           "<b>#{oportunity.review_code}</b>: #{oportunity.title}",
           oportunity.state_text
-        ]
-      end
-
-      unless column_data.blank?
-       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-         table_options = pdf.default_table_options(column_widths)
-
-         pdf.table(column_data.insert(0, column_headers), table_options) do
-           row(0).style(
-             :background_color => 'cccccc',
-             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-           )
-         end
-       end
-      end
-    end
-
-    potential_nonconformities = self.final_potential_nonconformities.all_for_report
-
-    unless potential_nonconformities.blank?
-      pdf.add_subtitle I18n.t('review.potential_nonconformities_summary'), PDF_FONT_SIZE,
-        PDF_FONT_SIZE
-
-      column_headers, column_widths, column_data = [], [], []
-      column_names = [['description', 75], ['state', 25]]
-
-      column_names.each do |col_name, col_size|
-        column_headers << PotentialNonconformity.human_attribute_name(col_name)
-        column_widths << pdf.percent_width(col_size)
-      end
-
-      potential_nonconformities.each do |potential_nonconformity|
-        description = "<b>#{potential_nonconformity.review_code}</b>: "
-        description << "#{potential_nonconformity.title}"
-
-        column_data << [
-          description,
-          potential_nonconformity.state_text
         ]
       end
 
@@ -971,64 +840,6 @@ class Review < ActiveRecord::Base
 
     pdf.move_down PDF_FONT_SIZE
 
-    nonconformities = self.final_nonconformities.all_for_report
-
-    unless nonconformities.blank?
-      pdf.add_subtitle I18n.t('review.nonconformities_count_summary', PDF_FONT_SIZE, PDF_FONT_SIZE)
-
-      column_headers, column_widths, column_data = [], [], []
-      column_names = [
-        I18n.t('review.nonconformities_count'),
-        Nonconformity.human_attribute_name(:risk),
-        Nonconformity.human_attribute_name(:state)
-      ]
-
-      column_names.each do |col_name|
-        column_headers << col_name
-        column_widths << pdf.percent_width(100.0 / column_names.size)
-      end
-
-      nonconformity = nonconformities.first
-      risk_text, state_text = nonconformity.risk_text, nonconformity.state_text
-      count = 0
-
-      nonconformities.each do |nc|
-        if risk_text == nc.risk_text && state_text == nc.state_text
-          count += 1
-        else
-          column_data << [
-            count,
-            risk_text,
-            state_text
-          ]
-
-          risk_text, state_text = nc.risk_text, nc.state_text
-          count = 1
-        end
-      end
-
-      if count > 0
-        column_data << [
-          count,
-          risk_text,
-          state_text
-        ]
-      end
-
-      unless column_data.blank?
-        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-         table_options = pdf.default_table_options(column_widths)
-
-         pdf.table(column_data.insert(0, column_headers), table_options) do
-           row(0).style(
-             :background_color => 'cccccc',
-             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-           )
-         end
-       end
-      end
-    end
-
     oportunities = self.final_oportunities.all_for_report
 
     unless oportunities.blank?
@@ -1063,62 +874,6 @@ class Review < ActiveRecord::Base
           ]
 
           state_text = o.state_text
-          count = 1
-        end
-      end
-
-      if count > 0
-        column_data << [
-          count,
-          state_text
-        ]
-      end
-
-      unless column_data.blank?
-        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-         table_options = pdf.default_table_options(column_widths)
-
-         pdf.table(column_data.insert(0, column_headers), table_options) do
-           row(0).style(
-             :background_color => 'cccccc',
-             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-           )
-         end
-       end
-      end
-    end
-
-    potential_nonconformities = self.final_potential_nonconformities.all_for_report
-
-    unless potential_nonconformities.blank?
-      pdf.add_subtitle I18n.t('review.potential_nonconformities_count_summary'),
-        PDF_FONT_SIZE, PDF_FONT_SIZE
-
-      column_headers, column_widths, column_data = [], [], []
-      column_names = [
-        PotentialNonconformity.human_attribute_name(:count),
-        PotentialNonconformity.human_attribute_name(:state)
-      ]
-
-      column_names.each do |col_name|
-        column_headers << col_name
-        column_widths << pdf.percent_width(100.0 / column_names.size)
-      end
-
-      potential_nonconformity = potential_nonconformities.first
-      state_text = potential_nonconformity.state_text
-      count = 0
-
-      potential_nonconformities.each do |pnc|
-        if state_text == pnc.state_text
-          count += 1
-        else
-          column_data << [
-            count,
-            state_text
-          ]
-
-          state_text = pnc.state_text
           count = 1
         end
       end
@@ -1268,13 +1023,10 @@ class Review < ActiveRecord::Base
 
   def zip_all_work_papers(organization = nil)
     filename = self.absolute_work_papers_zip_path
-    weaknesses, oportunities, nonconformities, potential_nonconformities,
-      findings = [], [], [], [], []
+    weaknesses, oportunities, findings = [], [], []
     dirs = {
       :control_objectives => I18n.t('review.control_objectives_work_papers').sanitized_for_filename,
-      :nonconformities => I18n.t('review.nonconformities_work_papers').sanitized_for_filename,
       :weaknesses => I18n.t('review.weaknesses_work_papers').sanitized_for_filename,
-      :potential_nonconformities => I18n.t('review.potential_nonconformities_work_papers').sanitized_for_filename,
       :oportunities => I18n.t('review.oportunities_work_papers').sanitized_for_filename,
       :follow_up => I18n.t('review.follow_up_work_papers').sanitized_for_filename,
       :survey => Review.human_attribute_name(:survey).sanitized_for_filename
@@ -1293,30 +1045,11 @@ class Review < ActiveRecord::Base
       if self.has_final_review?
         weaknesses = self.final_weaknesses.not_revoked
         oportunities = self.final_oportunities.not_revoked
-        nonconformities = self.final_nonconformities.not_revoked
-        potential_nonconformities = self.final_potential_nonconformities.not_revoked
-        findings = self.weaknesses.not_revoked +
-          self.oportunities.not_revoked +
-          self.nonconformities.not_revoked +
-          self.potential_nonconformities.not_revoked
+        findings = self.weaknesses.not_revoked + self.oportunities.not_revoked
       else
         weaknesses = self.weaknesses.not_revoked
         oportunities = self.oportunities.not_revoked
-        nonconformities = self.nonconformities.not_revoked
-        potential_nonconformities = self.potential_nonconformities.not_revoked
         findings = []
-      end
-
-      nonconformities.each do |nc|
-        nc.work_papers.each do |nc_wp|
-          self.add_work_paper_to_zip nc_wp, dirs[:nonconformities], zipfile, 'E_'
-        end
-      end
-
-      potential_nonconformities.each do |pnc|
-        pnc.work_papers.each do |pnc_wp|
-          self.add_work_paper_to_zip pnc_wp, dirs[:potential_nonconformities], zipfile, 'E_'
-        end
       end
 
       weaknesses.each do |w|
