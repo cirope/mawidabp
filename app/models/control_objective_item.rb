@@ -453,28 +453,6 @@ class ControlObjectiveItem < ActiveRecord::Base
         "</b> #{I18n.l(finding.origination_date, format: :long)}\n"
     end
 
-    if weakness && finding.correction.present?
-      body << "<b>#{Weakness.human_attribute_name(
-      :correction)}: </b>#{finding.correction}\n"
-    end
-
-    if weakness && finding.correction_date.present?
-      body << "<b>#{Weakness.human_attribute_name(
-      :correction_date)}: </b> #{I18n.l(finding.correction_date,
-        format: :long)}\n"
-    end
-
-    if weakness && finding.cause_analysis.present?
-      body << "<b>#{Weakness.human_attribute_name(
-      :cause_analysis)}: </b>#{finding.cause_analysis}\n"
-    end
-
-    if weakness && finding.cause_analysis_date.present?
-      body << "<b>#{Weakness.human_attribute_name(
-      :cause_analysis_date)}: </b> #{I18n.l(finding.cause_analysis_date,
-        format: :long)}\n"
-    end
-
     if finding.answer.present?
       body << "<b>#{finding.class.human_attribute_name(:answer)}:</b> " +
         "#{finding.answer.chomp}\n"

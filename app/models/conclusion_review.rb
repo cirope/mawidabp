@@ -179,7 +179,6 @@ class ConclusionReview < ActiveRecord::Base
       grouped_control_objectives.each do |process_control, cois|
         process_control_text = "<b>#{ProcessControl.model_name.human}: " +
             "<i>#{process_control.name}</i></b>"
-        process_control_text += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
         pdf.text process_control_text, :align => :justify,
             :inline_format => true
 
@@ -246,7 +245,6 @@ class ConclusionReview < ActiveRecord::Base
           column_headers, column_widths = [], []
           header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
 
-          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
           column_headers << header
           column_widths << pdf.percent_width(100)
 
@@ -302,7 +300,6 @@ class ConclusionReview < ActiveRecord::Base
           column_headers, column_widths = [], []
           header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
 
-          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
           column_headers << header
           column_widths << pdf.percent_width(100)
 

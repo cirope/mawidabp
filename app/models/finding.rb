@@ -298,22 +298,6 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(self.class.human_attribute_name('state'),
       self.state_text, 0, false)
 
-    if self.correction && self.correction_date
-      pdf.add_description_item(self.class.human_attribute_name('correction'),
-        self.correction, 0, false)
-
-      pdf.add_description_item(self.class.human_attribute_name('correction_date'),
-        I18n.l(self.correction_date, :format => :long), 0,false)
-    end
-
-    if self.cause_analysis && self.cause_analysis_date
-      pdf.add_description_item(self.class.human_attribute_name('cause_analysis'),
-        self.cause_analysis, 0, false)
-
-      pdf.add_description_item(self.class.human_attribute_name('cause_analysis_date'),
-        I18n.l(self.cause_analysis_date, :format => :long), 0,false)
-    end
-
     unless self.work_papers.blank?
       pdf.start_new_page
       pdf.move_down PDF_FONT_SIZE * 3

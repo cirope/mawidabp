@@ -180,7 +180,6 @@ class FindingsController < ApplicationController
         :id, :control_objective_item_id, :review_code, :title, :description,
         :answer, :audit_comments, :state, :origination_date, :solution_date,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
-        :correction, :correction_date, :cause_analysis, :cause_analysis_date,
         :nested_user, :lock_version,
         users_for_notification: [],
         business_unit_ids: [],
@@ -210,8 +209,7 @@ class FindingsController < ApplicationController
     def prepare_parameters
       if @auth_user.can_act_as_audited?
         params[:finding].delete_if do |k,|
-          ![:finding_answers_attributes, :costs_attributes, :cause_analysis,
-            :cause_analysis_date, :correction, :correction_date].include?(k.to_sym)
+          ![:finding_answers_attributes, :costs_attributes].include?(k.to_sym)
         end
       end
     end

@@ -31,7 +31,7 @@ module Users::Roles
     end
   end
 
-  def get_menu type = nil
+  def get_menu
     audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS
   end
 

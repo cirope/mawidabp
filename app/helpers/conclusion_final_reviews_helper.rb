@@ -124,28 +124,6 @@ module ConclusionFinalReviewsHelper
         "#{I18n.l(finding.origination_date, :format => :long)}"
     end
 
-    if weakness && finding.correction.present?
-      body_rows << "<strong>#{finding.class.human_attribute_name(
-      :correction)}: </strong>#{finding.correction}"
-    end
-
-    if weakness && finding.correction_date.present?
-      body_rows << "<strong>#{finding.class.human_attribute_name(
-      :correction_date)}: </strong> #{I18n.l(finding.correction_date,
-        :format => :long)}"
-    end
-
-    if weakness && finding.cause_analysis.present?
-      body_rows << "<strong>#{finding.class.human_attribute_name(
-      :cause_analysis)}: </strong>#{finding.cause_analysis}"
-    end
-
-    if weakness && finding.cause_analysis_date.present?
-      body_rows << "<strong>#{finding.class.human_attribute_name(
-      :cause_analysis_date)}: </strong> #{I18n.l(finding.cause_analysis_date,
-        :format => :long)}"
-    end
-
     if finding.answer.present?
       body_rows << "<strong>#{finding.class.human_attribute_name(:answer)}:</strong> " +
         "#{h(finding.answer)}"

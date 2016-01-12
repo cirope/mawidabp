@@ -154,7 +154,6 @@ es:
         user_id: 'Usuario'
       organization:
         description: 'Descripción'
-        kind: 'Tipo de organización'
         name: 'Nombre'
         prefix: 'Prefijo'
       organization/image_model:

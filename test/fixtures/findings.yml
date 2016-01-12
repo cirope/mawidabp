@@ -14,10 +14,6 @@ bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
   effect: Effect 1w
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
-  correction: Correction
-  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
-  cause_analysis: Cause analysis
-  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
@@ -37,10 +33,6 @@ iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   solution_date:
   audit_recommendations: Proposed action 2w
   effect: Effect 2w
-  correction:
-  correction_date:
-  cause_analysis:
-  cause_analysis_date:
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
@@ -64,10 +56,6 @@ iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_
   solution_date:
   audit_recommendations: Proposed action 3w
   effect: Effect <%= level %>w
-  correction:
-  correction_date:
-  cause_analysis:
-  cause_analysis_date:
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
@@ -92,10 +80,6 @@ iso_27000_security_organization_4_2_item_editable_weakness_incomplete:
   solution_date:
   audit_recommendations: Proposed action 3w
   effect: Effect incomplete_w
-  correction:
-  correction_date:
-  cause_analysis:
-  cause_analysis_date:
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
@@ -118,10 +102,6 @@ iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   solution_date:
   audit_recommendations: Proposed action 1w
   effect: Effect 1w
-  correction:
-  correction_date:
-  cause_analysis:
-  cause_analysis_date:
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
@@ -186,10 +166,6 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   state: <%= Finding::STATUS[:being_implemented] %>
   origination_date:
   solution_date:
-  correction: Correction
-  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
-  cause_analysis: Cause analysis
-  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   audit_recommendations: Proposed action 3w
   effect: Effect 3w
   risk: <%= Finding.risks_values.first %>
@@ -299,10 +275,6 @@ iso_27000_security_policy_3_1_item_weakness:
   state: <%= Finding::STATUS[:being_implemented] %>
   origination_date:
   solution_date:
-  correction: Correction
-  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
-  cause_analysis: Cause analysis
-  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   audit_recommendations: Proposed action 1w
   effect: Effect 1w
   risk: <%= Finding.risks_values.first %>
@@ -323,10 +295,6 @@ bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
   state: <%= Finding::STATUS[:being_implemented] %>
   origination_date:
   solution_date:
-  correction: Correction
-  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
-  cause_analysis: Cause analysis
-  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   audit_recommendations: Proposed action 1w
   effect: Effect 1w
   risk: <%= Finding.risks_values.first %>
