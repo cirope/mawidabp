@@ -33,16 +33,6 @@ Rails.application.routes.draw do
 
   resources :business_unit_types
 
-  namespace :fortresses do
-    resources :users, only: [:index]
-  end
-
-  resources :fortresses do
-    resources :costs
-
-    get :auto_complete_for_control_objective_item, on: :collection
-  end
-
   resources :groups
 
   get 'welcome', as: 'welcome', to: 'welcome#index'

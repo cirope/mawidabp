@@ -466,13 +466,7 @@ APP_AUDITOR_QM_MENU_ITEMS = [
             order: 5,
             controllers: :potential_nonconformities,
             url: { controller: '/potential_nonconformities' }
-          ),
-          MenuItem.new(
-            :fortresses,
-            order: 5,
-            controllers: :fortresses,
-            url: { controller: '/fortresses' }
-            ),
+          )
         ]
       ),
       MenuItem.new(

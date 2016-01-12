@@ -271,10 +271,8 @@ class Finding < ActiveRecord::Base
           'audit_recommendations'), self.audit_recommendations, 0, false)
     end
 
-    unless self.kind_of? Fortress
-      pdf.add_description_item(self.class.human_attribute_name('answer'),
-        self.answer, 0, false) unless self.unanswered?
-    end
+    pdf.add_description_item(self.class.human_attribute_name('answer'),
+      self.answer, 0, false) unless self.unanswered?
 
     if (self.kind_of?(Weakness) || self.kind_of?(Nonconformity)) && (self.implemented? || self.being_implemented?)
       pdf.add_description_item(Weakness.human_attribute_name('follow_up_date'),
@@ -282,7 +280,7 @@ class Finding < ActiveRecord::Base
         0, false)
     end
 
-    if !self.kind_of?(Fortress) && self.implemented_audited?
+    if self.implemented_audited?
       pdf.add_description_item(self.class.human_attribute_name('solution_date'),
         (I18n.l(self.solution_date, :format => :long) if self.solution_date), 0,
         false)
@@ -298,13 +296,11 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(self.class.human_attribute_name('user_ids'),
       audited.join('; '), 0, false)
 
-    unless self.kind_of? Fortress
-      pdf.add_description_item(self.class.human_attribute_name('audit_comments'),
-        self.audit_comments, 0, false)
+    pdf.add_description_item(self.class.human_attribute_name('audit_comments'),
+      self.audit_comments, 0, false)
 
-      pdf.add_description_item(self.class.human_attribute_name('state'),
-        self.state_text, 0, false)
-    end
+    pdf.add_description_item(self.class.human_attribute_name('state'),
+      self.state_text, 0, false)
 
     if self.correction && self.correction_date
       pdf.add_description_item(self.class.human_attribute_name('correction'),
@@ -389,7 +385,7 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(self.class.human_attribute_name(:description),
       self.description, 0, false)
     pdf.add_description_item(self.class.human_attribute_name(:state),
-      self.state_text, 0, false) unless self.kind_of?(Fortress)
+      self.state_text, 0, false)
 
     if self.kind_of?(Weakness) || self.kind_of?(Nonconformity)
       pdf.add_description_item(self.class.human_attribute_name(:risk),

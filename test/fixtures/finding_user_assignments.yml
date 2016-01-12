@@ -1,24 +1,3 @@
-bcra_A4609_security_management_responsible_dependency_fortress_auditor_user:
-  finding: bcra_A4609_security_management_responsible_dependency_fortress
-  finding_type: Fortress
-  user: auditor_user
-  process_owner: false
-  responsible_auditor: false
-
-bcra_A4609_security_management_responsible_dependency_fortress_audited_user:
-  finding: bcra_A4609_security_management_responsible_dependency_fortress
-  finding_type: Fortress
-  user: audited_user
-  process_owner: true
-  responsible_auditor: false
-
-bcra_A4609_security_management_responsible_dependency_fortress_supervisor_user:
-  finding: bcra_A4609_security_management_responsible_dependency_fortress
-  finding_type: Fortress
-  user: supervisor_user
-  process_owner: false
-  responsible_auditor: true
-
 iso_27000_security_organization_4_2_item_editable_potential_nonconformity_auditor_user:
   finding: iso_27000_security_organization_4_2_item_editable_potential_nonconformity
   finding_type: PotentialNonconformity

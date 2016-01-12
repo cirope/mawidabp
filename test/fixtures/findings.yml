@@ -130,54 +130,6 @@ iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   notification_level: 0
   organization: cirope
 
-bcra_A4609_security_management_responsible_dependency_fortress:
-  type: Fortress
-  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
-  title: Title 1f
-  review_code: F001
-  description: Description 1f
-  answer:
-  audit_comments:
-  state:
-  solution_date:
-  audit_recommendations:
-  effect:
-  correction:
-  correction_date:
-  cause_analysis:
-  cause_analysis_date:
-  risk:
-  priority:
-  follow_up_date:
-  origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
-  final: false
-  notification_level:
-  organization: cirope
-
-bcra_A4609_security_management_responsible_dependency_fortress_2:
-  type: Fortress
-  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
-  title: Title 2f
-  review_code: F002
-  description: Description 2f
-  answer:
-  audit_comments:
-  state:
-  solution_date:
-  audit_recommendations:
-  effect:
-  correction:
-  correction_date:
-  cause_analysis:
-  cause_analysis_date:
-  risk:
-  priority:
-  follow_up_date:
-  origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
-  final: false
-  notification_level:
-  organization: cirope
-
 bcra_A4609_security_management_responsible_dependency_nonconformity_being_implemented:
   type: Nonconformity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item

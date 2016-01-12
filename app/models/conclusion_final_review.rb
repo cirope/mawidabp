@@ -145,8 +145,7 @@ class ConclusionFinalReview < ConclusionReview
 
   def duplicate_review_findings
     findings = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked +
-      self.review.nonconformities.not_revoked + self.review.potential_nonconformities.not_revoked +
-      self.review.fortresses
+      self.review.nonconformities.not_revoked + self.review.potential_nonconformities.not_revoked
 
     begin
       findings.all? do |f|

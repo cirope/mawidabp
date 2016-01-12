@@ -40,10 +40,8 @@
           <%= f.input :risk, collection: risks, prompt: true, disabled: true %>
           <%= f.input :priority, collection: priorities, prompt: true, disabled: true %>
         <% end %>
-        <% unless @finding.kind_of? Fortress %>
-          <%= f.label :state, Finding.human_attribute_name(:state) %>
-          <%= finding_status_field(f, true, true) %>
-        <% end %>
+        <%= f.label :state, Finding.human_attribute_name(:state) %>
+        <%= finding_status_field(f, true, true) %>
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
         <% if current_organization.kind.eql?('quality_management') &&

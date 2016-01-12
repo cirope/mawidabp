@@ -32,7 +32,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'create' do
     review = Review.find reviews(:review_approved_with_conclusion).id
     findings_count = (review.weaknesses + review.oportunities + review.nonconformities +
-                        review.potential_nonconformities + review.fortresses).size
+                        review.potential_nonconformities).size
 
     assert findings_count > 0
 
@@ -54,7 +54,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
     final_findings_count =
       (review.final_weaknesses + review.final_oportunities + review.final_nonconformities +
-         review.final_potential_nonconformities + review.final_fortresses).size
+         review.final_potential_nonconformities).size
 
     assert_equal findings_count, final_findings_count
     assert_not_equal 0, Finding.finals(true).count
@@ -65,7 +65,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'create with repeated findings' do
     review = Review.find reviews(:review_approved_with_conclusion).id
     findings = (review.weaknesses + review.oportunities + review.nonconformities +
-                  review.potential_nonconformities + review.fortresses)
+                  review.potential_nonconformities)
     repeated_id = findings(
       :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
 
@@ -100,7 +100,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
     final_findings_count =
       (review.final_weaknesses + review.final_oportunities + review.final_nonconformities +
-         review.final_potential_nonconformities + review.final_fortresses).size
+         review.final_potential_nonconformities).size
 
     assert_equal findings.size, final_findings_count
     assert_not_equal 0, Finding.finals(true).count
@@ -221,10 +221,10 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'duplicate review findings' do
     review = Review.find reviews(:review_approved_with_conclusion).id
     review = review.reload
-    findings = review.weaknesses + review.oportunities + review.fortresses + review.nonconformities +
+    findings = review.weaknesses + review.oportunities + review.nonconformities +
       review.potential_nonconformities
 
-    final_findings = review.final_weaknesses + review.final_oportunities + review.final_fortresses +
+    final_findings = review.final_weaknesses + review.final_oportunities +
       review.final_nonconformities + review.final_potential_nonconformities
     work_papers_count = findings.inject(0) { |acc, f| acc + f.work_papers.size }
     final_work_papers_count = final_findings.inject(0) do |acc, f|
@@ -248,9 +248,9 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     end
 
     findings = review.weaknesses(true) + review.oportunities(true) + review.potential_nonconformities(true) +
-      review.potential_nonconformities(true) + review.fortresses(true) + review.nonconformities(true)
+      review.potential_nonconformities(true) + review.nonconformities(true)
     work_papers_count = findings.inject(0) { |acc, f| acc + f.work_papers.size }
-    final_findings = review.reload.final_weaknesses(true) + review.reload.final_fortresses(true) +
+    final_findings = review.reload.final_weaknesses(true) +
       review.reload.final_nonconformities(true) + review.reload.final_potential_nonconformities(true) +
       review.reload.final_oportunities(true)
     final_work_papers_count = final_findings.inject(0) do |acc, f|

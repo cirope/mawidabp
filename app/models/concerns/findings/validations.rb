@@ -109,7 +109,7 @@ module Findings::Validations
     end
 
     def findings_for review
-      review.weaknesses | review.oportunities | review.fortresses |
+      review.weaknesses | review.oportunities |
         review.nonconformities | review.potential_nonconformities
     end
 

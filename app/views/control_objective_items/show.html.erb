@@ -76,7 +76,6 @@
 <%= render :partial => 'weaknesses_summary', :locals => {:readonly => true} %>
 <%= render :partial => 'oportunities_summary', :locals => {:readonly => true} %>
 <% if current_organization.kind.eql? 'quality_management' %>
-  <%= render :partial => 'fortresses_summary', :locals => {:readonly => true} %>
   <%= render :partial => 'nonconformities_summary', :locals => {:readonly => true} %>
   <%= render :partial => 'potential_nonconformities_summary', :locals => {:readonly => true} %>
 <% end %>

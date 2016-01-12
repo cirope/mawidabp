@@ -90,8 +90,7 @@ module Users::Reassigns
       review.weaknesses +
         review.oportunities +
         review.nonconformities +
-        review.potential_nonconformities +
-        review.fortresses
+        review.potential_nonconformities
     end
 
     def notify_responsibility_changes_to_me_and other

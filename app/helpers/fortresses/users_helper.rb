@@ -1,2 +1,0 @@
-module Fortresses::UsersHelper
-end

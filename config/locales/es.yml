@@ -336,7 +336,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     oportunities: "OPORTUNIDADES DE MEJORA"
     nonconformities: "NO CONFORMIDADES"
     potential_nonconformities: "NO CONFORMIDADES POTENCIALES"
-    fortresses: "FORTALEZAS"
     finding_review_assignments: "HALLAZGOS REVISADOS"
     add_recipient: "Agregar nuevo destinatario"
     review_sended: "El informe fue enviado a todos los destinatarios indicados"
@@ -382,10 +381,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     stale_object_error: "El objetivo de control no fue actualizado, intente nuevamente."
     view_all_weaknesses: "Ver listado de observaciones"
     view_all_oportunities: "Ver listado de oportunidades de mejora"
-    view_all_fortresses: "Ver listado de fortalezas"
     view_all_nonconformities: "Ver listado de no conformidades"
     view_all_potential_nonconformities: "Ver listado de no conformidades potenciales"
-    add_fortress: "Agregar nueva fortaleza"
     add_nonconformity: "Agregar nueva no conformidad"
     add_potential_nonconformity: "Agregar nueva no conformidad potencial"
     add_oportunity: "Agregar nueva oportunidad de mejora"
@@ -539,9 +536,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       potential_nonconformity:
         title: "SEGUIMIENTO DE NO CONFORMIDAD POTENCIAL"
         subtitle: "Datos de la no conformidad potencial"
-      fortress:
-        title: "SEGUIMIENTO DE FORTALEZA"
-        subtitle: "Datos de la fortaleza"
       print_date: "Fecha de impresión: %{date}"
       download: "Descargar seguimiento completo"
       follow_up_comments: "Comentarios de seguimiento"
@@ -742,18 +736,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
-
-  fortress:
-    index_title: "Listado de fortalezas"
-    show_title: "Detalles de la fortaleza"
-    new_title: "Agregar fortaleza"
-    edit_title: "Modificar fortaleza"
-    correctly_created: "Fortaleza agregada correctamente."
-    correctly_updated: "Fortaleza actualizada correctamente."
-    stale_object_error: "La fortaleza no fue actualizada, intente nuevamente."
-    edit_control_objective: "Editar objetivo de control"
-    show_follow_up: 'Ver en seguimiento'
-    edit_follow_up: 'Editar en seguimiento'
 
   group:
     index_title: "Listado de grupos"
@@ -1056,8 +1038,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     control_objectives_relevance: "Peso"
     oportunities_summary: "Resumen de oportunidades de mejora ordenadas por estado"
     oportunities_count_summary: "Cantidad de oportunidades de mejora ordenadas por estado"
-    fortresses_summary: "Resumen de fortalezas"
-    fortresses_count_summary: "Cantidad de fortalezas"
     potential_nonconformities_summary: "Resumen de no conformidades potenciales ordenadas por estado"
     potential_nonconformities_count_summary: "Cantidad de no conformidades potenciales ordenadas por estado"
     nonconformities_summary: "Resumen de no conformidades que sustentan la calificación otorgada ordenadas por estado"
@@ -1069,11 +1049,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     oportunities_count: "Cantidad de Oportunidades de Mejora"
     nonconformities_count: "Cantidad de No Conformidades"
     potential_nonconformities_count: "Cantidad de No Conformidades Potenciales"
-    fortresses_count: "Cantidad de fortalezas"
     control_objectives_work_papers: "Objetivos de control"
     show_control_objective: "Ver detalles del objetivo de control"
     hide_control_objective: "Ocultar detalles del objetivo de control"
-    fortresses_work_papers: "Fortalezas"
     nonconformities_work_papers: "Noconformidades"
     potential_nonconformities_work_papers: "No conformidades potenciales"
     weaknesses_work_papers: "Observaciones"
@@ -1234,7 +1212,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       finding: "Hallazgo"
       finding_answer: "Respuesta a hallazgo"
       finding_review_assignment: "Asignación de observación a informe"
-      fortress: "Fortaleza"
       group: "Grupo"
       nonconformity: "No conformidad"
       notification: "Notificación"
@@ -1302,7 +1279,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         effectiveness: "Efectividad de control"
         weaknesses: "Observaciones"
         oportunities: "Oportunidades de mejora"
-        fortresses: "Fortalezas"
         nonconformities: "No conformidades"
         potential_nonconformities: "No conformidades potenciales"
       control_objective_item/control:
@@ -1428,15 +1404,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         user: 'Usuario'
         process_owner: 'Responsable'
         responsible_auditor: 'Auditor referente'
-      fortress:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "Fortaleza"
-        review_code: "Código en el informe"
-        user_ids: "Responsable"
-        finding_user_assignments: "Responsables"
-        work_papers: "Papeles de trabajo"
-        origination_date: "Fecha de origen"
       group:
         name: "Nombre"
         description: "Descripción"

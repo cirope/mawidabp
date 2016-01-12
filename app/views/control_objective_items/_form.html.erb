@@ -85,8 +85,6 @@
   <%= render 'oportunities_summary', readonly: readonly %>
   <% if current_organization.kind.eql? 'quality_management' %>
     <br />
-    <%= render 'fortresses_summary', readonly: readonly %>
-    <br />
     <%= render 'nonconformities_summary', readonly: readonly %>
     <br />
     <%= render 'potential_nonconformities_summary', readonly: readonly %>

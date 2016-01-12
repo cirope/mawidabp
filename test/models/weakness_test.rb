@@ -6,8 +6,7 @@ class WeaknessTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    @weakness = Weakness.find(
-      findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id)
+    @weakness = findings :bcra_A4609_data_proccessing_impact_analisys_weakness
 
     set_organization
   end

@@ -65,7 +65,6 @@ class ControlObjectiveItem < ActiveRecord::Base
   has_many :business_unit_scores, dependent: :destroy
   has_many :weaknesses, -> { where(final: false) }, dependent: :destroy
   has_many :oportunities, -> { where(final: false) }, dependent: :destroy
-  has_many :fortresses, -> { where(final: false) }, dependent: :destroy
   has_many :nonconformities, -> { where(final: false) }, dependent: :destroy
   has_many :potential_nonconformities, -> { where(final: false) },
     dependent: :destroy
@@ -73,8 +72,6 @@ class ControlObjectiveItem < ActiveRecord::Base
     class_name: 'Weakness'
   has_many :final_oportunities, -> { where(final: true) }, dependent: :destroy,
     class_name: 'Oportunity'
-  has_many :final_fortresses, -> { where(final: true) }, dependent: :destroy,
-    class_name: 'Fortress'
   has_many :final_nonconformities, -> { where(final: true) },
     dependent: :destroy, class_name: 'Nonconformity'
   has_many :final_potential_nonconformities, -> { where(final: true) },

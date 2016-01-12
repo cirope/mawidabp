@@ -60,21 +60,6 @@
   <p><%= @conclusion_final_review.conclusion %></p>
 <% end %>
 
-<% review_has_fortresses = grouped_control_objectives.any? do |_, cois|
-  cois.any? { |coi| !coi.final_fortresses.blank? }
-end %>
-
-<% if review_has_fortresses %>
-  <br />
-  <h4><%= t('conclusion_review.fortresses') %></h4>
-
-  <table class="table table-condensed table-striped">
-    <% grouped_control_objectives.each do |process_control, cois| %>
-      <%= conclusion_review_process_control_fortress_details_table(process_control, cois, true) %>
-    <% end %>
-  </table>
-<% end %>
-
 <% review_has_observations = grouped_control_objectives.any? do |_, cois|
   cois.any? { |coi| !coi.final_weaknesses.not_revoked.blank? }
 end %>

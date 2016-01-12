@@ -149,11 +149,9 @@ class Review < ActiveRecord::Base
   has_many :control_objective_items, :dependent => :destroy, :after_add => :assign_review
   has_many :weaknesses, :through => :control_objective_items
   has_many :oportunities, :through => :control_objective_items
-  has_many :fortresses, :through => :control_objective_items
   has_many :nonconformities, :through => :control_objective_items
   has_many :potential_nonconformities, :through => :control_objective_items
   has_many :final_weaknesses, :through => :control_objective_items
-  has_many :final_fortresses, :through => :control_objective_items
   has_many :final_nonconformities, :through => :control_objective_items
   has_many :final_potential_nonconformities, :through => :control_objective_items
   has_many :final_oportunities, :through => :control_objective_items
@@ -485,16 +483,6 @@ class Review < ActiveRecord::Base
     last_work_paper_code(prefix, work_papers)
   end
 
-  def last_fortress_work_paper_code(prefix = nil)
-    work_papers = []
-
-    (self.fortresses + self.final_fortresses).each do |w|
-      work_papers.concat(w.work_papers.with_prefix(prefix))
-    end
-
-    last_work_paper_code(prefix, work_papers)
-  end
-
   def last_nonconformity_work_paper_code(prefix = nil)
     work_papers = []
 
@@ -527,10 +515,6 @@ class Review < ActiveRecord::Base
 
   def next_weakness_code(prefix = nil)
     next_finding_code prefix, self.weaknesses.with_prefix(prefix)
-  end
-
-  def next_fortress_code(prefix = nil)
-    next_finding_code prefix, self.fortresses.with_prefix(prefix)
   end
 
   def next_nonconformity_code(prefix = nil)
@@ -830,38 +814,6 @@ class Review < ActiveRecord::Base
           description,
           potential_nonconformity.state_text
         ]
-      end
-
-      unless column_data.blank?
-       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-         table_options = pdf.default_table_options(column_widths)
-
-         pdf.table(column_data.insert(0, column_headers), table_options) do
-           row(0).style(
-             :background_color => 'cccccc',
-             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-           )
-         end
-       end
-      end
-    end
-
-    fortresses = self.final_fortresses.all_for_report
-
-    unless fortresses.blank?
-      pdf.add_subtitle I18n.t('review.fortresses_summary'), PDF_FONT_SIZE,
-        PDF_FONT_SIZE
-
-      column_headers, column_widths, column_data = [], [], []
-      column_names = [['description', 75]]
-
-      column_names.each do |col_name, col_size|
-        column_headers << Fortress.human_attribute_name(col_name)
-        column_widths << pdf.percent_width(col_size)
-      end
-
-      fortresses.each do |fortress|
-        column_data << ["<b>#{fortress.review_code}</b>: #{fortress.title}"]
       end
 
       unless column_data.blank?
@@ -1192,58 +1144,6 @@ class Review < ActiveRecord::Base
       end
     end
 
-    fortresses = self.final_fortresses.all_for_report
-
-    unless fortresses.blank?
-      pdf.add_subtitle I18n.t('review.fortresses_count_summary'),
-        PDF_FONT_SIZE, PDF_FONT_SIZE
-
-      column_headers, column_widths, column_data = [], [], []
-      column_names = [
-        Fortress.human_attribute_name(:count)
-      ]
-
-      column_names.each do |col_name|
-        column_headers << col_name
-        column_widths << pdf.percent_width(100.0 / column_names.size)
-      end
-
-      fortress = fortresses.first
-      state_text = fortress.state_text
-      count = 0
-
-      fortresses.each do |f|
-        if state_text == f.state_text
-          count += 1
-        else
-          column_data << [
-            count
-          ]
-
-          count = 1
-        end
-      end
-
-      if count > 0
-        column_data << [
-          count
-        ]
-      end
-
-      unless column_data.blank?
-        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-         table_options = pdf.default_table_options(column_widths)
-
-         pdf.table(column_data.insert(0, column_headers), table_options) do
-           row(0).style(
-             :background_color => 'cccccc',
-             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-           )
-         end
-       end
-      end
-    end
-
     pdf.move_down PDF_FONT_SIZE * 2
 
     pdf.add_review_auditors_table(
@@ -1369,10 +1269,9 @@ class Review < ActiveRecord::Base
   def zip_all_work_papers(organization = nil)
     filename = self.absolute_work_papers_zip_path
     weaknesses, oportunities, nonconformities, potential_nonconformities,
-      fortresses, findings = [], [], [], [], [], []
+      findings = [], [], [], [], []
     dirs = {
       :control_objectives => I18n.t('review.control_objectives_work_papers').sanitized_for_filename,
-      :fortresses => I18n.t('review.fortresses_work_papers').sanitized_for_filename,
       :nonconformities => I18n.t('review.nonconformities_work_papers').sanitized_for_filename,
       :weaknesses => I18n.t('review.weaknesses_work_papers').sanitized_for_filename,
       :potential_nonconformities => I18n.t('review.potential_nonconformities_work_papers').sanitized_for_filename,
@@ -1394,27 +1293,18 @@ class Review < ActiveRecord::Base
       if self.has_final_review?
         weaknesses = self.final_weaknesses.not_revoked
         oportunities = self.final_oportunities.not_revoked
-        fortresses = self.final_fortresses.not_revoked
         nonconformities = self.final_nonconformities.not_revoked
         potential_nonconformities = self.final_potential_nonconformities.not_revoked
         findings = self.weaknesses.not_revoked +
           self.oportunities.not_revoked +
-          self.fortresses.not_revoked +
           self.nonconformities.not_revoked +
           self.potential_nonconformities.not_revoked
       else
         weaknesses = self.weaknesses.not_revoked
         oportunities = self.oportunities.not_revoked
-        fortresses = self.fortresses.not_revoked
         nonconformities = self.nonconformities.not_revoked
         potential_nonconformities = self.potential_nonconformities.not_revoked
         findings = []
-      end
-
-      fortresses.each do |f|
-        f.work_papers.each do |f_wp|
-          self.add_work_paper_to_zip f_wp, dirs[:fortresses], zipfile, 'E_'
-        end
       end
 
       nonconformities.each do |nc|

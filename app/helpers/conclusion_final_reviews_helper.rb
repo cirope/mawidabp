@@ -124,29 +124,6 @@ module ConclusionFinalReviewsHelper
     end
   end
 
-  def conclusion_review_process_control_fortress_details_table(
-      process_control, cois, use_finals = false)
-    has_fortresses = cois.any? do |coi|
-      !(use_finals ? coi.final_fortresses : coi.fortresses).blank?
-    end
-
-    if has_fortresses
-      header = String.new.html_safe
-      body = String.new.html_safe
-
-      header = content_tag :tr, content_tag(:td,
-        "#{ProcessControl.model_name.human}: #{process_control.name}")
-
-      cois.each do |coi|
-        (use_finals ? coi.final_fortresses : coi.fortresses).each do |f|
-          body << finding_row_data(coi, f)
-        end
-      end
-
-      header + body
-    end
-  end
-
   def finding_row_data(coi, finding, html_class = nil)
     weakness = finding.kind_of?(Weakness) || finding.kind_of?(Nonconformity)
     oportunity = finding.kind_of?(Oportunity) || finding.kind_of?(PotentialNonconformity)

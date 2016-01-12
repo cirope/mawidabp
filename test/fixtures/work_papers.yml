@@ -108,16 +108,6 @@ text_work_paper_iso_27000_security_organization_4_2_item_editable_potential_nonc
   owner_id: <%= ActiveRecord::FixtureSet.identify(:iso_27000_security_organization_4_2_item_editable_potential_nonconformity) %>
   owner_type: Finding
 
-text_work_paper_bcra_A4609_security_management_responsible_dependency_fortress:
-  name: Text WP
-  code: PTF 04
-  number_of_pages: 11
-  description: Text Work Paper Description
-  file_model:
-  organization: cirope
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_security_management_responsible_dependency_fortress) %>
-  owner_type: Finding
-
 text_work_paper_bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_nonconformity:
   name: Text WP
   code: PTNC 01
