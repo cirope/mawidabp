@@ -13,8 +13,9 @@
 
   insertNestedItem: (e) ->
     source = e.data('dynamic-source')
-    template = DynamicFormHelper.findInNearestFieldset(e, source).data('dynamic-template')
-    regexp = new RegExp(e.data('id'), 'g')
+    templateHolder = DynamicFormHelper.findInNearestFieldset e, source
+    template = templateHolder.data('dynamic-template')
+    regexp = new RegExp(templateHolder.data('id'), 'g')
 
     e.closest('fieldset').before DynamicFormHelper.replaceIds(template, regexp)
 
