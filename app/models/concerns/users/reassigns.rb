@@ -87,11 +87,7 @@ module Users::Reassigns
     end
 
     def findings_for review
-      review.weaknesses +
-        review.oportunities +
-        review.nonconformities +
-        review.potential_nonconformities +
-        review.fortresses
+      review.weaknesses + review.oportunities
     end
 
     def notify_responsibility_changes_to_me_and other

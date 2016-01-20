@@ -1,4 +1,4 @@
-es: &common
+es:
   simple_form:
     "yes": 'Si'
     "no": 'No'
@@ -47,9 +47,3 @@ es: &common
         test_password: 'Contraseña del usuario para probar la conexión'
       import:
         username: 'Usuario con permisos para consultar la base de usuarios LDAP'
-
-public_es:
-  <<: *common
-
-mc_es:
-  <<: *common

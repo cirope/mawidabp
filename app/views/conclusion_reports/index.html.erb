@@ -65,14 +65,3 @@
       class: 'btn btn-default btn-lg btn-block' %>
   </div>
 </div>
-
-<% if @quality_management %>
-  <br />
-  <div class="row">
-    <div class="col-md-6">
-      <%= link_to t('conclusion_report.nonconformities_report_title'),
-        { action: :nonconformities_report, controller_name: 'conclusion', final: true },
-        class: 'btn btn-default btn-lg btn-block' %>
-    </div>
-  </div>
-<% end %>

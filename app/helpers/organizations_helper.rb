@@ -9,10 +9,6 @@ module OrganizationsHelper
     @organization.image_model
   end
 
-  def organization_kinds
-    ORGANIZATION_KINDS.map { |k| [t("organizations.kinds.#{k}"), k] }
-  end
-
   private
 
     def image_persisted?

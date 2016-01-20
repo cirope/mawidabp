@@ -1,4 +1,4 @@
-es: &common
+es:
   attributes:
     created_at: 'Creación'
     updated_at: 'Última actualización'
@@ -154,7 +154,6 @@ es: &common
         user_id: 'Usuario'
       organization:
         description: 'Descripción'
-        kind: 'Tipo de organización'
         name: 'Nombre'
         prefix: 'Prefijo'
       organization/image_model:
@@ -244,9 +243,3 @@ es: &common
         cost: 'Costo'
         resource: 'Recurso'
         resource_consumer: 'Utilización de recurso'
-
-public_es:
-  <<: *common
-
-mc_es:
-  <<: *common

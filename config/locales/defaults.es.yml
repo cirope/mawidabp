@@ -1,4 +1,4 @@
-es: &common
+es:
   date:
     abbr_day_names:
     - Dom
@@ -210,9 +210,3 @@ es: &common
   activerecord:
     errors:
       <<: *errors
-
-public_es:
-  <<: *common
-
-mc_es:
-  <<: *common

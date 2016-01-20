@@ -33,16 +33,6 @@ Rails.application.routes.draw do
 
   resources :business_unit_types
 
-  namespace :fortresses do
-    resources :users, only: [:index]
-  end
-
-  resources :fortresses do
-    resources :costs
-
-    get :auto_complete_for_control_objective_item, on: :collection
-  end
-
   resources :groups
 
   get 'welcome', as: 'welcome', to: 'welcome#index'
@@ -82,8 +72,7 @@ Rails.application.routes.draw do
     'process_control_stats',
     'qa_indicators',
     'weaknesses_by_risk_report',
-    'fixed_weaknesses_report',
-    'nonconformities_report'
+    'fixed_weaknesses_report'
   ].each do |action|
     get "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
@@ -102,8 +91,7 @@ Rails.application.routes.draw do
     'create_process_control_stats',
     'create_qa_indicators',
     'create_weaknesses_by_risk_report',
-    'create_fixed_weaknesses_report',
-    'create_nonconformities_report'
+    'create_fixed_weaknesses_report'
   ].each do |action|
     post "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
@@ -235,24 +223,6 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :nonconformities do
-    resources :users, only: [:index]
-  end
-
-  resources :nonconformities, except: [:destroy] do
-    resources :costs
-
-    collection do
-      get :auto_complete_for_finding_relation
-      get :auto_complete_for_control_objective_item
-    end
-
-    member do
-      get :follow_up_pdf
-      patch :undo_reiteration
-    end
-  end
-
   resources :control_objective_items do
     get :suggest_next_work_paper_code, on: :member
     get :auto_complete_for_business_unit, on: :collection
@@ -283,24 +253,6 @@ Rails.application.routes.draw do
   end
 
   resources :oportunities, except: [:destroy] do
-    resources :costs
-
-    member do
-      get :follow_up_pdf
-      patch :undo_reiteration
-    end
-
-    collection do
-      get :auto_complete_for_finding_relation
-      get :auto_complete_for_control_objective_item
-    end
-  end
-
-  namespace :potential_nonconformities do
-    resources :users, only: [:index]
-  end
-
-  resources :potential_nonconformities, except: [:destroy] do
     resources :costs
 
     member do

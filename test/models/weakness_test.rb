@@ -6,8 +6,7 @@ class WeaknessTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    @weakness = Weakness.find(
-      findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id)
+    @weakness = findings :bcra_A4609_data_proccessing_impact_analisys_weakness
 
     set_organization
   end
@@ -165,28 +164,6 @@ class WeaknessTest < ActiveSupport::TestCase
         :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id)
     @weakness.review_code = another_weakness.review_code
     assert @weakness.valid?
-  end
-
-    # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'validates date attributes' do
-    @weakness.correction_date = 'xxx'
-    @weakness.cause_analysis_date = 'xxx'
-
-    assert @weakness.invalid?
-    assert_error @weakness, :correction_date, :invalid_date
-    assert_error @weakness, :cause_analysis_date, :invalid_date
-
-    assert @weakness.update_attribute(:state, 0)
-    @weakness.correction_date = '25/05/2013'
-    @weakness.cause_analysis_date = '24/05/2013'
-    @weakness.follow_up_date = '23/05/2013'
-    assert @weakness.invalid?
-
-    assert_equal 2, @weakness.errors.count
-    assert_equal [I18n.t('finding.errors.correction_date_on_or_before')],
-      @weakness.errors[:correction_date]
-    assert_equal [I18n.t('finding.errors.cause_analysis_date_on_or_before')],
-      @weakness.errors[:cause_analysis_date]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

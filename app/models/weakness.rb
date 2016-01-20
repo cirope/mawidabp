@@ -26,16 +26,6 @@ class Weakness < Finding
   # Restricciones
   validates :risk, :priority, :presence => true
   validates :audit_recommendations, :presence => true, :if => :notify?
-  validates :correction, :correction_date, :cause_analysis, :cause_analysis_date,
-    :presence => true, :if => :audited_and_system_quality_management?
-  validates_date :correction_date, :cause_analysis_date,
-    :allow_nil => true, :allow_blank => true
-  validates_date :correction_date, :on_or_before => :cause_analysis_date,
-    :on_or_before_message => I18n.t('finding.errors.correction_date_on_or_before'),
-    :allow_nil => true, :allow_blank => true
-  validates_date :cause_analysis_date, :on_or_before => :follow_up_date,
-    :on_or_before_message => I18n.t('finding.errors.cause_analysis_date_on_or_before'),
-    :allow_nil => true, :allow_blank => true
   validates_each :review_code do |record, attr, value|
     regex = /\A#{record.prefix}\d+\Z/
 

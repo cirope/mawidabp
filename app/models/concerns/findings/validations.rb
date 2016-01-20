@@ -27,7 +27,7 @@ module Findings::Validations
     end
 
     def validate_follow_up_date
-      if kind_of?(Weakness) || kind_of?(Nonconformity)
+      if kind_of?(Weakness)
         check_for_blank = being_implemented? || implemented? || implemented_audited?
 
         errors.add :follow_up_date, :blank         if check_for_blank  && follow_up_date.blank?
@@ -109,8 +109,7 @@ module Findings::Validations
     end
 
     def findings_for review
-      review.weaknesses | review.oportunities | review.fortresses |
-        review.nonconformities | review.potential_nonconformities
+      review.weaknesses | review.oportunities
     end
 
     def validate_finding_user_assignments

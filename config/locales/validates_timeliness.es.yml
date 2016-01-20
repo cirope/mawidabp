@@ -1,4 +1,4 @@
-es: &common
+es:
   errors:
     messages:
       invalid_date: 'no es una fecha válida'
@@ -14,9 +14,3 @@ es: &common
       date: '%d/%m/%Y'
       time: '%H:%M:%S'
       datetime: '%d/%m/%Y %H:%M:%S'
-
-public_es:
-  <<: *common
-
-mc_es:
-  <<: *common

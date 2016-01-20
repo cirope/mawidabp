@@ -1,4 +1,4 @@
-es: &common
+es:
   menu:
     administration_title: 'Administración'
     administration:
@@ -37,9 +37,6 @@ es: &common
       findings:
         weaknesses: 'Observaciones'
         oportunities: 'Oportunidades de mejora'
-        fortresses: 'Fortalezas'
-        nonconformities: 'No conformidades'
-        potential_nonconformities: 'No conformidades potenciales'
     conclusion_title: 'Conclusión'
     conclusion:
       draft_reviews: 'Informe borrador'
@@ -52,9 +49,3 @@ es: &common
       notifications: 'Notificaciones'
       reports: 'Reportes'
     help_title: 'Ayuda'
-
-public_es:
-  <<: *common
-
-mc_es:
-  <<: *common

@@ -18,7 +18,6 @@ module Reports::WeaknessesByState
       [:internal, BusinessUnitType.list.internal_audit.map {|but| [but.name, but.id]}],
       [:external, BusinessUnitType.list.external_audit.map {|but| [but.name, but.id]}]
     ]
-    @sqm = current_organization.kind.eql? 'quality_management'
 
     @periods.each do |period|
       @weaknesses_counts[period] ||= {}
@@ -47,32 +46,6 @@ module Reports::WeaknessesByState
               Finding.list_all_by_date(@from_date, @to_date, false).send(
                 "#{audit_type_symbol}_audit").finals(false).for_period(
                   period).repeated.where(conditions).count
-
-            if @sqm
-              @weaknesses_counts[period]['total_nonconformities'] ||= {}
-              @weaknesses_counts[period]['total_potential_nonconformities'] ||= {}
-
-              @weaknesses_counts[period]["#{key}_nonconformities"] =
-                Nonconformity.list_all_by_date(@from_date, @to_date, false).
-                with_status_for_report.send("#{audit_type_symbol}_audit").
-                for_period(period).finals(final).where(conditions).group(
-                :state).count
-              @weaknesses_counts[period]["#{key}_potential_nonconformities"] =
-                PotentialNonconformity.list_all_by_date(@from_date, @to_date, false).
-                with_status_for_report.send("#{audit_type_symbol}_audit").
-                for_period(period).finals(final).where(conditions).group(
-                :state).count
-
-              @weaknesses_counts[period]["#{key}_nonconformities"].each do |state, count|
-                @weaknesses_counts[period]['total_nonconformities'][state] ||= 0
-                @weaknesses_counts[period]['total_nonconformities'][state] += count
-              end
-
-              @weaknesses_counts[period]["#{key}_potential_nonconformities"].each do |state, count|
-                @weaknesses_counts[period]['total_potential_nonconformities'][state] ||= 0
-                @weaknesses_counts[period]['total_potential_nonconformities'][state] += count
-              end
-            end
 
             @weaknesses_counts[period]["#{key}_weaknesses"].each do |state, count|
               @weaknesses_counts[period]['total_weaknesses'][state] ||= 0
@@ -162,18 +135,9 @@ module Reports::WeaknessesByState
             oportunities_count = @weaknesses_counts[period]["#{key}_oportunities"]
             repeated_count = @weaknesses_counts[period]["#{key}_repeated"]
 
-            if @sqm
-              nonconformities_count = @weaknesses_counts[period]["#{key}_nonconformities"]
-              potential_nonconformities_count = @weaknesses_counts[period]["#{key}_potential_nonconformities"]
-
-              add_weaknesses_by_state_table(pdf, weaknesses_count, oportunities_count,
-                repeated_count, @being_implemented_resumes[period][key], audit_type_symbol,
-                nonconformities_count, potential_nonconformities_count, @sqm)
-            else
-              add_weaknesses_by_state_table(pdf, weaknesses_count,
-                oportunities_count, repeated_count,
-                @being_implemented_resumes[period][key], audit_type_symbol)
-            end
+            add_weaknesses_by_state_table(pdf, weaknesses_count,
+              oportunities_count, repeated_count,
+              @being_implemented_resumes[period][key], audit_type_symbol)
           end
         end
       end

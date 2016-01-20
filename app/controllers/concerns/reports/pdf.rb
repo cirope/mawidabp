@@ -126,20 +126,11 @@ module Reports::Pdf
   end
 
   def add_weaknesses_by_state_table(pdf, weaknesses_count, oportunities_count,
-      repeated_count, being_implemented_resume, audit_type_symbol = :internal, nonconformities_count = nil,
-      potential_nonconformities_count = nil, sqm = false)
+      repeated_count, being_implemented_resume, audit_type_symbol = :internal)
 
     total_weaknesses = weaknesses_count.values.sum
     total_oportunities = oportunities_count.values.sum
-
-    if sqm
-      total_nonconformities = nonconformities_count.values.sum
-      total_potential_nonconformities = potential_nonconformities_count.values.sum
-      totals = total_weaknesses + total_oportunities + total_nonconformities +
-        total_potential_nonconformities
-    else
-      totals = total_weaknesses + total_oportunities
-    end
+    totals = total_weaknesses + total_oportunities
 
     if totals > 0
       columns = [
@@ -148,16 +139,9 @@ module Reports::Pdf
       ]
       column_data = []
 
-      if audit_type_symbol == :internal && !sqm
+      if audit_type_symbol == :internal
         columns << [
           t('conclusion_committee_report.weaknesses_by_state.oportunities_column'), 20]
-      elsif audit_type_symbol == :internal && sqm
-        columns << [
-          t('conclusion_committee_report.weaknesses_by_state.oportunities_column'), 20]
-        columns << [
-          t('conclusion_committee_report.weaknesses_by_state.nonconformities_column'), 20]
-        columns << [
-          t('conclusion_committee_report.weaknesses_by_state.potential_nonconformities_column'), 20]
       end
 
       column_headers, column_widths = [], []
@@ -180,17 +164,8 @@ module Reports::Pdf
           "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)"
         ]
 
-        if audit_type_symbol == :internal && !sqm
+        if audit_type_symbol == :internal
           column_data.last << "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
-        elsif audit_type_symbol == :internal && sqm
-          nc_count = nonconformities_count[state.last] || 0
-          pnc_count = potential_nonconformities_count[state.last] || 0
-          nonconformities_percentage = total_nonconformities > 0 ? nc_count.to_f / total_nonconformities * 100 : 0.0
-          potential_nonconformities_percentage = total_potential_nonconformities > 0 ? pnc_count.to_f / total_potential_nonconformities * 100 : 0.0
-
-          column_data.last << "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
-          column_data.last << "#{nc_count} (#{'%.2f' % nonconformities_percentage.round(2)}%)"
-          column_data.last << "#{pnc_count} (#{'%.2f' % potential_nonconformities_percentage.round(2)}%)"
         end
 
         if state.first.to_s == 'being_implemented'
@@ -205,12 +180,8 @@ module Reports::Pdf
         "<strong>#{total_weaknesses}</strong>"
       ]
 
-      if audit_type_symbol == :internal && !sqm
+      if audit_type_symbol == :internal
         column_data.last << "<strong>#{total_oportunities}</strong>"
-      elsif audit_type_symbol == :internal && sqm
-        column_data.last << "<strong>#{total_oportunities}</strong>"
-        column_data.last << "<strong>#{total_nonconformities}</strong>"
-        column_data.last << "<strong>#{total_potential_nonconformities}</strong>"
       end
 
       unless column_data.blank?

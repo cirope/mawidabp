@@ -15,8 +15,7 @@ class OrganizationTest < ActiveSupport::TestCase
         assert_difference 'Role.count', Role::TYPES.size do
           @organization = Organization.create(
             name: 'new3 organization',
-            prefix: 'newww-test-prefix',
-            kind: 'public'
+            prefix: 'newww-test-prefix'
           )
         end
       end
@@ -32,7 +31,6 @@ class OrganizationTest < ActiveSupport::TestCase
           @organization = Organization.create(
             name: 'new3 organization',
             prefix: 'newww-test-prefix',
-            kind: 'quality_management',
             group_id: groups(:second_group).id
           )
         end
@@ -65,12 +63,10 @@ class OrganizationTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @organization.name = nil
     @organization.prefix = nil
-    @organization.kind = nil
 
     assert @organization.invalid?
     assert_error @organization, :name, :blank
     assert_error @organization, :prefix, :blank
-    assert_error @organization, :kind, :blank
   end
 
   test 'validates length of attributes' do
@@ -112,12 +108,5 @@ class OrganizationTest < ActiveSupport::TestCase
 
     assert @organization.invalid?
     assert_error @organization, :prefix, :exclusion
-  end
-
-  test 'validates included attributes' do
-    @organization.kind = 'another_kind'
-
-    assert @organization.invalid?
-    assert_error @organization, :kind, :inclusion
   end
 end

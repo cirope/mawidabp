@@ -55,29 +55,6 @@ module ConclusionFinalReviewsHelper
     end
   end
 
-  def conclusion_review_process_control_nonconformity_details_table(process_control,
-      cois, use_finals = false)
-    has_nonconformities = cois.any? do |coi|
-      !(use_finals ? coi.final_nonconformities : coi.nonconformities).not_revoked.blank?
-    end
-
-    if has_nonconformities
-      header = String.new.html_safe
-      body = String.new.html_safe
-
-      header = content_tag :tr, content_tag(:td,
-        "#{ProcessControl.model_name.human}: #{process_control.name}")
-
-      cois.each do |coi|
-        (use_finals ? coi.final_nonconformities : coi.nonconformities).not_revoked.each do |nc|
-          body << finding_row_data(coi, nc)
-        end
-      end
-
-      header + body
-    end
-  end
-
   def conclusion_review_process_control_oportunity_details_table(
       process_control, cois, use_finals = false)
     has_oportunities = cois.any? do |coi|
@@ -101,55 +78,9 @@ module ConclusionFinalReviewsHelper
     end
   end
 
-  def conclusion_review_process_control_potential_nonconformity_details_table(
-      process_control, cois, use_finals = false)
-    has_potential_nonconformities = cois.any? do |coi|
-      !(use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.blank?
-    end
-
-    if has_potential_nonconformities
-      header = String.new.html_safe
-      body = String.new.html_safe
-
-      header = content_tag :tr, content_tag(:td,
-        "#{ProcessControl.model_name.human}: #{process_control.name}")
-
-      cois.each do |coi|
-        (use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.each do |p_nc|
-          body << finding_row_data(coi, p_nc)
-        end
-      end
-
-      header + body
-    end
-  end
-
-  def conclusion_review_process_control_fortress_details_table(
-      process_control, cois, use_finals = false)
-    has_fortresses = cois.any? do |coi|
-      !(use_finals ? coi.final_fortresses : coi.fortresses).blank?
-    end
-
-    if has_fortresses
-      header = String.new.html_safe
-      body = String.new.html_safe
-
-      header = content_tag :tr, content_tag(:td,
-        "#{ProcessControl.model_name.human}: #{process_control.name}")
-
-      cois.each do |coi|
-        (use_finals ? coi.final_fortresses : coi.fortresses).each do |f|
-          body << finding_row_data(coi, f)
-        end
-      end
-
-      header + body
-    end
-  end
-
   def finding_row_data(coi, finding, html_class = nil)
-    weakness = finding.kind_of?(Weakness) || finding.kind_of?(Nonconformity)
-    oportunity = finding.kind_of?(Oportunity) || finding.kind_of?(PotentialNonconformity)
+    weakness = finding.kind_of?(Weakness)
+    oportunity = finding.kind_of?(Oportunity)
 
     body_rows = ["<strong>#{ControlObjective.model_name.human}:</strong> #{coi.to_s}"]
 
@@ -191,28 +122,6 @@ module ConclusionFinalReviewsHelper
     if finding.origination_date.present?
       body_rows << "<strong>#{finding.class.human_attribute_name(:origination_date)}:</strong> " +
         "#{I18n.l(finding.origination_date, :format => :long)}"
-    end
-
-    if weakness && finding.correction.present?
-      body_rows << "<strong>#{finding.class.human_attribute_name(
-      :correction)}: </strong>#{finding.correction}"
-    end
-
-    if weakness && finding.correction_date.present?
-      body_rows << "<strong>#{finding.class.human_attribute_name(
-      :correction_date)}: </strong> #{I18n.l(finding.correction_date,
-        :format => :long)}"
-    end
-
-    if weakness && finding.cause_analysis.present?
-      body_rows << "<strong>#{finding.class.human_attribute_name(
-      :cause_analysis)}: </strong>#{finding.cause_analysis}"
-    end
-
-    if weakness && finding.cause_analysis_date.present?
-      body_rows << "<strong>#{finding.class.human_attribute_name(
-      :cause_analysis_date)}: </strong> #{I18n.l(finding.cause_analysis_date,
-        :format => :long)}"
     end
 
     if finding.answer.present?

@@ -45,8 +45,6 @@
 
   lang:
     es: 'Español'
-    public_es: 'Público'
-    mc_es: 'Control de gestión'
 
   message:
     change_weakness_risk: "El riesgo de la observación ha cambiado"
@@ -136,7 +134,6 @@
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
-    nonconformities_report_title: "No conformidades"
     cost_analysis:
       detailed_column_resource: "Recurso"
       detailed_column_estimated_amount: "Costo estimado (planificado)"
@@ -159,7 +156,6 @@
     process_control_stats_title: 'Observaciones por proceso de negocio'
     synthesis_report_title: "Informe de síntesis al directorio"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
-    nonconformities_report_title: "No conformidades"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     qa_indicators_title: "Indicadores de calidad"
     weaknesses_by_state_title: "Hallazgos totales por estado"
@@ -209,14 +205,6 @@
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-    nonconformities_report:
-      pdf_name: "no_conformidades_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_nonconformities: "No conformidades Auditoría Interna"
-      external_audit_nonconformities: "No conformidades de Auditorías Externas"
-      title: "NO CONFORMIDADES - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías en el periodo"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
-      without_nonconformities: "Sin no conformidades"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -251,17 +239,14 @@
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
-      sqm_title: "OBSERVACIONES/NO CONFORMIDADES\nDE INFORMES DEFINITIVOS"
       organization_score: "Calificación de la organización: %{score}% (*)"
       organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (Procesos
 Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Informática)"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin hallazgos"
-      without_nonconformities: "Sin no conformidades"
       without_oportunities: "Sin oportunidades de mejora"
       references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
-      sqm_references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de No Conformidades: muestra la cantidad de no conformidades obtenidas en el informe. Su nivel de riesgo es Alto. En caso de no tener no conformidades, aparece la leyenda \"Sin no conformidades\"."
       generic_score_average:
         one: 'Promedio de las calificaciones de %{audit_type} en un informe'
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
@@ -270,8 +255,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       title: "HALLAZGOS INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
       weaknesses_column: "Observaciones"
       oportunities_column: "Oportunidades de Mejora"
-      nonconformities_column: "No Conformidades"
-      potential_nonconformities_column: "No Conformidades Potenciales"
       period_summary: "Resumen del periodo %{period}"
       total: "TOTAL"
     weaknesses_by_risk:
@@ -336,9 +319,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     conclusion: "CONCLUSIÓN"
     findings: "OBSERVACIONES"
     oportunities: "OPORTUNIDADES DE MEJORA"
-    nonconformities: "NO CONFORMIDADES"
-    potential_nonconformities: "NO CONFORMIDADES POTENCIALES"
-    fortresses: "FORTALEZAS"
     finding_review_assignments: "HALLAZGOS REVISADOS"
     add_recipient: "Agregar nuevo destinatario"
     review_sended: "El informe fue enviado a todos los destinatarios indicados"
@@ -384,12 +364,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     stale_object_error: "El objetivo de control no fue actualizado, intente nuevamente."
     view_all_weaknesses: "Ver listado de observaciones"
     view_all_oportunities: "Ver listado de oportunidades de mejora"
-    view_all_fortresses: "Ver listado de fortalezas"
-    view_all_nonconformities: "Ver listado de no conformidades"
-    view_all_potential_nonconformities: "Ver listado de no conformidades potenciales"
-    add_fortress: "Agregar nueva fortaleza"
-    add_nonconformity: "Agregar nueva no conformidad"
-    add_potential_nonconformity: "Agregar nueva no conformidad potencial"
     add_oportunity: "Agregar nueva oportunidad de mejora"
     add_weakness: "Agregar nueva observación"
     add_work_paper: "Agregar papel de trabajo"
@@ -432,10 +406,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      without_nonconformities: "Sin no conformidades"
       without_oportunities: "Sin oportunidades de mejora"
       references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
-      sqm_references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (medio y bajo). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de No Conformidades: muestra la cantidad de no conformidades obtenidas en el informe (no son las definitivas). Su nivel de riesgo es Alto. En caso de no tener no conformidades, aparece la leyenda \"Sin no conformidades\"."
     detailed_management_report_title: "Resumen gerencial"
     index_title: "Reportes de ejecución"
     findings_type_external: "Hallazgos Auditorías Externas"
@@ -450,8 +422,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       clarification: "Nota: los hallazgos mostrados en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
       weaknesses_column: "Observaciones"
       oportunities_column: "Oportunidades de Mejora"
-      nonconformities_column: "No Conformidades"
-      potential_nonconformities_column: "No Conformidades Potenciales"
       total: "TOTAL"
     without_weaknesses: "Sin hallazgos en el periodo"
     without_weaknesses_in_the_interval: "Sin hallazgos en el intervalo"
@@ -535,15 +505,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       oportunity:
         title: "SEGUIMIENTO DE OPORTUNIDAD DE MEJORA"
         subtitle: "Datos de la oportunidad de mejora"
-      nonconformity:
-        title: "SEGUIMIENTO DE NO CONFORMIDAD"
-        subtitle: "Datos de la no conformidad"
-      potential_nonconformity:
-        title: "SEGUIMIENTO DE NO CONFORMIDAD POTENCIAL"
-        subtitle: "Datos de la no conformidad potencial"
-      fortress:
-        title: "SEGUIMIENTO DE FORTALEZA"
-        subtitle: "Datos de la fortaleza"
       print_date: "Fecha de impresión: %{date}"
       download: "Descargar seguimiento completo"
       follow_up_comments: "Comentarios de seguimiento"
@@ -564,7 +525,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
-    nonconformities_report_title: "No conformidades"
     cost_analysis:
       column_business_unit: "Unidad de negocio"
       column_project: "Proyecto"
@@ -592,7 +552,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weakness_summary: "Resumen de observaciones"
     weaknesses_by_risk: "Observaciones por riesgo"
     fixed_weaknesses: "Observaciones por riesgo solucionadas"
-    nonconformities_report_title: "No conformidades"
     weaknesses_being_implemented_current:
       one: "Vigente"
       other: "Vigentes"
@@ -656,14 +615,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-    nonconformities_report:
-      pdf_name: "no_conformidades_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_nonconformities: "No conformidades Auditoría Interna"
-      external_audit_nonconformities: "No conformidades de Auditorías Externas"
-      title: "NO CONFORMIDADES - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías en el periodo"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
-      without_nonconformities: "Sin no conformidades"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -703,14 +654,12 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
-      sqm_title: "SEGUIMIENTO DE OBSERVACIONES/NO CONFORMIDADES"
       organization_score: "Calificación de la organización: %{score}% (*)"
       organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
-      without_nonconformities: "Sin no conformidades"
       generic_score_average:
         one: 'Promedio de las calificaciones de %{audit_type} en un informe'
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
@@ -719,7 +668,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         other: "%{count} hallazgos reiterados"
       total_score_average: "Total promedio de las calificaciones (%{reference })"
       references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
-      sqm_references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de No Conformidades: muestra la cantidad de no conformidades obtenidas en el informe. Su nivel de riesgo es Alto. En caso de no tener no conformidades, aparece la leyenda \"Sin no conformidades\"."
     weaknesses_by_state:
       pdf_name: "observaciones_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
@@ -745,18 +693,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
 
-  fortress:
-    index_title: "Listado de fortalezas"
-    show_title: "Detalles de la fortaleza"
-    new_title: "Agregar fortaleza"
-    edit_title: "Modificar fortaleza"
-    correctly_created: "Fortaleza agregada correctamente."
-    correctly_updated: "Fortaleza actualizada correctamente."
-    stale_object_error: "La fortaleza no fue actualizada, intente nuevamente."
-    edit_control_objective: "Editar objetivo de control"
-    show_follow_up: 'Ver en seguimiento'
-    edit_follow_up: 'Editar en seguimiento'
-
   group:
     index_title: "Listado de grupos"
     show_title: "Detalles del grupo"
@@ -766,34 +702,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_updated: "Grupo actualizado correctamente."
     stale_object_error: "El grupo no fue actualizado, intente nuevamente."
     add_organization: "Agregar organización"
-
-  nonconformity:
-    index_title: "Listado de no conformidades"
-    show_title: "Detalles de la no conformidad"
-    new_title: "Agregar no conformidad"
-    edit_title: "Modificar no conformidad"
-    correctly_created: "No conformidad agregada correctamente."
-    correctly_updated: "No conformidad actualizada correctamente."
-    stale_object_error: "La no conformidad no fue actualizada, intente nuevamente."
-    edit_control_objective: "Editar objetivo de control"
-    show_follow_up: "Ver en seguimiento"
-    edit_follow_up: "Editar en seguimiento"
-    errors:
-      is_unconfirmed: "está en estado 'No confirmada'"
-      not_valid_state: "tiene un estado no permitido"
-      with_follow_up_date: "tiene fecha de implementación (y no debería)"
-      with_solution_date: "tiene fecha de solución (y no debería)"
-      without_answer: "no tiene respuesta"
-      without_audited: "no tiene auditado"
-      without_auditor: "no tiene auditor"
-      without_effect: "no tiene efecto"
-      without_follow_up_date: "no tiene fecha de implementación"
-      without_solution_date: "no tiene fecha de solución"
-      without_audit_comments: "no tiene comentarios de auditoría"
-      without_correction: "no tiene corrección/acción inmediata"
-      without_correction_date: "no tiene fecha de corrección/acción inmediata"
-      without_cause_analysis: "no tiene análisis de causa"
-      without_cause_analysis_date: "no tiene fecha de análisis de causa"
 
   notification:
     index_title: "Listado de notificaciones"
@@ -900,27 +808,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_created: "Oportunidad agregada correctamente."
     correctly_updated: "Oportunidad actualizada correctamente."
     stale_object_error: "La oportunidad no fue actualizada, intente nuevamente."
-    edit_control_objective: "Editar objetivo de control"
-    show_follow_up: 'Ver en seguimiento'
-    edit_follow_up: 'Editar en seguimiento'
-    errors:
-      is_unconfirmed: "está en estado 'No confirmada'"
-      not_valid_state: "tiene un estado no permitido"
-      with_solution_date: "tiene fecha de solución (y no debería)"
-      without_answer: "no tiene respuesta"
-      without_audited: "no tiene auditado"
-      without_auditor: "no tiene auditor"
-      without_solution_date: "no tiene fecha de solución"
-      without_audit_comments: "no tiene comentarios de auditoría"
-
-  potential_nonconformity:
-    index_title: "Listado de no conformidades potenciales"
-    show_title: "Detalles de la no conformidad potencial"
-    new_title: "Agregar no conformidad potencial"
-    edit_title: "Modificar no conformidad potencial"
-    correctly_created: "No conformidad potencial agregada correctamente."
-    correctly_updated: "No conformidad potencial actualizada correctamente."
-    stale_object_error: "La no conformidad potencial no fue actualizada, intente nuevamente."
     edit_control_objective: "Editar objetivo de control"
     show_follow_up: 'Ver en seguimiento'
     edit_follow_up: 'Editar en seguimiento'
@@ -1058,26 +945,14 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     control_objectives_relevance: "Peso"
     oportunities_summary: "Resumen de oportunidades de mejora ordenadas por estado"
     oportunities_count_summary: "Cantidad de oportunidades de mejora ordenadas por estado"
-    fortresses_summary: "Resumen de fortalezas"
-    fortresses_count_summary: "Cantidad de fortalezas"
-    potential_nonconformities_summary: "Resumen de no conformidades potenciales ordenadas por estado"
-    potential_nonconformities_count_summary: "Cantidad de no conformidades potenciales ordenadas por estado"
-    nonconformities_summary: "Resumen de no conformidades que sustentan la calificación otorgada ordenadas por estado"
-    nonconformities_count_summary: "Cantidad de no conformidades que sustentan la calificación otorgada ordenadas por estado"
     weaknesses_summary: "Resumen de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de la observación)"
     weaknesses_count_summary: "Cantidad de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de la observación)"
     weaknesses_count: "Cantidad de Observaciones"
     weaknesses_count_by_state: "Cantidad de Observaciones (Pendientes/Solucionadas-Reiteradas)"
     oportunities_count: "Cantidad de Oportunidades de Mejora"
-    nonconformities_count: "Cantidad de No Conformidades"
-    potential_nonconformities_count: "Cantidad de No Conformidades Potenciales"
-    fortresses_count: "Cantidad de fortalezas"
     control_objectives_work_papers: "Objetivos de control"
     show_control_objective: "Ver detalles del objetivo de control"
     hide_control_objective: "Ocultar detalles del objetivo de control"
-    fortresses_work_papers: "Fortalezas"
-    nonconformities_work_papers: "Noconformidades"
-    potential_nonconformities_work_papers: "No conformidades potenciales"
     weaknesses_work_papers: "Observaciones"
     oportunities_work_papers: "Oportunidades"
     follow_up_work_papers: "Seguimiento de observaciones"
@@ -1236,15 +1111,12 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       finding: "Hallazgo"
       finding_answer: "Respuesta a hallazgo"
       finding_review_assignment: "Asignación de observación a informe"
-      fortress: "Fortaleza"
       group: "Grupo"
-      nonconformity: "No conformidad"
       notification: "Notificación"
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
       plan: "Plan de trabajo"
       plan_item: "Registro de plan"
-      potential_nonconformity: "No conformidad potencial"
       privilege: "Privilegio"
       review: "Informe"
       review_user_assignment: "Asignación de usuario a informe"
@@ -1304,9 +1176,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         effectiveness: "Efectividad de control"
         weaknesses: "Observaciones"
         oportunities: "Oportunidades de mejora"
-        fortresses: "Fortalezas"
-        nonconformities: "No conformidades"
-        potential_nonconformities: "No conformidades potenciales"
       control_objective_item/control:
         order: "Objetivo de control (orden)"
         control: "Objetivo de control (controles)"
@@ -1430,15 +1299,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         user: 'Usuario'
         process_owner: 'Responsable'
         responsible_auditor: 'Auditor referente'
-      fortress:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "Fortaleza"
-        review_code: "Código en el informe"
-        user_ids: "Responsable"
-        finding_user_assignments: "Responsables"
-        work_papers: "Papeles de trabajo"
-        origination_date: "Fecha de origen"
       group:
         name: "Nombre"
         description: "Descripción"
@@ -1453,27 +1313,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         uploaded_data: "Imagen"
         content_type: "Imagen (tipo)"
         size: "Imagen (tamaño)"
-      nonconformity:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "No conformidad"
-        review_code: "Código en el informe"
-        audit_recommendations: "Recomendaciones de auditoría"
-        answer: "Respuesta/Acción correctiva"
-        correction: "Corrección/Acción inmediata"
-        correction_date: "Fecha Corrección/Acción inmediata"
-        cause_analysis: "Análisis de causa"
-        cause_analysis_date: "Fecha Análisis de causa"
-        effect: "Efecto"
-        risk: "Riesgo"
-        priority: "Prioridad"
-        user_ids: "Responsable"
-        finding_user_assignments: "Responsables"
-        origination_date: "Fecha de origen"
-        follow_up_date: "Fecha de implementación/Acción correctiva"
-        state: "Estado"
-        solution_date: "Fecha de solución"
-        work_papers: "Papeles de trabajo"
       notification:
         status: "Estado"
         confirmation_hash: "Cadena de confirmación"
@@ -1540,19 +1379,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         human_resources_cost: "Costo recursos humanos"
         material_resources_cost: "Costo recursos materiales"
         total_resources_cost: "Costo total"
-      potential_nonconformity:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "No conformidad potencial"
-        review_code: "Código en el informe"
-        answer: "Respuesta/Acción preventiva"
-        user_ids: "Responsable"
-        finding_user_assignments: "Responsables"
-        work_papers: "Papeles de trabajo"
-        state: "Estado"
-        follow_up_date: "Fecha de implementación/Acción preventiva"
-        origination_date: "Fecha de origen"
-        solution_date: "Fecha de solución"
       privilege:
         module: "Módulo"
         read: "Lectura"
@@ -1605,10 +1431,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         review_code: "Código en el informe"
         audit_recommendations: "Recomendaciones de auditoría"
         answer: "Respuesta/Acción correctiva"
-        correction: "Corrección/Acción inmediata"
-        correction_date: "Fecha Corrección/Acción inmediata"
-        cause_analysis: "Análisis de causa"
-        cause_analysis_date: "Fecha Análisis de causa"
         effect: "Efecto"
         risk: "Riesgo"
         priority: "Prioridad"

@@ -59,26 +59,6 @@
 </p>
 
 <p>
-  <strong><%= Weakness.human_attribute_name :correction %>:</strong>
-  <%= @weakness.correction if @weakness.correction %>
-</p>
-
-<p>
-  <strong><%= Weakness.human_attribute_name :cause_analysis %>:</strong>
-  <%= @weakness.cause_analysis if @weakness.cause_analysis %>
-</p>
-
-<p>
-  <strong><%= Weakness.human_attribute_name :correction_date %>:</strong>
-  <%=l @weakness.correction_date, :format => :long if @weakness.correction_date %>
-</p>
-
-<p>
-  <strong><%= Weakness.human_attribute_name :cause_analysis_date %>:</strong>
-  <%=l @weakness.cause_analysis_date, :format => :long if @weakness.cause_analysis_date %>
-</p>
-
-<p>
   <strong><%= Weakness.human_attribute_name :origination_date %>:</strong>
   <%=l @weakness.origination_date, :format => :long if @weakness.origination_date %>
 </p>

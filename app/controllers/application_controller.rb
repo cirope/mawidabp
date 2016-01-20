@@ -29,14 +29,6 @@ class ApplicationController < ActionController::Base
       Organization.current_id = current_organization.try(:id)
     end
 
-    def set_locales
-      I18n.locale = case current_organization.try(:kind)
-        when 'public' then 'public_es'
-        when 'management_control' then 'mc_es'
-        else 'es'
-      end
-    end
-
     def load_user
       if @auth_user.nil? && session[:user_id]
         @auth_user = User.includes(
@@ -56,7 +48,6 @@ class ApplicationController < ActionController::Base
       action = (params[:action] || 'none').to_sym
 
       if login_check
-        set_locales
         check_access_time
 
         session[:back_to] = nil if action == :index
@@ -138,11 +129,7 @@ class ApplicationController < ActionController::Base
 
     def module_name_for(controller_name)
       if current_organization
-        if current_organization.kind == 'quality_management'
-          modules =  @auth_user.audited? ? APP_AUDITED_QM_MENU_ITEMS : APP_AUDITOR_QM_MENU_ITEMS
-        else
-          modules =  @auth_user.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS
-        end
+        modules = @auth_user.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS
       end
 
       top_level_menu = true

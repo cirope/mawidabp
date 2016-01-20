@@ -15,7 +15,6 @@ module Reports::WeaknessesByStateExecution
     @title = t 'execution_reports.weaknesses_by_state_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state_execution])
     @audit_types = [:internal, :external]
-    @sqm = current_organization.kind.eql? 'quality_management'
     @counts = []
     @status = Finding::STATUS.except(:repeated, :revoked).sort do |s1, s2|
       s1.last <=> s2.last
@@ -35,12 +34,6 @@ module Reports::WeaknessesByStateExecution
           review.weaknesses.group(:state).count
         @count_for_period[audit_type][review][:oportunities] =
           review.oportunities.group(:state).count
-        if @sqm
-          @count_for_period[audit_type][review][:nonconformities] =
-            review.nonconformities.group(:state).count
-          @count_for_period[audit_type][review][:potential_nonconformities] =
-            review.potential_nonconformities.group(:state).count
-        end
       end
     end
   end
@@ -106,20 +99,8 @@ module Reports::WeaknessesByStateExecution
     ]
     @column_data, @column_headers, @column_widths = [], [], []
 
-    if type == :internal && !@sqm
-      @columns << [
-        t('execution_reports.weaknesses_by_state.oportunities_column'),
-        20]
-    elsif type == :internal && @sqm
-      @columns << [
-        t('execution_reports.weaknesses_by_state.oportunities_column'),
-        20]
-      @columns << [
-        t('execution_reports.weaknesses_by_state.nonconformities_column'),
-        20]
-      @columns << [
-        t('execution_reports.weaknesses_by_state.potential_nonconformities_column'),
-        20]
+    if type == :internal
+      @columns << [t('execution_reports.weaknesses_by_state.oportunities_column'), 20]
     end
 
     @columns.each do |col_data|
@@ -134,15 +115,7 @@ module Reports::WeaknessesByStateExecution
     @total_weaknesses = @weaknesses_count.values.sum
     @total_oportunities = @oportunities_count.values.sum
 
-    if @sqm
-      @nonconformities_count = counts[:nonconformities]
-      @potential_nonconformities_count = counts[:potential_nonconformities]
-      @total_nonconformities = @nonconformities_count.values.sum
-      @total_potential_nonconformities = @potential_nonconformities_count.values.sum
-    end
-
     @totals = @total_weaknesses + @total_oportunities
-    @totals += (@total_nonconformities + @total_potential_nonconformities) if @sqm
   end
 
   def count_findings_by_state(type)
@@ -159,19 +132,8 @@ module Reports::WeaknessesByStateExecution
         "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)"
       ]
 
-      if type == :internal && !@sqm
+      if type == :internal
         @column_data.last << "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
-
-      elsif type == :internal && @sqm
-        @column_data.last << "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
-
-        nc_count = @nonconformities_count[state.last] || 0
-        pnc_count = @potential_nonconformities_count[state.last] || 0
-        nonconformities_percentage = @total_nonconformities > 0 ? nc_count.to_f / @total_nonconformities * 100 : 0.0
-        potential_nonconformities_percentage = @total_potential_nonconformities > 0 ? pnc_count.to_f / @total_potential_nonconformities * 100 : 0.0
-
-        @column_data.last << "#{nc_count} (#{'%.2f' % nonconformities_percentage.round(2)}%)"
-        @column_data.last << "#{pnc_count} (#{'%.2f' % potential_nonconformities_percentage.round(2)}%)"
       end
     end
   end
@@ -182,13 +144,8 @@ module Reports::WeaknessesByStateExecution
       "<b>#{@total_weaknesses}</b>"
     ]
 
-    if type == :internal && !@sqm
+    if type == :internal
       @column_data.last << "<b>#{@total_oportunities}</b>"
-
-    elsif type == :internal && @sqm
-      @column_data.last << "<b>#{@total_oportunities}</b>"
-      @column_data.last << "<b>#{@total_nonconformities}</b>"
-      @column_data.last << "<b>#{@total_potential_nonconformities}</b>"
     end
   end
 

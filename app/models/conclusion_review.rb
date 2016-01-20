@@ -179,7 +179,6 @@ class ConclusionReview < ActiveRecord::Base
       grouped_control_objectives.each do |process_control, cois|
         process_control_text = "<b>#{ProcessControl.model_name.human}: " +
             "<i>#{process_control.name}</i></b>"
-        process_control_text += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
         pdf.text process_control_text, :align => :justify,
             :inline_format => true
 
@@ -227,118 +226,6 @@ class ConclusionReview < ActiveRecord::Base
         :inline_format => true
     end
 
-    review_has_fortresses = grouped_control_objectives.any? do |_, cois|
-      cois.any? do |coi|
-        !(use_finals ? coi.final_fortresses : coi.fortresses).blank?
-      end
-    end
-
-    if review_has_fortresses
-      pdf.add_subtitle(
-        I18n.t('conclusion_review.fortresses'), PDF_FONT_SIZE, PDF_FONT_SIZE)
-
-      grouped_control_objectives.each do |process_control, cois|
-        has_fortresses = cois.any? do |coi|
-          (use_finals ? coi.final_fortresses : coi.fortresses).not_revoked.present?
-        end
-
-        if has_fortresses
-          column_headers, column_widths = [], []
-          header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
-
-          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
-          column_headers << header
-          column_widths << pdf.percent_width(100)
-
-          cois.sort.each do |coi|
-            if (use_finals ? coi.final_fortresses : coi.fortresses).not_revoked.present?
-              column_data = []
-              fortresses = (
-                use_finals ? coi.final_fortresses : coi.fortresses
-              ).not_revoked.sort_for_review
-
-              column_data << column_headers
-              column_data << ["<b>#{ControlObjective.model_name.human}:</b> #{coi.to_s}\n"]
-
-              pdf.move_down PDF_FONT_SIZE
-
-              pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-                table_options = pdf.default_table_options(column_widths)
-
-                pdf.table(column_data, table_options) do
-                  row(0).style(
-                    :background_color => 'cccccc',
-                    :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-                  )
-                end
-              end
-
-              fortresses.each do |w|
-                pdf.move_down PDF_FONT_SIZE
-                pdf.text coi.pdf_data(w), :align => :justify, :inline_format => true
-              end
-            end
-          end
-        end
-      end
-    end
-
-    review_has_nonconformities = grouped_control_objectives.any? do |_, cois|
-      cois.any? do |coi|
-        !(use_finals ? coi.final_nonconformities : coi.nonconformities).not_revoked.blank?
-      end
-    end
-
-    if review_has_nonconformities
-      pdf.add_subtitle(
-        I18n.t('conclusion_review.nonconformities'), PDF_FONT_SIZE, PDF_FONT_SIZE)
-
-      grouped_control_objectives.each do |process_control, cois|
-        has_nonconformities = cois.any? do |coi|
-          (use_finals ? coi.final_nonconformities : coi.nonconformities).not_revoked.present?
-        end
-
-        if has_nonconformities
-          column_headers, column_widths = [], []
-          header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
-
-          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
-          column_headers << header
-          column_widths << pdf.percent_width(100)
-
-          cois.sort.each do |coi|
-            if (use_finals ? coi.final_nonconformities : coi.nonconformities).not_revoked.present?
-              column_data = []
-              nonconformities = (
-                use_finals ? coi.final_nonconformities : coi.nonconformities
-              ).not_revoked.sort_for_review
-
-              column_data << column_headers
-              column_data << ["<b>#{ControlObjective.model_name.human}:</b> #{coi.to_s}\n"]
-
-              pdf.move_down PDF_FONT_SIZE
-
-              pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-                table_options = pdf.default_table_options(column_widths)
-
-                pdf.table(column_data, table_options) do
-                  row(0).style(
-                    :background_color => 'cccccc',
-                    :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-                  )
-                end
-              end
-
-              nonconformities.each do |w|
-                pdf.move_down PDF_FONT_SIZE
-                pdf.text coi.pdf_data(w), :align => :justify, :inline_format => true
-              end
-            end
-          end
-        end
-      end
-    end
-
     review_has_observations = grouped_control_objectives.any? do |_, cois|
       cois.any? do |coi|
         !(use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.blank?
@@ -358,7 +245,6 @@ class ConclusionReview < ActiveRecord::Base
           column_headers, column_widths = [], []
           header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
 
-          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
           column_headers << header
           column_widths << pdf.percent_width(100)
 
@@ -395,62 +281,6 @@ class ConclusionReview < ActiveRecord::Base
       end
     end
 
-    review_has_potential_nonconformities = grouped_control_objectives.any? do |_, cois|
-      cois.any? do |coi|
-        !(use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.blank?
-      end
-    end
-
-    if review_has_potential_nonconformities
-      pdf.add_subtitle(
-        I18n.t('conclusion_review.potential_nonconformities'), PDF_FONT_SIZE, PDF_FONT_SIZE)
-
-      grouped_control_objectives.each do |process_control, cois|
-        has_potential_nonconformities = cois.any? do |coi|
-          (use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.present?
-        end
-
-        if has_potential_nonconformities
-          column_headers, column_widths = [], []
-          header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
-
-          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
-          column_headers << header
-          column_widths << pdf.percent_width(100)
-
-          cois.sort.each do |coi|
-            if (use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.present?
-              column_data = []
-              potential_nonconformities = (
-                use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities
-              ).not_revoked.sort_for_review
-
-              column_data << column_headers
-              column_data << ["<b>#{ControlObjective.model_name.human}:</b> #{coi.to_s}\n"]
-
-              pdf.move_down PDF_FONT_SIZE
-
-              pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-                table_options = pdf.default_table_options(column_widths)
-
-                pdf.table(column_data, table_options) do
-                  row(0).style(
-                    :background_color => 'cccccc',
-                    :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-                  )
-                end
-              end
-
-              potential_nonconformities.each do |w|
-                pdf.move_down PDF_FONT_SIZE
-                pdf.text coi.pdf_data(w), :align => :justify, :inline_format => true
-              end
-            end
-          end
-        end
-      end
-    end
-
     review_has_oportunities = grouped_control_objectives.any? do |_, cois|
       cois.any? do |coi|
         !(use_finals ? coi.final_oportunities : coi.oportunities).not_revoked.blank?
@@ -470,7 +300,6 @@ class ConclusionReview < ActiveRecord::Base
           column_headers, column_widths = [], []
           header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
 
-          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
           column_headers << header
           column_widths << pdf.percent_width(100)
 

@@ -3,7 +3,6 @@
     <div class="col-md-6">
       <%= f.input :name, autofocus: true %>
       <%= f.input :prefix unless action_name.presence_in %w(edit update) %>
-      <%= f.input :kind, collection: organization_kinds, prompt: true %>
 
       <%= render 'image_input', f: f %>
     </div>
