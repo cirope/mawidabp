@@ -92,7 +92,7 @@ module Reports::ControlObjectiveStats
     unless business_units.empty?
       @filters << "<b>#{BusinessUnit.model_name.human}</b> = \"#{params[:control_objective_stats][:business_unit].strip}\""
 
-      @conclusion_reviews = @conclusion_reviews.by_business_unit_names @final, *business_units
+      @conclusion_reviews = @conclusion_reviews.by_business_unit_names *business_units
     end
   end
 

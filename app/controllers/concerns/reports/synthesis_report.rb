@@ -62,7 +62,7 @@ module Reports::SynthesisReport
     ).uniq.map(&:strip)
 
     unless business_units.empty?
-      @conclusion_reviews = @conclusion_reviews.by_business_unit_names(@final, *business_units)
+      @conclusion_reviews = @conclusion_reviews.by_business_unit_names(*business_units)
       @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
         "\"#{params[:synthesis_report][:business_unit].strip}\""
     end
