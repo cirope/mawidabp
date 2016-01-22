@@ -1,5 +1,6 @@
 class BusinessUnitScore < ActiveRecord::Base
   include Auditable
+  include BusinessUnitScores::Effectiveness
   include BusinessUnitScores::Validation
 
   belongs_to :business_unit

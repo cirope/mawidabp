@@ -2,10 +2,10 @@ module ConclusionReviews::Scopes
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def by_business_unit_names(final, *business_unit_names)
+    def by_business_unit_names(*business_unit_names)
       conditions, parameters = business_unit_conditions business_unit_names
 
-      ids_by_weaknesses = includes(business_unit_includes(final)).where(
+      ids_by_control_objectives = includes(business_unit_includes).where(
         conditions.join(' OR '), parameters
       ).references(:business_units).pluck('id')
 
@@ -13,7 +13,7 @@ module ConclusionReviews::Scopes
         conditions.join(' OR '), parameters
       ).references(:business_units).pluck('id')
 
-      where(id: ids_by_weaknesses | ids_by_review)
+      where(id: ids_by_control_objectives | ids_by_review)
     end
 
     private
@@ -29,16 +29,11 @@ module ConclusionReviews::Scopes
 
         [conditions, parameters]
       end
-    
-      def business_unit_includes final
-        business_units = { business_unit_findings: :business_unit }
-        weaknesses_include = final ?
-          { final_weaknesses: business_units } :
-          { weaknesses: business_units }
 
+      def business_unit_includes
         {
           review: {
-            control_objective_items: weaknesses_include
+            control_objective_items: { business_unit_scores: :business_unit }
           }
         }
       end

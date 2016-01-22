@@ -39,7 +39,7 @@ module Reports::ProcessControlStats
         business_unit_ids = business_units.present? && BusinessUnit.by_names(*business_units).pluck('id')
 
         unless business_units.empty?
-          conclusion_reviews = conclusion_reviews.by_business_unit_names(final, *business_units)
+          conclusion_reviews = conclusion_reviews.by_business_unit_names(*business_units)
           @filters << "<b>#{BusinessUnit.model_name.human}</b> = \"#{params[:process_control_stats][:business_unit].strip}\""
         end
       end
