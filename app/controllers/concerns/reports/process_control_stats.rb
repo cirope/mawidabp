@@ -36,7 +36,7 @@ module Reports::ProcessControlStats
         business_units = params[:process_control_stats][:business_unit].split(
           SPLIT_AND_TERMS_REGEXP
         ).uniq.map(&:strip)
-        business_unit_ids = business_units.present? && BusinessUnit.by_names(*business_units).pluck('id')
+        @business_unit_ids = business_units.present? && BusinessUnit.by_names(*business_units).pluck('id')
 
         unless business_units.empty?
           conclusion_reviews = conclusion_reviews.by_business_unit_names(*business_units)
@@ -77,9 +77,9 @@ module Reports::ProcessControlStats
 
           weaknesses.not_revoked.each do |w|
             @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
-            show = business_unit_ids.blank? ||
-              business_unit_ids.include?(c_r.review.business_unit.id) ||
-              w.business_unit_ids.any? { |bu_id| business_unit_ids.include?(bu_id) }
+            show = @business_unit_ids.blank? ||
+              @business_unit_ids.include?(c_r.review.business_unit.id) ||
+              w.business_unit_ids.any? { |bu_id| @business_unit_ids.include?(bu_id) }
 
             if show
               weaknesses_count[w.risk_text] ||= 0
@@ -93,7 +93,7 @@ module Reports::ProcessControlStats
 
           pc_data[:weaknesses] ||= {}
           pc_data[:effectiveness] ||= []
-          pc_data[:effectiveness] << coi.effectiveness
+          pc_data[:effectiveness] << effectiveness(coi)
 
           weaknesses_count.each do |r, c|
             pc_data[:weaknesses][r] ||= 0
@@ -228,4 +228,16 @@ module Reports::ProcessControlStats
 
     redirect_to_pdf(@controller, @from_date, @to_date, 'process_control_stats')
   end
+
+  private
+
+    def effectiveness coi
+      if coi.continuous && @business_unit_ids && @business_unit_ids.size == 1
+        score = coi.business_unit_scores.where(
+          business_unit_id: @business_unit_ids
+        ).take
+      end
+
+      score ? score.effectiveness : coi.effectiveness
+    end
 end
