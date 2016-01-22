@@ -89,7 +89,7 @@ module Reports::ControlObjectiveStats
     ).uniq.map(&:strip)
     @business_unit_ids = business_units.present? && BusinessUnit.by_names(*business_units).pluck('id')
 
-    unless business_units.empty?
+    if business_units.present?
       @filters << "<b>#{BusinessUnit.model_name.human}</b> = \"#{params[:control_objective_stats][:business_unit].strip}\""
 
       @conclusion_reviews = @conclusion_reviews.by_business_unit_names *business_units
@@ -230,7 +230,7 @@ module Reports::ControlObjectiveStats
 
     @coi_data[:weaknesses] ||= {}
     @coi_data[:effectiveness] ||= []
-    @coi_data[:effectiveness] << coi.effectiveness
+    @coi_data[:effectiveness] << effectiveness(coi)
 
     id = coi.review.id
     @coi_data[:review_ids] ||= []
@@ -238,6 +238,16 @@ module Reports::ControlObjectiveStats
 
     @coi_data[:reviews] ||= 0
     @coi_data[:reviews] += 1 if @weaknesses.size > 0
+  end
+
+  def effectiveness coi
+    if coi.continuous && @business_unit_ids.size == 1
+      score = coi.business_unit_scores.where(
+        business_unit_id: @business_unit_ids
+      ).take
+    end
+
+    score ? score.effectiveness : coi.effectiveness
   end
 
   def create_control_objective_stats
