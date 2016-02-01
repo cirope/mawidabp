@@ -4,6 +4,7 @@ cirope:
   description: ''
   image_model: image_one
   group: main_group
+  corporate: false
 
 google:
   name: Google Inc.
@@ -11,3 +12,4 @@ google:
   description: ''
   image_model: image_two
   group: second_group
+  corporate: false

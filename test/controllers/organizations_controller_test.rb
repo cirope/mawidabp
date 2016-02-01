@@ -25,14 +25,18 @@ class OrganizationsControllerTest < ActionController::TestCase
   end
 
   test 'create organization' do
-    assert_difference 'Organization.count' do
+    assert_difference ['Organization.count', 'ImageModel.count'] do
       post :create, {
         organization: {
           name: 'New organization',
           prefix: 'new-prefix',
           description: 'New description',
           group_id: groups(:main_group).id,
-          image_model_id: image_models(:image_one).id
+          image_model_attributes: {
+            image: Rack::Test::UploadedFile.new(
+              "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
+            )
+          }
         }
       }
     end
@@ -48,7 +52,6 @@ class OrganizationsControllerTest < ActionController::TestCase
           prefix: 'new-prefix',
           description: 'New description',
           group_id: groups(:main_group).id,
-          image_model_id: image_models(:image_one).id,
           ldap_config_attributes: {
             hostname: 'localhost',
             port: ENV['TRAVIS'] ? 3389 : 389,
@@ -79,8 +82,7 @@ class OrganizationsControllerTest < ActionController::TestCase
           name: 'New organization',
           prefix: 'new-prefix',
           description: 'New description',
-          group_id: groups(:second_group).id,
-          image_model_id: image_models(:image_one).id
+          group_id: groups(:second_group).id
         }
       }
     end
@@ -100,7 +102,11 @@ class OrganizationsControllerTest < ActionController::TestCase
       organization: {
         name: 'Updated organization',
         description: 'Updated description',
-        image_model_id: image_models(:image_one).id
+        image_model_attributes: {
+          image: Rack::Test::UploadedFile.new(
+            "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
+          )
+        }
       }
     }
 
