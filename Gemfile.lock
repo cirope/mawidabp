@@ -54,7 +54,7 @@ GEM
       rails
       rdiscount
     builder (3.2.2)
-    byebug (8.2.1)
+    byebug (8.2.2)
     capistrano (3.4.0)
       i18n
       rake (>= 10.0.0)
@@ -143,6 +143,7 @@ GEM
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     multi_json (1.11.2)
+    nakayoshi_fork (0.0.3)
     net-ldap (0.13.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -297,6 +298,7 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   mini_magick
+  nakayoshi_fork
   net-ldap
   newrelic_rpm
   paper_trail
