@@ -56,6 +56,9 @@
   <thead id="column_headers">
     <tr>
       <th></th>
+      <%= make_not_available_column(
+        Finding.human_attribute_name(:organization), :class => 'hidden-sm hidden-xs'
+      ) if current_organization.corporate? %>
       <%= make_filterable_column Review.model_name.human, nil, 'review', 'issue_date' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'hidden-xs' }, 'project' %>
       <%= make_filterable_column Finding.human_attribute_name(:code), nil, 'review_code' %>
@@ -74,6 +77,9 @@
     <% @findings.each do |finding| %>
       <tr>
         <td><%= finding_updated_at_text finding %></td>
+        <% if current_organization.corporate? %>
+          <td><%= finding.organization.prefix %></td>
+        <% end %>
         <td class="nowrap"><%= show_review_with_conclusion_status_as_abbr(
           finding.control_objective_item.review) %></td>
         <td class="hidden-xs"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>

@@ -16,6 +16,7 @@ class Finding < ActiveRecord::Base
   include Findings::Relations
   include Findings::ReportScopes
   include Findings::ScaffoldNotifications
+  include Findings::Scopes
   include Findings::Search
   include Findings::SortColumns
   include Findings::State
@@ -35,26 +36,6 @@ class Finding < ActiveRecord::Base
   acts_as_tree
 
   cattr_accessor :current_user, :current_organization
-
-  # Named scopes
-  scope :list, -> { where(organization_id: Organization.current_id) }
-  scope :with_prefix, ->(prefix) {
-    where(
-      "#{quoted_table_name}.#{qcn('review_code')} LIKE ?", "#{prefix}%"
-    ).order(review_code: :asc)
-  }
-  scope :with_title, ->(title) {
-    where "#{quoted_table_name}.#{qcn('title')} LIKE ?", "%#{title}%"
-  }
-  scope :all_for_reallocation_with_review, ->(review) {
-    includes(:control_objective_item => :review).references(:reviews).where(
-      :reviews => { :id => review.id }, :state => PENDING_STATUS, :final => false
-    )
-  }
-  scope :finals, ->(use_finals) { where(:final => use_finals) }
-  scope :for_current_organization, -> { list }
-  scope :sort_by_code, -> { order(review_code: :asc) }
-  scope :sort_for_review, -> { order risk: :desc, priority: :desc, review_code: :asc }
 
   # Relaciones
   belongs_to :organization

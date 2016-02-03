@@ -15,7 +15,7 @@ class FindingsController < ApplicationController
     @related_users = @auth_user.related_users_and_descendants
     default_conditions = { final: false }
 
-    if @auth_user.committee? || @selected_user
+    if current_organization.corporate? || @auth_user.committee? || @selected_user
       if @selected_user
         default_conditions[User.table_name] = { :id => params[:user_id] }
 
@@ -24,8 +24,7 @@ class FindingsController < ApplicationController
         end
       end
     else
-      self_and_descendants_ids = @self_and_descendants.map(&:id) +
-        @related_users.map(&:id)
+      self_and_descendants_ids = @self_and_descendants.map(&:id) + @related_users.map(&:id)
       default_conditions[User.table_name] = {
         :id => self_and_descendants_ids.include?(@selected_user.try(:id)) ?
           @selected_user.id : self_and_descendants_ids
@@ -46,7 +45,7 @@ class FindingsController < ApplicationController
 
     build_search_conditions Finding, default_conditions
 
-    @findings = Finding.list.includes(
+    @findings = scoped_findings.includes(
       {
         :control_objective_item => {
           :review => [:conclusion_final_review, :period, :plan_item]
@@ -54,6 +53,7 @@ class FindingsController < ApplicationController
       }, :users
     ).where(@conditions).order(
       @order_by || [
+        "#{Finding.quoted_table_name}.#{Finding.qcn('organization_id')} ASC",
         "#{Review.quoted_table_name}.#{Review.qcn('created_at')} DESC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('state')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
@@ -142,7 +142,7 @@ class FindingsController < ApplicationController
   #
   # * GET /oportunities/follow_up_pdf/1
   def follow_up_pdf
-    finding = Finding.list.find_by(id: params[:id])
+    finding = scoped_findings.find_by(id: params[:id])
 
     finding.follow_up_pdf(current_organization)
 
@@ -150,11 +150,12 @@ class FindingsController < ApplicationController
   end
 
   private
+
     def set_finding
       includes = [{:control_objective_item => {:review => :period}}]
       conditions = { :id => params[:id], :final => false }
 
-      if @auth_user.can_act_as_audited?
+      if !current_organization.corporate && @auth_user.can_act_as_audited?
         includes << :users
         conditions[User.table_name] = {
           :id => @auth_user.descendants.map(&:id) +
@@ -219,5 +220,9 @@ class FindingsController < ApplicationController
         :follow_up_pdf => :read,
         :auto_complete_for_finding_relation => :read
       )
+    end
+
+    def scoped_findings
+      current_organization.corporate? ? Finding.group_list : Finding.list
     end
 end

@@ -6,6 +6,14 @@ cirope:
   group: main_group
   corporate: false
 
+twitter:
+  name: Twitter Inc.
+  prefix: tw
+  description: ''
+  image_model: image_one
+  group: main_group
+  corporate: true
+
 google:
   name: Google Inc.
   prefix: google

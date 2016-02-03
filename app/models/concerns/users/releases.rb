@@ -32,7 +32,7 @@ module Users::Releases
     end
 
     def findings_for_reallocation
-      findings.for_current_organization.all_for_reallocation
+      findings.list.all_for_reallocation
     end
 
     def release_pending_findings

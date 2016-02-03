@@ -8,6 +8,11 @@ admin_role_for_administrator_user_in_google:
   organization: google
   role: admin_role
 
+admin_role_for_administrator_user_in_twitter:
+  user: administrator_user
+  organization: twitter
+  role: admin_role
+
 admin_second_role_for_administrator_second_user_in_google:
   user: administrator_second_user
   organization: google
@@ -152,3 +157,8 @@ auditor_senior_role_for_poll_user_in_cirope:
   user: poll_user
   organization: cirope
   role: auditor_senior_role
+
+admin_role_for_corporate_user_in_twitter:
+  user: corporate_user
+  organization: twitter
+  role: admin_role

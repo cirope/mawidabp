@@ -15,6 +15,16 @@ class Users::CompletionsControllerTest < ActionController::TestCase
     assert users.all? { |u| (u['label'] + u['informal']).match /bar/i }
   end
 
+  test 'auto complete for corporate user' do
+    xhr :get, :index, q: 'corporate', format: :json
+
+    assert_response :success
+    users = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, users.size
+    assert users.all? { |u| (u['label'] + u['informal']).match /corporate/i }
+  end
+
   test 'list blank users' do
     xhr :get, :index, q: 'blank', format: :json
 

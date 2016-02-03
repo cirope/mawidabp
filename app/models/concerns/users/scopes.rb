@@ -40,11 +40,9 @@ module Users::Scopes
       end
 
       def corporate_list_parameters
-        organization = Organization.find Organization.current_id
-
         {
-          organization_id: organization.id,
-          group_id:        organization.group_id,
+          organization_id: Organization.current_id,
+          group_id:        Group.current_id,
           true:            true
         }
       end
