@@ -1176,6 +1176,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         work_papers: "Papeles de trabajo"
         finding_answers: "Respuestas"
         rescheduled: "Reprogramada"
+        organization: "Organización"
       finding/achievements:
         one: "Beneficio estimado"
         amount: "Monto"

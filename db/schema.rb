@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160112035748) do
+ActiveRecord::Schema.define(version: 20160131223829) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer  "benefit_id", limit: nil,                          null: false
@@ -1962,10 +1962,12 @@ ActiveRecord::Schema.define(version: 20160112035748) do
     t.integer  "group_id",       limit: nil
     t.integer  "image_model_id", limit: nil
     t.integer  "lock_version",               precision: 38, default: 0
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+    t.boolean  "corporate",      limit: nil,                default: false, null: false
   end
 
+  add_index "organizations", ["corporate"], name: "i_organizations_corporate"
   add_index "organizations", ["group_id"], name: "i_organizations_group_id"
   add_index "organizations", ["image_model_id"], name: "i_organizations_image_model_id"
   add_index "organizations", ["name"], name: "index_organizations_on_name"

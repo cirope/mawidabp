@@ -481,3 +481,24 @@ auditor_user:
   manager_id: <%= ActiveRecord::FixtureSet.identify(:supervisor_user) %>
   notes: User notes
   hidden: false
+
+<% ::PLAIN_PASSWORDS[:corporate] = 'corporate123' %>
+<% salt = Digest::SHA512.hexdigest("corporate#{rand}") %>
+corporate_user:
+  name: Corporate
+  last_name: Corporate
+  language: es
+  email: corporate@corporate.com
+  function: Corporate function
+  user: corporate
+  password: <%= Digest::SHA512.hexdigest("#{salt}-corporate123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  logged_in: false
+  group_admin: false
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  resource: auditor_resource
+  notes: User notes
+  hidden: false

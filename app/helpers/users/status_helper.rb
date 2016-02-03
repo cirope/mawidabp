@@ -58,6 +58,6 @@ module Users::StatusHelper
     end
 
     def filtered_weaknesses
-      @user.weaknesses.for_current_organization.finals(false).not_incomplete
+      @user.weaknesses.list.finals(false).not_incomplete
     end
 end

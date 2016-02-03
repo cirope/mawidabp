@@ -28,6 +28,8 @@ gem 'search_cop'
 gem 'jbuilder'
 gem 'sidekiq'
 
+gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
+
 gem 'sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'

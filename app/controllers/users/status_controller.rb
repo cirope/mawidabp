@@ -7,6 +7,6 @@ class Users::StatusController < ApplicationController
   # * GET /users/status/1
   def show
     @user = @auth_user if @auth_user.audited?
-    @weaknesses = @user.weaknesses.for_current_organization.finals(false).not_incomplete
+    @weaknesses = @user.weaknesses.list.finals(false).not_incomplete
   end
 end

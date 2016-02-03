@@ -131,6 +131,19 @@ class FindingsControllerTest < ActionController::TestCase
     assert_equal "#{Mime::CSV}; charset=utf-8", @response.content_type
   end
 
+  test 'list findings as corporate user' do
+    organization = organizations :twitter
+
+    login prefix: organization.prefix
+
+    get :index, :completed => 'incomplete'
+
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert(assigns(:findings).any? { |finding| finding.organization_id != organization.id })
+    assert_template 'findings/index'
+  end
+
   test 'edit finding when search match only one result' do
     login
     get :index, :completed => 'incomplete', :search => {
