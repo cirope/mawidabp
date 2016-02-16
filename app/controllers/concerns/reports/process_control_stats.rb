@@ -63,7 +63,10 @@ module Reports::ProcessControlStats
       reviews_score_data[period] ||= []
 
       conclusion_reviews.for_period(period).each do |c_r|
+        _effectiveness = []
+
         c_r.review.control_objective_items.not_excluded_from_score.each do |coi|
+          coi_effectiveness = effectiveness coi
           pc_data = process_controls[coi.process_control.name] ||= {}
           pc_data[:weaknesses_ids] ||= {}
           pc_data[:reviews] ||= 0
@@ -93,7 +96,9 @@ module Reports::ProcessControlStats
 
           pc_data[:weaknesses] ||= {}
           pc_data[:effectiveness] ||= []
-          pc_data[:effectiveness] << effectiveness(coi)
+          pc_data[:effectiveness] << coi_effectiveness
+
+          _effectiveness << [coi_effectiveness * coi.relevance, coi.relevance]
 
           weaknesses_count.each do |r, c|
             pc_data[:weaknesses][r] ||= 0
@@ -103,7 +108,7 @@ module Reports::ProcessControlStats
           process_controls[coi.process_control.name] = pc_data
         end
 
-        reviews_score_data[period] << c_r.review.score
+        reviews_score_data[period] << weighted_average(_effectiveness)
       end
 
       @reviews_score_data[period] = reviews_score_data[period].size > 0 ?
@@ -217,7 +222,7 @@ module Reports::ProcessControlStats
 
       pdf.move_down PDF_FONT_SIZE
       pdf.text t(
-        "#{@controller}_committee_report.control_objective_stats.review_score_average",
+        "#{@controller}_committee_report.process_control_stats.review_effectiveness_average",
         :score => @reviews_score_data[period]
       ), :inline_format => true
     end
@@ -239,5 +244,12 @@ module Reports::ProcessControlStats
       end
 
       score ? score.effectiveness : coi.effectiveness
+    end
+
+    def weighted_average effectiveness
+      scores  = effectiveness.map(&:first)
+      weights = effectiveness.map(&:last)
+
+      effectiveness.size > 0 ? (scores.sum / weights.sum).round : 100
     end
 end
