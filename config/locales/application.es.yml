@@ -183,7 +183,7 @@ es:
         other: '%{effectiveness} en %{count} informes'
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
-      review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control en los informes: <b>%{score}%</b>'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
@@ -215,7 +215,7 @@ es:
         other: '%{effectiveness} con observaciones en %{count} informes'
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
-      review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio en los informes: <b>%{score}%</b>'
     qa_indicators:
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
       subtitle: ""
@@ -579,7 +579,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         one: '%{effectiveness} en un informe'
         other: '%{effectiveness} en %{count} informes'
       without_weaknesses: 'Sin observaciones'
-      review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control en los informes: <b>%{score}%</b>'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
@@ -610,7 +610,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         one: '%{effectiveness} con observaciones en un informe'
         other: '%{effectiveness} con observaciones en %{count} informes'
       without_weaknesses: 'Sin observaciones'
-      review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio en los informes: <b>%{score}%</b>'
     qa_indicators:
       without_data: "Sin datos para el rango de fechas ingresado"
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad (Seguimiento)"
