@@ -183,22 +183,18 @@ module Reports::ControlObjectiveStats
       @weaknesses_status_count = {}
 
       @conclusion_reviews.for_period(period).each do |c_r|
-        _effectiveness = []
-
         c_r.review.control_objective_items.not_excluded_from_score.with_names(*@control_objectives).each do |coi|
           init_control_objective_item_data(coi)
 
           count_weaknesses_by_risk(@weaknesses)
 
-          _effectiveness << effectiveness(coi)
+          @reviews_score_data[period] << effectiveness(coi)
           @process_controls[coi.process_control.name][coi.control_objective] = @coi_data
         end
-
-        @reviews_score_data[period] << weighted_average(_effectiveness)
       end
 
       @reviews_score_data[period] = @reviews_score_data[period].size > 0 ?
-        (@reviews_score_data[period].sum.to_f / @reviews_score_data[period].size).round : 100
+        weighted_average(@reviews_score_data[period]) : 100
     end
 
     def sort_process_control_data(period)
@@ -283,9 +279,7 @@ module Reports::ControlObjectiveStats
 
     def effectiveness coi
       if coi.continuous && @business_unit_ids && @business_unit_ids.size == 1
-        score = coi.business_unit_scores.where(
-          business_unit_id: @business_unit_ids
-        ).take
+        score = coi.business_unit_scores.where(business_unit_id: @business_unit_ids).take
       end
       _effectiveness = score ? score.effectiveness : coi.effectiveness
 
@@ -296,7 +290,7 @@ module Reports::ControlObjectiveStats
       scores  = effectiveness.map(&:first)
       weights = effectiveness.map(&:last)
 
-      effectiveness.size > 0 ? (scores.sum / weights.sum).round : 100
+      effectiveness.size > 0 ? (scores.sum / weights.sum).round(2) : 100
     end
 
     def prepare_pdf_table_headers(pdf)

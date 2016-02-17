@@ -98,7 +98,7 @@ module Reports::ProcessControlStats
           pc_data[:effectiveness] ||= []
           pc_data[:effectiveness] << coi_effectiveness
 
-          _effectiveness << coi_effectiveness
+          reviews_score_data[period] << coi_effectiveness
 
           weaknesses_count.each do |r, c|
             pc_data[:weaknesses][r] ||= 0
@@ -108,11 +108,10 @@ module Reports::ProcessControlStats
           process_controls[coi.process_control.name] = pc_data
         end
 
-        reviews_score_data[period] << weighted_average(_effectiveness)
       end
 
       @reviews_score_data[period] = reviews_score_data[period].size > 0 ?
-        (reviews_score_data[period].sum.to_f / reviews_score_data[period].size).round : 100
+        weighted_average(reviews_score_data[period]) : 100
 
       @process_control_data[period] ||= []
 
@@ -250,6 +249,6 @@ module Reports::ProcessControlStats
       scores  = effectiveness.map(&:first)
       weights = effectiveness.map(&:last)
 
-      effectiveness.size > 0 ? (scores.sum / weights.sum).round : 100
+      effectiveness.size > 0 ? (scores.sum / weights.sum).round(2) : 100
     end
 end
