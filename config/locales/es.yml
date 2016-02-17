@@ -177,7 +177,7 @@
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
       title: "OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL"
       subtitle: "INFORMES DEFINITIVOS"
-      average_effectiveness: "Efectividad promedio"
+      average_effectiveness: "Calificación promedio ponderada"
       average_effectiveness_resume:
         one: "%{effectiveness} - %{count} informe evaluado"
         other: "%{effectiveness} - %{count} informes evaluados"
@@ -212,7 +212,7 @@
       pdf_name: "observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf"
       title: "OBSERVACIONES AGRUPADAS POR PROCESO DE NEGOCIO"
       subtitle: "INFORMES DEFINITIVOS"
-      average_effectiveness: "Efectividad promedio"
+      average_effectiveness: "Calificación promedio ponderada"
       average_effectiveness_resume:
         one: "%{effectiveness} - %{count} informe evaluado"
         other: "%{effectiveness} - %{count} informes evaluados"
@@ -585,7 +585,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
       title: "OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL"
       subtitle: "SEGUIMIENTO DE INFORMES"
-      average_effectiveness: 'Efectividad promedio'
+      average_effectiveness: 'Calificación promedio ponderada'
       average_effectiveness_resume:
         one: "%{effectiveness} - %{count} informe evaluado"
         other: "%{effectiveness} - %{count} informes evaluados"
@@ -622,7 +622,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       pdf_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf'
       title: "OBSERVACIONES AGRUPADAS POR PROCESO DE NEGOCIO"
       subtitle: "SEGUIMIENTO DE INFORMES"
-      average_effectiveness: "Efectividad promedio"
+      average_effectiveness: "Calificación promedio ponderada"
       average_effectiveness_resume:
         one: "%{effectiveness} - %{count} informe evaluado"
         other: "%{effectiveness} - %{count} informes evaluados"

@@ -98,7 +98,7 @@ module Reports::ProcessControlStats
           pc_data[:effectiveness] ||= []
           pc_data[:effectiveness] << coi_effectiveness
 
-          _effectiveness << [coi_effectiveness * coi.relevance, coi.relevance]
+          _effectiveness << coi_effectiveness
 
           weaknesses_count.each do |r, c|
             pc_data[:weaknesses][r] ||= 0
@@ -119,8 +119,7 @@ module Reports::ProcessControlStats
       process_controls.each do |pc, pc_data|
         @process_control_ids_data[pc] ||= {}
         reviews_count = pc_data[:effectiveness].size
-        effectiveness = reviews_count > 0 ?
-          pc_data[:effectiveness].sum.to_f / reviews_count : 100
+        effectiveness = reviews_count > 0 ? weighted_average(pc_data[:effectiveness]) : 100
         weaknesses_count = pc_data[:weaknesses]
 
         if weaknesses_count.values.sum == 0
@@ -141,8 +140,7 @@ module Reports::ProcessControlStats
 
         @process_control_data[period] << {
           'process_control' => pc,
-          'effectiveness' => effectiveness_label(
-            effectiveness, pc_data[:reviews], pc_data[:review_ids]),
+          'effectiveness' => effectiveness_label(effectiveness, pc_data[:reviews], pc_data[:review_ids]),
           'weaknesses_count' => weaknesses_count_text
         }
       end
@@ -243,7 +241,9 @@ module Reports::ProcessControlStats
         ).take
       end
 
-      score ? score.effectiveness : coi.effectiveness
+      _effectiveness = score ? score.effectiveness : coi.effectiveness
+
+      [_effectiveness * coi.relevance, coi.relevance]
     end
 
     def weighted_average effectiveness
