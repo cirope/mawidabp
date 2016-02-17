@@ -24,8 +24,7 @@ module Reports::ControlObjectiveStats
           @control_objectives_data[period][pc][co.name] ||= {}
           @coi_data = data
 
-          effectiveness = @coi_data[:effectiveness].size > 0 ?
-            @coi_data[:effectiveness].sum.to_f / @coi_data[:effectiveness].size : 100
+          effectiveness = @coi_data[:effectiveness].size > 0 ? weighted_average(@coi_data[:effectiveness]) : 100
           @weaknesses_count = @coi_data[:weaknesses]
 
           if @weaknesses_count.values.sum == 0
@@ -191,7 +190,7 @@ module Reports::ControlObjectiveStats
 
           count_weaknesses_by_risk(@weaknesses)
 
-          _effectiveness << [effectiveness(coi) * coi.relevance, coi.relevance]
+          _effectiveness << effectiveness(coi)
           @process_controls[coi.process_control.name][coi.control_objective] = @coi_data
         end
 
@@ -288,8 +287,9 @@ module Reports::ControlObjectiveStats
           business_unit_id: @business_unit_ids
         ).take
       end
+      _effectiveness = score ? score.effectiveness : coi.effectiveness
 
-      score ? score.effectiveness : coi.effectiveness
+      [_effectiveness * coi.relevance, coi.relevance]
     end
 
     def weighted_average effectiveness
