@@ -290,7 +290,7 @@ module Reports::ControlObjectiveStats
       scores  = effectiveness.map(&:first)
       weights = effectiveness.map(&:last)
 
-      effectiveness.size > 0 ? (scores.sum / weights.sum).round(2) : 100
+      effectiveness.size > 0 ? (scores.sum.to_f / weights.sum).round(2) : 100
     end
 
     def prepare_pdf_table_headers(pdf)
