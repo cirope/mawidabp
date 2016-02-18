@@ -19,6 +19,7 @@ module Reports::ProcessControlStats
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(
       @from_date, @to_date
     )
+    @process_controls = []
     @process_control_data = {}
     @process_control_ids_data = {}
     @reviews_score_data = {}
@@ -26,6 +27,18 @@ module Reports::ProcessControlStats
     weaknesses_conditions = {}
 
     if params[:process_control_stats]
+      if params[:process_control_stats][:process_control].present?
+        @process_controls = params[:process_control_stats][:process_control].split(
+          SPLIT_AND_TERMS_REGEXP
+        ).uniq.map(&:strip)
+
+        if @process_controls.present?
+          @filters << "<b>#{ProcessControl.model_name.human}</b> = \"#{params[:process_control_stats][:process_control].strip}\""
+
+          conclusion_reviews = conclusion_reviews.by_process_control_names *@process_controls
+        end
+      end
+
       if params[:process_control_stats][:business_unit_type].present?
         @selected_business_unit = BusinessUnitType.find(params[:process_control_stats][:business_unit_type])
         conclusion_reviews = conclusion_reviews.by_business_unit_type(@selected_business_unit.id)
@@ -65,7 +78,7 @@ module Reports::ProcessControlStats
       conclusion_reviews.for_period(period).each do |c_r|
         _effectiveness = []
 
-        c_r.review.control_objective_items.not_excluded_from_score.each do |coi|
+        c_r.review.control_objective_items.not_excluded_from_score.with_process_control_names(*@process_controls).each do |coi|
           coi_effectiveness = effectiveness coi
           pc_data = process_controls[coi.process_control.name] ||= {}
           pc_data[:weaknesses_ids] ||= {}
@@ -107,7 +120,6 @@ module Reports::ProcessControlStats
 
           process_controls[coi.process_control.name] = pc_data
         end
-
       end
 
       @reviews_score_data[period] = reviews_score_data[period].size > 0 ?
