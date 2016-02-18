@@ -471,6 +471,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :to_date => 10.years.from_now.to_date,
         :business_unit_type => business_unit_types(:cycle).id,
         :business_unit => 'one',
+        :process_control => 'seg',
         :finding_status => Finding::STATUS[:being_implemented],
         :finding_title => 'a'
       },

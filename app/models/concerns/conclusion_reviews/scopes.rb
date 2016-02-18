@@ -1,7 +1,53 @@
 module ConclusionReviews::Scopes
   extend ActiveSupport::Concern
 
+  included do
+    scope :list, -> { where(organization_id: Organization.current_id) }
+  end
+
   module ClassMethods
+    def for_period period
+      includes(review: :period).
+        where(periods: { id: period.id }).
+        references(:periods)
+    end
+
+    def by_control_objective_names *control_objective_names
+      conditions  = []
+      parameters  = {}
+      column_name = "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn 'name'}"
+
+      control_objective_names.each_with_index do |control_objective_name, i|
+        conditions << "LOWER(#{column_name}) LIKE :co_#{i}"
+        parameters[:"co_#{i}"] = "%#{control_objective_name.mb_chars.downcase}%"
+      end
+
+      includes(review: { control_objective_items: :control_objective }).
+        where(conditions.join(' OR '), parameters).
+        references(:control_objectives)
+    end
+
+    def by_process_control_names *process_control_names
+      conditions  = []
+      parameters  = {}
+      column_name = "#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn 'name'}"
+
+      process_control_names.each_with_index do |process_control_name, i|
+        conditions << "LOWER(#{column_name}) LIKE :pc_#{i}"
+        parameters[:"pc_#{i}"] = "%#{process_control_name.mb_chars.downcase}%"
+      end
+
+      includes(review: { control_objective_items: { control_objective: :process_control } }).
+        where(conditions.join(' OR '), parameters).
+        references(:process_controls)
+    end
+
+    def by_business_unit_type business_unit_type_id
+      includes(review: { plan_item: :business_unit }).
+        where(business_units: { business_unit_type_id: business_unit_type_id }).
+        references(:business_units)
+    end
+
     def by_business_unit_names(*business_unit_names)
       conditions, parameters = business_unit_conditions business_unit_names
 

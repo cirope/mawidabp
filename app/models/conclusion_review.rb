@@ -35,32 +35,6 @@ class ConclusionReview < ActiveRecord::Base
     }
   }.with_indifferent_access
 
-  # Named scopes
-  scope :list, -> { where(organization_id: Organization.current_id) }
-  scope :for_period, ->(period) {
-    includes(:review =>:period).where(
-      :periods => { :id => period.id }
-    ).references(:periods)
-  }
-  scope :by_business_unit_type, ->(business_unit_type_id) {
-    includes(:review => { :plan_item => :business_unit }).where(
-      :business_units => { :business_unit_type_id => business_unit_type_id }
-    ).references(:business_units)
-  }
-  scope :by_control_objective_names, ->(*control_objective_names) {
-    conditions = []
-    parameters = {}
-
-    control_objective_names.each_with_index do |control_objective_name, i|
-      conditions << "LOWER(#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('name')}) LIKE :co_#{i}"
-      parameters[:"co_#{i}"] = "%#{control_objective_name.mb_chars.downcase}%"
-    end
-
-    includes(:review => {:control_objective_items => :control_objective}).where(
-      conditions.join(' OR '), parameters
-    ).references(:control_objectives)
-  }
-
   # Callbacks
   before_destroy :can_be_destroyed?
 
