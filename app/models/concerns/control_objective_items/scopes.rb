@@ -3,7 +3,7 @@ module ControlObjectiveItems::Scopes
 
   included do
     scope :list,                    -> { where organization_id: Organization.current_id }
-    scope :not_excluded_from_score, -> { where(exclude_from_score: false) }
+    scope :not_excluded_from_score, -> { where exclude_from_score: false }
   end
 
   module ClassMethods
@@ -28,13 +28,28 @@ module ControlObjectiveItems::Scopes
       column_name = "#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn 'name'}"
 
       process_control_names.each_with_index do |process_control_name, i|
-        conditions << "LOWER(#{column_name}) LIKE :co_#{i}"
-        parameters[:"co_#{i}"] = "%#{process_control_name.mb_chars.downcase}%"
+        conditions << "LOWER(#{column_name}) LIKE :pc_#{i}"
+        parameters[:"pc_#{i}"] = "%#{process_control_name.mb_chars.downcase}%"
       end
 
       includes(control_objective: :process_control).
         where(conditions.join(' OR '), parameters).
         references(:process_controls)
+    end
+
+    def not_continuous_or_with_business_unit_ids *business_unit_ids
+      conditions = { control_objectives: { continuous: false } }
+      conditions = [
+        "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn 'continuous'} = :false"
+      ]
+
+      if business_unit_ids.present?
+        conditions << "#{BusinessUnitScore.quoted_table_name}.#{BusinessUnitScore.qcn 'business_unit_id'} IN (:bu_ids)"
+      end
+
+      includes(:business_unit_scores, :control_objective).
+        where("(#{conditions.join(' OR ')})", false: false, bu_ids: business_unit_ids).
+        references(:business_unit_scores, :control_objectives)
     end
   end
 end

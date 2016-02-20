@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160131223829) do
+ActiveRecord::Schema.define(version: 20160220003928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -194,7 +194,7 @@ ActiveRecord::Schema.define(version: 20160131223829) do
     t.integer  "relevance"
     t.integer  "risk"
     t.boolean  "obsolete",           default: false
-    t.boolean  "continuous"
+    t.boolean  "continuous",                         null: false
   end
 
   add_index "control_objectives", ["obsolete"], name: "index_control_objectives_on_obsolete", using: :btree
