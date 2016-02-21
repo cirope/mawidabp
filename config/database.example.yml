@@ -5,7 +5,7 @@ common: &common
   password: <%= ENV['TRAVIS'] ? '' : 'oracle' %>
 
 development:
-  database: xe
+  database: //localhost:1521/xe
   <<: *common
 
 test:
