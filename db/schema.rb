@@ -194,7 +194,7 @@ ActiveRecord::Schema.define(version: 20160220003928) do
     t.integer  "relevance"
     t.integer  "risk"
     t.boolean  "obsolete",           default: false
-    t.boolean  "continuous",                         null: false
+    t.boolean  "continuous",         default: false, null: false
   end
 
   add_index "control_objectives", ["obsolete"], name: "index_control_objectives_on_obsolete", using: :btree
