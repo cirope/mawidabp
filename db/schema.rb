@@ -231,7 +231,7 @@ ActiveRecord::Schema.define(version: 20160220003928) do
     t.datetime "created_at",                                                    null: false
     t.datetime "updated_at",                                                    null: false
     t.boolean  "obsolete",           limit: nil,                default: false
-    t.boolean  "continuous",         limit: nil,                                null: false
+    t.boolean  "continuous",         limit: nil,                default: false, null: false
   end
 
   add_index "control_objectives", ["obsolete"], name: "i_control_objectives_obsolete"
