@@ -76,9 +76,12 @@ module Reports::ProcessControlStats
       reviews_score_data[period] ||= []
 
       conclusion_reviews.for_period(period).each do |c_r|
-        _effectiveness = []
+        control_objective_items = c_r.review.control_objective_items.
+          not_excluded_from_score.
+          not_continuous_or_with_business_unit_ids(*@business_unit_ids).
+          with_process_control_names(*@process_controls)
 
-        c_r.review.control_objective_items.not_excluded_from_score.with_process_control_names(*@process_controls).each do |coi|
+        control_objective_items.each do |coi|
           coi_effectiveness = effectiveness coi
           pc_data = process_controls[coi.process_control.name] ||= {}
           pc_data[:weaknesses_ids] ||= {}

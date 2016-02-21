@@ -183,7 +183,12 @@ module Reports::ControlObjectiveStats
       @weaknesses_status_count = {}
 
       @conclusion_reviews.for_period(period).each do |c_r|
-        c_r.review.control_objective_items.not_excluded_from_score.with_names(*@control_objectives).each do |coi|
+        control_objective_items = c_r.review.control_objective_items.
+          not_excluded_from_score.
+          not_continuous_or_with_business_unit_ids(*@business_unit_ids).
+          with_names(*@control_objectives)
+
+        control_objective_items.each do |coi|
           init_control_objective_item_data(coi)
 
           count_weaknesses_by_risk(@weaknesses)

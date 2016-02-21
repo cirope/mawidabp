@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160131223829) do
+ActiveRecord::Schema.define(version: 20160220003928) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer  "benefit_id", limit: nil,                          null: false
@@ -231,7 +231,7 @@ ActiveRecord::Schema.define(version: 20160131223829) do
     t.datetime "created_at",                                                    null: false
     t.datetime "updated_at",                                                    null: false
     t.boolean  "obsolete",           limit: nil,                default: false
-    t.boolean  "continuous",         limit: nil
+    t.boolean  "continuous",         limit: nil,                                null: false
   end
 
   add_index "control_objectives", ["obsolete"], name: "i_control_objectives_obsolete"
