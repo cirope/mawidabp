@@ -37,19 +37,19 @@ module ControlObjectiveItems::Scopes
         references(:process_controls)
     end
 
-    def not_continuous_or_with_business_unit_ids *business_unit_ids
-      conditions = { control_objectives: { continuous: false } }
-      conditions = [
-        "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn 'continuous'} = :false"
-      ]
-
+    def for_business_units *business_unit_ids
       if business_unit_ids.present?
-        conditions << "#{BusinessUnitScore.quoted_table_name}.#{BusinessUnitScore.qcn 'business_unit_id'} IN (:bu_ids)"
-      end
+        conditions = [
+          "#{BusinessUnitScore.quoted_table_name}.#{BusinessUnitScore.qcn 'business_unit_id'} IN (:bu_ids)",
+          "#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'business_unit_id'} IN (:bu_ids)"
+        ].join(' OR ')
 
-      includes(:business_unit_scores, :control_objective).
-        where("(#{conditions.join(' OR ')})", false: false, bu_ids: business_unit_ids).
-        references(:business_unit_scores, :control_objectives)
+        includes(:business_unit_scores, review: :plan_item).
+          where("(#{conditions})", bu_ids: business_unit_ids).
+          references(:business_unit_scores, :plan_items)
+      else
+        all
+      end
     end
   end
 end
