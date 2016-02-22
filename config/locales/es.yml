@@ -186,7 +186,7 @@
         other: "%{count} informes con observaciones en el O.C."
       without_weaknesses: "Sin observaciones"
       without_audits_in_the_period: "Sin auditorías en el periodo"
-      review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control en los informes: <b>%{score}%</b>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
     fixed_weaknesses_report:
       pdf_name: "observaciones_por_riesgo_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
@@ -221,7 +221,7 @@
         other: "%{count} informes con observaciones en el O.C."
       without_weaknesses: "Sin observaciones"
       without_audits_in_the_period: "Sin auditorías en el periodo"
-      review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio en los informes: <b>%{score}%</b>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
     qa_indicators:
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
       subtitle: ""
@@ -594,7 +594,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         other: "%{count} informes con observaciones en el O.C."
       without_weaknesses: "Sin observaciones"
       without_audits_in_the_period: "Sin auditorías en el periodo"
-      review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control en los informes: <b>%{score}%</b>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
     follow_up_cost_analysis:
       pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
     fixed_weaknesses_report:
@@ -630,7 +630,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         one: "%{count} informe con observaciones en el O.C"
         other: "%{count} informes con observaciones en el O.C."
       without_weaknesses: "Sin observaciones"
-      review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio en los informes: <b>%{score}%</b>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
     qa_indicators:
       without_data: "Sin datos para el rango de fechas ingresado"
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
