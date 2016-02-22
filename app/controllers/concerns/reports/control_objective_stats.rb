@@ -185,7 +185,7 @@ module Reports::ControlObjectiveStats
       @conclusion_reviews.for_period(period).each do |c_r|
         control_objective_items = c_r.review.control_objective_items.
           not_excluded_from_score.
-          not_continuous_or_with_business_unit_ids(*@business_unit_ids).
+          for_business_units(*@business_unit_ids).
           with_names(*@control_objectives)
 
         control_objective_items.each do |coi|
