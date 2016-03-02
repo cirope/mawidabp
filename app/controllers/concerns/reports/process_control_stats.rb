@@ -85,7 +85,7 @@ module Reports::ProcessControlStats
           coi_effectiveness = effectiveness coi
           pc_data = process_controls[coi.process_control.name] ||= {}
           pc_data[:weaknesses_ids] ||= {}
-          pc_data[:reviews] ||= 0
+          pc_data[:reviews_with_weaknesses] ||= []
           id = coi.review.id
           pc_data[:review_ids] ||= []
           pc_data[:review_ids] << id if pc_data[:review_ids].exclude? id
@@ -108,7 +108,9 @@ module Reports::ProcessControlStats
             end
           end
 
-          pc_data[:reviews] += 1 if weaknesses.size > 0
+          if weaknesses.not_revoked.size > 0 && pc_data[:reviews_with_weaknesses].exclude?(id)
+            pc_data[:reviews_with_weaknesses] << id
+          end
 
           pc_data[:weaknesses] ||= {}
           pc_data[:effectiveness] ||= []
@@ -154,7 +156,7 @@ module Reports::ProcessControlStats
 
         @process_control_data[period] << {
           'process_control' => pc,
-          'effectiveness' => effectiveness_label(effectiveness, pc_data[:reviews], pc_data[:review_ids]),
+          'effectiveness' => effectiveness_label(effectiveness, pc_data[:reviews_with_weaknesses], pc_data[:review_ids]),
           'weaknesses_count' => weaknesses_count_text
         }
       end
@@ -168,7 +170,7 @@ module Reports::ProcessControlStats
     end
   end
 
-  def effectiveness_label(effectiveness, reviews, review_ids)
+  def effectiveness_label(effectiveness, reviews_with_weaknesses, review_ids)
     effectiveness_label = []
 
    effectiveness_label << t(
@@ -179,7 +181,7 @@ module Reports::ProcessControlStats
 
     effectiveness_label <<  t(
       "#{@controller}_committee_report.process_control_stats.reviews_with_weaknesses",
-      :count => reviews
+      :count => reviews_with_weaknesses.count
     )
 
     effectiveness_label.join(' / ')
