@@ -6,7 +6,9 @@
  *= require bootstrap
  *= require jquery-ui
  *= require jquery-ui-theme
+ *= require chartist.min
  *= require autocomplete
  *= require main
+ *= require graph
  *= require roles
 */

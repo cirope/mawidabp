@@ -28,6 +28,7 @@ gem 'will_paginate-bootstrap'
 gem 'search_cop'
 gem 'jbuilder'
 gem 'sidekiq'
+gem 'chartist-rails'
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 

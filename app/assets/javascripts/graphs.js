@@ -1,4 +1,3 @@
 //
-//= require raphael
-//= require morris
+//= require chartist
 //= require users/status

@@ -150,18 +150,21 @@ class Weakness < Finding
   end
 
   def self.weaknesses_for_graph(weaknesses)
-    data = []
+    labels = []
+    series = []
     grouped_weaknesses = weaknesses.group_by(&:state)
 
     grouped_weaknesses.each do |status, weaknesses|
-      data << { :label => weaknesses.first.state_text, :value => weaknesses.size }
+      labels << weaknesses.first.state_text
+      series << weaknesses.size
     end
 
-    data
+    { labels: labels, series: series }
   end
 
   def self.pending_weaknesses_for_graph(weaknesses)
-    data = []
+    labels = []
+    series = []
     being_implemented_counts = {
       :current => 0, :current_rescheduled => 0, :stale => 0 , :stale_rescheduled => 0
     }
@@ -184,14 +187,11 @@ class Weakness < Finding
 
     being_implemented_counts.each do |label, value|
       unless value == 0
-        data << {
-          :label => I18n.t(
-            "follow_up_committee.weaknesses_being_implemented_#{label}",
-            :count => value),
-          :value => value}
+        labels << I18n.t("follow_up_committee.weaknesses_being_implemented_#{label}", count: value)
+        series << value
       end
     end
 
-    data
+    { labels: labels, series: series }
   end
 end
