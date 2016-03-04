@@ -5,21 +5,23 @@
 </div>
 
 <div class="row">
-  <div class="col-md-4 text-center">
+  <div class="col-lg-6 text-center">
     <h5>
       <%= textilize_without_paragraph t('.high_risk_weaknesses', count: @weaknesses.with_highest_risk.count) %>
     </h5>
     <%= high_risk_weaknesses_graph_placeholder %>
   </div>
 
-  <div class="col-md-4 text-center">
+  <div class="col-lg-6 text-center">
     <h5>
       <%== user_weaknesses_links %>
     </h5>
     <%= weaknesses_graph_placeholder %>
   </div>
+</div>
 
-  <div class="col-md-4 text-center">
+<div class="row">
+  <div class="col-lg-6 col-lg-offset-3 text-center">
     <h5>
       <%= textilize_without_paragraph t('.pending_weaknesses', count: @weaknesses.with_pending_status.count) %>
     </h5>

@@ -5,7 +5,7 @@ module Users::StatusHelper
 
   def high_risk_weaknesses_graph_placeholder
     content_tag(
-      :div, nil, id: 'high_risk_weaknesses_graph',
+      :div, nil, id: 'high_risk_weaknesses_graph', class: 'ct-chart ct-golden-section',
       data: {
         graph: true,
         weaknesses: Weakness.weaknesses_for_graph(@weaknesses.with_highest_risk),
@@ -16,7 +16,7 @@ module Users::StatusHelper
 
   def weaknesses_graph_placeholder
     content_tag(
-      :div, '', id: 'status_weaknesses_graph',
+      :div, nil, id: 'status_weaknesses_graph', class: 'ct-chart ct-golden-section',
       data: {
         graph: true,
         weaknesses: Weakness.weaknesses_for_graph(@weaknesses),
@@ -27,7 +27,7 @@ module Users::StatusHelper
 
   def pending_weaknesses_graph_placeholder
     content_tag(
-      :div, '', id: 'pending_weaknesses_graph',
+      :div, nil, id: 'pending_weaknesses_graph', class: 'ct-chart ct-golden-section',
       data: {
         graph: true,
         weaknesses: Weakness.pending_weaknesses_for_graph(@weaknesses),

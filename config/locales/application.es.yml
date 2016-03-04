@@ -150,6 +150,14 @@ es:
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
 
+  conclusion_reports:
+    weaknesses_graphs:
+      empty: 'No hay observaciones para el filtro aplicado'
+      hint: 'Debe realizar una búsqueda'
+      users: 'Por usuario'
+      business_units: 'Por unidad de negocio'
+      process_controls: 'Por proceso de negocio'
+
   conclusion_committee_report:
     index_title: "Reportes de conclusión"
     control_objective_stats_title: 'Observaciones por objetivo de control'
@@ -167,6 +175,7 @@ es:
     weaknesses_type_external: "Observaciones Auditorías Externas"
     high_risk_weaknesses: "Observaciones de riesgo alto"
     fixed_weaknesses: "Observaciones de riesgo alto solucionadas"
+    weaknesses_graphs: "Gráfico de observaciones"
     from_date: "Desde"
     to_date: "Hasta"
     invalid_dates: "Verifique el rango de fechas, no es válido."
@@ -515,6 +524,13 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
+    weaknesses_graphs:
+      title: 'Gráfico de observaciones'
+      empty: 'No hay observaciones para el filtro aplicado'
+      hint: 'Debe realizar una búsqueda'
+      users: 'Por usuario'
+      business_units: 'Por unidad de negocio'
+      process_controls: 'Por proceso de negocio'
     cost_analysis:
       column_business_unit: "Unidad de negocio"
       column_project: "Proyecto"

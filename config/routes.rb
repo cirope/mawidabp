@@ -72,7 +72,10 @@ Rails.application.routes.draw do
     'process_control_stats',
     'qa_indicators',
     'weaknesses_by_risk_report',
-    'fixed_weaknesses_report'
+    'fixed_weaknesses_report',
+    'weaknesses_graphs',
+    'auto_complete_for_business_unit',
+    'auto_complete_for_process_control'
   ].each do |action|
     get "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
