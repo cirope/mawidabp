@@ -496,4 +496,40 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'process_control_stats', 0)
   end
+
+  test 'weaknesses graphs for user' do
+    login
+
+    get :weaknesses_graphs, :weaknesses_graphs => {
+      :user_id => users(:administrator_user).id
+    },
+    :final => true
+
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_graphs'
+  end
+
+  test 'weaknesses graphs for business unit' do
+    login
+
+    get :weaknesses_graphs, :weaknesses_graphs => {
+      :business_unit_id => business_units(:business_unit_one).id
+    },
+    :final => true
+
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_graphs'
+  end
+
+  test 'weaknesses graphs for process control' do
+    login
+
+    get :weaknesses_graphs, :weaknesses_graphs => {
+      :process_control_id => process_controls(:iso_27000_security_policy).id
+    },
+    :final => true
+
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_graphs'
+  end
 end

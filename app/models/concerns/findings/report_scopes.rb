@@ -58,5 +58,28 @@ module Findings::ReportScopes
         "#{BusinessUnitType.table_name}.external" => external
       ).references(:business_unit_types)
     end
+
+    def for_user user_id
+      includes(:finding_user_assignments).
+        where(finding_user_assignments: { user_id: user_id }).
+        references(:finding_user_assignments)
+    end
+
+    def for_business_unit business_unit_id
+      conditions = [
+        "#{PlanItem.quoted_table_name}.business_unit_id = :bu_id",
+        "#{BusinessUnitFinding.quoted_table_name}.business_unit_id = :bu_id"
+      ].join ' OR '
+
+      includes({ control_objective_item: { review: :plan_item } }, :business_unit_findings).
+        where("(#{conditions})", bu_id: business_unit_id).
+        references(:plan_items, :business_unit_findings)
+    end
+
+    def for_process_control process_control_id
+      includes(control_objective_item: :control_objective).
+        where(control_objectives: { process_control_id: process_control_id }).
+        references(:control_objectives)
+    end
   end
 end
