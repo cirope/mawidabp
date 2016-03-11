@@ -33,6 +33,14 @@ class FindingsController < ApplicationController
 
     if params[:as_owner]
       default_conditions[FindingUserAssignment.table_name] = { :process_owner => true }
+
+      if current_organization.corporate?
+        self_and_descendants_ids = @self_and_descendants.map(&:id) + @related_users.map(&:id)
+        default_conditions[User.table_name] = {
+          :id => self_and_descendants_ids.include?(@selected_user.try(:id)) ?
+            @selected_user.id : self_and_descendants_ids
+        }
+      end
     end
 
     if params[:ids]

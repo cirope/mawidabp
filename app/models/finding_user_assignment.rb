@@ -17,7 +17,9 @@ class FindingUserAssignment < ActiveRecord::Base
   validates :user_id, :numericality => {:only_integer => true},
     :allow_blank => true, :allow_nil => true
   validates_each :process_owner do |record, attr, value|
-    if value && !record.user.can_act_as_audited?
+    organization_id = record.finding.try(:organization_id)
+
+    if value && !record.user.can_act_as_audited? && !record.user.can_act_as_audited_on?(organization_id)
       record.errors.add attr, :invalid
     end
   end

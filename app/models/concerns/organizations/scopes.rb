@@ -2,7 +2,8 @@ module Organizations::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :ordered, -> { order name: :asc }
+    scope :ordered,   -> { order name: :asc }
+    scope :corporate, -> { where corporate: true }
   end
 
   module ClassMethods
