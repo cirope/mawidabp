@@ -49,7 +49,8 @@
         <% end %>
       <% else %>
         <% if finding_answer.user.can_act_as_audited? &&
-            finding.pending? && finding.commitment_date.blank? %>
+            finding.pending? && finding.commitment_date.blank? &&
+            !current_organization.corporate? %>
           <%= f.input :commitment_date, as: :date_picker, label: false, hint:
             FindingAnswer.human_attribute_name(:commitment_date),
             input_html: { data: { required: true } } %>
