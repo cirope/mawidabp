@@ -121,6 +121,10 @@ module Findings::Validations
     end
 
     def all_roles_fullfilled_by? users
-      users.any?(&:can_act_as_audited?) && users.any?(&:auditor?) && users.any?(&:supervisor?)
+      has_audited    = users.any? { |u| u.can_act_as_audited? || u.can_act_as_audited_on?(organization_id) }
+      has_auditor    = users.any? { |u| u.auditor?            || u.auditor_on?(organization_id) }
+      has_supervisor = users.any? { |u| u.supervisor?         || u.supervisor_on?(organization_id) }
+
+      has_audited && has_auditor && has_supervisor
     end
 end

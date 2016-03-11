@@ -17,8 +17,10 @@ module Users::Roles
 
   def roles organization_id = nil
     ors = organization_roles.reject(&:marked_for_destruction?)
+    group = Group.find Group.current_id if Group.current_id
+    organization_ids = [organization_id] | (group ? group.organizations.corporate.pluck('id') : [])
 
-    ors.select! { |o_r| o_r.organization_id == organization_id } if organization_id
+    ors.select! { |o_r| organization_ids.include?(o_r.organization_id) } if organization_id
 
     ors.map(&:role).sort
   end
@@ -56,14 +58,26 @@ module Users::Roles
     define_method("#{type}?") do
       roles(Organization.current_id).any? { |role| role.role_type == value }
     end
+
+    define_method("#{type}_on?") do |organization_id|
+      roles(organization_id).any? { |role| role.role_type == value }
+    end
   end
 
   def auditor?
     auditor_junior? || auditor_senior?
   end
 
+  def auditor_on? organization_id
+    auditor_junior_on?(organization_id) || auditor_senior_on?(organization_id)
+  end
+
   def can_act_as_audited?
     audited? || executive_manager?
+  end
+
+  def can_act_as_audited_on? organization_id
+    audited_on?(organization_id) || executive_manager_on?(organization_id)
   end
 
   private
