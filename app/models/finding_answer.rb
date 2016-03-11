@@ -21,8 +21,11 @@ class FindingAnswer < ActiveRecord::Base
     :allow_blank => true
   validates_date :commitment_date, :allow_nil => true, :allow_blank => true
   validates :commitment_date, :presence => true, :if => lambda { |fa|
+    current_organization = Organization.current_id && Organization.find(Organization.current_id)
+
     fa.user.try(:can_act_as_audited?) && fa.finding.try(:pending?) &&
-      fa.finding.commitment_date.blank?
+      fa.finding.commitment_date.blank? &&
+      current_organization && !current_organization.corporate?
   }
 
   # Relaciones
