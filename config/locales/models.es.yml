@@ -7,8 +7,8 @@ es:
   activerecord:
     models:
       achievement:
-        one: 'Beneficio estimado'
-        other: 'Beneficios estimados'
+        one: 'Beneficio / perjuicio estimado'
+        other: 'Beneficios / perjuicios estimados'
       answer:
         one: 'Respuesta'
         other: 'Respuestas'
@@ -87,7 +87,7 @@ es:
 
     attributes:
       achievement:
-        benefit: 'Beneficio estimado'
+        benefit: 'Nombre'
         amount: 'Monto'
         comment: 'Comentario'
       answer:
