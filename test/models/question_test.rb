@@ -64,12 +64,4 @@ class QuestionTest < ActiveSupport::TestCase
     assert @question.invalid?
     assert_error @question, :answer_type, :inclusion
   end
-
-   # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'validates unique attributes' do
-    @question.question = questions(:question_written).question
-
-    assert @question.invalid?
-    assert_error @question, :question, :taken
-  end
 end
