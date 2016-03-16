@@ -22,4 +22,10 @@
   </tbody>
 </table>
 
-<%= link_to_new new_benefit_path, class: 'btn btn-primary' %>
+<hr />
+
+<div>
+  <%= paginate @benefits %>
+  <%= link_to_new new_benefit_path, class: 'btn btn-primary' %>
+</div>
+
