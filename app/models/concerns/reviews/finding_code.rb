@@ -38,12 +38,14 @@ module Reviews::FindingCode
       findings = findings.order :review_code
 
       self.class.transaction do
-        findings.each_with_index do |f, i|
-          f.update_column :review_code, "#{revoked_prefix}#{'%.3d' % i.next}"
+        findings.revoked.each_with_index do |f, i|
+          f.update_column :review_code, "#{revoked_prefix}#{f.review_code}"
         end
 
         findings.not_revoked.each_with_index do |f, i|
-          f.update_column :review_code, "#{f.prefix}#{'%.3d' % i.next}"
+          new_code = "#{f.prefix}#{'%.3d' % i.next}"
+
+          f.update! review_code: new_code unless f.review_code == new_code
         end
       end
     end
