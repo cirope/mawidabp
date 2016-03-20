@@ -4,7 +4,7 @@ class ReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
     :show, :edit, :update, :destroy, :review_data, :download_work_papers,
-    :survey_pdf
+    :survey_pdf, :recode_findings
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -332,6 +332,14 @@ class ReviewsController < ApplicationController
     render partial: 'estimated_amount', locals: {plan_item: plan_item}
   end
 
+  # * PUT /reviews/1/recode_findings
+  def recode_findings
+    @review.recode_weaknesses
+    @review.recode_oportunities
+
+    redirect_to @review, notice: t('review.findings_recoded')
+  end
+
   private
 
     def review_params
@@ -384,7 +392,8 @@ class ReviewsController < ApplicationController
         auto_complete_for_finding: :read,
         auto_complete_for_control_objective: :read,
         auto_complete_for_process_control: :read,
-        estimated_amount: :read
+        estimated_amount: :read,
+        recode_findings: :modify
       )
     end
 end

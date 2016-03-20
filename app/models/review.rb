@@ -1,14 +1,12 @@
 class Review < ActiveRecord::Base
+  include Auditable
   include Parameters::Risk
   include Parameters::Score
   include ParameterSelector
+  include Reviews::FindingCode
   include Trimmer
 
   trimmed_fields :identification
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
 
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
@@ -461,14 +459,6 @@ class Review < ActiveRecord::Base
     end
 
     last_work_paper_code(prefix, work_papers)
-  end
-
-  def next_weakness_code(prefix = nil)
-    next_finding_code prefix, self.weaknesses.with_prefix(prefix)
-  end
-
-  def next_oportunity_code(prefix = nil)
-    next_finding_code prefix, self.oportunities.with_prefix(prefix)
   end
 
   def work_papers
@@ -1132,14 +1122,5 @@ class Review < ActiveRecord::Base
     last_number = last_code.blank? ? 0 : last_code
 
     "#{prefix} #{'%.2d' % last_number}".strip
-  end
-
-  def next_finding_code(prefix, findings)
-    last_review_code = findings.order(:review_code => :asc).last.try(:review_code)
-    last_number = (last_review_code || '0').match(/\d+\Z/)[0].to_i || 0
-
-    raise 'A review can not have more than 999 findings' if last_number > 999
-
-    "#{prefix}#{'%.3d' % last_number.next}".strip
   end
 end

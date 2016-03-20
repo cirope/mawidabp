@@ -557,11 +557,27 @@ class ReviewTest < ActiveSupport::TestCase
     )
   end
 
+  test 'recode findings' do
+    codes = @review.weaknesses.not_revoked.pluck 'review_code'
+
+    assert codes.each_with_index.any? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i != i.next
+    }
+
+    @review.recode_weaknesses
+
+    codes = @review.reload.weaknesses.not_revoked.pluck 'review_code'
+
+    assert codes.each_with_index.all? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i == i.next
+    }
+  end
+
   private
 
-  def clone_finding_user_assignments(finding)
-    finding.finding_user_assignments.map do |fua|
-      fua.dup.attributes.merge('finding_id' => nil)
+    def clone_finding_user_assignments(finding)
+      finding.finding_user_assignments.map do |fua|
+        fua.dup.attributes.merge('finding_id' => nil)
+      end
     end
-  end
 end
