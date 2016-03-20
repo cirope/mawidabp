@@ -125,6 +125,8 @@ class FindingAnswerTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes with audited' do
+    Organization.current_id = organizations(:cirope).id
+
     @finding_answer.user = users(:audited_user)
     @finding_answer.answer = '      '
     @finding_answer.finding = findings(:iso_27000_security_policy_3_1_item_weakness)
@@ -133,6 +135,8 @@ class FindingAnswerTest < ActiveSupport::TestCase
     assert @finding_answer.invalid?
     assert_error @finding_answer, :answer, :blank
     assert_error @finding_answer, :commitment_date, :blank
+
+    Organization.current_id = nil
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
