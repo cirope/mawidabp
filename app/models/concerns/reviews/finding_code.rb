@@ -33,6 +33,8 @@ module Reviews::FindingCode
     end
 
     def recode_findings findings
+      raise 'Cannot recode if final review' if has_final_review?
+
       findings = findings.order :review_code
 
       self.class.transaction do

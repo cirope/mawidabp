@@ -921,6 +921,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     download_work_papers: "Descargar papeles de trabajo"
     notes: "Notas"
     estimated_amount: "Costo estimado en plan de trabajo"
+    other_actions: "Acciones"
+    recode_findings: "Recodificar hallazgos"
+    findings_recoded: "Hallazgos recodificados correctamente"
     review_qualification_explanation: "La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     process_control_qualification_explanation: "La calificación del proceso de negocio se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     errors:

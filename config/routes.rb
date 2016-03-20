@@ -197,6 +197,7 @@ Rails.application.routes.draw do
       get :weaknesses_and_oportunities
       get :download_work_papers
       get :estimated_amount
+      patch :recode_findings
     end
 
     collection do

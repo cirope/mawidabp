@@ -309,6 +309,14 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/_estimated_amount'
   end
 
+  test 'recode findings' do
+    login
+
+    patch :recode_findings, id: reviews(:review_without_conclusion).id
+
+    assert_redirected_to review_url(reviews(:review_without_conclusion))
+  end
+
   test 'auto complete for control objectives' do
     login
     get :auto_complete_for_control_objective, {
