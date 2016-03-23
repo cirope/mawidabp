@@ -21,7 +21,9 @@
         <%= user_assignment_type_field(f, false, readonly) %>
       </div>
       <div class="col-md-2">
-        <%= f.input :include_signature, label: false, input_html: { disabled: readonly } %>
+        <%= f.input :include_signature, label: false, input_html: {
+          disabled: readonly, data: { include_signature: true }
+        } %>
       </div>
       <div class="col-md-1">
         <div class="toggle-visibility text-right">

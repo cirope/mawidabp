@@ -31,6 +31,7 @@
 //= require control_objective_items
 //= require findings
 //= require organizations
+//= require reviews
 //= require touch
 //= require users
 //= require work_papers
