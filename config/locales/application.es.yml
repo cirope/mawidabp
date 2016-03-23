@@ -1386,10 +1386,12 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
         assignment_type: "Integrante (rol)"
         user: "Integrante"
         user_id: "Integrante"
+        include_signature: "Incluir firma"
       review_user_assignment:
         assignment_type: "Rol"
         user: "Integrante"
         user_id: "Integrante"
+        include_signature: "Incluir firma"
         review: "Informe"
       role:
         name: "Perfil"

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160220003928) do
+ActiveRecord::Schema.define(version: 20160323124915) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -650,6 +650,7 @@ ActiveRecord::Schema.define(version: 20160220003928) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "include_signature", default: true, null: false
   end
 
   add_index "review_user_assignments", ["review_id", "user_id"], name: "index_review_user_assignments_on_review_id_and_user_id", using: :btree
