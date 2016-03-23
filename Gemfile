@@ -38,12 +38,13 @@ gem 'uglifier'
 
 gem 'unicorn'
 
+gem 'capistrano'
+gem 'capistrano-bundler'
+gem 'capistrano-rails'
+gem 'capistrano-rbenv'
+gem 'capistrano-sidekiq'
+
 group :development do
-  gem 'capistrano'
-  gem 'capistrano-bundler'
-  gem 'capistrano-rails'
-  gem 'capistrano-rbenv'
-  gem 'capistrano-sidekiq'
   gem 'unicorn-rails'
   gem 'web-console'
 end
