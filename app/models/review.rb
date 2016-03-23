@@ -692,8 +692,7 @@ class Review < ActiveRecord::Base
 
     pdf.move_down PDF_FONT_SIZE * 2
 
-    pdf.add_review_auditors_table(
-      self.review_user_assignments.reject { |rua| rua.audited? })
+    pdf.add_review_auditors_table(review_user_assignments.select(&:include_signature))
 
     pdf.custom_save_as(self.score_sheet_name, 'score_sheets', self.id)
   end
@@ -892,8 +891,7 @@ class Review < ActiveRecord::Base
 
     pdf.move_down PDF_FONT_SIZE * 2
 
-    pdf.add_review_auditors_table(
-      self.review_user_assignments.select { |rua| !rua.audited? })
+    pdf.add_review_auditors_table(review_user_assignments.select(&:include_signature))
 
     pdf.custom_save_as(self.global_score_sheet_name, 'global_score_sheets',
       self.id)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160220003928) do
+ActiveRecord::Schema.define(version: 20160323124915) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer  "benefit_id", limit: nil,                          null: false
@@ -2664,11 +2664,12 @@ ActiveRecord::Schema.define(version: 20160220003928) do
   add_index "resources", ["resource_class_id"], name: "i_resources_resource_class_id"
 
   create_table "review_user_assignments", force: :cascade do |t|
-    t.integer  "assignment_type",             precision: 38
-    t.integer  "review_id",       limit: nil
-    t.integer  "user_id",         limit: nil
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.integer  "assignment_type",               precision: 38
+    t.integer  "review_id",         limit: nil
+    t.integer  "user_id",           limit: nil
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
+    t.boolean  "include_signature", limit: nil,                default: true, null: false
   end
 
   add_index "review_user_assignments", ["review_id", "user_id"], name: "i_rev_use_ass_rev_id_use_id"

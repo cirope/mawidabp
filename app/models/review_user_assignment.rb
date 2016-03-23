@@ -1,17 +1,14 @@
 class ReviewUserAssignment < ActiveRecord::Base
+  include Auditable
   include ParameterSelector
   include Comparable
 
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
-
   # Constantes
   TYPES = {
-    :audited => -1,
-    :auditor => 0,
-    :supervisor => 1,
-    :manager => 2
+    audited: -1,
+    auditor: 0,
+    supervisor: 1,
+    manager: 2
   }
 
   # Callbacks
@@ -20,12 +17,12 @@ class ReviewUserAssignment < ActiveRecord::Base
   before_save :check_user_modification
 
   # Restricciones
-  validates :assignment_type, :user_id, :presence => true
+  validates :assignment_type, :user_id, presence: true
   validates :assignment_type, :user_id, :review_id,
-    :numericality => {:only_integer => true}, :allow_blank => true,
-    :allow_nil => true
-  validates :assignment_type, :inclusion => {:in => TYPES.values},
-    :allow_blank => true, :allow_nil => true
+    numericality: { only_integer: true },
+    allow_blank: true, allow_nil: true
+  validates :assignment_type, inclusion: { in: TYPES.values },
+    allow_blank: true, allow_nil: true
   validates_each :user_id do |record, attr, value|
     # Recarga porque el cache se trae el usuario anterior aun cuando el user_id
     # ha cambiado
@@ -120,15 +117,15 @@ class ReviewUserAssignment < ActiveRecord::Base
       if transfered
         notification_title = I18n.t(
           'review_user_assignment.responsibility_modification.title',
-          :review => self.review.try(:identification))
+          review: self.review.try(:identification))
         notification_body = "#{Review.model_name.human} #{self.review.identification}"
         notification_content = [
           I18n.t(
             'review_user_assignment.responsibility_modification.old_responsible',
-            :responsible => old_user.full_name_with_function),
+            responsible: old_user.full_name_with_function),
           I18n.t(
             'review_user_assignment.responsibility_modification.new_responsible',
-            :responsible => new_user.full_name_with_function)
+            responsible: new_user.full_name_with_function)
         ]
 
         NotifierMailer.changes_notification(
@@ -175,10 +172,8 @@ class ReviewUserAssignment < ActiveRecord::Base
       end
     end
 
-    if all_valid && !@cancel_notification &&
-        (self.review.oportunities | self.review.weaknesses).size > 0
-      title = I18n.t('review_user_assignment.responsibility_removed',
-        :review => self.review.try(:identification))
+    if all_valid && !@cancel_notification && (self.review.oportunities | self.review.weaknesses).size > 0
+      title = I18n.t('review_user_assignment.responsibility_removed', review: self.review.try(:identification))
 
       NotifierMailer.changes_notification(
         self.user, title: title, organizations: [review.organization]
