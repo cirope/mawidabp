@@ -272,9 +272,10 @@ class Review < ActiveRecord::Base
       'id' => nil, 'period_id' => nil, 'plan_item_id' => nil,
       'identification' => nil, 'file_model_id' => nil)
 
-    other.control_objective_items.each do |coi|
+    other.control_objective_items.order(:order_number).each do |coi|
       self.control_objective_items.build(coi.attributes.merge(
           'id' => nil,
+          'review_id' => self.id,
           'control_attributes' => coi.control.attributes.merge('id' => nil)
         )
       )
