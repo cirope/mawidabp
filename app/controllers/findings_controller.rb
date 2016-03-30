@@ -14,8 +14,10 @@ class FindingsController < ApplicationController
     @self_and_descendants = @auth_user.descendants + [@auth_user]
     @related_users = @auth_user.related_users_and_descendants
     default_conditions = { final: false }
+    corporate_not_audited = current_organization.corporate? && !@auth_user.can_act_as_audited?
+    show_all = corporate_not_audited || @auth_user.committee? || @selected_user
 
-    if current_organization.corporate? || @auth_user.committee? || @selected_user
+    if show_all
       if @selected_user
         default_conditions[User.table_name] = { :id => params[:user_id] }
 
