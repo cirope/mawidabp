@@ -2,6 +2,7 @@
 <fieldset class="control_objective_item">
   <% if control_objective_item.new_record? %>
     <div class="hidden">
+      <%= f.input :order_number, as: :hidden %>
       <%= f.input :control_objective_id, as: :hidden %>
       <%= f.input :control_objective_text, as: :hidden %>
       <%= f.simple_fields_for :control do |c_f| %>
