@@ -177,7 +177,10 @@ class ConclusionFinalReview < ConclusionReview
 
       revoked_findings = self.review.weaknesses.revoked + self.review.oportunities.revoked
 
-      revoked_findings.each { |rf| rf.final = true; rf.save! }
+      revoked_findings.each do |rf|
+        rf.final = true
+        rf.save! validate: false
+      end
     rescue ActiveRecord::RecordInvalid
       errors.add :base, I18n.t('conclusion_final_review.stale_object_error')
 
