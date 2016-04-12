@@ -31,13 +31,6 @@ class ResourceClassTest < ActiveSupport::TestCase
     end
   end
 
-  test 'validates formated attributes' do
-    @resource_class.name = '?_1'
-
-    assert @resource_class.invalid?
-    assert_error @resource_class, :name, :invalid
-  end
-
   test 'validates blank attributes' do
     @resource_class.name = nil
 
