@@ -6,6 +6,7 @@ conclusion_current_final_review:
   applied_procedures: Current Final Applied Procedures
   conclusion: Current Final Conclusion
   approved: true
+  summary: 'ACT 12'
   organization: cirope
   created_at: <%= 2.days.ago.to_date.to_s(:db) %>
 
@@ -26,6 +27,7 @@ conclusion_past_final_review:
   applied_procedures: Past Final Applied Procedures
   conclusion: Past Final Conclusion
   approved: true
+  summary: 'ACT 12'
   organization: cirope
   created_at: <%= 2.months.ago.to_date.to_s(:db) %>
 

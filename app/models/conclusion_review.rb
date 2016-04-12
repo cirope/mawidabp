@@ -25,6 +25,11 @@ class ConclusionReview < ActiveRecord::Base
       :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
       :regexp => /.*/
     },
+    :summary => {
+      :column => "LOWER(#{quoted_table_name}.#{qcn('summary')})",
+      :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
+      :regexp => /.*/
+    },
     :business_unit => {
       :column => "LOWER(#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
@@ -44,7 +49,7 @@ class ConclusionReview < ActiveRecord::Base
   # Restricciones
   validates :review_id, :organization_id, :presence => true
   validates :issue_date, :applied_procedures, :presence => true
-  validates_length_of :type, :maximum => 255, :allow_nil => true,
+  validates_length_of :type, :summary, :maximum => 255, :allow_nil => true,
     :allow_blank => true
   validates_date :issue_date, :allow_nil => true, :allow_blank => true
 

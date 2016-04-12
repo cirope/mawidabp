@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160323124915) do
+ActiveRecord::Schema.define(version: 20160412184610) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer  "benefit_id", limit: nil,                          null: false
@@ -191,12 +191,14 @@ ActiveRecord::Schema.define(version: 20160323124915) do
     t.datetime "created_at",                                                null: false
     t.datetime "updated_at",                                                null: false
     t.integer  "organization_id",    limit: nil
+    t.string   "summary"
   end
 
   add_index "conclusion_reviews", ["close_date"], name: "i_con_rev_clo_dat"
   add_index "conclusion_reviews", ["issue_date"], name: "i_con_rev_iss_dat"
   add_index "conclusion_reviews", ["organization_id"], name: "i_con_rev_org_id"
   add_index "conclusion_reviews", ["review_id"], name: "i_conclusion_reviews_review_id"
+  add_index "conclusion_reviews", ["summary"], name: "i_conclusion_reviews_summary"
   add_index "conclusion_reviews", ["type"], name: "i_conclusion_reviews_type"
 
   create_table "control_objective_items", force: :cascade do |t|
