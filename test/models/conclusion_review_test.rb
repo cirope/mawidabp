@@ -79,9 +79,11 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @conclusion_review.type = 'abcdd' * 52
+    @conclusion_review.summary = 'abcdd' * 52
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :type, :too_long, count: 255
+    assert_error @conclusion_review, :summary, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

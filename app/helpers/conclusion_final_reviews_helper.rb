@@ -176,4 +176,12 @@ module ConclusionFinalReviewsHelper
 
     options_for_select options, 'normal'
   end
+
+  def show_conclusion_review_issue_date conclusion_final_review
+    issue_date = l(conclusion_final_review.issue_date, :format => :short) if conclusion_final_review.issue_date
+    close_date = l(conclusion_final_review.close_date, :format => :short) if conclusion_final_review.close_date
+    title      = "#{ConclusionDraftReview.human_attribute_name(:close_date)}: #{close_date}" if close_date
+
+    content_tag :abbr, issue_date, title: title if issue_date
+  end
 end

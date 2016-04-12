@@ -1115,6 +1115,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
         business_unit: "Unidad de negocio"
         project: "Proyecto"
         approved: "Aprobado"
+        summary: "Acta"
       control:
         order: "Orden"
         control: "Controles"

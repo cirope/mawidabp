@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160323124915) do
+ActiveRecord::Schema.define(version: 20160412184610) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -154,12 +154,14 @@ ActiveRecord::Schema.define(version: 20160323124915) do
     t.boolean  "approved"
     t.date     "close_date"
     t.integer  "organization_id"
+    t.string   "summary"
   end
 
   add_index "conclusion_reviews", ["close_date"], name: "index_conclusion_reviews_on_close_date", using: :btree
   add_index "conclusion_reviews", ["issue_date"], name: "index_conclusion_reviews_on_issue_date", using: :btree
   add_index "conclusion_reviews", ["organization_id"], name: "index_conclusion_reviews_on_organization_id", using: :btree
   add_index "conclusion_reviews", ["review_id"], name: "index_conclusion_reviews_on_review_id", using: :btree
+  add_index "conclusion_reviews", ["summary"], name: "index_conclusion_reviews_on_summary", using: :btree
   add_index "conclusion_reviews", ["type"], name: "index_conclusion_reviews_on_type", using: :btree
 
   create_table "control_objective_items", force: :cascade do |t|

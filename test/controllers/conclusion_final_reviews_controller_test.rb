@@ -136,7 +136,8 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :issue_date => Date.today,
           :close_date => Date.tomorrow,
           :applied_procedures => 'New applied procedures',
-          :conclusion => 'New conclusion'
+          :conclusion => 'New conclusion',
+          :summary => 'ACT 12'
         }
       }
     end
@@ -160,14 +161,15 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'Updated applied procedures',
-          :conclusion => 'Updated conclusion'
+          :conclusion => 'Updated conclusion',
+          :summary => 'ACT Updated'
         }
       }
     end
     assert_response :success
     assert_not_nil assigns(:conclusion_final_review)
-    assert_equal 'Updated conclusion',
-      assigns(:conclusion_final_review).conclusion
+    assert_equal 'ACT Updated',
+      assigns(:conclusion_final_review).summary
   end
 
   test 'export conclusion final review' do

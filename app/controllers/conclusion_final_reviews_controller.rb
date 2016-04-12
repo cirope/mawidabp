@@ -383,7 +383,7 @@ class ConclusionFinalReviewsController < ApplicationController
     def conclusion_final_review_params
       params.require(:conclusion_final_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
-        :lock_version
+        :summary, :lock_version
       )
     end
 
