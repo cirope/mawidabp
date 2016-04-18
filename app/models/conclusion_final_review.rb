@@ -84,8 +84,7 @@ class ConclusionFinalReview < ConclusionReview
   }
 
   # Callbacks
-  before_save :check_for_approval
-  before_create :duplicate_review_findings
+  before_create :check_for_approval, :duplicate_review_findings
 
   # Restricciones de los atributos
   attr_readonly :issue_date, :close_date, :conclusion, :applied_procedures
