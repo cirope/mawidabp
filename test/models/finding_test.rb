@@ -319,9 +319,9 @@ class FindingTest < ActiveSupport::TestCase
     assert_error @finding, :finding_user_assignments, :invalid
   end
 
-  test 'validates supervisor users' do
+  test 'validates supervisor or manager users' do
     @finding.finding_user_assignments =
-      @finding.finding_user_assignments.reject { |fua| fua.user.supervisor? }
+      @finding.finding_user_assignments.reject { |fua| fua.user.supervisor? || fua.user.manager? }
 
     assert @finding.invalid?
     assert_error @finding, :finding_user_assignments, :invalid
