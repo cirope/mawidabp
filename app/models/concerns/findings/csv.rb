@@ -1,8 +1,8 @@
 module Findings::Csv
   extend ActiveSupport::Concern
 
-  LINE_BREAK = "\r\n"
-  NEW_LINE   = "\n"
+  LINE_BREAK             = "\r\n"
+  LINE_BREAK_REPLACEMENT = " | "
 
   def to_a
     [
@@ -10,7 +10,7 @@ module Findings::Csv
       review.plan_item.project,
       review_code,
       title,
-      description.gsub(LINE_BREAK, NEW_LINE),
+      description,
       state_text,
       respond_to?(:risk_text) ? risk_text : '',
       respond_to?(:risk_text) ? priority_text : '',
@@ -18,13 +18,13 @@ module Findings::Csv
       audited_users.join('; '),
       best_practice.name,
       process_control.name,
-      control_objective_item.control_objective_text.gsub(LINE_BREAK, NEW_LINE),
+      control_objective_item.control_objective_text,
       origination_date_text,
       date_text,
-      audit_comments.gsub(LINE_BREAK, NEW_LINE),
-      answer.gsub(LINE_BREAK, NEW_LINE),
-      finding_answers_text.gsub(LINE_BREAK, NEW_LINE)
-    ]
+      audit_comments,
+      answer,
+      finding_answers_text
+    ].map { |item| item&.gsub(LINE_BREAK, LINE_BREAK_REPLACEMENT) }
   end
 
   private
@@ -66,7 +66,7 @@ module Findings::Csv
         "[#{date}] #{fa.user.full_name}: #{fa.answer}"
       end
 
-      answers.join NEW_LINE
+      answers.join LINE_BREAK_REPLACEMENT
     end
 
   module ClassMethods
