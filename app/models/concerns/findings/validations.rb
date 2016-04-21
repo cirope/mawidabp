@@ -5,7 +5,7 @@ module Findings::Validations
     validates :control_objective_item_id, :description, :review_code, :organization_id, presence: true
     validates :title, presence: true, if: :title_should_be_present?
     validates :review_code, :title, length: { maximum: 255 }, allow_blank: true
-    validates :audit_comments, presence: true, if: :revoked?
+    validates :audit_comments, presence: true, if: :audit_comments_should_be_present?
     validates :follow_up_date, :solution_date, :origination_date, :first_notification_date,
       timeliness: { type: :date }, allow_blank: true
     validate :validate_answer
@@ -17,6 +17,10 @@ module Findings::Validations
   end
 
   private
+
+    def audit_comments_should_be_present?
+      revoked? || criteria_mismatch?
+    end
 
     def check_dates?
       !incomplete? && !revoked? && !repeated?
@@ -36,7 +40,7 @@ module Findings::Validations
     end
 
     def validate_solution_date
-      check_for_blank = implemented_audited? || assumed_risk?
+      check_for_blank = implemented_audited? || assumed_risk? || criteria_mismatch?
 
       errors.add :solution_date, :blank         if check_for_blank  && solution_date.blank?
       errors.add :solution_date, :must_be_blank if !check_for_blank && solution_date.present?
