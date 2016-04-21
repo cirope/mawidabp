@@ -1,13 +1,16 @@
 module Findings::Csv
   extend ActiveSupport::Concern
 
+  LINE_BREAK = "\r\n"
+  NEW_LINE   = "\n"
+
   def to_a
     [
       review.identification,
       review.plan_item.project,
       review_code,
       title,
-      description,
+      description.gsub(LINE_BREAK, NEW_LINE),
       state_text,
       respond_to?(:risk_text) ? risk_text : '',
       respond_to?(:risk_text) ? priority_text : '',
@@ -15,12 +18,12 @@ module Findings::Csv
       audited_users.join('; '),
       best_practice.name,
       process_control.name,
-      control_objective_item.control_objective_text,
+      control_objective_item.control_objective_text.gsub(LINE_BREAK, NEW_LINE),
       origination_date_text,
       date_text,
-      audit_comments,
-      answer,
-      finding_answers_text
+      audit_comments.gsub(LINE_BREAK, NEW_LINE),
+      answer.gsub(LINE_BREAK, NEW_LINE),
+      finding_answers_text.gsub(LINE_BREAK, NEW_LINE)
     ]
   end
 
@@ -63,7 +66,7 @@ module Findings::Csv
         "[#{date}] #{fa.user.full_name}: #{fa.answer}"
       end
 
-      answers.join "\n"
+      answers.join NEW_LINE
     end
 
   module ClassMethods
