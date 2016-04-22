@@ -1,6 +1,9 @@
 module Findings::Csv
   extend ActiveSupport::Concern
 
+  LINE_BREAK             = "\r\n"
+  LINE_BREAK_REPLACEMENT = " | "
+
   def to_a
     [
       review.identification,
@@ -21,7 +24,7 @@ module Findings::Csv
       audit_comments,
       answer,
       finding_answers_text
-    ]
+    ].map { |item| item&.gsub(LINE_BREAK, LINE_BREAK_REPLACEMENT) }
   end
 
   private
@@ -63,7 +66,7 @@ module Findings::Csv
         "[#{date}] #{fa.user.full_name}: #{fa.answer}"
       end
 
-      answers.join "\n"
+      answers.join LINE_BREAK_REPLACEMENT
     end
 
   module ClassMethods

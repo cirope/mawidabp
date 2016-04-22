@@ -27,7 +27,8 @@ module Findings::State
           notify:               4,
           incomplete:           5,
           repeated:             6,
-          revoked:              7
+          revoked:              7,
+          criteria_mismatch:    8
         }.with_indifferent_access.freeze
       end
 
@@ -43,12 +44,13 @@ module Findings::State
           notify:               notify_transitions,
           incomplete:           incomplete_transitions,
           repeated:             repeated_transitions,
-          revoked:              revoked_transitions
+          revoked:              revoked_transitions,
+          criteria_mismatch:    criteria_mismatch_transitions
         }.with_indifferent_access.freeze
       end
 
       def final_status
-        [STATUS[:implemented_audited], STATUS[:assumed_risk], STATUS[:revoked]]
+        [STATUS[:implemented_audited], STATUS[:assumed_risk], STATUS[:revoked], STATUS[:criteria_mismatch]]
       end
 
       def pending_status
@@ -74,11 +76,11 @@ module Findings::State
       end
 
       def exclude_from_reports_status
-        [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked]
+        [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked, :criteria_mismatch]
       end
 
       def confirmed_transitions
-        [:confirmed, :unanswered, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :revoked]
+        [:confirmed, :unanswered, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :revoked, :criteria_mismatch]
       end
 
       def unconfirmed_transitions
@@ -86,15 +88,15 @@ module Findings::State
       end
 
       def unanswered_transitions
-        [:unanswered, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :repeated, :revoked]
+        [:unanswered, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :repeated, :revoked, :criteria_mismatch]
       end
 
       def being_implemented_transitions
-        [:being_implemented, :implemented, :implemented_audited, :assumed_risk, :repeated, :revoked]
+        [:being_implemented, :implemented, :implemented_audited, :assumed_risk, :repeated, :revoked, :criteria_mismatch]
       end
 
       def implemented_transitions
-        [:implemented, :being_implemented, :implemented_audited, :assumed_risk, :repeated, :revoked]
+        [:implemented, :being_implemented, :implemented_audited, :assumed_risk, :repeated, :revoked, :criteria_mismatch]
       end
 
       def implemented_audited_transitions
@@ -106,11 +108,11 @@ module Findings::State
       end
 
       def notify_transitions
-        [:notify, :incomplete, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :revoked]
+        [:notify, :incomplete, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :revoked, :criteria_mismatch]
       end
 
       def incomplete_transitions
-        [:incomplete, :notify, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :revoked]
+        [:incomplete, :notify, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :revoked, :criteria_mismatch]
       end
 
       def repeated_transitions
@@ -119,6 +121,10 @@ module Findings::State
 
       def revoked_transitions
         [:revoked]
+      end
+
+      def criteria_mismatch_transitions
+        [:criteria_mismatch]
       end
 
       def visible_pending_status

@@ -78,6 +78,7 @@ class Finding < ActiveRecord::Base
     self.state ||= STATUS[:incomplete]
     self.final ||= false
     self.finding_prefix ||= false
+    self.origination_date ||= Time.zone.now.to_date
   end
 
   def <=>(other)

@@ -484,6 +484,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
     status_incomplete: "Incompleta"
     status_repeated: "Reiterada"
     status_revoked: "Anulada"
+    status_criteria_mismatch: "Difiere criterio"
     view_completed: "Ver implementadas"
     view_cost_details: "Listado de actividades anteriores relacionadas al hallazgo"
     view_pending: "Ver pendientes"

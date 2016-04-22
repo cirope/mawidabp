@@ -166,10 +166,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
         }
       }
     end
-    assert_response :success
-    assert_not_nil assigns(:conclusion_final_review)
-    assert_equal 'ACT Updated',
-      assigns(:conclusion_final_review).summary
+
+    assert_redirected_to conclusion_final_reviews_url
+    assert_equal 'ACT Updated', conclusion_reviews(:conclusion_past_final_review).reload.summary
   end
 
   test 'export conclusion final review' do
