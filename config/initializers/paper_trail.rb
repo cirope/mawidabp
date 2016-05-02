@@ -1,3 +1,5 @@
+PaperTrail.config.track_associations = false
+
 module PaperTrail::VersionConcern
   def changes_until other
     new_attributes = (other.try(:reify, has_one: false) || item).try(:attributes) || {}
