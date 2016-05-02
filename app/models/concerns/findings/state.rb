@@ -76,7 +76,7 @@ module Findings::State
       end
 
       def exclude_from_reports_status
-        [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked, :criteria_mismatch]
+        [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked]
       end
 
       def confirmed_transitions
