@@ -82,6 +82,17 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert ldap.bind
   end
 
+  test 'ldap bind using full name' do
+    username = @ldap_config.login_mask % {
+      user: 'admin',
+      basedn: @ldap_config.basedn
+    }
+
+    ldap = @ldap_config.ldap username, 'admin123'
+
+    assert ldap.bind
+  end
+
   test 'ldap no bind if wrong password' do
     ldap = @ldap_config.ldap 'admin', 'wrong'
 
