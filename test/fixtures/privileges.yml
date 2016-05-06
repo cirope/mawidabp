@@ -58,6 +58,26 @@ auditor_second_<%= privilege %>:
   role: auditor_second_role
 <% end %>
 
+<% ALLOWED_MODULES_BY_TYPE[:admin].each do |privilege| %>
+admin_second_alphabet_<%= privilege %>:
+  module: <%= privilege %>
+  read: true
+  modify: true
+  erase: true
+  approval: true
+  role: admin_second_alphabet_role
+<% end %>
+
+<% ALLOWED_MODULES_BY_TYPE[:auditor_senior].each do |privilege| %>
+auditor_second_alphabet_<%= privilege %>:
+  module: <%= privilege %>
+  read: true
+  modify: true
+  erase: false
+  approval: false
+  role: auditor_second_alphabet_role
+<% end %>
+
 <% ALLOWED_MODULES_BY_TYPE[:committee].each do |privilege| %>
 committee_<%= privilege %>:
   module: <%= privilege %>

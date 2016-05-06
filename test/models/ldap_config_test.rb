@@ -82,6 +82,17 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert ldap.bind
   end
 
+  test 'ldap bind using full name' do
+    username = @ldap_config.login_mask % {
+      user: 'admin',
+      basedn: @ldap_config.basedn
+    }
+
+    ldap = @ldap_config.ldap username, 'admin123'
+
+    assert ldap.bind
+  end
+
   test 'ldap no bind if wrong password' do
     ldap = @ldap_config.ldap 'admin', 'wrong'
 
@@ -91,16 +102,19 @@ class LdapConfigTest < ActiveSupport::TestCase
   test 'import' do
     set_organization organizations(:google)
 
-    user = users :administrator_user
-    role = roles :admin_second_role
+    user      = users :administrator_user
+    role      = roles :admin_second_role
+    corp_role = roles :admin_second_alphabet_role
 
     assert user.organization_roles.map(&:role_id).exclude?(role.id)
+    assert user.organization_roles.map(&:role_id).exclude?(corp_role.id)
 
     assert_difference 'User.count' do
       @ldap_config.import 'admin', 'admin123'
     end
 
     assert user.reload.organization_roles.map(&:role_id).include?(role.id)
+    assert user.organization_roles.map(&:role_id).include?(corp_role.id)
     assert_equal user.id, User.find_by(user: 'new_user').manager_id
   end
 end

@@ -1,10 +1,8 @@
 class Role < ActiveRecord::Base
+  include Auditable
   include Comparable
+  include Roles::Scopes
   include ParameterSelector
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
 
   # Constantes
   TYPES = {
@@ -16,18 +14,6 @@ class Role < ActiveRecord::Base
     :committee => 5,
     :audited => 6,
     :executive_manager => 7
-  }
-
-  # Named scopes
-  scope :list, -> { where(organization_id: Organization.current_id).order(:name => :asc) }
-  scope :list_by_organization, ->(organization_id) {
-    where(organization_id: organization_id).order(:name => :asc)
-  }
-  scope :list_by_organization_and_group, ->(organization, group) {
-    includes(:organization).where(
-      "#{table_name}.organization_id" => organization.id,
-      "#{Organization.table_name}.group_id" => group.id
-    ).references(:organizations)
   }
 
   # Callbacks

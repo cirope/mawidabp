@@ -21,6 +21,7 @@ givenname: John
 title: Administrator
 description: cn=Administrator Second,ou=people,dc=test,dc=com
 description: cn=Auditor Second,ou=people,dc=test,dc=com
+description: cn=Administrator Corp Second,ou=people,dc=test,dc=com
 uid: admin@test.com
 mail: administrator@administrator.com
 cn: admin
