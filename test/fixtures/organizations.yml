@@ -21,3 +21,10 @@ google:
   image_model: image_two
   group: second_group
   corporate: false
+
+alphabet:
+  name: Alphabet Inc.
+  prefix: alphabet
+  description: ''
+  group: second_group
+  corporate: true

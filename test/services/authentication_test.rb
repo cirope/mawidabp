@@ -21,6 +21,19 @@ class AuthenticationTest < ActionController::TestCase
     assert_valid_authentication
   end
 
+  test 'should authenticate via ldap using the proper config' do
+    role = roles :admin_second_alphabet_role
+    ldap_config = ldap_configs :google_ldap
+    username = ldap_config.login_mask % { user: @user.user, basedn: ldap_config.basedn }
+    @params = { user: username, password: 'admin123' }
+    @organization = organizations :alphabet
+    Organization.current_id = @organization.id
+
+    @user.organization_roles.create! role_id: role.id, organization_id: role.organization_id
+
+    assert_valid_authentication
+  end
+
   test 'no group admin user attempt login in admin mode' do
     request.host = "#{APP_ADMIN_PREFIXES.first}.localhost.i"
     @user.update_column :group_admin, false

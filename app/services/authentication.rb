@@ -36,16 +36,27 @@ class Authentication
 
     def set_resources
       set_login_user
+      set_ldap_config
       set_valid_user
+    end
+
+    def unmasked_user
+      user = @params[:user]
+
+      @ldap_config ? @ldap_config.unmasked_user(user) : user
     end
 
     def set_login_user
       @user = User.new user: @params[:user], password: @params[:password]
     end
 
+    def set_ldap_config
+      @ldap_config = choose_ldap_config(@params[:user])
+    end
+
     def set_valid_user
       conditions = ["LOWER(#{User.quoted_table_name}.#{User.qcn('user')}) = :user"]
-      parameters = { user: @params[:user].to_s.downcase.strip }
+      parameters = { user: unmasked_user.to_s.downcase.strip }
 
       if @admin_mode
         conditions << "#{User.quoted_table_name}.#{User.qcn('group_admin')} = :true"
@@ -79,7 +90,7 @@ class Authentication
     end
 
     def ldap_auth
-      ldap = @current_organization.ldap_config.ldap @user.user, @user.password
+      ldap = @ldap_config.ldap @user.user, @user.password
 
       @valid = @user.password.present? && ldap.bind
 
@@ -90,6 +101,15 @@ class Authentication
       end
     rescue Net::LDAP::Error
       @message = I18n.t 'message.ldap_error'
+    end
+
+    def choose_ldap_config username
+      ldap_configs = @current_organization.group.ldap_configs
+      ldap_config  = ldap_configs.detect do |config|
+        username =~ config.mask_regex
+      end
+
+      ldap_config || @current_organization.ldap_config
     end
 
     def local_auth

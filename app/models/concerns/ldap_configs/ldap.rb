@@ -10,7 +10,13 @@ module LdapConfigs::LDAP
   end
 
   def mask_regex
-    /\A#{login_mask % { user: '.*', basedn: '.*' }}\z/i
+    /\A#{login_mask % { user: '(.*)', basedn: Regexp.escape(basedn) }}\z/
+  end
+
+  def unmasked_user username
+    match = username.match mask_regex
+
+    match ? match[1] : username
   end
 
   private

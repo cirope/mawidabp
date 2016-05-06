@@ -9,6 +9,7 @@ class Group < ActiveRecord::Base
 
   has_many :organizations, -> { order(name: :asc) }, dependent: :destroy
   accepts_nested_attributes_for :organizations, allow_destroy: true
+  has_many :ldap_configs, through: :organizations
 
   def initialize attributes = nil, options = {}
     super attributes, options

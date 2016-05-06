@@ -35,7 +35,7 @@ module LdapConfigs::LDAPImport
       role_names = entry[roles_attribute].map { |r| r.try(:force_encoding, 'UTF-8').sub(/.*?cn=(.*?),.*/i, '\1') }
       manager_dn = manager_attribute && entry[manager_attribute].first.try(:force_encoding, 'UTF-8')
       data       = trivial_data entry
-      roles      = clean_roles Role.list.where(name: role_names)
+      roles      = clean_roles Role.list_with_corporate.where(name: role_names)
       user       = User.where(email: data[:email]).take
       new        = !user
 
@@ -62,8 +62,12 @@ module LdapConfigs::LDAPImport
     def clean_roles roles
       if roles.all?(&:audited?)
         roles
-      else
+      elsif roles.group_by(&:organization_id).size == 1
         roles.reject(&:audited?)
+      else
+        roles.group_by(&:organization_id).map do |organization_id, roles|
+          clean_roles roles
+        end.flatten
       end
     end
 
