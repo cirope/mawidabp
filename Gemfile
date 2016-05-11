@@ -22,6 +22,7 @@ gem 'prawn-table'
 gem 'figaro'
 gem 'bloggy', require: false
 gem 'irreverent'
+gem 'bootstrap-sass'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 gem 'search_cop'
