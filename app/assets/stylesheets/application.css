@@ -11,4 +11,5 @@
  *= require main
  *= require graph
  *= require roles
+ *= require sessions
 */

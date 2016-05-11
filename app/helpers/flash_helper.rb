@@ -3,6 +3,10 @@ module FlashHelper
     flash[:alert] || flash[:notice]
   end
 
+  def show_flash_message?
+    flash_message && controller_name != 'sessions'
+  end
+
   def flash_class
     flash[:alert] ? 'alert-danger' : 'alert-info'
   end

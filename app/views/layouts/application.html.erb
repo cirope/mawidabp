@@ -28,9 +28,9 @@
   </div>
   <div class="container">
     <%= render 'shared/compatibility_warning' %>
-    <%= render 'shared/menu' %>
+    <%= render 'shared/menu' if show_menu? %>
     <%= yield :submenu %>
-    <%= render 'shared/flash' if flash_message %>
+    <%= render 'shared/flash' if show_flash_message? %>
     <%= render 'shared/time_left' if @auth_user %>
     <%= yield %>
 

@@ -1,3 +1,19 @@
-// Place all the styles related to the Sessions controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+[data-controller="sessions"] {
+  background: lighten(#ffb400, 45%);
+
+  .panel-heading {
+    background-color: #fff;
+    border-color: #fff;
+    padding: 3.5em 0em 2em;
+  }
+
+  .panel-body {
+    padding: 0em 5em;
+  }
+
+  .panel-footer {
+    background-color: #fff;
+    border-color: #fff;
+    padding-bottom: 4em;
+  }
+}
