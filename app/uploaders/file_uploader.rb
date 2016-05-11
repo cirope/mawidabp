@@ -28,9 +28,9 @@ class FileUploader < CarrierWave::Uploader::Base
     end
 
     def try_corporate_path
-      organization = Organization.find Organization.current_id
+      organization = Organization.find_by id: Organization.current_id
 
-      if organization.corporate?
+      if organization && organization.corporate?
         organization_ids = organization.group.organizations.pluck 'id'
         posible_paths    = organization_ids.map { |organization_id| path_for organization_id }
 

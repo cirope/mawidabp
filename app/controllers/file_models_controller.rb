@@ -8,9 +8,11 @@ class FileModelsController < ApplicationController
     organization_paths = ["#{PRIVATE_PATH}#{File.join(('%08d' %
       (current_organization.id || 0)).scan(/\d{4}/))}"]
     current_organization.group.organizations.each do |o|
-      if o.id != current_organization.id && @auth_user.organizations.include?(o)
-        organization_paths <<
-          "#{PRIVATE_PATH}#{File.join(('%08d' % (o.id || 0)).scan(/\d{4}/))}"
+      is_corporate = current_organization.corporate?
+      has_organization_access = o.id != current_organization.id && @auth_user.organizations.include?(o)
+
+      if is_corporate || has_organization_access
+        organization_paths << "#{PRIVATE_PATH}#{File.join(('%08d' % (o.id || 0)).scan(/\d{4}/))}"
       end
     end
     allowed_paths = organization_paths.map { |p| Regexp.escape(p) }.join('|')
