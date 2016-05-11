@@ -9,7 +9,14 @@
         </button>
       <% end %>
 
-      <%= link_to t('app_name'), root_url, class: 'navbar-brand' %>
+      <%= link_to root_url, class: 'navbar-brand', title: t('app_name') do %>
+        <!--[if lt IE 9]>
+          <img src="<%= image_path 'logo_header.png'  %>" alt="<%= t 'app_name' %>" height="17">
+        <![endif]-->
+        <!--[if gt IE 8]><!-->
+          <embed src="<%= image_path 'logo_header.svg' %>" type="image/svg+xml" height="17">
+        <!--<![endif]-->
+      <% end %>
     </div>
 
     <div class="collapse navbar-collapse" role="navigation">
