@@ -1,16 +1,26 @@
 <div class="row">
-  <div class="col-md-4 col-md-offset-4">
-    <p class="lead text-muted"><%= t('.note') %></p>
-    <div class="well">
-      <%= simple_form_for :user, url: users_passwords_path, html: { data: { no_observe_changes: true } } do |f| %>
-        <div class="form-inputs">
-          <%= f.input :email, label: t('.email'), input_html: { maxlength: 100, autofocus: true } %>
+  <div class="col-md-6 col-md-offset-3">
+    <%= simple_form_for :user, url: users_passwords_path, html: { data: { no_observe_changes: true } } do |f| %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
         </div>
-        <div class="form-actions">
-          <%= f.submit t('.send_instructions'), class: 'btn btn-default' %>
+        <div class="panel-body">
+          <%= render 'shared/flash' if flash_message %>
+          <p class="lead text-muted text-center"><%= t('.note') %></p>
+          <div class="form-inputs">
+            <%= f.input :email, label: t('.email'), input_html: { maxlength: 100, autofocus: true, class: 'input-lg' } %>
+          </div>
         </div>
-      <% end %>
-    </div>
-    <%= link_to t('.back'), login_path %>
+        <div class="panel-footer text-center">
+          <div class="form-actions">
+            <%= f.submit t('.send_instructions'), class: 'btn btn-lg btn-default' %>
+          </div>
+
+          <hr>
+
+          <%= link_to t('.back'), login_path %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>

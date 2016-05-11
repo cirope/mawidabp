@@ -4,7 +4,7 @@ module FlashHelper
   end
 
   def show_flash_message?
-    flash_message && controller_name != 'sessions'
+    flash_message && %w(passwords sessions).exclude?(controller_name)
   end
 
   def flash_class
