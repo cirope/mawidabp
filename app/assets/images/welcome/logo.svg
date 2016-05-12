@@ -9,16 +9,16 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="57.188152mm"
-   height="10.083766mm"
-   viewBox="0 0 202.63518 35.729879"
+   width="58.119705mm"
+   height="9.9411402mm"
+   viewBox="0 0 205.93596 35.224512"
    id="svg3504"
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="logo.svg"
    inkscape:export-filename="/home/franco/git/mawidabp/app/assets/images/welcome/logo.png"
-   inkscape:export-xdpi="113.35049"
-   inkscape:export-ydpi="113.35049">
+   inkscape:export-xdpi="178.85001"
+   inkscape:export-ydpi="178.85001">
   <defs
      id="defs3506" />
   <sodipodi:namedview
@@ -28,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="-92.590396"
-     inkscape:cy="161.1471"
+     inkscape:zoom="3.959798"
+     inkscape:cx="-13.346352"
+     inkscape:cy="102.99379"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -66,27 +66,27 @@
          transform="translate(-199.22836,160.61928)"
          style="clip-rule:evenodd;fill:#ec1846;fill-rule:evenodd"
          id="polygon23"
-         points="512.309,473.918 529.406,444.303 537.65,458.568 528.785,473.918 " />
+         points="528.785,473.918 512.309,473.918 529.406,444.303 537.65,458.568 " />
       <polygon
          transform="translate(-199.22836,160.61928)"
          style="clip-rule:evenodd;fill:#ec1846;fill-rule:evenodd"
          id="polygon25"
-         points="537.65,458.568 545.891,444.303 562.984,473.918 546.51,473.918 " />
+         points="546.51,473.918 537.65,458.568 545.891,444.303 562.984,473.918 " />
       <polygon
          transform="translate(-199.22836,160.61928)"
          style="clip-rule:evenodd;fill:#b00a32;fill-rule:evenodd"
          id="polygon27"
-         points="528.785,473.918 537.65,458.568 546.51,473.918 " />
+         points="537.65,458.568 546.51,473.918 528.785,473.918 " />
       <text
          sodipodi:linespacing="125%"
          id="text3345"
          y="634.42657"
-         x="371.79492"
+         x="369.79492"
          style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
          xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ffffff;"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:27.49999619px;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:#ffffff;"
            y="634.42657"
-           x="371.79492"
+           x="369.79492"
            id="tspan3347"
            sodipodi:role="line">Mawida bp</tspan></text>
     </g>
