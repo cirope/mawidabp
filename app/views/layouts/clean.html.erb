@@ -24,7 +24,7 @@
     <div class="container">
       <%= render 'shared/compatibility_warning' %>
       <%= render 'shared/menu' %>
-      <%= render 'shared/flash' if flash_message.present? %>
+      <%= render 'shared/flash' if show_flash_message? %>
       <%= yield %>
       <%= yield :extra_bottom %>
     </div>

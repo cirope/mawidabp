@@ -1,0 +1,22 @@
+[data-controller="sessions"],
+[data-controller="passwords"] {
+  background: lighten(#ffb400, 45%);
+
+  .panel-default {
+    & > .panel-heading {
+      background-color: #fff;
+      border-color: #fff;
+      padding: 3.5em 0em 2em 0em;
+    }
+
+    & > .panel-body {
+      padding: 0em 5em;
+    }
+
+    & > .panel-footer {
+      background-color: #fff;
+      border-color: #fff;
+      padding-bottom: 4em;
+    }
+  }
+}

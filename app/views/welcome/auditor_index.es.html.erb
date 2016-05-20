@@ -1,32 +1,100 @@
 <%= render 'header' %>
 
-<h3>Administración</h3>
+<div class="row help text-center">
+  <div class="col-md-2">
+    <div>
+      <!--[if lt IE 9]>
+        <img src="<%= image_path 'welcome/administration.png'  %>" alt="Administración" height="60">
+      <![endif]-->
+      <!--[if gt IE 8]><!-->
+        <embed src="<%= image_path 'welcome/administration.svg' %>" type="image/svg+xml" height="60">
+      <!--<![endif]-->
+    </div>
 
-<p>
-  Gestión de organizaciones, usuarios, privilegios y <strong>buenas prácticas</strong>
-</p>
+    <h3>Administración</h3>
 
-<h3>Planificación</h3>
+    <p>
+      Gestión de organizaciones, usuarios, privilegios y buenas prácticas
+    </p>
+  </div>
 
-<p>Definición de periodos, recursos, planes y costos</p>
+  <div class="col-md-2">
+    <div>
+      <!--[if lt IE 9]>
+        <img src="<%= image_path 'welcome/planification.png'  %>" alt="Planificación" height="60">
+      <![endif]-->
+      <!--[if gt IE 8]><!-->
+        <embed src="<%= image_path 'welcome/planification.svg' %>" type="image/svg+xml" height="60">
+      <!--<![endif]-->
+    </div>
 
-<h3>Ejecución</h3>
+    <h3>Planificación</h3>
 
-<p><strong>Soporte</strong> a la documentación de hallazgos</p>
+    <p>Definición de periodos, recursos, planes y costos</p>
+  </div>
 
-<h3>Conclusión</h3>
+  <div class="col-md-2">
+    <div>
+      <!--[if lt IE 9]>
+        <img src="<%= image_path 'welcome/execution.png'  %>" alt="Ejecución" height="60">
+      <![endif]-->
+      <!--[if gt IE 8]><!-->
+        <embed src="<%= image_path 'welcome/execution.svg' %>" type="image/svg+xml" height="60">
+      <!--<![endif]-->
+    </div>
 
-<p>Valoración de los procesos</p>
+    <h3>Ejecución</h3>
 
-<h3>Seguimiento</h3>
+    <p>Soporte a la documentación de hallazgos</p>
+  </div>
 
-<p>Asistencia en la <strong>implementación</strong> de soluciones y mejoras</p>
+  <div class="col-md-2">
+    <div>
+      <!--[if lt IE 9]>
+        <img src="<%= image_path 'welcome/conclusion.png'  %>" alt="Conclusión" height="60">
+      <![endif]-->
+      <!--[if gt IE 8]><!-->
+        <embed src="<%= image_path 'welcome/conclusion.svg' %>" type="image/svg+xml" height="60">
+      <!--<![endif]-->
+    </div>
 
-<h3>Ayuda</h3>
+    <h3>Conclusión</h3>
 
-<p>
-  Si tiene alguna duda sobre alguna funcionalidad o proceso, este es el mejor
-  lugar para despejarla
-</p>
+    <p>Valoración de los procesos</p>
+  </div>
+
+  <div class="col-md-2">
+    <div>
+      <!--[if lt IE 9]>
+        <img src="<%= image_path 'welcome/follow_up.png'  %>" alt="Seguimiento" height="60">
+      <![endif]-->
+      <!--[if gt IE 8]><!-->
+        <embed src="<%= image_path 'welcome/follow_up.svg' %>" type="image/svg+xml" height="60">
+      <!--<![endif]-->
+    </div>
+
+    <h3>Seguimiento</h3>
+
+    <p>Asistencia en la implementación de soluciones y mejoras</p>
+  </div>
+
+  <div class="col-md-2">
+    <div>
+      <!--[if lt IE 9]>
+        <img src="<%= image_path 'welcome/help.png'  %>" alt="Ayuda" height="60">
+      <![endif]-->
+      <!--[if gt IE 8]><!-->
+        <embed src="<%= image_path 'welcome/help.svg' %>" type="image/svg+xml" height="60">
+      <!--<![endif]-->
+    </div>
+
+    <h3>Ayuda</h3>
+
+    <p>
+      Si tiene alguna duda sobre alguna funcionalidad o proceso, este es el mejor
+      lugar para despejarla
+    </p>
+  </div>
+</div>
 
 <%= render 'footer' %>

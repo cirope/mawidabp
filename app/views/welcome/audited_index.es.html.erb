@@ -1,31 +1,56 @@
 <%= render 'header' %>
 
-<h3>Seguimiento</h3>
+<div class="row help text-center">
+  <div class="col-md-3 col-md-offset-1">
+    <div>
+      <!--[if lt IE 9]>
+        <img src="<%= image_path 'welcome/follow_up.png'  %>" alt="Seguimiento" height="60">
+      <![endif]-->
+      <!--[if gt IE 8]><!-->
+        <embed src="<%= image_path 'welcome/follow_up.svg' %>" type="image/svg+xml" height="60">
+      <!--<![endif]-->
+    </div>
 
-<h4 class="text-muted"><strong>Hallazgos pendientes</strong></h4>
+    <h3>Hallazgos pendientes</h3>
 
-<p class="nested">
-  Aquí podrá consultar sus hallazgos pendientes de solución. Para
-  contestar algún hallazgo, deberá seleccionar <strong>Editar</strong> (Lápiz)
-</p>
+    <p>
+      Aquí podrá consultar sus hallazgos pendientes de solución. Para
+      contestar algún hallazgo, deberá seleccionar Editar (Lápiz)
+    </p>
+  </div>
 
-<p class="nested">
-  Dentro del detalle del hallazgo podrá contestar y comunicarse con
-  todas las personas relacionadas al mismo. El objetivo es colaborar
-  para encontrar una solución
-</p>
+  <div class="col-md-3">
+    <div>
+      <!--[if lt IE 9]>
+        <img src="<%= image_path 'welcome/conclusion.png'  %>" alt="Conclusión" height="60">
+      <![endif]-->
+      <!--[if gt IE 8]><!-->
+        <embed src="<%= image_path 'welcome/conclusion.svg' %>" type="image/svg+xml" height="60">
+      <!--<![endif]-->
+    </div>
 
-<h4 class="text-muted"><strong>Hallazgos solucionados</strong></h4>
+    <h3>Hallazgos solucionados</h3>
 
-<p class="nested">
-  Podrá consultar sus hallazgos solucionados o reiterados
-</p>
+    <p>Podrá consultar sus hallazgos solucionados o reiterados</p>
+  </div>
 
-<h3>Ayuda</h3>
+  <div class="col-md-3">
+    <div>
+      <!--[if lt IE 9]>
+        <img src="<%= image_path 'welcome/help.png'  %>" alt="Ayuda" height="60">
+      <![endif]-->
+      <!--[if gt IE 8]><!-->
+        <embed src="<%= image_path 'welcome/help.svg' %>" type="image/svg+xml" height="60">
+      <!--<![endif]-->
+    </div>
 
-<p>
-  Si tiene alguna duda sobre alguna funcionalidad o proceso, este es el mejor
-  lugar para despejarla
-</p>
+    <h3>Ayuda</h3>
+
+    <p>
+      Si tiene alguna duda sobre alguna funcionalidad o proceso, este es el mejor
+      lugar para despejarla
+    </p>
+  </div>
+</div>
 
 <%= render 'footer' %>

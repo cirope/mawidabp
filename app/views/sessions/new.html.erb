@@ -1,33 +1,51 @@
 <div class="row">
-  <div class="col-md-4 col-md-offset-4">
-    <div class="well">
-      <%= form_tag sessions_path, novalidate: 'novalidate', data: { no_observe_changes: true } do %>
-        <div class="form-inputs">
-          <div class="form-group">
-            <%= label_tag :user, t('.user'), class: 'control-label' %>
-            <div class="controls">
-              <%= text_field_tag :user, params[:user], class: 'form-control',
-                autofocus: true, autocomplete: 'off', maxlength: 30 %>
-            </div>
-          </div>
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_tag sessions_path, novalidate: 'novalidate', data: { no_observe_changes: true } do %>
+      <div class="panel panel-default">
+        <div class="panel-heading text-center">
+          <!--[if lt IE 9]>
+            <img src="<%= image_path 'logo.png'  %>" alt="<%= t 'app_name' %>" height="40">
+          <![endif]-->
+          <!--[if gt IE 8]><!-->
+            <embed src="<%= image_path 'logo.svg' %>" type="image/svg+xml" height="40">
+          <!--<![endif]-->
+        </div>
+        <div class="panel-body">
+          <%= render 'shared/flash' if flash_message %>
 
-          <div class="form-group">
-            <%= label_tag :password, t('.password'), class: 'control-label' %>
-            <div class="controls">
-              <%= password_field_tag :password, nil, class: 'form-control',
-                maxlength: 128, autocomplete: 'off' %>
+          <div class="form-inputs">
+            <div class="form-group">
+              <%= label_tag :user, t('.user'), class: 'control-label' %>
+              <div class="controls">
+                <%= text_field_tag :user, params[:user], class: 'form-control input-lg',
+                  autofocus: true, autocomplete: 'off', maxlength: 30 %>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <%= label_tag :password, t('.password'), class: 'control-label' %>
+              <div class="controls">
+                <%= password_field_tag :password, nil, class: 'form-control input-lg',
+                  maxlength: 128, autocomplete: 'off' %>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="form-actions">
-          <%= submit_tag t('.log_in'), class: 'btn btn-default' %>
-        </div>
-      <% end %>
-    </div>
+        <div class="panel-footer text-center">
+          <div class="form-actions">
+            <%= submit_tag t('.log_in'), class: 'btn btn-lg btn-default' %>
+          </div>
 
-    <% if current_organization.blank? || current_organization.ldap_config.blank? %>
-      <%= link_to t('sessions.new.forgot_password'), new_users_password_path %>
+          <% if current_organization.blank? || current_organization.ldap_config.blank? %>
+            <hr>
+
+            <p>
+              <%= link_to t('sessions.new.forgot_password'), new_users_password_path %>
+            </p>
+          <% end %>
+        </div>
+      </div>
     <% end %>
   </div>
 </div>

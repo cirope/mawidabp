@@ -22,19 +22,22 @@ class FileUploader < CarrierWave::Uploader::Base
     end
 
     def path_for organization_id
-      id = ('%08d' % model.id).scan(/\d{4}/).join('/')
+      id = ('%08d' % model.id).scan(/\d{4}/).join '/'
 
       "private/#{organization_id_path(organization_id)}/#{model.class.to_s.underscore.pluralize}/#{id}"
     end
 
     def try_corporate_path
+      path         = nil
       organization = Organization.find_by id: Organization.current_id
 
       if organization && organization.corporate?
         organization_ids = organization.group.organizations.pluck 'id'
         posible_paths    = organization_ids.map { |organization_id| path_for organization_id }
 
-        posible_paths.detect { |path| File.exist? path }
+        path = posible_paths.detect { |path| File.exist? path }
       end
+
+      path || path_for(Organization.current_id)
     end
 end

@@ -1,5 +1,10 @@
-<header>
-  <h1 class="text-center"><%= t 'app_name' %></h1>
+<header class="main">
+  <div class="logo-container text-center">
+    <!--[if lt IE 9]>
+      <img src="<%= image_path 'welcome/logo.png'  %>" alt="<%= t 'app_name' %>" height="70">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+      <embed src="<%= image_path 'welcome/logo.svg' %>" type="image/svg+xml" height="70">
+    <!--<![endif]-->
+  </div>
 </header>
-
-<hr />

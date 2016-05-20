@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="58.119705mm"
+   height="9.9411402mm"
+   viewBox="0 0 205.93596 35.224512"
+   id="svg3504"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="logo.svg"
+   inkscape:export-filename="/home/franco/git/mawidabp/app/assets/images/logo_header.png"
+   inkscape:export-xdpi="37"
+   inkscape:export-ydpi="37">
+  <defs
+     id="defs3506" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.959798"
+     inkscape:cx="67.591192"
+     inkscape:cy="103.49887"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="3200"
+     inkscape:window-height="1671"
+     inkscape:window-x="0"
+     inkscape:window-y="55"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata3509">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-313.08064,-604.92228)">
+    <g
+       id="g3360"
+       inkscape:export-xdpi="102.2"
+       inkscape:export-ydpi="102.2">
+      <polygon
+         transform="translate(-199.22836,160.61928)"
+         style="clip-rule:evenodd;fill:#ec1846;fill-rule:evenodd"
+         id="polygon23"
+         points="529.406,444.303 537.65,458.568 528.785,473.918 512.309,473.918 " />
+      <polygon
+         transform="translate(-199.22836,160.61928)"
+         style="clip-rule:evenodd;fill:#ec1846;fill-rule:evenodd"
+         id="polygon25"
+         points="545.891,444.303 562.984,473.918 546.51,473.918 537.65,458.568 " />
+      <polygon
+         transform="translate(-199.22836,160.61928)"
+         style="clip-rule:evenodd;fill:#b00a32;fill-rule:evenodd"
+         id="polygon27"
+         points="546.51,473.918 528.785,473.918 537.65,458.568 " />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3345"
+         y="634.42657"
+         x="369.79492"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:27.49999619px;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:#999999"
+           y="634.42657"
+           x="369.79492"
+           id="tspan3347"
+           sodipodi:role="line">Mawida bp</tspan></text>
+    </g>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3349"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="translate(313.08064,604.86928)"><flowRegion
+         id="flowRegion3351"><rect
+           id="rect3353"
+           width="342.14285"
+           height="162.14285"
+           x="-125"
+           y="-295.72842" /></flowRegion><flowPara
+         id="flowPara3355" /></flowRoot>  </g>
+</svg>

@@ -1,21 +1,26 @@
 <%= simple_form_for @auth_user, url: users_password_path(@auth_user) do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
-
-  <h2 class="text-center text-muted"><%= @title %></h2>
-  <br />
-
   <div class="row">
-    <div class="col-md-4 col-md-offset-4">
-      <div class="well">
-        <div class="form-inputs">
-          <%= f.input :password, label: t('.new_password'), input_html: { autofocus: true } %>
-          <%= f.input :password_confirmation %>
+    <div class="col-md-6 col-md-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-heading text-center">
+          <h3 class="panel-title text-muted"><%= @title %></h3>
         </div>
 
-        <div class="form-actions">
-          <%= hidden_field_tag :confirmation_hash, params[:confirmation_hash] %>
-          <%= f.input :lock_version, as: :hidden %>
-          <%= f.submit t('.update'), class: 'btn btn-default' %>
+        <div class="panel-body">
+          <%= render 'shared/error_explanation', f: f %>
+
+          <div class="form-inputs">
+            <%= f.input :password, label: t('.new_password'), input_html: { autofocus: true, class: 'input-lg' } %>
+            <%= f.input :password_confirmation, input_html: { class: 'input-lg' } %>
+          </div>
+        </div>
+
+        <div class="panel-footer">
+          <div class="form-actions text-center">
+            <%= hidden_field_tag :confirmation_hash, params[:confirmation_hash] %>
+            <%= f.input :lock_version, as: :hidden %>
+            <%= f.submit t('.update'), class: 'btn btn-lg btn-default' %>
+          </div>
         </div>
       </div>
     </div>
