@@ -1,5 +1,5 @@
 class Users::ImportsController < ApplicationController
-  before_action :auth, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
 
   def new
   end
@@ -26,5 +26,9 @@ class Users::ImportsController < ApplicationController
 
     def import_params
       params.require(:import).permit :username, :password
+    end
+
+    def load_privileges
+      @action_privileges.update new: :read, create: :read
     end
 end
