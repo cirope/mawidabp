@@ -532,6 +532,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
       users: 'Por usuario'
       business_units: 'Por unidad de negocio'
       process_controls: 'Por proceso de negocio'
+    weaknesses_report:
+      title: 'Informe de seguimiento de observaciones'
+      empty: 'No hay observaciones para el filtro aplicado'
+      pdf_name: 'informe_de_seguimiento_de_observaciones.pdf'
     cost_analysis:
       column_business_unit: "Unidad de negocio"
       column_project: "Proyecto"

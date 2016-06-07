@@ -122,6 +122,13 @@ Rails.application.routes.draw do
     as: 'create_follow_up_cost_analysis_follow_up_audit',
     to: 'follow_up_audit#create_follow_up_cost_analysis'
 
+  get 'follow_up_audit/weaknesses_report',
+    as: 'weaknesses_report_follow_up_audit',
+    to: 'follow_up_audit#weaknesses_report'
+  post 'follow_up_audit/create_weaknesses_report',
+    as: 'create_weaknesses_report_follow_up_audit',
+    to: 'follow_up_audit#create_weaknesses_report'
+
   scope ':completed', completed: /complete|incomplete/ do
     resources :findings, except: [:destroy] do
       resources :costs

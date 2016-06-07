@@ -1,4 +1,3 @@
-require 'prawn/table'
 require 'prawn/measurement_extensions'
 
 module Prawn
@@ -277,9 +276,12 @@ module Prawn
       def custom_save_as(filename, sub_directory, id = 0)
         base_dir = File.join(*([PRIVATE_PATH] + Prawn::Document.path_without_root(
               filename, sub_directory, id)[0..-2]))
+        file_path = File.join base_dir, filename
 
         FileUtils.makedirs base_dir
-        self.save_as File.join(base_dir, filename)
+        self.save_as file_path
+
+        file_path
       end
     end
   end

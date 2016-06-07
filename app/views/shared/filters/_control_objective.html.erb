@@ -2,12 +2,10 @@
   <div class="row">
     <div class="col-md-6">
       <div class="form-group">
-        <% control_objective_filter = params[action] ?
-          params[action][:control_objective] : nil %>
+        <% control_objective_filter = params[action] ? params[action][:control_objective] : nil %>
         <%= f.label :control_objective, ControlObjective.model_name.human, class: 'col-md-3' %>
         <div class="col-md-9">
-          <%= f.text_field :control_objective, value: control_objective_filter,
-            maxlength: 3072, class: 'form-control' %>
+          <%= f.text_field :control_objective, value: control_objective_filter, maxlength: 3072, class: 'form-control' %>
         </div>
       </div>
     </div>
