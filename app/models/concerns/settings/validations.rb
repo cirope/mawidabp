@@ -7,12 +7,12 @@ module Settings::Validations
     validates :name, uniqueness: { case_sensitive: false, scope: :organization }
     validates :value,
       numericality: { only_integer: true, greater_than_or_equal_to: 0 },
-      if: :is_numericality?
+      if: :is_number?
   end
 
   private
 
-    def is_numericality?
+    def is_number?
       DEFAULT_SETTINGS[name][:validates] == 'numericality' if DEFAULT_SETTINGS[name]
     end
 end
