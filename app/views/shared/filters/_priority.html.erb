@@ -5,7 +5,7 @@
         <% selected = params[action] ? params[action][:priority] : nil %>
         <%= f.label :priority, Weakness.human_attribute_name('priority'), class: 'col-md-3' %>
         <div class="col-md-9">
-          <%= f.select :priority, priorities, { selected: selected, prompt: true }, class: 'form-control' %>
+          <%= f.select :priority, priorities, { selected: selected, include_blank: t('helpers.select.prompt') }, class: 'form-control' %>
         </div>
       </div>
     </div>
