@@ -15,7 +15,7 @@ class Authentication
   def authenticated?
     authenticate
 
-    if @valid
+    if @valid && @valid_user
       unless @current_organization.try(:ldap_config)
         verify_days_for_password_expiration
         verify_pending_poll

@@ -1,10 +1,8 @@
 class WorkPaper < ActiveRecord::Base
+  include Auditable
   include ParameterSelector
   include Comparable
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
+  include WorkPapers::LocalFiles
 
   # Named scopes
   scope :list, -> { where(organization_id: Organization.current_id) }

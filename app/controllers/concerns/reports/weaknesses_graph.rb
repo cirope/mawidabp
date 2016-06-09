@@ -2,7 +2,7 @@ module Reports::WeaknessesGraph
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_graph_weaknesses
+    before_action :set_graph_weaknesses, only: [:weaknesses_graphs]
 
     include AutoCompleteFor::BusinessUnit
     include AutoCompleteFor::ProcessControl

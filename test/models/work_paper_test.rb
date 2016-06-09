@@ -45,6 +45,26 @@ class WorkPaperTest < ActiveSupport::TestCase
     end
   end
 
+  test 'create with local path' do
+    file_name = File.basename TEST_FILE_FULL_PATH
+
+    FileUtils.cp TEST_FILE_FULL_PATH, "/tmp/#{file_name}"
+
+    assert_difference ['WorkPaper.count', 'FileModel.count'] do
+      @work_paper = WorkPaper.list.create(
+        :owner => control_objective_items(:iso_27000_security_policy_3_1_item),
+        :name => 'New name',
+        :code => 'PTOC 21',
+        :number_of_pages => '10',
+        :description => "New description local://#{file_name}",
+        :organization => organizations(:cirope),
+        :code_prefix => 'PTOC'
+      )
+    end
+
+    FileUtils.rm "/tmp/#{file_name}"
+  end
+
   # Prueba de actualización de un papel de trabajo
   test 'update' do
     assert @work_paper.update(:name => 'New name'),

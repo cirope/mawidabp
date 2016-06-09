@@ -232,6 +232,7 @@ es:
     password_minimum_length: 'Longitud mínima de la contraseña'
     password_minimum_time: 'Duración mínima de la contraseña'
     session_expire_time: 'Desconexión por inactividad'
+    exchange_directory_path: 'Directorio de intercambio de archivos'
 
   users:
     index:

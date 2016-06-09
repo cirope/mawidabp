@@ -1,0 +1,21 @@
+<div id="date_filter_<%= field_name %>" class="filter" <%= 'style="display: none;"' unless display %>>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <% field_value = params[action] ? params[action][field_name] : nil %>
+        <div class="col-md-4">
+          <%= f.label field_name, field_label %>
+        </div>
+        <div class="col-md-3">
+          <% selected = params[action] ? params[action][:"#{field_name}_operator"] : nil %>
+          <%= f.select "#{field_name}_operator", %w(= < > <= >=), {
+            include_blank: t('helpers.select.prompt'), selected: selected
+          }, { class: 'form-control' } %>
+        </div>
+        <div class="col-md-5">
+          <%= f.text_field field_name, value: field_value, autocomplete: :off, class: 'form-control', data: { date_picker: true } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

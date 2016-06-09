@@ -15,7 +15,7 @@ module Findings::Scopes
     end
 
     def with_title title
-      where "#{quoted_table_name}.#{qcn 'title'} LIKE ?", "%#{title}%"
+      where "LOWER(#{quoted_table_name}.#{qcn 'title'}) LIKE ?", "%#{title.mb_chars.downcase}%"
     end
 
     def with_prefix prefix
@@ -32,6 +32,39 @@ module Findings::Scopes
         where(reviews: { id: review.id }, state: ::Finding::PENDING_STATUS).
         finals(false).
         references(:reviews)
+    end
+
+    def by_review identification
+      includes(:review).
+        where("LOWER(#{Review.quoted_table_name}.#{Review.qcn 'identification'}) LIKE ?", "%#{identification.mb_chars.downcase}%").
+        references(:reviews)
+    end
+
+    def by_project project
+      includes(review: :plan_item).
+        where("LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'project'}) LIKE ?", "%#{project.mb_chars.downcase}%").
+        references(:plan_items)
+    end
+
+    def by_process_control name
+      includes(control_objective: :process_control).
+        where("LOWER(#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn 'name'}) LIKE ?", "%#{name.mb_chars.downcase}%").
+        references(:process_controls)
+    end
+
+    def by_control_objective name
+      includes(:control_objective).
+        where("LOWER(#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn 'name'}) LIKE ?", "%#{name.mb_chars.downcase}%").
+        references(:control_objectives)
+    end
+
+    def by_user_id user_id
+      includes(:users).where(users: { id: user_id }).references(:users)
+    end
+
+    def by_issue_date operator, date
+      includes(review: :conclusion_final_review).
+        where("#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} #{operator} ?", date)
     end
   end
 end
