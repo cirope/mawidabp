@@ -12,5 +12,6 @@ DEFAULT_SETTINGS = {
   password_expire_time: { value: '30', validates: 'numericality' },
   password_minimum_length: { value: '8', validates: 'numericality' },
   password_minimum_time: { value: '1', validates: 'numericality' },
-  session_expire_time: { value: '15', validates: 'numericality' }
+  session_expire_time: { value: '15', validates: 'numericality' },
+  exchange_directory_path: { value: '/tmp', validates: 'presence' }
 }.with_indifferent_access.freeze
