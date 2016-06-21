@@ -6,6 +6,8 @@ module Findings::SortColumns
       {
         risk_asc:             risk_asc_options,
         risk_desc:            risk_desc_options,
+        priority_asc:         priority_asc_options,
+        priority_desc:        priority_desc_options,
         state:                state_options,
         review:               review_options,
         updated_at_asc:       updated_at_asc_options,
@@ -29,6 +31,21 @@ module Findings::SortColumns
         {
           name: "#{human_attribute_name :risk} - #{human_attribute_name :priority}#{order_label order}",
           field: ["#{quoted_table_name}.#{qcn('risk')} #{order}", "#{quoted_table_name}.#{qcn('priority')} #{order}", "#{quoted_table_name}.#{qcn('state')} ASC"]
+        }
+      end
+
+      def priority_asc_options
+        priority_options
+      end
+
+      def priority_desc_options
+        priority_options order: 'DESC'
+      end
+
+      def priority_options order: 'ASC'
+        {
+          name: "#{human_attribute_name :priority} - #{human_attribute_name :risk}#{order_label order}",
+          field: ["#{quoted_table_name}.#{qcn('priority')} #{order}", "#{quoted_table_name}.#{qcn('risk')} #{order}", "#{quoted_table_name}.#{qcn('state')} ASC"]
         }
       end
 
