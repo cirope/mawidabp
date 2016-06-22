@@ -29,8 +29,12 @@ module Findings::SortColumns
 
       def risk_options order: 'ASC'
         {
-          name: "#{human_attribute_name :risk} - #{human_attribute_name :priority}#{order_label order}",
-          field: ["#{quoted_table_name}.#{qcn('risk')} #{order}", "#{quoted_table_name}.#{qcn('priority')} #{order}", "#{quoted_table_name}.#{qcn('state')} ASC"]
+          name:  "#{human_attribute_name :risk} - #{human_attribute_name :priority}#{order_label order}",
+          field: [
+            "#{quoted_table_name}.#{qcn('risk')} #{order}",
+            "#{quoted_table_name}.#{qcn('priority')} #{order}",
+            "#{quoted_table_name}.#{qcn('state')} ASC"
+          ]
         }
       end
 
@@ -44,8 +48,12 @@ module Findings::SortColumns
 
       def priority_options order: 'ASC'
         {
-          name: "#{human_attribute_name :priority} - #{human_attribute_name :risk}#{order_label order}",
-          field: ["#{quoted_table_name}.#{qcn('priority')} #{order}", "#{quoted_table_name}.#{qcn('risk')} #{order}", "#{quoted_table_name}.#{qcn('state')} ASC"]
+          name:  "#{human_attribute_name :priority} - #{human_attribute_name :risk}#{order_label order}",
+          field: [
+            "#{quoted_table_name}.#{qcn('priority')} #{order}",
+            "#{quoted_table_name}.#{qcn('risk')} #{order}",
+            "#{quoted_table_name}.#{qcn('state')} ASC"
+          ]
         }
       end
 
