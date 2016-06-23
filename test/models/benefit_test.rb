@@ -32,4 +32,12 @@ class BenefitTest < ActiveSupport::TestCase
       @benefit.destroy
     end
   end
+
+  test 'benefit or damage' do
+    assert @benefit.benefit?
+
+    @benefit.kind = 'damage_tangible'
+
+    assert @benefit.damage?
+  end
 end

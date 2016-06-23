@@ -11,6 +11,7 @@ class FollowUpAuditController < ApplicationController
   include Reports::FollowUpCostAnalysis
   include Reports::WeaknessesGraph
   include Reports::WeaknessesReport
+  include Reports::Benefits
 
   before_action :auth, :load_privileges, :check_privileges
 
@@ -44,6 +45,8 @@ class FollowUpAuditController < ApplicationController
         create_control_objective_stats: :read,
         process_control_stats: :read,
         create_process_control_stats: :read,
+        benefits: :read,
+        create_benefits: :read,
         auto_complete_for_business_unit: :read,
         auto_complete_for_process_control: :read
       )

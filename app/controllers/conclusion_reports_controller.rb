@@ -9,6 +9,7 @@ class ConclusionReportsController < ApplicationController
   include Reports::FixedWeaknessesReport
   include Reports::CostAnalysis
   include Reports::WeaknessesGraph
+  include Reports::Benefits
 
   before_action :auth, :load_privileges, :check_privileges
 
@@ -44,6 +45,8 @@ class ConclusionReportsController < ApplicationController
         create_control_objective_stats: :read,
         process_control_stats: :read,
         create_process_control_stats: :read,
+        benefits: :read,
+        create_benefits: :read,
         auto_complete_for_business_unit: :read,
         auto_complete_for_process_control: :read
       )

@@ -532,4 +532,60 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_response :success
     assert_template 'conclusion_reports/weaknesses_graphs'
   end
+
+  test 'benefits report' do
+    login
+
+    get :benefits
+    assert_response :success
+    assert_template 'conclusion_reports/benefits'
+
+    assert_nothing_raised do
+      get :benefits, :benefits => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion',
+        :final => true
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/benefits'
+  end
+
+  test 'filtered benefits report' do
+    login
+
+    get :benefits, :benefits => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :business_unit_type => business_unit_types(:cycle).id,
+      :business_unit => 'one',
+      :control_objective => 'a',
+      },
+      :controller_name => 'conclusion',
+      :final => true
+
+    assert_response :success
+    assert_template 'conclusion_reports/benefits'
+  end
+
+  test 'create benefits report' do
+    login
+
+    get :create_benefits, :benefits => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion',
+      :final => true
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.benefits.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'benefits', 0)
+  end
 end
