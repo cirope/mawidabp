@@ -1,6 +1,7 @@
 class Benefit < ActiveRecord::Base
   include Auditable
   include Benefits::DestroyValidation
+  include Benefits::Kind
   include Benefits::Scopes
   include Benefits::Validations
 

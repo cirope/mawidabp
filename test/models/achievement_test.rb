@@ -31,4 +31,12 @@ class AchievementTest < ActiveSupport::TestCase
     assert @achievement.invalid?
     assert_error @achievement, :comment, :blank
   end
+
+  test 'signed amount' do
+    assert_equal @achievement.amount, @achievement.signed_amount
+
+    @achievement.benefit.update! kind: 'damage_tangible'
+
+    assert_equal -@achievement.reload.amount, @achievement.signed_amount
+  end
 end

@@ -42,10 +42,15 @@ module Reports::WeaknessesReport
     def filter_weaknesses_for_report report_params
       weaknesses = Weakness.finals false
 
-      %i(review project process_control control_objective user_id).each do |param|
+      %i(review project process_control control_objective).each do |param|
         if report_params[param].present?
           weaknesses = weaknesses.send "by_#{param}", report_params[param]
         end
+      end
+
+      if report_params[:user_id].present?
+        weaknesses = weaknesses.by_user_id report_params[:user_id],
+          include_finding_answers: report_params[:user_in_comments] == '1'
       end
 
       if report_params[:finding_status].present?
@@ -143,7 +148,7 @@ module Reports::WeaknessesReport
           column_widths << pdf.percent_width(col_size)
         end
 
-        weakness.finding_answers.each do |finding_answer|
+        weakness.finding_answers.reload.each do |finding_answer|
           column_data << [
             finding_answer.answer,
             finding_answer.user.try(:full_name),
@@ -169,9 +174,9 @@ module Reports::WeaknessesReport
             end
           end
         end
-
-        pdf.start_new_page
       end
+
+      pdf.start_new_page
     end
 
     def add_filter_options_to_pdf pdf
@@ -183,6 +188,7 @@ module Reports::WeaknessesReport
         process_control:   ProcessControl.model_name.human,
         control_objective: ControlObjective.model_name.human,
         user:              User.model_name.human,
+        user_in_comments:  t('shared.filters.user.user_in_comments'),
         finding_status:    Weakness.human_attribute_name('state'),
         finding_title:     Weakness.human_attribute_name('title'),
         risk:              Weakness.human_attribute_name('risk'),
@@ -196,7 +202,7 @@ module Reports::WeaknessesReport
       labels.each do |filter_name, filter_label|
         if report_params[filter_name].present?
           operator = report_params["#{filter_name}_operator"] || '='
-          value = %i(risk priority finding_status).include?(filter_name) ?
+          value = %i(risk priority finding_status user_in_comments).include?(filter_name) ?
             value_to_label(filter_name) :
             report_params[filter_name]
 
@@ -221,6 +227,8 @@ module Reports::WeaknessesReport
         priority ? t("priority_types.#{priority.first}") : ''
       when :finding_status
         t "finding.status_#{Finding::STATUS.invert[value]}"
+      when :user_in_comments
+        value == 1 ? t('label.yes') : t('label.no')
       end
     end
 end

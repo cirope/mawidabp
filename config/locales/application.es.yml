@@ -161,6 +161,7 @@ es:
   conclusion_committee_report:
     index_title: "Reportes de conclusión"
     control_objective_stats_title: 'Observaciones por objetivo de control'
+    benefits_title: 'Beneficios / Perjuicios'
     process_control_stats_title: 'Observaciones por proceso de negocio'
     synthesis_report_title: "Informe de síntesis al directorio"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
@@ -193,6 +194,12 @@ es:
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
+    benefits:
+      pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
+      title: "Beneficios / Perjuicios"
+      subtitle: "INFORMES DEFINITIVOS"
+      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
+      total: 'Monto total: <b>%{amount}</b>'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
@@ -552,6 +559,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
   follow_up_committee:
     index_title: "Reportes de comité"
     control_objective_stats_title: 'Observaciones por objetivo de control'
+    benefits_title: 'Beneficios / Perjuicios'
     process_control_stats_title: 'Observaciones por proceso de negocio'
     control_effectiveness: "Efectividad del control"
     pending_findings: "Seguimiento de observaciones pendientes"
@@ -601,6 +609,12 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         other: '%{effectiveness} en %{count} informes'
       without_weaknesses: 'Sin observaciones'
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
+    benefits:
+      pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
+      title: "Beneficios / Perjuicios"
+      subtitle: "INFORMES DEFINITIVOS"
+      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
+      total: 'Monto total: <b>%{amount}</b>'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"

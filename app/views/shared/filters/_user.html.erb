@@ -4,7 +4,9 @@
       <div class="form-group">
         <% user = params[action] && params[action][:user] %>
 
-        <%= f.label :user, User.model_name.human, class: 'col-md-3' %>
+        <div class="col-md-3">
+          <%= f.label :user, User.model_name.human %>
+        </div>
 
         <div class="col-md-9">
           <%= f.text_field :user,
@@ -20,6 +22,14 @@
           %>
           <%= f.hidden_field :user_id, value: params[action] && params[action][:user_id] %>
         </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="checkbox">
+        <% user_in_comments = params[action] && params[action][:user_in_comments] %>
+        <label>
+          <%= f.check_box :user_in_comments, checked: user_in_comments == '1' %> <%= t '.user_in_comments' %>
+        </label>
       </div>
     </div>
   </div>

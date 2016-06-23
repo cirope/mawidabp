@@ -2,9 +2,10 @@ module Findings::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list,            -> { where organization_id: Organization.current_id }
-    scope :sort_by_code,    -> { order review_code: :asc }
-    scope :sort_for_review, -> { order risk: :desc, priority: :desc, review_code: :asc }
+    scope :list,              -> { where organization_id: Organization.current_id }
+    scope :sort_by_code,      -> { order review_code: :asc }
+    scope :sort_for_review,   -> { order risk: :desc, priority: :desc, review_code: :asc }
+    scope :with_achievements, -> { includes(:achievements).where.not achievements: { finding_id: nil } }
   end
 
   module ClassMethods
@@ -58,8 +59,19 @@ module Findings::Scopes
         references(:control_objectives)
     end
 
-    def by_user_id user_id
-      includes(:users).where(users: { id: user_id }).references(:users)
+    def by_user_id user_id, include_finding_answers: false
+      if include_finding_answers
+        conditions = [
+          "#{User.quoted_table_name}.#{User.qcn 'id'} = :user_id",
+          "#{FindingAnswer.quoted_table_name}.#{FindingAnswer.qcn 'user_id'} = :user_id"
+        ]
+
+        includes(:users, :finding_answers).
+          where(conditions.map { |c| "(#{c})" }.join(' OR '), user_id: user_id).
+          references(:users, :finding_answers)
+      else
+        includes(:users).where(users: { id: user_id }).references(:users)
+      end
     end
 
     def by_issue_date operator, date
