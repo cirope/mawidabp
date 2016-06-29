@@ -51,7 +51,7 @@ class Authentication
     end
 
     def set_ldap_config
-      @ldap_config = choose_ldap_config(@params[:user])
+      @ldap_config = @current_organization && choose_ldap_config(@params[:user])
     end
 
     def set_valid_user
