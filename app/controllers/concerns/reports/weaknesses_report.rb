@@ -40,7 +40,7 @@ module Reports::WeaknessesReport
     end
 
     def filter_weaknesses_for_report report_params
-      weaknesses = Weakness.finals false
+      weaknesses = Weakness.list.finals false
 
       %i(review project process_control control_objective).each do |param|
         if report_params[param].present?
