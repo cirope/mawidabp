@@ -8,12 +8,24 @@
         </div>
         <div class="col-md-3">
           <% selected = params[action] ? params[action][:"#{field_name}_operator"] : nil %>
-          <%= f.select "#{field_name}_operator", %w(= < > <= >=), {
+          <%= f.select "#{field_name}_operator", date_filter_operators, {
             include_blank: t('helpers.select.prompt'), selected: selected
-          }, { class: 'form-control' } %>
+          }, { class: 'form-control', data: { date_operator: true } } %>
         </div>
         <div class="col-md-5">
           <%= f.text_field field_name, value: field_value, autocomplete: :off, class: 'form-control', data: { date_picker: true } %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <% field_value = params[action] ? params[action]["#{field_name}_until"] : nil %>
+        <% classes = selected == 'between' ? 'form-control' : 'form-control hidden' %>
+        <div class="col-md-5">
+          <%= f.text_field "#{field_name}_until", value: field_value, autocomplete: :off, class: classes, data: {
+            date_picker: true,
+            date_until: true
+          } %>
         </div>
       </div>
     </div>

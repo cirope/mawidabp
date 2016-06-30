@@ -73,9 +73,11 @@ module Reports::WeaknessesReport
 
       %i(origination_date follow_up_date solution_date).each do |date_field|
         if report_params[date_field].present?
-          operator, date = *parse_date_field(report_params, date_field)
+          operator, date, date_until = *parse_date_field(report_params, date_field)
 
-          weaknesses = weaknesses.where "#{Weakness.qcn date_field} #{operator} ?", date
+          mask       = date_until ? '? AND ?' : '?'
+          condition  = "#{Weakness.qcn date_field} #{operator} #{mask}"
+          weaknesses = weaknesses.where condition, *[date, date_until].compact
         end
       end
 
@@ -86,14 +88,16 @@ module Reports::WeaknessesReport
     end
 
     def safe_date_operator operator
-      %w(= < > <= >=).include?(operator) ? operator : '='
+      %w(= < > <= >= between).include?(operator) ? operator : '='
     end
 
     def parse_date_field report_params, field_name
-      operator = safe_date_operator report_params["#{field_name}_operator"]
-      date     = Timeliness.parse(report_params[field_name], :date).to_date
+      operator     = safe_date_operator report_params["#{field_name}_operator"]
+      date         = Timeliness.parse(report_params[field_name], :date).to_date
+      date_until   = Timeliness.parse(report_params["#{field_name}_until"], :date)&.to_date
+      date_until ||= date if operator == 'between'
 
-      [operator, date]
+      [operator.upcase, date, date_until]
     end
 
     def add_to_weakness_report_pdf pdf, weakness
