@@ -24,6 +24,7 @@
 //= require common
 //= require extensions
 //= require form_modification
+//= require filters
 //= require validation
 //= require ui
 //= require file_input

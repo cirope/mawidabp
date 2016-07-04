@@ -546,19 +546,24 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_nothing_raised do
       get :weaknesses_report, :weaknesses_report => {
-        :review            => '1',
-        :project           => '2',
-        :process_control   => '3',
-        :control_objective => '4',
-        :user_id           => users(:administrator_user).id.to_s,
-        :finding_status    => '1',
-        :finding_title     => '1',
-        :risk              => '1',
-        :priority          => '1',
-        :issue_date        => Date.today.to_s(:db),
-        :origination_date  => Date.today.to_s(:db),
-        :follow_up_date    => Date.today.to_s(:db),
-        :solution_date     => Date.today.to_s(:db)
+        :review                    => '1',
+        :project                   => '2',
+        :process_control           => '3',
+        :control_objective         => '4',
+        :user_id                   => users(:administrator_user).id.to_s,
+        :finding_status            => '1',
+        :finding_title             => '1',
+        :risk                      => '1',
+        :priority                  => '1',
+        :issue_date                => Date.today.to_s(:db),
+        :issue_date_operator       => '=',
+        :origination_date          => Date.today.to_s(:db),
+        :origination_date_operator => '>',
+        :follow_up_date            => Date.today.to_s(:db),
+        :follow_up_date_until      => Date.today.to_s(:db),
+        :follow_up_date_operator   => 'between',
+        :solution_date             => Date.today.to_s(:db),
+        :solution_date_operator    => '='
       }
     end
 

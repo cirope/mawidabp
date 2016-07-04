@@ -1,5 +1,7 @@
 es:
   shared:
     filters:
+      date_field:
+        between: 'Entre'
       user:
         user_in_comments: 'Incluir usuarios en comentarios'

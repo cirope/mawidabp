@@ -74,9 +74,11 @@ module Findings::Scopes
       end
     end
 
-    def by_issue_date operator, date
-      includes(review: :conclusion_final_review).
-        where("#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} #{operator} ?", date)
+    def by_issue_date operator, date, date_until = nil
+      mask      = date_until ? '? AND ?' : '?'
+      condition = "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} #{operator} #{mask}"
+
+      includes(review: :conclusion_final_review).where condition, *[date, date_until].compact
     end
   end
 end
