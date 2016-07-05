@@ -12,7 +12,7 @@ module WorkflowsHelper
   def review_id_field(f)
     workflow = f.object
     with_period = @workflow.period_id && @workflow.period_id > 0
-    collection = (with_period ? Review.list_without_final_review.
+    collection = (with_period ? Review.list_without_final_review_or_not_closed.
               list_all_without_workflow(@workflow.period_id).
               map { |r| [r.identification, r.id] } : [])
     disabled = (with_period && @workflow.new_record?) ? false : true
