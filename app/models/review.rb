@@ -58,6 +58,14 @@ class Review < ActiveRecord::Base
       "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL"
     ).references(:conclusion_reviews)
   }
+  scope :list_without_final_review_or_not_closed, -> {
+    conditions = [
+      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL",
+      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('close_date')} >= :today"
+    ].map { |c| "(#{c})" }.join(' OR ')
+
+    list.includes(:conclusion_final_review).where(conditions, today: Date.today).references(:conclusion_reviews)
+  }
   scope :list_without_draft_review, -> {
     list.includes(:conclusion_draft_review).where(
       "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL"
