@@ -12,6 +12,21 @@ module ConclusionReviews::Scopes
         references(:periods)
     end
 
+    def by_best_practice_names *best_practice_names
+      conditions  = []
+      parameters  = {}
+      column_name = "#{BestPractice.quoted_table_name}.#{BestPractice.qcn 'name'}"
+
+      best_practice_names.each_with_index do |best_practice_name, i|
+        conditions << "LOWER(#{column_name}) LIKE :bp_#{i}"
+        parameters[:"bp_#{i}"] = "%#{best_practice_name.mb_chars.downcase}%"
+      end
+
+      includes(review: { control_objective_items: { control_objective: { process_control: :best_practice } } }).
+        where(conditions.join(' OR '), parameters).
+        references(:best_practices)
+    end
+
     def by_control_objective_names *control_objective_names
       conditions  = []
       parameters  = {}

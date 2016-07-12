@@ -467,6 +467,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     get :process_control_stats, :process_control_stats => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date,
+      :best_practice => 'a',
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one',
       :process_control => 'seg'

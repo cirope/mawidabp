@@ -19,6 +19,7 @@ module Reports::ProcessControlStats
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(
       @from_date, @to_date
     )
+    @best_practices = []
     @process_controls = []
     @process_control_data = {}
     @process_control_ids_data = {}
@@ -27,6 +28,18 @@ module Reports::ProcessControlStats
     weaknesses_conditions = {}
 
     if params[:process_control_stats]
+      if params[:process_control_stats][:best_practice].present?
+        @best_practices = params[:process_control_stats][:best_practice].split(
+          SPLIT_AND_TERMS_REGEXP
+        ).uniq.map(&:strip)
+
+        if @best_practices.present?
+          @filters << "<b>#{BestPractice.model_name.human}</b> = \"#{params[:process_control_stats][:best_practice].strip}\""
+
+          conclusion_reviews = conclusion_reviews.by_best_practice_names *@best_practices
+        end
+      end
+
       if params[:process_control_stats][:process_control].present?
         @process_controls = params[:process_control_stats][:process_control].split(
           SPLIT_AND_TERMS_REGEXP
