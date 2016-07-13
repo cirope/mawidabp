@@ -1403,40 +1403,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
-      review:
-        identification: "Identificación"
-        description: "Descripción"
-        survey: "Relevamiento"
-        audit_type: "Tipo de auditoría"
-        business_unit: "Unidad de negocio"
-        period_id: "Periodo"
-        plan_item: "Proyecto"
-        file_model_id: "Anexos"
-        score: "Calificación"
-        work_papers: "Papeles de trabajo"
-        file_model:
-          one: "Anexo (archivo)"
-          file_file_name: "Anexo (nombre de archivo)"
-          file_content_type: "Anexo (tipo de archivo)"
-          file_file_size: "Anexo (tamaño de archivo)"
-        finding_review_assignments:
-          one: "Hallazgo pendiente"
-          other: "Hallazgos pendientes"
-          finding: "Hallazgo pendiente"
-          finding_id: "Hallazgo pendiente"
-        review_user_assignments:
-          one: "Integrante"
-          other: "Integrantes"
-          assignment_type: "Integrante (rol)"
-          user: "Integrante"
-          user_id: "Integrante"
-          include_signature: "Incluir firma"
-      review_user_assignment:
-        assignment_type: "Rol"
-        user: "Integrante"
-        user_id: "Integrante"
-        include_signature: "Incluir firma"
-        review: "Informe"
       role:
         name: "Perfil"
         role_type: "Tipo perfil"
