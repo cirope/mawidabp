@@ -16,6 +16,9 @@ class FindingsController < ApplicationController
     default_conditions = { final: false }
     corporate_not_audited = current_organization.corporate? && !@auth_user.can_act_as_audited?
     show_all = corporate_not_audited || @auth_user.committee? || @selected_user
+    default_sort_column = params[:completed] == 'incomplete' ?
+      "#{Finding.quoted_table_name}.#{Finding.qcn('follow_up_date')} ASC" :
+      "#{Finding.quoted_table_name}.#{Finding.qcn('solution_date')} DESC"
 
     if show_all
       if @selected_user
@@ -63,8 +66,8 @@ class FindingsController < ApplicationController
       }, :users
     ).where(@conditions).order(
       @order_by || [
+        default_sort_column,
         "#{Finding.quoted_table_name}.#{Finding.qcn('organization_id')} ASC",
-        "#{Review.quoted_table_name}.#{Review.qcn('created_at')} DESC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('state')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
       ]
