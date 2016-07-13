@@ -21,7 +21,7 @@ class WorkPaper < ActiveRecord::Base
   after_destroy :destroy_file_model # TODO: delete when Rails fix gets in stable
 
   # Restricciones
-  validates :organization_id, :name, :code, :number_of_pages, :presence => true
+  validates :organization_id, :name, :code, :presence => true
   validates :number_of_pages, :numericality =>
     {:only_integer => true, :less_than => 100000, :greater_than => 0},
     :allow_nil => true, :allow_blank => true
@@ -64,7 +64,7 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def inspect
-    "#{self.code} - #{self.name} (#{self.pages_to_s})"
+    number_of_pages.present? ? "#{code} - #{name} (#{pages_to_s})" : "#{code} - #{name}"
   end
 
   def <=>(other)

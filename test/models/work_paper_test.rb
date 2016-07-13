@@ -86,13 +86,11 @@ class WorkPaperTest < ActiveSupport::TestCase
     @work_paper.organization_id = nil
     @work_paper.name = '    '
     @work_paper.code = '   '
-    @work_paper.number_of_pages = nil
 
     assert @work_paper.invalid?
     assert_error @work_paper, :organization_id, :blank
     assert_error @work_paper, :name, :blank
     assert_error @work_paper, :code, :blank
-    assert_error @work_paper, :number_of_pages, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
