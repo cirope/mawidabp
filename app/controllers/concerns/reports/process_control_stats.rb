@@ -92,6 +92,7 @@ module Reports::ProcessControlStats
         control_objective_items = c_r.review.control_objective_items.
           not_excluded_from_score.
           for_business_units(*@business_unit_ids).
+          with_best_practice_names(*@best_practices).
           with_process_control_names(*@process_controls)
 
         control_objective_items.each do |coi|

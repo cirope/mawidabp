@@ -37,6 +37,21 @@ module ControlObjectiveItems::Scopes
         references(:process_controls)
     end
 
+    def with_best_practice_names(*best_practice_names)
+      conditions  = []
+      parameters  = {}
+      column_name = "#{BestPractice.quoted_table_name}.#{BestPractice.qcn 'name'}"
+
+      best_practice_names.each_with_index do |best_practice_name, i|
+        conditions << "LOWER(#{column_name}) LIKE :bp_#{i}"
+        parameters[:"bp_#{i}"] = "%#{best_practice_name.mb_chars.downcase}%"
+      end
+
+      includes(control_objective: { process_control: :best_practice }).
+        where(conditions.join(' OR '), parameters).
+        references(:best_practices)
+    end
+
     def for_business_units *business_unit_ids
       if business_unit_ids.present?
         conditions = [
