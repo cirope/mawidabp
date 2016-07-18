@@ -351,7 +351,7 @@ class ReviewsController < ApplicationController
           :id, :finding_id, :_destroy, :lock_version
         ],
         review_user_assignments_attributes: [
-          :id, :assignment_type, :user_id, :include_signature, :_destroy
+          :id, :assignment_type, :user_id, :include_signature, :owner, :_destroy
         ],
         control_objective_items_attributes: [
           :id, :control_objective_id, :control_objective_text, :order_number, :_destroy,
