@@ -321,6 +321,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     score_sheet: "Planilla de calificación detallada"
     global_score_sheet: "Planilla de calificación global"
     email_note: "Nota a incluir en el correo"
+    responsibles: "Responsables"
     issue_date_title: "FECHA"
     audit_period: "%{start} al %{end}"
     audit_period_title: "PERIODO DE LA AUDITORÍA"
