@@ -108,6 +108,7 @@ class ConclusionReview < ActiveRecord::Base
     cover_bottom_text << I18n.l(self.issue_date, :format => :long)
 
     current_organization = Organization.find(self.organization_id)
+    review_owners = review.review_user_assignments.where(owner: true)
 
     pdf.add_review_header organization, self.review.identification.strip,
       self.review.plan_item.project.strip
@@ -119,6 +120,15 @@ class ConclusionReview < ActiveRecord::Base
     pdf.add_title cover_text, (PDF_FONT_SIZE * 1.5).round, :center, false
     pdf.add_title cover_bottom_text, (PDF_FONT_SIZE * 1.25).round, :center,
       false
+
+    if review_owners.present?
+      pdf.move_down PDF_FONT_SIZE * 12
+      pdf.add_subtitle I18n.t('conclusion_review.responsibles'), PDF_FONT_SIZE, PDF_FONT_SIZE
+
+      review_owners.each do |rua|
+        pdf.text "• #{rua.user.full_name}", :align => :justify, :inline_format => true
+      end
+    end
 
     pdf.start_new_page
     pdf.add_page_footer
