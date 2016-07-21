@@ -294,9 +294,10 @@ class ConclusionFinalReviewsController < ApplicationController
 
     column_order = [
       ['period', Review.human_attribute_name(:period_id), 5],
-      ['identification', Review.human_attribute_name(:identification), 8],
-      ['business_unit', PlanItem.human_attribute_name(:business_unit_id), 30],
-      ['project', PlanItem.human_attribute_name(:project), 30],
+      ['identification', Review.human_attribute_name(:identification), 13],
+      ['summary', ConclusionDraftReview.human_attribute_name(:summary), 10],
+      ['business_unit', PlanItem.human_attribute_name(:business_unit_id), 20],
+      ['project', PlanItem.human_attribute_name(:project), 25],
       ['issue_date', ConclusionDraftReview.human_attribute_name(:issue_date), 10],
       ['close_date', ConclusionDraftReview.human_attribute_name(:close_date), 10],
       ['score', Review.human_attribute_name(:score), 7]
@@ -314,6 +315,7 @@ class ConclusionFinalReviewsController < ApplicationController
       column_data << [
         cfr.review.period.number.to_s,
         cfr.review.identification,
+        cfr.summary,
         cfr.review.plan_item.business_unit.name,
         cfr.review.plan_item.project,
         "<b>#{cfr.issue_date ? l(cfr.issue_date, format: :minimal) : ''}</b>",
@@ -331,7 +333,7 @@ class ConclusionFinalReviewsController < ApplicationController
       end
 
       pdf.text t('conclusion_final_review.pdf.filtered_by',
-        query: @query.map {|q| "<b>#{q}</b>"}.join(', '),
+        query: @query.flatten.map { |q| "<b>#{q}</b>"}.join(', '),
         columns: filter_columns.to_sentence, count: @columns.size),
         font_size: (PDF_FONT_SIZE * 0.75).round, inline_format: true
     end
