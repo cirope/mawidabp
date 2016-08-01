@@ -434,7 +434,7 @@ class Finding < ActiveRecord::Base
           previous_method_name = previous_finding.respond_to?(
             "#{attribute}_text") ? "#{attribute}_text".to_sym : attribute
           version_method_name = version_finding.respond_to?(
-           "#{attribute}_text") ? "#{attribute}_text".to_sym : attribute
+            "#{attribute}_text") ? "#{attribute}_text".to_sym : attribute
 
           column_data << [
             Finding.human_attribute_name(attribute),
@@ -451,9 +451,9 @@ class Finding < ActiveRecord::Base
           pdf.add_description_item(PaperTrail::Version.human_attribute_name(:created_at),
             I18n.l(version.created_at || version_finding.updated_at,
               :format => :long))
-          pdf.add_description_item(User.model_name.human,
-            version.previous.try(:whodunnit) ?
-              User.find(version.previous.whodunnit).try(:full_name) : '--'
+          pdf.add_description_item(
+            User.model_name.human,
+            version.paper_trail_originator ? User.find(version.paper_trail_originator).try(:full_name) : '--'
           )
 
           pdf.move_down PDF_FONT_SIZE
