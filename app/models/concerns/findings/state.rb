@@ -146,7 +146,10 @@ module Findings::State
   def status_change_history
     findings_with_status_changed = versions_with_state_change
 
-    unless findings_with_status_changed.last.try(:state) == state
+    if findings_with_status_changed.last.try(:state) != state
+      u_id = self.paper_trail.originator
+      self.user_who_make_it = u_id && User.find(u_id)
+
       findings_with_status_changed << self
     end
 
@@ -168,7 +171,7 @@ module Findings::State
         if finding && finding.state != last_state
           last_state = finding.state
 
-          if u_id = version.previous.try(:whodunnit)
+          if u_id = version.paper_trail_originator
             finding.user_who_make_it = User.find u_id
           end
 
