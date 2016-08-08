@@ -1,5 +1,4 @@
-<% if submenu_item.children.present? &&
-  submenu_item.submenu_names.include?(@current_module) %>
+<% if submenu_item.children.present? && submenu_item.submenu_names.include?(@current_module) %>
   <%= content_for :submenu do %>
     <div class="row">
       <div class="col-md-12">
