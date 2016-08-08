@@ -413,7 +413,6 @@ class Finding < ActiveRecord::Base
       (PDF_FONT_SIZE * 1.25).round
 
     if important_changed_versions.size > 1
-      last_checked_version = self.versions.first
       column_names = [['attribute', 30 ], ['old_value', 35], ['new_value', 35]]
       column_headers, column_widths, column_data = [], [], []
 
