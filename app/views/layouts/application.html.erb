@@ -21,7 +21,7 @@
       <%= raw "setTimeout(function () {" %>
       <%= raw "  State.unsavedDataWarning = '#{t('message.unsaved_data_warning')}';" %>
       <%= raw "  State.validationFailedMessage = '#{t('message.validation_failed_message')}';" %>
-      <%= raw "}, 10000)" %>
+      <%= raw "}, 10000);" %>
       <%= yield :js_extra %>
     <% end %>
   </head>
