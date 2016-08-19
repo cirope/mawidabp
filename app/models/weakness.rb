@@ -98,7 +98,7 @@ class Weakness < Finding
   end
 
   def must_be_approved?
-    return true if self.revoked?
+    return true if self.revoked? || self.criteria_mismatch?
 
     errors = []
 
