@@ -39,6 +39,8 @@ module LdapConfigs::LDAPImport
       user       = User.where(email: data[:email]).take
       new        = !user
 
+      data[:manager_id] = nil if manager_dn.blank?
+
       if user
         update_user user: user, data: data, roles: roles
       else
