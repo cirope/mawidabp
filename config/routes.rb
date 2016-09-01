@@ -257,7 +257,9 @@ Rails.application.routes.draw do
 
   resources :resource_classes
 
-  resources :best_practices
+  resources :best_practices do
+    resources :process_controls, only: [:new, :edit]
+  end
 
   resources :periods
 

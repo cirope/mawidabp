@@ -1,10 +1,11 @@
 <% id = f.object.object_id %>
+
 <fieldset class="process_control">
   <div class="form-inputs row">
     <div class="col-md-10">
       <div class="media">
         <div class="pull-left toggle-visibility">
-          <%= link_to_show_hide "control_objectives_for_#{id}" %>
+          <%= link_to_fetch_hide id %>
         </div>
         <div class="media-body">
           <%= f.input :name, label: false, input_html: { maxlength: 255 } %>
@@ -12,7 +13,7 @@
       </div>
     </div>
     <div class="col-md-1">
-      <%= f.input :obsolete, label: false, input_html: { data: { process_control: id } } %>
+      <%= f.input :obsolete, label: false, input_html: { data: { process_control: f.object.id || id } } %>
     </div>
     <div class="col-md-1 toggle-visibility">
       <%= link_to_insert_field(f) %>
@@ -23,15 +24,17 @@
     </div>
   </div>
 
-  <div id="control_objectives_for_<%= id %>" class="nested" style="display: none;">
-    <div class="control_objectives">
-      <%= f.simple_fields_for :control_objectives do |co_f| %>
-        <%= render 'control_objective', f: co_f, process_control_id: id %>
-      <% end %>
-
-      <%= link_to_add_fields t('best_practices.control_objectives.new'), f, :control_objectives %>
+  <div class="nested hidden">
+    <div class="hidden" data-container-id="<%= id %>" data-index="<%= f.index %>" data-url="<%= process_control_path f.object %>">
+      <div class="alert alert-warning">
+        <%= t 'navigation.loading' %>
+      </div>
     </div>
-    <br />
+
+    <p>
+      <%= link_to_add_fields t('best_practices.control_objectives.new'), f, :control_objectives, 'process_controls/control_objective' %>
+    </p>
   </div>
 </fieldset>
+
 <script type="text/javascript">FormUtil.completeSortNumbers();</script>

@@ -31,7 +31,7 @@ class BestPracticesController < ApplicationController
     @best_practice = BestPractice.new best_practice_params
 
     @best_practice.save
-    respond_with @best_practice
+    respond_with @best_practice, location: edit_best_practice_url(@best_practice)
   end
 
   # * PATCH /best_practices/1
@@ -51,10 +51,9 @@ class BestPracticesController < ApplicationController
   end
 
   private
+
     def set_best_practice
-      @best_practice = BestPractice.list.includes(
-        process_controls: { control_objectives: :control }
-      ).find(params[:id])
+      @best_practice = BestPractice.list.includes(:process_controls).find(params[:id])
     end
 
     def best_practice_params

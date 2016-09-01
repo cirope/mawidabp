@@ -218,16 +218,13 @@ module ApplicationHelper
   # contenedor.
   #
   # * _element_id_:: ID del elemento que se va a mostrar y ocultar
-  # * _show_text_:: Texto que se va a mostrar en el title del link para mostrar
-  # * _hide_text_:: Texto que se va a mostrar en el title del link para ocultar
-  def link_to_show_hide(element_id, show_text = nil, hide_text = nil, displayed = false)
+  def link_to_show_hide(element_id)
     out = content_tag(:span,
       link_to(
         content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-right'),
         '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
       ),
       :id => "show_element_#{element_id}_content",
-      :style => (displayed ? 'display: none' : nil),
       :class => 'media-object'
     )
     out << content_tag(:span,
@@ -236,9 +233,21 @@ module ApplicationHelper
         '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
       ),
       :id => "hide_element_#{element_id}_content",
-      :style => (displayed ? nil : 'display: none'),
+      :style => 'display: none;',
       :class => 'media-object'
     )
+  end
+
+  def link_to_fetch_hide(id)
+    show_link = link_to('#', :data => { :fetch => id }) do
+      content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-right')
+    end
+    hide_link = link_to('#', :data => { :hide => id }) do
+      content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-down')
+    end
+
+    out  = content_tag(:span, show_link, :class => 'media-object')
+    out << content_tag(:span, hide_link, :class => 'media-object hidden')
   end
 
   # Devuelve el HTML de un vínculo para mover un ítem.

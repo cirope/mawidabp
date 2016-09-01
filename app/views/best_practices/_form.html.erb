@@ -8,22 +8,24 @@
     <%= f.input :shared, input_html: { disabled: @best_practice.shared } %>
   </div>
 
-  <div class="row">
-    <div class="col-md-10">
-      <h5><strong><%= ProcessControl.model_name.human count: 0 %></strong></h5>
+  <% if @best_practice.persisted? %>
+    <div class="row">
+      <div class="col-md-10">
+        <h5><strong><%= ProcessControl.model_name.human count: 0 %></strong></h5>
+      </div>
+      <div class="col-md-1">
+        <h5><strong><%= ProcessControl.human_attribute_name 'obsolete' %></strong></h5>
+      </div>
     </div>
-    <div class="col-md-1">
-      <h5><strong><%= ProcessControl.human_attribute_name 'obsolete' %></strong></h5>
+
+    <div id="process_controls">
+      <%= f.simple_fields_for :process_controls, nested_process_controls do |p_f| %>
+        <%= render 'process_control', f: p_f %>
+      <% end %>
+
+      <%= link_to_add_fields t('best_practices.process_controls.new'), f, :process_controls %>
     </div>
-  </div>
-
-  <div id="process_controls">
-    <%= f.simple_fields_for :process_controls, nested_process_controls do |p_f| %>
-      <%= render 'process_control', f: p_f %>
-    <% end %>
-
-    <%= link_to_add_fields t('best_practices.process_controls.new'), f, :process_controls %>
-  </div>
+  <% end %>
 
   <hr />
 
