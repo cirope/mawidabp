@@ -30,6 +30,7 @@ module LinksHelper
   end
 
   private
+
     def link_with_icon(options = {}, *args)
       arg_options = args.extract_options!
 

@@ -10,4 +10,12 @@ module BestPracticesHelper
 
     best_practice.shared ? icon : ''
   end
+
+  def process_control_path process_control
+    if process_control.persisted?
+      edit_best_practice_process_control_path @best_practice, process_control
+    else
+      new_best_practice_process_control_path @best_practice
+    end
+  end
 end

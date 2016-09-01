@@ -1,15 +1,12 @@
 class ProcessControl < ActiveRecord::Base
+  include Auditable
   include ParameterSelector
   include Comparable
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
+  include ProcessControls::ControlObjectives
+  include ProcessControls::DestroyValidation
+  include ProcessControls::Obsolecence
 
   alias_attribute :label, :name
-
-  # Callbacks
-  before_destroy :can_be_destroyed?
 
   # Named scopes
   scope :list, -> {
@@ -45,10 +42,6 @@ class ProcessControl < ActiveRecord::Base
 
   # Relaciones
   belongs_to :best_practice
-  has_many :control_objectives, -> { order("#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('order')} ASC") },
-    dependent: :destroy
-
-  accepts_nested_attributes_for :control_objectives, allow_destroy: true
 
   def <=>(other)
     if other.kind_of?(ProcessControl)
@@ -73,20 +66,5 @@ class ProcessControl < ActiveRecord::Base
 
   def informal
     best_practice.try(:name)
-  end
-
-  def can_be_destroyed?
-    unless self.control_objectives.all? { |co| co.can_be_destroyed? }
-      errors = self.control_objectives.map do |co|
-        co.errors.full_messages.join(APP_ENUM_SEPARATOR)
-      end
-
-      self.errors.add :base, errors.reject { |e| e.blank? }.join(
-        APP_ENUM_SEPARATOR)
-
-      false
-    else
-      true
-    end
   end
 end

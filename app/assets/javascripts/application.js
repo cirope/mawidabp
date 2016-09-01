@@ -21,6 +21,9 @@
 //= require dynamic_form
 //= require effect_helper
 //= require date_pickers
+//= require fetch
+//= require hide
+//= require show
 //= require common
 //= require extensions
 //= require form_modification
@@ -32,6 +35,7 @@
 //= require control_objective_items
 //= require findings
 //= require organizations
+//= require process_controls
 //= require reviews
 //= require touch
 //= require users

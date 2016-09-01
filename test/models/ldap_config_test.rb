@@ -106,6 +106,8 @@ class LdapConfigTest < ActiveSupport::TestCase
     role      = roles :admin_second_role
     corp_role = roles :admin_second_alphabet_role
 
+    user.update! manager_id: users(:corporate_user).id
+
     assert user.organization_roles.map(&:role_id).exclude?(role.id)
     assert user.organization_roles.map(&:role_id).exclude?(corp_role.id)
 
@@ -116,5 +118,6 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert user.reload.organization_roles.map(&:role_id).include?(role.id)
     assert user.organization_roles.map(&:role_id).include?(corp_role.id)
     assert_equal user.id, User.find_by(user: 'new_user').manager_id
+    assert_nil user.manager_id
   end
 end

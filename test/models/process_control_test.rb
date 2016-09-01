@@ -51,8 +51,7 @@ class ProcessControlTest < ActiveSupport::TestCase
     end
 
     assert_equal 1, @process_control.errors.size
-    assert_equal I18n.t('control_objective.errors.related'),
-      @process_control.errors.full_messages.join
+    assert_error @process_control, :base, :invalid
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

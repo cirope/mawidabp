@@ -104,6 +104,7 @@ es:
         description: 'Descripción'
         obsolete: 'Obsoleta'
         shared: 'Compartida'
+        process_controls: 'Proceso'
       best_practice/process_controls:
         name: 'Proceso'
         order: 'Proceso (orden)'
