@@ -750,11 +750,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     conclusion_review_notification:
       title: "Informe de auditoría %{review}"
       body_title: "Se adjuntan los siguientes documentos: %{elements}"
-    findings_expiration_warning:
-      title: "Notificación de observaciones cercanas al vencimiento"
-      body_title:
-        one: "La siguiente observación / oportunidad de mejora está próxima a vencer"
-        other: "Las siguientes observaciones / oportunidades de mejora están próximas a vencer"
     footer:
       email_label: "Correo (preferentemente)"
       phone_label: "Teléfono"

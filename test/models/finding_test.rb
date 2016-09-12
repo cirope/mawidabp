@@ -996,6 +996,39 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
+  test 'remember users about expired findings' do
+    Organization.current_id = nil
+    assert_equal 3, Finding.expired.size
+
+    review_codes_by_user = {}
+
+    Finding.expired.each do |finding|
+      finding.finding_user_assignments.map(&:user).each do |user|
+        assert !user.findings.expired.empty?
+        review_codes_by_user[user] ||= []
+        review_codes_by_user[user] |= user.findings.expired.map(&:review_code)
+      end
+    end
+
+    assert(Finding.expired.all? { |finding| finding.follow_up_date < Time.zone.today })
+
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+
+    assert_difference 'ActionMailer::Base.deliveries.size', 6 do
+      Finding.remember_users_about_expiration
+    end
+
+    review_codes_by_user.each do |user, review_codes|
+      ActionMailer::Base.deliveries.each do |mail|
+        if mail.to.include?(user.email)
+          assert review_codes.all? { |r_c| mail.body.match(Regexp.new(r_c)) }
+        end
+      end
+    end
+  end
+
   test 'mark stale and confirmed findings as unanswered' do
     Organization.current_id = nil
     # Sólo funciona si no es un fin de semana

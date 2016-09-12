@@ -45,6 +45,8 @@ gem 'capistrano-rails'
 gem 'capistrano-rbenv'
 gem 'capistrano-sidekiq'
 
+gem 'where-or' # TODO: remove when Rails 5.0
+
 group :development do
   gem 'unicorn-rails'
   gem 'web-console'
