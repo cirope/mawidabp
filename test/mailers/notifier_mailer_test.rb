@@ -294,6 +294,19 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert_equal user.email, response.to.first
   end
 
+  test 'deliver findings expired warning' do
+    user = User.find(users(:administrator_user).id)
+    response = NotifierMailer.findings_expired_warning(user, user.findings).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier_mailer.findings_expired_warning.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier_mailer.findings_expired_warning.body_title',
+        :count => user.findings.size)), response.body.decoded
+    assert_equal user.email, response.to.first
+  end
+
   test 'deliver conclusion final review expiration warning' do
     user = User.find(users(:administrator_user).id)
     cfr = ConclusionReview.find(conclusion_reviews(:conclusion_current_final_review).id)

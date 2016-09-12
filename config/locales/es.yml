@@ -761,6 +761,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       body_title:
         one: "El siguiente hallazgo está próximo a vencer"
         other: "Los siguientes hallazgos están próximos a vencer"
+    findings_expired_warning:
+      title: "Notificación de hallazgos vencidos"
+      body_title:
+        one: "El siguiente hallazgo está vencido"
+        other: "Los siguientes hallazgos están vencidos"
     footer:
       email_label: "Correo"
       warning: "Por favor, *no contestar* el presente correo."

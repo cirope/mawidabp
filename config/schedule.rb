@@ -18,6 +18,10 @@ every 1.day, at: '20:00' do
   runner methods.join('; ')
 end
 
+every :thursday, at: '20:00' do
+  runner 'Finding.remember_users_about_expiration'
+end
+
 every 1.hour do
   command "cd #{path} && bundle exec cap localhost sidekiq:restart"
 end

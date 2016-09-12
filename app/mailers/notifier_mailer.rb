@@ -216,6 +216,16 @@ class NotifierMailer < ActionMailer::Base
          subject: prefixes.upcase + t('notifier_mailer.findings_expiration_warning.title')
   end
 
+  def findings_expired_warning(user, findings)
+    @grouped_findings = findings.group_by(&:organization)
+    prefixes = @grouped_findings.keys.map {|o| "[#{o.prefix}]" }.join(' ')
+
+    prefixes << ' ' unless prefixes.blank?
+
+    mail to: [user.email],
+         subject: prefixes.upcase + t('notifier_mailer.findings_expired_warning.title')
+  end
+
   def conclusion_final_review_expiration_warning(user, cfr)
     @cfr = cfr
 
