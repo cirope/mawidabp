@@ -358,7 +358,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'next status list function' do
     Finding::STATUS.each do |status, value|
       keys = @finding.next_status_list(value).keys
-      expected_keys = Finding::STATUS_TRANSITIONS[status].map(&:to_s)
+      expected_keys = Finding::STATUS_TRANSITIONS_WITH_FINAL_REVIEW[status].map(&:to_s)
 
       assert_equal expected_keys.size, keys.size
       assert keys.all? { |k| expected_keys.include?(k) }
