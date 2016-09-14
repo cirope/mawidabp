@@ -2,11 +2,12 @@ module Findings::State
   extend ActiveSupport::Concern
 
   included do
-    STATUS                      = status
-    STATUS_TRANSITIONS          = status_transitions
-    FINAL_STATUS                = final_status
-    PENDING_STATUS              = pending_status
-    EXCLUDE_FROM_REPORTS_STATUS = exclude_from_reports_status
+    STATUS                               = status
+    STATUS_TRANSITIONS                   = status_transitions
+    STATUS_TRANSITIONS_WITH_FINAL_REVIEW = status_transitions final: true
+    FINAL_STATUS                         = final_status
+    PENDING_STATUS                       = pending_status
+    EXCLUDE_FROM_REPORTS_STATUS          = exclude_from_reports_status
 
     define_state_scopes
     define_state_methods
@@ -32,20 +33,20 @@ module Findings::State
         }.with_indifferent_access.freeze
       end
 
-      def status_transitions
+      def status_transitions final: false
         {
-          confirmed:            confirmed_transitions,
-          unconfirmed:          unconfirmed_transitions,
-          unanswered:           unanswered_transitions,
-          being_implemented:    being_implemented_transitions,
-          implemented:          implemented_transitions,
-          implemented_audited:  implemented_audited_transitions,
-          assumed_risk:         assumed_risk_transitions,
-          notify:               notify_transitions,
-          incomplete:           incomplete_transitions,
-          repeated:             repeated_transitions,
-          revoked:              revoked_transitions,
-          criteria_mismatch:    criteria_mismatch_transitions
+          confirmed:           confirmed_transitions(final),
+          unconfirmed:         unconfirmed_transitions(final),
+          unanswered:          unanswered_transitions(final),
+          being_implemented:   being_implemented_transitions(final),
+          implemented:         implemented_transitions(final),
+          implemented_audited: implemented_audited_transitions(final),
+          assumed_risk:        assumed_risk_transitions(final),
+          notify:              notify_transitions(final),
+          incomplete:          incomplete_transitions(final),
+          repeated:            repeated_transitions(final),
+          revoked:             revoked_transitions(final),
+          criteria_mismatch:   criteria_mismatch_transitions(final)
         }.with_indifferent_access.freeze
       end
 
@@ -79,51 +80,57 @@ module Findings::State
         [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked]
       end
 
-      def confirmed_transitions
-        [:confirmed, :unanswered, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :revoked, :criteria_mismatch]
+      def confirmed_transitions final
+        [:confirmed, :unanswered, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :criteria_mismatch] |
+          (final ? [] : [:revoked])
       end
 
-      def unconfirmed_transitions
+      def unconfirmed_transitions final
         [:unconfirmed, :confirmed, :unanswered]
       end
 
-      def unanswered_transitions
-        [:unanswered, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :repeated, :revoked, :criteria_mismatch]
+      def unanswered_transitions final
+        [:unanswered, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :repeated, :criteria_mismatch] |
+          (final ? [] : [:revoked])
       end
 
-      def being_implemented_transitions
-        [:being_implemented, :implemented, :implemented_audited, :assumed_risk, :repeated, :revoked, :criteria_mismatch]
+      def being_implemented_transitions final
+        [:being_implemented, :implemented, :implemented_audited, :assumed_risk, :repeated, :criteria_mismatch] |
+          (final ? [] : [:revoked])
       end
 
-      def implemented_transitions
-        [:implemented, :being_implemented, :implemented_audited, :assumed_risk, :repeated, :revoked, :criteria_mismatch]
+      def implemented_transitions final
+        [:implemented, :being_implemented, :implemented_audited, :assumed_risk, :repeated, :criteria_mismatch] |
+          (final ? [] : [:revoked])
       end
 
-      def implemented_audited_transitions
+      def implemented_audited_transitions final
         [:implemented_audited]
       end
 
-      def assumed_risk_transitions
+      def assumed_risk_transitions final
         [:assumed_risk]
       end
 
-      def notify_transitions
-        [:notify, :incomplete, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :revoked, :criteria_mismatch]
+      def notify_transitions final
+        [:notify, :incomplete, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :criteria_mismatch] |
+          (final ? [] : [:revoked])
       end
 
-      def incomplete_transitions
-        [:incomplete, :notify, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :revoked, :criteria_mismatch]
+      def incomplete_transitions final
+        [:incomplete, :notify, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :criteria_mismatch] |
+          (final ? [] : [:revoked])
       end
 
-      def repeated_transitions
+      def repeated_transitions final
         [:repeated]
       end
 
-      def revoked_transitions
+      def revoked_transitions final
         [:revoked]
       end
 
-      def criteria_mismatch_transitions
+      def criteria_mismatch_transitions final
         [:criteria_mismatch]
       end
 
@@ -138,7 +145,9 @@ module Findings::State
 
   def next_status_list state = nil
     state_key    = STATUS.invert[state || state_was || self.state]
-    allowed_keys = STATUS_TRANSITIONS[state_key]
+    allowed_keys = review&.has_final_review? ?
+      STATUS_TRANSITIONS_WITH_FINAL_REVIEW[state_key] :
+      STATUS_TRANSITIONS[state_key]
 
     STATUS.select { |k,| allowed_keys.include? k.to_sym }
   end
