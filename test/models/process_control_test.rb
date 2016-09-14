@@ -40,18 +40,16 @@ class ProcessControlTest < ActiveSupport::TestCase
   # Prueba de eliminación de un proceso de control
   test 'destroy' do
     assert_difference 'ProcessControl.count', -1 do
-      ProcessControl.find(process_controls(:bcra_A4609_data_proccessing).id).
-        destroy
+      process_controls(:bcra_A4609_data_proccessing).destroy
     end
   end
 
   test 'destroy with asociated control objectives' do
     assert_no_difference 'ProcessControl.count' do
-      @process_control.destroy
+      assert_raise ActiveRecord::RecordNotDestroyed do
+        @process_control.destroy
+      end
     end
-
-    assert_equal 1, @process_control.errors.size
-    assert_error @process_control, :base, :invalid
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
