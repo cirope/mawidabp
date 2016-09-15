@@ -1,8 +1,5 @@
 class Cost < ActiveRecord::Base
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
+  include Auditable
 
   # Named scopes
   scope :audit, -> { where(:cost_type => 'audit') }
@@ -14,6 +11,7 @@ class Cost < ActiveRecord::Base
     :allow_nil => true, :allow_blank => true
   validates :cost, :numericality => {:greater_than_or_equal_to => 0},
     :allow_nil => true, :allow_blank => true
+  validates :description, :pdf_encoding => true
 
   # Relaciones
   belongs_to :user

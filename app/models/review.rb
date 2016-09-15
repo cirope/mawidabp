@@ -122,6 +122,7 @@ class Review < ActiveRecord::Base
     :allow_blank => true
   validates :identification, :description, :period_id, :plan_item_id,
     :organization_id, :presence => true
+  validates :identification, :description, :survey, :pdf_encoding => true
   validates :plan_item_id, :uniqueness => {:case_sensitive => false}
   validates :period_id, :plan_item_id, :numericality => {:only_integer => true},
     :allow_nil => true, :allow_blank => true

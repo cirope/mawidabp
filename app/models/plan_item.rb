@@ -44,6 +44,7 @@ class PlanItem < ActiveRecord::Base
   validates :project, :order_number, :presence => true
   validates :project, :predecessors, :length => {:maximum => 255},
     :allow_nil => true, :allow_blank => true
+  validates :project, :pdf_encoding => true
   validates :order_number, :plan_id, :business_unit_id,
     :numericality => {:only_integer => true}, :allow_nil => true
   validates_date :start

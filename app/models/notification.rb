@@ -49,6 +49,7 @@ class Notification < ActiveRecord::Base
     :allow_blank => true
   validates :confirmation_hash, :length => {:maximum => 255},
     :allow_nil => true, :allow_blank => true
+  validates :notes, :pdf_encoding => true
   validates_datetime :confirmation_date, :allow_nil => true,
     :allow_blank => true
 

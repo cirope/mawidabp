@@ -31,6 +31,7 @@ class WorkPaper < ActiveRecord::Base
     :allow_blank => true
   validates :code, :uniqueness => { :scope => :owner_id }, :on => :create,
     :allow_nil => true, :allow_blank => true
+  validates :name, :code, :description, :pdf_encoding => true
   validates_each :code, :on => :create do |record, attr, value|
     if record.check_code_prefix && !record.marked_for_destruction?
       raise 'No code_prefix is set!' unless record.code_prefix
