@@ -1,10 +1,7 @@
 class ConclusionReview < ActiveRecord::Base
+  include Auditable
   include ParameterSelector
   include ConclusionReviews::Scopes
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
 
   # Constantes
   GENERIC_COLUMNS_FOR_SEARCH = {
@@ -49,6 +46,7 @@ class ConclusionReview < ActiveRecord::Base
   # Restricciones
   validates :review_id, :organization_id, :presence => true
   validates :issue_date, :applied_procedures, :presence => true
+  validates :conclusion, :applied_procedures, :summary, pdf_encoding: true
   validates_length_of :type, :summary, :maximum => 255, :allow_nil => true,
     :allow_blank => true
   validates_date :issue_date, :allow_nil => true, :allow_blank => true

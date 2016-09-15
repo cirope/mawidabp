@@ -1,9 +1,6 @@
 class FindingAnswer < ActiveRecord::Base
+  include Auditable
   include ParameterSelector
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
 
   # Callbacks
   after_commit :send_notification_to_users
@@ -19,6 +16,7 @@ class FindingAnswer < ActiveRecord::Base
   validates :finding_id, :user_id, :file_model_id,
     :numericality => {:only_integer => true}, :allow_nil => true,
     :allow_blank => true
+  validates :answer, :auditor_comments, :pdf_encoding => true
   validates_date :commitment_date, :allow_nil => true, :allow_blank => true
   validates :commitment_date, :presence => true, :if => lambda { |fa|
     current_organization = Organization.current_id && Organization.find(Organization.current_id)

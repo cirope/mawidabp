@@ -125,6 +125,7 @@ es:
       not_an_integer: debe ser un entero
       odd: debe ser impar
       out_of_period: debe estar dentro del período
+      pdf_encoding: tiene símbolos no válidos
       record_invalid: ! 'La validación falló: %{errors}'
       taken: ya está en uso
       too_long: es demasiado largo (%{count} caracteres máximo)

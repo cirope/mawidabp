@@ -24,7 +24,7 @@ class ControlObjective < ActiveRecord::Base
   }
 
   # Restricciones
-  validates :name, presence: true
+  validates :name, pdf_encoding: true, presence: true
   validates :relevance, :risk, numericality: { only_integer: true },
     allow_nil: true, allow_blank: true
   validates_each :control do |record, attr, value|

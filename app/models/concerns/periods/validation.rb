@@ -7,8 +7,8 @@ module Periods::Validation
     validates :number, :start, :end, :description, :organization,
       presence: true
     validates :number, uniqueness: { scope: :organization }
+    validates :description, pdf_encoding: true
     validates_date :start, allow_nil: true, allow_blank: true
-    validates_date :end, allow_nil: true, allow_blank: true,
-      after: :start
+    validates_date :end, allow_nil: true, allow_blank: true, after: :start
   end
 end

@@ -19,7 +19,8 @@ class ProcessControl < ActiveRecord::Base
 
   # Restricciones
   validates :name, :order, presence: true
-  validates :name, length: { maximum: 255 }, allow_nil: true, allow_blank: true
+  validates :name, pdf_encoding: true, length: { maximum: 255 },
+    allow_nil: true, allow_blank: true
   validates :order, numericality: { only_integer: true }
   validates_each :name do |record, attr, value|
     best_practice = record.best_practice

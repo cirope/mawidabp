@@ -1,13 +1,10 @@
 class FindingRelation < ActiveRecord::Base
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
+  include Auditable
 
   # Restricciones
   validates :description, :related_finding_id, :presence => true
-  validates :description, :length => { :maximum => 255 }, :allow_nil => true,
-    :allow_blank => true
+  validates :description, :pdf_encoding => true, :length => { :maximum => 255 },
+    :allow_nil => true, :allow_blank => true
   validates_each :related_finding_id do |record, attr, value|
     repeated_relations = record.finding.finding_relations.select do |fr|
       fr.related_finding_id == value

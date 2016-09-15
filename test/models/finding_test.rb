@@ -237,6 +237,13 @@ class FindingTest < ActiveSupport::TestCase
     assert_error @finding, :origination_date,        :invalid_date
   end
 
+  test 'validates attributes encoding' do
+    @finding.title = "\n\t"
+
+    assert @finding.invalid?
+    assert_error @finding, :title, :pdf_encoding
+  end
+
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates included attributes' do
     # Debe tener una fecha de implementación por el cambio de estado

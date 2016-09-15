@@ -19,6 +19,7 @@ class WorkflowItem < ActiveRecord::Base
   # Restricciones
   validate :check_if_is_frozen
   validates :task, :order_number, :presence => true
+  validates :task, :pdf_encoding => true
   validates :predecessors, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
   validates :order_number, :workflow_id, :numericality =>
