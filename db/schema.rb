@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160915182823) do
+ActiveRecord::Schema.define(version: 20160918020315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -745,7 +745,6 @@ ActiveRecord::Schema.define(version: 20160915182823) do
     t.string   "item_type",       limit: 255
     t.string   "event",           limit: 255, null: false
     t.integer  "whodunnit"
-    t.text     "old_object"
     t.datetime "created_at"
     t.integer  "organization_id"
     t.boolean  "important"
