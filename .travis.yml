@@ -9,6 +9,7 @@ addons:
     - imagemagick
     - slapd
     - ldap-utils
+  postgresql: 9.5
 before_script:
   - 'cp config/application.example.yml config/application.yml'
   - "psql -c 'create database mawidabp_test;' -U postgres"
