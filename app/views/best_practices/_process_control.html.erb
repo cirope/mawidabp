@@ -1,11 +1,12 @@
-<% id = f.object.object_id %>
+<% id    = f.object.object_id %>
+<% fetch = f.object.new_record? || f.object.valid? %>
 
 <fieldset class="process_control">
   <div class="form-inputs row">
     <div class="col-md-10">
       <div class="media">
         <div class="pull-left toggle-visibility">
-          <%= link_to_fetch_hide id %>
+          <%= link_to_fetch_hide id, fetch ? :fetch : :show %>
         </div>
         <div class="media-body">
           <%= f.input :name, label: false, input_html: { maxlength: 255 } %>
@@ -26,9 +27,13 @@
 
   <div class="nested hidden">
     <div class="hidden" data-container-id="<%= id %>" data-index="<%= f.index %>" data-url="<%= process_control_path f.object %>">
-      <div class="alert alert-warning">
-        <%= t 'navigation.loading' %>
-      </div>
+      <% if fetch %>
+        <div class="alert alert-warning">
+          <%= t 'navigation.loading' %>
+        </div>
+      <% else %>
+        <%= render 'process_controls/form', :@process_control => f.object %>
+      <% end %>
     </div>
 
     <p>

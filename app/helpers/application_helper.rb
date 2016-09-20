@@ -238,8 +238,8 @@ module ApplicationHelper
     )
   end
 
-  def link_to_fetch_hide(id)
-    show_link = link_to('#', :data => { :fetch => id }) do
+  def link_to_fetch_hide(id, action = :fetch)
+    show_link = link_to('#', :data => { action => id }) do
       content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-right')
     end
     hide_link = link_to('#', :data => { :hide => id }) do
