@@ -10,7 +10,7 @@ Rails.application.configure do
     domain:               ENV['SMTP_DOMAIN'],
     user_name:            ENV['SMTP_USER_NAME'],
     password:             ENV['SMTP_PASSWORD'],
-    authentication:       ENV['SMTP_AUTHENTICATION'],
+    authentication:       ENV['SMTP_AUTHENTICATION'].to_sym,
     enable_starttls_auto: ENV['SMTP_ENABLE_STARTTLS_AUTO'] != 'false'
   }
 end
