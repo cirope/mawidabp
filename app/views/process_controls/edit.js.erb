@@ -1,6 +1,4 @@
 +function () {
-  console.log('edit')
-
   $('[data-container-id="<%= params[:container] %>"]').replaceWith(
     '<%= j render('form', format: :html) %>'
   )

@@ -10,6 +10,7 @@ addons:
     - imagemagick
     - slapd
     - ldap-utils
+  postgresql: 9.5
 before_script:
   - 'cp config/application.example.yml config/application.yml'
   - 'cp config/database.travis.yml config/database.yml'

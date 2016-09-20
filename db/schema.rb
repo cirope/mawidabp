@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160915182823) do
+ActiveRecord::Schema.define(version: 20160918020315) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer  "benefit_id", limit: nil,                          null: false
@@ -2767,7 +2767,6 @@ ActiveRecord::Schema.define(version: 20160915182823) do
     t.string   "item_type"
     t.string   "event",                                      null: false
     t.integer  "whodunnit",                   precision: 38
-    t.text     "old_object"
     t.datetime "created_at"
     t.boolean  "important",       limit: nil
     t.integer  "organization_id", limit: nil
