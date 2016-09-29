@@ -65,9 +65,9 @@ class NotificationsController < ApplicationController
     @notification = Notification.where(
       :status => Notification::STATUS[:unconfirmed],
       :confirmation_hash => params[:id]
-    ).first
+    ).take!
 
-    @notification.notify! params[:reject].blank? if @notification
+    @notification.notify! params[:reject].blank?
 
     go_to = {:controller => :notifications, :action => :edit,
       :id => @notification.to_param}
@@ -82,7 +82,7 @@ class NotificationsController < ApplicationController
     def set_notification
       @notification = Notification.where(
         confirmation_hash: params[:id], user_id: @auth_user.id
-      ).first
+      ).take!
     end
 
     def notification_params

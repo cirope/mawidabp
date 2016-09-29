@@ -1,36 +1,20 @@
 require 'test_helper'
 
-# Clase para probar el modelo "Notification"
 class NotificationTest < ActiveSupport::TestCase
   fixtures :notifications, :users, :findings
 
-  # Función para inicializar las variables utilizadas en las pruebas
   def setup
     set_organization
 
-    @notification = Notification.find(
-      notifications(:administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).id)
+    @notification = 
+      notifications :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed
   end
 
-  # Prueba que se realicen las búsquedas como se espera
-  test 'search' do
-    assert_kind_of Notification, @notification
-    fixture_notification = notifications(:administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed)
-    assert_equal fixture_notification.status, @notification.status
-    assert_equal fixture_notification.notes, @notification.notes
-    assert_equal fixture_notification.confirmation_hash,
-      @notification.confirmation_hash
-    assert_equal fixture_notification.confirmation_date,
-      @notification.confirmation_date
-    assert_equal fixture_notification.user_id, @notification.user_id
-  end
-
-  # Prueba la creación de una notificación
   test 'create' do
     assert_difference 'Notification.count' do
       @notification = Notification.create(
-        :user_id => users(:administrator_user).id,
-        :notes => 'New notes'
+        user_id: users(:administrator_user).id,
+        notes:  'New notes'
       )
     end
 
@@ -38,44 +22,41 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal @notification.notes, 'New notes'
   end
 
-  # Prueba de actualización de una notificacion
   test 'update' do
     new_confirmation_hash = SecureRandom.urlsafe_base64
 
     assert @notification.update(
-      :confirmation_hash => new_confirmation_hash, :notes => 'Updated notes'),
+      confirmation_hash: new_confirmation_hash, notes: 'Updated notes'),
       @notification.errors.full_messages.join('; ')
     assert_equal new_confirmation_hash, @notification.confirmation_hash
     assert_equal 'Updated notes', @notification.notes
   end
 
-  # Prueba de eliminación de notificaciones
   test 'delete' do
     assert_difference('Notification.count', -1) { @notification.destroy }
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @notification.confirmation_hash = '   '
-    @notification.user_id = nil
+    @notification.user = nil
 
     assert @notification.invalid?
     assert_error @notification, :confirmation_hash, :blank
-    assert_error @notification, :user_id, :blank
+    assert_error @notification, :user, :blank
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates formatted attributes' do
-    @notification.user_id = '12.3'
-    @notification.status = '_12'
-    @notification.user_who_confirm_id = 'x123'
     @notification.confirmation_date = '12/34/34'
 
     assert @notification.invalid?
-    assert_error @notification, :user_id, :not_an_integer
-    assert_error @notification, :status, :not_a_number
-    assert_error @notification, :user_who_confirm_id, :not_a_number
     assert_error @notification, :confirmation_date, :invalid_datetime
+  end
+
+  test 'validates included attributes' do
+    @notification.status = Notification::STATUS.values.last + 1
+
+    assert @notification.invalid?
+    assert_error @notification, :status, :inclusion
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
