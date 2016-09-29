@@ -2,17 +2,15 @@ module Notifications::Notify
   extend ActiveSupport::Concern
 
   def notify! confirmed = true
-    new_status = confirmed ?
-      Notification::STATUS[:confirmed] : Notification::STATUS[:rejected]
+    new_notification_attributes = {
+      status:            Notification::STATUS[confirmed ? :confirmed : :rejected],
+      user_who_confirm:  user,
+      confirmation_date: Time.zone.now
+    }
 
     Notification.transaction do
-      update!(
-        status:            new_status,
-        user_who_confirm:  user,
-        confirmation_date: Time.zone.now
-      )
-
-      confirm_findings new_status
+      update!          new_notification_attributes
+      confirm_findings new_notification_attributes
 
       true
     end
@@ -20,13 +18,13 @@ module Notifications::Notify
 
   private
 
-    def confirm_findings new_status
+    def confirm_findings new_notification_attributes
       findings.each do |finding|
         finding.confirmed! user if user.can_act_as_audited?
 
         finding.notifications.uniq.each do |notification|
           if should_update? notification
-            notification.update! status: new_status, user_who_confirm: user
+            notification.update! new_notification_attributes
           end
         end
       end
