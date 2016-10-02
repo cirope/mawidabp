@@ -2,7 +2,9 @@ namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      sudo 'systemctl start unicorn && systemctl reload unicorn'
+      # Just in case is not started and for the first deploy
+      sudo 'systemctl start unicorn'
+      sudo 'systemctl reload unicorn'
     end
   end
 end
