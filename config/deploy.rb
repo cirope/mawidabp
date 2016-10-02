@@ -23,5 +23,4 @@ namespace :deploy do
   after :finishing,  :cleanup
 end
 
-before 'deploy:started',   'sidekiq:quiet'
 after  'deploy:published', 'sidekiq:restart'

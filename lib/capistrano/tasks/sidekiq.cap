@@ -16,7 +16,7 @@ namespace :sidekiq do
   desc 'Quiet Sidekiq workers and stop accepting jobs'
   task :quiet do
     on roles(:app) do
-      sudo 'systemctl try-reload-or-restart sidekiq'
+      sudo 'systemctl reload sidekiq'
     end
   end
 
