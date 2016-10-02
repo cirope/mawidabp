@@ -44,7 +44,6 @@ gem 'capistrano'
 gem 'capistrano-bundler'
 gem 'capistrano-rails'
 gem 'capistrano-rbenv'
-gem 'capistrano-sidekiq'
 
 gem 'where-or' # TODO: remove when Rails 5.0
 
