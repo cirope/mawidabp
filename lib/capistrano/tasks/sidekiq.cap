@@ -22,7 +22,8 @@ namespace :sidekiq do
 
   desc 'Restart sidekiq workers'
   task :restart do
-    stop
-    start
+    on roles(:app) do
+      sudo 'systemctl restart sidekiq'
+    end
   end
 end
