@@ -1,6 +1,14 @@
 module BusinessUnits::Scopes
   extend ActiveSupport::Concern
 
+  included do
+    scope :list, -> {
+      joins(:business_unit_type).where(business_unit_types: {
+        organization_id: Organization.current_id
+      }).references(:business_unit_types)
+    }
+  end
+
   module ClassMethods
     def by_names *names
       conditions, parameters = *name_conditions(names)

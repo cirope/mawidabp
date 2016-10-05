@@ -1,13 +1,10 @@
 class BusinessUnit < ActiveRecord::Base
+  include Auditable
   include BusinessUnits::Scopes
   include ParameterSelector
   include Trimmer
 
   trimmed_fields :name
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
 
   # Alias de atributos
   alias_attribute :label, :name
