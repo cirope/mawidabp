@@ -1,6 +1,6 @@
 set :stage, :production
 set :rails_env, 'production'
-set :branch, 'master'
+set :branch, 'c-bica'
 set :log_level, :error
 
 role :web, %w{deployer@127.0.0.1}
