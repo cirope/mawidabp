@@ -47,7 +47,7 @@ module FindingsHelper
     else
       review = form.object.control_objective_item.try(:review)
       fras = (review.try(:finding_review_assignments) || []).reject do |fra|
-        fra.finding.repeated? && fra.finding.class != form.object.class
+        fra.finding.repeated? || fra.finding.class != form.object.class
       end
       findings = fras.map { |fra| [fra.finding, fra.finding_id.to_i] }
       url = url_for controller: form.object.class.to_s.tableize, action: :show, id: '[FINDING_ID]'
