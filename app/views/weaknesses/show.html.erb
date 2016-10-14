@@ -80,7 +80,12 @@
   <h3><%= t('finding.repeated_ancestors') %></h3>
   <ul>
     <% repeated_ancestors.each do |repeated_ancestor| %>
-      <li><%= repeated_ancestor %></li>
+      <li>
+        <%= link_to(
+          repeated_ancestor,
+          finding_path(repeated_ancestor.try(:pending?) ? 'incomplete' : 'complete', repeated_ancestor)
+        ) %>
+      </li>
     <% end %>
   </ul>
 <% end %>
@@ -89,7 +94,12 @@
   <h3><%= t('finding.repeated_children') %></h3>
   <ul>
     <% repeated_children.each do |repeated_child| %>
-      <li><%= repeated_child %></li>
+      <li>
+        <%= link_to(
+          repeated_child,
+          finding_path(repeated_child.try(:pending?) ? 'incomplete' : 'complete', repeated_child)
+        ) %>
+      </li>
     <% end %>
   </ul>
 <% end %>
