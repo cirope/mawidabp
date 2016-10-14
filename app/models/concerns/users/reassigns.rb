@@ -82,7 +82,6 @@ module Users::Reassigns
 
       unless rua.update user_id: other.id
         reallocation_errors << review_reallocation_errors_for(rua.review, rua.errors)
-        o
       end
     end
 
