@@ -83,7 +83,7 @@
       <li>
         <%= link_to(
           repeated_ancestor,
-          finding_path(repeated_ancestor.try(:pending?) ? 'incomplete' : 'complete', repeated_ancestor)
+          finding_path(repeated_ancestor.pending? ? 'incomplete' : 'complete', repeated_ancestor)
         ) %>
       </li>
     <% end %>
@@ -97,7 +97,7 @@
       <li>
         <%= link_to(
           repeated_child,
-          finding_path(repeated_child.try(:pending?) ? 'incomplete' : 'complete', repeated_child)
+          finding_path(repeated_child.pending? ? 'incomplete' : 'complete', repeated_child)
         ) %>
       </li>
     <% end %>
