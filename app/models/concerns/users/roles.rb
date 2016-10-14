@@ -73,11 +73,14 @@ module Users::Roles
   end
 
   def can_act_as_audited?
-    audited? || executive_manager?
+    audited? || executive_manager? || admin? || committee?
   end
 
   def can_act_as_audited_on? organization_id
-    audited_on?(organization_id) || executive_manager_on?(organization_id)
+    audited_on?(organization_id) ||
+      executive_manager_on?(organization_id) ||
+      admin_on?(organization_id) ||
+      committee_on?(organization_id)
   end
 
   private
