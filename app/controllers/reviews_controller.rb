@@ -223,12 +223,14 @@ class ReviewsController < ApplicationController
     @process_control = ProcessControl.find params[:id]
     @findings = Finding.where(
       [
+        "#{Finding.quoted_table_name}.#{Finding.qcn('organization_id')} = :organization_id",
         "#{Finding.quoted_table_name}.#{Finding.qcn('final')} = :false",
         "#{Finding.quoted_table_name}.#{Finding.qcn('state')} IN(:states)",
         "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL",
         "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('process_control_id')} = :process_control_id"
       ].join(' AND '),
       false: false,
+      organization_id: Organization.current_id,
       states: [Finding::STATUS[:being_implemented], Finding::STATUS[:implemented]],
       process_control_id: @process_control.id
     ).includes(

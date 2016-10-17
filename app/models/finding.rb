@@ -118,20 +118,6 @@ class Finding < ActiveRecord::Base
     self.review.try(:organization)
   end
 
-  def is_in_a_final_review?
-    self.control_objective_item.try(:review).try(:has_final_review?)
-  end
-
-  def must_have_a_comment?
-    self.being_implemented? && self.was_implemented? &&
-      !self.comments.detect { |c| c.new_record? && c.valid? }
-  end
-
-  def can_not_be_revoked?
-    self.revoked? && self.state_changed? &&
-      (self.repeated_of || self.is_in_a_final_review?)
-  end
-
   def next_code(review = nil)
     raise 'Must be implemented in the subclasses'
   end
@@ -174,8 +160,7 @@ class Finding < ActiveRecord::Base
   end
 
   def commitment_date
-    self.finding_answers.where('commitment_date IS NOT NULL').first.try(
-      :commitment_date)
+    finding_answers.where.not(commitment_date: nil).first&.commitment_date
   end
 
   def process_owners

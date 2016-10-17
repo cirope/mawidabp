@@ -104,7 +104,7 @@ class FindingsController < ApplicationController
   def edit
     @title = t 'finding.edit_title'
 
-    if @finding.nil? ||
+    if !@finding.pending? ||
         (@auth_user.can_act_as_audited? && !@finding.users.include?(@auth_user))
       redirect_to findings_url
     end
@@ -119,7 +119,7 @@ class FindingsController < ApplicationController
   def update
     @title = t 'finding.edit_title'
 
-    if @finding.nil? ||
+    if !@finding.pending? ||
         (@auth_user.can_act_as_audited? && !@finding.users.include?(@auth_user))
       raise 'Finding can not be updated'
     end
@@ -178,15 +178,15 @@ class FindingsController < ApplicationController
 
       conditions[:state] = Finding::STATUS.values - [Finding::STATUS[:incomplete]] + [nil]
 
-      @finding = Finding.includes(includes).where(conditions).references(
+      @finding = scoped_findings.includes(includes).where(conditions).references(
         :periods, :organizations
-      ).first
+      ).take!
 
       # TODO: eliminar cuando se corrija el problema que hace que include solo
       # traiga el primer usuario
-      @finding.try(:reload)
+      @finding.reload
 
-      @finding.finding_prefix = true if @finding
+      @finding.finding_prefix = true
     end
 
     def finding_params

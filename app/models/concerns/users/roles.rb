@@ -45,6 +45,7 @@ module Users::Roles
     roles(organization.id).each_with_object({}) do |role, privileges|
       role.privileges.each do |privilege|
         module_name = privilege.module
+
         privileges[module_name]            ||= HashWithIndifferentAccess.new
         privileges[module_name][:read]     ||= privilege.read?
         privileges[module_name][:modify]   ||= privilege.modify?
@@ -73,11 +74,11 @@ module Users::Roles
   end
 
   def can_act_as_audited?
-    audited? || executive_manager?
+    audited? || executive_manager? || admin?
   end
 
   def can_act_as_audited_on? organization_id
-    audited_on?(organization_id) || executive_manager_on?(organization_id)
+    audited_on?(organization_id) || executive_manager_on?(organization_id) || admin_on?(organization_id)
   end
 
   private
@@ -110,7 +111,13 @@ module Users::Roles
     def user_act_as_changed?
       old_user = User.find id
 
-      (old_user.auditor? && can_act_as_audited?) || (old_user.can_act_as_audited? && auditor?)
+      organization_roles.reject(&:marked_for_destruction?).any? do |organization_role|
+        o_id               = organization_role.organization_id
+        auditor_to_audited = old_user.auditor_on?(o_id) && can_act_as_audited_on?(o_id)
+        audited_to_auditor = old_user.can_act_as_audited_on?(o_id) && auditor_on?(o_id)
+
+        auditor_to_audited || audited_to_auditor
+      end
     end
 
     def mark_roles_as_changed organization_role

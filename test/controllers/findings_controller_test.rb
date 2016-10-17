@@ -197,23 +197,26 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'unauthorized edit finding' do
     login user: users(:audited_second_user)
-    get :edit, :completed => 'complete',
-      :id => findings(:iso_27000_security_policy_3_1_item_weakness).id
+
     # No está autorizado el usuario a ver la observación
-    assert_redirected_to findings_url('complete')
+    assert_raise ActiveRecord::RecordNotFound do
+      get :edit, :completed => 'complete',
+        :id => findings(:iso_27000_security_policy_3_1_item_weakness).id
+    end
   end
 
   test 'unauthorized edit incomplete finding' do
     login user: users(:audited_user)
-    get :edit, :completed => 'incomplete',
-      :id => findings(:iso_27000_security_organization_4_2_item_editable_weakness_incomplete).id
 
     # No está autorizado el usuario a ver la observación por estar incompleta
-    assert_redirected_to findings_url('incomplete')
+    assert_raise ActiveRecord::RecordNotFound do
+      get :edit, :completed => 'incomplete',
+        :id => findings(:iso_27000_security_organization_4_2_item_editable_weakness_incomplete).id
+    end
   end
 
   test 'update finding' do
-    login
+    login user: users(:supervisor_user)
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -295,7 +298,7 @@ class FindingsControllerTest < ActionController::TestCase
                 {
                   :answer => 'New answer',
                   :auditor_comments => 'New auditor comments',
-                  :user_id => users(:administrator_user).id,
+                  :user_id => users(:supervisor_user).id,
                   :notify_users => '1',
                   :file_model_attributes => {
                     :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
@@ -432,7 +435,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'update finding and notify to the new user' do
-    login
+    login user: users(:supervisor_user)
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
