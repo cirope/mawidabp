@@ -180,13 +180,13 @@ class FindingsController < ApplicationController
 
       @finding = Finding.list.includes(includes).where(conditions).references(
         :periods, :organizations
-      ).first
+      ).take!
 
       # TODO: eliminar cuando se corrija el problema que hace que include solo
       # traiga el primer usuario
-      @finding.try(:reload)
+      @finding.reload
 
-      @finding.finding_prefix = true if @finding
+      @finding.finding_prefix = true
     end
 
     def finding_params
