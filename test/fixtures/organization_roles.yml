@@ -6,12 +6,12 @@ admin_role_for_administrator_user_in_cirope:
 admin_role_for_administrator_user_in_google:
   user: administrator_user
   organization: google
-  role: admin_role
+  role: admin_google_role
 
 admin_role_for_administrator_user_in_twitter:
   user: administrator_user
   organization: twitter
-  role: admin_role
+  role: admin_twitter_role
 
 admin_second_role_for_administrator_second_user_in_google:
   user: administrator_second_user

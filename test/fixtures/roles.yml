@@ -7,10 +7,20 @@
   updated_at: <%= 2.days.ago.to_s(:db) %>
 <% end %>
 
+admin_google_role:
+  name: Administrator Google
+  role_type: <%= Role::TYPES[:admin] %>
+  organization: google
+
 admin_second_role:
   name: Administrator Second
   role_type: <%= Role::TYPES[:admin] %>
   organization: google
+
+admin_twitter_role:
+  name: Administrator Twitter
+  role_type: <%= Role::TYPES[:admin] %>
+  organization: twitter
 
 auditor_second_role:
   name: Auditor Second

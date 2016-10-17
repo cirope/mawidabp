@@ -213,7 +213,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'update finding' do
-    login
+    login user: users(:supervisor_user)
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -295,7 +295,7 @@ class FindingsControllerTest < ActionController::TestCase
                 {
                   :answer => 'New answer',
                   :auditor_comments => 'New auditor comments',
-                  :user_id => users(:administrator_user).id,
+                  :user_id => users(:supervisor_user).id,
                   :notify_users => '1',
                   :file_model_attributes => {
                     :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
@@ -432,7 +432,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'update finding and notify to the new user' do
-    login
+    login user: users(:supervisor_user)
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true

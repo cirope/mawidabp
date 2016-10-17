@@ -38,7 +38,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
           :answer => 'New answer',
           :auditor_comments => 'New auditor comments',
           :finding => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
-          :user => users(:administrator_user),
+          :user => users(:supervisor_user),
           :file_model => file_models(:text_file),
           :notify_users => false
         )
@@ -66,7 +66,6 @@ class FindingAnswerTest < ActiveSupport::TestCase
     end
   end
 
-  # Prueba la creación de una respuesta a una observación
   test 'auditor create with notification' do
     counts_array = ['FindingAnswer.count', 'ActionMailer::Base.deliveries.size']
 
@@ -75,7 +74,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
         :answer => 'New answer',
         :auditor_comments => 'New auditor comments',
         :finding => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
-        :user => users(:administrator_user),
+        :user => users(:supervisor_user),
         :file_model => file_models(:text_file),
         :notify_users => true
       )

@@ -10,17 +10,7 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
 
     @finding_user_assignment = FindingUserAssignment.find(
       finding_user_assignments(
-        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_administrator_user).id)
-  end
-
-  # Prueba que se realicen las búsquedas como se espera
-  test 'search' do
-    fixture_assignment = finding_user_assignments(
-      :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_administrator_user)
-    assert_kind_of FindingUserAssignment, @finding_user_assignment
-    assert_equal fixture_assignment.user_id, @finding_user_assignment.user_id
-    assert_equal fixture_assignment.finding_id,
-      @finding_user_assignment.finding_id
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_manager_user).id)
   end
 
   # Prueba la creación de una asignación de usuario

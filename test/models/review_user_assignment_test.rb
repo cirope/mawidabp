@@ -202,13 +202,20 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
   end
 
   test 'try to delete the last audited user in a review with pending findings' do
-    review_user_assignment = ReviewUserAssignment.find(
-      review_user_assignments(:review_with_conclusion_audited).id)
-    findings_size =
-      review_user_assignment.user.findings.all_for_reallocation_with_review(
-      review_user_assignment.review).size
+    review_user_assignment = review_user_assignments :review_with_conclusion_audited
+    review = review_user_assignment.review
+    user = review_user_assignment.user
+    findings = user.findings.all_for_reallocation_with_review(review)
 
-    assert_not_equal 0, findings_size
+    assert_not_equal 0, findings.size
+
+    findings.each do |finding|
+      finding.finding_user_assignments.each do |fua|
+        if fua.user_id != user.id && fua.user.can_act_as_audited?
+          fua.destroy!
+        end
+      end
+    end
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -220,11 +227,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
       end
     end
 
-    new_finding_size =
-      review_user_assignment.user.findings.all_for_reallocation_with_review(
-      review_user_assignment.review).size
-
-    assert_equal findings_size, new_finding_size
+    assert_equal findings.size, findings.reload.size
   end
 
   test 'can be modified' do
