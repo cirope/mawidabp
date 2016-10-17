@@ -178,7 +178,7 @@ class FindingsController < ApplicationController
 
       conditions[:state] = Finding::STATUS.values - [Finding::STATUS[:incomplete]] + [nil]
 
-      @finding = Finding.includes(includes).where(conditions).references(
+      @finding = Finding.list.includes(includes).where(conditions).references(
         :periods, :organizations
       ).first
 
