@@ -905,6 +905,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       one: "El código de papel de trabajo %{duplicated_work_papers} está duplicado"
       other: "Los siguientes códigos de papeles de trabajo están duplicados: %{duplicated_work_papers}"
     user_assignment:
+      type_viewer: "Veedor"
       type_auditor: "Auditor"
       type_supervisor: "Supervisor"
       type_manager: "Gerente"

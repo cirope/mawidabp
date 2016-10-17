@@ -5,6 +5,7 @@ class ReviewUserAssignment < ActiveRecord::Base
 
   # Constantes
   TYPES = {
+    viewer: -2,
     audited: -1,
     auditor: 0,
     supervisor: 1,
