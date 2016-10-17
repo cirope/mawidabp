@@ -391,10 +391,10 @@ class FindingTest < ActiveSupport::TestCase
 
     finding.finding_answers.build(
       :answer => 'New administrator answer',
-      :user => users(:administrator_user)
+      :user => users(:supervisor_user)
     )
 
-    # La respuesta es de un usuario administrador
+    # La respuesta es de un usuario supervisor
     assert finding.unconfirmed?
     assert finding.notifications.not_confirmed.any? { |n| n.user.can_act_as_audited? }
 
@@ -1058,6 +1058,7 @@ class FindingTest < ActiveSupport::TestCase
       review_codes_by_user[user] = findings_by_user.map(&:review_code)
     end
 
+    assert !review_codes_by_user.empty?
     unanswered_finding = Finding.where(
       :state => Finding::STATUS[:unanswered]
     ).count

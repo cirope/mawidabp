@@ -7,14 +7,14 @@ class NotificationTest < ActiveSupport::TestCase
     set_organization
 
     @notification = 
-      notifications :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed
+      notifications :supervisor_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed
   end
 
   test 'create' do
     assert_difference 'Notification.count' do
       @notification = Notification.create(
-        user_id: users(:administrator_user).id,
-        notes:  'New notes'
+        user_id: users(:supervisor_user).id,
+        notes: 'New notes'
       )
     end
 

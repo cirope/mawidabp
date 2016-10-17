@@ -173,7 +173,7 @@ class UsersControllerTest < ActionController::TestCase
               send_notification_email: true,
               organization_roles_attributes: [
                 {
-                  organization_id: organizations(:cirope).id,
+                  organization_id: organizations(:google).id,
                   role_id: roles(:admin_second_role).id
                 }
               ],
