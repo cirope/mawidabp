@@ -49,15 +49,17 @@
     :url => findings_path(:completed => params[:completed]),
     :extra_parameters => {:completed => params[:completed]}
   },
-  :columns => @query.blank? ? Finding::COLUMNS_FOR_SEARCH.keys : @columns
+  :columns => @query.blank? ?
+    Finding::COLUMNS_FOR_SEARCH.keys - (current_organization.corporate? ? [] : ['organization']) :
+    @columns
 } %>
 
 <table class="table table-condensed table-striped">
   <thead id="column_headers">
     <tr>
       <th></th>
-      <%= make_not_available_column(
-        Finding.human_attribute_name(:organization), :class => 'hidden-sm hidden-xs'
+      <%= make_filterable_column(
+        Finding.human_attribute_name(:organization), { :class => 'hidden-sm hidden-xs' }, 'organization'
       ) if current_organization.corporate? %>
       <%= make_filterable_column Review.model_name.human, nil, 'review', 'issue_date' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'hidden-xs' }, 'project' %>

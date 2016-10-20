@@ -3,11 +3,12 @@ module Findings::Search
 
   included do
     COLUMNS_FOR_SEARCH = {
-      issue_date:  issue_date_options,
-      review:      review_options,
-      project:     project_options,
-      review_code: review_code_options,
-      title:       title_options
+      issue_date:   issue_date_options,
+      organization: organization_options,
+      review:       review_options,
+      project:      project_options,
+      review_code:  review_code_options,
+      title:        title_options
     }.with_indifferent_access
   end
 
@@ -22,6 +23,10 @@ module Findings::Search
           conversion_method: ->(value) { Timeliness.parse(value, :date).to_s(:db) },
           regexp:            SEARCH_DATE_REGEXP
         }
+      end
+
+      def organization_options
+        string_column_options_for "#{Organization.quoted_table_name}.#{Organization.qcn('prefix')}"
       end
 
       def review_options
