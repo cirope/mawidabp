@@ -4,8 +4,9 @@ module Findings::Csv
   LINE_BREAK             = "\r\n"
   LINE_BREAK_REPLACEMENT = " | "
 
-  def to_a
+  def to_csv_a corporate
     [
+      (organization.prefix if corporate),
       review.identification,
       review.plan_item.project,
       review_code,
@@ -24,7 +25,7 @@ module Findings::Csv
       audit_comments,
       answer,
       finding_answers_text
-    ].map { |item| item&.gsub(LINE_BREAK, LINE_BREAK_REPLACEMENT) }
+    ].compact.map { |item| item&.gsub(LINE_BREAK, LINE_BREAK_REPLACEMENT) }
   end
 
   private
@@ -70,11 +71,11 @@ module Findings::Csv
     end
 
   module ClassMethods
-    def to_csv completed = 'incomplete'
+    def to_csv completed: 'incomplete', corporate: false
       CSV.generate(col_sep: ';') do |csv|
-        csv << column_headers(completed)
+        csv << column_headers(completed, corporate)
 
-        prepared_for_csv.each { |f| csv << f.to_a }
+        prepared_for_csv.each { |f| csv << f.to_csv_a(corporate) }
       end
     end
 
@@ -91,8 +92,9 @@ module Findings::Csv
         )
       end
 
-      def column_headers completed
+      def column_headers completed, corporate
         [
+          (Organization.model_name.human if corporate),
           Review.model_name.human,
           PlanItem.human_attribute_name('project'),
           Weakness.human_attribute_name('review_code'),
@@ -111,7 +113,7 @@ module Findings::Csv
           Finding.human_attribute_name('audit_comments'),
           Finding.human_attribute_name('answer'),
           I18n.t('finding.finding_answers')
-        ]
+        ].compact
       end
 
       def date_label completed

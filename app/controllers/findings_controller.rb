@@ -63,7 +63,7 @@ class FindingsController < ApplicationController
         :control_objective_item => {
           :review => [:conclusion_final_review, :period, :plan_item]
         }
-      }, :users
+      }, :users, :organization
     ).where(@conditions).order(
       @order_by || [
         default_sort_column,
@@ -81,7 +81,14 @@ class FindingsController < ApplicationController
           redirect_to finding_url(params[:completed], @findings.first)
         end
       } # index.html.erb
-      format.csv { render csv: @findings.to_csv(params[:completed]), filename: @title.downcase }
+      format.csv {
+        csv_options = {
+          completed: params[:completed],
+          corporate: current_organization.corporate?
+        }
+
+        render csv: @findings.to_csv(csv_options), filename:  @title.downcase
+      }
     end
   end
 
