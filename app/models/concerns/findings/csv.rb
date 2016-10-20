@@ -84,6 +84,7 @@ module Findings::Csv
       def prepared_for_csv
         includes(
           review: :plan_item,
+          finding_answers: :user,
           control_objective_item: {
             control_objective: {
               process_control: :best_practice
