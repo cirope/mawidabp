@@ -75,23 +75,11 @@ module Findings::Csv
       CSV.generate(col_sep: ';') do |csv|
         csv << column_headers(completed, corporate)
 
-        prepared_for_csv.each { |f| csv << f.to_csv_a(corporate) }
+        all.each { |f| csv << f.to_csv_a(corporate) }
       end
     end
 
     private
-
-      def prepared_for_csv
-        includes(
-          review: :plan_item,
-          finding_answers: :user,
-          control_objective_item: {
-            control_objective: {
-              process_control: :best_practice
-            }
-          }
-        )
-      end
 
       def column_headers completed, corporate
         [
