@@ -1,20 +1,31 @@
-jQuery(function() {
-  $('form:not([data-no-observe-changes])').change(function() {
-    State.unsavedData = true;
-  });
+jQuery(function () {
+  var _resetForms = function () {
+    $('form').each(function (i, form) {
+      $(form).find(':input, :checkbox').each(function (i, e) {
+        var $e         = $(e)
+        var resetValue = $e.data('resetValue')
 
-  // Verifica antes de cerrar la ventana que los datos no hayan cambiado
-  $(window).bind('beforeunload', function() {
+        if (resetValue) $e.val(resetValue)
+      })
+    })
+  }
+
+  var _onBeforeUnload = function (event) {
     if (State.unsavedData) {
-      $('form').each(function(i, form) {
-        $(form).find(':input, :checkbox').each(function(i, e) {
-          if($(e).data('resetValue')) { $(e).val($(e).data('resetValue')); }
-        });
-      });
+      _resetForms()
 
-      return State.unsavedDataWarning;
-    } else {
-      return undefined;
+      if (event) event.returnValue = State.unsavedDataWarning
+
+      return State.unsavedDataWarning
     }
-  });
-});
+  }
+
+  $('form:not([data-no-observe-changes])').change(function () {
+    State.unsavedData = true
+  })
+
+  if (window.addEventListener)
+    window.addEventListener('beforeunload', _onBeforeUnload)
+  else
+    window.onbeforeunload = _onBeforeUnload
+})
