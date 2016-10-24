@@ -1,7 +1,7 @@
 <% if params[:control_objective].blank? %>
   <%= render :partial => 'shared/search', :locals => {
     :options => {:columns_for_sort => Weakness.columns_for_sort},
-    :columns => @query.blank? ? Weakness::COLUMNS_FOR_SEARCH.keys : @columns
+    :columns => @query.blank? ? (Weakness::COLUMNS_FOR_SEARCH.keys - ['organization']) : @columns
   } %>
 <% end %>
 <table class="table table-condensed table-striped">
