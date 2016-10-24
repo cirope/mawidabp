@@ -356,7 +356,7 @@ class ReviewsController < ApplicationController
           :id, :assignment_type, :user_id, :include_signature, :owner, :_destroy
         ],
         control_objective_items_attributes: [
-          :id, :control_objective_id, :control_objective_text, :order_number, :_destroy,
+          :id, :control_objective_id, :control_objective_text, :relevance, :order_number, :_destroy,
           control_attributes: [
             :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
           ]

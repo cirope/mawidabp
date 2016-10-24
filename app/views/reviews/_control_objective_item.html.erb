@@ -5,6 +5,7 @@
       <%= f.input :order_number, as: :hidden %>
       <%= f.input :control_objective_id, as: :hidden %>
       <%= f.input :control_objective_text, as: :hidden %>
+      <%= f.input :relevance, as: :hidden %>
       <%= f.simple_fields_for :control do |c_f| %>
         <%= c_f.input :control, as: :hidden %>
         <%= c_f.input :effects, as: :hidden %>
