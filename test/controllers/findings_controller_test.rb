@@ -176,7 +176,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'edit finding' do
-    login
+    login user: users(:auditor_user)
     get :edit, :completed => 'incomplete', :id =>
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
