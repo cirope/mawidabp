@@ -72,6 +72,16 @@ es:
         notice: 'Configuración actualizada correctamente'
         stale: 'La configuración no fue actualizada, intente nuevamente'
 
+    tags:
+      create:
+        notice: 'Etiqueta creada'
+      update:
+        notice: 'Etiqueta actualizada'
+        alert:  ''
+      destroy:
+        notice: 'Etiqueta eliminada'
+        alert:  'La etiqueta no pudo ser eliminada, es final y tiene casos asociados'
+
     users:
       profiles:
         update:

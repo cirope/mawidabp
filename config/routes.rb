@@ -35,6 +35,10 @@ Rails.application.routes.draw do
 
   resources :groups
 
+  scope ':kind', kind: /finding/ do
+    resources :tags
+  end
+
   get 'welcome', as: 'welcome', to: 'welcome#index'
   get 'execution_reports', as: 'execution_reports', to: 'execution_reports#index'
 

@@ -37,6 +37,7 @@
 //= require organizations
 //= require process_controls
 //= require reviews
+//= require tags
 //= require touch
 //= require users
 //= require work_papers

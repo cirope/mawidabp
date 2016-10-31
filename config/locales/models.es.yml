@@ -81,6 +81,9 @@ es:
       resource_class:
         one: 'Clase de recurso'
         other: 'Clases de recursos'
+      tag:
+        one: 'Etiqueta'
+        other: 'Etiquetas'
       work_paper:
         one: 'Papel de trabajo'
         other: 'Papeles de trabajo'
@@ -167,6 +170,9 @@ es:
         name: 'Nombre'
         value: 'Valor'
         description: 'Descripción'
+      tag:
+        name: 'Nombre'
+        style: 'Estilo'
       user:
         email: 'Correo'
         enable: 'Habilitado'

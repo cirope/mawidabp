@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160918020315) do
+ActiveRecord::Schema.define(version: 20161030230351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -706,6 +706,22 @@ ActiveRecord::Schema.define(version: 20160918020315) do
   add_index "settings", ["name"], name: "index_settings_on_name", using: :btree
   add_index "settings", ["organization_id"], name: "index_settings_on_organization_id", using: :btree
 
+  create_table "tags", force: :cascade do |t|
+    t.string   "name",                        null: false
+    t.string   "kind",                        null: false
+    t.string   "style",                       null: false
+    t.integer  "organization_id",             null: false
+    t.integer  "lock_version",    default: 0
+    t.jsonb    "options"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "tags", ["kind"], name: "index_tags_on_kind", using: :btree
+  add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
+  add_index "tags", ["options"], name: "index_tags_on_options", using: :gin
+  add_index "tags", ["organization_id"], name: "index_tags_on_organization_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "name",                 limit: 100
     t.string   "last_name",            limit: 100
@@ -859,6 +875,7 @@ ActiveRecord::Schema.define(version: 20160918020315) do
   add_foreign_key "reviews", "plan_items", name: "reviews_plan_item_id_fk", on_delete: :restrict
   add_foreign_key "roles", "organizations", name: "roles_organization_id_fk", on_delete: :restrict
   add_foreign_key "settings", "organizations", name: "settings_organization_id_fk", on_delete: :restrict
+  add_foreign_key "tags", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "users", "resources", name: "users_resource_id_fk", on_delete: :restrict
   add_foreign_key "users", "users", column: "manager_id", name: "users_manager_id_fk", on_delete: :restrict
   add_foreign_key "work_papers", "file_models", name: "work_papers_file_model_id_fk", on_delete: :restrict

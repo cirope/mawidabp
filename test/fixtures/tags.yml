@@ -1,0 +1,6 @@
+important:
+  name: Important
+  kind: finding
+  style: danger
+  options: {}
+  organization: cirope
