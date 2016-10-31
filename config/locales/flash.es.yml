@@ -80,7 +80,7 @@ es:
         alert:  ''
       destroy:
         notice: 'Etiqueta eliminada'
-        alert:  'La etiqueta no pudo ser eliminada, es final y tiene casos asociados'
+        alert:  'La etiqueta no pudo ser eliminada'
 
     users:
       profiles:

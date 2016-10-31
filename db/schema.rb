@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161030230351) do
+ActiveRecord::Schema.define(version: 20161031023539) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -706,6 +706,17 @@ ActiveRecord::Schema.define(version: 20161030230351) do
   add_index "settings", ["name"], name: "index_settings_on_name", using: :btree
   add_index "settings", ["organization_id"], name: "index_settings_on_organization_id", using: :btree
 
+  create_table "taggings", force: :cascade do |t|
+    t.integer  "tag_id",        null: false
+    t.integer  "taggable_id",   null: false
+    t.string   "taggable_type", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
+  add_index "taggings", ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id", using: :btree
+
   create_table "tags", force: :cascade do |t|
     t.string   "name",                        null: false
     t.string   "kind",                        null: false
@@ -875,6 +886,7 @@ ActiveRecord::Schema.define(version: 20161030230351) do
   add_foreign_key "reviews", "plan_items", name: "reviews_plan_item_id_fk", on_delete: :restrict
   add_foreign_key "roles", "organizations", name: "roles_organization_id_fk", on_delete: :restrict
   add_foreign_key "settings", "organizations", name: "settings_organization_id_fk", on_delete: :restrict
+  add_foreign_key "taggings", "tags", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "users", "resources", name: "users_resource_id_fk", on_delete: :restrict
   add_foreign_key "users", "users", column: "manager_id", name: "users_manager_id_fk", on_delete: :restrict

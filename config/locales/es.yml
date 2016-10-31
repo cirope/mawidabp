@@ -452,6 +452,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
     download_csv: "Descargar CSV"
     add_finding_relation: "Agregar relación"
+    add_tagging: "Agregar etiqueta"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
     add_work_paper: "Agregar papel de trabajo"

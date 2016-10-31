@@ -59,10 +59,12 @@ class TagsControllerTest < ActionController::TestCase
   end
 
   test 'should destroy tag' do
+    tag = Tag.create! @tag.attributes.merge(id: nil, name: 'Other')
+
     assert_difference 'Tag.count', -1 do
-      delete :destroy, id: @tag, kind: @tag.kind
+      delete :destroy, id: tag, kind: tag.kind
     end
 
-    assert_redirected_to tags_url(kind: @tag.kind)
+    assert_redirected_to tags_url(kind: tag.kind)
   end
 end

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :taggings
   get '/touch', to: 'touch#index', as: 'touch'
 
   # Sessions
@@ -144,6 +145,7 @@ Rails.application.routes.draw do
       collection do
         get :export_to_pdf
         get :export_to_csv
+        get :auto_complete_for_tagging
         get :auto_complete_for_finding_relation
       end
     end
@@ -230,6 +232,7 @@ Rails.application.routes.draw do
     resources :costs
 
     collection do
+      get :auto_complete_for_tagging
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
     end
@@ -280,6 +283,7 @@ Rails.application.routes.draw do
     end
 
     collection do
+      get :auto_complete_for_tagging
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
     end

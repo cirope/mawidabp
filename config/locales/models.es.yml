@@ -42,6 +42,9 @@ es:
       error_record:
         one: 'Registro de error'
         other: 'Registros de errores'
+      finding:
+        one: 'Hallazgo'
+        other: 'Hallazgos'
       ldap_config:
         one: 'Configuración LDAP'
         other: 'Configuraciones LDAP'
@@ -84,6 +87,9 @@ es:
       tag:
         one: 'Etiqueta'
         other: 'Etiquetas'
+      tagging:
+        one: 'Etiquetado'
+        other: 'Etiquetados'
       work_paper:
         one: 'Papel de trabajo'
         other: 'Papeles de trabajo'
@@ -173,6 +179,9 @@ es:
       tag:
         name: 'Nombre'
         style: 'Estilo'
+      tagging:
+        tag: 'Etiqueta'
+        tag_id: 'Etiqueta'
       user:
         email: 'Correo'
         enable: 'Habilitado'

@@ -35,7 +35,7 @@ class TagsController < ApplicationController
 
   def destroy
     @tag.destroy
-    respond_with @tag
+    respond_with @tag, location: [@tag, kind: @tag.kind]
   end
 
   private

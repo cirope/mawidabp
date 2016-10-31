@@ -11,7 +11,7 @@ module Tags::Scopes
       result = ordered
 
       if query.present?
-        result = result.where "#{table_name}.name ILIKE ?", "%#{query.strip}%"
+        result = result.where "LOWER(#{table_name}.name) LIKE ?", "%#{query.strip}%".downcase
       end
 
       result
