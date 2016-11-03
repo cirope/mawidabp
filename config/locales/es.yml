@@ -875,6 +875,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     calculate_estimated_amount: "Calcular ahora"
     add_human_resource_utilization: "Agregar recurso humano"
     add_material_resource_utilization: "Agregar recurso material"
+    add_tagging: "Agregar etiqueta"
     show_resource_utilization: "Mostrar recursos"
     hide_resource_utilization: "Ocultar recursos"
     download_global_plan: "Descargar plan de auditoria global"
@@ -1139,7 +1140,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
       plan: "Plan de trabajo"
-      plan_item: "Registro de plan"
       privilege: "Privilegio"
       review: "Informe"
       review_user_assignment: "Asignación de usuario a informe"
@@ -1402,6 +1402,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         human_resources_cost: "Costo recursos humanos"
         material_resources_cost: "Costo recursos materiales"
         total_resources_cost: "Costo total"
+        tags: "Etiquetas"
       privilege:
         module: "Módulo"
         read: "Lectura"

@@ -1,7 +1,7 @@
 <%= simple_form_for @plan do |f| %>
   <%= render 'shared/error_explanation', f: f %>
 
-  <% unless params[:business_unit_type].blank? %>
+  <% if params[:business_unit_type].present? %>
     <div class="page-header">
       <%= show_plan_business_unit_type_info %>
     </div>

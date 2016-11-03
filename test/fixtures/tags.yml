@@ -4,3 +4,10 @@ important:
   style: danger
   options: {}
   organization: cirope
+
+extra:
+  name: Extra
+  kind: plan_item
+  style: default
+  options: {}
+  organization: cirope

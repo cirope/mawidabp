@@ -2,6 +2,7 @@ class PlanItem < ActiveRecord::Base
   include Auditable
   include ParameterSelector
   include Comparable
+  include Taggable
 
   # Atributos no persistentes
   attr_accessor :business_unit_data, :overloaded

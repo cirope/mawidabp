@@ -13,7 +13,7 @@ class Plan < ActiveRecord::Base
   attr_readonly :period_id
 
   # Scopes
-  scope :list, -> { where(organization_id: Organization.current_id) }
+  scope :list, -> { where organization_id: Organization.current_id }
 
   # Restricciones
   validates :period_id, :organization, presence: true
@@ -30,8 +30,7 @@ class Plan < ActiveRecord::Base
   # Relaciones
   belongs_to :period
   belongs_to :organization
-  has_many :plan_items,
-    dependent: :destroy
+  has_many :plan_items, -> { order :order_number }, dependent: :destroy
   has_many :resource_utilizations, through: :plan_items
 
   accepts_nested_attributes_for :plan_items, allow_destroy: true
@@ -133,9 +132,9 @@ class Plan < ActiveRecord::Base
     pdf = Prawn::Document.create_generic_pdf :landscape
     currency_mask = "#{I18n.t('number.currency.format.unit')}%.2f"
     column_order = [['order_number', 6], ['status', 6],
-      ['business_unit_id', 16], ['project', 27], ['start', 7.5], ['end', 7.5],
-      ['human_resources_cost', 10], ['material_resources_cost', 10],
-      ['total_resources_cost', 10]]
+      ['business_unit_id', 16], ['project', 20], ['tags', 7], ['start', 7.5],
+      ['end', 7.5], ['human_resources_cost', 10],
+      ['material_resources_cost', 10], ['total_resources_cost', 10]]
     column_headers, column_widths = [], []
 
     pdf.add_generic_report_header organization
@@ -157,62 +156,64 @@ class Plan < ActiveRecord::Base
 
     (BusinessUnitType.list + [nil]).each do |but|
       items = (grouped_plan_items[but] || []).sort
-      column_data = []
-      total_cost = 0.0
 
-      pdf.move_down PDF_FONT_SIZE
-      pdf.add_title but.try(:name) || I18n.t('plan.without_business_unit_type')
+      if items.present?
+        column_data = []
+        total_cost = 0.0
 
-      items.each do |plan_item|
-        total_resource_text = currency_mask % plan_item.cost
-        total_cost += plan_item.cost
-
-        column_data << [
-          plan_item.order_number,
-          plan_item.status_text(false),
-          plan_item.business_unit ?
-            plan_item.business_unit.name : '',
-          plan_item.project,
-          I18n.l(plan_item.start, format: :default),
-          I18n.l(plan_item.end, format: :default),
-          currency_mask % plan_item.human_cost,
-          currency_mask % plan_item.material_cost,
-          total_resource_text
-        ]
-      end
-
-      column_data << [
-        '', '', '', '', '', '', '', '', "<b>#{currency_mask % total_cost}</b>"
-      ]
-
-      pdf.move_down PDF_FONT_SIZE
-
-      unless column_data.blank?
-        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-          table_options = pdf.default_table_options(column_widths)
-
-          pdf.table(column_data.insert(0, column_headers), table_options) do
-            row(0).style(
-              background_color: 'cccccc',
-              padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-            )
-          end
-        end
-      end
-
-      pdf.text "\n#{I18n.t('plan.item_status.note')}",
-        font_size: (PDF_FONT_SIZE * 0.75).round
-
-      if include_details &&
-          !items.all? { |pi| pi.resource_utilizations.blank? }
         pdf.move_down PDF_FONT_SIZE
-
-        pdf.add_title I18n.t('plan.pdf.resource_utilization'),
-          (PDF_FONT_SIZE * 1.25).round
+        pdf.add_title but.try(:name) || I18n.t('plan.without_business_unit_type')
 
         items.each do |plan_item|
-          unless plan_item.resource_utilizations.blank?
-            plan_item.add_resource_data(pdf)
+          total_resource_text = currency_mask % plan_item.cost
+          total_cost += plan_item.cost
+
+          column_data << [
+            plan_item.order_number,
+            plan_item.status_text(false),
+            plan_item.business_unit ?  plan_item.business_unit.name : '',
+            plan_item.project,
+            plan_item.tags.map(&:to_s).join(';'),
+            I18n.l(plan_item.start, format: :default),
+            I18n.l(plan_item.end, format: :default),
+            currency_mask % plan_item.human_cost,
+            currency_mask % plan_item.material_cost,
+            total_resource_text
+          ]
+        end
+
+        column_data << [
+          '', '', '', '', '', '', '', '', '', "<b>#{currency_mask % total_cost}</b>"
+        ]
+
+        pdf.move_down PDF_FONT_SIZE
+
+        unless column_data.blank?
+          pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+            table_options = pdf.default_table_options(column_widths)
+
+            pdf.table(column_data.insert(0, column_headers), table_options) do
+              row(0).style(
+                background_color: 'cccccc',
+                padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+              )
+            end
+          end
+        end
+
+        pdf.text "\n#{I18n.t('plan.item_status.note')}",
+          font_size: (PDF_FONT_SIZE * 0.75).round
+
+        if include_details && items.any? { |pi| pi.resource_utilizations.present? }
+          pdf.move_down PDF_FONT_SIZE
+
+          pdf.add_title I18n.t('plan.pdf.resource_utilization'),
+            (PDF_FONT_SIZE * 1.25).round
+
+          items.each do |plan_item|
+            unless plan_item.resource_utilizations.blank?
+              plan_item.add_resource_data(pdf)
+            end
           end
         end
       end

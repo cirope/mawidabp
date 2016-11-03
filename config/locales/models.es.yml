@@ -54,6 +54,9 @@ es:
       organization:
         one: 'Organización'
         other: 'Organizaciones'
+      plan_item:
+        one: 'Proyecto en plan'
+        other: 'Proyectos en plan'
       setting:
         one: 'Configuración'
         other: 'Configuraciones'
