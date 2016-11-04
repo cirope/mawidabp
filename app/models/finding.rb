@@ -165,7 +165,7 @@ class Finding < ActiveRecord::Base
   end
 
   def process_owners
-    self.finding_user_assignments.owners.map(&:user)
+    finding_user_assignments.select(&:process_owner).map(&:user)
   end
 
   def responsible_auditors

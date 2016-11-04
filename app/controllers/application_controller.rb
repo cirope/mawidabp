@@ -26,8 +26,9 @@ class ApplicationController < ActionController::Base
   private
 
     def scope_current_organization
-      Group.current_id        = current_organization.try(:group_id)
-      Organization.current_id = current_organization.try(:id)
+      Group.current_id        = current_organization&.group_id
+      Group.corporate_ids     = current_organization&.group&.organizations&.corporate&.ids
+      Organization.current_id = current_organization&.id
     end
 
     def load_user
