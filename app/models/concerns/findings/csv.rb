@@ -45,7 +45,7 @@ module Findings::Csv
     end
 
     def audited_users
-      auditeds = users.reload.select do |u|
+      auditeds = users.select do |u|
         u.can_act_as_audited? && process_owners.exclude?(u)
       end
 
@@ -75,11 +75,26 @@ module Findings::Csv
       CSV.generate(col_sep: ';') do |csv|
         csv << column_headers(completed, corporate)
 
-        all.each { |f| csv << f.to_csv_a(corporate) }
+        all_with_inclusions.each { |f| csv << f.to_csv_a(corporate) }
       end
     end
 
     private
+
+      def all_with_inclusions
+        preload :organization,
+          finding_answers: :user,
+          review: :plan_item,
+          finding_user_assignments: :user,
+          users: {
+            organization_roles: :role
+          },
+          control_objective_item: {
+            control_objective: {
+              process_control: :best_practice
+            }
+          }
+      end
 
       def column_headers completed, corporate
         [
