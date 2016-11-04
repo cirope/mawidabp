@@ -115,10 +115,6 @@ class Finding < ActiveRecord::Base
     end
   end
 
-  def organization
-    self.review.try(:organization)
-  end
-
   def next_code(review = nil)
     raise 'Must be implemented in the subclasses'
   end
@@ -156,8 +152,7 @@ class Finding < ActiveRecord::Base
   end
 
   def stale_confirmed_days
-    self.parameter_in(self.review.organization.id,
-      'finding_stale_confirmed_days').to_i
+    parameter_in(organization_id, 'finding_stale_confirmed_days').to_i
   end
 
   def commitment_date
