@@ -20,12 +20,22 @@ jQuery(function () {
     }
   }
 
-  $('form:not([data-no-observe-changes])').change(function () {
-    State.unsavedData = true
-  })
-
   if (window.addEventListener)
     window.addEventListener('beforeunload', _onBeforeUnload)
   else
     window.onbeforeunload = _onBeforeUnload
+
+  $(document).on('change', 'form:not([data-no-observe-changes])', function () {
+    State.unsavedData = true
+  })
+
+  $(document).on('click', '[data-ignore-unsaved-data]', function () {
+    var unsavedData   = State.unsavedData
+
+    State.unsavedData = false
+
+    setTimeout(function () {
+      State.unsavedData = unsavedData
+    }, 100)
+  })
 })
