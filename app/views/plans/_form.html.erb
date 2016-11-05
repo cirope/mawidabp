@@ -28,7 +28,7 @@
           <strong>
             <%= t('number.currency.format.unit') %>
             <span id="estimated_amount">
-              <%= '%.2f' % @plan.estimated_amount(params[:business_unit_type]) %>
+              <%= '%.2f' % (params[:business_unit_type].present? ? @plan.estimated_amount(params[:business_unit_type]) : @plan.cost) %>
             </span>
           </strong>
           <% unless params[:business_unit_type].blank? %>

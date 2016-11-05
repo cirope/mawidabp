@@ -8,7 +8,7 @@
 </p>
 <p>
   <strong><%= Plan.human_attribute_name :estimated_amount %></strong>:
-  <strong><%= currency_mask % @plan.estimated_amount %></strong>
+  <strong><%= currency_mask % @plan.cost %></strong>
 </p>
 
 <% business_unit_types.each do |business_unit_type| %>
@@ -47,7 +47,7 @@
         <% end %>
         <tr>
           <td colspan="9"></td>
-          <td><strong><%= @plan.cost %></strong></td>
+          <td><strong><%= @plan.estimated_amount business_unit_type&.id %></strong></td>
         </tr>
       </tbody>
     </table>

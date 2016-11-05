@@ -79,15 +79,6 @@ class PlanTest < ActiveSupport::TestCase
     assert @plan.allow_overload?
   end
 
-  test 'estimated amount' do
-    calculated_amount = @plan.plan_items.inject 0.0 do |sum, pi|
-      sum + pi.resource_utilizations.to_a.sum(&:cost)
-    end
-
-    assert calculated_amount > 0
-    assert_equal calculated_amount, @plan.estimated_amount
-  end
-
   test 'estimated amount for business unit type' do
     but_id = business_unit_types(:cycle).id
     plan_items = @plan.plan_items.for_business_unit_type(but_id)
