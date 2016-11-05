@@ -155,7 +155,7 @@ class PlansController < ApplicationController
   private
     def plan_params
       params.require(:plan).permit(
-        :period_id, :allow_overload, :allow_duplication, :new_version,
+        :period_id, :allow_overload, :allow_duplication,
         :lock_version, plan_items_attributes: [
           :id, :project, :start, :end, :plain_predecessors, :order_number,
           :business_unit_id, :_destroy,

@@ -149,8 +149,7 @@ class PlanItemTest < ActiveSupport::TestCase
     
     assert plan_item_3.valid?
 
-    plan_item_3.resource_utilizations <<
-      @plan_item.human_resource_utilizations.first
+    plan_item_3.resource_utilizations << @plan_item.human_resource_utilizations.first
     plan_item_3.start = @plan_item.end
 
     assert plan_item_3.invalid?
