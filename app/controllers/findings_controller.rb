@@ -1,5 +1,6 @@
 class FindingsController < ApplicationController
   include AutoCompleteFor::FindingRelation
+  include AutoCompleteFor::Tagging
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_finding, only: [:show, :edit, :update]
@@ -63,7 +64,7 @@ class FindingsController < ApplicationController
         :control_objective_item => {
           :review => [:conclusion_final_review, :period, :plan_item]
         }
-      }, :users
+      }, :users, :organization
     ).where(@conditions).order(
       @order_by || [
         default_sort_column,
@@ -81,7 +82,14 @@ class FindingsController < ApplicationController
           redirect_to finding_url(params[:completed], @findings.first)
         end
       } # index.html.erb
-      format.csv { render csv: @findings.to_csv(params[:completed]), filename: @title.downcase }
+      format.csv {
+        csv_options = {
+          completed: params[:completed],
+          corporate: current_organization.corporate?
+        }
+
+        render csv: @findings.to_csv(csv_options), filename:  @title.downcase
+      }
     end
   end
 
@@ -211,6 +219,9 @@ class FindingsController < ApplicationController
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
         ],
+        taggings_attributes: [
+          :id, :tag_id, :_destroy
+        ],
         costs_attributes: [
           :id, :raw_cost, :cost, :cost_type, :description, :user_id, :_destroy
         ],
@@ -231,6 +242,7 @@ class FindingsController < ApplicationController
     def load_privileges
       @action_privileges.update(
         :follow_up_pdf => :read,
+        :auto_complete_for_tagging => :read,
         :auto_complete_for_finding_relation => :read
       )
     end

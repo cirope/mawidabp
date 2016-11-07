@@ -84,6 +84,20 @@
   </ul>
 <% end %>
 
+<% unless @oportunity.taggings.blank? %>
+  <h3>
+    <%= Tag.model_name.human count: 0 %>
+  </h3>
+
+  <ul class="list-unstyled">
+    <% @oportunity.taggings.each do |tagging| %>
+      <li>
+        <span class="label label-<%= tagging.tag.style %>"><%= tagging.tag %></span>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
 <% unless @oportunity.finding_relations.blank? %>
   <h3>
     <%= t('finding.finding_relations') %>

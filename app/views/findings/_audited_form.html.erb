@@ -95,6 +95,20 @@
     </table>
   <% end %>
 
+  <% unless @finding.taggings.blank? %>
+    <h4>
+      <%= Tag.model_name.human count: 0 %>
+    </h4>
+
+    <ul class="list-unstyled">
+      <% @finding.taggings.each do |tagging| %>
+        <li>
+          <span class="label label-<%= tagging.tag.style %>"><%= tagging.tag %></span>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
   <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
     <h4><%= t('finding.repeated_ancestors') %></h4>
     <ul>

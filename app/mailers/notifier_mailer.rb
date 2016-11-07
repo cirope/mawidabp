@@ -61,8 +61,11 @@ class NotifierMailer < ActionMailer::Base
 
   def notify_new_finding(user, finding)
     @user, @finding = user, finding
-    @notification = Notification.create(user: user, findings: [finding])
     prefix = "[#{finding.organization.prefix}] "
+
+    if @finding.notify? || @finding.unconfirmed?
+      @notification = Notification.create(user: user, findings: [finding])
+    end
 
     mail to: [user.email],
          subject: prefix.upcase + t('notifier_mailer.notify_new_finding.title')

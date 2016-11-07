@@ -234,6 +234,25 @@ es:
     session_expire_time: 'Desconexión por inactividad'
     exchange_directory_path: 'Directorio de intercambio de archivos'
 
+  tags:
+    edit:
+      title: 'Editar etiqueta'
+    index:
+      new: 'Nueva etiqueta'
+      title: 'Listado de etiquetas'
+      empty_html: 'No hay etiquetas, puede crear una con el botón <span class="label label-primary">Nueva etiqueta</span>'
+    new:
+      title: 'Crear etiqueta'
+    show:
+      title: 'Ver etiqueta'
+    styles:
+      default: 'Por defecto'
+      primary: 'Importante'
+      success: 'Exitosa'
+      info: 'Informativa'
+      warning: 'Advertencia'
+      danger: 'Peligro'
+
   users:
     index:
       title: 'Listado de usuarios'

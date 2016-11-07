@@ -61,12 +61,9 @@ class NotificationsController < ApplicationController
 
   # * GET /notifications/1/confirm
   def confirm
-    @notification = Notification.where(
-      :status => Notification::STATUS[:unconfirmed],
-      :confirmation_hash => params[:id]
-    ).take!
+    @notification = Notification.where(:confirmation_hash => params[:id]).take!
 
-    @notification.notify! params[:reject].blank?
+    @notification.notify! params[:reject].blank? if @notification.unconfirmed?
 
     redirect_to @notification, :notice => t('notification.confirmed')
   end

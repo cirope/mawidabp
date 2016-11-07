@@ -176,7 +176,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'edit finding' do
-    login
+    login user: users(:auditor_user)
     get :edit, :completed => 'incomplete', :id =>
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
@@ -224,7 +224,8 @@ class FindingsControllerTest < ActionController::TestCase
 
     difference_counts = ['WorkPaper.count', 'FindingAnswer.count', 'Cost.count',
                          'ActionMailer::Base.deliveries.size',
-                         'FindingRelation.count', 'BusinessUnitFinding.count']
+                         'FindingRelation.count', 'BusinessUnitFinding.count',
+                         'Tagging.count']
 
     assert_no_difference 'Finding.count' do
       assert_difference difference_counts do
@@ -310,6 +311,11 @@ class FindingsControllerTest < ActionController::TestCase
                 {
                   :description => 'Duplicated',
                   :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+                }
+              ],
+              :taggings_attributes => [
+                {
+                  :tag_id => tags(:important).id
                 }
               ],
               :costs_attributes => [
@@ -580,5 +586,34 @@ class FindingsControllerTest < ActionController::TestCase
     findings = ActiveSupport::JSON.decode(@response.body)
 
     assert_equal 0, findings.size # Sin resultados
+  end
+
+  test 'auto complete for tagging' do
+    login
+
+    get :auto_complete_for_tagging, {
+      :q => 'impor',
+      :completed => 'incomplete',
+      :kind => 'finding',
+      :format => :json
+    }
+    assert_response :success
+
+    tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, tags.size
+    assert tags.all? { |t| t['label'].match /impor/i }
+
+    get :auto_complete_for_tagging, {
+      :q => 'x_none',
+      :completed => 'incomplete',
+      :kind => 'finding',
+      :format => :json
+    }
+    assert_response :success
+
+    tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, tags.size # Sin resultados
   end
 end

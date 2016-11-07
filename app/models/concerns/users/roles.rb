@@ -16,9 +16,8 @@ module Users::Roles
   end
 
   def roles organization_id = nil
-    ors = organization_roles.reject(&:marked_for_destruction?)
-    group = Group.find Group.current_id if Group.current_id
-    organization_ids = [organization_id] | (group ? group.organizations.corporate.pluck('id') : [])
+    ors              = organization_roles.reject &:marked_for_destruction?
+    organization_ids = [organization_id] | (Group.corporate_ids || [])
 
     ors.select! { |o_r| organization_ids.include?(o_r.organization_id) } if organization_id
 

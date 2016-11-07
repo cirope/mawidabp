@@ -10,7 +10,7 @@ class Workflow < ActiveRecord::Base
   before_destroy :can_be_destroyed?
 
   # Atributos no persistentes
-  attr_accessor :allow_overload, :new_version
+  attr_accessor :allow_overload
   attr_writer :cost
 
   attr_readonly :period_id, :review_id
