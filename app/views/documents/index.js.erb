@@ -1,0 +1,9 @@
++function () {
+  var $container = $('[data-document-list]')
+
+  <% if @tag %>
+    $container.html('<%= j render('list') %>')
+  <% else %>
+    $container.html('<%= j render('tag_list') %>')
+  <% end %>
+}()

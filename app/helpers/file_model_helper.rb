@@ -44,4 +44,9 @@ module FileModelHelper
       content_tag :span, nil, class: 'icon glyphicon glyphicon-download-alt'
     end
   end
+
+  def file_model_error model
+    model.errors[:file_model].first ||
+      Array(model.file_model&.errors[:file_file_name]).first
+  end
 end

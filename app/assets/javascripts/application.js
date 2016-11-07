@@ -33,6 +33,7 @@
 //= require file_input
 //= require best_practices
 //= require control_objective_items
+//= require documents
 //= require findings
 //= require organizations
 //= require process_controls

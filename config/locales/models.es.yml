@@ -36,6 +36,9 @@ es:
       control_objective:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
+      document:
+        one: 'Documento'
+        other: 'Documentos'
       e_mail:
         one: 'Correo'
         other: 'Correos'
@@ -136,6 +139,11 @@ es:
         risk: 'Riesgo'
         obsolete: 'Obsoleto'
         continuous: 'Contínuo'
+      document:
+        name: 'Nombre'
+        description: 'Descripción'
+        shared: 'Compartido'
+        tags: 'Etiquetas'
       e_mail:
         to: 'Para'
         subject: 'Asunto'

@@ -295,13 +295,26 @@ class ReviewsController < ApplicationController
   def auto_complete_for_control_objective
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
-    best_practice_conditions = BestPractice.list_conditions
 
     conditions = [
-      best_practice_conditions.first,
+      [
+        [
+          "#{BestPractice.table_name}.#{BestPractice.qcn 'shared'} = :false",
+          "#{BestPractice.table_name}.#{BestPractice.qcn 'organization_id'} = :organization_id"
+        ].join(' AND '),
+        [
+          "#{BestPractice.table_name}.#{BestPractice.qcn 'shared'} = :true",
+          "#{BestPractice.table_name}.#{BestPractice.qcn 'group_id'} = :group_id"
+        ].join(' AND ')
+      ].map { |c| "(#{c})" }.join(' OR '),
       "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('obsolete')} = :false"
     ]
-    parameters = best_practice_conditions.last.merge(false: false)
+    parameters = {
+      false:           false,
+      true:            true,
+      organization_id: Organization.current_id,
+      group_id:        Group.current_id
+    }
 
     @tokens.each_with_index do |t, i|
       conditions << [

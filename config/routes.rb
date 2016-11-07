@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :taggings
   get '/touch', to: 'touch#index', as: 'touch'
 
   # Sessions
@@ -10,6 +9,11 @@ Rails.application.routes.draw do
   resources :settings, only: [:index, :show, :edit, :update]
 
   resources :benefits
+
+  resources :documents do
+    get :download, on: :member
+    get :auto_complete_for_tagging, on: :collection
+  end
 
   resources :questionnaires do
     resources :polls, only: [:index]
@@ -36,7 +40,11 @@ Rails.application.routes.draw do
 
   resources :groups
 
-  scope ':kind', kind: /finding|plan_item|review/ do
+  resources :tags, only: [] do
+    resources :documents, only: [:index]
+  end
+
+  scope ':kind', kind: /finding|plan_item|review|document/ do
     resources :tags
   end
 

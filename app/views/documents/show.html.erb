@@ -1,0 +1,27 @@
+<h2>
+  <%= @document %>
+  <span class="pull-right"><%= link_to_download_document @document %></span>
+</h2>
+
+<p>
+  <strong><%= Document.human_attribute_name 'description' %></strong>:
+  <%= @document.description %>
+</p>
+
+<p>
+  <strong><%= Document.human_attribute_name 'shared' %></strong>:
+  <%= t @document.shared ? 'label.yes' : 'label.no' %>
+</p>
+
+<% if @document.taggings.any? %>
+  <ul class="list-inline">
+    <% @document.taggings.each do |tagging| %>
+      <li>
+        <span class="label label-<%= tagging.tag.style %>"><%= tagging.tag %></span>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= link_to_edit [:edit, @document] %> |
+<%= link_to_index documents_path %>
