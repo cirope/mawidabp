@@ -36,7 +36,7 @@ Rails.application.routes.draw do
 
   resources :groups
 
-  scope ':kind', kind: /finding|plan_item/ do
+  scope ':kind', kind: /finding|plan_item|review/ do
     resources :tags
   end
 
@@ -221,6 +221,7 @@ Rails.application.routes.draw do
       get :auto_complete_for_finding
       get :auto_complete_for_process_control
       get :auto_complete_for_control_objective
+      get :auto_complete_for_tagging
     end
   end
 

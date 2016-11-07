@@ -1,5 +1,6 @@
 class ReviewsController < ApplicationController
   include AutoCompleteFor::ProcessControl
+  include AutoCompleteFor::Tagging
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
@@ -355,6 +356,9 @@ class ReviewsController < ApplicationController
         review_user_assignments_attributes: [
           :id, :assignment_type, :user_id, :include_signature, :owner, :_destroy
         ],
+        taggings_attributes: [
+          :id, :tag_id, :_destroy
+        ],
         control_objective_items_attributes: [
           :id, :control_objective_id, :control_objective_text, :relevance, :order_number, :_destroy,
           control_attributes: [
@@ -394,6 +398,7 @@ class ReviewsController < ApplicationController
         auto_complete_for_finding: :read,
         auto_complete_for_control_objective: :read,
         auto_complete_for_process_control: :read,
+        auto_complete_for_tagging: :read,
         estimated_amount: :read,
         recode_findings: :modify
       )

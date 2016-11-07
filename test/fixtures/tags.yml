@@ -11,3 +11,10 @@ extra:
   style: default
   options: {}
   organization: cirope
+
+high_priority:
+  name: High priority
+  kind: review
+  style: default
+  options: {}
+  organization: cirope

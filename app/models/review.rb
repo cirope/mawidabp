@@ -4,6 +4,7 @@ class Review < ActiveRecord::Base
   include Parameters::Score
   include ParameterSelector
   include Reviews::FindingCode
+  include Taggable
   include Trimmer
 
   trimmed_fields :identification
