@@ -20,7 +20,7 @@ class ReviewsController < ApplicationController
     build_search_conditions Review
 
     @reviews = Review.list.includes(
-      :period, { plan_item: :business_unit }
+      :period, :tags, { plan_item: :business_unit }
     ).where(@conditions).reorder(identification: :desc).page(
       params[:page]
     ).references(:periods)

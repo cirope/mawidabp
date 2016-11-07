@@ -26,6 +26,10 @@ class Review < ActiveRecord::Base
     :project => {
       :column => "LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn('project')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    },
+    :tags => {
+      :column => "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn('name')})", :operator => 'LIKE',
+      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     }
   })
 

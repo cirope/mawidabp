@@ -9,7 +9,7 @@
       <%= make_filterable_column Review.human_attribute_name(:identification), nil, 'identification' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), { :class => 'hidden-xs' }, 'business_unit' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'hidden-xs' }, 'project' %>
-      <%= make_not_available_column Tag.model_name.human(count: 0), :class => 'hidden-xs' %>
+      <%= make_filterable_column Tag.model_name.human(count: 0), { :class => 'hidden-xs' }, 'tags' %>
       <th colspan="4" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
