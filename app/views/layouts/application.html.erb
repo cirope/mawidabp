@@ -16,7 +16,7 @@
       <%= javascript_include_tag 'application-ie', data: { turbolinks_track: true } %>
     <![endif]-->
     <%= csrf_meta_tags %>
-    <%= favicon_link_tag '/favicon.ico' %>
+    <%= favicon_link_tag 'favicon.ico' %>
     <%= javascript_tag do %>
       <%= raw "setTimeout(function () {" %>
       <%= raw "  State.unsavedDataWarning = '#{t('message.unsaved_data_warning')}';" %>
