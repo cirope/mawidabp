@@ -1,5 +1,7 @@
 class Tagging < ActiveRecord::Base
   include Auditable
+  include Taggings::Associations
+  include Taggings::Scopes
   include Taggings::Validation
 
   belongs_to :tag

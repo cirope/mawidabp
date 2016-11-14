@@ -12,13 +12,9 @@ class FileUploader < CarrierWave::Uploader::Base
     end
 
     def guess_path organization_id = Organization.current_id
-      path = path_for organization_id
+      path = path_for model.organization_id || organization_id
 
-      if File.exist? path
-        path
-      else
-        try_corporate_path
-      end
+      File.exist?(path) ? path : try_corporate_path
     end
 
     def path_for organization_id

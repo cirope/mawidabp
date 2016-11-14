@@ -98,20 +98,26 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/tags', kind: 'finding' }
       ),
       MenuItem.new(
-        :benefits,
+        :documents,
         order: 6,
+        controllers: :documents,
+        url: { controller: '/documents' }
+      ),
+      MenuItem.new(
+        :benefits,
+        order: 7,
         controllers: :benefits,
         url: { controller: '/benefits' }
       ),
       MenuItem.new(
         :e_mails,
-        order: 7,
+        order: 8,
         controllers: :e_mails,
         url: { controller: '/e_mails' }
       ),
       MenuItem.new(
         :questionnaires,
-        order: 8,
+        order: 9,
         url: { controller: '/questionnaires' },
         children: [
           MenuItem.new(
