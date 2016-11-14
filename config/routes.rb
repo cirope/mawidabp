@@ -10,6 +10,11 @@ Rails.application.routes.draw do
 
   resources :benefits
 
+  resources :documents do
+    get :download, on: :member
+    get :auto_complete_for_tagging, on: :collection
+  end
+
   resources :questionnaires do
     resources :polls, only: [:index]
   end
@@ -34,6 +39,14 @@ Rails.application.routes.draw do
   resources :business_unit_types
 
   resources :groups
+
+  resources :tags, only: [] do
+    resources :documents, only: [:index]
+  end
+
+  scope ':kind', kind: /finding|plan_item|review|document/ do
+    resources :tags
+  end
 
   get 'welcome', as: 'welcome', to: 'welcome#index'
   get 'execution_reports', as: 'execution_reports', to: 'execution_reports#index'
@@ -140,6 +153,7 @@ Rails.application.routes.draw do
       collection do
         get :export_to_pdf
         get :export_to_csv
+        get :auto_complete_for_tagging
         get :auto_complete_for_finding_relation
       end
     end
@@ -215,6 +229,7 @@ Rails.application.routes.draw do
       get :auto_complete_for_finding
       get :auto_complete_for_process_control
       get :auto_complete_for_control_objective
+      get :auto_complete_for_tagging
     end
   end
 
@@ -226,6 +241,7 @@ Rails.application.routes.draw do
     resources :costs
 
     collection do
+      get :auto_complete_for_tagging
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
     end
@@ -252,6 +268,7 @@ Rails.application.routes.draw do
     collection do
       get :resource_data
       get :auto_complete_for_business_unit
+      get :auto_complete_for_tagging
     end
   end
 
@@ -276,6 +293,7 @@ Rails.application.routes.draw do
     end
 
     collection do
+      get :auto_complete_for_tagging
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
     end

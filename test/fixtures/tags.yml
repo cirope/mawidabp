@@ -1,0 +1,35 @@
+important:
+  name: Important
+  kind: finding
+  style: danger
+  shared: false
+  options: {}
+  organization: cirope
+  group: main_group
+
+extra:
+  name: Extra
+  kind: plan_item
+  style: default
+  shared: false
+  options: {}
+  organization: cirope
+  group: main_group
+
+high_priority:
+  name: High priority
+  kind: review
+  style: default
+  shared: false
+  options: {}
+  organization: cirope
+  group: main_group
+
+manual:
+  name: Manual
+  kind: document
+  style: default
+  shared: false
+  options: {}
+  organization: cirope
+  group: main_group

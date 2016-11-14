@@ -1,0 +1,7 @@
+audit_manual:
+  name: Audit manual
+  description: Audit manual
+  shared: false
+  file_model: document_file
+  organization: cirope
+  group: main_group

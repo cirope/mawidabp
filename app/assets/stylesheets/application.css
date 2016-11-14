@@ -11,8 +11,10 @@
  *= require autocomplete
  *= require main
  *= require graph
+ *= require documents
  *= require process_controls
  *= require roles
  *= require sessions
+ *= require tags
  *= require welcome
 */

@@ -32,6 +32,7 @@ class Finding < ActiveRecord::Base
   include Parameters::Risk
   include Parameters::Priority
   include ParameterSelector
+  include Taggable
 
   acts_as_tree
 

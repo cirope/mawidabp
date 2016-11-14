@@ -1,6 +1,7 @@
 class WeaknessesController < ApplicationController
-  include AutoCompleteFor::FindingRelation
   include AutoCompleteFor::ControlObjectiveItem
+  include AutoCompleteFor::FindingRelation
+  include AutoCompleteFor::Tagging
 
   before_filter :auth, :load_privileges, :check_privileges
   before_action :set_weakness, only: [
@@ -194,6 +195,9 @@ class WeaknessesController < ApplicationController
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
         ],
+        taggings_attributes: [
+          :id, :tag_id, :_destroy
+        ],
         comments_attributes: [
           :user_id, :comment
         ]
@@ -211,6 +215,7 @@ class WeaknessesController < ApplicationController
     def load_privileges
       @action_privileges.update(
         follow_up_pdf: :read,
+        auto_complete_for_tagging: :read,
         auto_complete_for_finding_relation: :read,
         auto_complete_for_control_objective_item: :read,
         undo_reiteration: :modify

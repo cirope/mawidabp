@@ -7,8 +7,13 @@ module FileModelHelper
     file_model = model.file_model
 
     if file_model && file_model.file? && file_model.file.cached?.blank?
-      link_to file_model.file.url, class: 'btn btn-default',
-        title: file_model.identifier.titleize do
+      options = {
+        class: 'btn btn-default',
+        title: file_model.identifier.titleize,
+        data:  { ignore_unsaved_data: true }
+      }
+
+      link_to file_model.file.url, options do
         content_tag(:span, nil, class: 'icon glyphicon glyphicon-download-alt')
       end
     end
@@ -38,5 +43,10 @@ module FileModelHelper
     link_to url, class: classes, target: '_blank', data: { file_url: true } do
       content_tag :span, nil, class: 'icon glyphicon glyphicon-download-alt'
     end
+  end
+
+  def file_model_error model
+    model.errors[:file_model].first ||
+      Array(model.file_model&.errors[:file_file_name]).first
   end
 end

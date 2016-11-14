@@ -13,6 +13,8 @@ es:
         roles: 'Perfiles y Privilegios'
       best_practices: 'Buenas prácticas'
       settings: 'Configuraciones'
+      tags: 'Etiquetas'
+      documents: 'Documentos'
       benefits: 'Beneficios / Perjuicios'
       e_mails: 'Correos'
       questionnaires_title: 'Cuestionarios'

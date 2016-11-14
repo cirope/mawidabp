@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160918020315) do
+ActiveRecord::Schema.define(version: 20161114201526) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer  "benefit_id", limit: nil,                          null: false
@@ -406,6 +406,24 @@ ActiveRecord::Schema.define(version: 20160918020315) do
     t.boolean "disabled",     limit: nil, default: false, comment: "Disable propagation"
     t.string  "source_site",  limit: 128,                 comment: "Obsolete - do not use"
   end
+
+  create_table "documents", force: :cascade do |t|
+    t.string   "name",                                                       null: false
+    t.text     "description"
+    t.boolean  "shared",          limit: nil,                default: false, null: false
+    t.integer  "lock_version",                precision: 38, default: 0
+    t.integer  "file_model_id",   limit: nil
+    t.integer  "organization_id", limit: nil
+    t.integer  "group_id",        limit: nil
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
+  end
+
+  add_index "documents", ["file_model_id"], name: "i_documents_file_model_id"
+  add_index "documents", ["group_id"], name: "index_documents_on_group_id"
+  add_index "documents", ["name"], name: "index_documents_on_name"
+  add_index "documents", ["organization_id"], name: "i_documents_organization_id"
+  add_index "documents", ["shared"], name: "index_documents_on_shared"
 
   create_table "e_mails", force: :cascade do |t|
     t.text     "to"
@@ -2728,6 +2746,36 @@ ActiveRecord::Schema.define(version: 20160918020315) do
 # Could not dump table "sqlplus_product_profile" because of following StandardError
 #   Unknown type 'LONG' for column 'long_value'
 
+  create_table "taggings", force: :cascade do |t|
+    t.integer  "tag_id",        limit: nil, null: false
+    t.integer  "taggable_id",   limit: nil, null: false
+    t.string   "taggable_type",             null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id"
+  add_index "taggings", ["taggable_type", "taggable_id"], name: "i_tag_tag_typ_tag_id"
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "name",                                                       null: false
+    t.string   "kind",                                                       null: false
+    t.string   "style",                                                      null: false
+    t.integer  "organization_id", limit: nil,                                null: false
+    t.integer  "lock_version",                precision: 38, default: 0
+    t.text     "options"
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
+    t.boolean  "shared",          limit: nil,                default: false, null: false
+    t.integer  "group_id",        limit: nil,                                null: false
+  end
+
+  add_index "tags", ["group_id"], name: "index_tags_on_group_id"
+  add_index "tags", ["kind"], name: "index_tags_on_kind"
+  add_index "tags", ["name"], name: "index_tags_on_name"
+  add_index "tags", ["organization_id"], name: "index_tags_on_organization_id"
+  add_index "tags", ["shared"], name: "index_tags_on_shared"
+
   create_table "users", force: :cascade do |t|
     t.string   "name",                 limit: 100
     t.string   "last_name",            limit: 100
@@ -2844,6 +2892,9 @@ ActiveRecord::Schema.define(version: 20160918020315) do
   add_foreign_key "costs", "users", on_delete: :cascade
   add_foreign_key "def$_calldest", "def$_destination", column: "catchup", primary_key: "catchup", name: "def$_call_destination"
   add_foreign_key "def$_calldest", "def$_destination", column: "dblink", primary_key: "dblink", name: "def$_call_destination"
+  add_foreign_key "documents", "file_models", on_delete: :cascade
+  add_foreign_key "documents", "groups", on_delete: :cascade
+  add_foreign_key "documents", "organizations", on_delete: :cascade
   add_foreign_key "error_records", "organizations", on_delete: :cascade
   add_foreign_key "error_records", "users", on_delete: :cascade
   add_foreign_key "finding_answers", "file_models", on_delete: :cascade
@@ -2972,6 +3023,9 @@ ActiveRecord::Schema.define(version: 20160918020315) do
   add_foreign_key "reviews", "plan_items", on_delete: :cascade
   add_foreign_key "roles", "organizations", on_delete: :cascade
   add_foreign_key "settings", "organizations", on_delete: :cascade
+  add_foreign_key "taggings", "tags", on_delete: :cascade
+  add_foreign_key "tags", "groups", on_delete: :cascade
+  add_foreign_key "tags", "organizations", on_delete: :cascade
   add_foreign_key "users", "resources", on_delete: :cascade
   add_foreign_key "users", "users", column: "manager_id", on_delete: :cascade
   add_foreign_key "work_papers", "file_models", on_delete: :cascade

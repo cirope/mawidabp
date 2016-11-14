@@ -54,6 +54,20 @@ es:
     control_objectives:
       new: 'Agregar objetivo'
 
+  documents:
+    edit:
+      title: 'Editar documento'
+    index:
+      new: 'Nuevo documento'
+      title: 'Listado de documentos'
+      empty_html: 'No hay documentos, puede crear uno con el botón <span class="label label-primary">Nuevo documento</span>'
+      empty_search_html: 'No hay documentos que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear documento'
+      tagging: 'Agregar etiqueta'
+    show:
+      title: 'Ver documento'
+
   e_mails:
     index:
       title: 'Listado de correos'
@@ -233,6 +247,25 @@ es:
     password_minimum_time: 'Duración mínima de la contraseña'
     session_expire_time: 'Desconexión por inactividad'
     exchange_directory_path: 'Directorio de intercambio de archivos'
+
+  tags:
+    edit:
+      title: 'Editar etiqueta'
+    index:
+      new: 'Nueva etiqueta'
+      title: 'Listado de etiquetas'
+      empty_html: 'No hay etiquetas, puede crear una con el botón <span class="label label-primary">Nueva etiqueta</span>'
+    new:
+      title: 'Crear etiqueta'
+    show:
+      title: 'Ver etiqueta'
+    styles:
+      default: 'Por defecto'
+      primary: 'Importante'
+      success: 'Exitosa'
+      info: 'Informativa'
+      warning: 'Advertencia'
+      danger: 'Peligro'
 
   users:
     index:

@@ -454,6 +454,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
     add_finding_relation: "Agregar relación"
+    add_tagging: "Agregar etiqueta"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
     add_work_paper: "Agregar papel de trabajo"
@@ -846,6 +847,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     calculate_estimated_amount: "Calcular ahora"
     add_human_resource_utilization: "Agregar recurso humano"
     add_material_resource_utilization: "Agregar recurso material"
+    add_tagging: "Agregar etiqueta"
     show_resource_utilization: "Mostrar recursos"
     hide_resource_utilization: "Ocultar recursos"
     download_global_plan: "Descargar plan de auditoria global"
@@ -888,6 +890,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     control_objective_items_label: "Objetivos de control"
     add_control_objective: "Agregar un nuevo objetivo de control"
     add_process_control: "Agregar un nuevo proceso"
+    add_tagging: "Agregar etiqueta"
     associated: "Asociados"
     available: "Disponibles"
     bundle: "Legajo"
@@ -1093,7 +1096,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
       plan: "Plan de trabajo"
-      plan_item: "Registro de plan"
       privilege: "Privilegio"
       review: "Informe"
       review_user_assignment: "Asignación de usuario a informe"
@@ -1226,6 +1228,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         other: "Relaciones"
         related_finding_id: "Relación (Observación / Oportunidad de mejora relacionada)"
         description: "Relación (descripción)"
+      finding/taggings:
+        one: "Etiqueta"
+        other: "Etiquetas"
+        tag_id: "Etiqueta"
       finding/finding_user_assignments:
         one: "Usuario relacionado"
         user: 'Usuario relacionado (usuario)'
@@ -1367,6 +1373,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         human_resources_cost: "Costo recursos humanos"
         material_resources_cost: "Costo recursos materiales"
         total_resources_cost: "Costo total"
+        tags: "Etiquetas"
       privilege:
         module: "Módulo"
         read: "Lectura"

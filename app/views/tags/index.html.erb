@@ -1,0 +1,38 @@
+<ul class="nav nav-tabs">
+  <% tag_kinds.each do |kind, name| %>
+    <%= content_tag :li, class: ('active' if kind.to_s == params[:kind]) do %>
+      <%= link_to name, tags_path(kind: kind) %>
+    <% end %>
+  <% end %>
+</ul>
+
+<% if @tags.empty? %>
+  <br>
+  <%= render 'shared/empty_index', message: t('.empty_html') %>
+<% else %>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th><%= Tag.human_attribute_name 'name' %></th>
+        <th colspan="3">
+          <%= link_to_new new_tag_path, class: 'btn btn-default btn-xs pull-right' %>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @tags.each do |tag| %>
+        <tr>
+          <td><%= tag.name %></td>
+          <td><%= link_to_show [tag, kind: tag.kind] %></td>
+          <td><%= link_to_edit [:edit, tag, kind: tag.kind] %></td>
+          <td><%= link_to_destroy [tag, kind: tag.kind] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= paginate @tags %>
+<% end %>
+
+<%= link_to_new new_tag_path, class: 'btn btn-primary' %>

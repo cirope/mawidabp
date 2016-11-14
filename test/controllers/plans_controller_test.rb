@@ -80,7 +80,8 @@ class PlansControllerTest < ActionController::TestCase
 
   test 'create plan' do
     counts_array = ['Plan.count', 'PlanItem.count',
-      'ResourceUtilization.human.count', 'ResourceUtilization.material.count']
+                    'ResourceUtilization.human.count',
+                    'ResourceUtilization.material.count', 'Tagging.count']
 
     assert_difference counts_array do
       login
@@ -107,6 +108,11 @@ class PlansControllerTest < ActionController::TestCase
                   :resource_type => 'Resource',
                   :units => '2',
                   :cost_per_unit => '10.7'
+                }
+              ],
+              :taggings_attributes => [
+                {
+                  :tag_id => tags(:extra).id
                 }
               ]
             }
@@ -136,40 +142,47 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'update plan' do
-    assert_no_difference ['Plan.count', 'ResourceUtilization.count'] do
-      assert_difference 'PlanItem.count', -1 do
-        login
-        patch :update, {
-          :id => plans(:past_plan).id,
-          :plan => {
-            :period_id => periods(:past_period).id,
-            :new_version => '0',
-            :plan_items_attributes => [
-              {
-                :id => plan_items(:past_plan_item_1).id,
-                :project => 'Updated project',
-                :start => 55.days.ago.to_date,
-                :end => 45.days.ago.to_date,
-                :plain_predecessors => '',
-                :order_number => 1,
-                :business_unit_id => business_units(:business_unit_one).id,
-                :resource_utilizations_attributes => [
-		  {
-                    :id => resource_utilizations(:auditor_for_20_units_past_plan_item_1).id,
-                    :resource_id => resources(:laptop_resource).id,
-                    :resource_type => 'Resource',
-                    :units => '12.21',
-                    :cost_per_unit => '8.75'
-                  }
-		]
-              },
-              {
-                :id => plan_items(:past_plan_item_3).id,
-                :_destroy => '1'
-              }
-	    ]
+    assert_difference 'Tagging.count' do
+      assert_no_difference ['Plan.count', 'ResourceUtilization.count'] do
+        assert_difference 'PlanItem.count', -1 do
+          login
+          patch :update, {
+            :id => plans(:past_plan).id,
+            :plan => {
+              :period_id => periods(:past_period).id,
+              :new_version => '0',
+              :plan_items_attributes => [
+                {
+                  :id => plan_items(:past_plan_item_1).id,
+                  :project => 'Updated project',
+                  :start => 55.days.ago.to_date,
+                  :end => 45.days.ago.to_date,
+                  :plain_predecessors => '',
+                  :order_number => 1,
+                  :business_unit_id => business_units(:business_unit_one).id,
+                  :resource_utilizations_attributes => [
+                    {
+                      :id => resource_utilizations(:auditor_for_20_units_past_plan_item_1).id,
+                      :resource_id => resources(:laptop_resource).id,
+                      :resource_type => 'Resource',
+                      :units => '12.21',
+                      :cost_per_unit => '8.75'
+                    }
+                  ],
+                  :taggings_attributes => [
+                    {
+                      :tag_id => tags(:extra).id
+                    }
+                  ]
+                },
+                {
+                  :id => plan_items(:past_plan_item_3).id,
+                  :_destroy => '1'
+                }
+              ]
+            }
           }
-        }
+        end
       end
     end
 
@@ -202,7 +215,7 @@ class PlansControllerTest < ActionController::TestCase
                 :units => '12.21',
                 :cost_per_unit => '8.75'
               }
-    	    ]
+            ]
           },
           {
             :project => 'New project 2',
@@ -218,7 +231,7 @@ class PlansControllerTest < ActionController::TestCase
                 :units => '12.21',
                 :cost_per_unit => '8.75'
               }
-	    ]
+            ]
           }
         ]
       }
@@ -256,7 +269,7 @@ class PlansControllerTest < ActionController::TestCase
                 :units => '12.21',
                 :cost_per_unit => '8.75'
               }
-    	    ]
+            ]
           },
           {
             :project => 'New project',
@@ -272,9 +285,9 @@ class PlansControllerTest < ActionController::TestCase
                 :units => '12.21',
                 :cost_per_unit => '8.75'
               }
-	    ]
+            ]
           }
-    	]
+        ]
       }
     }
 
