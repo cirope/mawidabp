@@ -10,5 +10,6 @@ module Documents::Defaults
     def set_defaults
       self.group_id        = Group.current_id
       self.organization_id = Organization.current_id
+      self.shared          = !!shared
     end
 end
