@@ -5,7 +5,7 @@ module TagsHelper
       plan_item: PlanItem.model_name.human(count: 0),
       review:    Review.model_name.human(count: 0),
       document:  Document.model_name.human(count: 0)
-    }
+    }.with_indifferent_access
   end
 
   def styles
