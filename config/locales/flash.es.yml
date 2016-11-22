@@ -26,6 +26,17 @@ es:
         notice: 'Buena práctica eliminada'
         alert: 'La buena práctica no puede ser eliminada, ya ha sido utilizada en informes'
 
+    news:
+      create:
+        notice: 'Noticia creada'
+      update:
+        notice: 'Noticia actualizada'
+        alert: ''
+        stale: 'Noticia no pudo ser actualizada, intente nuevamente'
+      destroy:
+        notice: 'Noticia eliminada'
+        alert: 'La noticia no pudo ser eliminada'
+
     organizations:
       create:
         notice: 'Organización agregada correctamente'
@@ -77,10 +88,11 @@ es:
         notice: 'Etiqueta creada'
       update:
         notice: 'Etiqueta actualizada'
-        alert:  ''
+        alert: ''
+        stale: 'Etiqueta no pudo ser actualizada, intente nuevamente'
       destroy:
         notice: 'Etiqueta eliminada'
-        alert:  'La etiqueta no pudo ser eliminada'
+        alert: 'La etiqueta no pudo ser eliminada'
 
     users:
       profiles:

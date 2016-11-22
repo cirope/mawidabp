@@ -33,3 +33,12 @@ manual:
   options: {}
   organization: cirope
   group: main_group
+
+breaking:
+  name: Breaking
+  kind: news
+  style: default
+  shared: false
+  options: {}
+  organization: cirope
+  group: main_group

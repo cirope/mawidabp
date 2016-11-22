@@ -54,6 +54,9 @@ es:
       login_record:
         one: 'Registro de ingreso'
         other: 'Registros de ingreso'
+      news:
+        one: 'Noticia'
+        other: 'Noticias'
       organization:
         one: 'Organización'
         other: 'Organizaciones'
@@ -173,6 +176,12 @@ es:
         end: 'Fin'
         start: 'Inicio'
         user_id: 'Usuario'
+      news:
+        title: 'Título'
+        description: 'Descripción'
+        body: 'Cuerpo'
+        shared: 'Compartida'
+        published_at: 'Fecha de publicación'
       organization:
         description: 'Descripción'
         name: 'Nombre'

@@ -22,6 +22,7 @@ class Organization < ActiveRecord::Base
   has_many :documents, dependent: :destroy
   has_many :error_records, dependent: :destroy
   has_many :login_records, dependent: :destroy
+  has_many :news, dependent: :destroy
   has_many :periods, dependent: :destroy
   has_many :polls, dependent: :destroy
   has_many :questionnaires, dependent: :destroy

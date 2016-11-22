@@ -12,6 +12,7 @@
  *= require main
  *= require graph
  *= require documents
+ *= require news
  *= require process_controls
  *= require roles
  *= require sessions

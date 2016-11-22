@@ -35,6 +35,7 @@
 //= require control_objective_items
 //= require documents
 //= require findings
+//= require news
 //= require organizations
 //= require process_controls
 //= require reviews

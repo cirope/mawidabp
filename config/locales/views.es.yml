@@ -102,6 +102,20 @@ es:
       title: 'Detalles del registro de ingreso'
       list: 'Ver registros de ingreso'
 
+  news:
+    edit:
+      title: 'Editar noticia'
+    index:
+      new: 'Nueva noticia'
+      title: 'Listado de noticias'
+      empty_html: 'No hay noticias, puede crear una con el botón <span class="label label-primary">Nueva noticia</span>'
+      empty_search_html: 'No hay noticias que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear noticia'
+      tagging: 'Agregar etiqueta'
+    show:
+      title: 'Ver noticia'
+
   organizations:
     index:
       title: 'Listado de organizaciones'

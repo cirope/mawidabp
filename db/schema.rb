@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161115201932) do
+ActiveRecord::Schema.define(version: 20161121150859) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -433,6 +433,24 @@ ActiveRecord::Schema.define(version: 20161115201932) do
   add_index "login_records", ["organization_id"], name: "index_login_records_on_organization_id", using: :btree
   add_index "login_records", ["start"], name: "index_login_records_on_start", using: :btree
   add_index "login_records", ["user_id"], name: "index_login_records_on_user_id", using: :btree
+
+  create_table "news", force: :cascade do |t|
+    t.string   "title",                           null: false
+    t.text     "description"
+    t.text     "body",                            null: false
+    t.boolean  "shared",          default: false, null: false
+    t.datetime "published_at",                    null: false
+    t.integer  "lock_version",    default: 0
+    t.integer  "organization_id",                 null: false
+    t.integer  "group_id",                        null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "news", ["group_id"], name: "index_news_on_group_id", using: :btree
+  add_index "news", ["organization_id"], name: "index_news_on_organization_id", using: :btree
+  add_index "news", ["published_at"], name: "index_news_on_published_at", using: :btree
+  add_index "news", ["shared"], name: "index_news_on_shared", using: :btree
 
   create_table "notification_relations", force: :cascade do |t|
     t.integer  "notification_id"
@@ -887,6 +905,8 @@ ActiveRecord::Schema.define(version: 20161115201932) do
   add_foreign_key "ldap_configs", "organizations", name: "ldap_configs_organization_id_fk", on_update: :restrict, on_delete: :restrict
   add_foreign_key "login_records", "organizations", name: "login_records_organization_id_fk", on_delete: :restrict
   add_foreign_key "login_records", "users", name: "login_records_user_id_fk", on_delete: :restrict
+  add_foreign_key "news", "groups", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "news", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "notification_relations", "notifications", name: "notification_relations_notification_id_fk", on_delete: :restrict
   add_foreign_key "notifications", "users", column: "user_who_confirm_id", name: "notifications_user_who_confirm_id_fk", on_delete: :restrict
   add_foreign_key "notifications", "users", name: "notifications_user_id_fk", on_delete: :restrict
