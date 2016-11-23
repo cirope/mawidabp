@@ -40,16 +40,15 @@ gem 'sprockets'
 
 gem 'unicorn'
 
-gem 'capistrano'
-gem 'capistrano-bundler'
-gem 'capistrano-rails'
-gem 'capistrano-rbenv'
-
 gem 'where-or' # TODO: remove when Rails 5.0
 
 group :development do
   gem 'unicorn-rails'
   gem 'web-console'
+  gem 'capistrano'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'capistrano-rbenv'
 end
 
 group :test do
