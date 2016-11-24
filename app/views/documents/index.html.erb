@@ -31,6 +31,8 @@
       <% end %>
     </tbody>
   </table>
+
+  <%= paginate @documents %>
 <% end %>
 
 <%= link_to_new new_document_path, class: 'btn btn-primary' %>
