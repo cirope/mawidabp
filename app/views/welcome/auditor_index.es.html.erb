@@ -1,13 +1,7 @@
 <%= render 'header' %>
 
 <div class="row help">
-  <% if can?(:read, :administration_documents) && @documents_count > 0 %>
-    <div class="col-md-4" data-document-list>
-      <%= render 'documents/tag_list' %>
-    </div>
-  <% end %>
-
-  <div class="col-md-<%= can?(:read, :administration_documents) && @documents_count > 0 ? 8 : 12 %>">
+  <div class="col-md-12">
     <div class="row text-center">
       <div class="col-md-4">
         <div>
