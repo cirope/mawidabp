@@ -9,6 +9,16 @@
 </p>
 
 <p>
+  <strong><%= Document.human_attribute_name 'created_at' %></strong>:
+  <%= l @document.created_at, format: :short  %>
+</p>
+
+<p>
+  <strong><%= Document.human_attribute_name 'updated_at' %></strong>:
+  <%= l @document.updated_at, format: :short %>
+</p>
+
+<p>
   <strong><%= Document.human_attribute_name 'shared' %></strong>:
   <%= t @document.shared ? 'label.yes' : 'label.no' %>
 </p>
