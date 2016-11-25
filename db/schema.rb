@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161115201932) do
+ActiveRecord::Schema.define(version: 20161124175612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -746,6 +746,7 @@ ActiveRecord::Schema.define(version: 20161115201932) do
     t.datetime "updated_at",                      null: false
     t.boolean  "shared",          default: false, null: false
     t.integer  "group_id",                        null: false
+    t.string   "icon",            default: "tag", null: false
   end
 
   add_index "tags", ["group_id"], name: "index_tags_on_group_id", using: :btree
