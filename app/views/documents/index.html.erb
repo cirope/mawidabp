@@ -9,7 +9,7 @@
   <table class="table table-striped table-hover">
     <thead id="column_headers">
       <tr>
-        <th></th>
+        <th colspan="2"></th>
         <%= make_filterable_column Document.human_attribute_name('name'), nil, 'name' %>
         <%= make_filterable_column Document.human_attribute_name('description'), { class: 'hidden-sm hidden-xs'}, 'description' %>
         <%= make_not_available_column Document.human_attribute_name('shared') %>
@@ -21,6 +21,7 @@
     <tbody>
       <% @documents.each do |document| %>
         <tr>
+          <td><%= show_document_info document %></td>
           <td><%= link_to_download_document document, class: 'btn btn-default btn-xs' %></td>
           <td><%= super_truncate document.name, 25 %></td>
           <td class="hidden-sm hidden-xs"><%= super_truncate document.description, 25 %></td>

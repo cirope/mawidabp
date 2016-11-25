@@ -23,13 +23,6 @@ class DocumentTest < ActiveSupport::TestCase
     assert_error @document, :organization, :blank
   end
 
-  test 'unique attributes' do
-    document = @document.dup
-
-    assert document.invalid?
-    assert_error document, :name, :taken
-  end
-
   test 'attributes length' do
     @document.name = 'abcde' * 52
 

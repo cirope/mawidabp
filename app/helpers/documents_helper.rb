@@ -14,4 +14,16 @@ module DocumentsHelper
       end
     end
   end
+
+  def show_document_info document
+    created_at_label = Document.human_attribute_name 'created_at'
+    updated_at_label = Document.human_attribute_name 'updated_at'
+    created_at_value = l document.created_at, format: :short
+    updated_at_value = l document.updated_at, format: :short
+
+    show_info [
+      "#{created_at_label}: #{created_at_value}",
+      "#{updated_at_label}: #{updated_at_value}"
+    ].join("\n")
+  end
 end

@@ -4,7 +4,7 @@ module Documents::FileModel
   included do
     after_initialize :set_organization_id_on_file_model
 
-    belongs_to :file_model
+    belongs_to :file_model, dependent: :destroy
     accepts_nested_attributes_for :file_model, allow_destroy: true, reject_if: :all_blank
   end
 
