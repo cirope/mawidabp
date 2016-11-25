@@ -11,8 +11,6 @@ module Documents::FileModel
   private
 
     def set_organization_id_on_file_model
-      file_model = self.file_model || build_file_model
-
-      file_model.organization_id = organization_id
+      file_model.organization_id = organization_id if file_model
     end
 end

@@ -14,13 +14,11 @@ class DocumentTest < ActiveSupport::TestCase
 
   test 'blank attributes' do
     @document.name = ''
-    @document.file_model = nil
     @document.group = nil
     @document.organization = nil
 
     assert @document.invalid?
     assert_error @document, :name, :blank
-    assert_error @document, :file_model, :blank
     assert_error @document, :group, :blank
     assert_error @document, :organization, :blank
   end
