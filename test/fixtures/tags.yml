@@ -2,6 +2,7 @@ important:
   name: Important
   kind: finding
   style: danger
+  icon: tag
   shared: false
   options: {}
   organization: cirope
@@ -11,6 +12,7 @@ extra:
   name: Extra
   kind: plan_item
   style: default
+  icon: tag
   shared: false
   options: {}
   organization: cirope
@@ -20,6 +22,7 @@ high_priority:
   name: High priority
   kind: review
   style: default
+  icon: tag
   shared: false
   options: {}
   organization: cirope
@@ -29,6 +32,7 @@ manual:
   name: Manual
   kind: document
   style: default
+  icon: tag
   shared: false
   options: {}
   organization: cirope

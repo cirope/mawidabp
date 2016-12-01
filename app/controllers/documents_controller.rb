@@ -1,18 +1,16 @@
 class DocumentsController < ApplicationController
   include AutoCompleteFor::Tagging
 
-  respond_to :html, :js
+  respond_to :html
 
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_tag, only: [:index]
   before_action :set_document, only: [:show, :edit, :update, :destroy, :download]
   before_action :set_title, except: [:destroy]
 
   def index
     build_search_conditions Document
 
-    @documents     = documents.includes(:tags).where(@conditions).references(:tags).order(:name).page params[:page]
-    @document_tags = Tagging.grouped_with_document_count if request.xhr?
+    @documents = documents.includes(:tags).where(@conditions).references(:tags).order(:name).page params[:page]
 
     respond_with @documents
   end
@@ -51,10 +49,6 @@ class DocumentsController < ApplicationController
   end
 
   private
-
-    def set_tag
-      @tag = Tag.find params[:tag_id] if params[:tag_id]
-    end
 
     def set_document
       @document = documents.find params[:id]

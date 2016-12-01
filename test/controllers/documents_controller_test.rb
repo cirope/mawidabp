@@ -13,18 +13,6 @@ class DocumentsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should get index via js' do
-    xhr :get, :index, format: :js
-    assert_response :success
-    assert_equal Mime::JS, response.content_type
-  end
-
-  test 'should get index with tag via js' do
-    xhr :get, :index, tag_id: tags(:manual).id, format: :js
-    assert_response :success
-    assert_equal Mime::JS, response.content_type
-  end
-
   test 'should get new' do
     get :new
     assert_response :success

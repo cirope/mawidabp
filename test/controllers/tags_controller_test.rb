@@ -33,7 +33,8 @@ class TagsControllerTest < ActionController::TestCase
     assert_difference 'Tag.where(kind: kind).count' do
       post :create, kind: kind, tag: {
         name: 'Test tag',
-        style: 'default'
+        style: 'default',
+        icon: 'tag'
       }
     end
 

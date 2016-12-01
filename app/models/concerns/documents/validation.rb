@@ -3,9 +3,7 @@ module Documents::Validation
 
   included do
     validates :organization, :group, presence: true
-    validates :name, presence: true, length: { maximum: 255 },
-      uniqueness: { case_sensitive: false, scope: :group_id }
-    validates :file_model, presence: true
+    validates :name, presence: true, length: { maximum: 255 }
     validate :has_at_least_one_tag
   end
 

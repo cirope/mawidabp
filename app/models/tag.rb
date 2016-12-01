@@ -3,6 +3,7 @@ class Tag < ActiveRecord::Base
   include Trimmer
   include Shareable
   include Tags::Defaults
+  include Tags::Icons
   include Tags::JSON
   include Tags::Options
   include Tags::Scopes
