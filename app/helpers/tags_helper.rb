@@ -18,7 +18,7 @@ module TagsHelper
     ActiveSupport::SafeBuffer.new.tap do |buffer|
       tags.each do |tag|
         buffer << content_tag(:span, class: "text-#{tag.style}") do
-          content_tag :span, nil, class: 'glyphicon glyphicon-tag', title: tag.name
+          content_tag :span, nil, class: "glyphicon glyphicon-#{tag.icon}", title: tag.name
         end
       end
     end

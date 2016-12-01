@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161115201932) do
+ActiveRecord::Schema.define(version: 20161124175612) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer  "benefit_id", limit: nil,                          null: false
@@ -2768,6 +2768,7 @@ ActiveRecord::Schema.define(version: 20161115201932) do
     t.datetime "updated_at",                                                 null: false
     t.boolean  "shared",          limit: nil,                default: false, null: false
     t.integer  "group_id",        limit: nil,                                null: false
+    t.string   "icon",                                       default: "tag", null: false
   end
 
   add_index "tags", ["group_id"], name: "index_tags_on_group_id"

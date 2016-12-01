@@ -9,6 +9,16 @@
 </p>
 
 <p>
+  <strong><%= Document.human_attribute_name 'created_at' %></strong>:
+  <%= l @document.created_at, format: :short  %>
+</p>
+
+<p>
+  <strong><%= Document.human_attribute_name 'updated_at' %></strong>:
+  <%= l @document.updated_at, format: :short %>
+</p>
+
+<p>
   <strong><%= Document.human_attribute_name 'shared' %></strong>:
   <%= t @document.shared ? 'label.yes' : 'label.no' %>
 </p>
@@ -16,9 +26,7 @@
 <% if @document.taggings.any? %>
   <ul class="list-inline">
     <% @document.taggings.each do |tagging| %>
-      <li>
-        <span class="label label-<%= tagging.tag.style %>"><%= tagging.tag %></span>
-      </li>
+      <%= tagging_item tagging %>
     <% end %>
   </ul>
 <% end %>

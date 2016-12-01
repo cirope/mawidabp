@@ -190,6 +190,7 @@ es:
       tag:
         name: 'Nombre'
         style: 'Estilo'
+        icon: 'Icono'
       tagging:
         tag: 'Etiqueta'
         tag_id: 'Etiqueta'
