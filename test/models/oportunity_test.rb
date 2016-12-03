@@ -23,8 +23,6 @@ class OportunityTest < ActiveSupport::TestCase
     assert_equal oportunity.description, @oportunity.description
     assert_equal oportunity.answer, @oportunity.answer
     assert_equal oportunity.state, @oportunity.state
-    assert_equal oportunity.solution_date, @oportunity.solution_date
-    assert_equal oportunity.origination_date, @oportunity.origination_date
   end
 
   # Prueba la creación de una oportunidad

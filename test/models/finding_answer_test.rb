@@ -22,8 +22,6 @@ class FindingAnswerTest < ActiveSupport::TestCase
       @finding_answer.commitment_date
     assert_equal fixture_finding_answer.finding_id, @finding_answer.finding_id
     assert_equal fixture_finding_answer.user_id, @finding_answer.user_id
-    assert_equal fixture_finding_answer.file_model_id,
-      @finding_answer.file_model_id
   end
 
   # Prueba la creación de una respuesta a una observación
