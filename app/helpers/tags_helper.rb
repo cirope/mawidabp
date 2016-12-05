@@ -20,6 +20,7 @@ module TagsHelper
         buffer << content_tag(:span, class: "text-#{tag.style}") do
           content_tag :span, nil, class: "glyphicon glyphicon-#{tag.icon}", title: tag.name
         end
+        buffer << ' '
       end
     end
   end

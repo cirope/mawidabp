@@ -13,6 +13,11 @@ class DocumentsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'should get index for tag' do
+    get :index, tag_id: tags(:manual).id
+    assert_response :success
+  end
+
   test 'should get new' do
     get :new
     assert_response :success
