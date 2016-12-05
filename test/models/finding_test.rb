@@ -15,7 +15,6 @@ class FindingTest < ActiveSupport::TestCase
   test 'search' do
     finding = findings(:bcra_A4609_data_proccessing_impact_analisys_weakness)
     assert_kind_of Finding, @finding
-    assert_equal finding.repeated_of_id, @finding.repeated_of_id
     assert_equal finding.control_objective_item_id,
       @finding.control_objective_item_id
     assert_equal finding.title, @finding.title
@@ -23,13 +22,10 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal finding.description, @finding.description
     assert_equal finding.answer, @finding.answer
     assert_equal finding.state, @finding.state
-    assert_equal finding.solution_date, @finding.solution_date
-    assert_equal finding.origination_date, @finding.origination_date
     assert_equal finding.audit_recommendations, @finding.audit_recommendations
     assert_equal finding.effect, @finding.effect
     assert_equal finding.risk, @finding.risk
     assert_equal finding.priority, @finding.priority
-    assert_equal finding.follow_up_date, @finding.follow_up_date
   end
 
   # Prueba la creación de una debilidad

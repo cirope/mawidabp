@@ -12,6 +12,7 @@ module Taggings::Scopes
       with_documents.group(
         :tag_id,
         "#{Tag.quoted_table_name}.#{Tag.qcn 'name'}",
+        "#{Tag.quoted_table_name}.#{Tag.qcn 'icon'}",
         "#{Tag.quoted_table_name}.#{Tag.qcn 'style'}"
       ).count
     }
