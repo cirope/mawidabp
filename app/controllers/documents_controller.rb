@@ -4,13 +4,19 @@ class DocumentsController < ApplicationController
   respond_to :html
 
   before_action :auth, :load_privileges, :check_privileges
+  before_action :set_tag, only: [:index]
   before_action :set_document, only: [:show, :edit, :update, :destroy, :download]
   before_action :set_title, except: [:destroy]
 
   def index
     build_search_conditions Document
 
-    @documents = documents.includes(:tags).where(@conditions).references(:tags).order(:name).page params[:page]
+    if @tag
+      @documents = documents.includes(:tags).where(@conditions).references(:tags).order(:name).page params[:page]
+    else
+      @document_tags   = Tagging.grouped_with_document_count
+      @documents_count = @document_tags.values.sum
+    end
 
     respond_with @documents
   end
@@ -52,6 +58,10 @@ class DocumentsController < ApplicationController
 
     def set_document
       @document = documents.find params[:id]
+    end
+
+    def set_tag
+      @tag = Tag.list.find params[:tag_id] if params[:tag_id]
     end
 
     def document_params

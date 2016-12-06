@@ -187,6 +187,7 @@ es:
         name: 'Nombre'
         prefix: 'Prefijo'
         corporate: 'Corporativa'
+        image_model: 'Imagen'
       organization/image_model:
         image_file_name: 'Isologotipo (nombre de archivo)'
         image_content_type: 'Isologotipo (tipo de archivo)'
