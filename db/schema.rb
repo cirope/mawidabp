@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161124175612) do
+ActiveRecord::Schema.define(version: 20161206154301) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -398,7 +398,11 @@ ActiveRecord::Schema.define(version: 20161124175612) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "image_updated_at"
+    t.integer  "imageable_id",                               null: false
+    t.string   "imageable_type",                             null: false
   end
+
+  add_index "image_models", ["imageable_type", "imageable_id"], name: "index_image_models_on_imageable_type_and_imageable_id", using: :btree
 
   create_table "ldap_configs", force: :cascade do |t|
     t.string   "hostname",            limit: 255,               null: false

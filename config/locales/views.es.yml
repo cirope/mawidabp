@@ -113,6 +113,7 @@ es:
     new:
       title: 'Crear noticia'
       tagging: 'Agregar etiqueta'
+      image_model: 'Agregar imagen'
     show:
       title: 'Ver noticia'
 

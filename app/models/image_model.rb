@@ -9,6 +9,8 @@ class ImageModel < ActiveRecord::Base
 
   attr_accessor :organization_id
 
+  belongs_to :imageable, polymorphic: true
+
   def identifier
     image_file_name
   end

@@ -16,6 +16,20 @@
   </ul>
 <% end %>
 
+<% if @news.image_models.any? %>
+  <ul class="list-inline">
+    <% @news.image_models.each_slice(3) do |image_models| %>
+      <div class="row">
+        <% image_models.each do |image_model| %>
+          <div class="col-md-4">
+            <%= image_tag image_model.image.url(:thumb), class: 'img-thumbnail img-responsive' %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </ul>
+<% end %>
+
 <footer>
   <p>
     <strong><%= News.human_attribute_name 'published_at' %></strong>:

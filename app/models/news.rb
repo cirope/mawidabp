@@ -1,6 +1,7 @@
 class News < ActiveRecord::Base
   include Auditable
   include News::Defaults
+  include News::ImageModels
   include News::Scopes
   include News::Search
   include News::Validation
