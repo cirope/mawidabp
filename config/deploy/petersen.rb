@@ -1,6 +1,6 @@
 set :stage, :production
 set :rails_env, 'production'
-set :branch, 'oracle'
+set :branch, 'c-petersen-production'
 set :pty, true
 
 role :web, %w{deployer@application.mawidabp.petersen.corp}
