@@ -324,6 +324,7 @@ DEPENDENCIES
   prawn
   prawn-table
   rails (~> 4.2.7.1)
+  redcarpet
   responders
   ruby-ntlm
   ruby-oci8
