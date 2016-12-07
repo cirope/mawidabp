@@ -5,9 +5,9 @@ class ImageModel < ActiveRecord::Base
   include ImageModels::Validation
   include ParameterSelector
 
-  mount_uploader :image, ImageUploader, mount_on: :image_file_name
+  delegate :organization_id, to: :imageable, allow_nil: true
 
-  attr_accessor :organization_id
+  mount_uploader :image, ImageUploader, mount_on: :image_file_name
 
   belongs_to :imageable, polymorphic: true
 
