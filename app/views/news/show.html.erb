@@ -13,12 +13,14 @@
     <% if @news.image_models.any? %>
       <div class="pull-left image-container">
         <div id="images" class="carousel slide" data-ride="carousel" data-interval="false">
-          <ol class="carousel-indicators">
-            <li data-target="#images" data-slide-to="0" class="active"></li>
-            <% @news.image_models.size.pred.times do |i| %>
-              <li data-target="#images" data-slide-to="<%= i.next %>"></li>
-            <% end %>
-          </ol>
+          <% if @news.image_models.size > 1 %>
+            <ol class="carousel-indicators">
+              <li data-target="#images" data-slide-to="0" class="active"></li>
+              <% @news.image_models.size.pred.times do |i| %>
+                <li data-target="#images" data-slide-to="<%= i.next %>"></li>
+              <% end %>
+            </ol>
+          <% end %>
 
           <div class="carousel-inner">
             <% @news.image_models.each_with_index do |image_model, i| %>
@@ -28,13 +30,15 @@
             <% end %>
           </div>
 
-          <a class="left carousel-control" href="#images" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left"></span>
-          </a>
+          <% if @news.image_models.size > 1 %>
+            <a class="left carousel-control" href="#images" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
 
-          <a class="right carousel-control" href="#images" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-          </a>
+            <a class="right carousel-control" href="#images" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          <% end %>
         </div>
       </div>
     <% end %>
