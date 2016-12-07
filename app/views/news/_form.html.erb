@@ -1,0 +1,70 @@
+<%= simple_form_for @news do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :title, input_html: { autofocus: true } %>
+    <%= f.input :description, input_html: { rows: 2 } %>
+    <%= f.input :body, hint: markdown_help_link, input_html: { rows: 6 } %>
+    <%= f.input :lock_version, as: :hidden %>
+
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :published_at, as: :date_picker, input_html: { value: l(@news.published_at.to_date) } %>
+      </div>
+      <div class="col-md-6 bottom">
+        <br />
+        <%= f.input :shared, input_html: { disabled: @news.persisted? && @news.shared } %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel <%= @news.errors[:tags].blank? ? 'panel-default' : 'panel-danger' %>">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <%= Tag.model_name.human count: 0 %>
+            </h3>
+          </div>
+          <div class="panel-body">
+            <% @news.errors.full_messages_for(:tags).each do |error| %>
+              <p class="text-danger"><%= error %></p>
+            <% end %>
+
+            <%= f.simple_fields_for :taggings do |tf| %>
+              <%= render 'tagging', f: tf, kind: 'news' %>
+            <% end %>
+
+            <%= link_to_add_fields t('news.new.tagging'), f, :taggings, 'news/tagging' %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="panel <%= @news.errors[:image_models].blank? ? 'panel-default' : 'panel-danger' %>">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <%= ImageModel.model_name.human count: 0 %>
+            </h3>
+          </div>
+          <div class="panel-body">
+            <% @news.errors.full_messages_for(:image_models).each do |error| %>
+              <p class="text-danger"><%= error %></p>
+            <% end %>
+
+            <%= f.simple_fields_for :image_models do |imf| %>
+              <%= render 'image_model', f: imf %>
+            <% end %>
+
+            <%= link_to_add_fields t('news.new.image_model'), f, :image_models, 'news/image_model' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn-primary' %>
+  </div>
+<% end %>
+
+<%= render 'markdown_inline' %>

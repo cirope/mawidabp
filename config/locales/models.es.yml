@@ -48,12 +48,18 @@ es:
       finding:
         one: 'Hallazgo'
         other: 'Hallazgos'
+      image_model:
+        one: 'Imagen'
+        other: 'Imágenes'
       ldap_config:
         one: 'Configuración LDAP'
         other: 'Configuraciones LDAP'
       login_record:
         one: 'Registro de ingreso'
         other: 'Registros de ingreso'
+      news:
+        one: 'Noticia'
+        other: 'Noticias'
       organization:
         one: 'Organización'
         other: 'Organizaciones'
@@ -153,6 +159,10 @@ es:
         data: 'Datos'
         error: 'Error'
         user_id: 'Usuario'
+      image_model:
+        uploaded_data: "Imagen"
+        content_type: "Imagen (tipo)"
+        size: "Imagen (tamaño)"
       ldap_config:
         hostname: 'Dirección del servidor'
         port: 'Puerto'
@@ -173,6 +183,12 @@ es:
         end: 'Fin'
         start: 'Inicio'
         user_id: 'Usuario'
+      news:
+        title: 'Título'
+        description: 'Descripción'
+        body: 'Cuerpo'
+        shared: 'Compartida'
+        published_at: 'Fecha de publicación'
       organization:
         description: 'Descripción'
         name: 'Nombre'

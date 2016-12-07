@@ -102,6 +102,23 @@ es:
       title: 'Detalles del registro de ingreso'
       list: 'Ver registros de ingreso'
 
+  news:
+    edit:
+      title: 'Editar noticia'
+    index:
+      new: 'Nueva noticia'
+      title: 'Listado de noticias'
+      empty_html: 'No hay noticias, puede crear una con el botón <span class="label label-primary">Nueva noticia</span>'
+      empty_search_html: 'No hay noticias que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear noticia'
+      tagging: 'Agregar etiqueta'
+      image_model: 'Agregar imagen'
+    form:
+      markdown_help_html: '<span class="label label-info">Atención</span> dentro del contenido puedes utilizar %{link}'
+    show:
+      title: 'Ver noticia'
+
   organizations:
     index:
       title: 'Listado de organizaciones'

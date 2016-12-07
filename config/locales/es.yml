@@ -1333,10 +1333,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           name: "Organización (nombre)"
           prefix: "Organización (prefijo)"
           description: "Organización (descripción)"
-      image_model:
-        uploaded_data: "Imagen"
-        content_type: "Imagen (tipo)"
-        size: "Imagen (tamaño)"
       notification:
         status: "Estado"
         confirmation_hash: "Cadena de confirmación"

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161124175612) do
+ActiveRecord::Schema.define(version: 20161206154301) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer  "benefit_id", limit: nil,                          null: false
@@ -574,12 +574,16 @@ ActiveRecord::Schema.define(version: 20161124175612) do
   create_table "image_models", force: :cascade do |t|
     t.string   "image_file_name"
     t.string   "image_content_type"
-    t.integer  "image_file_size",    precision: 38
+    t.integer  "image_file_size",                precision: 38
     t.datetime "image_updated_at"
-    t.integer  "lock_version",       precision: 38, default: 0
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
+    t.integer  "lock_version",                   precision: 38, default: 0
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+    t.integer  "imageable_id",       limit: nil,                            null: false
+    t.string   "imageable_type",                                            null: false
   end
+
+  add_index "image_models", ["imageable_type", "imageable_id"], name: "i_ima_mod_ima_typ_ima_id"
 
   create_table "ldap_configs", force: :cascade do |t|
     t.string   "hostname",                                                     null: false
@@ -1885,6 +1889,24 @@ ActiveRecord::Schema.define(version: 20161124175612) do
 # Could not dump table "mview$_adv_workload" because of following StandardError
 #   Unknown type 'LONG' for column 'sql_text'
 
+  create_table "news", force: :cascade do |t|
+    t.string   "title",                                                      null: false
+    t.text     "description"
+    t.text     "body",                                                       null: false
+    t.boolean  "shared",          limit: nil,                default: false, null: false
+    t.datetime "published_at",                                               null: false
+    t.integer  "lock_version",                precision: 38, default: 0
+    t.integer  "organization_id", limit: nil,                                null: false
+    t.integer  "group_id",        limit: nil,                                null: false
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
+  end
+
+  add_index "news", ["group_id"], name: "index_news_on_group_id"
+  add_index "news", ["organization_id"], name: "index_news_on_organization_id"
+  add_index "news", ["published_at"], name: "index_news_on_published_at"
+  add_index "news", ["shared"], name: "index_news_on_shared"
+
   create_table "notification_relations", force: :cascade do |t|
     t.integer  "notification_id", limit: nil
     t.integer  "model_id",        limit: nil
@@ -2929,6 +2951,8 @@ ActiveRecord::Schema.define(version: 20161124175612) do
   add_foreign_key "mview$_adv_rollup", "mview$_adv_level", column: "runid#", primary_key: "runid#", name: "mview$_adv_rollup_cfk"
   add_foreign_key "mview$_adv_rollup", "mview$_adv_level", column: "runid#", primary_key: "runid#", name: "mview$_adv_rollup_pfk"
   add_foreign_key "mview$_adv_rollup", "mview$_adv_log", column: "runid#", primary_key: "runid#", name: "mview$_adv_rollup_fk"
+  add_foreign_key "news", "groups", on_delete: :cascade
+  add_foreign_key "news", "organizations", on_delete: :cascade
   add_foreign_key "notification_relations", "notifications", on_delete: :cascade
   add_foreign_key "notifications", "users", column: "user_who_confirm_id", on_delete: :cascade
   add_foreign_key "notifications", "users", on_delete: :cascade

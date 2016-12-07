@@ -44,8 +44,12 @@ Rails.application.routes.draw do
     resources :documents, only: [:index]
   end
 
-  scope ':kind', kind: /finding|plan_item|review|document/ do
+  scope ':kind', kind: /document|finding|news|plan_item|review/ do
     resources :tags
+  end
+
+  resources :news do
+    get :auto_complete_for_tagging, on: :collection
   end
 
   get 'welcome', as: 'welcome', to: 'welcome#index'
