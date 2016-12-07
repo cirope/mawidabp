@@ -44,7 +44,7 @@
     <% end %>
 
     <div class="body clearfix">
-      <%= textilize @news.body %>
+      <%= markdown @news.body %>
     </div>
 
     <% if @news.taggings.any? %>
