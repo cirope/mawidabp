@@ -14,6 +14,7 @@ class Organization < ActiveRecord::Base
   include Organizations::Setting
   include Organizations::Validations
 
+  alias_method :organization_id, :id
   trimmed_fields :name, :prefix
 
   has_many :benefits, dependent: :destroy

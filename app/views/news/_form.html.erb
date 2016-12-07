@@ -17,41 +17,47 @@
       </div>
     </div>
 
-    <div class="panel <%= @news.errors[:tags].blank? ? 'panel-default' : 'panel-danger' %>">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <%= Tag.model_name.human count: 0 %>
-        </h3>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel <%= @news.errors[:tags].blank? ? 'panel-default' : 'panel-danger' %>">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <%= Tag.model_name.human count: 0 %>
+            </h3>
+          </div>
+          <div class="panel-body">
+            <% @news.errors.full_messages_for(:tags).each do |error| %>
+              <p class="text-danger"><%= error %></p>
+            <% end %>
+
+            <%= f.simple_fields_for :taggings do |tf| %>
+              <%= render 'tagging', f: tf, kind: 'news' %>
+            <% end %>
+
+            <%= link_to_add_fields t('news.new.tagging'), f, :taggings, 'news/tagging' %>
+          </div>
+        </div>
       </div>
-      <div class="panel-body">
-        <% @news.errors.full_messages_for(:tags).each do |error| %>
-          <p class="text-danger"><%= error %></p>
-        <% end %>
 
-        <%= f.simple_fields_for :taggings do |tf| %>
-          <%= render 'tagging', f: tf, kind: 'news' %>
-        <% end %>
+      <div class="col-md-6">
+        <div class="panel <%= @news.errors[:image_models].blank? ? 'panel-default' : 'panel-danger' %>">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <%= ImageModel.model_name.human count: 0 %>
+            </h3>
+          </div>
+          <div class="panel-body">
+            <% @news.errors.full_messages_for(:image_models).each do |error| %>
+              <p class="text-danger"><%= error %></p>
+            <% end %>
 
-        <%= link_to_add_fields t('news.new.tagging'), f, :taggings, 'news/tagging' %>
-      </div>
-    </div>
+            <%= f.simple_fields_for :image_models do |imf| %>
+              <%= render 'image_model', f: imf %>
+            <% end %>
 
-    <div class="panel <%= @news.errors[:image_models].blank? ? 'panel-default' : 'panel-danger' %>">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <%= ImageModel.model_name.human count: 0 %>
-        </h3>
-      </div>
-      <div class="panel-body">
-        <% @news.errors.full_messages_for(:image_models).each do |error| %>
-          <p class="text-danger"><%= error %></p>
-        <% end %>
-
-        <%= f.simple_fields_for :image_models do |imf| %>
-          <%= render 'image_model', f: imf %>
-        <% end %>
-
-        <%= link_to_add_fields t('news.new.image_model'), f, :image_models, 'news/image_model' %>
+            <%= link_to_add_fields t('news.new.image_model'), f, :image_models, 'news/image_model' %>
+          </div>
+        </div>
       </div>
     </div>
   </div>

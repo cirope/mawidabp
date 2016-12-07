@@ -1,41 +1,68 @@
-<h1><%= @news %></h1>
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="page-header">
+      <h1><%= @news %></h1>
+    </div>
 
-<p class="lead">
-  <em><%= @news.description %></em>
-</p>
+    <h3>
+      <em><%= @news.description %></em>
+    </h3>
 
-<%= textilize @news.body %>
+    <br>
 
-<% if @news.taggings.any? %>
-  <ul class="list-inline">
-    <% @news.taggings.each do |tagging| %>
-      <li>
-        <span class="label label-<%= tagging.tag.style %>"><%= tagging.tag %></span>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
+    <% if @news.image_models.any? %>
+      <div class="pull-left image-container">
+        <div id="images" class="carousel slide" data-ride="carousel" data-interval="false">
+          <ol class="carousel-indicators">
+            <li data-target="#images" data-slide-to="0" class="active"></li>
+            <% @news.image_models.size.pred.times do |i| %>
+              <li data-target="#images" data-slide-to="<%= i.next %>"></li>
+            <% end %>
+          </ol>
 
-<% if @news.image_models.any? %>
-  <ul class="list-inline">
-    <% @news.image_models.each_slice(3) do |image_models| %>
-      <div class="row">
-        <% image_models.each do |image_model| %>
-          <div class="col-md-4">
-            <%= image_tag image_model.image.url(:thumb), class: 'img-thumbnail img-responsive' %>
+          <div class="carousel-inner">
+            <% @news.image_models.each_with_index do |image_model, i| %>
+              <div class="item <%= 'active' if i == 0 %>">
+                <%= image_tag image_model.image.url(:medium), class: 'img-thumbnail img-responsive' %>
+              </div>
+            <% end %>
           </div>
-        <% end %>
+
+          <a class="left carousel-control" href="#images" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </a>
+
+          <a class="right carousel-control" href="#images" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </a>
+        </div>
       </div>
     <% end %>
-  </ul>
-<% end %>
 
-<footer>
-  <p>
-    <strong><%= News.human_attribute_name 'published_at' %></strong>:
-    <%= l @news.published_at.to_date %>
-  </p>
-</footer>
+    <div class="body clearfix">
+      <%= textilize @news.body %>
+    </div>
 
-<%= link_to_edit [:edit, @news] %> |
-<%= link_to_index news_index_path %>
+    <% if @news.taggings.any? %>
+      <ul class="list-inline">
+        <% @news.taggings.each do |tagging| %>
+          <li>
+            <span class="label label-<%= tagging.tag.style %>"><%= tagging.tag %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <footer>
+      <p>
+        <strong><%= News.human_attribute_name 'published_at' %></strong>:
+        <%= l @news.published_at.to_date %>
+      </p>
+    </footer>
+
+    <hr>
+
+    <%= link_to_edit [:edit, @news] %> |
+    <%= link_to_index news_index_path %>
+  </div>
+</div>

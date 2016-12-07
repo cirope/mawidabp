@@ -48,6 +48,9 @@ es:
       finding:
         one: 'Hallazgo'
         other: 'Hallazgos'
+      image_model:
+        one: 'Imagen'
+        other: 'Imágenes'
       ldap_config:
         one: 'Configuración LDAP'
         other: 'Configuraciones LDAP'
@@ -156,6 +159,10 @@ es:
         data: 'Datos'
         error: 'Error'
         user_id: 'Usuario'
+      image_model:
+        uploaded_data: "Imagen"
+        content_type: "Imagen (tipo)"
+        size: "Imagen (tamaño)"
       ldap_config:
         hostname: 'Dirección del servidor'
         port: 'Puerto'

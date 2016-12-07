@@ -1,22 +1,24 @@
 <fieldset class="image_model">
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-6">
-        <div class="file-container pull-left">
-          <% if f.object.image? %>
-            <p><%= f.object.image.filename %></p>
-          <% else %>
+      <div class="col-xs-10">
+        <% if f.object.image? %>
+          <p>
+            <span class="glyphicon glyphicon-picture"></span>
+            <%= f.object.image.file.filename %>
+          </p>
+        <% else %>
+          <div class="file-container pull-left">
             <%= link_to_upload f.object %>
-          <% end %>
-
-          <% if f.object.image_cache %>
-            <%= f.input :image_cache, as: :hidden %>
-          <% else %>
-            <%= f.input :image, label: false %>
-          <% end %>
-        </div>
+            <% if f.object.image_cache %>
+              <%= f.input :image_cache, as: :hidden %>
+            <% else %>
+              <%= f.input :image, label: false %>
+            <% end %>
+          </div>
+        <% end %>
       </div>
-      <div class="col-md-2">
+      <div class="col-xs-2">
         <div class="toggle-visibility">
           <%= link_to_remove_nested_item f %>
         </div>

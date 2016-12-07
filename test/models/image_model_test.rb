@@ -9,7 +9,8 @@ class ImageModelTest < ActiveSupport::TestCase
 
   test 'create' do
     assert_difference 'ImageModel.count' do
-      @image_model = ImageModel.create(
+      @image_model = ImageModel.create!(
+        imageable: organizations(:cirope),
         image: Rack::Test::UploadedFile.new(
           "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
         )
