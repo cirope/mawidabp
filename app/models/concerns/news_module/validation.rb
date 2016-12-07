@@ -1,4 +1,4 @@
-module News::Validation
+module NewsModule::Validation
   extend ActiveSupport::Concern
 
   included do

@@ -1,4 +1,4 @@
-module News::Search
+module NewsModule::Search
   extend ActiveSupport::Concern
 
   included do

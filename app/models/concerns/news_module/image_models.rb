@@ -1,4 +1,4 @@
-module News::ImageModels
+module NewsModule::ImageModels
   extend ActiveSupport::Concern
 
   included do

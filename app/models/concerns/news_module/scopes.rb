@@ -1,4 +1,4 @@
-module News::Scopes
+module NewsModule::Scopes
   extend ActiveSupport::Concern
 
   included do

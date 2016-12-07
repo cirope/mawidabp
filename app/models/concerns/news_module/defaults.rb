@@ -1,4 +1,4 @@
-module News::Defaults
+module NewsModule::Defaults
   extend ActiveSupport::Concern
 
   included do

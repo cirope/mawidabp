@@ -1,10 +1,10 @@
 class News < ActiveRecord::Base
   include Auditable
-  include News::Defaults
-  include News::ImageModels
-  include News::Scopes
-  include News::Search
-  include News::Validation
+  include NewsModule::Defaults
+  include NewsModule::ImageModels
+  include NewsModule::Scopes
+  include NewsModule::Search
+  include NewsModule::Validation
   include Shareable
   include Taggable
   include Trimmer
