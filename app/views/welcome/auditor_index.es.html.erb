@@ -12,6 +12,10 @@
           <% end %>
         </div>
       <% end %>
+
+      <p>
+        <%= link_to 'Ver todas las noticias', news_index_path %>
+      </p>
     </div>
   </div>
 <% elsif @news.size == 1 && can?(:read, :administration_news) %>
