@@ -47,7 +47,8 @@ class NewsController < ApplicationController
     end
 
     def news_params
-      params.require(:news).permit :title, :description, :body, :published_at, :lock_version,
+      params.require(:news).permit :title, :description, :body, :published_at,
+        :shared, :lock_version,
         taggings_attributes:     [:id, :tag_id, :_destroy],
         image_models_attributes: [:id, :image, :image_cache, :_destroy]
     end

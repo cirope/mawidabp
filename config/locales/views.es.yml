@@ -114,6 +114,8 @@ es:
       title: 'Crear noticia'
       tagging: 'Agregar etiqueta'
       image_model: 'Agregar imagen'
+    form:
+      markdown_help_html: '<span class="label label-info">Atención</span> dentro del contenido puedes utilizar %{link}'
     show:
       title: 'Ver noticia'
 

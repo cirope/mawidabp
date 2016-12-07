@@ -4,7 +4,7 @@
   <div class="form-inputs">
     <%= f.input :title, input_html: { autofocus: true } %>
     <%= f.input :description, input_html: { rows: 2 } %>
-    <%= f.input :body, input_html: { rows: 6 } %>
+    <%= f.input :body, hint: markdown_help_link, input_html: { rows: 6 } %>
     <%= f.input :lock_version, as: :hidden %>
 
     <div class="row">
@@ -66,3 +66,5 @@
     <%= f.button :submit, class: 'btn-primary' %>
   </div>
 <% end %>
+
+<%= render 'markdown_inline' %>
