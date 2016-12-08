@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get '/touch', to: 'touch#index', as: 'touch'
+  post '/touch', to: 'touch#create', as: 'touch'
 
   # Sessions
   get    'login',    to: 'sessions#new',     as: 'login'

@@ -75,7 +75,7 @@ class ApplicationController < ActionController::Base
           @auth_user.try(:privileges, current_organization) : {}
       else
         go_to = request.fullpath
-        store_go_to = request.get? && !request.xhr? && controller_name != 'touch'
+        store_go_to = request.get? && !request.xhr?
         session[:go_to] = go_to if store_go_to
         @auth_user = nil
         redirect_to_login t('message.must_be_authenticated'), :alert

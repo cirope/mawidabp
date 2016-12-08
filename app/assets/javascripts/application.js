@@ -19,7 +19,6 @@
 //= require jquery.url
 //= require jquery.mw
 //= require dynamic_form
-//= require effect_helper
 //= require date_pickers
 //= require fetch
 //= require hide

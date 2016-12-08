@@ -1,7 +1,7 @@
 class TouchController < ApplicationController
   before_action :auth
 
-  def index
+  def create
     head :ok
   end
 end
