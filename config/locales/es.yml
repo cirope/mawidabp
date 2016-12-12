@@ -1200,6 +1200,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
         effectiveness: "Efectividad de control"
         weaknesses: "Observaciones"
         oportunities: "Oportunidades de mejora"
+        work_papers: "Papeles de trabajo"
       control_objective_item/control:
         order: "Objetivo de control (orden)"
         control: "Objetivo de control (controles)"
