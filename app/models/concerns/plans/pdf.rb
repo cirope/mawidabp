@@ -1,4 +1,4 @@
-module Plans::Pdf
+module Plans::PDF
   extend ActiveSupport::Concern
 
   def to_pdf organization = nil, include_details = true
@@ -48,7 +48,7 @@ module Plans::Pdf
         from_date: I18n.l(period.start, format: :long),
         to_date:   I18n.l(period.end,   format: :long)
       }
-      
+
       [period_label, range_label, 0, false]
     end
 
