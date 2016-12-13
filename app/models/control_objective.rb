@@ -58,7 +58,7 @@ class ControlObjective < ActiveRecord::Base
   end
 
   def label
-    continuous ? "#{name} (#{I18n.t('activerecord.attributes.control_objective.continuous')})" : name
+    name
   end
 
   def informal

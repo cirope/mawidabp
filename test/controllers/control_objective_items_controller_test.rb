@@ -82,15 +82,6 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert_template 'control_objective_items/edit'
   end
 
-  test 'edit continuous control objective item' do
-    login
-    get :edit, :id => control_objective_items(
-      :iso_27000_security_organization_4_4_continuous_item).id
-    assert_response :success
-    assert_not_nil assigns(:control_objective_item)
-    assert_template 'control_objective_items/_business_unit_score'
-  end
-
   test 'update control_objective_item' do
     assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
       assert_difference 'WorkPaper.count', 2 do
@@ -149,7 +140,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
       assigns(:control_objective_item).control_objective_text
   end
 
-  test 'update continuous control_objective_item' do
+  test 'update control_objective_item with business unit scores' do
     assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
       # One explicit and two via business unit type
       assert_difference 'BusinessUnitScore.count', 3 do

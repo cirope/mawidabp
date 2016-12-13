@@ -17,9 +17,6 @@
   <% else %>
     <ul>
       <li>
-        <% if control_objective_item.continuous %>
-          <span class="glyphicon glyphicon-repeat"></span>
-        <% end %>
         <%= content_tag :span, control_objective_item.control_objective_text,
           :class => ('strike text-muted' if control_objective_item.finished) %>
         <% if !readonly %>

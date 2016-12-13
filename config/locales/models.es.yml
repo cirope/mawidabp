@@ -144,7 +144,6 @@ es:
         relevance: 'Importancia'
         risk: 'Riesgo'
         obsolete: 'Obsoleto'
-        continuous: 'Contínuo'
       document:
         name: 'Nombre'
         description: 'Descripción'

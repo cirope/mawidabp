@@ -265,10 +265,8 @@ module Reports::ProcessControlStats
   private
 
     def effectiveness coi
-      if coi.continuous && @business_unit_ids && @business_unit_ids.size == 1
-        score = coi.business_unit_scores.where(
-          business_unit_id: @business_unit_ids
-        ).take
+      if @business_unit_ids && @business_unit_ids.size == 1
+        score = coi.business_unit_scores.where(business_unit_id: @business_unit_ids).take
       end
 
       _effectiveness = score ? score.effectiveness : coi.effectiveness

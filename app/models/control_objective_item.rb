@@ -209,10 +209,6 @@ class ControlObjectiveItem < ActiveRecord::Base
     self.control_objective.try(:process_control)
   end
 
-  def continuous
-    self.control_objective.try(:continuous)
-  end
-
   def must_be_approved?
     errors = []
 
