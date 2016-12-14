@@ -34,13 +34,20 @@ module Findings::PDF
     def put_cover_on pdf
       review_code_title = "<b>#{self.class.human_attribute_name :review_code}</b>: #{review_code}"
 
-      pdf.add_review_header organization, review.identification.strip, review.plan_item.project.strip
-      pdf.move_down PDF_FONT_SIZE * 3
-
-      pdf.add_title self.class.model_name.human, (PDF_FONT_SIZE * 1.5).round, :center, false
-      pdf.move_down PDF_FONT_SIZE
+      put_review_header_on pdf
+      put_finding_model_name_on pdf
 
       pdf.add_title review_code_title, PDF_FONT_SIZE, :center, false
+    end
+
+    def put_review_header_on pdf
+      pdf.add_review_header organization, review.identification.strip, review.plan_item.project.strip
+      pdf.move_down PDF_FONT_SIZE * 3
+    end
+
+    def put_finding_model_name_on pdf
+      pdf.add_title self.class.model_name.human, (PDF_FONT_SIZE * 1.5).round, :center, false
+      pdf.move_down PDF_FONT_SIZE
     end
 
     def put_description_items_on pdf
@@ -64,32 +71,41 @@ module Findings::PDF
     end
 
     def put_conditional_items_on pdf
-      unless unanswered?
-        label = self.class.human_attribute_name 'answer'
-
-        pdf.add_description_item label, answer, 0, false
-      end
+      put_answer_on pdf unless unanswered?
 
       if kind_of?(Weakness) && (implemented? || being_implemented?)
-        label = Weakness.human_attribute_name 'follow_up_date'
-        value = follow_up_date ? I18n.l(follow_up_date, format: :long) : nil
-
-        pdf.add_description_item label, value, 0, false
+        put_follow_up_date_on pdf
       end
 
-      if implemented_audited?
-        label = self.class.human_attribute_name 'solution_date'
-        value = solution_date ? I18n.l(solution_date, format: :long) : nil
+      put_solution_date_on pdf    if implemented_audited?
+      put_origination_date_on pdf if origination_date.present?
+    end
 
-        pdf.add_description_item label, value, 0, false
-      end
+    def put_answer_on pdf
+      label = self.class.human_attribute_name 'answer'
 
-      if origination_date.present?
-        label = self.class.human_attribute_name 'origination_date'
-        value = I18n.l origination_date, format: :long
+      pdf.add_description_item label, answer, 0, false
+    end
 
-        pdf.add_description_item label, value , 0, false
-      end
+    def put_follow_up_date_on pdf
+      label = Weakness.human_attribute_name 'follow_up_date'
+      value = follow_up_date ? I18n.l(follow_up_date, format: :long) : nil
+
+      pdf.add_description_item label, value, 0, false
+    end
+
+    def put_solution_date_on pdf
+      label = self.class.human_attribute_name 'solution_date'
+      value = solution_date ? I18n.l(solution_date, format: :long) : nil
+
+      pdf.add_description_item label, value, 0, false
+    end
+
+    def put_origination_date_on pdf
+      label = self.class.human_attribute_name 'origination_date'
+      value = I18n.l origination_date, format: :long
+
+      pdf.add_description_item label, value , 0, false
     end
 
     def put_user_data_on pdf
@@ -100,18 +116,8 @@ module Findings::PDF
     end
 
     def put_work_paper_data_on pdf
-      work_papers_label = ControlObjectiveItem.human_attribute_name 'work_papers'
-      finding_title     = "#{self.class.model_name.human} #{review_code} - #{title}"
-
       if work_papers.present?
-        pdf.start_new_page
-        pdf.move_down PDF_FONT_SIZE * 3
-
-        pdf.add_title work_papers_label, (PDF_FONT_SIZE * 1.5).round, :center, false
-        pdf.move_down PDF_FONT_SIZE
-        pdf.add_title finding_title, (PDF_FONT_SIZE * 1.5).round, :center, false
-
-        pdf.move_down PDF_FONT_SIZE * 3
+        put_work_paper_cover_on pdf
 
         work_papers.each do |wp|
           pdf.text wp.inspect, align: :center, font_size: PDF_FONT_SIZE
@@ -119,6 +125,20 @@ module Findings::PDF
       else
         pdf.add_footnote I18n.t('finding.without_work_papers')
       end
+    end
+
+    def put_work_paper_cover_on pdf
+      work_papers_label = ControlObjectiveItem.human_attribute_name 'work_papers'
+      finding_title     = "#{self.class.model_name.human} #{review_code} - #{title}"
+
+      pdf.start_new_page
+      pdf.move_down PDF_FONT_SIZE * 3
+
+      pdf.add_title work_papers_label, (PDF_FONT_SIZE * 1.5).round, :center, false
+      pdf.move_down PDF_FONT_SIZE
+      pdf.add_title finding_title, (PDF_FONT_SIZE * 1.5).round, :center, false
+
+      pdf.move_down PDF_FONT_SIZE * 3
     end
 
     def description_items
