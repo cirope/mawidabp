@@ -7,6 +7,8 @@ class ControlObjectiveItem < ActiveRecord::Base
   include ControlObjectiveItems::Scopes
   include ControlObjectiveItems::Search
 
+  delegate :support, :support?, to: :control_objective
+
   # Atributos no persistentes
   attr_reader :approval_errors
   # Alias de atributos

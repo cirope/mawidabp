@@ -73,6 +73,15 @@
         </div>
       </div>
     </div>
+
+    <% if @control_objective_item.support? %>
+      <p>
+        <strong>
+          <%= ControlObjectiveItem.human_attribute_name :support %>
+        </strong>
+        <%= link_to_download_support @control_objective_item.control_objective %>
+      </p>
+    <% end %>
   </div>
 
   <br />

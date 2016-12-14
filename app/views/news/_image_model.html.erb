@@ -9,7 +9,7 @@
           </p>
         <% else %>
           <div class="file-container pull-left">
-            <%= link_to_upload f.object %>
+            <%= link_to_upload f.object, :image %>
             <% if f.object.image_cache %>
               <%= f.input :image_cache, as: :hidden %>
             <% else %>

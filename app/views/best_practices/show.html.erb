@@ -14,6 +14,7 @@
         <th><%= Control.human_attribute_name 'sustantive_tests' %></th>
         <th><%= Control.human_attribute_name 'effects' %></th>
         <th><%= ControlObjective.human_attribute_name 'risk' %></th>
+        <th><%= ControlObjective.human_attribute_name 'support' %></th>
       </tr>
     </thead>
     <tbody>
@@ -26,6 +27,7 @@
           <td><%= simple_format co.control.sustantive_tests %></td>
           <td><%= simple_format co.control.effects %></td>
           <td><%= co.risk_text %></td>
+          <td><%= link_to_download_support co %></td>
         </tr>
       <% end %>
     </tbody>

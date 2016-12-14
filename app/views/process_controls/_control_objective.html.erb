@@ -5,7 +5,7 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-5">
-        <%= f.input :name, autofocus: true, input_html: { rows: 4 } %>
+        <%= f.input :name, input_html: { rows: 4 } %>
       </div>
 
       <div class="col-md-2">
@@ -14,12 +14,28 @@
       <div class="col-md-2">
         <%= f.input :risk, collection: risks, prompt: true %>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-1">
         <label for="control_objective_obsolete_<%= id %>">
           <%= ControlObjective.human_attribute_name 'obsolete' %>
         </label>
         <div>
           <%= f.check_box :obsolete, id: "control_objective_obsolete_#{id}", data: { process_control_id: process_control_id } %>
+        </div>
+      </div>
+      <div class="col-md-1">
+        <label>
+          <%= ControlObjective.human_attribute_name 'support' %>
+        </label>
+        <div>
+          <div class="file-container pull-left">
+            <%= link_to_upload f.object, :support %>
+
+            <% if f.object.support_cache %>
+              <%= f.input :support_cache, as: :hidden, id: "control_objective_support_#{id}" %>
+            <% else %>
+              <%= f.input :support, as: :file, label: false, hint: f.object.identifier, id: "control_objective_support_#{id}" %>
+            <% end %>
+          </div>
         </div>
       </div>
       <div class="col-md-1">

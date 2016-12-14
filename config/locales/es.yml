@@ -1178,6 +1178,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
         business_unit: "Unidad de negocio"
         project: "Proyecto"
         approved: "Aprobado"
+        summary: "Acta"
       control:
         order: "Orden"
         control: "Controles"
@@ -1198,6 +1199,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
         exclude_from_score: "No calificar"
         process_control_id: "Proceso de negocio"
         effectiveness: "Efectividad de control"
+        support: "Soporte"
         weaknesses: "Observaciones"
         oportunities: "Oportunidades de mejora"
         work_papers: "Papeles de trabajo"

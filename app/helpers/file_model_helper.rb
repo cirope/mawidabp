@@ -19,13 +19,18 @@ module FileModelHelper
     end
   end
 
-  def link_to_upload model
-    options = { class: 'glyphicon-folder-open', title: t('navigation.upload') }
+  def link_to_upload model, attr = :file
+    cache_column = "#{attr}_cache"
+    options      = {
+      class: 'glyphicon-folder-open',
+      title: t('navigation.upload')
+    }
 
-    model_cache = model.respond_to?(:file_cache) ? :file_cache : :image_cache
-
-    if model.send(model_cache)
-      options = { class: 'glyphicon-file', title: model.identifier.to_s.titleize }
+    if model.send(cache_column)
+      options = {
+        class: 'glyphicon-file',
+        title: model.identifier.to_s.titleize
+      }
     end
 
     content_tag :span, class: 'btn btn-default file', title: options[:title] do

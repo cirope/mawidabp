@@ -6,6 +6,10 @@
           <%= render 'process_controls/control_objective', f: co_f, process_control_id: @process_control.id %>
         <% end %>
       <% end %>
+
+      <% if @process_control.persisted? %>
+        <%= pc_f.input :id, as: :hidden, input_html: { id: "nested_business_unit_process_control_#{@process_control.id}" } %>
+      <% end %>
     <% end %>
   <% end %>
 </div>

@@ -93,6 +93,7 @@ class BestPracticesControllerTest < ActionController::TestCase
                   },
                   relevance: ControlObjective.relevances_values.first,
                   risk: ControlObjective.risks_values.first,
+                  support: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain'),
                   order: 2
                 }
               ]

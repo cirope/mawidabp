@@ -5,6 +5,7 @@ bcra_A4609_security_management_responsible_dependency:
   order: 1
   process_control: bcra_A4609_security_management
   obsolete: false
+  support: 'text.txt'
 
 bcra_A4609_data_proccessing_impact_analisys:
   name: Análisis de impacto

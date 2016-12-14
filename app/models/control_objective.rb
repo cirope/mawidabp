@@ -1,10 +1,11 @@
 class ControlObjective < ActiveRecord::Base
+  include Auditable
   include Parameters::Relevance
   include Parameters::Risk
 
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
+  mount_uploader :support, FileUploader
+
+  delegate :organization_id, to: :best_practice, allow_nil: true
 
   # Callbacks
   before_destroy :can_be_destroyed?
@@ -35,6 +36,7 @@ class ControlObjective < ActiveRecord::Base
 
   # Relaciones
   belongs_to :process_control
+  has_one :best_practice, through: :process_control
   has_many :control_objective_items, inverse_of: :control_objective,
     dependent: :nullify
   has_one :control, -> { order("#{Control.quoted_table_name}.#{Control.qcn('order')} ASC") },
@@ -79,5 +81,9 @@ class ControlObjective < ActiveRecord::Base
     risk = self.class.risks.detect { |r| r.last == self.risk }
 
     risk ? I18n.t("risk_types.#{risk.first}") : ''
+  end
+
+  def identifier
+    support.identifier || support_identifier
   end
 end
