@@ -6,7 +6,7 @@ module Tags::Validation
     validates :name, uniqueness: { case_sensitive: false, scope: :group_id }
     validates :icon, inclusion: { in: :available_icons }
     validates :kind, inclusion: {
-      in: %w(document finding news plan_item review)
+      in: %w(control_objective document finding news plan_item review)
     }
     validates :style, inclusion: {
       in: %w(default primary success info warning danger)

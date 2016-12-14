@@ -15,6 +15,7 @@
         <th><%= Control.human_attribute_name 'effects' %></th>
         <th><%= ControlObjective.human_attribute_name 'risk' %></th>
         <th><%= ControlObjective.human_attribute_name 'support' %></th>
+        <th><%= Tag.model_name.human count: 0 %></th>
       </tr>
     </thead>
     <tbody>
@@ -28,6 +29,7 @@
           <td><%= simple_format co.control.effects %></td>
           <td><%= co.risk_text %></td>
           <td><%= link_to_download_support co %></td>
+          <td><%= tags co.tags %></td>
         </tr>
       <% end %>
     </tbody>

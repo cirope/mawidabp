@@ -1,7 +1,9 @@
 class BestPracticesController < ApplicationController
+  include AutoCompleteFor::Tagging
+
   respond_to :html
 
-  before_action :auth, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   before_action :set_best_practice, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: :destroy
 
@@ -58,14 +60,21 @@ class BestPracticesController < ApplicationController
 
     def best_practice_params
       params.require(:best_practice).permit(
-        :name, :description, :obsolete, :shared, :lock_version, process_controls_attributes: [
-          :id, :name, :order, :obsolete, :_destroy, control_objectives_attributes: [
+        :name, :description, :obsolete, :shared, :lock_version,
+        process_controls_attributes: [
+          :id, :name, :order, :obsolete, :_destroy,
+          control_objectives_attributes: [
             :id, :name, :relevance, :risk, :obsolete, :support, :support_cache, :order, :_destroy,
-            control_attributes: [
-              :id, :control, :effects, :design_tests, :compliance_tests, :sustantive_tests, :_destroy
+            taggings_attributes: [:id, :tag_id, :_destroy],
+            control_attributes:  [
+              :id, :control, :effects, :design_tests, :compliance_tests, :sustantive_tests, :_destroy,
             ]
           ]
         ]
       )
+    end
+
+    def load_privileges
+      @action_privileges.update auto_complete_for_tagging: :read
     end
 end

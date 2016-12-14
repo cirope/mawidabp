@@ -2,6 +2,7 @@ class ControlObjective < ActiveRecord::Base
   include Auditable
   include Parameters::Relevance
   include Parameters::Risk
+  include Taggable
 
   mount_uploader :support, FileUploader
 

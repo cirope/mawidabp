@@ -44,7 +44,7 @@ Rails.application.routes.draw do
     resources :documents, only: [:index]
   end
 
-  scope ':kind', kind: /document|finding|news|plan_item|review/ do
+  scope ':kind', kind: /control_objective|document|finding|news|plan_item|review/ do
     resources :tags
   end
 
@@ -284,6 +284,8 @@ Rails.application.routes.draw do
     resources :control_objectives, only: [] do
       get :download, on: :member, controller: 'best_practices/control_objectives'
     end
+
+    get :auto_complete_for_tagging, on: :collection
   end
 
   resources :periods
