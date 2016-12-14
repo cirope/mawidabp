@@ -5,6 +5,7 @@ class Finding < ActiveRecord::Base
   include Findings::Achievements
   include Findings::Answers
   include Findings::Confirmation
+  include Findings::Cost
   include Findings::CreateValidation
   include Findings::Csv
   include Findings::CustomAttributes
@@ -47,7 +48,6 @@ class Finding < ActiveRecord::Base
   has_many :notification_relations, :as => :model, :dependent => :destroy
   has_many :notifications, -> { order(:created_at) },
     :through => :notification_relations
-  has_many :costs, :as => :item, :dependent => :destroy
   has_many :comments, -> { order(:created_at => :asc) }, :as => :commentable,
     :dependent => :destroy
   has_many :finding_user_assignments, :dependent => :destroy,
@@ -59,7 +59,6 @@ class Finding < ActiveRecord::Base
   has_many :business_unit_findings, :dependent => :destroy
   has_many :business_units, :through => :business_unit_findings
 
-  accepts_nested_attributes_for :costs, :allow_destroy => false
   accepts_nested_attributes_for :comments, :allow_destroy => false
   accepts_nested_attributes_for :finding_user_assignments,
     :allow_destroy => true
@@ -142,10 +141,6 @@ class Finding < ActiveRecord::Base
 
   def rescheduled?
     all_follow_up_dates.size > 0
-  end
-
-  def cost
-    costs.reject(&:new_record?).sum(&:cost)
   end
 
   def issue_date
