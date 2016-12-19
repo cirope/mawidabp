@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ResourceClassesControllerTest < ActionController::TestCase
   setup do
-    @resource_class = resource_classes :human_resources
+    @resource_class = resource_classes :hardware_resources
 
     login
   end
@@ -33,7 +33,6 @@ class ResourceClassesControllerTest < ActionController::TestCase
       post :create, {
         resource_class: {
           name: 'New resource class',
-          resource_class_type: ResourceClass::TYPES[:human],
           resources_attributes: [
             {
               name: 'New name',
@@ -59,10 +58,9 @@ class ResourceClassesControllerTest < ActionController::TestCase
           id: @resource_class,
           resource_class: {
             name: 'Updated resource class',
-            resource_class_type: ResourceClass::TYPES[:human],
             resources_attributes: [
               {
-                id: resources(:auditor_resource).id,
+                id: resources(:laptop_resource).id,
                 name: 'Updated name',
                 description: 'Updated description'
               }, {

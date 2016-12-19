@@ -4,7 +4,7 @@ class ResourceTest < ActiveSupport::TestCase
   def setup
     set_organization
 
-    @resource = resources :auditor_resource
+    @resource = resources :laptop_resource
   end
 
   test 'create' do
@@ -12,7 +12,7 @@ class ResourceTest < ActiveSupport::TestCase
       Resource.create(
         name: 'New name',
         description: 'New description',
-        resource_class: resource_classes(:human_resources)
+        resource_class: resource_classes(:hardware_resources)
       )
     end
   end
@@ -45,9 +45,9 @@ class ResourceTest < ActiveSupport::TestCase
   end
 
   test 'validates duplicated attributes' do
-    @resource.name = resources(:developer_resource).name
+    resource = @resource.dup
 
-    assert @resource.invalid?
-    assert_error @resource, :name, :taken
+    assert resource.invalid?
+    assert_error resource, :name, :taken
   end
 end

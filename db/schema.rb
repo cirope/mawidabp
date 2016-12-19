@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161214224309) do
+ActiveRecord::Schema.define(version: 20161219225623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -648,13 +648,12 @@ ActiveRecord::Schema.define(version: 20161214224309) do
   add_index "related_user_relations", ["user_id", "related_user_id"], name: "index_related_user_relations_on_user_id_and_related_user_id", using: :btree
 
   create_table "resource_classes", force: :cascade do |t|
-    t.string   "name",                limit: 255
+    t.string   "name",            limit: 255
     t.integer  "unit"
     t.integer  "organization_id"
-    t.integer  "lock_version",                    default: 0
+    t.integer  "lock_version",                default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "resource_class_type"
   end
 
   add_index "resource_classes", ["name"], name: "index_resource_classes_on_name", using: :btree
@@ -794,7 +793,6 @@ ActiveRecord::Schema.define(version: 20161214224309) do
     t.string   "salt",                 limit: 255
     t.string   "change_password_hash", limit: 255
     t.string   "function",             limit: 255
-    t.integer  "resource_id"
     t.integer  "manager_id"
     t.boolean  "group_admin",                      default: false
     t.text     "notes"
@@ -807,7 +805,6 @@ ActiveRecord::Schema.define(version: 20161214224309) do
   add_index "users", ["group_admin"], name: "index_users_on_group_admin", using: :btree
   add_index "users", ["hidden"], name: "index_users_on_hidden", using: :btree
   add_index "users", ["manager_id"], name: "index_users_on_manager_id", using: :btree
-  add_index "users", ["resource_id"], name: "index_users_on_resource_id", using: :btree
   add_index "users", ["user"], name: "index_users_on_user", using: :btree
 
   create_table "versions", force: :cascade do |t|
@@ -937,7 +934,6 @@ ActiveRecord::Schema.define(version: 20161214224309) do
   add_foreign_key "taggings", "tags", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "organizations", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "users", "resources", name: "users_resource_id_fk", on_delete: :restrict
   add_foreign_key "users", "users", column: "manager_id", name: "users_manager_id_fk", on_delete: :restrict
   add_foreign_key "work_papers", "file_models", name: "work_papers_file_model_id_fk", on_delete: :restrict
   add_foreign_key "work_papers", "organizations", name: "work_papers_organization_id_fk", on_delete: :restrict

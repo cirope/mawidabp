@@ -6,7 +6,7 @@
         <%= f.input :resource, as: :string, label: false, autofocus: true,
           input_html: {
             name: 'resource_utilization[user_data]',
-            value: f.object.resource.try(:full_name_with_resource),
+            value: f.object.resource.try(:full_name),
             id: "resource_utilization_user_#{id}",
             title: t('label.search'),
             data: {

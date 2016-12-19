@@ -12,7 +12,6 @@
       </div>
       <div class="col-md-6">
         <%= f.input :notes, input_html: { rows: 5 } %>
-        <%= user_resource_field(f) %>
         <%= user_language_field(f) %>
         <%= f.input :send_notification_email, as: :boolean,
           checked_value: '1', unchecked_value: '', label: false, inline_label: true %>
