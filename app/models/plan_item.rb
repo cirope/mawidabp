@@ -3,13 +3,13 @@ class PlanItem < ActiveRecord::Base
   include Comparable
   include ParameterSelector
   include PlanItems::Comparable
-  include PlanItems::Cost
   include PlanItems::DestroyValidation
   include PlanItems::Pdf
   include PlanItems::Predecessors
   include PlanItems::ResourceUtilizations
   include PlanItems::Scopes
   include PlanItems::Status
+  include PlanItems::Units
   include PlanItems::Validations
   include Taggable
 

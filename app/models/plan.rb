@@ -2,13 +2,13 @@ class Plan < ActiveRecord::Base
   include Auditable
   include ParameterSelector
   include Plans::Clone
-  include Plans::Costs
   include Plans::DestroyValidation
   include Plans::Duplication
   include Plans::Overload
   include Plans::PDF
   include Plans::PlanItems
   include Plans::Scopes
+  include Plans::Units
   include Plans::ValidationCallbacks
   include Plans::Validations
 

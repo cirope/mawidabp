@@ -12,7 +12,6 @@ class ResourceTest < ActiveSupport::TestCase
       Resource.create(
         name: 'New name',
         description: 'New description',
-        cost_per_unit: '12.5',
         resource_class: resource_classes(:human_resources)
       )
     end
@@ -29,13 +28,6 @@ class ResourceTest < ActiveSupport::TestCase
       # TODO unscoped current_organization
       User.unscoped { @resource.destroy }
     end
-  end
-
-  test 'validates formated attributes' do
-    @resource.cost_per_unit = '_1'
-
-    assert @resource.invalid?
-    assert_error @resource, :cost_per_unit, :not_a_number
   end
 
   test 'validates blank attributes' do

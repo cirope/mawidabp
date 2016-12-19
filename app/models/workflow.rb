@@ -11,7 +11,6 @@ class Workflow < ActiveRecord::Base
 
   # Atributos no persistentes
   attr_accessor :allow_overload
-  attr_writer :cost
 
   attr_readonly :period_id, :review_id
 
@@ -95,7 +94,6 @@ class Workflow < ActiveRecord::Base
 
   def to_pdf(organization = nil, include_details = true)
     pdf = Prawn::Document.create_generic_pdf :landscape
-    currency_mask = "#{I18n.t('number.currency.format.unit')}%.2f"
     column_order = [
       ['order_number', 10], ['task', 50], ['start', 10], ['end', 10], ['predecessors', 10],
       ['resources', 10]
@@ -123,7 +121,7 @@ class Workflow < ActiveRecord::Base
     column_data[0] = column_headers
 
     self.workflow_items.sort_by(&:order_number).each do |workflow_item|
-      resource_text = currency_mask % workflow_item.cost
+      resource_text = '%.2f' % workflow_item.units
       column_data[workflow_item.order_number] = [
         workflow_item.order_number,
         workflow_item.task,
@@ -135,7 +133,7 @@ class Workflow < ActiveRecord::Base
     end
 
     column_data << [
-      '', '', '', '', '', "<b>#{currency_mask % self.cost}</b>"
+      '', '', '', '', '', "<b>#{'%.2f' % units}</b>"
     ]
 
     unless column_data.blank?
@@ -196,11 +194,11 @@ class Workflow < ActiveRecord::Base
       :review => self.review.sanitized_identification
   end
 
-  def cost
-    self.workflow_items.to_a.sum(&:cost)
+  def human_units
+    workflow_items.to_a.sum &:human_units
   end
 
-  def human_unit_cost
-    self.workflow_items.to_a.sum(&:human_unit_cost)
+  def units
+    workflow_items.map(&:units).compact.sum
   end
 end

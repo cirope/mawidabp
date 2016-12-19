@@ -844,7 +844,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     allow_overload: "¿Permitir superposición?"
     copy: "Copiar"
     add_plan_item: "Agregar proyecto"
-    calculate_estimated_amount: "Calcular ahora"
     add_human_resource_utilization: "Agregar recurso humano"
     add_material_resource_utilization: "Agregar recurso material"
     add_tagging: "Agregar etiqueta"
@@ -1053,7 +1052,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_updated: "Programa de trabajo actualizado correctamente."
     stale_object_error: "El programa de trabajo no fue actualizado, intente nuevamente."
     save_as_new_version: "¿Guardar como nueva versión?"
-    calculate_estimated_amount: "Calcular ahora"
     column_estimated: "Estimado"
     column_real: "Real"
     row_cost: "Costo"
@@ -1369,9 +1367,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         resources: "Recursos"
         resource_ids: "Recursos"
         status: "Estado"
-        human_resources_cost: "Costo recursos humanos"
-        material_resources_cost: "Costo recursos materiales"
-        total_resources_cost: "Costo total"
+        human_resource_units: "Costo recursos humanos"
+        material_resource_units: "Costo recursos materiales"
+        total_resource_units: "Costo total"
         tags: "Etiquetas"
       privilege:
         module: "Módulo"
@@ -1382,6 +1380,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
+      resource_utilization:
+        resource_id: "Recurso"
       review:
         identification: "Identificación"
         description: "Descripción"
@@ -1477,9 +1477,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         order_number: "Orden"
         resources: "Recursos"
         resource_ids: "Recursos"
-        human_resources_cost: "Costo recursos humanos"
-        material_resources_cost: "Costo recursos materiales"
-        total_resources_cost: "Costo total"
+        human_resource_units: "Costo recursos humanos"
+        material_resource_units: "Costo recursos materiales"
+        total_resource_units: "Costo total"
 
     errors:
       # Append your own errors here or at the model/attributes scope.

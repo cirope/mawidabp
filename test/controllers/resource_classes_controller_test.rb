@@ -37,8 +37,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
           resources_attributes: [
             {
               name: 'New name',
-              description: 'New description',
-              cost_per_unit: '15.33'
+              description: 'New description'
             }
           ]
         }
@@ -65,12 +64,10 @@ class ResourceClassesControllerTest < ActionController::TestCase
               {
                 id: resources(:auditor_resource).id,
                 name: 'Updated name',
-                description: 'Updated description',
-                cost_per_unit: '14.33'
+                description: 'Updated description'
               }, {
                 name: 'New name from update',
-                description: 'New description from update',
-                cost_per_unit: '15.53'
+                description: 'New description from update'
               }
             ]
           }

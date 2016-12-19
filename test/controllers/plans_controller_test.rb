@@ -100,14 +100,12 @@ class PlansControllerTest < ActionController::TestCase
                 {
                   :resource_id => users(:bare_user).id,
                   :resource_type => 'User',
-                  :units => '12.21',
-                  :cost_per_unit => '8.75'
+                  :units => '12.21'
                 },
                 {
                   :resource_id => resources(:laptop_resource).id,
                   :resource_type => 'Resource',
-                  :units => '2',
-                  :cost_per_unit => '10.7'
+                  :units => '2'
                 }
               ],
               :taggings_attributes => [
@@ -165,8 +163,7 @@ class PlansControllerTest < ActionController::TestCase
                       :id => resource_utilizations(:auditor_for_20_units_past_plan_item_1).id,
                       :resource_id => resources(:laptop_resource).id,
                       :resource_type => 'Resource',
-                      :units => '12.21',
-                      :cost_per_unit => '8.75'
+                      :units => '12.21'
                     }
                   ],
                   :taggings_attributes => [
@@ -193,7 +190,6 @@ class PlansControllerTest < ActionController::TestCase
     assert_redirected_to edit_plan_url(assigns(:plan))
     assert_equal 'Updated project', assigns(:plan).plan_items.find(
       plan_items(:past_plan_item_1).id).project
-    assert_in_delta 8.75, resource_utilization.cost_per_unit, 0.01
   end
 
   test 'overloaded plan' do
@@ -212,8 +208,7 @@ class PlansControllerTest < ActionController::TestCase
               {
                 :resource_id => users(:bare_user).id,
                 :resource_type => 'User',
-                :units => '12.21',
-                :cost_per_unit => '8.75'
+                :units => '12.21'
               }
             ]
           },
@@ -228,8 +223,7 @@ class PlansControllerTest < ActionController::TestCase
               {
                 :resource_id => users(:bare_user).id,
                 :resource_type => 'User',
-                :units => '12.21',
-                :cost_per_unit => '8.75'
+                :units => '12.21'
               }
             ]
           }
@@ -266,8 +260,7 @@ class PlansControllerTest < ActionController::TestCase
               {
                 :resource_id => users(:bare_user).id,
                 :resource_type => 'User',
-                :units => '12.21',
-                :cost_per_unit => '8.75'
+                :units => '12.21'
               }
             ]
           },
@@ -282,8 +275,7 @@ class PlansControllerTest < ActionController::TestCase
               {
                 :resource_id => users(:bare_user).id,
                 :resource_type => 'User',
-                :units => '12.21',
-                :cost_per_unit => '8.75'
+                :units => '12.21'
               }
             ]
           }
@@ -375,20 +367,5 @@ class PlansControllerTest < ActionController::TestCase
 
     assert_equal 2, business_units.size # All in the organization (one and two)
     assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
-  end
-
-  test 'resource data' do
-    login
-
-    resource_data = nil
-
-    xhr :get, :resource_data, :id => resources(:auditor_resource).id
-    assert_response :success
-    assert_nothing_raised do
-      resource_data = ActiveSupport::JSON.decode(@response.body)
-    end
-
-    assert_not_nil resource_data
-    assert_not_nil resource_data['cost_per_unit']
   end
 end

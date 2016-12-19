@@ -171,7 +171,6 @@ Rails.application.routes.draw do
     get :export_to_pdf, on: :member
 
     collection do
-      get :resource_data
       get :estimated_amount
       get :reviews_for_period
     end
@@ -270,7 +269,6 @@ Rails.application.routes.draw do
     get :export_to_pdf, on: :member
 
     collection do
-      get :resource_data
       get :auto_complete_for_business_unit
       get :auto_complete_for_tagging
     end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161213200852) do
+ActiveRecord::Schema.define(version: 20161214224309) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -662,7 +662,6 @@ ActiveRecord::Schema.define(version: 20161213200852) do
 
   create_table "resource_utilizations", force: :cascade do |t|
     t.decimal  "units",                              precision: 15, scale: 2
-    t.decimal  "cost_per_unit",                      precision: 15, scale: 2
     t.integer  "resource_consumer_id"
     t.string   "resource_consumer_type", limit: 255
     t.integer  "resource_id"
@@ -677,9 +676,8 @@ ActiveRecord::Schema.define(version: 20161213200852) do
   create_table "resources", force: :cascade do |t|
     t.string   "name",              limit: 255
     t.text     "description"
-    t.decimal  "cost_per_unit",                 precision: 15, scale: 2
     t.integer  "resource_class_id"
-    t.integer  "lock_version",                                           default: 0
+    t.integer  "lock_version",                  default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
