@@ -5,11 +5,11 @@ module Plans::Units
     items = plan_items.for_business_unit_type business_unit_type
 
     items.inject 0.0 do |sum, plan_item|
-      sum + plan_item.resource_utilizations.to_a.sum(&:units)
+      sum + plan_item.human_units
     end
   end
 
   def units
-    plan_items.to_a.sum &:units
+    plan_items.to_a.sum &:human_units
   end
 end
