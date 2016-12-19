@@ -26,15 +26,8 @@
         <div class="alert alert-warning">
           <%= Plan.human_attribute_name :estimated_amount %>:
           <strong>
-            <%= t('number.currency.format.unit') %>
-            <span id="estimated_amount">
-              <%= '%.2f' % (params[:business_unit_type].present? ? @plan.estimated_amount(params[:business_unit_type]) : @plan.cost) %>
-            </span>
+            <%= '%.2f' % (params[:business_unit_type].present? ? @plan.estimated_amount(params[:business_unit_type]) : @plan.units) %>
           </strong>
-          <% unless params[:business_unit_type].blank? %>
-            <%= link_to t('plan.calculate_estimated_amount'), '#', onclick:
-              "calculateEstimatedAmount(); return false;", style: 'margin-left: .5em;' %>
-          <% end %>
         </div>
       </div>
     </div>
@@ -111,33 +104,7 @@
   </div>
 <% end %>
 <script type="text/javascript">
-function calculateEstimatedAmount() {
-  var estimatedTotal = 0;
-
-  $('input[name$="[cost_per_unit]"]').each(function(i, e) {
-    var value = $(e).val();
-    var unitsString = $(e).closest('fieldset').find('input[name$="[units]"]').val();
-    var units = parseFloat(unitsString) || 0;
-
-    estimatedTotal += (parseFloat(value) || 0) * units;
-  });
-
-  $('#estimated_amount').html(
-    estimatedTotal.toFixed(2)
-  ).stop(true, true).effect('highlight', {}, 2000);
-}
-
 jQuery(function() {
-  $(document).on('autocomplete:update', 'input[data-autocomplete-url]', function() {
-    var item = $(this).data('item');
-
-    if (item.cost_per_unit) {
-      $(this).closest('fieldset').find('input[name$="[cost_per_unit]"]').val(
-        item.cost_per_unit
-      );
-    }
-  });
-
   Helper.makeSortable('#plan_items', 'fieldset.plan_item', 'a.move');
 });
 </script>

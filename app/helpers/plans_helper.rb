@@ -1,8 +1,6 @@
 module PlansHelper
   def plan_resource_field form, id = '', inline = true
-    resource_classes = ResourceClass.material_resources
-
-    form.input :resource_id, collection: resource_classes, as: :grouped_select,
+    form.input :resource_id, collection: ResourceClass.list, as: :grouped_select,
       group_method: :resources, label: false, prompt: true, input_html: {
       id: "#{id}_resource_id", autofocus: true
     }

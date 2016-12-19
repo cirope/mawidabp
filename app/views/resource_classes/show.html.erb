@@ -7,7 +7,6 @@
     <tr>
       <th><%= Resource.human_attribute_name 'name' %></th>
       <th><%= Resource.human_attribute_name 'description' %></th>
-      <th><%= Resource.human_attribute_name 'cost_per_unit' %></th>
     </tr>
   </thead>
   <tbody>
@@ -15,7 +14,6 @@
       <tr>
         <td><%= resource.name %></td>
         <td><%= resource.description %></td>
-        <td><%= resource.cost_per_unit %></td>
       </tr>
     <% end %>
   </tbody>

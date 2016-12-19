@@ -84,7 +84,7 @@ class PlanTest < ActiveSupport::TestCase
     plan_items = @plan.plan_items.for_business_unit_type(but_id)
 
     calculated_amount = plan_items.inject 0.0 do |sum, pi|
-      sum + pi.resource_utilizations.to_a.sum(&:cost)
+      sum + pi.resource_utilizations.map(&:units).compact.sum
     end
 
     assert_not_equal plan_items.size, @plan.plan_items.size
@@ -120,11 +120,11 @@ class PlanTest < ActiveSupport::TestCase
     FileUtils.rm @plan.absolute_pdf_path
   end
 
-  test 'cost' do
-    cost = @plan.plan_items.inject(0) { |sum, pi| sum + pi.cost }
+  test 'units' do
+    units = @plan.plan_items.inject(0) { |sum, pi| sum + pi.units }
 
-    assert cost > 0
-    assert_equal cost, @plan.cost
+    assert units > 0
+    assert_equal units, @plan.units
   end
 
   test 'clone from without period' do

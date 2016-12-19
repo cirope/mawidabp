@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  resources :taggings
-  get '/touch', to: 'touch#index', as: 'touch'
+  post '/touch', to: 'touch#create', as: 'touch'
 
   # Sessions
   get    'login',    to: 'sessions#new',     as: 'login'
@@ -10,6 +9,11 @@ Rails.application.routes.draw do
   resources :settings, only: [:index, :show, :edit, :update]
 
   resources :benefits
+
+  resources :documents do
+    get :download, on: :member
+    get :auto_complete_for_tagging, on: :collection
+  end
 
   resources :questionnaires do
     resources :polls, only: [:index]
@@ -36,8 +40,16 @@ Rails.application.routes.draw do
 
   resources :groups
 
-  scope ':kind', kind: /finding|plan_item/ do
+  resources :tags, only: [] do
+    resources :documents, only: [:index]
+  end
+
+  scope ':kind', kind: /control_objective|document|finding|news|plan_item|review/ do
     resources :tags
+  end
+
+  resources :news do
+    get :auto_complete_for_tagging, on: :collection
   end
 
   get 'welcome', as: 'welcome', to: 'welcome#index'
@@ -159,7 +171,6 @@ Rails.application.routes.draw do
     get :export_to_pdf, on: :member
 
     collection do
-      get :resource_data
       get :estimated_amount
       get :reviews_for_period
     end
@@ -221,6 +232,7 @@ Rails.application.routes.draw do
       get :auto_complete_for_finding
       get :auto_complete_for_process_control
       get :auto_complete_for_control_objective
+      get :auto_complete_for_tagging
     end
   end
 
@@ -257,7 +269,6 @@ Rails.application.routes.draw do
     get :export_to_pdf, on: :member
 
     collection do
-      get :resource_data
       get :auto_complete_for_business_unit
       get :auto_complete_for_tagging
     end
@@ -267,6 +278,12 @@ Rails.application.routes.draw do
 
   resources :best_practices do
     resources :process_controls, only: [:new, :edit]
+
+    resources :control_objectives, only: [] do
+      get :download, on: :member, controller: 'best_practices/control_objectives'
+    end
+
+    get :auto_complete_for_tagging, on: :collection
   end
 
   resources :periods

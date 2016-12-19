@@ -128,7 +128,7 @@ class Weakness < Finding
       errors << I18n.t('weakness.errors.with_follow_up_date')
     elsif !self.implemented_audited? && !self.implemented? &&
         !self.being_implemented? && !self.unanswered? &&
-        !self.assumed_risk?
+        !self.assumed_risk? && !self.criteria_mismatch?
       errors << I18n.t('weakness.errors.not_valid_state')
     end
 

@@ -97,7 +97,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'create review' do
     login
-    assert_difference ['Review.count', 'FindingReviewAssignment.count'] do
+    assert_difference ['Review.count', 'FindingReviewAssignment.count', 'Tagging.count'] do
       # Se crean 2 con el 'process_control_ids' y uno con 'control_objective_ids'
       assert_difference 'ControlObjectiveItem.count', 3 do
         assert_difference 'FileModel.count' do
@@ -133,6 +133,11 @@ class ReviewsControllerTest < ActionController::TestCase
                   }, {
                     assignment_type: ReviewUserAssignment::TYPES[:audited],
                     user_id: users(:audited_user).id
+                  }
+                ],
+                taggings_attributes: [
+                  {
+                    tag_id: tags(:high_priority).id
                   }
                 ]
               }
@@ -421,5 +426,32 @@ class ReviewsControllerTest < ActionController::TestCase
     findings = ActiveSupport::JSON.decode(@response.body)
 
     assert_equal 0, findings.size # Sin resultados
+  end
+
+  test 'auto complete for tagging' do
+    login
+
+    get :auto_complete_for_tagging, {
+      :q => 'high priority',
+      :kind => 'review',
+      :format => :json
+    }
+    assert_response :success
+
+    tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, tags.size
+    assert tags.all? { |t| t['label'].match /high priority/i }
+
+    get :auto_complete_for_tagging, {
+      :q => 'x_none',
+      :kind => 'finding',
+      :format => :json
+    }
+    assert_response :success
+
+    tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, tags.size # Sin resultados
   end
 end

@@ -10,7 +10,7 @@ class CreateTags < ActiveRecord::Migration
       if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
         t.jsonb :options, index: { using: :gin }
       else
-        t.text :options, index: true
+        t.text :options
       end
 
       t.timestamps null: false

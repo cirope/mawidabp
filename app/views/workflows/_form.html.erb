@@ -38,15 +38,13 @@
         <td>
           <%= @workflow.new_record? ? '-' : show_detailed_distance_of_time(@workflow.begining, @workflow.ending) %>
           <span>|</span>
-          <%= t(:worked_hours, :scope => [:workflow], :count => ('%.2f' % @workflow.human_unit_cost)) %>
+          <%= t(:worked_hours, :scope => [:workflow], :count => ('%.2f' % @workflow.human_units)) %>
         </td>
         <td><%= @workflow.plan_item ? show_detailed_distance_of_time(@workflow.plan_item.start, @workflow.plan_item.end) : '-' %></td>
       </tr>
       <tr style="vertical-align: text-top;">
         <td><strong><%= t('workflow.row_cost') %></strong></td>
-        <td><%= t('number.currency.format.unit') %><span id="workflow_cost"><%= '%.2f' %  @workflow.cost %></span>
-          <%= link_to t('workflow.calculate_estimated_amount'), '#', :onclick =>
-            "calculateCost(); return false;", :style => 'margin-left: .5em;' %></td>
+        <td><%= '%.2f' %  @workflow.human_units %></td>
         <td>
           <div id="estimated_amount">
             <%= render 'estimated_amount', plan_item: @workflow.review.try(:plan_item) %>
@@ -95,32 +93,7 @@
   </div>
 <% end %>
 <script type="text/javascript">
-function calculateCost() {
-  var costElement = $('#workflow_cost');
-  var estimatedCost = 0;
-
-  $('input[name$="[cost_per_unit]"]').each(function(i, e) {
-    var unitsString = $(e).closest('fieldset').find('input[name$="[units]"]').val();
-    var units = parseFloat(unitsString) || 0;
-    estimatedCost += (parseFloat($(e).val()) || 0) * units;
-  });
-
-  costElement.html(
-    estimatedCost.toFixed(2)
-  ).stop(true, true).effect('highlight', {}, 2000);
-}
-
 jQuery(function() {
-  $(document).on('autocomplete:update', 'input[data-autocomplete-url]', function() {
-    var item = $(this).data('item');
-
-    if (item.cost_per_unit) {
-      $(this).closest('fieldset').find('input[name$="[cost_per_unit]"]').val(
-        item.cost_per_unit
-      );
-    }
-  });
-
   $('#workflow_period_id').change(function() {
     var element = $(this);
 

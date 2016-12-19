@@ -1,0 +1,30 @@
+<% @document_tags.each_slice(3) do |tags| %>
+  <div class="row">
+    <% tags.each do |tag_data, count| %>
+      <% tag_id, tag_name, tag_icon, tag_style = *tag_data %>
+
+      <div class="col-md-4">
+        <%= link_to tag_documents_path(tag_id), class: "text-#{tag_style == 'default' ? 'muted' : tag_style}" do %>
+          <div class="panel panel-<%= tag_style %>">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <%= tag_name %>
+                <span class="pull-right">
+                  <span class="badge badge-<%= tag_style %>"><%= count %></span>
+                </span>
+              </h3>
+            </div>
+
+            <div class="panel-body text-center">
+              <h4 class="icon-lg">
+                <span class="glyphicon glyphicon-<%= tag_icon %>"></span>
+              </h4>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<hr>

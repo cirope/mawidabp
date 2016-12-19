@@ -22,13 +22,10 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_equal weakness.description, @weakness.description
     assert_equal weakness.answer, @weakness.answer
     assert_equal weakness.state, @weakness.state
-    assert_equal weakness.solution_date, @weakness.solution_date
     assert_equal weakness.audit_recommendations, @weakness.audit_recommendations
     assert_equal weakness.effect, @weakness.effect
     assert_equal weakness.risk, @weakness.risk
     assert_equal weakness.priority, @weakness.priority
-    assert_equal weakness.follow_up_date, @weakness.follow_up_date
-    assert_equal weakness.origination_date, @weakness.origination_date
   end
 
   # Prueba la creación de una debilidad

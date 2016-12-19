@@ -1,0 +1,2 @@
+module BestPractices::ControlObjectivesHelper
+end

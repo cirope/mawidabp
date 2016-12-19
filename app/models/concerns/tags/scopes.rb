@@ -3,7 +3,6 @@ module Tags::Scopes
 
   included do
     scope :ordered, -> { order name: :asc }
-    scope :list,    -> { where organization_id: Organization.current_id }
   end
 
   module ClassMethods

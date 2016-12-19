@@ -1,0 +1,7 @@
+announcement:
+  title: New central bank statement
+  description: The central bank as issued a new statemente
+  body: The news body
+  published_at: <%= 1.day.ago.to_s :db %>
+  organization: cirope
+  group: main_group

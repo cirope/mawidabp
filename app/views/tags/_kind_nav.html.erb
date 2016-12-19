@@ -1,0 +1,22 @@
+<ul class="nav nav-pills visible-xs visible-sm">
+  <li class="dropdown active">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+      <%= tag_kinds[params[:kind]] %> <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+      <% tag_kinds.each do |kind, name| %>
+        <%= content_tag :li, class: ('active' if kind.to_s == params[:kind]) do %>
+          <%= link_to name, tags_path(kind: kind) %>
+        <% end %>
+      <% end %>
+    </ul>
+  </li>
+</ul>
+
+<ul class="nav nav-tabs visible-md visible-lg">
+  <% tag_kinds.each do |kind, name| %>
+    <%= content_tag :li, class: ('active' if kind.to_s == params[:kind]) do %>
+      <%= link_to name, tags_path(kind: kind) %>
+    <% end %>
+  <% end %>
+</ul>

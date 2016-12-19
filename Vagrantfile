@@ -6,6 +6,7 @@ Vagrant.configure VAGRANTFILE_API_VERSION do |config|
   config.vm.box = 'debian/jessie64'
   config.vm.provision :shell, path: 'puppet/tools/install.sh'
 
+  config.vm.network 'public_network'
   config.vm.network :forwarded_port, guest: 80, host: 8080
 
   config.vm.provider 'virtualbox' do |vb|

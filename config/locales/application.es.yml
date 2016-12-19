@@ -844,7 +844,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     allow_overload: "¿Permitir superposición?"
     copy: "Copiar"
     add_plan_item: "Agregar proyecto"
-    calculate_estimated_amount: "Calcular ahora"
     add_human_resource_utilization: "Agregar recurso humano"
     add_material_resource_utilization: "Agregar recurso material"
     add_tagging: "Agregar etiqueta"
@@ -890,6 +889,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     control_objective_items_label: "Objetivos de control"
     add_control_objective: "Agregar un nuevo objetivo de control"
     add_process_control: "Agregar un nuevo proceso"
+    add_tagging: "Agregar etiqueta"
     associated: "Asociados"
     available: "Disponibles"
     bundle: "Legajo"
@@ -1052,7 +1052,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_updated: "Programa de trabajo actualizado correctamente."
     stale_object_error: "El programa de trabajo no fue actualizado, intente nuevamente."
     save_as_new_version: "¿Guardar como nueva versión?"
-    calculate_estimated_amount: "Calcular ahora"
     column_estimated: "Estimado"
     column_real: "Real"
     row_cost: "Costo"
@@ -1153,8 +1152,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         exclude_from_score: "No calificar"
         process_control_id: "Proceso de negocio"
         effectiveness: "Efectividad de control"
+        support: "Soporte"
         weaknesses: "Observaciones"
         oportunities: "Oportunidades de mejora"
+        work_papers: "Papeles de trabajo"
       control_objective_item/control:
         order: "Objetivo de control (orden)"
         control: "Objetivo de control (controles)"
@@ -1162,6 +1163,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         design_tests: "Objetivo de control (evaluación de diseño)"
         compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
         sustantive_tests: "Objetivo de control (pruebas sustantivas)"
+        work_papers: "Papeles de trabajo"
       control_objective_item/work_papers:
         one: "Papel de trabajo"
         other: "Papeles de trabajo"
@@ -1294,10 +1296,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         name: "Organización (nombre)"
         prefix: "Organización (prefijo)"
         description: "Organización (descripción)"
-      image_model:
-        uploaded_data: "Imagen"
-        content_type: "Imagen (tipo)"
-        size: "Imagen (tamaño)"
       notification:
         status: "Estado"
         confirmation_hash: "Cadena de confirmación"
@@ -1369,9 +1367,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         resources: "Recursos"
         resource_ids: "Recursos"
         status: "Estado"
-        human_resources_cost: "Costo recursos humanos"
-        material_resources_cost: "Costo recursos materiales"
-        total_resources_cost: "Costo total"
+        human_resource_units: "Costo recursos humanos"
+        material_resource_units: "Costo recursos materiales"
+        total_resource_units: "Costo total"
         tags: "Etiquetas"
       privilege:
         module: "Módulo"
@@ -1382,6 +1380,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
+      resource_utilization:
+        resource_id: "Recurso"
       review:
         identification: "Identificación"
         description: "Descripción"
@@ -1390,6 +1390,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         business_unit: "Unidad de negocio"
         period_id: "Periodo"
         plan_item_id: "Proyecto"
+        plan_item: "Proyecto"
         file_model_id: "Anexos"
         score: "Calificación"
         work_papers: "Papeles de trabajo"
@@ -1476,9 +1477,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         order_number: "Orden"
         resources: "Recursos"
         resource_ids: "Recursos"
-        human_resources_cost: "Costo recursos humanos"
-        material_resources_cost: "Costo recursos materiales"
-        total_resources_cost: "Costo total"
+        human_resource_units: "Costo recursos humanos"
+        material_resource_units: "Costo recursos materiales"
+        total_resource_units: "Costo total"
 
     errors:
       # Append your own errors here or at the model/attributes scope.

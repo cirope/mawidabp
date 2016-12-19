@@ -4,6 +4,7 @@ class Review < ActiveRecord::Base
   include Parameters::Score
   include ParameterSelector
   include Reviews::FindingCode
+  include Taggable
   include Trimmer
 
   trimmed_fields :identification
@@ -24,6 +25,10 @@ class Review < ActiveRecord::Base
     },
     :project => {
       :column => "LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn('project')})", :operator => 'LIKE',
+      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    },
+    :tags => {
+      :column => "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn('name')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     }
   })

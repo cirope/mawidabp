@@ -1,12 +1,12 @@
 <% id = f.object.object_id %>
 <fieldset class="human_resource_utilization">
   <div class="row nested">
-    <div class="col-md-5">
+    <div class="col-md-8">
       <% if f.object.new_record? %>
         <%= f.input :resource_id, as: :string, label: false, autofocus: true,
           input_html: {
             name: 'resource_utilization[user_data]',
-            value: f.object.resource.try(:full_name_with_resource),
+            value: f.object.resource.try(:full_name),
             id: "resource_utilization_user_#{id}",
             title: t('label.search'),
             data: {
@@ -27,9 +27,6 @@
     </div>
     <div class="col-md-3">
       <%= f.input :units, as: :string, label: false %>
-    </div>
-    <div class="col-md-3">
-      <%= f.input :cost_per_unit, as: :string, label: false, input_html: { id: "#{id}_cost_per_unit" } %>
     </div>
     <div class="col-md-1">
       <div class="toggle-visibility">
