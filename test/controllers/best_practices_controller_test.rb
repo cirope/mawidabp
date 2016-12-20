@@ -27,6 +27,14 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'create best_practice' do
+    counts_array = [
+      'BestPractice.count',
+      'ProcessControl.count',
+      'ControlObjective.count',
+      'Control.count',
+      'Tagging.count'
+    ]
+
     assert_difference counts_array, 4 do
       post :create, {
         best_practice: {
@@ -48,7 +56,12 @@ class BestPracticesControllerTest < ActionController::TestCase
                   },
                   relevance: ControlObjective.relevances_values.first,
                   risk: ControlObjective.risks_values.first,
-                  order: 1
+                  order: 1,
+                  taggings_attributes: [
+                    {
+                      tag_id: tags(:risk_evaluation).id
+                    }
+                  ]
                 },
                 {
                   name: 'new control objective 1 2',
@@ -61,7 +74,12 @@ class BestPracticesControllerTest < ActionController::TestCase
                   },
                   relevance: ControlObjective.relevances_values.first,
                   risk: ControlObjective.risks_values.first,
-                  order: 2
+                  order: 2,
+                  taggings_attributes: [
+                    {
+                      tag_id: tags(:risk_evaluation).id
+                    }
+                  ]
                 }
               ]
             },
@@ -80,7 +98,12 @@ class BestPracticesControllerTest < ActionController::TestCase
                   },
                   relevance: ControlObjective.relevances_values.first,
                   risk: ControlObjective.risks_values.first,
-                  order: 1
+                  order: 1,
+                  taggings_attributes: [
+                    {
+                      tag_id: tags(:risk_evaluation).id
+                    }
+                  ]
                 },
                 {
                   name: 'new control objective 2 2',
@@ -93,7 +116,13 @@ class BestPracticesControllerTest < ActionController::TestCase
                   },
                   relevance: ControlObjective.relevances_values.first,
                   risk: ControlObjective.risks_values.first,
-                  order: 2
+                  support: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain'),
+                  order: 2,
+                  taggings_attributes: [
+                    {
+                      tag_id: tags(:risk_evaluation).id
+                    }
+                  ]
                 }
               ]
             }
@@ -142,8 +171,13 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'update best practice' do
-    counts_array = ['BestPractice.count', 'ProcessControl.count',
-      'ControlObjective.count', 'Control.count']
+    counts_array = [
+      'BestPractice.count',
+      'ProcessControl.count',
+      'ControlObjective.count',
+      'Control.count'
+    ]
+
     assert_no_difference counts_array do
       patch :update, {
         id: best_practices(:iso_27001).id,
@@ -215,9 +249,28 @@ class BestPracticesControllerTest < ActionController::TestCase
     assert_redirected_to best_practices_url
   end
 
-  private
+  test 'auto complete for tagging' do
+    get :auto_complete_for_tagging, {
+      q: 'risk',
+      kind: 'control_objective',
+      format: :json
+    }
+    assert_response :success
 
-    def counts_array
-      ['BestPractice.count', 'ProcessControl.count', 'ControlObjective.count', 'Control.count']
-    end
+    tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, tags.size
+    assert tags.all? { |t| t['label'].match /risk/i }
+
+    get :auto_complete_for_tagging, {
+      q: 'x_none',
+      kind: 'control_objective',
+      format: :json
+    }
+    assert_response :success
+
+    tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, tags.size
+  end
 end

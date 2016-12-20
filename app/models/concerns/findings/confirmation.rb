@@ -13,7 +13,7 @@ module Findings::Confirmation
 
   def confirmed! user = nil
     if unconfirmed? || notify?
-      update_column :state, Finding::STATUS[:confirmed]
+      update! state: Finding::STATUS[:confirmed]
       update_column :confirmation_date, Time.zone.today if confirmation_date.blank?
 
       mark_notifications_as_confirmed_by user if user

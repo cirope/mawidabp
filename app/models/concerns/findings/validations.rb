@@ -18,6 +18,16 @@ module Findings::Validations
     validate :validate_solution_date,  if: :check_dates?
   end
 
+  def is_in_a_final_review?
+    control_objective_item&.review&.has_final_review?
+  end
+
+  def must_have_a_comment?
+    has_new_comment = comments.detect { |c| c.new_record? && c.valid? }
+
+    being_implemented? && was_implemented? && !has_new_comment
+  end
+
   private
 
     def audit_comments_should_be_present?
@@ -133,5 +143,9 @@ module Findings::Validations
       has_manager    = users.any? { |u| u.manager?            || u.manager_on?(organization_id) }
 
       has_audited && has_auditor && (has_supervisor || has_manager)
+    end
+
+    def can_not_be_revoked?
+      revoked? && state_changed? && (repeated_of || is_in_a_final_review?)
     end
 end

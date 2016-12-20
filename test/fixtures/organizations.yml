@@ -2,7 +2,6 @@ cirope:
   name: Cirope S.A.
   prefix: cirope
   description: ''
-  image_model: image_one
   group: main_group
   corporate: false
 
@@ -10,7 +9,6 @@ twitter:
   name: Twitter Inc.
   prefix: tw
   description: ''
-  image_model: image_one
   group: main_group
   corporate: true
 
@@ -18,7 +16,6 @@ google:
   name: Google Inc.
   prefix: google
   description: ''
-  image_model: image_two
   group: second_group
   corporate: false
 

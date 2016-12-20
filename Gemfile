@@ -11,6 +11,7 @@ gem 'simple_form'
 gem 'newrelic_rpm'
 gem 'validates_timeliness', github: 'francocatena/validates_timeliness'
 gem 'RedCloth'
+gem 'redcarpet'
 gem 'whenever'
 gem 'paper_trail'
 gem 'carrierwave'
@@ -35,22 +36,19 @@ gem 'chartist-rails'
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 
 gem 'sass-rails'
-gem 'coffee-rails'
 gem 'uglifier'
 
 gem 'unicorn'
-
-gem 'capistrano'
-gem 'capistrano-bundler'
-gem 'capistrano-rails'
-gem 'capistrano-rbenv'
-gem 'capistrano-sidekiq'
 
 gem 'where-or' # TODO: remove when Rails 5.0
 
 group :development do
   gem 'unicorn-rails'
   gem 'web-console'
+  gem 'capistrano'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'capistrano-rbenv'
 end
 
 group :test do

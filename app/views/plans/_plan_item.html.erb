@@ -65,26 +65,29 @@
 
   <div class="hidden_items" id="resource_utilizations_for_<%= id %>" style="display: none;">
     <div class="row nested">
-      <div class="col-md-5">
+      <div class="col-md-8">
         <h5><strong><%= ResourceUtilization.human_attribute_name 'resource' %></strong></h5>
       </div>
       <div class="col-md-3">
         <h5><strong><%= ResourceUtilization.human_attribute_name 'units' %></strong></h5>
       </div>
-      <div class="col-md-3">
-        <h5><strong><%= ResourceUtilization.human_attribute_name 'cost_per_unit' %></strong></h5>
-      </div>
     </div>
 
     <div id="material_resource_utilizations_<%= id %>">
-      <%= f.simple_fields_for :resource_utilizations, f.object.material_resource_utilizations do |ru_f| %>
-        <%= render 'material_resource_utilization', f: ru_f %>
+      <%= f.simple_fields_for :resource_utilizations, f.object.material_resource_utilizations do |mru_f| %>
+        <%= render 'material_resource_utilization', f: mru_f %>
       <% end %>
     </div>
 
     <div id="human_resource_utilizations_<%= id %>">
-      <%= f.simple_fields_for :resource_utilizations, f.object.human_resource_utilizations do |ru_f| %>
-        <%= render 'human_resource_utilization', f: ru_f %>
+      <%= f.simple_fields_for :resource_utilizations, f.object.human_resource_utilizations do |hru_f| %>
+        <%= render 'human_resource_utilization', f: hru_f %>
+      <% end %>
+    </div>
+
+    <div id="tags_<%= id %>">
+      <%= f.simple_fields_for :taggings, f.object.taggings do |t_f| %>
+        <%= render 'tagging', f: t_f %>
       <% end %>
     </div>
 
@@ -98,6 +101,8 @@
           'human_resource_utilization', {
           insert_into: "#human_resource_utilizations_#{id}", association: 'human_resource_utilizations'
         } ) %>
+        <%= link_to_add_fields(t('plan.add_tagging'), f, :taggings,
+          'tagging', { insert_into: "#tags_#{id}", association: 'taggings' } ) %>
       </p>
     </div>
   </div>

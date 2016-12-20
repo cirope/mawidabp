@@ -208,7 +208,8 @@ module ApplicationHelper
   # Devuelve el HTML de un vínculo para mostrar el cuadro de búsqueda
   def link_to_search
     search_link = link_to t('label.search'), '#', :onclick => 'Search.show(); return false;',
-      :id => :show_search_link, :title => t('message.search_link_title')
+      :id => :show_search_link, :class => 'btn btn-xs btn-default',
+      :title => t('message.search_link_title')
 
     @query.blank? ? search_link : content_tag(:span, search_link,
       :style => 'display: none;')

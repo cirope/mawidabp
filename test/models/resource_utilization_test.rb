@@ -10,9 +10,8 @@ class ResourceUtilizationTest < ActiveSupport::TestCase
     assert_difference 'ResourceUtilization.count' do
       @resource_utilization = ResourceUtilization.create(
         units: '21.5',
-        cost_per_unit: '1.23',
         resource_consumer: plan_items(:current_plan_item_1),
-        resource: resources(:senior_auditor_resource)
+        resource: resources(:laptop_resource)
       )
     end
   end
@@ -36,25 +35,13 @@ class ResourceUtilizationTest < ActiveSupport::TestCase
 
     assert @resource_utilization.invalid?
     assert_error @resource_utilization, :units, :blank
-    assert_error @resource_utilization, :cost_per_unit, :blank
     assert_error @resource_utilization, :resource, :blank
   end
 
   test 'validates well formated attributes' do
     @resource_utilization.units = '_1'
-    @resource_utilization.cost_per_unit = '_1'
 
     assert @resource_utilization.invalid?
     assert_error @resource_utilization, :units, :not_a_number
-    assert_error @resource_utilization, :cost_per_unit, :not_a_number
-  end
-
-  test 'cost function' do
-    calculated_cost = @resource_utilization.cost_per_unit *
-    @resource_utilization.units
-
-    assert @resource_utilization.cost_per_unit > 1
-    assert @resource_utilization.units > 1
-    assert_in_delta calculated_cost, @resource_utilization.cost, 0.01
   end
 end

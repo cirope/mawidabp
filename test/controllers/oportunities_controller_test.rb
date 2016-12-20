@@ -105,7 +105,8 @@ class OportunitiesControllerTest < ActionController::TestCase
       'Oportunity.count',
       'WorkPaper.count',
       'BusinessUnitFinding.count',
-      'FindingRelation.count'
+      'FindingRelation.count',
+      'Tagging.count'
     ]
 
     login
@@ -157,6 +158,11 @@ class OportunitiesControllerTest < ActionController::TestCase
             {
               :description => 'Duplicated',
               :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+            }
+          ],
+          :taggings_attributes => [
+            {
+              :tag_id => tags(:important).id
             }
           ]
         }
@@ -351,6 +357,33 @@ class OportunitiesControllerTest < ActionController::TestCase
     findings = ActiveSupport::JSON.decode(@response.body)
 
     assert_equal 0, findings.size # Sin resultados
+  end
+
+  test 'auto complete for tagging' do
+    login
+
+    get :auto_complete_for_tagging, {
+      :q => 'impor',
+      :kind => 'finding',
+      :format => :json
+    }
+    assert_response :success
+
+    tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, tags.size
+    assert tags.all? { |t| t['label'].match /impor/i }
+
+    get :auto_complete_for_tagging, {
+      :q => 'x_none',
+      :kind => 'finding',
+      :format => :json
+    }
+    assert_response :success
+
+    tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, tags.size # Sin resultados
   end
 
   test 'auto complete for control objective item' do

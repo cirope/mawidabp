@@ -125,7 +125,7 @@ module Reports::ControlObjectiveStats
       business_units = params[:control_objective_stats][:business_unit].split(
         SPLIT_AND_TERMS_REGEXP
       ).uniq.map(&:strip)
-      @business_unit_ids = business_units.present? && BusinessUnit.by_names(*business_units).pluck('id')
+      @business_unit_ids = business_units.present? && BusinessUnit.list.by_names(*business_units).pluck('id')
 
       if business_units.present?
         @filters << "<b>#{BusinessUnit.model_name.human}</b> = \"#{params[:control_objective_stats][:business_unit].strip}\""
@@ -283,9 +283,10 @@ module Reports::ControlObjectiveStats
     end
 
     def effectiveness coi
-      if coi.continuous && @business_unit_ids && @business_unit_ids.size == 1
+      if @business_unit_ids && @business_unit_ids.size == 1
         score = coi.business_unit_scores.where(business_unit_id: @business_unit_ids).take
       end
+
       _effectiveness = score ? score.effectiveness : coi.effectiveness
 
       [_effectiveness * coi.relevance, coi.relevance]

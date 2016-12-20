@@ -5,7 +5,7 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-5">
-        <%= f.input :name, autofocus: true, input_html: { rows: 4 } %>
+        <%= f.input :name, input_html: { rows: 4 } %>
       </div>
 
       <div class="col-md-2">
@@ -15,19 +15,27 @@
         <%= f.input :risk, collection: risks, prompt: true %>
       </div>
       <div class="col-md-1">
-        <label for="control_objective_continuous_<%= id %>">
-          <%= ControlObjective.human_attribute_name 'continuous' %>
-        </label>
-        <div>
-          <%= f.check_box :continuous, id: "control_objective_continuous_#{id}", disabled: f.object.continuous %>
-        </div>
-      </div>
-      <div class="col-md-1">
         <label for="control_objective_obsolete_<%= id %>">
           <%= ControlObjective.human_attribute_name 'obsolete' %>
         </label>
         <div>
           <%= f.check_box :obsolete, id: "control_objective_obsolete_#{id}", data: { process_control_id: process_control_id } %>
+        </div>
+      </div>
+      <div class="col-md-1">
+        <label>
+          <%= ControlObjective.human_attribute_name 'support' %>
+        </label>
+        <div>
+          <div class="file-container pull-left">
+            <%= link_to_upload f.object, :support %>
+
+            <% if f.object.support_cache %>
+              <%= f.input :support_cache, as: :hidden, id: "control_objective_support_#{id}" %>
+            <% else %>
+              <%= f.input :support, as: :file, label: false, hint: f.object.identifier, id: "control_objective_support_#{id}" %>
+            <% end %>
+          </div>
         </div>
       </div>
       <div class="col-md-1">
@@ -59,6 +67,21 @@
         </div>
         <%= c_f.input :order, as: :hidden %>
       <% end %>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <%= Tag.model_name.human count: 0 %>
+      </h3>
+    </div>
+    <div class="panel-body">
+      <%= f.simple_fields_for :taggings do |tf| %>
+        <%= render 'control_objectives/tagging', f: tf, kind: 'control_objective' %>
+      <% end %>
+
+      <%= link_to_add_fields t('control_objectives.new.tagging'), f, :taggings, 'control_objectives/tagging' %>
     </div>
   </div>
 

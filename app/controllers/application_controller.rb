@@ -26,8 +26,9 @@ class ApplicationController < ActionController::Base
   private
 
     def scope_current_organization
-      Group.current_id        = current_organization.try(:group_id)
-      Organization.current_id = current_organization.try(:id)
+      Group.current_id        = current_organization&.group_id
+      Group.corporate_ids     = current_organization&.group&.organizations&.corporate&.ids
+      Organization.current_id = current_organization&.id
     end
 
     def load_user
@@ -74,7 +75,8 @@ class ApplicationController < ActionController::Base
           @auth_user.try(:privileges, current_organization) : {}
       else
         go_to = request.fullpath
-        session[:go_to] = go_to if request.get? && !request.xhr?
+        store_go_to = request.get? && !request.xhr?
+        session[:go_to] = go_to if store_go_to
         @auth_user = nil
         redirect_to_login t('message.must_be_authenticated'), :alert
       end

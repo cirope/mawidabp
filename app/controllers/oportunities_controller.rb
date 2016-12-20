@@ -1,6 +1,7 @@
 class OportunitiesController < ApplicationController
-  include AutoCompleteFor::FindingRelation
   include AutoCompleteFor::ControlObjectiveItem
+  include AutoCompleteFor::FindingRelation
+  include AutoCompleteFor::Tagging
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_oportunity, only: [
@@ -197,6 +198,9 @@ class OportunitiesController < ApplicationController
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
+        ],
+        taggings_attributes: [
+          :id, :tag_id, :_destroy
         ]
       )
     end
@@ -204,6 +208,7 @@ class OportunitiesController < ApplicationController
     def load_privileges
       @action_privileges.update(
         :follow_up_pdf => :read,
+        :auto_complete_for_tagging => :read,
         :auto_complete_for_finding_relation => :read,
         :auto_complete_for_control_objective_item => :read,
         :undo_reiteration => :modify

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160918020315) do
+ActiveRecord::Schema.define(version: 20161219225623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -196,7 +196,7 @@ ActiveRecord::Schema.define(version: 20160918020315) do
     t.integer  "relevance"
     t.integer  "risk"
     t.boolean  "obsolete",           default: false
-    t.boolean  "continuous",         default: false, null: false
+    t.string   "support"
   end
 
   add_index "control_objectives", ["obsolete"], name: "index_control_objectives_on_obsolete", using: :btree
@@ -231,6 +231,24 @@ ActiveRecord::Schema.define(version: 20160918020315) do
   add_index "costs", ["cost_type"], name: "index_costs_on_cost_type", using: :btree
   add_index "costs", ["item_type", "item_id"], name: "index_costs_on_item_type_and_item_id", using: :btree
   add_index "costs", ["user_id"], name: "index_costs_on_user_id", using: :btree
+
+  create_table "documents", force: :cascade do |t|
+    t.string   "name",                            null: false
+    t.text     "description"
+    t.boolean  "shared",          default: false, null: false
+    t.integer  "lock_version",    default: 0
+    t.integer  "file_model_id"
+    t.integer  "organization_id"
+    t.integer  "group_id"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "documents", ["file_model_id"], name: "index_documents_on_file_model_id", using: :btree
+  add_index "documents", ["group_id"], name: "index_documents_on_group_id", using: :btree
+  add_index "documents", ["name"], name: "index_documents_on_name", using: :btree
+  add_index "documents", ["organization_id"], name: "index_documents_on_organization_id", using: :btree
+  add_index "documents", ["shared"], name: "index_documents_on_shared", using: :btree
 
   create_table "e_mails", force: :cascade do |t|
     t.text     "to"
@@ -380,7 +398,11 @@ ActiveRecord::Schema.define(version: 20160918020315) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "image_updated_at"
+    t.integer  "imageable_id",                               null: false
+    t.string   "imageable_type",                             null: false
   end
+
+  add_index "image_models", ["imageable_type", "imageable_id"], name: "index_image_models_on_imageable_type_and_imageable_id", using: :btree
 
   create_table "ldap_configs", force: :cascade do |t|
     t.string   "hostname",            limit: 255,               null: false
@@ -415,6 +437,24 @@ ActiveRecord::Schema.define(version: 20160918020315) do
   add_index "login_records", ["organization_id"], name: "index_login_records_on_organization_id", using: :btree
   add_index "login_records", ["start"], name: "index_login_records_on_start", using: :btree
   add_index "login_records", ["user_id"], name: "index_login_records_on_user_id", using: :btree
+
+  create_table "news", force: :cascade do |t|
+    t.string   "title",                           null: false
+    t.text     "description"
+    t.text     "body",                            null: false
+    t.boolean  "shared",          default: false, null: false
+    t.datetime "published_at",                    null: false
+    t.integer  "lock_version",    default: 0
+    t.integer  "organization_id",                 null: false
+    t.integer  "group_id",                        null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "news", ["group_id"], name: "index_news_on_group_id", using: :btree
+  add_index "news", ["organization_id"], name: "index_news_on_organization_id", using: :btree
+  add_index "news", ["published_at"], name: "index_news_on_published_at", using: :btree
+  add_index "news", ["shared"], name: "index_news_on_shared", using: :btree
 
   create_table "notification_relations", force: :cascade do |t|
     t.integer  "notification_id"
@@ -608,13 +648,12 @@ ActiveRecord::Schema.define(version: 20160918020315) do
   add_index "related_user_relations", ["user_id", "related_user_id"], name: "index_related_user_relations_on_user_id_and_related_user_id", using: :btree
 
   create_table "resource_classes", force: :cascade do |t|
-    t.string   "name",                limit: 255
+    t.string   "name",            limit: 255
     t.integer  "unit"
     t.integer  "organization_id"
-    t.integer  "lock_version",                    default: 0
+    t.integer  "lock_version",                default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "resource_class_type"
   end
 
   add_index "resource_classes", ["name"], name: "index_resource_classes_on_name", using: :btree
@@ -622,7 +661,6 @@ ActiveRecord::Schema.define(version: 20160918020315) do
 
   create_table "resource_utilizations", force: :cascade do |t|
     t.decimal  "units",                              precision: 15, scale: 2
-    t.decimal  "cost_per_unit",                      precision: 15, scale: 2
     t.integer  "resource_consumer_id"
     t.string   "resource_consumer_type", limit: 255
     t.integer  "resource_id"
@@ -637,9 +675,8 @@ ActiveRecord::Schema.define(version: 20160918020315) do
   create_table "resources", force: :cascade do |t|
     t.string   "name",              limit: 255
     t.text     "description"
-    t.decimal  "cost_per_unit",                 precision: 15, scale: 2
     t.integer  "resource_class_id"
-    t.integer  "lock_version",                                           default: 0
+    t.integer  "lock_version",                  default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -706,6 +743,38 @@ ActiveRecord::Schema.define(version: 20160918020315) do
   add_index "settings", ["name"], name: "index_settings_on_name", using: :btree
   add_index "settings", ["organization_id"], name: "index_settings_on_organization_id", using: :btree
 
+  create_table "taggings", force: :cascade do |t|
+    t.integer  "tag_id",        null: false
+    t.integer  "taggable_id",   null: false
+    t.string   "taggable_type", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
+  add_index "taggings", ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id", using: :btree
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "name",                            null: false
+    t.string   "kind",                            null: false
+    t.string   "style",                           null: false
+    t.integer  "organization_id",                 null: false
+    t.integer  "lock_version",    default: 0
+    t.jsonb    "options"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "shared",          default: false, null: false
+    t.integer  "group_id",                        null: false
+    t.string   "icon",            default: "tag", null: false
+  end
+
+  add_index "tags", ["group_id"], name: "index_tags_on_group_id", using: :btree
+  add_index "tags", ["kind"], name: "index_tags_on_kind", using: :btree
+  add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
+  add_index "tags", ["options"], name: "index_tags_on_options", using: :gin
+  add_index "tags", ["organization_id"], name: "index_tags_on_organization_id", using: :btree
+  add_index "tags", ["shared"], name: "index_tags_on_shared", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "name",                 limit: 100
     t.string   "last_name",            limit: 100
@@ -724,7 +793,6 @@ ActiveRecord::Schema.define(version: 20160918020315) do
     t.string   "salt",                 limit: 255
     t.string   "change_password_hash", limit: 255
     t.string   "function",             limit: 255
-    t.integer  "resource_id"
     t.integer  "manager_id"
     t.boolean  "group_admin",                      default: false
     t.text     "notes"
@@ -737,7 +805,6 @@ ActiveRecord::Schema.define(version: 20160918020315) do
   add_index "users", ["group_admin"], name: "index_users_on_group_admin", using: :btree
   add_index "users", ["hidden"], name: "index_users_on_hidden", using: :btree
   add_index "users", ["manager_id"], name: "index_users_on_manager_id", using: :btree
-  add_index "users", ["resource_id"], name: "index_users_on_resource_id", using: :btree
   add_index "users", ["user"], name: "index_users_on_user", using: :btree
 
   create_table "versions", force: :cascade do |t|
@@ -819,6 +886,9 @@ ActiveRecord::Schema.define(version: 20160918020315) do
   add_foreign_key "control_objective_items", "reviews", name: "control_objective_items_review_id_fk", on_delete: :restrict
   add_foreign_key "control_objectives", "process_controls", name: "control_objectives_process_control_id_fk", on_delete: :restrict
   add_foreign_key "costs", "users", name: "costs_user_id_fk", on_delete: :restrict
+  add_foreign_key "documents", "file_models", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "documents", "groups", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "documents", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "error_records", "organizations", name: "error_records_organization_id_fk", on_delete: :restrict
   add_foreign_key "error_records", "users", name: "error_records_user_id_fk", on_delete: :restrict
   add_foreign_key "finding_answers", "file_models", name: "finding_answers_file_model_id_fk", on_delete: :restrict
@@ -835,6 +905,8 @@ ActiveRecord::Schema.define(version: 20160918020315) do
   add_foreign_key "ldap_configs", "organizations", name: "ldap_configs_organization_id_fk", on_update: :restrict, on_delete: :restrict
   add_foreign_key "login_records", "organizations", name: "login_records_organization_id_fk", on_delete: :restrict
   add_foreign_key "login_records", "users", name: "login_records_user_id_fk", on_delete: :restrict
+  add_foreign_key "news", "groups", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "news", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "notification_relations", "notifications", name: "notification_relations_notification_id_fk", on_delete: :restrict
   add_foreign_key "notifications", "users", column: "user_who_confirm_id", name: "notifications_user_who_confirm_id_fk", on_delete: :restrict
   add_foreign_key "notifications", "users", name: "notifications_user_id_fk", on_delete: :restrict
@@ -859,7 +931,9 @@ ActiveRecord::Schema.define(version: 20160918020315) do
   add_foreign_key "reviews", "plan_items", name: "reviews_plan_item_id_fk", on_delete: :restrict
   add_foreign_key "roles", "organizations", name: "roles_organization_id_fk", on_delete: :restrict
   add_foreign_key "settings", "organizations", name: "settings_organization_id_fk", on_delete: :restrict
-  add_foreign_key "users", "resources", name: "users_resource_id_fk", on_delete: :restrict
+  add_foreign_key "taggings", "tags", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "tags", "groups", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "tags", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "users", "users", column: "manager_id", name: "users_manager_id_fk", on_delete: :restrict
   add_foreign_key "work_papers", "file_models", name: "work_papers_file_model_id_fk", on_delete: :restrict
   add_foreign_key "work_papers", "organizations", name: "work_papers_organization_id_fk", on_delete: :restrict

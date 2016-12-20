@@ -1,5 +1,6 @@
 class PlansController < ApplicationController
   include AutoCompleteFor::BusinessUnit
+  include AutoCompleteFor::Tagging
 
   before_action :auth, :load_privileges, :check_privileges,
     :find_business_unit_type
@@ -144,22 +145,18 @@ class PlansController < ApplicationController
     end
   end
 
-  # * GET /plans/resource_data/1
-  def resource_data
-    resource = Resource.find(params[:id])
-
-    render :json => resource.to_json(:only => :cost_per_unit)
-  end
-
   private
     def plan_params
       params.require(:plan).permit(
-        :period_id, :allow_overload, :allow_duplication, :new_version,
+        :period_id, :allow_overload, :allow_duplication,
         :lock_version, plan_items_attributes: [
           :id, :project, :start, :end, :plain_predecessors, :order_number,
           :business_unit_id, :_destroy,
           resource_utilizations_attributes: [
-            :id, :resource_id, :resource_type, :units, :cost_per_unit, :_destroy
+            :id, :resource_id, :resource_type, :units, :_destroy
+          ],
+          taggings_attributes: [
+            :id, :tag_id, :_destroy
           ]
         ]
       )
@@ -188,7 +185,7 @@ class PlansController < ApplicationController
       @action_privileges.update(
         :export_to_pdf => :read,
         :auto_complete_for_business_unit => :read,
-        :resource_data => :read
+        :auto_complete_for_tagging => :read
       )
     end
 end

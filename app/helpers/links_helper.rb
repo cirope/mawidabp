@@ -18,7 +18,7 @@ module LinksHelper
   end
 
   def link_to_new(*args)
-    link_to t('navigation.new'), *args
+    link_to t('.new', default: t('navigation.new')), *args
   end
 
   def link_to_show(*args)

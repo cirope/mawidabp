@@ -47,7 +47,7 @@ module FindingsHelper
     else
       review = form.object.control_objective_item.try(:review)
       fras = (review.try(:finding_review_assignments) || []).reject do |fra|
-        fra.finding.repeated? && fra.finding.class != form.object.class
+        fra.finding.repeated? || fra.finding.class != form.object.class
       end
       findings = fras.map { |fra| [fra.finding, fra.finding_id.to_i] }
       url = url_for controller: form.object.class.to_s.tableize, action: :show, id: '[FINDING_ID]'
@@ -101,8 +101,11 @@ module FindingsHelper
 
 
   def finding_answer_notification_check(form)
-    form.input :notify_users, as: :boolean, label: false, inline_label:
-      FindingAnswer.human_attribute_name(:notify_users)
+    html_class = @auth_user.can_act_as_audited? ? 'hidden' : nil
+    label = html_class.blank? && FindingAnswer.human_attribute_name(:notify_users)
+
+    form.input :notify_users, as: :boolean, label: false, inline_label: label,
+      input_html: { class: html_class }
   end
 
   def finding_show_status_change_history(dom_id)

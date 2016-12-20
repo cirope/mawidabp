@@ -13,7 +13,7 @@ jQuery(function ($) {
       makeRequest = false
 
       deferEnableRequest()
-      $.get('/touch', State.resetTimers)
+      $.post('/touch', State.resetTimers)
     }
   })
 })

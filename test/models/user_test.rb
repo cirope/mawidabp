@@ -24,7 +24,6 @@ class UserTest < ActiveSupport::TestCase
         failed_attempts: 0,
         logged_in: false,
         notes: 'Some user notes',
-        resource_id: resources(:auditor_resource).id,
         manager_id: users(:administrator_user).id,
         organization_roles_attributes: [
           {

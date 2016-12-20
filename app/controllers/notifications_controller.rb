@@ -59,22 +59,13 @@ class NotificationsController < ApplicationController
     redirect_to :action => :edit
   end
 
-  # * GET /notifications/confirm
-  # * GET /notifications/confirm.xml
+  # * GET /notifications/1/confirm
   def confirm
-    @notification = Notification.where(
-      :status => Notification::STATUS[:unconfirmed],
-      :confirmation_hash => params[:id]
-    ).first
+    @notification = Notification.where(:confirmation_hash => params[:id]).take!
 
-    @notification.notify! params[:reject].blank? if @notification
+    @notification.notify! params[:reject].blank? if @notification.unconfirmed?
 
-    go_to = {:controller => :notifications, :action => :edit,
-      :id => @notification.to_param}
-
-    redirect_to params[:reject].blank? ? :back : go_to
-  rescue ActionController::RedirectBackError
-    redirect_to notifications_url
+    redirect_to @notification, :notice => t('notification.confirmed')
   end
 
   private
@@ -82,7 +73,7 @@ class NotificationsController < ApplicationController
     def set_notification
       @notification = Notification.where(
         confirmation_hash: params[:id], user_id: @auth_user.id
-      ).first
+      ).take!
     end
 
     def notification_params

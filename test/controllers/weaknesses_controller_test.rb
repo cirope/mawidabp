@@ -122,6 +122,7 @@ class WeaknessesControllerTest < ActionController::TestCase
       'FindingRelation.count',
       'Achievement.count',
       'BusinessUnitFinding.count',
+      'Tagging.count',
       'Comment.count'
     ]
 
@@ -176,6 +177,11 @@ class WeaknessesControllerTest < ActionController::TestCase
               file_model_attributes: {
                 file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
               }
+            }
+          ],
+          taggings_attributes: [
+            {
+              tag_id: tags(:important).id
             }
           ],
           finding_relations_attributes: [
@@ -373,6 +379,33 @@ class WeaknessesControllerTest < ActionController::TestCase
     findings = ActiveSupport::JSON.decode(@response.body)
 
     assert_equal 0, findings.size # Sin resultados
+  end
+
+  test 'auto complete for tagging' do
+    login
+
+    get :auto_complete_for_tagging, {
+      :q => 'impor',
+      :kind => 'finding',
+      :format => :json
+    }
+    assert_response :success
+
+    tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, tags.size
+    assert tags.all? { |t| t['label'].match /impor/i }
+
+    get :auto_complete_for_tagging, {
+      :q => 'x_none',
+      :kind => 'finding',
+      :format => :json
+    }
+    assert_response :success
+
+    tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, tags.size # Sin resultados
   end
 
   test 'auto complete for control objective item' do

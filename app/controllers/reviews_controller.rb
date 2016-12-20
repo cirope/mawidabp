@@ -1,5 +1,6 @@
 class ReviewsController < ApplicationController
   include AutoCompleteFor::ProcessControl
+  include AutoCompleteFor::Tagging
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
@@ -19,7 +20,7 @@ class ReviewsController < ApplicationController
     build_search_conditions Review
 
     @reviews = Review.list.includes(
-      :period, { plan_item: :business_unit }
+      :period, :tags, { plan_item: :business_unit }
     ).where(@conditions).reorder(identification: :desc).page(
       params[:page]
     ).references(:periods)
@@ -223,12 +224,14 @@ class ReviewsController < ApplicationController
     @process_control = ProcessControl.find params[:id]
     @findings = Finding.where(
       [
+        "#{Finding.quoted_table_name}.#{Finding.qcn('organization_id')} = :organization_id",
         "#{Finding.quoted_table_name}.#{Finding.qcn('final')} = :false",
         "#{Finding.quoted_table_name}.#{Finding.qcn('state')} IN(:states)",
         "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL",
         "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('process_control_id')} = :process_control_id"
       ].join(' AND '),
       false: false,
+      organization_id: Organization.current_id,
       states: [Finding::STATUS[:being_implemented], Finding::STATUS[:implemented]],
       process_control_id: @process_control.id
     ).includes(
@@ -292,13 +295,26 @@ class ReviewsController < ApplicationController
   def auto_complete_for_control_objective
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
-    best_practice_conditions = BestPractice.list_conditions
 
     conditions = [
-      best_practice_conditions.first,
+      [
+        [
+          "#{BestPractice.table_name}.#{BestPractice.qcn 'shared'} = :false",
+          "#{BestPractice.table_name}.#{BestPractice.qcn 'organization_id'} = :organization_id"
+        ].join(' AND '),
+        [
+          "#{BestPractice.table_name}.#{BestPractice.qcn 'shared'} = :true",
+          "#{BestPractice.table_name}.#{BestPractice.qcn 'group_id'} = :group_id"
+        ].join(' AND ')
+      ].map { |c| "(#{c})" }.join(' OR '),
       "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('obsolete')} = :false"
     ]
-    parameters = best_practice_conditions.last.merge(false: false)
+    parameters = {
+      false:           false,
+      true:            true,
+      organization_id: Organization.current_id,
+      group_id:        Group.current_id
+    }
 
     @tokens.each_with_index do |t, i|
       conditions << [
@@ -353,8 +369,11 @@ class ReviewsController < ApplicationController
         review_user_assignments_attributes: [
           :id, :assignment_type, :user_id, :include_signature, :owner, :_destroy
         ],
+        taggings_attributes: [
+          :id, :tag_id, :_destroy
+        ],
         control_objective_items_attributes: [
-          :id, :control_objective_id, :control_objective_text, :order_number, :_destroy,
+          :id, :control_objective_id, :control_objective_text, :relevance, :order_number, :_destroy,
           control_attributes: [
             :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
           ]
@@ -392,6 +411,7 @@ class ReviewsController < ApplicationController
         auto_complete_for_finding: :read,
         auto_complete_for_control_objective: :read,
         auto_complete_for_process_control: :read,
+        auto_complete_for_tagging: :read,
         estimated_amount: :read,
         recode_findings: :modify
       )

@@ -154,13 +154,6 @@ class WorkflowsController < ApplicationController
     render json: options
   end
 
-  # * GET /workflows/resource_data/1
-  def resource_data
-    resource = Resource.find(params[:id])
-
-    render json: resource.to_json(only: :cost_per_unit)
-  end
-
   # * GET /workflows/estimated_amount/1
   def estimated_amount
     review = Review.find(params[:id]) unless params[:id].blank?
@@ -176,7 +169,7 @@ class WorkflowsController < ApplicationController
         workflow_items_attributes: [
           :id, :task, :start, :end, :plain_predecessors, :order_number, :_destroy,
           resource_utilizations_attributes: [
-            :id, :resource_id, :resource_type, :units, :cost_per_unit, :_destroy
+            :id, :resource_id, :resource_type, :units, :_destroy
           ]
         ]
       )
@@ -198,7 +191,6 @@ class WorkflowsController < ApplicationController
       @action_privileges.update(
         export_to_pdf: :read,
         reviews_for_period: :read,
-        resource_data: :read,
         estimated_amount: :read
       )
     end

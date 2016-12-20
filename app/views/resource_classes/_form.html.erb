@@ -2,30 +2,18 @@
   <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-6">
-        <%= f.input :name, input_html: { maxlength: 255, autofocus: true },
-          label: ResourceClass.human_attribute_name(:name) %>
-      </div>
-      <div class="col-md-6">
-        <%= f.input :resource_class_type,
-          collection: sort_options_array(resource_class_types),
-          prompt: true, disabled: !f.object.new_record? %>
-      </div>
-    </div>
+    <%= f.input :name, input_html: { maxlength: 255, autofocus: true },
+      label: ResourceClass.human_attribute_name(:name) %>
   </div>
 
   <hr />
 
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <h5><strong><%= Resource.human_attribute_name 'name' %></strong></h5>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-5">
       <h5><strong><%= Resource.human_attribute_name 'description' %></strong></h5>
-    </div>
-    <div class="col-md-3">
-      <h5><strong><%= Resource.human_attribute_name 'cost_per_unit' %></strong></h5>
     </div>
   </div>
 

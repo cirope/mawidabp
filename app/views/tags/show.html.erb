@@ -1,0 +1,11 @@
+<h2>
+  <div class="label label-<%= @tag.style %>">
+    <span class="glyphicon glyphicon-<%= @tag.icon %>"></span>
+    <%= @tag %>
+  </div>
+</h2>
+
+<hr>
+
+<%= link_to_edit [:edit, @tag, kind: @tag.kind] %> |
+<%= link_to_index tags_path %>

@@ -52,7 +52,6 @@ class UsersControllerTest < ActionController::TestCase
             email: 'new_user@newemail.net',
             language: I18n.available_locales.last.to_s,
             notes: 'Some user notes',
-            resource_id: resources(:auditor_resource).id,
             manager_id: users(:administrator_user).id,
             logged_in: false,
             enable: true,
@@ -81,7 +80,6 @@ class UsersControllerTest < ActionController::TestCase
             email: 'new_user2@newemail.net',
             language: I18n.available_locales.last.to_s,
             notes: 'Some user notes',
-            resource_id: resources(:auditor_resource).id,
             manager_id: users(:administrator_user).id,
             logged_in: false,
             enable: true,
@@ -119,7 +117,6 @@ class UsersControllerTest < ActionController::TestCase
             email: 'updated_user@updatedemail.net',
             notes: 'Updated user notes',
             language: I18n.available_locales.first.to_s,
-            resource_id: resources(:auditor_resource).id,
             logged_in: false,
             enable: true,
             send_notification_email: false,
@@ -167,13 +164,12 @@ class UsersControllerTest < ActionController::TestCase
               email: 'updated_user@updatedemail.net',
               language: I18n.available_locales.first.to_s,
               notes: 'Updated user notes',
-              resource_id: resources(:auditor_resource).id,
               logged_in: false,
               enable: true,
               send_notification_email: true,
               organization_roles_attributes: [
                 {
-                  organization_id: organizations(:cirope).id,
+                  organization_id: organizations(:google).id,
                   role_id: roles(:admin_second_role).id
                 }
               ],

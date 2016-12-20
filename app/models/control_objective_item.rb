@@ -7,6 +7,8 @@ class ControlObjectiveItem < ActiveRecord::Base
   include ControlObjectiveItems::Scopes
   include ControlObjectiveItems::Search
 
+  delegate :support, :support?, to: :control_objective
+
   # Atributos no persistentes
   attr_reader :approval_errors
   # Alias de atributos
@@ -207,10 +209,6 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   def process_control
     self.control_objective.try(:process_control)
-  end
-
-  def continuous
-    self.control_objective.try(:continuous)
   end
 
   def must_be_approved?

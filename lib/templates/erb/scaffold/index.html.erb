@@ -26,6 +26,8 @@
       <%% end %>
     </tbody>
   </table>
+
+  <%%= paginate @<%= plural_table_name %> %>
 <%% end %>
 
 <%%= link_to_new new_<%= singular_table_name %>_path, class: 'btn btn-primary' %>

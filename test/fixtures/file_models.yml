@@ -7,3 +7,8 @@ text_file:
   file_file_name: 'text.txt'
   file_content_type: 'text/plain'
   file_file_size: 20
+
+document_file:
+  file_file_name: 'text.txt'
+  file_content_type: 'text/plain'
+  file_file_size: 20

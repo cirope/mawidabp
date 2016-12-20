@@ -568,7 +568,7 @@ class ReviewTest < ActiveSupport::TestCase
 
     codes = @review.reload.weaknesses.not_revoked.pluck 'review_code'
 
-    assert codes.each_with_index.all? { |c, i|
+    assert codes.sort.each_with_index.all? { |c, i|
       c.match(/\d+\Z/).to_a.first.to_i == i.next
     }
   end

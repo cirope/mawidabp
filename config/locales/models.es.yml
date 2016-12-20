@@ -36,21 +36,36 @@ es:
       control_objective:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
+      document:
+        one: 'Documento'
+        other: 'Documentos'
       e_mail:
         one: 'Correo'
         other: 'Correos'
       error_record:
         one: 'Registro de error'
         other: 'Registros de errores'
+      finding:
+        one: 'Hallazgo'
+        other: 'Hallazgos'
+      image_model:
+        one: 'Imagen'
+        other: 'Imágenes'
       ldap_config:
         one: 'Configuración LDAP'
         other: 'Configuraciones LDAP'
       login_record:
         one: 'Registro de ingreso'
         other: 'Registros de ingreso'
+      news:
+        one: 'Noticia'
+        other: 'Noticias'
       organization:
         one: 'Organización'
         other: 'Organizaciones'
+      plan_item:
+        one: 'Proyecto en plan'
+        other: 'Proyectos en plan'
       setting:
         one: 'Configuración'
         other: 'Configuraciones'
@@ -81,6 +96,12 @@ es:
       resource_class:
         one: 'Clase de recurso'
         other: 'Clases de recursos'
+      tag:
+        one: 'Etiqueta'
+        other: 'Etiquetas'
+      tagging:
+        one: 'Etiquetado'
+        other: 'Etiquetados'
       work_paper:
         one: 'Papel de trabajo'
         other: 'Papeles de trabajo'
@@ -123,7 +144,12 @@ es:
         relevance: 'Importancia'
         risk: 'Riesgo'
         obsolete: 'Obsoleto'
-        continuous: 'Contínuo'
+        support: 'Soporte'
+      document:
+        name: 'Nombre'
+        description: 'Descripción'
+        shared: 'Compartido'
+        tags: 'Etiquetas'
       e_mail:
         to: 'Para'
         subject: 'Asunto'
@@ -133,6 +159,10 @@ es:
         data: 'Datos'
         error: 'Error'
         user_id: 'Usuario'
+      image_model:
+        uploaded_data: "Imagen"
+        content_type: "Imagen (tipo)"
+        size: "Imagen (tamaño)"
       ldap_config:
         hostname: 'Dirección del servidor'
         port: 'Puerto'
@@ -153,11 +183,18 @@ es:
         end: 'Fin'
         start: 'Inicio'
         user_id: 'Usuario'
+      news:
+        title: 'Título'
+        description: 'Descripción'
+        body: 'Cuerpo'
+        shared: 'Compartida'
+        published_at: 'Fecha de publicación'
       organization:
         description: 'Descripción'
         name: 'Nombre'
         prefix: 'Prefijo'
         corporate: 'Corporativa'
+        image_model: 'Imagen'
       organization/image_model:
         image_file_name: 'Isologotipo (nombre de archivo)'
         image_content_type: 'Isologotipo (tipo de archivo)'
@@ -167,6 +204,13 @@ es:
         name: 'Nombre'
         value: 'Valor'
         description: 'Descripción'
+      tag:
+        name: 'Nombre'
+        style: 'Estilo'
+        icon: 'Icono'
+      tagging:
+        tag: 'Etiqueta'
+        tag_id: 'Etiqueta'
       user:
         email: 'Correo'
         enable: 'Habilitado'
@@ -184,7 +228,6 @@ es:
         password: 'Contraseña'
         password_changed: 'Contraseña cambiada'
         password_confirmation: 'Confirmación'
-        resource: 'Tipo de recurso'
         roles: 'Perfiles'
         send_notification_email: 'Enviar notificación'
         user: 'Usuario'
@@ -235,7 +278,6 @@ es:
       resource_class:
         name: 'Clase de recurso'
         unit: 'Unidad de medida'
-        resource_class_type: 'Tipo'
       resource_class/resources:
         name: 'Recurso'
         resource_class: 'Clase'
