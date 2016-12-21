@@ -3,13 +3,6 @@ module UsersHelper
     content_tag(:abbr, h(user.user), :title => user.email)
   end
 
-  def user_resource_field(form)
-    resource_classes = ResourceClass.human_resources
-
-    form.input :resource_id, collection: resource_classes, as: :grouped_select,
-      group_method: :resources, prompt: true, label: User.human_attribute_name('resource')
-  end
-
   def user_language_field(form)
     options = AVAILABLE_LOCALES.map do |lang|
       [t("lang.#{lang}"), lang.to_s]

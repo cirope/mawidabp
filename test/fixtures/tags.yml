@@ -46,3 +46,12 @@ breaking:
   options: "{}"
   organization: cirope
   group: main_group
+
+risk_evaluation:
+  name: Risk evaluation
+  kind: control_objective
+  style: default
+  shared: false
+  options: {}
+  organization: cirope
+  group: main_group

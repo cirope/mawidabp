@@ -1,18 +1,17 @@
-<% currency_mask = "#{t('number.currency.format.unit')}%.2f" %>
 <% unless plan_item.try(:resource_utilizations).blank? %>
   <p>
-    <%= link_to currency_mask % plan_item.cost, '#', :onclick =>
+    <%= link_to '%.2f' % plan_item.units, '#', :onclick =>
       "$('#estimated_cost_details').slideToggle(); return false;" %>
   </p>
   <div id="estimated_cost_details" style="display: none;">
     <div>
       <ul>
         <% plan_item.resource_utilizations.each do |ru| %>
-          <li><%= "#{ru.resource.resource_name}: #{currency_mask % ru.cost}" %></li>
+          <li><%= "#{ru.resource.resource_name}: #{'%.2f' % ru.units}" %></li>
         <% end %>
       </ul>
     </div>
   </div>
 <% else %>
-  <p><%= currency_mask % 0.0 %></p>
+  <p><%= '%.2f' % 0.0 %></p>
 <% end %>

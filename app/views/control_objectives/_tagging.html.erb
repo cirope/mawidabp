@@ -1,0 +1,33 @@
+<%
+  id = f.object.object_id
+  tagging = f.object
+%>
+
+<fieldset class="tagging">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <% if tagging.tag.blank? %>
+          <%= f.input :tag_id, as: :string, label: false, input_html: {
+            value: tagging.tag.to_s,
+            id: "control_objective_tagging_#{id}",
+            title: t('label.search'), autocomplete: :off, autofocus: true,
+            data: {
+              autocomplete_params: { kind: 'control_objective' },
+              autocomplete_url: url_for([:auto_complete_for_tagging, BestPractice]),
+              autocomplete_id_target: "#hidden_tag_#{id}"
+            }
+          } %>
+        <% else %>
+          <%= f.input "control_objective_tagging_#{id}", label: false, input_html: { value: tagging.tag.to_s, readonly: true } %>
+        <% end %>
+        <%= f.input :tag_id, as: :hidden, input_html: { id: "hidden_tag_#{id}" } %>
+      </div>
+      <div class="col-md-2">
+        <div class="toggle-visibility">
+          <%= link_to_remove_nested_item f %>
+        </div>
+      </div>
+    </div>
+  </div>
+</fieldset>

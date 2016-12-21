@@ -30,21 +30,11 @@ module Users::Name
     "#{version.full_name}#{version.string_to_append_if_function}#{version.string_to_append_if_disable}"
   end
 
-  def full_name_with_resource from = nil
-    version = version_of from
-
-    "#{version.full_name}#{version.string_to_append_if_resource}#{version.string_to_append_if_disable}"
-  end
-
   def string_to_append_if_disable
     " - (#{I18n.t('user.disabled')})" unless enable? || full_name.blank?
   end
 
   def string_to_append_if_function
     " (#{function})" unless function.blank? || full_name.blank?
-  end
-
-  def string_to_append_if_resource
-    " (#{resource.name})" unless resource.blank? || full_name.blank?
   end
 end

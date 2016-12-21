@@ -4,7 +4,7 @@
 %>
 <fieldset class="tagging">
   <div class="row nested">
-    <div class="col-md-5">
+    <div class="col-md-8">
       <% if tagging.tag.blank? %>
         <%= f.input :tag_id, as: :string, label: false, input_html: {
           value: tagging.tag.to_s,

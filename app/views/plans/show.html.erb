@@ -1,4 +1,3 @@
-<% currency_mask = "#{t('number.currency.format.unit')}%.2f" %>
 <% grouped_plan_items = @plan.grouped_plan_items %>
 <% business_unit_types = BusinessUnitType.list + [nil] %>
 
@@ -8,7 +7,7 @@
 </p>
 <p>
   <strong><%= Plan.human_attribute_name :estimated_amount %></strong>:
-  <strong><%= currency_mask % @plan.cost %></strong>
+  <strong><%= '%.2f' % @plan.units %></strong>
 </p>
 
 <% business_unit_types.each do |business_unit_type| %>
@@ -25,9 +24,9 @@
           <th><%= Tag.model_name.human count: 0 %></th>
           <th><%= PlanItem.human_attribute_name(:start) %></th>
           <th><%= PlanItem.human_attribute_name(:end) %></th>
-          <th><%= PlanItem.human_attribute_name :human_resources_cost %></th>
-          <th><%= PlanItem.human_attribute_name :material_resources_cost %></th>
-          <th><%= PlanItem.human_attribute_name :total_resources_cost %></th>
+          <th><%= PlanItem.human_attribute_name :human_resource_units %></th>
+          <th><%= PlanItem.human_attribute_name :material_resource_units %></th>
+          <th><%= PlanItem.human_attribute_name :total_resource_units %></th>
         </tr>
       </thead>
       <tbody>
@@ -40,9 +39,9 @@
             <td><%= tags plan_item.tags %></td>
             <td><%= l plan_item.start, format: :minimal %></td>
             <td><%= l plan_item.end, format: :minimal %></td>
-            <td><%= currency_mask % plan_item.human_cost %></td>
-            <td><%= currency_mask % plan_item.material_cost %></td>
-            <td><%= currency_mask % plan_item.cost %></td>
+            <td><%= '%.2f' % plan_item.human_units %></td>
+            <td><%= '%.2f' % plan_item.material_units %></td>
+            <td><%= '%.2f' % plan_item.units %></td>
           </tr>
         <% end %>
         <tr>
@@ -68,8 +67,6 @@
               <tr>
                 <th><%= ResourceUtilization.human_attribute_name :resource %></th>
                 <th><%= ResourceUtilization.human_attribute_name :units %></th>
-                <th><%= ResourceUtilization.human_attribute_name :cost_per_unit %></th>
-                <th><%= ResourceUtilization.human_attribute_name :cost %></th>
               </tr>
             </thead>
             <tbody>
@@ -77,13 +74,11 @@
                 <tr>
                   <td><%= ru.resource.resource_name %></td>
                   <td><%= ru.units %></td>
-                  <td><%= currency_mask % ru.cost_per_unit %></td>
-                  <td><%= currency_mask % ru.cost %></td>
                 </tr>
               <% end %>
               <tr>
-                <td colspan="3"></td>
-                <td><strong><%= plan_item.cost %></strong></td>
+                <td></td>
+                <td><strong><%= '%.2f' % plan_item.units %></strong></td>
               </tr>
             </tbody>
           </table>

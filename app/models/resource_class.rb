@@ -6,8 +6,6 @@ class ResourceClass < ActiveRecord::Base
   include ResourceClasses::Resources
   include Trimmer
 
-  attr_readonly :resource_class_type
-
   trimmed_fields :name
 
   belongs_to :organization

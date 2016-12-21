@@ -16,10 +16,6 @@ class ResourceUtilization < ActiveRecord::Base
     end
   end
 
-  def cost
-    units.to_f * cost_per_unit.to_f
-  end
-
   def human?
     resource_type == 'User'
   end

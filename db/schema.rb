@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161206154301) do
+ActiveRecord::Schema.define(version: 20161219225623) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer  "benefit_id", limit: nil,                          null: false
@@ -233,7 +233,7 @@ ActiveRecord::Schema.define(version: 20161206154301) do
     t.datetime "created_at",                                                    null: false
     t.datetime "updated_at",                                                    null: false
     t.boolean  "obsolete",           limit: nil,                default: false
-    t.boolean  "continuous",         limit: nil,                default: false, null: false
+    t.string   "support"
   end
 
   add_index "control_objectives", ["obsolete"], name: "i_control_objectives_obsolete"
@@ -2668,12 +2668,11 @@ ActiveRecord::Schema.define(version: 20161206154301) do
 
   create_table "resource_classes", force: :cascade do |t|
     t.string   "name"
-    t.integer  "unit",                            precision: 38
-    t.integer  "resource_class_type",             precision: 38
-    t.integer  "organization_id",     limit: nil
-    t.integer  "lock_version",                    precision: 38, default: 0
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
+    t.integer  "unit",                        precision: 38
+    t.integer  "organization_id", limit: nil
+    t.integer  "lock_version",                precision: 38, default: 0
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
   end
 
   add_index "resource_classes", ["name"], name: "index_resource_classes_on_name"
@@ -2681,7 +2680,6 @@ ActiveRecord::Schema.define(version: 20161206154301) do
 
   create_table "resource_utilizations", force: :cascade do |t|
     t.decimal  "units",                              precision: 15, scale: 2
-    t.decimal  "cost_per_unit",                      precision: 15, scale: 2
     t.integer  "resource_consumer_id",   limit: nil
     t.string   "resource_consumer_type"
     t.integer  "resource_id",            limit: nil
@@ -2696,11 +2694,10 @@ ActiveRecord::Schema.define(version: 20161206154301) do
   create_table "resources", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
-    t.decimal  "cost_per_unit",                 precision: 15, scale: 2
     t.integer  "resource_class_id", limit: nil
-    t.integer  "lock_version",                  precision: 38,           default: 0
-    t.datetime "created_at",                                                         null: false
-    t.datetime "updated_at",                                                         null: false
+    t.integer  "lock_version",                  precision: 38, default: 0
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
   end
 
   add_index "resources", ["resource_class_id"], name: "i_resources_resource_class_id"
@@ -2813,7 +2810,6 @@ ActiveRecord::Schema.define(version: 20161206154301) do
     t.boolean  "enable",               limit: nil,                default: false
     t.boolean  "logged_in",            limit: nil,                default: false
     t.boolean  "group_admin",          limit: nil,                default: false
-    t.integer  "resource_id",          limit: nil
     t.datetime "last_access"
     t.integer  "manager_id",           limit: nil
     t.integer  "failed_attempts",                  precision: 38, default: 0
@@ -2830,7 +2826,6 @@ ActiveRecord::Schema.define(version: 20161206154301) do
   add_index "users", ["group_admin"], name: "index_users_on_group_admin"
   add_index "users", ["hidden"], name: "index_users_on_hidden"
   add_index "users", ["manager_id"], name: "index_users_on_manager_id"
-  add_index "users", ["resource_id"], name: "index_users_on_resource_id"
   add_index "users", ["user"], name: "index_users_on_user"
 
   create_table "versions", force: :cascade do |t|
@@ -3051,7 +3046,6 @@ ActiveRecord::Schema.define(version: 20161206154301) do
   add_foreign_key "taggings", "tags", on_delete: :cascade
   add_foreign_key "tags", "groups", on_delete: :cascade
   add_foreign_key "tags", "organizations", on_delete: :cascade
-  add_foreign_key "users", "resources", on_delete: :cascade
   add_foreign_key "users", "users", column: "manager_id", on_delete: :cascade
   add_foreign_key "work_papers", "file_models", on_delete: :cascade
   add_foreign_key "work_papers", "organizations", on_delete: :cascade

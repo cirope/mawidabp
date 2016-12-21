@@ -92,13 +92,11 @@ class WorkflowsControllerTest < ActionController::TestCase
                 {
                   :resource_id => users(:manager_user).id,
                   :resource_type => 'User',
-                  :units => '12.21',
-                  :cost_per_unit => '8.75'
+                  :units => '12.21'
                 }, {
                   :resource_id => resources(:laptop_resource).id,
                   :resource_type => 'Resource',
-                  :units => '2',
-                  :cost_per_unit => '10.7'
+                  :units => '2'
                 }
               ]
             }
@@ -137,8 +135,7 @@ class WorkflowsControllerTest < ActionController::TestCase
                   {
                     :id => resource_utilizations(:auditor_for_20_units_with_conclusion_workflow_item_1).id,
                     :resource_id => users(:manager_user).id,
-                    :units => '12.21',
-                    :cost_per_unit => '8.75'
+                    :units => '12.21'
                   }
                 ]
               }, {
@@ -158,7 +155,6 @@ class WorkflowsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:workflow)
     assert_equal 'Updated task', assigns(:workflow).workflow_items.find(
       workflow_items(:with_conclusion_workflow_item_1).id).task
-    assert_in_delta 8.75, resource_utilization.cost_per_unit, 0.01
   end
 
   test 'overloaded workflow' do
@@ -177,8 +173,7 @@ class WorkflowsControllerTest < ActionController::TestCase
               {
                 :resource_id => users(:manager_user).id,
                 :resource_type => 'User',
-                :units => '12.21',
-                :cost_per_unit => '8.75'
+                :units => '12.21'
               }
             ]
           }, {
@@ -191,8 +186,7 @@ class WorkflowsControllerTest < ActionController::TestCase
               {
                 :resource_id => users(:manager_user).id,
                 :resource_type => 'User',
-                :units => '12.21',
-                :cost_per_unit => '8.75'
+                :units => '12.21'
               }
             ]
           }
@@ -246,21 +240,6 @@ class WorkflowsControllerTest < ActionController::TestCase
     assert_not_nil reviews
     assert_not_equal 0, reviews.size
     assert_not_nil reviews.any? {|r| r.first == reviews(:current_review).identification}
-  end
-
-  test 'resource data' do
-    login
-
-    resource_data = nil
-
-    xhr :get, :resource_data, :id => resources(:auditor_resource).id
-    assert_response :success
-    assert_nothing_raised do
-      resource_data = ActiveSupport::JSON.decode(@response.body)
-    end
-
-    assert_not_nil resource_data
-    assert_not_nil resource_data['cost_per_unit']
   end
 
   test 'estimated amount' do

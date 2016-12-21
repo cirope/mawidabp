@@ -19,16 +19,10 @@ module PlanItems::Pdf
 
   private
 
-    def currency_mask
-      "#{I18n.t('number.currency.format.unit')}%.2f"
-    end
-
     def column_order
       [
-        ['resource_id', 40],
-        ['units', 20],
-        ['cost_per_unit', 20],
-        ['cost', 20]
+        ['resource_id', 80],
+        ['units', 20]
       ]
     end
 
@@ -66,13 +60,11 @@ module PlanItems::Pdf
     def row_data_for resource_utilization
       [
         resource_utilization.resource.resource_name,
-        resource_utilization.units,
-        currency_mask % resource_utilization.cost_per_unit,
-        currency_mask % resource_utilization.cost
+        resource_utilization.units
       ]
     end
 
     def total_row_data
-      ['', '', '', "<b>#{currency_mask % cost}</b>"]
+      ['', "<b>#{'%.2f' % units}</b>"]
     end
 end

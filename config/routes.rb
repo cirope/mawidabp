@@ -44,7 +44,7 @@ Rails.application.routes.draw do
     resources :documents, only: [:index]
   end
 
-  scope ':kind', kind: /document|finding|news|plan_item|review/ do
+  scope ':kind', kind: /control_objective|document|finding|news|plan_item|review/ do
     resources :tags
   end
 
@@ -171,7 +171,6 @@ Rails.application.routes.draw do
     get :export_to_pdf, on: :member
 
     collection do
-      get :resource_data
       get :estimated_amount
       get :reviews_for_period
     end
@@ -270,7 +269,6 @@ Rails.application.routes.draw do
     get :export_to_pdf, on: :member
 
     collection do
-      get :resource_data
       get :auto_complete_for_business_unit
       get :auto_complete_for_tagging
     end
@@ -280,6 +278,12 @@ Rails.application.routes.draw do
 
   resources :best_practices do
     resources :process_controls, only: [:new, :edit]
+
+    resources :control_objectives, only: [] do
+      get :download, on: :member, controller: 'best_practices/control_objectives'
+    end
+
+    get :auto_complete_for_tagging, on: :collection
   end
 
   resources :periods

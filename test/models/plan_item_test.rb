@@ -130,10 +130,10 @@ class PlanItemTest < ActiveSupport::TestCase
     assert_error @plan_item, :predecessors, :invalid
   end
 
-  test 'cost function' do
-    cost = @plan_item.resource_utilizations.to_a.sum &:cost
+  test 'units function' do
+    units = @plan_item.resource_utilizations.map(&:units).compact.sum
 
-    assert cost > 0
-    assert_equal cost, @plan_item.cost
+    assert units > 0
+    assert_equal units, @plan_item.units
   end
 end

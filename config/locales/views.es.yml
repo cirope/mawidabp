@@ -54,6 +54,10 @@ es:
     control_objectives:
       new: 'Agregar objetivo'
 
+  control_objectives:
+    new:
+      tagging: 'Agregar etiqueta'
+
   documents:
     edit:
       title: 'Editar documento'

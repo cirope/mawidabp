@@ -1,4 +1,3 @@
-<% currency_mask = "#{t('number.currency.format.unit')}%.2f" %>
 <div class="page-header">
   <h2><%= @workflow.review %></h2>
 </div>
@@ -16,9 +15,9 @@
       <th><%= WorkflowItem.human_attribute_name :start %></th>
       <th><%= WorkflowItem.human_attribute_name :end %></th>
       <th><%= WorkflowItem.human_attribute_name(:predecessors) %></th>
-      <th><%= WorkflowItem.human_attribute_name :human_resources_cost %></th>
-      <th><%= WorkflowItem.human_attribute_name :material_resources_cost %></th>
-      <th><%= WorkflowItem.human_attribute_name :total_resources_cost %></th>
+      <th><%= WorkflowItem.human_attribute_name :human_resource_units %></th>
+      <th><%= WorkflowItem.human_attribute_name :material_resource_units %></th>
+      <th><%= WorkflowItem.human_attribute_name :total_resource_units %></th>
     </tr>
   </thead>
   <tbody>
@@ -29,14 +28,14 @@
         <td><%= l workflow_item.start %></td>
         <td><%= l workflow_item.end %></td>
         <td><%= workflow_item.plain_predecessors %></td>
-        <td><%= currency_mask % workflow_item.human_cost %></td>
-        <td><%= currency_mask % workflow_item.material_cost %></td>
-        <td><%= currency_mask % workflow_item.cost %></td>
+        <td><%= '%.2f' % workflow_item.human_units %></td>
+        <td><%= '%.2f' % workflow_item.material_units %></td>
+        <td><%= '%.2f' % workflow_item.units %></td>
       </tr>
     <% end %>
     <tr>
       <td colspan="7"></td>
-      <td><strong><%= @workflow.cost %></strong></td>
+      <td><strong><%= '%.2f' % @workflow.units %></strong></td>
     </tr>
   </tbody>
 </table>
@@ -56,8 +55,6 @@
           <tr>
             <th><%= ResourceUtilization.human_attribute_name :resource %></th>
             <th><%= ResourceUtilization.human_attribute_name :units %></th>
-            <th><%= ResourceUtilization.human_attribute_name :cost_per_unit %></th>
-            <th><%= ResourceUtilization.human_attribute_name :cost %></th>
           </tr>
         </thead>
         <tbody>
@@ -65,13 +62,11 @@
             <tr>
               <td><%= ru.resource.resource_name %></td>
               <td><%= ru.units %></td>
-              <td><%= currency_mask % ru.cost_per_unit %></td>
-              <td><%= currency_mask % ru.cost %></td>
             </tr>
           <% end %>
           <tr>
-            <td colspan="3"></td>
-            <td><strong><%= workflow_item.cost %></strong></td>
+            <td></td>
+            <td><strong><%= '%.2f' % workflow_item.units %></strong></td>
           </tr>
         </tbody>
       </table>

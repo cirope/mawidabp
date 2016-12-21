@@ -1,4 +1,4 @@
-module Plans::Pdf
+module Plans::PDF
   extend ActiveSupport::Concern
 
   def to_pdf organization = nil, include_details = true
@@ -34,10 +34,6 @@ module Plans::Pdf
 
   private
 
-    def currency_mask
-      "#{I18n.t('number.currency.format.unit')}%.2f"
-    end
-
     def pdf_title
       ["#{I18n.t('plan.pdf.title')}\n", (PDF_FONT_SIZE * 1.5).round, :center]
     end
@@ -48,7 +44,7 @@ module Plans::Pdf
         from_date: I18n.l(period.start, format: :long),
         to_date:   I18n.l(period.end,   format: :long)
       }
-      
+
       [period_label, range_label, 0, false]
     end
 
@@ -61,9 +57,9 @@ module Plans::Pdf
         ['tags', 7],
         ['start', 7.5],
         ['end', 7.5],
-        ['human_resources_cost', 10],
-        ['material_resources_cost', 10],
-        ['total_resources_cost', 10]
+        ['human_resource_units', 10],
+        ['material_resource_units', 10],
+        ['total_resource_units', 10]
       ]
     end
 
@@ -88,8 +84,8 @@ module Plans::Pdf
       put_business_unit_type_title_on pdf, business_unit_type
 
       plan_items.each do |plan_item|
-        total_resource_text  = currency_mask % plan_item.cost
-        total_cost          += plan_item.cost
+        total_resource_text  = '%.2f' % plan_item.units
+        total_cost          += plan_item.units
 
         row_data << row_data_for(plan_item, total_resource_text)
       end
@@ -117,8 +113,8 @@ module Plans::Pdf
         plan_item.tags.map(&:to_s).join(';'),
         I18n.l(plan_item.start, format: :default),
         I18n.l(plan_item.end, format: :default),
-        currency_mask % plan_item.human_cost,
-        currency_mask % plan_item.material_cost,
+        '%.2f' % plan_item.human_units,
+        '%.2f' % plan_item.material_units,
         total_resource_text
       ]
     end
@@ -126,7 +122,7 @@ module Plans::Pdf
     def total_row_data total_cost
       [
         '', '', '', '', '', '', '', '', '',
-        "<b>#{currency_mask % total_cost}</b>"
+        "<b>#{'%.2f' % total_cost}</b>"
       ]
     end
 

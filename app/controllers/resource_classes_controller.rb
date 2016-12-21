@@ -51,9 +51,9 @@ class ResourceClassesController < ApplicationController
 
     def resource_class_params
       params.require(:resource_class).permit(
-        :name, :resource_class_type, :lock_version,
+        :name, :lock_version,
         resources_attributes: [
-          :id, :name, :description, :cost_per_unit, :_destroy
+          :id, :name, :description, :_destroy
         ]
       )
     end

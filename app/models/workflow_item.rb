@@ -137,20 +137,16 @@ class WorkflowItem < ActiveRecord::Base
     end.compact.sort
   end
 
-  def cost
-    self.resource_utilizations.to_a.sum(&:cost)
-  end
-
-  def human_cost
-    self.human_resource_utilizations.sum(&:cost)
-  end
-
-  def human_unit_cost
+  def human_units
     self.human_resource_utilizations.map(&:units).compact.sum
   end
 
-  def material_cost
-    self.material_resource_utilizations.sum(&:cost)
+  def material_units
+    self.material_resource_utilizations.map(&:units).compact.sum
+  end
+
+  def units
+    self.resource_utilizations.map(&:units).compact.sum
   end
 
   def check_if_is_frozen
@@ -178,10 +174,8 @@ class WorkflowItem < ActiveRecord::Base
     pdf.text "<b>#{self.order_number}</b>) #{self.task}",
       :font_size => PDF_FONT_SIZE, :inline_format => true
 
-    column_order = [['resource_id', 40], ['units', 20], ['cost_per_unit', 20],
-      ['cost', 20]]
+    column_order = [['resource_id', 80], ['units', 20]]
     column_data, column_headers, column_widths = [], [], []
-    currency_mask = "#{I18n.t('number.currency.format.unit')}%.2f"
 
     column_order.each do |col_name, col_width|
       column_headers << ResourceUtilization.human_attribute_name(col_name)
@@ -191,14 +185,12 @@ class WorkflowItem < ActiveRecord::Base
     self.resource_utilizations.each do |resource_utilization|
       column_data << [
         resource_utilization.resource.resource_name,
-        resource_utilization.units,
-        currency_mask % resource_utilization.cost_per_unit,
-        currency_mask % resource_utilization.cost
+        resource_utilization.units
       ]
     end
 
     column_data << [
-      '', '', '', "<b>#{currency_mask % self.cost}</b>"
+      '', "<b>#{'%.2f' % units}</b>"
     ]
 
     pdf.move_down((PDF_FONT_SIZE * 0.5).round)

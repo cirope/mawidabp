@@ -174,12 +174,12 @@ class WorkflowItemTest < ActiveSupport::TestCase
     end
   end
 
-  test 'cost function' do
-    cost = @workflow_item.resource_utilizations.inject(0) do |sum, ru|
-      sum + ru.cost
+  test 'units function' do
+    units = @workflow_item.resource_utilizations.inject(0) do |sum, ru|
+      sum + ru.units
     end
 
-    assert cost > 0
-    assert_equal cost, @workflow_item.cost
+    assert units > 0
+    assert_equal units, @workflow_item.units
   end
 end

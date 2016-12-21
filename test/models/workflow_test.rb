@@ -143,10 +143,10 @@ class WorkflowTest < ActiveSupport::TestCase
     FileUtils.rm @workflow.absolute_pdf_path
   end
 
-  test 'cost' do
-    cost = @workflow.workflow_items.to_a.sum(&:cost)
+  test 'units' do
+    units = @workflow.workflow_items.map(&:units).compact.sum
 
-    assert cost > 0
-    assert_equal cost, @workflow.cost
+    assert units > 0
+    assert_equal units, @workflow.units
   end
 end
