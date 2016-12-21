@@ -84,7 +84,7 @@ class PlanTest < ActiveSupport::TestCase
     plan_items = @plan.plan_items.for_business_unit_type(but_id)
 
     calculated_amount = plan_items.inject 0.0 do |sum, pi|
-      sum + pi.resource_utilizations.map(&:units).compact.sum
+      sum + pi.human_units
     end
 
     assert_not_equal plan_items.size, @plan.plan_items.size
@@ -121,7 +121,7 @@ class PlanTest < ActiveSupport::TestCase
   end
 
   test 'units' do
-    units = @plan.plan_items.inject(0) { |sum, pi| sum + pi.units }
+    units = @plan.plan_items.inject(0) { |sum, pi| sum + pi.human_units }
 
     assert units > 0
     assert_equal units, @plan.units
