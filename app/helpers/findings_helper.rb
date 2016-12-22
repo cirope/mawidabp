@@ -8,7 +8,7 @@ module FindingsHelper
       state_was = finding.new_record? ?
         Finding::STATUS[:incomplete] : Finding.find(finding.id).state
 
-      statuses.merge! finding.next_status_list(state_was)
+      statuses.merge! finding.next_status_list(state_was).except(:repeated)
     end
 
     options = statuses.map { |k, v| [t(:"finding.status_#{k}"), v] }
