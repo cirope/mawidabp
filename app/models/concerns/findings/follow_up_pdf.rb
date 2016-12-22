@@ -171,7 +171,7 @@ module Findings::FollowUpPDF
         pdf.move_down PDF_FONT_SIZE
 
         pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-          table_options = pdf.default_table_options(column_widths)
+          table_options = pdf.default_table_options column_widths
 
           pdf.table(row_data.insert(0, column_headers), table_options) do
             row(0).style(
@@ -207,13 +207,12 @@ module Findings::FollowUpPDF
     def put_history_data_for version, version_finding, pdf, column_headers, column_widths, row_data
       created_at_label = PaperTrail::Version.human_attribute_name :created_at
       version_date     = I18n.l(version_finding&.updated_at || version.created_at, format: :long)
-      user_name        = version.paper_trail_originator ?
-        User.find(version.paper_trail_originator)&.full_name : '--'
+      user_id          = version.persisted? ? version.paper_trail_originator : version.whodunnit
+      user_name        = user_id ? User.find(user_id)&.full_name : '--'
 
       pdf.move_down PDF_FONT_SIZE
 
       pdf.add_description_item created_at_label, version_date
-
       pdf.add_description_item User.model_name.human, user_name
 
       pdf.move_down PDF_FONT_SIZE
@@ -281,7 +280,15 @@ module Findings::FollowUpPDF
         previous_version = last_checked_version
       end
 
-      important_versions
+      important_versions + [current_version]
+    end
+
+    def current_version
+      PaperTrail::Version.new(
+        item:      self,
+        object:    self.paper_trail.object_attrs_for_paper_trail,
+        whodunnit: self.paper_trail.originator
+      )
     end
 
     def column_widths_for pdf, column_names
