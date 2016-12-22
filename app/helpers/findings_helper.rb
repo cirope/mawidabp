@@ -1,17 +1,18 @@
 module FindingsHelper
   def finding_status_field(form, inline = true, disabled = false)
-    finding = form.object
-    statuses = finding.repeated? ?
-      finding.next_status_list : finding.next_status_list.except(:repeated)
+    finding  = form.object
+    statuses = finding.next_status_list
 
     if finding.errors[:state].present?
       state_was = finding.new_record? ?
         Finding::STATUS[:incomplete] : Finding.find(finding.id).state
 
-      statuses.merge! finding.next_status_list(state_was).except(:repeated)
+      statuses.merge! finding.next_status_list(state_was)
     end
 
-    options = statuses.map { |k, v| [t(:"finding.status_#{k}"), v] }
+    options = statuses.except(:repeated).map do |k, v|
+      [t(:"finding.status_#{k}"), v]
+    end
 
     form.input :state, collection: sort_options_array(options), label: false,
       prompt: true, input_html: { disabled: (disabled || finding.unconfirmed?) }
