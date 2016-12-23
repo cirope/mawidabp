@@ -286,7 +286,7 @@ module Findings::FollowUpPDF
     def current_version
       PaperTrail::Version.new(
         item:      self,
-        object:    self.paper_trail.object_attrs_for_paper_trail,
+        object:    self.paper_trail.object_attrs_for_paper_trail.to_json,
         whodunnit: self.paper_trail.originator
       )
     end
