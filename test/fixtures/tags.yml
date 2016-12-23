@@ -52,6 +52,6 @@ risk_evaluation:
   kind: control_objective
   style: default
   shared: false
-  options: {}
+  options: "{}"
   organization: cirope
   group: main_group
