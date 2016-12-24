@@ -181,7 +181,7 @@ class WorkPaper < ActiveRecord::Base
     if self.file_model.try(:file?)
       File.join File.dirname(self.file_model.file.path), self.pdf_cover_name
     else
-      "#{TEMP_PATH}#{self.pdf_cover_name(filename || self.object_id.abs)}"
+      "#{TEMP_PATH}#{self.pdf_cover_name(filename || "#{object_id.abs}.pdf")}"
     end
   end
 
@@ -255,6 +255,7 @@ class WorkPaper < ActiveRecord::Base
             self.file_model.update_column :file_file_name, File.basename(filename)
             self.file_model.file_file_size = File.size(filename)
             self.file_model.save!
+            self.reload
           end
         end
       end
