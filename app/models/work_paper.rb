@@ -256,7 +256,7 @@ class WorkPaper < ActiveRecord::Base
             self.file_model.update_column :file_file_name, File.basename(filename)
             self.file_model.file_file_size = File.size(filename)
             self.file_model.save!
-            self.reload
+            self.file_model.reload
           end
         end
       end
