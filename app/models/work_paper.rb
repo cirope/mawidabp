@@ -164,9 +164,10 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def pdf_cover_name(filename = nil, short = false)
+    code = sanitized_code
+    short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
+
     if self.file_model.try(:file?)
-      code = sanitized_code
-      short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
       filename ||= self.file_model.identifier.sanitized_for_filename
       filename = filename.sanitized_for_filename.
         sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
