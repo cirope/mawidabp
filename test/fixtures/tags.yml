@@ -1,0 +1,57 @@
+important:
+  name: Important
+  kind: finding
+  style: danger
+  icon: tag
+  shared: false
+  options: {}
+  organization: cirope
+  group: main_group
+
+extra:
+  name: Extra
+  kind: plan_item
+  style: default
+  icon: tag
+  shared: false
+  options: {}
+  organization: cirope
+  group: main_group
+
+high_priority:
+  name: High priority
+  kind: review
+  style: default
+  icon: tag
+  shared: false
+  options: {}
+  organization: cirope
+  group: main_group
+
+manual:
+  name: Manual
+  kind: document
+  style: default
+  icon: tag
+  shared: false
+  options: {}
+  organization: cirope
+  group: main_group
+
+breaking:
+  name: Breaking
+  kind: news
+  style: default
+  shared: false
+  options: {}
+  organization: cirope
+  group: main_group
+
+risk_evaluation:
+  name: Risk evaluation
+  kind: control_objective
+  style: default
+  shared: false
+  options: {}
+  organization: cirope
+  group: main_group

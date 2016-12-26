@@ -89,6 +89,18 @@
 <h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
 <%= finding_responsibles_list(@finding) %>
 
+<% unless @finding.taggings.blank? %>
+  <h3>
+    <%= Tag.model_name.human count: 0 %>
+  </h3>
+
+  <ul class="list-unstyled">
+    <% @finding.taggings.each do |tagging| %>
+      <%= tagging_item tagging %>
+    <% end %>
+  </ul>
+<% end %>
+
 <% unless @finding.finding_relations.blank? %>
   <h4>
     <%= t('finding.finding_relations') %>

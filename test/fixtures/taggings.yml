@@ -1,0 +1,7 @@
+important_finding:
+  tag: important
+  taggable: iso_27000_security_policy_3_1_item_weakness (Weakness)
+
+manual_document:
+  tag: manual
+  taggable: audit_manual (Document)

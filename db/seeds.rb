@@ -1,4 +1,4 @@
-User.paper_trail_off!
+User.paper_trail.disable
 
 user = User.new(
   name: 'Administrator',
@@ -16,4 +16,4 @@ user.roles.each { |r| r.inject_auth_privileges Hash.new(Hash.new(true)) }
 user.encrypt_password
 user.save!
 
-User.paper_trail_on!
+User.paper_trail.enable

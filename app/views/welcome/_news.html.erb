@@ -1,0 +1,61 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <%= link_to news, news %>
+    </h3>
+  </div>
+
+  <div class="panel-body">
+    <% if news.image_models.any? %>
+      <div id="images-<%= news.id %>" class="carousel slide" data-ride="carousel" data-interval="false">
+        <% if news.image_models.size > 1 %>
+          <ol class="carousel-indicators">
+            <li data-target="#images-<%= news.id %>" data-slide-to="0" class="active"></li>
+            <% news.image_models.size.pred.times do |i| %>
+              <li data-target="#images-<%= news.id %>" data-slide-to="<%= i.next %>"></li>
+            <% end %>
+          </ol>
+        <% end %>
+
+        <div class="carousel-inner">
+          <% news.image_models.each_with_index do |image_model, i| %>
+            <div class="item <%= 'active' if i == 0 %>">
+              <%= image_tag image_model.image.url(:medium), class: 'img-responsive' %>
+            </div>
+          <% end %>
+        </div>
+
+        <% if news.image_models.size > 1 %>
+          <a class="left carousel-control" href="#images-<%= news.id %>" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </a>
+
+          <a class="right carousel-control" href="#images-<%= news.id %>" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </a>
+        <% end %>
+      </div>
+
+      <br>
+    <% end %>
+
+    <p>
+      <em><%= news.description %></em>
+    </p>
+
+    <% if news.taggings.any? %>
+      <ul class="list-inline">
+        <% news.taggings.each do |tagging| %>
+          <li>
+            <span class="label label-<%= tagging.tag.style %>"><%= tagging.tag %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+
+  <div class="panel-footer">
+    <span class="glyphicon glyphicon-calendar"></span>
+    <%= l news.published_at.to_date, format: :short %>
+  </div>
+</div>

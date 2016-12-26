@@ -2,9 +2,7 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-2">
-        <%= f.input :raw_cost, label: false, input_html: {
-          maxlength: 255, data: { required: true }
-        } %>
+        <%= f.input :raw_cost, label: false, input_html: { maxlength: 255 } %>
       </div>
       <div class="col-md-10">
         <%= f.input :description, label: false, input_html: { rows: 1 } %>

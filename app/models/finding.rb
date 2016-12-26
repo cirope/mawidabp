@@ -5,6 +5,7 @@ class Finding < ActiveRecord::Base
   include Findings::Achievements
   include Findings::Answers
   include Findings::Confirmation
+  include Findings::Cost
   include Findings::CreateValidation
   include Findings::Csv
   include Findings::CustomAttributes
@@ -12,6 +13,7 @@ class Finding < ActiveRecord::Base
   include Findings::Expiration
   include Findings::ImportantDates
   include Findings::JSON
+  include Findings::PDF
   include Findings::Reiterations
   include Findings::Relations
   include Findings::ReportScopes
@@ -32,6 +34,7 @@ class Finding < ActiveRecord::Base
   include Parameters::Risk
   include Parameters::Priority
   include ParameterSelector
+  include Taggable
 
   acts_as_tree
 
@@ -45,7 +48,6 @@ class Finding < ActiveRecord::Base
   has_many :notification_relations, :as => :model, :dependent => :destroy
   has_many :notifications, -> { order(:created_at) },
     :through => :notification_relations
-  has_many :costs, :as => :item, :dependent => :destroy
   has_many :comments, -> { order(:created_at => :asc) }, :as => :commentable,
     :dependent => :destroy
   has_many :finding_user_assignments, :dependent => :destroy,
@@ -57,7 +59,6 @@ class Finding < ActiveRecord::Base
   has_many :business_unit_findings, :dependent => :destroy
   has_many :business_units, :through => :business_unit_findings
 
-  accepts_nested_attributes_for :costs, :allow_destroy => false
   accepts_nested_attributes_for :comments, :allow_destroy => false
   accepts_nested_attributes_for :finding_user_assignments,
     :allow_destroy => true
@@ -142,10 +143,6 @@ class Finding < ActiveRecord::Base
     all_follow_up_dates.size > 0
   end
 
-  def cost
-    costs.reject(&:new_record?).sum(&:cost)
-  end
-
   def issue_date
     review.try(:conclusion_final_review).try(:issue_date)
   end
@@ -184,115 +181,6 @@ class Finding < ActiveRecord::Base
     end
 
     @all_follow_up_dates.compact
-  end
-
-  def to_pdf(organization = nil)
-    pdf = Prawn::Document.create_generic_pdf(:portrait, false)
-
-    pdf.add_review_header organization, self.review.identification.strip,
-      self.review.plan_item.project.strip
-
-    pdf.move_down PDF_FONT_SIZE * 3
-
-    pdf.add_title self.class.model_name.human, (PDF_FONT_SIZE * 1.5).round, :center,
-      false
-
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.add_title "<b>#{self.class.human_attribute_name(:review_code)}</b>: " +
-      self.review_code, PDF_FONT_SIZE, :center, false
-
-    pdf.start_new_page
-
-    pdf.move_down((PDF_FONT_SIZE * 2.5).round)
-
-    pdf.add_description_item(
-      self.class.human_attribute_name('control_objective_item_id'),
-      self.control_objective_item.to_s, 0, false)
-    pdf.add_description_item(self.class.human_attribute_name('review_code'),
-      self.review_code, 0, false)
-    pdf.add_description_item(self.class.human_attribute_name('title'),
-      self.title, 0, false)
-    pdf.add_description_item(self.class.human_attribute_name('description'),
-      self.description, 0, false)
-
-    pdf.move_down((PDF_FONT_SIZE * 2.5).round)
-
-    if self.kind_of?(Weakness)
-      pdf.add_description_item(Weakness.human_attribute_name('risk'),
-        self.risk_text, 0, false)
-      pdf.add_description_item(Weakness.human_attribute_name('priority'),
-        self.priority_text, 0, false)
-      pdf.add_description_item(Weakness.human_attribute_name('effect'),
-        self.effect, 0, false)
-      pdf.add_description_item(Weakness.human_attribute_name(
-          'audit_recommendations'), self.audit_recommendations, 0, false)
-    end
-
-    pdf.add_description_item(self.class.human_attribute_name('answer'),
-      self.answer, 0, false) unless self.unanswered?
-
-    if self.kind_of?(Weakness) && (self.implemented? || self.being_implemented?)
-      pdf.add_description_item(Weakness.human_attribute_name('follow_up_date'),
-        (I18n.l(self.follow_up_date, :format => :long) if self.follow_up_date),
-        0, false)
-    end
-
-    if self.implemented_audited?
-      pdf.add_description_item(self.class.human_attribute_name('solution_date'),
-        (I18n.l(self.solution_date, :format => :long) if self.solution_date), 0,
-        false)
-    end
-
-    unless self.origination_date.blank?
-      pdf.add_description_item(self.class.human_attribute_name('origination_date'),
-        I18n.l(self.origination_date, :format => :long), 0, false)
-    end
-
-    audited = self.users.select { |u| u.can_act_as_audited? }.map(&:full_name)
-
-    pdf.add_description_item(self.class.human_attribute_name('user_ids'),
-      audited.join('; '), 0, false)
-
-    pdf.add_description_item(self.class.human_attribute_name('audit_comments'),
-      self.audit_comments, 0, false)
-
-    pdf.add_description_item(self.class.human_attribute_name('state'),
-      self.state_text, 0, false)
-
-    unless self.work_papers.blank?
-      pdf.start_new_page
-      pdf.move_down PDF_FONT_SIZE * 3
-
-      pdf.add_title(ControlObjectiveItem.human_attribute_name('work_papers'),
-        (PDF_FONT_SIZE * 1.5).round, :center, false)
-      pdf.add_title("#{self.class.model_name.human} #{review_code} - #{title}",
-        (PDF_FONT_SIZE * 1.5).round, :center, false)
-
-      pdf.move_down PDF_FONT_SIZE * 3
-
-      self.work_papers.each do |wp|
-        pdf.text wp.inspect, :align => :center,
-          :font_size => PDF_FONT_SIZE
-      end
-    else
-      pdf.add_footnote(I18n.t('finding.without_work_papers'))
-    end
-
-    pdf.custom_save_as(self.pdf_name, self.class.table_name, self.id)
-  end
-
-  def absolute_pdf_path
-    Prawn::Document.absolute_path(self.pdf_name, self.class.table_name, self.id)
-  end
-
-  def relative_pdf_path
-    Prawn::Document.relative_path(self.pdf_name, self.class.table_name, self.id)
-  end
-
-  def pdf_name
-    ("#{self.class.model_name.human.downcase.gsub(/\s+/, '_')}-" +
-      "#{self.review_code}.pdf").sanitized_for_filename
   end
 
   def follow_up_pdf(organization = nil)

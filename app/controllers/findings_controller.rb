@@ -1,5 +1,6 @@
 class FindingsController < ApplicationController
   include AutoCompleteFor::FindingRelation
+  include AutoCompleteFor::Tagging
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_finding, only: [:show, :edit, :update]
@@ -218,6 +219,9 @@ class FindingsController < ApplicationController
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
         ],
+        taggings_attributes: [
+          :id, :tag_id, :_destroy
+        ],
         costs_attributes: [
           :id, :raw_cost, :cost, :cost_type, :description, :user_id, :_destroy
         ],
@@ -238,6 +242,7 @@ class FindingsController < ApplicationController
     def load_privileges
       @action_privileges.update(
         :follow_up_pdf => :read,
+        :auto_complete_for_tagging => :read,
         :auto_complete_for_finding_relation => :read
       )
     end

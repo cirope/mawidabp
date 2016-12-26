@@ -6,12 +6,12 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui/autocomplete
-//= require jquery-ui/datepicker
-//= require jquery-ui/datepicker-es
-//= require jquery-ui/effect-highlight
-//= require jquery-ui/dialog
-//= require jquery-ui/sortable
+//= require jquery-ui/effects/effect-highlight
+//= require jquery-ui/widgets/autocomplete
+//= require jquery-ui/widgets/datepicker
+//= require jquery-ui/i18n/datepicker-es
+//= require jquery-ui/widgets/dialog
+//= require jquery-ui/widgets/sortable
 //= require jquery-ui-timepicker-addon
 //= require bootstrap
 //= require autocomplete
@@ -19,7 +19,6 @@
 //= require jquery.url
 //= require jquery.mw
 //= require dynamic_form
-//= require effect_helper
 //= require date_pickers
 //= require fetch
 //= require hide
@@ -33,10 +32,13 @@
 //= require file_input
 //= require best_practices
 //= require control_objective_items
+//= require documents
 //= require findings
+//= require news
 //= require organizations
 //= require process_controls
 //= require reviews
+//= require tags
 //= require touch
 //= require users
 //= require work_papers

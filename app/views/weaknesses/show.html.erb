@@ -104,6 +104,18 @@
   </ul>
 <% end %>
 
+<% unless @weakness.taggings.blank? %>
+  <h3>
+    <%= Tag.model_name.human count: 0 %>
+  </h3>
+
+  <ul class="list-unstyled">
+    <% @weakness.taggings.each do |tagging| %>
+      <%= tagging_item tagging %>
+    <% end %>
+  </ul>
+<% end %>
+
 <% unless @weakness.finding_relations.blank? %>
   <h3>
     <%= t('finding.finding_relations') %>

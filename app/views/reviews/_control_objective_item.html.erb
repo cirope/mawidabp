@@ -17,9 +17,6 @@
   <% else %>
     <ul>
       <li>
-        <% if control_objective_item.continuous %>
-          <span class="glyphicon glyphicon-repeat"></span>
-        <% end %>
         <%= content_tag :span, control_objective_item.control_objective_text,
           :class => ('strike text-muted' if control_objective_item.finished) %>
         <% if !readonly %>
@@ -27,9 +24,13 @@
           <%= link_to_move %>
           <span class="text-muted">|</span>
           <%= link_to_edit edit_control_objective_item_path(control_objective_item) %>
+          <% if control_objective_item.support? %>
+            <span class="text-muted">|</span>
+            <%= link_to_download_support control_objective_item.control_objective, class: nil %>
+          <% end %>
           <% if control_objective_item.can_be_destroyed? %>
             <span class="text-muted">|</span>
-            <%= link_to_remove_nested_item(f)  %>
+            <%= link_to_remove_nested_item(f) %>
           <% end %>
           <%= f.input :id, as: :hidden %>
           <%= f.input :order_number, as: :hidden, input_html: { class: 'sort_number' } %>

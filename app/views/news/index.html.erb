@@ -1,0 +1,36 @@
+<%= render partial: 'shared/search', locals: {
+  options: {},
+  columns: @query.blank? ? News::COLUMNS_FOR_SEARCH.keys : @columns
+} %>
+
+<% if @news.empty? %>
+  <%= render 'shared/empty_index', message: @query.blank? ? t('.empty_html') : t('.empty_search_html') %>
+<% else %>
+  <table class="table table-striped table-hover">
+    <thead id="column_headers">
+      <tr>
+        <%= make_filterable_column News.human_attribute_name('title'), nil, 'name' %>
+        <%= make_not_available_column News.human_attribute_name('published_at') %>
+        <%= make_not_available_column News.human_attribute_name('shared'), class: 'hidden-xs hidden-sm' %>
+        <%= make_filterable_column Tag.model_name.human(count: 0), { class: 'hidden-xs' }, 'tags' %>
+        <th colspan="3" class="text-right"><%= link_to_search %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @news.each do |news| %>
+        <tr <%== 'class="text-muted"' if news.published_at.to_date.future? %>>
+          <td><%= super_truncate news.title, 25 %></td>
+          <td><%= l news.published_at.to_date %></td>
+          <td class="hidden-xs hidden-sm"><%= t news.shared ? 'label.yes' : 'label.no' %></td>
+          <td class="hidden-xs"><%= tags news.tags %></td>
+          <td><%= link_to_show news %></td>
+          <td><%= link_to_edit [:edit, news] %></td>
+          <td><%= link_to_destroy news %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<%= link_to_new new_news_path, class: 'btn btn-primary' %>

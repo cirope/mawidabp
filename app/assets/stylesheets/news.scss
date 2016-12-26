@@ -1,0 +1,15 @@
+[data-controller="news"] {
+  .image-container {
+    margin: 0em 2em 1em 0em;
+  }
+
+  .body {
+    ol, p, ul {
+      font-size: 1.25em;
+    }
+
+    blockquote p {
+      font-size: 1em;
+    }
+  }
+}

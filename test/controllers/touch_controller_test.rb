@@ -4,7 +4,7 @@ class TouchControllerTest < ActionController::TestCase
   test 'should get index' do
     login
 
-    get :index
+    post :create
     assert_response :success
   end
 end

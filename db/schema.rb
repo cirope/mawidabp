@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160918020315) do
+ActiveRecord::Schema.define(version: 20161213200852) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer  "benefit_id", limit: nil,                          null: false
@@ -226,14 +226,14 @@ ActiveRecord::Schema.define(version: 20160918020315) do
 
   create_table "control_objectives", force: :cascade do |t|
     t.text     "name"
-    t.integer  "risk",                           precision: 38
-    t.integer  "relevance",                      precision: 38
-    t.integer  "order",                          precision: 38
-    t.integer  "process_control_id", limit: nil
-    t.datetime "created_at",                                                    null: false
-    t.datetime "updated_at",                                                    null: false
-    t.boolean  "obsolete",           limit: nil,                default: false
-    t.boolean  "continuous",         limit: nil,                default: false, null: false
+    t.integer  "order"
+    t.integer  "process_control_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "relevance"
+    t.integer  "risk"
+    t.boolean  "obsolete",           default: false
+    t.string   "support"
   end
 
   add_index "control_objectives", ["obsolete"], name: "i_control_objectives_obsolete"
@@ -407,6 +407,24 @@ ActiveRecord::Schema.define(version: 20160918020315) do
     t.string  "source_site",  limit: 128,                 comment: "Obsolete - do not use"
   end
 
+  create_table "documents", force: :cascade do |t|
+    t.string   "name",                            null: false
+    t.text     "description"
+    t.boolean  "shared",          default: false, null: false
+    t.integer  "lock_version",    default: 0
+    t.integer  "file_model_id"
+    t.integer  "organization_id"
+    t.integer  "group_id"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "documents", ["file_model_id"], name: "index_documents_on_file_model_id", using: :btree
+  add_index "documents", ["group_id"], name: "index_documents_on_group_id", using: :btree
+  add_index "documents", ["name"], name: "index_documents_on_name", using: :btree
+  add_index "documents", ["organization_id"], name: "index_documents_on_organization_id", using: :btree
+  add_index "documents", ["shared"], name: "index_documents_on_shared", using: :btree
+
   create_table "e_mails", force: :cascade do |t|
     t.text     "to"
     t.text     "subject"
@@ -559,9 +577,13 @@ ActiveRecord::Schema.define(version: 20160918020315) do
     t.integer  "image_file_size",    precision: 38
     t.datetime "image_updated_at"
     t.integer  "lock_version",       precision: 38, default: 0
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.integer  "imageable_id",                               null: false
+    t.string   "imageable_type",                             null: false
   end
+
+  add_index "image_models", ["imageable_type", "imageable_id"], name: "index_image_models_on_imageable_type_and_imageable_id", using: :btree
 
   create_table "ldap_configs", force: :cascade do |t|
     t.string   "hostname",                                                     null: false
@@ -1867,6 +1889,24 @@ ActiveRecord::Schema.define(version: 20160918020315) do
 # Could not dump table "mview$_adv_workload" because of following StandardError
 #   Unknown type 'LONG' for column 'sql_text'
 
+  create_table "news", force: :cascade do |t|
+    t.string   "title",                           null: false
+    t.text     "description"
+    t.text     "body",                            null: false
+    t.boolean  "shared",          default: false, null: false
+    t.datetime "published_at",                    null: false
+    t.integer  "lock_version",    default: 0
+    t.integer  "organization_id",                 null: false
+    t.integer  "group_id",                        null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "news", ["group_id"], name: "index_news_on_group_id", using: :btree
+  add_index "news", ["organization_id"], name: "index_news_on_organization_id", using: :btree
+  add_index "news", ["published_at"], name: "index_news_on_published_at", using: :btree
+  add_index "news", ["shared"], name: "index_news_on_shared", using: :btree
+
   create_table "notification_relations", force: :cascade do |t|
     t.integer  "notification_id", limit: nil
     t.integer  "model_id",        limit: nil
@@ -2728,6 +2768,38 @@ ActiveRecord::Schema.define(version: 20160918020315) do
 # Could not dump table "sqlplus_product_profile" because of following StandardError
 #   Unknown type 'LONG' for column 'long_value'
 
+  create_table "taggings", force: :cascade do |t|
+    t.integer  "tag_id",        null: false
+    t.integer  "taggable_id",   null: false
+    t.string   "taggable_type", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
+  add_index "taggings", ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id", using: :btree
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "name",                            null: false
+    t.string   "kind",                            null: false
+    t.string   "style",                           null: false
+    t.integer  "organization_id",                 null: false
+    t.integer  "lock_version",    default: 0
+    t.jsonb    "options"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "shared",          default: false, null: false
+    t.integer  "group_id",                        null: false
+    t.string   "icon",            default: "tag", null: false
+  end
+
+  add_index "tags", ["group_id"], name: "index_tags_on_group_id", using: :btree
+  add_index "tags", ["kind"], name: "index_tags_on_kind", using: :btree
+  add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
+  add_index "tags", ["options"], name: "index_tags_on_options", using: :gin
+  add_index "tags", ["organization_id"], name: "index_tags_on_organization_id", using: :btree
+  add_index "tags", ["shared"], name: "index_tags_on_shared", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "name",                 limit: 100
     t.string   "last_name",            limit: 100
@@ -2987,5 +3059,4 @@ ActiveRecord::Schema.define(version: 20160918020315) do
   add_synonym "sysfiles", "sys.sysfiles", force: true
   add_synonym "publicsyn", "sys.publicsyn", force: true
   add_synonym "product_user_profile", "system.sqlplus_product_profile", force: true
-
 end

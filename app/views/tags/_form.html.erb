@@ -1,0 +1,41 @@
+<%= simple_form_for @tag, url: [@tag, kind: @tag.kind] do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-sm-8">
+        <%= f.input :name, input_html: { autofocus: true } %>
+      </div>
+      <div class="col-sm-4">
+        <%= f.input :style, collection: styles, prompt: false %>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <%= Tag.human_attribute_name 'icon' %>
+        </h4>
+      </div>
+
+      <div class="panel-body">
+        <ul class="nav nav-pills lead">
+          <% Tag.available_icons.each do |icon| %>
+            <li <%== 'class="active"' if @tag.icon == icon %>>
+              <a class="text-muted" href="#" data-icon="<%= icon %>">
+                <span class="glyphicon glyphicon-<%= icon %>"></span>
+              </a>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+    <%= f.input :icon, as: :hidden %>
+    <%= f.input :lock_version, as: :hidden %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn-primary' %>
+  </div>
+<% end %>

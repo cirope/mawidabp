@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get '/touch', to: 'touch#index', as: 'touch'
+  post '/touch', to: 'touch#create', as: 'touch'
 
   # Sessions
   get    'login',    to: 'sessions#new',     as: 'login'
@@ -9,6 +9,11 @@ Rails.application.routes.draw do
   resources :settings, only: [:index, :show, :edit, :update]
 
   resources :benefits
+
+  resources :documents do
+    get :download, on: :member
+    get :auto_complete_for_tagging, on: :collection
+  end
 
   resources :questionnaires do
     resources :polls, only: [:index]
@@ -34,6 +39,18 @@ Rails.application.routes.draw do
   resources :business_unit_types
 
   resources :groups
+
+  resources :tags, only: [] do
+    resources :documents, only: [:index]
+  end
+
+  scope ':kind', kind: /control_objective|document|finding|news|plan_item|review/ do
+    resources :tags
+  end
+
+  resources :news do
+    get :auto_complete_for_tagging, on: :collection
+  end
 
   get 'welcome', as: 'welcome', to: 'welcome#index'
   get 'execution_reports', as: 'execution_reports', to: 'execution_reports#index'
@@ -140,6 +157,7 @@ Rails.application.routes.draw do
       collection do
         get :export_to_pdf
         get :export_to_csv
+        get :auto_complete_for_tagging
         get :auto_complete_for_finding_relation
       end
     end
@@ -215,6 +233,7 @@ Rails.application.routes.draw do
       get :auto_complete_for_finding
       get :auto_complete_for_process_control
       get :auto_complete_for_control_objective
+      get :auto_complete_for_tagging
     end
   end
 
@@ -226,6 +245,7 @@ Rails.application.routes.draw do
     resources :costs
 
     collection do
+      get :auto_complete_for_tagging
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
     end
@@ -252,6 +272,7 @@ Rails.application.routes.draw do
     collection do
       get :resource_data
       get :auto_complete_for_business_unit
+      get :auto_complete_for_tagging
     end
   end
 
@@ -259,6 +280,12 @@ Rails.application.routes.draw do
 
   resources :best_practices do
     resources :process_controls, only: [:new, :edit]
+
+    resources :control_objectives, only: [] do
+      get :download, on: :member, controller: 'best_practices/control_objectives'
+    end
+
+    get :auto_complete_for_tagging, on: :collection
   end
 
   resources :periods
@@ -276,6 +303,7 @@ Rails.application.routes.draw do
     end
 
     collection do
+      get :auto_complete_for_tagging
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
     end
