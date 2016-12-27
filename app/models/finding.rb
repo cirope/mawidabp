@@ -9,6 +9,7 @@ class Finding < ActiveRecord::Base
   include Findings::CreateValidation
   include Findings::Csv
   include Findings::CustomAttributes
+  include Findings::DateColumns
   include Findings::DestroyValidation
   include Findings::Expiration
   include Findings::FollowUpPDF

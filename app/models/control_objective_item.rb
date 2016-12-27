@@ -4,6 +4,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   include Parameters::Relevance
   include Parameters::Qualification
   include ParameterSelector
+  include ControlObjectiveItems::DateColumns
   include ControlObjectiveItems::Scopes
   include ControlObjectiveItems::Search
 
