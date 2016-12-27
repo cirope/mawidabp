@@ -1,10 +1,8 @@
 class WorkflowItem < ActiveRecord::Base
-  include ParameterSelector
+  include Auditable
   include Comparable
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
+  include ParameterSelector
+  include WorkflowItems::DateColumns
 
   # Callbacks para registrar los cambios en los modelos cuando son modificados o
   # creados

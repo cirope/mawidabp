@@ -1,6 +1,7 @@
 class ConclusionReview < ActiveRecord::Base
   include Auditable
   include ParameterSelector
+  include ConclusionReviews::DateColumns
   include ConclusionReviews::Scopes
 
   # Constantes
