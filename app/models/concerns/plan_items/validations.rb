@@ -81,7 +81,7 @@ module PlanItems::Validations
         plan_items = plan.plan_items.reject &:marked_for_destruction?
 
         plan_items.each do |plan_item|
-          if start && plan_item.start < start
+          if start && plan_item.start && plan_item.start < start
             plan_item.human_resource_utilizations.each do |resource_utilization|
               resource_id = resource_utilization.resource_id
 
