@@ -1052,13 +1052,13 @@ class Review < ActiveRecord::Base
 
   private
 
-  def last_work_paper_code(prefix, work_papers)
-    last_code = work_papers.map do |wp|
-      wp.code.match(/\d+\Z/)[0].to_i if wp.code =~ /\d+\Z/
-    end.compact.sort.last
+    def last_work_paper_code(prefix, work_papers)
+      last_code = work_papers.map do |wp|
+        wp.code.match(/\d+\Z/)[0].to_i if wp.code =~ /\d+\Z/
+      end.compact.sort.last
 
-    last_number = last_code.blank? ? 0 : last_code
+      last_number = last_code.blank? ? 0 : last_code
 
-    "#{prefix} #{'%.2d' % last_number}".strip
-  end
+      "#{prefix} #{'%.2d' % last_number}".strip
+    end
 end

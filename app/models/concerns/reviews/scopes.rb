@@ -8,6 +8,10 @@ module Reviews::Scopes
   end
 
   module ClassMethods
+    def for_period period
+      where period_id: period.id
+    end
+
     def list_with_approved_draft
       list.
         includes(:conclusion_draft_review).
@@ -72,6 +76,18 @@ module Reviews::Scopes
         :period_id => period_id,
         Workflow.table_name => { review_id: nil }
       ).references(:workflows)
+    end
+
+    def list_by_issue_date_or_creation from_date, to_date
+      start  = from_date.to_time.beginning_of_day
+      finish = to_date.to_time.end_of_day
+
+      without_final_review = list_without_final_review.where created_at: start..finish
+      with_final_review    = list_with_final_review.where(
+        ConclusionReview.table_name => { issue_date: start..finish }
+      )
+
+      without_final_review.or with_final_review
     end
 
     private
