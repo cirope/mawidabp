@@ -5,34 +5,11 @@ class Review < ActiveRecord::Base
   include ParameterSelector
   include Reviews::FindingCode
   include Reviews::Scopes
+  include Reviews::Search
   include Taggable
   include Trimmer
 
   trimmed_fields :identification
-
-  # Constantes
-  COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
-    :period => {
-      :column => "#{Period.quoted_table_name}.#{Period.qcn('number')}", :operator => '=', :mask => "%d",
-      :conversion_method => :to_i, :regexp => /\A\s*\d+\s*\Z/
-    },
-    :identification => {
-      :column => "LOWER(#{quoted_table_name}.#{qcn('identification')})", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
-    },
-    :business_unit => {
-      :column => "LOWER(#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')})", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
-    },
-    :project => {
-      :column => "LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn('project')})", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
-    },
-    :tags => {
-      :column => "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn('name')})", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
-    }
-  })
 
   # Callbacks
   before_validation :set_proper_parent, :can_be_modified?
