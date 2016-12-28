@@ -5,33 +5,37 @@ module Reviews::Scopes
     scope :list, -> {
       where(organization_id: Organization.current_id).order identification: :asc
     }
-
-    scope :list_with_approved_draft, -> {
-      list.includes(:conclusion_draft_review).where(
-        ConclusionReview.table_name => { approved: true }
-      ).references(:conclusion_reviews)
-    }
-
-    scope :list_with_final_review, -> {
-      list.includes(:conclusion_final_review).where.not(
-        ConclusionReview.table_name => { review_id: nil }
-      ).references(:conclusion_reviews)
-    }
-
-    scope :list_without_final_review, -> {
-      list.includes(:conclusion_final_review).where(
-        ConclusionReview.table_name => { review_id: nil }
-      ).references(:conclusion_reviews)
-    }
-
-    scope :list_without_draft_review, -> {
-      list.includes(:conclusion_draft_review).where(
-        ConclusionReview.table_name => { review_id: nil }
-      ).references(:conclusion_reviews)
-    }
   end
 
   module ClassMethods
+    def list_with_approved_draft
+      list.
+        includes(:conclusion_draft_review).
+        where(ConclusionReview.table_name => { approved: true }).
+        references(:conclusion_reviews)
+    end
+
+    def list_with_final_review
+      list.
+        includes(:conclusion_final_review).
+        where.not(ConclusionReview.table_name => { review_id: nil }).
+        references(:conclusion_reviews)
+    end
+
+    def list_without_final_review
+      list.
+        includes(:conclusion_final_review).
+        where(ConclusionReview.table_name => { review_id: nil }).
+        references(:conclusion_reviews)
+    end
+
+    def list_without_draft_review
+      list.
+        includes(:conclusion_draft_review).
+        where(ConclusionReview.table_name => { review_id: nil }).
+        references(:conclusion_reviews)
+    end
+
     def list_without_final_review_or_not_closed
       quoted_table = ConclusionReview.quoted_table_name
       conditions   = [
