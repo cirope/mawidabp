@@ -4,34 +4,12 @@ class Review < ActiveRecord::Base
   include Parameters::Score
   include ParameterSelector
   include Reviews::FindingCode
+  include Reviews::Scopes
+  include Reviews::Search
   include Taggable
   include Trimmer
 
   trimmed_fields :identification
-
-  # Constantes
-  COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
-    :period => {
-      :column => "#{Period.quoted_table_name}.#{Period.qcn('number')}", :operator => '=', :mask => "%d",
-      :conversion_method => :to_i, :regexp => /\A\s*\d+\s*\Z/
-    },
-    :identification => {
-      :column => "LOWER(#{quoted_table_name}.#{qcn('identification')})", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
-    },
-    :business_unit => {
-      :column => "LOWER(#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')})", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
-    },
-    :project => {
-      :column => "LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn('project')})", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
-    },
-    :tags => {
-      :column => "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn('name')})", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
-    }
-  })
 
   # Callbacks
   before_validation :set_proper_parent, :can_be_modified?
@@ -43,82 +21,6 @@ class Review < ActiveRecord::Base
   attr_accessor :can_be_approved_by_force, :control_objective_data,
     :process_control_data
   attr_readonly :plan_item_id
-
-  # Named scopes
-  scope :list, -> {
-    where(organization_id: Organization.current_id).order(identification: :asc)
-  }
-  scope :list_with_approved_draft, -> {
-    list.includes(:conclusion_draft_review).where(
-      ConclusionReview.table_name => { approved: true }
-    ).references(:conclusion_reviews)
-  }
-  scope :list_with_final_review, -> {
-    list.includes(:conclusion_final_review).where(
-      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL"
-    ).references(:conclusion_reviews)
-  }
-  scope :list_without_final_review, -> {
-    list.includes(:conclusion_final_review).where(
-      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL"
-    ).references(:conclusion_reviews)
-  }
-  scope :list_without_final_review_or_not_closed, -> {
-    conditions = [
-      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL",
-      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('close_date')} >= :today"
-    ].map { |c| "(#{c})" }.join(' OR ')
-
-    list.includes(:conclusion_final_review).where(conditions, today: Date.today).references(:conclusion_reviews)
-  }
-  scope :list_without_draft_review, -> {
-    list.includes(:conclusion_draft_review).where(
-      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL"
-    ).references(:conclusion_reviews)
-  }
-  scope :list_all_without_final_review_by_date, ->(from_date, to_date) {
-    list.includes(
-      :period, :conclusion_final_review, {
-        :plan_item => {:business_unit => :business_unit_type}
-      }
-    ).where(
-      [
-        "#{quoted_table_name}.#{qcn('created_at')} BETWEEN :from_date AND :to_date",
-        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('review_id')} IS NULL"
-      ].join(' AND '),
-      { :from_date => from_date, :to_date => to_date.to_time.end_of_day }
-    ).order(
-      [
-        "#{Period.quoted_table_name}.#{Period.qcn('start')} ASC",
-        "#{Period.quoted_table_name}.#{Period.qcn('end')} ASC",
-        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
-        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
-        "#{quoted_table_name}.#{qcn('created_at')} ASC"
-      ]
-    ).references(:conclusion_reviews, :business_unit_types)
-  }
-  scope :list_all_without_workflow, ->(period_id) {
-    list.includes(:workflow).list.where(
-      [
-        "#{quoted_table_name}.#{qcn('period_id')} = :period_id",
-        "#{Workflow.quoted_table_name}.#{Workflow.qcn('review_id')} IS NULL"
-      ].join(' AND '), { :period_id => period_id }
-    ).references(:workflows)
-  }
-  scope :internal_audit, -> {
-    includes(
-      :plan_item => {:business_unit => :business_unit_type}
-    ).where("#{BusinessUnitType.table_name}.external" => false).references(
-      :business_unit_types
-    )
-  }
-  scope :external_audit, -> {
-    includes(
-      :plan_item => {:business_unit => :business_unit_type}
-    ).where("#{BusinessUnitType.table_name}.external" => true).references(
-      :business_unit_types
-    )
-  }
 
   # Restricciones
   validates :identification, :format => {:with => /\A\w[\w\s-]*\z/},
@@ -1127,13 +1029,13 @@ class Review < ActiveRecord::Base
 
   private
 
-  def last_work_paper_code(prefix, work_papers)
-    last_code = work_papers.map do |wp|
-      wp.code.match(/\d+\Z/)[0].to_i if wp.code =~ /\d+\Z/
-    end.compact.sort.last
+    def last_work_paper_code(prefix, work_papers)
+      last_code = work_papers.map do |wp|
+        wp.code.match(/\d+\Z/)[0].to_i if wp.code =~ /\d+\Z/
+      end.compact.sort.last
 
-    last_number = last_code.blank? ? 0 : last_code
+      last_number = last_code.blank? ? 0 : last_code
 
-    "#{prefix} #{'%.2d' % last_number}".strip
-  end
+      "#{prefix} #{'%.2d' % last_number}".strip
+    end
 end
