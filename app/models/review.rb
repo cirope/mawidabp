@@ -6,6 +6,7 @@ class Review < ActiveRecord::Base
   include Reviews::FindingCode
   include Reviews::Scopes
   include Reviews::Search
+  include Reviews::Validations
   include Taggable
   include Trimmer
 
@@ -21,35 +22,6 @@ class Review < ActiveRecord::Base
   attr_accessor :can_be_approved_by_force, :control_objective_data,
     :process_control_data
   attr_readonly :plan_item_id
-
-  # Restricciones
-  validates :identification, :format => {:with => /\A\w[\w\s-]*\z/},
-    :allow_nil => true, :allow_blank => true
-  validates :identification, :length => {:maximum => 255}, :allow_nil => true,
-    :allow_blank => true
-  validates :identification, :description, :period_id, :plan_item_id,
-    :organization_id, :presence => true
-  validates :identification, :description, :survey, :pdf_encoding => true
-  validates :plan_item_id, :uniqueness => {:case_sensitive => false}
-  validates :period_id, :plan_item_id, :numericality => {:only_integer => true},
-    :allow_nil => true, :allow_blank => true
-  validates_each :identification do |record, attr, value|
-    reviews = Review.list.where(
-      [
-        'identification = :identification',
-        (record.id ? "#{quoted_table_name}.#{qcn('id')} <> :id" : "#{quoted_table_name}.#{qcn('id')} IS NOT NULL")
-      ].join(' AND '), { :identification => value, :id => record.id }
-    )
-    record.errors.add attr, :taken if reviews.count > 0
-  end
-  validates_each :review_user_assignments do |record, attr, value|
-    record.errors.add attr, :invalid unless Review.check_user_roles(record)
-  end
-  validates_each :plan_item_id do |record, attr, value|
-    if value && !PlanItem.find_by(:id => value).try(:business_unit)
-      record.errors.add attr, :invalid
-    end
-  end
 
   # Relaciones
   belongs_to :period
@@ -90,12 +62,6 @@ class Review < ActiveRecord::Base
 
   def set_proper_parent
     self.review_user_assignments.each { |rua| rua.review = self }
-  end
-
-  def self.check_user_roles(record)
-    record.has_audited? && record.has_auditor? && record.has_supervisor? && record.has_manager? ||
-    record.has_audited? && record.has_auditor? && record.has_manager? ||
-    record.has_audited? && record.has_auditor? && record.has_supervisor?
   end
 
   def can_be_modified?
