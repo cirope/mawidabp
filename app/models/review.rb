@@ -3,6 +3,7 @@ class Review < ActiveRecord::Base
   include Parameters::Risk
   include Parameters::Score
   include ParameterSelector
+  include Reviews::DestroyValidation
   include Reviews::FindingCode
   include Reviews::Scopes
   include Reviews::Search
@@ -15,7 +16,6 @@ class Review < ActiveRecord::Base
   # Callbacks
   before_validation :set_proper_parent, :can_be_modified?
   before_save :calculate_score
-  before_destroy :can_be_destroyed?
 
   # Acceso a los atributos
   attr_reader :approval_errors, :control_objective_ids, :process_control_ids
@@ -73,11 +73,6 @@ class Review < ActiveRecord::Base
     else
       true
     end
-  end
-
-  def can_be_destroyed?
-    !self.has_final_review? &&
-      self.control_objective_items.all? { |coi| coi.can_be_destroyed? }
   end
 
   def has_final_review?
