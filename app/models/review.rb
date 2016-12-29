@@ -7,6 +7,7 @@ class Review < ActiveRecord::Base
   include Reviews::FindingCode
   include Reviews::Scopes
   include Reviews::Search
+  include Reviews::Users
   include Reviews::Validations
   include Taggable
   include Trimmer
@@ -37,12 +38,9 @@ class Review < ActiveRecord::Base
   has_many :oportunities, :through => :control_objective_items
   has_many :final_weaknesses, :through => :control_objective_items
   has_many :final_oportunities, :through => :control_objective_items
-  has_many :review_user_assignments, :dependent => :destroy
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :review, :after_add => :check_if_is_in_a_final_review
-  has_many :users, :through => :review_user_assignments
 
-  accepts_nested_attributes_for :review_user_assignments, :allow_destroy => true
   accepts_nested_attributes_for :finding_review_assignments, :allow_destroy => true
   accepts_nested_attributes_for :file_model, :allow_destroy => true
   accepts_nested_attributes_for :control_objective_items, :allow_destroy => true
@@ -284,30 +282,6 @@ class Review < ActiveRecord::Base
 
   alias_method :is_approved?, :must_be_approved?
   alias_method :can_be_sended?, :must_be_approved?
-
-  def has_audited?
-    self.review_user_assignments.any? do |rua|
-      rua.audited? && !rua.marked_for_destruction?
-    end
-  end
-
-  def has_auditor?
-    self.review_user_assignments.any? do |rua|
-      rua.auditor? && !rua.marked_for_destruction?
-    end
-  end
-
-  def has_manager?
-    self.review_user_assignments.any? do |rua|
-      rua.manager? && !rua.marked_for_destruction?
-    end
-  end
-
-  def has_supervisor?
-    self.review_user_assignments.any? do |rua|
-      rua.supervisor? && !rua.marked_for_destruction?
-    end
-  end
 
   def last_control_objective_work_paper_code(prefix = nil)
     work_papers = []
