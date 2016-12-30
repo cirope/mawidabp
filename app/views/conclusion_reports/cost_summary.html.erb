@@ -1,0 +1,70 @@
+<%= render 'shared/filter_form', action: :cost_summary, extra_params: {}, forms: { date_range: true } %>
+
+<% if @periods.empty? %>
+  <p style="margin: 1em;">
+    <em><%= t 'conclusion_report.cost_summary.without_audits_in_the_interval' %></em>
+  </p>
+<% end %>
+
+<% @periods.each do |period| %>
+  <div class="page-header">
+    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+  </div>
+
+  <% if @data[period].present? && @data[period][:data].present? %>
+    <% @data[period][:data].each do |user_id, data| %>
+      <h4><%= data[:name] %></h4>
+
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            <th><%= t 'conclusion_report.cost_summary.column_month' %></th>
+            <th><%= t 'conclusion_report.cost_summary.column_estimated_amount' %></th>
+            <th><%= t 'conclusion_report.cost_summary.column_real_amount' %></th>
+            <th><%= t 'conclusion_report.cost_summary.column_deviation' %></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @data[period][:months].each do |month| %>
+            <% month_data = data[:data][month] || {} %>
+            <tr>
+              <td><%= l month, format: '%b-%y' %></td>
+              <td><%= '%.2f' % (month_data[:planed_units] || 0) %></td>
+              <td><%= '%.2f' % (month_data[:executed_units] || 0) %></td>
+              <td><%= '%.0f%%' % (month_data[:deviation] || 0) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  <% else %>
+    <p style="margin: 1em;">
+      <em><%= t 'conclusion_report.cost_summary.without_audits_in_the_period' %></em>
+    </p>
+  <% end %>
+<% end %>
+
+<hr />
+
+<div>
+  <%= link_to t('label.back'), action: :index %> |
+  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: "#customize_report" } %>
+</div>
+
+<%= render partial: 'shared/customize_report_form', locals: {
+  options: {
+    form_name: 'report',
+    url: request.query_parameters.merge(
+      action: :create_cost_summary,
+      _ts: Time.now.to_i
+    ),
+    fields: [
+      {
+        name: :report_title,
+        label: t('customize_report_form.title'),
+        value: t('conclusion_report.cost_summary.title')
+      }
+    ]
+  }
+} %>
