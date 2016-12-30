@@ -152,7 +152,7 @@ module Reports::DetailedManagement
 
     add_report_references(pdf)
 
-    save_and_redirect_to_pdf(pdf)
+    save_and_redirect_to_detailed_management_pdf(pdf)
   end
 
   def prepare_pdf_table_headers(pdf, data)
@@ -191,7 +191,7 @@ module Reports::DetailedManagement
     end
   end
 
-  def save_and_redirect_to_pdf(pdf)
+  def save_and_redirect_to_detailed_management_pdf(pdf)
     pdf.custom_save_as(
       t('execution_reports.detailed_management_report.pdf_name',
         from_date: @from_date.to_formatted_s(:db),

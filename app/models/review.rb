@@ -3,9 +3,12 @@ class Review < ActiveRecord::Base
   include Parameters::Risk
   include Parameters::Score
   include ParameterSelector
+  include Reviews::DestroyValidation
   include Reviews::FindingCode
   include Reviews::Scopes
   include Reviews::Search
+  include Reviews::Users
+  include Reviews::Validations
   include Taggable
   include Trimmer
 
@@ -14,42 +17,12 @@ class Review < ActiveRecord::Base
   # Callbacks
   before_validation :set_proper_parent, :can_be_modified?
   before_save :calculate_score
-  before_destroy :can_be_destroyed?
 
   # Acceso a los atributos
   attr_reader :approval_errors, :control_objective_ids, :process_control_ids
   attr_accessor :can_be_approved_by_force, :control_objective_data,
     :process_control_data
   attr_readonly :plan_item_id
-
-  # Restricciones
-  validates :identification, :format => {:with => /\A\w[\w\s-]*\z/},
-    :allow_nil => true, :allow_blank => true
-  validates :identification, :length => {:maximum => 255}, :allow_nil => true,
-    :allow_blank => true
-  validates :identification, :description, :period_id, :plan_item_id,
-    :organization_id, :presence => true
-  validates :identification, :description, :survey, :pdf_encoding => true
-  validates :plan_item_id, :uniqueness => {:case_sensitive => false}
-  validates :period_id, :plan_item_id, :numericality => {:only_integer => true},
-    :allow_nil => true, :allow_blank => true
-  validates_each :identification do |record, attr, value|
-    reviews = Review.list.where(
-      [
-        'identification = :identification',
-        (record.id ? "#{quoted_table_name}.#{qcn('id')} <> :id" : "#{quoted_table_name}.#{qcn('id')} IS NOT NULL")
-      ].join(' AND '), { :identification => value, :id => record.id }
-    )
-    record.errors.add attr, :taken if reviews.count > 0
-  end
-  validates_each :review_user_assignments do |record, attr, value|
-    record.errors.add attr, :invalid unless Review.check_user_roles(record)
-  end
-  validates_each :plan_item_id do |record, attr, value|
-    if value && !PlanItem.find_by(:id => value).try(:business_unit)
-      record.errors.add attr, :invalid
-    end
-  end
 
   # Relaciones
   belongs_to :period
@@ -65,12 +38,9 @@ class Review < ActiveRecord::Base
   has_many :oportunities, :through => :control_objective_items
   has_many :final_weaknesses, :through => :control_objective_items
   has_many :final_oportunities, :through => :control_objective_items
-  has_many :review_user_assignments, :dependent => :destroy
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :review, :after_add => :check_if_is_in_a_final_review
-  has_many :users, :through => :review_user_assignments
 
-  accepts_nested_attributes_for :review_user_assignments, :allow_destroy => true
   accepts_nested_attributes_for :finding_review_assignments, :allow_destroy => true
   accepts_nested_attributes_for :file_model, :allow_destroy => true
   accepts_nested_attributes_for :control_objective_items, :allow_destroy => true
@@ -92,12 +62,6 @@ class Review < ActiveRecord::Base
     self.review_user_assignments.each { |rua| rua.review = self }
   end
 
-  def self.check_user_roles(record)
-    record.has_audited? && record.has_auditor? && record.has_supervisor? && record.has_manager? ||
-    record.has_audited? && record.has_auditor? && record.has_manager? ||
-    record.has_audited? && record.has_auditor? && record.has_supervisor?
-  end
-
   def can_be_modified?
     if self.has_final_review? && self.changed?
       msg = I18n.t('review.readonly')
@@ -107,11 +71,6 @@ class Review < ActiveRecord::Base
     else
       true
     end
-  end
-
-  def can_be_destroyed?
-    !self.has_final_review? &&
-      self.control_objective_items.all? { |coi| coi.can_be_destroyed? }
   end
 
   def has_final_review?
@@ -323,30 +282,6 @@ class Review < ActiveRecord::Base
 
   alias_method :is_approved?, :must_be_approved?
   alias_method :can_be_sended?, :must_be_approved?
-
-  def has_audited?
-    self.review_user_assignments.any? do |rua|
-      rua.audited? && !rua.marked_for_destruction?
-    end
-  end
-
-  def has_auditor?
-    self.review_user_assignments.any? do |rua|
-      rua.auditor? && !rua.marked_for_destruction?
-    end
-  end
-
-  def has_manager?
-    self.review_user_assignments.any? do |rua|
-      rua.manager? && !rua.marked_for_destruction?
-    end
-  end
-
-  def has_supervisor?
-    self.review_user_assignments.any? do |rua|
-      rua.supervisor? && !rua.marked_for_destruction?
-    end
-  end
 
   def last_control_objective_work_paper_code(prefix = nil)
     work_papers = []

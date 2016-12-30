@@ -2,16 +2,16 @@ module Reports::CostAnalysis
   include Reports::Pdf
 
   def cost_analysis
-    init_cost_vars
+    init_cost_analysis_vars
 
     @periods.each do |period|
       @total_estimated_amount = 0
       @total_real_amount = 0
 
       @reviews.for_period(period).each do |review|
-        calculate_total_cost_data(review, period)
+        calculate_total_cost_analysis_data(review, period)
 
-        unless params[:include_details].blank?
+        if params[:include_details].present?
           @data = { :review => review, :data => [] }
 
           set_estimated_data(review)
@@ -19,9 +19,7 @@ module Reports::CostAnalysis
 
           @detailed_data[period] ||= []
 
-          unless @data[:data].empty?
-            @detailed_data[period] << @data
-          end
+          @detailed_data[period] << @data if @data[:data].present?
         end
       end
 
@@ -29,7 +27,7 @@ module Reports::CostAnalysis
     end
   end
 
-  def init_cost_vars
+  def init_cost_analysis_vars
     @title = t(params[:include_details].blank? ?
       'conclusion_report.cost_analysis_title' :
       'conclusion_report.detailed_cost_analysis_title')
@@ -44,13 +42,13 @@ module Reports::CostAnalysis
     @reviews = Review.list_by_issue_date_or_creation @from_date, @to_date
   end
 
-  def calculate_total_cost_data(review, period)
+  def calculate_total_cost_analysis_data(review, period)
     estimated_amount = review.plan_item.units
     real_amount = review.workflow.try(:units) || 0
     amount_difference = estimated_amount - real_amount
     deviation = real_amount > 0 ? amount_difference / real_amount.to_f * 100 :
       (estimated_amount > 0 ? 100 : 0)
-    deviation_text = "%.2f%% (#{'%.2f' % amount_difference.abs})" % deviation
+    deviation_text = "%.0f%% (#{'%.2f' % amount_difference.abs})" % deviation
     @total_estimated_amount += estimated_amount
     @total_real_amount += real_amount
 
@@ -82,7 +80,7 @@ module Reports::CostAnalysis
     total_deviation = @total_real_amount > 0 ?
       total_difference_amount / @total_real_amount.to_f * 100 :
       (@total_estimated_amount > 0 ? 100 : 0)
-    total_deviation_mask = "%.2f%% (#{'%.2f' % total_difference_amount.abs})"
+    total_deviation_mask = "%.0f%% (#{'%.2f' % total_difference_amount.abs})"
 
     @total_cost_data[period] ||= []
     @total_cost_data[period] << [
@@ -130,10 +128,10 @@ module Reports::CostAnalysis
       end
     end
 
-    save_and_redirect_to_pdf(pdf)
+    save_and_redirect_to_cost_analysis_pdf(pdf)
   end
 
-  def save_and_redirect_to_pdf(pdf)
+  def save_and_redirect_to_cost_analysis_pdf(pdf)
     pdf.custom_save_as(
       t('conclusion_report.cost_analysis.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
@@ -182,7 +180,7 @@ module Reports::CostAnalysis
       deviation = real_amount > 0 ?
         amount_difference / real_amount.to_f * 100 :
         (estimated_amount > 0 ? 100 : 0)
-      deviation_text = "%.2f%% (#{'%.2f' % amount_difference.abs})" % deviation
+      deviation_text = "%.0f%% (#{'%.2f' % amount_difference.abs})" % deviation
 
       @data[:data] << [
         resource.resource_name,

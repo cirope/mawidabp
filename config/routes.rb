@@ -123,16 +123,23 @@ Rails.application.routes.draw do
       to: "follow_up_audit##{action}"
   end
 
-  get "conclusion_reports/cost_analysis",
+  get 'conclusion_reports/cost_analysis',
     as: 'cost_analysis_conclusion_reports',
     to: 'conclusion_reports#cost_analysis'
-  post "conclusion_reports/create_cost_analysis",
+  post 'conclusion_reports/create_cost_analysis',
     as: 'create_cost_analysis_conclusion_reports',
     to: 'conclusion_reports#create_cost_analysis'
   get 'conclusion_reports/cost_analysis/detailed',
     as: 'detailed_cost_analysis_conclusion_reports',
     to: 'conclusion_reports#cost_analysis',
     include_details: 1
+
+  get 'conclusion_reports/cost_summary',
+    as: 'cost_summary_conclusion_reports',
+    to: 'conclusion_reports#cost_summary'
+  post 'conclusion_reports/create_cost_summary',
+    as: 'create_cost_summary_conclusion_reports',
+    to: 'conclusion_reports#create_cost_summary'
 
   get 'follow_up_audit/follow_up_cost_analysis',
     as: 'follow_up_cost_analysis_follow_up_audit',
