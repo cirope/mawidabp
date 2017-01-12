@@ -447,6 +447,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
     without_weaknesses: "Sin observaciones en el periodo"
     without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
+    weaknesses_report:
+      title: 'Informe de seguimiento de observaciones'
+      empty: 'No hay observaciones para el filtro aplicado'
+      pdf_name: 'informe_de_seguimiento_de_observaciones_en_ejecucion.pdf'
 
   finding:
     index_title: "Listado de observaciones / oportunidades de mejora"

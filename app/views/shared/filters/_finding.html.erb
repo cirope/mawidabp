@@ -1,3 +1,11 @@
+<% status_options = if action == :fixed_weaknesses_report
+                      finding_fixed_status_options
+                    elsif params[:execution].present?
+                      finding_execution_status_options
+                    else
+                      finding_status_options
+                    end
+ %>
 <div id="finding_filter" class="filter" <%= 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
@@ -5,12 +13,7 @@
           <% selected = params[action] ? params[action][:finding_status] : nil %>
           <%= f.label :finding_status, Finding.human_attribute_name('state'), class: 'col-md-3' %>
           <div class="col-md-9">
-            <%= f.select(
-              :finding_status,
-              action == :fixed_weaknesses_report ? finding_fixed_status_options : finding_status_options,
-              { include_blank: t('helpers.select.prompt'), selected: selected },
-              class: 'form-control'
-            ) %>
+            <%= f.select :finding_status, status_options, { include_blank: t('helpers.select.prompt'), selected: selected }, class: 'form-control' %>
           </div>
        </div>
     </div>

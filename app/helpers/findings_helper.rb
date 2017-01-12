@@ -184,4 +184,12 @@ module FindingsHelper
       [t("finding.status_#{k}"), v.to_s]
     end
   end
+
+  def finding_execution_status_options
+    exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS - [:unconfirmed, :confirmed]
+
+    Finding::STATUS.except(*exclude).map do |k, v|
+      [t("finding.status_#{k}"), v.to_s]
+    end
+  end
 end
