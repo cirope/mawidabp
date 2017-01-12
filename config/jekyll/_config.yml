@@ -1,18 +1,19 @@
 encoding: utf-8
-markdown: rdiscount
+markdown: kramdown
 permalink: pretty
-highlighter: pygments
+baseurl: "/help"
+gems:
+  - jekyll-multiple-languages-plugin
 assets:
-  baseurl: /help/assets/
-  js_compressor: uglifier
-  css_compressor: sass
+  cache: false
+  digest: true
   sources:
-    - _assets/images
-    - _assets/javascripts
-    - _assets/stylesheets
-    - _vendor/assets/stylesheets
-    - _vendor/assets/javascripts
-    - _vendor/assets/fonts
+    - "_assets/images"
+    - "_assets/javascripts"
+    - "_assets/stylesheets"
+    - "_vendor/assets/stylesheets"
+    - "_vendor/assets/javascripts"
+    - "_vendor/assets/fonts"
 exclude:
   - Gemfile
   - Gemfile.lock
