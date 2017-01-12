@@ -7,6 +7,9 @@ gems:
 assets:
   cache: false
   digest: true
+  compress:
+    css: true
+    js: true
   sources:
     - "_assets/images"
     - "_assets/javascripts"
