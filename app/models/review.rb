@@ -34,6 +34,7 @@ class Review < ActiveRecord::Base
   has_one :business_unit, :through => :plan_item
   has_one :workflow, :dependent => :destroy
   has_many :control_objective_items, :dependent => :destroy, :after_add => :assign_review
+  has_many :business_unit_scores, :through => :control_objective_items
   has_many :weaknesses, :through => :control_objective_items
   has_many :oportunities, :through => :control_objective_items
   has_many :final_weaknesses, :through => :control_objective_items
