@@ -1,0 +1,61 @@
+<% url = weaknesses_report_path execution: params[:execution] %>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title"><%= t 'label.search' %></h4>
+  </div>
+
+  <div class="panel-body">
+    <%= simple_form_for action_name, url: url, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
+      <% %w(review finding risk_levels priority process_control control_objective user).each do |filter_name| %>
+        <%= render "shared/filters/#{filter_name}", f: f, display: true, action: action_name %>
+      <% end %>
+
+      <%= render 'shared/filters/date_field', {
+        f: f, display: true, action: action_name, field_name: 'issue_date',
+        field_label: ConclusionFinalReview.human_attribute_name('issue_date')
+      } %>
+
+      <% %w(origination_date follow_up_date solution_date).each do |date_field| %>
+        <%= render 'shared/filters/date_field', {
+          f: f, display: true, action: action_name, field_name: date_field, field_label: Finding.human_attribute_name(date_field)
+        } %>
+      <% end %>
+
+      <div class="form-actions">
+        <%= hidden_field_tag :execution, params[:execution] %>
+        <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-default' %> |
+        <%= link_to t('label.cancel'), url %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% if @weaknesses.present? %>
+  <% @weaknesses.each do |weakness| %>
+    <%= render 'weakness', weakness: weakness %>
+  <% end %>
+<% else %>
+  <div class="alert alert-info">
+    <%= t '.empty' %>
+  </div>
+<% end %>
+
+<div>
+  <%= link_to t('label.back'), action: :index %> |
+  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %>
+</div>
+
+<%= render partial: 'shared/customize_report_form', locals: {
+  options: {
+    form_name: 'report',
+    url:       request.query_parameters.merge(action: :create_weaknesses_report, _ts: Time.now.to_i),
+    fields: [
+      {
+        name:  :report_title,
+        label: t('customize_report_form.title'),
+        value: @title
+      }
+    ]
+  }
+} %>
