@@ -1261,6 +1261,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         notify_users: "Comentario (enviar notificación)"
       finding/finding_answers/file_model:
         one: "Anexo (archivo)"
+        file: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"
         file_content_type: "Anexo (tipo de archivo)"
         file_file_size: "Anexo (tamaño de archivo)"
