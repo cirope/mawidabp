@@ -4,7 +4,7 @@ jQuery(function ($) {
     var $container  = $fileInput.closest('.file-container')
     var $cacheInput = $container.find('[name$="[' + attrName + '_cache]"]')
 
-    if ($fileInput.val().trim() || $cacheInput.val()) {
+    if ($fileInput.val() || $cacheInput.val()) {
       $fileInput.val('')
       $cacheInput.val('')
 
