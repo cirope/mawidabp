@@ -33,6 +33,11 @@
                 <%= fm_f.input :file, label: false %>
               <% end %>
             </div>
+            <% link_classes = ['pull-left'] %>
+            <% link_classes << 'hidden' unless fm_f.object.file_cache %>
+            <%= link_to '#', class: link_classes.join(' '), data: { clear_file: 'file' } do %>
+              <span class="glyphicon glyphicon-remove"></span>
+            <% end %>
           <% end %>
         <% else %>
           ---
