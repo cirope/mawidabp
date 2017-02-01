@@ -1,16 +1,18 @@
 module DocumentsHelper
   def link_to_download_document document, options = {}
-    file_model = document.file_model
+    url   = url_from_document_file_model(document) || url_from_document_description(document)
+    title = document.file_model&.identifier&.titleize || url
+    icon  = document.file_model ? 'download-alt' : 'link'
 
-    if file_model && file_model.file? && file_model.file.cached?.blank?
+    if url.present?
       default_options = {
         class: 'btn btn-default',
-        title: file_model.identifier.titleize,
+        title: title,
         data:  { ignore_unsaved_data: true }
       }
 
-      link_to download_document_path(document), default_options.merge(options) do
-        content_tag(:span, nil, class: 'icon glyphicon glyphicon-download-alt')
+      link_to url, default_options.merge(options) do
+        content_tag :span, nil, class: "icon glyphicon glyphicon-#{icon}"
       end
     end
   end
@@ -26,4 +28,20 @@ module DocumentsHelper
       "#{updated_at_label}: #{updated_at_value}"
     ].join("\n")
   end
+
+  private
+
+    def url_from_document_file_model document
+      file_model = document.file_model
+
+      if file_model && file_model.file? && file_model.file.cached?.blank?
+        download_document_path document
+      end
+    end
+
+    def url_from_document_description document
+      url_regex = /(ftp|file|http|https):\/\/[\\\w\-.:%]+(\/\S*)?/
+
+      document.description.to_s.match(url_regex) && $~[0]
+    end
 end

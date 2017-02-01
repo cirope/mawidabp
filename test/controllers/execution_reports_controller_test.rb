@@ -86,6 +86,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
 
   test 'create weaknesses by state execution report' do
     login
+
     post :create_weaknesses_by_state_execution, weaknesses_by_state_execution: {
       from_date: 10.years.ago.to_date,
       to_date: 10.years.from_now.to_date
@@ -97,5 +98,63 @@ class ExecutionReportsControllerTest < ActionController::TestCase
         from_date: 10.years.ago.to_date.to_formatted_s(:db),
         to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'execution_weaknesses_by_state', 0)
+  end
+
+  test 'weaknesses report' do
+    login
+
+    get :weaknesses_report
+    assert_response :success
+    assert_template 'execution_reports/weaknesses_report'
+
+    assert_nothing_raised do
+      get :weaknesses_report, weaknesses_report: {
+        review: '1',
+        project: '2',
+        process_control: '3',
+        control_objective: '4',
+        user_id: users(:administrator_user).id.to_s,
+        finding_status: '1',
+        finding_title: '1',
+        risk: '1',
+        priority: '1',
+        issue_date: Date.today.to_s(:db),
+        issue_date_operator: '=',
+        origination_date: Date.today.to_s(:db),
+        origination_date_operator: '>',
+        follow_up_date: Date.today.to_s(:db),
+        follow_up_date_until: Date.today.to_s(:db),
+        follow_up_date_operator: 'between',
+        solution_date: Date.today.to_s(:db),
+        solution_date_operator: '='
+      }
+    end
+
+    assert_response :success
+    assert_template 'execution_reports/weaknesses_report'
+  end
+
+  test 'filtered weaknesses report' do
+    login
+
+    get :weaknesses_report, weaknesses_report: {
+      finding_status: Finding::STATUS[:being_implemented].to_s,
+      finding_title: 'a'
+    }
+
+    assert_response :success
+    assert_template 'execution_reports/weaknesses_report'
+  end
+
+  test 'create weaknesses report' do
+    login
+
+    post :create_weaknesses_report, weaknesses_report: {
+        finding_status: Finding::STATUS[:being_implemented].to_s
+      },
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+
+    assert_response :redirect
   end
 end

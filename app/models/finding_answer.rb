@@ -1,5 +1,6 @@
 class FindingAnswer < ActiveRecord::Base
   include Auditable
+  include FindingAnswers::DateColumns
   include ParameterSelector
 
   # Callbacks

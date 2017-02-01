@@ -57,14 +57,16 @@ Rails.application.routes.draw do
 
   [
     'weaknesses_by_state_execution',
-    'detailed_management_report'
+    'detailed_management_report',
+    'weaknesses_report'
   ].each do |action|
     get "execution_reports/#{action}", to: "execution_reports##{action}", as: action
   end
 
   [
     'create_weaknesses_by_state_execution',
-    'create_detailed_management_report'
+    'create_detailed_management_report',
+    'create_weaknesses_report'
   ].each do |action|
     post "execution_reports/#{action}", to: "execution_reports##{action}", as: action
   end
@@ -123,16 +125,23 @@ Rails.application.routes.draw do
       to: "follow_up_audit##{action}"
   end
 
-  get "conclusion_reports/cost_analysis",
+  get 'conclusion_reports/cost_analysis',
     as: 'cost_analysis_conclusion_reports',
     to: 'conclusion_reports#cost_analysis'
-  post "conclusion_reports/create_cost_analysis",
+  post 'conclusion_reports/create_cost_analysis',
     as: 'create_cost_analysis_conclusion_reports',
     to: 'conclusion_reports#create_cost_analysis'
   get 'conclusion_reports/cost_analysis/detailed',
     as: 'detailed_cost_analysis_conclusion_reports',
     to: 'conclusion_reports#cost_analysis',
     include_details: 1
+
+  get 'conclusion_reports/cost_summary',
+    as: 'cost_summary_conclusion_reports',
+    to: 'conclusion_reports#cost_summary'
+  post 'conclusion_reports/create_cost_summary',
+    as: 'create_cost_summary_conclusion_reports',
+    to: 'conclusion_reports#create_cost_summary'
 
   get 'follow_up_audit/follow_up_cost_analysis',
     as: 'follow_up_cost_analysis_follow_up_audit',

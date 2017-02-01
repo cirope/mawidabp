@@ -3,6 +3,7 @@ class PlanItem < ActiveRecord::Base
   include Comparable
   include ParameterSelector
   include PlanItems::Comparable
+  include PlanItems::DateColumns
   include PlanItems::DestroyValidation
   include PlanItems::Pdf
   include PlanItems::Predecessors

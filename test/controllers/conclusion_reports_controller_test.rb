@@ -11,7 +11,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     private_actions = [
       :index, :synthesis_report, :weaknesses_by_state, :weaknesses_by_risk,
       :weaknesses_by_audit_type, :weaknesses_by_audit_type, :cost_analysis,
-      :weaknesses_by_risk_report, :fixed_weaknesses_report
+      :cost_summary, :weaknesses_by_risk_report, :fixed_weaknesses_report
     ]
 
     private_actions.each do |action|
@@ -273,6 +273,43 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'cost_analysis', 0)
+  end
+
+  test 'cost summary report' do
+    login
+    expected_title = I18n.t 'conclusion_report.cost_summary_title'
+
+    get :cost_summary
+    assert_response :success
+    assert_equal assigns(:title), expected_title
+    assert_template 'conclusion_reports/cost_summary'
+
+    assert_nothing_raised do
+      get :cost_summary, :cost_summary => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+        }
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/cost_summary'
+  end
+
+  test 'create cost summary report' do
+    login
+
+    post :create_cost_summary,
+      :cost_summary => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title'
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_report.cost_summary.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'cost_summary', 0)
   end
 
   test 'weaknesses by risk report' do

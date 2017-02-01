@@ -39,7 +39,7 @@ module FileModelHelper
   end
 
   def link_to_file description
-    file_url = description.match(/(ftp|file|http|https):\/\/[\\\w\-.%]+(\/\S*)?/) && $~[0]
+    file_url = description.match(/(ftp|file|http|https):\/\/[\\\w\-.:%]+(\/\S*)?/) && $~[0]
     url      = file_url ? file_url.strip : '#'
     classes  = 'btn btn-default'
 

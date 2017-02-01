@@ -2,11 +2,10 @@ class ResourceUtilization < ActiveRecord::Base
   include Auditable
   include Comparable
   include ParameterSelector
+  include ResourceUtilizations::Resources
+  include ResourceUtilizations::ResourceConsumers
   include ResourceUtilizations::Scopes
   include ResourceUtilizations::Validation
-
-  belongs_to :resource, polymorphic: true
-  belongs_to :resource_consumer, polymorphic: true
 
   def <=>(other)
     if other.kind_of?(ResourceUtilization)

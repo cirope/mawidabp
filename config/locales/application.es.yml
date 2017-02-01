@@ -128,6 +128,7 @@ es:
   conclusion_report:
     index_title: "Reportes de conclusión"
     cost_analysis_title: "Análisis de costos"
+    cost_summary_title: "Análisis de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
@@ -149,6 +150,15 @@ es:
       general_title: "ANÁLISIS DE COSTOS\nDE AUDÍTORIA INTERNA"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+    cost_summary:
+      pdf_name: "resumen_de_costos_%{from_date}_al_%{to_date}.pdf"
+      title: "RESUMEN DE COSTOS\nDE AUDITORÍA INTERNA"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      column_month: "Mes"
+      column_estimated_amount: "Unidades estimadas"
+      column_real_amount: "Unidades reales"
+      column_deviation: "Desviación"
 
   conclusion_reports:
     weaknesses_graphs:
@@ -437,6 +447,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     without_weaknesses: "Sin observaciones en el periodo"
     without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
+    weaknesses_report:
+      title: 'Informe de seguimiento de observaciones'
+      empty: 'No hay observaciones para el filtro aplicado'
+      pdf_name: 'informe_de_seguimiento_de_observaciones_en_ejecucion.pdf'
 
   finding:
     index_title: "Listado de observaciones / oportunidades de mejora"
@@ -1247,6 +1261,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         notify_users: "Comentario (enviar notificación)"
       finding/finding_answers/file_model:
         one: "Anexo (archivo)"
+        file: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"
         file_content_type: "Anexo (tipo de archivo)"
         file_file_size: "Anexo (tamaño de archivo)"
@@ -1451,6 +1466,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         period_id: "Periodo"
         review_id: "Informe"
         cost: "Costo"
+        units: "Unidades"
         workflow_items_resources: "Recursos"
       workflow/workflow_items:
         one: "Tarea"
