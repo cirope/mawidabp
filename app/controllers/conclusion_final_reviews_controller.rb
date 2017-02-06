@@ -241,28 +241,28 @@ class ConclusionFinalReviewsController < ApplicationController
         include_global_score_sheet: include_global_score_sheet
       }
 
-        if user && !users.include?(user)
-          @conclusion_final_review.send_by_email_to(user, send_options)
+      if user && !users.include?(user)
+        @conclusion_final_review.send_by_email_to(user, send_options)
 
-          users << user
-        end
+        users << user
+      end
 
-        if user.try(:can_act_as_audited?) && user_data[:questionnaire_id].present?
-          polls = Poll.list.where(user_id: user.id, questionnaire_id: user_data[:questionnaire_id],
-                               pollable_id: @conclusion_final_review)
-          if polls.empty?
-            questionnaire = Questionnaire.find user_data[:questionnaire_id]
-            @conclusion_final_review.polls.create!(
-              questionnaire_id: user_data[:questionnaire_id],
-              user_id: user.id,
-              organization_id: current_organization.id,
-              pollable_type: questionnaire.pollable_type
-            )
-          else
-            users_without_poll << user.informal_name
-          end
+      if user.try(:can_act_as_audited?) && user_data[:questionnaire_id].present?
+        polls = Poll.list.where(user_id: user.id, questionnaire_id: user_data[:questionnaire_id],
+                                pollable_id: @conclusion_final_review)
+        if polls.empty?
+          questionnaire = Questionnaire.find user_data[:questionnaire_id]
+          @conclusion_final_review.polls.create!(
+            questionnaire_id: user_data[:questionnaire_id],
+            user_id: user.id,
+            organization_id: current_organization.id,
+            pollable_type: questionnaire.pollable_type
+          )
+        else
+          users_without_poll << user.informal_name
         end
       end
+    end
 
     unless users.blank?
       flash.notice = t('conclusion_review.review_sended')
