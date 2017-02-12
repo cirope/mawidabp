@@ -1,6 +1,11 @@
 <%= render partial: 'shared/filter_form',
   locals: { action: 'index', extra_params: {},
-  forms: { poll_date_range: true, business_unit: true, questionnaire: true }
+  forms: {
+    poll_date_range: true,
+    business_unit: true,
+    poll_user: true,
+    questionnaire: true
+  }
 } %>
 
 <br />

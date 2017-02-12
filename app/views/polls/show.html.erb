@@ -1,12 +1,15 @@
 <p>
-  <% if @poll.user.present? %>
-    <strong><%= Poll.human_attribute_name :user %>:</strong>
-    <%= @poll.user.informal_name  %>
-  <% elsif @poll.customer_email.present? %>
-    <strong><%= Poll.human_attribute_name :customer_email %>:</strong>
-    <%= @poll.customer_email  %>
-  <% end %>
+  <strong><%= Poll.human_attribute_name :user %>:</strong>
+  <%= @poll.user.informal_name  %>
 </p>
+
+<% if @poll.affected_user %>
+  <p>
+    <strong><%= Poll.human_attribute_name :affected_user %>:</strong>
+    <%= @poll.affected_user.informal_name %>
+  </p>
+<% end %>
+
 <p>
   <strong><%= Poll.human_attribute_name :answered %>:</strong>
   <%= t_boolean @poll.answered %>

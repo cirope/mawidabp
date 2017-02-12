@@ -2,7 +2,7 @@ module Polls::SendEmail
   extend ActiveSupport::Concern
 
   included do
-    after_create :send_poll_email
+    after_commit :send_poll_email, on: :create
   end
 
   private

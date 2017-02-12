@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161219225623) do
+ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer  "benefit_id", limit: nil,                          null: false
@@ -2061,7 +2061,7 @@ ActiveRecord::Schema.define(version: 20161219225623) do
     t.text     "comments"
     t.boolean  "answered",         limit: nil,                default: false
     t.integer  "lock_version",                 precision: 38, default: 0
-    t.integer  "user_id",          limit: nil
+    t.integer  "user_id",          limit: nil,                                null: false
     t.integer  "questionnaire_id", limit: nil
     t.integer  "pollable_id",      limit: nil
     t.string   "pollable_type"
@@ -2069,12 +2069,14 @@ ActiveRecord::Schema.define(version: 20161219225623) do
     t.datetime "updated_at",                                                  null: false
     t.integer  "organization_id",  limit: nil
     t.string   "access_token"
-    t.string   "customer_email"
+    t.integer  "affected_user_id", limit: nil
   end
 
-  add_index "polls", ["customer_email"], name: "index_polls_on_customer_email"
+  add_index "polls", ["affected_user_id"], name: "i_polls_affected_user_id"
   add_index "polls", ["organization_id"], name: "index_polls_on_organization_id"
+  add_index "polls", ["pollable_id", "pollable_type"], name: "i_pol_pol_id_pol_typ"
   add_index "polls", ["questionnaire_id"], name: "i_polls_questionnaire_id"
+  add_index "polls", ["user_id"], name: "index_polls_on_user_id"
 
   create_table "privileges", force: :cascade do |t|
     t.string   "module",     limit: 100
@@ -2806,7 +2808,7 @@ ActiveRecord::Schema.define(version: 20161219225623) do
     t.string   "password",             limit: 128
     t.string   "salt"
     t.string   "change_password_hash"
-    t.datetime "password_changed"
+    t.date     "password_changed"
     t.boolean  "enable",               limit: nil,                default: false
     t.boolean  "logged_in",            limit: nil,                default: false
     t.boolean  "group_admin",          limit: nil,                default: false
@@ -2961,6 +2963,10 @@ ActiveRecord::Schema.define(version: 20161219225623) do
   add_foreign_key "plan_items", "business_units", on_delete: :cascade
   add_foreign_key "plan_items", "plans", on_delete: :cascade
   add_foreign_key "plans", "periods", on_delete: :cascade
+  add_foreign_key "polls", "organizations", on_delete: :cascade
+  add_foreign_key "polls", "questionnaires", on_delete: :cascade
+  add_foreign_key "polls", "users", column: "affected_user_id", on_delete: :cascade
+  add_foreign_key "polls", "users", on_delete: :cascade
   add_foreign_key "privileges", "roles", on_delete: :cascade
   add_foreign_key "process_controls", "best_practices", on_delete: :cascade
   add_foreign_key "repcat$_audit_column", "repcat$_audit_attribute", column: "attribute", primary_key: "attribute", name: "repcat$_audit_column_f1"

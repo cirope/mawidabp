@@ -7,7 +7,7 @@ module Findings::ImportantDates
     important_dates << notification_date_label if first_notification_date
     important_dates << confirmation_date_label if confirmation_date
 
-    if (confirmed? || unconfirmed?) && expiration_diff.to_i > 0
+    if (confirmed? || unconfirmed?) && expiration_diff.to_i >= 0
       important_dates << expiration_date_label
     end
 

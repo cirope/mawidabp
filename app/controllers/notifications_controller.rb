@@ -1,6 +1,6 @@
 class NotificationsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_notification, only: [:show, :edit, :update]
+  before_action :set_notification, only: [:show, :edit, :update, :confirm]
 
   # * GET /notifications
   # * GET /notifications.xml
@@ -61,8 +61,6 @@ class NotificationsController < ApplicationController
 
   # * GET /notifications/1/confirm
   def confirm
-    @notification = Notification.where(:confirmation_hash => params[:id]).take!
-
     @notification.notify! params[:reject].blank? if @notification.unconfirmed?
 
     redirect_to @notification, :notice => t('notification.confirmed')
