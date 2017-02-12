@@ -27,11 +27,7 @@ Rails.application.routes.draw do
   end
 
   resources :polls do
-    collection do
-      get :import_csv_customers
-      post :send_csv_polls
-      get :reports
-    end
+    get :reports, on: :collection
   end
 
   resources :e_mails, only: [:index, :show]

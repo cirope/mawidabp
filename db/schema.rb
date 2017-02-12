@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170206163603) do
+ActiveRecord::Schema.define(version: 20170212233430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -570,7 +570,7 @@ ActiveRecord::Schema.define(version: 20170206163603) do
     t.text     "comments"
     t.boolean  "answered",                     default: false
     t.integer  "lock_version",                 default: 0
-    t.integer  "user_id"
+    t.integer  "user_id",                                      null: false
     t.integer  "questionnaire_id"
     t.integer  "pollable_id"
     t.string   "pollable_type",    limit: 255
@@ -578,12 +578,10 @@ ActiveRecord::Schema.define(version: 20170206163603) do
     t.datetime "updated_at"
     t.integer  "organization_id"
     t.string   "access_token",     limit: 255
-    t.string   "customer_email",   limit: 255
     t.integer  "affected_user_id"
   end
 
   add_index "polls", ["affected_user_id"], name: "index_polls_on_affected_user_id", using: :btree
-  add_index "polls", ["customer_email"], name: "index_polls_on_customer_email", using: :btree
   add_index "polls", ["organization_id"], name: "index_polls_on_organization_id", using: :btree
   add_index "polls", ["pollable_id", "pollable_type"], name: "index_polls_on_pollable_id_and_pollable_type", using: :btree
   add_index "polls", ["questionnaire_id"], name: "index_polls_on_questionnaire_id", using: :btree

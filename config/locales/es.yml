@@ -1,6 +1,5 @@
 'es':
   label:
-    attach_csv: "Importar CSV"
     yes: "Si"
     no: "No"
     total: "Total"
@@ -1533,10 +1532,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           attributes:
             role_id:
               invalid: "deben ser sólo del tipo auditado o de otro tipo pero no ambos"
-        poll:
-          attributes:
-            base:
-              invalid: "debe tener un usuario asociado o un correo de cliente"
         plan:
           attributes:
             plan_items:

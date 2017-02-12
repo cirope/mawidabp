@@ -112,37 +112,4 @@ class PollsControllerTest < ActionController::TestCase
 
     assert_redirected_to polls_url
   end
-
-  test 'send csv polls' do
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.deliveries = []
-
-    assert_difference ['Poll.count', 'ActionMailer::Base.deliveries.count'], 2 do
-      assert_difference 'Answer.count', 4 do
-        post :send_csv_polls, poll: {
-          file: fixture_file_upload('files/customer_emails.csv', 'text/csv'),
-          questionnaire: questionnaires(:questionnaire_one)
-        }
-      end
-    end
-
-    assert_redirected_to import_csv_customers_polls_path
-    assert_equal I18n.t('polls.customer_polls_sended', count: 2), flash[:notice]
-
-    assert_no_difference 'Poll.count' do
-      post :send_csv_polls, poll: {}
-
-      assert_redirected_to import_csv_customers_polls_path
-    end
-
-    # Prueba adjuntar un archivo que no sea csv
-    assert_no_difference('Poll.count') do
-      post :send_csv_polls, dump_emails: {
-        file: fixture_file_upload('files/customer_emails.txt', 'text/csv')
-      }
-    end
-
-    assert_redirected_to import_csv_customers_polls_path
-    assert_equal I18n.t('polls.error_csv_file_extension'), flash[:alert]
-  end
 end

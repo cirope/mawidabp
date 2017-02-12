@@ -19,7 +19,7 @@
   <tbody>
     <% @polls.each do |poll| %>
       <tr>
-        <td><%= poll.user ? poll.user.informal_name : poll.customer_email %></td>
+        <td><%= poll.user.informal_name %></td>
         <td><%= poll.questionnaire.name %></td>
         <td class="hidden-xs hidden-sm"><%= poll.affected_user&.informal_name || t('label.all') %></td>
         <td class="hidden-xs"><%= t_boolean poll.answered %></td>
@@ -35,5 +35,5 @@
 <hr />
 
 <%= paginate @polls %>
-<%= link_to_new new_poll_path, class: 'btn btn-primary' %> |
-<%= link_to t('polls.import_csv'), import_csv_customers_polls_path %>
+
+<%= link_to_new new_poll_path, class: 'btn btn-primary' %>

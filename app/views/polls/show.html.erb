@@ -1,11 +1,6 @@
 <p>
-  <% if @poll.user.present? %>
-    <strong><%= Poll.human_attribute_name :user %>:</strong>
-    <%= @poll.user.informal_name  %>
-  <% elsif @poll.customer_email.present? %>
-    <strong><%= Poll.human_attribute_name :customer_email %>:</strong>
-    <%= @poll.customer_email  %>
-  <% end %>
+  <strong><%= Poll.human_attribute_name :user %>:</strong>
+  <%= @poll.user.informal_name  %>
 </p>
 
 <% if @poll.affected_user %>

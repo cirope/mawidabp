@@ -174,13 +174,10 @@ es:
     business_units:
       index:
         title: 'Resumen por unidad organizativa'
-    customer_polls_sended: 'Se enviaron satisfactoriamente %{count} encuestas'
     index:
       title: 'Listado de encuestas'
-    import_csv: 'Importar clientes CSV'
     edit:
       title: 'Modificar encuesta'
-    error_csv_file_extension: 'Debe seleccionar un archivo CSV'
     must_answer_poll: 'Tiene una encuesta pendiente por responder.'
     new:
       title: 'Agregar encuesta'

@@ -243,7 +243,6 @@ es:
         end: 'Fin'
       poll:
         comments: 'Comentarios'
-        customer_email: 'Correo cliente'
         send_date: 'Fecha envío'
         answer_date: 'Fecha contestación'
         answered: 'Contestada'

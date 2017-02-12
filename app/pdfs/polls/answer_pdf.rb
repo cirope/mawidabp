@@ -61,11 +61,7 @@ class Polls::AnswerPDF < Prawn::Document
     end
 
     def pdf_add_user poll
-      if poll.user
-        pdf.text "#{Poll.human_attribute_name :user}: #{poll.user.informal_name}", style: :bold
-      elsif poll.customer_email
-        pdf.text "#{Poll.human_attribute_name :customer_email}: #{poll.customer_email}", style: :bold
-      end
+      pdf.text "#{Poll.human_attribute_name :user}: #{poll.user.informal_name}", style: :bold
     end
 
     def pdf_add_affected_user poll
