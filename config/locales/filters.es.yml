@@ -5,3 +5,5 @@ es:
         between: 'Entre'
       user:
         user_in_comments: 'Incluir usuarios en comentarios'
+      poll_user:
+        only_all: 'Solo a todos'

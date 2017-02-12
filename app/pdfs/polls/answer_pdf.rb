@@ -36,6 +36,7 @@ class Polls::AnswerPDF < Prawn::Document
       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
         @report.polls.each do |poll|
           pdf_add_user poll
+          pdf_add_affected_user poll
           pdf_add_status poll
           pdf_add_answers poll
           pdf_add_comments poll
@@ -61,9 +62,15 @@ class Polls::AnswerPDF < Prawn::Document
 
     def pdf_add_user poll
       if poll.user
-        pdf.text "#{Poll.human_attribute_name :user_id}: #{poll.user.informal_name}", style: :bold
+        pdf.text "#{Poll.human_attribute_name :user}: #{poll.user.informal_name}", style: :bold
       elsif poll.customer_email
         pdf.text "#{Poll.human_attribute_name :customer_email}: #{poll.customer_email}", style: :bold
+      end
+    end
+
+    def pdf_add_affected_user poll
+      if poll.affected_user
+        pdf.text "#{Poll.human_attribute_name :affected_user}: #{poll.affected_user.informal_name}", style: :bold
       end
     end
 

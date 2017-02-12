@@ -1,6 +1,6 @@
 <%= render partial: 'shared/filter_form',
   locals: { action: 'index', extra_params: {},
-  forms: { poll_date_range: true, questionnaire: true, answered: true }
+  forms: { poll_date_range: true, poll_user: true, questionnaire: true, answered: true }
 } %>
 
 <br />
@@ -17,6 +17,12 @@
         <%= poll.customer_email %>
       <% end %>
     </p>
+    <% if poll.affected_user %>
+      <p>
+        <strong><%= Poll.human_attribute_name :affected_user %>:</strong>
+        <%= poll.affected_user.informal_name %>
+      </p>
+    <% end %>
     <p>
       <strong><%= Poll.human_attribute_name 'answered' %>:</strong>
       <%= t_boolean poll.answered %>
