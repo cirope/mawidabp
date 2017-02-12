@@ -249,6 +249,7 @@ es:
         answered: 'Contestada'
         questionnaire: 'Cuestionario'
         user: 'Usuario'
+        affected_user: 'Acerca de'
       poll/answers:
         answer: 'Respuesta'
         answer_option: 'Opción'

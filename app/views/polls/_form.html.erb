@@ -3,7 +3,12 @@
 
   <% if @poll.persisted? %>
     <div class="page-header">
-      <h1><%= Question.model_name.human count: 0 %></h1>
+      <h1>
+        <%= Question.model_name.human count: 0 %>
+        <% if @poll.affected_user %>
+          <small><%= t 'polls.affected_user_html', user: @poll.affected_user.full_name %></small>
+        <% end %>
+      </h1>
     </div>
 
     <%= f.simple_fields_for :answers do |a_f| %>

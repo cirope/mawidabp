@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170206161718) do
+ActiveRecord::Schema.define(version: 20170206163603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -579,8 +579,10 @@ ActiveRecord::Schema.define(version: 20170206161718) do
     t.integer  "organization_id"
     t.string   "access_token",     limit: 255
     t.string   "customer_email",   limit: 255
+    t.integer  "affected_user_id"
   end
 
+  add_index "polls", ["affected_user_id"], name: "index_polls_on_affected_user_id", using: :btree
   add_index "polls", ["customer_email"], name: "index_polls_on_customer_email", using: :btree
   add_index "polls", ["organization_id"], name: "index_polls_on_organization_id", using: :btree
   add_index "polls", ["pollable_id", "pollable_type"], name: "index_polls_on_pollable_id_and_pollable_type", using: :btree
@@ -924,6 +926,7 @@ ActiveRecord::Schema.define(version: 20170206161718) do
   add_foreign_key "plans", "periods", name: "plans_period_id_fk", on_delete: :restrict
   add_foreign_key "polls", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "polls", "questionnaires", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "polls", "users", column: "affected_user_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "polls", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "privileges", "roles", name: "privileges_role_id_fk", on_delete: :restrict
   add_foreign_key "process_controls", "best_practices", name: "process_controls_best_practice_id_fk", on_delete: :restrict

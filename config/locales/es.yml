@@ -808,6 +808,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     being_implemented_and_stale_finding_to_manager:
       title: "Notificación de observaciones en proceso de implementación vencidas"
       the_following_finding_is_being_implemented_and_stale: "La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación"
+    pending_poll_email:
+      affected_user_html: "Encuesta acerca de <strong>%{user}</strong>"
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables del siguiente hallazgo"
