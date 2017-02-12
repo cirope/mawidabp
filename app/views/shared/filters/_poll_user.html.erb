@@ -1,0 +1,35 @@
+<div id="poll_user_filter" class="filter" <%= 'style="display: none;"' unless display %>>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <% user = params[action] && params[action][:affected_user] %>
+
+        <div class="col-md-3">
+          <%= f.label :user, t('polls.affected_user') %>
+        </div>
+
+        <div class="col-md-9">
+          <%= f.text_field :affected_user,
+            value: user,
+            title: t('label.search'),
+            class: 'form-control',
+            data: {
+              clear: 'user',
+              autocomplete_url: users_completions_path,
+              autocomplete_id_target: '#index_affected_user_id'
+            }
+          %>
+          <%= f.hidden_field :affected_user_id, value: params[action] && params[action][:affected_user_id] %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="checkbox">
+        <% only_all = params[action] && params[action][:only_all] %>
+        <label>
+          <%= f.check_box :only_all, checked: only_all == '1' %> <%= t '.only_all' %>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

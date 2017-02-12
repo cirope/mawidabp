@@ -9,6 +9,14 @@
       )
     %>
   </p>
+  <% if @poll.affected_user %>
+    <p>
+      <%= t(
+        'notifier_mailer.pending_poll_email.affected_user_html',
+        user: @poll.affected_user.full_name
+      ) %>
+    </p>
+  <% end %>
   <% if @poll.questionnaire.email_clarification? %>
     <p><%= @poll.questionnaire.email_clarification %></p>
   <% end %>
