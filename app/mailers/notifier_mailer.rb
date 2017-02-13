@@ -9,7 +9,9 @@ class NotifierMailer < ActionMailer::Base
     @token = poll.access_token
     @user = poll.user.informal_name
     email = poll.user.email
-    subject = "[#{@organization.prefix.upcase}] " + poll.questionnaire.email_subject
+    subject = "[#{@organization.prefix.upcase}] #{poll.questionnaire.email_subject}"
+
+    subject << " - #{poll.affected_user.informal_name}" if poll.affected_user
 
     mail to: email, subject: subject
   end
