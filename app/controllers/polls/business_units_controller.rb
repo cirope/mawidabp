@@ -58,7 +58,7 @@ class Polls::BusinessUnitsController < ApplicationController
       Poll.list.
         between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day).
         by_questionnaire(@report.questionnaire).
-        by_affected_user(@report.affected_user_id, only_all: @report.only_all).
+        by_user(@report.user_id, @report.user_options || {}).
         pollables
     end
 
