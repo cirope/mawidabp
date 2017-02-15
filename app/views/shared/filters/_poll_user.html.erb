@@ -2,33 +2,40 @@
   <div class="row">
     <div class="col-md-6">
       <div class="form-group">
-        <% user = params[action] && params[action][:affected_user] %>
+        <% user = params[action] && params[action][:user] %>
 
         <div class="col-md-3">
-          <%= f.label :user, t('polls.affected_user') %>
+          <%= f.label :user, User.model_name.human(count: 1) %>
         </div>
 
         <div class="col-md-9">
-          <%= f.text_field :affected_user,
+          <%= f.text_field :user,
             value: user,
             title: t('label.search'),
             class: 'form-control',
             data: {
               clear: 'user',
               autocomplete_url: users_completions_path,
-              autocomplete_id_target: '#index_affected_user_id'
+              autocomplete_id_target: "##{action}_user_id"
             }
           %>
-          <%= f.hidden_field :affected_user_id, value: params[action] && params[action][:affected_user_id] %>
+          <%= f.hidden_field :user_id, value: params[action] && params[action][:user_id] %>
         </div>
       </div>
     </div>
     <div class="col-md-6">
-      <div class="checkbox">
-        <% only_all = params[action] && params[action][:only_all] %>
-        <label>
-          <%= f.check_box :only_all, checked: only_all == '1' %> <%= t '.only_all' %>
-        </label>
+       <div class="form-group">
+        <div class="col-md-3">
+          <%= f.label :user, t('.user_option') %>
+        </div>
+
+        <div class="col-md-9">
+          <%= f.select :user_option,
+            %w(only_all include_reviews).map { |option| [t(".#{option}"), option] },
+            { include_blank: t('.affected_only'), selected: params[action] && params[action][:user_option] },
+            class: 'form-control'
+          %>
+        </div>
       </div>
     </div>
   </div>

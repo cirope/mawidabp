@@ -19,6 +19,23 @@ module Polls::Scopes
       where answered: answered
     end
 
+    def by_user user_id, include_reviews: false, only_all: false
+      result = by_affected_user(user_id, only_all: only_all)
+
+      if include_reviews
+        result = result.
+          joins(conclusion_review: { review: :review_user_assignments }).
+          or by_review_user(user_id)
+      end
+
+      result.uniq
+    end
+
+    def by_review_user user_id
+      joins(conclusion_review: { review: :review_user_assignments }).
+        where(review_user_assignments: { user_id: user_id })
+    end
+
     def by_affected_user affected_user_id, only_all: false
       if only_all
         where affected_user_id: nil

@@ -6,4 +6,7 @@ es:
       user:
         user_in_comments: 'Incluir usuarios en comentarios'
       poll_user:
+        user_option: 'Ver'
+        affected_only: 'Asignadas'
         only_all: 'Solo a todos'
+        include_reviews: 'Asignadas y por informe'

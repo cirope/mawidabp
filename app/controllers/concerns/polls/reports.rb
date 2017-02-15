@@ -49,12 +49,15 @@ module Polls::Reports
     end
 
     def set_user
-      if params[:index] && params[:index][:only_all] == '1'
-        @report.only_all = true
+      if params[:index] && params[:index][:user_option].present?
+        @report.user_options = {
+          only_all:        params[:index][:user_option] == 'only_all',
+          include_reviews: params[:index][:user_option] == 'include_reviews'
+        }
       end
 
-      if params[:index] && params[:index][:affected_user_id].present?
-        @report.affected_user_id = params[:index][:affected_user_id]
+      if params[:index] && params[:index][:user_id].present?
+        @report.user_id = params[:index][:user_id]
       end
     end
 

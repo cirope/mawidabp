@@ -34,7 +34,7 @@ class Polls::AnswersController < ApplicationController
       @report.polls = Poll.list.
         between_dates(@report.from_date.at_beginning_of_day, @report.to_date.end_of_day).
         by_questionnaire(@report.questionnaire).
-        by_affected_user(@report.affected_user_id, only_all: @report.only_all)
+        by_user(@report.user_id, @report.user_options || {})
 
       @report.polls = @report.polls.answered(@report.answered) unless @report.answered.nil?
     end
