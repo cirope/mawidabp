@@ -33,7 +33,7 @@ module Polls::Scopes
 
     def by_review_user user_id
       joins(conclusion_review: { review: :review_user_assignments }).
-        where(review_user_assignments: { user_id: user_id })
+        where(affected_user_id: nil, review_user_assignments: { user_id: user_id })
     end
 
     def by_affected_user affected_user_id, only_all: false
