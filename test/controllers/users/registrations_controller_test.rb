@@ -35,7 +35,6 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
           last_name: 'New Last Name2',
           email: 'new_user2@newemail.net',
           language: I18n.available_locales.last.to_s,
-          resource_id: resources(:auditor_resource).id,
           manager_id: users(:administrator_user).id,
           logged_in: false,
           enable: true,

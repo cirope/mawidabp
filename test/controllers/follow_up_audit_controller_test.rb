@@ -236,7 +236,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       'weaknesses_by_audit_type', 0)
   end
 
-  test 'cost analysis report' do
+  test 'units analysis report' do
     login
 
     get :follow_up_cost_analysis
@@ -254,7 +254,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/follow_up_cost_analysis'
   end
 
-  test 'create cost analysis report' do
+  test 'create units analysis report' do
     login
 
     post :create_follow_up_cost_analysis,

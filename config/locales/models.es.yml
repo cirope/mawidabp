@@ -228,7 +228,6 @@ es:
         password: 'Contraseña'
         password_changed: 'Contraseña cambiada'
         password_confirmation: 'Confirmación'
-        resource: 'Tipo de recurso'
         roles: 'Perfiles'
         send_notification_email: 'Enviar notificación'
         user: 'Usuario'
@@ -244,12 +243,12 @@ es:
         end: 'Fin'
       poll:
         comments: 'Comentarios'
-        customer_email: 'Correo cliente'
         send_date: 'Fecha envío'
         answer_date: 'Fecha contestación'
         answered: 'Contestada'
         questionnaire: 'Cuestionario'
         user: 'Usuario'
+        affected_user: 'Acerca de'
       poll/answers:
         answer: 'Respuesta'
         answer_option: 'Opción'
@@ -279,7 +278,6 @@ es:
       resource_class:
         name: 'Clase de recurso'
         unit: 'Unidad de medida'
-        resource_class_type: 'Tipo'
       resource_class/resources:
         name: 'Recurso'
         resource_class: 'Clase'

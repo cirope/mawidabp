@@ -5,7 +5,6 @@ class Resource < ActiveRecord::Base
   include Trimmer
 
   belongs_to :resource_class
-  has_many :users, dependent: :nullify
   has_many :resource_utilizations, as: :resource, dependent: :destroy
 
   trimmed_fields :name, :description

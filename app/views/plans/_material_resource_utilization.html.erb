@@ -1,14 +1,11 @@
 <% id = f.object.object_id %>
 <fieldset class="material_resource_utilization">
   <div class="row nested">
-    <div class="col-md-5">
+    <div class="col-md-8">
       <%= plan_resource_field f, id, false %>
     </div>
     <div class="col-md-3">
       <%= f.input :units, as: :string, label: false %>
-    </div>
-    <div class="col-md-3">
-      <%= f.input :cost_per_unit, as: :string, label: false, input_html: { id: "#{id}_cost_per_unit" } %>
     </div>
     <div class="col-md-1">
       <div class="toggle-visibility">
@@ -18,20 +15,3 @@
     </div>
   </div>
 </fieldset>
-<script type="text/javascript">
-(function() {
-  var id = '#<%= id %>_resource_id';
-
-  $(id).change(function() {
-    var url = '<%= resource_data_plans_path %>';
-
-    Helper.showLoading(id);
-
-    $.get(url, { id: $(this).val(), format: 'json' }, function(data) {
-      $('#<%= id %>_cost_per_unit').val(data.cost_per_unit || '');
-    }).complete(function() {
-      Helper.hideLoading(id);
-    });
-  });
-})();
-</script>

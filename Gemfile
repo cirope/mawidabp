@@ -1,5 +1,11 @@
 source 'https://rubygems.org'
 
+git_source :github do |repo_name|
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include? '/'
+
+  "https://github.com/#{repo_name}.git"
+end
+
 gem 'rails', '~> 4.2.7.1'
 
 gem 'jquery-rails'
@@ -21,7 +27,6 @@ gem 'rubyzip', require: 'zip'
 gem 'prawn'
 gem 'prawn-table'
 gem 'figaro'
-gem 'bloggy', require: false
 gem 'irreverent'
 gem 'bootstrap-sass'
 gem 'will_paginate'
@@ -58,7 +63,6 @@ group :test do
 end
 
 group :development, :test do
-  gem 'spring'
   gem 'byebug'
 end
 

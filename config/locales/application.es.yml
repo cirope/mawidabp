@@ -7,6 +7,7 @@ es:
     'no': "No"
     add: "Agregar"
     add_item: "Agregar ítem"
+    all: "Todos"
     apply_filter: "Aplicar filtro"
     ascendant: "Ascendente"
     back: "Volver"
@@ -128,6 +129,7 @@ es:
   conclusion_report:
     index_title: "Reportes de conclusión"
     cost_analysis_title: "Análisis de costos"
+    cost_summary_title: "Análisis de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
@@ -149,6 +151,15 @@ es:
       general_title: "ANÁLISIS DE COSTOS\nDE AUDÍTORIA INTERNA"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+    cost_summary:
+      pdf_name: "resumen_de_costos_%{from_date}_al_%{to_date}.pdf"
+      title: "RESUMEN DE COSTOS\nDE AUDITORÍA INTERNA"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      column_month: "Mes"
+      column_estimated_amount: "Unidades estimadas"
+      column_real_amount: "Unidades reales"
+      column_deviation: "Desviación"
 
   conclusion_reports:
     weaknesses_graphs:
@@ -437,6 +448,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     without_weaknesses: "Sin observaciones en el periodo"
     without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
+    weaknesses_report:
+      title: 'Informe de seguimiento de observaciones'
+      empty: 'No hay observaciones para el filtro aplicado'
+      pdf_name: 'informe_de_seguimiento_de_observaciones_en_ejecucion.pdf'
 
   finding:
     index_title: "Listado de observaciones / oportunidades de mejora"
@@ -784,6 +799,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables de la siguiente observación / oportunidad de mejora"
       managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
+    pending_poll_email:
+      affected_user_html: "Encuesta acerca de <strong>%{user}</strong>"
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:
@@ -844,7 +861,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     allow_overload: "¿Permitir superposición?"
     copy: "Copiar"
     add_plan_item: "Agregar proyecto"
-    calculate_estimated_amount: "Calcular ahora"
     add_human_resource_utilization: "Agregar recurso humano"
     add_material_resource_utilization: "Agregar recurso material"
     add_tagging: "Agregar etiqueta"
@@ -1053,7 +1069,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_updated: "Programa de trabajo actualizado correctamente."
     stale_object_error: "El programa de trabajo no fue actualizado, intente nuevamente."
     save_as_new_version: "¿Guardar como nueva versión?"
-    calculate_estimated_amount: "Calcular ahora"
     column_estimated: "Estimado"
     column_real: "Real"
     row_cost: "Costo"
@@ -1249,6 +1264,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         notify_users: "Comentario (enviar notificación)"
       finding/finding_answers/file_model:
         one: "Anexo (archivo)"
+        file: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"
         file_content_type: "Anexo (tipo de archivo)"
         file_file_size: "Anexo (tamaño de archivo)"
@@ -1369,9 +1385,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         resources: "Recursos"
         resource_ids: "Recursos"
         status: "Estado"
-        human_resources_cost: "Costo recursos humanos"
-        material_resources_cost: "Costo recursos materiales"
-        total_resources_cost: "Costo total"
+        human_resource_units: "Costo recursos humanos"
+        material_resource_units: "Costo recursos materiales"
+        total_resource_units: "Costo total"
         tags: "Etiquetas"
       privilege:
         module: "Módulo"
@@ -1382,6 +1398,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
+      resource_utilization:
+        resource_id: "Recurso"
       review:
         identification: "Identificación"
         description: "Descripción"
@@ -1451,6 +1469,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         period_id: "Periodo"
         review_id: "Informe"
         cost: "Costo"
+        units: "Unidades"
         workflow_items_resources: "Recursos"
       workflow/workflow_items:
         one: "Tarea"
@@ -1477,9 +1496,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         order_number: "Orden"
         resources: "Recursos"
         resource_ids: "Recursos"
-        human_resources_cost: "Costo recursos humanos"
-        material_resources_cost: "Costo recursos materiales"
-        total_resources_cost: "Costo total"
+        human_resource_units: "Costo recursos humanos"
+        material_resource_units: "Costo recursos materiales"
+        total_resource_units: "Costo total"
 
     errors:
       # Append your own errors here or at the model/attributes scope.

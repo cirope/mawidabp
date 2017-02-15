@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161213200852) do
+ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer  "benefit_id", limit: nil,                          null: false
@@ -226,13 +226,13 @@ ActiveRecord::Schema.define(version: 20161213200852) do
 
   create_table "control_objectives", force: :cascade do |t|
     t.text     "name"
-    t.integer  "order"
-    t.integer  "process_control_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "relevance"
-    t.integer  "risk"
-    t.boolean  "obsolete",           default: false
+    t.integer  "risk",                           precision: 38
+    t.integer  "relevance",                      precision: 38
+    t.integer  "order",                          precision: 38
+    t.integer  "process_control_id", limit: nil
+    t.datetime "created_at",                                                    null: false
+    t.datetime "updated_at",                                                    null: false
+    t.boolean  "obsolete",           limit: nil,                default: false
     t.string   "support"
   end
 
@@ -408,22 +408,22 @@ ActiveRecord::Schema.define(version: 20161213200852) do
   end
 
   create_table "documents", force: :cascade do |t|
-    t.string   "name",                            null: false
+    t.string   "name",                                                       null: false
     t.text     "description"
-    t.boolean  "shared",          default: false, null: false
-    t.integer  "lock_version",    default: 0
-    t.integer  "file_model_id"
-    t.integer  "organization_id"
-    t.integer  "group_id"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.boolean  "shared",          limit: nil,                default: false, null: false
+    t.integer  "lock_version",                precision: 38, default: 0
+    t.integer  "file_model_id",   limit: nil
+    t.integer  "organization_id", limit: nil
+    t.integer  "group_id",        limit: nil
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
   end
 
-  add_index "documents", ["file_model_id"], name: "index_documents_on_file_model_id", using: :btree
-  add_index "documents", ["group_id"], name: "index_documents_on_group_id", using: :btree
-  add_index "documents", ["name"], name: "index_documents_on_name", using: :btree
-  add_index "documents", ["organization_id"], name: "index_documents_on_organization_id", using: :btree
-  add_index "documents", ["shared"], name: "index_documents_on_shared", using: :btree
+  add_index "documents", ["file_model_id"], name: "i_documents_file_model_id"
+  add_index "documents", ["group_id"], name: "index_documents_on_group_id"
+  add_index "documents", ["name"], name: "index_documents_on_name"
+  add_index "documents", ["organization_id"], name: "i_documents_organization_id"
+  add_index "documents", ["shared"], name: "index_documents_on_shared"
 
   create_table "e_mails", force: :cascade do |t|
     t.text     "to"
@@ -574,16 +574,16 @@ ActiveRecord::Schema.define(version: 20161213200852) do
   create_table "image_models", force: :cascade do |t|
     t.string   "image_file_name"
     t.string   "image_content_type"
-    t.integer  "image_file_size",    precision: 38
+    t.integer  "image_file_size",                precision: 38
     t.datetime "image_updated_at"
-    t.integer  "lock_version",       precision: 38, default: 0
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
-    t.integer  "imageable_id",                               null: false
-    t.string   "imageable_type",                             null: false
+    t.integer  "lock_version",                   precision: 38, default: 0
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+    t.integer  "imageable_id",       limit: nil,                            null: false
+    t.string   "imageable_type",                                            null: false
   end
 
-  add_index "image_models", ["imageable_type", "imageable_id"], name: "index_image_models_on_imageable_type_and_imageable_id", using: :btree
+  add_index "image_models", ["imageable_type", "imageable_id"], name: "i_ima_mod_ima_typ_ima_id"
 
   create_table "ldap_configs", force: :cascade do |t|
     t.string   "hostname",                                                     null: false
@@ -1890,22 +1890,22 @@ ActiveRecord::Schema.define(version: 20161213200852) do
 #   Unknown type 'LONG' for column 'sql_text'
 
   create_table "news", force: :cascade do |t|
-    t.string   "title",                           null: false
+    t.string   "title",                                                      null: false
     t.text     "description"
-    t.text     "body",                            null: false
-    t.boolean  "shared",          default: false, null: false
-    t.datetime "published_at",                    null: false
-    t.integer  "lock_version",    default: 0
-    t.integer  "organization_id",                 null: false
-    t.integer  "group_id",                        null: false
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.text     "body",                                                       null: false
+    t.boolean  "shared",          limit: nil,                default: false, null: false
+    t.datetime "published_at",                                               null: false
+    t.integer  "lock_version",                precision: 38, default: 0
+    t.integer  "organization_id", limit: nil,                                null: false
+    t.integer  "group_id",        limit: nil,                                null: false
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
   end
 
-  add_index "news", ["group_id"], name: "index_news_on_group_id", using: :btree
-  add_index "news", ["organization_id"], name: "index_news_on_organization_id", using: :btree
-  add_index "news", ["published_at"], name: "index_news_on_published_at", using: :btree
-  add_index "news", ["shared"], name: "index_news_on_shared", using: :btree
+  add_index "news", ["group_id"], name: "index_news_on_group_id"
+  add_index "news", ["organization_id"], name: "index_news_on_organization_id"
+  add_index "news", ["published_at"], name: "index_news_on_published_at"
+  add_index "news", ["shared"], name: "index_news_on_shared"
 
   create_table "notification_relations", force: :cascade do |t|
     t.integer  "notification_id", limit: nil
@@ -2061,7 +2061,7 @@ ActiveRecord::Schema.define(version: 20161213200852) do
     t.text     "comments"
     t.boolean  "answered",         limit: nil,                default: false
     t.integer  "lock_version",                 precision: 38, default: 0
-    t.integer  "user_id",          limit: nil
+    t.integer  "user_id",          limit: nil,                                null: false
     t.integer  "questionnaire_id", limit: nil
     t.integer  "pollable_id",      limit: nil
     t.string   "pollable_type"
@@ -2069,12 +2069,14 @@ ActiveRecord::Schema.define(version: 20161213200852) do
     t.datetime "updated_at",                                                  null: false
     t.integer  "organization_id",  limit: nil
     t.string   "access_token"
-    t.string   "customer_email"
+    t.integer  "affected_user_id", limit: nil
   end
 
-  add_index "polls", ["customer_email"], name: "index_polls_on_customer_email"
+  add_index "polls", ["affected_user_id"], name: "i_polls_affected_user_id"
   add_index "polls", ["organization_id"], name: "index_polls_on_organization_id"
+  add_index "polls", ["pollable_id", "pollable_type"], name: "i_pol_pol_id_pol_typ"
   add_index "polls", ["questionnaire_id"], name: "i_polls_questionnaire_id"
+  add_index "polls", ["user_id"], name: "index_polls_on_user_id"
 
   create_table "privileges", force: :cascade do |t|
     t.string   "module",     limit: 100
@@ -2668,12 +2670,11 @@ ActiveRecord::Schema.define(version: 20161213200852) do
 
   create_table "resource_classes", force: :cascade do |t|
     t.string   "name"
-    t.integer  "unit",                            precision: 38
-    t.integer  "resource_class_type",             precision: 38
-    t.integer  "organization_id",     limit: nil
-    t.integer  "lock_version",                    precision: 38, default: 0
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
+    t.integer  "unit",                        precision: 38
+    t.integer  "organization_id", limit: nil
+    t.integer  "lock_version",                precision: 38, default: 0
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
   end
 
   add_index "resource_classes", ["name"], name: "index_resource_classes_on_name"
@@ -2681,7 +2682,6 @@ ActiveRecord::Schema.define(version: 20161213200852) do
 
   create_table "resource_utilizations", force: :cascade do |t|
     t.decimal  "units",                              precision: 15, scale: 2
-    t.decimal  "cost_per_unit",                      precision: 15, scale: 2
     t.integer  "resource_consumer_id",   limit: nil
     t.string   "resource_consumer_type"
     t.integer  "resource_id",            limit: nil
@@ -2696,11 +2696,10 @@ ActiveRecord::Schema.define(version: 20161213200852) do
   create_table "resources", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
-    t.decimal  "cost_per_unit",                 precision: 15, scale: 2
     t.integer  "resource_class_id", limit: nil
-    t.integer  "lock_version",                  precision: 38,           default: 0
-    t.datetime "created_at",                                                         null: false
-    t.datetime "updated_at",                                                         null: false
+    t.integer  "lock_version",                  precision: 38, default: 0
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
   end
 
   add_index "resources", ["resource_class_id"], name: "i_resources_resource_class_id"
@@ -2769,36 +2768,35 @@ ActiveRecord::Schema.define(version: 20161213200852) do
 #   Unknown type 'LONG' for column 'long_value'
 
   create_table "taggings", force: :cascade do |t|
-    t.integer  "tag_id",        null: false
-    t.integer  "taggable_id",   null: false
-    t.string   "taggable_type", null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.integer  "tag_id",        limit: nil, null: false
+    t.integer  "taggable_id",   limit: nil, null: false
+    t.string   "taggable_type",             null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
-  add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
-  add_index "taggings", ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id", using: :btree
+  add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id"
+  add_index "taggings", ["taggable_type", "taggable_id"], name: "i_tag_tag_typ_tag_id"
 
   create_table "tags", force: :cascade do |t|
-    t.string   "name",                            null: false
-    t.string   "kind",                            null: false
-    t.string   "style",                           null: false
-    t.integer  "organization_id",                 null: false
-    t.integer  "lock_version",    default: 0
-    t.jsonb    "options"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.boolean  "shared",          default: false, null: false
-    t.integer  "group_id",                        null: false
-    t.string   "icon",            default: "tag", null: false
+    t.string   "name",                                                       null: false
+    t.string   "kind",                                                       null: false
+    t.string   "style",                                                      null: false
+    t.integer  "organization_id", limit: nil,                                null: false
+    t.integer  "lock_version",                precision: 38, default: 0
+    t.text     "options"
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
+    t.boolean  "shared",          limit: nil,                default: false, null: false
+    t.integer  "group_id",        limit: nil,                                null: false
+    t.string   "icon",                                       default: "tag", null: false
   end
 
-  add_index "tags", ["group_id"], name: "index_tags_on_group_id", using: :btree
-  add_index "tags", ["kind"], name: "index_tags_on_kind", using: :btree
-  add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
-  add_index "tags", ["options"], name: "index_tags_on_options", using: :gin
-  add_index "tags", ["organization_id"], name: "index_tags_on_organization_id", using: :btree
-  add_index "tags", ["shared"], name: "index_tags_on_shared", using: :btree
+  add_index "tags", ["group_id"], name: "index_tags_on_group_id"
+  add_index "tags", ["kind"], name: "index_tags_on_kind"
+  add_index "tags", ["name"], name: "index_tags_on_name"
+  add_index "tags", ["organization_id"], name: "index_tags_on_organization_id"
+  add_index "tags", ["shared"], name: "index_tags_on_shared"
 
   create_table "users", force: :cascade do |t|
     t.string   "name",                 limit: 100
@@ -2814,7 +2812,6 @@ ActiveRecord::Schema.define(version: 20161213200852) do
     t.boolean  "enable",               limit: nil,                default: false
     t.boolean  "logged_in",            limit: nil,                default: false
     t.boolean  "group_admin",          limit: nil,                default: false
-    t.integer  "resource_id",          limit: nil
     t.datetime "last_access"
     t.integer  "manager_id",           limit: nil
     t.integer  "failed_attempts",                  precision: 38, default: 0
@@ -2831,7 +2828,6 @@ ActiveRecord::Schema.define(version: 20161213200852) do
   add_index "users", ["group_admin"], name: "index_users_on_group_admin"
   add_index "users", ["hidden"], name: "index_users_on_hidden"
   add_index "users", ["manager_id"], name: "index_users_on_manager_id"
-  add_index "users", ["resource_id"], name: "index_users_on_resource_id"
   add_index "users", ["user"], name: "index_users_on_user"
 
   create_table "versions", force: :cascade do |t|
@@ -2916,6 +2912,9 @@ ActiveRecord::Schema.define(version: 20161213200852) do
   add_foreign_key "costs", "users", on_delete: :cascade
   add_foreign_key "def$_calldest", "def$_destination", column: "catchup", primary_key: "catchup", name: "def$_call_destination"
   add_foreign_key "def$_calldest", "def$_destination", column: "dblink", primary_key: "dblink", name: "def$_call_destination"
+  add_foreign_key "documents", "file_models", on_delete: :cascade
+  add_foreign_key "documents", "groups", on_delete: :cascade
+  add_foreign_key "documents", "organizations", on_delete: :cascade
   add_foreign_key "error_records", "organizations", on_delete: :cascade
   add_foreign_key "error_records", "users", on_delete: :cascade
   add_foreign_key "finding_answers", "file_models", on_delete: :cascade
@@ -2949,6 +2948,8 @@ ActiveRecord::Schema.define(version: 20161213200852) do
   add_foreign_key "mview$_adv_rollup", "mview$_adv_level", column: "runid#", primary_key: "runid#", name: "mview$_adv_rollup_cfk"
   add_foreign_key "mview$_adv_rollup", "mview$_adv_level", column: "runid#", primary_key: "runid#", name: "mview$_adv_rollup_pfk"
   add_foreign_key "mview$_adv_rollup", "mview$_adv_log", column: "runid#", primary_key: "runid#", name: "mview$_adv_rollup_fk"
+  add_foreign_key "news", "groups", on_delete: :cascade
+  add_foreign_key "news", "organizations", on_delete: :cascade
   add_foreign_key "notification_relations", "notifications", on_delete: :cascade
   add_foreign_key "notifications", "users", column: "user_who_confirm_id", on_delete: :cascade
   add_foreign_key "notifications", "users", on_delete: :cascade
@@ -2962,6 +2963,10 @@ ActiveRecord::Schema.define(version: 20161213200852) do
   add_foreign_key "plan_items", "business_units", on_delete: :cascade
   add_foreign_key "plan_items", "plans", on_delete: :cascade
   add_foreign_key "plans", "periods", on_delete: :cascade
+  add_foreign_key "polls", "organizations", on_delete: :cascade
+  add_foreign_key "polls", "questionnaires", on_delete: :cascade
+  add_foreign_key "polls", "users", column: "affected_user_id", on_delete: :cascade
+  add_foreign_key "polls", "users", on_delete: :cascade
   add_foreign_key "privileges", "roles", on_delete: :cascade
   add_foreign_key "process_controls", "best_practices", on_delete: :cascade
   add_foreign_key "repcat$_audit_column", "repcat$_audit_attribute", column: "attribute", primary_key: "attribute", name: "repcat$_audit_column_f1"
@@ -3044,7 +3049,9 @@ ActiveRecord::Schema.define(version: 20161213200852) do
   add_foreign_key "reviews", "plan_items", on_delete: :cascade
   add_foreign_key "roles", "organizations", on_delete: :cascade
   add_foreign_key "settings", "organizations", on_delete: :cascade
-  add_foreign_key "users", "resources", on_delete: :cascade
+  add_foreign_key "taggings", "tags", on_delete: :cascade
+  add_foreign_key "tags", "groups", on_delete: :cascade
+  add_foreign_key "tags", "organizations", on_delete: :cascade
   add_foreign_key "users", "users", column: "manager_id", on_delete: :cascade
   add_foreign_key "work_papers", "file_models", on_delete: :cascade
   add_foreign_key "work_papers", "organizations", on_delete: :cascade
@@ -3059,4 +3066,5 @@ ActiveRecord::Schema.define(version: 20161213200852) do
   add_synonym "sysfiles", "sys.sysfiles", force: true
   add_synonym "publicsyn", "sys.publicsyn", force: true
   add_synonym "product_user_profile", "system.sqlplus_product_profile", force: true
+
 end

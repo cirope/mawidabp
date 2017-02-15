@@ -102,13 +102,9 @@ class ReviewTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
     @review.identification = '?nil'
-    @review.period_id = '12.3'
-    @review.plan_item_id = '?nil'
 
     assert @review.invalid?
     assert_error @review, :identification, :invalid
-    assert_error @review, :period_id, :not_an_integer
-    assert_error @review, :plan_item_id, :not_a_number
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

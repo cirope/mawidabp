@@ -5,7 +5,7 @@ module Users::Params
 
     def user_params
       params.require(:user).permit(
-        :user, :name, :last_name, :email, :language, :notes, :resource_id,
+        :user, :name, :last_name, :email, :language, :notes,
         :manager_id, :enable, :logged_in, :password, :password_confirmation,
         :hidden, :function, :send_notification_email, :confirmation_hash,
         :lock_version, child_ids: [],

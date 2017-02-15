@@ -1,9 +1,3 @@
-human_resources:
-  name: Human resources
-  resource_class_type: <%= ResourceClass::TYPES[:human] %>
-  organization: cirope
-
 hardware_resources:
   name: Hardware resources
-  resource_class_type: <%= ResourceClass::TYPES[:material] %>
   organization: cirope

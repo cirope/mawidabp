@@ -92,7 +92,7 @@ module PlanItems::Validations
             end
           end
         end
-        
+
         result
       end
 

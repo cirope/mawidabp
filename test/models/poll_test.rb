@@ -47,25 +47,8 @@ class PollTest < ActiveSupport::TestCase
 
     assert @poll.invalid?
     assert_error @poll, :questionnaire, :blank
+    assert_error @poll, :user, :blank
     assert_error @poll, :organization_id, :blank
-    assert_error @poll, :base, :invalid
-
-    @poll.customer_email = 'customer@email.com'
-    @poll.user = users(:poll_user)
-
-    assert @poll.invalid?
-    assert_error @poll, :base, :invalid
-    assert_equal 3, @poll.errors.count
-
-    @poll.customer_email = 'customer@email.com'
-    @poll.user = nil
-    assert @poll.invalid?
-    assert_equal 2, @poll.errors.count
-
-    @poll.customer_email = nil
-    @poll.user = users(:poll_user)
-    assert @poll.invalid?
-    assert_equal 2, @poll.errors.count
   end
 
   test 'validates length of attributes' do

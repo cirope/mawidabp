@@ -8,12 +8,12 @@ module Reports::FollowUpCostAnalysis
       init_cost_analysis_period_vars(period)
 
       unless @weaknesses_by_review.blank?
-        calculate_weaknesses_costs(period)
+        calculate_weaknesses_cost(period)
         add_weaknesses_data(period)
       end
 
       unless @oportunities_by_review.blank?
-        calculate_oportunities_costs(period)
+        calculate_oportunities_cost(period)
         add_oportunities_data(period)
       end
     end
@@ -42,7 +42,7 @@ module Reports::FollowUpCostAnalysis
       &:review)
   end
 
-  def calculate_weaknesses_costs(period)
+  def calculate_weaknesses_cost(period)
     @weaknesses_by_review.each do |review, weaknesses|
       audit_cost = weaknesses.inject(0) do |sum, weakness|
         sum + weakness.costs.audit.to_a.sum(&:cost)
@@ -57,8 +57,8 @@ module Reports::FollowUpCostAnalysis
         review.plan_item.business_unit.name,
         review.plan_item.project,
         review.identification,
-        audit_cost.to_s,
-        audited_cost.to_s
+        '%.2f' % audit_cost,
+        '%.2f' % audited_cost
       ]
     end
   end
@@ -71,7 +71,7 @@ module Reports::FollowUpCostAnalysis
     ]
   end
 
-  def calculate_oportunities_costs(period)
+  def calculate_oportunities_cost(period)
     @oportunities_by_review.each do |review, oportunities|
       audit_cost = oportunities.inject(0) do |sum, oportunity|
         sum + oportunity.costs.audit.to_a.sum(&:cost)
@@ -86,8 +86,8 @@ module Reports::FollowUpCostAnalysis
         review.plan_item.business_unit.name,
         review.plan_item.project,
         review.identification,
-        audit_cost.to_s,
-        audited_cost.to_s
+        '%.2f' % audit_cost,
+        '%.2f' % audited_cost
       ]
     end
   end

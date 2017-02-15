@@ -4,14 +4,13 @@ class ResourceClassTest < ActiveSupport::TestCase
   def setup
     set_organization
 
-    @resource_class = resource_classes :human_resources
+    @resource_class = resource_classes :hardware_resources
   end
 
   test 'create' do
     assert_difference 'ResourceClass.count' do
       ResourceClass.list.create(
         name: 'New resource class',
-        resource_class_type: ResourceClass::TYPES[:human],
         organization: organizations(:cirope)
       )
     end
@@ -46,32 +45,12 @@ class ResourceClassTest < ActiveSupport::TestCase
   end
 
   test 'validates duplicated attributes' do
-    @resource_class.name = resource_classes(:hardware_resources).name
+    resource_class = @resource_class.dup
 
-    assert @resource_class.invalid?
-    assert_error @resource_class, :name, :taken
+    assert resource_class.invalid?
+    assert_error resource_class, :name, :taken
 
-    @resource_class.organization_id = organizations(:google).id
-    assert @resource_class.valid?
-  end
-
-  test 'validates included attributes' do
-    @resource_class.resource_class_type =
-      ResourceClass::TYPES.values.sort.last.next
-
-    assert @resource_class.invalid?
-    assert_error @resource_class, :resource_class_type, :inclusion
-  end
-
-  test 'dynamic functions' do
-    ResourceClass::TYPES.each do |type, value|
-      @resource_class.resource_class_type = value
-      assert @resource_class.send("#{type}?".to_sym)
-
-      (ResourceClass::TYPES.values - [value]).each do |v|
-        @resource_class.resource_class_type = v
-        assert !@resource_class.send("#{type}?".to_sym)
-      end
-    end
+    resource_class.organization_id = organizations(:google).id
+    assert resource_class.valid?
   end
 end

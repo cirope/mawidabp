@@ -169,6 +169,12 @@ module ConclusionFinalReviewsHelper
     content_tag(:tr, content_tag(:td, raw(body_rows.map { |r| content_tag(:div, raw(r)) }.join)))
   end
 
+  def users_for_conclusion_review_questionnaire
+    @conclusion_final_review.review.users.reject do |user|
+      user.can_act_as_audited? || user.new_record?
+    end
+  end
+
   def send_review_options
     options = ['normal', 'brief', 'without_score'].map do |type|
       [t("conclusion_final_review.send_type.#{type}"), type]

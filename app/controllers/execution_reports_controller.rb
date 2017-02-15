@@ -1,12 +1,10 @@
 class ExecutionReportsController < ApplicationController
   include Reports::WeaknessesByStateExecution
   include Reports::DetailedManagement
+  include Reports::WeaknessesReport
 
   before_action :auth, :load_privileges, :check_privileges
 
-  # Muestra una lista con los reportes disponibles
-  #
-  # * GET /execution_reports
   def index
     @title = t 'execution_reports.index_title'
 

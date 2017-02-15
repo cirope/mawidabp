@@ -2,18 +2,14 @@
 <fieldset>
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-6">
         <%= f.input :name, label: false, autofocus: true,
           input_html: { id: "resource_name_#{id}", maxlength: 255 }
         %>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-5">
         <%= f.input :description, label: false,
           input_html: { id: "resource_description_#{id}", rows: 1 } %>
-      </div>
-      <div class="col-md-3">
-        <%= f.input :cost_per_unit, as: :string, label: false,
-          input_html: { id: "resource_cost_per_unit_#{id}" } %>
       </div>
       <div class="col-md-1">
         <%= link_to_remove_nested_item f %>

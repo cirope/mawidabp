@@ -55,8 +55,11 @@ class Polls::BusinessUnitsController < ApplicationController
     end
 
     def set_polls
-      Poll.between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day).
-        by_questionnaire(@report.questionnaire).pollables
+      Poll.list.
+        between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day).
+        by_questionnaire(@report.questionnaire).
+        by_user(@report.user_id, @report.user_options || {}).
+        pollables
     end
 
     def but_polls business_unit

@@ -1,6 +1,5 @@
 'es':
   label:
-    attach_csv: "Importar CSV"
     yes: "Si"
     no: "No"
     total: "Total"
@@ -128,6 +127,7 @@
   conclusion_report:
     index_title: "Reportes de conclusión"
     cost_analysis_title: "Análisis de costos"
+    cost_summary_title: "Resumen de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
@@ -149,6 +149,15 @@
       general_title: "ANÁLISIS DE COSTOS\nDE AUDÍTORIA INTERNA"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+    cost_summary:
+      pdf_name: "resumen_de_costos_%{from_date}_al_%{to_date}.pdf"
+      title: "RESUMEN DE COSTOS\nDE AUDITORÍA INTERNA"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      column_month: "Mes"
+      column_estimated_amount: "Unidades estimadas"
+      column_real_amount: "Unidades reales"
+      column_deviation: "Desviación"
 
   conclusion_committee_report:
     index_title: "Reportes de conclusión"
@@ -798,6 +807,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     being_implemented_and_stale_finding_to_manager:
       title: "Notificación de observaciones en proceso de implementación vencidas"
       the_following_finding_is_being_implemented_and_stale: "La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación"
+    pending_poll_email:
+      affected_user_html: "Encuesta acerca de <strong>%{user}</strong>"
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables del siguiente hallazgo"
@@ -872,7 +883,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     allow_overload: "¿Permitir superposición?"
     copy: "Copiar"
     add_plan_item: "Agregar proyecto"
-    calculate_estimated_amount: "Calcular ahora"
     add_human_resource_utilization: "Agregar recurso humano"
     add_material_resource_utilization: "Agregar recurso material"
     add_tagging: "Agregar etiqueta"
@@ -1098,7 +1108,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_updated: "Programa de trabajo actualizado correctamente."
     stale_object_error: "El programa de trabajo no fue actualizado, intente nuevamente."
     save_as_new_version: "¿Guardar como nueva versión?"
-    calculate_estimated_amount: "Calcular ahora"
     column_estimated: "Estimado"
     column_real: "Real"
     row_cost: "Costo"
@@ -1399,9 +1408,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         resources: "Recursos"
         resource_ids: "Recursos"
         status: "Estado"
-        human_resources_cost: "Costo recursos humanos"
-        material_resources_cost: "Costo recursos materiales"
-        total_resources_cost: "Costo total"
+        human_resource_units: "Costo recursos humanos"
+        material_resource_units: "Costo recursos materiales"
+        total_resource_units: "Costo total"
         tags: "Etiquetas"
       privilege:
         module: "Módulo"
@@ -1444,6 +1453,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         period_id: "Periodo"
         review_id: "Informe"
         cost: "Costo"
+        units: "Unidades"
         workflow_items_resources: "Recursos"
         workflow_items:
           one: "Tarea"
@@ -1470,9 +1480,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         order_number: "Orden"
         resources: "Recursos"
         resource_ids: "Recursos"
-        human_resources_cost: "Costo recursos humanos"
-        material_resources_cost: "Costo recursos materiales"
-        total_resources_cost: "Costo total"
+        human_resource_units: "Costo recursos humanos"
+        material_resource_units: "Costo recursos materiales"
+        total_resource_units: "Costo total"
 
     errors:
       # Append your own errors here or at the model/attributes scope.
@@ -1522,10 +1532,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           attributes:
             role_id:
               invalid: "deben ser sólo del tipo auditado o de otro tipo pero no ambos"
-        poll:
-          attributes:
-            base:
-              invalid: "debe tener un usuario asociado o un correo de cliente"
         plan:
           attributes:
             plan_items:
