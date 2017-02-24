@@ -224,7 +224,7 @@ class ControlObjectiveItem < ActiveRecord::Base
       errors << I18n.t('control_objective_item.errors.without_score')
     end
 
-    if self.relevance && self.relevance <= 0
+    if self.relevance.blank?
       errors << I18n.t('control_objective_item.errors.without_relevance')
     end
 

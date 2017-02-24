@@ -272,7 +272,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert @control_objective_item.must_be_approved?
     assert @control_objective_item.approval_errors.blank?
 
-    @control_objective_item.relevance = 0
+    @control_objective_item.relevance = nil
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
