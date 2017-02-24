@@ -7,18 +7,11 @@ class NotifierMailer < ActionMailer::Base
     @poll = poll
     @organization = poll.organization
     @token = poll.access_token
+    @user = poll.user.informal_name
+    email = poll.user.email
+    subject = "[#{@organization.prefix.upcase}] #{poll.questionnaire.email_subject}"
 
-    # Si es un usuario
-    if poll.user
-      @user = poll.user.informal_name
-      email = poll.user.email
-      subject = "[#{@organization.prefix.upcase}] " + poll.questionnaire.email_subject
-    # Si es un cliente externo
-    elsif poll.customer_email
-      @user = poll.customer_name ? poll.customer_name : poll.customer_email
-      email = poll.customer_email
-      subject = poll.questionnaire.email_subject
-    end
+    subject << " - #{poll.affected_user.informal_name}" if poll.affected_user
 
     mail to: email, subject: subject
   end

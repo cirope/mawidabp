@@ -243,12 +243,12 @@ es:
         end: 'Fin'
       poll:
         comments: 'Comentarios'
-        customer_email: 'Correo cliente'
         send_date: 'Fecha envío'
         answer_date: 'Fecha contestación'
         answered: 'Contestada'
         questionnaire: 'Cuestionario'
         user: 'Usuario'
+        affected_user: 'Acerca de'
       poll/answers:
         answer: 'Respuesta'
         answer_option: 'Opción'

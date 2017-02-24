@@ -32,7 +32,6 @@ module Findings::FollowUpPDF
   private
 
     def put_follow_up_cover_on pdf
-      issue_date  = issue_date ? I18n.l(issue_date, format: :long) : I18n.t('finding.without_conclusion_final_review')
       class_name  = self.class.name.downcase
       line_height = (PDF_FONT_SIZE * 1.25).round
 
@@ -233,7 +232,9 @@ module Findings::FollowUpPDF
     end
 
     def follow_up_description_items
-      issue_date  = issue_date ? I18n.l(issue_date, format: :long) : I18n.t('finding.without_conclusion_final_review')
+      issue_date  = self.issue_date ?
+        I18n.l(self.issue_date, format: :long) :
+        I18n.t('finding.without_conclusion_final_review')
 
       [
         [Review.model_name.human, "#{review.long_identification} (#{issue_date})", 0, false],

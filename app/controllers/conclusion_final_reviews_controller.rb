@@ -4,12 +4,8 @@ class ConclusionFinalReviewsController < ApplicationController
     :show, :edit, :update, :export_to_pdf, :score_sheet, :download_work_papers,
     :create_bundle, :compose_email, :send_by_email
   ]
-  layout proc{ |controller| controller.request.xhr? ? false : 'application' }
+  layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
-  # Lista los informes definitivos
-  #
-  # * GET /conclusion_final_reviews
-  # * GET /conclusion_final_reviews.xml
   def index
     @title = t 'conclusion_final_review.index_title'
 
@@ -207,7 +203,7 @@ class ConclusionFinalReviewsController < ApplicationController
     @questionnaires = Questionnaire.list.by_pollable_type 'ConclusionReview'
 
     users = []
-    users_without_poll = []
+    users_with_poll = []
     export_options = params[:export_options] || {}
 
     if params[:conclusion_review]
@@ -241,34 +237,46 @@ class ConclusionFinalReviewsController < ApplicationController
         include_global_score_sheet: include_global_score_sheet
       }
 
-        if user && !users.include?(user)
-          @conclusion_final_review.send_by_email_to(user, send_options)
+      if user && users.all? { |u| u.id != user.id }
+        @conclusion_final_review.send_by_email_to(user, send_options)
 
-          users << user
-        end
-
-        if user.try(:can_act_as_audited?) && user_data[:questionnaire_id].present?
-          polls = Poll.list.where(user_id: user.id, questionnaire_id: user_data[:questionnaire_id],
-                               pollable_id: @conclusion_final_review)
-          if polls.empty?
-            questionnaire = Questionnaire.find user_data[:questionnaire_id]
-            @conclusion_final_review.polls.create!(
-              questionnaire_id: user_data[:questionnaire_id],
-              user_id: user.id,
-              organization_id: current_organization.id,
-              pollable_type: questionnaire.pollable_type
-            )
-          else
-            users_without_poll << user.informal_name
-          end
-        end
+        users << user
       end
 
-    unless users.blank?
+      if user.try(:can_act_as_audited?) && user_data[:questionnaire_id].present?
+        questionnaire = Questionnaire.find user_data[:questionnaire_id]
+        affected_user_id = user_data[:affected_user_id].present? ?
+          user_data[:affected_user_id] : nil
+        has_poll = Poll.list.exists?(
+          user_id: user.id,
+          affected_user_id: affected_user_id,
+          questionnaire_id: user_data[:questionnaire_id],
+          organization_id: current_organization.id,
+          pollable_type: questionnaire.pollable_type,
+          pollable_id: @conclusion_final_review
+        )
+
+        if has_poll
+          users_with_poll << user.informal_name
+        else
+          @conclusion_final_review.polls.create!(
+            user_id: user.id,
+            affected_user_id: affected_user_id,
+            questionnaire_id: user_data[:questionnaire_id],
+            organization_id: current_organization.id,
+            pollable_type: questionnaire.pollable_type
+          )
+        end
+      end
+    end
+
+    if users.present?
       flash.notice = t('conclusion_review.review_sended')
-      unless users_without_poll.empty?
-        flash.notice << "#{t('polls.already_exists')} #{users_without_poll.join(', ').inspect}"
+
+      if users_with_poll.present?
+        flash.notice << ". #{t 'polls.already_exists', user: users_with_poll.uniq.to_sentence}"
       end
+
       redirect_to edit_conclusion_final_review_url(@conclusion_final_review)
     else
       render action: :compose_email

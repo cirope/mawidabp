@@ -24,7 +24,7 @@
         </div>
       <% end %>
       <%= hidden_field_tag "user[#{id}][id]", user.id %>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <% if user.can_act_as_audited? || user.new_record? %>
           <%= select_tag "user[#{id}][questionnaire_id]", options_from_collection_for_select(
             @questionnaires, :id, :name), prompt: t('label.no'),
@@ -32,7 +32,14 @@
         <% end %>
       </div>
       <div class="col-md-2">
-        <%= link_to_remove_child_item(nil) %>
+        <% if user.can_act_as_audited? || user.new_record? %>
+          <%= select_tag "user[#{id}][affected_user_id]", options_from_collection_for_select(
+            users_for_conclusion_review_questionnaire, :id, :name),
+            prompt: t('label.all'), class: "form-control #{('hidden' if user.new_record?)}" %>
+        <% end %>
+      </div>
+      <div class="col-md-1">
+        <%= link_to_remove_child_item nil %>
       </div>
     </div>
   </div>
@@ -42,8 +49,10 @@
     $('#user_<%= id %>_data').on('autocomplete:update', function() {
       if ($(this).data('item')['can_act_as_audited?']) {
         $('#user_<%= id %>_questionnaire_id').removeClass('hidden');
+        $('#user_<%= id %>_affected_user_id').removeClass('hidden');
       } else {
-        $('#user_<%= id %>_questionnaire_id').addClass('hidden');
+        $('#user_<%= id %>_questionnaire_id').val('').addClass('hidden');
+        $('#user_<%= id %>_affected_user_id').val('').addClass('hidden');
       }
     });
   </script>

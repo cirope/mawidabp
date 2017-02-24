@@ -57,6 +57,7 @@ class ConclusionReview < ActiveRecord::Base
   belongs_to :organization
   has_one :plan_item, :through => :review
   has_many :control_objective_items, :through => :review
+  has_many :polls, as: :pollable
 
   def self.columns_for_sort
     HashWithIndifferentAccess.new({
