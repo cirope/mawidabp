@@ -443,6 +443,62 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       'control_objective_stats', 0)
   end
 
+  test 'control objective stats by review report' do
+    login
+
+    get :control_objective_stats_by_review
+    assert_response :success
+    assert_template 'follow_up_audit/control_objective_stats_by_review'
+
+    assert_nothing_raised do
+      get :control_objective_stats_by_review, :control_objective_stats_by_review => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => true
+    end
+
+    assert_response :success
+    assert_template 'follow_up_audit/control_objective_stats_by_review'
+  end
+
+  test 'filtered control objective stats by review report' do
+    login
+
+    get :control_objective_stats_by_review, :control_objective_stats_by_review => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :business_unit_type => business_unit_types(:cycle).id,
+      :business_unit => 'one',
+      :control_objective => 'a',
+      },
+      :controller_name => 'follow_up',
+      :final => true
+
+    assert_response :success
+    assert_template 'follow_up_audit/control_objective_stats_by_review'
+  end
+
+  test 'create control objective stats by review report' do
+    login
+
+    get :create_control_objective_stats_by_review, :control_objective_stats_by_review => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up',
+      :final => true
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('follow_up_committee_report.control_objective_stats_by_review.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'control_objective_stats_by_review', 0)
+  end
+
   test 'process control stats report' do
     login
 

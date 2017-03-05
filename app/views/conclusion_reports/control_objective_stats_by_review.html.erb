@@ -1,10 +1,10 @@
 <%= render partial: 'shared/filter_form',
   locals: {
-    action: :control_objective_stats, extra_params: {
-      controller_name: 'follow_up', final: false
+    action: :control_objective_stats_by_review, extra_params: {
+      controller_name: 'conclusion', final: true
     },
     forms: {
-      control_objective: 1, date_range: 2, business_unit: 3, finding: 4
+      control_objective: 1, date_range: 2, business_unit: 3
     }
   }
 %>
@@ -16,7 +16,7 @@
 
   <% if @process_control_data[period].blank? %>
     <p style="margin: 1em;">
-      <em><%= t 'follow_up_committee_report.control_objective_stats.without_audits_in_the_period' %></em>
+      <em><%= t 'conclusion_committee_report.control_objective_stats_by_review.without_audits_in_the_period' %></em>
     </p>
   <% else %>
     <table class="table table-condensed table-striped">
@@ -34,7 +34,8 @@
               <% col_data = data[col_name] %>
               <td>
                 <%= col_name == 'weaknesses_count' ?
-                  show_control_objective_weaknesses_report_links(data, period) : col_data %>
+                  show_control_objective_final_weaknesses_report_links(data, period) :
+                  raw(col_data.gsub("\n", '<br>')) %>
               </td>
             <% end %>
           </tr>
@@ -42,13 +43,6 @@
       </tbody>
     </table>
   <% end %>
-
-  <p style="margin: 1em 0;">
-    <%= raw t(
-      'follow_up_committee_report.control_objective_stats.review_effectiveness_average',
-      score: @reviews_score_data[period]
-    ) %>
-  </p>
 <% end %>
 
 <hr />
@@ -63,18 +57,18 @@
   options: {
     form_name: 'report',
     url: request.query_parameters.merge(
-      {action: :create_control_objective_stats, _ts: Time.now.to_i}
+      {action: :create_control_objective_stats_by_review, _ts: Time.now.to_i}
     ),
     fields: [
       {
         name: :report_title,
         label: t('customize_report_form.title'),
-        value: t('follow_up_committee_report.control_objective_stats.title')
+        value: t('conclusion_committee_report.control_objective_stats_by_review.title')
       },
       {
         name: :report_subtitle,
         label: t('customize_report_form.subtitle'),
-        value: t('follow_up_committee_report.control_objective_stats.subtitle')
+        value: t('conclusion_committee_report.control_objective_stats_by_review.subtitle')
       }
     ]
   }
