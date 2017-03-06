@@ -37,6 +37,7 @@ gem 'jbuilder'
 gem 'sidekiq'
 gem 'ruby-ntlm'
 gem 'chartist-rails'
+gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 
