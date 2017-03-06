@@ -1,4 +1,4 @@
-class FindingAnswer < ActiveRecord::Base
+class FindingAnswer < ApplicationRecord
   include Auditable
   include FindingAnswers::DateColumns
   include ParameterSelector

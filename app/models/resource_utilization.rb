@@ -1,4 +1,4 @@
-class ResourceUtilization < ActiveRecord::Base
+class ResourceUtilization < ApplicationRecord
   include Auditable
   include Comparable
   include ParameterSelector

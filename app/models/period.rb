@@ -1,4 +1,4 @@
-class Period < ActiveRecord::Base
+class Period < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Periods::DateColumns

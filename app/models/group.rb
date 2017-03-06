@@ -1,4 +1,4 @@
-class Group < ActiveRecord::Base
+class Group < ApplicationRecord
   include Trimmer
   include Groups::Auditable
   include Groups::Current

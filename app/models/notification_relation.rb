@@ -1,4 +1,4 @@
-class NotificationRelation < ActiveRecord::Base
+class NotificationRelation < ApplicationRecord
   include ParameterSelector
 
   has_paper_trail meta: {

@@ -1,4 +1,4 @@
-class FindingReviewAssignment < ActiveRecord::Base
+class FindingReviewAssignment < ApplicationRecord
   include Comparable
 
   has_paper_trail meta: {

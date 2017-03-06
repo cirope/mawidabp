@@ -1,4 +1,4 @@
-class Control < ActiveRecord::Base
+class Control < ApplicationRecord
   include ParameterSelector
 
   has_paper_trail meta: {

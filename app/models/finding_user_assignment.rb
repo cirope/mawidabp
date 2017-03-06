@@ -1,4 +1,4 @@
-class FindingUserAssignment < ActiveRecord::Base
+class FindingUserAssignment < ApplicationRecord
   include Auditable
   include Comparable
 

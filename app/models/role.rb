@@ -1,4 +1,4 @@
-class Role < ActiveRecord::Base
+class Role < ApplicationRecord
   include Auditable
   include Comparable
   include Roles::Scopes

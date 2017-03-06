@@ -1,4 +1,4 @@
-class ControlObjective < ActiveRecord::Base
+class ControlObjective < ApplicationRecord
   include Auditable
   include Parameters::Relevance
   include Parameters::Risk

@@ -1,4 +1,4 @@
-class BusinessUnit < ActiveRecord::Base
+class BusinessUnit < ApplicationRecord
   include Auditable
   include BusinessUnits::Scopes
   include ParameterSelector

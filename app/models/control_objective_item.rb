@@ -1,4 +1,4 @@
-class ControlObjectiveItem < ActiveRecord::Base
+class ControlObjectiveItem < ApplicationRecord
   include Auditable
   include Comparable
   include Parameters::Relevance

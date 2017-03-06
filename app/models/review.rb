@@ -1,4 +1,4 @@
-class Review < ActiveRecord::Base
+class Review < ApplicationRecord
   include Auditable
   include Parameters::Risk
   include Parameters::Score

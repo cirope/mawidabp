@@ -1,4 +1,4 @@
-class BusinessUnitType < ActiveRecord::Base
+class BusinessUnitType < ApplicationRecord
   include Trimmer
 
   trimmed_fields :name, :business_unit_label, :project_label

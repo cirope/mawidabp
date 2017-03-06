@@ -1,4 +1,4 @@
-class ConclusionReview < ActiveRecord::Base
+class ConclusionReview < ApplicationRecord
   include Auditable
   include ParameterSelector
   include ConclusionReviews::DateColumns

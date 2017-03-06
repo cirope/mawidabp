@@ -1,4 +1,4 @@
-class Finding < ActiveRecord::Base
+class Finding < ApplicationRecord
   include ActsAsTree
   include Auditable
   include Comparable

@@ -1,4 +1,4 @@
-class ReviewUserAssignment < ActiveRecord::Base
+class ReviewUserAssignment < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Comparable

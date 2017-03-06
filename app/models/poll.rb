@@ -1,4 +1,4 @@
-class Poll < ActiveRecord::Base
+class Poll < ApplicationRecord
   include Auditable
   include Polls::Answers
   include Polls::AccessToken

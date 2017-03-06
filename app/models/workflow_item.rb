@@ -1,4 +1,4 @@
-class WorkflowItem < ActiveRecord::Base
+class WorkflowItem < ApplicationRecord
   include Auditable
   include Comparable
   include ParameterSelector

@@ -1,4 +1,4 @@
-class LdapConfig < ActiveRecord::Base
+class LdapConfig < ApplicationRecord
   include Auditable
   include Trimmer
   include LdapConfigs::LDAP

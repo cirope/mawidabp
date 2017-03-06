@@ -1,4 +1,4 @@
-class WorkPaper < ActiveRecord::Base
+class WorkPaper < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Comparable
