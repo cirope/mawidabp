@@ -113,7 +113,7 @@ module Findings::State
       end
 
       def notify_transitions final
-        [:notify, :incomplete, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :criteria_mismatch] |
+        [:notify, :incomplete, :confirmed, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :criteria_mismatch] |
           (final ? [] : [:revoked])
       end
 

@@ -5,6 +5,7 @@ class FollowUpAuditController < ApplicationController
   include Reports::WeaknessesByRisk
   include Reports::WeaknessesByAuditType
   include Reports::ControlObjectiveStats
+  include Reports::ControlObjectiveStatsByReview
   include Reports::ProcessControlStats
   include Reports::WeaknessesByRiskReport
   include Reports::FixedWeaknessesReport
