@@ -6,7 +6,7 @@ git_source :github do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '~> 4.2.7.1'
+gem 'rails', '~> 5.0.2'
 
 gem 'pg'
 gem 'jquery-rails'
@@ -45,8 +45,6 @@ gem 'uglifier'
 
 gem 'unicorn'
 
-gem 'where-or' # TODO: remove when Rails 5.0
-
 group :development do
   gem 'unicorn-rails'
   gem 'web-console'
@@ -57,7 +55,6 @@ group :development do
 end
 
 group :test do
-  gem 'test_after_commit' # TODO: remove when Rails 5.0
   gem 'timecop'
 end
 
