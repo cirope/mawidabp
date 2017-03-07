@@ -108,7 +108,7 @@ class ControlObjectiveItemsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        redirect_to(control_objective_items_url(params.slice(:period, :review)))
+        redirect_to(control_objective_items_url)
       }
     end
   end
