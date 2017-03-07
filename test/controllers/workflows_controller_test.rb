@@ -123,8 +123,8 @@ class WorkflowsControllerTest < ActionController::TestCase
           :workflow => {
             :period_id => periods(:current_period).id,
             :review_id => reviews(:review_with_conclusion).id,
-            :workflow_items_attributes => [
-              {
+            :workflow_items_attributes => {
+              '0' => {
                 :id => workflow_items(:with_conclusion_workflow_item_1).id,
                 :task => 'Updated task',
                 :start => 5.days.ago.to_date,
@@ -138,11 +138,12 @@ class WorkflowsControllerTest < ActionController::TestCase
                     :units => '12.21'
                   }
                 ]
-              }, {
+              },
+              '1' => {
                 :id => workflow_items(:with_conclusion_workflow_item_3).id,
                 :_destroy => 1
               }
-            ]
+            }
           }
         }
       end

@@ -149,8 +149,8 @@ class PlansControllerTest < ActionController::TestCase
             :plan => {
               :period_id => periods(:past_period).id,
               :new_version => '0',
-              :plan_items_attributes => [
-                {
+              :plan_items_attributes => {
+                '0' => {
                   :id => plan_items(:past_plan_item_1).id,
                   :project => 'Updated project',
                   :start => 55.days.ago.to_date,
@@ -172,11 +172,11 @@ class PlansControllerTest < ActionController::TestCase
                     }
                   ]
                 },
-                {
+                '1' => {
                   :id => plan_items(:past_plan_item_3).id,
                   :_destroy => '1'
                 }
-              ]
+              }
             }
           }
         end
