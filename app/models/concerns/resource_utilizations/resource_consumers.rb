@@ -5,11 +5,11 @@ module ResourceUtilizations::ResourceConsumers
     belongs_to :resource_consumer, polymorphic: true
 
     belongs_to :workflow_item, -> {
-      joins(:resource_utilizations).where resource_utilizations: { resource_consumer_type: 'WorkflowItem' }
+      where resource_utilizations: { resource_consumer_type: 'WorkflowItem' }
     }, foreign_key: 'resource_consumer_id'
 
     belongs_to :plan_item, -> {
-      joins(:resource_utilizations).where resource_utilizations: { resource_consumer_type: 'PlanItem' }
+      where resource_utilizations: { resource_consumer_type: 'PlanItem' }
     }, foreign_key: 'resource_consumer_id'
 
     has_one :workflow, -> {
