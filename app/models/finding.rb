@@ -32,7 +32,6 @@ class Finding < ApplicationRecord
   include Findings::ValidationCallbacks
   include Findings::Versions
   include Findings::WorkPapers
-  include Findings::XML
   include Parameters::Risk
   include Parameters::Priority
   include ParameterSelector
