@@ -6,7 +6,9 @@ module ProcessControls::DestroyValidation
   end
 
   def can_be_destroyed?
-    unless control_objectives.all?(&:can_be_destroyed?)
+    if control_objectives.all?(&:can_be_destroyed?)
+      true
+    else
       errors.add :base, :invalid
 
       false

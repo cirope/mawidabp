@@ -1,11 +1,11 @@
-module Reports::ControlObjectiveStats
+module Reports::ControlObjectiveStatsByReview
   include Reports::CommonControlObjectiveStats
   include Reports::Pdf
   include Reports::Period
   include Parameters::Risk
 
-  def control_objective_stats
-    init_control_objective_stats_vars
+  def control_objective_stats_by_review
+    init_control_objective_stats_by_review_vars
 
     if params[@action]
       conclusion_reviews_by_business_unit_type if params[@action][:business_unit_type].present?
@@ -16,7 +16,7 @@ module Reports::ControlObjectiveStats
     end
 
     @periods.each do |period|
-      count_conclusion_review_weaknesses_with_effectiveness(period)
+      count_conclusion_review_weaknesses(period)
 
       @process_controls.each do |pc, cos|
         @control_objectives_data[period][pc] ||= {}
@@ -25,11 +25,10 @@ module Reports::ControlObjectiveStats
           @control_objectives_data[period][pc][co.name] ||= {}
           @coi_data = data
 
-          effectiveness = @coi_data[:effectiveness].size > 0 ? weighted_average(@coi_data[:effectiveness]) : 100
           @weaknesses_count = @coi_data[:weaknesses]
 
           if @weaknesses_count.values.sum == 0
-            @weaknesses_count_text = t "#{@controller}_committee_report.control_objective_stats.without_weaknesses"
+            @weaknesses_count_text = t "#{@controller}_committee_report.control_objective_stats_by_review.without_weaknesses"
           else
             group_findings_by_risk(period, pc, co, @coi_data)
           end
@@ -37,7 +36,7 @@ module Reports::ControlObjectiveStats
           @process_control_data[period] << {
             'process_control' => pc,
             'control_objective' => co.name,
-            'effectiveness' => get_effectiveness(effectiveness),
+            'reviews' => @coi_data[:review_identifications].join("\n"),
             'weaknesses_count' => @weaknesses_count_text
           }
         end
@@ -47,8 +46,8 @@ module Reports::ControlObjectiveStats
     end
   end
 
-  def create_control_objective_stats
-    self.control_objective_stats
+  def create_control_objective_stats_by_review
+    self.control_objective_stats_by_review
 
     pdf = init_pdf(params[:report_title], params[:report_subtitle])
 
@@ -67,28 +66,22 @@ module Reports::ControlObjectiveStats
         add_pdf_table(pdf)
       else
         pdf.text(
-          t("#{@controller}_committee_report.control_objective_stats.without_audits_in_the_period"))
+          t("#{@controller}_committee_report.control_objective_stats_by_review.without_audits_in_the_period"))
       end
-
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text t(
-        "#{@controller}_committee_report.control_objective_stats.review_effectiveness_average",
-        :score => @reviews_score_data[period]
-      ), :inline_format => true
     end
 
     add_pdf_filters(pdf, @controller, @filters) if @filters.present?
 
-    save_pdf(pdf, @controller, @from_date, @to_date, 'control_objective_stats')
+    save_pdf(pdf, @controller, @from_date, @to_date, 'control_objective_stats_by_review')
 
-    redirect_to_pdf(@controller, @from_date, @to_date, 'control_objective_stats')
+    redirect_to_pdf(@controller, @from_date, @to_date, 'control_objective_stats_by_review')
   end
 
   private
 
-    def init_control_objective_stats_vars
+    def init_control_objective_stats_by_review_vars
       @controller = params[:controller_name]
-      @action = :control_objective_stats
+      @action = :control_objective_stats_by_review
       @final = params[:final] == 'true'
       @title = t("#{@controller}_committee_report.control_objective_stats_title")
       @from_date, @to_date = *make_date_range(params[@action])
@@ -99,14 +92,13 @@ module Reports::ControlObjectiveStats
       @columns = [
         ['process_control', BestPractice.human_attribute_name('process_controls.name'), 20],
         ['control_objective', ControlObjective.model_name.human, 40],
-        ['effectiveness', t("#{@controller}_committee_report.control_objective_stats.average_effectiveness"), 20],
+        ['reviews', Review.model_name.human(count: 0), 20],
         ['weaknesses_count', t('review.weaknesses_count_by_state'), 20]
       ]
       @conclusion_reviews = ConclusionFinalReview.list_all_by_date(
         @from_date, @to_date
       )
       @process_control_data = {}
-      @reviews_score_data = {}
       @control_objectives = []
       @control_objectives_data = {}
       @weaknesses_conditions = {}
@@ -116,8 +108,7 @@ module Reports::ControlObjectiveStats
       end
     end
 
-    def count_conclusion_review_weaknesses_with_effectiveness(period)
-      @reviews_score_data[period] ||= []
+    def count_conclusion_review_weaknesses(period)
       @process_control_data[period] ||= []
       @process_controls = {}
       @weaknesses_status_count = {}
@@ -129,37 +120,16 @@ module Reports::ControlObjectiveStats
           with_names(*@control_objectives)
 
         control_objective_items.each do |coi|
-          init_control_objective_item_data_with_effectiveness(coi)
+          init_control_objective_item_data(coi)
 
           count_weaknesses_by_risk(@weaknesses)
 
-          @reviews_score_data[period] << effectiveness(coi)
           @process_controls[coi.process_control.name][coi.control_objective] = @coi_data
         end
       end
-
-      @reviews_score_data[period] = @reviews_score_data[period].size > 0 ?
-        weighted_average(@reviews_score_data[period]) : 100
     end
 
-    def get_effectiveness(effectiveness)
-      effectiveness_label = []
-
-      effectiveness_label << t(
-        "#{@controller}_committee_report.control_objective_stats.average_effectiveness_resume",
-        :effectiveness => "#{'%.2f' % effectiveness}%",
-        :count => @coi_data[:review_ids].count
-      )
-
-      effectiveness_label <<  t(
-        "#{@controller}_committee_report.control_objective_stats.reviews_with_weaknesses",
-        :count => @coi_data[:reviews]
-      )
-
-      effectiveness_label.join(' / ')
-    end
-
-    def init_control_objective_item_data_with_effectiveness(coi)
+    def init_control_objective_item_data(coi)
       @process_controls[coi.process_control.name] ||= {}
       @coi_data = @process_controls[coi.process_control.name][coi.control_objective] || {}
       @coi_data[:weaknesses_ids] ||= {}
@@ -169,31 +139,19 @@ module Reports::ControlObjectiveStats
       @weaknesses = @weaknesses.with_title(@weaknesses_conditions[:title])   if @weaknesses_conditions[:title]
 
       @coi_data[:weaknesses] ||= {}
-      @coi_data[:effectiveness] ||= []
-      @coi_data[:effectiveness] << effectiveness(coi)
 
       id = coi.review.id
       @coi_data[:review_ids] ||= []
       @coi_data[:review_ids] << id if @coi_data[:review_ids].exclude? id
 
-      @coi_data[:reviews] ||= 0
-      @coi_data[:reviews] += 1 if @weaknesses.size > 0
-    end
+      identification = coi.review.identification
+      @coi_data[:review_identifications] ||= []
 
-    def effectiveness coi
-      if @business_unit_ids && @business_unit_ids.size == 1
-        score = coi.business_unit_scores.where(business_unit_id: @business_unit_ids).take
+      if @coi_data[:review_identifications].exclude? identification
+        @coi_data[:review_identifications] << identification
       end
 
-      _effectiveness = score ? score.effectiveness : coi.effectiveness
-
-      [_effectiveness * coi.relevance, coi.relevance]
-    end
-
-    def weighted_average effectiveness
-      scores  = effectiveness.map(&:first)
-      weights = effectiveness.map(&:last)
-
-      effectiveness.size > 0 ? (scores.sum.to_f / weights.sum).round(2) : 100
+      @coi_data[:reviews] ||= 0
+      @coi_data[:reviews] += 1 if @weaknesses.size > 0
     end
 end

@@ -67,8 +67,8 @@ module Findings::ReportScopes
 
     def for_business_unit business_unit_id
       conditions = [
-        "#{PlanItem.quoted_table_name}.business_unit_id = :bu_id",
-        "#{BusinessUnitFinding.quoted_table_name}.business_unit_id = :bu_id"
+        "#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'business_unit_id'} = :bu_id",
+        "#{BusinessUnitFinding.quoted_table_name}.#{BusinessUnitFinding.qcn 'business_unit_id'} = :bu_id"
       ].join ' OR '
 
       includes({ control_objective_item: { review: :plan_item } }, :business_unit_findings).
