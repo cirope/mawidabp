@@ -1,4 +1,4 @@
-class OportunitiesController < ApplicationController
+ class OportunitiesController < ApplicationController
   include AutoCompleteFor::ControlObjectiveItem
   include AutoCompleteFor::FindingRelation
   include AutoCompleteFor::Tagging
@@ -81,7 +81,7 @@ class OportunitiesController < ApplicationController
   def new
     @title = t 'oportunity.new_title'
     @oportunity = Oportunity.new(
-      { :control_objective_item_id => params[:control_objective_item] }, {}, true
+      { :control_objective_item_id => params[:control_objective_item] }, true
     )
 
     respond_to do |format|

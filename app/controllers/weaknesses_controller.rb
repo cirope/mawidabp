@@ -82,7 +82,7 @@ class WeaknessesController < ApplicationController
   def new
     @title = t 'weakness.new_title'
     @weakness = Weakness.new(
-      {control_objective_item_id: params[:control_objective_item]}, {}, true
+      {control_objective_item_id: params[:control_objective_item]}, true
     )
 
     respond_to do |format|
