@@ -128,7 +128,7 @@ class FindingsControllerTest < ActionController::TestCase
     login
     get :index, :completed => 'incomplete', :format => :csv
     assert_response :success
-    assert_equal "#{Mime::CSV}; charset=utf-8", @response.content_type
+    assert_equal "#{Mime[:csv]}", @response.content_type
   end
 
   test 'list findings as corporate user' do
