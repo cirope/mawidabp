@@ -18,7 +18,7 @@ class Users::ReassignmentsControllerTest < ActionController::TestCase
   test 'user finding reassignment update' do
     login user: users(:administrator_user), prefix: organizations(:cirope).prefix
 
-    assert_emails 2 do
+    assert_enqueued_emails 2 do
       assert_difference 'Notification.count' do
         patch :update, {
           id: users(:audited_user).user,
@@ -41,7 +41,7 @@ class Users::ReassignmentsControllerTest < ActionController::TestCase
   end
 
   test 'user reviews reassignment update' do
-    assert_emails 2 do
+    assert_enqueued_emails 2 do
       assert_difference 'Notification.count' do
         patch :update, {
           id: users(:audited_user).user,

@@ -16,7 +16,7 @@ class Users::ReleasesControllerTest < ActionController::TestCase
   end
 
   test 'user findings release update' do
-    assert_emails 1 do
+    assert_enqueued_emails 1 do
       patch :update, { id: users(:auditor_user).user, with_findings: '1' }
     end
 
@@ -32,7 +32,7 @@ class Users::ReleasesControllerTest < ActionController::TestCase
   end
 
   test 'user reviews release update' do
-    assert_emails 1 do
+    assert_enqueued_emails 1 do
       patch :update, { id: users(:auditor_user).user, with_reviews: '1' }
     end
 

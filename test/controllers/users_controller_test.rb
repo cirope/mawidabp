@@ -42,7 +42,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'create user' do
     counts_array = ['User.count', 'RelatedUserRelation.count', 'OrganizationRole.count']
 
-    assert_emails 1 do
+    assert_enqueued_emails 1 do
       assert_difference counts_array do
         post :create, {
           user: {
@@ -153,7 +153,7 @@ class UsersControllerTest < ActionController::TestCase
     user = users :administrator_user
 
     assert_no_difference ['User.count', 'user.children.count'] do
-      assert_emails 1 do
+      assert_enqueued_emails 1 do
         assert_difference 'OrganizationRole.count' do
           patch :update, {
             id: users(:administrator_user).user,
