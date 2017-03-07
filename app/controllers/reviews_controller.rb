@@ -13,7 +13,6 @@ class ReviewsController < ApplicationController
   # Lista los informes
   #
   # * GET /reviews
-  # * GET /reviews.xml
   def index
     @title = t 'review.index_title'
 
@@ -31,27 +30,23 @@ class ReviewsController < ApplicationController
           redirect_to review_url(@reviews.first)
         end
       }
-      format.xml  { render xml: @reviews }
     end
   end
 
   # Muestra el detalle de un informe
   #
   # * GET /reviews/1
-  # * GET /reviews/1.xml
   def show
     @title = t 'review.show_title'
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render xml: @review }
     end
   end
 
   # Permite ingresar los datos para crear un nuevo informe
   #
   # * GET /reviews/new
-  # * GET /reviews/new.xml
   def new
     @title = t 'review.new_title'
     @review = Review.new
@@ -62,7 +57,6 @@ class ReviewsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render xml: @review }
     end
   end
 
@@ -77,7 +71,6 @@ class ReviewsController < ApplicationController
   # actualiza el contenido de los objetivos de control que lo componen.
   #
   # * POST /reviews
-  # * POST /reviews.xml
   def create
     @title = t 'review.new_title'
     @review = Review.list.new(review_params)
@@ -86,10 +79,8 @@ class ReviewsController < ApplicationController
       if @review.save
         flash.notice = t 'review.correctly_created'
         format.html { redirect_to(edit_review_url(@review)) }
-        format.xml  { render xml: @review, status: :created, location: @review }
       else
         format.html { render action: :new }
-        format.xml  { render xml: @review.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -99,7 +90,6 @@ class ReviewsController < ApplicationController
   # lo componen.
   #
   # * PATCH /reviews/1
-  # * PATCH /reviews/1.xml
   def update
     @title = t 'review.edit_title'
 
@@ -107,10 +97,8 @@ class ReviewsController < ApplicationController
       if @review.update(review_params)
         flash.notice = t 'review.correctly_updated'
         format.html { redirect_to(edit_review_url(@review)) }
-        format.xml  { head :ok }
       else
         format.html { render action: :edit }
-        format.xml  { render xml: @review.errors, status: :unprocessable_entity }
       end
     end
 
@@ -122,13 +110,11 @@ class ReviewsController < ApplicationController
   # Elimina un informe
   #
   # * DELETE /reviews/1
-  # * DELETE /reviews/1.xml
   def destroy
     flash.alert = t 'review.errors.can_not_be_destroyed' unless @review.destroy
 
     respond_to do |format|
       format.html { redirect_to(reviews_url) }
-      format.xml  { head :ok }
     end
   end
 

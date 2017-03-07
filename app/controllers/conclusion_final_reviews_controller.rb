@@ -28,27 +28,23 @@ class ConclusionFinalReviewsController < ApplicationController
           )
         end
       }
-      format.xml  { render xml: @conclusion_final_reviews }
     end
   end
 
   # Muestra el detalle de un informe definitivo
   #
   # * GET /conclusion_final_reviews/1
-  # * GET /conclusion_final_reviews/1.xml
   def show
     @title = t 'conclusion_final_review.show_title'
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render xml: @conclusion_final_review }
     end
   end
 
   # Permite ingresar los datos para crear un nuevo informe definitivo
   #
   # * GET /conclusion_final_reviews/new
-  # * GET /conclusion_final_reviews/new.xml
   # * GET /conclusion_final_reviews/new.json
   def new
     conclusion_final_review =
@@ -61,7 +57,6 @@ class ConclusionFinalReviewsController < ApplicationController
 
       respond_to do |format|
         format.html # new.html.erb
-        format.xml  { render xml: @conclusion_final_review }
         format.json { render json: @conclusion_final_review.to_json(
             include: {review: {
                 only: [],
@@ -90,7 +85,6 @@ class ConclusionFinalReviewsController < ApplicationController
   # Crea un nuevo informe definitivo siempre que cumpla con las validaciones.
   #
   # * POST /conclusion_final_reviews
-  # * POST /conclusion_final_reviews.xml
   def create
     @title = t 'conclusion_final_review.new_title'
     @conclusion_final_review =
@@ -100,10 +94,8 @@ class ConclusionFinalReviewsController < ApplicationController
       if @conclusion_final_review.save
         flash.notice = t 'conclusion_final_review.correctly_created'
         format.html { redirect_to(conclusion_final_reviews_url) }
-        format.xml  { render xml: @conclusion_final_review, status: :created, location: @conclusion_final_review }
       else
         format.html { render action: :new }
-        format.xml  { render xml: @conclusion_final_review.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -112,7 +104,6 @@ class ConclusionFinalReviewsController < ApplicationController
   # validaciones.
   #
   # * PATCH /conclusion_final_reviews/1
-  # * PATCH /conclusion_final_reviews/1.xml
   def update
     @title = t 'conclusion_final_review.edit_title'
 
@@ -120,10 +111,8 @@ class ConclusionFinalReviewsController < ApplicationController
       if @conclusion_final_review.update(conclusion_final_review_params)
         flash.notice = t 'conclusion_final_review.correctly_updated'
         format.html { redirect_to(conclusion_final_reviews_url) }
-        format.xml  { head :ok }
       else
         format.html { render action: :edit }
-        format.xml  { render xml: @conclusion_final_review.errors, status: :unprocessable_entity }
       end
     end
 
@@ -140,7 +129,6 @@ class ConclusionFinalReviewsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to @conclusion_final_review.relative_pdf_path }
-      format.xml  { head :ok }
     end
   end
 

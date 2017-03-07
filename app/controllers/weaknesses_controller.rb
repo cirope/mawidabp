@@ -12,7 +12,6 @@ class WeaknessesController < ApplicationController
   # Lista las observaciones
   #
   # * GET /weaknesses
-  # * GET /weaknesses.xml
   def index
     @title = t 'weakness.index_title'
     default_conditions = []
@@ -62,28 +61,24 @@ class WeaknessesController < ApplicationController
           redirect_to weakness_url(@weaknesses.first)
         end
       } # index.html.erb
-      format.xml  { render xml: @weaknesses }
     end
   end
 
   # Muestra el detalle de una observación
   #
   # * GET /weaknesses/1
-  # * GET /weaknesses/1.xml
   def show
     @title = t 'weakness.show_title'
 
     respond_to do |format|
       format.html # show.html.erb
       format.json # show.json.jbuilder
-      format.xml  { render xml: @weakness }
     end
   end
 
   # Permite ingresar los datos para crear una nueva observación
   #
   # * GET /weaknesses/new
-  # * GET /weaknesses/new.xml
   def new
     @title = t 'weakness.new_title'
     @weakness = Weakness.new(
@@ -92,7 +87,6 @@ class WeaknessesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render xml: @weakness }
     end
   end
 
@@ -106,7 +100,6 @@ class WeaknessesController < ApplicationController
   # Crea una observación siempre que cumpla con las validaciones.
   #
   # * POST /weaknesses
-  # * POST /weaknesses.xml
   def create
     @title = t 'weakness.new_title'
     @weakness = Weakness.list.new(weakness_params)
@@ -115,10 +108,8 @@ class WeaknessesController < ApplicationController
       if @weakness.save
         flash.notice = t 'weakness.correctly_created'
         format.html { redirect_to(edit_weakness_url(@weakness)) }
-        format.xml  { render xml: @weakness, status: :created, location: @weakness }
       else
         format.html { render action: :new }
-        format.xml  { render xml: @weakness.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -127,7 +118,6 @@ class WeaknessesController < ApplicationController
   # validaciones.
   #
   # * PATCH /weaknesses/1
-  # * PATCH /weaknesses/1.xml
   def update
     @title = t 'weakness.edit_title'
 
@@ -136,10 +126,8 @@ class WeaknessesController < ApplicationController
         if @weakness.update(weakness_params)
           flash.notice = t 'weakness.correctly_updated'
           format.html { redirect_to(edit_weakness_url(@weakness)) }
-          format.xml  { head :ok }
         else
           format.html { render action: :edit }
-          format.xml  { render xml: @weakness.errors, status: :unprocessable_entity }
           raise ActiveRecord::Rollback
         end
       end
@@ -166,7 +154,6 @@ class WeaknessesController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(edit_weakness_url(@weakness)) }
-      format.xml  { head :ok }
     end
   end
 

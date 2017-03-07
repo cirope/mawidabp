@@ -11,7 +11,6 @@ class ControlObjectiveItemsController < ApplicationController
   # Lista los objetivos de control
   #
   # * GET /control_objective_items
-  # * GET /control_objective_items.xml
   def index
     @title = t 'control_objective_item.index_title'
 
@@ -33,20 +32,17 @@ class ControlObjectiveItemsController < ApplicationController
           redirect_to control_objective_item_url(@control_objectives.first)
         end
       } # index.html.erb
-      format.xml  { render xml: @control_objective_items }
     end
   end
 
   # Muestra el detalle de un objetivo de control
   #
   # * GET /control_objective_items/1
-  # * GET /control_objective_items/1.xml
   def show
     @title = t 'control_objective_item.show_title'
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render xml: @control_objective_item }
     end
   end
 
@@ -71,7 +67,6 @@ class ControlObjectiveItemsController < ApplicationController
   # validaciones.
   #
   # * PATCH /control_objective_items/1
-  # * PATCH /control_objective_items/1.xml
   def update
     @title = t 'control_objective_item.edit_title'
     review = @control_objective_item.review
@@ -95,10 +90,8 @@ class ControlObjectiveItemsController < ApplicationController
         format.html {
           redirect_to(back_to || edit_control_objective_item_url(@control_objective_item))
         }
-        format.xml  { head :ok }
       else
         format.html { render action: :edit }
-        format.xml  { render xml: @control_objective_item.errors, status: :unprocessable_entity }
       end
     end
 
@@ -110,7 +103,6 @@ class ControlObjectiveItemsController < ApplicationController
   # Elimina un objetivo de control
   #
   # * DELETE /control_objective_items/1
-  # * DELETE /control_objective_items/1.xml
   def destroy
     @control_objective_item.destroy
 
@@ -118,7 +110,6 @@ class ControlObjectiveItemsController < ApplicationController
       format.html {
         redirect_to(control_objective_items_url(params.slice(:period, :review)))
       }
-      format.xml  { head :ok }
     end
   end
 
