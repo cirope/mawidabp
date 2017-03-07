@@ -7,7 +7,7 @@ class Workflow < ApplicationRecord
 
   # Callbacks
   before_validation :set_proper_parent
-  before_destroy :can_be_destroyed?
+  before_destroy :check_if_can_be_destroyed
 
   # Atributos no persistentes
   attr_accessor :allow_overload
@@ -62,13 +62,13 @@ class Workflow < ApplicationRecord
   end
 
   def check_if_is_frozen
-    unless self.is_frozen? && self.changed?
-      true
-    else
+    if self.is_frozen? && self.changed?
       msg = I18n.t('workflow.readonly')
       self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
+    else
+      true
     end
   end
 
@@ -201,4 +201,10 @@ class Workflow < ApplicationRecord
   def units
     workflow_items.map(&:units).compact.sum
   end
+
+  private
+
+    def check_if_can_be_destroyed
+      throw :abort unless can_be_destroyed?
+    end
 end

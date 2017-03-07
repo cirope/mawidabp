@@ -10,7 +10,7 @@ class BusinessUnit < ApplicationRecord
   alias_attribute :label, :name
 
   # Callbacks
-  before_destroy :can_be_destroyed?
+  before_destroy :check_if_can_be_destroyed
 
   # Restricciones
   validates :name, :presence => true
@@ -37,7 +37,7 @@ class BusinessUnit < ApplicationRecord
   end
 
   def can_be_destroyed?
-    unless self.plan_items.empty?
+    if self.plan_items.any?
       self.errors.add :base,
         I18n.t('business_unit_type.errors.business_unit_related')
 
@@ -46,4 +46,10 @@ class BusinessUnit < ApplicationRecord
       true
     end
   end
+
+  private
+
+    def check_if_can_be_destroyed
+      throw :abort unless can_be_destroyed?
+    end
 end

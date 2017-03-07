@@ -16,9 +16,9 @@ class ControlObjectiveItem < ApplicationRecord
   alias_attribute :label, :control_objective_text
 
   # Callbacks
-  before_validation :set_proper_parent, :can_be_modified?,
+  before_validation :set_proper_parent, :check_if_can_be_modified,
     :enable_control_validations
-  before_destroy :can_be_destroyed?
+  before_destroy :check_if_can_be_destroyed
   before_validation(on: :create) { fill_control_objective_text }
 
   # Validaciones
@@ -499,11 +499,20 @@ class ControlObjectiveItem < ApplicationRecord
   end
 
   private
+
     def qualification_text(score, show_value)
       if score.present?
         text = I18n.t("qualification_types.#{score.first}")
 
         return show_value ? [text, "(#{score.last})"].join(' ') : text
       end
+    end
+
+    def check_if_can_be_modified
+      throw :abort unless can_be_modified?
+    end
+
+    def check_if_can_be_destroyed
+      throw :abort unless can_be_destroyed?
     end
 end

@@ -238,9 +238,9 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
         @conclusion_review.errors.full_messages.join('; ')
     end
 
-    findings = review.weaknesses(true) + review.oportunities(true)
+    findings = review.weaknesses.reload + review.oportunities.reload
     work_papers_count = findings.inject(0) { |acc, f| acc + f.work_papers.size }
-    final_findings = review.reload.final_weaknesses(true) + review.reload.final_oportunities(true)
+    final_findings = review.reload.final_weaknesses.reload + review.reload.final_oportunities.reload
     final_work_papers_count = final_findings.inject(0) do |acc, f|
       acc + f.work_papers.size
     end

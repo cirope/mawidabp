@@ -35,7 +35,7 @@ class BusinessUnitType < ApplicationRecord
   end
 
   # Callbacks
-  before_destroy :can_be_destroyed?
+  before_destroy :check_if_can_be_destroyed
 
   # Relaciones
   belongs_to :organization
@@ -55,4 +55,10 @@ class BusinessUnitType < ApplicationRecord
 
     super(default_options.merge(options || {}))
   end
+
+  private
+
+    def check_if_can_be_destroyed
+      throw :abort unless can_be_destroyed?
+    end
 end

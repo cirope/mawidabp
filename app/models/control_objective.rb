@@ -9,7 +9,7 @@ class ControlObjective < ApplicationRecord
   delegate :organization_id, to: :best_practice, allow_nil: true
 
   # Callbacks
-  before_destroy :can_be_destroyed?
+  before_destroy :check_if_can_be_destroyed
 
   # Named scopes
   scope :list, -> {
@@ -69,7 +69,7 @@ class ControlObjective < ApplicationRecord
   end
 
   def can_be_destroyed?
-    unless self.control_objective_items.blank?
+    if self.control_objective_items.any?
       self.errors.add :base, I18n.t('control_objective.errors.related')
 
       false
@@ -87,4 +87,10 @@ class ControlObjective < ApplicationRecord
   def identifier
     support.identifier || support_identifier
   end
+
+  private
+
+    def check_if_can_be_destroyed
+      throw :abort unless can_be_destroyed?
+    end
 end
