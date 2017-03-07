@@ -127,6 +127,6 @@ class String
   end
 
   def sanitized_for_filename
-    @_sanitized_for_filename ||= self.gsub /[^A-Za-z0-9\.\-]+/, '_'
+    gsub /[^A-Za-z0-9\.\-]+/, '_'
   end
 end
