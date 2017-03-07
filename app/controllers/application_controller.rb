@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   include ParameterSelector
   include CacheControl
 
-  protect_from_forgery
+  protect_from_forgery with: :exception
 
   before_action :set_paper_trail_whodunnit
   before_action :scope_current_organization
