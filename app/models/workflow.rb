@@ -42,8 +42,8 @@ class Workflow < ApplicationRecord
 
   accepts_nested_attributes_for :workflow_items, :allow_destroy => true
 
-  def initialize(attributes = nil, options = {})
-    super(attributes, options)
+  def initialize(attributes = nil)
+    super(attributes)
 
     self.period ||= Period.currents.first
   end

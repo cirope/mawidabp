@@ -21,8 +21,8 @@ class Control < ApplicationRecord
   # Relaciones
   belongs_to :controllable, polymorphic: true
 
-  def initialize(attributes = nil, options = {})
-    super(attributes, options)
+  def initialize(attributes = nil)
+    super(attributes)
 
     self.order ||= 1
   end

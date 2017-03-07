@@ -39,8 +39,8 @@ class Role < ApplicationRecord
 
   accepts_nested_attributes_for :privileges, :allow_destroy => true
 
-  def initialize(attributes = nil, options = {})
-    super(attributes, options)
+  def initialize(attributes = nil)
+    super(attributes)
 
     self.role_type ||= TYPES[:admin]
   end

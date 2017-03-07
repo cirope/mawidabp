@@ -84,8 +84,8 @@ class ControlObjectiveItem < ApplicationRecord
   accepts_nested_attributes_for :business_unit_scores, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :work_papers, allow_destroy: true
 
-  def initialize(attributes = nil, options = {})
-    super attributes, options
+  def initialize(attributes = nil)
+    super attributes
 
     self.relevance ||= control_objective.relevance if control_objective
 

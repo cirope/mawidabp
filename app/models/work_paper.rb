@@ -58,8 +58,8 @@ class WorkPaper < ApplicationRecord
   accepts_nested_attributes_for :file_model, :allow_destroy => true,
     reject_if: ->(attrs) { ['file', 'file_cache'].all? { |a| attrs[a].blank? } }
 
-  def initialize(attributes = nil, options = {})
-    super(attributes, options)
+  def initialize(attributes = nil)
+    super(attributes)
 
     self.organization_id = Organization.current_id
   end

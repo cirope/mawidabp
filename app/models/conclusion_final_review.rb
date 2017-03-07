@@ -117,8 +117,8 @@ class ConclusionFinalReview < ConclusionReview
     )
   end
 
-  def initialize(attributes = nil, options = {}, import_from_draft = true)
-    super(attributes, options)
+  def initialize(attributes = nil, import_from_draft = true)
+    super attributes
 
     if import_from_draft && self.review
       draft = ConclusionDraftReview.where(review_id: self.review_id).first
