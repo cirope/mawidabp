@@ -16,7 +16,7 @@ class GroupsControllerTest < ActionController::TestCase
   end
 
   test 'show group' do
-    get :show, :id => groups(:main_group).id
+    get :show, :params => { :id => groups(:main_group).id }
     assert_response :success
     assert_not_nil assigns(:group)
     assert_template 'groups/show'
@@ -38,7 +38,7 @@ class GroupsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference counts_array do
-      post :create, {
+      post :create, :params => {
         :group => {
           :name => 'New group',
           :description => 'New group description',
@@ -67,7 +67,7 @@ class GroupsControllerTest < ActionController::TestCase
 
     assert_difference ['Group.count', 'Organization.count'] do
       assert_no_difference 'ActionMailer::Base.deliveries.size' do
-        post :create, {
+        post :create, :params => {
           :group => {
             :name => 'New group',
             :description => 'New group description',
@@ -90,7 +90,7 @@ class GroupsControllerTest < ActionController::TestCase
   end
 
   test 'edit group' do
-    get :edit, :id => groups(:main_group).id
+    get :edit, :params => { :id => groups(:main_group).id }
     assert_response :success
     assert_not_nil assigns(:group)
     assert_template 'groups/edit'
@@ -98,7 +98,7 @@ class GroupsControllerTest < ActionController::TestCase
 
   test 'update group' do
     assert_no_difference ['Group.count', 'Organization.count'] do
-      patch :update, {
+      patch :update, :params => {
         :id => groups(:main_group).id,
         :group => {
           :name => 'Updated group',
@@ -126,7 +126,7 @@ class GroupsControllerTest < ActionController::TestCase
 
   test 'destroy group' do
     assert_difference 'Group.count', -1 do
-      delete :destroy, :id => groups(:second_group).id
+      delete :destroy, :params => { :id => groups(:second_group).id }
     end
 
     assert_redirected_to groups_url
