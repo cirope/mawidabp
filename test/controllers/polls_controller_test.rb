@@ -22,7 +22,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'show poll' do
-    get :show, id: @poll
+    get :show, params: { id: @poll }
     assert_response :success
     assert_not_nil assigns(:poll)
     assert_template 'polls/show'
@@ -41,7 +41,7 @@ class PollsControllerTest < ActionController::TestCase
 
     assert_difference ['Poll.count', 'ActionMailer::Base.deliveries.count'] do
       assert_difference 'Answer.count', 2 do
-        post :create, {
+        post :create, params: {
           poll: {
             user_id: users(:administrator_user).id,
             questionnaire_id: questionnaires(:questionnaire_one).id,
@@ -65,7 +65,10 @@ class PollsControllerTest < ActionController::TestCase
   test 'edit poll' do
     @request.host = "#{@poll.organization.prefix}.localhost.i"
 
-    get :edit, id: @poll, token: @poll.access_token
+    get :edit, params: {
+      id: @poll,
+      token: @poll.access_token
+    }
     assert_response :success
     assert_not_nil assigns(:poll)
     assert_template 'polls/edit'
@@ -75,7 +78,7 @@ class PollsControllerTest < ActionController::TestCase
     @request.host = "#{@poll.organization.prefix}.localhost.i"
 
     assert_no_difference ['Poll.count', 'Answer.count'] do
-      patch :update, {
+      patch :update, params: {
         id: @poll,
         poll: {
           user_id: users(:administrator_user).id,
@@ -106,7 +109,7 @@ class PollsControllerTest < ActionController::TestCase
   test 'destroy poll' do
     assert_difference 'Poll.count', -1 do
       assert_difference 'Answer.count', -2 do
-        delete :destroy, id: @poll
+        delete :destroy, params: { id: @poll }
       end
     end
 
