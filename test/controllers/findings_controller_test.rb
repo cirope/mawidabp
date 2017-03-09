@@ -8,12 +8,14 @@ class FindingsControllerTest < ActionController::TestCase
   # y no accesibles las privadas
   test 'public and private actions' do
     id_param = {
-      :completed => 'complete',
-      :id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).to_param
+      :params => {
+        :completed => 'complete',
+        :id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).to_param
+      }
     }
     public_actions = []
     private_actions = [
-      [:get, :index, {:completed => 'incomplete'}],
+      [:get, :index, :params => { :completed => 'incomplete' }],
       [:get, :show, id_param],
       [:get, :edit, id_param],
       [:patch, :update, id_param]
@@ -33,7 +35,7 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'list findings' do
     login
-    get :index, :completed => 'incomplete'
+    get :index, :params => { :completed => 'incomplete' }
     assert_response :success
     assert_not_nil assigns(:findings)
     assert_template 'findings/index'
@@ -41,7 +43,7 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'list findings for follow_up_committee' do
     login user: users(:committee_user)
-    get :index, :completed => 'incomplete'
+    get :index, :params => { :completed => 'incomplete' }
     assert_response :success
     assert_not_nil assigns(:findings)
     assert_template 'findings/index'
@@ -49,10 +51,13 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'list findings with search and sort' do
     login
-    get :index, :completed => 'incomplete', :search => {
-      :query => '1 2 4 y w',
-      :columns => ['title', 'review'],
-      :order => 'review'
+    get :index, :params => {
+      :completed => 'incomplete',
+      :search => {
+        :query => '1 2 4 y w',
+        :columns => ['title', 'review'],
+        :order => 'review'
+      }
     }
     assert_response :success
     assert_not_nil assigns(:findings)
@@ -65,9 +70,12 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'list findings with search by date and sort' do
     login
-    get :index, :completed => 'incomplete', :search => {
-      :query => "> #{I18n.l(4.days.ago.to_date, :format => :minimal)}",
-      :columns => ['review', 'issue_date']
+    get :index, :params => {
+      :completed => 'incomplete',
+      :search => {
+        :query => "> #{I18n.l(4.days.ago.to_date, :format => :minimal)}",
+        :columns => ['review', 'issue_date']
+      }
     }
 
     assert_response :success
@@ -80,7 +88,10 @@ class FindingsControllerTest < ActionController::TestCase
   test 'list findings for user' do
     login
     user = User.find(users(:first_time_user).id)
-    get :index, :completed => 'incomplete', :user_id => user.id
+    get :index, :params => {
+      :completed => 'incomplete',
+      :user_id => user.id
+    }
     assert_response :success
     assert_not_nil assigns(:findings)
     assert_equal 2, assigns(:findings).count
@@ -91,7 +102,11 @@ class FindingsControllerTest < ActionController::TestCase
   test 'list findings for responsible auditor' do
     login
     user = User.find(users(:first_time_user).id)
-    get :index, :completed => 'incomplete', :user_id => user.id, :as_responsible => true
+    get :index, :params => {
+      :completed => 'incomplete',
+      :user_id => user.id,
+      :as_responsible => true
+    }
     assert_response :success
     assert_not_nil assigns(:findings)
     assert_equal 1, assigns(:findings).count
@@ -103,7 +118,10 @@ class FindingsControllerTest < ActionController::TestCase
     user = users :audited_user
 
     login user: user
-    get :index, :completed => 'incomplete', :as_owner => true
+    get :index, :params => {
+      :completed => 'incomplete',
+      :as_owner => true
+    }
     assert_response :success
     assert assigns(:findings).any?
     assert assigns(:findings).all? { |f| f.finding_user_assignments.owners.map(&:user).include?(user) }
@@ -116,7 +134,10 @@ class FindingsControllerTest < ActionController::TestCase
       findings(:iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id
     ]
 
-    get :index, :completed => 'incomplete', :ids => ids
+    get :index, :params => {
+      :completed => 'incomplete',
+      :ids => ids
+    }
     assert_response :success
     assert_not_nil assigns(:findings)
     assert_equal 2, assigns(:findings).count
@@ -126,7 +147,10 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'list findings as CSV' do
     login
-    get :index, :completed => 'incomplete', :format => :csv
+    get :index, :params => {
+      :completed => 'incomplete',
+      :format => :csv
+    }
     assert_response :success
     assert_equal "#{Mime[:csv]}", @response.content_type
   end
@@ -136,7 +160,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     login prefix: organization.prefix
 
-    get :index, :completed => 'incomplete'
+    get :index, :params => { :completed => 'incomplete' }
 
     assert_response :success
     assert_not_nil assigns(:findings)
@@ -146,9 +170,12 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'edit finding when search match only one result' do
     login
-    get :index, :completed => 'incomplete', :search => {
-      :query => '1 2 4 y 1w',
-      :columns => ['title', 'review']
+    get :index, :params => {
+      :completed => 'incomplete',
+      :search => {
+        :query => '1 2 4 y 1w',
+        :columns => ['title', 'review']
+      }
     }
 
     assert_redirected_to finding_url('incomplete',
@@ -159,8 +186,10 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'show finding' do
     login
-    get :show, :completed => 'incomplete',
+    get :show, :params => {
+      :completed => 'incomplete',
       :id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+    }
     assert_response :success
     assert_not_nil assigns(:finding)
     assert_template 'findings/show'
@@ -168,8 +197,10 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'show finding for follow_up_committee' do
     login user: users(:committee_user)
-    get :show, :completed => 'incomplete', :id => findings(
-      :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id
+    get :show, :params => {
+      :completed => 'incomplete',
+      :id => findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id
+    }
     assert_response :success
     assert_not_nil assigns(:finding)
     assert_template 'findings/show'
@@ -177,8 +208,10 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'edit finding' do
     login user: users(:auditor_user)
-    get :edit, :completed => 'incomplete', :id =>
-      findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+    get :edit, :params => {
+      :completed => 'incomplete',
+      :id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+    }
     assert_response :success
     assert_not_nil assigns(:finding)
     assert_template 'findings/edit'
@@ -186,8 +219,10 @@ class FindingsControllerTest < ActionController::TestCase
     auditor_response = @response.body.dup
 
     login user: users(:audited_user)
-    get :edit, :completed => 'incomplete', :id =>
-      findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+    get :edit, :params => {
+      :completed => 'incomplete',
+      :id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+    }
     assert_response :success
     assert_not_nil assigns(:finding)
     assert_template 'findings/edit'
@@ -200,8 +235,10 @@ class FindingsControllerTest < ActionController::TestCase
 
     # No está autorizado el usuario a ver la observación
     assert_raise ActiveRecord::RecordNotFound do
-      get :edit, :completed => 'complete',
+      get :edit, :params => {
+        :completed => 'complete',
         :id => findings(:iso_27000_security_policy_3_1_item_weakness).id
+      }
     end
   end
 
@@ -210,8 +247,10 @@ class FindingsControllerTest < ActionController::TestCase
 
     # No está autorizado el usuario a ver la observación por estar incompleta
     assert_raise ActiveRecord::RecordNotFound do
-      get :edit, :completed => 'incomplete',
+      get :edit, :params => {
+        :completed => 'incomplete',
         :id => findings(:iso_27000_security_organization_4_2_item_editable_weakness_incomplete).id
+      }
     end
   end
 
@@ -230,7 +269,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert_no_difference 'Finding.count' do
       assert_difference difference_counts do
         assert_difference 'FileModel.count', 2 do
-          patch :update, {
+          patch :update, :params => {
             :completed => 'incomplete',
             :id => findings(
               :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
@@ -345,7 +384,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_no_difference no_difference_count do
       assert_difference difference_count do
-        patch :update, {
+        patch :update, :params => {
           :completed => 'incomplete',
           :id => findings(
             :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
@@ -449,7 +488,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_no_difference 'Finding.count' do
       assert_difference 'ActionMailer::Base.deliveries.size' do
-        patch :update, {
+        patch :update, :params => {
           :completed => 'incomplete',
           :id => findings(
             :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
@@ -518,7 +557,10 @@ class FindingsControllerTest < ActionController::TestCase
         :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
 
     assert_nothing_raised do
-      get :follow_up_pdf, :completed => 'incomplete', :id => finding.id
+      get :follow_up_pdf, :params => {
+        :completed => 'incomplete',
+        :id => finding.id
+      }
     end
 
     assert_redirected_to finding.relative_follow_up_pdf_path
@@ -529,7 +571,7 @@ class FindingsControllerTest < ActionController::TestCase
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
 
     login
-    get :auto_complete_for_finding_relation, {
+    get :auto_complete_for_finding_relation, :params => {
       :completed => 'incomplete',
       :q => 'O001',
       :finding_id => finding.id,
@@ -546,7 +588,7 @@ class FindingsControllerTest < ActionController::TestCase
     finding = Finding.find(findings(
         :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id)
 
-    get :auto_complete_for_finding_relation, {
+    get :auto_complete_for_finding_relation, :params => {
       :completed => 'incomplete',
       :q => 'O001',
       :finding_id => finding.id,
@@ -560,7 +602,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
-    get :auto_complete_for_finding_relation, {
+    get :auto_complete_for_finding_relation, :params => {
       :completed => 'incomplete',
       :q => 'O001, 1 2 3',
       :finding_id => finding.id,
@@ -574,7 +616,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert_equal 1, findings.size # Solo O01 del informe 1 2 3
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001.*1 2 3/i }
 
-    get :auto_complete_for_finding_relation, {
+    get :auto_complete_for_finding_relation, :params => {
       :completed => 'incomplete',
       :q => 'x_none',
       :finding_id => finding.id,
@@ -591,7 +633,7 @@ class FindingsControllerTest < ActionController::TestCase
   test 'auto complete for tagging' do
     login
 
-    get :auto_complete_for_tagging, {
+    get :auto_complete_for_tagging, :params => {
       :q => 'impor',
       :completed => 'incomplete',
       :kind => 'finding',
@@ -604,7 +646,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert_equal 1, tags.size
     assert tags.all? { |t| t['label'].match /impor/i }
 
-    get :auto_complete_for_tagging, {
+    get :auto_complete_for_tagging, :params => {
       :q => 'x_none',
       :completed => 'incomplete',
       :kind => 'finding',
