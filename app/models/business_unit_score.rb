@@ -1,4 +1,4 @@
-class BusinessUnitScore < ActiveRecord::Base
+class BusinessUnitScore < ApplicationRecord
   include Auditable
   include BusinessUnitScores::Effectiveness
   include BusinessUnitScores::Validation

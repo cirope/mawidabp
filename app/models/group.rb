@@ -1,4 +1,4 @@
-class Group < ActiveRecord::Base
+class Group < ApplicationRecord
   include Trimmer
   include Groups::Auditable
   include Groups::Current
@@ -11,8 +11,8 @@ class Group < ActiveRecord::Base
   accepts_nested_attributes_for :organizations, allow_destroy: true
   has_many :ldap_configs, through: :organizations
 
-  def initialize attributes = nil, options = {}
-    super attributes, options
+  def initialize attributes = nil
+    super attributes
 
     self.send_notification_email = true if send_notification_email.nil?
 

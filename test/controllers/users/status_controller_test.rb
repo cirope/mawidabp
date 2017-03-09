@@ -8,14 +8,17 @@ class Users::StatusControllerTest < ActionController::TestCase
   end
 
   test 'show' do
-    get :show, id: @user
+    get :show, params: { id: @user }
     assert_response :success
     assert_not_nil assigns(:user)
-    assert_nil @request.variant
+    assert @request.variant.blank?
   end
 
   test 'show graph variant' do
-    get :show, id: @user, graph: true
+    get :show, params: {
+      id: @user,
+      graph: true
+    }
     assert_response :success
     assert_not_nil assigns(:user)
     assert_equal [:graph], @request.variant

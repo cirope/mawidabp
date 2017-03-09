@@ -30,7 +30,7 @@ class NotifierMailer < ActionMailer::Base
 
   def welcome_email(user)
     @user, @hash = user, user.change_password_hash
-    prefixes = user.organizations.uniq.map { |o| "[#{o.prefix}]" }.join(' ')
+    prefixes = user.organizations.distinct.map { |o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
     mail to: [user.email],

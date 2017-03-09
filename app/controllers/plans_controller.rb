@@ -13,7 +13,6 @@ class PlansController < ApplicationController
   # Lista los planes de trabajo
   #
   # * GET /plans
-  # * GET /plans.xml
   def index
     @title = t 'plan.index_title'
     @plans = Plan.list.includes(:period).references(:period).order(
@@ -22,27 +21,23 @@ class PlansController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @plans }
     end
   end
 
   # Muestra el detalle de un plan de trabajo
   #
   # * GET /plans/1
-  # * GET /plans/1.xml
   def show
     @title = t 'plan.show_title'
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @plan }
     end
   end
 
   # Permite ingresar los datos para crear un plan de trabajo
   #
   # * GET /plans/new
-  # * GET /plans/new.xml
   def new
     @title = t 'plan.new_title'
     @plan = Plan.new
@@ -51,7 +46,6 @@ class PlansController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @plan }
     end
   end
 
@@ -66,7 +60,6 @@ class PlansController < ApplicationController
   # Además crea los ítems que lo componen.
   #
   # * POST /plans
-  # * POST /plans.xml
   def create
     @title = t 'plan.new_title'
     @plan = Plan.list.new(plan_params)
@@ -81,10 +74,8 @@ class PlansController < ApplicationController
             notice: t('plan.correctly_created')
           )
         }
-        format.xml  { render :xml => @plan, :status => :created, :location => @plan }
       else
         format.html { render :action => :new }
-        format.xml  { render :xml => @plan.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -94,7 +85,6 @@ class PlansController < ApplicationController
   # contenido de los ítems que lo componen.
   #
   # * PATCH /plans/1
-  # * PATCH /plans/1.xml
   def update
     @title = t 'plan.edit_title'
 
@@ -106,10 +96,8 @@ class PlansController < ApplicationController
             notice: t('plan.correctly_updated')
           )
         }
-        format.xml  { head :ok }
       else
         format.html { render :action => :edit }
-        format.xml  { render :xml => @plan.errors, :status => :unprocessable_entity }
       end
     end
 
@@ -121,7 +109,6 @@ class PlansController < ApplicationController
   # Elimina un plan de trabajo
   #
   # * DELETE /plans/1
-  # * DELETE /plans/1.xml
   def destroy
     unless @plan.destroy
       flash.alert = t 'plan.errors.can_not_be_destroyed'
@@ -129,7 +116,6 @@ class PlansController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(plans_url) }
-      format.xml  { head :ok }
     end
   end
 
@@ -141,7 +127,6 @@ class PlansController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to @plan.relative_pdf_path }
-      format.xml  { head :ok }
     end
   end
 

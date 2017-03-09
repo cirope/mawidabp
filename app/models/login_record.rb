@@ -1,4 +1,4 @@
-class LoginRecord < ActiveRecord::Base
+class LoginRecord < ApplicationRecord
   include Auditable
   include ParameterSelector
   include LoginRecords::Defaults

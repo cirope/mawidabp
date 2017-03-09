@@ -1,4 +1,4 @@
-class Workflow < ActiveRecord::Base
+class Workflow < ApplicationRecord
   include ParameterSelector
 
   has_paper_trail meta: {
@@ -7,7 +7,7 @@ class Workflow < ActiveRecord::Base
 
   # Callbacks
   before_validation :set_proper_parent
-  before_destroy :can_be_destroyed?
+  before_destroy :check_if_can_be_destroyed
 
   # Atributos no persistentes
   attr_accessor :allow_overload
@@ -42,8 +42,8 @@ class Workflow < ActiveRecord::Base
 
   accepts_nested_attributes_for :workflow_items, :allow_destroy => true
 
-  def initialize(attributes = nil, options = {})
-    super(attributes, options)
+  def initialize(attributes = nil)
+    super(attributes)
 
     self.period ||= Period.currents.first
   end
@@ -62,13 +62,13 @@ class Workflow < ActiveRecord::Base
   end
 
   def check_if_is_frozen
-    unless self.is_frozen? && self.changed?
-      true
-    else
+    if self.is_frozen? && self.changed?
       msg = I18n.t('workflow.readonly')
       self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
+    else
+      true
     end
   end
 
@@ -201,4 +201,10 @@ class Workflow < ActiveRecord::Base
   def units
     workflow_items.map(&:units).compact.sum
   end
+
+  private
+
+    def check_if_can_be_destroyed
+      throw :abort unless can_be_destroyed?
+    end
 end

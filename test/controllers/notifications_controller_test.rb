@@ -16,16 +16,18 @@ class NotificationsControllerTest < ActionController::TestCase
   end
 
   test 'show notification' do
-    get :show, :id => notifications(
-      :audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).to_param
+    get :show, :params => {
+      :id => notifications(:audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).to_param
+    }
     assert_response :success
     assert_not_nil assigns(:notification)
     assert_template 'notifications/show'
   end
 
   test 'edit notification' do
-    get :edit, :id => notifications(
-      :audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).to_param
+    get :edit, :params => {
+      :id => notifications(:audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).to_param
+    }
     assert_response :success
     assert_not_nil assigns(:notification)
     assert_template 'notifications/edit'
@@ -33,9 +35,8 @@ class NotificationsControllerTest < ActionController::TestCase
 
   test 'update notification' do
     assert_no_difference 'User.count' do
-      patch :update, {
-        :id => notifications(
-          :audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).to_param,
+      patch :update, :params => {
+        :id => notifications(:audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).to_param,
         :notification => {
           :notes => 'Updated notes'
         }
@@ -48,23 +49,24 @@ class NotificationsControllerTest < ActionController::TestCase
   end
 
   test 'confirm' do
-    notification_id = notifications(
-      :audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id
+    notification_id = notifications(:audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id
     notification = Notification.find notification_id
 
     assert !notification.notified?
-    get :confirm, :id => notification.confirmation_hash
+    get :confirm, :params => { :id => notification.confirmation_hash }
     assert notification.reload.notified?
     assert notification.confirmed?
   end
 
   test 'reject' do
-    notification_id = notifications(
-      :audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id
+    notification_id = notifications(:audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id
     notification = Notification.find notification_id
 
     assert !notification.notified?
-    get :confirm, :id => notification.confirmation_hash, :reject => 1
+    get :confirm, :params => {
+      :id => notification.confirmation_hash,
+      :reject => 1
+    }
     assert notification.reload.notified?
     assert notification.rejected?
   end

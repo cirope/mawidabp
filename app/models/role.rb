@@ -1,4 +1,4 @@
-class Role < ActiveRecord::Base
+class Role < ApplicationRecord
   include Auditable
   include Comparable
   include Roles::Scopes
@@ -39,8 +39,8 @@ class Role < ActiveRecord::Base
 
   accepts_nested_attributes_for :privileges, :allow_destroy => true
 
-  def initialize(attributes = nil, options = {})
-    super(attributes, options)
+  def initialize(attributes = nil)
+    super(attributes)
 
     self.role_type ||= TYPES[:admin]
   end

@@ -6,7 +6,7 @@ git_source :github do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '~> 4.2.7.1'
+gem 'rails', '~> 5.0.2'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -36,6 +36,7 @@ gem 'jbuilder'
 gem 'sidekiq'
 gem 'ruby-ntlm'
 gem 'chartist-rails'
+gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 
@@ -44,8 +45,6 @@ gem 'uglifier'
 gem 'sprockets'
 
 gem 'unicorn'
-
-gem 'where-or' # TODO: remove when Rails 5.0
 
 group :development do
   gem 'unicorn-rails'
@@ -58,7 +57,6 @@ end
 
 group :test do
   gem 'sqlite3'
-  gem 'test_after_commit' # TODO: remove when Rails 5.0
   gem 'timecop'
 end
 

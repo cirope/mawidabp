@@ -1,4 +1,4 @@
-class ConclusionReview < ActiveRecord::Base
+class ConclusionReview < ApplicationRecord
   include Auditable
   include ParameterSelector
   include ConclusionReviews::DateColumns
@@ -39,7 +39,7 @@ class ConclusionReview < ActiveRecord::Base
   }.with_indifferent_access
 
   # Callbacks
-  before_destroy :can_be_destroyed?
+  before_destroy :check_if_can_be_destroyed
 
   # Restricciones de los atributos
   attr_readonly :review_id
@@ -830,4 +830,10 @@ class ConclusionReview < ActiveRecord::Base
     I18n.t('conclusion_review.findings_follow_up.pdf_name',
       :prefix => '%02d' % index)
   end
+
+  private
+
+    def check_if_can_be_destroyed
+      throw :abort unless can_be_destroyed?
+    end
 end

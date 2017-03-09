@@ -1,4 +1,4 @@
-class FindingAnswer < ActiveRecord::Base
+class FindingAnswer < ApplicationRecord
   include Auditable
   include FindingAnswers::DateColumns
   include ParameterSelector
@@ -34,8 +34,8 @@ class FindingAnswer < ActiveRecord::Base
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true
 
-  def initialize(attributes = nil, options = {})
-    super(attributes, options)
+  def initialize(attributes = nil)
+    super(attributes)
 
     self.notify_users = true if self.notify_users.nil?
   end

@@ -1,4 +1,4 @@
-class Finding < ActiveRecord::Base
+class Finding < ApplicationRecord
   include ActsAsTree
   include Auditable
   include Comparable
@@ -32,7 +32,6 @@ class Finding < ActiveRecord::Base
   include Findings::ValidationCallbacks
   include Findings::Versions
   include Findings::WorkPapers
-  include Findings::XML
   include Parameters::Risk
   include Parameters::Priority
   include ParameterSelector
@@ -65,8 +64,8 @@ class Finding < ActiveRecord::Base
   accepts_nested_attributes_for :finding_user_assignments,
     :allow_destroy => true
 
-  def initialize(attributes = nil, options = {}, import_users = false)
-    super(attributes, options)
+  def initialize(attributes = nil, import_users = false)
+    super(attributes)
 
     if import_users && self.try(:control_objective_item).try(:review)
       self.control_objective_item.review.review_user_assignments.map do |rua|

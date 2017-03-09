@@ -14,17 +14,17 @@ class SettingsControllerTest < ActionController::TestCase
   end
 
   test 'should show setting' do
-    get :show, id: @setting
+    get :show, params: { id: @setting }
     assert_response :success
   end
 
   test 'should get edit' do
-    get :edit, id: @setting
+    get :edit, params: { id: @setting }
     assert_response :success
   end
 
   test 'should update setting' do
-    patch :update, {
+    patch :update, params: {
       id: @setting.id, setting: { value: '45', description: 'New description' }
     }
     assert_redirected_to setting_path(assigns(:setting))

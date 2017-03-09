@@ -1,4 +1,4 @@
-class PlanItem < ActiveRecord::Base
+class PlanItem < ApplicationRecord
   include Auditable
   include Comparable
   include ParameterSelector

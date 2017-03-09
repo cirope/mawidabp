@@ -1,4 +1,4 @@
-class Cost < ActiveRecord::Base
+class Cost < ApplicationRecord
   include Auditable
 
   # Named scopes

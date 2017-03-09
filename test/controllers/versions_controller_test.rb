@@ -15,7 +15,7 @@ class VersionsControllerTest < ActionController::TestCase
   end
 
   test 'show version' do
-    get :show, id: @version
+    get :show, params: { id: @version }
     assert_response :success
     assert_not_nil assigns(:version)
     assert_select 'table.table'
@@ -27,7 +27,10 @@ class VersionsControllerTest < ActionController::TestCase
     to = Date.today.at_end_of_month
 
     assert_nothing_raised do
-      get :index, index: { from_date: from, to_date: to }, format: :pdf
+      get :index, params: {
+        index: { from_date: from, to_date: to },
+        format: :pdf
+      }
     end
 
     assert_redirected_to Prawn::Document.relative_path(

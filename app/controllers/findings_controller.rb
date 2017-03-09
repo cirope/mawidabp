@@ -96,13 +96,11 @@ class FindingsController < ApplicationController
   # Muestra el detalle de una debilidad u oportunidad
   #
   # * GET /findings/1
-  # * GET /findings/1.xml
   def show
     @title = t 'finding.show_title'
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @finding }
     end
   end
 
@@ -123,7 +121,6 @@ class FindingsController < ApplicationController
   # componen.
   #
   # * PATCH /findings/1
-  # * PATCH /findings/1.xml
   def update
     @title = t 'finding.edit_title'
 
@@ -144,11 +141,9 @@ class FindingsController < ApplicationController
         if @finding.update(finding_params)
           flash.notice = t 'finding.correctly_updated'
           format.html { redirect_to(edit_finding_url(params[:completed], @finding)) }
-          format.xml  { head :ok }
         else
           flash.alert = t 'finding.stale_object_error'
           format.html { render :action => :edit }
-          format.xml  { render :xml => @finding.errors, :status => :unprocessable_entity }
           raise ActiveRecord::Rollback
         end
       end

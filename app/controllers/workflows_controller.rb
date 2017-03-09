@@ -9,7 +9,6 @@ class WorkflowsController < ApplicationController
   # Lista los programas de trabajo
   #
   # * GET /workflows
-  # * GET /workflows.xml
   def index
     @title = t 'workflow.index_title'
     @workflows = Workflow.list.includes(:review).order(
@@ -19,27 +18,23 @@ class WorkflowsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render xml: @workflows }
     end
   end
 
   # Muestra el detalle de un programa de trabajo
   #
   # * GET /workflows/1
-  # * GET /workflows/1.xml
   def show
     @title = t 'workflow.show_title'
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render xml: @workflow }
     end
   end
 
   # Permite ingresar los datos para crear un programa de trabajo
   #
   # * GET /workflows/new
-  # * GET /workflows/new.xml
   def new
     @title = t 'workflow.new_title'
     @workflow = Workflow.new
@@ -60,7 +55,6 @@ class WorkflowsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render xml: @workflow }
     end
   end
 
@@ -75,7 +69,6 @@ class WorkflowsController < ApplicationController
   # Además crea los ítems que lo componen.
   #
   # * POST /workflows
-  # * POST /workflows.xml
   def create
     @title = t 'workflow.new_title'
     @workflow = Workflow.list.new(workflow_params)
@@ -84,10 +77,8 @@ class WorkflowsController < ApplicationController
       if @workflow.save
         flash.notice = t 'workflow.correctly_created'
         format.html { redirect_to(workflows_url) }
-        format.xml  { render xml: @workflow, status: :created, location: @workflow }
       else
         format.html { render action: :new }
-        format.xml  { render xml: @workflow.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -97,7 +88,6 @@ class WorkflowsController < ApplicationController
   # contenido de los ítems que lo componen.
   #
   # * PATCH /workflows/1
-  # * PATCH /workflows/1.xml
   def update
     @title = t 'workflow.edit_title'
 
@@ -105,10 +95,8 @@ class WorkflowsController < ApplicationController
       if @workflow.update(workflow_params)
         flash.notice = t 'workflow.correctly_updated'
         format.html { redirect_to(workflows_url) }
-        format.xml  { head :ok }
       else
         format.html { render action: :edit }
-        format.xml  { render xml: @workflow.errors, status: :unprocessable_entity }
       end
     end
 
@@ -120,13 +108,11 @@ class WorkflowsController < ApplicationController
   # Elimina un programa de trabajo
   #
   # * DELETE /workflows/1
-  # * DELETE /workflows/1.xml
   def destroy
     @workflow.destroy
 
     respond_to do |format|
       format.html { redirect_to(workflows_url) }
-      format.xml  { head :ok }
     end
   end
 
@@ -138,7 +124,6 @@ class WorkflowsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to @workflow.relative_pdf_path }
-      format.xml  { head :ok }
     end
   end
 

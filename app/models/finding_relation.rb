@@ -1,4 +1,4 @@
-class FindingRelation < ActiveRecord::Base
+class FindingRelation < ApplicationRecord
   include Auditable
 
   # Restricciones
