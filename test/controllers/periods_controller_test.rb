@@ -15,7 +15,7 @@ class PeriodsControllerTest < ActionController::TestCase
   end
 
   test 'show period' do
-    get :show, id: @period
+    get :show, params: { id: @period }
     assert_response :success
     assert_not_nil assigns(:period)
     assert_template 'periods/show'
@@ -30,7 +30,7 @@ class PeriodsControllerTest < ActionController::TestCase
 
   test 'create period' do
     assert_difference 'Period.count' do
-      post :create, {
+      post :create, params: {
         period: {
           number: '20',
           description: 'New period',
@@ -45,7 +45,7 @@ class PeriodsControllerTest < ActionController::TestCase
     assert_difference 'Period.count' do
       session[:back_to] = new_period_url
 
-      post :create, {
+      post :create, params: {
         period: {
           number: '20',
           description: 'New period',
@@ -59,7 +59,7 @@ class PeriodsControllerTest < ActionController::TestCase
   end
 
   test 'edit period' do
-    get :edit, id: @period
+    get :edit, params: { id: @period }
     assert_response :success
     assert_not_nil assigns(:period)
     assert_template 'periods/edit'
@@ -67,7 +67,7 @@ class PeriodsControllerTest < ActionController::TestCase
 
   test 'update period' do
     assert_no_difference 'Period.count' do
-      patch :update, {
+      patch :update, params: {
         id: @period,
         period: {
           number: '20',
@@ -85,7 +85,7 @@ class PeriodsControllerTest < ActionController::TestCase
 
   test 'destroy period' do
     assert_difference 'Period.count', -1 do
-      delete :destroy, id: periods(:unused_period).id
+      delete :destroy, params: { id: periods(:unused_period).id }
     end
 
     assert_redirected_to periods_url
@@ -93,7 +93,7 @@ class PeriodsControllerTest < ActionController::TestCase
 
   test 'destroy asociated period' do
     assert_no_difference 'Period.count' do
-      delete :destroy, id: @period
+      delete :destroy, params: { id: @period }
     end
 
     assert_equal [
