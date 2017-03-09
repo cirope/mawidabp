@@ -3,7 +3,7 @@ class WeaknessesController < ApplicationController
   include AutoCompleteFor::FindingRelation
   include AutoCompleteFor::Tagging
 
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   before_action :set_weakness, only: [
     :show, :edit, :update, :follow_up_pdf, :undo_reiteration
   ]

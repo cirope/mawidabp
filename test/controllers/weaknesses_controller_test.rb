@@ -8,7 +8,11 @@ class WeaknessesControllerTest < ActionController::TestCase
   # y no accesibles las privadas
   test 'public and private actions' do
     public_actions = []
-    id_param = {id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).to_param}
+    id_param = {
+      params: {
+        id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).to_param
+      }
+    }
     public_actions = []
     private_actions = [
       [:get, :index],
@@ -42,10 +46,12 @@ class WeaknessesControllerTest < ActionController::TestCase
 
   test 'list weaknesses with search and sort' do
     login
-    get :index, search: {
-      query: '1 2 4',
-      columns: ['title', 'review'],
-      order: 'review'
+    get :index, params: {
+      search: {
+        query: '1 2 4',
+        columns: ['title', 'review'],
+        order: 'review'
+      }
     }
     assert_response :success
     assert_not_nil assigns(:weaknesses)
@@ -65,7 +71,7 @@ class WeaknessesControllerTest < ActionController::TestCase
       findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id
     ]
 
-    get :index, ids: ids
+    get :index, params: { ids: ids }
     assert_response :success
     assert_not_nil assigns(:weaknesses)
     assert_equal 2, assigns(:weaknesses).count
@@ -75,9 +81,11 @@ class WeaknessesControllerTest < ActionController::TestCase
 
   test 'edit weakness when search match only one result' do
     login
-    get :index, search: {
-      query: '1 2 4 y 1w',
-      columns: ['title', 'review']
+    get :index, params: {
+      search: {
+        query: '1 2 4 y 1w',
+        columns: ['title', 'review']
+      }
     }
     assert_redirected_to weakness_url(
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness))
@@ -87,7 +95,9 @@ class WeaknessesControllerTest < ActionController::TestCase
 
   test 'show weakness' do
     login
-    get :show, id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+    get :show, params: {
+      id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+    }
     assert_response :success
     assert_not_nil assigns(:weakness)
     assert_template 'weaknesses/show'
@@ -97,7 +107,11 @@ class WeaknessesControllerTest < ActionController::TestCase
     weakness = findings :bcra_A4609_data_proccessing_impact_analisys_weakness
 
     login
-    get :show, :completed => 'incomplete', :id => weakness.id, :format => :json
+    get :show, :params => {
+      :completed => 'incomplete',
+      :id => weakness.id,
+      :format => :json
+    }
     assert_response :success
     assert_not_nil assigns(:weakness)
 
@@ -108,8 +122,9 @@ class WeaknessesControllerTest < ActionController::TestCase
 
   test 'new weakness' do
     login
-    get :new, control_objective_item: control_objective_items(
-      :bcra_A4609_security_management_responsible_dependency_item_editable).id
+    get :new, params: {
+      control_objective_item: control_objective_items(:bcra_A4609_security_management_responsible_dependency_item_editable).id
+    }
     assert_response :success
     assert_not_nil assigns(:weakness)
     assert_template 'weaknesses/new'
@@ -129,7 +144,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
 
     assert_difference counts_array do
-      post :create, {
+      post :create, params: {
         weakness: {
           control_objective_item_id: control_objective_items(
             :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
@@ -203,7 +218,9 @@ class WeaknessesControllerTest < ActionController::TestCase
 
   test 'edit weakness' do
     login
-    get :edit, id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+    get :edit, params: {
+      id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+    }
     assert_response :success
     assert_not_nil assigns(:weakness)
     assert_template 'weaknesses/edit'
@@ -213,7 +230,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
     assert_no_difference 'Weakness.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
-        patch :update, {
+        patch :update, params: {
           id: findings(
             :bcra_A4609_data_proccessing_impact_analisys_weakness).id,
           weakness: {
@@ -293,7 +310,7 @@ class WeaknessesControllerTest < ActionController::TestCase
         :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
 
     assert_nothing_raised do
-      get :follow_up_pdf, id: weakness.id
+      get :follow_up_pdf, params: { id: weakness.id }
     end
 
     assert_redirected_to weakness.relative_follow_up_pdf_path
@@ -312,7 +329,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert repeated_of.reload.repeated?
     assert weakness.reload.repeated_of
 
-    patch :undo_reiteration, id: weakness.to_param
+    patch :undo_reiteration, params: { id: weakness.to_param }
     assert_redirected_to edit_weakness_url(weakness)
 
     assert !repeated_of.reload.repeated?
@@ -325,7 +342,7 @@ class WeaknessesControllerTest < ActionController::TestCase
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
 
     login
-    get :auto_complete_for_finding_relation, {
+    get :auto_complete_for_finding_relation, params: {
       q: 'O001',
       finding_id: finding.id,
       review_id: finding.review.id,
@@ -341,7 +358,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     finding = Finding.find(findings(
         :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id)
 
-    get :auto_complete_for_finding_relation, {
+    get :auto_complete_for_finding_relation, params: {
       q: 'O001',
       finding_id: finding.id,
       review_id: finding.review.id,
@@ -354,7 +371,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
-    get :auto_complete_for_finding_relation, {
+    get :auto_complete_for_finding_relation, params: {
       completed: 'incomplete',
       q: 'O001, 1 2 3',
       finding_id: finding.id,
@@ -368,7 +385,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_equal 1, findings.size # Solo O01 del informe 1 2 3
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001.*1 2 3/i }
 
-    get :auto_complete_for_finding_relation, {
+    get :auto_complete_for_finding_relation, params: {
       q: 'x_none',
       finding_id: finding.id,
       review_id: finding.review.id,
@@ -384,7 +401,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   test 'auto complete for tagging' do
     login
 
-    get :auto_complete_for_tagging, {
+    get :auto_complete_for_tagging, params: {
       :q => 'impor',
       :kind => 'finding',
       :format => :json
@@ -396,7 +413,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_equal 1, tags.size
     assert tags.all? { |t| t['label'].match /impor/i }
 
-    get :auto_complete_for_tagging, {
+    get :auto_complete_for_tagging, params: {
       :q => 'x_none',
       :kind => 'finding',
       :format => :json
@@ -410,7 +427,7 @@ class WeaknessesControllerTest < ActionController::TestCase
 
   test 'auto complete for control objective item' do
     login
-    get :auto_complete_for_control_objective_item, {
+    get :auto_complete_for_control_objective_item, params: {
       q: 'dependencia',
       review_id: reviews(:review_with_conclusion).id,
       format: :json
@@ -426,7 +443,7 @@ class WeaknessesControllerTest < ActionController::TestCase
       cois.first['id']
     )
 
-    get :auto_complete_for_control_objective_item, {
+    get :auto_complete_for_control_objective_item, params: {
       q: 'x_none',
       review_id: reviews(:review_with_conclusion).id,
       format: :json
