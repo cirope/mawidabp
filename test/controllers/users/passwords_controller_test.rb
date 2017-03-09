@@ -15,7 +15,9 @@ class Users::PasswordsControllerTest < ActionController::TestCase
     original_hash = user.change_password_hash
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      post :create, user: { email: user.email }
+      post :create, params: {
+        user: { email: user.email }
+      }
     end
 
     assert_redirected_to login_url
@@ -26,7 +28,7 @@ class Users::PasswordsControllerTest < ActionController::TestCase
 
   test 'edit password' do
     login
-    get :edit, { id: users(:blank_password_user) }
+    get :edit, params: { id: users(:blank_password_user) }
     assert_response :success
     assert_not_nil assigns(:auth_user)
   end
@@ -36,7 +38,7 @@ class Users::PasswordsControllerTest < ActionController::TestCase
     user = users :administrator_user
 
     assert_difference 'OldPassword.count' do
-      patch :update, {
+      patch :update, params: {
         id: user,
         user: {
           password: 'new_password_123',
@@ -54,7 +56,7 @@ class Users::PasswordsControllerTest < ActionController::TestCase
     confirmation_hash = user.change_password_hash
 
     assert_difference 'OldPassword.count' do
-      patch :update, {
+      patch :update, params: {
         id: user,
         confirmation_hash: confirmation_hash,
         user: {
@@ -71,7 +73,10 @@ class Users::PasswordsControllerTest < ActionController::TestCase
     assert_equal 0, user.failed_attempts
 
     # No se puede usar 2 veces el mismo hash
-    get :edit, { id: user, confirmation_hash: confirmation_hash }
+    get :edit, params: {
+      id: user,
+      confirmation_hash: confirmation_hash
+    }
 
     assert_redirected_to login_url
   end
@@ -79,7 +84,7 @@ class Users::PasswordsControllerTest < ActionController::TestCase
   test 'change expired blank password' do
     user = users :expired_blank_password_user
 
-    patch :update, {
+    patch :update, params: {
       id: user,
       confirmation_hash: user.change_password_hash,
       user: {

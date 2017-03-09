@@ -8,7 +8,7 @@ class Users::ReassignmentsControllerTest < ActionController::TestCase
   end
 
   test 'user findings reassignment edit' do
-    get :edit, id: users(:audited_user).user
+    get :edit, params: { id: users(:audited_user).user }
 
     assert_response :success
     assert_not_nil assigns(:user)
@@ -20,7 +20,7 @@ class Users::ReassignmentsControllerTest < ActionController::TestCase
 
     assert_enqueued_emails 2 do
       assert_difference 'Notification.count' do
-        patch :update, {
+        patch :update, params: {
           id: users(:audited_user).user,
           other_id: users(:audited_second_user).id,
           with_findings: '1'
@@ -33,7 +33,7 @@ class Users::ReassignmentsControllerTest < ActionController::TestCase
   end
 
   test 'user reviews reassignment edit' do
-    get :edit, id: users(:audited_user).user
+    get :edit, params: { id: users(:audited_user).user }
 
     assert_response :success
     assert_not_nil assigns(:user)
@@ -43,7 +43,7 @@ class Users::ReassignmentsControllerTest < ActionController::TestCase
   test 'user reviews reassignment update' do
     assert_enqueued_emails 2 do
       assert_difference 'Notification.count' do
-        patch :update, {
+        patch :update, params: {
           id: users(:audited_user).user,
           other_id: users(:audited_second_user).id,
           with_reviews: '1'
@@ -56,7 +56,7 @@ class Users::ReassignmentsControllerTest < ActionController::TestCase
   end
 
   test 'user reassignment of nothing edit' do
-    get :edit, id: users(:audited_user).user
+    get :edit, params: { id: users(:audited_user).user }
 
     assert_response :success
     assert_not_nil assigns(:user)
@@ -66,7 +66,7 @@ class Users::ReassignmentsControllerTest < ActionController::TestCase
   test 'user reassignment of nothing' do
     assert_no_emails do
       assert_no_difference 'Notification.count' do
-        patch :update, {
+        patch :update, params: {
           id: users(:audited_user).user,
           other_id: users(:administrator_second_user).id
         }

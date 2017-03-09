@@ -8,18 +8,21 @@ class Users::ProfilesControllerTest < ActionController::TestCase
   end
 
   test 'edit' do
-    get :edit, id: @user
+    get :edit, params: { id: @user }
     assert_response :success
     assert_not_nil assigns(:auth_user)
   end
 
   test 'update' do
     assert_no_difference 'User.count' do
-      patch :update, id: @user, user: {
-        name: 'Updated Name',
-        last_name: 'Updated Last Name',
-        email: 'updated@email.com',
-        function: 'Updated function'
+      patch :update, params: {
+        id: @user,
+        user: {
+          name: 'Updated Name',
+          last_name: 'Updated Last Name',
+          email: 'updated@email.com',
+          function: 'Updated function'
+        }
       }
     end
 

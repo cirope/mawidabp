@@ -9,7 +9,10 @@ class BestPractices::ControlObjectivesControllerTest < ActionController::TestCas
   end
 
   test 'should download' do
-    get :download, best_practice_id: @best_practice, id: @control_objective
+    get :download, params: {
+      best_practice_id: @best_practice,
+      id: @control_objective
+    }
 
     assert_redirected_to @control_objective.support.url
   end

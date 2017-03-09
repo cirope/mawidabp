@@ -8,7 +8,7 @@ class Users::ReleasesControllerTest < ActionController::TestCase
   end
 
   test 'user findings release edit' do
-    get :edit, id: users(:auditor_user).user
+    get :edit, params: { id: users(:auditor_user).user }
 
     assert_response :success
     assert_not_nil assigns(:user)
@@ -17,7 +17,10 @@ class Users::ReleasesControllerTest < ActionController::TestCase
 
   test 'user findings release update' do
     assert_enqueued_emails 1 do
-      patch :update, { id: users(:auditor_user).user, with_findings: '1' }
+      patch :update, params: {
+        id: users(:auditor_user).user,
+        with_findings: '1'
+      }
     end
 
     assert_redirected_to users_url
@@ -25,7 +28,7 @@ class Users::ReleasesControllerTest < ActionController::TestCase
   end
 
   test 'user reviews release edit' do
-    get :edit, id: users(:auditor_user).user
+    get :edit, params: { id: users(:auditor_user).user }
 
     assert_response :success
     assert_not_nil assigns(:user)
@@ -33,7 +36,10 @@ class Users::ReleasesControllerTest < ActionController::TestCase
 
   test 'user reviews release update' do
     assert_enqueued_emails 1 do
-      patch :update, { id: users(:auditor_user).user, with_reviews: '1' }
+      patch :update, params: {
+        id: users(:auditor_user).user,
+        with_reviews: '1'
+      }
     end
 
     assert_redirected_to users_url
@@ -42,7 +48,7 @@ class Users::ReleasesControllerTest < ActionController::TestCase
 
   test 'user release update of nothing' do
     assert_no_emails do
-      post :update, { id: users(:auditor_user).user }
+      post :update, params: { id: users(:auditor_user).user }
     end
 
     assert_redirected_to users_url
