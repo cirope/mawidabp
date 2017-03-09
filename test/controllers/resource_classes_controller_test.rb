@@ -15,7 +15,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
   end
 
   test 'show resource class' do
-    get :show, id: @resource_class
+    get :show, params: { id: @resource_class }
     assert_response :success
     assert_not_nil assigns(:resource_class)
     assert_template 'resource_classes/show'
@@ -30,7 +30,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
 
   test 'create resource class' do
     assert_difference ['ResourceClass.count', 'Resource.count'] do
-      post :create, {
+      post :create, params: {
         resource_class: {
           name: 'New resource class',
           resources_attributes: [
@@ -45,7 +45,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
   end
 
   test 'edit resource class' do
-    get :edit, id: @resource_class
+    get :edit, params: { id: @resource_class }
     assert_response :success
     assert_not_nil assigns(:resource_class)
     assert_template 'resource_classes/edit'
@@ -54,7 +54,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
   test 'update resource class' do
     assert_no_difference 'ResourceClass.count' do
       assert_difference 'Resource.count' do
-        patch :update, {
+        patch :update, params: {
           id: @resource_class,
           resource_class: {
             name: 'Updated resource class',
@@ -80,7 +80,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
 
   test 'destroy resource class' do
     assert_difference 'ResourceClass.count', -1 do
-      delete :destroy, id: @resource_class
+      delete :destroy, params: { id: @resource_class }
     end
 
     assert_redirected_to resource_classes_url
