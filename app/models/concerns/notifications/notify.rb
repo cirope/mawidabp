@@ -22,7 +22,7 @@ module Notifications::Notify
       findings.each do |finding|
         finding.confirmed! user if user.can_act_as_audited?
 
-        finding.notifications.uniq.each do |notification|
+        finding.notifications.distinct.each do |notification|
           if should_update? notification
             notification.update! new_notification_attributes
           end
