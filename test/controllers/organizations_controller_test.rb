@@ -13,7 +13,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   end
 
   test 'show organization' do
-    get :show, id: organizations(:cirope)
+    get :show, params: { id: organizations(:cirope) }
     assert_response :success
     assert_not_nil assigns(:organization)
   end
@@ -26,7 +26,7 @@ class OrganizationsControllerTest < ActionController::TestCase
 
   test 'create organization' do
     assert_difference ['Organization.count', 'ImageModel.count'] do
-      post :create, {
+      post :create, params: {
         organization: {
           name: 'New organization',
           prefix: 'new-prefix',
@@ -46,7 +46,7 @@ class OrganizationsControllerTest < ActionController::TestCase
 
   test 'create organization with LDAP config' do
     assert_difference ['Organization.count', 'LdapConfig.count'] do
-      post :create, {
+      post :create, params: {
         organization: {
           name: 'New organization',
           prefix: 'new-prefix',
@@ -77,7 +77,7 @@ class OrganizationsControllerTest < ActionController::TestCase
 
   test 'create organization with wrong group' do
     assert_difference 'Organization.count' do
-      post :create, {
+      post :create, params: {
         organization: {
           name: 'New organization',
           prefix: 'new-prefix',
@@ -91,13 +91,13 @@ class OrganizationsControllerTest < ActionController::TestCase
   end
 
   test 'edit organization' do
-    get :edit, id: organizations(:cirope)
+    get :edit, params: { id: organizations(:cirope) }
     assert_response :success
     assert_not_nil assigns(:organization)
   end
 
   test 'update organization' do
-    patch :update, {
+    patch :update, params: {
       id: organizations(:cirope),
       organization: {
         name: 'Updated organization',
@@ -119,7 +119,7 @@ class OrganizationsControllerTest < ActionController::TestCase
     login user: users(:administrator_second_user), prefix: organization.prefix
 
     assert_difference ['Organization.count', 'BusinessUnitType.count'], -1 do
-      delete :destroy, id: organization
+      delete :destroy, params: { id: organization }
     end
 
     assert_redirected_to organizations_url
