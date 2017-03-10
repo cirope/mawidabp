@@ -19,7 +19,10 @@
       <% @tags.each do |tag| %>
         <tr>
           <td><span class="glyphicon glyphicon-<%= tag.icon %>"></span></td>
-          <td><%= tag.name %></td>
+          <td>
+            <%= tag_shared_icon tag %>
+            <%= tag.name %>
+          </td>
           <td><%= link_to_show [tag, kind: tag.kind] %></td>
           <td><%= link_to_edit [:edit, tag, kind: tag.kind] %></td>
           <td><%= link_to_destroy [tag, kind: tag.kind] %></td>

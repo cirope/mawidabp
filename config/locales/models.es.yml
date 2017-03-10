@@ -208,6 +208,7 @@ es:
         name: 'Nombre'
         style: 'Estilo'
         icon: 'Icono'
+        shared: 'Compartida'
       tagging:
         tag: 'Etiqueta'
         tag_id: 'Etiqueta'
