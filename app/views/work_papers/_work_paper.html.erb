@@ -3,7 +3,9 @@
 <fieldset class="work_paper" id="<%= id %>">
   <div class="row">
     <div class="col-md-3">
-      <%= f.input :name, label: false, input_html: { autofocus: true } %>
+      <%= f.input :name, label: false, input_html: {
+        autofocus: f.object.name.blank?
+      } %>
     </div>
     <div class="col-md-1">
       <%= f.input :code, label: false, input_html: {
