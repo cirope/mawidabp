@@ -18,5 +18,10 @@ module MawidaBP
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake time:zones:all" for a time zone names list. Default is UTC.
     config.time_zone = ENV['TRAVIS'] ? 'UTC' : 'Buenos Aires'
+
+    # Be sure to have the adapter's gem in your Gemfile
+    # and follow the adapter's specific installation
+    # and deployment instructions.
+    config.active_job.queue_adapter = :sidekiq
   end
 end
