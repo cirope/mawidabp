@@ -11,7 +11,7 @@ private
     if add_show_print_date_on_pdfs?
       Organization.all.each do |o|
         o.settings.create! name:        'show_print_date_on_pdfs',
-                           value:       '1',
+                           value:       DEFAULT_SETTINGS[:show_print_date_on_pdfs][:value],
                            description: I18n.t('settings.show_print_date_on_pdfs')
       end
     end
