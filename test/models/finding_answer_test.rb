@@ -1,115 +1,84 @@
 require 'test_helper'
 
-# Clase para probar el modelo "FindingAnswer"
 class FindingAnswerTest < ActiveSupport::TestCase
-  fixtures :finding_answers, :findings, :users
+  include ActionMailer::TestHelper
 
-  # Función para inicializar las variables utilizadas en las pruebas
-  def setup
-    @finding_answer = FindingAnswer.find finding_answers(
-      :bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_auditor_answer).id
+  setup do
+    @finding_answer = finding_answers :bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_auditor_answer
   end
 
-  # Prueba que se realicen las búsquedas como se espera
-  test 'search' do
-    fixture_finding_answer = finding_answers(
-      :bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_auditor_answer)
-    assert_kind_of FindingAnswer, @finding_answer
-    assert_equal fixture_finding_answer.answer, @finding_answer.answer
-    assert_equal fixture_finding_answer.auditor_comments,
-      @finding_answer.auditor_comments
-    assert_equal fixture_finding_answer.commitment_date,
-      @finding_answer.commitment_date
-    assert_equal fixture_finding_answer.finding_id, @finding_answer.finding_id
-    assert_equal fixture_finding_answer.user_id, @finding_answer.user_id
-  end
-
-  # Prueba la creación de una respuesta a una observación
   test 'auditor create without notification' do
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-
-    assert_no_difference 'ActionMailer::Base.deliveries.size' do
+    assert_no_enqueued_emails do
       assert_difference 'FindingAnswer.count' do
         @finding_answer = FindingAnswer.create(
-          :answer => 'New answer',
-          :auditor_comments => 'New auditor comments',
-          :finding => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
-          :user => users(:supervisor_user),
-          :file_model => file_models(:text_file),
-          :notify_users => false
+          answer: 'New answer',
+          auditor_comments: 'New auditor comments',
+          finding: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
+          user: users(:supervisor_user),
+          file_model: file_models(:text_file),
+          notify_users: false
         )
       end
     end
   end
 
-  # Prueba la creación de una respuesta a una observación
   test 'audited create without notification' do
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-
-    assert_no_difference 'ActionMailer::Base.deliveries.size' do
+    assert_no_enqueued_emails do
       assert_difference 'FindingAnswer.count' do
         @finding_answer = FindingAnswer.create(
-          :answer => 'New answer',
-          :commitment_date => 10.days.from_now.to_date,
-          :finding => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
-          :user => users(:audited_user),
-          :file_model => file_models(:text_file),
-          :notify_users => false
+          answer: 'New answer',
+          commitment_date: 10.days.from_now.to_date,
+          finding: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
+          user: users(:audited_user),
+          file_model: file_models(:text_file),
+          notify_users: false
         )
       end
     end
   end
 
   test 'auditor create with notification' do
-    counts_array = ['FindingAnswer.count', 'ActionMailer::Base.deliveries.size']
-
-    assert_difference counts_array do
-      @finding_answer = FindingAnswer.create(
-        :answer => 'New answer',
-        :auditor_comments => 'New auditor comments',
-        :finding => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
-        :user => users(:supervisor_user),
-        :file_model => file_models(:text_file),
-        :notify_users => true
-      )
+    assert_enqueued_emails 1 do
+      assert_difference 'FindingAnswer.count' do
+        @finding_answer = FindingAnswer.create(
+          answer: 'New answer',
+          auditor_comments: 'New auditor comments',
+          finding: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
+          user: users(:supervisor_user),
+          file_model: file_models(:text_file),
+          notify_users: true
+        )
+      end
     end
   end
 
-  # Prueba la creación de una respuesta a una observación
   test 'audited create with notification' do
-    counts_array = ['FindingAnswer.count', 'ActionMailer::Base.deliveries.size']
-
-    assert_difference counts_array do
-      @finding_answer = FindingAnswer.create(
-        :answer => 'New answer',
-        :commitment_date => 10.days.from_now.to_date,
-        :finding => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
-        :user => users(:audited_user),
-        :file_model => file_models(:text_file),
-        # :notify_users => true
-      )
+    assert_enqueued_emails 1 do
+      assert_difference 'FindingAnswer.count' do
+        @finding_answer = FindingAnswer.create(
+          answer: 'New answer',
+          commitment_date: 10.days.from_now.to_date,
+          finding: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
+          user: users(:audited_user),
+          file_model: file_models(:text_file)
+          # notify_users nil which converts to true
+        )
+      end
     end
   end
 
-  # Prueba de actualización de una respuesta a una observación
   test 'update' do
-    assert @finding_answer.update(:answer => 'New answer'),
-      @finding_answer.errors.full_messages.join('; ')
-    @finding_answer.reload
-    # No se puede cambiar una respuesta
-    assert_not_equal 'New answer', @finding_answer.answer
+    assert @finding_answer.update(answer: 'New answer')
+
+    assert_not_equal 'New answer', @finding_answer.reload.answer
   end
 
-  # Prueba de eliminación de respuestas a observaciones
   test 'delete' do
-    assert_difference('FindingAnswer.count', -1) { @finding_answer.destroy }
+    assert_difference 'FindingAnswer.count', -1 do
+      @finding_answer.destroy
+    end
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes with auditor' do
     @finding_answer.answer = '      '
     @finding_answer.finding_id = nil
@@ -120,7 +89,6 @@ class FindingAnswerTest < ActiveSupport::TestCase
     assert_error @finding_answer, :finding_id, :blank
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes with audited' do
     Organization.current_id = organizations(:cirope).id
 
@@ -136,7 +104,6 @@ class FindingAnswerTest < ActiveSupport::TestCase
     Organization.current_id = nil
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
     @finding_answer.commitment_date = '13/13/13'
 
