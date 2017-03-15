@@ -90,7 +90,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
         :finding => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
         :user => users(:audited_user),
         :file_model => file_models(:text_file),
-        :notify_users => true
+        # :notify_users => true
       )
     end
   end
@@ -138,15 +138,9 @@ class FindingAnswerTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
-    @finding_answer.finding_id = '?nil'
-    @finding_answer.user_id = '?123'
-    @finding_answer.file_model_id = 'incorrect'
     @finding_answer.commitment_date = '13/13/13'
 
     assert @finding_answer.invalid?
-    assert_error @finding_answer, :finding_id, :not_a_number
-    assert_error @finding_answer, :user_id, :not_a_number
-    assert_error @finding_answer, :file_model_id, :not_a_number
     assert_error @finding_answer, :commitment_date, :invalid_date
   end
 end
