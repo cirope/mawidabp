@@ -1,4 +1,4 @@
-class Privilege < ActiveRecord::Base
+class Privilege < ApplicationRecord
   include ParameterSelector
 
   has_paper_trail meta: {

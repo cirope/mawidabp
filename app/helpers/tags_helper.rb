@@ -26,4 +26,10 @@ module TagsHelper
       end
     end
   end
+
+  def tag_shared_icon tag
+    icon = content_tag :span, nil, class: 'glyphicon glyphicon-eye-open', title: t('activerecord.attributes.tag.shared')
+
+    tag.shared ? icon : ''
+  end
 end

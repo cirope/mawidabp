@@ -11,7 +11,7 @@ module Findings::CreateValidation
 
       errors.add :base, msg unless errors.full_messages.include? msg
 
-      false
+      throw :abort
     end
   end
 end

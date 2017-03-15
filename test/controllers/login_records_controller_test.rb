@@ -19,7 +19,9 @@ class LoginRecordsControllerTest < ActionController::TestCase
   end
 
   test 'list login records with search' do
-    get :index, search: { query: 'login data', columns: ['user', 'data'] }
+    get :index, params: {
+      search: { query: 'login data', columns: ['user', 'data'] }
+    }
 
     assert_response :success
     assert_equal 2, assigns(:login_records).count
@@ -28,7 +30,9 @@ class LoginRecordsControllerTest < ActionController::TestCase
   end
 
   test 'show login record' do
-    get :show, :id => login_records(:administrator_user_success_login_record).id
+    get :show, :params => {
+      :id => login_records(:administrator_user_success_login_record).id
+    }
     assert_response :success
     assert_not_nil assigns(:login_record)
     assert_template 'login_records/show'
@@ -39,7 +43,10 @@ class LoginRecordsControllerTest < ActionController::TestCase
     to_date = Date.today.at_end_of_month
 
     assert_nothing_raised do
-      get :index, index: { from_date: from_date, to_date: to_date }, format: :pdf
+      get :index, params: {
+        index: { from_date: from_date, to_date: to_date },
+        format: :pdf
+      }
     end
 
     assert_redirected_to Prawn::Document.relative_path(

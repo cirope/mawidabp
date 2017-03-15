@@ -1,4 +1,4 @@
-class Tagging < ActiveRecord::Base
+class Tagging < ApplicationRecord
   include Auditable
   include Taggings::Associations
   include Taggings::Scopes

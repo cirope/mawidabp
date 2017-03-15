@@ -13,7 +13,9 @@ class ErrorRecordsControllerTest < ActionController::TestCase
   end
 
   test 'list error records with search' do
-    get :index, search: { query: 'usefull', columns: ['user', 'data'] }
+    get :index, params: {
+      search: { query: 'usefull', columns: ['user', 'data'] }
+    }
 
     assert_response :success
     assert_equal 2, assigns(:error_records).count
@@ -22,7 +24,9 @@ class ErrorRecordsControllerTest < ActionController::TestCase
   end
 
   test 'show error record' do
-    get :show, id: error_records(:administrator_user_failed_attempt).id
+    get :show, params: {
+      id: error_records(:administrator_user_failed_attempt).id
+    }
 
     assert_response :success
     assert_not_nil assigns(:error_record)
@@ -34,7 +38,10 @@ class ErrorRecordsControllerTest < ActionController::TestCase
     to = Date.today.at_end_of_month
 
     assert_nothing_raised do
-      get :index, index: { from_date: from, to_date: to }, format: :pdf
+      get :index, params: {
+        index: { from_date: from, to_date: to },
+        format: :pdf
+      }
     end
 
     assert_redirected_to Prawn::Document.relative_path(

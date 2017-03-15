@@ -30,8 +30,7 @@
         <td class="hidden-xs"><%= t control_objective.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show control_objective_item_path(control_objective) %></td>
         <td><%= link_to_edit edit_control_objective_item_path(control_objective) %></td>
-        <td><%= link_to_destroy(control_objective_item_path(control_objective,
-            params.slice(:period, :review))) if control_objective.can_be_destroyed? %></td>
+        <td><%= link_to_destroy(control_objective_item_path(control_objective)) if control_objective.can_be_destroyed? %></td>
       </tr>
     <% end %>
   </tbody>

@@ -1,4 +1,4 @@
-class Notification < ActiveRecord::Base
+class Notification < ApplicationRecord
   include Comparable
   include Notifications::Status
   include Notifications::Defaults

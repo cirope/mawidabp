@@ -17,8 +17,8 @@ class Oportunity < Finding
     record.errors.add attr, :invalid unless value =~ regex
   end
 
-  def initialize(attributes = nil, options = {}, import_users = false)
-    super(attributes, options, import_users)
+  def initialize(attributes = nil, import_users = false)
+    super(attributes, import_users)
 
     self.review_code ||= self.next_code
   end

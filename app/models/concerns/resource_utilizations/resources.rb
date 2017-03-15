@@ -5,7 +5,7 @@ module ResourceUtilizations::Resources
     belongs_to :resource, polymorphic: true
 
     belongs_to :user, -> {
-      joins(:resource_utilizations).where resource_utilizations: { resource_type: 'User' }
-    }, foreign_key: 'resource_id'
+      where resource_utilizations: { resource_type: 'User' }
+    }, foreign_key: 'resource_id', optional: true
   end
 end

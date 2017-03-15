@@ -7,7 +7,11 @@ class WorkflowsControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    id_param = {:id => workflows(:current_workflow).to_param}
+    id_param = {
+      :params => {
+        :id => workflows(:current_workflow).to_param
+      }
+    }
     public_actions = []
     private_actions = [
       [:get, :index],
@@ -41,7 +45,7 @@ class WorkflowsControllerTest < ActionController::TestCase
 
   test 'show workflow' do
     login
-    get :show, :id => workflows(:current_workflow).id
+    get :show, :params => { :id => workflows(:current_workflow).id }
     assert_response :success
     assert_not_nil assigns(:workflow)
     assert_template 'workflows/show'
@@ -59,7 +63,7 @@ class WorkflowsControllerTest < ActionController::TestCase
     login
     workflow = Workflow.find workflows(:current_workflow).id
 
-    get :new, :clone_from => workflow.id
+    get :new, :params => { :clone_from => workflow.id }
     assert_response :success
     assert_not_nil assigns(:workflow)
     assert workflow.workflow_items.size > 0
@@ -77,7 +81,7 @@ class WorkflowsControllerTest < ActionController::TestCase
 
     assert_difference counts_array do
       login
-      post :create, {
+      post :create, :params => {
         :workflow => {
           :period_id => periods(:current_period).id,
           :review_id => reviews(:review_without_conclusion).id,
@@ -108,7 +112,7 @@ class WorkflowsControllerTest < ActionController::TestCase
 
   test 'edit workflow' do
     login
-    get :edit, :id => workflows(:current_workflow).id
+    get :edit, params: { :id => workflows(:current_workflow).id }
     assert_response :success
     assert_not_nil assigns(:workflow)
     assert_template 'workflows/edit'
@@ -118,13 +122,13 @@ class WorkflowsControllerTest < ActionController::TestCase
     assert_no_difference ['Workflow.count', 'ResourceUtilization.count'] do
       assert_difference 'WorkflowItem.count', -1 do
         login
-        patch :update, {
+        patch :update, :params => {
           :id => workflows(:with_conclusion_workflow).id,
           :workflow => {
             :period_id => periods(:current_period).id,
             :review_id => reviews(:review_with_conclusion).id,
-            :workflow_items_attributes => [
-              {
+            :workflow_items_attributes => {
+              '0' => {
                 :id => workflow_items(:with_conclusion_workflow_item_1).id,
                 :task => 'Updated task',
                 :start => 5.days.ago.to_date,
@@ -138,11 +142,12 @@ class WorkflowsControllerTest < ActionController::TestCase
                     :units => '12.21'
                   }
                 ]
-              }, {
+              },
+              '1' => {
                 :id => workflow_items(:with_conclusion_workflow_item_3).id,
                 :_destroy => 1
               }
-            ]
+            }
           }
         }
       end
@@ -196,13 +201,13 @@ class WorkflowsControllerTest < ActionController::TestCase
 
     assert_no_difference ['Workflow.count', 'WorkflowItem.count'] do
       login
-      post :create, values
+      post :create, :params => values
     end
 
     assert_difference 'WorkflowItem.count', 2 do
       assert_difference 'Workflow.count' do
         values[:workflow][:allow_overload] = '1'
-        post :create, values
+        post :create, :params => values
       end
     end
   end
@@ -210,7 +215,9 @@ class WorkflowsControllerTest < ActionController::TestCase
   test 'destroy workflow' do
     login
     assert_difference 'Workflow.count', -1 do
-      delete :destroy, :id => workflows(:with_conclusion_workflow).id
+      delete :destroy, :params => {
+        :id => workflows(:with_conclusion_workflow).id
+      }
     end
 
     assert_redirected_to workflows_url
@@ -221,14 +228,18 @@ class WorkflowsControllerTest < ActionController::TestCase
 
     workflow = Workflow.find(workflows(:current_workflow).id)
 
-    assert_nothing_raised { get :export_to_pdf, :id => workflow.id }
+    assert_nothing_raised do
+      get :export_to_pdf, :params => { :id => workflow.id }
+    end
 
     assert_redirected_to workflow.relative_pdf_path
   end
 
   test 'reviews for period' do
     login
-    get :reviews_for_period, :period => periods(:current_period).id
+    get :reviews_for_period, :params => {
+      :period => periods(:current_period).id
+    }
     assert_response :success
 
     reviews = nil
@@ -244,7 +255,9 @@ class WorkflowsControllerTest < ActionController::TestCase
 
   test 'estimated amount' do
     login
-    get :estimated_amount, :id => reviews(:current_review).id
+    get :estimated_amount, :params => {
+      :id => reviews(:current_review).id
+    }
 
     assert_response :success
     assert_template 'workflows/_estimated_amount'

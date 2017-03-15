@@ -1,4 +1,4 @@
-class ControlObjective < ActiveRecord::Base
+class ControlObjective < ApplicationRecord
   include Auditable
   include Parameters::Relevance
   include Parameters::Risk
@@ -9,7 +9,7 @@ class ControlObjective < ActiveRecord::Base
   delegate :organization_id, to: :best_practice, allow_nil: true
 
   # Callbacks
-  before_destroy :can_be_destroyed?
+  before_destroy :check_if_can_be_destroyed
 
   # Named scopes
   scope :list, -> {
@@ -45,8 +45,8 @@ class ControlObjective < ActiveRecord::Base
 
   accepts_nested_attributes_for :control, allow_destroy: true
 
-  def initialize(attributes = nil, options = {})
-    super(attributes, options)
+  def initialize(attributes = nil)
+    super(attributes)
 
     self.build_control unless self.control
   end
@@ -69,7 +69,7 @@ class ControlObjective < ActiveRecord::Base
   end
 
   def can_be_destroyed?
-    unless self.control_objective_items.blank?
+    if self.control_objective_items.any?
       self.errors.add :base, I18n.t('control_objective.errors.related')
 
       false
@@ -87,4 +87,10 @@ class ControlObjective < ActiveRecord::Base
   def identifier
     support.identifier || support_identifier
   end
+
+  private
+
+    def check_if_can_be_destroyed
+      throw :abort unless can_be_destroyed?
+    end
 end

@@ -13,7 +13,7 @@ class Polls::AnswersControllerTest < ActionController::TestCase
     assert_template 'polls/answers/index'
 
     assert_nothing_raised do
-      get :index, index: index_params.merge(answered: 'true')
+      get :index, params: { index: index_params.merge(answered: 'true') }
     end
 
     assert_response :success
@@ -22,7 +22,7 @@ class Polls::AnswersControllerTest < ActionController::TestCase
   end
 
   test 'filtered answers report' do
-    get :index, index: index_params.merge(answered: nil)
+    get :index, params: { index: index_params.merge(answered: nil) }
 
     assert_response :success
     assert_not_nil assigns(:report)
@@ -30,8 +30,11 @@ class Polls::AnswersControllerTest < ActionController::TestCase
   end
 
   test 'report answers pdf' do
-    xhr :get, :index, index: index_params.merge(answered: 'false'),
-      report_title: 'New title', report_subtitle: 'New subtitle'
+    get :index, xhr: true, params: {
+      index: index_params.merge(answered: 'false'),
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+    }
 
     assert_response :success
     assert_not_nil assigns(:report)

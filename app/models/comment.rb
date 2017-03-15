@@ -1,4 +1,4 @@
-class Comment < ActiveRecord::Base
+class Comment < ApplicationRecord
   include ParameterSelector
 
   has_paper_trail meta: {

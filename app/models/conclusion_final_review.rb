@@ -84,7 +84,7 @@ class ConclusionFinalReview < ConclusionReview
   }
 
   # Callbacks
-  before_create :check_for_approval, :duplicate_review_findings
+  before_create :check_if_can_be_created, :duplicate_review_findings
 
   # Restricciones de los atributos
   attr_readonly :issue_date, :close_date, :conclusion, :applied_procedures
@@ -117,8 +117,8 @@ class ConclusionFinalReview < ConclusionReview
     )
   end
 
-  def initialize(attributes = nil, options = {}, import_from_draft = true)
-    super(attributes, options)
+  def initialize(attributes = nil, import_from_draft = true)
+    super attributes
 
     if import_from_draft && self.review
       draft = ConclusionDraftReview.where(review_id: self.review_id).first
@@ -219,4 +219,10 @@ class ConclusionFinalReview < ConclusionReview
       end
     end
   end
+
+  private
+
+    def check_if_can_be_created
+      throw :abort unless check_for_approval
+    end
 end

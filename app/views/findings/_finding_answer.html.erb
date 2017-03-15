@@ -17,7 +17,7 @@
       <% if finding_answer.new_record? %>
         <%= f.input :answer, label: false %>
       <% else %>
-        <%= finding_answer.answer %>
+        <%= simple_format finding_answer.answer %>
       <% end %>
     </div>
     <div class="col-md-2">

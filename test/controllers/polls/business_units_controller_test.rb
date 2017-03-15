@@ -14,7 +14,7 @@ class Polls::BusinessUnitsControllerTest < ActionController::TestCase
     assert_template 'polls/business_units/index'
 
     assert_nothing_raised do
-      get :index, index: index_params
+      get :index, params: { index: index_params }
     end
 
     assert_response :success
@@ -22,7 +22,7 @@ class Polls::BusinessUnitsControllerTest < ActionController::TestCase
   end
 
   test 'filtered business unit report' do
-    get :index, index: index_params
+    get :index, params: { index: index_params }
 
     assert_response :success
     assert_not_nil assigns(:report)
@@ -30,8 +30,11 @@ class Polls::BusinessUnitsControllerTest < ActionController::TestCase
   end
 
   test 'report business unit pdf' do
-    xhr :get, :index, index: index_params,
-      report_title: 'New title', report_subtitle: 'New subtitle'
+    get :index, xhr: true, params: {
+      index: index_params,
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+    }
 
     assert_response :success
   end

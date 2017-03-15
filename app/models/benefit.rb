@@ -1,4 +1,4 @@
-class Benefit < ActiveRecord::Base
+class Benefit < ApplicationRecord
   include Auditable
   include Benefits::DestroyValidation
   include Benefits::Kind

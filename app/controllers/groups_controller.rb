@@ -8,42 +8,36 @@ class GroupsController < ApplicationController
   # Lista los grupos
   #
   # * GET /groups
-  # * GET /groups.xml
   def index
     @title = t 'group.index_title'
     @groups = Group.order(name: :asc).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @groups }
     end
   end
 
   # Muestra el detalle de un grupo
   #
   # * GET /groups/1
-  # * GET /groups/1.xml
   def show
     @title = t 'group.show_title'
     @group = Group.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @group }
     end
   end
 
   # Permite ingresar los datos para crear un nuevo grupo
   #
   # * GET /groups/new
-  # * GET /groups/new.xml
   def new
     @title = t 'group.new_title'
     @group = Group.new
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @group }
     end
   end
 
@@ -58,7 +52,6 @@ class GroupsController < ApplicationController
   # Crea una nuevo grupo siempre que cumpla con las validaciones
   #
   # * POST /groups
-  # * POST /groups.xml
   def create
     @title = t 'group.new_title'
     @group = Group.new(group_params)
@@ -67,10 +60,8 @@ class GroupsController < ApplicationController
       if @group.save
         flash.notice = t 'group.correctly_created'
         format.html { redirect_to(groups_url) }
-        format.xml  { render :xml => @group, :status => :created, :location => @group }
       else
         format.html { render :action => :new }
-        format.xml  { render :xml => @group.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -78,7 +69,6 @@ class GroupsController < ApplicationController
   # Actualiza el contenido de un grupo siempre que cumpla con las validaciones
   #
   # * PATCH /groups/1
-  # * PATCH /groups/1.xml
   def update
     @title = t 'group.edit_title'
     @group = Group.find(params[:id])
@@ -87,10 +77,8 @@ class GroupsController < ApplicationController
       if @group.update(group_params)
         flash.notice = t 'group.correctly_updated'
         format.html { redirect_to(groups_url) }
-        format.xml  { head :ok }
       else
         format.html { render :action => :edit }
-        format.xml  { render :xml => @group.errors, :status => :unprocessable_entity }
       end
     end
 
@@ -102,14 +90,12 @@ class GroupsController < ApplicationController
   # Elimina un grupo
   #
   # * DELETE /groups/1
-  # * DELETE /groups/1.xml
   def destroy
     @group = Group.find(params[:id])
     @group.destroy
 
     respond_to do |format|
       format.html { redirect_to(groups_url) }
-      format.xml  { head :ok }
     end
   end
 

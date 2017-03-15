@@ -14,21 +14,31 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'list users with search' do
-    get :index, search: { query: 'manager', columns: ['user', 'name'] }
+    get :index, params: {
+      search: {
+        query: 'manager',
+        columns: ['user', 'name']
+      }
+    }
     assert_response :success
     assert_not_nil assigns(:users)
     assert_equal 5, assigns(:users).count
   end
 
   test 'edit user when search match only one result' do
-    get :index, search: { query: 'admin', columns: ['user', 'name'] }
+    get :index, params: {
+      search: {
+        query: 'admin',
+        columns: ['user', 'name']
+      }
+    }
     assert_redirected_to user_url(users(:administrator_user))
     assert_not_nil assigns(:users)
     assert_equal 1, assigns(:users).count
   end
 
   test 'show user' do
-    get :show, id: users(:administrator_user)
+    get :show, params: { id: users(:administrator_user) }
     assert_response :success
     assert_not_nil assigns(:user)
   end
@@ -42,9 +52,9 @@ class UsersControllerTest < ActionController::TestCase
   test 'create user' do
     counts_array = ['User.count', 'RelatedUserRelation.count', 'OrganizationRole.count']
 
-    assert_emails 1 do
+    assert_enqueued_emails 1 do
       assert_difference counts_array do
-        post :create, {
+        post :create, params: {
           user: {
             user: 'new_user',
             name: 'New Name',
@@ -72,7 +82,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_difference ['User.count', 'OrganizationRole.count'] do
       assert_no_emails do
-        post :create, {
+        post :create, params: {
           user: {
             user: 'new_user_2',
             name: 'New Name2',
@@ -97,7 +107,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'edit user' do
-    get :edit, id: users(:administrator_user)
+    get :edit, params: { id: users(:administrator_user) }
     assert_response :success
     assert_not_nil assigns(:user)
   end
@@ -108,7 +118,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_no_emails do
       assert_no_difference counts_array do
-        patch :update, {
+        patch :update, params: {
           id: user.user,
           user: {
             user: 'updated_name',
@@ -153,9 +163,9 @@ class UsersControllerTest < ActionController::TestCase
     user = users :administrator_user
 
     assert_no_difference ['User.count', 'user.children.count'] do
-      assert_emails 1 do
+      assert_enqueued_emails 1 do
         assert_difference 'OrganizationRole.count' do
-          patch :update, {
+          patch :update, params: {
             id: users(:administrator_user).user,
             user: {
               user: 'updated_name_2',
@@ -204,7 +214,7 @@ class UsersControllerTest < ActionController::TestCase
     assert user.findings.all_for_reallocation.empty?
 
     assert_no_difference 'User.count' do
-      delete :destroy, id: user
+      delete :destroy, params: { id: user }
     end
 
     assert !user.reload.enable?
@@ -213,20 +223,24 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'disable audited user' do
     assert_no_difference 'User.count' do
-      delete :destroy, id: users(:audited_user).user
+      delete :destroy, params: { id: users(:audited_user).user }
     end
 
     assert_redirected_to users_url
   end
 
   test 'index as pdf' do
-    get :index, format: :pdf
+    get :index, params: { format: :pdf }
     assert_redirected_to UserPdf.new.relative_path
   end
 
   test 'export with search' do
-    get :index, format: :pdf, search: {
-      query: 'manager', columns: ['user', 'name']
+    get :index, params: {
+      format: :pdf,
+      search: {
+        query: 'manager',
+        columns: ['user', 'name']
+      }
     }
 
     assert_redirected_to UserPdf.new.relative_path

@@ -2,6 +2,8 @@ require 'test_helper'
 
 # Clase para probar el modelo "FindingUserAssignment"
 class FindingUserAssignmentTest < ActiveSupport::TestCase
+  include ActionMailer::TestHelper
+
   fixtures :finding_user_assignments
 
   # Función para inicializar las variables utilizadas en las pruebas
@@ -27,14 +29,17 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una asignación de usuario
   test 'update' do
-    old_updated_at = @finding_user_assignment.updated_at
+    assert_enqueued_emails 1 do
+      assert @finding_user_assignment.update!(
+        :user_id => users(:supervisor_user).id
+      )
+    end
 
-    assert @finding_user_assignment.touch,
-      @finding_user_assignment.errors.full_messages.join('; ')
-    @finding_user_assignment.reload
-
-    assert_not_equal old_updated_at,
-      @finding_user_assignment.updated_at
+    assert_no_enqueued_emails do
+      assert @finding_user_assignment.update!(
+        :responsible_auditor => !@finding_user_assignment.responsible_auditor
+      )
+    end
   end
 
   # Prueba de eliminación de una asignación de usuario

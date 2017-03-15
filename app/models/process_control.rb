@@ -1,4 +1,4 @@
-class ProcessControl < ActiveRecord::Base
+class ProcessControl < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Comparable

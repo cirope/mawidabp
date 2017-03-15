@@ -1,4 +1,4 @@
-class Achievement < ActiveRecord::Base
+class Achievement < ApplicationRecord
   include Auditable
   include Achievements::Validations
 

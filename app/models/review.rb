@@ -1,4 +1,4 @@
-class Review < ActiveRecord::Base
+class Review < ApplicationRecord
   include Auditable
   include Parameters::Risk
   include Parameters::Score
@@ -15,7 +15,7 @@ class Review < ActiveRecord::Base
   trimmed_fields :identification
 
   # Callbacks
-  before_validation :set_proper_parent, :can_be_modified?
+  before_validation :set_proper_parent, :check_if_can_be_modified
   before_save :calculate_score
 
   # Acceso a los atributos
@@ -973,5 +973,9 @@ class Review < ActiveRecord::Base
       last_number = last_code.blank? ? 0 : last_code
 
       "#{prefix} #{'%.2d' % last_number}".strip
+    end
+
+    def check_if_can_be_modified
+      throw :abort unless can_be_modified?
     end
 end
