@@ -197,17 +197,19 @@ module Prawn
 
           self.add_organization_image organization, font_size
 
-          self.canvas do
-            date_text = I18n.l(date, :format => :long) if date
-            text ||= I18n.t(:'follow_up_committee.print_date',
-              :date => date_text)
-            coordinates = [
-              self.bounds.width / 2.0,
-              self.bounds.top - font_size.pt * 2
-            ]
+          if show_print_date_on? organization
+            self.canvas do
+              date_text = I18n.l(date, :format => :long) if date
+              text ||= I18n.t(:'follow_up_committee.print_date',
+                :date => date_text)
+              coordinates = [
+                self.bounds.width / 2.0,
+                self.bounds.top - font_size.pt * 2
+              ]
 
-            self.text_box text, :at => coordinates, :size => font_size,
-              :width => (coordinates[0] - PDF_MARGINS[1].mm), :align => :right
+              self.text_box text, :at => coordinates, :size => font_size,
+                :width => (coordinates[0] - PDF_MARGINS[1].mm), :align => :right
+            end
           end
         end
 
@@ -283,6 +285,14 @@ module Prawn
 
         file_path
       end
+
+      private
+
+        def show_print_date_on? organization
+          setting = organization.settings.find_by name: 'show_print_date_on_pdfs'
+
+          (setting ? setting.value : DEFAULT_SETTINGS[:show_print_date_on_pdfs][:value]) != '0'
+        end
     end
   end
 end

@@ -267,6 +267,7 @@ es:
     password_minimum_time: 'Duración mínima de la contraseña'
     session_expire_time: 'Desconexión por inactividad'
     exchange_directory_path: 'Directorio de intercambio de archivos'
+    show_print_date_on_pdfs: 'Mostrar fecha de impresión en PDFs'
 
   tags:
     edit:
