@@ -157,11 +157,6 @@ module Findings::FollowUpPDF
 
     def put_follow_up_finding_answers_on pdf
       if finding_answers.any?
-        column_names   = [['answer', 50], ['user_id', 30], ['created_at', 20]]
-        column_headers = follow_up_column_headers_for FindingAnswer, column_names
-        column_widths  = column_widths_for pdf, column_names
-        row_data       = finding_answers_row_data
-
         pdf.move_down PDF_FONT_SIZE
 
         pdf.add_title I18n.t('finding.follow_up_report.follow_up_comments'),
@@ -169,15 +164,12 @@ module Findings::FollowUpPDF
 
         pdf.move_down PDF_FONT_SIZE
 
-        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-          table_options = pdf.default_table_options column_widths
-
-          pdf.table(row_data.insert(0, column_headers), table_options) do
-            row(0).style(
-              background_color: 'cccccc',
-              padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-            )
+        finding_answers_items.each do |finding_answer_item|
+          finding_answer_item.each do |args|
+            pdf.add_description_item *(args | [0, false])
           end
+
+          pdf.move_down PDF_FONT_SIZE
         end
       end
     end
@@ -237,7 +229,7 @@ module Findings::FollowUpPDF
         I18n.t('finding.without_conclusion_final_review')
 
       [
-        [Review.model_name.human, "#{review.long_identification} (#{issue_date})", 0, false],
+        [Review.model_name.human, "#{review.long_identification} (#{issue_date})", 1, false],
         [Finding.human_attribute_name(:review_code), review_code, 0, false],
         [Finding.human_attribute_name(:title), title, 0, false],
         [ProcessControl.model_name.human, control_objective_item.process_control.name, 0, false],
@@ -348,12 +340,21 @@ module Findings::FollowUpPDF
       end
     end
 
-    def finding_answers_row_data
+    def finding_answers_items
       finding_answers.map do |finding_answer|
         [
-          finding_answer.answer,
-          finding_answer.user&.full_name,
-          I18n.l(finding_answer.created_at, format: :validation)
+          [
+            FindingAnswer.human_attribute_name('user_id'),
+            finding_answer.user&.full_name
+          ],
+          [
+            FindingAnswer.human_attribute_name('created_at'),
+            I18n.l(finding_answer.created_at, format: :validation)
+          ],
+          [
+            FindingAnswer.human_attribute_name('answer'),
+            finding_answer.answer
+          ]
         ]
       end
     end
