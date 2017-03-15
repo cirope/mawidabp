@@ -18,9 +18,9 @@ set :keep_releases, 5
 
 namespace :deploy do
   before :check,      'config:upload'
+  before :publishing, :db_updates
   after  :publishing, :restart
   after  :finishing,  :help
-  after  :finishing,  :db_updates
   after  :finishing,  :cleanup
   after  :published,  'sidekiq:restart'
 end
