@@ -156,7 +156,7 @@ module Prawn
         end
       end
 
-      def add_review_auditors_table(review_user_assignments)
+      def add_review_signatures_table(review_user_assignments)
         if review_user_assignments.present?
           column_data = [[]]
           column_headers = []

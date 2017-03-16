@@ -337,7 +337,7 @@ class ConclusionReview < ApplicationRecord
 
     pdf.move_down PDF_FONT_SIZE
 
-    pdf.add_review_auditors_table(review.review_user_assignments.select(&:include_signature))
+    pdf.add_review_signatures_table(review.review_user_assignments.select(&:include_signature))
 
     pdf.custom_save_as self.pdf_name, ConclusionReview.table_name, self.id
   end
