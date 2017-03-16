@@ -157,7 +157,7 @@ module Prawn
       end
 
       def add_review_auditors_table(review_user_assignments)
-        unless review_user_assignments.blank?
+        if review_user_assignments.present?
           column_data = [[]]
           column_headers = []
           column_widths = []
@@ -169,8 +169,9 @@ module Prawn
               100.0 / review_user_assignments.size)
           end
 
-          self.font_size(((PDF_FONT_SIZE * 0.75).round).pt) do
+          font_size(((PDF_FONT_SIZE * 0.75).round).pt) do
             table_options = {
+              :header => true,
               :cell_style => {
                 :padding => (PDF_FONT_SIZE * 0.3).round,
                 :inline_format => true
@@ -179,7 +180,7 @@ module Prawn
               :column_widths => column_widths
             }
 
-            self.table(column_data.insert(0, column_headers), table_options) do
+            table(column_data.insert(0, column_headers), table_options) do
               row(0).style(
                 :background_color => 'cccccc',
                 :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
