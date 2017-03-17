@@ -46,7 +46,8 @@
             }
           %>
           <%= f.input :user_id, as: :hidden, input_html: {
-            value: params[:weaknesses_graphs] && params[:weaknesses_graphs][:user_id]
+            value: params[:weaknesses_graphs] && params[:weaknesses_graphs][:user_id],
+            data: { clear: 'user' }
           } %>
         </div>
         <div class="tab-pane <%= 'active' if business_unit.present? %>" id="business_units">
@@ -54,7 +55,6 @@
             input_html: {
               value: business_unit,
               title: t('label.search'),
-              autofocus: true,
               data: {
                 clear: 'business_unit',
                 autocomplete_url: auto_complete_for_business_unit_conclusion_reports_path,
@@ -63,7 +63,8 @@
             }
           %>
           <%= f.input :business_unit_id, as: :hidden, input_html: {
-            value: params[:weaknesses_graphs] && params[:weaknesses_graphs][:business_unit_id]
+            value: params[:weaknesses_graphs] && params[:weaknesses_graphs][:business_unit_id],
+            data: { clear: 'business_unit' }
           } %>
         </div>
         <div class="tab-pane <%= 'active' if process_control.present? %>" id="process_controls">
@@ -71,7 +72,6 @@
             input_html: {
               value: process_control,
               title: t('label.search'),
-              autofocus: true,
               data: {
                 clear: 'process_control',
                 autocomplete_url: auto_complete_for_process_control_conclusion_reports_path,
@@ -80,7 +80,8 @@
             }
           %>
           <%= f.input :process_control_id, as: :hidden, input_html: {
-            value: params[:weaknesses_graphs] && params[:weaknesses_graphs][:process_control_id]
+            value: params[:weaknesses_graphs] && params[:weaknesses_graphs][:process_control_id],
+            data: { clear: 'process_control' }
           } %>
         </div>
       </div>

@@ -10,7 +10,7 @@ module FindingsHelper
       statuses.merge! finding.next_status_list(state_was)
     end
 
-    options = statuses.except(:repeated).map do |k, v|
+    options = statuses.except(:repeated, :confirmed).map do |k, v|
       [t(:"finding.status_#{k}"), v]
     end
 

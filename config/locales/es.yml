@@ -162,6 +162,7 @@
   conclusion_committee_report:
     index_title: "Reportes de conclusión"
     control_objective_stats_title: 'Observaciones por objetivo de control'
+    control_objective_stats_by_review_title: 'Observaciones por objetivo de control sin calificación'
     benefits_title: 'Beneficios / Perjuicios'
     process_control_stats_title: 'Observaciones por proceso de negocio'
     synthesis_report_title: "Informe de síntesis al directorio"
@@ -183,6 +184,12 @@
     applied_filters:
       one: "En este reporte se ha aplicado el siguiente filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
+    benefits:
+      pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
+      title: "Beneficios / Perjuicios"
+      subtitle: "INFORMES DEFINITIVOS"
+      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
+      total: 'Monto total: <b>%{amount}</b>'
     control_objective_stats:
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
       title: "OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL"
@@ -197,12 +204,12 @@
       without_weaknesses: "Sin observaciones"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
-    benefits:
-      pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
-      title: "Beneficios / Perjuicios"
-      subtitle: "INFORMES DEFINITIVOS"
-      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
-      total: 'Monto total: <b>%{amount}</b>'
+    control_objective_stats_by_review:
+      pdf_name: 'observaciones_por_objetivo_de_control_sin_calificacion_%{from_date}_al_%{to_date}.pdf'
+      title: 'OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL SIN CALIFICACIÓN'
+      subtitle: 'INFORMES DEFINITIVOS'
+      without_weaknesses: 'Sin observaciones'
+      without_audits_in_the_period: 'Sin auditorías en el periodo'
     fixed_weaknesses_report:
       pdf_name: "observaciones_por_riesgo_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
@@ -560,6 +567,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
   follow_up_committee_report:
     index_title: "Reportes de comité"
     control_objective_stats_title: "Observaciones por objetivo de control"
+    control_objective_stats_by_review_title: 'Observaciones por objetivo de control sin calificación'
     benefits_title: "Beneficios / Perjuicios"
     process_control_stats_title: "Observaciones por proceso de negocio"
     control_effectiveness: "Efectividad del control"
@@ -601,6 +609,12 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     applied_filters:
       one: "En este reporte se ha aplicado el siguiente filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
+    benefits:
+      pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
+      title: "Beneficios / Perjuicios"
+      subtitle: "SEGUIMIENTO DE INFORMES"
+      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
+      total: 'Monto total: <b>%{amount}</b>'
     control_objective_stats:
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
       title: "OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL"
@@ -615,12 +629,12 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       without_weaknesses: "Sin observaciones"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
-    benefits:
-      pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
-      title: "Beneficios / Perjuicios"
-      subtitle: "INFORMES DEFINITIVOS"
-      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
-      total: 'Monto total: <b>%{amount}</b>'
+    control_objective_stats_by_review:
+      pdf_name: 'observaciones_por_objetivo_de_control_sin_calificacion_%{from_date}_al_%{to_date}.pdf'
+      title: 'OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL SIN CALIFICACIÓN'
+      subtitle: "SEGUIMIENTO DE INFORMES"
+      without_weaknesses: 'Sin observaciones'
+      without_audits_in_the_period: 'Sin auditorías en el periodo'
     follow_up_cost_analysis:
       pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
     fixed_weaknesses_report:

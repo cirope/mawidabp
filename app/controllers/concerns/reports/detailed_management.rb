@@ -2,7 +2,7 @@ module Reports::DetailedManagement
   include Reports::Pdf
 
   def detailed_management_report
-    init_vars
+    init_detailed_management_report_vars
 
     raw_reviews = find_reviews
 
@@ -44,7 +44,7 @@ module Reports::DetailedManagement
     end
   end
 
-  def init_vars
+  def init_detailed_management_report_vars
     @title = t 'execution_reports.detailed_management_report_title'
     @from_date, @to_date = *make_date_range(params[:detailed_management_report])
     @column_order = ['business_unit_report_name', 'review', 'process_control',
