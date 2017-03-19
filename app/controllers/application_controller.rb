@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   include ParameterSelector
   include CacheControl
 
-  protect_from_forgery
+  protect_from_forgery with: :exception
 
   before_action :set_paper_trail_whodunnit
   before_action :scope_current_organization
@@ -172,12 +172,11 @@ class ApplicationController < ActionController::Base
         @auth_privileges[@current_module][@action_privileges[current_action]]
 
       unless allowed_by_type && allowed_by_privileges
-        unless request.xhr?
-          flash.alert = t('message.insufficient_privileges')
-          redirect_to :back
-        else
+        if request.xhr?
           render :partial => 'shared/ajax_message', :layout => false,
             :locals => {:message => t('message.insufficient_privileges')}
+        else
+          redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
         end
       end
 
@@ -188,8 +187,7 @@ class ApplicationController < ActionController::Base
 
     def check_group_admin
       unless @auth_user.is_group_admin?
-        flash.alert = t('message.insufficient_privileges')
-        redirect_to :back
+        redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
       end
 
     rescue ActionController::RedirectBackError

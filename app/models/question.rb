@@ -1,4 +1,4 @@
-class Question < ActiveRecord::Base
+class Question < ApplicationRecord
   include Auditable
   include Questions::Validations
   include Questions::Callbacks

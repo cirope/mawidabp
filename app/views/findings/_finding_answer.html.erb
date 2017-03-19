@@ -17,7 +17,7 @@
       <% if finding_answer.new_record? %>
         <%= f.input :answer, label: false %>
       <% else %>
-        <%= finding_answer.answer %>
+        <%= simple_format finding_answer.answer %>
       <% end %>
     </div>
     <div class="col-md-2">
@@ -64,7 +64,6 @@
         <%= finding_answer_notification_check(f) %>
       <% end %>
       <%= f.input :user_id, as: :hidden %>
-      <%= f.input :id, as: :hidden %>
     </div>
   </div>
 </fieldset>

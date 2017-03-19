@@ -28,7 +28,7 @@ module Polls::Scopes
           or by_review_user(user_id)
       end
 
-      result.uniq
+      result.distinct
     end
 
     def by_review_user user_id

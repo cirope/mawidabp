@@ -1,4 +1,4 @@
-class Plan < ActiveRecord::Base
+class Plan < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Plans::Clone

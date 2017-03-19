@@ -1,4 +1,4 @@
-class Resource < ActiveRecord::Base
+class Resource < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Resources::Validation

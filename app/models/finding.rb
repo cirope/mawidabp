@@ -1,4 +1,4 @@
-class Finding < ActiveRecord::Base
+class Finding < ApplicationRecord
   include ActsAsTree
   include Auditable
   include Comparable
@@ -27,12 +27,12 @@ class Finding < ActiveRecord::Base
   include Findings::Unanswered
   include Findings::Unconfirmed
   include Findings::UpdateCallbacks
+  include Findings::UserAssignments
   include Findings::UserScopes
   include Findings::Validations
   include Findings::ValidationCallbacks
   include Findings::Versions
   include Findings::WorkPapers
-  include Findings::XML
   include Parameters::Risk
   include Parameters::Priority
   include ParameterSelector
@@ -52,21 +52,15 @@ class Finding < ActiveRecord::Base
     :through => :notification_relations
   has_many :comments, -> { order(:created_at => :asc) }, :as => :commentable,
     :dependent => :destroy
-  has_many :finding_user_assignments, :dependent => :destroy,
-    :inverse_of => :finding, :before_add => :check_for_final_review,
-    :before_remove => :check_for_final_review
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :finding
-  has_many :users, -> { order(:last_name => :asc) }, :through => :finding_user_assignments
   has_many :business_unit_findings, :dependent => :destroy
   has_many :business_units, :through => :business_unit_findings
 
   accepts_nested_attributes_for :comments, :allow_destroy => false
-  accepts_nested_attributes_for :finding_user_assignments,
-    :allow_destroy => true
 
-  def initialize(attributes = nil, options = {}, import_users = false)
-    super(attributes, options)
+  def initialize(attributes = nil, import_users = false)
+    super(attributes)
 
     if import_users && self.try(:control_objective_item).try(:review)
       self.control_objective_item.review.review_user_assignments.map do |rua|
@@ -129,18 +123,6 @@ class Finding < ActiveRecord::Base
     PENDING_STATUS.include?(self.state)
   end
 
-  def has_audited?
-    finding_user_assignments.any? do |fua|
-      !fua.marked_for_destruction? && fua.user.can_act_as_audited?
-    end
-  end
-
-  def has_auditor?
-    finding_user_assignments.any? do |fua|
-      !fua.marked_for_destruction? && fua.user.auditor?
-    end
-  end
-
   def rescheduled?
     all_follow_up_dates.size > 0
   end
@@ -155,14 +137,6 @@ class Finding < ActiveRecord::Base
 
   def commitment_date
     finding_answers.where.not(commitment_date: nil).first&.commitment_date
-  end
-
-  def process_owners
-    finding_user_assignments.select(&:process_owner).map(&:user)
-  end
-
-  def responsible_auditors
-    self.finding_user_assignments.responsibles.map(&:user)
   end
 
   def all_follow_up_dates(end_date = nil, reload = false)

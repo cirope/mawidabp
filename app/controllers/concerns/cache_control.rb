@@ -2,7 +2,7 @@ module CacheControl
   extend ActiveSupport::Concern
 
   included do
-    after_filter :set_cache_control, unless: :downloading_file?
+    after_action :set_cache_control, unless: :downloading_file?
   end
 
   def set_file_download_headers

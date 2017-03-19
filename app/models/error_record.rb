@@ -1,4 +1,4 @@
-class ErrorRecord < ActiveRecord::Base
+class ErrorRecord < ApplicationRecord
   include Auditable
   include ParameterSelector
   include ErrorRecords::Search

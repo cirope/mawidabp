@@ -1,4 +1,4 @@
-class ReviewUserAssignment < ActiveRecord::Base
+class ReviewUserAssignment < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Comparable
@@ -13,8 +13,8 @@ class ReviewUserAssignment < ActiveRecord::Base
   }
 
   # Callbacks
-  before_validation :can_be_modified?
-  before_destroy :can_be_modified?, :delete_user_in_all_review_findings
+  before_validation :check_if_can_modified
+  before_destroy :check_if_can_modified, :delete_user_in_all_review_findings
   before_save :check_user_modification
 
   # Restricciones
@@ -77,14 +77,13 @@ class ReviewUserAssignment < ActiveRecord::Base
   end
 
   def can_be_modified?
-    unless self.is_in_a_final_review? &&
-        (self.changed? || self.marked_for_destruction?)
-      true
-    else
+    if self.is_in_a_final_review? && (self.changed? || self.marked_for_destruction?)
       msg = I18n.t('review.user_assignment.readonly')
       self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
+    else
+      true
     end
   end
 
@@ -181,7 +180,7 @@ class ReviewUserAssignment < ActiveRecord::Base
       ).deliver_later
     end
 
-    all_valid
+    throw :abort unless all_valid
   end
 
   def is_in_a_final_review?
@@ -196,4 +195,10 @@ class ReviewUserAssignment < ActiveRecord::Base
   def type_text
     I18n.t "review.user_assignment.type_#{TYPES.invert[self.assignment_type]}"
   end
+
+  private
+
+    def check_if_can_modified
+      throw :abort unless can_be_modified?
+    end
 end

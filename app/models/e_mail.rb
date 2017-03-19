@@ -1,4 +1,4 @@
-class EMail < ActiveRecord::Base
+class EMail < ApplicationRecord
   include Auditable
   include Emails::Search
   include Emails::Scopes

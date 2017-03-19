@@ -1,4 +1,4 @@
-class Control < ActiveRecord::Base
+class Control < ApplicationRecord
   include ParameterSelector
 
   has_paper_trail meta: {
@@ -21,8 +21,8 @@ class Control < ActiveRecord::Base
   # Relaciones
   belongs_to :controllable, polymorphic: true
 
-  def initialize(attributes = nil, options = {})
-    super(attributes, options)
+  def initialize(attributes = nil)
+    super(attributes)
 
     self.order ||= 1
   end

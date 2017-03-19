@@ -1,4 +1,4 @@
-class Review < ActiveRecord::Base
+class Review < ApplicationRecord
   include Auditable
   include Parameters::Risk
   include Parameters::Score
@@ -15,7 +15,7 @@ class Review < ActiveRecord::Base
   trimmed_fields :identification
 
   # Callbacks
-  before_validation :set_proper_parent, :can_be_modified?
+  before_validation :set_proper_parent, :check_if_can_be_modified
   before_save :calculate_score
 
   # Acceso a los atributos
@@ -544,7 +544,7 @@ class Review < ActiveRecord::Base
 
     pdf.move_down PDF_FONT_SIZE * 2
 
-    pdf.add_review_auditors_table(review_user_assignments.select(&:include_signature))
+    pdf.add_review_signatures_table(review_user_assignments.select(&:include_signature))
 
     pdf.custom_save_as(self.score_sheet_name, 'score_sheets', self.id)
   end
@@ -743,7 +743,7 @@ class Review < ActiveRecord::Base
 
     pdf.move_down PDF_FONT_SIZE * 2
 
-    pdf.add_review_auditors_table(review_user_assignments.select(&:include_signature))
+    pdf.add_review_signatures_table(review_user_assignments.select(&:include_signature))
 
     pdf.custom_save_as(self.global_score_sheet_name, 'global_score_sheets',
       self.id)
@@ -973,5 +973,9 @@ class Review < ActiveRecord::Base
       last_number = last_code.blank? ? 0 : last_code
 
       "#{prefix} #{'%.2d' % last_number}".strip
+    end
+
+    def check_if_can_be_modified
+      throw :abort unless can_be_modified?
     end
 end

@@ -2,7 +2,7 @@ module Periods::DestroyValidation
   extend ActiveSupport::Concern
 
   included do
-    before_destroy :can_be_destroyed?
+    before_destroy :check_if_can_be_destroyed
   end
 
   private
@@ -21,5 +21,9 @@ module Periods::DestroyValidation
 
     def add_error_for method, collection
       I18n.t "periods.errors.#{method}", count: collection.size
+    end
+
+    def check_if_can_be_destroyed
+      throw :abort unless can_be_destroyed?
     end
 end

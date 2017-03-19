@@ -37,7 +37,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion'
-      }, {}, false)
+      }, false)
 
       assert @conclusion_review.save
     end
@@ -94,7 +94,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :close_date => '13/13/13',
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion'
-      }, {}, false)
+      }, false)
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
@@ -109,7 +109,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :close_date => 2.days.ago.to_date,
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion'
-      }, {}, false)
+      }, false)
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :close_date, :on_or_after, restriction: I18n.l(Date.today)

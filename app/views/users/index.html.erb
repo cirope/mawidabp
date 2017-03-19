@@ -40,5 +40,5 @@
   <% if current_organization.ldap_config %>
     <%= link_to t('.import_from_ldap'), new_users_import_path %> |
   <% end %>
-  <%= link_to t('label.download'), users_path(search: params[:search], _ts: Time.now.to_i, format: :pdf) %>
+  <%= link_to t('label.download'), users_path(params.permit(search: [:query, columns: []]).merge(_ts: Time.now.to_i, format: :pdf)) %>
 </div>

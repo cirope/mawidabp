@@ -6,14 +6,14 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
   end
 
   test 'new' do
-    get :new, hash: groups(:main_group).admin_hash
+    get :new, params: { hash: groups(:main_group).admin_hash }
     assert_response :success
     assert_not_nil assigns(:user)
   end
 
   test 'new with invalid hash' do
     assert_raise ActiveRecord::RecordNotFound do
-      get :new, hash: 'xxx'
+      get :new, params: { hash: 'xxx' }
     end
   end
 
@@ -22,13 +22,14 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
 
     group.update! updated_at: BLANK_PASSWORD_STALE_DAYS.next.days.ago
 
-    get :new, hash: group.admin_hash
+    get :new, params: { hash: group.admin_hash }
     assert_redirected_to login_url
   end
 
   test 'create initial' do
     assert_difference ['User.count', 'OrganizationRole.count'] do
-      post :create, hash: groups(:main_group).admin_hash,
+      post :create, params: {
+        hash: groups(:main_group).admin_hash,
         user: {
           user: 'new_user_2',
           name: 'New Name2',
@@ -46,6 +47,7 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
             }
           ]
         }
+      }
     end
 
     assert_redirected_to login_url
@@ -55,7 +57,10 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
 
   test 'create with invalid hash' do
     assert_raise ActiveRecord::RecordNotFound do
-      post :create, hash: 'xxx', user: {}
+      post :create, params: {
+        hash: 'xxx',
+        user: {}
+      }
     end
   end
 end

@@ -1,4 +1,4 @@
-class Document < ActiveRecord::Base
+class Document < ApplicationRecord
   include Auditable
   include Documents::Shared
   include Documents::Defaults

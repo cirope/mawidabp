@@ -15,7 +15,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
   end
 
   test 'show questionnaire' do
-    get :show, id: @questionnaire
+    get :show, params: { id: @questionnaire }
     assert_response :success
     assert_not_nil assigns(:questionnaire)
     assert_template 'questionnaires/show'
@@ -32,7 +32,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
     assert_difference 'Questionnaire.count' do
       assert_difference 'Question.count', 2 do
         assert_difference 'AnswerOption.count', 5 do
-          post :create, {
+          post :create, params: {
             questionnaire: {
               name: 'Nuevo cuestionario',
               email_text: 'Email text',
@@ -58,7 +58,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
   end
 
   test 'edit questionnaire' do
-    get :edit, id: @questionnaire
+    get :edit, params: { id: @questionnaire }
     assert_response :success
     assert_not_nil assigns(:questionnaire)
     assert_template 'questionnaires/edit'
@@ -66,7 +66,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
 
   test 'update questionnaire' do
     assert_no_difference ['Questionnaire.count', 'Question.count'] do
-      patch :update, {
+      patch :update, params: {
         id: @questionnaire,
         questionnaire: {
           name: 'Cuestionario actualizado',
@@ -93,7 +93,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
     assert_difference ['Questionnaire.count'], -1 do
       assert_difference 'Question.count', -2 do
         assert_difference ['AnswerOption.count'], -5 do
-          delete :destroy, id: @questionnaire
+          delete :destroy, params: { id: @questionnaire }
         end
       end
     end

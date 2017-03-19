@@ -1,4 +1,4 @@
-class OldPassword < ActiveRecord::Base
+class OldPassword < ApplicationRecord
   validates :password, length: { maximum: 255 }, allow_nil: true, allow_blank: true
 
   # Relaciones

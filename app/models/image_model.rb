@@ -1,4 +1,4 @@
-class ImageModel < ActiveRecord::Base
+class ImageModel < ApplicationRecord
   include Auditable
   include ImageModels::Geometry
   include ImageModels::ImageAttributes

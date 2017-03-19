@@ -1,4 +1,4 @@
-class FileModel < ActiveRecord::Base
+class FileModel < ApplicationRecord
   include Auditable
   include FileModels::Dirty
   include FileModels::FileAttributes

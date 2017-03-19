@@ -77,7 +77,7 @@ class UsersController < ApplicationController
       UserPdf.create(
         columns: @columns,
         query: @query,
-        users: @users,
+        users: @users.except(:limit),
         current_organization: current_organization
       )
     end

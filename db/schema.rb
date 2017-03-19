@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170212233430) do
+ActiveRecord::Schema.define(version: 20170309185011) do
 
   create_table "achievements", force: :cascade do |t|
-    t.integer  "benefit_id", limit: nil,                          null: false
-    t.decimal  "amount",                 precision: 15, scale: 2
+    t.integer  "benefit_id", precision: 38,           null: false
+    t.decimal  "amount",     precision: 15, scale: 2
     t.text     "comment"
-    t.integer  "finding_id", limit: nil,                          null: false
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.integer  "finding_id", precision: 38,           null: false
+    t.datetime "created_at", precision: 6,            null: false
+    t.datetime "updated_at", precision: 6,            null: false
   end
 
   add_index "achievements", ["benefit_id"], name: "i_achievements_benefit_id"
@@ -27,10 +26,10 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "answer_options", force: :cascade do |t|
     t.text     "option"
-    t.integer  "question_id",  limit: nil
-    t.integer  "lock_version",             precision: 38, default: 0
-    t.datetime "created_at",                                          null: false
-    t.datetime "updated_at",                                          null: false
+    t.integer  "question_id",  precision: 38
+    t.integer  "lock_version", precision: 38, default: 0
+    t.datetime "created_at",   precision: 6,              null: false
+    t.datetime "updated_at",   precision: 6,              null: false
   end
 
   add_index "answer_options", ["question_id"], name: "i_answer_options_question_id"
@@ -38,13 +37,13 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   create_table "answers", force: :cascade do |t|
     t.text     "comments"
     t.string   "type"
-    t.integer  "question_id",      limit: nil
-    t.integer  "poll_id",          limit: nil
-    t.integer  "lock_version",                 precision: 38, default: 0
+    t.integer  "question_id",      precision: 38
+    t.integer  "poll_id",          precision: 38
+    t.integer  "lock_version",     precision: 38, default: 0
     t.text     "answer"
-    t.integer  "answer_option_id", limit: nil
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
+    t.integer  "answer_option_id", precision: 38
+    t.datetime "created_at",       precision: 6,              null: false
+    t.datetime "updated_at",       precision: 6,              null: false
   end
 
   add_index "answers", ["poll_id"], name: "index_answers_on_poll_id"
@@ -58,12 +57,12 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "aq$_internet_agent_privs", ["agent_name", "db_username"], name: "unq_pairs", unique: true
 
-  create_table "aq$_internet_agents", primary_key: "agent_name", force: :cascade do |t|
+  create_table "aq$_internet_agents", primary_key: "agent_name", id: :string, limit: 30, force: :cascade do |t|
     t.integer "protocol",             precision: 38, null: false
     t.string  "spare1",   limit: 128
   end
 
-  create_table "aq$_queue_tables", primary_key: "objno", force: :cascade do |t|
+  create_table "aq$_queue_tables", primary_key: "objno", id: :decimal, force: :cascade do |t|
     t.string  "schema",        limit: 30,   null: false
     t.string  "name",          limit: 30,   null: false
     t.decimal "udata_type",                 null: false
@@ -78,25 +77,25 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 # Could not dump table "aq$_queues" because of following StandardError
 #   Unknown type 'SYS.AQ$_SUBSCRIBERS' for column 'subscribers'
 
-  create_table "aq$_schedules", id: false, force: :cascade do |t|
-    t.raw      "oid",         limit: 16,  null: false
-    t.string   "destination", limit: 128, null: false
-    t.datetime "start_time"
-    t.string   "duration",    limit: 8
-    t.string   "next_time",   limit: 128
-    t.string   "latency",     limit: 8
-    t.datetime "last_time"
-    t.decimal  "jobno"
+  create_table "aq$_schedules", primary_key: ["oid", "destination"], force: :cascade do |t|
+    t.raw     "oid",         limit: 16,  null: false
+    t.string  "destination", limit: 128, null: false
+    t.date    "start_time"
+    t.string  "duration",    limit: 8
+    t.string  "next_time",   limit: 128
+    t.string  "latency",     limit: 8
+    t.date    "last_time"
+    t.decimal "jobno"
   end
 
   add_index "aq$_schedules", ["jobno"], name: "aq$_schedules_check", unique: true
 
   create_table "benefits", force: :cascade do |t|
-    t.string   "name",                        null: false
-    t.string   "kind",                        null: false
-    t.integer  "organization_id", limit: nil, null: false
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.string   "name",                           null: false
+    t.string   "kind",                           null: false
+    t.integer  "organization_id", precision: 38, null: false
+    t.datetime "created_at",      precision: 6,  null: false
+    t.datetime "updated_at",      precision: 6,  null: false
   end
 
   add_index "benefits", ["organization_id"], name: "i_benefits_organization_id"
@@ -104,13 +103,13 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   create_table "best_practices", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
-    t.integer  "organization_id", limit: nil
-    t.integer  "lock_version",                precision: 38, default: 0
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
-    t.boolean  "obsolete",        limit: nil,                default: false
-    t.boolean  "shared",          limit: nil,                default: false
-    t.integer  "group_id",        limit: nil
+    t.integer  "organization_id", precision: 38
+    t.integer  "lock_version",    precision: 38, default: 0
+    t.datetime "created_at",      precision: 6,                  null: false
+    t.datetime "updated_at",      precision: 6,                  null: false
+    t.boolean  "obsolete",                       default: false
+    t.boolean  "shared",                         default: false
+    t.integer  "group_id",        precision: 38
   end
 
   add_index "best_practices", ["created_at"], name: "i_best_practices_created_at"
@@ -119,23 +118,23 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "best_practices", ["organization_id"], name: "i_bes_pra_org_id"
 
   create_table "business_unit_findings", force: :cascade do |t|
-    t.integer  "business_unit_id", limit: nil
-    t.integer  "finding_id",       limit: nil
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.integer  "business_unit_id", precision: 38
+    t.integer  "finding_id",       precision: 38
+    t.datetime "created_at",       precision: 6,  null: false
+    t.datetime "updated_at",       precision: 6,  null: false
   end
 
   add_index "business_unit_findings", ["business_unit_id"], name: "i_bus_uni_fin_bus_uni_id"
   add_index "business_unit_findings", ["finding_id"], name: "i_bus_uni_fin_fin_id"
 
   create_table "business_unit_scores", force: :cascade do |t|
-    t.integer  "design_score",                          precision: 38
-    t.integer  "compliance_score",                      precision: 38
-    t.integer  "sustantive_score",                      precision: 38
-    t.integer  "business_unit_id",          limit: nil
-    t.integer  "control_objective_item_id", limit: nil
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
+    t.integer  "design_score",              precision: 38
+    t.integer  "compliance_score",          precision: 38
+    t.integer  "sustantive_score",          precision: 38
+    t.integer  "business_unit_id",          precision: 38
+    t.integer  "control_objective_item_id", precision: 38
+    t.datetime "created_at",                precision: 6,  null: false
+    t.datetime "updated_at",                precision: 6,  null: false
   end
 
   add_index "business_unit_scores", ["business_unit_id"], name: "i_bus_uni_sco_bus_uni_id"
@@ -143,13 +142,13 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "business_unit_types", force: :cascade do |t|
     t.string   "name"
-    t.boolean  "external",            limit: nil,                default: false, null: false
+    t.boolean  "external",                           default: false, null: false
     t.string   "business_unit_label"
     t.string   "project_label"
-    t.integer  "organization_id",     limit: nil
-    t.integer  "lock_version",                    precision: 38, default: 0
-    t.datetime "created_at",                                                     null: false
-    t.datetime "updated_at",                                                     null: false
+    t.integer  "organization_id",     precision: 38
+    t.integer  "lock_version",        precision: 38, default: 0
+    t.datetime "created_at",          precision: 6,                  null: false
+    t.datetime "updated_at",          precision: 6,                  null: false
   end
 
   add_index "business_unit_types", ["external"], name: "i_business_unit_types_external"
@@ -158,9 +157,9 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "business_units", force: :cascade do |t|
     t.string   "name"
-    t.integer  "business_unit_type_id", limit: nil
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.integer  "business_unit_type_id", precision: 38
+    t.datetime "created_at",            precision: 6,  null: false
+    t.datetime "updated_at",            precision: 6,  null: false
   end
 
   add_index "business_units", ["business_unit_type_id"], name: "i_bus_uni_bus_uni_typ_id"
@@ -168,11 +167,11 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "comments", force: :cascade do |t|
     t.text     "comment"
-    t.integer  "commentable_id",   limit: nil
+    t.integer  "commentable_id",   precision: 38
     t.string   "commentable_type"
-    t.integer  "user_id",          limit: nil
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.integer  "user_id",          precision: 38
+    t.datetime "created_at",       precision: 6,  null: false
+    t.datetime "updated_at",       precision: 6,  null: false
   end
 
   add_index "comments", ["commentable_id"], name: "i_comments_commentable_id"
@@ -181,16 +180,16 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "conclusion_reviews", force: :cascade do |t|
     t.string   "type"
-    t.integer  "review_id",          limit: nil
+    t.integer  "review_id",          precision: 38
     t.date     "issue_date"
     t.date     "close_date"
     t.text     "applied_procedures"
     t.text     "conclusion"
-    t.boolean  "approved",           limit: nil
-    t.integer  "lock_version",                   precision: 38, default: 0
-    t.datetime "created_at",                                                null: false
-    t.datetime "updated_at",                                                null: false
-    t.integer  "organization_id",    limit: nil
+    t.boolean  "approved"
+    t.integer  "lock_version",       precision: 38, default: 0
+    t.datetime "created_at",         precision: 6,              null: false
+    t.datetime "updated_at",         precision: 6,              null: false
+    t.integer  "organization_id",    precision: 38
     t.string   "summary"
   end
 
@@ -203,21 +202,21 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "control_objective_items", force: :cascade do |t|
     t.text     "control_objective_text"
-    t.integer  "order_number",                       precision: 38
-    t.integer  "relevance",                          precision: 38
-    t.integer  "design_score",                       precision: 38
-    t.integer  "compliance_score",                   precision: 38
-    t.integer  "sustantive_score",                   precision: 38
+    t.integer  "order_number",           precision: 38
+    t.integer  "relevance",              precision: 38
+    t.integer  "design_score",           precision: 38
+    t.integer  "compliance_score",       precision: 38
+    t.integer  "sustantive_score",       precision: 38
     t.date     "audit_date"
     t.text     "auditor_comment"
-    t.boolean  "finished",               limit: nil
-    t.integer  "control_objective_id",   limit: nil
-    t.integer  "review_id",              limit: nil
-    t.integer  "lock_version",                       precision: 38, default: 0
-    t.datetime "created_at",                                                        null: false
-    t.datetime "updated_at",                                                        null: false
-    t.boolean  "exclude_from_score",     limit: nil,                default: false, null: false
-    t.integer  "organization_id",        limit: nil
+    t.boolean  "finished"
+    t.integer  "control_objective_id",   precision: 38
+    t.integer  "review_id",              precision: 38
+    t.integer  "lock_version",           precision: 38, default: 0
+    t.datetime "created_at",             precision: 6,                  null: false
+    t.datetime "updated_at",             precision: 6,                  null: false
+    t.boolean  "exclude_from_score",                    default: false, null: false
+    t.integer  "organization_id",        precision: 38
   end
 
   add_index "control_objective_items", ["control_objective_id"], name: "i_con_obj_ite_con_obj_id"
@@ -226,13 +225,13 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "control_objectives", force: :cascade do |t|
     t.text     "name"
-    t.integer  "risk",                           precision: 38
-    t.integer  "relevance",                      precision: 38
-    t.integer  "order",                          precision: 38
-    t.integer  "process_control_id", limit: nil
-    t.datetime "created_at",                                                    null: false
-    t.datetime "updated_at",                                                    null: false
-    t.boolean  "obsolete",           limit: nil,                default: false
+    t.integer  "risk",               precision: 38
+    t.integer  "relevance",          precision: 38
+    t.integer  "order",              precision: 38
+    t.integer  "process_control_id", precision: 38
+    t.datetime "created_at",         precision: 6,                  null: false
+    t.datetime "updated_at",         precision: 6,                  null: false
+    t.boolean  "obsolete",                          default: false
     t.string   "support"
   end
 
@@ -245,11 +244,11 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.text     "design_tests"
     t.text     "compliance_tests"
     t.text     "sustantive_tests"
-    t.integer  "order",                         precision: 38
-    t.integer  "controllable_id",   limit: nil
+    t.integer  "order",             precision: 38
+    t.integer  "controllable_id",   precision: 38
     t.string   "controllable_type"
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
+    t.datetime "created_at",        precision: 6,  null: false
+    t.datetime "updated_at",        precision: 6,  null: false
   end
 
   add_index "controls", ["controllable_type", "controllable_id"], name: "i_con_con_typ_con_id"
@@ -257,77 +256,77 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   create_table "costs", force: :cascade do |t|
     t.text     "description"
     t.string   "cost_type"
-    t.decimal  "cost",                    precision: 15, scale: 2
-    t.integer  "item_id",     limit: nil
+    t.decimal  "cost",        precision: 15, scale: 2
+    t.integer  "item_id",     precision: 38
     t.string   "item_type"
-    t.integer  "user_id",     limit: nil
-    t.datetime "created_at",                                       null: false
-    t.datetime "updated_at",                                       null: false
+    t.integer  "user_id",     precision: 38
+    t.datetime "created_at",  precision: 6,            null: false
+    t.datetime "updated_at",  precision: 6,            null: false
   end
 
   add_index "costs", ["cost_type"], name: "index_costs_on_cost_type"
   add_index "costs", ["item_type", "item_id"], name: "i_costs_item_type_item_id"
   add_index "costs", ["user_id"], name: "index_costs_on_user_id"
 
-  create_table "def$_aqcall", id: false, force: :cascade do |t|
-    t.string    "q_name",            limit: 30
-    t.raw       "msgid",             limit: 16
-    t.string    "corrid",            limit: 128
-    t.decimal   "priority"
-    t.decimal   "state"
-    t.timestamp "delay",             limit: 6
-    t.decimal   "expiration"
-    t.timestamp "time_manager_info", limit: 6
-    t.decimal   "local_order_no"
-    t.decimal   "chain_no"
-    t.decimal   "cscn"
-    t.decimal   "dscn"
-    t.timestamp "enq_time",          limit: 6
-    t.decimal   "enq_uid"
-    t.string    "enq_tid",           limit: 30,  null: false
-    t.timestamp "deq_time",          limit: 6
-    t.decimal   "deq_uid"
-    t.string    "deq_tid",           limit: 30
-    t.decimal   "retry_count"
-    t.string    "exception_qschema", limit: 30
-    t.string    "exception_queue",   limit: 30
-    t.decimal   "step_no",                       null: false
-    t.decimal   "recipient_key"
-    t.raw       "dequeue_msgid",     limit: 16
-    t.binary    "user_data"
+  create_table "def$_aqcall", primary_key: ["enq_tid", "step_no"], force: :cascade do |t|
+    t.string   "q_name",            limit: 30
+    t.raw      "msgid",             limit: 16
+    t.string   "corrid",            limit: 128
+    t.decimal  "priority"
+    t.decimal  "state"
+    t.datetime "delay",                         precision: 6
+    t.decimal  "expiration"
+    t.datetime "time_manager_info",             precision: 6
+    t.decimal  "local_order_no"
+    t.decimal  "chain_no"
+    t.decimal  "cscn"
+    t.decimal  "dscn"
+    t.datetime "enq_time",                      precision: 6
+    t.decimal  "enq_uid"
+    t.string   "enq_tid",           limit: 30,                null: false
+    t.datetime "deq_time",                      precision: 6
+    t.decimal  "deq_uid"
+    t.string   "deq_tid",           limit: 30
+    t.decimal  "retry_count"
+    t.string   "exception_qschema", limit: 30
+    t.string   "exception_queue",   limit: 30
+    t.decimal  "step_no",                                     null: false
+    t.decimal  "recipient_key"
+    t.raw      "dequeue_msgid",     limit: 16
+    t.binary   "user_data"
   end
 
   add_index "def$_aqcall", ["cscn", "enq_tid"], name: "def$_tranorder"
 
-  create_table "def$_aqerror", id: false, force: :cascade do |t|
-    t.string    "q_name",            limit: 30
-    t.raw       "msgid",             limit: 16
-    t.string    "corrid",            limit: 128
-    t.decimal   "priority"
-    t.decimal   "state"
-    t.timestamp "delay",             limit: 6
-    t.decimal   "expiration"
-    t.timestamp "time_manager_info", limit: 6
-    t.decimal   "local_order_no"
-    t.decimal   "chain_no"
-    t.decimal   "cscn"
-    t.decimal   "dscn"
-    t.timestamp "enq_time",          limit: 6
-    t.decimal   "enq_uid"
-    t.string    "enq_tid",           limit: 30,  null: false
-    t.timestamp "deq_time",          limit: 6
-    t.decimal   "deq_uid"
-    t.string    "deq_tid",           limit: 30
-    t.decimal   "retry_count"
-    t.string    "exception_qschema", limit: 30
-    t.string    "exception_queue",   limit: 30
-    t.decimal   "step_no",                       null: false
-    t.decimal   "recipient_key"
-    t.raw       "dequeue_msgid",     limit: 16
-    t.binary    "user_data"
+  create_table "def$_aqerror", primary_key: ["enq_tid", "step_no"], force: :cascade do |t|
+    t.string   "q_name",            limit: 30
+    t.raw      "msgid",             limit: 16
+    t.string   "corrid",            limit: 128
+    t.decimal  "priority"
+    t.decimal  "state"
+    t.datetime "delay",                         precision: 6
+    t.decimal  "expiration"
+    t.datetime "time_manager_info",             precision: 6
+    t.decimal  "local_order_no"
+    t.decimal  "chain_no"
+    t.decimal  "cscn"
+    t.decimal  "dscn"
+    t.datetime "enq_time",                      precision: 6
+    t.decimal  "enq_uid"
+    t.string   "enq_tid",           limit: 30,                null: false
+    t.datetime "deq_time",                      precision: 6
+    t.decimal  "deq_uid"
+    t.string   "deq_tid",           limit: 30
+    t.decimal  "retry_count"
+    t.string   "exception_qschema", limit: 30
+    t.string   "exception_queue",   limit: 30
+    t.decimal  "step_no",                                     null: false
+    t.decimal  "recipient_key"
+    t.raw      "dequeue_msgid",     limit: 16
+    t.binary   "user_data"
   end
 
-  create_table "def$_calldest", comment: "Information about call destinations for D-type and error transactions", id: false, force: :cascade do |t|
+  create_table "def$_calldest", comment: "Information about call destinations for D-type and error transactions", primary_key: ["enq_tid", "dblink", "step_no"], force: :cascade do |t|
     t.string  "enq_tid",      limit: 22,                 null: false, comment: "Transaction ID"
     t.decimal "step_no",                                 null: false, comment: "Unique ID of call within transaction"
     t.string  "dblink",       limit: 128,                null: false, comment: "The destination database"
@@ -338,46 +337,46 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "def$_calldest", ["dblink", "catchup"], name: "def$_calldest_n2"
 
-  create_table "def$_defaultdest", comment: "Default destinations for deferred remote procedure calls", primary_key: "dblink", force: :cascade do |t|
+  create_table "def$_defaultdest", comment: "Default destinations for deferred remote procedure calls", primary_key: "dblink", id: :string, limit: 128, comment: "Default destination", force: :cascade do |t|
   end
 
-  create_table "def$_destination", comment: "Information about propagation to different destinations", id: false, force: :cascade do |t|
+  create_table "def$_destination", comment: "Information about propagation to different destinations", primary_key: ["dblink", "catchup"], force: :cascade do |t|
     t.string  "dblink",                     limit: 128,                       null: false, comment: "Destination"
-    t.decimal "last_delivered",                          default: 0.0,        null: false, comment: "Value of delivery_order of last transaction propagated"
+    t.decimal "last_delivered",                          default: "0.0",      null: false, comment: "Value of delivery_order of last transaction propagated"
     t.string  "last_enq_tid",               limit: 22,                                     comment: "Transaction ID of last transaction propagated"
     t.decimal "last_seq",                                                                  comment: "Parallel prop seq number of last transaction propagated"
-    t.boolean "disabled",                   limit: nil,                                    comment: "Is propagation to destination disabled"
+    t.string  "disabled",                   limit: 1,                                      comment: "Is propagation to destination disabled"
     t.decimal "job",                                                                       comment: "Number of job that pushes queue"
     t.decimal "last_txn_count",                                                            comment: "Number of transactions pushed during last attempt"
     t.decimal "last_error_number",                                                         comment: "Oracle error number from last push"
     t.string  "last_error_message",         limit: 2000,                                   comment: "Error message from last push"
     t.string  "apply_init",                 limit: 4000
     t.raw     "catchup",                    limit: 16,   default: "00",       null: false, comment: "Used to break transaction into pieces"
-    t.boolean "alternate",                  limit: nil,  default: false,                   comment: "Used to break transaction into pieces"
-    t.decimal "total_txn_count",                         default: 0.0,                     comment: "Total number of transactions pushed"
-    t.decimal "total_prop_time_throughput",              default: 0.0,                     comment: "Total propagation time in seconds for measuring throughput"
-    t.decimal "total_prop_time_latency",                 default: 0.0,                     comment: "Total propagation time in seconds for measuring latency"
-    t.decimal "to_communication_size",                   default: 0.0,                     comment: "Total number of bytes sent to this dblink"
-    t.decimal "from_communication_size",                 default: 0.0,                     comment: "Total number of bytes received from this dblink"
+    t.string  "alternate",                  limit: 1,    default: "F",                     comment: "Used to break transaction into pieces"
+    t.decimal "total_txn_count",                         default: "0.0",                   comment: "Total number of transactions pushed"
+    t.decimal "total_prop_time_throughput",              default: "0.0",                   comment: "Total propagation time in seconds for measuring throughput"
+    t.decimal "total_prop_time_latency",                 default: "0.0",                   comment: "Total propagation time in seconds for measuring latency"
+    t.decimal "to_communication_size",                   default: "0.0",                   comment: "Total number of bytes sent to this dblink"
+    t.decimal "from_communication_size",                 default: "0.0",                   comment: "Total number of bytes received from this dblink"
     t.raw     "flag",                       limit: 4,    default: "00000000"
-    t.decimal "spare1",                                  default: 0.0,                     comment: "Total number of round trips for this dblink"
-    t.decimal "spare2",                                  default: 0.0,                     comment: "Total number of administrative requests"
-    t.decimal "spare3",                                  default: 0.0,                     comment: "Total number of error transactions pushed"
-    t.decimal "spare4",                                  default: 0.0,                     comment: "Total time in seconds spent sleeping during push"
+    t.decimal "spare1",                                  default: "0.0",                   comment: "Total number of round trips for this dblink"
+    t.decimal "spare2",                                  default: "0.0",                   comment: "Total number of administrative requests"
+    t.decimal "spare3",                                  default: "0.0",                   comment: "Total number of error transactions pushed"
+    t.decimal "spare4",                                  default: "0.0",                   comment: "Total time in seconds spent sleeping during push"
   end
 
-  create_table "def$_error", comment: "Information about all deferred transactions that caused an error", primary_key: "enq_tid", force: :cascade do |t|
-    t.string   "origin_tran_db", limit: 128,  comment: "The database originating the deferred transaction"
-    t.string   "origin_enq_tid", limit: 22,   comment: "The original ID of the transaction"
-    t.string   "destination",    limit: 128,  comment: "Database link used to address destination"
-    t.decimal  "step_no",                     comment: "Unique ID of call that caused an error"
-    t.decimal  "receiver",                    comment: "User ID of the original receiver"
-    t.datetime "enq_time",                    comment: "Time original transaction enqueued"
-    t.decimal  "error_number",                comment: "Oracle error number"
-    t.string   "error_msg",      limit: 2000, comment: "Error message text"
+  create_table "def$_error", comment: "Information about all deferred transactions that caused an error", primary_key: "enq_tid", id: :string, limit: 22, comment: "The ID of the transaction that created the error", force: :cascade do |t|
+    t.string  "origin_tran_db", limit: 128,  comment: "The database originating the deferred transaction"
+    t.string  "origin_enq_tid", limit: 22,   comment: "The original ID of the transaction"
+    t.string  "destination",    limit: 128,  comment: "Database link used to address destination"
+    t.decimal "step_no",                     comment: "Unique ID of call that caused an error"
+    t.decimal "receiver",                    comment: "User ID of the original receiver"
+    t.date    "enq_time",                    comment: "Time original transaction enqueued"
+    t.decimal "error_number",                comment: "Oracle error number"
+    t.string  "error_msg",      limit: 2000, comment: "Error message text"
   end
 
-  create_table "def$_lob", comment: "Storage for LOB parameters to deferred RPCs", force: :cascade do |t|
+  create_table "def$_lob", comment: "Storage for LOB parameters to deferred RPCs", id: :raw, limit: 16, comment: "Identifier of LOB parameter", force: :cascade do |t|
     t.string "enq_tid",   limit: 22, comment: "Transaction identifier for deferred RPC with this LOB parameter"
     t.binary "blob_col",             comment: "Binary LOB parameter"
     t.text   "clob_col",             comment: "Character LOB parameter"
@@ -396,27 +395,27 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.raw     "catchup",       limit: 16,  default: "00", comment: "Used to break transaction into pieces"
   end
 
-  create_table "def$_propagator", comment: "The propagator for deferred remote procedure calls", primary_key: "userid", force: :cascade do |t|
-    t.string   "username", limit: 30, null: false, comment: "User name of the propagator"
-    t.datetime "created",             null: false, comment: "The time when the propagator is registered"
+  create_table "def$_propagator", comment: "The propagator for deferred remote procedure calls", primary_key: "userid", id: :decimal, comment: "User ID of the propagator", force: :cascade do |t|
+    t.string "username", limit: 30, null: false, comment: "User name of the propagator"
+    t.date   "created",             null: false, comment: "The time when the propagator is registered"
   end
 
-  create_table "def$_pushed_transactions", comment: "Information about deferred transactions pushed to this site by RepAPI clients", primary_key: "source_site_id", force: :cascade do |t|
-    t.integer "last_tran_id", limit: nil, default: 0,     comment: "Last committed transaction"
-    t.boolean "disabled",     limit: nil, default: false, comment: "Disable propagation"
+  create_table "def$_pushed_transactions", comment: "Information about deferred transactions pushed to this site by RepAPI clients", primary_key: "source_site_id", id: :decimal, comment: "Originating database identifier for the deferred transaction", force: :cascade do |t|
+    t.decimal "last_tran_id",             default: "0.0", comment: "Last committed transaction"
+    t.boolean "disabled",                 default: false, comment: "Disable propagation"
     t.string  "source_site",  limit: 128,                 comment: "Obsolete - do not use"
   end
 
   create_table "documents", force: :cascade do |t|
-    t.string   "name",                                                       null: false
+    t.string   "name",                                           null: false
     t.text     "description"
-    t.boolean  "shared",          limit: nil,                default: false, null: false
-    t.integer  "lock_version",                precision: 38, default: 0
-    t.integer  "file_model_id",   limit: nil
-    t.integer  "organization_id", limit: nil
-    t.integer  "group_id",        limit: nil
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
+    t.boolean  "shared",                         default: false, null: false
+    t.integer  "lock_version",    precision: 38, default: 0
+    t.integer  "file_model_id",   precision: 38
+    t.integer  "organization_id", precision: 38
+    t.integer  "group_id",        precision: 38
+    t.datetime "created_at",      precision: 6,                  null: false
+    t.datetime "updated_at",      precision: 6,                  null: false
   end
 
   add_index "documents", ["file_model_id"], name: "i_documents_file_model_id"
@@ -430,9 +429,9 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.text     "subject"
     t.text     "body"
     t.text     "attachments"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.integer  "organization_id", limit: nil
+    t.datetime "created_at",      precision: 6,  null: false
+    t.datetime "updated_at",      precision: 6,  null: false
+    t.integer  "organization_id", precision: 38
   end
 
   add_index "e_mails", ["created_at"], name: "index_e_mails_on_created_at"
@@ -440,11 +439,11 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "error_records", force: :cascade do |t|
     t.text     "data"
-    t.integer  "error",                       precision: 38
-    t.integer  "user_id",         limit: nil
-    t.integer  "organization_id", limit: nil
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.integer  "error",           precision: 38
+    t.integer  "user_id",         precision: 38
+    t.integer  "organization_id", precision: 38
+    t.datetime "created_at",      precision: 6,  null: false
+    t.datetime "updated_at",      precision: 6,  null: false
   end
 
   add_index "error_records", ["created_at"], name: "i_error_records_created_at"
@@ -455,21 +454,21 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.string   "file_file_name"
     t.string   "file_content_type"
     t.integer  "file_file_size",    precision: 38
-    t.datetime "file_updated_at"
+    t.datetime "file_updated_at",   precision: 6
     t.integer  "lock_version",      precision: 38, default: 0
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
+    t.datetime "created_at",        precision: 6,              null: false
+    t.datetime "updated_at",        precision: 6,              null: false
   end
 
   create_table "finding_answers", force: :cascade do |t|
     t.text     "answer"
     t.text     "auditor_comments"
     t.date     "commitment_date"
-    t.integer  "finding_id",       limit: nil
-    t.integer  "user_id",          limit: nil
-    t.integer  "file_model_id",    limit: nil
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.integer  "finding_id",       precision: 38
+    t.integer  "user_id",          precision: 38
+    t.integer  "file_model_id",    precision: 38
+    t.datetime "created_at",       precision: 6,  null: false
+    t.datetime "updated_at",       precision: 6,  null: false
   end
 
   add_index "finding_answers", ["file_model_id"], name: "i_fin_ans_fil_mod_id"
@@ -477,33 +476,33 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "finding_answers", ["user_id"], name: "i_finding_answers_user_id"
 
   create_table "finding_relations", force: :cascade do |t|
-    t.string   "description",                    null: false
-    t.integer  "finding_id",         limit: nil
-    t.integer  "related_finding_id", limit: nil
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.string   "description",                       null: false
+    t.integer  "finding_id",         precision: 38
+    t.integer  "related_finding_id", precision: 38
+    t.datetime "created_at",         precision: 6,  null: false
+    t.datetime "updated_at",         precision: 6,  null: false
   end
 
   add_index "finding_relations", ["finding_id"], name: "i_finding_relations_finding_id"
   add_index "finding_relations", ["related_finding_id"], name: "i_fin_rel_rel_fin_id"
 
   create_table "finding_review_assignments", force: :cascade do |t|
-    t.integer  "finding_id", limit: nil
-    t.integer  "review_id",  limit: nil
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "finding_id", precision: 38
+    t.integer  "review_id",  precision: 38
+    t.datetime "created_at", precision: 6,  null: false
+    t.datetime "updated_at", precision: 6,  null: false
   end
 
   add_index "finding_review_assignments", ["finding_id", "review_id"], name: "i_fin_rev_ass_fin_id_rev_id"
 
   create_table "finding_user_assignments", force: :cascade do |t|
-    t.boolean  "process_owner",       limit: nil, default: false
-    t.integer  "finding_id",          limit: nil
+    t.boolean  "process_owner",                      default: false
+    t.integer  "finding_id",          precision: 38
     t.string   "finding_type"
-    t.integer  "user_id",             limit: nil
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
-    t.boolean  "responsible_auditor", limit: nil
+    t.integer  "user_id",             precision: 38
+    t.datetime "created_at",          precision: 6,                  null: false
+    t.datetime "updated_at",          precision: 6,                  null: false
+    t.boolean  "responsible_auditor"
   end
 
   add_index "finding_user_assignments", ["finding_id", "finding_type", "user_id"], name: "fua_on_id_type_and_user_id"
@@ -519,22 +518,22 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.date     "first_notification_date"
     t.date     "confirmation_date"
     t.date     "origination_date"
-    t.boolean  "final",                     limit: nil
-    t.integer  "parent_id",                 limit: nil
-    t.integer  "state",                                 precision: 38
-    t.integer  "notification_level",                    precision: 38, default: 0
-    t.integer  "lock_version",                          precision: 38, default: 0
-    t.integer  "control_objective_item_id", limit: nil
+    t.boolean  "final"
+    t.integer  "parent_id",                 precision: 38
+    t.integer  "state",                     precision: 38
+    t.integer  "notification_level",        precision: 38, default: 0
+    t.integer  "lock_version",              precision: 38, default: 0
+    t.integer  "control_objective_item_id", precision: 38
     t.text     "audit_recommendations"
     t.text     "effect"
-    t.integer  "risk",                                  precision: 38
-    t.integer  "highest_risk",                          precision: 38
-    t.integer  "priority",                              precision: 38
+    t.integer  "risk",                      precision: 38
+    t.integer  "highest_risk",              precision: 38
+    t.integer  "priority",                  precision: 38
     t.date     "follow_up_date"
-    t.datetime "created_at",                                                       null: false
-    t.datetime "updated_at",                                                       null: false
-    t.integer  "repeated_of_id",            limit: nil
-    t.integer  "organization_id",           limit: nil
+    t.datetime "created_at",                precision: 6,              null: false
+    t.datetime "updated_at",                precision: 6,              null: false
+    t.integer  "repeated_of_id",            precision: 38
+    t.integer  "organization_id",           precision: 38
     t.string   "title"
   end
 
@@ -557,15 +556,15 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.string   "admin_hash"
     t.text     "description"
     t.integer  "lock_version", precision: 38, default: 0
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",   precision: 6,              null: false
+    t.datetime "updated_at",   precision: 6,              null: false
   end
 
   add_index "groups", ["admin_email"], name: "index_groups_on_admin_email", unique: true
   add_index "groups", ["admin_hash"], name: "index_groups_on_admin_hash", unique: true
   add_index "groups", ["name"], name: "index_groups_on_name", unique: true
 
-  create_table "help", id: false, force: :cascade do |t|
+  create_table "help", primary_key: ["topic", "seq"], force: :cascade do |t|
     t.string  "topic", limit: 50, null: false
     t.decimal "seq",              null: false
     t.string  "info",  limit: 80
@@ -574,44 +573,44 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   create_table "image_models", force: :cascade do |t|
     t.string   "image_file_name"
     t.string   "image_content_type"
-    t.integer  "image_file_size",                precision: 38
-    t.datetime "image_updated_at"
-    t.integer  "lock_version",                   precision: 38, default: 0
-    t.datetime "created_at",                                                null: false
-    t.datetime "updated_at",                                                null: false
-    t.integer  "imageable_id",       limit: nil,                            null: false
-    t.string   "imageable_type",                                            null: false
+    t.integer  "image_file_size",    precision: 38
+    t.datetime "image_updated_at",   precision: 6
+    t.integer  "lock_version",       precision: 38, default: 0
+    t.datetime "created_at",         precision: 6,              null: false
+    t.datetime "updated_at",         precision: 6,              null: false
+    t.integer  "imageable_id",       precision: 38,             null: false
+    t.string   "imageable_type",                                null: false
   end
 
   add_index "image_models", ["imageable_type", "imageable_id"], name: "i_ima_mod_ima_typ_ima_id"
 
   create_table "ldap_configs", force: :cascade do |t|
-    t.string   "hostname",                                                     null: false
-    t.integer  "port",                            precision: 38, default: 389, null: false
-    t.string   "basedn",                                                       null: false
-    t.string   "login_mask",                                                   null: false
-    t.string   "username_attribute",                                           null: false
-    t.string   "name_attribute",                                               null: false
-    t.string   "last_name_attribute",                                          null: false
-    t.string   "email_attribute",                                              null: false
+    t.string   "hostname",                                         null: false
+    t.integer  "port",                precision: 38, default: 389, null: false
+    t.string   "basedn",                                           null: false
+    t.string   "login_mask",                                       null: false
+    t.string   "username_attribute",                               null: false
+    t.string   "name_attribute",                                   null: false
+    t.string   "last_name_attribute",                              null: false
+    t.string   "email_attribute",                                  null: false
     t.string   "function_attribute"
-    t.string   "roles_attribute",                                              null: false
+    t.string   "roles_attribute",                                  null: false
     t.string   "manager_attribute"
-    t.integer  "organization_id",     limit: nil,                              null: false
-    t.datetime "created_at",                                                   null: false
-    t.datetime "updated_at",                                                   null: false
+    t.integer  "organization_id",     precision: 38,               null: false
+    t.datetime "created_at",          precision: 6,                null: false
+    t.datetime "updated_at",          precision: 6,                null: false
     t.string   "filter"
   end
 
   add_index "ldap_configs", ["organization_id"], name: "i_ldap_configs_organization_id"
 
   create_table "login_records", force: :cascade do |t|
-    t.integer  "user_id",         limit: nil
+    t.integer  "user_id",         precision: 38
     t.text     "data"
-    t.datetime "start"
-    t.datetime "end"
-    t.datetime "created_at"
-    t.integer  "organization_id", limit: nil
+    t.datetime "start",           precision: 6
+    t.datetime "end",             precision: 6
+    t.datetime "created_at",      precision: 6
+    t.integer  "organization_id", precision: 38
   end
 
   add_index "login_records", ["end"], name: "index_login_records_on_end"
@@ -619,7 +618,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "login_records", ["start"], name: "index_login_records_on_start"
   add_index "login_records", ["user_id"], name: "index_login_records_on_user_id"
 
-  create_table "logmnr_age_spill$", id: false, force: :cascade do |t|
+  create_table "logmnr_age_spill$", primary_key: ["session#", "xidusn", "xidslt", "xidsqn", "chunk", "sequence#"], force: :cascade do |t|
     t.decimal "session#",   null: false
     t.decimal "xidusn",     null: false
     t.decimal "xidslt",     null: false
@@ -632,7 +631,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.decimal "spare2"
   end
 
-  create_table "logmnr_attrcol$", id: false, force: :cascade do |t|
+  create_table "logmnr_attrcol$", primary_key: ["logmnr_uid", "obj#", "intcol#"], force: :cascade do |t|
     t.decimal "intcol#"
     t.string  "name",         limit: 4000
     t.decimal "obj#",                                     null: false
@@ -642,7 +641,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_attrcol$", ["logmnr_uid", "obj#", "intcol#"], name: "logmnr_i1attrcol$"
 
-  create_table "logmnr_attribute$", id: false, force: :cascade do |t|
+  create_table "logmnr_attribute$", primary_key: ["logmnr_uid", "toid", "version#", "attribute#"], force: :cascade do |t|
     t.decimal "version#"
     t.string  "name",          limit: 30
     t.decimal "attribute#"
@@ -671,7 +670,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_attribute$", ["logmnr_uid", "toid", "version#", "attribute#"], name: "logmnr_i1attribute$"
 
-  create_table "logmnr_ccol$", id: false, force: :cascade do |t|
+  create_table "logmnr_ccol$", primary_key: ["logmnr_uid", "con#", "intcol#"], force: :cascade do |t|
     t.decimal "con#"
     t.decimal "obj#"
     t.decimal "col#"
@@ -683,7 +682,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_ccol$", ["logmnr_uid", "con#", "intcol#"], name: "logmnr_i1ccol$"
 
-  create_table "logmnr_cdef$", id: false, force: :cascade do |t|
+  create_table "logmnr_cdef$", primary_key: ["logmnr_uid", "con#"], force: :cascade do |t|
     t.decimal "con#"
     t.decimal "cols"
     t.decimal "type#"
@@ -698,7 +697,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_cdef$", ["logmnr_uid", "con#"], name: "logmnr_i1cdef$"
 
-  create_table "logmnr_col$", id: false, force: :cascade do |t|
+  create_table "logmnr_col$", primary_key: ["logmnr_uid", "obj#", "intcol#"], force: :cascade do |t|
     t.integer "col#",         limit: 22, precision: 22
     t.integer "segcol#",      limit: 22, precision: 22
     t.string  "name",         limit: 30
@@ -722,7 +721,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "logmnr_col$", ["logmnr_uid", "obj#", "intcol#"], name: "logmnr_i1col$"
   add_index "logmnr_col$", ["logmnr_uid", "obj#", "name"], name: "logmnr_i2col$"
 
-  create_table "logmnr_coltype$", id: false, force: :cascade do |t|
+  create_table "logmnr_coltype$", primary_key: ["logmnr_uid", "obj#", "intcol#"], force: :cascade do |t|
     t.decimal "col#"
     t.decimal "intcol#"
     t.raw     "toid",         limit: 16
@@ -742,7 +741,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "logmnr_dictionary$", primary_key: "logmnr_uid", force: :cascade do |t|
     t.string  "db_name",              limit: 9
-    t.integer "db_id",                limit: nil
+    t.integer "db_id",                limit: 20,  precision: 20
     t.string  "db_created",           limit: 20
     t.string  "db_dict_created",      limit: 20
     t.integer "db_dict_scn",          limit: 22,  precision: 22
@@ -777,7 +776,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.integer "logmnr_flags", limit: 22, precision: 22
   end
 
-  create_table "logmnr_enc$", id: false, force: :cascade do |t|
+  create_table "logmnr_enc$", primary_key: ["logmnr_uid", "obj#", "owner#"], force: :cascade do |t|
     t.decimal "obj#"
     t.decimal "owner#"
     t.decimal "encalg"
@@ -793,43 +792,43 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "logmnr_enc$", ["logmnr_uid", "obj#", "owner#"], name: "logmnr_i1enc$"
 
   create_table "logmnr_error$", id: false, force: :cascade do |t|
-    t.decimal  "session#"
-    t.datetime "time_of_error"
-    t.decimal  "code"
-    t.string   "message",       limit: 4000
-    t.decimal  "spare1"
-    t.decimal  "spare2"
-    t.decimal  "spare3"
-    t.string   "spare4",        limit: 4000
-    t.string   "spare5",        limit: 4000
+    t.decimal "session#"
+    t.date    "time_of_error"
+    t.decimal "code"
+    t.string  "message",       limit: 4000
+    t.decimal "spare1"
+    t.decimal "spare2"
+    t.decimal "spare3"
+    t.string  "spare4",        limit: 4000
+    t.string  "spare5",        limit: 4000
   end
 
   create_table "logmnr_filter$", id: false, force: :cascade do |t|
-    t.decimal  "session#"
-    t.string   "filter_type", limit: 30
-    t.decimal  "attr1"
-    t.decimal  "attr2"
-    t.decimal  "attr3"
-    t.decimal  "attr4"
-    t.decimal  "attr5"
-    t.decimal  "attr6"
-    t.decimal  "filter_scn"
-    t.decimal  "spare1"
-    t.decimal  "spare2"
-    t.datetime "spare3"
+    t.decimal "session#"
+    t.string  "filter_type", limit: 30
+    t.decimal "attr1"
+    t.decimal "attr2"
+    t.decimal "attr3"
+    t.decimal "attr4"
+    t.decimal "attr5"
+    t.decimal "attr6"
+    t.decimal "filter_scn"
+    t.decimal "spare1"
+    t.decimal "spare2"
+    t.date    "spare3"
   end
 
   create_table "logmnr_global$", id: false, force: :cascade do |t|
-    t.decimal  "high_recid_foreign"
-    t.decimal  "high_recid_deleted"
-    t.decimal  "local_reset_scn"
-    t.decimal  "local_reset_timestamp"
-    t.decimal  "version_timestamp"
-    t.decimal  "spare1"
-    t.decimal  "spare2"
-    t.decimal  "spare3"
-    t.string   "spare4",                limit: 2000
-    t.datetime "spare5"
+    t.decimal "high_recid_foreign"
+    t.decimal "high_recid_deleted"
+    t.decimal "local_reset_scn"
+    t.decimal "local_reset_timestamp"
+    t.decimal "version_timestamp"
+    t.decimal "spare1"
+    t.decimal "spare2"
+    t.decimal "spare3"
+    t.string  "spare4",                limit: 2000
+    t.date    "spare5"
   end
 
   create_table "logmnr_gt_tab_include$", temporary: true, id: false, force: :cascade do |t|
@@ -848,7 +847,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.decimal "xidsqn"
   end
 
-  create_table "logmnr_icol$", id: false, force: :cascade do |t|
+  create_table "logmnr_icol$", primary_key: ["logmnr_uid", "obj#", "intcol#"], force: :cascade do |t|
     t.decimal "obj#"
     t.decimal "bo#"
     t.decimal "col#"
@@ -861,7 +860,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_icol$", ["logmnr_uid", "obj#", "intcol#"], name: "logmnr_i1icol$"
 
-  create_table "logmnr_ind$", id: false, force: :cascade do |t|
+  create_table "logmnr_ind$", primary_key: ["logmnr_uid", "obj#"], force: :cascade do |t|
     t.integer "bo#",          limit: 22, precision: 22
     t.integer "cols",         limit: 22, precision: 22
     t.integer "type#",        limit: 22, precision: 22
@@ -875,7 +874,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "logmnr_ind$", ["logmnr_uid", "bo#"], name: "logmnr_i2ind$"
   add_index "logmnr_ind$", ["logmnr_uid", "obj#"], name: "logmnr_i1ind$"
 
-  create_table "logmnr_indcompart$", id: false, force: :cascade do |t|
+  create_table "logmnr_indcompart$", primary_key: ["logmnr_uid", "obj#"], force: :cascade do |t|
     t.decimal "obj#"
     t.decimal "dataobj#"
     t.decimal "bo#"
@@ -886,7 +885,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_indcompart$", ["logmnr_uid", "obj#"], name: "logmnr_i1indcompart$"
 
-  create_table "logmnr_indpart$", id: false, force: :cascade do |t|
+  create_table "logmnr_indpart$", primary_key: ["logmnr_uid", "obj#", "bo#"], force: :cascade do |t|
     t.decimal "obj#"
     t.decimal "bo#"
     t.decimal "part#"
@@ -898,7 +897,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "logmnr_indpart$", ["logmnr_uid", "bo#"], name: "logmnr_i2indpart$"
   add_index "logmnr_indpart$", ["logmnr_uid", "obj#", "bo#"], name: "logmnr_i1indpart$"
 
-  create_table "logmnr_indsubpart$", id: false, force: :cascade do |t|
+  create_table "logmnr_indsubpart$", primary_key: ["logmnr_uid", "obj#", "pobj#"], force: :cascade do |t|
     t.integer "obj#",         limit: 22, precision: 22
     t.integer "dataobj#",     limit: 22, precision: 22
     t.integer "pobj#",        limit: 22, precision: 22
@@ -910,24 +909,24 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_indsubpart$", ["logmnr_uid", "obj#", "pobj#"], name: "logmnr_i1indsubpart$"
 
-  create_table "logmnr_integrated_spill$", id: false, force: :cascade do |t|
-    t.decimal  "session#",   null: false
-    t.decimal  "xidusn",     null: false
-    t.decimal  "xidslt",     null: false
-    t.decimal  "xidsqn",     null: false
-    t.decimal  "chunk",      null: false
-    t.decimal  "flag",       null: false
-    t.datetime "ctime"
-    t.datetime "mtime"
-    t.binary   "spill_data"
-    t.decimal  "spare1"
-    t.decimal  "spare2"
-    t.decimal  "spare3"
-    t.datetime "spare4"
-    t.datetime "spare5"
+  create_table "logmnr_integrated_spill$", primary_key: ["session#", "xidusn", "xidslt", "xidsqn", "chunk", "flag"], force: :cascade do |t|
+    t.decimal "session#",   null: false
+    t.decimal "xidusn",     null: false
+    t.decimal "xidslt",     null: false
+    t.decimal "xidsqn",     null: false
+    t.decimal "chunk",      null: false
+    t.decimal "flag",       null: false
+    t.date    "ctime"
+    t.date    "mtime"
+    t.binary  "spill_data"
+    t.decimal "spare1"
+    t.decimal "spare2"
+    t.decimal "spare3"
+    t.date    "spare4"
+    t.date    "spare5"
   end
 
-  create_table "logmnr_kopm$", id: false, force: :cascade do |t|
+  create_table "logmnr_kopm$", primary_key: ["logmnr_uid", "name"], force: :cascade do |t|
     t.decimal "length"
     t.raw     "metadata",     limit: 255
     t.string  "name",         limit: 30,                 null: false
@@ -937,7 +936,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_kopm$", ["logmnr_uid", "name"], name: "logmnr_i1kopm$"
 
-  create_table "logmnr_lob$", id: false, force: :cascade do |t|
+  create_table "logmnr_lob$", primary_key: ["logmnr_uid", "obj#", "intcol#"], force: :cascade do |t|
     t.decimal "obj#"
     t.decimal "intcol#"
     t.decimal "col#"
@@ -949,7 +948,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_lob$", ["logmnr_uid", "obj#", "intcol#"], name: "logmnr_i1lob$"
 
-  create_table "logmnr_lobfrag$", id: false, force: :cascade do |t|
+  create_table "logmnr_lobfrag$", primary_key: ["logmnr_uid", "fragobj#"], force: :cascade do |t|
     t.decimal "fragobj#"
     t.decimal "parentobj#"
     t.decimal "tabfragobj#"
@@ -961,45 +960,45 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_lobfrag$", ["logmnr_uid", "fragobj#"], name: "logmnr_i1lobfrag$"
 
-  create_table "logmnr_log$", id: false, force: :cascade do |t|
-    t.decimal  "session#",                           null: false
-    t.decimal  "thread#",                            null: false
-    t.decimal  "sequence#",                          null: false
-    t.decimal  "first_change#",                      null: false
-    t.decimal  "next_change#"
-    t.datetime "first_time"
-    t.datetime "next_time"
-    t.string   "file_name",              limit: 513
-    t.decimal  "status"
-    t.string   "info",                   limit: 32
-    t.datetime "timestamp"
-    t.string   "dict_begin",             limit: 3
-    t.string   "dict_end",               limit: 3
-    t.string   "status_info",            limit: 32
-    t.integer  "db_id",                  limit: nil, null: false
-    t.decimal  "resetlogs_change#",                  null: false
-    t.decimal  "reset_timestamp",                    null: false
-    t.decimal  "prev_resetlogs_change#"
-    t.decimal  "prev_reset_timestamp"
-    t.decimal  "blocks"
-    t.decimal  "block_size"
-    t.decimal  "flags"
-    t.decimal  "contents"
-    t.decimal  "recid"
-    t.decimal  "recstamp"
-    t.decimal  "mark_delete_timestamp"
-    t.decimal  "spare1"
-    t.decimal  "spare2"
-    t.decimal  "spare3"
-    t.decimal  "spare4"
-    t.decimal  "spare5"
+  create_table "logmnr_log$", primary_key: ["session#", "thread#", "sequence#", "first_change#", "db_id", "resetlogs_change#", "reset_timestamp"], force: :cascade do |t|
+    t.decimal "session#",                           null: false
+    t.decimal "thread#",                            null: false
+    t.decimal "sequence#",                          null: false
+    t.decimal "first_change#",                      null: false
+    t.decimal "next_change#"
+    t.date    "first_time"
+    t.date    "next_time"
+    t.string  "file_name",              limit: 513
+    t.decimal "status"
+    t.string  "info",                   limit: 32
+    t.date    "timestamp"
+    t.string  "dict_begin",             limit: 3
+    t.string  "dict_end",               limit: 3
+    t.string  "status_info",            limit: 32
+    t.decimal "db_id",                              null: false
+    t.decimal "resetlogs_change#",                  null: false
+    t.decimal "reset_timestamp",                    null: false
+    t.decimal "prev_resetlogs_change#"
+    t.decimal "prev_reset_timestamp"
+    t.decimal "blocks"
+    t.decimal "block_size"
+    t.decimal "flags"
+    t.decimal "contents"
+    t.decimal "recid"
+    t.decimal "recstamp"
+    t.decimal "mark_delete_timestamp"
+    t.decimal "spare1"
+    t.decimal "spare2"
+    t.decimal "spare3"
+    t.decimal "spare4"
+    t.decimal "spare5"
   end
 
   add_index "logmnr_log$", ["first_change#"], name: "logmnr_log$_first_change#", tablespace: "sysaux"
   add_index "logmnr_log$", ["flags"], name: "logmnr_log$_flags", tablespace: "sysaux"
   add_index "logmnr_log$", ["recid"], name: "logmnr_log$_recid", tablespace: "sysaux"
 
-  create_table "logmnr_logmnr_buildlog", id: false, force: :cascade do |t|
+  create_table "logmnr_logmnr_buildlog", primary_key: ["logmnr_uid", "initial_xid"], force: :cascade do |t|
     t.string  "build_date",              limit: 20
     t.decimal "db_txn_scnbas"
     t.decimal "db_txn_scnwrp"
@@ -1013,7 +1012,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_logmnr_buildlog", ["logmnr_uid", "initial_xid"], name: "logmnr_i1logmnr_buildlog"
 
-  create_table "logmnr_ntab$", id: false, force: :cascade do |t|
+  create_table "logmnr_ntab$", primary_key: ["logmnr_uid", "obj#", "intcol#"], force: :cascade do |t|
     t.decimal "col#"
     t.decimal "intcol#"
     t.decimal "ntab#"
@@ -1026,30 +1025,30 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "logmnr_ntab$", ["logmnr_uid", "ntab#"], name: "logmnr_i2ntab$"
   add_index "logmnr_ntab$", ["logmnr_uid", "obj#", "intcol#"], name: "logmnr_i1ntab$"
 
-  create_table "logmnr_obj$", id: false, force: :cascade do |t|
-    t.integer  "objv#",        limit: 22,  precision: 22
-    t.integer  "owner#",       limit: 22,  precision: 22
-    t.string   "name",         limit: 30
-    t.integer  "namespace",    limit: 22,  precision: 22
-    t.string   "subname",      limit: 30
-    t.integer  "type#",        limit: 22,  precision: 22
-    t.raw      "oid$",         limit: 16
-    t.string   "remoteowner",  limit: 30
-    t.string   "linkname",     limit: 128
-    t.integer  "flags",        limit: 22,  precision: 22
-    t.integer  "spare3",       limit: 22,  precision: 22
-    t.datetime "stime"
-    t.integer  "obj#",         limit: 22,  precision: 22, null: false
-    t.integer  "logmnr_uid",   limit: 22,  precision: 22
-    t.integer  "logmnr_flags", limit: 22,  precision: 22
-    t.decimal  "start_scnbas"
-    t.decimal  "start_scnwrp"
+  create_table "logmnr_obj$", primary_key: ["logmnr_uid", "obj#"], force: :cascade do |t|
+    t.integer "objv#",        limit: 22,  precision: 22
+    t.integer "owner#",       limit: 22,  precision: 22
+    t.string  "name",         limit: 30
+    t.integer "namespace",    limit: 22,  precision: 22
+    t.string  "subname",      limit: 30
+    t.integer "type#",        limit: 22,  precision: 22
+    t.raw     "oid$",         limit: 16
+    t.string  "remoteowner",  limit: 30
+    t.string  "linkname",     limit: 128
+    t.integer "flags",        limit: 22,  precision: 22
+    t.integer "spare3",       limit: 22,  precision: 22
+    t.date    "stime"
+    t.integer "obj#",         limit: 22,  precision: 22, null: false
+    t.integer "logmnr_uid",   limit: 22,  precision: 22
+    t.integer "logmnr_flags", limit: 22,  precision: 22
+    t.decimal "start_scnbas"
+    t.decimal "start_scnwrp"
   end
 
   add_index "logmnr_obj$", ["logmnr_uid", "obj#"], name: "logmnr_i1obj$"
   add_index "logmnr_obj$", ["logmnr_uid", "oid$"], name: "logmnr_i2obj$"
 
-  create_table "logmnr_opqtype$", id: false, force: :cascade do |t|
+  create_table "logmnr_opqtype$", primary_key: ["logmnr_uid", "obj#", "intcol#"], force: :cascade do |t|
     t.decimal "intcol#",                                  null: false
     t.decimal "type"
     t.decimal "flags"
@@ -1079,7 +1078,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_parameter$", ["session#", "name"], name: "logmnr_parameter_indx"
 
-  create_table "logmnr_partobj$", id: false, force: :cascade do |t|
+  create_table "logmnr_partobj$", primary_key: ["logmnr_uid", "obj#"], force: :cascade do |t|
     t.decimal "parttype"
     t.decimal "partcnt"
     t.decimal "partkeycols"
@@ -1110,21 +1109,21 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_partobj$", ["logmnr_uid", "obj#"], name: "logmnr_i1partobj$"
 
-  create_table "logmnr_processed_log$", id: false, force: :cascade do |t|
-    t.decimal  "session#",                  null: false
-    t.decimal  "thread#",                   null: false
-    t.decimal  "sequence#"
-    t.decimal  "first_change#"
-    t.decimal  "next_change#"
-    t.datetime "first_time"
-    t.datetime "next_time"
-    t.string   "file_name",     limit: 513
-    t.decimal  "status"
-    t.string   "info",          limit: 32
-    t.datetime "timestamp"
+  create_table "logmnr_processed_log$", primary_key: ["session#", "thread#"], force: :cascade do |t|
+    t.decimal "session#",                  null: false
+    t.decimal "thread#",                   null: false
+    t.decimal "sequence#"
+    t.decimal "first_change#"
+    t.decimal "next_change#"
+    t.date    "first_time"
+    t.date    "next_time"
+    t.string  "file_name",     limit: 513
+    t.decimal "status"
+    t.string  "info",          limit: 32
+    t.date    "timestamp"
   end
 
-  create_table "logmnr_props$", id: false, force: :cascade do |t|
+  create_table "logmnr_props$", primary_key: ["logmnr_uid", "name"], force: :cascade do |t|
     t.string  "value$",       limit: 4000
     t.string  "comment$",     limit: 4000
     t.string  "name",         limit: 30,                  null: false
@@ -1134,7 +1133,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_props$", ["logmnr_uid", "name"], name: "logmnr_i1props$"
 
-  create_table "logmnr_refcon$", id: false, force: :cascade do |t|
+  create_table "logmnr_refcon$", primary_key: ["logmnr_uid", "obj#", "intcol#"], force: :cascade do |t|
     t.decimal "col#"
     t.decimal "intcol#"
     t.decimal "reftyp"
@@ -1147,7 +1146,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_refcon$", ["logmnr_uid", "obj#", "intcol#"], name: "logmnr_i1refcon$"
 
-  create_table "logmnr_restart_ckpt$", id: false, force: :cascade do |t|
+  create_table "logmnr_restart_ckpt$", primary_key: ["session#", "ckpt_scn", "xidusn", "xidslt", "xidsqn", "session_num", "serial_num"], force: :cascade do |t|
     t.decimal "session#",    null: false
     t.decimal "valid"
     t.decimal "ckpt_scn",    null: false
@@ -1164,7 +1163,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.decimal "spare2"
   end
 
-  create_table "logmnr_restart_ckpt_txinfo$", id: false, force: :cascade do |t|
+  create_table "logmnr_restart_ckpt_txinfo$", primary_key: ["session#", "xidusn", "xidslt", "xidsqn", "session_num", "serial_num", "effective_scn"], force: :cascade do |t|
     t.decimal "session#",      null: false
     t.decimal "xidusn",        null: false
     t.decimal "xidslt",        null: false
@@ -1178,7 +1177,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.binary  "tx_data"
   end
 
-  create_table "logmnr_seed$", id: false, force: :cascade do |t|
+  create_table "logmnr_seed$", primary_key: ["logmnr_uid", "obj#", "intcol#"], force: :cascade do |t|
     t.integer "seed_version",   limit: 22, precision: 22
     t.integer "gather_version", limit: 22, precision: 22
     t.string  "schemaname",     limit: 30
@@ -1201,87 +1200,87 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "logmnr_seed$", ["logmnr_uid", "obj#", "intcol#"], name: "logmnr_i1seed$"
   add_index "logmnr_seed$", ["logmnr_uid", "schemaname", "table_name", "col_name", "obj#", "intcol#"], name: "logmnr_i2seed$"
 
-  create_table "logmnr_session$", primary_key: "session#", force: :cascade do |t|
-    t.decimal  "client#"
-    t.string   "session_name",         limit: 128,  null: false
-    t.integer  "db_id",                limit: nil
-    t.decimal  "resetlogs_change#"
-    t.decimal  "session_attr"
-    t.string   "session_attr_verbose", limit: 400
-    t.decimal  "start_scn"
-    t.decimal  "end_scn"
-    t.decimal  "spill_scn"
-    t.datetime "spill_time"
-    t.decimal  "oldest_scn"
-    t.decimal  "resume_scn"
-    t.string   "global_db_name",       limit: 128
-    t.decimal  "reset_timestamp"
-    t.decimal  "branch_scn"
-    t.string   "version",              limit: 64
-    t.string   "redo_compat",          limit: 20
-    t.decimal  "spare1"
-    t.decimal  "spare2"
-    t.decimal  "spare3"
-    t.decimal  "spare4"
-    t.decimal  "spare5"
-    t.datetime "spare6"
-    t.string   "spare7",               limit: 1000
-    t.string   "spare8",               limit: 1000
+  create_table "logmnr_session$", primary_key: "session#", id: :decimal, force: :cascade do |t|
+    t.decimal "client#"
+    t.string  "session_name",         limit: 128,  null: false
+    t.decimal "db_id"
+    t.decimal "resetlogs_change#"
+    t.decimal "session_attr"
+    t.string  "session_attr_verbose", limit: 400
+    t.decimal "start_scn"
+    t.decimal "end_scn"
+    t.decimal "spill_scn"
+    t.date    "spill_time"
+    t.decimal "oldest_scn"
+    t.decimal "resume_scn"
+    t.string  "global_db_name",       limit: 128
+    t.decimal "reset_timestamp"
+    t.decimal "branch_scn"
+    t.string  "version",              limit: 64
+    t.string  "redo_compat",          limit: 20
+    t.decimal "spare1"
+    t.decimal "spare2"
+    t.decimal "spare3"
+    t.decimal "spare4"
+    t.decimal "spare5"
+    t.date    "spare6"
+    t.string  "spare7",               limit: 1000
+    t.string  "spare8",               limit: 1000
   end
 
   add_index "logmnr_session$", ["session_name"], name: "logmnr_session_uk1", unique: true
 
-  create_table "logmnr_session_actions$", id: false, force: :cascade do |t|
-    t.decimal   "flagsruntime",                 default: 0.0
-    t.decimal   "dropscn"
-    t.timestamp "modifytime",      limit: 6
-    t.timestamp "dispatchtime",    limit: 6
-    t.timestamp "droptime",        limit: 6
-    t.decimal   "lcrcount",                     default: 0.0
-    t.string    "actionname",      limit: 30,                 null: false
-    t.decimal   "logmnrsession#",                             null: false
-    t.decimal   "processrole#",                               null: false
-    t.decimal   "actiontype#",                                null: false
-    t.decimal   "flagsdefinetime"
-    t.timestamp "createtime",      limit: 6
-    t.decimal   "xidusn"
-    t.decimal   "xidslt"
-    t.decimal   "xidsqn"
-    t.decimal   "thread#"
-    t.decimal   "startscn"
-    t.decimal   "startsubscn"
-    t.decimal   "endscn"
-    t.decimal   "endsubscn"
-    t.decimal   "rbasqn"
-    t.decimal   "rbablk"
-    t.decimal   "rbabyte"
-    t.decimal   "session#"
-    t.decimal   "obj#"
-    t.decimal   "attr1"
-    t.decimal   "attr2"
-    t.decimal   "attr3"
-    t.decimal   "spare1"
-    t.decimal   "spare2"
-    t.timestamp "spare3",          limit: 6
-    t.string    "spare4",          limit: 2000
-  end
-
-  create_table "logmnr_session_evolve$", id: false, force: :cascade do |t|
-    t.decimal  "branch_level"
-    t.decimal  "session#",                         null: false
-    t.integer  "db_id",                limit: nil, null: false
-    t.decimal  "reset_scn",                        null: false
-    t.decimal  "reset_timestamp",                  null: false
-    t.decimal  "prev_reset_scn"
-    t.decimal  "prev_reset_timestamp"
-    t.decimal  "status"
+  create_table "logmnr_session_actions$", primary_key: ["logmnrsession#", "actionname"], force: :cascade do |t|
+    t.decimal  "flagsruntime",                               default: "0.0"
+    t.decimal  "dropscn"
+    t.datetime "modifytime",                   precision: 6
+    t.datetime "dispatchtime",                 precision: 6
+    t.datetime "droptime",                     precision: 6
+    t.decimal  "lcrcount",                                   default: "0.0"
+    t.string   "actionname",      limit: 30,                                 null: false
+    t.decimal  "logmnrsession#",                                             null: false
+    t.decimal  "processrole#",                                               null: false
+    t.decimal  "actiontype#",                                                null: false
+    t.decimal  "flagsdefinetime"
+    t.datetime "createtime",                   precision: 6
+    t.decimal  "xidusn"
+    t.decimal  "xidslt"
+    t.decimal  "xidsqn"
+    t.decimal  "thread#"
+    t.decimal  "startscn"
+    t.decimal  "startsubscn"
+    t.decimal  "endscn"
+    t.decimal  "endsubscn"
+    t.decimal  "rbasqn"
+    t.decimal  "rbablk"
+    t.decimal  "rbabyte"
+    t.decimal  "session#"
+    t.decimal  "obj#"
+    t.decimal  "attr1"
+    t.decimal  "attr2"
+    t.decimal  "attr3"
     t.decimal  "spare1"
     t.decimal  "spare2"
-    t.decimal  "spare3"
-    t.datetime "spare4"
+    t.datetime "spare3",                       precision: 6
+    t.string   "spare4",          limit: 2000
   end
 
-  create_table "logmnr_spill$", id: false, force: :cascade do |t|
+  create_table "logmnr_session_evolve$", primary_key: ["session#", "db_id", "reset_scn", "reset_timestamp"], force: :cascade do |t|
+    t.decimal "branch_level"
+    t.decimal "session#",             null: false
+    t.decimal "db_id",                null: false
+    t.decimal "reset_scn",            null: false
+    t.decimal "reset_timestamp",      null: false
+    t.decimal "prev_reset_scn"
+    t.decimal "prev_reset_timestamp"
+    t.decimal "status"
+    t.decimal "spare1"
+    t.decimal "spare2"
+    t.decimal "spare3"
+    t.date    "spare4"
+  end
+
+  create_table "logmnr_spill$", primary_key: ["session#", "xidusn", "xidslt", "xidsqn", "chunk", "startidx", "endidx", "flag", "sequence#"], force: :cascade do |t|
     t.decimal "session#",   null: false
     t.decimal "xidusn",     null: false
     t.decimal "xidslt",     null: false
@@ -1296,7 +1295,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.decimal "spare2"
   end
 
-  create_table "logmnr_subcoltype$", id: false, force: :cascade do |t|
+  create_table "logmnr_subcoltype$", primary_key: ["logmnr_uid", "obj#", "intcol#", "toid"], force: :cascade do |t|
     t.decimal "intcol#",                                null: false
     t.raw     "toid",         limit: 16,                null: false
     t.decimal "version#",                               null: false
@@ -1311,7 +1310,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_subcoltype$", ["logmnr_uid", "obj#", "intcol#", "toid"], name: "logmnr_i1subcoltype$"
 
-  create_table "logmnr_tab$", id: false, force: :cascade do |t|
+  create_table "logmnr_tab$", primary_key: ["logmnr_uid", "obj#"], force: :cascade do |t|
     t.integer "ts#",          limit: 22, precision: 22
     t.integer "cols",         limit: 22, precision: 22
     t.integer "property",     limit: 22, precision: 22
@@ -1328,7 +1327,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "logmnr_tab$", ["logmnr_uid", "bobj#"], name: "logmnr_i2tab$"
   add_index "logmnr_tab$", ["logmnr_uid", "obj#"], name: "logmnr_i1tab$"
 
-  create_table "logmnr_tabcompart$", id: false, force: :cascade do |t|
+  create_table "logmnr_tabcompart$", primary_key: ["logmnr_uid", "obj#"], force: :cascade do |t|
     t.integer "obj#",         limit: 22, precision: 22
     t.integer "bo#",          limit: 22, precision: 22
     t.integer "part#",        limit: 22, precision: 22, null: false
@@ -1339,7 +1338,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "logmnr_tabcompart$", ["logmnr_uid", "bo#"], name: "logmnr_i2tabcompart$"
   add_index "logmnr_tabcompart$", ["logmnr_uid", "obj#"], name: "logmnr_i1tabcompart$"
 
-  create_table "logmnr_tabpart$", id: false, force: :cascade do |t|
+  create_table "logmnr_tabpart$", primary_key: ["logmnr_uid", "obj#", "bo#"], force: :cascade do |t|
     t.integer "obj#",         limit: 22, precision: 22
     t.integer "ts#",          limit: 22, precision: 22
     t.decimal "part#"
@@ -1351,7 +1350,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "logmnr_tabpart$", ["logmnr_uid", "bo#"], name: "logmnr_i2tabpart$"
   add_index "logmnr_tabpart$", ["logmnr_uid", "obj#", "bo#"], name: "logmnr_i1tabpart$"
 
-  create_table "logmnr_tabsubpart$", id: false, force: :cascade do |t|
+  create_table "logmnr_tabsubpart$", primary_key: ["logmnr_uid", "obj#", "pobj#"], force: :cascade do |t|
     t.integer "obj#",         limit: 22, precision: 22
     t.integer "dataobj#",     limit: 22, precision: 22
     t.integer "pobj#",        limit: 22, precision: 22
@@ -1364,7 +1363,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "logmnr_tabsubpart$", ["logmnr_uid", "obj#", "pobj#"], name: "logmnr_i1tabsubpart$"
   add_index "logmnr_tabsubpart$", ["logmnr_uid", "pobj#"], name: "logmnr_i2tabsubpart$"
 
-  create_table "logmnr_ts$", id: false, force: :cascade do |t|
+  create_table "logmnr_ts$", primary_key: ["logmnr_uid", "ts#"], force: :cascade do |t|
     t.integer "ts#",          limit: 22, precision: 22
     t.string  "name",         limit: 30
     t.integer "owner#",       limit: 22, precision: 22
@@ -1375,7 +1374,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_ts$", ["logmnr_uid", "ts#"], name: "logmnr_i1ts$"
 
-  create_table "logmnr_type$", id: false, force: :cascade do |t|
+  create_table "logmnr_type$", primary_key: ["logmnr_uid", "toid", "version#"], force: :cascade do |t|
     t.decimal "version#"
     t.string  "version",         limit: 30
     t.raw     "tvoid",           limit: 16
@@ -1405,11 +1404,11 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_type$", ["logmnr_uid", "toid", "version#"], name: "logmnr_i1type$"
 
-  create_table "logmnr_uid$", primary_key: "session#", force: :cascade do |t|
+  create_table "logmnr_uid$", primary_key: "session#", id: :decimal, force: :cascade do |t|
     t.integer "logmnr_uid", limit: 22, precision: 22
   end
 
-  create_table "logmnr_user$", id: false, force: :cascade do |t|
+  create_table "logmnr_user$", primary_key: ["logmnr_uid", "user#"], force: :cascade do |t|
     t.integer "user#",        limit: 22, precision: 22
     t.string  "name",         limit: 30,                null: false
     t.integer "logmnr_uid",   limit: 22, precision: 22
@@ -1418,149 +1417,149 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "logmnr_user$", ["logmnr_uid", "user#"], name: "logmnr_i1user$"
 
-  create_table "logmnrc_dbname_uid_map", primary_key: "global_name", force: :cascade do |t|
+  create_table "logmnrc_dbname_uid_map", primary_key: "global_name", id: :string, limit: 128, force: :cascade do |t|
     t.decimal "logmnr_uid"
     t.decimal "flags"
   end
 
-  create_table "logmnrc_gsba", id: false, force: :cascade do |t|
-    t.decimal  "logmnr_uid",                    null: false
-    t.decimal  "as_of_scn",                     null: false
-    t.decimal  "fdo_length"
-    t.raw      "fdo_value",        limit: 255
-    t.decimal  "charsetid"
-    t.decimal  "ncharsetid"
-    t.decimal  "dbtimezone_len"
-    t.string   "dbtimezone_value", limit: 64
-    t.decimal  "logmnr_spare1"
-    t.decimal  "logmnr_spare2"
-    t.string   "logmnr_spare3",    limit: 1000
-    t.datetime "logmnr_spare4"
+  create_table "logmnrc_gsba", primary_key: ["logmnr_uid", "as_of_scn"], force: :cascade do |t|
+    t.decimal "logmnr_uid",                    null: false
+    t.decimal "as_of_scn",                     null: false
+    t.decimal "fdo_length"
+    t.raw     "fdo_value",        limit: 255
+    t.decimal "charsetid"
+    t.decimal "ncharsetid"
+    t.decimal "dbtimezone_len"
+    t.string  "dbtimezone_value", limit: 64
+    t.decimal "logmnr_spare1"
+    t.decimal "logmnr_spare2"
+    t.string  "logmnr_spare3",    limit: 1000
+    t.date    "logmnr_spare4"
   end
 
-  create_table "logmnrc_gsii", id: false, force: :cascade do |t|
-    t.decimal  "logmnr_uid",                 null: false
-    t.decimal  "obj#",                       null: false
-    t.decimal  "bo#",                        null: false
-    t.decimal  "indtype#",                   null: false
-    t.decimal  "drop_scn"
-    t.decimal  "logmnr_spare1"
-    t.decimal  "logmnr_spare2"
-    t.string   "logmnr_spare3", limit: 1000
-    t.datetime "logmnr_spare4"
+  create_table "logmnrc_gsii", primary_key: ["logmnr_uid", "obj#"], force: :cascade do |t|
+    t.decimal "logmnr_uid",                 null: false
+    t.decimal "obj#",                       null: false
+    t.decimal "bo#",                        null: false
+    t.decimal "indtype#",                   null: false
+    t.decimal "drop_scn"
+    t.decimal "logmnr_spare1"
+    t.decimal "logmnr_spare2"
+    t.string  "logmnr_spare3", limit: 1000
+    t.date    "logmnr_spare4"
   end
 
-  create_table "logmnrc_gtcs", id: false, force: :cascade do |t|
-    t.decimal  "logmnr_uid",                               null: false
-    t.decimal  "obj#",                                     null: false
-    t.decimal  "objv#",                                    null: false
-    t.decimal  "segcol#",                                  null: false
-    t.decimal  "intcol#",                                  null: false
-    t.string   "colname",                     limit: 30,   null: false
-    t.decimal  "type#",                                    null: false
-    t.decimal  "length"
-    t.decimal  "precision"
-    t.decimal  "scale"
-    t.decimal  "interval_leading_precision"
-    t.decimal  "interval_trailing_precision"
-    t.decimal  "property"
-    t.raw      "toid",                        limit: 16
-    t.decimal  "charsetid"
-    t.decimal  "charsetform"
-    t.string   "typename",                    limit: 30
-    t.string   "fqcolname",                   limit: 4000
-    t.decimal  "numintcols"
-    t.decimal  "numattrs"
-    t.decimal  "adtorder"
-    t.decimal  "logmnr_spare1"
-    t.decimal  "logmnr_spare2"
-    t.string   "logmnr_spare3",               limit: 1000
-    t.datetime "logmnr_spare4"
-    t.decimal  "logmnr_spare5"
-    t.decimal  "logmnr_spare6"
-    t.decimal  "logmnr_spare7"
-    t.decimal  "logmnr_spare8"
-    t.decimal  "logmnr_spare9"
-    t.decimal  "col#"
-    t.string   "xtypeschemaname",             limit: 30
-    t.string   "xtypename",                   limit: 4000
-    t.string   "xfqcolname",                  limit: 4000
-    t.decimal  "xtopintcol"
-    t.decimal  "xreffedtableobjn"
-    t.decimal  "xreffedtableobjv"
-    t.decimal  "xcoltypeflags"
-    t.decimal  "xopqtypetype"
-    t.decimal  "xopqtypeflags"
-    t.decimal  "xopqlobintcol"
-    t.decimal  "xopqobjintcol"
-    t.decimal  "xxmlintcol"
-    t.decimal  "eaowner#"
-    t.string   "eamkeyid",                    limit: 64
-    t.decimal  "eaencalg"
-    t.decimal  "eaintalg"
-    t.raw      "eacolklc"
-    t.decimal  "eaklclen"
-    t.decimal  "eaflags"
+  create_table "logmnrc_gtcs", primary_key: ["logmnr_uid", "obj#", "objv#", "intcol#"], force: :cascade do |t|
+    t.decimal "logmnr_uid",                               null: false
+    t.decimal "obj#",                                     null: false
+    t.decimal "objv#",                                    null: false
+    t.decimal "segcol#",                                  null: false
+    t.decimal "intcol#",                                  null: false
+    t.string  "colname",                     limit: 30,   null: false
+    t.decimal "type#",                                    null: false
+    t.decimal "length"
+    t.decimal "precision"
+    t.decimal "scale"
+    t.decimal "interval_leading_precision"
+    t.decimal "interval_trailing_precision"
+    t.decimal "property"
+    t.raw     "toid",                        limit: 16
+    t.decimal "charsetid"
+    t.decimal "charsetform"
+    t.string  "typename",                    limit: 30
+    t.string  "fqcolname",                   limit: 4000
+    t.decimal "numintcols"
+    t.decimal "numattrs"
+    t.decimal "adtorder"
+    t.decimal "logmnr_spare1"
+    t.decimal "logmnr_spare2"
+    t.string  "logmnr_spare3",               limit: 1000
+    t.date    "logmnr_spare4"
+    t.decimal "logmnr_spare5"
+    t.decimal "logmnr_spare6"
+    t.decimal "logmnr_spare7"
+    t.decimal "logmnr_spare8"
+    t.decimal "logmnr_spare9"
+    t.decimal "col#"
+    t.string  "xtypeschemaname",             limit: 30
+    t.string  "xtypename",                   limit: 4000
+    t.string  "xfqcolname",                  limit: 4000
+    t.decimal "xtopintcol"
+    t.decimal "xreffedtableobjn"
+    t.decimal "xreffedtableobjv"
+    t.decimal "xcoltypeflags"
+    t.decimal "xopqtypetype"
+    t.decimal "xopqtypeflags"
+    t.decimal "xopqlobintcol"
+    t.decimal "xopqobjintcol"
+    t.decimal "xxmlintcol"
+    t.decimal "eaowner#"
+    t.string  "eamkeyid",                    limit: 64
+    t.decimal "eaencalg"
+    t.decimal "eaintalg"
+    t.raw     "eacolklc"
+    t.decimal "eaklclen"
+    t.decimal "eaflags"
   end
 
   add_index "logmnrc_gtcs", ["logmnr_uid", "obj#", "objv#", "segcol#", "intcol#"], name: "logmnrc_i2gtcs"
 
-  create_table "logmnrc_gtlo", id: false, force: :cascade do |t|
-    t.decimal  "logmnr_uid",                      null: false
-    t.decimal  "keyobj#",                         null: false
-    t.decimal  "lvlcnt",                          null: false
-    t.decimal  "baseobj#",                        null: false
-    t.decimal  "baseobjv#",                       null: false
-    t.decimal  "lvl1obj#"
-    t.decimal  "lvl2obj#"
-    t.decimal  "lvl0type#",                       null: false
-    t.decimal  "lvl1type#"
-    t.decimal  "lvl2type#"
-    t.decimal  "owner#"
-    t.string   "ownername",          limit: 30,   null: false
-    t.string   "lvl0name",           limit: 30,   null: false
-    t.string   "lvl1name",           limit: 30
-    t.string   "lvl2name",           limit: 30
-    t.decimal  "intcols",                         null: false
-    t.decimal  "cols"
-    t.decimal  "kernelcols"
-    t.decimal  "tab_flags"
-    t.decimal  "trigflag"
-    t.decimal  "assoc#"
-    t.decimal  "obj_flags"
-    t.decimal  "ts#"
-    t.string   "tsname",             limit: 30
-    t.decimal  "property"
-    t.decimal  "start_scn",                       null: false
-    t.decimal  "drop_scn"
-    t.decimal  "xidusn"
-    t.decimal  "xidslt"
-    t.decimal  "xidsqn"
-    t.decimal  "flags"
-    t.decimal  "logmnr_spare1"
-    t.decimal  "logmnr_spare2"
-    t.string   "logmnr_spare3",      limit: 1000
-    t.datetime "logmnr_spare4"
-    t.decimal  "logmnr_spare5"
-    t.decimal  "logmnr_spare6"
-    t.decimal  "logmnr_spare7"
-    t.decimal  "logmnr_spare8"
-    t.decimal  "logmnr_spare9"
-    t.decimal  "parttype"
-    t.decimal  "subparttype"
-    t.decimal  "unsupportedcols"
-    t.decimal  "complextypecols"
-    t.decimal  "ntparentobjnum"
-    t.decimal  "ntparentobjversion"
-    t.decimal  "ntparentintcolnum"
-    t.decimal  "logmnrtloflags"
-    t.string   "logmnrmcv",          limit: 30
+  create_table "logmnrc_gtlo", primary_key: ["logmnr_uid", "keyobj#", "baseobjv#"], force: :cascade do |t|
+    t.decimal "logmnr_uid",                      null: false
+    t.decimal "keyobj#",                         null: false
+    t.decimal "lvlcnt",                          null: false
+    t.decimal "baseobj#",                        null: false
+    t.decimal "baseobjv#",                       null: false
+    t.decimal "lvl1obj#"
+    t.decimal "lvl2obj#"
+    t.decimal "lvl0type#",                       null: false
+    t.decimal "lvl1type#"
+    t.decimal "lvl2type#"
+    t.decimal "owner#"
+    t.string  "ownername",          limit: 30,   null: false
+    t.string  "lvl0name",           limit: 30,   null: false
+    t.string  "lvl1name",           limit: 30
+    t.string  "lvl2name",           limit: 30
+    t.decimal "intcols",                         null: false
+    t.decimal "cols"
+    t.decimal "kernelcols"
+    t.decimal "tab_flags"
+    t.decimal "trigflag"
+    t.decimal "assoc#"
+    t.decimal "obj_flags"
+    t.decimal "ts#"
+    t.string  "tsname",             limit: 30
+    t.decimal "property"
+    t.decimal "start_scn",                       null: false
+    t.decimal "drop_scn"
+    t.decimal "xidusn"
+    t.decimal "xidslt"
+    t.decimal "xidsqn"
+    t.decimal "flags"
+    t.decimal "logmnr_spare1"
+    t.decimal "logmnr_spare2"
+    t.string  "logmnr_spare3",      limit: 1000
+    t.date    "logmnr_spare4"
+    t.decimal "logmnr_spare5"
+    t.decimal "logmnr_spare6"
+    t.decimal "logmnr_spare7"
+    t.decimal "logmnr_spare8"
+    t.decimal "logmnr_spare9"
+    t.decimal "parttype"
+    t.decimal "subparttype"
+    t.decimal "unsupportedcols"
+    t.decimal "complextypecols"
+    t.decimal "ntparentobjnum"
+    t.decimal "ntparentobjversion"
+    t.decimal "ntparentintcolnum"
+    t.decimal "logmnrtloflags"
+    t.string  "logmnrmcv",          limit: 30
   end
 
   add_index "logmnrc_gtlo", ["logmnr_uid", "baseobj#", "baseobjv#"], name: "logmnrc_i2gtlo"
   add_index "logmnrc_gtlo", ["logmnr_uid", "drop_scn"], name: "logmnrc_i3gtlo"
 
-  create_table "logmnrp_ctas_part_map", id: false, force: :cascade do |t|
+  create_table "logmnrp_ctas_part_map", primary_key: ["logmnr_uid", "baseobjv#", "keyobj#"], force: :cascade do |t|
     t.decimal "logmnr_uid",              null: false
     t.decimal "baseobj#",                null: false
     t.decimal "baseobjv#",               null: false
@@ -1577,91 +1576,91 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 #   Unknown type 'ROWID' for column 'source_rowid'
 
   create_table "logstdby$apply_milestone", id: false, force: :cascade do |t|
-    t.integer  "session_id",     limit: nil,                null: false
-    t.decimal  "commit_scn",                                null: false
-    t.datetime "commit_time"
-    t.decimal  "synch_scn",                                 null: false
-    t.decimal  "epoch",                                     null: false
-    t.decimal  "processed_scn",                             null: false
-    t.datetime "processed_time"
-    t.decimal  "fetchlwm_scn",                default: 0.0, null: false
-    t.decimal  "spare1"
-    t.decimal  "spare2"
-    t.string   "spare3",         limit: 2000
+    t.decimal "session_id",                                  null: false
+    t.decimal "commit_scn",                                  null: false
+    t.date    "commit_time"
+    t.decimal "synch_scn",                                   null: false
+    t.decimal "epoch",                                       null: false
+    t.decimal "processed_scn",                               null: false
+    t.date    "processed_time"
+    t.decimal "fetchlwm_scn",                default: "0.0", null: false
+    t.decimal "spare1"
+    t.decimal "spare2"
+    t.string  "spare3",         limit: 2000
   end
 
   create_table "logstdby$apply_progress", id: false, force: :cascade do |t|
-    t.decimal  "xidusn"
-    t.decimal  "xidslt"
-    t.decimal  "xidsqn"
-    t.decimal  "commit_scn"
-    t.datetime "commit_time"
-    t.decimal  "spare1"
-    t.decimal  "spare2"
-    t.string   "spare3",      limit: 2000
+    t.decimal "xidusn"
+    t.decimal "xidslt"
+    t.decimal "xidsqn"
+    t.decimal "commit_scn"
+    t.date    "commit_time"
+    t.decimal "spare1"
+    t.decimal "spare2"
+    t.string  "spare3",      limit: 2000
   end
 
-  create_table "logstdby$eds_tables", id: false, force: :cascade do |t|
-    t.string    "owner",               limit: 30, null: false
-    t.string    "table_name",          limit: 30, null: false
-    t.string    "shadow_table_name",   limit: 30
-    t.string    "base_trigger_name",   limit: 30
-    t.string    "shadow_trigger_name", limit: 30
-    t.string    "dblink"
-    t.decimal   "flags"
-    t.string    "state"
-    t.decimal   "objv"
-    t.decimal   "obj#"
-    t.decimal   "sobj#"
-    t.timestamp "ctime",               limit: 6
-    t.decimal   "spare1"
-    t.string    "spare2"
-    t.decimal   "spare3"
+  create_table "logstdby$eds_tables", primary_key: ["owner", "table_name"], force: :cascade do |t|
+    t.string   "owner",               limit: 30,               null: false
+    t.string   "table_name",          limit: 30,               null: false
+    t.string   "shadow_table_name",   limit: 30
+    t.string   "base_trigger_name",   limit: 30
+    t.string   "shadow_trigger_name", limit: 30
+    t.string   "dblink"
+    t.decimal  "flags"
+    t.string   "state"
+    t.decimal  "objv"
+    t.decimal  "obj#"
+    t.decimal  "sobj#"
+    t.datetime "ctime",                          precision: 6
+    t.decimal  "spare1"
+    t.string   "spare2"
+    t.decimal  "spare3"
   end
 
   create_table "logstdby$events", id: false, force: :cascade do |t|
-    t.timestamp "event_time",  limit: 6,    null: false
-    t.decimal   "current_scn"
-    t.decimal   "commit_scn"
-    t.decimal   "xidusn"
-    t.decimal   "xidslt"
-    t.decimal   "xidsqn"
-    t.decimal   "errval"
-    t.string    "event",       limit: 2000
-    t.text      "full_event"
-    t.string    "error",       limit: 2000
-    t.decimal   "spare1"
-    t.decimal   "spare2"
-    t.string    "spare3",      limit: 2000
+    t.datetime "event_time",               precision: 6, null: false
+    t.decimal  "current_scn"
+    t.decimal  "commit_scn"
+    t.decimal  "xidusn"
+    t.decimal  "xidslt"
+    t.decimal  "xidsqn"
+    t.decimal  "errval"
+    t.string   "event",       limit: 2000
+    t.text     "full_event"
+    t.string   "error",       limit: 2000
+    t.decimal  "spare1"
+    t.decimal  "spare2"
+    t.string   "spare3",      limit: 2000
   end
 
   add_index "logstdby$events", ["commit_scn"], name: "logstdby$events_ind_scn", tablespace: "sysaux"
   add_index "logstdby$events", ["event_time"], name: "logstdby$events_ind", tablespace: "sysaux"
   add_index "logstdby$events", ["xidusn", "xidslt", "xidsqn"], name: "logstdby$events_ind_xid", tablespace: "sysaux"
 
-  create_table "logstdby$flashback_scn", primary_key: "primary_scn", force: :cascade do |t|
-    t.datetime "primary_time"
-    t.decimal  "standby_scn"
-    t.datetime "standby_time"
-    t.decimal  "spare1"
-    t.decimal  "spare2"
-    t.datetime "spare3"
+  create_table "logstdby$flashback_scn", primary_key: "primary_scn", id: :decimal, force: :cascade do |t|
+    t.date    "primary_time"
+    t.decimal "standby_scn"
+    t.date    "standby_time"
+    t.decimal "spare1"
+    t.decimal "spare2"
+    t.date    "spare3"
   end
 
   create_table "logstdby$history", id: false, force: :cascade do |t|
-    t.decimal  "stream_sequence#"
-    t.decimal  "lmnr_sid"
-    t.decimal  "dbid"
-    t.decimal  "first_change#"
-    t.decimal  "last_change#"
-    t.decimal  "source"
-    t.decimal  "status"
-    t.datetime "first_time"
-    t.datetime "last_time"
-    t.string   "dgname"
-    t.decimal  "spare1"
-    t.decimal  "spare2"
-    t.string   "spare3",           limit: 2000
+    t.decimal "stream_sequence#"
+    t.decimal "lmnr_sid"
+    t.decimal "dbid"
+    t.decimal "first_change#"
+    t.decimal "last_change#"
+    t.decimal "source"
+    t.decimal "status"
+    t.date    "first_time"
+    t.date    "last_time"
+    t.string  "dgname"
+    t.decimal "spare1"
+    t.decimal "spare2"
+    t.string  "spare3",           limit: 2000
   end
 
   create_table "logstdby$parameters", id: false, force: :cascade do |t|
@@ -1675,7 +1674,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   end
 
   create_table "logstdby$plsql", id: false, force: :cascade do |t|
-    t.integer "session_id",   limit: nil
+    t.decimal "session_id"
     t.decimal "start_finish"
     t.text    "call_text"
     t.decimal "spare1"
@@ -1700,7 +1699,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.string  "schema",        limit: 30
     t.string  "name",          limit: 65
     t.decimal "use_like"
-    t.boolean "esc",           limit: nil
+    t.boolean "esc"
     t.string  "proc",          limit: 98
     t.decimal "active"
     t.decimal "spare1"
@@ -1732,11 +1731,11 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.string  "spare3",     limit: 2000
   end
 
-  create_table "mview$_adv_ajg", comment: "Anchor-join graph representation", primary_key: "ajgid#", force: :cascade do |t|
-    t.decimal "runid#",                null: false
-    t.decimal "ajgdeslen",             null: false
-    t.raw     "ajgdes",    limit: nil, null: false
-    t.decimal "hashvalue",             null: false
+  create_table "mview$_adv_ajg", comment: "Anchor-join graph representation", primary_key: "ajgid#", id: :decimal, force: :cascade do |t|
+    t.decimal "runid#",    null: false
+    t.decimal "ajgdeslen", null: false
+    t.raw     "ajgdes",    null: false
+    t.decimal "hashvalue", null: false
     t.decimal "frequency"
   end
 
@@ -1750,18 +1749,18 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "mview$_adv_basetable", ["queryid#"], name: "mview$_adv_basetable_idx_01"
 
-  create_table "mview$_adv_clique", comment: "Table for storing canonical form of Clique queries", primary_key: "cliqueid#", force: :cascade do |t|
-    t.decimal "runid#",                   null: false
-    t.decimal "cliquedeslen",             null: false
-    t.raw     "cliquedes",    limit: nil, null: false
-    t.decimal "hashvalue",                null: false
-    t.decimal "frequency",                null: false
-    t.decimal "bytecost",                 null: false
-    t.decimal "rowsize",                  null: false
-    t.decimal "numrows",                  null: false
+  create_table "mview$_adv_clique", comment: "Table for storing canonical form of Clique queries", primary_key: "cliqueid#", id: :decimal, force: :cascade do |t|
+    t.decimal "runid#",       null: false
+    t.decimal "cliquedeslen", null: false
+    t.raw     "cliquedes",    null: false
+    t.decimal "hashvalue",    null: false
+    t.decimal "frequency",    null: false
+    t.decimal "bytecost",     null: false
+    t.decimal "rowsize",      null: false
+    t.decimal "numrows",      null: false
   end
 
-  create_table "mview$_adv_eligible", comment: "Summary management rewrite eligibility information", id: false, force: :cascade do |t|
+  create_table "mview$_adv_eligible", comment: "Summary management rewrite eligibility information", primary_key: ["sumobjn#", "runid#"], force: :cascade do |t|
     t.decimal "sumobjn#",  null: false
     t.decimal "runid#",    null: false
     t.decimal "bytecost",  null: false
@@ -1772,7 +1771,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 # Could not dump table "mview$_adv_exceptions" because of following StandardError
 #   Unknown type 'ROWID' for column 'bad_rowid'
 
-  create_table "mview$_adv_filter", comment: "Table for workload filter definition", id: false, force: :cascade do |t|
+  create_table "mview$_adv_filter", comment: "Table for workload filter definition", primary_key: ["filterid#", "subfilternum#"], force: :cascade do |t|
     t.decimal "filterid#",                  null: false
     t.decimal "subfilternum#",              null: false
     t.decimal "subfiltertype",              null: false
@@ -1795,28 +1794,28 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.date    "date_value2"
   end
 
-  create_table "mview$_adv_fjg", comment: "Representation for query join sub-graph not in AJG ", primary_key: "fjgid#", force: :cascade do |t|
-    t.decimal "ajgid#",                null: false
-    t.decimal "fjgdeslen",             null: false
-    t.raw     "fjgdes",    limit: nil, null: false
-    t.decimal "hashvalue",             null: false
+  create_table "mview$_adv_fjg", comment: "Representation for query join sub-graph not in AJG ", primary_key: "fjgid#", id: :decimal, force: :cascade do |t|
+    t.decimal "ajgid#",    null: false
+    t.decimal "fjgdeslen", null: false
+    t.raw     "fjgdes",    null: false
+    t.decimal "hashvalue", null: false
     t.decimal "frequency"
   end
 
-  create_table "mview$_adv_gc", comment: "Group-by columns of a query", primary_key: "gcid#", force: :cascade do |t|
-    t.decimal "fjgid#",                null: false
-    t.decimal "gcdeslen",              null: false
-    t.raw     "gcdes",     limit: nil, null: false
-    t.decimal "hashvalue",             null: false
+  create_table "mview$_adv_gc", comment: "Group-by columns of a query", primary_key: "gcid#", id: :decimal, force: :cascade do |t|
+    t.decimal "fjgid#",    null: false
+    t.decimal "gcdeslen",  null: false
+    t.raw     "gcdes",     null: false
+    t.decimal "hashvalue", null: false
     t.decimal "frequency"
   end
 
-  create_table "mview$_adv_info", comment: "Internal table for passing information from the SQL analyzer", id: false, force: :cascade do |t|
-    t.decimal "runid#",              null: false
-    t.decimal "seq#",                null: false
-    t.decimal "type",                null: false
-    t.decimal "infolen",             null: false
-    t.raw     "info",    limit: nil
+  create_table "mview$_adv_info", comment: "Internal table for passing information from the SQL analyzer", primary_key: ["runid#", "seq#"], force: :cascade do |t|
+    t.decimal "runid#",  null: false
+    t.decimal "seq#",    null: false
+    t.decimal "type",    null: false
+    t.decimal "infolen", null: false
+    t.raw     "info"
     t.decimal "status"
     t.decimal "flag"
   end
@@ -1824,7 +1823,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 # Could not dump table "mview$_adv_journal" because of following StandardError
 #   Unknown type 'LONG' for column 'text'
 
-  create_table "mview$_adv_level", comment: "Level definition", id: false, force: :cascade do |t|
+  create_table "mview$_adv_level", comment: "Level definition", primary_key: ["runid#", "levelid#"], force: :cascade do |t|
     t.decimal "runid#",                null: false
     t.decimal "levelid#",              null: false
     t.decimal "dimobj#"
@@ -1834,23 +1833,23 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.string  "levelname",  limit: 30
   end
 
-  create_table "mview$_adv_log", comment: "Log all calls to summary advisory functions", primary_key: "runid#", force: :cascade do |t|
-    t.decimal  "filterid#"
-    t.datetime "run_begin"
-    t.datetime "run_end"
-    t.decimal  "run_type"
-    t.string   "uname",      limit: 30
-    t.decimal  "status",                  null: false
-    t.string   "message",    limit: 2000
-    t.decimal  "completed"
-    t.decimal  "total"
-    t.string   "error_code", limit: 20
+  create_table "mview$_adv_log", comment: "Log all calls to summary advisory functions", primary_key: "runid#", id: :decimal, force: :cascade do |t|
+    t.decimal "filterid#"
+    t.date    "run_begin"
+    t.date    "run_end"
+    t.decimal "run_type"
+    t.string  "uname",      limit: 30
+    t.decimal "status",                  null: false
+    t.string  "message",    limit: 2000
+    t.decimal "completed"
+    t.decimal "total"
+    t.string  "error_code", limit: 20
   end
 
 # Could not dump table "mview$_adv_output" because of following StandardError
 #   Unknown type 'LONG' for column 'query_text'
 
-  create_table "mview$_adv_parameters", comment: "Summary advisor tuning parameters", primary_key: "parameter_name", force: :cascade do |t|
+  create_table "mview$_adv_parameters", comment: "Summary advisor tuning parameters", primary_key: "parameter_name", id: :string, limit: 30, force: :cascade do |t|
     t.decimal "parameter_type",             null: false
     t.string  "string_value",    limit: 30
     t.date    "date_value"
@@ -1863,7 +1862,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 # Could not dump table "mview$_adv_pretty" because of following StandardError
 #   Unknown type 'LONG' for column 'sql_text'
 
-  create_table "mview$_adv_rollup", comment: "Each row repesents either a functional dependency or join-key relationship", id: false, force: :cascade do |t|
+  create_table "mview$_adv_rollup", comment: "Each row repesents either a functional dependency or join-key relationship", primary_key: ["runid#", "clevelid#", "plevelid#"], force: :cascade do |t|
     t.decimal "runid#",    null: false
     t.decimal "clevelid#", null: false
     t.decimal "plevelid#", null: false
@@ -1872,7 +1871,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "mview$_adv_sqldepend", comment: "Temporary table for workload collections", id: false, force: :cascade do |t|
     t.decimal "collectionid#"
-    t.integer "inst_id",       limit: nil
+    t.decimal "inst_id"
     t.raw     "from_address",  limit: 16
     t.decimal "from_hash"
     t.string  "to_owner",      limit: 64
@@ -1890,16 +1889,16 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 #   Unknown type 'LONG' for column 'sql_text'
 
   create_table "news", force: :cascade do |t|
-    t.string   "title",                                                      null: false
+    t.string   "title",                                          null: false
     t.text     "description"
-    t.text     "body",                                                       null: false
-    t.boolean  "shared",          limit: nil,                default: false, null: false
-    t.datetime "published_at",                                               null: false
-    t.integer  "lock_version",                precision: 38, default: 0
-    t.integer  "organization_id", limit: nil,                                null: false
-    t.integer  "group_id",        limit: nil,                                null: false
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
+    t.text     "body",                                           null: false
+    t.boolean  "shared",                         default: false, null: false
+    t.datetime "published_at",    precision: 6,                  null: false
+    t.integer  "lock_version",    precision: 38, default: 0
+    t.integer  "organization_id", precision: 38,                 null: false
+    t.integer  "group_id",        precision: 38,                 null: false
+    t.datetime "created_at",      precision: 6,                  null: false
+    t.datetime "updated_at",      precision: 6,                  null: false
   end
 
   add_index "news", ["group_id"], name: "index_news_on_group_id"
@@ -1908,26 +1907,26 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "news", ["shared"], name: "index_news_on_shared"
 
   create_table "notification_relations", force: :cascade do |t|
-    t.integer  "notification_id", limit: nil
-    t.integer  "model_id",        limit: nil
+    t.integer  "notification_id", precision: 38
+    t.integer  "model_id",        precision: 38
     t.string   "model_type"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",      precision: 6,  null: false
+    t.datetime "updated_at",      precision: 6,  null: false
   end
 
   add_index "notification_relations", ["model_type", "model_id"], name: "i_not_rel_mod_typ_mod_id"
   add_index "notification_relations", ["notification_id"], name: "i_not_rel_not_id"
 
   create_table "notifications", force: :cascade do |t|
-    t.integer  "status",                          precision: 38
+    t.integer  "status",              precision: 38
     t.string   "confirmation_hash"
     t.text     "notes"
-    t.date     "confirmation_date"
-    t.integer  "user_id",             limit: nil
-    t.integer  "user_who_confirm_id", limit: nil
-    t.integer  "lock_version",                    precision: 38, default: 0
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
+    t.datetime "confirmation_date",   precision: 6
+    t.integer  "user_id",             precision: 38
+    t.integer  "user_who_confirm_id", precision: 38
+    t.integer  "lock_version",        precision: 38, default: 0
+    t.datetime "created_at",          precision: 6,              null: false
+    t.datetime "updated_at",          precision: 6,              null: false
   end
 
   add_index "notifications", ["confirmation_hash"], name: "i_not_con_has", unique: true
@@ -1949,7 +1948,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.string  "table_name",      limit: 30
     t.decimal "table_tin"
     t.decimal "table_pos"
-    t.integer "ref_id",          limit: nil
+    t.decimal "ref_id"
     t.string  "user_table_name", limit: 64
     t.float   "cost",            limit: 126
     t.float   "cardinality",     limit: 126
@@ -1967,8 +1966,8 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   create_table "ol$nodes", temporary: true, id: false, force: :cascade do |t|
     t.string  "ol_name",      limit: 30
     t.string  "category",     limit: 30
-    t.integer "node_id",      limit: nil
-    t.integer "parent_id",    limit: nil
+    t.decimal "node_id"
+    t.decimal "parent_id"
     t.decimal "node_type"
     t.decimal "node_textlen"
     t.decimal "node_textoff"
@@ -1977,20 +1976,20 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "old_passwords", force: :cascade do |t|
     t.string   "password"
-    t.integer  "user_id",    limit: nil
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "user_id",    precision: 38
+    t.datetime "created_at", precision: 6,  null: false
+    t.datetime "updated_at", precision: 6,  null: false
   end
 
   add_index "old_passwords", ["created_at"], name: "i_old_passwords_created_at"
   add_index "old_passwords", ["user_id"], name: "index_old_passwords_on_user_id"
 
   create_table "organization_roles", force: :cascade do |t|
-    t.integer  "user_id",         limit: nil
-    t.integer  "organization_id", limit: nil
-    t.integer  "role_id",         limit: nil
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.integer  "user_id",         precision: 38
+    t.integer  "organization_id", precision: 38
+    t.integer  "role_id",         precision: 38
+    t.datetime "created_at",      precision: 6,  null: false
+    t.datetime "updated_at",      precision: 6,  null: false
   end
 
   add_index "organization_roles", ["organization_id"], name: "i_org_rol_org_id"
@@ -2001,12 +2000,12 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.string   "name"
     t.string   "prefix"
     t.text     "description"
-    t.integer  "group_id",       limit: nil
-    t.integer  "image_model_id", limit: nil
-    t.integer  "lock_version",               precision: 38, default: 0
-    t.datetime "created_at",                                                null: false
-    t.datetime "updated_at",                                                null: false
-    t.boolean  "corporate",      limit: nil,                default: false, null: false
+    t.integer  "group_id",       precision: 38
+    t.integer  "image_model_id", precision: 38
+    t.integer  "lock_version",   precision: 38, default: 0
+    t.datetime "created_at",     precision: 6,                  null: false
+    t.datetime "updated_at",     precision: 6,                  null: false
+    t.boolean  "corporate",                     default: false, null: false
   end
 
   add_index "organizations", ["corporate"], name: "i_organizations_corporate"
@@ -2016,14 +2015,14 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "organizations", ["prefix"], name: "index_organizations_on_prefix", unique: true
 
   create_table "periods", force: :cascade do |t|
-    t.integer  "number",                      precision: 38
+    t.integer  "number",          precision: 38
     t.text     "description"
-    t.datetime "start"
-    t.datetime "end"
-    t.integer  "organization_id", limit: nil
-    t.integer  "lock_version",                precision: 38, default: 0
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
+    t.date     "start"
+    t.date     "end"
+    t.integer  "organization_id", precision: 38
+    t.integer  "lock_version",    precision: 38, default: 0
+    t.datetime "created_at",      precision: 6,              null: false
+    t.datetime "updated_at",      precision: 6,              null: false
   end
 
   add_index "periods", ["end"], name: "index_periods_on_end"
@@ -2033,25 +2032,25 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "plan_items", force: :cascade do |t|
     t.string   "project"
-    t.datetime "start"
-    t.datetime "end"
+    t.date     "start"
+    t.date     "end"
     t.string   "predecessors"
-    t.integer  "order_number",                 precision: 38
-    t.integer  "plan_id",          limit: nil
-    t.integer  "business_unit_id", limit: nil
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.integer  "order_number",     precision: 38
+    t.integer  "plan_id",          precision: 38
+    t.integer  "business_unit_id", precision: 38
+    t.datetime "created_at",       precision: 6,  null: false
+    t.datetime "updated_at",       precision: 6,  null: false
   end
 
   add_index "plan_items", ["business_unit_id"], name: "i_plan_items_business_unit_id"
   add_index "plan_items", ["plan_id"], name: "index_plan_items_on_plan_id"
 
   create_table "plans", force: :cascade do |t|
-    t.integer  "period_id",       limit: nil
-    t.integer  "lock_version",                precision: 38, default: 0
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
-    t.integer  "organization_id", limit: nil
+    t.integer  "period_id",       precision: 38
+    t.integer  "lock_version",    precision: 38, default: 0
+    t.datetime "created_at",      precision: 6,              null: false
+    t.datetime "updated_at",      precision: 6,              null: false
+    t.integer  "organization_id", precision: 38
   end
 
   add_index "plans", ["organization_id"], name: "index_plans_on_organization_id"
@@ -2059,17 +2058,17 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "polls", force: :cascade do |t|
     t.text     "comments"
-    t.boolean  "answered",         limit: nil,                default: false
-    t.integer  "lock_version",                 precision: 38, default: 0
-    t.integer  "user_id",          limit: nil,                                null: false
-    t.integer  "questionnaire_id", limit: nil
-    t.integer  "pollable_id",      limit: nil
+    t.boolean  "answered",                        default: false
+    t.integer  "lock_version",     precision: 38, default: 0
+    t.integer  "user_id",          precision: 38,                 null: false
+    t.integer  "questionnaire_id", precision: 38
+    t.integer  "pollable_id",      precision: 38
     t.string   "pollable_type"
-    t.datetime "created_at",                                                  null: false
-    t.datetime "updated_at",                                                  null: false
-    t.integer  "organization_id",  limit: nil
+    t.datetime "created_at",       precision: 6,                  null: false
+    t.datetime "updated_at",       precision: 6,                  null: false
+    t.integer  "organization_id",  precision: 38
     t.string   "access_token"
-    t.integer  "affected_user_id", limit: nil
+    t.integer  "affected_user_id", precision: 38
   end
 
   add_index "polls", ["affected_user_id"], name: "i_polls_affected_user_id"
@@ -2080,24 +2079,24 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "privileges", force: :cascade do |t|
     t.string   "module",     limit: 100
-    t.boolean  "read",       limit: nil, default: false
-    t.boolean  "modify",     limit: nil, default: false
-    t.boolean  "erase",      limit: nil, default: false
-    t.boolean  "approval",   limit: nil, default: false
-    t.integer  "role_id",    limit: nil
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.boolean  "read",                                  default: false
+    t.boolean  "modify",                                default: false
+    t.boolean  "erase",                                 default: false
+    t.boolean  "approval",                              default: false
+    t.integer  "role_id",                precision: 38
+    t.datetime "created_at",             precision: 6,                  null: false
+    t.datetime "updated_at",             precision: 6,                  null: false
   end
 
   add_index "privileges", ["role_id"], name: "index_privileges_on_role_id"
 
   create_table "process_controls", force: :cascade do |t|
     t.string   "name"
-    t.integer  "order",                        precision: 38
-    t.integer  "best_practice_id", limit: nil
-    t.datetime "created_at",                                                  null: false
-    t.datetime "updated_at",                                                  null: false
-    t.boolean  "obsolete",         limit: nil,                default: false
+    t.integer  "order",            precision: 38
+    t.integer  "best_practice_id", precision: 38
+    t.datetime "created_at",       precision: 6,                  null: false
+    t.datetime "updated_at",       precision: 6,                  null: false
+    t.boolean  "obsolete",                        default: false
   end
 
   add_index "process_controls", ["best_practice_id"], name: "i_pro_con_bes_pra_id"
@@ -2105,10 +2104,10 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "questionnaires", force: :cascade do |t|
     t.string   "name"
-    t.integer  "lock_version",                    precision: 38, default: 0
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
-    t.integer  "organization_id",     limit: nil
+    t.integer  "lock_version",        precision: 38, default: 0
+    t.datetime "created_at",          precision: 6,              null: false
+    t.datetime "updated_at",          precision: 6,              null: false
+    t.integer  "organization_id",     precision: 38
     t.string   "pollable_type"
     t.string   "email_subject"
     t.string   "email_link"
@@ -2120,64 +2119,64 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "questionnaires", ["organization_id"], name: "i_que_org_id"
 
   create_table "questions", force: :cascade do |t|
-    t.integer  "sort_order",                   precision: 38
-    t.integer  "answer_type",                  precision: 38
+    t.integer  "sort_order",       precision: 38
+    t.integer  "answer_type",      precision: 38
     t.text     "question"
-    t.integer  "questionnaire_id", limit: nil
-    t.integer  "lock_version",                 precision: 38, default: 0
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
+    t.integer  "questionnaire_id", precision: 38
+    t.integer  "lock_version",     precision: 38, default: 0
+    t.datetime "created_at",       precision: 6,              null: false
+    t.datetime "updated_at",       precision: 6,              null: false
   end
 
   add_index "questions", ["questionnaire_id"], name: "i_questions_questionnaire_id"
 
   create_table "related_user_relations", force: :cascade do |t|
-    t.integer  "user_id",         limit: nil
-    t.integer  "related_user_id", limit: nil
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.integer  "user_id",         precision: 38
+    t.integer  "related_user_id", precision: 38
+    t.datetime "created_at",      precision: 6,  null: false
+    t.datetime "updated_at",      precision: 6,  null: false
   end
 
   add_index "related_user_relations", ["user_id", "related_user_id"], name: "ibff96752fbe4d0f3af118e7ce3391"
 
-  create_table "repcat$_audit_attribute", comment: "Information about attributes automatically maintained for replication", primary_key: "attribute", force: :cascade do |t|
-    t.integer "data_type_id", limit: nil,                null: false, comment: "Datatype of the attribute value"
-    t.integer "data_length",              precision: 38,              comment: "Length of the attribute value in byte"
-    t.string  "source",       limit: 92,                 null: false, comment: "Name of the function which returns the attribute value"
+  create_table "repcat$_audit_attribute", comment: "Information about attributes automatically maintained for replication", primary_key: "attribute", id: :string, limit: 30, comment: "Description of the attribute", force: :cascade do |t|
+    t.integer "data_type_id",            precision: 38, null: false, comment: "Datatype of the attribute value"
+    t.integer "data_length",             precision: 38,              comment: "Length of the attribute value in byte"
+    t.string  "source",       limit: 92,                null: false, comment: "Name of the function which returns the attribute value"
   end
 
-  create_table "repcat$_audit_column", comment: "Information about columns in all shadow tables for all replicated tables in the database", id: false, force: :cascade do |t|
-    t.string  "sname",                 limit: 30,  null: false, comment: "Owner of the shadow table"
-    t.string  "oname",                 limit: 30,  null: false, comment: "Name of the shadow table"
-    t.string  "column_name",           limit: 30,  null: false, comment: "Name of the column in the shadow table"
-    t.string  "base_sname",            limit: 30,  null: false, comment: "Owner of replicated table"
-    t.string  "base_oname",            limit: 30,  null: false, comment: "Name of the replicated table"
-    t.integer "base_conflict_type_id", limit: nil, null: false, comment: "Type of conflict"
-    t.string  "base_reference_name",   limit: 30,  null: false, comment: "Table name, unique constraint name, or column group name"
-    t.string  "attribute",             limit: 30,  null: false, comment: "Description of the attribute"
+  create_table "repcat$_audit_column", comment: "Information about columns in all shadow tables for all replicated tables in the database", primary_key: ["column_name", "oname", "sname"], force: :cascade do |t|
+    t.string  "sname",                 limit: 30,                null: false, comment: "Owner of the shadow table"
+    t.string  "oname",                 limit: 30,                null: false, comment: "Name of the shadow table"
+    t.string  "column_name",           limit: 30,                null: false, comment: "Name of the column in the shadow table"
+    t.string  "base_sname",            limit: 30,                null: false, comment: "Owner of replicated table"
+    t.string  "base_oname",            limit: 30,                null: false, comment: "Name of the replicated table"
+    t.integer "base_conflict_type_id",            precision: 38, null: false, comment: "Type of conflict"
+    t.string  "base_reference_name",   limit: 30,                null: false, comment: "Table name, unique constraint name, or column group name"
+    t.string  "attribute",             limit: 30,                null: false, comment: "Description of the attribute"
   end
 
   add_index "repcat$_audit_column", ["attribute"], name: "repcat$_audit_column_f1_idx"
   add_index "repcat$_audit_column", ["base_sname", "base_oname", "base_conflict_type_id", "base_reference_name"], name: "repcat$_audit_column_f2_idx"
 
-  create_table "repcat$_column_group", comment: "All column groups of replicated tables in the database", id: false, force: :cascade do |t|
+  create_table "repcat$_column_group", comment: "All column groups of replicated tables in the database", primary_key: ["sname", "oname", "group_name"], force: :cascade do |t|
     t.string "sname",         limit: 30, null: false, comment: "Owner of replicated object"
     t.string "oname",         limit: 30, null: false, comment: "Name of the replicated object"
     t.string "group_name",    limit: 30, null: false, comment: "Name of the column group"
     t.string "group_comment", limit: 80,              comment: "Description of the column group"
   end
 
-  create_table "repcat$_conflict", comment: "All conflicts for which users have specified resolutions in the database", id: false, force: :cascade do |t|
-    t.string  "sname",            limit: 30,  null: false, comment: "Owner of replicated object"
-    t.string  "oname",            limit: 30,  null: false, comment: "Name of the replicated object"
-    t.integer "conflict_type_id", limit: nil, null: false, comment: "Type of conflict"
-    t.string  "reference_name",   limit: 30,  null: false, comment: "Table name, unique constraint name, or column group name"
+  create_table "repcat$_conflict", comment: "All conflicts for which users have specified resolutions in the database", primary_key: ["sname", "oname", "conflict_type_id", "reference_name"], force: :cascade do |t|
+    t.string  "sname",            limit: 30,                null: false, comment: "Owner of replicated object"
+    t.string  "oname",            limit: 30,                null: false, comment: "Name of the replicated object"
+    t.integer "conflict_type_id",            precision: 38, null: false, comment: "Type of conflict"
+    t.string  "reference_name",   limit: 30,                null: false, comment: "Table name, unique constraint name, or column group name"
   end
 
   create_table "repcat$_ddl", comment: "Arguments that do not fit in a single repcat log record", id: false, force: :cascade do |t|
-    t.integer "log_id",  limit: nil,                             comment: "Identifying number of the repcat log record"
+    t.decimal "log_id",                                          comment: "Identifying number of the repcat log record"
     t.string  "source",  limit: 128,                             comment: "Name of the database at which the request originated"
-    t.boolean "role",    limit: nil,                             comment: "Is this database the masterdef for the request"
+    t.boolean "role",                                            comment: "Is this database the masterdef for the request"
     t.string  "master",  limit: 128,                             comment: "Name of the database that processes this request"
     t.integer "line",                 precision: 38,             comment: "Ordering of records within a single request"
     t.string  "text",    limit: 2000,                            comment: "Portion of an argument"
@@ -2187,7 +2186,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "repcat$_ddl", ["log_id", "source", "role", "master", "line"], name: "repcat$_ddl", unique: true
   add_index "repcat$_ddl", ["log_id", "source", "role", "master"], name: "repcat$_ddl_index"
 
-  create_table "repcat$_exceptions", comment: "Repcat processing exceptions table.", primary_key: "exception_id", force: :cascade do |t|
+  create_table "repcat$_exceptions", comment: "Repcat processing exceptions table.", primary_key: "exception_id", id: :decimal, comment: "Internal primary key of the exceptions table.", force: :cascade do |t|
     t.string  "user_name",     limit: 30,   comment: "User name of user submitting the exception."
     t.text    "request",                    comment: "Originating request containing the exception."
     t.decimal "job",                        comment: "Originating job containing the exception."
@@ -2197,23 +2196,23 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.decimal "line_number",                comment: "Line number of the exception."
   end
 
-  create_table "repcat$_extension", comment: "Information about replication extension requests", primary_key: "extension_id", force: :cascade do |t|
+  create_table "repcat$_extension", comment: "Information about replication extension requests", primary_key: "extension_id", id: :raw, limit: 16, comment: "Globally unique identifier for replication extension", force: :cascade do |t|
     t.decimal "extension_code",                          comment: "Kind of replication extension"
     t.string  "masterdef",                   limit: 128, comment: "Master definition site for replication extension"
-    t.boolean "export_required",             limit: nil, comment: "YES if this extension requires an export, and NO if no export is required"
-    t.integer "repcatlog_id",                limit: nil, comment: "Identifier of repcatlog records related to replication extension"
+    t.boolean "export_required",                         comment: "YES if this extension requires an export, and NO if no export is required"
+    t.decimal "repcatlog_id",                            comment: "Identifier of repcatlog records related to replication extension"
     t.decimal "extension_status",                        comment: "Status of replication extension"
     t.decimal "flashback_scn",                           comment: "Flashback_scn for export or change-based recovery for replication extension"
-    t.boolean "push_to_mdef",                limit: nil, comment: "YES if existing masters partially push to masterdef, NO if no pushing"
-    t.boolean "push_to_new",                 limit: nil, comment: "YES if existing masters partially push to new masters, NO if no pushing"
+    t.boolean "push_to_mdef",                            comment: "YES if existing masters partially push to masterdef, NO if no pushing"
+    t.boolean "push_to_new",                             comment: "YES if existing masters partially push to new masters, NO if no pushing"
     t.decimal "percentage_for_catchup_mdef",             comment: "Fraction of push to masterdef cycle devoted to catching up"
     t.decimal "cycle_seconds_mdef",                      comment: "Length of push to masterdef cycle when catching up"
     t.decimal "percentage_for_catchup_new",              comment: "Fraction of push to new masters cycle devoted to catching up"
     t.decimal "cycle_seconds_new",                       comment: "Length of push to new masters cycle when catching up"
   end
 
-  create_table "repcat$_flavor_objects", comment: "Replicated objects in flavors", id: false, force: :cascade do |t|
-    t.integer "flavor_id",       limit: nil,                    null: false, comment: "Flavor identifier"
+  create_table "repcat$_flavor_objects", comment: "Replicated objects in flavors", primary_key: ["sname", "oname", "type", "gname", "flavor_id", "gowner"], force: :cascade do |t|
+    t.decimal "flavor_id",                                      null: false, comment: "Flavor identifier"
     t.string  "gowner",          limit: 30,  default: "PUBLIC", null: false, comment: "Owner of the object group containing object"
     t.string  "gname",           limit: 30,                     null: false, comment: "Object group containing object"
     t.string  "sname",           limit: 30,                     null: false, comment: "Schema containing object"
@@ -2229,13 +2228,13 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "repcat$_flavor_objects", ["gname", "gowner"], name: "repcat$_flavor_objects_fk1_idx"
 
   create_table "repcat$_flavors", comment: "Flavors defined for replicated object groups", id: false, force: :cascade do |t|
-    t.integer "flavor_id",     limit: nil,                    null: false, comment: "Flavor identifier, unique within object group"
-    t.string  "gowner",        limit: 30,  default: "PUBLIC",              comment: "Owner of the object group"
-    t.string  "gname",         limit: 30,                     null: false, comment: "Name of the object group"
-    t.string  "fname",         limit: 30,                                  comment: "Name of the flavor"
-    t.date    "creation_date",                                             comment: "Date on which the flavor was created"
-    t.decimal "created_by",                default: 0.0,                   comment: "Identifier of user that created the flavor"
-    t.boolean "published",     limit: nil, default: false,                 comment: "Indicates whether flavor is published (Y/N) or obsolete (O)"
+    t.decimal "flavor_id",                                   null: false, comment: "Flavor identifier, unique within object group"
+    t.string  "gowner",        limit: 30, default: "PUBLIC",              comment: "Owner of the object group"
+    t.string  "gname",         limit: 30,                    null: false, comment: "Name of the object group"
+    t.string  "fname",         limit: 30,                                 comment: "Name of the flavor"
+    t.date    "creation_date",                                            comment: "Date on which the flavor was created"
+    t.decimal "created_by",               default: "0.0",                 comment: "Identifier of user that created the flavor"
+    t.boolean "published",                default: false,                 comment: "Indicates whether flavor is published (Y/N) or obsolete (O)"
   end
 
   add_index "repcat$_flavors", ["fname"], name: "repcat$_flavors_fname"
@@ -2243,23 +2242,23 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "repcat$_flavors", ["gname", "fname", "gowner"], name: "repcat$_flavors_gname", unique: true
   add_index "repcat$_flavors", ["gname", "gowner"], name: "repcat$_flavors_fk1_idx"
 
-  create_table "repcat$_generated", comment: "Objects generated to support replication", id: false, force: :cascade do |t|
-    t.string  "sname",            limit: 30,                 null: false, comment: "Schema containing the generated object"
-    t.string  "oname",            limit: 30,                 null: false, comment: "Name of the generated object"
-    t.integer "type",                         precision: 38, null: false, comment: "Type of the generated object"
-    t.decimal "reason",                                                   comment: "Reason the object was generated"
-    t.string  "base_sname",       limit: 30,                 null: false, comment: "Name of the object's owner"
-    t.string  "base_oname",       limit: 30,                 null: false, comment: "Name of the object"
-    t.integer "base_type",                    precision: 38, null: false, comment: "Type of the object"
-    t.string  "package_prefix",   limit: 30,                              comment: "Prefix for package wrapper"
-    t.string  "procedure_prefix", limit: 30,                              comment: "Procedure prefix for package wrapper or procedure wrapper"
-    t.boolean "distributed",      limit: nil,                             comment: "Is the generated object separately generated at each master"
+  create_table "repcat$_generated", comment: "Objects generated to support replication", primary_key: ["sname", "oname", "type", "base_sname", "base_oname", "base_type"], force: :cascade do |t|
+    t.string  "sname",            limit: 30,                null: false, comment: "Schema containing the generated object"
+    t.string  "oname",            limit: 30,                null: false, comment: "Name of the generated object"
+    t.integer "type",                        precision: 38, null: false, comment: "Type of the generated object"
+    t.decimal "reason",                                                  comment: "Reason the object was generated"
+    t.string  "base_sname",       limit: 30,                null: false, comment: "Name of the object's owner"
+    t.string  "base_oname",       limit: 30,                null: false, comment: "Name of the object"
+    t.integer "base_type",                   precision: 38, null: false, comment: "Type of the object"
+    t.string  "package_prefix",   limit: 30,                             comment: "Prefix for package wrapper"
+    t.string  "procedure_prefix", limit: 30,                             comment: "Procedure prefix for package wrapper or procedure wrapper"
+    t.boolean "distributed",                                             comment: "Is the generated object separately generated at each master"
   end
 
   add_index "repcat$_generated", ["base_sname", "base_oname", "base_type"], name: "repcat$_generated_n1"
   add_index "repcat$_generated", ["sname", "oname", "type"], name: "repcat$_repgen_prnt_idx"
 
-  create_table "repcat$_grouped_column", comment: "Columns in all column groups of replicated tables in the database", id: false, force: :cascade do |t|
+  create_table "repcat$_grouped_column", comment: "Columns in all column groups of replicated tables in the database", primary_key: ["sname", "oname", "group_name", "column_name", "pos"], force: :cascade do |t|
     t.string  "sname",       limit: 30, null: false, comment: "Owner of replicated object"
     t.string  "oname",       limit: 30, null: false, comment: "Name of the replicated object"
     t.string  "group_name",  limit: 30, null: false, comment: "Name of the column group"
@@ -2269,14 +2268,14 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "repcat$_grouped_column", ["sname", "oname", "group_name"], name: "repcat$_grouped_column_f1_idx"
 
-  create_table "repcat$_instantiation_ddl", comment: "Table containing supplementary DDL to be executed during instantiation.", id: false, force: :cascade do |t|
-    t.integer "refresh_template_id", limit: nil, null: false, comment: "Primary key of template containing supplementary DDL."
-    t.text    "ddl_text",                                     comment: "Supplementary DDL string."
-    t.decimal "ddl_num",                         null: false, comment: "Column for ordering of supplementary DDL."
-    t.decimal "phase",                           null: false, comment: "Phase to execute the DDL string."
+  create_table "repcat$_instantiation_ddl", comment: "Table containing supplementary DDL to be executed during instantiation.", primary_key: ["refresh_template_id", "phase", "ddl_num"], force: :cascade do |t|
+    t.decimal "refresh_template_id", null: false, comment: "Primary key of template containing supplementary DDL."
+    t.text    "ddl_text",                         comment: "Supplementary DDL string."
+    t.decimal "ddl_num",             null: false, comment: "Column for ordering of supplementary DDL."
+    t.decimal "phase",               null: false, comment: "Phase to execute the DDL string."
   end
 
-  create_table "repcat$_key_columns", comment: "Primary columns for a table using column-level replication", id: false, force: :cascade do |t|
+  create_table "repcat$_key_columns", comment: "Primary columns for a table using column-level replication", primary_key: ["sname", "oname", "col"], force: :cascade do |t|
     t.string  "sname", limit: 30,                null: false, comment: "Schema containing table"
     t.string  "oname", limit: 30,                null: false, comment: "Name of the table"
     t.integer "type",             precision: 38,              comment: "Type identifier"
@@ -2285,35 +2284,35 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "repcat$_key_columns", ["sname", "oname", "type"], name: "repcat$_key_columns_prnt_idx"
 
-  create_table "repcat$_object_parms", id: false, force: :cascade do |t|
-    t.integer "template_parameter_id", limit: nil, null: false, comment: "Primary key of template parameter."
-    t.integer "template_object_id",    limit: nil, null: false, comment: "Primary key of object using the paramter."
+  create_table "repcat$_object_parms", primary_key: ["template_parameter_id", "template_object_id"], force: :cascade do |t|
+    t.decimal "template_parameter_id", null: false, comment: "Primary key of template parameter."
+    t.decimal "template_object_id",    null: false, comment: "Primary key of object using the paramter."
   end
 
   add_index "repcat$_object_parms", ["template_object_id"], name: "repcat$_object_parms_n2"
 
-  create_table "repcat$_object_types", comment: "Internal table for template object types.", primary_key: "object_type_id", force: :cascade do |t|
+  create_table "repcat$_object_types", comment: "Internal table for template object types.", primary_key: "object_type_id", id: :decimal, comment: "Internal primary key of the template object types table.", force: :cascade do |t|
     t.string "object_type_name", limit: 200,  comment: "Descriptive name for the object type."
     t.raw    "flags",            limit: 255,  comment: "Internal flags for object type processing."
     t.string "spare1",           limit: 4000, comment: "Reserved for future use."
   end
 
-  create_table "repcat$_parameter_column", comment: "All columns used for resolving conflicts in the database", id: false, force: :cascade do |t|
-    t.string  "sname",                 limit: 30,   null: false, comment: "Owner of replicated object"
-    t.string  "oname",                 limit: 30,   null: false, comment: "Name of the replicated object"
-    t.integer "conflict_type_id",      limit: nil,  null: false, comment: "Type of conflict"
-    t.string  "reference_name",        limit: 30,   null: false, comment: "Table name, unique constraint name, or column group name"
-    t.decimal "sequence_no",                        null: false, comment: "Ordering on resolution"
-    t.string  "parameter_table_name",  limit: 30,   null: false, comment: "Name of the table to which the parameter column belongs"
-    t.string  "parameter_column_name", limit: 4000,              comment: "Name of the parameter column used for resolving the conflict"
-    t.decimal "parameter_sequence_no",              null: false, comment: "Ordering on parameter column"
-    t.decimal "column_pos",                         null: false, comment: "Column position of an attribute or a column"
-    t.decimal "attribute_sequence_no",                           comment: "Sequence number for an attribute of an ADT/pkREF column or a scalar column"
+  create_table "repcat$_parameter_column", comment: "All columns used for resolving conflicts in the database", primary_key: ["sname", "oname", "conflict_type_id", "reference_name", "sequence_no", "parameter_table_name", "parameter_sequence_no", "column_pos"], force: :cascade do |t|
+    t.string  "sname",                 limit: 30,                  null: false, comment: "Owner of replicated object"
+    t.string  "oname",                 limit: 30,                  null: false, comment: "Name of the replicated object"
+    t.integer "conflict_type_id",                   precision: 38, null: false, comment: "Type of conflict"
+    t.string  "reference_name",        limit: 30,                  null: false, comment: "Table name, unique constraint name, or column group name"
+    t.decimal "sequence_no",                                       null: false, comment: "Ordering on resolution"
+    t.string  "parameter_table_name",  limit: 30,                  null: false, comment: "Name of the table to which the parameter column belongs"
+    t.string  "parameter_column_name", limit: 4000,                             comment: "Name of the parameter column used for resolving the conflict"
+    t.decimal "parameter_sequence_no",                             null: false, comment: "Ordering on parameter column"
+    t.decimal "column_pos",                                        null: false, comment: "Column position of an attribute or a column"
+    t.decimal "attribute_sequence_no",                                          comment: "Sequence number for an attribute of an ADT/pkREF column or a scalar column"
   end
 
   add_index "repcat$_parameter_column", ["sname", "oname", "conflict_type_id", "reference_name", "sequence_no"], name: "repcat$_parameter_column_f1_i"
 
-  create_table "repcat$_priority", comment: "Values and their corresponding priorities in all priority groups in the database", id: false, force: :cascade do |t|
+  create_table "repcat$_priority", comment: "Values and their corresponding priorities in all priority groups in the database", primary_key: ["sname", "priority_group", "priority"], force: :cascade do |t|
     t.string  "sname",            limit: 30,   null: false, comment: "Name of the replicated object group"
     t.string  "priority_group",   limit: 30,   null: false, comment: "Name of the priority group"
     t.decimal "priority",                      null: false, comment: "Priority of the value"
@@ -2322,79 +2321,79 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.decimal "number_value",                               comment: "Numeric value"
     t.date    "date_value",                                 comment: "Date value"
     t.string  "varchar2_value",   limit: 4000,              comment: "Character string"
-    t.string  "nchar_value",      limit: nil,               comment: "NCHAR string"
-    t.string  "nvarchar2_value",  limit: nil,               comment: "NVARCHAR2 string"
+    t.string  "nchar_value",                                comment: "NCHAR string"
+    t.string  "nvarchar2_value",                            comment: "NVARCHAR2 string"
     t.string  "large_char_value", limit: 2000,              comment: "Blank-padded character string over 255 characters"
   end
 
   add_index "repcat$_priority", ["priority_group", "sname"], name: "repcat$_priority_f1_idx"
 
-  create_table "repcat$_priority_group", comment: "Information about all priority groups in the database", id: false, force: :cascade do |t|
-    t.string  "sname",             limit: 30,                 null: false, comment: "Name of the replicated object group"
-    t.string  "priority_group",    limit: 30,                 null: false, comment: "Name of the priority group"
-    t.integer "data_type_id",      limit: nil,                null: false, comment: "Datatype of the value in the priority group"
-    t.integer "fixed_data_length",             precision: 38,              comment: "Length of the value in bytes if the datatype is CHAR"
-    t.string  "priority_comment",  limit: 80,                              comment: "Description of the priority group"
+  create_table "repcat$_priority_group", comment: "Information about all priority groups in the database", primary_key: ["priority_group", "sname"], force: :cascade do |t|
+    t.string  "sname",             limit: 30,                null: false, comment: "Name of the replicated object group"
+    t.string  "priority_group",    limit: 30,                null: false, comment: "Name of the priority group"
+    t.integer "data_type_id",                 precision: 38, null: false, comment: "Datatype of the value in the priority group"
+    t.integer "fixed_data_length",            precision: 38,              comment: "Length of the value in bytes if the datatype is CHAR"
+    t.string  "priority_comment",  limit: 80,                             comment: "Description of the priority group"
   end
 
   add_index "repcat$_priority_group", ["sname", "priority_group", "data_type_id", "fixed_data_length"], name: "repcat$_priority_group_u1", unique: true
 
-  create_table "repcat$_refresh_templates", comment: "Primary table containing deployment template information.", primary_key: "refresh_template_id", force: :cascade do |t|
-    t.string   "owner",                 limit: 30,               null: false, comment: "Owner of the refresh group template."
-    t.string   "refresh_group_name",    limit: 30,               null: false, comment: "Name of the refresh group to create during instantiation."
-    t.string   "refresh_template_name", limit: 30,               null: false, comment: "Name of the refresh group template."
-    t.string   "template_comment",      limit: 2000,                          comment: "Optional comment field for the refresh group template."
-    t.boolean  "public_template",       limit: nil,                           comment: "Flag specifying public template or private template."
-    t.datetime "last_modified",                                               comment: "Date the row was last modified."
-    t.decimal  "modified_by",                                                 comment: "User id of the user that modified the row."
-    t.date     "creation_date",                                               comment: "Date the row was created."
-    t.decimal  "created_by",                                                  comment: "User id of the user that created the row."
-    t.integer  "refresh_group_id",      limit: nil,  default: 0, null: false, comment: "Internal primary key to default refresh group for the template."
-    t.integer  "template_type_id",      limit: nil,  default: 1, null: false, comment: "Internal primary key to the template types."
-    t.integer  "template_status_id",    limit: nil,  default: 0, null: false, comment: "Internal primary key to the template status table."
-    t.raw      "flags",                 limit: 255,                           comment: "Internal flags for the template."
-    t.string   "spare1",                limit: 4000,                          comment: "Reserved for future use."
+  create_table "repcat$_refresh_templates", comment: "Primary table containing deployment template information.", primary_key: "refresh_template_id", id: :decimal, comment: "Internal primary key of the REPCAT$_REFRESH_TEMPLATES table.", force: :cascade do |t|
+    t.string  "owner",                 limit: 30,                   null: false, comment: "Owner of the refresh group template."
+    t.string  "refresh_group_name",    limit: 30,                   null: false, comment: "Name of the refresh group to create during instantiation."
+    t.string  "refresh_template_name", limit: 30,                   null: false, comment: "Name of the refresh group template."
+    t.string  "template_comment",      limit: 2000,                              comment: "Optional comment field for the refresh group template."
+    t.boolean "public_template",                                                 comment: "Flag specifying public template or private template."
+    t.date    "last_modified",                                                   comment: "Date the row was last modified."
+    t.decimal "modified_by",                                                     comment: "User id of the user that modified the row."
+    t.date    "creation_date",                                                   comment: "Date the row was created."
+    t.decimal "created_by",                                                      comment: "User id of the user that created the row."
+    t.decimal "refresh_group_id",                   default: "0.0", null: false, comment: "Internal primary key to default refresh group for the template."
+    t.decimal "template_type_id",                   default: "1.0", null: false, comment: "Internal primary key to the template types."
+    t.decimal "template_status_id",                 default: "0.0", null: false, comment: "Internal primary key to the template status table."
+    t.raw     "flags",                 limit: 255,                               comment: "Internal flags for the template."
+    t.string  "spare1",                limit: 4000,                              comment: "Reserved for future use."
   end
 
   add_index "repcat$_refresh_templates", ["refresh_template_name"], name: "repcat$_refresh_templates_u1", unique: true
 
-  create_table "repcat$_repcat", comment: "Information about all replicated object groups", id: false, force: :cascade do |t|
-    t.string  "gowner",         limit: 30,                 default: "PUBLIC",   null: false, comment: "Owner of the object group"
-    t.string  "sname",          limit: 30,                                      null: false, comment: "Name of the replicated object group"
-    t.boolean "master",         limit: nil,                                                  comment: "Is the site a master site for the replicated object group"
-    t.integer "status",                     precision: 38,                                   comment: "If the site is a master, the master's status"
-    t.string  "schema_comment", limit: 80,                                                   comment: "Description of the replicated object group"
-    t.integer "flavor_id",      limit: nil,                                                  comment: "Flavor identifier"
-    t.raw     "flag",           limit: 4,                  default: "00000000",              comment: "Miscellaneous repgroup info"
+  create_table "repcat$_repcat", comment: "Information about all replicated object groups", primary_key: ["sname", "gowner"], force: :cascade do |t|
+    t.string  "gowner",         limit: 30,                default: "PUBLIC",   null: false, comment: "Owner of the object group"
+    t.string  "sname",          limit: 30,                                     null: false, comment: "Name of the replicated object group"
+    t.boolean "master",                                                                     comment: "Is the site a master site for the replicated object group"
+    t.integer "status",                    precision: 38,                                   comment: "If the site is a master, the master's status"
+    t.string  "schema_comment", limit: 80,                                                  comment: "Description of the replicated object group"
+    t.decimal "flavor_id",                                                                  comment: "Flavor identifier"
+    t.raw     "flag",           limit: 4,                 default: "00000000",              comment: "Miscellaneous repgroup info"
   end
 
-  create_table "repcat$_repcatlog", comment: "Information about asynchronous administration requests", id: false, force: :cascade do |t|
-    t.decimal  "version",                                               comment: "Version of the repcat log record"
-    t.integer  "id",           limit: nil,                 null: false, comment: "Identifying number of repcat log record"
-    t.string   "source",       limit: 128,                 null: false, comment: "Name of the database at which the request originated"
-    t.string   "userid",       limit: 30,                               comment: "Name of the user who submitted the request"
-    t.datetime "timestamp",                                             comment: "When the request was submitted"
-    t.boolean  "role",         limit: nil,                 null: false, comment: "Is this database the masterdef for the request"
-    t.string   "master",       limit: 128,                 null: false, comment: "Name of the database that processes this request$_ddl"
-    t.string   "sname",        limit: 30,                               comment: "Schema of replicated object"
-    t.integer  "request",                   precision: 38,              comment: "Name of the requested operation"
-    t.string   "oname",        limit: 30,                               comment: "Replicated object name, if applicable"
-    t.integer  "type",                      precision: 38,              comment: "Type of replicated object, if applicable"
-    t.string   "a_comment",    limit: 2000,                             comment: "Textual argument used for comments"
-    t.boolean  "bool_arg",     limit: nil,                              comment: "Boolean argument"
-    t.boolean  "ano_bool_arg", limit: nil,                              comment: "Another Boolean argument"
-    t.integer  "int_arg",                   precision: 38,              comment: "Integer argument"
-    t.integer  "ano_int_arg",               precision: 38,              comment: "Another integer argument"
-    t.integer  "lines",                     precision: 38,              comment: "The number of rows in system.repcat$_ddl at the processing site"
-    t.integer  "status",                    precision: 38,              comment: "Status of the request at this database"
-    t.string   "message",      limit: 200,                              comment: "Error message associated with processing the request"
-    t.decimal  "errnum",                                                comment: "Oracle error number associated with processing the request"
-    t.string   "gname",        limit: 30,                               comment: "Name of the replicated object group"
+  create_table "repcat$_repcatlog", comment: "Information about asynchronous administration requests", primary_key: ["id", "source", "role", "master"], force: :cascade do |t|
+    t.decimal "version",                                               comment: "Version of the repcat log record"
+    t.decimal "id",                                       null: false, comment: "Identifying number of repcat log record"
+    t.string  "source",       limit: 128,                 null: false, comment: "Name of the database at which the request originated"
+    t.string  "userid",       limit: 30,                               comment: "Name of the user who submitted the request"
+    t.date    "timestamp",                                             comment: "When the request was submitted"
+    t.boolean "role",                                     null: false, comment: "Is this database the masterdef for the request"
+    t.string  "master",       limit: 128,                 null: false, comment: "Name of the database that processes this request$_ddl"
+    t.string  "sname",        limit: 30,                               comment: "Schema of replicated object"
+    t.integer "request",                   precision: 38,              comment: "Name of the requested operation"
+    t.string  "oname",        limit: 30,                               comment: "Replicated object name, if applicable"
+    t.integer "type",                      precision: 38,              comment: "Type of replicated object, if applicable"
+    t.string  "a_comment",    limit: 2000,                             comment: "Textual argument used for comments"
+    t.boolean "bool_arg",                                              comment: "Boolean argument"
+    t.boolean "ano_bool_arg",                                          comment: "Another Boolean argument"
+    t.integer "int_arg",                   precision: 38,              comment: "Integer argument"
+    t.integer "ano_int_arg",               precision: 38,              comment: "Another integer argument"
+    t.integer "lines",                     precision: 38,              comment: "The number of rows in system.repcat$_ddl at the processing site"
+    t.integer "status",                    precision: 38,              comment: "Status of the request at this database"
+    t.string  "message",      limit: 200,                              comment: "Error message associated with processing the request"
+    t.decimal "errnum",                                                comment: "Oracle error number associated with processing the request"
+    t.string  "gname",        limit: 30,                               comment: "Name of the replicated object group"
   end
 
   add_index "repcat$_repcatlog", ["gname", "sname", "oname", "type"], name: "repcat$_repcatlog_gname"
 
-  create_table "repcat$_repcolumn", comment: "Replicated columns for a table sorted alphabetically in ascending order", id: false, force: :cascade do |t|
+  create_table "repcat$_repcolumn", comment: "Replicated columns for a table sorted alphabetically in ascending order", primary_key: ["sname", "oname", "type", "cname"], force: :cascade do |t|
     t.string  "sname",       limit: 30,                                       null: false, comment: "Name of the object owner"
     t.string  "oname",       limit: 30,                                       null: false, comment: "Name of the object"
     t.integer "type",                     precision: 38,                      null: false, comment: "Type of the object"
@@ -2405,7 +2404,7 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.raw     "hashcode",    limit: 17,                                                    comment: "Hashcode of a column of user-defined type"
     t.string  "ctype_name",  limit: 30
     t.string  "ctype_owner", limit: 30
-    t.integer "id",          limit: nil,                                                   comment: "Column ID"
+    t.decimal "id",                                                                        comment: "Column ID"
     t.decimal "pos",                                                                       comment: "Ordering of column used as IN parameter in the replication procedures"
     t.string  "top",         limit: 30,                                                    comment: "Top column name for an attribute"
     t.raw     "flag",        limit: 2,                   default: "0000",                  comment: "Replication information about column"
@@ -2423,41 +2422,41 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "repcat$_repcolumn", ["sname", "oname", "type"], name: "repcat$_repcolumn_fk_idx"
 
   create_table "repcat$_repgroup_privs", comment: "Information about users who are registered for object group privileges", id: false, force: :cascade do |t|
-    t.decimal  "userid",                              comment: "OBSOLETE COLUMN: Identifying number of the user"
-    t.string   "username",    limit: 30, null: false, comment: "Identifying name of the registered user"
-    t.string   "gowner",      limit: 30,              comment: "Owner of the replicated object group"
-    t.string   "gname",       limit: 30,              comment: "Name of the replicated object group"
-    t.decimal  "global_flag",            null: false, comment: "1 if gname is NULL, 0 otherwise"
-    t.datetime "created",                null: false, comment: "Registration date"
-    t.decimal  "privilege",                           comment: "Registered privileges"
+    t.decimal "userid",                              comment: "OBSOLETE COLUMN: Identifying number of the user"
+    t.string  "username",    limit: 30, null: false, comment: "Identifying name of the registered user"
+    t.string  "gowner",      limit: 30,              comment: "Owner of the replicated object group"
+    t.string  "gname",       limit: 30,              comment: "Name of the replicated object group"
+    t.decimal "global_flag",            null: false, comment: "1 if gname is NULL, 0 otherwise"
+    t.date    "created",                null: false, comment: "Registration date"
+    t.decimal "privilege",                           comment: "Registered privileges"
   end
 
   add_index "repcat$_repgroup_privs", ["global_flag", "username"], name: "repcat$_repgroup_privs_n1"
   add_index "repcat$_repgroup_privs", ["gname", "gowner"], name: "repcat$_repgroup_privs_fk_idx"
   add_index "repcat$_repgroup_privs", ["username", "gname", "gowner"], name: "repcat$_repgroup_privs_uk", unique: true
 
-  create_table "repcat$_repobject", comment: "Information about replicated objects", id: false, force: :cascade do |t|
-    t.string  "sname",          limit: 30,                                      null: false, comment: "Name of the object owner"
-    t.string  "oname",          limit: 30,                                      null: false, comment: "Name of the object"
-    t.integer "type",                       precision: 38,                      null: false, comment: "Type of the object"
-    t.decimal "version#",                                                                    comment: "Version of objects of TYPE"
-    t.raw     "hashcode",       limit: 17,                                                   comment: "Hashcode of objects of TYPE"
-    t.integer "id",             limit: nil,                                                  comment: "Identifier of the local object"
-    t.string  "object_comment", limit: 80,                                                   comment: "Description of the replicated object"
-    t.integer "status",                     precision: 38,                                   comment: "Status of the last create or alter request on the local object"
-    t.integer "genpackage",                 precision: 38,                                   comment: "Status of whether the object needs to generate replication package"
-    t.integer "genplogid",                  precision: 38,                                   comment: "Log id of message sent for generating package support"
-    t.integer "gentrigger",                 precision: 38,                                   comment: "Status of whether the object needs to generate replication trigger"
-    t.integer "gentlogid",                  precision: 38,                                   comment: "Log id of message sent for generating trigger support"
-    t.string  "gowner",         limit: 30,                                                   comment: "Owner of the object's object group"
-    t.string  "gname",          limit: 30,                                                   comment: "Name of the object's object group"
-    t.raw     "flag",           limit: 4,                  default: "00000000",              comment: "Information about replicated object"
+  create_table "repcat$_repobject", comment: "Information about replicated objects", primary_key: ["sname", "oname", "type"], force: :cascade do |t|
+    t.string  "sname",          limit: 30,                                     null: false, comment: "Name of the object owner"
+    t.string  "oname",          limit: 30,                                     null: false, comment: "Name of the object"
+    t.integer "type",                      precision: 38,                      null: false, comment: "Type of the object"
+    t.decimal "version#",                                                                   comment: "Version of objects of TYPE"
+    t.raw     "hashcode",       limit: 17,                                                  comment: "Hashcode of objects of TYPE"
+    t.decimal "id",                                                                         comment: "Identifier of the local object"
+    t.string  "object_comment", limit: 80,                                                  comment: "Description of the replicated object"
+    t.integer "status",                    precision: 38,                                   comment: "Status of the last create or alter request on the local object"
+    t.integer "genpackage",                precision: 38,                                   comment: "Status of whether the object needs to generate replication package"
+    t.integer "genplogid",                 precision: 38,                                   comment: "Log id of message sent for generating package support"
+    t.integer "gentrigger",                precision: 38,                                   comment: "Status of whether the object needs to generate replication trigger"
+    t.integer "gentlogid",                 precision: 38,                                   comment: "Log id of message sent for generating trigger support"
+    t.string  "gowner",         limit: 30,                                                  comment: "Owner of the object's object group"
+    t.string  "gname",          limit: 30,                                                  comment: "Name of the object's object group"
+    t.raw     "flag",           limit: 4,                 default: "00000000",              comment: "Information about replicated object"
   end
 
   add_index "repcat$_repobject", ["gname", "gowner"], name: "repcat$_repobject_prnt_idx"
   add_index "repcat$_repobject", ["gname", "oname", "type", "gowner"], name: "repcat$_repobject_gname"
 
-  create_table "repcat$_repprop", comment: "Propagation information about replicated objects", id: false, force: :cascade do |t|
+  create_table "repcat$_repprop", comment: "Propagation information about replicated objects", primary_key: ["sname", "oname", "type", "dblink"], force: :cascade do |t|
     t.string  "sname",             limit: 30,                                null: false, comment: "Name of the object owner"
     t.string  "oname",             limit: 30,                                null: false, comment: "Name of the object"
     t.integer "type",                          precision: 38,                null: false, comment: "Type of the object"
@@ -2474,91 +2473,91 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "repcat$_repprop", ["sname", "dblink"], name: "repcat$_repprop_prnt2_idx"
   add_index "repcat$_repprop", ["sname", "oname", "type"], name: "repcat$_repprop_prnt_idx"
 
-  create_table "repcat$_repschema", comment: "N-way replication information", id: false, force: :cascade do |t|
+  create_table "repcat$_repschema", comment: "N-way replication information", primary_key: ["sname", "dblink", "gowner"], force: :cascade do |t|
     t.string  "gowner",         limit: 30,  default: "PUBLIC", null: false, comment: "Owner of the replicated object group"
     t.string  "sname",          limit: 30,                     null: false, comment: "Name of the replicated object group"
     t.string  "dblink",         limit: 128,                    null: false, comment: "A database site replicating the object group"
-    t.boolean "masterdef",      limit: nil,                                 comment: "Is the database the master definition site for the replicated object group"
-    t.boolean "snapmaster",     limit: nil,                                 comment: "For a snapshot site, is this the current refresh_master"
+    t.boolean "masterdef",                                                  comment: "Is the database the master definition site for the replicated object group"
+    t.boolean "snapmaster",                                                 comment: "For a snapshot site, is this the current refresh_master"
     t.string  "master_comment", limit: 80,                                  comment: "Description of the database site"
-    t.boolean "master",         limit: nil,                                 comment: "Redundant information from repcat$_repcat.master"
-    t.decimal "prop_updates",               default: 0.0,                   comment: "Number of requested updates for master in repcat$_repprop"
-    t.boolean "my_dblink",      limit: nil,                                 comment: "A sanity check after import: is this master the current site"
+    t.boolean "master",                                                     comment: "Redundant information from repcat$_repcat.master"
+    t.decimal "prop_updates",               default: "0.0",                 comment: "Number of requested updates for master in repcat$_repprop"
+    t.boolean "my_dblink",                                                  comment: "A sanity check after import: is this master the current site"
     t.raw     "extension_id",   limit: 16,  default: "00",                  comment: "Dummy column for foreign key"
   end
 
   add_index "repcat$_repschema", ["dblink", "extension_id"], name: "repcat$_repschema_dest_idx"
   add_index "repcat$_repschema", ["sname", "gowner"], name: "repcat$_repschema_prnt_idx"
 
-  create_table "repcat$_resol_stats_control", comment: "Information about statistics collection for conflict resolutions for all replicated tables in the database", id: false, force: :cascade do |t|
-    t.string   "sname",                 limit: 30,                null: false, comment: "Owner of replicated object"
-    t.string   "oname",                 limit: 30,                null: false, comment: "Name of the replicated object"
-    t.datetime "created",                                         null: false, comment: "Timestamp for which statistics collection was first started"
-    t.integer  "status",                           precision: 38, null: false, comment: "Status of statistics collection: ACTIVE, CANCELLED"
-    t.date     "status_update_date",                              null: false, comment: "Timestamp for which the status was last updated"
-    t.date     "purged_date",                                                  comment: "Timestamp for the last purge of statistics data"
-    t.date     "last_purge_start_date",                                        comment: "The last start date of the statistics purging date range"
-    t.date     "last_purge_end_date",                                          comment: "The last end date of the statistics purging date range"
+  create_table "repcat$_resol_stats_control", comment: "Information about statistics collection for conflict resolutions for all replicated tables in the database", primary_key: ["sname", "oname"], force: :cascade do |t|
+    t.string  "sname",                 limit: 30,                null: false, comment: "Owner of replicated object"
+    t.string  "oname",                 limit: 30,                null: false, comment: "Name of the replicated object"
+    t.date    "created",                                         null: false, comment: "Timestamp for which statistics collection was first started"
+    t.integer "status",                           precision: 38, null: false, comment: "Status of statistics collection: ACTIVE, CANCELLED"
+    t.date    "status_update_date",                              null: false, comment: "Timestamp for which the status was last updated"
+    t.date    "purged_date",                                                  comment: "Timestamp for the last purge of statistics data"
+    t.date    "last_purge_start_date",                                        comment: "The last start date of the statistics purging date range"
+    t.date    "last_purge_end_date",                                          comment: "The last end date of the statistics purging date range"
   end
 
-  create_table "repcat$_resolution", comment: "Description of all conflict resolutions in the database", id: false, force: :cascade do |t|
-    t.string  "sname",              limit: 30,  null: false, comment: "Owner of replicated object"
-    t.string  "oname",              limit: 30,  null: false, comment: "Name of the replicated object"
-    t.integer "conflict_type_id",   limit: nil, null: false, comment: "Type of conflict"
-    t.string  "reference_name",     limit: 30,  null: false, comment: "Table name, unique constraint name, or column group name"
-    t.decimal "sequence_no",                    null: false, comment: "Ordering on resolution"
-    t.string  "method_name",        limit: 80,  null: false, comment: "Name of the conflict resolution method"
-    t.string  "function_name",      limit: 92,  null: false, comment: "Name of the resolution function"
-    t.string  "priority_group",     limit: 30,               comment: "Name of the priority group used in conflict resolution"
-    t.string  "resolution_comment", limit: 80,               comment: "Description of the conflict resolution"
+  create_table "repcat$_resolution", comment: "Description of all conflict resolutions in the database", primary_key: ["sname", "oname", "conflict_type_id", "reference_name", "sequence_no"], force: :cascade do |t|
+    t.string  "sname",              limit: 30,                null: false, comment: "Owner of replicated object"
+    t.string  "oname",              limit: 30,                null: false, comment: "Name of the replicated object"
+    t.integer "conflict_type_id",              precision: 38, null: false, comment: "Type of conflict"
+    t.string  "reference_name",     limit: 30,                null: false, comment: "Table name, unique constraint name, or column group name"
+    t.decimal "sequence_no",                                  null: false, comment: "Ordering on resolution"
+    t.string  "method_name",        limit: 80,                null: false, comment: "Name of the conflict resolution method"
+    t.string  "function_name",      limit: 92,                null: false, comment: "Name of the resolution function"
+    t.string  "priority_group",     limit: 30,                             comment: "Name of the priority group used in conflict resolution"
+    t.string  "resolution_comment", limit: 80,                             comment: "Description of the conflict resolution"
   end
 
   add_index "repcat$_resolution", ["conflict_type_id", "method_name"], name: "repcat$_resolution_f3_idx"
   add_index "repcat$_resolution", ["sname", "oname", "conflict_type_id", "reference_name"], name: "repcat$_resolution_idx2"
 
-  create_table "repcat$_resolution_method", comment: "All conflict resolution methods in the database", id: false, force: :cascade do |t|
-    t.integer "conflict_type_id", limit: nil, null: false, comment: "Type of conflict"
-    t.string  "method_name",      limit: 80,  null: false, comment: "Name of the conflict resolution method"
+  create_table "repcat$_resolution_method", comment: "All conflict resolution methods in the database", primary_key: ["conflict_type_id", "method_name"], force: :cascade do |t|
+    t.integer "conflict_type_id",            precision: 38, null: false, comment: "Type of conflict"
+    t.string  "method_name",      limit: 80,                null: false, comment: "Name of the conflict resolution method"
   end
 
   create_table "repcat$_resolution_statistics", comment: "Statistics for conflict resolutions for all replicated tables in the database", id: false, force: :cascade do |t|
-    t.string  "sname",             limit: 30,   null: false, comment: "Owner of replicated object"
-    t.string  "oname",             limit: 30,   null: false, comment: "Name of the replicated object"
-    t.integer "conflict_type_id",  limit: nil,  null: false, comment: "Type of conflict"
-    t.string  "reference_name",    limit: 30,   null: false, comment: "Table name, unique constraint name, or column group name"
-    t.string  "method_name",       limit: 80,   null: false, comment: "Name of the conflict resolution method"
-    t.string  "function_name",     limit: 92,   null: false, comment: "Name of the resolution function"
-    t.string  "priority_group",    limit: 30,                comment: "Name of the priority group used in conflict resolution"
-    t.date    "resolved_date",                  null: false, comment: "Timestamp for the resolution of the conflict"
-    t.string  "primary_key_value", limit: 2000, null: false, comment: "Primary key of the replicated row (character data)"
+    t.string  "sname",             limit: 30,                  null: false, comment: "Owner of replicated object"
+    t.string  "oname",             limit: 30,                  null: false, comment: "Name of the replicated object"
+    t.integer "conflict_type_id",               precision: 38, null: false, comment: "Type of conflict"
+    t.string  "reference_name",    limit: 30,                  null: false, comment: "Table name, unique constraint name, or column group name"
+    t.string  "method_name",       limit: 80,                  null: false, comment: "Name of the conflict resolution method"
+    t.string  "function_name",     limit: 92,                  null: false, comment: "Name of the resolution function"
+    t.string  "priority_group",    limit: 30,                               comment: "Name of the priority group used in conflict resolution"
+    t.date    "resolved_date",                                 null: false, comment: "Timestamp for the resolution of the conflict"
+    t.string  "primary_key_value", limit: 2000,                null: false, comment: "Primary key of the replicated row (character data)"
   end
 
   add_index "repcat$_resolution_statistics", ["sname", "oname", "resolved_date", "conflict_type_id", "reference_name", "method_name", "function_name", "priority_group"], name: "repcat$_resolution_stats_n1"
 
   create_table "repcat$_runtime_parms", id: false, force: :cascade do |t|
-    t.integer "runtime_parm_id", limit: nil, comment: "Primary key of the parameter values table."
-    t.string  "parameter_name",  limit: 30,  comment: "Name of the parameter."
-    t.text    "parm_value",                  comment: "Parameter value."
+    t.decimal "runtime_parm_id",            comment: "Primary key of the parameter values table."
+    t.string  "parameter_name",  limit: 30, comment: "Name of the parameter."
+    t.text    "parm_value",                 comment: "Parameter value."
   end
 
   add_index "repcat$_runtime_parms", ["runtime_parm_id", "parameter_name"], name: "repcat$_runtime_parms_pk", unique: true
 
   create_table "repcat$_site_objects", comment: "Table for maintaining database objects deployed at a site.", id: false, force: :cascade do |t|
-    t.integer "template_site_id", limit: nil, null: false, comment: "Internal primary key of the template sites table."
-    t.string  "sname",            limit: 30,               comment: "Schema containing the deployed database object."
-    t.string  "oname",            limit: 30,  null: false, comment: "Name of the deployed database object."
-    t.integer "object_type_id",   limit: nil, null: false, comment: "Internal ID of the object type of the deployed database object."
+    t.decimal "template_site_id",            null: false, comment: "Internal primary key of the template sites table."
+    t.string  "sname",            limit: 30,              comment: "Schema containing the deployed database object."
+    t.string  "oname",            limit: 30, null: false, comment: "Name of the deployed database object."
+    t.decimal "object_type_id",              null: false, comment: "Internal ID of the object type of the deployed database object."
   end
 
   add_index "repcat$_site_objects", ["template_site_id", "oname", "object_type_id", "sname"], name: "repcat$_site_objects_u1", unique: true
   add_index "repcat$_site_objects", ["template_site_id"], name: "repcat$_site_objects_n1"
 
-  create_table "repcat$_sites_new", comment: "Information about new masters for replication extension", id: false, force: :cascade do |t|
+  create_table "repcat$_sites_new", comment: "Information about new masters for replication extension", primary_key: ["extension_id", "gowner", "gname", "dblink"], force: :cascade do |t|
     t.raw     "extension_id",       limit: 16,  null: false, comment: "Globally unique identifier for replication extension"
     t.string  "gowner",             limit: 30,  null: false, comment: "Owner of the object group"
     t.string  "gname",              limit: 30,  null: false, comment: "Name of the replicated object group"
     t.string  "dblink",             limit: 128, null: false, comment: "A database site that will replicate the object group"
-    t.boolean "full_instantiation", limit: nil,              comment: "Y if the database uses full-database export or change-based recovery"
+    t.boolean "full_instantiation",                          comment: "Y if the database uses full-database export or change-based recovery"
     t.decimal "master_status",                               comment: "Instantiation status of the new master"
   end
 
@@ -2571,45 +2570,45 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.string  "dblink",        limit: 128,                    comment: "Database site of the snapshot repgroup"
     t.string  "group_comment", limit: 80,                     comment: "Description of the snapshot repgroup"
     t.decimal "rep_type",                                     comment: "Identifier of flavor at snapshot"
-    t.integer "flavor_id",     limit: nil
+    t.decimal "flavor_id"
   end
 
   add_index "repcat$_snapgroup", ["gname", "dblink", "gowner"], name: "i_repcat$_snapgroup1", unique: true
 
-  create_table "repcat$_template_objects", primary_key: "template_object_id", force: :cascade do |t|
-    t.integer "refresh_template_id",  limit: nil,                null: false, comment: "Internal primary key of the REPCAT$_REFRESH_TEMPLATES table."
-    t.string  "object_name",          limit: 30,                 null: false, comment: "Name of the database object."
-    t.decimal "object_type",                                     null: false, comment: "Type of database object."
-    t.decimal "object_version#",                                              comment: "Version# of database object of TYPE."
-    t.text    "ddl_text",                                                     comment: "DDL string for creating the object or WHERE clause for snapshot query."
-    t.string  "master_rollback_seg",  limit: 30,                              comment: "Rollback segment for use during snapshot refreshes."
-    t.string  "derived_from_sname",   limit: 30,                              comment: "Schema name of schema containing object this was derived from."
-    t.string  "derived_from_oname",   limit: 30,                              comment: "Object name of object this object was derived from."
-    t.integer "flavor_id",            limit: nil,                             comment: "Foreign key to the REPCAT$_FLAVORS table."
-    t.string  "schema_name",          limit: 30,                              comment: "Schema containing the object."
-    t.decimal "ddl_num",                           default: 1.0, null: false, comment: "Order of ddls to execute."
-    t.integer "template_refgroup_id", limit: nil,  default: 0,   null: false, comment: "Internal ID of the refresh group to contain the object."
-    t.raw     "flags",                limit: 255,                             comment: "Internal flags for the object."
-    t.string  "spare1",               limit: 4000,                            comment: "Reserved for future use."
+  create_table "repcat$_template_objects", primary_key: "template_object_id", id: :decimal, comment: "Internal primary key of the REPCAT$_TEMPLATE_OBJECTS table.", force: :cascade do |t|
+    t.decimal "refresh_template_id",                               null: false, comment: "Internal primary key of the REPCAT$_REFRESH_TEMPLATES table."
+    t.string  "object_name",          limit: 30,                   null: false, comment: "Name of the database object."
+    t.decimal "object_type",                                       null: false, comment: "Type of database object."
+    t.decimal "object_version#",                                                comment: "Version# of database object of TYPE."
+    t.text    "ddl_text",                                                       comment: "DDL string for creating the object or WHERE clause for snapshot query."
+    t.string  "master_rollback_seg",  limit: 30,                                comment: "Rollback segment for use during snapshot refreshes."
+    t.string  "derived_from_sname",   limit: 30,                                comment: "Schema name of schema containing object this was derived from."
+    t.string  "derived_from_oname",   limit: 30,                                comment: "Object name of object this object was derived from."
+    t.decimal "flavor_id",                                                      comment: "Foreign key to the REPCAT$_FLAVORS table."
+    t.string  "schema_name",          limit: 30,                                comment: "Schema containing the object."
+    t.decimal "ddl_num",                           default: "1.0", null: false, comment: "Order of ddls to execute."
+    t.decimal "template_refgroup_id",              default: "0.0", null: false, comment: "Internal ID of the refresh group to contain the object."
+    t.raw     "flags",                limit: 255,                               comment: "Internal flags for the object."
+    t.string  "spare1",               limit: 4000,                              comment: "Reserved for future use."
   end
 
   add_index "repcat$_template_objects", ["object_name", "object_type", "refresh_template_id", "schema_name", "ddl_num"], name: "repcat$_template_objects_u1", unique: true
   add_index "repcat$_template_objects", ["refresh_template_id", "object_name", "schema_name", "object_type"], name: "repcat$_template_objects_n2"
   add_index "repcat$_template_objects", ["refresh_template_id", "object_type"], name: "repcat$_template_objects_n1"
 
-  create_table "repcat$_template_parms", primary_key: "template_parameter_id", force: :cascade do |t|
-    t.integer "refresh_template_id", limit: nil,                 null: false, comment: "Internal primary key of the REPCAT$_REFRESH_TEMPLATES table."
+  create_table "repcat$_template_parms", primary_key: "template_parameter_id", id: :decimal, comment: "Internal primary key of the REPCAT$_TEMPLATE_PARMS table.", force: :cascade do |t|
+    t.decimal "refresh_template_id",                             null: false, comment: "Internal primary key of the REPCAT$_REFRESH_TEMPLATES table."
     t.string  "parameter_name",      limit: 30,                  null: false, comment: "name of the parameter."
     t.text    "default_parm_value",                                           comment: "Default value for the parameter."
     t.string  "prompt_string",       limit: 2000,                             comment: "String for use in prompting for parameter values."
-    t.boolean "user_override",       limit: nil,  default: true,              comment: "User override flag."
+    t.boolean "user_override",                    default: true,              comment: "User override flag."
   end
 
   add_index "repcat$_template_parms", ["refresh_template_id", "parameter_name"], name: "repcat$_template_parms_u1", unique: true
 
-  create_table "repcat$_template_refgroups", comment: "Table for maintaining refresh group information for template.", primary_key: "refresh_group_id", force: :cascade do |t|
+  create_table "repcat$_template_refgroups", comment: "Table for maintaining refresh group information for template.", primary_key: "refresh_group_id", id: :decimal, comment: "Internal primary key of the refresh groups table.", force: :cascade do |t|
     t.string  "refresh_group_name",  limit: 30,  null: false, comment: "Name of the refresh group"
-    t.integer "refresh_template_id", limit: nil, null: false, comment: "Primary key of the template containing the refresh group."
+    t.decimal "refresh_template_id",             null: false, comment: "Primary key of the template containing the refresh group."
     t.string  "rollback_seg",        limit: 30,               comment: "Name of the rollback segment to use during refresh."
     t.string  "start_date",          limit: 200,              comment: "Refresh start date."
     t.string  "interval",            limit: 200,              comment: "Refresh interval."
@@ -2618,26 +2617,26 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "repcat$_template_refgroups", ["refresh_group_name"], name: "repcat$_template_refgroups_n1"
   add_index "repcat$_template_refgroups", ["refresh_template_id"], name: "repcat$_template_refgroups_n2"
 
-  create_table "repcat$_template_sites", primary_key: "template_site_id", force: :cascade do |t|
+  create_table "repcat$_template_sites", primary_key: "template_site_id", id: :decimal, comment: "Internal primary key of the REPCAT$_TEMPLATE_SITES table.", force: :cascade do |t|
     t.string  "refresh_template_name", limit: 30,  null: false, comment: "Name of the refresh group template."
     t.string  "refresh_group_name",    limit: 30,               comment: "Name of the refresh group to create during instantiation."
     t.string  "template_owner",        limit: 30,               comment: "Owner of the refresh group template."
     t.string  "user_name",             limit: 30,  null: false, comment: "Database user name."
     t.string  "site_name",             limit: 128,              comment: "Name of the site that has instantiated the template."
-    t.integer "repapi_site_id",        limit: nil,              comment: "Name of the site that has instantiated the template."
+    t.decimal "repapi_site_id",                                 comment: "Name of the site that has instantiated the template."
     t.decimal "status",                            null: false, comment: "Obsolete - do not use."
-    t.integer "refresh_template_id",   limit: nil,              comment: "Obsolete - do not use."
-    t.integer "user_id",               limit: nil,              comment: "Obsolete - do not use."
+    t.decimal "refresh_template_id",                            comment: "Obsolete - do not use."
+    t.decimal "user_id",                                        comment: "Obsolete - do not use."
     t.date    "instantiation_date",                             comment: "Date template was instantiated."
   end
 
   add_index "repcat$_template_sites", ["refresh_template_name", "user_name", "site_name", "repapi_site_id"], name: "repcat$_template_sites_u1", unique: true
 
-  create_table "repcat$_template_status", comment: "Table for template status and template status codes.", primary_key: "template_status_id", force: :cascade do |t|
+  create_table "repcat$_template_status", comment: "Table for template status and template status codes.", primary_key: "template_status_id", id: :decimal, comment: "Internal primary key for the template status table.", force: :cascade do |t|
     t.string "status_type_name", limit: 100, null: false, comment: "User friendly name for the template status."
   end
 
-  create_table "repcat$_template_targets", comment: "Internal table for tracking potential target databases for templates.", primary_key: "template_target_id", force: :cascade do |t|
+  create_table "repcat$_template_targets", comment: "Internal table for tracking potential target databases for templates.", primary_key: "template_target_id", id: :decimal, comment: "Internal primary key of the template targets table.", force: :cascade do |t|
     t.string "target_database", limit: 128,  null: false, comment: "Global identifier of the target database."
     t.string "target_comment",  limit: 2000,              comment: "Comment on the target database."
     t.string "connect_string",  limit: 4000,              comment: "The connection descriptor used to connect to the target database."
@@ -2646,48 +2645,48 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   add_index "repcat$_template_targets", ["target_database"], name: "repcat$_template_targets_u1", unique: true
 
-  create_table "repcat$_template_types", comment: "Internal table for maintaining types of templates.", primary_key: "template_type_id", force: :cascade do |t|
+  create_table "repcat$_template_types", comment: "Internal table for maintaining types of templates.", primary_key: "template_type_id", id: :decimal, comment: "Internal primary key of the template types table.", force: :cascade do |t|
     t.string "template_description", limit: 200,  comment: "Description of the template type."
     t.raw    "flags",                limit: 255,  comment: "Bitmap flags controlling each type of template."
     t.string "spare1",               limit: 4000, comment: "Reserved for future expansion."
   end
 
-  create_table "repcat$_user_authorizations", primary_key: "user_authorization_id", force: :cascade do |t|
-    t.integer "user_id",             limit: nil, null: false, comment: "Database user id."
-    t.integer "refresh_template_id", limit: nil, null: false, comment: "Internal primary key of the REPCAT$_REFRESH_TEMPLATES table."
+  create_table "repcat$_user_authorizations", primary_key: "user_authorization_id", id: :decimal, comment: "Internal primary key of the REPCAT$_USER_AUTHORIZATIONS table.", force: :cascade do |t|
+    t.decimal "user_id",             null: false, comment: "Database user id."
+    t.decimal "refresh_template_id", null: false, comment: "Internal primary key of the REPCAT$_REFRESH_TEMPLATES table."
   end
 
   add_index "repcat$_user_authorizations", ["refresh_template_id"], name: "repcat$_user_authorizations_n1"
   add_index "repcat$_user_authorizations", ["user_id", "refresh_template_id"], name: "repcat$_user_authorizations_u1", unique: true
 
-  create_table "repcat$_user_parm_values", primary_key: "user_parameter_id", force: :cascade do |t|
-    t.integer "template_parameter_id", limit: nil, null: false, comment: "Internal primary key of the REPCAT$_TEMPLATE_PARMS table."
-    t.integer "user_id",               limit: nil, null: false, comment: "Database user id."
-    t.text    "parm_value",                                     comment: "Value of the parameter for this user."
+  create_table "repcat$_user_parm_values", primary_key: "user_parameter_id", id: :decimal, comment: "Internal primary key of the REPCAT$_USER_PARM_VALUES table.", force: :cascade do |t|
+    t.decimal "template_parameter_id", null: false, comment: "Internal primary key of the REPCAT$_TEMPLATE_PARMS table."
+    t.decimal "user_id",               null: false, comment: "Database user id."
+    t.text    "parm_value",                         comment: "Value of the parameter for this user."
   end
 
   add_index "repcat$_user_parm_values", ["template_parameter_id", "user_id"], name: "repcat$_user_parm_values_u1", unique: true
 
   create_table "resource_classes", force: :cascade do |t|
     t.string   "name"
-    t.integer  "unit",                        precision: 38
-    t.integer  "organization_id", limit: nil
-    t.integer  "lock_version",                precision: 38, default: 0
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
+    t.integer  "unit",            precision: 38
+    t.integer  "organization_id", precision: 38
+    t.integer  "lock_version",    precision: 38, default: 0
+    t.datetime "created_at",      precision: 6,              null: false
+    t.datetime "updated_at",      precision: 6,              null: false
   end
 
   add_index "resource_classes", ["name"], name: "index_resource_classes_on_name"
   add_index "resource_classes", ["organization_id"], name: "i_res_cla_org_id"
 
   create_table "resource_utilizations", force: :cascade do |t|
-    t.decimal  "units",                              precision: 15, scale: 2
-    t.integer  "resource_consumer_id",   limit: nil
+    t.decimal  "units",                  precision: 15, scale: 2
+    t.integer  "resource_consumer_id",   precision: 38
     t.string   "resource_consumer_type"
-    t.integer  "resource_id",            limit: nil
+    t.integer  "resource_id",            precision: 38
     t.string   "resource_type"
-    t.datetime "created_at",                                                  null: false
-    t.datetime "updated_at",                                                  null: false
+    t.datetime "created_at",             precision: 6,            null: false
+    t.datetime "updated_at",             precision: 6,            null: false
   end
 
   add_index "resource_utilizations", ["resource_consumer_id", "resource_consumer_type"], name: "ru_consumer_consumer_type_idx"
@@ -2696,22 +2695,22 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   create_table "resources", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
-    t.integer  "resource_class_id", limit: nil
-    t.integer  "lock_version",                  precision: 38, default: 0
-    t.datetime "created_at",                                               null: false
-    t.datetime "updated_at",                                               null: false
+    t.integer  "resource_class_id", precision: 38
+    t.integer  "lock_version",      precision: 38, default: 0
+    t.datetime "created_at",        precision: 6,              null: false
+    t.datetime "updated_at",        precision: 6,              null: false
   end
 
   add_index "resources", ["resource_class_id"], name: "i_resources_resource_class_id"
 
   create_table "review_user_assignments", force: :cascade do |t|
-    t.integer  "assignment_type",               precision: 38
-    t.integer  "review_id",         limit: nil
-    t.integer  "user_id",           limit: nil
-    t.datetime "created_at",                                                   null: false
-    t.datetime "updated_at",                                                   null: false
-    t.boolean  "include_signature", limit: nil,                default: true,  null: false
-    t.boolean  "owner",             limit: nil,                default: false, null: false
+    t.integer  "assignment_type",   precision: 38
+    t.integer  "review_id",         precision: 38
+    t.integer  "user_id",           precision: 38
+    t.datetime "created_at",        precision: 6,                  null: false
+    t.datetime "updated_at",        precision: 6,                  null: false
+    t.boolean  "include_signature",                default: true,  null: false
+    t.boolean  "owner",                            default: false, null: false
   end
 
   add_index "review_user_assignments", ["review_id", "user_id"], name: "i_rev_use_ass_rev_id_use_id"
@@ -2720,16 +2719,16 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.string   "identification"
     t.text     "description"
     t.text     "survey"
-    t.integer  "score",                       precision: 38
-    t.integer  "top_scale",                   precision: 38
-    t.integer  "achieved_scale",              precision: 38
-    t.integer  "period_id",       limit: nil
-    t.integer  "plan_item_id",    limit: nil
-    t.integer  "file_model_id",   limit: nil
-    t.integer  "lock_version",                precision: 38, default: 0
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
-    t.integer  "organization_id", limit: nil
+    t.integer  "score",           precision: 38
+    t.integer  "top_scale",       precision: 38
+    t.integer  "achieved_scale",  precision: 38
+    t.integer  "period_id",       precision: 38
+    t.integer  "plan_item_id",    precision: 38
+    t.integer  "file_model_id",   precision: 38
+    t.integer  "lock_version",    precision: 38, default: 0
+    t.datetime "created_at",      precision: 6,              null: false
+    t.datetime "updated_at",      precision: 6,              null: false
+    t.integer  "organization_id", precision: 38
   end
 
   add_index "reviews", ["file_model_id"], name: "index_reviews_on_file_model_id"
@@ -2740,24 +2739,24 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "roles", force: :cascade do |t|
     t.string   "name"
-    t.integer  "role_type",                   precision: 38
-    t.integer  "organization_id", limit: nil
-    t.integer  "lock_version",                precision: 38, default: 0
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
+    t.integer  "role_type",       precision: 38
+    t.integer  "organization_id", precision: 38
+    t.integer  "lock_version",    precision: 38, default: 0
+    t.datetime "created_at",      precision: 6,              null: false
+    t.datetime "updated_at",      precision: 6,              null: false
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name"
   add_index "roles", ["organization_id"], name: "index_roles_on_organization_id"
 
   create_table "settings", force: :cascade do |t|
-    t.string   "name",                                                   null: false
-    t.string   "value",                                                  null: false
+    t.string   "name",                                       null: false
+    t.string   "value",                                      null: false
     t.text     "description"
-    t.integer  "organization_id", limit: nil,                            null: false
-    t.integer  "lock_version",                precision: 38, default: 0
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
+    t.integer  "organization_id", precision: 38,             null: false
+    t.integer  "lock_version",    precision: 38, default: 0
+    t.datetime "created_at",      precision: 6,              null: false
+    t.datetime "updated_at",      precision: 6,              null: false
   end
 
   add_index "settings", ["name", "organization_id"], name: "i_set_nam_org_id", unique: true
@@ -2768,28 +2767,28 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 #   Unknown type 'LONG' for column 'long_value'
 
   create_table "taggings", force: :cascade do |t|
-    t.integer  "tag_id",        limit: nil, null: false
-    t.integer  "taggable_id",   limit: nil, null: false
-    t.string   "taggable_type",             null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "tag_id",        precision: 38, null: false
+    t.integer  "taggable_id",   precision: 38, null: false
+    t.string   "taggable_type",                null: false
+    t.datetime "created_at",    precision: 6,  null: false
+    t.datetime "updated_at",    precision: 6,  null: false
   end
 
   add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id"
   add_index "taggings", ["taggable_type", "taggable_id"], name: "i_tag_tag_typ_tag_id"
 
   create_table "tags", force: :cascade do |t|
-    t.string   "name",                                                       null: false
-    t.string   "kind",                                                       null: false
-    t.string   "style",                                                      null: false
-    t.integer  "organization_id", limit: nil,                                null: false
-    t.integer  "lock_version",                precision: 38, default: 0
+    t.string   "name",                                           null: false
+    t.string   "kind",                                           null: false
+    t.string   "style",                                          null: false
+    t.integer  "organization_id", precision: 38,                 null: false
+    t.integer  "lock_version",    precision: 38, default: 0
     t.text     "options"
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
-    t.boolean  "shared",          limit: nil,                default: false, null: false
-    t.integer  "group_id",        limit: nil,                                null: false
-    t.string   "icon",                                       default: "tag", null: false
+    t.datetime "created_at",      precision: 6,                  null: false
+    t.datetime "updated_at",      precision: 6,                  null: false
+    t.boolean  "shared",                         default: false, null: false
+    t.integer  "group_id",        precision: 38,                 null: false
+    t.string   "icon",                           default: "tag", null: false
   end
 
   add_index "tags", ["group_id"], name: "index_tags_on_group_id"
@@ -2808,19 +2807,19 @@ ActiveRecord::Schema.define(version: 20170212233430) do
     t.string   "password",             limit: 128
     t.string   "salt"
     t.string   "change_password_hash"
-    t.datetime "password_changed"
-    t.boolean  "enable",               limit: nil,                default: false
-    t.boolean  "logged_in",            limit: nil,                default: false
-    t.boolean  "group_admin",          limit: nil,                default: false
-    t.datetime "last_access"
-    t.integer  "manager_id",           limit: nil
+    t.date     "password_changed"
+    t.boolean  "enable",                                          default: false
+    t.boolean  "logged_in",                                       default: false
+    t.boolean  "group_admin",                                     default: false
+    t.datetime "last_access",                      precision: 6
+    t.integer  "manager_id",                       precision: 38
     t.integer  "failed_attempts",                  precision: 38, default: 0
     t.text     "notes"
     t.integer  "lock_version",                     precision: 38, default: 0
-    t.datetime "created_at",                                                      null: false
-    t.datetime "updated_at",                                                      null: false
-    t.datetime "hash_changed"
-    t.boolean  "hidden",               limit: nil,                default: false
+    t.datetime "created_at",                       precision: 6,                  null: false
+    t.datetime "updated_at",                       precision: 6,                  null: false
+    t.datetime "hash_changed",                     precision: 6
+    t.boolean  "hidden",                                          default: false
   end
 
   add_index "users", ["change_password_hash"], name: "i_users_change_password_hash", unique: true
@@ -2831,13 +2830,13 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_index "users", ["user"], name: "index_users_on_user"
 
   create_table "versions", force: :cascade do |t|
-    t.integer  "item_id",         limit: nil
+    t.integer  "item_id",         precision: 38
     t.string   "item_type"
-    t.string   "event",                                      null: false
-    t.integer  "whodunnit",                   precision: 38
-    t.datetime "created_at"
-    t.boolean  "important",       limit: nil
-    t.integer  "organization_id", limit: nil
+    t.string   "event",                          null: false
+    t.integer  "whodunnit",       precision: 38
+    t.datetime "created_at",      precision: 6
+    t.boolean  "important"
+    t.integer  "organization_id", precision: 38
     t.text     "object"
     t.text     "object_changes"
   end
@@ -2851,15 +2850,15 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   create_table "work_papers", force: :cascade do |t|
     t.string   "name"
     t.string   "code"
-    t.integer  "number_of_pages",             precision: 38
+    t.integer  "number_of_pages", precision: 38
     t.text     "description"
-    t.integer  "owner_id",        limit: nil
+    t.integer  "owner_id",        precision: 38
     t.string   "owner_type"
-    t.integer  "file_model_id",   limit: nil
-    t.integer  "organization_id", limit: nil
-    t.integer  "lock_version",                precision: 38, default: 0
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
+    t.integer  "file_model_id",   precision: 38
+    t.integer  "organization_id", precision: 38
+    t.integer  "lock_version",    precision: 38, default: 0
+    t.datetime "created_at",      precision: 6,              null: false
+    t.datetime "updated_at",      precision: 6,              null: false
   end
 
   add_index "work_papers", ["file_model_id"], name: "i_work_papers_file_model_id"
@@ -2868,24 +2867,24 @@ ActiveRecord::Schema.define(version: 20170212233430) do
 
   create_table "workflow_items", force: :cascade do |t|
     t.text     "task"
-    t.datetime "start"
-    t.datetime "end"
+    t.date     "start"
+    t.date     "end"
     t.string   "predecessors"
-    t.integer  "order_number",             precision: 38
-    t.integer  "workflow_id",  limit: nil
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.integer  "order_number", precision: 38
+    t.integer  "workflow_id",  precision: 38
+    t.datetime "created_at",   precision: 6,  null: false
+    t.datetime "updated_at",   precision: 6,  null: false
   end
 
   add_index "workflow_items", ["workflow_id"], name: "i_workflow_items_workflow_id"
 
   create_table "workflows", force: :cascade do |t|
-    t.integer  "review_id",       limit: nil
-    t.integer  "period_id",       limit: nil
-    t.integer  "lock_version",                precision: 38, default: 0
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
-    t.integer  "organization_id", limit: nil
+    t.integer  "review_id",       precision: 38
+    t.integer  "period_id",       precision: 38
+    t.integer  "lock_version",    precision: 38, default: 0
+    t.datetime "created_at",      precision: 6,              null: false
+    t.datetime "updated_at",      precision: 6,              null: false
+    t.integer  "organization_id", precision: 38
   end
 
   add_index "workflows", ["organization_id"], name: "i_workflows_organization_id"
@@ -3058,13 +3057,13 @@ ActiveRecord::Schema.define(version: 20170212233430) do
   add_foreign_key "workflow_items", "workflows", on_delete: :cascade
   add_foreign_key "workflows", "periods", on_delete: :cascade
   add_foreign_key "workflows", "reviews", on_delete: :cascade
-  add_synonym "syscatalog", "sys.syscatalog", force: true
   add_synonym "catalog", "sys.catalog", force: true
-  add_synonym "tab", "sys.tab", force: true
   add_synonym "col", "sys.col", force: true
-  add_synonym "tabquotas", "sys.tabquotas", force: true
-  add_synonym "sysfiles", "sys.sysfiles", force: true
-  add_synonym "publicsyn", "sys.publicsyn", force: true
   add_synonym "product_user_profile", "system.sqlplus_product_profile", force: true
+  add_synonym "publicsyn", "sys.publicsyn", force: true
+  add_synonym "syscatalog", "sys.syscatalog", force: true
+  add_synonym "sysfiles", "sys.sysfiles", force: true
+  add_synonym "tab", "sys.tab", force: true
+  add_synonym "tabquotas", "sys.tabquotas", force: true
 
 end

@@ -156,8 +156,8 @@ module Prawn
         end
       end
 
-      def add_review_auditors_table(review_user_assignments)
-        unless review_user_assignments.blank?
+      def add_review_signatures_table(review_user_assignments)
+        if review_user_assignments.present?
           column_data = [[]]
           column_headers = []
           column_widths = []
@@ -169,8 +169,9 @@ module Prawn
               100.0 / review_user_assignments.size)
           end
 
-          self.font_size(((PDF_FONT_SIZE * 0.75).round).pt) do
+          font_size(((PDF_FONT_SIZE * 0.75).round).pt) do
             table_options = {
+              :header => true,
               :cell_style => {
                 :padding => (PDF_FONT_SIZE * 0.3).round,
                 :inline_format => true
@@ -179,7 +180,7 @@ module Prawn
               :column_widths => column_widths
             }
 
-            self.table(column_data.insert(0, column_headers), table_options) do
+            table(column_data.insert(0, column_headers), table_options) do
               row(0).style(
                 :background_color => 'cccccc',
                 :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
@@ -197,17 +198,19 @@ module Prawn
 
           self.add_organization_image organization, font_size
 
-          self.canvas do
-            date_text = I18n.l(date, :format => :long) if date
-            text ||= I18n.t(:'follow_up_committee.print_date',
-              :date => date_text)
-            coordinates = [
-              self.bounds.width / 2.0,
-              self.bounds.top - font_size.pt * 2
-            ]
+          if show_print_date_on? organization
+            self.canvas do
+              date_text = I18n.l(date, :format => :long) if date
+              text ||= I18n.t(:'follow_up_committee.print_date',
+                :date => date_text)
+              coordinates = [
+                self.bounds.width / 2.0,
+                self.bounds.top - font_size.pt * 2
+              ]
 
-            self.text_box text, :at => coordinates, :size => font_size,
-              :width => (coordinates[0] - PDF_MARGINS[1].mm), :align => :right
+              self.text_box text, :at => coordinates, :size => font_size,
+                :width => (coordinates[0] - PDF_MARGINS[1].mm), :align => :right
+            end
           end
         end
 
@@ -283,6 +286,14 @@ module Prawn
 
         file_path
       end
+
+      private
+
+        def show_print_date_on? organization
+          setting = organization.settings.find_by name: 'show_print_date_on_pdfs'
+
+          (setting ? setting.value : DEFAULT_SETTINGS[:show_print_date_on_pdfs][:value]) != '0'
+        end
     end
   end
 end

@@ -9,41 +9,35 @@ class BusinessUnitTypesController < ApplicationController
   # Lista los tipos de unidades de negocio
   #
   # * GET /business_unit_types
-  # * GET /business_unit_types.xml
   def index
     @title = t 'business_unit_type.index_title'
     @business_unit_types = BusinessUnitType.list.page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @business_unit_types }
     end
   end
 
   # Muestra el detalle de un tipo de unidad de negocio
   #
   # * GET /business_unit_types/1
-  # * GET /business_unit_types/1.xml
   def show
     @title = t 'business_unit_type.show_title'
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @business_unit_type }
     end
   end
 
   # Permite ingresar los datos para crear un nuevo tipo de unidad de negocio
   #
   # * GET /business_unit_types/new
-  # * GET /business_unit_types/new.xml
   def new
     @title = t 'business_unit_type.new_title'
     @business_unit_type = BusinessUnitType.new
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @business_unit_type }
     end
   end
 
@@ -58,7 +52,6 @@ class BusinessUnitTypesController < ApplicationController
   # validaciones. Además crea las unidades de negocio que lo componen.
   #
   # * POST /business_unit_types
-  # * POST /business_unit_types.xml
   def create
     @title = t 'business_unit_type.new_title'
     @business_unit_type = BusinessUnitType.list.new(business_unit_type_params)
@@ -67,10 +60,8 @@ class BusinessUnitTypesController < ApplicationController
       if @business_unit_type.save
         flash.notice = t 'business_unit_type.correctly_created'
         format.html { redirect_to(business_unit_types_url) }
-        format.xml  { render :xml => @business_unit_type, :status => :created, :location => @business_unit_type }
       else
         format.html { render :action => :new }
-        format.xml  { render :xml => @business_unit_type.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -80,7 +71,6 @@ class BusinessUnitTypesController < ApplicationController
   # negocio que la componen.
   #
   # * PATCH /business_unit_types/1
-  # * PATCH /business_unit_types/1.xml
   def update
     @title = t 'business_unit_type.edit_title'
 
@@ -88,10 +78,8 @@ class BusinessUnitTypesController < ApplicationController
       if @business_unit_type.update(business_unit_type_params)
         flash.notice = t 'business_unit_type.correctly_updated'
         format.html { redirect_to(business_unit_types_url) }
-        format.xml  { head :ok }
       else
         format.html { render :action => :edit }
-        format.xml  { render :xml => @business_unit_type.errors, :status => :unprocessable_entity }
       end
     end
 
@@ -103,7 +91,6 @@ class BusinessUnitTypesController < ApplicationController
   # Elimina el tipo de unidad de negocio
   #
   # * DELETE /business_unit_types/1
-  # * DELETE /business_unit_types/1.xml
   def destroy
     unless @business_unit_type.destroy
       flash.alert = t 'business_unit_type.errors.can_not_be_destroyed'
@@ -111,7 +98,6 @@ class BusinessUnitTypesController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(business_unit_types_url) }
-      format.xml  { head :ok }
     end
   end
 

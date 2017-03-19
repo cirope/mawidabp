@@ -16,14 +16,20 @@ class SessionsControllerTest < ActionController::TestCase
 
   test 'login without organization' do
     @request.host = 'localhost.i'
-    post :create, user: @user.user, password: 'admin123'
+    post :create, params: {
+      user: @user.user,
+      password: 'admin123'
+    }
 
     assert_redirected_to login_url
     assert_equal I18n.t('message.no_organization'), flash.alert
   end
 
   test 'redirected instead of relogin' do
-    post :create, user: @user.user, password: 'admin123'
+    post :create, params: {
+      user: @user.user,
+      password: 'admin123'
+    }
 
     assert_redirected_to welcome_url
     get :new

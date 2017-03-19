@@ -13,7 +13,7 @@ class Polls::QuestionnairesControllerTest < ActionController::TestCase
     assert_template 'polls/questionnaires/index'
 
     assert_nothing_raised do
-      get :index, index: index_params
+      get :index, params: { index: index_params }
     end
 
     assert_response :success
@@ -21,7 +21,7 @@ class Polls::QuestionnairesControllerTest < ActionController::TestCase
   end
 
   test 'filtered questionnaire report' do
-    get :index, index: index_params
+    get :index, params: { index: index_params }
 
     assert_response :success
     assert_not_nil assigns(:report)
@@ -29,8 +29,11 @@ class Polls::QuestionnairesControllerTest < ActionController::TestCase
   end
 
   test 'report questionnaire pdf' do
-    xhr :get, :index, index: index_params, report_title: 'New title',
+    get :index, params: {
+      index: index_params,
+      report_title: 'New title',
       report_subtitle: 'New subtitle'
+    }
 
     assert_response :success
   end

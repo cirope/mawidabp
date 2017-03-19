@@ -13,7 +13,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    id_param = {:id => conclusion_reviews(:conclusion_with_conclusion_draft_review).to_param}
+    id_param = {
+      params: {
+        :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).to_param
+      }
+    }
     public_actions = []
     private_actions = [
       [:get, :index],
@@ -46,9 +50,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'list conclusion_draft_reviews with search' do
     login
-    get :index, :search => {
-      :query => '1 2',
-      :columns => ['identification', 'project']
+    get :index, :params => {
+      :search => {
+        :query => '1 2',
+        :columns => ['identification', 'project']
+      }
     }
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_reviews)
@@ -58,9 +64,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'list conclusion_draft_reviews with search by date and sort' do
     login
-    get :index, :search => {
-      :query => "> #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
-      :columns => ['issue_date']
+    get :index, :params => {
+      :search => {
+        :query => "> #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
+        :columns => ['issue_date']
+      }
     }
 
     assert_response :success
@@ -72,9 +80,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'edit conclusion_draft_reviews when search match only one result' do
     login
-    get :index, :search => {
-      :query => '1 2 4',
-      :columns => ['identification', 'project']
+    get :index, :params =>{
+      :search => {
+        :query => '1 2 4',
+        :columns => ['identification', 'project']
+      }
     }
     assert_redirected_to conclusion_draft_review_url(conclusion_reviews(:conclusion_with_conclusion_draft_review))
     assert_not_nil assigns(:conclusion_draft_reviews)
@@ -83,9 +93,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'edit conclusion_draft_reviews when search by date match only one result' do
     login
-    get :index, :search => {
-      :query => "< #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
-      :columns => ['issue_date']
+    get :index, :params => {
+      :search => {
+        :query => "< #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
+        :columns => ['issue_date']
+      }
     }
 
     assert_redirected_to conclusion_draft_review_url(
@@ -97,9 +109,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'list only one conclusion_draft_reviews with search on one with final' do
     login
-    get :index, :search => {
-      :query => '1 1',
-      :columns => ['identification', 'project']
+    get :index, :params => {
+      :search => {
+        :query => '1 1',
+        :columns => ['identification', 'project']
+      }
     }
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_reviews)
@@ -109,7 +123,9 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'show conclusion_draft_review' do
     login
-    get :show, :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
+    get :show, :params => {
+      :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
+    }
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_review)
     assert_template 'conclusion_draft_reviews/show'
@@ -126,7 +142,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   test 'create conclusion_draft_review' do
     login
     assert_difference 'ConclusionDraftReview.count' do
-      post :create, {
+      post :create, :params => {
         :conclusion_draft_review => {
           :review_id => reviews(:review_without_conclusion).id,
           :issue_date => Date.today,
@@ -142,7 +158,9 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'edit conclusion_draft_review' do
     login
-    get :edit, :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
+    get :edit, :params => {
+      :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
+    }
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_review)
     assert_template 'conclusion_draft_reviews/edit'
@@ -151,7 +169,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   test 'update conclusion_draft_review' do
     assert_no_difference 'ConclusionDraftReview.count' do
       login
-      patch :update, {
+      patch :update, :params => {
         :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id,
         :conclusion_draft_review => {
           :review_id => reviews(:review_with_conclusion).id,
@@ -176,7 +194,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
     assert_nothing_raised do
-      get :export_to_pdf, :id => conclusion_review.id
+      get :export_to_pdf, :params => { :id => conclusion_review.id }
     end
 
     assert_redirected_to conclusion_review.relative_pdf_path
@@ -189,8 +207,10 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
     assert_nothing_raised do
-      get :export_to_pdf, :id => conclusion_review.id,
+      get :export_to_pdf, :params => {
+        :id => conclusion_review.id,
         :export_options => { :hide_score => '1' }
+      }
     end
 
     assert_redirected_to conclusion_review.relative_pdf_path
@@ -203,13 +223,13 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
     assert_nothing_raised do
-      get :score_sheet, :id => conclusion_review.id
+      get :score_sheet, :params => { :id => conclusion_review.id }
     end
 
     assert_redirected_to conclusion_review.review.relative_score_sheet_path
 
     assert_nothing_raised do
-      get :score_sheet, :id => conclusion_review.id, :global => 1
+      get :score_sheet, :params => { :id => conclusion_review.id, :global => 1 }
     end
 
     assert_redirected_to(
@@ -223,7 +243,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
     assert_nothing_raised do
-      get :download_work_papers, :id => conclusion_review.id
+      get :download_work_papers, :params => { :id => conclusion_review.id }
     end
 
     assert_redirected_to conclusion_review.review.relative_work_papers_zip_path
@@ -236,8 +256,10 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
     assert_nothing_raised do
-      post :create_bundle, :id => conclusion_review.id,
+      post :create_bundle, :params => {
+        :id => conclusion_review.id,
         :index_items => "one\ntwo"
+      }
     end
 
     assert_redirected_to conclusion_review.relative_bundle_zip_path
@@ -246,8 +268,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'check for approval' do
     login
-    get :check_for_approval, :id => reviews(:current_review).id,
+    get :check_for_approval, :params => {
+      :id => reviews(:current_review).id,
       :format => :json
+    }
+
     assert_response :success
 
     approval_hash = nil
@@ -264,8 +289,10 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'compose email' do
     login
-    get :compose_email,
+    get :compose_email, :params => {
       :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
+    }
+
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_review)
     assert_template 'conclusion_draft_reviews/compose_email'
@@ -282,7 +309,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      patch :send_by_email, {
+      patch :send_by_email, :params => {
         :id => conclusion_review.id,
         :user => {
           users(:administrator_user).id => {
@@ -302,7 +329,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
 
     assert_difference 'ActionMailer::Base.deliveries.size', 2 do
-      patch :send_by_email, {
+      patch :send_by_email, :params => {
         :id => conclusion_review.id,
         :user => {
           users(:administrator_user).id => {
@@ -333,7 +360,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      patch :send_by_email, {
+      patch :send_by_email, :params => {
         :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
@@ -357,7 +384,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_match /textile/, text_part
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      patch :send_by_email, {
+      patch :send_by_email, :params => {
         :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
@@ -392,7 +419,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
-      patch :send_by_email, {
+      patch :send_by_email, :params => {
         :id => conclusion_review.id,
         :user => {
           users(:administrator_user).id => {

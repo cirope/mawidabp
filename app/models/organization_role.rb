@@ -1,4 +1,4 @@
-class OrganizationRole < ActiveRecord::Base
+class OrganizationRole < ApplicationRecord
 
   has_paper_trail meta: {
     organization_id: ->(model) { Organization.current_id },

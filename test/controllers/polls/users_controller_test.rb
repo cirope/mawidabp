@@ -6,7 +6,10 @@ class Polls::UsersControllerTest < ActionController::TestCase
   end
 
   test 'list admin users' do
-    xhr :get, :index, q: 'poll', format: :json
+    get :index, xhr: true, params: {
+      q: 'poll',
+      format: :json
+    }
 
     assert_response :success
     users = ActiveSupport::JSON.decode(@response.body)
@@ -16,7 +19,10 @@ class Polls::UsersControllerTest < ActionController::TestCase
   end
 
   test 'list blank users' do
-    xhr :get, :index, q: 'blank', format: :json
+    get :index, xhr: true, params: {
+      q: 'blank',
+      format: :json
+    }
 
     assert_response :success
     users = ActiveSupport::JSON.decode(@response.body)
@@ -26,7 +32,10 @@ class Polls::UsersControllerTest < ActionController::TestCase
   end
 
   test 'list none users' do
-    xhr :get, :index, q: 'xyz', format: :json
+    get :index, xhr: true, params: {
+      q: 'xyz',
+      format: :json
+    }
 
     assert_response :success
     users = ActiveSupport::JSON.decode(@response.body)

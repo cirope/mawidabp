@@ -33,7 +33,8 @@ module Users::Scopes
       joins(:organizations).
         where(conditions, corporate_list_parameters).
         references(:organizations).
-        uniq.select(column_names - ['notes'])
+        distinct.
+        select(column_names - ['notes'])
     end
 
     private

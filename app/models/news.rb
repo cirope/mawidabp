@@ -1,4 +1,4 @@
-class News < ActiveRecord::Base
+class News < ApplicationRecord
   include Auditable
   include NewsModule::Defaults
   include NewsModule::ImageModels
