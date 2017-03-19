@@ -77,7 +77,7 @@ class TagsControllerTest < ActionController::TestCase
   end
 
   test 'should destroy tag' do
-    tag = Tag.create! @tag.attributes.merge(id: nil, name: 'Other')
+    tag = tags :extra
 
     assert_difference 'Tag.count', -1 do
       delete :destroy, params: {

@@ -15,7 +15,8 @@
             value: finding_user.try(:full_name_with_function),
             id: "finding_user_#{id}", name: "auto_user_id_#{id}",
             title: t('label.search'),
-            autocomplete: :off, autofocus: true,
+            autocomplete: :off,
+            autofocus: !finding_user,
             data: {
               autocomplete_url: url_for([finding.class.model_name.plural, :users]),
               autocomplete_id_target: "#user_id_#{id}"

@@ -2,6 +2,7 @@ module FindingsHelper
   def finding_status_field(form, inline = true, disabled = false)
     finding  = form.object
     statuses = finding.next_status_list
+    excluded = []
 
     if finding.errors[:state].present?
       state_was = finding.new_record? ?
@@ -10,7 +11,10 @@ module FindingsHelper
       statuses.merge! finding.next_status_list(state_was)
     end
 
-    options = statuses.except(:repeated, :confirmed).map do |k, v|
+    excluded << :repeated  unless finding.repeated?  || finding.was_repeated?
+    excluded << :confirmed unless finding.confirmed? || finding.was_confirmed?
+
+    options = statuses.except(*excluded).map do |k, v|
       [t(:"finding.status_#{k}"), v]
     end
 

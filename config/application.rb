@@ -1,9 +1,9 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
 require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
-# # you've limited to :test, :development, or :production.
+# you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
 module MawidaBP
@@ -13,25 +13,15 @@ module MawidaBP
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
-    config.autoload_paths += %W(#{config.root}/lib #{config.root}/app/mailers/concerns)
-
-    # Only load the plugins named here, in the order given (default is alphabetical).
-    # :all can be used as a placeholder for all plugins not explicitly named.
-    # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
-
-    # Activate observers that should always be running.
-    # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
+    config.autoload_paths += %W(#{config.root}/lib)
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
+    # Run "rake time:zones:all" for a time zone names list. Default is UTC.
     config.time_zone = ENV['TRAVIS'] ? 'UTC' : 'Buenos Aires'
 
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    config.i18n.default_locale = :es
-
-    # Be sure to have the adapter's gem in your Gemfile and follow
-    # the adapter's specific installation and deployment instructions.
+    # Be sure to have the adapter's gem in your Gemfile
+    # and follow the adapter's specific installation
+    # and deployment instructions.
     config.active_job.queue_adapter = :sidekiq
   end
 end
