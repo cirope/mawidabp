@@ -290,12 +290,12 @@ var HTMLUtil = {
      * el elemento es a su vez un array se convierte recursivamente en un UL
      */
   arrayToUL: function(array, attributes) {
-    if($.isArray(array) && array.length > 0) {
+    if(Array.isArray(array) && array.length > 0) {
       var ul = $('<ul></ul>', attributes);
 
       $.each(array, function(i, e) {
-        if($.isArray(e) && e.length > 1 && typeof e[0] == 'string' &&
-          $.isArray(e[1])) {
+        if(Array.isArray(e) && e.length > 1 && typeof e[0] == 'string' &&
+          Array.isArray(e[1])) {
           var li = $('<li></li>');
 
           li.append(e.shift());
@@ -303,7 +303,7 @@ var HTMLUtil = {
 
           ul.append(li);
         } else {
-          if($.isArray(e)) {
+          if(Array.isArray(e)) {
             $.each(e, function(i, se) {ul.append($('<li></li>').html(se));});
           } else {
             ul.append($('<li></li>').html(e));
@@ -493,7 +493,7 @@ jQuery(function($) {
   });
 
   // Mensajes diferidos
-  if($.isArray(State.showMessages)) {
+  if(Array.isArray(State.showMessages)) {
     $.each(State.showMessages, function() {
       var message = this.message;
       var expired = this.expired;
