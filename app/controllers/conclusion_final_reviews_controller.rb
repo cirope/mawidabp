@@ -125,7 +125,7 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf/1
   def export_to_pdf
-    @conclusion_final_review.to_pdf(current_organization, params[:export_options])
+    @conclusion_final_review.to_pdf(current_organization, params[:export_options]&.to_unsafe_h)
 
     respond_to do |format|
       format.html { redirect_to @conclusion_final_review.relative_pdf_path }
