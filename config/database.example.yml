@@ -1,6 +1,7 @@
 common: &common
   adapter: oracle_enhanced
   pool: 5
+  nls_numeric_characters: '.,'
   username: <%= ENV['TRAVIS'] ? 'postgres' : 'system' %>
   password: <%= ENV['TRAVIS'] ? '' : 'oracle' %>
 
