@@ -36,10 +36,6 @@ class Weakness < Finding
     super(attributes, import_users)
 
     self.review_code ||= self.next_code
-
-    if self.control_objective_item.try(:control_objective)
-      self.risk ||= self.control_objective_item.control_objective.risk
-    end
   end
 
   def self.columns_for_sort
