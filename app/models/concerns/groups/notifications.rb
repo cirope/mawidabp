@@ -19,7 +19,7 @@ module Groups::Notifications
           self.send_notification_email = true
         end
 
-        NotifierMailer.group_welcome_email(self).deliver_later
+        Notifier.group_welcome_email(self).deliver_later
       end
     end
 end
