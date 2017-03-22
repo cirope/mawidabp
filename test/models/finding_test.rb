@@ -914,7 +914,7 @@ class FindingTest < ActiveSupport::TestCase
     Organization.current_id = nil
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
-    assert_equal 2, Finding.unconfirmed_for_notification.size
+    assert_not_equal 0, Finding.unconfirmed_for_notification.size
 
     review_codes_by_user = {}
 
@@ -933,7 +933,7 @@ class FindingTest < ActiveSupport::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_difference 'ActionMailer::Base.deliveries.size', 1 do
+    assert_difference 'ActionMailer::Base.deliveries.size' do
       Finding.notify_for_unconfirmed_for_notification_findings
     end
 
@@ -948,7 +948,7 @@ class FindingTest < ActiveSupport::TestCase
     Finding.unconfirmed_for_notification.each do |finding|
       begin
         finding.first_notification_date -=
-          FINDING_STALE_UNCONFIRMED_DAYS.next.day
+          FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.day
       end while [0, 6].include?(finding.first_notification_date.wday)
       assert finding.save
     end
@@ -1093,14 +1093,13 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 1, Finding.confirmed_and_stale.size
 
     Finding.confirmed_and_stale.each do |finding|
-      finding.finding_answers.create(
+      finding.finding_answers.create!(
         :answer => 'New answer',
         :user => users(:audited_user)
       )
     end
 
-    counts = ['Finding.confirmed_and_stale.count',
-      'ActionMailer::Base.deliveries.size']
+    counts = ['Finding.confirmed_and_stale.count', 'ActionMailer::Base.deliveries.size']
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []

@@ -67,12 +67,9 @@ module Findings::Unanswered
       def confirmed_pre_conditions
         stale_parameters.each_with_index.map do |stale_parameter, i|
           [
-            [
-              "#{quoted_table_name}.#{qcn 'confirmation_date'} < :stale_confirmed_date_#{i}",
-              "#{quoted_table_name}.#{qcn 'first_notification_date'} < :stale_first_notification_date_#{i}"
-            ].join(' OR '),
-            "#{Period.quoted_table_name}.#{Period.qcn('organization_id')} = :organization_id_#{i}",
-          ].map { |c| "(#{c})" }.join(' AND ')
+            "#{quoted_table_name}.#{qcn 'first_notification_date'} < :stale_first_notification_date_#{i}",
+            "#{quoted_table_name}.#{qcn 'organization_id'} = :organization_id_#{i}"
+          ].join(' AND ')
         end
       end
 
@@ -85,9 +82,7 @@ module Findings::Unanswered
 
         stale_parameters.each_with_index do |stale_parameter, i|
           stale_days = stale_parameter[:parameter].to_i
-          parameters[:"stale_confirmed_date_#{i}"] = stale_days.days.ago_in_business.to_date
-          parameters[:"stale_first_notification_date_#{i}"] =
-            (FINDING_STALE_UNCONFIRMED_DAYS + stale_days).days.ago_in_business.to_date
+          parameters[:"stale_first_notification_date_#{i}"] = stale_days.days.ago_in_business.to_date
           parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
         end
 
@@ -105,7 +100,7 @@ module Findings::Unanswered
       def unconfirmed_pre_conditions
         stale_parameters.each_with_index.map do |stale_parameter, i|
           [
-            "#{quoted_table_name}.#{qcn 'first_notification_date'} < :stale_unconfirmed_date_#{i}",
+            "#{quoted_table_name}.#{qcn 'first_notification_date'} < :stale_first_notification_date_#{i}",
             "#{Period.quoted_table_name}.#{Period.qcn 'organization_id'} = :organization_id_#{i}",
           ].join(' AND ')
         end
@@ -119,8 +114,7 @@ module Findings::Unanswered
 
         stale_parameters.each_with_index do |stale_parameter, i|
           stale_days = stale_parameter[:parameter].to_i
-          parameters[:"stale_unconfirmed_date_#{i}"] =
-            (FINDING_STALE_UNCONFIRMED_DAYS + stale_days).days.ago_in_business.to_date
+          parameters[:"stale_first_notification_date_#{i}"] = stale_days.days.ago_in_business.to_date
           parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
         end
 
