@@ -25,11 +25,22 @@ class FindingReviewAssignmentTest < ActiveSupport::TestCase
     assert_not_equal old_updated_at, @finding_review_assignment.updated_at
   end
 
-  test 'delete' do
+  test 'destroy' do
     finding_review_assignment =
       finding_review_assignments :review_without_conclusion_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
 
     assert_difference 'FindingReviewAssignment.count', -1 do
+      finding_review_assignment.destroy
+    end
+  end
+
+  test 'destroy gets cancelled if repeated' do
+    finding_review_assignment =
+      finding_review_assignments :review_without_conclusion_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
+
+    finding_review_assignment.finding.update! state: Finding::STATUS[:repeated]
+
+    assert_no_difference 'FindingReviewAssignment.count' do
       finding_review_assignment.destroy
     end
   end
