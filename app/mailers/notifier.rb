@@ -68,7 +68,7 @@ class Notifier < ActionMailer::Base
     @finding_answer = finding_answer
     prefix = "[#{finding_answer.finding.organization.prefix}] "
 
-    mail to: users.kind_of?(Array) ? users.map(&:email) : [users.email],
+    mail to: Array(users).map(&:email),
          subject: prefix.upcase + t(
            'notifier_mailer.notify_new_finding_answer.title',
            review: finding_answer.finding.review.to_s
@@ -113,7 +113,7 @@ class Notifier < ActionMailer::Base
   def reassigned_findings_notification(new_users, old_users, findings, notify = true)
     findings_array = findings.respond_to?(:each) ? findings.to_a : [findings]
 
-    @new_users, @old_users = [new_users].flatten, [old_users].flatten
+    @new_users, @old_users = Array(new_users), Array(old_users)
     @grouped_findings = findings_array.group_by(&:organization)
     @notification = notify ?
       Notification.create(findings: findings_array, user: new_users) : nil
@@ -150,7 +150,7 @@ class Notifier < ActionMailer::Base
     prefixes = organizations.uniq.map {|o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
-    mail to: users.kind_of?(Array) ? users.map(&:email) : [users.email],
+    mail to: Array(users).map(&:email),
          subject: prefixes.upcase + t('notifier_mailer.changes_notification.title')
   end
 
