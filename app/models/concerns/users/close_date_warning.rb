@@ -1,21 +1,17 @@
-module Users::Notifications
+module Users::CloseDateWarning
   extend ActiveSupport::Concern
 
-  def send_welcome_email
-    Notifier.welcome_email(self).deliver_later unless send_notification_email.blank?
-  end
-
-  def send_notification_if_necesary
-    if send_notification_email.present?
-      organization = Organization.find Organization.current_id
-
-      reset_password organization, notify: false
-
-      Notifier.welcome_email(self).deliver_later
-    end
-  end
-
   module ClassMethods
+    def notify_auditors_about_close_date
+      if [0, 6].exclude? Date.today.wday
+        all_with_conclusion_final_reviews_for_notification.find_each do |user|
+          cfrs = user.conclusion_final_reviews.with_near_close_date.to_a
+
+          Notifier.conclusion_final_review_close_date_warning(user, cfrs).deliver_later
+        end
+      end
+    end
+
     def notify_new_findings
       unless [0, 6].include?(Date.today.wday)
         users, findings = [], []

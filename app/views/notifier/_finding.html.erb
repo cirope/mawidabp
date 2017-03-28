@@ -53,5 +53,5 @@
 <%= textilize_without_paragraph auditors.map { |u| "* #{u.full_name}" }.join("\n") %>
 
 <p style="margin: .1em 0em;">
-  <%= link_to t('notifier_mailer.notify_new_finding_answer.finding_link'), finding_url %>
+  <%= link_to t('notifier.notify_new_finding_answer.finding_link'), finding_url %>
 </p>
