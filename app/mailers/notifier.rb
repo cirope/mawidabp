@@ -1,4 +1,4 @@
-class NotifierMailer < ActionMailer::Base
+class Notifier < ActionMailer::Base
   helper :application, :notifier_mailer
 
   default from: "'#{I18n.t('app_name')}' <#{ENV['EMAIL_ADDRESS']}>"
@@ -68,7 +68,7 @@ class NotifierMailer < ActionMailer::Base
     @finding_answer = finding_answer
     prefix = "[#{finding_answer.finding.organization.prefix}] "
 
-    mail to: users.kind_of?(Array) ? users.map(&:email) : [users.email],
+    mail to: Array(users).map(&:email),
          subject: prefix.upcase + t(
            'notifier_mailer.notify_new_finding_answer.title',
            review: finding_answer.finding.review.to_s
@@ -113,7 +113,7 @@ class NotifierMailer < ActionMailer::Base
   def reassigned_findings_notification(new_users, old_users, findings, notify = true)
     findings_array = findings.respond_to?(:each) ? findings.to_a : [findings]
 
-    @new_users, @old_users = [new_users].flatten, [old_users].flatten
+    @new_users, @old_users = Array(new_users), Array(old_users)
     @grouped_findings = findings_array.group_by(&:organization)
     @notification = notify ?
       Notification.create(findings: findings_array, user: new_users) : nil
@@ -150,7 +150,7 @@ class NotifierMailer < ActionMailer::Base
     prefixes = organizations.uniq.map {|o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
-    mail to: users.kind_of?(Array) ? users.map(&:email) : [users.email],
+    mail to: Array(users).map(&:email),
          subject: prefixes.upcase + t('notifier_mailer.changes_notification.title')
   end
 
@@ -222,10 +222,13 @@ class NotifierMailer < ActionMailer::Base
          subject: prefixes.upcase + t('notifier_mailer.findings_expired_warning.title')
   end
 
-  def conclusion_final_review_expiration_warning(user, cfr)
-    @cfr = cfr
+  def conclusion_final_review_close_date_warning(user, conclusion_final_reviews)
+    @grouped_conclusion_reviews = conclusion_final_reviews.group_by(&:organization)
+    prefixes = @grouped_conclusion_reviews.keys.map {|o| "[#{o.prefix}]" }.join(' ')
+
+    prefixes << ' ' unless prefixes.blank?
 
     mail to: [user.email],
-         subject: "[#{@cfr.review.organization.prefix.upcase}] #{t('notifier_mailer.conclusion_final_review_expiration_warning.title')}"
+         subject: "#{prefixes.upcase} #{t 'notifier_mailer.conclusion_final_review_close_date_warning.title'}"
   end
 end
