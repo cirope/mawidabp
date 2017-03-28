@@ -307,16 +307,16 @@ class NotifierTest < ActionMailer::TestCase
     assert_equal user.email, response.to.first
   end
 
-  test 'deliver conclusion final review expiration warning' do
-    user = User.find(users(:administrator_user).id)
-    cfr = ConclusionReview.find(conclusion_reviews(:conclusion_current_final_review).id)
-    response = Notifier.conclusion_final_review_expiration_warning(user, cfr).deliver_now
+  test 'deliver conclusion final review close date warning' do
+    user = User.find(users(:supervisor_user).id)
+    cfrs = user.conclusion_final_reviews
+    response = Notifier.conclusion_final_review_close_date_warning(user, cfrs).deliver_now
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier_mailer.conclusion_final_review_expiration_warning.title')
+      I18n.t('notifier_mailer.conclusion_final_review_close_date_warning.title')
     )
-    assert_match Regexp.new(I18n.t('notifier_mailer.conclusion_final_review_expiration_warning.body_title')),
+    assert_match Regexp.new(I18n.t('notifier_mailer.conclusion_final_review_close_date_warning.body_title')),
       response.body.decoded
     assert_equal user.email, response.to.first
   end

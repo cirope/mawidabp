@@ -1,8 +1,12 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
+  include ActionMailer::TestHelper
+
   def setup
     @user = users :administrator_second_user
+
+    ActionMailer::Base.deliveries.clear
 
     set_organization
   end
@@ -269,7 +273,7 @@ class UserTest < ActiveSupport::TestCase
   test 'reset password' do
     assert_nil @user.change_password_hash
 
-    assert_difference 'ActionMailer::Base.deliveries.size' do
+    assert_enqueued_emails 1 do
       @user.reset_password organizations(:cirope)
     end
 
@@ -345,7 +349,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'send welcome email' do
-    assert_difference 'ActionMailer::Base.deliveries.size' do
+    assert_enqueued_emails 1 do
       @user.send_notification_email = true
       @user.send_welcome_email
     end
@@ -367,7 +371,7 @@ class UserTest < ActiveSupport::TestCase
     assert old_user.findings.all_for_reallocation.any?
     assert user.findings.all_for_reallocation.blank?
 
-    assert_difference 'ActionMailer::Base.deliveries.size', 2 do
+    assert_enqueued_emails 2 do
       assert_difference 'Notification.count' do
         old_user.reassign_to user, with_findings: true
       end
@@ -386,7 +390,7 @@ class UserTest < ActiveSupport::TestCase
     assert reviews_to_reassign.any? { |r| r.users.exclude?(user) }
 
     # One email each user...
-    assert_difference 'ActionMailer::Base.deliveries.size', 2 do
+    assert_enqueued_emails 2 do
       assert_difference 'Notification.count' do
          old_user.reassign_to user, with_reviews: true
       end
@@ -431,9 +435,7 @@ class UserTest < ActiveSupport::TestCase
       review_codes_by_user[user] = user.findings.for_notification.pluck 'review_code'
     end
 
-    ActionMailer::Base.deliveries.clear
-
-    assert_difference 'ActionMailer::Base.deliveries.size', 6 do
+    assert_enqueued_emails 6 do
       User.notify_new_findings
     end
 
@@ -446,5 +448,25 @@ class UserTest < ActiveSupport::TestCase
     end
 
     assert Finding.for_notification.empty?
+  end
+
+  test 'notify conclusion final review close date warning' do
+    users = User.all_with_conclusion_final_reviews_for_notification
+
+    ConclusionFinalReview.list.new({
+      review_id: reviews(:review_approved_with_conclusion).id,
+      issue_date: Date.today,
+      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date,
+      applied_procedures: 'New applied procedures',
+      conclusion: 'New conclusion'
+    }, false).save!
+
+    Organization.current_id = nil
+
+    assert users.any?
+
+    assert_enqueued_emails users.count do
+      User.notify_auditors_about_close_date
+    end
   end
 end

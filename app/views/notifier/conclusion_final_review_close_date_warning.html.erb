@@ -1,0 +1,22 @@
+<div style="font-family: verdana, sans-serif, arial, helvetica;">
+  <% @grouped_conclusion_reviews.each do |organization, conclusion_final_reviews| %>
+    <% Organization.current_id = organization.id %>
+    <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
+    <h3><%= t 'notifier_mailer.conclusion_final_review_close_date_warning.body_title' %></h3>
+
+    <ul>
+      <% conclusion_final_reviews.each do |cfr| %>
+        <% conclusion_review_url = conclusion_final_review_url cfr, host: ("#{organization.prefix}.#{URL_HOST}" if organization) %>
+
+        <li>
+          <%= link_to conclusion_review_url do %>
+            <%= cfr.review.identification %> -
+            <%= "#{ConclusionFinalReview.human_attribute_name 'close_date'}: #{l cfr.close_date}" %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <%= render partial: 'footer' %>
+</div>

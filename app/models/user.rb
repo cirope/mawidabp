@@ -6,6 +6,7 @@ class User < ApplicationRecord
   include Trimmer
   include Users::Auditable
   include Users::Authorization
+  include Users::CloseDateWarning
   include Users::CustomAttributes
   include Users::DateColumns
   include Users::Defaults
@@ -37,6 +38,7 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_many :review_user_assignments, dependent: :destroy
   has_many :reviews, through: :review_user_assignments
+  has_many :conclusion_final_reviews, through: :reviews
 
   def <=>(other)
     other.kind_of?(User) ? id <=> other.id : -1
