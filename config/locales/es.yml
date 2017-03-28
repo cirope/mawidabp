@@ -758,7 +758,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
     status_rejected: "Rechazada"
     type: "Tipo"
 
-  notifier_mailer:
+  notifier:
     notify_new_finding:
       title: "Tiene un nuevo hallazgo"
       created_title: "Nuevo hallazgo"

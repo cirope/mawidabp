@@ -1,8 +1,8 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <h2><%= t 'notifier_mailer.unanswered_findings.title' %></h2>
+  <h2><%= t 'notifier.unanswered_findings.title' %></h2>
   <h3 style="font-weight: normal;">
     <%= textilize_without_paragraph(
-      t('notifier_mailer.unanswered_findings.the_following_findings_are_now_unanswered',
+      t('notifier.unanswered_findings.the_following_findings_are_now_unanswered',
         :count => @grouped_findings.values.sum(&:size))) %>
   </h3>
 
@@ -23,7 +23,7 @@
 
         <% if levels.any? %>
           <h3 style="margin-top: 1em;"><%= textilize_without_paragraph(
-                t('notifier_mailer.unanswered_findings.if_no_answer_is_given_the_following_users_will_be_notified')) %> (*)</h3>
+                t('notifier.unanswered_findings.if_no_answer_is_given_the_following_users_will_be_notified')) %> (*)</h3>
           <% levels.each do |level| %>
             <% managers = finding.manager_users_for_level(level) %>
             <% unless managers.empty? %>
@@ -33,7 +33,7 @@
             <% end %>
           <% end %>
           <p style="font-size: .8em;">
-            (*) <%= t('notifier_mailer.unanswered_finding_to_manager.managers_clarification') %>
+            (*) <%= t('notifier.unanswered_finding_to_manager.managers_clarification') %>
           </p>
         <% end %>
       <% end %>

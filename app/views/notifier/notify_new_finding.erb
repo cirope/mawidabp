@@ -2,14 +2,14 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
   <h3 style="text-decoration: underline;">
-    <%= t('notifier_mailer.notify_new_finding.title') %>
+    <%= t('notifier.notify_new_finding.title') %>
   </h3>
 
   <%= render partial: 'finding', locals: {finding: @finding} %>
 
   <% if @notification.present? %>
     <p>
-      <%= link_to t('notifier_mailer.notification.confirm'),
+      <%= link_to t('notifier.notification.confirm'),
           confirm_notification_url(@notification, host: ("#{organization.prefix}.#{URL_HOST}" if organization)) %>
     </p>
   <% end %>
