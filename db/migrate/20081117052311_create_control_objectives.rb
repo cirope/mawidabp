@@ -1,4 +1,4 @@
-class CreateControlObjectives < ActiveRecord::Migration
+class CreateControlObjectives < ActiveRecord::Migration[4.2]
   def self.up
     create_table :control_objectives do |t|
       t.text :name

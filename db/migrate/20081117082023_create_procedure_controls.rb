@@ -1,4 +1,4 @@
-class CreateProcedureControls < ActiveRecord::Migration
+class CreateProcedureControls < ActiveRecord::Migration[4.2]
   def self.up
     create_table :procedure_controls do |t|
       t.references :period

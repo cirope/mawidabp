@@ -1,4 +1,4 @@
-class CreatePrivileges < ActiveRecord::Migration
+class CreatePrivileges < ActiveRecord::Migration[4.2]
   def self.up
     create_table :privileges do |t|
       t.string :module, :limit => 100

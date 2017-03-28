@@ -1,4 +1,4 @@
-class RemoveResourceClassTypeFromResourceClass < ActiveRecord::Migration
+class RemoveResourceClassTypeFromResourceClass < ActiveRecord::Migration[4.2]
   def change
     remove_human_resources
 

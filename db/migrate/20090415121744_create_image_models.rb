@@ -1,4 +1,4 @@
-class CreateImageModels < ActiveRecord::Migration
+class CreateImageModels < ActiveRecord::Migration[4.2]
   def self.up
     create_table :image_models do |t|
       t.string :image_file_name

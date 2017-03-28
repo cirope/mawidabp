@@ -1,4 +1,4 @@
-class CreateHelpItems < ActiveRecord::Migration
+class CreateHelpItems < ActiveRecord::Migration[4.2]
   def self.up
     create_table :help_items do |t|
       t.string :name

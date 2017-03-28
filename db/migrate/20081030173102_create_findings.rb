@@ -1,4 +1,4 @@
-class CreateFindings < ActiveRecord::Migration
+class CreateFindings < ActiveRecord::Migration[4.2]
   def self.up
     create_table :findings do |t|
       # Comunes

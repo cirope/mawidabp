@@ -1,4 +1,4 @@
-class CreateBusinessUnitFindings < ActiveRecord::Migration
+class CreateBusinessUnitFindings < ActiveRecord::Migration[4.2]
   def change
     create_table :business_unit_findings do |t|
       t.references :business_unit, index: true

@@ -1,4 +1,4 @@
-class AddIndexesToPolls < ActiveRecord::Migration
+class AddIndexesToPolls < ActiveRecord::Migration[4.2]
   def change
     add_index :polls, :user_id
     add_index :polls, [:pollable_id, :pollable_type]

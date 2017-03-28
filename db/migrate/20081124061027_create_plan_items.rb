@@ -1,4 +1,4 @@
-class CreatePlanItems < ActiveRecord::Migration
+class CreatePlanItems < ActiveRecord::Migration[4.2]
   def self.up
     create_table :plan_items do |t|
       t.string :project
