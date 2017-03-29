@@ -71,10 +71,10 @@ module FindingsHelper
       end
 
       if finding.rescheduled?
-        html_classes << 'yellow'
+        html_classes << 'text-warning'
       end
 
-      html_classes << 'green' if html_classes.blank?
+      html_classes << 'text-success' if html_classes.blank?
     end
 
     unless finding.follow_up_date.blank?

@@ -53,6 +53,7 @@ GEM
     arel (7.1.4)
     autoprefixer-rails (6.7.7.1)
       execjs
+    bindex (0.5.0)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -80,7 +81,6 @@ GEM
     chronic (0.10.2)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
-    debug_inspector (0.0.2)
     dynamic_form (1.1.4)
     erubis (2.7.0)
     execjs (2.7.0)
@@ -211,7 +211,7 @@ GEM
     ttfunk (1.5.0)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
-    uglifier (3.1.10)
+    uglifier (3.1.11)
       execjs (>= 0.3.0, < 3)
     unicorn (5.2.0)
       kgio (~> 2.6)
@@ -219,10 +219,10 @@ GEM
     unicorn-rails (2.2.1)
       rack
       unicorn
-    web-console (3.4.0)
+    web-console (3.5.0)
       actionview (>= 5.0)
       activemodel (>= 5.0)
-      debug_inspector
+      bindex (>= 0.4.0)
       railties (>= 5.0)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
