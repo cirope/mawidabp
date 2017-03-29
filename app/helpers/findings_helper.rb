@@ -138,7 +138,7 @@ module FindingsHelper
   def show_finding_answers_count(finding)
     finding_answers_count = finding.finding_answers.count
     user_answers = finding.finding_answers.where(:user_id => @auth_user.id).count
-    klass = 'green' if user_answers > 0
+    klass = 'text-success' if user_answers > 0
     user_count = content_tag(
       :abbr, user_answers,
       :title => t('finding.user_finding_answers_count'),
