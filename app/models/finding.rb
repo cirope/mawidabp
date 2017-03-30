@@ -7,7 +7,7 @@ class Finding < ApplicationRecord
   include Findings::Confirmation
   include Findings::Cost
   include Findings::CreateValidation
-  include Findings::Csv
+  include Findings::CSV
   include Findings::CustomAttributes
   include Findings::DateColumns
   include Findings::DestroyValidation
