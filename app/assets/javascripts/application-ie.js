@@ -12,3 +12,4 @@
 //
 //= require ie/html5shiv
 //= require ie/respond
+//= require ie/polyfills

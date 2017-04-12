@@ -1,4 +1,4 @@
-class CreateProcedureControlItems < ActiveRecord::Migration
+class CreateProcedureControlItems < ActiveRecord::Migration[4.2]
   def self.up
     create_table :procedure_control_items do |t|
       t.integer :aproach

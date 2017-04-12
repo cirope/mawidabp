@@ -49,7 +49,7 @@ module Users::Password
 
     save!
 
-    NotifierMailer.restore_password(self, organization).deliver_later if notify
+    Notifier.restore_password(self, organization).deliver_later if notify
   end
 
   def password_was_encrypted

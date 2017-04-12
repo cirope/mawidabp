@@ -1,4 +1,4 @@
-class CreateLoginRecords < ActiveRecord::Migration
+class CreateLoginRecords < ActiveRecord::Migration[4.2]
   def self.up
     create_table :login_records do |t|
       t.references :user

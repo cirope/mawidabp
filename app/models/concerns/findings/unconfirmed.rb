@@ -12,7 +12,7 @@ module Findings::Unconfirmed
         {
           state: Finding::STATUS[:unconfirmed],
           false: false,
-          stale_unconfirmed_date: FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date
+          stale_unconfirmed_date: FINDING_DAYS_FOR_SECOND_NOTIFICATION.days.ago_in_business.to_date
         }
       )
     }
@@ -31,7 +31,7 @@ module Findings::Unconfirmed
             end
           end
 
-          users.each { |user| NotifierMailer.stale_notification(user).deliver_later }
+          users.each { |user| Notifier.stale_notification(user).deliver_later }
         end
       end
     end

@@ -64,7 +64,7 @@ class FindingsController < ApplicationController
         :control_objective_item => {
           :review => [:conclusion_final_review, :period, :plan_item]
         }
-      }, :users, :organization
+      }, :users, :tags, :organization
     ).where(@conditions).order(
       @order_by || [
         default_sort_column,
@@ -208,8 +208,8 @@ class FindingsController < ApplicationController
           file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_answers_attributes: [
-          :id, :answer, :auditor_comments, :user_id, :commitment_date, :notify_users, :_destroy,
-          file_model_attributes: [:id, :file, :file_cache]
+          :answer, :auditor_comments, :user_id, :commitment_date, :notify_users,
+          file_model_attributes: [:file, :file_cache]
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy

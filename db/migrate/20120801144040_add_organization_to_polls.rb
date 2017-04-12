@@ -1,4 +1,4 @@
-class AddOrganizationToPolls < ActiveRecord::Migration
+class AddOrganizationToPolls < ActiveRecord::Migration[4.2]
   def change
     add_column :polls, :organization_id, :integer
 

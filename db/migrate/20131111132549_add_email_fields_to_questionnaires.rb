@@ -1,4 +1,4 @@
-class AddEmailFieldsToQuestionnaires < ActiveRecord::Migration
+class AddEmailFieldsToQuestionnaires < ActiveRecord::Migration[4.2]
   def change
     add_column :questionnaires, :email_subject, :string
     add_column :questionnaires, :email_link, :string

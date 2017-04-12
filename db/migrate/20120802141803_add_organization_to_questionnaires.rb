@@ -1,4 +1,4 @@
-class AddOrganizationToQuestionnaires < ActiveRecord::Migration
+class AddOrganizationToQuestionnaires < ActiveRecord::Migration[4.2]
   def change
     add_column :questionnaires, :organization_id, :integer
 

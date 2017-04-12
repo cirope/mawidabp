@@ -8,7 +8,8 @@ module Findings::Search
       review:       review_options,
       project:      project_options,
       review_code:  review_code_options,
-      title:        title_options
+      title:        title_options,
+      tags:         tags_options
     }.with_indifferent_access
   end
 
@@ -43,6 +44,10 @@ module Findings::Search
 
       def title_options
         string_column_options_for "#{quoted_table_name}.#{qcn('title')}"
+      end
+
+      def tags_options
+        string_column_options_for "#{Tag.quoted_table_name}.#{Tag.qcn 'name'}"
       end
 
       def string_column_options_for column

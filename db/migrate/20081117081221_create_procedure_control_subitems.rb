@@ -1,4 +1,4 @@
-class CreateProcedureControlSubitems < ActiveRecord::Migration
+class CreateProcedureControlSubitems < ActiveRecord::Migration[4.2]
   def self.up
     create_table :procedure_control_subitems do |t|
       t.text :control_objective_text

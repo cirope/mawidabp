@@ -1,15 +1,15 @@
-module Findings::Csv
+module Findings::CSV
   extend ActiveSupport::Concern
 
   LINE_BREAK             = "\r\n"
   LINE_BREAK_REPLACEMENT = " | "
 
   def to_csv_a corporate
-    [
-      (organization.prefix if corporate),
+    row = [
       review.identification,
       review.plan_item.project,
       review_code,
+      tags.map(&:to_s).to_sentence,
       title,
       description,
       state_text,
@@ -22,10 +22,15 @@ module Findings::Csv
       control_objective_item.control_objective_text,
       origination_date_text,
       date_text,
+      reiteration_info,
       audit_comments,
       answer,
       finding_answers_text
-    ].compact.map { |item| item&.gsub(LINE_BREAK, LINE_BREAK_REPLACEMENT) }
+    ]
+
+    row.unshift organization.prefix if corporate
+
+    row.map { |item| item.to_s.gsub(LINE_BREAK, LINE_BREAK_REPLACEMENT) }
   end
 
   private
@@ -33,11 +38,21 @@ module Findings::Csv
     def date_text
       date = solution_date || follow_up_date
 
-      I18n.l date, format: :minimal if date
+      date ? I18n.l(date, format: :minimal) : '-'
+    end
+
+    def reiteration_info
+      if repeated_ancestors.any?
+        "#{I18n.t('finding.repeated_ancestors')}: #{repeated_ancestors.to_sentence}"
+      elsif repeated_children.any?
+        "#{I18n.t('finding.repeated_children')}: #{repeated_children.to_sentence}"
+      else
+        '-'
+      end
     end
 
     def origination_date_text
-      I18n.l origination_date, format: :minimal if origination_date
+      origination_date ? I18n.l(origination_date, format: :minimal) : '-'
     end
 
     def auditeds_as_process_owner
@@ -72,7 +87,7 @@ module Findings::Csv
 
   module ClassMethods
     def to_csv completed: 'incomplete', corporate: false
-      CSV.generate(col_sep: ';') do |csv|
+      ::CSV.generate(col_sep: ';', force_quotes: true) do |csv|
         csv << column_headers(completed, corporate)
 
         all_with_inclusions.each { |f| csv << f.to_csv_a(corporate) }
@@ -83,6 +98,8 @@ module Findings::Csv
 
       def all_with_inclusions
         preload :organization,
+          :repeated_of,
+          :repeated_in,
           finding_answers: :user,
           review: :plan_item,
           finding_user_assignments: :user,
@@ -102,6 +119,7 @@ module Findings::Csv
           Review.model_name.human,
           PlanItem.human_attribute_name('project'),
           Weakness.human_attribute_name('review_code'),
+          Tag.model_name.human(count: 0),
           Weakness.human_attribute_name('title'),
           Weakness.human_attribute_name('description'),
           Weakness.human_attribute_name('state'),
@@ -114,6 +132,7 @@ module Findings::Csv
           ControlObjectiveItem.human_attribute_name('control_objective_text'),
           Finding.human_attribute_name('origination_date'),
           date_label(completed),
+          I18n.t('finding.status_repeated'),
           Finding.human_attribute_name('audit_comments'),
           Finding.human_attribute_name('answer'),
           I18n.t('finding.finding_answers')

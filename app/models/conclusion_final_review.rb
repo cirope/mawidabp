@@ -1,4 +1,6 @@
 class ConclusionFinalReview < ConclusionReview
+  include ConclusionFinalReviews::Scopes
+
   # Constantes
   COLUMNS_FOR_SEARCH = {
     close_date: {
@@ -10,78 +12,6 @@ class ConclusionFinalReview < ConclusionReview
       regexp: SEARCH_DATE_REGEXP
     }
   }.merge(GENERIC_COLUMNS_FOR_SEARCH).with_indifferent_access
-
-  # Named scopes
-  scope :list_all_by_date, ->(from_date, to_date) {
-    list.where(
-      'issue_date BETWEEN :from_date AND :to_date',
-      from_date: from_date, to_date: to_date
-    )
-  }
-  scope :ordered, -> {
-    includes(
-      review: { plan_item: { business_unit: :business_unit_type } }
-    ).references(:business_unit_types).order(
-      [
-        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
-        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
-        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')}"
-      ]
-    )
-  }
-  scope :list_all_by_solution_date, ->(from_date, to_date) {
-    list.includes(
-      review: [
-        { plan_item: { business_unit: :business_unit_type } },
-        { control_objective_items: :weaknesses }
-      ]
-    ).where(
-      "#{Weakness.quoted_table_name}.#{Weakness.qcn('solution_date')} BETWEEN :from_date AND :to_date",
-      from_date: from_date, to_date: to_date
-    ).references(:findings, :business_unit_types).order(
-      [
-        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
-        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
-        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')}"
-      ]
-    )
-  }
-  scope :list_all_by_final_solution_date, ->(from_date, to_date) {
-    list.includes(
-      review: [
-        { plan_item: { business_unit: :business_unit_type } },
-        { control_objective_items: :final_weaknesses }
-      ]
-    ).where(
-      "#{Weakness.quoted_table_name}.#{Weakness.qcn('solution_date')} BETWEEN :from_date AND :to_date",
-      from_date: from_date, to_date: to_date
-    ).references(:findings, :business_unit_types).order(
-      [
-        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
-        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
-        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')}"
-      ]
-    )
-  }
-  scope :internal_audit, -> {
-    includes(
-      review: {plan_item: {business_unit: :business_unit_type}}
-    ).where("#{BusinessUnitType.table_name}.external" => false).references(
-      :business_unit_types
-    )
-  }
-  scope :external_audit, -> {
-    includes(
-      review: {plan_item: {business_unit: :business_unit_type}}
-    ).where("#{BusinessUnitType.table_name}.external" => true).references(
-      :business_unit_types
-    )
-  }
-  scope :next_to_expire, -> {
-    where(
-      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date
-    )
-  }
 
   # Callbacks
   before_create :check_if_can_be_created, :duplicate_review_findings
@@ -188,36 +118,6 @@ class ConclusionFinalReview < ConclusionReview
 
   def is_frozen?
     self.close_date && Date.today > self.close_date
-  end
-
-  def self.warning_auditors_about_close_date
-    wday = Date.today.wday
-
-    # Sólo si no es sábado o domingo (porque no tiene sentido)
-    unless [0, 6].include? wday
-      # Si es viernes notifico también los que cierran el fin de semana
-      if wday == 5
-        cfrs = ConclusionFinalReview.where(
-          "#{quoted_table_name}.#{qcn 'close_date'} BETWEEN :from AND :to",
-          from: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date,
-          to: (CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS + 2).days.from_now_in_business.to_date
-        )
-      else
-        cfrs = ConclusionFinalReview.next_to_expire
-      end
-
-      if cfrs.present?
-        cfrs.each do |cfr|
-          ruas = cfr.review.review_user_assignments
-          ruas.each do |rua|
-            # si no es gerente o auditado
-            unless rua.assignment_type == 2 || rua.assignment_type == -1
-              NotifierMailer.conclusion_final_review_expiration_warning(rua.user, cfr).deliver_later
-            end
-          end
-        end
-      end
-    end
   end
 
   private

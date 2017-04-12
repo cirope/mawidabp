@@ -1,5 +1,14 @@
 <hr />
 
 <footer>
-  <p>Cualquier inquietud comunicarse al área de soporte: <%= mail_to SUPPORT_EMAIL %></p>
+  <div class="row">
+    <div class="col-sm-11">
+      <p>Cualquier inquietud comunicarse al área de soporte: <%= mail_to SUPPORT_EMAIL %></p>
+    </div>
+    <div class="col-sm-1">
+      <p class="text-right">
+        <span class="glyphicon glyphicon-info-sign" title="<%= APP_REVISION[0,8] %>"></span>
+      </p>
+    </div>
+  </div>
 </footer>

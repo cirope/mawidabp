@@ -8,7 +8,7 @@
   <h3 style="font-weight: normal;">
     <%= textilize_without_paragraph(
       t(
-        'notifier_mailer.notify_new_finding_answer.finding_data',
+        'notifier.notify_new_finding_answer.finding_data',
         :review => finding.review.to_s,
         :finding_code => [finding.review_code, finding.title].reject(&:blank?).join(' - ')
       )
@@ -37,7 +37,7 @@
   <% end %>
 
   <p>
-    <%= link_to t('notifier_mailer.notify_new_finding_answer.finding_link'),
+    <%= link_to t('notifier.notify_new_finding_answer.finding_link'),
       finding_url %>
   </p>
   <%= render :partial => 'footer' %>

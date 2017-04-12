@@ -1,4 +1,4 @@
-class CreateFindingRelations < ActiveRecord::Migration
+class CreateFindingRelations < ActiveRecord::Migration[4.2]
   def self.up
     create_table :finding_relations do |t|
       t.string :description, :null => false

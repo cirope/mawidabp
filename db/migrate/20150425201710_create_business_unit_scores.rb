@@ -1,4 +1,4 @@
-class CreateBusinessUnitScores < ActiveRecord::Migration
+class CreateBusinessUnitScores < ActiveRecord::Migration[4.2]
   def change
     create_table :business_unit_scores do |t|
       t.integer :design_score

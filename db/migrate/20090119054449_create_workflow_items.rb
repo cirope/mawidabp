@@ -1,4 +1,4 @@
-class CreateWorkflowItems < ActiveRecord::Migration
+class CreateWorkflowItems < ActiveRecord::Migration[4.2]
   def self.up
     create_table :workflow_items do |t|
       t.text :task

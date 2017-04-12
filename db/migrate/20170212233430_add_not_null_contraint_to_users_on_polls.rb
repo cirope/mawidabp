@@ -1,4 +1,4 @@
-class AddNotNullContraintToUsersOnPolls < ActiveRecord::Migration
+class AddNotNullContraintToUsersOnPolls < ActiveRecord::Migration[4.2]
   def change
     remove_polls_without_users
 
