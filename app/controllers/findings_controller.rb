@@ -64,7 +64,7 @@ class FindingsController < ApplicationController
         :control_objective_item => {
           :review => [:conclusion_final_review, :period, :plan_item]
         }
-      }, :users, :organization
+      }, :users, :tags, :organization
     ).where(@conditions).order(
       @order_by || [
         default_sort_column,
