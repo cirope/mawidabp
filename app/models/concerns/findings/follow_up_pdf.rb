@@ -7,6 +7,7 @@ module Findings::FollowUpPDF
     put_follow_up_cover_on             pdf
     put_follow_up_description_items_on pdf
     put_follow_up_user_data_on         pdf
+    put_relation_information_on        pdf
     put_history_on                     pdf
     put_follow_up_comments_on          pdf
     put_follow_up_work_papers_on       pdf
@@ -80,6 +81,18 @@ module Findings::FollowUpPDF
 
       pdf.add_title I18n.t('finding.responsibles', count: audited.size), PDF_FONT_SIZE, :left
       pdf.add_list audited.map(&:full_name), PDF_FONT_SIZE * 2
+    end
+
+    def put_relation_information_on pdf
+      if repeated_ancestors.any?
+        pdf.add_title I18n.t('finding.repeated_ancestors'), PDF_FONT_SIZE, :left
+        pdf.add_list repeated_ancestors, PDF_FONT_SIZE * 2
+      end
+
+      if repeated_children.any?
+        pdf.add_title I18n.t('finding.repeated_children'), PDF_FONT_SIZE, :left
+        pdf.add_list repeated_children, PDF_FONT_SIZE * 2
+      end
     end
 
     def put_history_on pdf

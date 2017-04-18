@@ -1,4 +1,4 @@
-class CreateWorkflows < ActiveRecord::Migration
+class CreateWorkflows < ActiveRecord::Migration[4.2]
   def self.up
     create_table :workflows do |t|
       t.references :review

@@ -1,4 +1,4 @@
-class ChangeTypeToQualityFindingColumns < ActiveRecord::Migration
+class ChangeTypeToQualityFindingColumns < ActiveRecord::Migration[4.2]
   def change
     add_column :findings, :c_tmp, :text
     add_column :findings, :ca_tmp, :text

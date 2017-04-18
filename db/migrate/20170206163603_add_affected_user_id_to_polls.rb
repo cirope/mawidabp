@@ -1,4 +1,4 @@
-class AddAffectedUserIdToPolls < ActiveRecord::Migration
+class AddAffectedUserIdToPolls < ActiveRecord::Migration[4.2]
   def change
     add_reference :polls, :affected_user, index: true
 

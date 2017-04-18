@@ -1,4 +1,4 @@
-class CreateResourceUtilizations < ActiveRecord::Migration
+class CreateResourceUtilizations < ActiveRecord::Migration[4.2]
   def self.up
     create_table :resource_utilizations do |t|
       t.decimal :units, :precision => 15, :scale => 2

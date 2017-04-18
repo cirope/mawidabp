@@ -1,4 +1,4 @@
-class CreateFindingReviewAssignments < ActiveRecord::Migration
+class CreateFindingReviewAssignments < ActiveRecord::Migration[4.2]
   def self.up
     create_table :finding_review_assignments do |t|
       t.references :finding

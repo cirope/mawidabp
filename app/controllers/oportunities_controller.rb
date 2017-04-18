@@ -43,7 +43,7 @@
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
     @oportunities = Oportunity.list.includes(
-      :work_papers,
+      :work_papers, :tags,
       :control_objective_item => {
         :review => [:period, :plan_item, :conclusion_final_review]
       }

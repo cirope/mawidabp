@@ -32,8 +32,8 @@ module LdapConfigs::LDAPImport
   private
 
     def process_entry entry
-      role_names = entry[roles_attribute].map { |r| r.try(:force_encoding, 'UTF-8').sub(/.*?cn=(.*?),.*/i, '\1') }
-      manager_dn = manager_attribute && entry[manager_attribute].first.try(:force_encoding, 'UTF-8')
+      role_names = entry[roles_attribute].map { |r| r&.force_encoding('UTF-8')&.sub(/.*?cn=(.*?),.*/i, '\1')&.to_s }
+      manager_dn = manager_attribute && entry[manager_attribute].first&.force_encoding('UTF-8')&.to_s
       data       = trivial_data entry
       roles      = clean_roles Role.list_with_corporate.where(name: role_names)
       user       = User.where(email: data[:email]).take
@@ -52,11 +52,11 @@ module LdapConfigs::LDAPImport
 
     def trivial_data entry
       {
-        user:      entry[username_attribute].first.try(:force_encoding, 'UTF-8'),
-        name:      entry[name_attribute].first.try(:force_encoding, 'UTF-8'),
-        last_name: entry[last_name_attribute].first.try(:force_encoding, 'UTF-8'),
-        email:     entry[email_attribute].first.try(:force_encoding, 'UTF-8'),
-        function:  function_attribute && entry[function_attribute].first.try(:force_encoding, 'UTF-8'),
+        user:      entry[username_attribute].first&.force_encoding('UTF-8')&.to_s,
+        name:      entry[name_attribute].first&.force_encoding('UTF-8')&.to_s,
+        last_name: entry[last_name_attribute].first&.force_encoding('UTF-8')&.to_s,
+        email:     entry[email_attribute].first&.force_encoding('UTF-8')&.to_s,
+        function:  function_attribute && entry[function_attribute].first&.force_encoding('UTF-8')&.to_s,
         enable:    true
       }
     end

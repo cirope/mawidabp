@@ -1,4 +1,4 @@
-class CreateDetracts < ActiveRecord::Migration
+class CreateDetracts < ActiveRecord::Migration[4.2]
   def self.up
     create_table :detracts do |t|
       t.decimal :value, :precision => 3, :scale => 2

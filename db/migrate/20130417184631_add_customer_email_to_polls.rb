@@ -1,4 +1,4 @@
-class AddCustomerEmailToPolls < ActiveRecord::Migration
+class AddCustomerEmailToPolls < ActiveRecord::Migration[4.2]
   def change
     add_column :polls, :customer_email, :string
 

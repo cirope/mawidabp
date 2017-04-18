@@ -1,4 +1,4 @@
-class CreateNotificationRelations < ActiveRecord::Migration
+class CreateNotificationRelations < ActiveRecord::Migration[4.2]
   def self.up
     create_table :notification_relations do |t|
       t.references :notification
