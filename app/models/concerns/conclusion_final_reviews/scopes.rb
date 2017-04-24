@@ -9,7 +9,7 @@ module ConclusionFinalReviews::Scopes
     }
     scope :next_to_expire_including_weekend, -> {
       from = CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date
-      to   = (CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS + 2).days.from_now_in_business.to_date
+      to   = from + 2.days
 
       where close_date: from..to
     }
