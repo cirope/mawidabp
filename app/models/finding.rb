@@ -5,6 +5,7 @@ class Finding < ApplicationRecord
   include Findings::Achievements
   include Findings::Answers
   include Findings::BusinessUnits
+  include Findings::ClassPDF
   include Findings::Comments
   include Findings::Confirmation
   include Findings::Cost

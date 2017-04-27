@@ -109,7 +109,8 @@
 
 <%= paginate @findings %>
 
-<%= link_to t('finding.download_csv'), findings_path(request.query_parameters.merge(format: :csv)) %>
+<%= link_to t('finding.download_csv'), findings_path(request.query_parameters.merge(format: :csv)) %> |
+<%= link_to t('finding.download_pdf'), findings_path(request.query_parameters.merge(format: :pdf)) %>
 
 <script type="text/javascript">
   $('#user_id_select').change(function() {
