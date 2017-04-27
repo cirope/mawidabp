@@ -859,6 +859,25 @@ class FindingTest < ActiveSupport::TestCase
     FileUtils.rm @finding.absolute_pdf_path
   end
 
+  test 'class to pdf' do
+    begin
+      Finding.current_organization = organizations :cirope
+
+      assert !File.exist?(Finding.absolute_pdf_path)
+
+      assert_nothing_raised do
+        Finding.all.to_pdf
+      end
+
+      assert File.exist?(Finding.absolute_pdf_path)
+      assert File.size(Finding.absolute_pdf_path) > 0
+
+      FileUtils.rm Finding.absolute_pdf_path
+    ensure
+      Finding.current_organization = nil
+    end
+  end
+
   test 'to csv' do
     csv = Finding.all.to_csv
     rows = CSV.parse csv, col_sep: ';'

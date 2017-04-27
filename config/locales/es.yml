@@ -467,6 +467,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
     download_csv: "Descargar CSV"
+    download_pdf: "Resumen en PDF"
     add_finding_relation: "Agregar relación"
     add_tagging: "Agregar etiqueta"
     add_finding_answer: "Agregar comentario"
