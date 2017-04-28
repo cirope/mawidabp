@@ -2,7 +2,7 @@ class FileModelsController < ApplicationController
   before_action :auth
 
   def download
-    base_regexp = /^#{allowed_paths}/
+    base_regexp = /#{allowed_paths}/
 
     if file_name =~ base_regexp && File.file?(file_name)
       set_file_download_headers
@@ -27,7 +27,7 @@ class FileModelsController < ApplicationController
     end
 
     def allowed_paths
-      paths = organization_paths.map { |p| Regexp.escape(p) }.join('|')
+      paths = organization_paths.map { |p| "^#{Regexp.escape(p)}" }.join('|')
 
       paths << "|#{Regexp.escape flash[:allow_url]}" if flash[:allow_url]
 
