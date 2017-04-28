@@ -29,7 +29,7 @@ class FileModelsController < ApplicationController
     def allowed_paths
       paths = organization_paths.map { |p| "^#{Regexp.escape(p)}" }.join('|')
 
-      paths << "|#{Regexp.escape flash[:allow_url]}" if flash[:allow_url]
+      paths << "|^#{Regexp.escape flash[:allow_path]}" if flash[:allow_path]
 
       paths
     end

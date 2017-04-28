@@ -5,9 +5,9 @@ class BestPractices::ControlObjectivesController < ApplicationController
   before_action :set_best_practice, :set_control_objective, only: [:download]
 
   def download
-    url = flash[:allow_url] = @control_objective.support&.url
+    flash[:allow_path] = @control_objective.support&.path
 
-    redirect_to url || root_url
+    redirect_to @control_objective.support&.url || root_url
   end
 
   private
