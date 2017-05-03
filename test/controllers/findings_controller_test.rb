@@ -155,6 +155,16 @@ class FindingsControllerTest < ActionController::TestCase
     assert_equal "#{Mime[:csv]}", @response.content_type
   end
 
+  test 'list findings as PDF' do
+    login
+    get :index, :params => {
+      :completed => 'incomplete',
+      :format => :pdf
+    }
+    assert_response :success
+    assert_equal "#{Mime[:pdf]}", @response.content_type
+  end
+
   test 'list findings as corporate user' do
     organization = organizations :twitter
 

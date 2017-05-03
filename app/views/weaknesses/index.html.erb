@@ -32,7 +32,7 @@
         <td class="hidden-xs"><%= super_truncate weakness.state_text, 19 %></td>
         <td class="hidden-xs hidden-sm hidden-md"><%= l weakness.follow_up_date, :format => :short if weakness.follow_up_date %></td>
         <td class="hidden-xs"><%= weakness.risk_text %></td>
-        <td class="hidden-xs"><%= tags weakness.tags %></td>
+        <td class="hidden-xs"><%= tags weakness.tags.reload %></td>
         <td class="hidden-xs"><%= t weakness.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show weakness %></td>
         <td><%= link_to_edit edit_weakness_path(weakness) %></td>

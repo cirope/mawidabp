@@ -9,7 +9,7 @@ module Findings::CSV
       review.identification,
       review.plan_item.project,
       review_code,
-      tags.map(&:to_s).to_sentence,
+      taggings.map(&:tag).to_sentence,
       title,
       description,
       state_text,
@@ -103,6 +103,7 @@ module Findings::CSV
           finding_answers: :user,
           review: :plan_item,
           finding_user_assignments: :user,
+          taggings: :tag,
           users: {
             organization_roles: :role
           },

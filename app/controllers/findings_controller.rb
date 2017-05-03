@@ -90,6 +90,11 @@ class FindingsController < ApplicationController
 
         render csv: @findings.to_csv(csv_options), filename:  @title.downcase
       }
+      format.pdf {
+        Finding.current_organization = current_organization
+
+        render pdf: @findings
+      }
     end
   end
 
