@@ -90,11 +90,7 @@ class FindingsController < ApplicationController
 
         render csv: @findings.to_csv(csv_options), filename:  @title.downcase
       }
-      format.pdf {
-        Finding.current_organization = current_organization
-
-        render pdf: @findings
-      }
+      format.pdf  { redirect_to pdf.relative_path }
     end
   end
 
@@ -249,5 +245,17 @@ class FindingsController < ApplicationController
 
     def scoped_findings
       current_organization.corporate? ? Finding.group_list : Finding.list
+    end
+
+    def pdf
+      title_partial = params[:completed] == 'incomplete' ? 'pending' : 'complete'
+
+      FindingPdf.create(
+        title: t("menu.follow_up.#{title_partial}_findings"),
+        columns: @columns,
+        query: @query,
+        findings: @findings.except(:limit),
+        current_organization: current_organization
+      )
     end
 end
