@@ -11,7 +11,6 @@ class Poll < ApplicationRecord
 
   belongs_to :questionnaire
   belongs_to :user
-  # TODO: put optional: true on Rails 5 migration
-  belongs_to :affected_user, class_name: 'User'
+  belongs_to :affected_user, class_name: 'User', optional: true
   belongs_to :organization
 end

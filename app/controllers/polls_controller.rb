@@ -50,7 +50,7 @@ class PollsController < ApplicationController
 
     respond_to do |format|
       if polls.present?
-        format.html { redirect_to new_poll_path, alert: t('polls.already_exists') }
+        format.html { redirect_to new_poll_path, alert: t('polls.already_exists', user: @poll.user&.full_name) }
       elsif @poll.save
         format.html { redirect_to @poll }
       else
