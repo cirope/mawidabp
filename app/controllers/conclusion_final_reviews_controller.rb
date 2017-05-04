@@ -20,14 +20,7 @@ class ConclusionFinalReviewsController < ApplicationController
     .references(:periods, :reviews, :business_units)
 
     respond_to do |format|
-      format.html {
-        if @conclusion_final_reviews.count == 1 && !@query.blank? &&
-            !params[:page]
-          redirect_to(
-            conclusion_final_review_url(@conclusion_final_reviews.first)
-          )
-        end
-      }
+      format.html
     end
   end
 
