@@ -273,6 +273,8 @@ Rails.application.routes.draw do
   end
 
   resources :plans do
+    resources :plan_items, only: [:new, :edit]
+
     get :export_to_pdf, on: :member
 
     collection do

@@ -22,13 +22,6 @@ class PlansControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'new plan with business unit type' do
-    business_unit_type = business_unit_types :cycle
-
-    get :new, params: { business_unit_type: business_unit_type }
-    assert_response :success
-  end
-
   test 'clone plan' do
     get :new, params: { clone_from: @plan }
     assert_response :success

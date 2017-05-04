@@ -11,6 +11,14 @@ module PlansHelper
       class: [plan_item.status_color, 'media-object'].join(' ')
   end
 
+  def plan_item_path plan_item
+    if plan_item.persisted?
+      edit_plan_plan_item_path @plan, plan_item
+    else
+      new_plan_plan_item_path @plan
+    end
+  end
+
   def plan_items_for_selected_business_unit_type
     business_unit_type = params[:business_unit_type].to_i > 0 ?
       params[:business_unit_type].to_i : nil

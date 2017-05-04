@@ -4,8 +4,6 @@ class PlansController < ApplicationController
 
   respond_to :html
 
-  layout ->(controller) { controller.request.xhr? && 'application' }
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_business_unit_type, only: [:show, :new, :edit]
   before_action :set_plan, only: [:show, :edit, :update, :destroy, :export_to_pdf]
