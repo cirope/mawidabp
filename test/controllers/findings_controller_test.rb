@@ -178,22 +178,6 @@ class FindingsControllerTest < ActionController::TestCase
     assert_template 'findings/index'
   end
 
-  test 'edit finding when search match only one result' do
-    login
-    get :index, :params => {
-      :completed => 'incomplete',
-      :search => {
-        :query => '1 2 4 y 1w',
-        :columns => ['title', 'review']
-      }
-    }
-
-    assert_redirected_to finding_url('incomplete',
-      findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness))
-    assert_not_nil assigns(:findings)
-    assert_equal 1, assigns(:findings).count
-  end
-
   test 'show finding' do
     login
     get :show, :params => {
