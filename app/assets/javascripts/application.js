@@ -35,6 +35,7 @@
 //= require findings
 //= require news
 //= require organizations
+//= require plans
 //= require process_controls
 //= require reviews
 //= require tags

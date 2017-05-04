@@ -29,18 +29,18 @@ module Plans::PDF
   end
 
   def pdf_name
-    I18n.t 'plan.pdf.pdf_name', period: period.number
+    I18n.t 'plans.pdf.pdf_name', period: period.number
   end
 
   private
 
     def pdf_title
-      ["#{I18n.t('plan.pdf.title')}\n", (PDF_FONT_SIZE * 1.5).round, :center]
+      ["#{I18n.t('plans.pdf.title')}\n", (PDF_FONT_SIZE * 1.5).round, :center]
     end
 
     def pdf_period
-      period_label = I18n.t 'plan.period.title', number: period.number
-      range_label  = I18n.t 'plan.period.range', {
+      period_label = I18n.t 'plans.period.title', number: period.number
+      range_label  = I18n.t 'plans.period.range', {
         from_date: I18n.l(period.start, format: :long),
         to_date:   I18n.l(period.end,   format: :long)
       }
@@ -101,7 +101,7 @@ module Plans::PDF
 
     def put_business_unit_type_title_on pdf, business_unit_type
       pdf.move_down PDF_FONT_SIZE
-      pdf.add_title business_unit_type&.name || I18n.t('plan.without_business_unit_type')
+      pdf.add_title business_unit_type&.name || I18n.t('plans.without_business_unit_type')
     end
 
     def row_data_for plan_item, total_resource_text
@@ -145,7 +145,7 @@ module Plans::PDF
         end
       end
 
-      pdf.text "\n#{I18n.t('plan.item_status.note')}", font_size: (PDF_FONT_SIZE * 0.75).round
+      pdf.text "\n#{I18n.t('plans.item_status.note')}", font_size: (PDF_FONT_SIZE * 0.75).round
     end
 
     def has_resources? plan_items
@@ -155,7 +155,7 @@ module Plans::PDF
     def put_plan_items_details_table_on pdf, plan_items
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.add_title I18n.t('plan.pdf.resource_utilization'), (PDF_FONT_SIZE * 1.25).round
+      pdf.add_title I18n.t('plans.pdf.resource_utilization'), (PDF_FONT_SIZE * 1.25).round
 
       plan_items.each do |plan_item|
         if plan_item.resource_utilizations.present?

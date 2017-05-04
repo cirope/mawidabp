@@ -7,7 +7,8 @@ module PlansHelper
   end
 
   def show_plan_item_info plan_item
-    show_info plan_item.status_text, class: [plan_item.status_color, 'media-object'].join(' ')
+    show_info plan_item.status_text,
+      class: [plan_item.status_color, 'media-object'].join(' ')
   end
 
   def plan_items_for_selected_business_unit_type
@@ -15,39 +16,38 @@ module PlansHelper
       params[:business_unit_type].to_i : nil
 
     @plan.plan_items.select do |pi|
-      pi.business_unit.try(:business_unit_type_id) == business_unit_type
+      pi.business_unit&.business_unit_type_id == business_unit_type
     end.sort
   end
 
-  def show_plan_business_unit_type_list
-    list = []
+  def plan_business_unit_type_list
     grouped_plan_items = @plan.grouped_plan_items
-    label = '<h4>%s</h4>'
 
-    (BusinessUnitType.list + [nil]).each do |but|
-      list << label % show_plan_group_link(but, grouped_plan_items[but])
-    end
-
-    content_tag(:ul, raw((list.map { |li| content_tag(:li, raw(li)) }).join('')))
+    (BusinessUnitType.list + [nil]).map { |but| [but, grouped_plan_items[but]] }
   end
 
   def show_plan_business_unit_type_info
-    label = @business_unit_type.try(:name) ||
-      t('plan.without_business_unit_type')
-    link = @plan.new_record? ? new_plan_path : edit_plan_path(@plan)
+    label = @business_unit_type&.name || t('plans.without_business_unit_type')
+    link  = @plan.new_record? ? new_plan_path : edit_plan_path(@plan)
 
-    content_tag(:h4,
-      raw("#{label} - " + link_to(t('plan.show_all'), link)))
+    content_tag :h4, raw("#{label} - #{link_to t('.show_all'), link}")
   end
 
-  def show_plan_group_link(business_unit_type, plan_items)
-    label = business_unit_type.try(:name) ||
-      t('plan.without_business_unit_type')
-    parameters = {:business_unit_type => business_unit_type || 'nil'}
-    link = @plan.new_record? ?
-      new_plan_path(parameters) : edit_plan_path(@plan, parameters)
+  def link_to_plan_business_unit_type but, plan_items
+    label   = but&.name || t('plans.without_business_unit_type')
+    classes = ['list-group-item']
+    badge   = content_tag :span, plan_items&.size || 0, class: 'badge'
 
-    raw(link_to_if(params[:clone_from].blank?, label, link) +
-        " (#{plan_items.try(:size) || 0})")
+    if @plan.new_record?
+      url = '#'
+
+      classes << 'disabled'
+    else
+      url = edit_plan_path(@plan, business_unit_type: but || 'nil')
+    end
+
+    link_to url, class: classes.join(' ') do
+      raw "#{badge} #{label}"
+    end
   end
 end

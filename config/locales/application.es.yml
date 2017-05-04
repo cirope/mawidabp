@@ -867,52 +867,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     review_identification: "Número de informe"
     draft: "Borrador"
 
-  plan:
-    index_title: "Listado de planes de trabajo"
-    show_title: "Detalles del plan de trabajo"
-    new_title: "Agregar plan de trabajo"
-    edit_title: "Modificar plan de trabajo"
-    correctly_created: "Plan de trabajo agregado correctamente."
-    correctly_updated: "Plan de trabajo actualizado correctamente."
-    stale_object_error: "El plan de trabajo no fue actualizado, intente nuevamente."
-    allow_duplication: "¿Permitir duplicados?"
-    allow_overload: "¿Permitir superposición?"
-    copy: "Copiar"
-    add_plan_item: "Agregar proyecto"
-    add_human_resource_utilization: "Agregar recurso humano"
-    add_material_resource_utilization: "Agregar recurso material"
-    add_tagging: "Agregar etiqueta"
-    show_resource_utilization: "Mostrar recursos"
-    hide_resource_utilization: "Ocultar recursos"
-    download_global_plan: "Descargar plan de auditoria global"
-    download_detailed_plan: "Descargar plan de auditoria detallado"
-    without_business_unit_type: "Sin unidad de negocio"
-    show_all: "Ver todos"
-    item_status:
-      note: "Los estados deben leerse como sigue: C = Concluido; E = En ejecución dentro de lo planeado; E (FP) = En ejecución fuera de lo planeado; R = Retrasado"
-      concluded:
-        long: "Concluido"
-        short: "C"
-      executing_in_time:
-        long: "En ejecución (dentro de lo planeado)"
-        short: "E"
-      executing_overtime:
-        long: "En ejecución (fuera de lo planeado)"
-        short: "E (FP)"
-      delayed:
-        long: "Retrasado"
-        short: "R"
-    period:
-      title: "Periodo (%{number})"
-      range: "desde el %{from_date} al %{to_date}"
-    pdf:
-      title: "Plan de auditoría"
-      pdf_name: "plan_periodo_%{period}.pdf"
-      resource_utilization: "Recursos utilizados"
-    errors:
-      can_not_be_destroyed: "El plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
-      plan_item_related: "El item del plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
-
   review:
     index_title: "Listado de informes"
     show_title: "Detalles del informes"

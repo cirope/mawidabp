@@ -1,10 +1,18 @@
 <%= content_for :form_actions do %>
   <%= link_to_show @plan %> |
   <%= link_to_index plans_path %> |
-  <%= link_to t('plan.download_global_plan'), export_to_pdf_plan_path(@plan,
-    :_ts => Time.now.to_i) %> |
-  <%= link_to t('plan.download_detailed_plan'), export_to_pdf_plan_path(@plan,
-    :include_details => 1, :_ts => Time.now.to_i) %> |
+  <%= render('shared/downloads',
+    links: [
+      link_to(
+        t('plans.download_global_plan'),
+        export_to_pdf_plan_path(@plan, _ts: Time.now.to_i)
+      ),
+      link_to(
+        t('plans.download_detailed_plan'),
+        export_to_pdf_plan_path(@plan, include_details: 1, _ts: Time.now.to_i)
+      )
+    ]
+  ) %> |
   <%= link_to_back %>
 <% end %>
 

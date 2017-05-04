@@ -44,7 +44,8 @@ class PlanItemTest < ActiveSupport::TestCase
       @plan_item.destroy
     end
 
-    assert_equal I18n.t('plan.errors.plan_item_related'), @plan_item.errors[:base].join
+    assert_equal 'Plan item is already related and can not be destroyed',
+      @plan_item.errors[:base].join
   end
 
   test 'validates formated attributes' do

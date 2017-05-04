@@ -93,15 +93,15 @@
 
     <div class="nested">
       <p>
-        <%= link_to_add_fields(t('plan.add_material_resource_utilization'), f, :resource_utilizations,
+        <%= link_to_add_fields(t('.add_material_resource_utilization'), f, :resource_utilizations,
           'material_resource_utilization', {
           insert_into: "#material_resource_utilizations_#{id}", association: 'material_resource_utilizations'
         } ) %>
-        <%= link_to_add_fields(t('plan.add_human_resource_utilization'), f, :resource_utilizations,
+        <%= link_to_add_fields(t('.add_human_resource_utilization'), f, :resource_utilizations,
           'human_resource_utilization', {
           insert_into: "#human_resource_utilizations_#{id}", association: 'human_resource_utilizations'
         } ) %>
-        <%= link_to_add_fields(t('plan.add_tagging'), f, :taggings,
+        <%= link_to_add_fields(t('.add_tagging'), f, :taggings,
           'tagging', { insert_into: "#tags_#{id}", association: 'taggings' } ) %>
       </p>
     </div>

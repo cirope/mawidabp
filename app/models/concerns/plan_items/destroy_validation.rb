@@ -7,7 +7,7 @@ module PlanItems::DestroyValidation
 
   def can_be_destroyed?
     if review
-      errors.add :base, I18n.t('plan.errors.plan_item_related')
+      errors.add :base, 'Plan item is already related and can not be destroyed'
 
       false
     else

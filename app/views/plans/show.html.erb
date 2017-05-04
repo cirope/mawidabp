@@ -1,6 +1,3 @@
-<% grouped_plan_items = @plan.grouped_plan_items %>
-<% business_unit_types = BusinessUnitType.list + [nil] %>
-
 <p>
   <strong><%= Plan.human_attribute_name :period_id %></strong>:
   <%= @plan.period.try(:inspect) %>
@@ -10,9 +7,9 @@
   <strong><%= '%.2f' % @plan.units %></strong>
 </p>
 
-<% business_unit_types.each do |business_unit_type| %>
-  <% if grouped_plan_items[business_unit_type] %>
-    <h3><%= business_unit_type&.name || t('plan.without_business_unit_type') %></h3>
+<% plan_business_unit_type_list.each do |business_unit_type, plan_items| %>
+  <% if plan_items %>
+    <h3><%= business_unit_type&.name || t('plans.without_business_unit_type') %></h3>
 
     <table class="table table-striped table-condensed">
       <thead>
@@ -30,7 +27,7 @@
         </tr>
       </thead>
       <tbody>
-        <% grouped_plan_items[business_unit_type].each do |plan_item| %>
+        <% plan_items.each do |plan_item| %>
           <tr>
             <td><%= show_plan_item_info(plan_item) %></td>
             <td><%= plan_item.order_number %></td>
@@ -51,12 +48,12 @@
       </tbody>
     </table>
 
-    <% if grouped_plan_items[business_unit_type].any? { |pi| pi.resource_utilizations.present? } %>
+    <% if plan_items.any? { |pi| pi.resource_utilizations.present? } %>
       <div class="page-header">
-        <h4><%= t('plan.pdf.resource_utilization') %></h4>
+        <h4><%= t('plans.pdf.resource_utilization') %></h4>
       </div>
 
-      <% grouped_plan_items[business_unit_type].each do |plan_item| %>
+      <% plan_items.each do |plan_item| %>
         <% unless plan_item.resource_utilizations.blank? %>
           <h4>
             (<%= plan_item.order_number %>) <%= plan_item.project %>
@@ -93,9 +90,17 @@
 <div>
   <%= link_to_edit edit_plan_path(@plan) %> |
   <%= link_to_index plans_path %> |
-  <%= link_to t('plan.download_global_plan'), export_to_pdf_plan_path(@plan,
-    :_ts => Time.now.to_i) %> |
-  <%= link_to t('plan.download_detailed_plan'), export_to_pdf_plan_path(@plan,
-    :include_details => 1, :_ts => Time.now.to_i) %> |
+  <%= render('shared/downloads',
+    links: [
+      link_to(
+        t('plans.download_global_plan'),
+        export_to_pdf_plan_path(@plan, _ts: Time.now.to_i)
+      ),
+      link_to(
+        t('plans.download_detailed_plan'),
+        export_to_pdf_plan_path(@plan, include_details: 1, _ts: Time.now.to_i)
+      )
+    ]
+  ) %> |
   <%= link_to_back %>
 </div>
