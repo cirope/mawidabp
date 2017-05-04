@@ -161,7 +161,7 @@ class FindingsControllerTest < ActionController::TestCase
       :completed => 'incomplete',
       :format => :pdf
     }
-    assert_redirected_to /\/private\/.*\.pdf$/
+    assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
     assert_equal "#{Mime[:pdf]}", @response.content_type
   end
 
