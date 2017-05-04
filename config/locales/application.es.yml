@@ -1128,7 +1128,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       notification: "Notificación"
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
-      plan: "Plan de trabajo"
       privilege: "Privilegio"
       review: "Informe"
       review_user_assignment: "Asignación de usuario a informe"
@@ -1372,41 +1371,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         user_id: "Usuario"
         organization_id: "Organización"
         role_id: "Perfil"
-      plan:
-        organization_id: "Organización"
-        period_id: "Periodo"
-        estimated_amount: "Costo estimado"
-      plan/plan_items:
-        one: "Registro"
-        other: "Registros"
-        project: "Proyecto"
-        start: "Proyecto (inicio)"
-        end: "Proyecto (fin)"
-        predecessors: "Proyecto (predecesoras)"
-        order_number: "Proyecto (orden)"
-        business_unit_id: "Proyecto (unidad de negocio)"
-        status: "Proyecto (estado)"
-      plan/plan_items/resource_utilizations:
-        one: "Recurso"
-        other: "Recursos"
-        units: "Recurso (cantidad de unidades)"
-        cost_per_unit: "Recurso (costo por unidad)"
-        cost: "Recurso (costo)"
-        resource: "Recurso"
-      plan_item:
-        project: "Proyecto"
-        start: "Inicio"
-        end: "Fin"
-        predecessors: "Predecesoras"
-        order_number: "Orden"
-        business_unit_id: "Unidad de negocio"
-        resources: "Recursos"
-        resource_ids: "Recursos"
-        status: "Estado"
-        human_resource_units: "Costo recursos humanos"
-        material_resource_units: "Costo recursos materiales"
-        total_resource_units: "Costo total"
-        tags: "Etiquetas"
       privilege:
         module: "Módulo"
         read: "Lectura"
@@ -1566,18 +1530,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           attributes:
             role_id:
               invalid: "deben ser sólo del tipo auditado o de otro tipo pero no ambos"
-        plan:
-          attributes:
-            plan_items:
-              locked: "no pueden ser eliminados, ya se utilizaron en al menos un informe"
-        plan_item:
-          attributes:
-            start:
-              resource_overload: "se superpone con otro ítem que ocupa el mismo recurso"
-              item_overload: "debe ser igual o posterior al fin de la/s tarea/s predecesora/s"
-            end:
-              resource_overload: "se superpone con otro ítem que ocupa el mismo recurso"
-              item_overload: "debe ser igual o posterior al fin de la/s tarea/s predecesora/s"
         process_control:
           attributes:
             control_objectives:
