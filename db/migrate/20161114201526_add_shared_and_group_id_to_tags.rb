@@ -1,4 +1,4 @@
-class AddSharedAndGroupIdToTags < ActiveRecord::Migration
+class AddSharedAndGroupIdToTags < ActiveRecord::Migration[4.2]
   def change
     add_column :tags, :shared, :boolean, null: false, default: false
     add_reference :tags, :group, index: true, foreign_key: FOREIGN_KEY_OPTIONS.dup

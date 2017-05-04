@@ -1,4 +1,4 @@
-class CreateErrorRecords < ActiveRecord::Migration
+class CreateErrorRecords < ActiveRecord::Migration[4.2]
   def self.up
     create_table :error_records do |t|
       t.text :data

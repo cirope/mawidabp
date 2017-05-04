@@ -1,4 +1,4 @@
-class AddForeignKeys < ActiveRecord::Migration
+class AddForeignKeys < ActiveRecord::Migration[4.2]
   def self.up
     # Tabla users
     add_foreign_key :users, :resources, FOREIGN_KEY_OPTIONS.dup

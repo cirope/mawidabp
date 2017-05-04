@@ -1,4 +1,4 @@
-class AddImageableToImageModel < ActiveRecord::Migration
+class AddImageableToImageModel < ActiveRecord::Migration[4.2]
   def change
     add_reference :image_models, :imageable, polymorphic: true, index: true
 

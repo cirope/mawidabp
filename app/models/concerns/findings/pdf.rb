@@ -4,7 +4,7 @@ module Findings::PDF
   def to_pdf organization = nil
     pdf = Prawn::Document.create_generic_pdf :portrait, false
 
-    put_cover_on pdf
+    put_cover_on pdf, organization
 
     pdf.start_new_page
     pdf.move_down (PDF_FONT_SIZE * 2.5).round
@@ -31,16 +31,16 @@ module Findings::PDF
 
   private
 
-    def put_cover_on pdf
+    def put_cover_on pdf, organization
       review_code_title = "<b>#{self.class.human_attribute_name :review_code}</b>: #{review_code}"
 
-      put_review_header_on pdf
+      put_review_header_on pdf, organization
       put_finding_model_name_on pdf
 
       pdf.add_title review_code_title, PDF_FONT_SIZE, :center, false
     end
 
-    def put_review_header_on pdf
+    def put_review_header_on pdf, organization
       pdf.add_review_header organization, review.identification.strip, review.plan_item.project.strip
       pdf.move_down PDF_FONT_SIZE * 3
     end

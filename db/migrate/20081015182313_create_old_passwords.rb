@@ -1,4 +1,4 @@
-class CreateOldPasswords < ActiveRecord::Migration
+class CreateOldPasswords < ActiveRecord::Migration[4.2]
   def self.up
     create_table :old_passwords do |t|
       t.string :password

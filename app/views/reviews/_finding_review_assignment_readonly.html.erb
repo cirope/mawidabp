@@ -9,9 +9,11 @@
         <strong>[<%= f.object.finding.try(:state_text) %>]</strong> |
         <% if f.object.finding %>
           <%= link_to_show finding_path(
-            f.object.finding.pending? ? 'incomplete' : 'complete', f.object.finding) %> |
+            f.object.finding.pending? ? 'incomplete' : 'complete', f.object.finding) %>
         <% end %>
-        <%= link_to_remove_nested_item(f) unless readonly %>
+        <% if !readonly && f.object.can_be_destroyed? %>
+          | <%= link_to_remove_nested_item(f) %>
+        <% end %>
       </li>
     </ul>
   </div>

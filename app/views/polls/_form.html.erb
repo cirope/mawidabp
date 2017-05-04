@@ -32,7 +32,7 @@
           } %>
           <%= f.input :user_id, as: :hidden %>
           <%= f.association :questionnaire,
-            collection: Questionnaire.list.pluck(:name, :id), prompt: true
+            collection: Questionnaire.list.not_pollable.pluck(:name, :id), prompt: true
           %>
         <% else %>
           <%= f.input :comments, label: "#{Poll.human_attribute_name :comments} (#{t 'label.optional'})" %>

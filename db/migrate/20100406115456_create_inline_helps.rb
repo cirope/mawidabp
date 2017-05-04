@@ -1,4 +1,4 @@
-class CreateInlineHelps < ActiveRecord::Migration
+class CreateInlineHelps < ActiveRecord::Migration[4.2]
   def self.up
     create_table :inline_helps do |t|
       t.string :language

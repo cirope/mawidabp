@@ -1,4 +1,4 @@
-class CreateLdapConfigs < ActiveRecord::Migration
+class CreateLdapConfigs < ActiveRecord::Migration[4.2]
   def change
     create_table :ldap_configs do |t|
       t.string :hostname, null: false

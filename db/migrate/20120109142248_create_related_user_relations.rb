@@ -1,4 +1,4 @@
-class CreateRelatedUserRelations < ActiveRecord::Migration
+class CreateRelatedUserRelations < ActiveRecord::Migration[4.2]
   def change
     create_table :related_user_relations do |t|
       t.references :user

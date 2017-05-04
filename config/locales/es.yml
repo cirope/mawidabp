@@ -467,6 +467,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
     download_csv: "Descargar CSV"
+    download_pdf: "Resumen en PDF"
     add_finding_relation: "Agregar relación"
     add_tagging: "Agregar etiqueta"
     add_finding_answer: "Agregar comentario"
@@ -537,6 +538,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       without_important_changes: "Sin cambios importantes hasta la fecha"
       work_papers: "Papeles de trabajo"
       pdf_name: "seguimiento_de_hallazgo_%{code}.pdf"
+    pdf:
+      filtered_by:
+        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
+        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
 
   finding_relation:
     types:
@@ -758,7 +763,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     status_rejected: "Rechazada"
     type: "Tipo"
 
-  notifier_mailer:
+  notifier:
     notify_new_finding:
       title: "Tiene un nuevo hallazgo"
       created_title: "Nuevo hallazgo"
@@ -777,9 +782,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     conclusion_review_notification:
       title: "Informe de auditoría %{review}"
       body_title: "Se adjuntan los siguientes documentos: %{elements}"
-    conclusion_final_review_expiration_warning:
-      title: "Notificación de informe cercano al cierre"
-      body_title: "El siguiente informe está próximo al cierre"
+    conclusion_final_review_close_date_warning:
+      title: "Notificación de informes cercanos al cierre"
+      body_title: "Los siguientes informes están próximos al cierre"
     findings_expiration_warning:
       title: "Notificación de hallazgos cercanos al vencimiento"
       body_title:

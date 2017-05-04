@@ -4,17 +4,21 @@ class Finding < ApplicationRecord
   include Comparable
   include Findings::Achievements
   include Findings::Answers
+  include Findings::BusinessUnits
+  include Findings::Comments
   include Findings::Confirmation
   include Findings::Cost
   include Findings::CreateValidation
-  include Findings::Csv
+  include Findings::CSV
   include Findings::CustomAttributes
   include Findings::DateColumns
   include Findings::DestroyValidation
   include Findings::Expiration
+  include Findings::FollowUpDates
   include Findings::FollowUpPDF
   include Findings::ImportantDates
   include Findings::JSON
+  include Findings::Notifications
   include Findings::PDF
   include Findings::Reiterations
   include Findings::Relations
@@ -47,17 +51,8 @@ class Finding < ApplicationRecord
   belongs_to :control_objective_item
   has_one :review, :through => :control_objective_item
   has_one :control_objective, :through => :control_objective_item
-  has_many :notification_relations, :as => :model, :dependent => :destroy
-  has_many :notifications, -> { order(:created_at) },
-    :through => :notification_relations
-  has_many :comments, -> { order(:created_at => :asc) }, :as => :commentable,
-    :dependent => :destroy
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :finding
-  has_many :business_unit_findings, :dependent => :destroy
-  has_many :business_units, :through => :business_unit_findings
-
-  accepts_nested_attributes_for :comments, :allow_destroy => false
 
   def initialize(attributes = nil, import_users = false)
     super(attributes)
@@ -123,10 +118,6 @@ class Finding < ApplicationRecord
     PENDING_STATUS.include?(self.state)
   end
 
-  def rescheduled?
-    all_follow_up_dates.size > 0
-  end
-
   def issue_date
     review.try(:conclusion_final_review).try(:issue_date)
   end
@@ -137,25 +128,5 @@ class Finding < ApplicationRecord
 
   def commitment_date
     finding_answers.where.not(commitment_date: nil).first&.commitment_date
-  end
-
-  def all_follow_up_dates(end_date = nil, reload = false)
-    @all_follow_up_dates = reload ? [] : (@all_follow_up_dates || [])
-
-    if @all_follow_up_dates.empty?
-      last_date = self.follow_up_date
-      dates = self.versions_after_final_review(end_date).map do |v|
-        v.reify(:has_one => false).try(:follow_up_date)
-      end
-
-      dates.each do |d|
-        unless d.blank? || d == last_date
-          @all_follow_up_dates << d
-          last_date = d
-        end
-      end
-    end
-
-    @all_follow_up_dates.compact
   end
 end

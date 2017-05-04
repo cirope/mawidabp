@@ -7,7 +7,7 @@ module Findings::ImportantDates
     important_dates << notification_date_label if first_notification_date
     important_dates << confirmation_date_label if confirmation_date
 
-    if (confirmed? || unconfirmed?) && expiration_diff.to_i >= 0
+    if (confirmed? || unconfirmed?) && expiration_diff && expiration_diff.to_i >= 0
       important_dates << expiration_date_label
     end
 
@@ -38,14 +38,8 @@ module Findings::ImportantDates
     end
 
     def expiration_diff
-      if confirmation_date
-        max_notification_date = stale_confirmed_days.days.ago_in_business.to_date
+      max_notification_date = stale_confirmed_days.days.ago_in_business.to_date
 
-        confirmation_date.diff_in_business max_notification_date
-      else
-        max_notification_date = (FINDING_STALE_UNCONFIRMED_DAYS + stale_confirmed_days).days.ago_in_business.to_date
-
-        first_notification_date.try :diff_in_business, max_notification_date
-      end
+      first_notification_date&.diff_in_business max_notification_date
     end
 end

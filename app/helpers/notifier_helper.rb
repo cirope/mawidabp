@@ -1,4 +1,4 @@
-module NotifierMailerHelper
+module NotifierHelper
   def finding_audited_names(finding)
     finding.users.select(&:can_act_as_audited?).map do |user|
       if finding.process_owners.include? user

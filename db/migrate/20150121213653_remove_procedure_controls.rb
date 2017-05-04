@@ -1,4 +1,4 @@
-class RemoveProcedureControls < ActiveRecord::Migration
+class RemoveProcedureControls < ActiveRecord::Migration[4.2]
   def change
     drop_table :procedure_control_subitems
     drop_table :procedure_control_items

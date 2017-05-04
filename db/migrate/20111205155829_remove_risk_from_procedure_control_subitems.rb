@@ -1,4 +1,4 @@
-class RemoveRiskFromProcedureControlSubitems < ActiveRecord::Migration
+class RemoveRiskFromProcedureControlSubitems < ActiveRecord::Migration[4.2]
   def up
     remove_column :procedure_control_subitems, :risk
   end

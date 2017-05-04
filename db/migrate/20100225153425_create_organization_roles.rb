@@ -1,4 +1,4 @@
-class CreateOrganizationRoles < ActiveRecord::Migration
+class CreateOrganizationRoles < ActiveRecord::Migration[4.2]
   def self.up
     create_table :organization_roles do |t|
       t.references :user

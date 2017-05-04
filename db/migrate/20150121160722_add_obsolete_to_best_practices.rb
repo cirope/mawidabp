@@ -1,4 +1,4 @@
-class AddObsoleteToBestPractices < ActiveRecord::Migration
+class AddObsoleteToBestPractices < ActiveRecord::Migration[4.2]
   def change
     add_column :best_practices, :obsolete, :boolean, default: false
     add_column :process_controls, :obsolete, :boolean, default: false

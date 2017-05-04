@@ -1,4 +1,4 @@
-class CreateBestPractices < ActiveRecord::Migration
+class CreateBestPractices < ActiveRecord::Migration[4.2]
   def self.up
     create_table :best_practices do |t|
       t.string :name

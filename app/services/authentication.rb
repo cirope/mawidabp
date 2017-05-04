@@ -29,7 +29,7 @@ class Authentication
       register_login_error
     end
 
-    @valid
+    @valid && @valid_user
   end
 
   private

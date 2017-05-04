@@ -64,7 +64,7 @@ class FindingsController < ApplicationController
         :control_objective_item => {
           :review => [:conclusion_final_review, :period, :plan_item]
         }
-      }, :users, :organization
+      }, :users, :tags, :organization
     ).where(@conditions).order(
       @order_by || [
         default_sort_column,
@@ -76,11 +76,7 @@ class FindingsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        @findings = @findings.page(params[:page])
-
-        if @findings.count == 1 && !@query.blank? && !params[:page]
-          redirect_to finding_url(params[:completed], @findings.first)
-        end
+        @findings = @findings.page params[:page]
       } # index.html.erb
       format.csv {
         csv_options = {
@@ -90,6 +86,7 @@ class FindingsController < ApplicationController
 
         render csv: @findings.to_csv(csv_options), filename:  @title.downcase
       }
+      format.pdf  { redirect_to pdf.relative_path }
     end
   end
 
@@ -244,5 +241,17 @@ class FindingsController < ApplicationController
 
     def scoped_findings
       current_organization.corporate? ? Finding.group_list : Finding.list
+    end
+
+    def pdf
+      title_partial = params[:completed] == 'incomplete' ? 'pending' : 'complete'
+
+      FindingPdf.create(
+        title: t("menu.follow_up.#{title_partial}_findings"),
+        columns: @columns,
+        query: @query,
+        findings: @findings.except(:limit),
+        current_organization: current_organization
+      )
     end
 end

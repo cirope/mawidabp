@@ -36,7 +36,7 @@ iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
-  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.next.days.ago_in_business.to_date.to_s(:db) %>
+  first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
   organization: cirope
@@ -105,7 +105,7 @@ iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
-  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
+  first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
   organization: cirope
@@ -226,8 +226,8 @@ bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   state: <%= Finding::STATUS[:unconfirmed] %>
   origination_date:
   solution_date:
-  confirmation_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
-  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
+  confirmation_date: <%= stale_confirmed_days.pred.days.ago_in_business.to_s(:db) %>
+  first_notification_date: <%= stale_confirmed_days.pred.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
   organization: cirope
@@ -259,7 +259,8 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
   state: <%= Finding::STATUS[:confirmed] %>
   origination_date:
   solution_date:
-  confirmation_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
+  confirmation_date: <%= 1.day.ago.to_s(:db) %>
+  first_notification_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
   final: false
   notification_level: 0
   organization: cirope
