@@ -1,9 +1,9 @@
-set :branch,    'master'
+set :branch,    'c-bi'
 set :stage,     :production
 set :rails_env, 'production'
 
-role :web, %w{deployer@app.mawidabp.com}
-role :app, %w{deployer@app.mawidabp.com}
-role :db,  %w{deployer@app.mawidabp.com}
+role :web, %w{deployer@bi.mawidabp.com}
+role :app, %w{deployer@bi.mawidabp.com}
+role :db,  %w{deployer@bi.mawidabp.com}
 
-server 'app.mawidabp.com', user: 'deployer', roles: %w{web app db}
+server 'bi.mawidabp.com', user: 'deployer', roles: %w{web app db}
