@@ -56,7 +56,7 @@ module ApplicationHelper
   end
 
   def show_info(text, html_options = {})
-    content_tag(:div, !text.blank? ?
+    content_tag(:div, text.present? ?
       content_tag(
         :span, nil, title: text,
         class: "#{html_options[:class]} glyphicon glyphicon-info-sign"
