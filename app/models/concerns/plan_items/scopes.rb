@@ -7,8 +7,7 @@ module PlanItems::Scopes
 
   module ClassMethods
     def list_unused period_id
-      # TODO: replace by left_joins on Rails 5 migration
-      includes(:review, :plan).
+      left_joins(:review, :plan).
         where(plans: { period_id: period_id }, reviews: { plan_item_id: nil }).
         where.not(business_unit_id: nil).
         references(:plans, :reviews).
@@ -22,8 +21,7 @@ module PlanItems::Scopes
         condition = { business_units: { business_unit_type_id: nil } }
       end
 
-      # TODO: replace by left_joins on Rails 5 migration
-      includes(:business_unit).
+      left_joins(:business_unit).
         where(condition).
         order(order_number: :asc).
         references(:business_units)
