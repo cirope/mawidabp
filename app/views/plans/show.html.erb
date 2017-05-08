@@ -94,11 +94,11 @@
     links: [
       link_to(
         t('plans.download_global_plan'),
-        export_to_pdf_plan_path(@plan, _ts: Time.now.to_i)
+        [@plan, _ts: Time.now.to_i, format: :pdf]
       ),
       link_to(
         t('plans.download_detailed_plan'),
-        export_to_pdf_plan_path(@plan, include_details: 1, _ts: Time.now.to_i)
+        [@plan, include_details: 1, _ts: Time.now.to_i, format: :pdf]
       )
     ]
   ) %> |

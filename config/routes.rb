@@ -275,8 +275,6 @@ Rails.application.routes.draw do
   resources :plans do
     resources :plan_items, only: [:new, :edit]
 
-    get :export_to_pdf, on: :member
-
     collection do
       get :auto_complete_for_business_unit
       get :auto_complete_for_tagging

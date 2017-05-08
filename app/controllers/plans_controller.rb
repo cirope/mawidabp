@@ -19,6 +19,10 @@ class PlansController < ApplicationController
 
   # * GET /plans/1
   def show
+    respond_to do |format|
+      format.html
+      format.pdf  { redirect_to plan_pdf_path }
+    end
   end
 
   # * GET /plans/new
@@ -61,15 +65,6 @@ class PlansController < ApplicationController
     respond_with @plan, location: plans_url
   end
 
-  # * GET /plans/export_to_pdf/1
-  def export_to_pdf
-    @plan.to_pdf current_organization, params[:include_details].present?
-
-    respond_to do |format|
-      format.html { redirect_to @plan.relative_pdf_path }
-    end
-  end
-
   private
 
     def plan_params
@@ -105,6 +100,12 @@ class PlansController < ApplicationController
 
     def set_plan_clone
       @plan_clone = Plan.list.find_by id: params[:clone_from]
+    end
+
+    def plan_pdf_path
+      @plan.to_pdf current_organization, params[:include_details].present?
+
+      @plan.relative_pdf_path
     end
 
     def load_privileges

@@ -17,6 +17,11 @@ class PlansControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'show plan on pdf' do
+    get :show, params: { id: @plan }, format: :pdf
+    assert_redirected_to @plan.relative_pdf_path
+  end
+
   test 'new plan' do
     get :new
     assert_response :success
@@ -263,14 +268,6 @@ class PlansControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to plans_url
-  end
-
-  test 'export to pdf' do
-    assert_nothing_raised do
-      get :export_to_pdf, params: { id: @plan }
-    end
-
-    assert_redirected_to @plan.relative_pdf_path
   end
 
   test 'auto complete for business_unit business_unit' do
