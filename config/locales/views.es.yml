@@ -165,8 +165,6 @@ es:
       title: 'Agregar plan de trabajo'
     edit:
       title: 'Modificar plan de trabajo'
-    form:
-      show_all: 'Ver todos'
     plan_item:
       add_human_resource_utilization: 'Agregar recurso humano'
       add_material_resource_utilization: 'Agregar recurso material'

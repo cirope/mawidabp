@@ -1,18 +1,24 @@
 <%= simple_form_for @plan do |f| %>
   <%= render 'shared/error_explanation', f: f %>
-
   <%= render 'common_form', f: f %>
 
-  <%= show_plan_business_unit_type_info if params[:business_unit_type].present? %>
-
   <% if params[:business_unit_type].blank? %>
-    <div class="row">
-      <div class="col-md-6">
-        <%= render 'business_unit_types' %>
+    <%= render 'business_unit_types' %>
+  <% else %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <%= @business_unit_type&.name || t('plans.without_business_unit_type') %>
+          <span class="pull-right">
+            <%= link_to t('label.back'), [:edit, @plan] %>
+          </span>
+        </h4>
+      </div>
+
+      <div class="panel-body">
+        <%= render 'plan_items', f: f %>
       </div>
     </div>
-  <% else %>
-    <%= render 'plan_items', f: f %>
   <% end %>
 
   <%= render 'duplication_or_overload_form', f: f %>

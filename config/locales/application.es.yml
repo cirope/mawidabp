@@ -67,7 +67,6 @@ es:
     session_closed_correctly: "Sesión cerrada correctamente"
     session_expires_in_less_than_two_minutes: "Su sesión expira en menos de dos minutos"
     session_time_expired: "Su sesión ha expirado, debe autenticarse nuevamente"
-    show_all: "Ver todos..."
     sort_by: "Ordenar por..."
     under_construction: "En mantenimiento, disculpe las molestias"
     unsaved_data_warning: "Ha modificado el contenido, si abandona la página perderá todos los cambios"

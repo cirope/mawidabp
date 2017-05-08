@@ -1,5 +1,22 @@
-<div class="list-group">
-  <% plan_business_unit_type_list.each do |but, plan_items| %>
-    <%= link_to_plan_business_unit_type but, plan_items %>
-  <% end %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <%= BusinessUnitType.model_name.human count: 0 %>
+    </h4>
+  </div>
+
+  <div class="panel-body">
+    <ul class="nav nav-pills nav-stacked">
+      <% plan_business_unit_type_list.each do |but, plan_items| %>
+        <li <%== 'class="disabled"' if @plan.new_record? %>>
+          <%= link_to_plan_business_unit_type but do %>
+            <%= but&.name || t('plans.without_business_unit_type') %>
+            <span class="pull-right">
+              <span class="badge"><%= plan_items&.size || 0 %></span>
+            </span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
 </div>
