@@ -1,18 +1,47 @@
 {
+  "app/inputs/*_input.rb": {
+    "type": "input",
+    "template": [
+      "class {underscore|capitalize|camelcase}Input < SimpleForm::Inputs::Base",
+      "  def input wrapper_options",
+      "  end",
+      "end"
+    ]
+  },
+
+  "app/pdfs/*.rb": {
+    "type": "pdf",
+    "alternate": "test/pdfs/{}_test.rb",
+    "template": [
+      "class {underscore|capitalize|camelcase} < Prawn::Document",
+      "  attr_reader :pdf",
+      "end"
+    ]
+  },
+
   "app/services/*.rb": {
     "type": "service",
     "alternate": "test/services/{}_test.rb",
     "template": [
-      "class {underscore|camelcase}",
+      "class {underscore|capitalize|camelcase}",
       "end"
     ]
   },
+
   "test/services/*_test.rb": {
     "type": "servicetest",
     "alternate": "app/services/{}.rb",
     "template": [
       "require 'test_helper'\n",
-      "class {underscore|camelcase}Test < ActionController::TestCase",
+      "class {underscore|capitalize|camelcase}Test < ActionController::TestCase",
+      "end"
+    ]
+  },
+
+  "app/uploaders/*_uploader.rb": {
+    "type": "uploader",
+    "template": [
+      "class {underscore|capitalize|camelcase}Uploader",
       "end"
     ]
   }

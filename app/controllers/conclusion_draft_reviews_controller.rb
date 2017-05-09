@@ -31,14 +31,7 @@ class ConclusionDraftReviewsController < ApplicationController
     ).page(params[:page])
 
     respond_to do |format|
-      format.html {
-        if @conclusion_draft_reviews.count == 1 && !@query.blank? &&
-            !params[:page] && !@conclusion_draft_reviews.first.has_final_review?
-          redirect_to(
-            conclusion_draft_review_url(@conclusion_draft_reviews.first)
-          )
-        end
-      }
+      format.html
     end
   end
 

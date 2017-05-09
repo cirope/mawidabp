@@ -58,21 +58,6 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert_template 'control_objective_items/index'
   end
 
-  test 'edit control objective item when search match only one result' do
-    login
-    get :index, :params => {
-      :search => {
-        :query => 'dependencia y responsable',
-        :columns => ['control_objective_text', 'review']
-      }
-    }
-
-    assert_redirected_to control_objective_item_url(
-      control_objective_items(:bcra_A4609_security_management_responsible_dependency_item))
-    assert_not_nil assigns(:control_objectives)
-    assert_equal 1, assigns(:control_objectives).count
-  end
-
   test 'show control_objective_item' do
     login
     get :show, :params => {

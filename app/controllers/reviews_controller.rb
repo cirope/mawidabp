@@ -25,11 +25,7 @@ class ReviewsController < ApplicationController
     ).references(:periods)
 
     respond_to do |format|
-      format.html {
-        if @reviews.count == 1 && !@query.blank? && !params[:page]
-          redirect_to review_url(@reviews.first)
-        end
-      }
+      format.html
     end
   end
 
