@@ -25,18 +25,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal 5, assigns(:users).count
   end
 
-  test 'edit user when search match only one result' do
-    get :index, params: {
-      search: {
-        query: 'admin',
-        columns: ['user', 'name']
-      }
-    }
-    assert_redirected_to user_url(users(:administrator_user))
-    assert_not_nil assigns(:users)
-    assert_equal 1, assigns(:users).count
-  end
-
   test 'show user' do
     get :show, params: { id: users(:administrator_user) }
     assert_response :success

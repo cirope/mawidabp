@@ -64,8 +64,8 @@ class FindingsController < ApplicationController
         :control_objective_item => {
           :review => [:conclusion_final_review, :period, :plan_item]
         }
-      }, :users, :tags, :organization
-    ).where(@conditions).order(
+      }, :organization
+    ).left_joins(:users, :tags).where(@conditions).order(
       @order_by || [
         default_sort_column,
         "#{Finding.quoted_table_name}.#{Finding.qcn('organization_id')} ASC",
@@ -76,11 +76,7 @@ class FindingsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        @findings = @findings.page(params[:page])
-
-        if @findings.count == 1 && !@query.blank? && !params[:page]
-          redirect_to finding_url(params[:completed], @findings.first)
-        end
+        @findings = @findings.page params[:page]
       } # index.html.erb
       format.csv {
         csv_options = {
