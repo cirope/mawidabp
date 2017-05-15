@@ -1,87 +1,88 @@
-<p>
-  <strong><%= Plan.human_attribute_name :period_id %></strong>:
-  <%= @plan.period.try(:inspect) %>
-</p>
-<p>
-  <strong><%= Plan.human_attribute_name :estimated_amount %></strong>:
-  <strong><%= '%.2f' % @plan.units %></strong>
-</p>
+<%= render 'header' %>
 
 <% plan_business_unit_type_list.each do |business_unit_type, plan_items| %>
-  <% if plan_items %>
-    <h3><%= business_unit_type&.name || t('plans.without_business_unit_type') %></h3>
-
-    <table class="table table-striped table-condensed">
-      <thead>
-        <tr>
-          <th></th>
-          <th><%= PlanItem.human_attribute_name :order_number %></th>
-          <th><%= BusinessUnit.model_name.human %></th>
-          <th><%= PlanItem.human_attribute_name(:project) %></th>
-          <th><%= Tag.model_name.human count: 0 %></th>
-          <th><%= PlanItem.human_attribute_name(:start) %></th>
-          <th><%= PlanItem.human_attribute_name(:end) %></th>
-          <th><%= PlanItem.human_attribute_name :human_resource_units %></th>
-          <th><%= PlanItem.human_attribute_name :material_resource_units %></th>
-          <th><%= PlanItem.human_attribute_name :total_resource_units %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% plan_items.each do |plan_item| %>
-          <tr>
-            <td><%= show_plan_item_info(plan_item) %></td>
-            <td><%= plan_item.order_number %></td>
-            <td><%= plan_item.business_unit.try(:name) %></td>
-            <td><%= plan_item.project %></td>
-            <td><%= tags plan_item.tags %></td>
-            <td><%= l plan_item.start, format: :minimal %></td>
-            <td><%= l plan_item.end, format: :minimal %></td>
-            <td><%= '%.2f' % plan_item.human_units %></td>
-            <td><%= '%.2f' % plan_item.material_units %></td>
-            <td><%= '%.2f' % plan_item.units %></td>
-          </tr>
-        <% end %>
-        <tr>
-          <td colspan="9"></td>
-          <td><strong><%= @plan.estimated_amount business_unit_type&.id %></strong></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <% if plan_items.any? { |pi| pi.resource_utilizations.present? } %>
-      <div class="page-header">
-        <h4><%= t('plans.pdf.resource_utilization') %></h4>
+  <% if plan_items.any? %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <%= business_unit_type&.name || t('plans.without_business_unit_type') %>
+        </h4>
       </div>
 
-      <% plan_items.each do |plan_item| %>
-        <% unless plan_item.resource_utilizations.blank? %>
-          <h4>
-            (<%= plan_item.order_number %>) <%= plan_item.project %>
-            (<%= plan_item.business_unit.try(:name) %>)
-          </h4>
-          <table class="table table-striped table-condensed">
-            <thead>
+      <div class="panel-body">
+        <table class="table table-striped table-condensed">
+          <thead>
+            <tr>
+              <th></th>
+              <th><%= PlanItem.human_attribute_name :order_number %></th>
+              <th><%= BusinessUnit.model_name.human %></th>
+              <th><%= PlanItem.human_attribute_name(:project) %></th>
+              <th><%= Tag.model_name.human count: 0 %></th>
+              <th><%= PlanItem.human_attribute_name(:start) %></th>
+              <th><%= PlanItem.human_attribute_name(:end) %></th>
+              <th><%= PlanItem.human_attribute_name :human_resource_units %></th>
+              <th><%= PlanItem.human_attribute_name :material_resource_units %></th>
+              <th><%= PlanItem.human_attribute_name :total_resource_units %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% plan_items.each do |plan_item| %>
               <tr>
-                <th><%= ResourceUtilization.human_attribute_name :resource %></th>
-                <th><%= ResourceUtilization.human_attribute_name :units %></th>
+                <td><%= show_plan_item_info(plan_item) %></td>
+                <td><%= plan_item.order_number %></td>
+                <td><%= plan_item.business_unit&.name %></td>
+                <td><%= plan_item.project %></td>
+                <td><%= tags plan_item.tags %></td>
+                <td><%= l plan_item.start, format: :minimal %></td>
+                <td><%= l plan_item.end, format: :minimal %></td>
+                <td><%= '%.2f' % plan_item.human_units %></td>
+                <td><%= '%.2f' % plan_item.material_units %></td>
+                <td><%= '%.2f' % plan_item.units %></td>
               </tr>
-            </thead>
-            <tbody>
-              <% plan_item.resource_utilizations.each do |ru| %>
-                <tr>
-                  <td><%= ru.resource.resource_name %></td>
-                  <td><%= ru.units %></td>
-                </tr>
-              <% end %>
-              <tr>
-                <td></td>
-                <td><strong><%= '%.2f' % plan_item.units %></strong></td>
-              </tr>
-            </tbody>
-          </table>
+            <% end %>
+            <tr>
+              <td colspan="9"></td>
+              <td><strong><%= @plan.estimated_amount business_unit_type&.id %></strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <% if plan_items.any? { |pi| pi.resource_utilizations.present? } %>
+          <h4><%= t 'plans.pdf.resource_utilization' %></h4>
+
+          <hr>
+
+          <% plan_items.each do |plan_item| %>
+            <% unless plan_item.resource_utilizations.blank? %>
+              <h5>
+                (<%= plan_item.order_number %>) <%= plan_item.project %>
+                (<%= plan_item.business_unit&.name %>)
+              </h5>
+              <table class="table table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th><%= ResourceUtilization.human_attribute_name :resource %></th>
+                    <th><%= ResourceUtilization.human_attribute_name :units %></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% plan_item.resource_utilizations.each do |ru| %>
+                    <tr>
+                      <td><%= ru.resource.resource_name %></td>
+                      <td><%= ru.units %></td>
+                    </tr>
+                  <% end %>
+                  <tr>
+                    <td></td>
+                    <td><strong><%= '%.2f' % plan_item.units %></strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            <% end %>
+          <% end %>
         <% end %>
-      <% end %>
-    <% end %>
+      </div>
+    </div>
   <% end %>
 <% end %>
 

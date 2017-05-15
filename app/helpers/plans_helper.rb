@@ -36,7 +36,9 @@ module PlansHelper
   def plan_business_unit_type_list
     grouped_plan_items = @plan.grouped_plan_items
 
-    (BusinessUnitType.list + [nil]).map { |but| [but, grouped_plan_items[but]] }
+    (BusinessUnitType.list + [nil]).map do |but|
+      [but, Array(grouped_plan_items[but])]
+    end
   end
 
   def link_to_plan_business_unit_type but, &block
