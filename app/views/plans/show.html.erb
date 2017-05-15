@@ -14,15 +14,15 @@
           <thead>
             <tr>
               <th></th>
-              <th><%= PlanItem.human_attribute_name :order_number %></th>
+              <th><%= PlanItem.human_attribute_name 'order_number' %></th>
               <th><%= BusinessUnit.model_name.human %></th>
-              <th><%= PlanItem.human_attribute_name(:project) %></th>
+              <th><%= PlanItem.human_attribute_name 'project' %></th>
               <th><%= Tag.model_name.human count: 0 %></th>
-              <th><%= PlanItem.human_attribute_name(:start) %></th>
-              <th><%= PlanItem.human_attribute_name(:end) %></th>
-              <th><%= PlanItem.human_attribute_name :human_resource_units %></th>
-              <th><%= PlanItem.human_attribute_name :material_resource_units %></th>
-              <th><%= PlanItem.human_attribute_name :total_resource_units %></th>
+              <th><%= PlanItem.human_attribute_name 'start' %></th>
+              <th><%= PlanItem.human_attribute_name 'end' %></th>
+              <th><%= PlanItem.human_attribute_name 'human_resource_units' %></th>
+              <th><%= PlanItem.human_attribute_name 'material_resource_units' %></th>
+              <th><%= PlanItem.human_attribute_name 'total_resource_units' %></th>
             </tr>
           </thead>
           <tbody>
@@ -50,19 +50,21 @@
         <% if plan_items.any? { |pi| pi.resource_utilizations.present? } %>
           <h4><%= t 'plans.pdf.resource_utilization' %></h4>
 
-          <hr>
-
           <% plan_items.each do |plan_item| %>
-            <% unless plan_item.resource_utilizations.blank? %>
-              <h5>
-                (<%= plan_item.order_number %>) <%= plan_item.project %>
-                (<%= plan_item.business_unit&.name %>)
-              </h5>
+            <% if plan_item.resource_utilizations.present? %>
               <table class="table table-striped table-condensed">
+                <caption>
+                  <h5>
+                    (<%= plan_item.order_number %>)
+                    <%= plan_item.project %>
+                    (<%= plan_item.business_unit&.name %>)
+                  </h5>
+                </caption>
+
                 <thead>
                   <tr>
-                    <th><%= ResourceUtilization.human_attribute_name :resource %></th>
-                    <th><%= ResourceUtilization.human_attribute_name :units %></th>
+                    <th><%= ResourceUtilization.human_attribute_name 'resource' %></th>
+                    <th><%= ResourceUtilization.human_attribute_name 'units' %></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -86,7 +88,7 @@
   <% end %>
 <% end %>
 
-<hr />
+<hr>
 
 <div>
   <%= link_to_edit edit_plan_path(@plan) %> |
