@@ -17,7 +17,7 @@
       <% if finding_answer.new_record? %>
         <%= f.input :answer, label: false %>
       <% else %>
-        <%= finding_answer.answer %>
+        <%= simple_format finding_answer.answer %>
       <% end %>
     </div>
     <div class="col-md-2">
@@ -26,12 +26,18 @@
           <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
             <div class="file-container pull-left">
               <%= link_to_upload(fm_f.object) %>
-              <% unless fm_f.object.file_cache %>
+              <% if fm_f.object.file_cache %>
                 <%= fm_f.input :file, label: false %>
-              <% else %>
                 <%= fm_f.input :file_cache, as: :hidden %>
+              <% else %>
+                <%= fm_f.input :file, label: false %>
               <% end %>
             </div>
+            <% link_classes = ['pull-left'] %>
+            <% link_classes << 'hidden' unless fm_f.object.file_cache %>
+            <%= link_to '#', class: link_classes.join(' '), data: { clear_file: 'file' } do %>
+              <span class="glyphicon glyphicon-remove"></span>
+            <% end %>
           <% end %>
         <% else %>
           ---
@@ -58,7 +64,6 @@
         <%= finding_answer_notification_check(f) %>
       <% end %>
       <%= f.input :user_id, as: :hidden %>
-      <%= f.input :id, as: :hidden %>
     </div>
   </div>
 </fieldset>

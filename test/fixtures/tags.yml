@@ -4,7 +4,7 @@ important:
   style: danger
   icon: tag
   shared: false
-  options: {}
+  options: "{}"
   organization: cirope
   group: main_group
 
@@ -14,7 +14,7 @@ extra:
   style: default
   icon: tag
   shared: false
-  options: {}
+  options: "{}"
   organization: cirope
   group: main_group
 
@@ -24,7 +24,7 @@ high_priority:
   style: default
   icon: tag
   shared: false
-  options: {}
+  options: "{}"
   organization: cirope
   group: main_group
 
@@ -34,7 +34,7 @@ manual:
   style: default
   icon: tag
   shared: false
-  options: {}
+  options: "{}"
   organization: cirope
   group: main_group
 
@@ -43,7 +43,7 @@ breaking:
   kind: news
   style: default
   shared: false
-  options: {}
+  options: "{}"
   organization: cirope
   group: main_group
 
@@ -52,6 +52,6 @@ risk_evaluation:
   kind: control_objective
   style: default
   shared: false
-  options: {}
+  options: "{}"
   organization: cirope
   group: main_group

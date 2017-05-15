@@ -4,10 +4,12 @@ class ConclusionReportsController < ApplicationController
   include Reports::WeaknessesByRisk
   include Reports::WeaknessesByAuditType
   include Reports::ControlObjectiveStats
+  include Reports::ControlObjectiveStatsByReview
   include Reports::ProcessControlStats
   include Reports::WeaknessesByRiskReport
   include Reports::FixedWeaknessesReport
   include Reports::CostAnalysis
+  include Reports::CostSummary
   include Reports::WeaknessesGraph
   include Reports::Benefits
 
@@ -36,6 +38,7 @@ class ConclusionReportsController < ApplicationController
         weaknesses_by_audit_type: :read,
         create_weaknesses_by_audit_type: :read,
         cost_analysis: :read,
+        cost_summary: :read,
         create_cost_analysis: :read,
         high_risk_weaknesses_report: :read,
         create_high_risk_weaknesses_report: :read,

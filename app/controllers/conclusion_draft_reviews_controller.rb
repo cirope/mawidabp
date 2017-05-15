@@ -10,7 +10,6 @@ class ConclusionDraftReviewsController < ApplicationController
   # Lista los informes borradores
   #
   # * GET /conclusion_draft_reviews
-  # * GET /conclusion_draft_reviews.xml
   def index
     @title = t 'conclusion_draft_review.index_title'
 
@@ -32,42 +31,30 @@ class ConclusionDraftReviewsController < ApplicationController
     ).page(params[:page])
 
     respond_to do |format|
-      format.html {
-        if @conclusion_draft_reviews.count == 1 && !@query.blank? &&
-            !params[:page] && !@conclusion_draft_reviews.first.has_final_review?
-          redirect_to(
-            conclusion_draft_review_url(@conclusion_draft_reviews.first)
-          )
-        end
-      }
-      format.xml { render xml: @conclusion_draft_reviews }
+      format.html
     end
   end
 
   # Muestra el detalle de un informe borrador
   #
   # * GET /conclusion_draft_reviews/1
-  # * GET /conclusion_draft_reviews/1.xml
   def show
     @title = t 'conclusion_draft_review.show_title'
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render xml: @conclusion_draft_review }
     end
   end
 
   # Permite ingresar los datos para crear un nuevo informe borrador
   #
   # * GET /conclusion_draft_reviews/new
-  # * GET /conclusion_draft_reviews/new.xml
   def new
     @title = t 'conclusion_draft_review.new_title'
     @conclusion_draft_review = ConclusionDraftReview.new
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render xml: @conclusion_draft_review }
     end
   end
 
@@ -81,7 +68,6 @@ class ConclusionDraftReviewsController < ApplicationController
   # Crea un nuevo informe borrador siempre que cumpla con las validaciones.
   #
   # * POST /conclusion_draft_reviews
-  # * POST /conclusion_draft_reviews.xml
   def create
     @title = t 'conclusion_draft_review.new_title'
     @conclusion_draft_review = ConclusionDraftReview.list.new(
@@ -91,10 +77,8 @@ class ConclusionDraftReviewsController < ApplicationController
       if @conclusion_draft_review.save
         flash.notice = t 'conclusion_draft_review.correctly_created'
         format.html { redirect_to(edit_conclusion_draft_review_url(@conclusion_draft_review)) }
-        format.xml  { render xml: @conclusion_draft_review, status: :created, location: @conclusion_draft_review }
       else
         format.html { render action: :new }
-        format.xml  { render xml: @conclusion_draft_review.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -103,7 +87,6 @@ class ConclusionDraftReviewsController < ApplicationController
   # validaciones.
   #
   # * PATCH /conclusion_draft_reviews/1
-  # * PATCH /conclusion_draft_reviews/1.xml
   def update
     @title = t 'conclusion_draft_review.edit_title'
 
@@ -111,10 +94,8 @@ class ConclusionDraftReviewsController < ApplicationController
       if @conclusion_draft_review.update(conclusion_draft_review_params)
         flash.notice = t 'conclusion_draft_review.correctly_updated'
         format.html { redirect_to(edit_conclusion_draft_review_url(@conclusion_draft_review)) }
-        format.xml  { head :ok }
       else
         format.html { render action: :edit }
-        format.xml  { render xml: @conclusion_draft_review.errors, status: :unprocessable_entity }
       end
     end
 
@@ -127,11 +108,10 @@ class ConclusionDraftReviewsController < ApplicationController
   #
   # * GET /conclusion_draft_reviews/export_to_pdf/1
   def export_to_pdf
-    @conclusion_draft_review.to_pdf(current_organization, params[:export_options])
+    @conclusion_draft_review.to_pdf(current_organization, params[:export_options]&.to_unsafe_h)
 
     respond_to do |format|
       format.html { redirect_to @conclusion_draft_review.relative_pdf_path }
-      format.xml  { head :ok }
     end
   end
 

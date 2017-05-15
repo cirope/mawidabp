@@ -1,18 +1,24 @@
-class Finding < ActiveRecord::Base
+class Finding < ApplicationRecord
   include ActsAsTree
   include Auditable
   include Comparable
   include Findings::Achievements
   include Findings::Answers
+  include Findings::BusinessUnits
+  include Findings::Comments
   include Findings::Confirmation
   include Findings::Cost
   include Findings::CreateValidation
-  include Findings::Csv
+  include Findings::CSV
   include Findings::CustomAttributes
+  include Findings::DateColumns
   include Findings::DestroyValidation
   include Findings::Expiration
+  include Findings::FollowUpDates
+  include Findings::FollowUpPDF
   include Findings::ImportantDates
   include Findings::JSON
+  include Findings::Notifications
   include Findings::PDF
   include Findings::Reiterations
   include Findings::Relations
@@ -25,12 +31,12 @@ class Finding < ActiveRecord::Base
   include Findings::Unanswered
   include Findings::Unconfirmed
   include Findings::UpdateCallbacks
+  include Findings::UserAssignments
   include Findings::UserScopes
   include Findings::Validations
   include Findings::ValidationCallbacks
   include Findings::Versions
   include Findings::WorkPapers
-  include Findings::XML
   include Parameters::Risk
   include Parameters::Priority
   include ParameterSelector
@@ -45,26 +51,11 @@ class Finding < ActiveRecord::Base
   belongs_to :control_objective_item
   has_one :review, :through => :control_objective_item
   has_one :control_objective, :through => :control_objective_item
-  has_many :notification_relations, :as => :model, :dependent => :destroy
-  has_many :notifications, -> { order(:created_at) },
-    :through => :notification_relations
-  has_many :comments, -> { order(:created_at => :asc) }, :as => :commentable,
-    :dependent => :destroy
-  has_many :finding_user_assignments, :dependent => :destroy,
-    :inverse_of => :finding, :before_add => :check_for_final_review,
-    :before_remove => :check_for_final_review
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :finding
-  has_many :users, -> { order(:last_name => :asc) }, :through => :finding_user_assignments
-  has_many :business_unit_findings, :dependent => :destroy
-  has_many :business_units, :through => :business_unit_findings
 
-  accepts_nested_attributes_for :comments, :allow_destroy => false
-  accepts_nested_attributes_for :finding_user_assignments,
-    :allow_destroy => true
-
-  def initialize(attributes = nil, options = {}, import_users = false)
-    super(attributes, options)
+  def initialize(attributes = nil, import_users = false)
+    super(attributes)
 
     if import_users && self.try(:control_objective_item).try(:review)
       self.control_objective_item.review.review_user_assignments.map do |rua|
@@ -127,22 +118,6 @@ class Finding < ActiveRecord::Base
     PENDING_STATUS.include?(self.state)
   end
 
-  def has_audited?
-    finding_user_assignments.any? do |fua|
-      !fua.marked_for_destruction? && fua.user.can_act_as_audited?
-    end
-  end
-
-  def has_auditor?
-    finding_user_assignments.any? do |fua|
-      !fua.marked_for_destruction? && fua.user.auditor?
-    end
-  end
-
-  def rescheduled?
-    all_follow_up_dates.size > 0
-  end
-
   def issue_date
     review.try(:conclusion_final_review).try(:issue_date)
   end
@@ -153,332 +128,5 @@ class Finding < ActiveRecord::Base
 
   def commitment_date
     finding_answers.where.not(commitment_date: nil).first&.commitment_date
-  end
-
-  def process_owners
-    finding_user_assignments.select(&:process_owner).map(&:user)
-  end
-
-  def responsible_auditors
-    self.finding_user_assignments.responsibles.map(&:user)
-  end
-
-  def all_follow_up_dates(end_date = nil, reload = false)
-    @all_follow_up_dates = reload ? [] : (@all_follow_up_dates || [])
-
-    if @all_follow_up_dates.empty?
-      last_date = self.follow_up_date
-      dates = self.versions_after_final_review(end_date).map do |v|
-        v.reify(:has_one => false).try(:follow_up_date)
-      end
-
-      dates.each do |d|
-        unless d.blank? || d == last_date
-          @all_follow_up_dates << d
-          last_date = d
-        end
-      end
-    end
-
-    @all_follow_up_dates.compact
-  end
-
-  def follow_up_pdf(organization = nil)
-    pdf = Prawn::Document.create_generic_pdf(:portrait)
-    issue_date = self.issue_date ? I18n.l(self.issue_date, :format => :long) :
-      I18n.t('finding.without_conclusion_final_review')
-
-    pdf.add_generic_report_header organization
-
-    pdf.add_title I18n.t("finding.follow_up_report.#{self.class.name.downcase}"+
-        '.title'), (PDF_FONT_SIZE * 1.25).round, :center
-
-    pdf.move_down((PDF_FONT_SIZE * 1.25).round)
-
-    pdf.add_title I18n.t("finding.follow_up_report.#{self.class.name.downcase}"+
-        '.subtitle'), (PDF_FONT_SIZE * 1.25).round, :left
-
-    pdf.move_down((PDF_FONT_SIZE * 1.25).round)
-
-    pdf.add_description_item(Review.model_name.human,
-      "#{self.review.long_identification} (#{issue_date})", 0, false)
-    pdf.add_description_item(Finding.human_attribute_name(:review_code),
-      self.review_code, 0, false)
-    pdf.add_description_item(Finding.human_attribute_name(:title),
-      self.title, 0, false)
-
-    pdf.add_description_item(ProcessControl.model_name.human,
-      self.control_objective_item.process_control.name, 0, false)
-    pdf.add_description_item(
-      Finding.human_attribute_name(:control_objective_item_id),
-      self.control_objective_item.to_s, 0, false)
-    pdf.add_description_item(self.class.human_attribute_name(:description),
-      self.description, 0, false)
-    pdf.add_description_item(self.class.human_attribute_name(:state),
-      self.state_text, 0, false)
-
-    if self.kind_of?(Weakness)
-      pdf.add_description_item(self.class.human_attribute_name(:risk),
-        self.risk_text, 0, false)
-      pdf.add_description_item(self.class.human_attribute_name(:priority),
-        self.priority_text, 0, false)
-      pdf.add_description_item(Finding.human_attribute_name(:effect),
-        self.effect, 0, false)
-      pdf.add_description_item(Finding.human_attribute_name(
-          :audit_recommendations), self.audit_recommendations, 0, false)
-    end
-
-    pdf.add_description_item(Finding.human_attribute_name(:answer),
-      self.answer, 0, false)
-
-    if self.kind_of?(Weakness) && self.follow_up_date
-      pdf.add_description_item(Finding.human_attribute_name(:follow_up_date),
-        I18n.l(self.follow_up_date, :format => :long), 0, false)
-    end
-
-    if self.solution_date
-      pdf.add_description_item(Finding.human_attribute_name(:solution_date),
-        I18n.l(self.solution_date, :format => :long), 0, false)
-    end
-
-    pdf.add_description_item(Finding.human_attribute_name(:audit_comments),
-      self.audit_comments, 0, false)
-
-    audited, auditors = *self.users.partition(&:can_act_as_audited?)
-
-    pdf.add_title I18n.t('finding.auditors', :count => auditors.size),
-      PDF_FONT_SIZE, :left
-    pdf.add_list auditors.map(&:full_name), PDF_FONT_SIZE * 2
-
-    pdf.add_title I18n.t('finding.responsibles', :count => audited.size),
-      PDF_FONT_SIZE, :left
-    pdf.add_list audited.map(&:full_name), PDF_FONT_SIZE * 2
-
-    important_attributes = [:state, :risk, :priority, :follow_up_date]
-    important_changed_versions = [PaperTrail::Version.new]
-    previous_version = self.versions.first
-
-    while (previous_version.try(:event) &&
-          last_checked_version = previous_version.try(:next))
-      has_important_changes = important_attributes.any? do |attribute|
-        current_value = last_checked_version.reify(:has_one => false) ?
-          last_checked_version.reify(:has_one => false).send(attribute) : nil
-        old_value = previous_version.reify(:has_one => false) ?
-          previous_version.reify(:has_one => false).send(attribute) : nil
-
-        current_value != old_value &&
-          !(current_value.blank? && old_value.blank?)
-      end
-
-      if has_important_changes
-        important_changed_versions << last_checked_version
-      end
-
-      previous_version = last_checked_version
-    end
-
-    pdf.add_title I18n.t('finding.change_history'),
-      (PDF_FONT_SIZE * 1.25).round
-
-    if important_changed_versions.size > 1
-      column_names = [['attribute', 30 ], ['old_value', 35], ['new_value', 35]]
-      column_headers, column_widths, column_data = [], [], []
-
-      column_names.each do |col_name, col_size|
-        column_headers << (col_name == 'attribute' ?
-          '' : I18n.t("versions.column_#{col_name}"))
-        column_widths << pdf.percent_width(col_size)
-      end
-
-      previous_version = important_changed_versions.shift
-      previous_finding = previous_version.reify(:has_one => false)
-
-      important_changed_versions.each do |version|
-        version_finding = version.reify(:has_one => false)
-        column_data = []
-
-        important_attributes.each do |attribute|
-          previous_method_name = previous_finding.respond_to?(
-            "#{attribute}_text") ? "#{attribute}_text".to_sym : attribute
-          version_method_name = version_finding.respond_to?(
-            "#{attribute}_text") ? "#{attribute}_text".to_sym : attribute
-
-          column_data << [
-            Finding.human_attribute_name(attribute),
-            previous_finding.try(:send, previous_method_name).
-              to_translated_string,
-            version_finding.try(:send, version_method_name).
-              to_translated_string
-          ]
-        end
-
-        unless column_data.blank?
-          pdf.move_down PDF_FONT_SIZE
-
-          pdf.add_description_item(PaperTrail::Version.human_attribute_name(:created_at),
-            I18n.l(version.created_at || version_finding.updated_at,
-              :format => :long))
-          pdf.add_description_item(
-            User.model_name.human,
-            version.paper_trail_originator ? User.find(version.paper_trail_originator).try(:full_name) : '--'
-          )
-
-          pdf.move_down PDF_FONT_SIZE
-
-          pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-            table_options = pdf.default_table_options(column_widths)
-
-            pdf.table(column_data.insert(0, column_headers), table_options) do
-              row(0).style(
-                :background_color => 'cccccc',
-                :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-              )
-            end
-          end
-        end
-
-        previous_finding = version_finding
-        previous_version = version
-      end
-    else
-      pdf.text(
-        "\n#{I18n.t('finding.follow_up_report.without_important_changes')}",
-        :font_size => PDF_FONT_SIZE)
-    end
-
-    unless self.comments.blank?
-      column_names = [['comment', 50], ['user_id', 30], ['created_at', 20]]
-      column_headers, column_widths, column_data = [], [], []
-
-      column_names.each do |col_name, col_size|
-        column_headers << Comment.human_attribute_name(col_name)
-        column_widths << pdf.percent_width(col_size)
-      end
-
-      self.comments.each do |comment|
-        column_data << [
-          comment.comment,
-          comment.user.try(:full_name),
-          I18n.l(comment.created_at,
-            :format => :validation)
-        ]
-      end
-
-      pdf.move_down PDF_FONT_SIZE
-
-      pdf.add_title I18n.t('finding.comments'), (PDF_FONT_SIZE * 1.25).round
-
-      pdf.move_down PDF_FONT_SIZE
-
-      unless column_data.blank?
-        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-          table_options = pdf.default_table_options(column_widths)
-
-          pdf.table(column_data.insert(0, column_headers), table_options) do
-            row(0).style(
-              :background_color => 'cccccc',
-              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-            )
-          end
-        end
-      end
-    end
-
-    unless self.work_papers.blank?
-      column_names = [['name', 20], ['code', 20], ['number_of_pages', 20],
-        ['description', 40]]
-      column_headers, column_widths, column_data = [], [], []
-
-      column_names.each do |col_name, col_size|
-        column_headers << WorkPaper.human_attribute_name(col_name)
-        column_widths << pdf.percent_width(col_size)
-      end
-
-      self.work_papers.each do |work_paper|
-        column_data << [
-          work_paper.name,
-          work_paper.code,
-          work_paper.number_of_pages || '-',
-          work_paper.description
-        ]
-      end
-
-      pdf.move_down PDF_FONT_SIZE
-
-      pdf.add_title I18n.t('finding.follow_up_report.work_papers'),
-        (PDF_FONT_SIZE * 1.25).round
-
-      pdf.move_down PDF_FONT_SIZE
-
-      unless column_data.blank?
-        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-          table_options = pdf.default_table_options(column_widths)
-
-          pdf.table(column_data.insert(0, column_headers), table_options) do
-            row(0).style(
-              :background_color => 'cccccc',
-              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-            )
-          end
-        end
-      end
-    end
-
-    unless self.finding_answers.blank?
-      column_names = [['answer', 50], ['user_id', 30], ['created_at', 20]]
-      column_headers, column_widths, column_data = [], [], []
-
-      column_names.each do |col_name, col_size|
-        column_headers << FindingAnswer.human_attribute_name(col_name)
-        column_widths << pdf.percent_width(col_size)
-      end
-
-      self.finding_answers.each do |finding_answer|
-        column_data << [
-          finding_answer.answer,
-          finding_answer.user.try(:full_name),
-          I18n.l(finding_answer.created_at,
-            :format => :validation)
-        ]
-      end
-
-      pdf.move_down PDF_FONT_SIZE
-
-      pdf.add_title I18n.t('finding.follow_up_report.follow_up_comments'),
-        (PDF_FONT_SIZE * 1.25).round
-
-      pdf.move_down PDF_FONT_SIZE
-
-      unless column_data.blank?
-        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-          table_options = pdf.default_table_options(column_widths)
-
-          pdf.table(column_data.insert(0, column_headers), table_options) do
-            row(0).style(
-              :background_color => 'cccccc',
-              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-            )
-          end
-        end
-      end
-    end
-
-    pdf.custom_save_as self.follow_up_pdf_name, Finding.table_name, self.id
-  end
-
-  def absolute_follow_up_pdf_path
-    Prawn::Document.absolute_path self.follow_up_pdf_name, Finding.table_name,
-      self.id
-  end
-
-  def relative_follow_up_pdf_path
-    Prawn::Document.relative_path self.follow_up_pdf_name, Finding.table_name,
-      self.id
-  end
-
-  def follow_up_pdf_name
-    code = self.review_code.sanitized_for_filename
-
-    I18n.t('finding.follow_up_report.pdf_name', :code => code)
   end
 end

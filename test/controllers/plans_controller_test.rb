@@ -7,7 +7,11 @@ class PlansControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    id_param = {:id => plans(:current_plan).to_param}
+    id_param = {
+      :params => {
+        :id => plans(:current_plan).to_param
+      }
+    }
     public_actions = []
     private_actions = [
       [:get, :index],
@@ -41,7 +45,7 @@ class PlansControllerTest < ActionController::TestCase
 
   test 'show plan' do
     login
-    get :show, :id => plans(:current_plan).id
+    get :show, :params => { :id => plans(:current_plan).id }
     assert_response :success
     assert_not_nil assigns(:plan)
     assert_template 'plans/show'
@@ -57,7 +61,9 @@ class PlansControllerTest < ActionController::TestCase
 
   test 'new plan with business unit type' do
     login
-    get :new, :business_unit_type => business_unit_types(:cycle).to_param
+    get :new, :params => {
+      :business_unit_type => business_unit_types(:cycle).to_param
+    }
     assert_response :success
     assert_not_nil assigns(:plan)
     assert_template 'plans/new'
@@ -67,7 +73,7 @@ class PlansControllerTest < ActionController::TestCase
     login
     plan = Plan.find plans(:current_plan).id
 
-    get :new, :clone_from => plan.id
+    get :new, :params => { :clone_from => plan.id }
     assert_response :success
     assert_not_nil assigns(:plan)
     assert plan.plan_items.size > 0
@@ -85,7 +91,7 @@ class PlansControllerTest < ActionController::TestCase
 
     assert_difference counts_array do
       login
-      post :create, {
+      post :create, :params => {
         :plan => {
           :period_id => periods(:unused_period).id,
           :plan_items_attributes => [
@@ -122,7 +128,7 @@ class PlansControllerTest < ActionController::TestCase
 
   test 'edit plan' do
     login
-    get :edit, :id => plans(:past_plan).id
+    get :edit, :params => { :id => plans(:past_plan).id }
     assert_response :success
     assert_not_nil assigns(:plan)
     assert_nil assigns(:business_unit_type)
@@ -131,8 +137,10 @@ class PlansControllerTest < ActionController::TestCase
 
   test 'edit plan with business unit type' do
     login
-    get :edit, :id => plans(:past_plan).id,
+    get :edit, :params => {
+      :id => plans(:past_plan).id,
       :business_unit_type => business_unit_types(:cycle).to_param
+    }
     assert_response :success
     assert_not_nil assigns(:plan)
     assert_not_nil assigns(:business_unit_type)
@@ -144,13 +152,13 @@ class PlansControllerTest < ActionController::TestCase
       assert_no_difference ['Plan.count', 'ResourceUtilization.count'] do
         assert_difference 'PlanItem.count', -1 do
           login
-          patch :update, {
+          patch :update, :params => {
             :id => plans(:past_plan).id,
             :plan => {
               :period_id => periods(:past_period).id,
               :new_version => '0',
-              :plan_items_attributes => [
-                {
+              :plan_items_attributes => {
+                '0' => {
                   :id => plan_items(:past_plan_item_1).id,
                   :project => 'Updated project',
                   :start => 55.days.ago.to_date,
@@ -172,11 +180,11 @@ class PlansControllerTest < ActionController::TestCase
                     }
                   ]
                 },
-                {
+                '1' => {
                   :id => plan_items(:past_plan_item_3).id,
                   :_destroy => '1'
                 }
-              ]
+              }
             }
           }
         end
@@ -233,13 +241,13 @@ class PlansControllerTest < ActionController::TestCase
 
     assert_no_difference ['Plan.count', 'PlanItem.count'] do
       login
-      post :create, values
+      post :create, :params => values
     end
 
     assert_difference 'PlanItem.count', 2 do
       assert_difference 'Plan.count' do
         values[:plan][:allow_overload] = '1'
-        post :create, values
+        post :create, :params => values
       end
     end
   end
@@ -285,13 +293,13 @@ class PlansControllerTest < ActionController::TestCase
 
     assert_no_difference ['Plan.count', 'PlanItem.count'] do
       login
-      post :create, values
+      post :create, :params => values
     end
 
     assert_difference 'PlanItem.count', 2 do
       assert_difference 'Plan.count' do
         values[:plan][:allow_duplication] = '1'
-        post :create, values
+        post :create, :params => values
       end
     end
   end
@@ -299,7 +307,7 @@ class PlansControllerTest < ActionController::TestCase
   test 'destroy plan' do
     login
     assert_difference 'Plan.count', -1 do
-      delete :destroy, :id => plans(:unrelated_plan).id
+      delete :destroy, :params => { :id => plans(:unrelated_plan).id }
     end
 
     assert_redirected_to plans_url
@@ -308,7 +316,7 @@ class PlansControllerTest < ActionController::TestCase
   test 'destroy related plan' do
     login
     assert_no_difference 'Plan.count' do
-      delete :destroy, :id => plans(:current_plan).id
+      delete :destroy, :params => { :id => plans(:current_plan).id }
     end
 
     assert_equal I18n.t('plan.errors.can_not_be_destroyed'), flash.alert
@@ -320,14 +328,16 @@ class PlansControllerTest < ActionController::TestCase
 
     plan = Plan.find(plans(:current_plan).id)
 
-    assert_nothing_raised { get :export_to_pdf, :id => plan.id }
+    assert_nothing_raised do
+      get :export_to_pdf, :params => { :id => plan.id }
+    end
 
     assert_redirected_to plan.relative_pdf_path
   end
 
   test 'auto complete for business_unit business_unit' do
     login
-    get :auto_complete_for_business_unit, {
+    get :auto_complete_for_business_unit, :params => {
       :q => 'fifth', :format => :json
     }
     assert_response :success
@@ -336,7 +346,7 @@ class PlansControllerTest < ActionController::TestCase
 
     assert_equal 0, business_units.size # Fifth is in another organization
 
-    get :auto_complete_for_business_unit, {
+    get :auto_complete_for_business_unit, :params => {
       :q => 'one', :format => :json
     }
     assert_response :success
@@ -346,7 +356,7 @@ class PlansControllerTest < ActionController::TestCase
     assert_equal 1, business_units.size # One only
     assert business_units.all? { |u| (u['label'] + u['informal']).match /one/i }
 
-    get :auto_complete_for_business_unit, {
+    get :auto_complete_for_business_unit, :params => {
       :q => 'business', :format => :json
     }
     assert_response :success
@@ -356,7 +366,7 @@ class PlansControllerTest < ActionController::TestCase
     assert_equal 4, business_units.size # All in the organization (one, two, three and four)
     assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
 
-    get :auto_complete_for_business_unit, {
+    get :auto_complete_for_business_unit, :params => {
       :q => 'business',
       :business_unit_type_id => business_unit_types(:cycle).id,
       :format => :json

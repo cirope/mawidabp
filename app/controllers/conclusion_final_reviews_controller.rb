@@ -4,12 +4,8 @@ class ConclusionFinalReviewsController < ApplicationController
     :show, :edit, :update, :export_to_pdf, :score_sheet, :download_work_papers,
     :create_bundle, :compose_email, :send_by_email
   ]
-  layout proc{ |controller| controller.request.xhr? ? false : 'application' }
+  layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
-  # Lista los informes definitivos
-  #
-  # * GET /conclusion_final_reviews
-  # * GET /conclusion_final_reviews.xml
   def index
     @title = t 'conclusion_final_review.index_title'
 
@@ -24,35 +20,24 @@ class ConclusionFinalReviewsController < ApplicationController
     .references(:periods, :reviews, :business_units)
 
     respond_to do |format|
-      format.html {
-        if @conclusion_final_reviews.count == 1 && !@query.blank? &&
-            !params[:page]
-          redirect_to(
-            conclusion_final_review_url(@conclusion_final_reviews.first)
-          )
-        end
-      }
-      format.xml  { render xml: @conclusion_final_reviews }
+      format.html
     end
   end
 
   # Muestra el detalle de un informe definitivo
   #
   # * GET /conclusion_final_reviews/1
-  # * GET /conclusion_final_reviews/1.xml
   def show
     @title = t 'conclusion_final_review.show_title'
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render xml: @conclusion_final_review }
     end
   end
 
   # Permite ingresar los datos para crear un nuevo informe definitivo
   #
   # * GET /conclusion_final_reviews/new
-  # * GET /conclusion_final_reviews/new.xml
   # * GET /conclusion_final_reviews/new.json
   def new
     conclusion_final_review =
@@ -65,7 +50,6 @@ class ConclusionFinalReviewsController < ApplicationController
 
       respond_to do |format|
         format.html # new.html.erb
-        format.xml  { render xml: @conclusion_final_review }
         format.json { render json: @conclusion_final_review.to_json(
             include: {review: {
                 only: [],
@@ -94,20 +78,17 @@ class ConclusionFinalReviewsController < ApplicationController
   # Crea un nuevo informe definitivo siempre que cumpla con las validaciones.
   #
   # * POST /conclusion_final_reviews
-  # * POST /conclusion_final_reviews.xml
   def create
     @title = t 'conclusion_final_review.new_title'
     @conclusion_final_review =
-      ConclusionFinalReview.list.new(conclusion_final_review_params, {}, false)
+      ConclusionFinalReview.list.new(conclusion_final_review_params, false)
 
     respond_to do |format|
       if @conclusion_final_review.save
         flash.notice = t 'conclusion_final_review.correctly_created'
         format.html { redirect_to(conclusion_final_reviews_url) }
-        format.xml  { render xml: @conclusion_final_review, status: :created, location: @conclusion_final_review }
       else
         format.html { render action: :new }
-        format.xml  { render xml: @conclusion_final_review.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -116,7 +97,6 @@ class ConclusionFinalReviewsController < ApplicationController
   # validaciones.
   #
   # * PATCH /conclusion_final_reviews/1
-  # * PATCH /conclusion_final_reviews/1.xml
   def update
     @title = t 'conclusion_final_review.edit_title'
 
@@ -124,10 +104,8 @@ class ConclusionFinalReviewsController < ApplicationController
       if @conclusion_final_review.update(conclusion_final_review_params)
         flash.notice = t 'conclusion_final_review.correctly_updated'
         format.html { redirect_to(conclusion_final_reviews_url) }
-        format.xml  { head :ok }
       else
         format.html { render action: :edit }
-        format.xml  { render xml: @conclusion_final_review.errors, status: :unprocessable_entity }
       end
     end
 
@@ -140,11 +118,10 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf/1
   def export_to_pdf
-    @conclusion_final_review.to_pdf(current_organization, params[:export_options])
+    @conclusion_final_review.to_pdf(current_organization, params[:export_options]&.to_unsafe_h)
 
     respond_to do |format|
       format.html { redirect_to @conclusion_final_review.relative_pdf_path }
-      format.xml  { head :ok }
     end
   end
 
@@ -207,7 +184,7 @@ class ConclusionFinalReviewsController < ApplicationController
     @questionnaires = Questionnaire.list.by_pollable_type 'ConclusionReview'
 
     users = []
-    users_without_poll = []
+    users_with_poll = []
     export_options = params[:export_options] || {}
 
     if params[:conclusion_review]
@@ -241,34 +218,46 @@ class ConclusionFinalReviewsController < ApplicationController
         include_global_score_sheet: include_global_score_sheet
       }
 
-        if user && !users.include?(user)
-          @conclusion_final_review.send_by_email_to(user, send_options)
+      if user && users.all? { |u| u.id != user.id }
+        @conclusion_final_review.send_by_email_to(user, send_options)
 
-          users << user
-        end
-
-        if user.try(:can_act_as_audited?) && user_data[:questionnaire_id].present?
-          polls = Poll.list.where(user_id: user.id, questionnaire_id: user_data[:questionnaire_id],
-                               pollable_id: @conclusion_final_review)
-          if polls.empty?
-            questionnaire = Questionnaire.find user_data[:questionnaire_id]
-            @conclusion_final_review.polls.create!(
-              questionnaire_id: user_data[:questionnaire_id],
-              user_id: user.id,
-              organization_id: current_organization.id,
-              pollable_type: questionnaire.pollable_type
-            )
-          else
-            users_without_poll << user.informal_name
-          end
-        end
+        users << user
       end
 
-    unless users.blank?
+      if user.try(:can_act_as_audited?) && user_data[:questionnaire_id].present?
+        questionnaire = Questionnaire.find user_data[:questionnaire_id]
+        affected_user_id = user_data[:affected_user_id].present? ?
+          user_data[:affected_user_id] : nil
+        has_poll = Poll.list.exists?(
+          user_id: user.id,
+          affected_user_id: affected_user_id,
+          questionnaire_id: user_data[:questionnaire_id],
+          organization_id: current_organization.id,
+          pollable_type: questionnaire.pollable_type,
+          pollable_id: @conclusion_final_review
+        )
+
+        if has_poll
+          users_with_poll << user.informal_name
+        else
+          @conclusion_final_review.polls.create!(
+            user_id: user.id,
+            affected_user_id: affected_user_id,
+            questionnaire_id: user_data[:questionnaire_id],
+            organization_id: current_organization.id,
+            pollable_type: questionnaire.pollable_type
+          )
+        end
+      end
+    end
+
+    if users.present?
       flash.notice = t('conclusion_review.review_sended')
-      unless users_without_poll.empty?
-        flash.notice << "#{t('polls.already_exists')} #{users_without_poll.join(', ').inspect}"
+
+      if users_with_poll.present?
+        flash.notice << ". #{t 'polls.already_exists', user: users_with_poll.uniq.to_sentence}"
       end
+
       redirect_to edit_conclusion_final_review_url(@conclusion_final_review)
     else
       render action: :compose_email

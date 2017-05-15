@@ -36,16 +36,18 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'synthesis report' do
     login
 
-    get :synthesis_report, :controller_name => 'follow_up'
+    get :synthesis_report, :params => { :controller_name => 'follow_up' }
     assert_response :success
     assert_template 'follow_up_audit/synthesis_report'
 
     assert_nothing_raised do
-      get :synthesis_report, :synthesis_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+      get :synthesis_report, :params => {
+        :synthesis_report => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up'
+      }
     end
 
     assert_response :success
@@ -54,13 +56,15 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
   test 'filtered synthesis report' do
     login
-    get :synthesis_report, :synthesis_report => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date,
-      :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'three'
+    get :synthesis_report, :params => {
+      :synthesis_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'three'
       },
       :controller_name => 'follow_up'
+    }
 
     assert_response :success
     assert_not_nil assigns(:filters)
@@ -71,13 +75,15 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'create synthesis report' do
     login
 
-    post :create_synthesis_report, :synthesis_report => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+    post :create_synthesis_report, :params => {
+      :synthesis_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
       :controller_name => 'follow_up'
+    }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee.synthesis_report.pdf_name',
@@ -94,10 +100,12 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/qa_indicators'
 
     assert_nothing_raised do
-      get :qa_indicators, :qa_indicators => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+      get :qa_indicators, :params => {
+        :qa_indicators => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
         }
+      }
     end
 
     assert_response :success
@@ -107,12 +115,14 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'create qa indicators' do
     login
 
-    post :create_qa_indicators, :qa_indicators => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+    post :create_qa_indicators, :params => {
+      :qa_indicators => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
+    }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee.qa_indicators.pdf_name',
@@ -129,12 +139,14 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/weaknesses_by_state'
 
     assert_nothing_raised do
-      get :weaknesses_by_state, :weaknesses_by_state => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+      get :weaknesses_by_state, :params => {
+        :weaknesses_by_state => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
+      }
     end
 
     assert_response :success
@@ -143,14 +155,15 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
   test 'create weaknesses by state report' do
     login
-    post :create_weaknesses_by_state, :weaknesses_by_state => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date,
-    },
-    :report_title => 'New title',
-    :controller_name => 'follow_up',
-    :final => false
-
+    post :create_weaknesses_by_state, :params => {
+      :weaknesses_by_state => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+      },
+      :report_title => 'New title',
+      :controller_name => 'follow_up',
+      :final => false
+    }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_state.pdf_name',
@@ -167,12 +180,14 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/weaknesses_by_risk'
 
     assert_nothing_raised do
-      get :weaknesses_by_risk, :weaknesses_by_risk => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+      get :weaknesses_by_risk, :params => {
+        :weaknesses_by_risk => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
+      }
     end
 
     assert_response :success
@@ -182,13 +197,15 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'create weaknesses by risk' do
     login
 
-    post :create_weaknesses_by_risk, :weaknesses_by_risk => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+    post :create_weaknesses_by_risk, :params => {
+      :weaknesses_by_risk => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
       :controller_name => 'follow_up',
       :final => false
+    }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee.weaknesses_by_risk.pdf_name',
@@ -205,12 +222,14 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/weaknesses_by_audit_type'
 
     assert_nothing_raised do
-      get :weaknesses_by_audit_type, :weaknesses_by_audit_type => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+      get :weaknesses_by_audit_type, :params => {
+        :weaknesses_by_audit_type => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
+      }
     end
 
     assert_response :success
@@ -220,14 +239,15 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'create weaknesses by audit type report' do
     login
 
-    post :create_weaknesses_by_audit_type,
+    post :create_weaknesses_by_audit_type, :params => {
       :weaknesses_by_audit_type => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        },
-        :report_title => 'New title',
-        :controller_name => 'follow_up',
-        :final => false
+      },
+      :report_title => 'New title',
+      :controller_name => 'follow_up',
+      :final => false
+    }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.weaknesses_by_audit_type.pdf_name',
@@ -244,10 +264,12 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/follow_up_cost_analysis'
 
     assert_nothing_raised do
-      get :follow_up_cost_analysis, :follow_up_cost_analysis => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+      get :follow_up_cost_analysis, :params => {
+        :follow_up_cost_analysis => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
         }
+      }
     end
 
     assert_response :success
@@ -257,12 +279,13 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'create units analysis report' do
     login
 
-    post :create_follow_up_cost_analysis,
+    post :create_follow_up_cost_analysis, :params => {
       :follow_up_cost_analysis => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        },
-        :report_title => 'New title'
+      },
+      :report_title => 'New title'
+    }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee_report.follow_up_cost_analysis.pdf_name',
@@ -279,12 +302,14 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/weaknesses_by_risk_report'
 
     assert_nothing_raised do
-      get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
+      get :weaknesses_by_risk_report, :params => {
+        :weaknesses_by_risk_report => {
           :from_date => 10.years.ago.to_date,
           :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
+      }
     end
 
     assert_response :success
@@ -294,8 +319,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'filtered weaknesses by risk report' do
     login
 
-    get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
-      :from_date => 10.years.ago.to_date,
+    get :weaknesses_by_risk_report, :params => {
+      :weaknesses_by_risk_report => {
+        :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
         :business_unit_type => business_unit_types(:cycle).id,
         :business_unit => 'three',
@@ -304,6 +330,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       },
       :controller_name => 'follow_up',
       :final => false
+    }
 
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_by_risk_report'
@@ -312,14 +339,16 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'create weaknesses by risk report' do
     login
 
-    get :create_weaknesses_by_risk_report, :weaknesses_by_risk_report => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+    get :create_weaknesses_by_risk_report, :params => {
+      :weaknesses_by_risk_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
       :controller_name => 'follow_up',
       :final => false
+    }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_risk_report.pdf_name',
@@ -336,12 +365,14 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/fixed_weaknesses_report'
 
     assert_nothing_raised do
-      get :fixed_weaknesses_report, :fixed_weaknesses_report => {
+      get :fixed_weaknesses_report, :params => {
+        :fixed_weaknesses_report => {
           :from_date => 10.years.ago.to_date,
           :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
+      }
     end
 
     assert_response :success
@@ -351,7 +382,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'filtered fixed weaknesses report' do
     login
 
-    get :fixed_weaknesses_report, :fixed_weaknesses_report => {
+    get :fixed_weaknesses_report, :params => {
+      :fixed_weaknesses_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
         :business_unit_type => business_unit_types(:cycle).id,
@@ -361,6 +393,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       },
       :controller_name => 'follow_up',
       :final => false
+    }
 
     assert_response :success
     assert_template 'follow_up_audit/fixed_weaknesses_report'
@@ -369,14 +402,16 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'create fixed weaknesses report' do
     login
 
-    get :create_fixed_weaknesses_report, :fixed_weaknesses_report => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+    get :create_fixed_weaknesses_report, :params => {
+      :fixed_weaknesses_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
       :controller_name => 'follow_up',
       :final => false
+    }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.fixed_weaknesses_report.pdf_name',
@@ -393,12 +428,14 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/control_objective_stats'
 
     assert_nothing_raised do
-      get :control_objective_stats, :control_objective_stats => {
+      get :control_objective_stats, :params => {
+        :control_objective_stats => {
           :from_date => 10.years.ago.to_date,
           :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
+      }
     end
 
     assert_response :success
@@ -408,7 +445,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'filtered control objective stats report' do
     login
 
-    get :control_objective_stats, :control_objective_stats => {
+    get :control_objective_stats, :params => {
+      :control_objective_stats => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
         :business_unit_type => business_unit_types(:cycle).id,
@@ -419,6 +457,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       },
       :controller_name => 'follow_up',
       :final => false
+    }
 
     assert_response :success
     assert_template 'follow_up_audit/control_objective_stats'
@@ -427,20 +466,84 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'create control objective stats report' do
     login
 
-    get :create_control_objective_stats, :control_objective_stats => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date,
+    get :create_control_objective_stats, :params => {
+      :control_objective_stats => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
       :controller_name => 'follow_up',
       :final => false
+    }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.control_objective_stats.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'control_objective_stats', 0)
+  end
+
+  test 'control objective stats by review report' do
+    login
+
+    get :control_objective_stats_by_review
+    assert_response :success
+    assert_template 'follow_up_audit/control_objective_stats_by_review'
+
+    assert_nothing_raised do
+      get :control_objective_stats_by_review, :params => {
+        :control_objective_stats_by_review => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => true
+      }
+    end
+
+    assert_response :success
+    assert_template 'follow_up_audit/control_objective_stats_by_review'
+  end
+
+  test 'filtered control objective stats by review report' do
+    login
+
+    get :control_objective_stats_by_review, :params => {
+      :control_objective_stats_by_review => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'one',
+        :control_objective => 'a',
+      },
+      :controller_name => 'follow_up',
+      :final => true
+    }
+
+    assert_response :success
+    assert_template 'follow_up_audit/control_objective_stats_by_review'
+  end
+
+  test 'create control objective stats by review report' do
+    login
+
+    get :create_control_objective_stats_by_review, :params => {
+      :control_objective_stats_by_review => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up',
+      :final => true
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('follow_up_committee_report.control_objective_stats_by_review.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'control_objective_stats_by_review', 0)
   end
 
   test 'process control stats report' do
@@ -451,12 +554,14 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/process_control_stats'
 
     assert_nothing_raised do
-      get :process_control_stats, :process_control_stats => {
+      get :process_control_stats, :params => {
+        :process_control_stats => {
           :from_date => 10.years.ago.to_date,
           :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
+      }
     end
 
     assert_response :success
@@ -466,8 +571,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'filtered process control stats report' do
     login
 
-    get :process_control_stats, :process_control_stats => {
-      :from_date => 10.years.ago.to_date,
+    get :process_control_stats, :params => {
+      :process_control_stats => {
+        :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
         :best_practice => 'a',
         :business_unit_type => business_unit_types(:cycle).id,
@@ -478,6 +584,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       },
       :controller_name => 'follow_up',
       :final => false
+    }
 
     assert_response :success
     assert_template 'follow_up_audit/process_control_stats'
@@ -486,7 +593,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'create process control stats report' do
     login
 
-    get :create_process_control_stats, :process_control_stats => {
+    get :create_process_control_stats, :params => {
+      :process_control_stats => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
       },
@@ -494,6 +602,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle',
       :controller_name => 'follow_up',
       :final => false
+    }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee.process_control_stats.pdf_name',
@@ -505,10 +614,12 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses graphs for user' do
     login
 
-    get :weaknesses_graphs, :weaknesses_graphs => {
-      :user_id => users(:administrator_user).id
-    },
-    :final => false
+    get :weaknesses_graphs, :params => {
+      :weaknesses_graphs => {
+        :user_id => users(:administrator_user).id
+      },
+      :final => false
+    }
 
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_graphs'
@@ -517,10 +628,12 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses graphs for business unit' do
     login
 
-    get :weaknesses_graphs, :weaknesses_graphs => {
-      :business_unit_id => business_units(:business_unit_one).id
-    },
-    :final => false
+    get :weaknesses_graphs, :params => {
+      :weaknesses_graphs => {
+        :business_unit_id => business_units(:business_unit_one).id
+      },
+      :final => false
+    }
 
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_graphs'
@@ -529,10 +642,12 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'weaknesses graphs for process control' do
     login
 
-    get :weaknesses_graphs, :weaknesses_graphs => {
-      :process_control_id => process_controls(:iso_27000_security_policy).id
-    },
-    :final => false
+    get :weaknesses_graphs, :params => {
+      :weaknesses_graphs => {
+        :process_control_id => process_controls(:iso_27000_security_policy).id
+      },
+      :final => false
+    }
 
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_graphs'
@@ -546,25 +661,27 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/weaknesses_report'
 
     assert_nothing_raised do
-      get :weaknesses_report, :weaknesses_report => {
-        :review                    => '1',
-        :project                   => '2',
-        :process_control           => '3',
-        :control_objective         => '4',
-        :user_id                   => users(:administrator_user).id.to_s,
-        :finding_status            => '1',
-        :finding_title             => '1',
-        :risk                      => '1',
-        :priority                  => '1',
-        :issue_date                => Date.today.to_s(:db),
-        :issue_date_operator       => '=',
-        :origination_date          => Date.today.to_s(:db),
-        :origination_date_operator => '>',
-        :follow_up_date            => Date.today.to_s(:db),
-        :follow_up_date_until      => Date.today.to_s(:db),
-        :follow_up_date_operator   => 'between',
-        :solution_date             => Date.today.to_s(:db),
-        :solution_date_operator    => '='
+      get :weaknesses_report, :params => {
+        :weaknesses_report => {
+          :review                    => '1',
+          :project                   => '2',
+          :process_control           => '3',
+          :control_objective         => '4',
+          :user_id                   => users(:administrator_user).id.to_s,
+          :finding_status            => '1',
+          :finding_title             => '1',
+          :risk                      => '1',
+          :priority                  => '1',
+          :issue_date                => Date.today.to_s(:db),
+          :issue_date_operator       => '=',
+          :origination_date          => Date.today.to_s(:db),
+          :origination_date_operator => '>',
+          :follow_up_date            => Date.today.to_s(:db),
+          :follow_up_date_until      => Date.today.to_s(:db),
+          :follow_up_date_operator   => 'between',
+          :solution_date             => Date.today.to_s(:db),
+          :solution_date_operator    => '='
+        }
       }
     end
 
@@ -575,9 +692,11 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'filtered weaknesses report' do
     login
 
-    get :weaknesses_report, :weaknesses_report => {
-      :finding_status => Finding::STATUS[:being_implemented].to_s,
-      :finding_title  => 'a'
+    get :weaknesses_report, :params => {
+      :weaknesses_report => {
+        :finding_status => Finding::STATUS[:being_implemented].to_s,
+        :finding_title  => 'a'
+      }
     }
 
     assert_response :success
@@ -587,11 +706,13 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'create weaknesses report' do
     login
 
-    post :create_weaknesses_report, :weaknesses_report => {
+    post :create_weaknesses_report, :params => {
+      :weaknesses_report => {
         :finding_status => Finding::STATUS[:being_implemented].to_s
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
+    }
 
     assert_response :redirect
   end
@@ -604,12 +725,14 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/benefits'
 
     assert_nothing_raised do
-      get :benefits, :benefits => {
+      get :benefits, :params => {
+        :benefits => {
           :from_date => 10.years.ago.to_date,
           :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
+      }
     end
 
     assert_response :success
@@ -619,7 +742,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'filtered benefits report' do
     login
 
-    get :benefits, :benefits => {
+    get :benefits, :params => {
+      :benefits => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
         :business_unit_type => business_unit_types(:cycle).id,
@@ -630,6 +754,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       },
       :controller_name => 'follow_up',
       :final => false
+    }
 
     assert_response :success
     assert_template 'follow_up_audit/benefits'
@@ -638,14 +763,16 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'create benefits report' do
     login
 
-    get :create_benefits, :benefits => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date,
+    get :create_benefits, :params => {
+      :benefits => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
       :controller_name => 'follow_up',
       :final => false
+    }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.benefits.pdf_name',

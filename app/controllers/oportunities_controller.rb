@@ -1,4 +1,4 @@
-class OportunitiesController < ApplicationController
+ class OportunitiesController < ApplicationController
   include AutoCompleteFor::ControlObjectiveItem
   include AutoCompleteFor::FindingRelation
   include AutoCompleteFor::Tagging
@@ -12,7 +12,6 @@ class OportunitiesController < ApplicationController
   # Lista las oportunidades de mejora
   #
   # * GET /oportunities
-  # * GET /oportunities.xml
   def index
     @title = t 'oportunity.index_title'
     default_conditions = [
@@ -44,7 +43,7 @@ class OportunitiesController < ApplicationController
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
     @oportunities = Oportunity.list.includes(
-      :work_papers,
+      :work_papers, :tags,
       :control_objective_item => {
         :review => [:period, :plan_item, :conclusion_final_review]
       }
@@ -56,42 +55,33 @@ class OportunitiesController < ApplicationController
     ).references(control_objective_item: :review).page(params[:page])
 
     respond_to do |format|
-      format.html {
-        if @oportunities.count == 1 && !@query.blank? && !params[:page]
-          redirect_to oportunity_url(@oportunities.first)
-        end
-      } # index.html.erb
-      format.xml  { render :xml => @oportunities }
+      format.html
     end
   end
 
   # Muestra el detalle de una oportunidad de mejora
   #
   # * GET /oportunities/1
-  # * GET /oportunities/1.xml
   def show
     @title = t 'oportunity.show_title'
 
     respond_to do |format|
       format.html # show.html.erb
       format.json # show.json.jbuilder
-      format.xml  { render :xml => @oportunity }
     end
   end
 
   # Permite ingresar los datos para crear una nueva oportunidad de mejora
   #
   # * GET /oportunities/new
-  # * GET /oportunities/new.xml
   def new
     @title = t 'oportunity.new_title'
     @oportunity = Oportunity.new(
-      { :control_objective_item_id => params[:control_objective_item] }, {}, true
+      { :control_objective_item_id => params[:control_objective_item] }, true
     )
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @oportunity }
     end
   end
 
@@ -105,7 +95,6 @@ class OportunitiesController < ApplicationController
   # Crea una oportunidad de mejora siempre que cumpla con las validaciones.
   #
   # * POST /oportunities
-  # * POST /oportunities.xml
   def create
     @title = t 'oportunity.new_title'
     @oportunity = Oportunity.list.new(oportunity_params)
@@ -114,10 +103,8 @@ class OportunitiesController < ApplicationController
       if @oportunity.save
         flash.notice = t 'oportunity.correctly_created'
         format.html { redirect_to(edit_oportunity_url(@oportunity)) }
-        format.xml  { render :xml => @oportunity, :status => :created, :location => @oportunity }
       else
         format.html { render :action => :new }
-        format.xml  { render :xml => @oportunity.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -126,7 +113,6 @@ class OportunitiesController < ApplicationController
   # las validaciones.
   #
   # * PATCH /oportunities/1
-  # * PATCH /oportunities/1.xml
   def update
     @title = t 'oportunity.edit_title'
 
@@ -135,10 +121,8 @@ class OportunitiesController < ApplicationController
         if @oportunity.update(oportunity_params)
           flash.notice = t 'oportunity.correctly_updated'
           format.html { redirect_to(edit_oportunity_url(@oportunity)) }
-          format.xml  { head :ok }
         else
           format.html { render :action => :edit }
-          format.xml  { render :xml => @oportunity.errors, :status => :unprocessable_entity }
           raise ActiveRecord::Rollback
         end
       end
@@ -166,7 +150,6 @@ class OportunitiesController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(edit_oportunity_url(@oportunity)) }
-      format.xml  { head :ok }
     end
   end
 

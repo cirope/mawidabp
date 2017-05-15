@@ -134,7 +134,7 @@ class RoleTest < ActiveSupport::TestCase
       update(:read => false, :modify => false, :erase => false,
       :approval => false)
 
-    @role.privileges(true).each do |p|
+    @role.privileges.reload.each do |p|
       if p.read? || p.modify? || p.erase? || p.approval?
         assert @role.has_privilege_for?(p.module)
         assert !(@role.has_privilege_for_read?(p.module) ^ p.read?)

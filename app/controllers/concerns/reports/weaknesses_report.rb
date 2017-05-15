@@ -10,9 +10,8 @@ module Reports::WeaknessesReport
   end
 
   def create_weaknesses_report
-    pdf_id   = rand 1_000_000
-    pdf_name = t 'follow_up_audit.weaknesses_report.pdf_name'
-    pdf      = init_pdf params[:report_title], params[:report_subtitle]
+    pdf_id = rand 1_000_000
+    pdf    = init_pdf params[:report_title], params[:report_subtitle]
 
     @weaknesses.each do |weakness|
       add_to_weakness_report_pdf pdf, weakness
@@ -20,7 +19,7 @@ module Reports::WeaknessesReport
 
     add_filter_options_to_pdf pdf
 
-    full_path    = pdf.custom_save_as pdf_name, 'weaknesses_report', pdf_id
+    full_path    = pdf.custom_save_as weaknesses_report_pdf_name, 'weaknesses_report', pdf_id
     @report_path = full_path.sub Rails.root.to_s, ''
 
     respond_to do |format|
@@ -36,11 +35,18 @@ module Reports::WeaknessesReport
 
       if report_params.present?
         @weaknesses = filter_weaknesses_for_report report_params
+      else
+        @weaknesses = Weakness.none
       end
     end
 
+    def scoped_weaknesses
+      params[:execution].present? ?
+        Weakness.list_without_final_review : Weakness.list
+    end
+
     def filter_weaknesses_for_report report_params
-      weaknesses = Weakness.list.finals false
+      weaknesses = scoped_weaknesses.finals false
 
       %i(review project process_control control_objective).each do |param|
         if report_params[param].present?
@@ -81,10 +87,14 @@ module Reports::WeaknessesReport
         end
       end
 
-      weaknesses.joins(review: :conclusion_final_review).order([
-        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC",
-        review_code: :asc
-      ])
+      if params[:execution].blank?
+        weaknesses.joins(review: :conclusion_final_review).order([
+          "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC",
+          review_code: :asc
+        ])
+      else
+        weaknesses.order review_code: :asc
+      end
     end
 
     def safe_date_operator operator
@@ -98,6 +108,12 @@ module Reports::WeaknessesReport
       date_until ||= date if operator == 'between'
 
       [operator.upcase, date, date_until]
+    end
+
+    def weaknesses_report_pdf_name
+      params[:execution].present? ?
+        t('execution_reports.weaknesses_report.pdf_name') :
+        t('follow_up_audit.weaknesses_report.pdf_name')
     end
 
     def add_to_weakness_report_pdf pdf, weakness
@@ -184,7 +200,6 @@ module Reports::WeaknessesReport
     end
 
     def add_filter_options_to_pdf pdf
-      report_params = Hash params[:weaknesses_report]
       filters       = []
       labels        = {
         review:            Review.model_name.human,
@@ -202,6 +217,7 @@ module Reports::WeaknessesReport
         follow_up_date:    Weakness.human_attribute_name('follow_up_date'),
         solution_date:     Weakness.human_attribute_name('solution_date')
       }
+      report_params = params.permit *labels.keys
 
       labels.each do |filter_name, filter_label|
         if report_params[filter_name].present?

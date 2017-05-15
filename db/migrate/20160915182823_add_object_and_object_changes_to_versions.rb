@@ -1,4 +1,4 @@
-class AddObjectAndObjectChangesToVersions < ActiveRecord::Migration
+class AddObjectAndObjectChangesToVersions < ActiveRecord::Migration[4.2]
   def change
     rename_column :versions, :object, :old_object
 

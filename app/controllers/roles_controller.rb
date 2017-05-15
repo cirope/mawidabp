@@ -5,41 +5,35 @@ class RolesController < ApplicationController
   # Lista los perfiles
   #
   # * GET /roles
-  # * GET /roles.xml
   def index
     @title = t 'role.index_title'
     @roles = Role.list.page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render xml: @roles }
     end
   end
 
   # Muestra el detalle de un perfil
   #
   # * GET /roles/1
-  # * GET /roles/1.xml
   def show
     @title = t 'role.show_title'
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render xml: @role }
     end
   end
 
   # Permite ingresar los datos para crear un nuevo perfil
   #
   # * GET /roles/new
-  # * GET /roles/new.xml
   def new
     @title = t 'role.new_title'
     @role = Role.new params[:role] ? role_params : {}
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render xml: @role }
     end
   end
 
@@ -54,7 +48,6 @@ class RolesController < ApplicationController
   # Crea un nuevo perfil siempre que cumpla con las validaciones.
   #
   # * POST /roles
-  # * POST /roles.xml
   def create
     @title = t 'role.new_title'
     @role = Role.list.new(role_params)
@@ -64,10 +57,8 @@ class RolesController < ApplicationController
       if @role.save
         flash.notice = t 'role.correctly_created'
         format.html { redirect_to(roles_url) }
-        format.xml  { render xml: @role, status: :created, location: @role }
       else
         format.html { render action: :new }
-        format.xml  { render xml: @role.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -75,7 +66,6 @@ class RolesController < ApplicationController
   # Actualiza el contenido de un perfil siempre que cumpla con las validaciones.
   #
   # * PATCH /roles/1
-  # * PATCH /roles/1.xml
   def update
     @title = t 'role.edit_title'
     @role.inject_auth_privileges @auth_privileges
@@ -84,10 +74,8 @@ class RolesController < ApplicationController
       if @role.update(role_params)
         flash.notice = t 'role.correctly_updated'
         format.html { redirect_to(roles_url) }
-        format.xml  { head :ok }
       else
         format.html { render action: :edit }
-        format.xml  { render xml: @role.errors, status: :unprocessable_entity }
       end
     end
 
@@ -99,13 +87,11 @@ class RolesController < ApplicationController
   # Elimina un perfil
   #
   # * DELETE /roles/1
-  # * DELETE /roles/1.xml
   def destroy
     @role.destroy
 
     respond_to do |format|
       format.html { redirect_to(roles_url) }
-      format.xml  { head :ok }
     end
   end
 

@@ -1,4 +1,4 @@
-class Questionnaire < ActiveRecord::Base
+class Questionnaire < ApplicationRecord
   include Auditable
   include Questionnaires::Validations
   include Questionnaires::Scopes

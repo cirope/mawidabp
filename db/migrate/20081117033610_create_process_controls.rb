@@ -1,4 +1,4 @@
-class CreateProcessControls < ActiveRecord::Migration
+class CreateProcessControls < ActiveRecord::Migration[4.2]
   def self.up
     create_table :process_controls do |t|
       t.string :name

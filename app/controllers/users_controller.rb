@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     @users = users
 
     respond_to do |format|
-      format.html { redirect_to user_url(@users.first) if one_result?  }
+      format.html
       format.pdf  { redirect_to pdf.relative_path }
     end
   end
@@ -69,15 +69,11 @@ class UsersController < ApplicationController
       ).references(:organizations).page(params[:page])
     end
 
-    def one_result?
-      @users.count == 1 && !@query.blank? && !params[:page]
-    end
-
     def pdf
       UserPdf.create(
         columns: @columns,
         query: @query,
-        users: @users,
+        users: @users.except(:limit),
         current_organization: current_organization
       )
     end

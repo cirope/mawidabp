@@ -43,7 +43,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion'
-        }, {}, false)
+        }, false)
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
         # Asegurarse que le asigna el tipo correcto
@@ -86,7 +86,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion'
-        }, {}, false)
+        }, false)
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
         # Asegurarse que le asigna el tipo correcto
@@ -131,7 +131,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion'
-        }, {}, false)
+        }, false)
 
     assert @conclusion_review.save
 
@@ -232,15 +232,15 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion'
-      }, {}, false)
+      }, false)
 
       assert @conclusion_review.save,
         @conclusion_review.errors.full_messages.join('; ')
     end
 
-    findings = review.weaknesses(true) + review.oportunities(true)
+    findings = review.weaknesses.reload + review.oportunities.reload
     work_papers_count = findings.inject(0) { |acc, f| acc + f.work_papers.size }
-    final_findings = review.reload.final_weaknesses(true) + review.reload.final_oportunities(true)
+    final_findings = review.reload.final_weaknesses.reload + review.reload.final_oportunities.reload
     final_work_papers_count = final_findings.inject(0) do |acc, f|
       acc + f.work_papers.size
     end

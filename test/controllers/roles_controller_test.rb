@@ -7,7 +7,11 @@ class RolesControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    id_param = {id: roles(:admin_role).to_param}
+    id_param = {
+      params: {
+        id: roles(:admin_role).to_param
+      }
+    }
     public_actions = []
     private_actions = [
       [:get, :index],
@@ -41,7 +45,7 @@ class RolesControllerTest < ActionController::TestCase
 
   test 'show role' do
     login
-    get :show, id: roles(:admin_role).id
+    get :show, params: { id: roles(:admin_role).id }
     assert_response :success
     assert_not_nil assigns(:role)
     assert_template 'roles/show'
@@ -58,7 +62,7 @@ class RolesControllerTest < ActionController::TestCase
   test 'create role' do
     assert_difference ['Role.count', 'Privilege.count'] do
       login
-      post :create, {
+      post :create, params: {
         role: {
           name: 'New role',
           role_type: Role::TYPES[:admin],
@@ -78,7 +82,7 @@ class RolesControllerTest < ActionController::TestCase
 
   test 'edit role' do
     login
-    get :edit, id: roles(:admin_role).id
+    get :edit, params: { id: roles(:admin_role).id }
     assert_response :success
     assert_not_nil assigns(:role)
     assert_template 'roles/edit'
@@ -90,7 +94,7 @@ class RolesControllerTest < ActionController::TestCase
 
     assert_no_difference ['Role.count', 'Privilege.count'] do
       login
-      patch :update, {
+      patch :update, params: {
         id: roles(:admin_role).id,
         role: {
           name: 'Updated role',
@@ -118,7 +122,7 @@ class RolesControllerTest < ActionController::TestCase
   test 'destroy role' do
     login
     assert_difference 'Role.count', -1 do
-      delete :destroy, id: roles(:auditor_senior_role).id
+      delete :destroy, params: { id: roles(:auditor_senior_role).id }
     end
 
     assert_redirected_to roles_url

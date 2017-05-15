@@ -1,4 +1,4 @@
-class CreateControls < ActiveRecord::Migration
+class CreateControls < ActiveRecord::Migration[4.2]
   def self.up
     create_table :controls do |t|
       t.text :control

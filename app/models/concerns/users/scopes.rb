@@ -21,6 +21,12 @@ module Users::Scopes
         references(:findings)
     end
 
+    def all_with_conclusion_final_reviews_for_notification
+      joins(review_user_assignments: { review: :conclusion_final_review }).
+        merge(ReviewUserAssignment.audit_team).
+        merge ConclusionFinalReview.with_near_close_date
+    end
+
     def list_with_corporate
       conditions   = [
         "#{organizations_table}.#{Organization.qcn('id')} = :organization_id",
@@ -33,7 +39,8 @@ module Users::Scopes
       joins(:organizations).
         where(conditions, corporate_list_parameters).
         references(:organizations).
-        uniq.select(column_names - ['notes'])
+        distinct.
+        select(column_names - ['notes'])
     end
 
     private

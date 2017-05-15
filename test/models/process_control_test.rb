@@ -47,7 +47,7 @@ class ProcessControlTest < ActiveSupport::TestCase
   test 'destroy with asociated control objectives' do
     assert_no_difference 'ProcessControl.count' do
       assert_raise ActiveRecord::RecordNotDestroyed do
-        @process_control.destroy
+        @process_control.destroy!
       end
     end
   end

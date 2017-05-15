@@ -1,4 +1,9 @@
 .ui-autocomplete {
+  .ui-state-active {
+    box-shadow: none !important;
+    font-weight: normal !important;
+  }
+
   .ui-state-focus {
     span {
       white-space: normal;

@@ -7,7 +7,11 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    id_param = {:id => control_objective_items(:bcra_A4609_security_management_responsible_dependency_item).to_param}
+    id_param = {
+      :params => {
+        :id => control_objective_items(:bcra_A4609_security_management_responsible_dependency_item).to_param
+      }
+    }
     public_actions = []
     private_actions = [
       [:get, :index],
@@ -39,9 +43,11 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
   test 'list control objective items with search' do
     login
-    get :index, :search => {
-      :query => 'seguridad',
-      :columns => ['control_objective_text', 'review']
+    get :index, :params => {
+      :search => {
+        :query => 'seguridad',
+        :columns => ['control_objective_text', 'review']
+      }
     }
     assert_response :success
     assert_not_nil assigns(:control_objectives)
@@ -52,22 +58,11 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert_template 'control_objective_items/index'
   end
 
-  test 'edit control objective item when search match only one result' do
-    login
-    get :index, :search => {
-      :query => 'dependencia y responsable',
-      :columns => ['control_objective_text', 'review']
-    }
-
-    assert_redirected_to control_objective_item_url(
-      control_objective_items(:bcra_A4609_security_management_responsible_dependency_item))
-    assert_not_nil assigns(:control_objectives)
-    assert_equal 1, assigns(:control_objectives).count
-  end
-
   test 'show control_objective_item' do
     login
-    get :show, :id => control_objective_items(:bcra_A4609_security_management_responsible_dependency_item).id
+    get :show, :params => {
+      :id => control_objective_items(:bcra_A4609_security_management_responsible_dependency_item).id
+    }
     assert_response :success
     assert_not_nil assigns(:control_objective_item)
     assert_template 'control_objective_items/show'
@@ -75,8 +70,9 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
   test 'edit control_objective_item' do
     login
-    get :edit, :id => control_objective_items(
-      :bcra_A4609_security_management_responsible_dependency_item_editable).id
+    get :edit, :params => {
+      :id => control_objective_items(:bcra_A4609_security_management_responsible_dependency_item_editable).id
+    }
     assert_response :success
     assert_not_nil assigns(:control_objective_item)
     assert_template 'control_objective_items/edit'
@@ -86,7 +82,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
       assert_difference 'WorkPaper.count', 2 do
         login
-        patch :update, {
+        patch :update, :params => {
           :id => control_objective_items(
             :bcra_A4609_security_management_responsible_dependency_item_editable).id,
           :control_objective_item => {
@@ -146,7 +142,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
       assert_difference 'BusinessUnitScore.count', 3 do
         login
 
-        patch :update, {
+        patch :update, :params => {
           :id => control_objective_items(:iso_27000_security_organization_4_4_continuous_item).id,
           :control_objective_item => {
             :control_objective_text => 'Updated text',
@@ -189,8 +185,9 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   test 'destroy control_objective_item' do
     login
     assert_difference 'ControlObjectiveItem.count', -1 do
-      delete :destroy, :id => control_objective_items(
-        :iso_27000_security_organization_4_3_item_editable_without_findings).id
+      delete :destroy, :params => {
+        :id => control_objective_items(:iso_27000_security_organization_4_3_item_editable_without_findings).id
+      }
     end
 
     assert_redirected_to control_objective_items_url
@@ -198,7 +195,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
   test 'auto complete for business unit' do
     login
-    get :auto_complete_for_business_unit, {
+    get :auto_complete_for_business_unit, :params => {
       :q => 'fifth', :format => :json
     }
     assert_response :success
@@ -207,7 +204,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
     assert_equal 0, business_units.size # Fifth is in another organization
 
-    get :auto_complete_for_business_unit, {
+    get :auto_complete_for_business_unit, :params => {
       :q => 'one', :format => :json
     }
     assert_response :success
@@ -217,7 +214,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert_equal 1, business_units.size # One only
     assert business_units.all? { |u| (u['label'] + u['informal']).match /one/i }
 
-    get :auto_complete_for_business_unit, {
+    get :auto_complete_for_business_unit, :params => {
       :q => 'business', :format => :json
     }
     assert_response :success
@@ -230,7 +227,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
   test 'auto complete for business unit type' do
     login
-    get :auto_complete_for_business_unit_type, {
+    get :auto_complete_for_business_unit_type, :params => {
       :q => 'noway', :format => :json
     }
     assert_response :success
@@ -239,7 +236,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
     assert_equal 0, business_unit_types.size # Fifth is in another organization
 
-    get :auto_complete_for_business_unit_type, {
+    get :auto_complete_for_business_unit_type, :params => {
       :q => 'cycle', :format => :json
     }
     assert_response :success

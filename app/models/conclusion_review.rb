@@ -1,6 +1,7 @@
-class ConclusionReview < ActiveRecord::Base
+class ConclusionReview < ApplicationRecord
   include Auditable
   include ParameterSelector
+  include ConclusionReviews::DateColumns
   include ConclusionReviews::Scopes
 
   # Constantes
@@ -38,7 +39,7 @@ class ConclusionReview < ActiveRecord::Base
   }.with_indifferent_access
 
   # Callbacks
-  before_destroy :can_be_destroyed?
+  before_destroy :check_if_can_be_destroyed
 
   # Restricciones de los atributos
   attr_readonly :review_id
@@ -56,6 +57,7 @@ class ConclusionReview < ActiveRecord::Base
   belongs_to :organization
   has_one :plan_item, :through => :review
   has_many :control_objective_items, :through => :review
+  has_many :polls, as: :pollable
 
   def self.columns_for_sort
     HashWithIndifferentAccess.new({
@@ -89,7 +91,7 @@ class ConclusionReview < ActiveRecord::Base
   end
 
   def send_by_email_to(user, options = {})
-    NotifierMailer.conclusion_review_notification(
+    Notifier.conclusion_review_notification(
       user, self,
       options.merge(organization_id: Organization.current_id, user_id: PaperTrail.whodunnit)
     ).deliver_later
@@ -335,7 +337,7 @@ class ConclusionReview < ActiveRecord::Base
 
     pdf.move_down PDF_FONT_SIZE
 
-    pdf.add_review_auditors_table(review.review_user_assignments.select(&:include_signature))
+    pdf.add_review_signatures_table(review.review_user_assignments.select(&:include_signature))
 
     pdf.custom_save_as self.pdf_name, ConclusionReview.table_name, self.id
   end
@@ -828,4 +830,10 @@ class ConclusionReview < ActiveRecord::Base
     I18n.t('conclusion_review.findings_follow_up.pdf_name',
       :prefix => '%02d' % index)
   end
+
+  private
+
+    def check_if_can_be_destroyed
+      throw :abort unless can_be_destroyed?
+    end
 end

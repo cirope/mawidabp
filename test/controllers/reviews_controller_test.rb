@@ -7,7 +7,11 @@ class ReviewsControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    id_param = {id: reviews(:current_review).to_param}
+    id_param = {
+      params: {
+        id: reviews(:current_review).to_param
+      }
+    }
     public_actions = []
     private_actions = [
       [:get, :index],
@@ -42,9 +46,11 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'list reviews with search' do
     login
-    get :index, search: {
-      query: '1 2',
-      columns: ['identification', 'project']
+    get :index, params: {
+      search: {
+        query: '1 2',
+        columns: ['identification', 'project']
+      }
     }
     assert_response :success
     assert_not_nil assigns(:reviews)
@@ -52,20 +58,11 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/index'
   end
 
-  test 'edit review when search match only one result' do
-    login
-    get :index, search: {
-      query: '1 1',
-      columns: ['identification', 'project']
-    }
-    assert_redirected_to review_url(reviews(:past_review))
-    assert_not_nil assigns(:reviews)
-    assert_equal 1, assigns(:reviews).count
-  end
-
   test 'show review' do
     login
-    get :show, id: reviews(:current_review).id
+    get :show, params: {
+      id: reviews(:current_review).id
+    }
     assert_response :success
     assert_not_nil assigns(:review)
     assert_template 'reviews/show'
@@ -83,7 +80,7 @@ class ReviewsControllerTest < ActionController::TestCase
     login
     review = Review.find reviews(:current_review).id
 
-    get :new, clone_from: review.id
+    get :new, params: { clone_from: review.id }
     assert_response :success
     assert_not_nil assigns(:review)
     assert review.control_objective_items.size > 0
@@ -102,7 +99,7 @@ class ReviewsControllerTest < ActionController::TestCase
       assert_difference 'ControlObjectiveItem.count', 3 do
         assert_difference 'FileModel.count' do
           assert_difference 'ReviewUserAssignment.count', 4 do
-            post :create, {
+            post :create, params: {
               review: {
                 identification: 'New Identification',
                 description: 'New Description',
@@ -150,7 +147,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'edit review' do
     login
-    get :edit, id: reviews(:current_review).id
+    get :edit, params: { id: reviews(:current_review).id }
     assert_response :success
     assert_not_nil assigns(:review)
     assert_template 'reviews/edit'
@@ -161,7 +158,7 @@ class ReviewsControllerTest < ActionController::TestCase
       'ReviewUserAssignment.count', 'FileModel.count', 'Control.count']
     login
     assert_no_difference counts_array do
-      patch :update, {
+      patch :update, params: {
         id: reviews(:review_with_conclusion).id,
         review: {
           identification: 'Updated Identification',
@@ -197,7 +194,9 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'destroy review' do
     login
     assert_difference 'Review.count', -1 do
-      delete :destroy, id: reviews(:review_without_conclusion_and_without_findings).id
+      delete :destroy, params: {
+        id: reviews(:review_without_conclusion_and_without_findings).id
+      }
     end
 
     assert_redirected_to reviews_url
@@ -206,7 +205,7 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'destroy with final review' do
     login
     assert_no_difference 'Review.count' do
-      delete :destroy, id: reviews(:current_review).id
+      delete :destroy, params: { id: reviews(:current_review).id }
     end
 
     assert_redirected_to reviews_url
@@ -218,8 +217,10 @@ class ReviewsControllerTest < ActionController::TestCase
 
     review_data = nil
 
-    xhr :get, :review_data, id: reviews(:current_review).id,
-      format: 'json'
+    get :review_data, xhr: true, params: {
+      id: reviews(:current_review).id,
+      format: :json
+    }
     assert_response :success
     assert_nothing_raised do
       review_data = ActiveSupport::JSON.decode(@response.body)
@@ -238,7 +239,9 @@ class ReviewsControllerTest < ActionController::TestCase
 
     plan_item_data = nil
 
-    xhr :get, :plan_item_data, id: plan_items(:current_plan_item_1).id
+    get :plan_item_data, xhr: true, params: {
+      id: plan_items(:current_plan_item_1).id
+    }
     assert_response :success
     assert_nothing_raised do
       plan_item_data = ActiveSupport::JSON.decode(@response.body)
@@ -254,7 +257,7 @@ class ReviewsControllerTest < ActionController::TestCase
     review = Review.find reviews(:current_review).id
 
     assert_nothing_raised do
-      get :survey_pdf, id: review.id
+      get :survey_pdf, params: { id: review.id }
     end
 
     assert_redirected_to review.relative_survey_pdf_path
@@ -264,7 +267,7 @@ class ReviewsControllerTest < ActionController::TestCase
     login
     review = Review.find reviews(:current_review).id
 
-    get :suggested_findings, id: review.plan_item_id
+    get :suggested_findings, params: { id: review.plan_item_id }
     assert_response :success
     assert_not_nil assigns(:findings)
     assert assigns(:findings).count > 0
@@ -281,7 +284,7 @@ class ReviewsControllerTest < ActionController::TestCase
     login
     process_control = process_controls :iso_27000_security_policy
 
-    get :suggested_process_control_findings, id: process_control.id
+    get :suggested_process_control_findings, params: { id: process_control.id }
     assert_response :success
     assert_not_nil assigns(:findings)
     assert assigns(:findings).count > 0
@@ -300,7 +303,7 @@ class ReviewsControllerTest < ActionController::TestCase
     review = Review.find reviews(:current_review).id
 
     assert_nothing_raised do
-      get :download_work_papers, id: review.id
+      get :download_work_papers, params: { id: review.id }
     end
 
     assert_redirected_to review.relative_work_papers_zip_path
@@ -308,7 +311,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'estimated amount' do
     login
-    get :estimated_amount, id: plan_items(:past_plan_item_1).id
+    get :estimated_amount, params: { id: plan_items(:past_plan_item_1).id }
 
     assert_response :success
     assert_template 'reviews/_estimated_amount'
@@ -317,14 +320,14 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'recode findings' do
     login
 
-    patch :recode_findings, id: reviews(:review_without_conclusion).id
+    patch :recode_findings, params: { id: reviews(:review_without_conclusion).id }
 
     assert_redirected_to review_url(reviews(:review_without_conclusion))
   end
 
   test 'auto complete for control objectives' do
     login
-    get :auto_complete_for_control_objective, {
+    get :auto_complete_for_control_objective, params: {
       q: 'acceso', format: :json
     }
     assert_response :success
@@ -338,7 +341,7 @@ class ReviewsControllerTest < ActionController::TestCase
       end
     )
 
-    get :auto_complete_for_control_objective, {
+    get :auto_complete_for_control_objective, params: {
       q: 'responsable', format: :json
     }
     assert_response :success
@@ -352,7 +355,7 @@ class ReviewsControllerTest < ActionController::TestCase
       end
     )
 
-    get :auto_complete_for_control_objective, {
+    get :auto_complete_for_control_objective, params: {
       q: 'xyz', format: :json
     }
     assert_response :success
@@ -364,7 +367,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'auto complete for process controls' do
     login
-    get :auto_complete_for_process_control, {
+    get :auto_complete_for_process_control, params: {
       q: 'seg', format: :json
     }
     assert_response :success
@@ -378,7 +381,7 @@ class ReviewsControllerTest < ActionController::TestCase
       end
     )
 
-    get :auto_complete_for_process_control, {
+    get :auto_complete_for_process_control, params: {
       q: 'clasi', format: :json
     }
     assert_response :success
@@ -392,7 +395,7 @@ class ReviewsControllerTest < ActionController::TestCase
       end
     )
 
-    get :auto_complete_for_process_control, {
+    get :auto_complete_for_process_control, params: {
       q: 'xyz', format: :json
     }
     assert_response :success
@@ -404,7 +407,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'auto complete for finding relation' do
     login
-    get :auto_complete_for_finding, { q: 'O001', format: :json }
+    get :auto_complete_for_finding, params: { q: 'O001', format: :json }
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -412,7 +415,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
-    get :auto_complete_for_finding, { q: 'O001, 1 2 3', format: :json }
+    get :auto_complete_for_finding, params: { q: 'O001, 1 2 3', format: :json }
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -420,7 +423,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 1, findings.size # Solo O01 del informe 1 2 3
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001.*1 2 3/i }
 
-    get :auto_complete_for_finding, { q: 'x_none', format: :json }
+    get :auto_complete_for_finding, params: { q: 'x_none', format: :json }
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -431,7 +434,7 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'auto complete for tagging' do
     login
 
-    get :auto_complete_for_tagging, {
+    get :auto_complete_for_tagging, params: {
       :q => 'high priority',
       :kind => 'review',
       :format => :json
@@ -443,7 +446,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 1, tags.size
     assert tags.all? { |t| t['label'].match /high priority/i }
 
-    get :auto_complete_for_tagging, {
+    get :auto_complete_for_tagging, params: {
       :q => 'x_none',
       :kind => 'finding',
       :format => :json

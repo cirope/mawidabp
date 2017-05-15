@@ -6,7 +6,10 @@ class Users::CompletionsControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for user' do
-    xhr :get, :index, q: 'bar', format: :json
+    get :index, xhr: true, params: {
+      q: 'bar',
+      format: :json
+    }
 
     assert_response :success
     users = ActiveSupport::JSON.decode(@response.body)
@@ -16,7 +19,10 @@ class Users::CompletionsControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for corporate user' do
-    xhr :get, :index, q: 'corporate', format: :json
+    get :index, xhr: true, params: {
+      q: 'corporate',
+      format: :json
+    }
 
     assert_response :success
     users = ActiveSupport::JSON.decode(@response.body)
@@ -26,7 +32,10 @@ class Users::CompletionsControllerTest < ActionController::TestCase
   end
 
   test 'list blank users' do
-    xhr :get, :index, q: 'blank', format: :json
+    get :index, xhr: true, params: {
+      q: 'blank',
+      format: :json
+    }
 
     assert_response :success
     users = ActiveSupport::JSON.decode(@response.body)
@@ -36,7 +45,10 @@ class Users::CompletionsControllerTest < ActionController::TestCase
   end
 
   test 'list none users' do
-    xhr :get, :index, q: 'xyz', format: :json
+    get :index, xhr: true, params: {
+      q: 'xyz',
+      format: :json
+    }
     assert_response :success
 
     users = ActiveSupport::JSON.decode(@response.body)

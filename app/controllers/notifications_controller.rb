@@ -1,9 +1,8 @@
 class NotificationsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_notification, only: [:show, :edit, :update]
+  before_action :set_notification, only: [:show, :edit, :update, :confirm]
 
   # * GET /notifications
-  # * GET /notifications.xml
   def index
     @title = t 'notification.index_title'
     @notifications = Notification.where(:user_id => @auth_user.id).order(
@@ -12,18 +11,15 @@ class NotificationsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @notifications }
     end
   end
 
   # * GET /notifications/1
-  # * GET /notifications/1.xml
   def show
     @title = t 'notification.show_title'
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @notification }
     end
   end
 
@@ -39,7 +35,6 @@ class NotificationsController < ApplicationController
   #  validaciones.
   #
   # * PATCH /notifications/1
-  # * PATCH /notifications/1.xml
   def update
     @title = t 'notification.edit_title'
 
@@ -47,10 +42,8 @@ class NotificationsController < ApplicationController
       if @notification.update(notification_params)
         flash.notice = t 'notification.correctly_updated'
         format.html { redirect_to(notifications_url) }
-        format.xml  { head :ok }
       else
         format.html { render :action => :edit }
-        format.xml  { render :xml => @notification.errors, :status => :unprocessable_entity }
       end
     end
 
@@ -61,8 +54,6 @@ class NotificationsController < ApplicationController
 
   # * GET /notifications/1/confirm
   def confirm
-    @notification = Notification.where(:confirmation_hash => params[:id]).take!
-
     @notification.notify! params[:reject].blank? if @notification.unconfirmed?
 
     redirect_to @notification, :notice => t('notification.confirmed')

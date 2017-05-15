@@ -50,7 +50,8 @@ class SessionsController < ApplicationController
 
     def set_session_values user
       session[:last_access] = Time.now
-      user.logged_in!(session[:last_access])
-      session[:user_id] = user.id
+      session[:user_id]     = user.id
+
+      user.logged_in! session[:last_access]
     end
 end

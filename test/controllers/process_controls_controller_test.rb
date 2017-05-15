@@ -9,12 +9,17 @@ class ProcessControlsControllerTest < ActionController::TestCase
   end
 
   test 'should get new' do
-    xhr :get, :new, best_practice_id: @best_practice
+    get :new, xhr: true, params: {
+      best_practice_id: @best_practice
+    }
     assert_response :success
   end
 
   test 'should get edit' do
-    xhr :get, :edit, best_practice_id: @best_practice, id: @process_control
+    get :edit, xhr: true, params: {
+      best_practice_id: @best_practice,
+      id: @process_control
+    }
     assert_response :success
   end
 end

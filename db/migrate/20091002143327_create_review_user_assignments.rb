@@ -1,4 +1,4 @@
-class CreateReviewUserAssignments < ActiveRecord::Migration
+class CreateReviewUserAssignments < ActiveRecord::Migration[4.2]
   def self.up
     create_table :review_user_assignments do |t|
       t.integer :assignment_type

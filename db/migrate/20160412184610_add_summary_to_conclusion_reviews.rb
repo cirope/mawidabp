@@ -1,4 +1,4 @@
-class AddSummaryToConclusionReviews < ActiveRecord::Migration
+class AddSummaryToConclusionReviews < ActiveRecord::Migration[4.2]
   def change
     add_column :conclusion_reviews, :summary, :string
 

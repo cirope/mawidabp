@@ -1,4 +1,4 @@
-class FindingUserAssignment < ActiveRecord::Base
+class FindingUserAssignment < ApplicationRecord
   include Auditable
   include Comparable
 
@@ -7,7 +7,7 @@ class FindingUserAssignment < ActiveRecord::Base
   scope :responsibles, -> { where(:responsible_auditor => true) }
 
   # Callbacks
-  before_save :can_be_modified?, :assign_finding_type
+  before_save :can_be_modified?, :assign_finding_type, :users_notification
 
   # Restricciones
   validates :user_id, :presence => true
@@ -52,5 +52,15 @@ class FindingUserAssignment < ActiveRecord::Base
 
   def assign_finding_type
     self.finding_type = self.finding.try(:type) || self.raw_finding.try(:type)
+  end
+
+  def users_notification
+    if user_id_changed? && persisted?
+      user_removed = User.find user_id_was
+
+      Notifier.reassigned_findings_notification(
+        user, user_removed, finding, false
+      ).deliver_later
+    end
   end
 end

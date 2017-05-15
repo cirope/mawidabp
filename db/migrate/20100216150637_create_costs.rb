@@ -1,4 +1,4 @@
-class CreateCosts < ActiveRecord::Migration
+class CreateCosts < ActiveRecord::Migration[4.2]
   def self.up
     create_table :costs do |t|
       t.text :description

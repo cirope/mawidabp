@@ -12,7 +12,6 @@
 //= require jquery-ui/i18n/datepicker-es
 //= require jquery-ui/widgets/dialog
 //= require jquery-ui/widgets/sortable
-//= require jquery-ui-timepicker-addon
 //= require bootstrap
 //= require autocomplete
 //= require ajax

@@ -58,22 +58,22 @@ class ActiveRecord::Base
 
   private
 
-    def self.sanitize condition, table_name = self.table_name
+    def self.sanitize condition
       return nil if condition.blank?
 
       case condition
       when Array; sanitize_sql_array condition
-      when Hash;  sanitize_hash condition, table_name
+      when Hash;  sanitize_hash condition
       else        condition
       end
     end
 
-    def self.sanitize_hash attrs, default_table_name = self.table_name
-      attrs = ActiveRecord::PredicateBuilder.resolve_column_aliases self, attrs
+    def self.sanitize_hash attrs
+      table = ActiveRecord::TableMetadata.new(self, arel_table)
+      attrs = table.resolve_column_aliases attrs
       attrs = expand_hash_conditions_for_aggregates attrs
-      table = Arel::Table.new(table_name, arel_engine).alias default_table_name
 
-      ActiveRecord::PredicateBuilder.build_from_hash(self, attrs, table).map do |b|
+      ActiveRecord::PredicateBuilder.new(table).build_from_hash(attrs.stringify_keys).map do |b|
         connection.visitor.compile b
       end.join ' AND '
     end
@@ -127,6 +127,6 @@ class String
   end
 
   def sanitized_for_filename
-    @_sanitized_for_filename ||= self.gsub /[^A-Za-z0-9\.\-]+/, '_'
+    gsub /[^A-Za-z0-9\.\-]+/, '_'
   end
 end

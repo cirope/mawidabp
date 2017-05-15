@@ -1,8 +1,8 @@
 module FindingsHelper
   def finding_status_field(form, inline = true, disabled = false)
-    finding = form.object
-    statuses = finding.repeated? ?
-      finding.next_status_list : finding.next_status_list.except(:repeated)
+    finding  = form.object
+    statuses = finding.next_status_list
+    excluded = []
 
     if finding.errors[:state].present?
       state_was = finding.new_record? ?
@@ -11,7 +11,12 @@ module FindingsHelper
       statuses.merge! finding.next_status_list(state_was)
     end
 
-    options = statuses.map { |k, v| [t(:"finding.status_#{k}"), v] }
+    excluded << :repeated  unless finding.repeated?  || finding.was_repeated?
+    excluded << :confirmed unless finding.confirmed? || finding.was_confirmed?
+
+    options = statuses.except(*excluded).map do |k, v|
+      [t(:"finding.status_#{k}"), v]
+    end
 
     form.input :state, collection: sort_options_array(options), label: false,
       prompt: true, input_html: { disabled: (disabled || finding.unconfirmed?) }
@@ -66,10 +71,10 @@ module FindingsHelper
       end
 
       if finding.rescheduled?
-        html_classes << 'yellow'
+        html_classes << 'text-warning'
       end
 
-      html_classes << 'green' if html_classes.blank?
+      html_classes << 'text-success' if html_classes.blank?
     end
 
     unless finding.follow_up_date.blank?
@@ -133,7 +138,7 @@ module FindingsHelper
   def show_finding_answers_count(finding)
     finding_answers_count = finding.finding_answers.count
     user_answers = finding.finding_answers.where(:user_id => @auth_user.id).count
-    klass = 'green' if user_answers > 0
+    klass = 'text-success' if user_answers > 0
     user_count = content_tag(
       :abbr, user_answers,
       :title => t('finding.user_finding_answers_count'),
@@ -180,6 +185,14 @@ module FindingsHelper
 
   def finding_fixed_status_options
     Finding::STATUS.slice(:implemented_audited, :assumed_risk).map do |k, v|
+      [t("finding.status_#{k}"), v.to_s]
+    end
+  end
+
+  def finding_execution_status_options
+    exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS - [:unconfirmed, :confirmed]
+
+    Finding::STATUS.except(*exclude).map do |k, v|
       [t("finding.status_#{k}"), v.to_s]
     end
   end

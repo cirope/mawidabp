@@ -1,4 +1,4 @@
-class CreateWorkPapers < ActiveRecord::Migration
+class CreateWorkPapers < ActiveRecord::Migration[4.2]
   def self.up
     create_table :work_papers do |t|
       t.string :name

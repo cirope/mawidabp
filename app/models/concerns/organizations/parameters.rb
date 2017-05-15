@@ -3,7 +3,7 @@ module Organizations::Parameters
 
   module ClassMethods
     def all_parameters name
-      all.map do |organization|
+      all.order(:id).map do |organization|
         {
           organization: organization,
           parameter:    organization.settings.find_by(name: name).try(:value)

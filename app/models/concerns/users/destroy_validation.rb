@@ -2,7 +2,7 @@ module Users::DestroyValidation
   extend ActiveSupport::Concern
 
   included do
-    before_destroy :has_not_orphan_fingings?
+    before_destroy :check_if_can_be_destroyed
   end
 
   def disable
@@ -19,5 +19,9 @@ module Users::DestroyValidation
       else
         true
       end
+    end
+
+    def check_if_can_be_destroyed
+      throw :abort unless has_not_orphan_fingings?
     end
 end

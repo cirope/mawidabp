@@ -22,8 +22,10 @@ class BenefitsControllerTest < ActionController::TestCase
     organization = organizations :cirope
 
     assert_difference 'organization.benefits.count' do
-      post :create, benefit: {
-        name: 'New', kind: 'benefit_tangible'
+      post :create, params: {
+        benefit: {
+          name: 'New', kind: 'benefit_tangible'
+        }
       }
     end
 
@@ -31,17 +33,20 @@ class BenefitsControllerTest < ActionController::TestCase
   end
 
   test 'should show benefit' do
-    get :show, id: @benefit
+    get :show, params: { id: @benefit }
     assert_response :success
   end
 
   test 'should get edit' do
-    get :edit, id: @benefit
+    get :edit, params: { id: @benefit }
     assert_response :success
   end
 
   test 'should update benefit' do
-    patch :update, id: @benefit, benefit: { name: 'updated name' }
+    patch :update, params: {
+      id: @benefit,
+      benefit: { name: 'updated name' }
+    }
     assert_redirected_to benefit_url(assigns(:benefit))
   end
 
@@ -49,7 +54,7 @@ class BenefitsControllerTest < ActionController::TestCase
     @benefit.achievements.clear
 
     assert_difference 'Benefit.count', -1 do
-      delete :destroy, id: @benefit
+      delete :destroy, params: { id: @benefit }
     end
 
     assert_redirected_to benefits_url

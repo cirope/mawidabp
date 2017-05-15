@@ -7,6 +7,7 @@ es:
     'no': "No"
     add: "Agregar"
     add_item: "Agregar ítem"
+    all: "Todos"
     apply_filter: "Aplicar filtro"
     ascendant: "Ascendente"
     back: "Volver"
@@ -128,6 +129,7 @@ es:
   conclusion_report:
     index_title: "Reportes de conclusión"
     cost_analysis_title: "Análisis de costos"
+    cost_summary_title: "Análisis de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
@@ -149,6 +151,15 @@ es:
       general_title: "ANÁLISIS DE COSTOS\nDE AUDÍTORIA INTERNA"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+    cost_summary:
+      pdf_name: "resumen_de_costos_%{from_date}_al_%{to_date}.pdf"
+      title: "RESUMEN DE COSTOS\nDE AUDITORÍA INTERNA"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      column_month: "Mes"
+      column_estimated_amount: "Unidades estimadas"
+      column_real_amount: "Unidades reales"
+      column_deviation: "Desviación"
 
   conclusion_reports:
     weaknesses_graphs:
@@ -161,6 +172,7 @@ es:
   conclusion_committee_report:
     index_title: "Reportes de conclusión"
     control_objective_stats_title: 'Observaciones por objetivo de control'
+    control_objective_stats_by_review_title: 'Observaciones por objetivo de control sin calificación'
     benefits_title: 'Beneficios / Perjuicios'
     process_control_stats_title: 'Observaciones por proceso de negocio'
     synthesis_report_title: "Informe de síntesis al directorio"
@@ -183,6 +195,12 @@ es:
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
+    benefits:
+      pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
+      title: "Beneficios / Perjuicios"
+      subtitle: "INFORMES DEFINITIVOS"
+      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
+      total: 'Monto total: <b>%{amount}</b>'
     control_objective_stats:
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
       title: "OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL"
@@ -194,12 +212,12 @@ es:
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
-    benefits:
-      pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
-      title: "Beneficios / Perjuicios"
-      subtitle: "INFORMES DEFINITIVOS"
-      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
-      total: 'Monto total: <b>%{amount}</b>'
+    control_objective_stats_by_review:
+      pdf_name: 'observaciones_por_objetivo_de_control_sin_calificacion_%{from_date}_al_%{to_date}.pdf'
+      title: 'OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL SIN CALIFICACIÓN'
+      subtitle: 'INFORMES DEFINITIVOS'
+      without_weaknesses: 'Sin observaciones'
+      without_audits_in_the_period: 'Sin auditorías en el periodo'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
@@ -437,6 +455,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     without_weaknesses: "Sin observaciones en el periodo"
     without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
+    weaknesses_report:
+      title: 'Informe de seguimiento de observaciones'
+      empty: 'No hay observaciones para el filtro aplicado'
+      pdf_name: 'informe_de_seguimiento_de_observaciones_en_ejecucion.pdf'
 
   finding:
     index_title: "Listado de observaciones / oportunidades de mejora"
@@ -520,6 +542,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       without_important_changes: "Sin cambios importantes hasta la fecha"
       work_papers: "Papeles de trabajo"
       pdf_name: "seguimiento_de_observacion_%{code}.pdf"
+    pdf:
+      filtered_by:
+        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
+        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
 
   finding_relation:
     types:
@@ -561,6 +587,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
   follow_up_committee:
     index_title: "Reportes de comité"
     control_objective_stats_title: 'Observaciones por objetivo de control'
+    control_objective_stats_by_review_title: 'Observaciones por objetivo de control sin calificación'
     benefits_title: 'Beneficios / Perjuicios'
     process_control_stats_title: 'Observaciones por proceso de negocio'
     control_effectiveness: "Efectividad del control"
@@ -601,6 +628,12 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
+    benefits:
+      pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
+      title: "Beneficios / Perjuicios"
+      subtitle: "INFORMES DEFINITIVOS"
+      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
+      total: 'Monto total: <b>%{amount}</b>'
     control_objective_stats:
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
       title: "OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL"
@@ -611,12 +644,12 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         other: '%{effectiveness} en %{count} informes'
       without_weaknesses: 'Sin observaciones'
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
-    benefits:
-      pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
-      title: "Beneficios / Perjuicios"
-      subtitle: "INFORMES DEFINITIVOS"
-      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
-      total: 'Monto total: <b>%{amount}</b>'
+    control_objective_stats_by_review:
+      pdf_name: 'observaciones_por_objetivo_de_control_sin_calificacion_%{from_date}_al_%{to_date}.pdf'
+      title: 'OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL SIN CALIFICACIÓN'
+      subtitle: "SEGUIMIENTO DE INFORMES"
+      without_weaknesses: 'Sin observaciones'
+      without_audits_in_the_period: 'Sin auditorías en el periodo'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
@@ -732,7 +765,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     status_rejected: "Rechazada"
     type: "Tipo"
 
-  notifier_mailer:
+  notifier:
     notify_new_finding:
       title: "Tiene una nueva observación / oportunidad de mejora"
       created_title: "Nueva observación / oportunidad de mejora"
@@ -784,6 +817,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables de la siguiente observación / oportunidad de mejora"
       managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
+    pending_poll_email:
+      affected_user_html: "Encuesta acerca de <strong>%{user}</strong>"
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:
@@ -1247,6 +1282,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         notify_users: "Comentario (enviar notificación)"
       finding/finding_answers/file_model:
         one: "Anexo (archivo)"
+        file: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"
         file_content_type: "Anexo (tipo de archivo)"
         file_file_size: "Anexo (tamaño de archivo)"
@@ -1451,6 +1487,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         period_id: "Periodo"
         review_id: "Informe"
         cost: "Costo"
+        units: "Unidades"
         workflow_items_resources: "Recursos"
       workflow/workflow_items:
         one: "Tarea"

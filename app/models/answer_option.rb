@@ -1,4 +1,4 @@
-class AnswerOption < ActiveRecord::Base
+class AnswerOption < ApplicationRecord
   include Auditable
 
   validates :option, presence: true

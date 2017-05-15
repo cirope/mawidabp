@@ -49,9 +49,9 @@ class DocumentsController < ApplicationController
   end
 
   def download
-    url = flash[:allow_url] = @document.file_model&.file&.url
+    flash[:allow_path] = @document.file_model&.file&.path
 
-    redirect_to url || root_url
+    redirect_to @document.file_model&.file&.url || root_url
   end
 
   private

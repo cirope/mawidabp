@@ -1,4 +1,4 @@
-class WorkPaper < ActiveRecord::Base
+class WorkPaper < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Comparable
@@ -58,8 +58,8 @@ class WorkPaper < ActiveRecord::Base
   accepts_nested_attributes_for :file_model, :allow_destroy => true,
     reject_if: ->(attrs) { ['file', 'file_cache'].all? { |a| attrs[a].blank? } }
 
-  def initialize(attributes = nil, options = {})
-    super(attributes, options)
+  def initialize(attributes = nil)
+    super(attributes)
 
     self.organization_id = Organization.current_id
   end
@@ -164,9 +164,10 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def pdf_cover_name(filename = nil, short = false)
+    code = sanitized_code
+    short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
+
     if self.file_model.try(:file?)
-      code = sanitized_code
-      short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
       filename ||= self.file_model.identifier.sanitized_for_filename
       filename = filename.sanitized_for_filename.
         sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
@@ -181,7 +182,7 @@ class WorkPaper < ActiveRecord::Base
     if self.file_model.try(:file?)
       File.join File.dirname(self.file_model.file.path), self.pdf_cover_name
     else
-      "#{TEMP_PATH}#{self.pdf_cover_name(filename || self.object_id.abs)}"
+      "#{TEMP_PATH}#{self.pdf_cover_name(filename || "#{object_id.abs}.pdf")}"
     end
   end
 
@@ -255,6 +256,7 @@ class WorkPaper < ActiveRecord::Base
             self.file_model.update_column :file_file_name, File.basename(filename)
             self.file_model.file_file_size = File.size(filename)
             self.file_model.save!
+            self.file_model.reload
           end
         end
       end

@@ -1,4 +1,4 @@
-class CreateConclusionReviews < ActiveRecord::Migration
+class CreateConclusionReviews < ActiveRecord::Migration[4.2]
   def self.up
     create_table :conclusion_reviews do |t|
       # Discriminator for inheritance

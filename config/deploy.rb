@@ -14,12 +14,13 @@ set :linked_files, %w{config/application.yml}
 set :linked_dirs, %w{log private tmp/pids}
 
 set :rbenv_type, :user
-set :rbenv_ruby, '2.3.3'
+set :rbenv_ruby, '2.4.1'
 
 set :keep_releases, 5
 
 namespace :deploy do
   before :check,      'config:upload'
+  before :publishing, :db_updates
   after  :publishing, :restart
   after  :finishing,  :help
   after  :finishing,  :cleanup

@@ -1,4 +1,4 @@
-class BestPractice < ActiveRecord::Base
+class BestPractice < ApplicationRecord
   include Auditable
   include BestPractices::Defaults
   include BestPractices::DestroyValidation

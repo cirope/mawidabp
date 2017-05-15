@@ -1,4 +1,4 @@
-class AddSharedToBestPractices < ActiveRecord::Migration
+class AddSharedToBestPractices < ActiveRecord::Migration[4.2]
   def change
     change_table :best_practices do |t|
       t.boolean :shared, default: false, index: true

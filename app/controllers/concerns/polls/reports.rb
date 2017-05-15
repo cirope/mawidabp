@@ -3,7 +3,8 @@ module Polls::Reports
 
   included do
     before_action :auth, :set_current_module, :set_report, :set_date_range,
-      :set_questionnaire, :set_questionnaires, :set_title, :process_report
+      :set_questionnaire, :set_user, :set_business_unit, :set_questionnaires,
+      :set_title, :process_report
 
     respond_to :html, :js
   end
@@ -44,6 +45,29 @@ module Polls::Reports
     def set_questionnaire
       if params[:index] && params[:index][:questionnaire].present?
         @report.questionnaire = Questionnaire.find(params[:index][:questionnaire])
+      end
+    end
+
+    def set_user
+      if params[:index] && params[:index][:user_option].present?
+        @report.user_options = {
+          only_all:        params[:index][:user_option] == 'only_all',
+          include_reviews: params[:index][:user_option] == 'include_reviews'
+        }
+      end
+
+      if params[:index] && params[:index][:user_id].present?
+        @report.user_id = params[:index][:user_id]
+      end
+    end
+
+    def set_business_unit
+      if params[:index] && params[:index][:business_unit].present?
+        @report.business_unit = params[:index][:business_unit]
+      end
+
+      if params[:index] && params[:index][:business_unit_type].present?
+        @report.business_unit = params[:index][:business_unit_type]
       end
     end
 end

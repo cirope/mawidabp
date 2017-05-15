@@ -7,7 +7,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    id_param = {:id => business_unit_types(:cycle).to_param}
+    id_param = { :params => { :id => business_unit_types(:cycle).to_param } }
     public_actions = []
     private_actions = [
       [:get, :index],
@@ -41,7 +41,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
 
   test 'show business_unit_type' do
     login
-    get :show, :id => business_unit_types(:cycle).id
+    get :show, :params => { :id => business_unit_types(:cycle).id }
     assert_response :success
     assert_not_nil assigns(:business_unit_type)
     assert_template 'business_unit_types/show'
@@ -58,7 +58,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
   test 'create business_unit_type' do
     assert_difference ['BusinessUnitType.count', 'BusinessUnit.count'] do
       login
-      post :create, {
+      post :create, :params => {
         :business_unit_type => {
           :name => 'New business unit type',
           :business_unit_label => 'New business unit label',
@@ -80,7 +80,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
 
   test 'edit business_unit_type' do
     login
-    get :edit, :id => business_unit_types(:cycle).id
+    get :edit, :params => { :id => business_unit_types(:cycle).id }
     assert_response :success
     assert_not_nil assigns(:business_unit_type)
     assert_template 'business_unit_types/edit'
@@ -89,7 +89,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
   test 'update business_unit_type' do
     assert_no_difference ['BusinessUnitType.count', 'BusinessUnit.count'] do
       login
-      patch :update, {
+      patch :update, :params => {
         :id => business_unit_types(:cycle).id,
         :business_unit_type => {
           :name => 'Updated business unit type',
@@ -120,7 +120,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
   test 'destroy business_unit_type' do
     login
     assert_difference 'BusinessUnitType.count', -1 do
-      delete :destroy, :id => business_unit_types(:bcra).id
+      delete :destroy, :params => { :id => business_unit_types(:bcra).id }
     end
 
     assert_redirected_to business_unit_types_url

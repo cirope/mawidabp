@@ -7,7 +7,7 @@
 
 every 1.day, at: '20:00' do
   methods = [
-    'ConclusionFinalReview.warning_auditors_about_close_date',
+    'User.notify_auditors_about_close_date',
     'Finding.notify_for_unconfirmed_for_notification_findings',
     'User.notify_new_findings',
     'Finding.mark_as_unanswered_if_necesary',

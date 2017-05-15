@@ -18,18 +18,18 @@ module Findings::State
 
       def status
         {
-          confirmed:            -3,
-          unconfirmed:          -2,
-          unanswered:           -1,
-          being_implemented:    0,
-          implemented:          1,
-          implemented_audited:  2,
-          assumed_risk:         3,
-          notify:               4,
-          incomplete:           5,
-          repeated:             6,
-          revoked:              7,
-          criteria_mismatch:    8
+          confirmed:           -3,
+          unconfirmed:         -2,
+          unanswered:          -1,
+          being_implemented:   0,
+          implemented:         1,
+          implemented_audited: 2,
+          assumed_risk:        3,
+          notify:              4,
+          incomplete:          5,
+          repeated:            6,
+          revoked:             7,
+          criteria_mismatch:   8
         }.with_indifferent_access.freeze
       end
 
@@ -113,7 +113,7 @@ module Findings::State
       end
 
       def notify_transitions final
-        [:notify, :incomplete, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :criteria_mismatch] |
+        [:notify, :incomplete, :confirmed, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :criteria_mismatch] |
           (final ? [] : [:revoked])
       end
 

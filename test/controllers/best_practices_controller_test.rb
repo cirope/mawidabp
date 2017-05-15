@@ -13,7 +13,7 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'show best practice' do
-    get :show, id: best_practices(:iso_27001).id
+    get :show, params: { id: best_practices(:iso_27001).id }
     assert_response :success
     assert_not_nil assigns(:best_practice)
     assert_template 'best_practices/show'
@@ -36,7 +36,7 @@ class BestPracticesControllerTest < ActionController::TestCase
     ]
 
     assert_difference counts_array, 4 do
-      post :create, {
+      post :create, params: {
         best_practice: {
           name: 'new_best_practice 1',
           description: 'New description 1',
@@ -130,7 +130,7 @@ class BestPracticesControllerTest < ActionController::TestCase
         }
       }
 
-      post :create, {
+      post :create, params: {
         best_practice: {
           name: 'new_best_practice 2',
           description: 'New description 2',
@@ -147,14 +147,14 @@ class BestPracticesControllerTest < ActionController::TestCase
         }
       }
 
-      post :create, {
+      post :create, params: {
         best_practice: {
           name: 'new_best_practice 3',
           description: 'New description 3'
         }
       }
 
-      post :create, {
+      post :create, params: {
         best_practice: {
           name: 'new_best_practice 4',
           description: 'New description 4'
@@ -164,7 +164,7 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'edit best practice' do
-    get :edit, id: best_practices(:iso_27001).id
+    get :edit, params: { id: best_practices(:iso_27001).id }
     assert_response :success
     assert_not_nil assigns(:best_practice)
     assert_template 'best_practices/edit'
@@ -179,7 +179,7 @@ class BestPracticesControllerTest < ActionController::TestCase
     ]
 
     assert_no_difference counts_array do
-      patch :update, {
+      patch :update, params: {
         id: best_practices(:iso_27001).id,
         best_practice: {
           name: 'updated_best_practice',
@@ -243,14 +243,16 @@ class BestPracticesControllerTest < ActionController::TestCase
 
   test 'destroy best_practice' do
     assert_difference 'BestPractice.count', -1 do
-      delete :destroy, id: best_practices(:useless_best_practice).id
+      delete :destroy, params: {
+        id: best_practices(:useless_best_practice).id
+      }
     end
 
     assert_redirected_to best_practices_url
   end
 
   test 'auto complete for tagging' do
-    get :auto_complete_for_tagging, {
+    get :auto_complete_for_tagging, params: {
       q: 'risk',
       kind: 'control_objective',
       format: :json
@@ -262,7 +264,7 @@ class BestPracticesControllerTest < ActionController::TestCase
     assert_equal 1, tags.size
     assert tags.all? { |t| t['label'].match /risk/i }
 
-    get :auto_complete_for_tagging, {
+    get :auto_complete_for_tagging, params: {
       q: 'x_none',
       kind: 'control_objective',
       format: :json

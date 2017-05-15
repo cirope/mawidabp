@@ -1,4 +1,4 @@
-class CreatePlans < ActiveRecord::Migration
+class CreatePlans < ActiveRecord::Migration[4.2]
   def self.up
     create_table :plans do |t|
       t.references :period

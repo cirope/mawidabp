@@ -95,7 +95,7 @@ module Users::Roles
         organization_roles.reload
         errors.add :organization_roles, :invalid
 
-        false
+        throw :abort
       end
     end
 

@@ -15,6 +15,11 @@ module Findings::Scopes
       where organization_id: organization_ids
     end
 
+    def list_without_final_review
+      includes(control_objective_item: :review).
+        merge(Review.list_without_final_review)
+    end
+
     def with_title title
       where "LOWER(#{quoted_table_name}.#{qcn 'title'}) LIKE ?", "%#{title.mb_chars.downcase}%"
     end

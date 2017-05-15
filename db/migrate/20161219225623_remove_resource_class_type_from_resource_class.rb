@@ -1,4 +1,4 @@
-class RemoveResourceClassTypeFromResourceClass < ActiveRecord::Migration
+class RemoveResourceClassTypeFromResourceClass < ActiveRecord::Migration[4.2]
   def change
     remove_human_resources
 
@@ -8,6 +8,6 @@ class RemoveResourceClassTypeFromResourceClass < ActiveRecord::Migration
   private
 
     def remove_human_resources
-      ResourceClass.unscoped.where(resource_class_type: 0).destroy_all
+      ResourceClass.where(resource_class_type: 0).destroy_all
     end
 end

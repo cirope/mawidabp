@@ -7,7 +7,7 @@ class SettingsController < ApplicationController
 
   # GET /settings
   def index
-    @settings = current_organization.settings.page params[:page]
+    @settings = current_organization.settings.order(:id).page params[:page]
   end
 
   # GET /settings/1

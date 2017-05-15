@@ -1,6 +1,7 @@
-class Period < ActiveRecord::Base
+class Period < ApplicationRecord
   include Auditable
   include ParameterSelector
+  include Periods::DateColumns
   include Periods::DestroyValidation
   include Periods::Overrides
   include Periods::Scopes

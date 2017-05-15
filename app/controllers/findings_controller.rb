@@ -64,8 +64,8 @@ class FindingsController < ApplicationController
         :control_objective_item => {
           :review => [:conclusion_final_review, :period, :plan_item]
         }
-      }, :users, :organization
-    ).where(@conditions).order(
+      }, :organization
+    ).left_joins(:users, :tags).where(@conditions).order(
       @order_by || [
         default_sort_column,
         "#{Finding.quoted_table_name}.#{Finding.qcn('organization_id')} ASC",
@@ -76,11 +76,7 @@ class FindingsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        @findings = @findings.page(params[:page])
-
-        if @findings.count == 1 && !@query.blank? && !params[:page]
-          redirect_to finding_url(params[:completed], @findings.first)
-        end
+        @findings = @findings.page params[:page]
       } # index.html.erb
       format.csv {
         csv_options = {
@@ -90,19 +86,18 @@ class FindingsController < ApplicationController
 
         render csv: @findings.to_csv(csv_options), filename:  @title.downcase
       }
+      format.pdf  { redirect_to pdf.relative_path }
     end
   end
 
   # Muestra el detalle de una debilidad u oportunidad
   #
   # * GET /findings/1
-  # * GET /findings/1.xml
   def show
     @title = t 'finding.show_title'
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @finding }
     end
   end
 
@@ -123,7 +118,6 @@ class FindingsController < ApplicationController
   # componen.
   #
   # * PATCH /findings/1
-  # * PATCH /findings/1.xml
   def update
     @title = t 'finding.edit_title'
 
@@ -144,11 +138,9 @@ class FindingsController < ApplicationController
         if @finding.update(finding_params)
           flash.notice = t 'finding.correctly_updated'
           format.html { redirect_to(edit_finding_url(params[:completed], @finding)) }
-          format.xml  { head :ok }
         else
           flash.alert = t 'finding.stale_object_error'
           format.html { render :action => :edit }
-          format.xml  { render :xml => @finding.errors, :status => :unprocessable_entity }
           raise ActiveRecord::Rollback
         end
       end
@@ -213,8 +205,8 @@ class FindingsController < ApplicationController
           file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_answers_attributes: [
-          :id, :answer, :auditor_comments, :user_id, :commitment_date, :notify_users, :_destroy,
-          file_model_attributes: [:id, :file, :file_cache]
+          :answer, :auditor_comments, :user_id, :commitment_date, :notify_users,
+          file_model_attributes: [:file, :file_cache]
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
@@ -249,5 +241,17 @@ class FindingsController < ApplicationController
 
     def scoped_findings
       current_organization.corporate? ? Finding.group_list : Finding.list
+    end
+
+    def pdf
+      title_partial = params[:completed] == 'incomplete' ? 'pending' : 'complete'
+
+      FindingPdf.create(
+        title: t("menu.follow_up.#{title_partial}_findings"),
+        columns: @columns,
+        query: @query,
+        findings: @findings.except(:limit),
+        current_organization: current_organization
+      )
     end
 end

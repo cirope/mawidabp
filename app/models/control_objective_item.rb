@@ -1,9 +1,10 @@
-class ControlObjectiveItem < ActiveRecord::Base
+class ControlObjectiveItem < ApplicationRecord
   include Auditable
   include Comparable
   include Parameters::Relevance
   include Parameters::Qualification
   include ParameterSelector
+  include ControlObjectiveItems::DateColumns
   include ControlObjectiveItems::Scopes
   include ControlObjectiveItems::Search
 
@@ -15,9 +16,9 @@ class ControlObjectiveItem < ActiveRecord::Base
   alias_attribute :label, :control_objective_text
 
   # Callbacks
-  before_validation :set_proper_parent, :can_be_modified?,
+  before_validation :set_proper_parent, :check_if_can_be_modified,
     :enable_control_validations
-  before_destroy :can_be_destroyed?
+  before_destroy :check_if_can_be_destroyed
   before_validation(on: :create) { fill_control_objective_text }
 
   # Validaciones
@@ -83,8 +84,8 @@ class ControlObjectiveItem < ActiveRecord::Base
   accepts_nested_attributes_for :business_unit_scores, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :work_papers, allow_destroy: true
 
-  def initialize(attributes = nil, options = {})
-    super attributes, options
+  def initialize(attributes = nil)
+    super attributes
 
     self.relevance ||= control_objective.relevance if control_objective
 
@@ -223,7 +224,7 @@ class ControlObjectiveItem < ActiveRecord::Base
       errors << I18n.t('control_objective_item.errors.without_score')
     end
 
-    if self.relevance && self.relevance <= 0
+    if self.relevance.blank?
       errors << I18n.t('control_objective_item.errors.without_relevance')
     end
 
@@ -498,11 +499,20 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   private
+
     def qualification_text(score, show_value)
       if score.present?
         text = I18n.t("qualification_types.#{score.first}")
 
         return show_value ? [text, "(#{score.last})"].join(' ') : text
       end
+    end
+
+    def check_if_can_be_modified
+      throw :abort unless can_be_modified?
+    end
+
+    def check_if_can_be_destroyed
+      throw :abort unless can_be_destroyed?
     end
 end

@@ -1,4 +1,4 @@
-class CreateFileModels < ActiveRecord::Migration
+class CreateFileModels < ActiveRecord::Migration[4.2]
   def self.up
     create_table :file_models do |t|
       t.string :file_file_name

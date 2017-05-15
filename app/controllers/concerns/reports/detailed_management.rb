@@ -2,7 +2,7 @@ module Reports::DetailedManagement
   include Reports::Pdf
 
   def detailed_management_report
-    init_vars
+    init_detailed_management_report_vars
 
     raw_reviews = find_reviews
 
@@ -44,7 +44,7 @@ module Reports::DetailedManagement
     end
   end
 
-  def init_vars
+  def init_detailed_management_report_vars
     @title = t 'execution_reports.detailed_management_report_title'
     @from_date, @to_date = *make_date_range(params[:detailed_management_report])
     @column_order = ['business_unit_report_name', 'review', 'process_control',
@@ -152,7 +152,7 @@ module Reports::DetailedManagement
 
     add_report_references(pdf)
 
-    save_and_redirect_to_pdf(pdf)
+    save_and_redirect_to_detailed_management_pdf(pdf)
   end
 
   def prepare_pdf_table_headers(pdf, data)
@@ -191,7 +191,7 @@ module Reports::DetailedManagement
     end
   end
 
-  def save_and_redirect_to_pdf(pdf)
+  def save_and_redirect_to_detailed_management_pdf(pdf)
     pdf.custom_save_as(
       t('execution_reports.detailed_management_report.pdf_name',
         from_date: @from_date.to_formatted_s(:db),

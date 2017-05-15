@@ -1,4 +1,4 @@
-class CreateTaggings < ActiveRecord::Migration
+class CreateTaggings < ActiveRecord::Migration[4.2]
   def change
     create_table :taggings do |t|
       t.references :tag, index: true, null: false, foreign_key: FOREIGN_KEY_OPTIONS.dup

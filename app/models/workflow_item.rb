@@ -1,14 +1,12 @@
-class WorkflowItem < ActiveRecord::Base
-  include ParameterSelector
+class WorkflowItem < ApplicationRecord
+  include Auditable
   include Comparable
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
+  include ParameterSelector
+  include WorkflowItems::DateColumns
 
   # Callbacks para registrar los cambios en los modelos cuando son modificados o
   # creados
-  before_destroy :can_be_destroyed?
+  before_destroy :check_if_can_be_destroyed
 
   # Atributos serializabled
   serialize :predecessors, Array
@@ -150,13 +148,13 @@ class WorkflowItem < ActiveRecord::Base
   end
 
   def check_if_is_frozen
-    unless self.is_frozen? && self.changed?
-      true
-    else
+    if self.is_frozen? && self.changed?
       msg = I18n.t('workflow.readonly')
       self.errors.add :base, msg unless self.errors.full_messages.include?(msg)
 
-      false
+      throw :abort
+    else
+      true
     end
   end
 
@@ -208,4 +206,10 @@ class WorkflowItem < ActiveRecord::Base
       end
     end
   end
+
+  private
+
+    def check_if_can_be_destroyed
+      throw :abort unless can_be_destroyed?
+    end
 end

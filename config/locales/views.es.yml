@@ -164,21 +164,20 @@ es:
 
   polls:
     access_denied: 'La encuesta ya ha sido contestada.'
-    already_exists: 'La encuesta ya existe y no fue enviada al usuario'
+    already_exists: 'Alguna de las encuestas para %{user} ya existen y no fueron enviadas nuevamente'
     answer_poll: '¿Contestar encuesta?'
+    affected_user: 'Acerca de'
+    affected_user_html: 'Acerca de <strong>%{user}</strong>'
     answers:
       index:
         title: 'Resumen de respuestas'
     business_units:
       index:
         title: 'Resumen por unidad organizativa'
-    customer_polls_sended: 'Se enviaron satisfactoriamente %{count} encuestas'
     index:
       title: 'Listado de encuestas'
-    import_csv: 'Importar clientes CSV'
     edit:
       title: 'Modificar encuesta'
-    error_csv_file_extension: 'Debe seleccionar un archivo CSV'
     must_answer_poll: 'Tiene una encuesta pendiente por responder.'
     new:
       title: 'Agregar encuesta'
@@ -268,6 +267,7 @@ es:
     password_minimum_time: 'Duración mínima de la contraseña'
     session_expire_time: 'Desconexión por inactividad'
     exchange_directory_path: 'Directorio de intercambio de archivos'
+    show_print_date_on_pdfs: 'Mostrar fecha de impresión en PDFs'
 
   tags:
     edit:

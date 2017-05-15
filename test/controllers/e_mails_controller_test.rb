@@ -15,7 +15,7 @@ class EMailsControllerTest < ActionController::TestCase
   end
 
   test 'show email' do
-    get :show, id: @email.to_param
+    get :show, params: { id: @email.to_param }
     assert_response :success
     assert_not_nil assigns(:email)
     assert_template 'e_mails/show'
