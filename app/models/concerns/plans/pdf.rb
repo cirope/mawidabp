@@ -10,7 +10,7 @@ module Plans::PDF
     pdf.add_description_item *pdf_period
 
     business_unit_types.each do |business_unit_type|
-      plan_items = (grouped_plan_items[business_unit_type] || []).sort
+      plan_items = Array(grouped_plan_items[business_unit_type]).sort
 
       if plan_items.present?
         put_plan_items_on pdf, plan_items, business_unit_type, include_details
@@ -100,8 +100,10 @@ module Plans::PDF
     end
 
     def put_business_unit_type_title_on pdf, business_unit_type
+      title = business_unit_type&.name || I18n.t('plans.without_business_unit_type')
+
       pdf.move_down PDF_FONT_SIZE
-      pdf.add_title business_unit_type&.name || I18n.t('plans.without_business_unit_type')
+      pdf.add_title title, (PDF_FONT_SIZE * 1.25).round
     end
 
     def row_data_for plan_item, total_resource_text
@@ -155,7 +157,7 @@ module Plans::PDF
     def put_plan_items_details_table_on pdf, plan_items
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.add_title I18n.t('plans.pdf.resource_utilization'), (PDF_FONT_SIZE * 1.25).round
+      pdf.add_title I18n.t('plans.pdf.resource_utilization'), (PDF_FONT_SIZE * 1.1).round
 
       plan_items.each do |plan_item|
         if plan_item.resource_utilizations.present?
