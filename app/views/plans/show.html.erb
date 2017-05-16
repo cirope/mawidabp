@@ -95,7 +95,8 @@
 <hr>
 
 <div>
-  <%= link_to_edit edit_plan_path(@plan) %> |
+  <%= link_to_edit [:edit, @plan] %> |
+  <%= link_to_stats [:stats, @plan] %> |
   <%= link_to_index plans_path %> |
   <%= render('shared/downloads',
     links: [
