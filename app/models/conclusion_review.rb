@@ -163,8 +163,10 @@ class ConclusionReview < ApplicationRecord
     )
 
     if options[:brief].blank?
-      pdf.add_subtitle I18n.t('conclusion_review.objectives_and_scopes'),
-        PDF_FONT_SIZE, PDF_FONT_SIZE
+      if grouped_control_objectives.present?
+        pdf.add_subtitle I18n.t('conclusion_review.objectives_and_scopes'),
+          PDF_FONT_SIZE, PDF_FONT_SIZE
+      end
 
       grouped_control_objectives.each do |process_control, cois|
         process_control_text = "<b>#{ProcessControl.model_name.human}: " +
