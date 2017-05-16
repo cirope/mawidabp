@@ -55,7 +55,6 @@ class PlansControllerTest < ActionController::TestCase
               project: 'New project',
               start: 71.days.from_now.to_date,
               end: 80.days.from_now.to_date,
-              plain_predecessors: '',
               order_number: 1,
               business_unit_id: business_units(:business_unit_one).id,
               resource_utilizations_attributes: [
@@ -116,7 +115,6 @@ class PlansControllerTest < ActionController::TestCase
                   project: 'Updated project',
                   start: 55.days.ago.to_date,
                   end: 45.days.ago.to_date,
-                  plain_predecessors: '',
                   order_number: 1,
                   business_unit_id: business_units(:business_unit_one).id,
                   resource_utilizations_attributes: {
@@ -161,7 +159,6 @@ class PlansControllerTest < ActionController::TestCase
             project: 'New project',
             start: 71.days.from_now.to_date,
             end: 80.days.from_now.to_date,
-            plain_predecessors: '',
             order_number: 1,
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
@@ -176,7 +173,6 @@ class PlansControllerTest < ActionController::TestCase
             project: 'New project 2',
             start: 79.days.from_now.to_date,
             end: 90.days.from_now.to_date,
-            plain_predecessors: '1',
             order_number: 2,
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
@@ -212,7 +208,6 @@ class PlansControllerTest < ActionController::TestCase
             project: 'New project',
             start: 71.days.from_now.to_date,
             end: 80.days.from_now.to_date,
-            plain_predecessors: '',
             order_number: 1,
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
@@ -227,7 +222,6 @@ class PlansControllerTest < ActionController::TestCase
             project: 'New project',
             start: 81.days.from_now.to_date,
             end: 90.days.from_now.to_date,
-            plain_predecessors: '1',
             order_number: 2,
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [

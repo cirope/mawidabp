@@ -255,7 +255,6 @@ es:
         project: 'Proyecto'
         start: 'Proyecto (inicio)'
         end: 'Proyecto (fin)'
-        predecessors: 'Proyecto (predecesoras)'
         order_number: 'Proyecto (orden)'
         business_unit_id: 'Proyecto (unidad de negocio)'
         status: 'Proyecto (estado)'
@@ -270,7 +269,6 @@ es:
         project: 'Proyecto'
         start: 'Inicio'
         end: 'Fin'
-        predecessors: 'Predecesoras'
         order_number: 'Orden'
         business_unit_id: 'Unidad de negocio'
         resources: 'Recursos'
@@ -337,7 +335,5 @@ es:
           attributes:
             start:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
-              item_overload: 'debe ser igual o posterior al fin de la/s tarea/s predecesora/s'
             end:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
-              item_overload: 'debe ser igual o posterior al fin de la/s tarea/s predecesora/s'

@@ -71,8 +71,8 @@ class PlansController < ApplicationController
       params.require(:plan).permit(
         :period_id, :allow_overload, :allow_duplication,
         :lock_version, plan_items_attributes: [
-          :id, :project, :start, :end, :plain_predecessors, :order_number,
-          :business_unit_id, :_destroy,
+          :id, :project, :start, :end, :order_number, :business_unit_id,
+          :_destroy,
           resource_utilizations_attributes: [
             :id, :resource_id, :resource_type, :units, :_destroy
           ],

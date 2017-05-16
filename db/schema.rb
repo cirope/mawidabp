@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170516130334) do
+ActiveRecord::Schema.define(version: 20170516132941) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -509,7 +509,6 @@ ActiveRecord::Schema.define(version: 20170516130334) do
     t.string   "project",          limit: 255
     t.date     "start"
     t.date     "end"
-    t.string   "predecessors",     limit: 255
     t.integer  "order_number"
     t.integer  "plan_id"
     t.integer  "business_unit_id"
@@ -794,7 +793,6 @@ ActiveRecord::Schema.define(version: 20170516130334) do
     t.text     "task"
     t.date     "start"
     t.date     "end"
-    t.string   "predecessors", limit: 255
     t.integer  "order_number"
     t.integer  "workflow_id"
     t.datetime "created_at"
