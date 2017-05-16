@@ -36,6 +36,7 @@
 //= require news
 //= require organizations
 //= require plans
+//= require plans/stats
 //= require plan_items
 //= require process_controls
 //= require reviews

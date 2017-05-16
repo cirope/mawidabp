@@ -119,14 +119,14 @@ class PlansControllerTest < ActionController::TestCase
                   plain_predecessors: '',
                   order_number: 1,
                   business_unit_id: business_units(:business_unit_one).id,
-                  resource_utilizations_attributes: [
-                    {
+                  resource_utilizations_attributes: {
+                    '1' => {
                       id: resource_utilizations(:auditor_for_20_units_past_plan_item_1).id,
                       resource_id: resources(:laptop_resource).id,
                       resource_type: 'Resource',
                       units: '12.21'
                     }
-                  ],
+                  },
                   taggings_attributes: [
                     {
                       tag_id: tags(:extra).id
