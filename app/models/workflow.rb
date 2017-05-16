@@ -109,7 +109,7 @@ class Workflow < ApplicationRecord
       self.review.to_s, 0, false
 
     pdf.add_description_item(I18n.t('workflow.period.title',
-        :number => self.period.number), I18n.t('workflow.period.range',
+        :name => self.period.name), I18n.t('workflow.period.range',
         :from_date => I18n.l(self.period.start, :format => :long),
         :to_date => I18n.l(self.period.end, :format => :long)), 0, false)
 

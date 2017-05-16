@@ -241,7 +241,7 @@ es:
         item: 'Objeto'
         whodunnit: 'Ejecutor'
       period:
-        number: 'Número'
+        name: 'Nombre'
         description: 'Descripción'
         start: 'Inicio'
         end: 'Fin'

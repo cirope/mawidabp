@@ -1095,7 +1095,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
     download_detailed_workflow: "Descargar programa de trabajo detallado"
     worked_hours: "Tiempo dedicado: %{count} unidades"
     period:
-      title: "Periodo (%{number})"
+      title: "Periodo (%{name})"
       range: "%{from_date} al %{to_date}"
     pdf:
       pdf_name: "programa_de_trabajo_%{review}.pdf"

@@ -190,7 +190,7 @@ es:
         long: 'Retrasado'
         short: 'R'
     period:
-      title: 'Periodo (%{number})'
+      title: 'Periodo (%{name})'
       range: 'desde el %{from_date} al %{to_date}'
     pdf:
       title: 'Plan de auditoría'

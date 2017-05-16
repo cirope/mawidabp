@@ -10,7 +10,7 @@ class PeriodTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'Period.count' do
       Period.list.create(
-        number: '20',
+        name: '20',
         description: 'New period',
         start: 2.months.from_now.to_date, # Administrador
         end: 3.months.from_now.to_date
@@ -42,19 +42,18 @@ class PeriodTest < ActiveSupport::TestCase
   end
 
   test 'validates formated attributes' do
-    @period.number = @period.start = @period.end = '_1'
+    @period.start = @period.end = '_1'
 
     assert @period.invalid?
-    assert_error @period, :number, :not_a_number
     assert_error @period, :start, :invalid_date
     assert_error @period, :end, :invalid_date
   end
 
   test 'validates blank attributes' do
-    @period = Period.new number: ' '
+    @period = Period.new name: ' '
 
     assert @period.invalid?
-    assert_error @period, :number, :blank
+    assert_error @period, :name, :blank
     assert_error @period, :start, :blank
     assert_error @period, :end, :blank
     assert_error @period, :description, :blank
@@ -69,17 +68,10 @@ class PeriodTest < ActiveSupport::TestCase
   end
 
   test 'validates duplicated attributes' do
-    @period.number = periods(:past_period).number
+    @period.name = periods(:past_period).name
 
     assert @period.invalid?
-    assert_error @period, :number, :taken
-  end
-
-  test 'validates integer number format' do
-    @period.number = 1.5
-
-    assert @period.invalid?
-    assert_error @period, :number, :not_an_integer
+    assert_error @period, :name, :taken
   end
 
   test 'contains' do

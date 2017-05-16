@@ -15,8 +15,9 @@ class ConclusionReview < ApplicationRecord
       :regexp => SEARCH_DATE_REGEXP
     },
     :period => {
-      :column => "#{Period.quoted_table_name}.#{Period.qcn('number')}", :operator => '=', :mask => "%d",
-      :conversion_method => :to_i, :regexp => /\A\s*\d+\s*\Z/
+      :column => "LOWER(#{Period.quoted_table_name}.#{Period.qcn('name')})",
+      :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
+      :regexp => /.*/
     },
     :identification => {
       :column => "LOWER(#{Review.quoted_table_name}.#{Review.qcn('identification')})",
@@ -67,7 +68,7 @@ class ConclusionReview < ApplicationRecord
       },
       :period => {
         :name => Period.model_name.human,
-        :field => "#{Period.quoted_table_name}.#{Period.qcn('number')} ASC"
+        :field => "#{Period.quoted_table_name}.#{Period.qcn('name')} ASC"
       },
       :identification => {
         :name => Review.human_attribute_name(:identification),

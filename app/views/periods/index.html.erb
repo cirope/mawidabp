@@ -1,7 +1,7 @@
 <table class="table table-condensed table-striped">
   <thead>
     <tr>
-      <th><%= Period.human_attribute_name 'number' %></th>
+      <th><%= Period.human_attribute_name 'name' %></th>
       <th class="hidden-xs"><%= Period.human_attribute_name 'description' %></th>
       <th class="hidden-xs"><%= Period.human_attribute_name 'start' %></th>
       <th class="hidden-xs"><%= Period.human_attribute_name 'end' %></th>
@@ -12,7 +12,7 @@
   <tbody>
     <% @periods.each do |period| %>
       <tr>
-        <td><%= period.number %></td>
+        <td><%= period.name %></td>
         <td class="hidden-xs"><%= super_truncate period.description, 40 %></td>
         <td class="hidden-xs"><%= l(period.start, format: :short) %></td>
         <td class="hidden-xs"><%= l(period.end, format: :short) %></td>

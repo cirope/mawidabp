@@ -29,7 +29,7 @@ module Plans::PDF
   end
 
   def pdf_name
-    I18n.t 'plans.pdf.pdf_name', period: period.number
+    I18n.t 'plans.pdf.pdf_name', period: period.name
   end
 
   private
@@ -39,7 +39,7 @@ module Plans::PDF
     end
 
     def pdf_period
-      period_label = I18n.t 'plans.period.title', number: period.number
+      period_label = I18n.t 'plans.period.title', name: period.name
       range_label  = I18n.t 'plans.period.range', {
         from_date: I18n.l(period.start, format: :long),
         to_date:   I18n.l(period.end,   format: :long)
