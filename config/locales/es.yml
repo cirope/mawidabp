@@ -1470,10 +1470,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
           attributes:
             control_objectives:
               locked: "no pueden ser eliminados, ya se utilizaron en al menos un informe"
-        resource_utilization:
-          attributes:
-            resource_consumer:
-              is_frozen: "no puede ser modificada"
         review:
           attributes:
             review_user_assignments:

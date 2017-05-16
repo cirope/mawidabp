@@ -1489,10 +1489,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
           attributes:
             question:
               answered: 'No se pudo actualizar, la pregunta ya tiene respuestas'
-        resource_utilization:
-          attributes:
-            resource_consumer:
-              is_frozen: "no puede ser modificada"
         review:
           attributes:
             review_user_assignments:
