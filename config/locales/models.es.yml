@@ -63,6 +63,9 @@ es:
       organization:
         one: 'Organización'
         other: 'Organizaciones'
+      plan:
+        one: 'Plan de trabajo'
+        other: 'Planes de trabajo'
       plan_item:
         one: 'Proyecto en plan'
         other: 'Proyectos en plan'
@@ -160,9 +163,9 @@ es:
         error: 'Error'
         user_id: 'Usuario'
       image_model:
-        uploaded_data: "Imagen"
-        content_type: "Imagen (tipo)"
-        size: "Imagen (tamaño)"
+        uploaded_data: 'Imagen'
+        content_type: 'Imagen (tipo)'
+        size: 'Imagen (tamaño)'
       ldap_config:
         hostname: 'Dirección del servidor'
         port: 'Puerto'
@@ -238,10 +241,43 @@ es:
         item: 'Objeto'
         whodunnit: 'Ejecutor'
       period:
-        number: 'Número'
+        name: 'Nombre'
         description: 'Descripción'
         start: 'Inicio'
         end: 'Fin'
+      plan:
+        organization_id: 'Organización'
+        period_id: 'Periodo'
+        estimated_amount: 'Costo estimado'
+      plan/plan_items:
+        one: 'Registro'
+        other: 'Registros'
+        project: 'Proyecto'
+        start: 'Proyecto (inicio)'
+        end: 'Proyecto (fin)'
+        order_number: 'Proyecto (orden)'
+        business_unit_id: 'Proyecto (unidad de negocio)'
+        status: 'Proyecto (estado)'
+      plan/plan_items/resource_utilizations:
+        one: 'Recurso'
+        other: 'Recursos'
+        units: 'Recurso (cantidad de unidades)'
+        cost_per_unit: 'Recurso (costo por unidad)'
+        cost: 'Recurso (costo)'
+        resource: 'Recurso'
+      plan_item:
+        project: 'Proyecto'
+        start: 'Inicio'
+        end: 'Fin'
+        order_number: 'Orden'
+        business_unit_id: 'Unidad de negocio'
+        resources: 'Recursos'
+        resource_ids: 'Recursos'
+        status: 'Estado'
+        human_resource_units: 'Costo recursos humanos'
+        material_resource_units: 'Costo recursos materiales'
+        total_resource_units: 'Costo total'
+        tags: 'Etiquetas'
       poll:
         comments: 'Comentarios'
         send_date: 'Fecha envío'
@@ -288,3 +324,16 @@ es:
         cost: 'Costo'
         resource: 'Recurso'
         resource_consumer: 'Utilización de recurso'
+
+    errors:
+      models:
+        plan:
+          attributes:
+            plan_items:
+              locked: 'no pueden ser eliminados, ya se utilizaron en al menos un informe'
+        plan_item:
+          attributes:
+            start:
+              resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
+            end:
+              resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'

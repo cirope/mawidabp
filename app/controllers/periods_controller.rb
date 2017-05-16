@@ -63,7 +63,7 @@ class PeriodsController < ApplicationController
     end
 
     def period_params
-      params.require(:period).permit :number, :description, :start, :end,
+      params.require(:period).permit :name, :description, :start, :end,
         :lock_version
     end
 end

@@ -90,7 +90,6 @@ class WorkflowsControllerTest < ActionController::TestCase
               :task => 'New task',
               :start => Date.today,
               :end => 10.days.from_now.to_date,
-              :plain_predecessors => '',
               :order_number => 1,
               :resource_utilizations_attributes => [
                 {
@@ -133,7 +132,6 @@ class WorkflowsControllerTest < ActionController::TestCase
                 :task => 'Updated task',
                 :start => 5.days.ago.to_date,
                 :end => 2.days.ago.to_date,
-                :plain_predecessors => '',
                 :order_number => 1,
                 :resource_utilizations_attributes => [
                   {
@@ -172,7 +170,6 @@ class WorkflowsControllerTest < ActionController::TestCase
             :task => 'New task',
             :start => Date.today,
             :end => 5.days.from_now.to_date,
-            :plain_predecessors => '',
             :order_number => 1,
             :resource_utilizations_attributes => [
               {
@@ -185,7 +182,6 @@ class WorkflowsControllerTest < ActionController::TestCase
             :task => 'New task 2',
             :start => 4.days.from_now.to_date,
             :end => 10.days.from_now.to_date,
-            :plain_predecessors => '1',
             :order_number => 2,
             :resource_utilizations_attributes => [
               {

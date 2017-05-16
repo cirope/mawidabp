@@ -78,35 +78,6 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_draft_reviews/index'
   end
 
-  test 'edit conclusion_draft_reviews when search match only one result' do
-    login
-    get :index, :params =>{
-      :search => {
-        :query => '1 2 4',
-        :columns => ['identification', 'project']
-      }
-    }
-    assert_redirected_to conclusion_draft_review_url(conclusion_reviews(:conclusion_with_conclusion_draft_review))
-    assert_not_nil assigns(:conclusion_draft_reviews)
-    assert_equal 1, assigns(:conclusion_draft_reviews).count
-  end
-
-  test 'edit conclusion_draft_reviews when search by date match only one result' do
-    login
-    get :index, :params => {
-      :search => {
-        :query => "< #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
-        :columns => ['issue_date']
-      }
-    }
-
-    assert_redirected_to conclusion_draft_review_url(
-      conclusion_reviews(:conclusion_with_conclusion_draft_review)
-    )
-    assert_not_nil assigns(:conclusion_draft_reviews)
-    assert_equal 1, assigns(:conclusion_draft_reviews).count
-  end
-
   test 'list only one conclusion_draft_reviews with search on one with final' do
     login
     get :index, :params => {

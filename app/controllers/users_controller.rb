@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     @users = users
 
     respond_to do |format|
-      format.html { redirect_to user_url(@users.first) if one_result?  }
+      format.html
       format.pdf  { redirect_to pdf.relative_path }
     end
   end
@@ -67,10 +67,6 @@ class UsersController < ApplicationController
       User.includes(:organizations).where(conditions).not_hidden.order(
         "#{User.quoted_table_name}.#{User.qcn('user')} ASC"
       ).references(:organizations).page(params[:page])
-    end
-
-    def one_result?
-      @users.count == 1 && !@query.blank? && !params[:page]
     end
 
     def pdf

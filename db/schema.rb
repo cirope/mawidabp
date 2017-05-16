@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170309185011) do
+ActiveRecord::Schema.define(version: 20170516132941) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer  "benefit_id", precision: 38,           null: false
@@ -2015,7 +2015,6 @@ ActiveRecord::Schema.define(version: 20170309185011) do
   add_index "organizations", ["prefix"], name: "index_organizations_on_prefix", unique: true
 
   create_table "periods", force: :cascade do |t|
-    t.integer  "number",          precision: 38
     t.text     "description"
     t.date     "start"
     t.date     "end"
@@ -2023,10 +2022,10 @@ ActiveRecord::Schema.define(version: 20170309185011) do
     t.integer  "lock_version",    precision: 38, default: 0
     t.datetime "created_at",      precision: 6,              null: false
     t.datetime "updated_at",      precision: 6,              null: false
+    t.string   "name"
   end
 
   add_index "periods", ["end"], name: "index_periods_on_end"
-  add_index "periods", ["number"], name: "index_periods_on_number"
   add_index "periods", ["organization_id"], name: "i_periods_organization_id"
   add_index "periods", ["start"], name: "index_periods_on_start"
 
@@ -2034,7 +2033,6 @@ ActiveRecord::Schema.define(version: 20170309185011) do
     t.string   "project"
     t.date     "start"
     t.date     "end"
-    t.string   "predecessors"
     t.integer  "order_number",     precision: 38
     t.integer  "plan_id",          precision: 38
     t.integer  "business_unit_id", precision: 38
@@ -2869,7 +2867,6 @@ ActiveRecord::Schema.define(version: 20170309185011) do
     t.text     "task"
     t.date     "start"
     t.date     "end"
-    t.string   "predecessors"
     t.integer  "order_number", precision: 38
     t.integer  "workflow_id",  precision: 38
     t.datetime "created_at",   precision: 6,  null: false

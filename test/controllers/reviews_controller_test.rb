@@ -58,19 +58,6 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/index'
   end
 
-  test 'edit review when search match only one result' do
-    login
-    get :index, params: {
-      search: {
-        query: '1 1',
-        columns: ['identification', 'project']
-      }
-    }
-    assert_redirected_to review_url(reviews(:past_review))
-    assert_not_nil assigns(:reviews)
-    assert_equal 1, assigns(:reviews).count
-  end
-
   test 'show review' do
     login
     get :show, params: {

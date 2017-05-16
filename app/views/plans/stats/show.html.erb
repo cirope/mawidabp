@@ -1,0 +1,65 @@
+<%= render 'plans/header' %>
+
+<ul class="nav nav-pills">
+  <% plan_stat_months.each do |month| %>
+    <li <%== 'class="active"' if month[:active] %>>
+      <%= link_to month[:label], [:stats, @plan, until: month[:value]] %>
+    </li>
+  <% end %>
+</ul>
+
+<hr>
+
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th><%= BusinessUnitType.model_name.human count: 0 %></th>
+        <th><%= t '.total' %></th>
+        <th><%= t '.planned' %></th>
+        <th><%= t '.executed' %></th>
+        <th><%= t '.on_time' %></th>
+        <th><%= t '.progress' %></th>
+        <th><%= t '.compliance' %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% plan_business_unit_type_list.each do |business_unit_type, plan_items| %>
+        <% if business_unit_type %>
+          <% plan_stat_compliance(plan_items).tap do |compliance| %>
+            <tr <%== "class=\"#{compliance[:class]}\"" unless compliance[:class] == 'success' %>>
+              <td><%= business_unit_type.name %></td>
+              <td><%= plan_items.size %></td>
+              <td>
+                <strong><%= link_to_planned_items business_unit_type, plan_items %></strong>
+              </td>
+              <td><%= plan_stat_executed_count plan_items %></td>
+              <td>
+                <strong><%= plan_stat_on_time(plan_items).size %></strong>
+              </td>
+              <td><%= plan_stat_progress plan_items %></td>
+              <td>
+                <div class="progress">
+                  <div class="progress-bar progress-bar-<%= compliance[:class] %>" style="width: <%= compliance[:value] %>%">
+                    <%= compliance[:label] %>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div id="planned-items"></div>
+</div>
+
+<hr>
+
+<div>
+  <%= link_to_show @plan %> |
+  <%= link_to_edit edit_plan_path(@plan) %> |
+  <%= link_to_index plans_path %>
+</div>

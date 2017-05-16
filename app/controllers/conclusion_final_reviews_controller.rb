@@ -20,14 +20,7 @@ class ConclusionFinalReviewsController < ApplicationController
     .references(:periods, :reviews, :business_units)
 
     respond_to do |format|
-      format.html {
-        if @conclusion_final_reviews.count == 1 && !@query.blank? &&
-            !params[:page]
-          redirect_to(
-            conclusion_final_review_url(@conclusion_final_reviews.first)
-          )
-        end
-      }
+      format.html
     end
   end
 
@@ -309,7 +302,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     conclusion_final_reviews.each do |cfr|
       column_data << [
-        cfr.review.period.number.to_s,
+        cfr.review.period.name,
         cfr.review.identification,
         cfr.summary,
         cfr.review.plan_item.business_unit.name,

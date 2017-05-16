@@ -3,7 +3,7 @@ module PlanItems::Validations
 
   included do
     validates :project, :order_number, presence: true
-    validates :project, :predecessors, length: { maximum: 255 }, allow_nil: true, allow_blank: true
+    validates :project, length: { maximum: 255 }, allow_nil: true, allow_blank: true
     validates :project, pdf_encoding: true
     validates :order_number, numericality: { only_integer: true }, allow_nil: true
     validates :start, timeliness: { type: :date }
@@ -12,7 +12,6 @@ module PlanItems::Validations
     validate :dates_are_included_in_period
     validate :not_overloaded_or_allowed
     validate :related_plan_item_dates
-    validate :predecessors_are_valid
   end
 
     private
@@ -54,25 +53,6 @@ module PlanItems::Validations
       def related_plan_item_dates
         if plan && !plan.allow_overload?
           plan_items = plan.plan_items.reject { |pi| pi.marked_for_destruction? }
-
-          if predecessors.present?
-            check_predecessors_dates_on plan_items
-          end
-        end
-      end
-
-      def predecessors_are_valid
-        plan_items    = plan ? plan.plan_items.reject(&:marked_for_destruction?) : []
-        order_numbers = plan_items.map &:order_number
-        exist         = predecessors.all? do |predecessor|
-          order_numbers.include?(predecessor)
-        end
-        are_previous  = predecessors.all? do |predecessor|
-          predecessor < order_number
-        end
-
-        if predecessors && (!exist || !are_previous)
-          errors.add :predecessors, :invalid
         end
       end
 
@@ -113,24 +93,6 @@ module PlanItems::Validations
               errors.add :end, :resource_overload
             end
           end
-        end
-      end
-
-      def check_predecessors_dates_on plan_items
-        predecessor_items = plan_items.select do |plan_item|
-          predecessors.include?(plan_item.order_number)
-        end
-
-        if predecessor_items.any? { |pi| pi.end && start < pi.end }
-          self.overloaded = true
-
-          errors.add :start, :item_overload
-        end
-
-        if predecessor_items.any? { |pi| pi.end && self.end < pi.end }
-          self.overloaded = true
-
-          errors.add :end, :item_overload
         end
       end
 end

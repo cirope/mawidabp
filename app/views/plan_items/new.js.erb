@@ -1,0 +1,5 @@
++function () {
+  $('[data-container-id="<%= params[:container] %>"]').replaceWith(
+    '<%= j render('form', format: :html) %>'
+  )
+}()

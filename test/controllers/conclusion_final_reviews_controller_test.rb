@@ -80,34 +80,6 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_final_reviews/index'
   end
 
-  test 'edit conclusion_final_reviews when search match only one result' do
-    login
-    get :index, :params => {
-      :search => {
-        :query => '1 2 3',
-        :columns => ['identification', 'project']
-      }
-    }
-
-    assert_redirected_to conclusion_final_review_url(conclusion_reviews(:conclusion_current_final_review))
-    assert_not_nil assigns(:conclusion_final_reviews)
-    assert_equal 1, assigns(:conclusion_final_reviews).count
-  end
-
-  test 'edit conclusion_final_reviews when search by date match only one result' do
-    login
-    get :index, :params => {
-      :search => {
-        :query => "> #{I18n.l(5.days.ago.to_date, :format => :minimal)}",
-        :columns => ['issue_date']
-      }
-    }
-
-    assert_redirected_to conclusion_final_review_url(conclusion_reviews(:conclusion_current_final_review))
-    assert_not_nil assigns(:conclusion_final_reviews)
-    assert_equal 1, assigns(:conclusion_final_reviews).count
-  end
-
   test 'show conclusion_final_review' do
     login
     get :show, :params => {
