@@ -109,7 +109,7 @@ module Plans::PDF
     def row_data_for plan_item, total_resource_text
       [
         plan_item.order_number,
-        plan_item.status_text(false),
+        plan_item.status_text(long: false),
         plan_item.business_unit&.name || '',
         plan_item.project,
         plan_item.tags.map(&:to_s).join(';'),

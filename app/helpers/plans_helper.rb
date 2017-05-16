@@ -12,8 +12,8 @@ module PlansHelper
   end
 
   def show_plan_item_info plan_item
-    show_info plan_item.status_text,
-      class: [plan_item.status_color, 'media-object'].join(' ')
+    show_info plan_item.status_text(on: plan_status_date),
+      class: [plan_item.status_color(on: plan_status_date), 'media-object'].join(' ')
   end
 
   def plan_item_path plan_item
@@ -47,6 +47,29 @@ module PlansHelper
     else
       link_to '#', &block
     end
-
   end
+
+  def render_business_unit_type_plan_items
+    render(
+      'business_unit_type_plan_items',
+      business_unit_type:        @business_unit_type,
+      plan_items:                business_unit_type_planned_items,
+      show_resource_utilization: false
+    )
+  end
+
+  def plan_status_date
+    date = Timeliness.parse params[:until], :date if params[:until].present?
+
+    date || Time.zone.today
+  end
+
+  private
+
+    def business_unit_type_planned_items
+      date  = plan_status_date
+      items = Array(@plan.grouped_plan_items[@business_unit_type])
+
+      items.select { |plan_item| plan_item.start <= date }
+    end
 end

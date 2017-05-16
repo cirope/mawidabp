@@ -32,7 +32,7 @@
               <td><%= business_unit_type.name %></td>
               <td><%= plan_items.size %></td>
               <td>
-                <strong><%= plan_stat_planned(plan_items).size %></strong>
+                <strong><%= link_to_planned_items business_unit_type, plan_items %></strong>
               </td>
               <td><%= plan_stat_executed_count plan_items %></td>
               <td>
@@ -52,6 +52,8 @@
       <% end %>
     </tbody>
   </table>
+
+  <div id="planned-items"></div>
 </div>
 
 <hr>

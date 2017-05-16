@@ -1,39 +1,40 @@
 module PlanItems::Status
   extend ActiveSupport::Concern
 
-  def status_text long = true
+  def status_text long: true, on: Time.zone.today
     i18n_prefix = 'plans.item_status'
     size        = long ? 'long' : 'short'
 
-    if concluded?
+    if concluded? on: on
       I18n.t "#{i18n_prefix}.concluded.#{size}"
-    elsif executed? && on_time?
+    elsif executed?(on: on) && on_time?(on: on)
       I18n.t "#{i18n_prefix}.executing_in_time.#{size}"
-    elsif executed?
+    elsif executed? on: on
       I18n.t "#{i18n_prefix}.executing_overtime.#{size}"
-    elsif should_have_started?
+    elsif should_have_started? on: on
       I18n.t "#{i18n_prefix}.delayed.#{size}"
     end
   end
 
-  def status_color
-    if concluded?
+  def status_color on: Time.zone.today
+    if concluded? on: on
       'text-success'
-    elsif executed? && on_time?
+    elsif executed?(on: on) && on_time?(on: on)
       'text-muted'
-    elsif executed?
+    elsif executed? on: on
       'text-warning'
-    elsif should_have_started?
+    elsif should_have_started? on: on
       'text-danger'
     end
   end
 
   def concluded? on: Time.zone.today
-    review&.has_final_review? && review.conclusion_final_review.created_at <= on
+    review&.has_final_review? &&
+      review.conclusion_final_review.created_at.to_date <= on
   end
 
   def executed? on: Time.zone.today
-    review && review.created_at <= on
+    review && review.created_at.to_date <= on
   end
 
   def on_time? on: Time.zone.today

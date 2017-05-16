@@ -2,7 +2,7 @@ class PlansController < ApplicationController
   include AutoCompleteFor::BusinessUnit
   include AutoCompleteFor::Tagging
 
-  respond_to :html
+  respond_to :html, :js
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_business_unit_type, only: [:show, :new, :edit]
@@ -21,6 +21,7 @@ class PlansController < ApplicationController
   def show
     respond_to do |format|
       format.html
+      format.js
       format.pdf  { redirect_to plan_pdf_path }
     end
   end

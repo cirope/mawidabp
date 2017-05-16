@@ -22,6 +22,17 @@ class PlansControllerTest < ActionController::TestCase
     assert_redirected_to @plan.relative_pdf_path
   end
 
+  test 'show plan on js' do
+    business_unit_type = business_unit_types :cycle
+
+    get :show, params: {
+      id: @plan,
+      business_unit_type: business_unit_type
+    }, xhr: true, format: :js
+
+    assert_response :success
+  end
+
   test 'new plan' do
     get :new
     assert_response :success

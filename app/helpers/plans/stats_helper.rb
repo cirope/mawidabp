@@ -23,11 +23,12 @@ module Plans::StatsHelper
   end
 
   def plan_stat_executed_count plan_items
-    items = plan_items.select do |plan_item|
+    planned  = plan_stat_planned plan_items
+    executed = planned.select do |plan_item|
       plan_item.executed? date_options
     end
 
-    items.size
+    executed.size
   end
 
   def plan_stat_progress plan_items
@@ -48,7 +49,7 @@ module Plans::StatsHelper
 
     items.select do |plan_item|
       plan_item.concluded?(date_options) ||
-        (plan_item.executed?(date_options) && plan_item.on_time?(on: limit_date))
+        (plan_item.executed?(date_options) && plan_item.on_time?(date_options))
     end
   end
 
@@ -63,6 +64,16 @@ module Plans::StatsHelper
       value: compliance.round,
       class: class_for_compliance(compliance)
     }
+  end
+
+  def link_to_planned_items business_unit_type, plan_items
+    planned_count = plan_stat_planned(plan_items).size
+    url           = [@plan, {
+      business_unit_type: business_unit_type,
+      until:              params[:until]
+    }]
+
+    link_to_if planned_count > 0, planned_count, url, data: { remote: true }
   end
 
   private
