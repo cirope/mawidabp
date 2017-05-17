@@ -1,5 +1,5 @@
 <% id    = f.object.object_id %>
-<% fetch = f.object.new_record? || f.object.valid? %>
+<% fetch = f.object.new_record? || f.object.errors.empty? %>
 
 <fieldset class="plan_item">
   <div class="row">
@@ -74,9 +74,7 @@
 
     <div class="hidden" data-container-id="<%= id %>" data-index="<%= f.index %>" data-url="<%= plan_item_path f.object %>">
       <% if fetch %>
-        <div class="alert alert-warning">
-          <%= t 'navigation.loading' %>
-        </div>
+        <div class="alert alert-warning"><%= t 'navigation.loading' %></div>
       <% else %>
         <%= render 'plan_items/form', :@plan_item => f.object %>
       <% end %>
