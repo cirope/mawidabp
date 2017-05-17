@@ -68,12 +68,13 @@ module Plans::StatsHelper
 
   def link_to_planned_items business_unit_type, plan_items
     planned_count = plan_stat_planned(plan_items).size
+    show_link     = business_unit_type && planned_count > 0
     url           = [@plan, {
       business_unit_type: business_unit_type,
       until:              params[:until]
     }]
 
-    link_to_if planned_count > 0, planned_count, url, data: { remote: true }
+    link_to_if show_link, planned_count, url, data: { remote: true }
   end
 
   private
