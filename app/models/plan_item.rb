@@ -5,7 +5,7 @@ class PlanItem < ApplicationRecord
   include PlanItems::Comparable
   include PlanItems::DateColumns
   include PlanItems::DestroyValidation
-  include PlanItems::Pdf
+  include PlanItems::PDF
   include PlanItems::ResourceUtilizations
   include PlanItems::Scopes
   include PlanItems::Status

@@ -1,4 +1,4 @@
-module PlanItems::Pdf
+module PlanItems::PDF
   extend ActiveSupport::Concern
 
   def add_resource_data pdf, show_description = true
