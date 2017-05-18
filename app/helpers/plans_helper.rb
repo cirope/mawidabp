@@ -64,6 +64,15 @@ module PlansHelper
     date || Time.zone.today
   end
 
+  def should_fetch_resources_for? plan_item
+    is_valid = plan_item.errors.empty?
+    resources_are_unchanged = plan_item.resource_utilizations.all? do |ru|
+      ru.persisted? && ru.errors.empty? && !ru.changed?
+    end
+
+    is_valid && resources_are_unchanged
+  end
+
   private
 
     def business_unit_type_planned_items

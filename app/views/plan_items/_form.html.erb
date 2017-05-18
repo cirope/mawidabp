@@ -1,8 +1,9 @@
 <% index = params[:container].to_i %>
+<% child_index = @plan.plan_items.index(@plan_item) || params[:index] %>
 
 <div data-container-id="<%= params[:container] %>">
   <%= simple_fields_for @plan do |f| %>
-    <%= f.simple_fields_for :plan_items, @plan_item, child_index: params[:index] do |pi_f| %>
+    <%= f.simple_fields_for :plan_items, @plan_item, child_index: child_index do |pi_f| %>
       <div id="material_resource_utilizations_<%= params[:container] %>">
         <% @plan_item.material_resource_utilizations.each_with_index do |material_resource_utilization, i| %>
           <%= pi_f.simple_fields_for :resource_utilizations, material_resource_utilization, child_index: index + i do |mru_f| %>
