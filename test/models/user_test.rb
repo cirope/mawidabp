@@ -3,12 +3,16 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
   include ActionMailer::TestHelper
 
-  def setup
+  setup do
     @user = users :administrator_second_user
 
     ActionMailer::Base.deliveries.clear
 
     set_organization
+  end
+
+  teardown do
+    Organization.current_id = nil
   end
 
   test 'create' do
