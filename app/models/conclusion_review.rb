@@ -61,7 +61,7 @@ class ConclusionReview < ApplicationRecord
   has_many :polls, as: :pollable
 
   def self.columns_for_sort
-    HashWithIndifferentAccess.new({
+    ActiveSupport::HashWithIndifferentAccess.new({
       :issue_date => {
         :name => ConclusionReview.human_attribute_name(:issue_date),
         :field => "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('issue_date')} ASC"

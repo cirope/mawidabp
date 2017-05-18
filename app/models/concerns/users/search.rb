@@ -2,7 +2,7 @@ module Users::Search
   extend ActiveSupport::Concern
 
   included do
-    COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
+    COLUMNS_FOR_SEARCH = ActiveSupport::HashWithIndifferentAccess.new(
       user: {
         column: "LOWER(#{quoted_table_name}.#{qcn('user')})", operator: 'LIKE',
         mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/

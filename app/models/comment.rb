@@ -9,6 +9,6 @@ class Comment < ApplicationRecord
   validates :comment, :presence => true
 
   # Relaciones
-  belongs_to :commentable, :polymorphic => true
+  belongs_to :commentable, :polymorphic => true, :optional => true
   belongs_to :user
 end

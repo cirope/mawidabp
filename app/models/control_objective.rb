@@ -36,7 +36,7 @@ class ControlObjective < ApplicationRecord
   end
 
   # Relaciones
-  belongs_to :process_control
+  belongs_to :process_control, optional: true
   has_one :best_practice, through: :process_control
   has_many :control_objective_items, inverse_of: :control_objective,
     dependent: :nullify

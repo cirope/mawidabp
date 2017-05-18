@@ -29,8 +29,8 @@ class FindingUserAssignment < ApplicationRecord
 
   # Relaciones
   belongs_to :finding, :inverse_of => :finding_user_assignments,
-    :polymorphic => true
-  belongs_to :raw_finding, :foreign_key => :finding_id, :class_name => 'Finding'
+    :polymorphic => true, :optional => true
+  belongs_to :raw_finding, :foreign_key => :finding_id, :class_name => 'Finding', :optional => true
   belongs_to :user
 
   def <=>(other)

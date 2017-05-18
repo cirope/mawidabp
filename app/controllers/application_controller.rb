@@ -61,7 +61,7 @@ class ApplicationController < ActionController::Base
           redirect_to edit_users_password_url(@auth_user)
         end
 
-        @action_privileges = HashWithIndifferentAccess.new(:approval).update(
+        @action_privileges = ActiveSupport::HashWithIndifferentAccess.new(:approval).update(
           :index => :read,
           :show => :read,
           :new => :modify,
