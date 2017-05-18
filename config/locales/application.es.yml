@@ -570,6 +570,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
       pdf_name: 'informe_de_seguimiento_de_observaciones.pdf'
+    others:
+      title: 'Otros'
     cost_analysis:
       column_business_unit: "Unidad de negocio"
       column_project: "Proyecto"
@@ -1081,7 +1083,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
       privilege: "Privilegio"
-      review: "Informe"
+      review:
+        one: "Informe"
+        other: "Informes"
       review_user_assignment: "Asignación de usuario a informe"
       role: "Perfil"
       weakness: "Observación"

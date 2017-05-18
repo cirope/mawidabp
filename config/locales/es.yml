@@ -1121,7 +1121,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
       privilege: "Privilegio"
-      review: "Informe"
+      review:
+        one: "Informe"
+        other: "Informes"
       review_user_assignment: "Asignación de usuario a informe"
       role: "Perfil"
       weakness: "Observación"
