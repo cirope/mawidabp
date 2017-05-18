@@ -15,7 +15,6 @@ class PlanItemTest < ActiveSupport::TestCase
         project: 'New project',
         start: 6.days.from_now.to_date,
         end: 7.days.from_now.to_date,
-        plain_predecessors: '1, 3',
         order_number: 4,
         plan: plan,
         business_unit: business_units(:business_unit_one)
@@ -44,7 +43,8 @@ class PlanItemTest < ActiveSupport::TestCase
       @plan_item.destroy
     end
 
-    assert_equal I18n.t('plan.errors.plan_item_related'), @plan_item.errors[:base].join
+    assert_equal 'Plan item is already related and can not be destroyed',
+      @plan_item.errors[:base].join
   end
 
   test 'validates formated attributes' do
@@ -101,16 +101,6 @@ class PlanItemTest < ActiveSupport::TestCase
     assert_error @plan_item, :end, :out_of_period
   end
 
-  test 'item overload' do
-    plan_item = plan_items :current_plan_item_2
-    plan_item.start = @plan_item.start
-    plan_item.end = @plan_item.end.yesterday
-
-    assert plan_item.invalid?
-    assert_error plan_item, :end, :item_overload
-    assert_error plan_item, :start, :item_overload
-  end
-
   test 'resource overload' do
     plan_item_3 = plan_items :current_plan_item_3
 
@@ -121,13 +111,6 @@ class PlanItemTest < ActiveSupport::TestCase
 
     assert plan_item_3.invalid?
     assert_error plan_item_3, :start, :resource_overload
-  end
-
-  test 'predecessors validation' do
-    @plan_item.plain_predecessors = '100'
-
-    assert @plan_item.invalid?
-    assert_error @plan_item, :predecessors, :invalid
   end
 
   test 'units function' do

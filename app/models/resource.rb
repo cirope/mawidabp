@@ -4,7 +4,7 @@ class Resource < ApplicationRecord
   include Resources::Validation
   include Trimmer
 
-  belongs_to :resource_class
+  belongs_to :resource_class, optional: true
   has_many :resource_utilizations, as: :resource, dependent: :destroy
 
   trimmed_fields :name, :description

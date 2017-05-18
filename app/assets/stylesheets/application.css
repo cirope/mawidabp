@@ -13,6 +13,9 @@
  *= require graph
  *= require documents
  *= require news
+ *= require plans
+ *= require plans/stats
+ *= require plan_items
  *= require process_controls
  *= require roles
  *= require sessions

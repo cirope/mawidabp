@@ -5,8 +5,7 @@ class PlanItem < ApplicationRecord
   include PlanItems::Comparable
   include PlanItems::DateColumns
   include PlanItems::DestroyValidation
-  include PlanItems::Pdf
-  include PlanItems::Predecessors
+  include PlanItems::PDF
   include PlanItems::ResourceUtilizations
   include PlanItems::Scopes
   include PlanItems::Status
@@ -16,8 +15,8 @@ class PlanItem < ApplicationRecord
 
   attr_accessor :overloaded
 
-  belongs_to :plan
-  belongs_to :business_unit
+  belongs_to :plan, optional: true
+  belongs_to :business_unit, optional: true
   has_one :review
   has_one :business_unit_type, through: :business_unit
 end

@@ -93,7 +93,7 @@ class Role < ApplicationRecord
   end
 
   def privileges_hash
-    privileges = HashWithIndifferentAccess.new
+    privileges = ActiveSupport::HashWithIndifferentAccess.new
 
     self.privileges.each do |p|
       privileges[p.module] = {

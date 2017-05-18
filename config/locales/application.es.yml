@@ -67,7 +67,6 @@ es:
     session_closed_correctly: "Sesión cerrada correctamente"
     session_expires_in_less_than_two_minutes: "Su sesión expira en menos de dos minutos"
     session_time_expired: "Su sesión ha expirado, debe autenticarse nuevamente"
-    show_all: "Ver todos..."
     sort_by: "Ordenar por..."
     under_construction: "En mantenimiento, disculpe las molestias"
     unsaved_data_warning: "Ha modificado el contenido, si abandona la página perderá todos los cambios"
@@ -867,52 +866,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     review_identification: "Número de informe"
     draft: "Borrador"
 
-  plan:
-    index_title: "Listado de planes de trabajo"
-    show_title: "Detalles del plan de trabajo"
-    new_title: "Agregar plan de trabajo"
-    edit_title: "Modificar plan de trabajo"
-    correctly_created: "Plan de trabajo agregado correctamente."
-    correctly_updated: "Plan de trabajo actualizado correctamente."
-    stale_object_error: "El plan de trabajo no fue actualizado, intente nuevamente."
-    allow_duplication: "¿Permitir duplicados?"
-    allow_overload: "¿Permitir superposición?"
-    copy: "Copiar"
-    add_plan_item: "Agregar proyecto"
-    add_human_resource_utilization: "Agregar recurso humano"
-    add_material_resource_utilization: "Agregar recurso material"
-    add_tagging: "Agregar etiqueta"
-    show_resource_utilization: "Mostrar recursos"
-    hide_resource_utilization: "Ocultar recursos"
-    download_global_plan: "Descargar plan de auditoria global"
-    download_detailed_plan: "Descargar plan de auditoria detallado"
-    without_business_unit_type: "Sin unidad de negocio"
-    show_all: "Ver todos"
-    item_status:
-      note: "Los estados deben leerse como sigue: C = Concluido; E = En ejecución dentro de lo planeado; E (FP) = En ejecución fuera de lo planeado; R = Retrasado"
-      concluded:
-        long: "Concluido"
-        short: "C"
-      executing_in_time:
-        long: "En ejecución (dentro de lo planeado)"
-        short: "E"
-      executing_overtime:
-        long: "En ejecución (fuera de lo planeado)"
-        short: "E (FP)"
-      delayed:
-        long: "Retrasado"
-        short: "R"
-    period:
-      title: "Periodo (%{number})"
-      range: "desde el %{from_date} al %{to_date}"
-    pdf:
-      title: "Plan de auditoría"
-      pdf_name: "plan_periodo_%{period}.pdf"
-      resource_utilization: "Recursos utilizados"
-    errors:
-      can_not_be_destroyed: "El plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
-      plan_item_related: "El item del plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
-
   review:
     index_title: "Listado de informes"
     show_title: "Detalles del informes"
@@ -1100,9 +1053,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     hide_resource_utilization: "Ocultar recursos"
     download_global_workflow: "Descargar programa de trabajo global"
     download_detailed_workflow: "Descargar programa de trabajo detallado"
-    worked_hours: "Tiempo dedicado: %{count} unidades"
     period:
-      title: "Periodo (%{number})"
+      title: "Periodo (%{name})"
       range: "%{from_date} al %{to_date}"
     pdf:
       pdf_name: "programa_de_trabajo_%{review}.pdf"
@@ -1128,7 +1080,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       notification: "Notificación"
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
-      plan: "Plan de trabajo"
       privilege: "Privilegio"
       review: "Informe"
       review_user_assignment: "Asignación de usuario a informe"
@@ -1372,41 +1323,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         user_id: "Usuario"
         organization_id: "Organización"
         role_id: "Perfil"
-      plan:
-        organization_id: "Organización"
-        period_id: "Periodo"
-        estimated_amount: "Costo estimado"
-      plan/plan_items:
-        one: "Registro"
-        other: "Registros"
-        project: "Proyecto"
-        start: "Proyecto (inicio)"
-        end: "Proyecto (fin)"
-        predecessors: "Proyecto (predecesoras)"
-        order_number: "Proyecto (orden)"
-        business_unit_id: "Proyecto (unidad de negocio)"
-        status: "Proyecto (estado)"
-      plan/plan_items/resource_utilizations:
-        one: "Recurso"
-        other: "Recursos"
-        units: "Recurso (cantidad de unidades)"
-        cost_per_unit: "Recurso (costo por unidad)"
-        cost: "Recurso (costo)"
-        resource: "Recurso"
-      plan_item:
-        project: "Proyecto"
-        start: "Inicio"
-        end: "Fin"
-        predecessors: "Predecesoras"
-        order_number: "Orden"
-        business_unit_id: "Unidad de negocio"
-        resources: "Recursos"
-        resource_ids: "Recursos"
-        status: "Estado"
-        human_resource_units: "Costo recursos humanos"
-        material_resource_units: "Costo recursos materiales"
-        total_resource_units: "Costo total"
-        tags: "Etiquetas"
       privilege:
         module: "Módulo"
         read: "Lectura"
@@ -1496,7 +1412,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         task: "Tarea"
         start: "Tarea (inicio)"
         end: "Tarea (fin)"
-        predecessors: "Tarea (predecesoras)"
         order_number: "Tarea (orden)"
         resources: "Tarea (recursos)"
       workflow/workflow_items/resource_utilizations:
@@ -1510,7 +1425,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         task: "Tarea"
         start: "Inicio"
         end: "Fin"
-        predecessors: "Predecesoras"
         order_number: "Orden"
         resources: "Recursos"
         resource_ids: "Recursos"
@@ -1566,18 +1480,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           attributes:
             role_id:
               invalid: "deben ser sólo del tipo auditado o de otro tipo pero no ambos"
-        plan:
-          attributes:
-            plan_items:
-              locked: "no pueden ser eliminados, ya se utilizaron en al menos un informe"
-        plan_item:
-          attributes:
-            start:
-              resource_overload: "se superpone con otro ítem que ocupa el mismo recurso"
-              item_overload: "debe ser igual o posterior al fin de la/s tarea/s predecesora/s"
-            end:
-              resource_overload: "se superpone con otro ítem que ocupa el mismo recurso"
-              item_overload: "debe ser igual o posterior al fin de la/s tarea/s predecesora/s"
         process_control:
           attributes:
             control_objectives:
@@ -1586,10 +1488,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           attributes:
             question:
               answered: 'No se pudo actualizar, la pregunta ya tiene respuestas'
-        resource_utilization:
-          attributes:
-            resource_consumer:
-              is_frozen: "no puede ser modificada"
         review:
           attributes:
             review_user_assignments:
@@ -1616,10 +1514,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           attributes:
             start:
               resource_overload: "se superpone con otro ítem que ocupa el mismo recurso"
-              item_overload: "debe ser igual o posterior al fin de la/s tarea/s predecesora/s"
             end:
               resource_overload: "se superpone con otro ítem que ocupa el mismo recurso"
-              item_overload: "debe ser igual o posterior al fin de la/s tarea/s predecesora/s"
 
   actioncontroller:
     best_practices: "Buenas prácticas"

@@ -27,7 +27,7 @@ class Review < ApplicationRecord
   # Relaciones
   belongs_to :period
   belongs_to :plan_item
-  belongs_to :file_model
+  belongs_to :file_model, :optional => true
   belongs_to :organization
   has_one :conclusion_draft_review, :dependent => :destroy
   has_one :conclusion_final_review
@@ -224,7 +224,6 @@ class Review < ApplicationRecord
     self.can_be_approved_by_force = true
 
     if self.control_objective_items.empty?
-      self.can_be_approved_by_force = false
       review_errors << I18n.t('review.errors.without_control_objectives')
     end
 

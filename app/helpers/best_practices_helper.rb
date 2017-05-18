@@ -19,6 +19,15 @@ module BestPracticesHelper
     end
   end
 
+  def should_fetch_control_objectives_for? process_control
+    is_valid = process_control.errors.empty?
+    control_objectives_are_unchanged = process_control.control_objectives.all? do |co|
+      co.persisted? && co.errors.empty? && !co.changed?
+    end
+
+    is_valid && control_objectives_are_unchanged
+  end
+
   def link_to_download_support control_objective, options = {}
     if control_objective.support? && control_objective.support.present?
       best_practice   = control_objective.best_practice

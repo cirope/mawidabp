@@ -29,6 +29,10 @@ module LinksHelper
     link_with_icon({ action: 'copy', icon: 'glyphicon-duplicate' }, *args)
   end
 
+  def link_to_stats(*args)
+    link_with_icon({ action: 'stats', icon: 'glyphicon-stats' }, *args)
+  end
+
   private
 
     def link_with_icon(options = {}, *args)

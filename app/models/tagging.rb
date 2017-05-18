@@ -5,7 +5,7 @@ class Tagging < ApplicationRecord
   include Taggings::Validation
 
   belongs_to :tag
-  belongs_to :taggable, polymorphic: true
+  belongs_to :taggable, polymorphic: true, optional: true
 
   def to_s
     "#{tag} -> #{taggable}"

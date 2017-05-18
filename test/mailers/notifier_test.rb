@@ -9,6 +9,10 @@ class NotifierTest < ActionMailer::TestCase
     assert ActionMailer::Base.deliveries.empty?
   end
 
+  teardown do
+    Organization.current_id = nil
+  end
+
   test 'pending poll email' do
     poll = Poll.find(polls(:poll_one).id)
 

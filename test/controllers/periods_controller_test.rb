@@ -32,7 +32,7 @@ class PeriodsControllerTest < ActionController::TestCase
     assert_difference 'Period.count' do
       post :create, params: {
         period: {
-          number: '20',
+          name: '20',
           description: 'New period',
           start: Date.today,
           end: 30.days.from_now.to_date,
@@ -47,7 +47,7 @@ class PeriodsControllerTest < ActionController::TestCase
 
       post :create, params: {
         period: {
-          number: '20',
+          name: '20',
           description: 'New period',
           start: Date.today,
           end: 30.days.from_now.to_date,
@@ -70,7 +70,7 @@ class PeriodsControllerTest < ActionController::TestCase
       patch :update, params: {
         id: @period,
         period: {
-          number: '20',
+          name: '20',
           description: 'Updated period',
           start: Date.today,
           end: 30.days.from_now.to_date,

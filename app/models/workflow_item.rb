@@ -8,9 +8,6 @@ class WorkflowItem < ApplicationRecord
   # creados
   before_destroy :check_if_can_be_destroyed
 
-  # Atributos serializabled
-  serialize :predecessors, Array
-
   # Atributos no persistentes
   attr_accessor :overloaded
 
@@ -18,8 +15,6 @@ class WorkflowItem < ApplicationRecord
   validate :check_if_is_frozen
   validates :task, :order_number, :presence => true
   validates :task, :pdf_encoding => true
-  validates :predecessors, :length => {:maximum => 255}, :allow_nil => true,
-    :allow_blank => true
   validates :order_number, :workflow_id, :numericality =>
     {:only_integer => true}, :allow_nil => true
   validates_date :start
@@ -65,32 +60,6 @@ class WorkflowItem < ApplicationRecord
           end
         end
       end
-
-      # VALIDACIÓN: Fecha incorrecta entre tareas relacionadas
-      if record.predecessors && !record.predecessors.empty?
-        predecessor_items = workflow_items.select do |wf_item|
-          record.predecessors.include?(wf_item.order_number)
-        end
-
-        if predecessor_items.any? { |pi| pi.end && value < pi.end }
-          record.overloaded = true
-
-          record.errors.add attr, :item_overload
-        end
-      end
-    end
-  end
-  validates_each :predecessors do |record, attr, value|
-    workflow_items = record.workflow ?
-      record.workflow.workflow_items.reject {|wi| wi.marked_for_destruction?} :
-      []
-    order_numbers = workflow_items.inject([]) do |orders, wf_item|
-      orders << wf_item.order_number
-    end
-
-    unless value.all? { |predecessor| order_numbers.include?(predecessor) } &&
-        value.all? { |predecessor| predecessor < record.order_number }
-      record.errors.add attr, :invalid if value
     end
   end
 
@@ -123,16 +92,6 @@ class WorkflowItem < ApplicationRecord
 
   def human_resource_utilizations
     self.resource_utilizations.select { |ru| ru.human?}
-  end
-
-  def plain_predecessors
-    self.predecessors.try(:to_sentence)
-  end
-
-  def plain_predecessors=(plain_predecessors)
-    self.predecessors = (plain_predecessors || '').split(/\D+/).map do |p|
-      p.to_i if p.respond_to?(:to_i)
-    end.compact.sort
   end
 
   def human_units

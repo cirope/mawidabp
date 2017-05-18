@@ -2,14 +2,14 @@
 <fieldset class="material_resource_utilization">
   <div class="row nested">
     <div class="col-md-8">
-      <%= plan_resource_field f, id, false %>
+      <%= plan_resource_field f, id %>
     </div>
     <div class="col-md-3">
       <%= f.input :units, as: :string, label: false %>
     </div>
     <div class="col-md-1">
       <div class="toggle-visibility">
-        <%= link_to_remove_nested_item(f) %>
+        <%= link_to_remove_nested_item f %>
         <%= f.input :resource_type, as: :hidden, input_html: { value: 'Resource' } %>
       </div>
     </div>

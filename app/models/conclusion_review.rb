@@ -15,8 +15,9 @@ class ConclusionReview < ApplicationRecord
       :regexp => SEARCH_DATE_REGEXP
     },
     :period => {
-      :column => "#{Period.quoted_table_name}.#{Period.qcn('number')}", :operator => '=', :mask => "%d",
-      :conversion_method => :to_i, :regexp => /\A\s*\d+\s*\Z/
+      :column => "LOWER(#{Period.quoted_table_name}.#{Period.qcn('name')})",
+      :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
+      :regexp => /.*/
     },
     :identification => {
       :column => "LOWER(#{Review.quoted_table_name}.#{Review.qcn('identification')})",
@@ -60,14 +61,14 @@ class ConclusionReview < ApplicationRecord
   has_many :polls, as: :pollable
 
   def self.columns_for_sort
-    HashWithIndifferentAccess.new({
+    ActiveSupport::HashWithIndifferentAccess.new({
       :issue_date => {
         :name => ConclusionReview.human_attribute_name(:issue_date),
         :field => "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('issue_date')} ASC"
       },
       :period => {
         :name => Period.model_name.human,
-        :field => "#{Period.quoted_table_name}.#{Period.qcn('number')} ASC"
+        :field => "#{Period.quoted_table_name}.#{Period.qcn('name')} ASC"
       },
       :identification => {
         :name => Review.human_attribute_name(:identification),
@@ -162,8 +163,10 @@ class ConclusionReview < ApplicationRecord
     )
 
     if options[:brief].blank?
-      pdf.add_subtitle I18n.t('conclusion_review.objectives_and_scopes'),
-        PDF_FONT_SIZE, PDF_FONT_SIZE
+      if grouped_control_objectives.present?
+        pdf.add_subtitle I18n.t('conclusion_review.objectives_and_scopes'),
+          PDF_FONT_SIZE, PDF_FONT_SIZE
+      end
 
       grouped_control_objectives.each do |process_control, cois|
         process_control_text = "<b>#{ProcessControl.model_name.human}: " +
@@ -189,7 +192,8 @@ class ConclusionReview < ApplicationRecord
       unless self.applied_procedures.blank?
         pdf.add_subtitle I18n.t('conclusion_review.applied_procedures'),
           PDF_FONT_SIZE
-        pdf.text self.applied_procedures, :align => :justify
+        pdf.text self.applied_procedures, :align => :justify,
+          :inline_format => true
       end
 
       pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
@@ -211,8 +215,7 @@ class ConclusionReview < ApplicationRecord
 
     unless self.conclusion.blank?
       pdf.move_down PDF_FONT_SIZE
-      pdf.text self.conclusion, :align => :justify, :font_size => PDF_FONT_SIZE,
-        :inline_format => true
+      pdf.text self.conclusion, :align => :justify, :inline_format => true
     end
 
     review_has_observations = grouped_control_objectives.any? do |_, cois|
