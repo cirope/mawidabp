@@ -192,7 +192,8 @@ class ConclusionReview < ApplicationRecord
       unless self.applied_procedures.blank?
         pdf.add_subtitle I18n.t('conclusion_review.applied_procedures'),
           PDF_FONT_SIZE
-        pdf.text self.applied_procedures, :align => :justify
+        pdf.text self.applied_procedures, :align => :justify,
+          :inline_format => true
       end
 
       pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
@@ -214,8 +215,7 @@ class ConclusionReview < ApplicationRecord
 
     unless self.conclusion.blank?
       pdf.move_down PDF_FONT_SIZE
-      pdf.text self.conclusion, :align => :justify, :font_size => PDF_FONT_SIZE,
-        :inline_format => true
+      pdf.text self.conclusion, :align => :justify, :inline_format => true
     end
 
     review_has_observations = grouped_control_objectives.any? do |_, cois|
