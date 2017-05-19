@@ -32,7 +32,7 @@
           <%= t 'navigation.loading' %>
         </div>
       <% else %>
-        <%= render 'process_controls/form', :@process_control => f.object %>
+        <%= render 'process_controls/form', process_control: f.object, index: f.index %>
       <% end %>
     </div>
 

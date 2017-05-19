@@ -76,7 +76,7 @@
       <% if fetch %>
         <div class="alert alert-warning"><%= t 'navigation.loading' %></div>
       <% else %>
-        <%= render 'plan_items/form', :@plan_item => f.object %>
+        <%= render 'plan_items/form', plan_item: f.object, index: f.index %>
       <% end %>
     </div>
 

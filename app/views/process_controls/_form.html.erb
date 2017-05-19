@@ -1,16 +1,18 @@
-<% child_index = @best_practice.process_controls.index(@process_control) || params[:index] %>
+<% process_control ||= @process_control %>
+<% index           ||= params[:index] %>
 
 <div data-container-id="<%= params[:container] %>">
   <%= simple_fields_for @best_practice do |f| %>
-    <%= f.simple_fields_for :process_controls, @process_control, child_index: child_index do |pc_f| %>
-      <% @process_control.control_objectives.each_with_index do |control_objective, i| %>
-        <%= pc_f.simple_fields_for :control_objectives, control_objective, child_index: params[:container].to_i + i do |co_f| %>
-          <%= render 'process_controls/control_objective', f: co_f, process_control_id: @process_control.id %>
+    <%= f.simple_fields_for :process_controls, process_control, child_index: index do |pc_f| %>
+      <% process_control.control_objectives.each do |control_objective| %>
+        <% control_objective_index = process_control.control_objectives.index control_objective %>
+        <%= pc_f.simple_fields_for :control_objectives, control_objective, child_index: control_objective_index do |co_f| %>
+          <%= render 'process_controls/control_objective', f: co_f, process_control_id: process_control.id %>
         <% end %>
       <% end %>
 
-      <% if @process_control.persisted? %>
-        <%= pc_f.input :id, as: :hidden, input_html: { id: "nested_best_practice_process_control_#{@process_control.id}" } %>
+      <% if process_control.persisted? %>
+        <%= pc_f.input :id, as: :hidden, input_html: { id: "nested_best_practice_process_control_#{process_control.id}" } %>
       <% end %>
     <% end %>
   <% end %>
