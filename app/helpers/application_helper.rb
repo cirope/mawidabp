@@ -1,6 +1,13 @@
 module ApplicationHelper
   include ParameterSelector
 
+  def page_title
+    @title     ||= t "actioncontroller.#{controller_name}"
+    organization = "&lt;#{current_organization.name}&gt;" if current_organization
+
+    raw [t('app_name'), organization, @title].compact.join(' ')
+  end
+
   def t_boolean field
     t "navigation.#{field ? '_yes' : '_no'}"
   end
