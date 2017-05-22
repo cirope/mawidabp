@@ -15,7 +15,7 @@ Rails.application.configure do
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
-    'Cache-Control' => 'public, max-age=3600'
+    'Cache-Control' => "public, max-age=#{1.hour.seconds.to_i}"
   }
 
   # Show full error reports and disable caching.
@@ -39,10 +39,10 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-  #
-  # Set timecop to January 5, 2016 10:05:00 AM UTC
+
+  # Set timecop to January 5, 2017 10:05:00 AM UTC
   config.after_initialize do
-    t = Time.utc 2016, 1, 5, 10, 5, 0
+    t = Time.utc 2017, 1, 5, 10, 5, 0
 
     Timecop.travel t
   end

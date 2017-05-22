@@ -3,10 +3,10 @@
   <div class="row nested">
     <div class="col-md-8">
       <% if f.object.new_record? %>
-        <%= f.input :resource_id, as: :string, label: false, autofocus: true,
+        <%= f.input :resource_id, as: :string, label: false,
           input_html: {
             name: 'resource_utilization[user_data]',
-            value: f.object.resource.try(:full_name),
+            value: f.object.resource&.full_name,
             id: "resource_utilization_user_#{id}",
             title: t('label.search'),
             data: {
@@ -17,7 +17,7 @@
       <% else %>
         <%= f.input :resource_id, as: :string, label: false, input_html: {
           name: "resource_utilization_user_#{id}",
-          value: f.object.resource.try(:full_name_with_function, f.object.created_at),
+          value: f.object.resource&.full_name_with_function(f.object.created_at),
           readonly: true
         } %>
       <% end %>
@@ -30,7 +30,7 @@
     </div>
     <div class="col-md-1">
       <div class="toggle-visibility">
-        <%= link_to_remove_nested_item(f) %>
+        <%= link_to_remove_nested_item f %>
         <%= f.input :resource_type, as: :hidden, input_html: { value: 'User' } %>
       </div>
     </div>

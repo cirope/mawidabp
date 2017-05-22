@@ -42,7 +42,7 @@ class ProcessControl < ApplicationRecord
   end
 
   # Relaciones
-  belongs_to :best_practice
+  belongs_to :best_practice, optional: true
 
   def <=>(other)
     if other.kind_of?(ProcessControl)

@@ -273,7 +273,9 @@ Rails.application.routes.draw do
   end
 
   resources :plans do
-    get :export_to_pdf, on: :member
+    resources :plan_items, only: [:new, :edit]
+
+    get :stats, on: :member, to: 'plans/stats#show'
 
     collection do
       get :auto_complete_for_business_unit

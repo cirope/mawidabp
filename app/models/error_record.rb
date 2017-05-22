@@ -8,7 +8,7 @@ class ErrorRecord < ApplicationRecord
 
   attr_accessor :request, :user_name, :error_type
 
-  belongs_to :user
+  belongs_to :user, optional: true
   belongs_to :organization
 
   def to_s

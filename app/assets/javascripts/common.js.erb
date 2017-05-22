@@ -16,13 +16,13 @@ var State = {
   resetTimers: function () {
     $.each(State.showMessages, function() {
       if(!State.sessionExpire) {
-        window.clearTimeout(this.timer_id);
+        window.clearTimeout(this.timerId);
         $('#time-left').addClass('hidden');
 
         var message = this.message;
         var expired = this.expired;
 
-        this.timer_id = window.setTimeout(
+        this.timerId = window.setTimeout(
           "Helper.showMessage('" + message + "', " + expired + ")",
           this.time * 1000
         );
@@ -492,18 +492,19 @@ jQuery(function($) {
     return false;
   });
 
-  // Mensajes diferidos
-  if(Array.isArray(State.showMessages)) {
-    $.each(State.showMessages, function() {
-      var message = this.message;
-      var expired = this.expired;
+  setTimeout(function () {
+    if (Array.isArray(State.showMessages)) {
+      $.each(State.showMessages, function () {
+        var message = this.message;
+        var expired = this.expired;
 
-      this.timer_id = window.setTimeout(
-        "Helper.showMessage('" + message + "', " + expired + ")",
-        this.time * 1000
-      );
-    });
-  }
+        this.timerId = window.setTimeout(
+          "Helper.showMessage('" + message + "', " + expired + ")",
+          this.time * 1000 - 15000
+        );
+      });
+    }
+  }, 15000)
 
   $(document).bind({
     ajaxStart: State.resetTimers

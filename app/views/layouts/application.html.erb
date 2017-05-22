@@ -1,29 +1,21 @@
 <!doctype html>
-<!--[if lt IE 8]> <html class="lt-ie8"> <![endif]-->
-<!--[if gt IE 7]><!--> <html lang="<%= locale %>"> <!--<![endif]-->
-<% @title ||= t("actioncontroller.#{controller_name}") %>
+<html lang="<%= locale %>">
   <head>
-    <meta charset="utf-8" />
-    <title><%= t(:app_name) %><%= raw " &lt;#{current_organization.name}&gt;" if current_organization %> | <%= @title %></title>
+    <meta charset="utf-8">
+    <title><%= page_title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
     <!--[if lt IE 8]>
-      <%= stylesheet_link_tag    'application-ie', media: 'all' %>
+      <%= stylesheet_link_tag 'application-ie', media: 'all' %>
     <![endif]-->
     <!--[if lt IE 9]>
       <%= javascript_include_tag 'application-ie' %>
     <![endif]-->
     <%= csrf_meta_tags %>
     <%= favicon_link_tag 'favicon.ico' %>
-    <%= javascript_tag do %>
-      <%= raw "setTimeout(function () {" %>
-      <%= raw "  State.unsavedDataWarning = '#{t('message.unsaved_data_warning')}';" %>
-      <%= raw "  State.validationFailedMessage = '#{t('message.validation_failed_message')}';" %>
-      <%= raw "}, 10000);" %>
-      <%= yield :js_extra %>
-    <% end %>
+    <%= javascript_tag { yield :js_extra } %>
   </head>
 
   <body data-controller="<%= controller_name %>">
@@ -38,9 +30,7 @@
       <%= render 'shared/time_left' if @auth_user %>
       <%= yield %>
 
-      <%= javascript_tag do %>
-        <%= yield :js_extra_bottom %>
-      <% end %>
+      <%= javascript_tag { yield :js_extra_bottom } %>
       <%= yield :extra_html_bottom %>
     </div>
   </body>

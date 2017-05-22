@@ -51,6 +51,11 @@ es:
         notice: 'Período actualizado correctamente'
         stale: 'El período no fue actualizado, intente nuevamente'
 
+    plans:
+      destroy:
+        notice: 'Plan de trabajo eliminado'
+        alert: 'El plan no puede ser eliminado, se encuentra relacionado con al menos un informe'
+
     polls:
       create:
         notice: 'La encuesta ha sido agregada correctamente'

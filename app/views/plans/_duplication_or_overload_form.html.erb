@@ -1,0 +1,20 @@
+<% if @plan.has_duplication? || @plan.overloaded? %>
+  <div class="row">
+    <% if @plan.has_duplication? %>
+      <div class="col-md-6">
+        <div class="alert alert-sm alert-danger">
+          <%= f.input :allow_duplication, as: :boolean, label: false,
+            inline_label: t('.allow_duplication') %>
+        </div>
+      </div>
+    <% end %>
+    <% if @plan.overloaded? %>
+      <div class="col-md-6">
+        <div class="alert alert-sm alert-danger">
+          <%= f.input :allow_overload, as: :boolean, label: false,
+            inline_label: t('.allow_overload') %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

@@ -5,7 +5,7 @@ class Achievement < ApplicationRecord
   delegate :benefit?, :damage?, to: :benefit
 
   belongs_to :benefit
-  belongs_to :finding
+  belongs_to :finding, optional: true
 
   def signed_amount
     benefit? ? amount : -amount

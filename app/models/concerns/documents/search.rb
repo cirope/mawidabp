@@ -2,7 +2,7 @@ module Documents::Search
   extend ActiveSupport::Concern
 
   included do
-    COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
+    COLUMNS_FOR_SEARCH = ActiveSupport::HashWithIndifferentAccess.new(
       name: {
         column: "LOWER(#{quoted_table_name}.#{qcn('name')})", operator: 'LIKE',
         mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
