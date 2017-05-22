@@ -282,8 +282,11 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
-      ratio: 'Proporción'
-      review_count: 'Cantidad de informes'
+      ratio: "Proporción"
+      review_count: "Cantidad de informes"
+      reviews_by_tag:
+        title: "Informes por etiqueta"
+        footnote: "Se cuenta el par etiqueta - informe. Así, por ejemplo, un informe con dos etiquetas será contado dos veces y un informe sin etiquetas no se tendrá en cuenta."
     weaknesses_by_state:
       pdf_name: "hallazgos_informes_definitivos_por_estado_%{from_date}_al_%{to_date}.pdf"
       title: "HALLAZGOS INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
@@ -735,8 +738,11 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
-      ratio: 'Proporción'
-      review_count: 'Cantidad de informes'
+      ratio: "Proporción"
+      review_count: "Cantidad de informes"
+      reviews_by_tag:
+        title: "Informes por etiqueta"
+        footnote: "Se cuenta el par etiqueta - informe. Así, por ejemplo, un informe con dos etiquetas será contado dos veces y un informe sin etiquetas no se tendrá en cuenta."
     weaknesses_by_state:
       pdf_name: "observaciones_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"

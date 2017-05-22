@@ -4,11 +4,11 @@
   extra_params: { controller_name: 'conclusion' }
 } %>
 
-<% score_count = @reviews_by_score.values.map(&:size).sum %>
-
 <br>
 
 <div class="panel panel-default">
+  <% score_count = @reviews_by_score.values.map(&:size).sum %>
+
   <div class="panel-heading">
     <h4 class="panel-title">
       <%= Review.model_name.human count: 0 %>
@@ -20,7 +20,9 @@
       <thead>
         <tr>
           <th><%= Review.human_attribute_name 'score' %></th>
-          <th><%= t 'conclusion_committee_report.review_stats_report.ratio' %></th>
+          <th class="text-right">
+            <%= t 'conclusion_committee_report.review_stats_report.ratio' %>
+          </th>
         </tr>
       </thead>
 
@@ -29,7 +31,9 @@
           <% scores = @reviews_by_score[score] %>
           <tr>
             <td><%= t "score_types.#{score}" %></td>
-            <td><%= scores.size > 0 ? '%.2f%' % (scores.size.to_f / score_count * 100) : '0.00%' %></td>
+            <td class="text-right">
+              <%= scores.size > 0 ? '%.2f%' % (scores.size.to_f / score_count * 100) : '0.00%' %>
+            </td>
           </tr>
         <% end %>
       </tbody>
@@ -37,9 +41,60 @@
   </div>
 
   <div class="panel-footer">
-    <%= t 'conclusion_committee_report.review_stats_report.review_count' %>: <mark><%= score_count %></mark>
+    <%= t 'conclusion_committee_report.review_stats_report.review_count' %>:
+    <mark><%= score_count %></mark>
   </div>
 </div>
+
+<% if @reviews_by_tag.present? %>
+  <div class="panel panel-default">
+    <% reviews_by_tag_count = @reviews_by_tag.values.sum %>
+
+    <div class="panel-heading">
+      <h4 class="panel-title">
+      <%= t 'conclusion_committee_report.review_stats_report.reviews_by_tag.title' %>
+      </h4>
+    </div>
+
+    <div class="panel-body">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th><%= Tag.model_name.human %></th>
+            <th class="text-right">
+              <%= t 'conclusion_committee_report.review_stats_report.ratio' %>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @reviews_by_tag.each do |tag, count| %>
+            <tr>
+              <td>
+                <span class="text-<%= tag.style %>">
+                  <span class="glyphicon glyphicon-<%= tag.icon %>"></span>
+                  <%= tag %>
+                </span>
+              </td>
+              <td class="text-right">
+                <%= count > 0 ? '%.2f%' % (count.to_f / reviews_by_tag_count * 100) : '0.00%' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel-footer">
+      <%= t 'conclusion_committee_report.review_stats_report.review_count' %>:
+      <mark><%= reviews_by_tag_count %></mark> <sup>(*)</sup>
+    </div>
+  </div>
+
+  <p class="text-muted small">
+    <sup>(*)</sup> <%= t 'conclusion_committee_report.review_stats_report.reviews_by_tag.footnote' %>
+  </p>
+<% end %>
 
 <hr>
 

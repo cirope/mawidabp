@@ -11,6 +11,7 @@ module Reports::ReviewStatsReport
     end
 
     set_reviews_by_score_data
+    set_reviews_by_tag_data
   end
 
   def create_review_stats_report
@@ -20,7 +21,8 @@ module Reports::ReviewStatsReport
 
     add_pdf_description pdf, @controller, @from_date, @to_date
 
-    add_review_stats pdf
+    add_reviews_stats pdf
+    add_reviews_by_tag_stats pdf if @reviews_by_tag.present?
 
     add_pdf_filters pdf, @controller, @filters if @filters.present?
 
@@ -37,6 +39,7 @@ module Reports::ReviewStatsReport
       @from_date, @to_date = *make_date_range(params[:review_stats_report])
       @filters = []
       @reviews_by_score = {}
+      @reviews_by_tag = {}
       @conclusion_reviews = ConclusionFinalReview.
         includes(:review).
         list_all_by_date @from_date, @to_date
@@ -71,7 +74,16 @@ module Reports::ReviewStatsReport
       end
     end
 
-    def add_review_stats pdf
+    def set_reviews_by_tag_data
+      Tag.list.for_reviews.each do |tag|
+        @reviews_by_tag[tag] = @conclusion_reviews.
+          joins(:review).
+          merge(Review.tagged_with(tag)).
+          count
+      end
+    end
+
+    def add_reviews_stats pdf
       count_label = I18n.t("#{@controller}_committee_report.review_stats_report.review_count")
 
       pdf.move_down PDF_FONT_SIZE
@@ -87,10 +99,32 @@ module Reports::ReviewStatsReport
       pdf.text "<b>#{count_label}</b>: #{review_stats_score_count}", inline_format: true
     end
 
+    def add_reviews_by_tag_stats pdf
+      count_label = I18n.t("#{@controller}_committee_report.review_stats_report.review_count")
+      title       = I18n.t("#{@controller}_committee_report.review_stats_report.reviews_by_tag.title")
+      footnote    = I18n.t("#{@controller}_committee_report.review_stats_report.reviews_by_tag.footnote")
+
+      pdf.move_down PDF_FONT_SIZE
+
+      pdf.add_title title, (PDF_FONT_SIZE * 1.25).round
+
+      pdf.move_down PDF_FONT_SIZE
+
+      add_reviews_by_tag_pdf_table pdf
+
+      pdf.move_down PDF_FONT_SIZE
+
+      pdf.text "<b>#{count_label}</b>: #{reviews_by_tag_count} <sup>(*)</sup>", inline_format: true
+
+      pdf.move_down PDF_FONT_SIZE
+
+      pdf.text "<sup>(*)</sup> #{footnote}", font_size: (PDF_FONT_SIZE * 0.75).round, inline_format: true
+    end
+
     def review_stats_columns
       {
-        'score' => [Review.human_attribute_name('score'), 50],
-        'ratio' => [I18n.t("#{@controller}_committee_report.review_stats_report.ratio"), 50]
+        'score' => [Review.human_attribute_name('score'), 80],
+        'ratio' => [I18n.t("#{@controller}_committee_report.review_stats_report.ratio"), 20]
       }
     end
 
@@ -106,7 +140,7 @@ module Reports::ReviewStatsReport
       @reviews_by_score.values.map(&:size).sum
     end
 
-    def review_stats_column_data
+    def review_stats_data
       Review.scores.map do |score, value|
         scores = @reviews_by_score[score]
         ratio  = if scores.size > 0
@@ -122,7 +156,50 @@ module Reports::ReviewStatsReport
     def add_review_stats_report_pdf_table(pdf)
       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
         table_options = pdf.default_table_options(review_stats_column_widths(pdf))
-        pdf.table(review_stats_column_data.insert(0, review_stats_column_headers(pdf)), table_options) do
+        pdf.table(review_stats_data.insert(0, review_stats_column_headers(pdf)), table_options) do
+          row(0).style(
+            background_color: 'cccccc',
+            padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          )
+        end
+      end
+    end
+
+    def reviews_by_tag_columns
+      {
+        'tag' => [Tag.model_name.human, 80],
+        'ratio' => [I18n.t("#{@controller}_committee_report.review_stats_report.ratio"), 20]
+      }
+    end
+
+    def reviews_by_tag_column_widths pdf
+      reviews_by_tag_columns.map { |name, header| pdf.percent_width(header.last) }
+    end
+
+    def reviews_by_tag_column_headers pdf
+      reviews_by_tag_columns.map { |name, header| "<b>#{header.first}</b>" }
+    end
+
+    def reviews_by_tag_count
+      @reviews_by_tag.values.sum
+    end
+
+    def reviews_by_tag_data
+      @reviews_by_tag.map do |tag, count|
+        ratio = if count > 0
+                  '%.2f%' % (count.to_f / reviews_by_tag_count * 100)
+                else
+                  '0.00%'
+                end
+
+        [tag.to_s, ratio]
+      end
+    end
+
+    def add_reviews_by_tag_pdf_table(pdf)
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        table_options = pdf.default_table_options(reviews_by_tag_column_widths(pdf))
+        pdf.table(reviews_by_tag_data.insert(0, reviews_by_tag_column_headers(pdf)), table_options) do
           row(0).style(
             background_color: 'cccccc',
             padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
