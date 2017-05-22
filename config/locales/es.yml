@@ -165,6 +165,7 @@
     benefits_title: 'Beneficios / Perjuicios'
     process_control_stats_title: 'Observaciones por proceso de negocio'
     synthesis_report_title: "Informe de síntesis al directorio"
+    review_stats_report_title: "Estadísticas de informes"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -262,8 +263,7 @@
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
       organization_score: "Calificación de la organización: %{score}% (*)"
-      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (Procesos
-Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Informática)"
+      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})."
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin hallazgos"
@@ -272,6 +272,18 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       generic_score_average:
         one: 'Promedio de las calificaciones de %{audit_type} en un informe'
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
+    review_stats_report:
+      pdf_name: "estadisticas_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
+      title: "ESTADÍSTICAS DE INFORMES"
+      subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
+      organization_score: "Calificación de la organización: %{score}% (*)"
+      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})."
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      without_oportunities: "Sin oportunidades de mejora"
+      ratio: 'Proporción'
+      review_count: 'Cantidad de informes'
     weaknesses_by_state:
       pdf_name: "hallazgos_informes_definitivos_por_estado_%{from_date}_al_%{to_date}.pdf"
       title: "HALLAZGOS INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
@@ -577,6 +589,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     control_effectiveness: "Efectividad del control"
     pending_findings: "Seguimiento de observaciones pendientes"
     synthesis_report_title: "Informe de síntesis al directorio"
+    review_stats_report_title: "Estadísticas de informes"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     detailed_report: "Reporte detallado"
@@ -699,7 +712,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
       organization_score: "Calificación de la organización: %{score}% (*)"
-      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})"
+      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})."
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
@@ -712,11 +725,22 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         other: "%{count} hallazgos reiterados"
       total_score_average: "Total promedio de las calificaciones (%{reference })"
       references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+    review_stats_report:
+      pdf_name: "estadisticas_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
+      title: "ESTADÍSTICAS DE INFORMES"
+      subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
+      organization_score: "Calificación de la organización: %{score}% (*)"
+      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})."
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      without_oportunities: "Sin oportunidades de mejora"
+      ratio: 'Proporción'
+      review_count: 'Cantidad de informes'
     weaknesses_by_state:
       pdf_name: "observaciones_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
       title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR ESTADO"
-      sqm_title: "SEGUIMIENTO DE HALLAZGOS TOTALES POR ESTADO"
       total: "TOTAL"
     weaknesses_by_risk:
       pdf_name: "observaciones_seguimiento_por_riesgo_%{from_date}_al_%{to_date}.pdf"
