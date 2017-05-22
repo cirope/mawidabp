@@ -54,9 +54,8 @@
 <% end %>
 
 <div>
-  <%= simple_format (@sqm ? t('execution_reports.detailed_management_report.sqm_references') :
-    t('execution_reports.detailed_management_report.references',
-    :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence)) %>
+  <%= simple_format t('execution_reports.detailed_management_report.references',
+    :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence) %>
 </div>
 
 <hr />
