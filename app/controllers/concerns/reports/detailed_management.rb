@@ -135,7 +135,7 @@ module Reports::DetailedManagement
         prepare_pdf_table_rows(data)
 
         unless @column_data.blank?
-          add_pdf_table(pdf)
+          add_detailed_management_pdf_table(pdf)
         else
           pdf.text(
             t('execution_reports.detailed_management_report.without_audits_in_the_period'),
@@ -178,7 +178,7 @@ module Reports::DetailedManagement
     end
   end
 
-  def add_pdf_table(pdf)
+  def add_detailed_management_pdf_table(pdf)
     pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
       table_options = pdf.default_table_options(@column_widths)
 

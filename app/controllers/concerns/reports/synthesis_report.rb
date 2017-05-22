@@ -36,7 +36,7 @@ module Reports::SynthesisReport
     synthesis_report
 
     pdf = init_pdf(params[:report_title], params[:report_subtitle])
-    add_pdf_description(pdf, 'follow_up', @from_date, @to_date)
+    add_pdf_description(pdf, @controller, @from_date, @to_date)
 
     @periods.each do |period|
       add_period_title(pdf, period, :justify)
@@ -48,9 +48,9 @@ module Reports::SynthesisReport
         prepare_synthesis_rows(data[:column_data])
 
         if @column_data.present?
-          add_pdf_table(pdf)
+          add_synthesis_report_pdf_table(pdf)
           add_score_data(pdf, data[:review_scores], data[:name])
-          add_repeated_text(pdf, data[:repeated_count]) if @controller.eql?('follow_up')
+          add_repeated_text(pdf, data[:repeated_count]) if @controller == 'follow_up'
         else
           pdf.text t("#{@controller}_committee_report.synthesis_report.without_audits_in_the_period"),
             :style => :italic
@@ -58,7 +58,7 @@ module Reports::SynthesisReport
       end
     end
 
-    add_pdf_filters(pdf, 'follow_up', @filters) if @filters.present?
+    add_pdf_filters(pdf, @controller, @filters) if @filters.present?
 
     add_pdf_references(pdf)
 
@@ -117,7 +117,7 @@ module Reports::SynthesisReport
     def init_business_unit_type_vars
       @column_data = []
       @review_scores = []
-      @repeated_count = 0 if @controller.eql? 'follow_up'
+      @repeated_count = 0 if @controller == 'follow_up'
     end
 
     def set_process_controls_data(c_r)
@@ -151,7 +151,7 @@ module Reports::SynthesisReport
 
         weaknesses_count[w.risk_text] ||= 0
 
-        if w.repeated? && @controller.eql?('follow_up')
+        if w.repeated? && @controller == 'follow_up'
           @repeated_count += 1
         else
           weaknesses_count[w.risk_text] += 1
@@ -222,7 +222,7 @@ module Reports::SynthesisReport
       }
     end
 
-    def add_pdf_table(pdf)
+    def add_synthesis_report_pdf_table(pdf)
       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
         table_options = pdf.default_table_options(@column_widths)
         pdf.table(@column_data.insert(0, @column_headers), table_options) do
