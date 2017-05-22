@@ -11,4 +11,10 @@ module Plans::PlanItems
   def grouped_plan_items
     plan_items.group_by { |pi| pi.business_unit&.business_unit_type }
   end
+
+  private
+
+    def plan_items_on date
+      plan_items.where "#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'start'} <= ?", date
+    end
 end
