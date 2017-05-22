@@ -18,7 +18,11 @@
     <tbody>
       <% @tags.each do |tag| %>
         <tr>
-          <td><span class="glyphicon glyphicon-<%= tag.icon %>"></span></td>
+          <td>
+            <span class="text-<%= tag.style %>">
+              <span class="glyphicon glyphicon-<%= tag.icon %>"></span>
+            </span>
+          </td>
           <td>
             <%= tag_shared_icon tag %>
             <%= tag.name %>
