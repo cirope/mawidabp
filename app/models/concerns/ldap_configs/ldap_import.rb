@@ -57,6 +57,7 @@ module LdapConfigs::LDAPImport
         last_name: entry[last_name_attribute].first&.force_encoding('UTF-8')&.to_s,
         email:     entry[email_attribute].first&.force_encoding('UTF-8')&.to_s,
         function:  function_attribute && entry[function_attribute].first&.force_encoding('UTF-8')&.to_s,
+        hidden:    false,
         enable:    true
       }
     end
