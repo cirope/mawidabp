@@ -93,6 +93,65 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       'synthesis_report', 0)
   end
 
+  test 'review stats report' do
+    login
+
+    get :review_stats_report, :params => { :controller_name => 'conclusion' }
+    assert_response :success
+    assert_template 'conclusion_reports/review_stats_report'
+
+    assert_nothing_raised do
+      get :review_stats_report, :params => {
+        :review_stats_report => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion'
+      }
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/review_stats_report'
+  end
+
+  test 'filtered review stats report' do
+    login
+    get :review_stats_report, :params => {
+      :review_stats_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'one'
+      },
+      :controller_name => 'conclusion'
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:filters)
+    assert_equal 2, assigns(:filters).count
+    assert_template 'conclusion_reports/review_stats_report'
+  end
+
+  test 'create review stats report' do
+    login
+
+    post :create_review_stats_report, :params => {
+      :review_stats_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion'
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.review_stats_report.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'review_stats_report', 0)
+  end
+
   test 'weaknesses by state report' do
     login
 

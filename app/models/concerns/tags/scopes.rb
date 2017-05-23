@@ -15,5 +15,9 @@ module Tags::Scopes
 
       result
     end
+
+    Tag::KINDS.each do |kind|
+      define_method("for_#{kind.pluralize}") { where kind: kind }
+    end
   end
 end

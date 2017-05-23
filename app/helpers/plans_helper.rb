@@ -16,6 +16,16 @@ module PlansHelper
       class: [plan_item.status_color(on: plan_status_date), 'media-object'].join(' ')
   end
 
+  def plan_cost
+    units = if params[:business_unit_type].present?
+              @plan.estimated_amount params[:business_unit_type], on: plan_status_date
+            else
+              @plan.units on: plan_status_date
+            end
+
+    '%.2f' % units
+  end
+
   def plan_item_path plan_item
     if plan_item.persisted?
       edit_plan_plan_item_path @plan, plan_item

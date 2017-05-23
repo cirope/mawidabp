@@ -229,7 +229,7 @@ module Reports::QAIndicators
     @indicators[period].each do |data|
       prepare_qa_columns(pdf)
       prepare_qa_rows(data)
-      add_pdf_table(pdf)
+      add_qa_indicators_pdf_table(pdf)
     end
   end
 
@@ -255,7 +255,7 @@ module Reports::QAIndicators
     end
   end
 
-  def add_pdf_table(pdf)
+  def add_qa_indicators_pdf_table(pdf)
     unless @column_data.blank?
       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
         table_options = pdf.default_table_options(@column_widths)
