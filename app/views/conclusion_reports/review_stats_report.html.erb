@@ -109,7 +109,7 @@
         <tr>
           <th><%= Weakness.human_attribute_name 'risk' %> / <%= Weakness.human_attribute_name 'priority' %></th>
           <% Review.scores.each do |score, value| %>
-            <th><%= t "score_types.#{score}" %></th>
+            <th class="text-right"><%= t "score_types.#{score}" %></th>
           <% end %>
         </tr>
       </thead>
@@ -119,23 +119,19 @@
           <tr>
             <td><%= label %></td>
             <% Review.scores.keys.each do |score| %>
-              <td><%= weaknesses_by_score[score] %></td>
+              <td class="text-right"><%= weaknesses_by_score[score] %></td>
             <% end %>
           </tr>
         <% end %>
       </tbody>
 
       <tfoot>
-        <tr>
+        <tr class="text-muted">
           <td>
-            <span class="text-muted">
-              <%= t 'conclusion_committee_report.review_stats_report.weaknesses_by_score.total' %>
-            </span>
+            <%= t 'conclusion_committee_report.review_stats_report.weaknesses_by_score.total' %>
           </td>
           <% Review.scores.keys.each do |score| %>
-            <td>
-              <span class="text-muted"><%= @total_weaknesses_by_score[score] %></span>
-            </td>
+            <td class="text-right"><%= @total_weaknesses_by_score[score] %></td>
           <% end %>
         </tr>
       </tfoot>

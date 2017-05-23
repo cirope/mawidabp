@@ -20,7 +20,9 @@
       <thead>
         <tr>
           <th><%= Review.human_attribute_name 'score' %></th>
-          <th><%= t 'follow_up_committee_report.review_stats_report.ratio' %></th>
+          <th class="text-right">
+            <%= t 'follow_up_committee_report.review_stats_report.ratio' %>
+          </th>
         </tr>
       </thead>
 
@@ -29,7 +31,9 @@
           <% scores = @reviews_by_score[score] %>
           <tr>
             <td><%= t "score_types.#{score}" %></td>
-            <td><%= scores.size > 0 ? '%.2f%' % (scores.size.to_f / score_count * 100) : '0.00%' %></td>
+            <td class="text-right">
+              <%= scores.size > 0 ? '%.2f%' % (scores.size.to_f / score_count * 100) : '0.00%' %>
+            </td>
           </tr>
         <% end %>
       </tbody>
@@ -105,7 +109,7 @@
         <tr>
           <th><%= Weakness.human_attribute_name 'risk' %> / <%= Weakness.human_attribute_name 'priority' %></th>
           <% Review.scores.each do |score, value| %>
-            <th><%= t "score_types.#{score}" %></th>
+            <th class="text-right"><%= t "score_types.#{score}" %></th>
           <% end %>
         </tr>
       </thead>
@@ -115,23 +119,19 @@
           <tr>
             <td><%= label %></td>
             <% Review.scores.keys.each do |score| %>
-              <td><%= weaknesses_by_score[score] %></td>
+              <td class="text-right"><%= weaknesses_by_score[score] %></td>
             <% end %>
           </tr>
         <% end %>
       </tbody>
 
       <tfoot>
-        <tr>
+        <tr class="text-muted">
           <td>
-            <span class="text-muted">
-              <%= t 'follow_up_committee_report.review_stats_report.weaknesses_by_score.total' %>
-            </span>
+            <%= t 'follow_up_committee_report.review_stats_report.weaknesses_by_score.total' %>
           </td>
           <% Review.scores.keys.each do |score| %>
-            <td>
-              <span class="text-muted"><%= @total_weaknesses_by_score[score] %></span>
-            </td>
+            <td class="text-right"><%= @total_weaknesses_by_score[score] %></td>
           <% end %>
         </tr>
       </tfoot>
