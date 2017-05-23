@@ -92,6 +92,53 @@
   </p>
 <% end %>
 
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <%= t 'follow_up_committee_report.review_stats_report.weaknesses_by_score.title' %>
+    </h4>
+  </div>
+
+  <div class="panel-body">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th><%= Weakness.human_attribute_name 'risk' %> / <%= Weakness.human_attribute_name 'priority' %></th>
+          <% Review.scores.each do |score, value| %>
+            <th><%= t "score_types.#{score}" %></th>
+          <% end %>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @weaknesses_by_score.each do |label, weaknesses_by_score| %>
+          <tr>
+            <td><%= label %></td>
+            <% Review.scores.keys.each do |score| %>
+              <td><%= weaknesses_by_score[score] %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td>
+            <span class="text-muted">
+              <%= t 'follow_up_committee_report.review_stats_report.weaknesses_by_score.total' %>
+            </span>
+          </td>
+          <% Review.scores.keys.each do |score| %>
+            <td>
+              <span class="text-muted"><%= @total_weaknesses_by_score[score] %></span>
+            </td>
+          <% end %>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
 <hr>
 
 <div>

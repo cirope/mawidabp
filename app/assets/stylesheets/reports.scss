@@ -1,0 +1,12 @@
+[data-controller="conclusion_reports"],
+[data-controller="follow_up_audit"] {
+  table.table {
+    tfoot {
+      tr {
+        td {
+          border-top-width: 2px;
+        }
+      }
+    }
+  }
+}

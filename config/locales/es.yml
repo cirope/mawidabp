@@ -287,6 +287,9 @@
       reviews_by_tag:
         title: "Informes por etiqueta"
         footnote: "Se cuenta el par etiqueta - informe. Así, por ejemplo, un informe con dos etiquetas será contado dos veces y un informe sin etiquetas no se tendrá en cuenta."
+      weaknesses_by_score:
+        title: "Observaciones por riesgo, prioridad y calificación de informe"
+        total: "Total"
     weaknesses_by_state:
       pdf_name: "hallazgos_informes_definitivos_por_estado_%{from_date}_al_%{to_date}.pdf"
       title: "HALLAZGOS INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
@@ -743,6 +746,9 @@
       reviews_by_tag:
         title: "Informes por etiqueta"
         footnote: "Se cuenta el par etiqueta - informe. Así, por ejemplo, un informe con dos etiquetas será contado dos veces y un informe sin etiquetas no se tendrá en cuenta."
+      weaknesses_by_score:
+        title: "Observaciones por riesgo, prioridad y calificación de informe"
+        total: "Total"
     weaknesses_by_state:
       pdf_name: "observaciones_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
