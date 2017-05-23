@@ -90,7 +90,7 @@ module Plans::StatsHelper
     def class_for_compliance compliance
       if compliance == 100
         'success'
-      elsif compliance >= 85
+      elsif compliance >= 80
         'warning'
       else
         'danger'
