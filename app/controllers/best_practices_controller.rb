@@ -55,7 +55,9 @@ class BestPracticesController < ApplicationController
   private
 
     def set_best_practice
-      @best_practice = BestPractice.list.includes(:process_controls).find(params[:id])
+      @best_practice = BestPractice.list.includes({
+        process_controls: :control_objectives
+      }).find params[:id]
     end
 
     def best_practice_params

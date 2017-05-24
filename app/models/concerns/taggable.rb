@@ -10,7 +10,12 @@ module Taggable
 
   module ClassMethods
     def tagged_with *tags
-      joins(:tags).where(tags: { name: tags }).distinct
+      condition = if tags.all? { |t| t.respond_to? :id }
+                    { id: tags.map(&:id) }
+                  else
+                    { name: tags }
+                  end
+      joins(:tags).where(tags: condition).distinct
     end
 
     def by_tags tags

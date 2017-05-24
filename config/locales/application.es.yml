@@ -175,6 +175,7 @@ es:
     benefits_title: 'Beneficios / Perjuicios'
     process_control_stats_title: 'Observaciones por proceso de negocio'
     synthesis_report_title: "Informe de síntesis al directorio"
+    review_stats_report_title: "Estadísticas de informes"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -267,8 +268,7 @@ es:
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
       organization_score: "Calificación de la organización: %{score}% (*)"
-      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (Procesos
-Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Informática)"
+      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})."
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
@@ -277,6 +277,18 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       generic_score_average:
         one: 'Promedio de las calificaciones de %{audit_type} en un informe'
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
+    review_stats_report:
+      pdf_name: "estadisticas_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
+      title: "ESTADÍSTICAS DE INFORMES"
+      subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
+      ratio: "Proporción"
+      review_count: "Cantidad de informes"
+      reviews_by_tag:
+        title: "Informes por etiqueta"
+        footnote: "Se cuenta el par etiqueta - informe. Así, por ejemplo, un informe con dos etiquetas será contado dos veces y un informe sin etiquetas no se tendrá en cuenta."
+      weaknesses_by_score:
+        title: "Observaciones por riesgo, prioridad y calificación de informe"
+        total: "Total"
     weaknesses_by_state:
       pdf_name: "observaciones_informes_definitivos_por_estado_%{from_date}_al_%{to_date}.pdf"
       title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
@@ -570,6 +582,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
       pdf_name: 'informe_de_seguimiento_de_observaciones.pdf'
+    others:
+      title: 'Otros'
     cost_analysis:
       column_business_unit: "Unidad de negocio"
       column_project: "Proyecto"
@@ -592,6 +606,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     control_effectiveness: "Efectividad del control"
     pending_findings: "Seguimiento de observaciones pendientes"
     synthesis_report_title: "Informe de síntesis al directorio"
+    review_stats_report_title: "Estadísticas de informes"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -702,7 +717,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
       organization_score: "Calificación de la organización: %{score}% (*)"
-      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})"
+      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})."
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
@@ -715,6 +730,18 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         other: "%{count} observaciones / oportunidades de mejora reiteradas"
       total_score_average: "Total promedio de las calificaciones (%{reference })"
       references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+    review_stats_report:
+      pdf_name: "estadisticas_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
+      title: "ESTADÍSTICAS DE INFORMES"
+      subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
+      ratio: "Proporción"
+      review_count: "Cantidad de informes"
+      reviews_by_tag:
+        title: "Informes por etiqueta"
+        footnote: "Se cuenta el par etiqueta - informe. Así, por ejemplo, un informe con dos etiquetas será contado dos veces y un informe sin etiquetas no se tendrá en cuenta."
+      weaknesses_by_score:
+        title: "Observaciones por riesgo, prioridad y calificación de informe"
+        total: "Total"
     weaknesses_by_state:
       pdf_name: "observaciones_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
@@ -1053,7 +1080,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     hide_resource_utilization: "Ocultar recursos"
     download_global_workflow: "Descargar programa de trabajo global"
     download_detailed_workflow: "Descargar programa de trabajo detallado"
-    worked_hours: "Tiempo dedicado: %{count} unidades"
     period:
       title: "Periodo (%{name})"
       range: "%{from_date} al %{to_date}"
@@ -1082,7 +1108,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
       privilege: "Privilegio"
-      review: "Informe"
+      review:
+        one: "Informe"
+        other: "Informes"
       review_user_assignment: "Asignación de usuario a informe"
       role: "Perfil"
       weakness: "Observación"

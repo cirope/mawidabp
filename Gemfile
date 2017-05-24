@@ -6,7 +6,7 @@ git_source :github do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '~> 5.0.3'
+gem 'rails', '~> 5.1.1'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -49,6 +49,7 @@ gem 'unicorn'
 group :development do
   gem 'unicorn-rails'
   gem 'web-console'
+  gem 'listen'
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'

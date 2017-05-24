@@ -2,15 +2,15 @@ module ResourceUtilizations::ResourceConsumers
   extend ActiveSupport::Concern
 
   included do
-    belongs_to :resource_consumer, polymorphic: true
+    belongs_to :resource_consumer, polymorphic: true, optional: true
 
     belongs_to :workflow_item, -> {
       where resource_utilizations: { resource_consumer_type: 'WorkflowItem' }
-    }, foreign_key: 'resource_consumer_id'
+    }, foreign_key: 'resource_consumer_id', optional: true
 
     belongs_to :plan_item, -> {
       where resource_utilizations: { resource_consumer_type: 'PlanItem' }
-    }, foreign_key: 'resource_consumer_id'
+    }, foreign_key: 'resource_consumer_id', optional: true
 
     has_one :workflow, -> {
       joins workflow_items: :resource_utilizations

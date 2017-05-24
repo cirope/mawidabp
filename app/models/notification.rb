@@ -6,7 +6,7 @@ class Notification < ApplicationRecord
   include Notifications::Validation
 
   belongs_to :user
-  belongs_to :user_who_confirm, class_name: 'User'
+  belongs_to :user_who_confirm, class_name: 'User', optional: true
   has_many :notification_relations, dependent: :destroy
   has_many :findings, through: :notification_relations,
     source: :model, source_type: 'Finding'

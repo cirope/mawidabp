@@ -16,6 +16,16 @@ module PlansHelper
       class: [plan_item.status_color(on: plan_status_date), 'media-object'].join(' ')
   end
 
+  def plan_cost
+    units = if params[:business_unit_type].present?
+              @plan.estimated_amount params[:business_unit_type], on: plan_status_date
+            else
+              @plan.units on: plan_status_date
+            end
+
+    '%.2f' % units
+  end
+
   def plan_item_path plan_item
     if plan_item.persisted?
       edit_plan_plan_item_path @plan, plan_item
@@ -62,6 +72,15 @@ module PlansHelper
     date = Timeliness.parse params[:until], :date if params[:until].present?
 
     date || Time.zone.today
+  end
+
+  def should_fetch_resources_for? plan_item
+    is_valid = plan_item.errors.empty?
+    resources_are_unchanged = plan_item.resource_utilizations.all? do |ru|
+      ru.persisted? && ru.errors.empty? && !ru.changed?
+    end
+
+    is_valid && resources_are_unchanged
   end
 
   private

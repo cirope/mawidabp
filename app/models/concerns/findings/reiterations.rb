@@ -7,7 +7,7 @@ module Findings::Reiterations
 
     before_save :check_for_reiteration
 
-    belongs_to :repeated_of, foreign_key: 'repeated_of_id', class_name: 'Finding', dependent: :destroy, autosave: true
+    belongs_to :repeated_of, foreign_key: 'repeated_of_id', class_name: 'Finding', dependent: :destroy, autosave: true, optional: true
     has_one    :repeated_in, foreign_key: 'repeated_of_id', class_name: 'Finding'
   end
 

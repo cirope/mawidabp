@@ -27,7 +27,7 @@ class Review < ApplicationRecord
   # Relaciones
   belongs_to :period
   belongs_to :plan_item
-  belongs_to :file_model
+  belongs_to :file_model, :optional => true
   belongs_to :organization
   has_one :conclusion_draft_review, :dependent => :destroy
   has_one :conclusion_final_review

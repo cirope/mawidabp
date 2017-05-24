@@ -4,5 +4,5 @@ class EMail < ApplicationRecord
   include Emails::Scopes
   include Emails::Validations
 
-  belongs_to :organization
+  belongs_to :organization, optional: true
 end

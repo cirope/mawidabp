@@ -1,5 +1,6 @@
 class FollowUpAuditController < ApplicationController
   include Reports::SynthesisReport
+  include Reports::ReviewStatsReport
   include Reports::QAIndicators
   include Reports::WeaknessesByState
   include Reports::WeaknessesByRisk
@@ -27,6 +28,8 @@ class FollowUpAuditController < ApplicationController
         create_qa_indicators: :read,
         synthesis_report: :read,
         create_synthesis_report: :read,
+        review_stats_report: :read,
+        create_review_stats_report: :read,
         weaknesses_by_state: :read,
         create_weaknesses_by_state: :read,
         weaknesses_by_risk: :read,

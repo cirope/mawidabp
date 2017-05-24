@@ -40,8 +40,8 @@ module Prawn
             :width => PDF_LOGO_SIZE.first, :height => PDF_LOGO_SIZE.last
 
           text = I18n.t :'app_copyright', :year => Date.today.year
-          x_start = pdf.bounds.left + font_size.pt * 2 + PDF_LOGO_SIZE.first.pt
-          pdf.draw_text(text, :at => [x_start, -(PDF_LOGO_SIZE.last.pt * 2)],
+          x_start = pdf.bounds.left + font_size.pt * 1.75 + PDF_LOGO_SIZE.first.pt
+          pdf.draw_text(text, :at => [x_start, -(PDF_LOGO_SIZE.last.pt * 1.75)],
             :size => font_size)
         end
 

@@ -1,36 +1,38 @@
-<% index = params[:container].to_i %>
+<% plan_item ||= @plan_item %>
+<% index     ||= params[:container].to_i %>
 
-<div data-container-id="<%= params[:container] %>">
+<div data-container-id="<%= index %>">
   <%= simple_fields_for @plan do |f| %>
-    <%= f.simple_fields_for :plan_items, @plan_item, child_index: params[:index] do |pi_f| %>
-      <div id="material_resource_utilizations_<%= params[:container] %>">
-        <% @plan_item.material_resource_utilizations.each_with_index do |material_resource_utilization, i| %>
-          <%= pi_f.simple_fields_for :resource_utilizations, material_resource_utilization, child_index: index + i do |mru_f| %>
-            <%= render 'plan_items/material_resource_utilization', f: mru_f, plan_item_id: @plan_item.id %>
+    <%= f.simple_fields_for :plan_items, plan_item, child_index: index do |pi_f| %>
+      <div id="material_resource_utilizations_<%= index %>">
+        <% plan_item.material_resource_utilizations.each do |material_resource_utilization| %>
+          <% material_child_index = plan_item.resource_utilizations.index material_resource_utilization %>
+          <%= pi_f.simple_fields_for :resource_utilizations, material_resource_utilization, child_index: material_child_index do |mru_f| %>
+            <%= render 'plan_items/material_resource_utilization', f: mru_f %>
           <% end %>
         <% end %>
       </div>
 
-      <div id="human_resource_utilizations_<%= params[:container] %>">
-        <% offset_count = @plan_item.material_resource_utilizations.count %>
-
-        <% @plan_item.human_resource_utilizations.each_with_index do |human_resource_utilization, i| %>
-          <%= pi_f.simple_fields_for :resource_utilizations, human_resource_utilization, child_index: index + offset_count + i do |hru_f| %>
-            <%= render 'plan_items/human_resource_utilization', f: hru_f, plan_item_id: @plan_item.id %>
+      <div id="human_resource_utilizations_<%= index %>">
+        <% plan_item.human_resource_utilizations.each do |human_resource_utilization| %>
+          <% human_child_index = plan_item.resource_utilizations.index human_resource_utilization %>
+          <%= pi_f.simple_fields_for :resource_utilizations, human_resource_utilization, child_index: human_child_index do |hru_f| %>
+            <%= render 'plan_items/human_resource_utilization', f: hru_f %>
           <% end %>
         <% end %>
       </div>
 
-      <div id="tags_<%= params[:container] %>">
-        <% @plan_item.taggings.each_with_index do |tagging, i| %>
-          <%= pi_f.simple_fields_for :taggings, tagging, child_index: index + i do |t_f| %>
-            <%= render 'plan_items/tagging', f: t_f, plan_item_id: @plan_item.id %>
+      <div id="tags_<%= index %>">
+        <% plan_item.taggings.each do |tagging| %>
+          <% tagging_child_index = plan_item.taggings.index tagging %>
+          <%= pi_f.simple_fields_for :taggings, tagging, child_index: tagging_child_index do |t_f| %>
+            <%= render 'plan_items/tagging', f: t_f %>
           <% end %>
         <% end %>
       </div>
 
-      <% if @plan_item.persisted? %>
-        <%= pi_f.input :id, as: :hidden, input_html: { id: "nested_plan_plan_item_#{@plan_item.id}" } %>
+      <% if plan_item.persisted? %>
+        <%= pi_f.input :id, as: :hidden, input_html: { id: "nested_plan_plan_item_#{plan_item.id}" } %>
       <% end %>
     <% end %>
   <% end %>
