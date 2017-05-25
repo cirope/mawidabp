@@ -31,6 +31,10 @@
 </div>
 
 <% if @weaknesses.present? %>
+  <div class="well well-sm">
+    <%= t '.weaknesses_count_html', count: @weaknesses.count %>
+  </div>
+
   <% @weaknesses.each do |weakness| %>
     <%= render 'weakness', weakness: weakness %>
   <% end %>
