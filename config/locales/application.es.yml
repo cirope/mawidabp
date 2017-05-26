@@ -469,6 +469,8 @@ es:
     weaknesses_report:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
+      weaknesses_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge">%{count}</span>'
       pdf_name: 'informe_de_seguimiento_de_observaciones_en_ejecucion.pdf'
 
   finding:
@@ -581,6 +583,8 @@ es:
     weaknesses_report:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
+      weaknesses_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge">%{count}</span>'
       pdf_name: 'informe_de_seguimiento_de_observaciones.pdf'
     others:
       title: 'Otros'
