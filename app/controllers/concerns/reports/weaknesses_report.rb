@@ -49,7 +49,7 @@ module Reports::WeaknessesReport
     def filter_weaknesses_for_report report_params
       weaknesses = scoped_weaknesses.finals false
 
-      %i(review project process_control control_objective).each do |param|
+      %i(review project process_control control_objective tags).each do |param|
         if report_params[param].present?
           weaknesses = weaknesses.send "by_#{param}", report_params[param]
         end
@@ -89,12 +89,15 @@ module Reports::WeaknessesReport
       end
 
       if params[:execution].blank?
-        weaknesses.joins(review: :conclusion_final_review).order([
+        weaknesses.includes(review: :conclusion_final_review).references(:conclusion_reviews).order [
           "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC",
           review_code: :asc
-        ])
+        ]
       else
-        weaknesses.order review_code: :asc
+        weaknesses.includes(:review).references(:reviews).order [
+          "#{Review.quoted_table_name}.#{Review.qcn 'created_at'} ASC",
+          review_code: :asc
+        ]
       end
     end
 
@@ -221,6 +224,7 @@ module Reports::WeaknessesReport
         project:           PlanItem.human_attribute_name('project'),
         process_control:   ProcessControl.model_name.human,
         control_objective: ControlObjective.model_name.human,
+        tags:              Tag.model_name.human,
         user:              User.model_name.human,
         user_in_comments:  t('shared.filters.user.user_in_comments'),
         finding_status:    Weakness.human_attribute_name('state'),
