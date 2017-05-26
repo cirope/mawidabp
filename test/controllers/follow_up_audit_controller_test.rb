@@ -726,6 +726,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
           :project                   => '2',
           :process_control           => '3',
           :control_objective         => '4',
+          :tags                      => '5',
           :user_id                   => users(:administrator_user).id.to_s,
           :finding_status            => '1',
           :finding_title             => '1',

@@ -17,7 +17,7 @@ class Users::ImportsController < ApplicationController
       parameters[:"ids_#{i}"] = user_ids
     end
 
-    @deprecated_users = User.list.where(conditions.join(' AND '), parameters)
+    @deprecated_users = User.list.not_hidden.where(conditions.join(' AND '), parameters)
   rescue Net::LDAP::Error
     redirect_to new_users_import_url, alert: t('.connection')
   end

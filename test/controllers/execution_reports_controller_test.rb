@@ -111,17 +111,19 @@ class ExecutionReportsControllerTest < ActionController::TestCase
   test 'weaknesses report' do
     login
 
-    get :weaknesses_report
+    get :weaknesses_report, params: { execution: 'true' }
     assert_response :success
     assert_template 'execution_reports/weaknesses_report'
 
     assert_nothing_raised do
       get :weaknesses_report, params: {
+        execution: 'true',
         weaknesses_report: {
           review: '1',
           project: '2',
           process_control: '3',
           control_objective: '4',
+          tags: '5',
           user_id: users(:administrator_user).id.to_s,
           finding_status: '1',
           finding_title: '1',
@@ -148,6 +150,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     login
 
     get :weaknesses_report, params: {
+      execution: 'true',
       weaknesses_report: {
         finding_status: Finding::STATUS[:being_implemented].to_s,
         finding_title: 'a'
@@ -162,6 +165,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     login
 
     post :create_weaknesses_report, params: {
+      execution: 'true',
       weaknesses_report: {
         finding_status: Finding::STATUS[:being_implemented].to_s
       },

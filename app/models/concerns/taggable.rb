@@ -19,7 +19,7 @@ module Taggable
     end
 
     def by_tags tags
-      tagged_with *tags.split(/\s*,\s*/)
+      tagged_with *tags.strip.split(/\s*,\s*/)
     end
   end
 end
