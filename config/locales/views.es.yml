@@ -15,6 +15,7 @@ es:
     new: 'Nuevo'
     show: 'Ver'
     stats: 'Estadísticas'
+    warning: 'Advertencia'
     upload: 'Adjuntar'
     _yes: 'Si'
     _no: 'No'

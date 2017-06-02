@@ -1,25 +1,27 @@
 <% time_left = parameter_in(current_organization.try(:id), :session_expire_time).to_i %>
 <% if current_organization && time_left > 0 %>
-  <div id="time-left" class="alert alert-danger alert-dismissable fade in hidden">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <p class="message text-center"></p>
-  </div>
+  <p class="navbar-text hidden" data-time-left>
+    <span data-toggle="popover" data-trigger="hover" data-placement="bottom" title="<%= t 'navigation.warning' %>" data-content="">
+      <span class="text-warning pulsate" data-text-style>
+        <span class="glyphicon glyphicon-exclamation-sign"></span>
+      </span>
+    </span>
+  </p>
+
   <script type="text/javascript">
     setTimeout(function () {
       State.unsavedDataWarning      = '<%= t 'message.unsaved_data_warning' %>'
       State.validationFailedMessage = '<%= t 'message.validation_failed_message' %>'
 
-      State.showMessages[0] = {
+      State.showMessages = [{
         time: <%= time_left - 2 %> * 60 - 10,
         message: '<%= t('message.session_expires_in_less_than_two_minutes') %>',
         expired: false
-      };
-
-      State.showMessages[1] = {
+      }, {
         time: <%= time_left %> * 60 - 10,
         message: '<%= t('message.session_time_expired') %>',
         expired: true
-      };
-    }, 10000);
+      }]
+    }, 10000)
   </script>
 <% end %>

@@ -9,11 +9,11 @@ jQuery(function ($) {
   deferEnableRequest()
 
   $(document).on('keyup click', function () {
-    if (makeRequest && ! State.sessionExpire && $('#time-left').length) {
+    if (makeRequest && ! State.sessionExpire && $('[data-time-left]').length) {
       makeRequest = false
 
       deferEnableRequest()
-      $.post('/touch', State.resetTimers)
+      $.post('/touch')
     }
   })
 })
