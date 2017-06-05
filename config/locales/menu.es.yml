@@ -27,7 +27,7 @@ es:
     planning:
       periods: 'Periodos'
       resources: 'Recursos'
-      plans: 'Plan de trabajo'
+      plans: 'Planes de trabajo'
     execution_title: 'Ejecución'
     execution:
       reviews: 'Informes'
@@ -42,8 +42,8 @@ es:
         oportunities: 'Oportunidades de mejora'
     conclusion_title: 'Conclusión'
     conclusion:
-      draft_reviews: 'Informe borrador'
-      final_reviews: 'Informe definitivo'
+      draft_reviews: 'Informes borradores'
+      final_reviews: 'Informes definitivos'
       reports: 'Reportes'
     follow_up_title: 'Seguimiento'
     follow_up:
