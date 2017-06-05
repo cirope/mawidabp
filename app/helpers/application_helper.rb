@@ -272,19 +272,4 @@ module ApplicationHelper
     out << link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-remove-circle'),
       '#', link_options.merge(options))
   end
-
-  # Devuelve HTML con un link para agregar un elemento
-  #
-  # * _options_:: Opciones utilizadas por link_to
-  def link_to_add(*args)
-    options = {
-      :class => 'action_link add_link',
-      :title => t('label.add'),
-      :style => 'margin: 0 5px;'
-    }
-    options.merge!(args.pop) if args.last.kind_of?(Hash)
-
-    out = String.new.html_safe
-    out << link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-plus'), *(args << options))
-  end
 end
