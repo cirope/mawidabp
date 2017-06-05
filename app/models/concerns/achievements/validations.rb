@@ -4,8 +4,10 @@ module Achievements::Validations
   included do
     validates :benefit, presence: true
     validates :comment, pdf_encoding: true
-    validates :amount, numericality: { greater_than_or_equal_to: 0 },
-      allow_nil: true, allow_blank: true
+    validates :amount, numericality: {
+      greater_than_or_equal_to: 0,
+      less_than_or_equal_to: 9_999_999_999_999.99
+    }, allow_nil: true, allow_blank: true
     validate :value_attribute_present?
   end
 

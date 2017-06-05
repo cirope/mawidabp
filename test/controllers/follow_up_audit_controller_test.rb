@@ -92,6 +92,65 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       'synthesis_report', 0)
   end
 
+  test 'review stats report' do
+    login
+
+    get :review_stats_report, :params => { :controller_name => 'follow_up' }
+    assert_response :success
+    assert_template 'follow_up_audit/review_stats_report'
+
+    assert_nothing_raised do
+      get :review_stats_report, :params => {
+        :review_stats_report => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up'
+      }
+    end
+
+    assert_response :success
+    assert_template 'follow_up_audit/review_stats_report'
+  end
+
+  test 'filtered review stats report' do
+    login
+    get :review_stats_report, :params => {
+      :review_stats_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'three'
+      },
+      :controller_name => 'follow_up'
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:filters)
+    assert_equal 2, assigns(:filters).count
+    assert_template 'follow_up_audit/review_stats_report'
+  end
+
+  test 'create review stats report' do
+    login
+
+    post :create_review_stats_report, :params => {
+      :review_stats_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up'
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('follow_up_committee.review_stats_report.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'review_stats_report', 0)
+  end
+
   test 'qa indicators' do
     login
 
@@ -667,6 +726,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
           :project                   => '2',
           :process_control           => '3',
           :control_objective         => '4',
+          :tags                      => '5',
           :user_id                   => users(:administrator_user).id.to_s,
           :finding_status            => '1',
           :finding_title             => '1',

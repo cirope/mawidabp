@@ -139,7 +139,7 @@ module Reports::CommonControlObjectiveStats
       new_row
     end
 
-    def add_pdf_table(pdf)
+    def add_control_objective_stats_pdf_table(pdf)
       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
         table_options = pdf.default_table_options(@column_widths)
 

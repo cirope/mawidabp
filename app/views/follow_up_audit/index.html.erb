@@ -60,6 +60,8 @@
       </div>
       <div class="col-md-6">
         <div class="list-group">
+          <%= link_to t('follow_up_committee_report.review_stats_report_title'),
+            { action: :review_stats_report, controller_name: 'follow_up' }, class: 'list-group-item' %>
           <%= link_to t('follow_up_audit.cost_analysis_title'),
             { :action => :follow_up_cost_analysis, class: 'btn btn-default btn-lg btn-block' }, class: 'list-group-item' %>
         </div>

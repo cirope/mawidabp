@@ -59,8 +59,7 @@
       <div class="col-md-6">
         <div class="list-group">
           <%= link_to t('conclusion_report.detailed_cost_analysis_title'),
-            detailed_cost_analysis_conclusion_reports_path,
-            class: 'list-group-item' %>
+            detailed_cost_analysis_conclusion_reports_path, class: 'list-group-item' %>
         </div>
       </div>
     </div>
@@ -79,8 +78,14 @@
       <div class="col-md-6">
         <div class="list-group">
           <%= link_to t('conclusion_committee_report.synthesis_report_title'),
-            { action: :synthesis_report, controller_name: 'conclusion' },
-            class: 'list-group-item' %>
+            { action: :synthesis_report, controller_name: 'conclusion' }, class: 'list-group-item' %>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="list-group">
+          <%= link_to t('conclusion_committee_report.review_stats_report_title'),
+            { action: :review_stats_report, controller_name: 'conclusion' }, class: 'list-group-item' %>
         </div>
       </div>
     </div>

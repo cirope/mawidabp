@@ -91,7 +91,7 @@ class ApplicationController < ActionController::Base
         parameter_in(current_organization.id, :session_expire_time).to_i : 30
 
       if session_expire == 0 || last_access >= session_expire.minutes.ago
-        session[:last_access] = Time.now
+        session[:last_access] = Time.zone.now
 
         unless @auth_user.first_login?
           begin
