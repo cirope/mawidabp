@@ -8,7 +8,7 @@ jQuery(function ($) {
 
   deferEnableRequest()
 
-  $(document).on('keyup click', function () {
+  $(document).on('keyup mouseup', function () {
     if (makeRequest && ! State.sessionExpire && $('[data-time-left]').length) {
       makeRequest = false
 
