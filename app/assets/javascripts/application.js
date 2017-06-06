@@ -40,6 +40,7 @@
 //= require plan_items
 //= require process_controls
 //= require reviews
+//= require sessions
 //= require tags
 //= require touch
 //= require users

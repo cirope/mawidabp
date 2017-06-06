@@ -27,7 +27,6 @@
       <%= render 'shared/menu' if show_menu? %>
       <%= yield :submenu %>
       <%= render 'shared/flash' if show_flash_message? %>
-      <%= render 'shared/time_left' if @auth_user %>
       <%= yield %>
 
       <%= javascript_tag { yield :js_extra_bottom } %>

@@ -11,24 +11,7 @@ var State = {
   // Variable para indicar si la sesión ha expirado
   sessionExpire: false,
   // Mensaje de error para mostrar cuando falla la validación en línea
-  validationFailedMessage: undefined,
-  // Reinicia los timers con los mensajes diferidos
-  resetTimers: function () {
-    $.each(State.showMessages, function() {
-      if(!State.sessionExpire) {
-        window.clearTimeout(this.timerId);
-        $('#time-left').addClass('hidden');
-
-        var message = this.message;
-        var expired = this.expired;
-
-        this.timerId = window.setTimeout(
-          "Helper.showMessage('" + message + "', " + expired + ")",
-          this.time * 1000
-        );
-      }
-    });
-  }
+  validationFailedMessage: undefined
 }
 
 // Utilidades para manipular algunos comportamientos del navegador
@@ -253,15 +236,6 @@ var Helper = {
     $('.loading-caption').removeClass('hidden');
 
     $(element).attr('disabled', true);
-  },
-
-  /**
-     * Muestra mensajes en el div "time-left" si existe
-     */
-  showMessage: function(message, expired) {
-    $('#time-left').removeClass('hidden').find('.message').html(message);
-
-    State.sessionExpire = State.sessionExpire || expired;
   },
 
   showOrHideWithArrow: function(elementId) {
@@ -490,23 +464,5 @@ jQuery(function($) {
     );
 
     return false;
-  });
-
-  setTimeout(function () {
-    if (Array.isArray(State.showMessages)) {
-      $.each(State.showMessages, function () {
-        var message = this.message;
-        var expired = this.expired;
-
-        this.timerId = window.setTimeout(
-          "Helper.showMessage('" + message + "', " + expired + ")",
-          this.time * 1000 - 15000
-        );
-      });
-    }
-  }, 15000)
-
-  $(document).bind({
-    ajaxStart: State.resetTimers
   });
 });
