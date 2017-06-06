@@ -3,7 +3,6 @@ cache: bundler
 sudo: required
 dist: trusty
 rvm:
-  - 2.3.4
   - 2.4.1
 bundler_args: '--without development production'
 addons:
@@ -12,7 +11,6 @@ addons:
     - imagemagick
     - slapd
     - ldap-utils
-  postgresql: 9.5
 before_script:
   - 'cp config/application.example.yml config/application.yml'
   - 'cp config/database.travis.yml config/database.yml'

@@ -95,7 +95,7 @@ class Workflow < ApplicationRecord
   def to_pdf(organization = nil, include_details = true)
     pdf = Prawn::Document.create_generic_pdf :landscape
     column_order = [
-      ['order_number', 10], ['task', 50], ['start', 10], ['end', 10], ['predecessors', 10],
+      ['order_number', 10], ['task', 60], ['start', 10], ['end', 10],
       ['resources', 10]
     ]
     column_data, column_headers, column_widths = [], [], []
@@ -109,7 +109,7 @@ class Workflow < ApplicationRecord
       self.review.to_s, 0, false
 
     pdf.add_description_item(I18n.t('workflow.period.title',
-        :number => self.period.number), I18n.t('workflow.period.range',
+        :name => self.period.name), I18n.t('workflow.period.range',
         :from_date => I18n.l(self.period.start, :format => :long),
         :to_date => I18n.l(self.period.end, :format => :long)), 0, false)
 
@@ -127,13 +127,12 @@ class Workflow < ApplicationRecord
         workflow_item.task,
         I18n.l(workflow_item.start, :format => :default),
         I18n.l(workflow_item.end, :format => :default),
-        workflow_item.predecessors.to_a.to_sentence,
         resource_text
       ]
     end
 
     column_data << [
-      '', '', '', '', '', "<b>#{'%.2f' % units}</b>"
+      '', '', '', '', "<b>#{'%.2f' % units}</b>"
     ]
 
     unless column_data.blank?

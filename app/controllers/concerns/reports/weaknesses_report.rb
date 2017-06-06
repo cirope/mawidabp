@@ -17,6 +17,7 @@ module Reports::WeaknessesReport
       add_to_weakness_report_pdf pdf, weakness
     end
 
+    add_weaknesses_count_to_pdf pdf
     add_filter_options_to_pdf pdf
 
     full_path    = pdf.custom_save_as weaknesses_report_pdf_name, 'weaknesses_report', pdf_id
@@ -48,7 +49,7 @@ module Reports::WeaknessesReport
     def filter_weaknesses_for_report report_params
       weaknesses = scoped_weaknesses.finals false
 
-      %i(review project process_control control_objective).each do |param|
+      %i(review project process_control control_objective tags).each do |param|
         if report_params[param].present?
           weaknesses = weaknesses.send "by_#{param}", report_params[param]
         end
@@ -88,12 +89,15 @@ module Reports::WeaknessesReport
       end
 
       if params[:execution].blank?
-        weaknesses.joins(review: :conclusion_final_review).order([
+        weaknesses.includes(review: :conclusion_final_review).references(:conclusion_reviews).order [
           "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC",
           review_code: :asc
-        ])
+        ]
       else
-        weaknesses.order review_code: :asc
+        weaknesses.includes(:review).references(:reviews).order [
+          "#{Review.quoted_table_name}.#{Review.qcn 'created_at'} ASC",
+          review_code: :asc
+        ]
       end
     end
 
@@ -116,11 +120,25 @@ module Reports::WeaknessesReport
         t('follow_up_audit.weaknesses_report.pdf_name')
     end
 
-    def add_to_weakness_report_pdf pdf, weakness
-      issue_date = weakness.issue_date ? l(weakness.issue_date, format: :long) :
-        t('finding.without_conclusion_final_review')
+    def add_weaknesses_count_to_pdf pdf
+      pdf.text I18n.t(
+        'follow_up_audit.weaknesses_report.weaknesses_count',
+        count: @weaknesses.count
+      )
 
-      pdf.add_subtitle t('finding.follow_up_report.weakness.subtitle')
+      pdf.move_down PDF_FONT_SIZE
+    end
+
+    def add_to_weakness_report_pdf pdf, weakness
+      issue_date = weakness.issue_date ?
+        l(weakness.issue_date, format: :long) :
+        t('finding.without_conclusion_final_review')
+      subtitle = [
+        weakness.review_code,
+        weakness.review.identification
+      ].join(' - ')
+
+      pdf.add_subtitle subtitle
 
       pdf.move_down (PDF_FONT_SIZE * 1.25).round
 
@@ -206,6 +224,7 @@ module Reports::WeaknessesReport
         project:           PlanItem.human_attribute_name('project'),
         process_control:   ProcessControl.model_name.human,
         control_objective: ControlObjective.model_name.human,
+        tags:              Tag.model_name.human,
         user:              User.model_name.human,
         user_in_comments:  t('shared.filters.user.user_in_comments'),
         finding_status:    Weakness.human_attribute_name('state'),
@@ -217,7 +236,7 @@ module Reports::WeaknessesReport
         follow_up_date:    Weakness.human_attribute_name('follow_up_date'),
         solution_date:     Weakness.human_attribute_name('solution_date')
       }
-      report_params = params.permit *labels.keys
+      report_params = params[:weaknesses_report].permit *labels.keys
 
       labels.each do |filter_name, filter_label|
         if report_params[filter_name].present?

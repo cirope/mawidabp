@@ -10,5 +10,5 @@ class FindingAnswer < ApplicationRecord
   attr_readonly :answer, :file_model_id, :finding_id, :user_id, :created_at
 
   belongs_to :finding
-  belongs_to :user, -> { where users: { hidden: [true, false] } }
+  belongs_to :user, -> { where users: { hidden: [true, false] } }, optional: true
 end

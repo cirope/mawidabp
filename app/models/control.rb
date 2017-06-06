@@ -19,7 +19,7 @@ class Control < ApplicationRecord
     :sustantive_tests, pdf_encoding: true
 
   # Relaciones
-  belongs_to :controllable, polymorphic: true
+  belongs_to :controllable, polymorphic: true, optional: true
 
   def initialize(attributes = nil)
     super(attributes)

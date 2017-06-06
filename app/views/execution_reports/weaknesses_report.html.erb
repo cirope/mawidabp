@@ -7,7 +7,7 @@
 
   <div class="panel-body">
     <%= simple_form_for action_name, url: url, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
-      <% %w(review finding risk_levels priority process_control control_objective user).each do |filter_name| %>
+      <% %w(review finding risk_levels priority process_control control_objective tags user).each do |filter_name| %>
         <%= render "shared/filters/#{filter_name}", f: f, display: true, action: action_name %>
       <% end %>
 
@@ -32,6 +32,10 @@
 </div>
 
 <% if @weaknesses.present? %>
+  <div class="well well-sm">
+    <%= t '.weaknesses_count_html', count: @weaknesses.count %>
+  </div>
+
   <% @weaknesses.each do |weakness| %>
     <%= render 'weakness', weakness: weakness %>
   <% end %>

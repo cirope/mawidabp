@@ -16,7 +16,7 @@ bcra:
   name: "B.C.R.A."
   external: true
   business_unit_label: Business Unit
-  project_label: 
+  project_label:
   organization: cirope
 
 bcra_google:

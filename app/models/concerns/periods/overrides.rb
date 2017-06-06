@@ -3,11 +3,11 @@ module Periods::Overrides
   include Comparable
 
   def to_s
-    "#{description} (#{number})"
+    "#{description} (#{name})"
   end
 
   def inspect
-    "#{number} (#{dates_range_text})"
+    "#{name} (#{dates_range_text})"
   end
 
   def start

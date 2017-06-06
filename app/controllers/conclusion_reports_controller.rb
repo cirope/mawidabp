@@ -1,5 +1,6 @@
 class ConclusionReportsController < ApplicationController
   include Reports::SynthesisReport
+  include Reports::ReviewStatsReport
   include Reports::WeaknessesByState
   include Reports::WeaknessesByRisk
   include Reports::WeaknessesByAuditType
@@ -31,6 +32,8 @@ class ConclusionReportsController < ApplicationController
       @action_privileges.update(
         synthesis_report: :read,
         create_synthesis_report: :read,
+        review_stats_report: :read,
+        create_review_stats_report: :read,
         weaknesses_by_state: :read,
         create_weaknesses_by_state: :read,
         weaknesses_by_risk: :read,

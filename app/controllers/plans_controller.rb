@@ -2,141 +2,78 @@ class PlansController < ApplicationController
   include AutoCompleteFor::BusinessUnit
   include AutoCompleteFor::Tagging
 
-  before_action :auth, :load_privileges, :check_privileges,
-    :find_business_unit_type
-  before_action :set_plan, only: [
-    :show, :edit, :update, :destroy, :export_to_pdf
-  ]
-  before_action :set_plan_clone, only: [:new, :create]
-  layout proc { |controller| controller.request.xhr? ? false : 'application' }
+  respond_to :html, :js
 
-  # Lista los planes de trabajo
-  #
+  before_action :auth, :load_privileges, :check_privileges
+  before_action :set_business_unit_type, only: [:show, :new, :edit]
+  before_action :set_plan, only: [:show, :edit, :update, :destroy, :export_to_pdf]
+  before_action :set_plan_clone, only: [:new, :create]
+  before_action :set_title, except: [:destroy]
+
   # * GET /plans
   def index
-    @title = t 'plan.index_title'
     @plans = Plan.list.includes(:period).references(:period).order(
       "#{Period.quoted_table_name}.#{Period.qcn('start')} DESC"
-    ).page(params[:page])
-
-    respond_to do |format|
-      format.html # index.html.erb
-    end
+    ).page params[:page]
   end
 
-  # Muestra el detalle de un plan de trabajo
-  #
   # * GET /plans/1
   def show
-    @title = t 'plan.show_title'
-
     respond_to do |format|
-      format.html # show.html.erb
+      format.html
+      format.js
+      format.pdf  { redirect_to plan_pdf_path }
     end
   end
 
-  # Permite ingresar los datos para crear un plan de trabajo
-  #
   # * GET /plans/new
   def new
-    @title = t 'plan.new_title'
     @plan = Plan.new
 
     @plan.clone_from @plan_clone if @plan_clone
-
-    respond_to do |format|
-      format.html # new.html.erb
-    end
   end
 
-  # Recupera los datos para modificar un plan de trabajo
-  #
   # * GET /plans/1/edit
   def edit
-    @title = t 'plan.edit_title'
   end
 
-  # Crea un nuevo plan de trabajo siempre que cumpla con las validaciones.
-  # Además crea los ítems que lo componen.
-  #
   # * POST /plans
   def create
-    @title = t 'plan.new_title'
-    @plan = Plan.list.new(plan_params)
+    @plan = Plan.list.new plan_params
 
     @plan.clone_from @plan_clone if @plan_clone
 
-    respond_to do |format|
-      if @plan.save
-        format.html {
-          redirect_to(
-            edit_plan_url(@plan, business_unit_type: params[:business_unit_type]),
-            notice: t('plan.correctly_created')
-          )
-        }
-      else
-        format.html { render :action => :new }
+    @plan.save
+
+    respond_with @plan, location: -> {
+      if @plan.persisted?
+        edit_plan_url @plan, business_unit_type: params[:business_unit_type]
       end
-    end
+    }
   end
 
-  # Actualiza el contenido de un plan de trabajo (o crea una nueva versión del
-  # mismo) siempre que cumpla con las validaciones. Además actualiza el
-  # contenido de los ítems que lo componen.
-  #
   # * PATCH /plans/1
   def update
-    @title = t 'plan.edit_title'
+    update_resource @plan, plan_params
 
-    respond_to do |format|
-      if @plan.update(plan_params)
-        format.html {
-          redirect_to(
-            edit_plan_url(@plan, business_unit_type: params[:business_unit_type]),
-            notice: t('plan.correctly_updated')
-          )
-        }
-      else
-        format.html { render :action => :edit }
-      end
-    end
-
-  rescue ActiveRecord::StaleObjectError
-    flash.alert = t 'plan.stale_object_error'
-    redirect_to :action => :edit
+    respond_with @plan, location: edit_plan_url(@plan, business_unit_type: params[:business_unit_type])
   end
 
-  # Elimina un plan de trabajo
-  #
   # * DELETE /plans/1
   def destroy
-    unless @plan.destroy
-      flash.alert = t 'plan.errors.can_not_be_destroyed'
-    end
+    @plan.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(plans_url) }
-    end
-  end
-
-  # Exporta el plan de trabajo en formato PDF
-  #
-  # * GET /plans/export_to_pdf/1
-  def export_to_pdf
-    @plan.to_pdf current_organization, !params[:include_details].blank?
-
-    respond_to do |format|
-      format.html { redirect_to @plan.relative_pdf_path }
-    end
+    respond_with @plan, location: plans_url
   end
 
   private
+
     def plan_params
       params.require(:plan).permit(
         :period_id, :allow_overload, :allow_duplication,
         :lock_version, plan_items_attributes: [
-          :id, :project, :start, :end, :plain_predecessors, :order_number,
-          :business_unit_id, :_destroy,
+          :id, :project, :start, :end, :order_number, :business_unit_id,
+          :_destroy,
           resource_utilizations_attributes: [
             :id, :resource_id, :resource_type, :units, :_destroy
           ],
@@ -147,9 +84,9 @@ class PlansController < ApplicationController
       )
     end
 
-    def find_business_unit_type
+    def set_business_unit_type
       if params[:business_unit_type].to_i > 0
-        @business_unit_type = BusinessUnitType.find params[:business_unit_type].to_i
+        @business_unit_type = BusinessUnitType.find params[:business_unit_type]
       end
     end
 
@@ -163,14 +100,20 @@ class PlansController < ApplicationController
     end
 
     def set_plan_clone
-      @plan_clone = Plan.list.find_by(id: params[:clone_from].try(:to_i))
+      @plan_clone = Plan.list.find_by id: params[:clone_from]
+    end
+
+    def plan_pdf_path
+      @plan.to_pdf current_organization, params[:include_details].present?
+
+      @plan.relative_pdf_path
     end
 
     def load_privileges
       @action_privileges.update(
-        :export_to_pdf => :read,
-        :auto_complete_for_business_unit => :read,
-        :auto_complete_for_tagging => :read
+        export_to_pdf: :read,
+        auto_complete_for_business_unit: :read,
+        auto_complete_for_tagging: :read
       )
     end
 end

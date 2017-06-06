@@ -5,9 +5,7 @@
     <div class="row">
       <div class="col-md-6">
         <% if @workflow.new_record? %>
-          <%= f.input :period_id, label: raw(Workflow.human_attribute_name(:period_id) +
-            link_to_add(new_period_path(:back_to => new_workflow_path))),
-            collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true %>
+          <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true %>
         <% else %>
           <%= f.input :period_description, label: Workflow.human_attribute_name('period_id'),
             input_html: { value: @workflow.period.inspect, readonly: true } %>
@@ -37,8 +35,6 @@
         <td><strong><%= t('workflow.row_time') %></strong></td>
         <td>
           <%= @workflow.new_record? ? '-' : show_detailed_distance_of_time(@workflow.begining, @workflow.ending) %>
-          <span>|</span>
-          <%= t(:worked_hours, :scope => [:workflow], :count => ('%.2f' % @workflow.human_units)) %>
         </td>
         <td><%= @workflow.plan_item ? show_detailed_distance_of_time(@workflow.plan_item.start, @workflow.plan_item.end) : '-' %></td>
       </tr>
@@ -55,7 +51,7 @@
   </table>
 
   <div class="row">
-    <div class="col-md-4 col-md-offset-1">
+    <div class="col-md-6 col-md-offset-1">
       <h5><strong><%= WorkflowItem.human_attribute_name(:task) %></strong></h5>
     </div>
     <div class="col-md-2">
@@ -63,9 +59,6 @@
     </div>
     <div class="col-md-2">
       <h5><strong><%= WorkflowItem.human_attribute_name :end %></strong></h5>
-    </div>
-    <div class="col-md-2">
-      <h5><strong><%= WorkflowItem.human_attribute_name(:predecessors) %></strong></h5>
     </div>
   </div>
 

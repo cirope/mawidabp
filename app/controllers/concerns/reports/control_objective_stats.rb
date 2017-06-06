@@ -64,7 +64,7 @@ module Reports::ControlObjectiveStats
       end
 
       unless @column_data.blank?
-        add_pdf_table(pdf)
+        add_control_objective_stats_pdf_table(pdf)
       else
         pdf.text(
           t("#{@controller}_committee_report.control_objective_stats.without_audits_in_the_period"))

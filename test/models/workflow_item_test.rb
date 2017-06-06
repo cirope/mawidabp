@@ -19,8 +19,6 @@ class WorkflowItemTest < ActiveSupport::TestCase
       @workflow_item.start
     assert_equal workflow_items(:with_conclusion_workflow_item_1).end,
       @workflow_item.end
-    assert_equal workflow_items(:with_conclusion_workflow_item_1).predecessors,
-      @workflow_item.predecessors
     assert_equal workflow_items(:with_conclusion_workflow_item_1).order_number,
       @workflow_item.order_number
   end
@@ -34,7 +32,6 @@ class WorkflowItemTest < ActiveSupport::TestCase
         :task => 'New task',
         :start => 6.days.from_now.to_date,
         :end => 7.days.from_now.to_date,
-        :plain_predecessors => '1, 3',
         :order_number => 4,
         :workflow => workflow
       )
@@ -112,20 +109,6 @@ class WorkflowItemTest < ActiveSupport::TestCase
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'item overload' do
-    @workflow_item = WorkflowItem.find(
-      workflow_items(:with_conclusion_workflow_item_2).id)
-    @workflow_item.start =
-      workflow_items(:with_conclusion_workflow_item_1).start
-    @workflow_item.end =
-      workflow_items(:with_conclusion_workflow_item_1).end.yesterday
-
-    assert @workflow_item.invalid?
-    assert_error @workflow_item, :start, :item_overload
-    assert_error @workflow_item, :end, :item_overload
-  end
-
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'resource overload' do
     workflow_item_3 = WorkflowItem.find(
       workflow_items(:current_workflow_item_3).id)
@@ -138,14 +121,6 @@ class WorkflowItemTest < ActiveSupport::TestCase
 
     assert workflow_item_3.invalid?
     assert_error workflow_item_3, :start, :resource_overload
-  end
-
-  # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'predecessors validation' do
-    @workflow_item.plain_predecessors = '100'
-
-    assert @workflow_item.invalid?
-    assert_error @workflow_item, :predecessors, :invalid
   end
 
   test 'can be modified' do

@@ -1,97 +1,27 @@
 <%= simple_form_for @plan do |f| %>
   <%= render 'shared/error_explanation', f: f %>
-
-  <% if params[:business_unit_type].present? %>
-    <div class="page-header">
-      <%= show_plan_business_unit_type_info %>
-    </div>
-  <% end %>
-
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-5">
-        <% if @plan.new_record? %>
-          <%= f.association :period, collection: Period.list_all_without_plans,
-            label_method: :inspect, value_method: :id, prompt: true,
-            label: Plan.human_attribute_name('period_id'), input_html: { autofocus: true }
-          %>
-        <% else %>
-          <%= f.input :period_id, as: :hidden %>
-          <%= f.input :period, label: Plan.human_attribute_name('period_id'), input_html: {
-            value: @plan.period.try(:inspect), readonly: true
-          } %>
-        <% end %>
-      </div>
-      <div class="col-md-5 col-md-offset-2">
-        <div class="alert alert-warning">
-          <%= Plan.human_attribute_name :estimated_amount %>:
-          <strong>
-            <%= '%.2f' % (params[:business_unit_type].present? ? @plan.estimated_amount(params[:business_unit_type]) : @plan.units) %>
-          </strong>
-        </div>
-      </div>
-    </div>
-  </div>
+  <%= render 'common_form', f: f %>
 
   <% if params[:business_unit_type].blank? %>
-    <%= show_plan_business_unit_type_list %>
+    <%= render 'business_unit_types' %>
   <% else %>
-    <hr />
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <%= @business_unit_type&.name || t('plans.without_business_unit_type') %>
+          <span class="pull-right">
+            <%= link_to t('label.back'), [:edit, @plan] %>
+          </span>
+        </h4>
+      </div>
 
-    <div class="row">
-      <div class="col-md-3 col-md-offset-1">
-        <h5><strong><%= BusinessUnit.model_name.human %></strong></h5>
+      <div class="panel-body">
+        <%= render 'plan_items', f: f %>
       </div>
-      <div class="col-md-2">
-        <h5><strong><%= PlanItem.human_attribute_name(:project) %></strong></h5>
-      </div>
-      <div class="col-md-3">
-        <div class="row">
-          <div class="col-md-6">
-            <h5><strong><%= PlanItem.human_attribute_name(:start) %></strong></h5>
-          </div>
-          <div class="col-md-6">
-            <h5><strong><%= PlanItem.human_attribute_name(:end) %></strong></h5>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-2">
-        <h5><strong><%= PlanItem.human_attribute_name(:predecessors) %></strong></h5>
-      </div>
-    </div>
-
-    <div id="plan_items">
-      <% plan_items_for_selected_business_unit_type.each do |pi| %>
-        <%= f.simple_fields_for :plan_items, pi do |pi_f| %>
-          <%= render 'plan_item', f: pi_f %>
-        <% end %>
-      <% end %>
-
-      <%= link_to_add_fields t('plan.add_plan_item'), f, :plan_items %>
     </div>
   <% end %>
 
-  <% if @plan.has_duplication? || @plan.overloaded? %>
-    <br/>
-    <div class="row">
-      <% if @plan.has_duplication? %>
-        <div class="col-md-6">
-          <div class="alert alert-sm alert-danger">
-            <%= f.input :allow_duplication, as: :boolean, label: false,
-              inline_label: t('plan.allow_duplication') %>
-          </div>
-        </div>
-      <% end %>
-      <% if @plan.overloaded? %>
-        <div class="col-md-6">
-          <div class="alert alert-sm alert-danger">
-            <%= f.input :allow_overload, as: :boolean, label: false,
-              inline_label: t('plan.allow_overload') %>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  <% end %>
+  <%= render 'duplication_or_overload_form', f: f %>
 
   <hr />
 
@@ -103,8 +33,3 @@
     <%= f.submit class: 'btn btn-primary' %>
   </div>
 <% end %>
-<script type="text/javascript">
-jQuery(function() {
-  Helper.makeSortable('#plan_items', 'fieldset.plan_item', 'a.move');
-});
-</script>

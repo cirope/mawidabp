@@ -63,21 +63,6 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_template 'oportunities/index'
   end
 
-  test 'edit oportunity when search match only one result' do
-    login
-    get :index, :params => {
-      :search => {
-        :query => '1 2 4 y 1o',
-        :columns => ['title', 'review']
-      }
-    }
-
-    assert_redirected_to oportunity_url(
-      findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity))
-    assert_not_nil assigns(:oportunities)
-    assert_equal 1, assigns(:oportunities).count
-  end
-
   test 'show oportunity' do
     login
     get :show, :params => {

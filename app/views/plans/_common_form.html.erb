@@ -1,0 +1,39 @@
+<div class="form-inputs">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <%= Plan.human_attribute_name 'period_id' %>
+          </h4>
+        </div>
+
+        <div class="panel-body">
+          <% if @plan.new_record? %>
+            <%= f.association :period, collection: Period.list_all_without_plans,
+              label_method: :inspect, value_method: :id, prompt: true,
+              label: false, input_html: { autofocus: true }
+            %>
+          <% else %>
+              <strong>
+                <%= @plan.period.inspect %>
+              </strong>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <%= Plan.human_attribute_name 'estimated_amount' %>
+          </h4>
+        </div>
+
+        <div class="panel-body">
+          <strong><%= plan_cost %></strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

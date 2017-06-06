@@ -14,7 +14,6 @@
       <th><%= WorkflowItem.human_attribute_name(:task) %></th>
       <th><%= WorkflowItem.human_attribute_name :start %></th>
       <th><%= WorkflowItem.human_attribute_name :end %></th>
-      <th><%= WorkflowItem.human_attribute_name(:predecessors) %></th>
       <th><%= WorkflowItem.human_attribute_name :human_resource_units %></th>
       <th><%= WorkflowItem.human_attribute_name :material_resource_units %></th>
       <th><%= WorkflowItem.human_attribute_name :total_resource_units %></th>
@@ -27,14 +26,13 @@
         <td><%= simple_format workflow_item.task %></td>
         <td><%= l workflow_item.start %></td>
         <td><%= l workflow_item.end %></td>
-        <td><%= workflow_item.plain_predecessors %></td>
         <td><%= '%.2f' % workflow_item.human_units %></td>
         <td><%= '%.2f' % workflow_item.material_units %></td>
         <td><%= '%.2f' % workflow_item.units %></td>
       </tr>
     <% end %>
     <tr>
-      <td colspan="7"></td>
+      <td colspan="6"></td>
       <td><strong><%= '%.2f' % @workflow.units %></strong></td>
     </tr>
   </tbody>

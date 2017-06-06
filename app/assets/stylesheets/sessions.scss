@@ -20,3 +20,16 @@
     }
   }
 }
+
+.pulsate {
+  animation: pulsate 0.5s infinite;
+}
+
+@keyframes pulsate {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: .1;
+  }
+}

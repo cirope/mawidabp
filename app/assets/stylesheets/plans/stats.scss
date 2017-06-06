@@ -1,0 +1,15 @@
+[data-controller="stats"] {
+  table.table {
+    tfoot {
+      tr {
+        td {
+          border-top-width: 2px;
+        }
+      }
+    }
+
+    .progress {
+      margin-bottom: 0;
+    }
+  }
+}

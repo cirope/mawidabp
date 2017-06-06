@@ -56,11 +56,7 @@ class WeaknessesController < ApplicationController
     ).references(:periods, :conclusion_reviews).page(params[:page])
 
     respond_to do |format|
-      format.html {
-        if @weaknesses.count == 1 && !@query.blank? && !params[:page]
-          redirect_to weakness_url(@weaknesses.first)
-        end
-      } # index.html.erb
+      format.html
     end
   end
 

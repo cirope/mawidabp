@@ -12,6 +12,10 @@ module Reviews::Scopes
       where period_id: period.id
     end
 
+    def with_score_between min, max
+      where score: min..max
+    end
+
     def list_with_approved_draft
       list.
         includes(:conclusion_draft_review).

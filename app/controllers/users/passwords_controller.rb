@@ -74,7 +74,7 @@ class Users::PasswordsController < ApplicationController
         change_password_hash: nil,
         enable: true,
         failed_attempts: 0,
-        last_access: session[:last_access] || Time.now
+        last_access: session[:last_access] || Time.zone.now
       )
     end
 end

@@ -1,9 +1,10 @@
-set :branch,    'master'
-set :stage,     :production
+set :stage, :production
 set :rails_env, 'production'
+set :branch, 'c-petersen-production'
+set :pty, true
 
-role :web, %w{deployer@app.mawidabp.com}
-role :app, %w{deployer@app.mawidabp.com}
-role :db,  %w{deployer@app.mawidabp.com}
+role :web, %w{deployer@application.mawidabp.petersen.corp}
+role :app, %w{deployer@application.mawidabp.petersen.corp}
+role :db,  %w{deployer@application.mawidabp.petersen.corp}
 
-server 'app.mawidabp.com', user: 'deployer', roles: %w{web app db}
+server 'application.mawidabp.petersen.corp', user: 'deployer', roles: %w{web app db}

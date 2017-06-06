@@ -1,35 +1,47 @@
 module PlanItems::Status
   extend ActiveSupport::Concern
 
-  def status_text long = true
-    if review&.has_final_review?
-      I18n.t("plan.item_status.concluded.#{long ? :long : :short}")
-    elsif review
-      if self.end >= Date.today
-        I18n.t("plan.item_status.executing_in_time.#{long ? :long : :short}")
-      else
-        I18n.t("plan.item_status.executing_overtime.#{long ? :long : :short}")
-      end
-    elsif !review && business_unit
-      if start && start < Date.today
-        I18n.t("plan.item_status.delayed.#{long ? :long : :short}")
-      end
+  def status_text long: true, on: Time.zone.today
+    i18n_prefix = 'plans.item_status'
+    size        = long ? 'long' : 'short'
+
+    if concluded? on: on
+      I18n.t "#{i18n_prefix}.concluded.#{size}"
+    elsif executed?(on: on) && on_time?(on: on)
+      I18n.t "#{i18n_prefix}.executing_in_time.#{size}"
+    elsif executed? on: on
+      I18n.t "#{i18n_prefix}.executing_overtime.#{size}"
+    elsif should_have_started? on: on
+      I18n.t "#{i18n_prefix}.delayed.#{size}"
     end
   end
 
-  def status_color
-    if review&.has_final_review?
+  def status_color on: Time.zone.today
+    if concluded? on: on
       'text-success'
-    elsif review
-      if self.end >= Date.today
-        'text-muted'
-      else
-        'text-warning'
-      end
-    elsif !review && business_unit
-      if start && start < Date.today
-        'text-danger'
-      end
+    elsif executed?(on: on) && on_time?(on: on)
+      'text-muted'
+    elsif executed? on: on
+      'text-warning'
+    elsif should_have_started? on: on
+      'text-danger'
     end
+  end
+
+  def concluded? on: Time.zone.today
+    review&.has_final_review? &&
+      review.conclusion_final_review.created_at.to_date <= on
+  end
+
+  def executed? on: Time.zone.today
+    review && review.created_at.to_date <= on
+  end
+
+  def on_time? on: Time.zone.today
+    self.end >= on
+  end
+
+  def should_have_started? on: Time.zone.today
+    business_unit && start && start < on
   end
 end

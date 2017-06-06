@@ -67,13 +67,8 @@
 <% end %>
 
 <div style="margin-top: 3em;">
-  <% if @sqm %>
-    <%= simple_format t('conclusion_committee_report.synthesis_report.sqm_references',
+  <%= simple_format t('conclusion_committee_report.synthesis_report.references',
     :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence) %>
-  <% else %>
-    <%= simple_format t('conclusion_committee_report.synthesis_report.references',
-    :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence) %>
-  <% end %>
 </div>
 
 <hr />
@@ -94,13 +89,12 @@
       {
         :name => :report_title,
         :label => t('customize_report_form.title'),
-        :value => @sqm ? t('conclusion_committee_report.synthesis_report.sqm_title') :
-          t('conclusion_committee_report.synthesis_report.title')
+        :value => t('conclusion_committee_report.synthesis_report.title')
       },
       {
         :name => :report_subtitle,
         :label => t('customize_report_form.subtitle'),
-        :value => @sqm ? '' : t('conclusion_committee_report.synthesis_report.subtitle')
+        :value => t('conclusion_committee_report.synthesis_report.subtitle')
       }
     ]
   }

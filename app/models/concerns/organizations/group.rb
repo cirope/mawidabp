@@ -6,7 +6,7 @@ module Organizations::Group
 
     before_save :set_group, on: :create
 
-    belongs_to :group
+    belongs_to :group, optional: true
   end
 
   private

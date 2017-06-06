@@ -7,10 +7,10 @@ module Users::Roles
     before_validation :inject_auth_privileges_in_roles, :set_proper_parent
     before_update :check_roles_changes
 
-    has_many :organizations, through: :organization_roles
     has_many :organization_roles, dependent: :destroy,
       after_add:    :mark_roles_as_changed,
       after_remove: :mark_roles_as_changed
+    has_many :organizations, through: :organization_roles
     accepts_nested_attributes_for :organization_roles, allow_destroy: true,
       reject_if: :reject_organization_role?
   end
@@ -45,7 +45,7 @@ module Users::Roles
       role.privileges.each do |privilege|
         module_name = privilege.module
 
-        privileges[module_name]            ||= HashWithIndifferentAccess.new
+        privileges[module_name]            ||= ActiveSupport::HashWithIndifferentAccess.new
         privileges[module_name][:read]     ||= privilege.read?
         privileges[module_name][:modify]   ||= privilege.modify?
         privileges[module_name][:erase]    ||= privilege.erase?
