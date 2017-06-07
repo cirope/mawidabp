@@ -64,8 +64,8 @@ class FindingsController < ApplicationController
         :control_objective_item => {
           :review => [:conclusion_final_review, :period, :plan_item]
         }
-      }, :organization
-    ).left_joins(:users, :tags).where(@conditions).order(
+      }, :tags, :organization
+    ).left_joins(:users).where(@conditions).order(
       @order_by || [
         default_sort_column,
         "#{Finding.quoted_table_name}.#{Finding.qcn('organization_id')} ASC",
