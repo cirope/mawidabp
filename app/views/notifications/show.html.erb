@@ -3,7 +3,7 @@
     <strong><%= Notification.human_attribute_name :findings %>:</strong>
   </div>
   <ul>
-    <% @notification.findings.distinct.map do |f| %>
+    <% @notification.findings.map do |f| %>
       <li><%= link_to_if f.users.include?(@auth_user),
         "#{f.review_code} - #{f.title} (#{f.review.identification})",
         finding_path(f.pending? ? 'incomplete' : 'complete', f) %></li>
