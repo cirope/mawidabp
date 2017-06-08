@@ -1,4 +1,8 @@
 module BreadcrumbHelper
+  def show_breadcrumb?
+    @auth_user && controller_name != 'welcome'
+  end
+
   def crumbs
     @auth_user ? crumbs_for(@auth_user.get_menu) : []
   end
