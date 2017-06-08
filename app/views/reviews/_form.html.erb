@@ -10,9 +10,7 @@
         <%= f.input :identification, label: Review.human_attribute_name(:identification),
           input_html: { readonly: readonly } %>
         <% if [:new, :create].include?(controller.action_name.to_sym) %>
-          <%= f.input :period_id, label: raw(Review.human_attribute_name(:period_id) +
-            link_to_add(new_period_path(:back_to => new_review_path))),
-            collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true %>
+          <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true %>
         <% else %>
           <%= f.input :period_description, label: Review.human_attribute_name('period_id'),
             input_html: { value: @review.period.inspect, readonly: true } %>

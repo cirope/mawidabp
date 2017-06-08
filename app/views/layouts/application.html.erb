@@ -24,9 +24,10 @@
     </div>
     <div class="container">
       <%= render 'shared/compatibility_warning' %>
-      <%= render 'shared/menu' if show_menu? %>
+      <%= render 'shared/menu'       if show_menu? %>
+      <%= render 'shared/breadcrumb' if show_breadcrumb? %>
+      <%= render 'shared/flash'      if show_flash_message? %>
       <%= yield :submenu %>
-      <%= render 'shared/flash' if show_flash_message? %>
       <%= yield %>
 
       <%= javascript_tag { yield :js_extra_bottom } %>
