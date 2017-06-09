@@ -1,6 +1,6 @@
 module BreadcrumbHelper
   def show_breadcrumb?
-    @auth_user && controller_name != 'welcome'
+    @auth_user && %w(welcome password).include?(controller_name)
   end
 
   def crumbs

@@ -858,8 +858,8 @@
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:
-        one: "El siguiente hallazgo ha cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
-        other: "Los siguientes hallazgos han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
+        one: "El siguiente hallazgo ha cambiado su estado a *Sin respuesta*, por no recibir una respuesta"
+        other: "Los siguientes hallazgos han cambiado su estado a *Sin respuesta*, por no recibir una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
