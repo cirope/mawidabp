@@ -5,9 +5,7 @@
     <div class="row">
       <div class="col-md-6">
         <% if @workflow.new_record? %>
-          <%= f.input :period_id, label: raw(Workflow.human_attribute_name(:period_id) +
-            link_to_add(new_period_path(:back_to => new_workflow_path))),
-            collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true %>
+          <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true %>
         <% else %>
           <%= f.input :period_description, label: Workflow.human_attribute_name('period_id'),
             input_html: { value: @workflow.period.inspect, readonly: true } %>
