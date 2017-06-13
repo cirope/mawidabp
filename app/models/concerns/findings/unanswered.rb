@@ -67,7 +67,7 @@ module Findings::Unanswered
       def confirmed_pre_conditions
         stale_parameters.each_with_index.map do |stale_parameter, i|
           [
-            "#{quoted_table_name}.#{qcn 'first_notification_date'} < :stale_first_notification_date_#{i}",
+            "#{quoted_table_name}.#{qcn 'first_notification_date'} <= :stale_first_notification_date_#{i}",
             "#{quoted_table_name}.#{qcn 'organization_id'} = :organization_id_#{i}"
           ].join(' AND ')
         end
@@ -100,7 +100,7 @@ module Findings::Unanswered
       def unconfirmed_pre_conditions
         stale_parameters.each_with_index.map do |stale_parameter, i|
           [
-            "#{quoted_table_name}.#{qcn 'first_notification_date'} < :stale_first_notification_date_#{i}",
+            "#{quoted_table_name}.#{qcn 'first_notification_date'} <= :stale_first_notification_date_#{i}",
             "#{Period.quoted_table_name}.#{Period.qcn 'organization_id'} = :organization_id_#{i}",
           ].join(' AND ')
         end
