@@ -17,10 +17,12 @@ module Findings::ScaffoldNotifications
 
       def notify_managers
         Finding.transaction do
-          n = 0
+          deepest_level = User.deepest_level
 
-          while (findings = Finding.unanswered_and_stale(n += 1)).any?
-            findings.each { |finding| finding.notify_for_level n }
+          (1..deepest_level).each do |n|
+            Finding.unanswered_and_stale(n).each do |finding|
+              finding.notify_for_level n
+            end
           end
         end
       end
@@ -71,7 +73,7 @@ module Findings::ScaffoldNotifications
   end
 
   def users_for_scaffold_notification level = 1
-    level_overflow = false
+    level_overflow       = false
     users, highest_users = *initial_scaffold_users
 
     level.times do
@@ -105,6 +107,7 @@ module Findings::ScaffoldNotifications
 
   def notify_for_level level
     level_users = users_for_scaffold_notification level
+
     has_audited_comments = finding_answers.reload.any? do |fa|
       fa.user.can_act_as_audited?
     end
@@ -121,6 +124,7 @@ module Findings::ScaffoldNotifications
 
     def initial_scaffold_users
       users = finding_user_assignments.map(&:user).select &:can_act_as_audited?
+
       highest_users = users.reject do |u|
         u.ancestors.any? { |p| users.include? p }
       end
