@@ -43,7 +43,7 @@ jQuery(function ($) {
   setTimeout(function () {
     if (Array.isArray(State.showMessages)) {
       $.each(State.showMessages, function () {
-        setTimer(this, this.time - 15)
+        if (! this.timerId) setTimer(this, this.time - 15)
       })
     }
   }, 15000)

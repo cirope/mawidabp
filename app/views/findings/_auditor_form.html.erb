@@ -262,7 +262,10 @@
 
   <div id="work_papers">
     <%= f.simple_fields_for :work_papers do |wp_f| %>
-      <%= render 'work_papers/work_paper', f: wp_f, frozen: false %>
+      <%= render 'work_papers/work_paper', {
+        f: wp_f,
+        frozen: finding_work_paper_frozen?(@finding, wp_f.object, true)
+      } %>
     <% end %>
 
     <%= link_to_add_fields(
