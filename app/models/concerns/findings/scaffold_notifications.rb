@@ -41,7 +41,7 @@ module Findings::ScaffoldNotifications
       def unanswered_and_stale_variable_conditions
         conditions = stale_parameters.each_with_index.map do |stale_parameter, i|
           [
-            "first_notification_date < :stale_unanswered_date_#{i}",
+            "first_notification_date <= :stale_unanswered_date_#{i}",
             "#{Period.quoted_table_name}.#{Period.qcn('organization_id')} = :organization_id_#{i}",
           ].join(' AND ')
         end
@@ -95,7 +95,7 @@ module Findings::ScaffoldNotifications
 
   def notification_date_for_level level = 1
     date_for_notification = first_notification_date.try(:dup) || Time.zone.today
-    days_to_add = (stale_confirmed_days + stale_confirmed_days * level).next
+    days_to_add = stale_confirmed_days + stale_confirmed_days * level
 
     until days_to_add == 0
       date_for_notification += 1
@@ -106,8 +106,7 @@ module Findings::ScaffoldNotifications
   end
 
   def notify_for_level level
-    level_users = users_for_scaffold_notification level
-
+    level_users          = users_for_scaffold_notification level
     has_audited_comments = finding_answers.reload.any? do |fa|
       fa.user.can_act_as_audited?
     end
@@ -115,9 +114,11 @@ module Findings::ScaffoldNotifications
     # No notificar si no hace falta
     if level_users.any? && !has_audited_comments
       Notifier.unanswered_finding_to_manager_notification(self, level_users | users, level).deliver_later
-    end
 
-    update_column :notification_level, level_users.empty? ? -1 : level
+      update_column :notification_level, level
+    else
+      update_column :notification_level, -1
+    end
   end
 
   private
