@@ -43,7 +43,7 @@ module Reports::WeaknessesReport
 
     def scoped_weaknesses
       params[:execution].present? ?
-        Weakness.list_without_final_review : Weakness.list
+        Weakness.list_without_final_review : Weakness.list_with_final_review
     end
 
     def filter_weaknesses_for_report report_params
@@ -89,12 +89,12 @@ module Reports::WeaknessesReport
       end
 
       if params[:execution].blank?
-        weaknesses.includes(review: :conclusion_final_review).references(:conclusion_reviews).order [
+        weaknesses.order [
           "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC",
           review_code: :asc
         ]
       else
-        weaknesses.includes(:review).references(:reviews).order [
+        weaknesses.order [
           "#{Review.quoted_table_name}.#{Review.qcn 'created_at'} ASC",
           review_code: :asc
         ]
