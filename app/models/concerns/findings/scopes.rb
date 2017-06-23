@@ -15,6 +15,11 @@ module Findings::Scopes
       where organization_id: organization_ids
     end
 
+    def list_with_final_review
+      includes(control_objective_item: :review).
+        merge(Review.list_with_final_review)
+    end
+
     def list_without_final_review
       includes(control_objective_item: :review).
         merge(Review.list_without_final_review)
