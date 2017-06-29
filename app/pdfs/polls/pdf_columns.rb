@@ -5,7 +5,7 @@ module Polls::PDFColumns
     columns = { Question.model_name.human => 40 }
 
     Question::ANSWER_OPTIONS.each do |option|
-      columns[I18n.t("answer_options.#{option}")] = 12
+      columns[I18n.t("answer_options.#{option}")] = 10
     end
 
     columns

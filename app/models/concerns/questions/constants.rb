@@ -6,7 +6,8 @@ module Questions::Constants
     :agree,
     :neither_agree_nor_disagree,
     :disagree,
-    :strongly_disagree
+    :strongly_disagree,
+    :not_apply
   ]
 
   ANSWER_OPTION_VALUES = {
@@ -14,7 +15,8 @@ module Questions::Constants
     agree: 75,
     neither_agree_nor_disagree: 50,
     disagree: 25,
-    strongly_disagree: 0
+    strongly_disagree: 0,
+    not_apply: -1
   }
 
   ANSWER_TYPES.each do |answer_type, answer_value|
