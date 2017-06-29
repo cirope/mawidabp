@@ -114,10 +114,6 @@ class Finding < ApplicationRecord
     being_implemented? && follow_up_date && follow_up_date < Date.today
   end
 
-  def pending?
-    PENDING_STATUS.include?(self.state)
-  end
-
   def issue_date
     review.try(:conclusion_final_review).try(:issue_date)
   end
