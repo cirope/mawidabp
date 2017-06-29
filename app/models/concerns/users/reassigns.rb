@@ -94,7 +94,7 @@ module Users::Reassigns
     end
 
     def send_reassign_mail other
-      Notifier.changes_notification(
+      NotifierMailer.changes_notification(
         [other, self],
         title:         mail_title_for_reassign,
         body:          mail_body_from_reviews,
@@ -166,7 +166,7 @@ module Users::Reassigns
     end
 
     def notify_unconfirmed_findings_to other
-      Notifier.changes_notification(
+      NotifierMailer.changes_notification(
         other,
         title: mail_title_for_unconfirmed_findings,
         content: mail_content_for_unconfirmed_findings,
