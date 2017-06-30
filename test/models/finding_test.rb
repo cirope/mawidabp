@@ -756,8 +756,8 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
-  test 'commitment date' do
-    assert_nil @finding.commitment_date
+  test 'last commitment date' do
+    assert_nil @finding.last_commitment_date
     assert_difference '@finding.finding_answers.count' do
       @finding.finding_answers.create(
         :answer => 'New answer',
@@ -766,7 +766,17 @@ class FindingTest < ActiveSupport::TestCase
         :notify_users => false
       )
     end
-    assert_equal 10.days.from_now.to_date, @finding.commitment_date
+    assert_equal 10.days.from_now.to_date, @finding.last_commitment_date
+
+    assert_difference '@finding.finding_answers.count' do
+      @finding.finding_answers.create(
+        :answer => 'New answer',
+        :commitment_date => 20.days.from_now.to_date,
+        :user => users(:audited_user),
+        :notify_users => false
+      )
+    end
+    assert_equal 20.days.from_now.to_date, @finding.last_commitment_date
   end
 
   test 'mark as duplicated' do

@@ -205,4 +205,10 @@ module FindingsHelper
       [t("finding.status_#{k}"), v.to_s]
     end
   end
+
+  def show_commitment_date? finding_answer
+    finding_answer.user.can_act_as_audited? &&
+      finding_answer.requires_commitment_date? &&
+      !current_organization.corporate?
+  end
 end
