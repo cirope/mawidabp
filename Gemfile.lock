@@ -82,7 +82,7 @@ GEM
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
     dynamic_form (1.1.4)
-    erubi (1.6.0)
+    erubi (1.6.1)
     execjs (2.7.0)
     ffi (1.9.18)
     figaro (1.1.1)
@@ -172,7 +172,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     raindrops (0.18.0)
     rake (12.0.0)
-    rb-fsevent (0.9.8)
+    rb-fsevent (0.10.1)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
     redcarpet (3.4.0)
@@ -272,7 +272,7 @@ DEPENDENCIES
   pg
   prawn
   prawn-table
-  rails (~> 5.1.1)
+  rails (= 5.1.1)
   rails-controller-testing
   redcarpet
   responders

@@ -28,7 +28,7 @@ module Findings::Expiration
         users.each do |user|
           findings = user.findings.next_to_expire.or user.findings.expires_now
 
-          Notifier.findings_expiration_warning(user, findings.to_a).deliver_later
+          NotifierMailer.findings_expiration_warning(user, findings.to_a).deliver_later
         end
       end
     end
@@ -39,7 +39,7 @@ module Findings::Expiration
       end
 
       users.each do |user|
-        Notifier.findings_expired_warning(user, user.findings.expired.to_a).deliver_later
+        NotifierMailer.findings_expired_warning(user, user.findings.expired.to_a).deliver_later
       end
     end
 

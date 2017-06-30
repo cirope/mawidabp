@@ -143,6 +143,10 @@ module Findings::State
       end
   end
 
+  def pending?
+    PENDING_STATUS.include?(self.state)
+  end
+
   def next_status_list state = nil
     state_key    = STATUS.invert[state || state_was || self.state]
     allowed_keys = review&.has_final_review? ?

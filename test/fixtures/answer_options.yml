@@ -1,20 +1,5 @@
-ao1: 
-  option: Muy de acuerdo
+<% Question::ANSWER_OPTIONS.each do |option| %>
+<%= option %>:
+  option: <%= option %>
   question: question_multi_choice
-  
-ao2: 
-  option: De acuerdo
-  question: question_multi_choice
-  
-ao3: 
-  option: Ni de acuerdo ni en desacuerdo
-  question: question_multi_choice
-  
-ao4: 
-  option: En desacuerdo
-  question: question_multi_choice
-  
-ao5: 
-  option: Muy en desacuerdo
-  question: question_multi_choice
-  
+<% end %>

@@ -1,5 +1,6 @@
 class FindingAnswer < ApplicationRecord
   include Auditable
+  include FindingAnswers::CommitmentDate
   include FindingAnswers::DateColumns
   include FindingAnswers::Defaults
   include FindingAnswers::File

@@ -14,7 +14,7 @@ module FindingAnswers::Notifications
         users = finding.users - [user]
 
         if users.present? && answer.present?
-          Notifier.notify_new_finding_answer(users, self).deliver_later
+          NotifierMailer.notify_new_finding_answer(users, self).deliver_later
         end
       end
     end
