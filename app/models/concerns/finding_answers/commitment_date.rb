@@ -18,7 +18,7 @@ module FindingAnswers::CommitmentDate
 
       last_commitment_date.blank? || last_commitment_date < Time.zone.today
     end
-    
+
     def has_date_required_status?
       finding.being_implemented? ||
         finding.notify? ||
