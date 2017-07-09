@@ -31,5 +31,8 @@ private
   end
 
   def add_new_answer_options?
-    AnswerOption.where(option: 'not_apply').empty?
+    AnswerOption.where(
+      "#{AnswerOption.quoted_table_name}.#{AnswerOption.qcn 'option'} LIKE ?",
+      'not_apply'
+    ).empty?
   end
