@@ -92,7 +92,7 @@ class ConclusionReview < ApplicationRecord
   end
 
   def send_by_email_to(user, options = {})
-    Notifier.conclusion_review_notification(
+    NotifierMailer.conclusion_review_notification(
       user, self,
       options.merge(organization_id: Organization.current_id, user_id: PaperTrail.whodunnit)
     ).deliver_later

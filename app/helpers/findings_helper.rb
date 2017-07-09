@@ -135,6 +135,15 @@ module FindingsHelper
     array_to_ul users
   end
 
+  def finding_work_paper_frozen?(finding, work_paper, follow_up)
+    code_prefix = follow_up ?
+      t('code_prefixes.work_papers_in_weaknesses_follow_up') :
+      finding.work_paper_prefix
+    follow_up_code = work_paper.code =~ /#{code_prefix}\s\d+/
+
+    !follow_up_code && finding.review&.is_frozen?
+  end
+
   def show_finding_answers_count(finding)
     finding_answers_count = finding.finding_answers.count
     user_answers = finding.finding_answers.where(:user_id => @auth_user.id).count
@@ -195,5 +204,11 @@ module FindingsHelper
     Finding::STATUS.except(*exclude).map do |k, v|
       [t("finding.status_#{k}"), v.to_s]
     end
+  end
+
+  def show_commitment_date? finding_answer
+    finding_answer.user.can_act_as_audited? &&
+      finding_answer.requires_commitment_date? &&
+      !current_organization.corporate?
   end
 end

@@ -15,8 +15,7 @@ module FindingAnswers::Validations
         Organization.find(Organization.current_id)
 
       user&.can_act_as_audited? &&
-        finding&.pending? &&
-        finding.commitment_date.blank? &&
+        requires_commitment_date? &&
         current_organization &&
         !current_organization.corporate?
     end

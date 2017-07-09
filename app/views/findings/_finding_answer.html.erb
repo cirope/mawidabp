@@ -40,23 +40,21 @@
             <% end %>
           <% end %>
         <% else %>
-          ---
+          -
         <% end %>
       <% else %>
         <%= link_to_download finding_answer %>
       <% end %>
     </div>
     <div class="col-md-2">
-      <% if finding_answer.created_at %>
+      <% if finding_answer.persisted? %>
         <%= l(finding_answer.created_at, format: :long) %>
         <% if finding_answer.commitment_date %>
           <br /><strong><%= FindingAnswer.human_attribute_name 'commitment_date' %></strong>:
           <br /><%= l(finding_answer.commitment_date, format: :long) %>
         <% end %>
       <% else %>
-        <% if finding_answer.user.can_act_as_audited? &&
-            finding.pending? && finding.commitment_date.blank? &&
-            !current_organization.corporate? %>
+        <% if show_commitment_date?(finding_answer) %>
           <%= f.input :commitment_date, as: :date_picker, label: false, hint:
             FindingAnswer.human_attribute_name(:commitment_date),
             input_html: { data: { required: true } } %>

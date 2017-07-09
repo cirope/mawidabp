@@ -129,7 +129,7 @@ class ReviewUserAssignment < ApplicationRecord
             responsible: new_user.full_name_with_function)
         ]
 
-        Notifier.changes_notification(
+        NotifierMailer.changes_notification(
           [new_user, old_user],
           title: notification_title, body: notification_body,
           content: notification_content,
@@ -137,7 +137,7 @@ class ReviewUserAssignment < ApplicationRecord
         ).deliver_later
 
         unless unconfirmed_findings.blank?
-          Notifier.reassigned_findings_notification(
+          NotifierMailer.reassigned_findings_notification(
             new_user, old_user, unconfirmed_findings
           ).deliver_later
         end
@@ -176,7 +176,7 @@ class ReviewUserAssignment < ApplicationRecord
     if all_valid && !@cancel_notification && (self.review.oportunities | self.review.weaknesses).size > 0
       title = I18n.t('review_user_assignment.responsibility_removed', review: self.review.try(:identification))
 
-      Notifier.changes_notification(
+      NotifierMailer.changes_notification(
         self.user, title: title, organizations: [review.organization]
       ).deliver_later
     end
