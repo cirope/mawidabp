@@ -65,7 +65,6 @@
     session_closed_correctly: "Sesión cerrada correctamente"
     session_expires_in_less_than_two_minutes: "Su sesión expira en menos de dos minutos"
     session_time_expired: "Su sesión ha expirado, debe autenticarse nuevamente"
-    show_all: "Ver todos..."
     sort_by: "Ordenar por..."
     under_construction: "En mantenimiento, disculpe las molestias"
     unsaved_data_warning: "Ha modificado el contenido, si abandona la página perderá todos los cambios"
@@ -166,6 +165,7 @@
     benefits_title: 'Beneficios / Perjuicios'
     process_control_stats_title: 'Observaciones por proceso de negocio'
     synthesis_report_title: "Informe de síntesis al directorio"
+    review_stats_report_title: "Estadísticas de informes"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -263,8 +263,7 @@
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
       organization_score: "Calificación de la organización: %{score}% (*)"
-      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (Procesos
-Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Informática)"
+      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})."
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin hallazgos"
@@ -273,6 +272,18 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       generic_score_average:
         one: 'Promedio de las calificaciones de %{audit_type} en un informe'
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
+    review_stats_report:
+      pdf_name: "estadisticas_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
+      title: "ESTADÍSTICAS DE INFORMES"
+      subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
+      ratio: "Proporción"
+      review_count: "Cantidad de informes"
+      reviews_by_tag:
+        title: "Informes por etiqueta"
+        footnote: "Se cuenta el par etiqueta - informe. Así, por ejemplo, un informe con dos etiquetas será contado dos veces y un informe sin etiquetas no se tendrá en cuenta."
+      weaknesses_by_score:
+        title: "Observaciones por riesgo, prioridad y calificación de informe"
+        total: "Total"
     weaknesses_by_state:
       pdf_name: "hallazgos_informes_definitivos_por_estado_%{from_date}_al_%{to_date}.pdf"
       title: "HALLAZGOS INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
@@ -578,6 +589,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     control_effectiveness: "Efectividad del control"
     pending_findings: "Seguimiento de observaciones pendientes"
     synthesis_report_title: "Informe de síntesis al directorio"
+    review_stats_report_title: "Estadísticas de informes"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     detailed_report: "Reporte detallado"
@@ -700,7 +712,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
       organization_score: "Calificación de la organización: %{score}% (*)"
-      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})"
+      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})."
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
@@ -713,11 +725,22 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         other: "%{count} hallazgos reiterados"
       total_score_average: "Total promedio de las calificaciones (%{reference })"
       references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+    review_stats_report:
+      pdf_name: "estadisticas_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
+      title: "ESTADÍSTICAS DE INFORMES"
+      subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
+      ratio: "Proporción"
+      review_count: "Cantidad de informes"
+      reviews_by_tag:
+        title: "Informes por etiqueta"
+        footnote: "Se cuenta el par etiqueta - informe. Así, por ejemplo, un informe con dos etiquetas será contado dos veces y un informe sin etiquetas no se tendrá en cuenta."
+      weaknesses_by_score:
+        title: "Observaciones por riesgo, prioridad y calificación de informe"
+        total: "Total"
     weaknesses_by_state:
       pdf_name: "observaciones_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
       title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR ESTADO"
-      sqm_title: "SEGUIMIENTO DE HALLAZGOS TOTALES POR ESTADO"
       total: "TOTAL"
     weaknesses_by_risk:
       pdf_name: "observaciones_seguimiento_por_riesgo_%{from_date}_al_%{to_date}.pdf"
@@ -835,8 +858,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:
-        one: "El siguiente hallazgo ha cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
-        other: "Los siguientes hallazgos han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
+        one: "El siguiente hallazgo ha cambiado su estado a *Sin respuesta*, por no recibir una respuesta"
+        other: "Los siguientes hallazgos han cambiado su estado a *Sin respuesta*, por no recibir una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
@@ -889,52 +912,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     period_description: "Periodo %{period}"
     review_identification: "Número de informe %{review}"
     draft: "Borrador"
-
-  plan:
-    index_title: "Listado de planes de trabajo"
-    show_title: "Detalles del plan de trabajo"
-    new_title: "Agregar plan de trabajo"
-    edit_title: "Modificar plan de trabajo"
-    correctly_created: "Plan de trabajo agregado correctamente."
-    correctly_updated: "Plan de trabajo actualizado correctamente."
-    stale_object_error: "El plan de trabajo no fue actualizado, intente nuevamente."
-    allow_duplication: "¿Permitir duplicados?"
-    allow_overload: "¿Permitir superposición?"
-    copy: "Copiar"
-    add_plan_item: "Agregar proyecto"
-    add_human_resource_utilization: "Agregar recurso humano"
-    add_material_resource_utilization: "Agregar recurso material"
-    add_tagging: "Agregar etiqueta"
-    show_resource_utilization: "Mostrar recursos"
-    hide_resource_utilization: "Ocultar recursos"
-    download_global_plan: "Descargar plan de auditoria global"
-    download_detailed_plan: "Descargar plan de auditoria detallado"
-    without_business_unit_type: "Sin unidad de negocio"
-    show_all: "Ver todos"
-    item_status:
-      note: "Los estados deben leerse como sigue: C = Concluido; E = En ejecución dentro de lo planeado; E (FP) = En ejecución fuera de lo planeado; R = Retrasado"
-      concluded:
-        long: "Concluido"
-        short: "C"
-      executing_in_time:
-        long: "En ejecución (dentro de lo planeado)"
-        short: "E"
-      executing_overtime:
-        long: "En ejecución (fuera de lo planeado)"
-        short: "E (FP)"
-      delayed:
-        long: "Retrasado"
-        short: "R"
-    period:
-      title: "Periodo (%{number})"
-      range: "desde el %{from_date} al %{to_date}"
-    pdf:
-      title: "Plan de auditoría"
-      pdf_name: "plan_periodo_%{period}.pdf"
-      resource_utilization: "Recursos utilizados"
-    errors:
-      can_not_be_destroyed: "El plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
-      plan_item_related: "El item del plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
 
   questionnaire:
     index_title: "Listado de cuestionarios"
@@ -1140,9 +1117,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     hide_resource_utilization: "Ocultar recursos"
     download_global_workflow: "Descargar programa de trabajo global"
     download_detailed_workflow: "Descargar programa de trabajo detallado"
-    worked_hours: "Tiempo dedicado: %{count} unidades"
     period:
-      title: "Periodo (%{number})"
+      title: "Periodo (%{name})"
       range: "%{from_date} al %{to_date}"
     pdf:
       pdf_name: "programa_de_trabajo_%{review}.pdf"
@@ -1168,9 +1144,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       notification: "Notificación"
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
-      plan: "Plan de trabajo"
       privilege: "Privilegio"
-      review: "Informe"
+      review:
+        one: "Informe"
+        other: "Informes"
       review_user_assignment: "Asignación de usuario a informe"
       role: "Perfil"
       weakness: "Observación"
@@ -1396,41 +1373,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         user_id: "Usuario"
         organization_id: "Organización"
         role_id: "Perfil"
-      plan:
-        organization_id: "Organización"
-        period_id: "Periodo"
-        estimated_amount: "Costo estimado"
-        plan_items:
-          one: "Registro"
-          other: "Registros"
-          project: "Proyecto"
-          start: "Proyecto (inicio)"
-          end: "Proyecto (fin)"
-          predecessors: "Proyecto (predecesoras)"
-          order_number: "Proyecto (orden)"
-          business_unit_id: "Proyecto (unidad de negocio)"
-          status: "Proyecto (estado)"
-          resource_utilizations:
-            one: "Recurso"
-            other: "Recursos"
-            units: "Recurso (cantidad de unidades)"
-            cost_per_unit: "Recurso (costo por unidad)"
-            cost: "Recurso (costo)"
-            resource_id: "Recurso"
-      plan_item:
-        project: "Proyecto"
-        start: "Inicio"
-        end: "Fin"
-        predecessors: "Predecesoras"
-        order_number: "Orden"
-        business_unit_id: "Unidad de negocio"
-        resources: "Recursos"
-        resource_ids: "Recursos"
-        status: "Estado"
-        human_resource_units: "Costo recursos humanos"
-        material_resource_units: "Costo recursos materiales"
-        total_resource_units: "Costo total"
-        tags: "Etiquetas"
       privilege:
         module: "Módulo"
         read: "Lectura"
@@ -1481,7 +1423,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           task: "Tarea"
           start: "Tarea (inicio)"
           end: "Tarea (fin)"
-          predecessors: "Tarea (predecesoras)"
           order_number: "Tarea (orden)"
           resources: "Tarea (recursos)"
           resource_utilizations:
@@ -1495,7 +1436,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         task: "Tarea"
         start: "Inicio"
         end: "Fin"
-        predecessors: "Predecesoras"
         order_number: "Orden"
         resources: "Recursos"
         resource_ids: "Recursos"
@@ -1551,26 +1491,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           attributes:
             role_id:
               invalid: "deben ser sólo del tipo auditado o de otro tipo pero no ambos"
-        plan:
-          attributes:
-            plan_items:
-              locked: "no pueden ser eliminados, ya se utilizaron en al menos un informe"
-        plan_item:
-          attributes:
-            start:
-              resource_overload: "se superpone con otro ítem que ocupa el mismo recurso"
-              item_overload: "debe ser igual o posterior al fin de la/s tarea/s predecesora/s"
-            end:
-              resource_overload: "se superpone con otro ítem que ocupa el mismo recurso"
-              item_overload: "debe ser igual o posterior al fin de la/s tarea/s predecesora/s"
         process_control:
           attributes:
             control_objectives:
               locked: "no pueden ser eliminados, ya se utilizaron en al menos un informe"
-        resource_utilization:
-          attributes:
-            resource_consumer:
-              is_frozen: "no puede ser modificada"
         review:
           attributes:
             review_user_assignments:
@@ -1597,10 +1521,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           attributes:
             start:
               resource_overload: "se superpone con otro ítem que ocupa el mismo recurso"
-              item_overload: "debe ser igual o posterior al fin de la/s tarea/s predecesora/s"
             end:
               resource_overload: "se superpone con otro ítem que ocupa el mismo recurso"
-              item_overload: "debe ser igual o posterior al fin de la/s tarea/s predecesora/s"
 
   actioncontroller:
     best_practices: "Buenas prácticas"

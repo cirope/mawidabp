@@ -1,11 +1,15 @@
 require 'test_helper'
 
 class AuthenticationTest < ActionController::TestCase
-  def setup
+  setup do
     @user = users :administrator_user
     @organization = organizations :cirope
     @params = { user: @user.user, password: 'admin123' }
     Organization.current_id = @organization.id
+  end
+
+  teardown do
+    Organization.current_id = nil
   end
 
   test 'should authenticate' do

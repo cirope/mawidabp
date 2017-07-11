@@ -51,7 +51,7 @@ class PollsControllerTest < ActionController::TestCase
                 comments: 'Comments',
                 type: 'AnswerWritten'
               }, {
-                answer_option_id: answer_options(:ao1).id,
+                answer_option_id: answer_options(:strongly_agree).id,
                 type: 'AnswerMultiChoice'
               }
             ]
@@ -92,7 +92,7 @@ class PollsControllerTest < ActionController::TestCase
               type: 'AnswerWritten'
             }, {
               id: answers(:answer_multi_choice).id,
-              answer_option_id: answer_options(:ao1).id,
+              answer_option_id: answer_options(:strongly_agree).id,
               type: 'AnswerMultiChoice'
             }
           ]

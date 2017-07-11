@@ -1,5 +1,5 @@
 <% id    = f.object.object_id %>
-<% fetch = f.object.new_record? || f.object.valid? %>
+<% fetch = should_fetch_control_objectives_for? f.object %>
 
 <fieldset class="process_control">
   <div class="form-inputs row">
@@ -32,7 +32,7 @@
           <%= t 'navigation.loading' %>
         </div>
       <% else %>
-        <%= render 'process_controls/form', :@process_control => f.object %>
+        <%= render 'process_controls/form', process_control: f.object, index: f.index %>
       <% end %>
     </div>
 

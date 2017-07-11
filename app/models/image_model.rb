@@ -9,7 +9,7 @@ class ImageModel < ApplicationRecord
 
   mount_uploader :image, ImageUploader, mount_on: :image_file_name
 
-  belongs_to :imageable, polymorphic: true
+  belongs_to :imageable, polymorphic: true, optional: true
 
   def identifier
     image_file_name

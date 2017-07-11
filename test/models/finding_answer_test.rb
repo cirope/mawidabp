@@ -93,9 +93,9 @@ class FindingAnswerTest < ActiveSupport::TestCase
     Organization.current_id = organizations(:cirope).id
 
     @finding_answer.user = users(:audited_user)
-    @finding_answer.answer = '      '
+    @finding_answer.answer = ' '
     @finding_answer.finding = findings(:iso_27000_security_policy_3_1_item_weakness)
-    @finding_answer.commitment_date = ''
+    @finding_answer.commitment_date = nil
 
     assert @finding_answer.invalid?
     assert_error @finding_answer, :answer, :blank
@@ -109,5 +109,25 @@ class FindingAnswerTest < ActiveSupport::TestCase
 
     assert @finding_answer.invalid?
     assert_error @finding_answer, :commitment_date, :invalid_date
+  end
+
+  test 'requires commitment date' do
+    Organization.current_id = organizations(:cirope).id
+
+    @finding_answer.user = users(:audited_user)
+    @finding_answer.finding = findings(:iso_27000_security_policy_3_1_item_weakness)
+    @finding_answer.commitment_date = nil
+
+    assert @finding_answer.requires_commitment_date?
+
+    @finding_answer.finding.follow_up_date = Time.zone.today
+
+    assert !@finding_answer.requires_commitment_date?
+
+    @finding_answer.finding.follow_up_date = 1.day.ago
+
+    assert @finding_answer.requires_commitment_date?
+
+    Organization.current_id = nil
   end
 end

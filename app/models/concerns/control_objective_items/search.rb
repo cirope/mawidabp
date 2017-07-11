@@ -2,7 +2,7 @@ module ControlObjectiveItems::Search
   extend ActiveSupport::Concern
 
   included do
-    COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
+    COLUMNS_FOR_SEARCH = ActiveSupport::HashWithIndifferentAccess.new(
       review:                 review_options,
       process_control:        process_control_options,
       control_objective_text: control_objective_text_options

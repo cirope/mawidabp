@@ -69,7 +69,7 @@ module Reports::WeaknessesByStateExecution
               set_column_data(type, pdf)
               count_findings_by_state(type)
               set_finding_totals(type)
-              add_pdf_table(pdf)
+              add_weaknesses_by_state_pdf_table(pdf)
             else
               pdf.text t('execution_reports.without_findings'), font_size: PDF_FONT_SIZE, style: :italic
               pdf.move_down PDF_FONT_SIZE
@@ -168,7 +168,7 @@ module Reports::WeaknessesByStateExecution
     end
   end
 
-  def add_pdf_table(pdf)
+  def add_weaknesses_by_state_pdf_table(pdf)
     unless @column_data.blank?
       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
         table_options = pdf.default_table_options(@column_widths)

@@ -49,7 +49,7 @@ class SessionsController < ApplicationController
     end
 
     def set_session_values user
-      session[:last_access] = Time.now
+      session[:last_access] = Time.zone.now
       session[:user_id]     = user.id
 
       user.logged_in! session[:last_access]

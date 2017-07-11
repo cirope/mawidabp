@@ -29,8 +29,8 @@ class FindingUserAssignment < ApplicationRecord
 
   # Relaciones
   belongs_to :finding, :inverse_of => :finding_user_assignments,
-    :polymorphic => true
-  belongs_to :raw_finding, :foreign_key => :finding_id, :class_name => 'Finding'
+    :polymorphic => true, :optional => true
+  belongs_to :raw_finding, :foreign_key => :finding_id, :class_name => 'Finding', :optional => true
   belongs_to :user
 
   def <=>(other)
@@ -58,7 +58,7 @@ class FindingUserAssignment < ApplicationRecord
     if user_id_changed? && persisted?
       user_removed = User.find user_id_was
 
-      Notifier.reassigned_findings_notification(
+      NotifierMailer.reassigned_findings_notification(
         user, user_removed, finding, false
       ).deliver_later
     end

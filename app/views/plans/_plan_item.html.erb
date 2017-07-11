@@ -1,4 +1,6 @@
-<% id = f.object.object_id %>
+<% id    = f.object.object_id %>
+<% fetch = should_fetch_resources_for? f.object %>
+
 <fieldset class="plan_item">
   <div class="row">
     <div class="col-md-1">
@@ -7,7 +9,7 @@
           <%= show_plan_item_info(f.object) %>
         </div>
         <div class="pull-left">
-          <%= link_to_show_hide "resource_utilizations_for_#{id}" %>
+          <%= link_to_fetch_hide id, fetch ? :fetch : :show %>
         </div>
         <div class="media-body">
           <%= f.input :order_number, as: :string, label: false,
@@ -33,7 +35,7 @@
       <%= f.input :business_unit_id, as: :hidden, input_html: {
         value: f.object.business_unit_id, id: "hidden_business_unit_id_#{id}" } %>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-4">
       <%= f.input :project, label: false, input_html: { maxlength: 255 } %>
     </div>
     <div class="col-md-3">
@@ -46,16 +48,13 @@
         </div>
       </div>
     </div>
-    <div class="col-md-2">
-      <%= f.input :plain_predecessors, label: false, input_html: { maxlength: 255 } %>
-    </div>
     <div class="col-md-1">
       <div class="toggle-visibility">
         <%= f.input :id, as: :hidden %>
-        <%= link_to_insert_field(f) %>
+        <%= link_to_insert_field f %>
         <span class="text-muted">|</span>
         <% unless f.object.try(:review) %>
-          <%= link_to_remove_nested_item(f) %>
+          <%= link_to_remove_nested_item f %>
           <span class="text-muted">|</span>
         <% end %>
         <%= link_to_move %>
@@ -63,7 +62,7 @@
     </div>
   </div>
 
-  <div class="hidden_items" id="resource_utilizations_for_<%= id %>" style="display: none;">
+  <div class="nested hidden">
     <div class="row nested">
       <div class="col-md-8">
         <h5><strong><%= ResourceUtilization.human_attribute_name 'resource' %></strong></h5>
@@ -73,40 +72,36 @@
       </div>
     </div>
 
-    <div id="material_resource_utilizations_<%= id %>">
-      <%= f.simple_fields_for :resource_utilizations, f.object.material_resource_utilizations do |mru_f| %>
-        <%= render 'material_resource_utilization', f: mru_f %>
+    <div class="hidden" data-container-id="<%= id %>" data-index="<%= f.index %>" data-url="<%= plan_item_path f.object %>">
+      <% if fetch %>
+        <div class="alert alert-warning"><%= t 'navigation.loading' %></div>
+      <% else %>
+        <%= render 'plan_items/form', plan_item: f.object, index: f.index %>
       <% end %>
     </div>
 
-    <div id="human_resource_utilizations_<%= id %>">
-      <%= f.simple_fields_for :resource_utilizations, f.object.human_resource_utilizations do |hru_f| %>
-        <%= render 'human_resource_utilization', f: hru_f %>
-      <% end %>
-    </div>
-
-    <div id="tags_<%= id %>">
-      <%= f.simple_fields_for :taggings, f.object.taggings do |t_f| %>
-        <%= render 'tagging', f: t_f %>
-      <% end %>
-    </div>
-
-    <div class="nested">
-      <p>
-        <%= link_to_add_fields(t('plan.add_material_resource_utilization'), f, :resource_utilizations,
-          'material_resource_utilization', {
-          insert_into: "#material_resource_utilizations_#{id}", association: 'material_resource_utilizations'
-        } ) %>
-        <%= link_to_add_fields(t('plan.add_human_resource_utilization'), f, :resource_utilizations,
-          'human_resource_utilization', {
-          insert_into: "#human_resource_utilizations_#{id}", association: 'human_resource_utilizations'
-        } ) %>
-        <%= link_to_add_fields(t('plan.add_tagging'), f, :taggings,
-          'tagging', { insert_into: "#tags_#{id}", association: 'taggings' } ) %>
-      </p>
-    </div>
+    <p class="nested">
+      <%= link_to_add_fields(
+        t('.add_material_resource_utilization'),
+        f, :resource_utilizations, 'plan_items/material_resource_utilization', {
+          insert_into: "#material_resource_utilizations_#{id}",
+          association: 'material_resource_utilizations'
+        }
+      ) %>
+      <%= link_to_add_fields(
+        t('.add_human_resource_utilization'),
+        f, :resource_utilizations, 'plan_items/human_resource_utilization', {
+          insert_into: "#human_resource_utilizations_#{id}",
+          association: 'human_resource_utilizations'
+        }
+      ) %>
+      <%= link_to_add_fields(
+        t('.add_tagging'),
+        f, :taggings, 'plan_items/tagging', {
+          insert_into: "#tags_#{id}",
+          association: 'taggings'
+        }
+      ) %>
+    </p>
   </div>
 </fieldset>
-<script type="text/javascript">
-  FormUtil.completeSortNumbers();
-</script>

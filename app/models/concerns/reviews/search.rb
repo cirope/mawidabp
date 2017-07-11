@@ -15,13 +15,7 @@ module Reviews::Search
     private
 
       def period_options
-        {
-          column:            "#{Period.quoted_table_name}.#{Period.qcn 'number'}",
-          operator:          '=',
-          mask:              '%d',
-          regexp:            /\A\s*\d+\s*\Z/,
-          conversion_method: :to_i
-        }
+        string_column_options_for "#{Period.quoted_table_name}.#{Period.qcn 'name'}"
       end
 
       def identification_options

@@ -1,95 +1,71 @@
-<div class="row">
-  <div class="col-md-6">
-    <%= link_to t('follow_up_audit.weaknesses_by_audit_type_title'),
-      { :action => :weaknesses_by_audit_type, :controller_name => 'follow_up', :final => false },
-      class: 'btn btn-default btn-lg btn-block' %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <%= Finding.model_name.human count: 0 %>
+    </h4>
   </div>
-  <div class="col-md-6">
-    <%= link_to t('follow_up_committee_report.qa_indicators_title'),
-      { :action => :qa_indicators }, class: 'btn btn-default btn-lg btn-block' %>
+
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="list-group">
+          <%= link_to t('follow_up_audit.weaknesses_by_audit_type_title'),
+            { :action => :weaknesses_by_audit_type, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+          <%= link_to t('follow_up_audit.weaknesses_by_state_title'),
+            { :action => :weaknesses_by_state, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+          <%= link_to t('follow_up_committee_report.control_objective_stats_title'),
+            { :action => :control_objective_stats, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+          <%= link_to t('follow_up_committee_report.process_control_stats_title'),
+            { :action => :process_control_stats, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+          <%= link_to t('follow_up_audit.weaknesses_by_risk_report_title'),
+            { :action => :weaknesses_by_risk_report, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+          <%= link_to t('follow_up_committee_report.benefits_title'),
+            { :action => :benefits, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="list-group">
+          <%= link_to t('follow_up_audit.weaknesses_by_risk_title'),
+            { :action => :weaknesses_by_risk, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+          <%= link_to t('follow_up_committee_report.control_objective_stats_by_review_title'),
+            { :action => :control_objective_stats_by_review, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+          <%= link_to t('follow_up_audit.fixed_weaknesses_report_title'),
+            { :action => :fixed_weaknesses_report, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+          <%= link_to t('follow_up_audit.weaknesses_graphs.title'),
+            { action: :weaknesses_graphs, controller_name: 'follow_up', final: false }, class: 'list-group-item' %>
+          <%= link_to t('follow_up_audit.weaknesses_report.title'),
+            { action: :weaknesses_report, controller_name: 'follow_up', final: false }, class: 'list-group-item' %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<br />
-<div class="row">
-  <div class="col-md-6">
-    <%= link_to t('follow_up_audit.weaknesses_by_state_title'),
-      { :action => :weaknesses_by_state, :controller_name => 'follow_up', :final => false },
-      class: 'btn btn-default btn-lg btn-block' %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <%= t 'follow_up_audit.others.title' %>
+    </h4>
   </div>
-  <div class="col-md-6">
-    <%= link_to t('follow_up_audit.weaknesses_by_risk_title'),
-      { :action => :weaknesses_by_risk, :controller_name => 'follow_up', :final => false },
-      class: 'btn btn-default btn-lg btn-block' %>
-  </div>
-</div>
 
-<br />
-<div class="row">
-  <div class="col-md-6">
-    <%= link_to t('follow_up_committee_report.control_objective_stats_title'),
-      { :action => :control_objective_stats, :controller_name => 'follow_up', :final => false },
-      class: 'btn btn-default btn-lg btn-block' %>
-  </div>
-  <div class="col-md-6">
-    <%= link_to t('follow_up_committee_report.control_objective_stats_by_review_title'),
-      { :action => :control_objective_stats_by_review, :controller_name => 'follow_up', :final => false },
-      class: 'btn btn-default btn-lg btn-block' %>
-  </div>
-</div>
-
-<br />
-<div class="row">
-  <div class="col-md-6">
-    <%= link_to t('follow_up_committee_report.process_control_stats_title'),
-      { :action => :process_control_stats, :controller_name => 'follow_up', :final => false },
-      class: 'btn btn-default btn-lg btn-block' %>
-  </div>
-  <div class="col-md-6">
-    <%= link_to t('follow_up_audit.cost_analysis_title'),
-      { :action => :follow_up_cost_analysis, class: 'btn btn-default btn-lg btn-block' },
-      class: 'btn btn-default btn-lg btn-block' %>
-  </div>
-</div>
-
-<br />
-<div class="row">
-  <div class="col-md-6">
-    <%= link_to t('follow_up_audit.weaknesses_by_risk_report_title'),
-      { :action => :weaknesses_by_risk_report, :controller_name => 'follow_up', :final => false },
-      class: 'btn btn-default btn-lg btn-block' %>
-  </div>
-  <div class="col-md-6">
-    <%= link_to t('follow_up_audit.fixed_weaknesses_report_title'),
-      { :action => :fixed_weaknesses_report, :controller_name => 'follow_up', :final => false },
-      class: 'btn btn-default btn-lg btn-block' %>
-  </div>
-</div>
-
-<br />
-<div class="row">
-  <div class="col-md-6">
-    <%= link_to t('follow_up_audit.weaknesses_graphs.title'),
-      { action: :weaknesses_graphs, controller_name: 'follow_up', final: false },
-      class: 'btn btn-default btn-lg btn-block' %>
-  </div>
-  <div class="col-md-6">
-    <%= link_to t('follow_up_audit.weaknesses_report.title'),
-      { action: :weaknesses_report, controller_name: 'follow_up', final: false },
-      class: 'btn btn-default btn-lg btn-block' %>
-  </div>
-</div>
-
-<br />
-<div class="row">
-  <div class="col-md-6">
-    <%= link_to t('follow_up_committee_report.synthesis_report_title'),
-      { :action => :synthesis_report, :controller_name => 'follow_up' },
-      class: 'btn btn-default btn-lg btn-block' %>
-  </div>
-  <div class="col-md-6">
-    <%= link_to t('follow_up_committee_report.benefits_title'),
-      { :action => :benefits, :controller_name => 'follow_up', :final => false },
-      class: 'btn btn-default btn-lg btn-block' %>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="list-group">
+          <%= link_to t('follow_up_committee_report.synthesis_report_title'),
+            { :action => :synthesis_report, :controller_name => 'follow_up' }, class: 'list-group-item' %>
+          <%= link_to t('follow_up_committee_report.qa_indicators_title'),
+            { :action => :qa_indicators }, class: 'list-group-item' %>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="list-group">
+          <%= link_to t('follow_up_committee_report.review_stats_report_title'),
+            { action: :review_stats_report, controller_name: 'follow_up' }, class: 'list-group-item' %>
+          <%= link_to t('follow_up_audit.cost_analysis_title'),
+            { :action => :follow_up_cost_analysis, class: 'btn btn-default btn-lg btn-block' }, class: 'list-group-item' %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -13,7 +13,11 @@
  *= require graph
  *= require documents
  *= require news
+ *= require plans
+ *= require plans/stats
+ *= require plan_items
  *= require process_controls
+ *= require reports
  *= require roles
  *= require sessions
  *= require tags

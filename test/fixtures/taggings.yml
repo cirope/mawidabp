@@ -5,3 +5,7 @@ important_finding:
 manual_document:
   tag: manual
   taggable: audit_manual (Document)
+
+high_priority_review:
+  tag: high_priority
+  taggable: review_with_conclusion (Review)

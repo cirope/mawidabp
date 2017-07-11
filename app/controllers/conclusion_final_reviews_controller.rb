@@ -302,7 +302,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     conclusion_final_reviews.each do |cfr|
       column_data << [
-        cfr.review.period.number.to_s,
+        cfr.review.period.name,
         cfr.review.identification,
         cfr.summary,
         cfr.review.plan_item.business_unit.name,

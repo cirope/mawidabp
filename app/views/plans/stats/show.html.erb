@@ -1,0 +1,51 @@
+<%= render 'plans/header' %>
+
+<ul class="nav nav-pills">
+  <% plan_stat_months.each do |month| %>
+    <li <%== 'class="active"' if month[:active] %>>
+      <%= link_to month[:label], [:stats, @plan, until: month[:value]] %>
+    </li>
+  <% end %>
+</ul>
+
+<br>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th><%= BusinessUnitType.model_name.human count: 0 %></th>
+            <th><%= t '.total' %></th>
+            <th><%= t '.planned' %></th>
+            <th><%= t '.executed' %></th>
+            <th><%= t '.on_time' %></th>
+            <th><%= t '.progress' %></th>
+            <th><%= t '.compliance' %></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% plan_business_unit_type_list.each do |business_unit_type, plan_items| %>
+            <%= render 'stat_row', business_unit_type: business_unit_type, plan_items: plan_items if business_unit_type %>
+          <% end %>
+        </tbody>
+
+        <tfoot>
+          <%= render 'stat_row', business_unit_type: nil, plan_items: @plan.plan_items %>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="planned-items"></div>
+
+<hr>
+
+<div>
+  <%= link_to_show @plan %> |
+  <%= link_to_edit edit_plan_path(@plan) %> |
+  <%= link_to_index plans_path %>
+</div>

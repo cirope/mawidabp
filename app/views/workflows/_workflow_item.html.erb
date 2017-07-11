@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
       <%= f.input :task, label: false, input_html: { autofocus: true } %>
     </div>
     <div class="col-md-2">
@@ -20,9 +20,6 @@
     </div>
     <div class="col-md-2">
       <%= f.input :end, as: :date_picker, label: false %>
-    </div>
-    <div class="col-md-2">
-      <%= f.input :plain_predecessors, label: false, input_html: { maxlength: 255 } %>
     </div>
     <div class="col-md-1">
       <div class="toggle-visibility">

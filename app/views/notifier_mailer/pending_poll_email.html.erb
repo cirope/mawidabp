@@ -9,6 +9,14 @@
       )
     %>
   </p>
+  <% if @poll.conclusion_review %>
+    <p>
+      <%= Poll.human_attribute_name 'pollable' %>:
+      <strong>
+        <%= Review.model_name.human %> <%= @poll.conclusion_review.review %>
+      </strong>
+    </p>
+  <% end %>
   <% if @poll.affected_user %>
     <p>
       <%= t(

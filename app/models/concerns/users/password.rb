@@ -4,7 +4,7 @@ module Users::Password
   extend ActiveSupport::Concern
 
   included do
-    after_update :log_password_change
+    before_update :log_password_change
 
     has_many :old_passwords, dependent: :destroy
   end
@@ -49,7 +49,7 @@ module Users::Password
 
     save!
 
-    Notifier.restore_password(self, organization).deliver_later if notify
+    NotifierMailer.restore_password(self, organization).deliver_later if notify
   end
 
   def password_was_encrypted

@@ -14,11 +14,14 @@ es:
     logout: 'Salir'
     new: 'Nuevo'
     show: 'Ver'
+    stats: 'Estadísticas'
+    warning: 'Advertencia'
     upload: 'Adjuntar'
     _yes: 'Si'
     _no: 'No'
 
   answer_options:
+    not_apply: 'No aplica'
     strongly_disagree: 'Muy en desacuerdo'
     disagree: 'En desacuerdo'
     neither_agree_nor_disagree: 'Ni acuerdo ni desacuerdo'
@@ -154,6 +157,60 @@ es:
       title: 'Agregar período'
     show:
       title: 'Detalles del período'
+
+  plans:
+    index:
+      title: 'Listado de planes de trabajo'
+      copy: 'Copiar'
+    show:
+      title: 'Detalles del plan de trabajo'
+    new:
+      title: 'Agregar plan de trabajo'
+    edit:
+      title: 'Modificar plan de trabajo'
+    plan_item:
+      add_human_resource_utilization: 'Agregar recurso humano'
+      add_material_resource_utilization: 'Agregar recurso material'
+      add_tagging: 'Agregar etiqueta'
+    plan_items:
+      add_plan_item: 'Agregar proyecto'
+    duplication_or_overload_form:
+      allow_duplication: '¿Permitir duplicados?'
+      allow_overload: '¿Permitir superposición?'
+    item_status:
+      note: 'Los estados deben leerse: C = Concluido; E = En ejecución dentro de lo planeado; E (FP) = En ejecución fuera de lo planeado; R = Retrasado'
+      concluded:
+        long: 'Concluido'
+        short: 'C'
+      executing_in_time:
+        long: 'En ejecución (dentro de lo planeado)'
+        short: 'E'
+      executing_overtime:
+        long: 'En ejecución (fuera de lo planeado)'
+        short: 'E (FP)'
+      delayed:
+        long: 'Retrasado'
+        short: 'R'
+    period:
+      title: 'Periodo (%{name})'
+      range: 'desde el %{from_date} al %{to_date}'
+    pdf:
+      title: 'Plan de auditoría'
+      pdf_name: 'plan_periodo_%{period}.pdf'
+      resource_utilization: 'Recursos utilizados'
+    stats:
+      show:
+        title: 'Estadísiticas del plan de auditoría'
+        now: 'Ahora'
+        total: 'Total'
+        planned: 'Planificados'
+        executed: 'Ejecutados'
+        on_time: 'En fecha'
+        progress: 'Avance total'
+        compliance: 'Cumplimiento'
+    download_global_plan: 'Descargar plan de auditoria global'
+    download_detailed_plan: 'Descargar plan de auditoria detallado'
+    without_business_unit_type: 'Sin unidad de negocio'
 
   profiles:
     edit:
@@ -365,8 +422,8 @@ es:
         table: 'Ver tabla'
         graph: 'Ver gráfico'
         pending_weaknesses:
-          one: "*Una* observación *pendiente*"
-          other: "*%{count}* observaciones *pendientes*"
+          one: '*Una* observación *pendiente*'
+          other: '*%{count}* observaciones *pendientes*'
         high_risk_weaknesses:
           one: '*Una* observación de *riesgo alto*'
           other: '*%{count}* observaciones de *riesgo alto*'

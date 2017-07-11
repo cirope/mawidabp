@@ -2,7 +2,7 @@ module DynamicFormHelper
   def link_to_add_fields(name, form, association, partial = nil, data = {}, locals = {})
     new_object = form.object.send(association).klass.new
     id = new_object.object_id
-    fields = form.fields_for(association, new_object, child_index: id) do |f|
+    template = form.fields_for(association, new_object, child_index: id) do |f|
       render (partial || association.to_s.singularize), locals.merge(f: f, parent: form)
     end
 
@@ -11,7 +11,7 @@ module DynamicFormHelper
         id: id,
         association: association,
         dynamic_form_event: 'addNestedItem',
-        dynamic_template: fields.gsub("\n", ''),
+        dynamic_template: template.gsub("\n", ''),
         show_tooltip: true
       }.merge(data)
     )
@@ -30,13 +30,13 @@ module DynamicFormHelper
 
   def link_to_add_item(name, new_object, partial)
     id = new_object.object_id
-    fields = render(partial, item: new_object)
+    template = render(partial, item: new_object)
 
     link_to(
       name, '#', class: 'btn btn-default btn-sm', title: name, data: {
         'id' => id,
         'dynamic-form-event' => 'addNestedItem',
-        'dynamic-template' => fields.gsub("\n", ''),
+        'dynamic-template' => template.gsub("\n", ''),
         'show-tooltip' => true
       }
     )

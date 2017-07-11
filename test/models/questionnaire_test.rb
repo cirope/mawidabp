@@ -36,7 +36,7 @@ class QuestionnaireTest < ActiveSupport::TestCase
   test 'delete' do
     assert_difference 'Questionnaire.count', -1 do
       assert_difference 'Question.count', -2 do
-        assert_difference 'AnswerOption.count', -5 do
+        assert_difference 'AnswerOption.count', -Question::ANSWER_OPTIONS.size do
           @questionnaire.destroy
         end
       end

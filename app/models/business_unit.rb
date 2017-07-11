@@ -20,7 +20,7 @@ class BusinessUnit < ApplicationRecord
     {:case_sensitive => false, :scope => :business_unit_type_id}
 
   # Relaciones
-  belongs_to :business_unit_type
+  belongs_to :business_unit_type, :optional => true
   has_many :plan_items, :dependent => :destroy
 
   def as_json(options = nil)

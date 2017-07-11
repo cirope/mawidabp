@@ -1,40 +1,40 @@
 current_period:
-  number: 1
+  name: '1'
   description: Period one
   start: <%= 10.days.ago.to_date.to_s(:db) %>
   end: <%= 10.days.from_now.to_date.to_s(:db) %>
   organization: cirope
 
 past_period:
-  number: 2
+  name: '2'
   description: Period two
   start: <%= 60.days.ago.to_date.to_s(:db) %>
   end: <%= 20.days.ago.to_date.to_s(:db) %>
   organization: cirope
 
 third_period:
-  number: 3
+  name: '3'
   description: Third period
   start: <%= 20.days.from_now.to_date.to_s(:db) %>
   end: <%= 60.days.from_now.to_date.to_s(:db) %>
   organization: cirope
 
 unused_period:
-  number: 4
+  name: '4'
   description: Unused period four
   start: <%= 70.days.from_now.to_date.to_s(:db) %>
   end: <%= 120.days.from_now.to_date.to_s(:db) %>
   organization: cirope
 
 current_period_google:
-  number: 1
+  name: '1'
   description: Period one
   start: <%= 10.days.ago.to_date.to_s(:db) %>
   end: <%= 10.days.from_now.to_date.to_s(:db) %>
   organization: google
 
 past_period_google:
-  number: 2
+  name: '2'
   description: Period two
   start: <%= 60.days.ago.to_date.to_s(:db) %>
   end: <%= 20.days.ago.to_date.to_s(:db) %>

@@ -744,8 +744,8 @@ class FindingTest < ActiveSupport::TestCase
     10.times do |n|
       first_notification_date = finding.first_notification_date.dup
       computed_date = finding.notification_date_for_level(n + 1)
-      days_to_add = (finding.stale_confirmed_days +
-          finding.stale_confirmed_days * (n + 1)).next
+      days_to_add = finding.stale_confirmed_days +
+        finding.stale_confirmed_days * (n + 1)
 
       until days_to_add == 0
         first_notification_date += 1.day
@@ -756,8 +756,8 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
-  test 'commitment date' do
-    assert_nil @finding.commitment_date
+  test 'last commitment date' do
+    assert_nil @finding.last_commitment_date
     assert_difference '@finding.finding_answers.count' do
       @finding.finding_answers.create(
         :answer => 'New answer',
@@ -766,7 +766,17 @@ class FindingTest < ActiveSupport::TestCase
         :notify_users => false
       )
     end
-    assert_equal 10.days.from_now.to_date, @finding.commitment_date
+    assert_equal 10.days.from_now.to_date, @finding.last_commitment_date
+
+    assert_difference '@finding.finding_answers.count' do
+      @finding.finding_answers.create(
+        :answer => 'New answer',
+        :commitment_date => 20.days.from_now.to_date,
+        :user => users(:audited_user),
+        :notify_users => false
+      )
+    end
+    assert_equal 20.days.from_now.to_date, @finding.last_commitment_date
   end
 
   test 'mark as duplicated' do

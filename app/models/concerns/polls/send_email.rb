@@ -8,6 +8,6 @@ module Polls::SendEmail
   private
 
     def send_poll_email
-      Notifier.pending_poll_email(self).deliver_later
+      NotifierMailer.pending_poll_email(self).deliver_later
     end
 end
