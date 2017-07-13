@@ -58,6 +58,31 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/index'
   end
 
+  test 'list reviews with search on tags' do
+    login
+    get :index, params: {
+      search: {
+        query: 'high priority',
+        columns: ['tags']
+      }
+    }
+    assert_response :success
+    assert_not_nil assigns(:reviews)
+    assert_equal 2, assigns(:reviews).count
+    assert_template 'reviews/index'
+
+    get :index, params: {
+      search: {
+        query: 'high priority and for rev',
+        columns: ['tags']
+      }
+    }
+    assert_response :success
+    assert_not_nil assigns(:reviews)
+    assert_equal 1, assigns(:reviews).count
+    assert_template 'reviews/index'
+  end
+
   test 'show review' do
     login
     get :show, params: {
