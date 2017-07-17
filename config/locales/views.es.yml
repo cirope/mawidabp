@@ -21,6 +21,7 @@ es:
     _no: 'No'
 
   answer_options:
+    not_apply: 'No aplica'
     strongly_disagree: 'Muy en desacuerdo'
     disagree: 'En desacuerdo'
     neither_agree_nor_disagree: 'Ni acuerdo ni desacuerdo'

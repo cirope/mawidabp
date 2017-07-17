@@ -7,7 +7,7 @@ answer_written:
 
 answer_multi_choice:
   comments: "Me agrada la forma de trabajo"
-  answer_option: ao1
+  answer_option: strongly_agree
   question: question_multi_choice
   poll: poll_one
   type: <%= AnswerMultiChoice.name %>

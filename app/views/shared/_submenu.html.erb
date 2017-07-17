@@ -6,7 +6,7 @@
           <% submenu_item.children.each do |sub_submenu_item| %>
             <% active = sub_submenu_item.submenu_names.include?(@current_module) %>
             <li <%== 'class="active"' if active %>>
-              <%= link_to sub_submenu_item.to_s, sub_submenu_item.url %>
+              <%= link_to sub_submenu_item, sub_submenu_item.url %>
             </li>
           <% end %>
         </ul>

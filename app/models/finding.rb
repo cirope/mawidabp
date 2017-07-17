@@ -114,10 +114,6 @@ class Finding < ApplicationRecord
     being_implemented? && follow_up_date && follow_up_date < Date.today
   end
 
-  def pending?
-    PENDING_STATUS.include?(self.state)
-  end
-
   def issue_date
     review.try(:conclusion_final_review).try(:issue_date)
   end
@@ -126,7 +122,10 @@ class Finding < ApplicationRecord
     parameter_in(organization_id, 'finding_stale_confirmed_days').to_i
   end
 
-  def commitment_date
-    finding_answers.where.not(commitment_date: nil).first&.commitment_date
+  def last_commitment_date
+    finding_answers.
+      where.not(commitment_date: nil).
+      reorder(commitment_date: :desc).
+      first&.commitment_date
   end
 end

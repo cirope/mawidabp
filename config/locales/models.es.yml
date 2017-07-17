@@ -285,6 +285,7 @@ es:
         answered: 'Contestada'
         questionnaire: 'Cuestionario'
         user: 'Usuario'
+        pollable: 'Sobre'
         affected_user: 'Acerca de'
       poll/answers:
         answer: 'Respuesta'

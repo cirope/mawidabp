@@ -23,9 +23,8 @@
       <% if show_menu? %>
         <ul class="nav navbar-nav">
           <%= render(
-            partial: 'shared/menu_item',
-            collection: @auth_user.get_menu,
-            as: :menu_item
+            partial:    'shared/menu_item',
+            collection: @auth_user.get_menu
           ) %>
         </ul>
         <%= render partial: 'shared/user_actions', locals: { user: @auth_user } %>

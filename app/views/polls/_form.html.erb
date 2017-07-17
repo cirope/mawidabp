@@ -5,11 +5,26 @@
     <div class="page-header">
       <h1>
         <%= Question.model_name.human count: 0 %>
-        <% if @poll.affected_user %>
-          <small><%= t 'polls.affected_user_html', user: @poll.affected_user.full_name %></small>
-        <% end %>
       </h1>
     </div>
+
+    <% if @poll.conclusion_review || @poll.affected_user %>
+      <ul class="lead list-unstyled">
+        <% if @poll.conclusion_review %>
+          <li>
+            <%= Poll.human_attribute_name :pollable %>
+            <strong>
+              <%= Review.model_name.human %> <%= @poll.conclusion_review.review %>
+            </strong>
+          </li>
+        <% end %>
+        <% if @poll.affected_user %>
+          <li><%= t 'polls.affected_user_html', user: @poll.affected_user.full_name %></li>
+        <% end %>
+      </ul>
+
+      <hr>
+    <% end %>
 
     <%= f.simple_fields_for :answers do |a_f| %>
       <%= render 'answer', f: a_f %>
