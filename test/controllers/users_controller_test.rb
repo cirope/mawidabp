@@ -37,6 +37,13 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil assigns(:user)
   end
 
+  test 'can not get new when ldap' do
+    login prefix: organizations(:google).prefix
+
+    get :new
+    assert_redirected_to login_url
+  end
+
   test 'create user' do
     counts_array = ['User.count', 'RelatedUserRelation.count', 'OrganizationRole.count']
 
