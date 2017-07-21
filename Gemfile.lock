@@ -279,6 +279,7 @@ DEPENDENCIES
   rails (= 5.1.1)
   rails-controller-testing
   redcarpet
+  request_store
   responders
   ruby-ntlm
   rubyzip
