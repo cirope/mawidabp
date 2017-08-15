@@ -57,6 +57,8 @@ GEM
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
+    bootstrap-will_paginate (1.0.0)
+      will_paginate
     builder (3.2.3)
     byebug (9.0.6)
     capistrano (3.9.0)
@@ -244,8 +246,6 @@ GEM
     whenever (0.9.7)
       chronic (>= 0.6.3)
     will_paginate (3.1.6)
-    will_paginate-bootstrap (1.0.1)
-      will_paginate (>= 3.0.3)
 
 PLATFORMS
   ruby
@@ -254,6 +254,7 @@ DEPENDENCIES
   RedCloth
   acts_as_tree
   bootstrap-sass
+  bootstrap-will_paginate
   byebug
   capistrano
   capistrano-bundler
@@ -295,7 +296,6 @@ DEPENDENCIES
   web-console
   whenever
   will_paginate
-  will_paginate-bootstrap
 
 BUNDLED WITH
    1.15.3
