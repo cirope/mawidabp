@@ -5,7 +5,6 @@ baseurl: "/help"
 gems:
   - jekyll-multiple-languages-plugin
 assets:
-  cache: false
   digest: true
   compress:
     css: true
