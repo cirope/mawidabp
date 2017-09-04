@@ -61,12 +61,6 @@ class Finding < ApplicationRecord
     other.kind_of?(Finding) ? self.id <=> other.id : -1
   end
 
-  def to_s
-    "#{review_code} - #{title} - #{control_objective_item.try(:review)}"
-  end
-
-  alias_method :label, :to_s
-
   def next_code(review = nil)
     raise 'Must be implemented in the subclasses'
   end
