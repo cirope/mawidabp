@@ -66,10 +66,6 @@ class Finding < ApplicationRecord
 
   alias_method :label, :to_s
 
-  def review_text
-    self.control_objective_item.try(:review).try(:to_s)
-  end
-
   def check_for_final_review(_)
     if self.final? && self.review && self.review.is_frozen?
       raise 'Conclusion Final Review frozen'
