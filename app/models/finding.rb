@@ -16,6 +16,7 @@ class Finding < ApplicationRecord
   include Findings::DestroyValidation
   include Findings::Display
   include Findings::Expiration
+  include Findings::FinalReview
   include Findings::FollowUp
   include Findings::FollowUpPDF
   include Findings::ImportantDates
@@ -66,18 +67,8 @@ class Finding < ApplicationRecord
 
   alias_method :label, :to_s
 
-  def check_for_final_review(_)
-    if self.final? && self.review && self.review.is_frozen?
-      raise 'Conclusion Final Review frozen'
-    end
-  end
-
   def next_code(review = nil)
     raise 'Must be implemented in the subclasses'
-  end
-
-  def issue_date
-    review.try(:conclusion_final_review).try(:issue_date)
   end
 
   def stale_confirmed_days
