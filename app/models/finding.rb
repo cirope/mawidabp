@@ -14,6 +14,7 @@ class Finding < ApplicationRecord
   include Findings::DateColumns
   include Findings::Defaults
   include Findings::DestroyValidation
+  include Findings::Display
   include Findings::Expiration
   include Findings::FollowUpDates
   include Findings::FollowUpPDF
@@ -64,19 +65,6 @@ class Finding < ApplicationRecord
   end
 
   alias_method :label, :to_s
-
-  def informal
-    text = "<strong>#{Finding.human_attribute_name(:title)}</strong>: "
-    text << self.title.to_s
-    text << "<br /><strong>#{Finding.human_attribute_name(:review_code)}</strong>: "
-    text << self.review_code
-    text << "<br /><strong>#{Review.model_name.human}</strong>: "
-    text << self.control_objective_item.review.to_s
-    text << "<br /><strong>#{Finding.human_attribute_name(:state)}</strong>: "
-    text << self.state_text
-    text << "<br /><strong>#{ControlObjectiveItem.human_attribute_name(:control_objective_text)}</strong>: "
-    text << self.control_objective_item.to_s
-  end
 
   def review_text
     self.control_objective_item.try(:review).try(:to_s)
