@@ -16,7 +16,7 @@ class Finding < ApplicationRecord
   include Findings::DestroyValidation
   include Findings::Display
   include Findings::Expiration
-  include Findings::FollowUpDates
+  include Findings::FollowUp
   include Findings::FollowUpPDF
   include Findings::ImportantDates
   include Findings::JSON
@@ -74,10 +74,6 @@ class Finding < ApplicationRecord
 
   def next_code(review = nil)
     raise 'Must be implemented in the subclasses'
-  end
-
-  def stale?
-    being_implemented? && follow_up_date && follow_up_date < Date.today
   end
 
   def issue_date
