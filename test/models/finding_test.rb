@@ -347,6 +347,18 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.valid?
   end
 
+  test 'import users' do
+    finding = @finding.dup
+    review  = @finding.review
+
+    assert_equal 0, finding.finding_user_assignments.count
+
+    finding.import_users
+
+    assert_equal review.review_user_assignments.size,
+      finding.finding_user_assignments.size
+  end
+
   test 'stale function' do
     @finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)

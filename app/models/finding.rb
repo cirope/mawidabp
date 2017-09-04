@@ -54,14 +54,8 @@ class Finding < ApplicationRecord
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :finding
 
-  def initialize(attributes = nil, import_users = false)
+  def initialize(attributes = nil)
     super(attributes)
-
-    if import_users && self.try(:control_objective_item).try(:review)
-      self.control_objective_item.review.review_user_assignments.map do |rua|
-        self.finding_user_assignments.build(:user_id => rua.user_id)
-      end
-    end
 
     if self.control_objective_item.try(:control)
       self.effect ||= self.control_objective_item.control.effects
@@ -71,6 +65,14 @@ class Finding < ApplicationRecord
     self.final ||= false
     self.finding_prefix ||= false
     self.origination_date ||= Time.zone.now.to_date
+  end
+
+  def import_users
+    if self.try(:control_objective_item).try(:review)
+      self.control_objective_item.review.review_user_assignments.map do |rua|
+        self.finding_user_assignments.build(:user_id => rua.user_id)
+      end
+    end
   end
 
   def <=>(other)

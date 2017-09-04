@@ -32,8 +32,8 @@ class Weakness < Finding
     record.errors.add attr, :invalid unless value =~ regex
   end
 
-  def initialize(attributes = nil, import_users = false)
-    super(attributes, import_users)
+  def initialize(attributes = nil)
+    super(attributes)
 
     self.review_code ||= self.next_code
   end
