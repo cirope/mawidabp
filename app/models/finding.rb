@@ -5,8 +5,10 @@ class Finding < ApplicationRecord
   include Findings::Achievements
   include Findings::Answers
   include Findings::BusinessUnits
+  include Findings::Code
   include Findings::Comments
   include Findings::Confirmation
+  include Findings::ControlObjective
   include Findings::Cost
   include Findings::CreateValidation
   include Findings::CSV
@@ -22,6 +24,7 @@ class Finding < ApplicationRecord
   include Findings::ImportantDates
   include Findings::JSON
   include Findings::Notifications
+  include Findings::Overrides
   include Findings::PDF
   include Findings::Reiterations
   include Findings::Relations
@@ -49,30 +52,6 @@ class Finding < ApplicationRecord
 
   cattr_accessor :current_user, :current_organization
 
-  # Relaciones
   belongs_to :organization
-  belongs_to :control_objective_item
-  has_one :review, :through => :control_objective_item
-  has_one :control_objective, :through => :control_objective_item
-  has_many :finding_review_assignments, :dependent => :destroy,
-    :inverse_of => :finding
-
-  def <=>(other)
-    other.kind_of?(Finding) ? self.id <=> other.id : -1
-  end
-
-  def next_code(review = nil)
-    raise 'Must be implemented in the subclasses'
-  end
-
-  def stale_confirmed_days
-    parameter_in(organization_id, 'finding_stale_confirmed_days').to_i
-  end
-
-  def last_commitment_date
-    finding_answers.
-      where.not(commitment_date: nil).
-      reorder(commitment_date: :desc).
-      first&.commitment_date
-  end
+  has_many :finding_review_assignments, dependent: :destroy, inverse_of: :finding
 end

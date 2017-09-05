@@ -1,12 +1,6 @@
 module Findings::Display
   extend ActiveSupport::Concern
 
-  def to_s
-    "#{review_code} - #{title} - #{control_objective_item.try(:review)}"
-  end
-
-  alias_method :label, :to_s
-
   def informal
     text = "<strong>#{Finding.human_attribute_name 'title'}</strong>: "
     text << title.to_s
