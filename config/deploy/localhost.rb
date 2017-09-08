@@ -7,8 +7,12 @@ set :default_env, {
   'https_proxy': 'http://rpm-proxy.bancotdf.com.ar:8080'
 }
 
+set :ssh_options, {
+  port: 22000
+}
+
 role :web, %w{deployer@127.0.0.1}
 role :app, %w{deployer@127.0.0.1}
 role :db,  %w{deployer@127.0.0.1}
 
-server '127.0.0.1', user: 'deployer', roles: %w{web app db}, port: 22000
+server '127.0.0.1', user: 'deployer', roles: %w{web app db}
