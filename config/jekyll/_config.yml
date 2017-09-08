@@ -1,5 +1,5 @@
 encoding: utf-8
-markdown: kramdown
+markdown: redcarpet
 permalink: pretty
 baseurl: "/help"
 plugins:

@@ -5,7 +5,7 @@ gem 'jekyll'#, '~> 3.4.5'
 gem 'sass'
 gem 'coffee-script'
 gem 'uglifier'
-gem 'kramdown'
+gem 'redcarpet'
 gem 'bootstrap-sass'
 
 group :plugins do
