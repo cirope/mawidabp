@@ -1,9 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.5.1)
-      public_suffix (~> 2.0, >= 2.0.2)
-    autoprefixer-rails (7.1.2.6)
+    addressable (2.5.2)
+      public_suffix (>= 2.0.2, < 4.0)
+    autoprefixer-rails (7.1.4)
       execjs
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
@@ -53,7 +53,7 @@ GEM
     mercenary (0.3.6)
     pathutil (0.14.0)
       forwardable-extended (~> 2.6)
-    public_suffix (2.0.5)
+    public_suffix (3.0.0)
     rack (1.6.8)
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
@@ -85,4 +85,4 @@ DEPENDENCIES
   uglifier
 
 BUNDLED WITH
-   1.15.3
+   1.15.4
