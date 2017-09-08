@@ -1,6 +1,7 @@
 set :branch,    'c-bancotdf'
 set :stage,     :production
 set :rails_env, 'production'
+set :pty,       true
 
 set :default_env, {
   'http_proxy':  'http://rpm-proxy.bancotdf.com.ar:8080',
