@@ -1,5 +1,5 @@
 encoding: utf-8
-markdown: redcarpet
+markdown: kramdown
 permalink: pretty
 baseurl: "/help"
 plugins:
@@ -20,6 +20,7 @@ assets:
 exclude:
   - Gemfile
   - Gemfile.lock
+  - .asset-cache
   - .git
   - .gitignore
 languages: ['es']
