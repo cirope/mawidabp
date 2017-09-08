@@ -5,7 +5,10 @@ set :pty,       true
 
 set :default_env, {
   'http_proxy':  'http://rpm-proxy.bancotdf.com.ar:8080',
-  'https_proxy': 'http://rpm-proxy.bancotdf.com.ar:8080'
+  'https_proxy': 'http://rpm-proxy.bancotdf.com.ar:8080',
+  'LANG':        'en_US.UTF-8',
+  'LANGUAGE':    'en_US.UTF-8',
+  'LC_ALL':      'en_US.UTF-8'
 }
 
 set :ssh_options, {
