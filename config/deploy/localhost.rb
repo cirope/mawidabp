@@ -1,7 +1,11 @@
-set :stage, :production
+set :branch,    'c-bancotdf'
+set :stage,     :production
 set :rails_env, 'production'
-set :branch, 'master'
-set :log_level, :error
+
+set :default_env, {
+  'http_proxy':  'http://rpm-proxy.bancotdf.com.ar:8080',
+  'https_proxy': 'http://rpm-proxy.bancotdf.com.ar:8080'
+}
 
 role :web, %w{deployer@127.0.0.1}
 role :app, %w{deployer@127.0.0.1}

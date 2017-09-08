@@ -1,9 +1,7 @@
 language: ruby
 cache: bundler
-sudo: required
-dist: trusty
+sudo: false
 rvm:
-  - 2.3.4
   - 2.4.1
 addons:
   apt:
@@ -11,7 +9,7 @@ addons:
     - imagemagick
     - slapd
     - ldap-utils
-  postgresql: 9.5
+  postgresql: 9.6
 before_script:
   - 'cp config/application.example.yml config/application.yml'
   - "psql -c 'create database mawidabp_test;' -U postgres"
