@@ -146,7 +146,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
             :control_objective_text => 'Updated text',
             :relevance => ControlObjectiveItem.relevances_values.last,
             :control_attributes => {
-              :id => controls(:iso_27000_security_organization_4_4_item_control_1).id,
+              :id => controls(:organization_security_4_4_item_control_1).id,
               :control => 'Updated control',
               :effects => 'Updated effects',
               :design_tests => 'Updated design tests',

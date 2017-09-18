@@ -131,7 +131,7 @@ class ReviewsControllerTest < ActionController::TestCase
                 survey: 'New survey',
                 period_id: periods(:current_period).id,
                 plan_item_id: plan_items(:past_plan_item_3).id,
-                process_control_ids: [process_controls(:bcra_A4609_security_management).id],
+                process_control_ids: [process_controls(:security_management).id],
                 control_objective_ids: [control_objectives(:security_policy_3_1).id],
                 file_model_attributes: {
                   file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
@@ -306,7 +306,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'suggested process control findings' do
     login
-    process_control = process_controls :iso_27000_security_policy
+    process_control = process_controls :security_policy
 
     get :suggested_process_control_findings, params: { id: process_control.id }
     assert_response :success
@@ -366,7 +366,7 @@ class ReviewsControllerTest < ActionController::TestCase
     )
 
     get :auto_complete_for_control_objective, params: {
-      q: 'management', format: :json
+      q: 'dependency', format: :json
     }
     assert_response :success
 
@@ -375,7 +375,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 1, control_objectives.size
     assert(
       control_objectives.all? do |co|
-        (co['label'] + co['informal']).match /management/i
+        (co['label'] + co['informal']).match /dependency/i
       end
     )
 
@@ -392,7 +392,7 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'auto complete for process controls' do
     login
     get :auto_complete_for_process_control, params: {
-      q: 'seg', format: :json
+      q: 'sec', format: :json
     }
     assert_response :success
 
@@ -401,12 +401,12 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 3, process_controls.size
     assert(
       process_controls.all? do |pc|
-        (pc['label'] + pc['informal']).match /seg/i
+        (pc['label'] + pc['informal']).match /sec/i
       end
     )
 
     get :auto_complete_for_process_control, params: {
-      q: 'clasi', format: :json
+      q: 'data', format: :json
     }
     assert_response :success
 
@@ -415,7 +415,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 1, process_controls.size
     assert(
       process_controls.all? do |pc|
-        (pc['label'] + pc['informal']).match /clasi/i
+        (pc['label'] + pc['informal']).match /data/i
       end
     )
 

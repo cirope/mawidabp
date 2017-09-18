@@ -3,7 +3,7 @@ management_dependency:
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 1
-  process_control: bcra_A4609_security_management
+  process_control: security_management
   obsolete: false
   support: 'text.txt'
 
@@ -12,7 +12,7 @@ impact_analysis:
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 2
-  process_control: bcra_A4609_security_management
+  process_control: security_management
   obsolete: false
 
 security_policy_3_1:
@@ -20,7 +20,7 @@ security_policy_3_1:
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 1
-  process_control: iso_27000_security_policy
+  process_control: security_policy
   obsolete: false
 
 organization_security_4_1:
@@ -28,7 +28,7 @@ organization_security_4_1:
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 2
-  process_control: iso_27000_security_policy
+  process_control: security_policy
   obsolete: false
 
 organization_security_4_2:
@@ -36,7 +36,7 @@ organization_security_4_2:
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 3
-  process_control: iso_27000_security_policy
+  process_control: security_policy
   obsolete: false
 
 organization_security_4_3:
@@ -44,7 +44,7 @@ organization_security_4_3:
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 4
-  process_control: iso_27000_security_policy
+  process_control: security_policy
   obsolete: false
 
 organization_security_4_4:
@@ -52,5 +52,5 @@ organization_security_4_4:
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 5
-  process_control: iso_27000_security_policy
+  process_control: security_policy
   obsolete: false

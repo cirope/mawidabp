@@ -391,11 +391,11 @@ class ReviewTest < ActiveSupport::TestCase
   test 'process control ids' do
     assert @review.control_objective_items.present?
     assert_difference '@review.control_objective_items.size', 5 do
-      @review.process_control_ids = [process_controls(:iso_27000_security_policy).id]
+      @review.process_control_ids = [process_controls(:security_policy).id]
     end
 
     assert_no_difference '@review.control_objective_items.size' do
-      @review.process_control_ids = [process_controls(:iso_27000_security_policy).id]
+      @review.process_control_ids = [process_controls(:security_policy).id]
     end
   end
 
