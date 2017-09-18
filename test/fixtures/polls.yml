@@ -1,6 +1,6 @@
 poll_one:
   questionnaire: questionnaire_one
-  user: poll_user
+  user: poll
   answered: false
   comments: Encuesta al administrador
   pollable_id: <%= ActiveRecord::FixtureSet.identify(:conclusion_current_final_review) %>

@@ -4,7 +4,7 @@ hardware_rent:
   description: A hardware rent
   item_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_weakness) %>
   item_type: Weakness
-  user: administrator_user
+  user: administrator
 
 man_hours:
   cost: 29.80
@@ -12,4 +12,4 @@ man_hours:
   description: Man hours fixing the weakness
   item_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_weakness) %>
   item_type: Weakness
-  user: bare_user
+  user: bare

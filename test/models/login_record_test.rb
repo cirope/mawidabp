@@ -5,7 +5,7 @@ class LoginRecordTest < ActiveSupport::TestCase
     set_organization
 
     @login_record = LoginRecord.find(
-      login_records(:administrator_user_success_login_record).id)
+      login_records(:administrator_success_login_record).id)
   end
 
   test 'create' do
@@ -13,7 +13,7 @@ class LoginRecordTest < ActiveSupport::TestCase
       @login_record = LoginRecord.list.create(
         start: 2.hours.ago,
         end: Time.now,
-        user_id: users(:administrator_user).id,
+        user_id: users(:administrator).id,
         data: 'Some data'
       )
     end

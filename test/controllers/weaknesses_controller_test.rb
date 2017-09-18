@@ -150,17 +150,17 @@ class WeaknessesControllerTest < ActionController::TestCase
           business_unit_ids: [business_units(:business_unit_three).id],
           finding_user_assignments_attributes: [
             {
-              user_id: users(:bare_user).id, process_owner: '0'
+              user_id: users(:bare).id, process_owner: '0'
             }, {
-              user_id: users(:audited_user).id, process_owner: '1'
+              user_id: users(:audited).id, process_owner: '1'
             }, {
-              user_id: users(:auditor_user).id, process_owner: '0'
+              user_id: users(:auditor).id, process_owner: '0'
             }, {
-              user_id: users(:manager_user).id, process_owner: '0'
+              user_id: users(:manager).id, process_owner: '0'
             }, {
-              user_id: users(:supervisor_user).id, process_owner: '0'
+              user_id: users(:supervisor).id, process_owner: '0'
             }, {
-              user_id: users(:administrator_user).id, process_owner: '0'
+              user_id: users(:administrator).id, process_owner: '0'
             }
           ],
           achievements_attributes: [
@@ -194,7 +194,7 @@ class WeaknessesControllerTest < ActionController::TestCase
           comments_attributes: [
             {
               comment: 'Test',
-              user_id: users(:administrator_user).id
+              user_id: users(:administrator).id
             }
           ]
         }
@@ -236,28 +236,28 @@ class WeaknessesControllerTest < ActionController::TestCase
             follow_up_date: '',
             finding_user_assignments_attributes: [
               {
-                id: finding_user_assignments(:unanswered_weakness_bare_user).id,
-                user_id: users(:bare_user).id,
+                id: finding_user_assignments(:unanswered_weakness_bare).id,
+                user_id: users(:bare).id,
                 process_owner: '0'
               }, {
-                id: finding_user_assignments(:unanswered_weakness_audited_user).id,
-                user_id: users(:audited_user).id,
+                id: finding_user_assignments(:unanswered_weakness_audited).id,
+                user_id: users(:audited).id,
                 process_owner: '1'
               }, {
-                id: finding_user_assignments(:unanswered_weakness_auditor_user).id,
-                user_id: users(:auditor_user).id,
+                id: finding_user_assignments(:unanswered_weakness_auditor).id,
+                user_id: users(:auditor).id,
                 process_owner: '0'
               }, {
-                id: finding_user_assignments(:unanswered_weakness_manager_user).id,
-                user_id: users(:manager_user).id,
+                id: finding_user_assignments(:unanswered_weakness_manager).id,
+                user_id: users(:manager).id,
                 process_owner: '0'
               }, {
-                id: finding_user_assignments(:unanswered_weakness_supervisor_user).id,
-                user_id: users(:supervisor_user).id,
+                id: finding_user_assignments(:unanswered_weakness_supervisor).id,
+                user_id: users(:supervisor).id,
                 process_owner: '0'
               }, {
-                id: finding_user_assignments(:unanswered_weakness_administrator_user).id,
-                user_id: users(:administrator_user).id,
+                id: finding_user_assignments(:unanswered_weakness_administrator).id,
+                user_id: users(:administrator).id,
                 process_owner: '0'
               }
             ],

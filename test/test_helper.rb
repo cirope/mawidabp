@@ -15,7 +15,7 @@ class ActiveSupport::TestCase
     Organization.current_id = organization.id
   end
 
-  def login user: users(:administrator_user), prefix: organizations(:cirope).prefix
+  def login user: users(:administrator), prefix: organizations(:cirope).prefix
     @request.host         = [prefix, ENV['APP_HOST']].join('.')
     session[:user_id]     = user.id
     session[:last_access] = Time.now

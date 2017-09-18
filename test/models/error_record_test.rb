@@ -4,7 +4,7 @@ class ErrorRecordTest < ActiveSupport::TestCase
   def setup
     set_organization
 
-    @error_record = error_records :administrator_user_failed_attempt
+    @error_record = error_records :administrator_failed_attempt
   end
 
   test 'create' do
@@ -12,7 +12,7 @@ class ErrorRecordTest < ActiveSupport::TestCase
       @error_record = ErrorRecord.list.create(
         error: 1,
         data: 'Some data',
-        user_id: users(:administrator_user).id
+        user_id: users(:administrator).id
       )
     end
   end

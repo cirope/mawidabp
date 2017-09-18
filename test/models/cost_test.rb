@@ -28,7 +28,7 @@ class CostTest < ActiveSupport::TestCase
         :cost => '15.50',
         :cost_type => 'audit',
         :item => findings(:unconfirmed_weakness),
-        :user => users(:administrator_user)
+        :user => users(:administrator)
       )
     end
 

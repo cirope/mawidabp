@@ -675,7 +675,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_graphs, :params => {
       :weaknesses_graphs => {
-        :user_id => users(:administrator_user).id
+        :user_id => users(:administrator).id
       },
       :final => false
     }
@@ -727,7 +727,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
           :process_control           => '3',
           :control_objective         => '4',
           :tags                      => '5',
-          :user_id                   => users(:administrator_user).id.to_s,
+          :user_id                   => users(:administrator).id.to_s,
           :finding_status            => '1',
           :finding_title             => '1',
           :risk                      => '1',

@@ -26,22 +26,22 @@ class FindingTest < ActiveSupport::TestCase
         follow_up_date: nil,
         finding_user_assignments_attributes: {
           new_1: {
-            user_id: users(:bare_user).id, process_owner: false
+            user_id: users(:bare).id, process_owner: false
           },
           new_2: {
-            user_id: users(:audited_user).id, process_owner: true
+            user_id: users(:audited).id, process_owner: true
           },
           new_3: {
-            user_id: users(:auditor_user).id, process_owner: false
+            user_id: users(:auditor).id, process_owner: false
           },
           new_4: {
-            user_id: users(:manager_user).id, process_owner: false
+            user_id: users(:manager).id, process_owner: false
           },
           new_5: {
-            user_id: users(:supervisor_user).id, process_owner: false
+            user_id: users(:supervisor).id, process_owner: false
           },
           new_6: {
-            user_id: users(:administrator_user).id, process_owner: false
+            user_id: users(:administrator).id, process_owner: false
           }
         }
       )
@@ -107,7 +107,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'avoid title validation when audited' do
-    Finding.current_user = users :audited_user
+    Finding.current_user = users :audited
 
     @finding.title = '  '
     @finding.valid?
@@ -128,7 +128,7 @@ class FindingTest < ActiveSupport::TestCase
     assert_error @finding, :follow_up_date, :blank
     assert_error @finding, :answer, :blank
 
-    Finding.current_user = users :supervisor_user
+    Finding.current_user = users :supervisor
 
     assert @finding.reload.update(
       state: Finding::STATUS[:implemented_audited],
@@ -248,7 +248,7 @@ class FindingTest < ActiveSupport::TestCase
 
     finding.comments.build(
       comment: 'Test comment',
-      user: users(:administrator_user)
+      user: users(:administrator)
     )
 
     assert finding.valid?
@@ -298,7 +298,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validate final state change only by supervisors' do
-    Finding.current_user = users :auditor_user
+    Finding.current_user = users :auditor
 
     @finding = Finding.find(findings(:being_implemented_weakness).id)
     @finding.state = Finding::STATUS[:implemented_audited]
@@ -307,7 +307,7 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.invalid?
     assert_error @finding, :state, :must_be_done_by_proper_role
 
-    Finding.current_user = users :supervisor_user
+    Finding.current_user = users :supervisor
 
     assert @finding.valid?
   end
@@ -361,7 +361,7 @@ class FindingTest < ActiveSupport::TestCase
 
     finding.finding_answers.build(
       answer: 'New administrator answer',
-      user: users(:supervisor_user)
+      user: users(:supervisor)
     )
 
     # La respuesta es de un usuario supervisor
@@ -370,14 +370,14 @@ class FindingTest < ActiveSupport::TestCase
 
     finding.finding_answers.build(
       answer: 'New audited answer',
-      user: users(:audited_user),
+      user: users(:audited),
       commitment_date: Date.today
     )
 
     assert finding.confirmed?
     assert_not_nil finding.confirmation_date
     assert !finding.notifications.not_confirmed.reload.any? { |n| n.user.can_act_as_audited? }
-    assert_equal users(:audited_user).id,
+    assert_equal users(:audited).id,
       finding.notifications.detect { |n| n.user.can_act_as_audited? }.user_who_confirm.id
     assert finding.save
   end
@@ -391,7 +391,7 @@ class FindingTest < ActiveSupport::TestCase
 
     finding.finding_answers.build(
       answer: '',
-      user: users(:audited_user)
+      user: users(:audited)
     )
 
     assert !finding.confirmed?
@@ -473,7 +473,7 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.update(audit_comments: 'Updated comments')
     assert_equal 1, @finding.status_change_history.size
 
-    Finding.current_user = users :supervisor_user
+    Finding.current_user = users :supervisor
 
     assert @finding.update(state: Finding::STATUS[:assumed_risk],
       solution_date: Date.today)
@@ -511,7 +511,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'notify changes to users' do
-    new_user = User.find(users(:administrator_second_user).id)
+    new_user = User.find(users(:administrator_second).id)
 
     assert !@finding.finding_user_assignments.blank?
     assert !@finding.finding_user_assignments.detect{|fua| fua.user == new_user}
@@ -525,7 +525,7 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     @finding.finding_user_assignments.each do |fua|
-      fua.mark_for_destruction if fua.user_id == users(:administrator_user).id
+      fua.mark_for_destruction if fua.user_id == users(:administrator).id
     end
     @finding.finding_user_assignments.build(user: new_user)
 
@@ -535,7 +535,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'avoid notify changes to users' do
-    new_user = User.find(users(:administrator_second_user).id)
+    new_user = User.find(users(:administrator_second).id)
 
     assert !@finding.finding_user_assignments.blank?
     assert !@finding.finding_user_assignments.detect{|fua| fua.user == new_user}
@@ -549,7 +549,7 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     @finding.finding_user_assignments.each do |fua|
-      fua.mark_for_destruction if fua.user_id == users(:administrator_user).id
+      fua.mark_for_destruction if fua.user_id == users(:administrator).id
     end
     @finding.finding_user_assignments.build(user: new_user)
     @finding.avoid_changes_notification = true
@@ -560,7 +560,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'avoid notify changes to users if incomplete' do
-    new_user = User.find(users(:administrator_second_user).id)
+    new_user = User.find(users(:administrator_second).id)
     fuas = @finding.finding_user_assignments.map do |fua|
       fua.attributes.reject { |k,v| k == 'id' }
     end
@@ -587,7 +587,7 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     finding.finding_user_assignments.each do |fua|
-      fua.mark_for_destruction if fua.user_id == users(:administrator_user).id
+      fua.mark_for_destruction if fua.user_id == users(:administrator).id
     end
     finding.finding_user_assignments.build(user: new_user)
 
@@ -604,7 +604,7 @@ class FindingTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries = []
 
     @finding.finding_user_assignments.each do |fua|
-      fua.mark_for_destruction if fua.user_id == users(:administrator_user).id
+      fua.mark_for_destruction if fua.user_id == users(:administrator).id
     end
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
@@ -623,8 +623,8 @@ class FindingTest < ActiveSupport::TestCase
 
     assert @finding.has_auditor?
     assert @finding.has_audited?
-    
-    @finding.finding_user_assignments = 
+
+    @finding.finding_user_assignments =
       @finding.finding_user_assignments.reject do |fua|
         fua.user.can_act_as_audited?
       end
@@ -655,14 +655,14 @@ class FindingTest < ActiveSupport::TestCase
   test 'users for scaffold notification' do
     finding = Finding.find(findings(:unanswered_for_level_1_notification).id)
     user_for_levels = {
-      1 => [users(:audited_user), users(:plain_manager_user)].sort,
-      2 => [users(:audited_user), users(:plain_manager_user),
-        users(:coordinator_manager_user)].sort,
-      3 => [users(:audited_user), users(:plain_manager_user),
-        users(:coordinator_manager_user), users(:general_manager_user)].sort,
+      1 => [users(:audited), users(:plain_manager)].sort,
+      2 => [users(:audited), users(:plain_manager),
+        users(:coordinator_manager)].sort,
+      3 => [users(:audited), users(:plain_manager),
+        users(:coordinator_manager), users(:general_manager)].sort,
       # No escala al presidente ya que pertenece a una organización diferente a la de la observación
-      4 => [users(:audited_user), users(:plain_manager_user),
-       users(:coordinator_manager_user), users(:general_manager_user)].sort
+      4 => [users(:audited), users(:plain_manager),
+       users(:coordinator_manager), users(:general_manager)].sort
     }
 
     n = 0
@@ -673,13 +673,13 @@ class FindingTest < ActiveSupport::TestCase
 
     # Agrego al presidente a la organización
     OrganizationRole.create({
-      user: users(:president_user),
+      user: users(:president),
       organization: finding.review.organization,
       role: roles(:executive_manager_role)
     })
 
     # Ahora debe notificarlo
-    user_for_levels[4] << users(:president_user)
+    user_for_levels[4] << users(:president)
     n = 0
 
     until (users = finding.users_for_scaffold_notification(n += 1)).empty?
@@ -691,10 +691,10 @@ class FindingTest < ActiveSupport::TestCase
   test 'manager users for level' do
     finding = Finding.find(findings(:unanswered_for_level_1_notification).id)
     user_for_levels = {
-      1 => [users(:plain_manager_user)],
-      2 => [users(:coordinator_manager_user)],
-      3 => [users(:general_manager_user)],
-      4 => [users(:president_user)]
+      1 => [users(:plain_manager)],
+      2 => [users(:coordinator_manager)],
+      3 => [users(:general_manager)],
+      4 => [users(:president)]
     }
 
     n = 0
@@ -728,7 +728,7 @@ class FindingTest < ActiveSupport::TestCase
       @finding.finding_answers.create(
         answer: 'New answer',
         commitment_date: 10.days.from_now.to_date,
-        user: users(:audited_user),
+        user: users(:audited),
         notify_users: false
       )
     end
@@ -738,7 +738,7 @@ class FindingTest < ActiveSupport::TestCase
       @finding.finding_answers.create(
         answer: 'New answer',
         commitment_date: 20.days.from_now.to_date,
-        user: users(:audited_user),
+        user: users(:audited),
         notify_users: false
       )
     end
@@ -836,7 +836,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'notify users if they are selected for notification' do
-    @finding.users_for_notification = [users(:administrator_user).id]
+    @finding.users_for_notification = [users(:administrator).id]
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -868,7 +868,7 @@ class FindingTest < ActiveSupport::TestCase
     )
     assert finding.save
 
-    finding.users_for_notification = [users(:administrator_user).id]
+    finding.users_for_notification = [users(:administrator).id]
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -1064,7 +1064,7 @@ class FindingTest < ActiveSupport::TestCase
     Finding.confirmed_and_stale.each do |finding|
       finding.finding_answers.create!(
         answer: 'New answer',
-        user: users(:audited_user)
+        user: users(:audited)
       )
     end
 

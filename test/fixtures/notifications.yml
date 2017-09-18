@@ -1,74 +1,74 @@
-supervisor_user_being_implemented_weakness_confirmed:
+supervisor_being_implemented_weakness_confirmed:
   status: <%= Notification::STATUS[:confirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date: <%= Time.now.to_s(:db) %>
-  user: supervisor_user
-  user_who_confirm: supervisor_user
+  user: supervisor
+  user_who_confirm: supervisor
   notes: Notification notes
 
-supervisor_user_unconfirmed_for_notification_weakness:
+supervisor_unconfirmed_for_notification_weakness:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date: <%= Time.now.to_s(:db) %>
-  user: supervisor_user
-  user_who_confirm: supervisor_user
+  user: supervisor
+  user_who_confirm: supervisor
   notes: Notification notes
 
-supervisor_user_unconfirmed_oportunity:
+supervisor_unconfirmed_oportunity:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date: <%= Time.now.to_s(:db) %>
-  user: supervisor_user
-  user_who_confirm: supervisor_user
+  user: supervisor
+  user_who_confirm: supervisor
   notes: Notification notes
 
-supervisor_user_notify_oportunity_unconfirmed:
+supervisor_notify_oportunity_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
-  user: supervisor_user
+  user: supervisor
   notes: Notification notes
 
-bare_user_unanswered_weakness_unconfirmed:
+bare_unanswered_weakness_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
-  user: bare_user
+  user: bare
   notes: Notification notes
 
-audited_user_unanswered_weakness_unconfirmed:
+audited_unanswered_weakness_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
-  user: audited_user
+  user: audited
   notes: Notification notes
 
-audited_second_user_unanswered_weakness_unconfirmed:
+audited_second_unanswered_weakness_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
-  user: audited_second_user
+  user: audited_second
   notes: Notification notes
 
-supervisor_user_unanswered_weakness_unconfirmed:
+supervisor_unanswered_weakness_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
-  user: supervisor_user
+  user: supervisor
   notes: Notification notes
 
-bare_user_confirmed_oportunity_unconfirmed_for_notification_weakness:
+bare_confirmed_oportunity_unconfirmed_for_notification_weakness:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date: 
-  user: bare_user
+  user: bare
   created_at: <%= NOTIFICATIONS_STALE_DAYS.next.days.ago %>
   notes: Notification notes
 
-audited_user_unconfirmed_for_notification_weakness:
+audited_unconfirmed_for_notification_weakness:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
-  user: audited_user
+  user: audited
   created_at: <%= NOTIFICATIONS_STALE_DAYS.next.days.ago %>
   notes: Notification notes

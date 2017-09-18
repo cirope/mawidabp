@@ -144,17 +144,17 @@ class ReviewsControllerTest < ActionController::TestCase
                 review_user_assignments_attributes: [
                   {
                     assignment_type: ReviewUserAssignment::TYPES[:auditor],
-                    user_id: users(:first_time_user).id
+                    user_id: users(:first_time).id
                   }, {
                     assignment_type:
                       ReviewUserAssignment::TYPES[:supervisor],
-                    user_id: users(:supervisor_user).id
+                    user_id: users(:supervisor).id
                   }, {
                     assignment_type: ReviewUserAssignment::TYPES[:manager],
-                    user_id: users(:supervisor_second_user).id
+                    user_id: users(:supervisor_second).id
                   }, {
                     assignment_type: ReviewUserAssignment::TYPES[:audited],
-                    user_id: users(:audited_user).id
+                    user_id: users(:audited).id
                   }
                 ],
                 taggings_attributes: [
@@ -194,7 +194,7 @@ class ReviewsControllerTest < ActionController::TestCase
             {
               id: review_user_assignments(:review_with_conclusion_bare_auditor).id,
               assignment_type: ReviewUserAssignment::TYPES[:auditor],
-              user_id: users(:bare_user).id
+              user_id: users(:bare).id
             }
           ],
           control_objective_items_attributes: [

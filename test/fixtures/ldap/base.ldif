@@ -40,7 +40,7 @@ mail: administrator_second@administrator.com
 cn: admin_second
 userPassword: {SSHA}jZeYUeNAd/8acSrOfPNWxWbxKyaQgxRP
 
-dn: cn=general_manager_user,ou=people,dc=test,dc=com
+dn: cn=general_manager,ou=people,dc=test,dc=com
 objectClass: inetOrgPerson
 objectClass: organizationalPerson
 objectClass: person
@@ -65,5 +65,5 @@ cn: admins
 dn: cn=users,ou=groups,dc=test,dc=com
 objectClass: groupOfUniqueNames
 objectClass: top
-uniqueMember: cn=general_manager_user,ou=people,dc=test,dc=com
+uniqueMember: cn=general_manager,ou=people,dc=test,dc=com
 cn: users

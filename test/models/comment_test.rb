@@ -25,7 +25,7 @@ class CommentTest < ActiveSupport::TestCase
       @comment = Comment.new(
         :comment => 'New comment',
         :commentable => findings(:unconfirmed_for_notification_weakness),
-        :user => users(:administrator_user)
+        :user => users(:administrator)
       )
 
       assert @comment.save, @comment.errors.full_messages.join('; ')

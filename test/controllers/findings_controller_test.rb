@@ -42,7 +42,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings for follow_up_committee' do
-    login user: users(:committee_user)
+    login user: users(:committee)
     get :index, :params => { :completed => 'incomplete' }
     assert_response :success
     assert_not_nil assigns(:findings)
@@ -87,7 +87,7 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'list findings for user' do
     login
-    user = User.find(users(:first_time_user).id)
+    user = User.find(users(:first_time).id)
     get :index, :params => {
       :completed => 'incomplete',
       :user_id => user.id
@@ -101,7 +101,7 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'list findings for responsible auditor' do
     login
-    user = User.find(users(:first_time_user).id)
+    user = User.find(users(:first_time).id)
     get :index, :params => {
       :completed => 'incomplete',
       :user_id => user.id,
@@ -115,7 +115,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings for process owner' do
-    user = users :audited_user
+    user = users :audited
 
     login user: user
     get :index, :params => {
@@ -190,7 +190,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'show finding for follow_up_committee' do
-    login user: users(:committee_user)
+    login user: users(:committee)
     get :show, :params => {
       :completed => 'incomplete',
       :id => findings(:being_implemented_oportunity).id
@@ -201,7 +201,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'edit finding' do
-    login user: users(:auditor_user)
+    login user: users(:auditor)
     get :edit, :params => {
       :completed => 'incomplete',
       :id => findings(:unanswered_weakness).id
@@ -212,7 +212,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     auditor_response = @response.body.dup
 
-    login user: users(:audited_user)
+    login user: users(:audited)
     get :edit, :params => {
       :completed => 'incomplete',
       :id => findings(:unanswered_weakness).id
@@ -225,7 +225,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'unauthorized edit finding' do
-    login user: users(:audited_second_user)
+    login user: users(:audited_second)
 
     # No está autorizado el usuario a ver la observación
     assert_raise ActiveRecord::RecordNotFound do
@@ -237,7 +237,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'unauthorized edit incomplete finding' do
-    login user: users(:audited_user)
+    login user: users(:audited)
 
     # No está autorizado el usuario a ver la observación por estar incompleta
     assert_raise ActiveRecord::RecordNotFound do
@@ -249,7 +249,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'update finding' do
-    login user: users(:supervisor_user)
+    login user: users(:supervisor)
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -285,33 +285,33 @@ class FindingsControllerTest < ActionController::TestCase
               :business_unit_ids => [business_units(:business_unit_three).id],
               :finding_user_assignments_attributes => [
                 {
-                  :id => finding_user_assignments(:unconfirmed_weakness_bare_user).id,
-                  :user_id => users(:bare_user).id,
+                  :id => finding_user_assignments(:unconfirmed_weakness_bare).id,
+                  :user_id => users(:bare).id,
                   :process_owner => '0'
                 },
                 {
-                  :id => finding_user_assignments(:unconfirmed_weakness_audited_user).id,
-                  :user_id => users(:audited_user).id,
+                  :id => finding_user_assignments(:unconfirmed_weakness_audited).id,
+                  :user_id => users(:audited).id,
                   :process_owner => '1'
                 },
                 {
-                  :id => finding_user_assignments(:unconfirmed_weakness_auditor_user).id,
-                  :user_id => users(:auditor_user).id,
+                  :id => finding_user_assignments(:unconfirmed_weakness_auditor).id,
+                  :user_id => users(:auditor).id,
                   :process_owner => '0'
                 },
                 {
-                  :id => finding_user_assignments(:unconfirmed_weakness_manager_user).id,
-                  :user_id => users(:manager_user).id,
+                  :id => finding_user_assignments(:unconfirmed_weakness_manager).id,
+                  :user_id => users(:manager).id,
                   :process_owner => '0'
                 },
                 {
-                  :id => finding_user_assignments(:unconfirmed_weakness_supervisor_user).id,
-                  :user_id => users(:supervisor_user).id,
+                  :id => finding_user_assignments(:unconfirmed_weakness_supervisor).id,
+                  :user_id => users(:supervisor).id,
                   :process_owner => '0'
                 },
                 {
-                  :id => finding_user_assignments(:unconfirmed_weakness_administrator_user).id,
-                  :user_id => users(:administrator_user).id,
+                  :id => finding_user_assignments(:unconfirmed_weakness_administrator).id,
+                  :user_id => users(:administrator).id,
                   :process_owner => '0'
                 }
               ],
@@ -331,7 +331,7 @@ class FindingsControllerTest < ActionController::TestCase
                 {
                   :answer => 'New answer',
                   :auditor_comments => 'New auditor comments',
-                  :user_id => users(:supervisor_user).id,
+                  :user_id => users(:supervisor).id,
                   :notify_users => '1',
                   :file_model_attributes => {
                     :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
@@ -355,7 +355,7 @@ class FindingsControllerTest < ActionController::TestCase
                   :cost => '12.5',
                   :cost_type => 'audit',
                   :description => 'New cost description',
-                  :user_id => users(:administrator_user).id
+                  :user_id => users(:administrator).id
                 }
               ]
             }
@@ -370,7 +370,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'update finding with audited user' do
-    login user: users(:audited_user)
+    login user: users(:audited)
     no_difference_count = ['Finding.count', 'WorkPaper.count',
       'FindingRelation.count']
     difference_count = ['FindingAnswer.count', 'Cost.count', 'FileModel.count']
@@ -398,27 +398,27 @@ class FindingsControllerTest < ActionController::TestCase
             :follow_up_date => 3.days.from_now.to_date,
             :finding_user_assignments_attributes => [
               {
-                :user_id => users(:bare_user).id,
+                :user_id => users(:bare).id,
                 :process_owner => '0'
               },
               {
-                :user_id => users(:audited_user).id,
+                :user_id => users(:audited).id,
                 :process_owner => '1'
               },
               {
-                :user_id => users(:auditor_user).id,
+                :user_id => users(:auditor).id,
                 :process_owner => '0'
               },
               {
-                :user_id => users(:manager_user).id,
+                :user_id => users(:manager).id,
                 :process_owner => '0'
               },
               {
-                :user_id => users(:supervisor_user).id,
+                :user_id => users(:supervisor).id,
                 :process_owner => '0'
               },
               {
-                :user_id => users(:administrator_user).id,
+                :user_id => users(:administrator).id,
                 :process_owner => '0'
               }
             ],
@@ -440,7 +440,7 @@ class FindingsControllerTest < ActionController::TestCase
                 :answer => 'New answer',
                 :auditor_comments => 'New audited comments',
                 :commitment_date => I18n.l(Date.tomorrow),
-                :user_id => users(:audited_user).id,
+                :user_id => users(:audited).id,
                 :file_model_attributes => {
                   :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
                     'text/plain')
@@ -458,7 +458,7 @@ class FindingsControllerTest < ActionController::TestCase
                 :cost => '12.5',
                 :cost_type => 'audit',
                 :description => 'New cost description',
-                :user_id => users(:administrator_user).id
+                :user_id => users(:administrator).id
               }
             ]
           }
@@ -472,7 +472,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'update finding and notify to the new user' do
-    login user: users(:supervisor_user)
+    login user: users(:supervisor)
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -499,36 +499,36 @@ class FindingsControllerTest < ActionController::TestCase
             :risk => Finding.risks_values.first,
             :priority => Finding.priorities_values.first,
             :follow_up_date => '',
-            :users_for_notification => [users(:bare_user).id],
+            :users_for_notification => [users(:bare).id],
             :finding_user_assignments_attributes => [
               {
-                :id => finding_user_assignments(:unconfirmed_weakness_bare_user).id,
-                :user_id => users(:bare_user).id,
+                :id => finding_user_assignments(:unconfirmed_weakness_bare).id,
+                :user_id => users(:bare).id,
                 :process_owner => '0'
               },
               {
-                :id => finding_user_assignments(:unconfirmed_weakness_audited_user).id,
-                :user_id => users(:audited_user).id,
+                :id => finding_user_assignments(:unconfirmed_weakness_audited).id,
+                :user_id => users(:audited).id,
                 :process_owner => '1'
               },
               {
-                :id => finding_user_assignments(:unconfirmed_weakness_auditor_user).id,
-                :user_id => users(:auditor_user).id,
+                :id => finding_user_assignments(:unconfirmed_weakness_auditor).id,
+                :user_id => users(:auditor).id,
                 :process_owner => '0'
               },
               {
-                :id => finding_user_assignments(:unconfirmed_weakness_manager_user).id,
-                :user_id => users(:manager_user).id,
+                :id => finding_user_assignments(:unconfirmed_weakness_manager).id,
+                :user_id => users(:manager).id,
                 :process_owner => '0'
               },
               {
-                :id => finding_user_assignments(:unconfirmed_weakness_supervisor_user).id,
-                :user_id => users(:supervisor_user).id,
+                :id => finding_user_assignments(:unconfirmed_weakness_supervisor).id,
+                :user_id => users(:supervisor).id,
                 :process_owner => '0'
               },
               {
-                :id => finding_user_assignments(:unconfirmed_weakness_administrator_user).id,
-                :user_id => users(:administrator_user).id,
+                :id => finding_user_assignments(:unconfirmed_weakness_administrator).id,
+                :user_id => users(:administrator).id,
                 :process_owner => '0'
               }
             ]

@@ -31,19 +31,19 @@ class ReviewTest < ActiveSupport::TestCase
         :review_user_assignments_attributes => {
             :new_1 => {
               :assignment_type => ReviewUserAssignment::TYPES[:auditor],
-              :user => users(:first_time_user)
+              :user => users(:first_time)
             },
             :new_2 => {
               :assignment_type => ReviewUserAssignment::TYPES[:supervisor],
-              :user => users(:supervisor_user)
+              :user => users(:supervisor)
             },
             :new_3 => {
               :assignment_type => ReviewUserAssignment::TYPES[:manager],
-              :user => users(:supervisor_second_user)
+              :user => users(:supervisor_second)
             },
             :new_4 => {
               :assignment_type => ReviewUserAssignment::TYPES[:audited],
-              :user => users(:audited_user)
+              :user => users(:audited)
             }
           }
       )
@@ -251,7 +251,7 @@ class ReviewTest < ActiveSupport::TestCase
     def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
-    Finding.current_user = users :supervisor_user
+    Finding.current_user = users :supervisor
 
     finding = Weakness.new finding.attributes.merge(
       'state' => Finding::STATUS[:assumed_risk]

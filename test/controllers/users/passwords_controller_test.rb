@@ -11,7 +11,7 @@ class Users::PasswordsControllerTest < ActionController::TestCase
   end
 
   test 'create password reset' do
-    user = users :blank_password_user
+    user = users :blank_password
     original_hash = user.change_password_hash
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
@@ -28,14 +28,14 @@ class Users::PasswordsControllerTest < ActionController::TestCase
 
   test 'edit password' do
     login
-    get :edit, params: { id: users(:blank_password_user) }
+    get :edit, params: { id: users(:blank_password) }
     assert_response :success
     assert_not_nil assigns(:auth_user)
   end
 
   test 'update password' do
     login
-    user = users :administrator_user
+    user = users :administrator
 
     assert_difference 'OldPassword.count' do
       patch :update, params: {
@@ -52,7 +52,7 @@ class Users::PasswordsControllerTest < ActionController::TestCase
   end
 
   test 'change blank password' do
-    user = users :blank_password_user
+    user = users :blank_password
     confirmation_hash = user.change_password_hash
 
     assert_difference 'OldPassword.count' do
@@ -82,7 +82,7 @@ class Users::PasswordsControllerTest < ActionController::TestCase
   end
 
   test 'change expired blank password' do
-    user = users :expired_blank_password_user
+    user = users :expired_blank_password
 
     patch :update, params: {
       id: user,

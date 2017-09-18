@@ -4,7 +4,7 @@ class UserTest < ActiveSupport::TestCase
   include ActionMailer::TestHelper
 
   setup do
-    @user = users :administrator_second_user
+    @user = users :administrator_second
 
     ActionMailer::Base.deliveries.clear
 
@@ -32,7 +32,7 @@ class UserTest < ActiveSupport::TestCase
         failed_attempts: 0,
         logged_in: false,
         notes: 'Some user notes',
-        manager_id: users(:administrator_user).id,
+        manager_id: users(:administrator).id,
         organization_roles_attributes: [
           {
             organization_id: organizations(:cirope).id,
@@ -59,14 +59,14 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'can not destroy user with findings' do
-    user = users :audited_user
+    user = users :audited
 
     assert_no_difference('User.count') { user.destroy }
     assert user.errors.full_messages.include?(I18n.t('user.will_be_orphan_findings'))
   end
 
   test 'can not disable manager user' do
-    user = users :manager_user
+    user = users :manager
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
       assert_no_difference 'user.reviews.count' do
@@ -79,8 +79,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'disable auditor user' do
-    user = users :first_time_user
-    new_user = users :expired_user
+    user = users :first_time
+    new_user = users :expired
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
       assert_no_difference 'user.reviews.count' do
@@ -124,8 +124,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'validates duplicated attributes' do
-    @user.user = users(:bare_user).user
-    @user.email = users(:bare_user).email
+    @user.user = users(:bare).user
+    @user.email = users(:bare).email
 
     assert @user.invalid?
     assert_error @user, :user, :taken
@@ -135,7 +135,7 @@ class UserTest < ActiveSupport::TestCase
   test 'validates can duplicate user if ldap' do
     Organization.current_id = organizations(:google).id
 
-    @user.user = users(:bare_user).user
+    @user.user = users(:bare).user
 
     assert @user.valid?
   end
@@ -175,17 +175,17 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'validates parent is in the same organization' do
-    user = users :bare_user
-    user.parent = users :administrator_second_user
+    user = users :bare
+    user.parent = users :administrator_second
 
     assert user.invalid?
     assert_error user, :manager_id, :invalid
   end
 
   test 'validates parent is not child' do
-    user = users :bare_user
-    user.child_ids  = [users(:first_time_user).id]
-    user.manager_id = users(:first_time_user).id
+    user = users :bare
+    user.child_ids  = [users(:first_time).id]
+    user.manager_id = users(:first_time).id
 
     assert user.invalid?
     assert_error user, :manager_id, :invalid
@@ -285,7 +285,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'privileges' do
-    user = users :administrator_user
+    user = users :administrator
     privileges = user.privileges organizations(:cirope)
 
     assert privileges.present?
@@ -300,56 +300,56 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'change user role from auditor to audited' do
-    auditor_user = users :auditor_user
+    auditor = users :auditor
 
-    assert auditor_user.findings.all_for_reallocation.present?
+    assert auditor.findings.all_for_reallocation.present?
 
-    auditor_user.organization_roles.each { |o_r| o_r.role = roles(:audited_role) }
+    auditor.organization_roles.each { |o_r| o_r.role = roles(:audited_role) }
 
-    assert !auditor_user.save
-    assert_error auditor_user, :organization_roles, :invalid
+    assert !auditor.save
+    assert_error auditor, :organization_roles, :invalid
 
-    auditor_user.reload
+    auditor.reload
 
-    assert auditor_user.reassign_to(users(:bare_user), with_reviews: true, with_findings: true)
-    assert auditor_user.reload.findings.all_for_reallocation.empty?
+    assert auditor.reassign_to(users(:bare), with_reviews: true, with_findings: true)
+    assert auditor.reload.findings.all_for_reallocation.empty?
 
-    auditor_user.organization_roles.each { |o_r| o_r.role = roles(:audited_role) }
+    auditor.organization_roles.each { |o_r| o_r.role = roles(:audited_role) }
 
-    assert auditor_user.save
+    assert auditor.save
   end
 
   test 'release for all pending fingings' do
-    auditor_user = users :auditor_user
+    auditor = users :auditor
 
-    assert auditor_user.findings.all_for_reallocation.any?
-    assert auditor_user.reviews.list_without_final_review.any?
+    assert auditor.findings.all_for_reallocation.any?
+    assert auditor.reviews.list_without_final_review.any?
 
     assert_nothing_raised do
-      assert auditor_user.release_pendings(with_reviews: true, with_findings: true)
+      assert auditor.release_pendings(with_reviews: true, with_findings: true)
     end
 
-    assert auditor_user.findings.reload.all_for_reallocation.empty?
-    assert auditor_user.reviews.reload.list_without_final_review.empty?
+    assert auditor.findings.reload.all_for_reallocation.empty?
+    assert auditor.reviews.reload.list_without_final_review.empty?
   end
 
   test 'try to release all pending findings for a unique audited' do
-    audited_user = users :audited_user
-    old_findings_count = audited_user.findings.all_for_reallocation.count
-    old_reviews_count = audited_user.reviews.list_without_final_review.count
+    audited = users :audited
+    old_findings_count = audited.findings.all_for_reallocation.count
+    old_reviews_count = audited.reviews.list_without_final_review.count
 
-    assert audited_user.findings.all_for_reallocation.any?
-    assert audited_user.reviews.list_without_final_review.any?
+    assert audited.findings.all_for_reallocation.any?
+    assert audited.reviews.list_without_final_review.any?
 
     assert_nothing_raised do
-      assert !audited_user.release_pendings(with_reviews: true, with_findings: true)
+      assert !audited.release_pendings(with_reviews: true, with_findings: true)
     end
 
-    assert audited_user.findings.reload.all_for_reallocation.any?
-    assert audited_user.reviews.reload.list_without_final_review.any?
-    assert_equal old_findings_count, audited_user.findings.all_for_reallocation.count
-    assert_equal old_reviews_count, audited_user.reviews.list_without_final_review.count
-    assert audited_user.errors.full_messages.include?(I18n.t('user.user_release_failed'))
+    assert audited.findings.reload.all_for_reallocation.any?
+    assert audited.reviews.reload.list_without_final_review.any?
+    assert_equal old_findings_count, audited.findings.all_for_reallocation.count
+    assert_equal old_reviews_count, audited.reviews.list_without_final_review.count
+    assert audited.errors.full_messages.include?(I18n.t('user.user_release_failed'))
   end
 
   test 'send welcome email' do
@@ -368,8 +368,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'user findings reassignment' do
-    old_user = users :audited_user
-    user = users :audited_second_user
+    old_user = users :audited
+    user = users :audited_second
     original_finding_ids = old_user.findings.all_for_reallocation.pluck('id').sort
 
     assert old_user.findings.all_for_reallocation.any?
@@ -387,8 +387,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'user reviews reassignment' do
-    old_user = users :audited_user
-    user = users :audited_second_user
+    old_user = users :audited
+    user = users :audited_second
     reviews_to_reassign = old_user.reviews.reject &:has_final_review?
 
     assert reviews_to_reassign.any? { |r| r.users.exclude?(user) }
@@ -405,7 +405,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'reassign to none' do
-    old_user = users :audited_user
+    old_user = users :audited
 
     old_user.reassign_to nil, with_reviews: true
 
@@ -414,7 +414,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'notify finding changes function' do
     Organization.current_id = nil
-    user = users :administrator_user
+    user = users :administrator
 
     assert user.findings.for_notification.any?
 

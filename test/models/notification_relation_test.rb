@@ -7,13 +7,13 @@ class NotificationRelationTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @notification_relation = NotificationRelation.find notification_relations(
-      :bare_user_unanswered_weakness_unconfirmed_relation).id
+      :bare_unanswered_weakness_unconfirmed_relation).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     fixture_notification_relation = notification_relations(
-      :bare_user_unanswered_weakness_unconfirmed_relation)
+      :bare_unanswered_weakness_unconfirmed_relation)
     assert_kind_of NotificationRelation, @notification_relation
     assert_equal fixture_notification_relation.model_id,
       @notification_relation.model_id
@@ -29,7 +29,7 @@ class NotificationRelationTest < ActiveSupport::TestCase
       @notification_relation = NotificationRelation.create(
         :model => Weakness.find(findings(:being_implemented_weakness).id),
         :notification => Notification.find(notifications(
-            :bare_user_unanswered_weakness_unconfirmed).id)
+            :bare_unanswered_weakness_unconfirmed).id)
       )
 
       assert_equal 'Finding', @notification_relation.model_type

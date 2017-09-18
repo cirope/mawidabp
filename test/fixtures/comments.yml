@@ -2,10 +2,10 @@ comment_one:
   comment: Comment one
   commentable_type: Finding
   commentable_id: <%= ActiveRecord::FixtureSet.identify(:being_implemented_weakness) %>
-  user: administrator_user
+  user: administrator
 
 comment_two:
   comment: Comment two
   commentable_type: Finding
   commentable_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_for_notification_weakness) %>
-  user: administrator_user
+  user: administrator

@@ -14,7 +14,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
           answer: 'New answer',
           auditor_comments: 'New auditor comments',
           finding: findings(:unanswered_weakness),
-          user: users(:supervisor_user),
+          user: users(:supervisor),
           file_model: file_models(:text_file),
           notify_users: false
         )
@@ -29,7 +29,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
           answer: 'New answer',
           commitment_date: 10.days.from_now.to_date,
           finding: findings(:unanswered_weakness),
-          user: users(:audited_user),
+          user: users(:audited),
           file_model: file_models(:text_file),
           notify_users: false
         )
@@ -44,7 +44,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
           answer: 'New answer',
           auditor_comments: 'New auditor comments',
           finding: findings(:unanswered_weakness),
-          user: users(:supervisor_user),
+          user: users(:supervisor),
           file_model: file_models(:text_file),
           notify_users: true
         )
@@ -59,7 +59,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
           answer: 'New answer',
           commitment_date: 10.days.from_now.to_date,
           finding: findings(:unanswered_weakness),
-          user: users(:audited_user),
+          user: users(:audited),
           file_model: file_models(:text_file)
           # notify_users nil which converts to true
         )
@@ -92,7 +92,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
   test 'validates blank attributes with audited' do
     Organization.current_id = organizations(:cirope).id
 
-    @finding_answer.user = users(:audited_user)
+    @finding_answer.user = users(:audited)
     @finding_answer.answer = ' '
     @finding_answer.finding = findings(:being_implemented_weakness_on_final)
     @finding_answer.commitment_date = nil
@@ -114,7 +114,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
   test 'requires commitment date' do
     Organization.current_id = organizations(:cirope).id
 
-    @finding_answer.user = users(:audited_user)
+    @finding_answer.user = users(:audited)
     @finding_answer.finding = findings(:being_implemented_weakness_on_final)
     @finding_answer.commitment_date = nil
 

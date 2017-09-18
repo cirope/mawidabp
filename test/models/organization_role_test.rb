@@ -7,7 +7,7 @@ class OrganizationRoleTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @organization_role = OrganizationRole.find(
-      organization_roles(:admin_role_for_administrator_user_in_cirope).id)
+      organization_roles(:admin_role_for_administrator_in_cirope).id)
 
     set_organization
   end
@@ -15,7 +15,7 @@ class OrganizationRoleTest < ActiveSupport::TestCase
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     fixture_organization_role = organization_roles(
-      :admin_role_for_administrator_user_in_cirope)
+      :admin_role_for_administrator_in_cirope)
     assert_kind_of OrganizationRole, @organization_role
     assert_equal fixture_organization_role.user_id, @organization_role.user_id
     assert_equal fixture_organization_role.organization_id,
@@ -27,13 +27,13 @@ class OrganizationRoleTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'OrganizationRole.count' do
       @organization_role = OrganizationRole.create(
-        :user => users(:administrator_user),
+        :user => users(:administrator),
         :organization => organizations(:cirope),
         :role => roles(:empty_admin_role)
       )
     end
 
-    assert_equal users(:administrator_user).id,
+    assert_equal users(:administrator).id,
       @organization_role.reload.user_id
   end
 
@@ -86,12 +86,12 @@ class OrganizationRoleTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates invalid roles' do
-    user = User.find users(:administrator_second_user).id
+    user = User.find users(:administrator_second).id
     organization_role = user.organization_roles.build(
       :role => roles(:audited_role),
       :organization => organizations(:google)
     )
-    
+
     assert organization_role.invalid?
     assert_error organization_role, :role_id, :invalid
   end

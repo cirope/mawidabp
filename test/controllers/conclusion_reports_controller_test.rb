@@ -714,7 +714,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
 
     get :weaknesses_graphs, :params => {
       :weaknesses_graphs => {
-        :user_id => users(:administrator_user).id
+        :user_id => users(:administrator).id
       },
       :final => true
     }

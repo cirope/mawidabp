@@ -3,5 +3,5 @@ confirmed_oportunity_auditor_answer:
   auditor_comments: Auditor comments
   commitment_date: <%= Date.today.to_s(:db) %>
   finding: confirmed_oportunity
-  user: supervisor_user
+  user: supervisor
   file_model:

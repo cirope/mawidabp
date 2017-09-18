@@ -1,125 +1,125 @@
 current_review_auditor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:auditor] %>
   review: current_review
-  user: bare_user
+  user: bare
   include_signature: true
   owner: false
 
 current_review_supervisor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:supervisor] %>
   review: current_review
-  user: supervisor_user
+  user: supervisor
   include_signature: true
   owner: false
 
 current_review_manager:
   assignment_type: <%= ReviewUserAssignment::TYPES[:manager] %>
   review: current_review
-  user: manager_user
+  user: manager
   include_signature: true
   owner: false
 
 review_with_conclusion_bare_auditor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:auditor] %>
   review: review_with_conclusion
-  user: bare_user
+  user: bare
   include_signature: true
   owner: false
 
 review_with_conclusion_second_auditor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:auditor] %>
   review: review_with_conclusion
-  user: first_time_user
+  user: first_time
   include_signature: true
   owner: false
 
 review_with_conclusion_audited:
   assignment_type: <%= ReviewUserAssignment::TYPES[:audited] %>
   review: review_with_conclusion
-  user: audited_user
+  user: audited
   include_signature: false
   owner: true
 
 review_with_conclusion_supervisor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:supervisor] %>
   review: review_with_conclusion
-  user: supervisor_user
+  user: supervisor
   include_signature: true
   owner: false
 
 review_with_conclusion_manager:
   assignment_type: <%= ReviewUserAssignment::TYPES[:manager] %>
   review: review_with_conclusion
-  user: manager_user
+  user: manager
   include_signature: true
   owner: false
 
 review_with_conclusion_auditor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:auditor] %>
   review: review_with_conclusion
-  user: auditor_user
+  user: auditor
   include_signature: true
   owner: false
 
 review_approved_with_conclusion_audited:
   assignment_type: <%= ReviewUserAssignment::TYPES[:audited] %>
   review: review_approved_with_conclusion
-  user: audited_user
+  user: audited
   include_signature: false
   owner: false
 
 review_approved_with_conclusion_supervisor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:supervisor] %>
   review: review_approved_with_conclusion
-  user: supervisor_user
+  user: supervisor
   include_signature: true
   owner: false
 
 review_approved_with_conclusion_auditor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:auditor] %>
   review: review_approved_with_conclusion
-  user: auditor_user
+  user: auditor
   include_signature: true
   owner: false
 
 review_without_conclusion_and_without_findings_audited:
   assignment_type: <%= ReviewUserAssignment::TYPES[:audited] %>
   review: review_without_conclusion_and_without_findings
-  user: audited_user
+  user: audited
   include_signature: false
   owner: true
 
 review_without_conclusion_and_without_findings_supervisor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:supervisor] %>
   review: review_without_conclusion_and_without_findings
-  user: supervisor_user
+  user: supervisor
   include_signature: true
   owner: false
 
 review_without_conclusion_and_without_findings_auditor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:auditor] %>
   review: review_without_conclusion_and_without_findings
-  user: auditor_user
+  user: auditor
   include_signature: true
   owner: false
 
 review_without_conclusion_audited:
   assignment_type: <%= ReviewUserAssignment::TYPES[:audited] %>
   review: review_without_conclusion
-  user: audited_user
+  user: audited
   include_signature: false
   owner: false
 
 review_without_conclusion_supervisor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:supervisor] %>
   review: review_without_conclusion
-  user: supervisor_user
+  user: supervisor
   include_signature: true
   owner: false
 
 review_without_conclusion_auditor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:auditor] %>
   review: review_without_conclusion
-  user: auditor_user
+  user: auditor
   include_signature: true
   owner: false

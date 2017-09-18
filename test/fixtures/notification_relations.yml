@@ -1,59 +1,59 @@
-supervisor_user_being_implemented_weakness_confirmed_relation:
-  notification: supervisor_user_being_implemented_weakness_confirmed
+supervisor_being_implemented_weakness_confirmed_relation:
+  notification: supervisor_being_implemented_weakness_confirmed
   model_id: <%= ActiveRecord::FixtureSet.identify(:being_implemented_weakness) %>
   model_type: Finding
 
 supervisor_unconfirmed_for_notification_weakness_relation:
-  notification: supervisor_user_unconfirmed_for_notification_weakness
+  notification: supervisor_unconfirmed_for_notification_weakness
   model_id: <%= ActiveRecord::FixtureSet.identify(:other_unconfirmed_for_notification_weakness) %>
   model_type: Finding
 
 supervisor_unconfirmed_oportunity_relation:
-  notification: supervisor_user_unconfirmed_oportunity
+  notification: supervisor_unconfirmed_oportunity
   model_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_oportunity) %>
   model_type: Finding
 
-supervisor_user_notify_oportunity_unconfirmed_relation:
-  notification: supervisor_user_notify_oportunity_unconfirmed
+supervisor_notify_oportunity_unconfirmed_relation:
+  notification: supervisor_notify_oportunity_unconfirmed
   model_id: <%= ActiveRecord::FixtureSet.identify(:notify_oportunity) %>
   model_type: Finding
 
-bare_user_unanswered_weakness_unconfirmed_relation:
-  notification: bare_user_unanswered_weakness_unconfirmed
+bare_unanswered_weakness_unconfirmed_relation:
+  notification: bare_unanswered_weakness_unconfirmed
   model_id: <%= ActiveRecord::FixtureSet.identify(:unanswered_weakness) %>
   model_type: Finding
 
-audited_user_unanswered_weakness_unconfirmed_relation:
-  notification: audited_user_unanswered_weakness_unconfirmed
+audited_unanswered_weakness_unconfirmed_relation:
+  notification: audited_unanswered_weakness_unconfirmed
   model_id: <%= ActiveRecord::FixtureSet.identify(:unanswered_weakness) %>
   model_type: Finding
 
-audited_user_unconfirmed_weakness_unconfirmed_relation:
-  notification: audited_user_unanswered_weakness_unconfirmed
+audited_unconfirmed_weakness_unconfirmed_relation:
+  notification: audited_unanswered_weakness_unconfirmed
   model_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_weakness) %>
   model_type: Finding
 
-audited_second_user_unanswered_weakness_unconfirmed_relation:
-  notification: audited_second_user_unanswered_weakness_unconfirmed
+audited_second_unanswered_weakness_unconfirmed_relation:
+  notification: audited_second_unanswered_weakness_unconfirmed
   model_id: <%= ActiveRecord::FixtureSet.identify(:unanswered_weakness) %>
   model_type: Finding
 
-audited_second_user_unconfirmed_weakness_unconfirmed_relation:
-  notification: audited_second_user_unanswered_weakness_unconfirmed
+audited_second_unconfirmed_weakness_unconfirmed_relation:
+  notification: audited_second_unanswered_weakness_unconfirmed
   model_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_weakness) %>
   model_type: Finding
 
-supervisor_user_unanswered_weakness_unconfirmed_relation:
-  notification: supervisor_user_unanswered_weakness_unconfirmed
+supervisor_unanswered_weakness_unconfirmed_relation:
+  notification: supervisor_unanswered_weakness_unconfirmed
   model_id: <%= ActiveRecord::FixtureSet.identify(:unanswered_weakness) %>
   model_type: Finding
 
-bare_user_confirmed_oportunity_unconfirmed_for_notification_weakness_relation:
-  notification: bare_user_confirmed_oportunity_unconfirmed_for_notification_weakness
+bare_confirmed_oportunity_unconfirmed_for_notification_weakness_relation:
+  notification: bare_confirmed_oportunity_unconfirmed_for_notification_weakness
   model_id: <%= ActiveRecord::FixtureSet.identify(:confirmed_oportunity) %>
   model_type: Finding
 
-audited_user_unconfirmed_for_notification_weakness_relation:
-  notification: audited_user_unconfirmed_for_notification_weakness
+audited_unconfirmed_for_notification_weakness_relation:
+  notification: audited_unconfirmed_for_notification_weakness
   model_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_for_notification_weakness) %>
   model_type: Finding

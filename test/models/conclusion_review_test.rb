@@ -120,7 +120,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    user = User.find users(:administrator_user).id
+    user = User.find users(:administrator).id
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
       @conclusion_review.send_by_email_to(user)

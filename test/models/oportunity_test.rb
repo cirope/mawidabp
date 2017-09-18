@@ -37,22 +37,22 @@ class OportunityTest < ActiveSupport::TestCase
         :state => Finding::STATUS[:being_implemented],
         :finding_user_assignments_attributes => {
           :new_1 => {
-            :user_id => users(:bare_user).id, :process_owner => false
+            :user_id => users(:bare).id, :process_owner => false
           },
           :new_2 => {
-            :user_id => users(:audited_user).id, :process_owner => false
+            :user_id => users(:audited).id, :process_owner => false
           },
           :new_3 => {
-            :user_id => users(:auditor_user).id, :process_owner => false
+            :user_id => users(:auditor).id, :process_owner => false
           },
           :new_4 => {
-            :user_id => users(:manager_user).id, :process_owner => false
+            :user_id => users(:manager).id, :process_owner => false
           },
           :new_5 => {
-            :user_id => users(:supervisor_user).id, :process_owner => false
+            :user_id => users(:supervisor).id, :process_owner => false
           },
           :new_6 => {
-            :user_id => users(:administrator_user).id, :process_owner => false
+            :user_id => users(:administrator).id, :process_owner => false
           }
         }
       )
@@ -74,10 +74,10 @@ class OportunityTest < ActiveSupport::TestCase
         :origination_date => 35.days.from_now.to_date,
         :finding_user_assignments_attributes => {
           :new_1 => {
-            :user_id => users(:bare_user).id, :process_owner => false
+            :user_id => users(:bare).id, :process_owner => false
           },
           :new_2 => {
-            :user_id => users(:audited_user).id, :process_owner => true
+            :user_id => users(:audited).id, :process_owner => true
           }
         }
       )

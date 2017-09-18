@@ -23,7 +23,7 @@ class OldPasswordTest < ActiveSupport::TestCase
     assert_difference 'OldPassword.count' do
       @old_password = OldPassword.create(
         :password => 'New Old Password',
-        :user => users(:administrator_user)
+        :user => users(:administrator)
       )
     end
   end
