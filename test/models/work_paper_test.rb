@@ -31,7 +31,7 @@ class WorkPaperTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'WorkPaper.count' do
       @work_paper = WorkPaper.list.create(
-        :owner => control_objective_items(:iso_27000_security_policy_3_1_item),
+        :owner => control_objective_items(:security_policy_3_1_item),
         :name => 'New name',
         :code => 'PTOC 20',
         :number_of_pages => '10',
@@ -52,7 +52,7 @@ class WorkPaperTest < ActiveSupport::TestCase
 
     assert_difference ['WorkPaper.count', 'FileModel.count'] do
       @work_paper = WorkPaper.list.create(
-        :owner => control_objective_items(:iso_27000_security_policy_3_1_item),
+        :owner => control_objective_items(:security_policy_3_1_item),
         :name => 'New name',
         :code => 'PTOC 21',
         :number_of_pages => '10',
@@ -128,7 +128,7 @@ class WorkPaperTest < ActiveSupport::TestCase
   test 'zip created' do
     assert_difference 'WorkPaper.count' do
       @work_paper = WorkPaper.create(
-        :owner => control_objective_items(:iso_27000_security_policy_3_1_item),
+        :owner => control_objective_items(:security_policy_3_1_item),
         :name => 'New name',
         :code => 'PTOC 20',
         :number_of_pages => '10',

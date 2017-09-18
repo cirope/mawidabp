@@ -109,7 +109,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   test 'new weakness' do
     login
     get :new, params: {
-      control_objective_item: control_objective_items(:bcra_A4609_security_management_responsible_dependency_item_editable).id
+      control_objective_item: control_objective_items(:management_dependency_item_editable).id
     }
     assert_response :success
     assert_not_nil assigns(:weakness)
@@ -132,8 +132,8 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_difference counts_array do
       post :create, params: {
         weakness: {
-          control_objective_item_id: control_objective_items(
-            :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
+          control_objective_item_id:
+            control_objective_items(:impact_analysis_item_editable).id,
           review_code: 'O020',
           title: 'Title',
           description: 'New description',
@@ -219,8 +219,8 @@ class WeaknessesControllerTest < ActionController::TestCase
         patch :update, params: {
           id: findings(:unanswered_weakness).id,
           weakness: {
-            control_objective_item_id: control_objective_items(
-              :bcra_A4609_data_proccessing_impact_analisys_item).id,
+            control_objective_item_id:
+              control_objective_items(:impact_analysis_item).id,
             review_code: 'O020',
             title: 'Title',
             description: 'Updated description',
@@ -416,10 +416,10 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     cois = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 1, cois.size # bcra_A4609_security_management_responsible_dependency_item_editable
+    assert_equal 1, cois.size # management_dependency_item_editable
     assert cois.all? { |f| (f['label'] + f['informal']).match /dependencia/i }
     assert_equal(
-      control_objective_items(:bcra_A4609_security_management_responsible_dependency_item_editable).id,
+      control_objective_items(:management_dependency_item_editable).id,
       cois.first['id']
     )
 

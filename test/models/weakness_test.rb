@@ -32,8 +32,7 @@ class WeaknessTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'Weakness.count' do
       @weakness = Weakness.list.new(
-        :control_objective_item =>
-          control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
+        :control_objective_item => control_objective_items(:impact_analysis_item_editable),
         :title => 'Title',
         :review_code => 'O020',
         :description => 'New description',
@@ -77,8 +76,7 @@ class WeaknessTest < ActiveSupport::TestCase
     # definitivo
     assert_no_difference 'Weakness.count' do
       Weakness.create(
-        :control_objective_item =>
-          control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
+        :control_objective_item => control_objective_items(:impact_analysis_item),
         :title => 'New title',
         :review_code => 'New review code',
         :description => 'New description',
@@ -198,7 +196,7 @@ class WeaknessTest < ActiveSupport::TestCase
     weakness = Weakness.find(findings(:being_implemented_weakness_on_draft).id)
 
     assert weakness.update(:control_objective_item_id =>
-        control_objective_items(:iso_27000_security_organization_4_2_item_editable).id)
+        control_objective_items(:organization_security_4_2_item_editable).id)
     assert_equal 'O006', weakness.review_code
   end
 
@@ -207,15 +205,17 @@ class WeaknessTest < ActiveSupport::TestCase
 
     assert_raise RuntimeError do
       weakness.update(:control_objective_item_id =>
-        control_objective_items(:iso_27000_security_policy_3_1_item).id)
+        control_objective_items(:security_policy_3_1_item).id)
     end
   end
 
   test 'work paper codes are updated when control objective is changed' do
     weakness = Weakness.find(findings(:unanswered_for_level_1_notification).id)
 
-    assert weakness.update(:control_objective_item_id =>
-        control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
+    assert weakness.update(
+      :control_objective_item_id =>
+        control_objective_items(:impact_analysis_item_editable).id
+    )
 
     assert_equal 'PTO 06', weakness.work_papers.first.code
   end

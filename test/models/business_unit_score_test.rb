@@ -2,7 +2,7 @@ require 'test_helper'
 
 class BusinessUnitScoreTest < ActiveSupport::TestCase
   def setup
-    @business_unit_score = business_unit_scores :iso_27000_security_organization_4_4_continuous_score
+    @business_unit_score = business_unit_scores :organization_security_4_4_score
   end
 
   test 'blank attributes' do

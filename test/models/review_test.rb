@@ -402,11 +402,11 @@ class ReviewTest < ActiveSupport::TestCase
   test 'procedure control subitem ids' do
     assert @review.control_objective_items.present?
     assert_difference '@review.control_objective_items.size' do
-      @review.control_objective_ids = [control_objectives(:iso_27000_security_organization_4_1).id]
+      @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
     end
 
     assert_no_difference '@review.control_objective_items.size' do
-      @review.control_objective_ids = [control_objectives(:iso_27000_security_organization_4_1).id]
+      @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
     end
   end
 

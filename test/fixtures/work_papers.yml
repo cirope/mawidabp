@@ -5,27 +5,27 @@ image_work_paper:
   description: Image Work Paper Description
   file_model: image_file
   organization: cirope
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:iso_27000_security_organization_4_2_item_editable) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:organization_security_4_2_item_editable) %>
   owner_type: ControlObjectiveItem
 
-text_work_paper_bcra_A4609_security_management_responsible_dependency_item:
+text_work_paper_management_dependency_item:
   name: Text Work Paper
   code: PTOC 02
   number_of_pages: 10
   description: Text Work Paper Description
   file_model:
   organization: cirope
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_security_management_responsible_dependency_item) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:management_dependency_item) %>
   owner_type: ControlObjectiveItem
 
-text_work_paper_bcra_A4609_security_management_responsible_dependency_item_editable:
+text_work_paper_management_dependency_item_editable:
   name: Text Work Paper
   code: PTOC 03
   number_of_pages: 12
   description: Text Work Paper Description
   file_model:
   organization: cirope
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_security_management_responsible_dependency_item_editable) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:management_dependency_item_editable) %>
   owner_type: ControlObjectiveItem
 
 text_work_paper_being_implemented_weakness_on_approved_draft:

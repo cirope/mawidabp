@@ -1,7 +1,7 @@
 <% stale_confirmed_days = DEFAULT_SETTINGS[:finding_stale_confirmed_days][:value].to_i %>
 being_implemented_weakness:
   type: Weakness
-  control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  control_objective_item: management_dependency_item
   title: Title 1w
   review_code: O001
   description: Description 1w
@@ -22,7 +22,7 @@ being_implemented_weakness:
 
 unconfirmed_for_notification_weakness:
   type: Weakness
-  control_objective_item: iso_27000_security_policy_3_1_item
+  control_objective_item: security_policy_3_1_item
   title: Title 2w iso
   review_code: O002
   description: Description 2w iso
@@ -45,7 +45,7 @@ unconfirmed_for_notification_weakness:
 
 unanswered_for_level_<%= level %>_notification:
   type: Weakness
-  control_objective_item: iso_27000_security_organization_4_2_item_editable
+  control_objective_item: organization_security_4_2_item_editable
   title: Title <%= level %>w
   review_code: <%= "O00#{level}" %>
   description: Description <%= level %>w
@@ -69,7 +69,7 @@ unanswered_for_level_<%= level %>_notification:
 
 incomplete_weakness:
   type: Weakness
-  control_objective_item: iso_27000_security_organization_4_2_item_editable
+  control_objective_item: organization_security_4_2_item_editable
   title: Title incomplete_w
   review_code: O005
   description: Description incomplete_w
@@ -91,7 +91,7 @@ incomplete_weakness:
 
 other_unconfirmed_for_notification_weakness:
   type: Weakness
-  control_objective_item: iso_27000_security_policy_3_1_item
+  control_objective_item: security_policy_3_1_item
   title: Title 3w iso
   review_code: O003
   description: Description 3w iso
@@ -112,7 +112,7 @@ other_unconfirmed_for_notification_weakness:
 
 notify_oportunity:
   type: Oportunity
-  control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  control_objective_item: management_dependency_item
   title: Title 1o
   review_code: OM001
   description: Description 1o
@@ -127,7 +127,7 @@ notify_oportunity:
 
 being_implemented_oportunity:
   type: Oportunity
-  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  control_objective_item: management_dependency_item_editable
   title: Title 1o
   review_code: OM001
   description: Description 1o
@@ -142,7 +142,7 @@ being_implemented_oportunity:
 
 being_implemented_weakness_on_draft:
   type: Weakness
-  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  control_objective_item: management_dependency_item_editable
   title: Title 3w bcra
   review_code: O003
   description: Description 3w bcra
@@ -162,7 +162,7 @@ being_implemented_weakness_on_draft:
 
 unanswered_weakness:
   type: Weakness
-  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
+  control_objective_item: impact_analysis_item
   title: Title 2w bcra
   review_code: O002
   description: Description 2w bcra
@@ -182,7 +182,7 @@ unanswered_weakness:
 
 unconfirmed_weakness:
   type: Weakness
-  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
+  control_objective_item: impact_analysis_item_editable
   title: Title 1w bi
   review_code: O001
   description: Description 1w bi
@@ -202,7 +202,7 @@ unconfirmed_weakness:
 
 unconfirmed_oportunity:
   type: Oportunity
-  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
+  control_objective_item: impact_analysis_item_editable
   title: Title 3o
   review_code: OM003
   description: Description 3o
@@ -219,7 +219,7 @@ unconfirmed_oportunity:
 
 confirmed_oportunity_on_draft:
   type: Oportunity
-  control_objective_item: iso_27000_security_organization_4_2_item_editable
+  control_objective_item: organization_security_4_2_item_editable
   title: Title o
   review_code: OM001
   description: Description o
@@ -235,7 +235,7 @@ confirmed_oportunity_on_draft:
 
 confirmed_oportunity:
   type: Oportunity
-  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
+  control_objective_item: impact_analysis_item
   title: Title 2o
   review_code: OM002
   description: Description 2o
@@ -252,7 +252,7 @@ confirmed_oportunity:
 
 being_implemented_weakness_on_final:
   type: Weakness
-  control_objective_item: iso_27000_security_policy_3_1_item
+  control_objective_item: security_policy_3_1_item
   title: Title 1wx
   review_code: O001
   description: Description 1wx
@@ -272,7 +272,7 @@ being_implemented_weakness_on_final:
 
 being_implemented_weakness_on_approved_draft:
   type: Weakness
-  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
+  control_objective_item: management_dependency_item_approved_and_editable
   title: Title 1w
   review_code: O001
   description: Description 1w

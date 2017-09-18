@@ -267,8 +267,8 @@ class FindingsControllerTest < ActionController::TestCase
             :completed => 'incomplete',
             :id => findings(:unconfirmed_weakness).id,
             :finding => {
-              :control_objective_item_id => control_objective_items(
-                :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
+              :control_objective_item_id =>
+                control_objective_items(:impact_analysis_item_editable).id,
               :review_code => 'O020',
               :title => 'Title',
               :description => 'Updated description',
@@ -381,8 +381,8 @@ class FindingsControllerTest < ActionController::TestCase
           :completed => 'incomplete',
           :id => findings(:unconfirmed_weakness).id,
           :finding => {
-            :control_objective_item_id => control_objective_items(
-              :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
+            :control_objective_item_id =>
+              control_objective_items(:impact_analysis_item_editable).id,
             :review_code => 'O020',
             :title => 'Title',
             :description => 'Updated description',
@@ -484,8 +484,8 @@ class FindingsControllerTest < ActionController::TestCase
           :completed => 'incomplete',
           :id => findings(:unconfirmed_weakness).id,
           :finding => {
-            :control_objective_item_id => control_objective_items(
-              :bcra_A4609_data_proccessing_impact_analisys_item).id,
+            :control_objective_item_id =>
+              control_objective_items(:impact_analysis_item).id,
             :review_code => 'O020',
             :title => 'Title',
             :description => 'Updated description',

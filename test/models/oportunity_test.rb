@@ -28,8 +28,7 @@ class OportunityTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'Oportunity.count' do
       @oportunity = Oportunity.list.new(
-        :control_objective_item =>
-          control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
+        :control_objective_item => control_objective_items(:impact_analysis_item_editable),
         :review_code => 'OM20',
         :title => 'Title',
         :description => 'New description',
@@ -64,8 +63,7 @@ class OportunityTest < ActiveSupport::TestCase
 
     assert_no_difference 'Oportunity.count' do
       Oportunity.create(
-        :control_objective_item =>
-          control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
+        :control_objective_item => control_objective_items(:impact_analysis_item),
         :review_code => 'OM20',
         :title => 'Title',
         :description => 'New description',
@@ -159,8 +157,10 @@ class OportunityTest < ActiveSupport::TestCase
   test 'review code is updated when control objective is changed' do
     oportunity = Oportunity.find(findings(:confirmed_oportunity_on_draft).id)
 
-    assert oportunity.update(:control_objective_item_id =>
-        control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
+    assert oportunity.update(
+      :control_objective_item_id =>
+        control_objective_items(:impact_analysis_item_editable).id
+    )
     assert_equal 'OM004', oportunity.review_code
   end
 
@@ -169,15 +169,17 @@ class OportunityTest < ActiveSupport::TestCase
 
     assert_raise RuntimeError do
       oportunity.update(:control_objective_item_id =>
-        control_objective_items(:iso_27000_security_policy_3_1_item).id)
+        control_objective_items(:security_policy_3_1_item).id)
     end
   end
 
   test 'work paper codes are updated when control objective is changed' do
     oportunity = Oportunity.find(findings(:confirmed_oportunity_on_draft).id)
 
-    assert oportunity.update(:control_objective_item_id =>
-        control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
+    assert oportunity.update(
+      :control_objective_item_id =>
+        control_objective_items(:impact_analysis_item_editable).id
+    )
     assert_equal 'PTOM 04', oportunity.work_papers.first.code
   end
 

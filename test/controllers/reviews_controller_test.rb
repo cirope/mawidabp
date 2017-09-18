@@ -132,7 +132,7 @@ class ReviewsControllerTest < ActionController::TestCase
                 period_id: periods(:current_period).id,
                 plan_item_id: plan_items(:past_plan_item_3).id,
                 process_control_ids: [process_controls(:bcra_A4609_security_management).id],
-                control_objective_ids: [control_objectives(:iso_27000_security_policy_3_1).id],
+                control_objective_ids: [control_objectives(:security_policy_3_1).id],
                 file_model_attributes: {
                   file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
                 },
@@ -199,8 +199,7 @@ class ReviewsControllerTest < ActionController::TestCase
           ],
           control_objective_items_attributes: [
             {
-              id: control_objective_items(
-                :bcra_A4609_security_management_responsible_dependency_item_editable).id,
+              id: control_objective_items(:management_dependency_item_editable).id,
               order_number: 1
             }
           ]
@@ -209,7 +208,7 @@ class ReviewsControllerTest < ActionController::TestCase
     end
 
     control_objective_item = ControlObjectiveItem.find(
-      control_objective_items(:bcra_A4609_security_management_responsible_dependency_item_editable).id)
+      control_objective_items(:management_dependency_item_editable).id)
 
     assert_redirected_to edit_review_url(reviews(:review_with_conclusion).id)
     assert_not_nil assigns(:review)
@@ -353,7 +352,7 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'auto complete for control objectives' do
     login
     get :auto_complete_for_control_objective, params: {
-      q: 'acceso', format: :json
+      q: 'access', format: :json
     }
     assert_response :success
 
@@ -362,12 +361,12 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 3, control_objectives.size
     assert(
       control_objectives.all? do |co|
-        (co['label'] + co['informal']).match /acceso/i
+        (co['label'] + co['informal']).match /access/i
       end
     )
 
     get :auto_complete_for_control_objective, params: {
-      q: 'responsable', format: :json
+      q: 'management', format: :json
     }
     assert_response :success
 
@@ -376,7 +375,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 1, control_objectives.size
     assert(
       control_objectives.all? do |co|
-        (co['label'] + co['informal']).match /responsable/i
+        (co['label'] + co['informal']).match /management/i
       end
     )
 

@@ -10,8 +10,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'Finding.count' do
       @finding = @finding.class.list.new(
-        control_objective_item:
-          control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
+        control_objective_item: control_objective_items(:impact_analysis_item_editable),
         review_code: 'O020',
         title: 'Title',
         description: 'New description',
@@ -55,8 +54,7 @@ class FindingTest < ActiveSupport::TestCase
     # definitivo
     assert_no_difference 'Finding.count' do
       Finding.list.create(
-        control_objective_item:
-          control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
+        control_objective_item: control_objective_items(:impact_analysis_item),
         review_code: 'O020',
         title: 'Title',
         description: 'New description',
@@ -570,8 +568,8 @@ class FindingTest < ActiveSupport::TestCase
         'state' => Finding::STATUS[:incomplete],
         'review_code' => 'O099',
         'title' => 'Title',
-        'control_objective_item_id' => control_objective_items(
-          :bcra_A4609_security_management_responsible_dependency_item_editable).id,
+        'control_objective_item_id' =>
+          control_objective_items(:management_dependency_item_editable).id,
         'finding_user_assignments_attributes' => fuas
       ).reject { |k,v| k == 'id' || k == 'type' }
     )
@@ -863,8 +861,8 @@ class FindingTest < ActiveSupport::TestCase
         'state' => Finding::STATUS[:incomplete],
         'review_code' => 'O099',
         'title' => 'Title',
-        'control_objective_item_id' => control_objective_items(
-          :bcra_A4609_security_management_responsible_dependency_item_editable).id,
+        'control_objective_item_id' =>
+          control_objective_items(:management_dependency_item_editable).id,
         'finding_user_assignments_attributes' => fuas
       ).reject { |k,v| k == 'id' || k == 'type' }
     )
