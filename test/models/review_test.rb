@@ -321,7 +321,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.reload.must_be_approved?
 
     assert @review.finding_review_assignments.build(
-      :finding_id => findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
+      :finding_id => findings(:being_implemented_weakness).id
     )
     assert !@review.must_be_approved?
     assert @review.approval_errors.flatten.include?(
@@ -415,8 +415,7 @@ class ReviewTest < ActiveSupport::TestCase
       assert @review.update(
         :finding_review_assignments_attributes => {
           :new_1 => {
-            :finding_id =>
-              findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id.to_s
+            :finding_id => findings(:unanswered_weakness).id.to_s
           }
         }
       )
@@ -429,8 +428,7 @@ class ReviewTest < ActiveSupport::TestCase
         @review.update(
           :finding_review_assignments_attributes => {
             :new_1 => {
-              :finding_id =>
-                findings(:iso_27000_security_organization_4_2_item_editable_oportunity).id.to_s
+              :finding_id => findings(:confirmed_oportunity_on_draft).id.to_s
             }
           }
         )

@@ -419,7 +419,7 @@ class UserTest < ActiveSupport::TestCase
     assert user.findings.for_notification.any?
 
     assert_difference 'Finding.for_notification.size' do
-      finding = findings :bcra_A4609_data_proccessing_impact_analisys_editable_weakness
+      finding = findings :unconfirmed_weakness
 
       new_finding = finding.dup
       new_finding.state = Finding::STATUS[:notify]

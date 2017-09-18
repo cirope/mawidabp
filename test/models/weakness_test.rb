@@ -6,14 +6,14 @@ class WeaknessTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    @weakness = findings :bcra_A4609_data_proccessing_impact_analisys_weakness
+    @weakness = findings :unanswered_weakness
 
     set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
-    weakness = findings(:bcra_A4609_data_proccessing_impact_analisys_weakness)
+    weakness = findings(:unanswered_weakness)
     assert_kind_of Weakness, @weakness
     assert_equal weakness.control_objective_item_id,
       @weakness.control_objective_item_id
@@ -119,8 +119,7 @@ class WeaknessTest < ActiveSupport::TestCase
       @weakness.destroy
     end
 
-    @weakness = Weakness.find(findings(
-        :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
+    @weakness = Weakness.find(findings(:unconfirmed_weakness).id)
 
     # Y tampoco se puede eliminar si NO está en un informe definitivo
     assert_no_difference 'Weakness.count' do
@@ -149,16 +148,14 @@ class WeaknessTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
-    another_weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
+    another_weakness = Weakness.find(findings(:being_implemented_weakness).id)
     @weakness.review_code = another_weakness.review_code
 
     assert @weakness.invalid?
     assert_error @weakness, :review_code, :taken
 
     # Se puede duplicar si es de otro informe
-    another_weakness = Weakness.find(findings(
-        :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id)
+    another_weakness = Weakness.find(findings(:unconfirmed_for_notification_weakness).id)
     @weakness.review_code = another_weakness.review_code
     assert @weakness.valid?
   end
@@ -198,8 +195,7 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'review code is updated when control objective is changed' do
-    weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
+    weakness = Weakness.find(findings(:being_implemented_weakness_on_draft).id)
 
     assert weakness.update(:control_objective_item_id =>
         control_objective_items(:iso_27000_security_organization_4_2_item_editable).id)
@@ -207,8 +203,7 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'can not change to a control objective in a final review' do
-    weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
+    weakness = Weakness.find(findings(:being_implemented_weakness_on_draft).id)
 
     assert_raise RuntimeError do
       weakness.update(:control_objective_item_id =>
@@ -217,8 +212,7 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'work paper codes are updated when control objective is changed' do
-    weakness = Weakness.find(findings(
-        :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
+    weakness = Weakness.find(findings(:unanswered_for_level_1_notification).id)
 
     assert weakness.update(:control_objective_item_id =>
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
@@ -323,8 +317,7 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'work papers can be added to uneditable weaknesses' do
-    uneditable_weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
+    uneditable_weakness = Weakness.find(findings(:being_implemented_weakness).id)
 
     assert_no_difference 'Weakness.count' do
       assert_difference 'WorkPaper.count' do
@@ -348,8 +341,7 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'work papers can not be added to uneditable and closed control objectives' do
-    uneditable_weakness = Weakness.find(findings(
-        :iso_27000_security_policy_3_1_item_weakness).id)
+    uneditable_weakness = Weakness.find(findings(:being_implemented_weakness_on_final).id)
     uneditable_weakness.final = true
 
     assert_no_difference ['Weakness.count', 'WorkPaper.count'] do
@@ -374,8 +366,7 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'list all follow up dates and rescheduled function' do
-    @weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
+    @weakness = Weakness.find(findings(:being_implemented_weakness_on_draft).id)
     assert @weakness.all_follow_up_dates.blank?
     assert !@weakness.rescheduled?
     assert_not_nil @weakness.follow_up_date

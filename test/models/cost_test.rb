@@ -27,8 +27,7 @@ class CostTest < ActiveSupport::TestCase
         :description => 'New description',
         :cost => '15.50',
         :cost_type => 'audit',
-        :item =>
-          findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness),
+        :item => findings(:unconfirmed_weakness),
         :user => users(:administrator_user)
       )
     end

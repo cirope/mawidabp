@@ -85,7 +85,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   test 'notify new finding answer' do
     user = User.find(users(:administrator_user).id)
     finding_answer = FindingAnswer.find(finding_answers(
-        :bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_auditor_answer).id)
+        :confirmed_oportunity_auditor_answer).id)
 
     response = NotifierMailer.notify_new_finding_answer(user, finding_answer).deliver_now
 
@@ -129,8 +129,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'deliver unanswered finding to manager notification' do
-    finding = Finding.find(findings(
-        :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_2_notification).id)
+    finding = Finding.find(findings(:unanswered_for_level_2_notification).id)
     users = finding.users_for_scaffold_notification(1)
     response = NotifierMailer.unanswered_finding_to_manager_notification(finding, users, 1).deliver_now
 

@@ -215,7 +215,7 @@ class WorkPaperTest < ActiveSupport::TestCase
   end
 
   test 'validates duplicated codes' do
-    other_work_paper = WorkPaper.find work_papers(:text2_work_paper_bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id
+    other_work_paper = WorkPaper.find work_papers(:text2_work_paper_unconfirmed_weakness).id
 
     assert_no_difference 'WorkPaper.count' do
       assert !other_work_paper.owner.update(

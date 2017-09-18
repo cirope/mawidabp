@@ -17,7 +17,7 @@ class NotificationsControllerTest < ActionController::TestCase
 
   test 'show notification' do
     get :show, :params => {
-      :id => notifications(:audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).to_param
+      :id => notifications(:audited_user_unanswered_weakness_unconfirmed).to_param
     }
     assert_response :success
     assert_not_nil assigns(:notification)
@@ -26,7 +26,7 @@ class NotificationsControllerTest < ActionController::TestCase
 
   test 'edit notification' do
     get :edit, :params => {
-      :id => notifications(:audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).to_param
+      :id => notifications(:audited_user_unanswered_weakness_unconfirmed).to_param
     }
     assert_response :success
     assert_not_nil assigns(:notification)
@@ -36,7 +36,7 @@ class NotificationsControllerTest < ActionController::TestCase
   test 'update notification' do
     assert_no_difference 'User.count' do
       patch :update, :params => {
-        :id => notifications(:audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).to_param,
+        :id => notifications(:audited_user_unanswered_weakness_unconfirmed).to_param,
         :notification => {
           :notes => 'Updated notes'
         }
@@ -49,7 +49,7 @@ class NotificationsControllerTest < ActionController::TestCase
   end
 
   test 'confirm' do
-    notification_id = notifications(:audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id
+    notification_id = notifications(:audited_user_unanswered_weakness_unconfirmed).id
     notification = Notification.find notification_id
 
     assert !notification.notified?
@@ -59,7 +59,7 @@ class NotificationsControllerTest < ActionController::TestCase
   end
 
   test 'reject' do
-    notification_id = notifications(:audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id
+    notification_id = notifications(:audited_user_unanswered_weakness_unconfirmed).id
     notification = Notification.find notification_id
 
     assert !notification.notified?

@@ -1,59 +1,59 @@
-supervisor_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed_relation:
-  notification: supervisor_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed
-  model_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented) %>
+supervisor_user_being_implemented_weakness_confirmed_relation:
+  notification: supervisor_user_being_implemented_weakness_confirmed
+  model_id: <%= ActiveRecord::FixtureSet.identify(:being_implemented_weakness) %>
   model_type: Finding
 
-supervisor_iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_relation:
-  notification: supervisor_user_iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification
-  model_id: <%= ActiveRecord::FixtureSet.identify(:iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification) %>
+supervisor_unconfirmed_for_notification_weakness_relation:
+  notification: supervisor_user_unconfirmed_for_notification_weakness
+  model_id: <%= ActiveRecord::FixtureSet.identify(:other_unconfirmed_for_notification_weakness) %>
   model_type: Finding
 
-supervisor_bcra_A4609_data_proccessing_impact_analisys_editable_oportunity_relation:
-  notification: supervisor_user_bcra_A4609_data_proccessing_impact_analisys_editable_oportunity
-  model_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_editable_oportunity) %>
+supervisor_unconfirmed_oportunity_relation:
+  notification: supervisor_user_unconfirmed_oportunity
+  model_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_oportunity) %>
   model_type: Finding
 
-supervisor_user_bcra_A4609_security_management_responsible_dependency_notify_oportunity_unconfirmed_relation:
-  notification: supervisor_user_bcra_A4609_security_management_responsible_dependency_notify_oportunity_unconfirmed
-  model_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_security_management_responsible_dependency_notify_oportunity) %>
+supervisor_user_notify_oportunity_unconfirmed_relation:
+  notification: supervisor_user_notify_oportunity_unconfirmed
+  model_id: <%= ActiveRecord::FixtureSet.identify(:notify_oportunity) %>
   model_type: Finding
 
-bare_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed_relation:
-  notification: bare_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed
-  model_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_weakness) %>
+bare_user_unanswered_weakness_unconfirmed_relation:
+  notification: bare_user_unanswered_weakness_unconfirmed
+  model_id: <%= ActiveRecord::FixtureSet.identify(:unanswered_weakness) %>
   model_type: Finding
 
-audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed_relation:
-  notification: audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed
-  model_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_weakness) %>
+audited_user_unanswered_weakness_unconfirmed_relation:
+  notification: audited_user_unanswered_weakness_unconfirmed
+  model_id: <%= ActiveRecord::FixtureSet.identify(:unanswered_weakness) %>
   model_type: Finding
 
-audited_user_bcra_A4609_data_proccessing_impact_analisys_editable_weakness_unconfirmed_relation:
-  notification: audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed
-  model_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness) %>
+audited_user_unconfirmed_weakness_unconfirmed_relation:
+  notification: audited_user_unanswered_weakness_unconfirmed
+  model_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_weakness) %>
   model_type: Finding
 
-audited_second_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed_relation:
-  notification: audited_second_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed
-  model_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_weakness) %>
+audited_second_user_unanswered_weakness_unconfirmed_relation:
+  notification: audited_second_user_unanswered_weakness_unconfirmed
+  model_id: <%= ActiveRecord::FixtureSet.identify(:unanswered_weakness) %>
   model_type: Finding
 
-audited_second_user_bcra_A4609_data_proccessing_impact_analisys_editable_weakness_unconfirmed_relation:
-  notification: audited_second_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed
-  model_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness) %>
+audited_second_user_unconfirmed_weakness_unconfirmed_relation:
+  notification: audited_second_user_unanswered_weakness_unconfirmed
+  model_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_weakness) %>
   model_type: Finding
 
-supervisor_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed_relation:
-  notification: supervisor_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed
-  model_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_weakness) %>
+supervisor_user_unanswered_weakness_unconfirmed_relation:
+  notification: supervisor_user_unanswered_weakness_unconfirmed
+  model_id: <%= ActiveRecord::FixtureSet.identify(:unanswered_weakness) %>
   model_type: Finding
 
-bare_user_bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_unconfirmed_for_notification_relation:
-  notification: bare_user_bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_unconfirmed_for_notification
-  model_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity) %>
+bare_user_confirmed_oportunity_unconfirmed_for_notification_weakness_relation:
+  notification: bare_user_confirmed_oportunity_unconfirmed_for_notification_weakness
+  model_id: <%= ActiveRecord::FixtureSet.identify(:confirmed_oportunity) %>
   model_type: Finding
 
-audited_user_iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification_relation:
-  notification: audited_user_iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification
-  model_id: <%= ActiveRecord::FixtureSet.identify(:iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification) %>
+audited_user_unconfirmed_for_notification_weakness_relation:
+  notification: audited_user_unconfirmed_for_notification_weakness
+  model_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_for_notification_weakness) %>
   model_type: Finding

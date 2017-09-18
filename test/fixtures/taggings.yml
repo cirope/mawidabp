@@ -1,6 +1,6 @@
 important_finding:
   tag: important
-  taggable: iso_27000_security_policy_3_1_item_weakness (Weakness)
+  taggable: being_implemented_weakness_on_final (Weakness)
 
 manual_document:
   tag: manual

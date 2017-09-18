@@ -10,7 +10,7 @@ class FindingsControllerTest < ActionController::TestCase
     id_param = {
       :params => {
         :completed => 'complete',
-        :id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).to_param
+        :id => findings(:unanswered_weakness).to_param
       }
     }
     public_actions = []
@@ -80,7 +80,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 5, assigns(:findings).count
+    assert_equal 4, assigns(:findings).count
     assert assigns(:findings).all? {|f| f.review.conclusion_final_review.issue_date > 4.days.ago.to_date}
     assert_template 'findings/index'
   end
@@ -130,8 +130,8 @@ class FindingsControllerTest < ActionController::TestCase
   test 'list findings for specific ids' do
     login
     ids = [
-      findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id,
-      findings(:iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id
+      findings(:being_implemented_weakness).id,
+      findings(:unconfirmed_for_notification_weakness).id
     ]
 
     get :index, :params => {
@@ -182,7 +182,7 @@ class FindingsControllerTest < ActionController::TestCase
     login
     get :show, :params => {
       :completed => 'incomplete',
-      :id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+      :id => findings(:unanswered_weakness).id
     }
     assert_response :success
     assert_not_nil assigns(:finding)
@@ -193,7 +193,7 @@ class FindingsControllerTest < ActionController::TestCase
     login user: users(:committee_user)
     get :show, :params => {
       :completed => 'incomplete',
-      :id => findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id
+      :id => findings(:being_implemented_oportunity).id
     }
     assert_response :success
     assert_not_nil assigns(:finding)
@@ -204,7 +204,7 @@ class FindingsControllerTest < ActionController::TestCase
     login user: users(:auditor_user)
     get :edit, :params => {
       :completed => 'incomplete',
-      :id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+      :id => findings(:unanswered_weakness).id
     }
     assert_response :success
     assert_not_nil assigns(:finding)
@@ -215,7 +215,7 @@ class FindingsControllerTest < ActionController::TestCase
     login user: users(:audited_user)
     get :edit, :params => {
       :completed => 'incomplete',
-      :id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+      :id => findings(:unanswered_weakness).id
     }
     assert_response :success
     assert_not_nil assigns(:finding)
@@ -231,7 +231,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert_raise ActiveRecord::RecordNotFound do
       get :edit, :params => {
         :completed => 'complete',
-        :id => findings(:iso_27000_security_policy_3_1_item_weakness).id
+        :id => findings(:being_implemented_weakness_on_final).id
       }
     end
   end
@@ -243,7 +243,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert_raise ActiveRecord::RecordNotFound do
       get :edit, :params => {
         :completed => 'incomplete',
-        :id => findings(:iso_27000_security_organization_4_2_item_editable_weakness_incomplete).id
+        :id => findings(:incomplete_weakness).id
       }
     end
   end
@@ -265,8 +265,7 @@ class FindingsControllerTest < ActionController::TestCase
         assert_difference 'FileModel.count', 2 do
           patch :update, :params => {
             :completed => 'incomplete',
-            :id => findings(
-              :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
+            :id => findings(:unconfirmed_weakness).id,
             :finding => {
               :control_objective_item_id => control_objective_items(
                 :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
@@ -286,32 +285,32 @@ class FindingsControllerTest < ActionController::TestCase
               :business_unit_ids => [business_units(:business_unit_three).id],
               :finding_user_assignments_attributes => [
                 {
-                  :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id,
+                  :id => finding_user_assignments(:unconfirmed_weakness_bare_user).id,
                   :user_id => users(:bare_user).id,
                   :process_owner => '0'
                 },
                 {
-                  :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id,
+                  :id => finding_user_assignments(:unconfirmed_weakness_audited_user).id,
                   :user_id => users(:audited_user).id,
                   :process_owner => '1'
                 },
                 {
-                  :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id,
+                  :id => finding_user_assignments(:unconfirmed_weakness_auditor_user).id,
                   :user_id => users(:auditor_user).id,
                   :process_owner => '0'
                 },
                 {
-                  :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id,
+                  :id => finding_user_assignments(:unconfirmed_weakness_manager_user).id,
                   :user_id => users(:manager_user).id,
                   :process_owner => '0'
                 },
                 {
-                  :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id,
+                  :id => finding_user_assignments(:unconfirmed_weakness_supervisor_user).id,
                   :user_id => users(:supervisor_user).id,
                   :process_owner => '0'
                 },
                 {
-                  :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id,
+                  :id => finding_user_assignments(:unconfirmed_weakness_administrator_user).id,
                   :user_id => users(:administrator_user).id,
                   :process_owner => '0'
                 }
@@ -343,7 +342,7 @@ class FindingsControllerTest < ActionController::TestCase
               :finding_relations_attributes => [
                 {
                   :description => 'Duplicated',
-                  :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+                  :related_finding_id => findings(:unanswered_weakness).id
                 }
               ],
               :taggings_attributes => [
@@ -380,8 +379,7 @@ class FindingsControllerTest < ActionController::TestCase
       assert_difference difference_count do
         patch :update, :params => {
           :completed => 'incomplete',
-          :id => findings(
-            :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
+          :id => findings(:unconfirmed_weakness).id,
           :finding => {
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
@@ -452,7 +450,7 @@ class FindingsControllerTest < ActionController::TestCase
             :finding_relations_attributes => [
               {
                 :description => 'Duplicated',
-                :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+                :related_finding_id => findings(:unanswered_weakness).id
               }
             ],
             :costs_attributes => [
@@ -484,8 +482,7 @@ class FindingsControllerTest < ActionController::TestCase
       assert_difference 'ActionMailer::Base.deliveries.size' do
         patch :update, :params => {
           :completed => 'incomplete',
-          :id => findings(
-            :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
+          :id => findings(:unconfirmed_weakness).id,
           :finding => {
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item).id,
@@ -505,32 +502,32 @@ class FindingsControllerTest < ActionController::TestCase
             :users_for_notification => [users(:bare_user).id],
             :finding_user_assignments_attributes => [
               {
-                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id,
+                :id => finding_user_assignments(:unconfirmed_weakness_bare_user).id,
                 :user_id => users(:bare_user).id,
                 :process_owner => '0'
               },
               {
-                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id,
+                :id => finding_user_assignments(:unconfirmed_weakness_audited_user).id,
                 :user_id => users(:audited_user).id,
                 :process_owner => '1'
               },
               {
-                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id,
+                :id => finding_user_assignments(:unconfirmed_weakness_auditor_user).id,
                 :user_id => users(:auditor_user).id,
                 :process_owner => '0'
               },
               {
-                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id,
+                :id => finding_user_assignments(:unconfirmed_weakness_manager_user).id,
                 :user_id => users(:manager_user).id,
                 :process_owner => '0'
               },
               {
-                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id,
+                :id => finding_user_assignments(:unconfirmed_weakness_supervisor_user).id,
                 :user_id => users(:supervisor_user).id,
                 :process_owner => '0'
               },
               {
-                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id,
+                :id => finding_user_assignments(:unconfirmed_weakness_administrator_user).id,
                 :user_id => users(:administrator_user).id,
                 :process_owner => '0'
               }
@@ -547,8 +544,7 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'follow up pdf' do
     login
-    finding = Finding.find(findings(
-        :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
+    finding = Finding.find(findings(:unconfirmed_weakness).id)
 
     assert_nothing_raised do
       get :follow_up_pdf, :params => {
@@ -561,8 +557,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for finding relation' do
-    finding = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
+    finding = Finding.find(findings(:being_implemented_weakness_on_draft).id)
 
     login
     get :auto_complete_for_finding_relation, :params => {
@@ -579,8 +574,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert_equal 3, findings.size
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
-    finding = Finding.find(findings(
-        :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id)
+    finding = Finding.find(findings(:unconfirmed_for_notification_weakness).id)
 
     get :auto_complete_for_finding_relation, :params => {
       :completed => 'incomplete',

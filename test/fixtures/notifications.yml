@@ -1,4 +1,4 @@
-supervisor_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed:
+supervisor_user_being_implemented_weakness_confirmed:
   status: <%= Notification::STATUS[:confirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date: <%= Time.now.to_s(:db) %>
@@ -6,7 +6,7 @@ supervisor_user_bcra_A4609_security_management_responsible_dependency_weakness_b
   user_who_confirm: supervisor_user
   notes: Notification notes
 
-supervisor_user_iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
+supervisor_user_unconfirmed_for_notification_weakness:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date: <%= Time.now.to_s(:db) %>
@@ -14,7 +14,7 @@ supervisor_user_iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_no
   user_who_confirm: supervisor_user
   notes: Notification notes
 
-supervisor_user_bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
+supervisor_user_unconfirmed_oportunity:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date: <%= Time.now.to_s(:db) %>
@@ -22,42 +22,42 @@ supervisor_user_bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   user_who_confirm: supervisor_user
   notes: Notification notes
 
-supervisor_user_bcra_A4609_security_management_responsible_dependency_notify_oportunity_unconfirmed:
+supervisor_user_notify_oportunity_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
   user: supervisor_user
   notes: Notification notes
 
-bare_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed:
+bare_user_unanswered_weakness_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
   user: bare_user
   notes: Notification notes
 
-audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed:
+audited_user_unanswered_weakness_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
   user: audited_user
   notes: Notification notes
 
-audited_second_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed:
+audited_second_user_unanswered_weakness_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
   user: audited_second_user
   notes: Notification notes
 
-supervisor_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed:
+supervisor_user_unanswered_weakness_unconfirmed:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:
   user: supervisor_user
   notes: Notification notes
 
-bare_user_bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_unconfirmed_for_notification:
+bare_user_confirmed_oportunity_unconfirmed_for_notification_weakness:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date: 
@@ -65,7 +65,7 @@ bare_user_bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_uncon
   created_at: <%= NOTIFICATIONS_STALE_DAYS.next.days.ago %>
   notes: Notification notes
 
-audited_user_iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
+audited_user_unconfirmed_for_notification_weakness:
   status: <%= Notification::STATUS[:unconfirmed] %>
   confirmation_hash: <%= SecureRandom.urlsafe_base64 %>
   confirmation_date:

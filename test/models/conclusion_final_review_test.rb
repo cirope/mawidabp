@@ -62,8 +62,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'create with repeated findings' do
     review = Review.find reviews(:review_approved_with_conclusion).id
     findings = review.weaknesses + review.oportunities
-    repeated_id = findings(
-      :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
+    repeated_id = findings(:being_implemented_weakness).id
 
     assert findings.size > 0
 
@@ -122,7 +121,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   # Prueba la inclusión de observaciones anuladas en ejecución
   test 'revoked weaknesses' do
     review = Review.find reviews(:review_approved_with_conclusion).id
-    weakness = Weakness.find findings(:bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_weakness).id
+    weakness = Weakness.find findings(:being_implemented_weakness_on_approved_draft).id
     assert weakness.update_attribute :state, 7
 
     @conclusion_review = ConclusionFinalReview.list.new({

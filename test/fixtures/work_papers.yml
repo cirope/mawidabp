@@ -28,62 +28,62 @@ text_work_paper_bcra_A4609_security_management_responsible_dependency_item_edita
   owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_security_management_responsible_dependency_item_editable) %>
   owner_type: ControlObjectiveItem
 
-text_work_paper_bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_weakness:
+text_work_paper_being_implemented_weakness_on_approved_draft:
   name: Text Work Paper
   code: PTO 01
   number_of_pages: 1
   description: Text Work Paper Description
   file_model:
   organization: cirope
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_weakness) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:being_implemented_weakness_on_approved_draft) %>
   owner_type: Finding
 
-text_work_paper_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented:
+text_work_paper_being_implemented_weakness:
   name: Text Work Paper
   code: PTO 04
   number_of_pages: 14
   description: Text Work Paper Description
   file_model:
   organization: cirope
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:being_implemented_weakness) %>
   owner_type: Finding
 
-text2_work_paper_bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
+text2_work_paper_unconfirmed_weakness:
   name: Text2 Work Paper
   code: PTO 05
   number_of_pages: 15
   description: Text2 Work Paper Description
   file_model:
   organization: cirope
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_weakness) %>
   owner_type: Finding
 
-text_work_paper_iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification:
+text_work_paper_unanswered_for_level_1_notification:
   name: Text Work Paper
   code: PTO 01
   number_of_pages: 10
   description: Text Work Paper Description
   file_model:
   organization: cirope
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:unanswered_for_level_1_notification) %>
   owner_type: Finding
 
-text_work_paper_bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
+text_work_paper_unconfirmed_oportunity:
   name: Text Work Paper
   code: PTOM 03
   number_of_pages: 13
   description: Text Work Paper Description
   file_model:
   organization: cirope
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_editable_oportunity) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_oportunity) %>
   owner_type: Finding
 
-text_work_paper_iso_27000_security_organization_4_2_item_editable_oportunity:
+text_work_paper_confirmed_oportunity_on_draft:
   name: Text Work Paper
   code: PTOM 01
   number_of_pages: 11
   description: Text Work Paper Description
   file_model:
   organization: cirope
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:iso_27000_security_organization_4_2_item_editable_oportunity) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:confirmed_oportunity_on_draft) %>
   owner_type: Finding

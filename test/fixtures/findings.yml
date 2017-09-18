@@ -1,5 +1,5 @@
 <% stale_confirmed_days = DEFAULT_SETTINGS[:finding_stale_confirmed_days][:value].to_i %>
-bcra_A4609_security_management_responsible_dependency_weakness_being_implemented:
+being_implemented_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
   title: Title 1w
@@ -20,7 +20,7 @@ bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
   notification_level: 0
   organization: cirope
 
-iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
+unconfirmed_for_notification_weakness:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
   title: Title 2w iso
@@ -43,7 +43,7 @@ iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
 
 <% (1..4).each do |level| %>
 
-iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification:
+unanswered_for_level_<%= level %>_notification:
   type: Weakness
   control_objective_item: iso_27000_security_organization_4_2_item_editable
   title: Title <%= level %>w
@@ -67,7 +67,7 @@ iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_
 
 <% end %>
 
-iso_27000_security_organization_4_2_item_editable_weakness_incomplete:
+incomplete_weakness:
   type: Weakness
   control_objective_item: iso_27000_security_organization_4_2_item_editable
   title: Title incomplete_w
@@ -89,7 +89,7 @@ iso_27000_security_organization_4_2_item_editable_weakness_incomplete:
   notification_level: 0
   organization: cirope
 
-iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
+other_unconfirmed_for_notification_weakness:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
   title: Title 3w iso
@@ -110,7 +110,7 @@ iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   notification_level: 0
   organization: cirope
 
-bcra_A4609_security_management_responsible_dependency_notify_oportunity:
+notify_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
   title: Title 1o
@@ -125,22 +125,7 @@ bcra_A4609_security_management_responsible_dependency_notify_oportunity:
   notification_level: 0
   organization: cirope
 
-bcra_A4609_security_management_responsible_dependency_notify_oportunity_2:
-  type: Oportunity
-  control_objective_item: bcra_A4609_security_management_responsible_dependency_item
-  title: Title 3o
-  review_code: OM003
-  description: Description 3o
-  answer: Answer 3o
-  audit_comments: Audit comments 3o
-  state: <%= Finding::STATUS[:notify] %>
-  origination_date:
-  solution_date:
-  final: false
-  notification_level: 0
-  organization: cirope
-
-bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity:
+being_implemented_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
   title: Title 1o
@@ -155,7 +140,7 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   notification_level: 0
   organization: cirope
 
-bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness:
+being_implemented_weakness_on_draft:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
   title: Title 3w bcra
@@ -175,7 +160,7 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   notification_level: 0
   organization: cirope
 
-bcra_A4609_data_proccessing_impact_analisys_weakness:
+unanswered_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
   title: Title 2w bcra
@@ -195,7 +180,7 @@ bcra_A4609_data_proccessing_impact_analisys_weakness:
   notification_level: 0
   organization: cirope
 
-bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
+unconfirmed_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
   title: Title 1w bi
@@ -215,7 +200,7 @@ bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
   notification_level: 0
   organization: cirope
 
-bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
+unconfirmed_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
   title: Title 3o
@@ -232,7 +217,7 @@ bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   notification_level: 0
   organization: cirope
 
-iso_27000_security_organization_4_2_item_editable_oportunity:
+confirmed_oportunity_on_draft:
   type: Oportunity
   control_objective_item: iso_27000_security_organization_4_2_item_editable
   title: Title o
@@ -248,7 +233,7 @@ iso_27000_security_organization_4_2_item_editable_oportunity:
   notification_level: 0
   organization: cirope
 
-bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
+confirmed_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
   title: Title 2o
@@ -265,7 +250,7 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
   notification_level: 0
   organization: cirope
 
-iso_27000_security_policy_3_1_item_weakness:
+being_implemented_weakness_on_final:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
   title: Title 1wx
@@ -285,7 +270,7 @@ iso_27000_security_policy_3_1_item_weakness:
   notification_level: 0
   organization: cirope
 
-bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_weakness:
+being_implemented_weakness_on_approved_draft:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
   title: Title 1w

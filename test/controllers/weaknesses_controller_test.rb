@@ -10,7 +10,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     public_actions = []
     id_param = {
       params: {
-        id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).to_param
+        id: findings(:unanswered_weakness).to_param
       }
     }
     public_actions = []
@@ -67,8 +67,8 @@ class WeaknessesControllerTest < ActionController::TestCase
   test 'list weaknesses for specific ids' do
     login
     ids = [
-      findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
-      findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id
+      findings(:unconfirmed_weakness).id,
+      findings(:being_implemented_weakness_on_draft).id
     ]
 
     get :index, params: { ids: ids }
@@ -82,7 +82,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   test 'show weakness' do
     login
     get :show, params: {
-      id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+      id: findings(:unanswered_weakness).id
     }
     assert_response :success
     assert_not_nil assigns(:weakness)
@@ -90,7 +90,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'show weakness in json' do
-    weakness = findings :bcra_A4609_data_proccessing_impact_analisys_weakness
+    weakness = findings :unanswered_weakness
 
     login
     get :show, :params => {
@@ -188,7 +188,7 @@ class WeaknessesControllerTest < ActionController::TestCase
           finding_relations_attributes: [
             {
               description: 'Duplicated',
-              related_finding_id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+              related_finding_id: findings(:unanswered_weakness).id
             }
           ],
           comments_attributes: [
@@ -205,7 +205,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   test 'edit weakness' do
     login
     get :edit, params: {
-      id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+      id: findings(:unanswered_weakness).id
     }
     assert_response :success
     assert_not_nil assigns(:weakness)
@@ -217,8 +217,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_no_difference 'Weakness.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
         patch :update, params: {
-          id: findings(
-            :bcra_A4609_data_proccessing_impact_analisys_weakness).id,
+          id: findings(:unanswered_weakness).id,
           weakness: {
             control_objective_item_id: control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item).id,
@@ -237,27 +236,27 @@ class WeaknessesControllerTest < ActionController::TestCase
             follow_up_date: '',
             finding_user_assignments_attributes: [
               {
-                id: finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_weakness_bare_user).id,
+                id: finding_user_assignments(:unanswered_weakness_bare_user).id,
                 user_id: users(:bare_user).id,
                 process_owner: '0'
               }, {
-                id: finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_weakness_audited_user).id,
+                id: finding_user_assignments(:unanswered_weakness_audited_user).id,
                 user_id: users(:audited_user).id,
                 process_owner: '1'
               }, {
-                id: finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_weakness_auditor_user).id,
+                id: finding_user_assignments(:unanswered_weakness_auditor_user).id,
                 user_id: users(:auditor_user).id,
                 process_owner: '0'
               }, {
-                id: finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_weakness_manager_user).id,
+                id: finding_user_assignments(:unanswered_weakness_manager_user).id,
                 user_id: users(:manager_user).id,
                 process_owner: '0'
               }, {
-                id: finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_weakness_supervisor_user).id,
+                id: finding_user_assignments(:unanswered_weakness_supervisor_user).id,
                 user_id: users(:supervisor_user).id,
                 process_owner: '0'
               }, {
-                id: finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_weakness_administrator_user).id,
+                id: finding_user_assignments(:unanswered_weakness_administrator_user).id,
                 user_id: users(:administrator_user).id,
                 process_owner: '0'
               }
@@ -277,7 +276,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             finding_relations_attributes: [
               {
                 description: 'Duplicated',
-                related_finding_id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+                related_finding_id: findings(:unanswered_weakness).id
               }
             ]
           }
@@ -292,8 +291,7 @@ class WeaknessesControllerTest < ActionController::TestCase
 
   test 'follow up pdf' do
     login
-    weakness = Weakness.find(findings(
-        :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
+    weakness = Weakness.find(findings(:unconfirmed_weakness).id)
 
     assert_nothing_raised do
       get :follow_up_pdf, params: { id: weakness.id }
@@ -304,10 +302,8 @@ class WeaknessesControllerTest < ActionController::TestCase
 
   test 'undo reiteration' do
     login
-    weakness = Finding.find(findings(
-        :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
-    repeated_of = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
+    weakness = Finding.find(findings(:unanswered_for_level_1_notification).id)
+    repeated_of = Finding.find(findings(:being_implemented_weakness).id)
     repeated_of_original_state = repeated_of.state
 
     assert !repeated_of.repeated?
@@ -324,8 +320,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for finding relation' do
-    finding = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
+    finding = Finding.find(findings(:being_implemented_weakness_on_draft).id)
 
     login
     get :auto_complete_for_finding_relation, params: {
@@ -341,8 +336,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_equal 3, findings.size
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
-    finding = Finding.find(findings(
-        :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id)
+    finding = Finding.find(findings(:unconfirmed_for_notification_weakness).id)
 
     get :auto_complete_for_finding_relation, params: {
       q: 'O001',

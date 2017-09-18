@@ -9,7 +9,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   test 'public and private actions' do
     id_param = {
       :params => {
-        :id => findings(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity).to_param
+        :id => findings(:confirmed_oportunity).to_param
       }
     }
     public_actions = []
@@ -66,7 +66,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   test 'show oportunity' do
     login
     get :show, :params => {
-      :id => findings(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity).id
+      :id => findings(:confirmed_oportunity).id
     }
     assert_response :success
     assert_not_nil assigns(:oportunity)
@@ -74,7 +74,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'show oportunity in json' do
-    oportunity = findings :bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity
+    oportunity = findings :confirmed_oportunity
 
     login
     get :show, :params => {
@@ -157,7 +157,7 @@ class OportunitiesControllerTest < ActionController::TestCase
           :finding_relations_attributes => [
             {
               :description => 'Duplicated',
-              :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+              :related_finding_id => findings(:unanswered_weakness).id
             }
           ],
           :taggings_attributes => [
@@ -173,7 +173,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   test 'edit oportunity' do
     login
     get :edit, :params => {
-      :id => findings(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity).id
+      :id => findings(:confirmed_oportunity).id
     }
     assert_response :success
     assert_not_nil assigns(:oportunity)
@@ -185,8 +185,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_no_difference 'Oportunity.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
         patch :update, :params => {
-          :id => findings(
-            :bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity).id,
+          :id => findings(:confirmed_oportunity).id,
           :oportunity => {
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item).id,
@@ -200,32 +199,32 @@ class OportunitiesControllerTest < ActionController::TestCase
             :solution_date => '',
             :finding_user_assignments_attributes => [
               {
-                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_bare_user).id,
+                :id => finding_user_assignments(:confirmed_oportunity_bare_user).id,
                 :user_id => users(:bare_user).id,
                 :process_owner => '0'
               },
               {
-                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_audited_user).id,
+                :id => finding_user_assignments(:confirmed_oportunity_audited_user).id,
                 :user_id => users(:audited_user).id,
                 :process_owner => '1'
               },
               {
-                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_auditor_user).id,
+                :id => finding_user_assignments(:confirmed_oportunity_auditor_user).id,
                 :user_id => users(:auditor_user).id,
                 :process_owner => '0'
               },
               {
-                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_manager_user).id,
+                :id => finding_user_assignments(:confirmed_oportunity_manager_user).id,
                 :user_id => users(:manager_user).id,
                 :process_owner => '0'
               },
               {
-                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_supervisor_user).id,
+                :id => finding_user_assignments(:confirmed_oportunity_supervisor_user).id,
                 :user_id => users(:supervisor_user).id,
                 :process_owner => '0'
               },
               {
-                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_administrator_user).id,
+                :id => finding_user_assignments(:confirmed_oportunity_administrator_user).id,
                 :user_id => users(:administrator_user).id,
                 :process_owner => '0'
               }
@@ -245,7 +244,7 @@ class OportunitiesControllerTest < ActionController::TestCase
             :finding_relations_attributes => [
               {
                 :description => 'Duplicated',
-                :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+                :related_finding_id => findings(:unanswered_weakness).id
               }
             ]
           }
@@ -260,8 +259,7 @@ class OportunitiesControllerTest < ActionController::TestCase
 
   test 'follow up pdf' do
     login
-    oportunity = Oportunity.find(findings(
-        :bcra_A4609_data_proccessing_impact_analisys_editable_oportunity).id)
+    oportunity = Oportunity.find(findings(:unconfirmed_oportunity).id)
 
     assert_nothing_raised do
       get :follow_up_pdf, :params => { :id => oportunity.id }
@@ -276,14 +274,12 @@ class OportunitiesControllerTest < ActionController::TestCase
 
     assert_difference 'review.finding_review_assignments.count' do
       review.finding_review_assignments.create(
-        :finding_id => findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
+        :finding_id => findings(:being_implemented_weakness).id
       )
     end
 
-    oportunity = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id)
-    repeated_of = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
+    oportunity = Finding.find(findings(:being_implemented_oportunity).id)
+    repeated_of = Finding.find(findings(:being_implemented_weakness).id)
     repeated_of_original_state = repeated_of.state
 
     assert !repeated_of.repeated?
@@ -300,8 +296,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for finding relation' do
-    finding = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id)
+    finding = Finding.find(findings(:being_implemented_oportunity).id)
 
     login
     get :auto_complete_for_finding_relation, :params => {
@@ -317,8 +312,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_equal 3, findings.size
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
-    finding = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id)
+    finding = Finding.find(findings(:notify_oportunity).id)
 
     get :auto_complete_for_finding_relation, :params => {
       :q => 'O001',

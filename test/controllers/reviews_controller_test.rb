@@ -138,7 +138,7 @@ class ReviewsControllerTest < ActionController::TestCase
                 },
                 finding_review_assignments_attributes: [
                   {
-                    finding_id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id.to_s
+                    finding_id: findings(:unanswered_weakness).id.to_s
                   }
                 ],
                 review_user_assignments_attributes: [

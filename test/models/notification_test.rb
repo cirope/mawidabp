@@ -6,8 +6,7 @@ class NotificationTest < ActiveSupport::TestCase
   def setup
     set_organization
 
-    @notification = 
-      notifications :supervisor_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed
+    @notification = notifications :supervisor_user_being_implemented_weakness_confirmed
   end
 
   test 'create' do
@@ -83,7 +82,7 @@ class NotificationTest < ActiveSupport::TestCase
 
   test 'notify function' do
     @notification = Notification.find(notifications(
-        :bare_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id)
+        :bare_user_unanswered_weakness_unconfirmed).id)
     pendings = @notification.findings.select(&:unconfirmed?)
     confirmed = @notification.findings.select(&:confirmed?)
 
@@ -103,7 +102,7 @@ class NotificationTest < ActiveSupport::TestCase
     assert_not_nil @notification.confirmation_date
 
     @notification = Notification.find(notifications(
-        :audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id)
+        :audited_user_unanswered_weakness_unconfirmed).id)
     pendings = @notification.findings.select(&:unconfirmed?)
     confirmed = @notification.findings.select(&:confirmed?)
     notifications_for_not_audit_users = @notification.findings.map do |f|

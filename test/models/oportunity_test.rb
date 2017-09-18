@@ -8,13 +8,12 @@ class OportunityTest < ActiveSupport::TestCase
   def setup
     set_organization
 
-    @oportunity = Oportunity.find(
-      findings(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity).id)
+    @oportunity = Oportunity.find(findings(:confirmed_oportunity).id)
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
-    oportunity = findings(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity)
+    oportunity = findings(:confirmed_oportunity)
     assert_kind_of Oportunity, @oportunity
     assert_equal oportunity.control_objective_item_id,
       @oportunity.control_objective_item_id
@@ -103,8 +102,7 @@ class OportunityTest < ActiveSupport::TestCase
       @oportunity.destroy
     end
 
-    @oportunity = Oportunity.find(findings(
-        :bcra_A4609_data_proccessing_impact_analisys_editable_oportunity).id)
+    @oportunity = Oportunity.find(findings(:unconfirmed_oportunity).id)
 
     # Y tampoco se puede eliminar si NO está en un informe definitivo
     assert_no_difference 'Oportunity.count', -1 do
@@ -125,8 +123,7 @@ class OportunityTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
-    another_oportunity = Oportunity.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id)
+    another_oportunity = Oportunity.find(findings(:notify_oportunity).id)
     @oportunity.review_code = another_oportunity.review_code
 
     assert @oportunity.invalid?
@@ -152,7 +149,7 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'next code' do
-    assert_equal 'OM004', @oportunity.next_code
+    assert_equal 'OM003', @oportunity.next_code
   end
 
   test 'next work paper code' do
@@ -160,8 +157,7 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'review code is updated when control objective is changed' do
-    oportunity = Oportunity.find(findings(
-        :iso_27000_security_organization_4_2_item_editable_oportunity).id)
+    oportunity = Oportunity.find(findings(:confirmed_oportunity_on_draft).id)
 
     assert oportunity.update(:control_objective_item_id =>
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
@@ -169,8 +165,7 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'can not change to a control objective in a final review' do
-    oportunity = Oportunity.find(findings(
-        :iso_27000_security_organization_4_2_item_editable_oportunity).id)
+    oportunity = Oportunity.find(findings(:confirmed_oportunity_on_draft).id)
 
     assert_raise RuntimeError do
       oportunity.update(:control_objective_item_id =>
@@ -179,19 +174,16 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'work paper codes are updated when control objective is changed' do
-    oportunity = Oportunity.find(findings(
-        :iso_27000_security_organization_4_2_item_editable_oportunity).id)
+    oportunity = Oportunity.find(findings(:confirmed_oportunity_on_draft).id)
 
     assert oportunity.update(:control_objective_item_id =>
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
     assert_equal 'PTOM 04', oportunity.work_papers.first.code
   end
-  
+
   test 'must be approved' do
-    @oportunity = Oportunity.find(
-      findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id
-    )
-    
+    @oportunity = Oportunity.find(findings(:being_implemented_oportunity).id)
+
     assert @oportunity.must_be_approved?
     assert @oportunity.approval_errors.blank?
 

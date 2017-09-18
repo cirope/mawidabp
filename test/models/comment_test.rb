@@ -24,8 +24,7 @@ class CommentTest < ActiveSupport::TestCase
     assert_difference 'Comment.count' do
       @comment = Comment.new(
         :comment => 'New comment',
-        :commentable => findings(
-          :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification),
+        :commentable => findings(:unconfirmed_for_notification_weakness),
         :user => users(:administrator_user)
       )
 
