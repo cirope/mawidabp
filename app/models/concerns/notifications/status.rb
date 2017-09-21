@@ -8,6 +8,7 @@ module Notifications::Status
       rejected:    2
     }
 
+    scope :confirmed,     -> { where status: STATUS[:confirmed] }
     scope :not_confirmed, -> { where status: STATUS[:unconfirmed] }
 
     STATUS.each do |name, value|

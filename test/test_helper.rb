@@ -1,6 +1,5 @@
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
-require 'minitest/pride'
 require 'sidekiq/testing'
 
 Sidekiq::Testing.inline!
@@ -40,8 +39,8 @@ class ActiveSupport::TestCase
   end
 
   def assert_error model, attribute, type, options = {}
-    assert model.errors[attribute].include?(
-      model.errors.generate_message(attribute, type, options)
-    )
+    error = model.errors.generate_message attribute, type, options
+
+    assert_includes model.errors[attribute], error
   end
 end
