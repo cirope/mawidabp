@@ -74,11 +74,6 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
-  test 'update' do
-    assert @finding.update(description: 'Updated description')
-    assert_equal 'Updated description', @finding.reload.description
-  end
-
   test 'delete' do
     # On a final review, can not be destroyed
     assert_no_difference('Finding.count') { @finding.destroy }
@@ -142,11 +137,10 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates duplicated attributes' do
-    other                = findings :being_implemented_weakness
-    @finding.review_code = other.review_code
+    finding = @finding.dup
 
-    assert @finding.invalid?
-    assert_error @finding, :review_code, :taken
+    assert finding.invalid?
+    assert_error finding, :review_code, :taken
 
     # Not in the same review
     other = findings :unconfirmed_for_notification_weakness
@@ -904,7 +898,6 @@ class FindingTest < ActiveSupport::TestCase
           '1_new' => {
             name: 'New post_workpaper name',
             code: 'PTO 20',
-            organization_id: organizations(:cirope).id,
             file_model_attributes: {
               file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
             }
@@ -919,7 +912,7 @@ class FindingTest < ActiveSupport::TestCase
     uneditable_finding.final = true
 
     assert_no_difference 'WorkPaper.count' do
-      assert_raise(RuntimeError) do
+      assert_raise RuntimeError do
         uneditable_finding.update(
           work_papers_attributes: {
             '1_new' => {
