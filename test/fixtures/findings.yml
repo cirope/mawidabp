@@ -136,6 +136,8 @@ being_implemented_oportunity:
   state: <%= Finding::STATUS[:being_implemented] %>
   origination_date:
   solution_date:
+  effect: Effect 1o
+  follow_up_date: <%= 1.year.from_now.to_date.to_s(:db) %>
   final: false
   notification_level: 0
   organization: cirope

@@ -1,5 +1,5 @@
 class Weakness < Finding
-  include Weaknesses::Approval
+  include Findings::Approval
   include Weaknesses::Code
   include Weaknesses::Defaults
   include Weaknesses::GraphHelpers

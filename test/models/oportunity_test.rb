@@ -187,7 +187,7 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity = Oportunity.find(findings(:being_implemented_oportunity).id)
 
     assert @oportunity.must_be_approved?
-    assert @oportunity.approval_errors.blank?
+    assert @oportunity.approval_errors
 
     @oportunity.state = Finding::STATUS[:implemented_audited]
     @oportunity.solution_date = nil
@@ -208,9 +208,11 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.answer = ' '
 
     assert !@oportunity.must_be_approved?
-    assert_equal [I18n.t('oportunity.errors.without_answer'),
-      I18n.t('oportunity.errors.with_solution_date')].sort,
-      @oportunity.approval_errors.sort
+    assert_equal [
+      I18n.t('oportunity.errors.without_answer'),
+      I18n.t('oportunity.errors.with_solution_date'),
+      I18n.t('oportunity.errors.without_follow_up_date')
+    ].sort, @oportunity.approval_errors.sort
 
     @oportunity.reload
     assert @oportunity.must_be_approved?
