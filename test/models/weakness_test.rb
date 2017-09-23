@@ -79,10 +79,10 @@ class WeaknessTest < ActiveSupport::TestCase
     # On a final review, can not be destroyed
     assert_no_difference('Weakness.count') { @weakness.destroy }
 
-    @weakness = findings :unconfirmed_weakness
+    weakness = findings :unconfirmed_weakness
 
     # Without final review, also can not be destroyed =)
-    assert_no_difference('Weakness.count') { @weakness.destroy }
+    assert_no_difference('Weakness.count') { weakness.destroy }
   end
 
   test 'validates blank attributes' do
@@ -214,7 +214,6 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.solution_date = nil
 
     refute @weakness.must_be_approved?
-    assert_equal 1, @weakness.approval_errors.size
     assert_equal error_messages.sort, @weakness.approval_errors.sort
   end
 
@@ -229,7 +228,6 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.follow_up_date = nil
 
     refute @weakness.must_be_approved?
-    assert_equal 2, @weakness.approval_errors.size
     assert_equal error_messages.sort, @weakness.approval_errors.sort
   end
 
@@ -243,7 +241,6 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.answer = ' '
 
     refute @weakness.must_be_approved?
-    assert_equal 2, @weakness.approval_errors.size
     assert_equal error_messages.sort, @weakness.approval_errors.sort
   end
 
@@ -253,7 +250,6 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.state = Finding::STATUS[:notify]
 
     refute @weakness.must_be_approved?
-    assert_equal 1, @weakness.approval_errors.size
     assert_equal error_messages.sort, @weakness.approval_errors.sort
   end
 
@@ -266,8 +262,9 @@ class WeaknessTest < ActiveSupport::TestCase
       end
 
     refute @weakness.must_be_approved?
-    assert_equal 1, @weakness.approval_errors.size
     assert_equal error_messages.sort, @weakness.approval_errors.sort
+
+    error_messages << I18n.t('weakness.errors.without_auditor')
 
     @weakness.finding_user_assignments =
       @weakness.reload.finding_user_assignments.reject do |fua|
@@ -275,10 +272,6 @@ class WeaknessTest < ActiveSupport::TestCase
       end
 
     refute @weakness.must_be_approved?
-    assert_equal 2, @weakness.approval_errors.size
-
-    error_messages << I18n.t('weakness.errors.without_auditor')
-
     assert_equal error_messages.sort, @weakness.approval_errors.sort
   end
 
@@ -292,7 +285,6 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.audit_comments = '  '
 
     refute @weakness.must_be_approved?
-    assert_equal 2, @weakness.approval_errors.size
     assert_equal error_messages.sort, @weakness.approval_errors.sort
   end
 
