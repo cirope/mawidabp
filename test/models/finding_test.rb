@@ -78,10 +78,10 @@ class FindingTest < ActiveSupport::TestCase
     # On a final review, can not be destroyed
     assert_no_difference('Finding.count') { @finding.destroy }
 
-    @finding = findings :unconfirmed_weakness
+    finding = findings :unconfirmed_weakness
 
     # Without final review, also can not be destroyed =)
-    assert_no_difference('Finding.count') { @finding.destroy }
+    assert_no_difference('Finding.count') { finding.destroy }
   end
 
   test 'validates blank attributes' do
