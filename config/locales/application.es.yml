@@ -1111,14 +1111,12 @@ es:
       group: "Grupo"
       notification: "Notificación"
       old_password: "Contraseña anterior"
-      oportunity: "Oportunidad de mejora"
       privilege: "Privilegio"
       review:
         one: "Informe"
         other: "Informes"
       review_user_assignment: "Asignación de usuario a informe"
       role: "Perfil"
-      weakness: "Observación"
       workflow: "Programa de trabajo"
       workflow_item: "Registro de programa de trabajo"
       work_paper: "Papel de trabajo"
@@ -1260,18 +1258,6 @@ es:
         notification: "Notificación"
       old_password:
         password: "Contraseña"
-      oportunity:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "Oportunidad de mejora"
-        review_code: "Código en el informe"
-        answer: "Respuesta"
-        user_ids: "Responsable"
-        finding_user_assignments: "Responsables"
-        work_papers: "Papeles de trabajo"
-        state: "Estado"
-        origination_date: "Fecha de origen"
-        solution_date: "Fecha de solución"
       organization:
         name: "Nombre"
         prefix: "Prefijo"
@@ -1338,23 +1324,6 @@ es:
         name: "Perfil"
         role_type: "Tipo perfil"
         privileges: "Privilegios"
-      weakness:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "Observación"
-        review_code: "Código en el informe"
-        audit_recommendations: "Recomendaciones de auditoría"
-        answer: "Respuesta"
-        effect: "Efecto"
-        risk: "Riesgo"
-        priority: "Prioridad"
-        user_ids: "Responsable"
-        finding_user_assignments: "Responsables"
-        origination_date: "Fecha de origen"
-        follow_up_date: "Fecha de implementación"
-        state: "Estado"
-        solution_date: "Fecha de solución"
-        work_papers: "Papeles de trabajo"
       work_paper:
         name: "Nombre"
         code: "Código"
@@ -1416,29 +1385,11 @@ es:
           attributes:
             file_file_name:
               without_extension: 'debe tener extensión'
-        finding:
-          attributes:
-            follow_up_date:
-              must_be_blank: "debe estar en blanco para el estado seleccionado"
-            solution_date:
-              must_be_blank: "debe estar en blanco para el estado seleccionado"
-            state:
-              must_have_a_comment: "debe tener adjunto un comentario para esta transición"
-              can_not_be_revoked: "no puede ser 'Anulado', posiblemente se deba a una reiteración o a que la observación ya se encuentra en un informe definitivo"
-              must_have_a_work_paper: "debe tener asociado al menos un papel de trabajo"
-              must_be_done_by_proper_role: "solo puede ser cambiado por un usuario supervisor o gerente"
-            users:
-              invalid: "debe contener como mínimo un auditor, un auditado, un gerente y un supervisor"
-        finding_user_assignment:
-          attributes:
-            process_owner:
-              invalid: "solo puede ser asignado a usuarios de tipo auditado"
         image_model:
           attributes:
             image_content_type:
               invalid: "no es válido"
             image_file_size:
-
         organization_role:
           attributes:
             role_id:
