@@ -1,6 +1,5 @@
 confirmed_oportunity_auditor_answer:
   answer: Auditor text
-  auditor_comments: Auditor comments
   commitment_date: <%= Date.today.to_s(:db) %>
   finding: confirmed_oportunity
   user: supervisor

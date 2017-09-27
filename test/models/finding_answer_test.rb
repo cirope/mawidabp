@@ -12,7 +12,6 @@ class FindingAnswerTest < ActiveSupport::TestCase
       assert_difference 'FindingAnswer.count' do
         @finding_answer = FindingAnswer.create(
           answer: 'New answer',
-          auditor_comments: 'New auditor comments',
           finding: findings(:unanswered_weakness),
           user: users(:supervisor),
           file_model: file_models(:text_file),
@@ -42,7 +41,6 @@ class FindingAnswerTest < ActiveSupport::TestCase
       assert_difference 'FindingAnswer.count' do
         @finding_answer = FindingAnswer.create(
           answer: 'New answer',
-          auditor_comments: 'New auditor comments',
           finding: findings(:unanswered_weakness),
           user: users(:supervisor),
           file_model: file_models(:text_file),
