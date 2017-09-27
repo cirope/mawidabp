@@ -5,7 +5,7 @@ class CommentTest < ActiveSupport::TestCase
   fixtures :comments
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @comment = Comment.find comments(:comment_one).id
   end
 

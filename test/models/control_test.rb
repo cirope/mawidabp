@@ -5,7 +5,7 @@ class ControlTest < ActiveSupport::TestCase
   fixtures :controls
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @control = Control.find controls(:security_policy_3_1_control_1).id
   end
 

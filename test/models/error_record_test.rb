@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ErrorRecordTest < ActiveSupport::TestCase
-  def setup
+  setup do
     set_organization
 
     @error_record = error_records :administrator_failed_attempt

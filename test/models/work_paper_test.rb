@@ -5,7 +5,7 @@ class WorkPaperTest < ActiveSupport::TestCase
   fixtures :work_papers, :file_models, :organizations
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @work_paper = WorkPaper.find work_papers(:image_work_paper).id
     @work_paper.code_prefix = I18n.t("code_prefixes.work_papers_in_control_objectives")
 

@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class BusinessUnitScoreTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @business_unit_score = business_unit_scores :organization_security_4_4_score
   end
 

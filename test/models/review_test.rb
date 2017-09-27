@@ -5,7 +5,7 @@ class ReviewTest < ActiveSupport::TestCase
   fixtures :reviews, :periods, :plan_items
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @review = Review.find reviews(:review_with_conclusion).id
 
     set_organization

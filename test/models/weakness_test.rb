@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class WeaknessTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @weakness = findings :unanswered_weakness
 
     set_organization

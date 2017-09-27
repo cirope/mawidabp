@@ -3,7 +3,7 @@ require 'test_helper'
 class NotificationTest < ActiveSupport::TestCase
   fixtures :notifications, :users, :findings
 
-  def setup
+  setup do
     set_organization
 
     @notification = notifications :supervisor_being_implemented_weakness_confirmed

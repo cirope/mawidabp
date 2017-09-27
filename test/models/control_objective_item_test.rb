@@ -6,7 +6,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   include ActionDispatch::TestProcess
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     set_organization
 
     @control_objective_item = ControlObjectiveItem.find control_objective_items(

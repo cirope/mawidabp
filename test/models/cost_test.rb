@@ -5,7 +5,7 @@ class CostTest < ActiveSupport::TestCase
   fixtures :costs
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @cost = Cost.find costs(:hardware_rent).id
   end
 

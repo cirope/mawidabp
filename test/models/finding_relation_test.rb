@@ -5,7 +5,7 @@ class FindingRelationTest < ActiveSupport::TestCase
   fixtures :finding_relations
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @finding_relation = FindingRelation.find finding_relations(:other_unconfirmed_for_notification_weakness_duplicated_of_unconfirmed_for_notification_weakness).id
   end
 

@@ -6,7 +6,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
-  def setup
+  setup do
     @request.host = "#{organizations(:cirope).prefix}.localhost.i"
   end
 

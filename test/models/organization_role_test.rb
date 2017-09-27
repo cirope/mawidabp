@@ -5,7 +5,7 @@ class OrganizationRoleTest < ActiveSupport::TestCase
   fixtures :organization_roles, :roles, :privileges
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @organization_role = OrganizationRole.find(
       organization_roles(:admin_role_for_administrator_in_cirope).id)
 

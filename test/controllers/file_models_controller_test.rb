@@ -4,7 +4,7 @@ require 'test_helper'
 class FileModelsControllerTest < ActionController::TestCase
   fixtures :organizations, :users
 
-  def setup
+  setup do
     set_organization
 
     file_name = "#{TEMP_PATH}temp_test.txt"

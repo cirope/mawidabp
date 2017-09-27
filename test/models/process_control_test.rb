@@ -5,7 +5,7 @@ class ProcessControlTest < ActiveSupport::TestCase
   fixtures :process_controls
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @process_control = ProcessControl.find(
       process_controls(:security_policy).id)
   end

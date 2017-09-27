@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class PollTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @poll = polls :poll_one
 
     set_organization

@@ -4,7 +4,7 @@ class RelatedUserRelationTest < ActiveSupport::TestCase
   fixtures :related_user_relations
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @related_user_relation = RelatedUserRelation.find(
       related_user_relations(:bare_first_time_relation).id
     )

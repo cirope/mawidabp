@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class NewsTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @news = news :announcement
   end
 

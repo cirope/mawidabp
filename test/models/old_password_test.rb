@@ -5,7 +5,7 @@ class OldPasswordTest < ActiveSupport::TestCase
   fixtures :old_passwords, :users
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @old_password = OldPassword.find old_passwords(:administrator_old_password).id
   end
 

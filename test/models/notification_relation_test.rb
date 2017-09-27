@@ -5,7 +5,7 @@ class NotificationRelationTest < ActiveSupport::TestCase
   fixtures :notification_relations
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @notification_relation = NotificationRelation.find notification_relations(
       :bare_unanswered_weakness_unconfirmed_relation).id
   end

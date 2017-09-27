@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class SessionsControllerTest < ActionController::TestCase
-  def setup
+  setup do
     @organization = organizations(:cirope)
     @user = users :administrator
 

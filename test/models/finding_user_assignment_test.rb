@@ -7,7 +7,7 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
   fixtures :finding_user_assignments
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     set_organization
 
     @finding_user_assignment =

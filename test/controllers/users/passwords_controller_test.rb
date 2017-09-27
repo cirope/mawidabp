@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class Users::PasswordsControllerTest < ActionController::TestCase
-  def setup
+  setup do
     @request.host = "#{organizations(:cirope).prefix}.localhost.i"
   end
 

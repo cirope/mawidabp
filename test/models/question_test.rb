@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class QuestionTest < ActiveSupport::TestCase
-  def setup
+  setup do
     set_organization
 
     @question = questions :question_multi_choice

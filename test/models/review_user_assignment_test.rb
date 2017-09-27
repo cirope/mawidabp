@@ -5,7 +5,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
   fixtures :review_user_assignments
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @review_user_assignment = ReviewUserAssignment.find(review_user_assignments(
         :review_with_conclusion_auditor).id)
 

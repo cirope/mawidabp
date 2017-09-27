@@ -5,7 +5,7 @@ class ControlObjectiveTest < ActiveSupport::TestCase
   fixtures :control_objectives
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @control_objective = ControlObjective.find(
       control_objectives(:security_policy_3_1).id)
   end

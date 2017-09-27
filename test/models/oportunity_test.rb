@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class OportunityTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @oportunity = findings :confirmed_oportunity
 
     set_organization

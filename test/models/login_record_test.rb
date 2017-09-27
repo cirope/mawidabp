@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class LoginRecordTest < ActiveSupport::TestCase
-  def setup
+  setup do
     set_organization
 
     @login_record = LoginRecord.find(

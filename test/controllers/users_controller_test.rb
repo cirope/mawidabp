@@ -3,7 +3,7 @@ require 'test_helper'
 class UsersControllerTest < ActionController::TestCase
   include ActionMailer::TestHelper
 
-  def setup
+  setup do
     login
   end
 

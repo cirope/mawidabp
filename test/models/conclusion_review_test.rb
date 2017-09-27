@@ -5,7 +5,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   fixtures :conclusion_reviews
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @conclusion_review = ConclusionReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
 
