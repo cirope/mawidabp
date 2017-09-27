@@ -330,7 +330,6 @@ class FindingsControllerTest < ActionController::TestCase
               :finding_answers_attributes => [
                 {
                   :answer => 'New answer',
-                  :auditor_comments => 'New auditor comments',
                   :user_id => users(:supervisor).id,
                   :notify_users => '1',
                   :file_model_attributes => {
@@ -438,7 +437,6 @@ class FindingsControllerTest < ActionController::TestCase
             :finding_answers_attributes => [
               {
                 :answer => 'New answer',
-                :auditor_comments => 'New audited comments',
                 :commitment_date => I18n.l(Date.tomorrow),
                 :user_id => users(:audited).id,
                 :file_model_attributes => {
@@ -540,20 +538,6 @@ class FindingsControllerTest < ActionController::TestCase
     assert_redirected_to edit_finding_url('incomplete', assigns(:finding))
     assert_not_nil assigns(:finding)
     assert_equal 'Updated description', assigns(:finding).description
-  end
-
-  test 'follow up pdf' do
-    login
-    finding = Finding.find(findings(:unconfirmed_weakness).id)
-
-    assert_nothing_raised do
-      get :follow_up_pdf, :params => {
-        :completed => 'incomplete',
-        :id => finding.id
-      }
-    end
-
-    assert_redirected_to finding.relative_follow_up_pdf_path
   end
 
   test 'auto complete for finding relation' do

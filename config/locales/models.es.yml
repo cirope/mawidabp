@@ -219,7 +219,6 @@ es:
         one: 'Comentarios'
         answer: 'Comentario'
         commitment_date: 'Fecha de compromiso'
-        auditor_comments: 'Comentario (comentarios del auditor)'
         user_id: 'Comentario (usuario)'
         notify_users: 'Comentario (enviar notificación)'
       finding/finding_answers/file_model:

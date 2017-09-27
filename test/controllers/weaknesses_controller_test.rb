@@ -289,17 +289,6 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_equal 'O020', assigns(:weakness).review_code
   end
 
-  test 'follow up pdf' do
-    login
-    weakness = Weakness.find(findings(:unconfirmed_weakness).id)
-
-    assert_nothing_raised do
-      get :follow_up_pdf, params: { id: weakness.id }
-    end
-
-    assert_redirected_to weakness.relative_follow_up_pdf_path
-  end
-
   test 'undo reiteration' do
     login
     weakness = Finding.find(findings(:unanswered_for_level_1_notification).id)

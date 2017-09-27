@@ -463,11 +463,6 @@
     without_findings: "Sin Hallazgos"
 
   finding:
-    index_title: "Listado de hallazgos"
-    show_title: "Detalles de la respuesta al hallazgo"
-    edit_title: "Modificar respuesta a un hallazgo"
-    correctly_updated: "Respuesta a hallazgo actualizada correctamente."
-    stale_object_error: "La respuesta al hallazgo no fue actualizada, intente nuevamente."
     incomplete: "Pendientes"
     complete: "Solucionados o reiterados"
     as_owner: "%{kind} como responsable"
@@ -1242,7 +1237,6 @@
         file: "Archivo"
       finding_answer:
         answer: "Comentario"
-        auditor_comments: "Comentarios del auditor"
         commitment_date: "Fecha de compromiso"
         finding_id: "Hallazgo"
         user_id: "Usuario"

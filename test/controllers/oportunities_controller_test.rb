@@ -257,17 +257,6 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_equal 'OM020', assigns(:oportunity).review_code
   end
 
-  test 'follow up pdf' do
-    login
-    oportunity = Oportunity.find(findings(:unconfirmed_oportunity).id)
-
-    assert_nothing_raised do
-      get :follow_up_pdf, :params => { :id => oportunity.id }
-    end
-
-    assert_redirected_to oportunity.relative_follow_up_pdf_path
-  end
-
   test 'undo reiteration' do
     login
     review = Review.find(reviews(:review_with_conclusion).id)
