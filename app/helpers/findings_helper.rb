@@ -5,8 +5,11 @@ module FindingsHelper
     excluded = []
 
     if finding.errors[:state].present?
-      state_was = finding.new_record? ?
-        Finding::STATUS[:incomplete] : Finding.find(finding.id).state
+      state_was = if finding.new_record?
+                    Finding::STATUS[:incomplete]
+                  else
+                    Finding.findfinding.id.state
+                  end
 
       statuses.merge! finding.next_status_list(state_was)
     end
@@ -15,11 +18,14 @@ module FindingsHelper
     excluded << :confirmed unless finding.confirmed? || finding.was_confirmed?
 
     options = statuses.except(*excluded).map do |k, v|
-      [t(:"finding.status_#{k}"), v]
+      [t("finding.status_#{k}"), v]
     end
 
-    form.input :state, collection: sort_options_array(options), label: false,
-      prompt: true, input_html: { disabled: (disabled || finding.unconfirmed?) }
+    form.input :state,
+      collection: sort_options_array(options),
+      label: false,
+      prompt: true,
+      input_html: { disabled: (disabled || finding.unconfirmed?) }
   end
 
   def finding_repeated_of_label(form, readonly)
@@ -27,15 +33,15 @@ module FindingsHelper
       link = content_tag(:span,
         "[#{t('finding.undo_reiteration')}]",
         'data-help-dialog' => '#inline_undo_reiteration',
-        :class => 'popup_link',
-        :title => t('finding.undo_reiteration'),
-        :style => 'color: #666666;'
+        class: 'popup_link',
+        title: t('finding.undo_reiteration'),
+        style: 'color: #666666;'
       )
 
       form.label :repeated_of_id, raw(
         Finding.human_attribute_name('repeated_of_id') + ' ' +
-        content_tag(:span, raw(link), :class => 'popup_link_container')
-      ), :for => 'repeated_of_finding'
+        content_tag(:span, raw(link), class: 'popup_link_container')
+      ), for: 'repeated_of_finding'
     else
       form.label(
         readonly && form.object.repeated_of.present? ? :repeated_of_finding : :repeated_of_id,
@@ -78,8 +84,8 @@ module FindingsHelper
     end
 
     unless finding.follow_up_date.blank?
-      content_tag(:span, l(finding.follow_up_date, :format => :short),
-        :class => (html_classes.join(' ') unless html_classes.blank?))
+      content_tag(:span, l(finding.follow_up_date, format: :short),
+        class: (html_classes.join(' ') unless html_classes.blank?))
     else
       ''
     end
@@ -87,7 +93,7 @@ module FindingsHelper
 
   def finding_updated_at_text(finding)
     label = Finding.human_attribute_name('updated_at')
-    date = I18n.l(finding.updated_at, :format => :minimal) if finding.updated_at
+    date = I18n.l(finding.updated_at, format: :minimal) if finding.updated_at
 
     show_info "#{label}: #{date}"
   end
@@ -95,13 +101,13 @@ module FindingsHelper
   def show_review_with_conclusion_status_as_abbr(review)
     review_data = review.has_final_review? ?
       t('review.with_final_review') : t('review.without_final_review')
-    review_data << " | #{l(review.issue_date(true), :format => :long)}"
+    review_data << " | #{l(review.issue_date(true), format: :long)}"
 
-    content_tag(:abbr, h(review.identification), :title => review_data)
+    content_tag(:abbr, h(review.identification), title: review_data)
   end
 
   def show_finding_review_code_with_decription_as_abbr(finding)
-    content_tag(:abbr, finding.review_code, :title => finding.description)
+    content_tag(:abbr, finding.review_code, title: finding.description)
   end
 
 
@@ -118,7 +124,7 @@ module FindingsHelper
       content_tag(
         :span, nil, class: 'glyphicon glyphicon-time', title: t('finding.show_status_change_history')
       ),
-      '#', :onclick => "$('##{dom_id}').slideToggle(); return false;"
+      '#', onclick: "$('##{dom_id}').slideToggle(); return false;"
     )
   end
 
@@ -146,12 +152,12 @@ module FindingsHelper
 
   def show_finding_answers_count(finding)
     finding_answers_count = finding.finding_answers.count
-    user_answers = finding.finding_answers.where(:user_id => @auth_user.id).count
+    user_answers = finding.finding_answers.where(user_id: @auth_user.id).count
     klass = 'text-success' if user_answers > 0
     user_count = content_tag(
       :abbr, user_answers,
-      :title => t('finding.user_finding_answers_count'),
-      :class => klass
+      title: t('finding.user_finding_answers_count'),
+      class: klass
     )
 
     raw "#{finding_answers_count} / #{user_count}"
@@ -162,24 +168,24 @@ module FindingsHelper
 
     (@self_and_descendants + @related_users).each do |u|
       users << [
-        u.full_name_with_function, {:user_id => u.id}.to_json
+        u.full_name_with_function, {user_id: u.id}.to_json
       ]
 
       if u.can_act_as_audited?
         users << [
           "#{u.full_name_with_function} - #{t('activerecord.attributes.finding_user_assignment.process_owner')}",
-          {:user_id => u.id, :as_owner => true}.to_json
+          {user_id: u.id, as_owner: true}.to_json
         ]
       else
         users << [
           "#{u.full_name_with_function} - #{t('activerecord.attributes.finding_user_assignment.responsible_auditor')}",
-          {:user_id => u.id, :as_responsible => true}.to_json
+          {user_id: u.id, as_responsible: true}.to_json
         ]
       end
     end
 
-    select nil, :user_id, sort_options_array(users), {:prompt => true},
-      {:name => :user_id, :id => :user_id_select, :class => 'form-control'}
+    select nil, :user_id, sort_options_array(users), {prompt: true},
+      {name: :user_id, id: :user_id_select, class: 'form-control'}
   end
 
   def finding_complete_or_incomplete_label

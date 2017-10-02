@@ -1,0 +1,44 @@
+<% if @query.blank? && @order_by.blank? %>
+  <% if @self_and_descendants.size > 1 || @related_users.size > 0 || @selected_user %>
+    <% if @selected_user %>
+      <div class="page-header">
+        <h3>
+          <%= @selected_user.full_name %>
+          <small>
+            <%= FindingUserAssignment.human_attribute_name('responsible_auditor') if params[:as_responsible].present? %>
+            <%= FindingUserAssignment.human_attribute_name('process_owner')       if params[:as_owner].present? %>
+            <span class="text-muted">|</span>
+            <%= link_to t('label.cancel'), findings_path(params[:completed]) if @selected_user %>
+          </small>
+        </h3>
+      </div>
+    <% else %>
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <div class="col-md-2">
+            <%= label_tag :user_id_select, User.model_name.human %>
+          </div>
+          <div class="col-md-10">
+            <%= show_finding_related_users %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% elsif @auth_user.can_act_as_audited? %>
+    <ul class="nav nav-tabs" data-hide-in-search>
+      <li <%== 'class="active"' if params[:as_owner].blank? %>>
+        <%= link_to(
+          finding_complete_or_incomplete_label,
+          findings_path(request.query_parameters.except(:as_owner))
+        ) %>
+      </li>
+      <li <%== 'class="active"' if params[:as_owner].present? %>>
+        <%= link_to(
+          t('finding.as_owner', kind: finding_complete_or_incomplete_label),
+          findings_path(request.query_parameters.merge(as_owner: true))
+        ) %>
+      </li>
+    </ul>
+    <br>
+  <% end %>
+<% end %>
