@@ -10,7 +10,7 @@
       <th></th>
       <%= make_filterable_column Review.model_name.human, nil, 'review' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'hidden-xs'}, 'project' %>
-      <%= make_filterable_column Weakness.human_attribute_name(:code), nil, 'review_code' %>
+      <%= make_filterable_column Weakness.human_attribute_name(:review_code), nil, 'review_code' %>
       <%= make_filterable_column Weakness.human_attribute_name(:title), { :class => 'hidden-xs'}, 'title' %>
       <%= make_not_available_column Weakness.human_attribute_name(:state), :class => 'hidden-xs' %>
       <%= make_not_available_column Weakness.human_attribute_name(:follow_up_date), class: 'hidden-xs hidden-sm hidden-md' %>

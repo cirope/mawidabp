@@ -9,7 +9,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   test 'public and private actions' do
     id_param = {
       :params => {
-        :id => control_objective_items(:bcra_A4609_security_management_responsible_dependency_item).to_param
+        :id => control_objective_items(:management_dependency_item).to_param
       }
     }
     public_actions = []
@@ -61,7 +61,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   test 'show control_objective_item' do
     login
     get :show, :params => {
-      :id => control_objective_items(:bcra_A4609_security_management_responsible_dependency_item).id
+      :id => control_objective_items(:management_dependency_item).id
     }
     assert_response :success
     assert_not_nil assigns(:control_objective_item)
@@ -71,7 +71,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   test 'edit control_objective_item' do
     login
     get :edit, :params => {
-      :id => control_objective_items(:bcra_A4609_security_management_responsible_dependency_item_editable).id
+      :id => control_objective_items(:management_dependency_item_editable).id
     }
     assert_response :success
     assert_not_nil assigns(:control_objective_item)
@@ -83,13 +83,12 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
       assert_difference 'WorkPaper.count', 2 do
         login
         patch :update, :params => {
-          :id => control_objective_items(
-            :bcra_A4609_security_management_responsible_dependency_item_editable).id,
+          :id => control_objective_items(:management_dependency_item_editable).id,
           :control_objective_item => {
             :control_objective_text => 'Updated text',
             :relevance => ControlObjectiveItem.relevances_values.last,
             :control_attributes => {
-              :id => controls(:bcra_A4609_security_management_responsible_dependency_item_editable_control_1).id,
+              :id => controls(:management_dependency_item_editable_control_1).id,
               :control => 'Updated control',
               :effects => 'Updated effects',
               :design_tests => 'Updated design tests',
@@ -101,7 +100,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
             :audit_date => 10.days.from_now.to_date,
             :auditor_comment => 'Updated comment',
             :control_objective_id =>
-              control_objectives(:iso_27000_security_organization_4_1).id,
+              control_objectives(:organization_security_4_1).id,
             :review_id => reviews(:review_with_conclusion).id,
             :work_papers_attributes => [
               {
@@ -129,8 +128,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to edit_control_objective_item_url(
-      control_objective_items(
-        :bcra_A4609_security_management_responsible_dependency_item_editable))
+      control_objective_items(:management_dependency_item_editable))
     assert_not_nil assigns(:control_objective_item)
     assert_equal 'Updated text',
       assigns(:control_objective_item).control_objective_text
@@ -143,12 +141,12 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
         login
 
         patch :update, :params => {
-          :id => control_objective_items(:iso_27000_security_organization_4_4_continuous_item).id,
+          :id => control_objective_items(:organization_security_4_4_item).id,
           :control_objective_item => {
             :control_objective_text => 'Updated text',
             :relevance => ControlObjectiveItem.relevances_values.last,
             :control_attributes => {
-              :id => controls(:iso_27000_security_organization_4_4_item_control_1).id,
+              :id => controls(:organization_security_4_4_item_control_1).id,
               :control => 'Updated control',
               :effects => 'Updated effects',
               :design_tests => 'Updated design tests',
@@ -159,7 +157,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
             :compliance_score => ControlObjectiveItem.qualifications_values.last,
             :audit_date => 10.days.from_now.to_date,
             :auditor_comment => 'Updated comment',
-            :control_objective_id => control_objectives(:iso_27000_security_organization_4_4_continuous).id,
+            :control_objective_id => control_objectives(:organization_security_4_4).id,
             :review_id => reviews(:review_without_conclusion).id,
             :business_unit_scores_attributes => [
               {
@@ -176,7 +174,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to edit_control_objective_item_url(
-      control_objective_items( :iso_27000_security_organization_4_4_continuous_item))
+      control_objective_items( :organization_security_4_4_item))
     assert_not_nil assigns(:control_objective_item)
     assert_equal 'Updated text',
       assigns(:control_objective_item).control_objective_text
@@ -186,7 +184,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     login
     assert_difference 'ControlObjectiveItem.count', -1 do
       delete :destroy, :params => {
-        :id => control_objective_items(:iso_27000_security_organization_4_3_item_editable_without_findings).id
+        :id => control_objective_items(:organization_security_4_3_item_editable_without_findings).id
       }
     end
 

@@ -1,9 +1,9 @@
 require 'test_helper'
 
 class SessionsControllerTest < ActionController::TestCase
-  def setup
+  setup do
     @organization = organizations(:cirope)
-    @user = users :administrator_user
+    @user = users :administrator
 
     @request.host = "#{@organization.prefix}.localhost.i"
   end

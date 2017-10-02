@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class BenefitTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @benefit = benefits :productivity
   end
 

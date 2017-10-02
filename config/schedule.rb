@@ -5,6 +5,8 @@
 # Para eliminarla
 # whenever -c mawidabp
 
+env :PATH, ENV['PATH']
+
 every 1.day, at: '20:00' do
   methods = [
     'User.notify_auditors_about_close_date',

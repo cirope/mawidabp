@@ -4,7 +4,7 @@ module Findings::FollowUpPDF
   def follow_up_pdf organization = nil
     pdf = Prawn::Document.create_generic_pdf :portrait
 
-    put_follow_up_cover_on             pdf
+    put_follow_up_cover_on             pdf, organization
     put_follow_up_description_items_on pdf
     put_follow_up_user_data_on         pdf
     put_relation_information_on        pdf
@@ -32,7 +32,7 @@ module Findings::FollowUpPDF
 
   private
 
-    def put_follow_up_cover_on pdf
+    def put_follow_up_cover_on pdf, organization
       class_name  = self.class.name.downcase
       line_height = (PDF_FONT_SIZE * 1.25).round
 

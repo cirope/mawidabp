@@ -63,7 +63,7 @@
       ) if current_organization.corporate? %>
       <%= make_filterable_column Review.model_name.human, nil, 'review', 'issue_date' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'hidden-xs hidden-sm' }, 'project' %>
-      <%= make_filterable_column Finding.human_attribute_name(:code), nil, 'review_code' %>
+      <%= make_filterable_column Finding.human_attribute_name(:review_code), nil, 'review_code' %>
       <%= make_filterable_column Finding.human_attribute_name(:title), { :class => 'hidden-xs hidden-sm' }, 'title' %>
       <%= make_not_available_column Finding.human_attribute_name(:state), :class => 'hidden-xs' %>
       <%= make_not_available_column Finding.human_attribute_name(

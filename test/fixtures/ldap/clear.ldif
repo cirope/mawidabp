@@ -4,7 +4,7 @@ changetype: delete
 dn: cn=users,ou=groups,dc=test,dc=com
 changetype: delete
 
-dn: cn=general_manager_user,ou=people,dc=test,dc=com
+dn: cn=general_manager,ou=people,dc=test,dc=com
 changetype: delete
 
 dn: cn=admin,ou=people,dc=test,dc=com

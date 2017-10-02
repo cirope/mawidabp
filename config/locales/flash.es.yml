@@ -26,6 +26,11 @@ es:
         notice: 'Buena práctica eliminada'
         alert: 'La buena práctica no puede ser eliminada, ya ha sido utilizada en informes'
 
+    findings:
+      update:
+        notice: 'Respuesta a hallazgo actualizada correctamente.'
+        stale: 'La respuesta al hallazgo no fue actualizada, intente nuevamente.'
+
     news:
       create:
         notice: 'Noticia creada'

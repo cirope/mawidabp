@@ -30,7 +30,7 @@ class WelcomeControllerTest < ActionController::TestCase
   end
 
   test 'show audited welcome' do
-    login user: users(:audited_user)
+    login user: users(:audited)
     get :index
     assert_response :success
     assert_template 'welcome/audited_index'

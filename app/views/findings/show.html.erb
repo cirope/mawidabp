@@ -298,7 +298,7 @@
       @finding, :user_id => params[:user_id]) %></strong> |
   <% end %>
   <%= link_to t('finding.follow_up_report.download'),
-    :action => :follow_up_pdf, :id => @finding, :_ts => Time.now.to_i %> |
+    follow_up_pdf_finding_path(params[:completed], @finding, :_ts => Time.now.to_i) %> |
   <%= link_to_index findings_path(params[:completed], :user_id => params[:user_id]) %> |
   <%= link_to_back %>
 </div>

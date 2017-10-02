@@ -3,17 +3,16 @@ require 'test_helper'
 class NotificationTest < ActiveSupport::TestCase
   fixtures :notifications, :users, :findings
 
-  def setup
+  setup do
     set_organization
 
-    @notification = 
-      notifications :supervisor_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed
+    @notification = notifications :supervisor_being_implemented_weakness_confirmed
   end
 
   test 'create' do
     assert_difference 'Notification.count' do
       @notification = Notification.create(
-        user_id: users(:supervisor_user).id,
+        user_id: users(:supervisor).id,
         notes: 'New notes'
       )
     end
@@ -83,7 +82,7 @@ class NotificationTest < ActiveSupport::TestCase
 
   test 'notify function' do
     @notification = Notification.find(notifications(
-        :bare_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id)
+        :bare_unanswered_weakness_unconfirmed).id)
     pendings = @notification.findings.select(&:unconfirmed?)
     confirmed = @notification.findings.select(&:confirmed?)
 
@@ -96,14 +95,14 @@ class NotificationTest < ActiveSupport::TestCase
     pendings = @notification.findings.reload.select(&:unconfirmed?)
     confirmed = @notification.findings.reload.select(&:confirmed?)
 
-    # No se confirma porque no es un auditado (es bare_user)
+    # No se confirma porque no es un auditado (es bare)
     assert confirmed.empty?
     assert pendings.empty?
     assert @notification.confirmed?
     assert_not_nil @notification.confirmation_date
 
     @notification = Notification.find(notifications(
-        :audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id)
+        :audited_unanswered_weakness_unconfirmed).id)
     pendings = @notification.findings.select(&:unconfirmed?)
     confirmed = @notification.findings.select(&:confirmed?)
     notifications_for_not_audit_users = @notification.findings.map do |f|

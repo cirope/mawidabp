@@ -6,7 +6,7 @@ git_source :github do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '5.1.1'
+gem 'rails', '~> 5.1.4'
 
 gem 'pg'
 gem 'jquery-rails'
@@ -31,10 +31,11 @@ gem 'figaro'
 gem 'irreverent'
 gem 'bootstrap-sass'
 gem 'will_paginate'
-gem 'will_paginate-bootstrap'
+gem 'bootstrap-will_paginate'
 gem 'search_cop'
 gem 'jbuilder'
 gem 'sidekiq'
+gem 'request_store'
 gem 'ruby-ntlm'
 gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns

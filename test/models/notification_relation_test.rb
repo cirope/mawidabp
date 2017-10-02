@@ -5,15 +5,15 @@ class NotificationRelationTest < ActiveSupport::TestCase
   fixtures :notification_relations
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @notification_relation = NotificationRelation.find notification_relations(
-      :bare_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed_relation).id
+      :bare_unanswered_weakness_unconfirmed_relation).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     fixture_notification_relation = notification_relations(
-      :bare_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed_relation)
+      :bare_unanswered_weakness_unconfirmed_relation)
     assert_kind_of NotificationRelation, @notification_relation
     assert_equal fixture_notification_relation.model_id,
       @notification_relation.model_id
@@ -27,10 +27,9 @@ class NotificationRelationTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'NotificationRelation.count' do
       @notification_relation = NotificationRelation.create(
-        :model => Weakness.find(findings(
-            :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id),
+        :model => Weakness.find(findings(:being_implemented_weakness).id),
         :notification => Notification.find(notifications(
-            :bare_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id)
+            :bare_unanswered_weakness_unconfirmed).id)
       )
 
       assert_equal 'Finding', @notification_relation.model_type
@@ -39,8 +38,7 @@ class NotificationRelationTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una relación de actualización
   test 'update' do
-    fixture_finding = findings(
-      :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification)
+    fixture_finding = findings(:unconfirmed_for_notification_weakness)
     assert @notification_relation.update(
       :model => Weakness.find(fixture_finding.id)),
       @notification_relation.errors.full_messages.join('; ')

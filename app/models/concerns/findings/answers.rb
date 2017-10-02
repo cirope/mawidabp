@@ -15,4 +15,11 @@ module Findings::Answers
 
     self.updated_at = Time.zone.now
   end
+
+  def last_commitment_date
+    finding_answers.
+      where.not(commitment_date: nil).
+      reorder(commitment_date: :desc).
+      first&.commitment_date
+  end
 end

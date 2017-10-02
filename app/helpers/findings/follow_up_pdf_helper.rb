@@ -1,0 +1,2 @@
+module Findings::FollowUpPdfHelper
+end

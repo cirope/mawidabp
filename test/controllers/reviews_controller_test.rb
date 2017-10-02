@@ -58,6 +58,31 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/index'
   end
 
+  test 'list reviews with search on tags' do
+    login
+    get :index, params: {
+      search: {
+        query: 'high priority',
+        columns: ['tags']
+      }
+    }
+    assert_response :success
+    assert_not_nil assigns(:reviews)
+    assert_equal 2, assigns(:reviews).count
+    assert_template 'reviews/index'
+
+    get :index, params: {
+      search: {
+        query: 'high priority and for rev',
+        columns: ['tags']
+      }
+    }
+    assert_response :success
+    assert_not_nil assigns(:reviews)
+    assert_equal 1, assigns(:reviews).count
+    assert_template 'reviews/index'
+  end
+
   test 'show review' do
     login
     get :show, params: {
@@ -106,30 +131,30 @@ class ReviewsControllerTest < ActionController::TestCase
                 survey: 'New survey',
                 period_id: periods(:current_period).id,
                 plan_item_id: plan_items(:past_plan_item_3).id,
-                process_control_ids: [process_controls(:bcra_A4609_security_management).id],
-                control_objective_ids: [control_objectives(:iso_27000_security_policy_3_1).id],
+                process_control_ids: [process_controls(:security_management).id],
+                control_objective_ids: [control_objectives(:security_policy_3_1).id],
                 file_model_attributes: {
                   file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
                 },
                 finding_review_assignments_attributes: [
                   {
-                    finding_id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id.to_s
+                    finding_id: findings(:unanswered_weakness).id.to_s
                   }
                 ],
                 review_user_assignments_attributes: [
                   {
                     assignment_type: ReviewUserAssignment::TYPES[:auditor],
-                    user_id: users(:first_time_user).id
+                    user_id: users(:first_time).id
                   }, {
                     assignment_type:
                       ReviewUserAssignment::TYPES[:supervisor],
-                    user_id: users(:supervisor_user).id
+                    user_id: users(:supervisor).id
                   }, {
                     assignment_type: ReviewUserAssignment::TYPES[:manager],
-                    user_id: users(:supervisor_second_user).id
+                    user_id: users(:supervisor_second).id
                   }, {
                     assignment_type: ReviewUserAssignment::TYPES[:audited],
-                    user_id: users(:audited_user).id
+                    user_id: users(:audited).id
                   }
                 ],
                 taggings_attributes: [
@@ -169,13 +194,12 @@ class ReviewsControllerTest < ActionController::TestCase
             {
               id: review_user_assignments(:review_with_conclusion_bare_auditor).id,
               assignment_type: ReviewUserAssignment::TYPES[:auditor],
-              user_id: users(:bare_user).id
+              user_id: users(:bare).id
             }
           ],
           control_objective_items_attributes: [
             {
-              id: control_objective_items(
-                :bcra_A4609_security_management_responsible_dependency_item_editable).id,
+              id: control_objective_items(:management_dependency_item_editable).id,
               order_number: 1
             }
           ]
@@ -184,7 +208,7 @@ class ReviewsControllerTest < ActionController::TestCase
     end
 
     control_objective_item = ControlObjectiveItem.find(
-      control_objective_items(:bcra_A4609_security_management_responsible_dependency_item_editable).id)
+      control_objective_items(:management_dependency_item_editable).id)
 
     assert_redirected_to edit_review_url(reviews(:review_with_conclusion).id)
     assert_not_nil assigns(:review)
@@ -282,7 +306,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'suggested process control findings' do
     login
-    process_control = process_controls :iso_27000_security_policy
+    process_control = process_controls :security_policy
 
     get :suggested_process_control_findings, params: { id: process_control.id }
     assert_response :success
@@ -328,7 +352,7 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'auto complete for control objectives' do
     login
     get :auto_complete_for_control_objective, params: {
-      q: 'acceso', format: :json
+      q: 'access', format: :json
     }
     assert_response :success
 
@@ -337,12 +361,12 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 3, control_objectives.size
     assert(
       control_objectives.all? do |co|
-        (co['label'] + co['informal']).match /acceso/i
+        (co['label'] + co['informal']).match /access/i
       end
     )
 
     get :auto_complete_for_control_objective, params: {
-      q: 'responsable', format: :json
+      q: 'dependency', format: :json
     }
     assert_response :success
 
@@ -351,7 +375,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 1, control_objectives.size
     assert(
       control_objectives.all? do |co|
-        (co['label'] + co['informal']).match /responsable/i
+        (co['label'] + co['informal']).match /dependency/i
       end
     )
 
@@ -368,7 +392,7 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'auto complete for process controls' do
     login
     get :auto_complete_for_process_control, params: {
-      q: 'seg', format: :json
+      q: 'sec', format: :json
     }
     assert_response :success
 
@@ -377,12 +401,12 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 3, process_controls.size
     assert(
       process_controls.all? do |pc|
-        (pc['label'] + pc['informal']).match /seg/i
+        (pc['label'] + pc['informal']).match /sec/i
       end
     )
 
     get :auto_complete_for_process_control, params: {
-      q: 'clasi', format: :json
+      q: 'data', format: :json
     }
     assert_response :success
 
@@ -391,7 +415,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 1, process_controls.size
     assert(
       process_controls.all? do |pc|
-        (pc['label'] + pc['informal']).match /clasi/i
+        (pc['label'] + pc['informal']).match /data/i
       end
     )
 

@@ -2,14 +2,14 @@ hardware_rent:
   cost: 9.99
   cost_type: audit
   description: A hardware rent
-  item_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness) %>
+  item_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_weakness) %>
   item_type: Weakness
-  user: administrator_user
+  user: administrator
 
 man_hours:
   cost: 29.80
   cost_type: audit
   description: Man hours fixing the weakness
-  item_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness) %>
+  item_id: <%= ActiveRecord::FixtureSet.identify(:unconfirmed_weakness) %>
   item_type: Weakness
-  user: bare_user
+  user: bare

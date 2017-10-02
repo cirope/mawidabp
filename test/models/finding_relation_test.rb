@@ -5,18 +5,18 @@ class FindingRelationTest < ActiveSupport::TestCase
   fixtures :finding_relations
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
-    @finding_relation = FindingRelation.find finding_relations(:iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_duplicated_of_iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id
+  setup do
+    @finding_relation = FindingRelation.find finding_relations(:other_unconfirmed_for_notification_weakness_duplicated_of_unconfirmed_for_notification_weakness).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of FindingRelation, @finding_relation
-    assert_equal finding_relations(:iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_duplicated_of_iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).description,
+    assert_equal finding_relations(:other_unconfirmed_for_notification_weakness_duplicated_of_unconfirmed_for_notification_weakness).description,
       @finding_relation.description
-    assert_equal finding_relations(:iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_duplicated_of_iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).finding_id,
+    assert_equal finding_relations(:other_unconfirmed_for_notification_weakness_duplicated_of_unconfirmed_for_notification_weakness).finding_id,
       @finding_relation.finding_id
-    assert_equal finding_relations(:iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_duplicated_of_iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).related_finding_id,
+    assert_equal finding_relations(:other_unconfirmed_for_notification_weakness_duplicated_of_unconfirmed_for_notification_weakness).related_finding_id,
       @finding_relation.related_finding_id
   end
 
@@ -25,8 +25,8 @@ class FindingRelationTest < ActiveSupport::TestCase
     assert_difference 'FindingRelation.count' do
       @finding_relation = FindingRelation.create(
         :description => 'Duplicated',
-        :finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
-        :related_finding_id => findings(:iso_27000_security_policy_3_1_item_weakness).id
+        :finding_id => findings(:unconfirmed_weakness).id,
+        :related_finding_id => findings(:being_implemented_weakness_on_final).id
       )
     end
   end
@@ -66,7 +66,7 @@ class FindingRelationTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates unique attributes' do
     finding_relation = FindingRelation.find(finding_relations(
-        :bcra_A4609_data_proccessing_impact_analisys_editable_weakness_related_to_iso_27000_security_policy_3_1_item_weakness).id)
+        :unconfirmed_weakness_related_to_being_implemented_weakness_on_final).id)
 
     finding_relation.finding.finding_relations.build(
       :related_finding => finding_relation.related_finding)

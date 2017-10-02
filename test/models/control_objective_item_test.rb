@@ -6,17 +6,16 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   include ActionDispatch::TestProcess
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     set_organization
 
     @control_objective_item = ControlObjectiveItem.find control_objective_items(
-      :bcra_A4609_security_management_responsible_dependency_item_editable).id
+      :management_dependency_item_editable).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
-    retrived_coi = control_objective_items(
-      :bcra_A4609_security_management_responsible_dependency_item_editable)
+    retrived_coi = control_objective_items(:management_dependency_item_editable)
     assert_kind_of ControlObjectiveItem, @control_objective_item
     assert_equal retrived_coi.control_objective_text,
       @control_objective_item.control_objective_text
@@ -43,7 +42,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
         :audit_date => 10.days.from_now.to_date,
         :auditor_comment => 'New comment',
         :control_objective_id =>
-          control_objectives(:iso_27000_security_organization_4_1).id,
+          control_objectives(:organization_security_4_1).id,
         :review_id => reviews(:review_with_conclusion).id,
         :control_attributes => {
           :control => 'New control',
@@ -73,7 +72,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     end
 
     control_objective_item = control_objective_items(
-      :iso_27000_security_organization_4_3_item_editable_without_findings
+      :organization_security_4_3_item_editable_without_findings
     )
 
     # Sin observaciones es posible eliminar
@@ -95,7 +94,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @control_objective_item.control_objective_id = control_objective_items(
-      :bcra_A4609_data_proccessing_impact_analisys_item_editable).control_objective_id
+      :impact_analysis_item_editable).control_objective_id
 
     assert @control_objective_item.invalid?
     assert_error @control_objective_item, :control_objective_id, :taken
@@ -329,8 +328,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
   test 'can be modified' do
     uneditable_control_objective_item = ControlObjectiveItem.find(
-      control_objective_items(
-        :bcra_A4609_security_management_responsible_dependency_item).id)
+      control_objective_items(:management_dependency_item).id)
 
     @control_objective_item.control_objective_text = 'Updated text'
 
@@ -356,8 +354,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
   test 'work papers can be added to uneditable control objectives' do
     uneditable_control_objective_item = ControlObjectiveItem.find(
-      control_objective_items(
-        :bcra_A4609_security_management_responsible_dependency_item).id)
+      control_objective_items(:management_dependency_item).id)
 
     assert_no_difference 'ControlObjectiveItem.count' do
       assert_difference 'WorkPaper.count' do
@@ -381,7 +378,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
   test 'work papers can not be added to uneditable and closed control objectives' do
     uneditable_control_objective_item = ControlObjectiveItem.find(
-      control_objective_items(:iso_27000_security_policy_3_1_item).id)
+      control_objective_items(:security_policy_3_1_item).id)
 
     assert_no_difference ['ControlObjectiveItem.count', 'WorkPaper.count'] do
       assert_raise(RuntimeError) do

@@ -11,6 +11,12 @@ module Users::Scopes
   end
 
   module ClassMethods
+    def by_email email
+      where(
+        "LOWER(#{quoted_table_name}.#{qcn 'email'}) = ?", email.downcase
+      ).take
+    end
+
     def all_with_findings_for_notification
       includes(finding_user_assignments: :raw_finding).
         where(findings: { state: Finding::STATUS[:notify], final: false }).

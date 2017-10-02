@@ -10,8 +10,14 @@ module Findings::Expiration
   end
 
   module ClassMethods
-    def expires_now
-      expires_on Time.zone.today
+    def expires_very_soon
+      date = if Time.zone.now < Time.zone.now.noon
+               Time.zone.today
+             else
+               1.day.from_now_in_business.to_date
+             end
+
+      expires_on date
     end
 
     def next_to_expire
@@ -21,12 +27,12 @@ module Findings::Expiration
     def warning_users_about_expiration
       # Sólo si no es sábado o domingo (porque no tiene sentido)
       if [0, 6].exclude? Time.zone.today.wday
-        users = next_to_expire.or(expires_now).inject([]) do |u, finding|
+        users = next_to_expire.or(expires_very_soon).inject([]) do |u, finding|
           u | finding.users
         end
 
         users.each do |user|
-          findings = user.findings.next_to_expire.or user.findings.expires_now
+          findings = user.findings.next_to_expire.or user.findings.expires_very_soon
 
           NotifierMailer.findings_expiration_warning(user, findings.to_a).deliver_later
         end

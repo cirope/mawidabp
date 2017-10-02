@@ -96,6 +96,14 @@ es:
       list: 'Ver registros de error'
     void_user: 'Inexistente'
 
+  findings:
+    index:
+      title: 'Listado de hallazgos'
+    show:
+      title: 'Detalles del hallazgo'
+    edit:
+      title: 'Editar hallazgo'
+
   login_records:
     choose:
       title: 'Reportes de seguridad'

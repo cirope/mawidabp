@@ -29,4 +29,12 @@ module Findings::UserAssignments
   def responsible_auditors
     finding_user_assignments.responsibles.map &:user
   end
+
+  def import_users
+    if control_objective_item&.review
+      control_objective_item.review.review_user_assignments.map do |rua|
+        finding_user_assignments.build user_id: rua.user_id
+      end
+    end
+  end
 end

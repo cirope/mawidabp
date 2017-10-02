@@ -463,11 +463,6 @@
     without_findings: "Sin Hallazgos"
 
   finding:
-    index_title: "Listado de hallazgos"
-    show_title: "Detalles de la respuesta al hallazgo"
-    edit_title: "Modificar respuesta a un hallazgo"
-    correctly_updated: "Respuesta a hallazgo actualizada correctamente."
-    stale_object_error: "La respuesta al hallazgo no fue actualizada, intente nuevamente."
     incomplete: "Pendientes"
     complete: "Solucionados o reiterados"
     as_owner: "%{kind} como responsable"
@@ -1137,20 +1132,17 @@
       control: "Control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
-      finding: "Hallazgo"
       finding_answer: "Respuesta a hallazgo"
       finding_review_assignment: "Asignación de observación a informe"
       group: "Grupo"
       notification: "Notificación"
       old_password: "Contraseña anterior"
-      oportunity: "Oportunidad de mejora"
       privilege: "Privilegio"
       review:
         one: "Informe"
         other: "Informes"
       review_user_assignment: "Asignación de usuario a informe"
       role: "Perfil"
-      weakness: "Observación"
       workflow: "Programa de trabajo"
       workflow_item: "Registro de programa de trabajo"
       work_paper: "Papel de trabajo"
@@ -1243,73 +1235,8 @@
         content_type: "Archivo (tipo)"
         size: "Archivo (tamaño)"
         file: "Archivo"
-      finding:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "Hallazgo"
-        type: "Tipo"
-        repeated_of_id: "Reiterada de"
-        review_code: "Código en el informe"
-        code: "Código"
-        audit_recommendations: "Recomendaciones de auditoría"
-        answer: "Respuesta"
-        effect: "Efecto"
-        risk: "Riesgo"
-        priority: "Prioridad"
-        user_ids: "Responsables"
-        finding_user_assignments: "Responsables"
-        origination_date: "Fecha de origen"
-        follow_up_date: "Fecha de implementación"
-        audit_comments: "Comentarios de auditoría"
-        state: "Estado"
-        count: "Cantidad"
-        solution_date: "Fecha de solución"
-        users: "Responsables"
-        work_papers: "Papeles de trabajo"
-        finding_answers: "Respuestas"
-        rescheduled: "Reprogramada"
-        costs:
-          one: "Tiempo dedicado"
-          cost: "Tiempo dedicado"
-          description: "Descripción de las actividades realizadas"
-        finding_relations:
-          one: "Relación"
-          other: "Relaciones"
-          related_finding_id: "Relación (Hallazgo relacionado)"
-          description: "Relación (descripción)"
-        finding_user_assignments:
-          one: "Usuario relacionado"
-          user: 'Usuario relacionado (usuario)'
-          user_id: 'Usuario relacionado (usuario)'
-          process_owner: 'Responsable (usuario)'
-        finding_answers:
-          one: "Comentarios"
-          answer: "Comentario"
-          commitment_date: "Fecha de compromiso"
-          auditor_comments: "Comentario (comentarios del auditor)"
-          user_id: "Comentario (usuario)"
-          notify_users: "Comentario (enviar notificación)"
-          file_model:
-            one: "Anexo (archivo)"
-            file_file_name: "Anexo (nombre de archivo)"
-            file_content_type: "Anexo (tipo de archivo)"
-            file_file_size: "Anexo (tamaño de archivo)"
-        work_papers:
-          one: "Papel de trabajo"
-          other: "Papeles de trabajo"
-          name: "Papel de trabajo (nombre)"
-          code: "Papel de trabajo (código)"
-          description: "Papel de trabajo (descripción)"
-          number_of_pages: "Papel de trabajo (páginas)"
-          file_model:
-            one: "Papel de trabajo (archivo)"
-            file_file_name: "Papel de trabajo (nombre de archivo)"
-            file_content_type: "Papel de trabajo (tipo de archivo)"
-            file_file_size: "Papel de trabajo (tamaño de archivo)"
-            file: "Papel de trabajo (nombre de archivo)"
       finding_answer:
         answer: "Comentario"
-        auditor_comments: "Comentarios del auditor"
         commitment_date: "Fecha de compromiso"
         finding_id: "Hallazgo"
         user_id: "Usuario"
@@ -1356,19 +1283,6 @@
         notification: "Notificación"
       old_password:
         password: "Contraseña"
-      oportunity:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "Oportunidad de mejora"
-        review_code: "Código en el informe"
-        answer: "Respuesta/Acción de mejora"
-        user_ids: "Responsable"
-        finding_user_assignments: "Responsables"
-        work_papers: "Papeles de trabajo"
-        state: "Estado"
-        origination_date: "Fecha de origen"
-        follow_up_date: "Fecha de implementación/Acción de mejora"
-        solution_date: "Fecha de solución"
       organization_role:
         user_id: "Usuario"
         organization_id: "Organización"
@@ -1386,23 +1300,6 @@
         name: "Perfil"
         role_type: "Tipo perfil"
         privileges: "Privilegios"
-      weakness:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "Observación"
-        review_code: "Código en el informe"
-        audit_recommendations: "Recomendaciones de auditoría"
-        answer: "Respuesta/Acción correctiva"
-        effect: "Efecto"
-        risk: "Riesgo"
-        priority: "Prioridad"
-        user_ids: "Responsable"
-        finding_user_assignments: "Responsables"
-        origination_date: "Fecha de origen"
-        follow_up_date: "Fecha de implementación/Acción correctiva"
-        state: "Estado"
-        solution_date: "Fecha de solución"
-        work_papers: "Papeles de trabajo"
       work_paper:
         name: "Nombre"
         code: "Código"
@@ -1464,29 +1361,11 @@
           attributes:
             file:
               without_extension: 'debe tener extensión'
-        finding:
-          attributes:
-            follow_up_date:
-              must_be_blank: "debe estar en blanco para el estado seleccionado"
-            solution_date:
-              must_be_blank: "debe estar en blanco para el estado seleccionado"
-            state:
-              must_have_a_comment: "debe tener adjunto un comentario para esta transición"
-              can_not_be_revoked: "no puede ser 'Anulado', posiblemente se deba a una reiteración o a que el hallazgo ya se encuentra en un informe definitivo"
-              must_have_a_work_paper: "debe tener asociado al menos un papel de trabajo"
-              must_be_done_by_proper_role: "solo puede ser cambiado por un usuario supervisor o gerente"
-            users:
-              invalid: "debe contener como mínimo un auditor, un auditado, un gerente y un supervisor"
-        finding_user_assignment:
-          attributes:
-            process_owner:
-              invalid: "solo puede ser asignado a usuarios de tipo auditado"
         image_model:
           attributes:
             image_content_type:
               invalid: "no es válido"
             image_file_size:
-
         organization_role:
           attributes:
             role_id:
@@ -1534,7 +1413,7 @@
     control_objective_items: "Objetivos de control"
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"
-    findings: "Seguimiento de observaciones"
+    findings: "Hallazgos"
     groups: "Grupos"
     login_records: "Registros de ingreso"
     notifications: "Notificaciones"

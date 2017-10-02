@@ -36,7 +36,7 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
           last_name: 'New Last Name2',
           email: 'new_user2@newemail.net',
           language: I18n.available_locales.last.to_s,
-          manager_id: users(:administrator_user).id,
+          manager_id: users(:administrator).id,
           logged_in: false,
           enable: true,
           send_notification_email: false,

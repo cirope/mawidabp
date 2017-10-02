@@ -5,7 +5,7 @@ class WeaknessesController < ApplicationController
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_weakness, only: [
-    :show, :edit, :update, :follow_up_pdf, :undo_reiteration
+    :show, :edit, :update, :undo_reiteration
   ]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
@@ -78,8 +78,10 @@ class WeaknessesController < ApplicationController
   def new
     @title = t 'weakness.new_title'
     @weakness = Weakness.new(
-      {control_objective_item_id: params[:control_objective_item]}, true
+      control_objective_item_id: params[:control_objective_item]
     )
+
+    @weakness.import_users
 
     respond_to do |format|
       format.html # new.html.erb
@@ -134,14 +136,6 @@ class WeaknessesController < ApplicationController
     redirect_to action: :edit
   end
 
-  # Crea el documento de seguimiento de la observación
-  #
-  # * GET /weaknesses/follow_up_pdf/1
-  def follow_up_pdf
-    @weakness.follow_up_pdf(current_organization)
-    redirect_to @weakness.relative_follow_up_pdf_path
-  end
-
   # Deshace la reiteración de la observación
   #
   # * PATCH /weaknesses/undo_reiteration/1
@@ -172,7 +166,7 @@ class WeaknessesController < ApplicationController
           file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_answers_attributes: [
-          :answer, :auditor_comments, :commitment_date, :user_id,
+          :answer, :commitment_date, :user_id,
           :notify_users, :_destroy, file_model_attributes: [:file, :file_cache]
         ],
         finding_relations_attributes: [
@@ -197,7 +191,6 @@ class WeaknessesController < ApplicationController
 
     def load_privileges
       @action_privileges.update(
-        follow_up_pdf: :read,
         auto_complete_for_tagging: :read,
         auto_complete_for_finding_relation: :read,
         auto_complete_for_control_objective_item: :read,

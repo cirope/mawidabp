@@ -1,13 +1,13 @@
-administrator_user_success_login_record:
+administrator_success_login_record:
   start: 2008-09-30 20:03:26
   end: 2008-09-30 23:03:26
   data: Login data for administrator user
-  user: administrator_user
+  user: administrator
   organization: cirope
 
-bare_user_success_login_record:
+bare_success_login_record:
   start: 2008-09-30 23:03:26
   end: 2008-09-30 23:03:26
   data: Login data for bare user
-  user: bare_user
+  user: bare
   organization: cirope

@@ -5,7 +5,7 @@ class RoleTest < ActiveSupport::TestCase
   fixtures :roles
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @role = Role.find roles(:admin_role).id
     @role.inject_auth_privileges(Hash.new(Hash.new(true)))
 

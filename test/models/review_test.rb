@@ -5,7 +5,7 @@ class ReviewTest < ActiveSupport::TestCase
   fixtures :reviews, :periods, :plan_items
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @review = Review.find reviews(:review_with_conclusion).id
 
     set_organization
@@ -31,19 +31,19 @@ class ReviewTest < ActiveSupport::TestCase
         :review_user_assignments_attributes => {
             :new_1 => {
               :assignment_type => ReviewUserAssignment::TYPES[:auditor],
-              :user => users(:first_time_user)
+              :user => users(:first_time)
             },
             :new_2 => {
               :assignment_type => ReviewUserAssignment::TYPES[:supervisor],
-              :user => users(:supervisor_user)
+              :user => users(:supervisor)
             },
             :new_3 => {
               :assignment_type => ReviewUserAssignment::TYPES[:manager],
-              :user => users(:supervisor_second_user)
+              :user => users(:supervisor_second)
             },
             :new_4 => {
               :assignment_type => ReviewUserAssignment::TYPES[:audited],
-              :user => users(:audited_user)
+              :user => users(:audited)
             }
           }
       )
@@ -251,7 +251,7 @@ class ReviewTest < ActiveSupport::TestCase
     def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
-    Finding.current_user = users :supervisor_user
+    Finding.current_user = users :supervisor
 
     finding = Weakness.new finding.attributes.merge(
       'state' => Finding::STATUS[:assumed_risk]
@@ -321,7 +321,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.reload.must_be_approved?
 
     assert @review.finding_review_assignments.build(
-      :finding_id => findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
+      :finding_id => findings(:being_implemented_weakness).id
     )
     assert !@review.must_be_approved?
     assert @review.approval_errors.flatten.include?(
@@ -391,22 +391,22 @@ class ReviewTest < ActiveSupport::TestCase
   test 'process control ids' do
     assert @review.control_objective_items.present?
     assert_difference '@review.control_objective_items.size', 5 do
-      @review.process_control_ids = [process_controls(:iso_27000_security_policy).id]
+      @review.process_control_ids = [process_controls(:security_policy).id]
     end
 
     assert_no_difference '@review.control_objective_items.size' do
-      @review.process_control_ids = [process_controls(:iso_27000_security_policy).id]
+      @review.process_control_ids = [process_controls(:security_policy).id]
     end
   end
 
   test 'procedure control subitem ids' do
     assert @review.control_objective_items.present?
     assert_difference '@review.control_objective_items.size' do
-      @review.control_objective_ids = [control_objectives(:iso_27000_security_organization_4_1).id]
+      @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
     end
 
     assert_no_difference '@review.control_objective_items.size' do
-      @review.control_objective_ids = [control_objectives(:iso_27000_security_organization_4_1).id]
+      @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
     end
   end
 
@@ -415,8 +415,7 @@ class ReviewTest < ActiveSupport::TestCase
       assert @review.update(
         :finding_review_assignments_attributes => {
           :new_1 => {
-            :finding_id =>
-              findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id.to_s
+            :finding_id => findings(:unanswered_weakness).id.to_s
           }
         }
       )
@@ -429,8 +428,7 @@ class ReviewTest < ActiveSupport::TestCase
         @review.update(
           :finding_review_assignments_attributes => {
             :new_1 => {
-              :finding_id =>
-                findings(:iso_27000_security_organization_4_2_item_editable_oportunity).id.to_s
+              :finding_id => findings(:confirmed_oportunity_on_draft).id.to_s
             }
           }
         )
