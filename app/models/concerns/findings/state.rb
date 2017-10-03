@@ -170,7 +170,7 @@ module Findings::State
   end
 
   def state_text
-    state ? I18n.t("finding.status_#{STATUS.invert[state]}") : '-'
+    state ? I18n.t("findings.state.#{STATUS.invert[state]}") : '-'
   end
 
   private

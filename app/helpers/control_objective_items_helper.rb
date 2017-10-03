@@ -37,7 +37,7 @@ module ControlObjectiveItemsHelper
 
   def control_objective_weaknesses_summary_headers
     Finding::STATUS.except(:repeated).keys.map do |status|
-      content_tag :th, t("finding.status_#{status}")
+      content_tag :th, t("findings.state.#{status}")
     end.join
   end
 
@@ -54,7 +54,7 @@ module ControlObjectiveItemsHelper
 
   def control_objective_oportunities_summary_headers
     Finding::STATUS.except(:repeated).keys.map do |status|
-      content_tag :th, t("finding.status_#{status}")
+      content_tag :th, t("findings.state.#{status}")
     end.join
   end
 

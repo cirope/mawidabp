@@ -28,13 +28,13 @@
     <ul class="nav nav-tabs" data-hide-in-search>
       <li <%== 'class="active"' if params[:as_owner].blank? %>>
         <%= link_to(
-          finding_complete_or_incomplete_label,
+          t(".#{params[:completed]}"),
           findings_path(request.query_parameters.except(:as_owner))
         ) %>
       </li>
       <li <%== 'class="active"' if params[:as_owner].present? %>>
         <%= link_to(
-          t('finding.as_owner', kind: finding_complete_or_incomplete_label),
+          t('.as_owner', kind: t(".#{params[:completed]}")),
           findings_path(request.query_parameters.merge(as_owner: true))
         ) %>
       </li>

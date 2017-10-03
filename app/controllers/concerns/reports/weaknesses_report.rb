@@ -265,7 +265,7 @@ module Reports::WeaknessesReport
 
         priority ? t("priority_types.#{priority.first}") : ''
       when :finding_status
-        t "finding.status_#{Finding::STATUS.invert[value]}"
+        t "findings.state.#{Finding::STATUS.invert[value]}"
       when :user_in_comments
         value == 1 ? t('label.yes') : t('label.no')
       end

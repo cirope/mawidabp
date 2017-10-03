@@ -40,7 +40,7 @@
         <% if current_organization.corporate? %>
           <td><%= finding.organization.prefix %></td>
         <% end %>
-        <td class="nowrap"><%= show_review_with_conclusion_status_as_abbr(finding.control_objective_item.review) %></td>
+        <td class="nowrap"><%= show_review_with_conclusion_status_as_abbr(finding.review) %></td>
         <td class="hidden-xs hidden-sm"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
         <td class="nowrap"><%= show_finding_review_code_with_decription_as_abbr(finding) %></td>
         <td class="hidden-xs hidden-sm"><%= super_truncate(finding.title, 17) %></td>

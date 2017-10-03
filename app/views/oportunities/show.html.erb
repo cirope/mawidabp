@@ -196,7 +196,7 @@
 <% end %>
 
 <% unless @oportunity.work_papers.empty? %>
-  <h3><%= t('finding.work_papers') %></h3>
+  <h3><%= WorkPaper.model_name.human(count: 0) %></h3>
   <table class="table table-condensed table-striped">
     <thead>
       <tr>

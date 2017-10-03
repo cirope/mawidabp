@@ -99,10 +99,34 @@ es:
   findings:
     index:
       title: 'Listado de hallazgos'
+      current_user_answers_count: 'Comentarios propios'
     show:
       title: 'Detalles del hallazgo'
     edit:
       title: 'Editar hallazgo'
+    form:
+      show_status_change_history: 'Ver historial de cambios de estado'
+    current_user_filters:
+      as_owner: '%{kind} como responsable'
+      incomplete: 'Pendientes'
+      complete: 'Solucionados o reiterados'
+    state:
+      confirmed: 'Confirmada'
+      unconfirmed: 'No confirmada'
+      unanswered: 'Sin respuesta'
+      being_implemented: 'En proceso de implementación'
+      being_implemented_current: 'Vigente'
+      being_implemented_current_rescheduled: 'Reprogramada vigente'
+      being_implemented_stale: 'Vencida'
+      being_implemented_stale_rescheduled: 'Reprogramada vencida'
+      implemented: 'Implementada'
+      implemented_audited: 'Implementada / Auditada'
+      assumed_risk: 'Riesgo asumido'
+      notify: 'Notificar'
+      incomplete: 'Incompleta'
+      repeated: 'Reiterada'
+      revoked: 'Anulada'
+      criteria_mismatch: 'Difiere criterio'
 
   login_records:
     choose:

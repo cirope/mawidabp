@@ -135,7 +135,7 @@ module Findings::CSV
           ControlObjectiveItem.human_attribute_name('control_objective_text'),
           Finding.human_attribute_name('origination_date'),
           date_label(completed),
-          I18n.t('finding.status_repeated'),
+          I18n.t('findings.state.repeated'),
           Finding.human_attribute_name('audit_comments'),
           Finding.human_attribute_name('answer'),
           I18n.t('finding.finding_answers')

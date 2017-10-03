@@ -229,7 +229,7 @@
 <% end %>
 
 <% unless @finding.work_papers.blank? %>
-  <h4><%= t('finding.work_papers') %></h4>
+  <h4><%= WorkPaper.model_name.human(count: 0) %></h4>
 
   <table class="table table-condensed table-striped">
     <thead>
@@ -261,10 +261,10 @@
 
 <% unless @finding.costs.blank? %>
   <p>
-    <%= link_to t('finding.view_cost_details'), '#', :onclick =>
-      "$('#cost_details').slideToggle(); return false;" %>
+    <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
   </p>
-  <div id="cost_details" style="display: none;">
+
+  <div id="cost_details" class="collapse">
     <div>
       <table class="table table-condensed table-striped">
         <thead>

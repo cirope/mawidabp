@@ -239,9 +239,8 @@
   </div>
 
   <br />
-  <h4>
-    <%= t('finding.work_papers') %>
-  </h4>
+  <h4><%= WorkPaper.model_name.human(count: 0) %></h4>
+
   <div class="row">
     <div class="col-md-3">
       <h5><strong><%= WorkPaper.human_attribute_name 'name' %></strong></h5>
@@ -264,7 +263,7 @@
     <%= f.simple_fields_for :work_papers do |wp_f| %>
       <%= render 'work_papers/work_paper', {
         f: wp_f,
-        frozen: finding_work_paper_frozen?(@finding, wp_f.object, true)
+        frozen: finding_work_paper_frozen?(@finding, wp_f.object)
       } %>
     <% end %>
 
@@ -279,10 +278,10 @@
 
   <% unless @finding.costs.blank? %>
     <p>
-      <%= link_to t('finding.view_cost_details'), '#', :onclick =>
-        "$('#cost_details').slideToggle(); return false;" %>
+      <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
     </p>
-    <div id="cost_details" style="display: none;">
+
+    <div id="cost_details" class="collapse">
       <div>
         <table class="table table-condensed table-striped">
           <thead>

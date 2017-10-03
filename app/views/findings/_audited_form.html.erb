@@ -41,7 +41,7 @@
           <%= f.input :priority, collection: priorities, prompt: true, disabled: true %>
         <% end %>
         <%= f.label :state, Finding.human_attribute_name(:state) %>
-        <%= finding_status_field(f, true, true) %>
+        <%= finding_status_field(f, disabled: true) %>
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
         <%= f.input :answer, input_html: { readonly: true, rows: 5 } %>
@@ -165,7 +165,7 @@
   </div>
 
   <% unless @finding.work_papers.blank? %>
-    <h4><%= t('finding.work_papers') %></h4>
+    <h4><%= WorkPaper.model_name.human(count: 0) %></h4>
 
     <table class="table table-condensed table-striped">
       <thead>
@@ -198,10 +198,10 @@
 
   <% unless @finding.costs.blank? %>
     <p style="margin-bottom: 1em;">
-      <%= link_to t('finding.view_cost_details'), '#', :onclick =>
-        "$('#cost_details').slideToggle(); return false;" %>
+      <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
     </p>
-    <div id="cost_details" style="display: none;">
+
+    <div id="cost_details" class="collapse">
       <div>
         <table class="table table-condensed table-striped">
           <thead>
