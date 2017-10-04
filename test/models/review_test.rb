@@ -450,30 +450,30 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'last control objective work paper code' do
-    generated_code = @review.last_control_objective_work_paper_code('pre')
+    generated_code = @review.last_control_objective_work_paper_code(prefix: 'pre')
 
     assert_match /\Apre\s\d+\Z/, generated_code
 
-    assert_equal 'New prefix 00',
-      @review.reload.last_control_objective_work_paper_code('New prefix')
+    assert_equal 'New prefix 000',
+      @review.reload.last_control_objective_work_paper_code(prefix: 'New prefix')
   end
 
   test 'last weakness work paper code' do
-    generated_code = @review.last_weakness_work_paper_code('pre')
+    generated_code = @review.last_weakness_work_paper_code(prefix: 'pre')
 
     assert_match /\Apre\s\d+\Z/, generated_code
 
-    assert_equal 'New prefix 00',
-      @review.reload.last_weakness_work_paper_code('New prefix')
+    assert_equal 'New prefix 000',
+      @review.reload.last_weakness_work_paper_code(prefix: 'New prefix')
   end
 
   test 'last oportunity work paper code' do
-    generated_code = @review.last_oportunity_work_paper_code('pre')
+    generated_code = @review.last_oportunity_work_paper_code(prefix: 'pre')
 
     assert_match /\Apre\s\d+\Z/, generated_code
 
-    assert_equal 'New prefix 00',
-      @review.reload.last_oportunity_work_paper_code('New prefix')
+    assert_equal 'New prefix 000',
+      @review.reload.last_oportunity_work_paper_code(prefix: 'New prefix')
   end
 
   test 'last weakness code' do
@@ -528,7 +528,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   test 'zip all work papers' do
     assert_nothing_raised do
-      @review.zip_all_work_papers
+      @review.zip_all_work_papers @review.organization
     end
 
     assert File.exist?(@review.absolute_work_papers_zip_path)

@@ -58,7 +58,7 @@ module ReviewsHelper
   def next_review_work_paper_code(review)
     code_prefix = t('code_prefixes.work_papers_in_control_objectives')
 
-    review ? review.last_control_objective_work_paper_code(code_prefix) :
+    review ? review.last_control_objective_work_paper_code(prefix: code_prefix) :
       "#{code_prefix} 0".strip
   end
 

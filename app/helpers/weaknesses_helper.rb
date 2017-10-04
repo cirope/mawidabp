@@ -24,7 +24,7 @@ module WeaknessesHelper
       weakness.work_paper_prefix
 
     code_from_review = review ?
-      review.last_weakness_work_paper_code(code_prefix) :
+      review.last_weakness_work_paper_code(prefix: code_prefix) :
       "#{code_prefix} 0".strip
 
     work_paper_codes = weakness.work_papers.reject(

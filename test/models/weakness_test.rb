@@ -142,7 +142,7 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'last work paper code' do
-    assert_equal 'PTO 04', @weakness.last_work_paper_code
+    assert_equal 'PTO 004', @weakness.last_work_paper_code
   end
 
   test 'review code is updated when control objective is changed' do
@@ -170,14 +170,14 @@ class WeaknessTest < ActiveSupport::TestCase
   test 'work paper codes are updated when control objective is changed' do
     weakness = findings :unanswered_for_level_1_notification
 
-    assert_not_equal 'PTO 06', weakness.work_papers.first.code
+    assert_not_equal 'PTO 006', weakness.work_papers.first.code
 
     weakness.update!(
       control_objective_item_id:
         control_objective_items(:impact_analysis_item_editable).id
     )
 
-    assert_equal 'PTO 06', weakness.work_papers.first.code
+    assert_equal 'PTO 006', weakness.work_papers.first.code
   end
 
   test 'dynamic status functions' do
@@ -296,7 +296,7 @@ class WeaknessTest < ActiveSupport::TestCase
         work_papers_attributes: {
           '1_new' => {
             name: 'New post_workpaper name',
-            code: 'PTO 20',
+            code: 'PTO 020',
             file_model_attributes: {
               file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
             }
@@ -316,7 +316,7 @@ class WeaknessTest < ActiveSupport::TestCase
         work_papers_attributes: {
             '1_new' => {
               name: 'New post_workpaper name',
-              code: 'PTO 20',
+              code: 'PTO 020',
               file_model_attributes: {
                 file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
               }

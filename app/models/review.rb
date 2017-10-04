@@ -3,350 +3,56 @@ class Review < ApplicationRecord
   include Parameters::Risk
   include Parameters::Score
   include ParameterSelector
+  include Reviews::Approval
+  include Reviews::Clone
+  include Reviews::ConclusionReview
+  include Reviews::ControlObjectiveItems
   include Reviews::DestroyValidation
+  include Reviews::Effectiveness
+  include Reviews::FileModel
+  include Reviews::FindingAssignments
   include Reviews::FindingCode
+  include Reviews::Findings
   include Reviews::Scopes
+  include Reviews::Score
   include Reviews::Search
+  include Reviews::UpdateCallbacks
   include Reviews::Users
   include Reviews::Validations
+  include Reviews::WorkPapers
+  include Reviews::WorkPapersZip
   include Taggable
   include Trimmer
 
   trimmed_fields :identification
 
-  # Callbacks
-  before_validation :set_proper_parent, :check_if_can_be_modified
-  before_save :calculate_score
-
-  # Acceso a los atributos
-  attr_reader :approval_errors, :control_objective_ids, :process_control_ids
-  attr_accessor :can_be_approved_by_force, :control_objective_data,
-    :process_control_data
-  attr_readonly :plan_item_id
-
-  # Relaciones
   belongs_to :period
   belongs_to :plan_item
-  belongs_to :file_model, :optional => true
   belongs_to :organization
-  has_one :conclusion_draft_review, :dependent => :destroy
-  has_one :conclusion_final_review
   has_one :business_unit, :through => :plan_item
   has_one :workflow, :dependent => :destroy
-  has_many :control_objective_items, :dependent => :destroy, :after_add => :assign_review
   has_many :business_unit_scores, :through => :control_objective_items
-  has_many :weaknesses, :through => :control_objective_items
-  has_many :oportunities, :through => :control_objective_items
-  has_many :final_weaknesses, :through => :control_objective_items
-  has_many :final_oportunities, :through => :control_objective_items
-  has_many :finding_review_assignments, :dependent => :destroy,
-    :inverse_of => :review, :after_add => :check_if_is_in_a_final_review
-
-  accepts_nested_attributes_for :finding_review_assignments, :allow_destroy => true
-  accepts_nested_attributes_for :file_model, :allow_destroy => true
-  accepts_nested_attributes_for :control_objective_items, :allow_destroy => true
 
   def to_s
-    self.long_identification +
-      " (#{I18n.l(self.issue_date, :format => :minimal)})"
+    "#{long_identification } (#{I18n.l issue_date, format: :minimal})"
   end
 
   def long_identification
-    "#{self.identification} - #{self.plan_item.project}"
-  end
-
-  def assign_review(related_object)
-    related_object.review = self
-  end
-
-  def set_proper_parent
-    self.review_user_assignments.each { |rua| rua.review = self }
-  end
-
-  def can_be_modified?
-    if self.has_final_review? && self.changed?
-      msg = I18n.t('review.readonly')
-      self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
-
-      false
-    else
-      true
-    end
-  end
-
-  def has_final_review?
-    self.conclusion_final_review
-  end
-
-  def is_frozen?
-    self.has_final_review? && self.conclusion_final_review.is_frozen?
-  end
-
-  def check_if_is_in_a_final_review(finding_review_assignment)
-    finding_review_assignment.finding.tap do |f|
-      if f && !f.is_in_a_final_review?
-        raise 'The finding must be in a final review'
-      end
-    end
-  end
-
-  def process_control_ids=(ids)
-    (ids || []).uniq.each do |pc_id|
-      if ProcessControl.exists?(pc_id)
-        cois = []
-        pc = ProcessControl.find(pc_id)
-        control_objective_ids = control_objective_items.map(&:control_objective_id)
-
-        pc.control_objectives.each do |co|
-          if !co.obsolete && control_objective_ids.exclude?(co.id)
-            cois << {
-              :control_objective_id => co.id,
-              :control_objective_text => co.name,
-              :relevance => co.relevance,
-              :control_attributes => {
-                :control => co.control.control,
-                :effects => co.control.effects,
-                :design_tests => co.control.design_tests,
-                :compliance_tests => co.control.compliance_tests,
-                :sustantive_tests => co.control.sustantive_tests
-              }
-            }
-          end
-        end
-
-        self.control_objective_items.build(cois) unless cois.empty?
-      end
-    end
-  end
-
-  def control_objective_ids=(ids)
-    (ids || []).uniq.each do |co_id|
-      if co_id.respond_to?(:to_i) && ControlObjective.exists?(co_id)
-        co = ControlObjective.find co_id
-        control_objective_ids = control_objective_items.map(&:control_objective_id)
-
-        unless control_objective_ids.include?(co.id)
-          control_objective_items.build(
-            :control_objective_id => co.id,
-            :control_objective_text => co.name,
-            :relevance => co.relevance,
-            :control_attributes => {
-              :control => co.control.control,
-              :effects => co.control.effects,
-              :design_tests => co.control.design_tests,
-              :compliance_tests => co.control.compliance_tests,
-              :sustantive_tests => co.control.sustantive_tests
-            }
-          )
-        end
-      end
-    end
-  end
-
-  def clone_from(other)
-    self.attributes = other.attributes.merge(
-      'id' => nil, 'period_id' => nil, 'plan_item_id' => nil,
-      'identification' => nil, 'file_model_id' => nil)
-
-    other.control_objective_items.order(:order_number).each do |coi|
-      self.control_objective_items.build(coi.attributes.merge(
-          'id' => nil,
-          'review_id' => self.id,
-          'control_attributes' => coi.control.attributes.merge('id' => nil)
-        )
-      )
-    end
-
-    other.review_user_assignments.each do |rua|
-      self.review_user_assignments.build(rua.attributes.merge('id' => nil))
-    end
-  end
-
-  def internal_audit?
-    !self.business_unit.business_unit_type.external
+    "#{identification} - #{plan_item.project}"
   end
 
   def external_audit?
-    self.business_unit.business_unit_type.external
+    business_unit.business_unit_type.external
   end
 
-  def calculate_score
-    self.score_array # Recalcula score y asigna achieved_scale y top_scale
-  end
-
-  # Devuelve la calificación del informe, siempre es un arreglo de dos elementos
-  # como sigue: ['nota en texto', integer_promedio], por ejemplo
-  # ['Satisfactorio', 90]
-  def score_array
-    scores = self.class.scores.to_a
-    count = scores.size + 1
-
-    self.effectiveness # Recalcula score
-    scores.sort! { |s1, s2| s2[1].to_i <=> s1[1].to_i }
-    score_description = scores.detect {|s| count -= 1; self.score >= s[1].to_i}
-
-    self.achieved_scale = count
-    self.top_scale = scores.size
-
-    [score_description ? score_description[0] : '-', self.score]
-  end
-
-  def score_text
-    score = self.score_array
-
-    score ? [I18n.t("score_types.#{score.first}"), "(#{score.last}%)"].join(' ') : ''
-  end
-
-  def control_objective_items_for_score
-    self.control_objective_items.reject &:exclude_from_score
-  end
-
-  def effectiveness
-    coi_count = self.control_objective_items_for_score.inject(0.0) do |acc, coi|
-      acc + (coi.relevance || 0)
-    end
-    total = self.control_objective_items_for_score.inject(0.0) do |acc, coi|
-      acc + coi.effectiveness * (coi.relevance || 0)
-    end
-
-    self.score = coi_count > 0 ? (total / coi_count.to_f).round : 100
+  def internal_audit?
+    !external_audit?
   end
 
   def issue_date(include_draft = false)
     self.conclusion_final_review.try(:issue_date) ||
       (self.conclusion_draft_review.try(:issue_date) if include_draft) ||
       self.plan_item.start
-  end
-
-  def must_be_approved?
-    errors = []
-    review_errors = []
-    self.can_be_approved_by_force = true
-
-    if self.control_objective_items.empty?
-      review_errors << I18n.t('review.errors.without_control_objectives')
-    end
-
-    self.control_objective_items.each do |coi|
-      coi.weaknesses.each do |w|
-        unless w.must_be_approved?
-          self.can_be_approved_by_force = false
-          errors << [
-            "#{Weakness.model_name.human} #{w.review_code} - #{w.title}",
-            w.approval_errors
-          ]
-        end
-      end
-
-      coi.weaknesses.select(&:unconfirmed?).each do |w|
-        errors << [
-          "#{Weakness.model_name.human} #{w.review_code} - #{w.title}",
-          [I18n.t('weakness.errors.is_unconfirmed')]
-        ]
-      end
-
-      coi.oportunities.each do |o|
-        unless o.must_be_approved?
-          errors << [
-            "#{Oportunity.model_name.human} #{o.review_code} - #{o.title}",
-            o.approval_errors
-          ]
-        end
-      end
-
-      unless coi.must_be_approved?
-        self.can_be_approved_by_force = false
-        errors << [
-          "#{ControlObjectiveItem.model_name.human}: #{coi}", coi.approval_errors
-        ]
-      end
-    end
-
-    self.finding_review_assignments.each do |fra|
-      if !fra.finding.repeated? && !fra.finding.implemented_audited?
-        errors << [
-          "#{Finding.model_name.human} #{fra.finding.review_code} - #{fra.finding.title} [#{fra.finding.review}]",
-          [I18n.t('review.errors.related_finding_incomplete')]
-        ]
-      end
-    end
-
-    if self.survey.blank?
-      review_errors << I18n.t('review.errors.without_survey')
-    end
-
-    errors << [Review.model_name.human, review_errors] unless review_errors.blank?
-
-    (@approval_errors = errors).blank?
-  end
-
-  alias_method :is_approved?, :must_be_approved?
-  alias_method :can_be_sended?, :must_be_approved?
-
-  def last_control_objective_work_paper_code(prefix = nil)
-    work_papers = []
-
-    self.control_objective_items.each do |coi|
-      work_papers.concat(coi.work_papers.with_prefix(prefix))
-    end
-
-    last_work_paper_code(prefix, work_papers)
-  end
-
-  def last_weakness_work_paper_code(prefix = nil)
-    work_papers = []
-
-    (self.weaknesses + self.final_weaknesses).each do |w|
-      work_papers.concat(w.work_papers.with_prefix(prefix))
-    end
-
-    last_work_paper_code(prefix, work_papers)
-  end
-
-  def last_oportunity_work_paper_code(prefix = nil)
-    work_papers = []
-
-    (self.oportunities + self.final_oportunities).each do |w|
-      work_papers.concat(w.work_papers.with_prefix(prefix))
-    end
-
-    last_work_paper_code(prefix, work_papers)
-  end
-
-  def work_papers
-    work_papers = []
-
-    self.control_objective_items.each do |coi|
-      work_papers.concat(coi.work_papers)
-    end
-
-    (self.oportunities + self.final_oportunities).each do |w|
-      work_papers.concat(w.work_papers)
-    end
-
-    work_papers
-  end
-
-  def grouped_control_objective_items(options = {})
-    grouped_control_objective_items = {}
-    control_objective_items = options[:hide_excluded_from_score] ?
-      self.control_objective_items.reject(&:exclude_from_score) :
-      self.control_objective_items
-
-    control_objective_items.each do |coi|
-      grouped_control_objective_items[coi.process_control] ||= []
-
-      unless grouped_control_objective_items[coi.process_control].include?(coi)
-        grouped_control_objective_items[coi.process_control] << coi
-      end
-    end
-
-    grouped_control_objective_items.to_a.sort do |gcoi1, gcoi2|
-      pc1 = gcoi1.last.map(&:order_number).compact.min || -1
-      pc2 = gcoi2.last.map(&:order_number).compact.min || -1
-
-      pc1 <=> pc2
-    end
   end
 
   def survey_pdf(organization = nil)
@@ -860,121 +566,4 @@ class Review < ApplicationRecord
   def sanitized_identification
     self.identification.strip.sanitized_for_filename
   end
-
-  def zip_all_work_papers(organization = nil)
-    filename = self.absolute_work_papers_zip_path
-    weaknesses, oportunities, findings = [], [], []
-    dirs = {
-      :control_objectives => I18n.t('review.control_objectives_work_papers').sanitized_for_filename,
-      :weaknesses => I18n.t('review.weaknesses_work_papers').sanitized_for_filename,
-      :oportunities => I18n.t('review.oportunities_work_papers').sanitized_for_filename,
-      :follow_up => I18n.t('review.follow_up_work_papers').sanitized_for_filename,
-      :survey => Review.human_attribute_name(:survey).sanitized_for_filename
-    }
-
-    FileUtils.rm filename if File.exists?(filename)
-    FileUtils.makedirs File.dirname(filename)
-
-    Zip::File.open(filename, Zip::File::CREATE) do |zipfile|
-      self.control_objective_items.each do |coi|
-        coi.work_papers.each do |pa_wp|
-          self.add_work_paper_to_zip pa_wp, dirs[:control_objectives], zipfile
-        end
-      end
-
-      if self.has_final_review?
-        weaknesses = self.final_weaknesses.not_revoked
-        oportunities = self.final_oportunities.not_revoked
-        findings = self.weaknesses.not_revoked + self.oportunities.not_revoked
-      else
-        weaknesses = self.weaknesses.not_revoked
-        oportunities = self.oportunities.not_revoked
-        findings = []
-      end
-
-      weaknesses.each do |w|
-        w.work_papers.each do |w_wp|
-          self.add_work_paper_to_zip w_wp, dirs[:weaknesses], zipfile, 'E_'
-        end
-      end
-
-      oportunities.each do |o|
-        o.work_papers.each do |o_wp|
-          self.add_work_paper_to_zip o_wp, dirs[:oportunities], zipfile, 'E_'
-        end
-      end
-
-      findings.each do |f|
-        f.work_papers.each do |f_wp|
-          self.add_work_paper_to_zip f_wp, dirs[:follow_up], zipfile, 'S_'
-        end
-      end
-
-      if self.file_model.try(:file?)
-        self.add_file_to_zip self.file_model.file.path,
-          self.file_model.identifier, dirs[:survey], zipfile
-      end
-
-      unless self.survey.blank?
-        self.survey_pdf organization
-
-        self.add_file_to_zip(self.absolute_survey_pdf_path,
-          self.survey_pdf_name, dirs[:survey], zipfile)
-      end
-    end
-
-    FileUtils.chmod 0640, filename
-  end
-
-  def absolute_work_papers_zip_path
-    File.join PRIVATE_PATH, self.work_papers_zip_path
-  end
-
-  def relative_work_papers_zip_path
-    "/private/#{self.work_papers_zip_path}"
-  end
-
-  def work_papers_zip_path
-    filename_prefix = Review.human_attribute_name(:work_papers).downcase.sanitized_for_filename
-    path = ('%08d' % (Organization.current_id || 0)).scan(/\d{4}/) +
-      [Review.table_name] + ('%08d' % self.id).scan(/\d{4}/) +
-      ["#{filename_prefix}-#{self.sanitized_identification}.zip"]
-
-    File.join *path
-  end
-
-  def add_work_paper_to_zip(wp, dir, zipfile, prefix = nil)
-    if wp.file_model.try(:file?) && File.exist?(wp.file_model.file.path)
-      self.add_file_to_zip(wp.file_model.file.path,
-        wp.file_model.identifier, dir, zipfile)
-    else
-      identification = "#{prefix}#{self.sanitized_identification}"
-      wp.create_pdf_cover(identification, self)
-
-      self.add_file_to_zip(wp.absolute_cover_path(identification),
-        wp.pdf_cover_name(identification), dir, zipfile)
-    end
-  end
-
-  def add_file_to_zip(file_path, zip_filename, zip_dir, zipfile)
-    zip_filename = File.join zip_dir, zip_filename.sanitized_for_filename
-
-    zipfile.add(zip_filename, file_path) { true } if File.exist?(file_path)
-  end
-
-  private
-
-    def last_work_paper_code(prefix, work_papers)
-      last_code = work_papers.map do |wp|
-        wp.code.match(/\d+\Z/)[0].to_i if wp.code =~ /\d+\Z/
-      end.compact.sort.last
-
-      last_number = last_code.blank? ? 0 : last_code
-
-      "#{prefix} #{'%.2d' % last_number}".strip
-    end
-
-    def check_if_can_be_modified
-      throw :abort unless can_be_modified?
-    end
 end
