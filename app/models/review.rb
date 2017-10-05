@@ -16,6 +16,7 @@ class Review < ApplicationRecord
   include Reviews::Scopes
   include Reviews::Score
   include Reviews::Search
+  include Reviews::SurveyPDF
   include Reviews::UpdateCallbacks
   include Reviews::Users
   include Reviews::Validations
@@ -53,43 +54,6 @@ class Review < ApplicationRecord
     self.conclusion_final_review.try(:issue_date) ||
       (self.conclusion_draft_review.try(:issue_date) if include_draft) ||
       self.plan_item.start
-  end
-
-  def survey_pdf(organization = nil)
-    pdf = Prawn::Document.create_generic_pdf(:portrait)
-
-    pdf.add_review_header organization, self.identification.strip,
-      self.plan_item.project.strip
-    pdf.add_title Review.human_attribute_name 'survey'
-
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.text self.survey, :font_size => PDF_FONT_SIZE, :align => :justify
-
-    pdf.move_down PDF_FONT_SIZE * 2
-
-    note_text = self.file_model.try(:file?) ?
-      I18n.t('review.survey.with_attachment') :
-      I18n.t('review.survey.without_attachment')
-
-    pdf.add_footnote "<i>#{note_text}</i>"
-
-    pdf.custom_save_as self.survey_pdf_name, 'review_surveys', self.id
-  end
-
-  def absolute_survey_pdf_path
-    Prawn::Document.absolute_path self.survey_pdf_name, 'review_surveys', self.id
-  end
-
-  def relative_survey_pdf_path
-    Prawn::Document.relative_path self.survey_pdf_name, 'review_surveys', self.id
-  end
-
-  def survey_pdf_name
-    identification = self.identification
-    survey = Review.human_attribute_name(:survey).downcase
-
-    "#{survey}-#{identification}.pdf".sanitized_for_filename
   end
 
   def score_sheet(organization = nil, draft = false)
