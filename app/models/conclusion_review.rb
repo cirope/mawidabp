@@ -265,7 +265,7 @@ class ConclusionReview < ApplicationRecord
 
               weaknesses.each do |w|
                 pdf.move_down PDF_FONT_SIZE
-                pdf.text coi.pdf_data(w), :align => :justify, :inline_format => true
+                pdf.text coi.finding_pdf_data(w), :align => :justify, :inline_format => true
               end
             end
           end
@@ -320,7 +320,7 @@ class ConclusionReview < ApplicationRecord
 
               oportunities.each do |w|
                 pdf.move_down PDF_FONT_SIZE
-                pdf.text coi.pdf_data(w), :align => :justify, :inline_format => true
+                pdf.text coi.finding_pdf_data(w), :align => :justify, :inline_format => true
               end
             end
           end
