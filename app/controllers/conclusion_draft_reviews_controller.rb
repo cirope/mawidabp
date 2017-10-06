@@ -122,11 +122,11 @@ class ConclusionDraftReviewsController < ApplicationController
     review = @conclusion_draft_review.review
 
     if params[:global].blank?
-      review.score_sheet(current_organization, true)
+      review.score_sheet(current_organization, draft: true)
 
       redirect_to review.relative_score_sheet_path
     else
-      review.global_score_sheet(current_organization, true)
+      review.global_score_sheet(current_organization, draft: true)
 
       redirect_to review.relative_global_score_sheet_path
     end
@@ -185,12 +185,11 @@ class ConclusionDraftReviewsController < ApplicationController
       @conclusion_draft_review.to_pdf(current_organization)
 
       if include_score_sheet
-        @conclusion_draft_review.review.score_sheet current_organization, true
+        @conclusion_draft_review.review.score_sheet current_organization, draft: true
       end
 
       if include_global_score_sheet
-        @conclusion_draft_review.review.global_score_sheet(current_organization,
-          true)
+        @conclusion_draft_review.review.global_score_sheet(current_organization, draft: true)
       end
 
       (params[:user].try(:values).try(:reject, &:blank?) || []).each do |user_data|

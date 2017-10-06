@@ -203,11 +203,11 @@ class ConclusionFinalReviewsController < ApplicationController
     @conclusion_final_review.to_pdf(current_organization, export_options)
 
     if include_score_sheet
-      @conclusion_final_review.review.score_sheet current_organization, false
+      @conclusion_final_review.review.score_sheet current_organization
     end
 
     if include_global_score_sheet
-      @conclusion_final_review.review.global_score_sheet(current_organization, false)
+      @conclusion_final_review.review.global_score_sheet(current_organization)
     end
 
     (params[:user].try(:values).try(:reject, &:blank?) || []).each do |user_data|

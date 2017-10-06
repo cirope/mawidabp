@@ -4,9 +4,7 @@ module Reviews::SurveyPDF
   def survey_pdf organization = nil
     pdf = Prawn::Document.create_generic_pdf :portrait
 
-    pdf.add_review_header organization,
-      identification.strip,
-      plan_item.project.strip
+    pdf.add_review_header organization, identification, plan_item.project
 
     add_survey_body_to pdf
 

@@ -200,7 +200,7 @@ class ConclusionReview < ApplicationRecord
 
       unless options[:hide_score]
         pdf.move_down PDF_FONT_SIZE
-        self.review.add_score_details_table(pdf)
+        self.review.put_score_details_table(pdf)
 
         pdf.move_down((PDF_FONT_SIZE * 0.75).round)
 

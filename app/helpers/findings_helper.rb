@@ -62,7 +62,7 @@ module FindingsHelper
                     t 'review.without_final_review'
                   end
 
-    review_data << " | #{l review.issue_date(true), format: :long}"
+    review_data << " | #{l review.issue_date(include_draft: true), format: :long}"
 
     content_tag :abbr, h(review.identification), title: review_data
   end
