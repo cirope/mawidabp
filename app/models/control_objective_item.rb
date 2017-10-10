@@ -10,7 +10,7 @@ class ControlObjectiveItem < ApplicationRecord
   include ControlObjectiveItems::ControlObjective
   include ControlObjectiveItems::DateColumns
   include ControlObjectiveItems::Defaults
-  include ControlObjectiveItems::DestroyCallbacks
+  include ControlObjectiveItems::DestroyValidation
   include ControlObjectiveItems::Effectiveness
   include ControlObjectiveItems::FindingPDFData
   include ControlObjectiveItems::Findings

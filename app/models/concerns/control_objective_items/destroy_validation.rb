@@ -1,4 +1,4 @@
-module ControlObjectiveItems::DestroyCallbacks
+module ControlObjectiveItems::DestroyValidation
   extend ActiveSupport::Concern
 
   included do
