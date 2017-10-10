@@ -75,30 +75,36 @@
         <strong><%= Control.human_attribute_name :control %>:</strong>
         <%= simple_format coi.control.control %>
       </div>
-      <p>
-        <strong><%= ControlObjectiveItem.human_attribute_name :effectiveness %>:</strong>
-        <%= "#{coi.effectiveness}%" %>
-      </p>
-      <p>
-        <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
-        <%= coi.design_score_text %>
-      </p>
+      <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+        <p>
+          <strong><%= ControlObjectiveItem.human_attribute_name :effectiveness %>:</strong>
+          <%= "#{coi.effectiveness}%" %>
+        </p>
+        <p>
+          <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
+          <%= coi.design_score_text %>
+        </p>
+      <% end %>
       <div>
         <strong><%= Control.human_attribute_name :design_tests %>:</strong>
         <%= simple_format coi.control.design_tests %>
       </div>
-      <p>
-        <strong><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</strong>
-        <%= coi.compliance_score_text %>
-      </p>
+      <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+        <p>
+          <strong><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</strong>
+          <%= coi.compliance_score_text %>
+        </p>
+      <% end %>
       <div>
         <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
         <%= simple_format coi.control.compliance_tests %>
       </div>
-      <p>
-        <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
-        <%= coi.sustantive_score_text %>
-      </p>
+      <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+        <p>
+          <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
+          <%= coi.sustantive_score_text %>
+        </p>
+      <% end %>
       <div>
         <strong><%= Control.human_attribute_name :sustantive_tests %>:</strong>
         <%= simple_format coi.control.sustantive_tests %>

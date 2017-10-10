@@ -216,14 +216,17 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     @control_objective_item.finished = true
 
     assert @control_objective_item.invalid?
-    assert_error @control_objective_item, :design_score, :blank
-    assert_error @control_objective_item, :compliance_score, :blank
-    assert_error @control_objective_item, :sustantive_score, :blank
     assert_error @control_objective_item, :audit_date, :blank
     assert_error @control_objective_item, :relevance, :blank
     assert_error @control_objective_item.control, :effects, :blank
     assert_error @control_objective_item.control, :control, :blank
     assert_error @control_objective_item, :auditor_comment, :blank
+
+    unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
+      assert_error @control_objective_item, :design_score, :blank
+      assert_error @control_objective_item, :compliance_score, :blank
+      assert_error @control_objective_item, :sustantive_score, :blank
+    end
 
     @control_objective_item.design_score = 0
 
@@ -271,15 +274,17 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
-    @control_objective_item.reload
-    @control_objective_item.design_score = nil
-    @control_objective_item.compliance_score = nil
-    @control_objective_item.sustantive_score = nil
-    assert !@control_objective_item.must_be_approved?
-    assert_equal 1, @control_objective_item.approval_errors.size
+    unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
+      @control_objective_item.reload
+      @control_objective_item.design_score = nil
+      @control_objective_item.compliance_score = nil
+      @control_objective_item.sustantive_score = nil
+      assert !@control_objective_item.must_be_approved?
+      assert_equal 1, @control_objective_item.approval_errors.size
 
-    @control_objective_item.exclude_from_score = true
-    assert @control_objective_item.must_be_approved?
+      @control_objective_item.exclude_from_score = true
+      assert @control_objective_item.must_be_approved?
+    end
 
     @control_objective_item.reload
     @control_objective_item.finished = false
@@ -296,21 +301,25 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
-    @control_objective_item.reload
-    @control_objective_item.control.compliance_tests = '  '
-    assert !@control_objective_item.must_be_approved?
-    assert_equal 1, @control_objective_item.approval_errors.size
+    unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
+      @control_objective_item.reload
+      @control_objective_item.control.compliance_tests = '  '
+      assert !@control_objective_item.must_be_approved?
+      assert_equal 1, @control_objective_item.approval_errors.size
+    end
 
     @control_objective_item.reload
     @control_objective_item.auditor_comment = '  '
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
-    @control_objective_item.reload
-    assert @control_objective_item.design_score
-    @control_objective_item.control.design_tests = '  '
-    assert !@control_objective_item.must_be_approved?
-    assert_equal 1, @control_objective_item.approval_errors.size
+    unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
+      @control_objective_item.reload
+      assert @control_objective_item.design_score
+      @control_objective_item.control.design_tests = '  '
+      assert !@control_objective_item.must_be_approved?
+      assert_equal 1, @control_objective_item.approval_errors.size
+    end
 
     @control_objective_item.reload
     @control_objective_item.design_score = nil

@@ -23,30 +23,36 @@
   <%= simple_format @control_objective_item.control.control %>
 </div>
 
-<p>
-  <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
-  <%= @control_objective_item.design_score_text %>
-</p>
+<% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+  <p>
+    <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
+    <%= @control_objective_item.design_score_text %>
+  </p>
+<% end %>
 
 <div>
   <strong><%= Control.human_attribute_name :design_tests %>:</strong>
   <%= simple_format @control_objective_item.control.design_tests %>
 </div>
 
-<p>
-  <strong><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</strong>
-  <%= @control_objective_item.compliance_score_text %>
-</p>
+<% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+  <p>
+    <strong><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</strong>
+    <%= @control_objective_item.compliance_score_text %>
+  </p>
+<% end %>
 
 <div>
   <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
   <%= simple_format @control_objective_item.control.compliance_tests %>
 </div>
 
-<p>
-  <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
-  <%= @control_objective_item.sustantive_score_text %>
-</p>
+<% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+  <p>
+    <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
+    <%= @control_objective_item.sustantive_score_text %>
+  </p>
+<% end %>
 
 <div>
   <strong><%= Control.human_attribute_name :sustantive_tests %>:</strong>
@@ -63,10 +69,12 @@
   <%= simple_format @control_objective_item.auditor_comment %>
 </div>
 
-<p>
-  <strong><%= ControlObjectiveItem.human_attribute_name(:effectiveness) %>:</strong>
-  <%= "#{@control_objective_item.effectiveness}%" %>
-</p>
+<% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+  <p>
+    <strong><%= ControlObjectiveItem.human_attribute_name(:effectiveness) %>:</strong>
+    <%= "#{@control_objective_item.effectiveness}%" %>
+  </p>
+<% end %>
 
 <p>
   <strong><%= ControlObjectiveItem.human_attribute_name(:finished) %>:</strong>
