@@ -33,6 +33,10 @@ es:
     low: 'Bajo'
     medium: 'Medio'
     high: 'Alto'
+    # Extended
+    not_relevant: 'No relevante'
+    medium_high: 'Medio PD'
+    high_medium: 'Alto - Medio'
   priority_types:
     low: 'Baja'
     medium: 'Media'

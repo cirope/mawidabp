@@ -88,7 +88,7 @@ module Reports::ReviewStatsReport
     end
 
     def set_weaknesses_by_score_data
-      Weakness::RISK_TYPES.reverse_each do |risk, r_value|
+      ::RISK_TYPES.reverse_each do |risk, r_value|
         ::PRIORITY_TYPES.reverse_each do |priority, p_value|
           add_total_weaknesses_by_score(
             risk:     risk,
