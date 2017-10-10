@@ -107,44 +107,46 @@
     <%= render 'oportunities_summary', readonly: readonly %>
   <% end %>
 
-  <br />
-  <h4>
-    <%= BusinessUnitScore.model_name.human count: @control_objective_item.business_unit_scores.size %>
-  </h4>
-  <div class="row">
-    <div class="col-md-4">
-      <h5><strong><%= BusinessUnitScore.human_attribute_name 'business_unit_id' %></strong></h5>
+  <% unless HIDE_BUSINESS_UNIT_SCORES %>
+    <br />
+    <h4>
+      <%= BusinessUnitScore.model_name.human count: @control_objective_item.business_unit_scores.size %>
+    </h4>
+    <div class="row">
+      <div class="col-md-4">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'business_unit_id' %></strong></h5>
+      </div>
+      <div class="col-md-2">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'design_score' %></strong></h5>
+      </div>
+      <div class="col-md-2">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'compliance_score' %></strong></h5>
+      </div>
+      <div class="col-md-2">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'sustantive_score' %></strong></h5>
+      </div>
     </div>
-    <div class="col-md-2">
-      <h5><strong><%= BusinessUnitScore.human_attribute_name 'design_score' %></strong></h5>
+
+    <div id="business_unit_scores">
+      <%= f.simple_fields_for :business_unit_scores do |bus_f| %>
+        <%= render 'business_unit_score', f: bus_f, readonly: readonly %>
+      <% end %>
+
+      <%= link_to_add_fields(
+        t('control_objective_item.add_business_unit_score'),
+        f, :business_unit_scores, nil, {}, { readonly: readonly }
+      ) unless readonly %>
     </div>
-    <div class="col-md-2">
-      <h5><strong><%= BusinessUnitScore.human_attribute_name 'compliance_score' %></strong></h5>
+
+    <hr>
+
+    <div id="business_unit_types">
+      <%= link_to_add_fields(
+        t('control_objective_item.add_business_unit_type'),
+        f, :business_unit_scores, 'business_unit_type', {}, { readonly: readonly }
+      ) unless readonly %>
     </div>
-    <div class="col-md-2">
-      <h5><strong><%= BusinessUnitScore.human_attribute_name 'sustantive_score' %></strong></h5>
-    </div>
-  </div>
-
-  <div id="business_unit_scores">
-    <%= f.simple_fields_for :business_unit_scores do |bus_f| %>
-      <%= render 'business_unit_score', f: bus_f, readonly: readonly %>
-    <% end %>
-
-    <%= link_to_add_fields(
-      t('control_objective_item.add_business_unit_score'),
-      f, :business_unit_scores, nil, {}, { readonly: readonly }
-    ) unless readonly %>
-  </div>
-
-  <hr>
-
-  <div id="business_unit_types">
-    <%= link_to_add_fields(
-      t('control_objective_item.add_business_unit_type'),
-      f, :business_unit_scores, 'business_unit_type', {}, { readonly: readonly }
-    ) unless readonly %>
-  </div>
+  <% end %>
 
   <br />
   <h4>

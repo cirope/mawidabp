@@ -13,8 +13,9 @@ EMAIL_ADDRESS: 'noreply@change.me'
 SECRET_KEY_BASE: 'REPLACE with rake secret output'
 NEW_RELIC_LICENSE_KEY: 'REPLACE with the one provided by NewRelic'
 
-# Extra options
+# Extra application options
 DISABLE_FINDINGS_EXPIRATION_NOTIFICATION: 'false'
+HIDE_BUSINESS_UNIT_SCORES: 'false'
 HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS: 'false'
 HIDE_CONTROL_OBJECTIVE_RISK: 'false'
 HIDE_OPORTUNITIES: 'false'
