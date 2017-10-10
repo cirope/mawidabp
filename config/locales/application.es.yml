@@ -357,7 +357,7 @@ es:
     objectives_and_scopes: "OBJETIVOS Y ALCANCE DEL TRABAJO"
     applied_procedures: "PROCEDIMIENTOS APLICADOS"
     conclusion: "CONCLUSIÓN"
-    findings: "OBSERVACIONES"
+    weaknesses: "OBSERVACIONES"
     oportunities: "OPORTUNIDADES DE MEJORA"
     finding_review_assignments: "OBSERVACIONES / OPORTUNIDADES DE MEJORA REVISADAS"
     add_recipient: "Agregar nuevo destinatario"
@@ -388,8 +388,7 @@ es:
       control_objective_work_papers: "Papeles de trabajo del objetivo de control"
       control_objective_weaknesses: "Observaciones"
       control_objective_oportunities: "Oportunidades"
-      oportunity_work_papers: "Papeles de trabajo de la oportunidad"
-      weakness_work_papers: "Papeles de trabajo de la observación"
+      finding_work_papers: "Papeles de trabajo del hallazgo"
 
   control_objective:
     errors:

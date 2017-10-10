@@ -25,8 +25,7 @@
   <span>|</span>
   <%= link_to t('conclusion_draft_review.create_bundle'), '#',
     data: { toggle: 'modal', target: "#customize_report" } %> |
-  <%= link_to_if(@conclusion_draft_review.review.try(:can_be_sended?) &&
-      !@conclusion_draft_review.has_final_review?,
+  <%= link_to_if(@conclusion_draft_review.review.try(:can_be_sended?),
     t('conclusion_draft_review.send_by_email'), :action => :compose_email,
     :id => @conclusion_draft_review) %> |
   <%= link_to_back %>

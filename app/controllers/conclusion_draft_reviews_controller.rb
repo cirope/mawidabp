@@ -170,8 +170,7 @@ class ConclusionDraftReviewsController < ApplicationController
   def send_by_email
     @title = t 'conclusion_draft_review.send_by_email'
 
-    if @conclusion_draft_review.try(:review).try(:can_be_sended?) &&
-        !@conclusion_draft_review.has_final_review?
+    if @conclusion_draft_review.try(:review).try(:can_be_sended?)
       users = []
 
       if params[:conclusion_review]
