@@ -67,9 +67,11 @@ module ConclusionReviews::PDF
 
       pdf.start_new_page
       pdf.add_page_footer
-      pdf.add_title review.description
 
-      pdf.move_down PDF_FONT_SIZE
+      unless HIDE_REVIEW_DESCRIPTION
+        pdf.add_title review.description
+        pdf.move_down PDF_FONT_SIZE
+      end
 
       pdf.add_description_item issue_date_title, I18n.l(issue_date, format: :long)
       pdf.add_description_item business_unit_label, review.business_unit.name

@@ -86,7 +86,7 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert @review.invalid?
     assert_error @review, :identification, :blank
-    assert_error @review, :description, :blank
+    assert_error @review, :description, :blank unless HIDE_REVIEW_DESCRIPTION
     assert_error @review, :period_id, :blank
     assert_error @review, :plan_item_id, :blank
   end

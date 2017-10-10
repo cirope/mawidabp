@@ -2,7 +2,8 @@ module Reviews::Validations
   extend ActiveSupport::Concern
 
   included do
-    validates :identification, :description, :period_id, :plan_item_id, :organization_id, presence: true
+    validates :identification, :period_id, :plan_item_id, :organization_id, presence: true
+    validates :description, presence: true, unless: -> { HIDE_REVIEW_DESCRIPTION }
     validates :identification,
       length:     { maximum: 255 },
       format:     { with: /\A\w[\w\s-]*\z/ }, allow_nil: true, allow_blank: true,

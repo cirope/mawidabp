@@ -27,10 +27,12 @@
   <%= show_readonly_review_survey(@review) %>
 </div>
 
-<div>
-  <strong><%= Review.human_attribute_name(:description) %>:</strong>
-  <%= simple_format @review.description %>
-</div>
+<% unless HIDE_REVIEW_DESCRIPTION %>
+  <div>
+    <strong><%= Review.human_attribute_name(:description) %>:</strong>
+    <%= simple_format @review.description %>
+  </div>
+<% end %>
 
 <table class="table table-condensed table-striped">
   <thead>
