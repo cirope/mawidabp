@@ -38,7 +38,7 @@ FOREIGN_KEY_OPTIONS={ on_delete: :restrict, on_update: :restrict }
 # Días a los que se consideran anticuadas las notificaciones
 NOTIFICATIONS_STALE_DAYS = 2
 # Deshabilitar notificación de observaciones vencidas
-DISABLE_FINDINGS_EXPIRATION_NOTIFICATION=ENV['DISABLE_FINDINGS_EXPIRATION_NOTIFICATION'] == 'true'
+DISABLE_FINDINGS_EXPIRATION_NOTIFICATION = ENV['DISABLE_FINDINGS_EXPIRATION_NOTIFICATION'] == 'true'
 # Cadena para separar las enumeraciones cuando son concatenadas
 APP_ENUM_SEPARATOR = ' / '.freeze
 # Márgenes a dejar en los reportes generados en PDF (T, R, B, L)

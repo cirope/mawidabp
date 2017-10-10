@@ -10,11 +10,12 @@ APP_HOST: 'lvh.me'
 APP_PROTOCOL: 'http'
 EMAIL_ADDRESS: 'noreply@change.me'
 
-DISABLE_FINDINGS_EXPIRATION_NOTIFICATION: 'false'
-
 SECRET_KEY_BASE: 'REPLACE with rake secret output'
-
 NEW_RELIC_LICENSE_KEY: 'REPLACE with the one provided by NewRelic'
+
+# Extra options
+DISABLE_FINDINGS_EXPIRATION_NOTIFICATION: 'false'
+HIDE_CONTROL_OBJECTIVE_RISK: 'false'
 
 production:
   APP_PROTOCOL: 'https'
