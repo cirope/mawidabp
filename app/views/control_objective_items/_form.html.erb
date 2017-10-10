@@ -33,7 +33,7 @@
               input_html: { value: "#{@control_objective_item.effectiveness}%", readonly: true } %>
           <% end %>
 
-          <% test_rows = HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS ? 8 : 5 %>
+          <% test_rows = HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS ? 9 : 5 %>
           <% content_for :design_tests do %>
             <%= c_f.input :design_tests, input_html: { readonly: readonly, rows: test_rows } %>
           <% end %>
@@ -67,7 +67,12 @@
         <% end %>
         <%= yield :sustantive_tests %>
 
-        <%= f.input :auditor_comment, input_html: { readonly: readonly, rows: 5 } %>
+        <% if SHOW_CONTROL_OBJECTIVE_ITEM_AUDITOR_COMMENT_AS_OPTIONS %>
+          <%= f.input :auditor_comment, collection: auditor_comment_options,
+            prompt: true, input_html: { readonly: readonly } %>
+        <% else %>
+          <%= f.input :auditor_comment, input_html: { readonly: readonly, rows: 5 } %>
+        <% end %>
 
         <div class="row">
           <div class="col-md-6">

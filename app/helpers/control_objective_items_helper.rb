@@ -80,4 +80,18 @@ module ControlObjectiveItemsHelper
     link_to_unless weaknesses.count == 0, weaknesses.count,
       weaknesses_path(:control_objective => control_objective_item)
   end
+
+  def auditor_comment_options
+    [
+      'satisfactory',
+      'satisfactory_with_caveats',
+      'needs_improvement',
+      'dissatisfactory',
+      'not_applicable'
+    ].map do |comment|
+      text = t "control_objective_item.auditor_comments.#{comment}"
+
+      [text, text]
+    end
+  end
 end
