@@ -102,8 +102,10 @@
   <br />
   <%= render 'weaknesses_summary', readonly: readonly %>
 
-  <br />
-  <%= render 'oportunities_summary', readonly: readonly %>
+  <% unless HIDE_OPORTUNITIES %>
+    <br />
+    <%= render 'oportunities_summary', readonly: readonly %>
+  <% end %>
 
   <br />
   <h4>

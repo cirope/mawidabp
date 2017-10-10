@@ -4,6 +4,10 @@ require 'test_helper'
 class OportunitiesControllerTest < ActionController::TestCase
   fixtures :findings, :control_objective_items
 
+  setup do
+    skip if HIDE_OPORTUNITIES
+  end
+
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
