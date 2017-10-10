@@ -813,6 +813,8 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'remember users about expired findings' do
+    skip if DISABLE_FINDINGS_EXPIRATION_NOTIFICATION
+
     Organization.current_id = nil
     review_codes_by_user    = review_codes_on_findings_by_user :expired
 
