@@ -255,14 +255,14 @@ module Findings::FollowUpPDF
     def weakness_follow_up_description_items
       [
         [self.class.human_attribute_name(:risk), risk_text, 0, false],
-        ([self.class.human_attribute_name(:priority), priority_text, 0, false] unless HIDE_WEAKNESSES_PRIORITY),
+        ([self.class.human_attribute_name(:priority), priority_text, 0, false] unless HIDE_WEAKNESS_PRIORITY),
         [Finding.human_attribute_name(:effect), effect, 0, false],
         [Finding.human_attribute_name(:audit_recommendations), audit_recommendations, 0, false]
       ].compact
     end
 
     def follow_up_important_attributes
-      if HIDE_WEAKNESSES_PRIORITY
+      if HIDE_WEAKNESS_PRIORITY
         [:state, :risk, :follow_up_date]
       else
         [:state, :risk, :priority, :follow_up_date]

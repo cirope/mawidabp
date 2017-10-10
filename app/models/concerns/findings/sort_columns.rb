@@ -11,7 +11,7 @@ module Findings::SortColumns
       columns.merge!(
         priority_asc:        priority_asc_options,
         priority_desc:       priority_desc_options,
-      ) unless HIDE_WEAKNESSES_PRIORITY
+      ) unless HIDE_WEAKNESS_PRIORITY
 
       columns.merge(
         state:               state_options,
@@ -34,7 +34,7 @@ module Findings::SortColumns
       end
 
       def risk_options order: 'ASC'
-        name = if HIDE_WEAKNESSES_PRIORITY
+        name = if HIDE_WEAKNESS_PRIORITY
                  "#{human_attribute_name :risk}#{order_label order}"
                else
                  "#{human_attribute_name :risk} - #{human_attribute_name :priority}#{order_label order}"

@@ -152,7 +152,7 @@ module Reports::WeaknessesReport
       pdf.add_description_item(Weakness.human_attribute_name(:state), weakness.state_text, 0, false)
 
       pdf.add_description_item(Weakness.human_attribute_name(:risk), weakness.risk_text, 0, false)
-      pdf.add_description_item(Weakness.human_attribute_name(:priority), weakness.priority_text, 0, false) unless HIDE_WEAKNESSES_PRIORITY
+      pdf.add_description_item(Weakness.human_attribute_name(:priority), weakness.priority_text, 0, false) unless HIDE_WEAKNESS_PRIORITY
       pdf.add_description_item(Weakness.human_attribute_name(:effect), weakness.effect, 0, false)
       pdf.add_description_item(Weakness.human_attribute_name(:audit_recommendations), weakness.audit_recommendations, 0, false)
 

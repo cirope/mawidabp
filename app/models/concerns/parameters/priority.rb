@@ -17,7 +17,7 @@ module Parameters::Priority
     private
 
       def priority_types
-        if HIDE_WEAKNESSES_PRIORITY
+        if HIDE_WEAKNESS_PRIORITY
           { default: 0 }
         else
           { low: 0, medium: 1, high: 2 }

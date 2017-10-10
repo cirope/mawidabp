@@ -39,7 +39,7 @@
     <%= @finding.risk_text %>
   </p>
 
-  <% unless HIDE_WEAKNESSES_PRIORITY %>
+  <% unless HIDE_WEAKNESS_PRIORITY %>
     <p>
       <strong><%= Weakness.human_attribute_name :priority %></strong>:
       <%= @finding.priority_text %>

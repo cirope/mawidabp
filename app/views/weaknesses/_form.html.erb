@@ -57,7 +57,7 @@
       <div class="col-md-6">
         <%= f.input :origination_date, as: :date_picker, input_html: { disabled: readonly } %>
         <%= f.input :risk, collection: risks, prompt: true, disabled: readonly %>
-        <% unless HIDE_WEAKNESSES_PRIORITY %>
+        <% unless HIDE_WEAKNESS_PRIORITY %>
           <%= f.input :priority, collection: priorities, prompt: true, disabled: readonly %>
         <% end %>
         <%= f.label :state, raw(Weakness.human_attribute_name(:state) + ' ' +

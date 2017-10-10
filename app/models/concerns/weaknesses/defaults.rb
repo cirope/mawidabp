@@ -3,7 +3,7 @@ module Weaknesses::Defaults
 
   included do
     after_initialize :set_review_code, if: :new_record?
-    after_initialize :set_priority, unless: -> { HIDE_WEAKNESSES_PRIORITY }
+    after_initialize :set_priority, unless: -> { HIDE_WEAKNESS_PRIORITY }
   end
 
   private
