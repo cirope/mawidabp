@@ -3,7 +3,11 @@ module ControlObjectiveItemsHelper
     relevance = control_objective_item.relevance
     text = control_objective_item.relevance_label
 
-    text.blank? || text == '-' ? text : "#{text} (#{relevance})"
+    if text.blank? || text == '-'
+      text
+    else
+      "#{text} (#{relevance})"
+    end
   end
 
   def control_objective_effectiveness(control_objective_item)

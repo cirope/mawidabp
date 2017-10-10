@@ -16,6 +16,7 @@ NEW_RELIC_LICENSE_KEY: 'REPLACE with the one provided by NewRelic'
 # Extra options
 DISABLE_FINDINGS_EXPIRATION_NOTIFICATION: 'false'
 HIDE_CONTROL_OBJECTIVE_RISK: 'false'
+USE_SHORT_RELEVANCE: 'false'
 
 production:
   APP_PROTOCOL: 'https'
