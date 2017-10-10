@@ -38,10 +38,13 @@
     <strong><%= Weakness.human_attribute_name :risk %></strong>:
     <%= @finding.risk_text %>
   </p>
-  <p>
-    <strong><%= Weakness.human_attribute_name :priority %></strong>:
-    <%= @finding.priority_text %>
-  </p>
+
+  <% unless HIDE_WEAKNESSES_PRIORITY %>
+    <p>
+      <strong><%= Weakness.human_attribute_name :priority %></strong>:
+      <%= @finding.priority_text %>
+    </p>
+  <% end %>
 <% end %>
 <p>
   <strong><%= Finding.human_attribute_name(:state) %></strong>:

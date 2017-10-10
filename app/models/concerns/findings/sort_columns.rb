@@ -3,18 +3,24 @@ module Findings::SortColumns
 
   module ClassMethods
     def columns_for_sort
-      {
-        risk_asc:             risk_asc_options,
-        risk_desc:            risk_desc_options,
-        priority_asc:         priority_asc_options,
-        priority_desc:        priority_desc_options,
-        state:                state_options,
-        review:               review_options,
-        updated_at_asc:       updated_at_asc_options,
-        updated_at_desc:      updated_at_desc_options,
-        follow_up_date_asc:   follow_up_date_asc_options,
-        follow_up_date_desc:  follow_up_date_desc_options
+      columns = {
+        risk_asc:            risk_asc_options,
+        risk_desc:           risk_desc_options,
       }.with_indifferent_access
+
+      columns.merge!(
+        priority_asc:        priority_asc_options,
+        priority_desc:       priority_desc_options,
+      ) unless HIDE_WEAKNESSES_PRIORITY
+
+      columns.merge(
+        state:               state_options,
+        review:              review_options,
+        updated_at_asc:      updated_at_asc_options,
+        updated_at_desc:     updated_at_desc_options,
+        follow_up_date_asc:  follow_up_date_asc_options,
+        follow_up_date_desc: follow_up_date_desc_options
+      )
     end
 
     private
@@ -28,8 +34,14 @@ module Findings::SortColumns
       end
 
       def risk_options order: 'ASC'
+        name = if HIDE_WEAKNESSES_PRIORITY
+                 "#{human_attribute_name :risk}#{order_label order}"
+               else
+                 "#{human_attribute_name :risk} - #{human_attribute_name :priority}#{order_label order}"
+               end
+
         {
-          name:  "#{human_attribute_name :risk} - #{human_attribute_name :priority}#{order_label order}",
+          name:  name,
           field: [
             "#{quoted_table_name}.#{qcn('risk')} #{order}",
             "#{quoted_table_name}.#{qcn('priority')} #{order}",

@@ -128,7 +128,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
           finding_status: '1',
           finding_title: '1',
           risk: '1',
-          priority: '1',
+          priority: Finding.priorities_values.first,
           issue_date: Date.today.to_s(:db),
           issue_date_operator: '=',
           origination_date: Date.today.to_s(:db),

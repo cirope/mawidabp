@@ -1,7 +1,9 @@
 module Parameters::Priority
   extend ActiveSupport::Concern
 
-  PRIORITY_TYPES = { low: 0, medium: 1, high: 2 }
+  included do
+    ::PRIORITY_TYPES = priority_types unless defined? ::PRIORITY_TYPES
+  end
 
   module ClassMethods
     def priorities
@@ -11,5 +13,15 @@ module Parameters::Priority
     def priorities_values
       PRIORITY_TYPES.values
     end
+
+    private
+
+      def priority_types
+        if HIDE_WEAKNESSES_PRIORITY
+          { default: 0 }
+        else
+          { low: 0, medium: 1, high: 2 }
+        end
+      end
   end
 end

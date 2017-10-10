@@ -52,10 +52,12 @@
       <%= weakness.risk_text %>
     </p>
 
-    <p>
-      <strong><%= Weakness.human_attribute_name 'priority' %>:</strong>
-      <%= weakness.priority_text %>
-    </p>
+    <% unless HIDE_WEAKNESSES_PRIORITY %>
+      <p>
+        <strong><%= Weakness.human_attribute_name 'priority' %>:</strong>
+        <%= weakness.priority_text %>
+      </p>
+    <% end %>
 
     <div>
       <strong><%= Weakness.human_attribute_name 'effect' %>:</strong>

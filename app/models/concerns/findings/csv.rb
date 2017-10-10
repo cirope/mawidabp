@@ -15,7 +15,7 @@ module Findings::CSV
       description,
       state_text,
       respond_to?(:risk_text) ? risk_text : '',
-      respond_to?(:risk_text) ? priority_text : '',
+      (respond_to?(:risk_text) ? priority_text : '' unless HIDE_WEAKNESSES_PRIORITY),
       auditeds_as_process_owner.join('; '),
       audited_users.join('; '),
       best_practice.name,
@@ -27,7 +27,7 @@ module Findings::CSV
       audit_comments,
       answer,
       finding_answers_text
-    ]
+    ].compact
 
     row.unshift organization.prefix if corporate
 
@@ -127,7 +127,7 @@ module Findings::CSV
           Weakness.human_attribute_name('description'),
           Weakness.human_attribute_name('state'),
           Weakness.human_attribute_name('risk'),
-          Weakness.human_attribute_name('priority'),
+          (Weakness.human_attribute_name('priority') unless HIDE_WEAKNESSES_PRIORITY),
           FindingUserAssignment.human_attribute_name('process_owner'),
           I18n.t('finding.audited', count: 0),
           BestPractice.model_name.human,

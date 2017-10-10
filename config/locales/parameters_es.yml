@@ -37,6 +37,8 @@ es:
     low: 'Baja'
     medium: 'Media'
     high: 'Alta'
+    # When priority is hidden
+    default: 'Normal'
   score_types:
     satisfactory: 'Satisfactorio'
     improve: 'Necesita mejorar'
