@@ -111,7 +111,7 @@ module ConclusionReviews::FindingsFollowUpPDF
       findings = findings.select do |f|
         f.implemented? || f.being_implemented? || f.unanswered?
       end
-        
+
       findings.sort do |f1, f2|
         f1.review_code <=> f2.review_code
       end
