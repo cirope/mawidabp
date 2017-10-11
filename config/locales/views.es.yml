@@ -114,6 +114,7 @@ es:
       confirmed: 'Confirmada'
       unconfirmed: 'No confirmada'
       unanswered: 'Sin respuesta'
+      awaiting: 'Pendiente'
       being_implemented: 'En proceso de implementación'
       being_implemented_current: 'Vigente'
       being_implemented_current_rescheduled: 'Reprogramada vigente'

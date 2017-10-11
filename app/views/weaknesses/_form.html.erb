@@ -76,6 +76,10 @@
             <%= c_f.input :user_id, as: :hidden %>
           <% end %>
         <% end %>
+        <% if SHOW_WEAKNESS_PROGRESS %>
+          <%= f.input :progress, collection: weakness_progresses(@weakness), prompt: true,
+            disabled: weakness_progress_disabled?(@weakness, readonly) %>
+        <% end %>
         <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
         <%= f.input :follow_up_date, as: :date_picker, input_html: { disabled: readonly } %>
         <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>

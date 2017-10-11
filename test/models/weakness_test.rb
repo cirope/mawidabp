@@ -145,6 +145,24 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_equal 'PTO 004', @weakness.last_work_paper_code
   end
 
+  test 'progress is not updated when state change to being implemented' do
+    @weakness.state = Finding::STATUS[:being_implemented]
+    @weakness.follow_up_date = Time.zone.today
+
+    @weakness.save!
+
+    assert_equal 0, @weakness.progress
+  end
+
+  test 'progress is updated to 100 when state change to implemented' do
+    @weakness.state = Finding::STATUS[:implemented]
+    @weakness.follow_up_date = Time.zone.today
+
+    @weakness.save!
+
+    assert_equal 100, @weakness.progress
+  end
+
   test 'review code is updated when control objective is changed' do
     weakness                   = findings :being_implemented_weakness_on_draft
     new_control_objective_item = control_objective_items :organization_security_4_2_item_editable

@@ -3,7 +3,8 @@ module Weaknesses::Defaults
 
   included do
     after_initialize :set_review_code, if: :new_record?
-    after_initialize :set_priority, unless: -> { HIDE_WEAKNESS_PRIORITY }
+    after_initialize :set_priority, if: -> { HIDE_WEAKNESS_PRIORITY }
+    after_initialize :set_progress, if: -> { SHOW_WEAKNESS_PROGRESS }
   end
 
   private
@@ -14,5 +15,9 @@ module Weaknesses::Defaults
 
     def set_priority
       self.priority ||= self.class.priorities_values.first
+    end
+
+    def set_progress
+      self.progress ||= 0
     end
 end

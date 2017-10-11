@@ -183,7 +183,7 @@ module FindingsHelper
         state_was = if finding.new_record?
                       Finding::STATUS[:incomplete]
                     else
-                      Finding.findfinding.id.state
+                      Finding.find(finding.id).state
                     end
 
         statuses.merge! finding.next_status_list(state_was)

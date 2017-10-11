@@ -64,6 +64,10 @@
             <%= c_f.input :user_id, as: :hidden %>
           <% end %>
         <% end %>
+        <% if @finding.kind_of?(Weakness) && SHOW_WEAKNESS_PROGRESS %>
+          <%= f.input :progress, collection: weakness_progresses(@finding), prompt: true,
+            disabled: weakness_progress_disabled?(@finding) %>
+        <% end %>
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
         <%= f.input :answer, input_html: { rows: 5 } %>

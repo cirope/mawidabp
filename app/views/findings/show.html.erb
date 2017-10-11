@@ -50,6 +50,18 @@
   <strong><%= Finding.human_attribute_name(:state) %></strong>:
   <%= @finding.state_text %>
 </p>
+<% if SHOW_WEAKNESS_PROGRESS && @finding.kind_of?(Weakness) %>
+  <p>
+    <strong><%= Weakness.human_attribute_name :progress %>:</strong>
+
+  </p>
+
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" style="width: <%= @finding.progress.to_i %>%;">
+      <%= @finding.progress.to_i %>%
+    </div>
+  </div>
+<% end %>
 <p>
   <strong><%= Finding.human_attribute_name(:origination_date) %></strong>:
   <%= l(@finding.origination_date, :format => :long) if @finding.origination_date %>

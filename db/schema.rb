@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170927183117) do
+ActiveRecord::Schema.define(version: 20171010220012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -337,6 +337,7 @@ ActiveRecord::Schema.define(version: 20170927183117) do
     t.integer "highest_risk"
     t.integer "organization_id"
     t.string "title", limit: 255
+    t.integer "progress"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
