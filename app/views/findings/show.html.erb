@@ -85,6 +85,17 @@
   <strong><%= Finding.human_attribute_name :answer %></strong>:
   <%= simple_format @finding.answer %>
 </div>
+<% if SHOW_FINDING_CURRENT_SITUATION %>
+  <div>
+    <strong><%= Finding.human_attribute_name :current_situation %></strong>:
+    <%= simple_format @finding.current_situation %>
+  </div>
+
+  <div>
+    <strong><%= Finding.human_attribute_name :current_situation_verified %></strong>:
+    <%= t "label.#{@finding.current_situation_verified ? 'yes' : 'no'}" %>
+  </div>
+<% end %>
 <div>
   <strong><%= Finding.human_attribute_name :audit_comments %></strong>:
   <%= simple_format @finding.audit_comments %>
