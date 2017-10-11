@@ -130,6 +130,18 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_error @weakness, :state, :inclusion
   end
 
+  test 'validates attributes boundaries' do
+    @weakness.progress = -1
+
+    assert @weakness.invalid?
+    assert_error @weakness, :progress, :greater_than_or_equal_to, count: 0
+
+    @weakness.progress = 101
+
+    assert @weakness.invalid?
+    assert_error @weakness, :progress, :less_than_or_equal_to, count: 100
+  end
+
   test 'validates well formated attributes' do
     @weakness.review_code = 'BAD_PREFIX_2'
 
