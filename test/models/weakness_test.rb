@@ -146,6 +146,8 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'progress is not updated when state change to awaiting' do
+    skip unless SHOW_WEAKNESS_PROGRESS
+
     @weakness.update! state: Finding::STATUS[:awaiting]
 
     assert_equal 0, @weakness.progress

@@ -59,10 +59,11 @@ module Findings::State
 
       def pending_status
         [
-          STATUS[:awaiting], STATUS[:being_implemented], STATUS[:notify],
-          STATUS[:implemented], STATUS[:unconfirmed], STATUS[:confirmed],
-          STATUS[:unanswered], STATUS[:incomplete]
-        ]
+          STATUS[:being_implemented], STATUS[:notify], STATUS[:implemented],
+          STATUS[:unconfirmed], STATUS[:confirmed], STATUS[:unanswered],
+          STATUS[:incomplete]
+        ] |
+        (SHOW_WEAKNESS_PROGRESS ? [STATUS[:awaiting]] : [])
       end
 
       def define_state_scopes
