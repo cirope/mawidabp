@@ -177,6 +177,8 @@ es:
         review_code: 'Código'
         audit_recommendations: 'Recomendaciones de auditoría'
         answer: 'Respuesta'
+        current_situation: 'Situación actual'
+        current_situation_verified: 'Situación actual verificada'
         effect: 'Efecto'
         risk: 'Riesgo'
         priority: 'Prioridad'

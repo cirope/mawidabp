@@ -371,6 +371,36 @@ class FindingTest < ActiveSupport::TestCase
     refute finding.save
   end
 
+  test 'current situation is updated on audited response' do
+    @finding.update! current_situation_verified: true
+
+    @finding.finding_answers.build(
+      user:            users(:audited),
+      answer:          'New audited answer',
+      commitment_date: Time.zone.today
+    )
+
+    @finding.save!
+
+    assert_equal 'New audited answer', @finding.current_situation
+    refute @finding.current_situation_verified
+  end
+
+  test 'current situation is not updated on auditor response' do
+    @finding.update! current_situation_verified: true
+
+    @finding.finding_answers.build(
+      user:            users(:auditor),
+      answer:          'New audited answer',
+      commitment_date: Time.zone.today
+    )
+
+    @finding.save!
+
+    assert_not_equal 'New audited answer', @finding.current_situation
+    assert @finding.current_situation_verified
+  end
+
   test 'status change from confirmed must have an answer' do
     finding        = findings :confirmed_oportunity
     finding.state  = Finding::STATUS[:unanswered]

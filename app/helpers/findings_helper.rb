@@ -160,6 +160,12 @@ module FindingsHelper
       !current_organization.corporate?
   end
 
+  def finding_answer_disabled?
+    SHOW_FINDING_CURRENT_SITUATION &&
+      @finding.is_in_a_final_review? &&
+      @finding.answer.present?
+  end
+
   private
 
     def finding_state_options_for finding

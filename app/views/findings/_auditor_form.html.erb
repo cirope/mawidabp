@@ -70,7 +70,7 @@
         <% end %>
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
-        <%= f.input :answer, input_html: { rows: 5 } %>
+        <%= f.input :answer, input_html: { rows: 5 }, disabled: finding_answer_disabled? %>
         <%= f.input :follow_up_date, as: :date_picker, label:
           @finding.class.human_attribute_name(:follow_up_date) %>
         <%= show_weakness_previous_follow_up_dates(@finding) if @finding.follow_up_date %>
@@ -80,6 +80,15 @@
         <%= f.input :audit_comments, input_html: { rows: 5 } %>
       </div>
     </div>
+
+    <% if SHOW_FINDING_CURRENT_SITUATION %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :current_situation, input_html: { rows: 3 } %>
+          <%= f.input :current_situation_verified %>
+        </div>
+      </div>
+    <% end %>
   </div>
 
   <% unless @finding.important_dates.blank? %>

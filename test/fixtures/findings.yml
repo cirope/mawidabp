@@ -6,6 +6,8 @@ being_implemented_weakness:
   review_code: O001
   description: Description 1w
   answer: Answer 1w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:being_implemented] %>
   progress: 0
@@ -28,6 +30,8 @@ unconfirmed_for_notification_weakness:
   review_code: O002
   description: Description 2w iso
   answer: Answer 2w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 2w
   state: <%= Finding::STATUS[:unconfirmed] %>
   progress: 0
@@ -52,6 +56,8 @@ unanswered_for_level_<%= level %>_notification:
   review_code: <%= "O00#{level}" %>
   description: Description <%= level %>w
   answer: Answer <%= level %>w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments <%= level %>w
   state: <%= Finding::STATUS[:unanswered] %>
   progress: 0
@@ -77,6 +83,8 @@ incomplete_weakness:
   review_code: O005
   description: Description incomplete_w
   answer: Answer incomplete_w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments incomplete_w
   state: <%= Finding::STATUS[:incomplete] %>
   progress: 0
@@ -100,6 +108,8 @@ other_unconfirmed_for_notification_weakness:
   review_code: O003
   description: Description 3w iso
   answer: Answer 3w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 3w
   state: <%= Finding::STATUS[:unconfirmed] %>
   progress: 0
@@ -122,6 +132,8 @@ notify_oportunity:
   review_code: OM001
   description: Description 1o
   answer: Answer 1o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1o
   state: <%= Finding::STATUS[:notify] %>
   progress: 0
@@ -138,6 +150,8 @@ being_implemented_oportunity:
   review_code: OM001
   description: Description 1o
   answer: Answer 1o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1o
   state: <%= Finding::STATUS[:being_implemented] %>
   progress: 0
@@ -156,6 +170,8 @@ being_implemented_weakness_on_draft:
   review_code: O003
   description: Description 3w bcra
   answer: Answer 3w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 3w
   state: <%= Finding::STATUS[:being_implemented] %>
   progress: 0
@@ -177,6 +193,8 @@ unanswered_weakness:
   review_code: O002
   description: Description 2w bcra
   answer: Answer 2w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 2w
   state: <%= Finding::STATUS[:unanswered] %>
   progress: 0
@@ -198,6 +216,8 @@ unconfirmed_weakness:
   review_code: O001
   description: Description 1w bi
   answer: Answer 1w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:unconfirmed] %>
   progress: 0
@@ -219,6 +239,8 @@ unconfirmed_oportunity:
   review_code: OM003
   description: Description 3o
   answer: Answer 3o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 3o
   state: <%= Finding::STATUS[:unconfirmed] %>
   progress: 0
@@ -237,6 +259,8 @@ confirmed_oportunity_on_draft:
   review_code: OM001
   description: Description o
   answer: Answer o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 3o
   state: <%= Finding::STATUS[:confirmed] %>
   progress: 0
@@ -254,6 +278,8 @@ confirmed_oportunity:
   review_code: OM002
   description: Description 2o
   answer: Answer 2o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 2o
   state: <%= Finding::STATUS[:confirmed] %>
   progress: 0
@@ -272,6 +298,8 @@ being_implemented_weakness_on_final:
   review_code: O001
   description: Description 1wx
   answer: Answer 1w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comment 1w
   state: <%= Finding::STATUS[:being_implemented] %>
   progress: 0
@@ -293,6 +321,8 @@ being_implemented_weakness_on_approved_draft:
   review_code: O001
   description: Description 1w
   answer: Answer 1w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:being_implemented] %>
   progress: 0
