@@ -145,13 +145,21 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_equal 'PTO 004', @weakness.last_work_paper_code
   end
 
-  test 'progress is not updated when state change to being implemented' do
+  test 'progress is not updated when state change to awaiting' do
+    @weakness.state = Finding::STATUS[:awaiting]
+
+    @weakness.save!
+
+    assert_equal 0, @weakness.progress
+  end
+
+  test 'progress is updated to 25 when state change to being implemented' do
     @weakness.state = Finding::STATUS[:being_implemented]
     @weakness.follow_up_date = Time.zone.today
 
     @weakness.save!
 
-    assert_equal 0, @weakness.progress
+    assert_equal 25, @weakness.progress
   end
 
   test 'progress is updated to 100 when state change to implemented' do
