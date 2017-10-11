@@ -434,6 +434,10 @@ es:
         state: 'Estado'
         progress: 'Normalización'
         solution_date: 'Fecha de solución'
+        compliance: 'Compliance'
+        operational_risk: 'Riesgo operacional'
+        impact: 'Impacto'
+        internal_control_components: 'Componentes de CI'
         work_papers: 'Papeles de trabajo'
 
     errors:

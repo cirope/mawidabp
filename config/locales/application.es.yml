@@ -959,6 +959,23 @@ es:
     previous_follow_up_dates: "Fechas de implementación anteriores"
     show_follow_up: 'Ver en seguimiento'
     edit_follow_up: 'Editar en seguimiento'
+    operational_risk:
+      control_weakness: 'Debilidad de control/errores'
+      internal_fraud: 'Fraude interno'
+      external_fraud: 'Fraude externo'
+      legal_risk: 'Riesgo legal'
+    impact:
+      reputational: 'Reputacional'
+      regulatory: 'Regulatorio'
+      economic: 'Económico'
+      business_process: 'En el proceso/negocio'
+    internal_control_components:
+      control_environment: 'Ambiente de control'
+      risk_assessment: 'Evaluación de riesgos'
+      control_activities: 'Actividades de control'
+      administration: 'Administración y control contable'
+      information: 'Información y comunicación'
+      monitoring: 'Monitoreo'
     errors:
       is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"

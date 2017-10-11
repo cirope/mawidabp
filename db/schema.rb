@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171011180708) do
+ActiveRecord::Schema.define(version: 20171011194548) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -340,6 +340,10 @@ ActiveRecord::Schema.define(version: 20171011180708) do
     t.integer "progress"
     t.text "current_situation"
     t.boolean "current_situation_verified", default: false, null: false
+    t.string "compliance"
+    t.string "operational_risk"
+    t.text "impact", default: [], null: false, array: true
+    t.text "internal_control_components", default: [], null: false, array: true
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"

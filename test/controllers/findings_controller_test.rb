@@ -258,6 +258,10 @@ class FindingsControllerTest < ActionController::TestCase
               effect: 'Updated effect',
               risk: Finding.risks_values.first,
               priority: Finding.priorities_values.first,
+              compliance: 'no',
+              operational_risk: 'internal fraud',
+              impact: ['econimic', 'regulatory'],
+              internal_control_components: ['risk_evaluation', 'monitoring'],
               business_unit_ids: [business_units(:business_unit_three).id],
               finding_user_assignments_attributes: [
                 {
@@ -362,6 +366,10 @@ class FindingsControllerTest < ActionController::TestCase
             risk: Finding.risks_values.first,
             priority: Finding.priorities_values.first,
             follow_up_date: 3.days.from_now.to_date,
+            compliance: 'no',
+            operational_risk: 'internal fraud',
+            impact: ['econimic', 'regulatory'],
+            internal_control_components: ['risk_evaluation', 'monitoring'],
             finding_user_assignments_attributes: [
               {
                 user_id: users(:audited).id,
@@ -442,6 +450,10 @@ class FindingsControllerTest < ActionController::TestCase
           effect: 'Updated effect',
           risk: Finding.risks_values.first,
           priority: Finding.priorities_values.first,
+          compliance: 'no',
+          operational_risk: 'internal fraud',
+          impact: ['econimic', 'regulatory'],
+          internal_control_components: ['risk_evaluation', 'monitoring'],
           users_for_notification: [users(:bare).id],
           finding_user_assignments_attributes: [
             {

@@ -7,6 +7,7 @@ module ControlObjectiveItems::FindingPDFData
     body << get_initial_finding_attributes(finding)
     body << get_weakness_attributes(finding) if finding.kind_of?(Weakness)
     body << get_late_finding_attributes(finding)
+    body << get_optional_finding_attributes(finding)
     body << get_audited_data(finding)
     body << get_final_finding_attributes(finding)
 
@@ -81,8 +82,20 @@ module ControlObjectiveItems::FindingPDFData
       end
 
       if finding.solution_date.present?
-        body << "<b>#{finding.class.human_attribute_name('solution_date')}:"+
+        body << "<b>#{finding.class.human_attribute_name('solution_date')}:" +
           "</b> #{I18n.l(finding.solution_date, format: :long)}\n"
+      end
+
+      body
+    end
+
+    def get_optional_finding_attributes finding
+      body = ''
+
+      if SHOW_WEAKNESS_EXTRA_ATTRIBUTES && finding.kind_of?(Weakness) &&
+          finding.internal_control_components.any?
+        body << "<b>#{finding.class.human_attribute_name('internal_control_components')}:" +
+          "</b> #{finding.internal_control_components.to_sentence}\n"
       end
 
       body

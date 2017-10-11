@@ -24,6 +24,10 @@ class WeaknessTest < ActiveSupport::TestCase
         risk: Weakness.risks_values.first,
         priority: Weakness.priorities_values.first,
         follow_up_date: nil,
+        compliance: 'no',
+        operational_risk: 'internal fraud',
+        impact: ['econimic', 'regulatory'],
+        internal_control_components: ['risk_evaluation', 'monitoring'],
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: false
@@ -58,6 +62,10 @@ class WeaknessTest < ActiveSupport::TestCase
         risk: Weakness.risks_values.first,
         priority: Weakness.priorities_values.first,
         follow_up_date: nil,
+        compliance: 'no',
+        operational_risk: 'internal fraud',
+        impact: ['econimic', 'regulatory'],
+        internal_control_components: ['risk_evaluation', 'monitoring'],
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: false
@@ -92,6 +100,10 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.audit_recommendations = '  '
     @weakness.risk = nil
     @weakness.priority = nil
+    @weakness.compliance = ''
+    @weakness.operational_risk = ''
+    @weakness.impact = []
+    @weakness.internal_control_components = []
 
     assert @weakness.invalid?
     assert_error @weakness, :control_objective_item_id, :blank
@@ -99,6 +111,13 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_error @weakness, :risk, :blank
     assert_error @weakness, :priority, :blank
     assert_error @weakness, :audit_recommendations, :blank
+
+    if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+      assert_error @weakness, :compliance, :blank
+      assert_error @weakness, :operational_risk, :blank
+      assert_error @weakness, :impact, :blank
+      assert_error @weakness, :internal_control_components, :blank
+    end
   end
 
   test 'validates duplicated attributes' do

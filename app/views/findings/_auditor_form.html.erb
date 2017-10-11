@@ -81,6 +81,19 @@
       </div>
     </div>
 
+    <% if @finding.kind_of?(Weakness) && SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :compliance, collection: weakness_compliance_options, prompt: true %>
+          <%= f.input :impact, as: :check_boxes, collection: weakness_impact_options %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :operational_risk, collection: weakness_operational_risk_options, prompt: true %>
+          <%= f.input :internal_control_components, as: :check_boxes, collection: weakness_internal_control_components_options %>
+        </div>
+      </div>
+    <% end %>
+
     <% if SHOW_FINDING_CURRENT_SITUATION %>
       <div class="row">
         <div class="col-md-6">

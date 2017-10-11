@@ -26,6 +26,10 @@ class FindingTest < ActiveSupport::TestCase
         risk: Finding.risks_values.first,
         priority: Finding.priorities_values.first,
         follow_up_date: nil,
+        compliance: 'no',
+        operational_risk: 'internal fraud',
+        impact: ['econimic', 'regulatory'],
+        internal_control_components: ['risk_evaluation', 'monitoring'],
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
@@ -57,6 +61,10 @@ class FindingTest < ActiveSupport::TestCase
         risk: Finding.risks_values.first,
         priority: Finding.priorities_values.first,
         follow_up_date: 2.days.from_now.to_date,
+        compliance: 'no',
+        operational_risk: 'internal fraud',
+        impact: ['econimic', 'regulatory'],
+        internal_control_components: ['risk_evaluation', 'monitoring'],
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true

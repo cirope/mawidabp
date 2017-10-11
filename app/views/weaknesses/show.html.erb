@@ -88,6 +88,28 @@
   <%=l @weakness.solution_date, :format => :long if @weakness.solution_date %>
 </p>
 
+<% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+  <p>
+    <strong><%= Weakness.human_attribute_name :compliance %>:</strong>
+    <%= t "label.#{@weakness.compliance}" if @weakness.compliance.present? %>
+  </p>
+
+  <p>
+    <strong><%= Weakness.human_attribute_name :operational_risk %>:</strong>
+    <%= @weakness.operational_risk %>
+  </p>
+
+  <p>
+    <strong><%= Weakness.human_attribute_name :impact %>:</strong>
+    <%= Array(@weakness.impact).to_sentence %>
+  </p>
+
+  <p>
+    <strong><%= Weakness.human_attribute_name :internal_control_components %>:</strong>
+    <%= Array(@weakness.internal_control_components).to_sentence %>
+  </p>
+<% end %>
+
 <h3><%= t('finding.responsibles', :count => @weakness.users.size) %></h3>
 <%= finding_responsibles_list(@weakness) %>
 

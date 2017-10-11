@@ -20,6 +20,10 @@ being_implemented_weakness:
   follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -44,6 +48,10 @@ unconfirmed_for_notification_weakness:
   follow_up_date:
   first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -71,6 +79,10 @@ unanswered_for_level_<%= level %>_notification:
   origination_date: <%= 1.year.ago.to_date.to_s(:db) %>
   first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: <%= level - 1 %>
   organization: cirope
 
@@ -98,6 +110,10 @@ incomplete_weakness:
   origination_date: <%= 1.year.ago.to_date.to_s(:db) %>
   first_notification_date: <%= Date.today.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -122,6 +138,10 @@ other_unconfirmed_for_notification_weakness:
   follow_up_date:
   first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.days.ago_in_business.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -183,6 +203,10 @@ being_implemented_weakness_on_draft:
   priority: <%= Finding.priorities_values.first %>
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -206,6 +230,10 @@ unanswered_weakness:
   priority: <%= Finding.priorities_values.first %>
   follow_up_date:
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -229,6 +257,10 @@ unconfirmed_weakness:
   priority: <%= Finding.priorities_values.first %>
   follow_up_date:
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -311,6 +343,10 @@ being_implemented_weakness_on_final:
   priority: <%= Finding.priorities_values.first %>
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -334,5 +370,9 @@ being_implemented_weakness_on_approved_draft:
   priority: <%= Finding.priorities_values.first %>
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope

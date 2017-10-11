@@ -148,6 +148,10 @@ class WeaknessesControllerTest < ActionController::TestCase
           priority: Weakness.priorities_values.first,
           follow_up_date: 2.days.from_now.to_date,
           business_unit_ids: [business_units(:business_unit_three).id],
+          compliance: 'no',
+          operational_risk: 'internal fraud',
+          impact: ['econimic', 'regulatory'],
+          internal_control_components: ['risk_evaluation', 'monitoring'],
           finding_user_assignments_attributes: [
             {
               user_id: users(:bare).id, process_owner: '0'
@@ -234,6 +238,10 @@ class WeaknessesControllerTest < ActionController::TestCase
             risk: Weakness.risks_values.first,
             priority: Weakness.priorities_values.first,
             follow_up_date: '',
+            compliance: 'no',
+            operational_risk: 'internal fraud',
+            impact: ['econimic', 'regulatory'],
+            internal_control_components: ['risk_evaluation', 'monitoring'],
             finding_user_assignments_attributes: [
               {
                 id: finding_user_assignments(:unanswered_weakness_bare).id,

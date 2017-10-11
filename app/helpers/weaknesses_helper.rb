@@ -69,4 +69,46 @@ module WeaknessesHelper
   def weakness_progress_disabled? weakness, readonly = false
     readonly || !weakness.allow_progress_edition?
   end
+
+  def weakness_compliance_options
+    ['yes', 'no'].map do |option|
+      [t("label.#{option}"), option]
+    end
+  end
+
+  def weakness_operational_risk_options
+    %w(
+      control_weakness
+      internal_fraud
+      external_fraud
+      legal_risk
+    ).map do |option|
+      text = t "weakness.operational_risk.#{option}"
+
+      [text, text]
+    end
+  end
+
+  def weakness_impact_options
+    %w(reputational regulatory economic business_process).map do |option|
+      text = t "weakness.impact.#{option}"
+
+      [text, text]
+    end
+  end
+
+  def weakness_internal_control_components_options
+    %w(
+      control_environment
+      risk_assessment
+      control_activities
+      administration
+      information
+      monitoring
+    ).map do |option|
+      text = t "weakness.internal_control_components.#{option}"
+
+      [text, text]
+    end
+  end
 end

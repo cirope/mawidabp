@@ -86,6 +86,19 @@
         <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
       </div>
     </div>
+
+    <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :compliance, collection: weakness_compliance_options, prompt: true, disabled: readonly %>
+          <%= f.input :impact, as: :check_boxes, collection: weakness_impact_options, disabled: readonly %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :operational_risk, collection: weakness_operational_risk_options, prompt: true, disabled: readonly %>
+          <%= f.input :internal_control_components, as: :check_boxes, collection: weakness_internal_control_components_options, disabled: readonly %>
+        </div>
+      </div>
+    <% end %>
   </div>
 
   <br />
