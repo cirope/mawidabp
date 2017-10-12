@@ -1,12 +1,14 @@
 set :stage, :production
 set :rails_env, 'production'
-set :branch, 'master'
+set :branch, 'c-galicia-production'
 set :log_level, :error
 
 set :default_env, {
-  'LANG':     'en_US.UTF-8',
-  'LANGUAGE': 'en_US.UTF-8',
-  'LC_ALL':   'en_US.UTF-8'
+  'HTTP_PROXY':  'http://avhttp20.bancogalicia.com.ar:8080',
+  'HTTPS_PROXY': 'http://avhttp20.bancogalicia.com.ar:8080',
+  'LANG':        'en_US.UTF-8',
+  'LANGUAGE':    'en_US.UTF-8',
+  'LC_ALL':      'en_US.UTF-8'
 }
 
 role :web, %w{deployer@127.0.0.1}
