@@ -135,7 +135,7 @@ es:
         control_objectives: 'Objetivos de control'
       best_practice/process_controls/control_objectives:
         name: 'Objetivo de control'
-        relevance: 'Objetivo de control (importancia)'
+        relevance: 'Objetivo de control (clave)'
         risk: 'Objetivo de control (riesgo)'
       business_unit_score:
         business_unit_id: 'Unidad de negocio'
@@ -144,7 +144,7 @@ es:
         sustantive_score: 'Calificación pruebas sustantivas'
       control_objective:
         name: 'Objetivo de control'
-        relevance: 'Importancia'
+        relevance: 'Clave'
         risk: 'Riesgo'
         obsolete: 'Obsoleto'
         support: 'Soporte'
