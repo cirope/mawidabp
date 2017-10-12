@@ -4,7 +4,7 @@ module Findings::FollowUpPDF
   def follow_up_pdf organization = nil
     pdf = Prawn::Document.create_generic_pdf :portrait
 
-    put_follow_up_cover_on             pdf
+    put_follow_up_cover_on             pdf, organization
     put_follow_up_description_items_on pdf
     put_follow_up_user_data_on         pdf
     put_relation_information_on        pdf
@@ -32,7 +32,7 @@ module Findings::FollowUpPDF
 
   private
 
-    def put_follow_up_cover_on pdf
+    def put_follow_up_cover_on pdf, organization
       class_name  = self.class.name.downcase
       line_height = (PDF_FONT_SIZE * 1.25).round
 
@@ -64,6 +64,13 @@ module Findings::FollowUpPDF
     end
 
     def put_follow_up_conditional_items_on pdf
+      if SHOW_FINDING_CURRENT_SITUATION
+        current_situation_verified_text = I18n.t "label.#{current_situation_verified ? 'yes' : 'no'}"
+
+        pdf.add_description_item Finding.human_attribute_name(:current_situation), current_situation, 0, false
+        pdf.add_description_item Finding.human_attribute_name(:current_situation_verified), current_situation_verified_text, 0, false
+      end
+
       if kind_of?(Weakness) && follow_up_date
         pdf.add_description_item Finding.human_attribute_name(:follow_up_date), I18n.l(follow_up_date, format: :long), 0, false
       end
@@ -255,14 +262,18 @@ module Findings::FollowUpPDF
     def weakness_follow_up_description_items
       [
         [self.class.human_attribute_name(:risk), risk_text, 0, false],
-        [self.class.human_attribute_name(:priority), priority_text, 0, false],
+        ([self.class.human_attribute_name(:priority), priority_text, 0, false] unless HIDE_WEAKNESS_PRIORITY),
         [Finding.human_attribute_name(:effect), effect, 0, false],
         [Finding.human_attribute_name(:audit_recommendations), audit_recommendations, 0, false]
-      ]
+      ].compact
     end
 
     def follow_up_important_attributes
-      [:state, :risk, :priority, :follow_up_date]
+      if HIDE_WEAKNESS_PRIORITY
+        [:state, :risk, :follow_up_date]
+      else
+        [:state, :risk, :priority, :follow_up_date]
+      end
     end
 
     def important_changed_versions

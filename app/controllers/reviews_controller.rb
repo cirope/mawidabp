@@ -350,7 +350,7 @@ class ReviewsController < ApplicationController
     def review_params
       params.require(:review).permit(
         :identification, :description, :survey, :period_id, :plan_item_id,
-        :lock_version,
+        :scope, :risk_exposure, :manual_score, :include_sox, :lock_version,
         file_model_attributes: [:id, :file, :file_cache, :_destroy],
         finding_review_assignments_attributes: [
           :id, :finding_id, :_destroy, :lock_version

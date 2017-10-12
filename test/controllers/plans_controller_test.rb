@@ -70,7 +70,7 @@ class PlansControllerTest < ActionController::TestCase
               business_unit_id: business_units(:business_unit_one).id,
               resource_utilizations_attributes: [
                 {
-                  resource_id: users(:bare_user).id,
+                  resource_id: users(:bare).id,
                   resource_type: 'User',
                   units: '12.21'
                 },
@@ -174,7 +174,7 @@ class PlansControllerTest < ActionController::TestCase
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
               {
-                resource_id: users(:bare_user).id,
+                resource_id: users(:bare).id,
                 resource_type: 'User',
                 units: '12.21'
               }
@@ -188,7 +188,7 @@ class PlansControllerTest < ActionController::TestCase
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
               {
-                resource_id: users(:bare_user).id,
+                resource_id: users(:bare).id,
                 resource_type: 'User',
                 units: '12.21'
               }
@@ -223,7 +223,7 @@ class PlansControllerTest < ActionController::TestCase
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
               {
-                resource_id: users(:bare_user).id,
+                resource_id: users(:bare).id,
                 resource_type: 'User',
                 units: '12.21'
               }
@@ -237,7 +237,7 @@ class PlansControllerTest < ActionController::TestCase
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
               {
-                resource_id: users(:bare_user).id,
+                resource_id: users(:bare).id,
                 resource_type: 'User',
                 units: '12.21'
               }

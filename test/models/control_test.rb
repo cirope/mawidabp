@@ -5,22 +5,22 @@ class ControlTest < ActiveSupport::TestCase
   fixtures :controls
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
-    @control = Control.find controls(:iso_27000_security_policy_3_1_control_1).id
+  setup do
+    @control = Control.find controls(:security_policy_3_1_control_1).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of Control, @control
-    assert_equal controls(:iso_27000_security_policy_3_1_control_1).control,
+    assert_equal controls(:security_policy_3_1_control_1).control,
       @control.control
-    assert_equal controls(:iso_27000_security_policy_3_1_control_1).effects,
+    assert_equal controls(:security_policy_3_1_control_1).effects,
       @control.effects
-    assert_equal controls(:iso_27000_security_policy_3_1_control_1).
+    assert_equal controls(:security_policy_3_1_control_1).
       design_tests, @control.design_tests
-    assert_equal controls(:iso_27000_security_policy_3_1_control_1).
+    assert_equal controls(:security_policy_3_1_control_1).
       compliance_tests, @control.compliance_tests
-    assert_equal controls(:iso_27000_security_policy_3_1_control_1).order,
+    assert_equal controls(:security_policy_3_1_control_1).order,
       @control.order
   end
 
@@ -34,7 +34,7 @@ class ControlTest < ActiveSupport::TestCase
         :compliance_tests => 'New compliance tests',
         :sustantive_tests => 'New sustantive tests',
         :order => 1,
-        :controllable => control_objectives(:iso_27000_security_policy_3_1)
+        :controllable => control_objectives(:security_policy_3_1)
       )
     end
 

@@ -202,19 +202,19 @@ APP_AUDITOR_MENU_ITEMS = [
         controllers: :weaknesses,
         url: { controller: '/weaknesses' }
       ),
-      MenuItem.new(
+      (MenuItem.new(
         :oportunities,
         order: 5,
         controllers: :oportunities,
         url: { controller: '/oportunities' }
-      ),
+      ) unless HIDE_OPORTUNITIES),
       MenuItem.new(
         :reports,
         order: 6,
         controllers: :execution_reports,
         url: { controller: '/execution_reports' }
       )
-    ]
+    ].compact
   ),
   # CONCLUSIÓN
   MenuItem.new(

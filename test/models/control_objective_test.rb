@@ -5,21 +5,21 @@ class ControlObjectiveTest < ActiveSupport::TestCase
   fixtures :control_objectives
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @control_objective = ControlObjective.find(
-      control_objectives(:iso_27000_security_policy_3_1).id)
+      control_objectives(:security_policy_3_1).id)
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of ControlObjective, @control_objective
-    assert_equal control_objectives(:iso_27000_security_policy_3_1).name,
+    assert_equal control_objectives(:security_policy_3_1).name,
       @control_objective.name
-    assert_equal control_objectives(:iso_27000_security_policy_3_1).relevance,
+    assert_equal control_objectives(:security_policy_3_1).relevance,
       @control_objective.relevance
-    assert_equal control_objectives(:iso_27000_security_policy_3_1).risk,
+    assert_equal control_objectives(:security_policy_3_1).risk,
       @control_objective.risk
-    assert_equal control_objectives(:iso_27000_security_policy_3_1).order,
+    assert_equal control_objectives(:security_policy_3_1).order,
       @control_objective.order
   end
 
@@ -52,7 +52,7 @@ class ControlObjectiveTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de una buena práctica
   test 'destroy' do
-    control_objective = control_objectives :iso_27000_security_organization_4_4_continuous
+    control_objective = control_objectives :organization_security_4_4
 
     control_objective.control_objective_items.clear
 

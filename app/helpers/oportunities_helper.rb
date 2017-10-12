@@ -3,7 +3,7 @@ module OportunitiesHelper
     review = oportunity.control_objective_item.try(:review)
     code_prefix = oportunity.work_paper_prefix
 
-    code_from_review= review ? review.last_oportunity_work_paper_code(code_prefix) :
+    code_from_review= review ? review.last_oportunity_work_paper_code(prefix: code_prefix) :
       "#{code_prefix} 0".strip
 
     work_paper_codes = oportunity.work_papers.reject(

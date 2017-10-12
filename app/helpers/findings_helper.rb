@@ -1,200 +1,148 @@
 module FindingsHelper
-  def finding_status_field(form, inline = true, disabled = false)
-    finding  = form.object
-    statuses = finding.next_status_list
-    excluded = []
+  def finding_status_field form, disabled: false
+    finding = form.object
 
-    if finding.errors[:state].present?
-      state_was = finding.new_record? ?
-        Finding::STATUS[:incomplete] : Finding.find(finding.id).state
-
-      statuses.merge! finding.next_status_list(state_was)
-    end
-
-    excluded << :repeated  unless finding.repeated?  || finding.was_repeated?
-    excluded << :confirmed unless finding.confirmed? || finding.was_confirmed?
-
-    options = statuses.except(*excluded).map do |k, v|
-      [t(:"finding.status_#{k}"), v]
-    end
-
-    form.input :state, collection: sort_options_array(options), label: false,
-      prompt: true, input_html: { disabled: (disabled || finding.unconfirmed?) }
-  end
-
-  def finding_repeated_of_label(form, readonly)
-    if !form.object.new_record? && form.object.repeated_of && !readonly
-      link = content_tag(:span,
-        "[#{t('finding.undo_reiteration')}]",
-        'data-help-dialog' => '#inline_undo_reiteration',
-        :class => 'popup_link',
-        :title => t('finding.undo_reiteration'),
-        :style => 'color: #666666;'
-      )
-
-      form.label :repeated_of_id, raw(
-        Finding.human_attribute_name('repeated_of_id') + ' ' +
-        content_tag(:span, raw(link), :class => 'popup_link_container')
-      ), :for => 'repeated_of_finding'
-    else
-      form.label(
-        readonly && form.object.repeated_of.present? ? :repeated_of_finding : :repeated_of_id,
-        Finding.human_attribute_name(:repeated_of_id)
-      )
-    end
-  end
-
-  def finding_repeated_of_if_field(form, readonly)
-    if !form.object.new_record? && form.object.repeated_of
-      form.input :repeated_of_finding, label: false, input_html: {
-        value: form.object.repeated_of, disabled: true
+    form.input :state,
+      collection: finding_state_options_for(finding),
+      label:      false,
+      prompt:     true,
+      input_html: {
+        disabled: (disabled || finding.unconfirmed?)
       }
-    else
-      review = form.object.control_objective_item.try(:review)
-      fras = (review.try(:finding_review_assignments) || []).reject do |fra|
-        fra.finding.repeated? || fra.finding.class != form.object.class
-      end
-      findings = fras.map { |fra| [fra.finding, fra.finding_id.to_i] }
-      url = url_for controller: form.object.class.to_s.tableize, action: :show, id: '[FINDING_ID]'
+  end
 
-      form.input :repeated_of_id, collection: findings, prompt: true,
-        label: false, input_html: { disabled: readonly, data: { repeated_url: url } }
+  def finding_repeated_of_label form, readonly:
+    finding = form.object
+
+    if finding.persisted? && finding.repeated_of && !readonly
+      finding_repeated_of_label_editable form, finding
+    else
+      finding_repeated_of_label_readonly form, finding, readonly
     end
   end
 
-  def finding_follow_up_date_text(finding)
+  def finding_repeated_of_if_field form, readonly:
+    finding = form.object
+
+    if finding.persisted? && finding.repeated_of
+      finding_repeated_of_input_readonly form, finding
+    else
+      finding_repeated_of_input_editable form, finding, readonly
+    end
+  end
+
+  def finding_follow_up_date_text finding
     html_classes = []
 
     if finding.being_implemented?
-      if finding.stale?
-        html_classes << 'strike'
-      end
-
-      if finding.rescheduled?
-        html_classes << 'text-warning'
-      end
-
+      html_classes << 'strike'       if finding.stale?
+      html_classes << 'text-warning' if finding.rescheduled?
       html_classes << 'text-success' if html_classes.blank?
     end
 
-    unless finding.follow_up_date.blank?
-      content_tag(:span, l(finding.follow_up_date, :format => :short),
-        :class => (html_classes.join(' ') unless html_classes.blank?))
-    else
-      ''
+    if finding.follow_up_date.present?
+      date_text  = l finding.follow_up_date, format: :short
+      html_class = html_classes.join(' ') if html_classes.any?
+
+      content_tag :span, date_text, class: html_class
     end
   end
 
-  def finding_updated_at_text(finding)
-    label = Finding.human_attribute_name('updated_at')
-    date = I18n.l(finding.updated_at, :format => :minimal) if finding.updated_at
+  def finding_updated_at_text finding
+    text = Finding.human_attribute_name 'updated_at'
+    date = l finding.updated_at, format: :minimal
 
-    show_info "#{label}: #{date}"
+    show_info "#{text}: #{date}"
   end
 
-  def show_review_with_conclusion_status_as_abbr(review)
-    review_data = review.has_final_review? ?
-      t('review.with_final_review') : t('review.without_final_review')
-    review_data << " | #{l(review.issue_date(true), :format => :long)}"
+  def show_review_with_conclusion_status_as_abbr review
+    review_data = if review.has_final_review?
+                    t 'review.with_final_review'
+                  else
+                    t 'review.without_final_review'
+                  end
 
-    content_tag(:abbr, h(review.identification), :title => review_data)
+    review_data << " | #{l review.issue_date(include_draft: true), format: :long}"
+
+    content_tag :abbr, h(review.identification), title: review_data
   end
 
-  def show_finding_review_code_with_decription_as_abbr(finding)
-    content_tag(:abbr, finding.review_code, :title => finding.description)
+  def show_finding_review_code_with_decription_as_abbr finding
+    content_tag :abbr, finding.review_code, title: finding.description
   end
 
 
-  def finding_answer_notification_check(form)
+  def finding_answer_notification_check form
     html_class = @auth_user.can_act_as_audited? ? 'hidden' : nil
-    label = html_class.blank? && FindingAnswer.human_attribute_name(:notify_users)
+    label_text = html_class.blank? &&
+      FindingAnswer.human_attribute_name('notify_users')
 
-    form.input :notify_users, as: :boolean, label: false, inline_label: label,
-      input_html: { class: html_class }
+    form.input :notify_users,
+      as:           :boolean,
+      label:        false,
+      inline_label: label_text,
+      input_html:   { class: html_class }
   end
 
-  def finding_show_status_change_history(dom_id)
-    link_to(
-      content_tag(
-        :span, nil, class: 'glyphicon glyphicon-time', title: t('finding.show_status_change_history')
-      ),
-      '#', :onclick => "$('##{dom_id}').slideToggle(); return false;"
-    )
+  def finding_show_status_change_history element_id
+    icon = content_tag :span, nil, class: 'glyphicon glyphicon-time'
+
+    link_to icon, "##{element_id}", {
+      title: t('findings.form.show_status_change_history'),
+      data:  { toggle: 'collapse' }
+    }
   end
 
-  def finding_responsibles_list(finding)
-    users = finding.users.map do |u|
-      if finding.process_owners.include?(u)
-        content_tag(:b, u.full_name_with_function +
-            " | #{FindingUserAssignment.human_attribute_name('process_owner')}")
+  def finding_responsibles_list finding
+    owner_label = FindingUserAssignment.human_attribute_name 'process_owner'
+    users       = finding.users.map do |user|
+      if finding.process_owners.include?(user)
+        content_tag :strong, "#{user.full_name_with_function} | #{owner_label}"
       else
-        u.full_name_with_function
+        user.full_name_with_function
       end
     end
 
     array_to_ul users
   end
 
-  def finding_work_paper_frozen?(finding, work_paper, follow_up)
-    code_prefix = follow_up ?
-      t('code_prefixes.work_papers_in_weaknesses_follow_up') :
-      finding.work_paper_prefix
-    follow_up_code = work_paper.code =~ /#{code_prefix}\s\d+/
+  def finding_work_paper_frozen? finding, work_paper
+    code_prefix    = t 'code_prefixes.work_papers_in_weaknesses_follow_up'
+    follow_up_code = work_paper.code =~ /\A#{code_prefix}\s\d+\z/
 
     !follow_up_code && finding.review&.is_frozen?
   end
 
-  def show_finding_answers_count(finding)
-    finding_answers_count = finding.finding_answers.count
-    user_answers = finding.finding_answers.where(:user_id => @auth_user.id).count
-    klass = 'text-success' if user_answers > 0
-    user_count = content_tag(
-      :abbr, user_answers,
-      :title => t('finding.user_finding_answers_count'),
-      :class => klass
-    )
+  def show_finding_answers_count finding
+    answers               = finding.finding_answers
+    finding_answers_count = answers.count
+    user_answers_count    = answers.where(user_id: @auth_user.id).count
+    html_class            = 'text-success' if user_answers_count > 0
+    user_count            = content_tag :abbr, user_answers_count, {
+      title: t('.current_user_answers_count'),
+      class: html_class
+    }
 
     raw "#{finding_answers_count} / #{user_count}"
   end
 
   def show_finding_related_users
-    users = []
+    users = finding_current_user_related_user_options
 
-    (@self_and_descendants + @related_users).each do |u|
-      users << [
-        u.full_name_with_function, {:user_id => u.id}.to_json
-      ]
-
-      if u.can_act_as_audited?
-        users << [
-          "#{u.full_name_with_function} - #{t('activerecord.attributes.finding_user_assignment.process_owner')}",
-          {:user_id => u.id, :as_owner => true}.to_json
-        ]
-      else
-        users << [
-          "#{u.full_name_with_function} - #{t('activerecord.attributes.finding_user_assignment.responsible_auditor')}",
-          {:user_id => u.id, :as_responsible => true}.to_json
-        ]
-      end
-    end
-
-    select nil, :user_id, sort_options_array(users), {:prompt => true},
-      {:name => :user_id, :id => :user_id_select, :class => 'form-control'}
-  end
-
-  def finding_complete_or_incomplete_label
-    t "finding.#{params[:completed]}"
+    select nil, :user_id, sort_options_array(users),
+      { prompt: true },
+      { name: :user_id, id: :user_id_select, class: 'form-control' }
   end
 
   def finding_status_options
     Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).map do |k, v|
-      [t("finding.status_#{k}"), v.to_s]
+      [t("findings.state.#{k}"), v.to_s]
     end
   end
 
   def finding_fixed_status_options
     Finding::STATUS.slice(:implemented_audited, :assumed_risk).map do |k, v|
-      [t("finding.status_#{k}"), v.to_s]
+      [t("findings.state.#{k}"), v.to_s]
     end
   end
 
@@ -202,7 +150,7 @@ module FindingsHelper
     exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS - [:unconfirmed, :confirmed]
 
     Finding::STATUS.except(*exclude).map do |k, v|
-      [t("finding.status_#{k}"), v.to_s]
+      [t("findings.state.#{k}"), v.to_s]
     end
   end
 
@@ -211,4 +159,125 @@ module FindingsHelper
       finding_answer.requires_commitment_date? &&
       !current_organization.corporate?
   end
+
+  def finding_answer_disabled?
+    SHOW_FINDING_CURRENT_SITUATION &&
+      @finding.is_in_a_final_review? &&
+      @finding.answer.present?
+  end
+
+  private
+
+    def finding_state_options_for finding
+      statuses = finding_state_list_for finding
+      excluded = []
+
+      excluded << :repeated  unless finding.repeated?  || finding.was_repeated?
+      excluded << :confirmed unless finding.confirmed? || finding.was_confirmed?
+
+      options = statuses.except(*excluded).map do |k, v|
+        [t("findings.state.#{k}"), v]
+      end
+
+      sort_options_array options
+    end
+
+    def finding_state_list_for finding
+      statuses = finding.next_status_list
+
+      if finding.errors[:state].present?
+        state_was = if finding.new_record?
+                      Finding::STATUS[:incomplete]
+                    else
+                      Finding.find(finding.id).state
+                    end
+
+        statuses.merge! finding.next_status_list(state_was)
+      end
+
+      statuses
+    end
+
+    def finding_repeated_of_label_editable form, finding
+      link = finding_undo_reiteration_link finding
+      text = raw(Finding.human_attribute_name('repeated_of_id') + ' | ' + link)
+
+      form.label :repeated_of_id, text, for: 'repeated_of_finding'
+    end
+
+    def finding_repeated_of_label_readonly form, finding, readonly
+      field = if readonly && finding.repeated_of.present?
+                :repeated_of_finding
+              else
+                :repeated_of_id
+              end
+
+      form.label field, Finding.human_attribute_name(:repeated_of_id)
+    end
+
+    def finding_undo_reiteration_link finding
+      url     = [:undo_reiteration, finding]
+      options = {
+        class: 'text-muted',
+        data: {
+          method:  :patch,
+          confirm: t('messages.confirmation')
+        }
+      }
+
+      link_to t('finding.undo_reiteration'), url, options
+    end
+
+    def finding_repeated_of_input_readonly form, finding
+      form.input :repeated_of_finding, label: false, input_html: {
+        id:       :repeated_of_finding,
+        value:    finding.repeated_of,
+        disabled: true
+      }
+    end
+
+    def finding_repeated_of_input_editable form, finding, readonly
+      review = finding.control_objective_item&.review
+      fras   = Array(review&.finding_review_assignments).reject do |fra|
+        fra.finding.repeated? || finding.class != fra.finding.class
+      end
+
+      form.input :repeated_of_id,
+        collection: fras.map { |fra| [fra.finding, fra.finding_id] },
+        prompt:     true,
+        label:      false,
+        input_html: {
+          disabled: readonly,
+          data:     {
+            repeated_url: finding_repeated_of_generic_url_for(finding)
+          }
+        }
+    end
+
+    def finding_repeated_of_generic_url_for finding
+      url_for controller: finding.class.to_s.tableize,
+              action:     :show,
+              id:         '[FINDING_ID]'
+    end
+
+    def finding_current_user_related_user_options
+      related     = @self_and_descendants + @related_users
+      owner       = FindingUserAssignment.human_attribute_name 'process_owner'
+      responsible = FindingUserAssignment.human_attribute_name 'responsible_auditor'
+
+      related.each_with_object([]) do |user, users|
+        options                = { user_id: user.id }
+        role_label, new_option = if user.can_act_as_audited?
+                                  [owner, :as_owner]
+                                else
+                                  [responsible, :as_responsible]
+                                end
+
+        users << [user.full_name_with_function, options.to_json]
+        users << [
+          "#{user.full_name_with_function} - #{role_label}",
+          options.merge(new_option => true).to_json
+        ]
+      end
+    end
 end

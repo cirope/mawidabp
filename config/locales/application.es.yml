@@ -357,7 +357,7 @@ es:
     objectives_and_scopes: "OBJETIVOS Y ALCANCE DEL TRABAJO"
     applied_procedures: "PROCEDIMIENTOS APLICADOS"
     conclusion: "CONCLUSIÓN"
-    findings: "OBSERVACIONES"
+    weaknesses: "OBSERVACIONES"
     oportunities: "OPORTUNIDADES DE MEJORA"
     finding_review_assignments: "OBSERVACIONES / OPORTUNIDADES DE MEJORA REVISADAS"
     add_recipient: "Agregar nuevo destinatario"
@@ -388,8 +388,7 @@ es:
       control_objective_work_papers: "Papeles de trabajo del objetivo de control"
       control_objective_weaknesses: "Observaciones"
       control_objective_oportunities: "Oportunidades"
-      oportunity_work_papers: "Papeles de trabajo de la oportunidad"
-      weakness_work_papers: "Papeles de trabajo de la observación"
+      finding_work_papers: "Papeles de trabajo del hallazgo"
 
   control_objective:
     errors:
@@ -411,10 +410,15 @@ es:
     add_business_unit_type: "Agregar unidades de negocio por tipo"
     readonly: "El objetivo de control no puede ser modificado, ya se emitió el informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
-    has_work_papers: "Papeles de trabajo"
     not_rated: "No evaluado"
     excluded_from_score: "No se tiene en cuenta en la calificación del informe"
     not_applicable: "No aplica"
+    auditor_comments:
+      satisfactory: "Satisfactorio"
+      satisfactory_with_caveats: "Satisfactorio con salvedades"
+      needs_improvement: "Necesita mejorar"
+      dissatisfactory: "No satisfactorio"
+      not_applicable: "No aplica"
     errors:
       not_finished: "no está terminado"
       without_score: "sin calificar"
@@ -472,93 +476,6 @@ es:
       weaknesses_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge">%{count}</span>'
       pdf_name: 'informe_de_seguimiento_de_observaciones_en_ejecucion.pdf'
-
-  finding:
-    index_title: "Listado de observaciones / oportunidades de mejora"
-    show_title: "Detalles de la respuesta a la observación / oportunidad de mejora"
-    edit_title: "Modificar respuesta a una observación / oportunidad de mejora"
-    correctly_updated: "Respuesta a observación / oportunidad de mejora actualizada correctamente."
-    stale_object_error: "La respuesta a la observación / oportunidad de mejora no fue actualizada, intente nuevamente."
-    incomplete: "Pendientes"
-    complete: "Solucionados o reiterados"
-    as_owner: "%{kind} como responsable"
-    work_papers: "Papeles de trabajo"
-    finding_relations: "Relacionada con"
-    inverse_finding_relations: "Relacionada en"
-    finding_answers: "Comentarios de seguimiento"
-    comments: "Justificación de cambios de estado"
-    costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
-    add_finding_relation: "Agregar relación"
-    add_tagging: "Agregar etiqueta"
-    add_finding_answer: "Agregar comentario"
-    add_user: "Agregar usuario"
-    add_work_paper: "Agregar papel de trabajo"
-    has_work_papers: "Papeles de trabajo"
-    repeated_ancestors: "Reiterada de"
-    repeated_children: "Reiterada en"
-    undo_reiteration: 'Deshacer reiteración'
-    change_history: "Historial de cambios"
-    user_finding_answers_count: "Comentarios propios"
-    auditors:
-      one: "Auditor"
-      other: "Auditores"
-    reviewers:
-      one: "Revisor"
-      other: "Revisores"
-    audited:
-      one: "Auditado"
-      other: "Auditados"
-    readonly: "La observación no puede ser creada ni modificada, ya se emitió el informe definitivo"
-    responsibles:
-      one: "Responsable"
-      other: "Responsables"
-    send_notification: "¿Notificar?"
-    show_status_change_history: "Ver historial de cambios de estado"
-    status_change_history: "Historial de cambios de estado"
-    status_confirmed: "Confirmada"
-    status_unconfirmed: "No confirmada"
-    status_unanswered: "Sin respuesta"
-    status_being_implemented: "Parcialmente normalizada"
-    status_being_implemented_current: "Vigente"
-    status_being_implemented_current_rescheduled: "Reprogramada vigente"
-    status_being_implemented_stale: "Vencida"
-    status_being_implemented_stale_rescheduled: "Reprogramada vencida"
-    status_implemented: "Implementada"
-    status_implemented_audited: "Normalizada"
-    status_assumed_risk: "Pendiente - Riesgo asumido"
-    status_notify: "Notificar"
-    status_incomplete: "Incompleta"
-    status_repeated: "Reiterada"
-    status_revoked: "Anulada"
-    status_criteria_mismatch: "Difiere criterio"
-    view_completed: "Ver implementadas"
-    view_cost_details: "Listado de actividades anteriores relacionadas a la observación / oportunidad de mejora"
-    view_pending: "Ver pendientes"
-    without_conclusion_final_review: "Sin informe definitivo"
-    without_work_papers: "Sin papeles de trabajo"
-    responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
-    important_dates:
-      title: "Fechas a considerar"
-      expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *%{date}* si ningún auditado proporciona una respuesta"
-      notification_date: "Fue notificada por primera vez el día *%{date}*"
-      confirmation_date: "Su notificación fue confirmada el día *%{date}*"
-    follow_up_report:
-      weakness:
-        title: "SEGUIMIENTO DE OBSERVACIÓN"
-        subtitle: "Datos de la observación"
-      oportunity:
-        title: "SEGUIMIENTO DE OPORTUNIDAD DE MEJORA"
-        subtitle: "Datos de la oportunidad de mejora"
-      print_date: "Fecha de impresión: %{date}"
-      download: "Descargar seguimiento completo"
-      follow_up_comments: "Comentarios de seguimiento"
-      without_important_changes: "Sin cambios importantes hasta la fecha"
-      work_papers: "Papeles de trabajo"
-      pdf_name: "seguimiento_de_observacion_%{code}.pdf"
-    pdf:
-      filtered_by:
-        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
-        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
 
   finding_relation:
     types:
@@ -883,10 +800,12 @@ es:
     errors:
       is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"
+      with_follow_up_date: "tiene fecha de implementación (y no debería)"
       with_solution_date: "tiene fecha de solución (y no debería)"
       without_answer: "no tiene respuesta"
       without_audited: "no tiene auditado"
       without_auditor: "no tiene auditor"
+      without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
 
@@ -1104,20 +1023,17 @@ es:
       control: "Control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
-      finding: "Observación / Oportunidad"
       finding_answer: "Respuesta a observación"
       finding_review_assignment: "Asignación de observación a informe"
       group: "Grupo"
       notification: "Notificación"
       old_password: "Contraseña anterior"
-      oportunity: "Oportunidad de mejora"
       privilege: "Privilegio"
       review:
         one: "Informe"
         other: "Informes"
       review_user_assignment: "Asignación de usuario a informe"
       role: "Perfil"
-      weakness: "Observación"
       workflow: "Programa de trabajo"
       workflow_item: "Registro de programa de trabajo"
       work_paper: "Papel de trabajo"
@@ -1210,81 +1126,8 @@ es:
         uploaded_data: "Archivo"
         content_type: "Archivo (tipo)"
         size: "Archivo (tamaño)"
-      finding:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "Observación / Oportunidad"
-        type: "Tipo"
-        repeated_of_id: "Reiterada de"
-        review_code: "Código en el informe"
-        audit_recommendations: "Recomendaciones de auditoría"
-        answer: "Respuesta"
-        effect: "Posibles consecuencias"
-        risk: "Riesgo"
-        priority: "Prioridad"
-        user_ids: "Responsables"
-        finding_user_assignments: "Responsables"
-        origination_date: "Fecha de origen"
-        follow_up_date: "Fecha de implementación"
-        audit_comments: "Comentarios de auditoría"
-        state: "Estado"
-        count: "Cantidad"
-        solution_date: "Fecha de solución"
-        users: "Responsables"
-        work_papers: "Papeles de trabajo"
-        finding_answers: "Respuestas"
-        rescheduled: "Reprogramada"
-        organization: "Organización"
-      finding/achievements:
-        one: "Beneficio estimado"
-        amount: "Monto"
-        comment: "Comentario"
-      finding/costs:
-        one: "Tiempo dedicado"
-        cost: "Tiempo dedicado"
-        description: "Descripción de las actividades realizadas"
-      finding/finding_relations:
-        one: "Relación"
-        other: "Relaciones"
-        related_finding_id: "Relación (Observación / Oportunidad de mejora relacionada)"
-        description: "Relación (descripción)"
-      finding/taggings:
-        one: "Etiqueta"
-        other: "Etiquetas"
-        tag_id: "Etiqueta"
-      finding/finding_user_assignments:
-        one: "Usuario relacionado"
-        user: 'Usuario relacionado (usuario)'
-        user_id: 'Usuario relacionado (usuario)'
-        process_owner: 'Responsable (usuario)'
-      finding/finding_answers:
-        one: "Comentarios"
-        answer: "Comentario"
-        commitment_date: "Fecha de compromiso"
-        auditor_comments: "Comentario (comentarios del auditor)"
-        user_id: "Comentario (usuario)"
-        notify_users: "Comentario (enviar notificación)"
-      finding/finding_answers/file_model:
-        one: "Anexo (archivo)"
-        file: "Anexo (archivo)"
-        file_file_name: "Anexo (nombre de archivo)"
-        file_content_type: "Anexo (tipo de archivo)"
-        file_file_size: "Anexo (tamaño de archivo)"
-      finding/work_papers:
-        one: "Papel de trabajo"
-        other: "Papeles de trabajo"
-        name: "Papel de trabajo (nombre)"
-        code: "Papel de trabajo (código)"
-        description: "Papel de trabajo (descripción)"
-        number_of_pages: "Papel de trabajo (páginas)"
-      finding/work_papers/file_model:
-        one: "Papel de trabajo (archivo)"
-        file_file_name: "Papel de trabajo (nombre de archivo)"
-        file_content_type: "Papel de trabajo (tipo de archivo)"
-        file_file_size: "Papel de trabajo (tamaño de archivo)"
       finding_answer:
         answer: "Comentario"
-        auditor_comments: "Comentarios del auditor"
         commitment_date: "Fecha de compromiso"
         finding_id: "Observación / Oportunidad"
         user_id: "Usuario"
@@ -1331,18 +1174,6 @@ es:
         notification: "Notificación"
       old_password:
         password: "Contraseña"
-      oportunity:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "Oportunidad de mejora"
-        review_code: "Código en el informe"
-        answer: "Respuesta"
-        user_ids: "Responsable"
-        finding_user_assignments: "Responsables"
-        work_papers: "Papeles de trabajo"
-        state: "Estado"
-        origination_date: "Fecha de origen"
-        solution_date: "Fecha de solución"
       organization:
         name: "Nombre"
         prefix: "Prefijo"
@@ -1378,7 +1209,12 @@ es:
         plan_item: "Proyecto"
         file_model_id: "Anexos"
         score: "Calificación"
+        scope: "Alcance auditoría"
+        risk_exposure: "Exposición al riesgo"
+        manual_score: "Puntaje de auditoría"
+        include_sox: "Incluye prueba SOX"
         work_papers: "Papeles de trabajo"
+        review_user_assignments: "Integrantes"
       review/file_model:
         one: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"
@@ -1408,23 +1244,6 @@ es:
         name: "Perfil"
         role_type: "Tipo perfil"
         privileges: "Privilegios"
-      weakness:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "Observación"
-        review_code: "Código en el informe"
-        audit_recommendations: "Recomendaciones de auditoría"
-        answer: "Respuesta"
-        effect: "Posibles consecuencias"
-        risk: "Riesgo"
-        priority: "Prioridad"
-        user_ids: "Responsable"
-        finding_user_assignments: "Responsables"
-        origination_date: "Fecha de origen"
-        follow_up_date: "Fecha de implementación"
-        state: "Estado"
-        solution_date: "Fecha de solución"
-        work_papers: "Papeles de trabajo"
       work_paper:
         name: "Nombre"
         code: "Código"
@@ -1486,29 +1305,11 @@ es:
           attributes:
             file_file_name:
               without_extension: 'debe tener extensión'
-        finding:
-          attributes:
-            follow_up_date:
-              must_be_blank: "debe estar en blanco para el estado seleccionado"
-            solution_date:
-              must_be_blank: "debe estar en blanco para el estado seleccionado"
-            state:
-              must_have_a_comment: "debe tener adjunto un comentario para esta transición"
-              can_not_be_revoked: "no puede ser 'Anulado', posiblemente se deba a una reiteración o a que la observación ya se encuentra en un informe definitivo"
-              must_have_a_work_paper: "debe tener asociado al menos un papel de trabajo"
-              must_be_done_by_proper_role: "solo puede ser cambiado por un usuario supervisor o gerente"
-            users:
-              invalid: "debe contener como mínimo un auditor, un auditado, un gerente y un supervisor"
-        finding_user_assignment:
-          attributes:
-            process_owner:
-              invalid: "solo puede ser asignado a usuarios de tipo auditado"
         image_model:
           attributes:
             image_content_type:
               invalid: "no es válido"
             image_file_size:
-
         organization_role:
           attributes:
             role_id:
@@ -1560,7 +1361,6 @@ es:
     control_objective_items: "Objetivos de control"
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"
-    findings: "Seguimiento de observaciones"
     groups: "Grupos"
     login_records: "Registros de ingreso"
     notifications: "Notificaciones"

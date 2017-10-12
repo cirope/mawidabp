@@ -5,7 +5,7 @@ class FileModelTest < ActiveSupport::TestCase
   fixtures :file_models
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @file_model = FileModel.find file_models(:text_file).id
   end
 

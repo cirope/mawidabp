@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ResourceClassTest < ActiveSupport::TestCase
-  def setup
+  setup do
     set_organization
 
     @resource_class = resource_classes :hardware_resources

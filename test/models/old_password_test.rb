@@ -5,7 +5,7 @@ class OldPasswordTest < ActiveSupport::TestCase
   fixtures :old_passwords, :users
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @old_password = OldPassword.find old_passwords(:administrator_old_password).id
   end
 
@@ -23,7 +23,7 @@ class OldPasswordTest < ActiveSupport::TestCase
     assert_difference 'OldPassword.count' do
       @old_password = OldPassword.create(
         :password => 'New Old Password',
-        :user => users(:administrator_user)
+        :user => users(:administrator)
       )
     end
   end

@@ -145,18 +145,18 @@ module Findings::PDF
       [
         [self.class.human_attribute_name('control_objective_item_id'), control_objective_item.to_s, 0, false],
         [self.class.human_attribute_name('review_code'), review_code, 0, false],
-        [self.class.human_attribute_name('title'), self.title, 0, false],
-        [self.class.human_attribute_name('description'), self.description, 0, false]
+        [self.class.human_attribute_name('title'), title, 0, false],
+        [self.class.human_attribute_name('description'), description, 0, false]
       ]
     end
 
     def weakness_description_items
       [
         [Weakness.human_attribute_name('risk'), risk_text, 0, false],
-        [Weakness.human_attribute_name('priority'), priority_text, 0, false],
+        ([Weakness.human_attribute_name('priority'), priority_text, 0, false] unless HIDE_WEAKNESS_PRIORITY),
         [Weakness.human_attribute_name('effect'), effect, 0, false],
         [Weakness.human_attribute_name('audit_recommendations'), audit_recommendations, 0, false]
-      ]
+      ].compact
     end
 
 end

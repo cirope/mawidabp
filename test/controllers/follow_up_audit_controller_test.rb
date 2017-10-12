@@ -675,7 +675,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_graphs, :params => {
       :weaknesses_graphs => {
-        :user_id => users(:administrator_user).id
+        :user_id => users(:administrator).id
       },
       :final => false
     }
@@ -703,7 +703,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_graphs, :params => {
       :weaknesses_graphs => {
-        :process_control_id => process_controls(:iso_27000_security_policy).id
+        :process_control_id => process_controls(:security_policy).id
       },
       :final => false
     }
@@ -727,11 +727,11 @@ class FollowUpAuditControllerTest < ActionController::TestCase
           :process_control           => '3',
           :control_objective         => '4',
           :tags                      => '5',
-          :user_id                   => users(:administrator_user).id.to_s,
+          :user_id                   => users(:administrator).id.to_s,
           :finding_status            => '1',
           :finding_title             => '1',
           :risk                      => '1',
-          :priority                  => '1',
+          :priority                  => Finding.priorities_values.first,
           :issue_date                => Date.today.to_s(:db),
           :issue_date_operator       => '=',
           :origination_date          => Date.today.to_s(:db),

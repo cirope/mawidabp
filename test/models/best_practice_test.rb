@@ -2,7 +2,7 @@ require 'test_helper'
 
 class BestPracticeTest < ActiveSupport::TestCase
 
-  def setup
+  setup do
     @best_practice = best_practices :iso_27001
 
     set_organization

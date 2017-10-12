@@ -2,6 +2,8 @@ require 'test_helper'
 
 class Oportunities::UsersControllerTest < ActionController::TestCase
   setup do
+    skip if HIDE_OPORTUNITIES
+
     login
   end
 

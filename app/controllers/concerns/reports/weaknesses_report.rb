@@ -152,7 +152,7 @@ module Reports::WeaknessesReport
       pdf.add_description_item(Weakness.human_attribute_name(:state), weakness.state_text, 0, false)
 
       pdf.add_description_item(Weakness.human_attribute_name(:risk), weakness.risk_text, 0, false)
-      pdf.add_description_item(Weakness.human_attribute_name(:priority), weakness.priority_text, 0, false)
+      pdf.add_description_item(Weakness.human_attribute_name(:priority), weakness.priority_text, 0, false) unless HIDE_WEAKNESS_PRIORITY
       pdf.add_description_item(Weakness.human_attribute_name(:effect), weakness.effect, 0, false)
       pdf.add_description_item(Weakness.human_attribute_name(:audit_recommendations), weakness.audit_recommendations, 0, false)
 
@@ -265,7 +265,7 @@ module Reports::WeaknessesReport
 
         priority ? t("priority_types.#{priority.first}") : ''
       when :finding_status
-        t "finding.status_#{Finding::STATUS.invert[value]}"
+        t "findings.state.#{Finding::STATUS.invert[value]}"
       when :user_in_comments
         value == 1 ? t('label.yes') : t('label.no')
       end

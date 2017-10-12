@@ -2,7 +2,7 @@ require 'test_helper'
 
 class AnswerOptionTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @answer_option = AnswerOption.find answer_options(:strongly_agree).id
   end
 

@@ -5,7 +5,7 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
   fixtures :business_unit_types
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @business_unit_type = BusinessUnitType.find business_unit_types(:cycle).id
   end
 

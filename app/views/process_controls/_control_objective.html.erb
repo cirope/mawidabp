@@ -4,16 +4,18 @@
 <fieldset class="control_objective">
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-5">
+      <div class="col-md-<%= HIDE_CONTROL_OBJECTIVE_RISK ? 7 : 5 %>">
         <%= f.input :name, input_html: { rows: 4 } %>
       </div>
 
       <div class="col-md-2">
         <%= f.input :relevance, collection: relevances, prompt: true %>
       </div>
-      <div class="col-md-2">
-        <%= f.input :risk, collection: risks, prompt: true %>
-      </div>
+      <% unless HIDE_CONTROL_OBJECTIVE_RISK %>
+        <div class="col-md-2">
+          <%= f.input :risk, collection: risks, prompt: true %>
+        </div>
+      <% end %>
       <div class="col-md-1">
         <label for="control_objective_obsolete_<%= id %>">
           <%= ControlObjective.human_attribute_name 'obsolete' %>

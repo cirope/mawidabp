@@ -1,7 +1,6 @@
-bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_auditor_answer:
+confirmed_oportunity_auditor_answer:
   answer: Auditor text
-  auditor_comments: Auditor comments
   commitment_date: <%= Date.today.to_s(:db) %>
-  finding: bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity
-  user: supervisor_user
+  finding: confirmed_oportunity
+  user: supervisor
   file_model:

@@ -5,7 +5,7 @@ class ReviewTest < ActiveSupport::TestCase
   fixtures :reviews, :periods, :plan_items
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @review = Review.find reviews(:review_with_conclusion).id
 
     set_organization
@@ -28,22 +28,26 @@ class ReviewTest < ActiveSupport::TestCase
         :description => 'New Description',
         :period_id => periods(:current_period).id,
         :plan_item_id => plan_items(:past_plan_item_3).id,
+        :scope => 'committee',
+        :risk_exposure => 'high',
+        :manual_score => 800,
+        :include_sox => 'no',
         :review_user_assignments_attributes => {
             :new_1 => {
               :assignment_type => ReviewUserAssignment::TYPES[:auditor],
-              :user => users(:first_time_user)
+              :user => users(:first_time)
             },
             :new_2 => {
               :assignment_type => ReviewUserAssignment::TYPES[:supervisor],
-              :user => users(:supervisor_user)
+              :user => users(:supervisor)
             },
             :new_3 => {
               :assignment_type => ReviewUserAssignment::TYPES[:manager],
-              :user => users(:supervisor_second_user)
+              :user => users(:supervisor_second)
             },
             :new_4 => {
               :assignment_type => ReviewUserAssignment::TYPES[:audited],
-              :user => users(:audited_user)
+              :user => users(:audited)
             }
           }
       )
@@ -83,12 +87,23 @@ class ReviewTest < ActiveSupport::TestCase
     @review.description = '   '
     @review.period_id = nil
     @review.plan_item_id = nil
+    @review.scope = ''
+    @review.risk_exposure = ''
+    @review.manual_score = nil
+    @review.include_sox = ''
 
     assert @review.invalid?
     assert_error @review, :identification, :blank
-    assert_error @review, :description, :blank
+    assert_error @review, :description, :blank unless HIDE_REVIEW_DESCRIPTION
     assert_error @review, :period_id, :blank
     assert_error @review, :plan_item_id, :blank
+
+    if SHOW_REVIEW_EXTRA_ATTRIBUTES
+      assert_error @review, :scope, :blank
+      assert_error @review, :risk_exposure, :blank
+      assert_error @review, :manual_score, :blank
+      assert_error @review, :include_sox, :blank
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -121,6 +136,20 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert @review.invalid?
     assert_error @review, :plan_item_id, :taken
+  end
+
+  test 'validates numeric attributes' do
+    skip unless SHOW_REVIEW_EXTRA_ATTRIBUTES
+
+    @review.manual_score = -1
+
+    assert @review.invalid?
+    assert_error @review, :manual_score, :greater_than_or_equal_to, count: 0
+
+    @review.manual_score = 1001
+
+    assert @review.invalid?
+    assert_error @review, :manual_score, :less_than_or_equal_to, count: 1000
   end
 
   test 'validates valid attributes' do
@@ -251,7 +280,7 @@ class ReviewTest < ActiveSupport::TestCase
     def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
-    Finding.current_user = users :supervisor_user
+    Finding.current_user = users :supervisor
 
     finding = Weakness.new finding.attributes.merge(
       'state' => Finding::STATUS[:assumed_risk]
@@ -321,7 +350,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.reload.must_be_approved?
 
     assert @review.finding_review_assignments.build(
-      :finding_id => findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
+      :finding_id => findings(:being_implemented_weakness).id
     )
     assert !@review.must_be_approved?
     assert @review.approval_errors.flatten.include?(
@@ -391,22 +420,22 @@ class ReviewTest < ActiveSupport::TestCase
   test 'process control ids' do
     assert @review.control_objective_items.present?
     assert_difference '@review.control_objective_items.size', 5 do
-      @review.process_control_ids = [process_controls(:iso_27000_security_policy).id]
+      @review.process_control_ids = [process_controls(:security_policy).id]
     end
 
     assert_no_difference '@review.control_objective_items.size' do
-      @review.process_control_ids = [process_controls(:iso_27000_security_policy).id]
+      @review.process_control_ids = [process_controls(:security_policy).id]
     end
   end
 
   test 'procedure control subitem ids' do
     assert @review.control_objective_items.present?
     assert_difference '@review.control_objective_items.size' do
-      @review.control_objective_ids = [control_objectives(:iso_27000_security_organization_4_1).id]
+      @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
     end
 
     assert_no_difference '@review.control_objective_items.size' do
-      @review.control_objective_ids = [control_objectives(:iso_27000_security_organization_4_1).id]
+      @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
     end
   end
 
@@ -415,8 +444,7 @@ class ReviewTest < ActiveSupport::TestCase
       assert @review.update(
         :finding_review_assignments_attributes => {
           :new_1 => {
-            :finding_id =>
-              findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id.to_s
+            :finding_id => findings(:unanswered_weakness).id.to_s
           }
         }
       )
@@ -429,8 +457,7 @@ class ReviewTest < ActiveSupport::TestCase
         @review.update(
           :finding_review_assignments_attributes => {
             :new_1 => {
-              :finding_id =>
-                findings(:iso_27000_security_organization_4_2_item_editable_oportunity).id.to_s
+              :finding_id => findings(:confirmed_oportunity_on_draft).id.to_s
             }
           }
         )
@@ -452,30 +479,30 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'last control objective work paper code' do
-    generated_code = @review.last_control_objective_work_paper_code('pre')
+    generated_code = @review.last_control_objective_work_paper_code(prefix: 'pre')
 
     assert_match /\Apre\s\d+\Z/, generated_code
 
-    assert_equal 'New prefix 00',
-      @review.reload.last_control_objective_work_paper_code('New prefix')
+    assert_equal 'New prefix 000',
+      @review.reload.last_control_objective_work_paper_code(prefix: 'New prefix')
   end
 
   test 'last weakness work paper code' do
-    generated_code = @review.last_weakness_work_paper_code('pre')
+    generated_code = @review.last_weakness_work_paper_code(prefix: 'pre')
 
     assert_match /\Apre\s\d+\Z/, generated_code
 
-    assert_equal 'New prefix 00',
-      @review.reload.last_weakness_work_paper_code('New prefix')
+    assert_equal 'New prefix 000',
+      @review.reload.last_weakness_work_paper_code(prefix: 'New prefix')
   end
 
   test 'last oportunity work paper code' do
-    generated_code = @review.last_oportunity_work_paper_code('pre')
+    generated_code = @review.last_oportunity_work_paper_code(prefix: 'pre')
 
     assert_match /\Apre\s\d+\Z/, generated_code
 
-    assert_equal 'New prefix 00',
-      @review.reload.last_oportunity_work_paper_code('New prefix')
+    assert_equal 'New prefix 000',
+      @review.reload.last_oportunity_work_paper_code(prefix: 'New prefix')
   end
 
   test 'last weakness code' do
@@ -530,7 +557,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   test 'zip all work papers' do
     assert_nothing_raised do
-      @review.zip_all_work_papers
+      @review.zip_all_work_papers @review.organization
     end
 
     assert File.exist?(@review.absolute_work_papers_zip_path)

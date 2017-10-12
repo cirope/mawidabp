@@ -15,7 +15,7 @@ jQuery(function ($) {
       'audit_comments'
     ]
 
-    if(repeatedId) {
+    if (repeatedId) {
       $repeatedSelect.prop('disabled', true)
 
       $.getJSON(url, function (finding) {

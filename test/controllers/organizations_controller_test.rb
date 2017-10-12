@@ -116,7 +116,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   test 'destroy organization' do
     organization = organizations :google
 
-    login user: users(:administrator_second_user), prefix: organization.prefix
+    login user: users(:administrator_second), prefix: organization.prefix
 
     assert_difference ['Organization.count', 'BusinessUnitType.count'], -1 do
       delete :destroy, params: { id: organization }

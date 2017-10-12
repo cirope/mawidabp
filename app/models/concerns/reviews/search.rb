@@ -26,7 +26,7 @@ module Reviews::Search
       end
 
       def project_options
-        string_column_options_for "#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'project'}"
+        string_column_options_for "#{::PlanItem.quoted_table_name}.#{::PlanItem.qcn 'project'}"
       end
 
       def string_column_options_for column

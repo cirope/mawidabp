@@ -1,9 +1,9 @@
 productivity:
   benefit: productivity
   amount: 1000.01
-  finding: bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
+  finding: being_implemented_weakness
 
 quality_of_service:
   benefit: quality_of_service
   comment: Some good QA achieved
-  finding: bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
+  finding: being_implemented_weakness

@@ -25,7 +25,7 @@ class ErrorRecordsControllerTest < ActionController::TestCase
 
   test 'show error record' do
     get :show, params: {
-      id: error_records(:administrator_user_failed_attempt).id
+      id: error_records(:administrator_failed_attempt).id
     }
 
     assert_response :success

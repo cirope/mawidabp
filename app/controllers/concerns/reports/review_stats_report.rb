@@ -88,8 +88,8 @@ module Reports::ReviewStatsReport
     end
 
     def set_weaknesses_by_score_data
-      Weakness::RISK_TYPES.reverse_each do |risk, r_value|
-        Weakness::PRIORITY_TYPES.reverse_each do |priority, p_value|
+      ::RISK_TYPES.reverse_each do |risk, r_value|
+        ::PRIORITY_TYPES.reverse_each do |priority, p_value|
           add_total_weaknesses_by_score(
             risk:     risk,
             r_value:  r_value,
@@ -186,10 +186,10 @@ module Reports::ReviewStatsReport
       Review.scores.map do |score, value|
         scores = @reviews_by_score[score]
         ratio  = if scores.size > 0
-          '%.2f%' % (scores.size.to_f / review_stats_score_count * 100)
-        else
-          '0.00%'
-        end
+                   '%.2f%' % (scores.size.to_f / review_stats_score_count * 100)
+                 else
+                   '0.00%'
+                 end
 
         [I18n.t("score_types.#{score}"), ratio]
       end

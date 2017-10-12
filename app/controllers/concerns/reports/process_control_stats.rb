@@ -72,7 +72,7 @@ module Reports::ProcessControlStats
 
       if params[:process_control_stats][:finding_status].present?
         weaknesses_conditions[:state] = params[:process_control_stats][:finding_status]
-        state_text = t "finding.status_#{Finding::STATUS.invert[weaknesses_conditions[:state].to_i]}"
+        state_text = t "findings.state.#{Finding::STATUS.invert[weaknesses_conditions[:state].to_i]}"
 
         @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text}\""
       end

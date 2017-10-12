@@ -102,11 +102,11 @@ class LdapConfigTest < ActiveSupport::TestCase
   test 'import' do
     set_organization organizations(:google)
 
-    user      = users :administrator_user
+    user      = users :administrator
     role      = roles :admin_second_role
     corp_role = roles :admin_second_alphabet_role
 
-    user.update! manager_id: users(:corporate_user).id
+    user.update! manager_id: users(:corporate).id
 
     assert user.organization_roles.map(&:role_id).exclude?(role.id)
     assert user.organization_roles.map(&:role_id).exclude?(corp_role.id)

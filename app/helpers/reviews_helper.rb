@@ -58,7 +58,7 @@ module ReviewsHelper
   def next_review_work_paper_code(review)
     code_prefix = t('code_prefixes.work_papers_in_control_objectives')
 
-    review ? review.last_control_objective_work_paper_code(code_prefix) :
+    review ? review.last_control_objective_work_paper_code(prefix: code_prefix) :
       "#{code_prefix} 0".strip
   end
 
@@ -88,5 +88,17 @@ module ReviewsHelper
     link_to suggested_process_control_findings_review_path(process_control.id), options do
       content_tag :span, nil, class: 'glyphicon glyphicon-eye-open'
     end
+  end
+
+  def review_scope_options
+    REVIEW_SCOPES.map { |scope| [scope, scope] }
+  end
+
+  def review_risk_exposure_options
+    REVIEW_RISK_EXPOSURE.map { |exposure| [exposure, exposure] }
+  end
+
+  def review_include_sox_options
+    %w(yes no).map { |option| [t("label.#{option}"), option] }
   end
 end
