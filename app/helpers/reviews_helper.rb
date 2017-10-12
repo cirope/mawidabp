@@ -89,4 +89,16 @@ module ReviewsHelper
       content_tag :span, nil, class: 'glyphicon glyphicon-eye-open'
     end
   end
+
+  def review_scope_options
+    REVIEW_SCOPES.map { |scope| [scope, scope] }
+  end
+
+  def review_risk_exposure_options
+    REVIEW_RISK_EXPOSURE.map { |exposure| [exposure, exposure] }
+  end
+
+  def review_include_sox_options
+    %w(yes no).map { |option| [t("label.#{option}"), option] }
+  end
 end

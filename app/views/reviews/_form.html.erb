@@ -60,6 +60,19 @@
         </div>
       </div>
     </div>
+
+    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :scope, collection: review_scope_options, prompt: true, readonly: readonly %>
+          <%= f.input :include_sox, collection: review_include_sox_options, prompt: true, readonly: readonly %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :risk_exposure, collection: review_risk_exposure_options, prompt: true, readonly: readonly %>
+          <%= f.input :manual_score, readonly: readonly, input_html: { min: 0, max: 1000, step: 1 } %>
+        </div>
+      </div>
+    <% end %>
   </div>
 
   <div class="row">

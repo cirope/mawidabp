@@ -131,6 +131,10 @@ class ReviewsControllerTest < ActionController::TestCase
                 survey: 'New survey',
                 period_id: periods(:current_period).id,
                 plan_item_id: plan_items(:past_plan_item_3).id,
+                scope: 'committee',
+                risk_exposure: 'high',
+                manual_score: 800,
+                include_sox: 'no',
                 process_control_ids: [process_controls(:security_management).id],
                 control_objective_ids: [control_objectives(:security_policy_3_1).id],
                 file_model_attributes: {
@@ -190,6 +194,10 @@ class ReviewsControllerTest < ActionController::TestCase
           description: 'Updated Description',
           period_id: periods(:current_period).id,
           plan_item_id: plan_items(:current_plan_item_2).id,
+          scope: 'committee',
+          risk_exposure: 'high',
+          manual_score: 800,
+          include_sox: 'no',
           review_user_assignments_attributes: [
             {
               id: review_user_assignments(:review_with_conclusion_bare_auditor).id,
@@ -459,9 +467,9 @@ class ReviewsControllerTest < ActionController::TestCase
     login
 
     get :auto_complete_for_tagging, params: {
-      :q => 'high priority',
-      :kind => 'review',
-      :format => :json
+      q: 'high priority',
+      kind: 'review',
+      format: :json
     }
     assert_response :success
 
@@ -471,9 +479,9 @@ class ReviewsControllerTest < ActionController::TestCase
     assert tags.all? { |t| t['label'].match /high priority/i }
 
     get :auto_complete_for_tagging, params: {
-      :q => 'x_none',
-      :kind => 'finding',
-      :format => :json
+      q: 'x_none',
+      kind: 'finding',
+      format: :json
     }
     assert_response :success
 

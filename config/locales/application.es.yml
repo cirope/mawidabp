@@ -1226,6 +1226,10 @@ es:
         plan_item: "Proyecto"
         file_model_id: "Anexos"
         score: "Calificación"
+        scope: "Alcance auditoría"
+        risk_exposure: "Exposición al riesgo"
+        manual_score: "Puntaje de auditoría"
+        include_sox: "Incluye prueba SOX"
         work_papers: "Papeles de trabajo"
         review_user_assignments: "Integrantes"
       review/file_model:

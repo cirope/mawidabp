@@ -34,6 +34,28 @@
   </div>
 <% end %>
 
+<% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+  <p>
+    <strong><%= Review.human_attribute_name :scope %>:</strong>
+    <%= @review.scope %>
+  </p>
+
+  <p>
+    <strong><%= Review.human_attribute_name :risk_exposure %>:</strong>
+    <%= @review.risk_exposure %>
+  </p>
+
+  <p>
+    <strong><%= Review.human_attribute_name :manual_score %>:</strong>
+    <%= @review.manual_score %>
+  </p>
+
+  <p>
+    <strong><%= Review.human_attribute_name :include_sox %>:</strong>
+    <%= t "label.#{@review.include_sox}" %>
+  </p>
+<% end %>
+
 <table class="table table-condensed table-striped">
   <thead>
     <tr>

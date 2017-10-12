@@ -11,6 +11,16 @@ module Reviews::Validations
     validates :identification, :description, :survey, pdf_encoding: true
     validates :plan_item_id, uniqueness: { case_sensitive: false }
 
+    validates :scope,
+              :risk_exposure,
+              :manual_score,
+              :include_sox,
+              presence: true, if: :validate_extra_attributes?
+
+    validates :manual_score, numericality: {
+      greater_than_or_equal_to: 0, less_than_or_equal_to: 1000
+    }, if: :validate_extra_attributes?
+
     validate :validate_user_roles
     validate :validate_plan_item
   end
@@ -29,5 +39,9 @@ module Reviews::Validations
 
     def has_valid_users?
       has_audited? && has_auditor? && (has_supervisor? || has_manager?)
+    end
+
+    def validate_extra_attributes?
+      SHOW_REVIEW_EXTRA_ATTRIBUTES
     end
 end

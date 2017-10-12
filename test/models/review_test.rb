@@ -28,6 +28,10 @@ class ReviewTest < ActiveSupport::TestCase
         :description => 'New Description',
         :period_id => periods(:current_period).id,
         :plan_item_id => plan_items(:past_plan_item_3).id,
+        :scope => 'committee',
+        :risk_exposure => 'high',
+        :manual_score => 800,
+        :include_sox => 'no',
         :review_user_assignments_attributes => {
             :new_1 => {
               :assignment_type => ReviewUserAssignment::TYPES[:auditor],
@@ -83,12 +87,23 @@ class ReviewTest < ActiveSupport::TestCase
     @review.description = '   '
     @review.period_id = nil
     @review.plan_item_id = nil
+    @review.scope = ''
+    @review.risk_exposure = ''
+    @review.manual_score = nil
+    @review.include_sox = ''
 
     assert @review.invalid?
     assert_error @review, :identification, :blank
     assert_error @review, :description, :blank unless HIDE_REVIEW_DESCRIPTION
     assert_error @review, :period_id, :blank
     assert_error @review, :plan_item_id, :blank
+
+    if SHOW_REVIEW_EXTRA_ATTRIBUTES
+      assert_error @review, :scope, :blank
+      assert_error @review, :risk_exposure, :blank
+      assert_error @review, :manual_score, :blank
+      assert_error @review, :include_sox, :blank
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -121,6 +136,20 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert @review.invalid?
     assert_error @review, :plan_item_id, :taken
+  end
+
+  test 'validates numeric attributes' do
+    skip unless SHOW_REVIEW_EXTRA_ATTRIBUTES
+
+    @review.manual_score = -1
+
+    assert @review.invalid?
+    assert_error @review, :manual_score, :greater_than_or_equal_to, count: 0
+
+    @review.manual_score = 1001
+
+    assert @review.invalid?
+    assert_error @review, :manual_score, :less_than_or_equal_to, count: 1000
   end
 
   test 'validates valid attributes' do
