@@ -7,10 +7,10 @@
 
 env :PATH, ENV['PATH']
 
-job_type :runner_file,  'cd :path && :runner_command -e :environment :task :output'
+job_type :runner_file, 'cd :path && :runner_command -e :environment :task :output'
 
 every 1.day, at: '20:00' do
-  runner_file "runners/daily.rb"
+  runner_file 'runners/daily.rb'
 end
 
 every :thursday, at: '20:00' do
