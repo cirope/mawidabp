@@ -106,6 +106,8 @@ es:
       title: 'Editar hallazgo'
     form:
       show_status_change_history: 'Ver historial de cambios de estado'
+    auditor_form:
+      origin: 'origen'
     current_user_filters:
       as_owner: '%{kind} como responsable'
       incomplete: 'Pendientes'
