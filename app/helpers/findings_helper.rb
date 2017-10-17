@@ -71,7 +71,6 @@ module FindingsHelper
     content_tag :abbr, finding.review_code, title: finding.description
   end
 
-
   def finding_answer_notification_check form
     html_class = @auth_user.can_act_as_audited? ? 'hidden' : nil
     label_text = html_class.blank? &&
@@ -164,6 +163,16 @@ module FindingsHelper
     SHOW_FINDING_CURRENT_SITUATION &&
       @finding.is_in_a_final_review? &&
       @finding.answer.present?
+  end
+
+  def finding_description_label
+    attr_name = @finding.class.human_attribute_name 'description'
+
+    if SHOW_FINDING_CURRENT_SITUATION
+      "#{attr_name} #{t '.origin'}"
+    else
+      attr_name
+    end
   end
 
   private
