@@ -64,13 +64,6 @@ module Findings::FollowUpPDF
     end
 
     def put_follow_up_conditional_items_on pdf
-      if SHOW_FINDING_CURRENT_SITUATION
-        current_situation_verified_text = I18n.t "label.#{current_situation_verified ? 'yes' : 'no'}"
-
-        pdf.add_description_item Finding.human_attribute_name(:current_situation), current_situation, 0, false
-        pdf.add_description_item Finding.human_attribute_name(:current_situation_verified), current_situation_verified_text, 0, false
-      end
-
       if kind_of?(Weakness) && follow_up_date
         pdf.add_description_item Finding.human_attribute_name(:follow_up_date), I18n.l(follow_up_date, format: :long), 0, false
       end
