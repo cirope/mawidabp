@@ -1,56 +1,56 @@
-bcra_A4609_security_management_responsible_dependency:
-  name: Dependencia del área responsable
+management_dependency:
+  name: Management dependency
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 1
-  process_control: bcra_A4609_security_management
+  process_control: security_management
   obsolete: false
   support: 'text.txt'
 
-bcra_A4609_data_proccessing_impact_analisys:
-  name: Análisis de impacto
+impact_analysis:
+  name: Impact analysis
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 2
-  process_control: bcra_A4609_security_management
+  process_control: security_management
   obsolete: false
 
-iso_27000_security_policy_3_1:
-  name: "3.1) Política de seguridad de la información.\nProporcionar orientación y apoyo a la alta dirección de la seguridad de la información."
+security_policy_3_1:
+  name: "3.1) Security policy"
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 1
-  process_control: iso_27000_security_policy
+  process_control: security_policy
   obsolete: false
 
-iso_27000_security_organization_4_1:
-  name: "4.1) Infraestructura de seguridad de la información."
+organization_security_4_1:
+  name: "4.1) Organization security"
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 2
-  process_control: iso_27000_security_policy
+  process_control: security_policy
   obsolete: false
 
-iso_27000_security_organization_4_2:
-  name: "4.2) Seguridad frente al acceso por parte de terceros."
+organization_security_4_2:
+  name: "4.2) Organization security access"
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 3
-  process_control: iso_27000_security_policy
+  process_control: security_policy
   obsolete: false
 
-iso_27000_security_organization_4_3:
-  name: "4.3) Seguridad frente al acceso por parte de terceros."
+organization_security_4_3:
+  name: "4.3) Organization security access"
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 4
-  process_control: iso_27000_security_policy
+  process_control: security_policy
   obsolete: false
 
-iso_27000_security_organization_4_4_continuous:
-  name: "4.4) Seguridad frente al acceso por parte de terceros (cont)."
+organization_security_4_4:
+  name: "4.4) Organization security access"
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 5
-  process_control: iso_27000_security_policy
+  process_control: security_policy
   obsolete: false

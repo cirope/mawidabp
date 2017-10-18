@@ -3,6 +3,13 @@
   <%= @poll.user.informal_name  %>
 </p>
 
+<% if @poll.conclusion_review %>
+  <p>
+    <strong><%= Poll.human_attribute_name :pollable %>:</strong>
+    <%= @poll.conclusion_review.review %>
+  </p>
+<% end %>
+
 <% if @poll.affected_user %>
   <p>
     <strong><%= Poll.human_attribute_name :affected_user %>:</strong>

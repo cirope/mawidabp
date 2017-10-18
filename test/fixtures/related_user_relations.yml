@@ -1,7 +1,7 @@
-bare_user_first_time_user_relation:
-  user: bare_user
-  related_user: first_time_user
-  
-general_manager_user_coordinator_manager_user_relation:
-  user: general_manager_user
-  related_user: coordinator_manager_user
+bare_first_time_relation:
+  user: bare
+  related_user: first_time
+
+general_manager_coordinator_manager_relation:
+  user: general_manager
+  related_user: coordinator_manager

@@ -2,15 +2,15 @@ require 'test_helper'
 
 class AnswerOptionTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
-    @answer_option = AnswerOption.find answer_options(:ao1).id
+  setup do
+    @answer_option = AnswerOption.find answer_options(:strongly_agree).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of AnswerOption, @answer_option
-    assert_equal answer_options(:ao1).option, @answer_option.option
-    assert_equal answer_options(:ao1).question_id, @answer_option.question_id
+    assert_equal answer_options(:strongly_agree).option, @answer_option.option
+    assert_equal answer_options(:strongly_agree).question_id, @answer_option.question_id
   end
 
   # Prueba la creación de una opción de respuesta

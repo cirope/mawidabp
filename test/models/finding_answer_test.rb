@@ -4,7 +4,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
   include ActionMailer::TestHelper
 
   setup do
-    @finding_answer = finding_answers :bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_auditor_answer
+    @finding_answer = finding_answers :confirmed_oportunity_auditor_answer
   end
 
   test 'auditor create without notification' do
@@ -12,9 +12,8 @@ class FindingAnswerTest < ActiveSupport::TestCase
       assert_difference 'FindingAnswer.count' do
         @finding_answer = FindingAnswer.create(
           answer: 'New answer',
-          auditor_comments: 'New auditor comments',
-          finding: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
-          user: users(:supervisor_user),
+          finding: findings(:unanswered_weakness),
+          user: users(:supervisor),
           file_model: file_models(:text_file),
           notify_users: false
         )
@@ -28,8 +27,8 @@ class FindingAnswerTest < ActiveSupport::TestCase
         @finding_answer = FindingAnswer.create(
           answer: 'New answer',
           commitment_date: 10.days.from_now.to_date,
-          finding: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
-          user: users(:audited_user),
+          finding: findings(:unanswered_weakness),
+          user: users(:audited),
           file_model: file_models(:text_file),
           notify_users: false
         )
@@ -42,9 +41,8 @@ class FindingAnswerTest < ActiveSupport::TestCase
       assert_difference 'FindingAnswer.count' do
         @finding_answer = FindingAnswer.create(
           answer: 'New answer',
-          auditor_comments: 'New auditor comments',
-          finding: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
-          user: users(:supervisor_user),
+          finding: findings(:unanswered_weakness),
+          user: users(:supervisor),
           file_model: file_models(:text_file),
           notify_users: true
         )
@@ -58,8 +56,8 @@ class FindingAnswerTest < ActiveSupport::TestCase
         @finding_answer = FindingAnswer.create(
           answer: 'New answer',
           commitment_date: 10.days.from_now.to_date,
-          finding: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
-          user: users(:audited_user),
+          finding: findings(:unanswered_weakness),
+          user: users(:audited),
           file_model: file_models(:text_file)
           # notify_users nil which converts to true
         )
@@ -92,10 +90,10 @@ class FindingAnswerTest < ActiveSupport::TestCase
   test 'validates blank attributes with audited' do
     Organization.current_id = organizations(:cirope).id
 
-    @finding_answer.user = users(:audited_user)
-    @finding_answer.answer = '      '
-    @finding_answer.finding = findings(:iso_27000_security_policy_3_1_item_weakness)
-    @finding_answer.commitment_date = ''
+    @finding_answer.user = users(:audited)
+    @finding_answer.answer = ' '
+    @finding_answer.finding = findings(:being_implemented_weakness_on_final)
+    @finding_answer.commitment_date = nil
 
     assert @finding_answer.invalid?
     assert_error @finding_answer, :answer, :blank
@@ -109,5 +107,25 @@ class FindingAnswerTest < ActiveSupport::TestCase
 
     assert @finding_answer.invalid?
     assert_error @finding_answer, :commitment_date, :invalid_date
+  end
+
+  test 'requires commitment date' do
+    Organization.current_id = organizations(:cirope).id
+
+    @finding_answer.user = users(:audited)
+    @finding_answer.finding = findings(:being_implemented_weakness_on_final)
+    @finding_answer.commitment_date = nil
+
+    assert @finding_answer.requires_commitment_date?
+
+    @finding_answer.finding.follow_up_date = Time.zone.today
+
+    assert !@finding_answer.requires_commitment_date?
+
+    @finding_answer.finding.follow_up_date = 1.day.ago
+
+    assert @finding_answer.requires_commitment_date?
+
+    Organization.current_id = nil
   end
 end

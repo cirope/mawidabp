@@ -5,7 +5,7 @@ class CommentTest < ActiveSupport::TestCase
   fixtures :comments
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @comment = Comment.find comments(:comment_one).id
   end
 
@@ -24,9 +24,8 @@ class CommentTest < ActiveSupport::TestCase
     assert_difference 'Comment.count' do
       @comment = Comment.new(
         :comment => 'New comment',
-        :commentable => findings(
-          :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification),
-        :user => users(:administrator_user)
+        :commentable => findings(:unconfirmed_for_notification_weakness),
+        :user => users(:administrator)
       )
 
       assert @comment.save, @comment.errors.full_messages.join('; ')

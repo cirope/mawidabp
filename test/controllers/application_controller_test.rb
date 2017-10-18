@@ -3,9 +3,9 @@ require 'test_helper'
 class ApplicationControllerTest < ActionController::TestCase
   fixtures :users, :organizations
 
-  def setup
+  setup do
     @controller.send(:reset_session)
-    @controller.send(:session)[:user_id] = users(:administrator_user).id
+    @controller.send(:session)[:user_id] = users(:administrator).id
     @controller.send(:session)[:last_access] = 30.seconds.ago
     @controller.send('response=', @response)
     @controller.send('request=', @request)
@@ -16,7 +16,7 @@ class ApplicationControllerTest < ActionController::TestCase
   test 'sucess login check function' do
     assert session[:user_id]
 
-    User.find(users(:administrator_user).id).update_attribute(:logged_in, true)
+    User.find(users(:administrator).id).update_attribute(:logged_in, true)
 
     assert @controller.send(:login_check)
     assert @controller.instance_variable_defined?(:@auth_user)
@@ -26,12 +26,12 @@ class ApplicationControllerTest < ActionController::TestCase
   test 'failed login check function' do
     assert session[:user_id]
 
-    User.find(users(:administrator_user).id).update_attribute(:enable, false)
+    User.find(users(:administrator).id).update_attribute(:enable, false)
     assert !@controller.send(:login_check)
   end
 
   test 'sucess auth function' do
-    User.find(users(:administrator_user).id).update_attribute(:logged_in, true)
+    User.find(users(:administrator).id).update_attribute(:logged_in, true)
 
     assert @controller.send(:auth)
     assert @controller.instance_variable_defined?(:@action_privileges)
@@ -189,7 +189,7 @@ class ApplicationControllerTest < ActionController::TestCase
   private
 
   def login_admin
-    User.find(users(:administrator_user).id).update_attribute(:logged_in, true)
+    User.find(users(:administrator).id).update_attribute(:logged_in, true)
 
     assert @controller.send(:auth)
   end

@@ -1,0 +1,14 @@
+<div id="current_situation_filter" class="filter" <%= 'style="display: none;"' unless display %>>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <% selected = params[action] ? params[action][:finding_current_situation_verified] : nil %>
+        <% options = %w(yes no).map { |option| [t("label.#{option}"), option] } %>
+        <%= f.label :finding_current_situation_verified, Weakness.human_attribute_name('current_situation_verified'), class: 'col-md-3' %>
+        <div class="col-md-9">
+          <%= f.select :finding_current_situation_verified, options, { selected: selected, include_blank: t('helpers.select.prompt') }, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

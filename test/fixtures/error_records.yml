@@ -1,17 +1,17 @@
-administrator_user_failed_attempt:
+administrator_failed_attempt:
   data: Usefull data from administrator user
   error: 1
-  user: administrator_user
+  user: administrator
   organization: cirope
 
-bare_user_failed_attempt:
+bare_failed_attempt:
   data: Usefull data from bare user
   error: 1
-  user: bare_user
+  user: bare
   organization: cirope
 
-wrong_user_failed_attempt:
-  data: "U:[wrong_user]"
+wrong_failed_attempt:
+  data: "U:[wrong]"
   error: 1
   user:
   organization: cirope

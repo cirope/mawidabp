@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class EMailTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @email = e_mails :urgent_email
   end
 

@@ -5,7 +5,7 @@ class PrivilegeTest < ActiveSupport::TestCase
   fixtures :privileges, :roles
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @privilege = Privilege.find privileges(:admin_administration_settings).id
     @privilege.role.inject_auth_privileges(Hash.new(Hash.new(true)))
   end

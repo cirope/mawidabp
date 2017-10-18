@@ -1,6 +1,7 @@
 class ReviewsController < ApplicationController
   include AutoCompleteFor::ProcessControl
   include AutoCompleteFor::Tagging
+  include SearchableByTag
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
@@ -15,14 +16,21 @@ class ReviewsController < ApplicationController
   # * GET /reviews
   def index
     @title = t 'review.index_title'
+    scope  = Review.list.
+      includes(:period, :tags, { plan_item: :business_unit }).
+      references(:periods)
+
+    tagged_reviews = build_tag_search_for scope
 
     build_search_conditions Review
 
-    @reviews = Review.list.includes(
-      :period, :tags, { plan_item: :business_unit }
-    ).where(@conditions).reorder(identification: :desc).page(
-      params[:page]
-    ).references(:periods)
+    reviews = @columns == ['tags'] ? scope.none : scope.where(@conditions)
+    order = @order_by || "#{Period.quoted_table_name}.#{Period.qcn 'name'} DESC"
+
+    @reviews = tagged_reviews.
+      or(reviews).
+      reorder(order).
+      page(params[:page])
 
     respond_to do |format|
       format.html
@@ -343,7 +351,7 @@ class ReviewsController < ApplicationController
     def review_params
       params.require(:review).permit(
         :identification, :description, :survey, :period_id, :plan_item_id,
-        :lock_version,
+        :scope, :risk_exposure, :manual_score, :include_sox, :lock_version,
         file_model_attributes: [:id, :file, :file_cache, :_destroy],
         finding_review_assignments_attributes: [
           :id, :finding_id, :_destroy, :lock_version

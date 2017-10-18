@@ -60,7 +60,7 @@ module Users::Releases
 
     def notify_release_changes
       if reallocation_errors.empty? && _items_for_notification.present?
-        Notifier.changes_notification(
+        NotifierMailer.changes_notification(
           self,
           title: I18n.t('user.responsibility_release.title'),
           content: _items_for_notification,

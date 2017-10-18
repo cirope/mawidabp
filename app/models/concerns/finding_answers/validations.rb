@@ -3,7 +3,7 @@ module FindingAnswers::Validations
 
   included do
     validates :finding_id, :answer, presence: true
-    validates :answer, :auditor_comments, pdf_encoding: true
+    validates :answer, pdf_encoding: true
     validates :commitment_date, timeliness: { type: :date }, allow_blank: true
     validates :commitment_date, presence: true, if: :commitment_date_should_be_present?
   end
@@ -15,8 +15,7 @@ module FindingAnswers::Validations
         Organization.find(Organization.current_id)
 
       user&.can_act_as_audited? &&
-        finding&.pending? &&
-        finding.commitment_date.blank? &&
+        requires_commitment_date? &&
         current_organization &&
         !current_organization.corporate?
     end

@@ -8,6 +8,7 @@
     <tr>
       <%= make_filterable_column Poll.human_attribute_name('user'), nil, 'name', 'last_name' %>
       <%= make_filterable_column Poll.human_attribute_name('questionnaire'), nil, 'questionnaire_name' %>
+      <%= make_not_available_column Poll.human_attribute_name('pollable'), class: 'hidden-xs hidden-sm hidden-md' %>
       <%= make_not_available_column Poll.human_attribute_name('affected_user'), class: 'hidden-xs hidden-sm' %>
       <%= make_filterable_column Poll.human_attribute_name('answered'), { class: 'hidden-xs' }, 'answered' %>
       <%= make_not_available_column Poll.human_attribute_name('send_date'), class: 'hidden-xs hidden-sm' %>
@@ -21,6 +22,7 @@
       <tr>
         <td><%= poll.user.informal_name %></td>
         <td><%= poll.questionnaire.name %></td>
+        <td class="hidden-xs hidden-sm hidden-md"><%= poll.conclusion_review&.review&.identification || '-' %></td>
         <td class="hidden-xs hidden-sm"><%= poll.affected_user&.informal_name || t('label.all') %></td>
         <td class="hidden-xs"><%= t_boolean poll.answered %></td>
         <td class="hidden-xs hidden-sm"><%= l poll.created_at.to_date, format: :minimal %></td>

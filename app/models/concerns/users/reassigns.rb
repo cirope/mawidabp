@@ -62,7 +62,10 @@ module Users::Reassigns
 
     def reassign_pending_reviews_to other
       review_user_assignments.each do |rua|
-        unless rua.review.has_final_review?
+        is_editable = !rua.review.has_final_review?
+        other_is_not_included = rua.review.users.exclude? other
+
+        if is_editable && other_is_not_included
           _unconfirmed_findings.concat unconfirmed_findings_in_review(rua.review)
           _reassigned_reviews << mini_review_description_for(rua.review)
 
@@ -94,7 +97,7 @@ module Users::Reassigns
     end
 
     def send_reassign_mail other
-      Notifier.changes_notification(
+      NotifierMailer.changes_notification(
         [other, self],
         title:         mail_title_for_reassign,
         body:          mail_body_from_reviews,
@@ -166,7 +169,7 @@ module Users::Reassigns
     end
 
     def notify_unconfirmed_findings_to other
-      Notifier.changes_notification(
+      NotifierMailer.changes_notification(
         other,
         title: mail_title_for_unconfirmed_findings,
         content: mail_content_for_unconfirmed_findings,

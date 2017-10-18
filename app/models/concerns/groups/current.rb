@@ -8,19 +8,19 @@ module Groups::Current
 
   module ClassMethods
     def current_id
-      Thread.current[:current_group_id]
+      RequestStore.store[:current_group_id]
     end
 
     def current_id= group_id
-      Thread.current[:current_group_id] = group_id
+      RequestStore.store[:current_group_id] = group_id
     end
 
     def corporate_ids
-      Thread.current[:corporate_ids]
+      RequestStore.store[:corporate_ids]
     end
 
     def corporate_ids= corporate_ids
-      Thread.current[:corporate_ids] = corporate_ids
+      RequestStore.store[:corporate_ids] = corporate_ids
     end
   end
 

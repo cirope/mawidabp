@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Users::StatusControllerTest < ActionController::TestCase
   setup do
-    @user = users :administrator_user
+    @user = users :administrator
 
     login
   end

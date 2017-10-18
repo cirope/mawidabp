@@ -35,7 +35,7 @@ es:
         port: 'Por ejemplo: 389'
         basedn: 'CN=Users,DC=dominio,DC=com'
         filter: 'CN=*'
-        login_mask: '%{user}@dominio.com, Dominio\%{user} o %{user},%{basedn}'
+        login_mask: '&#37;{user}@dominio.com, Dominio\&#37;{user} o &#37;{user},&#37;{basedn}'
         username_attribute: 'Por ejemplo: samaccountname'
         name_attribute: 'Por ejemplo: givenname'
         last_name_attribute: 'Por ejemplo: sn'

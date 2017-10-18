@@ -72,7 +72,7 @@ module Reports::WeaknessesByAuditType
                     o_count.to_f / total_oportunities * 100 : 0.0
 
                   oportunities_table_data << [
-                    "<b>#{t("finding.status_#{s[0]}")}</b>",
+                    "<b>#{t("findings.state.#{s[0]}")}</b>",
                     "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
                   ]
                 end

@@ -11,14 +11,20 @@ module Polls::Reports
 
   def polls_calification polls
     count = total = 0
+
     polls_answered(polls).each do |poll|
       poll.answers.each do |answer|
         if answer.answer_option.present?
-          count += Question::ANSWER_OPTION_VALUES[answer.answer_option.option.to_sym]
-          total += 1
+          value  = Question::ANSWER_OPTION_VALUES[answer.answer_option.option.to_sym]
+
+          if value >= 0
+            count += value
+            total += 1
+          end
         end
       end
     end
+
     total == 0 ? 0 : (count / total).round
   end
 

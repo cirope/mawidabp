@@ -31,7 +31,7 @@ module Findings::Unconfirmed
             end
           end
 
-          users.each { |user| Notifier.stale_notification(user).deliver_later }
+          users.each { |user| NotifierMailer.stale_notification(user).deliver_later }
         end
       end
     end

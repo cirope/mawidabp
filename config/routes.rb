@@ -161,7 +161,7 @@ Rails.application.routes.draw do
     resources :findings, except: [:destroy] do
       resources :costs
 
-      get :follow_up_pdf, on: :member
+      get :follow_up_pdf, on: :member, to: 'findings/follow_up_pdf#show'
 
       collection do
         get :export_to_pdf
@@ -259,7 +259,6 @@ Rails.application.routes.draw do
     end
 
     member do
-      get :follow_up_pdf
       patch :undo_reiteration
     end
   end
@@ -307,7 +306,6 @@ Rails.application.routes.draw do
     resources :costs
 
     member do
-      get :follow_up_pdf
       patch :undo_reiteration
     end
 

@@ -5,7 +5,7 @@ class GroupTest < ActiveSupport::TestCase
   fixtures :groups
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @group = Group.find groups(:main_group).id
   end
 
