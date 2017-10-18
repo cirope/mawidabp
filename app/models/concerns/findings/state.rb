@@ -53,7 +53,8 @@ module Findings::State
       end
 
       def final_status
-        [STATUS[:implemented_audited], STATUS[:assumed_risk], STATUS[:revoked]] |
+        [STATUS[:implemented_audited], STATUS[:assumed_risk]] |
+          (HIDE_FINDING_REVOKED ? [] : [STATUS[:revoked]]) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [STATUS[:criteria_mismatch]])
       end
 
@@ -86,7 +87,7 @@ module Findings::State
 
       def confirmed_transitions final
         [:confirmed, :unanswered, :being_implemented, :implemented, :implemented_audited, :assumed_risk] |
-          (final ? [] : [:revoked]) |
+          (final || HIDE_FINDING_REVOKED ? [] : [:revoked]) |
           (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
       end
@@ -97,26 +98,26 @@ module Findings::State
 
       def unanswered_transitions final
         [:unanswered, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :repeated] |
-          (final ? [] : [:revoked]) |
+          (final || HIDE_FINDING_REVOKED ? [] : [:revoked]) |
           (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
       end
 
       def awaiting_transitions final
         [:awaiting, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :repeated] |
-          (final ? [] : [:revoked]) |
+          (final || HIDE_FINDING_REVOKED ? [] : [:revoked]) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
       end
 
       def being_implemented_transitions final
         [:being_implemented, :implemented, :implemented_audited, :assumed_risk, :repeated] |
-          (final ? [] : [:revoked]) |
+          (final || HIDE_FINDING_REVOKED ? [] : [:revoked]) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
       end
 
       def implemented_transitions final
         [:implemented, :being_implemented, :implemented_audited, :assumed_risk, :repeated] |
-          (final ? [] : [:revoked]) |
+          (final || HIDE_FINDING_REVOKED ? [] : [:revoked]) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
       end
 
@@ -130,14 +131,14 @@ module Findings::State
 
       def notify_transitions final
         [:notify, :incomplete, :confirmed, :being_implemented, :implemented, :implemented_audited, :assumed_risk] |
-          (final ? [] : [:revoked]) |
+          (final || HIDE_FINDING_REVOKED ? [] : [:revoked]) |
           (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
       end
 
       def incomplete_transitions final
         [:incomplete, :notify, :being_implemented, :implemented, :implemented_audited, :assumed_risk] |
-          (final ? [] : [:revoked]) |
+          (final || HIDE_FINDING_REVOKED ? [] : [:revoked]) |
           (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
       end
