@@ -57,7 +57,7 @@ module FindingsHelper
 
   def show_review_with_conclusion_status_as_abbr review
     review_data = if review.has_final_review?
-                    t 'review.with_final_review'
+                    "#{t 'review.with_final_review'} | #{summary_for review}"
                   else
                     t 'review.without_final_review'
                   end
@@ -288,5 +288,11 @@ module FindingsHelper
           options.merge(new_option => true).to_json
         ]
       end
+    end
+
+    def summary_for review
+      summary = review.conclusion_final_review.summary || '-'
+
+      "#{ConclusionReview.human_attribute_name 'summary'}: #{summary}"
     end
 end
