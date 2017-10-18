@@ -596,6 +596,24 @@ class ReviewTest < ActiveSupport::TestCase
     }
   end
 
+  test 'recode findings by risk' do
+    codes = @review.weaknesses.not_revoked.
+      order(risk: :desc, review_code: :asc).pluck 'review_code'
+
+    assert codes.each_with_index.any? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i != i.next
+    }
+
+    @review.recode_weaknesses_by_risk
+
+    codes = @review.reload.weaknesses.not_revoked.
+      order(risk: :desc, review_code: :asc).pluck 'review_code'
+
+    assert codes.sort.each_with_index.all? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i == i.next
+    }
+  end
+
   private
 
     def clone_finding_user_assignments(finding)

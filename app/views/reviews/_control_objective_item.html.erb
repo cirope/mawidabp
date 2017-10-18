@@ -37,7 +37,7 @@
         <% end %>
         <% if control_objective_item.weaknesses.exists? %>
           <ul>
-            <% control_objective_item.weaknesses.each do |weakness| %>
+            <% control_objective_item.weaknesses.order(:review_code).each do |weakness| %>
               <li>
                 <span class="text-danger">
                   <%= [weakness.review_code, weakness.title].compact.join(' - ') %>

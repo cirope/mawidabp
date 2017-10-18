@@ -357,6 +357,14 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_redirected_to review_url(reviews(:review_without_conclusion))
   end
 
+  test 'recode findings by risk' do
+    login
+
+    patch :recode_findings_by_risk, params: { id: reviews(:review_without_conclusion).id }
+
+    assert_redirected_to review_url(reviews(:review_without_conclusion))
+  end
+
   test 'auto complete for control objectives' do
     login
     get :auto_complete_for_control_objective, params: {
