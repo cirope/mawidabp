@@ -74,6 +74,18 @@
       <%= simple_format weakness.answer %>
     </div>
 
+    <% if SHOW_FINDING_CURRENT_SITUATION %>
+      <div>
+        <strong><%= Finding.human_attribute_name 'current_situation' %></strong>:
+        <%= simple_format weakness.current_situation %>
+      </div>
+
+      <div>
+        <strong><%= Finding.human_attribute_name 'current_situation_verified' %></strong>:
+        <%= t "label.#{weakness.current_situation_verified ? 'yes' : 'no'}" %>
+      </div>
+    <% end %>
+
     <p>
       <strong><%= Weakness.human_attribute_name 'follow_up_date' %>:</strong>
       <%= l weakness.follow_up_date, format: :long if weakness.follow_up_date %>

@@ -7,8 +7,9 @@
 
   <div class="panel-body">
     <%= simple_form_for action_name, url: url, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
-      <% filters = %w(review finding risk_levels priority process_control control_objective tags user) %>
+      <% filters = %w(review finding risk_levels priority current_situation process_control control_objective tags user) %>
       <% filters = filters - ['priority'] if HIDE_WEAKNESS_PRIORITY %>
+      <% filters = filters - ['current_situation'] unless SHOW_FINDING_CURRENT_SITUATION %>
       <% filters.each do |filter_name| %>
         <%= render "shared/filters/#{filter_name}", f: f, display: true, action: action_name %>
       <% end %>
