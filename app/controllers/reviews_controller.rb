@@ -25,10 +25,11 @@ class ReviewsController < ApplicationController
     build_search_conditions Review
 
     reviews = @columns == ['tags'] ? scope.none : scope.where(@conditions)
+    order = @order_by || "#{Period.quoted_table_name}.#{Period.qcn 'name'} DESC"
 
     @reviews = tagged_reviews.
       or(reviews).
-      reorder(identification: :desc).
+      reorder(order).
       page(params[:page])
 
     respond_to do |format|
