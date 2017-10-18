@@ -18,7 +18,7 @@
     <ul>
       <li>
         <%= content_tag :span, control_objective_item.control_objective_text,
-          :class => ('strike text-muted' if control_objective_item.finished) %>
+          :class => review_control_objective_class(control_objective_item) %>
         <% if !readonly %>
           <span class="text-muted">|</span>
           <%= link_to_move %>
