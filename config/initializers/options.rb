@@ -1,3 +1,11 @@
+CONCLUSION_OPTIONS = [
+  'Satisfactorio',
+  'Satisfactorio con salvedades',
+  'Necesita mejorar',
+  'No satisfactorio',
+  'No aplica'
+]
+
 REVIEW_SCOPES = [
   'Auditorías/Seguimiento',
   'Trabajo especial',

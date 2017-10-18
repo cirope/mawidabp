@@ -67,7 +67,7 @@
         <% end %>
         <%= yield :sustantive_tests %>
 
-        <% if SHOW_CONTROL_OBJECTIVE_ITEM_AUDITOR_COMMENT_AS_OPTIONS %>
+        <% if SHOW_CONCLUSION_AS_OPTIONS %>
           <%= f.input :auditor_comment, collection: auditor_comment_options,
             prompt: true, input_html: { readonly: readonly } %>
         <% else %>

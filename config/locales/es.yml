@@ -408,12 +408,6 @@
     not_rated: "No evaluado"
     excluded_from_score: "No se tiene en cuenta en la calificación del informe"
     not_applicable: "No aplica"
-    auditor_comments:
-      satisfactory: "Satisfactorio"
-      satisfactory_with_caveats: "Satisfactorio con salvedades"
-      needs_improvement: "Necesita mejorar"
-      dissatisfactory: "No satisfactorio"
-      not_applicable: "No aplica"
     errors:
       not_finished: "no está terminado"
       without_score: "sin calificar"
