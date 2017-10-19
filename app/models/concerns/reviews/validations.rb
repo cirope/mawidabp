@@ -6,7 +6,7 @@ module Reviews::Validations
     validates :description, presence: true, unless: -> { HIDE_REVIEW_DESCRIPTION }
     validates :identification,
       length:     { maximum: 255 },
-      format:     { with: /\A\w[\w\s-]*\z/ }, allow_nil: true, allow_blank: true,
+      format:     { with: /\A\w([\w\s-]|\/)*\z/ }, allow_nil: true, allow_blank: true,
       uniqueness: { case_sensitive: false, scope: :organization_id }
     validates :identification, :description, :survey, pdf_encoding: true
     validates :plan_item_id, uniqueness: { case_sensitive: false }

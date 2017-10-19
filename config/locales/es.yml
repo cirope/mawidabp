@@ -1349,12 +1349,17 @@
           attributes:
             control_objectives:
               locked: "no pueden ser eliminados, ya se utilizaron en al menos un informe"
+        question:
+          attributes:
+            question:
+              answered: 'No se pudo actualizar, la pregunta ya tiene respuestas'
         review:
           attributes:
             review_user_assignments:
-              invalid: "debe tener al menos un auditor, un gerente y un auditado o un auditor, un supervisor y un auditado"
+              invalid: "debe tener al menos un supervisor o gerente, un auditor y un auditado"
             plan_item:
               invalid: "debe tener una unidad de negocio asignada en la planificación"
+              required: "debe seleccionar uno"
         review_user_assignment:
           attributes:
             user_id:

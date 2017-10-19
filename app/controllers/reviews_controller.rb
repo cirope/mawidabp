@@ -354,6 +354,11 @@ class ReviewsController < ApplicationController
     redirect_to @review, notice: t('review.findings_recoded')
   end
 
+  # * GET /reviews/next_identification_number
+  def next_identification_number
+    @next_number = Review.next_identification_number params[:prefix], params[:suffix]
+  end
+
   private
 
     def review_params
@@ -411,6 +416,7 @@ class ReviewsController < ApplicationController
         auto_complete_for_process_control: :read,
         auto_complete_for_tagging: :read,
         estimated_amount: :read,
+        next_identification_number: :read,
         recode_findings: :modify,
         recode_findings_by_risk: :modify
       )

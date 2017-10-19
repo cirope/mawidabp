@@ -116,4 +116,15 @@ module ReviewsHelper
 
     html_classes.join(' ')
   end
+
+  def review_year_suffixes
+    year  = Time.zone.today.year
+    years = []
+
+    years << year.pred if Time.zone.today.month <= 2
+    years << year
+    years << year.next if Time.zone.today.month >= 10
+
+    years
+  end
 end
