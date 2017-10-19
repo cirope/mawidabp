@@ -27,12 +27,4 @@ class ConclusionReview < ApplicationRecord
   def has_final_review?
     review&.has_final_review?
   end
-
-  def findings
-    if kind_of? ConclusionFinalReview
-      review.final_weaknesses + review.final_oportunities
-    else
-      review.weaknesses + review.oportunities
-    end
-  end
 end
