@@ -6,7 +6,7 @@ CONCLUSION_OPTIONS = [
   'No aplica'
 ]
 
-REVIEW_AUTOMATIC_PREFIXES = %w(AS AC)
+REVIEW_AUTOMATIC_PREFIXES = %w(AP AC AS AF AZ MC)
 
 REVIEW_SCOPES = [
   'Auditorías/Seguimiento',
