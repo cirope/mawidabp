@@ -5,7 +5,7 @@
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_oportunity, only: [
-    :show, :edit, :update, :follow_up_pdf, :undo_reiteration
+    :show, :edit, :update, :undo_reiteration
   ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
@@ -77,8 +77,10 @@
   def new
     @title = t 'oportunity.new_title'
     @oportunity = Oportunity.new(
-      { :control_objective_item_id => params[:control_objective_item] }, true
+      :control_objective_item_id => params[:control_objective_item]
     )
+
+    @oportunity.import_users
 
     respond_to do |format|
       format.html # new.html.erb
@@ -133,15 +135,6 @@
     redirect_to :action => :edit
   end
 
-  # Crea el documento de seguimiento de la oportunidad
-  #
-  # * GET /oportunities/follow_up_pdf/1
-  def follow_up_pdf
-    @oportunity.follow_up_pdf(current_organization)
-
-    redirect_to @oportunity.relative_follow_up_pdf_path
-  end
-
   # Deshace la reiteración de la oportunidad
   #
   # * PATCH /oportunities/undo_reiteration/1
@@ -176,7 +169,7 @@
           file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_answers_attributes: [
-          :answer, :auditor_comments, :commitment_date, :user_id,
+          :answer, :commitment_date, :user_id,
           :notify_users, :_destroy, file_model_attributes: [:file, :file_cache]
         ],
         finding_relations_attributes: [
@@ -190,7 +183,6 @@
 
     def load_privileges
       @action_privileges.update(
-        :follow_up_pdf => :read,
         :auto_complete_for_tagging => :read,
         :auto_complete_for_finding_relation => :read,
         :auto_complete_for_control_objective_item => :read,

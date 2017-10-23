@@ -3,7 +3,7 @@ require 'test_helper'
 class OrganizationTest < ActiveSupport::TestCase
   fixtures :organizations
 
-  def setup
+  setup do
     @organization = organizations :cirope
 
     set_organization

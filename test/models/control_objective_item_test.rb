@@ -6,17 +6,16 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   include ActionDispatch::TestProcess
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     set_organization
 
     @control_objective_item = ControlObjectiveItem.find control_objective_items(
-      :bcra_A4609_security_management_responsible_dependency_item_editable).id
+      :management_dependency_item_editable).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
-    retrived_coi = control_objective_items(
-      :bcra_A4609_security_management_responsible_dependency_item_editable)
+    retrived_coi = control_objective_items(:management_dependency_item_editable)
     assert_kind_of ControlObjectiveItem, @control_objective_item
     assert_equal retrived_coi.control_objective_text,
       @control_objective_item.control_objective_text
@@ -43,7 +42,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
         :audit_date => 10.days.from_now.to_date,
         :auditor_comment => 'New comment',
         :control_objective_id =>
-          control_objectives(:iso_27000_security_organization_4_1).id,
+          control_objectives(:organization_security_4_1).id,
         :review_id => reviews(:review_with_conclusion).id,
         :control_attributes => {
           :control => 'New control',
@@ -73,7 +72,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     end
 
     control_objective_item = control_objective_items(
-      :iso_27000_security_organization_4_3_item_editable_without_findings
+      :organization_security_4_3_item_editable_without_findings
     )
 
     # Sin observaciones es posible eliminar
@@ -95,7 +94,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @control_objective_item.control_objective_id = control_objective_items(
-      :bcra_A4609_data_proccessing_impact_analisys_item_editable).control_objective_id
+      :impact_analysis_item_editable).control_objective_id
 
     assert @control_objective_item.invalid?
     assert_error @control_objective_item, :control_objective_id, :taken
@@ -103,15 +102,11 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
-    @control_objective_item.control_objective_id = '?nil'
-    @control_objective_item.review_id = '?123'
     @control_objective_item.relevance = '?123'
     @control_objective_item.audit_date = '?123'
     @control_objective_item.finished = false
 
     assert @control_objective_item.invalid?
-    assert_error @control_objective_item, :control_objective_id, :not_a_number
-    assert_error @control_objective_item, :review_id, :not_a_number
     assert_error @control_objective_item, :relevance, :not_a_number
     assert_error @control_objective_item, :audit_date, :invalid_date
   end
@@ -221,14 +216,17 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     @control_objective_item.finished = true
 
     assert @control_objective_item.invalid?
-    assert_error @control_objective_item, :design_score, :blank
-    assert_error @control_objective_item, :compliance_score, :blank
-    assert_error @control_objective_item, :sustantive_score, :blank
     assert_error @control_objective_item, :audit_date, :blank
     assert_error @control_objective_item, :relevance, :blank
     assert_error @control_objective_item.control, :effects, :blank
     assert_error @control_objective_item.control, :control, :blank
     assert_error @control_objective_item, :auditor_comment, :blank
+
+    unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
+      assert_error @control_objective_item, :design_score, :blank
+      assert_error @control_objective_item, :compliance_score, :blank
+      assert_error @control_objective_item, :sustantive_score, :blank
+    end
 
     @control_objective_item.design_score = 0
 
@@ -276,15 +274,17 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
-    @control_objective_item.reload
-    @control_objective_item.design_score = nil
-    @control_objective_item.compliance_score = nil
-    @control_objective_item.sustantive_score = nil
-    assert !@control_objective_item.must_be_approved?
-    assert_equal 1, @control_objective_item.approval_errors.size
+    unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
+      @control_objective_item.reload
+      @control_objective_item.design_score = nil
+      @control_objective_item.compliance_score = nil
+      @control_objective_item.sustantive_score = nil
+      assert !@control_objective_item.must_be_approved?
+      assert_equal 1, @control_objective_item.approval_errors.size
 
-    @control_objective_item.exclude_from_score = true
-    assert @control_objective_item.must_be_approved?
+      @control_objective_item.exclude_from_score = true
+      assert @control_objective_item.must_be_approved?
+    end
 
     @control_objective_item.reload
     @control_objective_item.finished = false
@@ -301,21 +301,25 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
-    @control_objective_item.reload
-    @control_objective_item.control.compliance_tests = '  '
-    assert !@control_objective_item.must_be_approved?
-    assert_equal 1, @control_objective_item.approval_errors.size
+    unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
+      @control_objective_item.reload
+      @control_objective_item.control.compliance_tests = '  '
+      assert !@control_objective_item.must_be_approved?
+      assert_equal 1, @control_objective_item.approval_errors.size
+    end
 
     @control_objective_item.reload
     @control_objective_item.auditor_comment = '  '
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
-    @control_objective_item.reload
-    assert @control_objective_item.design_score
-    @control_objective_item.control.design_tests = '  '
-    assert !@control_objective_item.must_be_approved?
-    assert_equal 1, @control_objective_item.approval_errors.size
+    unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
+      @control_objective_item.reload
+      assert @control_objective_item.design_score
+      @control_objective_item.control.design_tests = '  '
+      assert !@control_objective_item.must_be_approved?
+      assert_equal 1, @control_objective_item.approval_errors.size
+    end
 
     @control_objective_item.reload
     @control_objective_item.design_score = nil
@@ -329,8 +333,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
   test 'can be modified' do
     uneditable_control_objective_item = ControlObjectiveItem.find(
-      control_objective_items(
-        :bcra_A4609_security_management_responsible_dependency_item).id)
+      control_objective_items(:management_dependency_item).id)
 
     @control_objective_item.control_objective_text = 'Updated text'
 
@@ -356,8 +359,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
   test 'work papers can be added to uneditable control objectives' do
     uneditable_control_objective_item = ControlObjectiveItem.find(
-      control_objective_items(
-        :bcra_A4609_security_management_responsible_dependency_item).id)
+      control_objective_items(:management_dependency_item).id)
 
     assert_no_difference 'ControlObjectiveItem.count' do
       assert_difference 'WorkPaper.count' do
@@ -381,7 +383,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
   test 'work papers can not be added to uneditable and closed control objectives' do
     uneditable_control_objective_item = ControlObjectiveItem.find(
-      control_objective_items(:iso_27000_security_policy_3_1_item).id)
+      control_objective_items(:security_policy_3_1_item).id)
 
     assert_no_difference ['ControlObjectiveItem.count', 'WorkPaper.count'] do
       assert_raise(RuntimeError) do

@@ -1,0 +1,6 @@
++function () {
+  var identification = '<%= params[:prefix] %>-<%= @next_number %>/<%= params[:suffix] %>'
+
+  $('[name="review[identification_number]"]').val('<%= @next_number %>')
+  $('[name="review[identification]"]').val(identification)
+}()

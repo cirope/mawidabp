@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class QuestionnaireTest < ActiveSupport::TestCase
-  def setup
+  setup do
     set_organization
 
     @questionnaire = questionnaires :questionnaire_one

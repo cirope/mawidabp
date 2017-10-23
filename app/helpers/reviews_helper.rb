@@ -58,7 +58,7 @@ module ReviewsHelper
   def next_review_work_paper_code(review)
     code_prefix = t('code_prefixes.work_papers_in_control_objectives')
 
-    review ? review.last_control_objective_work_paper_code(code_prefix) :
+    review ? review.last_control_objective_work_paper_code(prefix: code_prefix) :
       "#{code_prefix} 0".strip
   end
 
@@ -88,5 +88,43 @@ module ReviewsHelper
     link_to suggested_process_control_findings_review_path(process_control.id), options do
       content_tag :span, nil, class: 'glyphicon glyphicon-eye-open'
     end
+  end
+
+  def review_scope_options
+    REVIEW_SCOPES.map { |scope| [scope, scope] }
+  end
+
+  def review_risk_exposure_options
+    REVIEW_RISK_EXPOSURE.map { |exposure| [exposure, exposure] }
+  end
+
+  def review_include_sox_options
+    %w(yes no).map { |option| [t("label.#{option}"), option] }
+  end
+
+  def review_control_objective_class(control_objective_item)
+    html_classes = []
+
+    if control_objective_item.finished
+      html_classes << 'strike'
+      html_classes << 'text-muted'
+    end
+
+    if control_objective_item.exclude_from_score
+      html_classes << 'text-warning'
+    end
+
+    html_classes.join(' ')
+  end
+
+  def review_year_suffixes
+    year  = Time.zone.today.year
+    years = []
+
+    years << year.pred if Time.zone.today.month <= 2
+    years << year
+    years << year.next if Time.zone.today.month >= 10
+
+    years
   end
 end

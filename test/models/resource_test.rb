@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ResourceTest < ActiveSupport::TestCase
-  def setup
+  setup do
     set_organization
 
     @resource = resources :laptop_resource

@@ -18,6 +18,6 @@ module Parameters::Approach
   end
 
   def approach_label
-    I18n.t "approach_types.#{RELEVANCE_TYPES.invert[self.aproach]}"
+    I18n.t "approach_types.#{APPROACH_TYPES.invert[aproach]}"
   end
 end

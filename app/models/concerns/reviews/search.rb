@@ -6,8 +6,7 @@ module Reviews::Search
       period:         period_options,
       identification: identification_options,
       business_unit:  business_unit_options,
-      project:        project_options,
-      tags:           tags_options
+      project:        project_options
     }.with_indifferent_access
   end
 
@@ -27,11 +26,7 @@ module Reviews::Search
       end
 
       def project_options
-        string_column_options_for "#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'project'}"
-      end
-
-      def tags_options
-        string_column_options_for "#{Tag.quoted_table_name}.#{Tag.qcn 'name'}"
+        string_column_options_for "#{::PlanItem.quoted_table_name}.#{::PlanItem.qcn 'project'}"
       end
 
       def string_column_options_for column

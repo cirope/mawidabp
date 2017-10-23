@@ -5,7 +5,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
   fixtures :review_user_assignments
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @review_user_assignment = ReviewUserAssignment.find(review_user_assignments(
         :review_with_conclusion_auditor).id)
 
@@ -28,7 +28,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
       @review_user_assignment =
         ReviewUserAssignment.create(
         :assignment_type =>  ReviewUserAssignment::TYPES[:auditor],
-        :user => users(:expired_user),
+        :user => users(:expired),
         :review_id => reviews(:review_with_conclusion).id
       )
     end
@@ -119,7 +119,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     review_user_assignment = ReviewUserAssignment.find(
       review_user_assignments(:review_with_conclusion_audited).id)
     old_user = User.find review_user_assignment.user_id
-    review_user_assignment.user_id = users(:audited_second_user).id
+    review_user_assignment.user_id = users(:audited_second).id
     original_finding_ids = old_user.findings.all_for_reallocation_with_review(
       review_user_assignment.review).map(&:id).sort
 
@@ -151,7 +151,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     review_user_assignment = ReviewUserAssignment.find(
       review_user_assignments(:review_with_conclusion_audited).id)
     old_user = User.find review_user_assignment.user_id
-    new_user = User.find users(:administrator_second_user).id
+    new_user = User.find users(:administrator_second).id
     review_user_assignment.user = new_user
     original_finding_ids = old_user.findings.all_for_reallocation_with_review(
       review_user_assignment.review).map(&:id).sort
@@ -181,11 +181,11 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
   end
 
   test 'delete user in all review findings' do
-    review_user_assignment = ReviewUserAssignment.find(
-      review_user_assignments(:review_with_conclusion_auditor).id)
+    review_user_assignment = review_user_assignments(:review_with_conclusion_auditor)
+    findings = review_user_assignment.user.findings.
+      all_for_reallocation_with_review(review_user_assignment.review)
 
-    assert !review_user_assignment.user.findings.all_for_reallocation_with_review(
-      review_user_assignment.review).blank?
+    assert findings.present?
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -197,11 +197,10 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
       end
     end
 
-    assert review_user_assignment.user.reload.findings.all_for_reallocation_with_review(
-      review_user_assignment.review).blank?
+    assert findings.reload.blank?
   end
 
-  test 'try to delete the last audited user in a review with pending findings' do
+  test 'delete the last audited user in a review with pending findings' do
     review_user_assignment = review_user_assignments :review_with_conclusion_audited
     review = review_user_assignment.review
     user = review_user_assignment.user
@@ -211,8 +210,10 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
 
     findings.each do |finding|
       finding.finding_user_assignments.each do |fua|
-        if fua.user_id != user.id && fua.user.can_act_as_audited?
-          fua.destroy!
+        Finding.transaction do
+          fua.destroy! unless fua.user_id == user.id
+
+          raise ActiveRecord::Rollback unless finding.reload.valid?
         end
       end
     end
@@ -221,10 +222,8 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_no_difference 'ReviewUserAssignment.count' do
-      assert_no_difference 'ActionMailer::Base.deliveries.size' do
-        review_user_assignment.destroy
-      end
+    assert_difference 'ActionMailer::Base.deliveries.size' do
+      review_user_assignment.destroy!
     end
 
     assert_equal findings.size, findings.reload.size
@@ -234,7 +233,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     uneditable_review_user_assignment = ReviewUserAssignment.find(
       review_user_assignments(:current_review_auditor).id)
 
-    @review_user_assignment.user_id = users(:administrator_user).id
+    @review_user_assignment.user_id = users(:administrator).id
 
     assert !@review_user_assignment.is_in_a_final_review?
     assert @review_user_assignment.can_be_modified?
@@ -245,7 +244,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     # atributos
     assert uneditable_review_user_assignment.can_be_modified?
 
-    uneditable_review_user_assignment.user_id = users(:administrator_user).id
+    uneditable_review_user_assignment.user_id = users(:administrator).id
 
     # No puede ser actualizado porque se ha modificado un atributo
     assert !uneditable_review_user_assignment.can_be_modified?

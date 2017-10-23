@@ -25,23 +25,27 @@ class ActiveRecord::Base
   end
 
   def self.get_column_name(column)
-    self::COLUMNS_FOR_SEARCH[column][:column]
+    get_search_column(column)[:column]
   end
 
   def self.get_column_operator(column)
-    self::COLUMNS_FOR_SEARCH[column][:operator]
+    get_search_column(column)[:operator]
   end
 
   def self.get_column_mask(column)
-    self::COLUMNS_FOR_SEARCH[column][:mask]
+    get_search_column(column)[:mask]
   end
 
   def self.get_column_conversion_method(column)
-    self::COLUMNS_FOR_SEARCH[column][:conversion_method]
+    get_search_column(column)[:conversion_method]
   end
 
   def self.get_column_regexp(column)
-    self::COLUMNS_FOR_SEARCH[column][:regexp]
+    get_search_column(column)[:regexp]
+  end
+
+  def self.get_search_column(column)
+    self::COLUMNS_FOR_SEARCH[column] || {}
   end
 
   def self.allow_search_operator?(operator, column)

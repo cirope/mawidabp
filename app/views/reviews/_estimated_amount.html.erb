@@ -1,7 +1,8 @@
 <% unless plan_item.try(:resource_utilizations).blank? %>
-  <%= link_to "#{t('review.estimated_amount')}: #{'%.2f' % plan_item.units}", '#',
-    :onclick => "$('#estimated_cost_details').slideToggle(); return false;" %>
-  <div id="estimated_cost_details" style="display: none;">
+  <%= link_to "#{t('review.estimated_amount')}: #{'%.2f' % plan_item.units}", '#estimated_cost_details',
+    :data => { toggle: 'collapse' } %>
+
+  <div id="estimated_cost_details" class="collapse">
     <div>
       <ul>
         <% plan_item.resource_utilizations.each do |ru| %>

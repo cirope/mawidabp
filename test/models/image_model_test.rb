@@ -3,7 +3,7 @@ require 'test_helper'
 class ImageModelTest < ActiveSupport::TestCase
   fixtures :image_models
 
-  def setup
+  setup do
     @image_model = image_models :image_one
   end
 

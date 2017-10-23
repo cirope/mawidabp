@@ -25,8 +25,14 @@
         <%= f.input :summary %>
       </div>
       <div class="col-md-6">
-        <%= f.input :applied_procedures, input_html: { readonly: readonly, rows: 2 } %>
-        <%= f.input :conclusion, input_html: { readonly: readonly, rows: 2 } %>
+        <%= f.input :applied_procedures, input_html: { readonly: readonly, rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 2 } %>
+
+        <% if SHOW_CONCLUSION_AS_OPTIONS %>
+          <%= f.input :conclusion, collection: conclusion_options, prompt: true,
+            input_html: { disabled: readonly } %>
+        <% else %>
+          <%= f.input :conclusion, input_html: { readonly: readonly, rows: 2 } %>
+        <% end %>
         <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
         <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
       </div>
@@ -61,7 +67,7 @@
           var target = $('#conclusion_final_review_' + key);
 
           if($.inArray(key, elementsForUpdate) != -1) {
-            target.html(data[key] || '');
+            target.val(data[key] || '');
           }
         }
 

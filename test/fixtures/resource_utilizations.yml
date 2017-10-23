@@ -9,35 +9,35 @@ laptop_for_2_units_plan_item_1:
   units: 2
   resource_consumer_id: <%= ActiveRecord::FixtureSet.identify(:current_plan_item_1) %>
   resource_consumer_type: PlanItem
-  resource_id: <%= ActiveRecord::FixtureSet.identify(:bare_user) %>
+  resource_id: <%= ActiveRecord::FixtureSet.identify(:bare) %>
   resource_type: User
 
 developer_for_10_units_plan_item_2:
   units: 10
   resource_consumer_id: <%= ActiveRecord::FixtureSet.identify(:current_plan_item_2) %>
   resource_consumer_type: PlanItem
-  resource_id: <%= ActiveRecord::FixtureSet.identify(:first_time_user) %>
+  resource_id: <%= ActiveRecord::FixtureSet.identify(:first_time) %>
   resource_type: User
 
 auditor_for_20_units_workflow_item_1:
   units: 20
   resource_consumer_id: <%= ActiveRecord::FixtureSet.identify(:current_workflow_item_1) %>
   resource_consumer_type: WorkflowItem
-  resource_id: <%= ActiveRecord::FixtureSet.identify(:manager_user) %>
+  resource_id: <%= ActiveRecord::FixtureSet.identify(:manager) %>
   resource_type: User
 
 developer_for_10_units_workflow_item_2:
   units: 10
   resource_consumer_id: <%= ActiveRecord::FixtureSet.identify(:current_workflow_item_2) %>
   resource_consumer_type: WorkflowItem
-  resource_id: <%= ActiveRecord::FixtureSet.identify(:supervisor_user) %>
+  resource_id: <%= ActiveRecord::FixtureSet.identify(:supervisor) %>
   resource_type: User
 
 auditor_for_20_units_past_plan_item_1:
   units: 20
   resource_consumer_id: <%= ActiveRecord::FixtureSet.identify(:past_plan_item_1) %>
   resource_consumer_type: PlanItem
-  resource_id: <%= ActiveRecord::FixtureSet.identify(:bare_user) %>
+  resource_id: <%= ActiveRecord::FixtureSet.identify(:bare) %>
   resource_type: User
 
 laptop_for_2_units_past_plan_item_1:
@@ -51,12 +51,12 @@ auditor_for_20_units_with_conclusion_workflow_item_1:
   units: 20
   resource_consumer_id: <%= ActiveRecord::FixtureSet.identify(:with_conclusion_workflow_item_1) %>
   resource_consumer_type: WorkflowItem
-  resource_id: <%= ActiveRecord::FixtureSet.identify(:manager_user) %>
+  resource_id: <%= ActiveRecord::FixtureSet.identify(:manager) %>
   resource_type: User
 
 developer_for_10_units_with_conclusion_workflow_item_2:
   units: 10
   resource_consumer_id: <%= ActiveRecord::FixtureSet.identify(:with_conclusion_workflow_item_2) %>
   resource_consumer_type: WorkflowItem
-  resource_id: <%= ActiveRecord::FixtureSet.identify(:supervisor_user) %>
+  resource_id: <%= ActiveRecord::FixtureSet.identify(:supervisor) %>
   resource_type: User

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class AuthenticationTest < ActionController::TestCase
   setup do
-    @user = users :administrator_user
+    @user = users :administrator
     @organization = organizations :cirope
     @params = { user: @user.user, password: 'admin123' }
     Organization.current_id = @organization.id

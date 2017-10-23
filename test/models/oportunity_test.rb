@@ -1,118 +1,76 @@
 require 'test_helper'
 
-# Clase para probar el modelo "Oportunity"
 class OportunityTest < ActiveSupport::TestCase
-  fixtures :findings, :control_objective_items
+  setup do
+    @oportunity = findings :confirmed_oportunity
 
-  # Función para inicializar las variables utilizadas en las pruebas
-  def setup
     set_organization
-
-    @oportunity = Oportunity.find(
-      findings(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity).id)
   end
 
-  # Prueba que se realicen las búsquedas como se espera
-  test 'search' do
-    oportunity = findings(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity)
-    assert_kind_of Oportunity, @oportunity
-    assert_equal oportunity.control_objective_item_id,
-      @oportunity.control_objective_item_id
-    assert_equal oportunity.review_code, @oportunity.review_code
-    assert_equal oportunity.title, @oportunity.title
-    assert_equal oportunity.description, @oportunity.description
-    assert_equal oportunity.answer, @oportunity.answer
-    assert_equal oportunity.state, @oportunity.state
-  end
-
-  # Prueba la creación de una oportunidad
   test 'create' do
     assert_difference 'Oportunity.count' do
-      @oportunity = Oportunity.list.new(
-        :control_objective_item =>
-          control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
-        :review_code => 'OM20',
-        :title => 'Title',
-        :description => 'New description',
-        :answer => 'New answer',
-        :audit_comments => 'New audit comments',
-        :state => Finding::STATUS[:being_implemented],
-        :finding_user_assignments_attributes => {
-          :new_1 => {
-            :user_id => users(:bare_user).id, :process_owner => false
+      @oportunity = Oportunity.list.create!(
+        control_objective_item: control_objective_items(:impact_analysis_item_editable),
+        review_code: 'OM20',
+        title: 'Title',
+        description: 'New description',
+        answer: 'New answer',
+        audit_comments: 'New audit comments',
+        state: Finding::STATUS[:being_implemented],
+        finding_user_assignments_attributes: {
+          new_1: {
+            user_id: users(:audited).id, process_owner: false
           },
-          :new_2 => {
-            :user_id => users(:audited_user).id, :process_owner => false
+          new_2: {
+            user_id: users(:auditor).id, process_owner: false
           },
-          :new_3 => {
-            :user_id => users(:auditor_user).id, :process_owner => false
-          },
-          :new_4 => {
-            :user_id => users(:manager_user).id, :process_owner => false
-          },
-          :new_5 => {
-            :user_id => users(:supervisor_user).id, :process_owner => false
-          },
-          :new_6 => {
-            :user_id => users(:administrator_user).id, :process_owner => false
+          new_3: {
+            user_id: users(:supervisor).id, process_owner: false
           }
         }
       )
 
-      assert @oportunity.save, @oportunity.errors.full_messages.join('; ')
       assert_equal 'OM20', @oportunity.review_code
     end
+  end
 
+  test 'control objective from final review can not be used to create new oportunity' do
     assert_no_difference 'Oportunity.count' do
-      Oportunity.create(
-        :control_objective_item =>
-          control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
-        :review_code => 'OM20',
-        :title => 'Title',
-        :description => 'New description',
-        :answer => 'New answer',
-        :audit_comments => 'New audit comments',
-        :state => Finding::STATUS[:being_implemented],
-        :solution_date => 30.days.from_now.to_date,
-        :origination_date => 35.days.from_now.to_date,
-        :finding_user_assignments_attributes => {
-          :new_1 => {
-            :user_id => users(:bare_user).id, :process_owner => false
+      oportunity = Oportunity.list.create(
+        control_objective_item: control_objective_items(:impact_analysis_item),
+        review_code: 'OM20',
+        title: 'Title',
+        description: 'New description',
+        answer: 'New answer',
+        audit_comments: 'New audit comments',
+        state: Finding::STATUS[:being_implemented],
+        finding_user_assignments_attributes: {
+          new_1: {
+            user_id: users(:audited).id, process_owner: false
           },
-          :new_2 => {
-            :user_id => users(:audited_user).id, :process_owner => true
+          new_2: {
+            user_id: users(:auditor).id, process_owner: false
+          },
+          new_3: {
+            user_id: users(:supervisor).id, process_owner: false
           }
         }
       )
+
+      assert_includes oportunity.errors.full_messages, I18n.t('finding.readonly')
     end
   end
 
-  # Prueba de actualización de una oportunidad
-  test 'update' do
-    assert @oportunity.update(
-      :review_code => 'OM20', :description => 'Updated description'),
-      @oportunity.errors.full_messages.join('; ')
-    @oportunity.reload
-    assert_equal 'Updated description', @oportunity.description
-  end
-
-  # Prueba de eliminación de oportunidades
   test 'delete' do
-    # No se puede eliminar si está en un informe definitivo
-    assert_no_difference 'Oportunity.count' do
-      @oportunity.destroy
-    end
+    # On a final review, can not be destroyed
+    assert_no_difference('Oportunity.count') { @oportunity.destroy }
 
-    @oportunity = Oportunity.find(findings(
-        :bcra_A4609_data_proccessing_impact_analisys_editable_oportunity).id)
+    oportunity = findings :unconfirmed_oportunity
 
-    # Y tampoco se puede eliminar si NO está en un informe definitivo
-    assert_no_difference 'Oportunity.count', -1 do
-      @oportunity.destroy
-    end
+    # Without final review, also can not be destroyed =)
+    assert_no_difference('Oportunity.count') { oportunity.destroy }
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @oportunity.control_objective_item_id = nil
     @oportunity.review_code = '   '
@@ -120,20 +78,15 @@ class OportunityTest < ActiveSupport::TestCase
     assert @oportunity.invalid?
     assert_error @oportunity, :control_objective_item_id, :blank
     assert_error @oportunity, :review_code, :blank
-    assert_error @oportunity, :review_code, :invalid
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
-    another_oportunity = Oportunity.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id)
-    @oportunity.review_code = another_oportunity.review_code
+    oportunity = @oportunity.dup
 
-    assert @oportunity.invalid?
-    assert_error @oportunity, :review_code, :taken
+    assert oportunity.invalid?
+    assert_error oportunity, :review_code, :taken
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @oportunity.review_code = 'abcdd' * 52
     @oportunity.title = 'abcdd' * 52
@@ -143,7 +96,6 @@ class OportunityTest < ActiveSupport::TestCase
     assert_error @oportunity, :title, :too_long, count: 255
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates included attributes' do
     @oportunity.state = Finding::STATUS.values.sort.last.next
 
@@ -151,108 +103,133 @@ class OportunityTest < ActiveSupport::TestCase
     assert_error @oportunity, :state, :inclusion
   end
 
+  test 'validates well formated attributes' do
+    @oportunity.review_code = 'BAD_PREFIX_2'
+
+    assert @oportunity.invalid?
+    assert_error @oportunity, :review_code, :invalid
+  end
+
   test 'next code' do
-    assert_equal 'OM004', @oportunity.next_code
+    assert_equal 'OM003', @oportunity.next_code
   end
 
   test 'next work paper code' do
-    assert_equal 'PTOM 00', @oportunity.last_work_paper_code
+    assert_equal 'PTOM 000', @oportunity.last_work_paper_code
   end
 
   test 'review code is updated when control objective is changed' do
-    oportunity = Oportunity.find(findings(
-        :iso_27000_security_organization_4_2_item_editable_oportunity).id)
+    oportunity = findings :confirmed_oportunity_on_draft
 
-    assert oportunity.update(:control_objective_item_id =>
-        control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
+    assert_not_equal 'OM004', oportunity.review_code
+
+    oportunity.update!(
+      control_objective_item_id:
+        control_objective_items(:impact_analysis_item_editable).id
+    )
+
     assert_equal 'OM004', oportunity.review_code
   end
 
   test 'can not change to a control objective in a final review' do
-    oportunity = Oportunity.find(findings(
-        :iso_27000_security_organization_4_2_item_editable_oportunity).id)
+    oportunity = findings :confirmed_oportunity_on_draft
 
     assert_raise RuntimeError do
-      oportunity.update(:control_objective_item_id =>
-        control_objective_items(:iso_27000_security_policy_3_1_item).id)
+      oportunity.update(control_objective_item_id:
+        control_objective_items(:security_policy_3_1_item).id)
     end
   end
 
   test 'work paper codes are updated when control objective is changed' do
-    oportunity = Oportunity.find(findings(
-        :iso_27000_security_organization_4_2_item_editable_oportunity).id)
+    oportunity = findings :confirmed_oportunity_on_draft
 
-    assert oportunity.update(:control_objective_item_id =>
-        control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
-    assert_equal 'PTOM 04', oportunity.work_papers.first.code
-  end
-  
-  test 'must be approved' do
-    @oportunity = Oportunity.find(
-      findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id
+    assert_not_equal 'PTOM 004', oportunity.work_papers.first.code
+
+    oportunity.update!(
+      control_objective_item_id:
+        control_objective_items(:impact_analysis_item_editable).id
     )
-    
-    assert @oportunity.must_be_approved?
-    assert @oportunity.approval_errors.blank?
+
+    assert_equal 'PTOM 004', oportunity.work_papers.first.code
+  end
+
+  test 'must be approved on implemented audited' do
+    error_messages = [I18n.t('oportunity.errors.without_solution_date')]
 
     @oportunity.state = Finding::STATUS[:implemented_audited]
     @oportunity.solution_date = nil
 
-    assert !@oportunity.must_be_approved?
-    assert_equal I18n.t('oportunity.errors.without_solution_date'),
-      @oportunity.approval_errors.first
+    refute @oportunity.must_be_approved?
+    assert_equal error_messages.sort, @oportunity.approval_errors.sort
+  end
+
+  test 'must be approved on implemented' do
+    error_messages = [
+      I18n.t('oportunity.errors.with_solution_date'),
+      I18n.t('oportunity.errors.without_follow_up_date')
+    ]
 
     @oportunity.state = Finding::STATUS[:implemented]
     @oportunity.solution_date = 2.days.from_now.to_date
     @oportunity.follow_up_date = nil
 
-    assert !@oportunity.must_be_approved?
-    assert_equal I18n.t('oportunity.errors.with_solution_date'),
-      @oportunity.approval_errors.first
+    refute @oportunity.must_be_approved?
+    assert_equal error_messages.sort, @oportunity.approval_errors.sort
+  end
+
+  test 'must be approved on being implemented' do
+    error_messages = [
+      I18n.t('oportunity.errors.without_answer'),
+      I18n.t('oportunity.errors.without_follow_up_date')
+    ]
 
     @oportunity.state = Finding::STATUS[:being_implemented]
     @oportunity.answer = ' '
 
-    assert !@oportunity.must_be_approved?
-    assert_equal [I18n.t('oportunity.errors.without_answer'),
-      I18n.t('oportunity.errors.with_solution_date')].sort,
-      @oportunity.approval_errors.sort
+    refute @oportunity.must_be_approved?
+    assert_equal error_messages.sort, @oportunity.approval_errors.sort
+  end
 
-    @oportunity.reload
-    assert @oportunity.must_be_approved?
+  test 'must be approved invalid state' do
+    error_messages = [I18n.t('oportunity.errors.not_valid_state')]
+
     @oportunity.state = Finding::STATUS[:notify]
 
-    assert !@oportunity.must_be_approved?
-    assert_equal I18n.t('oportunity.errors.not_valid_state'),
-      @oportunity.approval_errors.first
+    refute @oportunity.must_be_approved?
+    assert_equal error_messages.sort, @oportunity.approval_errors.sort
+  end
 
-    @oportunity.reload
+  test 'must be approved on users' do
+    error_messages = [I18n.t('oportunity.errors.without_audited')]
+
+    @oportunity.state = Finding::STATUS[:assumed_risk]
     @oportunity.finding_user_assignments =
       @oportunity.finding_user_assignments.reject do |fua|
         fua.user.can_act_as_audited?
       end
 
-    assert !@oportunity.must_be_approved?
-    assert_equal I18n.t('oportunity.errors.without_audited'),
-      @oportunity.approval_errors.first
+    refute @oportunity.must_be_approved?
+    assert_equal error_messages.sort, @oportunity.approval_errors.sort
 
-    @oportunity.reload
+    error_messages << I18n.t('oportunity.errors.without_auditor')
+
     @oportunity.finding_user_assignments =
       @oportunity.finding_user_assignments.reject { |fua| fua.user.auditor? }
-    assert !@oportunity.must_be_approved?
-    assert_equal 2, @oportunity.approval_errors.size
-    assert_equal I18n.t('oportunity.errors.without_auditor'),
-      @oportunity.approval_errors.last
-
-    @oportunity.reload
-    @oportunity.audit_comments = '  '
-    assert !@oportunity.must_be_approved?
-    assert_equal 3, @oportunity.approval_errors.size
-    assert_equal I18n.t('oportunity.errors.without_audit_comments'),
-      @oportunity.approval_errors.last
+    refute @oportunity.must_be_approved?
+    assert_equal error_messages.sort, @oportunity.approval_errors.sort
   end
 
-  test 'dynamic functions' do
+  test 'must be approved on required attributes' do
+    error_messages = [I18n.t('oportunity.errors.without_audit_comments')]
+
+    @oportunity.state = Finding::STATUS[:assumed_risk]
+    @oportunity.audit_comments = '  '
+
+    refute @oportunity.must_be_approved?
+    assert_equal error_messages.sort, @oportunity.approval_errors.sort
+  end
+
+  test 'dynamic status functions' do
     Finding::STATUS.each do |status, value|
       @oportunity.state = value
       assert @oportunity.send(:"#{status}?")
@@ -260,7 +237,8 @@ class OportunityTest < ActiveSupport::TestCase
       Finding::STATUS.each do |k, v|
         unless k == status
           @oportunity.state = v
-          assert !@oportunity.send(:"#{status}?")
+
+          refute @oportunity.send(:"#{status}?")
         end
       end
     end

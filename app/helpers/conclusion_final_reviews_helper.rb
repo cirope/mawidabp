@@ -190,4 +190,8 @@ module ConclusionFinalReviewsHelper
 
     content_tag :abbr, issue_date, title: title if issue_date
   end
+
+  def conclusion_options
+    CONCLUSION_OPTIONS.map { |option| [option, option] }
+  end
 end

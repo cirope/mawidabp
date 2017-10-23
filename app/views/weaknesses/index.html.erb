@@ -10,13 +10,13 @@
       <th></th>
       <%= make_filterable_column Review.model_name.human, nil, 'review' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'hidden-xs'}, 'project' %>
-      <%= make_filterable_column Weakness.human_attribute_name(:code), nil, 'review_code' %>
+      <%= make_filterable_column Weakness.human_attribute_name(:review_code), nil, 'review_code' %>
       <%= make_filterable_column Weakness.human_attribute_name(:title), { :class => 'hidden-xs'}, 'title' %>
       <%= make_not_available_column Weakness.human_attribute_name(:state), :class => 'hidden-xs' %>
       <%= make_not_available_column Weakness.human_attribute_name(:follow_up_date), class: 'hidden-xs hidden-sm hidden-md' %>
       <%= make_not_available_column Weakness.human_attribute_name(:risk), :class => 'hidden-xs' %>
       <%= make_filterable_column Tag.model_name.human(count: 0), { :class => 'hidden-xs' }, 'tags' %>
-      <%= make_not_available_column t('finding.has_work_papers'), :class => 'hidden-xs' %>
+      <%= make_not_available_column WorkPaper.model_name.human(count: 0), :class => 'hidden-xs' %>
       <th colspan="2" class="text-right"><%= link_to_search if params[:control_objective].blank? %></th>
     </tr>
   </thead>

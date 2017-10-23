@@ -105,7 +105,7 @@ class FindingPdf < Prawn::Document
     def column_order
       [
         ['review', Review.model_name.human, 10],
-        ['review_code', Finding.human_attribute_name('code'), 5],
+        ['review_code', Finding.human_attribute_name('review_code'), 5],
         ['best_practice', BestPractice.model_name.human, 16],
         ['process_control', ProcessControl.model_name.human, 19],
         ['title', Finding.human_attribute_name('title'), 49]
@@ -125,7 +125,7 @@ class FindingPdf < Prawn::Document
         'organization' => Finding.human_attribute_name('organization'),
         'review'       => Review.model_name.human,
         'project'      => PlanItem.human_attribute_name('project'),
-        'review_code'  => Finding.human_attribute_name('code'),
+        'review_code'  => Finding.human_attribute_name('review_code'),
         'title'        => Finding.human_attribute_name('title'),
         'tags'         => Tag.model_name.human(count: 0)
       }

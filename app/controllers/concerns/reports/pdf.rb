@@ -82,7 +82,7 @@ module Reports::Pdf
       statuses.each do |state|
         sub_total_count = weaknesses_count[state.last].sum(&:second)
         percentage_total = 0
-        column_row = {'state' => "<strong>#{t("finding.status_#{state.first}")}</strong>"}
+        column_row = {'state' => "<strong>#{t("findings.state.#{state.first}")}</strong>"}
 
         risk_levels.each do |rl|
           count = weaknesses_count[state.last][rl.last]
@@ -160,7 +160,7 @@ module Reports::Pdf
           o_count.to_f / total_oportunities * 100 : 0.0
 
         column_data << [
-          "<strong>#{t("finding.status_#{state.first}")}</strong>",
+          "<strong>#{t("findings.state.#{state.first}")}</strong>",
           "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)"
         ]
 

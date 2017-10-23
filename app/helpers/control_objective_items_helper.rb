@@ -3,7 +3,11 @@ module ControlObjectiveItemsHelper
     relevance = control_objective_item.relevance
     text = control_objective_item.relevance_label
 
-    text.blank? || text == '-' ? text : "#{text} (#{relevance})"
+    if text.blank? || text == '-'
+      text
+    else
+      "#{text} (#{relevance})"
+    end
   end
 
   def control_objective_effectiveness(control_objective_item)
@@ -37,7 +41,7 @@ module ControlObjectiveItemsHelper
 
   def control_objective_weaknesses_summary_headers
     Finding::STATUS.except(:repeated).keys.map do |status|
-      content_tag :th, t("finding.status_#{status}")
+      content_tag :th, t("findings.state.#{status}")
     end.join
   end
 
@@ -54,7 +58,7 @@ module ControlObjectiveItemsHelper
 
   def control_objective_oportunities_summary_headers
     Finding::STATUS.except(:repeated).keys.map do |status|
-      content_tag :th, t("finding.status_#{status}")
+      content_tag :th, t("findings.state.#{status}")
     end.join
   end
 
@@ -75,5 +79,9 @@ module ControlObjectiveItemsHelper
 
     link_to_unless weaknesses.count == 0, weaknesses.count,
       weaknesses_path(:control_objective => control_objective_item)
+  end
+
+  def auditor_comment_options
+    CONCLUSION_OPTIONS.map { |option| [option, option] }
   end
 end

@@ -8,11 +8,11 @@ module Organizations::Current
 
   module ClassMethods
     def current_id
-      Thread.current[:current_organization_id]
+      RequestStore.store[:current_organization_id]
     end
 
     def current_id=(organization_id)
-      Thread.current[:current_organization_id] = organization_id
+      RequestStore.store[:current_organization_id] = organization_id
     end
   end
 

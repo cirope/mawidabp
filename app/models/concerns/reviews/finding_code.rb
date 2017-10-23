@@ -9,6 +9,14 @@ module Reviews::FindingCode
     recode_findings oportunities
   end
 
+  def recode_weaknesses_by_risk
+    recode_findings weaknesses, order: [risk: :desc, review_code: :asc]
+  end
+
+  def recode_oportunities_by_risk
+    recode_findings oportunities, order: [risk: :desc, review_code: :asc]
+  end
+
   def next_weakness_code prefix = nil
     next_finding_code prefix, weaknesses.with_prefix(prefix)
   end
@@ -32,10 +40,10 @@ module Reviews::FindingCode
       "#{prefix}#{'%.3d' % last_number.next}".strip
     end
 
-    def recode_findings findings
+    def recode_findings findings, order: :review_code
       raise 'Cannot recode if final review' if has_final_review?
 
-      findings = findings.order :review_code
+      findings = findings.order order
 
       self.class.transaction do
         findings.revoked.each_with_index do |f, i|
@@ -45,7 +53,7 @@ module Reviews::FindingCode
         findings.not_revoked.each_with_index do |f, i|
           new_code = "#{f.prefix}#{'%.3d' % i.next}"
 
-          f.update! review_code: new_code unless f.review_code == new_code
+          f.update_column :review_code, new_code
         end
       end
     end

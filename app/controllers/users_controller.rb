@@ -5,6 +5,7 @@ class UsersController < ApplicationController
   respond_to :html
 
   before_action :auth, :check_privileges
+  before_action :check_ldap, only: [:new, :create]
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: [:destroy]
 
@@ -84,5 +85,11 @@ class UsersController < ApplicationController
       }
 
       build_search_conditions User, default_conditions
+    end
+
+    def check_ldap
+      if current_organization.ldap_config
+        redirect_to_login t('message.insufficient_privileges'), :alert
+      end
     end
 end

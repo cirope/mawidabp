@@ -28,6 +28,16 @@ high_priority:
   organization: cirope
   group: main_group
 
+for_revision:
+  name: For revision
+  kind: review
+  style: default
+  icon: tag
+  shared: false
+  options: "{}"
+  organization: cirope
+  group: main_group
+
 manual:
   name: Manual
   kind: document

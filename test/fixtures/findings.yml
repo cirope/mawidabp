@@ -1,13 +1,16 @@
 <% stale_confirmed_days = DEFAULT_SETTINGS[:finding_stale_confirmed_days][:value].to_i %>
-bcra_A4609_security_management_responsible_dependency_weakness_being_implemented:
+being_implemented_weakness:
   type: Weakness
-  control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  control_objective_item: management_dependency_item
   title: Title 1w
   review_code: O001
   description: Description 1w
   answer: Answer 1w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:being_implemented] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 1w
@@ -17,18 +20,25 @@ bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
   follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
-iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
+unconfirmed_for_notification_weakness:
   type: Weakness
-  control_objective_item: iso_27000_security_policy_3_1_item
+  control_objective_item: security_policy_3_1_item
   title: Title 2w iso
   review_code: O002
   description: Description 2w iso
   answer: Answer 2w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 2w
   state: <%= Finding::STATUS[:unconfirmed] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 2w
@@ -38,20 +48,27 @@ iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   follow_up_date:
   first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
 <% (1..4).each do |level| %>
 
-iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification:
+unanswered_for_level_<%= level %>_notification:
   type: Weakness
-  control_objective_item: iso_27000_security_organization_4_2_item_editable
+  control_objective_item: organization_security_4_2_item_editable
   title: Title <%= level %>w
   review_code: <%= "O00#{level}" %>
   description: Description <%= level %>w
   answer: Answer <%= level %>w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments <%= level %>w
   state: <%= Finding::STATUS[:unanswered] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 3w
@@ -62,20 +79,27 @@ iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_
   origination_date: <%= 1.year.ago.to_date.to_s(:db) %>
   first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: <%= level - 1 %>
   organization: cirope
 
 <% end %>
 
-iso_27000_security_organization_4_2_item_editable_weakness_incomplete:
+incomplete_weakness:
   type: Weakness
-  control_objective_item: iso_27000_security_organization_4_2_item_editable
+  control_objective_item: organization_security_4_2_item_editable
   title: Title incomplete_w
   review_code: O005
   description: Description incomplete_w
   answer: Answer incomplete_w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments incomplete_w
   state: <%= Finding::STATUS[:incomplete] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 3w
@@ -86,18 +110,25 @@ iso_27000_security_organization_4_2_item_editable_weakness_incomplete:
   origination_date: <%= 1.year.ago.to_date.to_s(:db) %>
   first_notification_date: <%= Date.today.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
-iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
+other_unconfirmed_for_notification_weakness:
   type: Weakness
-  control_objective_item: iso_27000_security_policy_3_1_item
+  control_objective_item: security_policy_3_1_item
   title: Title 3w iso
   review_code: O003
   description: Description 3w iso
   answer: Answer 3w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 3w
   state: <%= Finding::STATUS[:unconfirmed] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 1w
@@ -107,63 +138,63 @@ iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   follow_up_date:
   first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.days.ago_in_business.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
-bcra_A4609_security_management_responsible_dependency_notify_oportunity:
+notify_oportunity:
   type: Oportunity
-  control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  control_objective_item: management_dependency_item
   title: Title 1o
   review_code: OM001
   description: Description 1o
   answer: Answer 1o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1o
   state: <%= Finding::STATUS[:notify] %>
+  progress: 0
   origination_date:
   solution_date:
   final: false
   notification_level: 0
   organization: cirope
 
-bcra_A4609_security_management_responsible_dependency_notify_oportunity_2:
+being_implemented_oportunity:
   type: Oportunity
-  control_objective_item: bcra_A4609_security_management_responsible_dependency_item
-  title: Title 3o
-  review_code: OM003
-  description: Description 3o
-  answer: Answer 3o
-  audit_comments: Audit comments 3o
-  state: <%= Finding::STATUS[:notify] %>
-  origination_date:
-  solution_date:
-  final: false
-  notification_level: 0
-  organization: cirope
-
-bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity:
-  type: Oportunity
-  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  control_objective_item: management_dependency_item_editable
   title: Title 1o
   review_code: OM001
   description: Description 1o
   answer: Answer 1o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1o
   state: <%= Finding::STATUS[:being_implemented] %>
+  progress: 0
   origination_date:
   solution_date:
+  effect: Effect 1o
+  follow_up_date: <%= 1.year.from_now.to_date.to_s(:db) %>
   final: false
   notification_level: 0
   organization: cirope
 
-bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness:
+being_implemented_weakness_on_draft:
   type: Weakness
-  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  control_objective_item: management_dependency_item_editable
   title: Title 3w bcra
   review_code: O003
   description: Description 3w bcra
   answer: Answer 3w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 3w
   state: <%= Finding::STATUS[:being_implemented] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 3w
@@ -172,18 +203,25 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   priority: <%= Finding.priorities_values.first %>
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
-bcra_A4609_data_proccessing_impact_analisys_weakness:
+unanswered_weakness:
   type: Weakness
-  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
+  control_objective_item: impact_analysis_item
   title: Title 2w bcra
   review_code: O002
   description: Description 2w bcra
   answer: Answer 2w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 2w
   state: <%= Finding::STATUS[:unanswered] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 2w
@@ -192,18 +230,25 @@ bcra_A4609_data_proccessing_impact_analisys_weakness:
   priority: <%= Finding.priorities_values.first %>
   follow_up_date:
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
-bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
+unconfirmed_weakness:
   type: Weakness
-  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
+  control_objective_item: impact_analysis_item_editable
   title: Title 1w bi
   review_code: O001
   description: Description 1w bi
   answer: Answer 1w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:unconfirmed] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 1w
@@ -212,18 +257,25 @@ bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
   priority: <%= Finding.priorities_values.first %>
   follow_up_date:
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
-bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
+unconfirmed_oportunity:
   type: Oportunity
-  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
+  control_objective_item: impact_analysis_item_editable
   title: Title 3o
   review_code: OM003
   description: Description 3o
   answer: Answer 3o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 3o
   state: <%= Finding::STATUS[:unconfirmed] %>
+  progress: 0
   origination_date:
   solution_date:
   confirmation_date: <%= stale_confirmed_days.pred.days.ago_in_business.to_s(:db) %>
@@ -232,15 +284,18 @@ bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   notification_level: 0
   organization: cirope
 
-iso_27000_security_organization_4_2_item_editable_oportunity:
+confirmed_oportunity_on_draft:
   type: Oportunity
-  control_objective_item: iso_27000_security_organization_4_2_item_editable
+  control_objective_item: organization_security_4_2_item_editable
   title: Title o
   review_code: OM001
   description: Description o
   answer: Answer o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 3o
   state: <%= Finding::STATUS[:confirmed] %>
+  progress: 0
   origination_date:
   solution_date:
   confirmation_date: <%= Date.today.to_s(:db) %>
@@ -248,15 +303,18 @@ iso_27000_security_organization_4_2_item_editable_oportunity:
   notification_level: 0
   organization: cirope
 
-bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
+confirmed_oportunity:
   type: Oportunity
-  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
+  control_objective_item: impact_analysis_item
   title: Title 2o
   review_code: OM002
   description: Description 2o
   answer: Answer 2o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 2o
   state: <%= Finding::STATUS[:confirmed] %>
+  progress: 0
   origination_date:
   solution_date:
   confirmation_date: <%= 1.day.ago.to_s(:db) %>
@@ -265,15 +323,18 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
   notification_level: 0
   organization: cirope
 
-iso_27000_security_policy_3_1_item_weakness:
+being_implemented_weakness_on_final:
   type: Weakness
-  control_objective_item: iso_27000_security_policy_3_1_item
+  control_objective_item: security_policy_3_1_item
   title: Title 1wx
   review_code: O001
   description: Description 1wx
   answer: Answer 1w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comment 1w
   state: <%= Finding::STATUS[:being_implemented] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 1w
@@ -282,18 +343,25 @@ iso_27000_security_policy_3_1_item_weakness:
   priority: <%= Finding.priorities_values.first %>
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
-bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_weakness:
+being_implemented_weakness_on_approved_draft:
   type: Weakness
-  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
+  control_objective_item: management_dependency_item_approved_and_editable
   title: Title 1w
   review_code: O001
   description: Description 1w
   answer: Answer 1w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:being_implemented] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 1w
@@ -302,5 +370,9 @@ bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
   priority: <%= Finding.priorities_values.first %>
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: internal fraud
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ProcessControlsControllerTest < ActionController::TestCase
   setup do
-    @process_control = process_controls :iso_27000_security_policy
+    @process_control = process_controls :security_policy
     @best_practice   = @process_control.best_practice
 
     login

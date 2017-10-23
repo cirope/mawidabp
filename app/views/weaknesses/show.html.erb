@@ -43,10 +43,12 @@
   <%= @weakness.risk_text %>
 </p>
 
-<p>
-  <strong><%= Weakness.human_attribute_name :priority %>:</strong>
-  <%= @weakness.priority_text %>
-</p>
+<% unless HIDE_WEAKNESS_PRIORITY %>
+  <p>
+    <strong><%= Weakness.human_attribute_name :priority %>:</strong>
+    <%= @weakness.priority_text %>
+  </p>
+<% end %>
 
 <div>
   <strong><%= Weakness.human_attribute_name :audit_comments %>:</strong>
@@ -54,9 +56,22 @@
 </div>
 
 <p>
-  <strong><%= Weakness.human_attribute_name(:state) %>:</strong>
+  <strong><%= Weakness.human_attribute_name :state %>:</strong>
   <%= @weakness.state_text %>
 </p>
+
+<% if SHOW_WEAKNESS_PROGRESS %>
+  <p>
+    <strong><%= Weakness.human_attribute_name :progress %>:</strong>
+
+  </p>
+
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" style="width: <%= @weakness.progress.to_i %>%;">
+      <%= @weakness.progress.to_i %>%
+    </div>
+  </div>
+<% end %>
 
 <p>
   <strong><%= Weakness.human_attribute_name :origination_date %>:</strong>
@@ -72,6 +87,28 @@
   <strong><%= Weakness.human_attribute_name :solution_date %>:</strong>
   <%=l @weakness.solution_date, :format => :long if @weakness.solution_date %>
 </p>
+
+<% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+  <p>
+    <strong><%= Weakness.human_attribute_name :compliance %>:</strong>
+    <%= t "label.#{@weakness.compliance}" if @weakness.compliance.present? %>
+  </p>
+
+  <p>
+    <strong><%= Weakness.human_attribute_name :operational_risk %>:</strong>
+    <%= @weakness.operational_risk %>
+  </p>
+
+  <p>
+    <strong><%= Weakness.human_attribute_name :impact %>:</strong>
+    <%= Array(@weakness.impact).to_sentence %>
+  </p>
+
+  <p>
+    <strong><%= Weakness.human_attribute_name :internal_control_components %>:</strong>
+    <%= Array(@weakness.internal_control_components).to_sentence %>
+  </p>
+<% end %>
 
 <h3><%= t('finding.responsibles', :count => @weakness.users.size) %></h3>
 <%= finding_responsibles_list(@weakness) %>
@@ -216,7 +253,7 @@
 <% end %>
 
 <% unless @weakness.work_papers.empty? %>
-  <h3><%= t('finding.work_papers') %></h3>
+  <h3><%= WorkPaper.model_name.human(count: 0) %></h3>
   <table class="table table-condensed table-striped">
     <thead>
       <tr>
