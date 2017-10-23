@@ -22,8 +22,8 @@ being_implemented_weakness:
   final: false
   compliance: no
   operational_risk: internal fraud
-  impact: <%= ['econimic', 'regulatory'].to_json %>
-  internal_control_components: <%= ['risk_evaluation', 'monitoring'].to_json %>
+  impact: '["econimic", "regulatory"]'
+  internal_control_components: '["risk_evaluation", "monitoring"]'
   notification_level: 0
   organization: cirope
 
@@ -50,8 +50,8 @@ unconfirmed_for_notification_weakness:
   final: false
   compliance: no
   operational_risk: internal fraud
-  impact: <%= ['econimic', 'regulatory'].to_json %>
-  internal_control_components: <%= ['risk_evaluation', 'monitoring'].to_json %>
+  impact: '["econimic", "regulatory"]'
+  internal_control_components: '["risk_evaluation", "monitoring"]'
   notification_level: 0
   organization: cirope
 
@@ -81,8 +81,8 @@ unanswered_for_level_<%= level %>_notification:
   final: false
   compliance: no
   operational_risk: internal fraud
-  impact: <%= ['econimic', 'regulatory'].to_json %>
-  internal_control_components: <%= ['risk_evaluation', 'monitoring'].to_json %>
+  impact: '["econimic", "regulatory"]'
+  internal_control_components: '["risk_evaluation", "monitoring"]'
   notification_level: <%= level - 1 %>
   organization: cirope
 
@@ -112,8 +112,8 @@ incomplete_weakness:
   final: false
   compliance: no
   operational_risk: internal fraud
-  impact: <%= ['econimic', 'regulatory'].to_json %>
-  internal_control_components: <%= ['risk_evaluation', 'monitoring'].to_json %>
+  impact: '["econimic", "regulatory"]'
+  internal_control_components: '["risk_evaluation", "monitoring"]'
   notification_level: 0
   organization: cirope
 
@@ -140,8 +140,8 @@ other_unconfirmed_for_notification_weakness:
   final: false
   compliance: no
   operational_risk: internal fraud
-  impact: <%= ['econimic', 'regulatory'].to_json %>
-  internal_control_components: <%= ['risk_evaluation', 'monitoring'].to_json %>
+  impact: '["econimic", "regulatory"]'
+  internal_control_components: '["risk_evaluation", "monitoring"]'
   notification_level: 0
   organization: cirope
 
@@ -205,8 +205,8 @@ being_implemented_weakness_on_draft:
   final: false
   compliance: no
   operational_risk: internal fraud
-  impact: <%= ['econimic', 'regulatory'].to_json %>
-  internal_control_components: <%= ['risk_evaluation', 'monitoring'].to_json %>
+  impact: '["econimic", "regulatory"]'
+  internal_control_components: '["risk_evaluation", "monitoring"]'
   notification_level: 0
   organization: cirope
 
@@ -232,8 +232,8 @@ unanswered_weakness:
   final: false
   compliance: no
   operational_risk: internal fraud
-  impact: <%= ['econimic', 'regulatory'].to_json %>
-  internal_control_components: <%= ['risk_evaluation', 'monitoring'].to_json %>
+  impact: '["econimic", "regulatory"]'
+  internal_control_components: '["risk_evaluation", "monitoring"]'
   notification_level: 0
   organization: cirope
 
@@ -259,8 +259,8 @@ unconfirmed_weakness:
   final: false
   compliance: no
   operational_risk: internal fraud
-  impact: <%= ['econimic', 'regulatory'].to_json %>
-  internal_control_components: <%= ['risk_evaluation', 'monitoring'].to_json %>
+  impact: '["econimic", "regulatory"]'
+  internal_control_components: '["risk_evaluation", "monitoring"]'
   notification_level: 0
   organization: cirope
 
@@ -345,8 +345,8 @@ being_implemented_weakness_on_final:
   final: false
   compliance: no
   operational_risk: internal fraud
-  impact: <%= ['econimic', 'regulatory'].to_json %>
-  internal_control_components: <%= ['risk_evaluation', 'monitoring'].to_json %>
+  impact: '["econimic", "regulatory"]'
+  internal_control_components: '["risk_evaluation", "monitoring"]'
   notification_level: 0
   organization: cirope
 
@@ -372,7 +372,7 @@ being_implemented_weakness_on_approved_draft:
   final: false
   compliance: no
   operational_risk: internal fraud
-  impact: <%= ['econimic', 'regulatory'].to_json %>
-  internal_control_components: <%= ['risk_evaluation', 'monitoring'].to_json %>
+  impact: '["econimic", "regulatory"]'
+  internal_control_components: '["risk_evaluation", "monitoring"]'
   notification_level: 0
   organization: cirope
