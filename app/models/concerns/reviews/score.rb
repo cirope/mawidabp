@@ -4,7 +4,11 @@ module Reviews::Score
   def score_text
     score = score_array
 
-    score ? [I18n.t("score_types.#{score.first}"), "(#{score.last}%)"].join(' ') : ''
+    if SHOW_REVIEW_EXTRA_ATTRIBUTES
+      manual_score.to_s
+    else score
+      [I18n.t("score_types.#{score.first}"), "(#{score.last}%)"].join(' ')
+    end
   end
 
   def sorted_scores
