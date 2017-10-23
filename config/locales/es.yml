@@ -358,6 +358,22 @@
     add_recipient: "Agregar nuevo destinatario"
     review_sended: "El informe fue enviado a todos los destinatarios indicados"
     review_not_approved: "El informe no fue enviado, debe estar aprobado"
+    executive_summary:
+      title: "Resumen ejecutivo"
+      review_author: "Gerencia de Auditoría Interna"
+      project: "La Auditoría practicada estuvo circunscripta a la revisión del proceso/subproceso/tema"
+      risk_exposure: "El proceso/subproceso evaluado en esta revisión es considerado por la Auditoria Interna en función a la Matriz de Riesgo"
+      score: "Calificación"
+      main_weaknesses: "Principales debilidades"
+      no_main_weaknesses: "No hay observaciones consideradas Principal Debilidad."
+      other_weaknesses: "Otras observaciones"
+      no_other_weaknesses: "No hay otras observaciones."
+      medium_risk_weaknesses: "Riesgo medio"
+      assumed_risk_weaknesses: "Riesgo asumido"
+      low_risk_weaknesses_title: "Riesgo bajo y no relevante"
+      low_risk_weaknesses:
+        one: "Se encuentran detalladas en el cuerpo de este informe %{count} observación de riesgo bajo y %{not_relevant_count} de riesgo no relevante."
+        other: "Se encuentran detalladas en el cuerpo de este informe %{count} observaciones de riesgo bajo y %{not_relevant_count} de riesgo no relevante."
     bundle:
       zip_name: "legajo_%{identification}.zip"
       control_objectives_dir: "%{prefix}_objetivos_de_control"

@@ -14,6 +14,14 @@ module Parameters::Risk
       RISK_TYPES.values
     end
 
+    def highest_risks
+      if SHOW_EXTENDED_RISKS
+        [RISK_TYPES[:high], RISK_TYPES[:high_medium], RISK_TYPES[:medium_high]]
+      else
+        [RISK_TYPES[:high]]
+      end
+    end
+
     private
 
       def risk_types

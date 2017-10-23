@@ -6,6 +6,8 @@ module Findings::Scopes
     scope :sort_by_code,      -> { order review_code: :asc }
     scope :sort_for_review,   -> { order risk: :desc, priority: :desc, review_code: :asc }
     scope :with_achievements, -> { includes(:achievements).where.not achievements: { finding_id: nil } }
+    scope :with_highest_risk, -> { where risk: highest_risks }
+    scope :with_other_risk,   -> { where.not risk: highest_risks }
   end
 
   module ClassMethods

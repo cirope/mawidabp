@@ -6,6 +6,14 @@ CONCLUSION_OPTIONS = [
   'No aplica'
 ]
 
+CONCLUSION_COLORS = {
+  'Satisfactorio'                => '00ff00',
+  'Satisfactorio con salvedades' => '808000',
+  'Necesita mejorar'             => 'f4d03f',
+  'No satisfactorio'             => 'ff0000',
+  'No aplica'                    => '808080'
+}
+
 REVIEW_AUTOMATIC_PREFIXES = %w(AP AC AS AF AZ MC)
 
 REVIEW_SCOPES = [

@@ -70,6 +70,8 @@ module Findings::State
       def define_state_scopes
         scope :revoked,     -> { where     state: STATUS[:revoked] }
         scope :not_revoked, -> { where.not state: STATUS[:revoked] }
+        scope :assumed_risk,     -> { where     state: STATUS[:assumed_risk] }
+        scope :not_assumed_risk, -> { where.not state: STATUS[:assumed_risk] }
         scope :with_pending_status, -> { where state: visible_pending_status }
         scope :with_pending_status_for_report, -> { where state: report_pending_status }
       end

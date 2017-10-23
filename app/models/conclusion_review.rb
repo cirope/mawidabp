@@ -1,6 +1,7 @@
 class ConclusionReview < ApplicationRecord
   include Auditable
   include ParameterSelector
+  include ConclusionReviews::AlternativePDF
   include ConclusionReviews::BundleIndexPDF
   include ConclusionReviews::BundleZip
   include ConclusionReviews::CoverPDF
