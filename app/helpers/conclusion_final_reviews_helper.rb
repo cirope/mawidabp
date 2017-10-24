@@ -176,11 +176,17 @@ module ConclusionFinalReviewsHelper
   end
 
   def send_review_options
-    options = ['normal', 'brief', 'without_score'].map do |type|
+    options = if SHOW_CONCLUSION_ALTERNATIVE_PDF
+                ['normal']
+              else
+                ['normal', 'brief', 'without_score']
+              end
+
+    select_options = options.map do |type|
       [t("conclusion_final_review.send_type.#{type}"), type]
     end
 
-    options_for_select options, 'normal'
+    options_for_select select_options, 'normal'
   end
 
   def show_conclusion_review_issue_date conclusion_final_review
