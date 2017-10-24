@@ -36,7 +36,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion'
+        :conclusion => 'New conclusion',
+        :recipients => 'John Doe',
+        :sectors => 'Area 51'
       }, false)
 
       assert @conclusion_review.save
@@ -68,12 +70,19 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review.review_id = nil
     @conclusion_review.applied_procedures = '   '
     @conclusion_review.conclusion = '   '
+    @conclusion_review.recipients = '   '
+    @conclusion_review.sectors = '   '
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
     assert_error @conclusion_review, :review_id, :blank
     assert_error @conclusion_review, :applied_procedures, :blank
     assert_error @conclusion_review, :conclusion, :blank
+
+    if SHOW_REVIEW_EXTRA_ATTRIBUTES
+      assert_error @conclusion_review, :recipients, :blank
+      assert_error @conclusion_review, :sectors, :blank
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -108,7 +117,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :issue_date => Date.today,
         :close_date => 2.days.ago.to_date,
         :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion'
+        :conclusion => 'New conclusion',
+        :recipients => 'John Doe',
+        :sectors => 'Area 51'
       }, false)
 
     assert @conclusion_review.invalid?

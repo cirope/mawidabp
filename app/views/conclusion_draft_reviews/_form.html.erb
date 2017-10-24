@@ -34,6 +34,17 @@
         <%= f.input :issue_date, as: :date_picker %>
       </div>
     </div>
+
+    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :recipients, input_html: { rows: 4 } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :sectors, input_html: { rows: 4 } %>
+        </div>
+      </div>
+    <% end %>
   </div>
 
   <div id="approval_text">

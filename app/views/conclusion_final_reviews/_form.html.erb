@@ -37,6 +37,17 @@
         <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
       </div>
     </div>
+
+    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :recipients, input_html: { rows: 4 } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :sectors, input_html: { rows: 4 } %>
+        </div>
+      </div>
+    <% end %>
   </div>
 
   <hr />
@@ -53,7 +64,9 @@
 <script type="text/javascript">
 //<![CDATA[
   $('#conclusion_final_review_review_id').change(function() {
-    var elementsForUpdate = ['applied_procedures', 'conclusion'];
+    var elementsForUpdate = [
+      'applied_procedures', 'conclusion', 'recipients', 'sectors'
+    ];
 
     if(!$(this).val().match(/^\s*$/)) {
       var element = $(this);

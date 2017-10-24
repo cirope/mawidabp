@@ -60,7 +60,7 @@ class ConclusionFinalReviewsController < ApplicationController
                 },
               }
             },
-            only: [:conclusion, :applied_procedures])
+            only: [:conclusion, :applied_procedures, :recipients, :sectors])
         }
       end
     else
@@ -378,7 +378,7 @@ class ConclusionFinalReviewsController < ApplicationController
     def conclusion_final_review_params
       params.require(:conclusion_final_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
-        :summary, :lock_version
+        :summary, :recipients, :sectors, :lock_version
       )
     end
 

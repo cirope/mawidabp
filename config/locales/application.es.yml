@@ -1082,6 +1082,8 @@ es:
         project: "Proyecto"
         approved: "Aprobado"
         summary: "Acta"
+        recipients: "Destinatarios del informe"
+        sectors: "Sectores/departamentos involucrados"
       control:
         order: "Orden"
         control: "Controles"
