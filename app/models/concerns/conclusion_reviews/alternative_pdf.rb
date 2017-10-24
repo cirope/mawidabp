@@ -8,8 +8,7 @@ module ConclusionReviews::AlternativePDF
     put_alternative_header_on pdf, organization
     put_alternative_cover_on  pdf
     put_executive_summary_on  pdf
-    put_main_weaknesses_on    pdf
-    put_other_weaknesses_on   pdf
+    put_detailed_review_on    pdf
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -61,6 +60,43 @@ module ConclusionReviews::AlternativePDF
 
       put_risk_exposure_on           pdf
       put_alternative_score_table_on pdf
+
+      put_main_weaknesses_on         pdf
+      put_other_weaknesses_on        pdf
+    end
+
+    def put_detailed_review_on pdf
+      title  = I18n.t 'conclusion_review.detailed_review.title'
+      legend = I18n.t 'conclusion_review.detailed_review.legend'
+
+      pdf.start_new_page
+      pdf.add_title title, (PDF_FONT_SIZE * 1.5).round, :center
+      pdf.move_down PDF_FONT_SIZE * 2
+
+      pdf.text legend, align: :justify, style: :italic
+
+      put_review_survey_on       pdf
+      put_detailed_weaknesses_on pdf
+    end
+
+    def put_review_survey_on pdf
+      title = Review.human_attribute_name 'survey'
+
+      pdf.move_down PDF_FONT_SIZE * 2
+      pdf.add_title title, (PDF_FONT_SIZE * 1.25).round
+      pdf.move_down PDF_FONT_SIZE
+
+      pdf.text review.survey, align: :justify
+    end
+
+    def put_detailed_weaknesses_on pdf
+      title = Weakness.model_name.human count: 0
+
+      pdf.move_down PDF_FONT_SIZE * 2
+      pdf.add_title title, (PDF_FONT_SIZE * 1.25).round
+      pdf.move_down PDF_FONT_SIZE
+
+      put_weakness_details_on pdf, all_weaknesses, legend: 'no_weaknesses'
     end
 
     def put_risk_exposure_on pdf
@@ -128,6 +164,10 @@ module ConclusionReviews::AlternativePDF
       pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title title, (PDF_FONT_SIZE * 1.25).round
 
+      put_weakness_details_on pdf, weaknesses, legend: 'no_main_weaknesses'
+    end
+
+    def put_weakness_details_on pdf, weaknesses, legend:
       if weaknesses.any?
         weaknesses.each do |f|
           coi = f.control_objective_item
@@ -136,7 +176,7 @@ module ConclusionReviews::AlternativePDF
           pdf.text coi.finding_pdf_data(f), align: :justify, inline_format: true
         end
       else
-        put_weakness_legend_on pdf, 'no_main_weaknesses'
+        put_weakness_legend_on pdf, legend
       end
     end
 
@@ -258,6 +298,10 @@ module ConclusionReviews::AlternativePDF
 
     def assumed_risk_weaknesses
       weaknesses.assumed_risk
+    end
+
+    def all_weaknesses
+      weaknesses.not_revoked.sort_for_review
     end
 
     def weaknesses
