@@ -178,6 +178,17 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert_not_equal size, new_size
   end
 
+  test 'alternative pdf conversion' do
+    assert_nothing_raised do
+      @conclusion_review.alternative_pdf(organizations(:cirope))
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+
+    FileUtils.rm @conclusion_review.absolute_pdf_path
+  end
+
   test 'create bundle zip' do
     if File.exist?(@conclusion_review.absolute_bundle_zip_path)
       FileUtils.rm @conclusion_review.absolute_bundle_zip_path
