@@ -7,6 +7,8 @@ conclusion_current_final_review:
   conclusion: Current Final Conclusion
   approved: true
   summary: 'ACT 12'
+  recipients: 'John Doe'
+  sectors: 'Area 51'
   organization: cirope
   created_at: <%= 2.days.ago.to_date.to_s(:db) %>
 
@@ -17,6 +19,8 @@ conclusion_current_draft_review:
   applied_procedures: Current Draft Applied Procedures
   conclusion: Current Draft Conclusion
   approved: true
+  recipients: 'John Doe'
+  sectors: 'Area 51'
   organization: cirope
 
 conclusion_past_final_review:
@@ -28,6 +32,8 @@ conclusion_past_final_review:
   conclusion: Past Final Conclusion
   approved: true
   summary: 'ACT 12'
+  recipients: 'John Doe'
+  sectors: 'Area 51'
   organization: cirope
   created_at: <%= 2.months.ago.to_date.to_s(:db) %>
 
@@ -38,6 +44,8 @@ conclusion_past_draft_review:
   applied_procedures: Past Draft Applied Procedures
   conclusion: Past Draft Conclusion
   approved: true
+  recipients: 'John Doe'
+  sectors: 'Area 51'
   organization: cirope
 
 conclusion_with_conclusion_draft_review:
@@ -47,6 +55,8 @@ conclusion_with_conclusion_draft_review:
   applied_procedures: With Conclusion Draft Applied Procedures
   conclusion: With Conclusion Draft Conclusion
   approved: true
+  recipients: 'John Doe'
+  sectors: 'Area 51'
   organization: cirope
 
 conclusion_approved_with_conclusion_draft_review:
@@ -56,4 +66,6 @@ conclusion_approved_with_conclusion_draft_review:
   applied_procedures: With Conclusion Draft Applied Procedures
   conclusion: With Conclusion Draft Conclusion
   approved: true
+  recipients: 'John Doe'
+  sectors: 'Area 51'
   organization: cirope

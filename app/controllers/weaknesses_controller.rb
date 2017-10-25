@@ -53,10 +53,11 @@ class WeaknessesController < ApplicationController
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn('review_code')} ASC"
       ]
-    ).references(:periods, :conclusion_reviews).page(params[:page])
+    ).references(:periods, :conclusion_reviews)
 
     respond_to do |format|
-      format.html
+      format.html { @weaknesses = @weaknesses.page params[:page] }
+      format.csv  { render csv: @weaknesses.to_csv, filename: @title.downcase }
     end
   end
 

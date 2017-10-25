@@ -119,7 +119,9 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
-          :conclusion => 'New conclusion'
+          :conclusion => 'New conclusion',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51'
         }
       }
     end
@@ -147,7 +149,9 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'Updated applied procedures',
-          :conclusion => 'Updated conclusion'
+          :conclusion => 'Updated conclusion',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51'
         }
       }
     end

@@ -79,6 +79,14 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_template 'weaknesses/index'
   end
 
+  test 'list weaknesses as CSV' do
+    login
+    get :index, params: { format: :csv }
+
+    assert_response :success
+    assert_equal "#{Mime[:csv]}", @response.content_type
+  end
+
   test 'show weakness' do
     login
     get :show, params: {

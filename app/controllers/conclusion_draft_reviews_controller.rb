@@ -185,7 +185,11 @@ class ConclusionDraftReviewsController < ApplicationController
         note = params[:conclusion_review][:email_note]
       end
 
-      @conclusion_draft_review.to_pdf(current_organization)
+      if SHOW_CONCLUSION_ALTERNATIVE_PDF
+        @conclusion_draft_review.alternative_pdf(current_organization)
+      else
+        @conclusion_draft_review.to_pdf(current_organization)
+      end
 
       if include_score_sheet
         @conclusion_draft_review.review.score_sheet current_organization, draft: true
@@ -264,7 +268,7 @@ class ConclusionDraftReviewsController < ApplicationController
     def conclusion_draft_review_params
       params.require(:conclusion_draft_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
-        :force_approval, :lock_version
+        :recipients, :sectors, :force_approval, :lock_version
       )
     end
 

@@ -12,6 +12,20 @@ module Reviews::SortColumns
       )
     end
 
+    def default_order
+      if ORDER_REVIEWS_BY == 'period'
+        [
+          "#{Period.quoted_table_name}.#{Period.qcn 'name'} DESC",
+          "#{quoted_table_name}.#{qcn 'identification'} ASC"
+        ]
+      else
+        [
+          "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn 'review_id'} IS NOT NULL",
+          "#{quoted_table_name}.#{qcn 'identification'} ASC"
+        ]
+      end
+    end
+
     private
 
       def period_asc_sort_options

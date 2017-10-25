@@ -17,7 +17,9 @@ class ReviewsController < ApplicationController
   def index
     @title = t 'review.index_title'
     scope  = Review.list.
-      includes(:period, :tags, { plan_item: :business_unit }).
+      includes(:conclusion_final_review, :period, :tags, {
+        plan_item: :business_unit
+      }).
       references(:periods)
 
     tagged_reviews = build_tag_search_for scope
@@ -25,7 +27,7 @@ class ReviewsController < ApplicationController
     build_search_conditions Review
 
     reviews = @columns == ['tags'] ? scope.none : scope.where(@conditions)
-    order = @order_by || "#{Period.quoted_table_name}.#{Period.qcn 'name'} DESC"
+    order = @order_by || Review.default_order
 
     @reviews = tagged_reviews.
       or(reviews).

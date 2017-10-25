@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171011224217) do
+ActiveRecord::Schema.define(version: 20171024174522) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -178,6 +178,8 @@ ActiveRecord::Schema.define(version: 20171011224217) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "organization_id", precision: 38
     t.string "summary"
+    t.text "recipients"
+    t.text "sectors"
     t.index ["close_date"], name: "i_con_rev_clo_dat"
     t.index ["issue_date"], name: "i_con_rev_iss_dat"
     t.index ["organization_id"], name: "i_con_rev_org_id"

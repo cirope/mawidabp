@@ -42,7 +42,9 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
-          :conclusion => 'New conclusion'
+          :conclusion => 'New conclusion',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51'
         }, false)
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
@@ -84,7 +86,9 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
-          :conclusion => 'New conclusion'
+          :conclusion => 'New conclusion',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51'
         }, false)
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
@@ -129,7 +133,9 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
-          :conclusion => 'New conclusion'
+          :conclusion => 'New conclusion',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51'
         }, false)
 
     assert @conclusion_review.save
@@ -230,7 +236,9 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion'
+        :conclusion => 'New conclusion',
+        :recipients => 'John Doe',
+        :sectors => 'Area 51'
       }, false)
 
       assert @conclusion_review.save,

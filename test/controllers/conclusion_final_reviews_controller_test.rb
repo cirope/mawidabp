@@ -128,7 +128,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :close_date => Date.tomorrow,
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion',
-          :summary => 'ACT 12'
+          :summary => 'ACT 12',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51'
         }
       }
     end
@@ -156,7 +158,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'Updated applied procedures',
           :conclusion => 'Updated conclusion',
-          :summary => 'ACT Updated'
+          :summary => 'ACT Updated',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51'
         }
       }
     end
