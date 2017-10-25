@@ -92,6 +92,10 @@ table th.not_available {
   color: #888;
 }
 
+textarea {
+  resize: vertical;
+}
+
 [data-controller="best_practices"] {
   fieldset {
     textarea, select {
