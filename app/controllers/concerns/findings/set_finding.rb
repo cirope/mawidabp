@@ -35,6 +35,6 @@ module Findings::SetFinding
     def scope_current_user_findings?
       !current_organization.corporate &&
         @auth_user.can_act_as_audited? &&
-        !@auth.committee?
+        !@auth_user.committee?
     end
 end
