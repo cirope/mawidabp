@@ -8,17 +8,17 @@ module Reviews::AutomaticIdentification
   end
 
   module ClassMethods
-    def next_identification_number prefix, suffix
-      regex = /#{prefix}-(\d+)\/#{suffix}/i
+    def next_identification_number suffix
+      regex = /(\d+)\/#{suffix}\Z/i
       last_identification =
-        where("#{quoted_table_name}.#{qcn 'identification'} LIKE ?", "#{prefix}-%/#{suffix}").
+        where("#{quoted_table_name}.#{qcn 'identification'} LIKE ?", "%/#{suffix}").
         order(:identification).
         last&.
         identification
 
       last_number = String(last_identification).match(regex)&.captures&.first
 
-      '%03d' % (last_number&.to_i&.next || 1)
+      '%03d' % last_number.to_i.next
     end
   end
 end
