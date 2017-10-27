@@ -351,14 +351,13 @@ class ReviewsController < ApplicationController
   # * PUT /reviews/1/recode_findings_by_risk
   def recode_findings_by_risk
     @review.recode_weaknesses_by_risk
-    @review.recode_oportunities_by_risk
 
     redirect_to @review, notice: t('review.findings_recoded')
   end
 
   # * GET /reviews/next_identification_number
   def next_identification_number
-    @next_number = Review.next_identification_number params[:prefix], params[:suffix]
+    @next_number = Review.next_identification_number params[:suffix]
   end
 
   private

@@ -13,10 +13,6 @@ module Reviews::FindingCode
     recode_findings weaknesses, order: [risk: :desc, review_code: :asc]
   end
 
-  def recode_oportunities_by_risk
-    recode_findings oportunities, order: [risk: :desc, review_code: :asc]
-  end
-
   def next_weakness_code prefix = nil
     next_finding_code prefix, weaknesses.with_prefix(prefix)
   end

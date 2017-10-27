@@ -615,11 +615,12 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'next identification number' do
-    assert_equal '001', Review.next_identification_number('TS', 2017)
+    assert_equal '001', Review.next_identification_number(2017)
 
-    @review.update! identification: 'TS-22/2017'
+    @review.update! identification: 'XX-22/2017'
 
-    assert_equal '023', Review.next_identification_number('TS', 2017)
+    # Should ignore the prefix
+    assert_equal '023', Review.next_identification_number(2017)
   end
 
   private
