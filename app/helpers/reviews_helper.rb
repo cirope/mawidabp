@@ -101,4 +101,30 @@ module ReviewsHelper
   def review_include_sox_options
     %w(yes no).map { |option| [t("label.#{option}"), option] }
   end
+
+  def review_control_objective_class(control_objective_item)
+    html_classes = []
+
+    if control_objective_item.finished
+      html_classes << 'strike'
+      html_classes << 'text-muted'
+    end
+
+    if control_objective_item.exclude_from_score
+      html_classes << 'text-warning'
+    end
+
+    html_classes.join(' ')
+  end
+
+  def review_year_suffixes
+    year  = Time.zone.today.year
+    years = []
+
+    years << year.pred if Time.zone.today.month <= 2
+    years << year
+    years << year.next if Time.zone.today.month >= 10
+
+    years
+  end
 end

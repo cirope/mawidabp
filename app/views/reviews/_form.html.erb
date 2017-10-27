@@ -7,8 +7,12 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <%= f.input :identification, label: Review.human_attribute_name(:identification),
-          input_html: { readonly: readonly } %>
+        <% if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION && !readonly %>
+          <%= render 'automatic_identification', f: f %>
+        <% else %>
+          <%= f.input :identification, label: Review.human_attribute_name(:identification),
+            input_html: { readonly: readonly } %>
+        <% end %>
         <% if [:new, :create].include?(controller.action_name.to_sym) %>
           <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true %>
         <% else %>
@@ -17,7 +21,7 @@
         <% end %>
         <% if @review.new_record? %>
           <div class="form-group">
-            <%= f.label :plan_item %>
+            <%= f.label :plan_item_id %>
             <%= review_plan_item_field(f, readonly) %>
           </div>
         <% else %>

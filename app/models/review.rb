@@ -3,6 +3,7 @@ class Review < ApplicationRecord
   include Parameters::Risk
   include Parameters::Score
   include ParameterSelector
+  include Reviews::AutomaticIdentification
   include Reviews::Approval
   include Reviews::Clone
   include Reviews::ConclusionReview

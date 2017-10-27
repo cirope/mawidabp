@@ -34,7 +34,13 @@ class FindingsController < ApplicationController
   def update
     update_resource @finding, finding_params
 
-    respond_with @finding, location: edit_finding_url(params[:completed], @finding)
+    location = if @finding.pending?
+                 edit_finding_url params[:completed], @finding
+               else
+                 finding_url 'complete', @finding
+               end
+
+    respond_with @finding, location: location
   end
 
   private

@@ -5,16 +5,18 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <div class="form-group">
-          <%= content_tag :label, t('conclusion_review.include_global_score_sheet'),
-            for: :conclusion_review_include_global_score_sheet %>
-          <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, true %>
-        </div>
-        <div class="form-group">
-          <%= content_tag :label, t('conclusion_review.include_score_sheet'),
-            for: :conclusion_review_include_score_sheet %>
-          <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false %>
-        </div>
+        <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+          <div class="form-group">
+            <%= content_tag :label, t('conclusion_review.include_global_score_sheet'),
+              for: :conclusion_review_include_global_score_sheet %>
+            <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, true %>
+          </div>
+          <div class="form-group">
+            <%= content_tag :label, t('conclusion_review.include_score_sheet'),
+              for: :conclusion_review_include_score_sheet %>
+            <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false %>
+          </div>
+        <% end %>
         <div class="form-group">
           <%= content_tag :label, t('conclusion_review.email_note'),
             for: :conclusion_review_email_note %>

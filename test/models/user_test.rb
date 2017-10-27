@@ -462,7 +462,9 @@ class UserTest < ActiveSupport::TestCase
       issue_date: Date.today,
       close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date,
       applied_procedures: 'New applied procedures',
-      conclusion: 'New conclusion'
+      conclusion: 'New conclusion',
+      recipients: 'John Doe',
+      sectors: 'Area 51'
     }, false).save!
 
     Organization.current_id = nil
