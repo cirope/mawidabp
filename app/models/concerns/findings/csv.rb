@@ -8,6 +8,7 @@ module Findings::CSV
     row = [
       review.identification,
       review.plan_item.project,
+      review.conclusion_final_review&.summary || '-',
       review_code,
       id,
       taggings.map(&:tag).to_sentence,
@@ -120,6 +121,7 @@ module Findings::CSV
           (Organization.model_name.human if corporate),
           Review.model_name.human,
           PlanItem.human_attribute_name('project'),
+          ConclusionFinalReview.human_attribute_name('summary'),
           Weakness.human_attribute_name('review_code'),
           Finding.human_attribute_name('id'),
           Tag.model_name.human(count: 0),

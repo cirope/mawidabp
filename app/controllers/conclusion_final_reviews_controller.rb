@@ -60,7 +60,7 @@ class ConclusionFinalReviewsController < ApplicationController
                 },
               }
             },
-            only: [:conclusion, :applied_procedures])
+            only: [:conclusion, :applied_procedures, :recipients, :sectors])
         }
       end
     else
@@ -118,7 +118,11 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf/1
   def export_to_pdf
-    @conclusion_final_review.to_pdf(current_organization, params[:export_options]&.to_unsafe_h)
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+      @conclusion_final_review.alternative_pdf(current_organization)
+    else
+      @conclusion_final_review.to_pdf(current_organization, params[:export_options]&.to_unsafe_h)
+    end
 
     respond_to do |format|
       format.html { redirect_to @conclusion_final_review.relative_pdf_path }
@@ -200,7 +204,11 @@ class ConclusionFinalReviewsController < ApplicationController
       end
     end
 
-    @conclusion_final_review.to_pdf(current_organization, export_options)
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+      @conclusion_final_review.alternative_pdf(current_organization)
+    else
+      @conclusion_final_review.to_pdf(current_organization, export_options)
+    end
 
     if include_score_sheet
       @conclusion_final_review.review.score_sheet current_organization
@@ -374,7 +382,7 @@ class ConclusionFinalReviewsController < ApplicationController
     def conclusion_final_review_params
       params.require(:conclusion_final_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
-        :summary, :lock_version
+        :summary, :recipients, :sectors, :lock_version
       )
     end
 

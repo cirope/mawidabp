@@ -233,6 +233,7 @@ Rails.application.routes.draw do
       get :download_work_papers
       get :estimated_amount
       patch :recode_findings
+      patch :recode_findings_by_risk
     end
 
     collection do
@@ -242,6 +243,7 @@ Rails.application.routes.draw do
       get :auto_complete_for_process_control
       get :auto_complete_for_control_objective
       get :auto_complete_for_tagging
+      get :next_identification_number
     end
   end
 

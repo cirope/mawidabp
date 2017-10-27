@@ -46,8 +46,10 @@
 <div class="clearfix">
   <%= paginate @weaknesses %>
 
+  <%= link_to t('finding.download_csv'), weaknesses_path(request.query_parameters.merge(format: :csv)) %>
+
   <% if params[:control_objective].to_i > 0 %>
-    <%= link_to t('label.new'), new_weakness_path(
+    | <%= link_to t('label.new'), new_weakness_path(
       :control_objective_item => params[:control_objective]), class: 'btn btn-primary' %> |
     <%= link_to t('weakness.see_all'), weaknesses_path %>
   <% end %>

@@ -59,15 +59,6 @@
         <%= f.input :audit_comments, input_html: { readonly: true, rows: 5 } %>
       </div>
     </div>
-
-    <% if SHOW_FINDING_CURRENT_SITUATION %>
-      <div class="row">
-        <div class="col-md-6">
-          <%= f.input :current_situation, input_html: { rows: 3 }, readonly: true %>
-          <%= f.input :current_situation_verified, readonly: true %>
-        </div>
-      </div>
-    <% end %>
   </div>
 
   <% unless @finding.important_dates.blank? %>

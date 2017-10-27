@@ -363,6 +363,32 @@ es:
     add_recipient: "Agregar nuevo destinatario"
     review_sended: "El informe fue enviado a todos los destinatarios indicados"
     review_not_approved: "El informe no fue enviado, debe estar aprobado"
+    executive_summary:
+      title: "Resumen ejecutivo"
+      review_author: "Gerencia de Auditoría Interna"
+      project: "La Auditoría practicada estuvo circunscripta a la revisión del proceso/subproceso/tema"
+      risk_exposure: "El proceso/subproceso evaluado en esta revisión es considerado por la Auditoria Interna en función a la Matriz de Riesgo"
+      score: "Calificación"
+      main_weaknesses: "Principales debilidades"
+      no_main_weaknesses: "No hay observaciones consideradas Principal Debilidad."
+      other_weaknesses: "Otras observaciones"
+      no_other_weaknesses: "No hay otras observaciones."
+      no_weaknesses: "Sin observaciones"
+      medium_risk_weaknesses: "Riesgo medio"
+      assumed_risk_weaknesses: "Riesgo asumido"
+      low_risk_weaknesses_title: "Riesgo bajo y no relevante"
+      low_risk_weaknesses:
+        one: "Se encuentran detalladas en el cuerpo de este informe %{count} observación de riesgo bajo y %{not_relevant_count} de riesgo no relevante."
+        other: "Se encuentran detalladas en el cuerpo de este informe %{count} observaciones de riesgo bajo y %{not_relevant_count} de riesgo no relevante."
+    detailed_review:
+      title: "Informe detallado"
+      legend: "Durante el corriente mes se ha efectuado una Auditoría sobre el proceso de referencia.\nEn cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.\nLa puesta en práctica de las recomendaciones citadas en el presente informe permitirá cumplimentar: i) los requerimientos del informe elaborado por el denominado Committee of Sponsoring Organizations of the Treadway Commission (COSO) sobre la evaluación de control interno, metodología internacional utilizada por esta Auditoria; ii) los requerimientos del Modelo de Control COBIT (Governance, Control and Audit for Information and Related Technology), metodología internacional utilizada por esta Auditoría de Sistemas y que incluye, entre otros, Normas Técnicas ISO y criterios de calificación ISO 9000, lo cual le permitirá al Banco encuadrarse dentro de Estándares Internacionales de Seguridad y de Control de Calidad."
+    annex:
+      title: "Anexo I"
+      legend: "La Auditoría practicada estuvo conformada por distintos controles, los cuales han sido evaluados con relación a los riesgos asociados, por lo que a continuación se detallan con su respectiva calificación, aclarando que dichos conceptos pueden estar vinculados a distintas valoraciones:"
+      scope: "Alcance de la tarea"
+      scope_column: "Alcance de la tarea"
+      staff: "Personal interviniente"
     bundle:
       zip_name: "legajo_%{identification}.zip"
       control_objectives_dir: "%{prefix}_objetivos_de_control"
@@ -413,12 +439,6 @@ es:
     not_rated: "No evaluado"
     excluded_from_score: "No se tiene en cuenta en la calificación del informe"
     not_applicable: "No aplica"
-    auditor_comments:
-      satisfactory: "Satisfactorio"
-      satisfactory_with_caveats: "Satisfactorio con salvedades"
-      needs_improvement: "Necesita mejorar"
-      dissatisfactory: "No satisfactorio"
-      not_applicable: "No aplica"
     errors:
       not_finished: "no está terminado"
       without_score: "sin calificar"
@@ -879,6 +899,7 @@ es:
     estimated_amount: "Costo estimado en plan de trabajo"
     other_actions: "Acciones"
     recode_findings: "Recodificar hallazgos"
+    recode_findings_by_risk: "Recodificar hallazgos por riesgo"
     findings_recoded: "Hallazgos recodificados correctamente"
     review_qualification_explanation: "La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     process_control_qualification_explanation: "La calificación del proceso de negocio se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
@@ -1067,6 +1088,8 @@ es:
         project: "Proyecto"
         approved: "Aprobado"
         summary: "Acta"
+        recipients: "Destinatarios del informe"
+        sectors: "Sectores/departamentos involucrados"
       control:
         order: "Orden"
         control: "Controles"
@@ -1325,9 +1348,10 @@ es:
         review:
           attributes:
             review_user_assignments:
-              invalid: "debe tener al menos un auditor, un gerente, un supervisor y un auditado"
+              invalid: "debe tener al menos un supervisor o gerente, un auditor y un auditado"
             plan_item:
               invalid: "debe tener una unidad de negocio asignada en la planificación"
+              required: "debe seleccionar uno"
         review_user_assignment:
           attributes:
             user_id:

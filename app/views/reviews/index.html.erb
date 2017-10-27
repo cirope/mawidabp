@@ -1,5 +1,7 @@
 <%= render :partial => 'shared/search', :locals => {
-  :options => {},
+  :options => {
+    :columns_for_sort => Review.columns_for_sort
+  },
   :columns => @query.blank? ? (Review::COLUMNS_FOR_SEARCH.keys + ['tags']) : @columns
 } %>
 <table class="table table-condensed table-striped">

@@ -27,7 +27,6 @@
 //= require form_modification
 //= require filters
 //= require validation
-//= require ui
 //= require file_input
 //= require best_practices
 //= require control_objective_items

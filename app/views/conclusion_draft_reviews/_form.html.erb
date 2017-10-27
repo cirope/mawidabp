@@ -23,11 +23,28 @@
           readonly: true } %>
       </div>
       <div class="col-md-6">
-        <%= f.input :applied_procedures, input_html: { rows: 3 } %>
-        <%= f.input :conclusion, input_html: { rows: 3 } %>
+        <%= f.input :applied_procedures, input_html: { rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 3 } %>
+
+        <% if SHOW_CONCLUSION_AS_OPTIONS %>
+          <%= f.input :conclusion, collection: conclusion_options, prompt: true %>
+        <% else %>
+          <%= f.input :conclusion, input_html: { rows: 3 } %>
+        <% end %>
+
         <%= f.input :issue_date, as: :date_picker %>
       </div>
     </div>
+
+    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :recipients, input_html: { rows: 4 } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :sectors, input_html: { rows: 4 } %>
+        </div>
+      </div>
+    <% end %>
   </div>
 
   <div id="approval_text">

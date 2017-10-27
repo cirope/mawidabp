@@ -273,7 +273,7 @@ module Prawn
       end
 
       def percent_width(width)
-        (page_usable_width * (width / 100.0)).round
+        (page_usable_width * (width / 100.0) * 10_000).floor / 10_000.0
       end
 
       def custom_save_as(filename, sub_directory, id = 0)

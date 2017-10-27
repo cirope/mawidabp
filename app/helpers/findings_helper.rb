@@ -57,7 +57,7 @@ module FindingsHelper
 
   def show_review_with_conclusion_status_as_abbr review
     review_data = if review.has_final_review?
-                    t 'review.with_final_review'
+                    "#{t 'review.with_final_review'} | #{summary_for review}"
                   else
                     t 'review.without_final_review'
                   end
@@ -70,7 +70,6 @@ module FindingsHelper
   def show_finding_review_code_with_decription_as_abbr finding
     content_tag :abbr, finding.review_code, title: finding.description
   end
-
 
   def finding_answer_notification_check form
     html_class = @auth_user.can_act_as_audited? ? 'hidden' : nil
@@ -164,6 +163,16 @@ module FindingsHelper
     SHOW_FINDING_CURRENT_SITUATION &&
       @finding.is_in_a_final_review? &&
       @finding.answer.present?
+  end
+
+  def finding_description_label
+    attr_name = @finding.class.human_attribute_name 'description'
+
+    if SHOW_FINDING_CURRENT_SITUATION
+      "#{attr_name} #{t '.origin'}"
+    else
+      attr_name
+    end
   end
 
   private
@@ -279,5 +288,11 @@ module FindingsHelper
           options.merge(new_option => true).to_json
         ]
       end
+    end
+
+    def summary_for review
+      summary = review.conclusion_final_review.summary || '-'
+
+      "#{ConclusionReview.human_attribute_name 'summary'}: #{summary}"
     end
 end

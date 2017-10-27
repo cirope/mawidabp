@@ -1,0 +1,11 @@
++function () {
+  var identification = '<%= params[:prefix] %>-<%= @next_number %>/<%= params[:suffix] %>'
+
+  $('[name="review[identification_number]"]').
+    val('<%= @next_number %>').
+    css('border-color', '#47ae00').
+    delay(1000).
+    animate({'border-color': '#c2bfB7'}, 50)
+
+  $('[name="review[identification]"]').val(identification)
+}()

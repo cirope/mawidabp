@@ -6,7 +6,7 @@ class ReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
     :show, :edit, :update, :destroy, :review_data, :download_work_papers,
-    :survey_pdf, :recode_findings
+    :survey_pdf, :recode_findings, :recode_findings_by_risk
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -17,7 +17,9 @@ class ReviewsController < ApplicationController
   def index
     @title = t 'review.index_title'
     scope  = Review.list.
-      includes(:period, :tags, { plan_item: :business_unit }).
+      includes(:conclusion_final_review, :period, :tags, {
+        plan_item: :business_unit
+      }).
       references(:periods)
 
     tagged_reviews = build_tag_search_for scope
@@ -25,10 +27,11 @@ class ReviewsController < ApplicationController
     build_search_conditions Review
 
     reviews = @columns == ['tags'] ? scope.none : scope.where(@conditions)
+    order = @order_by || Review.default_order
 
     @reviews = tagged_reviews.
       or(reviews).
-      reorder(identification: :desc).
+      reorder(order).
       page(params[:page])
 
     respond_to do |format|
@@ -345,6 +348,18 @@ class ReviewsController < ApplicationController
     redirect_to @review, notice: t('review.findings_recoded')
   end
 
+  # * PUT /reviews/1/recode_findings_by_risk
+  def recode_findings_by_risk
+    @review.recode_weaknesses_by_risk
+
+    redirect_to @review, notice: t('review.findings_recoded')
+  end
+
+  # * GET /reviews/next_identification_number
+  def next_identification_number
+    @next_number = Review.next_identification_number params[:suffix]
+  end
+
   private
 
     def review_params
@@ -402,7 +417,9 @@ class ReviewsController < ApplicationController
         auto_complete_for_process_control: :read,
         auto_complete_for_tagging: :read,
         estimated_amount: :read,
-        recode_findings: :modify
+        next_identification_number: :read,
+        recode_findings: :modify,
+        recode_findings_by_risk: :modify
       )
     end
 end

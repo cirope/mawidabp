@@ -2,6 +2,7 @@ class ReviewUserAssignment < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Comparable
+  include ReviewUserAssignments::DestroyCallbacks
   include ReviewUserAssignments::Scopes
 
   # Constantes
@@ -15,7 +16,7 @@ class ReviewUserAssignment < ApplicationRecord
 
   # Callbacks
   before_validation :check_if_can_modified
-  before_destroy :check_if_can_modified, :delete_user_in_all_review_findings
+  before_destroy :check_if_can_modified
   before_save :check_user_modification
 
   # Restricciones
@@ -154,34 +155,6 @@ class ReviewUserAssignment < ApplicationRecord
     @cancel_notification = true
 
     self.destroy
-  end
-
-  def delete_user_in_all_review_findings
-    all_valid = false
-
-    Finding.transaction do
-      findings = self.user.findings.all_for_reallocation_with_review self.review
-      all_valid = findings.all? do |finding|
-        finding.users.delete self.user
-        finding.valid?
-      end
-
-      unless all_valid
-        self.errors.add(:base,
-          I18n.t('review_user_assignment.cannot_be_destroyed'))
-        raise ActiveRecord::Rollback
-      end
-    end
-
-    if all_valid && !@cancel_notification && (self.review.oportunities | self.review.weaknesses).size > 0
-      title = I18n.t('review_user_assignment.responsibility_removed', review: self.review.try(:identification))
-
-      NotifierMailer.changes_notification(
-        self.user, title: title, organizations: [review.organization]
-      ).deliver_later
-    end
-
-    throw :abort unless all_valid
   end
 
   def is_in_a_final_review?
