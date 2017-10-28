@@ -20,6 +20,10 @@ module Findings::Confirmation
     end
   end
 
+  def stale_confirmed_days
+    parameter_in(organization_id, 'finding_stale_confirmed_days').to_i
+  end
+
   private
 
     def mark_notifications_as_confirmed_by user

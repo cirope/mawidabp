@@ -2,21 +2,21 @@ encoding: utf-8
 markdown: kramdown
 permalink: pretty
 baseurl: "/help"
-gems:
+plugins:
+  - jekyll-assets
   - jekyll-multiple-languages-plugin
 assets:
-  cache: false
   digest: true
   compress:
     css: true
     js: true
   sources:
-    - "_assets/images"
-    - "_assets/javascripts"
-    - "_assets/stylesheets"
-    - "_vendor/assets/stylesheets"
-    - "_vendor/assets/javascripts"
-    - "_vendor/assets/fonts"
+    - _assets/images
+    - _assets/javascripts
+    - _assets/stylesheets
+    - _vendor/assets/stylesheets
+    - _vendor/assets/javascripts
+    - _vendor/assets/fonts
 exclude:
   - Gemfile
   - Gemfile.lock

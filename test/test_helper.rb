@@ -1,6 +1,5 @@
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
-require 'minitest/pride'
 require 'sidekiq/testing'
 
 Sidekiq::Testing.inline!
@@ -15,7 +14,7 @@ class ActiveSupport::TestCase
     Organization.current_id = organization.id
   end
 
-  def login user: users(:administrator_user), prefix: organizations(:cirope).prefix
+  def login user: users(:administrator), prefix: organizations(:cirope).prefix
     @request.host         = [prefix, ENV['APP_HOST']].join('.')
     session[:user_id]     = user.id
     session[:last_access] = Time.now
@@ -40,8 +39,8 @@ class ActiveSupport::TestCase
   end
 
   def assert_error model, attribute, type, options = {}
-    assert model.errors[attribute].include?(
-      model.errors.generate_message(attribute, type, options)
-    )
+    error = model.errors.generate_message attribute, type, options
+
+    assert_includes model.errors[attribute], error
   end
 end

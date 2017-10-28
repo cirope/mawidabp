@@ -438,31 +438,4 @@ jQuery(function($) {
       event.stopPropagation();
     }
   });
-
-  $('.popup').dialog({
-    autoOpen: false,
-    draggable: false,
-    resizable: false,
-    height: 'auto',
-    minHeight: 50,
-    maxWidth: 400,
-    width: 'auto',
-    close: function() {
-      $(this).parents('.ui-dialog').show().fadeOut(500);
-    },
-    open: function(){
-      $(this).parents('.ui-dialog').hide().fadeIn(500);
-    }
-  });
-
-  $(document).on('click', 'span.popup_link', function(event) {
-    $($(this).data('helpDialog')).dialog('open').dialog(
-      'option', 'position', [
-        event.pageX - $(window).scrollLeft(),
-        event.pageY - $(window).scrollTop()
-      ]
-    );
-
-    return false;
-  });
 });

@@ -3,7 +3,7 @@ module FindingAnswers::Validations
 
   included do
     validates :finding_id, :answer, presence: true
-    validates :answer, :auditor_comments, pdf_encoding: true
+    validates :answer, pdf_encoding: true
     validates :commitment_date, timeliness: { type: :date }, allow_blank: true
     validates :commitment_date, presence: true, if: :commitment_date_should_be_present?
   end

@@ -1,5 +1,5 @@
 class Users::ImportsController < ApplicationController
-  before_action :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges, :set_title
 
   def new
   end

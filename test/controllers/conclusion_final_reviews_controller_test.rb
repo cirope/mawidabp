@@ -6,7 +6,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
-  def setup
+  setup do
     @request.host = "#{organizations(:cirope).prefix}.localhost.i"
   end
 
@@ -128,7 +128,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :close_date => Date.tomorrow,
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion',
-          :summary => 'ACT 12'
+          :summary => 'ACT 12',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51'
         }
       }
     end
@@ -156,7 +158,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'Updated applied procedures',
           :conclusion => 'Updated conclusion',
-          :summary => 'ACT Updated'
+          :summary => 'ACT Updated',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51'
         }
       }
     end
@@ -282,14 +286,14 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       patch :send_by_email, :params => {
         :id => conclusion_reviews(:conclusion_current_final_review).id,
         :user => {
-          users(:administrator_user).id => {
-            :id => users(:administrator_user).id,
-            :data => users(:administrator_user).name
+          users(:administrator).id => {
+            :id => users(:administrator).id,
+            :data => users(:administrator).name
           },
           # Con duplicados igual envía solo un correo
-          users(:administrator_user).id + 1 => {
-            :id => users(:administrator_user).id,
-            :data => users(:administrator_user).name
+          users(:administrator).id + 1 => {
+            :id => users(:administrator).id,
+            :data => users(:administrator).name
           }
         }
       }
@@ -303,14 +307,14 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       patch :send_by_email, :params => {
         :id => conclusion_reviews(:conclusion_current_final_review).id,
         :user => {
-          users(:administrator_user).id => {
-            :id => users(:administrator_user).id,
-            :data => users(:administrator_user).name
+          users(:administrator).id => {
+            :id => users(:administrator).id,
+            :data => users(:administrator).name
           },
           # Sin confirmación
-          users(:audited_user).id => {
-            :id => users(:audited_user).id,
-            :data => users(:audited_user).name
+          users(:audited).id => {
+            :id => users(:audited).id,
+            :data => users(:audited).name
           }
         }
       }
@@ -336,9 +340,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :email_note => 'note in *textile* _format_'
         },
         :user => {
-          users(:administrator_user).id => {
-            :id => users(:administrator_user).id,
-            :data => users(:administrator_user).name
+          users(:administrator).id => {
+            :id => users(:administrator).id,
+            :data => users(:administrator).name
           }
         }
       }
@@ -361,9 +365,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :email_note => 'note in *textile* _format_'
         },
         :user => {
-          users(:administrator_user).id => {
-            :id => users(:administrator_user).id,
-            :data => users(:administrator_user).name
+          users(:administrator).id => {
+            :id => users(:administrator).id,
+            :data => users(:administrator).name
           }
         }
       }

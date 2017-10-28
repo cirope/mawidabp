@@ -5,7 +5,7 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
   fixtures :conclusion_reviews
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_current_draft_review).id)
 
@@ -36,7 +36,9 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion'
+        :conclusion => 'New conclusion',
+        :recipients => 'John Doe',
+        :sectors => 'Area 51'
       )
 
       # Asegurarse que le asigna el tipo correcto

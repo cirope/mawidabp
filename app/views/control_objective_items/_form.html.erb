@@ -27,37 +27,52 @@
         <%= f.simple_fields_for :control do |c_f| %>
           <%= c_f.input :effects, label: Control.human_attribute_name(:effects), input_html: { readonly: readonly, rows: 5 } %>
           <%= c_f.input :control, label: Control.human_attribute_name(:control), input_html: { readonly: readonly, rows: 5 } %>
-          <%= f.input :effectiveness, label: ControlObjectiveItem.human_attribute_name(:effectiveness),
-            input_html: { value: "#{@control_objective_item.effectiveness}%", readonly: true } %>
 
+          <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+            <%= f.input :effectiveness, label: ControlObjectiveItem.human_attribute_name(:effectiveness),
+              input_html: { value: "#{@control_objective_item.effectiveness}%", readonly: true } %>
+          <% end %>
+
+          <% test_rows = HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS ? 9 : 5 %>
           <% content_for :design_tests do %>
-            <%= c_f.input :design_tests, input_html: { readonly: readonly, rows: 5 } %>
+            <%= c_f.input :design_tests, input_html: { readonly: readonly, rows: test_rows } %>
           <% end %>
           <% content_for :compliance_tests do %>
-            <%= c_f.input :compliance_tests, input_html: { readonly: readonly, rows: 5 } %>
+            <%= c_f.input :compliance_tests, input_html: { readonly: readonly, rows: test_rows } %>
           <% end %>
           <% content_for :sustantive_tests do %>
-            <%= c_f.input :sustantive_tests, input_html: { readonly: readonly, rows: 5 } %>
+            <%= c_f.input :sustantive_tests, input_html: { readonly: readonly, rows: test_rows } %>
           <% end %>
         <% end %>
       </div>
       <div class="col-md-6">
-        <%= f.input :design_score, collection: qualifications,
-          include_blank: t('control_objective_item.not_rated'),
-          input_html: { data: { score_target: 'design' }, disabled: readonly } %>
+        <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+          <%= f.input :design_score, collection: qualifications,
+            include_blank: t('control_objective_item.not_rated'),
+            input_html: { data: { score_target: 'design' }, disabled: readonly } %>
+        <% end %>
         <%= yield :design_tests %>
 
-        <%= f.input :compliance_score, collection: qualifications,
-          include_blank: t('control_objective_item.not_rated'),
-          input_html: { data: { score_target: 'compliance' }, disabled: readonly } %>
+        <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+          <%= f.input :compliance_score, collection: qualifications,
+            include_blank: t('control_objective_item.not_rated'),
+            input_html: { data: { score_target: 'compliance' }, disabled: readonly } %>
+        <% end %>
         <%= yield :compliance_tests %>
 
-        <%= f.input :sustantive_score, collection: qualifications,
-          include_blank: t('control_objective_item.not_rated'),
-          input_html: { data: { score_target: 'sustantive' }, disabled: readonly } %>
+        <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+          <%= f.input :sustantive_score, collection: qualifications,
+            include_blank: t('control_objective_item.not_rated'),
+            input_html: { data: { score_target: 'sustantive' }, disabled: readonly } %>
+        <% end %>
         <%= yield :sustantive_tests %>
 
-        <%= f.input :auditor_comment, input_html: { readonly: readonly, rows: 5 } %>
+        <% if SHOW_CONCLUSION_AS_OPTIONS %>
+          <%= f.input :auditor_comment, collection: auditor_comment_options,
+            prompt: true, input_html: { readonly: readonly } %>
+        <% else %>
+          <%= f.input :auditor_comment, input_html: { readonly: readonly, rows: 5 } %>
+        <% end %>
 
         <div class="row">
           <div class="col-md-6">
@@ -87,47 +102,51 @@
   <br />
   <%= render 'weaknesses_summary', readonly: readonly %>
 
-  <br />
-  <%= render 'oportunities_summary', readonly: readonly %>
+  <% unless HIDE_OPORTUNITIES %>
+    <br />
+    <%= render 'oportunities_summary', readonly: readonly %>
+  <% end %>
 
-  <br />
-  <h4>
-    <%= BusinessUnitScore.model_name.human count: @control_objective_item.business_unit_scores.size %>
-  </h4>
-  <div class="row">
-    <div class="col-md-4">
-      <h5><strong><%= BusinessUnitScore.human_attribute_name 'business_unit_id' %></strong></h5>
+  <% unless HIDE_BUSINESS_UNIT_SCORES %>
+    <br />
+    <h4>
+      <%= BusinessUnitScore.model_name.human count: @control_objective_item.business_unit_scores.size %>
+    </h4>
+    <div class="row">
+      <div class="col-md-4">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'business_unit_id' %></strong></h5>
+      </div>
+      <div class="col-md-2">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'design_score' %></strong></h5>
+      </div>
+      <div class="col-md-2">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'compliance_score' %></strong></h5>
+      </div>
+      <div class="col-md-2">
+        <h5><strong><%= BusinessUnitScore.human_attribute_name 'sustantive_score' %></strong></h5>
+      </div>
     </div>
-    <div class="col-md-2">
-      <h5><strong><%= BusinessUnitScore.human_attribute_name 'design_score' %></strong></h5>
+
+    <div id="business_unit_scores">
+      <%= f.simple_fields_for :business_unit_scores do |bus_f| %>
+        <%= render 'business_unit_score', f: bus_f, readonly: readonly %>
+      <% end %>
+
+      <%= link_to_add_fields(
+        t('control_objective_item.add_business_unit_score'),
+        f, :business_unit_scores, nil, {}, { readonly: readonly }
+      ) unless readonly %>
     </div>
-    <div class="col-md-2">
-      <h5><strong><%= BusinessUnitScore.human_attribute_name 'compliance_score' %></strong></h5>
+
+    <hr>
+
+    <div id="business_unit_types">
+      <%= link_to_add_fields(
+        t('control_objective_item.add_business_unit_type'),
+        f, :business_unit_scores, 'business_unit_type', {}, { readonly: readonly }
+      ) unless readonly %>
     </div>
-    <div class="col-md-2">
-      <h5><strong><%= BusinessUnitScore.human_attribute_name 'sustantive_score' %></strong></h5>
-    </div>
-  </div>
-
-  <div id="business_unit_scores">
-    <%= f.simple_fields_for :business_unit_scores do |bus_f| %>
-      <%= render 'business_unit_score', f: bus_f, readonly: readonly %>
-    <% end %>
-
-    <%= link_to_add_fields(
-      t('control_objective_item.add_business_unit_score'),
-      f, :business_unit_scores, nil, {}, { readonly: readonly }
-    ) unless readonly %>
-  </div>
-
-  <hr>
-
-  <div id="business_unit_types">
-    <%= link_to_add_fields(
-      t('control_objective_item.add_business_unit_type'),
-      f, :business_unit_scores, 'business_unit_type', {}, { readonly: readonly }
-    ) unless readonly %>
-  </div>
+  <% end %>
 
   <br />
   <h4>

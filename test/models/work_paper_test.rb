@@ -5,7 +5,7 @@ class WorkPaperTest < ActiveSupport::TestCase
   fixtures :work_papers, :file_models, :organizations
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @work_paper = WorkPaper.find work_papers(:image_work_paper).id
     @work_paper.code_prefix = I18n.t("code_prefixes.work_papers_in_control_objectives")
 
@@ -31,7 +31,7 @@ class WorkPaperTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'WorkPaper.count' do
       @work_paper = WorkPaper.list.create(
-        :owner => control_objective_items(:iso_27000_security_policy_3_1_item),
+        :owner => control_objective_items(:security_policy_3_1_item),
         :name => 'New name',
         :code => 'PTOC 20',
         :number_of_pages => '10',
@@ -52,7 +52,7 @@ class WorkPaperTest < ActiveSupport::TestCase
 
     assert_difference ['WorkPaper.count', 'FileModel.count'] do
       @work_paper = WorkPaper.list.create(
-        :owner => control_objective_items(:iso_27000_security_policy_3_1_item),
+        :owner => control_objective_items(:security_policy_3_1_item),
         :name => 'New name',
         :code => 'PTOC 21',
         :number_of_pages => '10',
@@ -128,7 +128,7 @@ class WorkPaperTest < ActiveSupport::TestCase
   test 'zip created' do
     assert_difference 'WorkPaper.count' do
       @work_paper = WorkPaper.create(
-        :owner => control_objective_items(:iso_27000_security_policy_3_1_item),
+        :owner => control_objective_items(:security_policy_3_1_item),
         :name => 'New name',
         :code => 'PTOC 20',
         :number_of_pages => '10',
@@ -215,7 +215,7 @@ class WorkPaperTest < ActiveSupport::TestCase
   end
 
   test 'validates duplicated codes' do
-    other_work_paper = WorkPaper.find work_papers(:text2_work_paper_bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id
+    other_work_paper = WorkPaper.find work_papers(:text2_work_paper_unconfirmed_weakness).id
 
     assert_no_difference 'WorkPaper.count' do
       assert !other_work_paper.owner.update(

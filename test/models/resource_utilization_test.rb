@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ResourceUtilizationTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @resource_utilization =
       resource_utilizations(:auditor_for_20_units_plan_item_1)
   end

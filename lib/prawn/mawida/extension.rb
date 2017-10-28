@@ -251,7 +251,7 @@ module Prawn
         font_height = self.font.height_at(font_size)
 
         self.draw_text(text, :size => font_size, :style => style,
-          :at => [self.bounds.left, self.bounds.bottom - font_height])
+          :at => [self.bounds.left, self.bounds.bottom - font_height * 0.5])
       end
 
       def default_table_options(column_widths)
@@ -273,7 +273,7 @@ module Prawn
       end
 
       def percent_width(width)
-        (page_usable_width * (width / 100.0)).round
+        (page_usable_width * (width / 100.0) * 10_000).floor / 10_000.0
       end
 
       def custom_save_as(filename, sub_directory, id = 0)

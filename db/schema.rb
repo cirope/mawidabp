@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170516132941) do
+ActiveRecord::Schema.define(version: 20171024174522) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -178,6 +178,8 @@ ActiveRecord::Schema.define(version: 20170516132941) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "organization_id", precision: 38
     t.string "summary"
+    t.text "recipients"
+    t.text "sectors"
     t.index ["close_date"], name: "i_con_rev_clo_dat"
     t.index ["issue_date"], name: "i_con_rev_iss_dat"
     t.index ["organization_id"], name: "i_con_rev_org_id"
@@ -438,7 +440,6 @@ ActiveRecord::Schema.define(version: 20170516132941) do
 
   create_table "finding_answers", force: :cascade do |t|
     t.text "answer"
-    t.text "auditor_comments"
     t.date "commitment_date"
     t.integer "finding_id", precision: 38
     t.integer "user_id", precision: 38
@@ -507,6 +508,13 @@ ActiveRecord::Schema.define(version: 20170516132941) do
     t.integer "repeated_of_id", precision: 38
     t.integer "organization_id", precision: 38
     t.string "title"
+    t.integer "progress", precision: 38
+    t.text "current_situation"
+    t.boolean "current_situation_verified", default: false, null: false
+    t.string "compliance"
+    t.string "operational_risk"
+    t.text "impact", default: "[]", null: false
+    t.text "internal_control_components", default: "[]", null: false
     t.index ["control_objective_item_id"], name: "i_fin_con_obj_ite_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
@@ -2600,6 +2608,10 @@ ActiveRecord::Schema.define(version: 20170516132941) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "organization_id", precision: 38
+    t.string "scope"
+    t.string "risk_exposure"
+    t.decimal "manual_score", precision: 6, scale: 2
+    t.string "include_sox"
     t.index ["file_model_id"], name: "index_reviews_on_file_model_id"
     t.index ["identification"], name: "i_reviews_identification"
     t.index ["organization_id"], name: "i_reviews_organization_id"

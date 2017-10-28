@@ -93,7 +93,7 @@ class WorkflowsControllerTest < ActionController::TestCase
               :order_number => 1,
               :resource_utilizations_attributes => [
                 {
-                  :resource_id => users(:manager_user).id,
+                  :resource_id => users(:manager).id,
                   :resource_type => 'User',
                   :units => '12.21'
                 }, {
@@ -136,7 +136,7 @@ class WorkflowsControllerTest < ActionController::TestCase
                 :resource_utilizations_attributes => [
                   {
                     :id => resource_utilizations(:auditor_for_20_units_with_conclusion_workflow_item_1).id,
-                    :resource_id => users(:manager_user).id,
+                    :resource_id => users(:manager).id,
                     :units => '12.21'
                   }
                 ]
@@ -173,7 +173,7 @@ class WorkflowsControllerTest < ActionController::TestCase
             :order_number => 1,
             :resource_utilizations_attributes => [
               {
-                :resource_id => users(:manager_user).id,
+                :resource_id => users(:manager).id,
                 :resource_type => 'User',
                 :units => '12.21'
               }
@@ -185,7 +185,7 @@ class WorkflowsControllerTest < ActionController::TestCase
             :order_number => 2,
             :resource_utilizations_attributes => [
               {
-                :resource_id => users(:manager_user).id,
+                :resource_id => users(:manager).id,
                 :resource_type => 'User',
                 :units => '12.21'
               }

@@ -5,7 +5,7 @@ class WorkflowTest < ActiveSupport::TestCase
   fixtures :workflows, :periods, :reviews
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @workflow = Workflow.find workflows(:with_conclusion_workflow).id
 
     set_organization

@@ -41,7 +41,7 @@ module Reports::FixedWeaknessesReport
 
       if params[:fixed_weaknesses_report][:finding_status].present?
         weaknesses_conditions[:state] = params[:fixed_weaknesses_report][:finding_status]
-        state_text = t "finding.status_#{Finding::STATUS.invert[weaknesses_conditions[:state].to_i]}"
+        state_text = t "findings.state.#{Finding::STATUS.invert[weaknesses_conditions[:state].to_i]}"
 
         @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text}\""
       end

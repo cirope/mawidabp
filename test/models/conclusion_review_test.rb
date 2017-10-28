@@ -5,7 +5,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   fixtures :conclusion_reviews
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @conclusion_review = ConclusionReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
 
@@ -36,7 +36,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion'
+        :conclusion => 'New conclusion',
+        :recipients => 'John Doe',
+        :sectors => 'Area 51'
       }, false)
 
       assert @conclusion_review.save
@@ -68,12 +70,19 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review.review_id = nil
     @conclusion_review.applied_procedures = '   '
     @conclusion_review.conclusion = '   '
+    @conclusion_review.recipients = '   '
+    @conclusion_review.sectors = '   '
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
     assert_error @conclusion_review, :review_id, :blank
     assert_error @conclusion_review, :applied_procedures, :blank
     assert_error @conclusion_review, :conclusion, :blank
+
+    if SHOW_REVIEW_EXTRA_ATTRIBUTES
+      assert_error @conclusion_review, :recipients, :blank
+      assert_error @conclusion_review, :sectors, :blank
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -108,7 +117,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :issue_date => Date.today,
         :close_date => 2.days.ago.to_date,
         :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion'
+        :conclusion => 'New conclusion',
+        :recipients => 'John Doe',
+        :sectors => 'Area 51'
       }, false)
 
     assert @conclusion_review.invalid?
@@ -120,7 +131,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    user = User.find users(:administrator_user).id
+    user = User.find users(:administrator).id
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
       @conclusion_review.send_by_email_to(user)
@@ -165,6 +176,17 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert File.exist?(@conclusion_review.absolute_pdf_path)
     assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
     assert_not_equal size, new_size
+  end
+
+  test 'alternative pdf conversion' do
+    assert_nothing_raised do
+      @conclusion_review.alternative_pdf(organizations(:cirope))
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+
+    FileUtils.rm @conclusion_review.absolute_pdf_path
   end
 
   test 'create bundle zip' do

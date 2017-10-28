@@ -34,10 +34,10 @@ module UsersHelper
 
   def roles_for organization_role
     roles = if organization_role.organization_id
-      Role.list_by_organization organization_role.organization_id
-    else
-      Role.none
-    end
+              Role.list_by_organization organization_role.organization_id
+            else
+              Role.none
+            end
 
     sorted_options_array_for roles, :name, :id
   end

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class BestPractices::ControlObjectivesControllerTest < ActionController::TestCase
   setup do
-    @control_objective = control_objectives :bcra_A4609_security_management_responsible_dependency
+    @control_objective = control_objectives :management_dependency
     @best_practice     = @control_objective.best_practice
 
     login

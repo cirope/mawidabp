@@ -5,7 +5,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   fixtures :conclusion_reviews
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_current_final_review).id)
 
@@ -42,7 +42,9 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
-          :conclusion => 'New conclusion'
+          :conclusion => 'New conclusion',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51'
         }, false)
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
@@ -62,8 +64,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'create with repeated findings' do
     review = Review.find reviews(:review_approved_with_conclusion).id
     findings = review.weaknesses + review.oportunities
-    repeated_id = findings(
-      :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
+    repeated_id = findings(:being_implemented_weakness).id
 
     assert findings.size > 0
 
@@ -85,7 +86,9 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
-          :conclusion => 'New conclusion'
+          :conclusion => 'New conclusion',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51'
         }, false)
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
@@ -122,7 +125,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   # Prueba la inclusión de observaciones anuladas en ejecución
   test 'revoked weaknesses' do
     review = Review.find reviews(:review_approved_with_conclusion).id
-    weakness = Weakness.find findings(:bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_weakness).id
+    weakness = Weakness.find findings(:being_implemented_weakness_on_approved_draft).id
     assert weakness.update_attribute :state, 7
 
     @conclusion_review = ConclusionFinalReview.list.new({
@@ -130,7 +133,9 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
-          :conclusion => 'New conclusion'
+          :conclusion => 'New conclusion',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51'
         }, false)
 
     assert @conclusion_review.save
@@ -231,7 +236,9 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion'
+        :conclusion => 'New conclusion',
+        :recipients => 'John Doe',
+        :sectors => 'Area 51'
       }, false)
 
       assert @conclusion_review.save,

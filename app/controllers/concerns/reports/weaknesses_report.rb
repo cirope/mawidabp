@@ -64,6 +64,11 @@ module Reports::WeaknessesReport
         weaknesses = weaknesses.where state: report_params[:finding_status]
       end
 
+      if report_params[:finding_current_situation_verified].present?
+        verified   = report_params[:finding_current_situation_verified] == 'yes'
+        weaknesses = weaknesses.where current_situation_verified: verified
+      end
+
       if report_params[:finding_title].present?
         weaknesses = weaknesses.with_title report_params[:finding_title]
       end
@@ -152,11 +157,18 @@ module Reports::WeaknessesReport
       pdf.add_description_item(Weakness.human_attribute_name(:state), weakness.state_text, 0, false)
 
       pdf.add_description_item(Weakness.human_attribute_name(:risk), weakness.risk_text, 0, false)
-      pdf.add_description_item(Weakness.human_attribute_name(:priority), weakness.priority_text, 0, false)
+      pdf.add_description_item(Weakness.human_attribute_name(:priority), weakness.priority_text, 0, false) unless HIDE_WEAKNESS_PRIORITY
       pdf.add_description_item(Weakness.human_attribute_name(:effect), weakness.effect, 0, false)
       pdf.add_description_item(Weakness.human_attribute_name(:audit_recommendations), weakness.audit_recommendations, 0, false)
 
       pdf.add_description_item(Weakness.human_attribute_name(:answer), weakness.answer, 0, false)
+
+      if SHOW_FINDING_CURRENT_SITUATION
+        current_situation_verified = I18n.t "label.#{weakness.current_situation_verified ? 'yes' : 'no'}"
+
+        pdf.add_description_item(Weakness.human_attribute_name(:current_situation), weakness.current_situation, 0, false)
+        pdf.add_description_item(Weakness.human_attribute_name(:current_situation_verified), current_situation_verified, 0, false)
+      end
 
       if weakness.follow_up_date
         pdf.add_description_item(Weakness.human_attribute_name(:follow_up_date), l(weakness.follow_up_date, format: :long), 0, false)
@@ -218,32 +230,36 @@ module Reports::WeaknessesReport
     end
 
     def add_filter_options_to_pdf pdf
-      filters       = []
-      labels        = {
-        review:            Review.model_name.human,
-        project:           PlanItem.human_attribute_name('project'),
-        process_control:   ProcessControl.model_name.human,
-        control_objective: ControlObjective.model_name.human,
-        tags:              Tag.model_name.human,
-        user:              User.model_name.human,
-        user_in_comments:  t('shared.filters.user.user_in_comments'),
-        finding_status:    Weakness.human_attribute_name('state'),
-        finding_title:     Weakness.human_attribute_name('title'),
-        risk:              Weakness.human_attribute_name('risk'),
-        priority:          Weakness.human_attribute_name('priority'),
-        issue_date:        ConclusionFinalReview.human_attribute_name('issue_date'),
-        origination_date:  Weakness.human_attribute_name('origination_date'),
-        follow_up_date:    Weakness.human_attribute_name('follow_up_date'),
-        solution_date:     Weakness.human_attribute_name('solution_date')
+      value_filter_names = %i(risk priority finding_status finding_current_situation_verified user_in_comments)
+      filters            = []
+      labels             = {
+        review:                             Review.model_name.human,
+        project:                            PlanItem.human_attribute_name('project'),
+        process_control:                    ProcessControl.model_name.human,
+        control_objective:                  ControlObjective.model_name.human,
+        tags:                               Tag.model_name.human,
+        user:                               User.model_name.human,
+        user_in_comments:                   t('shared.filters.user.user_in_comments'),
+        finding_status:                     Weakness.human_attribute_name('state'),
+        finding_title:                      Weakness.human_attribute_name('title'),
+        risk:                               Weakness.human_attribute_name('risk'),
+        priority:                           Weakness.human_attribute_name('priority'),
+        finding_current_situation_verified: Weakness.human_attribute_name('current_situation_verified'),
+        issue_date:                         ConclusionFinalReview.human_attribute_name('issue_date'),
+        origination_date:                   Weakness.human_attribute_name('origination_date'),
+        follow_up_date:                     Weakness.human_attribute_name('follow_up_date'),
+        solution_date:                      Weakness.human_attribute_name('solution_date')
       }
       report_params = params[:weaknesses_report].permit *labels.keys
 
       labels.each do |filter_name, filter_label|
         if report_params[filter_name].present?
           operator = report_params["#{filter_name}_operator"] || '='
-          value = %i(risk priority finding_status user_in_comments).include?(filter_name) ?
-            value_to_label(filter_name) :
-            report_params[filter_name]
+          value = if value_filter_names.include?(filter_name)
+                    value_to_label(filter_name)
+                  else
+                    report_params[filter_name]
+                  end
 
           filters << "<b>#{filter_label}</b> #{operator} #{value}"
         end
@@ -265,9 +281,11 @@ module Reports::WeaknessesReport
 
         priority ? t("priority_types.#{priority.first}") : ''
       when :finding_status
-        t "finding.status_#{Finding::STATUS.invert[value]}"
+        t "findings.state.#{Finding::STATUS.invert[value]}"
       when :user_in_comments
         value == 1 ? t('label.yes') : t('label.no')
+      when :finding_current_situation_verified
+        t "label.#{params[:weaknesses_report][param_name]}"
       end
     end
 end

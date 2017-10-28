@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class BusinessUnitFindingTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @business_unit_finding = business_unit_findings :business_unit_three_finding
   end
 

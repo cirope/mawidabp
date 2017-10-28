@@ -31,7 +31,7 @@ class LoginRecordsControllerTest < ActionController::TestCase
 
   test 'show login record' do
     get :show, :params => {
-      :id => login_records(:administrator_user_success_login_record).id
+      :id => login_records(:administrator_success_login_record).id
     }
     assert_response :success
     assert_not_nil assigns(:login_record)
