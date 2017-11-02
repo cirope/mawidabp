@@ -6,7 +6,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   setup do
-    @review = Review.find reviews(:review_with_conclusion).id
+    @review = reviews :review_with_conclusion
 
     set_organization
   end
@@ -417,14 +417,54 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.invalid?
   end
 
+  test 'control objective ids' do
+    assert_difference '@review.control_objective_items.size' do
+      @review.control_objective_ids = [
+        control_objectives(:security_policy_3_1).id
+      ]
+    end
+
+    if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+      assert_difference '@review.control_objective_items.size' do
+        @review.control_objective_ids = [
+          control_objectives(:security_policy_3_1).id
+        ]
+      end
+    else
+      assert_no_difference '@review.control_objective_items.size' do
+        @review.control_objective_ids = [
+          control_objectives(:security_policy_3_1).id
+        ]
+      end
+    end
+
+    assert_difference '@review.control_objective_items.size' do
+      @review.control_objective_ids = [
+        control_objectives(:organization_security_4_1).id
+      ]
+    end
+  end
+
   test 'process control ids' do
     assert @review.control_objective_items.present?
     assert_difference '@review.control_objective_items.size', 5 do
-      @review.process_control_ids = [process_controls(:security_policy).id]
+      @review.process_control_ids = [
+        process_controls(:security_policy).id
+      ]
     end
 
-    assert_no_difference '@review.control_objective_items.size' do
-      @review.process_control_ids = [process_controls(:security_policy).id]
+    if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+      assert_difference '@review.control_objective_items.size', 5 do
+        @review.process_control_ids = [
+          process_controls(:security_policy).id
+        ]
+      end
+    else
+      assert_no_difference '@review.control_objective_items.size' do
+        @review.process_control_ids = [
+          process_controls(:security_policy).id
+        ]
+      end
     end
   end
 
@@ -434,8 +474,14 @@ class ReviewTest < ActiveSupport::TestCase
       @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
     end
 
-    assert_no_difference '@review.control_objective_items.size' do
-      @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
+    if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+      assert_difference '@review.control_objective_items.size' do
+        @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
+      end
+    else
+      assert_no_difference '@review.control_objective_items.size' do
+        @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
+      end
     end
   end
 
