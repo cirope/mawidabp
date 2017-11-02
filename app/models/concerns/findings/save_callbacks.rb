@@ -11,8 +11,8 @@ module Findings::SaveCallbacks
       is_oracle = self.class.connection.adapter_name == 'OracleEnhanced'
 
       if !SHOW_WEAKNESS_EXTRA_ATTRIBUTES && is_oracle
-        self.impact = '[]'
-        self.internal_control_components = '[]'
+        self.impact = [].to_json
+        self.internal_control_components = [].to_json
       end
     end
 end
