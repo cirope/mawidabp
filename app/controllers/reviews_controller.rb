@@ -20,7 +20,7 @@ class ReviewsController < ApplicationController
       includes(:conclusion_final_review, :period, :tags, {
         plan_item: :business_unit
       }).
-      references(:periods)
+      references(:periods, :conclusion_final_review)
 
     tagged_reviews = build_tag_search_for scope
 

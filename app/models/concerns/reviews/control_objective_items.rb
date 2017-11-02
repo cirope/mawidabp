@@ -23,7 +23,13 @@ module Reviews::ControlObjectiveItems
   end
 
   def control_objective_ids= control_objective_ids
-    Array(control_objective_ids).uniq.each do |control_objective_id|
+    ids = if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+            Array(control_objective_ids)
+          else
+            Array(control_objective_ids).uniq
+          end
+
+    ids.each do |control_objective_id|
       if ControlObjective.exists? control_objective_id
         control_objective = ControlObjective.find control_objective_id
 
@@ -52,8 +58,9 @@ module Reviews::ControlObjectiveItems
     def add_control_objective_item_from control_objective
       control_objective_ids = control_objective_items.map &:control_objective_id
       is_not_included       = control_objective_ids.exclude? control_objective.id
+      duplication_allowed   = ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
 
-      if !control_objective.obsolete && is_not_included
+      if !control_objective.obsolete && (is_not_included || duplication_allowed)
         coi_attributes = control_objective_item_attributes_for control_objective
 
         control_objective_items.build coi_attributes

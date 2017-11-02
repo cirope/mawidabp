@@ -96,8 +96,12 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     @control_objective_item.control_objective_id = control_objective_items(
       :impact_analysis_item_editable).control_objective_id
 
-    assert @control_objective_item.invalid?
-    assert_error @control_objective_item, :control_objective_id, :taken
+    if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+      assert @control_objective_item.valid?
+    else
+      assert @control_objective_item.invalid?
+      assert_error @control_objective_item, :control_objective_id, :taken
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
