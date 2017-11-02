@@ -27,6 +27,8 @@ module ControlObjectiveItems::Validations
     end
 
     def control_objective_uniqueness
+      return if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+
       is_duplicated = review && review.control_objective_items.any? do |coi|
         is_same        = coi.control_objective_id == control_objective_id
         another_record = (persisted? && coi.id != id) ||
