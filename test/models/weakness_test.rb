@@ -329,10 +329,14 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'must be approved on required attributes' do
-    error_messages = [
-      I18n.t('weakness.errors.without_effect'),
-      I18n.t('weakness.errors.without_audit_comments')
-    ]
+    error_messages = if HIDE_WEAKNESS_EFFECT
+                       [I18n.t('weakness.errors.without_audit_comments')]
+                     else
+                       [
+                         I18n.t('weakness.errors.without_effect'),
+                         I18n.t('weakness.errors.without_audit_comments')
+                       ]
+                     end
 
     @weakness.effect = ' '
     @weakness.audit_comments = '  '

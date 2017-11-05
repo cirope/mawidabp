@@ -8,7 +8,7 @@ module Findings::Defaults
   private
 
     def set_defaults
-      if control_objective_item&.control
+      if control_objective_item&.control && !HIDE_WEAKNESS_EFFECT
         self.effect ||= control_objective_item.control.effects
       end
 
