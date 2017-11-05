@@ -33,10 +33,12 @@
   <%= simple_format @weakness.answer %>
 </div>
 
-<div>
-  <strong><%= Weakness.human_attribute_name :effect %>:</strong>
-  <%= simple_format @weakness.effect %>
-</div>
+<% unless HIDE_WEAKNESS_EFFECT %>
+  <div>
+    <strong><%= Weakness.human_attribute_name :effect %>:</strong>
+    <%= simple_format @weakness.effect %>
+  </div>
+<% end %>
 
 <p>
   <strong><%= Weakness.human_attribute_name :risk %>:</strong>

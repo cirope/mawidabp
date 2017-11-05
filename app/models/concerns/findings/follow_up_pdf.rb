@@ -256,7 +256,7 @@ module Findings::FollowUpPDF
       [
         [self.class.human_attribute_name(:risk), risk_text, 0, false],
         ([self.class.human_attribute_name(:priority), priority_text, 0, false] unless HIDE_WEAKNESS_PRIORITY),
-        [Finding.human_attribute_name(:effect), effect, 0, false],
+        ([Finding.human_attribute_name(:effect), effect, 0, false] unless HIDE_WEAKNESS_EFFECT),
         [Finding.human_attribute_name(:audit_recommendations), audit_recommendations, 0, false]
       ].compact
     end
