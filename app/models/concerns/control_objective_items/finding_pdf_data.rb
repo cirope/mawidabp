@@ -50,7 +50,7 @@ module ControlObjectiveItems::FindingPDFData
           "#{finding.risk_text.chomp}\n"
       end
 
-      if finding.effect.present?
+      if !HIDE_WEAKNESS_EFFECT && finding.effect.present?
         body << "<b>#{Weakness.human_attribute_name('effect')}:</b> " +
           "#{finding.effect.chomp}\n"
       end

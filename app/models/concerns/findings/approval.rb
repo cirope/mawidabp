@@ -72,7 +72,7 @@ module Findings::Approval
     end
 
     def effect_error
-      if kind_of?(Weakness) && effect.blank?
+      if kind_of?(Weakness) && !HIDE_WEAKNESS_EFFECT && effect.blank?
         I18n.t "#{class_name}.errors.without_effect"
       end
     end

@@ -109,7 +109,7 @@ module ConclusionFinalReviewsHelper
         "#{finding.risk_text}"
     end
 
-    if weakness && finding.effect.present?
+    if !HIDE_WEAKNESS_EFFECT && weakness && finding.effect.present?
       body_rows << "<strong>#{finding.class.human_attribute_name(:effect)}:</strong> " +
         "#{finding.effect}"
     end
