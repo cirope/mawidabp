@@ -111,7 +111,7 @@ module ReviewsHelper
     end
 
     if control_objective_item.exclude_from_score
-      html_classes << 'text-warning'
+      html_classes << 'bg-danger'
     end
 
     html_classes.join(' ')
