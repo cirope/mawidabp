@@ -366,7 +366,7 @@ module ConclusionReviews::AlternativePDF
     end
 
     def main_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_highest_risk.sort_for_review
+      weaknesses.not_revoked.not_assumed_risk.with_high_risk.sort_for_review
     end
 
     def other_weaknesses
