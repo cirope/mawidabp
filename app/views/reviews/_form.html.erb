@@ -13,8 +13,10 @@
           <%= f.input :identification, label: Review.human_attribute_name(:identification),
             input_html: { readonly: readonly } %>
         <% end %>
-        <% if [:new, :create].include?(controller.action_name.to_sym) %>
-          <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true %>
+        <% if @review.new_record? %>
+          <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true, input_html: {
+            data: { plan_item_refresh_url: plan_item_refresh_reviews_url }
+          } %>
         <% else %>
           <%= f.input :period_description, label: Review.human_attribute_name('period_id'),
             input_html: { value: @review.period.inspect, readonly: true } %>

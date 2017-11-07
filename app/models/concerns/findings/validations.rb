@@ -41,7 +41,10 @@ module Findings::Validations
 
     def validate_follow_up_date
       if kind_of?(Weakness)
-        check_for_blank = being_implemented? || implemented? || implemented_audited?
+        check_for_blank = awaiting?          ||
+                          being_implemented? ||
+                          implemented?       ||
+                          implemented_audited?
 
         errors.add :follow_up_date, :blank         if check_for_blank  && follow_up_date.blank?
         errors.add :follow_up_date, :must_be_blank if !check_for_blank && follow_up_date.present?

@@ -120,7 +120,7 @@ module Reviews::Approval
           ]
         end
       end
-      
+
       errors
     end
 end

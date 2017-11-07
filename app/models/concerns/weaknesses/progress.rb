@@ -20,7 +20,7 @@ module Weaknesses::Progress
         self.progress = 100
       elsif state_changed? && being_implemented?
         self.progress = 25
-      elsif state_changed? && progress_reset_state?
+      elsif progress_reset_state?
         self.progress = 0
       end
     end

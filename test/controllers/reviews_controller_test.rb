@@ -270,6 +270,17 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_not_nil review_data['business_unit']['name']
   end
 
+  test 'plan item refresh' do
+    login
+
+    get :plan_item_refresh, xhr: true, params: {
+      period_id: periods(:current_period).id, format: :js
+    }
+
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+  end
+
   test 'plan item data' do
     login
 

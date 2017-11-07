@@ -238,6 +238,7 @@ Rails.application.routes.draw do
 
     collection do
       get :estimated_amount
+      get :plan_item_refresh
       get :plan_item_data
       get :auto_complete_for_finding
       get :auto_complete_for_process_control

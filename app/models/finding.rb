@@ -1,9 +1,9 @@
 class Finding < ApplicationRecord
   include ActsAsTree
+  include Auditable
   include Comparable
   include Findings::Achievements
   include Findings::Answers
-  include Findings::Auditable
   include Findings::BusinessUnits
   include Findings::Code
   include Findings::Comments
@@ -29,7 +29,6 @@ class Finding < ApplicationRecord
   include Findings::Reiterations
   include Findings::Relations
   include Findings::ReportScopes
-  include Findings::SaveCallbacks
   include Findings::ScaffoldNotifications
   include Findings::Scopes
   include Findings::Search
