@@ -1,3 +1,26 @@
+$(document).on('change', '[data-plan-item-refresh-url]', function () {
+  var $period   = $('#review_period_id')
+  var $planItem = $('#review_plan_item_id')
+  var periodId  = $period.val()
+  var url       = $period.data('planItemRefreshUrl')
+
+  if (periodId) {
+    $period.prop('disabled', true)
+    $planItem.prop('disabled', true)
+
+    $.ajax({
+      url: url,
+      dataType: 'script',
+      data: {
+        period_id: periodId
+      }
+    }).always(function () {
+      $period.prop('disabled', false)
+      $planItem.prop('disabled', false).change()
+    })
+  }
+})
+
 $(document).on('change', '[data-review-role]', function () {
   $(this).
     parents('fieldset').

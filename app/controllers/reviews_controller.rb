@@ -150,6 +150,22 @@ class ReviewsController < ApplicationController
     redirect_to @review.relative_work_papers_zip_path
   end
 
+  # * GET /reviews/plan_item_refresh?period_id=1
+  def plan_item_refresh
+    grouped_plan_items =
+      PlanItem.list_unused(params[:period_id]).group_by(&:business_unit_type)
+
+    @business_unit_types = grouped_plan_items.map do |but, plan_items|
+      sorted_plan_items = plan_items.sort_by &:project
+
+      OpenStruct.new name: but.name, plan_items: sorted_plan_items
+    end
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   # Devuelve los datos del ítem del plan
   #
   # * GET /reviews/plan_item_data/1
@@ -409,6 +425,7 @@ class ReviewsController < ApplicationController
       @action_privileges.update(
         review_data: :read,
         download_work_papers: :read,
+        plan_item_refresh: :read,
         plan_item_data: :read,
         survey_pdf: :read,
         suggested_findings: :read,

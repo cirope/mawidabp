@@ -4,14 +4,3 @@
 <% end %>
 
 <%= render 'form' %>
-
-<script type="text/javascript">
-  $('#review_period_id').change(function() {
-    BrowserManipulation.changeLocation(
-      '<%= new_review_path %>',
-      { period: $(this).val() }
-    );
-
-    Helper.showLoading($(this));
-  });
-</script>
