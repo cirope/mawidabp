@@ -84,7 +84,6 @@ GEM
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
     crass (1.0.2)
-    dynamic_form (1.1.4)
     erubi (1.7.0)
     execjs (2.7.0)
     ffi (1.9.18)
@@ -266,7 +265,6 @@ DEPENDENCIES
   capistrano-rbenv
   carrierwave
   chartist-rails
-  dynamic_form
   figaro
   irreverent
   jbuilder
