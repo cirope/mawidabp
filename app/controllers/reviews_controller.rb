@@ -171,14 +171,15 @@ class ReviewsController < ApplicationController
   # * GET /reviews/plan_item_data/1
   def plan_item_data
     plan_item = PlanItem.find_by(id: params[:id])
-    business_unit = plan_item.try(:business_unit)
-    name = business_unit.try(:name)
-
-    type = business_unit.business_unit_type.name if business_unit
+    business_unit = plan_item&.business_unit
+    name = business_unit&.name
+    type = business_unit&.business_unit_type&.name
+    prefix = business_unit&.business_unit_type&.review_prefix
 
     render json: {
       business_unit_name: name,
       business_unit_type: type,
+      business_unit_prefix: prefix,
       link_to_suggested_findings:
         (suggested_findings_review_url(id: plan_item.id) if plan_item)
     }.to_json

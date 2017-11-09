@@ -3,6 +3,7 @@ cycle:
   external: false
   business_unit_label: Cycle
   project_label: Subcycle
+  review_prefix: C
   organization: cirope
 
 consolidated_substantive:
@@ -10,6 +11,7 @@ consolidated_substantive:
   external: false
   business_unit_label: Business Unit
   project_label: Audited object
+  review_prefix: CS
   organization: cirope
 
 bcra:
@@ -17,6 +19,7 @@ bcra:
   external: true
   business_unit_label: Business Unit
   project_label:
+  review_prefix: BCRA
   organization: cirope
 
 bcra_google:
@@ -24,4 +27,5 @@ bcra_google:
   external: true
   business_unit_label: Business Unit
   project_label:
+  review_prefix: BCRA
   organization: google

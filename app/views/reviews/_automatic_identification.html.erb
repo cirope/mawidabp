@@ -1,12 +1,13 @@
-<% if @review.identification.blank? || @review.errors[:identification].present? %>
+<% prefix, number, year = *@review.identification.to_s.split(/[-\/]/) %>
+
+<% if @review.new_record? %>
   <div class="row">
     <div class="col-xs-4">
       <%= f.input :identification_prefix,
-        collection: REVIEW_AUTOMATIC_PREFIXES,
         label: Review.human_attribute_name('identification'),
-        prompt: true,
         input_html: {
-          autofocus: true,
+          readonly: true,
+          value: prefix,
           data: {
             next_identification_number_url: next_identification_number_reviews_path
           }
@@ -14,14 +15,16 @@
       %>
     </div>
     <div class="col-xs-4">
-      <%= f.input :identification_number, label: raw('&nbsp;'), input_html: { readonly: true } %>
+      <%= f.input :identification_number, label: raw('&nbsp;'), input_html: {
+        value: number, readonly: true
+      } %>
     </div>
     <div class="col-xs-4">
       <%= f.input :identification_suffix,
         collection: review_year_suffixes,
         label: raw('&nbsp;'),
         prompt: false,
-        selected: Time.zone.today.year,
+        selected: year.present? ? year.to_i : Time.zone.today.year,
         input_html: {
           data: {
             next_identification_number_url: next_identification_number_reviews_path

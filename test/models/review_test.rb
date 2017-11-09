@@ -70,9 +70,11 @@ class ReviewTest < ActiveSupport::TestCase
   test 'destroy' do
     assert_no_difference('Review.count') { @review.destroy }
 
-    review = reviews(:review_without_conclusion_and_without_findings)
+    unless SHOW_REVIEW_AUTOMATIC_IDENTIFICATION
+      review = reviews(:review_without_conclusion_and_without_findings)
 
-    assert_difference('Review.count', -1) { review.destroy }
+      assert_difference('Review.count', -1) { review.destroy }
+    end
   end
 
   test 'destroy with final review' do

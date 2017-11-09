@@ -228,7 +228,10 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'destroy review' do
+    skip if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION
+
     login
+
     assert_difference 'Review.count', -1 do
       delete :destroy, params: {
         id: reviews(:review_without_conclusion_and_without_findings).id
@@ -297,6 +300,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_not_nil plan_item_data
     assert_not_nil plan_item_data['business_unit_name']
     assert_not_nil plan_item_data['business_unit_type']
+    assert_not_nil plan_item_data['business_unit_prefix']
   end
 
   test 'survey pdf' do

@@ -5,6 +5,10 @@ module Reviews::AutomaticIdentification
     attr_reader :identification_prefix,
                 :identification_number,
                 :identification_suffix
+
+    if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION && Rails.env.production?
+      attr_readonly :identification
+    end
   end
 
   module ClassMethods

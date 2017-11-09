@@ -7,7 +7,8 @@ module FindingsHelper
       label:      false,
       prompt:     true,
       input_html: {
-        disabled: (disabled || finding.unconfirmed?)
+        disabled: (disabled || finding.unconfirmed?),
+        data: { weakness_state_changed_url: state_changed_weaknesses_url }
       }
   end
 

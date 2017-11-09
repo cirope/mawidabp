@@ -1,4 +1,4 @@
-module Reviews::DestroyValidation
+module BusinessUnitTypes::DestroyValidation
   extend ActiveSupport::Concern
 
   included do
@@ -6,9 +6,7 @@ module Reviews::DestroyValidation
   end
 
   def can_be_destroyed?
-    !SHOW_REVIEW_AUTOMATIC_IDENTIFICATION &&
-      !has_final_review? &&
-      control_objective_items.all?(&:can_be_destroyed?)
+    business_units.all? &:can_be_destroyed?
   end
 
   private
