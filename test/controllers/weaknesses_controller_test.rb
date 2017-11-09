@@ -324,6 +324,17 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_equal repeated_of_original_state, repeated_of.state
   end
 
+  test 'state changed' do
+    login
+
+    get :state_changed, xhr: true, params: {
+      state: Finding::STATUS[:being_implemented], format: :js
+    }
+
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+  end
+
   test 'auto complete for finding relation' do
     finding = Finding.find(findings(:being_implemented_weakness_on_draft).id)
 

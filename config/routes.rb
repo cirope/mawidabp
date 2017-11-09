@@ -259,6 +259,7 @@ Rails.application.routes.draw do
       get :auto_complete_for_tagging
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
+      get :state_changed
     end
 
     member do

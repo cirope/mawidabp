@@ -199,6 +199,12 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_equal 100, @weakness.progress
   end
 
+  test 'default progress for' do
+    assert_equal 100, Weakness.default_progress_for(state: Finding::STATUS[:implemented])
+    assert_equal 0,   Weakness.default_progress_for(state: Finding::STATUS[:awaiting])
+    assert_equal 25,  Weakness.default_progress_for(state: Finding::STATUS[:being_implemented])
+  end
+
   test 'review code is updated when control objective is changed' do
     weakness                   = findings :being_implemented_weakness_on_draft
     new_control_objective_item = control_objective_items :organization_security_4_2_item_editable

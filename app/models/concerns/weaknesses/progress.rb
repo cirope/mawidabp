@@ -2,15 +2,43 @@ module Weaknesses::Progress
   extend ActiveSupport::Concern
 
   included do
+    PROGRESS_COMPLETED_STATES = [
+      Finding::STATUS[:implemented],
+      Finding::STATUS[:implemented_audited]
+    ]
+
+    PROGRESS_RESET_STATES = [
+      Finding::STATUS[:awaiting],
+      Finding::STATUS[:assumed_risk],
+      Finding::STATUS[:revoked],
+      Finding::STATUS[:criteria_mismatch]
+    ]
+
+    PROGRESS_EDITION_STATES = [
+      Finding::STATUS[:being_implemented]
+    ]
+
     before_save :update_progress
   end
 
   def allow_progress_edition?
-    progress_edition_states = [
-      Finding::STATUS[:being_implemented]
-    ]
+    self.class.allow_progress_edition_for? state
+  end
 
-    progress_edition_states.include? state
+  module ClassMethods
+    def allow_progress_edition_for? state
+      PROGRESS_EDITION_STATES.include? state
+    end
+
+    def default_progress_for state: nil
+      if PROGRESS_COMPLETED_STATES.include? state
+        100
+      elsif PROGRESS_RESET_STATES.include? state
+        0
+      else
+        25
+      end
+    end
   end
 
   private
@@ -26,22 +54,10 @@ module Weaknesses::Progress
     end
 
     def progress_completed_state?
-      progress_completed_states = [
-        Finding::STATUS[:implemented],
-        Finding::STATUS[:implemented_audited]
-      ]
-
-      progress_completed_states.include? state
+      PROGRESS_COMPLETED_STATES.include? state
     end
 
     def progress_reset_state?
-      progress_reset_states = [
-        Finding::STATUS[:awaiting],
-        Finding::STATUS[:assumed_risk],
-        Finding::STATUS[:revoked],
-        Finding::STATUS[:criteria_mismatch]
-      ]
-
-      progress_reset_states.include? state
+      PROGRESS_RESET_STATES.include? state
     end
 end
