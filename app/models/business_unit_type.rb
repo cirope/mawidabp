@@ -1,5 +1,6 @@
 class BusinessUnitType < ApplicationRecord
   include Auditable
+  include BusinessUnitTypes::BusinessUnits
   include BusinessUnitTypes::DestroyValidation
   include BusinessUnitTypes::JSON
   include BusinessUnitTypes::Scopes
@@ -11,7 +12,4 @@ class BusinessUnitType < ApplicationRecord
   alias_attribute :label, :name
 
   belongs_to :organization
-  has_many :business_units, -> { order name: :asc }, dependent: :destroy
-
-  accepts_nested_attributes_for :business_units, allow_destroy: true
 end
