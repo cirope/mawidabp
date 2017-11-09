@@ -32,7 +32,7 @@
         <td><%= link_to_clone new_review_path(:clone_from => review.id) %></td>
         <td><%= link_to_show review %></td>
         <td><%= link_to_edit edit_review_path(review) %></td>
-        <td><%= link_to_destroy review unless has_final %></td>
+        <td><%= link_to_destroy review if review.can_be_destroyed? %></td>
       </tr>
     <% end %>
   </tbody>

@@ -228,7 +228,10 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'destroy review' do
+    skip if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION
+
     login
+
     assert_difference 'Review.count', -1 do
       delete :destroy, params: {
         id: reviews(:review_without_conclusion_and_without_findings).id
