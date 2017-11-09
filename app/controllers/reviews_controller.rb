@@ -374,7 +374,7 @@ class ReviewsController < ApplicationController
 
   # * GET /reviews/next_identification_number
   def next_identification_number
-    @next_number = Review.next_identification_number params[:suffix]
+    @next_number = Review.list.next_identification_number params[:suffix]
   end
 
   private
