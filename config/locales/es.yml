@@ -1155,6 +1155,7 @@
         name: "Nombre"
         business_unit_label: "Etiqueta de la unidad de negocio en el informe"
         project_label: "Etiqueta del proyecto en el informe"
+        review_prefix: "Prefijo en el informe"
         external: "Externo"
         business_units:
           one: "Unidad de negocio"

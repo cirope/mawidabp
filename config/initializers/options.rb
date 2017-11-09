@@ -14,8 +14,6 @@ CONCLUSION_COLORS = {
   'No aplica'                    => '808080'
 }
 
-REVIEW_AUTOMATIC_PREFIXES = %w(AP AC AS AF AZ MC)
-
 REVIEW_SCOPES = [
   'Auditorías/Seguimiento',
   'Trabajo especial',

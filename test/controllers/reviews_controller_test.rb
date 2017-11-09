@@ -297,6 +297,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_not_nil plan_item_data
     assert_not_nil plan_item_data['business_unit_name']
     assert_not_nil plan_item_data['business_unit_type']
+    assert_not_nil plan_item_data['business_unit_prefix']
   end
 
   test 'survey pdf' do
