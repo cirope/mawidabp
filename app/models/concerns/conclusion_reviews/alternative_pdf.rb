@@ -22,6 +22,7 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_alternative_cover_on pdf
+      items_font_size = PDF_FONT_SIZE * 1.5
       business_unit_label =
         review.business_unit.business_unit_type.business_unit_label
       business_unit_title =
@@ -30,22 +31,27 @@ module ConclusionReviews::AlternativePDF
         I18n.t('conclusion_review.issue_date_title').downcase.camelize
 
       pdf.move_down PDF_FONT_SIZE * 8
-      pdf.add_title business_unit_title, (PDF_FONT_SIZE * 1.75).round, :center
+      pdf.text "#{business_unit_title}\n", size: (PDF_FONT_SIZE * 2.5).round,
+        align: :center
       pdf.move_down PDF_FONT_SIZE * 4
 
       if review.business_unit.business_unit_type.project_label.present?
         project_label = review.business_unit.business_unit_type.project_label
 
-        pdf.add_description_item project_label, review.plan_item.project, 0, false
+        pdf.add_description_item project_label, review.plan_item.project,
+          0, false, items_font_size
         pdf.move_down PDF_FONT_SIZE * 2
       end
 
-      pdf.add_description_item Review.model_name.human, review.identification, 0, false
-      pdf.add_description_item issue_date_title, I18n.l(issue_date), 0, false
+      pdf.add_description_item Review.model_name.human, review.identification,
+        0, false, items_font_size
+      pdf.add_description_item issue_date_title, I18n.l(issue_date),
+        0, false, items_font_size
 
       pdf.move_down PDF_FONT_SIZE * 2
 
-      pdf.text I18n.t('conclusion_review.executive_summary.review_author')
+      pdf.text I18n.t('conclusion_review.executive_summary.review_author'),
+        size: items_font_size
     end
 
     def put_executive_summary_on pdf
@@ -54,7 +60,7 @@ module ConclusionReviews::AlternativePDF
       project = review.plan_item.project
 
       pdf.start_new_page
-      pdf.add_title title, (PDF_FONT_SIZE * 1.5).round, :center
+      pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
       pdf.move_down PDF_FONT_SIZE * 2
 
       pdf.text "#{project_title} <b>#{project}</b>", inline_format: true
@@ -71,7 +77,7 @@ module ConclusionReviews::AlternativePDF
       legend = I18n.t 'conclusion_review.detailed_review.legend'
 
       pdf.start_new_page
-      pdf.add_title title, (PDF_FONT_SIZE * 1.5).round, :center
+      pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
       pdf.move_down PDF_FONT_SIZE * 2
 
       pdf.text legend, align: :justify, style: :italic
@@ -86,7 +92,7 @@ module ConclusionReviews::AlternativePDF
       legend = I18n.t 'conclusion_review.annex.legend'
 
       pdf.start_new_page
-      pdf.add_title title, (PDF_FONT_SIZE * 1.5).round, :center
+      pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
       pdf.move_down PDF_FONT_SIZE * 2
 
       pdf.text legend, align: :justify
@@ -108,7 +114,7 @@ module ConclusionReviews::AlternativePDF
       title = I18n.t 'conclusion_review.annex.scope'
 
       pdf.move_down PDF_FONT_SIZE * 2
-      pdf.add_title title, (PDF_FONT_SIZE * 1.25).round
+      pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
       put_control_objective_items_table_on pdf
@@ -118,7 +124,7 @@ module ConclusionReviews::AlternativePDF
       title = I18n.t 'conclusion_review.annex.staff'
 
       pdf.move_down PDF_FONT_SIZE * 2
-      pdf.add_title title, (PDF_FONT_SIZE * 1.25).round
+      pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
       review.review_user_assignments.each do |rua|
@@ -132,7 +138,7 @@ module ConclusionReviews::AlternativePDF
       title = self.class.human_attribute_name 'sectors'
 
       pdf.move_down PDF_FONT_SIZE * 2
-      pdf.add_title title, (PDF_FONT_SIZE * 1.25).round
+      pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
       pdf.text sectors, align: :justify
@@ -163,7 +169,7 @@ module ConclusionReviews::AlternativePDF
       title = Review.human_attribute_name 'survey'
 
       pdf.move_down PDF_FONT_SIZE * 2
-      pdf.add_title title, (PDF_FONT_SIZE * 1.25).round
+      pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
       pdf.text review.survey, align: :justify
@@ -173,7 +179,7 @@ module ConclusionReviews::AlternativePDF
       title = Weakness.model_name.human count: 0
 
       pdf.move_down PDF_FONT_SIZE * 2
-      pdf.add_title title, (PDF_FONT_SIZE * 1.25).round
+      pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
       put_weakness_details_on pdf, all_weaknesses, legend: 'no_weaknesses'
@@ -212,7 +218,7 @@ module ConclusionReviews::AlternativePDF
       ].join("\n")
 
       pdf.move_down PDF_FONT_SIZE * 2
-      pdf.add_title score_title, (PDF_FONT_SIZE * 1.25).round
+      pdf.add_title score_title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
       pdf.bounding_box [0, pdf.cursor], width: pdf.percent_width(100) do
@@ -247,7 +253,7 @@ module ConclusionReviews::AlternativePDF
       weaknesses = main_weaknesses
 
       pdf.move_down PDF_FONT_SIZE * 2
-      pdf.add_title title, (PDF_FONT_SIZE * 1.25).round
+      pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
 
       put_weakness_details_on pdf, weaknesses, legend: 'no_main_weaknesses'
     end
@@ -270,7 +276,7 @@ module ConclusionReviews::AlternativePDF
       weaknesses = other_weaknesses
 
       pdf.move_down PDF_FONT_SIZE
-      pdf.add_title title, (PDF_FONT_SIZE * 1.25).round
+      pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
 
       if weaknesses.any? || assumed_risk_weaknesses.any?
         put_medium_risk_weaknesses_on  pdf
@@ -297,7 +303,7 @@ module ConclusionReviews::AlternativePDF
           I18n.t 'conclusion_review.executive_summary.medium_risk_weaknesses'
 
         pdf.move_down PDF_FONT_SIZE
-        pdf.add_title title, (PDF_FONT_SIZE * 1.1).round
+        pdf.add_title title, (PDF_FONT_SIZE * 1.3).round
         pdf.move_down PDF_FONT_SIZE
 
         weaknesses.each do |w|
@@ -315,7 +321,7 @@ module ConclusionReviews::AlternativePDF
           not_relevant_count: not_relevant_weaknesses.size
 
         pdf.move_down PDF_FONT_SIZE
-        pdf.add_title title, (PDF_FONT_SIZE * 1.1).round
+        pdf.add_title title, (PDF_FONT_SIZE * 1.3).round
         pdf.move_down PDF_FONT_SIZE
 
         pdf.indent PDF_FONT_SIZE do
@@ -332,7 +338,7 @@ module ConclusionReviews::AlternativePDF
           I18n.t 'conclusion_review.executive_summary.assumed_risk_weaknesses'
 
         pdf.move_down PDF_FONT_SIZE
-        pdf.add_title title, (PDF_FONT_SIZE * 1.1).round
+        pdf.add_title title, (PDF_FONT_SIZE * 1.3).round
         pdf.move_down PDF_FONT_SIZE
 
         weaknesses.each do |w|
