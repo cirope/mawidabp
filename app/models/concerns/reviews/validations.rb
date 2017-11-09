@@ -6,8 +6,10 @@ module Reviews::Validations
     validates :description, presence: true, unless: -> { HIDE_REVIEW_DESCRIPTION }
     validates :identification,
       length:     { maximum: 255 },
-      format:     { with: /\A\w([\w\s-]|\/)*\z/ }, allow_nil: true, allow_blank: true,
-      uniqueness: { case_sensitive: false, scope: :organization_id }
+      format:     { with: /\A\w([\w\s-]|\/)*\z/ }, allow_nil: true, allow_blank: true
+    validates :identification, uniqueness: {
+      case_sensitive: false, scope: :organization_id
+    }, unless: -> { SHOW_REVIEW_AUTOMATIC_IDENTIFICATION }
     validates :identification, :description, :survey, :scope, :risk_exposure,
       :include_sox, pdf_encoding: true
     validates :plan_item_id, uniqueness: { case_sensitive: false }
@@ -24,6 +26,8 @@ module Reviews::Validations
 
     validate :validate_user_roles
     validate :validate_plan_item
+    validate :validate_identification_number_uniqueness,
+      on: :create, if: -> { SHOW_REVIEW_AUTOMATIC_IDENTIFICATION }
   end
 
   private
@@ -44,5 +48,23 @@ module Reviews::Validations
 
     def validate_extra_attributes?
       SHOW_REVIEW_EXTRA_ATTRIBUTES
+    end
+
+    def validate_identification_number_uniqueness
+      suffix = identification.to_s.split('-').last
+      conditions = [
+        "#{Review.quoted_table_name}.#{Review.qcn 'organization_id'} = :organization_id",
+        "#{Review.quoted_table_name}.#{Review.qcn 'identification'} LIKE :identification"
+      ].join(' AND ')
+
+      if suffix.present?
+        is_taken = Review.where(
+          conditions,
+          organization_id: organization_id,
+          identification: "%#{suffix}"
+        ).any?
+
+        errors.add :identification, :taken if is_taken
+      end
     end
 end

@@ -16,7 +16,7 @@ module Reviews::AutomaticIdentification
       regex = /(\d+)\/#{suffix}\Z/i
       last_identification =
         where("#{quoted_table_name}.#{qcn 'identification'} LIKE ?", "%/#{suffix}").
-        order(:identification).
+        order(:id).
         last&.
         identification
 

@@ -126,18 +126,25 @@ class ReviewTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
-    @review.identification = reviews(:past_review).identification
-    @review.plan_item_id = reviews(:past_review).plan_item_id
+    review = @review.dup
 
-    assert @review.invalid?
-    assert_error @review, :identification, :taken
-    assert_error @review, :plan_item_id, :taken
+    assert review.invalid?
+    assert_error review, :identification, :taken
+    assert_error review, :plan_item_id, :taken
+  end
 
-    @review.period_id = periods(:current_period_google).id
-    @review.period.reload
+  test 'validate unique identification number' do
+    skip unless SHOW_REVIEW_AUTOMATIC_IDENTIFICATION
 
-    assert @review.invalid?
-    assert_error @review, :plan_item_id, :taken
+    last_review = Review.order(:id).last
+    review = last_review.dup
+
+    last_review.update_column :identification, 'XX-22/2017'
+
+    review.identification = 'YY-22/2017'
+
+    assert review.invalid?
+    assert_error review, :identification, :taken
   end
 
   test 'validates numeric attributes' do
@@ -665,7 +672,7 @@ class ReviewTest < ActiveSupport::TestCase
   test 'next identification number' do
     assert_equal '001', Review.next_identification_number(2017)
 
-    @review.update! identification: 'XX-22/2017'
+    Review.order(:id).last.update_column :identification, 'XX-22/2017'
 
     # Should ignore the prefix
     assert_equal '023', Review.next_identification_number(2017)
