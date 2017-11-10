@@ -23,7 +23,10 @@
       </div>
       <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF %>
         <div class="col-md-1">
-          <%= f.input :include_signature, label: false, input_html: { disabled: readonly } %>
+          <%= f.input :include_signature, label: false, input_html: {
+            disabled: readonly,
+            data: { include_signature: true }
+          } %>
         </div>
         <div class="col-md-1">
           <%= f.input :owner, label: false, input_html: { disabled: readonly } %>

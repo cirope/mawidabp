@@ -23,7 +23,7 @@ $(document).on('change', '[data-plan-item-refresh-url]', function () {
 
 $(document).on('change', '[data-review-role]', function () {
   $(this).
-    parents('fieldset').
+    closest('.review_user_assignment').
     find('[data-include-signature]').
     prop('checked', $(this).val() !== '-1').
     trigger('change')
