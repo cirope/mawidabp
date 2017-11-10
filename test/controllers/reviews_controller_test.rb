@@ -273,6 +273,17 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_not_nil review_data['business_unit']['name']
   end
 
+  test 'assignment type refresh' do
+    login
+
+    get :assignment_type_refresh, xhr: true, params: {
+      user_id: users(:administrator).id, format: :js
+    }
+
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+  end
+
   test 'plan item refresh' do
     login
 

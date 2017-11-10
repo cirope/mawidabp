@@ -1,0 +1,3 @@
+<% options  = options_for_select user_assignment_type_options_for(@user, include_blank: true) %>
+
+$('#<%= params[:type_input_id] %>').html('<%= j options %>').prop('disabled', false)

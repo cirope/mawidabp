@@ -39,12 +39,22 @@ module ReviewsHelper
 
   def user_assignment_type_field(form, inline = true, disabled = false)
     input_options = { disabled: disabled, data: { review_role: true } }
-    options = ReviewUserAssignment::TYPES.map do |k, v|
+    options = user_assignment_type_options_for form.object.user
+
+    form.input :assignment_type, collection: options, prompt: true,
+      label: false, input_html: input_options
+  end
+
+  def user_assignment_type_options_for(user, include_blank: false)
+    options = Array(user&.review_assignment_options).map do |k, v|
       [t("review.user_assignment.type_#{k}"), v]
     end
 
-    form.input :assignment_type, collection: sort_options_array(options),
-      prompt: true, label: false, input_html: input_options
+    if include_blank && options.size > 1
+      [[t('helpers.select.prompt'), '']] + options
+    else
+      options
+    end
   end
 
   def user_assignment_type_text(type)

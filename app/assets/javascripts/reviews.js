@@ -47,3 +47,23 @@ $(document).on('change', '[data-next-identification-number-url]', function () {
     $('[name="review[identification_number]"]').val('')
   }
 })
+
+$(document).on('autocomplete:update', '[data-assignment-type-refresh-url]', function (event, input) {
+  var $input     = $(input)
+  var $typeInput = $input.closest('.review_user_assignment').find('[name$="[assignment_type]"]')
+  var url        = $input.data('assignmentTypeRefreshUrl')
+  var user       = $input.data('item')
+
+  if (user && user.id) {
+    $typeInput.prop('disabled', true)
+
+    $.ajax({
+      url: url,
+      dataType: 'script',
+      data: {
+        user_id: user.id,
+        type_input_id: $typeInput.prop('id')
+      }
+    })
+  }
+})
