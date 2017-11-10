@@ -406,15 +406,17 @@ module ConclusionReviews::AlternativePDF
     def control_objectives_row_data
       row_data = []
 
-      review.control_objective_items.each do |coi|
-        color      = CONCLUSION_COLORS.fetch(coi.auditor_comment) { '808080' }
-        icon       = "<font size=\"14\"><color rgb=\"#{color}\">•</color></font>"
-        conclusion = "#{icon} #{coi.auditor_comment&.upcase}"
+      review.grouped_control_objective_items.each do |process_control, cois|
+        cois.each do |coi|
+          color      = CONCLUSION_COLORS.fetch(coi.auditor_comment) { '808080' }
+          icon       = "<font size=\"14\"><color rgb=\"#{color}\">•</color></font>"
+          conclusion = "#{icon} #{coi.auditor_comment&.upcase}"
 
-        row_data << [
-          coi.control_objective_text,
-          conclusion
-        ]
+          row_data << [
+            coi.control_objective_text,
+            conclusion
+          ]
+        end
       end
 
       row_data
