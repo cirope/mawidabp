@@ -958,6 +958,8 @@
       type_supervisor: "Supervisor"
       type_manager: "Gerente"
       type_audited: "Auditado"
+      audit_team: "Auditoría"
+      others: "Otros"
       readonly: "Los integrantes no pueden ser modificados, ya se emitió el informe definitivo"
     score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN DETALLADA"
     global_score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN GLOBAL"
@@ -1151,16 +1153,6 @@
     attributes:
       business_unit:
         name: "Nombre"
-      business_unit_type:
-        name: "Nombre"
-        business_unit_label: "Etiqueta de la unidad de negocio en el informe"
-        project_label: "Etiqueta del proyecto en el informe"
-        review_prefix: "Prefijo en el informe"
-        external: "Externo"
-        business_units:
-          one: "Unidad de negocio"
-          other: "Unidades de negocio"
-          name: "Unidad de negocio"
       comment:
         comment: "Comentario"
         user_id: "Usuario"

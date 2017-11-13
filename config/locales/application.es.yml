@@ -870,6 +870,8 @@ es:
       type_supervisor: "Supervisor"
       type_manager: "Gerente"
       type_audited: "Auditado"
+      audit_team: "Auditoría"
+      others: "Otros"
       readonly: "Los integrantes no pueden ser modificados, ya se emitió el informe definitivo"
     score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN DETALLADA"
     global_score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN GLOBAL"
@@ -1068,6 +1070,7 @@ es:
         project_label: "Etiqueta del proyecto en el informe"
         review_prefix: "Prefijo en el informe"
         external: "Externo"
+        require_tag: "Requerir etiqueta en informe"
       business_unit_type/business_units:
         one: "Unidad de negocio"
         other: "Unidades de negocio"
@@ -1239,6 +1242,7 @@ es:
         include_sox: "Incluye prueba SOX"
         work_papers: "Papeles de trabajo"
         review_user_assignments: "Integrantes"
+        taggings: "Etiquetas"
       review/file_model:
         one: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"

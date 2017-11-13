@@ -26,6 +26,7 @@ module Reviews::Validations
 
     validate :validate_user_roles
     validate :validate_plan_item
+    validate :validate_required_tag
     validate :validate_identification_number_uniqueness,
       on: :create, if: -> { SHOW_REVIEW_AUTOMATIC_IDENTIFICATION }
   end
@@ -48,6 +49,14 @@ module Reviews::Validations
 
     def validate_extra_attributes?
       SHOW_REVIEW_EXTRA_ATTRIBUTES
+    end
+
+    def validate_required_tag
+      business_unit_type = plan_item&.business_unit&.business_unit_type
+      is_invalid = business_unit_type&.require_tag &&
+        taggings.reject(&:marked_for_destruction?).blank?
+
+      errors.add :taggings, :blank if is_invalid
     end
 
     def validate_identification_number_uniqueness

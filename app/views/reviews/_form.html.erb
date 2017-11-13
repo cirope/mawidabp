@@ -88,30 +88,50 @@
     <div class="col-md-6">
       <h5><strong><%= ReviewUserAssignment.human_attribute_name 'user' %></strong></h5>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-<%= SHOW_CONCLUSION_ALTERNATIVE_PDF ? 5 : 3 %>">
       <h5><strong><%= ReviewUserAssignment.human_attribute_name 'assignment_type' %></strong></h5>
     </div>
-    <div class="col-md-1">
-      <h5><strong><%= ReviewUserAssignment.human_attribute_name 'include_signature' %></strong></h5>
-    </div>
-    <div class="col-md-1">
-      <h5><strong><%= ReviewUserAssignment.human_attribute_name 'owner' %></strong></h5>
-    </div>
+    <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+      <div class="col-md-1">
+        <h5><strong><%= ReviewUserAssignment.human_attribute_name 'include_signature' %></strong></h5>
+      </div>
+      <div class="col-md-1">
+        <h5><strong><%= ReviewUserAssignment.human_attribute_name 'owner' %></strong></h5>
+      </div>
+    <% end %>
   </div>
 
   <div id="review_user_assignments">
-    <%= f.simple_fields_for :review_user_assignments do |rua_f| %>
-      <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
+    <% audit_team, others = @review.review_user_assignments.partition &:in_audit_team? %>
+
+    <% if audit_team.present? %>
+      <h4><%= t 'review.user_assignment.audit_team' %></h4>
+
+      <%= f.simple_fields_for :review_user_assignments, audit_team do |rua_f| %>
+        <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
+      <% end %>
     <% end %>
 
-    <%= link_to_add_fields(
-      t('review.add_user_assignment'), f, :review_user_assignments, nil, {}, { readonly: readonly }
-    ) unless readonly %>
+    <% if others.present? %>
+      <h4><%= t 'review.user_assignment.others' %></h4>
+
+      <%= f.simple_fields_for :review_user_assignments, others do |rua_f| %>
+        <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
+      <% end %>
+    <% end %>
+
+    <% unless readonly %>
+      <hr>
+
+      <%= link_to_add_fields(
+        t('review.add_user_assignment'), f, :review_user_assignments, nil, {}, { readonly: readonly }
+      ) %>
+    <% end %>
   </div>
 
   <% if !readonly || @review.taggings.any? %>
     <br />
-    <h4>
+    <h4 <%== @review.errors[:taggings].present? ? 'class="text-danger"' : '' %>>
       <%= Tag.model_name.human count: 0 %>
     </h4>
 

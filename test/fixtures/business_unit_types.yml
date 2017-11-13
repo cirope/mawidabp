@@ -4,6 +4,7 @@ cycle:
   business_unit_label: Cycle
   project_label: Subcycle
   review_prefix: C
+  require_tag: false
   organization: cirope
 
 consolidated_substantive:
@@ -12,6 +13,7 @@ consolidated_substantive:
   business_unit_label: Business Unit
   project_label: Audited object
   review_prefix: CS
+  require_tag: false
   organization: cirope
 
 bcra:
@@ -20,6 +22,7 @@ bcra:
   business_unit_label: Business Unit
   project_label:
   review_prefix: BCRA
+  require_tag: false
   organization: cirope
 
 bcra_google:
@@ -28,4 +31,5 @@ bcra_google:
   business_unit_label: Business Unit
   project_label:
   review_prefix: BCRA
+  require_tag: false
   organization: google

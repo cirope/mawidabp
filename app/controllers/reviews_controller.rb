@@ -150,6 +150,15 @@ class ReviewsController < ApplicationController
     redirect_to @review.relative_work_papers_zip_path
   end
 
+  # * GET /reviews/assignment_type_refresh?user_id=1
+  def assignment_type_refresh
+    @user = User.find params[:user_id]
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   # * GET /reviews/plan_item_refresh?period_id=1
   def plan_item_refresh
     grouped_plan_items =
@@ -426,6 +435,7 @@ class ReviewsController < ApplicationController
       @action_privileges.update(
         review_data: :read,
         download_work_papers: :read,
+        assignment_type_refresh: :read,
         plan_item_refresh: :read,
         plan_item_data: :read,
         survey_pdf: :read,

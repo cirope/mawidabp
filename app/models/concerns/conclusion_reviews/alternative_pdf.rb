@@ -127,7 +127,7 @@ module ConclusionReviews::AlternativePDF
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
-      review.review_user_assignments.each do |rua|
+      review.review_user_assignments.select(&:in_audit_team?).each do |rua|
         text = "• #{rua.type_text}: #{rua.user.informal_name}"
 
         pdf.indent(PDF_FONT_SIZE) { pdf.text text }
@@ -406,15 +406,17 @@ module ConclusionReviews::AlternativePDF
     def control_objectives_row_data
       row_data = []
 
-      review.control_objective_items.each do |coi|
-        color      = CONCLUSION_COLORS.fetch(coi.auditor_comment) { '808080' }
-        icon       = "<font size=\"14\"><color rgb=\"#{color}\">•</color></font>"
-        conclusion = "#{icon} #{coi.auditor_comment&.upcase}"
+      review.grouped_control_objective_items.each do |process_control, cois|
+        cois.each do |coi|
+          color      = CONCLUSION_COLORS.fetch(coi.auditor_comment) { '808080' }
+          icon       = "<font size=\"14\"><color rgb=\"#{color}\">•</color></font>"
+          conclusion = "#{icon} #{coi.auditor_comment&.upcase}"
 
-        row_data << [
-          coi.control_objective_text,
-          conclusion
-        ]
+          row_data << [
+            coi.control_objective_text,
+            conclusion
+          ]
+        end
       end
 
       row_data
