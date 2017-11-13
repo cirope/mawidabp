@@ -245,7 +245,7 @@ es:
         compliance: 'Cumplimiento'
     download_global_plan: 'Descargar plan de auditoria global'
     download_detailed_plan: 'Descargar plan de auditoria detallado'
-    without_business_unit_type: 'Sin unidad de negocio'
+    without_business_unit_type: 'Sin ciclo'
 
   profiles:
     edit:

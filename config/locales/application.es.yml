@@ -88,19 +88,19 @@ es:
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
 
   business_unit_type:
-    index_title: "Listado de tipos de unidades de negocio"
-    show_title: "Detalle tipo de unidad de negocio"
-    new_title: "Agregar tipo de unidad de negocio"
-    edit_title: "Modificar tipo de unidad de negocio"
-    correctly_created: "Tipo de unidad de negocio agregado correctamente."
-    correctly_updated: "Tipo de unidad de negocio actualizado correctamente."
-    stale_object_error: "El tipo de unidad de negocio no fue actualizado, intente nuevamente."
-    add_business_unit: "Agregar unidad de negocio"
+    index_title: "Listado de tipos de ciclos"
+    show_title: "Detalle tipo de ciclo"
+    new_title: "Agregar tipo de ciclo"
+    edit_title: "Modificar tipo de ciclo"
+    correctly_created: "Tipo de ciclo agregado correctamente."
+    correctly_updated: "Tipo de ciclo actualizado correctamente."
+    stale_object_error: "El tipo de ciclo no fue actualizado, intente nuevamente."
+    add_business_unit: "Agregar ciclo"
     internal_audit: "Auditorías realizadas por la entidad"
     external_audit: "Auditorías realizadas por otras entidades"
     errors:
-      can_not_be_destroyed: "El tipo de unidad de negocio no puede ser eliminado"
-      business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
+      can_not_be_destroyed: "El tipo de ciclo no puede ser eliminado"
+      business_unit_related: "El ciclo no puede ser eliminado, se encuentra relacionado con al menos un plan de trabajo"
 
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
@@ -140,7 +140,7 @@ es:
       detailed_column_estimated_amount: "Costo estimado (planificado)"
       detailed_column_real_amount: "Costo real (ejecutado)"
       detailed_column_deviation: "Desviación"
-      general_column_business_unit: "Unidad de negocio"
+      general_column_business_unit: "Ciclo"
       general_column_review: "Informe"
       general_column_estimated_amount: "Costo estimado (planificado)"
       general_column_real_amount: "Costo real (ejecutado)"
@@ -165,7 +165,7 @@ es:
       empty: 'No hay observaciones para el filtro aplicado'
       hint: 'Debe realizar una búsqueda'
       users: 'Por usuario'
-      business_units: 'Por unidad de negocio'
+      business_units: 'Por ciclo'
       process_controls: 'Por proceso de negocio'
 
   conclusion_committee_report:
@@ -432,8 +432,8 @@ es:
     add_oportunity: "Agregar nueva oportunidad de mejora"
     add_weakness: "Agregar nueva observación"
     add_work_paper: "Agregar papel de trabajo"
-    add_business_unit_score: "Agregar calificación de unidad de negocio"
-    add_business_unit_type: "Agregar unidades de negocio por tipo"
+    add_business_unit_score: "Agregar calificación de ciclo"
+    add_business_unit_type: "Agregar ciclos por tipo"
     readonly: "El objetivo de control no puede ser modificado, ya se emitió el informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     not_rated: "No evaluado"
@@ -515,7 +515,7 @@ es:
       empty: 'No hay observaciones para el filtro aplicado'
       hint: 'Debe realizar una búsqueda'
       users: 'Por usuario'
-      business_units: 'Por unidad de negocio'
+      business_units: 'Por ciclo'
       process_controls: 'Por proceso de negocio'
     weaknesses_report:
       title: 'Informe de seguimiento de observaciones'
@@ -526,7 +526,7 @@ es:
     others:
       title: 'Otros'
     cost_analysis:
-      column_business_unit: "Unidad de negocio"
+      column_business_unit: "Ciclo"
       column_project: "Proyecto"
       column_review: "Informe"
       column_audit_cost: "Cantidad de horas utilizadas (suma de las horas de seguimiento por auditores)"
@@ -1037,8 +1037,8 @@ es:
 
   activerecord:
     models:
-      business_unit: "Unidad de negocio"
-      business_unit_type: "Tipo de unidad de negocio"
+      business_unit: "Ciclo"
+      business_unit_type: "Tipo de ciclo"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
@@ -1066,15 +1066,15 @@ es:
         name: "Nombre"
       business_unit_type:
         name: "Nombre"
-        business_unit_label: "Etiqueta de la unidad de negocio en el informe"
+        business_unit_label: "Etiqueta del ciclo en el informe"
         project_label: "Etiqueta del proyecto en el informe"
         review_prefix: "Prefijo en el informe"
         external: "Externo"
         require_tag: "Requerir etiqueta en informe"
       business_unit_type/business_units:
-        one: "Unidad de negocio"
-        other: "Unidades de negocio"
-        name: "Unidad de negocio"
+        one: "Ciclo"
+        other: "Ciclos"
+        name: "Ciclo"
       comment:
         comment: "Comentario"
         user_id: "Usuario"
@@ -1088,7 +1088,7 @@ es:
         close_date: "Fecha de cierre"
         applied_procedures: "Procedimientos aplicados"
         conclusion: "Conclusión"
-        business_unit: "Unidad de negocio"
+        business_unit: "Ciclo"
         project: "Proyecto"
         approved: "Aprobado"
         summary: "Acta"
@@ -1139,10 +1139,10 @@ es:
         file_content_type: "Papel de trabajo (tipo de archivo)"
         file_file_size: "Papel de trabajo (tamaño de archivo)"
       control_objective_item/business_unit_scores:
-        business_unit_id: 'Calificación de unidad de negocio (unidad de negocio)'
-        design_score: 'Calificación de unidad de negocio (evaluación de diseño)'
-        compliance_score: 'Calificación de unidad de negocio (pruebas de cumplimiento)'
-        sustantive_score: 'Calificación de unidad de negocio (pruebas sustantivas)'
+        business_unit_id: 'Calificación de ciclo (ciclo)'
+        design_score: 'Calificación de ciclo (evaluación de diseño)'
+        compliance_score: 'Calificación de ciclo (pruebas de cumplimiento)'
+        sustantive_score: 'Calificación de ciclo (pruebas sustantivas)'
       cost:
         cost: "Tiempo dedicado"
         description: "Descripción de las actividades realizadas"
@@ -1230,7 +1230,7 @@ es:
         description: "Descripción"
         survey: "Resumen del alcance"
         audit_type: "Tipo de auditoría"
-        business_unit: "Unidad de negocio"
+        business_unit: "Ciclo"
         period_id: "Periodo"
         plan_item_id: "Proyecto"
         plan_item: "Proyecto"
@@ -1355,7 +1355,7 @@ es:
             review_user_assignments:
               invalid: "debe tener al menos un supervisor o gerente, un auditor y un auditado"
             plan_item:
-              invalid: "debe tener una unidad de negocio asignada en la planificación"
+              invalid: "debe tener un ciclo asignado en la planificación"
               required: "debe seleccionar uno"
         review_user_assignment:
           attributes:
@@ -1382,7 +1382,7 @@ es:
 
   actioncontroller:
     best_practices: "Buenas prácticas"
-    business_unit_types: "Unidades de negocio"
+    business_unit_types: "Ciclos"
     follow_up_audit: "Reportes de seguimiento"
     conclusion_reports: "Reportes de conclusión"
     conclusion_draft_reviews: "Informe borrador"
