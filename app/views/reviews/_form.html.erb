@@ -102,13 +102,31 @@
   </div>
 
   <div id="review_user_assignments">
-    <%= f.simple_fields_for :review_user_assignments do |rua_f| %>
-      <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
+    <% audit_team, others = @review.review_user_assignments.partition &:in_audit_team? %>
+
+    <% if audit_team.present? %>
+      <h4><%= t 'review.user_assignment.audit_team' %></h4>
+
+      <%= f.simple_fields_for :review_user_assignments, audit_team do |rua_f| %>
+        <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
+      <% end %>
     <% end %>
 
-    <%= link_to_add_fields(
-      t('review.add_user_assignment'), f, :review_user_assignments, nil, {}, { readonly: readonly }
-    ) unless readonly %>
+    <% if others.present? %>
+      <h4><%= t 'review.user_assignment.others' %></h4>
+
+      <%= f.simple_fields_for :review_user_assignments, others do |rua_f| %>
+        <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
+      <% end %>
+    <% end %>
+
+    <% unless readonly %>
+      <hr>
+
+      <%= link_to_add_fields(
+        t('review.add_user_assignment'), f, :review_user_assignments, nil, {}, { readonly: readonly }
+      ) %>
+    <% end %>
   </div>
 
   <% if !readonly || @review.taggings.any? %>
