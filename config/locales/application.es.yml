@@ -1070,6 +1070,7 @@ es:
         project_label: "Etiqueta del proyecto en el informe"
         review_prefix: "Prefijo en el informe"
         external: "Externo"
+        require_tag: "Requerir etiqueta en informe"
       business_unit_type/business_units:
         one: "Unidad de negocio"
         other: "Unidades de negocio"
@@ -1241,6 +1242,7 @@ es:
         include_sox: "Incluye prueba SOX"
         work_papers: "Papeles de trabajo"
         review_user_assignments: "Integrantes"
+        taggings: "Etiquetas"
       review/file_model:
         one: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"

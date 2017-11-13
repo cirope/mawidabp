@@ -131,7 +131,7 @@
 
   <% if !readonly || @review.taggings.any? %>
     <br />
-    <h4>
+    <h4 <%== @review.errors[:taggings].present? ? 'class="text-danger"' : '' %>>
       <%= Tag.model_name.human count: 0 %>
     </h4>
 

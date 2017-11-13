@@ -28,6 +28,7 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
         :project_label => 'New project label',
         :review_prefix => 'NBU',
         :external => false,
+        :require_tag => false,
         :organization_id => @business_unit_type.organization_id
       )
     end

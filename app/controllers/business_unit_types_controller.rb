@@ -109,7 +109,7 @@ class BusinessUnitTypesController < ApplicationController
     def business_unit_type_params
       params.require(:business_unit_type).permit(
         :name, :business_unit_label, :project_label, :review_prefix, :external,
-        :lock_version,
+        :require_tag, :lock_version,
         business_units_attributes: [:id, :name, :_destroy]
       )
     end

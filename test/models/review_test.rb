@@ -169,6 +169,14 @@ class ReviewTest < ActiveSupport::TestCase
     assert_error @review, :plan_item_id, :invalid
   end
 
+  test 'validates required tag' do
+    @review.taggings.clear
+    @review.business_unit.business_unit_type.update! require_tag: true
+
+    assert @review.invalid?
+    assert_error @review, :taggings, :blank
+  end
+
   test 'can be modified' do
     uneditable_review = Review.find(reviews(:current_review).id)
 
