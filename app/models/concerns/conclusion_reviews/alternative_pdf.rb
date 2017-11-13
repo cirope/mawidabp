@@ -127,7 +127,7 @@ module ConclusionReviews::AlternativePDF
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
-      review.review_user_assignments.reject(&:audited?).each do |rua|
+      review.review_user_assignments.select(&:in_audit_team?).each do |rua|
         text = "• #{rua.type_text}: #{rua.user.informal_name}"
 
         pdf.indent(PDF_FONT_SIZE) { pdf.text text }
