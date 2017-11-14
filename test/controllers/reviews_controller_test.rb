@@ -288,7 +288,9 @@ class ReviewsControllerTest < ActionController::TestCase
     login
 
     get :plan_item_refresh, xhr: true, params: {
-      period_id: periods(:current_period).id, format: :js
+      period_id: periods(:current_period).id,
+      prefix: business_unit_types(:cycle).review_prefix,
+      format: :js
     }
 
     assert_response :success

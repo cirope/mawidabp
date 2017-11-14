@@ -161,8 +161,16 @@ class ReviewsController < ApplicationController
 
   # * GET /reviews/plan_item_refresh?period_id=1
   def plan_item_refresh
-    grouped_plan_items =
-      PlanItem.list_unused(params[:period_id]).group_by(&:business_unit_type)
+    business_unit_type = BusinessUnitType.list.find_by review_prefix: params[:prefix]
+    plan_items = if business_unit_type
+                   PlanItem.for_business_unit_type business_unit_type.id
+                 else
+                   PlanItem.all
+                 end
+
+    grouped_plan_items = plan_items.
+      list_unused(params[:period_id]).
+      group_by(&:business_unit_type)
 
     @business_unit_types = grouped_plan_items.map do |but, plan_items|
       sorted_plan_items = plan_items.sort_by &:project
@@ -217,6 +225,7 @@ class ReviewsController < ApplicationController
       ].join(' AND '),
       boolean_false: false,
       states: [
+        Finding::STATUS[:awaiting],
         Finding::STATUS[:being_implemented],
         Finding::STATUS[:implemented],
         Finding::STATUS[:unanswered]
@@ -250,7 +259,12 @@ class ReviewsController < ApplicationController
       ].join(' AND '),
       false: false,
       organization_id: Organization.current_id,
-      states: [Finding::STATUS[:being_implemented], Finding::STATUS[:implemented]],
+      states: [
+        Finding::STATUS[:awaiting],
+        Finding::STATUS[:being_implemented],
+        Finding::STATUS[:implemented],
+        Finding::STATUS[:unanswered]
+      ],
       process_control_id: @process_control.id
     ).includes(
       control_objective_item: [
@@ -279,7 +293,10 @@ class ReviewsController < ApplicationController
       boolean_false: false,
       organization_id: current_organization.id,
       states: [
-        Finding::STATUS[:being_implemented], Finding::STATUS[:implemented]
+        Finding::STATUS[:awaiting],
+        Finding::STATUS[:being_implemented],
+        Finding::STATUS[:implemented],
+        Finding::STATUS[:unanswered]
       ],
     }
     @tokens.each_with_index do |t, i|

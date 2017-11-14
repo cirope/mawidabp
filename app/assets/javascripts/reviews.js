@@ -1,22 +1,27 @@
 $(document).on('change', '[data-plan-item-refresh-url]', function () {
-  var $period   = $('#review_period_id')
-  var $planItem = $('#review_plan_item_id')
+  var $period   = $('[name="review[period_id]"]')
+  var $prefix   = $('[name="review[identification_prefix]"]')
+  var $planItem = $('[name="review[plan_item_id]"]')
   var periodId  = $period.val()
-  var url       = $period.data('planItemRefreshUrl')
+  var url       = $(this).data('planItemRefreshUrl')
 
   if (periodId) {
     $period.prop('disabled', true)
+    $prefix.prop('disabled', true)
     $planItem.prop('disabled', true)
 
     $.ajax({
       url: url,
       dataType: 'script',
       data: {
+        prefix: $prefix.val(),
+        plan_item_id: $planItem.val(),
         period_id: periodId
       }
     }).always(function () {
       $period.prop('disabled', false)
-      $planItem.prop('disabled', false).change()
+      $prefix.prop('disabled', false)
+      $planItem.prop('disabled', false)
     })
   }
 })

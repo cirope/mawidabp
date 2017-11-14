@@ -5,11 +5,13 @@
     <div class="col-xs-4">
       <%= f.input :identification_prefix,
         label: Review.human_attribute_name('identification'),
+        collection: BusinessUnitType.list.pluck('review_prefix'),
+        prompt: true,
+        selected: prefix,
         input_html: {
-          readonly: true,
-          value: prefix,
           data: {
-            next_identification_number_url: next_identification_number_reviews_path
+            next_identification_number_url: next_identification_number_reviews_path,
+            plan_item_refresh_url: plan_item_refresh_reviews_path
           }
         }
       %>

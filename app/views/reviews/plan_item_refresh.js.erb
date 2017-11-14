@@ -1,4 +1,4 @@
 <% options  = options_for_select([[t('helpers.select.prompt'), '']]) %>
-<% options << option_groups_from_collection_for_select(@business_unit_types, :plan_items, :name, :id, :project) %>
+<% options << option_groups_from_collection_for_select(@business_unit_types, :plan_items, :name, :id, :project, params[:plan_item_id].to_i) %>
 
 $('#review_plan_item_id').html('<%= j options %>')

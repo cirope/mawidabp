@@ -18,7 +18,7 @@
         <% if @review.new_record? %>
           <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true, input_html: {
             autofocus: SHOW_REVIEW_AUTOMATIC_IDENTIFICATION,
-            data: { plan_item_refresh_url: plan_item_refresh_reviews_url }
+            data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
           } %>
         <% else %>
           <%= f.input :period_description, label: Review.human_attribute_name('period_id'),
@@ -239,10 +239,10 @@ jQuery(function() {
     var data_url = '<%= plan_item_data_reviews_path %>';
     var amount_url = '<%= estimated_amount_reviews_path %>';
     var element = $(this);
+    var prefix = $('#review_identification_prefix').val();
 
     $('#review_business_unit').val('');
     $('#review_audit_type').val('');
-    $('#review_identification_prefix').val('');
 
     if(!$(this).val().match(/^\s*$/)) {
       Helper.showLoading(element);
@@ -250,12 +250,15 @@ jQuery(function() {
       $.get(data_url, { id: element.val(), format: 'json' }, function(data) {
         $('#review_business_unit').val(data.business_unit_name);
         $('#review_audit_type').val(data.business_unit_type);
-        $('#review_identification_prefix').
-          val(data.business_unit_prefix).
-          change().
-          css('border-color', '#47ae00').
-          delay(1000).
-          animate({'border-color': '#c2bfB7'}, 50)
+
+        if (prefix !== data.business_unit_prefix) {
+          $('#review_identification_prefix').
+            val(data.business_unit_prefix).
+            change().
+            css('border-color', '#47ae00').
+            delay(1000).
+            animate({'border-color': '#c2bfB7'}, 50)
+        }
 
         if(data.link_to_suggested_findings) {
           $('#link_to_suggested_findings').attr(
@@ -277,6 +280,7 @@ jQuery(function() {
         $('#estimated_amount').effect('highlight', {}, 2000);
       });
     } else {
+      $('#review_identification_prefix').prop('disabled', false).val('');
       $('#review_identification_number').val('');
       $('#link_to_suggested_findings').attr('href', '#');
       $('#link_to_suggested_findings').addClass('link_without_action');
