@@ -34,7 +34,10 @@ module Reviews::Validations
   private
 
     def validate_user_roles
-      errors.add :review_user_assignments, :invalid unless has_valid_users?
+      unless has_valid_users?
+        errors.add :review_user_assignments, :invalid,
+          required_roles: required_roles.to_sentence
+      end
     end
 
     def validate_plan_item
@@ -44,7 +47,11 @@ module Reviews::Validations
     end
 
     def has_valid_users?
-      has_audited? && has_auditor? && (has_supervisor? || has_manager?)
+      if DISABLE_REVIEW_AUDITED_VALIDATION
+        has_auditor? && (has_supervisor? || has_manager?)
+      else
+        has_audited? && has_auditor? && (has_supervisor? || has_manager?)
+      end
     end
 
     def validate_extra_attributes?
@@ -75,5 +82,22 @@ module Reviews::Validations
 
         errors.add :identification, :taken if is_taken
       end
+    end
+
+    def required_roles
+      required_roles = [
+        [
+          I18n.t('review.user_assignment.type_manager'),
+          I18n.t('label.or'),
+          I18n.t('review.user_assignment.type_supervisor')
+        ].join(' '),
+        I18n.t('review.user_assignment.type_auditor')
+      ]
+
+      unless DISABLE_REVIEW_AUDITED_VALIDATION
+        required_roles << I18n.t('review.user_assignment.type_auditor')
+      end
+
+      required_roles
     end
 end
