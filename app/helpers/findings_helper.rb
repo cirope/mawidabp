@@ -35,10 +35,10 @@ module FindingsHelper
   def finding_follow_up_date_text finding
     html_classes = []
 
-    if finding.being_implemented?
-      html_classes << 'strike'       if finding.stale?
-      html_classes << 'text-warning' if finding.rescheduled?
-      html_classes << 'text-success' if html_classes.blank?
+    if finding.being_implemented? || finding.awaiting?
+      html_classes << 'strike bg-danger' if finding.stale?
+      html_classes << 'text-warning'     if finding.rescheduled?
+      html_classes << 'text-success'     if html_classes.blank?
     end
 
     if finding.follow_up_date.present?
