@@ -161,8 +161,9 @@ class ReviewsController < ApplicationController
 
   # * GET /reviews/plan_item_refresh?period_id=1
   def plan_item_refresh
-    business_unit_type = BusinessUnitType.list.find_by review_prefix: params[:prefix]
-    plan_items = if business_unit_type
+    prefix = params[:prefix]
+    business_unit_type = BusinessUnitType.list.find_by review_prefix: prefix
+    plan_items = if prefix.present? && business_unit_type
                    PlanItem.for_business_unit_type business_unit_type.id
                  else
                    PlanItem.all
