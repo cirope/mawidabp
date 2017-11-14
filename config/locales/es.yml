@@ -959,7 +959,7 @@
       type_manager: "Gerente"
       type_audited: "Auditado"
       audit_team: "Auditoría"
-      others: "Otros"
+      others: "Usuarios"
       readonly: "Los integrantes no pueden ser modificados, ya se emitió el informe definitivo"
     score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN DETALLADA"
     global_score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN GLOBAL"
