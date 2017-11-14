@@ -23,7 +23,7 @@ module Prawn
           [filename]
       end
 
-      def create_generic_pdf(layout = :landscape, footer = true)
+      def create_generic_pdf(layout = :landscape, footer = true, hide_brand: false)
         pdf = Prawn::Document.new(
           :page_size => PDF_PAPER,
           :page_layout => layout,
@@ -33,16 +33,18 @@ module Prawn
 
         pdf.font 'Helvetica', :size => PDF_FONT_SIZE
 
-        pdf.repeat :all do
-          font_size = 6
+        unless hide_brand
+          pdf.repeat :all do
+            font_size = 6
 
-          pdf.image PDF_LOGO, :at => [pdf.bounds.left, -PDF_LOGO_SIZE.last.pt],
-            :width => PDF_LOGO_SIZE.first, :height => PDF_LOGO_SIZE.last
+            pdf.image PDF_LOGO, :at => [pdf.bounds.left, -PDF_LOGO_SIZE.last.pt],
+              :width => PDF_LOGO_SIZE.first, :height => PDF_LOGO_SIZE.last
 
-          text = I18n.t :'app_copyright', :year => Date.today.year
-          x_start = pdf.bounds.left + font_size.pt * 1.75 + PDF_LOGO_SIZE.first.pt
-          pdf.draw_text(text, :at => [x_start, -(PDF_LOGO_SIZE.last.pt * 1.75)],
-            :size => font_size)
+            text = I18n.t :'app_copyright', :year => Date.today.year
+            x_start = pdf.bounds.left + font_size.pt * 1.75 + PDF_LOGO_SIZE.first.pt
+            pdf.draw_text(text, :at => [x_start, -(PDF_LOGO_SIZE.last.pt * 1.75)],
+              :size => font_size)
+          end
         end
 
         pdf.add_page_footer if footer

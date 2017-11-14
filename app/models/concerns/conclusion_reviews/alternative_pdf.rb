@@ -2,7 +2,7 @@ module ConclusionReviews::AlternativePDF
   extend ActiveSupport::Concern
 
   def alternative_pdf organization = nil
-    pdf = Prawn::Document.create_generic_pdf :portrait, false
+    pdf = Prawn::Document.create_generic_pdf :portrait, false, hide_brand: true
 
     put_watermark_on          pdf
     put_alternative_header_on pdf, organization

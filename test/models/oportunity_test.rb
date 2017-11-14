@@ -231,7 +231,6 @@ class OportunityTest < ActiveSupport::TestCase
       refute @oportunity.must_be_approved?
       assert_equal error_messages.sort, @oportunity.approval_errors.sort
     end
-
   end
 
   test 'dynamic status functions' do
