@@ -121,7 +121,9 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion',
           :recipients => 'John Doe',
-          :sectors => 'Area 51'
+          :sectors => 'Area 51',
+          :evolution => 'Do the evolution',
+          :evolution_justification => 'Ok'
         }
       }
     end
@@ -151,7 +153,9 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :applied_procedures => 'Updated applied procedures',
           :conclusion => 'Updated conclusion',
           :recipients => 'John Doe',
-          :sectors => 'Area 51'
+          :sectors => 'Area 51',
+          :evolution => 'Do the evolution',
+          :evolution_justification => 'Ok'
         }
       }
     end

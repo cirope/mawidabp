@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171115123316) do
+ActiveRecord::Schema.define(version: 20171115133247) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -148,6 +148,8 @@ ActiveRecord::Schema.define(version: 20171115123316) do
     t.string "summary"
     t.text "recipients"
     t.text "sectors"
+    t.string "evolution"
+    t.text "evolution_justification"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
     t.index ["organization_id"], name: "index_conclusion_reviews_on_organization_id"

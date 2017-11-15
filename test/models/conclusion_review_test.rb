@@ -38,7 +38,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion',
         :recipients => 'John Doe',
-        :sectors => 'Area 51'
+        :sectors => 'Area 51',
+        :evolution => 'Do the evolution',
+        :evolution_justification => 'Ok'
       }, false)
 
       assert @conclusion_review.save
@@ -72,6 +74,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review.conclusion = '   '
     @conclusion_review.recipients = '   '
     @conclusion_review.sectors = '   '
+    @conclusion_review.evolution = '   '
+    @conclusion_review.evolution_justification = '   '
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
@@ -79,9 +83,11 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert_error @conclusion_review, :applied_procedures, :blank
     assert_error @conclusion_review, :conclusion, :blank
 
-    if SHOW_REVIEW_EXTRA_ATTRIBUTES
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF
       assert_error @conclusion_review, :recipients, :blank
       assert_error @conclusion_review, :sectors, :blank
+      assert_error @conclusion_review, :evolution, :blank
+      assert_error @conclusion_review, :evolution_justification, :blank
     end
   end
 
@@ -89,10 +95,12 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   test 'validates length of attributes' do
     @conclusion_review.type = 'abcdd' * 52
     @conclusion_review.summary = 'abcdd' * 52
+    @conclusion_review.evolution = 'abcdd' * 52
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :type, :too_long, count: 255
     assert_error @conclusion_review, :summary, :too_long, count: 255
+    assert_error @conclusion_review, :evolution, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -119,7 +127,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion',
         :recipients => 'John Doe',
-        :sectors => 'Area 51'
+        :sectors => 'Area 51',
+        :evolution => 'Do the evolution',
+        :evolution_justification => 'Ok'
       }, false)
 
     assert @conclusion_review.invalid?

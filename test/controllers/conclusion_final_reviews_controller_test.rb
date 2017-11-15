@@ -130,7 +130,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :conclusion => 'New conclusion',
           :summary => 'ACT 12',
           :recipients => 'John Doe',
-          :sectors => 'Area 51'
+          :sectors => 'Area 51',
+          :evolution => 'Do the evolution',
+          :evolution_justification => 'Ok'
         }
       }
     end
@@ -160,7 +162,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :conclusion => 'Updated conclusion',
           :summary => 'ACT Updated',
           :recipients => 'John Doe',
-          :sectors => 'Area 51'
+          :sectors => 'Area 51',
+          :evolution => 'Do the evolution',
+          :evolution_justification => 'Ok'
         }
       }
     end

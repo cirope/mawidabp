@@ -268,7 +268,8 @@ class ConclusionDraftReviewsController < ApplicationController
     def conclusion_draft_review_params
       params.require(:conclusion_draft_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
-        :recipients, :sectors, :force_approval, :lock_version
+        :recipients, :sectors, :evolution, :evolution_justification,
+        :force_approval, :lock_version
       )
     end
 

@@ -1174,6 +1174,8 @@
         summary: "Acta"
         recipients: "Destinatarios del informe"
         sectors: "Sectores/departamentos involucrados"
+        evolution: "Evolución de la calificación"
+        evolution_justification: "Justificación evolución"
       control:
         order: "Orden"
         control: "Controles"

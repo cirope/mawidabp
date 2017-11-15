@@ -14,6 +14,13 @@ CONCLUSION_COLORS = {
   'No aplica'                    => '808080'
 }
 
+EVOLUTION_OPTIONS = [
+  'Mantiene calificación desfavorable',
+  'Mantiene calificación favorable',
+  'Mejora calificación',
+  'Empeora calficación'
+]
+
 REVIEW_SCOPES = [
   'Auditorías/Seguimiento',
   'Trabajo especial',
