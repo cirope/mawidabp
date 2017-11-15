@@ -6,7 +6,7 @@ class ReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
     :show, :edit, :update, :destroy, :review_data, :download_work_papers,
-    :survey_pdf, :recode_findings, :recode_findings_by_risk
+    :survey_pdf, :finished_work_papers, :recode_findings, :recode_findings_by_risk
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -384,6 +384,15 @@ class ReviewsController < ApplicationController
     render partial: 'estimated_amount', locals: {plan_item: plan_item}
   end
 
+  # * PUT /reviews/1/finished_work_papers
+  def finished_work_papers
+    @review.finished_work_papers = true
+
+    @review.save! validate: false
+
+    redirect_to @review, notice: t('review.work_papers_marked_as_finished')
+  end
+
   # * PUT /reviews/1/recode_findings
   def recode_findings
     @review.recode_weaknesses
@@ -464,6 +473,7 @@ class ReviewsController < ApplicationController
         auto_complete_for_tagging: :read,
         estimated_amount: :read,
         next_identification_number: :read,
+        finished_work_papers: :modify,
         recode_findings: :modify,
         recode_findings_by_risk: :modify
       )

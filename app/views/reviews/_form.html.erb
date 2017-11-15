@@ -73,12 +73,12 @@
     <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :scope, collection: review_scope_options, prompt: true, readonly: readonly %>
-          <%= f.input :include_sox, collection: review_include_sox_options, prompt: true, readonly: readonly %>
+          <%= f.input :scope, collection: review_scope_options, prompt: true, input_html: { disabled: readonly } %>
+          <%= f.input :include_sox, collection: review_include_sox_options, prompt: true, input_html: { disabled: readonly } %>
         </div>
         <div class="col-md-6">
-          <%= f.input :risk_exposure, collection: review_risk_exposure_options, prompt: true, readonly: readonly %>
-          <%= f.input :manual_score, readonly: readonly, input_html: { min: 0, max: 1000, step: 1 } %>
+          <%= f.input :risk_exposure, collection: review_risk_exposure_options, prompt: true, input_html: { disabled: readonly } %>
+          <%= f.input :manual_score, input_html: { min: 0, max: 1000, step: 1, disabled: readonly } %>
         </div>
       </div>
     <% end %>
@@ -220,6 +220,13 @@
       suggested_findings_review_path(id: @review.plan_item_id) : '#',
       :remote => true, :id => :link_to_suggested_findings,
       :class => 'btn btn-default btn-sm' %>
+  <% end %>
+
+  <% if @review.finished_work_papers %>
+    <p>&nbsp;</p>
+    <div class="alert alert-info">
+      <%= t 'review.work_papers_marked_as_finished' %>
+    </div>
   <% end %>
 
   <hr />

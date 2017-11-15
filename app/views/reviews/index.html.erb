@@ -7,6 +7,7 @@
 <table class="table table-condensed table-striped">
   <thead id="column_headers">
     <tr>
+      <th></th>
       <%= make_filterable_column Period.model_name.human, nil, 'period' %>
       <%= make_filterable_column Review.human_attribute_name(:identification), nil, 'identification' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), { :class => 'hidden-xs' }, 'business_unit' %>
@@ -24,6 +25,7 @@
     <% @reviews.each do |review| %>
       <% has_final = review.has_final_review? %>
       <tr <%== 'class="text-muted"' if has_final %>>
+        <td><%= show_review_finished_work_papers_icon review %></td>
         <td><%= show_period_with_dates_as_abbr review.period %></td>
         <td class="nowrap"><%= review.identification %></td>
         <td class="hidden-xs"><%= super_truncate review.plan_item.business_unit.name, 25 %></td>

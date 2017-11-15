@@ -381,6 +381,19 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/_estimated_amount'
   end
 
+  test 'finished work papers' do
+    review = reviews(:past_review) # should work even if it has final review
+
+    login
+
+    assert_difference 'review.versions.count' do
+      patch :finished_work_papers, params: { id: review.id }
+    end
+
+    assert_redirected_to review_url(review)
+    assert review.reload.finished_work_papers
+  end
+
   test 'recode findings' do
     login
 
