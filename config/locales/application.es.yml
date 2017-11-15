@@ -369,6 +369,8 @@ es:
       project: "La Auditoría practicada estuvo circunscripta a la revisión del proceso/subproceso/tema"
       risk_exposure: "El proceso/subproceso evaluado en esta revisión es considerado por la Auditoria Interna en función a la Matriz de Riesgo"
       score: "Calificación"
+      current_score: "CALIFICACIÓN INFORME ACTUAL"
+      evolution: "EVOLUCIÓN (*)"
       main_weaknesses: "Principales debilidades"
       no_main_weaknesses: "No hay observaciones consideradas Principal Debilidad."
       other_weaknesses: "Otras observaciones"

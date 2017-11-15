@@ -14,12 +14,30 @@ CONCLUSION_COLORS = {
   'No aplica'                    => '808080'
 }
 
+CONCLUSION_IMAGES = {
+  'Satisfactorio'                => 'score_success.png',
+  'Satisfactorio con salvedades' => 'score_success_with_exceptions.png',
+  'Necesita mejorar'             => 'score_warning.png',
+  'No satisfactorio'             => 'score_danger.png',
+  'No aplica'                    => 'score_not_apply.png'
+}
+
 EVOLUTION_OPTIONS = [
   'Mantiene calificación desfavorable',
   'Mantiene calificación favorable',
   'Mejora calificación',
   'Empeora calficación'
 ]
+
+EVOLUTION_IMAGES = {
+  'Mantiene calificación desfavorable' => 'evolution_equal_danger.png',
+  'Mantiene calificación favorable'    => 'evolution_equal_success.png',
+  'Mejora calificación'                => 'evolution_up.png',
+  'Empeora calficación'                => 'evolution_down.png'
+}
+
+PDF_IMAGE_PATH = Rails.root.join('app', 'assets', 'images', 'pdf').freeze
+PDF_DEFAULT_SCORE_IMAGE = 'score_none.png'
 
 REVIEW_SCOPES = [
   'Auditorías/Seguimiento',
