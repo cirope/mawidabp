@@ -78,7 +78,7 @@ module Prawn
           formated_term = underline ? "<u><b>#{term}</b></u>" : "<b>#{term}</b>"
           encoded_text = "#{formated_term}: #{description}".encode 'windows-1252', 'UTF-8', options
 
-          self.text encoded_text, :size => font_size,
+          self.text encoded_text, :size => font_size, :align => :justify,
             :inline_format => true, :indent_paragraphs => left.pt
         end
       end

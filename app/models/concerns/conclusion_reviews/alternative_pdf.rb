@@ -117,7 +117,9 @@ module ConclusionReviews::AlternativePDF
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
-      put_control_objective_items_table_on pdf
+      put_control_objective_items_table_on     pdf
+      pdf.move_down PDF_FONT_SIZE
+      put_control_objective_items_reference_on pdf
     end
 
     def put_staff_on pdf
@@ -161,6 +163,38 @@ module ConclusionReviews::AlternativePDF
               ]
             )
           end
+        end
+      end
+    end
+
+    def put_control_objective_items_reference_on pdf
+      count = 0
+
+      review.grouped_control_objective_items.each do |process_control, cois|
+        cois.each do |coi|
+          put_control_objective_item_reference_on pdf, coi, count += 1
+
+          pdf.move_down PDF_FONT_SIZE
+        end
+      end
+    end
+
+    def put_control_objective_item_reference_on pdf, coi, index
+      control_attributes = %i(
+        control
+        design_tests
+        compliance_tests
+        sustantive_tests
+        effects
+      )
+
+      pdf.text "<sup>(#{index})</sup> <b>#{coi.control_objective_text}</b>",
+        inline_format: true, size: (PDF_FONT_SIZE * 1.1).round, align: :justify
+
+      control_attributes.each do |attr_name|
+        if coi.control.send(attr_name).present?
+          pdf.add_description_item Control.human_attribute_name(attr_name),
+            coi.control.send(attr_name), 0, false, PDF_FONT_SIZE
         end
       end
     end
@@ -433,6 +467,7 @@ module ConclusionReviews::AlternativePDF
 
     def control_objectives_row_data
       row_data = []
+      count    = 0
 
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.each do |coi|
@@ -441,7 +476,7 @@ module ConclusionReviews::AlternativePDF
           conclusion = "#{icon} #{coi.auditor_comment&.upcase}"
 
           row_data << [
-            coi.control_objective_text,
+            "<sup>(#{count += 1})</sup> #{coi.control_objective_text}",
             conclusion
           ]
         end
