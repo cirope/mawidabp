@@ -151,7 +151,7 @@ module ConclusionReviews::AlternativePDF
         data          = row_data.insert 0, control_objective_column_headers
         table_options = pdf.default_table_options control_objective_column_widths(pdf)
 
-        pdf.font_size (PDF_FONT_SIZE * 0.75).round do
+        pdf.font_size PDF_FONT_SIZE do
           pdf.table data, table_options do
             row(0).style(
               background_color: 'cccccc',
@@ -437,7 +437,7 @@ module ConclusionReviews::AlternativePDF
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.each do |coi|
           color      = CONCLUSION_COLORS.fetch(coi.auditor_comment) { '808080' }
-          icon       = "<font size=\"14\"><color rgb=\"#{color}\">•</color></font>"
+          icon       = "<font size=\"16\"><color rgb=\"#{color}\">•</color></font>"
           conclusion = "#{icon} #{coi.auditor_comment&.upcase}"
 
           row_data << [
