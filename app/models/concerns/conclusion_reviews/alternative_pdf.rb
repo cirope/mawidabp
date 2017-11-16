@@ -182,7 +182,8 @@ module ConclusionReviews::AlternativePDF
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
-      put_weakness_details_on pdf, all_weaknesses, legend: 'no_weaknesses'
+      put_weakness_details_on pdf, all_weaknesses, hide: %w(audit_comments),
+        legend: 'no_weaknesses'
     end
 
     def put_recipients_on pdf
@@ -277,7 +278,7 @@ module ConclusionReviews::AlternativePDF
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
 
       put_weakness_details_on pdf, weaknesses, legend: 'no_main_weaknesses',
-        hide: %w(audit_recommendations)
+        hide: %w(audit_recommendations audit_comments)
     end
 
     def put_weakness_details_on pdf, weaknesses, hide: [], legend:

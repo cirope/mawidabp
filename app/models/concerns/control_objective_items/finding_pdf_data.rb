@@ -9,7 +9,7 @@ module ControlObjectiveItems::FindingPDFData
     body << get_late_finding_attributes(finding)
     body << get_optional_finding_attributes(finding)
     body << get_audited_data(finding)
-    body << get_final_finding_attributes(finding)
+    body << get_final_finding_attributes(finding, hide)
 
     body
   end
@@ -111,7 +111,7 @@ module ControlObjectiveItems::FindingPDFData
       body
     end
 
-    def get_final_finding_attributes finding
+    def get_final_finding_attributes finding, hide
       body = ''
 
       if finding.state_text.present?
@@ -119,7 +119,7 @@ module ControlObjectiveItems::FindingPDFData
           "#{finding.state_text.chomp}\n"
       end
 
-      if finding.audit_comments.present?
+      if finding.audit_comments.present? && hide.exclude?('audit_comments')
         body << "<b>#{finding.class.human_attribute_name('audit_comments')}:" +
           "</b> #{finding.audit_comments.chomp}\n"
       end
