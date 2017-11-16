@@ -8,6 +8,7 @@ module Findings::State
     FINAL_STATUS                         = final_status
     PENDING_STATUS                       = pending_status
     EXCLUDE_FROM_REPORTS_STATUS          = exclude_from_reports_status
+    PENDING_FOR_REVIEW_STATUS            = pending_for_review_status
 
     define_state_scopes
     define_state_methods
@@ -85,6 +86,16 @@ module Findings::State
 
       def exclude_from_reports_status
         [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked]
+      end
+
+      def pending_for_review_status
+        [
+          STATUS[:awaiting],
+          STATUS[:being_implemented],
+          STATUS[:implemented],
+          STATUS[:unanswered],
+          STATUS[:assumed_risk]
+        ]
       end
 
       def confirmed_transitions final

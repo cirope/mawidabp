@@ -225,12 +225,7 @@ class ReviewsController < ApplicationController
         "#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('id')} = :business_unit_id"
       ].join(' AND '),
       boolean_false: false,
-      states: [
-        Finding::STATUS[:awaiting],
-        Finding::STATUS[:being_implemented],
-        Finding::STATUS[:implemented],
-        Finding::STATUS[:unanswered]
-      ],
+      states: Finding::PENDING_FOR_REVIEW_STATUS,
       business_unit_id: plan_item.business_unit_id
     ).includes(
       control_objective_item: {
@@ -260,12 +255,7 @@ class ReviewsController < ApplicationController
       ].join(' AND '),
       false: false,
       organization_id: Organization.current_id,
-      states: [
-        Finding::STATUS[:awaiting],
-        Finding::STATUS[:being_implemented],
-        Finding::STATUS[:implemented],
-        Finding::STATUS[:unanswered]
-      ],
+      states: Finding::PENDING_FOR_REVIEW_STATUS,
       process_control_id: @process_control.id
     ).includes(
       control_objective_item: [
@@ -293,12 +283,7 @@ class ReviewsController < ApplicationController
     parameters = {
       boolean_false: false,
       organization_id: current_organization.id,
-      states: [
-        Finding::STATUS[:awaiting],
-        Finding::STATUS[:being_implemented],
-        Finding::STATUS[:implemented],
-        Finding::STATUS[:unanswered]
-      ],
+      states: Finding::PENDING_FOR_REVIEW_STATUS
     }
     @tokens.each_with_index do |t, i|
       conditions << [
