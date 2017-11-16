@@ -372,10 +372,14 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_short_weakness_on pdf, weakness
-      origination_date = if weakness.origination_date.present?
+      show_origination_date =
+        weakness.repeated_ancestors.present? &&
+        weakness.origination_date.present?
+
+      origination_date = if show_origination_date
                            I18n.l weakness.origination_date
                          else
-                           '-'
+                           I18n.t 'conclusion_review.new_origination_date'
                          end
       state_text = [
         Weakness.human_attribute_name('state'), weakness.state_text
