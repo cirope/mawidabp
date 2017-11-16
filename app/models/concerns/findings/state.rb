@@ -94,8 +94,8 @@ module Findings::State
           STATUS[:being_implemented],
           STATUS[:implemented],
           STATUS[:unanswered],
-          STATUS[:assumed_risk]
-        ]
+        ] |
+        (SHOW_ASSUMED_RISK_AS_REVIEW_PENDING ? [STATUS[:assumed_risk]] : [])
       end
 
       def confirmed_transitions final
