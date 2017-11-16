@@ -276,16 +276,18 @@ module ConclusionReviews::AlternativePDF
       pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
 
-      put_weakness_details_on pdf, weaknesses, legend: 'no_main_weaknesses'
+      put_weakness_details_on pdf, weaknesses, legend: 'no_main_weaknesses',
+        hide: %w(audit_recommendations)
     end
 
-    def put_weakness_details_on pdf, weaknesses, legend:
+    def put_weakness_details_on pdf, weaknesses, hide: [], legend:
       if weaknesses.any?
         weaknesses.each do |f|
           coi = f.control_objective_item
 
           pdf.move_down PDF_FONT_SIZE
-          pdf.text coi.finding_pdf_data(f), align: :justify, inline_format: true
+          pdf.text coi.finding_pdf_data(f, hide: hide),
+            align: :justify, inline_format: true
         end
       else
         put_weakness_legend_on pdf, legend
