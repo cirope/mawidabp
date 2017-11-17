@@ -944,7 +944,9 @@
     add_finding_assignment: "Agregar hallazgo pendiente"
     add_user_assignment: "Agregar usuario relacionado"
     suggest_findings: 'Sugerir hallazgos pendientes'
+    suggest_past_findings: 'Sugerir hallazgos solucionados recientes'
     without_suggested_findings: 'Sin hallazgos pendientes'
+    without_past_implemented_audited_findings: 'Sin hallazgos solucionados recientes'
     suggested_findings_for: 'Hallazgos sugeridos para %{process_control}'
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"

@@ -358,7 +358,29 @@ class ReviewsControllerTest < ActionController::TestCase
         f.control_objective.process_control_id == process_control.id
       end
     )
+
     assert_template 'reviews/suggested_process_control_findings'
+  end
+
+  test 'past implemented audited findings' do
+    review = reviews :current_review
+    finding = findings :being_implemented_weakness_on_final
+
+    login
+
+    finding.update_column :state, Finding::STATUS[:implemented_audited]
+
+    get :past_implemented_audited_findings, params: { id: review.plan_item_id }
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert assigns(:findings).count > 0
+    assert assigns(:findings).all?(&:implemented_audited?)
+    assert(
+      assigns(:findings).all? do |f|
+        f.review.plan_item.business_unit_id == review.plan_item.business_unit_id
+      end
+    )
+    assert_template 'reviews/past_implemented_audited_findings'
   end
 
   test 'download work papers' do

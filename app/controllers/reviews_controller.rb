@@ -193,13 +193,17 @@ class ReviewsController < ApplicationController
     name = business_unit&.name
     type = business_unit&.business_unit_type&.name
     prefix = business_unit&.business_unit_type&.review_prefix
+    link_to_suggested_findings =
+      suggested_findings_review_url(id: plan_item.id) if plan_item
+    link_to_past_implemented_audited_findings =
+      past_implemented_audited_findings_review_url(id: plan_item.id) if plan_item
 
     render json: {
       business_unit_name: name,
       business_unit_type: type,
       business_unit_prefix: prefix,
-      link_to_suggested_findings:
-        (suggested_findings_review_url(id: plan_item.id) if plan_item)
+      link_to_suggested_findings: link_to_suggested_findings,
+      link_to_past_implemented_audited_findings: link_to_past_implemented_audited_findings
     }.to_json
   end
 
@@ -267,6 +271,37 @@ class ReviewsController < ApplicationController
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
       ]
     ).references(:reviews, :conclusion_reviews, :control_objectives)
+  end
+
+  # * GET /reviews/past_implemented_audited_findings
+  def past_implemented_audited_findings
+    plan_item = PlanItem.find(params[:id])
+    @findings = Finding.where(
+      [
+        "#{Finding.quoted_table_name}.#{Finding.qcn('final')} = :boolean_false",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('state')} IN(:states)",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('origination_date')} >= :limit_date",
+        "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL",
+        "#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('id')} = :business_unit_id"
+      ].join(' AND '),
+      boolean_false: false,
+      limit_date: 3.years.ago.to_date,
+      states: [Finding::STATUS[:implemented_audited]],
+      business_unit_id: plan_item.business_unit_id
+    ).includes(
+      control_objective_item: {
+        review: [
+          {plan_item: [:plan, :business_unit]},
+          :period,
+          :conclusion_final_review
+        ]
+      }
+    ).order(
+      [
+        "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
+      ]
+    ).references(:reviews, :periods, :conclusion_reviews, :business_units)
   end
 
   # * GET /reviews/auto_complete_for_finding
@@ -452,6 +487,8 @@ class ReviewsController < ApplicationController
         plan_item_data: :read,
         survey_pdf: :read,
         suggested_findings: :read,
+        suggested_process_control_findings: :read,
+        past_implemented_audited_findings: :read,
         auto_complete_for_finding: :read,
         auto_complete_for_control_objective: :read,
         auto_complete_for_process_control: :read,
