@@ -22,11 +22,13 @@
         <%= f.input :relevance, collection: relevances,
           include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
         <%= f.input :audit_date, as: :date_picker, input_html: { disabled: readonly } %>
-        <%= f.input :control_objective_text, input_html: { autofocus: true, readonly: readonly, rows: 5 } %>
+        <%= f.input :control_objective_text, input_html: { autofocus: true, readonly: readonly, rows: HIDE_CONTROL_EFFECTS ? 9 : 5 } %>
 
         <%= f.simple_fields_for :control do |c_f| %>
-          <%= c_f.input :effects, label: Control.human_attribute_name(:effects), input_html: { readonly: readonly, rows: 5 } %>
-          <%= c_f.input :control, label: Control.human_attribute_name(:control), input_html: { readonly: readonly, rows: 5 } %>
+          <% unless HIDE_CONTROL_EFFECTS %>
+            <%= c_f.input :effects, label: Control.human_attribute_name(:effects), input_html: { readonly: readonly, rows: 5 } %>
+          <% end %>
+          <%= c_f.input :control, label: Control.human_attribute_name(:control), input_html: { readonly: readonly, rows: HIDE_CONTROL_EFFECTS ? 8 : 5 } %>
 
           <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
             <%= f.input :effectiveness, label: ControlObjectiveItem.human_attribute_name(:effectiveness),

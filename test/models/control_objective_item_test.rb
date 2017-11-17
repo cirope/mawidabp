@@ -222,9 +222,12 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert @control_objective_item.invalid?
     assert_error @control_objective_item, :audit_date, :blank
     assert_error @control_objective_item, :relevance, :blank
-    assert_error @control_objective_item.control, :effects, :blank
     assert_error @control_objective_item.control, :control, :blank
     assert_error @control_objective_item, :auditor_comment, :blank
+
+    unless HIDE_CONTROL_EFFECTS
+      assert_error @control_objective_item.control, :effects, :blank
+    end
 
     unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
       assert_error @control_objective_item, :design_score, :blank
@@ -234,8 +237,10 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
     @control_objective_item.design_score = 0
 
+    expected_error_count = HIDE_CONTROL_EFFECTS ? 5 : 6
+
     assert !@control_objective_item.valid?
-    assert_equal 6, @control_objective_item.errors.count
+    assert_equal expected_error_count, @control_objective_item.errors.count
     assert @control_objective_item.errors[:compliance_score].blank?
     assert @control_objective_item.errors[:sustantive_score].blank?
     assert_error @control_objective_item.control, :design_tests, :blank
@@ -297,8 +302,13 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
     @control_objective_item.reload
     @control_objective_item.control.effects = '  '
-    assert !@control_objective_item.must_be_approved?
-    assert_equal 1, @control_objective_item.approval_errors.size
+
+    if HIDE_CONTROL_EFFECTS
+      assert @control_objective_item.must_be_approved?
+    else
+      assert !@control_objective_item.must_be_approved?
+      assert_equal 1, @control_objective_item.approval_errors.size
+    end
 
     @control_objective_item.reload
     @control_objective_item.control.control = '  '

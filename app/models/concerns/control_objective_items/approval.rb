@@ -52,7 +52,7 @@ module ControlObjectiveItems::Approval
     def blank_control_attributes_errors
       errors = []
 
-      if control&.effects.blank?
+      if control&.effects.blank? && !HIDE_CONTROL_EFFECTS
         errors << I18n.t('control_objective_item.errors.without_effects')
       end
 

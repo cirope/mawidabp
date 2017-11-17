@@ -185,7 +185,6 @@ module ConclusionReviews::AlternativePDF
         design_tests
         compliance_tests
         sustantive_tests
-        effects
       )
 
       pdf.text "<sup>(#{index})</sup> <b>#{coi.control_objective_text}</b>",

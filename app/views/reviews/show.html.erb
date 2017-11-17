@@ -89,10 +89,12 @@
         <strong><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</strong>
         <%= l(coi.audit_date) if coi.audit_date %>
       </p>
-      <div>
-        <strong><%= Control.human_attribute_name :effects %>:</strong>
-        <%= simple_format coi.control.effects %>
-      </div>
+      <% unless HIDE_CONTROL_EFFECTS %>
+        <div>
+          <strong><%= Control.human_attribute_name :effects %>:</strong>
+          <%= simple_format coi.control.effects %>
+        </div>
+      <% end %>
       <div>
         <strong><%= Control.human_attribute_name :control %>:</strong>
         <%= simple_format coi.control.control %>

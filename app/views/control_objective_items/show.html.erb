@@ -8,10 +8,12 @@
   <%= simple_format @control_objective_item.to_s %>
 </div>
 
-<div>
-  <strong><%= Control.human_attribute_name(:effects) %>:</strong>
-  <%= simple_format @control_objective_item.control.effects %>
-</div>
+<% unless HIDE_CONTROL_EFFECTS %>
+  <div>
+    <strong><%= Control.human_attribute_name(:effects) %>:</strong>
+    <%= simple_format @control_objective_item.control.effects %>
+  </div>
+<% end %>
 
 <p>
   <strong><%= ControlObjectiveItem.human_attribute_name(:relevance) %>:</strong>
