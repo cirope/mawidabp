@@ -352,6 +352,7 @@ es:
     email_note: "Nota a incluir en el correo"
     responsibles: "Responsables"
     issue_date_title: "FECHA"
+    new_origination_date: "Nueva"
     audit_period: "%{start} al %{end}"
     audit_period_title: "PERIODO DE LA AUDITORÍA"
     objectives_and_scopes: "OBJETIVOS Y ALCANCE DEL TRABAJO"
@@ -369,6 +370,8 @@ es:
       project: "La Auditoría practicada estuvo circunscripta a la revisión del proceso/subproceso/tema"
       risk_exposure: "El proceso/subproceso evaluado en esta revisión es considerado por la Auditoria Interna en función a la Matriz de Riesgo"
       score: "Calificación"
+      current_score: "CALIFICACIÓN INFORME ACTUAL"
+      evolution: "EVOLUCIÓN (*)"
       main_weaknesses: "Principales debilidades"
       no_main_weaknesses: "No hay observaciones consideradas Principal Debilidad."
       other_weaknesses: "Otras observaciones"
@@ -856,7 +859,9 @@ es:
     add_finding_assignment: "Agregar observación / oportunidad de mejora pendiente"
     add_user_assignment: "Agregar usuario relacionado"
     suggest_findings: 'Sugerir observaciones / oportunidades de mejora pendientes'
+    suggest_past_findings: 'Sugerir observaciones / oportunidades de mejora solucionadas recientes'
     without_suggested_findings: 'Sin observaciones / oportunidades de mejora pendientes'
+    without_past_implemented_audited_findings: 'Sin observaciones / oportunidades de mejora solucionadas recientes'
     suggested_findings_for: 'Hallazgos sugeridos para %{process_control}'
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
@@ -871,7 +876,7 @@ es:
       type_manager: "Gerente"
       type_audited: "Auditado"
       audit_team: "Auditoría"
-      others: "Otros"
+      others: "Usuarios"
       readonly: "Los integrantes no pueden ser modificados, ya se emitió el informe definitivo"
     score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN DETALLADA"
     global_score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN GLOBAL"
@@ -897,17 +902,20 @@ es:
     oportunities_work_papers: "Oportunidades"
     follow_up_work_papers: "Seguimiento de observaciones"
     download_work_papers: "Descargar papeles de trabajo"
+    finished_work_papers: "Papeles de trabajo - Conforme auditor"
     notes: "Notas"
     estimated_amount: "Costo estimado en plan de trabajo"
     other_actions: "Acciones"
     recode_findings: "Recodificar hallazgos"
     recode_findings_by_risk: "Recodificar hallazgos por riesgo"
     findings_recoded: "Hallazgos recodificados correctamente"
+    work_papers_marked_as_finished: "Papeles de trabajo marcados como conforme auditor"
     review_qualification_explanation: "La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     process_control_qualification_explanation: "La calificación del proceso de negocio se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     errors:
       can_not_be_destroyed: "El informe no puede ser eliminado"
       without_survey: "no tiene resumen del alcance"
+      without_audited: "no tiene usuario auditado"
       without_control_objectives: "no tiene objetivos de control"
       related_finding_incomplete: "está pendiente y no se ha marcado como reiterada o solucionada"
     survey:
@@ -1094,6 +1102,8 @@ es:
         summary: "Acta"
         recipients: "Destinatarios del informe"
         sectors: "Sectores/departamentos involucrados"
+        evolution: "Evolución de la calificación"
+        evolution_justification: "Justificación evolución"
       control:
         order: "Orden"
         control: "Controles"
@@ -1353,7 +1363,7 @@ es:
         review:
           attributes:
             review_user_assignments:
-              invalid: "debe tener al menos un supervisor o gerente, un auditor y un auditado"
+              invalid: "debe tener al menos %{required_roles}"
             plan_item:
               invalid: "debe tener un ciclo asignado en la planificación"
               required: "debe seleccionar uno"

@@ -944,7 +944,9 @@
     add_finding_assignment: "Agregar hallazgo pendiente"
     add_user_assignment: "Agregar usuario relacionado"
     suggest_findings: 'Sugerir hallazgos pendientes'
+    suggest_past_findings: 'Sugerir hallazgos solucionados recientes'
     without_suggested_findings: 'Sin hallazgos pendientes'
+    without_past_implemented_audited_findings: 'Sin hallazgos solucionados recientes'
     suggested_findings_for: 'Hallazgos sugeridos para %{process_control}'
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
@@ -959,7 +961,7 @@
       type_manager: "Gerente"
       type_audited: "Auditado"
       audit_team: "Auditoría"
-      others: "Otros"
+      others: "Usuarios"
       readonly: "Los integrantes no pueden ser modificados, ya se emitió el informe definitivo"
     score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN DETALLADA"
     global_score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN GLOBAL"
@@ -986,6 +988,7 @@
     oportunities_work_papers: "Oportunidades"
     follow_up_work_papers: "Seguimiento de observaciones"
     download_work_papers: "Descargar papeles de trabajo"
+    finished_work_papers: "Papeles de trabajo - Conforme auditor"
     notes: "Notas"
     estimated_amount: "Costo estimado en plan de trabajo"
     review_qualification_explanation: "La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
@@ -993,6 +996,7 @@
     errors:
       can_not_be_destroyed: "El informe no puede ser eliminado"
       without_survey: "no tiene resumen del alcance"
+      without_audited: "no tiene usuario auditado"
       without_control_objectives: "no tiene objetivos de control"
       related_finding_incomplete: "está pendiente y no se ha marcado como reiterada o solucionada"
     survey:
@@ -1172,6 +1176,8 @@
         summary: "Acta"
         recipients: "Destinatarios del informe"
         sectors: "Sectores/departamentos involucrados"
+        evolution: "Evolución de la calificación"
+        evolution_justification: "Justificación evolución"
       control:
         order: "Orden"
         control: "Controles"
@@ -1377,7 +1383,7 @@
         review:
           attributes:
             review_user_assignments:
-              invalid: "debe tener al menos un supervisor o gerente, un auditor y un auditado"
+              invalid: "debe tener al menos %{required_roles}"
             plan_item:
               invalid: "debe tener un ciclo asignado en la planificación"
               required: "debe seleccionar uno"

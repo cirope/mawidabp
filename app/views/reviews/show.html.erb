@@ -155,6 +155,13 @@
   </ul>
 <% end %>
 
+<% if @review.finished_work_papers %>
+  <p>&nbsp;</p>
+  <div class="alert alert-info">
+    <%= t 'review.work_papers_marked_as_finished' %>
+  </div>
+<% end %>
+
 <hr />
 
 <div>

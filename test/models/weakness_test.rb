@@ -348,8 +348,12 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.effect = ' '
     @weakness.audit_comments = '  '
 
-    refute @weakness.must_be_approved?
-    assert_equal error_messages.sort, @weakness.approval_errors.sort
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF && HIDE_WEAKNESS_EFFECT
+      assert @weakness.must_be_approved?
+    else
+      refute @weakness.must_be_approved?
+      assert_equal error_messages.sort, @weakness.approval_errors.sort
+    end
   end
 
   test 'work papers can be added to weakness with current close date' do

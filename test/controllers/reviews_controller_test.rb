@@ -288,7 +288,9 @@ class ReviewsControllerTest < ActionController::TestCase
     login
 
     get :plan_item_refresh, xhr: true, params: {
-      period_id: periods(:current_period).id, format: :js
+      period_id: periods(:current_period).id,
+      prefix: business_unit_types(:cycle).review_prefix,
+      format: :js
     }
 
     assert_response :success
@@ -356,7 +358,29 @@ class ReviewsControllerTest < ActionController::TestCase
         f.control_objective.process_control_id == process_control.id
       end
     )
+
     assert_template 'reviews/suggested_process_control_findings'
+  end
+
+  test 'past implemented audited findings' do
+    review = reviews :current_review
+    finding = findings :being_implemented_weakness_on_final
+
+    login
+
+    finding.update_column :state, Finding::STATUS[:implemented_audited]
+
+    get :past_implemented_audited_findings, params: { id: review.plan_item_id }
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert assigns(:findings).count > 0
+    assert assigns(:findings).all?(&:implemented_audited?)
+    assert(
+      assigns(:findings).all? do |f|
+        f.review.plan_item.business_unit_id == review.plan_item.business_unit_id
+      end
+    )
+    assert_template 'reviews/past_implemented_audited_findings'
   end
 
   test 'download work papers' do
@@ -377,6 +401,19 @@ class ReviewsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_template 'reviews/_estimated_amount'
+  end
+
+  test 'finished work papers' do
+    review = reviews(:past_review) # should work even if it has final review
+
+    login
+
+    assert_difference 'review.versions.count' do
+      patch :finished_work_papers, params: { id: review.id }
+    end
+
+    assert_redirected_to review_url(review)
+    assert review.reload.finished_work_papers
   end
 
   test 'recode findings' do

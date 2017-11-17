@@ -383,6 +383,15 @@ class ReviewTest < ActiveSupport::TestCase
     assert review.approval_errors.flatten.include?(
       I18n.t('review.errors.without_control_objectives')
     )
+
+    assert @review.reload.must_be_approved?
+    assert @review.approval_errors.blank?
+    @review.review_user_assignments.each { |rua| rua.audited? && rua.delete }
+    refute @review.reload.must_be_approved?
+    assert @review.approval_errors.present?
+    assert @review.approval_errors.flatten.include?(
+      I18n.t('review.errors.without_audited')
+    )
   end
 
   test 'can be sended' do
@@ -408,19 +417,24 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_audited?
     assert @review.valid?
 
-    @review.review_user_assignments.delete_all(&:audited?)
+    @review.review_user_assignments.each { |rua| rua.audited? && rua.delete }
 
-    assert !@review.has_audited?
-    assert @review.invalid?
+    refute @review.reload.has_audited?
+
+    if DISABLE_REVIEW_AUDITED_VALIDATION
+      assert @review.valid?
+    else
+      assert @review.invalid?
+    end
   end
 
   test 'has manager or supervisor function' do
     assert @review.has_manager? || @review.has_supervisor?
     assert @review.valid?
 
-    @review.review_user_assignments.delete_all { |a| a.manager? || a.supervisor? }
+    @review.review_user_assignments.each { |a| (a.manager? || a.supervisor?) && a.delete }
 
-    assert !@review.has_supervisor? && !@review.has_manager?
+    assert !@review.reload.has_supervisor? && !@review.has_manager?
     assert @review.invalid?
   end
 
@@ -428,9 +442,9 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_auditor?
     assert @review.valid?
 
-    @review.review_user_assignments.delete_all(&:auditor?)
+    @review.review_user_assignments.each { |rua| rua.auditor? && rua.delete }
 
-    assert !@review.has_auditor?
+    assert !@review.reload.has_auditor?
     assert @review.invalid?
   end
 

@@ -137,4 +137,13 @@ module ReviewsHelper
 
     years
   end
+
+  def show_review_finished_work_papers_icon review
+    if review.finished_work_papers
+      content_tag(:span, nil,
+        class: 'glyphicon glyphicon-paperclip',
+        title: t('review.work_papers_marked_as_finished')
+      )
+    end
+  end
 end

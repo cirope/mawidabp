@@ -1,15 +1,15 @@
 module ControlObjectiveItems::FindingPDFData
   extend ActiveSupport::Concern
 
-  def finding_pdf_data finding
+  def finding_pdf_data finding, hide: []
     body = ''
 
     body << get_initial_finding_attributes(finding)
-    body << get_weakness_attributes(finding) if finding.kind_of?(Weakness)
+    body << get_weakness_attributes(finding, hide) if finding.kind_of?(Weakness)
     body << get_late_finding_attributes(finding)
     body << get_optional_finding_attributes(finding)
     body << get_audited_data(finding)
-    body << get_final_finding_attributes(finding)
+    body << get_final_finding_attributes(finding, hide)
 
     body
   end
@@ -25,8 +25,8 @@ module ControlObjectiveItems::FindingPDFData
       end
 
       if finding.title.present?
-        body << "<b>#{finding.class.human_attribute_name('title')}:</b> " +
-          "#{finding.title.chomp}\n"
+        body << "<b>#{finding.class.human_attribute_name('title')}: " +
+          "<i>#{finding.title.chomp}</i></b>\n"
       end
 
       if finding.description.present?
@@ -34,15 +34,10 @@ module ControlObjectiveItems::FindingPDFData
           "#{finding.description.chomp}\n"
       end
 
-      if finding.repeated_ancestors.present?
-        body << "<b>#{finding.class.human_attribute_name('repeated_of_id')}:</b>" +
-          " #{finding.repeated_ancestors.join(' | ')}\n"
-      end
-
-      body
+      body << finding_repeated_text_for(finding)
     end
 
-    def get_weakness_attributes finding
+    def get_weakness_attributes finding, hide
       body = ''
 
       if finding.risk_text.present?
@@ -55,7 +50,7 @@ module ControlObjectiveItems::FindingPDFData
           "#{finding.effect.chomp}\n"
       end
 
-      if finding.audit_recommendations.present?
+      if finding.audit_recommendations.present? && hide.exclude?('audit_recommendations')
         body << "<b>#{Weakness.human_attribute_name('audit_recommendations')}: " +
           "</b>#{finding.audit_recommendations}\n"
       end
@@ -68,7 +63,7 @@ module ControlObjectiveItems::FindingPDFData
 
       if finding.origination_date.present?
         body << "<b>#{finding.class.human_attribute_name('origination_date')}:"+
-          "</b> #{I18n.l(finding.origination_date, format: :long)}\n"
+          "</b> #{finding_origination_date_text_for finding}\n"
       end
 
       if finding.answer.present?
@@ -76,10 +71,7 @@ module ControlObjectiveItems::FindingPDFData
           "#{finding.answer.chomp}\n"
       end
 
-      if finding.follow_up_date.present?
-        body << "<b>#{finding.class.human_attribute_name('follow_up_date')}:</b> " +
-          "#{I18n.l(finding.follow_up_date, format: :long)}\n"
-      end
+      body << finding_follow_up_date_text_for(finding)
 
       if finding.solution_date.present?
         body << "<b>#{finding.class.human_attribute_name('solution_date')}:" +
@@ -119,7 +111,7 @@ module ControlObjectiveItems::FindingPDFData
       body
     end
 
-    def get_final_finding_attributes finding
+    def get_final_finding_attributes finding, hide
       body = ''
 
       if finding.state_text.present?
@@ -127,7 +119,7 @@ module ControlObjectiveItems::FindingPDFData
           "#{finding.state_text.chomp}\n"
       end
 
-      if finding.audit_comments.present?
+      if finding.audit_comments.present? && hide.exclude?('audit_comments')
         body << "<b>#{finding.class.human_attribute_name('audit_comments')}:" +
           "</b> #{finding.audit_comments.chomp}\n"
       end
@@ -138,5 +130,41 @@ module ControlObjectiveItems::FindingPDFData
       end
 
       body
+    end
+
+    def finding_origination_date_text_for finding
+      if !SHOW_CONCLUSION_ALTERNATIVE_PDF || finding.repeated_ancestors.present?
+        I18n.l finding.origination_date, format: :long
+      else
+        I18n.t 'conclusion_review.new_origination_date'
+      end
+    end
+
+    def finding_follow_up_date_text_for finding
+      show =
+        (!SHOW_CONCLUSION_ALTERNATIVE_PDF && finding.follow_up_date.present?) ||
+        (finding.follow_up_date.present? && !finding.implemented_audited?)
+
+      if show
+        "<b>#{finding.class.human_attribute_name('follow_up_date')}:</b> " +
+          "#{I18n.l(finding.follow_up_date, format: :long)}\n"
+      else
+        ''
+      end
+    end
+
+    def finding_repeated_text_for finding
+      repeated = finding.repeated_ancestors.present?
+
+      if SHOW_CONCLUSION_ALTERNATIVE_PDF
+        label = I18n.t "label.#{repeated ? 'yes' : 'no'}"
+
+        "<b>#{I18n.t 'findings.state.repeated'}:</b> #{label}\n"
+      elsif repeated
+        "<b>#{finding.class.human_attribute_name('repeated_of_id')}:</b>" +
+          " #{finding.repeated_ancestors.join(' | ')}\n"
+      else
+        ''
+      end
     end
 end

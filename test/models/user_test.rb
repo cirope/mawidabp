@@ -480,7 +480,9 @@ class UserTest < ActiveSupport::TestCase
       applied_procedures: 'New applied procedures',
       conclusion: 'New conclusion',
       recipients: 'John Doe',
-      sectors: 'Area 51'
+      sectors: 'Area 51',
+      evolution: 'Do the evolution',
+      evolution_justification: 'Ok'
     }, false).save!
 
     Organization.current_id = nil

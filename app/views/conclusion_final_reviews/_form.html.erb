@@ -38,13 +38,22 @@
       </div>
     </div>
 
-    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+    <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :recipients, input_html: { rows: 4 } %>
+          <%= f.input :evolution, collection: EVOLUTION_OPTIONS, prompt: true, input_html: { disabled: readonly } %>
         </div>
         <div class="col-md-6">
-          <%= f.input :sectors, input_html: { rows: 4 } %>
+          <%= f.input :evolution_justification, as: :string, input_html: { readonly: readonly } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :recipients, input_html: { rows: 4, readonly: true } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :sectors, input_html: { rows: 4, readonly: true } %>
         </div>
       </div>
     <% end %>
@@ -65,7 +74,8 @@
 //<![CDATA[
   $('#conclusion_final_review_review_id').change(function() {
     var elementsForUpdate = [
-      'applied_procedures', 'conclusion', 'recipients', 'sectors'
+      'applied_procedures', 'conclusion', 'evolution',
+      'evolution_justification', 'recipients', 'sectors'
     ];
 
     if(!$(this).val().match(/^\s*$/)) {

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171113124611) do
+ActiveRecord::Schema.define(version: 20171115133247) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -148,6 +148,8 @@ ActiveRecord::Schema.define(version: 20171113124611) do
     t.string "summary"
     t.text "recipients"
     t.text "sectors"
+    t.string "evolution"
+    t.text "evolution_justification"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
     t.index ["organization_id"], name: "index_conclusion_reviews_on_organization_id"
@@ -677,6 +679,7 @@ ActiveRecord::Schema.define(version: 20171113124611) do
     t.string "risk_exposure"
     t.decimal "manual_score", precision: 6, scale: 2
     t.string "include_sox"
+    t.boolean "finished_work_papers", default: false, null: false
     t.index ["file_model_id"], name: "index_reviews_on_file_model_id"
     t.index ["identification"], name: "index_reviews_on_identification"
     t.index ["organization_id"], name: "index_reviews_on_organization_id"

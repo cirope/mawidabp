@@ -6,7 +6,7 @@ class ReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
     :show, :edit, :update, :destroy, :review_data, :download_work_papers,
-    :survey_pdf, :recode_findings, :recode_findings_by_risk
+    :survey_pdf, :finished_work_papers, :recode_findings, :recode_findings_by_risk
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -161,8 +161,17 @@ class ReviewsController < ApplicationController
 
   # * GET /reviews/plan_item_refresh?period_id=1
   def plan_item_refresh
-    grouped_plan_items =
-      PlanItem.list_unused(params[:period_id]).group_by(&:business_unit_type)
+    prefix = params[:prefix]
+    business_unit_type = BusinessUnitType.list.find_by review_prefix: prefix
+    plan_items = if prefix.present? && business_unit_type
+                   PlanItem.for_business_unit_type business_unit_type.id
+                 else
+                   PlanItem.all
+                 end
+
+    grouped_plan_items = plan_items.
+      list_unused(params[:period_id]).
+      group_by(&:business_unit_type)
 
     @business_unit_types = grouped_plan_items.map do |but, plan_items|
       sorted_plan_items = plan_items.sort_by &:project
@@ -184,13 +193,17 @@ class ReviewsController < ApplicationController
     name = business_unit&.name
     type = business_unit&.business_unit_type&.name
     prefix = business_unit&.business_unit_type&.review_prefix
+    link_to_suggested_findings =
+      suggested_findings_review_url(id: plan_item.id) if plan_item
+    link_to_past_implemented_audited_findings =
+      past_implemented_audited_findings_review_url(id: plan_item.id) if plan_item
 
     render json: {
       business_unit_name: name,
       business_unit_type: type,
       business_unit_prefix: prefix,
-      link_to_suggested_findings:
-        (suggested_findings_review_url(id: plan_item.id) if plan_item)
+      link_to_suggested_findings: link_to_suggested_findings,
+      link_to_past_implemented_audited_findings: link_to_past_implemented_audited_findings
     }.to_json
   end
 
@@ -216,11 +229,7 @@ class ReviewsController < ApplicationController
         "#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('id')} = :business_unit_id"
       ].join(' AND '),
       boolean_false: false,
-      states: [
-        Finding::STATUS[:being_implemented],
-        Finding::STATUS[:implemented],
-        Finding::STATUS[:unanswered]
-      ],
+      states: Finding::PENDING_FOR_REVIEW_STATUS,
       business_unit_id: plan_item.business_unit_id
     ).includes(
       control_objective_item: {
@@ -250,7 +259,7 @@ class ReviewsController < ApplicationController
       ].join(' AND '),
       false: false,
       organization_id: Organization.current_id,
-      states: [Finding::STATUS[:being_implemented], Finding::STATUS[:implemented]],
+      states: Finding::PENDING_FOR_REVIEW_STATUS,
       process_control_id: @process_control.id
     ).includes(
       control_objective_item: [
@@ -262,6 +271,37 @@ class ReviewsController < ApplicationController
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
       ]
     ).references(:reviews, :conclusion_reviews, :control_objectives)
+  end
+
+  # * GET /reviews/past_implemented_audited_findings
+  def past_implemented_audited_findings
+    plan_item = PlanItem.find(params[:id])
+    @findings = Finding.where(
+      [
+        "#{Finding.quoted_table_name}.#{Finding.qcn('final')} = :boolean_false",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('state')} IN(:states)",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('origination_date')} >= :limit_date",
+        "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL",
+        "#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('id')} = :business_unit_id"
+      ].join(' AND '),
+      boolean_false: false,
+      limit_date: 3.years.ago.to_date,
+      states: [Finding::STATUS[:implemented_audited]],
+      business_unit_id: plan_item.business_unit_id
+    ).includes(
+      control_objective_item: {
+        review: [
+          {plan_item: [:plan, :business_unit]},
+          :period,
+          :conclusion_final_review
+        ]
+      }
+    ).order(
+      [
+        "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
+      ]
+    ).references(:reviews, :periods, :conclusion_reviews, :business_units)
   end
 
   # * GET /reviews/auto_complete_for_finding
@@ -278,9 +318,7 @@ class ReviewsController < ApplicationController
     parameters = {
       boolean_false: false,
       organization_id: current_organization.id,
-      states: [
-        Finding::STATUS[:being_implemented], Finding::STATUS[:implemented]
-      ],
+      states: Finding::PENDING_FOR_REVIEW_STATUS
     }
     @tokens.each_with_index do |t, i|
       conditions << [
@@ -366,6 +404,15 @@ class ReviewsController < ApplicationController
     render partial: 'estimated_amount', locals: {plan_item: plan_item}
   end
 
+  # * PUT /reviews/1/finished_work_papers
+  def finished_work_papers
+    @review.finished_work_papers = true
+
+    @review.save! validate: false
+
+    redirect_to @review, notice: t('review.work_papers_marked_as_finished')
+  end
+
   # * PUT /reviews/1/recode_findings
   def recode_findings
     @review.recode_weaknesses
@@ -440,12 +487,15 @@ class ReviewsController < ApplicationController
         plan_item_data: :read,
         survey_pdf: :read,
         suggested_findings: :read,
+        suggested_process_control_findings: :read,
+        past_implemented_audited_findings: :read,
         auto_complete_for_finding: :read,
         auto_complete_for_control_objective: :read,
         auto_complete_for_process_control: :read,
         auto_complete_for_tagging: :read,
         estimated_amount: :read,
         next_identification_number: :read,
+        finished_work_papers: :modify,
         recode_findings: :modify,
         recode_findings_by_risk: :modify
       )

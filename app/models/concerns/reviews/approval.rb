@@ -33,6 +33,10 @@ module Reviews::Approval
         review_errors << I18n.t('review.errors.without_survey')
       end
 
+      unless has_audited?
+        review_errors << I18n.t('review.errors.without_audited')
+      end
+
       review_errors
     end
 

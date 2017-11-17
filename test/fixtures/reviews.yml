@@ -8,6 +8,7 @@ current_review:
   risk_exposure: high
   manual_score: 800
   include_sox: yes
+  finished_work_papers: false
   organization: cirope
 
 past_review:
@@ -20,6 +21,7 @@ past_review:
   risk_exposure: high
   manual_score: 800
   include_sox: yes
+  finished_work_papers: false
   organization: cirope
 
 review_with_conclusion:
@@ -32,6 +34,7 @@ review_with_conclusion:
   risk_exposure: high
   manual_score: 800
   include_sox: yes
+  finished_work_papers: false
   organization: cirope
 
 review_without_conclusion:
@@ -44,6 +47,7 @@ review_without_conclusion:
   risk_exposure: high
   manual_score: 800
   include_sox: yes
+  finished_work_papers: false
   organization: cirope
 
 review_without_conclusion_and_without_findings:
@@ -56,6 +60,7 @@ review_without_conclusion_and_without_findings:
   risk_exposure: high
   manual_score: 800
   include_sox: yes
+  finished_work_papers: false
   organization: cirope
 
 review_approved_with_conclusion:
@@ -68,4 +73,5 @@ review_approved_with_conclusion:
   risk_exposure: high
   manual_score: 800
   include_sox: yes
+  finished_work_papers: false
   organization: cirope

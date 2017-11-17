@@ -2,7 +2,7 @@ module ConclusionReviews::AlternativePDF
   extend ActiveSupport::Concern
 
   def alternative_pdf organization = nil
-    pdf = Prawn::Document.create_generic_pdf :portrait, false
+    pdf = Prawn::Document.create_generic_pdf :portrait, false, hide_brand: true
 
     put_watermark_on          pdf
     put_alternative_header_on pdf, organization
@@ -65,11 +65,11 @@ module ConclusionReviews::AlternativePDF
 
       pdf.text "#{project_title} <b>#{project}</b>", inline_format: true
 
-      put_risk_exposure_on           pdf
-      put_alternative_score_table_on pdf
+      put_risk_exposure_on     pdf
+      put_alternative_score_on pdf
 
-      put_main_weaknesses_on         pdf
-      put_other_weaknesses_on        pdf
+      put_main_weaknesses_on   pdf
+      put_other_weaknesses_on  pdf
     end
 
     def put_detailed_review_on pdf
@@ -117,7 +117,9 @@ module ConclusionReviews::AlternativePDF
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
-      put_control_objective_items_table_on pdf
+      put_control_objective_items_table_on     pdf
+      pdf.move_down PDF_FONT_SIZE
+      put_control_objective_items_reference_on pdf
     end
 
     def put_staff_on pdf
@@ -151,7 +153,7 @@ module ConclusionReviews::AlternativePDF
         data          = row_data.insert 0, control_objective_column_headers
         table_options = pdf.default_table_options control_objective_column_widths(pdf)
 
-        pdf.font_size (PDF_FONT_SIZE * 0.75).round do
+        pdf.font_size PDF_FONT_SIZE do
           pdf.table data, table_options do
             row(0).style(
               background_color: 'cccccc',
@@ -161,6 +163,38 @@ module ConclusionReviews::AlternativePDF
               ]
             )
           end
+        end
+      end
+    end
+
+    def put_control_objective_items_reference_on pdf
+      count = 0
+
+      review.grouped_control_objective_items.each do |process_control, cois|
+        cois.each do |coi|
+          put_control_objective_item_reference_on pdf, coi, count += 1
+
+          pdf.move_down PDF_FONT_SIZE
+        end
+      end
+    end
+
+    def put_control_objective_item_reference_on pdf, coi, index
+      control_attributes = %i(
+        control
+        design_tests
+        compliance_tests
+        sustantive_tests
+        effects
+      )
+
+      pdf.text "<sup>(#{index})</sup> <b>#{coi.control_objective_text}</b>",
+        inline_format: true, size: (PDF_FONT_SIZE * 1.1).round, align: :justify
+
+      control_attributes.each do |attr_name|
+        if coi.control.send(attr_name).present?
+          pdf.add_description_item Control.human_attribute_name(attr_name),
+            coi.control.send(attr_name), 0, false, PDF_FONT_SIZE
         end
       end
     end
@@ -182,7 +216,8 @@ module ConclusionReviews::AlternativePDF
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
-      put_weakness_details_on pdf, all_weaknesses, legend: 'no_weaknesses'
+      put_weakness_details_on pdf, all_weaknesses, hide: %w(audit_comments),
+        legend: 'no_weaknesses'
     end
 
     def put_recipients_on pdf
@@ -210,42 +245,63 @@ module ConclusionReviews::AlternativePDF
       }
     end
 
-    def put_alternative_score_table_on pdf
+    def put_alternative_score_on pdf
       score_title = I18n.t 'conclusion_review.executive_summary.score'
-      score_text  = [
-        "<b>#{conclusion.upcase}</b>",
-        "<b><color rgb=\"cc0000\">(#{review.score_text})</color></b>"
-      ].join("\n")
 
       pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title score_title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.bounding_box [0, pdf.cursor], width: pdf.percent_width(100) do
-        inner_width = pdf.percent_width(100) - PDF_FONT_SIZE * 1.5
+      cursor = pdf.cursor
 
-        pdf.move_down PDF_FONT_SIZE
+      put_alternative_score_table_on pdf
+      pdf.move_cursor_to cursor
+      put_evolution_table_on pdf
 
-        pdf.bounding_box [PDF_FONT_SIZE, pdf.cursor], width: inner_width do
-          pdf.text score_text, inline_format: true
+      pdf.move_down PDF_FONT_SIZE
+      pdf.add_description_item "(*) #{self.class.human_attribute_name 'evolution_justification'}",
+        evolution_justification, 0, false
+    end
+
+    def put_alternative_score_table_on pdf
+      widths        = alternative_score_details_column_widths pdf
+      table_options = pdf.default_table_options widths
+      data          = [
+        alternative_score_details_column_headers,
+        alternative_score_details_column_data
+      ]
+
+      pdf.font_size (PDF_FONT_SIZE * 0.75).round do
+        pdf.table data, table_options do
+          row(0).style(
+            padding: [
+              (PDF_FONT_SIZE * 0.5).round,
+              (PDF_FONT_SIZE * 0.3).round
+            ]
+          )
         end
-
-        put_alternative_score_circle_on pdf
       end
     end
 
-    def put_alternative_score_circle_on pdf
-      fill_color = pdf.fill_color
-      point      = [
-        pdf.bounds.width - 20,
-        pdf.bounds.height - PDF_FONT_SIZE
+    def put_evolution_table_on pdf
+      image         = EVOLUTION_IMAGES[evolution]
+      widths        = [pdf.percent_width(15)]
+      table_options = pdf.default_table_options widths
+      data = [
+        [I18n.t('conclusion_review.executive_summary.evolution')],
+        [pdf_score_image_row(image)]
       ]
 
-      pdf.move_down PDF_FONT_SIZE
-      pdf.fill_color CONCLUSION_COLORS.fetch(conclusion) { '808080' }
-      pdf.fill_ellipse point, PDF_FONT_SIZE
-      pdf.fill_color fill_color
-      pdf.stroke_bounds
+      pdf.font_size (PDF_FONT_SIZE * 0.75).round do
+        pdf.table data, table_options.merge(position: :right) do
+          row(0).style(
+            padding: [
+              (PDF_FONT_SIZE * 0.5).round,
+              (PDF_FONT_SIZE * 0.3).round
+            ]
+          )
+        end
+      end
     end
 
     def put_main_weaknesses_on pdf
@@ -255,16 +311,18 @@ module ConclusionReviews::AlternativePDF
       pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
 
-      put_weakness_details_on pdf, weaknesses, legend: 'no_main_weaknesses'
+      put_weakness_details_on pdf, weaknesses, legend: 'no_main_weaknesses',
+        hide: %w(audit_recommendations audit_comments)
     end
 
-    def put_weakness_details_on pdf, weaknesses, legend:
+    def put_weakness_details_on pdf, weaknesses, hide: [], legend:
       if weaknesses.any?
         weaknesses.each do |f|
           coi = f.control_objective_item
 
           pdf.move_down PDF_FONT_SIZE
-          pdf.text coi.finding_pdf_data(f), align: :justify, inline_format: true
+          pdf.text coi.finding_pdf_data(f, hide: hide),
+            align: :justify, inline_format: true
         end
       else
         put_weakness_legend_on pdf, legend
@@ -348,10 +406,14 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_short_weakness_on pdf, weakness
-      origination_date = if weakness.origination_date.present?
+      show_origination_date =
+        weakness.repeated_ancestors.present? &&
+        weakness.origination_date.present?
+
+      origination_date = if show_origination_date
                            I18n.l weakness.origination_date
                          else
-                           '-'
+                           I18n.t 'conclusion_review.new_origination_date'
                          end
       state_text = [
         Weakness.human_attribute_name('state'), weakness.state_text
@@ -405,15 +467,16 @@ module ConclusionReviews::AlternativePDF
 
     def control_objectives_row_data
       row_data = []
+      count    = 0
 
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.each do |coi|
           color      = CONCLUSION_COLORS.fetch(coi.auditor_comment) { '808080' }
-          icon       = "<font size=\"14\"><color rgb=\"#{color}\">•</color></font>"
+          icon       = "<font size=\"16\"><color rgb=\"#{color}\">•</color></font>"
           conclusion = "#{icon} #{coi.auditor_comment&.upcase}"
 
           row_data << [
-            coi.control_objective_text,
+            "<sup>(#{count += 1})</sup> #{coi.control_objective_text}",
             conclusion
           ]
         end
@@ -431,5 +494,34 @@ module ConclusionReviews::AlternativePDF
 
     def control_objective_column_widths pdf
       [70, 30].map { |percent| pdf.percent_width percent }
+    end
+
+    def alternative_score_details_column_headers
+      header = I18n.t 'conclusion_review.executive_summary.current_score'
+
+      [{ content: header, colspan: 2 }]
+    end
+
+    def alternative_score_details_column_widths pdf
+      [70, 10].map do |width|
+        pdf.percent_width width
+      end
+    end
+
+    def alternative_score_details_column_data
+      image = CONCLUSION_IMAGES[conclusion]
+
+      score_text  = [
+        "<b>#{conclusion.upcase}</b>",
+        "<b><color rgb=\"cc0000\">(#{review.score_text})</color></b>"
+      ].join("\n")
+
+      [score_text, pdf_score_image_row(image)]
+    end
+
+    def pdf_score_image_row image
+      image_path = PDF_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
+
+      { image: image_path, fit: [23, 23], position: :center, vposition: :center }
     end
 end
