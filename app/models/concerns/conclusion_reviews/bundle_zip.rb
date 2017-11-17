@@ -149,4 +149,12 @@ module ConclusionReviews::BundleZip
         FileUtils.rm cover if File.exist? cover
       end
     end
+
+    def findings
+      if kind_of? ConclusionFinalReview
+        review.final_weaknesses + review.final_oportunities
+      else
+        review.weaknesses + review.oportunities
+      end
+    end
 end

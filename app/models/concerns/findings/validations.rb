@@ -7,7 +7,8 @@ module Findings::Validations
     validates :review_code, :title, length: { maximum: 255 }, allow_blank: true
     validates :audit_comments, presence: true, if: :audit_comments_should_be_present?
     validates :review_code, :description, :answer, :audit_recommendations,
-      :effect, :audit_comments, :title, pdf_encoding: true
+      :effect, :audit_comments, :title, :current_situation, :compliance,
+      :operational_risk, pdf_encoding: true
     validates :follow_up_date, :solution_date, :origination_date,
       :first_notification_date, timeliness: { type: :date }, allow_blank: true
     validate :validate_answer
@@ -40,7 +41,10 @@ module Findings::Validations
 
     def validate_follow_up_date
       if kind_of?(Weakness)
-        check_for_blank = being_implemented? || implemented? || implemented_audited?
+        check_for_blank = awaiting?          ||
+                          being_implemented? ||
+                          implemented?       ||
+                          implemented_audited?
 
         errors.add :follow_up_date, :blank         if check_for_blank  && follow_up_date.blank?
         errors.add :follow_up_date, :must_be_blank if !check_for_blank && follow_up_date.present?

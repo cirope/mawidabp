@@ -228,20 +228,26 @@ Rails.application.routes.draw do
       get :survey_pdf
       get :suggested_findings
       get :suggested_process_control_findings
+      get :past_implemented_audited_findings
       get :review_data
       get :weaknesses_and_oportunities
       get :download_work_papers
       get :estimated_amount
+      patch :finished_work_papers
       patch :recode_findings
+      patch :recode_findings_by_risk
     end
 
     collection do
       get :estimated_amount
+      get :plan_item_refresh
+      get :assignment_type_refresh
       get :plan_item_data
       get :auto_complete_for_finding
       get :auto_complete_for_process_control
       get :auto_complete_for_control_objective
       get :auto_complete_for_tagging
+      get :next_identification_number
     end
   end
 
@@ -256,6 +262,7 @@ Rails.application.routes.draw do
       get :auto_complete_for_tagging
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
+      get :state_changed
     end
 
     member do

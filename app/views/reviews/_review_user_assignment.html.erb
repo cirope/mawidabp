@@ -4,28 +4,34 @@
     <div class="row">
       <div class="col-md-6">
         <% copy_attribute_errors(:user_id, :auto_user_name, f) %>
-        <%= f.input :auto_user_name, label: false, autofocus: true,
+        <%= f.input :auto_user_name, label: false, autofocus: f.object.new_record?,
           input_html: {
             value: f.object.try(:user).try(:full_name_with_function, f.object.updated_at),
             id: "review_user_assignment_user_#{id}",
             title: t('label.search'),
             readonly: readonly,
             data: {
+              assignment_type_refresh_url: assignment_type_refresh_reviews_path,
               autocomplete_url: reviews_users_path,
               autocomplete_id_target: "#auto_user_id_#{id}"
             }
           } %>
         <%= f.input :user_id, as: :hidden, input_html: { id: "auto_user_id_#{id}" } %>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-<%= SHOW_CONCLUSION_ALTERNATIVE_PDF ? 5 : 3 %>">
         <%= user_assignment_type_field(f, false, readonly) %>
       </div>
-      <div class="col-md-1">
-        <%= f.input :include_signature, label: false, input_html: { disabled: readonly } %>
-      </div>
-      <div class="col-md-1">
-        <%= f.input :owner, label: false, input_html: { disabled: readonly } %>
-      </div>
+      <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+        <div class="col-md-1">
+          <%= f.input :include_signature, label: false, input_html: {
+            disabled: readonly,
+            data: { include_signature: true }
+          } %>
+        </div>
+        <div class="col-md-1">
+          <%= f.input :owner, label: false, input_html: { disabled: readonly } %>
+        </div>
+      <% end %>
       <div class="col-md-1">
         <div class="toggle-visibility text-right">
           <%= link_to_remove_nested_item(f) unless readonly %>

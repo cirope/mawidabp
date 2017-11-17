@@ -3,6 +3,7 @@ class Review < ApplicationRecord
   include Parameters::Risk
   include Parameters::Score
   include ParameterSelector
+  include Reviews::AutomaticIdentification
   include Reviews::Approval
   include Reviews::Clone
   include Reviews::ConclusionReview
@@ -22,6 +23,7 @@ class Review < ApplicationRecord
   include Reviews::ScoreSheetCommon
   include Reviews::ScoreSheetGlobal
   include Reviews::Search
+  include Reviews::SortColumns
   include Reviews::SurveyPDF
   include Reviews::UpdateCallbacks
   include Reviews::Users

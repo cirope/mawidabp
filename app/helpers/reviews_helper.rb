@@ -39,12 +39,22 @@ module ReviewsHelper
 
   def user_assignment_type_field(form, inline = true, disabled = false)
     input_options = { disabled: disabled, data: { review_role: true } }
-    options = ReviewUserAssignment::TYPES.map do |k, v|
+    options = user_assignment_type_options_for form.object.user
+
+    form.input :assignment_type, collection: options, prompt: true,
+      label: false, input_html: input_options
+  end
+
+  def user_assignment_type_options_for(user, include_blank: false)
+    options = Array(user&.review_assignment_options).map do |k, v|
       [t("review.user_assignment.type_#{k}"), v]
     end
 
-    form.input :assignment_type, collection: sort_options_array(options),
-      prompt: true, label: false, input_html: input_options
+    if include_blank && options.size > 1
+      [[t('helpers.select.prompt'), '']] + options
+    else
+      options
+    end
   end
 
   def user_assignment_type_text(type)
@@ -100,5 +110,40 @@ module ReviewsHelper
 
   def review_include_sox_options
     %w(yes no).map { |option| [t("label.#{option}"), option] }
+  end
+
+  def review_control_objective_class(control_objective_item)
+    html_classes = []
+
+    if control_objective_item.finished
+      html_classes << 'strike'
+      html_classes << 'text-muted'
+    end
+
+    if control_objective_item.exclude_from_score
+      html_classes << 'bg-danger'
+    end
+
+    html_classes.join(' ')
+  end
+
+  def review_year_suffixes
+    year  = Time.zone.today.year
+    years = []
+
+    years << year.pred if Time.zone.today.month <= 2
+    years << year
+    years << year.next if Time.zone.today.month >= 10
+
+    years
+  end
+
+  def show_review_finished_work_papers_icon review
+    if review.finished_work_papers
+      content_tag(:span, nil,
+        class: 'glyphicon glyphicon-paperclip',
+        title: t('review.work_papers_marked_as_finished')
+      )
+    end
   end
 end

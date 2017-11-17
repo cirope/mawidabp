@@ -52,7 +52,7 @@
 
   <p>
     <strong><%= Review.human_attribute_name :include_sox %>:</strong>
-    <%= t "label.#{@review.include_sox}" %>
+    <%= t "label.#{@review.include_sox}" unless @review.include_sox.nil? %>
   </p>
 <% end %>
 
@@ -153,6 +153,13 @@
       <li><%= fra.finding %></li>
     <% end %>
   </ul>
+<% end %>
+
+<% if @review.finished_work_papers %>
+  <p>&nbsp;</p>
+  <div class="alert alert-info">
+    <%= t 'review.work_papers_marked_as_finished' %>
+  </div>
 <% end %>
 
 <hr />

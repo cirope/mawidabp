@@ -154,7 +154,7 @@ module Findings::PDF
       [
         [Weakness.human_attribute_name('risk'), risk_text, 0, false],
         ([Weakness.human_attribute_name('priority'), priority_text, 0, false] unless HIDE_WEAKNESS_PRIORITY),
-        [Weakness.human_attribute_name('effect'), effect, 0, false],
+        ([Weakness.human_attribute_name('effect'), effect, 0, false] unless HIDE_WEAKNESS_EFFECT),
         [Weakness.human_attribute_name('audit_recommendations'), audit_recommendations, 0, false]
       ].compact
     end

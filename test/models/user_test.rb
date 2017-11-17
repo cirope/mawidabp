@@ -412,6 +412,22 @@ class UserTest < ActiveSupport::TestCase
     assert old_user.errors.size > 0
   end
 
+  test 'review assignment options' do
+    Organization.current_id = organizations(:google).id
+
+    options = @user.review_assignment_options
+
+    assert_equal 2, options.size
+    assert options[:audited]
+    assert options[:viewer]
+
+    user    = users :supervisor
+    options = user.review_assignment_options
+
+    assert_equal 1, options.size
+    assert options[:supervisor]
+  end
+
   test 'notify finding changes function' do
     Organization.current_id = nil
     user = users :administrator
@@ -462,7 +478,11 @@ class UserTest < ActiveSupport::TestCase
       issue_date: Date.today,
       close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date,
       applied_procedures: 'New applied procedures',
-      conclusion: 'New conclusion'
+      conclusion: 'New conclusion',
+      recipients: 'John Doe',
+      sectors: 'Area 51',
+      evolution: 'Do the evolution',
+      evolution_justification: 'Ok'
     }, false).save!
 
     Organization.current_id = nil

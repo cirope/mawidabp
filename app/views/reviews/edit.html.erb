@@ -8,9 +8,23 @@
     <% end %>
     <ul class="dropdown-menu">
       <li><%= link_to t('review.download_work_papers'), action: :download_work_papers, id: @review, _ts: Time.now.to_i %></li>
+      <% unless @review.finished_work_papers %>
+        <li>
+          <%= link_to t('review.finished_work_papers'), { action: :finished_work_papers, id: @review, _ts: Time.now.to_i }, data: {
+            method: :patch, confirm: t('messages.confirmation')
+          } %>
+        </li>
+      <% end %>
       <% unless @review.has_final_review? %>
         <li>
-          <%= link_to t('review.recode_findings'), recode_findings_review_path(@review, _ts: Time.now.to_i), data: { method: :patch } %>
+          <%= link_to t('review.recode_findings'), recode_findings_review_path(@review, _ts: Time.now.to_i), data: {
+            method: :patch, confirm: t('messages.confirmation')
+          } %>
+        </li>
+        <li>
+          <%= link_to t('review.recode_findings_by_risk'), recode_findings_by_risk_review_path(@review, _ts: Time.now.to_i), data: {
+            method: :patch, confirm: t('messages.confirmation')
+          } %>
         </li>
       <% end %>
     </ul>

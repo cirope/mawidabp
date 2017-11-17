@@ -36,7 +36,11 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion'
+        :conclusion => 'New conclusion',
+        :recipients => 'John Doe',
+        :sectors => 'Area 51',
+        :evolution => 'Do the evolution',
+        :evolution_justification => 'Ok'
       )
 
       # Asegurarse que le asigna el tipo correcto
@@ -76,11 +80,22 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
     @conclusion_review.issue_date = nil
     @conclusion_review.review_id = nil
     @conclusion_review.applied_procedures = '   '
+    @conclusion_review.recipients = '   '
+    @conclusion_review.sectors = '   '
+    @conclusion_review.evolution = '   '
+    @conclusion_review.evolution_justification = '   '
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
     assert_error @conclusion_review, :review_id, :blank
     assert_error @conclusion_review, :applied_procedures, :blank
+
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+      assert_error @conclusion_review, :recipients, :blank
+      assert_error @conclusion_review, :sectors, :blank
+      assert_error @conclusion_review, :evolution, :blank
+      assert_error @conclusion_review, :evolution_justification, :blank
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

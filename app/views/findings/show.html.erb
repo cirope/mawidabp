@@ -77,10 +77,12 @@
   <strong><%= Finding.human_attribute_name(:solution_date) %></strong>:
   <%= l(@finding.solution_date, :format => :long) if @finding.solution_date %>
 </p>
-<div>
-  <strong><%= Finding.human_attribute_name :effect %></strong>:
-  <%= simple_format @finding.effect %>
-</div>
+<% unless HIDE_WEAKNESS_EFFECT %>
+  <div>
+    <strong><%= Finding.human_attribute_name :effect %></strong>:
+    <%= simple_format @finding.effect %>
+  </div>
+<% end %>
 <div>
   <strong><%= Finding.human_attribute_name :answer %></strong>:
   <%= simple_format @finding.answer %>
@@ -342,7 +344,7 @@
 <hr />
 
 <div>
-  <% if @finding.pending? %>
+  <% if @finding.pending? && (!@auth_user.can_act_as_audited? || @finding.users.reload.include?(@auth_user)) %>
     <strong><%= link_to_edit edit_finding_path(params[:completed],
       @finding, :user_id => params[:user_id]) %></strong> |
   <% end %>

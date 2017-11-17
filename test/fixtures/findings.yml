@@ -335,7 +335,7 @@ being_implemented_weakness_on_final:
   audit_comments: Audit comment 1w
   state: <%= Finding::STATUS[:being_implemented] %>
   progress: 0
-  origination_date:
+  origination_date: <%= 2.days.ago.to_date.to_s(:db) %>
   solution_date:
   audit_recommendations: Proposed action 1w
   effect: Effect 1w

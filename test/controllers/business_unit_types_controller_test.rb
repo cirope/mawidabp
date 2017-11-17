@@ -63,7 +63,9 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :name => 'New business unit type',
           :business_unit_label => 'New business unit label',
           :project_label => 'New project label',
+          :review_prefix => 'NBU',
           :external => '0',
+          :require_tag => '0',
           :business_units_attributes => [
             {
               :name => 'New business unit'
@@ -95,7 +97,9 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :name => 'Updated business unit type',
           :business_unit_label => 'Updated business unit label',
           :project_label => 'Updated project label',
+          :review_prefix => 'UBU',
           :external => '0',
+          :require_tag => '0',
           :business_units_attributes => [
             {
               :id => business_units(:business_unit_one).id,

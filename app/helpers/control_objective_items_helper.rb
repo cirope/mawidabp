@@ -82,16 +82,6 @@ module ControlObjectiveItemsHelper
   end
 
   def auditor_comment_options
-    [
-      'satisfactory',
-      'satisfactory_with_caveats',
-      'needs_improvement',
-      'dissatisfactory',
-      'not_applicable'
-    ].map do |comment|
-      text = t "control_objective_item.auditor_comments.#{comment}"
-
-      [text, text]
-    end
+    CONCLUSION_OPTIONS.map { |option| [option, option] }
   end
 end

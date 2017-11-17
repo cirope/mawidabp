@@ -6,7 +6,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   setup do
-    @review = Review.find reviews(:review_with_conclusion).id
+    @review = reviews :review_with_conclusion
 
     set_organization
   end
@@ -70,9 +70,11 @@ class ReviewTest < ActiveSupport::TestCase
   test 'destroy' do
     assert_no_difference('Review.count') { @review.destroy }
 
-    review = reviews(:review_without_conclusion_and_without_findings)
+    unless SHOW_REVIEW_AUTOMATIC_IDENTIFICATION
+      review = reviews(:review_without_conclusion_and_without_findings)
 
-    assert_difference('Review.count', -1) { review.destroy }
+      assert_difference('Review.count', -1) { review.destroy }
+    end
   end
 
   test 'destroy with final review' do
@@ -124,18 +126,25 @@ class ReviewTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
-    @review.identification = reviews(:past_review).identification
-    @review.plan_item_id = reviews(:past_review).plan_item_id
+    review = @review.dup
 
-    assert @review.invalid?
-    assert_error @review, :identification, :taken
-    assert_error @review, :plan_item_id, :taken
+    assert review.invalid?
+    assert_error review, :identification, :taken
+    assert_error review, :plan_item_id, :taken
+  end
 
-    @review.period_id = periods(:current_period_google).id
-    @review.period.reload
+  test 'validate unique identification number' do
+    skip unless SHOW_REVIEW_AUTOMATIC_IDENTIFICATION
 
-    assert @review.invalid?
-    assert_error @review, :plan_item_id, :taken
+    last_review = Review.order(:id).last
+    review = last_review.dup
+
+    last_review.update_column :identification, 'XX-22/2017'
+
+    review.identification = 'YY-22/2017'
+
+    assert review.invalid?
+    assert_error review, :identification, :taken
   end
 
   test 'validates numeric attributes' do
@@ -158,6 +167,14 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert @review.invalid?
     assert_error @review, :plan_item_id, :invalid
+  end
+
+  test 'validates required tag' do
+    @review.taggings.clear
+    @review.business_unit.business_unit_type.update! require_tag: true
+
+    assert @review.invalid?
+    assert_error @review, :taggings, :blank
   end
 
   test 'can be modified' do
@@ -366,6 +383,15 @@ class ReviewTest < ActiveSupport::TestCase
     assert review.approval_errors.flatten.include?(
       I18n.t('review.errors.without_control_objectives')
     )
+
+    assert @review.reload.must_be_approved?
+    assert @review.approval_errors.blank?
+    @review.review_user_assignments.each { |rua| rua.audited? && rua.delete }
+    refute @review.reload.must_be_approved?
+    assert @review.approval_errors.present?
+    assert @review.approval_errors.flatten.include?(
+      I18n.t('review.errors.without_audited')
+    )
   end
 
   test 'can be sended' do
@@ -391,19 +417,24 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_audited?
     assert @review.valid?
 
-    @review.review_user_assignments.delete_all(&:audited?)
+    @review.review_user_assignments.each { |rua| rua.audited? && rua.delete }
 
-    assert !@review.has_audited?
-    assert @review.invalid?
+    refute @review.reload.has_audited?
+
+    if DISABLE_REVIEW_AUDITED_VALIDATION
+      assert @review.valid?
+    else
+      assert @review.invalid?
+    end
   end
 
   test 'has manager or supervisor function' do
     assert @review.has_manager? || @review.has_supervisor?
     assert @review.valid?
 
-    @review.review_user_assignments.delete_all { |a| a.manager? || a.supervisor? }
+    @review.review_user_assignments.each { |a| (a.manager? || a.supervisor?) && a.delete }
 
-    assert !@review.has_supervisor? && !@review.has_manager?
+    assert !@review.reload.has_supervisor? && !@review.has_manager?
     assert @review.invalid?
   end
 
@@ -411,20 +442,60 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_auditor?
     assert @review.valid?
 
-    @review.review_user_assignments.delete_all(&:auditor?)
+    @review.review_user_assignments.each { |rua| rua.auditor? && rua.delete }
 
-    assert !@review.has_auditor?
+    assert !@review.reload.has_auditor?
     assert @review.invalid?
+  end
+
+  test 'control objective ids' do
+    assert_difference '@review.control_objective_items.size' do
+      @review.control_objective_ids = [
+        control_objectives(:security_policy_3_1).id
+      ]
+    end
+
+    if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+      assert_difference '@review.control_objective_items.size' do
+        @review.control_objective_ids = [
+          control_objectives(:security_policy_3_1).id
+        ]
+      end
+    else
+      assert_no_difference '@review.control_objective_items.size' do
+        @review.control_objective_ids = [
+          control_objectives(:security_policy_3_1).id
+        ]
+      end
+    end
+
+    assert_difference '@review.control_objective_items.size' do
+      @review.control_objective_ids = [
+        control_objectives(:organization_security_4_1).id
+      ]
+    end
   end
 
   test 'process control ids' do
     assert @review.control_objective_items.present?
     assert_difference '@review.control_objective_items.size', 5 do
-      @review.process_control_ids = [process_controls(:security_policy).id]
+      @review.process_control_ids = [
+        process_controls(:security_policy).id
+      ]
     end
 
-    assert_no_difference '@review.control_objective_items.size' do
-      @review.process_control_ids = [process_controls(:security_policy).id]
+    if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+      assert_difference '@review.control_objective_items.size', 5 do
+        @review.process_control_ids = [
+          process_controls(:security_policy).id
+        ]
+      end
+    else
+      assert_no_difference '@review.control_objective_items.size' do
+        @review.process_control_ids = [
+          process_controls(:security_policy).id
+        ]
+      end
     end
   end
 
@@ -434,8 +505,14 @@ class ReviewTest < ActiveSupport::TestCase
       @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
     end
 
-    assert_no_difference '@review.control_objective_items.size' do
-      @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
+    if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+      assert_difference '@review.control_objective_items.size' do
+        @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
+      end
+    else
+      assert_no_difference '@review.control_objective_items.size' do
+        @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
+      end
     end
   end
 
@@ -594,6 +671,33 @@ class ReviewTest < ActiveSupport::TestCase
     assert codes.sort.each_with_index.all? { |c, i|
       c.match(/\d+\Z/).to_a.first.to_i == i.next
     }
+  end
+
+  test 'recode findings by risk' do
+    codes = @review.weaknesses.not_revoked.
+      order(risk: :desc, review_code: :asc).pluck 'review_code'
+
+    assert codes.each_with_index.any? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i != i.next
+    }
+
+    @review.recode_weaknesses_by_risk
+
+    codes = @review.reload.weaknesses.not_revoked.
+      order(risk: :desc, review_code: :asc).pluck 'review_code'
+
+    assert codes.sort.each_with_index.all? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i == i.next
+    }
+  end
+
+  test 'next identification number' do
+    assert_equal '001', Review.next_identification_number(2017)
+
+    Review.order(:id).last.update_column :identification, 'XX-22/2017'
+
+    # Should ignore the prefix
+    assert_equal '023', Review.next_identification_number(2017)
   end
 
   private

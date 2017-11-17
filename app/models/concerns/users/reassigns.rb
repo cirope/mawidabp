@@ -62,7 +62,10 @@ module Users::Reassigns
 
     def reassign_pending_reviews_to other
       review_user_assignments.each do |rua|
-        unless rua.review.has_final_review?
+        is_editable = !rua.review.has_final_review?
+        other_is_not_included = rua.review.users.exclude? other
+
+        if is_editable && other_is_not_included
           _unconfirmed_findings.concat unconfirmed_findings_in_review(rua.review)
           _reassigned_reviews << mini_review_description_for(rua.review)
 

@@ -53,10 +53,11 @@ class WeaknessesController < ApplicationController
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn('review_code')} ASC"
       ]
-    ).references(:periods, :conclusion_reviews).page(params[:page])
+    ).references(:periods, :conclusion_reviews)
 
     respond_to do |format|
-      format.html
+      format.html { @weaknesses = @weaknesses.page params[:page] }
+      format.csv  { render csv: @weaknesses.to_csv, filename: @title.downcase }
     end
   end
 
@@ -147,6 +148,15 @@ class WeaknessesController < ApplicationController
     end
   end
 
+  # * GET /weaknesses/state_changed
+  def state_changed
+    @state = params[:state].to_i
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
     def weakness_params
       params.require(:weakness).permit(
@@ -195,6 +205,7 @@ class WeaknessesController < ApplicationController
         auto_complete_for_tagging: :read,
         auto_complete_for_finding_relation: :read,
         auto_complete_for_control_objective_item: :read,
+        state_changed: :read,
         undo_reiteration: :modify
       )
     end

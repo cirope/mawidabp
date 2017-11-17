@@ -27,12 +27,14 @@ module ControlObjectiveItems::Validations
     end
 
     def control_objective_uniqueness
+      return if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+
       is_duplicated = review && review.control_objective_items.any? do |coi|
         is_same        = coi.control_objective_id == control_objective_id
         another_record = (persisted? && coi.id != id) ||
                          (new_record? && coi.object_id != object_id)
 
-        is_same && another_record && !marked_for_destruction?
+        is_same && another_record && !coi.marked_for_destruction?
       end
 
       errors.add :control_objective_id, :taken if is_duplicated

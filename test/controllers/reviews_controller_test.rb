@@ -59,6 +59,10 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list reviews with search on tags' do
+    support_tags = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+
+    skip unless support_tags
+
     login
     get :index, params: {
       search: {
@@ -224,7 +228,10 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'destroy review' do
+    skip if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION
+
     login
+
     assert_difference 'Review.count', -1 do
       delete :destroy, params: {
         id: reviews(:review_without_conclusion_and_without_findings).id
@@ -266,6 +273,30 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_not_nil review_data['business_unit']['name']
   end
 
+  test 'assignment type refresh' do
+    login
+
+    get :assignment_type_refresh, xhr: true, params: {
+      user_id: users(:administrator).id, format: :js
+    }
+
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+  end
+
+  test 'plan item refresh' do
+    login
+
+    get :plan_item_refresh, xhr: true, params: {
+      period_id: periods(:current_period).id,
+      prefix: business_unit_types(:cycle).review_prefix,
+      format: :js
+    }
+
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+  end
+
   test 'plan item data' do
     login
 
@@ -282,6 +313,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_not_nil plan_item_data
     assert_not_nil plan_item_data['business_unit_name']
     assert_not_nil plan_item_data['business_unit_type']
+    assert_not_nil plan_item_data['business_unit_prefix']
   end
 
   test 'survey pdf' do
@@ -326,7 +358,29 @@ class ReviewsControllerTest < ActionController::TestCase
         f.control_objective.process_control_id == process_control.id
       end
     )
+
     assert_template 'reviews/suggested_process_control_findings'
+  end
+
+  test 'past implemented audited findings' do
+    review = reviews :current_review
+    finding = findings :being_implemented_weakness_on_final
+
+    login
+
+    finding.update_column :state, Finding::STATUS[:implemented_audited]
+
+    get :past_implemented_audited_findings, params: { id: review.plan_item_id }
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert assigns(:findings).count > 0
+    assert assigns(:findings).all?(&:implemented_audited?)
+    assert(
+      assigns(:findings).all? do |f|
+        f.review.plan_item.business_unit_id == review.plan_item.business_unit_id
+      end
+    )
+    assert_template 'reviews/past_implemented_audited_findings'
   end
 
   test 'download work papers' do
@@ -349,6 +403,19 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/_estimated_amount'
   end
 
+  test 'finished work papers' do
+    review = reviews(:past_review) # should work even if it has final review
+
+    login
+
+    assert_difference 'review.versions.count' do
+      patch :finished_work_papers, params: { id: review.id }
+    end
+
+    assert_redirected_to review_url(review)
+    assert review.reload.finished_work_papers
+  end
+
   test 'recode findings' do
     login
 
@@ -357,9 +424,28 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_redirected_to review_url(reviews(:review_without_conclusion))
   end
 
+  test 'recode findings by risk' do
+    login
+
+    patch :recode_findings_by_risk, params: { id: reviews(:review_without_conclusion).id }
+
+    assert_redirected_to review_url(reviews(:review_without_conclusion))
+  end
+
+  test 'next identification number' do
+    login
+
+    get :next_identification_number, xhr: true, params: {
+      format: :js, prefix: 'TS', suffix: 2017
+    }
+
+    assert_response :success
+    assert_match /TS-001\/2017/, @response.body
+  end
+
   test 'auto complete for control objectives' do
     login
-    get :auto_complete_for_control_objective, params: {
+    get :auto_complete_for_control_objective, xhr: true, params: {
       q: 'access', format: :json
     }
     assert_response :success
@@ -373,7 +459,7 @@ class ReviewsControllerTest < ActionController::TestCase
       end
     )
 
-    get :auto_complete_for_control_objective, params: {
+    get :auto_complete_for_control_objective, xhr: true, params: {
       q: 'dependency', format: :json
     }
     assert_response :success
@@ -387,7 +473,7 @@ class ReviewsControllerTest < ActionController::TestCase
       end
     )
 
-    get :auto_complete_for_control_objective, params: {
+    get :auto_complete_for_control_objective, xhr: true, params: {
       q: 'xyz', format: :json
     }
     assert_response :success
@@ -399,7 +485,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'auto complete for process controls' do
     login
-    get :auto_complete_for_process_control, params: {
+    get :auto_complete_for_process_control, xhr: true, params: {
       q: 'sec', format: :json
     }
     assert_response :success
@@ -413,7 +499,7 @@ class ReviewsControllerTest < ActionController::TestCase
       end
     )
 
-    get :auto_complete_for_process_control, params: {
+    get :auto_complete_for_process_control, xhr: true, params: {
       q: 'data', format: :json
     }
     assert_response :success
@@ -427,7 +513,7 @@ class ReviewsControllerTest < ActionController::TestCase
       end
     )
 
-    get :auto_complete_for_process_control, params: {
+    get :auto_complete_for_process_control, xhr: true, params: {
       q: 'xyz', format: :json
     }
     assert_response :success
@@ -439,7 +525,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'auto complete for finding relation' do
     login
-    get :auto_complete_for_finding, params: { q: 'O001', format: :json }
+    get :auto_complete_for_finding, xhr: true, params: { q: 'O001', format: :json }
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -447,7 +533,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
-    get :auto_complete_for_finding, params: { q: 'O001, 1 2 3', format: :json }
+    get :auto_complete_for_finding, xhr: true, params: { q: 'O001, 1 2 3', format: :json }
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -455,7 +541,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 1, findings.size # Solo O01 del informe 1 2 3
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001.*1 2 3/i }
 
-    get :auto_complete_for_finding, params: { q: 'x_none', format: :json }
+    get :auto_complete_for_finding, xhr: true, params: { q: 'x_none', format: :json }
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -466,7 +552,7 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'auto complete for tagging' do
     login
 
-    get :auto_complete_for_tagging, params: {
+    get :auto_complete_for_tagging, xhr: true, params: {
       q: 'high priority',
       kind: 'review',
       format: :json
@@ -478,7 +564,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 1, tags.size
     assert tags.all? { |t| t['label'].match /high priority/i }
 
-    get :auto_complete_for_tagging, params: {
+    get :auto_complete_for_tagging, xhr: true, params: {
       q: 'x_none',
       kind: 'finding',
       format: :json

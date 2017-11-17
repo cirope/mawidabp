@@ -7,17 +7,26 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <%= f.input :identification, label: Review.human_attribute_name(:identification),
-          input_html: { readonly: readonly } %>
-        <% if [:new, :create].include?(controller.action_name.to_sym) %>
-          <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true %>
+        <% if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION && !readonly %>
+          <%= render 'automatic_identification', f: f %>
+        <% else %>
+          <%= f.input :identification, label: Review.human_attribute_name(:identification), input_html: {
+            autofocus: !SHOW_REVIEW_AUTOMATIC_IDENTIFICATION && !readonly,
+            readonly: readonly
+          } %>
+        <% end %>
+        <% if @review.new_record? %>
+          <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true, input_html: {
+            autofocus: SHOW_REVIEW_AUTOMATIC_IDENTIFICATION,
+            data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
+          } %>
         <% else %>
           <%= f.input :period_description, label: Review.human_attribute_name('period_id'),
             input_html: { value: @review.period.inspect, readonly: true } %>
         <% end %>
         <% if @review.new_record? %>
           <div class="form-group">
-            <%= f.label :plan_item %>
+            <%= f.label :plan_item_id %>
             <%= review_plan_item_field(f, readonly) %>
           </div>
         <% else %>
@@ -64,12 +73,12 @@
     <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :scope, collection: review_scope_options, prompt: true, readonly: readonly %>
-          <%= f.input :include_sox, collection: review_include_sox_options, prompt: true, readonly: readonly %>
+          <%= f.input :scope, collection: review_scope_options, prompt: true, input_html: { disabled: readonly } %>
+          <%= f.input :include_sox, collection: review_include_sox_options, prompt: true, input_html: { disabled: readonly } %>
         </div>
         <div class="col-md-6">
-          <%= f.input :risk_exposure, collection: review_risk_exposure_options, prompt: true, readonly: readonly %>
-          <%= f.input :manual_score, readonly: readonly, input_html: { min: 0, max: 1000, step: 1 } %>
+          <%= f.input :risk_exposure, collection: review_risk_exposure_options, prompt: true, input_html: { disabled: readonly } %>
+          <%= f.input :manual_score, input_html: { min: 0, max: 1000, step: 1, disabled: readonly } %>
         </div>
       </div>
     <% end %>
@@ -79,30 +88,50 @@
     <div class="col-md-6">
       <h5><strong><%= ReviewUserAssignment.human_attribute_name 'user' %></strong></h5>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-<%= SHOW_CONCLUSION_ALTERNATIVE_PDF ? 5 : 3 %>">
       <h5><strong><%= ReviewUserAssignment.human_attribute_name 'assignment_type' %></strong></h5>
     </div>
-    <div class="col-md-1">
-      <h5><strong><%= ReviewUserAssignment.human_attribute_name 'include_signature' %></strong></h5>
-    </div>
-    <div class="col-md-1">
-      <h5><strong><%= ReviewUserAssignment.human_attribute_name 'owner' %></strong></h5>
-    </div>
+    <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+      <div class="col-md-1">
+        <h5><strong><%= ReviewUserAssignment.human_attribute_name 'include_signature' %></strong></h5>
+      </div>
+      <div class="col-md-1">
+        <h5><strong><%= ReviewUserAssignment.human_attribute_name 'owner' %></strong></h5>
+      </div>
+    <% end %>
   </div>
 
   <div id="review_user_assignments">
-    <%= f.simple_fields_for :review_user_assignments do |rua_f| %>
-      <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
+    <% audit_team, others = @review.review_user_assignments.partition &:in_audit_team? %>
+
+    <% if audit_team.present? %>
+      <h4><%= t 'review.user_assignment.audit_team' %></h4>
+
+      <%= f.simple_fields_for :review_user_assignments, audit_team do |rua_f| %>
+        <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
+      <% end %>
     <% end %>
 
-    <%= link_to_add_fields(
-      t('review.add_user_assignment'), f, :review_user_assignments, nil, {}, { readonly: readonly }
-    ) unless readonly %>
+    <% if others.present? %>
+      <h4><%= t 'review.user_assignment.others' %></h4>
+
+      <%= f.simple_fields_for :review_user_assignments, others do |rua_f| %>
+        <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
+      <% end %>
+    <% end %>
+
+    <% unless readonly %>
+      <hr>
+
+      <%= link_to_add_fields(
+        t('review.add_user_assignment'), f, :review_user_assignments, nil, {}, { readonly: readonly }
+      ) %>
+    <% end %>
   </div>
 
   <% if !readonly || @review.taggings.any? %>
     <br />
-    <h4>
+    <h4 <%== @review.errors[:taggings].present? ? 'class="text-danger"' : '' %>>
       <%= Tag.model_name.human count: 0 %>
     </h4>
 
@@ -173,6 +202,7 @@
 
   <div id="suggested_process_control_findings"></div>
   <div id="suggested_findings"></div>
+  <div id="past_implemented_audited_findings"></div>
 
   <% finding_relations = @review.finding_review_assignments.reject(&:marked_for_destruction?) %>
   <% unless finding_relations.empty? %>
@@ -191,6 +221,17 @@
       suggested_findings_review_path(id: @review.plan_item_id) : '#',
       :remote => true, :id => :link_to_suggested_findings,
       :class => 'btn btn-default btn-sm' %>
+    <%= link_to t('review.suggest_past_findings'), @review.plan_item_id ?
+      past_implemented_audited_findings_review_path(id: @review.plan_item_id) : '#',
+      :remote => true, :id => :link_to_past_implemented_audited_findings,
+      :class => 'btn btn-default btn-sm' %>
+  <% end %>
+
+  <% if @review.finished_work_papers %>
+    <p>&nbsp;</p>
+    <div class="alert alert-info">
+      <%= t 'review.work_papers_marked_as_finished' %>
+    </div>
   <% end %>
 
   <hr />
@@ -210,6 +251,7 @@ jQuery(function() {
     var data_url = '<%= plan_item_data_reviews_path %>';
     var amount_url = '<%= estimated_amount_reviews_path %>';
     var element = $(this);
+    var prefix = $('#review_identification_prefix').val();
 
     $('#review_business_unit').val('');
     $('#review_audit_type').val('');
@@ -221,6 +263,15 @@ jQuery(function() {
         $('#review_business_unit').val(data.business_unit_name);
         $('#review_audit_type').val(data.business_unit_type);
 
+        if (prefix !== data.business_unit_prefix) {
+          $('#review_identification_prefix').
+            val(data.business_unit_prefix).
+            change().
+            css('border-color', '#47ae00').
+            delay(1000).
+            animate({'border-color': '#c2bfB7'}, 50)
+        }
+
         if(data.link_to_suggested_findings) {
           $('#link_to_suggested_findings').attr(
             'href', data.link_to_suggested_findings
@@ -229,6 +280,16 @@ jQuery(function() {
         } else {
           $('#link_to_suggested_findings').attr('href', '#');
           $('#link_to_suggested_findings').addClass('link_without_action');
+        }
+
+        if(data.link_to_past_implemented_audited_findings) {
+          $('#link_to_past_implemented_audited_findings').attr(
+            'href', data.link_to_past_implemented_audited_findings
+          );
+          $('#link_to_past_implemented_audited_findings').removeClass('link_without_action');
+        } else {
+          $('#link_to_past_implemented_audited_findings').attr('href', '#');
+          $('#link_to_past_implemented_audited_findings').addClass('link_without_action');
         }
       }).complete(function() {
         Helper.hideLoading(element);
@@ -241,8 +302,13 @@ jQuery(function() {
         $('#estimated_amount').effect('highlight', {}, 2000);
       });
     } else {
+      $('#review_identification_prefix').prop('disabled', false).val('');
+      $('#review_identification_number').val('');
       $('#link_to_suggested_findings').attr('href', '#');
       $('#link_to_suggested_findings').addClass('link_without_action');
+      $('#link_to_past_implemented_audited_findings').attr('href', '#');
+      $('#link_to_past_implemented_audited_findings').addClass('link_without_action');
+      $('#estimated_amount').html('');
     }
   });
 
@@ -254,6 +320,16 @@ jQuery(function() {
 
   $('#link_to_suggested_findings').bind('ajax:success', function(event, data) {
     $('#suggested_findings').html(data);
+  });
+
+  $('#link_to_past_implemented_audited_findings').click(function() {
+    if($('#link_to_past_implemented_audited_findings').attr('href') == '#') {
+      return false;
+    }
+  });
+
+  $('#link_to_past_implemented_audited_findings').bind('ajax:success', function(event, data) {
+    $('#past_implemented_audited_findings').html(data);
   });
 
   Helper.makeSortable(

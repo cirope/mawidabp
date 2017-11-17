@@ -3,14 +3,31 @@
 
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-<%= SHOW_REVIEW_AUTOMATIC_IDENTIFICATION ? 6 : 12 %>">
         <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
+      </div>
+      <% if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION %>
+        <div class="col-md-6">
+          <%= f.input :review_prefix, input_html: { maxlength: 255 } %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
         <%= f.input :business_unit_label, input_html: { maxlength: 255 } %>
       </div>
       <div class="col-md-6">
         <%= f.input :project_label, input_html: { maxlength: 255 } %>
-        <br />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
         <%= f.input :external, label: false, inline_label: true %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :require_tag, label: false, inline_label: true %>
       </div>
     </div>
 

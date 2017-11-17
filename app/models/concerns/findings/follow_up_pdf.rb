@@ -64,13 +64,6 @@ module Findings::FollowUpPDF
     end
 
     def put_follow_up_conditional_items_on pdf
-      if SHOW_FINDING_CURRENT_SITUATION
-        current_situation_verified_text = I18n.t "label.#{current_situation_verified ? 'yes' : 'no'}"
-
-        pdf.add_description_item Finding.human_attribute_name(:current_situation), current_situation, 0, false
-        pdf.add_description_item Finding.human_attribute_name(:current_situation_verified), current_situation_verified_text, 0, false
-      end
-
       if kind_of?(Weakness) && follow_up_date
         pdf.add_description_item Finding.human_attribute_name(:follow_up_date), I18n.l(follow_up_date, format: :long), 0, false
       end
@@ -263,7 +256,7 @@ module Findings::FollowUpPDF
       [
         [self.class.human_attribute_name(:risk), risk_text, 0, false],
         ([self.class.human_attribute_name(:priority), priority_text, 0, false] unless HIDE_WEAKNESS_PRIORITY),
-        [Finding.human_attribute_name(:effect), effect, 0, false],
+        ([Finding.human_attribute_name(:effect), effect, 0, false] unless HIDE_WEAKNESS_EFFECT),
         [Finding.human_attribute_name(:audit_recommendations), audit_recommendations, 0, false]
       ].compact
     end
