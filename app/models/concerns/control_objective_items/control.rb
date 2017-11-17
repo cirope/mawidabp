@@ -14,7 +14,7 @@ module ControlObjectiveItems::Control
     def enable_control_validations
       if finished && !exclude_from_score
         control.validates_presence_of_control = true
-        control.validates_presence_of_effects = true
+        control.validates_presence_of_effects = !HIDE_CONTROL_EFFECTS
 
         control.validates_presence_of_compliance_tests = compliance_score.present?
         control.validates_presence_of_design_tests     = design_score.present?
