@@ -25,7 +25,7 @@ class WeaknessTest < ActiveSupport::TestCase
         priority: Weakness.priorities_values.first,
         follow_up_date: nil,
         compliance: 'no',
-        operational_risk: 'internal fraud',
+        operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
         finding_user_assignments_attributes: {
@@ -63,7 +63,7 @@ class WeaknessTest < ActiveSupport::TestCase
         priority: Weakness.priorities_values.first,
         follow_up_date: nil,
         compliance: 'no',
-        operational_risk: 'internal fraud',
+        operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
         finding_user_assignments_attributes: {
@@ -101,7 +101,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.risk = nil
     @weakness.priority = nil
     @weakness.compliance = ''
-    @weakness.operational_risk = ''
+    @weakness.operational_risk = []
     @weakness.impact = []
     @weakness.internal_control_components = []
 

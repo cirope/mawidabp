@@ -11,7 +11,7 @@ module Weaknesses::Validations
     }
     validate :review_code_has_valid_prefix
 
-    validates :compliance, :operational_risk, length: { maximum: 255 },
+    validates :compliance, length: { maximum: 255 },
       allow_nil: true, allow_blank: true
     validates :compliance,
               :operational_risk,

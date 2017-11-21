@@ -98,7 +98,7 @@
 
   <p>
     <strong><%= Weakness.human_attribute_name :operational_risk %>:</strong>
-    <%= @weakness.operational_risk %>
+    <%= Array(@weakness.operational_risk).to_sentence %>
   </p>
 
   <p>
