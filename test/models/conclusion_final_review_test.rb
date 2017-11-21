@@ -166,7 +166,6 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
     assert_error @conclusion_review, :review_id, :blank
-    assert_error @conclusion_review, :applied_procedures, :blank
     assert_error @conclusion_review, :conclusion, :blank
 
     if SHOW_CONCLUSION_ALTERNATIVE_PDF
@@ -174,6 +173,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       assert_error @conclusion_review, :sectors, :blank
       assert_error @conclusion_review, :evolution, :blank
       assert_error @conclusion_review, :evolution_justification, :blank
+    else
+      assert_error @conclusion_review, :applied_procedures, :blank
     end
   end
 
