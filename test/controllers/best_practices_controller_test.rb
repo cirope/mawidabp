@@ -12,6 +12,20 @@ class BestPracticesControllerTest < ActionController::TestCase
     assert_template 'best_practices/index'
   end
 
+  test 'list best practices with search' do
+    login
+    get :index, params: {
+      search: {
+        query: 'iso',
+        columns: ['name']
+      }
+    }
+    assert_response :success
+    assert_not_nil assigns(:best_practices)
+    assert_equal 1, assigns(:best_practices).count
+    assert_template 'best_practices/index'
+  end
+
   test 'show best practice' do
     get :show, params: { id: best_practices(:iso_27001).id }
     assert_response :success
