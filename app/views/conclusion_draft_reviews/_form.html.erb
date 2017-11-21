@@ -38,19 +38,12 @@
     <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :evolution, collection: EVOLUTION_OPTIONS, prompt: true %>
-        </div>
-        <div class="col-md-6">
-          <%= f.input :evolution_justification, as: :string %>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6">
           <%= f.input :recipients, input_html: { rows: 4 } %>
+          <%= f.input :sectors, input_html: { rows: 4 } %>
         </div>
         <div class="col-md-6">
-          <%= f.input :sectors, input_html: { rows: 4 } %>
+          <%= f.input :evolution, collection: EVOLUTION_OPTIONS, prompt: true %>
+          <%= f.input :evolution_justification, input_html: { rows: 7 } %>
         </div>
       </div>
     <% end %>

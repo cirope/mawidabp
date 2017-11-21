@@ -41,19 +41,12 @@
     <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :evolution, collection: EVOLUTION_OPTIONS, prompt: true, input_html: { disabled: readonly } %>
-        </div>
-        <div class="col-md-6">
-          <%= f.input :evolution_justification, as: :string, input_html: { readonly: readonly } %>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6">
           <%= f.input :recipients, input_html: { rows: 4, readonly: true } %>
+          <%= f.input :sectors, input_html: { rows: 4, readonly: true } %>
         </div>
         <div class="col-md-6">
-          <%= f.input :sectors, input_html: { rows: 4, readonly: true } %>
+          <%= f.input :evolution, collection: EVOLUTION_OPTIONS, prompt: true, input_html: { disabled: readonly } %>
+          <%= f.input :evolution_justification, input_html: { rows: 7, readonly: readonly } %>
         </div>
       </div>
     <% end %>
