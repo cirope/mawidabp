@@ -86,18 +86,18 @@
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
 
   business_unit_type:
-    index_title: "Listado de tipos de ciclos"
-    show_title: "Detalle tipo de ciclo"
-    new_title: "Agregar tipo de ciclo"
-    edit_title: "Modificar tipo de ciclo"
-    correctly_created: "Tipo de ciclo agregado correctamente."
-    correctly_updated: "Tipo de ciclo actualizado correctamente."
-    stale_object_error: "El tipo de ciclo no fue actualizado, intente nuevamente."
+    index_title: "Listado de sectores"
+    show_title: "Detalle sector"
+    new_title: "Agregar sector"
+    edit_title: "Modificar sector"
+    correctly_created: "Sector agregado correctamente."
+    correctly_updated: "Sector actualizado correctamente."
+    stale_object_error: "El sector no fue actualizado, intente nuevamente."
     add_business_unit: "Agregar ciclo"
     internal_audit: "Auditorías realizadas por la entidad"
     external_audit: "Auditorías realizadas por otras entidades"
     errors:
-      can_not_be_destroyed: "El tipo de ciclo no puede ser eliminado"
+      can_not_be_destroyed: "El sector no puede ser eliminado"
       business_unit_related: "El ciclo no puede ser eliminado, se encuentra relacionado con al menos un plan de trabajo"
 
   conclusion_draft_review:
@@ -1131,7 +1131,7 @@
   activerecord:
     models:
       business_unit: "Ciclo"
-      business_unit_type: "Tipo de ciclo"
+      business_unit_type: "Sector"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
