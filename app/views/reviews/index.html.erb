@@ -24,7 +24,7 @@
   <tbody>
     <% @reviews.each do |review| %>
       <% has_final = review.has_final_review? %>
-      <tr <%== 'class="text-muted"' if has_final %>>
+      <tr <%== 'class="text-muted strike"' if has_final %>>
         <td><%= show_review_finished_work_papers_icon review %></td>
         <td><%= show_period_with_dates_as_abbr review.period %></td>
         <td class="nowrap"><%= review.identification %></td>
