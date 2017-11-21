@@ -37,7 +37,7 @@
           }, readonly: true %>
           <%= f.input :control_objective_item_id, as: :hidden %>
         <% end %>
-        <%= f.input :description, label: finding_description_label, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 9 : 5 } %>
+        <%= f.input :description, label: finding_description_label, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 7 : 5 } %>
 
         <% if SHOW_FINDING_CURRENT_SITUATION %>
           <%= f.input :current_situation, input_html: { rows: 3 } %>
@@ -93,10 +93,16 @@
       <div class="row">
         <div class="col-md-6">
           <%= f.input :compliance, collection: weakness_compliance_options, prompt: true %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
           <%= f.input :impact, as: :check_boxes, collection: weakness_impact_options, disabled: true %>
         </div>
-        <div class="col-md-6">
-          <%= f.input :operational_risk, collection: weakness_operational_risk_options, prompt: true, disabled: true %>
+        <div class="col-md-4">
+          <%= f.input :operational_risk, as: :check_boxes, collection: weakness_operational_risk_options, disabled: true %>
+        </div>
+        <div class="col-md-4">
           <%= f.input :internal_control_components, as: :check_boxes, collection: weakness_internal_control_components_options, disabled: true %>
         </div>
       </div>

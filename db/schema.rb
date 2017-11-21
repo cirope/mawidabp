@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171115133247) do
+ActiveRecord::Schema.define(version: 20171121164102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -123,8 +123,8 @@ ActiveRecord::Schema.define(version: 20171115133247) do
 
   create_table "comments", id: :serial, force: :cascade do |t|
     t.text "comment"
-    t.string "commentable_type"
     t.integer "commentable_id"
+    t.string "commentable_type"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -201,8 +201,8 @@ ActiveRecord::Schema.define(version: 20171115133247) do
     t.text "compliance_tests"
     t.text "sustantive_tests"
     t.integer "order"
-    t.string "controllable_type"
     t.integer "controllable_id"
+    t.string "controllable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["controllable_type", "controllable_id"], name: "index_controls_on_controllable_type_and_controllable_id"
@@ -212,8 +212,8 @@ ActiveRecord::Schema.define(version: 20171115133247) do
     t.text "description"
     t.string "cost_type"
     t.decimal "cost", precision: 15, scale: 2
-    t.string "item_type"
     t.integer "item_id"
+    t.string "item_type"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -306,8 +306,8 @@ ActiveRecord::Schema.define(version: 20171115133247) do
 
   create_table "finding_user_assignments", id: :serial, force: :cascade do |t|
     t.boolean "process_owner", default: false
-    t.string "finding_type"
     t.integer "finding_id"
+    t.string "finding_type"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -347,7 +347,7 @@ ActiveRecord::Schema.define(version: 20171115133247) do
     t.text "current_situation"
     t.boolean "current_situation_verified", default: false, null: false
     t.string "compliance"
-    t.string "operational_risk"
+    t.text "operational_risk", default: [], array: true
     t.text "impact", default: [], null: false, array: true
     t.text "internal_control_components", default: [], null: false, array: true
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
@@ -385,8 +385,8 @@ ActiveRecord::Schema.define(version: 20171115133247) do
     t.integer "lock_version", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "imageable_type", null: false
     t.integer "imageable_id", null: false
+    t.string "imageable_type", null: false
     t.index ["imageable_type", "imageable_id"], name: "index_image_models_on_imageable_type_and_imageable_id"
   end
 
@@ -441,8 +441,8 @@ ActiveRecord::Schema.define(version: 20171115133247) do
 
   create_table "notification_relations", id: :serial, force: :cascade do |t|
     t.integer "notification_id"
-    t.string "model_type"
     t.integer "model_id"
+    t.string "model_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["model_type", "model_id"], name: "index_notification_relations_on_model_type_and_model_id"
@@ -545,8 +545,8 @@ ActiveRecord::Schema.define(version: 20171115133247) do
     t.integer "lock_version", default: 0
     t.integer "user_id", null: false
     t.integer "questionnaire_id"
-    t.string "pollable_type"
     t.integer "pollable_id"
+    t.string "pollable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "organization_id"
@@ -629,10 +629,10 @@ ActiveRecord::Schema.define(version: 20171115133247) do
 
   create_table "resource_utilizations", id: :serial, force: :cascade do |t|
     t.decimal "units", precision: 15, scale: 2
-    t.string "resource_consumer_type"
     t.integer "resource_consumer_id"
-    t.string "resource_type"
+    t.string "resource_consumer_type"
     t.integer "resource_id"
+    t.string "resource_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["resource_consumer_id", "resource_consumer_type"], name: "resource_utilizations_consumer_consumer_type_idx"
@@ -712,8 +712,8 @@ ActiveRecord::Schema.define(version: 20171115133247) do
 
   create_table "taggings", id: :serial, force: :cascade do |t|
     t.integer "tag_id", null: false
-    t.string "taggable_type", null: false
     t.integer "taggable_id", null: false
+    t.string "taggable_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
@@ -772,8 +772,8 @@ ActiveRecord::Schema.define(version: 20171115133247) do
   end
 
   create_table "versions", id: :serial, force: :cascade do |t|
-    t.string "item_type"
     t.integer "item_id"
+    t.string "item_type"
     t.string "event", null: false
     t.integer "whodunnit"
     t.datetime "created_at"
@@ -793,8 +793,8 @@ ActiveRecord::Schema.define(version: 20171115133247) do
     t.string "code"
     t.integer "number_of_pages"
     t.text "description"
-    t.string "owner_type"
     t.integer "owner_id"
+    t.string "owner_type"
     t.integer "file_model_id"
     t.integer "organization_id"
     t.integer "lock_version", default: 0

@@ -157,7 +157,7 @@ class WeaknessesControllerTest < ActionController::TestCase
           follow_up_date: 2.days.from_now.to_date,
           business_unit_ids: [business_units(:business_unit_three).id],
           compliance: 'no',
-          operational_risk: 'internal fraud',
+          operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
           finding_user_assignments_attributes: [
@@ -247,7 +247,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             priority: Weakness.priorities_values.first,
             follow_up_date: '',
             compliance: 'no',
-            operational_risk: 'internal fraud',
+            operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
             finding_user_assignments_attributes: [

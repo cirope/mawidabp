@@ -8,7 +8,7 @@ module Findings::Validations
     validates :audit_comments, presence: true, if: :audit_comments_should_be_present?
     validates :review_code, :description, :answer, :audit_recommendations,
       :effect, :audit_comments, :title, :current_situation, :compliance,
-      :operational_risk, pdf_encoding: true
+      pdf_encoding: true
     validates :follow_up_date, :solution_date, :origination_date,
       :first_notification_date, timeliness: { type: :date }, allow_blank: true
     validate :validate_answer
