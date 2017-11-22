@@ -10,6 +10,8 @@ module Weaknesses::Progress
     PROGRESS_RESET_STATES = [
       Finding::STATUS[:awaiting],
       Finding::STATUS[:assumed_risk],
+      Finding::STATUS[:notify],
+      Finding::STATUS[:incomplete],
       Finding::STATUS[:revoked],
       Finding::STATUS[:criteria_mismatch]
     ]
