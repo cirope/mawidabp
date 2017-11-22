@@ -1,4 +1,5 @@
 <% prefix, number, year = *@review.identification.to_s.split(/[-\/]/) %>
+<% number = Review.list.next_identification_number year if @review.errors[:identification].any? %>
 
 <% if @review.new_record? %>
   <div class="row">
@@ -36,7 +37,7 @@
     </div>
   </div>
 
-  <%= f.input :identification, as: :hidden %>
+  <%= f.input :identification, as: :hidden, input_html: { value: "#{prefix}-#{number}/#{year}" } %>
 <% else %>
   <%= f.input :identification, label: Review.human_attribute_name('identification'), input_html: { readonly: true } %>
 <% end %>
