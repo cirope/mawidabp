@@ -26,7 +26,7 @@ module Findings::Validations
   def must_have_a_comment?
     has_new_comment = comments.detect { |c| c.new_record? && c.valid? }
 
-    being_implemented? && was_implemented? && !has_new_comment
+    (being_implemented? || awaiting?) && was_implemented? && !has_new_comment
   end
 
   private
