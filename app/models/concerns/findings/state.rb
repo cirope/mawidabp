@@ -129,7 +129,7 @@ module Findings::State
       end
 
       def implemented_transitions final
-        [:implemented, :being_implemented, :implemented_audited, :assumed_risk, :repeated] |
+        [:implemented, :awaiting, :being_implemented, :implemented_audited, :assumed_risk, :repeated] |
           (final || HIDE_FINDING_REVOKED ? [] : [:revoked]) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
       end
