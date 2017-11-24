@@ -16,9 +16,11 @@ module Reviews::Approval
 
     (@approval_errors = errors).blank?
   end
-
   alias_method :is_approved?, :must_be_approved?
-  alias_method :can_be_sended?, :must_be_approved?
+
+  def can_be_sended?
+    must_be_approved? || can_be_approved_by_force
+  end
 
   private
 
