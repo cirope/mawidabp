@@ -56,7 +56,7 @@ group :development do
   gem 'capistrano-rbenv'
 
   # Support for ed25519 ssh keys
-  gem 'rbnacl'
+  gem 'rbnacl', '< 5.0' # TODO: check net-ssh dependency to _unleash_
   gem 'bcrypt_pbkdf'
 end
 
