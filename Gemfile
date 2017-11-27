@@ -54,6 +54,10 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
+
+  # Support for ed25519 ssh keys
+  gem 'rbnacl'
+  gem 'bcrypt_pbkdf'
 end
 
 group :test do
