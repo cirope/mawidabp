@@ -95,7 +95,7 @@ module Reviews::Validations
       ]
 
       unless DISABLE_REVIEW_AUDITED_VALIDATION
-        required_roles << I18n.t('review.user_assignment.type_auditor')
+        required_roles << I18n.t('review.user_assignment.type_audited')
       end
 
       required_roles
