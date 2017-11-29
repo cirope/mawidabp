@@ -16,13 +16,12 @@ module Reviews::Validations
 
     validates :scope,
               :risk_exposure,
-              :manual_score,
               :include_sox,
               presence: true, if: :validate_extra_attributes?
 
     validates :manual_score, numericality: {
       greater_than_or_equal_to: 0, less_than_or_equal_to: 1000
-    }, if: :validate_extra_attributes?
+    }, allow_nil: true, if: :validate_extra_attributes?
 
     validate :validate_user_roles
     validate :validate_plan_item

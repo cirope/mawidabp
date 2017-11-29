@@ -31,6 +31,10 @@ module Reviews::Approval
         review_errors << I18n.t('review.errors.without_control_objectives')
       end
 
+      if manual_score.blank? && SHOW_REVIEW_EXTRA_ATTRIBUTES
+        review_errors << I18n.t('review.errors.without_score')
+      end
+
       if survey.blank?
         review_errors << I18n.t('review.errors.without_survey')
       end

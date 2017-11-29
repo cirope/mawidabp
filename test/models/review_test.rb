@@ -91,7 +91,6 @@ class ReviewTest < ActiveSupport::TestCase
     @review.plan_item_id = nil
     @review.scope = ''
     @review.risk_exposure = ''
-    @review.manual_score = nil
     @review.include_sox = ''
 
     assert @review.invalid?
@@ -103,7 +102,6 @@ class ReviewTest < ActiveSupport::TestCase
     if SHOW_REVIEW_EXTRA_ATTRIBUTES
       assert_error @review, :scope, :blank
       assert_error @review, :risk_exposure, :blank
-      assert_error @review, :manual_score, :blank
       assert_error @review, :include_sox, :blank
     end
   end
