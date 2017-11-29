@@ -348,6 +348,7 @@ es:
         start: 'Proyecto (inicio)'
         end: 'Proyecto (fin)'
         order_number: 'Proyecto (orden)'
+        risk_exposure: 'Proyecto (exposición al riesgo)'
         business_unit_id: 'Proyecto (unidad de negocio)'
         status: 'Proyecto (estado)'
       plan/plan_items/resource_utilizations:
@@ -362,6 +363,7 @@ es:
         start: 'Inicio'
         end: 'Fin'
         order_number: 'Orden'
+        risk_exposure: 'Exposición al riesgo'
         business_unit_id: 'Unidad de negocio'
         resources: 'Recursos'
         resource_ids: 'Recursos'

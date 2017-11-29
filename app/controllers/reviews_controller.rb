@@ -199,6 +199,7 @@ class ReviewsController < ApplicationController
       past_implemented_audited_findings_review_url(id: plan_item.id) if plan_item
 
     render json: {
+      risk_exposure: plan_item.risk_exposure,
       business_unit_name: name,
       business_unit_type: type,
       business_unit_prefix: prefix,

@@ -253,13 +253,16 @@ jQuery(function() {
     var element = $(this);
     var prefix = $('#review_identification_prefix').val();
 
+    $('#review_risk_exposure').val('');
     $('#review_business_unit').val('');
     $('#review_audit_type').val('');
+    $('#estimated_amount').html('');
 
     if(!$(this).val().match(/^\s*$/)) {
       Helper.showLoading(element);
 
       $.get(data_url, { id: element.val(), format: 'json' }, function(data) {
+        $('#review_risk_exposure').val(data.risk_exposure);
         $('#review_business_unit').val(data.business_unit_name);
         $('#review_audit_type').val(data.business_unit_type);
 
@@ -308,7 +311,6 @@ jQuery(function() {
       $('#link_to_suggested_findings').addClass('link_without_action');
       $('#link_to_past_implemented_audited_findings').attr('href', '#');
       $('#link_to_past_implemented_audited_findings').addClass('link_without_action');
-      $('#estimated_amount').html('');
     }
   });
 
