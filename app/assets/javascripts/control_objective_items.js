@@ -22,9 +22,7 @@ jQuery(function ($) {
       var set = $(this).is(':checked')
       var val = set ? automaticComment : ''
 
-      $('#control_objective_item_auditor_comment').
-        val(val).
-        prop('disabled', set)
+      $('#control_objective_item_auditor_comment').val(val)
     }
   })
 })
