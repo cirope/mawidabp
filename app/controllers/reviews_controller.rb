@@ -133,6 +133,7 @@ class ReviewsController < ApplicationController
         only: [],
           methods: :score_text,
           include: {
+            business_unit_type: { only: [:sectors, :recipients] },
             business_unit: { only: :name },
             plan_item: { only: :project }
           }
