@@ -71,7 +71,7 @@
 
         <% if SHOW_CONCLUSION_AS_OPTIONS %>
           <%= f.input :auditor_comment, collection: auditor_comment_options,
-            prompt: true, input_html: { readonly: readonly } %>
+            prompt: true, input_html: { disabled: readonly } %>
         <% else %>
           <%= f.input :auditor_comment, input_html: { readonly: readonly, rows: 5 } %>
         <% end %>
@@ -85,7 +85,13 @@
           <div class="col-md-6">
             <%= f.input :exclude_from_score, as: :boolean, label: false, inline_label:
               ControlObjectiveItem.human_attribute_name(:exclude_from_score),
-              input_html: { disabled: readonly } %>
+              input_html: {
+                disabled: readonly,
+                data: {
+                  automatic_auditor_comment: SHOW_CONCLUSION_AS_OPTIONS ?
+                    auditor_comment_options.last&.last : ''
+                }
+              } %>
           </div>
         </div>
       </div>
@@ -187,7 +193,7 @@
     <div class="pull-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.input :control_objective_id, as: :hidden %>
-    <%= f.submit class: 'btn btn-primary' %>
+    <%= f.submit class: 'btn btn-primary', disabled: frozen %>
   </div>
 <% end %>
 <script type="text/javascript">

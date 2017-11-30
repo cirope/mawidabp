@@ -14,4 +14,17 @@ jQuery(function ($) {
 
     $('[data-score-target="' + score + '"]').val(scoreValue).change()
   })
+
+  $(document).on('change', '[data-automatic-auditor-comment]', function () {
+    var automaticComment = $(this).data('automaticAuditorComment')
+
+    if (automaticComment) {
+      var set = $(this).is(':checked')
+      var val = set ? automaticComment : ''
+
+      $('#control_objective_item_auditor_comment').
+        val(val).
+        prop('disabled', set)
+    }
+  })
 })
