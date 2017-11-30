@@ -63,7 +63,9 @@
           <%= render 'findings/history_changes', finding: @oportunity %>
         <% end %>
 
-        <%= f.input :origination_date, as: :date_picker, input_html: { disabled: readonly } %>
+        <%= f.input :origination_date, as: :date_picker, input_html: {
+          readonly: (readonly || @oportunity.repeated_of)
+        } %>
         <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
 
         <% if @oportunity.must_have_a_comment? %>
