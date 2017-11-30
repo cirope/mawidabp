@@ -26,14 +26,16 @@ EVOLUTION_OPTIONS = [
   'Mantiene calificación desfavorable',
   'Mantiene calificación favorable',
   'Mejora calificación',
-  'Empeora calficación'
+  'Empeora calficación',
+  'No aplica'
 ]
 
 EVOLUTION_IMAGES = {
   'Mantiene calificación desfavorable' => 'evolution_equal_danger.png',
   'Mantiene calificación favorable'    => 'evolution_equal_success.png',
   'Mejora calificación'                => 'evolution_up.png',
-  'Empeora calficación'                => 'evolution_down.png'
+  'Empeora calficación'                => 'evolution_down.png',
+  'No aplica'                          => 'evolution_not_apply.png'
 }
 
 PDF_IMAGE_PATH = Rails.root.join('app', 'assets', 'images', 'pdf').freeze
