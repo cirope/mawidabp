@@ -32,11 +32,17 @@ module Reviews::Approval
       end
 
       if manual_score.blank? && SHOW_REVIEW_EXTRA_ATTRIBUTES
+        self.can_be_approved_by_force = false
+
         review_errors << I18n.t('review.errors.without_score')
       end
 
       if survey.blank?
         review_errors << I18n.t('review.errors.without_survey')
+      end
+
+      if file_model.blank? && SHOW_REVIEW_EXTRA_ATTRIBUTES
+        review_errors << I18n.t('review.errors.without_file_model')
       end
 
       unless has_audited?

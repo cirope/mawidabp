@@ -245,6 +245,9 @@ class ReviewTest < ActiveSupport::TestCase
   test 'must be approved function' do
     @review = reviews(:review_approved_with_conclusion)
 
+    @review.file_model = FileModel.take!
+    @review.save!
+
     assert @review.must_be_approved?
     assert @review.approval_errors.blank?
 
@@ -384,6 +387,25 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?
+
+    if SHOW_REVIEW_EXTRA_ATTRIBUTES
+      @review.file_model = nil
+
+      refute @review.must_be_approved?
+      assert @review.can_be_approved_by_force
+      assert @review.approval_errors.flatten.include?(
+        I18n.t('review.errors.without_file_model')
+      )
+
+      @review.manual_score = nil
+
+      refute @review.must_be_approved?
+      refute @review.can_be_approved_by_force
+      assert @review.approval_errors.flatten.include?(
+        I18n.t('review.errors.without_score')
+      )
+    end
+
     @review.review_user_assignments.each { |rua| rua.audited? && rua.delete }
     refute @review.reload.must_be_approved?
     assert @review.approval_errors.present?
