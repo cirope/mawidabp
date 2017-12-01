@@ -9,6 +9,10 @@ class FindingTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    Finding.current_user = nil
+  end
+
   test 'create' do
     assert_difference 'Finding.count' do
       @finding.class.list.create!(
@@ -253,13 +257,11 @@ class FindingTest < ActiveSupport::TestCase
     finding.state         = Finding::STATUS[:implemented_audited]
     finding.solution_date = Time.zone.today
 
+    Finding.current_user    = users :supervisor
     finding.skip_work_paper = true
 
     assert finding.work_papers.empty?
-
-    finding.valid?
-
-    assert finding.errors[:state].empty?
+    assert finding.valid?
   end
 
   test 'validates audited user must be present' do
