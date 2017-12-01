@@ -27,6 +27,8 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
         :business_unit_label => 'New business unit label',
         :project_label => 'New project label',
         :review_prefix => 'NBU',
+        :recipients => 'John Doe',
+        :sectors => 'Area 51',
         :external => false,
         :require_tag => false,
         :organization_id => @business_unit_type.organization_id

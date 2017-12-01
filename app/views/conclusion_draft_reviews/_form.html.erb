@@ -165,6 +165,8 @@
         $('#conclusion_draft_review_business_unit').val(data.business_unit.name || '');
         $('#conclusion_draft_review_project').val(data.plan_item.project || '');
         $('#conclusion_draft_review_score').val(data.score_text || '');
+        $('#conclusion_draft_review_recipients').val(data.business_unit_type.recipients || '');
+        $('#conclusion_draft_review_sectors').val(data.business_unit_type.sectors || '');
         $('#conclusion_draft_review_applied_procedures').focus();
       }).complete(function() {
         Helper.hideLoading('#conclusion_draft_review_review_id');
@@ -172,6 +174,9 @@
     } else {
       $('#conclusion_draft_review_business_unit').val('');
       $('#conclusion_draft_review_project').val('');
+      $('#conclusion_draft_review_score').val('');
+      $('#conclusion_draft_review_recipients').val('');
+      $('#conclusion_draft_review_sectors').val('');
     }
 
     $('#error_list').remove();

@@ -133,6 +133,7 @@ class ReviewsController < ApplicationController
         only: [],
           methods: :score_text,
           include: {
+            business_unit_type: { only: [:sectors, :recipients] },
             business_unit: { only: :name },
             plan_item: { only: :project }
           }
@@ -199,6 +200,7 @@ class ReviewsController < ApplicationController
       past_implemented_audited_findings_review_url(id: plan_item.id) if plan_item
 
     render json: {
+      risk_exposure: plan_item.risk_exposure,
       business_unit_name: name,
       business_unit_type: type,
       business_unit_prefix: prefix,

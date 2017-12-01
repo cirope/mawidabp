@@ -64,6 +64,8 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :business_unit_label => 'New business unit label',
           :project_label => 'New project label',
           :review_prefix => 'NBU',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51',
           :external => '0',
           :require_tag => '0',
           :business_units_attributes => [
@@ -98,6 +100,8 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :business_unit_label => 'Updated business unit label',
           :project_label => 'Updated project label',
           :review_prefix => 'UBU',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51',
           :external => '0',
           :require_tag => '0',
           :business_units_attributes => [

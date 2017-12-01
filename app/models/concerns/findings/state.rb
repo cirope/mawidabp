@@ -54,7 +54,8 @@ module Findings::State
       end
 
       def final_status
-        [STATUS[:implemented_audited], STATUS[:assumed_risk]] |
+        [STATUS[:implemented_audited]] |
+          (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING ? [] : [STATUS[:assumed_risk]]) |
           (HIDE_FINDING_REVOKED ? [] : [STATUS[:revoked]]) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [STATUS[:criteria_mismatch]])
       end
@@ -65,6 +66,7 @@ module Findings::State
           STATUS[:unconfirmed], STATUS[:confirmed], STATUS[:unanswered],
           STATUS[:incomplete]
         ] |
+        (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING ? [STATUS[:assumed_risk]] : []) |
         (SHOW_WEAKNESS_PROGRESS ? [STATUS[:awaiting]] : [])
       end
 
@@ -139,7 +141,8 @@ module Findings::State
       end
 
       def assumed_risk_transitions final
-        [:assumed_risk]
+        [:assumed_risk] |
+          (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING ? [:awaiting, :being_implemented] : [])
       end
 
       def notify_transitions final

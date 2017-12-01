@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171121164102) do
+ActiveRecord::Schema.define(version: 20171130185958) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,6 +107,8 @@ ActiveRecord::Schema.define(version: 20171121164102) do
     t.datetime "updated_at", null: false
     t.string "review_prefix"
     t.boolean "require_tag", default: false, null: false
+    t.text "sectors"
+    t.text "recipients"
     t.index ["external"], name: "index_business_unit_types_on_external"
     t.index ["name"], name: "index_business_unit_types_on_name"
     t.index ["organization_id"], name: "index_business_unit_types_on_organization_id"
@@ -525,6 +527,7 @@ ActiveRecord::Schema.define(version: 20171121164102) do
     t.integer "business_unit_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "risk_exposure"
     t.index ["business_unit_id"], name: "index_plan_items_on_business_unit_id"
     t.index ["plan_id"], name: "index_plan_items_on_plan_id"
   end

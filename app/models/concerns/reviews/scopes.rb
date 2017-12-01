@@ -30,6 +30,18 @@ module Reviews::Scopes
         references(:conclusion_reviews)
     end
 
+    def list_with_incomplete_work_papers
+      close_date_condition =
+        "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn 'close_date'} < ?"
+
+      list.
+        includes(:conclusion_final_review).
+        where.not(ConclusionReview.table_name => { review_id: nil }).
+        where(finished_work_papers: false).
+        where(close_date_condition, Time.zone.today).
+        references(:conclusion_reviews)
+    end
+
     def list_without_final_review
       list.
         includes(:conclusion_final_review).

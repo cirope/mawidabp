@@ -22,6 +22,17 @@
       </div>
     </div>
 
+    <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :recipients, input_html: { rows: 4 } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :sectors, input_html: { rows: 4 } %>
+        </div>
+      </div>
+    <% end %>
+
     <div class="row">
       <div class="col-md-6">
         <%= f.input :external, label: false, inline_label: true %>

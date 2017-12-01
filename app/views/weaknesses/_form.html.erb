@@ -57,7 +57,9 @@
         <%= f.input :audit_recommendations, input_html: { readonly: readonly, rows: 5 } %>
       </div>
       <div class="col-md-6">
-        <%= f.input :origination_date, as: :date_picker, input_html: { disabled: readonly } %>
+        <%= f.input :origination_date, as: :date_picker, input_html: {
+          readonly: (readonly || @weakness.repeated_of)
+        } %>
         <%= f.input :risk, collection: risks, prompt: true, disabled: readonly %>
         <% unless HIDE_WEAKNESS_PRIORITY %>
           <%= f.input :priority, collection: priorities, prompt: true, disabled: readonly %>
