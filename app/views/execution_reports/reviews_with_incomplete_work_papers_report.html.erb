@@ -1,0 +1,25 @@
+<div class="page-header">
+  <h2>
+    <%= t 'execution_reports.reviews_with_incomplete_work_papers_report_title' %>
+  </h2>
+</div>
+
+<% if @reviews.present? %>
+  <ul>
+    <% @reviews.each do |review| %>
+      <li>
+        <%= link_to review, review %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <div class="alert alert-info">
+    <%= t '.empty' %>
+  </div>
+<% end %>
+
+<hr>
+
+<div>
+  <%= link_to t('label.back'), action: :index %>
+</div>
