@@ -2,6 +2,8 @@ module Findings::Validations
   extend ActiveSupport::Concern
 
   included do
+    attr_accessor :skip_work_paper
+
     validates :control_objective_item_id, :title, :description, :review_code,
       :organization_id, presence: true
     validates :review_code, :title, length: { maximum: 255 }, allow_blank: true
@@ -78,7 +80,7 @@ module Findings::Validations
     end
 
     def validate_state_work_paper_presence
-      if implemented_audited? && work_papers.empty?
+      if implemented_audited? && work_papers.empty? && !skip_work_paper
         errors.add :state, :must_have_a_work_paper
       end
     end

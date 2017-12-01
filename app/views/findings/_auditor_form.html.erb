@@ -61,6 +61,12 @@
         <%= f.label :state, raw(Finding.human_attribute_name(:state) + ' ' +
           (show_history_changes ? finding_show_status_change_history(:finding_status_change_history) : '')) %>
         <%= finding_status_field(f) %>
+
+        <% if show_skip_work_paper_for @finding %>
+          <%= f.input :skip_work_paper, as: :boolean, label: false,
+            inline_label: Finding.human_attribute_name('skip_work_paper') %>
+        <% end %>
+
         <% if show_history_changes %>
           <%= render 'history_changes', finding: @finding %>
         <% end %>

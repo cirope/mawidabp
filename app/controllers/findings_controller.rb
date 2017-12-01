@@ -59,7 +59,7 @@ class FindingsController < ApplicationController
         :answer, :current_situation, :current_situation_verified,
         :audit_comments, :state, :progress, :origination_date, :solution_date,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
-        :compliance, :nested_user, :lock_version,
+        :compliance, :nested_user, :skip_work_paper, :lock_version,
         users_for_notification: [],
         business_unit_ids: [],
         finding_user_assignments_attributes: [

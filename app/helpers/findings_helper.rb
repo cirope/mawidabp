@@ -176,6 +176,13 @@ module FindingsHelper
     end
   end
 
+  def show_skip_work_paper_for finding
+    state_errors = finding.errors.details[:state]
+
+    finding.skip_work_paper ||
+      state_errors.any? { |msg| msg[:error] == :must_have_a_work_paper }
+  end
+
   private
 
     def finding_state_options_for finding

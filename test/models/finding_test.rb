@@ -248,6 +248,17 @@ class FindingTest < ActiveSupport::TestCase
     assert_error finding, :state, :must_have_a_work_paper
   end
 
+  test 'validates implemented audited can skip work paper validation' do
+    finding               = findings :being_implemented_weakness_on_final
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Time.zone.today
+
+    finding.skip_work_paper = true
+
+    assert finding.work_papers.empty?
+    assert finding.valid?
+  end
+
   test 'validates audited user must be present' do
     @finding.finding_user_assignments =
       @finding.finding_user_assignments.reject do |fua|
