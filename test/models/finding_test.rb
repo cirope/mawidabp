@@ -256,7 +256,10 @@ class FindingTest < ActiveSupport::TestCase
     finding.skip_work_paper = true
 
     assert finding.work_papers.empty?
-    assert finding.valid?
+
+    finding.valid?
+
+    assert finding.errors[:state].empty?
   end
 
   test 'validates audited user must be present' do
@@ -290,6 +293,8 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validate final state can be changed only by supervisors' do
+    skip if DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION
+
     Finding.current_user  = users :auditor
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
@@ -297,6 +302,21 @@ class FindingTest < ActiveSupport::TestCase
 
     assert finding.invalid?
     assert_error finding, :state, :must_be_done_by_proper_role
+
+    Finding.current_user  = users :supervisor
+
+    assert finding.valid?
+  end
+
+  test 'validate final state can be changed by any auditor' do
+    skip unless DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION
+
+    Finding.current_user  = users :auditor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = 1.month.from_now
+
+    assert finding.valid?
 
     Finding.current_user  = users :supervisor
 

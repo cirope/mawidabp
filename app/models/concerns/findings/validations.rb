@@ -103,7 +103,8 @@ module Findings::Validations
     end
 
     def validate_state_user_if_final
-      skip_validation = new_record? && final # comes from a final review _clone_
+      skip_validation = DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION ||
+        (new_record? && final) # comes from a final review _clone_
 
       if !skip_validation && state && state_changed? && state.presence_in(Finding::FINAL_STATUS)
         has_role_to_do_it = current_user.try(:supervisor?) || current_user.try(:manager?)
