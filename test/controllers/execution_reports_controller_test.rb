@@ -175,4 +175,12 @@ class ExecutionReportsControllerTest < ActionController::TestCase
 
     assert_response :redirect
   end
+
+  test 'reviews with incomplete work papers' do
+    login
+
+    get :reviews_with_incomplete_work_papers_report
+    assert_response :success
+    assert_template 'execution_reports/reviews_with_incomplete_work_papers_report'
+  end
 end
