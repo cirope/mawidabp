@@ -84,6 +84,7 @@ module ConclusionReviews::AlternativePDF
 
       put_review_survey_on       pdf
       put_detailed_weaknesses_on pdf
+      put_observations_on        pdf
       put_recipients_on          pdf
     end
 
@@ -217,6 +218,17 @@ module ConclusionReviews::AlternativePDF
 
       put_weakness_details_on pdf, all_weaknesses, hide: %w(audit_comments),
         legend: 'no_weaknesses'
+    end
+
+    def put_observations_on pdf
+      if observations.present?
+        title = self.class.human_attribute_name 'observations'
+
+        pdf.move_down PDF_FONT_SIZE * 2
+        pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text observations, align: :justify
+      end
     end
 
     def put_recipients_on pdf

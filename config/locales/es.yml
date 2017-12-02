@@ -1183,6 +1183,7 @@
         sectors: "Sectores/departamentos involucrados"
         evolution: "Evolución de la calificación"
         evolution_justification: "Justificación evolución"
+        observations: "Otras consideraciones"
       control:
         order: "Orden"
         control: "Controles"
