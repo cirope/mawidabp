@@ -5,7 +5,7 @@ module Reviews::Score
     score = score_array
 
     if SHOW_REVIEW_EXTRA_ATTRIBUTES
-      manual_score.to_s
+      (manual_score || '-').to_s
     else score
       [I18n.t("score_types.#{score.first}"), "(#{score.last}%)"].join(' ')
     end

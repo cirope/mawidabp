@@ -112,12 +112,7 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_review_scope_on pdf
-      title = I18n.t 'conclusion_review.annex.scope'
-
-      pdf.move_down PDF_FONT_SIZE * 2
-      pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
-
       put_control_objective_items_table_on     pdf
       pdf.move_down PDF_FONT_SIZE
       put_control_objective_items_reference_on pdf
@@ -238,7 +233,7 @@ module ConclusionReviews::AlternativePDF
 
     def put_risk_exposure_on pdf
       risk_exposure_title = I18n.t 'conclusion_review.executive_summary.risk_exposure'
-      risk_exposure       = '<b><color rgb="cc0000">%s</color></b>' % [
+      risk_exposure       = '<b>%s</b>' % [
         Review.human_attribute_name('risk_exposure'),
         review.risk_exposure
       ].join(': ')
@@ -524,7 +519,7 @@ module ConclusionReviews::AlternativePDF
 
       score_text  = [
         "<b>#{conclusion.upcase}</b>",
-        "<b><color rgb=\"cc0000\">(#{review.score_text})</color></b>"
+        "<b>(#{review.score_text})</b>"
       ].join("\n")
 
       [score_text, pdf_score_image_row(image)]
