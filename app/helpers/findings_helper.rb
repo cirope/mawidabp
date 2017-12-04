@@ -160,12 +160,6 @@ module FindingsHelper
       !current_organization.corporate?
   end
 
-  def finding_answer_disabled?
-    SHOW_FINDING_CURRENT_SITUATION &&
-      @finding.is_in_a_final_review? &&
-      @finding.answer.present?
-  end
-
   def finding_description_label
     attr_name = @finding.class.human_attribute_name 'description'
 
