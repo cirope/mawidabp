@@ -1,10 +1,10 @@
 module ControlObjectiveItems::FindingPDFData
   extend ActiveSupport::Concern
 
-  def finding_pdf_data finding, hide: []
+  def finding_pdf_data finding, hide: [], show_repeated_review: false
     body = ''
 
-    body << get_initial_finding_attributes(finding)
+    body << get_initial_finding_attributes(finding, show_repeated_review)
     body << get_weakness_attributes(finding, hide) if finding.kind_of?(Weakness)
     body << get_late_finding_attributes(finding)
     body << get_optional_finding_attributes(finding)
@@ -16,7 +16,7 @@ module ControlObjectiveItems::FindingPDFData
 
   private
 
-    def get_initial_finding_attributes finding
+    def get_initial_finding_attributes finding, show_repeated_review
       body = ''
 
       if finding.review_code.present?
@@ -34,7 +34,7 @@ module ControlObjectiveItems::FindingPDFData
           "#{finding.description.chomp}\n"
       end
 
-      body << finding_repeated_text_for(finding)
+      body << finding_repeated_text_for(finding, show_repeated_review)
     end
 
     def get_weakness_attributes finding, hide
@@ -153,11 +153,15 @@ module ControlObjectiveItems::FindingPDFData
       end
     end
 
-    def finding_repeated_text_for finding
+    def finding_repeated_text_for finding, show_repeated_review
       repeated = finding.repeated_ancestors.present?
 
       if SHOW_CONCLUSION_ALTERNATIVE_PDF
         label = I18n.t "label.#{repeated ? 'yes' : 'no'}"
+
+        if show_repeated_review && finding.repeated_of
+          label << " (#{finding.repeated_of.review.identification})"
+        end
 
         "<b>#{I18n.t 'findings.state.repeated'}:</b> #{label}\n"
       elsif repeated

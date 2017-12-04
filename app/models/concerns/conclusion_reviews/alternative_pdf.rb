@@ -212,7 +212,7 @@ module ConclusionReviews::AlternativePDF
       pdf.move_down PDF_FONT_SIZE
 
       put_weakness_details_on pdf, all_weaknesses, hide: %w(audit_comments),
-        legend: 'no_weaknesses'
+        legend: 'no_weaknesses', show_repeated_review: true
     end
 
     def put_observations_on pdf
@@ -321,13 +321,18 @@ module ConclusionReviews::AlternativePDF
         hide: %w(audit_recommendations audit_comments)
     end
 
-    def put_weakness_details_on pdf, weaknesses, hide: [], legend:
+    def put_weakness_details_on pdf, weaknesses, hide: [], show_repeated_review: false, legend:
+      finding_data_options = {
+        hide: hide,
+        show_repeated_review: show_repeated_review
+      }
+
       if weaknesses.any?
         weaknesses.each do |f|
           coi = f.control_objective_item
 
           pdf.move_down PDF_FONT_SIZE
-          pdf.text coi.finding_pdf_data(f, hide: hide),
+          pdf.text coi.finding_pdf_data(f, finding_data_options),
             align: :justify, inline_format: true
         end
       else
