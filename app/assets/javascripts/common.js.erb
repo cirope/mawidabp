@@ -149,7 +149,7 @@ var FormUtil = {
      * Completa todos los inputs con la clase "sort_number" con números en secuencia
      */
   completeSortNumbers: function() {
-    $('input.sort_number').val(function(i) {return i + 1;}).trigger('change');
+    $('input.sort_number').val(function(i) {return i + 1;});
   }
 }
 
@@ -183,7 +183,11 @@ var Helper = {
       items: elements,
       handle: handles,
       opacity: 0.6,
-      stop: function() {FormUtil.completeSortNumbers();}
+      stop: function() {
+        State.unsavedData = true;
+
+        FormUtil.completeSortNumbers();
+      }
     });
   },
 
