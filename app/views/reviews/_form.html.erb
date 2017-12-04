@@ -17,7 +17,6 @@
         <% end %>
         <% if @review.new_record? %>
           <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true, input_html: {
-            autofocus: SHOW_REVIEW_AUTOMATIC_IDENTIFICATION,
             data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
           } %>
         <% else %>
