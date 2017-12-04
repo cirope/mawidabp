@@ -6,12 +6,12 @@ CONCLUSION_OPTIONS = [
   'No aplica'
 ]
 
-CONCLUSION_COLORS = {
-  'Satisfactorio'                => '00ff00',
-  'Satisfactorio con salvedades' => '808000',
-  'Necesita mejorar'             => 'f4d03f',
-  'No satisfactorio'             => 'ff0000',
-  'No aplica'                    => '808080'
+CONCLUSION_SCOPE_IMAGES = {
+  'Satisfactorio'                => 'scope_success.png',
+  'Satisfactorio con salvedades' => 'scope_success_with_exceptions.png',
+  'Necesita mejorar'             => 'scope_warning.png',
+  'No satisfactorio'             => 'scope_danger.png',
+  'No aplica'                    => 'scope_not_apply.png'
 }
 
 CONCLUSION_IMAGES = {

@@ -472,18 +472,21 @@ module ConclusionReviews::AlternativePDF
     end
 
     def control_objectives_row_data
-      row_data = []
-      count    = 0
+      count         = 0
+      row_data      = []
+      image_options = { vposition: :top, border_widths: [1, 0, 1, 0] }
 
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.each do |coi|
-          color      = CONCLUSION_COLORS.fetch(coi.auditor_comment) { '808080' }
-          icon       = "<font size=\"16\"><color rgb=\"#{color}\">•</color></font>"
-          conclusion = "#{icon} #{coi.auditor_comment&.upcase}"
+          image = CONCLUSION_SCOPE_IMAGES.fetch(coi.auditor_comment) { 'scope_not_apply.png' }
 
           row_data << [
             "<sup>(#{count += 1})</sup> #{coi.control_objective_text}",
-            conclusion
+            pdf_score_image_row(image, fit: [12, 12]).merge(image_options),
+            {
+              content:       coi.auditor_comment&.upcase,
+              border_widths: [1, 1, 1, 0]
+            }
           ]
         end
       end
@@ -494,12 +497,12 @@ module ConclusionReviews::AlternativePDF
     def control_objective_column_headers
       [
         "<b>#{I18n.t 'conclusion_review.annex.scope_column'}</b> ",
-        "<b>#{self.class.human_attribute_name 'conclusion'}</b>"
+        { content: "<b>#{self.class.human_attribute_name 'conclusion'}</b>", colspan: 2 }
       ]
     end
 
     def control_objective_column_widths pdf
-      [70, 30].map { |percent| pdf.percent_width percent }
+      [70, 4, 26].map { |percent| pdf.percent_width percent }
     end
 
     def alternative_score_details_column_headers
@@ -525,9 +528,9 @@ module ConclusionReviews::AlternativePDF
       [score_text, pdf_score_image_row(image)]
     end
 
-    def pdf_score_image_row image
+    def pdf_score_image_row image, fit: [23, 23]
       image_path = PDF_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
 
-      { image: image_path, fit: [23, 23], position: :center, vposition: :center }
+      { image: image_path, fit: fit, position: :center, vposition: :center }
     end
 end
