@@ -70,7 +70,7 @@ class Users::PasswordsController < ApplicationController
       @auth_user.update!(
         password: @auth_user.password,
         password_confirmation: @auth_user.password,
-        password_changed: Date.today,
+        password_changed: Time.zone.today,
         change_password_hash: nil,
         enable: true,
         failed_attempts: 0,
