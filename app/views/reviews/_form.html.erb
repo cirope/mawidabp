@@ -17,7 +17,6 @@
         <% end %>
         <% if @review.new_record? %>
           <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true, input_html: {
-            autofocus: SHOW_REVIEW_AUTOMATIC_IDENTIFICATION,
             data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
           } %>
         <% else %>
@@ -227,10 +226,15 @@
       :class => 'btn btn-default btn-sm' %>
   <% end %>
 
-  <% if @review.finished_work_papers %>
+  <% if @review.work_papers_finished? %>
     <p>&nbsp;</p>
     <div class="alert alert-info">
       <%= t 'review.work_papers_marked_as_finished' %>
+    </div>
+  <% elsif @review.work_papers_revised? %>
+    <p>&nbsp;</p>
+    <div class="alert alert-success">
+      <%= t 'review.work_papers_marked_as_revised' %>
     </div>
   <% end %>
 

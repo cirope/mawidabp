@@ -104,7 +104,9 @@ class PlansController < ApplicationController
     end
 
     def plan_pdf_path
-      @plan.to_pdf current_organization, params[:include_details].present?
+      @plan.to_pdf current_organization,
+        include_details: params[:include_details].present?,
+        business_unit_type: @business_unit_type
 
       @plan.relative_pdf_path
     end

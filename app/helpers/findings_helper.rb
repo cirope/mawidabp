@@ -160,12 +160,6 @@ module FindingsHelper
       !current_organization.corporate?
   end
 
-  def finding_answer_disabled?
-    SHOW_FINDING_CURRENT_SITUATION &&
-      @finding.is_in_a_final_review? &&
-      @finding.answer.present?
-  end
-
   def finding_description_label
     attr_name = @finding.class.human_attribute_name 'description'
 
@@ -174,6 +168,13 @@ module FindingsHelper
     else
       attr_name
     end
+  end
+
+  def show_skip_work_paper_for finding
+    state_errors = finding.errors.details[:state]
+
+    finding.skip_work_paper ||
+      state_errors.any? { |msg| msg[:error] == :must_have_a_work_paper }
   end
 
   private

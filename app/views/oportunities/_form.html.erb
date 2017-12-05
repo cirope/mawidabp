@@ -59,6 +59,11 @@
               :finding_status_change_history) : ''))  %>
         <%= finding_status_field f, disabled: readonly %>
 
+        <% if show_skip_work_paper_for @oportunity %>
+          <%= f.input :skip_work_paper, as: :boolean, label: false,
+            inline_label: Oportunity.human_attribute_name('skip_work_paper') %>
+        <% end %>
+
         <% if show_history_changes %>
           <%= render 'findings/history_changes', finding: @oportunity %>
         <% end %>

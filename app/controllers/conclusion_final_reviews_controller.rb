@@ -66,7 +66,8 @@ class ConclusionFinalReviewsController < ApplicationController
               :evolution,
               :evolution_justification,
               :recipients,
-              :sectors
+              :sectors,
+              :observations
             ])
         }
       end
@@ -390,7 +391,7 @@ class ConclusionFinalReviewsController < ApplicationController
       params.require(:conclusion_final_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
         :summary, :recipients, :evolution, :evolution_justification, :sectors,
-        :lock_version
+        :observations, :lock_version
       )
     end
 

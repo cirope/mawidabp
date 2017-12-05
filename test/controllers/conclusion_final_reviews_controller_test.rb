@@ -132,7 +132,8 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :recipients => 'John Doe',
           :sectors => 'Area 51',
           :evolution => 'Do the evolution',
-          :evolution_justification => 'Ok'
+          :evolution_justification => 'Ok',
+          :observations => nil
         }
       }
     end
@@ -164,7 +165,8 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :recipients => 'John Doe',
           :sectors => 'Area 51',
           :evolution => 'Do the evolution',
-          :evolution_justification => 'Ok'
+          :evolution_justification => 'Ok',
+          :observations => nil
         }
       }
     end

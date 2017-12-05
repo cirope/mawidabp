@@ -52,10 +52,16 @@
     <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :recipients, input_html: { rows: 4, readonly: true } %>
+          <%= f.input :recipients, input_html: { rows: 4, readonly: readonly } %>
         </div>
         <div class="col-md-6">
-          <%= f.input :sectors, input_html: { rows: 4, readonly: true } %>
+          <%= f.input :sectors, input_html: { rows: 4, readonly: readonly } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :observations, input_html: { rows: 4, readonly: readonly } %>
         </div>
       </div>
     <% end %>
@@ -77,7 +83,7 @@
   $('#conclusion_final_review_review_id').change(function() {
     var elementsForUpdate = [
       'applied_procedures', 'conclusion', 'evolution',
-      'evolution_justification', 'recipients', 'sectors'
+      'evolution_justification', 'recipients', 'sectors', 'observations'
     ];
 
     if(!$(this).val().match(/^\s*$/)) {

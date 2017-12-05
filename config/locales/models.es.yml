@@ -191,6 +191,7 @@ es:
         progress: 'Normalización'
         count: 'Cantidad'
         solution_date: 'Fecha de solución'
+        skip_work_paper: 'No requiere papel de trabajo'
         users: 'Responsables'
         work_papers: 'Papeles de trabajo'
         finding_answers: 'Respuestas'

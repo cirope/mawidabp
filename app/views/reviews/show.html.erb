@@ -157,10 +157,15 @@
   </ul>
 <% end %>
 
-<% if @review.finished_work_papers %>
+<% if @review.work_papers_finished? %>
   <p>&nbsp;</p>
   <div class="alert alert-info">
     <%= t 'review.work_papers_marked_as_finished' %>
+  </div>
+<% elsif @review.work_papers_revised? %>
+  <p>&nbsp;</p>
+  <div class="alert alert-success">
+    <%= t 'review.work_papers_marked_as_revised' %>
   </div>
 <% end %>
 

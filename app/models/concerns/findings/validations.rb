@@ -2,6 +2,8 @@ module Findings::Validations
   extend ActiveSupport::Concern
 
   included do
+    attr_accessor :skip_work_paper
+
     validates :control_objective_item_id, :title, :description, :review_code,
       :organization_id, presence: true
     validates :review_code, :title, length: { maximum: 255 }, allow_blank: true
@@ -78,7 +80,7 @@ module Findings::Validations
     end
 
     def validate_state_work_paper_presence
-      if implemented_audited? && work_papers.empty?
+      if implemented_audited? && work_papers.empty? && !skip_work_paper
         errors.add :state, :must_have_a_work_paper
       end
     end
@@ -101,7 +103,8 @@ module Findings::Validations
     end
 
     def validate_state_user_if_final
-      skip_validation = new_record? && final # comes from a final review _clone_
+      skip_validation = DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION ||
+        (new_record? && final) # comes from a final review _clone_
 
       if !skip_validation && state && state_changed? && state.presence_in(Finding::FINAL_STATUS)
         has_role_to_do_it = current_user.try(:supervisor?) || current_user.try(:manager?)

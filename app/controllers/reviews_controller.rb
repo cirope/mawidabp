@@ -408,11 +408,22 @@ class ReviewsController < ApplicationController
 
   # * PUT /reviews/1/finished_work_papers
   def finished_work_papers
-    @review.finished_work_papers = true
+    is_supervisor                = @auth_user.supervisor?
+    @review.finished_work_papers = if params[:revised].present? && is_supervisor
+                                     'work_papers_revised'
+                                   else
+                                     'work_papers_finished'
+                                   end
 
     @review.save! validate: false
 
-    redirect_to @review, notice: t('review.work_papers_marked_as_finished')
+    notice = if @review.work_papers_finished?
+               t 'review.work_papers_marked_as_finished'
+             else
+               t 'review.work_papers_marked_as_revised'
+             end
+
+    redirect_to @review, notice: notice
   end
 
   # * PUT /reviews/1/recode_findings
