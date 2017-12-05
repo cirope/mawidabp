@@ -1,8 +1,15 @@
-<div class="page-header">
-  <h2>
-    <%= t 'execution_reports.reviews_with_incomplete_work_papers_report_title' %>
-  </h2>
-</div>
+<ul class="nav nav-tabs">
+  <li <%== 'class="active"' if params[:revised].blank?  %>>
+    <%= link_to t('execution_reports.reviews_with_incomplete_work_papers_report_incomplete_title'),
+      { action: :reviews_with_incomplete_work_papers_report } %>
+  </li>
+  <li <%== 'class="active"' if params[:revised].present?  %>>
+    <%= link_to t('execution_reports.reviews_with_incomplete_work_papers_report_revised_title'),
+      { action: :reviews_with_incomplete_work_papers_report, revised: true } %>
+  </li>
+</ul>
+
+<br>
 
 <% if @reviews.present? %>
   <ul>
@@ -14,7 +21,7 @@
   </ul>
 <% else %>
   <div class="alert alert-info">
-    <%= t '.empty' %>
+    <%= t ".empty_#{params[:revised].present? ? 'revised' : 'incomplete'}" %>
   </div>
 <% end %>
 
