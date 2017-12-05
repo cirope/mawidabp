@@ -414,7 +414,20 @@ class ReviewsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to review_url(review)
-    assert review.reload.finished_work_papers
+    assert review.reload.work_papers_finished?
+  end
+
+  test 'supervised work papers' do
+    review = reviews(:past_review) # should work even if it has final review
+
+    login user: users(:supervisor)
+
+    assert_difference 'review.versions.count' do
+      patch :finished_work_papers, params: { id: review.id, revised: true }
+    end
+
+    assert_redirected_to review_url(review)
+    assert review.reload.work_papers_revised?
   end
 
   test 'recode findings' do

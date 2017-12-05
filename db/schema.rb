@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171201172344) do
+ActiveRecord::Schema.define(version: 20171204231746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -682,7 +682,7 @@ ActiveRecord::Schema.define(version: 20171201172344) do
     t.string "risk_exposure"
     t.decimal "manual_score", precision: 6, scale: 2
     t.string "include_sox"
-    t.boolean "finished_work_papers", default: false, null: false
+    t.integer "finished_work_papers", default: 0, null: false
     t.index ["file_model_id"], name: "index_reviews_on_file_model_id"
     t.index ["identification"], name: "index_reviews_on_identification"
     t.index ["organization_id"], name: "index_reviews_on_organization_id"
