@@ -119,10 +119,12 @@
           <%= coi.compliance_score_text %>
         </p>
       <% end %>
-      <div>
-        <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
-        <%= simple_format coi.control.compliance_tests %>
-      </div>
+      <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
+        <div>
+          <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
+          <%= simple_format coi.control.compliance_tests %>
+        </div>
+      <% end %>
       <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
         <p>
           <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>

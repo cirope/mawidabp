@@ -44,10 +44,12 @@
   </p>
 <% end %>
 
-<div>
-  <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
-  <%= simple_format @control_objective_item.control.compliance_tests %>
-</div>
+<% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
+  <div>
+    <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
+    <%= simple_format @control_objective_item.control.compliance_tests %>
+  </div>
+<% end %>
 
 <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
   <p>

@@ -10,7 +10,9 @@
         <th><%= ControlObjective.human_attribute_name 'name' %></th>
         <th><%= Control.human_attribute_name 'control' %></th>
         <th><%= Control.human_attribute_name 'design_tests' %></th>
-        <th><%= Control.human_attribute_name 'compliance_tests' %></th>
+        <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
+          <th><%= Control.human_attribute_name 'compliance_tests' %></th>
+        <% end %>
         <th><%= Control.human_attribute_name 'sustantive_tests' %></th>
         <% unless HIDE_CONTROL_EFFECTS %>
           <th><%= Control.human_attribute_name 'effects' %></th>
@@ -26,7 +28,9 @@
           <td><%= simple_format co.name %></td>
           <td><%= simple_format co.control.control %></td>
           <td><%= simple_format co.control.design_tests %></td>
-          <td><%= simple_format co.control.compliance_tests %></td>
+          <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
+            <td><%= simple_format co.control.compliance_tests %></td>
+          <% end %>
           <td><%= simple_format co.control.sustantive_tests %></td>
           <% unless HIDE_CONTROL_EFFECTS %>
             <td><%= simple_format co.control.effects %></td>

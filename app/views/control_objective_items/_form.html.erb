@@ -22,25 +22,27 @@
         <%= f.input :relevance, collection: relevances,
           include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
         <%= f.input :audit_date, as: :date_picker, input_html: { disabled: readonly } %>
-        <%= f.input :control_objective_text, input_html: { autofocus: true, readonly: readonly, rows: HIDE_CONTROL_EFFECTS ? 9 : 5 } %>
+        <%= f.input :control_objective_text, input_html: { autofocus: true, readonly: readonly, rows: 5 } %>
 
         <%= f.simple_fields_for :control do |c_f| %>
           <% unless HIDE_CONTROL_EFFECTS %>
             <%= c_f.input :effects, label: Control.human_attribute_name(:effects), input_html: { readonly: readonly, rows: 5 } %>
           <% end %>
-          <%= c_f.input :control, label: Control.human_attribute_name(:control), input_html: { readonly: readonly, rows: HIDE_CONTROL_EFFECTS ? 8 : 5 } %>
+          <%= c_f.input :control, label: Control.human_attribute_name(:control), input_html: { readonly: readonly, rows: 5 } %>
 
           <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
             <%= f.input :effectiveness, label: ControlObjectiveItem.human_attribute_name(:effectiveness),
               input_html: { value: "#{@control_objective_item.effectiveness}%", readonly: true } %>
           <% end %>
 
-          <% test_rows = HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS ? 9 : 5 %>
+          <% test_rows = HIDE_CONTROL_COMPLIANCE_TESTS ? 11 : 5 %>
           <% content_for :design_tests do %>
             <%= c_f.input :design_tests, input_html: { readonly: readonly, rows: test_rows } %>
           <% end %>
-          <% content_for :compliance_tests do %>
-            <%= c_f.input :compliance_tests, input_html: { readonly: readonly, rows: test_rows } %>
+          <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
+            <% content_for :compliance_tests do %>
+              <%= c_f.input :compliance_tests, input_html: { readonly: readonly, rows: test_rows } %>
+            <% end %>
           <% end %>
           <% content_for :sustantive_tests do %>
             <%= c_f.input :sustantive_tests, input_html: { readonly: readonly, rows: test_rows } %>
@@ -60,7 +62,7 @@
             include_blank: t('control_objective_item.not_rated'),
             input_html: { data: { score_target: 'compliance' }, disabled: readonly } %>
         <% end %>
-        <%= yield :compliance_tests %>
+        <%= yield :compliance_tests unless HIDE_CONTROL_COMPLIANCE_TESTS %>
 
         <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
           <%= f.input :sustantive_score, collection: qualifications,
