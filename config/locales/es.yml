@@ -441,7 +441,7 @@
       without_audit_date: "sin fecha de auditoría"
       without_effects: "sin efectos"
       without_controls: "sin controles"
-      without_design_tests: "sin evaluación de diseño"
+      without_design_tests: "sin pruebas de diseño"
       without_compliance_tests: "sin pruebas de cumplimiento"
       without_sustantive_tests: "sin pruebas sustantivas"
       without_auditor_comment: "sin conclusiones del auditor"
@@ -1191,14 +1191,14 @@
         order: "Orden"
         control: "Controles"
         effects: "Efectos"
-        design_tests: "Evaluación de diseño"
+        design_tests: "Pruebas de diseño"
         compliance_tests: "Pruebas de cumplimiento"
         sustantive_tests: "Pruebas sustantivas"
       control_objective_item:
         control_objective_id: "Objetivo de control"
         control_objective_text: "Objetivo de control"
         relevance: "Importancia"
-        design_score: "Calificación evaluación de diseño"
+        design_score: "Calificación pruebas de diseño"
         compliance_score: "Calificación pruebas de cumplimiento"
         sustantive_score: "Calificación pruebas sustantivas"
         audit_date: "Fecha de auditoría"
@@ -1215,7 +1215,7 @@
         order: "Objetivo de control (orden)"
         control: "Objetivo de control (controles)"
         effects: "Objetivo de control (efectos)"
-        design_tests: "Objetivo de control (evaluación de diseño)"
+        design_tests: "Objetivo de control (pruebas de diseño)"
         compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
         sustantive_tests: "Objetivo de control (pruebas sustantivas)"
       control_objective_item/work_papers:
@@ -1232,7 +1232,7 @@
         file_file_size: "Papel de trabajo (tamaño de archivo)"
       control_objective_item/business_unit_scores:
         business_unit_id: 'Calificación de unidad de negocio (unidad de negocio)'
-        design_score: 'Calificación de unidad de negocio (evaluación de diseño)'
+        design_score: 'Calificación de unidad de negocio (pruebas de diseño)'
         compliance_score: 'Calificación de unidad de negocio (pruebas de cumplimiento)'
         sustantive_score: 'Calificación de unidad de negocio (pruebas sustantivas)'
       cost:

@@ -145,7 +145,7 @@ es:
         risk: 'Objetivo de control (riesgo)'
       business_unit_score:
         business_unit_id: 'Unidad de negocio'
-        design_score: 'Calificación evaluación de diseño'
+        design_score: 'Calificación pruebas de diseño'
         compliance_score: 'Calificación pruebas de cumplimiento'
         sustantive_score: 'Calificación pruebas sustantivas'
       control_objective:
