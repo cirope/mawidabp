@@ -76,13 +76,4 @@ class ControlTest < ActiveSupport::TestCase
     assert_error @control, :compliance_tests, :blank
     assert_error @control, :sustantive_tests, :blank
   end
-
-  test 'defaults' do
-    expected_design_tests = 'test dt value'
-    ENV['DEFAULT_CONTROL_DESIGN_TEST_VALUE'] = expected_design_tests
-
-    control = Control.new
-
-    assert_equal expected_design_tests, control.design_tests
-  end
 end
