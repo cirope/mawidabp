@@ -41,7 +41,7 @@ module ControlObjectiveItems::Validations
     end
 
     def score_completion
-      if finished && !exclude_from_score && !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
+      if finished && !exclude_from_score
         if design_score.blank? && compliance_score.blank? && sustantive_score.blank?
           errors.add :design_score,     :blank
           errors.add :compliance_score, :blank

@@ -35,7 +35,7 @@
               input_html: { value: "#{@control_objective_item.effectiveness}%", readonly: true } %>
           <% end %>
 
-          <% test_rows = HIDE_CONTROL_COMPLIANCE_TESTS ? 11 : 5 %>
+          <% test_rows = HIDE_CONTROL_COMPLIANCE_TESTS ? 7 : 5 %>
           <% content_for :design_tests do %>
             <%= c_f.input :design_tests, input_html: { readonly: readonly, rows: test_rows } %>
           <% end %>
@@ -50,25 +50,21 @@
         <% end %>
       </div>
       <div class="col-md-6">
-        <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
-          <%= f.input :design_score, collection: qualifications,
-            include_blank: t('control_objective_item.not_rated'),
-            input_html: { data: { score_target: 'design' }, disabled: readonly } %>
-        <% end %>
+        <%= f.input :design_score, collection: qualifications,
+          include_blank: t('control_objective_item.not_rated'),
+          input_html: { data: { score_target: 'design' }, disabled: readonly } %>
         <%= yield :design_tests %>
 
-        <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+        <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
           <%= f.input :compliance_score, collection: qualifications,
             include_blank: t('control_objective_item.not_rated'),
             input_html: { data: { score_target: 'compliance' }, disabled: readonly } %>
         <% end %>
         <%= yield :compliance_tests unless HIDE_CONTROL_COMPLIANCE_TESTS %>
 
-        <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
-          <%= f.input :sustantive_score, collection: qualifications,
-            include_blank: t('control_objective_item.not_rated'),
-            input_html: { data: { score_target: 'sustantive' }, disabled: readonly } %>
-        <% end %>
+        <%= f.input :sustantive_score, collection: qualifications,
+          include_blank: t('control_objective_item.not_rated'),
+          input_html: { data: { score_target: 'sustantive' }, disabled: readonly } %>
         <%= yield :sustantive_tests %>
 
         <% if SHOW_CONCLUSION_AS_OPTIONS %>
