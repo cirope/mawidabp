@@ -147,6 +147,8 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'review effectiveness modification' do
+    skip if HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
+
     min_qualification_value = ControlObjectiveItem.qualifications_values.min
     review = @control_objective_item.review
 
@@ -229,9 +231,9 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       assert_error @control_objective_item.control, :effects, :blank
     end
 
-    assert_error @control_objective_item, :design_score, :blank
-    assert_error @control_objective_item, :compliance_score, :blank
-    assert_error @control_objective_item, :sustantive_score, :blank
+    assert_error @control_objective_item.control, :design_tests, :blank
+    assert_error @control_objective_item.control, :compliance_tests, :blank
+    assert_error @control_objective_item.control, :sustantive_tests, :blank
 
     @control_objective_item.design_score = 0
 

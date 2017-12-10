@@ -155,6 +155,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
             },
             :design_score => ControlObjectiveItem.qualifications_values.last,
             :compliance_score => ControlObjectiveItem.qualifications_values.last,
+            :sustantive_score => ControlObjectiveItem.qualifications_values.last,
             :audit_date => 10.days.from_now.to_date,
             :auditor_comment => 'Updated comment',
             :control_objective_id => control_objectives(:organization_security_4_4).id,
@@ -162,9 +163,9 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
             :business_unit_scores_attributes => [
               {
                 :business_unit_id => business_units(:business_unit_two).id,
-                :design_score => ControlObjectiveItem.qualifications_values.last,
-                :compliance_score => ControlObjectiveItem.qualifications_values.last,
-                :sustantive_score => ControlObjectiveItem.qualifications_values.last
+                :design_score => ControlObjectiveItem.qualifications_values.last.to_s,
+                :compliance_score => ControlObjectiveItem.qualifications_values.last.to_s,
+                :sustantive_score => ControlObjectiveItem.qualifications_values.last.to_s
               }
             ],
             :business_unit_type_ids => [business_unit_types(:consolidated_substantive).id.to_s]

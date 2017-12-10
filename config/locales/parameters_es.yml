@@ -29,6 +29,9 @@ es:
     high: 'Alto'
     very_high: 'Muy alto'
     excellent: 'Óptimo'
+    # Short qualifications
+    'yes': 'Si'
+    'no': 'No'
   risk_types:
     low: 'Bajo'
     medium: 'Medio'
