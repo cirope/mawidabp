@@ -176,22 +176,56 @@
   <% end %>
 
   <% unless readonly %>
-    <h5><strong><%= ControlObjective.model_name.human %></strong></h5>
+    <br>
 
-    <div id="control_objectives">
-      <%= link_to_add_fields(
-        t('review.add_control_objective'), f, :control_objective_items, 'control_objective'
-      ) %>
-    </div>
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a href="#control-objective" data-toggle="tab">
+          <%= ControlObjective.model_name.human %>
+        </a>
+      </li>
+      <li>
+        <a href="#process-control" data-toggle="tab">
+          <%= ProcessControl.model_name.human %>
+        </a>
+      </li>
+      <li>
+        <a href="#best-practice" data-toggle="tab">
+          <%= BestPractice.model_name.human %>
+        </a>
+      </li>
+    </ul>
 
-    <hr />
+    <div class="tab-content">
+      <div class="tab-pane active" id="control-objective">
+        <br>
 
-    <h5><strong><%= ProcessControl.model_name.human %></strong></h5>
+        <div id="control_objectives">
+          <%= link_to_add_fields(
+            t('review.add_control_objective'), f, :control_objective_items, 'control_objective'
+          ) %>
+        </div>
+      </div>
 
-    <div id="process_controls">
-      <%= link_to_add_fields(
-        t('review.add_process_control'), f, :control_objective_items, 'process_control'
-      ) %>
+      <div class="tab-pane" id="process-control">
+        <br>
+
+        <div id="process_controls">
+          <%= link_to_add_fields(
+            t('review.add_process_control'), f, :control_objective_items, 'process_control'
+          ) %>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="best-practice">
+        <br>
+
+        <div id="best_practices">
+          <%= link_to_add_fields(
+            t('review.add_best_practice'), f, :control_objective_items, 'best_practice'
+          ) %>
+        </div>
+      </div>
     </div>
   <% end %>
 

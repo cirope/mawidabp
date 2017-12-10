@@ -1,4 +1,5 @@
 class ReviewsController < ApplicationController
+  include AutoCompleteFor::BestPractice
   include AutoCompleteFor::ProcessControl
   include AutoCompleteFor::Tagging
   include SearchableByTag
@@ -469,7 +470,8 @@ class ReviewsController < ApplicationController
           ]
         ],
         control_objective_ids: [],
-        process_control_ids: []
+        process_control_ids: [],
+        best_practice_ids: []
       )
     end
 
@@ -505,6 +507,7 @@ class ReviewsController < ApplicationController
         auto_complete_for_finding: :read,
         auto_complete_for_control_objective: :read,
         auto_complete_for_process_control: :read,
+        auto_complete_for_best_practice: :read,
         auto_complete_for_tagging: :read,
         estimated_amount: :read,
         next_identification_number: :read,

@@ -124,8 +124,8 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'create review' do
     login
     assert_difference ['Review.count', 'FindingReviewAssignment.count', 'Tagging.count'] do
-      # Se crean 2 con el 'process_control_ids' y uno con 'control_objective_ids'
-      assert_difference 'ControlObjectiveItem.count', 3 do
+      # Se crean 2 con 'best_practice_ids', 2 con 'process_control_ids' y uno con 'control_objective_ids'
+      assert_difference 'ControlObjectiveItem.count', 5 do
         assert_difference 'FileModel.count' do
           assert_difference 'ReviewUserAssignment.count', 4 do
             post :create, params: {
@@ -139,6 +139,7 @@ class ReviewsControllerTest < ActionController::TestCase
                 risk_exposure: 'high',
                 manual_score: 800,
                 include_sox: 'no',
+                best_practice_ids: [best_practices(:bcra_A4609).id],
                 process_control_ids: [process_controls(:security_management).id],
                 control_objective_ids: [control_objectives(:security_policy_3_1).id],
                 file_model_attributes: {

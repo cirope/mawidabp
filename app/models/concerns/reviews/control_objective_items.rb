@@ -2,12 +2,24 @@ module Reviews::ControlObjectiveItems
   extend ActiveSupport::Concern
 
   included do
-    attr_reader   :control_objective_ids, :process_control_ids
-    attr_accessor :control_objective_data, :process_control_data
+    attr_reader   :control_objective_ids, :process_control_ids, :best_practice_ids
+    attr_accessor :control_objective_data, :process_control_data, :best_practice_data
 
     has_many :control_objective_items, dependent: :destroy, after_add: :assign_review
 
     accepts_nested_attributes_for :control_objective_items, allow_destroy: true
+  end
+
+  def best_practice_ids= best_practice_ids
+    Array(best_practice_ids).uniq.each do |best_practice_id|
+      if BestPractice.exists? best_practice_id
+        best_practice = BestPractice.find best_practice_id
+
+        best_practice.control_objectives.each do |control_objective|
+          add_control_objective_item_from control_objective
+        end
+      end
+    end
   end
 
   def process_control_ids= process_control_ids
