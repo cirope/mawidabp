@@ -189,11 +189,6 @@ module ApplicationHelper
       :class => (html_classes.join(' ') unless html_classes.blank?))
   end
 
-  # Devuelve el HTML de un vínculo para volver (history.back())
-  def link_to_back
-    link_to t('label.back'), '#', 'data-event' => 'historyBack'
-  end
-
   # Devuelve el HTML de un vínculo para mostrar el cuadro de búsqueda
   def link_to_search
     search_link = link_to t('label.search'), '#', :onclick => 'Search.show(); return false;',
