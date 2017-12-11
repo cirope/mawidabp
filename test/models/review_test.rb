@@ -521,11 +521,6 @@ class ReviewTest < ActiveSupport::TestCase
 
   test 'best practice ids' do
     assert @review.control_objective_items.present?
-    assert_difference '@review.control_objective_items.size', 2 do
-      @review.best_practice_ids = [
-        best_practices(:bcra_A4609).id
-      ]
-    end
 
     if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
       assert_difference '@review.control_objective_items.size', 2 do
