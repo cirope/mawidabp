@@ -1192,7 +1192,7 @@
         observations: "Otras consideraciones"
       control:
         order: "Orden"
-        control: "Objetivo de control"
+        control: "Detalle objetivo de control"
         effects: "Posibles consecuencias"
         design_tests: "Pruebas de diseño"
         compliance_tests: "Pruebas de cumplimiento"
@@ -1216,7 +1216,7 @@
         work_papers: "Papeles de trabajo"
       control_objective_item/control:
         order: "Objetivo de control (orden)"
-        control: "Objetivo de control (objetivo de control)"
+        control: "Objetivo de control (detalle objetivo de control)"
         effects: "Objetivo de control (posibles consecuencias)"
         design_tests: "Objetivo de control (pruebas de diseño)"
         compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
