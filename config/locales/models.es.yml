@@ -150,7 +150,7 @@ es:
         business_unit_id: 'Ciclo'
         design_score: 'Calificación pruebas de diseño'
         compliance_score: 'Calificación pruebas de cumplimiento'
-        sustantive_score: 'Calificación pruebas sustantivas'
+        sustantive_score: 'Calificación pruebas sustantivas/cumplimiento'
       control_objective:
         name: 'Objetivo de control'
         relevance: 'Clave'
