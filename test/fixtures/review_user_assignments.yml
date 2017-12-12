@@ -19,6 +19,13 @@ current_review_manager:
   include_signature: true
   owner: false
 
+current_review_audited:
+  assignment_type: <%= ReviewUserAssignment::TYPES[:audited] %>
+  review: current_review
+  user: audited
+  include_signature: false
+  owner: true
+
 past_review_auditor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:auditor] %>
   review: past_review
