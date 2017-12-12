@@ -152,7 +152,7 @@ es:
         compliance_score: 'Calificación pruebas de cumplimiento'
         sustantive_score: 'Calificación pruebas sustantivas/cumplimiento'
       control_objective:
-        name: 'Objetivo de control'
+        name: 'Identificación objetivo de control'
         relevance: 'Clave'
         risk: 'Riesgo'
         obsolete: 'Obsoleto'

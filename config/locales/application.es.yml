@@ -1123,14 +1123,14 @@ es:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:
         order: "Orden"
-        control: "Controles"
+        control: "Objetivo de control"
         effects: "Posibles consecuencias"
         design_tests: "Pruebas de diseño"
         compliance_tests: "Pruebas de cumplimiento"
         sustantive_tests: "Pruebas sustantivas/cumplimiento"
       control_objective_item:
         control_objective_id: "Objetivo de control"
-        control_objective_text: "Objetivo de control"
+        control_objective_text: "Identificación objetivo de control"
         relevance: "Clave"
         design_score: "Calificación pruebas de diseño"
         compliance_score: "Calificación pruebas de cumplimiento"
@@ -1147,7 +1147,7 @@ es:
         work_papers: "Papeles de trabajo"
       control_objective_item/control:
         order: "Objetivo de control (orden)"
-        control: "Objetivo de control (controles)"
+        control: "Objetivo de control (objetivo de control)"
         effects: "Objetivo de control (posibles consecuencias)"
         design_tests: "Objetivo de control (pruebas de diseño)"
         compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
