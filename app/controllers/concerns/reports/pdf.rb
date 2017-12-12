@@ -62,7 +62,7 @@ module Reports::Pdf
     end
   end
 
-  def get_weaknesses_synthesis_table_data(weaknesses_count, weaknesses_count_by_risk, risk_levels)
+  def get_weaknesses_synthesis_table_data(final, weaknesses_count, weaknesses_count_by_risk, risk_levels)
     total_count = weaknesses_count_by_risk.sum(&:second)
 
     unless total_count == 0
@@ -93,7 +93,11 @@ module Reports::Pdf
             "#{count} (#{'%.2f' % percentage}%)" : '-'
           percentage_total += percentage
 
-          if count > 0 && rl == highest_risk && state[0].to_s == 'being_implemented'
+          if !final && count > 0 && rl == highest_risk && state[0].to_s == 'awaiting'
+            column_row[rl.first] << '****'
+          end
+
+          if !final && count > 0 && rl == highest_risk && state[0].to_s == 'being_implemented'
             column_row[rl.first] << '**'
           end
         end
@@ -101,7 +105,11 @@ module Reports::Pdf
         column_row['count'] = sub_total_count > 0 ?
           "<strong>#{sub_total_count} (#{'%.1f' % percentage_total}%)</strong>" : '-'
 
-        if state.first.to_s == 'being_implemented' && sub_total_count != 0
+        if !final && state.first.to_s == 'awaiting' && sub_total_count != 0
+          column_row['count'] << '***'
+        end
+
+        if !final && state.first.to_s == 'being_implemented' && sub_total_count != 0
           column_row['count'] << '*'
         end
 
@@ -125,8 +133,9 @@ module Reports::Pdf
     end
   end
 
-  def add_weaknesses_by_state_table(pdf, weaknesses_count, oportunities_count,
-      repeated_count, being_implemented_resume, audit_type_symbol = :internal)
+  def add_weaknesses_by_state_table(pdf, final, weaknesses_count,
+      oportunities_count, repeated_count, awaiting_resume,
+      being_implemented_resume, audit_type_symbol = :internal)
 
     total_weaknesses = weaknesses_count.values.sum
     total_oportunities = oportunities_count.values.sum
@@ -134,14 +143,14 @@ module Reports::Pdf
 
     if totals > 0
       columns = [
-        [Finding.human_attribute_name(:state), 20],
-        [t('conclusion_committee_report.weaknesses_by_state.weaknesses_column'), 20]
+        [Finding.human_attribute_name(:state), 40],
+        [t('conclusion_committee_report.weaknesses_by_state.weaknesses_column'), 30]
       ]
       column_data = []
 
-      if audit_type_symbol == :internal
+      if audit_type_symbol == :internal && !HIDE_OPORTUNITIES
         columns << [
-          t('conclusion_committee_report.weaknesses_by_state.oportunities_column'), 20]
+          t('conclusion_committee_report.weaknesses_by_state.oportunities_column'), 30]
       end
 
       column_headers, column_widths = [], []
@@ -164,11 +173,17 @@ module Reports::Pdf
           "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)"
         ]
 
-        if audit_type_symbol == :internal
+        if audit_type_symbol == :internal && !HIDE_OPORTUNITIES
           column_data.last << "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
         end
 
-        if state.first.to_s == 'being_implemented'
+        if !final && state.first.to_s == 'awaiting'
+          if column_data.last[1] != '0'
+            column_data.last[1] << ' **'
+          end
+        end
+
+        if !final && state.first.to_s == 'being_implemented'
           if column_data.last[1] != '0'
             column_data.last[1] << ' *'
           end
@@ -180,7 +195,7 @@ module Reports::Pdf
         "<strong>#{total_weaknesses}</strong>"
       ]
 
-      if audit_type_symbol == :internal
+      if audit_type_symbol == :internal && !HIDE_OPORTUNITIES
         column_data.last << "<strong>#{total_oportunities}</strong>"
       end
 
@@ -197,7 +212,10 @@ module Reports::Pdf
         end
       end
 
-      add_being_implemented_resume(pdf, being_implemented_resume)
+      unless final
+        add_being_implemented_resume(pdf, being_implemented_resume)
+        add_being_implemented_resume(pdf, awaiting_resume, 2)
+      end
 
       if repeated_count > 0
         pdf.move_down((PDF_FONT_SIZE * 0.5).round)
@@ -277,6 +295,40 @@ module Reports::Pdf
     respond_to do |format|
       format.html { redirect_to @report_path }
       format.js { render 'shared/pdf_report' }
+    end
+  end
+
+  def fill_counts_for rl, highest_risk, weaknesses, counts, highest_counts
+    weaknesses.each do |w|
+      unless w.stale?
+        unless w.rescheduled?
+          counts[:current] += 1
+
+          if rl == highest_risk
+            highest_counts[:current] += 1
+          end
+        else
+          counts[:current_rescheduled] += 1
+
+          if rl == highest_risk
+            highest_counts[:current_rescheduled] += 1
+          end
+        end
+      else
+        unless w.rescheduled?
+          counts[:stale] += 1
+
+          if rl == highest_risk
+            highest_counts[:stale] += 1
+          end
+        else
+          counts[:stale_rescheduled] += 1
+
+          if rl == highest_risk
+            highest_counts[:stale_rescheduled] += 1
+          end
+        end
+      end
     end
   end
 end
