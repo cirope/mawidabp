@@ -178,13 +178,13 @@ module Reports::Pdf
         end
 
         if !final && state.first.to_s == 'awaiting'
-          if column_data.last[1] != '0'
+          if column_data.last[1] != '0 (0.00%)'
             column_data.last[1] << ' **'
           end
         end
 
         if !final && state.first.to_s == 'being_implemented'
-          if column_data.last[1] != '0'
+          if column_data.last[1] != '0 (0.00%)'
             column_data.last[1] << ' *'
           end
         end
