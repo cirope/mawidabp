@@ -154,4 +154,19 @@ module ReviewsHelper
       end
     end
   end
+
+  def audit_team_for review
+    audit_team = review.review_user_assignments.reload.select &:in_audit_team?
+
+    ActiveSupport::SafeBuffer.new.tap do |buffer|
+      audit_team.each do |rua|
+        buffer << content_tag(:span, class: 'text-muted') do
+          content_tag :span, nil, class: 'glyphicon glyphicon-user',
+            title: rua.user.full_name
+        end
+
+        buffer << ' '
+      end
+    end
+  end
 end

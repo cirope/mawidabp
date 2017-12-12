@@ -19,9 +19,11 @@ class ReviewsController < ApplicationController
     @title = t 'review.index_title'
     scope  = Review.list.
       includes(:conclusion_final_review, :period, :tags, {
-        plan_item: :business_unit
+        plan_item: :business_unit,
+        review_user_assignments: :user
       }).
-      references(:periods, :conclusion_final_review)
+      merge(ReviewUserAssignment.audit_team).
+      references(:periods, :conclusion_final_review, :user)
 
     tagged_reviews = build_tag_search_for scope
 

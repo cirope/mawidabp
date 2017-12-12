@@ -87,6 +87,43 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/index'
   end
 
+  test 'list reviews with search on audit team' do
+    login
+    get :index, params: {
+      search: {
+        query: 'sup',
+        columns: ['audit_team']
+      }
+    }
+    assert_response :success
+    assert_not_nil assigns(:reviews)
+    assert_equal 6, assigns(:reviews).count
+    assert_template 'reviews/index'
+
+    get :index, params: {
+      search: {
+        query: 'first',
+        columns: ['audit_team']
+      }
+    }
+    assert_response :success
+    assert_not_nil assigns(:reviews)
+    assert_equal 1, assigns(:reviews).count
+    assert_template 'reviews/index'
+
+    # No search by audited kind
+    get :index, params: {
+      search: {
+        query: 'audited',
+        columns: ['audit_team']
+      }
+    }
+    assert_response :success
+    assert_not_nil assigns(:reviews)
+    assert_equal 0, assigns(:reviews).count
+    assert_template 'reviews/index'
+  end
+
   test 'show review' do
     login
     get :show, params: {
