@@ -46,8 +46,8 @@ es:
         one: 'Registro de error'
         other: 'Registros de errores'
       finding:
-        one: 'Hallazgo'
-        other: 'Hallazgos'
+        one: 'Observación'
+        other: 'Observaciones'
       image_model:
         one: 'Imagen'
         other: 'Imágenes'

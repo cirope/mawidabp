@@ -417,7 +417,7 @@ es:
       control_objective_work_papers: "Papeles de trabajo del objetivo de control"
       control_objective_weaknesses: "Observaciones"
       control_objective_oportunities: "Oportunidades"
-      finding_work_papers: "Papeles de trabajo del hallazgo"
+      finding_work_papers: "Papeles de trabajo de la observación"
 
   control_objective:
     errors:
@@ -870,7 +870,7 @@ es:
     suggest_past_findings: 'Sugerir observaciones / oportunidades de mejora solucionadas recientes'
     without_suggested_findings: 'Sin observaciones / oportunidades de mejora pendientes'
     without_past_implemented_audited_findings: 'Sin observaciones / oportunidades de mejora solucionadas recientes'
-    suggested_findings_for: 'Hallazgos sugeridos para %{process_control}'
+    suggested_findings_for: 'Observaciones sugeridas para %{process_control}'
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
@@ -915,9 +915,9 @@ es:
     notes: "Notas"
     estimated_amount: "Costo estimado en plan de trabajo"
     other_actions: "Acciones"
-    recode_findings: "Recodificar hallazgos"
-    recode_findings_by_risk: "Recodificar hallazgos por riesgo"
-    findings_recoded: "Hallazgos recodificados correctamente"
+    recode_findings: "Recodificar observaciones"
+    recode_findings_by_risk: "Recodificar observaciones por riesgo"
+    findings_recoded: "Observaciones recodificadas correctamente"
     work_papers_marked_as_finished: "Papeles de trabajo marcados como conforme auditor"
     work_papers_marked_as_revised: "Papeles de trabajo marcados como revisados supervisor"
     review_qualification_explanation: "La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
@@ -977,8 +977,8 @@ es:
         one: "Se ha reasignado la responsabilidad del informe en ejecución %{reviews}"
         other: "Se han reasignado la responsabilidad de los informes en ejecución %{reviews}"
       reassigned_to_findings_from_reviews:
-        one: "Se han reasignado los hallazgos pendientes del informe %{reviews}"
-        other: "Se han reasignado las hallazgos pendientes de los informes %{reviews}"
+        one: "Se han reasignado las observaciones pendientes del informe %{reviews}"
+        other: "Se han reasignado las observaciones pendientes de los informes %{reviews}"
     responsibility_release:
       title: "Liberación de responsabilidades"
     unconfirmed_findings: "Observaciones sin confirmar a la fecha"
