@@ -9,7 +9,7 @@ module ConclusionReviews::AlternativePDF
     put_alternative_cover_on  pdf
     put_executive_summary_on  pdf
     put_detailed_review_on    pdf
-    put_annex_on              pdf
+    put_annex_on              pdf, organization
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -43,7 +43,7 @@ module ConclusionReviews::AlternativePDF
         pdf.move_down PDF_FONT_SIZE * 2
       end
 
-      pdf.add_description_item Review.model_name.human, review.identification,
+      pdf.add_description_item ::Review.model_name.human, review.identification,
         0, false, items_font_size
       pdf.add_description_item issue_date_title, I18n.l(issue_date),
         0, false, items_font_size
@@ -88,7 +88,7 @@ module ConclusionReviews::AlternativePDF
       put_recipients_on          pdf
     end
 
-    def put_annex_on pdf
+    def put_annex_on pdf, organization
       title  = I18n.t 'conclusion_review.annex.title'
       legend = I18n.t 'conclusion_review.annex.legend'
 
@@ -99,7 +99,7 @@ module ConclusionReviews::AlternativePDF
       pdf.text legend, align: :justify
 
       put_conclusion_options_on pdf
-      put_review_scope_on       pdf
+      put_review_scope_on       pdf, organization
       put_staff_on              pdf
       put_sectors_on            pdf
     end
@@ -111,11 +111,16 @@ module ConclusionReviews::AlternativePDF
       pdf.text text, align: :center, style: :bold
     end
 
-    def put_review_scope_on pdf
-      pdf.move_down PDF_FONT_SIZE
-      put_control_objective_items_table_on     pdf
-      pdf.move_down PDF_FONT_SIZE
-      put_control_objective_items_reference_on pdf
+    def put_review_scope_on pdf, organization
+      if show_review_process_control_comments? organization
+        pdf.move_down PDF_FONT_SIZE
+        put_process_control_comments_table_on pdf
+      else
+        pdf.move_down PDF_FONT_SIZE
+        put_control_objective_items_table_on pdf
+        pdf.move_down PDF_FONT_SIZE
+        put_control_objective_items_reference_on pdf
+      end
     end
 
     def put_staff_on pdf
@@ -140,6 +145,27 @@ module ConclusionReviews::AlternativePDF
       pdf.move_down PDF_FONT_SIZE
 
       pdf.text sectors, align: :justify
+    end
+
+    def put_process_control_comments_table_on pdf
+      row_data = process_control_comments_row_data
+
+      if row_data.present?
+        data          = row_data.insert 0, process_control_comment_column_headers
+        table_options = pdf.default_table_options process_control_comment_column_widths(pdf)
+
+        pdf.font_size PDF_FONT_SIZE do
+          pdf.table data, table_options do
+            row(0).style(
+              background_color: 'cccccc',
+              padding: [
+                (PDF_FONT_SIZE * 0.5).round,
+                (PDF_FONT_SIZE * 0.3).round
+              ]
+            )
+          end
+        end
+      end
     end
 
     def put_control_objective_items_table_on pdf
@@ -195,7 +221,7 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_review_survey_on pdf
-      title = Review.human_attribute_name 'survey'
+      title = ::Review.human_attribute_name 'survey'
 
       pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
@@ -234,7 +260,7 @@ module ConclusionReviews::AlternativePDF
     def put_risk_exposure_on pdf
       risk_exposure_title = I18n.t 'conclusion_review.executive_summary.risk_exposure'
       risk_exposure       = '<b>%s</b>' % [
-        Review.human_attribute_name('risk_exposure'),
+        ::Review.human_attribute_name('risk_exposure'),
         review.risk_exposure
       ].join(': ')
 
@@ -478,13 +504,43 @@ module ConclusionReviews::AlternativePDF
 
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.each do |coi|
-          image = CONCLUSION_SCOPE_IMAGES.fetch(coi.auditor_comment) { 'scope_not_apply.png' }
+          image = CONCLUSION_SCOPE_IMAGES.fetch(coi.auditor_comment) do
+            'scope_not_apply.png'
+          end
 
           row_data << [
             "<sup>(#{count += 1})</sup> #{coi.control_objective_text}",
             pdf_score_image_row(image, fit: [12, 12]).merge(image_options),
             {
               content:       coi.auditor_comment&.upcase,
+              border_widths: [1, 1, 1, 0]
+            }
+          ]
+        end
+      end
+
+      row_data
+    end
+
+    def process_control_comments_row_data
+      row_data      = []
+      image_options = { vposition: :top, border_widths: [1, 0, 1, 0] }
+
+      review.grouped_control_objective_items.each do |process_control, cois|
+        pcc = review.process_control_comments.detect do |_pcc|
+          _pcc.process_control_id == process_control.id
+        end
+
+        if pcc
+          image = CONCLUSION_SCOPE_IMAGES.fetch(pcc.auditor_comment) do
+            'scope_not_apply.png'
+          end
+
+          row_data << [
+            process_control.name,
+            pdf_score_image_row(image, fit: [12, 12]).merge(image_options),
+            {
+              content:       pcc.auditor_comment&.upcase,
               border_widths: [1, 1, 1, 0]
             }
           ]
@@ -501,7 +557,18 @@ module ConclusionReviews::AlternativePDF
       ]
     end
 
+    def process_control_comment_column_headers
+      [
+        "<b>#{I18n.t 'conclusion_review.annex.scope_column'}</b> ",
+        { content: "<b>#{self.class.human_attribute_name 'conclusion'}</b>", colspan: 2 }
+      ]
+    end
+
     def control_objective_column_widths pdf
+      [70, 4, 26].map { |percent| pdf.percent_width percent }
+    end
+
+    def process_control_comment_column_widths pdf
       [70, 4, 26].map { |percent| pdf.percent_width percent }
     end
 
@@ -532,5 +599,12 @@ module ConclusionReviews::AlternativePDF
       image_path = PDF_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
 
       { image: image_path, fit: fit, position: :center, vposition: :center }
+    end
+
+    def show_review_process_control_comments? organization
+      prefix = organization&.prefix
+
+      SHOW_REVIEW_PROCESS_CONTROL_COMMENTS &&
+        ORGANIZATIONS_WITH_PROCESS_CONTROL_COMMENTS.include?(prefix)
     end
 end

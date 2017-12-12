@@ -23,8 +23,9 @@ module ControlObjectiveItems::BusinessUnitScores
     def add_business_unit_score_from bu
       business_unit_scores_ids = business_unit_scores.map &:business_unit_id
       is_not_included          = business_unit_scores_ids.exclude? bu.id
-      default_score            =
-        Parameters::Qualification::QUALIFICATION_TYPES[:excellent]
+      default_score            = SHOW_SHORT_QUALIFICATIONS ?
+                                   ::QUALIFICATION_TYPES[:no] :
+                                   ::QUALIFICATION_TYPES[:excellent]
 
       if is_not_included
         business_unit_scores.build business_unit_id: bu.id,

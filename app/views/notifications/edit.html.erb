@@ -51,8 +51,7 @@
   <div>
     <div class="pull-right">
       <%= link_to_show @notification %> |
-      <%= link_to_index notifications_path %> |
-      <%= link_to_back %>
+      <%= link_to_index notifications_path %>
     </div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit t('label.save'), class: 'btn btn-primary' %>

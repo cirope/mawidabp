@@ -2,6 +2,7 @@ class BestPractice < ApplicationRecord
   include Auditable
   include BestPractices::Defaults
   include BestPractices::DestroyValidation
+  include BestPractices::JSON
   include BestPractices::ProcessControls
   include BestPractices::Search
   include BestPractices::Validations

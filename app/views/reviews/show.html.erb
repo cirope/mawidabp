@@ -104,31 +104,29 @@
           <strong><%= ControlObjectiveItem.human_attribute_name :effectiveness %>:</strong>
           <%= "#{coi.effectiveness}%" %>
         </p>
-        <p>
-          <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
-          <%= coi.design_score_text %>
-        </p>
       <% end %>
+      <p>
+        <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
+        <%= coi.design_score_text %>
+      </p>
       <div>
         <strong><%= Control.human_attribute_name :design_tests %>:</strong>
         <%= simple_format coi.control.design_tests %>
       </div>
-      <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+      <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
         <p>
           <strong><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</strong>
           <%= coi.compliance_score_text %>
         </p>
+        <div>
+          <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
+          <%= simple_format coi.control.compliance_tests %>
+        </div>
       <% end %>
-      <div>
-        <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
-        <%= simple_format coi.control.compliance_tests %>
-      </div>
-      <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
-        <p>
-          <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
-          <%= coi.sustantive_score_text %>
-        </p>
-      <% end %>
+      <p>
+        <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
+        <%= coi.sustantive_score_text %>
+      </p>
       <div>
         <strong><%= Control.human_attribute_name :sustantive_tests %>:</strong>
         <%= simple_format coi.control.sustantive_tests %>
@@ -173,6 +171,5 @@
 
 <div>
   <%= link_to_edit edit_review_path(@review) %> |
-  <%= link_to_index reviews_path %> |
-  <%= link_to_back %>
+  <%= link_to_index reviews_path %>
 </div>

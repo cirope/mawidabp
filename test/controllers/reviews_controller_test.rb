@@ -122,10 +122,12 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'create review' do
+    expected_coi_count = ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION ? 5 : 3
+
     login
     assert_difference ['Review.count', 'FindingReviewAssignment.count', 'Tagging.count'] do
-      # Se crean 2 con el 'process_control_ids' y uno con 'control_objective_ids'
-      assert_difference 'ControlObjectiveItem.count', 3 do
+      # Se crean 2 con 'best_practice_ids', 2 con 'process_control_ids' y uno con 'control_objective_ids'
+      assert_difference 'ControlObjectiveItem.count', expected_coi_count do
         assert_difference 'FileModel.count' do
           assert_difference 'ReviewUserAssignment.count', 4 do
             post :create, params: {
@@ -139,6 +141,7 @@ class ReviewsControllerTest < ActionController::TestCase
                 risk_exposure: 'high',
                 manual_score: 800,
                 include_sox: 'no',
+                best_practice_ids: [best_practices(:bcra_A4609).id],
                 process_control_ids: [process_controls(:security_management).id],
                 control_objective_ids: [control_objectives(:security_policy_3_1).id],
                 file_model_attributes: {
@@ -249,28 +252,6 @@ class ReviewsControllerTest < ActionController::TestCase
 
     assert_redirected_to reviews_url
     assert_equal I18n.t('review.errors.can_not_be_destroyed'), flash.alert
-  end
-
-  test 'review data' do
-    login
-
-    review_data = nil
-
-    get :review_data, xhr: true, params: {
-      id: reviews(:current_review).id,
-      format: :json
-    }
-    assert_response :success
-    assert_nothing_raised do
-      review_data = ActiveSupport::JSON.decode(@response.body)
-    end
-
-    assert_not_nil review_data
-    assert_not_nil review_data['score_text']
-    assert_not_nil review_data['plan_item']
-    assert_not_nil review_data['plan_item']['project']
-    assert_not_nil review_data['business_unit']
-    assert_not_nil review_data['business_unit']['name']
   end
 
   test 'assignment type refresh' do

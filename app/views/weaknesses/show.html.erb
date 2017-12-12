@@ -285,9 +285,8 @@
 
 <div>
   <%= link_to_edit edit_weakness_path(@weakness) %> |
-  <%= link_to_index weaknesses_path %> |
+  <%= link_to_index weaknesses_path %>
   <% if !@weakness.is_in_a_final_review? && @weakness.pending? && !@weakness.incomplete? %>
-    <%= link_to t('weakness.show_follow_up'), finding_path('incomplete', @weakness) %> |
+    | <%= link_to t('weakness.show_follow_up'), finding_path('incomplete', @weakness) %>
   <% end %>
-  <%= link_to_back %>
 </div>

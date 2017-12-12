@@ -10,8 +10,7 @@
   <%= link_to t('conclusion_final_review.create_bundle'), '#',
     data: { toggle: 'modal', target: "#customize_report" } %> |
   <%= link_to t('conclusion_final_review.send_by_email'),
-    :action => :compose_email, :id => @conclusion_final_review %> |
-  <%= link_to_back %>
+    :action => :compose_email, :id => @conclusion_final_review %>
 <% end %>
 
 <%= render 'form' %>

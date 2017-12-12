@@ -422,6 +422,8 @@
     correctly_created: "Objetivo de control agregado correctamente."
     correctly_updated: "Objetivo de control actualizado correctamente."
     stale_object_error: "El objetivo de control no fue actualizado, intente nuevamente."
+    no_weaknesses: "Objetivo de control sin observaciones"
+    no_oportunities: "Objetivo de control sin oportunidades de mejora"
     view_all_weaknesses: "Ver listado de observaciones"
     view_all_oportunities: "Ver listado de oportunidades de mejora"
     add_oportunity: "Agregar nueva oportunidad de mejora"
@@ -441,7 +443,7 @@
       without_audit_date: "sin fecha de auditoría"
       without_effects: "sin posibles consecuencias"
       without_controls: "sin controles"
-      without_design_tests: "sin evaluación de diseño"
+      without_design_tests: "sin pruebas de diseño"
       without_compliance_tests: "sin pruebas de cumplimiento"
       without_sustantive_tests: "sin pruebas sustantivas"
       without_auditor_comment: "sin conclusiones del auditor"
@@ -940,6 +942,7 @@
     control_objective_items_label: "Objetivos de control"
     add_control_objective: "Agregar un nuevo objetivo de control"
     add_process_control: "Agregar un nuevo proceso"
+    add_best_practice: "Agregar una nueva buena práctica"
     add_tagging: "Agregar etiqueta"
     associated: "Asociados"
     available: "Disponibles"
@@ -1191,14 +1194,14 @@
         order: "Orden"
         control: "Controles"
         effects: "Posibles consecuencias"
-        design_tests: "Evaluación de diseño"
+        design_tests: "Pruebas de diseño"
         compliance_tests: "Pruebas de cumplimiento"
         sustantive_tests: "Pruebas sustantivas"
       control_objective_item:
         control_objective_id: "Objetivo de control"
         control_objective_text: "Objetivo de control"
         relevance: "Clave"
-        design_score: "Calificación evaluación de diseño"
+        design_score: "Calificación pruebas de diseño"
         compliance_score: "Calificación pruebas de cumplimiento"
         sustantive_score: "Calificación pruebas sustantivas"
         audit_date: "Fecha de auditoría"
@@ -1215,7 +1218,7 @@
         order: "Objetivo de control (orden)"
         control: "Objetivo de control (controles)"
         effects: "Objetivo de control (posibles consecuencias)"
-        design_tests: "Objetivo de control (evaluación de diseño)"
+        design_tests: "Objetivo de control (pruebas de diseño)"
         compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
         sustantive_tests: "Objetivo de control (pruebas sustantivas)"
       control_objective_item/work_papers:
@@ -1232,7 +1235,7 @@
         file_file_size: "Papel de trabajo (tamaño de archivo)"
       control_objective_item/business_unit_scores:
         business_unit_id: 'Calificación de ciclo (ciclo)'
-        design_score: 'Calificación de ciclo (evaluación de diseño)'
+        design_score: 'Calificación de ciclo (pruebas de diseño)'
         compliance_score: 'Calificación de ciclo (pruebas de cumplimiento)'
         sustantive_score: 'Calificación de ciclo (pruebas sustantivas)'
       cost:

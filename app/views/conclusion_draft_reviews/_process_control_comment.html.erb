@@ -1,0 +1,15 @@
+<fieldset class="process_control_comment">
+  <div class="form-inputs row">
+    <div class="col-md-6">
+      <%= f.input :process_control, label: false, input_html: { disabled: true, value: f.object.process_control&.name } %>
+      <%= f.input :process_control_id, as: :hidden %>
+    </div>
+    <div class="col-md-6">
+      <% if SHOW_CONCLUSION_AS_OPTIONS %>
+        <%= f.input :auditor_comment, collection: auditor_comment_options, label: false, prompt: true %>
+      <% else %>
+        <%= f.input :auditor_comment, label: false, input_html: { rows: 5 } %>
+      <% end %>
+    </div>
+  </div>
+</fieldset>

@@ -18,4 +18,17 @@ module ConclusionDraftReviewsHelper
   def show_has_final_info
     show_info(t('conclusion_draft_review.has_final_review'), class: 'text-danger')
   end
+
+  def show_review_process_control_comments?
+    prefix = current_organization&.prefix
+
+    SHOW_REVIEW_PROCESS_CONTROL_COMMENTS &&
+      ORGANIZATIONS_WITH_PROCESS_CONTROL_COMMENTS.include?(prefix)
+  end
+
+  def process_control_comments_form conclusion_review
+    simple_form_for conclusion_review do |f|
+      render 'process_control_comments', f: f, readonly: false
+    end
+  end
 end

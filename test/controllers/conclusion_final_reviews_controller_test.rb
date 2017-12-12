@@ -99,13 +99,11 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_final_reviews/new'
   end
 
-  test 'new json conclusion final review' do
+  test 'new js conclusion final review' do
     login
-    get :new, :params => { :format => 'json' }, xhr: true
+    get :new, :params => { :format => 'js' }, xhr: true
     assert_response :success
-    assert_nothing_raised do
-      ActiveSupport::JSON.decode(@response.body)
-    end
+    assert_equal @response.content_type, Mime[:js]
   end
 
   test 'new for existent conclusion final review' do

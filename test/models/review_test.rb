@@ -519,6 +519,24 @@ class ReviewTest < ActiveSupport::TestCase
     end
   end
 
+  test 'best practice ids' do
+    assert @review.control_objective_items.present?
+
+    if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+      assert_difference '@review.control_objective_items.size', 2 do
+        @review.best_practice_ids = [
+          best_practices(:bcra_A4609).id
+        ]
+      end
+    else
+      assert_no_difference '@review.control_objective_items.size' do
+        @review.best_practice_ids = [
+          best_practices(:bcra_A4609).id
+        ]
+      end
+    end
+  end
+
   test 'procedure control subitem ids' do
     assert @review.control_objective_items.present?
     assert_difference '@review.control_objective_items.size' do
@@ -718,6 +736,27 @@ class ReviewTest < ActiveSupport::TestCase
 
     # Should ignore the prefix
     assert_equal '023', Review.next_identification_number(2017)
+  end
+
+  test 'build process control comments' do
+    expected_count = @review.process_controls.count
+
+    @review.process_control_comments.destroy_all
+
+    assert expected_count > 0
+
+    assert_difference '@review.process_control_comments.size', expected_count do
+      @review.build_process_control_comments
+    end
+  end
+
+  test 'clean stale process control comments' do
+    @review.process_control_comments.create! auditor_comment: 'Test',
+      process_control_id: process_controls(:security_policy).id
+
+    assert_difference '@review.process_control_comments.count', -1 do
+      @review.save!
+    end
   end
 
   private

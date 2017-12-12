@@ -50,26 +50,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
       respond_to do |format|
         format.html # new.html.erb
-        format.json { render json: @conclusion_final_review.to_json(
-            include: {review: {
-                only: [],
-                methods: :score_text,
-                include: {
-                  business_unit: {only: :name},
-                  plan_item: {only: :project}
-                },
-              }
-            },
-            only: [
-              :conclusion,
-              :applied_procedures,
-              :evolution,
-              :evolution_justification,
-              :recipients,
-              :sectors,
-              :observations
-            ])
-        }
+        format.js   # new.js.erb
       end
     else
       redirect_to edit_conclusion_final_review_url(conclusion_final_review)
@@ -391,7 +372,13 @@ class ConclusionFinalReviewsController < ApplicationController
       params.require(:conclusion_final_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
         :summary, :recipients, :evolution, :evolution_justification, :sectors,
-        :observations, :lock_version
+        :observations, :lock_version,
+        review_attributes: [
+          :id, :manual_score, :lock_version,
+          process_control_comments_attributes: [
+            :id, :process_control_id, :auditor_comment
+          ]
+        ]
       )
     end
 

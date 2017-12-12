@@ -58,10 +58,12 @@
         <div class="col-md-2">
           <%= c_f.input :design_tests, input_html: { rows: 4 } %>
         </div>
-        <div class="col-md-3">
-          <%= c_f.input :compliance_tests, input_html: { rows: 4 } %>
-        </div>
-        <div class="col-md-2">
+        <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
+          <div class="col-md-3">
+            <%= c_f.input :compliance_tests, input_html: { rows: 4 } %>
+          </div>
+        <% end %>
+        <div class="col-md-<%= HIDE_CONTROL_COMPLIANCE_TESTS ? 5 : 2 %>">
           <%= c_f.input :sustantive_tests, input_html: { rows: 4 } %>
         </div>
         <% unless HIDE_CONTROL_EFFECTS %>

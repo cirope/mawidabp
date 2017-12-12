@@ -2,8 +2,7 @@
   <%= link_to_show @plan %> |
   <%= link_to_stats [:stats, @plan] %> |
   <%= link_to_index plans_path %> |
-  <%= render 'shared/downloads', links: plan_download_options %> |
-  <%= link_to_back %>
+  <%= render 'shared/downloads', links: plan_download_options %>
 <% end %>
 
 <%= render 'form' %>
