@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171204231746) do
+ActiveRecord::Schema.define(version: 20171211135809) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -575,6 +575,16 @@ ActiveRecord::Schema.define(version: 20171204231746) do
     t.index ["role_id"], name: "index_privileges_on_role_id"
   end
 
+  create_table "process_control_comments", force: :cascade do |t|
+    t.text "auditor_comment"
+    t.bigint "review_id", null: false
+    t.bigint "process_control_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["process_control_id"], name: "index_process_control_comments_on_process_control_id"
+    t.index ["review_id"], name: "index_process_control_comments_on_review_id"
+  end
+
   create_table "process_controls", id: :serial, force: :cascade do |t|
     t.string "name"
     t.integer "order"
@@ -888,6 +898,8 @@ ActiveRecord::Schema.define(version: 20171204231746) do
   add_foreign_key "polls", "users", column: "affected_user_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "polls", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "privileges", "roles", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "process_control_comments", "process_controls", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "process_control_comments", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "process_controls", "best_practices", on_update: :restrict, on_delete: :restrict
   add_foreign_key "resource_classes", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "resources", "resource_classes", on_update: :restrict, on_delete: :restrict

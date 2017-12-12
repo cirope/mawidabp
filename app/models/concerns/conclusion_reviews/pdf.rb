@@ -36,7 +36,7 @@ module ConclusionReviews::PDF
 
     def put_cover_on pdf, organization
       title_options     = [(PDF_FONT_SIZE * 1.5).round, :center, false]
-      cover_text        = "\n\n\n\n#{Review.model_name.human.upcase}\n\n"
+      cover_text        = "\n\n\n\n#{::Review.model_name.human.upcase}\n\n"
       cover_bottom_text = "#{review.plan_item.business_unit.name}\n"
 
       cover_text << "#{review.identification}\n\n"

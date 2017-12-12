@@ -72,6 +72,9 @@ es:
       plan_item:
         one: 'Proyecto en plan'
         other: 'Proyectos en plan'
+      process_control_comment:
+        one: 'Comentario del auditor (proceso)'
+        other: 'Comentarios del auditor (procesos)'
       setting:
         one: 'Configuración'
         other: 'Configuraciones'
@@ -296,6 +299,9 @@ es:
         image_content_type: 'Isologotipo (tipo de archivo)'
         image_file_size: 'Isologotipo (tamaño)'
         one: 'Isologotipo'
+      process_control_comment:
+        auditor_comment: 'Conclusiones del auditor'
+        process_control: 'Proceso'
       setting:
         name: 'Nombre'
         value: 'Valor'

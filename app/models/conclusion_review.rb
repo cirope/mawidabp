@@ -11,6 +11,7 @@ class ConclusionReview < ApplicationRecord
   include ConclusionReviews::FindingsFollowUpPDF
   include ConclusionReviews::FindingsSheetPDF
   include ConclusionReviews::PDF
+  include ConclusionReviews::Review
   include ConclusionReviews::Scopes
   include ConclusionReviews::Search
   include ConclusionReviews::SortColumns
@@ -19,7 +20,6 @@ class ConclusionReview < ApplicationRecord
 
   attr_readonly :review_id
 
-  belongs_to :review
   belongs_to :organization
   has_one :plan_item, through: :review
   has_many :control_objective_items, through: :review

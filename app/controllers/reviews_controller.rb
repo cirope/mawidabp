@@ -6,8 +6,8 @@ class ReviewsController < ApplicationController
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
-    :show, :edit, :update, :destroy, :review_data, :download_work_papers,
-    :survey_pdf, :finished_work_papers, :recode_findings, :recode_findings_by_risk
+    :show, :edit, :update, :destroy, :download_work_papers, :survey_pdf,
+    :finished_work_papers, :recode_findings, :recode_findings_by_risk
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -122,24 +122,6 @@ class ReviewsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(reviews_url) }
-    end
-  end
-
-  # Lista los informes del periodo indicado
-  #
-  # * GET /reviews/review_data/1.json
-  def review_data
-    respond_to do |format|
-      format.json  { render json: @review.to_json(
-        only: [],
-          methods: :score_text,
-          include: {
-            business_unit_type: { only: [:sectors, :recipients] },
-            business_unit: { only: :name },
-            plan_item: { only: :project }
-          }
-        )
-      }
     end
   end
 
@@ -495,7 +477,6 @@ class ReviewsController < ApplicationController
 
     def load_privileges
       @action_privileges.update(
-        review_data: :read,
         download_work_papers: :read,
         assignment_type_refresh: :read,
         plan_item_refresh: :read,

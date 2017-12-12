@@ -1,0 +1,4 @@
+security_policy_on_current:
+  auditor_comment: Some comment
+  process_control: security_management
+  review: review_with_conclusion

@@ -230,7 +230,6 @@ Rails.application.routes.draw do
       get :suggested_findings
       get :suggested_process_control_findings
       get :past_implemented_audited_findings
-      get :review_data
       get :weaknesses_and_oportunities
       get :download_work_papers
       get :estimated_amount

@@ -738,6 +738,27 @@ class ReviewTest < ActiveSupport::TestCase
     assert_equal '023', Review.next_identification_number(2017)
   end
 
+  test 'build process control comments' do
+    expected_count = @review.process_controls.count
+
+    @review.process_control_comments.destroy_all
+
+    assert expected_count > 0
+
+    assert_difference '@review.process_control_comments.size', expected_count do
+      @review.build_process_control_comments
+    end
+  end
+
+  test 'clean stale process control comments' do
+    @review.process_control_comments.create! auditor_comment: 'Test',
+      process_control_id: process_controls(:security_policy).id
+
+    assert_difference '@review.process_control_comments.count', -1 do
+      @review.save!
+    end
+  end
+
   private
 
     def clone_finding_user_assignments(finding)

@@ -31,8 +31,8 @@ module ConclusionReviews::SortColumns
 
       def identification_sort_options
         {
-          name:  Review.human_attribute_name(:identification),
-          field: "#{Review.quoted_table_name}.#{Review.qcn 'identification'} ASC"
+          name:  ::Review.human_attribute_name(:identification),
+          field: "#{::Review.quoted_table_name}.#{::Review.qcn 'identification'} ASC"
         }
       end
   end

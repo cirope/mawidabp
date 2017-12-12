@@ -1119,6 +1119,8 @@ es:
         evolution: "Evolución de la calificación"
         evolution_justification: "Justificación evolución"
         observations: "Otras consideraciones"
+      conclusion_review/review/process_control_comments:
+        auditor_comment: "Conclusiones del auditor (proceso)"
       control:
         order: "Orden"
         control: "Controles"

@@ -254,28 +254,6 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal I18n.t('review.errors.can_not_be_destroyed'), flash.alert
   end
 
-  test 'review data' do
-    login
-
-    review_data = nil
-
-    get :review_data, xhr: true, params: {
-      id: reviews(:current_review).id,
-      format: :json
-    }
-    assert_response :success
-    assert_nothing_raised do
-      review_data = ActiveSupport::JSON.decode(@response.body)
-    end
-
-    assert_not_nil review_data
-    assert_not_nil review_data['score_text']
-    assert_not_nil review_data['plan_item']
-    assert_not_nil review_data['plan_item']['project']
-    assert_not_nil review_data['business_unit']
-    assert_not_nil review_data['business_unit']['name']
-  end
-
   test 'assignment type refresh' do
     login
 

@@ -6,6 +6,7 @@ module Reviews::ControlObjectiveItems
     attr_accessor :control_objective_data, :process_control_data, :best_practice_data
 
     has_many :control_objective_items, dependent: :destroy, after_add: :assign_review
+    has_many :process_controls, -> { distinct }, through: :control_objective_items
 
     accepts_nested_attributes_for :control_objective_items, allow_destroy: true
   end
