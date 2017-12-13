@@ -169,4 +169,16 @@ module ReviewsHelper
       end
     end
   end
+
+  def link_to_excluded_control_objectives
+    path    = excluded_control_objectives_review_path @review
+    options = {
+      title: t('review.show_excluded_control_objectives'),
+      data:  { remote: true }
+    }
+
+    link_to path, options do
+      content_tag :span, nil, class: 'glyphicon glyphicon-scissors'
+    end
+  end
 end

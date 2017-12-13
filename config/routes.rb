@@ -233,6 +233,7 @@ Rails.application.routes.draw do
       get :weaknesses_and_oportunities
       get :download_work_papers
       get :estimated_amount
+      get :excluded_control_objectives
       patch :finished_work_papers
       patch :recode_findings
       patch :recode_findings_by_risk

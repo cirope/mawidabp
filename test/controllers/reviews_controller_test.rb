@@ -607,4 +607,15 @@ class ReviewsControllerTest < ActionController::TestCase
 
     assert_equal 0, tags.size # Sin resultados
   end
+
+  test 'excluded control objectives' do
+    login
+
+    get :excluded_control_objectives, xhr: true, params: {
+      id: reviews(:current_review).id, format: :js
+    }
+
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+  end
 end

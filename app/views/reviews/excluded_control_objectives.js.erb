@@ -1,0 +1,5 @@
+<% @review.grouped_control_objective_items.each do |pc, cois| %>
+  $('#process_control_<%= pc.id %>').
+    find('[data-messages]').
+    html('<%= j render('excluded_control_objectives', pc: pc, cois: cois) %>')
+<% end %>
