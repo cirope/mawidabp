@@ -121,7 +121,10 @@ module ReviewsHelper
     end
 
     if control_objective_item.exclude_from_score
-      html_classes << 'bg-danger'
+      highest_relevance = control_objective_item.relevance ==
+        ControlObjectiveItem.relevances_values.last
+
+      html_classes << (highest_relevance ? 'bg-danger' : 'bg-warning')
     end
 
     html_classes.join(' ')
