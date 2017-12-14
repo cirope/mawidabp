@@ -375,8 +375,8 @@ class ConclusionFinalReviewsController < ApplicationController
         :observations, :lock_version,
         review_attributes: [
           :id, :manual_score, :lock_version,
-          process_control_comments_attributes: [
-            :id, :process_control_id, :auditor_comment
+          best_practice_comments_attributes: [
+            :id, :best_practice_id, :auditor_comment
           ]
         ]
       )

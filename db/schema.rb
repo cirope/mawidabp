@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171211135809) do
+ActiveRecord::Schema.define(version: 20171213223706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,16 @@ ActiveRecord::Schema.define(version: 20171211135809) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_benefits_on_organization_id"
+  end
+
+  create_table "best_practice_comments", force: :cascade do |t|
+    t.text "auditor_comment"
+    t.bigint "review_id", null: false
+    t.bigint "best_practice_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["best_practice_id"], name: "index_best_practice_comments_on_best_practice_id"
+    t.index ["review_id"], name: "index_best_practice_comments_on_review_id"
   end
 
   create_table "best_practices", id: :serial, force: :cascade do |t|
@@ -575,16 +585,6 @@ ActiveRecord::Schema.define(version: 20171211135809) do
     t.index ["role_id"], name: "index_privileges_on_role_id"
   end
 
-  create_table "process_control_comments", force: :cascade do |t|
-    t.text "auditor_comment"
-    t.bigint "review_id", null: false
-    t.bigint "process_control_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["process_control_id"], name: "index_process_control_comments_on_process_control_id"
-    t.index ["review_id"], name: "index_process_control_comments_on_review_id"
-  end
-
   create_table "process_controls", id: :serial, force: :cascade do |t|
     t.string "name"
     t.integer "order"
@@ -845,6 +845,8 @@ ActiveRecord::Schema.define(version: 20171211135809) do
   add_foreign_key "achievements", "benefits", on_update: :restrict, on_delete: :restrict
   add_foreign_key "achievements", "findings", on_update: :restrict, on_delete: :restrict
   add_foreign_key "benefits", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "best_practice_comments", "best_practices", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "best_practice_comments", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practices", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practices", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_findings", "business_units", on_update: :restrict, on_delete: :restrict
@@ -898,8 +900,6 @@ ActiveRecord::Schema.define(version: 20171211135809) do
   add_foreign_key "polls", "users", column: "affected_user_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "polls", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "privileges", "roles", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "process_control_comments", "process_controls", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "process_control_comments", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "process_controls", "best_practices", on_update: :restrict, on_delete: :restrict
   add_foreign_key "resource_classes", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "resources", "resource_classes", on_update: :restrict, on_delete: :restrict

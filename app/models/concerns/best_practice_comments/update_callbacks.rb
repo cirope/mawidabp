@@ -1,4 +1,4 @@
-module ProcessControlComments::UpdateCallbacks
+module BestPracticeComments::UpdateCallbacks
   extend ActiveSupport::Concern
 
   included do

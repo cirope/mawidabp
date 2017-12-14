@@ -112,9 +112,9 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_review_scope_on pdf, organization
-      if show_review_process_control_comments? organization
+      if show_review_best_practice_comments? organization
         pdf.move_down PDF_FONT_SIZE
-        put_process_control_comments_table_on pdf
+        put_best_practice_comments_table_on pdf
       else
         pdf.move_down PDF_FONT_SIZE
         put_control_objective_items_table_on pdf
@@ -147,12 +147,13 @@ module ConclusionReviews::AlternativePDF
       pdf.text sectors, align: :justify
     end
 
-    def put_process_control_comments_table_on pdf
-      row_data = process_control_comments_row_data
+    def put_best_practice_comments_table_on pdf
+      row_data = best_practice_comments_row_data
 
       if row_data.present?
-        data          = row_data.insert 0, process_control_comment_column_headers
-        table_options = pdf.default_table_options process_control_comment_column_widths(pdf)
+        data          = row_data.insert 0, best_practice_comment_column_headers
+        column_widths = best_practice_comment_column_widths pdf
+        table_options = pdf.default_table_options column_widths
 
         pdf.font_size PDF_FONT_SIZE do
           pdf.table data, table_options do
@@ -173,7 +174,8 @@ module ConclusionReviews::AlternativePDF
 
       if row_data.present?
         data          = row_data.insert 0, control_objective_column_headers
-        table_options = pdf.default_table_options control_objective_column_widths(pdf)
+        column_widths = control_objective_column_widths pdf
+        table_options = pdf.default_table_options column_widths
 
         pdf.font_size PDF_FONT_SIZE do
           pdf.table data, table_options do
@@ -258,7 +260,8 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_risk_exposure_on pdf
-      risk_exposure_title = I18n.t 'conclusion_review.executive_summary.risk_exposure'
+      risk_exposure_title =
+        I18n.t 'conclusion_review.executive_summary.risk_exposure'
       risk_exposure       = '<b>%s</b>' % [
         ::Review.human_attribute_name('risk_exposure'),
         review.risk_exposure
@@ -522,13 +525,14 @@ module ConclusionReviews::AlternativePDF
       row_data
     end
 
-    def process_control_comments_row_data
+    def best_practice_comments_row_data
       row_data      = []
       image_options = { vposition: :top, border_widths: [1, 0, 1, 0] }
+      grouped_cois  = review.grouped_control_objective_items_by_best_practice
 
-      review.grouped_control_objective_items.each do |process_control, cois|
-        pcc = review.process_control_comments.detect do |_pcc|
-          _pcc.process_control_id == process_control.id
+      grouped_cois.each do |best_practice, cois|
+        pcc = review.best_practice_comments.detect do |_pcc|
+          _pcc.best_practice_id == best_practice.id
         end
 
         if pcc
@@ -537,7 +541,7 @@ module ConclusionReviews::AlternativePDF
           end
 
           row_data << [
-            process_control.name,
+            best_practice.name,
             pdf_score_image_row(image, fit: [12, 12]).merge(image_options),
             {
               content:       pcc.auditor_comment&.upcase,
@@ -557,7 +561,7 @@ module ConclusionReviews::AlternativePDF
       ]
     end
 
-    def process_control_comment_column_headers
+    def best_practice_comment_column_headers
       [
         "<b>#{I18n.t 'conclusion_review.annex.scope_column'}</b> ",
         { content: "<b>#{self.class.human_attribute_name 'conclusion'}</b>", colspan: 2 }
@@ -568,7 +572,7 @@ module ConclusionReviews::AlternativePDF
       [70, 4, 26].map { |percent| pdf.percent_width percent }
     end
 
-    def process_control_comment_column_widths pdf
+    def best_practice_comment_column_widths pdf
       [70, 4, 26].map { |percent| pdf.percent_width percent }
     end
 
@@ -601,10 +605,10 @@ module ConclusionReviews::AlternativePDF
       { image: image_path, fit: fit, position: :center, vposition: :center }
     end
 
-    def show_review_process_control_comments? organization
+    def show_review_best_practice_comments? organization
       prefix = organization&.prefix
 
-      SHOW_REVIEW_PROCESS_CONTROL_COMMENTS &&
-        ORGANIZATIONS_WITH_PROCESS_CONTROL_COMMENTS.include?(prefix)
+      SHOW_REVIEW_BEST_PRACTICE_COMMENTS &&
+        ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(prefix)
     end
 end

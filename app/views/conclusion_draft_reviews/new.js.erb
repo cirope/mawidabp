@@ -5,7 +5,7 @@
   $('#conclusion_draft_review_recipients').val('<%= j @conclusion_draft_review.review.business_unit_type.recipients %>')
   $('#conclusion_draft_review_sectors').val('<%= j @conclusion_draft_review.review.business_unit_type.sectors %>')
 
-  $('#process_control_comments_container').html('<%= j process_control_comments_form(@conclusion_draft_review) %>')
+  $('#best_practice_comments_container').html('<%= j best_practice_comments_form(@conclusion_draft_review) %>')
 
   $('#conclusion_draft_review_applied_procedures').focus()
 <% else %>
@@ -15,7 +15,7 @@
   $('#conclusion_draft_review_recipients').val('')
   $('#conclusion_draft_review_sectors').val('')
 
-  $('#process_control_comments_container').html('')
+  $('#best_practice_comments_container').html('')
 <% end %>
 
 $('#error_list').remove()
