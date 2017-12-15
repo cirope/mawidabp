@@ -19,16 +19,16 @@ module ConclusionDraftReviewsHelper
     show_info(t('conclusion_draft_review.has_final_review'), class: 'text-danger')
   end
 
-  def show_review_process_control_comments?
+  def show_review_best_practice_comments?
     prefix = current_organization&.prefix
 
-    SHOW_REVIEW_PROCESS_CONTROL_COMMENTS &&
-      ORGANIZATIONS_WITH_PROCESS_CONTROL_COMMENTS.include?(prefix)
+    SHOW_REVIEW_BEST_PRACTICE_COMMENTS &&
+      ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(prefix)
   end
 
-  def process_control_comments_form conclusion_review
+  def best_practice_comments_form conclusion_review
     simple_form_for conclusion_review do |f|
-      render 'process_control_comments', f: f, readonly: false
+      render 'best_practice_comments', f: f, readonly: false
     end
   end
 end

@@ -86,7 +86,8 @@ module Findings::State
       end
 
       def exclude_from_reports_status
-        [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked]
+        [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked] |
+          (SHOW_WEAKNESS_PROGRESS ? [] : [:awaiting])
       end
 
       def pending_for_review_status

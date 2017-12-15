@@ -66,10 +66,10 @@
       </div>
     <% end %>
 
-    <% if show_review_process_control_comments? %>
-      <div id="process_control_comments_container">
+    <% if show_review_best_practice_comments? %>
+      <div id="best_practice_comments_container">
         <% if @conclusion_final_review.review %>
-          <%= render 'process_control_comments', f: f, readonly: readonly %>
+          <%= render 'best_practice_comments', f: f, readonly: readonly %>
         <% end %>
       </div>
     <% end %>

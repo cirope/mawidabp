@@ -7,6 +7,7 @@ module Reviews::ControlObjectiveItems
 
     has_many :control_objective_items, dependent: :destroy, after_add: :assign_review
     has_many :process_controls, -> { distinct }, through: :control_objective_items
+    has_many :best_practices, -> { distinct }, through: :process_controls
 
     accepts_nested_attributes_for :control_objective_items, allow_destroy: true
   end
@@ -62,6 +63,18 @@ module Reviews::ControlObjectiveItems
     end
   end
 
+  def grouped_control_objective_items_by_best_practice options = {}
+    grouped_control_objective_items =
+      group_control_objective_items_by_best_practice options
+
+    grouped_control_objective_items.to_a.sort do |gcoi1, gcoi2|
+      pc1 = gcoi1.last.map(&:order_number).compact.min || -1
+      pc2 = gcoi2.last.map(&:order_number).compact.min || -1
+
+      pc1 <=> pc2
+    end
+  end
+
   private
 
     def assign_review related_object
@@ -108,6 +121,25 @@ module Reviews::ControlObjectiveItems
 
         if grouped_items[item.process_control].exclude?(item)
           grouped_items[item.process_control] << item
+        end
+      end
+
+      grouped_items
+    end
+
+    def group_control_objective_items_by_best_practice options
+      grouped_items = {}
+      items         = if options[:hide_excluded_from_score]
+                        control_objective_items.reject &:exclude_from_score
+                      else
+                        control_objective_items
+                      end
+
+      items.each do |item|
+        grouped_items[item.best_practice] ||= []
+
+        if grouped_items[item.best_practice].exclude?(item)
+          grouped_items[item.best_practice] << item
         end
       end
 

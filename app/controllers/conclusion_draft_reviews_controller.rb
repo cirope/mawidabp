@@ -54,7 +54,7 @@ class ConclusionDraftReviewsController < ApplicationController
     @conclusion_draft_review =
       ConclusionDraftReview.new(review_id: params[:review])
 
-    @conclusion_draft_review.review&.build_process_control_comments
+    @conclusion_draft_review.review&.build_best_practice_comments
 
     respond_to do |format|
       format.html # new.html.erb
@@ -68,7 +68,7 @@ class ConclusionDraftReviewsController < ApplicationController
   def edit
     @title = t 'conclusion_draft_review.edit_title'
 
-    @conclusion_draft_review.review.build_process_control_comments
+    @conclusion_draft_review.review.build_best_practice_comments
   end
 
   # Crea un nuevo informe borrador siempre que cumpla con las validaciones.
@@ -278,8 +278,8 @@ class ConclusionDraftReviewsController < ApplicationController
         :observations, :force_approval, :lock_version,
         review_attributes: [
           :id, :manual_score, :lock_version,
-          process_control_comments_attributes: [
-            :id, :process_control_id, :auditor_comment
+          best_practice_comments_attributes: [
+            :id, :best_practice_id, :auditor_comment
           ]
         ]
       )

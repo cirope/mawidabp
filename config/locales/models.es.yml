@@ -27,6 +27,9 @@ es:
       best_practice:
         one: 'Buena práctica'
         other: 'Buenas prácticas'
+      best_practice_comment:
+        one: 'Comentario del auditor (buena práctica)'
+        other: 'Comentarios del auditor (buena práctica)'
       business_unit:
         one: 'Ciclo'
         other: 'Ciclos'
@@ -72,9 +75,6 @@ es:
       plan_item:
         one: 'Proyecto en plan'
         other: 'Proyectos en plan'
-      process_control_comment:
-        one: 'Comentario del auditor (proceso)'
-        other: 'Comentarios del auditor (procesos)'
       setting:
         one: 'Configuración'
         other: 'Configuraciones'
@@ -146,6 +146,9 @@ es:
         name: 'Objetivo de control'
         relevance: 'Objetivo de control (clave)'
         risk: 'Objetivo de control (riesgo)'
+      best_practice_comment:
+        auditor_comment: 'Conclusiones del auditor'
+        best_practice: 'Buena práctica'
       business_unit_score:
         business_unit_id: 'Ciclo'
         design_score: 'Calificación pruebas de diseño'
@@ -299,9 +302,6 @@ es:
         image_content_type: 'Isologotipo (tipo de archivo)'
         image_file_size: 'Isologotipo (tamaño)'
         one: 'Isologotipo'
-      process_control_comment:
-        auditor_comment: 'Conclusiones del auditor'
-        process_control: 'Proceso'
       setting:
         name: 'Nombre'
         value: 'Valor'

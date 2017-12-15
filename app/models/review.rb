@@ -5,6 +5,7 @@ class Review < ApplicationRecord
   include ParameterSelector
   include Reviews::AutomaticIdentification
   include Reviews::Approval
+  include Reviews::BestPracticeComments
   include Reviews::Clone
   include Reviews::ConclusionReview
   include Reviews::ControlObjectiveItems
@@ -17,7 +18,6 @@ class Review < ApplicationRecord
   include Reviews::IssueDate
   include Reviews::Overrides
   include Reviews::PlanItem
-  include Reviews::ProcessControlComments
   include Reviews::Scopes
   include Reviews::Score
   include Reviews::ScoreDetails

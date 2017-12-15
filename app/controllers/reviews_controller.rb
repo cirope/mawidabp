@@ -7,7 +7,8 @@ class ReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
     :show, :edit, :update, :destroy, :download_work_papers, :survey_pdf,
-    :finished_work_papers, :recode_findings, :recode_findings_by_risk
+    :finished_work_papers, :recode_findings, :recode_findings_by_risk,
+    :excluded_control_objectives
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -19,9 +20,11 @@ class ReviewsController < ApplicationController
     @title = t 'review.index_title'
     scope  = Review.list.
       includes(:conclusion_final_review, :period, :tags, {
-        plan_item: :business_unit
+        plan_item: :business_unit,
+        review_user_assignments: :user
       }).
-      references(:periods, :conclusion_final_review)
+      merge(ReviewUserAssignment.audit_team).
+      references(:periods, :conclusion_final_review, :user)
 
     tagged_reviews = build_tag_search_for scope
 
@@ -429,6 +432,9 @@ class ReviewsController < ApplicationController
     @next_number = Review.list.next_identification_number params[:suffix]
   end
 
+  def excluded_control_objectives
+  end
+
   private
 
     def review_params
@@ -492,6 +498,7 @@ class ReviewsController < ApplicationController
         auto_complete_for_tagging: :read,
         estimated_amount: :read,
         next_identification_number: :read,
+        excluded_control_objectives: :read,
         finished_work_papers: :modify,
         recode_findings: :modify,
         recode_findings_by_risk: :modify
