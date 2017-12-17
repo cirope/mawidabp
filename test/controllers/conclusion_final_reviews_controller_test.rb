@@ -101,7 +101,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
   test 'new js conclusion final review' do
     login
-    get :new, :params => { :format => 'js' }, xhr: true
+    get :new, xhr: true, as: :js
     assert_response :success
     assert_equal @response.content_type, Mime[:js]
   end

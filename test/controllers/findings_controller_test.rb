@@ -114,20 +114,14 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings as CSV' do
-    get :index, params: {
-      completed: 'incomplete',
-      format:    :csv
-    }
+    get :index, params: { completed: 'incomplete' }, as: :csv
 
     assert_response :success
     assert_equal "#{Mime[:csv]}", @response.content_type
   end
 
   test 'list findings as PDF' do
-    get :index, params: {
-      completed: 'incomplete',
-      format:    :pdf
-    }
+    get :index, params: { completed: 'incomplete' }, as: :pdf
 
     assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
     assert_equal "#{Mime[:pdf]}", @response.content_type
@@ -492,9 +486,8 @@ class FindingsControllerTest < ActionController::TestCase
       completed: 'incomplete',
       q: 'O001',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
 
     assert_response :success
 
@@ -511,9 +504,8 @@ class FindingsControllerTest < ActionController::TestCase
       completed: 'incomplete',
       q: 'O001',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
 
     assert_response :success
 
@@ -531,9 +523,8 @@ class FindingsControllerTest < ActionController::TestCase
       completed: 'incomplete',
       q: 'O001, 1 2 3',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
 
     assert_response :success
 
@@ -551,9 +542,8 @@ class FindingsControllerTest < ActionController::TestCase
       completed: 'incomplete',
       q: 'x_none',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
 
     assert_response :success
 
@@ -566,9 +556,8 @@ class FindingsControllerTest < ActionController::TestCase
     get :auto_complete_for_tagging, params: {
       q: 'impor',
       completed: 'incomplete',
-      kind: 'finding',
-      format: :json
-    }
+      kind: 'finding'
+    }, as: :json
 
     assert_response :success
 
@@ -582,9 +571,8 @@ class FindingsControllerTest < ActionController::TestCase
     get :auto_complete_for_tagging, params: {
       q: 'x_none',
       completed: 'incomplete',
-      kind: 'finding',
-      format: :json
-    }
+      kind: 'finding'
+    }, as: :json
 
     assert_response :success
 

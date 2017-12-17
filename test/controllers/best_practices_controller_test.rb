@@ -268,9 +268,8 @@ class BestPracticesControllerTest < ActionController::TestCase
   test 'auto complete for tagging' do
     get :auto_complete_for_tagging, params: {
       q: 'risk',
-      kind: 'control_objective',
-      format: :json
-    }
+      kind: 'control_objective'
+    }, as: :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)
@@ -280,9 +279,8 @@ class BestPracticesControllerTest < ActionController::TestCase
 
     get :auto_complete_for_tagging, params: {
       q: 'x_none',
-      kind: 'control_objective',
-      format: :json
-    }
+      kind: 'control_objective'
+    }, as: :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)
