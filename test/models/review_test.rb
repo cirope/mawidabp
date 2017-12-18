@@ -206,7 +206,7 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'review score' do
-    skip if score_type == :weaknesses
+    skip if score_type != :effectiveness
 
     assert !@review.control_objective_items_for_score.empty?
 
