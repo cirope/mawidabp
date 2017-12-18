@@ -29,6 +29,7 @@ class Finding < ApplicationRecord
   include Findings::Reiterations
   include Findings::Relations
   include Findings::ReportScopes
+  include Findings::SaveCallbacks
   include Findings::ScaffoldNotifications
   include Findings::Scopes
   include Findings::Search

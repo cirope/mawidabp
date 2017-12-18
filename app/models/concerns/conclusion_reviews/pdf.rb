@@ -153,7 +153,11 @@ module ConclusionReviews::PDF
 
       pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
 
-      put_score_table_on pdf unless options[:hide_score]
+      if review.score_type == 'effectiveness'
+        put_score_table_on pdf unless options[:hide_score]
+      elsif review.score_type == 'weaknesses'
+        put_score_text_on pdf unless options[:hide_score]
+      end
     end
 
     def put_review_owners_on pdf
@@ -213,6 +217,16 @@ module ConclusionReviews::PDF
       pdf.font_size (PDF_FONT_SIZE * 0.6).round do
         pdf.text "<i>#{explanation}</i>", align: :justify, inline_format: true
       end
+    end
+
+    def put_score_text_on pdf
+      review_score = review.score_array.first
+      score_text   = I18n.t "score_types.#{review_score}"
+
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text "<b>#{I18n.t('review.score')}</b>: <i>#{score_text}</i>",
+        align: :justify, inline_format: true
+      pdf.move_down PDF_FONT_SIZE
     end
 
     def put_control_objective_table_on pdf, control_objective_item, process_control
