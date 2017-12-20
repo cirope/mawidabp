@@ -12,8 +12,8 @@
 
 <div id="best_practice_comments">
   <%= f.simple_fields_for :review do |r_f| %>
-    <%= r_f.simple_fields_for :best_practice_comments do |pcc_f| %>
-      <%= render 'best_practice_comment', f: pcc_f, readonly: readonly %>
+    <%= r_f.simple_fields_for :best_practice_comments, sorted_best_practice_comments_for(f.object) do |bpc_f| %>
+      <%= render 'best_practice_comment', f: bpc_f, readonly: readonly %>
     <% end %>
   <% end %>
 </div>
