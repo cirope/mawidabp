@@ -13,7 +13,8 @@ module Weaknesses::Progress
       Finding::STATUS[:notify],
       Finding::STATUS[:incomplete],
       Finding::STATUS[:revoked],
-      Finding::STATUS[:criteria_mismatch]
+      Finding::STATUS[:criteria_mismatch],
+      Finding::STATUS[:expired]
     ]
 
     PROGRESS_EDITION_STATES = [

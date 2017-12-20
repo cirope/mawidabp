@@ -1,4 +1,4 @@
-<% users_readonly = @finding.implemented_audited? || @finding.assumed_risk? || @finding.repeated? %>
+<% users_readonly = @finding.implemented_audited? || @finding.assumed_risk? || @finding.repeated? || @finding.expired? %>
 <% show_history_changes = @finding.status_change_history.size > 1 %>
 <%= simple_form_for @finding, :as => :finding, :url => finding_path(params[:completed], @finding), :html =>
   {:method => :patch, :id => "edit_finding_#{@finding.id}"} do |f| %>

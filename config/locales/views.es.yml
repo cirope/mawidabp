@@ -130,6 +130,7 @@ es:
       repeated: 'Reiterada'
       revoked: 'Anulada'
       criteria_mismatch: 'Difiere criterio'
+      expired: 'Expirada'
 
   login_records:
     choose:
