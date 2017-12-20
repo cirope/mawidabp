@@ -78,5 +78,6 @@ WEAKNESS_INTERNAL_CONTROL_COMPONENTS = [
   'Actividades de control',
   'Administración y control contable',
   'Información y comunicación',
-  'Monitoreo'
+  'Monitoreo',
+  'No aplica'
 ]
