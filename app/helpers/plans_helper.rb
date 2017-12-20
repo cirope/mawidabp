@@ -83,6 +83,25 @@ module PlansHelper
     is_valid && resources_are_unchanged
   end
 
+  def plan_download_options
+    options = [
+      link_to(
+        t('plans.download_global_plan'),
+        [@plan, _ts: Time.now.to_i, format: :pdf]
+      ),
+      link_to(
+        t('plans.download_detailed_plan'),
+        [@plan, include_details: 1, _ts: Time.now.to_i, format: :pdf]
+      )
+    ]
+
+    if @business_unit_type
+      options | business_unit_type_download_options
+    else
+      options
+    end
+  end
+
   private
 
     def business_unit_type_planned_items
@@ -90,5 +109,18 @@ module PlansHelper
       items = Array(@plan.grouped_plan_items[@business_unit_type])
 
       items.select { |plan_item| plan_item.start <= date }
+    end
+
+    def business_unit_type_download_options
+      [
+        link_to(
+          t('plans.download_business_unit_type_plan', business_unit_type: @business_unit_type.name),
+          [@plan, business_unit_type: @business_unit_type.id, _ts: Time.now.to_i, format: :pdf]
+        ),
+        link_to(
+          t('plans.download_detailed_business_unit_type_plan', business_unit_type: @business_unit_type.name),
+          [@plan, include_details: 1, business_unit_type: @business_unit_type.id, _ts: Time.now.to_i, format: :pdf]
+        )
+      ]
     end
 end

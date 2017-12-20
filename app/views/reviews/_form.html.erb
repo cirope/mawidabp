@@ -17,7 +17,6 @@
         <% end %>
         <% if @review.new_record? %>
           <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true, input_html: {
-            autofocus: SHOW_REVIEW_AUTOMATIC_IDENTIFICATION,
             data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
           } %>
         <% else %>
@@ -150,8 +149,15 @@
     </div>
   <% end %>
 
-  <% unless @review.control_objective_items.empty? %>
-    <h3><%= t('review.control_objective_items_label') %></h3>
+  <% if @review.control_objective_items.any? %>
+    <h3>
+      <%= t('review.control_objective_items_label') %>
+      <% if @review.persisted? %>
+        <small class="pull-right">
+          <%= link_to_excluded_control_objectives %>
+        </small>
+      <% end %>
+    </h3>
 
     <hr />
 
@@ -168,6 +174,8 @@
           <%= f.simple_fields_for :control_objective_items, cois.sort do |coi_f| %>
             <%= render 'control_objective_item', f: coi_f, readonly: readonly %>
           <% end %>
+
+          <div data-messages></div>
         </div>
         <script type="text/javascript">
           Helper.makeSortable('#process_control_<%= pc.id %>', 'fieldset.control_objective_item', 'a.move');
@@ -177,22 +185,56 @@
   <% end %>
 
   <% unless readonly %>
-    <h5><strong><%= ControlObjective.model_name.human %></strong></h5>
+    <br>
 
-    <div id="control_objectives">
-      <%= link_to_add_fields(
-        t('review.add_control_objective'), f, :control_objective_items, 'control_objective'
-      ) %>
-    </div>
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a href="#control-objective" data-toggle="tab">
+          <%= ControlObjective.model_name.human %>
+        </a>
+      </li>
+      <li>
+        <a href="#process-control" data-toggle="tab">
+          <%= ProcessControl.model_name.human %>
+        </a>
+      </li>
+      <li>
+        <a href="#best-practice" data-toggle="tab">
+          <%= BestPractice.model_name.human %>
+        </a>
+      </li>
+    </ul>
 
-    <hr />
+    <div class="tab-content">
+      <div class="tab-pane active" id="control-objective">
+        <br>
 
-    <h5><strong><%= ProcessControl.model_name.human %></strong></h5>
+        <div id="control_objectives">
+          <%= link_to_add_fields(
+            t('review.add_control_objective'), f, :control_objective_items, 'control_objective'
+          ) %>
+        </div>
+      </div>
 
-    <div id="process_controls">
-      <%= link_to_add_fields(
-        t('review.add_process_control'), f, :control_objective_items, 'process_control'
-      ) %>
+      <div class="tab-pane" id="process-control">
+        <br>
+
+        <div id="process_controls">
+          <%= link_to_add_fields(
+            t('review.add_process_control'), f, :control_objective_items, 'process_control'
+          ) %>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="best-practice">
+        <br>
+
+        <div id="best_practices">
+          <%= link_to_add_fields(
+            t('review.add_best_practice'), f, :control_objective_items, 'best_practice'
+          ) %>
+        </div>
+      </div>
     </div>
   <% end %>
 
@@ -227,10 +269,15 @@
       :class => 'btn btn-default btn-sm' %>
   <% end %>
 
-  <% if @review.finished_work_papers %>
+  <% if @review.work_papers_finished? %>
     <p>&nbsp;</p>
     <div class="alert alert-info">
       <%= t 'review.work_papers_marked_as_finished' %>
+    </div>
+  <% elsif @review.work_papers_revised? %>
+    <p>&nbsp;</p>
+    <div class="alert alert-success">
+      <%= t 'review.work_papers_marked_as_revised' %>
     </div>
   <% end %>
 
@@ -253,13 +300,16 @@ jQuery(function() {
     var element = $(this);
     var prefix = $('#review_identification_prefix').val();
 
+    $('#review_risk_exposure').val('');
     $('#review_business_unit').val('');
     $('#review_audit_type').val('');
+    $('#estimated_amount').html('');
 
     if(!$(this).val().match(/^\s*$/)) {
       Helper.showLoading(element);
 
       $.get(data_url, { id: element.val(), format: 'json' }, function(data) {
+        $('#review_risk_exposure').val(data.risk_exposure);
         $('#review_business_unit').val(data.business_unit_name);
         $('#review_audit_type').val(data.business_unit_type);
 
@@ -308,7 +358,6 @@ jQuery(function() {
       $('#link_to_suggested_findings').addClass('link_without_action');
       $('#link_to_past_implemented_audited_findings').attr('href', '#');
       $('#link_to_past_implemented_audited_findings').addClass('link_without_action');
-      $('#estimated_amount').html('');
     }
   });
 

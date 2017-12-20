@@ -8,6 +8,24 @@
   <div class="page-header">
     <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
   </div>
+
+  <h3 class="text-center">
+    <%= t('follow_up_committee_report.weaknesses_by_risk.period_summary',
+      :period => period.inspect) %>
+  </h3>
+  <%= render :partial => 'weaknesses_synthesis_table', :locals => {
+    :table_data => @tables_data[period]['total'],
+    :awaiting_resume => @awaiting_resumes[period]['total'],
+    :being_implemented_resume => @being_implemented_resumes[period]['total'],
+    :highest_awaiting_resume => @highest_awaiting_resumes[period]['total'],
+    :highest_being_implemented_resume => @highest_being_implemented_resumes[period]['total']} %>
+  <% if @repeated_counts[period]['total'] > 0 %>
+    <p>
+      <%= t('follow_up_committee_report.repeated_count',
+        :count => @repeated_counts[period]['total']) %>
+    </p>
+  <% end %>
+
   <% @audit_types.each do |audit_type| %>
     <% unless audit_type.last.empty? %>
       <% audit_type_symbol = audit_type.first %>
@@ -19,7 +37,9 @@
         <h4><%= audit_types.first %></h4>
         <%= render :partial => 'weaknesses_synthesis_table', :locals => {
           :table_data => @tables_data[period][key],
+          :awaiting_resume => @awaiting_resumes[period][key],
           :being_implemented_resume => @being_implemented_resumes[period][key],
+          :highest_awaiting_resume => @highest_awaiting_resumes[period][key],
           :highest_being_implemented_resume => @highest_being_implemented_resumes[period][key]} %>
         <% if @repeated_counts[period][key] > 0 %>
           <p>
@@ -29,21 +49,6 @@
         <% end %>
       <% end %>
     <% end %>
-  <% end %>
-
-  <h3 class="text-center">
-    <%= t('follow_up_committee_report.weaknesses_by_risk.period_summary',
-      :period => period.inspect) %>
-  </h3>
-  <%= render :partial => 'weaknesses_synthesis_table', :locals => {
-    :table_data => @tables_data[period]['total'],
-    :being_implemented_resume => @being_implemented_resumes[period]['total'],
-    :highest_being_implemented_resume => @highest_being_implemented_resumes[period]['total']} %>
-  <% if @repeated_counts[period]['total'] > 0 %>
-    <p>
-      <%= t('follow_up_committee_report.repeated_count',
-        :count => @repeated_counts[period]['total']) %>
-    </p>
   <% end %>
 <% end %>
 

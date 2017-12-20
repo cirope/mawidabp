@@ -53,8 +53,9 @@ Rails.application.routes.draw do
 
   [
     'weaknesses_by_state_execution',
+    'weaknesses_report',
     'detailed_management_report',
-    'weaknesses_report'
+    'reviews_with_incomplete_work_papers_report'
   ].each do |action|
     get "execution_reports/#{action}", to: "execution_reports##{action}", as: action
   end
@@ -206,7 +207,7 @@ Rails.application.routes.draw do
     resources :users, only: [:index]
   end
 
-  resources :conclusion_final_reviews, except: [:destroy] do
+  resources :conclusion_final_reviews do
     member do
       get :export_to_pdf
       get :compose_email
@@ -229,10 +230,10 @@ Rails.application.routes.draw do
       get :suggested_findings
       get :suggested_process_control_findings
       get :past_implemented_audited_findings
-      get :review_data
       get :weaknesses_and_oportunities
       get :download_work_papers
       get :estimated_amount
+      get :excluded_control_objectives
       patch :finished_work_papers
       patch :recode_findings
       patch :recode_findings_by_risk
@@ -244,6 +245,7 @@ Rails.application.routes.draw do
       get :assignment_type_refresh
       get :plan_item_data
       get :auto_complete_for_finding
+      get :auto_complete_for_best_practice
       get :auto_complete_for_process_control
       get :auto_complete_for_control_objective
       get :auto_complete_for_tagging

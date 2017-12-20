@@ -11,6 +11,11 @@ class ReviewTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    Organization.current_id = nil
+    Group.current_id = nil
+  end
+
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of Review, @review
@@ -91,7 +96,6 @@ class ReviewTest < ActiveSupport::TestCase
     @review.plan_item_id = nil
     @review.scope = ''
     @review.risk_exposure = ''
-    @review.manual_score = nil
     @review.include_sox = ''
 
     assert @review.invalid?
@@ -103,7 +107,6 @@ class ReviewTest < ActiveSupport::TestCase
     if SHOW_REVIEW_EXTRA_ATTRIBUTES
       assert_error @review, :scope, :blank
       assert_error @review, :risk_exposure, :blank
-      assert_error @review, :manual_score, :blank
       assert_error @review, :include_sox, :blank
     end
   end
@@ -203,6 +206,8 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'review score' do
+    skip if score_type != :effectiveness
+
     assert !@review.control_objective_items_for_score.empty?
 
     cois_count = @review.control_objective_items_for_score.inject(0) do |acc, coi|
@@ -220,6 +225,7 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert_equal average, @review.score_array.last
     assert_equal average, @review.score
+    assert_equal 'effectiveness', @review.score_type
     assert !@review.reload.score_text.blank?
     assert(scores.any? { |s| count -= 1; s[0] == @review.score_array.first })
     assert count > 0
@@ -244,8 +250,50 @@ class ReviewTest < ActiveSupport::TestCase
     assert_not_equal average, new_average
   end
 
+  test 'review score by weaknesses' do
+    skip if score_type != :weaknesses
+
+    # With two low risk and not repeated weaknesses
+    assert_equal :require_some_improvements, @review.score_array.first
+    assert_equal 96, @review.score
+    assert_equal 'weaknesses', @review.score_type
+
+    review_weakness = @review.weaknesses.first
+    finding = Weakness.new review_weakness.dup.attributes.merge(
+      'risk' => ::RISK_TYPES[:high]
+    )
+    finding.finding_user_assignments.build(
+      clone_finding_user_assignments(review_weakness)
+    )
+
+    finding.save!(:validate => false)
+
+    # High risk counts 12
+    assert_equal :require_some_improvements, @review.reload.score_array.first
+    assert_equal 84, @review.score
+
+    repeated_of = findings :being_implemented_weakness
+    finding.repeated_of_id = repeated_of.id
+
+    @review.finding_review_assignments.create! finding_id: repeated_of.id
+
+    finding.save!(:validate => false)
+
+    # High risk and repeated counts 20
+    assert_equal :require_improvements, @review.reload.score_array.first
+    assert_equal 76, @review.score
+
+    review = Review.new
+
+    assert_equal :adequate, review.score_array.first
+    assert_equal 100, review.score
+  end
+
   test 'must be approved function' do
     @review = reviews(:review_approved_with_conclusion)
+
+    @review.file_model = FileModel.take!
+    @review.save!
 
     assert @review.must_be_approved?
     assert @review.approval_errors.blank?
@@ -386,6 +434,25 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?
+
+    if SHOW_REVIEW_EXTRA_ATTRIBUTES
+      @review.file_model = nil
+
+      refute @review.must_be_approved?
+      assert @review.can_be_approved_by_force
+      assert @review.approval_errors.flatten.include?(
+        I18n.t('review.errors.without_file_model')
+      )
+
+      @review.manual_score = nil
+
+      refute @review.must_be_approved?
+      refute @review.can_be_approved_by_force
+      assert @review.approval_errors.flatten.include?(
+        I18n.t('review.errors.without_score')
+      )
+    end
+
     @review.review_user_assignments.each { |rua| rua.audited? && rua.delete }
     refute @review.reload.must_be_approved?
     assert @review.approval_errors.present?
@@ -494,6 +561,24 @@ class ReviewTest < ActiveSupport::TestCase
       assert_no_difference '@review.control_objective_items.size' do
         @review.process_control_ids = [
           process_controls(:security_policy).id
+        ]
+      end
+    end
+  end
+
+  test 'best practice ids' do
+    assert @review.control_objective_items.present?
+
+    if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+      assert_difference '@review.control_objective_items.size', 2 do
+        @review.best_practice_ids = [
+          best_practices(:bcra_A4609).id
+        ]
+      end
+    else
+      assert_no_difference '@review.control_objective_items.size' do
+        @review.best_practice_ids = [
+          best_practices(:bcra_A4609).id
         ]
       end
     end
@@ -700,11 +785,44 @@ class ReviewTest < ActiveSupport::TestCase
     assert_equal '023', Review.next_identification_number(2017)
   end
 
+  test 'build best practice comments' do
+    expected_count = @review.best_practices.count
+
+    @review.best_practice_comments.destroy_all
+
+    assert expected_count > 0
+
+    assert_difference '@review.best_practice_comments.size', expected_count do
+      @review.build_best_practice_comments
+    end
+  end
+
+  test 'clean stale best practice comments' do
+    @review.best_practice_comments.create! auditor_comment: 'Test',
+      best_practice_id: best_practices(:iso_27001).id
+
+    assert_difference '@review.best_practice_comments.count', -1 do
+      @review.save!
+    end
+  end
+
   private
 
     def clone_finding_user_assignments(finding)
       finding.finding_user_assignments.map do |fua|
         fua.dup.attributes.merge('finding_id' => nil)
+      end
+    end
+
+    def score_type
+      organization = Organization.find Organization.current_id
+
+      if SHOW_REVIEW_EXTRA_ATTRIBUTES
+        :manual
+      elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization.prefix
+        :weaknesses
+      else
+        :effectiveness
       end
     end
 end

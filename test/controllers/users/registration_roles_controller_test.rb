@@ -3,9 +3,9 @@ require 'test_helper'
 class Users::RegistrationRolesControllerTest < ActionController::TestCase
   test 'should get index' do
     get :index, xhr: true, params: {
-      id: organizations(:cirope).id, format: 'json',
+      id: organizations(:cirope).id,
       hash: groups(:main_group).admin_hash
-    }
+    }, as: :json
 
     assert_response :success
     roles = ActiveSupport::JSON.decode @response.body
@@ -17,9 +17,8 @@ class Users::RegistrationRolesControllerTest < ActionController::TestCase
     assert_raise ActiveRecord::RecordNotFound do
       get :index, xhr: true, params: {
         id: organizations(:cirope).id,
-        format: 'json',
         hash: 'xxx'
-      }
+      }, as: :json
     end
   end
 end

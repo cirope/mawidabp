@@ -16,13 +16,12 @@ module Reviews::Validations
 
     validates :scope,
               :risk_exposure,
-              :manual_score,
               :include_sox,
               presence: true, if: :validate_extra_attributes?
 
     validates :manual_score, numericality: {
       greater_than_or_equal_to: 0, less_than_or_equal_to: 1000
-    }, if: :validate_extra_attributes?
+    }, allow_nil: true, if: :validate_extra_attributes?
 
     validate :validate_user_roles
     validate :validate_plan_item
@@ -95,7 +94,7 @@ module Reviews::Validations
       ]
 
       unless DISABLE_REVIEW_AUDITED_VALIDATION
-        required_roles << I18n.t('review.user_assignment.type_auditor')
+        required_roles << I18n.t('review.user_assignment.type_audited')
       end
 
       required_roles

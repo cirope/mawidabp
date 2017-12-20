@@ -88,18 +88,18 @@ es:
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
 
   business_unit_type:
-    index_title: "Listado de tipos de ciclos"
-    show_title: "Detalle tipo de ciclo"
-    new_title: "Agregar tipo de ciclo"
-    edit_title: "Modificar tipo de ciclo"
-    correctly_created: "Tipo de ciclo agregado correctamente."
-    correctly_updated: "Tipo de ciclo actualizado correctamente."
-    stale_object_error: "El tipo de ciclo no fue actualizado, intente nuevamente."
+    index_title: "Listado de sectores"
+    show_title: "Detalle sector"
+    new_title: "Agregar sector"
+    edit_title: "Modificar sector"
+    correctly_created: "Sector agregado correctamente."
+    correctly_updated: "Sector actualizado correctamente."
+    stale_object_error: "El sector no fue actualizado, intente nuevamente."
     add_business_unit: "Agregar ciclo"
     internal_audit: "Auditorías realizadas por la entidad"
     external_audit: "Auditorías realizadas por otras entidades"
     errors:
-      can_not_be_destroyed: "El tipo de ciclo no puede ser eliminado"
+      can_not_be_destroyed: "El sector no puede ser eliminado"
       business_unit_related: "El ciclo no puede ser eliminado, se encuentra relacionado con al menos un plan de trabajo"
 
   conclusion_draft_review:
@@ -417,7 +417,7 @@ es:
       control_objective_work_papers: "Papeles de trabajo del objetivo de control"
       control_objective_weaknesses: "Observaciones"
       control_objective_oportunities: "Oportunidades"
-      finding_work_papers: "Papeles de trabajo del hallazgo"
+      finding_work_papers: "Papeles de trabajo de la observación"
 
   control_objective:
     errors:
@@ -430,6 +430,8 @@ es:
     correctly_created: "Objetivo de control agregado correctamente."
     correctly_updated: "Objetivo de control actualizado correctamente."
     stale_object_error: "El objetivo de control no fue actualizado, intente nuevamente."
+    no_weaknesses: "Objetivo de control sin observaciones"
+    no_oportunities: "Objetivo de control sin oportunidades de mejora"
     view_all_weaknesses: "Ver listado de observaciones"
     view_all_oportunities: "Ver listado de oportunidades de mejora"
     add_oportunity: "Agregar nueva oportunidad de mejora"
@@ -449,9 +451,9 @@ es:
       without_audit_date: "sin fecha de auditoría"
       without_effects: "sin posibles consecuencias"
       without_controls: "sin controles"
-      without_design_tests: "sin evaluación de diseño"
+      without_design_tests: "sin pruebas de diseño"
       without_compliance_tests: "sin pruebas de cumplimiento"
-      without_sustantive_tests: "sin pruebas sustantivas"
+      without_sustantive_tests: "sin pruebas sustantivas/cumplimiento"
       without_auditor_comment: "sin conclusiones del auditor"
     review:
       edit: 'Editar informe'
@@ -476,6 +478,11 @@ es:
       without_oportunities: "Sin oportunidades de mejora"
       references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     detailed_management_report_title: "Resumen gerencial"
+    reviews_with_incomplete_work_papers_report_incomplete_title: "Informes cerrados sin conformidad auditor"
+    reviews_with_incomplete_work_papers_report_revised_title: "Informes cerrados sin revisión supervisor"
+    reviews_with_incomplete_work_papers_report:
+      empty_incomplete: "No hay informes cerrados sin conformidad auditor en papeles de trabajo"
+      empty_revised: "No hay informes cerrados sin revisión supervisor en papeles de trabajo"
     index_title: "Reportes de ejecución"
     findings_type_external: "Observaciones Auditorías Externas"
     findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
@@ -848,8 +855,11 @@ es:
     correctly_updated: "Informe actualizado correctamente."
     stale_object_error: "El informe no fue actualizado, intente nuevamente."
     control_objective_items_label: "Objetivos de control"
+    show_excluded_control_objectives: "Mostrar objetivos de control cargados en la buena práctica y ausentes en el informe"
+    no_excluded_control_objectives: "Todos los objetivos de control de este proceso se encuentran en el informe"
     add_control_objective: "Agregar un nuevo objetivo de control"
     add_process_control: "Agregar un nuevo proceso"
+    add_best_practice: "Agregar una nueva buena práctica"
     add_tagging: "Agregar etiqueta"
     associated: "Asociados"
     available: "Disponibles"
@@ -862,7 +872,7 @@ es:
     suggest_past_findings: 'Sugerir observaciones / oportunidades de mejora solucionadas recientes'
     without_suggested_findings: 'Sin observaciones / oportunidades de mejora pendientes'
     without_past_implemented_audited_findings: 'Sin observaciones / oportunidades de mejora solucionadas recientes'
-    suggested_findings_for: 'Hallazgos sugeridos para %{process_control}'
+    suggested_findings_for: 'Observaciones sugeridas para %{process_control}'
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
@@ -903,19 +913,23 @@ es:
     follow_up_work_papers: "Seguimiento de observaciones"
     download_work_papers: "Descargar papeles de trabajo"
     finished_work_papers: "Papeles de trabajo - Conforme auditor"
+    revise_work_papers: "Papeles de trabajo - Revisado supervisor"
     notes: "Notas"
     estimated_amount: "Costo estimado en plan de trabajo"
     other_actions: "Acciones"
-    recode_findings: "Recodificar hallazgos"
-    recode_findings_by_risk: "Recodificar hallazgos por riesgo"
-    findings_recoded: "Hallazgos recodificados correctamente"
+    recode_findings: "Recodificar observaciones"
+    recode_findings_by_risk: "Recodificar observaciones por riesgo"
+    findings_recoded: "Observaciones recodificadas correctamente"
     work_papers_marked_as_finished: "Papeles de trabajo marcados como conforme auditor"
+    work_papers_marked_as_revised: "Papeles de trabajo marcados como revisados supervisor"
     review_qualification_explanation: "La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     process_control_qualification_explanation: "La calificación del proceso de negocio se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     errors:
       can_not_be_destroyed: "El informe no puede ser eliminado"
+      without_score: "no tiene puntaje de auditoría"
       without_survey: "no tiene resumen del alcance"
       without_audited: "no tiene usuario auditado"
+      without_file_model: "no tiene anexo"
       without_control_objectives: "no tiene objetivos de control"
       related_finding_incomplete: "está pendiente y no se ha marcado como reiterada o solucionada"
     survey:
@@ -965,8 +979,8 @@ es:
         one: "Se ha reasignado la responsabilidad del informe en ejecución %{reviews}"
         other: "Se han reasignado la responsabilidad de los informes en ejecución %{reviews}"
       reassigned_to_findings_from_reviews:
-        one: "Se han reasignado los hallazgos pendientes del informe %{reviews}"
-        other: "Se han reasignado las hallazgos pendientes de los informes %{reviews}"
+        one: "Se han reasignado las observaciones pendientes del informe %{reviews}"
+        other: "Se han reasignado las observaciones pendientes de los informes %{reviews}"
     responsibility_release:
       title: "Liberación de responsabilidades"
     unconfirmed_findings: "Observaciones sin confirmar a la fecha"
@@ -1046,7 +1060,7 @@ es:
   activerecord:
     models:
       business_unit: "Ciclo"
-      business_unit_type: "Tipo de ciclo"
+      business_unit_type: "Sector"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
@@ -1077,6 +1091,8 @@ es:
         business_unit_label: "Etiqueta del ciclo en el informe"
         project_label: "Etiqueta del proyecto en el informe"
         review_prefix: "Prefijo en el informe"
+        recipients: "Destinatarios del informe"
+        sectors: "Sectores/departamentos involucrados"
         external: "Externo"
         require_tag: "Requerir etiqueta en informe"
       business_unit_type/business_units:
@@ -1104,20 +1120,23 @@ es:
         sectors: "Sectores/departamentos involucrados"
         evolution: "Evolución de la calificación"
         evolution_justification: "Justificación evolución"
+        observations: "Otras consideraciones"
+      conclusion_review/review/best_practice_comments:
+        auditor_comment: "Conclusiones del auditor (proceso)"
       control:
         order: "Orden"
-        control: "Controles"
+        control: "Detalle objetivo de control"
         effects: "Posibles consecuencias"
-        design_tests: "Evaluación de diseño"
+        design_tests: "Pruebas de diseño"
         compliance_tests: "Pruebas de cumplimiento"
-        sustantive_tests: "Pruebas sustantivas"
+        sustantive_tests: "Pruebas sustantivas/cumplimiento"
       control_objective_item:
         control_objective_id: "Objetivo de control"
-        control_objective_text: "Objetivo de control"
+        control_objective_text: "Identificación objetivo de control"
         relevance: "Clave"
-        design_score: "Calificación evaluación de diseño"
+        design_score: "Calificación pruebas de diseño"
         compliance_score: "Calificación pruebas de cumplimiento"
-        sustantive_score: "Calificación pruebas sustantivas"
+        sustantive_score: "Calificación pruebas sustantivas/cumplimiento"
         audit_date: "Fecha de auditoría"
         auditor_comment: "Conclusiones del auditor"
         finished: "Terminado"
@@ -1130,11 +1149,11 @@ es:
         work_papers: "Papeles de trabajo"
       control_objective_item/control:
         order: "Objetivo de control (orden)"
-        control: "Objetivo de control (controles)"
+        control: "Objetivo de control (detalle objetivo de control)"
         effects: "Objetivo de control (posibles consecuencias)"
-        design_tests: "Objetivo de control (evaluación de diseño)"
+        design_tests: "Objetivo de control (pruebas de diseño)"
         compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
-        sustantive_tests: "Objetivo de control (pruebas sustantivas)"
+        sustantive_tests: "Objetivo de control (pruebas sustantivas/cumplimiento)"
         work_papers: "Papeles de trabajo"
       control_objective_item/work_papers:
         one: "Papel de trabajo"
@@ -1150,9 +1169,9 @@ es:
         file_file_size: "Papel de trabajo (tamaño de archivo)"
       control_objective_item/business_unit_scores:
         business_unit_id: 'Calificación de ciclo (ciclo)'
-        design_score: 'Calificación de ciclo (evaluación de diseño)'
+        design_score: 'Calificación de ciclo (pruebas de diseño)'
         compliance_score: 'Calificación de ciclo (pruebas de cumplimiento)'
-        sustantive_score: 'Calificación de ciclo (pruebas sustantivas)'
+        sustantive_score: 'Calificación de ciclo (pruebas sustantivas/cumplimiento)'
       cost:
         cost: "Tiempo dedicado"
         description: "Descripción de las actividades realizadas"

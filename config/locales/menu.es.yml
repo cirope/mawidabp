@@ -36,7 +36,7 @@ es:
       weaknesses: 'Observaciones'
       oportunities: 'Oportunidades de mejora'
       reports: 'Reportes'
-      findings_title: 'Hallazgos'
+      findings_title: 'Observaciones'
       findings:
         weaknesses: 'Observaciones'
         oportunities: 'Oportunidades de mejora'
@@ -47,8 +47,8 @@ es:
       reports: 'Reportes'
     follow_up_title: 'Seguimiento'
     follow_up:
-      pending_findings: 'Hallazgos pendientes'
-      complete_findings: 'Hallazgos solucionados'
+      pending_findings: 'Observaciones pendientes'
+      complete_findings: 'Observaciones solucionadas'
       notifications: 'Notificaciones'
       reports: 'Reportes'
     help_title: 'Ayuda'

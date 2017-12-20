@@ -18,7 +18,7 @@ class NotifierMailer < ActionMailer::Base
 
   def group_welcome_email(group)
     @group, @hash = group, group.admin_hash
-    prefixes = group.organizations.map { |o| "[#{o.prefix}]" }.join(' ')
+    prefixes = group.organizations.to_a.uniq.map { |o| "[#{o.prefix}]" }.join(' ')
 
     prefixes << ' ' unless prefixes.blank?
 
@@ -30,7 +30,7 @@ class NotifierMailer < ActionMailer::Base
 
   def welcome_email(user)
     @user, @hash = user, user.change_password_hash
-    prefixes = user.organizations.distinct.map { |o| "[#{o.prefix}]" }.join(' ')
+    prefixes = user.organizations.to_a.uniq.map { |o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
     mail to: [user.email],

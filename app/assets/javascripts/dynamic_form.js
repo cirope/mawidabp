@@ -86,6 +86,8 @@
       var eventName = $(this).data('dynamicFormEvent')
 
       if ($.inArray(eventName, eventList) !== -1) {
+        State.unsavedData = true
+
         DynamicFormEvent[eventName]($(this))
 
         event.preventDefault()

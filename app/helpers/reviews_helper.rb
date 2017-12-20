@@ -121,7 +121,10 @@ module ReviewsHelper
     end
 
     if control_objective_item.exclude_from_score
-      html_classes << 'bg-danger'
+      highest_relevance = control_objective_item.relevance ==
+        ControlObjectiveItem.relevances_values.last
+
+      html_classes << (highest_relevance ? 'bg-danger' : 'bg-warning')
     end
 
     html_classes.join(' ')
@@ -139,11 +142,46 @@ module ReviewsHelper
   end
 
   def show_review_finished_work_papers_icon review
-    if review.finished_work_papers
-      content_tag(:span, nil,
-        class: 'glyphicon glyphicon-paperclip',
-        title: t('review.work_papers_marked_as_finished')
-      )
+    wrapper_class = if review.work_papers_revised?
+                      'text-success'
+                    elsif review.work_papers_finished? && review.is_frozen?
+                      'text-danger'
+                    end
+
+    if review.work_papers_finished? || review.work_papers_revised?
+      content_tag(:span, class: wrapper_class) do
+        content_tag(:span, nil,
+          class: 'glyphicon glyphicon-paperclip',
+          title: t('review.work_papers_marked_as_finished')
+        )
+      end
+    end
+  end
+
+  def audit_team_for review
+    audit_team = review.review_user_assignments.reload.select &:in_audit_team?
+
+    ActiveSupport::SafeBuffer.new.tap do |buffer|
+      audit_team.each do |rua|
+        buffer << content_tag(:span, class: 'text-muted') do
+          content_tag :span, nil, class: 'glyphicon glyphicon-user',
+            title: rua.user.full_name
+        end
+
+        buffer << ' '
+      end
+    end
+  end
+
+  def link_to_excluded_control_objectives
+    path    = excluded_control_objectives_review_path @review
+    options = {
+      title: t('review.show_excluded_control_objectives'),
+      data:  { remote: true }
+    }
+
+    link_to path, options do
+      content_tag :span, nil, class: 'glyphicon glyphicon-scissors'
     end
   end
 end

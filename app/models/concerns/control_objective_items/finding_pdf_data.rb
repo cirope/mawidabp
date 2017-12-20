@@ -1,22 +1,22 @@
 module ControlObjectiveItems::FindingPDFData
   extend ActiveSupport::Concern
 
-  def finding_pdf_data finding, hide: []
+  def finding_pdf_data finding, hide: [], show: []
     body = ''
 
-    body << get_initial_finding_attributes(finding)
+    body << get_initial_finding_attributes(finding, show)
     body << get_weakness_attributes(finding, hide) if finding.kind_of?(Weakness)
     body << get_late_finding_attributes(finding)
-    body << get_optional_finding_attributes(finding)
-    body << get_audited_data(finding)
-    body << get_final_finding_attributes(finding, hide)
+    body << get_optional_finding_attributes(finding, hide)
+    body << get_audited_data(finding, hide)
+    body << get_final_finding_attributes(finding, hide, show)
 
     body
   end
 
   private
 
-    def get_initial_finding_attributes finding
+    def get_initial_finding_attributes finding, show
       body = ''
 
       if finding.review_code.present?
@@ -34,7 +34,7 @@ module ControlObjectiveItems::FindingPDFData
           "#{finding.description.chomp}\n"
       end
 
-      body << finding_repeated_text_for(finding)
+      body << finding_repeated_text_for(finding, show)
     end
 
     def get_weakness_attributes finding, hide
@@ -81,11 +81,14 @@ module ControlObjectiveItems::FindingPDFData
       body
     end
 
-    def get_optional_finding_attributes finding
+    def get_optional_finding_attributes finding, hide
       body = ''
+      show_internal_control_components = SHOW_WEAKNESS_EXTRA_ATTRIBUTES &&
+        finding.kind_of?(Weakness) &&
+        hide.exclude?('internal_control_components') &&
+        finding.internal_control_components.any?
 
-      if SHOW_WEAKNESS_EXTRA_ATTRIBUTES && finding.kind_of?(Weakness) &&
-          finding.internal_control_components.any?
+      if show_internal_control_components
         body << "<b>#{finding.class.human_attribute_name('internal_control_components')}:" +
           "</b> #{finding.internal_control_components.to_sentence}\n"
       end
@@ -93,12 +96,12 @@ module ControlObjectiveItems::FindingPDFData
       body
     end
 
-    def get_audited_data finding
+    def get_audited_data finding, hide
       body          = ''
       process_owner = FindingUserAssignment.human_attribute_name 'process_owner'
       audited_users = finding.users.select &:can_act_as_audited?
 
-      if audited_users.present?
+      if audited_users.present? && hide.exclude?('audited')
         process_owners = finding.process_owners
         users          = audited_users.map do |u|
           u.full_name + (process_owners.include?(u) ? " (#{process_owner})" : '')
@@ -111,7 +114,7 @@ module ControlObjectiveItems::FindingPDFData
       body
     end
 
-    def get_final_finding_attributes finding, hide
+    def get_final_finding_attributes finding, hide, show
       body = ''
 
       if finding.state_text.present?
@@ -127,6 +130,11 @@ module ControlObjectiveItems::FindingPDFData
       if finding.business_units.present?
         body << "<b>#{BusinessUnit.model_name.human count: finding.business_units.size}:" +
           "</b> #{finding.business_units.map(&:name).join(', ')}\n"
+      end
+
+      if show.include?('tags') && finding.tags.any?
+        body << "<b>#{Tag.model_name.human count: 0}:</b> " +
+          finding.tags.map(&:name).to_sentence
       end
 
       body
@@ -153,11 +161,15 @@ module ControlObjectiveItems::FindingPDFData
       end
     end
 
-    def finding_repeated_text_for finding
+    def finding_repeated_text_for finding, show
       repeated = finding.repeated_ancestors.present?
 
       if SHOW_CONCLUSION_ALTERNATIVE_PDF
         label = I18n.t "label.#{repeated ? 'yes' : 'no'}"
+
+        if show.include?('repeated_review') && finding.repeated_of
+          label << " (#{finding.repeated_of.review.identification})"
+        end
 
         "<b>#{I18n.t 'findings.state.repeated'}:</b> #{label}\n"
       elsif repeated

@@ -5,5 +5,5 @@ ActionController::Renderers.add :csv do |str, options|
 
   send_data "\uFEFF" << str,
     type:        "#{Mime[:csv]}; charset=utf-8",
-    disposition: "attachment; filename=#{filename.gsub(/\s/, '_')}.csv"
+    disposition: "attachment; filename=\"#{filename}.csv\""
 end

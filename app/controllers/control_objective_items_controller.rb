@@ -100,7 +100,16 @@ class ControlObjectiveItemsController < ApplicationController
   #
   # * DELETE /control_objective_items/1
   def destroy
-    @control_objective_item.destroy
+    review = @control_objective_item.review
+
+    review.update!(
+      control_objective_items_attributes: [
+        {
+          id: @control_objective_item.id,
+          _destroy: '1'
+        }
+      ]
+    )
 
     respond_to do |format|
       format.html {

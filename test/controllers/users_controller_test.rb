@@ -225,18 +225,17 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'index as pdf' do
-    get :index, params: { format: :pdf }
+    get :index, as: :pdf
     assert_redirected_to UserPdf.new.relative_path
   end
 
   test 'export with search' do
     get :index, params: {
-      format: :pdf,
       search: {
         query: 'manager',
         columns: ['user', 'name']
       }
-    }
+    }, as: :pdf
 
     assert_redirected_to UserPdf.new.relative_path
   end

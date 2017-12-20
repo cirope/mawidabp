@@ -92,7 +92,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_draft_reviews/index'
   end
 
-  test 'show conclusion_draft_review' do
+  test 'show conclusion draft review' do
     login
     get :show, :params => {
       :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
@@ -102,7 +102,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_draft_reviews/show'
   end
 
-  test 'new conclusion_draft_review' do
+  test 'new conclusion draft review' do
     login
     get :new
     assert_response :success
@@ -110,7 +110,14 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_draft_reviews/new'
   end
 
-  test 'create conclusion_draft_review' do
+  test 'new js conclusion draft review' do
+    login
+    get :new, xhr: true, as: :js
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+  end
+
+  test 'create conclusion draft review' do
     login
     assert_difference 'ConclusionDraftReview.count' do
       post :create, :params => {
@@ -123,7 +130,8 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :recipients => 'John Doe',
           :sectors => 'Area 51',
           :evolution => 'Do the evolution',
-          :evolution_justification => 'Ok'
+          :evolution_justification => 'Ok',
+          :observations => nil
         }
       }
     end
@@ -131,7 +139,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_redirected_to edit_conclusion_draft_review_url(assigns(:conclusion_draft_review))
   end
 
-  test 'edit conclusion_draft_review' do
+  test 'edit conclusion draft review' do
     login
     get :edit, :params => {
       :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
@@ -141,7 +149,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_draft_reviews/edit'
   end
 
-  test 'update conclusion_draft_review' do
+  test 'update conclusion draft review' do
     assert_no_difference 'ConclusionDraftReview.count' do
       login
       patch :update, :params => {
@@ -155,7 +163,8 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :recipients => 'John Doe',
           :sectors => 'Area 51',
           :evolution => 'Do the evolution',
-          :evolution_justification => 'Ok'
+          :evolution_justification => 'Ok',
+          :observations => nil
         }
       }
     end
@@ -248,9 +257,8 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   test 'check for approval' do
     login
     get :check_for_approval, :params => {
-      :id => reviews(:current_review).id,
-      :format => :json
-    }
+      :id => reviews(:current_review).id
+    }, :as => :json
 
     assert_response :success
 

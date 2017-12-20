@@ -98,12 +98,12 @@ es:
 
   findings:
     index:
-      title: 'Listado de hallazgos'
+      title: 'Listado de observaciones'
       current_user_answers_count: 'Comentarios propios'
     show:
-      title: 'Detalles del hallazgo'
+      title: 'Detalles de la observación'
     edit:
-      title: 'Editar hallazgo'
+      title: 'Editar observación'
     form:
       show_status_change_history: 'Ver historial de cambios de estado'
     auditor_form:
@@ -130,6 +130,7 @@ es:
       repeated: 'Reiterada'
       revoked: 'Anulada'
       criteria_mismatch: 'Difiere criterio'
+      expired: 'Expirada'
 
   login_records:
     choose:
@@ -245,6 +246,8 @@ es:
         compliance: 'Cumplimiento'
     download_global_plan: 'Descargar plan de auditoria global'
     download_detailed_plan: 'Descargar plan de auditoria detallado'
+    download_business_unit_type_plan: 'Descargar plan %{business_unit_type}'
+    download_detailed_business_unit_type_plan: 'Descargar plan %{business_unit_type} detallado'
     without_business_unit_type: 'Sin ciclo'
 
   profiles:
@@ -439,7 +442,7 @@ es:
         title: 'Reasignar responsabilidades'
         new_user: 'Nuevo responsable'
         old_user: 'Responsable anterior'
-        with_findings: '¿Incluir hallazgos pendientes?'
+        with_findings: '¿Incluir observaciones pendientes?'
         with_reviews: '¿Incluir informes en ejecución?'
         submit: 'Reasignar'
       must_select_a_user: 'Debe seleccionar un usuario'
@@ -447,7 +450,7 @@ es:
     releases:
       edit:
         title: 'Liberar responsabilidades'
-        with_findings: '¿Incluir hallazgos pendientes?'
+        with_findings: '¿Incluir observaciones pendientes?'
         with_reviews: '¿Incluir informes en ejecución?'
         submit: 'Liberar responsabilidades'
 

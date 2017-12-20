@@ -57,7 +57,9 @@
         <%= f.input :audit_recommendations, input_html: { readonly: readonly, rows: 5 } %>
       </div>
       <div class="col-md-6">
-        <%= f.input :origination_date, as: :date_picker, input_html: { disabled: readonly } %>
+        <%= f.input :origination_date, as: :date_picker, input_html: {
+          readonly: (readonly || @weakness.repeated_of)
+        } %>
         <%= f.input :risk, collection: risks, prompt: true, disabled: readonly %>
         <% unless HIDE_WEAKNESS_PRIORITY %>
           <%= f.input :priority, collection: priorities, prompt: true, disabled: readonly %>
@@ -66,6 +68,11 @@
             (show_history_changes ? finding_show_status_change_history(
               :finding_status_change_history) : '')) %>
         <%= finding_status_field(f, disabled: readonly) %>
+
+        <% if show_skip_work_paper_for @weakness %>
+          <%= f.input :skip_work_paper, as: :boolean, label: false,
+            inline_label: Weakness.human_attribute_name('skip_work_paper') %>
+        <% end %>
 
         <% if show_history_changes %>
           <%= render 'findings/history_changes', finding: @weakness %>
@@ -92,11 +99,19 @@
     <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :compliance, collection: weakness_compliance_options, prompt: true, disabled: readonly %>
+          <%= f.input :compliance, collection: weakness_compliance_options, prompt: true, disabled: readonly, input_html: {
+            data: { mark_impact_as: WEAKNESS_IMPACT[1], mark_impact_on: 'yes' }
+          } %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
           <%= f.input :impact, as: :check_boxes, collection: weakness_impact_options, disabled: readonly %>
         </div>
-        <div class="col-md-6">
-          <%= f.input :operational_risk, collection: weakness_operational_risk_options, prompt: true, disabled: readonly %>
+        <div class="col-md-4">
+          <%= f.input :operational_risk, as: :check_boxes, collection: weakness_operational_risk_options, disabled: readonly %>
+        </div>
+        <div class="col-md-4">
           <%= f.input :internal_control_components, as: :check_boxes, collection: weakness_internal_control_components_options, disabled: readonly %>
         </div>
       </div>

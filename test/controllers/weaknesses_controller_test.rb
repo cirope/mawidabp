@@ -81,7 +81,7 @@ class WeaknessesControllerTest < ActionController::TestCase
 
   test 'list weaknesses as CSV' do
     login
-    get :index, params: { format: :csv }
+    get :index, as: :csv
 
     assert_response :success
     assert_equal "#{Mime[:csv]}", @response.content_type
@@ -103,9 +103,8 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
     get :show, :params => {
       :completed => 'incomplete',
-      :id => weakness.id,
-      :format => :json
-    }
+      :id => weakness.id
+    }, :as => :json
     assert_response :success
     assert_not_nil assigns(:weakness)
 
@@ -157,7 +156,7 @@ class WeaknessesControllerTest < ActionController::TestCase
           follow_up_date: 2.days.from_now.to_date,
           business_unit_ids: [business_units(:business_unit_three).id],
           compliance: 'no',
-          operational_risk: 'internal fraud',
+          operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
           finding_user_assignments_attributes: [
@@ -247,7 +246,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             priority: Weakness.priorities_values.first,
             follow_up_date: '',
             compliance: 'no',
-            operational_risk: 'internal fraud',
+            operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
             finding_user_assignments_attributes: [
@@ -328,8 +327,8 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
 
     get :state_changed, xhr: true, params: {
-      state: Finding::STATUS[:being_implemented], format: :js
-    }
+      state: Finding::STATUS[:being_implemented]
+    }, as: :js
 
     assert_response :success
     assert_equal @response.content_type, Mime[:js]
@@ -342,9 +341,8 @@ class WeaknessesControllerTest < ActionController::TestCase
     get :auto_complete_for_finding_relation, params: {
       q: 'O001',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -357,9 +355,8 @@ class WeaknessesControllerTest < ActionController::TestCase
     get :auto_complete_for_finding_relation, params: {
       q: 'O001',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -371,9 +368,8 @@ class WeaknessesControllerTest < ActionController::TestCase
       completed: 'incomplete',
       q: 'O001, 1 2 3',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -384,9 +380,8 @@ class WeaknessesControllerTest < ActionController::TestCase
     get :auto_complete_for_finding_relation, params: {
       q: 'x_none',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -399,9 +394,8 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     get :auto_complete_for_tagging, params: {
       :q => 'impor',
-      :kind => 'finding',
-      :format => :json
-    }
+      :kind => 'finding'
+    }, :as => :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)
@@ -411,9 +405,8 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     get :auto_complete_for_tagging, params: {
       :q => 'x_none',
-      :kind => 'finding',
-      :format => :json
-    }
+      :kind => 'finding'
+    }, :as => :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)
@@ -425,9 +418,8 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
     get :auto_complete_for_control_objective_item, params: {
       q: 'dependencia',
-      review_id: reviews(:review_with_conclusion).id,
-      format: :json
-    }
+      review_id: reviews(:review_with_conclusion).id
+    }, as: :json
     assert_response :success
 
     cois = ActiveSupport::JSON.decode(@response.body)
@@ -441,9 +433,8 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     get :auto_complete_for_control_objective_item, params: {
       q: 'x_none',
-      review_id: reviews(:review_with_conclusion).id,
-      format: :json
-    }
+      review_id: reviews(:review_with_conclusion).id
+    }, as: :json
     assert_response :success
 
     cois = ActiveSupport::JSON.decode(@response.body)

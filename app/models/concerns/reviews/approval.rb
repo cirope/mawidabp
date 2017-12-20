@@ -16,9 +16,11 @@ module Reviews::Approval
 
     (@approval_errors = errors).blank?
   end
-
   alias_method :is_approved?, :must_be_approved?
-  alias_method :can_be_sended?, :must_be_approved?
+
+  def can_be_sended?
+    must_be_approved? || can_be_approved_by_force
+  end
 
   private
 
@@ -29,8 +31,18 @@ module Reviews::Approval
         review_errors << I18n.t('review.errors.without_control_objectives')
       end
 
+      if manual_score.blank? && SHOW_REVIEW_EXTRA_ATTRIBUTES
+        self.can_be_approved_by_force = false
+
+        review_errors << I18n.t('review.errors.without_score')
+      end
+
       if survey.blank?
         review_errors << I18n.t('review.errors.without_survey')
+      end
+
+      if file_model.blank? && SHOW_REVIEW_EXTRA_ATTRIBUTES
+        review_errors << I18n.t('review.errors.without_file_model')
       end
 
       unless has_audited?

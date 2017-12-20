@@ -28,8 +28,8 @@ es:
 
     findings:
       update:
-        notice: 'Respuesta a hallazgo actualizada correctamente.'
-        stale: 'La respuesta al hallazgo no fue actualizada, intente nuevamente.'
+        notice: 'Respuesta a observación actualizada correctamente.'
+        stale: 'La respuesta a la observación no fue actualizada, intente nuevamente.'
 
     news:
       create:

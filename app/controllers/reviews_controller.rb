@@ -1,12 +1,14 @@
 class ReviewsController < ApplicationController
+  include AutoCompleteFor::BestPractice
   include AutoCompleteFor::ProcessControl
   include AutoCompleteFor::Tagging
   include SearchableByTag
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
-    :show, :edit, :update, :destroy, :review_data, :download_work_papers,
-    :survey_pdf, :finished_work_papers, :recode_findings, :recode_findings_by_risk
+    :show, :edit, :update, :destroy, :download_work_papers, :survey_pdf,
+    :finished_work_papers, :recode_findings, :recode_findings_by_risk,
+    :excluded_control_objectives
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -18,9 +20,11 @@ class ReviewsController < ApplicationController
     @title = t 'review.index_title'
     scope  = Review.list.
       includes(:conclusion_final_review, :period, :tags, {
-        plan_item: :business_unit
+        plan_item: :business_unit,
+        review_user_assignments: :user
       }).
-      references(:periods, :conclusion_final_review)
+      merge(ReviewUserAssignment.audit_team).
+      references(:periods, :conclusion_final_review, :user)
 
     tagged_reviews = build_tag_search_for scope
 
@@ -124,23 +128,6 @@ class ReviewsController < ApplicationController
     end
   end
 
-  # Lista los informes del periodo indicado
-  #
-  # * GET /reviews/review_data/1.json
-  def review_data
-    respond_to do |format|
-      format.json  { render json: @review.to_json(
-        only: [],
-          methods: :score_text,
-          include: {
-            business_unit: { only: :name },
-            plan_item: { only: :project }
-          }
-        )
-      }
-    end
-  end
-
   # Devuelve los papeles de trabajo del informe
   #
   # * GET /reviews/download_work_papers/1
@@ -199,6 +186,7 @@ class ReviewsController < ApplicationController
       past_implemented_audited_findings_review_url(id: plan_item.id) if plan_item
 
     render json: {
+      risk_exposure: plan_item.risk_exposure,
       business_unit_name: name,
       business_unit_type: type,
       business_unit_prefix: prefix,
@@ -406,11 +394,22 @@ class ReviewsController < ApplicationController
 
   # * PUT /reviews/1/finished_work_papers
   def finished_work_papers
-    @review.finished_work_papers = true
+    is_supervisor                = @auth_user.supervisor?
+    @review.finished_work_papers = if params[:revised].present? && is_supervisor
+                                     'work_papers_revised'
+                                   else
+                                     'work_papers_finished'
+                                   end
 
     @review.save! validate: false
 
-    redirect_to @review, notice: t('review.work_papers_marked_as_finished')
+    notice = if @review.work_papers_finished?
+               t 'review.work_papers_marked_as_finished'
+             else
+               t 'review.work_papers_marked_as_revised'
+             end
+
+    redirect_to @review, notice: notice
   end
 
   # * PUT /reviews/1/recode_findings
@@ -431,6 +430,9 @@ class ReviewsController < ApplicationController
   # * GET /reviews/next_identification_number
   def next_identification_number
     @next_number = Review.list.next_identification_number params[:suffix]
+  end
+
+  def excluded_control_objectives
   end
 
   private
@@ -456,7 +458,8 @@ class ReviewsController < ApplicationController
           ]
         ],
         control_objective_ids: [],
-        process_control_ids: []
+        process_control_ids: [],
+        best_practice_ids: []
       )
     end
 
@@ -480,7 +483,6 @@ class ReviewsController < ApplicationController
 
     def load_privileges
       @action_privileges.update(
-        review_data: :read,
         download_work_papers: :read,
         assignment_type_refresh: :read,
         plan_item_refresh: :read,
@@ -492,9 +494,11 @@ class ReviewsController < ApplicationController
         auto_complete_for_finding: :read,
         auto_complete_for_control_objective: :read,
         auto_complete_for_process_control: :read,
+        auto_complete_for_best_practice: :read,
         auto_complete_for_tagging: :read,
         estimated_amount: :read,
         next_identification_number: :read,
+        excluded_control_objectives: :read,
         finished_work_papers: :modify,
         recode_findings: :modify,
         recode_findings_by_risk: :modify

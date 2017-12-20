@@ -4,6 +4,7 @@ module Reviews::PlanItem
   included do
     belongs_to :plan_item
     has_one :business_unit, through: :plan_item
+    has_one :business_unit_type, through: :business_unit
   end
 
   def external_audit?

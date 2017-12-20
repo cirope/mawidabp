@@ -2,8 +2,8 @@ module ConclusionReviews::Validations
   extend ActiveSupport::Concern
 
   included do
-    validates :review_id, :organization_id, :issue_date, :applied_procedures,
-      presence: true
+    validates :review_id, :organization_id, :issue_date, presence: true
+    validates :applied_procedures, presence: true, unless: :validate_extra_attributes?
     validates :conclusion, :applied_procedures, :summary, :recipients, :sectors,
       pdf_encoding: true
     validates :type, :summary, :evolution, length: { maximum: 255 }

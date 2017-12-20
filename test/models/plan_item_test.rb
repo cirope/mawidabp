@@ -16,6 +16,7 @@ class PlanItemTest < ActiveSupport::TestCase
         start: 6.days.from_now.to_date,
         end: 7.days.from_now.to_date,
         order_number: 4,
+        risk_exposure: 'high',
         plan: plan,
         business_unit: business_units(:business_unit_one)
       )
@@ -63,12 +64,17 @@ class PlanItemTest < ActiveSupport::TestCase
     @plan_item.order_number = nil
     @plan_item.start = nil
     @plan_item.end = '   '
+    @plan_item.risk_exposure = '   '
 
     assert @plan_item.invalid?
     assert_error @plan_item, :project, :blank
     assert_error @plan_item, :order_number, :blank
     assert_error @plan_item, :start, :invalid_date
     assert_error @plan_item, :end, :invalid_date
+
+    if SHOW_REVIEW_EXTRA_ATTRIBUTES
+      assert_error @plan_item, :risk_exposure, :blank
+    end
   end
 
   test 'validates length of attributes' do

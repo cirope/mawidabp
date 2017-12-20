@@ -1,10 +1,6 @@
 source 'https://rubygems.org'
 
-git_source :github do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include? '/'
-
-  "https://github.com/#{repo_name}.git"
-end
+git_source(:github) { |r| "https://github.com/#{r}" }
 
 gem 'rails', '~> 5.1.4'
 
@@ -54,6 +50,10 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
+
+  # Support for ed25519 ssh keys
+  gem 'rbnacl', '< 5.0' # TODO: check net-ssh dependency to _unleash_
+  gem 'bcrypt_pbkdf'
 end
 
 group :test do

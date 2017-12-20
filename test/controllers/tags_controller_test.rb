@@ -15,9 +15,8 @@ class TagsControllerTest < ActionController::TestCase
   test 'should get filtered index' do
     get :index, params: {
       kind: @tag.kind,
-      q: @tag.name,
-      format: :json
-    }
+      q: @tag.name
+    }, as: :json
     assert_response :success
 
     tags = JSON.parse @response.body

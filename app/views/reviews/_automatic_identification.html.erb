@@ -1,4 +1,5 @@
 <% prefix, number, year = *@review.identification.to_s.split(/[-\/]/) %>
+<% number = Review.list.next_identification_number year if @review.errors[:identification].any? %>
 
 <% if @review.new_record? %>
   <div class="row">
@@ -9,6 +10,7 @@
         prompt: true,
         selected: prefix,
         input_html: {
+          autofocus: true,
           data: {
             next_identification_number_url: next_identification_number_reviews_path,
             plan_item_refresh_url: plan_item_refresh_reviews_path
@@ -36,7 +38,7 @@
     </div>
   </div>
 
-  <%= f.input :identification, as: :hidden %>
+  <%= f.input :identification, as: :hidden, input_html: { value: "#{prefix}-#{number}/#{year}" } %>
 <% else %>
   <%= f.input :identification, label: Review.human_attribute_name('identification'), input_html: { readonly: true } %>
 <% end %>
