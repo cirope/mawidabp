@@ -23,6 +23,17 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_organization
 
+  def can_perform? action
+    load_current_module
+    allowed_by_type = ALLOWED_MODULES_BY_TYPE[@auth_user.get_type].try(
+      :include?, @current_module)
+    allowed_by_privileges = @auth_privileges[@current_module] &&
+      @auth_privileges[@current_module][@action_privileges[action]]
+
+    allowed_by_type && allowed_by_privileges
+  end
+  helper_method :can_perform?
+
   private
 
     def scope_current_organization
@@ -164,14 +175,9 @@ class ApplicationController < ActionController::Base
     # tenerlos se produce una redirección a la página de ingreso (ver
     # #redirect_to_login)
     def check_privileges #:doc:
-      load_current_module
       current_action = action_name.to_sym
-      allowed_by_type = ALLOWED_MODULES_BY_TYPE[@auth_user.get_type].try(
-        :include?, @current_module)
-      allowed_by_privileges = @auth_privileges[@current_module] &&
-        @auth_privileges[@current_module][@action_privileges[current_action]]
 
-      unless allowed_by_type && allowed_by_privileges
+      unless can_perform?(current_action)
         if request.xhr?
           render :partial => 'shared/ajax_message', :layout => false,
             :locals => {:message => t('message.insufficient_privileges')}

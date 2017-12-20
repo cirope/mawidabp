@@ -9,18 +9,20 @@
           <%= select_tag 'conclusion_review[review_type]', send_review_options, class: 'form-control' %>
         </div>
         <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF %>
-          <div class="checkbox">
-            <label for="conclusion_review_include_global_score_sheet">
-              <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, false %>
-              <%= t 'conclusion_review.include_global_score_sheet' %>
-            </label>
-          </div>
-          <div class="checkbox">
-            <label for="conclusion_review_include_score_sheet">
-              <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false %>
-              <%= t 'conclusion_review.include_score_sheet' %>
-            </label>
-          </div>
+          <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.exclude?(current_organization.prefix) %>
+            <div class="checkbox">
+              <label for="conclusion_review_include_global_score_sheet">
+                <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, false %>
+                <%= t 'conclusion_review.include_global_score_sheet' %>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label for="conclusion_review_include_score_sheet">
+                <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false %>
+                <%= t 'conclusion_review.include_score_sheet' %>
+              </label>
+            </div>
+          <% end %>
           <div class="checkbox">
             <label for="export_options_hide_control_objectives_excluded_from_score">
               <%= check_box_tag 'export_options[hide_control_objectives_excluded_from_score]', 1, false %>

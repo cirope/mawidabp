@@ -44,9 +44,8 @@ class LoginRecordsControllerTest < ActionController::TestCase
 
     assert_nothing_raised do
       get :index, params: {
-        index: { from_date: from_date, to_date: to_date },
-        format: :pdf
-      }
+        index: { from_date: from_date, to_date: to_date }
+      }, as: :pdf
     end
 
     assert_redirected_to Prawn::Document.relative_path(

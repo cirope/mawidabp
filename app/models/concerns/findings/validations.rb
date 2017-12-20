@@ -56,7 +56,10 @@ module Findings::Validations
     end
 
     def validate_solution_date
-      check_for_blank = implemented_audited? || assumed_risk? || criteria_mismatch?
+      check_for_blank = implemented_audited? ||
+                        assumed_risk?        ||
+                        criteria_mismatch?   ||
+                        expired?
 
       errors.add :solution_date, :blank         if check_for_blank  && solution_date.blank?
       errors.add :solution_date, :must_be_blank if !check_for_blank && solution_date.present?

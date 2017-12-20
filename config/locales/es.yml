@@ -531,9 +531,6 @@
     without_conclusion_final_review: "Sin informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
-    errors:
-      correction_date_on_or_before: "La fecha de corrección/acción inmediata debe ser anterior a la fecha de análisis de causa"
-      cause_analysis_date_on_or_before: "La fecha de análisis de causa debe ser anterior a la fecha de implementación"
     important_dates:
       title: "Fechas a considerar"
       expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *%{date}* si ningún auditado proporciona una respuesta"
@@ -1096,10 +1093,6 @@
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
-      without_correction: "no tiene corrección/acción inmediata"
-      without_correction_date: "no tiene fecha de corrección/acción inmediata"
-      without_cause_analysis: "no tiene análisis de causa"
-      without_cause_analysis_date: "no tiene fecha de análisis de causa"
 
   welcome:
     index_title: "Bienvenido"

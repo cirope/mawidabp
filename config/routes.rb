@@ -207,7 +207,7 @@ Rails.application.routes.draw do
     resources :users, only: [:index]
   end
 
-  resources :conclusion_final_reviews, except: [:destroy] do
+  resources :conclusion_final_reviews do
     member do
       get :export_to_pdf
       get :compose_email

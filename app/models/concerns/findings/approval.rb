@@ -53,7 +53,8 @@ module Findings::Approval
         being_implemented?                   ||
         unanswered?                          ||
         assumed_risk?                        ||
-        criteria_mismatch?
+        criteria_mismatch?                   ||
+        expired?
 
       unless has_valid_state
         I18n.t "#{class_name}.errors.not_valid_state"

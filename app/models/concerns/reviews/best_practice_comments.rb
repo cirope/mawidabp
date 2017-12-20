@@ -11,8 +11,8 @@ module Reviews::BestPracticeComments
 
   def build_best_practice_comments
     grouped_control_objective_items_by_best_practice.each do |best_practice, _cois|
-      exists = best_practice_comments.any? do |pcc|
-        pcc.best_practice_id == best_practice.id
+      exists = best_practice_comments.any? do |bpc|
+        bpc.best_practice_id == best_practice.id
       end
 
       unless exists
@@ -26,9 +26,9 @@ module Reviews::BestPracticeComments
     def clean_stale_best_practice_comments
       best_practice_ids = best_practices.ids
 
-      best_practice_comments.each do |pcc|
-        if best_practice_ids.exclude? pcc.best_practice_id
-          pcc.mark_for_destruction
+      best_practice_comments.each do |bpc|
+        if best_practice_ids.exclude? bpc.best_practice_id
+          bpc.mark_for_destruction
         end
       end
     end

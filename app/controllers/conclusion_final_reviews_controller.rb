@@ -1,8 +1,8 @@
 class ConclusionFinalReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_final_review, only: [
-    :show, :edit, :update, :export_to_pdf, :score_sheet, :download_work_papers,
-    :create_bundle, :compose_email, :send_by_email
+    :show, :edit, :update, :destroy, :export_to_pdf, :score_sheet,
+    :download_work_papers, :create_bundle, :compose_email, :send_by_email
   ]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
@@ -101,6 +101,17 @@ class ConclusionFinalReviewsController < ApplicationController
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'conclusion_final_review.stale_object_error'
     redirect_to action: :edit
+  end
+
+  # Elimina un informe definitivo
+  #
+  # * DELETE /conclusion_final_reviews/1
+  def destroy
+    @conclusion_final_review.destroy!
+
+    respond_to do |format|
+      format.html { redirect_to(conclusion_final_reviews_url) }
+    end
   end
 
   # Exporta el informe en formato PDF
@@ -354,6 +365,7 @@ class ConclusionFinalReviewsController < ApplicationController
   end
 
   private
+
     def set_conclusion_final_review
       @conclusion_final_review = ConclusionFinalReview.list.includes(
         review: [

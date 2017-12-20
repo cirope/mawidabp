@@ -536,12 +536,12 @@ module ConclusionReviews::AlternativePDF
       grouped_cois  = review.grouped_control_objective_items_by_best_practice
 
       grouped_cois.each do |best_practice, cois|
-        pcc = review.best_practice_comments.detect do |_pcc|
-          _pcc.best_practice_id == best_practice.id
+        bpc = review.best_practice_comments.detect do |_bpc|
+          _bpc.best_practice_id == best_practice.id
         end
 
-        if pcc
-          image = CONCLUSION_SCOPE_IMAGES.fetch(pcc.auditor_comment) do
+        if bpc
+          image = CONCLUSION_SCOPE_IMAGES.fetch(bpc.auditor_comment) do
             'scope_not_apply.png'
           end
 
@@ -549,7 +549,7 @@ module ConclusionReviews::AlternativePDF
             best_practice.name,
             pdf_score_image_row(image, fit: [12, 12]).merge(image_options),
             {
-              content:       pcc.auditor_comment&.upcase,
+              content:       bpc.auditor_comment&.upcase,
               border_widths: [1, 1, 1, 0]
             }
           ]

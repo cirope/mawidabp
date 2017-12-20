@@ -200,4 +200,8 @@ module ConclusionFinalReviewsHelper
   def conclusion_options
     CONCLUSION_OPTIONS.map { |option| [option, option] }
   end
+
+  def can_destroy_final_reviews?
+    ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION && can_perform?(:destroy)
+  end
 end

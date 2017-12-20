@@ -79,9 +79,8 @@ class DocumentsControllerTest < ActionController::TestCase
   test 'auto complete for tagging' do
     get :auto_complete_for_tagging, params: {
       q: 'man',
-      kind: 'document',
-      format: :json
-    }
+      kind: 'document'
+    }, as: :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)
@@ -91,9 +90,8 @@ class DocumentsControllerTest < ActionController::TestCase
 
     get :auto_complete_for_tagging, params: {
       q: 'x_none',
-      kind: 'document',
-      format: :json
-    }
+      kind: 'document'
+    }, as: :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)

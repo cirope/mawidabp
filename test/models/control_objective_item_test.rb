@@ -13,6 +13,11 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       :management_dependency_item_editable).id
   end
 
+  teardown do
+    Organization.current_id = nil
+    Group.current_id = nil
+  end
+
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     retrived_coi = control_objective_items(:management_dependency_item_editable)
@@ -147,7 +152,9 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'review effectiveness modification' do
-    skip if HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
+    if HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS || use_review_weaknesses_score?
+      skip
+    end
 
     min_qualification_value = ControlObjectiveItem.qualifications_values.min
     review = @control_objective_item.review
@@ -425,4 +432,12 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
     FileUtils.rm @control_objective_item.absolute_pdf_path
   end
+
+  private
+
+    def use_review_weaknesses_score?
+      organization = Organization.find Organization.current_id
+
+      ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization.prefix
+    end
 end

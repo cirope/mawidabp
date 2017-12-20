@@ -112,7 +112,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'new js conclusion draft review' do
     login
-    get :new, :params => { :format => 'js' }, xhr: true
+    get :new, xhr: true, as: :js
     assert_response :success
     assert_equal @response.content_type, Mime[:js]
   end
@@ -257,9 +257,8 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   test 'check for approval' do
     login
     get :check_for_approval, :params => {
-      :id => reviews(:current_review).id,
-      :format => :json
-    }
+      :id => reviews(:current_review).id
+    }, :as => :json
 
     assert_response :success
 
