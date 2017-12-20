@@ -1,4 +1,5 @@
 class ConclusionFinalReview < ConclusionReview
+  include ConclusionFinalReviews::Destroy
   include ConclusionFinalReviews::Scopes
   include ConclusionFinalReviews::Search
   include ConclusionFinalReviews::Sort

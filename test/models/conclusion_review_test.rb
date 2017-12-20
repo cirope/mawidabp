@@ -61,8 +61,10 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de informes de conclusión
   test 'destroy' do
+    conclusion_review = conclusion_reviews :conclusion_current_draft_review
+
     assert_no_difference 'ConclusionReview.count' do
-      @conclusion_review.destroy
+      conclusion_review.destroy
     end
   end
 

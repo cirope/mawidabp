@@ -26,6 +26,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       [:get, :edit, id_param],
       [:post, :create],
       [:patch, :update, id_param],
+      [:delete, :destroy, id_param],
       [:get, :export_to_pdf, id_param]
     ]
 
@@ -171,6 +172,20 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
     assert_redirected_to conclusion_final_reviews_url
     assert_equal 'ACT Updated', conclusion_reviews(:conclusion_past_final_review).reload.summary
+  end
+
+  test 'destroy conclusion final review' do
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+
+    login
+
+    assert_difference 'ConclusionFinalReview.count', -1 do
+      delete :destroy, params: {
+        id: conclusion_reviews(:conclusion_past_final_review).id
+      }
+    end
+
+    assert_redirected_to conclusion_final_reviews_url
   end
 
   test 'export conclusion final review' do

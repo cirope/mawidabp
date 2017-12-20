@@ -121,8 +121,28 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de informes finales
   test 'destroy' do
+    skip if ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+
     assert_no_difference 'ConclusionFinalReview.count' do
       @conclusion_review.destroy
+    end
+  end
+
+  test 'allow destruction' do
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+
+    weakness = @conclusion_review.review.weaknesses.first
+
+    weakness.update_column :final, true
+
+    findings_count = @conclusion_review.review.final_weaknesses.count
+
+    assert findings_count > 0
+
+    assert_difference 'ConclusionFinalReview.count', -1 do
+      assert_difference 'Finding.finals(true).count', -findings_count do
+        @conclusion_review.destroy
+      end
     end
   end
 
