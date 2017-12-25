@@ -35,7 +35,7 @@ module Plans::StatsHelper
     total    = plan_items.size
     executed = plan_stat_executed_count plan_items
 
-    total > 0 ? '%.1f%' % (executed.to_f / total * 100) : '-'
+    total > 0 ? '%.1f%%' % (executed.to_f / total * 100) : '-'
   end
 
   def plan_stat_planned plan_items
@@ -60,7 +60,7 @@ module Plans::StatsHelper
     compliance = on_time.size.to_f / items.size * 100 if items.size > 0
 
     {
-      label: '%.0f%' % compliance,
+      label: '%.0f%%' % compliance,
       value: compliance.round,
       class: class_for_compliance(compliance)
     }

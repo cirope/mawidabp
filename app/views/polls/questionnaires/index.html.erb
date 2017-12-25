@@ -22,7 +22,7 @@
           <td><%= question.question %></td>
           <% Question::ANSWER_OPTIONS.each_index do |i| %>
             <td><%= @report.rates[question.question][i] %> %</td>
-          <% end%>
+          <% end %>
         </tr>
       <% end %>
     </tbody>

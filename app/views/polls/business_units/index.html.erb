@@ -32,7 +32,7 @@
             <td><%= question.question %></td>
             <% Question::ANSWER_OPTIONS.each_index do |i| %>
               <td><%= @report.business_unit_polls[but][:rates][question.question][i] %> %</td>
-            <% end%>
+            <% end %>
           </tr>
         <% end %>
       </tbody>
