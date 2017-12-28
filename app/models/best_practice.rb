@@ -5,6 +5,7 @@ class BestPractice < ApplicationRecord
   include BestPractices::JSON
   include BestPractices::ProcessControls
   include BestPractices::Search
+  include BestPractices::Shared
   include BestPractices::Validations
   include ParameterSelector
   include Shareable
