@@ -62,9 +62,8 @@ class NewsControllerTest < ActionController::TestCase
   test 'auto complete for tagging' do
     get :auto_complete_for_tagging, params: {
       q: 'brea',
-      kind: 'news',
-      format: :json
-    }
+      kind: 'news'
+    }, as: :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode @response.body
@@ -74,9 +73,8 @@ class NewsControllerTest < ActionController::TestCase
 
     get :auto_complete_for_tagging, params: {
       q: 'x_none',
-      kind: 'news',
-      format: :json
-    }
+      kind: 'news'
+    }, as: :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode @response.body

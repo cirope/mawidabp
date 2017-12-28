@@ -51,10 +51,14 @@ class ConclusionDraftReviewsController < ApplicationController
   # * GET /conclusion_draft_reviews/new
   def new
     @title = t 'conclusion_draft_review.new_title'
-    @conclusion_draft_review = ConclusionDraftReview.new
+    @conclusion_draft_review =
+      ConclusionDraftReview.new(review_id: params[:review])
+
+    @conclusion_draft_review.review&.build_best_practice_comments
 
     respond_to do |format|
       format.html # new.html.erb
+      format.js   # new.js.erb
     end
   end
 
@@ -63,6 +67,8 @@ class ConclusionDraftReviewsController < ApplicationController
   # * GET /conclusion_draft_reviews/1/edit
   def edit
     @title = t 'conclusion_draft_review.edit_title'
+
+    @conclusion_draft_review.review.build_best_practice_comments
   end
 
   # Crea un nuevo informe borrador siempre que cumpla con las validaciones.
@@ -268,7 +274,14 @@ class ConclusionDraftReviewsController < ApplicationController
     def conclusion_draft_review_params
       params.require(:conclusion_draft_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
-        :recipients, :sectors, :force_approval, :lock_version
+        :recipients, :sectors, :evolution, :evolution_justification,
+        :observations, :force_approval, :lock_version,
+        review_attributes: [
+          :id, :manual_score, :lock_version,
+          best_practice_comments_attributes: [
+            :id, :best_practice_id, :auditor_comment
+          ]
+        ]
       )
     end
 

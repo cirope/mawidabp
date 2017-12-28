@@ -2,7 +2,9 @@ module Findings::FollowUp
   extend ActiveSupport::Concern
 
   def stale?
-    being_implemented? && follow_up_date && follow_up_date < Time.zone.today
+    (being_implemented? || awaiting?) &&
+      follow_up_date &&
+      follow_up_date < Time.zone.today
   end
 
   def rescheduled?

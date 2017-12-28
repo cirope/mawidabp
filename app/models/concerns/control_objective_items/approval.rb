@@ -24,7 +24,7 @@ module ControlObjectiveItems::Approval
     end
 
     def score_error
-      return if exclude_from_score || HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
+      return if exclude_from_score
 
       if design_score.blank? && compliance_score.blank? && sustantive_score.blank?
         I18n.t 'control_objective_item.errors.without_score'
@@ -52,7 +52,7 @@ module ControlObjectiveItems::Approval
     def blank_control_attributes_errors
       errors = []
 
-      if control&.effects.blank?
+      if control&.effects.blank? && !HIDE_CONTROL_EFFECTS
         errors << I18n.t('control_objective_item.errors.without_effects')
       end
 
@@ -64,8 +64,6 @@ module ControlObjectiveItems::Approval
     end
 
     def blank_score_errors
-      return if HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
-
       errors = []
 
       if design_score && control&.design_tests.blank?

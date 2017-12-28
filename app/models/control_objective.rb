@@ -1,5 +1,6 @@
 class ControlObjective < ApplicationRecord
   include Auditable
+  include ControlObjectives::Shared
   include Parameters::Relevance
   include Parameters::Risk
   include Taggable

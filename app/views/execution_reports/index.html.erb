@@ -38,6 +38,12 @@
             { action: :detailed_management_report }, class: 'list-group-item' %>
         </div>
       </div>
+      <div class="col-md-6">
+        <div class="list-group">
+          <%= link_to t('execution_reports.reviews_with_incomplete_work_papers_report_incomplete_title'),
+            { action: :reviews_with_incomplete_work_papers_report }, class: 'list-group-item' %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -96,7 +96,7 @@ class PlanTest < ActiveSupport::TestCase
     FileUtils.rm @plan.absolute_pdf_path if File.exist?(@plan.absolute_pdf_path)
 
     assert_nothing_raised do
-      @plan.to_pdf(organizations(:cirope), false)
+      @plan.to_pdf(organizations(:cirope), include_details: false)
     end
 
     assert File.exist?(@plan.absolute_pdf_path)
@@ -111,7 +111,7 @@ class PlanTest < ActiveSupport::TestCase
     FileUtils.rm @plan.absolute_pdf_path if File.exist?(@plan.absolute_pdf_path)
 
     assert_nothing_raised do
-      @plan.to_pdf(organizations(:cirope), true)
+      @plan.to_pdf(organizations(:cirope), include_details: true)
     end
 
     assert File.exist?(@plan.absolute_pdf_path)

@@ -25,7 +25,7 @@ class WeaknessTest < ActiveSupport::TestCase
         priority: Weakness.priorities_values.first,
         follow_up_date: nil,
         compliance: 'no',
-        operational_risk: 'internal fraud',
+        operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
         finding_user_assignments_attributes: {
@@ -63,7 +63,7 @@ class WeaknessTest < ActiveSupport::TestCase
         priority: Weakness.priorities_values.first,
         follow_up_date: nil,
         compliance: 'no',
-        operational_risk: 'internal fraud',
+        operational_risk: ['internal fraud'],
         impact: ['econimic', 'regulatory'],
         internal_control_components: ['risk_evaluation', 'monitoring'],
         finding_user_assignments_attributes: {
@@ -101,7 +101,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.risk = nil
     @weakness.priority = nil
     @weakness.compliance = ''
-    @weakness.operational_risk = ''
+    @weakness.operational_risk = []
     @weakness.impact = []
     @weakness.internal_control_components = []
 
@@ -179,7 +179,8 @@ class WeaknessTest < ActiveSupport::TestCase
   test 'progress is not updated when state change to awaiting' do
     skip unless SHOW_WEAKNESS_PROGRESS
 
-    @weakness.update! state: Finding::STATUS[:awaiting]
+    @weakness.update! state:          Finding::STATUS[:awaiting],
+                      follow_up_date: Time.zone.today
 
     assert_equal 0, @weakness.progress
   end
@@ -196,6 +197,12 @@ class WeaknessTest < ActiveSupport::TestCase
                       follow_up_date: Time.zone.today
 
     assert_equal 100, @weakness.progress
+  end
+
+  test 'default progress for' do
+    assert_equal 100, Weakness.default_progress_for(state: Finding::STATUS[:implemented])
+    assert_equal 0,   Weakness.default_progress_for(state: Finding::STATUS[:awaiting])
+    assert_equal 25,  Weakness.default_progress_for(state: Finding::STATUS[:being_implemented])
   end
 
   test 'review code is updated when control objective is changed' do
@@ -341,8 +348,12 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.effect = ' '
     @weakness.audit_comments = '  '
 
-    refute @weakness.must_be_approved?
-    assert_equal error_messages.sort, @weakness.approval_errors.sort
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF && HIDE_WEAKNESS_EFFECT
+      assert @weakness.must_be_approved?
+    else
+      refute @weakness.must_be_approved?
+      assert_equal error_messages.sort, @weakness.approval_errors.sort
+    end
   end
 
   test 'work papers can be added to weakness with current close date' do

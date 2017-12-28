@@ -43,4 +43,5 @@
 //= require tags
 //= require touch
 //= require users
+//= require weaknesses
 //= require work_papers

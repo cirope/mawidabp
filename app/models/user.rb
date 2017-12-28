@@ -21,6 +21,7 @@ class User < ApplicationRecord
   include Users::Relations
   include Users::Releases
   include Users::Resources
+  include Users::ReviewAssignment
   include Users::Roles
   include Users::Scopes
   include Users::Search

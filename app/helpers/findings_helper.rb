@@ -7,7 +7,8 @@ module FindingsHelper
       label:      false,
       prompt:     true,
       input_html: {
-        disabled: (disabled || finding.unconfirmed?)
+        disabled: (disabled || finding.unconfirmed?),
+        data: { weakness_state_changed_url: state_changed_weaknesses_url }
       }
   end
 
@@ -34,10 +35,10 @@ module FindingsHelper
   def finding_follow_up_date_text finding
     html_classes = []
 
-    if finding.being_implemented?
-      html_classes << 'strike'       if finding.stale?
-      html_classes << 'text-warning' if finding.rescheduled?
-      html_classes << 'text-success' if html_classes.blank?
+    if finding.being_implemented? || finding.awaiting?
+      html_classes << 'strike bg-danger' if finding.stale?
+      html_classes << 'text-warning'     if finding.rescheduled?
+      html_classes << 'text-success'     if html_classes.blank?
     end
 
     if finding.follow_up_date.present?
@@ -140,7 +141,7 @@ module FindingsHelper
   end
 
   def finding_fixed_status_options
-    Finding::STATUS.slice(:implemented_audited, :assumed_risk).map do |k, v|
+    Finding::STATUS.slice(:implemented_audited, :assumed_risk, :expired).map do |k, v|
       [t("findings.state.#{k}"), v.to_s]
     end
   end
@@ -159,12 +160,6 @@ module FindingsHelper
       !current_organization.corporate?
   end
 
-  def finding_answer_disabled?
-    SHOW_FINDING_CURRENT_SITUATION &&
-      @finding.is_in_a_final_review? &&
-      @finding.answer.present?
-  end
-
   def finding_description_label
     attr_name = @finding.class.human_attribute_name 'description'
 
@@ -173,6 +168,13 @@ module FindingsHelper
     else
       attr_name
     end
+  end
+
+  def show_skip_work_paper_for finding
+    state_errors = finding.errors.details[:state]
+
+    finding.skip_work_paper ||
+      state_errors.any? { |msg| msg[:error] == :must_have_a_work_paper }
   end
 
   private

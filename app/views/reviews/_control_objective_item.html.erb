@@ -35,9 +35,10 @@
           <%= f.input :id, as: :hidden %>
           <%= f.input :order_number, as: :hidden, input_html: { class: 'sort_number' } %>
         <% end %>
-        <% if control_objective_item.weaknesses.exists? %>
+        <% weaknesses = readonly ? control_objective_item.final_weaknesses : control_objective_item.weaknesses %>
+        <% if weaknesses.exists? %>
           <ul>
-            <% control_objective_item.weaknesses.order(:review_code).each do |weakness| %>
+            <% weaknesses.order(:review_code).each do |weakness| %>
               <li>
                 <span class="text-danger">
                   <%= [weakness.review_code, weakness.title].compact.join(' - ') %>

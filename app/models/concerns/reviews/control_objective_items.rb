@@ -2,12 +2,26 @@ module Reviews::ControlObjectiveItems
   extend ActiveSupport::Concern
 
   included do
-    attr_reader   :control_objective_ids, :process_control_ids
-    attr_accessor :control_objective_data, :process_control_data
+    attr_reader   :control_objective_ids, :process_control_ids, :best_practice_ids
+    attr_accessor :control_objective_data, :process_control_data, :best_practice_data
 
     has_many :control_objective_items, dependent: :destroy, after_add: :assign_review
+    has_many :process_controls, -> { distinct }, through: :control_objective_items
+    has_many :best_practices, -> { distinct }, through: :process_controls
 
     accepts_nested_attributes_for :control_objective_items, allow_destroy: true
+  end
+
+  def best_practice_ids= best_practice_ids
+    Array(best_practice_ids).uniq.each do |best_practice_id|
+      if BestPractice.exists? best_practice_id
+        best_practice = BestPractice.find best_practice_id
+
+        best_practice.control_objectives.each do |control_objective|
+          add_control_objective_item_from control_objective
+        end
+      end
+    end
   end
 
   def process_control_ids= process_control_ids
@@ -40,6 +54,18 @@ module Reviews::ControlObjectiveItems
 
   def grouped_control_objective_items options = {}
     grouped_control_objective_items = group_control_objective_items options
+
+    grouped_control_objective_items.to_a.sort do |gcoi1, gcoi2|
+      pc1 = gcoi1.last.map(&:order_number).compact.min || -1
+      pc2 = gcoi2.last.map(&:order_number).compact.min || -1
+
+      pc1 <=> pc2
+    end
+  end
+
+  def grouped_control_objective_items_by_best_practice options = {}
+    grouped_control_objective_items =
+      group_control_objective_items_by_best_practice options
 
     grouped_control_objective_items.to_a.sort do |gcoi1, gcoi2|
       pc1 = gcoi1.last.map(&:order_number).compact.min || -1
@@ -95,6 +121,25 @@ module Reviews::ControlObjectiveItems
 
         if grouped_items[item.process_control].exclude?(item)
           grouped_items[item.process_control] << item
+        end
+      end
+
+      grouped_items
+    end
+
+    def group_control_objective_items_by_best_practice options
+      grouped_items = {}
+      items         = if options[:hide_excluded_from_score]
+                        control_objective_items.reject &:exclude_from_score
+                      else
+                        control_objective_items
+                      end
+
+      items.each do |item|
+        grouped_items[item.best_practice] ||= []
+
+        if grouped_items[item.best_practice].exclude?(item)
+          grouped_items[item.best_practice] << item
         end
       end
 

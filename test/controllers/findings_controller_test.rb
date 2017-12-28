@@ -114,20 +114,14 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings as CSV' do
-    get :index, params: {
-      completed: 'incomplete',
-      format:    :csv
-    }
+    get :index, params: { completed: 'incomplete' }, as: :csv
 
     assert_response :success
     assert_equal "#{Mime[:csv]}", @response.content_type
   end
 
   test 'list findings as PDF' do
-    get :index, params: {
-      completed: 'incomplete',
-      format:    :pdf
-    }
+    get :index, params: { completed: 'incomplete' }, as: :pdf
 
     assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
     assert_equal "#{Mime[:pdf]}", @response.content_type
@@ -259,7 +253,7 @@ class FindingsControllerTest < ActionController::TestCase
               risk: Finding.risks_values.first,
               priority: Finding.priorities_values.first,
               compliance: 'no',
-              operational_risk: 'internal fraud',
+              operational_risk: ['internal fraud'],
               impact: ['econimic', 'regulatory'],
               internal_control_components: ['risk_evaluation', 'monitoring'],
               business_unit_ids: [business_units(:business_unit_three).id],
@@ -367,7 +361,7 @@ class FindingsControllerTest < ActionController::TestCase
             priority: Finding.priorities_values.first,
             follow_up_date: 3.days.from_now.to_date,
             compliance: 'no',
-            operational_risk: 'internal fraud',
+            operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
             finding_user_assignments_attributes: [
@@ -451,7 +445,7 @@ class FindingsControllerTest < ActionController::TestCase
           risk: Finding.risks_values.first,
           priority: Finding.priorities_values.first,
           compliance: 'no',
-          operational_risk: 'internal fraud',
+          operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
           users_for_notification: [users(:bare).id],
@@ -492,9 +486,8 @@ class FindingsControllerTest < ActionController::TestCase
       completed: 'incomplete',
       q: 'O001',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
 
     assert_response :success
 
@@ -511,9 +504,8 @@ class FindingsControllerTest < ActionController::TestCase
       completed: 'incomplete',
       q: 'O001',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
 
     assert_response :success
 
@@ -531,9 +523,8 @@ class FindingsControllerTest < ActionController::TestCase
       completed: 'incomplete',
       q: 'O001, 1 2 3',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
 
     assert_response :success
 
@@ -551,9 +542,8 @@ class FindingsControllerTest < ActionController::TestCase
       completed: 'incomplete',
       q: 'x_none',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
 
     assert_response :success
 
@@ -566,9 +556,8 @@ class FindingsControllerTest < ActionController::TestCase
     get :auto_complete_for_tagging, params: {
       q: 'impor',
       completed: 'incomplete',
-      kind: 'finding',
-      format: :json
-    }
+      kind: 'finding'
+    }, as: :json
 
     assert_response :success
 
@@ -582,9 +571,8 @@ class FindingsControllerTest < ActionController::TestCase
     get :auto_complete_for_tagging, params: {
       q: 'x_none',
       completed: 'incomplete',
-      kind: 'finding',
-      format: :json
-    }
+      kind: 'finding'
+    }, as: :json
 
     assert_response :success
 

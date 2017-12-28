@@ -1,7 +1,8 @@
 class ExecutionReportsController < ApplicationController
   include Reports::WeaknessesByStateExecution
-  include Reports::DetailedManagement
   include Reports::WeaknessesReport
+  include Reports::DetailedManagement
+  include Reports::ReviewsWithIncompleteWorkPapers
 
   before_action :auth, :load_privileges, :check_privileges
 
@@ -16,10 +17,13 @@ class ExecutionReportsController < ApplicationController
   private
     def load_privileges
       @action_privileges.update(
+        weaknesses_by_state_execution: :read,
+        create_weaknesses_by_state_execution: :read,
+        weaknesses_report: :read,
+        create_weaknesses_report: :read,
         detailed_management_report: :read,
         create_detailed_management_report: :read,
-        weaknesses_by_state_execution: :read,
-        create_weaknesses_by_state_execution: :read
+        reviews_with_incomplete_work_papers_report: :read
       )
     end
 end
