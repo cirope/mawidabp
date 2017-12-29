@@ -11,6 +11,8 @@ addons:
     - slapd
     - ldap-utils
   postgresql: 9.6
+before_install:
+  - 'gem update --system'
 before_script:
   - 'cp config/application.example.yml config/application.yml'
   - "psql -c 'create database mawidabp_test;' -U postgres"
