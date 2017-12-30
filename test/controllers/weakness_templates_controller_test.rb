@@ -33,7 +33,12 @@ class WeaknessTemplatesControllerTest < ActionController::TestCase
   end
 
   test 'should create weakness_template' do
-    assert_difference 'WeaknessTemplate.count' do
+    counts = %w(
+      WeaknessTemplate.count
+      ControlObjectiveWeaknessTemplateRelation.count
+    )
+
+    assert_difference counts do
       post :create, params: {
         weakness_template: {
           title: 'New weakness template',
@@ -41,7 +46,12 @@ class WeaknessTemplatesControllerTest < ActionController::TestCase
           risk: WeaknessTemplate.risks_values.first,
           operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
-          internal_control_components: ['risk_evaluation', 'monitoring']
+          internal_control_components: ['risk_evaluation', 'monitoring'],
+          control_objective_weakness_template_relations_attributes: [
+            {
+              control_objective_id: control_objectives(:impact_analysis).id
+            }
+          ]
         }
       }
     end

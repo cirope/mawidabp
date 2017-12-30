@@ -25,10 +25,27 @@
         </div>
       </div>
     <% end %>
+
+    <h4>
+      <%= ControlObjective.model_name.human count: 0 %>
+    </h4>
+
+    <div id="control_objective_weakness_template_relations">
+      <%= f.simple_fields_for :control_objective_weakness_template_relations do |co_f| %>
+        <%= render 'control_objective_weakness_template_relation', f: co_f %>
+      <% end %>
+
+      <p>
+        <%= link_to_add_fields t('.add_control_objective'), f, :control_objective_weakness_template_relations %>
+      </p>
+    </div>
     <%= f.input :lock_version, as: :hidden %>
   </div>
 
+  <hr>
+
   <div class="form-actions">
+    <div class="pull-right"><%= yield :form_actions %></div>
     <%= f.submit class: 'btn btn-primary' %>
   </div>
 <% end %>

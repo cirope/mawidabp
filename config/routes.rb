@@ -272,7 +272,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :weakness_templates
+  resources :weakness_templates do
+    get :auto_complete_for_control_objective, on: :collection
+  end
 
   resources :control_objective_items do
     get :suggest_next_work_paper_code, on: :member

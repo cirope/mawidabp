@@ -503,3 +503,5 @@ es:
       title: 'Crear plantilla de observación'
     show:
       title: 'Ver plantilla de observación'
+    form:
+      add_control_objective: 'Agregar objetivo de control'

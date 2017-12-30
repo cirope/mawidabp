@@ -30,6 +30,7 @@ class Organization < ApplicationRecord
   has_many :resource_classes, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :users, -> { readonly }, through: :organization_roles
+  has_many :weakness_templates, dependent: :destroy
   has_many :work_papers, dependent: :destroy
 
   def to_s

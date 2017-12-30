@@ -25,5 +25,21 @@
   </p>
 <% end %>
 
+<% if @weakness_template.control_objectives.any? %>
+  <hr>
+
+  <h4>
+    <%= ControlObjective.model_name.human count: @weakness_template.control_objectives.size %>
+  </h4>
+
+  <ul>
+    <% @weakness_template.control_objectives.each do |control_objective| %>
+      <li><%= control_objective %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<hr>
+
 <%= link_to_edit [:edit, @weakness_template] %> |
 <%= link_to_index weakness_templates_path %>

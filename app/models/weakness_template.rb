@@ -1,6 +1,7 @@
 class WeaknessTemplate < ApplicationRecord
   include Auditable
   include Parameters::Risk
+  include WeaknessTemplates::ControlObjectives
   include WeaknessTemplates::Risk
   include WeaknessTemplates::Scopes
   include WeaknessTemplates::Search

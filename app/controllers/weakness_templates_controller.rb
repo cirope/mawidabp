@@ -1,7 +1,9 @@
 class WeaknessTemplatesController < ApplicationController
+  include AutoCompleteFor::ControlObjective
+
   respond_to :html
 
-  before_action :auth, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   before_action :set_weakness_template, only: [:show, :edit, :update, :destroy]
   before_action :set_title, except: [:destroy]
 
@@ -57,7 +59,14 @@ class WeaknessTemplatesController < ApplicationController
     def weakness_template_params
       params.require(:weakness_template).permit(
         :title, :description, :risk, :lock_version,
-        impact: [], operational_risk: [], internal_control_components: []
+        impact: [], operational_risk: [], internal_control_components: [],
+        control_objective_weakness_template_relations_attributes: [
+          :id, :control_objective_id, :_destroy
+        ]
       )
+    end
+
+    def load_privileges
+      @action_privileges.update auto_complete_for_control_objective: :read
     end
 end

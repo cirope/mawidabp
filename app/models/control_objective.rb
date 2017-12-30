@@ -43,6 +43,8 @@ class ControlObjective < ApplicationRecord
     dependent: :nullify
   has_one :control, -> { order("#{Control.quoted_table_name}.#{Control.qcn('order')} ASC") },
     as: :controllable, dependent: :destroy
+  has_many :control_objective_weakness_template_relations, dependent: :destroy
+  has_many :weakness_templates, through: :control_objective_weakness_template_relations
 
   accepts_nested_attributes_for :control, allow_destroy: true
 
@@ -50,6 +52,10 @@ class ControlObjective < ApplicationRecord
     super(attributes)
 
     self.build_control unless self.control
+  end
+
+  def to_s
+    name
   end
 
   def as_json(options = nil)
