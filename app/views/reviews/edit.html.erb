@@ -8,6 +8,19 @@
     <% end %>
     <ul class="dropdown-menu">
       <li><%= link_to t('review.download_work_papers'), action: :download_work_papers, id: @review, _ts: Time.now.to_i %></li>
+      <% if @review.work_papers_not_finished? %>
+        <li>
+          <%= link_to t('review.finished_work_papers'), { action: :finished_work_papers, id: @review, _ts: Time.now.to_i }, data: {
+            method: :patch, confirm: t('messages.confirmation')
+          } %>
+        </li>
+      <% elsif @review.work_papers_finished? && @auth_user.supervisor? %>
+        <li>
+          <%= link_to t('review.revise_work_papers'), { action: :finished_work_papers, id: @review, revised: true, _ts: Time.now.to_i }, data: {
+            method: :patch, confirm: t('messages.confirmation')
+          } %>
+        </li>
+      <% end %>
       <% unless @review.has_final_review? %>
         <li>
           <%= link_to t('review.recode_findings'), recode_findings_review_path(@review, _ts: Time.now.to_i), data: {
@@ -21,8 +34,7 @@
         </li>
       <% end %>
     </ul>
-  </div> |
-  <%= link_to_back %>
+  </div>
 <% end %>
 
 <%= render 'form' %>

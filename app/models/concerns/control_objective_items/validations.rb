@@ -13,7 +13,8 @@ module ControlObjectiveItems::Validations
     validates :auditor_comment, presence: true, if: :exclude_from_score
     validate :audit_date_is_on_period
     validate :control_objective_uniqueness
-    validate :score_completion
+    validate :tests_completion
+    validate :score_with_test_completion
   end
 
   private
@@ -34,17 +35,37 @@ module ControlObjectiveItems::Validations
         another_record = (persisted? && coi.id != id) ||
                          (new_record? && coi.object_id != object_id)
 
-        is_same && another_record && !marked_for_destruction?
+        is_same && another_record && !coi.marked_for_destruction?
       end
 
       errors.add :control_objective_id, :taken if is_duplicated
     end
 
-    def score_completion
-      if finished && !exclude_from_score && !HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS
-        if design_score.blank? && compliance_score.blank? && sustantive_score.blank?
-          errors.add :design_score,     :blank
+    def tests_completion
+      if finished && !exclude_from_score
+        all_blank = control.design_tests.blank?     &&
+                    control.compliance_tests.blank? &&
+                    control.sustantive_tests.blank?
+
+        if all_blank
+          control.errors.add :design_tests,     :blank
+          control.errors.add :compliance_tests, :blank
+          control.errors.add :sustantive_tests, :blank
+        end
+      end
+    end
+
+    def score_with_test_completion
+      if finished && !exclude_from_score
+        if design_score.blank? && control.design_tests.present?
+          errors.add :design_score, :blank
+        end
+
+        if compliance_score.blank? && control.compliance_tests.present?
           errors.add :compliance_score, :blank
+        end
+
+        if sustantive_score.blank? && control.sustantive_tests.present?
           errors.add :sustantive_score, :blank
         end
       end

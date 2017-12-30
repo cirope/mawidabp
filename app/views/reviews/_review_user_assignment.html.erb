@@ -11,21 +11,27 @@
             title: t('label.search'),
             readonly: readonly,
             data: {
+              assignment_type_refresh_url: assignment_type_refresh_reviews_path,
               autocomplete_url: reviews_users_path,
               autocomplete_id_target: "#auto_user_id_#{id}"
             }
           } %>
         <%= f.input :user_id, as: :hidden, input_html: { id: "auto_user_id_#{id}" } %>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-<%= SHOW_CONCLUSION_ALTERNATIVE_PDF ? 5 : 3 %>">
         <%= user_assignment_type_field(f, false, readonly) %>
       </div>
-      <div class="col-md-1">
-        <%= f.input :include_signature, label: false, input_html: { disabled: readonly } %>
-      </div>
-      <div class="col-md-1">
-        <%= f.input :owner, label: false, input_html: { disabled: readonly } %>
-      </div>
+      <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+        <div class="col-md-1">
+          <%= f.input :include_signature, label: false, input_html: {
+            disabled: readonly,
+            data: { include_signature: true }
+          } %>
+        </div>
+        <div class="col-md-1">
+          <%= f.input :owner, label: false, input_html: { disabled: readonly } %>
+        </div>
+      <% end %>
       <div class="col-md-1">
         <div class="toggle-visibility text-right">
           <%= link_to_remove_nested_item(f) unless readonly %>

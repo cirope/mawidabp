@@ -27,6 +27,9 @@ es:
       best_practice:
         one: 'Buena práctica'
         other: 'Buenas prácticas'
+      best_practice_comment:
+        one: 'Comentario del auditor (buena práctica)'
+        other: 'Comentarios del auditor (buena práctica)'
       business_unit:
         one: 'Unidad de negocio'
         other: 'Unidades de negocio'
@@ -143,9 +146,12 @@ es:
         name: 'Objetivo de control'
         relevance: 'Objetivo de control (importancia)'
         risk: 'Objetivo de control (riesgo)'
+      best_practice_comment:
+        auditor_comment: 'Conclusiones del auditor'
+        best_practice: 'Buena práctica'
       business_unit_score:
         business_unit_id: 'Unidad de negocio'
-        design_score: 'Calificación evaluación de diseño'
+        design_score: 'Calificación pruebas de diseño'
         compliance_score: 'Calificación pruebas de cumplimiento'
         sustantive_score: 'Calificación pruebas sustantivas'
       control_objective:
@@ -176,7 +182,7 @@ es:
         repeated_of_id: 'Reiterada de'
         review_code: 'Código'
         audit_recommendations: 'Recomendaciones de auditoría'
-        answer: 'Respuesta'
+        answer: 'Respuesta/Acciones correctivas'
         current_situation: 'Situación actual'
         current_situation_verified: 'Situación actual verificada'
         effect: 'Efecto'
@@ -191,6 +197,7 @@ es:
         progress: 'Normalización'
         count: 'Cantidad'
         solution_date: 'Fecha de solución'
+        skip_work_paper: 'No requiere papel de trabajo'
         users: 'Responsables'
         work_papers: 'Papeles de trabajo'
         finding_answers: 'Respuestas'
@@ -277,7 +284,7 @@ es:
         title: 'Título'
         description: 'Oportunidad de mejora'
         review_code: 'Código'
-        answer: 'Respuesta'
+        answer: 'Respuesta/Acciones correctivas'
         user_ids: 'Responsable'
         finding_user_assignments: 'Responsables'
         work_papers: 'Papeles de trabajo'
@@ -348,6 +355,7 @@ es:
         start: 'Proyecto (inicio)'
         end: 'Proyecto (fin)'
         order_number: 'Proyecto (orden)'
+        risk_exposure: 'Proyecto (exposición al riesgo)'
         business_unit_id: 'Proyecto (unidad de negocio)'
         status: 'Proyecto (estado)'
       plan/plan_items/resource_utilizations:
@@ -362,6 +370,7 @@ es:
         start: 'Inicio'
         end: 'Fin'
         order_number: 'Orden'
+        risk_exposure: 'Exposición al riesgo'
         business_unit_id: 'Unidad de negocio'
         resources: 'Recursos'
         resource_ids: 'Recursos'
@@ -423,7 +432,7 @@ es:
         description: 'Observación'
         review_code: 'Código'
         audit_recommendations: 'Recomendaciones de auditoría'
-        answer: 'Respuesta'
+        answer: 'Respuesta/Acciones correctivas'
         effect: 'Efecto'
         risk: 'Riesgo'
         priority: 'Prioridad'

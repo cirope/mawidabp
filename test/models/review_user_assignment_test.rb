@@ -107,12 +107,11 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     review = @review_user_assignment.review
     # Para que ARel cargue la relación
     review.review_user_assignments.map(&:user_id)
-    review_user_assignment = review.review_user_assignments.build(
+    review.review_user_assignments.build(
       @review_user_assignment.attributes.merge('id' => nil))
-    review_user_assignment.review = review
 
-    assert review_user_assignment.invalid?
-    assert_error review_user_assignment, :user_id, :taken
+    assert @review_user_assignment.invalid?
+    assert_error @review_user_assignment, :user_id, :taken
   end
 
   test 'user reassignment' do
@@ -253,5 +252,13 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     assert_no_difference 'ReviewUserAssignment.count' do
       uneditable_review_user_assignment.destroy
     end
+  end
+
+  test 'in audit team' do
+    assert @review_user_assignment.in_audit_team?
+
+    @review_user_assignment.assignment_type = ReviewUserAssignment::TYPES[:viewer]
+
+    refute @review_user_assignment.in_audit_team?
   end
 end

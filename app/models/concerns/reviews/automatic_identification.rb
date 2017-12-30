@@ -5,6 +5,10 @@ module Reviews::AutomaticIdentification
     attr_reader :identification_prefix,
                 :identification_number,
                 :identification_suffix
+
+    if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION && Rails.env.production?
+      attr_readonly :identification
+    end
   end
 
   module ClassMethods
@@ -12,7 +16,7 @@ module Reviews::AutomaticIdentification
       regex = /(\d+)\/#{suffix}\Z/i
       last_identification =
         where("#{quoted_table_name}.#{qcn 'identification'} LIKE ?", "%/#{suffix}").
-        order(:identification).
+        reorder(:id).
         last&.
         identification
 

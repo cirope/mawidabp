@@ -9,7 +9,7 @@ module Plans::Duplication
     plan_items.any? do |plan_item|
       errors         = plan_item.errors
       @taken_error ||= taken_error_for plan_item
-      
+
       errors[:project].include? @taken_error
     end
   end

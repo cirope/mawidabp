@@ -29,6 +29,9 @@ es:
     high: 'Alto'
     very_high: 'Muy alto'
     excellent: 'Óptimo'
+    # Short qualifications
+    ok: 'OK'
+    observed: 'Observado'
   risk_types:
     low: 'Bajo'
     medium: 'Medio'
@@ -47,3 +50,9 @@ es:
     satisfactory: 'Satisfactorio'
     improve: 'Necesita mejorar'
     unsatisfactory: 'No satisfactorio'
+    # When score by weaknesses is used
+    adequate: 'Adecuado'
+    require_some_improvements: 'Requiere ciertas mejoras'
+    require_improvements: 'Requiere mejoras'
+    require_lots_of_improvements: 'Requiere mejoras significativas'
+    inadequate: 'Inadecuado'

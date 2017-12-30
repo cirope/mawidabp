@@ -1,0 +1,15 @@
+<fieldset class="best_practice_comment">
+  <div class="form-inputs row">
+    <div class="col-md-6">
+      <%= f.input :best_practice, label: false, input_html: { disabled: true, value: f.object.best_practice&.name } %>
+      <%= f.input :best_practice_id, as: :hidden %>
+    </div>
+    <div class="col-md-6">
+      <% if SHOW_CONCLUSION_AS_OPTIONS %>
+        <%= f.input :auditor_comment, collection: auditor_comment_options, label: false, prompt: true, input_html: { disabled: readonly } %>
+      <% else %>
+        <%= f.input :auditor_comment, label: false, input_html: { readonly: readonly, rows: 5 } %>
+      <% end %>
+    </div>
+  </div>
+</fieldset>

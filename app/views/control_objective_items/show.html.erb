@@ -8,10 +8,12 @@
   <%= simple_format @control_objective_item.to_s %>
 </div>
 
-<div>
-  <strong><%= Control.human_attribute_name(:effects) %>:</strong>
-  <%= simple_format @control_objective_item.control.effects %>
-</div>
+<% unless HIDE_CONTROL_EFFECTS %>
+  <div>
+    <strong><%= Control.human_attribute_name(:effects) %>:</strong>
+    <%= simple_format @control_objective_item.control.effects %>
+  </div>
+<% end %>
 
 <p>
   <strong><%= ControlObjectiveItem.human_attribute_name(:relevance) %>:</strong>
@@ -23,36 +25,32 @@
   <%= simple_format @control_objective_item.control.control %>
 </div>
 
-<% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
-  <p>
-    <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
-    <%= @control_objective_item.design_score_text %>
-  </p>
-<% end %>
+<p>
+  <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
+  <%= @control_objective_item.design_score_text %>
+</p>
 
 <div>
   <strong><%= Control.human_attribute_name :design_tests %>:</strong>
   <%= simple_format @control_objective_item.control.design_tests %>
 </div>
 
-<% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+<% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
   <p>
     <strong><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</strong>
     <%= @control_objective_item.compliance_score_text %>
   </p>
+
+  <div>
+    <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
+    <%= simple_format @control_objective_item.control.compliance_tests %>
+  </div>
 <% end %>
 
-<div>
-  <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
-  <%= simple_format @control_objective_item.control.compliance_tests %>
-</div>
-
-<% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
-  <p>
-    <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
-    <%= @control_objective_item.sustantive_score_text %>
-  </p>
-<% end %>
+<p>
+  <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
+  <%= @control_objective_item.sustantive_score_text %>
+</p>
 
 <div>
   <strong><%= Control.human_attribute_name :sustantive_tests %>:</strong>
@@ -141,6 +139,5 @@
 
 <div>
   <%= link_to_edit edit_control_objective_item_path(@control_objective_item) %> |
-  <%= link_to_index control_objective_items_path %> |
-  <%= link_to_back %>
+  <%= link_to_index control_objective_items_path %>
 </div>

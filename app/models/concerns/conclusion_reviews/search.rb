@@ -30,7 +30,7 @@ module ConclusionReviews::Search
       end
 
       def identification_options
-        string_column_options_for "#{Review.quoted_table_name}.#{Review.qcn 'identification'}"
+        string_column_options_for "#{::Review.quoted_table_name}.#{::Review.qcn 'identification'}"
       end
 
       def summary_options

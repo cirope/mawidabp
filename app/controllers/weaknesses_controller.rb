@@ -148,14 +148,24 @@ class WeaknessesController < ApplicationController
     end
   end
 
+  # * GET /weaknesses/state_changed
+  def state_changed
+    @state = params[:state].to_i
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
     def weakness_params
       params.require(:weakness).permit(
         :control_objective_item_id, :review_code, :title, :description, :answer,
         :audit_comments, :state, :progress, :origination_date, :solution_date,
         :repeated_of_id, :audit_recommendations, :effect, :risk, :priority,
-        :follow_up_date, :users_for_notification, :compliance, :operational_risk,
-        :lock_version, impact: [], internal_control_components: [],
+        :follow_up_date, :users_for_notification, :compliance, :skip_work_paper,
+        :lock_version,
+        operational_risk: [], impact: [], internal_control_components: [],
         business_unit_ids: [],
         achievements_attributes: [
           :id, :benefit_id, :amount, :comment, :_destroy
@@ -196,6 +206,7 @@ class WeaknessesController < ApplicationController
         auto_complete_for_tagging: :read,
         auto_complete_for_finding_relation: :read,
         auto_complete_for_control_objective_item: :read,
+        state_changed: :read,
         undo_reiteration: :modify
       )
     end

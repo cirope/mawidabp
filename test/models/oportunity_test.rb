@@ -225,8 +225,12 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.state = Finding::STATUS[:assumed_risk]
     @oportunity.audit_comments = '  '
 
-    refute @oportunity.must_be_approved?
-    assert_equal error_messages.sort, @oportunity.approval_errors.sort
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+      assert @oportunity.must_be_approved?
+    else
+      refute @oportunity.must_be_approved?
+      assert_equal error_messages.sort, @oportunity.approval_errors.sort
+    end
   end
 
   test 'dynamic status functions' do

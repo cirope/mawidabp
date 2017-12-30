@@ -2,6 +2,8 @@ module Weaknesses::Scopes
   extend ActiveSupport::Concern
 
   included do
+    scope :with_high_risk,    -> { where risk: highest_risks }
+    scope :with_other_risk,   -> { where.not risk: highest_risks }
     scope :with_highest_risk, -> {
       where "#{quoted_table_name}.#{qcn 'highest_risk'} = #{quoted_table_name}.#{qcn 'risk'}"
     }

@@ -9,6 +9,8 @@ conclusion_current_final_review:
   summary: 'ACT 12'
   recipients: 'John Doe'
   sectors: 'Area 51'
+  evolution: 'Do the evolution'
+  evolution_justification: 'Ok'
   organization: cirope
   created_at: <%= 2.days.ago.to_date.to_s(:db) %>
 
@@ -21,6 +23,9 @@ conclusion_current_draft_review:
   approved: true
   recipients: 'John Doe'
   sectors: 'Area 51'
+  evolution: 'Do the evolution'
+  evolution_justification: 'Ok'
+  observations:
   organization: cirope
 
 conclusion_past_final_review:
@@ -34,6 +39,9 @@ conclusion_past_final_review:
   summary: 'ACT 12'
   recipients: 'John Doe'
   sectors: 'Area 51'
+  evolution: 'Do the evolution'
+  evolution_justification: 'Ok'
+  observations:
   organization: cirope
   created_at: <%= 2.months.ago.to_date.to_s(:db) %>
 
@@ -46,6 +54,9 @@ conclusion_past_draft_review:
   approved: true
   recipients: 'John Doe'
   sectors: 'Area 51'
+  evolution: 'Do the evolution'
+  evolution_justification: 'Ok'
+  observations:
   organization: cirope
 
 conclusion_with_conclusion_draft_review:
@@ -57,6 +68,9 @@ conclusion_with_conclusion_draft_review:
   approved: true
   recipients: 'John Doe'
   sectors: 'Area 51'
+  evolution: 'Do the evolution'
+  evolution_justification: 'Ok'
+  observations:
   organization: cirope
 
 conclusion_approved_with_conclusion_draft_review:
@@ -68,4 +82,7 @@ conclusion_approved_with_conclusion_draft_review:
   approved: true
   recipients: 'John Doe'
   sectors: 'Area 51'
+  evolution: 'Do the evolution'
+  evolution_justification: 'Ok'
+  observations:
   organization: cirope

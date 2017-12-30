@@ -15,9 +15,14 @@ module SettingsHelper
     end
   end
 
-  def qualifications
-    QUALIFICATION_TYPES.map do |k, v|
-      [[t("qualification_types.#{k}"),"(#{v})"].join(' '), v]
+  def qualifications show_value: !SHOW_SHORT_QUALIFICATIONS
+    ::QUALIFICATION_TYPES.map do |k, v|
+      text = [
+        t("qualification_types.#{k}"),
+        ("(#{v})" if show_value)
+      ].compact.join(' ')
+
+      [text, v]
     end
   end
 

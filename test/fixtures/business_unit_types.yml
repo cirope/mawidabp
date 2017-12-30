@@ -3,6 +3,10 @@ cycle:
   external: false
   business_unit_label: Cycle
   project_label: Subcycle
+  review_prefix: C
+  recipients: 'John Doe'
+  sectors: 'Area 51'
+  require_tag: false
   organization: cirope
 
 consolidated_substantive:
@@ -10,6 +14,10 @@ consolidated_substantive:
   external: false
   business_unit_label: Business Unit
   project_label: Audited object
+  review_prefix: CS
+  recipients: 'John Doe'
+  sectors: 'Area 51'
+  require_tag: false
   organization: cirope
 
 bcra:
@@ -17,6 +25,10 @@ bcra:
   external: true
   business_unit_label: Business Unit
   project_label:
+  review_prefix: BCRA
+  recipients: 'John Doe'
+  sectors: 'Area 51'
+  require_tag: false
   organization: cirope
 
 bcra_google:
@@ -24,4 +36,8 @@ bcra_google:
   external: true
   business_unit_label: Business Unit
   project_label:
+  review_prefix: BCRA
+  recipients: 'John Doe'
+  sectors: 'Area 51'
+  require_tag: false
   organization: google

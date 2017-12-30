@@ -155,6 +155,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
             },
             :design_score => ControlObjectiveItem.qualifications_values.last,
             :compliance_score => ControlObjectiveItem.qualifications_values.last,
+            :sustantive_score => ControlObjectiveItem.qualifications_values.last,
             :audit_date => 10.days.from_now.to_date,
             :auditor_comment => 'Updated comment',
             :control_objective_id => control_objectives(:organization_security_4_4).id,
@@ -162,9 +163,9 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
             :business_unit_scores_attributes => [
               {
                 :business_unit_id => business_units(:business_unit_two).id,
-                :design_score => ControlObjectiveItem.qualifications_values.last,
-                :compliance_score => ControlObjectiveItem.qualifications_values.last,
-                :sustantive_score => ControlObjectiveItem.qualifications_values.last
+                :design_score => ControlObjectiveItem.qualifications_values.last.to_s,
+                :compliance_score => ControlObjectiveItem.qualifications_values.last.to_s,
+                :sustantive_score => ControlObjectiveItem.qualifications_values.last.to_s
               }
             ],
             :business_unit_type_ids => [business_unit_types(:consolidated_substantive).id.to_s]
@@ -194,8 +195,8 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   test 'auto complete for business unit' do
     login
     get :auto_complete_for_business_unit, :params => {
-      :q => 'fifth', :format => :json
-    }
+      :q => 'fifth'
+    }, :as => :json
     assert_response :success
 
     business_units = ActiveSupport::JSON.decode(@response.body)
@@ -203,8 +204,8 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert_equal 0, business_units.size # Fifth is in another organization
 
     get :auto_complete_for_business_unit, :params => {
-      :q => 'one', :format => :json
-    }
+      :q => 'one'
+    }, :as => :json
     assert_response :success
 
     business_units = ActiveSupport::JSON.decode(@response.body)
@@ -213,8 +214,8 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert business_units.all? { |u| (u['label'] + u['informal']).match /one/i }
 
     get :auto_complete_for_business_unit, :params => {
-      :q => 'business', :format => :json
-    }
+      :q => 'business'
+    }, :as => :json
     assert_response :success
 
     business_units = ActiveSupport::JSON.decode(@response.body)
@@ -226,8 +227,8 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   test 'auto complete for business unit type' do
     login
     get :auto_complete_for_business_unit_type, :params => {
-      :q => 'noway', :format => :json
-    }
+      :q => 'noway'
+    }, :as => :json
     assert_response :success
 
     business_unit_types = ActiveSupport::JSON.decode(@response.body)
@@ -235,8 +236,8 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert_equal 0, business_unit_types.size # Fifth is in another organization
 
     get :auto_complete_for_business_unit_type, :params => {
-      :q => 'cycle', :format => :json
-    }
+      :q => 'cycle'
+    }, :as => :json
     assert_response :success
 
     business_unit_types = ActiveSupport::JSON.decode(@response.body)

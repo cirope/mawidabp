@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171024174522) do
+ActiveRecord::Schema.define(version: 20171218211545) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -93,6 +93,16 @@ ActiveRecord::Schema.define(version: 20171024174522) do
     t.index ["organization_id"], name: "i_benefits_organization_id"
   end
 
+  create_table "best_practice_comments", force: :cascade do |t|
+    t.text "auditor_comment"
+    t.integer "review_id", limit: 19, precision: 19, null: false
+    t.integer "best_practice_id", limit: 19, precision: 19, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["best_practice_id"], name: "i_bes_pra_com_bes_pra_id"
+    t.index ["review_id"], name: "i_bes_pra_com_rev_id"
+  end
+
   create_table "best_practices", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -139,6 +149,10 @@ ActiveRecord::Schema.define(version: 20171024174522) do
     t.integer "lock_version", precision: 38, default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "review_prefix"
+    t.boolean "require_tag", default: false, null: false
+    t.text "sectors"
+    t.text "recipients"
     t.index ["external"], name: "i_business_unit_types_external"
     t.index ["name"], name: "i_business_unit_types_name"
     t.index ["organization_id"], name: "i_bus_uni_typ_org_id"
@@ -180,6 +194,9 @@ ActiveRecord::Schema.define(version: 20171024174522) do
     t.string "summary"
     t.text "recipients"
     t.text "sectors"
+    t.string "evolution"
+    t.text "evolution_justification"
+    t.text "observations"
     t.index ["close_date"], name: "i_con_rev_clo_dat"
     t.index ["issue_date"], name: "i_con_rev_iss_dat"
     t.index ["organization_id"], name: "i_con_rev_org_id"
@@ -512,9 +529,9 @@ ActiveRecord::Schema.define(version: 20171024174522) do
     t.text "current_situation"
     t.boolean "current_situation_verified", default: false, null: false
     t.string "compliance"
-    t.string "operational_risk"
     t.text "impact", default: "[]", null: false
     t.text "internal_control_components", default: "[]", null: false
+    t.text "operational_risk", default: "[]"
     t.index ["control_objective_item_id"], name: "i_fin_con_obj_ite_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
@@ -1962,6 +1979,7 @@ ActiveRecord::Schema.define(version: 20171024174522) do
     t.integer "business_unit_id", precision: 38
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "risk_exposure"
     t.index ["business_unit_id"], name: "i_plan_items_business_unit_id"
     t.index ["plan_id"], name: "index_plan_items_on_plan_id"
   end
@@ -2612,6 +2630,8 @@ ActiveRecord::Schema.define(version: 20171024174522) do
     t.string "risk_exposure"
     t.decimal "manual_score", precision: 6, scale: 2
     t.string "include_sox"
+    t.integer "finished_work_papers", precision: 38, default: 0, null: false
+    t.string "score_type", default: "effectiveness", null: false
     t.index ["file_model_id"], name: "index_reviews_on_file_model_id"
     t.index ["identification"], name: "i_reviews_identification"
     t.index ["organization_id"], name: "i_reviews_organization_id"
@@ -2767,6 +2787,8 @@ ActiveRecord::Schema.define(version: 20171024174522) do
   add_foreign_key "achievements", "findings", on_delete: :cascade
   add_foreign_key "aq$_internet_agent_privs", "aq$_internet_agents", column: "agent_name", primary_key: "agent_name", name: "agent_must_be_created", on_delete: :cascade
   add_foreign_key "benefits", "organizations", on_delete: :cascade
+  add_foreign_key "best_practice_comments", "best_practices", on_delete: :cascade
+  add_foreign_key "best_practice_comments", "reviews", on_delete: :cascade
   add_foreign_key "best_practices", "groups", on_delete: :cascade
   add_foreign_key "best_practices", "organizations", on_delete: :cascade
   add_foreign_key "business_unit_findings", "business_units", on_delete: :cascade

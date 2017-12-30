@@ -1,10 +1,13 @@
 module WeaknessesHelper
   def show_weakness_previous_follow_up_dates(weakness)
-    dates = weakness.all_follow_up_dates if weakness.being_implemented?
     list = String.new.html_safe
     out = String.new.html_safe
 
-    unless dates.blank?
+    if weakness.being_implemented? || weakness.awaiting?
+      dates = weakness.all_follow_up_dates
+    end
+
+    if dates.present?
       dates.each { |d| list << content_tag(:li, l(d, :format => :long)) }
 
       out << link_to(t('weakness.previous_follow_up_dates'), '#', :onclick =>

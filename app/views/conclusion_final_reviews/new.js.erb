@@ -1,0 +1,35 @@
+<% if @conclusion_final_review.review %>
+  $('#conclusion_final_review_applied_procedures').val('<%= j @conclusion_final_review.applied_procedures %>')
+  $('#conclusion_final_review_conclusion').val('<%= j @conclusion_final_review.conclusion %>')
+  $('#conclusion_final_review_evolution').val('<%= j @conclusion_final_review.evolution %>')
+  $('#conclusion_final_review_evolution_justification').val('<%= j @conclusion_final_review.evolution_justification %>')
+  $('#conclusion_final_review_recipients').val('<%= j @conclusion_final_review.recipients %>')
+  $('#conclusion_final_review_sectors').val('<%= j @conclusion_final_review.sectors %>')
+  $('#conclusion_final_review_observations').val('<%= j @conclusion_final_review.observations %>')
+  $('#conclusion_final_review_business_unit').val('<%= j @conclusion_final_review.review.business_unit.name %>')
+  $('#conclusion_final_review_project').val('<%= j @conclusion_final_review.review.plan_item.project %>')
+  $('#conclusion_final_review_score').val('<%= j @conclusion_final_review.review.score_text %>')
+
+  $('#best_practice_comments_container').html('<%= j best_practice_comments_form(@conclusion_final_review) %>')
+
+  $('#conclusion_final_review_applied_procedures').focus()
+<% else %>
+  var elementsForUpdate = [
+    'applied_procedures',
+    'conclusion',
+    'evolution',
+    'evolution_justification',
+    'recipients',
+    'sectors',
+    'observations',
+    'business_unit',
+    'project',
+    'score'
+  ]
+
+  $.each(elementsForUpdate, function (i, e) {
+    $('#conclusion_final_review_' + e).val('')
+  })
+
+  $('#best_practice_comments_container').html('')
+<% end %>
