@@ -1,0 +1,38 @@
+<% if @weakness_templates.empty? && @query.blank? %>
+  <%= render 'shared/empty_index', message: t('.empty_html') %>
+<% else %>
+  <%= render partial: 'shared/search', locals: {
+    options: {},
+    columns: @query.blank? ? WeaknessTemplate::COLUMNS_FOR_SEARCH.keys : @columns
+  } %>
+
+  <table class="table table-striped table-hover">
+    <thead id="column_headers">
+      <tr>
+        <%= make_filterable_column WeaknessTemplate.human_attribute_name('title'), nil, 'title' %>
+        <%= make_filterable_column WeaknessTemplate.human_attribute_name('description'), { class: 'hidden-xs' }, 'title' %>
+        <%= make_not_available_column WeaknessTemplate.human_attribute_name('risk'), class: 'hidden-xs' %>
+        <th colspan="3" class="text-right"><%= link_to_search %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @weakness_templates.each do |weakness_template| %>
+        <tr>
+          <td><%= super_truncate weakness_template.title, 30 %></td>
+          <td><%= super_truncate weakness_template.description, 30 %></td>
+          <td><%= weakness_template.risk_text %></td>
+          <td><%= link_to_show weakness_template %></td>
+          <td><%= link_to_edit [:edit, weakness_template] %></td>
+          <td><%= link_to_destroy weakness_template %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <hr />
+
+  <%= paginate @weakness_templates %>
+<% end %>
+
+<%= link_to_new new_weakness_template_path, class: 'btn btn-primary' %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171218211545) do
+ActiveRecord::Schema.define(version: 20171229141447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -803,6 +803,20 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.index ["whodunnit"], name: "index_versions_on_whodunnit"
   end
 
+  create_table "weakness_templates", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "description", null: false
+    t.integer "risk"
+    t.text "impact", default: [], null: false, array: true
+    t.text "operational_risk", default: [], null: false, array: true
+    t.text "internal_control_components", default: [], null: false, array: true
+    t.integer "lock_version", default: 0, null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_weakness_templates_on_organization_id"
+  end
+
   create_table "work_papers", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "code"
@@ -915,6 +929,7 @@ ActiveRecord::Schema.define(version: 20171218211545) do
   add_foreign_key "tags", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "users", "users", column: "manager_id", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "weakness_templates", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflow_items", "workflows", on_update: :restrict, on_delete: :restrict

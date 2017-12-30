@@ -44,4 +44,5 @@
 //= require touch
 //= require users
 //= require weaknesses
+//= require weakness_templates
 //= require work_papers

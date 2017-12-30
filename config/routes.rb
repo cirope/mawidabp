@@ -272,6 +272,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :weakness_templates
+
   resources :control_objective_items do
     get :suggest_next_work_paper_code, on: :member
     get :auto_complete_for_business_unit, on: :collection
