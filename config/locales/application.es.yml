@@ -442,6 +442,7 @@ es:
     readonly: "El objetivo de control no puede ser modificado, ya se emitió el informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     not_rated: "No evaluado"
+    not_apply_text: 'No aplica calificación'
     excluded_from_score: "No se tiene en cuenta en la calificación del informe"
     not_applicable: "No aplica"
     errors:

@@ -25,4 +25,15 @@ jQuery(function ($) {
       $('#control_objective_item_auditor_comment').val(val)
     }
   })
+
+  $(document).on('change', '[data-update-test]', function () {
+    var $score = $(this)
+    var test   = $score.data('updateTest')
+    var newVal = $score.data('updateWith')
+    var on     = $score.data('updateOn')
+    var $test  = $('[name$="[' + test + ']"]')
+
+    if (+$score.val() === on && !$test.val().trim())
+      $test.val(newVal)
+  })
 })
