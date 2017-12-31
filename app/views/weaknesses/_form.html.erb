@@ -11,6 +11,12 @@
   <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
+    <% if show_weakness_templates? %>
+      <%= render 'weakness_templates', f: f %>
+    <% elsif @weakness.new_record? %>
+      <%= f.input :weakness_template_id, as: :hidden %>
+    <% end %>
+
     <div class="row">
       <div class="col-md-6">
         <div class="row">

@@ -7,6 +7,7 @@ class Weakness < Finding
   include Weaknesses::Progress
   include Weaknesses::Risk
   include Weaknesses::Scopes
+  include Weaknesses::Template
   include Weaknesses::Validations
   include Weaknesses::WorkPapers
 end

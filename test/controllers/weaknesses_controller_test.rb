@@ -334,6 +334,22 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_equal @response.content_type, Mime[:js]
   end
 
+  test 'weakness template changed' do
+    login
+
+    get :weakness_template_changed, xhr: true, params: {
+      id: weakness_templates(:security).id
+    }, as: :js
+
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+
+    get :weakness_template_changed, xhr: true, as: :js
+
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+  end
+
   test 'auto complete for finding relation' do
     finding = Finding.find(findings(:being_implemented_weakness_on_draft).id)
 
@@ -386,7 +402,7 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     findings = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 0, findings.size # Sin resultados
+    assert_equal 0, findings.size # No results
   end
 
   test 'auto complete for tagging' do
@@ -411,7 +427,7 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     tags = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 0, tags.size # Sin resultados
+    assert_equal 0, tags.size # No results
   end
 
   test 'auto complete for control objective item' do
@@ -439,6 +455,28 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     cois = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 0, cois.size # Sin resultados
+    assert_equal 0, cois.size # No results
+  end
+
+  test 'auto complete for weakness template' do
+    login
+
+    get :auto_complete_for_weakness_template, params: { q: 'sec' }, as: :json
+
+    assert_response :success
+
+    wts = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, wts.size # security
+    assert wts.all? { |f| f['label'].match /sec/i }
+    assert_equal weakness_templates(:security).id, wts.first['id']
+
+    get :auto_complete_for_weakness_template, params: { q: 'x_none' }, as: :json
+
+    assert_response :success
+
+    wts = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, wts.size # No results
   end
 end
