@@ -236,7 +236,8 @@ Rails.application.routes.draw do
       get :excluded_control_objectives
       patch :finished_work_papers
       patch :recode_findings
-      patch :recode_findings_by_risk
+      patch :recode_weaknesses_by_risk
+      patch :recode_weaknesses_by_control_objective_order
     end
 
     collection do
