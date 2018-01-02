@@ -31,6 +31,7 @@ gem 'search_cop'
 gem 'jbuilder'
 gem 'sidekiq'
 gem 'request_store'
+gem 'request_store-sidekiq'
 gem 'ruby-ntlm'
 gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
