@@ -1,15 +1,16 @@
 module ConclusionReviews::AlternativePDF
   extend ActiveSupport::Concern
 
-  def alternative_pdf organization = nil
-    pdf = Prawn::Document.create_generic_pdf :portrait, false, hide_brand: true
+  def alternative_pdf organization = nil, *args
+    options = args.extract_options!
+    pdf     = Prawn::Document.create_generic_pdf :portrait, false, hide_brand: true
 
     put_watermark_on          pdf
     put_alternative_header_on pdf, organization
     put_alternative_cover_on  pdf
     put_executive_summary_on  pdf
     put_detailed_review_on    pdf
-    put_annex_on              pdf, organization
+    put_annex_on              pdf, organization, options
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -88,7 +89,7 @@ module ConclusionReviews::AlternativePDF
       put_recipients_on          pdf
     end
 
-    def put_annex_on pdf, organization
+    def put_annex_on pdf, organization, options
       title  = I18n.t 'conclusion_review.annex.title'
       legend = I18n.t 'conclusion_review.annex.legend'
 
@@ -99,7 +100,7 @@ module ConclusionReviews::AlternativePDF
       pdf.text legend, align: :justify
 
       put_conclusion_options_on pdf
-      put_review_scope_on       pdf, organization
+      put_review_scope_on       pdf, organization, options
       put_staff_on              pdf
       put_sectors_on            pdf
     end
@@ -111,15 +112,18 @@ module ConclusionReviews::AlternativePDF
       pdf.text text, align: :center, style: :bold
     end
 
-    def put_review_scope_on pdf, organization
+    def put_review_scope_on pdf, organization, options
       if show_review_best_practice_comments? organization
         pdf.move_down PDF_FONT_SIZE
         put_best_practice_comments_table_on pdf
       else
         pdf.move_down PDF_FONT_SIZE
         put_control_objective_items_table_on pdf
-        pdf.move_down PDF_FONT_SIZE
-        put_control_objective_items_reference_on pdf
+
+        unless options[:brief]
+          pdf.move_down PDF_FONT_SIZE
+          put_control_objective_items_reference_on pdf
+        end
       end
     end
 
