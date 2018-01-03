@@ -6,7 +6,7 @@
     columns: @query.blank? ? WeaknessTemplate::COLUMNS_FOR_SEARCH.keys : @columns
   } %>
 
-  <table class="table table-striped table-hover">
+  <table class="table table-condensed table-striped table-hover">
     <thead id="column_headers">
       <tr>
         <%= make_filterable_column WeaknessTemplate.human_attribute_name('title'), nil, 'title' %>
