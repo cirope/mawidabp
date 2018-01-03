@@ -34,6 +34,7 @@ module Weaknesses::Validations
 
     def clean_array_attributes
       self.impact = Array(impact).reject &:blank?
+      self.operational_risk = Array(operational_risk).reject &:blank?
       self.internal_control_components =
         Array(internal_control_components).reject &:blank?
     end

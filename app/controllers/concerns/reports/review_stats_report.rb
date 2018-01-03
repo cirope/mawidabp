@@ -190,7 +190,7 @@ module Reports::ReviewStatsReport
       Review.scores.map do |score, value|
         scores = @reviews_by_score[score]
         ratio  = if scores.size > 0
-                   '%.2f%' % (scores.size.to_f / review_stats_score_count * 100)
+                   '%.2f%%' % (scores.size.to_f / review_stats_score_count * 100)
                  else
                    '0.00%'
                  end
@@ -233,7 +233,7 @@ module Reports::ReviewStatsReport
     def reviews_by_tag_data
       @reviews_by_tag.map do |tag, count|
         ratio = if count > 0
-                  '%.2f%' % (count.to_f / reviews_by_tag_count * 100)
+                  '%.2f%%' % (count.to_f / reviews_by_tag_count * 100)
                 else
                   '0.00%'
                 end

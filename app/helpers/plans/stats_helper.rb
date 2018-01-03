@@ -37,7 +37,7 @@ module Plans::StatsHelper
     progress = total > 0 ? executed.to_f / total * 100 : 0
 
     {
-      label: '%.0f%' % progress,
+      label: '%.0f%%' % progress,
       value: progress.round,
       class: class_for_progress(progress)
     }
@@ -64,7 +64,7 @@ module Plans::StatsHelper
     on_time    = plan_stat_on_time plan_items
     compliance = on_time.size.to_f / items.size * 100 if items.size > 0
 
-    '%.0f%' % compliance
+    '%.0f%%' % compliance
   end
 
   def link_to_planned_items business_unit_type, plan_items

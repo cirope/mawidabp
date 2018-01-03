@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171218211545) do
+ActiveRecord::Schema.define(version: 20171230233914) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -193,6 +193,15 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.index ["review_id"], name: "index_control_objective_items_on_review_id"
   end
 
+  create_table "control_objective_weakness_template_relations", force: :cascade do |t|
+    t.bigint "control_objective_id", null: false
+    t.bigint "weakness_template_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["control_objective_id"], name: "index_co_wt_on_control_objective_id"
+    t.index ["weakness_template_id"], name: "index_co_wt_on_weakness_template_id"
+  end
+
   create_table "control_objectives", id: :serial, force: :cascade do |t|
     t.text "name"
     t.integer "risk"
@@ -363,6 +372,7 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.text "operational_risk", default: [], array: true
     t.text "impact", default: [], null: false, array: true
     t.text "internal_control_components", default: [], null: false, array: true
+    t.bigint "weakness_template_id"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
@@ -375,6 +385,7 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.index ["title"], name: "index_findings_on_title"
     t.index ["type"], name: "index_findings_on_type"
     t.index ["updated_at"], name: "index_findings_on_updated_at"
+    t.index ["weakness_template_id"], name: "index_findings_on_weakness_template_id"
   end
 
   create_table "groups", id: :serial, force: :cascade do |t|
@@ -803,6 +814,20 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.index ["whodunnit"], name: "index_versions_on_whodunnit"
   end
 
+  create_table "weakness_templates", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "description", null: false
+    t.integer "risk"
+    t.text "impact", default: [], null: false, array: true
+    t.text "operational_risk", default: [], null: false, array: true
+    t.text "internal_control_components", default: [], null: false, array: true
+    t.integer "lock_version", default: 0, null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_weakness_templates_on_organization_id"
+  end
+
   create_table "work_papers", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "code"
@@ -860,6 +885,8 @@ ActiveRecord::Schema.define(version: 20171218211545) do
   add_foreign_key "conclusion_reviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "control_objectives", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "reviews", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "control_objective_weakness_template_relations", "control_objectives", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "control_objective_weakness_template_relations", "weakness_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objectives", "process_controls", on_update: :restrict, on_delete: :restrict
   add_foreign_key "costs", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "documents", "file_models", on_update: :restrict, on_delete: :restrict
@@ -878,6 +905,7 @@ ActiveRecord::Schema.define(version: 20171218211545) do
   add_foreign_key "finding_user_assignments", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "findings", "control_objective_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "findings", "findings", column: "repeated_of_id", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "findings", "weakness_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "ldap_configs", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "login_records", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "login_records", "users", on_update: :restrict, on_delete: :restrict
@@ -915,6 +943,7 @@ ActiveRecord::Schema.define(version: 20171218211545) do
   add_foreign_key "tags", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "users", "users", column: "manager_id", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "weakness_templates", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflow_items", "workflows", on_update: :restrict, on_delete: :restrict

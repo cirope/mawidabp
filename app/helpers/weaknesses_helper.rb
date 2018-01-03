@@ -88,4 +88,17 @@ module WeaknessesHelper
   def weakness_internal_control_components_options
     WEAKNESS_INTERNAL_CONTROL_COMPONENTS.map { |option| [option, option] }
   end
+
+  def show_weakness_templates?
+    @weakness.new_record? &&
+      @weakness.weakness_template_id.blank? &&
+      WeaknessTemplate.list.any?
+  end
+
+  def weakness_templates_for weakness
+    control_objective  = weakness.control_objective_item&.control_objective
+
+    control_objective &&
+      WeaknessTemplate.list.by_control_objective(control_objective)
+  end
 end

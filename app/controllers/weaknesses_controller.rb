@@ -2,6 +2,7 @@ class WeaknessesController < ApplicationController
   include AutoCompleteFor::ControlObjectiveItem
   include AutoCompleteFor::FindingRelation
   include AutoCompleteFor::Tagging
+  include AutoCompleteFor::WeaknessTemplate
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_weakness, only: [
@@ -157,6 +158,15 @@ class WeaknessesController < ApplicationController
     end
   end
 
+  # * GET /weaknesses/weakness_template_changed
+  def weakness_template_changed
+    @weakness_template = WeaknessTemplate.list.find_by id: params[:id]
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
     def weakness_params
       params.require(:weakness).permit(
@@ -164,7 +174,7 @@ class WeaknessesController < ApplicationController
         :audit_comments, :state, :progress, :origination_date, :solution_date,
         :repeated_of_id, :audit_recommendations, :effect, :risk, :priority,
         :follow_up_date, :users_for_notification, :compliance, :skip_work_paper,
-        :lock_version,
+        :weakness_template_id, :lock_version,
         operational_risk: [], impact: [], internal_control_components: [],
         business_unit_ids: [],
         achievements_attributes: [
@@ -206,6 +216,7 @@ class WeaknessesController < ApplicationController
         auto_complete_for_tagging: :read,
         auto_complete_for_finding_relation: :read,
         auto_complete_for_control_objective_item: :read,
+        auto_complete_for_weakness_template: :read,
         state_changed: :read,
         undo_reiteration: :modify
       )

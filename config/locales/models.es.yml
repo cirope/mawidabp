@@ -114,6 +114,9 @@ es:
       weakness:
         one: 'Observación'
         other: 'Observaciones'
+      weakness_template:
+        one: 'Plantilla de observación'
+        other: 'Plantillas de observaciones'
       work_paper:
         one: 'Papel de trabajo'
         other: 'Papeles de trabajo'
@@ -447,7 +450,16 @@ es:
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
+        weakness_template: 'Buscar plantilla por título'
+        weakness_template_from_control_objective: 'Plantilla sugerida por objetivo de control'
         work_papers: 'Papeles de trabajo'
+      weakness_template:
+        title: 'Título'
+        description: 'Observación'
+        risk: 'Riesgo'
+        operational_risk: 'Riesgo operacional'
+        impact: 'Impacto'
+        internal_control_components: 'Componentes de CI'
 
     errors:
       models:
