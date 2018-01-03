@@ -7,7 +7,7 @@
     <h5>
       <%= textilize_without_paragraph t('.high_risk_weaknesses', count: @weaknesses.with_highest_risk.count) %>
     </h5>
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <% labels, values = *Weakness.weaknesses_for_graph(@weaknesses.with_highest_risk).values %>
       <% labels.zip(values).each do |label, value| %>
         <tr>
@@ -28,7 +28,7 @@
     <h5>
       <%== user_weaknesses_links %>
     </h5>
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <% labels, values = *Weakness.weaknesses_for_graph(@weaknesses).values %>
       <% labels.zip(values).each do |label, value| %>
         <tr>
@@ -49,7 +49,7 @@
     <h5>
       <%= textilize_without_paragraph t('.pending_weaknesses', count: @weaknesses.with_pending_status.count) %>
     </h5>
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <% labels, values = *Weakness.pending_weaknesses_for_graph(@weaknesses).values %>
       <% labels.zip(values).each do |label, value| %>
         <tr>
