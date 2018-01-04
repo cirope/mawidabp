@@ -40,8 +40,17 @@
           <ul>
             <% weaknesses.order(:review_code).each do |weakness| %>
               <li>
+                <% if weakness.weakness_template_id %>
+                  <span class="text-success" title="<%= t 'review.weakness_from_template' %>">
+                    <span class="glyphicon glyphicon-star"></span>
+                  </span>
+                <% end %>
                 <span class="text-danger">
-                  <%= [weakness.review_code, weakness.title].compact.join(' - ') %>
+                  <% if weakness.weakness_template_id %>
+                    <strong><%= [weakness.review_code, weakness.title].compact.join(' - ') %></strong>
+                  <% else %>
+                    <%= [weakness.review_code, weakness.title].compact.join(' - ') %>
+                  <% end %>
                 </span>
               </li>
             <% end %>
