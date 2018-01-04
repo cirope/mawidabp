@@ -8,8 +8,8 @@ class ReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
     :show, :edit, :update, :destroy, :download_work_papers, :survey_pdf,
-    :finished_work_papers, :recode_findings, :recode_findings_by_risk,
-    :excluded_control_objectives
+    :finished_work_papers, :recode_findings, :recode_weaknesses_by_risk,
+    :recode_weaknesses_by_control_objective_order, :excluded_control_objectives
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -371,9 +371,16 @@ class ReviewsController < ApplicationController
     redirect_to @review, notice: t('review.findings_recoded')
   end
 
-  # * PUT /reviews/1/recode_findings_by_risk
-  def recode_findings_by_risk
+  # * PUT /reviews/1/recode_weaknesses_by_risk
+  def recode_weaknesses_by_risk
     @review.recode_weaknesses_by_risk
+
+    redirect_to @review, notice: t('review.findings_recoded')
+  end
+
+  # * PUT /reviews/1/recode_weaknesses_by_control_objective_order
+  def recode_weaknesses_by_control_objective_order
+    @review.recode_weaknesses_by_control_objective_order
 
     redirect_to @review, notice: t('review.findings_recoded')
   end
@@ -452,7 +459,8 @@ class ReviewsController < ApplicationController
         excluded_control_objectives: :read,
         finished_work_papers: :modify,
         recode_findings: :modify,
-        recode_findings_by_risk: :modify
+        recode_weaknesses_by_risk: :modify,
+        recode_weaknesses_by_control_objective_order: :modify
       )
     end
 end

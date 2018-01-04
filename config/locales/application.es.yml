@@ -442,6 +442,7 @@ es:
     readonly: "El objetivo de control no puede ser modificado, ya se emitió el informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     not_rated: "No evaluado"
+    not_apply_text: 'No aplica calificación'
     excluded_from_score: "No se tiene en cuenta en la calificación del informe"
     not_applicable: "No aplica"
     errors:
@@ -918,7 +919,8 @@ es:
     estimated_amount: "Costo estimado en plan de trabajo"
     other_actions: "Acciones"
     recode_findings: "Recodificar observaciones"
-    recode_findings_by_risk: "Recodificar observaciones por riesgo"
+    recode_weaknesses_by_risk: "Recodificar observaciones por riesgo"
+    recode_weaknesses_by_control_objective_order: "Recodificar observaciones por orden objetivos de control"
     findings_recoded: "Observaciones recodificadas correctamente"
     work_papers_marked_as_finished: "Papeles de trabajo marcados como conforme auditor"
     work_papers_marked_as_revised: "Papeles de trabajo marcados como revisados supervisor"

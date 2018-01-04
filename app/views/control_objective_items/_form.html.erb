@@ -53,7 +53,16 @@
         <%= f.input :design_score, collection: qualifications,
           include_blank: !SHOW_SHORT_QUALIFICATIONS && t('control_objective_item.not_rated'),
           prompt: SHOW_CONCLUSION_AS_OPTIONS,
-          input_html: { data: { score_target: 'design' }, disabled: readonly } %>
+          input_html: {
+            disabled: readonly,
+            data: {
+              score_target: 'design',
+              update_test: 'design_tests',
+              update_with: t('control_objective_item.not_apply_text'),
+              update_on: ControlObjectiveItem.qualifications[:not_apply]
+            }
+          }
+        %>
         <%= yield :design_tests %>
 
         <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
@@ -66,7 +75,16 @@
         <%= f.input :sustantive_score, collection: qualifications,
           include_blank: !SHOW_SHORT_QUALIFICATIONS && t('control_objective_item.not_rated'),
           prompt: SHOW_CONCLUSION_AS_OPTIONS,
-          input_html: { data: { score_target: 'sustantive' }, disabled: readonly } %>
+          input_html: {
+            disabled: readonly,
+            data: {
+              score_target: 'sustantive',
+              update_test: 'sustantive_tests',
+              update_with: t('control_objective_item.not_apply_text'),
+              update_on: ControlObjectiveItem.qualifications[:not_apply]
+            }
+          }
+        %>
         <%= yield :sustantive_tests %>
 
         <% if SHOW_CONCLUSION_AS_OPTIONS %>

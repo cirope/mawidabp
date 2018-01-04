@@ -776,6 +776,36 @@ class ReviewTest < ActiveSupport::TestCase
     }
   end
 
+  test 'recode weaknesses by control objective order' do
+    codes = @review.grouped_control_objective_items.map do |_pc, cois|
+      cois.map do |coi|
+        findings =
+          coi.weaknesses.order(risk: :desc, review_code: :asc).not_revoked
+
+        findings.pluck 'review_code'
+      end
+    end.flatten
+
+    assert codes.each_with_index.any? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i != i.next
+    }
+
+    @review.recode_weaknesses_by_control_objective_order
+
+    codes = @review.reload.grouped_control_objective_items.map do |_pc, cois|
+      cois.map do |coi|
+        findings =
+          coi.weaknesses.order(risk: :desc, review_code: :asc).not_revoked
+
+        findings.pluck 'review_code'
+      end
+    end.flatten
+
+    assert codes.sort.each_with_index.all? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i == i.next
+    }
+  end
+
   test 'next identification number' do
     assert_equal '001', Review.next_identification_number(2017)
 
