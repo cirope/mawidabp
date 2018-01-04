@@ -240,7 +240,7 @@ module ConclusionReviews::AlternativePDF
       pdf.move_down PDF_FONT_SIZE
 
       put_weakness_details_on pdf, all_weaknesses,
-        hide: %w(audited audit_comments),
+        hide: %w(audited),
         show: %w(tags repeated_review),
         legend: 'no_weaknesses'
     end
@@ -476,11 +476,11 @@ module ConclusionReviews::AlternativePDF
     end
 
     def main_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_high_risk.sort_for_review
+      weaknesses.not_revoked.not_assumed_risk.with_high_risk.sort_by_code
     end
 
     def other_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_for_review
+      weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_by_code
     end
 
     def low_risk_weaknesses
@@ -496,7 +496,7 @@ module ConclusionReviews::AlternativePDF
     end
 
     def all_weaknesses
-      weaknesses.not_revoked.sort_for_review
+      weaknesses.not_revoked.sort_by_code
     end
 
     def weaknesses

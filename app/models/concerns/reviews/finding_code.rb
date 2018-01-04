@@ -19,7 +19,7 @@ module Reviews::FindingCode
     revoked    = []
 
     grouped_control_objective_items.each do |_pc, cois|
-      cois.each do |coi|
+      cois.sort.each do |coi|
         weaknesses += coi.weaknesses.not_revoked.order(order).to_a
         revoked    += coi.weaknesses.revoked.to_a
       end
@@ -62,7 +62,9 @@ module Reviews::FindingCode
     def assign_new_review_code_to_findings not_revoked, revoked
       self.class.transaction do
         revoked.each_with_index do |f, i|
-          f.update_column :review_code, "#{revoked_prefix}#{f.review_code}"
+          unless f.review_code.start_with? revoked_prefix
+            f.update_column :review_code, "#{revoked_prefix}#{f.review_code}"
+          end
         end
 
         not_revoked.each_with_index do |f, i|

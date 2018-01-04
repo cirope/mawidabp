@@ -122,7 +122,7 @@ GEM
     mini_magick (4.8.0)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
-    minitest (5.11.0)
+    minitest (5.11.1)
     multi_json (1.12.2)
     nakayoshi_fork (0.0.3)
     net-ldap (0.16.1)
