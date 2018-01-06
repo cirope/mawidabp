@@ -239,7 +239,7 @@ module ConclusionReviews::AlternativePDF
     def put_detailed_weaknesses_on pdf, organization
       title = Weakness.model_name.human count: 0
       show  = if show_review_best_practice_comments?(organization)
-                %w(tags repeated_review control_objective_title)
+                %w(tags repeated_review control_objective_title template_code)
               else
                 %w(tags repeated_review)
               end
