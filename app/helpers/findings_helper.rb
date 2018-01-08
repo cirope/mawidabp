@@ -69,7 +69,7 @@ module FindingsHelper
   end
 
   def show_finding_review_code_with_decription_as_abbr finding
-    content_tag :abbr, finding.review_code, title: finding.description
+    content_tag :abbr, finding.review_code, title: j(finding.description)
   end
 
   def finding_answer_notification_check form

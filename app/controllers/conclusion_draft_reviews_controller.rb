@@ -114,10 +114,12 @@ class ConclusionDraftReviewsController < ApplicationController
   #
   # * GET /conclusion_draft_reviews/export_to_pdf/1
   def export_to_pdf
+    options = params[:export_options]&.to_unsafe_h
+
     if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_draft_review.alternative_pdf(current_organization)
+      @conclusion_draft_review.alternative_pdf(current_organization, options)
     else
-      @conclusion_draft_review.to_pdf(current_organization, params[:export_options]&.to_unsafe_h)
+      @conclusion_draft_review.to_pdf(current_organization, options)
     end
 
     respond_to do |format|

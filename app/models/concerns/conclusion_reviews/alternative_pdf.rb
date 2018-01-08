@@ -1,15 +1,16 @@
 module ConclusionReviews::AlternativePDF
   extend ActiveSupport::Concern
 
-  def alternative_pdf organization = nil
-    pdf = Prawn::Document.create_generic_pdf :portrait, false, hide_brand: true
+  def alternative_pdf organization = nil, *args
+    options = args.extract_options!
+    pdf     = Prawn::Document.create_generic_pdf :portrait, false, hide_brand: true
 
     put_watermark_on          pdf
     put_alternative_header_on pdf, organization
     put_alternative_cover_on  pdf
     put_executive_summary_on  pdf
-    put_detailed_review_on    pdf
-    put_annex_on              pdf, organization
+    put_detailed_review_on    pdf, organization
+    put_annex_on              pdf, organization, options
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -72,7 +73,7 @@ module ConclusionReviews::AlternativePDF
       put_other_weaknesses_on  pdf
     end
 
-    def put_detailed_review_on pdf
+    def put_detailed_review_on pdf, organization
       title  = I18n.t 'conclusion_review.detailed_review.title'
       legend = I18n.t 'conclusion_review.detailed_review.legend'
 
@@ -83,12 +84,12 @@ module ConclusionReviews::AlternativePDF
       pdf.text legend, align: :justify, style: :italic
 
       put_review_survey_on       pdf
-      put_detailed_weaknesses_on pdf
+      put_detailed_weaknesses_on pdf, organization
       put_observations_on        pdf
       put_recipients_on          pdf
     end
 
-    def put_annex_on pdf, organization
+    def put_annex_on pdf, organization, options
       title  = I18n.t 'conclusion_review.annex.title'
       legend = I18n.t 'conclusion_review.annex.legend'
 
@@ -99,7 +100,7 @@ module ConclusionReviews::AlternativePDF
       pdf.text legend, align: :justify
 
       put_conclusion_options_on pdf
-      put_review_scope_on       pdf, organization
+      put_review_scope_on       pdf, organization, options
       put_staff_on              pdf
       put_sectors_on            pdf
     end
@@ -111,15 +112,18 @@ module ConclusionReviews::AlternativePDF
       pdf.text text, align: :center, style: :bold
     end
 
-    def put_review_scope_on pdf, organization
+    def put_review_scope_on pdf, organization, options
       if show_review_best_practice_comments? organization
         pdf.move_down PDF_FONT_SIZE
         put_best_practice_comments_table_on pdf
       else
         pdf.move_down PDF_FONT_SIZE
         put_control_objective_items_table_on pdf
-        pdf.move_down PDF_FONT_SIZE
-        put_control_objective_items_reference_on pdf
+
+        unless options[:brief]
+          pdf.move_down PDF_FONT_SIZE
+          put_control_objective_items_reference_on pdf
+        end
       end
     end
 
@@ -232,16 +236,21 @@ module ConclusionReviews::AlternativePDF
       pdf.text review.survey, align: :justify
     end
 
-    def put_detailed_weaknesses_on pdf
+    def put_detailed_weaknesses_on pdf, organization
       title = Weakness.model_name.human count: 0
+      show  = if show_review_best_practice_comments?(organization)
+                %w(tags repeated_review control_objective_title template_code)
+              else
+                %w(tags repeated_review)
+              end
 
       pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
       put_weakness_details_on pdf, all_weaknesses,
-        hide: %w(audited),
-        show: %w(tags repeated_review),
+        show:   show,
+        hide:   %w(audited),
         legend: 'no_weaknesses'
     end
 
@@ -362,12 +371,31 @@ module ConclusionReviews::AlternativePDF
         weaknesses.each do |f|
           coi = f.control_objective_item
 
+          if show.include? 'control_objective_title'
+            put_control_objective_title_on pdf, coi
+          end
+
           pdf.move_down PDF_FONT_SIZE
           pdf.text coi.finding_pdf_data(f, hide: hide, show: show),
             align: :justify, inline_format: true
         end
       else
         put_weakness_legend_on pdf, legend
+      end
+    end
+
+    def put_control_objective_title_on pdf, control_objective_item
+      unless @__last_control_objective_showed == control_objective_item.id
+        options = { align: :justify, inline_format: true }
+        bp_name = control_objective_item.best_practice.name
+        pc_name = control_objective_item.process_control.name
+        co_text = control_objective_item.control_objective_text
+
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text "<u><b>#{bp_name.upcase}</b></u>", options
+        pdf.text "<u><b>#{pc_name} (#{co_text})</b></u>", options
+
+        @__last_control_objective_showed = control_objective_item.id
       end
     end
 

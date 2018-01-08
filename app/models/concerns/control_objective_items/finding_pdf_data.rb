@@ -20,8 +20,7 @@ module ControlObjectiveItems::FindingPDFData
       body = ''
 
       if finding.review_code.present?
-        body << "<b>#{finding.class.human_attribute_name('review_code')}:</b> " +
-          "#{finding.review_code.chomp}\n"
+        body << finding_review_code_text_for(finding, show)
       end
 
       if finding.title.present?
@@ -138,6 +137,18 @@ module ControlObjectiveItems::FindingPDFData
       end
 
       body
+    end
+
+    def finding_review_code_text_for finding, show
+      show_template_code = show.include?('template_code') &&
+                           finding.weakness_template_id.blank?
+      code               = if show_template_code
+                             "#{finding.review_code} <sub><b>(NE)</b></sub>"
+                           else
+                             finding.review_code
+                           end
+
+      "<b>#{finding.class.human_attribute_name 'review_code'}:</b> #{code}\n"
     end
 
     def finding_origination_date_text_for finding

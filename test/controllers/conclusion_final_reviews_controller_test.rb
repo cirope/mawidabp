@@ -201,7 +201,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
-  test 'export conclusion draft review without control objectives excluded from score' do
+  test 'export conclusion final review without control objectives excluded from score' do
     login
 
     conclusion_review = ConclusionFinalReview.find(
@@ -217,7 +217,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
-  test 'export conclusion draft review brief' do
+  test 'export conclusion final review brief' do
     login
 
     conclusion_review = ConclusionFinalReview.find(

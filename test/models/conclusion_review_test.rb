@@ -189,15 +189,30 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert File.exist?(@conclusion_review.absolute_pdf_path)
     assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
     assert_not_equal size, new_size
+
+    FileUtils.rm @conclusion_review.absolute_pdf_path
   end
 
   test 'alternative pdf conversion' do
+    organization = organizations :cirope
+
     assert_nothing_raised do
-      @conclusion_review.alternative_pdf(organizations(:cirope))
+      @conclusion_review.alternative_pdf organization
     end
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)
     assert (size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+
+    assert_nothing_raised do
+      @conclusion_review.alternative_pdf organization, :brief => '1'
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+
+    if ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.exclude?(organization.prefix)
+      assert_not_equal size, new_size
+    end
 
     FileUtils.rm @conclusion_review.absolute_pdf_path
   end
