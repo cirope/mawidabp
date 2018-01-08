@@ -118,7 +118,7 @@ module ConclusionReviews::AlternativePDF
         put_best_practice_comments_table_on pdf
       else
         pdf.move_down PDF_FONT_SIZE
-        put_control_objective_items_table_on pdf
+        put_control_objective_items_table_on pdf, brief: options[:brief]
 
         unless options[:brief]
           pdf.move_down PDF_FONT_SIZE
@@ -173,8 +173,8 @@ module ConclusionReviews::AlternativePDF
       end
     end
 
-    def put_control_objective_items_table_on pdf
-      row_data = control_objectives_row_data
+    def put_control_objective_items_table_on pdf, brief: false
+      row_data = control_objectives_row_data brief
 
       if row_data.present?
         data          = row_data.insert 0, control_objective_column_headers
@@ -199,7 +199,7 @@ module ConclusionReviews::AlternativePDF
       count = 0
 
       review.grouped_control_objective_items.each do |process_control, cois|
-        cois.each do |coi|
+        cois.sort.each do |coi|
           put_control_objective_item_reference_on pdf, coi, count += 1
 
           pdf.move_down PDF_FONT_SIZE
@@ -535,19 +535,19 @@ module ConclusionReviews::AlternativePDF
       end
     end
 
-    def control_objectives_row_data
+    def control_objectives_row_data brief
       count         = 0
       row_data      = []
       image_options = { vposition: :top, border_widths: [1, 0, 1, 0] }
 
       review.grouped_control_objective_items.each do |process_control, cois|
-        cois.each do |coi|
-          image = CONCLUSION_SCOPE_IMAGES.fetch(coi.auditor_comment) do
+        cois.sort.each do |coi|
+          text  = coi.control_objective_text
+          image = CONCLUSION_SCOPE_IMAGES[coi.auditor_comment] ||
             'scope_not_apply.png'
-          end
 
           row_data << [
-            "<sup>(#{count += 1})</sup> #{coi.control_objective_text}",
+            brief ? text : "<sup>(#{count += 1})</sup> #{text}",
             pdf_score_image_row(image, fit: [12, 12]).merge(image_options),
             {
               content:       coi.auditor_comment&.upcase,
