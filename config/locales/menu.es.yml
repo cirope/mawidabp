@@ -14,6 +14,7 @@ es:
       best_practices: 'Buenas prácticas'
       settings: 'Configuraciones'
       weakness_templates: 'Plantillas de observaciones'
+      risk_assessment_templates: 'Plantillas evaluación de riesgo'
       tags: 'Etiquetas'
       documents: 'Documentos'
       news: 'Noticias'

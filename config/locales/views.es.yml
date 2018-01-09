@@ -473,6 +473,21 @@ es:
             one: '*Una* observación solucionada'
             other: '*%{count}* observaciones solucionadas'
 
+  risk_assessment_templates:
+    edit:
+      title: 'Editar plantilla de evaluación de riesgo'
+    index:
+      new: 'Nueva plantilla de evaluación de riesgo'
+      title: 'Listado de plantillas de evaluación de riesgo'
+      empty_html: 'No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="label label-primary">Nueva plantilla de evaluación de riesgo</span>'
+      empty_search_html: 'No hay plantillas de evaluación de riesgo que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear plantilla de evaluación de riesgo'
+    show:
+      title: 'Ver plantilla de evaluación de riesgo'
+    form:
+      add_risk_assessment_weight: 'Agregar ponderador'
+
   versions:
     index:
       title: 'Ver reporte de cambios de seguridad'

@@ -105,6 +105,12 @@ es:
       resource_class:
         one: 'Clase de recurso'
         other: 'Clases de recursos'
+      risk_assessment_template:
+        one: 'Plantilla de evaluación de riesgo'
+        other: 'Plantillas de evaluación de riesgo'
+      risk_assessment_weight:
+        one: 'Atributo de evaluación de riesgo'
+        other: 'Atributos de evaluación de riesgo'
       tag:
         one: 'Etiqueta'
         other: 'Etiquetas'
@@ -429,6 +435,18 @@ es:
         cost: 'Costo'
         resource: 'Recurso'
         resource_consumer: 'Utilización de recurso'
+      risk_assessment_template:
+        name: 'Nombre'
+        description: 'Descripción'
+        risk_assessment_weights: 'Atributos de evaluación de riesgo'
+      risk_assessment_template/risk_assessment_weights:
+        name: 'Atributo'
+        description: 'Descripción'
+        weight: 'Ponderador'
+      risk_assessment_weight:
+        name: 'Atributo'
+        description: 'Descripción'
+        weight: 'Ponderador'
       weakness:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
@@ -490,3 +508,7 @@ es:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
             end:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
+        risk_assessment_template:
+          attributes:
+            risk_assessment_weights:
+              blank: 'debe tener al menos uno'

@@ -98,38 +98,44 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/weakness_templates' }
       ),
       MenuItem.new(
-        :tags,
+        :risk_assessment_templates,
         order: 6,
+        controllers: :risk_assessment_templates,
+        url: { controller: '/risk_assessment_templates' }
+      ),
+      MenuItem.new(
+        :tags,
+        order: 7,
         controllers: :tags,
         url: { controller: '/tags', kind: 'finding' }
       ),
       MenuItem.new(
         :documents,
-        order: 7,
+        order: 8,
         controllers: :documents,
         url: { controller: '/documents' }
       ),
       MenuItem.new(
         :news,
-        order: 8,
+        order: 9,
         controllers: :news,
         url: { controller: '/news' }
       ),
       MenuItem.new(
         :benefits,
-        order: 9,
+        order: 10,
         controllers: :benefits,
         url: { controller: '/benefits' }
       ),
       MenuItem.new(
         :e_mails,
-        order: 10,
+        order: 11,
         controllers: :e_mails,
         url: { controller: '/e_mails' }
       ),
       MenuItem.new(
         :questionnaires,
-        order: 11,
+        order: 12,
         url: { controller: '/questionnaires' },
         children: [
           MenuItem.new(

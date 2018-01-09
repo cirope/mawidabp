@@ -18,6 +18,7 @@
  *= require plan_items
  *= require process_controls
  *= require reports
+ *= require risk_assessment_templates
  *= require roles
  *= require sessions
  *= require tags

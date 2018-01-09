@@ -39,6 +39,7 @@
 //= require plan_items
 //= require process_controls
 //= require reviews
+//= require risk_assessment_templates
 //= require sessions
 //= require tags
 //= require touch
