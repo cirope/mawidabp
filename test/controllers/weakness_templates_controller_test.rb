@@ -15,7 +15,6 @@ class WeaknessTemplatesControllerTest < ActionController::TestCase
   end
 
   test 'should get filtered index' do
-    login
     get :index, params: {
       search: {
         query: 'sec',
