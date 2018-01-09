@@ -6,33 +6,37 @@
     columns: @query.blank? ? WeaknessTemplate::COLUMNS_FOR_SEARCH.keys : @columns
   } %>
 
-  <table class="table table-condensed table-striped table-hover">
-    <thead id="column_headers">
-      <tr>
-        <%= make_filterable_column WeaknessTemplate.human_attribute_name('title'), nil, 'title' %>
-        <%= make_filterable_column WeaknessTemplate.human_attribute_name('description'), { class: 'hidden-xs hidden-sm' }, 'title' %>
-        <%= make_not_available_column WeaknessTemplate.human_attribute_name('risk'), class: 'hidden-xs' %>
-        <th colspan="3" class="text-right"><%= link_to_search %></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @weakness_templates.each do |weakness_template| %>
+  <% if @weakness_templates.empty? %>
+    <%= render 'shared/empty_index', message: t('.empty_search_html') %>
+  <% else %>
+    <table class="table table-condensed table-striped table-hover">
+      <thead id="column_headers">
         <tr>
-          <td><%= super_truncate weakness_template.title, 30 %></td>
-          <td class="hidden-xs hidden-sm"><%= super_truncate weakness_template.description, 30 %></td>
-          <td class="hidden-xs"><%= weakness_template.risk_text %></td>
-          <td><%= link_to_show weakness_template %></td>
-          <td><%= link_to_edit [:edit, weakness_template] %></td>
-          <td><%= link_to_destroy weakness_template %></td>
+          <%= make_filterable_column WeaknessTemplate.human_attribute_name('title'), nil, 'title' %>
+          <%= make_filterable_column WeaknessTemplate.human_attribute_name('description'), { class: 'hidden-xs hidden-sm' }, 'description' %>
+          <%= make_not_available_column WeaknessTemplate.human_attribute_name('risk'), class: 'hidden-xs' %>
+          <th colspan="3" class="text-right"><%= link_to_search %></th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
 
-  <hr />
+      <tbody>
+        <% @weakness_templates.each do |weakness_template| %>
+          <tr>
+            <td><%= super_truncate weakness_template.title, 30 %></td>
+            <td class="hidden-xs hidden-sm"><%= super_truncate weakness_template.description, 30 %></td>
+            <td class="hidden-xs"><%= weakness_template.risk_text %></td>
+            <td><%= link_to_show weakness_template %></td>
+            <td><%= link_to_edit [:edit, weakness_template] %></td>
+            <td><%= link_to_destroy weakness_template %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-  <%= paginate @weakness_templates %>
+    <hr />
+
+    <%= paginate @weakness_templates %>
+  <% end %>
 <% end %>
 
 <%= link_to_new new_weakness_template_path, class: 'btn btn-primary' %>
