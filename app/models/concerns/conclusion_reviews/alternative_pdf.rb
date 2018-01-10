@@ -351,11 +351,32 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_main_weaknesses_on pdf
-      title      = I18n.t 'conclusion_review.executive_summary.main_weaknesses'
-      weaknesses = main_weaknesses
+      title = I18n.t 'conclusion_review.executive_summary.main_weaknesses'
 
       pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
+
+      if main_weaknesses_text.present?
+        put_main_weaknesses_text_on pdf
+      else
+        put_main_weaknesses_details_on pdf
+      end
+    end
+
+    def put_main_weaknesses_text_on pdf
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text main_weaknesses_text, align: :justify, inline_format: true
+
+      pdf.move_down PDF_FONT_SIZE
+      pdf.add_title self.class.human_attribute_name('corrective_actions'),
+        (PDF_FONT_SIZE * 1.25).round
+
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text corrective_actions, align: :justify, inline_format: true
+    end
+
+    def put_main_weaknesses_details_on pdf
+      weaknesses = main_weaknesses
 
       put_weakness_details_on pdf, weaknesses, legend: 'no_main_weaknesses',
         hide: [

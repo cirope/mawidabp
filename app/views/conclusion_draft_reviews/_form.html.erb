@@ -54,10 +54,26 @@
         </div>
       </div>
 
+      <% if show_review_best_practice_comments? %>
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :main_weaknesses_text, input_html: { rows: 4 } %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :corrective_actions, input_html: { rows: 4 } %>
+          </div>
+        </div>
+      <% end %>
+
       <div class="row">
         <div class="col-md-6">
           <%= f.input :observations, input_html: { rows: 4 } %>
         </div>
+        <% if show_review_best_practice_comments? %>
+          <div class="col-md-6 toggle-visibility">
+            <%= f.input :affects_compliance %>
+          </div>
+        <% end %>
       </div>
     <% end %>
 

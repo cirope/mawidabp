@@ -12,6 +12,11 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    Group.current_id        = nil
+    Organization.current_id = nil
+  end
+
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of ConclusionReview, @conclusion_review
@@ -70,6 +75,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
+    organization = Organization.find Organization.current_id
+
     @conclusion_review.issue_date = nil
     @conclusion_review.review_id = nil
     @conclusion_review.applied_procedures = '   '
@@ -78,6 +85,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review.sectors = '   '
     @conclusion_review.evolution = '   '
     @conclusion_review.evolution_justification = '   '
+    @conclusion_review.main_weaknesses_text = '   '
+    @conclusion_review.corrective_actions = '   '
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
@@ -91,6 +100,11 @@ class ConclusionReviewTest < ActiveSupport::TestCase
       assert_error @conclusion_review, :evolution_justification, :blank
     else
       assert_error @conclusion_review, :applied_procedures, :blank
+    end
+
+    if ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(organization.prefix)
+      assert_error @conclusion_review, :main_weaknesses_text, :blank
+      assert_error @conclusion_review, :corrective_actions, :blank
     end
   end
 
