@@ -387,12 +387,18 @@ module ConclusionReviews::AlternativePDF
     def put_control_objective_title_on pdf, control_objective_item
       unless @__last_control_objective_showed == control_objective_item.id
         options = { align: :justify, inline_format: true }
-        bp_name = control_objective_item.best_practice.name
+        bp      = control_objective_item.best_practice
         pc_name = control_objective_item.process_control.name
         co_text = control_objective_item.control_objective_text
 
         pdf.move_down PDF_FONT_SIZE
-        pdf.text "<u><b>#{bp_name.upcase}</b></u>", options
+
+        unless @__last_best_practice_showed == bp.id
+          pdf.text "<u><b>#{bp.name.upcase}</b></u>", options
+
+          @__last_best_practice_showed = bp.id
+        end
+
         pdf.text "<u><b>#{pc_name} (#{co_text})</b></u>", options
 
         @__last_control_objective_showed = control_objective_item.id
