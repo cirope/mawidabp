@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class BestPracticeCommentTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @best_practice_comment = best_practice_comments :bcra_A4609_on_current
   end
 

@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class WeaknessTemplateTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @weakness_template = weakness_templates :security
   end
 
