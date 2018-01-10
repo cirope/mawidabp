@@ -259,7 +259,14 @@ class ConclusionDraftReviewsController < ApplicationController
     end
   end
 
+  def corrective_actions_update
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
+
     def set_conclusion_draft_review
       @conclusion_draft_review = ConclusionDraftReview.list.includes(
         review: [

@@ -443,4 +443,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     # tiene definitivo
     assert_redirected_to :action => :index
   end
+
+  test 'corrective actions update' do
+    login
+    get :corrective_actions_update, xhr: true, as: :js
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+  end
 end
