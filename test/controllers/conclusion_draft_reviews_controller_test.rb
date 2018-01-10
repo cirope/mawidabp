@@ -131,7 +131,10 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :sectors => 'Area 51',
           :evolution => 'Do the evolution',
           :evolution_justification => 'Ok',
-          :observations => nil
+          :observations => nil,
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => '0'
         }
       }
     end
@@ -164,6 +167,9 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :sectors => 'Area 51',
           :evolution => 'Do the evolution',
           :evolution_justification => 'Ok',
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => '0',
           :observations => nil
         }
       }
