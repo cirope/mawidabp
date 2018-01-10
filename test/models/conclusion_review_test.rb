@@ -217,6 +217,16 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert File.exist?(@conclusion_review.absolute_pdf_path)
     assert (size = File.size(@conclusion_review.absolute_pdf_path)) > 0
 
+    @conclusion_review.update_column :main_weaknesses_text, nil
+
+    assert_nothing_raised do
+      @conclusion_review.alternative_pdf organization
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+    assert_not_equal size, new_size
+
     assert_nothing_raised do
       @conclusion_review.alternative_pdf organization, :brief => '1'
     end
