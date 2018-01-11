@@ -259,7 +259,14 @@ class ConclusionDraftReviewsController < ApplicationController
     end
   end
 
+  def corrective_actions_update
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
+
     def set_conclusion_draft_review
       @conclusion_draft_review = ConclusionDraftReview.list.includes(
         review: [
@@ -277,7 +284,8 @@ class ConclusionDraftReviewsController < ApplicationController
       params.require(:conclusion_draft_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
         :recipients, :sectors, :evolution, :evolution_justification,
-        :observations, :force_approval, :lock_version,
+        :observations, :main_weaknesses_text, :corrective_actions,
+        :affects_compliance, :force_approval, :lock_version,
         review_attributes: [
           :id, :manual_score, :lock_version,
           best_practice_comments_attributes: [

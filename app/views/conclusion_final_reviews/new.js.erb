@@ -5,7 +5,10 @@
   $('#conclusion_final_review_evolution_justification').val('<%== j @conclusion_final_review.evolution_justification %>')
   $('#conclusion_final_review_recipients').val('<%== j @conclusion_final_review.recipients %>')
   $('#conclusion_final_review_sectors').val('<%== j @conclusion_final_review.sectors %>')
+  $('#conclusion_final_review_main_weaknesses_text').val('<%== j @conclusion_final_review.main_weaknesses_text %>')
+  $('#conclusion_final_review_corrective_actions').val('<%== j @conclusion_final_review.corrective_actions %>')
   $('#conclusion_final_review_observations').val('<%== j @conclusion_final_review.observations %>')
+  $('#conclusion_final_review_affects_compliance').prop('checked', <%= @conclusion_final_review.affects_compliance.inspect %>)
   $('#conclusion_final_review_business_unit').val('<%= j @conclusion_final_review.review.business_unit.name %>')
   $('#conclusion_final_review_project').val('<%= j @conclusion_final_review.review.plan_item.project %>')
   $('#conclusion_final_review_score').val('<%= j @conclusion_final_review.review.score_text %>')
@@ -21,6 +24,8 @@
     'evolution_justification',
     'recipients',
     'sectors',
+    'main_weaknesses_text',
+    'corrective_actions',
     'observations',
     'business_unit',
     'project',
@@ -30,6 +35,8 @@
   $.each(elementsForUpdate, function (i, e) {
     $('#conclusion_final_review_' + e).val('')
   })
+
+  $('#conclusion_final_review_affects_compliance').prop('checked', false)
 
   $('#best_practice_comments_container').html('')
 <% end %>
