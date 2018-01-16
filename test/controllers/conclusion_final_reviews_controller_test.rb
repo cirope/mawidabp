@@ -132,6 +132,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :sectors => 'Area 51',
           :evolution => 'Do the evolution',
           :evolution_justification => 'Ok',
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => '0',
           :observations => nil
         }
       }
@@ -165,6 +168,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :sectors => 'Area 51',
           :evolution => 'Do the evolution',
           :evolution_justification => 'Ok',
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => '0',
           :observations => nil
         }
       }
@@ -201,7 +207,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
-  test 'export conclusion draft review without control objectives excluded from score' do
+  test 'export conclusion final review without control objectives excluded from score' do
     login
 
     conclusion_review = ConclusionFinalReview.find(
@@ -217,7 +223,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
-  test 'export conclusion draft review brief' do
+  test 'export conclusion final review brief' do
     login
 
     conclusion_review = ConclusionFinalReview.find(

@@ -1,0 +1,3 @@
+impact_analysis_security:
+  control_objective: impact_analysis
+  weakness_template: security

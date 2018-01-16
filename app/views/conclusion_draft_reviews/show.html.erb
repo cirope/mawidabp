@@ -69,7 +69,7 @@ end %>
   <br />
   <h4><%= t('conclusion_review.weaknesses') %></h4>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <% grouped_control_objectives.each do |process_control, cois| %>
       <%= conclusion_review_process_control_weakness_details_table(process_control, cois, false) %>
     <% end %>
@@ -84,7 +84,7 @@ end %>
   <br />
   <h4><%= t('conclusion_review.oportunities') %></h4>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <% grouped_control_objectives.each do |process_control, cois| %>
       <%= conclusion_review_process_control_oportunity_details_table(process_control, cois, false) %>
     <% end %>

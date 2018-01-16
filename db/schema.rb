@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171218211545) do
+ActiveRecord::Schema.define(version: 20180107131246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,8 +135,8 @@ ActiveRecord::Schema.define(version: 20171218211545) do
 
   create_table "comments", id: :serial, force: :cascade do |t|
     t.text "comment"
-    t.string "commentable_type"
     t.integer "commentable_id"
+    t.string "commentable_type"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -163,6 +163,9 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.string "evolution"
     t.text "evolution_justification"
     t.text "observations"
+    t.text "main_weaknesses_text"
+    t.text "corrective_actions"
+    t.boolean "affects_compliance", default: false, null: false
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
     t.index ["organization_id"], name: "index_conclusion_reviews_on_organization_id"
@@ -193,6 +196,15 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.index ["review_id"], name: "index_control_objective_items_on_review_id"
   end
 
+  create_table "control_objective_weakness_template_relations", force: :cascade do |t|
+    t.bigint "control_objective_id", null: false
+    t.bigint "weakness_template_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["control_objective_id"], name: "index_co_wt_on_control_objective_id"
+    t.index ["weakness_template_id"], name: "index_co_wt_on_weakness_template_id"
+  end
+
   create_table "control_objectives", id: :serial, force: :cascade do |t|
     t.text "name"
     t.integer "risk"
@@ -214,8 +226,8 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.text "compliance_tests"
     t.text "sustantive_tests"
     t.integer "order"
-    t.string "controllable_type"
     t.integer "controllable_id"
+    t.string "controllable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["controllable_type", "controllable_id"], name: "index_controls_on_controllable_type_and_controllable_id"
@@ -225,8 +237,8 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.text "description"
     t.string "cost_type"
     t.decimal "cost", precision: 15, scale: 2
-    t.string "item_type"
     t.integer "item_id"
+    t.string "item_type"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -319,8 +331,8 @@ ActiveRecord::Schema.define(version: 20171218211545) do
 
   create_table "finding_user_assignments", id: :serial, force: :cascade do |t|
     t.boolean "process_owner", default: false
-    t.string "finding_type"
     t.integer "finding_id"
+    t.string "finding_type"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -363,6 +375,7 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.text "operational_risk", default: [], array: true
     t.text "impact", default: [], null: false, array: true
     t.text "internal_control_components", default: [], null: false, array: true
+    t.bigint "weakness_template_id"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
@@ -375,6 +388,7 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.index ["title"], name: "index_findings_on_title"
     t.index ["type"], name: "index_findings_on_type"
     t.index ["updated_at"], name: "index_findings_on_updated_at"
+    t.index ["weakness_template_id"], name: "index_findings_on_weakness_template_id"
   end
 
   create_table "groups", id: :serial, force: :cascade do |t|
@@ -398,8 +412,8 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.integer "lock_version", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "imageable_type", null: false
     t.integer "imageable_id", null: false
+    t.string "imageable_type", null: false
     t.index ["imageable_type", "imageable_id"], name: "index_image_models_on_imageable_type_and_imageable_id"
   end
 
@@ -454,8 +468,8 @@ ActiveRecord::Schema.define(version: 20171218211545) do
 
   create_table "notification_relations", id: :serial, force: :cascade do |t|
     t.integer "notification_id"
-    t.string "model_type"
     t.integer "model_id"
+    t.string "model_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["model_type", "model_id"], name: "index_notification_relations_on_model_type_and_model_id"
@@ -559,8 +573,8 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.integer "lock_version", default: 0
     t.integer "user_id", null: false
     t.integer "questionnaire_id"
-    t.string "pollable_type"
     t.integer "pollable_id"
+    t.string "pollable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "organization_id"
@@ -643,10 +657,10 @@ ActiveRecord::Schema.define(version: 20171218211545) do
 
   create_table "resource_utilizations", id: :serial, force: :cascade do |t|
     t.decimal "units", precision: 15, scale: 2
-    t.string "resource_consumer_type"
     t.integer "resource_consumer_id"
-    t.string "resource_type"
+    t.string "resource_consumer_type"
     t.integer "resource_id"
+    t.string "resource_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["resource_consumer_id", "resource_consumer_type"], name: "resource_utilizations_consumer_consumer_type_idx"
@@ -727,8 +741,8 @@ ActiveRecord::Schema.define(version: 20171218211545) do
 
   create_table "taggings", id: :serial, force: :cascade do |t|
     t.integer "tag_id", null: false
-    t.string "taggable_type", null: false
     t.integer "taggable_id", null: false
+    t.string "taggable_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
@@ -787,8 +801,8 @@ ActiveRecord::Schema.define(version: 20171218211545) do
   end
 
   create_table "versions", id: :serial, force: :cascade do |t|
-    t.string "item_type"
     t.integer "item_id"
+    t.string "item_type"
     t.string "event", null: false
     t.integer "whodunnit"
     t.datetime "created_at"
@@ -803,13 +817,27 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.index ["whodunnit"], name: "index_versions_on_whodunnit"
   end
 
+  create_table "weakness_templates", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "description", null: false
+    t.integer "risk"
+    t.text "impact", default: [], null: false, array: true
+    t.text "operational_risk", default: [], null: false, array: true
+    t.text "internal_control_components", default: [], null: false, array: true
+    t.integer "lock_version", default: 0, null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_weakness_templates_on_organization_id"
+  end
+
   create_table "work_papers", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "code"
     t.integer "number_of_pages"
     t.text "description"
-    t.string "owner_type"
     t.integer "owner_id"
+    t.string "owner_type"
     t.integer "file_model_id"
     t.integer "organization_id"
     t.integer "lock_version", default: 0
@@ -860,6 +888,8 @@ ActiveRecord::Schema.define(version: 20171218211545) do
   add_foreign_key "conclusion_reviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "control_objectives", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "reviews", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "control_objective_weakness_template_relations", "control_objectives", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "control_objective_weakness_template_relations", "weakness_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objectives", "process_controls", on_update: :restrict, on_delete: :restrict
   add_foreign_key "costs", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "documents", "file_models", on_update: :restrict, on_delete: :restrict
@@ -878,6 +908,7 @@ ActiveRecord::Schema.define(version: 20171218211545) do
   add_foreign_key "finding_user_assignments", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "findings", "control_objective_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "findings", "findings", column: "repeated_of_id", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "findings", "weakness_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "ldap_configs", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "login_records", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "login_records", "users", on_update: :restrict, on_delete: :restrict
@@ -915,6 +946,7 @@ ActiveRecord::Schema.define(version: 20171218211545) do
   add_foreign_key "tags", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "users", "users", column: "manager_id", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "weakness_templates", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflow_items", "workflows", on_update: :restrict, on_delete: :restrict

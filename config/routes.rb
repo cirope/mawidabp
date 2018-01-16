@@ -200,7 +200,10 @@ Rails.application.routes.draw do
       post :create_bundle
     end
 
-    get :check_for_approval, on: :collection
+    collection do
+      get :check_for_approval
+      get :corrective_actions_update
+    end
   end
 
   namespace :conclusion_final_reviews do
@@ -236,7 +239,8 @@ Rails.application.routes.draw do
       get :excluded_control_objectives
       patch :finished_work_papers
       patch :recode_findings
-      patch :recode_findings_by_risk
+      patch :recode_weaknesses_by_risk
+      patch :recode_weaknesses_by_control_objective_order
     end
 
     collection do
@@ -264,12 +268,18 @@ Rails.application.routes.draw do
       get :auto_complete_for_tagging
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
+      get :auto_complete_for_weakness_template
       get :state_changed
+      get :weakness_template_changed
     end
 
     member do
       patch :undo_reiteration
     end
+  end
+
+  resources :weakness_templates do
+    get :auto_complete_for_control_objective, on: :collection
   end
 
   resources :control_objective_items do

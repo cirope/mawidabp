@@ -490,3 +490,18 @@ es:
     column_old_value: 'Valor anterior'
     without_changes: 'Sin cambios'
     pdf_list_name: 'reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf'
+
+  weakness_templates:
+    edit:
+      title: 'Editar plantilla de observación'
+    index:
+      new: 'Nueva plantilla de observación'
+      title: 'Listado de plantillas de observaciones'
+      empty_html: 'No hay plantillas de observaciones, puede crear una con el botón <span class="label label-primary">Nueva plantilla de observación</span>'
+      empty_search_html: 'No hay plantillas de observaciones que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear plantilla de observación'
+    show:
+      title: 'Ver plantilla de observación'
+    form:
+      add_control_objective: 'Agregar objetivo de control'

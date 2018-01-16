@@ -11,6 +11,12 @@
   <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
+    <% if show_weakness_templates? %>
+      <%= render 'weakness_templates', f: f %>
+    <% elsif @weakness.new_record? %>
+      <%= f.input :weakness_template_id, as: :hidden %>
+    <% end %>
+
     <div class="row">
       <div class="col-md-6">
         <div class="row">
@@ -213,7 +219,7 @@
       <%= t('finding.inverse_finding_relations') %>
     </h4>
 
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <thead>
         <tr>
           <th><%= FindingRelation.human_attribute_name :finding_id %></th>
@@ -245,7 +251,7 @@
       <%= t('finding.finding_answers') %>
     </h4>
 
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <thead>
         <tr>
           <th><%= User.model_name.human %></th>

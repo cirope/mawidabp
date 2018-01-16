@@ -1,15 +1,16 @@
 module ConclusionReviews::AlternativePDF
   extend ActiveSupport::Concern
 
-  def alternative_pdf organization = nil
-    pdf = Prawn::Document.create_generic_pdf :portrait, false, hide_brand: true
+  def alternative_pdf organization = nil, *args
+    options = args.extract_options!
+    pdf     = Prawn::Document.create_generic_pdf :portrait, false, hide_brand: true
 
     put_watermark_on          pdf
     put_alternative_header_on pdf, organization
     put_alternative_cover_on  pdf
     put_executive_summary_on  pdf
-    put_detailed_review_on    pdf
-    put_annex_on              pdf, organization
+    put_detailed_review_on    pdf, organization
+    put_annex_on              pdf, organization, options
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -72,7 +73,7 @@ module ConclusionReviews::AlternativePDF
       put_other_weaknesses_on  pdf
     end
 
-    def put_detailed_review_on pdf
+    def put_detailed_review_on pdf, organization
       title  = I18n.t 'conclusion_review.detailed_review.title'
       legend = I18n.t 'conclusion_review.detailed_review.legend'
 
@@ -83,12 +84,12 @@ module ConclusionReviews::AlternativePDF
       pdf.text legend, align: :justify, style: :italic
 
       put_review_survey_on       pdf
-      put_detailed_weaknesses_on pdf
+      put_detailed_weaknesses_on pdf, organization
       put_observations_on        pdf
       put_recipients_on          pdf
     end
 
-    def put_annex_on pdf, organization
+    def put_annex_on pdf, organization, options
       title  = I18n.t 'conclusion_review.annex.title'
       legend = I18n.t 'conclusion_review.annex.legend'
 
@@ -99,7 +100,7 @@ module ConclusionReviews::AlternativePDF
       pdf.text legend, align: :justify
 
       put_conclusion_options_on pdf
-      put_review_scope_on       pdf, organization
+      put_review_scope_on       pdf, organization, options
       put_staff_on              pdf
       put_sectors_on            pdf
     end
@@ -111,15 +112,18 @@ module ConclusionReviews::AlternativePDF
       pdf.text text, align: :center, style: :bold
     end
 
-    def put_review_scope_on pdf, organization
+    def put_review_scope_on pdf, organization, options
       if show_review_best_practice_comments? organization
         pdf.move_down PDF_FONT_SIZE
         put_best_practice_comments_table_on pdf
       else
         pdf.move_down PDF_FONT_SIZE
-        put_control_objective_items_table_on pdf
-        pdf.move_down PDF_FONT_SIZE
-        put_control_objective_items_reference_on pdf
+        put_control_objective_items_table_on pdf, brief: options[:brief]
+
+        unless options[:brief]
+          pdf.move_down PDF_FONT_SIZE
+          put_control_objective_items_reference_on pdf
+        end
       end
     end
 
@@ -169,8 +173,8 @@ module ConclusionReviews::AlternativePDF
       end
     end
 
-    def put_control_objective_items_table_on pdf
-      row_data = control_objectives_row_data
+    def put_control_objective_items_table_on pdf, brief: false
+      row_data = control_objectives_row_data brief
 
       if row_data.present?
         data          = row_data.insert 0, control_objective_column_headers
@@ -195,7 +199,7 @@ module ConclusionReviews::AlternativePDF
       count = 0
 
       review.grouped_control_objective_items.each do |process_control, cois|
-        cois.each do |coi|
+        cois.sort.each do |coi|
           put_control_objective_item_reference_on pdf, coi, count += 1
 
           pdf.move_down PDF_FONT_SIZE
@@ -232,15 +236,22 @@ module ConclusionReviews::AlternativePDF
       pdf.text review.survey, align: :justify
     end
 
-    def put_detailed_weaknesses_on pdf
+    def put_detailed_weaknesses_on pdf, organization
       title = Weakness.model_name.human count: 0
+      show  = if show_review_best_practice_comments?(organization)
+                %w(tags repeated_review control_objective_title template_code)
+              else
+                %w(tags repeated_review)
+              end
 
       pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
       pdf.move_down PDF_FONT_SIZE
 
-      put_weakness_details_on pdf, all_weaknesses, hide: %w(audit_comments),
-        show: %w(tags repeated_review), legend: 'no_weaknesses'
+      put_weakness_details_on pdf, all_weaknesses,
+        show:   show,
+        hide:   %w(audited),
+        legend: 'no_weaknesses'
     end
 
     def put_observations_on pdf
@@ -340,11 +351,32 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_main_weaknesses_on pdf
-      title      = I18n.t 'conclusion_review.executive_summary.main_weaknesses'
-      weaknesses = main_weaknesses
+      title = I18n.t 'conclusion_review.executive_summary.main_weaknesses'
 
       pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
+
+      if main_weaknesses_text.present?
+        put_main_weaknesses_text_on pdf
+      else
+        put_main_weaknesses_details_on pdf
+      end
+    end
+
+    def put_main_weaknesses_text_on pdf
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text main_weaknesses_text, align: :justify, inline_format: true
+
+      pdf.move_down PDF_FONT_SIZE
+      pdf.add_title self.class.human_attribute_name('corrective_actions'),
+        (PDF_FONT_SIZE * 1.25).round
+
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text corrective_actions, align: :justify, inline_format: true
+    end
+
+    def put_main_weaknesses_details_on pdf
+      weaknesses = main_weaknesses
 
       put_weakness_details_on pdf, weaknesses, legend: 'no_main_weaknesses',
         hide: [
@@ -360,12 +392,37 @@ module ConclusionReviews::AlternativePDF
         weaknesses.each do |f|
           coi = f.control_objective_item
 
+          if show.include? 'control_objective_title'
+            put_control_objective_title_on pdf, coi
+          end
+
           pdf.move_down PDF_FONT_SIZE
           pdf.text coi.finding_pdf_data(f, hide: hide, show: show),
             align: :justify, inline_format: true
         end
       else
         put_weakness_legend_on pdf, legend
+      end
+    end
+
+    def put_control_objective_title_on pdf, control_objective_item
+      unless @__last_control_objective_showed == control_objective_item.id
+        options = { align: :justify, inline_format: true }
+        bp      = control_objective_item.best_practice
+        pc_name = control_objective_item.process_control.name
+        co_text = control_objective_item.control_objective_text
+
+        pdf.move_down PDF_FONT_SIZE
+
+        unless @__last_best_practice_showed == bp.id
+          pdf.text "<u><b>#{bp.name.upcase}</b></u>", options
+
+          @__last_best_practice_showed = bp.id
+        end
+
+        pdf.text "<u><b>#{pc_name} (#{co_text})</b></u>", options
+
+        @__last_control_objective_showed = control_objective_item.id
       end
     end
 
@@ -474,11 +531,11 @@ module ConclusionReviews::AlternativePDF
     end
 
     def main_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_high_risk.sort_for_review
+      weaknesses.not_revoked.not_assumed_risk.with_high_risk.sort_by_code
     end
 
     def other_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_for_review
+      weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_by_code
     end
 
     def low_risk_weaknesses
@@ -494,7 +551,7 @@ module ConclusionReviews::AlternativePDF
     end
 
     def all_weaknesses
-      weaknesses.not_revoked.sort_for_review
+      weaknesses.not_revoked.sort_by_code
     end
 
     def weaknesses
@@ -505,19 +562,19 @@ module ConclusionReviews::AlternativePDF
       end
     end
 
-    def control_objectives_row_data
+    def control_objectives_row_data brief
       count         = 0
       row_data      = []
       image_options = { vposition: :top, border_widths: [1, 0, 1, 0] }
 
       review.grouped_control_objective_items.each do |process_control, cois|
-        cois.each do |coi|
-          image = CONCLUSION_SCOPE_IMAGES.fetch(coi.auditor_comment) do
+        cois.sort.each do |coi|
+          text  = coi.control_objective_text
+          image = CONCLUSION_SCOPE_IMAGES[coi.auditor_comment] ||
             'scope_not_apply.png'
-          end
 
           row_data << [
-            "<sup>(#{count += 1})</sup> #{coi.control_objective_text}",
+            brief ? text : "<sup>(#{count += 1})</sup> #{text}",
             pdf_score_image_row(image, fit: [12, 12]).merge(image_options),
             {
               content:       coi.auditor_comment&.upcase,

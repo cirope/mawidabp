@@ -131,7 +131,10 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :sectors => 'Area 51',
           :evolution => 'Do the evolution',
           :evolution_justification => 'Ok',
-          :observations => nil
+          :observations => nil,
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => '0'
         }
       }
     end
@@ -164,6 +167,9 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :sectors => 'Area 51',
           :evolution => 'Do the evolution',
           :evolution_justification => 'Ok',
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => '0',
           :observations => nil
         }
       }
@@ -204,7 +210,23 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
-  test 'score sheet of final review' do
+  test 'export conclusion draft review brief' do
+    login
+
+    conclusion_review = ConclusionDraftReview.find(
+      conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
+
+    assert_nothing_raised do
+      get :export_to_pdf, :params => {
+        :id => conclusion_review.id,
+        :export_options => { :brief => '1' }
+      }
+    end
+
+    assert_redirected_to conclusion_review.relative_pdf_path
+  end
+
+  test 'score sheet of draft review' do
     login
 
     conclusion_review = ConclusionDraftReview.find(
@@ -420,5 +442,12 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     # Produce un error cuando se trata de buscar un informe borrador que ya
     # tiene definitivo
     assert_redirected_to :action => :index
+  end
+
+  test 'corrective actions update' do
+    login
+    get :corrective_actions_update, xhr: true, as: :js
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
   end
 end

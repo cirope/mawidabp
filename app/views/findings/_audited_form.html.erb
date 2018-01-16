@@ -79,7 +79,7 @@
     <% process_owners = @finding.process_owners %>
     <% responsible_auditors = @finding.responsible_auditors %>
     <h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
-    <table class="table table-condensed">
+    <table class="table table-condensed table-hover">
       <thead>
         <tr>
           <th><%= t('finding.audited', :count => audited.size) %></th>
@@ -174,7 +174,7 @@
   <% unless @finding.work_papers.blank? %>
     <h4><%= WorkPaper.model_name.human(count: 0) %></h4>
 
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <thead>
         <tr>
           <th><%= WorkPaper.human_attribute_name 'name' %></th>
@@ -210,7 +210,7 @@
 
     <div id="cost_details" class="collapse">
       <div>
-        <table class="table table-condensed table-striped">
+        <table class="table table-condensed table-striped table-hover">
           <thead>
             <tr>
               <th><%= Cost.human_attribute_name 'created_at' %></th>

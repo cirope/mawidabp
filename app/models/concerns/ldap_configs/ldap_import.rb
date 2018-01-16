@@ -112,7 +112,7 @@ module LdapConfigs::LDAPImport
 
     def assign_managers managers, users_by_dn
       managers.each do |user, manager_dn|
-        user.update manager_id: users_by_dn[manager_dn]
+        user.reload.update manager_id: users_by_dn[manager_dn]
       end
     end
 end

@@ -84,7 +84,7 @@
 
 <% unless @control_objective_item.business_unit_scores.empty? %>
   <h3><%= BusinessUnitScore.model_name.human :count => @control_objective_item.business_unit_scores.size %></h3>
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <caption></caption>
     <thead>
       <tr>
@@ -109,7 +109,7 @@
 
 <% unless @control_objective_item.work_papers.empty? %>
   <h3><%= WorkPaper.model_name.human :count => @control_objective_item.work_papers.size %></h3>
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <caption></caption>
     <thead>
       <tr>

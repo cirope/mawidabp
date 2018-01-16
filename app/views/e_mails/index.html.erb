@@ -3,7 +3,7 @@
   columns: @query.blank? ? EMail::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
 
-<table class="table table-condensed table-striped">
+<table class="table table-condensed table-striped table-hover">
   <thead id="column_headers">
     <tr>
       <%= make_not_available_column EMail.human_attribute_name('created_at') %>
