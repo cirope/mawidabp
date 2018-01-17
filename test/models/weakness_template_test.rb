@@ -21,6 +21,14 @@ class WeaknessTemplateTest < ActiveSupport::TestCase
     assert_error weakness_template, :title, :taken
   end
 
+  test 'allow title duplication' do
+    weakness_template = @weakness_template.dup
+
+    weakness_template.allow_duplication = '1'
+
+    assert weakness_template.valid?
+  end
+
   test 'validates attributes encoding' do
     @weakness_template.title = "\n\t"
     @weakness_template.description = "\n\t"

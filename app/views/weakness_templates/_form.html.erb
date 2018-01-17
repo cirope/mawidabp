@@ -39,6 +39,11 @@
         <%= link_to_add_fields t('.add_control_objective'), f, :control_objective_weakness_template_relations %>
       </p>
     </div>
+
+    <% if show_weakness_template_allow_duplication? @weakness_template %>
+      <%= f.input :allow_duplication, as: :boolean %>
+    <% end %>
+
     <%= f.input :lock_version, as: :hidden %>
   </div>
 

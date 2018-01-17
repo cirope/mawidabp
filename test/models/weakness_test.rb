@@ -168,6 +168,14 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_error @weakness, :review_code, :invalid
   end
 
+  test 'should allow revoked prefixed codes' do
+    revoked_prefix = I18n.t 'code_prefixes.revoked'
+
+    @weakness.review_code = "#{revoked_prefix}#{@weakness.review_code}"
+
+    assert @weakness.valid?
+  end
+
   test 'next code' do
     assert_equal 'O003', @weakness.next_code
   end
