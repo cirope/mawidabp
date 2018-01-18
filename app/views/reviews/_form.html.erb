@@ -152,7 +152,7 @@
   <% if @review.control_objective_items.any? %>
     <h3>
       <%= t('review.control_objective_items_label') %>
-      <% if @review.persisted? %>
+      <% if @review.persisted? && !readonly %>
         <small class="pull-right">
           <%= link_to_excluded_control_objectives %>
         </small>
