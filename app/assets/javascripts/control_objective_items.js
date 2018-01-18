@@ -23,6 +23,8 @@ jQuery(function ($) {
       var val = set ? automaticComment : ''
 
       $('#control_objective_item_auditor_comment').val(val)
+      $('#control_objective_item_auditor_comment option:not(:selected)').
+        attr('disabled', set)
     }
   })
 

@@ -106,8 +106,8 @@
               input_html: {
                 disabled: readonly,
                 data: {
-                  automatic_auditor_comment: SHOW_CONCLUSION_AS_OPTIONS ?
-                    auditor_comment_options.last&.last : ''
+                  automatic_auditor_comment: SHOW_CONCLUSION_AS_OPTIONS &&
+                    auditor_comment_options.last&.last
                 }
               } %>
           </div>
