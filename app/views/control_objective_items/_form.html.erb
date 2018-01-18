@@ -126,11 +126,11 @@
   </div>
 
   <br />
-  <%= render 'weaknesses_summary', readonly: readonly %>
+  <%= render 'weaknesses_summary', readonly: readonly, frozen: frozen %>
 
   <% unless HIDE_OPORTUNITIES %>
     <br />
-    <%= render 'oportunities_summary', readonly: readonly %>
+    <%= render 'oportunities_summary', readonly: readonly, frozen: frozen %>
   <% end %>
 
   <% unless HIDE_BUSINESS_UNIT_SCORES %>

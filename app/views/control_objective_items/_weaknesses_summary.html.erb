@@ -9,7 +9,7 @@
     <% weaknesses.order(:review_code).each do |weakness| %>
       <li>
         <%= link_to "#{weakness.review_code} - #{weakness.title} (#{weakness.state_text})", weakness %>
-        <% unless readonly %>
+        <% unless frozen %>
           | <%= link_to_edit edit_weakness_path(weakness) %>
         <% end %>
       </li>

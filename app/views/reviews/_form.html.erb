@@ -172,7 +172,7 @@
             <% end %>
           </h4>
           <%= f.simple_fields_for :control_objective_items, cois.sort do |coi_f| %>
-            <%= render 'control_objective_item', f: coi_f, readonly: readonly %>
+            <%= render 'control_objective_item', f: coi_f, readonly: readonly, frozen: frozen %>
           <% end %>
 
           <div data-messages></div>

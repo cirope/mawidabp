@@ -35,6 +35,10 @@
           <%= f.input :id, as: :hidden %>
           <%= f.input :order_number, as: :hidden, input_html: { class: 'sort_number' } %>
         <% end %>
+        <% if readonly && !frozen %>
+          <span class="text-muted">|</span>
+          <%= link_to_edit edit_control_objective_item_path(control_objective_item) %>
+        <% end %>
         <% weaknesses = readonly ? control_objective_item.final_weaknesses : control_objective_item.weaknesses %>
         <% if weaknesses.exists? %>
           <ul>
