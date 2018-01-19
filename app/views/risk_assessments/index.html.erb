@@ -21,7 +21,7 @@
 
       <tbody>
         <% @risk_assessments.each do |risk_assessment| %>
-          <tr>
+          <tr <%== 'class="text-muted"' if risk_assessment.final %>>
             <td class="hidden-xs"><%= risk_assessment.period %></td>
             <td><%= super_truncate risk_assessment.name, 30 %></td>
             <td class="hidden-xs hidden-sm"><%= super_truncate risk_assessment.description, 30 %></td>
@@ -32,9 +32,10 @@
         <% end %>
       </tbody>
     </table>
-
-    <%= paginate @risk_assessments %>
   <% end %>
 <% end %>
 
+<hr>
+
+<%= paginate @risk_assessments %>
 <%= link_to_new new_risk_assessment_path, class: 'btn btn-primary' %>

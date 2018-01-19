@@ -57,6 +57,6 @@ class RiskAssessmentsController < ApplicationController
     end
 
     def risk_assessment_params
-      params.require(:risk_assessment).permit :name, :description, :period_id, :risk_assessment_template_id, :lock_version
+      params.require(:risk_assessment).permit :name, :description, :final, :period_id, :risk_assessment_template_id, :lock_version
     end
 end

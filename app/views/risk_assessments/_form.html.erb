@@ -19,11 +19,14 @@
         %>
       </div>
       <div class="col-md-6">
-        <%= f.input :description, input_html: { rows: 8 } %>
+        <%= f.input :description, input_html: { rows: 6 } %>
+        <%= f.input :final %>
       </div>
     </div>
     <%= f.input :lock_version, as: :hidden %>
   </div>
+
+  <hr>
 
   <div class="form-actions">
     <div class="pull-right"><%= yield :form_actions %></div>

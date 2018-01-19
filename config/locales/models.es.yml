@@ -443,6 +443,7 @@ es:
         description: 'Descripción'
         period: 'Periodo'
         risk_assessment_template: 'Plantilla de evaluación de riesgo'
+        final: 'Definitiva'
       risk_assessment_template:
         name: 'Nombre'
         description: 'Descripción'
