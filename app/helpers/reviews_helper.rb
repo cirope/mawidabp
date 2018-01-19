@@ -184,4 +184,14 @@ module ReviewsHelper
       content_tag :span, nil, class: 'glyphicon glyphicon-scissors'
     end
   end
+
+  def excluded_control_objective_class control_objective
+    if control_objective.obsolete
+      'bg-info'
+    elsif control_objective.relevance == ControlObjective.relevances_values.last
+      'bg-danger'
+    else
+      'bg-warning'
+    end
+  end
 end

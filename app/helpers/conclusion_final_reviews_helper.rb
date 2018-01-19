@@ -177,7 +177,7 @@ module ConclusionFinalReviewsHelper
 
   def send_review_options
     options = if SHOW_CONCLUSION_ALTERNATIVE_PDF
-                ['normal']
+                ['normal', 'brief']
               else
                 ['normal', 'brief', 'without_score']
               end

@@ -9,7 +9,7 @@
     <% oportunities.order(:review_code).each do |oportunity| %>
       <li>
         <%= link_to "#{oportunity.review_code} - #{oportunity.title} (#{oportunity.state_text})", oportunity %>
-        <% unless readonly %>
+        <% unless frozen %>
           | <%= link_to_edit edit_oportunity_path(oportunity) %>
         <% end %>
       </li>
