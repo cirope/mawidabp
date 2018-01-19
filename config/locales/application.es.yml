@@ -1124,6 +1124,9 @@ es:
         evolution: "Evolución de la calificación"
         evolution_justification: "Justificación evolución"
         observations: "Otras consideraciones"
+        main_weaknesses_text: "Principales debilidades"
+        corrective_actions: "Acciones correctivas"
+        affects_compliance: "Afecta compliance"
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:

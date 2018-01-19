@@ -207,7 +207,7 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
     if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_final_review.alternative_pdf(current_organization)
+      @conclusion_final_review.alternative_pdf(current_organization, export_options)
     else
       @conclusion_final_review.to_pdf(current_organization, export_options)
     end
@@ -386,7 +386,8 @@ class ConclusionFinalReviewsController < ApplicationController
       params.require(:conclusion_final_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
         :summary, :recipients, :evolution, :evolution_justification, :sectors,
-        :observations, :lock_version,
+        :observations, :main_weaknesses_text, :corrective_actions,
+        :affects_compliance, :lock_version,
         review_attributes: [
           :id, :manual_score, :lock_version,
           best_practice_comments_attributes: [

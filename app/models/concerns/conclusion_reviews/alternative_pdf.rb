@@ -351,11 +351,32 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_main_weaknesses_on pdf
-      title      = I18n.t 'conclusion_review.executive_summary.main_weaknesses'
-      weaknesses = main_weaknesses
+      title = I18n.t 'conclusion_review.executive_summary.main_weaknesses'
 
       pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
+
+      if main_weaknesses_text.present?
+        put_main_weaknesses_text_on pdf
+      else
+        put_main_weaknesses_details_on pdf
+      end
+    end
+
+    def put_main_weaknesses_text_on pdf
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text main_weaknesses_text, align: :justify, inline_format: true
+
+      pdf.move_down PDF_FONT_SIZE
+      pdf.add_title self.class.human_attribute_name('corrective_actions'),
+        (PDF_FONT_SIZE * 1.25).round
+
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text corrective_actions, align: :justify, inline_format: true
+    end
+
+    def put_main_weaknesses_details_on pdf
+      weaknesses = main_weaknesses
 
       put_weakness_details_on pdf, weaknesses, legend: 'no_main_weaknesses',
         hide: [
@@ -387,12 +408,18 @@ module ConclusionReviews::AlternativePDF
     def put_control_objective_title_on pdf, control_objective_item
       unless @__last_control_objective_showed == control_objective_item.id
         options = { align: :justify, inline_format: true }
-        bp_name = control_objective_item.best_practice.name
+        bp      = control_objective_item.best_practice
         pc_name = control_objective_item.process_control.name
         co_text = control_objective_item.control_objective_text
 
         pdf.move_down PDF_FONT_SIZE
-        pdf.text "<u><b>#{bp_name.upcase}</b></u>", options
+
+        unless @__last_best_practice_showed == bp.id
+          pdf.text "<u><b>#{bp.name.upcase}</b></u>", options
+
+          @__last_best_practice_showed = bp.id
+        end
+
         pdf.text "<u><b>#{pc_name} (#{co_text})</b></u>", options
 
         @__last_control_objective_showed = control_objective_item.id

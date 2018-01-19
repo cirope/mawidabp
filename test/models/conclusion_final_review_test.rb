@@ -46,7 +46,10 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :recipients => 'John Doe',
           :sectors => 'Area 51',
           :evolution => 'Do the evolution',
-          :evolution_justification => 'Ok'
+          :evolution_justification => 'Ok',
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => false
         }, false)
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
@@ -92,7 +95,10 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :recipients => 'John Doe',
           :sectors => 'Area 51',
           :evolution => 'Do the evolution',
-          :evolution_justification => 'Ok'
+          :evolution_justification => 'Ok',
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => false
         }, false)
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
@@ -161,7 +167,10 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :recipients => 'John Doe',
           :sectors => 'Area 51',
           :evolution => 'Do the evolution',
-          :evolution_justification => 'Ok'
+          :evolution_justification => 'Ok',
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => false
         }, false)
 
     assert @conclusion_review.save
@@ -278,7 +287,10 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
         :recipients => 'John Doe',
         :sectors => 'Area 51',
         :evolution => 'Do the evolution',
-        :evolution_justification => 'Ok'
+        :evolution_justification => 'Ok',
+        :main_weaknesses_text => 'Some main weakness X',
+        :corrective_actions => 'You should do it this way',
+        :affects_compliance => false
       }, false)
 
       assert @conclusion_review.save,

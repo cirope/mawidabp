@@ -478,6 +478,7 @@ es:
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
+        allow_duplication: 'Permitir título duplicado'
 
     errors:
       models:

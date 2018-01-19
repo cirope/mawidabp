@@ -202,7 +202,10 @@ Rails.application.routes.draw do
       post :create_bundle
     end
 
-    get :check_for_approval, on: :collection
+    collection do
+      get :check_for_approval
+      get :corrective_actions_update
+    end
   end
 
   namespace :conclusion_final_reviews do

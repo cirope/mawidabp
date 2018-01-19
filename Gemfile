@@ -4,7 +4,7 @@ git_source(:github) { |r| "https://github.com/#{r}" }
 
 gem 'rails', '~> 5.1.4'
 
-gem 'pg'
+gem 'pg', '< 1.0'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'responders'

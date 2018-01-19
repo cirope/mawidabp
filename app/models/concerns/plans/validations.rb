@@ -1,7 +1,6 @@
 module Plans::Validations
   extend ActiveSupport::Concern
 
-
   included do
     validates :period_id, :organization, presence: true
     validates :period_id, uniqueness: true, allow_nil: true, allow_blank: true

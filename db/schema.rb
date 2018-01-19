@@ -163,6 +163,9 @@ ActiveRecord::Schema.define(version: 20180109013719) do
     t.string "evolution"
     t.text "evolution_justification"
     t.text "observations"
+    t.text "main_weaknesses_text"
+    t.text "corrective_actions"
+    t.boolean "affects_compliance", default: false, null: false
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
     t.index ["organization_id"], name: "index_conclusion_reviews_on_organization_id"
