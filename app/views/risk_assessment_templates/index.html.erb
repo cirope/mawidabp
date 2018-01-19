@@ -30,9 +30,10 @@
         <% end %>
       </tbody>
     </table>
-
-    <%= paginate @risk_assessment_templates %>
   <% end %>
 <% end %>
 
+<hr>
+
+<%= paginate @risk_assessment_templates %>
 <%= link_to_new new_risk_assessment_template_path, class: 'btn btn-primary' %>
