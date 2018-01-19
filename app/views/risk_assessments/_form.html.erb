@@ -1,0 +1,32 @@
+<%= simple_form_for @risk_assessment do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :name, input_html: { autofocus: true } %>
+        <% if @risk_assessment.new_record? %>
+          <%= f.association :period,
+            collection:   Period.list_all_without_risk_assessment,
+            prompt:       true
+          %>
+        <% else %>
+          <%= f.input :period, input_html: { readonly: true } %>
+        <% end %>
+        <%= f.association :risk_assessment_template,
+          collection: RiskAssessmentTemplate.list.order(:name),
+          prompt:     true
+        %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :description, input_html: { rows: 8 } %>
+      </div>
+    </div>
+    <%= f.input :lock_version, as: :hidden %>
+  </div>
+
+  <div class="form-actions">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.button :submit, class: 'btn-primary' %>
+  </div>
+<% end %>

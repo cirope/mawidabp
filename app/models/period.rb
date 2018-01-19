@@ -10,5 +10,6 @@ class Period < ApplicationRecord
   belongs_to :organization
   has_many :plans
   has_many :reviews
+  has_many :risk_assessments
   has_many :workflows
 end

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   resources :benefits
 
+  resources :risk_assessments
   resources :risk_assessment_templates
 
   resources :documents do

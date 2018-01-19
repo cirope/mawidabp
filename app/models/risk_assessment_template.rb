@@ -6,4 +6,5 @@ class RiskAssessmentTemplate < ApplicationRecord
   include RiskAssessmentTemplates::Weights
 
   belongs_to :organization
+  has_many :risk_assessments, dependent: :destroy
 end

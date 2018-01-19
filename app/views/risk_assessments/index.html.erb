@@ -1,0 +1,40 @@
+<% if @risk_assessments.empty? && @query.blank? %>
+  <%= render 'shared/empty_index', message: t('.empty_html') %>
+<% else %>
+  <%= render partial: 'shared/search', locals: {
+    options: {},
+    columns: @query.blank? ? RiskAssessment::COLUMNS_FOR_SEARCH.keys : @columns
+  } %>
+
+  <% if @risk_assessments.empty? %>
+    <%= render 'shared/empty_index', message: t('.empty_search_html') %>
+  <% else %>
+    <table class="table table-condensed table-striped table-hover">
+      <thead id="column_headers">
+        <tr>
+          <%= make_filterable_column RiskAssessment.human_attribute_name('period'), { class: 'hidden-xs' }, 'period' %>
+          <%= make_filterable_column RiskAssessment.human_attribute_name('name'), nil, 'name' %>
+          <%= make_filterable_column RiskAssessment.human_attribute_name('description'), { class: 'hidden-xs hidden-sm' }, 'description' %>
+          <th colspan="3" class="text-right"><%= link_to_search %></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @risk_assessments.each do |risk_assessment| %>
+          <tr>
+            <td class="hidden-xs"><%= risk_assessment.period %></td>
+            <td><%= super_truncate risk_assessment.name, 30 %></td>
+            <td class="hidden-xs hidden-sm"><%= super_truncate risk_assessment.description, 30 %></td>
+            <td><%= link_to_show risk_assessment %></td>
+            <td><%= link_to_edit [:edit, risk_assessment] %></td>
+            <td><%= link_to_destroy risk_assessment %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <%= paginate @risk_assessments %>
+  <% end %>
+<% end %>
+
+<%= link_to_new new_risk_assessment_path, class: 'btn btn-primary' %>

@@ -178,8 +178,14 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/periods' }
       ),
       MenuItem.new(
-        :plans,
+        :risk_assessments,
         order: 3,
+        controllers: :risk_assessments,
+        url: { controller: '/risk_assessments' }
+      ),
+      MenuItem.new(
+        :plans,
+        order: 4,
         controllers: :plans,
         url: { controller: '/plans' }
       )

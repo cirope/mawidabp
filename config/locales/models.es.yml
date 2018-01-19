@@ -105,6 +105,9 @@ es:
       resource_class:
         one: 'Clase de recurso'
         other: 'Clases de recursos'
+      risk_assessment:
+        one: 'Evaluación de riesgo'
+        other: 'Evaluaciones de riesgo'
       risk_assessment_template:
         one: 'Plantilla de evaluación de riesgo'
         other: 'Plantillas de evaluación de riesgo'
@@ -435,6 +438,11 @@ es:
         cost: 'Costo'
         resource: 'Recurso'
         resource_consumer: 'Utilización de recurso'
+      risk_assessment:
+        name: 'Nombre'
+        description: 'Descripción'
+        period: 'Periodo'
+        risk_assessment_template: 'Plantilla de evaluación de riesgo'
       risk_assessment_template:
         name: 'Nombre'
         description: 'Descripción'

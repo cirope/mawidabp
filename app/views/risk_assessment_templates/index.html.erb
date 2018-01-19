@@ -22,7 +22,7 @@
         <% @risk_assessment_templates.each do |risk_assessment_template| %>
           <tr>
             <td><%= super_truncate risk_assessment_template.name, 30 %></td>
-            <td class="hidden-xs"><%= super_truncate risk_assessment_template.description, 30 %></td>
+            <td class="hidden-xs hidden-sm"><%= super_truncate risk_assessment_template.description, 30 %></td>
             <td><%= link_to_show risk_assessment_template %></td>
             <td><%= link_to_edit [:edit, risk_assessment_template] %></td>
             <td><%= link_to_destroy risk_assessment_template %></td>

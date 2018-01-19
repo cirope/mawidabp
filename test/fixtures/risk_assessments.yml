@@ -1,0 +1,6 @@
+sox_current:
+  name: Sox current period
+  description: Sox description
+  period: current_period
+  risk_assessment_template: sox
+  organization: cirope

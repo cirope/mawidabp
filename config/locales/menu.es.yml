@@ -29,6 +29,7 @@ es:
     planning:
       periods: 'Periodos'
       resources: 'Recursos'
+      risk_assessments: 'Evaluaciones de riesgo'
       plans: 'Planes de trabajo'
     execution_title: 'Ejecución'
     execution:

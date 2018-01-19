@@ -473,6 +473,19 @@ es:
             one: '*Una* observación solucionada'
             other: '*%{count}* observaciones solucionadas'
 
+  risk_assessments:
+    edit:
+      title: 'Editar evaluación de riesgo'
+    index:
+      new: 'Nueva evaluación de riesgo'
+      title: 'Listado de evaluaciones de riesgo'
+      empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="label label-primary">Nueva evaluación de riesgo</span>'
+      empty_search_html: 'No hay evaluaciones de riesgo que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear evaluación de riesgo'
+    show:
+      title: 'Ver evaluación de riesgo'
+
   risk_assessment_templates:
     edit:
       title: 'Editar plantilla de evaluación de riesgo'

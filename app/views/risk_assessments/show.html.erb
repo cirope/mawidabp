@@ -1,0 +1,21 @@
+<p>
+  <strong><%= RiskAssessment.human_attribute_name 'name' %></strong>:
+  <%= @risk_assessment.name %>
+</p>
+<p>
+  <strong><%= RiskAssessment.human_attribute_name 'description' %></strong>:
+  <%= @risk_assessment.description %>
+</p>
+<p>
+  <strong><%= RiskAssessment.human_attribute_name 'period' %></strong>:
+  <%= @risk_assessment.period %>
+</p>
+<p>
+  <strong><%= RiskAssessment.human_attribute_name 'risk_assessment_template' %></strong>:
+  <%= @risk_assessment.risk_assessment_template.name %>
+</p>
+
+<hr>
+
+<%= link_to_edit [:edit, @risk_assessment] %> |
+<%= link_to_index risk_assessments_path %>

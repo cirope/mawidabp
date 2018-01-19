@@ -28,6 +28,7 @@ class Organization < ApplicationRecord
   has_many :polls, dependent: :destroy
   has_many :questionnaires, dependent: :destroy
   has_many :resource_classes, dependent: :destroy
+  has_many :risk_assessments, dependent: :destroy
   has_many :risk_assessment_templates, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :users, -> { readonly }, through: :organization_roles
