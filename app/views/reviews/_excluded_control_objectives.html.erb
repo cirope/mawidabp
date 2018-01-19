@@ -2,9 +2,9 @@
 <% excluded_cos = pc.control_objectives.select { |co| co_ids.exclude? co.id } %>
 
 <% if excluded_cos.any? %>
-  <ul class="bg-info">
+  <ul>
     <% excluded_cos.each do |co| %>
-      <li><%= co.name %></li>
+      <li class="<%= excluded_control_objective_class co %>"><%= co.name %></li>
     <% end %>
   </ul>
 <% else %>

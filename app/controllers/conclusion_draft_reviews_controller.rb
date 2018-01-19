@@ -184,6 +184,7 @@ class ConclusionDraftReviewsController < ApplicationController
 
     if @conclusion_draft_review.try(:review).try(:can_be_sended?)
       users = []
+      export_options = params[:export_options] || {}
 
       if params[:conclusion_review]
         include_score_sheet =
@@ -191,12 +192,19 @@ class ConclusionDraftReviewsController < ApplicationController
         include_global_score_sheet =
           params[:conclusion_review][:include_global_score_sheet] == '1'
         note = params[:conclusion_review][:email_note]
+        review_type = params[:conclusion_review][:review_type]
+
+        if review_type == 'brief'
+          export_options[:brief] = '1'
+        elsif review_type == 'without_score'
+          export_options[:hide_score] = '1'
+        end
       end
 
       if SHOW_CONCLUSION_ALTERNATIVE_PDF
-        @conclusion_draft_review.alternative_pdf(current_organization)
+        @conclusion_draft_review.alternative_pdf(current_organization, export_options)
       else
-        @conclusion_draft_review.to_pdf(current_organization)
+        @conclusion_draft_review.to_pdf(current_organization, export_options)
       end
 
       if include_score_sheet

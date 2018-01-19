@@ -207,7 +207,7 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
     if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_final_review.alternative_pdf(current_organization)
+      @conclusion_final_review.alternative_pdf(current_organization, export_options)
     else
       @conclusion_final_review.to_pdf(current_organization, export_options)
     end
