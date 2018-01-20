@@ -1,5 +1,6 @@
 class RiskAssessment < ApplicationRecord
   include Auditable
+  include RiskAssessments::RiskAssessmentItems
   include RiskAssessments::Scopes
   include RiskAssessments::Search
   include RiskAssessments::Validations

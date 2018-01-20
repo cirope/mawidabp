@@ -108,6 +108,9 @@ es:
       risk_assessment:
         one: 'Evaluación de riesgo'
         other: 'Evaluaciones de riesgo'
+      risk_assessment_item:
+        one: 'Item de evaluación'
+        other: 'Items de evaluación'
       risk_assessment_template:
         one: 'Plantilla de evaluación de riesgo'
         other: 'Plantillas de evaluación de riesgo'
@@ -444,6 +447,15 @@ es:
         period: 'Periodo'
         risk_assessment_template: 'Plantilla de evaluación de riesgo'
         final: 'Definitiva'
+      risk_assessment/risk_assessment_items:
+        name: 'Nombre'
+        risk: 'Riesgo'
+        business_unit: 'Unidad de negocio'
+      risk_assessment_item:
+        name: 'Nombre'
+        risk: 'Riesgo'
+        business_unit: 'Unidad de negocio'
+        process_control: 'Proceso'
       risk_assessment_template:
         name: 'Nombre'
         description: 'Descripción'

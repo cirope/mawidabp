@@ -485,6 +485,8 @@ es:
       title: 'Crear evaluación de riesgo'
     show:
       title: 'Ver evaluación de riesgo'
+    form:
+      add_risk_assessment_item: 'Agregar item'
 
   risk_assessment_templates:
     edit:

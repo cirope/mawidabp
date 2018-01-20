@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180119153053) do
+ActiveRecord::Schema.define(version: 20180119192419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -715,6 +715,20 @@ ActiveRecord::Schema.define(version: 20180119153053) do
     t.index ["plan_item_id"], name: "index_reviews_on_plan_item_id"
   end
 
+  create_table "risk_assessment_items", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "risk", null: false
+    t.integer "order", default: 1, null: false
+    t.bigint "business_unit_id", null: false
+    t.bigint "process_control_id"
+    t.bigint "risk_assessment_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["business_unit_id"], name: "index_risk_assessment_items_on_business_unit_id"
+    t.index ["process_control_id"], name: "index_risk_assessment_items_on_process_control_id"
+    t.index ["risk_assessment_id"], name: "index_risk_assessment_items_on_risk_assessment_id"
+  end
+
   create_table "risk_assessment_templates", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -975,6 +989,9 @@ ActiveRecord::Schema.define(version: 20180119153053) do
   add_foreign_key "reviews", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "reviews", "periods", on_update: :restrict, on_delete: :restrict
   add_foreign_key "reviews", "plan_items", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessment_items", "business_units", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessment_items", "process_controls", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessment_items", "risk_assessments", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessment_templates", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessment_weights", "risk_assessment_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "organizations", on_update: :restrict, on_delete: :restrict

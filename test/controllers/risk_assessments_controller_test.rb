@@ -35,14 +35,22 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should create risk_assessment' do
-    assert_difference 'RiskAssessment.count' do
+  test 'should create risk assessment' do
+    assert_difference ['RiskAssessment.count', 'RiskAssessmentItem.count'] do
       post :create, params: {
         risk_assessment: {
           name: 'New risk assessment',
           description: 'New risk assessment description',
           period_id: periods(:current_period).id,
-          risk_assessment_template_id: risk_assessment_templates(:sox).id
+          risk_assessment_template_id: risk_assessment_templates(:sox).id,
+          risk_assessment_items_attributes: [
+            {
+              order: 1,
+              name: 'New risk assessment item',
+              business_unit_id: business_units(:business_unit_one).id,
+              risk: 30
+            }
+          ]
         }
       }
     end
@@ -50,7 +58,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     assert_redirected_to risk_assessment_url(assigns(:risk_assessment))
   end
 
-  test 'should show risk_assessment' do
+  test 'should show risk assessment' do
     get :show, params: { id: @risk_assessment }
     assert_response :success
   end
@@ -60,7 +68,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should update risk_assessment' do
+  test 'should update risk assessment' do
     patch :update, params: {
       id: @risk_assessment, risk_assessment: { name: 'Updated name' }
     }
@@ -68,11 +76,36 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     assert_redirected_to risk_assessment_url(assigns(:risk_assessment))
   end
 
-  test 'should destroy risk_assessment' do
+  test 'should destroy risk assessment' do
     assert_difference 'RiskAssessment.count', -1 do
       delete :destroy, params: { id: @risk_assessment }
     end
 
     assert_redirected_to risk_assessments_url
+  end
+
+  test 'auto complete for business units' do
+    get :auto_complete_for_business_unit, params: { q: 'fifth' }, as: :json
+    assert_response :success
+
+    business_units = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, business_units.size # Fifth is in another organization
+
+    get :auto_complete_for_business_unit, params: { q: 'one' }, as: :json
+    assert_response :success
+
+    business_units = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, business_units.size # One only
+    assert business_units.all? { |u| (u['label'] + u['informal']).match /one/i }
+
+    get :auto_complete_for_business_unit, params: { q: 'business' }, as: :json
+    assert_response :success
+
+    business_units = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 4, business_units.size # All in the organization (one, two, three and four)
+    assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
   end
 end

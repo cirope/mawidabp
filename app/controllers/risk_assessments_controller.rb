@@ -1,4 +1,6 @@
 class RiskAssessmentsController < ApplicationController
+  include AutoCompleteFor::BusinessUnit
+
   respond_to :html
 
   before_action :auth, :check_privileges
@@ -57,6 +59,11 @@ class RiskAssessmentsController < ApplicationController
     end
 
     def risk_assessment_params
-      params.require(:risk_assessment).permit :name, :description, :final, :period_id, :risk_assessment_template_id, :lock_version
+      params.require(:risk_assessment).permit :name, :description, :final,
+        :period_id, :risk_assessment_template_id, :lock_version,
+        risk_assessment_items_attributes: [
+          :id, :order, :name, :business_unit_id, :process_control_id, :risk,
+          :_destroy
+        ]
     end
 end

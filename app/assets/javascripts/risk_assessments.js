@@ -1,2 +1,9 @@
-// Place all the behaviors and hooks related to the matching controller here.
-// All this logic will automatically be available in application.js.
+jQuery(function ($) {
+  $(document).on('autocomplete:update', '[data-complete-business-unit-type]', function () {
+    var $input = $(this)
+    var target = $input.data('completeBusinessUnitType')
+    var data   = $input.data('item')
+
+    $(target).val(data.informal)
+  })
+})

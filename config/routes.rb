@@ -10,7 +10,10 @@ Rails.application.routes.draw do
 
   resources :benefits
 
-  resources :risk_assessments
+  resources :risk_assessments do
+    get :auto_complete_for_business_unit, on: :collection
+  end
+
   resources :risk_assessment_templates
 
   resources :documents do

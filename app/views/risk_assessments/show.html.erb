@@ -19,6 +19,32 @@
   <%= t "label.#{@risk_assessment.final ? 'yes' : 'no'}" %>
 </p>
 
+<% if @risk_assessment.risk_assessment_items.any? %>
+  <table class="table table-condensed table-striped table-hover">
+    <caption>
+      <h4><%= RiskAssessmentItem.model_name.human count: 0 %></h4>
+    </caption>
+    <thead>
+      <tr>
+        <th><%= RiskAssessmentItem.human_attribute_name 'name' %></th>
+        <th><%= BusinessUnitType.model_name.human %></th>
+        <th><%= RiskAssessmentItem.human_attribute_name 'business_unit' %></th>
+        <th><%= RiskAssessmentItem.human_attribute_name 'risk' %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @risk_assessment.risk_assessment_items.each do |risk_assessment_item| %>
+        <tr>
+          <td><%= risk_assessment_item.name %></td>
+          <td><%= risk_assessment_item.business_unit_type %></td>
+          <td><%= risk_assessment_item.business_unit %></td>
+          <td><%= risk_assessment_item.risk %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
 <hr>
 
 <%= link_to_edit [:edit, @risk_assessment] %> |

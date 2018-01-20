@@ -23,6 +23,36 @@
         <%= f.input :final %>
       </div>
     </div>
+
+    <h4>
+      <%= RiskAssessmentItem.model_name.human count: 0 %>
+    </h4>
+
+    <div class="row">
+      <div class="col-md-3">
+        <h5><strong><%= RiskAssessmentItem.human_attribute_name 'name' %></strong></h5>
+      </div>
+      <div class="col-md-2">
+        <h5><strong><%= BusinessUnitType.model_name.human %></strong></h5>
+      </div>
+      <div class="col-md-3">
+        <h5><strong><%= RiskAssessmentItem.human_attribute_name 'business_unit' %></strong></h5>
+      </div>
+      <div class="col-md-3">
+        <h5><strong><%= RiskAssessmentItem.human_attribute_name 'risk' %></strong></h5>
+      </div>
+    </div>
+
+    <div id="risk_assessment_items">
+      <%= f.simple_fields_for :risk_assessment_items do |co_f| %>
+        <%= render 'risk_assessment_item', f: co_f %>
+      <% end %>
+
+      <p>
+        <%= link_to_add_fields t('.add_risk_assessment_item'), f, :risk_assessment_items %>
+      </p>
+    </div>
+
     <%= f.input :lock_version, as: :hidden %>
   </div>
 
