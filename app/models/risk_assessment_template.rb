@@ -1,5 +1,6 @@
 class RiskAssessmentTemplate < ApplicationRecord
   include Auditable
+  include RiskAssessmentTemplates::DestroyValidation
   include RiskAssessmentTemplates::Scopes
   include RiskAssessmentTemplates::Search
   include RiskAssessmentTemplates::Validations

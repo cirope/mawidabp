@@ -75,6 +75,8 @@ class RiskAssessmentTemplatesControllerTest < ActionController::TestCase
   test 'should destroy risk_assessment_template' do
     counts = %w(RiskAssessmentTemplate.count RiskAssessmentWeight.count)
 
+    @risk_assessment_template.risk_assessments.destroy_all
+
     assert_difference counts, -1 do
       delete :destroy, params: { id: @risk_assessment_template }
     end

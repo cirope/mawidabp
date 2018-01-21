@@ -117,6 +117,9 @@ es:
       risk_assessment_weight:
         one: 'Atributo de evaluación de riesgo'
         other: 'Atributos de evaluación de riesgo'
+      risk_weight:
+        one: 'Valor de evaluación de riesgo'
+        other: 'Valores de evaluación de riesgo'
       tag:
         one: 'Etiqueta'
         other: 'Etiquetas'
@@ -448,9 +451,12 @@ es:
         risk_assessment_template: 'Plantilla de evaluación de riesgo'
         final: 'Definitiva'
       risk_assessment/risk_assessment_items:
-        name: 'Nombre'
-        risk: 'Riesgo'
+        name: 'Nombre (item)'
+        risk: 'Riesgo (item)'
         business_unit: 'Unidad de negocio'
+      risk_assessment/risk_assessment_items/risk_weights:
+        value: 'Valor (item)'
+        weight: 'Ponderador (item)'
       risk_assessment_item:
         name: 'Nombre'
         risk: 'Riesgo'
@@ -467,6 +473,9 @@ es:
       risk_assessment_weight:
         name: 'Atributo'
         description: 'Descripción'
+        weight: 'Ponderador'
+      risk_weight:
+        value: 'Valor'
         weight: 'Ponderador'
       weakness:
         control_objective_item_id: 'Objetivo de control'

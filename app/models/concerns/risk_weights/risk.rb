@@ -1,12 +1,12 @@
-module RiskAssessmentItems::Risk
+module RiskWeights::Risk
   extend ActiveSupport::Concern
 
   included do
     RISK_TYPES = {
       none:        0,
       low:         1,
-      medium:      2,
-      medium_low:  3,
+      medium_low:  2,
+      medium:      3,
       medium_high: 4,
       high:        5
     }

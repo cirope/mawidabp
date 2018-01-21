@@ -1,7 +1,7 @@
 class RiskAssessmentItem < ApplicationRecord
   include Auditable
-  include RiskAssessmentItems::Risk
   include RiskAssessmentItems::Validations
+  include RiskAssessmentItems::Weights
 
   belongs_to :risk_assessment, optional: true
   belongs_to :business_unit, optional: true

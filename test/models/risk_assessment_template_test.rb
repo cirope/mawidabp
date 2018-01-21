@@ -9,7 +9,7 @@ class RiskAssessmentTemplateTest < ActiveSupport::TestCase
     @risk_assessment_template.name = ''
     @risk_assessment_template.description = ''
 
-    @risk_assessment_template.risk_assessment_weights.clear
+    @risk_assessment_template.risk_assessment_weights.destroy_all
 
     assert @risk_assessment_template.invalid?
     assert_error @risk_assessment_template, :name, :blank
@@ -38,5 +38,17 @@ class RiskAssessmentTemplateTest < ActiveSupport::TestCase
     assert @risk_assessment_template.invalid?
     assert_error @risk_assessment_template, :name, :pdf_encoding
     assert_error @risk_assessment_template, :description, :pdf_encoding
+  end
+
+  test 'destroy' do
+    assert_no_difference 'RiskAssessmentTemplate.count' do
+      @risk_assessment_template.destroy
+    end
+
+    @risk_assessment_template.risk_assessments.destroy_all
+
+    assert_difference 'RiskAssessmentTemplate.count', -1 do
+      @risk_assessment_template.destroy
+    end
   end
 end

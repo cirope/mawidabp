@@ -36,7 +36,13 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
   end
 
   test 'should create risk assessment' do
-    assert_difference ['RiskAssessment.count', 'RiskAssessmentItem.count'] do
+    counts = [
+      'RiskAssessment.count',
+      'RiskAssessmentItem.count',
+      'RiskWeight.count'
+    ]
+
+    assert_difference counts do
       post :create, params: {
         risk_assessment: {
           name: 'New risk assessment',
@@ -48,7 +54,14 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
               order: 1,
               name: 'New risk assessment item',
               business_unit_id: business_units(:business_unit_one).id,
-              risk: 30
+              risk: 100,
+              risk_weights_attributes: [
+                {
+                  value: RiskWeight.risks_values.last,
+                  weight: 100,
+                  risk_assessment_weight_id: risk_assessment_weights(:sox_404).id
+                }
+              ]
             }
           ]
         }
@@ -86,6 +99,15 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
 
   test 'should get new item' do
     get :new_item, params: { id: @risk_assessment }, xhr: true, as: :js
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+  end
+
+  test 'should get fetch item' do
+    get :new_item, params: {
+      id: @risk_assessment,
+      risk_assessment_item_id: risk_assessment_items(:sox_section_13).id
+    }, xhr: true, as: :js
     assert_response :success
     assert_equal @response.content_type, Mime[:js]
   end

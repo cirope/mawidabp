@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180119192419) do
+ActiveRecord::Schema.define(version: 20180121170808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -764,6 +764,17 @@ ActiveRecord::Schema.define(version: 20180119192419) do
     t.index ["risk_assessment_template_id"], name: "index_risk_assessments_on_risk_assessment_template_id"
   end
 
+  create_table "risk_weights", force: :cascade do |t|
+    t.integer "value", null: false
+    t.integer "weight", null: false
+    t.bigint "risk_assessment_weight_id", null: false
+    t.bigint "risk_assessment_item_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["risk_assessment_item_id"], name: "index_risk_weights_on_risk_assessment_item_id"
+    t.index ["risk_assessment_weight_id"], name: "index_risk_weights_on_risk_assessment_weight_id"
+  end
+
   create_table "roles", id: :serial, force: :cascade do |t|
     t.string "name"
     t.integer "role_type"
@@ -997,6 +1008,8 @@ ActiveRecord::Schema.define(version: 20180119192419) do
   add_foreign_key "risk_assessments", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "periods", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "risk_assessment_templates", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_weights", "risk_assessment_items", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_weights", "risk_assessment_weights", on_update: :restrict, on_delete: :restrict
   add_foreign_key "roles", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "settings", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "taggings", "tags", on_update: :restrict, on_delete: :restrict

@@ -3,8 +3,8 @@ class RiskAssessmentsController < ApplicationController
 
   respond_to :html
 
-  before_action :auth, :check_privileges
-  before_action :set_risk_assessment, only: [:show, :edit, :update, :destroy, :new_item]
+  before_action :auth, :load_privileges, :check_privileges
+  before_action :set_risk_assessment, only: [:show, :edit, :update, :destroy, :new_item, :fetch_item]
   before_action :set_title, except: [:destroy]
 
   # GET /risk_assessments
@@ -56,6 +56,13 @@ class RiskAssessmentsController < ApplicationController
   # GET /risk_assessments/1/new_item
   def new_item
     @risk_assessment_item = @risk_assessment.risk_assessment_items.new
+
+    @risk_assessment_item.build_risk_weights
+  end
+
+  def fetch_item
+    id = params[:risk_assessment_item_id]
+    @risk_assessment_item = @risk_assessment.risk_assessment_items.find id
   end
 
   private
@@ -69,7 +76,18 @@ class RiskAssessmentsController < ApplicationController
         :period_id, :risk_assessment_template_id, :lock_version,
         risk_assessment_items_attributes: [
           :id, :order, :name, :business_unit_id, :process_control_id, :risk,
-          :_destroy
+          :_destroy,
+          risk_weights_attributes: [
+            :id, :value, :weight, :risk_assessment_weight_id, :_destroy
+          ]
         ]
+    end
+
+    def load_privileges
+      @action_privileges.update(
+        auto_complete_for_business_unit: :read,
+        new_item: :read,
+        fetch_item: :read
+      )
     end
 end

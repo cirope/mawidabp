@@ -488,6 +488,13 @@ es:
     form:
       new_risk_assessment_items: 'Luego de crear la evaluación de riesgo podrá agregar items a la misma'
       add_risk_assessment_item: 'Agregar item'
+    risk_weight_risks:
+      none: 'Nulo'
+      low: 'Bajo'
+      medium_low: 'Medio bajo'
+      medium: 'Medio'
+      medium_high: 'Medio alto'
+      high: 'Alto'
 
   risk_assessment_templates:
     edit:
