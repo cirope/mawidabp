@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   resources :benefits
 
   resources :risk_assessments do
+    get :new_item, on: :member
+
     get :auto_complete_for_business_unit, on: :collection
   end
 

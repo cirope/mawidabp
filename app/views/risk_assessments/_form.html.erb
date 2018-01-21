@@ -24,34 +24,43 @@
       </div>
     </div>
 
-    <h4>
-      <%= RiskAssessmentItem.model_name.human count: 0 %>
-    </h4>
+    <% if @risk_assessment.persisted? %>
+      <h4>
+        <%= RiskAssessmentItem.model_name.human count: 0 %>
+      </h4>
 
-    <div class="row">
-      <div class="col-md-3">
-        <h5><strong><%= RiskAssessmentItem.human_attribute_name 'name' %></strong></h5>
+      <div class="row">
+        <div class="col-md-3">
+          <h5><strong><%= RiskAssessmentItem.human_attribute_name 'name' %></strong></h5>
+        </div>
+        <div class="col-md-2">
+          <h5><strong><%= BusinessUnitType.model_name.human %></strong></h5>
+        </div>
+        <div class="col-md-3">
+          <h5><strong><%= RiskAssessmentItem.human_attribute_name 'business_unit' %></strong></h5>
+        </div>
+        <div class="col-md-3">
+          <h5><strong><%= RiskAssessmentItem.human_attribute_name 'risk' %></strong></h5>
+        </div>
       </div>
-      <div class="col-md-2">
-        <h5><strong><%= BusinessUnitType.model_name.human %></strong></h5>
-      </div>
-      <div class="col-md-3">
-        <h5><strong><%= RiskAssessmentItem.human_attribute_name 'business_unit' %></strong></h5>
-      </div>
-      <div class="col-md-3">
-        <h5><strong><%= RiskAssessmentItem.human_attribute_name 'risk' %></strong></h5>
-      </div>
-    </div>
 
-    <div id="risk_assessment_items">
-      <%= f.simple_fields_for :risk_assessment_items do |co_f| %>
-        <%= render 'risk_assessment_item', f: co_f %>
-      <% end %>
+      <div id="risk_assessment_items">
+        <div data-risk-assessment-items-container>
+          <%= f.simple_fields_for :risk_assessment_items do |co_f| %>
+            <%= render 'risk_assessment_item', f: co_f %>
+          <% end %>
+        </div>
 
-      <p>
-        <%= link_to_add_fields t('.add_risk_assessment_item'), f, :risk_assessment_items %>
-      </p>
-    </div>
+        <p>
+          <%= link_to t('.add_risk_assessment_item'), new_item_risk_assessment_path(@risk_assessment),
+            class: 'btn btn-default btn-sm', data: { remote: true } %>
+        </p>
+      </div>
+    <% else %>
+      <div class="alert alert-info">
+        <p><%= t '.new_risk_assessment_items' %></p>
+      </div>
+    <% end %>
 
     <%= f.input :lock_version, as: :hidden %>
   </div>

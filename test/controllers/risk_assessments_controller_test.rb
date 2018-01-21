@@ -55,7 +55,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to risk_assessment_url(assigns(:risk_assessment))
+    assert_redirected_to edit_risk_assessment_url(assigns(:risk_assessment))
   end
 
   test 'should show risk assessment' do
@@ -82,6 +82,12 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to risk_assessments_url
+  end
+
+  test 'should get new item' do
+    get :new_item, params: { id: @risk_assessment }, xhr: true, as: :js
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
   end
 
   test 'auto complete for business units' do

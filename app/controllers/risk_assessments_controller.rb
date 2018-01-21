@@ -4,7 +4,7 @@ class RiskAssessmentsController < ApplicationController
   respond_to :html
 
   before_action :auth, :check_privileges
-  before_action :set_risk_assessment, only: [:show, :edit, :update, :destroy]
+  before_action :set_risk_assessment, only: [:show, :edit, :update, :destroy, :new_item]
   before_action :set_title, except: [:destroy]
 
   # GET /risk_assessments
@@ -37,7 +37,8 @@ class RiskAssessmentsController < ApplicationController
     @risk_assessment = RiskAssessment.list.new risk_assessment_params
 
     @risk_assessment.save
-    respond_with @risk_assessment
+    respond_with @risk_assessment, location: @risk_assessment.persisted? &&
+      edit_risk_assessment_url(@risk_assessment)
   end
 
   # PATCH/PUT /risk_assessments/1
@@ -50,6 +51,11 @@ class RiskAssessmentsController < ApplicationController
   def destroy
     @risk_assessment.destroy
     respond_with @risk_assessment
+  end
+
+  # GET /risk_assessments/1/new_item
+  def new_item
+    @risk_assessment_item = @risk_assessment.risk_assessment_items.new
   end
 
   private
