@@ -1,5 +1,6 @@
 class RiskAssessmentItem < ApplicationRecord
   include Auditable
+  include RiskAssessmentItems::Risk
   include RiskAssessmentItems::Validations
   include RiskAssessmentItems::Weights
 

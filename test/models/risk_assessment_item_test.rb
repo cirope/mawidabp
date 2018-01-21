@@ -43,4 +43,12 @@ class RiskAssessmentItemTest < ActiveSupport::TestCase
     assert @risk_assessment_item.invalid?
     assert_error @risk_assessment_item, :name, :pdf_encoding
   end
+
+  test 'risk calculation' do
+    assert_not_equal 100, @risk_assessment_item.risk
+
+    @risk_assessment_item.save!
+
+    assert_equal 100, @risk_assessment_item.reload.risk
+  end
 end
