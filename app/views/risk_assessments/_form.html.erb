@@ -13,10 +13,14 @@
         <% else %>
           <%= f.input :period, input_html: { readonly: true } %>
         <% end %>
-        <%= f.association :risk_assessment_template,
-          collection: RiskAssessmentTemplate.list.order(:name),
-          prompt:     true
-        %>
+        <% if @risk_assessment.new_record? %>
+          <%= f.association :risk_assessment_template,
+            collection: RiskAssessmentTemplate.list.order(:name),
+            prompt:     true
+          %>
+        <% else %>
+          <%= f.input :risk_assessment_template, input_html: { readonly: true } %>
+        <% end %>
       </div>
       <div class="col-md-6">
         <%= f.input :description, input_html: { rows: 6 } %>

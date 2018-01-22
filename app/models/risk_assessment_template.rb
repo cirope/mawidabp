@@ -8,4 +8,8 @@ class RiskAssessmentTemplate < ApplicationRecord
 
   belongs_to :organization
   has_many :risk_assessments, dependent: :destroy
+
+  def to_s
+    name
+  end
 end

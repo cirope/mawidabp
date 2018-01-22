@@ -2,7 +2,10 @@ module RiskAssessmentItems::Weights
   extend ActiveSupport::Concern
 
   included do
-    has_many :risk_weights, dependent: :destroy
+    has_many :risk_weights, -> {
+      joins(:risk_assessment_weight).
+        order("#{RiskAssessmentWeight.quoted_table_name}.#{RiskAssessmentWeight.qcn 'id'}")
+    }, dependent: :destroy
 
     accepts_nested_attributes_for :risk_weights, allow_destroy: true, reject_if: :all_blank
   end

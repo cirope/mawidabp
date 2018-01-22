@@ -3,7 +3,7 @@
 
   <%= simple_fields_for @risk_assessment do |f| %>
     <%= f.simple_fields_for :risk_assessment_items, @risk_assessment_item, include_id: false, child_index: params[:index] do |rai_f| %>
-      $container.replaceWith('<%= j render('risk_weights', f: rai_f) %>')
+      $container.html('<%= j render('risk_weights', f: rai_f) %>')
     <% end %>
   <% end %>
 }()

@@ -86,7 +86,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
       id: @risk_assessment, risk_assessment: { name: 'Updated name' }
     }
 
-    assert_redirected_to risk_assessment_url(assigns(:risk_assessment))
+    assert_redirected_to edit_risk_assessment_url(assigns(:risk_assessment))
   end
 
   test 'should destroy risk assessment' do
