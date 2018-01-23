@@ -476,6 +476,8 @@ es:
   risk_assessments:
     edit:
       title: 'Editar evaluación de riesgo'
+      other_actions: 'Acciones'
+      sort_by_risk: 'Ordenar por riesgo descendente'
     index:
       new: 'Nueva evaluación de riesgo'
       title: 'Listado de evaluaciones de riesgo'

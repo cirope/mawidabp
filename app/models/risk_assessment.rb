@@ -5,6 +5,7 @@ class RiskAssessment < ApplicationRecord
   include RiskAssessments::RiskAssessmentItems
   include RiskAssessments::Scopes
   include RiskAssessments::Search
+  include RiskAssessments::Sort
   include RiskAssessments::UpdateCallbacks
   include RiskAssessments::Validations
 

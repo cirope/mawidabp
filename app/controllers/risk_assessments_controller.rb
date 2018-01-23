@@ -12,6 +12,7 @@ class RiskAssessmentsController < ApplicationController
     :destroy,
     :new_item,
     :fetch_item,
+    :sort_by_risk,
     :create_plan
   ]
 
@@ -80,6 +81,12 @@ class RiskAssessmentsController < ApplicationController
     @risk_assessment_item = @risk_assessment.risk_assessment_items.find id
   end
 
+  def sort_by_risk
+    @risk_assessment.sort_by_risk
+
+    respond_with @risk_assessment, location: edit_risk_assessment_url(@risk_assessment)
+  end
+
   def create_plan
     plan = @risk_assessment.create_plan
 
@@ -109,6 +116,7 @@ class RiskAssessmentsController < ApplicationController
         auto_complete_for_business_unit: :read,
         new_item: :read,
         fetch_item: :read,
+        sort_by_risk: :modify,
         create_plan: :modify
       )
     end

@@ -68,4 +68,19 @@ class RiskAssessmentTest < ActiveSupport::TestCase
         plan.plan_items.count
     end
   end
+
+  test 'sort by risk' do
+    rai = @risk_assessment.risk_assessment_items.create!(
+      name:  'First by risk',
+      risk:  99,
+      order: 2,
+      business_unit_id: business_units(:business_unit_two).id
+    )
+
+    assert_equal @risk_assessment.risk_assessment_items.last.id, rai.id
+
+    @risk_assessment.sort_by_risk
+
+    assert_equal @risk_assessment.reload.risk_assessment_items.first.id, rai.id
+  end
 end

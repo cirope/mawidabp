@@ -120,6 +120,12 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     assert_equal @response.content_type, Mime[:js]
   end
 
+  test 'should sort by risk' do
+    patch :sort_by_risk, params: { id: @risk_assessment }
+
+    assert_redirected_to edit_risk_assessment_url(assigns(:risk_assessment))
+  end
+
   test 'should create plan' do
     period = periods :unused_period
 
