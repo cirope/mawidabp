@@ -24,7 +24,7 @@ module Periods::Scopes
     end
 
     def list_all_without_plans
-      list.includes(:plans).where(plans: { period_id: nil }).
+      list.includes(:plan).where(plans: { period_id: nil }).
         reorder(order_by_dates).references(:plans)
     end
 

@@ -36,7 +36,7 @@ class PeriodTest < ActiveSupport::TestCase
     assert_equal 3, @period.errors.size
     assert_equal [
       I18n.t('periods.errors.reviews', count: @period.reviews.size),
-      I18n.t('periods.errors.plans', count: @period.plans.size),
+      I18n.t('periods.errors.plan', count: 1),
       I18n.t('periods.errors.workflows', count: @period.workflows.size)
     ].sort, @period.errors.full_messages.sort
   end
