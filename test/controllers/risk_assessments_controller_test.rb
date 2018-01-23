@@ -47,7 +47,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
         risk_assessment: {
           name: 'New risk assessment',
           description: 'New risk assessment description',
-          period_id: periods(:current_period).id,
+          period_id: periods(:unused_period).id,
           risk_assessment_template_id: risk_assessment_templates(:sox).id,
           risk_assessment_items_attributes: [
             {
@@ -110,6 +110,18 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     }, xhr: true, as: :js
     assert_response :success
     assert_equal @response.content_type, Mime[:js]
+  end
+
+  test 'should create plan' do
+    period = periods :unused_period
+
+    @risk_assessment.update_column :period_id, period.id
+
+    assert_difference 'Plan.count' do
+      post :create_plan, params: { id: @risk_assessment }
+    end
+
+    assert_redirected_to edit_plan_url(Plan.find_by period_id: period.id)
   end
 
   test 'auto complete for business units' do

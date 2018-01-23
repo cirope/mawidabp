@@ -755,12 +755,14 @@ ActiveRecord::Schema.define(version: 20180121170808) do
     t.boolean "final", default: false, null: false
     t.integer "lock_version", default: 0, null: false
     t.bigint "period_id", null: false
+    t.bigint "plan_id"
     t.bigint "risk_assessment_template_id", null: false
     t.bigint "organization_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_risk_assessments_on_organization_id"
-    t.index ["period_id"], name: "index_risk_assessments_on_period_id"
+    t.index ["period_id"], name: "index_risk_assessments_on_period_id", unique: true
+    t.index ["plan_id"], name: "index_risk_assessments_on_plan_id"
     t.index ["risk_assessment_template_id"], name: "index_risk_assessments_on_risk_assessment_template_id"
   end
 
@@ -1007,6 +1009,7 @@ ActiveRecord::Schema.define(version: 20180121170808) do
   add_foreign_key "risk_assessment_weights", "risk_assessment_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "periods", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessments", "plans", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "risk_assessment_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_weights", "risk_assessment_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_weights", "risk_assessment_weights", on_update: :restrict, on_delete: :restrict

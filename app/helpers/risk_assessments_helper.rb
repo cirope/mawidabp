@@ -16,4 +16,21 @@ module RiskAssessmentsHelper
 
     is_valid && risk_weights_are_unchanged
   end
+
+  def link_to_create_plan risk_assessment
+    if risk_assessment.final && risk_assessment.period.plan.blank?
+      options = {
+        title: t('.create_plan'),
+        class: 'icon',
+        data: {
+          method:  :post,
+          confirm: t('messages.confirmation')
+        }
+      }
+
+      link_to [:create_plan, risk_assessment], options do
+        content_tag :span, nil, class: 'glyphicon glyphicon-list'
+      end
+    end
+  end
 end

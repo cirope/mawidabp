@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     member do
       get :fetch_item
       get :new_item
+      post :create_plan
     end
 
     get :auto_complete_for_business_unit, on: :collection

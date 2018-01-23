@@ -178,7 +178,7 @@ es:
       title: 'Modificar período'
     errors:
       can_not_be_destroyed: 'El período no puede ser eliminado'
-      plans:
+      plan:
         one: 'Tiene un plan asociado'
         other: 'Tiene %{count} planes asociados'
       reviews:
@@ -481,6 +481,7 @@ es:
       title: 'Listado de evaluaciones de riesgo'
       empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="label label-primary">Nueva evaluación de riesgo</span>'
       empty_search_html: 'No hay evaluaciones de riesgo que coincidan con el criterio de búsqueda'
+      create_plan: 'Crear plan a partir de la evaluación'
     new:
       title: 'Crear evaluación de riesgo'
     show:

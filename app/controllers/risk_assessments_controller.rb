@@ -4,8 +4,16 @@ class RiskAssessmentsController < ApplicationController
   respond_to :html
 
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_risk_assessment, only: [:show, :edit, :update, :destroy, :new_item, :fetch_item]
   before_action :set_title, except: [:destroy]
+  before_action :set_risk_assessment, only: [
+    :show,
+    :edit,
+    :update,
+    :destroy,
+    :new_item,
+    :fetch_item,
+    :create_plan
+  ]
 
   # GET /risk_assessments
   def index
@@ -65,6 +73,12 @@ class RiskAssessmentsController < ApplicationController
     @risk_assessment_item = @risk_assessment.risk_assessment_items.find id
   end
 
+  def create_plan
+    plan = @risk_assessment.create_plan
+
+    respond_with plan, location: edit_plan_url(plan)
+  end
+
   private
 
     def set_risk_assessment
@@ -87,7 +101,8 @@ class RiskAssessmentsController < ApplicationController
       @action_privileges.update(
         auto_complete_for_business_unit: :read,
         new_item: :read,
-        fetch_item: :read
+        fetch_item: :read,
+        create_plan: :modify
       )
     end
 end

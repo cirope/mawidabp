@@ -23,6 +23,7 @@ class RiskAssessmentTest < ActiveSupport::TestCase
 
     assert risk_assessment.invalid?
     assert_error risk_assessment, :name, :taken
+    assert_error risk_assessment, :period_id, :taken
   end
 
   test 'attribute length' do
@@ -39,5 +40,17 @@ class RiskAssessmentTest < ActiveSupport::TestCase
     assert @risk_assessment.invalid?
     assert_error @risk_assessment, :name, :pdf_encoding
     assert_error @risk_assessment, :description, :pdf_encoding
+  end
+
+  test 'create plan' do
+    @risk_assessment.update_column :period_id, periods(:unused_period).id
+
+    assert_difference 'Plan.count' do
+      plan = @risk_assessment.create_plan
+
+      assert_equal @risk_assessment.period_id, plan.period_id
+      assert_equal @risk_assessment.risk_assessment_items.count,
+        plan.plan_items.count
+    end
   end
 end

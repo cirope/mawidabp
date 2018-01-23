@@ -5,8 +5,9 @@ class CreateRiskAssessments < ActiveRecord::Migration[5.1]
       t.text :description
       t.boolean :final, null: false, default: false
       t.integer :lock_version, null: false, default: 0
-      t.references :period, null: false, index: true,
+      t.references :period, null: false, index: { unique: true },
         foreign_key: FOREIGN_KEY_OPTIONS.dup
+      t.references :plan, index: true, foreign_key: FOREIGN_KEY_OPTIONS.dup
       t.references :risk_assessment_template, null: false, index: true,
         foreign_key: FOREIGN_KEY_OPTIONS.dup
       t.references :organization, null: false, index: true,

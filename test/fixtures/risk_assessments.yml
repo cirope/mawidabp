@@ -3,5 +3,6 @@ sox_current:
   description: Sox description
   final: false
   period: current_period
+  plan:
   risk_assessment_template: sox
   organization: cirope
