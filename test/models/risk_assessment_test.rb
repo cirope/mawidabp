@@ -42,6 +42,21 @@ class RiskAssessmentTest < ActiveSupport::TestCase
     assert_error @risk_assessment, :description, :pdf_encoding
   end
 
+  test 'can not be updated when final' do
+    @risk_assessment.update! final: true
+    @risk_assessment.update name: 'new name'
+
+    assert_not_equal 'new name', @risk_assessment.reload.name
+  end
+
+  test 'can not be destroyed when final' do
+    @risk_assessment.update! final: true
+
+    assert_no_difference 'RiskAssessment.count' do
+      @risk_assessment.destroy
+    end
+  end
+
   test 'create plan' do
     @risk_assessment.update_column :period_id, periods(:unused_period).id
 
