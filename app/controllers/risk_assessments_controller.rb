@@ -52,7 +52,14 @@ class RiskAssessmentsController < ApplicationController
   # PATCH/PUT /risk_assessments/1
   def update
     update_resource @risk_assessment, risk_assessment_params
-    respond_with @risk_assessment, location: edit_risk_assessment_url(@risk_assessment)
+
+    location = if @risk_assessment.final
+                 risk_assessment_url @risk_assessment
+               else
+                 edit_risk_assessment_url @risk_assessment
+               end
+
+    respond_with @risk_assessment, location: location
   end
 
   # DELETE /risk_assessments/1

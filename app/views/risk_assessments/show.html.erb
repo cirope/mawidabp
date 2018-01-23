@@ -47,5 +47,7 @@
 
 <hr>
 
-<%= link_to_edit [:edit, @risk_assessment] %> |
+<% unless @risk_assessment.final %>
+  <%= link_to_edit [:edit, @risk_assessment] %> |
+<% end %>
 <%= link_to_index risk_assessments_path %>

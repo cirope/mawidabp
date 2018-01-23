@@ -81,12 +81,20 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should update risk assessment' do
+  test 'should update risk assessment and redirect to edit' do
     patch :update, params: {
       id: @risk_assessment, risk_assessment: { name: 'Updated name' }
     }
 
     assert_redirected_to edit_risk_assessment_url(assigns(:risk_assessment))
+  end
+
+  test 'should update risk assessment and redirect to show' do
+    patch :update, params: {
+      id: @risk_assessment, risk_assessment: { final: '1' }
+    }
+
+    assert_redirected_to risk_assessment_url(assigns(:risk_assessment))
   end
 
   test 'should destroy risk assessment' do
