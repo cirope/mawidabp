@@ -19,7 +19,10 @@ Rails.application.routes.draw do
       post :create_plan
     end
 
-    get :auto_complete_for_business_unit, on: :collection
+    collection do
+      get :auto_complete_for_business_unit
+      get :auto_complete_for_best_practice
+    end
   end
 
   resources :risk_assessment_templates

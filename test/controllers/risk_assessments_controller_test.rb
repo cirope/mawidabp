@@ -175,4 +175,35 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     assert_equal 4, business_units.size # All in the organization (one, two, three and four)
     assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
   end
+
+  test 'auto complete for best practices' do
+    get :auto_complete_for_best_practice, xhr: true, params: {
+      q: 'a'
+    }, as: :json
+    assert_response :success
+
+    best_practices = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 2, best_practices.size
+    assert best_practices.all? { |bp| bp['label'].match /a/i }
+
+    get :auto_complete_for_best_practice, xhr: true, params: {
+      q: 'iso'
+    }, as: :json
+    assert_response :success
+
+    best_practices = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, best_practices.size
+    assert best_practices.all? { |bp| bp['label'].match /iso/i }
+
+    get :auto_complete_for_best_practice, xhr: true, params: {
+      q: 'xyz'
+    }, as: :json
+    assert_response :success
+
+    best_practices = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, best_practices.size # None
+  end
 end

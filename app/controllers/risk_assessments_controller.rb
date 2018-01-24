@@ -1,4 +1,5 @@
 class RiskAssessmentsController < ApplicationController
+  include AutoCompleteFor::BestPractice
   include AutoCompleteFor::BusinessUnit
 
   respond_to :html
@@ -124,9 +125,11 @@ class RiskAssessmentsController < ApplicationController
 
     def load_privileges
       @action_privileges.update(
+        auto_complete_for_best_practice: :read,
         auto_complete_for_business_unit: :read,
         new_item: :read,
         fetch_item: :read,
+        add_items: :read,
         sort_by_risk: :modify,
         create_plan: :modify
       )
