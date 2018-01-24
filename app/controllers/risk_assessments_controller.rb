@@ -1,6 +1,7 @@
 class RiskAssessmentsController < ApplicationController
   include AutoCompleteFor::BestPractice
   include AutoCompleteFor::BusinessUnit
+  include AutoCompleteFor::BusinessUnitType
 
   respond_to :html
 
@@ -82,6 +83,8 @@ class RiskAssessmentsController < ApplicationController
   def add_items
     @risk_assessment_items = if params[:type] == 'best_practice'
                                @risk_assessment.build_items_from_best_practices params[:ids]
+                             elsif params[:type] == 'business_unit_type'
+                               @risk_assessment.build_items_from_business_unit_types params[:ids]
                              end
   end
 
@@ -127,6 +130,7 @@ class RiskAssessmentsController < ApplicationController
       @action_privileges.update(
         auto_complete_for_best_practice: :read,
         auto_complete_for_business_unit: :read,
+        auto_complete_for_business_unit_type: :read,
         new_item: :read,
         fetch_item: :read,
         add_items: :read,

@@ -5,6 +5,10 @@ class RiskAssessmentTest < ActiveSupport::TestCase
     @risk_assessment = risk_assessments :sox_current
   end
 
+  teardown do
+    Organization.current_id = nil
+  end
+
   test 'blank attributes' do
     @risk_assessment.name = ''
     @risk_assessment.description = ''
@@ -85,11 +89,24 @@ class RiskAssessmentTest < ActiveSupport::TestCase
   end
 
   test 'build items from best practices' do
+    set_organization
+
     bps   = [best_practices(:iso_27001), best_practices(:bcra_A4609)]
     pcs   = bps.map { |bp| bp.process_controls.where(obsolete: false).to_a }.flatten
     items = @risk_assessment.build_items_from_best_practices(bps.map &:id)
 
     assert_equal pcs.size, items.size
     assert pcs.all? { |pc| items.any? { |i| i.name == pc.name } }
+  end
+
+  test 'build items from business units' do
+    set_organization
+
+    buts  = [business_unit_types(:cycle), business_unit_types(:consolidated_substantive)]
+    bus   = buts.map { |but| but.business_units.to_a }.flatten
+    items = @risk_assessment.build_items_from_business_unit_types(buts.map &:id)
+
+    assert_equal bus.size, items.size
+    assert bus.all? { |pc| items.any? { |i| i.name == pc.name } }
   end
 end

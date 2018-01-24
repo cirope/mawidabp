@@ -66,6 +66,11 @@
               <%= BestPractice.model_name.human count: 0 %>
             </a>
           </li>
+          <li>
+            <a href="#business-unit-type" data-toggle="tab">
+              <%= BusinessUnitType.model_name.human count: 0 %>
+            </a>
+          </li>
         </ul>
 
         <div class="tab-content">
@@ -79,6 +84,19 @@
               <%= link_to t('.apply'), '#', class: 'btn btn-default btn-sm', disabled: true, data: {
                 disabled_on_apply: true,
                 add_risk_assessment_items_url: add_items_risk_assessment_path(@risk_assessment, type: 'best_practice')
+              } %>
+            </div>
+          </div>
+          <div class="tab-pane" id="business-unit-type">
+            <br>
+
+            <div id="business_unit_types">
+              <%= link_to_add_fields(
+                t('.add_business_unit_type'), f, :risk_assessment_items, 'business_unit_type', disabled_on_apply: true
+              ) %>
+              <%= link_to t('.apply'), '#', class: 'btn btn-default btn-sm', disabled: true, data: {
+                disabled_on_apply: true,
+                add_risk_assessment_items_url: add_items_risk_assessment_path(@risk_assessment, type: 'business_unit_type')
               } %>
             </div>
           </div>

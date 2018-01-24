@@ -123,6 +123,17 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     assert_equal @response.content_type, Mime[:js]
   end
 
+  test 'should get add items for business unit types' do
+    get :add_items, params: {
+      id: @risk_assessment,
+      ids: [business_unit_types(:cycle).id],
+      type: 'business_unit_type'
+    }, xhr: true, as: :js
+
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+  end
+
   test 'should get fetch item' do
     get :new_item, params: {
       id: @risk_assessment,
@@ -174,6 +185,23 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
 
     assert_equal 4, business_units.size # All in the organization (one, two, three and four)
     assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
+  end
+
+  test 'auto complete for business unit type' do
+    get :auto_complete_for_business_unit_type, params: { q: 'noway' }, as: :json
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, business_unit_types.size # Fifth is in another organization
+
+    get :auto_complete_for_business_unit_type, params: { q: 'cycle' }, as: :json
+    assert_response :success
+
+    business_unit_types = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, business_unit_types.size # One only
+    assert business_unit_types.all? { |u| u['label'].match /cycle/i }
   end
 
   test 'auto complete for best practices' do

@@ -1,7 +1,7 @@
 +function () {
   var $container = $('[data-risk-assessment-items-container]')
 
-  $('fieldset.best_practice').remove()
+  $('fieldset.<%= params[:type] %>').remove()
 
   <%= simple_fields_for @risk_assessment do |f| %>
     <% @risk_assessment_items.each_with_index do |risk_assessment_item, i| %>
