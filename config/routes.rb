@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     member do
       get :fetch_item
       get :new_item
+      get :add_items
       patch :sort_by_risk
       post :create_plan
     end

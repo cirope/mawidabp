@@ -1,0 +1,20 @@
++function () {
+  var $container = $('[data-risk-assessment-items-container]')
+
+  $('fieldset.best_practice').remove()
+
+  <%= simple_fields_for @risk_assessment do |f| %>
+    <% @risk_assessment_items.each_with_index do |risk_assessment_item, i| %>
+      <% index = @risk_assessment.object_id + i %>
+      <%= f.simple_fields_for :risk_assessment_items, risk_assessment_item, child_index: index do |rai_f| %>
+        $container.append('<%= j render('risk_assessment_item', f: rai_f) %>')
+      <% end %>
+    <% end %>
+  <% end %>
+
+  $container.find('[name$="[order]"]').each(function (i, e) { $(e).val(i + 1) })
+
+  setTimeout(function () {
+    $('[data-add-risk-assessment-items-url]').attr('disabled', true)
+  }, 100)
+}()

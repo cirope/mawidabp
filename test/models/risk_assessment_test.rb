@@ -83,4 +83,13 @@ class RiskAssessmentTest < ActiveSupport::TestCase
 
     assert_equal @risk_assessment.reload.risk_assessment_items.first.id, rai.id
   end
+
+  test 'build items from best practices' do
+    bps   = [best_practices(:iso_27001), best_practices(:bcra_A4609)]
+    pcs   = bps.map { |bp| bp.process_controls.where(obsolete: false).to_a }.flatten
+    items = @risk_assessment.build_items_from_best_practices(bps.map &:id)
+
+    assert_equal pcs.size, items.size
+    assert pcs.all? { |pc| items.any? { |i| i.name == pc.name } }
+  end
 end

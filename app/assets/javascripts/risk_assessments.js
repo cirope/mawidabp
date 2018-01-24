@@ -32,4 +32,35 @@ jQuery(function ($) {
       })
     }
   })
+
+  $(document).on('autocomplete:update', '[data-enable-add-risk-assessment-items]', function () {
+    $(this).
+      closest('.tab-pane').
+      find('[data-add-risk-assessment-items-url]').
+      attr('disabled', false)
+  })
+
+  $(document).on('click', '[data-add-risk-assessment-items-url]', function (event) {
+    var url        = $(this).data('addRiskAssessmentItemsUrl')
+    var $container = $(this).closest('.tab-pane')
+
+    event.stopPropagation()
+    event.preventDefault()
+
+    var ids = $container.find('[data-apply-id]').map(function () {
+      return $(this).val()
+    }).get().filter(function (e) { return e })
+
+    if (ids.length) {
+      $container.find('[data-disabled-on-apply]').attr('disabled', true)
+
+      $.ajax({
+        url:      url,
+        dataType: 'script',
+        data:     { ids: ids }
+      }).done(function () {
+        $container.find('[data-disabled-on-apply]').attr('disabled', false)
+      })
+    }
+  })
 })

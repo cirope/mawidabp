@@ -11,6 +11,7 @@ class RiskAssessmentsController < ApplicationController
     :update,
     :destroy,
     :new_item,
+    :add_items,
     :fetch_item,
     :sort_by_risk,
     :create_plan
@@ -76,17 +77,27 @@ class RiskAssessmentsController < ApplicationController
     @risk_assessment_item.build_risk_weights
   end
 
+  # GET /risk_assessments/1/add_items
+  def add_items
+    @risk_assessment_items = if params[:type] == 'best_practice'
+                               @risk_assessment.build_items_from_best_practices params[:ids]
+                             end
+  end
+
+  # GET /risk_assessments/1/fetch_items
   def fetch_item
     id = params[:risk_assessment_item_id]
     @risk_assessment_item = @risk_assessment.risk_assessment_items.find id
   end
 
+  # PATCH /risk_assessments/1/sort_by_risk
   def sort_by_risk
     @risk_assessment.sort_by_risk
 
     respond_with @risk_assessment, location: edit_risk_assessment_url(@risk_assessment)
   end
 
+  # POST /risk_assessments/1/create_plan
   def create_plan
     plan = @risk_assessment.create_plan
 

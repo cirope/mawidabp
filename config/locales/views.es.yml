@@ -491,6 +491,8 @@ es:
     form:
       new_risk_assessment_items: 'Luego de crear la evaluación de riesgo podrá agregar items a la misma'
       add_risk_assessment_item: 'Agregar item'
+      add_best_practice: 'Agregar buena práctica'
+      apply: 'Aplicar'
     risk_weight_risks:
       none: 'Nulo'
       low: 'Bajo'
