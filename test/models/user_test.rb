@@ -471,8 +471,6 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'notify conclusion final review close date warning' do
-    users = User.all_with_conclusion_final_reviews_for_notification
-
     ConclusionFinalReview.list.new({
       review_id: reviews(:review_approved_with_conclusion).id,
       issue_date: Date.today,
@@ -486,6 +484,8 @@ class UserTest < ActiveSupport::TestCase
     }, false).save!
 
     Organization.current_id = nil
+
+    users = User.all_with_conclusion_final_reviews_for_notification
 
     assert users.any?
 

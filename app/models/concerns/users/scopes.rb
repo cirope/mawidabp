@@ -28,9 +28,14 @@ module Users::Scopes
     end
 
     def all_with_conclusion_final_reviews_for_notification
-      joins(review_user_assignments: { review: :conclusion_final_review }).
-        merge(ReviewUserAssignment.audit_team).
-        merge ConclusionFinalReview.with_near_close_date
+      joins = { review_user_assignments: { review: :conclusion_final_review } }
+      ids   = distinct.
+                left_joins(joins).
+                merge(ReviewUserAssignment.audit_team).
+                merge(ConclusionFinalReview.with_near_close_date).
+                ids
+
+      where(id: ids) # TODO: remove when we don't have to _support_ Oracle
     end
 
     def list_with_corporate
