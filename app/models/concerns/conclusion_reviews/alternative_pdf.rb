@@ -468,7 +468,7 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_low_risk_weaknesses_on pdf
-      if low_risk_weaknesses.any? || not_relevant_weaknesses.any?
+      if low_risk_and_not_relevant_weaknesses.any?
         title =
           I18n.t 'conclusion_review.executive_summary.low_risk_weaknesses_title'
 
@@ -476,11 +476,7 @@ module ConclusionReviews::AlternativePDF
         pdf.add_title title, (PDF_FONT_SIZE * 1.3).round
         pdf.move_down PDF_FONT_SIZE
 
-        low_risk_weaknesses.each do |w|
-          put_short_weakness_on pdf, w, show_risk: true
-        end
-
-        not_relevant_weaknesses.each do |w|
+        low_risk_and_not_relevant_weaknesses.each do |w|
           put_short_weakness_on pdf, w, show_risk: true
         end
       end
@@ -543,12 +539,10 @@ module ConclusionReviews::AlternativePDF
       weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_by_code
     end
 
-    def low_risk_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.where risk: RISK_TYPES[:low]
-    end
+    def low_risk_and_not_relevant_weaknesses
+      risks = [RISK_TYPES[:low], RISK_TYPES[:not_relevant]]
 
-    def not_relevant_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.where risk: RISK_TYPES[:not_relevant]
+      weaknesses.not_revoked.not_assumed_risk.where(risk: risks).sort_by_code
     end
 
     def assumed_risk_weaknesses
