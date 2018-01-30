@@ -1,7 +1,7 @@
 jQuery(function ($) {
   $(document).on('keyup', '.ui-autocomplete-input', function () {
     if (! $(this).val())
-      $($(this).data('autocompleteIdTarget')).val('')
+      $($(this).data('autocompleteIdTarget')).val('').change()
   })
 
   $(document).on('focus', '[data-autocomplete-url]:not(.ui-autocomplete-input)', function () {
@@ -38,12 +38,13 @@ jQuery(function ($) {
       select: function (event, ui) {
         var selected = ui.item
 
-        $($input.data('autocompleteIdTarget')).val(selected.item.id)
+        $($input.data('autocompleteIdTarget')).val(selected.item.id).change()
 
         $input
           .val(selected.value)
           .data('item', selected.item)
           .trigger('autocomplete:update', $input)
+          .change()
 
         return false
       },

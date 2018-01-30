@@ -6,8 +6,11 @@ being_implemented_weakness:
   review_code: O001
   description: Description 1w
   answer: Answer 1w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:being_implemented] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 1w
@@ -17,6 +20,10 @@ being_implemented_weakness:
   follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: ['internal fraud']
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -27,8 +34,11 @@ unconfirmed_for_notification_weakness:
   review_code: O002
   description: Description 2w iso
   answer: Answer 2w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 2w
   state: <%= Finding::STATUS[:unconfirmed] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 2w
@@ -38,6 +48,10 @@ unconfirmed_for_notification_weakness:
   follow_up_date:
   first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: ['internal fraud']
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -50,8 +64,11 @@ unanswered_for_level_<%= level %>_notification:
   review_code: <%= "O00#{level}" %>
   description: Description <%= level %>w
   answer: Answer <%= level %>w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments <%= level %>w
   state: <%= Finding::STATUS[:unanswered] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 3w
@@ -62,6 +79,10 @@ unanswered_for_level_<%= level %>_notification:
   origination_date: <%= 1.year.ago.to_date.to_s(:db) %>
   first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: ['internal fraud']
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: <%= level - 1 %>
   organization: cirope
 
@@ -74,8 +95,11 @@ incomplete_weakness:
   review_code: O005
   description: Description incomplete_w
   answer: Answer incomplete_w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments incomplete_w
   state: <%= Finding::STATUS[:incomplete] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 3w
@@ -86,6 +110,10 @@ incomplete_weakness:
   origination_date: <%= 1.year.ago.to_date.to_s(:db) %>
   first_notification_date: <%= Date.today.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: ['internal fraud']
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -96,8 +124,11 @@ other_unconfirmed_for_notification_weakness:
   review_code: O003
   description: Description 3w iso
   answer: Answer 3w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 3w
   state: <%= Finding::STATUS[:unconfirmed] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 1w
@@ -107,6 +138,10 @@ other_unconfirmed_for_notification_weakness:
   follow_up_date:
   first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.days.ago_in_business.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: ['internal fraud']
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -117,8 +152,11 @@ notify_oportunity:
   review_code: OM001
   description: Description 1o
   answer: Answer 1o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1o
   state: <%= Finding::STATUS[:notify] %>
+  progress: 0
   origination_date:
   solution_date:
   final: false
@@ -132,8 +170,11 @@ being_implemented_oportunity:
   review_code: OM001
   description: Description 1o
   answer: Answer 1o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1o
   state: <%= Finding::STATUS[:being_implemented] %>
+  progress: 0
   origination_date:
   solution_date:
   effect: Effect 1o
@@ -149,8 +190,11 @@ being_implemented_weakness_on_draft:
   review_code: O003
   description: Description 3w bcra
   answer: Answer 3w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 3w
   state: <%= Finding::STATUS[:being_implemented] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 3w
@@ -159,6 +203,10 @@ being_implemented_weakness_on_draft:
   priority: <%= Finding.priorities_values.first %>
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: ['internal fraud']
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -169,8 +217,11 @@ unanswered_weakness:
   review_code: O002
   description: Description 2w bcra
   answer: Answer 2w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 2w
   state: <%= Finding::STATUS[:unanswered] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 2w
@@ -179,6 +230,10 @@ unanswered_weakness:
   priority: <%= Finding.priorities_values.first %>
   follow_up_date:
   final: false
+  compliance: no
+  operational_risk: ['internal fraud']
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -189,8 +244,11 @@ unconfirmed_weakness:
   review_code: O001
   description: Description 1w bi
   answer: Answer 1w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:unconfirmed] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 1w
@@ -199,6 +257,10 @@ unconfirmed_weakness:
   priority: <%= Finding.priorities_values.first %>
   follow_up_date:
   final: false
+  compliance: no
+  operational_risk: ['internal fraud']
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -209,8 +271,11 @@ unconfirmed_oportunity:
   review_code: OM003
   description: Description 3o
   answer: Answer 3o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 3o
   state: <%= Finding::STATUS[:unconfirmed] %>
+  progress: 0
   origination_date:
   solution_date:
   confirmation_date: <%= stale_confirmed_days.pred.days.ago_in_business.to_s(:db) %>
@@ -226,8 +291,11 @@ confirmed_oportunity_on_draft:
   review_code: OM001
   description: Description o
   answer: Answer o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 3o
   state: <%= Finding::STATUS[:confirmed] %>
+  progress: 0
   origination_date:
   solution_date:
   confirmation_date: <%= Date.today.to_s(:db) %>
@@ -242,8 +310,11 @@ confirmed_oportunity:
   review_code: OM002
   description: Description 2o
   answer: Answer 2o
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 2o
   state: <%= Finding::STATUS[:confirmed] %>
+  progress: 0
   origination_date:
   solution_date:
   confirmation_date: <%= 1.day.ago.to_s(:db) %>
@@ -259,9 +330,12 @@ being_implemented_weakness_on_final:
   review_code: O001
   description: Description 1wx
   answer: Answer 1w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comment 1w
   state: <%= Finding::STATUS[:being_implemented] %>
-  origination_date:
+  progress: 0
+  origination_date: <%= 2.days.ago.to_date.to_s(:db) %>
   solution_date:
   audit_recommendations: Proposed action 1w
   effect: Effect 1w
@@ -269,6 +343,10 @@ being_implemented_weakness_on_final:
   priority: <%= Finding.priorities_values.first %>
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: ['internal fraud']
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
 
@@ -279,8 +357,11 @@ being_implemented_weakness_on_approved_draft:
   review_code: O001
   description: Description 1w
   answer: Answer 1w
+  current_situation:
+  current_situation_verified: false
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:being_implemented] %>
+  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 1w
@@ -289,5 +370,9 @@ being_implemented_weakness_on_approved_draft:
   priority: <%= Finding.priorities_values.first %>
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
+  compliance: no
+  operational_risk: ['internal fraud']
+  impact: ['econimic', 'regulatory']
+  internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope

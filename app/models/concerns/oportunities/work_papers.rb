@@ -9,7 +9,7 @@ module Oportunities::WorkPapers
     review ||= control_objective_item&.review
 
     code_from_review = review ?
-      review.last_oportunity_work_paper_code(work_paper_prefix) :
+      review.last_oportunity_work_paper_code(prefix: work_paper_prefix) :
       "#{work_paper_prefix} 0".strip
 
     code_from_oportunity =

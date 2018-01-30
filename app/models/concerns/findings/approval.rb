@@ -49,10 +49,12 @@ module Findings::Approval
     def valid_state_error
       has_valid_state = implemented_audited? ||
         implemented?                         ||
+        awaiting?                            ||
         being_implemented?                   ||
         unanswered?                          ||
         assumed_risk?                        ||
-        criteria_mismatch?
+        criteria_mismatch?                   ||
+        expired?
 
       unless has_valid_state
         I18n.t "#{class_name}.errors.not_valid_state"
@@ -72,13 +74,13 @@ module Findings::Approval
     end
 
     def effect_error
-      if kind_of?(Weakness) && effect.blank?
+      if kind_of?(Weakness) && !HIDE_WEAKNESS_EFFECT && effect.blank?
         I18n.t "#{class_name}.errors.without_effect"
       end
     end
 
     def audit_comments_error
-      if audit_comments.blank? && !revoked?
+      if audit_comments.blank? && !revoked? && !SHOW_CONCLUSION_ALTERNATIVE_PDF
         I18n.t "#{class_name}.errors.without_audit_comments"
       end
     end

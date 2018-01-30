@@ -115,7 +115,7 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'next work paper code' do
-    assert_equal 'PTOM 00', @oportunity.last_work_paper_code
+    assert_equal 'PTOM 000', @oportunity.last_work_paper_code
   end
 
   test 'review code is updated when control objective is changed' do
@@ -143,14 +143,14 @@ class OportunityTest < ActiveSupport::TestCase
   test 'work paper codes are updated when control objective is changed' do
     oportunity = findings :confirmed_oportunity_on_draft
 
-    assert_not_equal 'PTOM 04', oportunity.work_papers.first.code
+    assert_not_equal 'PTOM 004', oportunity.work_papers.first.code
 
     oportunity.update!(
       control_objective_item_id:
         control_objective_items(:impact_analysis_item_editable).id
     )
 
-    assert_equal 'PTOM 04', oportunity.work_papers.first.code
+    assert_equal 'PTOM 004', oportunity.work_papers.first.code
   end
 
   test 'must be approved on implemented audited' do
@@ -225,8 +225,12 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.state = Finding::STATUS[:assumed_risk]
     @oportunity.audit_comments = '  '
 
-    refute @oportunity.must_be_approved?
-    assert_equal error_messages.sort, @oportunity.approval_errors.sort
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+      assert @oportunity.must_be_approved?
+    else
+      refute @oportunity.must_be_approved?
+      assert_equal error_messages.sort, @oportunity.approval_errors.sort
+    end
   end
 
   test 'dynamic status functions' do

@@ -222,8 +222,8 @@ class NotifierMailerTest < ActionMailer::TestCase
     Organization.current_id = organization.id
 
     conclusion_review.to_pdf organization
-    conclusion_review.review.score_sheet organization, false
-    conclusion_review.review.global_score_sheet organization, false
+    conclusion_review.review.score_sheet organization, draft: false
+    conclusion_review.review.global_score_sheet organization, draft: false
 
     response = NotifierMailer.conclusion_review_notification(user, conclusion_review,
       :include_score_sheet => true, :include_global_score_sheet => true,

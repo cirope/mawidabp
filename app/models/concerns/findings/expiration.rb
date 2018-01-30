@@ -40,12 +40,16 @@ module Findings::Expiration
     end
 
     def remember_users_about_expiration
-      users = expired.inject([]) do |u, finding|
-        u | finding.users
-      end
+      unless DISABLE_FINDINGS_EXPIRATION_NOTIFICATION
+        users = expired.inject([]) do |u, finding|
+          u | finding.users
+        end
 
-      users.each do |user|
-        NotifierMailer.findings_expired_warning(user, user.findings.expired.to_a).deliver_later
+        users.each do |user|
+          NotifierMailer.
+            findings_expired_warning(user, user.findings.expired.to_a).
+            deliver_later
+        end
       end
     end
 

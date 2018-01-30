@@ -34,7 +34,13 @@ class FindingsController < ApplicationController
   def update
     update_resource @finding, finding_params
 
-    respond_with @finding, location: edit_finding_url(params[:completed], @finding)
+    location = if @finding.pending?
+                 edit_finding_url params[:completed], @finding
+               else
+                 finding_url 'complete', @finding
+               end
+
+    respond_with @finding, location: location
   end
 
   private
@@ -50,9 +56,10 @@ class FindingsController < ApplicationController
     def auditor_finding_params
       params.require(:finding).permit(
         :id, :control_objective_item_id, :review_code, :title, :description,
-        :answer, :audit_comments, :state, :origination_date, :solution_date,
+        :answer, :current_situation, :current_situation_verified,
+        :audit_comments, :state, :progress, :origination_date, :solution_date,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
-        :nested_user, :lock_version,
+        :compliance, :nested_user, :skip_work_paper, :lock_version,
         users_for_notification: [],
         business_unit_ids: [],
         finding_user_assignments_attributes: [

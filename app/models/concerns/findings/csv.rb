@@ -8,6 +8,7 @@ module Findings::CSV
     row = [
       review.identification,
       review.plan_item.project,
+      review.conclusion_final_review&.summary || '-',
       review_code,
       id,
       taggings.map(&:tag).to_sentence,
@@ -15,7 +16,7 @@ module Findings::CSV
       description,
       state_text,
       respond_to?(:risk_text) ? risk_text : '',
-      respond_to?(:risk_text) ? priority_text : '',
+      (respond_to?(:risk_text) ? priority_text : '' unless HIDE_WEAKNESS_PRIORITY),
       auditeds_as_process_owner.join('; '),
       audited_users.join('; '),
       best_practice.name,
@@ -27,7 +28,7 @@ module Findings::CSV
       audit_comments,
       answer,
       finding_answers_text
-    ]
+    ].compact
 
     row.unshift organization.prefix if corporate
 
@@ -120,6 +121,7 @@ module Findings::CSV
           (Organization.model_name.human if corporate),
           Review.model_name.human,
           PlanItem.human_attribute_name('project'),
+          ConclusionFinalReview.human_attribute_name('summary'),
           Weakness.human_attribute_name('review_code'),
           Finding.human_attribute_name('id'),
           Tag.model_name.human(count: 0),
@@ -127,7 +129,7 @@ module Findings::CSV
           Weakness.human_attribute_name('description'),
           Weakness.human_attribute_name('state'),
           Weakness.human_attribute_name('risk'),
-          Weakness.human_attribute_name('priority'),
+          (Weakness.human_attribute_name('priority') unless HIDE_WEAKNESS_PRIORITY),
           FindingUserAssignment.human_attribute_name('process_owner'),
           I18n.t('finding.audited', count: 0),
           BestPractice.model_name.human,
@@ -135,7 +137,7 @@ module Findings::CSV
           ControlObjectiveItem.human_attribute_name('control_objective_text'),
           Finding.human_attribute_name('origination_date'),
           date_label(completed),
-          I18n.t('finding.status_repeated'),
+          I18n.t('findings.state.repeated'),
           Finding.human_attribute_name('audit_comments'),
           Finding.human_attribute_name('answer'),
           I18n.t('finding.finding_answers')

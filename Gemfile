@@ -1,14 +1,10 @@
 source 'https://rubygems.org'
 
-git_source :github do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include? '/'
-
-  "https://github.com/#{repo_name}.git"
-end
+git_source(:github) { |r| "https://github.com/#{r}" }
 
 gem 'rails', '~> 5.1.4'
 
-gem 'pg'
+gem 'pg', '< 1.0'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'responders'
@@ -21,7 +17,6 @@ gem 'redcarpet'
 gem 'whenever'
 gem 'paper_trail'
 gem 'carrierwave'
-gem 'dynamic_form'
 gem 'acts_as_tree'
 gem 'net-ldap'
 gem 'rubyzip', require: 'zip'
@@ -36,6 +31,7 @@ gem 'search_cop'
 gem 'jbuilder'
 gem 'sidekiq'
 gem 'request_store'
+gem 'request_store-sidekiq'
 gem 'ruby-ntlm'
 gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
@@ -55,6 +51,10 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
+
+  # Support for ed25519 ssh keys
+  gem 'rbnacl', '< 5.0' # TODO: check net-ssh dependency to _unleash_
+  gem 'bcrypt_pbkdf'
 end
 
 group :test do

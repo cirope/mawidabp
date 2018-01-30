@@ -17,6 +17,7 @@
   <%= link_to_stats [:stats, @plan] %> |
   <%= link_to_index plans_path %> |
   <%= render('shared/downloads',
+    right: true,
     links: [
       link_to(
         t('plans.download_global_plan'),
@@ -27,6 +28,5 @@
         [@plan, include_details: 1, _ts: Time.now.to_i, format: :pdf]
       )
     ]
-  ) %> |
-  <%= link_to_back %>
+  ) %>
 </div>

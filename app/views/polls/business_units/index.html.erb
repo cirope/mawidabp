@@ -17,7 +17,7 @@
   </div>
   <% @report.business_unit_polls.each_key do |but| %>
     <h3><%= but %>:</h3>
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <thead>
         <tr>
           <th><%= Question.model_name.human %></th>
@@ -32,7 +32,7 @@
             <td><%= question.question %></td>
             <% Question::ANSWER_OPTIONS.each_index do |i| %>
               <td><%= @report.business_unit_polls[but][:rates][question.question][i] %> %</td>
-            <% end%>
+            <% end %>
           </tr>
         <% end %>
       </tbody>

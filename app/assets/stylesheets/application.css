@@ -21,5 +21,6 @@
  *= require roles
  *= require sessions
  *= require tags
+ *= require weakness_templates
  *= require welcome
 */

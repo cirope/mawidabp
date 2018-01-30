@@ -3,7 +3,11 @@ module ControlObjectiveItemsHelper
     relevance = control_objective_item.relevance
     text = control_objective_item.relevance_label
 
-    text.blank? || text == '-' ? text : "#{text} (#{relevance})"
+    if text.blank? || text == '-'
+      text
+    else
+      "#{text} (#{relevance})"
+    end
   end
 
   def control_objective_effectiveness(control_objective_item)
@@ -35,45 +39,15 @@ module ControlObjectiveItemsHelper
     [code_from_review, code_from_control_objective].compact.max
   end
 
-  def control_objective_weaknesses_summary_headers
-    Finding::STATUS.except(:repeated).keys.map do |status|
-      content_tag :th, t("finding.status_#{status}")
-    end.join
-  end
-
-  def control_objective_weaknesses_summary_row(control_objective_item)
-    Finding::STATUS.except(:repeated).keys.map do |status|
-      weaknesses =  control_objective_item.is_in_a_final_review? ?
-        control_objective_item.final_weaknesses :
-        control_objective_item.weaknesses
-      weaknesses_count = weaknesses.select { |w| w.send "#{status}?" }.size
-
-      content_tag :td, weaknesses_count
-    end.join
-  end
-
-  def control_objective_oportunities_summary_headers
-    Finding::STATUS.except(:repeated).keys.map do |status|
-      content_tag :th, t("finding.status_#{status}")
-    end.join
-  end
-
-  def control_objective_oportunities_summary_row(control_objective_item)
-    Finding::STATUS.except(:repeated).keys.map do |status|
-      oportunities =  control_objective_item.is_in_a_final_review? ?
-        control_objective_item.final_oportunities :
-        control_objective_item.oportunities
-      oportunities_count = oportunities.select { |w| w.send "#{status}?" }.size
-
-      content_tag :td, oportunities_count
-    end.join
-  end
-
   def control_objective_weaknesses_link(control_objective_item)
     weaknesses = control_objective_item.is_in_a_final_review? ?
       control_objective_item.final_weaknesses : control_objective_item.weaknesses
 
     link_to_unless weaknesses.count == 0, weaknesses.count,
       weaknesses_path(:control_objective => control_objective_item)
+  end
+
+  def auditor_comment_options
+    CONCLUSION_OPTIONS.map { |option| [option, option] }
   end
 end

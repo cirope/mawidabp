@@ -29,19 +29,26 @@
           }, readonly: true %>
           <%= f.input :control_objective_item_id, as: :hidden %>
         <% end %>
-        <%= f.input :description, input_html: { readonly: true, rows: 5 } %>
+        <%= f.input :description, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 12 : 5 } %>
         <% if @finding.kind_of?(Weakness) %>
-          <%= f.input :effect, input_html: { readonly: true, rows: 4 } %>
+          <% unless HIDE_WEAKNESS_EFFECT %>
+            <%= f.input :effect, input_html: { readonly: true, rows: 4 } %>
+          <% end %>
           <%= f.input :audit_recommendations, input_html: { readonly: true, rows: 2 } %>
         <% end %>
       </div>
       <div class="col-md-6">
         <% if @finding.kind_of?(Weakness) %>
           <%= f.input :risk, collection: risks, prompt: true, disabled: true %>
-          <%= f.input :priority, collection: priorities, prompt: true, disabled: true %>
+          <% unless HIDE_WEAKNESS_PRIORITY %>
+            <%= f.input :priority, collection: priorities, prompt: true, disabled: true %>
+          <% end %>
         <% end %>
         <%= f.label :state, Finding.human_attribute_name(:state) %>
-        <%= finding_status_field(f, true, true) %>
+        <%= finding_status_field(f, disabled: true) %>
+        <% if @finding.kind_of?(Weakness) && SHOW_WEAKNESS_PROGRESS %>
+          <%= f.input :progress, collection: weakness_progresses(@finding), prompt: true, disabled: true %>
+        <% end %>
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
         <%= f.input :answer, input_html: { readonly: true, rows: 5 } %>
@@ -72,7 +79,7 @@
     <% process_owners = @finding.process_owners %>
     <% responsible_auditors = @finding.responsible_auditors %>
     <h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
-    <table class="table table-condensed">
+    <table class="table table-condensed table-hover">
       <thead>
         <tr>
           <th><%= t('finding.audited', :count => audited.size) %></th>
@@ -165,9 +172,9 @@
   </div>
 
   <% unless @finding.work_papers.blank? %>
-    <h4><%= t('finding.work_papers') %></h4>
+    <h4><%= WorkPaper.model_name.human(count: 0) %></h4>
 
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <thead>
         <tr>
           <th><%= WorkPaper.human_attribute_name 'name' %></th>
@@ -198,12 +205,12 @@
 
   <% unless @finding.costs.blank? %>
     <p style="margin-bottom: 1em;">
-      <%= link_to t('finding.view_cost_details'), '#', :onclick =>
-        "$('#cost_details').slideToggle(); return false;" %>
+      <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
     </p>
-    <div id="cost_details" style="display: none;">
+
+    <div id="cost_details" class="collapse">
       <div>
-        <table class="table table-condensed table-striped">
+        <table class="table table-condensed table-striped table-hover">
           <thead>
             <tr>
               <th><%= Cost.human_attribute_name 'created_at' %></th>

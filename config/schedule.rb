@@ -7,19 +7,12 @@
 
 env :PATH, ENV['PATH']
 
-every 1.day, at: '20:00' do
-  methods = [
-    'User.notify_auditors_about_close_date',
-    'Finding.notify_for_unconfirmed_for_notification_findings',
-    'User.notify_new_findings',
-    'Finding.mark_as_unanswered_if_necesary',
-    'Finding.warning_users_about_expiration',
-    'Finding.notify_manager_if_necesary'
-  ]
+job_type :runner_file, 'cd :path && :runner_command -e :environment :task :output'
 
-  runner methods.join('; ')
+every 1.day, at: '20:00' do
+  runner_file 'runners/daily.rb'
 end
 
 every :thursday, at: '20:00' do
-  runner 'Finding.remember_users_about_expiration'
+  runner_file 'runners/weekly.rb'
 end

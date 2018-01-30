@@ -1,0 +1,14 @@
++function () {
+  var $correctiveActions = $('#conclusion_draft_review_corrective_actions')
+  var actionsWhenUnsatisfied = 'La Gerencia de Desarrollo del Canal informa que dará intervención al Supervisor Zonal, con la finalidad que en un plazo de 30 días procure la regularización de los aspectos que dieron origen a la calificación desfavorable de la presente Auditoría.\r\nEn lo que respecta en particular sobre las debilidades que se relacionan con aspectos de Compliance, adicionalmente a la regularización puntual de los casos observados, instruirá a las Jerarquías de la Red de Sucursales sobre la importancia e implicancia de eventuales incumplimientos de estas disposiciones.'
+  var actionsWhenAffectsCompliance = 'La Gerencia de Desarrollo del Canal informa que sobre las debilidades que se relacionan con aspectos de Compliance, adicionalmente a la regularización puntual de los casos observados, instruirá a las Jerarquías de la Red de Sucursales sobre la importancia e implicancia de eventuales incumplimientos de estas disposiciones.\r\nEn lo que respecta al resto de los casos expuestos y los riesgos involucrados dará instrucciones a las jerarquías de la sucursal para su regularización en forma inmediata, extremando los recaudos en el control interno que eviten la aparición de nuevos casos.\r\n\r\n<b>Plazo de normalización establecido</b>: La Gerencia de Desarrollo del Canal, estima que la regularización de la sucursal se completará en el plazo de 30 días.'
+  var actionsWhenNoAffectsCompliance = 'La Gerencia de Desarrollo del Canal, analizó el informe, los casos expuestos y los riesgos involucrados, dando instrucciones a las jerarquías de la sucursal para su regularización en forma inmediata, extremando los recaudos en el control interno que eviten la aparición de nuevos casos.'
+
+  <% if params[:conclusion] == CONCLUSION_OPTIONS[2] || params[:conclusion] == CONCLUSION_OPTIONS[3] %>
+    $correctiveActions.val(actionsWhenUnsatisfied).effect('highlight')
+  <% elsif params[:conclusion] == CONCLUSION_OPTIONS[1] && params[:affects_compliance] == 'true' %>
+    $correctiveActions.val(actionsWhenAffectsCompliance).effect('highlight')
+  <% elsif params[:conclusion] == CONCLUSION_OPTIONS[1] %>
+    $correctiveActions.val(actionsWhenNoAffectsCompliance).effect('highlight')
+  <% end %>
+}()

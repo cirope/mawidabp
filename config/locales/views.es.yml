@@ -99,10 +99,38 @@ es:
   findings:
     index:
       title: 'Listado de hallazgos'
+      current_user_answers_count: 'Comentarios propios'
     show:
       title: 'Detalles del hallazgo'
     edit:
       title: 'Editar hallazgo'
+    form:
+      show_status_change_history: 'Ver historial de cambios de estado'
+    auditor_form:
+      origin: 'origen'
+    current_user_filters:
+      as_owner: '%{kind} como responsable'
+      incomplete: 'Pendientes'
+      complete: 'Solucionados o reiterados'
+    state:
+      confirmed: 'Confirmada'
+      unconfirmed: 'No confirmada'
+      unanswered: 'Sin respuesta'
+      awaiting: 'Pendiente'
+      being_implemented: 'En proceso de implementación'
+      being_implemented_current: 'Vigente'
+      being_implemented_current_rescheduled: 'Reprogramada vigente'
+      being_implemented_stale: 'Vencida'
+      being_implemented_stale_rescheduled: 'Reprogramada vencida'
+      implemented: 'Implementada'
+      implemented_audited: 'Implementada / Auditada'
+      assumed_risk: 'Riesgo asumido'
+      notify: 'Notificar'
+      incomplete: 'Incompleta'
+      repeated: 'Reiterada'
+      revoked: 'Anulada'
+      criteria_mismatch: 'Difiere criterio'
+      expired: 'Desestimada / No aplica'
 
   login_records:
     choose:
@@ -218,6 +246,8 @@ es:
         compliance: 'Cumplimiento'
     download_global_plan: 'Descargar plan de auditoria global'
     download_detailed_plan: 'Descargar plan de auditoria detallado'
+    download_business_unit_type_plan: 'Descargar plan %{business_unit_type}'
+    download_detailed_business_unit_type_plan: 'Descargar plan %{business_unit_type} detallado'
     without_business_unit_type: 'Sin unidad de negocio'
 
   profiles:
@@ -460,3 +490,18 @@ es:
     column_old_value: 'Valor anterior'
     without_changes: 'Sin cambios'
     pdf_list_name: 'reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf'
+
+  weakness_templates:
+    edit:
+      title: 'Editar plantilla de observación'
+    index:
+      new: 'Nueva plantilla de observación'
+      title: 'Listado de plantillas de observaciones'
+      empty_html: 'No hay plantillas de observaciones, puede crear una con el botón <span class="label label-primary">Nueva plantilla de observación</span>'
+      empty_search_html: 'No hay plantillas de observaciones que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear plantilla de observación'
+    show:
+      title: 'Ver plantilla de observación'
+    form:
+      add_control_objective: 'Agregar objetivo de control'

@@ -1,0 +1,36 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title" id="weakness-template-heading">
+      <a data-toggle="collapse" href="#weakness-templates" aria-expanded="true" aria-controls="weakness-templates">
+        <%= WeaknessTemplate.model_name.human count: 0 %>
+      </a>
+    </h3>
+  </div>
+  <div id="weakness-templates" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="weakness-template-heading">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :weakness_template_from_control_objective, collection: weakness_templates_for(f.object), prompt: true, input_html: {
+            value: f.object.weakness_template_id
+          } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :weakness_template, input_html: {
+            title: t('label.search'),
+            autocomplete: :off,
+            data: {
+              autocomplete_url: auto_complete_for_weakness_template_weaknesses_path,
+              autocomplete_id_target: '#weakness_template_id'
+            }
+          } %>
+        </div>
+      </div>
+      <%= f.input :weakness_template_id, as: :hidden, input_html: {
+        id: 'weakness_template_id',
+        data: {
+          weakness_template_changed_url: weakness_template_changed_weaknesses_path
+        }
+      } %>
+    </div>
+  </div>
+</div>

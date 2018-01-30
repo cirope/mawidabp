@@ -38,15 +38,30 @@
     <strong><%= Weakness.human_attribute_name :risk %></strong>:
     <%= @finding.risk_text %>
   </p>
-  <p>
-    <strong><%= Weakness.human_attribute_name :priority %></strong>:
-    <%= @finding.priority_text %>
-  </p>
+
+  <% unless HIDE_WEAKNESS_PRIORITY %>
+    <p>
+      <strong><%= Weakness.human_attribute_name :priority %></strong>:
+      <%= @finding.priority_text %>
+    </p>
+  <% end %>
 <% end %>
 <p>
   <strong><%= Finding.human_attribute_name(:state) %></strong>:
   <%= @finding.state_text %>
 </p>
+<% if SHOW_WEAKNESS_PROGRESS && @finding.kind_of?(Weakness) %>
+  <p>
+    <strong><%= Weakness.human_attribute_name :progress %>:</strong>
+
+  </p>
+
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" style="width: <%= @finding.progress.to_i %>%;">
+      <%= @finding.progress.to_i %>%
+    </div>
+  </div>
+<% end %>
 <p>
   <strong><%= Finding.human_attribute_name(:origination_date) %></strong>:
   <%= l(@finding.origination_date, :format => :long) if @finding.origination_date %>
@@ -62,18 +77,54 @@
   <strong><%= Finding.human_attribute_name(:solution_date) %></strong>:
   <%= l(@finding.solution_date, :format => :long) if @finding.solution_date %>
 </p>
-<div>
-  <strong><%= Finding.human_attribute_name :effect %></strong>:
-  <%= simple_format @finding.effect %>
-</div>
+<% unless HIDE_WEAKNESS_EFFECT %>
+  <div>
+    <strong><%= Finding.human_attribute_name :effect %></strong>:
+    <%= simple_format @finding.effect %>
+  </div>
+<% end %>
 <div>
   <strong><%= Finding.human_attribute_name :answer %></strong>:
   <%= simple_format @finding.answer %>
 </div>
+<% if SHOW_FINDING_CURRENT_SITUATION %>
+  <div>
+    <strong><%= Finding.human_attribute_name :current_situation %></strong>:
+    <%= simple_format @finding.current_situation %>
+  </div>
+
+  <div>
+    <strong><%= Finding.human_attribute_name :current_situation_verified %></strong>:
+    <%= t "label.#{@finding.current_situation_verified ? 'yes' : 'no'}" %>
+  </div>
+<% end %>
+
 <div>
   <strong><%= Finding.human_attribute_name :audit_comments %></strong>:
   <%= simple_format @finding.audit_comments %>
 </div>
+
+<% if @finding.kind_of?(Weakness) && SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+  <p>
+    <strong><%= Weakness.human_attribute_name :compliance %>:</strong>
+    <%= t "label.#{@finding.compliance}" if @finding.compliance.present? %>
+  </p>
+
+  <p>
+    <strong><%= Weakness.human_attribute_name :operational_risk %>:</strong>
+    <%= Array(@finding.operational_risk).to_sentence %>
+  </p>
+
+  <p>
+    <strong><%= Weakness.human_attribute_name :impact %>:</strong>
+    <%= Array(@finding.impact).to_sentence %>
+  </p>
+
+  <p>
+    <strong><%= Weakness.human_attribute_name :internal_control_components %>:</strong>
+    <%= Array(@finding.internal_control_components).to_sentence %>
+  </p>
+<% end %>
 
 <% unless @finding.important_dates.blank? %>
   <h4>
@@ -106,7 +157,7 @@
     <%= t('finding.finding_relations') %>
   </h4>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
@@ -129,7 +180,7 @@
     <%= t('finding.inverse_finding_relations') %>
   </h4>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= FindingRelation.human_attribute_name :finding_id %></th>
@@ -164,7 +215,7 @@
     <%= t('finding.finding_answers') %>
   </h4>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= User.model_name.human %></th>
@@ -229,9 +280,9 @@
 <% end %>
 
 <% unless @finding.work_papers.blank? %>
-  <h4><%= t('finding.work_papers') %></h4>
+  <h4><%= WorkPaper.model_name.human(count: 0) %></h4>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= WorkPaper.human_attribute_name :name %></th>
@@ -261,12 +312,12 @@
 
 <% unless @finding.costs.blank? %>
   <p>
-    <%= link_to t('finding.view_cost_details'), '#', :onclick =>
-      "$('#cost_details').slideToggle(); return false;" %>
+    <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
   </p>
-  <div id="cost_details" style="display: none;">
+
+  <div id="cost_details" class="collapse">
     <div>
-      <table class="table table-condensed table-striped">
+      <table class="table table-condensed table-striped table-hover">
         <thead>
           <tr>
             <th><%= Cost.human_attribute_name :created_at %></th>
@@ -293,12 +344,11 @@
 <hr />
 
 <div>
-  <% if @finding.pending? %>
+  <% if @finding.pending? && (!@auth_user.can_act_as_audited? || @finding.users.reload.include?(@auth_user)) %>
     <strong><%= link_to_edit edit_finding_path(params[:completed],
       @finding, :user_id => params[:user_id]) %></strong> |
   <% end %>
   <%= link_to t('finding.follow_up_report.download'),
     follow_up_pdf_finding_path(params[:completed], @finding, :_ts => Time.now.to_i) %> |
-  <%= link_to_index findings_path(params[:completed], :user_id => params[:user_id]) %> |
-  <%= link_to_back %>
+  <%= link_to_index findings_path(params[:completed], :user_id => params[:user_id]) %>
 </div>

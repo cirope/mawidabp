@@ -8,24 +8,28 @@
         <div class="form-group">
           <%= select_tag 'conclusion_review[review_type]', send_review_options, class: 'form-control' %>
         </div>
-        <div class="checkbox">
-          <label for="conclusion_review_include_global_score_sheet">
-            <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, false %>
-            <%= t 'conclusion_review.include_global_score_sheet' %>
-          </label>
-        </div>
-        <div class="checkbox">
-          <label for="conclusion_review_include_score_sheet">
-            <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false %>
-            <%= t 'conclusion_review.include_score_sheet' %>
-          </label>
-        </div>
-        <div class="checkbox">
-          <label for="export_options_hide_control_objectives_excluded_from_score">
-            <%= check_box_tag 'export_options[hide_control_objectives_excluded_from_score]', 1, false %>
-            <%= t 'conclusion_final_review.hide_control_objectives_excluded_from_score' %>
-          </label>
-        </div>
+        <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+          <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.exclude?(current_organization.prefix) %>
+            <div class="checkbox">
+              <label for="conclusion_review_include_global_score_sheet">
+                <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, false %>
+                <%= t 'conclusion_review.include_global_score_sheet' %>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label for="conclusion_review_include_score_sheet">
+                <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false %>
+                <%= t 'conclusion_review.include_score_sheet' %>
+              </label>
+            </div>
+          <% end %>
+          <div class="checkbox">
+            <label for="export_options_hide_control_objectives_excluded_from_score">
+              <%= check_box_tag 'export_options[hide_control_objectives_excluded_from_score]', 1, false %>
+              <%= t 'conclusion_final_review.hide_control_objectives_excluded_from_score' %>
+            </label>
+          </div>
+        <% end %>
         <div class="form-group">
           <%= f.label t('conclusion_review.email_note'), for: :conclusion_review_email_note %>
           <%= text_area_tag 'conclusion_review[email_note]', nil, rows: 5, class: 'form-control' %>
@@ -61,8 +65,7 @@
   <div class="form-actions">
     <div class="pull-right">
       <%= link_to_edit edit_conclusion_final_review_path(@conclusion_final_review) %> |
-      <%= link_to_index conclusion_final_reviews_path %> |
-      <%= link_to_back %>
+      <%= link_to_index conclusion_final_reviews_path %>
     </div>
     <%= f.submit t('label.send'), class: 'btn btn-primary' %>
   </div>

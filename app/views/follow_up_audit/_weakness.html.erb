@@ -52,15 +52,19 @@
       <%= weakness.risk_text %>
     </p>
 
-    <p>
-      <strong><%= Weakness.human_attribute_name 'priority' %>:</strong>
-      <%= weakness.priority_text %>
-    </p>
+    <% unless HIDE_WEAKNESS_PRIORITY %>
+      <p>
+        <strong><%= Weakness.human_attribute_name 'priority' %>:</strong>
+        <%= weakness.priority_text %>
+      </p>
+    <% end %>
 
-    <div>
-      <strong><%= Weakness.human_attribute_name 'effect' %>:</strong>
-      <%= simple_format weakness.effect %>
-    </div>
+    <% unless HIDE_WEAKNESS_EFFECT %>
+      <div>
+        <strong><%= Weakness.human_attribute_name 'effect' %>:</strong>
+        <%= simple_format weakness.effect %>
+      </div>
+    <% end %>
 
     <div>
       <strong><%= Weakness.human_attribute_name 'audit_recommendations' %>:</strong>
@@ -71,6 +75,18 @@
       <strong><%= Weakness.human_attribute_name 'answer' %>:</strong>
       <%= simple_format weakness.answer %>
     </div>
+
+    <% if SHOW_FINDING_CURRENT_SITUATION %>
+      <div>
+        <strong><%= Finding.human_attribute_name 'current_situation' %></strong>:
+        <%= simple_format weakness.current_situation %>
+      </div>
+
+      <div>
+        <strong><%= Finding.human_attribute_name 'current_situation_verified' %></strong>:
+        <%= t "label.#{weakness.current_situation_verified ? 'yes' : 'no'}" %>
+      </div>
+    <% end %>
 
     <p>
       <strong><%= Weakness.human_attribute_name 'follow_up_date' %>:</strong>
@@ -106,7 +122,7 @@
         <%= t 'finding.finding_answers' %>
       </h3>
 
-      <table class="table table-condensed table-striped">
+      <table class="table table-condensed table-striped table-hover">
         <thead>
           <tr>
             <th><%= User.model_name.human %></th>

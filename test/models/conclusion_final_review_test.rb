@@ -42,7 +42,14 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
-          :conclusion => 'New conclusion'
+          :conclusion => 'New conclusion',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51',
+          :evolution => 'Do the evolution',
+          :evolution_justification => 'Ok',
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => false
         }, false)
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
@@ -84,7 +91,14 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
-          :conclusion => 'New conclusion'
+          :conclusion => 'New conclusion',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51',
+          :evolution => 'Do the evolution',
+          :evolution_justification => 'Ok',
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => false
         }, false)
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
@@ -113,8 +127,28 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de informes finales
   test 'destroy' do
+    skip if ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+
     assert_no_difference 'ConclusionFinalReview.count' do
       @conclusion_review.destroy
+    end
+  end
+
+  test 'allow destruction' do
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+
+    weakness = @conclusion_review.review.weaknesses.first
+
+    weakness.update_column :final, true
+
+    findings_count = @conclusion_review.review.final_weaknesses.count
+
+    assert findings_count > 0
+
+    assert_difference 'ConclusionFinalReview.count', -1 do
+      assert_difference 'Finding.finals(true).count', -findings_count do
+        @conclusion_review.destroy
+      end
     end
   end
 
@@ -129,7 +163,14 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
-          :conclusion => 'New conclusion'
+          :conclusion => 'New conclusion',
+          :recipients => 'John Doe',
+          :sectors => 'Area 51',
+          :evolution => 'Do the evolution',
+          :evolution_justification => 'Ok',
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => false
         }, false)
 
     assert @conclusion_review.save
@@ -146,12 +187,24 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     @conclusion_review.review_id = nil
     @conclusion_review.applied_procedures = '   '
     @conclusion_review.conclusion = '   '
+    @conclusion_review.recipients = '   '
+    @conclusion_review.sectors = '   '
+    @conclusion_review.evolution = '   '
+    @conclusion_review.evolution_justification = '   '
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
     assert_error @conclusion_review, :review_id, :blank
-    assert_error @conclusion_review, :applied_procedures, :blank
     assert_error @conclusion_review, :conclusion, :blank
+
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+      assert_error @conclusion_review, :recipients, :blank
+      assert_error @conclusion_review, :sectors, :blank
+      assert_error @conclusion_review, :evolution, :blank
+      assert_error @conclusion_review, :evolution_justification, :blank
+    else
+      assert_error @conclusion_review, :applied_procedures, :blank
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -230,7 +283,14 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion'
+        :conclusion => 'New conclusion',
+        :recipients => 'John Doe',
+        :sectors => 'Area 51',
+        :evolution => 'Do the evolution',
+        :evolution_justification => 'Ok',
+        :main_weaknesses_text => 'Some main weakness X',
+        :corrective_actions => 'You should do it this way',
+        :affects_compliance => false
       }, false)
 
       assert @conclusion_review.save,

@@ -60,7 +60,11 @@ module Reports::WeaknessesByAuditType
               weaknesses_count = {}
               weaknesses_count_by_risk = {}
               total_oportunities = grouped_oportunities.values.sum(&:size)
+              awaiting_counts = {:current => 0, :stale => 0,
+                :current_rescheduled => 0, :stale_rescheduled => 0}
               being_implemented_counts = {:current => 0, :stale => 0,
+                :current_rescheduled => 0, :stale_rescheduled => 0}
+              highest_awaiting_counts = {:current => 0, :stale => 0,
                 :current_rescheduled => 0, :stale_rescheduled => 0}
               highest_being_implemented_counts = {:current => 0, :stale => 0,
                 :current_rescheduled => 0, :stale_rescheduled => 0}
@@ -72,7 +76,7 @@ module Reports::WeaknessesByAuditType
                     o_count.to_f / total_oportunities * 100 : 0.0
 
                   oportunities_table_data << [
-                    "<b>#{t("finding.status_#{s[0]}")}</b>",
+                    "<b>#{t("findings.state.#{s[0]}")}</b>",
                     "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
                   ]
                 end
@@ -97,60 +101,44 @@ module Reports::WeaknessesByAuditType
                   weaknesses_count[s[1]][rl[1]] = count_for_risk
                   weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
 
-                  if s.first.to_s == 'being_implemented'
+                  if s.first.to_s == 'awaiting'
+                    awaiting = weaknesses_for_status.select do |w|
+                      w.risk == rl[1]
+                    end
+
+                    fill_counts_for rl, highest_risk, awaiting, awaiting_counts,
+                      highest_awaiting_counts
+                  elsif s.first.to_s == 'being_implemented'
                     being_implemented = weaknesses_for_status.select do |w|
                       w.risk == rl[1]
                     end
 
-                    being_implemented.each do |w|
-                      unless w.stale?
-                        unless w.rescheduled?
-                          being_implemented_counts[:current] += 1
-
-                          if rl == highest_risk
-                            highest_being_implemented_counts[:current] += 1
-                          end
-                        else
-                          being_implemented_counts[:current_rescheduled] += 1
-
-                          if rl == highest_risk
-                            highest_being_implemented_counts[:current_rescheduled] += 1
-                          end
-                        end
-                      else
-                        unless w.rescheduled?
-                          being_implemented_counts[:stale] += 1
-
-                          if rl == highest_risk
-                            highest_being_implemented_counts[:stale] += 1
-                          end
-                        else
-                          being_implemented_counts[:stale_rescheduled] += 1
-
-                          if rl == highest_risk
-                            highest_being_implemented_counts[:stale_rescheduled] += 1
-                          end
-                        end
-                      end
-                    end
+                    fill_counts_for rl, highest_risk, being_implemented,
+                      being_implemented_counts, highest_being_implemented_counts
                   end
                 end
               end
 
               weaknesses_table_data = get_weaknesses_synthesis_table_data(
-                weaknesses_count, weaknesses_count_by_risk, RISK_TYPES)
+                @final, weaknesses_count, weaknesses_count_by_risk, RISK_TYPES)
+              awaiting_resume = being_implemented_resume_from_counts(
+                awaiting_counts)
               being_implemented_resume = being_implemented_resume_from_counts(
                 being_implemented_counts)
+              highest_awaiting_resume = being_implemented_resume_from_counts(
+                highest_awaiting_counts)
               highest_being_implemented_resume =
                 being_implemented_resume_from_counts(
-                highest_being_implemented_counts)
+                  highest_being_implemented_counts)
 
               business_units[business_unit] = {
                 :conclusion_reviews => cfrs,
                 :weaknesses_table_data => weaknesses_table_data,
                 :oportunities_table_data => oportunities_table_data,
                 :repeated_count => repeated_count,
+                :awaiting_resume => awaiting_resume,
                 :being_implemented_resume => being_implemented_resume,
+                :highest_awaiting_resume => highest_awaiting_resume,
                 :highest_being_implemented_resume =>
                   highest_being_implemented_resume
               }
@@ -234,6 +222,10 @@ module Reports::WeaknessesByAuditType
                 bu_data[:being_implemented_resume])
               add_being_implemented_resume(pdf,
                 bu_data[:highest_being_implemented_resume], 2)
+              add_being_implemented_resume(pdf,
+                bu_data[:awaiting_resume], 3)
+              add_being_implemented_resume(pdf,
+                bu_data[:highest_awaiting_resume], 4)
 
               if type == :internal
                 pdf.move_down PDF_FONT_SIZE
@@ -289,4 +281,5 @@ module Reports::WeaknessesByAuditType
 
     redirect_to_pdf(@controller, @from_date, @to_date, 'weaknesses_by_audit_type')
   end
+
 end

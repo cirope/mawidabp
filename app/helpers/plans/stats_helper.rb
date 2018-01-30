@@ -34,8 +34,13 @@ module Plans::StatsHelper
   def plan_stat_progress plan_items
     total    = plan_items.size
     executed = plan_stat_executed_count plan_items
+    progress = total > 0 ? executed.to_f / total * 100 : 0
 
-    total > 0 ? '%.1f%' % (executed.to_f / total * 100) : '-'
+    {
+      label: '%.0f%%' % progress,
+      value: progress.round,
+      class: class_for_progress(progress)
+    }
   end
 
   def plan_stat_planned plan_items
@@ -59,11 +64,7 @@ module Plans::StatsHelper
     on_time    = plan_stat_on_time plan_items
     compliance = on_time.size.to_f / items.size * 100 if items.size > 0
 
-    {
-      label: '%.0f%' % compliance,
-      value: compliance.round,
-      class: class_for_compliance(compliance)
-    }
+    '%.0f%%' % compliance
   end
 
   def link_to_planned_items business_unit_type, plan_items
@@ -87,10 +88,10 @@ module Plans::StatsHelper
       @until ? { on: @until } : {}
     end
 
-    def class_for_compliance compliance
-      if compliance == 100
+    def class_for_progress progress
+      if progress == 100
         'success'
-      elsif compliance >= 80
+      elsif progress >= 80
         'warning'
       else
         'danger'

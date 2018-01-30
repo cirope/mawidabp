@@ -36,7 +36,14 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion'
+        :conclusion => 'New conclusion',
+        :recipients => 'John Doe',
+        :sectors => 'Area 51',
+        :evolution => 'Do the evolution',
+        :evolution_justification => 'Ok',
+        :main_weaknesses_text => 'Some main weakness X',
+        :corrective_actions => 'You should do it this way',
+        :affects_compliance => false
       )
 
       # Asegurarse que le asigna el tipo correcto
@@ -76,11 +83,23 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
     @conclusion_review.issue_date = nil
     @conclusion_review.review_id = nil
     @conclusion_review.applied_procedures = '   '
+    @conclusion_review.recipients = '   '
+    @conclusion_review.sectors = '   '
+    @conclusion_review.evolution = '   '
+    @conclusion_review.evolution_justification = '   '
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
     assert_error @conclusion_review, :review_id, :blank
-    assert_error @conclusion_review, :applied_procedures, :blank
+
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+      assert_error @conclusion_review, :recipients, :blank
+      assert_error @conclusion_review, :sectors, :blank
+      assert_error @conclusion_review, :evolution, :blank
+      assert_error @conclusion_review, :evolution_justification, :blank
+    else
+      assert_error @conclusion_review, :applied_procedures, :blank
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -103,6 +122,10 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
     @conclusion_review = conclusion_reviews(
       :conclusion_approved_with_conclusion_draft_review
     )
+
+    @conclusion_review.review.file_model = FileModel.take!
+    @conclusion_review.review.save!
+
     assert @conclusion_review.reload.check_for_approval
     assert @conclusion_review.approved?
 

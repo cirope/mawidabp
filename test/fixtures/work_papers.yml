@@ -1,6 +1,6 @@
 image_work_paper:
   name: Image Work Paper
-  code: PTOC 01
+  code: PTOC 001
   number_of_pages: 1
   description: Image Work Paper Description
   file_model: image_file
@@ -10,7 +10,7 @@ image_work_paper:
 
 text_work_paper_management_dependency_item:
   name: Text Work Paper
-  code: PTOC 02
+  code: PTOC 002
   number_of_pages: 10
   description: Text Work Paper Description
   file_model:
@@ -20,7 +20,7 @@ text_work_paper_management_dependency_item:
 
 text_work_paper_management_dependency_item_editable:
   name: Text Work Paper
-  code: PTOC 03
+  code: PTOC 003
   number_of_pages: 12
   description: Text Work Paper Description
   file_model:
@@ -30,7 +30,7 @@ text_work_paper_management_dependency_item_editable:
 
 text_work_paper_being_implemented_weakness_on_approved_draft:
   name: Text Work Paper
-  code: PTO 01
+  code: PTO 001
   number_of_pages: 1
   description: Text Work Paper Description
   file_model:
@@ -40,7 +40,7 @@ text_work_paper_being_implemented_weakness_on_approved_draft:
 
 text_work_paper_being_implemented_weakness:
   name: Text Work Paper
-  code: PTO 04
+  code: PTO 004
   number_of_pages: 14
   description: Text Work Paper Description
   file_model:
@@ -50,7 +50,7 @@ text_work_paper_being_implemented_weakness:
 
 text2_work_paper_unconfirmed_weakness:
   name: Text2 Work Paper
-  code: PTO 05
+  code: PTO 005
   number_of_pages: 15
   description: Text2 Work Paper Description
   file_model:
@@ -60,7 +60,7 @@ text2_work_paper_unconfirmed_weakness:
 
 text_work_paper_unanswered_for_level_1_notification:
   name: Text Work Paper
-  code: PTO 01
+  code: PTO 001
   number_of_pages: 10
   description: Text Work Paper Description
   file_model:
@@ -70,7 +70,7 @@ text_work_paper_unanswered_for_level_1_notification:
 
 text_work_paper_unconfirmed_oportunity:
   name: Text Work Paper
-  code: PTOM 03
+  code: PTOM 003
   number_of_pages: 13
   description: Text Work Paper Description
   file_model:
@@ -80,7 +80,7 @@ text_work_paper_unconfirmed_oportunity:
 
 text_work_paper_confirmed_oportunity_on_draft:
   name: Text Work Paper
-  code: PTOM 01
+  code: PTOM 001
   number_of_pages: 11
   description: Text Work Paper Description
   file_model:

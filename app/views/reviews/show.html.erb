@@ -27,12 +27,36 @@
   <%= show_readonly_review_survey(@review) %>
 </div>
 
-<div>
-  <strong><%= Review.human_attribute_name(:description) %>:</strong>
-  <%= simple_format @review.description %>
-</div>
+<% unless HIDE_REVIEW_DESCRIPTION %>
+  <div>
+    <strong><%= Review.human_attribute_name(:description) %>:</strong>
+    <%= simple_format @review.description %>
+  </div>
+<% end %>
 
-<table class="table table-condensed table-striped">
+<% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+  <p>
+    <strong><%= Review.human_attribute_name :scope %>:</strong>
+    <%= @review.scope %>
+  </p>
+
+  <p>
+    <strong><%= Review.human_attribute_name :risk_exposure %>:</strong>
+    <%= @review.risk_exposure %>
+  </p>
+
+  <p>
+    <strong><%= Review.human_attribute_name :manual_score %>:</strong>
+    <%= @review.manual_score %>
+  </p>
+
+  <p>
+    <strong><%= Review.human_attribute_name :include_sox %>:</strong>
+    <%= t "label.#{@review.include_sox}" unless @review.include_sox.nil? %>
+  </p>
+<% end %>
+
+<table class="table table-condensed table-striped table-hover">
   <thead>
     <tr>
       <th><%= ReviewUserAssignment.human_attribute_name :user %></th>
@@ -59,24 +83,28 @@
     <div style="margin: 1em;">
       <p>
         <strong><%= ControlObjectiveItem.human_attribute_name :relevance %>:</strong>
-        <%= coi.relevance_text(false) %>
+        <%= coi.relevance_text %>
       </p>
       <p>
         <strong><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</strong>
         <%= l(coi.audit_date) if coi.audit_date %>
       </p>
-      <div>
-        <strong><%= Control.human_attribute_name :effects %>:</strong>
-        <%= simple_format coi.control.effects %>
-      </div>
+      <% unless HIDE_CONTROL_EFFECTS %>
+        <div>
+          <strong><%= Control.human_attribute_name :effects %>:</strong>
+          <%= simple_format coi.control.effects %>
+        </div>
+      <% end %>
       <div>
         <strong><%= Control.human_attribute_name :control %>:</strong>
         <%= simple_format coi.control.control %>
       </div>
-      <p>
-        <strong><%= ControlObjectiveItem.human_attribute_name :effectiveness %>:</strong>
-        <%= "#{coi.effectiveness}%" %>
-      </p>
+      <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+        <p>
+          <strong><%= ControlObjectiveItem.human_attribute_name :effectiveness %>:</strong>
+          <%= "#{coi.effectiveness}%" %>
+        </p>
+      <% end %>
       <p>
         <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
         <%= coi.design_score_text %>
@@ -85,14 +113,16 @@
         <strong><%= Control.human_attribute_name :design_tests %>:</strong>
         <%= simple_format coi.control.design_tests %>
       </div>
-      <p>
-        <strong><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</strong>
-        <%= coi.compliance_score_text %>
-      </p>
-      <div>
-        <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
-        <%= simple_format coi.control.compliance_tests %>
-      </div>
+      <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
+        <p>
+          <strong><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</strong>
+          <%= coi.compliance_score_text %>
+        </p>
+        <div>
+          <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
+          <%= simple_format coi.control.compliance_tests %>
+        </div>
+      <% end %>
       <p>
         <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
         <%= coi.sustantive_score_text %>
@@ -125,10 +155,21 @@
   </ul>
 <% end %>
 
+<% if @review.work_papers_finished? %>
+  <p>&nbsp;</p>
+  <div class="alert alert-info">
+    <%= t 'review.work_papers_marked_as_finished' %>
+  </div>
+<% elsif @review.work_papers_revised? %>
+  <p>&nbsp;</p>
+  <div class="alert alert-success">
+    <%= t 'review.work_papers_marked_as_revised' %>
+  </div>
+<% end %>
+
 <hr />
 
 <div>
   <%= link_to_edit edit_review_path(@review) %> |
-  <%= link_to_index reviews_path %> |
-  <%= link_to_back %>
+  <%= link_to_index reviews_path %>
 </div>

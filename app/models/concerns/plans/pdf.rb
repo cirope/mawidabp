@@ -1,7 +1,7 @@
 module Plans::PDF
   extend ActiveSupport::Concern
 
-  def to_pdf organization = nil, include_details = true
+  def to_pdf organization = nil, include_details: true, business_unit_type: nil
     pdf                = Prawn::Document.create_generic_pdf :landscape
     grouped_plan_items = self.grouped_plan_items
 
@@ -9,13 +9,7 @@ module Plans::PDF
     pdf.add_title *pdf_title
     pdf.add_description_item *pdf_period
 
-    business_unit_types.each do |business_unit_type|
-      plan_items = Array(grouped_plan_items[business_unit_type]).sort
-
-      if plan_items.present?
-        put_plan_items_on pdf, plan_items, business_unit_type, include_details
-      end
-    end
+    put_business_unit_types_on pdf, business_unit_type, include_details
 
     pdf.custom_save_as pdf_name, Plan.table_name, id
   end
@@ -75,6 +69,26 @@ module Plans::PDF
 
     def business_unit_types
       BusinessUnitType.list + [nil]
+    end
+
+    def put_business_unit_types_on pdf, business_unit_type, include_details
+      if business_unit_type
+        put_business_unit_type_plan_items_on pdf, business_unit_type,
+          include_details
+      else
+        business_unit_types.each do |business_unit_type|
+          put_business_unit_type_plan_items_on pdf, business_unit_type,
+            include_details
+        end
+      end
+    end
+
+    def put_business_unit_type_plan_items_on pdf, business_unit_type, include_details
+      plan_items = Array(grouped_plan_items[business_unit_type]).sort
+
+      if plan_items.present?
+        put_plan_items_on pdf, plan_items, business_unit_type, include_details
+      end
     end
 
     def put_plan_items_on pdf, plan_items, business_unit_type, include_details

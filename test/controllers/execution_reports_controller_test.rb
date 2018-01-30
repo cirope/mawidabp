@@ -128,7 +128,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
           finding_status: '1',
           finding_title: '1',
           risk: '1',
-          priority: '1',
+          priority: Finding.priorities_values.first,
           issue_date: Date.today.to_s(:db),
           issue_date_operator: '=',
           origination_date: Date.today.to_s(:db),
@@ -174,5 +174,21 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     }
 
     assert_response :redirect
+  end
+
+  test 'reviews with incomplete work papers' do
+    login
+
+    get :reviews_with_incomplete_work_papers_report
+    assert_response :success
+    assert_template 'execution_reports/reviews_with_incomplete_work_papers_report'
+  end
+
+  test 'reviews with revised work papers' do
+    login
+
+    get :reviews_with_incomplete_work_papers_report, params: { revised: true }
+    assert_response :success
+    assert_template 'execution_reports/reviews_with_incomplete_work_papers_report'
   end
 end

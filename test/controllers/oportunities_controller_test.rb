@@ -4,6 +4,10 @@ require 'test_helper'
 class OportunitiesControllerTest < ActionController::TestCase
   fixtures :findings, :control_objective_items
 
+  setup do
+    skip if HIDE_OPORTUNITIES
+  end
+
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
@@ -79,9 +83,8 @@ class OportunitiesControllerTest < ActionController::TestCase
     login
     get :show, :params => {
       :completed => 'incomplete',
-      :id => oportunity.id,
-      :format => :json
-    }
+      :id => oportunity.id
+    }, :as => :json
     assert_response :success
     assert_not_nil assigns(:oportunity)
 
@@ -291,9 +294,8 @@ class OportunitiesControllerTest < ActionController::TestCase
     get :auto_complete_for_finding_relation, :params => {
       :q => 'O001',
       :finding_id => finding.id,
-      :review_id => finding.review.id,
-      :format => :json
-    }
+      :review_id => finding.review.id
+    }, :as => :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -306,9 +308,8 @@ class OportunitiesControllerTest < ActionController::TestCase
     get :auto_complete_for_finding_relation, :params => {
       :q => 'O001',
       :finding_id => finding.id,
-      :review_id => finding.review.id,
-      :format => :json
-    }
+      :review_id => finding.review.id
+    }, :as => :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -320,9 +321,8 @@ class OportunitiesControllerTest < ActionController::TestCase
       :completed => 'incomplete',
       :q => 'O001, 1 2 3',
       :finding_id => finding.id,
-      :review_id => finding.review.id,
-      :format => :json
-    }
+      :review_id => finding.review.id
+    }, :as => :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -333,9 +333,8 @@ class OportunitiesControllerTest < ActionController::TestCase
     get :auto_complete_for_finding_relation, :params => {
       :q => 'x_none',
       :finding_id => finding.id,
-      :review_id => finding.review.id,
-      :format => :json
-    }
+      :review_id => finding.review.id
+    }, :as => :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -348,9 +347,8 @@ class OportunitiesControllerTest < ActionController::TestCase
 
     get :auto_complete_for_tagging, :params => {
       :q => 'impor',
-      :kind => 'finding',
-      :format => :json
-    }
+      :kind => 'finding'
+    }, :as => :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)
@@ -360,9 +358,8 @@ class OportunitiesControllerTest < ActionController::TestCase
 
     get :auto_complete_for_tagging, :params => {
       :q => 'x_none',
-      :kind => 'finding',
-      :format => :json
-    }
+      :kind => 'finding'
+    }, :as => :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)
@@ -374,9 +371,8 @@ class OportunitiesControllerTest < ActionController::TestCase
     login
     get :auto_complete_for_control_objective_item, :params => {
       :q => 'dependencia',
-      :review_id => reviews(:review_with_conclusion).id,
-      :format => :json
-    }
+      :review_id => reviews(:review_with_conclusion).id
+    }, :as => :json
     assert_response :success
 
     cois = ActiveSupport::JSON.decode(@response.body)
@@ -390,9 +386,8 @@ class OportunitiesControllerTest < ActionController::TestCase
 
     get :auto_complete_for_control_objective_item, :params => {
       :q => 'x_none',
-      :review_id => reviews(:review_with_conclusion).id,
-      :format => :json
-    }
+      :review_id => reviews(:review_with_conclusion).id
+    }, :as => :json
     assert_response :success
 
     cois = ActiveSupport::JSON.decode(@response.body)

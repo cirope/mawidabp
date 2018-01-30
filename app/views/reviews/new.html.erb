@@ -1,17 +1,5 @@
 <%= content_for :form_actions do %>
-  <%= link_to_index reviews_path %> |
-  <%= link_to_back %>
+  <%= link_to_index reviews_path %>
 <% end %>
 
 <%= render 'form' %>
-
-<script type="text/javascript">
-  $('#review_period_id').change(function() {
-    BrowserManipulation.changeLocation(
-      '<%= new_review_path %>',
-      { period: $(this).val() }
-    );
-
-    Helper.showLoading($(this));
-  });
-</script>

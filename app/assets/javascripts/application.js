@@ -27,9 +27,9 @@
 //= require form_modification
 //= require filters
 //= require validation
-//= require ui
 //= require file_input
 //= require best_practices
+//= require conclusion_draft_reviews
 //= require control_objective_items
 //= require documents
 //= require findings
@@ -44,4 +44,6 @@
 //= require tags
 //= require touch
 //= require users
+//= require weaknesses
+//= require weakness_templates
 //= require work_papers

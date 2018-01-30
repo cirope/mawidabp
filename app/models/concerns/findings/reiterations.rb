@@ -17,7 +17,7 @@ module Findings::Reiterations
     self.undoing_reiteration = true
 
     repeated_of.update_column :state, previous_repeated_of_state
-    update_columns repeated_of_id: nil, origination_date: nil
+    update_columns repeated_of_id: nil, origination_date: Time.zone.today
   end
 
   def repeated_root

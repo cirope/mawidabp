@@ -128,7 +128,7 @@ module Reports::WeaknessesByStateExecution
         o_count.to_f / @total_oportunities * 100 : 0.0
 
       @column_data << [
-        t("finding.status_#{state.first}"),
+        t("findings.state.#{state.first}"),
         "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)"
       ]
 

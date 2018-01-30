@@ -9,6 +9,10 @@ class FindingTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    Finding.current_user = nil
+  end
+
   test 'create' do
     assert_difference 'Finding.count' do
       @finding.class.list.create!(
@@ -26,6 +30,10 @@ class FindingTest < ActiveSupport::TestCase
         risk: Finding.risks_values.first,
         priority: Finding.priorities_values.first,
         follow_up_date: nil,
+        compliance: 'no',
+        operational_risk: ['internal fraud'],
+        impact: ['econimic', 'regulatory'],
+        internal_control_components: ['risk_evaluation', 'monitoring'],
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
@@ -57,6 +65,10 @@ class FindingTest < ActiveSupport::TestCase
         risk: Finding.risks_values.first,
         priority: Finding.priorities_values.first,
         follow_up_date: 2.days.from_now.to_date,
+        compliance: 'no',
+        operational_risk: ['internal fraud'],
+        impact: ['econimic', 'regulatory'],
+        internal_control_components: ['risk_evaluation', 'monitoring'],
         finding_user_assignments_attributes: {
           new_1: {
             user_id: users(:audited).id, process_owner: true
@@ -240,6 +252,18 @@ class FindingTest < ActiveSupport::TestCase
     assert_error finding, :state, :must_have_a_work_paper
   end
 
+  test 'validates implemented audited can skip work paper validation' do
+    finding               = findings :being_implemented_weakness_on_final
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Time.zone.today
+
+    Finding.current_user    = users :supervisor
+    finding.skip_work_paper = true
+
+    assert finding.work_papers.empty?
+    assert finding.valid?
+  end
+
   test 'validates audited user must be present' do
     @finding.finding_user_assignments =
       @finding.finding_user_assignments.reject do |fua|
@@ -271,6 +295,8 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validate final state can be changed only by supervisors' do
+    skip if DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION
+
     Finding.current_user  = users :auditor
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
@@ -278,6 +304,21 @@ class FindingTest < ActiveSupport::TestCase
 
     assert finding.invalid?
     assert_error finding, :state, :must_be_done_by_proper_role
+
+    Finding.current_user  = users :supervisor
+
+    assert finding.valid?
+  end
+
+  test 'validate final state can be changed by any auditor' do
+    skip unless DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION
+
+    Finding.current_user  = users :auditor
+    finding               = findings :being_implemented_weakness
+    finding.state         = Finding::STATUS[:implemented_audited]
+    finding.solution_date = 1.month.from_now
+
+    assert finding.valid?
 
     Finding.current_user  = users :supervisor
 
@@ -369,6 +410,36 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.confirmation_date.blank?
     assert finding.notifications.not_confirmed.any? { |n| n.user.can_act_as_audited? }
     refute finding.save
+  end
+
+  test 'current situation is updated on audited response' do
+    @finding.update! current_situation_verified: true
+
+    @finding.finding_answers.build(
+      user:            users(:audited),
+      answer:          'New audited answer',
+      commitment_date: Time.zone.today
+    )
+
+    @finding.save!
+
+    assert_equal 'New audited answer', @finding.current_situation
+    refute @finding.current_situation_verified
+  end
+
+  test 'current situation is not updated on auditor response' do
+    @finding.update! current_situation_verified: true
+
+    @finding.finding_answers.build(
+      user:            users(:auditor),
+      answer:          'New audited answer',
+      commitment_date: Time.zone.today
+    )
+
+    @finding.save!
+
+    assert_not_equal 'New audited answer', @finding.current_situation
+    assert @finding.current_situation_verified
   end
 
   test 'status change from confirmed must have an answer' do
@@ -813,6 +884,8 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'remember users about expired findings' do
+    skip if DISABLE_FINDINGS_EXPIRATION_NOTIFICATION
+
     Organization.current_id = nil
     review_codes_by_user    = review_codes_on_findings_by_user :expired
 

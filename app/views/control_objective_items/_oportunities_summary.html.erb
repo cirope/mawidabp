@@ -1,22 +1,28 @@
+<% oportunities = readonly ? @control_objective_item.final_oportunities : @control_objective_item.oportunities %>
+
 <h4>
   <%= ControlObjectiveItem.human_attribute_name 'oportunities' %>
 </h4>
 
-<table class="table table-condensed">
-  <thead>
-    <tr>
-      <%= raw control_objective_oportunities_summary_headers %>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <%= raw control_objective_oportunities_summary_row(@control_objective_item) %>
-    </tr>
-  </tbody>
-</table>
+<% if oportunities.any? %>
+  <ul>
+    <% oportunities.order(:review_code).each do |oportunity| %>
+      <li>
+        <%= link_to "#{oportunity.review_code} - #{oportunity.title} (#{oportunity.state_text})", oportunity %>
+        <% unless frozen %>
+          | <%= link_to_edit edit_oportunity_path(oportunity) %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <div class="alert alert-info">
+    <%= t('control_objective_item.no_oportunities') %>
+  </div>
+<% end %>
 
 <p style="margin-bottom: 1.2em;">
-  <%= link_to_unless @control_objective_item.oportunities.blank?,
+  <%= link_to_unless oportunities.blank?,
     t('control_objective_item.view_all_oportunities'),
     oportunities_path(:control_objective => @control_objective_item) %>
   <span class="text-muted">|</span>

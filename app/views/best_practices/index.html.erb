@@ -1,9 +1,13 @@
-<table class="table table-condensed table-striped">
-  <thead>
+<%= render partial: 'shared/search', locals: {
+  options: {},
+  columns: @query.blank? ? BestPractice::COLUMNS_FOR_SEARCH.keys : @columns
+} %>
+<table class="table table-condensed table-striped table-hover">
+  <thead id="column_headers">
     <tr>
-      <th><%= BestPractice.human_attribute_name 'name' %></th>
-      <th class="hidden-xs"><%= BestPractice.human_attribute_name 'description' %></th>
-      <th colspan="3"></th>
+      <%= make_filterable_column BestPractice.human_attribute_name('name'), nil, 'name' %>
+      <%= make_not_available_column BestPractice.human_attribute_name('description'), { :class => 'hidden-xs' } %>
+      <th colspan="3" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
 

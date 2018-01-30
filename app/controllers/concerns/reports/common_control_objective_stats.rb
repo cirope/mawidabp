@@ -35,7 +35,7 @@ module Reports::CommonControlObjectiveStats
 
     def conclusion_reviews_by_finding_status
       @weaknesses_conditions[:state] = params[@action][:finding_status]
-      state_text = t "finding.status_#{Finding::STATUS.invert[@weaknesses_conditions[:state].to_i]}"
+      state_text = t "findings.state.#{Finding::STATUS.invert[@weaknesses_conditions[:state].to_i]}"
 
       @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text}\""
     end

@@ -1,0 +1,44 @@
+<% prefix, number, year = *@review.identification.to_s.split(/[-\/]/) %>
+<% number = Review.list.next_identification_number year if @review.errors[:identification].any? %>
+
+<% if @review.new_record? %>
+  <div class="row">
+    <div class="col-xs-4">
+      <%= f.input :identification_prefix,
+        label: Review.human_attribute_name('identification'),
+        collection: BusinessUnitType.list.pluck('review_prefix'),
+        prompt: true,
+        selected: prefix,
+        input_html: {
+          autofocus: true,
+          data: {
+            next_identification_number_url: next_identification_number_reviews_path,
+            plan_item_refresh_url: plan_item_refresh_reviews_path
+          }
+        }
+      %>
+    </div>
+    <div class="col-xs-4">
+      <%= f.input :identification_number, label: raw('&nbsp;'), input_html: {
+        value: number, readonly: true
+      } %>
+    </div>
+    <div class="col-xs-4">
+      <%= f.input :identification_suffix,
+        collection: review_year_suffixes,
+        label: raw('&nbsp;'),
+        prompt: false,
+        selected: year.present? ? year.to_i : Time.zone.today.year,
+        input_html: {
+          data: {
+            next_identification_number_url: next_identification_number_reviews_path
+          }
+        }
+      %>
+    </div>
+  </div>
+
+  <%= f.input :identification, as: :hidden, input_html: { value: "#{prefix}-#{number}/#{year}" } %>
+<% else %>
+  <%= f.input :identification, label: Review.human_attribute_name('identification'), input_html: { readonly: true } %>
+<% end %>

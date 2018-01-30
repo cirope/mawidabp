@@ -32,7 +32,7 @@
           <tr>
             <td><%= t "score_types.#{score}" %></td>
             <td class="text-right">
-              <%= scores.size > 0 ? '%.2f%' % (scores.size.to_f / score_count * 100) : '0.00%' %>
+              <%= scores.size > 0 ? '%.2f%%' % (scores.size.to_f / score_count * 100) : '0.00%' %>
             </td>
           </tr>
         <% end %>
@@ -77,7 +77,7 @@
                 </span>
               </td>
               <td class="text-right">
-                <%= count > 0 ? '%.2f%' % (count.to_f / reviews_by_tag_count * 100) : '0.00%' %>
+                <%= count > 0 ? '%.2f%%' % (count.to_f / reviews_by_tag_count * 100) : '0.00%' %>
               </td>
             </tr>
           <% end %>
@@ -107,7 +107,10 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th><%= Weakness.human_attribute_name 'risk' %> / <%= Weakness.human_attribute_name 'priority' %></th>
+          <th>
+            <%= Weakness.human_attribute_name 'risk' %>
+            <%= "/ #{Weakness.human_attribute_name 'priority'}" unless HIDE_WEAKNESS_PRIORITY %>
+          </th>
           <% Review.scores.each do |score, value| %>
             <th class="text-right"><%= t "score_types.#{score}" %></th>
           <% end %>
