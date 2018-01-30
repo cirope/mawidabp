@@ -471,16 +471,17 @@ module ConclusionReviews::AlternativePDF
       if low_risk_weaknesses.any? || not_relevant_weaknesses.any?
         title =
           I18n.t 'conclusion_review.executive_summary.low_risk_weaknesses_title'
-        text = I18n.t "conclusion_review.executive_summary.low_risk_weaknesses",
-          count:              low_risk_weaknesses.size,
-          not_relevant_count: not_relevant_weaknesses.size
 
         pdf.move_down PDF_FONT_SIZE
         pdf.add_title title, (PDF_FONT_SIZE * 1.3).round
         pdf.move_down PDF_FONT_SIZE
 
-        pdf.indent PDF_FONT_SIZE do
-          pdf.text text, align: :justify
+        low_risk_weaknesses.each do |w|
+          put_short_weakness_on pdf, w, show_risk: true
+        end
+
+        not_relevant_weaknesses.each do |w|
+          put_short_weakness_on pdf, w, show_risk: true
         end
       end
     end
@@ -502,7 +503,7 @@ module ConclusionReviews::AlternativePDF
       end
     end
 
-    def put_short_weakness_on pdf, weakness
+    def put_short_weakness_on pdf, weakness, show_risk: false
       show_origination_date =
         weakness.repeated_ancestors.present? &&
         weakness.origination_date.present?
@@ -515,6 +516,9 @@ module ConclusionReviews::AlternativePDF
       state_text = [
         Weakness.human_attribute_name('state'), weakness.state_text
       ].join(': ')
+      risk_text = [
+        Weakness.human_attribute_name('risk'), weakness.risk_text
+      ].join(': ')
       origination_date_text = [
         Weakness.human_attribute_name('origination_date'), origination_date
       ].join(': ')
@@ -522,11 +526,12 @@ module ConclusionReviews::AlternativePDF
         weakness.review_code,
         weakness.title,
         state_text,
+        (risk_text if show_risk),
         origination_date_text
-      ].join(' - ')
+      ].compact.join(' - ')
 
       pdf.indent PDF_FONT_SIZE do
-        pdf.text "• #{text}", align: :justify
+        pdf.text "• #{text}"
       end
     end
 
