@@ -249,9 +249,8 @@ module ConclusionReviews::AlternativePDF
       pdf.move_down PDF_FONT_SIZE
 
       put_weakness_details_on pdf, all_weaknesses,
-        show:   show,
-        hide:   %w(audited),
-        legend: 'no_weaknesses'
+        show:   show + ['estimated_follow_up'],
+        hide:   %w(audited)
     end
 
     def put_observations_on pdf
@@ -378,7 +377,8 @@ module ConclusionReviews::AlternativePDF
     def put_main_weaknesses_details_on pdf
       weaknesses = main_weaknesses
 
-      put_weakness_details_on pdf, weaknesses, legend: 'no_main_weaknesses',
+      put_weakness_details_on pdf, weaknesses,
+        show: %w(estimated_follow_up),
         hide: [
           'audited',
           'audit_recommendations',
@@ -387,7 +387,7 @@ module ConclusionReviews::AlternativePDF
         ]
     end
 
-    def put_weakness_details_on pdf, weaknesses, hide: [], show: [], legend:
+    def put_weakness_details_on pdf, weaknesses, hide: [], show: []
       if weaknesses.any?
         weaknesses.each do |f|
           coi = f.control_objective_item
@@ -401,7 +401,7 @@ module ConclusionReviews::AlternativePDF
             align: :justify, inline_format: true
         end
       else
-        put_weakness_legend_on pdf, legend
+        put_no_weakness_legend_on pdf
       end
     end
 
@@ -438,12 +438,12 @@ module ConclusionReviews::AlternativePDF
         put_low_risk_weaknesses_on     pdf
         put_assumed_risk_weaknesses_on pdf
       else
-        put_weakness_legend_on pdf, 'no_other_weaknesses'
+        put_no_weakness_legend_on pdf
       end
     end
 
-    def put_weakness_legend_on pdf, title
-      legend = I18n.t "conclusion_review.executive_summary.#{title}"
+    def put_no_weakness_legend_on pdf
+      legend = I18n.t 'conclusion_review.executive_summary.no_weaknesses'
 
       pdf.move_down PDF_FONT_SIZE
       pdf.text legend, align: :justify
