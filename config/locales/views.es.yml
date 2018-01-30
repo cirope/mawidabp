@@ -130,7 +130,7 @@ es:
       repeated: 'Reiterada'
       revoked: 'Anulada'
       criteria_mismatch: 'Difiere criterio'
-      expired: 'Desestimada'
+      expired: 'Desestimada / No aplica'
 
   login_records:
     choose:
