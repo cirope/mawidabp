@@ -1,0 +1,27 @@
+<%= render partial: 'shared/search', locals: {
+  options: {},
+  columns: @query.blank? ? ControlObjective::COLUMNS_FOR_SEARCH.keys : @columns
+} %>
+<table class="table table-condensed table-striped table-hover">
+  <thead id="column_headers">
+    <tr>
+      <%= make_filterable_column BestPractice.model_name.human, { class: 'hidden-xs' }, 'best_practice' %>
+      <%= make_filterable_column ControlObjective.human_attribute_name('name'), nil, 'name' %>
+      <th class="text-right"><%= link_to_search %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @control_objectives.each do |control_objective| %>
+      <tr <%== 'class="text-muted strike"' if control_objective.obsolete %>>
+        <td class="hidden-xs"><%= super_truncate(control_objective.best_practice.name, 40) %></td>
+        <td><%= super_truncate control_objective.name, 40 %></td>
+        <td><%= link_to_show control_objective %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<hr />
+
+<%= paginate @control_objectives %>
