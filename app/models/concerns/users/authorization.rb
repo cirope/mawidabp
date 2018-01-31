@@ -83,6 +83,7 @@ module Users::Authorization
     end
 
     def has_a_current_session?
-      logged_in? && last_access > session_expire_time.minutes.ago
+      logged_in? &&
+        (session_expire_time == 0 || last_access > session_expire_time.minutes.ago)
     end
 end
