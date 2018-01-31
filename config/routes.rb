@@ -326,6 +326,8 @@ Rails.application.routes.draw do
 
   resources :resource_classes
 
+  resources :control_objectives, only: [:index, :show]
+
   resources :best_practices do
     resources :process_controls, only: [:new, :edit]
 

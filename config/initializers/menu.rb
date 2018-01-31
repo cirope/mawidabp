@@ -82,8 +82,21 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :best_practices,
         order: 3,
-        controllers: :best_practices,
-        url: { controller: '/best_practices' }
+        url: { controller: '/best_practices' },
+        children: [
+          MenuItem.new(
+            :best_practices,
+            order: 1,
+            controllers: :best_practices,
+            url: { controller: '/best_practices' }
+          ),
+          MenuItem.new(
+            :control_objectives,
+            order: 1,
+            controllers: :control_objectives,
+            url: { controller: '/control_objectives' }
+          )
+        ]
       ),
       MenuItem.new(
         :settings,

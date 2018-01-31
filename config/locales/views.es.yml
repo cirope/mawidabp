@@ -58,6 +58,10 @@ es:
       new: 'Agregar objetivo'
 
   control_objectives:
+    index:
+      title: 'Listado de objetivos de control'
+    show:
+      title: 'Detalle objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
 
