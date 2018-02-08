@@ -7,7 +7,7 @@ module Parameters::Score
     unsatisfactory: 0
   }
 
-  SCORE_BY_WEAKNESSES = {
+  DEFAULT_SCORE_BY_WEAKNESSES = {
     adequate: 100,
     require_some_improvements: 80,
     require_improvements: 60,
@@ -21,7 +21,9 @@ module Parameters::Score
     end
 
     def scores_by_weaknesses
-      SCORE_BY_WEAKNESSES
+      scores = JSON.parse ENV['SCORE_BY_WEAKNESS'] || '{}'
+
+      DEFAULT_SCORE_BY_WEAKNESSES.merge scores.symbolize_keys
     end
   end
 end
