@@ -14,6 +14,8 @@ ActiveRecord::Schema.define(version: 20180121170808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "btree_gin"
+  enable_extension "pg_trgm"
 
   create_table "achievements", id: :serial, force: :cascade do |t|
     t.integer "benefit_id", null: false
@@ -875,6 +877,7 @@ ActiveRecord::Schema.define(version: 20180121170808) do
     t.index ["created_at"], name: "index_versions_on_created_at"
     t.index ["important"], name: "index_versions_on_important"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+    t.index ["object_changes"], name: "index_versions_on_object_changes", using: :gin
     t.index ["organization_id"], name: "index_versions_on_organization_id"
     t.index ["whodunnit"], name: "index_versions_on_whodunnit"
   end
