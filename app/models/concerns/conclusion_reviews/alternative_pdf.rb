@@ -434,9 +434,8 @@ module ConclusionReviews::AlternativePDF
       pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
 
       if weaknesses.any? || assumed_risk_weaknesses.any?
-        put_medium_risk_weaknesses_on  pdf
-        put_low_risk_weaknesses_on     pdf
-        put_assumed_risk_weaknesses_on pdf
+        put_other_not_assumed_risk_weaknesses_on pdf
+        put_assumed_risk_weaknesses_on           pdf
       else
         put_no_weakness_legend_on pdf
       end
@@ -450,33 +449,9 @@ module ConclusionReviews::AlternativePDF
       pdf.move_down PDF_FONT_SIZE
     end
 
-    def put_medium_risk_weaknesses_on pdf
-      weaknesses = other_weaknesses.where risk: RISK_TYPES[:medium]
-
-      if weaknesses.any?
-        title =
-          I18n.t 'conclusion_review.executive_summary.medium_risk_weaknesses'
-
-        pdf.move_down PDF_FONT_SIZE
-        pdf.add_title title, (PDF_FONT_SIZE * 1.3).round
-        pdf.move_down PDF_FONT_SIZE
-
-        weaknesses.each do |w|
-          put_short_weakness_on pdf, w
-        end
-      end
-    end
-
-    def put_low_risk_weaknesses_on pdf
-      if low_risk_and_not_relevant_weaknesses.any?
-        title =
-          I18n.t 'conclusion_review.executive_summary.low_risk_weaknesses_title'
-
-        pdf.move_down PDF_FONT_SIZE
-        pdf.add_title title, (PDF_FONT_SIZE * 1.3).round
-        pdf.move_down PDF_FONT_SIZE
-
-        low_risk_and_not_relevant_weaknesses.each do |w|
+    def put_other_not_assumed_risk_weaknesses_on pdf
+      if other_not_assumed_risk_weaknesses.any?
+        other_not_assumed_risk_weaknesses.each do |w|
           put_short_weakness_on pdf, w, show_risk: true
         end
       end
@@ -539,8 +514,8 @@ module ConclusionReviews::AlternativePDF
       weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_by_code
     end
 
-    def low_risk_and_not_relevant_weaknesses
-      risks = [RISK_TYPES[:low], RISK_TYPES[:not_relevant]]
+    def other_not_assumed_risk_weaknesses
+      risks = [RISK_TYPES[:medium], RISK_TYPES[:low], RISK_TYPES[:not_relevant]]
 
       weaknesses.not_revoked.not_assumed_risk.where(risk: risks).sort_by_code
     end
