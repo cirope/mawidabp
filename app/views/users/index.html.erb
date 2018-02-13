@@ -24,6 +24,7 @@
         <td class="hidden-xs"><%= super_truncate user.function || '-', 40 %></td>
         <td class="hidden-xs"><%= l user.last_access, format: :minimal if user.last_access %></td>
         <td class="hidden-xs"><%= user.failed_attempts %></td>
+        <td><%= link_to_stats users_status_path(user, graph: true) %></td>
         <td><%= link_to_show user %></td>
         <td><%= link_to_edit [:edit, user] %></td>
         <td><%= link_to_destroy user, title: t('label.disable') %></td>
