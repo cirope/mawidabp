@@ -12,6 +12,7 @@ module Users::Validations
       allow_nil: true, allow_blank: true
     validates :password, confirmation: true, unless: :is_encrypted?
     validates :language, length: { maximum: 10 }, presence: true
+    validates :user, format: { with: /[a-zA-Z0-9_]/ }, allow_nil: true, allow_blank: true
     validates :email, format: { with: EMAIL_REGEXP }, allow_nil: true, allow_blank: true
     validate :validate_manager
     validate :validate_roles
