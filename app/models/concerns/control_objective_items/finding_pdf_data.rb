@@ -6,7 +6,7 @@ module ControlObjectiveItems::FindingPDFData
 
     body << get_initial_finding_attributes(finding, show)
     body << get_weakness_attributes(finding, hide) if finding.kind_of?(Weakness)
-    body << get_late_finding_attributes(finding)
+    body << get_late_finding_attributes(finding, show)
     body << get_optional_finding_attributes(finding, hide)
     body << get_audited_data(finding, hide)
     body << get_final_finding_attributes(finding, hide, show)
@@ -57,7 +57,7 @@ module ControlObjectiveItems::FindingPDFData
       body
     end
 
-    def get_late_finding_attributes finding
+    def get_late_finding_attributes finding, show
       body = ''
 
       if finding.origination_date.present?
@@ -70,7 +70,7 @@ module ControlObjectiveItems::FindingPDFData
           "#{finding.answer.chomp}\n"
       end
 
-      body << finding_follow_up_date_text_for(finding)
+      body << finding_follow_up_date_text_for(finding, show)
 
       if finding.solution_date.present?
         body << "<b>#{finding.class.human_attribute_name('solution_date')}:" +
@@ -159,12 +159,15 @@ module ControlObjectiveItems::FindingPDFData
       end
     end
 
-    def finding_follow_up_date_text_for finding
-      show =
+    def finding_follow_up_date_text_for finding, show
+      display =
         (!SHOW_CONCLUSION_ALTERNATIVE_PDF && finding.follow_up_date.present?) ||
         (finding.follow_up_date.present? && !finding.implemented_audited?)
 
-      if show
+      if display && show.include?('estimated_follow_up')
+        "<b>#{I18n.t 'conclusion_review.estimated_follow_up_date'}:</b> " +
+          "#{I18n.l(finding.follow_up_date, format: '%B %Y')}\n"
+      elsif display
         "<b>#{finding.class.human_attribute_name('follow_up_date')}:</b> " +
           "#{I18n.l(finding.follow_up_date, format: :long)}\n"
       else
