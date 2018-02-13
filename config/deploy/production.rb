@@ -8,8 +8,8 @@ set :default_env, {
   'LC_ALL':   'en_US.UTF-8'
 }
 
-role :web, %w{deployer@tn.mawidabp.com}
-role :app, %w{deployer@tn.mawidabp.com}
-role :db,  %w{deployer@tn.mawidabp.com}
+role :web, %w{deployer@naranja.mawidabp.com}
+role :app, %w{deployer@naranja.mawidabp.com}
+role :db,  %w{deployer@naranja.mawidabp.com}
 
-server 'tn.mawidabp.com', user: 'deployer', roles: %w{web app db}
+server 'naranja.mawidabp.com', user: 'deployer', roles: %w{web app db}
