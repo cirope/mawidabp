@@ -4,11 +4,19 @@ namespace :deploy do
   end
 end
 
-remote_file 'config/database.yml' => 'config/database.example.yml', roles: :app
+namespace :config do
+  desc 'Uploads config/database.yml.example as the initial database.yml'
+  task :upload_database_config do
+    on roles(:app) do
+      config_path = 'config/database.yml'
 
-file 'config/database.example.yml' do |t|
-  on roles(:app) do
-    info "Now edit the config files in #{shared_path}."
-    upload! t.name shared_path.join('config/database.yml')
+      if test("[ -f #{shared_path.join config_path} ]")
+        info "The #{config_path} file is already there"
+      else
+        info "Now edit the config file in #{shared_path.join config_path}"
+        execute :mkdir, '-p', shared_path.join('config')
+        upload! 'config/database.yml.example', shared_path.join(config_path)
+      end
+    end
   end
 end
