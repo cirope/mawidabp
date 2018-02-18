@@ -18,7 +18,6 @@ set :keep_releases, 5
 
 namespace :deploy do
   before :check,      'config:upload'
-  before :check,      'config:upload_database_config'
   before :publishing, :db_updates
   after  :publishing, :restart
   after  :finishing,  :help
