@@ -1,4 +1,6 @@
 class NotifierMailer < ActionMailer::Base
+  include ActionView::Helpers::TextHelper
+
   helper :application, :notifier
 
   default from: "'#{ENV['EMAIL_NAME'] || I18n.t('app_name')}' <#{ENV['EMAIL_ADDRESS']}>"
@@ -161,7 +163,7 @@ class NotifierMailer < ActionMailer::Base
     prefix = "[#{conclusion_review.review.organization.prefix}] "
     title = I18n.t(
       'notifier.conclusion_review_notification.title',
-      review: conclusion_review.review.identification
+      review: conclusion_review.review.long_identification
     )
     elements = [
       "*#{Review.model_name.human} #{conclusion_review.review.identification}*"
@@ -199,7 +201,7 @@ class NotifierMailer < ActionMailer::Base
         File.read(conclusion_review.review.absolute_global_score_sheet_path)
     end
 
-    mail(to: [user.email], subject: prefix.upcase + title)
+    mail(to: [user.email], subject: truncate(prefix.upcase + title, length: 990))
   end
 
   def findings_expiration_warning(user, findings)
