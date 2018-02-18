@@ -755,8 +755,10 @@ es:
     changes_notification:
       title: "Notificación de cambios"
     conclusion_review_notification:
-      title: "Informe de auditoría %{review}"
+      title: "Informe de auditoría %{type} %{review}"
       body_title: "Se adjuntan los siguientes documentos: %{elements}"
+      final: "definitivo"
+      draft: "borrador"
     footer:
       email_label: "Correo (preferentemente)"
       phone_label: "Teléfono"

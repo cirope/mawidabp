@@ -161,8 +161,10 @@ class NotifierMailer < ActionMailer::Base
     PaperTrail.whodunnit    = options.delete :user_id
 
     prefix = "[#{conclusion_review.review.organization.prefix}] "
+    type = conclusion_review.kind_of?(ConclusionDraftReview) ? 'draft' : 'final'
     title = I18n.t(
       'notifier.conclusion_review_notification.title',
+      type: I18n.t("notifier.conclusion_review_notification.#{type}"),
       review: conclusion_review.review.long_identification
     )
     elements = [
