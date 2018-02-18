@@ -66,7 +66,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     login
     get :index, :params => {
       :search => {
-        :query => "> #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
+        :query => "> #{I18n.l(1.month.ago.to_date, :format => :minimal)}",
         :columns => ['issue_date']
       }
     }
