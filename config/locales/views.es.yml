@@ -213,6 +213,11 @@ es:
     duplication_or_overload_form:
       allow_duplication: '¿Permitir duplicados?'
       allow_overload: '¿Permitir superposición?'
+    cost:
+      human_resources_abbr: 'RRHH'
+      human_resources: 'Recursos humanos'
+      material_resources_abbr: 'RRMM'
+      material_resources: 'Recursos materiales'
     item_status:
       note: 'Los estados deben leerse: C = Concluido; E = En ejecución dentro de lo planeado; E (FP) = En ejecución fuera de lo planeado; R = Retrasado'
       concluded:
