@@ -8,6 +8,7 @@ module ControlObjectiveItems::Approval
   def must_be_approved?
     @approval_errors = [
       not_finished_error,
+      audit_date_error,
       score_error,
       blank_attributes_errors,
       blank_control_attributes_errors,
@@ -21,6 +22,14 @@ module ControlObjectiveItems::Approval
 
     def not_finished_error
       I18n.t 'control_objective_item.errors.not_finished' unless finished?
+    end
+
+    def audit_date_error
+      cdr = review.conclusion_draft_review
+
+      if cdr && audit_date > cdr.issue_date
+        I18n.t 'control_objective_item.errors.audit_date_ahead_of_issue_date'
+      end
     end
 
     def score_error

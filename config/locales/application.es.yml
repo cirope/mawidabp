@@ -441,6 +441,7 @@ es:
     not_applicable: "No aplica"
     errors:
       not_finished: "no está terminado"
+      audit_date_ahead_of_issue_date: "la fecha de auditoría es mayor a la fecha de emisión del informe"
       without_score: "sin calificar"
       without_relevance: "sin campo clave"
       without_audit_date: "sin fecha de auditoría"
@@ -754,8 +755,10 @@ es:
     changes_notification:
       title: "Notificación de cambios"
     conclusion_review_notification:
-      title: "Informe de auditoría %{review}"
+      title: "Informe de auditoría %{type} %{review}"
       body_title: "Se adjuntan los siguientes documentos: %{elements}"
+      final: "definitivo"
+      draft: "borrador"
     footer:
       email_label: "Correo (preferentemente)"
       phone_label: "Teléfono"

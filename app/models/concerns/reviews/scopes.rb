@@ -105,7 +105,9 @@ module Reviews::Scopes
 
       without_final_review = list_without_final_review.where created_at: start..finish
       with_final_review    = list_with_final_review.where(
-        ConclusionReview.table_name => { issue_date: start..finish }
+        ConclusionReview.table_name => {
+          issue_date: (start.to_date)..(finish.to_date)
+        }
       )
 
       without_final_review.or with_final_review
