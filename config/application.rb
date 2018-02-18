@@ -22,5 +22,8 @@ module MawidaBP
     # and follow the adapter's specific installation
     # and deployment instructions.
     config.active_job.queue_adapter = :sidekiq
+
+    # Disable IP spoofing check
+    config.action_dispatch.ip_spoofing_check = false
   end
 end
