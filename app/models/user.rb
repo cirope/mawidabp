@@ -50,6 +50,6 @@ class User < ApplicationRecord
   end
 
   def to_param
-    user_changed? ? user_was : user
+    "#{id}-#{user}".parameterize
   end
 end
