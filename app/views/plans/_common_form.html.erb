@@ -31,7 +31,10 @@
         </div>
 
         <div class="panel-body">
-          <strong><%= plan_cost %></strong>
+          <abbr title="<%= t 'plans.cost.human_resources' %>"><%= t 'plans.cost.human_resources_abbr' %></abbr>:
+          <strong><%= plan_cost %></strong>,
+          <abbr title="<%= t 'plans.cost.material_resources' %>"><%= t 'plans.cost.material_resources_abbr' %></abbr>:
+          <strong><%= plan_material_cost %></strong>
         </div>
       </div>
     </div>
