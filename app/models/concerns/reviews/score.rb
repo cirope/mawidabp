@@ -109,11 +109,11 @@ module Reviews::Score
 
       case weakness.risk
       when risks[:high]
-        6.0
+        weakness_weights[:normal_high]
       when risks[:medium]
-        2.0
+        weakness_weights[:normal_medium]
       when risks[:low]
-        1.0
+        weakness_weights[:normal_low]
       end
     end
 
@@ -122,15 +122,28 @@ module Reviews::Score
 
       case weakness.risk
       when risks[:high]
-        10.0
+        weakness_weights[:repeated_high]
       when risks[:medium]
-        3.0
+        weakness_weights[:repeated_medium]
       when risks[:low]
-        1.5
+        weakness_weights[:repeated_low]
       end
     end
 
     def calculate_score
       score_array
+    end
+
+    def weakness_weights
+      scores = JSON.parse ENV['WEAKNESS_WEIGHTS'] || '{}'
+
+      {
+        normal_high:     6.0,
+        normal_medium:   2.0,
+        normal_low:      1.0,
+        repeated_high:   10.0,
+        repeated_medium: 3.0,
+        repeated_low:    1.5
+      }.merge scores.symbolize_keys
     end
 end

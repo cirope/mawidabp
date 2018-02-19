@@ -8,9 +8,7 @@
       </div>
 
       <div class="panel-body">
-        <p>
-          <strong><%= @plan.period.inspect %></strong>
-        </p>
+        <strong><%= @plan.period.inspect %></strong>
       </div>
     </div>
   </div>
@@ -23,9 +21,10 @@
       </div>
 
       <div class="panel-body">
-        <p>
-          <strong><%= plan_cost %></strong>
-        </p>
+        <abbr title="<%= t 'plans.cost.human_resources' %>"><%= t 'plans.cost.human_resources_abbr' %></abbr>:
+        <strong><%= plan_cost %></strong>,
+        <abbr title="<%= t 'plans.cost.material_resources' %>"><%= t 'plans.cost.material_resources_abbr' %></abbr>:
+        <strong><%= plan_material_cost %></strong>
       </div>
     </div>
   </div>

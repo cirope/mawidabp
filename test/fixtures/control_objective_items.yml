@@ -5,7 +5,7 @@ management_dependency_item:
   design_score: <%= ControlObjectiveItem.qualifications_values.last %>
   compliance_score: <%= ControlObjectiveItem.qualifications_values.last %>
   sustantive_score: <%= ControlObjectiveItem.qualifications_values.last %>
-  audit_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  audit_date: <%= 5.days.ago.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false
@@ -20,7 +20,7 @@ impact_analysis_item:
   design_score: <%= ControlObjectiveItem.qualifications_values.last %>
   compliance_score: <%= ControlObjectiveItem.qualifications_values.last %>
   sustantive_score: <%= ControlObjectiveItem.qualifications_values.last %>
-  audit_date: <%= 7.days.from_now.to_date.to_s(:db) %>
+  audit_date: <%= 7.days.ago.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false
@@ -135,7 +135,7 @@ management_dependency_item_approved_and_editable:
   design_score: <%= ControlObjectiveItem.qualifications_values.last %>
   compliance_score: <%= ControlObjectiveItem.qualifications_values.last %>
   sustantive_score: <%= ControlObjectiveItem.qualifications_values.last %>
-  audit_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  audit_date: <%= 3.days.ago.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false
