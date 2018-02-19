@@ -1,0 +1,17 @@
+<small class="pull-right" data-status-controls>
+  <% if status_session.any? %>
+    <%= link_to users_status_index_path, title: t('.list') do %>
+      <span class="glyphicon glyphicon-list"></span>
+    <% end %> |
+  <% end %>
+
+  <% if status_session.include?(@user.id) %>
+    <%= link_to users_status_path(id: @user), data: { remote: true, method: :delete }, title: t('.remove') do %>
+      <span class="glyphicon glyphicon-minus-sign"></span>
+    <% end %>
+  <% else %>
+    <%= link_to users_status_index_path(id: @user), data: { remote: true, method: :post }, title: t('.add') do %>
+      <span class="glyphicon glyphicon-plus-sign"></span>
+    <% end %>
+  <% end %>
+</small>
