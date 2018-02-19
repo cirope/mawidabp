@@ -464,6 +464,10 @@ es:
         submit: 'Liberar responsabilidades'
 
     status:
+      status_controls:
+        add: 'Agregar usuario a lista de estado de seguimiento'
+        remove: 'Eliminar usuario de lista de estado de seguimiento'
+        list: 'Ver lista de observaciones pendientes de los usuarios seleccionados'
       show:
         title: 'Estado'
         table: 'Ver tabla'

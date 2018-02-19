@@ -377,7 +377,7 @@ Rails.application.routes.draw do
     resources :registration_roles, only: [:index]
     resources :releases, only: [:edit, :update]
     resources :roles, only: [:index]
-    resources :status, only: [:show]
+    resources :status, only: [:index, :show, :create, :destroy]
     resources :imports, only: [:new, :create]
   end
 
