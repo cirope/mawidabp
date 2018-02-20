@@ -112,7 +112,11 @@ module ConclusionReviews::PDF
       if review_has_findings
         pdf.add_subtitle title, PDF_FONT_SIZE, PDF_FONT_SIZE * 0.25
 
-        put_control_objective_findings_on pdf, grouped_objectives, type, use_finals
+        if ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY == 'risk'
+          put_findings_by_risk_on pdf, type, use_finals
+        else
+          put_control_objective_findings_on pdf, grouped_objectives, type, use_finals
+        end
       end
     end
 
@@ -230,6 +234,8 @@ module ConclusionReviews::PDF
     end
 
     def put_control_objective_table_on pdf, control_objective_item, process_control
+      return if is_last_displayed_control_objective? control_objective_item
+
       data = control_objective_column_data_for control_objective_item,
                                                process_control
 
@@ -247,6 +253,33 @@ module ConclusionReviews::PDF
             ]
           )
         end
+      end
+    end
+
+    def is_last_displayed_control_objective? control_objective_item
+      if @__last_displayed_control_objective_id == control_objective_item.id
+        true
+      else
+        @__last_displayed_control_objective_id = control_objective_item.id
+
+        false
+      end
+    end
+
+    def put_findings_by_risk_on pdf, type, use_finals
+      findings = if use_finals
+                   review.send :"final_#{type}"
+                 else
+                   review.send type
+                 end
+
+      findings.not_revoked.sort_for_review.each do |finding|
+        coi = finding.control_objective_item
+
+        put_control_objective_table_on pdf, coi, coi.process_control
+
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text coi.finding_pdf_data(finding), align: :justify, inline_format: true
       end
     end
 
