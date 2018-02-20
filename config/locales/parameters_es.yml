@@ -52,8 +52,8 @@ es:
     improve: 'Necesita mejorar'
     unsatisfactory: 'No satisfactorio'
     # When score by weaknesses is used
-    adequate: 'Adecuado'
-    require_some_improvements: 'Requiere ciertas mejoras'
+    adequate: 'Muy bueno'
+    require_some_improvements: 'Bueno'
     require_improvements: 'Requiere mejoras'
     require_lots_of_improvements: 'Requiere mejoras significativas'
     inadequate: 'Inadecuado'
