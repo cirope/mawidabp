@@ -9,6 +9,7 @@ module ConclusionReviews::PDF
     put_watermark_on               pdf
     put_header_on                  pdf
     put_conclusion_on              pdf, options
+    put_weaknesses_brief_on        pdf, organization
     put_findings_on                pdf, :weaknesses, options
     put_findings_on                pdf, :oportunities, options
     put_finding_assignments_on     pdf
@@ -97,6 +98,20 @@ module ConclusionReviews::PDF
       if conclusion.present?
         pdf.move_down PDF_FONT_SIZE
         pdf.text conclusion, align: :justify, inline_format: true
+      end
+    end
+
+    def put_weaknesses_brief_on pdf, organization
+      if show_weaknesses_brief? organization
+        title      = I18n.t 'conclusion_review.weaknesses_brief'
+        use_finals = kind_of? ConclusionFinalReview
+
+        pdf.add_subtitle title, PDF_FONT_SIZE, PDF_FONT_SIZE * 0.25
+        pdf.move_down PDF_FONT_SIZE
+
+        review.put_weaknesses_brief_table pdf, use_finals
+
+        pdf.move_down PDF_FONT_SIZE
       end
     end
 
@@ -348,5 +363,9 @@ module ConclusionReviews::PDF
       review.grouped_control_objective_items(
         hide_excluded_from_score: hide_excluded
       )
+    end
+
+    def show_weaknesses_brief? organization
+      ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization&.prefix
     end
 end
