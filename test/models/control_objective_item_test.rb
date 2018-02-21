@@ -427,7 +427,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'to pdf' do
-    assert !File.exist?(@control_objective_item.absolute_pdf_path)
+    FileUtils.rm_f @control_objective_item.absolute_pdf_path
 
     assert_nothing_raised do
       @control_objective_item.to_pdf(organizations(:cirope))
