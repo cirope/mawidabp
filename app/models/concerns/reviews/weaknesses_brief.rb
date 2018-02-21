@@ -30,13 +30,13 @@ module Reviews::WeaknessesBrief
 
       [
         [
-          I18n.t('review.repeated_weaknesses'),
+          I18n.t('review.new_weaknesses'),
           self.class.risks.to_a.reverse.map do |risk, value|
             findings.not_revoked.where(risk: value, repeated_of_id: nil).count
           end
         ].flatten,
         [
-          I18n.t('review.new_weaknesses'),
+          I18n.t('review.repeated_weaknesses'),
           self.class.risks.to_a.reverse.map do |risk, value|
             findings.not_revoked.where(risk: value).where.not(repeated_of_id: nil).count
           end
