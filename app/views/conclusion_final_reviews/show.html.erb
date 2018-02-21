@@ -97,6 +97,8 @@ end %>
   <%= link_to_index conclusion_final_reviews_path %> |
   <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
     <%= render 'alternative_downloads' %>
+  <% elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) %>
+    <%= render 'limited_downloads' %>
   <% else %>
     <%= render 'downloads' %>
   <% end %>
