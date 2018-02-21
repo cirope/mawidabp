@@ -243,7 +243,7 @@ module ConclusionReviews::PDF
       score_text   = I18n.t "score_types.#{review_score}"
 
       pdf.move_down PDF_FONT_SIZE
-      pdf.text "<b>#{I18n.t('review.score')}</b>: <i>#{score_text}</i>",
+      pdf.text "<b>#{I18n.t('review.score')}</b>: <b>#{score_text.upcase}</b>",
         align: :justify, inline_format: true
       pdf.move_down PDF_FONT_SIZE
     end
