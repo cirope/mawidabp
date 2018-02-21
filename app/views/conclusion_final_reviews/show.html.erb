@@ -52,7 +52,11 @@
 
 <br />
 <h4><%= t('conclusion_review.conclusion') %></h4>
-<%= conclusion_review_score_details_table @conclusion_final_review.review %>
+<% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) %>
+  <%= conclusion_review_score_text @conclusion_final_review.review %>
+<% else %>
+  <%= conclusion_review_score_details_table @conclusion_final_review.review %>
+<% end %>
 
 <p><small><%= t('review.review_qualification_explanation') %></small></p>
 
