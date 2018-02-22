@@ -62,7 +62,7 @@ module Reviews::Score
     weaknesses = has_final_review? ? final_weaknesses : self.weaknesses
 
     scores = weaknesses.map { |w| score_for w }
-    total  = scores.sum
+    total  = scores.compact.sum
 
     self.score = total <= 50 ? (100 - total * 2).round : 0
   end
