@@ -118,7 +118,7 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf/1
   def export_to_pdf
-    options = params[:export_options]&.to_unsafe_h
+    options = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
 
     if SHOW_CONCLUSION_ALTERNATIVE_PDF
       @conclusion_final_review.alternative_pdf(current_organization, options)
@@ -191,7 +191,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     users = []
     users_with_poll = []
-    export_options = params[:export_options] || {}
+    export_options = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
 
     if params[:conclusion_review]
       include_score_sheet = params[:conclusion_review][:include_score_sheet] == '1'

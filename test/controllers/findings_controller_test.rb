@@ -66,6 +66,20 @@ class FindingsControllerTest < ActionController::TestCase
     assert assigns(:findings).all? { |f| f.users.include?(user) }
   end
 
+  test 'list findings for users' do
+    user = users :first_time
+
+    get :index, params: {
+      completed: 'incomplete',
+      user_ids:  [user.id]
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_equal 2, assigns(:findings).count
+    assert assigns(:findings).all? { |f| f.users.include?(user) }
+  end
+
   test 'list findings for responsible auditor' do
     user = users :first_time
 
