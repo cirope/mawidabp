@@ -10,6 +10,14 @@ module ConclusionFinalReviewsHelper
       input_html: { autofocus: true }
   end
 
+  def conclusion_review_score_text(review)
+    review_score = review.score_array.first
+
+    content_tag(:strong) do
+      "#{t 'review.score'}: #{t("score_types.#{review_score}").upcase}"
+    end
+  end
+
   def conclusion_review_score_details_table(review)
     scores = review.class.scores.to_a
     review_score = review.score_array.first

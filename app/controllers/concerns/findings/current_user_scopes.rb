@@ -13,7 +13,8 @@ module Findings::CurrentUserScopes
   private
 
     def set_selected_user
-      @selected_user = User.find params[:user_id] if params[:user_id]
+      @selected_user     = User.find params[:user_id] if params[:user_id]
+      @selected_user_ids = params[:user_ids] if params[:user_ids].present?
     end
 
     def set_descendants
@@ -43,18 +44,23 @@ module Findings::CurrentUserScopes
       corporate_not_audited = current_organization.corporate? &&
                               !@auth_user.can_act_as_audited?
 
-      corporate_not_audited || @auth_user.committee? || @selected_user
+      corporate_not_audited   ||
+        @auth_user.committee? ||
+        @selected_user        ||
+        @selected_user_ids
     end
 
     def by_selected_user_conditions
       conditions = {}
 
       if @selected_user
-        conditions[User.table_name] = { id: params[:user_id] }
+        conditions[User.table_name] = { id: @selected_user.id }
 
         if params[:as_responsible]
           conditions[FindingUserAssignment.table_name] = { responsible_auditor: true }
         end
+      elsif @selected_user_ids
+        conditions[User.table_name] = { id: @selected_user_ids }
       end
 
       conditions

@@ -91,6 +91,7 @@ Rails.application.routes.draw do
     'process_control_stats',
     'qa_indicators',
     'weaknesses_by_risk_report',
+    'weaknesses_by_month',
     'fixed_weaknesses_report',
     'weaknesses_graphs',
     'auto_complete_for_business_unit',
@@ -116,6 +117,7 @@ Rails.application.routes.draw do
     'create_process_control_stats',
     'create_qa_indicators',
     'create_weaknesses_by_risk_report',
+    'create_weaknesses_by_month',
     'create_fixed_weaknesses_report'
   ].each do |action|
     post "conclusion_reports/#{action}",
@@ -356,7 +358,7 @@ Rails.application.routes.draw do
     resources :registration_roles, only: [:index]
     resources :releases, only: [:edit, :update]
     resources :roles, only: [:index]
-    resources :status, only: [:show]
+    resources :status, only: [:index, :show, :create, :destroy]
     resources :imports, only: [:new, :create]
   end
 
