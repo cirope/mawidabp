@@ -270,16 +270,14 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_risk_exposure_on pdf
-      risk_exposure_title =
-        I18n.t 'conclusion_review.executive_summary.risk_exposure'
-      risk_exposure       = '<b>%s</b>' % [
-        ::Review.human_attribute_name('risk_exposure'),
-        review.risk_exposure
-      ].join(': ')
+      risk_exposure_text = I18n.t(
+        'conclusion_review.executive_summary.risk_exposure',
+        risk: review.risk_exposure
+      )
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.table [["#{risk_exposure_title}: #{risk_exposure}"]], {
+      pdf.table [[risk_exposure_text]], {
         width:      pdf.percent_width(100),
         cell_style: {
           align:         :justify,
@@ -312,7 +310,6 @@ module ConclusionReviews::AlternativePDF
       widths        = alternative_score_details_column_widths pdf
       table_options = pdf.default_table_options widths
       data          = [
-        alternative_score_details_column_headers,
         alternative_score_details_column_data
       ]
 
@@ -612,12 +609,6 @@ module ConclusionReviews::AlternativePDF
       [70, 4, 26].map { |percent| pdf.percent_width percent }
     end
 
-    def alternative_score_details_column_headers
-      header = I18n.t 'conclusion_review.executive_summary.current_score'
-
-      [{ content: header, colspan: 2 }]
-    end
-
     def alternative_score_details_column_widths pdf
       [70, 10].map do |width|
         pdf.percent_width width
@@ -625,14 +616,21 @@ module ConclusionReviews::AlternativePDF
     end
 
     def alternative_score_details_column_data
-      image = CONCLUSION_IMAGES[conclusion]
+      image      = CONCLUSION_IMAGES[conclusion]
+      score_text = [
+        I18n.t('conclusion_review.executive_summary.score'), conclusion
+      ].join(': ')
 
-      score_text  = [
-        "<b>#{conclusion.upcase}</b>",
-        "<b>(#{review.score_text})</b>"
-      ].join("\n")
-
-      [score_text, pdf_score_image_row(image)]
+      [
+        {
+          content: score_text.upcase,
+          valign:  :center,
+          size:    12,
+          height:  50.25,
+          borders: [:left, :top, :bottom]
+        },
+        pdf_score_image_row(image).merge(borders: [:right, :top, :bottom])
+      ]
     end
 
     def pdf_score_image_row image, fit: [23, 23]

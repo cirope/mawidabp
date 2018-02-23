@@ -249,7 +249,7 @@ es:
         now: 'Ahora'
         total: 'Total'
         planned: 'Planificados'
-        executed: 'Ejecutados'
+        concluded: 'Concluidos'
         on_time: 'En fecha'
         progress: 'Avance total'
         compliance: 'Cumplimiento'
