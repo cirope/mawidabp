@@ -373,10 +373,9 @@
     executive_summary:
       title: "Resumen ejecutivo"
       review_author: "Gerencia de Auditoría Interna"
-      project: "La Auditoría practicada estuvo circunscripta a la revisión del proceso/subproceso/tema"
-      risk_exposure: "El proceso/subproceso evaluado en esta revisión es considerado por la Auditoria Interna en función a la Matriz de Riesgo"
+      project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
+      risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
       score: "Calificación"
-      current_score: "CALIFICACIÓN INFORME ACTUAL"
       evolution: "EVOLUCIÓN (*)"
       main_weaknesses: "Principales debilidades"
       other_weaknesses: "Otras observaciones"
@@ -1207,7 +1206,7 @@
         recipients: "Destinatarios del informe"
         sectors: "Sectores/departamentos involucrados"
         evolution: "Evolución de la calificación"
-        evolution_justification: "Justificación evolución"
+        evolution_justification: "Justificación de la evolución"
         observations: "Otras consideraciones"
       control:
         order: "Orden"
