@@ -31,21 +31,24 @@ module Reviews::WeaknessesBrief
       [
         [
           I18n.t('review.new_weaknesses'),
-          self.class.risks.to_a.reverse.map do |risk, value|
-            findings.not_revoked.where(risk: value, repeated_of_id: nil).count
-          end
+          new_weaknesses_counts(findings),
+          "<b>#{new_weaknesses_counts(findings).sum}</b>"
         ].flatten,
         [
           I18n.t('review.repeated_weaknesses'),
-          self.class.risks.to_a.reverse.map do |risk, value|
-            findings.not_revoked.where(risk: value).where.not(repeated_of_id: nil).count
-          end
+          repeated_weaknesses_counts(findings),
+          "<b>#{repeated_weaknesses_counts(findings).sum}</b>"
+        ].flatten,
+        [
+          "<b>#{I18n.t('label.total')}</b>",
+          total_weaknesses_counts(findings).map { |t| "<b>#{t}</b>" },
+          "<b>#{total_weaknesses_counts(findings).sum}</b>"
         ].flatten
       ]
     end
 
     def weaknesses_brief_column_widths pdf
-      columns_count = self.class.risks.size.next
+      columns_count = self.class.risks.size + 2
 
       columns_count.times.map do
         pdf.percent_width 100.0 / columns_count
@@ -57,7 +60,29 @@ module Reviews::WeaknessesBrief
         '',
         self.class.risks.to_a.reverse.map do |risk, value|
           "<b>#{I18n.t "risk_types.#{risk}"}</b>"
-        end
+        end,
+        "<b>#{I18n.t('label.total')}</b>"
       ].flatten
+    end
+
+    def new_weaknesses_counts findings
+      self.class.risks.to_a.reverse.map do |risk, value|
+        findings.not_revoked.where(risk: value, repeated_of_id: nil).count
+      end
+    end
+
+    def repeated_weaknesses_counts findings
+      self.class.risks.to_a.reverse.map do |risk, value|
+        findings.not_revoked.where(risk: value).where.not(repeated_of_id: nil).count
+      end
+    end
+
+    def total_weaknesses_counts findings
+      new_counts      = new_weaknesses_counts findings
+      repeated_counts = repeated_weaknesses_counts findings
+
+      self.class.risks.to_a.each_with_index.map do |risk, index|
+        new_counts[index] + repeated_counts[index]
+      end
     end
 end

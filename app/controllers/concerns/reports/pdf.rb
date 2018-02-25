@@ -27,7 +27,7 @@ module Reports::Pdf
   def add_month_title(pdf, month, align = :left)
     pdf.move_down PDF_FONT_SIZE
 
-    pdf.add_title I18n.l(month, format: '%B %Y'), (PDF_FONT_SIZE * 1.25).round,
+    pdf.add_title I18n.l(month, format: '%B %Y'), (PDF_FONT_SIZE * 1.5).round,
       align
   end
 
