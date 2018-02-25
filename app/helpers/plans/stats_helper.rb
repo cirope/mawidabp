@@ -22,19 +22,19 @@ module Plans::StatsHelper
     list
   end
 
-  def plan_stat_executed_count plan_items
-    planned  = plan_stat_planned plan_items
-    executed = planned.select do |plan_item|
-      plan_item.executed? date_options
+  def plan_stat_concluded_count plan_items
+    planned   = plan_stat_planned plan_items
+    concluded = planned.select do |plan_item|
+      plan_item.concluded? date_options
     end
 
-    executed.size
+    concluded.size
   end
 
   def plan_stat_progress plan_items
-    total    = plan_items.size
-    executed = plan_stat_executed_count plan_items
-    progress = total > 0 ? executed.to_f / total * 100 : 0
+    total     = plan_items.size
+    concluded = plan_stat_concluded_count plan_items
+    progress  = total > 0 ? concluded.to_f / total * 100 : 0
 
     {
       label: '%.0f%%' % progress,

@@ -8,6 +8,7 @@ class ConclusionReportsController < ApplicationController
   include Reports::ControlObjectiveStatsByReview
   include Reports::ProcessControlStats
   include Reports::WeaknessesByRiskReport
+  include Reports::WeaknessesByMonth
   include Reports::FixedWeaknessesReport
   include Reports::CostAnalysis
   include Reports::CostSummary
