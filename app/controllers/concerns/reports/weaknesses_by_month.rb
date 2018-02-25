@@ -93,8 +93,18 @@ module Reports::WeaknessesByMonth
       add_month_title pdf, month
 
       if @reviews[month].present?
+        last_shown_business_unit_type_id = nil
+
         @reviews[month].each do |data|
           conclusion_review = data[:conclusion_review]
+          review = conclusion_review.review
+
+          unless last_shown_business_unit_type_id == review.business_unit_type.id
+            pdf.move_down PDF_FONT_SIZE * 1.25
+            pdf.add_title review.business_unit_type.name, (PDF_FONT_SIZE * 1.25).round
+
+            last_shown_business_unit_type_id = review.business_unit_type.id
+          end
 
           put_weaknesses_by_month_conclusion_review_on pdf, conclusion_review
 
@@ -153,19 +163,21 @@ module Reports::WeaknessesByMonth
     end
 
     def put_weaknesses_by_month_conclusion_review_on pdf, conclusion_review
+      review = conclusion_review.review
+
       pdf.move_down PDF_FONT_SIZE
 
       pdf.add_description_item Review.human_attribute_name('identification'),
-        conclusion_review.review.identification, 0, false, PDF_FONT_SIZE
+        review.identification, 0, false, PDF_FONT_SIZE
 
       pdf.add_description_item ConclusionFinalReview.human_attribute_name('issue_date'),
         I18n.l(conclusion_review.issue_date), 0, false, PDF_FONT_SIZE
 
       pdf.add_description_item BusinessUnit.model_name.human,
-        conclusion_review.review.business_unit.name, 0, false, PDF_FONT_SIZE
+        review.business_unit.name, 0, false, PDF_FONT_SIZE
 
       pdf.add_description_item Review.human_attribute_name('plan_item'),
-        conclusion_review.review.plan_item.project, 0, false, PDF_FONT_SIZE
+        review.plan_item.project, 0, false, PDF_FONT_SIZE
 
       pdf.add_description_item ConclusionFinalReview.human_attribute_name('conclusion'),
         "     #{conclusion_review.conclusion}", 0, false, PDF_FONT_SIZE
@@ -178,7 +190,7 @@ module Reports::WeaknessesByMonth
       put_weaknesses_by_month_evolution_image_on pdf, conclusion_review
 
       pdf.add_description_item Review.human_attribute_name('risk_exposure'),
-        conclusion_review.review.risk_exposure, 0, false, PDF_FONT_SIZE
+        review.risk_exposure, 0, false, PDF_FONT_SIZE
     end
 
     def put_weaknesses_by_month_conclusion_image_on pdf, conclusion_review
@@ -203,7 +215,7 @@ module Reports::WeaknessesByMonth
 
     def put_weaknesses_by_month_main_weaknesses_on pdf, weaknesses
       pdf.move_down PDF_FONT_SIZE
-      pdf.text I18n.t('follow_up_committee_report.weaknesses_by_month.main_weaknesses'),
+      pdf.text I18n.t("#{@controller}_committee_report.weaknesses_by_month.main_weaknesses"),
         style: :bold, size: PDF_FONT_SIZE
 
       main_weaknesses = weaknesses.not_revoked.not_assumed_risk.with_high_risk.sort_by_code
@@ -249,7 +261,7 @@ module Reports::WeaknessesByMonth
 
     def put_weaknesses_by_month_other_weaknesses_on pdf, weaknesses
       pdf.move_down PDF_FONT_SIZE
-      pdf.text I18n.t('follow_up_committee_report.weaknesses_by_month.other_weaknesses'),
+      pdf.text I18n.t("#{@controller}_committee_report.weaknesses_by_month.other_weaknesses"),
         style: :bold, size: PDF_FONT_SIZE
 
       other_weaknesses = weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_by_code
@@ -274,9 +286,16 @@ module Reports::WeaknessesByMonth
     def put_weaknesses_by_month_other_weakness_on pdf, w
       text = [
         w.title,
-        w.risk_text,
-        w.repeated_of_id ? l(w.origination_date) : t('conclusion_review.new_origination_date')
-      ].join(' - ')
+        [Weakness.human_attribute_name('risk'), w.risk_text].join(': '),
+        [
+          Weakness.human_attribute_name('origination_date'),
+          w.repeated_of_id ? l(w.origination_date) : t('conclusion_review.new_origination_date')
+        ].join(': '),
+        ([
+          t("#{@controller}_committee_report.weaknesses_by_month.year"),
+          l(w.origination_date, format: '%Y')
+        ].join(': ') if w.repeated_of_id)
+      ].compact.join(' - ')
 
       pdf.text "• #{text}"
     end
