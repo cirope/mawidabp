@@ -197,6 +197,10 @@ class Workflow < ApplicationRecord
     workflow_items.to_a.sum &:human_units
   end
 
+  def material_units
+    workflow_items.to_a.sum &:material_units
+  end
+
   def units
     workflow_items.map(&:units).compact.sum
   end

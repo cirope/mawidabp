@@ -15,6 +15,10 @@ module Plans::PlanItems
   private
 
     def plan_items_on date
-      plan_items.where "#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'start'} <= ?", date
+      if date == Time.zone.today
+        plan_items
+      else
+        plan_items.where "#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'start'} <= ?", date
+      end
     end
 end

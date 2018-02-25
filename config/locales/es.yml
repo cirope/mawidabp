@@ -239,6 +239,7 @@
       without_audits_in_the_month: "Sin auditorías en el mes"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
+      year: "Año"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -373,10 +374,9 @@
     executive_summary:
       title: "Resumen ejecutivo"
       review_author: "Gerencia de Auditoría Interna"
-      project: "La Auditoría practicada estuvo circunscripta a la revisión del proceso/subproceso/tema"
-      risk_exposure: "El proceso/subproceso evaluado en esta revisión es considerado por la Auditoria Interna en función a la Matriz de Riesgo"
+      project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
+      risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
       score: "Calificación"
-      current_score: "CALIFICACIÓN INFORME ACTUAL"
       evolution: "EVOLUCIÓN (*)"
       main_weaknesses: "Principales debilidades"
       other_weaknesses: "Otras observaciones"
@@ -691,6 +691,7 @@
       without_audits_in_the_month: "Sin auditorías en el mes"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
+      year: "Año"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -1140,6 +1141,10 @@
     column_real: "Real"
     row_cost: "Costo"
     row_time: "Tiempo"
+    human_resources_abbr: "RRHH"
+    human_resources: "Recursos humanos"
+    material_resources_abbr: "RRMM"
+    material_resources: "Recursos materiales"
     allow_overload: "¿Permitir superposición?"
     copy: "Copiar"
     readonly: "El programa de trabajo no puede ser modificado, ya se emitió el informe definitivo"
@@ -1207,7 +1212,7 @@
         recipients: "Destinatarios del informe"
         sectors: "Sectores/departamentos involucrados"
         evolution: "Evolución de la calificación"
-        evolution_justification: "Justificación evolución"
+        evolution_justification: "Justificación de la evolución"
         observations: "Otras consideraciones"
       control:
         order: "Orden"
