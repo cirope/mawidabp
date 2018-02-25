@@ -13,8 +13,18 @@
   </div>
 
   <% if @reviews[month].present? %>
+    <% last_shown_business_unit_type_id = nil %>
+
     <% @reviews[month].each do |data| %>
       <% conclusion_review = data[:conclusion_review] %>
+
+      <% unless last_shown_business_unit_type_id == conclusion_review.review.business_unit_type.id %>
+        <h3>
+          <%= conclusion_review.review.business_unit_type.name %>
+        </h3>
+
+        <% last_shown_business_unit_type_id = conclusion_review.review.business_unit_type.id %>
+      <% end %>
 
       <p>
         <strong><%= Review.human_attribute_name 'identification' %></strong>:
@@ -120,9 +130,16 @@
               <%=
                 [
                   w.title,
-                  w.risk_text,
-                  w.repeated_of_id ? l(w.origination_date) : t('conclusion_review.new_origination_date')
-                ].join(' - ')
+                  [Weakness.human_attribute_name('risk'), w.risk_text].join(': '),
+                  [
+                    Weakness.human_attribute_name('origination_date'),
+                    w.repeated_of_id ? l(w.origination_date) : t('conclusion_review.new_origination_date')
+                  ].join(': '),
+                  ([
+                    t('follow_up_committee_report.weaknesses_by_month.year'),
+                    l(w.origination_date, format: '%Y')
+                  ].join(': ') if w.repeated_of_id)
+                ].compact.join(' - ')
               %>
             </li>
           <% end %>

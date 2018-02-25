@@ -239,6 +239,7 @@
       without_audits_in_the_month: "Sin auditorías en el mes"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
+      year: "Año"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -690,6 +691,7 @@
       without_audits_in_the_month: "Sin auditorías en el mes"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
+      year: "Año"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
