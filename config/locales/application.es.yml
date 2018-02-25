@@ -5,6 +5,8 @@ es:
   label:
     'yes': "Si"
     'no': "No"
+    total: "Total"
+    by: "por"
     add: "Agregar"
     add_item: "Agregar ítem"
     all: "Todos"
