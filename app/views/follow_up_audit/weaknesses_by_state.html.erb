@@ -8,6 +8,22 @@
   <div class="page-header">
     <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
   </div>
+
+  <h3 class="text-center">
+    <%= t('follow_up_committee_report.weaknesses_by_state.period_summary',
+      :period => period.inspect) %>
+  </h3>
+  <% locals = {
+       :weaknesses_count => @weaknesses_counts[period]['total_weaknesses'],
+       :oportunities_count => @weaknesses_counts[period]['total_oportunities'],
+       :repeated_count => @weaknesses_counts[period]['total_repeated'],
+       :awaiting_resume => @awaiting_resumes[period]['total'],
+       :being_implemented_resume => @being_implemented_resumes[period]['total'],
+       :audit_type_symbol => :internal
+     }
+  %>
+  <%= render :partial => 'weaknesses_by_state_table', :locals => locals %>
+
   <% @audit_types.each do |audit_type| %>
     <% audit_type_symbol = audit_type.first %>
     <% unless audit_type.last.empty? %>
@@ -22,6 +38,7 @@
             :weaknesses_count => @weaknesses_counts[period]["#{key}_weaknesses"],
             :oportunities_count => @weaknesses_counts[period]["#{key}_oportunities"],
             :repeated_count => @weaknesses_counts[period]["#{key}_repeated"],
+            :awaiting_resume => @awaiting_resumes[period][key],
             :being_implemented_resume => @being_implemented_resumes[period][key],
             :audit_type_symbol => audit_type_symbol
           }
@@ -30,20 +47,6 @@
       <% end %>
     <% end %>
   <% end %>
-
-  <h3 class="text-center">
-    <%= t('follow_up_committee_report.weaknesses_by_state.period_summary',
-      :period => period.inspect) %>
-  </h3>
-  <% locals = {
-       :weaknesses_count => @weaknesses_counts[period]['total_weaknesses'],
-       :oportunities_count => @weaknesses_counts[period]['total_oportunities'],
-       :repeated_count => @weaknesses_counts[period]['total_repeated'],
-       :being_implemented_resume => @being_implemented_resumes[period]['total'],
-       :audit_type_symbol => :internal
-     }
-  %>
-  <%= render :partial => 'weaknesses_by_state_table', :locals => locals %>
 <% end %>
 
 <hr />

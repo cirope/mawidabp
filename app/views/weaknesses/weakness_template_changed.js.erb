@@ -1,0 +1,25 @@
+$('[id^=weakness_impact]').prop('checked', false)
+$('[id^=weakness_operational_risk]').prop('checked', false)
+$('[id^=weakness_internal_control_components]').prop('checked', false)
+
+<% if @weakness_template %>
+  $('[name$="[title]"]').val('<%= j @weakness_template.title %>')
+  $('[name$="[description]"]').val('<%= j @weakness_template.description %>')
+  $('[name$="[risk]"]').val('<%= @weakness_template.risk %>')
+
+  <% Array(@weakness_template.impact).each do |value| %>
+    $('[id^=weakness_impact][value="<%= j value %>"]').prop('checked', true)
+  <% end %>
+
+  <% Array(@weakness_template.operational_risk).each do |value| %>
+    $('[id^=weakness_operational_risk][value="<%= j value %>"]').prop('checked', true)
+  <% end %>
+
+  <% Array(@weakness_template.internal_control_components).each do |value| %>
+    $('[id^=weakness_internal_control_components][value="<%= j value %>"]').prop('checked', true)
+  <% end %>
+<% else %>
+  $('[name$="[title]"]').val('')
+  $('[name$="[description]"]').val('')
+  $('[name$="[risk]"]').val('')
+<% end %>

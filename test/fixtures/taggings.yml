@@ -17,3 +17,7 @@ high_priority_without_conclusion_review:
 for_revision_without_conclusion_review:
   tag: for_revision
   taggable: review_without_conclusion (Review)
+
+for_security_policy_3_1_control_objective:
+  tag: risk_evaluation
+  taggable: security_policy_3_1 (ControlObjective)

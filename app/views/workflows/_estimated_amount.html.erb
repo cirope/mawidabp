@@ -1,6 +1,11 @@
-<% unless plan_item.try(:resource_utilizations).blank? %>
+<% if plan_item.try(:resource_utilizations).present? %>
   <p>
-    <%= link_to '%.2f' % plan_item.units, '#estimated_cost_details', :data => { toggle: 'collapse' } %>
+    <%= link_to '#estimated_cost_details', data: { toggle: 'collapse' } do %>
+      <abbr title="<%= t 'workflow.human_resources' %>"><%= t 'workflow.human_resources_abbr' %></abbr>:
+      <%= '%.2f' % plan_item.human_units %>
+      <abbr title="<%= t 'workflow.material_resources' %>"><%= t 'workflow.material_resources_abbr' %></abbr>:
+      <%= '%.2f' % plan_item.material_units %>
+    <% end %>
   </p>
 
   <div id="estimated_cost_details" class="collapse pull-left">
@@ -13,5 +18,10 @@
     </div>
   </div>
 <% else %>
-  <p><%= '%.2f' % 0.0 %></p>
+  <p>
+    <abbr title="<%= t 'workflow.human_resources' %>"><%= t 'workflow.human_resources_abbr' %></abbr>:
+    <%= '%.2f' % 0 %>
+    <abbr title="<%= t 'workflow.material_resources' %>"><%= t 'workflow.material_resources_abbr' %></abbr>:
+    <%= '%.2f' % 0 %>
+  </p>
 <% end %>

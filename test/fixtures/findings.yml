@@ -21,7 +21,7 @@ being_implemented_weakness:
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
   compliance: no
-  operational_risk: internal fraud
+  operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
@@ -49,7 +49,7 @@ unconfirmed_for_notification_weakness:
   first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   compliance: no
-  operational_risk: internal fraud
+  operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
@@ -80,7 +80,7 @@ unanswered_for_level_<%= level %>_notification:
   first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   compliance: no
-  operational_risk: internal fraud
+  operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: <%= level - 1 %>
@@ -111,7 +111,7 @@ incomplete_weakness:
   first_notification_date: <%= Date.today.to_s(:db) %>
   final: false
   compliance: no
-  operational_risk: internal fraud
+  operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
@@ -139,7 +139,7 @@ other_unconfirmed_for_notification_weakness:
   first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   compliance: no
-  operational_risk: internal fraud
+  operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
@@ -204,7 +204,7 @@ being_implemented_weakness_on_draft:
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   compliance: no
-  operational_risk: internal fraud
+  operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
@@ -231,7 +231,7 @@ unanswered_weakness:
   follow_up_date:
   final: false
   compliance: no
-  operational_risk: internal fraud
+  operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
@@ -258,7 +258,7 @@ unconfirmed_weakness:
   follow_up_date:
   final: false
   compliance: no
-  operational_risk: internal fraud
+  operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
@@ -335,7 +335,7 @@ being_implemented_weakness_on_final:
   audit_comments: Audit comment 1w
   state: <%= Finding::STATUS[:being_implemented] %>
   progress: 0
-  origination_date:
+  origination_date: <%= 2.days.ago.to_date.to_s(:db) %>
   solution_date:
   audit_recommendations: Proposed action 1w
   effect: Effect 1w
@@ -344,7 +344,7 @@ being_implemented_weakness_on_final:
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   compliance: no
-  operational_risk: internal fraud
+  operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
@@ -371,7 +371,7 @@ being_implemented_weakness_on_approved_draft:
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   compliance: no
-  operational_risk: internal fraud
+  operational_risk: ['internal fraud']
   impact: ['econimic', 'regulatory']
   internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0

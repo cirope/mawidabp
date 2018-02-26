@@ -45,7 +45,7 @@ module Users::Password
 
   def reset_password organization, notify: true
     self.change_password_hash = SecureRandom.urlsafe_base64
-    self.hash_changed = Time.now
+    self.hash_changed = Time.zone.now
 
     save!
 

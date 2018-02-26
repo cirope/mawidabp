@@ -5,6 +5,7 @@ class Review < ApplicationRecord
   include ParameterSelector
   include Reviews::AutomaticIdentification
   include Reviews::Approval
+  include Reviews::BestPracticeComments
   include Reviews::Clone
   include Reviews::ConclusionReview
   include Reviews::ControlObjectiveItems
@@ -13,6 +14,7 @@ class Review < ApplicationRecord
   include Reviews::FindingAssignments
   include Reviews::FindingCode
   include Reviews::Findings
+  include Reviews::FinishedWorkPapers
   include Reviews::IssueDate
   include Reviews::Overrides
   include Reviews::PlanItem
@@ -28,6 +30,7 @@ class Review < ApplicationRecord
   include Reviews::UpdateCallbacks
   include Reviews::Users
   include Reviews::Validations
+  include Reviews::WeaknessesBrief
   include Reviews::WorkPapers
   include Reviews::WorkPapersZip
   include Taggable

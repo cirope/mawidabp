@@ -1,4 +1,5 @@
 class ConclusionFinalReview < ConclusionReview
+  include ConclusionFinalReviews::Destroy
   include ConclusionFinalReviews::Scopes
   include ConclusionFinalReviews::Search
   include ConclusionFinalReviews::Sort
@@ -83,7 +84,7 @@ class ConclusionFinalReview < ConclusionReview
   end
 
   def is_frozen?
-    self.close_date && Date.today > self.close_date
+    close_date && Time.zone.today > close_date
   end
 
   private

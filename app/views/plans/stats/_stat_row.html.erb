@@ -1,15 +1,15 @@
-<% plan_stat_compliance(plan_items).tap do |compliance| %>
-  <tr <%== "class=\"#{compliance[:class]}\"" unless compliance[:class] == 'success' %>>
+<% plan_stat_progress(plan_items).tap do |progress| %>
+  <tr <%== "class=\"#{progress[:class]}\"" unless progress[:class] == 'success' %>>
     <td><%= business_unit_type&.name %></td>
     <td><%= plan_items.size %></td>
     <td><strong><%= link_to_planned_items business_unit_type, plan_items %></strong></td>
-    <td><%= plan_stat_executed_count plan_items %></td>
+    <td><%= plan_stat_concluded_count plan_items %></td>
     <td><strong><%= plan_stat_on_time(plan_items).size %></strong></td>
-    <td><%= plan_stat_progress plan_items %></td>
+    <td><%= plan_stat_compliance plan_items %></td>
     <td>
       <div class="progress">
-        <div class="progress-bar progress-bar-<%= compliance[:class] %>" style="width: <%= compliance[:value] %>%">
-          <%= compliance[:label] %>
+        <div class="progress-bar progress-bar-<%= progress[:class] %>" style="width: <%= progress[:value] %>%">
+          <%= progress[:label] %>
         </div>
       </div>
     </td>

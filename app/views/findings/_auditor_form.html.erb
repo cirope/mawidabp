@@ -1,4 +1,4 @@
-<% users_readonly = @finding.implemented_audited? || @finding.assumed_risk? || @finding.repeated? %>
+<% users_readonly = @finding.implemented_audited? || @finding.assumed_risk? || @finding.repeated? || @finding.expired? %>
 <% show_history_changes = @finding.status_change_history.size > 1 %>
 <%= simple_form_for @finding, :as => :finding, :url => finding_path(params[:completed], @finding), :html =>
   {:method => :patch, :id => "edit_finding_#{@finding.id}"} do |f| %>
@@ -37,7 +37,7 @@
           }, readonly: true %>
           <%= f.input :control_objective_item_id, as: :hidden %>
         <% end %>
-        <%= f.input :description, label: finding_description_label, input_html: { readonly: true, rows: 5 } %>
+        <%= f.input :description, label: finding_description_label, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 7 : 5 } %>
 
         <% if SHOW_FINDING_CURRENT_SITUATION %>
           <%= f.input :current_situation, input_html: { rows: 3 } %>
@@ -45,7 +45,9 @@
         <% end %>
 
         <% if @finding.kind_of?(Weakness) %>
-          <%= f.input :effect, input_html: { readonly: true, rows: 4 } %>
+          <% unless HIDE_WEAKNESS_EFFECT %>
+            <%= f.input :effect, input_html: { readonly: true, rows: 4 } %>
+          <% end %>
           <%= f.input :audit_recommendations, input_html: { readonly: true, rows: 2 } %>
         <% end %>
       </div>
@@ -59,6 +61,12 @@
         <%= f.label :state, raw(Finding.human_attribute_name(:state) + ' ' +
           (show_history_changes ? finding_show_status_change_history(:finding_status_change_history) : '')) %>
         <%= finding_status_field(f) %>
+
+        <% if show_skip_work_paper_for @finding %>
+          <%= f.input :skip_work_paper, as: :boolean, label: false,
+            inline_label: Finding.human_attribute_name('skip_work_paper') %>
+        <% end %>
+
         <% if show_history_changes %>
           <%= render 'history_changes', finding: @finding %>
         <% end %>
@@ -76,7 +84,7 @@
         <% end %>
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
-        <%= f.input :answer, input_html: { rows: SHOW_FINDING_CURRENT_SITUATION ? 9 : 5 }, disabled: finding_answer_disabled? %>
+        <%= f.input :answer, input_html: { rows: SHOW_FINDING_CURRENT_SITUATION ? 9 : 5 } %>
         <%= f.input :follow_up_date, as: :date_picker, label:
           @finding.class.human_attribute_name(:follow_up_date) %>
         <%= show_weakness_previous_follow_up_dates(@finding) if @finding.follow_up_date %>
@@ -91,10 +99,16 @@
       <div class="row">
         <div class="col-md-6">
           <%= f.input :compliance, collection: weakness_compliance_options, prompt: true %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
           <%= f.input :impact, as: :check_boxes, collection: weakness_impact_options, disabled: true %>
         </div>
-        <div class="col-md-6">
-          <%= f.input :operational_risk, collection: weakness_operational_risk_options, prompt: true, disabled: true %>
+        <div class="col-md-4">
+          <%= f.input :operational_risk, as: :check_boxes, collection: weakness_operational_risk_options, disabled: true %>
+        </div>
+        <div class="col-md-4">
           <%= f.input :internal_control_components, as: :check_boxes, collection: weakness_internal_control_components_options, disabled: true %>
         </div>
       </div>
@@ -207,7 +221,7 @@
       <%= t('finding.inverse_finding_relations') %>
     </h4>
 
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <thead>
         <tr>
           <th><%= FindingRelation.human_attribute_name 'finding_id' %></th>
@@ -250,9 +264,6 @@
           <%= FindingAnswer.human_attribute_name 'file_model' %>
         </strong>
       </h5>
-    </div>
-    <div class="col-md-2">
-      <h5><strong><%= FindingAnswer.human_attribute_name 'created_at' %></strong></h5>
     </div>
   </div>
 
@@ -308,7 +319,7 @@
 
     <div id="cost_details" class="collapse">
       <div>
-        <table class="table table-condensed table-striped">
+        <table class="table table-condensed table-striped table-hover">
           <thead>
             <tr>
               <th><%= Cost.human_attribute_name 'created_at' %></th>

@@ -18,7 +18,7 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'show plan on pdf' do
-    get :show, params: { id: @plan }, format: :pdf
+    get :show, params: { id: @plan }, as: :pdf
     assert_redirected_to @plan.relative_pdf_path
   end
 
@@ -28,7 +28,7 @@ class PlansControllerTest < ActionController::TestCase
     get :show, params: {
       id: @plan,
       business_unit_type: business_unit_type
-    }, xhr: true, format: :js
+    }, xhr: true, as: :js
 
     assert_response :success
   end
@@ -67,6 +67,7 @@ class PlansControllerTest < ActionController::TestCase
               start: 71.days.from_now.to_date,
               end: 80.days.from_now.to_date,
               order_number: 1,
+              risk_exposure: 'high',
               business_unit_id: business_units(:business_unit_one).id,
               resource_utilizations_attributes: [
                 {
@@ -127,6 +128,7 @@ class PlansControllerTest < ActionController::TestCase
                   start: 55.days.ago.to_date,
                   end: 45.days.ago.to_date,
                   order_number: 1,
+                  risk_exposure: 'high',
                   business_unit_id: business_units(:business_unit_one).id,
                   resource_utilizations_attributes: {
                     '1' => {
@@ -171,6 +173,7 @@ class PlansControllerTest < ActionController::TestCase
             start: 71.days.from_now.to_date,
             end: 80.days.from_now.to_date,
             order_number: 1,
+            risk_exposure: 'high',
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
               {
@@ -185,6 +188,7 @@ class PlansControllerTest < ActionController::TestCase
             start: 79.days.from_now.to_date,
             end: 90.days.from_now.to_date,
             order_number: 2,
+            risk_exposure: 'high',
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
               {
@@ -220,6 +224,7 @@ class PlansControllerTest < ActionController::TestCase
             start: 71.days.from_now.to_date,
             end: 80.days.from_now.to_date,
             order_number: 1,
+            risk_exposure: 'high',
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
               {
@@ -234,6 +239,7 @@ class PlansControllerTest < ActionController::TestCase
             start: 81.days.from_now.to_date,
             end: 90.days.from_now.to_date,
             order_number: 2,
+            risk_exposure: 'high',
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
               {
@@ -276,18 +282,14 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for business_unit business_unit' do
-    get :auto_complete_for_business_unit, params: {
-      q: 'fifth', format: :json
-    }
+    get :auto_complete_for_business_unit, params: { q: 'fifth' }, as: :json
     assert_response :success
 
     business_units = ActiveSupport::JSON.decode(@response.body)
 
     assert_equal 0, business_units.size # Fifth is in another organization
 
-    get :auto_complete_for_business_unit, params: {
-      q: 'one', format: :json
-    }
+    get :auto_complete_for_business_unit, params: { q: 'one' }, as: :json
     assert_response :success
 
     business_units = ActiveSupport::JSON.decode(@response.body)
@@ -295,9 +297,7 @@ class PlansControllerTest < ActionController::TestCase
     assert_equal 1, business_units.size # One only
     assert business_units.all? { |u| (u['label'] + u['informal']).match /one/i }
 
-    get :auto_complete_for_business_unit, params: {
-      q: 'business', format: :json
-    }
+    get :auto_complete_for_business_unit, params: { q: 'business' }, as: :json
     assert_response :success
 
     business_units = ActiveSupport::JSON.decode(@response.body)
@@ -307,9 +307,8 @@ class PlansControllerTest < ActionController::TestCase
 
     get :auto_complete_for_business_unit, params: {
       q: 'business',
-      business_unit_type_id: business_unit_types(:cycle).id,
-      format: :json
-    }
+      business_unit_type_id: business_unit_types(:cycle).id
+    }, as: :json
     assert_response :success
 
     business_units = ActiveSupport::JSON.decode(@response.body)

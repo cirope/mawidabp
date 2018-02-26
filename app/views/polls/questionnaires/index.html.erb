@@ -7,7 +7,7 @@
 <% if @report.polls.blank? %>
   <div class="alert alert-warning"><%= t('polls.without_data') %></div>
 <% else %>
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= Question.model_name.human %></th>
@@ -22,7 +22,7 @@
           <td><%= question.question %></td>
           <% Question::ANSWER_OPTIONS.each_index do |i| %>
             <td><%= @report.rates[question.question][i] %> %</td>
-          <% end%>
+          <% end %>
         </tr>
       <% end %>
     </tbody>

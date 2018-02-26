@@ -12,6 +12,11 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    Group.current_id        = nil
+    Organization.current_id = nil
+  end
+
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of ConclusionReview, @conclusion_review
@@ -38,7 +43,12 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion',
         :recipients => 'John Doe',
-        :sectors => 'Area 51'
+        :sectors => 'Area 51',
+        :evolution => 'Do the evolution',
+        :evolution_justification => 'Ok',
+        :main_weaknesses_text => 'Some main weakness X',
+        :corrective_actions => 'You should do it this way',
+        :affects_compliance => false
       }, false)
 
       assert @conclusion_review.save
@@ -59,29 +69,45 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de informes de conclusión
   test 'destroy' do
+    conclusion_review = conclusion_reviews :conclusion_current_draft_review
+
     assert_no_difference 'ConclusionReview.count' do
-      @conclusion_review.destroy
+      conclusion_review.destroy
     end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
+    organization = Organization.find Organization.current_id
+
     @conclusion_review.issue_date = nil
     @conclusion_review.review_id = nil
     @conclusion_review.applied_procedures = '   '
     @conclusion_review.conclusion = '   '
     @conclusion_review.recipients = '   '
     @conclusion_review.sectors = '   '
+    @conclusion_review.evolution = '   '
+    @conclusion_review.evolution_justification = '   '
+    @conclusion_review.main_weaknesses_text = '   '
+    @conclusion_review.corrective_actions = '   '
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
     assert_error @conclusion_review, :review_id, :blank
-    assert_error @conclusion_review, :applied_procedures, :blank
     assert_error @conclusion_review, :conclusion, :blank
 
-    if SHOW_REVIEW_EXTRA_ATTRIBUTES
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF
       assert_error @conclusion_review, :recipients, :blank
       assert_error @conclusion_review, :sectors, :blank
+      assert_error @conclusion_review, :evolution, :blank
+      assert_error @conclusion_review, :evolution_justification, :blank
+    else
+      assert_error @conclusion_review, :applied_procedures, :blank
+    end
+
+    if ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(organization.prefix)
+      assert_error @conclusion_review, :main_weaknesses_text, :blank
+      assert_error @conclusion_review, :corrective_actions, :blank
     end
   end
 
@@ -89,10 +115,12 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   test 'validates length of attributes' do
     @conclusion_review.type = 'abcdd' * 52
     @conclusion_review.summary = 'abcdd' * 52
+    @conclusion_review.evolution = 'abcdd' * 52
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :type, :too_long, count: 255
     assert_error @conclusion_review, :summary, :too_long, count: 255
+    assert_error @conclusion_review, :evolution, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -119,7 +147,12 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion',
         :recipients => 'John Doe',
-        :sectors => 'Area 51'
+        :sectors => 'Area 51',
+        :evolution => 'Do the evolution',
+        :evolution_justification => 'Ok',
+        :main_weaknesses_text => 'Some main weakness X',
+        :corrective_actions => 'You should do it this way',
+        :affects_compliance => '0'
       }, false)
 
     assert @conclusion_review.invalid?
@@ -176,15 +209,40 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert File.exist?(@conclusion_review.absolute_pdf_path)
     assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
     assert_not_equal size, new_size
+
+    FileUtils.rm @conclusion_review.absolute_pdf_path
   end
 
   test 'alternative pdf conversion' do
+    organization = organizations :cirope
+
     assert_nothing_raised do
-      @conclusion_review.alternative_pdf(organizations(:cirope))
+      @conclusion_review.alternative_pdf organization
     end
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)
     assert (size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+
+    @conclusion_review.update_column :main_weaknesses_text, nil
+
+    assert_nothing_raised do
+      @conclusion_review.alternative_pdf organization
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+    assert_not_equal size, new_size
+
+    assert_nothing_raised do
+      @conclusion_review.alternative_pdf organization, :brief => '1'
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+
+    if ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.exclude?(organization.prefix)
+      assert_not_equal size, new_size
+    end
 
     FileUtils.rm @conclusion_review.absolute_pdf_path
   end

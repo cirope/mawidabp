@@ -11,7 +11,7 @@ module Weaknesses::Validations
     }
     validate :review_code_has_valid_prefix
 
-    validates :compliance, :operational_risk, length: { maximum: 255 },
+    validates :compliance, length: { maximum: 255 },
       allow_nil: true, allow_blank: true
     validates :compliance,
               :operational_risk,
@@ -23,7 +23,8 @@ module Weaknesses::Validations
   private
 
     def review_code_has_valid_prefix
-      regex = /\A#{prefix}\d+\Z/
+      revoked_prefix = I18n.t 'code_prefixes.revoked'
+      regex          = /\A#{revoked_prefix}?#{prefix}\d+\Z/
 
       errors.add :review_code, :invalid unless review_code =~ regex
     end
@@ -34,6 +35,7 @@ module Weaknesses::Validations
 
     def clean_array_attributes
       self.impact = Array(impact).reject &:blank?
+      self.operational_risk = Array(operational_risk).reject &:blank?
       self.internal_control_components =
         Array(internal_control_components).reject &:blank?
     end

@@ -25,7 +25,9 @@
         <%= f.input :control_objective_text, input_html: { autofocus: true, readonly: readonly, rows: 5 } %>
 
         <%= f.simple_fields_for :control do |c_f| %>
-          <%= c_f.input :effects, label: Control.human_attribute_name(:effects), input_html: { readonly: readonly, rows: 5 } %>
+          <% unless HIDE_CONTROL_EFFECTS %>
+            <%= c_f.input :effects, label: Control.human_attribute_name(:effects), input_html: { readonly: readonly, rows: 5 } %>
+          <% end %>
           <%= c_f.input :control, label: Control.human_attribute_name(:control), input_html: { readonly: readonly, rows: 5 } %>
 
           <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
@@ -33,12 +35,14 @@
               input_html: { value: "#{@control_objective_item.effectiveness}%", readonly: true } %>
           <% end %>
 
-          <% test_rows = HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS ? 9 : 5 %>
+          <% test_rows = HIDE_CONTROL_COMPLIANCE_TESTS ? 7 : 5 %>
           <% content_for :design_tests do %>
             <%= c_f.input :design_tests, input_html: { readonly: readonly, rows: test_rows } %>
           <% end %>
-          <% content_for :compliance_tests do %>
-            <%= c_f.input :compliance_tests, input_html: { readonly: readonly, rows: test_rows } %>
+          <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
+            <% content_for :compliance_tests do %>
+              <%= c_f.input :compliance_tests, input_html: { readonly: readonly, rows: test_rows } %>
+            <% end %>
           <% end %>
           <% content_for :sustantive_tests do %>
             <%= c_f.input :sustantive_tests, input_html: { readonly: readonly, rows: test_rows } %>
@@ -46,30 +50,46 @@
         <% end %>
       </div>
       <div class="col-md-6">
-        <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
-          <%= f.input :design_score, collection: qualifications,
-            include_blank: t('control_objective_item.not_rated'),
-            input_html: { data: { score_target: 'design' }, disabled: readonly } %>
-        <% end %>
+        <%= f.input :design_score, collection: qualifications,
+          include_blank: !SHOW_SHORT_QUALIFICATIONS && t('control_objective_item.not_rated'),
+          prompt: SHOW_CONCLUSION_AS_OPTIONS,
+          input_html: {
+            disabled: readonly,
+            data: {
+              score_target: 'design',
+              update_test: 'design_tests',
+              update_with: t('control_objective_item.not_apply_text'),
+              update_on: ControlObjectiveItem.qualifications[:not_apply]
+            }
+          }
+        %>
         <%= yield :design_tests %>
 
-        <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+        <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
           <%= f.input :compliance_score, collection: qualifications,
             include_blank: t('control_objective_item.not_rated'),
             input_html: { data: { score_target: 'compliance' }, disabled: readonly } %>
         <% end %>
-        <%= yield :compliance_tests %>
+        <%= yield :compliance_tests unless HIDE_CONTROL_COMPLIANCE_TESTS %>
 
-        <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
-          <%= f.input :sustantive_score, collection: qualifications,
-            include_blank: t('control_objective_item.not_rated'),
-            input_html: { data: { score_target: 'sustantive' }, disabled: readonly } %>
-        <% end %>
+        <%= f.input :sustantive_score, collection: qualifications,
+          include_blank: !SHOW_SHORT_QUALIFICATIONS && t('control_objective_item.not_rated'),
+          prompt: SHOW_CONCLUSION_AS_OPTIONS,
+          input_html: {
+            disabled: readonly,
+            data: {
+              score_target: 'sustantive',
+              update_test: 'sustantive_tests',
+              update_with: t('control_objective_item.not_apply_text'),
+              update_on: ControlObjectiveItem.qualifications[:not_apply]
+            }
+          }
+        %>
         <%= yield :sustantive_tests %>
 
         <% if SHOW_CONCLUSION_AS_OPTIONS %>
           <%= f.input :auditor_comment, collection: auditor_comment_options,
-            prompt: true, input_html: { readonly: readonly } %>
+            prompt: true, input_html: { disabled: readonly } %>
         <% else %>
           <%= f.input :auditor_comment, input_html: { readonly: readonly, rows: 5 } %>
         <% end %>
@@ -83,7 +103,13 @@
           <div class="col-md-6">
             <%= f.input :exclude_from_score, as: :boolean, label: false, inline_label:
               ControlObjectiveItem.human_attribute_name(:exclude_from_score),
-              input_html: { disabled: readonly } %>
+              input_html: {
+                disabled: readonly,
+                data: {
+                  automatic_auditor_comment: SHOW_CONCLUSION_AS_OPTIONS &&
+                    auditor_comment_options.last&.last
+                }
+              } %>
           </div>
         </div>
       </div>
@@ -100,11 +126,11 @@
   </div>
 
   <br />
-  <%= render 'weaknesses_summary', readonly: readonly %>
+  <%= render 'weaknesses_summary', readonly: readonly, frozen: frozen %>
 
   <% unless HIDE_OPORTUNITIES %>
     <br />
-    <%= render 'oportunities_summary', readonly: readonly %>
+    <%= render 'oportunities_summary', readonly: readonly, frozen: frozen %>
   <% end %>
 
   <% unless HIDE_BUSINESS_UNIT_SCORES %>
@@ -185,7 +211,7 @@
     <div class="pull-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.input :control_objective_id, as: :hidden %>
-    <%= f.submit class: 'btn btn-primary' %>
+    <%= f.submit class: 'btn btn-primary', disabled: frozen %>
   </div>
 <% end %>
 <script type="text/javascript">

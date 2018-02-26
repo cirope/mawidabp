@@ -13,6 +13,10 @@
             { action: :weaknesses_by_audit_type, controller_name: 'conclusion', final: true }, class: 'list-group-item' %>
           <%= link_to t('conclusion_committee_report.weaknesses_by_state_title'),
             { action: :weaknesses_by_state, controller_name: 'conclusion', final: true }, class: 'list-group-item' %>
+          <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+            <%= link_to t('conclusion_report.weaknesses_by_month_title'),
+              { action: :weaknesses_by_month, controller_name: 'conclusion', final: true }, class: 'list-group-item' %>
+          <% end %>
           <%= link_to t('conclusion_committee_report.weaknesses_graphs'),
             { action: :weaknesses_graphs, controller_name: 'conclusion', final: true }, class: 'list-group-item' %>
           <%= link_to t('conclusion_committee_report.control_objective_stats_title'),

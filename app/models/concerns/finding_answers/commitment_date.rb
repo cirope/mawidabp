@@ -20,10 +20,11 @@ module FindingAnswers::CommitmentDate
     end
 
     def has_date_required_status?
-      finding.being_implemented? ||
-        finding.notify? ||
-        finding.unconfirmed? ||
-        finding.confirmed? ||
+      finding.awaiting?            ||
+        finding.being_implemented? ||
+        finding.notify?            ||
+        finding.unconfirmed?       ||
+        finding.confirmed?         ||
         finding.unanswered?
     end
 end

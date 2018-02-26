@@ -25,27 +25,68 @@
         <%= f.input :summary %>
       </div>
       <div class="col-md-6">
-        <%= f.input :applied_procedures, input_html: { readonly: readonly, rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 2 } %>
-
-        <% if SHOW_CONCLUSION_AS_OPTIONS %>
-          <%= f.input :conclusion, collection: conclusion_options, prompt: true,
-            input_html: { disabled: readonly } %>
+        <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+          <% if SHOW_CONCLUSION_AS_OPTIONS %>
+            <%= f.input :conclusion, collection: conclusion_options, prompt: true,
+              input_html: { disabled: readonly } %>
+          <% else %>
+            <%= f.input :conclusion, input_html: { readonly: readonly, rows: 2 } %>
+          <% end %>
+          <%= f.input :evolution, collection: EVOLUTION_OPTIONS, prompt: true, input_html: { disabled: readonly } %>
+          <%= f.input :evolution_justification, input_html: { rows: 1, readonly: readonly } %>
         <% else %>
-          <%= f.input :conclusion, input_html: { readonly: readonly, rows: 2 } %>
+          <%= f.input :applied_procedures, input_html: { readonly: readonly, rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 2 } %>
+          <% if SHOW_CONCLUSION_AS_OPTIONS %>
+            <%= f.input :conclusion, collection: conclusion_options, prompt: true,
+              input_html: { disabled: readonly } %>
+          <% else %>
+            <%= f.input :conclusion, input_html: { readonly: readonly, rows: 2 } %>
+          <% end %>
         <% end %>
+
         <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
         <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
       </div>
     </div>
 
-    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+    <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :recipients, input_html: { rows: 4 } %>
+          <%= f.input :recipients, input_html: { rows: 4, readonly: readonly } %>
         </div>
         <div class="col-md-6">
-          <%= f.input :sectors, input_html: { rows: 4 } %>
+          <%= f.input :sectors, input_html: { rows: 4, readonly: readonly } %>
         </div>
+      </div>
+
+      <% if show_review_best_practice_comments? %>
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :main_weaknesses_text, input_html: { rows: 4, readonly: readonly } %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :corrective_actions, input_html: { rows: 4, readonly: readonly } %>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :observations, input_html: { rows: 4, readonly: readonly } %>
+        </div>
+        <% if show_review_best_practice_comments? %>
+          <div class="col-md-6 toggle-visibility">
+            <%= f.input :affects_compliance, input_html: { disabled: readonly } %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if show_review_best_practice_comments? %>
+      <div id="best_practice_comments_container">
+        <% if @conclusion_final_review.review %>
+          <%= render 'best_practice_comments', f: f, readonly: readonly %>
+        <% end %>
       </div>
     <% end %>
   </div>
@@ -64,42 +105,18 @@
 <script type="text/javascript">
 //<![CDATA[
   $('#conclusion_final_review_review_id').change(function() {
-    var elementsForUpdate = [
-      'applied_procedures', 'conclusion', 'recipients', 'sectors'
-    ];
+    var element = $(this);
+    var url = '<%= new_conclusion_final_review_path %>';
 
-    if(!$(this).val().match(/^\s*$/)) {
-      var element = $(this);
-      var url = '<%= new_conclusion_final_review_path :format => :json %>';
+    Helper.showLoading(element);
 
-      Helper.showLoading(element);
-
-      $.get(url, { review: element.val() }, function(data) {
-
-        for(var key in data) {
-          var target = $('#conclusion_final_review_' + key);
-
-          if($.inArray(key, elementsForUpdate) != -1) {
-            target.val(data[key] || '');
-          }
-        }
-
-        $('#conclusion_final_review_business_unit').val(data.review.business_unit.name);
-        $('#conclusion_final_review_project').val(data.review.plan_item.project);
-        $('#conclusion_final_review_score').val(data.review.score_text);
-        $('#conclusion_final_review_applied_procedures').focus();
-      }).complete(function() {
-        Helper.hideLoading(element);
-      });
-    } else {
-      $.each(elementsForUpdate, function(i, e) {
-        $('#conclusion_final_review_' + e).html('');
-      });
-
-      $('#conclusion_final_review_business_unit').val('');
-      $('#conclusion_final_review_project').val('');
-      $('#conclusion_final_review_score').val('');
-    }
+    $.ajax({
+      url:      url,
+      dataType: 'script',
+      data:     { review: element.val() }
+    }).done(function() {
+      Helper.hideLoading(element);
+    });
   });
 //]]>
 </script>

@@ -72,16 +72,16 @@ module ControlObjectiveItems::PDF
       [
         [self.class.human_attribute_name('relevance'), relevance_text(show_value: true), 0, false],
         [self.class.human_attribute_name('audit_date'), (I18n.l(audit_date, format: :long) if audit_date), 0, false],
-        [Control.human_attribute_name('effects'), control.effects, 0, false],
+        ([Control.human_attribute_name('effects'), control.effects, 0, false] unless HIDE_CONTROL_EFFECTS),
         [Control.human_attribute_name('control'), control.control, 0, false],
         [self.class.human_attribute_name('design_score'), design_score_text(show_value: true), 0, false],
         [Control.human_attribute_name('design_tests'), control.design_tests, 0, false],
-        [self.class.human_attribute_name('compliance_score'), compliance_score_text(show_value: true), 0, false],
-        [Control.human_attribute_name('compliance_tests'), control.compliance_tests, 0, false],
+        ([self.class.human_attribute_name('compliance_score'), compliance_score_text(show_value: true), 0, false] unless HIDE_CONTROL_COMPLIANCE_TESTS),
+        ([Control.human_attribute_name('compliance_tests'), control.compliance_tests, 0, false] unless HIDE_CONTROL_COMPLIANCE_TESTS),
         [self.class.human_attribute_name('sustantive_score'), sustantive_score_text(show_value: true), 0, false],
         [Control.human_attribute_name('sustantive_tests'), control.sustantive_tests, 0, false],
         [self.class.human_attribute_name('auditor_comment'), auditor_comment, 0, false],
         [self.class.human_attribute_name('effectiveness'), "#{effectiveness}%", 0, false]
-      ]
+      ].compact
     end
 end

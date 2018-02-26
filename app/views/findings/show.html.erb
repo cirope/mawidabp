@@ -77,10 +77,12 @@
   <strong><%= Finding.human_attribute_name(:solution_date) %></strong>:
   <%= l(@finding.solution_date, :format => :long) if @finding.solution_date %>
 </p>
-<div>
-  <strong><%= Finding.human_attribute_name :effect %></strong>:
-  <%= simple_format @finding.effect %>
-</div>
+<% unless HIDE_WEAKNESS_EFFECT %>
+  <div>
+    <strong><%= Finding.human_attribute_name :effect %></strong>:
+    <%= simple_format @finding.effect %>
+  </div>
+<% end %>
 <div>
   <strong><%= Finding.human_attribute_name :answer %></strong>:
   <%= simple_format @finding.answer %>
@@ -110,7 +112,7 @@
 
   <p>
     <strong><%= Weakness.human_attribute_name :operational_risk %>:</strong>
-    <%= @finding.operational_risk %>
+    <%= Array(@finding.operational_risk).to_sentence %>
   </p>
 
   <p>
@@ -155,7 +157,7 @@
     <%= t('finding.finding_relations') %>
   </h4>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
@@ -178,7 +180,7 @@
     <%= t('finding.inverse_finding_relations') %>
   </h4>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= FindingRelation.human_attribute_name :finding_id %></th>
@@ -213,7 +215,7 @@
     <%= t('finding.finding_answers') %>
   </h4>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= User.model_name.human %></th>
@@ -280,7 +282,7 @@
 <% unless @finding.work_papers.blank? %>
   <h4><%= WorkPaper.model_name.human(count: 0) %></h4>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= WorkPaper.human_attribute_name :name %></th>
@@ -315,7 +317,7 @@
 
   <div id="cost_details" class="collapse">
     <div>
-      <table class="table table-condensed table-striped">
+      <table class="table table-condensed table-striped table-hover">
         <thead>
           <tr>
             <th><%= Cost.human_attribute_name :created_at %></th>
@@ -348,6 +350,5 @@
   <% end %>
   <%= link_to t('finding.follow_up_report.download'),
     follow_up_pdf_finding_path(params[:completed], @finding, :_ts => Time.now.to_i) %> |
-  <%= link_to_index findings_path(params[:completed], :user_id => params[:user_id]) %> |
-  <%= link_to_back %>
+  <%= link_to_index findings_path(params[:completed], :user_id => params[:user_id]) %>
 </div>

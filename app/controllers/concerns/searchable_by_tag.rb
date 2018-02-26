@@ -4,7 +4,7 @@ module SearchableByTag
   def build_tag_search_for scope
     if has_tag_query?
       query         = split_query_param
-      having        = "COUNT(#{Tag.quoted_table_name}.#{Tag.qcn 'id'}) >= ?"
+      having        = "COUNT(DISTINCT #{Tag.quoted_table_name}.#{Tag.qcn 'id'}) >= ?"
       min_tag_count = query.size
       ids = scope.
         where(*tags_conditions(query)).
@@ -21,7 +21,10 @@ module SearchableByTag
   private
 
     def has_tag_query?
-      params[:search] &&
+      support_tags = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+
+      support_tags &&
+        params[:search] &&
         params[:search][:query].present? &&
         params[:search][:columns].present? &&
         params[:search][:columns].include?('tags')

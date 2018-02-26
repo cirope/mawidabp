@@ -1,10 +1,13 @@
 module WeaknessesHelper
   def show_weakness_previous_follow_up_dates(weakness)
-    dates = weakness.all_follow_up_dates if weakness.being_implemented?
     list = String.new.html_safe
     out = String.new.html_safe
 
-    unless dates.blank?
+    if weakness.being_implemented? || weakness.awaiting?
+      dates = weakness.all_follow_up_dates
+    end
+
+    if dates.present?
       dates.each { |d| list << content_tag(:li, l(d, :format => :long)) }
 
       out << link_to(t('weakness.previous_follow_up_dates'), '#', :onclick =>
@@ -84,5 +87,18 @@ module WeaknessesHelper
 
   def weakness_internal_control_components_options
     WEAKNESS_INTERNAL_CONTROL_COMPONENTS.map { |option| [option, option] }
+  end
+
+  def show_weakness_templates?
+    @weakness.new_record? &&
+      @weakness.weakness_template_id.blank? &&
+      WeaknessTemplate.list.any?
+  end
+
+  def weakness_templates_for weakness
+    control_objective  = weakness.control_objective_item&.control_objective
+
+    control_objective &&
+      WeaknessTemplate.list.by_control_objective(control_objective)
   end
 end

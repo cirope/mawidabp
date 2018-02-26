@@ -13,6 +13,21 @@ module Reviews::FindingCode
     recode_findings weaknesses, order: [risk: :desc, review_code: :asc]
   end
 
+  def recode_weaknesses_by_control_objective_order
+    order      = [risk: :desc, review_code: :asc]
+    weaknesses = []
+    revoked    = []
+
+    grouped_control_objective_items.each do |_pc, cois|
+      cois.sort.each do |coi|
+        weaknesses += coi.weaknesses.not_revoked.order(order).to_a
+        revoked    += coi.weaknesses.revoked.to_a
+      end
+    end
+
+    assign_new_review_code_to_findings weaknesses, revoked
+  end
+
   def next_weakness_code prefix = nil
     next_finding_code prefix, weaknesses.with_prefix(prefix)
   end
@@ -41,12 +56,18 @@ module Reviews::FindingCode
 
       findings = findings.order order
 
+      assign_new_review_code_to_findings findings.not_revoked, findings.revoked
+    end
+
+    def assign_new_review_code_to_findings not_revoked, revoked
       self.class.transaction do
-        findings.revoked.each_with_index do |f, i|
-          f.update_column :review_code, "#{revoked_prefix}#{f.review_code}"
+        revoked.each_with_index do |f, i|
+          unless f.review_code.start_with? revoked_prefix
+            f.update_column :review_code, "#{revoked_prefix}#{f.review_code}"
+          end
         end
 
-        findings.not_revoked.each_with_index do |f, i|
+        not_revoked.each_with_index do |f, i|
           new_code = "#{f.prefix}#{'%.3d' % i.next}"
 
           f.update_column :review_code, new_code

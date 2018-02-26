@@ -1,8 +1,8 @@
 class ConclusionFinalReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_final_review, only: [
-    :show, :edit, :update, :export_to_pdf, :score_sheet, :download_work_papers,
-    :create_bundle, :compose_email, :send_by_email
+    :show, :edit, :update, :destroy, :export_to_pdf, :score_sheet,
+    :download_work_papers, :create_bundle, :compose_email, :send_by_email
   ]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
@@ -50,18 +50,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
       respond_to do |format|
         format.html # new.html.erb
-        format.json { render json: @conclusion_final_review.to_json(
-            include: {review: {
-                only: [],
-                methods: :score_text,
-                include: {
-                  business_unit: {only: :name},
-                  plan_item: {only: :project}
-                },
-              }
-            },
-            only: [:conclusion, :applied_procedures, :recipients, :sectors])
-        }
+        format.js   # new.js.erb
       end
     else
       redirect_to edit_conclusion_final_review_url(conclusion_final_review)
@@ -114,14 +103,27 @@ class ConclusionFinalReviewsController < ApplicationController
     redirect_to action: :edit
   end
 
+  # Elimina un informe definitivo
+  #
+  # * DELETE /conclusion_final_reviews/1
+  def destroy
+    @conclusion_final_review.destroy!
+
+    respond_to do |format|
+      format.html { redirect_to(conclusion_final_reviews_url) }
+    end
+  end
+
   # Exporta el informe en formato PDF
   #
   # * GET /conclusion_final_reviews/export_to_pdf/1
   def export_to_pdf
+    options = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
+
     if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_final_review.alternative_pdf(current_organization)
+      @conclusion_final_review.alternative_pdf(current_organization, options)
     else
-      @conclusion_final_review.to_pdf(current_organization, params[:export_options]&.to_unsafe_h)
+      @conclusion_final_review.to_pdf(current_organization, options)
     end
 
     respond_to do |format|
@@ -189,7 +191,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     users = []
     users_with_poll = []
-    export_options = params[:export_options] || {}
+    export_options = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
 
     if params[:conclusion_review]
       include_score_sheet = params[:conclusion_review][:include_score_sheet] == '1'
@@ -205,7 +207,7 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
     if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_final_review.alternative_pdf(current_organization)
+      @conclusion_final_review.alternative_pdf(current_organization, export_options)
     else
       @conclusion_final_review.to_pdf(current_organization, export_options)
     end
@@ -365,6 +367,7 @@ class ConclusionFinalReviewsController < ApplicationController
   end
 
   private
+
     def set_conclusion_final_review
       @conclusion_final_review = ConclusionFinalReview.list.includes(
         review: [
@@ -382,7 +385,15 @@ class ConclusionFinalReviewsController < ApplicationController
     def conclusion_final_review_params
       params.require(:conclusion_final_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
-        :summary, :recipients, :sectors, :lock_version
+        :summary, :recipients, :evolution, :evolution_justification, :sectors,
+        :observations, :main_weaknesses_text, :corrective_actions,
+        :affects_compliance, :lock_version,
+        review_attributes: [
+          :id, :manual_score, :lock_version,
+          best_practice_comments_attributes: [
+            :id, :best_practice_id, :auditor_comment
+          ]
+        ]
       )
     end
 

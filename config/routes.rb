@@ -53,8 +53,9 @@ Rails.application.routes.draw do
 
   [
     'weaknesses_by_state_execution',
+    'weaknesses_report',
     'detailed_management_report',
-    'weaknesses_report'
+    'reviews_with_incomplete_work_papers_report'
   ].each do |action|
     get "execution_reports/#{action}", to: "execution_reports##{action}", as: action
   end
@@ -90,6 +91,7 @@ Rails.application.routes.draw do
     'process_control_stats',
     'qa_indicators',
     'weaknesses_by_risk_report',
+    'weaknesses_by_month',
     'fixed_weaknesses_report',
     'weaknesses_graphs',
     'auto_complete_for_business_unit',
@@ -115,6 +117,7 @@ Rails.application.routes.draw do
     'create_process_control_stats',
     'create_qa_indicators',
     'create_weaknesses_by_risk_report',
+    'create_weaknesses_by_month',
     'create_fixed_weaknesses_report'
   ].each do |action|
     post "conclusion_reports/#{action}",
@@ -199,14 +202,17 @@ Rails.application.routes.draw do
       post :create_bundle
     end
 
-    get :check_for_approval, on: :collection
+    collection do
+      get :check_for_approval
+      get :corrective_actions_update
+    end
   end
 
   namespace :conclusion_final_reviews do
     resources :users, only: [:index]
   end
 
-  resources :conclusion_final_reviews, except: [:destroy] do
+  resources :conclusion_final_reviews do
     member do
       get :export_to_pdf
       get :compose_email
@@ -228,18 +234,24 @@ Rails.application.routes.draw do
       get :survey_pdf
       get :suggested_findings
       get :suggested_process_control_findings
-      get :review_data
+      get :past_implemented_audited_findings
       get :weaknesses_and_oportunities
       get :download_work_papers
       get :estimated_amount
+      get :excluded_control_objectives
+      patch :finished_work_papers
       patch :recode_findings
-      patch :recode_findings_by_risk
+      patch :recode_weaknesses_by_risk
+      patch :recode_weaknesses_by_control_objective_order
     end
 
     collection do
       get :estimated_amount
+      get :plan_item_refresh
+      get :assignment_type_refresh
       get :plan_item_data
       get :auto_complete_for_finding
+      get :auto_complete_for_best_practice
       get :auto_complete_for_process_control
       get :auto_complete_for_control_objective
       get :auto_complete_for_tagging
@@ -258,11 +270,18 @@ Rails.application.routes.draw do
       get :auto_complete_for_tagging
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
+      get :auto_complete_for_weakness_template
+      get :state_changed
+      get :weakness_template_changed
     end
 
     member do
       patch :undo_reiteration
     end
+  end
+
+  resources :weakness_templates do
+    get :auto_complete_for_control_objective, on: :collection
   end
 
   resources :control_objective_items do
@@ -287,6 +306,8 @@ Rails.application.routes.draw do
   end
 
   resources :resource_classes
+
+  resources :control_objectives, only: [:index, :show]
 
   resources :best_practices do
     resources :process_controls, only: [:new, :edit]
@@ -337,7 +358,7 @@ Rails.application.routes.draw do
     resources :registration_roles, only: [:index]
     resources :releases, only: [:edit, :update]
     resources :roles, only: [:index]
-    resources :status, only: [:show]
+    resources :status, only: [:index, :show, :create, :destroy]
     resources :imports, only: [:new, :create]
   end
 

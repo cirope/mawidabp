@@ -6,10 +6,7 @@ class Users::RolesControllerTest < ActionController::TestCase
   end
 
   test 'should get index' do
-    get :index, xhr: true, params: {
-      id: organizations(:cirope).id,
-      format: 'json'
-    }
+    get :index, xhr: true, params: { id: organizations(:cirope).id }, as: :json
     assert_response :success
     roles = ActiveSupport::JSON.decode @response.body
     assert roles.present?

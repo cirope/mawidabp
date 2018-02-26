@@ -3,6 +3,8 @@
   <%= link_to_index conclusion_draft_reviews_path %> |
   <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
     <%= render 'alternative_downloads' %>
+  <% elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) %>
+    <%= render 'limited_downloads' %>
   <% else %>
     <%= render 'downloads' %>
   <% end %>
@@ -11,8 +13,7 @@
     data: { toggle: 'modal', target: "#customize_report" } %> |
   <%= link_to_if(@conclusion_draft_review.review.try(:can_be_sended?),
     t('conclusion_draft_review.send_by_email'), :action => :compose_email,
-    :id => @conclusion_draft_review) %> |
-  <%= link_to_back %>
+    :id => @conclusion_draft_review) %>
 <% end %>
 
 <%= render 'form' %>

@@ -26,6 +26,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       [:get, :edit, id_param],
       [:post, :create],
       [:patch, :update, id_param],
+      [:delete, :destroy, id_param],
       [:get, :export_to_pdf, id_param]
     ]
 
@@ -99,13 +100,11 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_final_reviews/new'
   end
 
-  test 'new json conclusion final review' do
+  test 'new js conclusion final review' do
     login
-    get :new, :params => { :format => 'json' }, xhr: true
+    get :new, xhr: true, as: :js
     assert_response :success
-    assert_nothing_raised do
-      ActiveSupport::JSON.decode(@response.body)
-    end
+    assert_equal @response.content_type, Mime[:js]
   end
 
   test 'new for existent conclusion final review' do
@@ -130,7 +129,13 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :conclusion => 'New conclusion',
           :summary => 'ACT 12',
           :recipients => 'John Doe',
-          :sectors => 'Area 51'
+          :sectors => 'Area 51',
+          :evolution => 'Do the evolution',
+          :evolution_justification => 'Ok',
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => '0',
+          :observations => nil
         }
       }
     end
@@ -160,13 +165,33 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :conclusion => 'Updated conclusion',
           :summary => 'ACT Updated',
           :recipients => 'John Doe',
-          :sectors => 'Area 51'
+          :sectors => 'Area 51',
+          :evolution => 'Do the evolution',
+          :evolution_justification => 'Ok',
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => '0',
+          :observations => nil
         }
       }
     end
 
     assert_redirected_to conclusion_final_reviews_url
     assert_equal 'ACT Updated', conclusion_reviews(:conclusion_past_final_review).reload.summary
+  end
+
+  test 'destroy conclusion final review' do
+    skip unless ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
+
+    login
+
+    assert_difference 'ConclusionFinalReview.count', -1 do
+      delete :destroy, params: {
+        id: conclusion_reviews(:conclusion_past_final_review).id
+      }
+    end
+
+    assert_redirected_to conclusion_final_reviews_url
   end
 
   test 'export conclusion final review' do
@@ -182,7 +207,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
-  test 'export conclusion draft review without control objectives excluded from score' do
+  test 'export conclusion final review without control objectives excluded from score' do
     login
 
     conclusion_review = ConclusionFinalReview.find(
@@ -198,7 +223,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
-  test 'export conclusion draft review brief' do
+  test 'export conclusion final review brief' do
     login
 
     conclusion_review = ConclusionFinalReview.find(

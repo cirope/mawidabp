@@ -33,7 +33,7 @@ class Privilege < ApplicationRecord
 
     record.errors.add attr, :taken if is_duplicated
   end
-  
+
   # Relaciones
   belongs_to :role
 

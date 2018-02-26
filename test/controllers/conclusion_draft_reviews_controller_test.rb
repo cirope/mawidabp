@@ -66,7 +66,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     login
     get :index, :params => {
       :search => {
-        :query => "> #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
+        :query => "> #{I18n.l(1.month.ago.to_date, :format => :minimal)}",
         :columns => ['issue_date']
       }
     }
@@ -92,7 +92,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_draft_reviews/index'
   end
 
-  test 'show conclusion_draft_review' do
+  test 'show conclusion draft review' do
     login
     get :show, :params => {
       :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
@@ -102,7 +102,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_draft_reviews/show'
   end
 
-  test 'new conclusion_draft_review' do
+  test 'new conclusion draft review' do
     login
     get :new
     assert_response :success
@@ -110,7 +110,14 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_draft_reviews/new'
   end
 
-  test 'create conclusion_draft_review' do
+  test 'new js conclusion draft review' do
+    login
+    get :new, xhr: true, as: :js
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+  end
+
+  test 'create conclusion draft review' do
     login
     assert_difference 'ConclusionDraftReview.count' do
       post :create, :params => {
@@ -121,7 +128,13 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion',
           :recipients => 'John Doe',
-          :sectors => 'Area 51'
+          :sectors => 'Area 51',
+          :evolution => 'Do the evolution',
+          :evolution_justification => 'Ok',
+          :observations => nil,
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => '0'
         }
       }
     end
@@ -129,7 +142,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_redirected_to edit_conclusion_draft_review_url(assigns(:conclusion_draft_review))
   end
 
-  test 'edit conclusion_draft_review' do
+  test 'edit conclusion draft review' do
     login
     get :edit, :params => {
       :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
@@ -139,7 +152,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_draft_reviews/edit'
   end
 
-  test 'update conclusion_draft_review' do
+  test 'update conclusion draft review' do
     assert_no_difference 'ConclusionDraftReview.count' do
       login
       patch :update, :params => {
@@ -151,7 +164,13 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :applied_procedures => 'Updated applied procedures',
           :conclusion => 'Updated conclusion',
           :recipients => 'John Doe',
-          :sectors => 'Area 51'
+          :sectors => 'Area 51',
+          :evolution => 'Do the evolution',
+          :evolution_justification => 'Ok',
+          :main_weaknesses_text => 'Some main weakness X',
+          :corrective_actions => 'You should do it this way',
+          :affects_compliance => '0',
+          :observations => nil
         }
       }
     end
@@ -191,7 +210,23 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_redirected_to conclusion_review.relative_pdf_path
   end
 
-  test 'score sheet of final review' do
+  test 'export conclusion draft review brief' do
+    login
+
+    conclusion_review = ConclusionDraftReview.find(
+      conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
+
+    assert_nothing_raised do
+      get :export_to_pdf, :params => {
+        :id => conclusion_review.id,
+        :export_options => { :brief => '1' }
+      }
+    end
+
+    assert_redirected_to conclusion_review.relative_pdf_path
+  end
+
+  test 'score sheet of draft review' do
     login
 
     conclusion_review = ConclusionDraftReview.find(
@@ -244,9 +279,8 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   test 'check for approval' do
     login
     get :check_for_approval, :params => {
-      :id => reviews(:current_review).id,
-      :format => :json
-    }
+      :id => reviews(:current_review).id
+    }, :as => :json
 
     assert_response :success
 
@@ -408,5 +442,12 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     # Produce un error cuando se trata de buscar un informe borrador que ya
     # tiene definitivo
     assert_redirected_to :action => :index
+  end
+
+  test 'corrective actions update' do
+    login
+    get :corrective_actions_update, xhr: true, as: :js
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
   end
 end

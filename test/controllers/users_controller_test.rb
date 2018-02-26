@@ -114,7 +114,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_no_emails do
       assert_no_difference counts_array do
         patch :update, params: {
-          id: user.user,
+          id: user,
           user: {
             user: 'updated_name',
             name: 'Updated Name',
@@ -161,7 +161,7 @@ class UsersControllerTest < ActionController::TestCase
       assert_enqueued_emails 1 do
         assert_difference 'OrganizationRole.count' do
           patch :update, params: {
-            id: users(:administrator).user,
+            id: users(:administrator),
             user: {
               user: 'updated_name_2',
               name: 'Updated Name',
@@ -218,25 +218,24 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'disable audited user' do
     assert_no_difference 'User.count' do
-      delete :destroy, params: { id: users(:audited).user }
+      delete :destroy, params: { id: users(:audited) }
     end
 
     assert_redirected_to users_url
   end
 
   test 'index as pdf' do
-    get :index, params: { format: :pdf }
+    get :index, as: :pdf
     assert_redirected_to UserPdf.new.relative_path
   end
 
   test 'export with search' do
     get :index, params: {
-      format: :pdf,
       search: {
         query: 'manager',
         columns: ['user', 'name']
       }
-    }
+    }, as: :pdf
 
     assert_redirected_to UserPdf.new.relative_path
   end

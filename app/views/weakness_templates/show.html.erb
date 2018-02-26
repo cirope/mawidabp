@@ -1,0 +1,45 @@
+<p>
+  <strong><%= WeaknessTemplate.human_attribute_name 'title' %></strong>:
+  <%= @weakness_template.title %>
+</p>
+<p>
+  <strong><%= WeaknessTemplate.human_attribute_name 'description' %></strong>:
+  <%= simple_format @weakness_template.description %>
+</p>
+<p>
+  <strong><%= WeaknessTemplate.human_attribute_name 'risk' %></strong>:
+  <%= @weakness_template.risk_text %>
+</p>
+<% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+  <p>
+    <strong><%= WeaknessTemplate.human_attribute_name 'impact' %></strong>:
+    <%= Array(@weakness_template.impact).to_sentence %>
+  </p>
+  <p>
+    <strong><%= WeaknessTemplate.human_attribute_name 'operational_risk' %></strong>:
+    <%= Array(@weakness_template.operational_risk).to_sentence %>
+  </p>
+  <p>
+    <strong><%= WeaknessTemplate.human_attribute_name 'internal_control_components' %></strong>:
+    <%= Array(@weakness_template.internal_control_components).to_sentence %>
+  </p>
+<% end %>
+
+<% if @weakness_template.control_objectives.any? %>
+  <hr>
+
+  <h4>
+    <%= ControlObjective.model_name.human count: @weakness_template.control_objectives.size %>
+  </h4>
+
+  <ul>
+    <% @weakness_template.control_objectives.each do |control_objective| %>
+      <li><%= control_objective %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<hr>
+
+<%= link_to_edit [:edit, @weakness_template] %> |
+<%= link_to_index weakness_templates_path %>

@@ -1,0 +1,22 @@
+<% if @findings.empty? %>
+  <div class="alert alert-success">
+    <p><%= t 'review.without_past_implemented_audited_findings' %></p>
+  </div>
+<% else %>
+  <% @findings.each_with_index do |finding, i| %>
+    <ul class="finding_review_assignment">
+      <li>
+        <%= hidden_field_tag "review[finding_review_assignments_attributes][#{i + 2000}][finding_id]",
+          finding.id, :id => "hidden_finding_id_#{finding.id}" %>
+        <%= finding %> |
+        <%= link_to_show finding %> |
+        <%= remove_item_link nil, 'finding_review_assignment' %>
+      </li>
+    </ul>
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+  $('#past_implemented_audited_findings').effect('highlight', {}, 2000);
+</script>
+

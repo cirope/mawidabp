@@ -84,7 +84,7 @@ bare:
 <% salt = Digest::SHA512.hexdigest("first_time#{rand}") %>
 first_time:
   name: First Time
-  last_name: User
+  last_name: First User
   language: es
   email: first_time@users.com
   function: First time function
@@ -338,7 +338,7 @@ plain_manager_second:
 <% salt = Digest::SHA512.hexdigest("supervisor#{rand}") %>
 supervisor:
   name: Supervisor
-  last_name: Lastname
+  last_name: Sup Lastname
   language: es
   email: supervisor@users.com
   function: Supervisor function
@@ -380,7 +380,7 @@ supervisor_second:
 <% salt = Digest::SHA512.hexdigest("audited#{rand}") %>
 audited:
   name: Audited
-  last_name: Lastname
+  last_name: Audited Lastname
   language: es
   email: audited@users.com
   function: Audited function

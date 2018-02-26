@@ -4,14 +4,20 @@
   },
   :columns => @query.blank? ? (Review::COLUMNS_FOR_SEARCH.keys + ['tags']) : @columns
 } %>
-<table class="table table-condensed table-striped">
+<table class="table table-condensed table-striped table-hover">
   <thead id="column_headers">
     <tr>
+      <th></th>
       <%= make_filterable_column Period.model_name.human, nil, 'period' %>
       <%= make_filterable_column Review.human_attribute_name(:identification), nil, 'identification' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), { :class => 'hidden-xs' }, 'business_unit' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'hidden-xs' }, 'project' %>
-      <%= make_filterable_column Tag.model_name.human(count: 0), { :class => 'hidden-xs' }, 'tags' %>
+      <%= make_filterable_column t('review.user_assignment.audit_team'), { :class => 'hidden-xs' }, 'audit_team' %>
+      <% if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'  %>
+        <%= make_filterable_column Tag.model_name.human(count: 0), { :class => 'hidden-xs' }, 'tags' %>
+      <% else %>
+        <%= make_not_available_column Tag.model_name.human(count: 0), { :class => 'hidden-xs' } %>
+      <% end %>
       <th colspan="4" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -19,16 +25,18 @@
   <tbody>
     <% @reviews.each do |review| %>
       <% has_final = review.has_final_review? %>
-      <tr <%== 'class="text-muted"' if has_final %>>
+      <tr <%== 'class="text-muted strike"' if has_final %>>
+        <td><%= show_review_finished_work_papers_icon review %></td>
         <td><%= show_period_with_dates_as_abbr review.period %></td>
         <td class="nowrap"><%= review.identification %></td>
         <td class="hidden-xs"><%= super_truncate review.plan_item.business_unit.name, 25 %></td>
         <td class="hidden-xs"><%= super_truncate review.plan_item.project, 25 %></td>
+        <td class="hidden-xs"><%= audit_team_for review %></td>
         <td class="hidden-xs"><%= tags review.tags %></td>
         <td><%= link_to_clone new_review_path(:clone_from => review.id) %></td>
         <td><%= link_to_show review %></td>
         <td><%= link_to_edit edit_review_path(review) %></td>
-        <td><%= link_to_destroy review unless has_final %></td>
+        <td><%= link_to_destroy review if review.can_be_destroyed? %></td>
       </tr>
     <% end %>
   </tbody>

@@ -81,7 +81,7 @@ class WeaknessesControllerTest < ActionController::TestCase
 
   test 'list weaknesses as CSV' do
     login
-    get :index, params: { format: :csv }
+    get :index, as: :csv
 
     assert_response :success
     assert_equal "#{Mime[:csv]}", @response.content_type
@@ -103,9 +103,8 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
     get :show, :params => {
       :completed => 'incomplete',
-      :id => weakness.id,
-      :format => :json
-    }
+      :id => weakness.id
+    }, :as => :json
     assert_response :success
     assert_not_nil assigns(:weakness)
 
@@ -157,7 +156,7 @@ class WeaknessesControllerTest < ActionController::TestCase
           follow_up_date: 2.days.from_now.to_date,
           business_unit_ids: [business_units(:business_unit_three).id],
           compliance: 'no',
-          operational_risk: 'internal fraud',
+          operational_risk: ['internal fraud'],
           impact: ['econimic', 'regulatory'],
           internal_control_components: ['risk_evaluation', 'monitoring'],
           finding_user_assignments_attributes: [
@@ -247,7 +246,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             priority: Weakness.priorities_values.first,
             follow_up_date: '',
             compliance: 'no',
-            operational_risk: 'internal fraud',
+            operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
             finding_user_assignments_attributes: [
@@ -324,6 +323,33 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_equal repeated_of_original_state, repeated_of.state
   end
 
+  test 'state changed' do
+    login
+
+    get :state_changed, xhr: true, params: {
+      state: Finding::STATUS[:being_implemented]
+    }, as: :js
+
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+  end
+
+  test 'weakness template changed' do
+    login
+
+    get :weakness_template_changed, xhr: true, params: {
+      id: weakness_templates(:security).id
+    }, as: :js
+
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+
+    get :weakness_template_changed, xhr: true, as: :js
+
+    assert_response :success
+    assert_equal @response.content_type, Mime[:js]
+  end
+
   test 'auto complete for finding relation' do
     finding = Finding.find(findings(:being_implemented_weakness_on_draft).id)
 
@@ -331,9 +357,8 @@ class WeaknessesControllerTest < ActionController::TestCase
     get :auto_complete_for_finding_relation, params: {
       q: 'O001',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -346,9 +371,8 @@ class WeaknessesControllerTest < ActionController::TestCase
     get :auto_complete_for_finding_relation, params: {
       q: 'O001',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -360,9 +384,8 @@ class WeaknessesControllerTest < ActionController::TestCase
       completed: 'incomplete',
       q: 'O001, 1 2 3',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -373,14 +396,13 @@ class WeaknessesControllerTest < ActionController::TestCase
     get :auto_complete_for_finding_relation, params: {
       q: 'x_none',
       finding_id: finding.id,
-      review_id: finding.review.id,
-      format: :json
-    }
+      review_id: finding.review.id
+    }, as: :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 0, findings.size # Sin resultados
+    assert_equal 0, findings.size # No results
   end
 
   test 'auto complete for tagging' do
@@ -388,9 +410,8 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     get :auto_complete_for_tagging, params: {
       :q => 'impor',
-      :kind => 'finding',
-      :format => :json
-    }
+      :kind => 'finding'
+    }, :as => :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)
@@ -400,23 +421,21 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     get :auto_complete_for_tagging, params: {
       :q => 'x_none',
-      :kind => 'finding',
-      :format => :json
-    }
+      :kind => 'finding'
+    }, :as => :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 0, tags.size # Sin resultados
+    assert_equal 0, tags.size # No results
   end
 
   test 'auto complete for control objective item' do
     login
     get :auto_complete_for_control_objective_item, params: {
       q: 'dependencia',
-      review_id: reviews(:review_with_conclusion).id,
-      format: :json
-    }
+      review_id: reviews(:review_with_conclusion).id
+    }, as: :json
     assert_response :success
 
     cois = ActiveSupport::JSON.decode(@response.body)
@@ -430,13 +449,34 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     get :auto_complete_for_control_objective_item, params: {
       q: 'x_none',
-      review_id: reviews(:review_with_conclusion).id,
-      format: :json
-    }
+      review_id: reviews(:review_with_conclusion).id
+    }, as: :json
     assert_response :success
 
     cois = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 0, cois.size # Sin resultados
+    assert_equal 0, cois.size # No results
+  end
+
+  test 'auto complete for weakness template' do
+    login
+
+    get :auto_complete_for_weakness_template, params: { q: 'sec' }, as: :json
+
+    assert_response :success
+
+    wts = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, wts.size # security
+    assert wts.all? { |f| f['label'].match /sec/i }
+    assert_equal weakness_templates(:security).id, wts.first['id']
+
+    get :auto_complete_for_weakness_template, params: { q: 'x_none' }, as: :json
+
+    assert_response :success
+
+    wts = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, wts.size # No results
   end
 end

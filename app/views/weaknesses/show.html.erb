@@ -33,10 +33,12 @@
   <%= simple_format @weakness.answer %>
 </div>
 
-<div>
-  <strong><%= Weakness.human_attribute_name :effect %>:</strong>
-  <%= simple_format @weakness.effect %>
-</div>
+<% unless HIDE_WEAKNESS_EFFECT %>
+  <div>
+    <strong><%= Weakness.human_attribute_name :effect %>:</strong>
+    <%= simple_format @weakness.effect %>
+  </div>
+<% end %>
 
 <p>
   <strong><%= Weakness.human_attribute_name :risk %>:</strong>
@@ -96,7 +98,7 @@
 
   <p>
     <strong><%= Weakness.human_attribute_name :operational_risk %>:</strong>
-    <%= @weakness.operational_risk %>
+    <%= Array(@weakness.operational_risk).to_sentence %>
   </p>
 
   <p>
@@ -158,7 +160,7 @@
     <%= t('finding.finding_relations') %>
   </h3>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
@@ -181,7 +183,7 @@
     <%= t('finding.inverse_finding_relations') %>
   </h3>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= FindingRelation.human_attribute_name :finding_id %></th>
@@ -216,7 +218,7 @@
     <%= t('finding.finding_answers') %>
   </h3>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= User.model_name.human %></th>
@@ -254,7 +256,7 @@
 
 <% unless @weakness.work_papers.empty? %>
   <h3><%= WorkPaper.model_name.human(count: 0) %></h3>
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= WorkPaper.human_attribute_name :name %></th>
@@ -283,9 +285,8 @@
 
 <div>
   <%= link_to_edit edit_weakness_path(@weakness) %> |
-  <%= link_to_index weaknesses_path %> |
+  <%= link_to_index weaknesses_path %>
   <% if !@weakness.is_in_a_final_review? && @weakness.pending? && !@weakness.incomplete? %>
-    <%= link_to t('weakness.show_follow_up'), finding_path('incomplete', @weakness) %> |
+    | <%= link_to t('weakness.show_follow_up'), finding_path('incomplete', @weakness) %>
   <% end %>
-  <%= link_to_back %>
 </div>

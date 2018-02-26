@@ -1,4 +1,4 @@
-<table class="table table-condensed table-striped">
+<table class="table table-condensed table-striped table-hover">
   <thead>
     <tr>
       <th><%= Notification.human_attribute_name :status %></th>
@@ -30,5 +30,4 @@
 
 <div>
   <%= paginate @notifications %>
-  <%= link_to_back %>
 </div>

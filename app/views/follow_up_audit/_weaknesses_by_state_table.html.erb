@@ -3,11 +3,11 @@
 <% totals = total_oportunities + total_weaknesses %>
 
 <% if totals > 0 %>
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= Finding.human_attribute_name(:state) %></th>
-        <% if audit_type_symbol == :internal %>
+        <% if audit_type_symbol == :internal && !HIDE_OPORTUNITIES %>
           <th><%= t('conclusion_committee_report.weaknesses_by_state.weaknesses_column') %></th>
           <th><%= t('conclusion_committee_report.weaknesses_by_state.oportunities_column') %></th>
         <% else %>
@@ -24,8 +24,9 @@
         <tr>
           <td><strong><%= t(:"findings.state.#{state.first}") %></strong></td>
           <td><%= "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)" +
-            (state.first == :being_implemented && w_count != 0 ? ' *' : '') %></td>
-          <% if audit_type_symbol == :internal %>
+            (!@final && state.first.to_s == 'being_implemented' && w_count != 0 ? ' *' : '') +
+            (!@final && state.first.to_s == 'awaiting' && w_count != 0 ? ' **' : '') %></td>
+          <% if audit_type_symbol == :internal && !HIDE_OPORTUNITIES %>
             <td><%= "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)" %></td>
           <% end %>
         </tr>
@@ -35,15 +36,18 @@
           <strong><%= t('follow_up_committee.weaknesses_by_state.total') %></strong>
         </td>
         <td><strong><%= total_weaknesses %></strong></td>
-        <% if audit_type_symbol == :internal %>
+        <% if audit_type_symbol == :internal && !HIDE_OPORTUNITIES %>
           <td><strong><%= total_oportunities %></strong></td>
         <% end %>
       </tr>
     </tbody>
   </table>
 
-  <% unless being_implemented_resume.blank? %>
+  <% if being_implemented_resume.present? %>
     <p style="margin-left: 1em;">* <%= raw being_implemented_resume %></p>
+  <% end %>
+  <% if awaiting_resume.present? %>
+    <p style="margin-left: 1em;">** <%= raw awaiting_resume %></p>
   <% end %>
   <% if repeated_count > 0 %>
     <p style="margin-left: 1em;">

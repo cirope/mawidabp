@@ -117,3 +117,14 @@ es:
         update:
           notice: 'Liberación de responsabilidades finalizada correctamente'
           alert: 'La liberación de responsabilidades no puede realizarse, deberá en algunos casos reasignarlas'
+
+    weakness_templates:
+      create:
+        notice: 'Plantilla de observación creada'
+      update:
+        notice: 'Plantilla de observación actualizada'
+        alert: ''
+        stale: 'La plantilla de observación no pudo ser actualizada, intente nuevamente'
+      destroy:
+        notice: 'Plantilla de observación eliminada'
+        alert: 'La plantilla de observación no pudo ser eliminada'

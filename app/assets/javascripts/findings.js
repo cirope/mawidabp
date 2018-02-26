@@ -31,6 +31,8 @@ jQuery(function ($) {
           $('[name$="[' + dateField + ']"]').datepicker()
           $('[name$="[' + dateField + ']"]').datepicker('setDate', date)
         })
+
+        $('[name$="[origination_date]"]').prop('readonly', true)
       }).always(function () {
         $repeatedSelect.prop('disabled', false)
       })
@@ -38,6 +40,10 @@ jQuery(function ($) {
       $.each(fields, function (i, field) {
         $('[name$="[' + field + ']"]').val('')
       })
+
+      $('[name$="[origination_date]"]').
+        datepicker('setDate', new Date).
+        prop('readonly', false)
     }
   })
 })

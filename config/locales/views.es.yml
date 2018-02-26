@@ -58,6 +58,10 @@ es:
       new: 'Agregar objetivo'
 
   control_objectives:
+    index:
+      title: 'Listado de objetivos de control'
+    show:
+      title: 'Detalle objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
 
@@ -130,6 +134,7 @@ es:
       repeated: 'Reiterada'
       revoked: 'Anulada'
       criteria_mismatch: 'Difiere criterio'
+      expired: 'Desestimada / No aplica'
 
   login_records:
     choose:
@@ -212,6 +217,11 @@ es:
     duplication_or_overload_form:
       allow_duplication: '¿Permitir duplicados?'
       allow_overload: '¿Permitir superposición?'
+    cost:
+      human_resources_abbr: 'RRHH'
+      human_resources: 'Recursos humanos'
+      material_resources_abbr: 'RRMM'
+      material_resources: 'Recursos materiales'
     item_status:
       note: 'Los estados deben leerse: C = Concluido; E = En ejecución dentro de lo planeado; E (FP) = En ejecución fuera de lo planeado; R = Retrasado'
       concluded:
@@ -239,12 +249,14 @@ es:
         now: 'Ahora'
         total: 'Total'
         planned: 'Planificados'
-        executed: 'Ejecutados'
+        concluded: 'Concluidos'
         on_time: 'En fecha'
         progress: 'Avance total'
         compliance: 'Cumplimiento'
     download_global_plan: 'Descargar plan de auditoria global'
     download_detailed_plan: 'Descargar plan de auditoria detallado'
+    download_business_unit_type_plan: 'Descargar plan %{business_unit_type}'
+    download_detailed_business_unit_type_plan: 'Descargar plan %{business_unit_type} detallado'
     without_business_unit_type: 'Sin unidad de negocio'
 
   profiles:
@@ -452,6 +464,10 @@ es:
         submit: 'Liberar responsabilidades'
 
     status:
+      status_controls:
+        add: 'Agregar usuario a lista de estado de seguimiento'
+        remove: 'Eliminar usuario de lista de estado de seguimiento'
+        list: 'Ver lista de observaciones pendientes de los usuarios seleccionados'
       show:
         title: 'Estado'
         table: 'Ver tabla'
@@ -487,3 +503,18 @@ es:
     column_old_value: 'Valor anterior'
     without_changes: 'Sin cambios'
     pdf_list_name: 'reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf'
+
+  weakness_templates:
+    edit:
+      title: 'Editar plantilla de observación'
+    index:
+      new: 'Nueva plantilla de observación'
+      title: 'Listado de plantillas de observaciones'
+      empty_html: 'No hay plantillas de observaciones, puede crear una con el botón <span class="label label-primary">Nueva plantilla de observación</span>'
+      empty_search_html: 'No hay plantillas de observaciones que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear plantilla de observación'
+    show:
+      title: 'Ver plantilla de observación'
+    form:
+      add_control_objective: 'Agregar objetivo de control'
