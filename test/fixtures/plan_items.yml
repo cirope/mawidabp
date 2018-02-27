@@ -3,6 +3,7 @@ current_plan_item_1:
   start: <%= 5.days.ago.to_date.to_s(:db) %>
   end: <%= 2.days.ago.to_date.to_s(:db) %>
   order_number: 1
+  scope: committee
   risk_exposure: high
   plan: current_plan
   business_unit: business_unit_one
@@ -12,6 +13,7 @@ current_plan_item_2:
   start: <%= Date.today.to_s(:db) %>
   end: <%= 2.days.from_now.to_date.to_s(:db) %>
   order_number: 2
+  scope: committee
   risk_exposure: high
   plan: current_plan
   business_unit: business_unit_two
@@ -21,6 +23,7 @@ current_plan_item_3:
   start: <%= 3.days.from_now.to_date.to_s(:db) %>
   end: <%= 5.days.from_now.to_date.to_s(:db) %>
   order_number: 3
+  scope: committee
   risk_exposure: high
   plan: current_plan
   business_unit: business_unit_three
@@ -30,6 +33,7 @@ current_plan_item_4:
   start: <%= 6.days.from_now.to_date.to_s(:db) %>
   end: <%= 9.days.from_now.to_date.to_s(:db) %>
   order_number: 4
+  scope: committee
   risk_exposure: high
   plan: current_plan
   business_unit: business_unit_three
@@ -39,6 +43,7 @@ current_plan_item_5:
   start: <%= 10.days.from_now.to_date.to_s(:db) %>
   end: <%= 15.days.from_now.to_date.to_s(:db) %>
   order_number: 5
+  scope: committee
   risk_exposure: high
   plan: current_plan
   business_unit: business_unit_three
@@ -48,6 +53,7 @@ current_plan_item_4_without_business_unit:
   start: <%= 3.days.from_now.to_date.to_s(:db) %>
   end: <%= 5.days.from_now.to_date.to_s(:db) %>
   order_number: 4
+  scope: committee
   risk_exposure: high
   plan: current_plan
   business_unit:
@@ -57,6 +63,7 @@ past_plan_item_1:
   start: <%= 50.days.ago.to_date.to_s(:db) %>
   end: <%= 45.days.ago.to_date.to_s(:db) %>
   order_number: 1
+  scope: committee
   risk_exposure: high
   plan: past_plan
   business_unit: business_unit_one
@@ -66,6 +73,7 @@ past_plan_item_2:
   start: <%= 40.days.ago.to_date.to_s(:db) %>
   end: <%= 35.days.ago.to_date.to_s(:db) %>
   order_number: 2
+  scope: committee
   risk_exposure: high
   plan: past_plan
   business_unit: business_unit_two
@@ -75,6 +83,7 @@ past_plan_item_3:
   start: <%= 30.days.ago.to_date.to_s(:db) %>
   end: <%= 25.days.ago.to_date.to_s(:db) %>
   order_number: 3
+  scope: committee
   risk_exposure: high
   plan: past_plan
   business_unit: business_unit_three

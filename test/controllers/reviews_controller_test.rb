@@ -328,6 +328,7 @@ class ReviewsControllerTest < ActionController::TestCase
     end
 
     assert_not_nil plan_item_data
+    assert_not_nil plan_item_data['scope']
     assert_not_nil plan_item_data['risk_exposure']
     assert_not_nil plan_item_data['business_unit_name']
     assert_not_nil plan_item_data['business_unit_type']
