@@ -16,6 +16,7 @@ class PlanItemTest < ActiveSupport::TestCase
         start: 6.days.from_now.to_date,
         end: 7.days.from_now.to_date,
         order_number: 4,
+        scope: 'committee',
         risk_exposure: 'high',
         plan: plan,
         business_unit: business_units(:business_unit_one)
@@ -64,6 +65,7 @@ class PlanItemTest < ActiveSupport::TestCase
     @plan_item.order_number = nil
     @plan_item.start = nil
     @plan_item.end = '   '
+    @plan_item.scope = '   '
     @plan_item.risk_exposure = '   '
 
     assert @plan_item.invalid?
@@ -73,6 +75,7 @@ class PlanItemTest < ActiveSupport::TestCase
     assert_error @plan_item, :end, :invalid_date
 
     if SHOW_REVIEW_EXTRA_ATTRIBUTES
+      assert_error @plan_item, :scope, :blank
       assert_error @plan_item, :risk_exposure, :blank
     end
   end

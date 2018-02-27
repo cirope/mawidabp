@@ -300,6 +300,7 @@ jQuery(function() {
     var element = $(this);
     var prefix = $('#review_identification_prefix').val();
 
+    $('#review_scope').val('');
     $('#review_risk_exposure').val('');
     $('#review_business_unit').val('');
     $('#review_audit_type').val('');
@@ -309,6 +310,7 @@ jQuery(function() {
       Helper.showLoading(element);
 
       $.get(data_url, { id: element.val(), format: 'json' }, function(data) {
+        $('#review_scope').val(data.scope);
         $('#review_risk_exposure').val(data.risk_exposure);
         $('#review_business_unit').val(data.business_unit_name);
         $('#review_audit_type').val(data.business_unit_type);

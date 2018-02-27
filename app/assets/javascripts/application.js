@@ -39,6 +39,7 @@
 //= require plans/stats
 //= require plan_items
 //= require process_controls
+//= require readings
 //= require reviews
 //= require risk_assessments
 //= require risk_assessment_templates

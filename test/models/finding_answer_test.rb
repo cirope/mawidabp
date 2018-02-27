@@ -4,12 +4,12 @@ class FindingAnswerTest < ActiveSupport::TestCase
   include ActionMailer::TestHelper
 
   setup do
-    @finding_answer = finding_answers :confirmed_oportunity_auditor_answer
+    @finding_answer = finding_answers :auditor_answer
   end
 
   test 'auditor create without notification' do
     assert_no_enqueued_emails do
-      assert_difference 'FindingAnswer.count' do
+      assert_difference ['FindingAnswer.count', 'Reading.count'] do
         @finding_answer = FindingAnswer.create(
           answer: 'New answer',
           finding: findings(:unanswered_weakness),

@@ -8,6 +8,7 @@ class PlanItem < ApplicationRecord
   include PlanItems::PDF
   include PlanItems::ResourceUtilizations
   include PlanItems::Scopes
+  include PlanItems::Stats
   include PlanItems::Status
   include PlanItems::Units
   include PlanItems::Validations
