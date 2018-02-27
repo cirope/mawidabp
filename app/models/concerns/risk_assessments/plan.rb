@@ -18,12 +18,14 @@ module RiskAssessments::Plan
       risk_assessment_items.each_with_index do |risk_assessment_item, i|
         project       = "#{risk_assessment_item.name} (#{risk_assessment_item.risk})"
         risk_exposure = REVIEW_RISK_EXPOSURE.last if SHOW_REVIEW_EXTRA_ATTRIBUTES
+        scope         = REVIEW_SCOPES.first       if SHOW_REVIEW_EXTRA_ATTRIBUTES
 
         plan.plan_items.build(
           order_number:     i.next,
           project:          project,
           start:            period.start,
           end:              period.end,
+          scope:            scope,
           risk_exposure:    risk_exposure,
           business_unit_id: risk_assessment_item.business_unit_id
         )
