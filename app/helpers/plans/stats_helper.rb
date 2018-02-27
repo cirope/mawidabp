@@ -4,9 +4,9 @@ module Plans::StatsHelper
     cursor  = @plan.period.start.at_end_of_month
     ending  = @plan.period.end.at_end_of_month
     list    = [
-      active: params[:until].blank?,
+      active: params[:until] == Time.zone.today.to_s(:db),
       label:  t('.now'),
-      value:  nil
+      value:  Time.zone.today.to_s(:db)
     ]
 
     while cursor <= ending
