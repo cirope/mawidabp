@@ -21,6 +21,7 @@
             <th><%= BusinessUnit.model_name.human %></th>
             <th><%= PlanItem.human_attribute_name 'project' %></th>
             <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+              <th><%= PlanItem.human_attribute_name 'scope' %></th>
               <th><%= PlanItem.human_attribute_name 'risk_exposure' %></th>
             <% end %>
             <th><%= Tag.model_name.human count: 0 %></th>
@@ -36,6 +37,7 @@
               <td><%= plan_item.business_unit&.name %></td>
               <td><%= plan_item.project %></td>
               <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+                <td><%= plan_item.scope %></td>
                 <td><%= plan_item.risk_exposure %></td>
               <% end %>
               <td><%= tags plan_item.tags %></td>
