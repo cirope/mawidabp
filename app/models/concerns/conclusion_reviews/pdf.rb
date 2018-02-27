@@ -281,6 +281,10 @@ module ConclusionReviews::PDF
       end
     end
 
+    def reset_last_displayed_control_objective
+      @__last_displayed_control_objective_id = nil
+    end
+
     def put_findings_by_risk_on pdf, type, use_finals
       findings = if use_finals
                    review.send :"final_#{type}"
@@ -288,7 +292,45 @@ module ConclusionReviews::PDF
                    review.send type
                  end
 
-      findings.not_revoked.sort_for_review.each do |finding|
+      repeated = findings.not_revoked.where.not repeated_of_id: nil
+      present  = findings.not_revoked.where repeated_of_id: nil
+
+      put_repeated_findings_by_risk_on pdf, repeated
+      put_present_findings_by_risk_on  pdf, present
+    end
+
+    def put_repeated_findings_by_risk_on pdf, findings
+      pdf.move_down (PDF_FONT_SIZE * 0.75).round
+      pdf.add_title I18n.t('conclusion_review.repeated_findings'),
+        (PDF_FONT_SIZE * 1.15).round
+
+      if findings.any?
+        put_findings_sorted_by_risk_on pdf, findings
+      else
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t('conclusion_review.repeated_findings_empty'),
+          style: :italic
+      end
+    end
+
+    def put_present_findings_by_risk_on pdf, findings
+      reset_last_displayed_control_objective
+
+      pdf.move_down (PDF_FONT_SIZE * 0.75).round
+      pdf.add_title I18n.t('conclusion_review.present_findings'),
+        (PDF_FONT_SIZE * 1.15).round
+
+      if findings.any?
+        put_findings_sorted_by_risk_on pdf, findings
+      else
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t('conclusion_review.present_findings_empty'),
+          style: :italic
+      end
+    end
+
+    def put_findings_sorted_by_risk_on pdf, findings
+      findings.sort_for_review.each do |finding|
         coi = finding.control_objective_item
 
         put_control_objective_table_on pdf, coi, coi.process_control
