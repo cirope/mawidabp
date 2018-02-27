@@ -123,7 +123,20 @@ module FindingsHelper
       class: html_class
     }
 
-    raw "#{finding_answers_count} / #{user_count}"
+    raw [finding_answers_count, user_count].join(' / ')
+  end
+
+  def show_finding_reading_warning finding
+    readed_count  = finding.finding_answers.readed_by(@auth_user).count
+    answers_count = finding.finding_answers.count
+
+    if readed_count < answers_count
+      title = t '.unread_answers', count: answers_count - readed_count
+
+      content_tag(:span, class: 'text-warning', title: title) do
+        content_tag :span, nil, class: 'glyphicon glyphicon-warning-sign'
+      end
+    end
   end
 
   def show_finding_related_users

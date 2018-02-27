@@ -5,6 +5,8 @@ class FindingAnswer < ApplicationRecord
   include FindingAnswers::Defaults
   include FindingAnswers::File
   include FindingAnswers::Notifications
+  include FindingAnswers::Readings
+  include FindingAnswers::Scopes
   include FindingAnswers::Validations
   include ParameterSelector
 

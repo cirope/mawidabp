@@ -66,13 +66,11 @@ module Reports::WeaknessesByMonth
           report_weaknesses = report_weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
           report_weaknesses = report_weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
 
-          if report_weaknesses.any?
-            @reviews[month] ||= []
-            @reviews[month] << {
-              conclusion_review: c_r,
-              weaknesses: report_weaknesses
-            }
-          end
+          @reviews[month] ||= []
+          @reviews[month] << {
+            conclusion_review: c_r,
+            weaknesses: report_weaknesses
+          }
         end
       end
     end
@@ -179,15 +177,16 @@ module Reports::WeaknessesByMonth
       pdf.add_description_item Review.human_attribute_name('plan_item'),
         review.plan_item.project, 0, false, PDF_FONT_SIZE
 
-      pdf.add_description_item ConclusionFinalReview.human_attribute_name('conclusion'),
-        "     #{conclusion_review.conclusion}", 0, false, PDF_FONT_SIZE
-
       put_weaknesses_by_month_conclusion_image_on pdf, conclusion_review
 
-      pdf.add_description_item ConclusionFinalReview.human_attribute_name('evolution'),
-        "     #{conclusion_review.evolution}", 0, false, PDF_FONT_SIZE
+      pdf.add_description_item ConclusionFinalReview.human_attribute_name('conclusion'),
+        "     #{conclusion_review.conclusion}", 0, false, PDF_FONT_SIZE, align: :left
 
       put_weaknesses_by_month_evolution_image_on pdf, conclusion_review
+
+      pdf.add_description_item ConclusionFinalReview.human_attribute_name('evolution'),
+        "     #{conclusion_review.evolution} - #{conclusion_review.evolution_justification}",
+        0, false, PDF_FONT_SIZE, align: :left
 
       pdf.add_description_item Review.human_attribute_name('risk_exposure'),
         review.risk_exposure, 0, false, PDF_FONT_SIZE
@@ -198,7 +197,7 @@ module Reports::WeaknessesByMonth
       image      = CONCLUSION_IMAGES[conclusion_review.conclusion]
       image_path = PDF_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
       image_x    = pdf.width_of(text, size: PDF_FONT_SIZE, style: :bold)
-      image_y    = pdf.cursor + (PDF_FONT_SIZE * 1.25)
+      image_y    = pdf.cursor + 1
 
       pdf.image image_path, fit: [10, 10], at: [image_x, image_y]
     end
@@ -208,7 +207,7 @@ module Reports::WeaknessesByMonth
       image      = EVOLUTION_IMAGES[conclusion_review.evolution]
       image_path = PDF_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
       image_x    = pdf.width_of(text, size: PDF_FONT_SIZE, style: :bold)
-      image_y    = pdf.cursor + (PDF_FONT_SIZE * 1.25)
+      image_y    = pdf.cursor + 1
 
       pdf.image image_path, fit: [10, 10], at: [image_x, image_y]
     end
@@ -287,6 +286,7 @@ module Reports::WeaknessesByMonth
       text = [
         w.title,
         [Weakness.human_attribute_name('risk'), w.risk_text].join(': '),
+        [Weakness.human_attribute_name('state'), w.state_text].join(': '),
         [
           Weakness.human_attribute_name('origination_date'),
           w.repeated_of_id ? l(w.origination_date) : t('conclusion_review.new_origination_date')
