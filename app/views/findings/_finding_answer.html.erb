@@ -49,6 +49,9 @@
     </div>
     <div class="col-md-2">
       <% if finding_answer.persisted? %>
+        <div class="text-right">
+          <%= render 'readings/reading', finding_answer: finding_answer %>
+        </div>
         <% if finding_answer.commitment_date %>
           <strong><%= FindingAnswer.human_attribute_name 'commitment_date' %></strong>:
           <br /><%= l(finding_answer.commitment_date, format: :long) %>

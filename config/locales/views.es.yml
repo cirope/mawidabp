@@ -104,6 +104,9 @@ es:
     index:
       title: 'Listado de hallazgos'
       current_user_answers_count: 'Comentarios propios'
+      unread_answers:
+        one: 'Tiene un comentario sin leer'
+        other: 'Tiene %{count} comentarios sin leer'
     show:
       title: 'Detalles del hallazgo'
     edit:
@@ -311,6 +314,11 @@ es:
       title: 'Detalles del cuestionario'
     questions:
       new: 'Agregar cuestión'
+
+  readings:
+    reading:
+      mark_as_read: 'Marcar como leído'
+      readed_on: 'Marcado como leído el %{on}'
 
   report:
     index_title: 'Listado de reportes'

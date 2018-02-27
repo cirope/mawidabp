@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
   resources :benefits
 
+  resources :readings, only: [:create]
+
   resources :documents do
     get :download, on: :member
     get :auto_complete_for_tagging, on: :collection

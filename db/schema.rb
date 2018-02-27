@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180107223402) do
+ActiveRecord::Schema.define(version: 20180226161638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -638,6 +638,18 @@ ActiveRecord::Schema.define(version: 20180107223402) do
     t.index ["questionnaire_id"], name: "index_questions_on_questionnaire_id"
   end
 
+  create_table "readings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "readable_type", null: false
+    t.bigint "readable_id", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_readings_on_organization_id"
+    t.index ["readable_type", "readable_id"], name: "index_readings_on_readable_type_and_readable_id"
+    t.index ["user_id"], name: "index_readings_on_user_id"
+  end
+
   create_table "related_user_relations", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "related_user_id"
@@ -936,6 +948,8 @@ ActiveRecord::Schema.define(version: 20180107223402) do
   add_foreign_key "polls", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "privileges", "roles", on_update: :restrict, on_delete: :restrict
   add_foreign_key "process_controls", "best_practices", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "readings", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "readings", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "resource_classes", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "resources", "resource_classes", on_update: :restrict, on_delete: :restrict
   add_foreign_key "review_user_assignments", "reviews", on_update: :restrict, on_delete: :restrict

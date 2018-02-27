@@ -17,6 +17,7 @@
  *= require plans/stats
  *= require plan_items
  *= require process_controls
+ *= require readings
  *= require reports
  *= require roles
  *= require sessions
