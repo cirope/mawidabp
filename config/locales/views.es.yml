@@ -464,6 +464,10 @@ es:
         submit: 'Reasignar'
       must_select_a_user: 'Debe seleccionar un usuario'
 
+    registrations:
+      new:
+        title: 'Registrar nuevo usuario'
+
     releases:
       edit:
         title: 'Liberar responsabilidades'

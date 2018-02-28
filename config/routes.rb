@@ -57,6 +57,7 @@ Rails.application.routes.draw do
     'weaknesses_by_state_execution',
     'weaknesses_report',
     'detailed_management_report',
+    'planned_cost_summary',
     'reviews_with_incomplete_work_papers_report'
   ].each do |action|
     get "execution_reports/#{action}", to: "execution_reports##{action}", as: action
@@ -65,6 +66,7 @@ Rails.application.routes.draw do
   [
     'create_weaknesses_by_state_execution',
     'create_detailed_management_report',
+    'create_planned_cost_summary',
     'create_weaknesses_report'
   ].each do |action|
     post "execution_reports/#{action}", to: "execution_reports##{action}", as: action

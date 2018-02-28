@@ -1,26 +1,24 @@
-module Reports::CostSummary
+module Reports::PlannedCostSummary
   include Reports::Period
   include Reports::Pdf
 
-  def cost_summary
-    init_cost_summary_vars
+  def planned_cost_summary
+    init_planned_cost_summary_vars
 
     @periods.each do |period|
-      reviews_by_month = @reviews.for_period(period).group_by do |review|
-        date = review.conclusion_final_review&.issue_date || review.created_at
-
-        date.beginning_of_month.to_date
+      plan_items_by_month = @plan_items.for_period(period).group_by do |plan_item|
+        plan_item.start.beginning_of_month.to_date
       end
 
       @data[period] = {
-        data:   cost_summary_data_for(reviews_by_month),
-        months: reviews_by_month.keys.sort
+        data:   planned_cost_summary_data_for(plan_items_by_month),
+        months: plan_items_by_month.keys.sort
       }
     end
   end
 
-  def create_cost_summary
-    cost_summary
+  def create_planned_cost_summary
+    planned_cost_summary
 
     pdf = init_pdf params[:report_title], nil
 
@@ -30,23 +28,23 @@ module Reports::CostSummary
       add_period_title pdf, period
 
       if @data[period].present? && @data[period][:data].present?
-        put_cost_summary_on pdf, period
+        put_planned_cost_summary_on pdf, period
       else
-        pdf.text t('conclusion_report.cost_analysis.without_audits_in_the_period'), font_size: PDF_FONT_SIZE
+        pdf.text t('execution_reports.cost_analysis.without_audits_in_the_period'), font_size: PDF_FONT_SIZE
       end
     end
 
-    save_and_redirect_to_cost_summary_pdf pdf
+    save_and_redirect_to_planned_cost_summary_pdf pdf
   end
 
   private
 
-    def init_cost_summary_vars
-      @title = t 'conclusion_report.cost_summary_title'
-      @from_date, @to_date = *make_date_range(params[:cost_summary])
+    def init_planned_cost_summary_vars
+      @title = t 'execution_reports.planned_cost_summary_title'
+      @from_date, @to_date = *make_date_range(params[:planned_cost_summary])
       @data = {}
       @periods = periods_for_interval
-      @reviews = Review.list_by_issue_date_or_creation @from_date, @to_date
+      @plan_items = PlanItem.list.where(start: @from_date..@to_date)
 
       @column_order = [
         ['month', 20],
@@ -56,14 +54,14 @@ module Reports::CostSummary
       ]
     end
 
-    def cost_summary_data_for reviews_by_month
+    def planned_cost_summary_data_for plan_items_by_month
       data = {}
 
-      Hash[reviews_by_month.sort].each do |date, reviews|
-        planed   = ResourceUtilization.human.joins(:user).planned_on  reviews
-        executed = ResourceUtilization.human.joins(:user).executed_on reviews
+      Hash[plan_items_by_month.sort].each do |date, plan_items|
+        planned  = ResourceUtilization.human.joins(:user).items_planned_on  plan_items
+        executed = ResourceUtilization.human.joins(:user).items_executed_on plan_items
 
-        put_planned_data_on   data, planed, date
+        put_planned_data_on   data, planned, date
         put_executed_data_on  data, executed, date
         put_deviation_data_on data, date
       end
@@ -71,8 +69,8 @@ module Reports::CostSummary
       data
     end
 
-    def put_planned_data_on data, planed, date
-      planed.group(:resource_id, :name, :last_name).sum(:units).each do |user_data, sum|
+    def put_planned_data_on data, planned, date
+      planned.group(:resource_id, :name, :last_name).sum(:units).each do |user_data, sum|
         user_id = user_data.first
 
         data[user_id] ||= {
@@ -111,23 +109,23 @@ module Reports::CostSummary
       end
     end
 
-    def put_cost_summary_on pdf, period
+    def put_planned_cost_summary_on pdf, period
       @data[period][:data].each do |user_id, data|
         pdf.text "<b>#{data[:name]}</b>", inline_format: true, font_size: PDF_FONT_SIZE
         pdf.move_down PDF_FONT_SIZE
 
-        put_user_cost_summary_on pdf, data[:data], @data[period][:months]
+        put_user_planned_cost_summary_on pdf, data[:data], @data[period][:months]
 
         pdf.move_down PDF_FONT_SIZE
       end
     end
 
-    def put_user_cost_summary_on pdf, data, months
+    def put_user_planned_cost_summary_on pdf, data, months
       column_headers, column_widths = [], []
-      table_data = user_cost_summary_table_data data, months
+      table_data = user_planned_cost_summary_table_data data, months
 
       @column_order.each do |column|
-        column_headers << "<b>#{t("conclusion_report.cost_summary.column_#{column.first}")}</b>"
+        column_headers << "<b>#{t("execution_reports.planned_cost_summary.column_#{column.first}")}</b>"
         column_widths  << pdf.percent_width(column.last)
       end
 
@@ -146,7 +144,7 @@ module Reports::CostSummary
       end
     end
 
-    def user_cost_summary_table_data data, months
+    def user_planned_cost_summary_table_data data, months
       months.map do |month|
         month_data = data[month] || {}
 
@@ -159,14 +157,14 @@ module Reports::CostSummary
       end
     end
 
-    def save_and_redirect_to_cost_summary_pdf pdf
-      title = t 'conclusion_report.cost_summary.pdf_name',
+    def save_and_redirect_to_planned_cost_summary_pdf pdf
+      title = t 'execution_reports.planned_cost_summary.pdf_name',
         from_date: @from_date.to_formatted_s(:db),
         to_date:   @to_date.to_formatted_s(:db)
 
-      pdf.custom_save_as title, 'cost_summary', 0
+      pdf.custom_save_as title, 'planned_cost_summary', 0
 
-      @report_path = Prawn::Document.relative_path title, 'cost_summary', 0
+      @report_path = Prawn::Document.relative_path title, 'planned_cost_summary', 0
 
       respond_to do |format|
         format.html { redirect_to @report_path }
