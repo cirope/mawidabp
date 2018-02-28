@@ -29,22 +29,55 @@ module Reviews::WeaknessesBrief
       findings = finals ? final_weaknesses : weaknesses
 
       [
-        [
-          I18n.t('review.new_weaknesses'),
-          new_weaknesses_counts(findings),
-          "<b>#{new_weaknesses_counts(findings).sum}</b>"
-        ].flatten,
-        [
-          I18n.t('review.repeated_weaknesses'),
-          repeated_weaknesses_counts(findings),
-          "<b>#{repeated_weaknesses_counts(findings).sum}</b>"
-        ].flatten,
-        [
-          "<b>#{I18n.t('label.total')}</b>",
-          total_weaknesses_counts(findings).map { |t| "<b>#{t}</b>" },
-          "<b>#{total_weaknesses_counts(findings).sum}</b>"
-        ].flatten
+        new_weaknesses_row(findings),
+        repeated_weaknesses_row(findings),
+        total_weaknesses_row(findings)
       ]
+    end
+
+    def new_weaknesses_row findings
+      counts = new_weaknesses_counts(findings).map do |c|
+        { content: c.to_s, align: :center }
+      end
+
+      [
+        I18n.t('review.new_weaknesses'),
+        counts,
+        {
+          content: "<b>#{new_weaknesses_counts(findings).sum}</b>",
+          align: :center
+        }
+      ].flatten
+    end
+
+    def repeated_weaknesses_row findings
+      counts = repeated_weaknesses_counts(findings).map do |c|
+        { content: c.to_s, align: :center }
+      end
+
+      [
+        I18n.t('review.repeated_weaknesses'),
+        counts,
+        {
+          content: "<b>#{repeated_weaknesses_counts(findings).sum}</b>",
+          align: :center
+        }
+      ].flatten
+    end
+
+    def total_weaknesses_row findings
+      counts = total_weaknesses_counts(findings).map do |t|
+        { content: "<b>#{t}</b>", align: :center }
+      end
+
+      [
+        "<b>#{I18n.t('label.total')}</b>",
+        counts,
+        {
+          content: "<b>#{total_weaknesses_counts(findings).sum}</b>",
+          align: :center
+        }
+      ].flatten
     end
 
     def weaknesses_brief_column_widths pdf
@@ -59,9 +92,9 @@ module Reviews::WeaknessesBrief
       [
         '',
         self.class.risks.to_a.reverse.map do |risk, value|
-          "<b>#{I18n.t "risk_types.#{risk}"}</b>"
+          { content: "<b>#{I18n.t "risk_types.#{risk}"}</b>", align: :center }
         end,
-        "<b>#{I18n.t('label.total')}</b>"
+        { content: "<b>#{I18n.t('label.total')}</b>", align: :center }
       ].flatten
     end
 
