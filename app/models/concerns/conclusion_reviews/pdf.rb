@@ -118,16 +118,17 @@ module ConclusionReviews::PDF
     def put_findings_on pdf, type, options
       title              = I18n.t "conclusion_review.#{type}"
       use_finals         = kind_of? ConclusionFinalReview
+      ordered_by_risk    = ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY == 'risk'
       grouped_objectives = grouped_control_objectives options
 
       review_has_findings = grouped_objectives.any? do |_, cois|
         has_findings_for_review? cois, type, use_finals
       end
 
-      if review_has_findings
+      if review_has_findings || (ordered_by_risk && type == :weaknesses)
         pdf.add_subtitle title, PDF_FONT_SIZE, PDF_FONT_SIZE * 0.25
 
-        if ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY == 'risk'
+        if ordered_by_risk
           put_findings_by_risk_on pdf, type, use_finals
         else
           put_control_objective_findings_on pdf, grouped_objectives, type, use_finals
