@@ -62,14 +62,15 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
         :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'three'
+        :business_unit => 'three',
+        :scope => 'committee'
       },
       :controller_name => 'follow_up'
     }
 
     assert_response :success
     assert_not_nil assigns(:filters)
-    assert_equal 2, assigns(:filters).count
+    assert_equal 3, assigns(:filters).count
     assert_template 'follow_up_audit/synthesis_report'
   end
 
