@@ -3,6 +3,7 @@ class Users::RegistrationsController < ApplicationController
 
   respond_to :html
 
+  before_action :set_title
   before_action :set_group, :check_stale_group
 
   layout 'clean'

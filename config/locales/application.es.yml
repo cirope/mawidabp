@@ -467,6 +467,7 @@ es:
     subtitle: "Subtítulo"
 
   execution_reports:
+    cost_analysis_title: "Análisis de costos"
     detailed_management_report:
       pdf_name: "informe_gerencial_detallado_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
@@ -480,6 +481,16 @@ es:
       without_oportunities: "Sin oportunidades de mejora"
       references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     detailed_management_report_title: "Resumen gerencial"
+    planned_cost_summary:
+      pdf_name: "resumen_de_costos_planificados_%{from_date}_al_%{to_date}.pdf"
+      title: "RESUMEN DE COSTOS PLANIFICADOS\nDE AUDITORÍA INTERNA"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      column_month: "Mes"
+      column_estimated_amount: "Unidades estimadas"
+      column_real_amount: "Unidades reales"
+      column_deviation: "Desviación"
+    planned_cost_summary_title: "Análisis de costos planificados"
     reviews_with_incomplete_work_papers_report_incomplete_title: "Informes cerrados sin conformidad auditor"
     reviews_with_incomplete_work_papers_report_revised_title: "Informes cerrados sin revisión supervisor"
     reviews_with_incomplete_work_papers_report:
