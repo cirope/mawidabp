@@ -102,9 +102,11 @@ module ConclusionReviews::PDF
     end
 
     def put_weaknesses_brief_on pdf, organization
-      if show_weaknesses_brief? organization
-        title      = I18n.t 'conclusion_review.weaknesses_brief'
-        use_finals = kind_of? ConclusionFinalReview
+      use_finals = kind_of? ConclusionFinalReview
+      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
+
+      if show_weaknesses_brief?(organization) && weaknesses.any?
+        title = I18n.t 'conclusion_review.weaknesses_brief'
 
         pdf.add_subtitle title, PDF_FONT_SIZE, PDF_FONT_SIZE * 0.25
         pdf.move_down PDF_FONT_SIZE
