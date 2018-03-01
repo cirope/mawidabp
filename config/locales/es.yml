@@ -540,8 +540,8 @@
       one: "Revisor"
       other: "Revisores"
     audited:
-      one: "Auditado"
-      other: "Auditados"
+      one: "Responsable de la solución"
+      other: "Responsables de la solución"
     readonly: "La observación no puede ser creada ni modificada, ya se emitió el informe definitivo"
     responsibles:
       one: "Responsable"
