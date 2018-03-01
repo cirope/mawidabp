@@ -49,7 +49,6 @@ es:
     es: 'Español'
 
   message:
-    welcome: 'Bienvenido'
     ldap_error: 'El servidor de autenticación no está disponible, intente nuevamente más tarde'
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
