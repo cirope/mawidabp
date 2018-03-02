@@ -49,7 +49,6 @@ es:
     es: 'Español'
 
   message:
-    welcome: 'Bienvenido'
     ldap_error: 'El servidor de autenticación no está disponible, intente nuevamente más tarde'
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
@@ -937,6 +936,7 @@ es:
     other_actions: "Acciones"
     recode_findings: "Recodificar hallazgos"
     recode_weaknesses_by_risk: "Recodificar observaciones por riesgo"
+    recode_weaknesses_by_repetition_and_risk: "Recodificar observaciones por reiteración y riesgo"
     recode_weaknesses_by_control_objective_order: "Recodificar observaciones por orden objetivos de control"
     findings_recoded: "Hallazgos recodificados correctamente"
     work_papers_marked_as_finished: "Papeles de trabajo marcados como conforme auditor"
