@@ -264,6 +264,7 @@ Rails.application.routes.draw do
       patch :finished_work_papers
       patch :recode_findings
       patch :recode_weaknesses_by_risk
+      patch :recode_weaknesses_by_repetition_and_risk
       patch :recode_weaknesses_by_control_objective_order
     end
 
