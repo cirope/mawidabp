@@ -104,6 +104,7 @@ Rails.application.routes.draw do
   [
     'synthesis_report',
     'review_stats_report',
+    'review_scores_report',
     'weaknesses_by_state',
     'weaknesses_by_risk',
     'weaknesses_by_audit_type',
@@ -130,6 +131,7 @@ Rails.application.routes.draw do
   [
     'create_synthesis_report',
     'create_review_stats_report',
+    'create_review_scores_report',
     'create_weaknesses_by_state',
     'create_weaknesses_by_risk',
     'create_weaknesses_by_audit_type',
