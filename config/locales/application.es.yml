@@ -296,7 +296,7 @@ es:
       title: "CALIFICACIONES DE INFORMES"
       subtitle: "INFORMES DEFINITIVOS"
       review_score: "Calificación informes"
-      business_unit_score: "Calificación unidades de negocio"
+      business_unit_score: "Calificación ciclo"
       total_score: "Calificación total"
       empty: "Sin calificaciones para el filtro aplicado"
     weaknesses_by_state:
