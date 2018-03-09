@@ -177,6 +177,7 @@ es:
     process_control_stats_title: 'Observaciones por proceso de negocio'
     synthesis_report_title: "Informe de síntesis al directorio"
     review_stats_report_title: "Estadísticas de informes"
+    review_scores_report_title: "Calificaciones de informes"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -290,6 +291,14 @@ es:
       weaknesses_by_score:
         title: "Observaciones por riesgo, prioridad y calificación de informe"
         total: "Total"
+    review_scores_report:
+      pdf_name: "calificaciones_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
+      title: "CALIFICACIONES DE INFORMES"
+      subtitle: "INFORMES DEFINITIVOS"
+      review_score: "Calificación informes"
+      business_unit_score: "Calificación unidades de negocio"
+      total_score: "Calificación total"
+      empty: "Sin calificaciones para el filtro aplicado"
     weaknesses_by_state:
       pdf_name: "observaciones_informes_definitivos_por_estado_%{from_date}_al_%{to_date}.pdf"
       title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR ESTADO"

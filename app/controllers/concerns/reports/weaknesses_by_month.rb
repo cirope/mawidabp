@@ -85,12 +85,6 @@ module Reports::WeaknessesByMonth
 
     pdf = init_pdf params[:report_title], params[:report_subtitle]
 
-    @filters << t(
-      "#{@controller}_committee_report.period.range",
-      from_date: l(@from_date, format: :long),
-      to_date:   l(@to_date, format: :long)
-    )
-
     @months.each do |month|
       add_month_title pdf, month
 
