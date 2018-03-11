@@ -32,6 +32,7 @@ es:
     # Short qualifications
     ok: 'OK'
     observed: 'Observado'
+    not_apply: 'No aplica'
   risk_types:
     low: 'Bajo'
     medium: 'Medio'

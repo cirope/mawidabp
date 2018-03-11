@@ -114,10 +114,12 @@ class ConclusionDraftReviewsController < ApplicationController
   #
   # * GET /conclusion_draft_reviews/export_to_pdf/1
   def export_to_pdf
+    options = params[:export_options]&.to_unsafe_h
+
     if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_draft_review.alternative_pdf(current_organization)
+      @conclusion_draft_review.alternative_pdf(current_organization, options)
     else
-      @conclusion_draft_review.to_pdf(current_organization, params[:export_options]&.to_unsafe_h)
+      @conclusion_draft_review.to_pdf(current_organization, options)
     end
 
     respond_to do |format|
@@ -182,6 +184,7 @@ class ConclusionDraftReviewsController < ApplicationController
 
     if @conclusion_draft_review.try(:review).try(:can_be_sended?)
       users = []
+      export_options = params[:export_options] || {}
 
       if params[:conclusion_review]
         include_score_sheet =
@@ -189,12 +192,19 @@ class ConclusionDraftReviewsController < ApplicationController
         include_global_score_sheet =
           params[:conclusion_review][:include_global_score_sheet] == '1'
         note = params[:conclusion_review][:email_note]
+        review_type = params[:conclusion_review][:review_type]
+
+        if review_type == 'brief'
+          export_options[:brief] = '1'
+        elsif review_type == 'without_score'
+          export_options[:hide_score] = '1'
+        end
       end
 
       if SHOW_CONCLUSION_ALTERNATIVE_PDF
-        @conclusion_draft_review.alternative_pdf(current_organization)
+        @conclusion_draft_review.alternative_pdf(current_organization, export_options)
       else
-        @conclusion_draft_review.to_pdf(current_organization)
+        @conclusion_draft_review.to_pdf(current_organization, export_options)
       end
 
       if include_score_sheet
@@ -257,7 +267,14 @@ class ConclusionDraftReviewsController < ApplicationController
     end
   end
 
+  def corrective_actions_update
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
+
     def set_conclusion_draft_review
       @conclusion_draft_review = ConclusionDraftReview.list.includes(
         review: [
@@ -275,7 +292,8 @@ class ConclusionDraftReviewsController < ApplicationController
       params.require(:conclusion_draft_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
         :recipients, :sectors, :evolution, :evolution_justification,
-        :observations, :force_approval, :lock_version,
+        :observations, :main_weaknesses_text, :corrective_actions,
+        :affects_compliance, :force_approval, :lock_version,
         review_attributes: [
           :id, :manual_score, :lock_version,
           best_practice_comments_attributes: [

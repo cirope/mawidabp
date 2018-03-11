@@ -114,6 +114,9 @@ es:
       weakness:
         one: 'Observación'
         other: 'Observaciones'
+      weakness_template:
+        one: 'Plantilla de observación'
+        other: 'Plantillas de observaciones'
       work_paper:
         one: 'Papel de trabajo'
         other: 'Papeles de trabajo'
@@ -355,6 +358,7 @@ es:
         start: 'Proyecto (inicio)'
         end: 'Proyecto (fin)'
         order_number: 'Proyecto (orden)'
+        scope: 'Proyecto (Alcance auditoría)'
         risk_exposure: 'Proyecto (exposición al riesgo)'
         business_unit_id: 'Proyecto (unidad de negocio)'
         status: 'Proyecto (estado)'
@@ -370,6 +374,7 @@ es:
         start: 'Inicio'
         end: 'Fin'
         order_number: 'Orden'
+        scope: 'Alcance auditoría'
         risk_exposure: 'Exposición al riesgo'
         business_unit_id: 'Unidad de negocio'
         resources: 'Recursos'
@@ -447,7 +452,17 @@ es:
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
+        weakness_template: 'Buscar plantilla por título'
+        weakness_template_from_control_objective: 'Plantilla sugerida por objetivo de control'
         work_papers: 'Papeles de trabajo'
+      weakness_template:
+        title: 'Título'
+        description: 'Observación'
+        risk: 'Riesgo'
+        operational_risk: 'Riesgo operacional'
+        impact: 'Impacto'
+        internal_control_components: 'Componentes de CI'
+        allow_duplication: 'Permitir título duplicado'
 
     errors:
       models:

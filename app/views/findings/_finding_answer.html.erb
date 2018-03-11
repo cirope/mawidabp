@@ -18,6 +18,7 @@
         <%= f.input :answer, label: false %>
       <% else %>
         <%= simple_format finding_answer.answer %>
+        <p class="small text-muted"><%= l(finding_answer.created_at, format: :long) %></p>
       <% end %>
     </div>
     <div class="col-md-2">
@@ -48,9 +49,11 @@
     </div>
     <div class="col-md-2">
       <% if finding_answer.persisted? %>
-        <%= l(finding_answer.created_at, format: :long) %>
+        <div class="text-right">
+          <%= render 'readings/reading', finding_answer: finding_answer %>
+        </div>
         <% if finding_answer.commitment_date %>
-          <br /><strong><%= FindingAnswer.human_attribute_name 'commitment_date' %></strong>:
+          <strong><%= FindingAnswer.human_attribute_name 'commitment_date' %></strong>:
           <br /><%= l(finding_answer.commitment_date, format: :long) %>
         <% end %>
       <% else %>

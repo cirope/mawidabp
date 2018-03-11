@@ -3,7 +3,8 @@ module Oportunities::Validations
 
   included do
     validates_each :review_code do |record, attr, value|
-      regex = /\A#{record.prefix}\d+\Z/
+      revoked_prefix = I18n.t 'code_prefixes.revoked'
+      regex          = /\A#{revoked_prefix}?#{record.prefix}\d+\Z/
 
       record.errors.add attr, :invalid unless value =~ regex
     end

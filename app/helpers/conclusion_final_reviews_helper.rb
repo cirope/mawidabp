@@ -2,10 +2,20 @@ module ConclusionFinalReviewsHelper
   def conclusion_final_review_review_field(form, review)
     reviews = (Review.list_with_approved_draft - Review.list_with_final_review) |
       [review]
-    options = reviews.compact.map { |r| [r.identification, r.id] }
+    options = reviews.compact.map do |r|
+      [truncate(r.long_identification, length: 50), r.id]
+    end
 
     form.input :review_id, collection: options, prompt: true,
       input_html: { autofocus: true }
+  end
+
+  def conclusion_review_score_text(review)
+    review_score = review.score_array.first
+
+    content_tag(:strong) do
+      "#{t 'review.score'}: #{t("score_types.#{review_score}").upcase}"
+    end
   end
 
   def conclusion_review_score_details_table(review)
@@ -177,7 +187,7 @@ module ConclusionFinalReviewsHelper
 
   def send_review_options
     options = if SHOW_CONCLUSION_ALTERNATIVE_PDF
-                ['normal']
+                ['normal', 'brief']
               else
                 ['normal', 'brief', 'without_score']
               end

@@ -3,7 +3,7 @@
     <td><%= business_unit_type&.name %></td>
     <td><%= plan_items.size %></td>
     <td><strong><%= link_to_planned_items business_unit_type, plan_items %></strong></td>
-    <td><%= plan_stat_executed_count plan_items %></td>
+    <td><%= plan_stat_concluded_count plan_items %></td>
     <td><strong><%= plan_stat_on_time(plan_items).size %></strong></td>
     <td><%= plan_stat_compliance plan_items %></td>
     <td>

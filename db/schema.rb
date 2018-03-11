@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171218211545) do
+ActiveRecord::Schema.define(version: 20180227142453) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -167,6 +167,15 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.index ["name"], name: "index_business_units_on_name"
   end
 
+  create_table "co_weakness_template_relations", force: :cascade do |t|
+    t.integer "control_objective_id", limit: 19, precision: 19, null: false
+    t.integer "weakness_template_id", limit: 19, precision: 19, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["control_objective_id"], name: "index_co_wt_on_co_id"
+    t.index ["weakness_template_id"], name: "index_co_wt_on_wt_id"
+  end
+
   create_table "comments", force: :cascade do |t|
     t.text "comment"
     t.integer "commentable_id", precision: 38
@@ -197,6 +206,9 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.string "evolution"
     t.text "evolution_justification"
     t.text "observations"
+    t.text "main_weaknesses_text"
+    t.text "corrective_actions"
+    t.boolean "affects_compliance", default: false, null: false
     t.index ["close_date"], name: "i_con_rev_clo_dat"
     t.index ["issue_date"], name: "i_con_rev_iss_dat"
     t.index ["organization_id"], name: "i_con_rev_org_id"
@@ -532,6 +544,7 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.text "impact", default: "[]", null: false
     t.text "internal_control_components", default: "[]", null: false
     t.text "operational_risk", default: "[]"
+    t.integer "weakness_template_id", precision: 38
     t.index ["control_objective_item_id"], name: "i_fin_con_obj_ite_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
@@ -544,6 +557,7 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.index ["title"], name: "index_findings_on_title"
     t.index ["type"], name: "index_findings_on_type"
     t.index ["updated_at"], name: "index_findings_on_updated_at"
+    t.index ["weakness_template_id"], name: "i_fin_wea_tem_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -1980,6 +1994,7 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "risk_exposure"
+    t.string "scope"
     t.index ["business_unit_id"], name: "i_plan_items_business_unit_id"
     t.index ["plan_id"], name: "index_plan_items_on_plan_id"
   end
@@ -2061,6 +2076,18 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["questionnaire_id"], name: "i_questions_questionnaire_id"
+  end
+
+  create_table "readings", force: :cascade do |t|
+    t.integer "user_id", limit: 19, precision: 19, null: false
+    t.string "readable_type", null: false
+    t.integer "readable_id", limit: 19, precision: 19, null: false
+    t.integer "organization_id", limit: 19, precision: 19, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "i_readings_organization_id"
+    t.index ["readable_type", "readable_id"], name: "i_rea_rea_typ_rea_id"
+    t.index ["user_id"], name: "index_readings_on_user_id"
   end
 
   create_table "related_user_relations", force: :cascade do |t|
@@ -2743,6 +2770,20 @@ ActiveRecord::Schema.define(version: 20171218211545) do
     t.index ["whodunnit"], name: "index_versions_on_whodunnit"
   end
 
+  create_table "weakness_templates", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "description", null: false
+    t.integer "risk", precision: 38
+    t.text "impact", default: "[]", null: false
+    t.text "operational_risk", default: "[]", null: false
+    t.text "internal_control_components", default: "[]", null: false
+    t.integer "lock_version", precision: 38, default: 0, null: false
+    t.integer "organization_id", limit: 19, precision: 19, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "i_wea_tem_org_id"
+  end
+
   create_table "work_papers", force: :cascade do |t|
     t.string "name"
     t.string "code"
@@ -2797,6 +2838,8 @@ ActiveRecord::Schema.define(version: 20171218211545) do
   add_foreign_key "business_unit_scores", "control_objective_items", on_delete: :cascade
   add_foreign_key "business_unit_types", "organizations", on_delete: :cascade
   add_foreign_key "business_units", "business_unit_types", on_delete: :cascade
+  add_foreign_key "co_weakness_template_relations", "control_objectives", on_delete: :cascade
+  add_foreign_key "co_weakness_template_relations", "weakness_templates", on_delete: :cascade
   add_foreign_key "comments", "users", on_delete: :cascade
   add_foreign_key "conclusion_reviews", "reviews", on_delete: :cascade
   add_foreign_key "control_objective_items", "control_objectives", on_delete: :cascade
@@ -2821,6 +2864,7 @@ ActiveRecord::Schema.define(version: 20171218211545) do
   add_foreign_key "finding_user_assignments", "users", on_delete: :cascade
   add_foreign_key "findings", "control_objective_items", on_delete: :cascade
   add_foreign_key "findings", "findings", column: "repeated_of_id", on_delete: :cascade
+  add_foreign_key "findings", "weakness_templates", on_delete: :cascade
   add_foreign_key "ldap_configs", "organizations", on_delete: :cascade
   add_foreign_key "login_records", "organizations", on_delete: :cascade
   add_foreign_key "login_records", "users", on_delete: :cascade
@@ -2862,6 +2906,8 @@ ActiveRecord::Schema.define(version: 20171218211545) do
   add_foreign_key "polls", "users", on_delete: :cascade
   add_foreign_key "privileges", "roles", on_delete: :cascade
   add_foreign_key "process_controls", "best_practices", on_delete: :cascade
+  add_foreign_key "readings", "organizations", on_delete: :cascade
+  add_foreign_key "readings", "users", on_delete: :cascade
   add_foreign_key "repcat$_audit_column", "repcat$_audit_attribute", column: "attribute", primary_key: "attribute", name: "repcat$_audit_column_f1"
   add_foreign_key "repcat$_audit_column", "repcat$_conflict", column: "base_conflict_type_id", primary_key: "conflict_type_id", name: "repcat$_audit_column_f2"
   add_foreign_key "repcat$_audit_column", "repcat$_conflict", column: "base_oname", primary_key: "oname", name: "repcat$_audit_column_f2"
@@ -2946,6 +2992,7 @@ ActiveRecord::Schema.define(version: 20171218211545) do
   add_foreign_key "tags", "groups", on_delete: :cascade
   add_foreign_key "tags", "organizations", on_delete: :cascade
   add_foreign_key "users", "users", column: "manager_id", on_delete: :cascade
+  add_foreign_key "weakness_templates", "organizations", on_delete: :cascade
   add_foreign_key "work_papers", "file_models", on_delete: :cascade
   add_foreign_key "work_papers", "organizations", on_delete: :cascade
   add_foreign_key "workflow_items", "workflows", on_delete: :cascade

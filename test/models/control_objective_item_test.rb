@@ -342,6 +342,12 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert @control_objective_item.must_be_approved?
     assert @control_objective_item.approval_errors.blank?
 
+    @control_objective_item.reload
+    @control_objective_item.audit_date =
+      @control_objective_item.review.conclusion_draft_review.issue_date + 1.day
+    assert !@control_objective_item.must_be_approved?
+    assert_equal 1, @control_objective_item.approval_errors.size
+
     assert @control_objective_item.reload.must_be_approved?
     assert @control_objective_item.approval_errors.blank?
   end
@@ -421,7 +427,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'to pdf' do
-    assert !File.exist?(@control_objective_item.absolute_pdf_path)
+    FileUtils.rm_f @control_objective_item.absolute_pdf_path
 
     assert_nothing_raised do
       @control_objective_item.to_pdf(organizations(:cirope))

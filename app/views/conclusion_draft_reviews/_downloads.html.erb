@@ -1,4 +1,5 @@
 <%= render('shared/downloads',
+  right: true,
   links: [
     link_to(t('label.download'), :action => :export_to_pdf,
       :id => @conclusion_draft_review, :_ts => Time.now.to_i),

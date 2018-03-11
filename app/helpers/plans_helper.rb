@@ -81,7 +81,7 @@ module PlansHelper
   def plan_status_date
     date = Timeliness.parse params[:until], :date if params[:until].present?
 
-    date || Time.zone.today
+    date || @plan.period&.end || Time.zone.today
   end
 
   def should_fetch_resources_for? plan_item

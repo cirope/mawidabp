@@ -8,7 +8,8 @@ class ExecutionReportsControllerTest < ActionController::TestCase
   test 'public and private actions' do
     public_actions = []
     private_actions = [
-      :index, :weaknesses_by_state_execution, :detailed_management_report
+      :index, :weaknesses_by_state_execution, :detailed_management_report,
+      :planned_cost_summary
     ]
 
     private_actions.each do |action|
@@ -190,5 +191,43 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     get :reviews_with_incomplete_work_papers_report, params: { revised: true }
     assert_response :success
     assert_template 'execution_reports/reviews_with_incomplete_work_papers_report'
+  end
+
+  test 'planned cost summary report' do
+    login
+
+    get :planned_cost_summary
+    assert_response :success
+    assert_template 'execution_reports/planned_cost_summary'
+
+    assert_nothing_raised do
+      get :planned_cost_summary, params: {
+        planned_cost_summary: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
+        }
+      }
+    end
+
+    assert_response :success
+    assert_template 'execution_reports/planned_cost_summary'
+  end
+
+  test 'create planned cost summary report' do
+    login
+
+    post :create_planned_cost_summary, params: {
+      planned_cost_summary: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
+      },
+      report_title: 'New title'
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('execution_reports.planned_cost_summary.pdf_name',
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
+      'planned_cost_summary', 0)
   end
 end

@@ -221,7 +221,7 @@
       <%= t('finding.inverse_finding_relations') %>
     </h4>
 
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <thead>
         <tr>
           <th><%= FindingRelation.human_attribute_name 'finding_id' %></th>
@@ -264,9 +264,6 @@
           <%= FindingAnswer.human_attribute_name 'file_model' %>
         </strong>
       </h5>
-    </div>
-    <div class="col-md-2">
-      <h5><strong><%= FindingAnswer.human_attribute_name 'created_at' %></strong></h5>
     </div>
   </div>
 
@@ -322,7 +319,7 @@
 
     <div id="cost_details" class="collapse">
       <div>
-        <table class="table table-condensed table-striped">
+        <table class="table table-condensed table-striped table-hover">
           <thead>
             <tr>
               <th><%= Cost.human_attribute_name 'created_at' %></th>

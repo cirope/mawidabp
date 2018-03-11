@@ -8,7 +8,7 @@ module FindingsHelper
       prompt:     true,
       input_html: {
         disabled: (disabled || finding.unconfirmed?),
-        data: { weakness_state_changed_url: state_changed_weaknesses_url }
+        data: { weakness_state_changed_url: state_changed_weaknesses_path }
       }
   end
 
@@ -69,7 +69,7 @@ module FindingsHelper
   end
 
   def show_finding_review_code_with_decription_as_abbr finding
-    content_tag :abbr, finding.review_code, title: finding.description
+    content_tag :abbr, finding.review_code, title: j(finding.description)
   end
 
   def finding_answer_notification_check form
@@ -123,7 +123,20 @@ module FindingsHelper
       class: html_class
     }
 
-    raw "#{finding_answers_count} / #{user_count}"
+    raw [finding_answers_count, user_count].join(' / ')
+  end
+
+  def show_finding_reading_warning finding
+    readed_count  = finding.finding_answers.readed_by(@auth_user).count
+    answers_count = finding.finding_answers.count
+
+    if readed_count < answers_count
+      title = t '.unread_answers', count: answers_count - readed_count
+
+      content_tag(:span, class: 'text-warning', title: title) do
+        content_tag :span, nil, class: 'glyphicon glyphicon-warning-sign'
+      end
+    end
   end
 
   def show_finding_related_users

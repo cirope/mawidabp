@@ -84,8 +84,7 @@ class NotifierMailerTest < ActionMailer::TestCase
 
   test 'notify new finding answer' do
     user = User.find(users(:administrator).id)
-    finding_answer = FindingAnswer.find(finding_answers(
-        :confirmed_oportunity_auditor_answer).id)
+    finding_answer = FindingAnswer.find(finding_answers(:auditor_answer).id)
 
     response = NotifierMailer.notify_new_finding_answer(user, finding_answer).deliver_now
 
@@ -230,7 +229,8 @@ class NotifierMailerTest < ActionMailer::TestCase
       :note => 'note in *textile*', :organization_id => Organization.current_id,
       :user_id => PaperTrail.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
-      :review => conclusion_review.review.identification)
+      :type => I18n.t('notifier.conclusion_review_notification.final'),
+      :review => conclusion_review.review.long_identification)
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
     assert !ActionMailer::Base.deliveries.empty?
@@ -247,7 +247,8 @@ class NotifierMailerTest < ActionMailer::TestCase
       :include_score_sheet => true, :organization_id => Organization.current_id,
       :user_id => PaperTrail.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
-      :review => conclusion_review.review.identification)
+      :type => I18n.t('notifier.conclusion_review_notification.final'),
+      :review => conclusion_review.review.long_identification)
     elements.delete(I18n.t('conclusion_review.global_score_sheet'))
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
@@ -266,7 +267,8 @@ class NotifierMailerTest < ActionMailer::TestCase
       conclusion_review, :organization_id => Organization.current_id,
       :user_id => PaperTrail.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
-      :review => conclusion_review.review.identification)
+      :type => I18n.t('notifier.conclusion_review_notification.final'),
+      :review => conclusion_review.review.long_identification)
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
     elements.delete(I18n.t('conclusion_review.score_sheet'))

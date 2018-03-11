@@ -9,7 +9,7 @@
 
   <h4><%= t 'follow_up_audit.cost_analysis.weaknesses' %></h4>
   <% unless @weaknesses_data[period].blank? %>
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <thead>
         <tr>
           <% @column_order.each do |col_name, col_width| %>
@@ -35,7 +35,7 @@
 
   <h4><%= t 'follow_up_audit.cost_analysis.oportunities' %></h4>
   <% unless @oportunities_data[period].blank? %>
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <thead>
         <tr>
           <% @column_order.each do |col_name, col_width| %>
