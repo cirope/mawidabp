@@ -53,7 +53,7 @@
 
       <p>
         <strong><%= ConclusionFinalReview.human_attribute_name 'evolution' %></strong>:
-        <%= conclusion_review.evolution %>
+        <%= [conclusion_review.evolution, conclusion_review.evolution_justification].join(' - ') %>
       </p>
 
       <p>
@@ -131,6 +131,7 @@
                 [
                   w.title,
                   [Weakness.human_attribute_name('risk'), w.risk_text].join(': '),
+                  [Weakness.human_attribute_name('state'), w.state_text].join(': '),
                   [
                     Weakness.human_attribute_name('origination_date'),
                     w.repeated_of_id ? l(w.origination_date) : t('conclusion_review.new_origination_date')

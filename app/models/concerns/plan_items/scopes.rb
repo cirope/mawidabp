@@ -3,6 +3,9 @@ module PlanItems::Scopes
 
   included do
     scope :with_business_unit, -> { where.not business_unit_id: nil }
+    scope :list, -> {
+      joins(:plan).where plans: { organization_id: Organization.current_id }
+    }
   end
 
   module ClassMethods
@@ -25,6 +28,10 @@ module PlanItems::Scopes
         where(condition).
         order(order_number: :asc).
         references(:business_units)
+    end
+
+    def for_period period
+      joins(:plan).where plans: { period_id: period.id }
     end
 
     def between _start, _end

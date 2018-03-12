@@ -328,6 +328,7 @@ class ReviewsControllerTest < ActionController::TestCase
     end
 
     assert_not_nil plan_item_data
+    assert_not_nil plan_item_data['scope']
     assert_not_nil plan_item_data['risk_exposure']
     assert_not_nil plan_item_data['business_unit_name']
     assert_not_nil plan_item_data['business_unit_type']
@@ -459,6 +460,14 @@ class ReviewsControllerTest < ActionController::TestCase
     login
 
     patch :recode_weaknesses_by_risk, params: { id: reviews(:review_without_conclusion).id }
+
+    assert_redirected_to review_url(reviews(:review_without_conclusion))
+  end
+
+  test 'recode findings by repetition and risk' do
+    login
+
+    patch :recode_weaknesses_by_repetition_and_risk, params: { id: reviews(:review_without_conclusion).id }
 
     assert_redirected_to review_url(reviews(:review_without_conclusion))
   end

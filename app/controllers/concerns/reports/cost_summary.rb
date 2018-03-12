@@ -1,4 +1,5 @@
 module Reports::CostSummary
+  include Reports::Period
   include Reports::Pdf
 
   def cost_summary
@@ -59,7 +60,7 @@ module Reports::CostSummary
       data = {}
 
       Hash[reviews_by_month.sort].each do |date, reviews|
-        planed   = ResourceUtilization.human.joins(:user).planed_on   reviews
+        planed   = ResourceUtilization.human.joins(:user).planned_on  reviews
         executed = ResourceUtilization.human.joins(:user).executed_on reviews
 
         put_planned_data_on   data, planed, date

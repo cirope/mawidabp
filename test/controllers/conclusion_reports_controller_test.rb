@@ -63,14 +63,15 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
         :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'one'
+        :business_unit => 'one',
+        :scope => 'committee'
       },
       :controller_name => 'conclusion'
     }
 
     assert_response :success
     assert_not_nil assigns(:filters)
-    assert_equal 2, assigns(:filters).count
+    assert_equal 3, assigns(:filters).count
     assert_template 'conclusion_reports/synthesis_report'
   end
 
@@ -151,6 +152,65 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'review_stats_report', 0)
+  end
+
+  test 'review scores report' do
+    login
+
+    get :review_scores_report, :params => { :controller_name => 'conclusion' }
+    assert_response :success
+    assert_template 'conclusion_reports/review_scores_report'
+
+    assert_nothing_raised do
+      get :review_scores_report, :params => {
+        :review_scores_report => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion'
+      }
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/review_scores_report'
+  end
+
+  test 'filtered review scores report' do
+    login
+    get :review_scores_report, :params => {
+      :review_scores_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'one'
+      },
+      :controller_name => 'conclusion'
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:filters)
+    assert_equal 2, assigns(:filters).count
+    assert_template 'conclusion_reports/review_scores_report'
+  end
+
+  test 'create review scores report' do
+    login
+
+    post :create_review_scores_report, :params => {
+      :review_scores_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion'
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.review_scores_report.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'review_scores_report', 0)
   end
 
   test 'weaknesses by state report' do

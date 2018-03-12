@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
   resources :benefits
 
+  resources :readings, only: [:create]
+
   resources :documents do
     get :download, on: :member
     get :auto_complete_for_tagging, on: :collection
@@ -55,6 +57,7 @@ Rails.application.routes.draw do
     'weaknesses_by_state_execution',
     'weaknesses_report',
     'detailed_management_report',
+    'planned_cost_summary',
     'reviews_with_incomplete_work_papers_report'
   ].each do |action|
     get "execution_reports/#{action}", to: "execution_reports##{action}", as: action
@@ -63,6 +66,7 @@ Rails.application.routes.draw do
   [
     'create_weaknesses_by_state_execution',
     'create_detailed_management_report',
+    'create_planned_cost_summary',
     'create_weaknesses_report'
   ].each do |action|
     post "execution_reports/#{action}", to: "execution_reports##{action}", as: action
@@ -82,6 +86,7 @@ Rails.application.routes.draw do
   [
     'synthesis_report',
     'review_stats_report',
+    'review_scores_report',
     'weaknesses_by_state',
     'weaknesses_by_risk',
     'weaknesses_by_audit_type',
@@ -108,6 +113,7 @@ Rails.application.routes.draw do
   [
     'create_synthesis_report',
     'create_review_stats_report',
+    'create_review_scores_report',
     'create_weaknesses_by_state',
     'create_weaknesses_by_risk',
     'create_weaknesses_by_audit_type',
@@ -242,6 +248,7 @@ Rails.application.routes.draw do
       patch :finished_work_papers
       patch :recode_findings
       patch :recode_weaknesses_by_risk
+      patch :recode_weaknesses_by_repetition_and_risk
       patch :recode_weaknesses_by_control_objective_order
     end
 

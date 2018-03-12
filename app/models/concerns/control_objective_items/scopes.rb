@@ -10,7 +10,7 @@ module ControlObjectiveItems::Scopes
     def with_names(*control_objective_names)
       conditions  = []
       parameters  = {}
-      column_name = "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn 'name'}"
+      column_name = "#{::ControlObjective.quoted_table_name}.#{::ControlObjective.qcn 'name'}"
 
       control_objective_names.each_with_index do |control_objective_name, i|
         conditions << "LOWER(#{column_name}) LIKE :co_#{i}"
