@@ -1,5 +1,5 @@
 class ControlObjectiveWeaknessTemplateRelation < ApplicationRecord
-  if ActiveRecord::Base.connection.adapter_name == 'OracleEnhanced'
+  unless ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
     self.table_name = 'co_weakness_template_relations'
   end
 
