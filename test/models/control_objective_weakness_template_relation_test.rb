@@ -3,7 +3,7 @@ require 'test_helper'
 class ControlObjectiveWeaknessTemplateRelationTest < ActiveSupport::TestCase
   setup do
     @control_objective_weakness_template_relation =
-      control_objective_weakness_template_relations :impact_analysis_security
+      co_weakness_template_relations :impact_analysis_security
   end
 
   test 'blank attributes' do

@@ -2,7 +2,7 @@ security:
   title: Security weakness
   description: Some nasty security bug
   risk: <%= Finding.risks_values.last %>
-  impact: ['econimic', 'regulatory']
-  operational_risk: ['internal fraud']
-  internal_control_components: ['risk_evaluation', 'monitoring']
+  impact: '["econimic", "regulatory"]'
+  operational_risk: '["internal fraud"]'
+  internal_control_components: '["risk_evaluation", "monitoring"]'
   organization: cirope
