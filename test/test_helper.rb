@@ -7,6 +7,10 @@ Sidekiq::Testing.inline!
 class ActiveSupport::TestCase
   set_fixture_class versions: PaperTrail::Version
 
+  if ActiveRecord::Base.connection.adapter_name == 'OracleEnhanced'
+    set_fixture_class co_weakness_template_relations: ControlObjectiveWeaknessTemplateRelation
+  end
+
   fixtures :all
 
   def set_organization organization = organizations(:cirope)
