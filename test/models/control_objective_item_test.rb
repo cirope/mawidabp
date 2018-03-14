@@ -90,10 +90,17 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @control_objective_item.control_objective_text = '  '
     @control_objective_item.control_objective_id = nil
+    @control_objective_item.issues_count = nil
+    @control_objective_item.alerts_count = nil
 
     assert @control_objective_item.invalid?
     assert_error @control_objective_item, :control_objective_text, :blank
     assert_error @control_objective_item, :control_objective_id, :blank
+
+    if validate_counts?
+      assert_error @control_objective_item, :issues_count, :blank
+      assert_error @control_objective_item, :alerts_count, :blank
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -445,5 +452,11 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       organization = Organization.find Organization.current_id
 
       ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization.prefix
+    end
+
+    def validate_counts?
+      organization = Organization.find Organization.current_id
+
+      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include? organization.prefix
     end
 end
