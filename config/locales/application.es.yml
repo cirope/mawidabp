@@ -1176,6 +1176,8 @@ es:
         auditor_comment: "Conclusiones del auditor"
         finished: "Terminado"
         exclude_from_score: "No calificar"
+        issues_count: "Casos observados"
+        alerts_count: "Cantidad de alertas"
         process_control_id: "Proceso de negocio"
         effectiveness: "Efectividad de control"
         support: "Soporte"
