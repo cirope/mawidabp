@@ -6,7 +6,9 @@ module ControlObjectiveItems::Validations
       :organization_id, presence: true
     validates :control_objective_text, :auditor_comment, pdf_encoding: true
     validates :relevance, :issues_count, :alerts_count, numericality: {
-      only_integer: true, greater_than_or_equal_to: 0
+      only_integer: true,
+      greater_than_or_equal_to: 0,
+      less_than_or_equal_to: 2147483647
     }, allow_blank: true, allow_nil: true
     validates :audit_date, timeliness: { type: :date }, allow_nil: true
     validates :audit_date, :relevance, :auditor_comment, presence: true, if: :finished
