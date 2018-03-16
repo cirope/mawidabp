@@ -46,6 +46,7 @@ class ConclusionFinalReview < ConclusionReview
         finding = f.dup
         finding.final = true
         finding.parent = f
+        finding.skip_work_paper = f.skip_work_paper = true
         finding.origination_date ||= f.origination_date ||= self.issue_date
 
         f.business_unit_findings.each do |buf|
