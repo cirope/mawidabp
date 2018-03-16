@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180227142453) do
+ActiveRecord::Schema.define(version: 20180313174906) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -234,6 +234,8 @@ ActiveRecord::Schema.define(version: 20180227142453) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "exclude_from_score", default: false, null: false
     t.integer "organization_id", precision: 38
+    t.integer "issues_count", precision: 38
+    t.integer "alerts_count", precision: 38
     t.index ["control_objective_id"], name: "i_con_obj_ite_con_obj_id"
     t.index ["organization_id"], name: "i_con_obj_ite_org_id"
     t.index ["review_id"], name: "i_con_obj_ite_rev_id"
