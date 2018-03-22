@@ -36,3 +36,24 @@ module PaperTrail::VersionConcern
       ) if old_value.present? || new_value.present?
     end
 end
+
+# Oracle (or PaperTrail with oracle) put serialized attributes within a hash
+# with a single entry with a 'value' key
+# Visit https://github.com/airblade/paper_trail/blob/master/lib/paper_trail/attribute_serializers/cast_attribute_serializer.rb
+if ActiveRecord::Base.connection.adapter_name == 'OracleEnhanced'
+  module PaperTrail
+    module AttributeSerializers
+      class CastAttributeSerializer
+        def deserialize(attr, val)
+          if defined_enums[attr] && val.is_a?(::String)
+            val
+          else
+            val = val.kind_of?(Hash) ? val['value'] || val : val
+
+            @klass.type_for_attribute(attr).deserialize(val)
+          end
+        end
+      end
+    end
+  end
+end

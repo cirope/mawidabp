@@ -4,6 +4,11 @@ current_review:
   description: Current Review
   survey: Current Review Survey
   plan_item: current_plan_item_1
+  scope: committee
+  risk_exposure: high
+  manual_score: 800
+  include_sox: yes
+  finished_work_papers: 0
   organization: cirope
 
 past_review:
@@ -12,6 +17,11 @@ past_review:
   description: Old Review
   survey: Past Review Survey
   plan_item: past_plan_item_1
+  scope: committee
+  risk_exposure: high
+  manual_score: 800
+  include_sox: yes
+  finished_work_papers: 0
   organization: cirope
 
 review_with_conclusion:
@@ -20,6 +30,11 @@ review_with_conclusion:
   description: Review With Conclusion
   survey: Review With Conclusion Survey
   plan_item: current_plan_item_2
+  scope: committee
+  risk_exposure: high
+  manual_score: 800
+  include_sox: yes
+  finished_work_papers: 0
   organization: cirope
 
 review_without_conclusion:
@@ -28,6 +43,11 @@ review_without_conclusion:
   description: Review Without Conclusion
   survey: Review Without Conclusion Survey
   plan_item: current_plan_item_3
+  scope: committee
+  risk_exposure: high
+  manual_score: 800
+  include_sox: yes
+  finished_work_papers: 0
   organization: cirope
 
 review_without_conclusion_and_without_findings:
@@ -36,6 +56,11 @@ review_without_conclusion_and_without_findings:
   description: Review Without Conclusion and Without Findings
   survey: Review Without Conclusion and Without Findings Survey
   plan_item: current_plan_item_4
+  scope: committee
+  risk_exposure: high
+  manual_score: 800
+  include_sox: yes
+  finished_work_papers: 0
   organization: cirope
 
 review_approved_with_conclusion:
@@ -44,4 +69,9 @@ review_approved_with_conclusion:
   description: Review Approved With Conclusion
   survey: Review Approved With Conclusion Survey
   plan_item: current_plan_item_5
+  scope: committee
+  risk_exposure: high
+  manual_score: 800
+  include_sox: yes
+  finished_work_papers: 0
   organization: cirope

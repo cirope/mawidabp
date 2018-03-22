@@ -3,8 +3,8 @@ module Polls::Pollable
 
   included do
     belongs_to :pollable, polymorphic: true, optional: true
-    belongs_to :conclusion_review, -> {
-      joins(:polls).where polls: { pollable_type: 'ConclusionReview' }
-    }, foreign_key: 'pollable_id', optional: true
+
+    has_one :poll, class_name: 'Poll', foreign_key: :id # Self reference
+    has_one :conclusion_review, through: :poll, source: :pollable, source_type: 'ConclusionReview'
   end
 end

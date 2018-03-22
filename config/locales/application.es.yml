@@ -5,6 +5,8 @@ es:
   label:
     'yes': "Si"
     'no': "No"
+    total: "Total"
+    by: "por"
     add: "Agregar"
     add_item: "Agregar ítem"
     all: "Todos"
@@ -47,7 +49,6 @@ es:
     es: 'Español'
 
   message:
-    welcome: 'Bienvenido'
     ldap_error: 'El servidor de autenticación no está disponible, intente nuevamente más tarde'
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
@@ -176,6 +177,7 @@ es:
     process_control_stats_title: 'Observaciones por proceso de negocio'
     synthesis_report_title: "Informe de síntesis al directorio"
     review_stats_report_title: "Estadísticas de informes"
+    review_scores_report_title: "Calificaciones de informes"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -289,6 +291,14 @@ es:
       weaknesses_by_score:
         title: "Observaciones por riesgo, prioridad y calificación de informe"
         total: "Total"
+    review_scores_report:
+      pdf_name: "calificaciones_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
+      title: "CALIFICACIONES DE INFORMES"
+      subtitle: "INFORMES DEFINITIVOS"
+      review_score: "Calificación informes"
+      business_unit_score: "Calificación unidades de negocio"
+      total_score: "Calificación total"
+      empty: "Sin calificaciones para el filtro aplicado"
     weaknesses_by_state:
       pdf_name: "observaciones_informes_definitivos_por_estado_%{from_date}_al_%{to_date}.pdf"
       title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
@@ -352,17 +362,44 @@ es:
     email_note: "Nota a incluir en el correo"
     responsibles: "Responsables"
     issue_date_title: "FECHA"
+    new_origination_date: "Nueva"
+    estimated_follow_up_date: "Mes estimado de normalización"
     audit_period: "%{start} al %{end}"
     audit_period_title: "PERIODO DE LA AUDITORÍA"
     objectives_and_scopes: "OBJETIVOS Y ALCANCE DEL TRABAJO"
     applied_procedures: "PROCEDIMIENTOS APLICADOS"
     conclusion: "CONCLUSIÓN"
-    findings: "OBSERVACIONES"
+    weaknesses_brief: "RESUMEN DE OBSERVACIONES"
+    weaknesses: "OBSERVACIONES"
     oportunities: "OPORTUNIDADES DE MEJORA"
     finding_review_assignments: "OBSERVACIONES / OPORTUNIDADES DE MEJORA REVISADAS"
+    repeated_findings: "Seguimiento de observaciones"
+    repeated_findings_empty: "No se registran observaciones pendientes de regularización."
+    present_findings: "Nuevas observaciones"
+    present_findings_empty: "No se registran observaciones que mencionar."
     add_recipient: "Agregar nuevo destinatario"
     review_sended: "El informe fue enviado a todos los destinatarios indicados"
     review_not_approved: "El informe no fue enviado, debe estar aprobado"
+    executive_summary:
+      title: "Resumen ejecutivo"
+      review_author: "Gerencia de Auditoría Interna"
+      project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
+      risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
+      score: "Calificación"
+      evolution: "EVOLUCIÓN (*)"
+      main_weaknesses: "Principales debilidades"
+      other_weaknesses: "Otras observaciones"
+      no_weaknesses: "No hay observaciones"
+      assumed_risk_weaknesses: "Riesgo asumido"
+    detailed_review:
+      title: "Informe detallado"
+      legend: "Durante el corriente mes se ha efectuado una Auditoría sobre el proceso de referencia.\nEn cumplimiento de las “Normas Mínimas sobre Controles Internos”, los “Lineamientos para la Gestión de Riesgos en las Entidades Financieras”, los “Lineamientos para el Gobierno Societario” en sus respectivos textos ordenados BCRA a la fecha del presente informe, y de los “Requisitos Mínimos de Gestión, Implementación y Control de los Riesgos Relacionados con Tecnología Informática, Sistemas de Información y Recursos Asociados para las Entidades Financieras” reguladas por el BCRA, se ha evaluado el control interno como proceso diseñado para proporcionar una seguridad razonable en cuanto al logro de los siguientes objetivos: Objetivos de la Entidad, Efectividad y Eficiencia de las operaciones, Confiabilidad de la Información Contable y Cumplimiento de las leyes y normas aplicables en la operatoria analizada.\nLa puesta en práctica de las recomendaciones citadas en el presente informe permitirá cumplimentar: i) los requerimientos del informe elaborado por el denominado Committee of Sponsoring Organizations of the Treadway Commission (COSO) sobre la evaluación de control interno, metodología internacional utilizada por esta Auditoria; ii) los requerimientos del Modelo de Control COBIT (Governance, Control and Audit for Information and Related Technology), metodología internacional utilizada por esta Auditoría de Sistemas y que incluye, entre otros, Normas Técnicas ISO y criterios de calificación ISO 9000, lo cual le permitirá al Banco encuadrarse dentro de Estándares Internacionales de Seguridad y de Control de Calidad."
+    annex:
+      title: "Anexo I"
+      legend: "La Auditoría practicada estuvo conformada por distintos controles, los cuales han sido evaluados con relación a los riesgos asociados, por lo que a continuación se detallan con su respectiva calificación, aclarando que dichos conceptos pueden estar vinculados a distintas valoraciones:"
+      scope: "Alcance de la tarea"
+      scope_column: "Alcance de la tarea"
+      staff: "Personal interviniente"
     bundle:
       zip_name: "legajo_%{identification}.zip"
       control_objectives_dir: "%{prefix}_objetivos_de_control"
@@ -388,8 +425,7 @@ es:
       control_objective_work_papers: "Papeles de trabajo del objetivo de control"
       control_objective_weaknesses: "Observaciones"
       control_objective_oportunities: "Oportunidades"
-      oportunity_work_papers: "Papeles de trabajo de la oportunidad"
-      weakness_work_papers: "Papeles de trabajo de la observación"
+      finding_work_papers: "Papeles de trabajo del hallazgo"
 
   control_objective:
     errors:
@@ -402,6 +438,8 @@ es:
     correctly_created: "Objetivo de control agregado correctamente."
     correctly_updated: "Objetivo de control actualizado correctamente."
     stale_object_error: "El objetivo de control no fue actualizado, intente nuevamente."
+    no_weaknesses: "Objetivo de control sin observaciones"
+    no_oportunities: "Objetivo de control sin oportunidades de mejora"
     view_all_weaknesses: "Ver listado de observaciones"
     view_all_oportunities: "Ver listado de oportunidades de mejora"
     add_oportunity: "Agregar nueva oportunidad de mejora"
@@ -411,18 +449,19 @@ es:
     add_business_unit_type: "Agregar unidades de negocio por tipo"
     readonly: "El objetivo de control no puede ser modificado, ya se emitió el informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
-    has_work_papers: "Papeles de trabajo"
     not_rated: "No evaluado"
+    not_apply_text: 'No aplica calificación'
     excluded_from_score: "No se tiene en cuenta en la calificación del informe"
     not_applicable: "No aplica"
     errors:
       not_finished: "no está terminado"
+      audit_date_ahead_of_issue_date: "la fecha de auditoría es mayor a la fecha de emisión del informe"
       without_score: "sin calificar"
       without_relevance: "sin importancia"
       without_audit_date: "sin fecha de auditoría"
       without_effects: "sin efectos"
       without_controls: "sin controles"
-      without_design_tests: "sin evaluación de diseño"
+      without_design_tests: "sin pruebas de diseño"
       without_compliance_tests: "sin pruebas de cumplimiento"
       without_sustantive_tests: "sin pruebas sustantivas"
       without_auditor_comment: "sin conclusiones del auditor"
@@ -436,6 +475,7 @@ es:
     subtitle: "Subtítulo"
 
   execution_reports:
+    cost_analysis_title: "Análisis de costos"
     detailed_management_report:
       pdf_name: "informe_gerencial_detallado_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
@@ -449,6 +489,21 @@ es:
       without_oportunities: "Sin oportunidades de mejora"
       references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     detailed_management_report_title: "Resumen gerencial"
+    planned_cost_summary:
+      pdf_name: "resumen_de_costos_planificados_%{from_date}_al_%{to_date}.pdf"
+      title: "RESUMEN DE COSTOS PLANIFICADOS\nDE AUDITORÍA INTERNA"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      column_month: "Mes"
+      column_estimated_amount: "Unidades estimadas"
+      column_real_amount: "Unidades reales"
+      column_deviation: "Desviación"
+    planned_cost_summary_title: "Análisis de costos planificados"
+    reviews_with_incomplete_work_papers_report_incomplete_title: "Informes cerrados sin conformidad auditor"
+    reviews_with_incomplete_work_papers_report_revised_title: "Informes cerrados sin revisión supervisor"
+    reviews_with_incomplete_work_papers_report:
+      empty_incomplete: "No hay informes cerrados sin conformidad auditor en papeles de trabajo"
+      empty_revised: "No hay informes cerrados sin revisión supervisor en papeles de trabajo"
     index_title: "Reportes de ejecución"
     findings_type_external: "Observaciones Auditorías Externas"
     findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
@@ -472,93 +527,6 @@ es:
       weaknesses_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge">%{count}</span>'
       pdf_name: 'informe_de_seguimiento_de_observaciones_en_ejecucion.pdf'
-
-  finding:
-    index_title: "Listado de observaciones / oportunidades de mejora"
-    show_title: "Detalles de la respuesta a la observación / oportunidad de mejora"
-    edit_title: "Modificar respuesta a una observación / oportunidad de mejora"
-    correctly_updated: "Respuesta a observación / oportunidad de mejora actualizada correctamente."
-    stale_object_error: "La respuesta a la observación / oportunidad de mejora no fue actualizada, intente nuevamente."
-    incomplete: "Pendientes"
-    complete: "Solucionados o reiterados"
-    as_owner: "%{kind} como responsable"
-    work_papers: "Papeles de trabajo"
-    finding_relations: "Relacionada con"
-    inverse_finding_relations: "Relacionada en"
-    finding_answers: "Comentarios de seguimiento"
-    comments: "Justificación de cambios de estado"
-    costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
-    add_finding_relation: "Agregar relación"
-    add_tagging: "Agregar etiqueta"
-    add_finding_answer: "Agregar comentario"
-    add_user: "Agregar usuario"
-    add_work_paper: "Agregar papel de trabajo"
-    has_work_papers: "Papeles de trabajo"
-    repeated_ancestors: "Reiterada de"
-    repeated_children: "Reiterada en"
-    undo_reiteration: 'Deshacer reiteración'
-    change_history: "Historial de cambios"
-    user_finding_answers_count: "Comentarios propios"
-    auditors:
-      one: "Auditor"
-      other: "Auditores"
-    reviewers:
-      one: "Revisor"
-      other: "Revisores"
-    audited:
-      one: "Auditado"
-      other: "Auditados"
-    readonly: "La observación no puede ser creada ni modificada, ya se emitió el informe definitivo"
-    responsibles:
-      one: "Responsable"
-      other: "Responsables"
-    send_notification: "¿Notificar?"
-    show_status_change_history: "Ver historial de cambios de estado"
-    status_change_history: "Historial de cambios de estado"
-    status_confirmed: "Confirmada"
-    status_unconfirmed: "No confirmada"
-    status_unanswered: "Sin respuesta"
-    status_being_implemented: "En proceso de implementación"
-    status_being_implemented_current: "Vigente"
-    status_being_implemented_current_rescheduled: "Reprogramada vigente"
-    status_being_implemented_stale: "Vencida"
-    status_being_implemented_stale_rescheduled: "Reprogramada vencida"
-    status_implemented: "Implementada"
-    status_implemented_audited: "Implementada / Auditada"
-    status_assumed_risk: "Riesgo asumido"
-    status_notify: "Notificar"
-    status_incomplete: "Incompleta"
-    status_repeated: "Reiterada"
-    status_revoked: "Anulada"
-    status_criteria_mismatch: "Difiere criterio"
-    view_completed: "Ver implementadas"
-    view_cost_details: "Listado de actividades anteriores relacionadas a la observación / oportunidad de mejora"
-    view_pending: "Ver pendientes"
-    without_conclusion_final_review: "Sin informe definitivo"
-    without_work_papers: "Sin papeles de trabajo"
-    responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
-    important_dates:
-      title: "Fechas a considerar"
-      expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *%{date}* si ningún auditado proporciona una respuesta"
-      notification_date: "Fue notificada por primera vez el día *%{date}*"
-      confirmation_date: "Su notificación fue confirmada el día *%{date}*"
-    follow_up_report:
-      weakness:
-        title: "SEGUIMIENTO DE OBSERVACIÓN"
-        subtitle: "Datos de la observación"
-      oportunity:
-        title: "SEGUIMIENTO DE OPORTUNIDAD DE MEJORA"
-        subtitle: "Datos de la oportunidad de mejora"
-      print_date: "Fecha de impresión: %{date}"
-      download: "Descargar seguimiento completo"
-      follow_up_comments: "Comentarios de seguimiento"
-      without_important_changes: "Sin cambios importantes hasta la fecha"
-      work_papers: "Papeles de trabajo"
-      pdf_name: "seguimiento_de_observacion_%{code}.pdf"
-    pdf:
-      filtered_by:
-        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
-        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
 
   finding_relation:
     types:
@@ -812,8 +780,10 @@ es:
     changes_notification:
       title: "Notificación de cambios"
     conclusion_review_notification:
-      title: "Informe de auditoría %{review}"
+      title: "Informe de auditoría %{type} %{review}"
       body_title: "Se adjuntan los siguientes documentos: %{elements}"
+      final: "definitivo"
+      draft: "borrador"
     footer:
       email_label: "Correo (preferentemente)"
       phone_label: "Teléfono"
@@ -883,10 +853,12 @@ es:
     errors:
       is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"
+      with_follow_up_date: "tiene fecha de implementación (y no debería)"
       with_solution_date: "tiene fecha de solución (y no debería)"
       without_answer: "no tiene respuesta"
       without_audited: "no tiene auditado"
       without_auditor: "no tiene auditor"
+      without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
 
@@ -906,8 +878,11 @@ es:
     correctly_updated: "Informe actualizado correctamente."
     stale_object_error: "El informe no fue actualizado, intente nuevamente."
     control_objective_items_label: "Objetivos de control"
+    show_excluded_control_objectives: "Mostrar objetivos de control cargados en la buena práctica y ausentes en el informe"
+    no_excluded_control_objectives: "Todos los objetivos de control de este proceso se encuentran en el informe"
     add_control_objective: "Agregar un nuevo objetivo de control"
     add_process_control: "Agregar un nuevo proceso"
+    add_best_practice: "Agregar una nueva buena práctica"
     add_tagging: "Agregar etiqueta"
     associated: "Asociados"
     available: "Disponibles"
@@ -917,11 +892,16 @@ es:
     add_finding_assignment: "Agregar observación / oportunidad de mejora pendiente"
     add_user_assignment: "Agregar usuario relacionado"
     suggest_findings: 'Sugerir observaciones / oportunidades de mejora pendientes'
+    suggest_past_findings: 'Sugerir observaciones / oportunidades de mejora solucionadas recientes'
     without_suggested_findings: 'Sin observaciones / oportunidades de mejora pendientes'
+    without_past_implemented_audited_findings: 'Sin observaciones / oportunidades de mejora solucionadas recientes'
     suggested_findings_for: 'Hallazgos sugeridos para %{process_control}'
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
+    weakness_from_template: "Observación creada de una plantilla"
+    repeated_weaknesses: "Reiteradas"
+    new_weaknesses: "Nuevas"
     taken_work_paper_code:
       one: "El código de papel de trabajo %{duplicated_work_papers} está duplicado"
       other: "Los siguientes códigos de papeles de trabajo están duplicados: %{duplicated_work_papers}"
@@ -931,6 +911,8 @@ es:
       type_supervisor: "Supervisor"
       type_manager: "Gerente"
       type_audited: "Auditado"
+      audit_team: "Auditoría"
+      others: "Usuarios"
       readonly: "Los integrantes no pueden ser modificados, ya se emitió el informe definitivo"
     score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN DETALLADA"
     global_score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN GLOBAL"
@@ -956,16 +938,26 @@ es:
     oportunities_work_papers: "Oportunidades"
     follow_up_work_papers: "Seguimiento de observaciones"
     download_work_papers: "Descargar papeles de trabajo"
+    finished_work_papers: "Papeles de trabajo - Conforme auditor"
+    revise_work_papers: "Papeles de trabajo - Revisado supervisor"
     notes: "Notas"
     estimated_amount: "Costo estimado en plan de trabajo"
     other_actions: "Acciones"
     recode_findings: "Recodificar hallazgos"
+    recode_weaknesses_by_risk: "Recodificar observaciones por riesgo"
+    recode_weaknesses_by_repetition_and_risk: "Recodificar observaciones por reiteración y riesgo"
+    recode_weaknesses_by_control_objective_order: "Recodificar observaciones por orden objetivos de control"
     findings_recoded: "Hallazgos recodificados correctamente"
+    work_papers_marked_as_finished: "Papeles de trabajo marcados como conforme auditor"
+    work_papers_marked_as_revised: "Papeles de trabajo marcados como revisados supervisor"
     review_qualification_explanation: "La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     process_control_qualification_explanation: "La calificación del proceso de negocio se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     errors:
       can_not_be_destroyed: "El informe no puede ser eliminado"
+      without_score: "no tiene puntaje de auditoría"
       without_survey: "no tiene relevamiento"
+      without_audited: "no tiene usuario auditado"
+      without_file_model: "no tiene anexo"
       without_control_objectives: "no tiene objetivos de control"
       related_finding_incomplete: "está pendiente y no se ha marcado como reiterada o solucionada"
     survey:
@@ -1075,6 +1067,10 @@ es:
     column_real: "Real"
     row_cost: "Costo"
     row_time: "Tiempo"
+    human_resources_abbr: "RRHH"
+    human_resources: "Recursos humanos"
+    material_resources_abbr: "RRMM"
+    material_resources: "Recursos materiales"
     allow_overload: "¿Permitir superposición?"
     copy: "Copiar"
     readonly: "El programa de trabajo no puede ser modificado, ya se emitió el informe definitivo"
@@ -1104,20 +1100,17 @@ es:
       control: "Control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
-      finding: "Observación / Oportunidad"
       finding_answer: "Respuesta a observación"
       finding_review_assignment: "Asignación de observación a informe"
       group: "Grupo"
       notification: "Notificación"
       old_password: "Contraseña anterior"
-      oportunity: "Oportunidad de mejora"
       privilege: "Privilegio"
       review:
         one: "Informe"
         other: "Informes"
       review_user_assignment: "Asignación de usuario a informe"
       role: "Perfil"
-      weakness: "Observación"
       workflow: "Programa de trabajo"
       workflow_item: "Registro de programa de trabajo"
       work_paper: "Papel de trabajo"
@@ -1129,7 +1122,11 @@ es:
         name: "Nombre"
         business_unit_label: "Etiqueta de la unidad de negocio en el informe"
         project_label: "Etiqueta del proyecto en el informe"
+        review_prefix: "Prefijo en el informe"
+        recipients: "Destinatarios del informe"
+        sectors: "Sectores/departamentos involucrados"
         external: "Externo"
+        require_tag: "Requerir etiqueta en informe"
       business_unit_type/business_units:
         one: "Unidad de negocio"
         other: "Unidades de negocio"
@@ -1151,24 +1148,36 @@ es:
         project: "Proyecto"
         approved: "Aprobado"
         summary: "Acta"
+        recipients: "Destinatarios del informe"
+        sectors: "Sectores/departamentos involucrados"
+        evolution: "Evolución de la calificación"
+        evolution_justification: "Justificación de la evolución"
+        observations: "Otras consideraciones"
+        main_weaknesses_text: "Principales debilidades"
+        corrective_actions: "Acciones correctivas"
+        affects_compliance: "Afecta compliance"
+      conclusion_review/review/best_practice_comments:
+        auditor_comment: "Conclusiones del auditor (proceso)"
       control:
         order: "Orden"
         control: "Controles"
         effects: "Efectos"
-        design_tests: "Evaluación de diseño"
+        design_tests: "Pruebas de diseño"
         compliance_tests: "Pruebas de cumplimiento"
         sustantive_tests: "Pruebas sustantivas"
       control_objective_item:
         control_objective_id: "Objetivo de control"
         control_objective_text: "Objetivo de control"
         relevance: "Importancia"
-        design_score: "Calificación evaluación de diseño"
+        design_score: "Calificación pruebas de diseño"
         compliance_score: "Calificación pruebas de cumplimiento"
         sustantive_score: "Calificación pruebas sustantivas"
         audit_date: "Fecha de auditoría"
         auditor_comment: "Conclusiones del auditor"
         finished: "Terminado"
         exclude_from_score: "No calificar"
+        issues_count: "Casos observados"
+        alerts_count: "Cantidad de alertas"
         process_control_id: "Proceso de negocio"
         effectiveness: "Efectividad de control"
         support: "Soporte"
@@ -1179,7 +1188,7 @@ es:
         order: "Objetivo de control (orden)"
         control: "Objetivo de control (controles)"
         effects: "Objetivo de control (efectos)"
-        design_tests: "Objetivo de control (evaluación de diseño)"
+        design_tests: "Objetivo de control (pruebas de diseño)"
         compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
         sustantive_tests: "Objetivo de control (pruebas sustantivas)"
         work_papers: "Papeles de trabajo"
@@ -1197,7 +1206,7 @@ es:
         file_file_size: "Papel de trabajo (tamaño de archivo)"
       control_objective_item/business_unit_scores:
         business_unit_id: 'Calificación de unidad de negocio (unidad de negocio)'
-        design_score: 'Calificación de unidad de negocio (evaluación de diseño)'
+        design_score: 'Calificación de unidad de negocio (pruebas de diseño)'
         compliance_score: 'Calificación de unidad de negocio (pruebas de cumplimiento)'
         sustantive_score: 'Calificación de unidad de negocio (pruebas sustantivas)'
       cost:
@@ -1210,81 +1219,8 @@ es:
         uploaded_data: "Archivo"
         content_type: "Archivo (tipo)"
         size: "Archivo (tamaño)"
-      finding:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "Observación / Oportunidad"
-        type: "Tipo"
-        repeated_of_id: "Reiterada de"
-        review_code: "Código en el informe"
-        audit_recommendations: "Recomendaciones de auditoría"
-        answer: "Respuesta"
-        effect: "Efecto"
-        risk: "Riesgo"
-        priority: "Prioridad"
-        user_ids: "Responsables"
-        finding_user_assignments: "Responsables"
-        origination_date: "Fecha de origen"
-        follow_up_date: "Fecha de implementación"
-        audit_comments: "Comentarios de auditoría"
-        state: "Estado"
-        count: "Cantidad"
-        solution_date: "Fecha de solución"
-        users: "Responsables"
-        work_papers: "Papeles de trabajo"
-        finding_answers: "Respuestas"
-        rescheduled: "Reprogramada"
-        organization: "Organización"
-      finding/achievements:
-        one: "Beneficio estimado"
-        amount: "Monto"
-        comment: "Comentario"
-      finding/costs:
-        one: "Tiempo dedicado"
-        cost: "Tiempo dedicado"
-        description: "Descripción de las actividades realizadas"
-      finding/finding_relations:
-        one: "Relación"
-        other: "Relaciones"
-        related_finding_id: "Relación (Observación / Oportunidad de mejora relacionada)"
-        description: "Relación (descripción)"
-      finding/taggings:
-        one: "Etiqueta"
-        other: "Etiquetas"
-        tag_id: "Etiqueta"
-      finding/finding_user_assignments:
-        one: "Usuario relacionado"
-        user: 'Usuario relacionado (usuario)'
-        user_id: 'Usuario relacionado (usuario)'
-        process_owner: 'Responsable (usuario)'
-      finding/finding_answers:
-        one: "Comentarios"
-        answer: "Comentario"
-        commitment_date: "Fecha de compromiso"
-        auditor_comments: "Comentario (comentarios del auditor)"
-        user_id: "Comentario (usuario)"
-        notify_users: "Comentario (enviar notificación)"
-      finding/finding_answers/file_model:
-        one: "Anexo (archivo)"
-        file: "Anexo (archivo)"
-        file_file_name: "Anexo (nombre de archivo)"
-        file_content_type: "Anexo (tipo de archivo)"
-        file_file_size: "Anexo (tamaño de archivo)"
-      finding/work_papers:
-        one: "Papel de trabajo"
-        other: "Papeles de trabajo"
-        name: "Papel de trabajo (nombre)"
-        code: "Papel de trabajo (código)"
-        description: "Papel de trabajo (descripción)"
-        number_of_pages: "Papel de trabajo (páginas)"
-      finding/work_papers/file_model:
-        one: "Papel de trabajo (archivo)"
-        file_file_name: "Papel de trabajo (nombre de archivo)"
-        file_content_type: "Papel de trabajo (tipo de archivo)"
-        file_file_size: "Papel de trabajo (tamaño de archivo)"
       finding_answer:
         answer: "Comentario"
-        auditor_comments: "Comentarios del auditor"
         commitment_date: "Fecha de compromiso"
         finding_id: "Observación / Oportunidad"
         user_id: "Usuario"
@@ -1331,18 +1267,6 @@ es:
         notification: "Notificación"
       old_password:
         password: "Contraseña"
-      oportunity:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "Oportunidad de mejora"
-        review_code: "Código en el informe"
-        answer: "Respuesta"
-        user_ids: "Responsable"
-        finding_user_assignments: "Responsables"
-        work_papers: "Papeles de trabajo"
-        state: "Estado"
-        origination_date: "Fecha de origen"
-        solution_date: "Fecha de solución"
       organization:
         name: "Nombre"
         prefix: "Prefijo"
@@ -1378,7 +1302,13 @@ es:
         plan_item: "Proyecto"
         file_model_id: "Anexos"
         score: "Calificación"
+        scope: "Alcance auditoría"
+        risk_exposure: "Exposición al riesgo"
+        manual_score: "Puntaje de auditoría"
+        include_sox: "Incluye prueba SOX"
         work_papers: "Papeles de trabajo"
+        review_user_assignments: "Integrantes"
+        taggings: "Etiquetas"
       review/file_model:
         one: "Anexo (archivo)"
         file_file_name: "Anexo (nombre de archivo)"
@@ -1408,23 +1338,6 @@ es:
         name: "Perfil"
         role_type: "Tipo perfil"
         privileges: "Privilegios"
-      weakness:
-        control_objective_item_id: "Objetivo de control"
-        title: "Título"
-        description: "Observación"
-        review_code: "Código en el informe"
-        audit_recommendations: "Recomendaciones de auditoría"
-        answer: "Respuesta"
-        effect: "Efecto"
-        risk: "Riesgo"
-        priority: "Prioridad"
-        user_ids: "Responsable"
-        finding_user_assignments: "Responsables"
-        origination_date: "Fecha de origen"
-        follow_up_date: "Fecha de implementación"
-        state: "Estado"
-        solution_date: "Fecha de solución"
-        work_papers: "Papeles de trabajo"
       work_paper:
         name: "Nombre"
         code: "Código"
@@ -1486,29 +1399,11 @@ es:
           attributes:
             file_file_name:
               without_extension: 'debe tener extensión'
-        finding:
-          attributes:
-            follow_up_date:
-              must_be_blank: "debe estar en blanco para el estado seleccionado"
-            solution_date:
-              must_be_blank: "debe estar en blanco para el estado seleccionado"
-            state:
-              must_have_a_comment: "debe tener adjunto un comentario para esta transición"
-              can_not_be_revoked: "no puede ser 'Anulado', posiblemente se deba a una reiteración o a que la observación ya se encuentra en un informe definitivo"
-              must_have_a_work_paper: "debe tener asociado al menos un papel de trabajo"
-              must_be_done_by_proper_role: "solo puede ser cambiado por un usuario supervisor o gerente"
-            users:
-              invalid: "debe contener como mínimo un auditor, un auditado, un gerente y un supervisor"
-        finding_user_assignment:
-          attributes:
-            process_owner:
-              invalid: "solo puede ser asignado a usuarios de tipo auditado"
         image_model:
           attributes:
             image_content_type:
               invalid: "no es válido"
             image_file_size:
-
         organization_role:
           attributes:
             role_id:
@@ -1524,9 +1419,10 @@ es:
         review:
           attributes:
             review_user_assignments:
-              invalid: "debe tener al menos un auditor, un gerente, un supervisor y un auditado"
+              invalid: "debe tener al menos %{required_roles}"
             plan_item:
               invalid: "debe tener una unidad de negocio asignada en la planificación"
+              required: "debe seleccionar uno"
         review_user_assignment:
           attributes:
             user_id:
@@ -1560,7 +1456,6 @@ es:
     control_objective_items: "Objetivos de control"
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"
-    findings: "Seguimiento de observaciones"
     groups: "Grupos"
     login_records: "Registros de ingreso"
     notifications: "Notificaciones"

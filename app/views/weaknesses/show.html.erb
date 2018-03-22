@@ -33,20 +33,24 @@
   <%= simple_format @weakness.answer %>
 </div>
 
-<div>
-  <strong><%= Weakness.human_attribute_name :effect %>:</strong>
-  <%= simple_format @weakness.effect %>
-</div>
+<% unless HIDE_WEAKNESS_EFFECT %>
+  <div>
+    <strong><%= Weakness.human_attribute_name :effect %>:</strong>
+    <%= simple_format @weakness.effect %>
+  </div>
+<% end %>
 
 <p>
   <strong><%= Weakness.human_attribute_name :risk %>:</strong>
   <%= @weakness.risk_text %>
 </p>
 
-<p>
-  <strong><%= Weakness.human_attribute_name :priority %>:</strong>
-  <%= @weakness.priority_text %>
-</p>
+<% unless HIDE_WEAKNESS_PRIORITY %>
+  <p>
+    <strong><%= Weakness.human_attribute_name :priority %>:</strong>
+    <%= @weakness.priority_text %>
+  </p>
+<% end %>
 
 <div>
   <strong><%= Weakness.human_attribute_name :audit_comments %>:</strong>
@@ -54,9 +58,22 @@
 </div>
 
 <p>
-  <strong><%= Weakness.human_attribute_name(:state) %>:</strong>
+  <strong><%= Weakness.human_attribute_name :state %>:</strong>
   <%= @weakness.state_text %>
 </p>
+
+<% if SHOW_WEAKNESS_PROGRESS %>
+  <p>
+    <strong><%= Weakness.human_attribute_name :progress %>:</strong>
+
+  </p>
+
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" style="width: <%= @weakness.progress.to_i %>%;">
+      <%= @weakness.progress.to_i %>%
+    </div>
+  </div>
+<% end %>
 
 <p>
   <strong><%= Weakness.human_attribute_name :origination_date %>:</strong>
@@ -72,6 +89,28 @@
   <strong><%= Weakness.human_attribute_name :solution_date %>:</strong>
   <%=l @weakness.solution_date, :format => :long if @weakness.solution_date %>
 </p>
+
+<% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+  <p>
+    <strong><%= Weakness.human_attribute_name :compliance %>:</strong>
+    <%= t "label.#{@weakness.compliance}" if @weakness.compliance.present? %>
+  </p>
+
+  <p>
+    <strong><%= Weakness.human_attribute_name :operational_risk %>:</strong>
+    <%= Array(@weakness.operational_risk).to_sentence %>
+  </p>
+
+  <p>
+    <strong><%= Weakness.human_attribute_name :impact %>:</strong>
+    <%= Array(@weakness.impact).to_sentence %>
+  </p>
+
+  <p>
+    <strong><%= Weakness.human_attribute_name :internal_control_components %>:</strong>
+    <%= Array(@weakness.internal_control_components).to_sentence %>
+  </p>
+<% end %>
 
 <h3><%= t('finding.responsibles', :count => @weakness.users.size) %></h3>
 <%= finding_responsibles_list(@weakness) %>
@@ -121,7 +160,7 @@
     <%= t('finding.finding_relations') %>
   </h3>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
@@ -144,7 +183,7 @@
     <%= t('finding.inverse_finding_relations') %>
   </h3>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= FindingRelation.human_attribute_name :finding_id %></th>
@@ -179,7 +218,7 @@
     <%= t('finding.finding_answers') %>
   </h3>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= User.model_name.human %></th>
@@ -216,8 +255,8 @@
 <% end %>
 
 <% unless @weakness.work_papers.empty? %>
-  <h3><%= t('finding.work_papers') %></h3>
-  <table class="table table-condensed table-striped">
+  <h3><%= WorkPaper.model_name.human(count: 0) %></h3>
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= WorkPaper.human_attribute_name :name %></th>
@@ -246,9 +285,8 @@
 
 <div>
   <%= link_to_edit edit_weakness_path(@weakness) %> |
-  <%= link_to_index weaknesses_path %> |
+  <%= link_to_index weaknesses_path %>
   <% if !@weakness.is_in_a_final_review? && @weakness.pending? && !@weakness.incomplete? %>
-    <%= link_to t('weakness.show_follow_up'), finding_path('incomplete', @weakness) %> |
+    | <%= link_to t('weakness.show_follow_up'), finding_path('incomplete', @weakness) %>
   <% end %>
-  <%= link_to_back %>
 </div>

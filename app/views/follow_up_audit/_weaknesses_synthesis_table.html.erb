@@ -1,5 +1,5 @@
 <% if table_data.kind_of?(Hash) %>
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <% table_data[:order].each do |column| %>
@@ -18,11 +18,17 @@
     </tbody>
   </table>
 
-  <% unless being_implemented_resume.blank? %>
+  <% if being_implemented_resume.present? %>
     <p>* <%= raw being_implemented_resume %></p>
   <% end %>
-  <% unless highest_being_implemented_resume.blank? %>
+  <% if highest_being_implemented_resume.present? %>
     <p>** <%= raw highest_being_implemented_resume %></p>
+  <% end %>
+  <% if awaiting_resume.present? %>
+    <p>*** <%= raw awaiting_resume %></p>
+  <% end %>
+  <% if highest_awaiting_resume.present? %>
+    <p>**** <%= raw highest_awaiting_resume %></p>
   <% end %>
 <% else %>
   <p style="margin: 1em;"><em><%= table_data %></em></p>

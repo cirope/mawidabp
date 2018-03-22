@@ -18,7 +18,7 @@
     <ul>
       <li>
         <%= content_tag :span, control_objective_item.control_objective_text,
-          :class => ('strike text-muted' if control_objective_item.finished) %>
+          :class => review_control_objective_class(control_objective_item) %>
         <% if !readonly %>
           <span class="text-muted">|</span>
           <%= link_to_move %>
@@ -35,12 +35,26 @@
           <%= f.input :id, as: :hidden %>
           <%= f.input :order_number, as: :hidden, input_html: { class: 'sort_number' } %>
         <% end %>
-        <% if control_objective_item.weaknesses.exists? %>
+        <% if readonly && !frozen %>
+          <span class="text-muted">|</span>
+          <%= link_to_edit edit_control_objective_item_path(control_objective_item) %>
+        <% end %>
+        <% weaknesses = readonly ? control_objective_item.final_weaknesses : control_objective_item.weaknesses %>
+        <% if weaknesses.exists? %>
           <ul>
-            <% control_objective_item.weaknesses.each do |weakness| %>
+            <% weaknesses.order(:review_code).each do |weakness| %>
               <li>
+                <% if weakness.weakness_template_id %>
+                  <span class="text-success" title="<%= t 'review.weakness_from_template' %>">
+                    <span class="glyphicon glyphicon-duplicate"></span>
+                  </span>
+                <% end %>
                 <span class="text-danger">
-                  <%= [weakness.review_code, weakness.title].compact.join(' - ') %>
+                  <% if weakness.weakness_template_id %>
+                    <strong><%= [weakness.review_code, weakness.title].compact.join(' - ') %></strong>
+                  <% else %>
+                    <%= [weakness.review_code, weakness.title].compact.join(' - ') %>
+                  <% end %>
                 </span>
               </li>
             <% end %>

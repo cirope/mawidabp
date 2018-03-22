@@ -21,6 +21,7 @@ class User < ApplicationRecord
   include Users::Relations
   include Users::Releases
   include Users::Resources
+  include Users::ReviewAssignment
   include Users::Roles
   include Users::Scopes
   include Users::Search
@@ -49,6 +50,6 @@ class User < ApplicationRecord
   end
 
   def to_param
-    user_changed? ? user_was : user
+    "#{id}-#{user}".parameterize
   end
 end

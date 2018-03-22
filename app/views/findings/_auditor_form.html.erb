@@ -1,4 +1,4 @@
-<% users_readonly = @finding.implemented_audited? || @finding.assumed_risk? || @finding.repeated? %>
+<% users_readonly = @finding.implemented_audited? || @finding.assumed_risk? || @finding.repeated? || @finding.expired? %>
 <% show_history_changes = @finding.status_change_history.size > 1 %>
 <%= simple_form_for @finding, :as => :finding, :url => finding_path(params[:completed], @finding), :html =>
   {:method => :patch, :id => "edit_finding_#{@finding.id}"} do |f| %>
@@ -37,20 +37,36 @@
           }, readonly: true %>
           <%= f.input :control_objective_item_id, as: :hidden %>
         <% end %>
-        <%= f.input :description, input_html: { readonly: true, rows: 5 } %>
+        <%= f.input :description, label: finding_description_label, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 7 : 5 } %>
+
+        <% if SHOW_FINDING_CURRENT_SITUATION %>
+          <%= f.input :current_situation, input_html: { rows: 3 } %>
+          <%= f.input :current_situation_verified %>
+        <% end %>
+
         <% if @finding.kind_of?(Weakness) %>
-          <%= f.input :effect, input_html: { readonly: true, rows: 4 } %>
+          <% unless HIDE_WEAKNESS_EFFECT %>
+            <%= f.input :effect, input_html: { readonly: true, rows: 4 } %>
+          <% end %>
           <%= f.input :audit_recommendations, input_html: { readonly: true, rows: 2 } %>
         <% end %>
       </div>
       <div class="col-md-6">
         <% if @finding.kind_of?(Weakness) %>
           <%= f.input :risk, collection: risks, prompt: true, input_html: { autofocus: true } %>
-          <%= f.input :priority, collection: priorities, prompt: true %>
+          <% unless HIDE_WEAKNESS_PRIORITY %>
+            <%= f.input :priority, collection: priorities, prompt: true %>
+          <% end %>
         <% end %>
         <%= f.label :state, raw(Finding.human_attribute_name(:state) + ' ' +
           (show_history_changes ? finding_show_status_change_history(:finding_status_change_history) : '')) %>
         <%= finding_status_field(f) %>
+
+        <% if show_skip_work_paper_for @finding %>
+          <%= f.input :skip_work_paper, as: :boolean, label: false,
+            inline_label: Finding.human_attribute_name('skip_work_paper') %>
+        <% end %>
+
         <% if show_history_changes %>
           <%= render 'history_changes', finding: @finding %>
         <% end %>
@@ -62,9 +78,13 @@
             <%= c_f.input :user_id, as: :hidden %>
           <% end %>
         <% end %>
+        <% if @finding.kind_of?(Weakness) && SHOW_WEAKNESS_PROGRESS %>
+          <%= f.input :progress, collection: weakness_progresses(@finding), prompt: true,
+            disabled: weakness_progress_disabled?(@finding) %>
+        <% end %>
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
-        <%= f.input :answer, input_html: { rows: 5 } %>
+        <%= f.input :answer, input_html: { rows: SHOW_FINDING_CURRENT_SITUATION ? 9 : 5 } %>
         <%= f.input :follow_up_date, as: :date_picker, label:
           @finding.class.human_attribute_name(:follow_up_date) %>
         <%= show_weakness_previous_follow_up_dates(@finding) if @finding.follow_up_date %>
@@ -74,6 +94,44 @@
         <%= f.input :audit_comments, input_html: { rows: 5 } %>
       </div>
     </div>
+
+    <% if @finding.kind_of?(Weakness) && SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :compliance, collection: weakness_compliance_options, prompt: true %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <%= f.input :impact, as: :check_boxes, collection: weakness_impact_options, disabled: true %>
+        </div>
+        <div class="col-md-4">
+          <%= f.input :operational_risk, as: :check_boxes, collection: weakness_operational_risk_options, disabled: true %>
+        </div>
+        <div class="col-md-4">
+          <%= f.input :internal_control_components, as: :check_boxes, collection: weakness_internal_control_components_options, disabled: true %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <br />
+  <h4>
+    <%= Tag.model_name.human count: 0 %>
+  </h4>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h5><strong><%= Tag.human_attribute_name :name %></strong></h5>
+    </div>
+  </div>
+
+  <div id="taggings">
+    <%= f.simple_fields_for :taggings do |t_f| %>
+      <%= render 'findings/tagging', f: t_f, parent: f %>
+    <% end %>
+
+    <%= link_to_add_fields t('finding.add_tagging'), f, :taggings, 'findings/tagging' %>
   </div>
 
   <% unless @finding.important_dates.blank? %>
@@ -138,25 +196,6 @@
 
   <br />
   <h4>
-    <%= Tag.model_name.human count: 0 %>
-  </h4>
-
-  <div class="row">
-    <div class="col-md-6">
-      <h5><strong><%= Tag.human_attribute_name :name %></strong></h5>
-    </div>
-  </div>
-
-  <div id="taggings">
-    <%= f.simple_fields_for :taggings do |t_f| %>
-      <%= render 'findings/tagging', f: t_f, parent: f %>
-    <% end %>
-
-    <%= link_to_add_fields t('finding.add_tagging'), f, :taggings, 'findings/tagging' %>
-  </div>
-
-  <br />
-  <h4>
     <%= t('finding.finding_relations') %>
   </h4>
   <div class="row">
@@ -182,7 +221,7 @@
       <%= t('finding.inverse_finding_relations') %>
     </h4>
 
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <thead>
         <tr>
           <th><%= FindingRelation.human_attribute_name 'finding_id' %></th>
@@ -226,9 +265,6 @@
         </strong>
       </h5>
     </div>
-    <div class="col-md-2">
-      <h5><strong><%= FindingAnswer.human_attribute_name 'created_at' %></strong></h5>
-    </div>
   </div>
 
   <div id="finding_answers">
@@ -239,9 +275,8 @@
   </div>
 
   <br />
-  <h4>
-    <%= t('finding.work_papers') %>
-  </h4>
+  <h4><%= WorkPaper.model_name.human(count: 0) %></h4>
+
   <div class="row">
     <div class="col-md-3">
       <h5><strong><%= WorkPaper.human_attribute_name 'name' %></strong></h5>
@@ -264,7 +299,7 @@
     <%= f.simple_fields_for :work_papers do |wp_f| %>
       <%= render 'work_papers/work_paper', {
         f: wp_f,
-        frozen: finding_work_paper_frozen?(@finding, wp_f.object, true)
+        frozen: finding_work_paper_frozen?(@finding, wp_f.object)
       } %>
     <% end %>
 
@@ -279,12 +314,12 @@
 
   <% unless @finding.costs.blank? %>
     <p>
-      <%= link_to t('finding.view_cost_details'), '#', :onclick =>
-        "$('#cost_details').slideToggle(); return false;" %>
+      <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
     </p>
-    <div id="cost_details" style="display: none;">
+
+    <div id="cost_details" class="collapse">
       <div>
-        <table class="table table-condensed table-striped">
+        <table class="table table-condensed table-striped table-hover">
           <thead>
             <tr>
               <th><%= Cost.human_attribute_name 'created_at' %></th>

@@ -30,6 +30,23 @@ module Reviews::Scopes
         references(:conclusion_reviews)
     end
 
+    def list_with_work_papers status: :not_finished
+      initial_scope = if status == :not_finished
+                        list.work_papers_not_finished
+                      else
+                        list.work_papers_finished
+                      end
+
+      close_date_condition =
+        "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn 'close_date'} < ?"
+
+      initial_scope.
+        includes(:conclusion_final_review).
+        where.not(ConclusionReview.table_name => { review_id: nil }).
+        where(close_date_condition, Time.zone.today).
+        references(:conclusion_reviews)
+    end
+
     def list_without_final_review
       list.
         includes(:conclusion_final_review).
@@ -88,7 +105,9 @@ module Reviews::Scopes
 
       without_final_review = list_without_final_review.where created_at: start..finish
       with_final_review    = list_with_final_review.where(
-        ConclusionReview.table_name => { issue_date: start..finish }
+        ConclusionReview.table_name => {
+          issue_date: (start.to_date)..(finish.to_date)
+        }
       )
 
       without_final_review.or with_final_review

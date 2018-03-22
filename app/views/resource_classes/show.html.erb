@@ -2,7 +2,7 @@
   <h2><%= @resource_class.name %></h2>
 </div>
 
-<table class="table table-condensed table-striped">
+<table class="table table-condensed table-striped table-hover">
   <thead>
     <tr>
       <th><%= Resource.human_attribute_name 'name' %></th>
@@ -22,5 +22,4 @@
 <hr />
 
 <%= link_to_edit edit_resource_class_path(@resource_class) %> |
-<%= link_to_index resource_classes_path %> |
-<%= link_to_back %>
+<%= link_to_index resource_classes_path %>

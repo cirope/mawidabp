@@ -31,7 +31,7 @@ class LoginRecordsControllerTest < ActionController::TestCase
 
   test 'show login record' do
     get :show, :params => {
-      :id => login_records(:administrator_user_success_login_record).id
+      :id => login_records(:administrator_success_login_record).id
     }
     assert_response :success
     assert_not_nil assigns(:login_record)
@@ -44,9 +44,8 @@ class LoginRecordsControllerTest < ActionController::TestCase
 
     assert_nothing_raised do
       get :index, params: {
-        index: { from_date: from_date, to_date: to_date },
-        format: :pdf
-      }
+        index: { from_date: from_date, to_date: to_date }
+      }, as: :pdf
     end
 
     assert_redirected_to Prawn::Document.relative_path(

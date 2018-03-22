@@ -30,11 +30,11 @@ module Reports::QAIndicators
     @indexes = {}
     @cfrs = @conclusion_reviews.for_period(period).list_all_by_date(@from_date, @to_date)
     @row_order = [
-      ['%.1f%', :highest_solution_rate],
-      ['%.1f%', :oportunities_solution_rate],
-      ['%.1f%', :digitalized],
-      ['%d%', :score_average],
-      ['%.1f%', :production_level]
+      ['%.1f%%', :highest_solution_rate],
+      ['%.1f%%', :oportunities_solution_rate],
+      ['%.1f%%', :digitalized],
+      ['%d%%', :score_average],
+      ['%.1f%%', :production_level]
     ]
   end
 

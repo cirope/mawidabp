@@ -82,8 +82,21 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :best_practices,
         order: 3,
-        controllers: :best_practices,
-        url: { controller: '/best_practices' }
+        url: { controller: '/best_practices' },
+        children: [
+          MenuItem.new(
+            :best_practices,
+            order: 1,
+            controllers: :best_practices,
+            url: { controller: '/best_practices' }
+          ),
+          MenuItem.new(
+            :control_objectives,
+            order: 1,
+            controllers: :control_objectives,
+            url: { controller: '/control_objectives' }
+          )
+        ]
       ),
       MenuItem.new(
         :settings,
@@ -92,38 +105,44 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/settings' }
       ),
       MenuItem.new(
-        :tags,
+        :weakness_templates,
         order: 5,
+        controllers: :weakness_templates,
+        url: { controller: '/weakness_templates' }
+      ),
+      MenuItem.new(
+        :tags,
+        order: 6,
         controllers: :tags,
         url: { controller: '/tags', kind: 'finding' }
       ),
       MenuItem.new(
         :documents,
-        order: 6,
+        order: 7,
         controllers: :documents,
         url: { controller: '/documents' }
       ),
       MenuItem.new(
         :news,
-        order: 7,
+        order: 8,
         controllers: :news,
         url: { controller: '/news' }
       ),
       MenuItem.new(
         :benefits,
-        order: 8,
+        order: 9,
         controllers: :benefits,
         url: { controller: '/benefits' }
       ),
       MenuItem.new(
         :e_mails,
-        order: 9,
+        order: 10,
         controllers: :e_mails,
         url: { controller: '/e_mails' }
       ),
       MenuItem.new(
         :questionnaires,
-        order: 10,
+        order: 11,
         url: { controller: '/questionnaires' },
         children: [
           MenuItem.new(
@@ -202,19 +221,19 @@ APP_AUDITOR_MENU_ITEMS = [
         controllers: :weaknesses,
         url: { controller: '/weaknesses' }
       ),
-      MenuItem.new(
+      (MenuItem.new(
         :oportunities,
         order: 5,
         controllers: :oportunities,
         url: { controller: '/oportunities' }
-      ),
+      ) unless HIDE_OPORTUNITIES),
       MenuItem.new(
         :reports,
         order: 6,
         controllers: :execution_reports,
         url: { controller: '/execution_reports' }
       )
-    ]
+    ].compact
   ),
   # CONCLUSIÓN
   MenuItem.new(

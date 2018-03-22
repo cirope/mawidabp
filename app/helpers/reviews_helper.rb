@@ -39,12 +39,22 @@ module ReviewsHelper
 
   def user_assignment_type_field(form, inline = true, disabled = false)
     input_options = { disabled: disabled, data: { review_role: true } }
-    options = ReviewUserAssignment::TYPES.map do |k, v|
+    options = user_assignment_type_options_for form.object.user
+
+    form.input :assignment_type, collection: options, prompt: true,
+      label: false, input_html: input_options
+  end
+
+  def user_assignment_type_options_for(user, include_blank: false)
+    options = Array(user&.review_assignment_options).map do |k, v|
       [t("review.user_assignment.type_#{k}"), v]
     end
 
-    form.input :assignment_type, collection: sort_options_array(options),
-      prompt: true, label: false, input_html: input_options
+    if include_blank && options.size > 1
+      [[t('helpers.select.prompt'), '']] + options
+    else
+      options
+    end
   end
 
   def user_assignment_type_text(type)
@@ -58,7 +68,7 @@ module ReviewsHelper
   def next_review_work_paper_code(review)
     code_prefix = t('code_prefixes.work_papers_in_control_objectives')
 
-    review ? review.last_control_objective_work_paper_code(code_prefix) :
+    review ? review.last_control_objective_work_paper_code(prefix: code_prefix) :
       "#{code_prefix} 0".strip
   end
 
@@ -87,6 +97,101 @@ module ReviewsHelper
 
     link_to suggested_process_control_findings_review_path(process_control.id), options do
       content_tag :span, nil, class: 'glyphicon glyphicon-eye-open'
+    end
+  end
+
+  def review_scope_options
+    REVIEW_SCOPES.map { |scope| [scope, scope] }
+  end
+
+  def review_risk_exposure_options
+    REVIEW_RISK_EXPOSURE.map { |exposure| [exposure, exposure] }
+  end
+
+  def review_include_sox_options
+    %w(yes no).map { |option| [t("label.#{option}"), option] }
+  end
+
+  def review_control_objective_class(control_objective_item)
+    html_classes = []
+
+    if control_objective_item.finished
+      html_classes << 'strike'
+      html_classes << 'text-muted'
+    end
+
+    if control_objective_item.exclude_from_score
+      highest_relevance = control_objective_item.relevance ==
+        ControlObjectiveItem.relevances_values.last
+
+      html_classes << (highest_relevance ? 'bg-danger' : 'bg-warning')
+    end
+
+    html_classes.join(' ')
+  end
+
+  def review_year_suffixes
+    year  = Time.zone.today.year
+    years = []
+
+    years << year.pred if Time.zone.today.month <= 2
+    years << year
+    years << year.next if Time.zone.today.month >= 10
+
+    years
+  end
+
+  def show_review_finished_work_papers_icon review
+    wrapper_class = if review.work_papers_revised?
+                      'text-success'
+                    elsif review.work_papers_finished? && review.is_frozen?
+                      'text-danger'
+                    end
+
+    if review.work_papers_finished? || review.work_papers_revised?
+      content_tag(:span, class: wrapper_class) do
+        content_tag(:span, nil,
+          class: 'glyphicon glyphicon-paperclip',
+          title: t('review.work_papers_marked_as_finished')
+        )
+      end
+    end
+  end
+
+  def audit_team_for review
+    audit_team = review.review_user_assignments.reload.select &:in_audit_team?
+
+    ActiveSupport::SafeBuffer.new.tap do |buffer|
+      audit_team.each do |rua|
+        buffer << content_tag(:span, class: 'text-muted') do
+          content_tag :span, nil, class: 'glyphicon glyphicon-user',
+            title: rua.user.full_name
+        end
+
+        buffer << ' '
+      end
+    end
+  end
+
+  def link_to_excluded_control_objectives
+    path    = excluded_control_objectives_review_path @review
+    options = {
+      title: t('review.show_excluded_control_objectives'),
+      data:  { remote: true }
+    }
+
+    link_to path, options do
+      content_tag :span, nil, class: 'glyphicon glyphicon-scissors'
+    end
+  end
+
+  def excluded_control_objective_class control_objective
+    if control_objective.obsolete
+      'bg-info'
+    elsif control_objective.relevance == ControlObjective.relevances_values.last
+      'bg-danger'
+    else
+      'bg-warning'
     end
   end
 end

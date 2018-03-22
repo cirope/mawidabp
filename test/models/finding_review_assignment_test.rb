@@ -3,14 +3,14 @@ require 'test_helper'
 class FindingReviewAssignmentTest < ActiveSupport::TestCase
   setup do
     @finding_review_assignment =
-      finding_review_assignments :review_without_conclusion_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
+      finding_review_assignments :review_without_conclusion_being_implemented_weakness
   end
 
   test 'create' do
     assert_difference 'FindingReviewAssignment.count' do
       @finding_review_assignment = FindingReviewAssignment.create!(
         review:  reviews(:review_without_conclusion),
-        finding: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness)
+        finding: findings(:unanswered_weakness)
       )
     end
   end
@@ -27,7 +27,7 @@ class FindingReviewAssignmentTest < ActiveSupport::TestCase
 
   test 'destroy' do
     finding_review_assignment =
-      finding_review_assignments :review_without_conclusion_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
+      finding_review_assignments :review_without_conclusion_being_implemented_weakness
 
     assert_difference 'FindingReviewAssignment.count', -1 do
       finding_review_assignment.destroy
@@ -36,7 +36,7 @@ class FindingReviewAssignmentTest < ActiveSupport::TestCase
 
   test 'destroy gets cancelled if repeated' do
     finding_review_assignment =
-      finding_review_assignments :review_without_conclusion_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
+      finding_review_assignments :review_without_conclusion_being_implemented_weakness
 
     finding_review_assignment.finding.update! state: Finding::STATUS[:repeated]
 

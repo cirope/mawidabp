@@ -1,0 +1,11 @@
+<% is_being_implemented = @state == Finding::STATUS[:being_implemented] %>
+
+<% values   = is_being_implemented ? [25, 50, 75] : [0, 25, 50, 75, 100] %>
+<% options  = options_for_select values.map { |v| ["#{v}%", v] } %>
+<% default  = Weakness.default_progress_for state: @state %>
+<% disabled = !Weakness.allow_progress_edition_for?(@state) %>
+
+$('[name$="[progress]"]').
+  html('<%= j options %>').
+  val('<%= default %>').
+  prop('disabled', <%= disabled.inspect %>)

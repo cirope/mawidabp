@@ -1,0 +1,11 @@
+<% reading ||= finding_answer.reading_by @auth_user %>
+
+<% if reading %>
+  <span class="glyphicon glyphicon-ok" title="<%= t '.readed_on', on: l(reading.created_at, format: :long) %>"></span>
+<% else %>
+  <div data-readable-type="FindingAnswer" data-readable-id="<%= finding_answer.id %>">
+    <%= link_to readings_path(id: finding_answer.id, type: 'FindingAnswer'), title: t('.mark_as_read'), data: { remote: true, method: :post } do %>
+      <span class="glyphicon glyphicon-envelope"></span>
+    <% end %>
+  </div>
+<% end %>

@@ -1,10 +1,13 @@
 module WeaknessesHelper
   def show_weakness_previous_follow_up_dates(weakness)
-    dates = weakness.all_follow_up_dates if weakness.being_implemented?
     list = String.new.html_safe
     out = String.new.html_safe
 
-    unless dates.blank?
+    if weakness.being_implemented? || weakness.awaiting?
+      dates = weakness.all_follow_up_dates
+    end
+
+    if dates.present?
       dates.each { |d| list << content_tag(:li, l(d, :format => :long)) }
 
       out << link_to(t('weakness.previous_follow_up_dates'), '#', :onclick =>
@@ -24,7 +27,7 @@ module WeaknessesHelper
       weakness.work_paper_prefix
 
     code_from_review = review ?
-      review.last_weakness_work_paper_code(code_prefix) :
+      review.last_weakness_work_paper_code(prefix: code_prefix) :
       "#{code_prefix} 0".strip
 
     work_paper_codes = weakness.work_papers.reject(
@@ -54,5 +57,48 @@ module WeaknessesHelper
 
   def weakness_business_units
     @weakness.control_objective_item.business_units
+  end
+
+  def weakness_progresses weakness
+    values = if weakness.being_implemented?
+               [25, 50, 75]
+             else
+               [0, 25, 50, 75, 100]
+             end
+
+    values.map { |n| ["#{n}%", n] }
+  end
+
+  def weakness_progress_disabled? weakness, readonly = false
+    readonly || !weakness.allow_progress_edition?
+  end
+
+  def weakness_compliance_options
+    %w(yes no).map { |option| [t("label.#{option}"), option] }
+  end
+
+  def weakness_operational_risk_options
+    WEAKNESS_OPERATIONAL_RISK.map { |option| [option, option] }
+  end
+
+  def weakness_impact_options
+    WEAKNESS_IMPACT.map { |option| [option, option] }
+  end
+
+  def weakness_internal_control_components_options
+    WEAKNESS_INTERNAL_CONTROL_COMPONENTS.map { |option| [option, option] }
+  end
+
+  def show_weakness_templates?
+    @weakness.new_record? &&
+      @weakness.weakness_template_id.blank? &&
+      WeaknessTemplate.list.any?
+  end
+
+  def weakness_templates_for weakness
+    control_objective  = weakness.control_objective_item&.control_objective
+
+    control_objective &&
+      WeaknessTemplate.list.by_control_objective(control_objective)
   end
 end

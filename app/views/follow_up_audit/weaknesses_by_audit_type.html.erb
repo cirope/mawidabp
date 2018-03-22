@@ -30,7 +30,9 @@
             <h4><%= t('follow_up_committee_report.weaknesses_by_audit_type.weaknesses') %></h4>
             <%= render :partial => 'weaknesses_synthesis_table', :locals => {
               :table_data => bu_data[:weaknesses_table_data],
+              :awaiting_resume => bu_data[:awaiting_resume],
               :being_implemented_resume => bu_data[:being_implemented_resume],
+              :highest_awaiting_resume => bu_data[:highest_awaiting_resume],
               :highest_being_implemented_resume => bu_data[:highest_being_implemented_resume]} %>
 
             <% if type == :internal %>
@@ -38,7 +40,7 @@
                 <%= t('follow_up_committee_report.weaknesses_by_audit_type.oportunities') %>
               </h4>
               <% unless bu_data[:oportunities_table_data].blank? %>
-                <table class="table table-condensed table-striped">
+                <table class="table table-condensed table-striped table-hover">
                   <thead>
                     <tr>
                       <th><%= Oportunity.human_attribute_name(:state) %></th>

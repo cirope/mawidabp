@@ -32,7 +32,7 @@
             <% if type == :internal %>
               <h4><%= t('conclusion_committee_report.weaknesses_by_audit_type.oportunities') %></h4>
               <% unless bu_data[:oportunities_table_data].blank? %>
-                <table class="table table-condensed table-striped">
+                <table class="table table-condensed table-striped table-hover">
                   <thead>
                     <tr>
                       <th><%= Oportunity.human_attribute_name(:state) %></th>

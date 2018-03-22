@@ -32,7 +32,7 @@ module LdapConfigs::LDAPImport
   private
 
     def process_entry entry
-      role_names = entry[roles_attribute].map { |r| r&.force_encoding('UTF-8')&.sub(/.*?cn=(.*?),.*/i, '\1')&.to_s }
+      role_names = role_data entry
       manager_dn = casted_attribute entry, manager_attribute
       data       = trivial_data entry
       roles      = clean_roles Role.list_with_corporate.where(name: role_names)
@@ -48,6 +48,14 @@ module LdapConfigs::LDAPImport
       end
 
       { user: user, manager_dn: manager_dn, new: new }
+    end
+
+    def role_data entry
+      entry_roles = entry[roles_attribute].map do |r|
+        r&.force_encoding('UTF-8')&.sub(/.*?cn=(.*?),.*/i, '\1')&.to_s
+      end
+
+      entry_roles | DEFAULT_LDAP_ROLES
     end
 
     def trivial_data entry
@@ -104,7 +112,13 @@ module LdapConfigs::LDAPImport
 
     def assign_managers managers, users_by_dn
       managers.each do |user, manager_dn|
-        user.update manager_id: users_by_dn[manager_dn]
+        manager_id = if users_by_dn[manager_dn] == user.id
+                       nil
+                     else
+                       users_by_dn[manager_dn]
+                     end
+
+        user.reload.update manager_id: manager_id
       end
     end
 end

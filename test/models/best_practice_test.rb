@@ -2,7 +2,7 @@ require 'test_helper'
 
 class BestPracticeTest < ActiveSupport::TestCase
 
-  def setup
+  setup do
     @best_practice = best_practices :iso_27001
 
     set_organization
@@ -71,5 +71,63 @@ class BestPracticeTest < ActiveSupport::TestCase
 
     assert @best_practice.invalid?
     assert_error @best_practice, :name, :taken
+  end
+
+  test 'mark tags as shared when best practice gets shared' do
+    assert @best_practice.control_objectives.any?
+
+    @best_practice.control_objectives.all? do |co|
+      assert co.tags.all? { |tag| !tag.shared }
+    end
+
+    @best_practice.update! shared: true
+
+    @best_practice.control_objectives.reload.each do |co|
+      assert co.tags.all?(&:shared)
+    end
+  end
+
+  test 'mark tags as shared on best practice creation' do
+    assert @best_practice.control_objectives.any?
+
+    @best_practice.control_objectives.all? do |co|
+      assert co.tags.all? { |tag| !tag.shared }
+    end
+
+    tag_ids = @best_practice.control_objectives.map do |co|
+      co.tags.ids
+    end.flatten.uniq
+
+    assert tag_ids.any?
+
+    assert_difference 'Tag.where(shared: true).count', tag_ids.size do
+      attributes = @best_practice.attributes.merge(
+        id: nil,
+        name: 'New best practice',
+        shared: true,
+        process_controls_attributes: [
+          {
+            name: 'new process control',
+            order: 1,
+            control_objectives_attributes: [
+              {
+                name: 'new control objective 1 1',
+                control_attributes: {
+                  control: 'new control 1 1'
+                },
+                order: 1,
+                taggings_attributes: tag_ids.map { |t_id| { tag_id: t_id } }
+              }
+            ]
+          }
+        ]
+      )
+
+      best_practice = BestPractice.create! attributes
+    end
+
+    @best_practice.control_objectives.reload.each do |co|
+      assert co.tags.all?(&:shared)
+    end
   end
 end

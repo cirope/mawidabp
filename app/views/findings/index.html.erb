@@ -1,77 +1,34 @@
-<% if @query.blank? && @order_by.blank? %>
-  <% if @self_and_descendants.size > 1 || @related_users.size > 0 || @selected_user %>
-    <% if @selected_user %>
-      <div class="page-header">
-        <h3>
-          <%= @selected_user.full_name %>
-          <small>
-            <%= t 'activerecord.attributes.finding_user_assignment.responsible_auditor' if params[:as_responsible] %>
-            <%= t 'activerecord.attributes.finding_user_assignment.process_owner' if params[:as_owner] %>
-            <span class="text-muted">|</span>
-            <%= link_to t('label.cancel'), findings_path(params[:completed]) if @selected_user %>
-          </small>
-        </h3>
-      </div>
-    <% else %>
-      <div class="row">
-        <div class="col-md-6 form-group">
-          <div class="col-md-2">
-            <%= label_tag :user_id_select, User.model_name.human %>
-          </div>
-          <div class="col-md-10">
-            <%= show_finding_related_users %>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  <% elsif @auth_user.can_act_as_audited? %>
-    <ul class="nav nav-tabs" role="tablist" data-hide-in-search>
-      <li <%== 'class="active"' unless params[:as_owner] %>>
-        <%= link_to(
-          finding_complete_or_incomplete_label,
-          findings_path(request.query_parameters.except(:as_owner))
-        ) %>
-      </li>
-      <li <%== 'class="active"' if params[:as_owner] %>>
-        <%= link_to(
-          t('finding.as_owner', kind: finding_complete_or_incomplete_label),
-          findings_path(request.query_parameters.merge(:as_owner => true))
-        ) %>
-      </li>
-    </ul>
-    <br />
-  <% end %>
-<% end %>
-
-<%= render :partial => 'shared/search', :locals => {
-  :options => {
-    :columns_for_sort => Finding.columns_for_sort,
-    :url => findings_path(:completed => params[:completed]),
-    :extra_parameters => {:completed => params[:completed]}
+<%= render 'current_user_filters' %>
+<%= render 'shared/search', {
+  options: {
+    url:              findings_path(completed: params[:completed]),
+    extra_parameters: { completed: params[:completed] },
+    columns_for_sort: Finding.columns_for_sort
   },
-  :columns => @query.blank? ?
+
+  columns: @query.blank? ?
     Finding::COLUMNS_FOR_SEARCH.keys - (current_organization.corporate? ? [] : ['organization']) :
     @columns
 } %>
 
-<table class="table table-condensed table-striped">
+<table class="table table-condensed table-striped table-hover">
   <thead id="column_headers">
     <tr>
       <th></th>
       <%= make_filterable_column(
-        Finding.human_attribute_name(:organization), { :class => 'hidden-sm hidden-xs' }, 'organization'
+        Finding.human_attribute_name('organization'), { class: 'hidden-sm hidden-xs' }, 'organization'
       ) if current_organization.corporate? %>
       <%= make_filterable_column Review.model_name.human, nil, 'review', 'issue_date' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'hidden-xs hidden-sm' }, 'project' %>
-      <%= make_filterable_column Finding.human_attribute_name(:code), nil, 'review_code' %>
-      <%= make_filterable_column Finding.human_attribute_name(:title), { :class => 'hidden-xs hidden-sm' }, 'title' %>
-      <%= make_not_available_column Finding.human_attribute_name(:state), :class => 'hidden-xs' %>
+      <%= make_filterable_column PlanItem.human_attribute_name('project'), { class: 'hidden-xs hidden-sm' }, 'project' %>
+      <%= make_filterable_column Finding.human_attribute_name('review_code'), nil, 'review_code' %>
+      <%= make_filterable_column Finding.human_attribute_name('title'), { class: 'hidden-xs hidden-sm' }, 'title' %>
+      <%= make_not_available_column Finding.human_attribute_name('state'), class: 'hidden-xs' %>
       <%= make_not_available_column Finding.human_attribute_name(
-          params[:completed] == 'incomplete' ? :follow_up_date : :solution_date), :class => 'hidden-xs' %>
-      <%= make_not_available_column Weakness.human_attribute_name(:risk), :class => 'hidden-xs' %>
-      <%= make_filterable_column Tag.model_name.human(count: 0), { :class => 'hidden-xs' }, 'tags' %>
-      <%= make_not_available_column Finding.human_attribute_name(:finding_answers), :class => 'hidden-xs hidden-sm hidden-md' %>
-      <%= make_not_available_column t('finding.has_work_papers'), :class => 'hidden-xs hidden-sm hidden-md' %>
+          params[:completed] == 'incomplete' ? 'follow_up_date' : 'solution_date'), class: 'hidden-xs' %>
+      <%= make_not_available_column Weakness.human_attribute_name('risk'), class: 'hidden-xs' %>
+      <%= make_filterable_column Tag.model_name.human(count: 0), { class: 'hidden-xs' }, 'tags' %>
+      <%= make_not_available_column Finding.human_attribute_name('finding_answers'), class: 'hidden-xs hidden-sm hidden-md' %>
+      <%= make_not_available_column WorkPaper.model_name.human(count: 0), class: 'hidden-xs hidden-sm hidden-md' %>
       <th colspan="2" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -83,23 +40,22 @@
         <% if current_organization.corporate? %>
           <td><%= finding.organization.prefix %></td>
         <% end %>
-        <td class="nowrap"><%= show_review_with_conclusion_status_as_abbr(
-          finding.control_objective_item.review) %></td>
+        <td class="nowrap"><%= show_review_with_conclusion_status_as_abbr(finding.review) %></td>
         <td class="hidden-xs hidden-sm"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
         <td class="nowrap"><%= show_finding_review_code_with_decription_as_abbr(finding) %></td>
         <td class="hidden-xs hidden-sm"><%= super_truncate(finding.title, 17) %></td>
         <td class="hidden-xs"><%= super_truncate finding.state_text, 19 %></td>
         <% if params[:completed] == 'complete' %>
-          <td class="hidden-xs"><%= l(finding.solution_date, :format => :short) if finding.solution_date %></td>
+          <td class="hidden-xs"><%= l(finding.solution_date, format: :short) if finding.solution_date %></td>
         <% else %>
           <td class="hidden-xs"><%= finding_follow_up_date_text(finding) %></td>
         <% end %>
         <td class="hidden-xs"><%= finding.respond_to?(:risk_text) ? finding.risk_text : '-' %></td>
         <td class="hidden-xs"><%= tags finding.tags.reload %></td>
-        <td class="hidden-xs hidden-sm hidden-md"><%= show_finding_answers_count(finding) %></td>
+        <td class="hidden-xs hidden-sm hidden-md"><%= show_finding_answers_count finding %> <%= show_finding_reading_warning finding %></td>
         <td class="hidden-xs hidden-sm hidden-md"><%= t finding.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
-        <td><%= link_to_show finding_path(params[:completed], finding, :user_id => params[:user_id]) %></td>
-        <td><%= link_to_edit(edit_finding_path('incomplete', finding, :user_id => params[:user_id])) if finding.pending? && (!@auth_user.can_act_as_audited? || finding.users.reload.include?(@auth_user)) %></td>
+        <td><%= link_to_show finding_path(params[:completed], finding, user_id: params[:user_id]) %></td>
+        <td><%= link_to_edit(edit_finding_path('incomplete', finding, user_id: params[:user_id])) if finding.pending? && (!@auth_user.can_act_as_audited? || finding.users.reload.include?(@auth_user)) %></td>
       </tr>
     <% end %>
   </tbody>

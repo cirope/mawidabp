@@ -12,6 +12,13 @@ module ConclusionReviews::Scopes
         references(:periods)
     end
 
+    def for_month month
+      from = month.at_beginning_of_month
+      to   = month.at_end_of_month
+
+      where(issue_date: from..to)
+    end
+
     def by_best_practice_names *best_practice_names
       conditions  = []
       parameters  = {}

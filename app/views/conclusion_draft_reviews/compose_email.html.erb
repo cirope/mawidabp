@@ -6,15 +6,20 @@
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
-          <%= content_tag :label, t('conclusion_review.include_global_score_sheet'),
-            for: :conclusion_review_include_global_score_sheet %>
-          <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, true %>
+          <%= select_tag 'conclusion_review[review_type]', send_review_options, class: 'form-control' %>
         </div>
-        <div class="form-group">
-          <%= content_tag :label, t('conclusion_review.include_score_sheet'),
-            for: :conclusion_review_include_score_sheet %>
-          <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false %>
-        </div>
+        <% if !SHOW_CONCLUSION_ALTERNATIVE_PDF && ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.exclude?(current_organization.prefix) %>
+          <div class="form-group">
+            <%= content_tag :label, t('conclusion_review.include_global_score_sheet'),
+              for: :conclusion_review_include_global_score_sheet %>
+            <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, false %>
+          </div>
+          <div class="form-group">
+            <%= content_tag :label, t('conclusion_review.include_score_sheet'),
+              for: :conclusion_review_include_score_sheet %>
+            <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false %>
+          </div>
+        <% end %>
         <div class="form-group">
           <%= content_tag :label, t('conclusion_review.email_note'),
             for: :conclusion_review_email_note %>
@@ -46,8 +51,7 @@
   <div class="form-actions">
     <div class="pull-right">
       <%= link_to_edit edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
-      <%= link_to_index conclusion_draft_reviews_path %> |
-      <%= link_to_back %>
+      <%= link_to_index conclusion_draft_reviews_path %>
     </div>
     <%= f.submit t('label.send'), class: 'btn btn-primary' %>
   </div>

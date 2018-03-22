@@ -12,6 +12,20 @@ class BestPracticesControllerTest < ActionController::TestCase
     assert_template 'best_practices/index'
   end
 
+  test 'list best practices with search' do
+    login
+    get :index, params: {
+      search: {
+        query: 'iso',
+        columns: ['name']
+      }
+    }
+    assert_response :success
+    assert_not_nil assigns(:best_practices)
+    assert_equal 1, assigns(:best_practices).count
+    assert_template 'best_practices/index'
+  end
+
   test 'show best practice' do
     get :show, params: { id: best_practices(:iso_27001).id }
     assert_response :success
@@ -186,16 +200,16 @@ class BestPracticesControllerTest < ActionController::TestCase
           description: 'Updated description 1',
           process_controls_attributes: [
             {
-              id: process_controls(:iso_27000_security_policy).id,
+              id: process_controls(:security_policy).id,
               name: 'updated process control',
               order: 1,
               control_objectives_attributes: [
                 {
                   id: control_objectives(
-                    :iso_27000_security_organization_4_1).id,
+                    :organization_security_4_1).id,
                   name: 'updated control objective 1 1',
                   control_attributes: {
-                    id: controls(:iso_27000_security_organization_4_1_control_1).id,
+                    id: controls(:organization_security_4_1_control_1).id,
                     control: 'updated control 1 1',
                     effects: 'updated effects 1 1',
                     design_tests: 'new design tests 1 1',
@@ -208,10 +222,10 @@ class BestPracticesControllerTest < ActionController::TestCase
                 },
                 {
                   id: control_objectives(
-                    :iso_27000_security_organization_4_2).id,
+                    :organization_security_4_2).id,
                   name: 'updated control objective 1 2',
                   control_attributes: {
-                    id: controls(:iso_27000_security_organization_4_2_control_1).id,
+                    id: controls(:organization_security_4_2_control_1).id,
                     control: 'updated control 1 2',
                     effects: 'updated effects 1 2',
                     design_tests: 'new design tests 1 2',
@@ -233,12 +247,12 @@ class BestPracticesControllerTest < ActionController::TestCase
     assert_not_nil assigns(:best_practice)
     assert_equal 'updated_best_practice', assigns(:best_practice).name
     assert_equal 'updated process control', ProcessControl.find(
-      process_controls(:iso_27000_security_policy).id).name
+      process_controls(:security_policy).id).name
     assert_equal 'updated control objective 1 1',
       ControlObjective.find(control_objectives(
-        :iso_27000_security_organization_4_1).id).name
+        :organization_security_4_1).id).name
     assert_equal 'updated control 1 1', Control.find(
-      controls(:iso_27000_security_organization_4_1_control_1).id).control
+      controls(:organization_security_4_1_control_1).id).control
   end
 
   test 'destroy best_practice' do
@@ -254,9 +268,8 @@ class BestPracticesControllerTest < ActionController::TestCase
   test 'auto complete for tagging' do
     get :auto_complete_for_tagging, params: {
       q: 'risk',
-      kind: 'control_objective',
-      format: :json
-    }
+      kind: 'control_objective'
+    }, as: :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)
@@ -266,9 +279,8 @@ class BestPracticesControllerTest < ActionController::TestCase
 
     get :auto_complete_for_tagging, params: {
       q: 'x_none',
-      kind: 'control_objective',
-      format: :json
-    }
+      kind: 'control_objective'
+    }, as: :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)

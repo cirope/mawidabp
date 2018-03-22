@@ -39,7 +39,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'welcome email' do
-    user = User.find(users(:first_time_user).id)
+    user = User.find(users(:first_time).id)
     organization = Organization.find(organizations(:cirope).id)
     response = NotifierMailer.welcome_email(user).deliver_now
 
@@ -53,7 +53,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'notify new findings' do
-    user = User.find(users(:administrator_user).id)
+    user = User.find(users(:administrator).id)
 
     assert user.findings.for_notification.all?(&:mark_as_unconfirmed)
 
@@ -70,7 +70,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'notify new finding' do
-    user = users :administrator_user
+    user = users :administrator
     response = NotifierMailer.notify_new_finding(user, user.findings.first).deliver_now
 
     assert !ActionMailer::Base.deliveries.empty?
@@ -83,9 +83,8 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'notify new finding answer' do
-    user = User.find(users(:administrator_user).id)
-    finding_answer = FindingAnswer.find(finding_answers(
-        :bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_auditor_answer).id)
+    user = User.find(users(:administrator).id)
+    finding_answer = FindingAnswer.find(finding_answers(:auditor_answer).id)
 
     response = NotifierMailer.notify_new_finding_answer(user, finding_answer).deliver_now
 
@@ -102,7 +101,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'deliver stale notification' do
-    user = User.find(users(:bare_user).id)
+    user = User.find(users(:bare).id)
     response = NotifierMailer.stale_notification(user).deliver_now
 
     assert !ActionMailer::Base.deliveries.empty?
@@ -129,8 +128,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'deliver unanswered finding to manager notification' do
-    finding = Finding.find(findings(
-        :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_2_notification).id)
+    finding = Finding.find(findings(:unanswered_for_level_2_notification).id)
     users = finding.users_for_scaffold_notification(1)
     response = NotifierMailer.unanswered_finding_to_manager_notification(finding, users, 1).deliver_now
 
@@ -146,9 +144,9 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'deliver reassigned findings notification' do
-    user = User.find(users(:administrator_user).id)
-    old_user = User.find(users(:administrator_second_user).id)
-    response = NotifierMailer.reassigned_findings_notification(user, old_user, user.findings).deliver_now
+    user = User.find(users(:administrator).id)
+    old = User.find(users(:administrator_second).id)
+    response = NotifierMailer.reassigned_findings_notification(user, old, user.findings).deliver_now
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
@@ -161,7 +159,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'restore password notification' do
-    user = User.find(users(:blank_password_user).id)
+    user = User.find(users(:blank_password).id)
     organization = Organization.find(organizations(:cirope).id)
     response = NotifierMailer.restore_password(user, organization).deliver_now
 
@@ -177,7 +175,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'changes notification' do
-    user = User.find(users(:administrator_user).id)
+    user = User.find(users(:administrator).id)
     response = NotifierMailer.changes_notification(
       user,
       :title => 'test title',
@@ -199,7 +197,7 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
       response = NotifierMailer.changes_notification(
-        [user, User.find(users(:audited_user).id)], :title => 'test title',
+        [user, User.find(users(:audited).id)], :title => 'test title',
         :content => ['test content 1', 'test content 2']).deliver_now
     end
 
@@ -211,7 +209,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   test 'conclusion review notification' do
     organization = Organization.find(organizations(
           :cirope).id)
-    user = User.find(users(:administrator_user).id)
+    user = User.find(users(:administrator).id)
     conclusion_review = ConclusionFinalReview.find(conclusion_reviews(
         :conclusion_current_final_review).id)
     elements = [
@@ -223,15 +221,16 @@ class NotifierMailerTest < ActionMailer::TestCase
     Organization.current_id = organization.id
 
     conclusion_review.to_pdf organization
-    conclusion_review.review.score_sheet organization, false
-    conclusion_review.review.global_score_sheet organization, false
+    conclusion_review.review.score_sheet organization, draft: false
+    conclusion_review.review.global_score_sheet organization, draft: false
 
     response = NotifierMailer.conclusion_review_notification(user, conclusion_review,
       :include_score_sheet => true, :include_global_score_sheet => true,
       :note => 'note in *textile*', :organization_id => Organization.current_id,
       :user_id => PaperTrail.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
-      :review => conclusion_review.review.identification)
+      :type => I18n.t('notifier.conclusion_review_notification.final'),
+      :review => conclusion_review.review.long_identification)
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
     assert !ActionMailer::Base.deliveries.empty?
@@ -248,7 +247,8 @@ class NotifierMailerTest < ActionMailer::TestCase
       :include_score_sheet => true, :organization_id => Organization.current_id,
       :user_id => PaperTrail.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
-      :review => conclusion_review.review.identification)
+      :type => I18n.t('notifier.conclusion_review_notification.final'),
+      :review => conclusion_review.review.long_identification)
     elements.delete(I18n.t('conclusion_review.global_score_sheet'))
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
@@ -267,7 +267,8 @@ class NotifierMailerTest < ActionMailer::TestCase
       conclusion_review, :organization_id => Organization.current_id,
       :user_id => PaperTrail.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
-      :review => conclusion_review.review.identification)
+      :type => I18n.t('notifier.conclusion_review_notification.final'),
+      :review => conclusion_review.review.long_identification)
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
     elements.delete(I18n.t('conclusion_review.score_sheet'))
@@ -286,7 +287,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'deliver findings expiration warning' do
-    user = User.find(users(:administrator_user).id)
+    user = User.find(users(:administrator).id)
     response = NotifierMailer.findings_expiration_warning(user, user.findings).deliver_now
 
     assert !ActionMailer::Base.deliveries.empty?
@@ -299,7 +300,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'deliver findings expired warning' do
-    user = User.find(users(:administrator_user).id)
+    user = User.find(users(:administrator).id)
     response = NotifierMailer.findings_expired_warning(user, user.findings).deliver_now
 
     assert !ActionMailer::Base.deliveries.empty?
@@ -312,7 +313,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'deliver conclusion final review close date warning' do
-    user = User.find(users(:supervisor_user).id)
+    user = User.find(users(:supervisor).id)
     cfrs = user.conclusion_final_reviews
     response = NotifierMailer.conclusion_final_review_close_date_warning(user, cfrs).deliver_now
 

@@ -9,7 +9,7 @@
 </p>
 
 <% unless @group.organizations.empty? %>
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
         <th><%= Organization.human_attribute_name :name %></th>
@@ -33,6 +33,5 @@
 
 <div>
   <%= link_to_edit edit_group_path(@group) %> |
-  <%= link_to_index groups_path %> |
-  <%= link_to_back %>
+  <%= link_to_index groups_path %>
 </div>

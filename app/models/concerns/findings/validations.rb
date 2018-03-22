@@ -2,14 +2,17 @@ module Findings::Validations
   extend ActiveSupport::Concern
 
   included do
-    validates :control_objective_item_id, :description, :review_code, :organization_id, presence: true
-    validates :title, presence: true, if: :title_should_be_present?
+    attr_accessor :skip_work_paper
+
+    validates :control_objective_item_id, :title, :description, :review_code,
+      :organization_id, presence: true
     validates :review_code, :title, length: { maximum: 255 }, allow_blank: true
     validates :audit_comments, presence: true, if: :audit_comments_should_be_present?
     validates :review_code, :description, :answer, :audit_recommendations,
-      :effect, :audit_comments, :title, pdf_encoding: true
-    validates :follow_up_date, :solution_date, :origination_date, :first_notification_date,
-      timeliness: { type: :date }, allow_blank: true
+      :effect, :audit_comments, :title, :current_situation, :compliance,
+      pdf_encoding: true
+    validates :follow_up_date, :solution_date, :origination_date,
+      :first_notification_date, timeliness: { type: :date }, allow_blank: true
     validate :validate_answer
     validate :validate_state
     validate :validate_review_code
@@ -25,7 +28,9 @@ module Findings::Validations
   def must_have_a_comment?
     has_new_comment = comments.detect { |c| c.new_record? && c.valid? }
 
-    being_implemented? && was_implemented? && !has_new_comment
+    (being_implemented? || awaiting?) &&
+      (was_implemented? || was_assumed_risk?) &&
+      !has_new_comment
   end
 
   private
@@ -38,13 +43,12 @@ module Findings::Validations
       !incomplete? && !revoked? && !repeated?
     end
 
-    def title_should_be_present?
-      !final? && !current_user.try(:audited?)
-    end
-
     def validate_follow_up_date
       if kind_of?(Weakness)
-        check_for_blank = being_implemented? || implemented? || implemented_audited?
+        check_for_blank = awaiting?          ||
+                          being_implemented? ||
+                          implemented?       ||
+                          implemented_audited?
 
         errors.add :follow_up_date, :blank         if check_for_blank  && follow_up_date.blank?
         errors.add :follow_up_date, :must_be_blank if !check_for_blank && follow_up_date.present?
@@ -52,7 +56,10 @@ module Findings::Validations
     end
 
     def validate_solution_date
-      check_for_blank = implemented_audited? || assumed_risk? || criteria_mismatch?
+      check_for_blank = implemented_audited? ||
+                        assumed_risk?        ||
+                        criteria_mismatch?   ||
+                        expired?
 
       errors.add :solution_date, :blank         if check_for_blank  && solution_date.blank?
       errors.add :solution_date, :must_be_blank if !check_for_blank && solution_date.present?
@@ -76,7 +83,7 @@ module Findings::Validations
     end
 
     def validate_state_work_paper_presence
-      if implemented_audited? && work_papers.empty?
+      if implemented_audited? && work_papers.empty? && !skip_work_paper
         errors.add :state, :must_have_a_work_paper
       end
     end
@@ -99,7 +106,8 @@ module Findings::Validations
     end
 
     def validate_state_user_if_final
-      skip_validation = new_record? && final # comes from a final review _clone_
+      skip_validation = DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION ||
+        (new_record? && final) # comes from a final review _clone_
 
       if !skip_validation && state && state_changed? && state.presence_in(Finding::FINAL_STATUS)
         has_role_to_do_it = current_user.try(:supervisor?) || current_user.try(:manager?)

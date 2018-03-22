@@ -3,7 +3,7 @@ require 'test_helper'
 class UsersControllerTest < ActionController::TestCase
   include ActionMailer::TestHelper
 
-  def setup
+  setup do
     login
   end
 
@@ -26,7 +26,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'show user' do
-    get :show, params: { id: users(:administrator_user) }
+    get :show, params: { id: users(:administrator) }
     assert_response :success
     assert_not_nil assigns(:user)
   end
@@ -57,7 +57,7 @@ class UsersControllerTest < ActionController::TestCase
             email: 'new_user@newemail.net',
             language: I18n.available_locales.last.to_s,
             notes: 'Some user notes',
-            manager_id: users(:administrator_user).id,
+            manager_id: users(:administrator).id,
             logged_in: false,
             enable: true,
             send_notification_email: true,
@@ -68,7 +68,7 @@ class UsersControllerTest < ActionController::TestCase
               }
             ],
             related_user_relations_attributes: [
-              { related_user_id: users(:plain_manager_user).id }
+              { related_user_id: users(:plain_manager).id }
             ]
           }
         }
@@ -85,7 +85,7 @@ class UsersControllerTest < ActionController::TestCase
             email: 'new_user2@newemail.net',
             language: I18n.available_locales.last.to_s,
             notes: 'Some user notes',
-            manager_id: users(:administrator_user).id,
+            manager_id: users(:administrator).id,
             logged_in: false,
             enable: true,
             send_notification_email: false,
@@ -102,19 +102,19 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'edit user' do
-    get :edit, params: { id: users(:administrator_user) }
+    get :edit, params: { id: users(:administrator) }
     assert_response :success
     assert_not_nil assigns(:user)
   end
 
   test 'update user' do
-    user = users :administrator_user
+    user = users :administrator
     counts_array = ['User.count', 'OrganizationRole.count', 'user.children.count']
 
     assert_no_emails do
       assert_no_difference counts_array do
         patch :update, params: {
-          id: user.user,
+          id: user,
           user: {
             user: 'updated_name',
             name: 'Updated Name',
@@ -127,22 +127,22 @@ class UsersControllerTest < ActionController::TestCase
             send_notification_email: false,
             organization_roles_attributes: [
               {
-                id: organization_roles(:admin_role_for_administrator_user_in_cirope).id,
+                id: organization_roles(:admin_role_for_administrator_in_cirope).id,
                 organization_id: organizations(:cirope).id,
                 role_id: roles(:admin_role).id
               }
             ],
             child_ids: [
-              users(:administrator_second_user).id,
-              users(:bare_user).id,
-              users(:first_time_user).id,
-              users(:expired_user).id,
-              users(:disabled_user).id,
-              users(:blank_password_user).id,
-              users(:expired_blank_password_user).id,
-              users(:supervisor_user).id,
-              users(:supervisor_second_user).id,
-              users(:committee_user).id
+              users(:administrator_second).id,
+              users(:bare).id,
+              users(:first_time).id,
+              users(:expired).id,
+              users(:disabled).id,
+              users(:blank_password).id,
+              users(:expired_blank_password).id,
+              users(:supervisor).id,
+              users(:supervisor_second).id,
+              users(:committee).id
             ]
           }
         }
@@ -155,13 +155,13 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'send notification on updated user' do
-    user = users :administrator_user
+    user = users :administrator
 
     assert_no_difference ['User.count', 'user.children.count'] do
       assert_enqueued_emails 1 do
         assert_difference 'OrganizationRole.count' do
           patch :update, params: {
-            id: users(:administrator_user).user,
+            id: users(:administrator),
             user: {
               user: 'updated_name_2',
               name: 'Updated Name',
@@ -179,17 +179,17 @@ class UsersControllerTest < ActionController::TestCase
                 }
               ],
               child_ids: [
-                users(:administrator_second_user).id,
-                users(:bare_user).id,
-                users(:first_time_user).id,
-                users(:expired_user).id,
-                users(:disabled_user).id,
-                users(:blank_password_user).id,
-                users(:expired_blank_password_user).id,
-                users(:supervisor_user).id,
-                users(:supervisor_second_user).id,
+                users(:administrator_second).id,
+                users(:bare).id,
+                users(:first_time).id,
+                users(:expired).id,
+                users(:disabled).id,
+                users(:blank_password).id,
+                users(:expired_blank_password).id,
+                users(:supervisor).id,
+                users(:supervisor_second).id,
                 # El siguiente se elimina
-                users(:committee_user).id
+                users(:committee).id
               ]
             }
           }
@@ -203,7 +203,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'disable user' do
-    user = users :supervisor_second_user
+    user = users :supervisor_second
 
     assert user.enable?
     assert user.findings.all_for_reallocation.empty?
@@ -218,25 +218,24 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'disable audited user' do
     assert_no_difference 'User.count' do
-      delete :destroy, params: { id: users(:audited_user).user }
+      delete :destroy, params: { id: users(:audited) }
     end
 
     assert_redirected_to users_url
   end
 
   test 'index as pdf' do
-    get :index, params: { format: :pdf }
+    get :index, as: :pdf
     assert_redirected_to UserPdf.new.relative_path
   end
 
   test 'export with search' do
     get :index, params: {
-      format: :pdf,
       search: {
         query: 'manager',
         columns: ['user', 'name']
       }
-    }
+    }, as: :pdf
 
     assert_redirected_to UserPdf.new.relative_path
   end

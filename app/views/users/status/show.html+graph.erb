@@ -1,6 +1,7 @@
 <%= javascript_include_tag :graphs %>
 
 <div class="page-header">
+  <%= render 'status_controls' %>
   <h2><%= @user.informal_name %></h2>
 </div>
 
@@ -33,5 +34,4 @@
 
 <%= link_to_show user_path(@user) %> |
 <%= link_to_index users_path %> |
-<%= link_to t('.table'), users_status_path %> |
-<%= link_to_back %>
+<%= link_to t('.table'), users_status_path %>

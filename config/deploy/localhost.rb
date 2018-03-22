@@ -15,6 +15,12 @@ set :ssh_options, {
   port: 22000
 }
 
+set :default_env, {
+  'LANG':     'en_US.UTF-8',
+  'LANGUAGE': 'en_US.UTF-8',
+  'LC_ALL':   'en_US.UTF-8'
+}
+
 role :web, %w{deployer@127.0.0.1}
 role :app, %w{deployer@127.0.0.1}
 role :db,  %w{deployer@127.0.0.1}

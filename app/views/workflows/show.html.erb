@@ -7,7 +7,7 @@
   <%= @workflow.period.inspect %>
 </p>
 
-<table class="table table-condensed table-striped">
+<table class="table table-condensed table-striped table-hover">
   <thead>
     <tr>
       <th><%= WorkflowItem.human_attribute_name :order_number %></th>
@@ -48,7 +48,7 @@
       <h4>
         (<%= workflow_item.order_number %>) <%= workflow_item.task %>
       </h4>
-      <table class="table table-condensed table-striped">
+      <table class="table table-condensed table-striped table-hover">
         <thead>
           <tr>
             <th><%= ResourceUtilization.human_attribute_name :resource %></th>
@@ -81,6 +81,5 @@
     export_to_pdf_workflow_path(:_ts => Time.now.to_i) %> |
   <%= link_to t('workflow.download_detailed_workflow'),
     export_to_pdf_workflow_path(:include_details => 1,
-    :_ts => Time.now.to_i) %> |
-  <%= link_to_back %>
+    :_ts => Time.now.to_i) %>
 </div>

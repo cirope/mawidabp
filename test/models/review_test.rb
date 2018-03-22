@@ -5,10 +5,15 @@ class ReviewTest < ActiveSupport::TestCase
   fixtures :reviews, :periods, :plan_items
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
-    @review = Review.find reviews(:review_with_conclusion).id
+  setup do
+    @review = reviews :review_with_conclusion
 
     set_organization
+  end
+
+  teardown do
+    Organization.current_id = nil
+    Group.current_id = nil
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -28,22 +33,26 @@ class ReviewTest < ActiveSupport::TestCase
         :description => 'New Description',
         :period_id => periods(:current_period).id,
         :plan_item_id => plan_items(:past_plan_item_3).id,
+        :scope => 'committee',
+        :risk_exposure => 'high',
+        :manual_score => 800,
+        :include_sox => 'no',
         :review_user_assignments_attributes => {
             :new_1 => {
               :assignment_type => ReviewUserAssignment::TYPES[:auditor],
-              :user => users(:first_time_user)
+              :user => users(:first_time)
             },
             :new_2 => {
               :assignment_type => ReviewUserAssignment::TYPES[:supervisor],
-              :user => users(:supervisor_user)
+              :user => users(:supervisor)
             },
             :new_3 => {
               :assignment_type => ReviewUserAssignment::TYPES[:manager],
-              :user => users(:supervisor_second_user)
+              :user => users(:supervisor_second)
             },
             :new_4 => {
               :assignment_type => ReviewUserAssignment::TYPES[:audited],
-              :user => users(:audited_user)
+              :user => users(:audited)
             }
           }
       )
@@ -66,9 +75,11 @@ class ReviewTest < ActiveSupport::TestCase
   test 'destroy' do
     assert_no_difference('Review.count') { @review.destroy }
 
-    review = reviews(:review_without_conclusion_and_without_findings)
+    unless SHOW_REVIEW_AUTOMATIC_IDENTIFICATION
+      review = reviews(:review_without_conclusion_and_without_findings)
 
-    assert_difference('Review.count', -1) { review.destroy }
+      assert_difference('Review.count', -1) { review.destroy }
+    end
   end
 
   test 'destroy with final review' do
@@ -83,12 +94,21 @@ class ReviewTest < ActiveSupport::TestCase
     @review.description = '   '
     @review.period_id = nil
     @review.plan_item_id = nil
+    @review.scope = ''
+    @review.risk_exposure = ''
+    @review.include_sox = ''
 
     assert @review.invalid?
     assert_error @review, :identification, :blank
-    assert_error @review, :description, :blank
+    assert_error @review, :description, :blank unless HIDE_REVIEW_DESCRIPTION
     assert_error @review, :period_id, :blank
     assert_error @review, :plan_item_id, :blank
+
+    if SHOW_REVIEW_EXTRA_ATTRIBUTES
+      assert_error @review, :scope, :blank
+      assert_error @review, :risk_exposure, :blank
+      assert_error @review, :include_sox, :blank
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -109,18 +129,39 @@ class ReviewTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
-    @review.identification = reviews(:past_review).identification
-    @review.plan_item_id = reviews(:past_review).plan_item_id
+    review = @review.dup
+
+    assert review.invalid?
+    assert_error review, :identification, :taken
+    assert_error review, :plan_item_id, :taken
+  end
+
+  test 'validate unique identification number' do
+    skip unless SHOW_REVIEW_AUTOMATIC_IDENTIFICATION
+
+    last_review = Review.order(:id).last
+    review = last_review.dup
+
+    last_review.update_column :identification, 'XX-22/2017'
+
+    review.identification = 'YY-22/2017'
+
+    assert review.invalid?
+    assert_error review, :identification, :taken
+  end
+
+  test 'validates numeric attributes' do
+    skip unless SHOW_REVIEW_EXTRA_ATTRIBUTES
+
+    @review.manual_score = -1
 
     assert @review.invalid?
-    assert_error @review, :identification, :taken
-    assert_error @review, :plan_item_id, :taken
+    assert_error @review, :manual_score, :greater_than_or_equal_to, count: 0
 
-    @review.period_id = periods(:current_period_google).id
-    @review.period.reload
+    @review.manual_score = 1001
 
     assert @review.invalid?
-    assert_error @review, :plan_item_id, :taken
+    assert_error @review, :manual_score, :less_than_or_equal_to, count: 1000
   end
 
   test 'validates valid attributes' do
@@ -129,6 +170,14 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert @review.invalid?
     assert_error @review, :plan_item_id, :invalid
+  end
+
+  test 'validates required tag' do
+    @review.taggings.clear
+    @review.business_unit.business_unit_type.update! require_tag: true
+
+    assert @review.invalid?
+    assert_error @review, :taggings, :blank
   end
 
   test 'can be modified' do
@@ -157,6 +206,8 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'review score' do
+    skip if score_type != :effectiveness
+
     assert !@review.control_objective_items_for_score.empty?
 
     cois_count = @review.control_objective_items_for_score.inject(0) do |acc, coi|
@@ -174,6 +225,7 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert_equal average, @review.score_array.last
     assert_equal average, @review.score
+    assert_equal 'effectiveness', @review.score_type
     assert !@review.reload.score_text.blank?
     assert(scores.any? { |s| count -= 1; s[0] == @review.score_array.first })
     assert count > 0
@@ -198,8 +250,50 @@ class ReviewTest < ActiveSupport::TestCase
     assert_not_equal average, new_average
   end
 
+  test 'review score by weaknesses' do
+    skip if score_type != :weaknesses
+
+    # With two low risk and not repeated weaknesses
+    assert_equal :require_some_improvements, @review.score_array.first
+    assert_equal 96, @review.score
+    assert_equal 'weaknesses', @review.score_type
+
+    review_weakness = @review.weaknesses.first
+    finding = Weakness.new review_weakness.dup.attributes.merge(
+      'risk' => ::RISK_TYPES[:high]
+    )
+    finding.finding_user_assignments.build(
+      clone_finding_user_assignments(review_weakness)
+    )
+
+    finding.save!(:validate => false)
+
+    # High risk counts 12
+    assert_equal :require_some_improvements, @review.reload.score_array.first
+    assert_equal 84, @review.score
+
+    repeated_of = findings :being_implemented_weakness
+    finding.repeated_of_id = repeated_of.id
+
+    @review.finding_review_assignments.create! finding_id: repeated_of.id
+
+    finding.save!(:validate => false)
+
+    # High risk and repeated counts 20
+    assert_equal :require_improvements, @review.reload.score_array.first
+    assert_equal 76, @review.score
+
+    review = Review.new
+
+    assert_equal :adequate, review.score_array.first
+    assert_equal 100, review.score
+  end
+
   test 'must be approved function' do
     @review = reviews(:review_approved_with_conclusion)
+
+    @review.file_model = FileModel.take!
+    @review.save!
 
     assert @review.must_be_approved?
     assert @review.approval_errors.blank?
@@ -251,7 +345,7 @@ class ReviewTest < ActiveSupport::TestCase
     def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
-    Finding.current_user = users :supervisor_user
+    Finding.current_user = users :supervisor
 
     finding = Weakness.new finding.attributes.merge(
       'state' => Finding::STATUS[:assumed_risk]
@@ -321,7 +415,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.reload.must_be_approved?
 
     assert @review.finding_review_assignments.build(
-      :finding_id => findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
+      :finding_id => findings(:being_implemented_weakness).id
     )
     assert !@review.must_be_approved?
     assert @review.approval_errors.flatten.include?(
@@ -336,6 +430,34 @@ class ReviewTest < ActiveSupport::TestCase
     assert !review.must_be_approved?
     assert review.approval_errors.flatten.include?(
       I18n.t('review.errors.without_control_objectives')
+    )
+
+    assert @review.reload.must_be_approved?
+    assert @review.approval_errors.blank?
+
+    if SHOW_REVIEW_EXTRA_ATTRIBUTES
+      @review.file_model = nil
+
+      refute @review.must_be_approved?
+      assert @review.can_be_approved_by_force
+      assert @review.approval_errors.flatten.include?(
+        I18n.t('review.errors.without_file_model')
+      )
+
+      @review.manual_score = nil
+
+      refute @review.must_be_approved?
+      refute @review.can_be_approved_by_force
+      assert @review.approval_errors.flatten.include?(
+        I18n.t('review.errors.without_score')
+      )
+    end
+
+    @review.review_user_assignments.each { |rua| rua.audited? && rua.delete }
+    refute @review.reload.must_be_approved?
+    assert @review.approval_errors.present?
+    assert @review.approval_errors.flatten.include?(
+      I18n.t('review.errors.without_audited')
     )
   end
 
@@ -362,19 +484,24 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_audited?
     assert @review.valid?
 
-    @review.review_user_assignments.delete_all(&:audited?)
+    @review.review_user_assignments.each { |rua| rua.audited? && rua.delete }
 
-    assert !@review.has_audited?
-    assert @review.invalid?
+    refute @review.reload.has_audited?
+
+    if DISABLE_REVIEW_AUDITED_VALIDATION
+      assert @review.valid?
+    else
+      assert @review.invalid?
+    end
   end
 
   test 'has manager or supervisor function' do
     assert @review.has_manager? || @review.has_supervisor?
     assert @review.valid?
 
-    @review.review_user_assignments.delete_all { |a| a.manager? || a.supervisor? }
+    @review.review_user_assignments.each { |a| (a.manager? || a.supervisor?) && a.delete }
 
-    assert !@review.has_supervisor? && !@review.has_manager?
+    assert !@review.reload.has_supervisor? && !@review.has_manager?
     assert @review.invalid?
   end
 
@@ -382,31 +509,95 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_auditor?
     assert @review.valid?
 
-    @review.review_user_assignments.delete_all(&:auditor?)
+    @review.review_user_assignments.each { |rua| rua.auditor? && rua.delete }
 
-    assert !@review.has_auditor?
+    assert !@review.reload.has_auditor?
     assert @review.invalid?
+  end
+
+  test 'control objective ids' do
+    assert_difference '@review.control_objective_items.size' do
+      @review.control_objective_ids = [
+        control_objectives(:security_policy_3_1).id
+      ]
+    end
+
+    if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+      assert_difference '@review.control_objective_items.size' do
+        @review.control_objective_ids = [
+          control_objectives(:security_policy_3_1).id
+        ]
+      end
+    else
+      assert_no_difference '@review.control_objective_items.size' do
+        @review.control_objective_ids = [
+          control_objectives(:security_policy_3_1).id
+        ]
+      end
+    end
+
+    assert_difference '@review.control_objective_items.size' do
+      @review.control_objective_ids = [
+        control_objectives(:organization_security_4_1).id
+      ]
+    end
   end
 
   test 'process control ids' do
     assert @review.control_objective_items.present?
     assert_difference '@review.control_objective_items.size', 5 do
-      @review.process_control_ids = [process_controls(:iso_27000_security_policy).id]
+      @review.process_control_ids = [
+        process_controls(:security_policy).id
+      ]
     end
 
-    assert_no_difference '@review.control_objective_items.size' do
-      @review.process_control_ids = [process_controls(:iso_27000_security_policy).id]
+    if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+      assert_difference '@review.control_objective_items.size', 5 do
+        @review.process_control_ids = [
+          process_controls(:security_policy).id
+        ]
+      end
+    else
+      assert_no_difference '@review.control_objective_items.size' do
+        @review.process_control_ids = [
+          process_controls(:security_policy).id
+        ]
+      end
+    end
+  end
+
+  test 'best practice ids' do
+    assert @review.control_objective_items.present?
+
+    if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+      assert_difference '@review.control_objective_items.size', 2 do
+        @review.best_practice_ids = [
+          best_practices(:bcra_A4609).id
+        ]
+      end
+    else
+      assert_no_difference '@review.control_objective_items.size' do
+        @review.best_practice_ids = [
+          best_practices(:bcra_A4609).id
+        ]
+      end
     end
   end
 
   test 'procedure control subitem ids' do
     assert @review.control_objective_items.present?
     assert_difference '@review.control_objective_items.size' do
-      @review.control_objective_ids = [control_objectives(:iso_27000_security_organization_4_1).id]
+      @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
     end
 
-    assert_no_difference '@review.control_objective_items.size' do
-      @review.control_objective_ids = [control_objectives(:iso_27000_security_organization_4_1).id]
+    if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
+      assert_difference '@review.control_objective_items.size' do
+        @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
+      end
+    else
+      assert_no_difference '@review.control_objective_items.size' do
+        @review.control_objective_ids = [control_objectives(:organization_security_4_1).id]
+      end
     end
   end
 
@@ -415,8 +606,7 @@ class ReviewTest < ActiveSupport::TestCase
       assert @review.update(
         :finding_review_assignments_attributes => {
           :new_1 => {
-            :finding_id =>
-              findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id.to_s
+            :finding_id => findings(:unanswered_weakness).id.to_s
           }
         }
       )
@@ -429,8 +619,7 @@ class ReviewTest < ActiveSupport::TestCase
         @review.update(
           :finding_review_assignments_attributes => {
             :new_1 => {
-              :finding_id =>
-                findings(:iso_27000_security_organization_4_2_item_editable_oportunity).id.to_s
+              :finding_id => findings(:confirmed_oportunity_on_draft).id.to_s
             }
           }
         )
@@ -452,30 +641,30 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'last control objective work paper code' do
-    generated_code = @review.last_control_objective_work_paper_code('pre')
+    generated_code = @review.last_control_objective_work_paper_code(prefix: 'pre')
 
     assert_match /\Apre\s\d+\Z/, generated_code
 
-    assert_equal 'New prefix 00',
-      @review.reload.last_control_objective_work_paper_code('New prefix')
+    assert_equal 'New prefix 000',
+      @review.reload.last_control_objective_work_paper_code(prefix: 'New prefix')
   end
 
   test 'last weakness work paper code' do
-    generated_code = @review.last_weakness_work_paper_code('pre')
+    generated_code = @review.last_weakness_work_paper_code(prefix: 'pre')
 
     assert_match /\Apre\s\d+\Z/, generated_code
 
-    assert_equal 'New prefix 00',
-      @review.reload.last_weakness_work_paper_code('New prefix')
+    assert_equal 'New prefix 000',
+      @review.reload.last_weakness_work_paper_code(prefix: 'New prefix')
   end
 
   test 'last oportunity work paper code' do
-    generated_code = @review.last_oportunity_work_paper_code('pre')
+    generated_code = @review.last_oportunity_work_paper_code(prefix: 'pre')
 
     assert_match /\Apre\s\d+\Z/, generated_code
 
-    assert_equal 'New prefix 00',
-      @review.reload.last_oportunity_work_paper_code('New prefix')
+    assert_equal 'New prefix 000',
+      @review.reload.last_oportunity_work_paper_code(prefix: 'New prefix')
   end
 
   test 'last weakness code' do
@@ -530,7 +719,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   test 'zip all work papers' do
     assert_nothing_raised do
-      @review.zip_all_work_papers
+      @review.zip_all_work_papers @review.organization
     end
 
     assert File.exist?(@review.absolute_work_papers_zip_path)
@@ -569,11 +758,135 @@ class ReviewTest < ActiveSupport::TestCase
     }
   end
 
+  test 'recode findings by risk' do
+    codes = @review.weaknesses.not_revoked.
+      order(risk: :desc, review_code: :asc).pluck 'review_code'
+
+    assert codes.each_with_index.any? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i != i.next
+    }
+
+    @review.recode_weaknesses_by_risk
+
+    codes = @review.reload.weaknesses.not_revoked.
+      order(risk: :desc, review_code: :asc).pluck 'review_code'
+
+    assert codes.sort.each_with_index.all? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i == i.next
+    }
+  end
+
+  test 'recode findings by repetition and risk' do
+    repeated_column = [
+      Weakness.quoted_table_name,
+      Weakness.qcn('repeated_of_id')
+    ].join('.')
+
+    repeated_order = if Review.connection.adapter_name == 'OracleEnhanced'
+                        "CASE WHEN #{repeated_column} IS NULL THEN 1 ELSE 0 END"
+                      else
+                        "#{repeated_column} IS NULL"
+                      end
+
+    order = [
+      repeated_order,
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
+    ]
+
+    codes = @review.weaknesses.not_revoked.order(order).pluck 'review_code'
+
+    assert codes.each_with_index.any? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i != i.next
+    }
+
+    @review.recode_weaknesses_by_repetition_and_risk
+
+    codes = @review.reload.weaknesses.not_revoked.order(order).
+      pluck 'review_code'
+
+    assert codes.sort.each_with_index.all? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i == i.next
+    }
+  end
+
+  test 'recode weaknesses by control objective order' do
+    codes = @review.grouped_control_objective_items.map do |_pc, cois|
+      cois.map do |coi|
+        findings =
+          coi.weaknesses.order(risk: :desc, review_code: :asc).not_revoked
+
+        findings.pluck 'review_code'
+      end
+    end.flatten
+
+    assert codes.each_with_index.any? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i != i.next
+    }
+
+    @review.recode_weaknesses_by_control_objective_order
+
+    codes = @review.reload.grouped_control_objective_items.map do |_pc, cois|
+      cois.map do |coi|
+        findings =
+          coi.weaknesses.order(risk: :desc, review_code: :asc).not_revoked
+
+        findings.pluck 'review_code'
+      end
+    end.flatten
+
+    assert codes.sort.each_with_index.all? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i == i.next
+    }
+  end
+
+  test 'next identification number' do
+    assert_equal '001', Review.next_identification_number(2017)
+
+    Review.order(:id).last.update_column :identification, 'XX-22/2017'
+
+    # Should ignore the prefix
+    assert_equal '023', Review.next_identification_number(2017)
+  end
+
+  test 'build best practice comments' do
+    expected_count = @review.best_practices.count
+
+    @review.best_practice_comments.destroy_all
+
+    assert expected_count > 0
+
+    assert_difference '@review.best_practice_comments.size', expected_count do
+      @review.build_best_practice_comments
+    end
+  end
+
+  test 'clean stale best practice comments' do
+    @review.best_practice_comments.create! auditor_comment: 'Test',
+      best_practice_id: best_practices(:iso_27001).id
+
+    assert_difference '@review.best_practice_comments.count', -1 do
+      @review.save!
+    end
+  end
+
   private
 
     def clone_finding_user_assignments(finding)
       finding.finding_user_assignments.map do |fua|
         fua.dup.attributes.merge('finding_id' => nil)
+      end
+    end
+
+    def score_type
+      organization = Organization.find Organization.current_id
+
+      if SHOW_REVIEW_EXTRA_ATTRIBUTES
+        :manual
+      elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization.prefix
+        :weaknesses
+      else
+        :effectiveness
       end
     end
 end

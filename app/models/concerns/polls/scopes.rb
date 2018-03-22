@@ -25,6 +25,7 @@ module Polls::Scopes
       if include_reviews
         result = result.
           joins(conclusion_review: { review: :review_user_assignments }).
+          references(:review_user_assignments). # Just to be "OR compatible"
           or by_review_user(user_id)
       end
 

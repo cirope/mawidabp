@@ -3,15 +3,14 @@ module ConclusionFinalReviews::Scopes
 
   included do
     scope :next_to_expire, -> {
-      date = CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date
+      date  = CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date
+      range = if date.wday == 5
+                date..(date + 2.days)
+              else
+                date
+              end
 
-      where close_date: date
-    }
-    scope :next_to_expire_including_weekend, -> {
-      from = CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date
-      to   = from + 2.days
-
-      where close_date: from..to
+      where close_date: range
     }
     scope :internal_audit, -> { with_external_business_unit_type_as false }
     scope :external_audit, -> { with_external_business_unit_type_as true }
@@ -43,11 +42,7 @@ module ConclusionFinalReviews::Scopes
     end
 
     def with_near_close_date
-      if Date.today.wday == 5
-        ConclusionFinalReview.next_to_expire_including_weekend
-      else
-        ConclusionFinalReview.next_to_expire
-      end
+      ConclusionFinalReview.next_to_expire
     end
 
     private

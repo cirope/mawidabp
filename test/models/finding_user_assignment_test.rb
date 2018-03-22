@@ -7,12 +7,11 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
   fixtures :finding_user_assignments
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     set_organization
 
-    @finding_user_assignment = FindingUserAssignment.find(
-      finding_user_assignments(
-        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_manager_user).id)
+    @finding_user_assignment =
+      finding_user_assignments :being_implemented_weakness_manager
   end
 
   # Prueba la creación de una asignación de usuario
@@ -20,9 +19,8 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
     assert_difference 'FindingUserAssignment.count' do
       @finding_user_assignment =
         FindingUserAssignment.create(
-          :user => users(:expired_user),
-          :finding_id => findings(
-            :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
+          :user => users(:expired),
+          :finding_id => findings(:being_implemented_weakness).id
         )
     end
   end
@@ -31,7 +29,7 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
   test 'update' do
     assert_enqueued_emails 1 do
       assert @finding_user_assignment.update!(
-        :user_id => users(:supervisor_user).id
+        :user_id => users(:supervisor).id
       )
     end
 
@@ -44,8 +42,8 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de una asignación de usuario
   test 'delete' do
-    finding_user_assignment = FindingUserAssignment.find(finding_user_assignments(
-        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_administrator_user).id)
+    finding_user_assignment =
+      finding_user_assignments :being_implemented_weakness_administrator
 
     assert_difference 'FindingUserAssignment.count', -1 do
       finding_user_assignment.destroy

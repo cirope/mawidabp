@@ -43,7 +43,7 @@ class PollsControllerTest < ActionController::TestCase
       assert_difference 'Answer.count', 2 do
         post :create, params: {
           poll: {
-            user_id: users(:administrator_user).id,
+            user_id: users(:administrator).id,
             questionnaire_id: questionnaires(:questionnaire_one).id,
             answers_attributes: [
               {
@@ -81,7 +81,7 @@ class PollsControllerTest < ActionController::TestCase
       patch :update, params: {
         id: @poll,
         poll: {
-          user_id: users(:administrator_user).id,
+          user_id: users(:administrator).id,
           questionnaire_id: questionnaires(:questionnaire_one).id,
           comments: 'Encuesta actualizada',
           answers_attributes: [
