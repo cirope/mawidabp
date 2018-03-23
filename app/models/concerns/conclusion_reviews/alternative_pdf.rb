@@ -8,7 +8,7 @@ module ConclusionReviews::AlternativePDF
     put_watermark_on          pdf
     put_alternative_header_on pdf, organization
     put_alternative_cover_on  pdf
-    put_executive_summary_on  pdf
+    put_executive_summary_on  pdf, organization
     put_detailed_review_on    pdf, organization
     put_annex_on              pdf, organization, options
 
@@ -55,7 +55,7 @@ module ConclusionReviews::AlternativePDF
         size: items_font_size
     end
 
-    def put_executive_summary_on pdf
+    def put_executive_summary_on pdf, organization
       title = I18n.t 'conclusion_review.executive_summary.title'
       project_title = I18n.t 'conclusion_review.executive_summary.project'
       project = review.plan_item.project
@@ -70,7 +70,10 @@ module ConclusionReviews::AlternativePDF
       put_alternative_score_on pdf
 
       put_main_weaknesses_on   pdf
-      put_other_weaknesses_on  pdf
+
+      unless show_review_best_practice_comments? organization
+        put_other_weaknesses_on  pdf
+      end
     end
 
     def put_detailed_review_on pdf, organization
