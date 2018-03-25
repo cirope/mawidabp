@@ -186,6 +186,7 @@ module ConclusionFinalReviewsHelper
   end
 
   def send_review_options
+    default = SHOW_CONCLUSION_ALTERNATIVE_PDF ? 'brief' : 'normal'
     options = if SHOW_CONCLUSION_ALTERNATIVE_PDF
                 ['normal', 'brief']
               else
@@ -196,7 +197,7 @@ module ConclusionFinalReviewsHelper
       [t("conclusion_final_review.send_type.#{type}"), type]
     end
 
-    options_for_select select_options, 'normal'
+    options_for_select select_options, default
   end
 
   def show_conclusion_review_issue_date conclusion_final_review
