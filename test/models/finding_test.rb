@@ -239,6 +239,8 @@ class FindingTest < ActiveSupport::TestCase
     finding.solution_date   = Time.zone.today
     finding.skip_work_paper = true
 
+    Finding.current_user    = users :supervisor
+
     cfr = finding.review.conclusion_final_review
 
     def cfr.can_be_destroyed?; true; end
