@@ -84,9 +84,9 @@
           <%= render 'findings/history_changes', finding: @weakness %>
         <% end %>
 
-        <% if @weakness.must_have_a_comment? %>
-          <%= f.simple_fields_for :comments,
-            @weakness.comments.build(user: @auth_user) do |c_f| %>
+        <% if @weakness.must_have_a_comment? || @weakness.comments.detect(&:new_record?) %>
+          <% comment = @weakness.comments.detect(&:new_record?) || @weakness.comments.build(user: @auth_user) %>
+          <%= f.simple_fields_for :comments, comment do |c_f| %>
             <%= c_f.input :comment %>
             <%= c_f.input :user_id, as: :hidden %>
           <% end %>
