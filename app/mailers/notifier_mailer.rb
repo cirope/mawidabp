@@ -158,7 +158,7 @@ class NotifierMailer < ActionMailer::Base
 
   def conclusion_review_notification(user, conclusion_review, options = {})
     Organization.current_id = options.delete :organization_id
-    PaperTrail.whodunnit    = options.delete :user_id
+    PaperTrail.request.whodunnit    = options.delete :user_id
 
     prefix = "[#{conclusion_review.review.organization.prefix}] "
     type = conclusion_review.kind_of?(ConclusionDraftReview) ? 'draft' : 'final'
