@@ -15,7 +15,7 @@ module Prawn
 
       def path_without_root(filename, sub_directory, id = 0)
         id_path = ('%08d' % id).scan(/\d{4}/)
-        user_path = ('%08d' % (PaperTrail.whodunnit || 0)).scan(/\d{4}/)
+        user_path = ('%08d' % (PaperTrail.request.whodunnit || 0)).scan(/\d{4}/)
         organization_path = ('%08d' %
           (Organization.current_id || 0)).scan(/\d{4}/)
 
@@ -72,13 +72,13 @@ module Prawn
         self.move_down margin_down.pt if margin_down != 0
       end
 
-      def add_description_item(term, description, left = 0, underline = true, font_size = 12)
+      def add_description_item(term, description, left = 0, underline = true, font_size = 12, align: :justify)
         if term.present? && description.present?
           options = { invalid: :replace, undef: :replace, replace: '?' }
           formated_term = underline ? "<u><b>#{term}</b></u>" : "<b>#{term}</b>"
           encoded_text = "#{formated_term}: #{description}".encode 'windows-1252', 'UTF-8', options
 
-          self.text encoded_text, :size => font_size, :align => :justify,
+          self.text encoded_text, :size => font_size, :align => align,
             :inline_format => true, :indent_paragraphs => left.pt
         end
       end

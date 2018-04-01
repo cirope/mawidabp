@@ -9,6 +9,7 @@ class ReviewsController < ApplicationController
   before_action :set_review, only: [
     :show, :edit, :update, :destroy, :download_work_papers, :survey_pdf,
     :finished_work_papers, :recode_findings, :recode_weaknesses_by_risk,
+    :recode_weaknesses_by_repetition_and_risk,
     :recode_weaknesses_by_control_objective_order, :excluded_control_objectives
   ]
   before_action :set_review_clone, only: [:new]
@@ -187,6 +188,7 @@ class ReviewsController < ApplicationController
       past_implemented_audited_findings_review_url(id: plan_item.id) if plan_item
 
     render json: {
+      scope: plan_item.scope,
       risk_exposure: plan_item.risk_exposure,
       business_unit_name: name,
       business_unit_type: type,
@@ -378,6 +380,13 @@ class ReviewsController < ApplicationController
     redirect_to @review, notice: t('review.findings_recoded')
   end
 
+  # * PUT /reviews/1/recode_weaknesses_by_repetition_and_risk
+  def recode_weaknesses_by_repetition_and_risk
+    @review.recode_weaknesses_by_repetition_and_risk
+
+    redirect_to @review, notice: t('review.findings_recoded')
+  end
+
   # * PUT /reviews/1/recode_weaknesses_by_control_objective_order
   def recode_weaknesses_by_control_objective_order
     @review.recode_weaknesses_by_control_objective_order
@@ -460,6 +469,7 @@ class ReviewsController < ApplicationController
         finished_work_papers: :modify,
         recode_findings: :modify,
         recode_weaknesses_by_risk: :modify,
+        recode_weaknesses_by_repetition_and_risk: :modify,
         recode_weaknesses_by_control_objective_order: :modify
       )
     end

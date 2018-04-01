@@ -112,8 +112,20 @@
               } %>
           </div>
         </div>
+
       </div>
     </div>
+
+    <% if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(current_organization.prefix) %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :issues_count, input_html: { readonly: readonly } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :alerts_count, input_html: { readonly: readonly } %>
+        </div>
+      </div>
+    <% end %>
 
     <% if @control_objective_item.support? %>
       <p>

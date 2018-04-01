@@ -139,7 +139,8 @@ module Findings::State
       end
 
       def implemented_audited_transitions final
-        [:implemented_audited]
+        [:implemented_audited] |
+          (final ? [] : [:implemented, :being_implemented, :awaiting])
       end
 
       def assumed_risk_transitions final

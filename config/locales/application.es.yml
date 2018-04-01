@@ -5,6 +5,8 @@ es:
   label:
     'yes': "Si"
     'no': "No"
+    total: "Total"
+    by: "por"
     add: "Agregar"
     add_item: "Agregar ítem"
     all: "Todos"
@@ -47,7 +49,6 @@ es:
     es: 'Español'
 
   message:
-    welcome: 'Bienvenido'
     ldap_error: 'El servidor de autenticación no está disponible, intente nuevamente más tarde'
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
@@ -176,6 +177,7 @@ es:
     process_control_stats_title: 'Observaciones por proceso de negocio'
     synthesis_report_title: "Informe de síntesis al directorio"
     review_stats_report_title: "Estadísticas de informes"
+    review_scores_report_title: "Calificaciones de informes"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -289,6 +291,14 @@ es:
       weaknesses_by_score:
         title: "Observaciones por riesgo, prioridad y calificación de informe"
         total: "Total"
+    review_scores_report:
+      pdf_name: "calificaciones_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
+      title: "CALIFICACIONES DE INFORMES"
+      subtitle: "INFORMES DEFINITIVOS"
+      review_score: "Calificación informes"
+      business_unit_score: "Calificación unidades de negocio"
+      total_score: "Calificación total"
+      empty: "Sin calificaciones para el filtro aplicado"
     weaknesses_by_state:
       pdf_name: "observaciones_informes_definitivos_por_estado_%{from_date}_al_%{to_date}.pdf"
       title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
@@ -359,19 +369,23 @@ es:
     objectives_and_scopes: "OBJETIVOS Y ALCANCE DEL TRABAJO"
     applied_procedures: "PROCEDIMIENTOS APLICADOS"
     conclusion: "CONCLUSIÓN"
+    weaknesses_brief: "RESUMEN DE OBSERVACIONES"
     weaknesses: "OBSERVACIONES"
     oportunities: "OPORTUNIDADES DE MEJORA"
     finding_review_assignments: "OBSERVACIONES / OPORTUNIDADES DE MEJORA REVISADAS"
+    repeated_findings: "Seguimiento de observaciones"
+    repeated_findings_empty: "No se registran observaciones pendientes de regularización."
+    present_findings: "Nuevas observaciones"
+    present_findings_empty: "No se registran observaciones que mencionar."
     add_recipient: "Agregar nuevo destinatario"
     review_sended: "El informe fue enviado a todos los destinatarios indicados"
     review_not_approved: "El informe no fue enviado, debe estar aprobado"
     executive_summary:
       title: "Resumen ejecutivo"
       review_author: "Gerencia de Auditoría Interna"
-      project: "La Auditoría practicada estuvo circunscripta a la revisión del proceso/subproceso/tema"
-      risk_exposure: "El proceso/subproceso evaluado en esta revisión es considerado por la Auditoria Interna en función a la Matriz de Riesgo"
+      project: "La Auditoría practicada estuvo circunscripta a la revisión de:"
+      risk_exposure: "Exposición al riesgo del proceso evaluado: <b>%{risk}</b> (Fórmula algorítmica de la Matriz de Riesgos)"
       score: "Calificación"
-      current_score: "CALIFICACIÓN INFORME ACTUAL"
       evolution: "EVOLUCIÓN (*)"
       main_weaknesses: "Principales debilidades"
       other_weaknesses: "Otras observaciones"
@@ -461,6 +475,7 @@ es:
     subtitle: "Subtítulo"
 
   execution_reports:
+    cost_analysis_title: "Análisis de costos"
     detailed_management_report:
       pdf_name: "informe_gerencial_detallado_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
@@ -474,6 +489,16 @@ es:
       without_oportunities: "Sin oportunidades de mejora"
       references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     detailed_management_report_title: "Resumen gerencial"
+    planned_cost_summary:
+      pdf_name: "resumen_de_costos_planificados_%{from_date}_al_%{to_date}.pdf"
+      title: "RESUMEN DE COSTOS PLANIFICADOS\nDE AUDITORÍA INTERNA"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      column_month: "Mes"
+      column_estimated_amount: "Unidades estimadas"
+      column_real_amount: "Unidades reales"
+      column_deviation: "Desviación"
+    planned_cost_summary_title: "Análisis de costos planificados"
     reviews_with_incomplete_work_papers_report_incomplete_title: "Informes cerrados sin conformidad auditor"
     reviews_with_incomplete_work_papers_report_revised_title: "Informes cerrados sin revisión supervisor"
     reviews_with_incomplete_work_papers_report:
@@ -755,8 +780,10 @@ es:
     changes_notification:
       title: "Notificación de cambios"
     conclusion_review_notification:
-      title: "Informe de auditoría %{review}"
+      title: "Informe de auditoría %{type} %{review}"
       body_title: "Se adjuntan los siguientes documentos: %{elements}"
+      final: "definitivo"
+      draft: "borrador"
     footer:
       email_label: "Correo (preferentemente)"
       phone_label: "Teléfono"
@@ -873,6 +900,8 @@ es:
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
     weakness_from_template: "Observación creada de una plantilla"
+    repeated_weaknesses: "Reiteradas"
+    new_weaknesses: "Nuevas"
     taken_work_paper_code:
       one: "El código de papel de trabajo %{duplicated_work_papers} está duplicado"
       other: "Los siguientes códigos de papeles de trabajo están duplicados: %{duplicated_work_papers}"
@@ -916,6 +945,7 @@ es:
     other_actions: "Acciones"
     recode_findings: "Recodificar hallazgos"
     recode_weaknesses_by_risk: "Recodificar observaciones por riesgo"
+    recode_weaknesses_by_repetition_and_risk: "Recodificar observaciones por reiteración y riesgo"
     recode_weaknesses_by_control_objective_order: "Recodificar observaciones por orden objetivos de control"
     findings_recoded: "Hallazgos recodificados correctamente"
     work_papers_marked_as_finished: "Papeles de trabajo marcados como conforme auditor"
@@ -1037,6 +1067,10 @@ es:
     column_real: "Real"
     row_cost: "Costo"
     row_time: "Tiempo"
+    human_resources_abbr: "RRHH"
+    human_resources: "Recursos humanos"
+    material_resources_abbr: "RRMM"
+    material_resources: "Recursos materiales"
     allow_overload: "¿Permitir superposición?"
     copy: "Copiar"
     readonly: "El programa de trabajo no puede ser modificado, ya se emitió el informe definitivo"
@@ -1117,7 +1151,7 @@ es:
         recipients: "Destinatarios del informe"
         sectors: "Sectores/departamentos involucrados"
         evolution: "Evolución de la calificación"
-        evolution_justification: "Justificación evolución"
+        evolution_justification: "Justificación de la evolución"
         observations: "Otras consideraciones"
         main_weaknesses_text: "Principales debilidades"
         corrective_actions: "Acciones correctivas"
@@ -1142,6 +1176,8 @@ es:
         auditor_comment: "Conclusiones del auditor"
         finished: "Terminado"
         exclude_from_score: "No calificar"
+        issues_count: "Casos observados"
+        alerts_count: "Cantidad de alertas"
         process_control_id: "Proceso de negocio"
         effectiveness: "Efectividad de control"
         support: "Soporte"

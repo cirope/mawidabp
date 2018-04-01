@@ -58,7 +58,7 @@ class Users::PasswordsController < ApplicationController
     end
 
     def update_password
-      PaperTrail.whodunnit ||= @auth_user.id
+      PaperTrail.request.whodunnit ||= @auth_user.id
 
       save_password
       restart_session

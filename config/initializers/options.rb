@@ -41,6 +41,11 @@ EVOLUTION_IMAGES = {
 PDF_IMAGE_PATH = Rails.root.join('app', 'assets', 'images', 'pdf').freeze
 PDF_DEFAULT_SCORE_IMAGE = 'score_none.png'
 
+PLAN_ITEM_STATS_EXCLUDED_SCOPES = [
+  'Trabajo especial',
+  'Informe de comité'
+]
+
 REVIEW_SCOPES = [
   'Auditorías/Seguimiento',
   'Trabajo especial',

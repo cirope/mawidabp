@@ -8,7 +8,7 @@ module ConclusionReviews::AlternativePDF
     put_watermark_on          pdf
     put_alternative_header_on pdf, organization
     put_alternative_cover_on  pdf
-    put_executive_summary_on  pdf
+    put_executive_summary_on  pdf, organization
     put_detailed_review_on    pdf, organization
     put_annex_on              pdf, organization, options
 
@@ -55,7 +55,7 @@ module ConclusionReviews::AlternativePDF
         size: items_font_size
     end
 
-    def put_executive_summary_on pdf
+    def put_executive_summary_on pdf, organization
       title = I18n.t 'conclusion_review.executive_summary.title'
       project_title = I18n.t 'conclusion_review.executive_summary.project'
       project = review.plan_item.project
@@ -70,7 +70,10 @@ module ConclusionReviews::AlternativePDF
       put_alternative_score_on pdf
 
       put_main_weaknesses_on   pdf
-      put_other_weaknesses_on  pdf
+
+      unless show_review_best_practice_comments? organization
+        put_other_weaknesses_on  pdf
+      end
     end
 
     def put_detailed_review_on pdf, organization
@@ -270,16 +273,14 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_risk_exposure_on pdf
-      risk_exposure_title =
-        I18n.t 'conclusion_review.executive_summary.risk_exposure'
-      risk_exposure       = '<b>%s</b>' % [
-        ::Review.human_attribute_name('risk_exposure'),
-        review.risk_exposure
-      ].join(': ')
+      risk_exposure_text = I18n.t(
+        'conclusion_review.executive_summary.risk_exposure',
+        risk: review.risk_exposure
+      )
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.table [["#{risk_exposure_title}: #{risk_exposure}"]], {
+      pdf.table [[risk_exposure_text]], {
         width:      pdf.percent_width(100),
         cell_style: {
           align:         :justify,
@@ -312,7 +313,6 @@ module ConclusionReviews::AlternativePDF
       widths        = alternative_score_details_column_widths pdf
       table_options = pdf.default_table_options widths
       data          = [
-        alternative_score_details_column_headers,
         alternative_score_details_column_data
       ]
 
@@ -612,12 +612,6 @@ module ConclusionReviews::AlternativePDF
       [70, 4, 26].map { |percent| pdf.percent_width percent }
     end
 
-    def alternative_score_details_column_headers
-      header = I18n.t 'conclusion_review.executive_summary.current_score'
-
-      [{ content: header, colspan: 2 }]
-    end
-
     def alternative_score_details_column_widths pdf
       [70, 10].map do |width|
         pdf.percent_width width
@@ -625,14 +619,21 @@ module ConclusionReviews::AlternativePDF
     end
 
     def alternative_score_details_column_data
-      image = CONCLUSION_IMAGES[conclusion]
+      image      = CONCLUSION_IMAGES[conclusion]
+      score_text = [
+        I18n.t('conclusion_review.executive_summary.score'), conclusion
+      ].join(': ')
 
-      score_text  = [
-        "<b>#{conclusion.upcase}</b>",
-        "<b>(#{review.score_text})</b>"
-      ].join("\n")
-
-      [score_text, pdf_score_image_row(image)]
+      [
+        {
+          content: score_text.upcase,
+          valign:  :center,
+          size:    12,
+          height:  50.25,
+          borders: [:left, :top, :bottom]
+        },
+        pdf_score_image_row(image).merge(borders: [:right, :top, :bottom])
+      ]
     end
 
     def pdf_score_image_row image, fit: [23, 23]

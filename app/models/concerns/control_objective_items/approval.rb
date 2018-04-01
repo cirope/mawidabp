@@ -27,7 +27,7 @@ module ControlObjectiveItems::Approval
     def audit_date_error
       cdr = review.conclusion_draft_review
 
-      if cdr && audit_date > cdr.issue_date
+      if cdr && audit_date && audit_date > cdr.issue_date
         I18n.t 'control_objective_item.errors.audit_date_ahead_of_issue_date'
       end
     end

@@ -13,6 +13,8 @@ module Findings::SaveCallbacks
     rescue ActiveRecord::StaleObjectError
       review.reload.save!
     rescue ActiveRecord::RecordInvalid
+      errors.add :base, 'Review can not be saved!'
+
       throw :abort
     end
 end

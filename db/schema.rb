@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180107223402) do
+ActiveRecord::Schema.define(version: 20180313174906) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -193,6 +193,8 @@ ActiveRecord::Schema.define(version: 20180107223402) do
     t.datetime "updated_at", null: false
     t.boolean "exclude_from_score", default: false, null: false
     t.integer "organization_id"
+    t.integer "issues_count"
+    t.integer "alerts_count"
     t.index ["control_objective_id"], name: "index_control_objective_items_on_control_objective_id"
     t.index ["organization_id"], name: "index_control_objective_items_on_organization_id"
     t.index ["review_id"], name: "index_control_objective_items_on_review_id"
@@ -555,6 +557,7 @@ ActiveRecord::Schema.define(version: 20180107223402) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "risk_exposure"
+    t.string "scope"
     t.index ["business_unit_id"], name: "index_plan_items_on_business_unit_id"
     t.index ["plan_id"], name: "index_plan_items_on_plan_id"
   end
@@ -636,6 +639,18 @@ ActiveRecord::Schema.define(version: 20180107223402) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["questionnaire_id"], name: "index_questions_on_questionnaire_id"
+  end
+
+  create_table "readings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "readable_type", null: false
+    t.bigint "readable_id", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_readings_on_organization_id"
+    t.index ["readable_type", "readable_id"], name: "index_readings_on_readable_type_and_readable_id"
+    t.index ["user_id"], name: "index_readings_on_user_id"
   end
 
   create_table "related_user_relations", id: :serial, force: :cascade do |t|
@@ -936,6 +951,8 @@ ActiveRecord::Schema.define(version: 20180107223402) do
   add_foreign_key "polls", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "privileges", "roles", on_update: :restrict, on_delete: :restrict
   add_foreign_key "process_controls", "best_practices", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "readings", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "readings", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "resource_classes", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "resources", "resource_classes", on_update: :restrict, on_delete: :restrict
   add_foreign_key "review_user_assignments", "reviews", on_update: :restrict, on_delete: :restrict

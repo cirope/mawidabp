@@ -2,15 +2,18 @@
   <div class="col-md-<%= SHOW_REVIEW_EXTRA_ATTRIBUTES ? 2 : 3 %> col-md-offset-1">
     <h5><strong><%= BusinessUnit.model_name.human %></strong></h5>
   </div>
-  <div class="col-md-<%= SHOW_REVIEW_EXTRA_ATTRIBUTES ? 3 : 4 %>">
+  <div class="col-md-<%= SHOW_REVIEW_EXTRA_ATTRIBUTES ? 2 : 4 %>">
     <h5><strong><%= PlanItem.human_attribute_name 'project' %></strong></h5>
   </div>
   <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
     <div class="col-md-2">
+      <h5><strong><%= PlanItem.human_attribute_name 'scope' %></strong></h5>
+    </div>
+    <div class="col-md-2">
       <h5><strong><%= PlanItem.human_attribute_name 'risk_exposure' %></strong></h5>
     </div>
   <% end %>
-  <div class="col-md-3">
+  <div class="col-md-<%= SHOW_REVIEW_EXTRA_ATTRIBUTES ? 2 : 3 %>">
     <div class="row">
       <div class="col-md-6">
         <h5><strong><%= PlanItem.human_attribute_name 'start' %></strong></h5>

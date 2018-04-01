@@ -1,7 +1,9 @@
 class NotifierMailer < ActionMailer::Base
+  include ActionView::Helpers::TextHelper
+
   helper :application, :notifier
 
-  default from: "'#{ENV['EMAIL_NAME'] || I18n.t('app_name')}' <#{ENV['EMAIL_ADDRESS']}>"
+  default from: "#{ENV['EMAIL_NAME'] || I18n.t('app_name')} <#{ENV['EMAIL_ADDRESS']}>"
 
   def pending_poll_email(poll)
     @poll = poll
@@ -156,12 +158,14 @@ class NotifierMailer < ActionMailer::Base
 
   def conclusion_review_notification(user, conclusion_review, options = {})
     Organization.current_id = options.delete :organization_id
-    PaperTrail.whodunnit    = options.delete :user_id
+    PaperTrail.request.whodunnit    = options.delete :user_id
 
     prefix = "[#{conclusion_review.review.organization.prefix}] "
+    type = conclusion_review.kind_of?(ConclusionDraftReview) ? 'draft' : 'final'
     title = I18n.t(
       'notifier.conclusion_review_notification.title',
-      review: conclusion_review.review.identification
+      type: I18n.t("notifier.conclusion_review_notification.#{type}"),
+      review: conclusion_review.review.long_identification
     )
     elements = [
       "*#{Review.model_name.human} #{conclusion_review.review.identification}*"
@@ -199,7 +203,7 @@ class NotifierMailer < ActionMailer::Base
         File.read(conclusion_review.review.absolute_global_score_sheet_path)
     end
 
-    mail(to: [user.email], subject: prefix.upcase + title)
+    mail(to: [user.email], subject: truncate(prefix.upcase + title, length: 990))
   end
 
   def findings_expiration_warning(user, findings)
