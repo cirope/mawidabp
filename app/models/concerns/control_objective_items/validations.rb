@@ -5,12 +5,15 @@ module ControlObjectiveItems::Validations
     validates :control_objective_text, :control_objective_id,
       :organization_id, presence: true
     validates :control_objective_text, :auditor_comment, pdf_encoding: true
-    validates :relevance, numericality: {
-      only_integer: true, greater_than_or_equal_to: 0
+    validates :relevance, :issues_count, :alerts_count, numericality: {
+      only_integer: true,
+      greater_than_or_equal_to: 0,
+      less_than_or_equal_to: 2147483647
     }, allow_blank: true, allow_nil: true
     validates :audit_date, timeliness: { type: :date }, allow_nil: true
     validates :audit_date, :relevance, :auditor_comment, presence: true, if: :finished
     validates :auditor_comment, presence: true, if: :exclude_from_score
+    validates :issues_count, :alerts_count, presence: true, if: :validate_counts?
     validate :audit_date_is_on_period
     validate :control_objective_uniqueness
     validate :tests_completion
@@ -68,6 +71,14 @@ module ControlObjectiveItems::Validations
         if sustantive_score.blank? && control.sustantive_tests.present?
           errors.add :sustantive_score, :blank
         end
+      end
+    end
+
+    def validate_counts?
+      if finished
+        organization = Organization.find Organization.current_id
+
+        ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include? organization.prefix
       end
     end
 end
