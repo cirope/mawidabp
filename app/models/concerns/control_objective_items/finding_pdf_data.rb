@@ -182,7 +182,12 @@ module ControlObjectiveItems::FindingPDFData
         label = I18n.t "label.#{repeated ? 'yes' : 'no'}"
 
         if show.include?('repeated_review') && finding.repeated_of
-          label << " (#{finding.repeated_of.review.identification})"
+          review_identification = [
+            I18n.t('conclusion_review.review_repeated_finding_label'),
+            finding.repeated_of.review.identification
+          ].join(' ')
+
+          label << " (#{review_identification})"
         end
 
         "<b>#{I18n.t 'findings.state.repeated'}:</b> #{label}\n"
