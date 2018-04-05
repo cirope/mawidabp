@@ -125,7 +125,7 @@ module ConclusionReviews::AlternativePDF
 
         unless options[:brief]
           pdf.move_down PDF_FONT_SIZE
-          put_control_objective_items_reference_on pdf
+          put_control_objective_items_reference_on pdf, organization
         end
       end
     end
@@ -198,25 +198,24 @@ module ConclusionReviews::AlternativePDF
       end
     end
 
-    def put_control_objective_items_reference_on pdf
+    def put_control_objective_items_reference_on pdf, organization
       count = 0
 
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.sort.each do |coi|
-          put_control_objective_item_reference_on pdf, coi, count += 1
+          put_control_objective_item_reference_on pdf, organization, coi, count += 1
 
           pdf.move_down PDF_FONT_SIZE
         end
       end
     end
 
-    def put_control_objective_item_reference_on pdf, coi, index
-      control_attributes = %i(
-        control
-        design_tests
-        compliance_tests
-        sustantive_tests
-      )
+    def put_control_objective_item_reference_on pdf, organization, coi, index
+      control_attributes = %i(control design_tests compliance_tests)
+
+      if show_sustantive_tests? organization
+        control_attributes << :sustantive_tests
+      end
 
       pdf.text "<sup>(#{index})</sup> <b>#{coi.control_objective_text}</b>",
         inline_format: true, size: (PDF_FONT_SIZE * 1.1).round, align: :justify
@@ -647,5 +646,9 @@ module ConclusionReviews::AlternativePDF
 
       SHOW_REVIEW_BEST_PRACTICE_COMMENTS &&
         ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(prefix)
+    end
+
+    def show_sustantive_tests? organization
+      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.exclude? organization.prefix
     end
 end
