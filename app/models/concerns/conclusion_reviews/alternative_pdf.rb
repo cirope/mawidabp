@@ -211,10 +211,10 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_control_objective_item_reference_on pdf, organization, coi, index
-      control_attributes = %i(control design_tests compliance_tests)
+      control_attributes = %i(control)
 
-      if show_sustantive_tests? organization
-        control_attributes << :sustantive_tests
+      if show_tests? organization
+        control_attributes += %i(design_tests compliance_tests sustantive_tests)
       end
 
       pdf.text "<sup>(#{index})</sup> <b>#{coi.control_objective_text}</b>",
@@ -648,7 +648,7 @@ module ConclusionReviews::AlternativePDF
         ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(prefix)
     end
 
-    def show_sustantive_tests? organization
+    def show_tests? organization
       ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.exclude? organization.prefix
     end
 end
