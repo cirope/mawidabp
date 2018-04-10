@@ -84,7 +84,7 @@ GEM
     chronic (0.10.2)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
-    crass (1.0.3)
+    crass (1.0.4)
     erubi (1.7.1)
     execjs (2.7.0)
     ffi (1.9.23)
@@ -245,7 +245,7 @@ GEM
     unicorn-rails (2.2.1)
       rack
       unicorn
-    web-console (3.5.1)
+    web-console (3.6.0)
       actionview (>= 5.0)
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
