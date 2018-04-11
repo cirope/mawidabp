@@ -47,14 +47,14 @@ class RiskAssessmentTest < ActiveSupport::TestCase
   end
 
   test 'can not be updated when final' do
-    @risk_assessment.update! final: true
+    @risk_assessment.final!
     @risk_assessment.update name: 'new name'
 
     assert_not_equal 'new name', @risk_assessment.reload.name
   end
 
   test 'can not be destroyed when final' do
-    @risk_assessment.update! final: true
+    @risk_assessment.final!
 
     assert_no_difference 'RiskAssessment.count' do
       @risk_assessment.destroy

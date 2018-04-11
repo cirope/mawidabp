@@ -18,7 +18,7 @@ module RiskAssessmentsHelper
   end
 
   def link_to_create_plan risk_assessment
-    if risk_assessment.final && risk_assessment.period.plan.blank?
+    if risk_assessment.draft? && risk_assessment.period.plan.blank?
       options = {
         title: t('.create_plan'),
         class: 'icon',

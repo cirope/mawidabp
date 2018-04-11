@@ -57,10 +57,10 @@ class RiskAssessmentsController < ApplicationController
   def update
     update_resource @risk_assessment, risk_assessment_params
 
-    location = if @risk_assessment.final
-                 risk_assessment_url @risk_assessment
-               else
+    location = if @risk_assessment.draft? || @risk_assessment.invalid?
                  edit_risk_assessment_url @risk_assessment
+               else
+                 risk_assessment_url @risk_assessment
                end
 
     respond_with @risk_assessment, location: location
@@ -115,7 +115,7 @@ class RiskAssessmentsController < ApplicationController
     end
 
     def risk_assessment_params
-      params.require(:risk_assessment).permit :name, :description, :final,
+      params.require(:risk_assessment).permit :name, :description, :status,
         :period_id, :risk_assessment_template_id, :lock_version,
         risk_assessment_items_attributes: [
           :id, :order, :name, :business_unit_id, :process_control_id, :risk,

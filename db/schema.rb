@@ -769,7 +769,7 @@ ActiveRecord::Schema.define(version: 20180313174906) do
   create_table "risk_assessments", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
-    t.boolean "final", default: false, null: false
+    t.integer "status", default: 0, null: false
     t.integer "lock_version", default: 0, null: false
     t.bigint "period_id", null: false
     t.bigint "plan_id"

@@ -21,7 +21,7 @@
 
       <tbody>
         <% @risk_assessments.each do |risk_assessment| %>
-          <tr <%== 'class="text-muted"' if risk_assessment.final %>>
+          <tr <%== 'class="text-muted"' unless risk_assessment.draft? %>>
             <td class="hidden-xs"><%= risk_assessment.period.name %></td>
             <td><%= super_truncate risk_assessment.name, 30 %></td>
             <td class="hidden-xs hidden-sm"><%= super_truncate risk_assessment.description, 30 %></td>

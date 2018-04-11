@@ -451,7 +451,7 @@ es:
         description: 'Descripción'
         period: 'Periodo'
         risk_assessment_template: 'Plantilla de evaluación de riesgo'
-        final: 'Definitiva'
+        status: 'Estado'
       risk_assessment/risk_assessment_items:
         name: 'Nombre (item)'
         risk: 'Riesgo (item)'

@@ -15,8 +15,8 @@
   <%= @risk_assessment.risk_assessment_template.name %>
 </p>
 <p>
-  <strong><%= RiskAssessment.human_attribute_name 'final' %></strong>:
-  <%= t "label.#{@risk_assessment.final ? 'yes' : 'no'}" %>
+  <strong><%= RiskAssessment.human_attribute_name 'status' %></strong>:
+  <%= t "risk_assessments.status.#{@risk_assessment.status}" %>
 </p>
 
 <% if @risk_assessment.risk_assessment_items.any? %>
@@ -47,7 +47,7 @@
 
 <hr>
 
-<% unless @risk_assessment.final %>
+<% if @risk_assessment.draft? %>
   <%= link_to_edit [:edit, @risk_assessment] %> |
 <% end %>
 <%= link_to_index risk_assessments_path %>

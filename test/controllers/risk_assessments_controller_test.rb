@@ -91,7 +91,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
 
   test 'should update risk assessment and redirect to show' do
     patch :update, params: {
-      id: @risk_assessment, risk_assessment: { final: '1' }
+      id: @risk_assessment, risk_assessment: { status: 'final' }
     }
 
     assert_redirected_to risk_assessment_url(assigns(:risk_assessment))

@@ -526,6 +526,10 @@ es:
       medium: 'Medio'
       medium_high: 'Medio alto'
       high: 'Alto'
+    status:
+      draft: 'Borrador'
+      final: 'Definitiva'
+      merged: 'Planificada'
 
   risk_assessment_templates:
     edit:
