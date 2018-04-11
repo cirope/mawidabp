@@ -156,7 +156,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     @risk_assessment.update_column :period_id, period.id
 
     assert_difference 'Plan.count' do
-      post :create_plan, params: { id: @risk_assessment }
+      post :merge_to_plan, params: { id: @risk_assessment }
     end
 
     assert_redirected_to edit_plan_url(Plan.find_by period_id: period.id)

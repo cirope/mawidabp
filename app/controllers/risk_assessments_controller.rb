@@ -16,7 +16,7 @@ class RiskAssessmentsController < ApplicationController
     :add_items,
     :fetch_item,
     :sort_by_risk,
-    :create_plan
+    :merge_to_plan
   ]
 
   # GET /risk_assessments
@@ -27,7 +27,7 @@ class RiskAssessmentsController < ApplicationController
       includes(:period).
       references(:period).
       where(@conditions).
-      order(:name).
+      order(:status, :name).
       page params[:page]
   end
 
@@ -101,9 +101,9 @@ class RiskAssessmentsController < ApplicationController
     respond_with @risk_assessment, location: edit_risk_assessment_url(@risk_assessment)
   end
 
-  # POST /risk_assessments/1/create_plan
-  def create_plan
-    plan = @risk_assessment.create_plan
+  # POST /risk_assessments/1/merge_to_plan
+  def merge_to_plan
+    plan = @risk_assessment.merge_to_plan
 
     respond_with plan, location: edit_plan_url(plan)
   end
@@ -135,7 +135,7 @@ class RiskAssessmentsController < ApplicationController
         fetch_item: :read,
         add_items: :read,
         sort_by_risk: :modify,
-        create_plan: :modify
+        merge_to_plan: :modify
       )
     end
 end

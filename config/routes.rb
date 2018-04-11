@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       get :new_item
       get :add_items
       patch :sort_by_risk
-      post :create_plan
+      post :merge_to_plan
     end
 
     collection do

@@ -508,7 +508,7 @@ es:
       title: 'Listado de evaluaciones de riesgo'
       empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="label label-primary">Nueva evaluación de riesgo</span>'
       empty_search_html: 'No hay evaluaciones de riesgo que coincidan con el criterio de búsqueda'
-      create_plan: 'Crear plan a partir de la evaluación'
+      merge_to_plan: 'Crear proyectos en plan a partir de la evaluación'
     new:
       title: 'Crear evaluación de riesgo'
     show:

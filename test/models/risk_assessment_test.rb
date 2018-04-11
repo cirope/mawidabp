@@ -27,7 +27,6 @@ class RiskAssessmentTest < ActiveSupport::TestCase
 
     assert risk_assessment.invalid?
     assert_error risk_assessment, :name, :taken
-    assert_error risk_assessment, :period_id, :taken
   end
 
   test 'attribute length' do
@@ -61,16 +60,32 @@ class RiskAssessmentTest < ActiveSupport::TestCase
     end
   end
 
-  test 'create plan' do
+  test 'create plan on merge' do
     @risk_assessment.update_column :period_id, periods(:unused_period).id
 
     assert_difference 'Plan.count' do
-      plan = @risk_assessment.create_plan
+      plan = @risk_assessment.merge_to_plan
 
       assert_equal @risk_assessment.period_id, plan.period_id
       assert_equal @risk_assessment.risk_assessment_items.count,
         plan.plan_items.count
     end
+
+    assert @risk_assessment.reload.merged?
+  end
+
+  test 'append items to existing plan on merge' do
+    assert_no_difference 'Plan.count' do
+      expected_count = @risk_assessment.risk_assessment_items.count
+
+      assert_difference 'PlanItem.count', expected_count do
+        plan = @risk_assessment.merge_to_plan
+
+        assert_equal @risk_assessment.period_id, plan.period_id
+      end
+    end
+
+    assert @risk_assessment.reload.merged?
   end
 
   test 'sort by risk' do

@@ -1,15 +1,19 @@
 module RiskAssessments::Plan
   extend ActiveSupport::Concern
 
-  def create_plan
-    plan = build_plan(
-      period_id:       period_id,
-      organization_id: organization_id
-    )
+  def merge_to_plan
+    self.class.transaction do
+      plan = period.plan || build_plan(
+        period_id:       period_id,
+        organization_id: organization_id
+      )
 
-    build_plan_items_for plan
+      build_plan_items_for plan
 
-    plan.save! && update_column(:plan_id, plan.id) && plan
+      plan.allow_duplication = true
+
+      plan.save! && update_columns(plan_id: plan.id, status: :merged) && plan
+    end
   end
 
   private

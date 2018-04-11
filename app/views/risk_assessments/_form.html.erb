@@ -6,10 +6,7 @@
       <div class="col-md-6">
         <%= f.input :name, input_html: { autofocus: true } %>
         <% if @risk_assessment.new_record? %>
-          <%= f.association :period,
-            collection:   Period.list_all_without_risk_assessment,
-            prompt:       true
-          %>
+          <%= f.association :period, collection: Period.list, prompt: true %>
         <% else %>
           <%= f.input :period, input_html: { readonly: true } %>
         <% end %>

@@ -18,9 +18,9 @@ module RiskAssessmentsHelper
   end
 
   def link_to_create_plan risk_assessment
-    if risk_assessment.draft? && risk_assessment.period.plan.blank?
+    if risk_assessment.final?
       options = {
-        title: t('.create_plan'),
+        title: t('.merge_to_plan'),
         class: 'icon',
         data: {
           method:  :post,
@@ -28,7 +28,7 @@ module RiskAssessmentsHelper
         }
       }
 
-      link_to [:create_plan, risk_assessment], options do
+      link_to [:merge_to_plan, risk_assessment], options do
         content_tag :span, nil, class: 'glyphicon glyphicon-list'
       end
     end

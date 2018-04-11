@@ -28,11 +28,6 @@ module Periods::Scopes
         reorder(order_by_dates).references(:plans)
     end
 
-    def list_all_without_risk_assessment
-      list.includes(:risk_assessments).where(risk_assessments: { period_id: nil }).
-        reorder(order_by_dates).references(:risk_assessments)
-    end
-
     private
 
       def order_by_dates

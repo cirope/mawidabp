@@ -778,7 +778,7 @@ ActiveRecord::Schema.define(version: 20180313174906) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_risk_assessments_on_organization_id"
-    t.index ["period_id"], name: "index_risk_assessments_on_period_id", unique: true
+    t.index ["period_id"], name: "index_risk_assessments_on_period_id"
     t.index ["plan_id"], name: "index_risk_assessments_on_plan_id"
     t.index ["risk_assessment_template_id"], name: "index_risk_assessments_on_risk_assessment_template_id"
   end
