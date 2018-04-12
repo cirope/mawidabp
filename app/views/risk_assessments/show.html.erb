@@ -38,11 +38,39 @@
           <td><%= risk_assessment_item.name %></td>
           <td><%= risk_assessment_item.business_unit_type %></td>
           <td><%= risk_assessment_item.business_unit %></td>
-          <td><%= risk_assessment_item.risk %></td>
+          <td>
+            <%= link_to risk_assessment_item.risk, "#risk-assessment-item-detail-#{risk_assessment_item.id}" %>
+          </td>
         </tr>
       <% end %>
     </tbody>
   </table>
+
+  <% @risk_assessment.risk_assessment_items.each do |risk_assessment_item| %>
+    <div id="risk-assessment-item-detail-<%= risk_assessment_item.id %>">
+      <table class="table table-condensed table-striped table-hover table-bordered">
+        <caption>
+          <h5>
+            <%= risk_assessment_item.name %> (<%= risk_assessment_item.business_unit %>)
+          </h5>
+        </caption>
+
+        <tr>
+          <th> <%= RiskAssessmentWeight.human_attribute_name 'name' %></th>
+          <th> <%= RiskWeight.human_attribute_name 'weight' %></th>
+          <th> <%= RiskWeight.human_attribute_name 'value' %></th>
+        </tr>
+
+        <% risk_assessment_item.risk_weights.each do |risk_weight| %>
+          <tr>
+            <td><%= risk_weight.risk_assessment_weight.name %></td>
+            <td><%= risk_weight.weight %></td>
+            <td><%= risk_weight.value %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
 <% end %>
 
 <hr>
