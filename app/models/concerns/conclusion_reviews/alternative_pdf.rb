@@ -328,12 +328,11 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_evolution_table_on pdf
-      image         = EVOLUTION_IMAGES[evolution]
       widths        = [pdf.percent_width(15)]
       table_options = pdf.default_table_options widths
-      data = [
+      data          = [
         [I18n.t('conclusion_review.executive_summary.evolution')],
-        [pdf_score_image_row(image)]
+        [pdf_score_image_row(get_evolution_image)]
       ]
 
       pdf.font_size (PDF_FONT_SIZE * 0.75).round do
@@ -639,6 +638,11 @@ module ConclusionReviews::AlternativePDF
       image_path = PDF_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
 
       { image: image_path, fit: fit, position: :center, vposition: :center }
+    end
+
+    def get_evolution_image
+      CONCLUSION_EVOLUTION_IMAGES[[conclusion, evolution]] ||
+        EVOLUTION_IMAGES[evolution]
     end
 
     def show_review_best_practice_comments? organization
