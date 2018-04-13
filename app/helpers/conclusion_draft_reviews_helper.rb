@@ -19,13 +19,6 @@ module ConclusionDraftReviewsHelper
     show_info(t('conclusion_draft_review.has_final_review'), class: 'text-danger')
   end
 
-  def show_review_best_practice_comments?
-    prefix = current_organization&.prefix
-
-    SHOW_REVIEW_BEST_PRACTICE_COMMENTS &&
-      ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(prefix)
-  end
-
   def sorted_best_practice_comments_for conclusion_review
     review       = conclusion_review.review
     bpcs         = review.best_practice_comments

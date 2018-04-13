@@ -8,7 +8,7 @@ module ConclusionReviews::AlternativePDF
     put_watermark_on          pdf
     put_alternative_header_on pdf, organization
     put_alternative_cover_on  pdf
-    put_executive_summary_on  pdf
+    put_executive_summary_on  pdf, organization
     put_detailed_review_on    pdf, organization
     put_annex_on              pdf, organization, options
 
@@ -55,7 +55,7 @@ module ConclusionReviews::AlternativePDF
         size: items_font_size
     end
 
-    def put_executive_summary_on pdf
+    def put_executive_summary_on pdf, organization
       title = I18n.t 'conclusion_review.executive_summary.title'
       project_title = I18n.t 'conclusion_review.executive_summary.project'
       project = review.plan_item.project
@@ -70,7 +70,10 @@ module ConclusionReviews::AlternativePDF
       put_alternative_score_on pdf
 
       put_main_weaknesses_on   pdf
-      put_other_weaknesses_on  pdf
+
+      unless show_review_best_practice_comments? organization
+        put_other_weaknesses_on  pdf
+      end
     end
 
     def put_detailed_review_on pdf, organization
@@ -122,7 +125,7 @@ module ConclusionReviews::AlternativePDF
 
         unless options[:brief]
           pdf.move_down PDF_FONT_SIZE
-          put_control_objective_items_reference_on pdf
+          put_control_objective_items_reference_on pdf, organization
         end
       end
     end
@@ -195,25 +198,24 @@ module ConclusionReviews::AlternativePDF
       end
     end
 
-    def put_control_objective_items_reference_on pdf
+    def put_control_objective_items_reference_on pdf, organization
       count = 0
 
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.sort.each do |coi|
-          put_control_objective_item_reference_on pdf, coi, count += 1
+          put_control_objective_item_reference_on pdf, organization, coi, count += 1
 
           pdf.move_down PDF_FONT_SIZE
         end
       end
     end
 
-    def put_control_objective_item_reference_on pdf, coi, index
-      control_attributes = %i(
-        control
-        design_tests
-        compliance_tests
-        sustantive_tests
-      )
+    def put_control_objective_item_reference_on pdf, organization, coi, index
+      control_attributes = %i(control)
+
+      if show_tests? organization
+        control_attributes += %i(design_tests compliance_tests sustantive_tests)
+      end
 
       pdf.text "<sup>(#{index})</sup> <b>#{coi.control_objective_text}</b>",
         inline_format: true, size: (PDF_FONT_SIZE * 1.1).round, align: :justify
@@ -326,12 +328,11 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_evolution_table_on pdf
-      image         = EVOLUTION_IMAGES[evolution]
       widths        = [pdf.percent_width(15)]
       table_options = pdf.default_table_options widths
-      data = [
+      data          = [
         [I18n.t('conclusion_review.executive_summary.evolution')],
-        [pdf_score_image_row(image)]
+        [pdf_score_image_row(get_evolution_image)]
       ]
 
       pdf.font_size (PDF_FONT_SIZE * 0.75).round do
@@ -639,10 +640,19 @@ module ConclusionReviews::AlternativePDF
       { image: image_path, fit: fit, position: :center, vposition: :center }
     end
 
+    def get_evolution_image
+      CONCLUSION_EVOLUTION_IMAGES[[conclusion, evolution]] ||
+        EVOLUTION_IMAGES[evolution]
+    end
+
     def show_review_best_practice_comments? organization
       prefix = organization&.prefix
 
       SHOW_REVIEW_BEST_PRACTICE_COMMENTS &&
         ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(prefix)
+    end
+
+    def show_tests? organization
+      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.exclude? organization.prefix
     end
 end
