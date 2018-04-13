@@ -22,6 +22,13 @@ CONCLUSION_IMAGES = {
   'No aplica'                    => 'score_not_apply.png'
 }
 
+CONCLUSION_EVOLUTION_IMAGES = {
+  [
+    'Satisfactorio con salvedades',
+    'Mantiene calificación desfavorable'
+  ] => 'evolution_equal_success.png'
+}
+
 EVOLUTION_OPTIONS = [
   'Mantiene calificación desfavorable',
   'Mantiene calificación favorable',
