@@ -1,6 +1,7 @@
 class ConclusionReportsController < ApplicationController
   include Reports::SynthesisReport
   include Reports::ReviewStatsReport
+  include Reports::ReviewScoresReport
   include Reports::WeaknessesByState
   include Reports::WeaknessesByRisk
   include Reports::WeaknessesByAuditType
@@ -8,6 +9,7 @@ class ConclusionReportsController < ApplicationController
   include Reports::ControlObjectiveStatsByReview
   include Reports::ProcessControlStats
   include Reports::WeaknessesByRiskReport
+  include Reports::WeaknessesByMonth
   include Reports::FixedWeaknessesReport
   include Reports::CostAnalysis
   include Reports::CostSummary
@@ -34,6 +36,8 @@ class ConclusionReportsController < ApplicationController
         create_synthesis_report: :read,
         review_stats_report: :read,
         create_review_stats_report: :read,
+        review_scores_report: :read,
+        create_review_scores_report: :read,
         weaknesses_by_state: :read,
         create_weaknesses_by_state: :read,
         weaknesses_by_risk: :read,

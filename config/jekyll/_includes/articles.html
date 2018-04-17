@@ -1,11 +1,12 @@
 <br />
 
 <ul class="nav nav-pills nav-stacked">
-  {% sorted_for article in site.pages sort_by:article_order %}
+  {% assign articles = site.pages | sort: 'article_order' %}
+  {% for article in articles %}
     {% if article.category == page.category %}
       <li {% if article.url == page.url %} class="active" {% endif %}>
         <a href="/help{{ article.url }}">{{ article.title }}</a>
       </li>
     {% endif %}
-  {% endsorted_for %}
+  {% endfor %}
 </ul>

@@ -29,8 +29,8 @@ module PlanItems::Status
   end
 
   def concluded? on: Time.zone.today
-    review&.has_final_review? &&
-      review.conclusion_final_review.created_at.to_date <= on
+    conclusion_final_review &&
+      conclusion_final_review.send(PLAN_ITEM_REVIEW_CONCLUDED_ON).to_date <= on
   end
 
   def executed? on: Time.zone.today

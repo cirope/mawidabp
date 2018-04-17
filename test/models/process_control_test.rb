@@ -5,17 +5,17 @@ class ProcessControlTest < ActiveSupport::TestCase
   fixtures :process_controls
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @process_control = ProcessControl.find(
-      process_controls(:iso_27000_security_policy).id)
+      process_controls(:security_policy).id)
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of ProcessControl, @process_control
-    assert_equal process_controls(:iso_27000_security_policy).name,
+    assert_equal process_controls(:security_policy).name,
       @process_control.name
-    assert_equal process_controls(:iso_27000_security_policy).order,
+    assert_equal process_controls(:security_policy).order,
       @process_control.order
   end
 
@@ -40,7 +40,7 @@ class ProcessControlTest < ActiveSupport::TestCase
   # Prueba de eliminación de un proceso de control
   test 'destroy' do
     assert_difference 'ProcessControl.count', -1 do
-      process_controls(:bcra_A4609_data_proccessing).destroy
+      process_controls(:data_processing).destroy
     end
   end
 
@@ -73,8 +73,7 @@ class ProcessControlTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
-    @process_control.name =
-      process_controls(:iso_27000_security_organization).name
+    @process_control.name = process_controls(:organization_security).name
 
     assert @process_control.invalid?
     assert_error @process_control, :name, :taken

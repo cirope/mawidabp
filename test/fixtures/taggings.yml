@@ -1,6 +1,6 @@
 important_finding:
   tag: important
-  taggable: iso_27000_security_policy_3_1_item_weakness (Weakness)
+  taggable: being_implemented_weakness_on_final (Weakness)
 
 manual_document:
   tag: manual
@@ -9,3 +9,15 @@ manual_document:
 high_priority_review:
   tag: high_priority
   taggable: review_with_conclusion (Review)
+
+high_priority_without_conclusion_review:
+  tag: high_priority
+  taggable: review_without_conclusion (Review)
+
+for_revision_without_conclusion_review:
+  tag: for_revision
+  taggable: review_without_conclusion (Review)
+
+for_security_policy_3_1_control_objective:
+  tag: risk_evaluation
+  taggable: security_policy_3_1 (ControlObjective)

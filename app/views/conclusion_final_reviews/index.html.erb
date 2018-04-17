@@ -5,7 +5,7 @@
   :columns => @query.blank? ?
     ConclusionFinalReview::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
-<table class="table table-condensed table-striped">
+<table class="table table-condensed table-striped table-hover">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column Review.human_attribute_name(:period_id), nil, 'period' %>
@@ -15,7 +15,7 @@
       <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'hidden-xs' }, 'project' %>
       <%= make_not_available_column ConclusionDraftReview.human_attribute_name(:issue_date), { :class => 'hidden-xs' } %>
       <%= make_not_available_column Review.human_attribute_name(:score), { :class => 'hidden-xs' } %>
-      <th colspan="2" class="text-right"><%= link_to_search %></th>
+      <th colspan="3" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
 
@@ -31,6 +31,7 @@
         <td class="hidden-xs"><%= conclusion_final_review.review.score.to_s + '%' %>
         <td><%= link_to_show conclusion_final_review %></td>
         <td><%= link_to_edit edit_conclusion_final_review_path(conclusion_final_review) %></td>
+        <td><%= link_to_destroy conclusion_final_review if can_destroy_final_reviews? %></td>
       </tr>
     <% end %>
   </tbody>

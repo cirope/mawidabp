@@ -25,7 +25,7 @@ BLANK_PASSWORD_STALE_DAYS = 3
 # sistema notificará su proximidad
 CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS = 7
 # Expresión regular para validar direcciones de correo
-EMAIL_REGEXP = /\A[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\Z/i
+EMAIL_REGEXP = /\A[a-z0-9'._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\Z/i
 # Cantidad máxima de observaciones por PDF
 FINDING_MAX_PDF_ROWS = 100
 # Cantidad de días anteriores al vencimiento de una observación en los que el
@@ -37,6 +37,8 @@ FINDING_DAYS_FOR_SECOND_NOTIFICATION = 1
 FOREIGN_KEY_OPTIONS={ on_delete: :restrict, on_update: :restrict }
 # Días a los que se consideran anticuadas las notificaciones
 NOTIFICATIONS_STALE_DAYS = 2
+# Deshabilitar notificación de observaciones vencidas
+DISABLE_FINDINGS_EXPIRATION_NOTIFICATION = ENV['DISABLE_FINDINGS_EXPIRATION_NOTIFICATION'] == 'true'
 # Cadena para separar las enumeraciones cuando son concatenadas
 APP_ENUM_SEPARATOR = ' / '.freeze
 # Márgenes a dejar en los reportes generados en PDF (T, R, B, L)

@@ -5,7 +5,7 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
   fixtures :business_unit_types
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @business_unit_type = BusinessUnitType.find business_unit_types(:cycle).id
   end
 
@@ -26,7 +26,11 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
         :name => 'New business unit type',
         :business_unit_label => 'New business unit label',
         :project_label => 'New project label',
+        :review_prefix => 'NBU',
+        :recipients => 'John Doe',
+        :sectors => 'Area 51',
         :external => false,
+        :require_tag => false,
         :organization_id => @business_unit_type.organization_id
       )
     end
@@ -55,10 +59,15 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @business_unit_type.name = ' '
     @business_unit_type.business_unit_label = ' '
+    @business_unit_type.review_prefix = ' '
 
     assert @business_unit_type.invalid?
     assert_error @business_unit_type, :name, :blank
     assert_error @business_unit_type, :business_unit_label, :blank
+
+    if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION
+      assert_error @business_unit_type, :review_prefix, :blank
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -66,19 +75,26 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
     @business_unit_type.name = 'abcdd' * 52
     @business_unit_type.business_unit_label = 'abcdd' * 52
     @business_unit_type.project_label = 'abcdd' * 52
+    @business_unit_type.review_prefix = 'abcdd' * 52
 
     assert @business_unit_type.invalid?
     assert_error @business_unit_type, :name, :too_long, count: 255
     assert_error @business_unit_type, :business_unit_label, :too_long, count: 255
     assert_error @business_unit_type, :project_label, :too_long, count: 255
+    assert_error @business_unit_type, :review_prefix, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @business_unit_type.name = business_unit_types(:bcra).name
+    @business_unit_type.review_prefix = business_unit_types(:bcra).review_prefix
 
     assert @business_unit_type.invalid?
     assert_error @business_unit_type, :name, :taken
+
+    if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION
+      assert_error @business_unit_type, :review_prefix, :taken
+    end
   end
 
   test 'validates business units that can not be destroyed' do

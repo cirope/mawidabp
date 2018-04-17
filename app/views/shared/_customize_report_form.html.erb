@@ -18,11 +18,6 @@
           <% end %>
         </div>
         <div class="modal-footer">
-          <div class="pull-right">
-            <% if options[:show_link_to_back] %>
-              <%= link_to_back %>
-            <% end %>
-          </div>
           <%= f.submit (options[:submit_label] || t('customize_report_form.create')),
             class: 'btn btn-primary', data: { disable_with: t('reports.generating') } %>
         </div>

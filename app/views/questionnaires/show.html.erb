@@ -56,11 +56,9 @@
 <hr />
 
 <%= link_to_edit edit_questionnaire_path(@questionnaire) %> |
-<%= link_to_index questionnaires_path %> |
+<%= link_to_index questionnaires_path %>
 
 <% if @questionnaire.polls.present? %>
-  <%= link_to Poll.model_name.human(count: 0),
-    questionnaire_polls_path(@questionnaire) %> |
+  | <%= link_to Poll.model_name.human(count: 0),
+    questionnaire_polls_path(@questionnaire) %>
 <% end %>
-
-<%= link_to_back %>

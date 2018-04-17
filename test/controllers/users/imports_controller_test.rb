@@ -3,7 +3,7 @@ require 'test_helper'
 class Users::ImportsControllerTest < ActionController::TestCase
   setup do
     set_organization organizations(:google)
-    login user: users(:administrator_user), prefix: organizations(:google).prefix
+    login user: users(:administrator), prefix: organizations(:google).prefix
   end
 
   test 'should get new' do

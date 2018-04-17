@@ -1,12 +1,8 @@
 source 'https://rubygems.org'
 
-git_source :github do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include? '/'
+git_source(:github) { |r| "https://github.com/#{r}" }
 
-  "https://github.com/#{repo_name}.git"
-end
-
-gem 'rails', '5.1.1'
+gem 'rails', '~> 5.1.6'
 
 gem 'pg'
 gem 'jquery-rails'
@@ -21,7 +17,6 @@ gem 'redcarpet'
 gem 'whenever'
 gem 'paper_trail'
 gem 'carrierwave'
-gem 'dynamic_form'
 gem 'acts_as_tree'
 gem 'net-ldap'
 gem 'rubyzip', require: 'zip'
@@ -31,10 +26,12 @@ gem 'figaro'
 gem 'irreverent'
 gem 'bootstrap-sass'
 gem 'will_paginate'
-gem 'will_paginate-bootstrap'
+gem 'bootstrap-will_paginate'
 gem 'search_cop'
 gem 'jbuilder'
 gem 'sidekiq'
+gem 'request_store'
+gem 'request_store-sidekiq'
 gem 'ruby-ntlm'
 gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns

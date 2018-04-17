@@ -2,6 +2,7 @@ class ReviewUserAssignment < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Comparable
+  include ReviewUserAssignments::DestroyCallbacks
   include ReviewUserAssignments::Scopes
 
   # Constantes
@@ -13,9 +14,11 @@ class ReviewUserAssignment < ApplicationRecord
     manager: 2
   }
 
+  AUDIT_TEAM_TYPES = [TYPES[:auditor], TYPES[:supervisor], TYPES[:manager]]
+
   # Callbacks
   before_validation :check_if_can_modified
-  before_destroy :check_if_can_modified, :delete_user_in_all_review_findings
+  before_destroy :check_if_can_modified
   before_save :check_user_modification
 
   # Restricciones
@@ -28,13 +31,18 @@ class ReviewUserAssignment < ApplicationRecord
   validates_each :user_id do |record, attr, value|
     # Recarga porque el cache se trae el usuario anterior aun cuando el user_id
     # ha cambiado
-    user = User.find(value) if value && User.exists?(value)
+    user = User.find_by(id: value)
 
     if user && record.review
-      users = record.review.review_user_assignments.reject(
-        &:marked_for_destruction?).map(&:user_id)
+      others = record.review.review_user_assignments.map do |rua|
+        if !rua.marked_for_destruction? && rua.object_id != record.object_id
+          rua.user_id
+        end
+      end
 
-      record.errors.add attr, :taken if users.select { |u| u == value }.size > 1
+      if others.reverse.compact.select { |u| u == value }.size > 1
+        record.errors.add attr, :taken
+      end
 
       if (record.auditor? && !user.auditor?) ||
           (record.supervisor? && !user.supervisor?) ||
@@ -116,27 +124,7 @@ class ReviewUserAssignment < ApplicationRecord
       end
 
       if transfered
-        notification_title = I18n.t(
-          'review_user_assignment.responsibility_modification.title',
-          review: self.review.try(:identification))
-        notification_body = "#{Review.model_name.human} #{self.review.identification}"
-        notification_content = [
-          I18n.t(
-            'review_user_assignment.responsibility_modification.old_responsible',
-            responsible: old_user.full_name_with_function),
-          I18n.t(
-            'review_user_assignment.responsibility_modification.new_responsible',
-            responsible: new_user.full_name_with_function)
-        ]
-
-        NotifierMailer.changes_notification(
-          [new_user, old_user],
-          title: notification_title, body: notification_body,
-          content: notification_content,
-          organizations: [review.organization]
-        ).deliver_later
-
-        unless unconfirmed_findings.blank?
+        if unconfirmed_findings.present?
           NotifierMailer.reassigned_findings_notification(
             new_user, old_user, unconfirmed_findings
           ).deliver_later
@@ -156,34 +144,6 @@ class ReviewUserAssignment < ApplicationRecord
     self.destroy
   end
 
-  def delete_user_in_all_review_findings
-    all_valid = false
-
-    Finding.transaction do
-      findings = self.user.findings.all_for_reallocation_with_review self.review
-      all_valid = findings.all? do |finding|
-        finding.users.delete self.user
-        finding.valid?
-      end
-
-      unless all_valid
-        self.errors.add(:base,
-          I18n.t('review_user_assignment.cannot_be_destroyed'))
-        raise ActiveRecord::Rollback
-      end
-    end
-
-    if all_valid && !@cancel_notification && (self.review.oportunities | self.review.weaknesses).size > 0
-      title = I18n.t('review_user_assignment.responsibility_removed', review: self.review.try(:identification))
-
-      NotifierMailer.changes_notification(
-        self.user, title: title, organizations: [review.organization]
-      ).deliver_later
-    end
-
-    throw :abort unless all_valid
-  end
-
   def is_in_a_final_review?
     self.review.try(:has_final_review?)
   end
@@ -191,6 +151,10 @@ class ReviewUserAssignment < ApplicationRecord
   # Definición dinámica de todos los métodos "tipo?"
   TYPES.each do |type, value|
     define_method("#{type}?") { self.assignment_type == value }
+  end
+
+  def in_audit_team?
+    AUDIT_TEAM_TYPES.include? assignment_type
   end
 
   def type_text

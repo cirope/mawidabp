@@ -4,7 +4,7 @@ require 'test_helper'
 class FileModelsControllerTest < ActionController::TestCase
   fixtures :organizations, :users
 
-  def setup
+  setup do
     set_organization
 
     file_name = "#{TEMP_PATH}temp_test.txt"
@@ -50,7 +50,7 @@ class FileModelsControllerTest < ActionController::TestCase
   end
 
   test 'download unauthorized file' do
-    login user: users(:administrator_second_user), prefix: organizations(:google).prefix
+    login user: users(:administrator_second), prefix: organizations(:google).prefix
     get :download, :params => {
       :path => @file_model.file.url.gsub(/^\/private/, "")
     }

@@ -9,7 +9,7 @@ module BusinessUnitScores::Validation
   private
 
     def score_completion
-      if !design_score && !compliance_score && !sustantive_score
+      if design_score.blank? && compliance_score.blank? && sustantive_score.blank?
         errors.add :design_score,     :blank
         errors.add :compliance_score, :blank
         errors.add :sustantive_score, :blank

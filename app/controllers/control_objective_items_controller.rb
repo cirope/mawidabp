@@ -100,7 +100,16 @@ class ControlObjectiveItemsController < ApplicationController
   #
   # * DELETE /control_objective_items/1
   def destroy
-    @control_objective_item.destroy
+    review = @control_objective_item.review
+
+    review.update!(
+      control_objective_items_attributes: [
+        {
+          id: @control_objective_item.id,
+          _destroy: '1'
+        }
+      ]
+    )
 
     respond_to do |format|
       format.html {
@@ -120,7 +129,7 @@ class ControlObjectiveItemsController < ApplicationController
       params.require(:control_objective_item).permit(
         :control_objective_text, :relevance, :design_score, :compliance_score, :sustantive_score,
         :audit_date, :auditor_comment, :control_objective_id, :review_id, :finished,
-        :exclude_from_score, :lock_version,
+        :exclude_from_score, :issues_count, :alerts_count, :lock_version,
         :lock_version, control_attributes: [
           :id, :control, :effects, :design_tests, :compliance_tests,
           :sustantive_tests

@@ -1,0 +1,13 @@
+<p>
+  <strong><%= ControlObjective.human_attribute_name 'name' %></strong>:
+  <%= @control_objective.name %>
+</p>
+
+<p>
+  <strong><%= BestPractice.model_name.human %></strong>:
+  <%= link_to @control_objective.best_practice.name, @control_objective.best_practice %>
+</p>
+
+<hr />
+
+<%= link_to_index control_objectives_path %>

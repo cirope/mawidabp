@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class PollTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @poll = polls :poll_one
 
     set_organization
@@ -15,7 +15,7 @@ class PollTest < ActiveSupport::TestCase
         :pollable_id => ActiveRecord::FixtureSet.identify(:conclusion_current_final_review),
         :pollable_type => 'ConclusionReview',
         :questionnaire_id => questionnaires(:questionnaire_one).id,
-        :user_id => users(:poll_user).id,
+        :user_id => users(:poll).id,
         :answers_attributes => {
           '1' => {
             :answer => 'Answer'

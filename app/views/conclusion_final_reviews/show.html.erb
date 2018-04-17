@@ -52,9 +52,12 @@
 
 <br />
 <h4><%= t('conclusion_review.conclusion') %></h4>
-<%= conclusion_review_score_details_table @conclusion_final_review.review %>
-
-<p><small><%= t('review.review_qualification_explanation') %></small></p>
+<% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) %>
+  <%= conclusion_review_score_text @conclusion_final_review.review %>
+<% elsif !SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+  <%= conclusion_review_score_details_table @conclusion_final_review.review %>
+  <p><small><%= t('review.review_qualification_explanation') %></small></p>
+<% end %>
 
 <% unless @conclusion_final_review.conclusion.blank? %>
   <p><%= @conclusion_final_review.conclusion %></p>
@@ -66,9 +69,9 @@ end %>
 
 <% if review_has_observations %>
   <br />
-  <h4><%= t('conclusion_review.findings') %></h4>
+  <h4><%= t('conclusion_review.weaknesses') %></h4>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <% grouped_control_objectives.each do |process_control, cois| %>
       <%= conclusion_review_process_control_weakness_details_table(process_control, cois, true) %>
     <% end %>
@@ -83,7 +86,7 @@ end %>
   <br />
   <h4><%= t('conclusion_review.oportunities') %></h4>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed table-striped table-hover">
     <% grouped_control_objectives.each do |process_control, cois| %>
       <%= conclusion_review_process_control_oportunity_details_table(process_control, cois, true) %>
     <% end %>
@@ -95,35 +98,16 @@ end %>
 <div>
   <%= link_to_edit edit_conclusion_final_review_path(@conclusion_final_review) %> |
   <%= link_to_index conclusion_final_reviews_path %> |
-  <%= render('shared/downloads',
-    links: [
-      link_to(t('label.download'), :action => :export_to_pdf,
-        :id => @conclusion_final_review, :_ts => Time.now.to_i),
-      link_to(t('conclusion_final_review.download_brief'),
-        :action => :export_to_pdf, :id => @conclusion_final_review,
-        :export_options => {:brief => '1'}, :_ts => Time.now.to_i),
-      link_to(t('conclusion_final_review.download_without_score'),
-        :action => :export_to_pdf, :id => @conclusion_final_review,
-        :export_options => {:hide_score => '1'}, :_ts => Time.now.to_i),
-      link_to(t('conclusion_final_review.download_without_control_objectives_excluded_from_score'),
-        :action => :export_to_pdf, :id => @conclusion_final_review,
-        :export_options => {:hide_control_objectives_excluded_from_score => '1'},
-        :_ts => Time.now.to_i),
-      link_to(t('conclusion_final_review.generate_score_sheet'),
-        :action => :score_sheet, :id => @conclusion_final_review,
-        :_ts => Time.now.to_i),
-      link_to(t('conclusion_final_review.generate_global_score_sheet'),
-        :action => :score_sheet, :id => @conclusion_final_review, :global => 1,
-        :_ts => Time.now.to_i),
-      link_to(t('conclusion_final_review.download_work_papers'),
-        :action => :download_work_papers, :id => @conclusion_final_review,
-        :_ts => Time.now.to_i)
-    ]
-  ) %>
+  <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+    <%= render 'alternative_downloads' %>
+  <% elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) %>
+    <%= render 'limited_downloads' %>
+  <% else %>
+    <%= render 'downloads' %>
+  <% end %>
   <span>|</span>
   <%= link_to t('conclusion_final_review.create_bundle'), '#',
-    data: { toggle: 'modal', target: "#customize_report" } %> |
-  <%= link_to_back %>
+    data: { toggle: 'modal', target: "#customize_report" } %>
 </div>
 
 <%= render 'bundle' %>

@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <table class="table table-condensed">
+  <table class="table table-condensed table-hover">
     <thead>
       <tr>
         <th></th>
@@ -40,8 +40,13 @@
       </tr>
       <tr style="vertical-align: text-top;">
         <td><strong><%= t('workflow.row_cost') %></strong></td>
-        <td><%= '%.2f' %  @workflow.human_units %></td>
         <td>
+          <abbr title="<%= t 'workflow.human_resources' %>"><%= t 'workflow.human_resources_abbr' %></abbr>:
+          <%= '%.2f' % @workflow.human_units %>
+          <abbr title="<%= t 'workflow.material_resources' %>"><%= t 'workflow.material_resources_abbr' %></abbr>:
+          <%= '%.2f' % @workflow.material_units %>
+        </td>
+        <td style="width: 30%;">
           <div id="estimated_amount">
             <%= render 'estimated_amount', plan_item: @workflow.review.try(:plan_item) %>
           </div>

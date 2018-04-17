@@ -1,169 +1,138 @@
 require 'test_helper'
 
-# Clase para probar el modelo "Weakness"
 class WeaknessTest < ActiveSupport::TestCase
-  fixtures :findings, :control_objective_items
-
-  # Función para inicializar las variables utilizadas en las pruebas
-  def setup
-    @weakness = findings :bcra_A4609_data_proccessing_impact_analisys_weakness
+  setup do
+    @weakness = findings :unanswered_weakness
 
     set_organization
   end
 
-  # Prueba que se realicen las búsquedas como se espera
-  test 'search' do
-    weakness = findings(:bcra_A4609_data_proccessing_impact_analisys_weakness)
-    assert_kind_of Weakness, @weakness
-    assert_equal weakness.control_objective_item_id,
-      @weakness.control_objective_item_id
-    assert_equal weakness.title, @weakness.title
-    assert_equal weakness.review_code, @weakness.review_code
-    assert_equal weakness.description, @weakness.description
-    assert_equal weakness.answer, @weakness.answer
-    assert_equal weakness.state, @weakness.state
-    assert_equal weakness.audit_recommendations, @weakness.audit_recommendations
-    assert_equal weakness.effect, @weakness.effect
-    assert_equal weakness.risk, @weakness.risk
-    assert_equal weakness.priority, @weakness.priority
-  end
-
-  # Prueba la creación de una debilidad
   test 'create' do
     assert_difference 'Weakness.count' do
-      @weakness = Weakness.list.new(
-        :control_objective_item =>
-          control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
-        :title => 'Title',
-        :review_code => 'O020',
-        :description => 'New description',
-        :answer => 'New answer',
-        :audit_comments => 'New audit comments',
-        :state => Finding::STATUS[:notify],
-        :solution_date => nil,
-        :origination_date => 1.day.ago.to_date,
-        :audit_recommendations => 'New proposed action',
-        :effect => 'New effect',
-        :risk => Weakness.risks_values.first,
-        :priority => Weakness.priorities_values.first,
-        :follow_up_date => nil,
-        :finding_user_assignments_attributes => {
-          :new_1 => {
-            :user_id => users(:bare_user).id, :process_owner => false
+      weakness = Weakness.list.create!(
+        control_objective_item: control_objective_items(:impact_analysis_item_editable),
+        title: 'Title',
+        review_code: 'O020',
+        description: 'New description',
+        answer: 'New answer',
+        audit_comments: 'New audit comments',
+        state: Finding::STATUS[:notify],
+        solution_date: nil,
+        origination_date: 1.day.ago.to_date,
+        audit_recommendations: 'New proposed action',
+        effect: 'New effect',
+        risk: Weakness.risks_values.first,
+        priority: Weakness.priorities_values.first,
+        follow_up_date: nil,
+        compliance: 'no',
+        operational_risk: ['internal fraud'],
+        impact: ['econimic', 'regulatory'],
+        internal_control_components: ['risk_evaluation', 'monitoring'],
+        finding_user_assignments_attributes: {
+          new_1: {
+            user_id: users(:audited).id, process_owner: false
           },
-          :new_2 => {
-            :user_id => users(:audited_user).id, :process_owner => false
+          new_2: {
+            user_id: users(:auditor).id, process_owner: false
           },
-          :new_3 => {
-            :user_id => users(:auditor_user).id, :process_owner => false
-          },
-          :new_4 => {
-            :user_id => users(:manager_user).id, :process_owner => false
-          },
-          :new_5 => {
-            :user_id => users(:supervisor_user).id, :process_owner => false
-          },
-          :new_6 => {
-            :user_id => users(:administrator_user).id, :process_owner => false
+          new_3: {
+            user_id: users(:supervisor).id, process_owner: false
           }
         }
       )
 
-      assert @weakness.save, @weakness.errors.full_messages.join('; ')
-      assert_equal 'O020', @weakness.review_code
+      assert_equal 'O020', weakness.review_code
     end
+  end
 
-    # No se puede crear una observación de un objetivo que está en un informe
-    # definitivo
+  test 'control objective from final review can not be used to create new weakness' do
     assert_no_difference 'Weakness.count' do
-      Weakness.create(
-        :control_objective_item =>
-          control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
-        :title => 'New title',
-        :review_code => 'New review code',
-        :description => 'New description',
-        :answer => 'New answer',
-        :audit_comments => 'New audit comments',
-        :state => Finding::STATUS[:notify],
-        :origination_date => 35.days.from_now.to_date,
-        :solution_date => 30.days.from_now.to_date,
-        :audit_recommendations => 'New proposed action',
-        :effect => 'New effect',
-        :risk => Weakness.risks_values.first,
-        :priority => Weakness.priorities_values.first,
-        :follow_up_date => 2.days.from_now.to_date,
-        :finding_user_assignments_attributes => {
-          :new_1 => {
-            :user_id => users(:bare_user).id, :process_owner => false
+      weakness = Weakness.list.create(
+        control_objective_item: control_objective_items(:impact_analysis_item),
+        title: 'Title',
+        review_code: 'O020',
+        description: 'New description',
+        answer: 'New answer',
+        audit_comments: 'New audit comments',
+        state: Finding::STATUS[:notify],
+        solution_date: nil,
+        origination_date: 1.day.ago.to_date,
+        audit_recommendations: 'New proposed action',
+        effect: 'New effect',
+        risk: Weakness.risks_values.first,
+        priority: Weakness.priorities_values.first,
+        follow_up_date: nil,
+        compliance: 'no',
+        operational_risk: ['internal fraud'],
+        impact: ['econimic', 'regulatory'],
+        internal_control_components: ['risk_evaluation', 'monitoring'],
+        finding_user_assignments_attributes: {
+          new_1: {
+            user_id: users(:audited).id, process_owner: false
           },
-          :new_2 => {
-            :user_id => users(:audited_user).id, :process_owner => true
+          new_2: {
+            user_id: users(:auditor).id, process_owner: false
+          },
+          new_3: {
+            user_id: users(:supervisor).id, process_owner: false
           }
         }
       )
+
+      assert_includes weakness.errors.full_messages, I18n.t('finding.readonly')
     end
   end
 
-  # Prueba de actualización de una debilidad
-  test 'update' do
-    assert @weakness.update(:description => 'Updated description'),
-      @weakness.errors.full_messages.join('; ')
-    @weakness.reload
-    assert_equal 'Updated description', @weakness.description
-  end
-
-  # Prueba de eliminación de debilidades
   test 'delete' do
-    # No se puede eliminar si está en un informe definitivo
-    assert_no_difference 'Weakness.count' do
-      @weakness.destroy
-    end
+    # On a final review, can not be destroyed
+    assert_no_difference('Weakness.count') { @weakness.destroy }
 
-    @weakness = Weakness.find(findings(
-        :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
+    weakness = findings :unconfirmed_weakness
 
-    # Y tampoco se puede eliminar si NO está en un informe definitivo
-    assert_no_difference 'Weakness.count' do
-      @weakness.destroy
-    end
+    # Without final review, also can not be destroyed =)
+    assert_no_difference('Weakness.count') { weakness.destroy }
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
+    @weakness.state = Finding::STATUS[:notify] # To force audit recommendations check
     @weakness.control_objective_item_id = nil
     @weakness.review_code = '   '
-    @weakness.state = Finding::STATUS[:notify]
     @weakness.audit_recommendations = '  '
     @weakness.risk = nil
     @weakness.priority = nil
+    @weakness.compliance = ''
+    @weakness.operational_risk = []
+    @weakness.impact = []
+    @weakness.internal_control_components = []
 
     assert @weakness.invalid?
     assert_error @weakness, :control_objective_item_id, :blank
     assert_error @weakness, :review_code, :blank
-    assert_error @weakness, :review_code, :invalid
     assert_error @weakness, :risk, :blank
     assert_error @weakness, :priority, :blank
     assert_error @weakness, :audit_recommendations, :blank
-    assert_error @weakness, :state, :inclusion
+
+    if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+      assert_error @weakness, :compliance, :blank
+      assert_error @weakness, :operational_risk, :blank
+      assert_error @weakness, :impact, :blank
+      assert_error @weakness, :internal_control_components, :blank
+    end
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
-    another_weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
-    @weakness.review_code = another_weakness.review_code
+    weakness = @weakness.dup
 
-    assert @weakness.invalid?
-    assert_error @weakness, :review_code, :taken
+    assert weakness.invalid?
+    assert_error weakness, :review_code, :taken
 
-    # Se puede duplicar si es de otro informe
-    another_weakness = Weakness.find(findings(
-        :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id)
-    @weakness.review_code = another_weakness.review_code
+    # Not in the same review
+    other = findings :unconfirmed_for_notification_weakness
+
+    @weakness.review_code = other.review_code
     assert @weakness.valid?
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @weakness.review_code = 'abcdd' * 52
     @weakness.title = 'abcdd' * 52
@@ -173,7 +142,6 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_error @weakness, :title, :too_long, count: 255
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates included attributes' do
     @weakness.state = Finding::STATUS.values.sort.last.next
 
@@ -181,7 +149,18 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_error @weakness, :state, :inclusion
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
+  test 'validates attributes boundaries' do
+    @weakness.progress = -1
+
+    assert @weakness.invalid?
+    assert_error @weakness, :progress, :greater_than_or_equal_to, count: 0
+
+    @weakness.progress = 101
+
+    assert @weakness.invalid?
+    assert_error @weakness, :progress, :less_than_or_equal_to, count: 100
+  end
+
   test 'validates well formated attributes' do
     @weakness.review_code = 'BAD_PREFIX_2'
 
@@ -189,44 +168,87 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_error @weakness, :review_code, :invalid
   end
 
+  test 'should allow revoked prefixed codes' do
+    revoked_prefix = I18n.t 'code_prefixes.revoked'
+
+    @weakness.review_code = "#{revoked_prefix}#{@weakness.review_code}"
+
+    assert @weakness.valid?
+  end
+
   test 'next code' do
     assert_equal 'O003', @weakness.next_code
   end
 
-  test 'next work paper code' do
-    assert_equal 'PTO 04', @weakness.last_work_paper_code
+  test 'last work paper code' do
+    assert_equal 'PTO 004', @weakness.last_work_paper_code
+  end
+
+  test 'progress is not updated when state change to awaiting' do
+    skip unless SHOW_WEAKNESS_PROGRESS
+
+    @weakness.update! state:          Finding::STATUS[:awaiting],
+                      follow_up_date: Time.zone.today
+
+    assert_equal 0, @weakness.progress
+  end
+
+  test 'progress is updated to 25 when state change to being implemented' do
+    @weakness.update! state:          Finding::STATUS[:being_implemented],
+                      follow_up_date: Time.zone.today
+
+    assert_equal 25, @weakness.progress
+  end
+
+  test 'progress is updated to 100 when state change to implemented' do
+    @weakness.update! state:          Finding::STATUS[:implemented],
+                      follow_up_date: Time.zone.today
+
+    assert_equal 100, @weakness.progress
+  end
+
+  test 'default progress for' do
+    assert_equal 100, Weakness.default_progress_for(state: Finding::STATUS[:implemented])
+    assert_equal 0,   Weakness.default_progress_for(state: Finding::STATUS[:awaiting])
+    assert_equal 25,  Weakness.default_progress_for(state: Finding::STATUS[:being_implemented])
   end
 
   test 'review code is updated when control objective is changed' do
-    weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
+    weakness                   = findings :being_implemented_weakness_on_draft
+    new_control_objective_item = control_objective_items :organization_security_4_2_item_editable
 
-    assert weakness.update(:control_objective_item_id =>
-        control_objective_items(:iso_27000_security_organization_4_2_item_editable).id)
+    assert_not_equal 'O006', weakness.review_code
+
+    weakness.update! control_objective_item_id: new_control_objective_item.id
+
     assert_equal 'O006', weakness.review_code
   end
 
   test 'can not change to a control objective in a final review' do
-    weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
+    weakness = findings :being_implemented_weakness_on_draft
 
     assert_raise RuntimeError do
-      weakness.update(:control_objective_item_id =>
-        control_objective_items(:iso_27000_security_policy_3_1_item).id)
+      weakness.update(
+        control_objective_item_id:
+          control_objective_items(:security_policy_3_1_item).id
+      )
     end
   end
 
   test 'work paper codes are updated when control objective is changed' do
-    weakness = Weakness.find(findings(
-        :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
+    weakness = findings :unanswered_for_level_1_notification
 
-    assert weakness.update(:control_objective_item_id =>
-        control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
+    assert_not_equal 'PTO 006', weakness.work_papers.first.code
 
-    assert_equal 'PTO 06', weakness.work_papers.first.code
+    weakness.update!(
+      control_objective_item_id:
+        control_objective_items(:impact_analysis_item_editable).id
+    )
+
+    assert_equal 'PTO 006', weakness.work_papers.first.code
   end
 
-  test 'dynamic functions' do
+  test 'dynamic status functions' do
     Finding::STATUS.each do |status, value|
       @weakness.state = value
       assert @weakness.send(:"#{status}?")
@@ -234,7 +256,8 @@ class WeaknessTest < ActiveSupport::TestCase
       Finding::STATUS.each do |k, v|
         unless k == status
           @weakness.state = v
-          assert !@weakness.send(:"#{status}?")
+
+          refute @weakness.send(:"#{status}?")
         end
       end
     end
@@ -252,142 +275,150 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_equal I18n.t("priority_types.#{priority.first}"), @weakness.priority_text
   end
 
-  test 'must be approved' do
-    assert @weakness.must_be_approved?
-    assert @weakness.approval_errors.blank?
-    assert @weakness.unanswered?
+  test 'must be approved on implemented audited' do
+    error_messages = [I18n.t('weakness.errors.without_solution_date')]
 
     @weakness.state = Finding::STATUS[:implemented_audited]
     @weakness.solution_date = nil
-    assert !@weakness.must_be_approved?
-    assert_equal 1, @weakness.approval_errors.size
-    assert_equal I18n.t('weakness.errors.without_solution_date'),
-      @weakness.approval_errors.first
+
+    refute @weakness.must_be_approved?
+    assert_equal error_messages.sort, @weakness.approval_errors.sort
+  end
+
+  test 'must be approved on implemented' do
+    error_messages = [
+      I18n.t('weakness.errors.with_solution_date'),
+      I18n.t('weakness.errors.without_follow_up_date')
+    ]
 
     @weakness.state = Finding::STATUS[:implemented]
     @weakness.solution_date = 2.days.from_now.to_date
     @weakness.follow_up_date = nil
-    assert !@weakness.must_be_approved?
-    assert_equal 2, @weakness.approval_errors.size
-    assert_equal [I18n.t('weakness.errors.with_solution_date'),
-      I18n.t('weakness.errors.without_follow_up_date')].sort,
-      @weakness.approval_errors.sort
+
+    refute @weakness.must_be_approved?
+    assert_equal error_messages.sort, @weakness.approval_errors.sort
+  end
+
+  test 'must be approved on being implemented' do
+    error_messages = [
+      I18n.t('weakness.errors.without_answer'),
+      I18n.t('weakness.errors.without_follow_up_date')
+    ]
 
     @weakness.state = Finding::STATUS[:being_implemented]
     @weakness.answer = ' '
-    assert !@weakness.must_be_approved?
-    assert_equal 3, @weakness.approval_errors.size
-    assert_equal [I18n.t('weakness.errors.without_answer'),
-      I18n.t('weakness.errors.with_solution_date'),
-      I18n.t('weakness.errors.without_follow_up_date')].sort,
-      @weakness.approval_errors.sort
 
-    @weakness.reload
-    assert @weakness.must_be_approved?
+    refute @weakness.must_be_approved?
+    assert_equal error_messages.sort, @weakness.approval_errors.sort
+  end
+
+  test 'must be approved invalid state' do
+    error_messages = [I18n.t('weakness.errors.not_valid_state')]
+
     @weakness.state = Finding::STATUS[:notify]
-    assert !@weakness.must_be_approved?
-    assert_equal 1, @weakness.approval_errors.size
-    assert_equal I18n.t('weakness.errors.not_valid_state'),
-      @weakness.approval_errors.first
 
-    @weakness.reload
-    @weakness.finding_user_assignments = 
+    refute @weakness.must_be_approved?
+    assert_equal error_messages.sort, @weakness.approval_errors.sort
+  end
+
+  test 'must be approved on users' do
+    error_messages = [I18n.t('weakness.errors.without_audited')]
+
+    @weakness.finding_user_assignments =
       @weakness.finding_user_assignments.reject do |fua|
         fua.user.can_act_as_audited?
       end
 
-    assert !@weakness.must_be_approved?
-    assert_equal 1, @weakness.approval_errors.size
-    assert_equal I18n.t('weakness.errors.without_audited'),
-      @weakness.approval_errors.first
+    refute @weakness.must_be_approved?
+    assert_equal error_messages.sort, @weakness.approval_errors.sort
 
-    @weakness.reload
+    error_messages << I18n.t('weakness.errors.without_auditor')
+
     @weakness.finding_user_assignments =
-      @weakness.finding_user_assignments.reject { |fua| fua.user.auditor? }
-    assert !@weakness.must_be_approved?
-    assert_equal 2, @weakness.approval_errors.size
-    error_messages = [I18n.t('weakness.errors.without_audited'),
-      I18n.t('weakness.errors.without_auditor')]
-    assert_equal error_messages,
-      @weakness.approval_errors
+      @weakness.reload.finding_user_assignments.reject do |fua|
+        fua.user.auditor?
+      end
 
-    @weakness.reload
-    @weakness.effect = ' '
-    @weakness.audit_comments = '  '
-    assert !@weakness.must_be_approved?
-    assert_equal 4, @weakness.approval_errors.size
-    error_messages << I18n.t('weakness.errors.without_effect')
-    error_messages << I18n.t('weakness.errors.without_audit_comments')
-    assert_equal error_messages.sort,
-      @weakness.approval_errors.sort
+    refute @weakness.must_be_approved?
+    assert_equal error_messages.sort, @weakness.approval_errors.sort
   end
 
-  test 'work papers can be added to uneditable weaknesses' do
-    uneditable_weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
+  test 'must be approved on required attributes' do
+    error_messages = if HIDE_WEAKNESS_EFFECT
+                       [I18n.t('weakness.errors.without_audit_comments')]
+                     else
+                       [
+                         I18n.t('weakness.errors.without_effect'),
+                         I18n.t('weakness.errors.without_audit_comments')
+                       ]
+                     end
 
-    assert_no_difference 'Weakness.count' do
-      assert_difference 'WorkPaper.count' do
-        uneditable_weakness.update({
-        :work_papers_attributes => {
-            '1_new' => {
-              :name => 'New post_workpaper name',
-              :code => 'PTO 20',
-              :number_of_pages => '10',
-              :description => 'New post_workpaper description',
-              :organization_id => organizations(:cirope).id,
-              :file_model_attributes => {
-                :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
-                  'text/plain')
-              }
-            }
-          }
-        })
-      end
+    @weakness.effect = ' '
+    @weakness.audit_comments = '  '
+
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF && HIDE_WEAKNESS_EFFECT
+      assert @weakness.must_be_approved?
+    else
+      refute @weakness.must_be_approved?
+      assert_equal error_messages.sort, @weakness.approval_errors.sort
     end
   end
 
-  test 'work papers can not be added to uneditable and closed control objectives' do
-    uneditable_weakness = Weakness.find(findings(
-        :iso_27000_security_policy_3_1_item_weakness).id)
+  test 'work papers can be added to weakness with current close date' do
+    uneditable_weakness = findings :being_implemented_weakness
+
+    assert_difference 'WorkPaper.count' do
+      uneditable_weakness.update(
+        work_papers_attributes: {
+          '1_new' => {
+            name: 'New post_workpaper name',
+            code: 'PTO 020',
+            file_model_attributes: {
+              file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
+            }
+          }
+        }
+      )
+    end
+  end
+
+  test 'work papers can not be added to weakness with expired close date' do
+    uneditable_weakness       = findings :being_implemented_weakness_on_final
     uneditable_weakness.final = true
 
-    assert_no_difference ['Weakness.count', 'WorkPaper.count'] do
-      assert_raise(RuntimeError) do
-        uneditable_weakness.update({
-        :work_papers_attributes => {
+    assert_no_difference 'WorkPaper.count' do
+      assert_raise RuntimeError do
+        uneditable_weakness.update(
+        work_papers_attributes: {
             '1_new' => {
-              :name => 'New post_workpaper name',
-              :code => 'New post_workpaper code',
-              :number_of_pages => '10',
-              :description => 'New post_workpaper description',
-              :organization_id => organizations(:cirope).id,
-              :file_model_attributes => {
-                :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
-                  'text/plain')
+              name: 'New post_workpaper name',
+              code: 'PTO 020',
+              file_model_attributes: {
+                file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
               }
             }
           }
-        })
+        )
       end
     end
   end
 
   test 'list all follow up dates and rescheduled function' do
-    @weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
-    assert @weakness.all_follow_up_dates.blank?
-    assert !@weakness.rescheduled?
-    assert_not_nil @weakness.follow_up_date
+    weakness = findings :being_implemented_weakness_on_draft
+    old_date = weakness.follow_up_date.clone
 
-    old_date = @weakness.follow_up_date.clone
+    assert weakness.all_follow_up_dates.blank?
+    refute weakness.rescheduled?
+    assert_not_nil weakness.follow_up_date
 
-    assert @weakness.update_attribute(:follow_up_date, 10.days.from_now.to_date)
-    assert @weakness.reload.all_follow_up_dates(nil, true).include?(old_date)
-    assert @weakness.update_attribute(:follow_up_date, 15.days.from_now.to_date)
-    assert @weakness.reload.all_follow_up_dates(nil, true).include?(old_date)
-    assert @weakness.reload.all_follow_up_dates(nil, true).include?(
-      10.days.from_now.to_date)
-    assert @weakness.rescheduled?
+    weakness.update! follow_up_date: 10.days.from_now.to_date
+
+    assert weakness.all_follow_up_dates(nil, true).include?(old_date)
+    assert weakness.rescheduled?
+
+    weakness.update! follow_up_date: 15.days.from_now.to_date
+
+    assert weakness.all_follow_up_dates(nil, true).include?(old_date)
+    assert weakness.all_follow_up_dates(nil, true).include?(10.days.from_now.to_date)
   end
 end

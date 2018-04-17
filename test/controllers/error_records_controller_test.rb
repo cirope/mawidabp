@@ -25,7 +25,7 @@ class ErrorRecordsControllerTest < ActionController::TestCase
 
   test 'show error record' do
     get :show, params: {
-      id: error_records(:administrator_user_failed_attempt).id
+      id: error_records(:administrator_failed_attempt).id
     }
 
     assert_response :success
@@ -39,9 +39,8 @@ class ErrorRecordsControllerTest < ActionController::TestCase
 
     assert_nothing_raised do
       get :index, params: {
-        index: { from_date: from, to_date: to },
-        format: :pdf
-      }
+        index: { from_date: from, to_date: to }
+      }, :as => :pdf
     end
 
     assert_redirected_to Prawn::Document.relative_path(

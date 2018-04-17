@@ -2,7 +2,7 @@ require 'test_helper'
 
 class AuthenticationTest < ActionController::TestCase
   setup do
-    @user = users :administrator_user
+    @user = users :administrator
     @organization = organizations :cirope
     @params = { user: @user.user, password: 'admin123' }
     Organization.current_id = @organization.id
@@ -167,7 +167,12 @@ class AuthenticationTest < ActionController::TestCase
       assert_difference 'LoginRecord.count' do
         assert @auth.authenticated?
         assert_equal redirect_url || Hash[controller: 'welcome', action: 'index'], @auth.redirect_url
-        assert_equal I18n.t(*message || 'message.welcome'), @auth.message
+
+        if message
+          assert_equal I18n.t(*message), @auth.message
+        else
+          assert_nil @auth.message
+        end
       end
     end
 

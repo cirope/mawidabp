@@ -1,8 +1,9 @@
+<% forms = {:date_range => true, :business_unit => true} %>
+<% forms[:scope] = true if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
 <%= render :partial => 'shared/filter_form',
   :locals => {:action => :synthesis_report, :extra_params => {
     :controller_name => 'conclusion'
-  },
-  :forms => {:date_range => true, :business_unit => true}} %>
+  }, :forms => forms} %>
 
 <% @periods.each do |period| %>
   <div class="page-header">
@@ -32,7 +33,7 @@
     <% end %>
     <h4><%= data[:name] %></h4>
     <% unless data[:column_data].blank? %>
-      <table class="table table-condensed table-striped">
+      <table class="table table-condensed table-striped table-hover">
         <thead>
           <tr>
             <% @column_order.each do |col_name| %>

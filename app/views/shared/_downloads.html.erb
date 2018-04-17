@@ -1,10 +1,11 @@
 <% links = links || [] %>
+<% right = right %>
 <div class="dropup inline">
   <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
     <%= t('label.downloads') %>
     <span class="caret"></span>
   <% end %>
-  <ul class="dropdown-menu">
+  <ul class="dropdown-menu<%= ' dropdown-menu-right' if right %>">
     <% links.each do |link| %>
       <li><%= link %></li>
     <% end %>

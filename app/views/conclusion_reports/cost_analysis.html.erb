@@ -8,7 +8,7 @@
     <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
   </div>
   <% unless @total_cost_data[period].blank? %>
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <thead>
         <tr>
           <% @column_order.each do |col_name, col_width| %>
@@ -37,7 +37,7 @@
   <% unless @detailed_data[period].blank? %>
     <% @detailed_data[period].each do |detailed_data| %>
       <h3><%= detailed_data[:review] %></h3>
-      <table class="table table-condensed table-striped">
+      <table class="table table-condensed table-striped table-hover">
         <thead>
           <tr>
             <% @detailed_column_order.each do |col_name, col_width| %>

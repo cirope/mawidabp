@@ -1,0 +1,14 @@
+<% co_ids = cois.map &:control_objective_id %>
+<% excluded_cos = pc.control_objectives.select { |co| co_ids.exclude? co.id } %>
+
+<% if excluded_cos.any? %>
+  <ul>
+    <% excluded_cos.each do |co| %>
+      <li class="<%= excluded_control_objective_class co %>"><%= co.name %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <div class="alert alert-success">
+    <%= t 'review.no_excluded_control_objectives' %>
+  </div>
+<% end %>

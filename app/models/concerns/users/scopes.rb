@@ -11,6 +11,12 @@ module Users::Scopes
   end
 
   module ClassMethods
+    def by_email email
+      where(
+        "LOWER(#{quoted_table_name}.#{qcn 'email'}) = ?", email.downcase
+      ).take
+    end
+
     def all_with_findings_for_notification
       includes(finding_user_assignments: :raw_finding).
         where(findings: { state: Finding::STATUS[:notify], final: false }).
@@ -22,9 +28,14 @@ module Users::Scopes
     end
 
     def all_with_conclusion_final_reviews_for_notification
-      joins(review_user_assignments: { review: :conclusion_final_review }).
-        merge(ReviewUserAssignment.audit_team).
-        merge ConclusionFinalReview.with_near_close_date
+      joins = { review_user_assignments: { review: :conclusion_final_review } }
+      ids   = distinct.
+                left_joins(joins).
+                merge(ReviewUserAssignment.audit_team).
+                merge(ConclusionFinalReview.with_near_close_date).
+                ids
+
+      where(id: ids) # TODO: remove when we don't have to _support_ Oracle
     end
 
     def list_with_corporate

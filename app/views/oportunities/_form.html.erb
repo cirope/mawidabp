@@ -48,8 +48,8 @@
           <%= f.input :control_objective_item_id, as: :hidden,
             input_html: { id: 'control_objective_item_id' } %>
         </div>
-        <%= finding_repeated_of_label f, readonly %>
-        <%= finding_repeated_of_if_field f, readonly %>
+        <%= finding_repeated_of_label f, readonly: readonly %>
+        <%= finding_repeated_of_if_field f, readonly: readonly %>
         <%= f.input :description, autofocus: true, input_html: { readonly: readonly, rows: 5 } %>
         <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>
       </div>
@@ -57,13 +57,20 @@
         <%= f.label :state, raw(Oportunity.human_attribute_name(:state) + ' ' +
             (show_history_changes ? finding_show_status_change_history(
               :finding_status_change_history) : ''))  %>
-        <%= finding_status_field f, true, readonly %>
+        <%= finding_status_field f, disabled: readonly %>
+
+        <% if show_skip_work_paper_for @oportunity %>
+          <%= f.input :skip_work_paper, as: :boolean, label: false,
+            inline_label: Oportunity.human_attribute_name('skip_work_paper') %>
+        <% end %>
 
         <% if show_history_changes %>
           <%= render 'findings/history_changes', finding: @oportunity %>
         <% end %>
 
-        <%= f.input :origination_date, as: :date_picker, input_html: { disabled: readonly } %>
+        <%= f.input :origination_date, as: :date_picker, input_html: {
+          readonly: (readonly || @oportunity.repeated_of)
+        } %>
         <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
 
         <% if @oportunity.must_have_a_comment? %>
@@ -178,7 +185,7 @@
       <%= t('finding.inverse_finding_relations') %>
     </h4>
 
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <thead>
         <tr>
           <th><%= FindingRelation.human_attribute_name :finding_id %></th>
@@ -210,7 +217,7 @@
       <%= t('finding.finding_answers') %>
     </h4>
 
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <thead>
         <tr>
           <th><%= User.model_name.human %></th>
@@ -243,9 +250,7 @@
   <% end %>
 
   <br />
-  <h4>
-    <%= t('finding.work_papers') %>
-  </h4>
+  <h4><%= WorkPaper.model_name.human(count: 0) %></h4>
   <div class="row">
     <div class="col-md-3">
       <h5><strong><%= WorkPaper.human_attribute_name 'name' %></strong></h5>
@@ -281,13 +286,4 @@
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary', disabled: frozen %>
   </div>
-<% end %>
-
-<% if !@oportunity.new_record? && @oportunity.repeated_of && !readonly %>
-  <% content_for :extra_html_bottom do %>
-    <div id="inline_undo_reiteration" class="popup" style="display: none;">
-      <%= button_to t('finding.undo_reiteration'),
-        undo_reiteration_oportunity_path(@oportunity), :method => :patch %>
-    </div>
-  <% end %>
 <% end %>

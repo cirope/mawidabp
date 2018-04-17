@@ -4,11 +4,11 @@ class Users::ReassignmentsControllerTest < ActionController::TestCase
   include ActionMailer::TestHelper
 
   setup do
-    login user: users(:administrator_second_user), prefix: organizations(:google).prefix
+    login user: users(:administrator_second), prefix: organizations(:google).prefix
   end
 
   test 'user findings reassignment edit' do
-    get :edit, params: { id: users(:audited_user).user }
+    get :edit, params: { id: users(:audited) }
 
     assert_response :success
     assert_not_nil assigns(:user)
@@ -16,13 +16,13 @@ class Users::ReassignmentsControllerTest < ActionController::TestCase
   end
 
   test 'user finding reassignment update' do
-    login user: users(:administrator_user), prefix: organizations(:cirope).prefix
+    login user: users(:administrator), prefix: organizations(:cirope).prefix
 
     assert_enqueued_emails 2 do
       assert_difference 'Notification.count' do
         patch :update, params: {
-          id: users(:audited_user).user,
-          other_id: users(:audited_second_user).id,
+          id: users(:audited),
+          other_id: users(:audited_second).id,
           with_findings: '1'
         }
       end
@@ -33,7 +33,7 @@ class Users::ReassignmentsControllerTest < ActionController::TestCase
   end
 
   test 'user reviews reassignment edit' do
-    get :edit, params: { id: users(:audited_user).user }
+    get :edit, params: { id: users(:audited) }
 
     assert_response :success
     assert_not_nil assigns(:user)
@@ -44,8 +44,8 @@ class Users::ReassignmentsControllerTest < ActionController::TestCase
     assert_enqueued_emails 2 do
       assert_difference 'Notification.count' do
         patch :update, params: {
-          id: users(:audited_user).user,
-          other_id: users(:audited_second_user).id,
+          id: users(:audited),
+          other_id: users(:audited_second).id,
           with_reviews: '1'
         }
       end
@@ -56,7 +56,7 @@ class Users::ReassignmentsControllerTest < ActionController::TestCase
   end
 
   test 'user reassignment of nothing edit' do
-    get :edit, params: { id: users(:audited_user).user }
+    get :edit, params: { id: users(:audited) }
 
     assert_response :success
     assert_not_nil assigns(:user)
@@ -67,8 +67,8 @@ class Users::ReassignmentsControllerTest < ActionController::TestCase
     assert_no_emails do
       assert_no_difference 'Notification.count' do
         patch :update, params: {
-          id: users(:audited_user).user,
-          other_id: users(:administrator_second_user).id
+          id: users(:audited),
+          other_id: users(:administrator_second).id
         }
       end
     end

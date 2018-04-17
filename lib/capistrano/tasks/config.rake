@@ -1,5 +1,5 @@
 namespace :config do
-  desc 'Uploads config/application.example.yml as the initial application.yml'
+  desc 'Uploads config/application.yml.example as the initial application.yml'
   task :upload do
     on roles(:app) do
       config_path = 'config/application.yml'
@@ -9,7 +9,7 @@ namespace :config do
       else
         info "Now edit the config file in #{shared_path.join config_path}"
         execute :mkdir, '-p', shared_path.join('config')
-        upload! 'config/application.example.yml', shared_path.join(config_path)
+        upload! 'config/application.yml.example', shared_path.join(config_path)
       end
     end
   end

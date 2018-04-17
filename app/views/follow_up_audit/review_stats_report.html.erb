@@ -107,7 +107,10 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th><%= Weakness.human_attribute_name 'risk' %> / <%= Weakness.human_attribute_name 'priority' %></th>
+          <th>
+            <%= Weakness.human_attribute_name 'risk' %>
+            <%= "/ #{Weakness.human_attribute_name 'priority'}" unless HIDE_WEAKNESS_PRIORITY %>
+          </th>
           <% Review.scores.each do |score, value| %>
             <th class="text-right"><%= t "score_types.#{score}" %></th>
           <% end %>

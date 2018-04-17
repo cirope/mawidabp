@@ -2,10 +2,11 @@ class WeaknessesController < ApplicationController
   include AutoCompleteFor::ControlObjectiveItem
   include AutoCompleteFor::FindingRelation
   include AutoCompleteFor::Tagging
+  include AutoCompleteFor::WeaknessTemplate
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_weakness, only: [
-    :show, :edit, :update, :follow_up_pdf, :undo_reiteration
+    :show, :edit, :update, :undo_reiteration
   ]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
@@ -53,10 +54,11 @@ class WeaknessesController < ApplicationController
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn('review_code')} ASC"
       ]
-    ).references(:periods, :conclusion_reviews).page(params[:page])
+    ).references(:periods, :conclusion_reviews)
 
     respond_to do |format|
-      format.html
+      format.html { @weaknesses = @weaknesses.page params[:page] }
+      format.csv  { render csv: @weaknesses.to_csv, filename: @title.downcase }
     end
   end
 
@@ -78,8 +80,10 @@ class WeaknessesController < ApplicationController
   def new
     @title = t 'weakness.new_title'
     @weakness = Weakness.new(
-      {control_objective_item_id: params[:control_objective_item]}, true
+      control_objective_item_id: params[:control_objective_item]
     )
+
+    @weakness.import_users
 
     respond_to do |format|
       format.html # new.html.erb
@@ -134,14 +138,6 @@ class WeaknessesController < ApplicationController
     redirect_to action: :edit
   end
 
-  # Crea el documento de seguimiento de la observación
-  #
-  # * GET /weaknesses/follow_up_pdf/1
-  def follow_up_pdf
-    @weakness.follow_up_pdf(current_organization)
-    redirect_to @weakness.relative_follow_up_pdf_path
-  end
-
   # Deshace la reiteración de la observación
   #
   # * PATCH /weaknesses/undo_reiteration/1
@@ -153,13 +149,33 @@ class WeaknessesController < ApplicationController
     end
   end
 
+  # * GET /weaknesses/state_changed
+  def state_changed
+    @state = params[:state].to_i
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  # * GET /weaknesses/weakness_template_changed
+  def weakness_template_changed
+    @weakness_template = WeaknessTemplate.list.find_by id: params[:id]
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
     def weakness_params
       params.require(:weakness).permit(
         :control_objective_item_id, :review_code, :title, :description, :answer,
-        :audit_comments, :state, :origination_date, :solution_date, :repeated_of_id,
-        :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
-        :users_for_notification, :lock_version,
+        :audit_comments, :state, :progress, :origination_date, :solution_date,
+        :repeated_of_id, :audit_recommendations, :effect, :risk, :priority,
+        :follow_up_date, :users_for_notification, :compliance, :skip_work_paper,
+        :weakness_template_id, :lock_version,
+        operational_risk: [], impact: [], internal_control_components: [],
         business_unit_ids: [],
         achievements_attributes: [
           :id, :benefit_id, :amount, :comment, :_destroy
@@ -172,7 +188,7 @@ class WeaknessesController < ApplicationController
           file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_answers_attributes: [
-          :answer, :auditor_comments, :commitment_date, :user_id,
+          :answer, :commitment_date, :user_id,
           :notify_users, :_destroy, file_model_attributes: [:file, :file_cache]
         ],
         finding_relations_attributes: [
@@ -197,10 +213,11 @@ class WeaknessesController < ApplicationController
 
     def load_privileges
       @action_privileges.update(
-        follow_up_pdf: :read,
         auto_complete_for_tagging: :read,
         auto_complete_for_finding_relation: :read,
         auto_complete_for_control_objective_item: :read,
+        auto_complete_for_weakness_template: :read,
+        state_changed: :read,
         undo_reiteration: :modify
       )
     end

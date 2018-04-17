@@ -1,0 +1,56 @@
+<%= simple_form_for @weakness_template do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :title, input_html: { autofocus: true } %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :risk, collection: risks, prompt: true %>
+      </div>
+    </div>
+    <%= f.input :description, input_html: { rows: 6 } %>
+
+    <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+      <div class="row">
+        <div class="col-md-4">
+          <%= f.input :impact, as: :check_boxes, collection: weakness_impact_options %>
+        </div>
+        <div class="col-md-4">
+          <%= f.input :operational_risk, as: :check_boxes, collection: weakness_operational_risk_options %>
+        </div>
+        <div class="col-md-4">
+          <%= f.input :internal_control_components, as: :check_boxes, collection: weakness_internal_control_components_options %>
+        </div>
+      </div>
+    <% end %>
+
+    <h4>
+      <%= ControlObjective.model_name.human count: 0 %>
+    </h4>
+
+    <div id="control_objective_weakness_template_relations">
+      <%= f.simple_fields_for :control_objective_weakness_template_relations do |co_f| %>
+        <%= render 'control_objective_weakness_template_relation', f: co_f %>
+      <% end %>
+
+      <p>
+        <%= link_to_add_fields t('.add_control_objective'), f, :control_objective_weakness_template_relations %>
+      </p>
+    </div>
+
+    <% if show_weakness_template_allow_duplication? @weakness_template %>
+      <%= f.input :allow_duplication, as: :boolean %>
+    <% end %>
+
+    <%= f.input :lock_version, as: :hidden %>
+  </div>
+
+  <hr>
+
+  <div class="form-actions">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
+<% end %>

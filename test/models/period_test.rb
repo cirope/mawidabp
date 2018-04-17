@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class PeriodTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @period = periods :current_period
 
     set_organization

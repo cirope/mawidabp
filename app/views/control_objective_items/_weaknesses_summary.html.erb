@@ -1,22 +1,28 @@
+<% weaknesses = readonly ? @control_objective_item.final_weaknesses : @control_objective_item.weaknesses %>
+
 <h4>
   <%= ControlObjectiveItem.human_attribute_name 'weaknesses' %>
 </h4>
 
-<table class="table table-condensed">
-  <thead>
-    <tr>
-      <%= raw control_objective_weaknesses_summary_headers %>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <%= raw control_objective_weaknesses_summary_row(@control_objective_item) %>
-    </tr>
-  </tbody>
-</table>
+<% if weaknesses.any? %>
+  <ul>
+    <% weaknesses.order(:review_code).each do |weakness| %>
+      <li>
+        <%= link_to "#{weakness.review_code} - #{weakness.title} (#{weakness.state_text})", weakness %>
+        <% unless frozen %>
+          | <%= link_to_edit edit_weakness_path(weakness) %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <div class="alert alert-info">
+    <%= t('control_objective_item.no_weaknesses') %>
+  </div>
+<% end %>
 
 <p style="margin-bottom: 1.2em;">
-  <%= link_to_unless @control_objective_item.weaknesses.blank?,
+  <%= link_to_unless weaknesses.blank?,
     t('control_objective_item.view_all_weaknesses'),
     weaknesses_path(:control_objective => @control_objective_item) %>
   <span class="text-muted">|</span>

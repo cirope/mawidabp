@@ -38,6 +38,31 @@
             { action: :detailed_management_report }, class: 'list-group-item' %>
         </div>
       </div>
+      <div class="col-md-6">
+        <div class="list-group">
+          <%= link_to t('execution_reports.reviews_with_incomplete_work_papers_report_incomplete_title'),
+            { action: :reviews_with_incomplete_work_papers_report }, class: 'list-group-item' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <%= t 'execution_reports.cost_analysis_title' %>
+    </h4>
+  </div>
+
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="list-group">
+          <%= link_to t('execution_reports.planned_cost_summary_title'),
+            { action: :planned_cost_summary }, class: 'list-group-item' %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

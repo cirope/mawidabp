@@ -14,6 +14,9 @@ es:
     moderate: 'Moderado'
     high: 'Alto'
     critical: 'Crítico'
+    # Short relevance
+    'yes': 'Si'
+    'no': 'No'
   qualification_types:
     not_rated: 'Nulo'
     very_low: 'Muy bajo'
@@ -26,15 +29,31 @@ es:
     high: 'Alto'
     very_high: 'Muy alto'
     excellent: 'Óptimo'
+    # Short qualifications
+    ok: 'OK'
+    observed: 'Observado'
+    not_apply: 'No aplica'
   risk_types:
     low: 'Bajo'
     medium: 'Medio'
     high: 'Alto'
+    # Extended
+    not_relevant: 'No relevante'
+    medium_high: 'Medio PD'
+    high_medium: 'Alto - Medio'
   priority_types:
     low: 'Baja'
     medium: 'Media'
     high: 'Alta'
+    # When priority is hidden
+    default: 'Normal'
   score_types:
     satisfactory: 'Satisfactorio'
     improve: 'Necesita mejorar'
     unsatisfactory: 'No satisfactorio'
+    # When score by weaknesses is used
+    adequate: 'Adecuado'
+    require_some_improvements: 'Requiere ciertas mejoras'
+    require_improvements: 'Requiere mejoras'
+    require_lots_of_improvements: 'Requiere mejoras significativas'
+    inadequate: 'Inadecuado'

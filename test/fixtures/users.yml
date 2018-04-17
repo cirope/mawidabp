@@ -1,6 +1,6 @@
 <% ::PLAIN_PASSWORDS = { :admin => 'admin123' }.with_indifferent_access %>
 <% salt = Digest::SHA512.hexdigest("admin#{rand}") %>
-administrator_user:
+administrator:
   name: Administrator
   last_name: Administrator
   language: es
@@ -18,15 +18,15 @@ administrator_user:
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:poll_user] = 'poll_user123' %>
-<% salt = Digest::SHA512.hexdigest("poll_user#{rand}") %>
-poll_user:
+<% ::PLAIN_PASSWORDS[:poll] = 'poll_user123' %>
+<% salt = Digest::SHA512.hexdigest("poll#{rand}") %>
+poll:
   name: Poll User
   last_name: Poll User
   language: es
   email: polluser@poll.com
   function: Poll function
-  user: poll_user
+  user: poll
   password: <%= Digest::SHA512.hexdigest("#{salt}-poll_user123") %>
   salt: <%= salt %>
   enable: true
@@ -40,7 +40,7 @@ poll_user:
 
 <% ::PLAIN_PASSWORDS[:admin_second] = 'admin123' %>
 <% salt = Digest::SHA512.hexdigest("admin_second#{rand}") %>
-administrator_second_user:
+administrator_second:
   name: Administrator Second
   last_name: Administrator Second
   language: es
@@ -55,19 +55,19 @@ administrator_second_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:bare_user] = 'bare123' %>
+<% ::PLAIN_PASSWORDS[:bare] = 'bare123' %>
 <% salt = Digest::SHA512.hexdigest("bare#{rand}") %>
-bare_user:
+bare:
   name: Bare
   last_name: User
   language: es
   email: bare@users.com
   function: Bare function
-  user: bare_user
+  user: bare
   password: <%= Digest::SHA512.hexdigest("#{salt}-bare123") %>
   salt: <%= salt %>
   enable: true
@@ -76,33 +76,33 @@ bare_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:first_time_user] = 'first_time_user' %>
-<% salt = Digest::SHA512.hexdigest("first_time_user#{rand}") %>
-first_time_user:
+<% ::PLAIN_PASSWORDS[:first_time] = 'first_time_user' %>
+<% salt = Digest::SHA512.hexdigest("first_time#{rand}") %>
+first_time:
   name: First Time
-  last_name: User
+  last_name: First User
   language: es
   email: first_time@users.com
   function: First time function
-  user: first_time_user
-  password: <%= Digest::SHA512.hexdigest("#{salt}-first_time_user") %>
+  user: first_time
+  password: <%= Digest::SHA512.hexdigest("#{salt}-first_time") %>
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
 
 <% ::PLAIN_PASSWORDS[:expired] = 'expired123' %>
 <% salt = Digest::SHA512.hexdigest("expired#{rand}") %>
-expired_user:
+expired:
   name: Expired
   last_name: Expired
   language: es
@@ -118,13 +118,13 @@ expired_user:
   group_admin: false
   password_changed: <%= 2.days.ago %>
   last_access: <%= DEFAULT_SETTINGS[:account_expire_time][:value].to_i.days.ago.yesterday %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
 
 <% ::PLAIN_PASSWORDS[:disabled] = 'diasabled123' %>
 <% salt = Digest::SHA512.hexdigest("disabled#{rand}") %>
-disabled_user:
+disabled:
   name: Diasabled
   last_name: Disabled
   language: es
@@ -139,13 +139,13 @@ disabled_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
 
 <% ::PLAIN_PASSWORDS[:blank_password] = 'blank_password123' %>
 <% salt = Digest::SHA512.hexdigest("blank_password#{rand}") %>
-blank_password_user:
+blank_password:
   name: Blank
   last_name: Password
   language: es
@@ -162,13 +162,13 @@ blank_password_user:
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   change_password_hash: <%= SecureRandom.urlsafe_base64 %>
   hash_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
 
 <% ::PLAIN_PASSWORDS[:expired_blank_password] = 'expired_blank_password123' %>
 <% salt = Digest::SHA512.hexdigest("expired_blank_password#{rand}") %>
-expired_blank_password_user:
+expired_blank_password:
   name: Expired Blank
   last_name: Password
   language: es
@@ -184,19 +184,19 @@ expired_blank_password_user:
   group_admin: false
   password_changed: <%= BLANK_PASSWORD_STALE_DAYS.next.days.ago.to_s(:db) %>
   change_password_hash: <%= SecureRandom.urlsafe_base64 %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:president_user] = 'president123' %>
+<% ::PLAIN_PASSWORDS[:president] = 'president123' %>
 <% salt = Digest::SHA512.hexdigest("president#{rand}") %>
-president_user:
+president:
   name: President
   last_name: Lastname
   language: es
   email: president@users.com
   function: President function
-  user: president_user
+  user: president
   password: <%= Digest::SHA512.hexdigest("#{salt}-president123") %>
   salt: <%= salt %>
   enable: true
@@ -208,15 +208,15 @@ president_user:
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:general_manager_user] = 'general_manager123' %>
+<% ::PLAIN_PASSWORDS[:general_manager] = 'general_manager123' %>
 <% salt = Digest::SHA512.hexdigest("general_manager#{rand}") %>
-general_manager_user:
+general_manager:
   name: General Manager
   last_name: Lastname
   language: es
   email: general_manager@users.com
   function: General Manager function
-  user: general_manager_user
+  user: general_manager
   password: <%= Digest::SHA512.hexdigest("#{salt}-general_manager123") %>
   salt: <%= salt %>
   enable: true
@@ -225,19 +225,19 @@ general_manager_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:president_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:president) %>
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:general_manager_user] = 'coordinator_manager123' %>
+<% ::PLAIN_PASSWORDS[:general_manager] = 'coordinator_manager123' %>
 <% salt = Digest::SHA512.hexdigest("coordinator_manager#{rand}") %>
-coordinator_manager_user:
+coordinator_manager:
   name: Coordinator Manager
   last_name: Lastname
   language: es
   email: coordinator_manager@users.com
   function: Coordinator Manager function
-  user: coordinator_manager_user
+  user: coordinator_manager
   password: <%= Digest::SHA512.hexdigest("#{salt}-coordinator_manager123") %>
   salt: <%= salt %>
   enable: true
@@ -246,19 +246,19 @@ coordinator_manager_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:general_manager_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:general_manager) %>
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:plain_manager_user] = 'plain_manager123' %>
+<% ::PLAIN_PASSWORDS[:plain_manager] = 'plain_manager123' %>
 <% salt = Digest::SHA512.hexdigest("plain_manager#{rand}") %>
-plain_manager_user:
+plain_manager:
   name: Plain Manager
   last_name: Lastname
   language: es
   email: plain_manager@users.com
   function: Plain Manager function
-  user: plain_manager_user
+  user: plain_manager
   password: <%= Digest::SHA512.hexdigest("#{salt}-plain_manager123") %>
   salt: <%= salt %>
   enable: true
@@ -267,19 +267,19 @@ plain_manager_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager) %>
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:manager_user] = 'manager123' %>
+<% ::PLAIN_PASSWORDS[:manager] = 'manager123' %>
 <% salt = Digest::SHA512.hexdigest("manager#{rand}") %>
-manager_user:
+manager:
   name: Manager
   last_name: Lastname
   language: es
   email: manager@users.com
   function: Manager function
-  user: manager_user
+  user: manager
   password: <%= Digest::SHA512.hexdigest("#{salt}-manager123") %>
   salt: <%= salt %>
   enable: true
@@ -288,19 +288,19 @@ manager_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager) %>
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:manager_second_user] = 'manager_second123' %>
+<% ::PLAIN_PASSWORDS[:manager_second] = 'manager_second123' %>
 <% salt = Digest::SHA512.hexdigest("manager_second#{rand}") %>
-manager_second_user:
+manager_second:
   name: Manager Second
   last_name: Lastname
   language: es
   email: manager_second@users.com
   function: Manager Second function
-  user: manager_second_user
+  user: manager_second
   password: <%= Digest::SHA512.hexdigest("#{salt}-manager_second123") %>
   salt: <%= salt %>
   enable: true
@@ -309,19 +309,19 @@ manager_second_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager) %>
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:plain_manager_second_user] = 'plain_manager_second123' %>
+<% ::PLAIN_PASSWORDS[:plain_manager_second] = 'plain_manager_second123' %>
 <% salt = Digest::SHA512.hexdigest("plain_manager_second#{rand}") %>
-plain_manager_second_user:
+plain_manager_second:
   name: Plain Manager Second
   last_name: Lastname
   language: es
   email: plain_manager_second@users.com
   function: Plain Manager Second function
-  user: plain_manager_second_user
+  user: plain_manager_second
   password: <%= Digest::SHA512.hexdigest("#{salt}-plain_manager_second123") %>
   salt: <%= salt %>
   enable: true
@@ -330,19 +330,19 @@ plain_manager_second_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager) %>
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:supervisor_user] = 'supervisor123' %>
+<% ::PLAIN_PASSWORDS[:supervisor] = 'supervisor123' %>
 <% salt = Digest::SHA512.hexdigest("supervisor#{rand}") %>
-supervisor_user:
+supervisor:
   name: Supervisor
-  last_name: Lastname
+  last_name: Sup Lastname
   language: es
   email: supervisor@users.com
   function: Supervisor function
-  user: supervisor_user
+  user: supervisor
   password: <%= Digest::SHA512.hexdigest("#{salt}-supervisor123") %>
   salt: <%= salt %>
   enable: true
@@ -351,19 +351,19 @@ supervisor_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:supervisor_second_user] = 'supervisor_second123' %>
+<% ::PLAIN_PASSWORDS[:supervisor_second] = 'supervisor_second123' %>
 <% salt = Digest::SHA512.hexdigest("supervisor_second#{rand}") %>
-supervisor_second_user:
+supervisor_second:
   name: Supervisor Second
   last_name: Lastname
   language: es
   email: supervisor_second@users.com
   function: Supervisor second function
-  user: supervisor_second_user
+  user: supervisor_second
   password: <%= Digest::SHA512.hexdigest("#{salt}-supervisor_second123") %>
   salt: <%= salt %>
   enable: true
@@ -372,19 +372,19 @@ supervisor_second_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:audited_user] = 'audited123' %>
+<% ::PLAIN_PASSWORDS[:audited] = 'audited123' %>
 <% salt = Digest::SHA512.hexdigest("audited#{rand}") %>
-audited_user:
+audited:
   name: Audited
-  last_name: Lastname
+  last_name: Audited Lastname
   language: es
   email: audited@users.com
   function: Audited function
-  user: audited_user
+  user: audited
   password: <%= Digest::SHA512.hexdigest("#{salt}-audited123") %>
   salt: <%= salt %>
   enable: true
@@ -393,19 +393,19 @@ audited_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:plain_manager_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:plain_manager) %>
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:audited_second_user] = 'audited_second123' %>
+<% ::PLAIN_PASSWORDS[:audited_second] = 'audited_second123' %>
 <% salt = Digest::SHA512.hexdigest("audited_second#{rand}") %>
-audited_second_user:
+audited_second:
   name: Audited Second
   last_name: Lastname
   language: es
   email: audited_second@users.com
   function: Audited Second function
-  user: audited_second_user
+  user: audited_second
   password: <%= Digest::SHA512.hexdigest("#{salt}-audited_second123") %>
   salt: <%= salt %>
   enable: true
@@ -414,13 +414,13 @@ audited_second_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:plain_manager_second_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:plain_manager_second) %>
   notes: User notes
   hidden: false
 
 <% ::PLAIN_PASSWORDS[:committee] = 'committee123' %>
 <% salt = Digest::SHA512.hexdigest("committee#{rand}") %>
-committee_user:
+committee:
   name: Committee
   last_name: Committee
   language: es
@@ -435,19 +435,19 @@ committee_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator) %>
   notes: User notes
   hidden: false
 
-<% ::PLAIN_PASSWORDS[:auditor_user] = 'auditor123' %>
+<% ::PLAIN_PASSWORDS[:auditor] = 'auditor123' %>
 <% salt = Digest::SHA512.hexdigest("auditor#{rand}") %>
-auditor_user:
+auditor:
   name: Auditor
   last_name: User
   language: es
   email: auditor@users.com
   function: Auditor function
-  user: auditor_user
+  user: auditor
   password: <%= Digest::SHA512.hexdigest("#{salt}-auditor123") %>
   salt: <%= salt %>
   enable: true
@@ -456,13 +456,13 @@ auditor_user:
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
-  manager_id: <%= ActiveRecord::FixtureSet.identify(:supervisor_user) %>
+  manager_id: <%= ActiveRecord::FixtureSet.identify(:supervisor) %>
   notes: User notes
   hidden: false
 
 <% ::PLAIN_PASSWORDS[:corporate] = 'corporate123' %>
 <% salt = Digest::SHA512.hexdigest("corporate#{rand}") %>
-corporate_user:
+corporate:
   name: Corporate
   last_name: Corporate
   language: es

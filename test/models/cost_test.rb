@@ -5,7 +5,7 @@ class CostTest < ActiveSupport::TestCase
   fixtures :costs
 
   # Función para inicializar las variables utilizadas en las pruebas
-  def setup
+  setup do
     @cost = Cost.find costs(:hardware_rent).id
   end
 
@@ -27,9 +27,8 @@ class CostTest < ActiveSupport::TestCase
         :description => 'New description',
         :cost => '15.50',
         :cost_type => 'audit',
-        :item =>
-          findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness),
-        :user => users(:administrator_user)
+        :item => findings(:unconfirmed_weakness),
+        :user => users(:administrator)
       )
     end
 

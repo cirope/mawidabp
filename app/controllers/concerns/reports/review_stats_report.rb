@@ -88,8 +88,8 @@ module Reports::ReviewStatsReport
     end
 
     def set_weaknesses_by_score_data
-      Weakness::RISK_TYPES.reverse_each do |risk, r_value|
-        Weakness::PRIORITY_TYPES.reverse_each do |priority, p_value|
+      ::RISK_TYPES.reverse_each do |risk, r_value|
+        ::PRIORITY_TYPES.reverse_each do |priority, p_value|
           add_total_weaknesses_by_score(
             risk:     risk,
             r_value:  r_value,
@@ -102,10 +102,14 @@ module Reports::ReviewStatsReport
 
     def add_total_weaknesses_by_score risk:, r_value:, priority:, p_value:
       score_max = 100
-      label     = [
-        I18n.t("risk_types.#{risk}"),
-        I18n.t("priority_types.#{priority}")
-      ].join(' / ')
+      label     = if HIDE_WEAKNESS_PRIORITY
+                    I18n.t "risk_types.#{risk}"
+                  else
+                    [
+                      I18n.t("risk_types.#{risk}"),
+                      I18n.t("priority_types.#{priority}")
+                    ].join(' / ')
+                  end
 
       @weaknesses_by_score[label] = {}
 
@@ -186,10 +190,10 @@ module Reports::ReviewStatsReport
       Review.scores.map do |score, value|
         scores = @reviews_by_score[score]
         ratio  = if scores.size > 0
-          '%.2f%%' % (scores.size.to_f / review_stats_score_count * 100)
-        else
-          '0.00%'
-        end
+                   '%.2f%%' % (scores.size.to_f / review_stats_score_count * 100)
+                 else
+                   '0.00%'
+                 end
 
         [I18n.t("score_types.#{score}"), ratio]
       end
@@ -251,10 +255,14 @@ module Reports::ReviewStatsReport
     end
 
     def weaknesses_by_score_columns
-      risk_priority = [
-        Weakness.human_attribute_name('risk'),
-        Weakness.human_attribute_name('priority')
-      ].join(' / ')
+      risk_priority = if HIDE_WEAKNESS_PRIORITY
+                        Weakness.human_attribute_name('risk')
+                      else
+                        [
+                          Weakness.human_attribute_name('risk'),
+                          Weakness.human_attribute_name('priority')
+                        ].join(' / ')
+                      end
 
       columns = { risk_priority => 25 }
 

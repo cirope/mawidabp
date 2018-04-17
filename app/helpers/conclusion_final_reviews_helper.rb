@@ -2,10 +2,20 @@ module ConclusionFinalReviewsHelper
   def conclusion_final_review_review_field(form, review)
     reviews = (Review.list_with_approved_draft - Review.list_with_final_review) |
       [review]
-    options = reviews.compact.map { |r| [r.identification, r.id] }
+    options = reviews.compact.map do |r|
+      [truncate(r.long_identification, length: 50), r.id]
+    end
 
     form.input :review_id, collection: options, prompt: true,
       input_html: { autofocus: true }
+  end
+
+  def conclusion_review_score_text(review)
+    review_score = review.score_array.first
+
+    content_tag(:strong) do
+      "#{t 'review.score'}: #{t("score_types.#{review_score}").upcase}"
+    end
   end
 
   def conclusion_review_score_details_table(review)
@@ -109,7 +119,7 @@ module ConclusionFinalReviewsHelper
         "#{finding.risk_text}"
     end
 
-    if weakness && finding.effect.present?
+    if !HIDE_WEAKNESS_EFFECT && weakness && finding.effect.present?
       body_rows << "<strong>#{finding.class.human_attribute_name(:effect)}:</strong> " +
         "#{finding.effect}"
     end
@@ -176,11 +186,37 @@ module ConclusionFinalReviewsHelper
   end
 
   def send_review_options
-    options = ['normal', 'brief', 'without_score'].map do |type|
+    default = if SHOW_CONCLUSION_ALTERNATIVE_PDF && show_brief_download?
+                'brief'
+              else
+                'normal'
+              end
+
+    options = if SHOW_CONCLUSION_ALTERNATIVE_PDF
+                ['normal', 'brief']
+              else
+                ['normal', 'brief', 'without_score']
+              end
+
+    options.delete 'brief' unless show_brief_download?
+
+    select_options = options.map do |type|
       [t("conclusion_final_review.send_type.#{type}"), type]
     end
 
-    options_for_select options, 'normal'
+    options_for_select select_options, default
+  end
+
+  def show_review_best_practice_comments?
+    prefix = current_organization&.prefix
+
+    SHOW_REVIEW_BEST_PRACTICE_COMMENTS &&
+      ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(prefix)
+  end
+
+  def show_brief_download?
+    !show_review_best_practice_comments? &&
+      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.exclude?(current_organization.prefix)
   end
 
   def show_conclusion_review_issue_date conclusion_final_review
@@ -189,5 +225,13 @@ module ConclusionFinalReviewsHelper
     title      = "#{ConclusionDraftReview.human_attribute_name(:close_date)}: #{close_date}" if close_date
 
     content_tag :abbr, issue_date, title: title if issue_date
+  end
+
+  def conclusion_options
+    CONCLUSION_OPTIONS.map { |option| [option, option] }
+  end
+
+  def can_destroy_final_reviews?
+    ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION && can_perform?(:destroy)
   end
 end

@@ -3,6 +3,7 @@ class WorkPaper < ApplicationRecord
   include ParameterSelector
   include Comparable
   include WorkPapers::LocalFiles
+  include WorkPapers::Review
 
   # Named scopes
   scope :list, -> { where(organization_id: Organization.current_id) }

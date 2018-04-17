@@ -39,8 +39,8 @@ module Reports::QAIndicators
   end
 
   def calculate_ancient_weaknesses_data
-    @medium_risk_days = @medium_risk_total = 0
-    @highest_risk_days = @highest_risk_total = 0
+    @medium_risk_days = @medium_risk_total = 0.0
+    @highest_risk_days = @highest_risk_total = 0.0
 
     count_qa_weaknesses
     add_ancient_risk_labels

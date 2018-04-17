@@ -1,0 +1,22 @@
+<%= render('shared/downloads',
+  right: true,
+  links: [
+    link_to(t('label.download'), :action => :export_to_pdf,
+      :id => @conclusion_draft_review, :_ts => Time.now.to_i),
+    link_to(t('conclusion_draft_review.download_brief'),
+      :action => :export_to_pdf, :id => @conclusion_draft_review,
+      :export_options => {:brief => '1'}, :_ts => Time.now.to_i),
+    link_to(t('conclusion_draft_review.download_without_score'),
+      :action => :export_to_pdf, :id => @conclusion_draft_review,
+      :export_options => {:hide_score => '1'}, :_ts => Time.now.to_i),
+    link_to(t('conclusion_draft_review.generate_score_sheet'),
+      :action => :score_sheet, :id => @conclusion_draft_review,
+      :_ts => Time.now.to_i),
+    link_to(t('conclusion_draft_review.generate_global_score_sheet'),
+      :action => :score_sheet, :id => @conclusion_draft_review, :global => 1,
+      :_ts => Time.now.to_i),
+    link_to(t('conclusion_draft_review.download_work_papers'),
+      :action => :download_work_papers, :id => @conclusion_draft_review,
+      :_ts => Time.now.to_i)
+  ]
+) %>

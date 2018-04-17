@@ -1,0 +1,27 @@
+<% id = f.object.object_id %>
+<fieldset class="control_objective_weakness_template_relation">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-10">
+        <%= f.input :control_objective, as: :string, label: false,
+          input_html: {
+            title: t('label.search'),
+            autofocus: true,
+            disabled: f.object.persisted?,
+            data: {
+              autocomplete_url: auto_complete_for_control_objective_reviews_path,
+              autocomplete_id_target: "#hidden_control_objective_#{id}"
+            }
+          } %>
+        <%= f.input :control_objective_id, as: :hidden, input_html: {
+          id: "hidden_control_objective_#{id}"
+        } %>
+      </div>
+      <div class="col-md-2">
+        <div class="toggle-visibility">
+          <%= link_to_remove_nested_item f %>
+        </div>
+      </div>
+    </div>
+  </div>
+</fieldset>

@@ -1,9 +1,12 @@
-<table class="table table-condensed table-striped">
+<table class="table table-condensed table-striped table-hover">
   <thead>
     <tr>
       <th><%= BusinessUnitType.human_attribute_name :name %></th>
       <th class="hidden-xs"><%= BusinessUnitType.human_attribute_name :business_unit_label %></th>
       <th class="hidden-xs"><%= BusinessUnitType.human_attribute_name :project_label %></th>
+      <% if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION %>
+        <th class="hidden-xs"><%= BusinessUnitType.human_attribute_name :review_prefix %></th>
+      <% end %>
       <th><%= BusinessUnitType.human_attribute_name :external %></th>
       <th colspan="3"></th>
     </tr>
@@ -15,6 +18,9 @@
         <td><%= business_unit_type.name %></td>
         <td class="hidden-xs"><%= business_unit_type.business_unit_label %></td>
         <td class="hidden-xs"><%= business_unit_type.project_label %></td>
+        <% if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION %>
+          <td class="hidden-xs"><%= business_unit_type.review_prefix %></td>
+        <% end %>
         <td><%= t business_unit_type.external ? 'label.yes' : 'label.no' %></td>
         <td><%= link_to_show business_unit_type %></td>
         <td><%= link_to_edit edit_business_unit_type_path(business_unit_type) %></td>
