@@ -133,14 +133,16 @@ module Findings::State
       end
 
       def implemented_transitions final
-        [:implemented, :awaiting, :being_implemented, :implemented_audited, :assumed_risk, :expired, :repeated] |
+        [:implemented, :being_implemented, :implemented_audited, :assumed_risk, :expired, :repeated] |
           (final ? [] : [:revoked]) |
+          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
       end
 
       def implemented_audited_transitions final
         [:implemented_audited] |
-          (final ? [] : [:implemented, :being_implemented, :awaiting])
+          (final ? [] : [:implemented, :being_implemented]) |
+          (SHOW_WEAKNESS_PROGRESS && !final ? [:awaiting] : [])
       end
 
       def assumed_risk_transitions final
