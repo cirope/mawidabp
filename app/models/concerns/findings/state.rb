@@ -177,7 +177,9 @@ module Findings::State
       end
 
       def expired_transitions final
-        [:expired]
+        [:expired] |
+          (final ? [] : [:implemented, :being_implemented]) |
+          (SHOW_WEAKNESS_PROGRESS && !final ? [:awaiting] : [])
       end
 
       def visible_pending_status
