@@ -27,9 +27,9 @@ module Findings::Validations
 
   def must_have_a_comment?
     has_new_comment = comments.detect { |c| c.new_record? && c.valid? }
-    to_implemented  = implemented? && was_implemented_audited?
+    to_implemented  = implemented? && (was_implemented_audited? || was_expired?)
     to_pending      = (being_implemented? || awaiting?) &&
-      (was_implemented_audited? || was_implemented? || was_assumed_risk?)
+      (was_implemented_audited? || was_implemented? || was_assumed_risk? || was_expired?)
 
     (to_pending || to_implemented) && !has_new_comment
   end
