@@ -42,6 +42,9 @@ class RiskAssessmentsController < ApplicationController
 
   # GET /risk_assessments/1/edit
   def edit
+    unless @risk_assessment.draft?
+      redirect_to risk_assessment_url @risk_assessment
+    end
   end
 
   # POST /risk_assessments
