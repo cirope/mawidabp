@@ -106,7 +106,12 @@ module Reports::WeaknessesByMonth
 
           weaknesses = data[:weaknesses]
 
-          put_weaknesses_by_month_main_weaknesses_on  pdf, weaknesses
+          if conclusion_review.main_weaknesses_text.present?
+            put_weaknesses_by_month_main_weaknesses_text_on pdf, conclusion_review
+          else
+            put_weaknesses_by_month_main_weaknesses_on  pdf, weaknesses
+          end
+
           put_weaknesses_by_month_other_weaknesses_on pdf, weaknesses
         end
       else
@@ -208,6 +213,28 @@ module Reports::WeaknessesByMonth
       image_y    = pdf.cursor + 1
 
       pdf.image image_path, fit: [10, 10], at: [image_x, image_y]
+    end
+
+    def put_weaknesses_by_month_main_weaknesses_text_on pdf, conclusion_review
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text I18n.t("#{@controller}_committee_report.weaknesses_by_month.main_weaknesses"),
+        style: :bold, size: PDF_FONT_SIZE
+
+      pdf.indent PDF_FONT_SIZE do
+        pdf.move_down (PDF_FONT_SIZE * 0.5).round
+        pdf.text conclusion_review.main_weaknesses_text, align: :justify,
+          inline_format: true
+      end
+
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text ConclusionReview.human_attribute_name('corrective_actions'),
+        style: :bold, size: PDF_FONT_SIZE
+
+      pdf.indent PDF_FONT_SIZE do
+        pdf.move_down (PDF_FONT_SIZE * 0.5).round
+        pdf.text conclusion_review.corrective_actions, align: :justify,
+          inline_format: true
+      end
     end
 
     def put_weaknesses_by_month_main_weaknesses_on pdf, weaknesses
