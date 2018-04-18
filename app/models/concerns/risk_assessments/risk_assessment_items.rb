@@ -2,11 +2,13 @@ module RiskAssessments::RiskAssessmentItems
   extend ActiveSupport::Concern
 
   included do
-    has_many :risk_assessment_items, -> { order :order }, dependent: :destroy
+    has_many :risk_assessment_items, -> { order :order }, dependent: :destroy,
+      inverse_of: :risk_assessment
     has_many :best_practices, through: :risk_assessment_items
     has_many :business_unit_types, through: :risk_assessment_items
 
     accepts_nested_attributes_for :risk_assessment_items, allow_destroy: true, reject_if: :all_blank
+    validates_associated :risk_assessment_items, if: :final?
   end
 
   def build_items_from_best_practices ids

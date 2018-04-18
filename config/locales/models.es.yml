@@ -109,7 +109,7 @@ es:
         one: 'Evaluación de riesgo'
         other: 'Evaluaciones de riesgo'
       risk_assessment_item:
-        one: 'Item de evaluación'
+        one: 'Ítem de evaluación'
         other: 'Items de evaluación'
       risk_assessment_template:
         one: 'Plantilla de evaluación de riesgo'
@@ -452,13 +452,15 @@ es:
         period: 'Periodo'
         risk_assessment_template: 'Plantilla de evaluación de riesgo'
         status: 'Estado'
+        risk_assessment_items: 'Ítems'
       risk_assessment/risk_assessment_items:
-        name: 'Nombre (item)'
-        risk: 'Riesgo (item)'
+        name: 'Nombre (ítem)'
+        risk: 'Riesgo (ítem)'
         business_unit: 'Unidad de negocio'
+        risk_weights: 'Valores de la evaluación'
       risk_assessment/risk_assessment_items/risk_weights:
-        value: 'Valor (item)'
-        weight: 'Ponderador (item)'
+        value: 'Valor (ítem)'
+        weight: 'Ponderador (ítem)'
       risk_assessment_item:
         name: 'Nombre'
         risk: 'Riesgo'

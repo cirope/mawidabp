@@ -4,7 +4,7 @@ class CreateRiskAssessmentItems < ActiveRecord::Migration[5.1]
       t.string :name, null: false
       t.integer :risk, null: false
       t.integer :order, null: false, default: 1
-      t.references :business_unit, null: false, index: true,
+      t.references :business_unit, index: true,
         foreign_key: FOREIGN_KEY_OPTIONS.dup
       t.references :process_control, index: true,
         foreign_key: FOREIGN_KEY_OPTIONS.dup

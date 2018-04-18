@@ -5,9 +5,10 @@ module RiskAssessmentItems::Weights
     has_many :risk_weights, -> {
       joins(:risk_assessment_weight).
         order("#{RiskAssessmentWeight.quoted_table_name}.#{RiskAssessmentWeight.qcn 'id'}")
-    }, dependent: :destroy
+    }, dependent: :destroy, inverse_of: :risk_assessment_item
 
     accepts_nested_attributes_for :risk_weights, allow_destroy: true, reject_if: :all_blank
+    validates_associated :risk_weights, if: :final?
   end
 
   def build_risk_weights

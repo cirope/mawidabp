@@ -8,14 +8,21 @@ class RiskAssessmentItemTest < ActiveSupport::TestCase
   test 'blank attributes' do
     @risk_assessment_item.order = nil
     @risk_assessment_item.name = ''
-    @risk_assessment_item.risk = ''
-    @risk_assessment_item.business_unit = nil
 
     assert @risk_assessment_item.invalid?
     assert_error @risk_assessment_item, :order, :blank
     assert_error @risk_assessment_item, :name, :blank
-    assert_error @risk_assessment_item, :risk, :blank
+  end
+
+  test 'blank attributes on final' do
+    @risk_assessment_item.risk_assessment.update_columns status: 'final'
+
+    @risk_assessment_item.business_unit = nil
+    @risk_assessment_item.risk = nil
+
+    assert @risk_assessment_item.invalid?
     assert_error @risk_assessment_item, :business_unit, :blank
+    assert_error @risk_assessment_item, :risk, :blank
   end
 
   test 'attribute length' do

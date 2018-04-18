@@ -6,12 +6,19 @@ class RiskWeightTest < ActiveSupport::TestCase
   end
 
   test 'blank attributes' do
-    @risk_weight.value = ''
     @risk_weight.weight = nil
 
     assert @risk_weight.invalid?
-    assert_error @risk_weight, :value, :blank
     assert_error @risk_weight, :weight, :blank
+  end
+
+  test 'blank attributes on final' do
+    @risk_weight.risk_assessment_item.risk_assessment.update_columns status: 'final'
+
+    @risk_weight.value = ''
+
+    assert @risk_weight.invalid?
+    assert_error @risk_weight, :value, :blank
   end
 
   test 'attribute inclusion' do
