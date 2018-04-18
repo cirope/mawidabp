@@ -37,6 +37,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
 
   test 'should create risk assessment' do
     counts = [
+      'FileModel.count',
       'RiskAssessment.count',
       'RiskAssessmentItem.count',
       'RiskWeight.count'
@@ -49,6 +50,9 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
           description: 'New risk assessment description',
           period_id: periods(:unused_period).id,
           risk_assessment_template_id: risk_assessment_templates(:sox).id,
+          file_model_attributes: {
+            file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
+          },
           risk_assessment_items_attributes: [
             {
               order: 1,

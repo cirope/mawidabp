@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180313174906) do
+ActiveRecord::Schema.define(version: 20180418205133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -736,7 +736,7 @@ ActiveRecord::Schema.define(version: 20180313174906) do
     t.string "name", null: false
     t.integer "risk", null: false
     t.integer "order", default: 1, null: false
-    t.bigint "business_unit_id", null: false
+    t.bigint "business_unit_id"
     t.bigint "process_control_id"
     t.bigint "risk_assessment_id", null: false
     t.datetime "created_at", null: false
@@ -777,6 +777,8 @@ ActiveRecord::Schema.define(version: 20180313174906) do
     t.bigint "organization_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "file_model_id"
+    t.index ["file_model_id"], name: "index_risk_assessments_on_file_model_id"
     t.index ["organization_id"], name: "index_risk_assessments_on_organization_id"
     t.index ["period_id"], name: "index_risk_assessments_on_period_id"
     t.index ["plan_id"], name: "index_risk_assessments_on_plan_id"
@@ -784,7 +786,7 @@ ActiveRecord::Schema.define(version: 20180313174906) do
   end
 
   create_table "risk_weights", force: :cascade do |t|
-    t.integer "value", null: false
+    t.integer "value"
     t.integer "weight", null: false
     t.bigint "risk_assessment_weight_id", null: false
     t.bigint "risk_assessment_item_id", null: false
@@ -1027,6 +1029,7 @@ ActiveRecord::Schema.define(version: 20180313174906) do
   add_foreign_key "risk_assessment_items", "risk_assessments", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessment_templates", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessment_weights", "risk_assessment_templates", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessments", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "periods", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "plans", on_update: :restrict, on_delete: :restrict

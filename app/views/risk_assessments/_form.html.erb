@@ -20,8 +20,27 @@
         <% end %>
       </div>
       <div class="col-md-6">
-        <%= f.input :description, input_html: { rows: 6 } %>
+        <%= f.input :description, input_html: { rows: 2 } %>
         <%= f.input :status, as: :boolean, label: t('risk_assessments.status.final'), checked_value: 'final', unchecked_value: 'draft' %>
+
+        <p><strong><%= RiskAssessment.human_attribute_name 'file_model' %></strong></p>
+        <div class="clearfix">
+          <% f.object.build_file_model unless f.object.file_model %>
+
+          <%= f.simple_fields_for :file_model do |fm_f| %>
+            <div class="file-container pull-left">
+              <%= link_to_upload fm_f.object %>
+
+              <% if fm_f.object.file_cache %>
+                <%= fm_f.input :file_cache, as: :hidden %>
+              <% else %>
+                <%= fm_f.input :file, label: false %>
+              <% end %>
+            </div>
+          <% end %>
+
+          <%= link_to_download f.object %>
+        </div>
       </div>
     </div>
 

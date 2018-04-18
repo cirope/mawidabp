@@ -452,6 +452,7 @@ es:
         period: 'Periodo'
         risk_assessment_template: 'Plantilla de evaluación de riesgo'
         status: 'Estado'
+        file_model: "Anexo"
         risk_assessment_items: 'Ítems'
       risk_assessment/risk_assessment_items:
         name: 'Nombre (ítem)'

@@ -120,6 +120,7 @@ class RiskAssessmentsController < ApplicationController
     def risk_assessment_params
       params.require(:risk_assessment).permit :name, :description, :status,
         :period_id, :risk_assessment_template_id, :lock_version,
+        file_model_attributes: [:id, :file, :file_cache, :_destroy],
         risk_assessment_items_attributes: [
           :id, :order, :name, :business_unit_id, :process_control_id, :risk,
           :_destroy,
