@@ -78,4 +78,5 @@
 <% if @risk_assessment.draft? %>
   <%= link_to_edit [:edit, @risk_assessment] %> |
 <% end %>
+<%= link_to t('.download_pdf'), [@risk_assessment, _ts: Time.now.to_i, format: :pdf] %> |
 <%= link_to_index risk_assessments_path %>

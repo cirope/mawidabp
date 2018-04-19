@@ -513,6 +513,7 @@ es:
       title: 'Crear evaluación de riesgo'
     show:
       title: 'Ver evaluación de riesgo'
+      download_pdf: 'Descargar PDF'
     form:
       new_risk_assessment_items: 'Luego de crear la evaluación de riesgo podrá agregar items a la misma'
       add_risk_assessment_item: 'Agregar item'
@@ -530,6 +531,9 @@ es:
       draft: 'Borrador'
       final: 'Definitiva'
       merged: 'Planificada'
+    pdf:
+      title: 'Evaluación de riesgo'
+      pdf_name: 'evaluacion_de_riesgo_%{name}.pdf'
 
   risk_assessment_templates:
     edit:

@@ -33,6 +33,10 @@ class RiskAssessmentsController < ApplicationController
 
   # GET /risk_assessments/1
   def show
+    respond_to do |format|
+      format.html
+      format.pdf  { redirect_to risk_assessment_pdf_path }
+    end
   end
 
   # GET /risk_assessments/new
@@ -128,6 +132,12 @@ class RiskAssessmentsController < ApplicationController
             :id, :value, :weight, :risk_assessment_weight_id, :_destroy
           ]
         ]
+    end
+
+    def risk_assessment_pdf_path
+      @risk_assessment.to_pdf current_organization
+
+      @risk_assessment.relative_pdf_path
     end
 
     def load_privileges

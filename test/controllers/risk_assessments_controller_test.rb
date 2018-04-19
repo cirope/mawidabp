@@ -80,6 +80,11 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'should show risk assessment as pdf' do
+    get :show, params: { id: @risk_assessment }, as: :pdf
+    assert_redirected_to @risk_assessment.relative_pdf_path
+  end
+
   test 'should get edit' do
     get :edit, params: { id: @risk_assessment }
     assert_response :success

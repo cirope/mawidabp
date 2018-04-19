@@ -124,4 +124,19 @@ class RiskAssessmentTest < ActiveSupport::TestCase
     assert_equal bus.size, items.size
     assert bus.all? { |pc| items.any? { |i| i.name == pc.name } }
   end
+
+  test 'pdf conversion' do
+    if File.exist? @risk_assessment.absolute_pdf_path
+      FileUtils.rm @risk_assessment.absolute_pdf_path
+    end
+
+    assert_nothing_raised do
+      @risk_assessment.to_pdf organizations(:cirope)
+    end
+
+    assert File.exist?(@risk_assessment.absolute_pdf_path)
+    assert File.size(@risk_assessment.absolute_pdf_path) > 0
+
+    FileUtils.rm @risk_assessment.absolute_pdf_path
+  end
 end
