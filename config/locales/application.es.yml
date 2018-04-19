@@ -125,6 +125,8 @@ es:
     send_by_email: "Enviar por correo electrónico"
     last_verified_date: "La última comprobación se realizó el %{date}"
     has_final_review: "Ya se emitió un informe definitivo y por lo tanto no es posible seguir trabajando con el informe borrador"
+    errors:
+      without_corrective_actions: "no tiene acciones correctivas"
 
   conclusion_report:
     index_title: "Reportes de conclusión"
@@ -948,7 +950,10 @@ es:
     recode_weaknesses_by_risk: "Recodificar observaciones por riesgo"
     recode_weaknesses_by_repetition_and_risk: "Recodificar observaciones por reiteración y riesgo"
     recode_weaknesses_by_control_objective_order: "Recodificar observaciones por orden objetivos de control"
+    reorder: "Reordenar procesos por nombre"
     findings_recoded: "Hallazgos recodificados correctamente"
+    reordered: "Procesos ordenados correctamente"
+    failed_to_reorder: "Los procesos no pudieron ser ordenados"
     work_papers_marked_as_finished: "Papeles de trabajo marcados como conforme auditor"
     work_papers_marked_as_revised: "Papeles de trabajo marcados como revisados supervisor"
     review_qualification_explanation: "La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."

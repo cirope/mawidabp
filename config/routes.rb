@@ -268,6 +268,7 @@ Rails.application.routes.draw do
       patch :recode_weaknesses_by_risk
       patch :recode_weaknesses_by_repetition_and_risk
       patch :recode_weaknesses_by_control_objective_order
+      patch :reorder
     end
 
     collection do

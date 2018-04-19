@@ -89,7 +89,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review.evolution = '   '
     @conclusion_review.evolution_justification = '   '
     @conclusion_review.main_weaknesses_text = '   '
-    @conclusion_review.corrective_actions = '   '
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
@@ -107,7 +106,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
     if ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(organization.prefix)
       assert_error @conclusion_review, :main_weaknesses_text, :blank
-      assert_error @conclusion_review, :corrective_actions, :blank
     end
   end
 

@@ -364,12 +364,14 @@ module ConclusionReviews::AlternativePDF
       pdf.move_down PDF_FONT_SIZE
       pdf.text main_weaknesses_text, align: :justify, inline_format: true
 
-      pdf.move_down PDF_FONT_SIZE
-      pdf.add_title self.class.human_attribute_name('corrective_actions'),
-        (PDF_FONT_SIZE * 1.25).round
+      if corrective_actions.present?
+        pdf.move_down PDF_FONT_SIZE
+        pdf.add_title self.class.human_attribute_name('corrective_actions'),
+          (PDF_FONT_SIZE * 1.25).round
 
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text corrective_actions, align: :justify, inline_format: true
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text corrective_actions, align: :justify, inline_format: true
+      end
     end
 
     def put_main_weaknesses_details_on pdf

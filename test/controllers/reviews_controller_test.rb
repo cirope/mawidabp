@@ -480,6 +480,14 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_redirected_to review_url(reviews(:review_without_conclusion))
   end
 
+  test 'reorder' do
+    login
+
+    patch :reorder, params: { id: reviews(:review_without_conclusion).id }
+
+    assert_redirected_to review_url(reviews(:review_without_conclusion))
+  end
+
   test 'next identification number' do
     login
 
