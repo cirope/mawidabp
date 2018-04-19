@@ -229,7 +229,10 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)
     assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
-    assert_not_equal size, new_size
+
+    if ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.exclude?(organization.prefix)
+      assert_not_equal size, new_size
+    end
 
     @conclusion_review.update_columns collapse_control_objectives: false,
       main_weaknesses_text: nil
