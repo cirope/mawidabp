@@ -119,6 +119,9 @@ module ConclusionReviews::AlternativePDF
       if show_review_best_practice_comments? organization
         pdf.move_down PDF_FONT_SIZE
         put_best_practice_comments_table_on pdf
+      elsif collapse_control_objectives
+        pdf.move_down PDF_FONT_SIZE
+        put_collapsed_control_objective_items_table_on pdf
       else
         pdf.move_down PDF_FONT_SIZE
         put_control_objective_items_table_on pdf, brief: options[:brief]
@@ -160,6 +163,28 @@ module ConclusionReviews::AlternativePDF
       if row_data.present?
         data          = row_data.insert 0, best_practice_comment_column_headers
         column_widths = best_practice_comment_column_widths pdf
+        table_options = pdf.default_table_options column_widths
+
+        pdf.font_size PDF_FONT_SIZE do
+          pdf.table data, table_options do
+            row(0).style(
+              background_color: 'cccccc',
+              padding: [
+                (PDF_FONT_SIZE * 0.5).round,
+                (PDF_FONT_SIZE * 0.3).round
+              ]
+            )
+          end
+        end
+      end
+    end
+
+    def put_collapsed_control_objective_items_table_on pdf
+      row_data = collapsed_control_objectives_row_data
+
+      if row_data.present?
+        data          = row_data.insert 0, control_objective_column_headers
+        column_widths = control_objective_column_widths pdf
         table_options = pdf.default_table_options column_widths
 
         pdf.font_size PDF_FONT_SIZE do
@@ -536,6 +561,26 @@ module ConclusionReviews::AlternativePDF
       end
     end
 
+    def collapsed_control_objectives_row_data
+      row_data      = []
+      image_options = { vposition: :top, border_widths: [1, 0, 1, 0] }
+      best_comment  = CONCLUSION_OPTIONS.first
+
+      review.grouped_control_objective_items.each do |process_control, cois|
+        if cois.all? { |coi| coi.auditor_comment == best_comment }
+          row_data << satisfactory_process_control_row(process_control, image_options)
+        else
+          row_data << [
+            { content: "<b>#{process_control.name}</b>", colspan: 3 }
+          ]
+
+          row_data += expanded_control_objective_rows(cois, image_options)
+        end
+      end
+
+      row_data
+    end
+
     def control_objectives_row_data brief
       count         = 0
       row_data      = []
@@ -640,6 +685,74 @@ module ConclusionReviews::AlternativePDF
       image_path = PDF_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
 
       { image: image_path, fit: fit, position: :center, vposition: :center }
+    end
+
+    def expanded_control_objective_rows control_objective_items, image_options
+      result       = []
+      best_comment = CONCLUSION_OPTIONS.first
+
+      offending_cois = control_objective_items.reject do |coi|
+        coi.auditor_comment == best_comment
+      end
+
+      result += offending_control_objective_rows(offending_cois.sort, image_options)
+
+      if control_objective_items.size > offending_cois.size
+        good_cois_count = control_objective_items.size - offending_cois.size
+
+        result << satisfactory_control_objectives_row(good_cois_count, image_options)
+      end
+
+      result
+    end
+
+    def offending_control_objective_rows control_objective_items, image_options
+      control_objective_items.map do |coi|
+        text  = coi.control_objective_text
+        image = CONCLUSION_SCOPE_IMAGES[coi.auditor_comment] ||
+          'scope_not_apply.png'
+
+        [
+          "#{Prawn::Text::NBSP * 4}#{text}",
+          pdf_score_image_row(image, fit: [12, 12]).merge(image_options),
+          {
+            content:       coi.auditor_comment&.upcase,
+            border_widths: [1, 1, 1, 0]
+          }
+        ]
+      end
+    end
+
+    def satisfactory_process_control_row process_control, image_options
+      best_comment = CONCLUSION_OPTIONS.first
+      image        = CONCLUSION_SCOPE_IMAGES[best_comment]
+
+      [
+        "<b>#{process_control.name}</b>",
+        pdf_score_image_row(image, fit: [12, 12]).merge(image_options),
+        {
+          content:       best_comment.upcase,
+          border_widths: [1, 1, 1, 0]
+        }
+      ]
+    end
+
+    def satisfactory_control_objectives_row count, image_options
+      best_comment = CONCLUSION_OPTIONS.first
+      image        = CONCLUSION_SCOPE_IMAGES[best_comment]
+      text         = I18n.t(
+        'conclusion_review.annex.satisfactory_control_objective_items',
+        count: count
+      )
+
+      [
+        "#{Prawn::Text::NBSP * 4} #{text}",
+        pdf_score_image_row(image, fit: [12, 12]).merge(image_options),
+        {
+          content:       best_comment.upcase,
+          border_widths: [1, 1, 1, 0]
+        }
+      ]
     end
 
     def get_evolution_image
