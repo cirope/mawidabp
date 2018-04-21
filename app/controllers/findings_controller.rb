@@ -13,7 +13,16 @@ class FindingsController < ApplicationController
 
   # * GET /incomplete/findings
   def index
-    @findings = current_user_findings
+    if params[:ordered_by_readings]
+      # Ordered by readings
+      set_selected_user
+      set_descendants
+      set_related_users
+      build_current_user_query_conditions
+      @findings = scoped_findings.where(@conditions).ordered_by_readings
+    else
+      @findings = current_user_findings
+    end
 
     respond_to do |format|
       format.html { @findings = @findings.page params[:page] }

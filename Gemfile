@@ -63,4 +63,6 @@ end
 
 group :development, :test do
   gem 'byebug'
+  gem 'rack-mini-profiler'
+  gem 'awesome_print'
 end
