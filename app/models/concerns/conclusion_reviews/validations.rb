@@ -11,7 +11,7 @@ module ConclusionReviews::Validations
 
     validates :recipients, :sectors, :evolution, :evolution_justification,
       presence: true, if: :validate_extra_attributes?
-    validates :main_weaknesses_text, :corrective_actions, presence: true,
+    validates :main_weaknesses_text, presence: true,
       if: :validate_short_alternative_pdf_attributes?
   end
 

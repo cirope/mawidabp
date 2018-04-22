@@ -18,6 +18,7 @@ class Review < ApplicationRecord
   include Reviews::IssueDate
   include Reviews::Overrides
   include Reviews::PlanItem
+  include Reviews::Reorder
   include Reviews::Scopes
   include Reviews::Score
   include Reviews::ScoreDetails
