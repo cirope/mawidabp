@@ -293,7 +293,8 @@ class ConclusionDraftReviewsController < ApplicationController
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
         :recipients, :sectors, :evolution, :evolution_justification,
         :observations, :main_weaknesses_text, :corrective_actions,
-        :affects_compliance, :force_approval, :lock_version,
+        :affects_compliance, :collapse_control_objectives, :force_approval,
+        :lock_version,
         review_attributes: [
           :id, :manual_score, :lock_version,
           best_practice_comments_attributes: [

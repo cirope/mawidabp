@@ -387,7 +387,7 @@ class ConclusionFinalReviewsController < ApplicationController
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
         :summary, :recipients, :evolution, :evolution_justification, :sectors,
         :observations, :main_weaknesses_text, :corrective_actions,
-        :affects_compliance, :lock_version,
+        :affects_compliance, :collapse_control_objectives, :lock_version,
         review_attributes: [
           :id, :manual_score, :lock_version,
           best_practice_comments_attributes: [

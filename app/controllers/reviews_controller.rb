@@ -10,7 +10,8 @@ class ReviewsController < ApplicationController
     :show, :edit, :update, :destroy, :download_work_papers, :survey_pdf,
     :finished_work_papers, :recode_findings, :recode_weaknesses_by_risk,
     :recode_weaknesses_by_repetition_and_risk,
-    :recode_weaknesses_by_control_objective_order, :excluded_control_objectives
+    :recode_weaknesses_by_control_objective_order, :reorder,
+    :excluded_control_objectives
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -392,6 +393,15 @@ class ReviewsController < ApplicationController
     @review.recode_weaknesses_by_control_objective_order
 
     redirect_to @review, notice: t('review.findings_recoded')
+  end
+
+  # * PUT /reviews/1/reorder
+  def reorder
+    if @review.reorder
+      redirect_to @review, notice: t('review.reordered')
+    else
+      redirect_to edit_review_url(@review), alert: t('review.failed_to_reorder')
+    end
   end
 
   # * GET /reviews/next_identification_number
