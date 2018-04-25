@@ -698,9 +698,7 @@ module ConclusionReviews::AlternativePDF
       result += offending_control_objective_rows(offending_cois.sort, image_options)
 
       if control_objective_items.size > offending_cois.size
-        good_cois_count = control_objective_items.size - offending_cois.size
-
-        result << satisfactory_control_objectives_row(good_cois_count, image_options)
+        result << satisfactory_control_objectives_row(image_options)
       end
 
       result
@@ -737,13 +735,11 @@ module ConclusionReviews::AlternativePDF
       ]
     end
 
-    def satisfactory_control_objectives_row count, image_options
+    def satisfactory_control_objectives_row image_options
       best_comment = CONCLUSION_OPTIONS.first
       image        = CONCLUSION_SCOPE_IMAGES[best_comment]
-      text         = I18n.t(
-        'conclusion_review.annex.satisfactory_control_objective_items',
-        count: count
-      )
+      text         =
+        I18n.t 'conclusion_review.annex.satisfactory_control_objective_items'
 
       [
         "#{Prawn::Text::NBSP * 4} #{text}",
