@@ -11,7 +11,8 @@ module RiskAssessments::PDF
     pdf.move_down PDF_FONT_SIZE
     pdf.add_title name, (PDF_FONT_SIZE * 1.25).round
 
-    put_risk_assessment_items_on pdf
+    put_risk_assessment_items_on        pdf
+    put_risk_assessment_item_details_on pdf
 
     pdf.custom_save_as pdf_name, RiskAssessment.table_name, id
   end
@@ -67,6 +68,38 @@ module RiskAssessments::PDF
       end
     end
 
+    def put_risk_assessment_item_details_on pdf
+      risk_assessment_items.each do |risk_assessment_item|
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text risk_assessment_item.name, align: :justify,
+          size: (PDF_FONT_SIZE * 0.75).round
+
+        put_risk_assessment_item_table_on pdf, risk_assessment_item
+      end
+    end
+
+    def put_risk_assessment_item_table_on pdf, risk_assessment_item
+      row_data = risk_assessment_weight_rows risk_assessment_item
+
+      pdf.move_down PDF_FONT_SIZE * 0.5
+
+      if row_data.present?
+        pdf.font_size (PDF_FONT_SIZE * 0.75).round do
+          table_options = pdf.default_table_options weight_column_widths(pdf)
+
+          pdf.table row_data.insert(0, weight_column_headers), table_options do
+            row(0).style(
+              background_color: 'cccccc',
+              padding: [
+                (PDF_FONT_SIZE * 0.5).round,
+                (PDF_FONT_SIZE * 0.3).round
+              ]
+            )
+          end
+        end
+      end
+    end
+
     def risk_assessment_item_rows
       risk_assessment_items.map do |risk_assessment_item|
         [
@@ -93,5 +126,33 @@ module RiskAssessments::PDF
 
     def column_widths pdf
       column_order.map { |col_name, col_with| pdf.percent_width(col_with) }
+    end
+
+    def risk_assessment_weight_rows risk_assessment_item
+      risk_assessment_item.risk_weights.map do |risk_weight|
+        [
+          risk_weight.risk_assessment_weight.name,
+          risk_weight.weight,
+          risk_weight.value
+        ]
+      end
+    end
+
+    def weight_column_order
+      [
+        [RiskAssessmentWeight.human_attribute_name('name'), 70],
+        [RiskWeight.human_attribute_name('weight'), 15],
+        [RiskWeight.human_attribute_name('value'), 15]
+      ]
+    end
+
+    def weight_column_headers
+      weight_column_order.map { |col_name, _| "<b>#{col_name}</b>" }
+    end
+
+    def weight_column_widths pdf
+      weight_column_order.map do |col_name, col_with|
+        pdf.percent_width(col_with)
+      end
     end
 end
