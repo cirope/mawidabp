@@ -403,9 +403,7 @@ es:
       scope: "Alcance de la tarea"
       scope_column: "Alcance de la tarea"
       staff: "Personal interviniente"
-      satisfactory_control_objective_items:
-        one: "Un objetivo de control evaluado satisfactoriamente"
-        other: "%{count} objetivos de control evaluados satisfactoriamente"
+      satisfactory_control_objective_items: "Resto de los Objetivos de Control"
     bundle:
       zip_name: "legajo_%{identification}.zip"
       control_objectives_dir: "%{prefix}_objetivos_de_control"
