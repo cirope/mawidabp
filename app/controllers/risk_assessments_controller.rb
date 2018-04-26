@@ -36,6 +36,10 @@ class RiskAssessmentsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf  { redirect_to risk_assessment_pdf_path }
+      format.csv  do
+        render csv: @risk_assessment.to_csv,
+          filename: @risk_assessment.name.downcase
+      end
     end
   end
 

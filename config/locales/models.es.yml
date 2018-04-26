@@ -109,8 +109,8 @@ es:
         one: 'Evaluación de riesgo'
         other: 'Evaluaciones de riesgo'
       risk_assessment_item:
-        one: 'Ítem de evaluación'
-        other: 'Items de evaluación'
+        one: 'Ítem evaluado'
+        other: 'Items evaluados'
       risk_assessment_template:
         one: 'Plantilla de evaluación de riesgo'
         other: 'Plantillas de evaluación de riesgo'
@@ -453,6 +453,7 @@ es:
         risk_assessment_template: 'Plantilla de evaluación de riesgo'
         status: 'Estado'
         file_model: "Anexo"
+        risk_assessment_weights: 'Ponderadores'
         risk_assessment_items: 'Ítems'
       risk_assessment/risk_assessment_items:
         name: 'Nombre (ítem)'

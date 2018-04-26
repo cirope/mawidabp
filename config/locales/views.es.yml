@@ -514,6 +514,7 @@ es:
     show:
       title: 'Ver evaluación de riesgo'
       download_pdf: 'Descargar PDF'
+      download_csv: 'Descargar CSV'
     form:
       new_risk_assessment_items: 'Luego de crear la evaluación de riesgo podrá agregar items a la misma'
       add_risk_assessment_item: 'Agregar item'
