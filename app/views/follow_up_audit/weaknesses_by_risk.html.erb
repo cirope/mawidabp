@@ -19,6 +19,7 @@
     :being_implemented_resume => @being_implemented_resumes[period]['total'],
     :highest_awaiting_resume => @highest_awaiting_resumes[period]['total'],
     :highest_being_implemented_resume => @highest_being_implemented_resumes[period]['total']} %>
+
   <% if @repeated_counts[period]['total'] > 0 %>
     <p>
       <%= t('follow_up_committee_report.repeated_count',
