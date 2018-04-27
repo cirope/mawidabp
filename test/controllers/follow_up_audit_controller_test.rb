@@ -799,6 +799,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
           :finding_title             => '1',
           :risk                      => '1',
           :priority                  => Finding.priorities_values.first,
+          :compliance                => 'yes',
+          :repeated                  => 'false',
           :issue_date                => Date.today.to_s(:db),
           :issue_date_operator       => '=',
           :origination_date          => Date.today.to_s(:db),
