@@ -244,7 +244,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       get :weaknesses_by_risk, :params => {
         :weaknesses_by_risk => {
           :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+          :to_date => 10.years.from_now.to_date,
+          :compliance => 'yes',
+          :repeated => 'false'
         },
         :controller_name => 'follow_up',
         :final => false
