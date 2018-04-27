@@ -6,9 +6,11 @@ module Reports::WeaknessesByRisk
   def weaknesses_by_risk
     @controller = params[:controller_name]
     final = params[:final] == 'true'
+    weaknesses_params = params[:weaknesses_by_risk] || {}
     @title = t("#{@controller}_committee_report.weaknesses_by_risk_title")
-    @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk])
+    @from_date, @to_date = *make_date_range(weaknesses_params)
     @periods = periods_for_interval
+    @filters = []
     @audit_types = [
       [:internal, BusinessUnitType.list.internal_audit.map {|but| [but.name, but.id]}],
       [:external, BusinessUnitType.list.external_audit.map {|but| [but.name, but.id]}]
@@ -23,6 +25,20 @@ module Reports::WeaknessesByRisk
     @highest_awaiting_resumes = {}
     @highest_being_implemented_resumes = {}
     highest_risk = RISK_TYPES.sort { |r1, r2| r1[1] <=> r2[1] }.last
+
+    if weaknesses_params[:repeated].present?
+      repeated = weaknesses_params[:repeated] == 'true'
+
+      @filters << "<b>#{t 'findings.state.repeated'}</b>: " +
+        t("label.#{repeated ? 'yes' : 'no'}")
+    end
+
+    if weaknesses_params[:compliance].present?
+      compliance = weaknesses_params[:compliance] == 'yes'
+
+      @filters << "<b>#{Weakness.human_attribute_name 'compliance' }</b>: " +
+        t("label.#{compliance ? 'yes' : 'no'}")
+    end
 
     @periods.each do |period|
       total_weaknesses_count = {}
@@ -57,10 +73,17 @@ module Reports::WeaknessesByRisk
               :current_rescheduled => 0, :stale_rescheduled => 0}
             audit_type_symbol = audit_type.kind_of?(Symbol) ?
               audit_type : audit_type.first
-            repeated_count = Finding.list_all_by_date(
-              @from_date, @to_date, false).send(
-              "#{audit_type_symbol}_audit").finals(false).repeated.for_period(
-              period).where(conditions).count
+
+            if weaknesses_params[:compliance].present?
+              conditions[:compliance] = weaknesses_params[:compliance]
+            end
+
+            repeated_count = weaknesses_by_risk_scope(
+              period: period,
+              audit_type: audit_type_symbol,
+              final: final,
+              conditions: conditions
+            ).repeated.count
 
             RISK_TYPES.each do |rl|
               weaknesses_count_by_risk[rl[0]] = 0
@@ -68,12 +91,15 @@ module Reports::WeaknessesByRisk
 
               statuses.each do |s|
                 weaknesses_count[s[1]] ||= {}
-                weaknesses_count[s[1]][rl[1]] = Weakness.list_all_by_date(
-                  @from_date, @to_date, false).with_status_for_report.send(
-                  "#{audit_type_symbol}_audit").for_period(period).finals(
-                  final).where(
-                    {:state => s[1], :risk => rl[1]}.merge(conditions || {})
-                  ).count
+                weaknesses_count[s[1]][rl[1]] = weaknesses_by_risk_scope(
+                  period: period,
+                  audit_type: audit_type_symbol,
+                  final: final,
+                  conditions: {
+                    :state => s[1],
+                    :risk => rl[1]
+                  }.merge(conditions || {})
+                ).with_status_for_report.count
                 weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
                 total_weaknesses_count_by_risk[rl[0]] +=
                   weaknesses_count[s[1]][rl[1]]
@@ -84,22 +110,22 @@ module Reports::WeaknessesByRisk
                   weaknesses_count[s[1]][rl[1]]
 
                 if s.first.to_s == 'awaiting'
-                  awaiting = Weakness.with_status_for_report.
-                    list_all_by_date(@from_date, @to_date, false).send(
-                    "#{audit_type_symbol}_audit").finals(false).for_period(
-                    period).awaiting.where(
-                    {:risk => rl[1]}.merge(conditions || {})
-                  )
+                  awaiting = weaknesses_by_risk_scope(
+                    period: period,
+                    audit_type: audit_type_symbol,
+                    final: final,
+                    conditions: {:risk => rl[1]}.merge(conditions || {})
+                  ).with_status_for_report.awaiting
 
                   fill_counts_for rl, highest_risk, awaiting, awaiting_counts,
                     highest_awaiting_counts
                 elsif s.first.to_s == 'being_implemented'
-                  being_implemented = Weakness.with_status_for_report.
-                    list_all_by_date(@from_date, @to_date, false).send(
-                    "#{audit_type_symbol}_audit").finals(false).for_period(
-                    period).being_implemented.where(
-                    {:risk => rl[1]}.merge(conditions || {})
-                  )
+                  being_implemented = weaknesses_by_risk_scope(
+                    period: period,
+                    audit_type: audit_type_symbol,
+                    final: final,
+                    conditions: {:risk => rl[1]}.merge(conditions || {})
+                  ).with_status_for_report.being_implemented
 
                   fill_counts_for rl, highest_risk, being_implemented,
                     being_implemented_counts, highest_being_implemented_counts
@@ -238,8 +264,32 @@ module Reports::WeaknessesByRisk
       end
     end
 
+    add_pdf_filters(pdf, @controller, @filters) if @filters.present?
+
     save_pdf(pdf, @controller, @from_date, @to_date, 'weaknesses_by_risk')
 
     redirect_to_pdf(@controller, @from_date, @to_date, 'weaknesses_by_risk')
   end
+
+  private
+
+    def weaknesses_by_risk_scope final: false, conditions: {}, period:, audit_type:
+      weaknesses_params = params[:weaknesses_by_risk] || {}
+      scope = Weakness.
+        list_all_by_date(@from_date, @to_date, false).
+        send("#{audit_type}_audit").
+        finals(final).
+        for_period(period).
+        where(conditions)
+
+      if weaknesses_params[:repeated].present?
+        if weaknesses_params[:repeated] == 'true'
+          scope.where.not(repeated_of: nil)
+        else
+          scope.where(repeated_of: nil)
+        end
+      else
+        scope
+      end
+    end
 end
