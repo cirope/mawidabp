@@ -1,7 +1,16 @@
 <%= render :partial => 'shared/filter_form',
-  :locals => {:action => :weaknesses_by_risk, :extra_params => {
-    :controller_name => 'conclusion', :final => true
-  }, :forms => {:date_range => true}} %>
+  :locals => {
+    :action => :weaknesses_by_risk,
+    :extra_params => {
+      :controller_name => 'conclusion',
+      :final => true
+    },
+    :forms => {
+      :date_range => true,
+      :repeated => true,
+      :compliance => SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+    }
+  } %>
 
 <% @periods.each do |period| %>
   <div class="page-header">
