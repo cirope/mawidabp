@@ -23,6 +23,10 @@ class BusinessUnit < ApplicationRecord
   belongs_to :business_unit_type, :optional => true
   has_many :plan_items, :dependent => :destroy
 
+  def to_s
+    name
+  end
+
   def as_json(options = nil)
     default_options = {
       :only => [:id],
