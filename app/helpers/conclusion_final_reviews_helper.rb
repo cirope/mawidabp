@@ -186,17 +186,37 @@ module ConclusionFinalReviewsHelper
   end
 
   def send_review_options
+    default = if SHOW_CONCLUSION_ALTERNATIVE_PDF && show_brief_download?
+                'brief'
+              else
+                'normal'
+              end
+
     options = if SHOW_CONCLUSION_ALTERNATIVE_PDF
                 ['normal', 'brief']
               else
                 ['normal', 'brief', 'without_score']
               end
 
+    options.delete 'brief' unless show_brief_download?
+
     select_options = options.map do |type|
       [t("conclusion_final_review.send_type.#{type}"), type]
     end
 
-    options_for_select select_options, 'normal'
+    options_for_select select_options, default
+  end
+
+  def show_review_best_practice_comments?
+    prefix = current_organization&.prefix
+
+    SHOW_REVIEW_BEST_PRACTICE_COMMENTS &&
+      ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(prefix)
+  end
+
+  def show_brief_download?
+    !show_review_best_practice_comments? &&
+      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.exclude?(current_organization.prefix)
   end
 
   def show_conclusion_review_issue_date conclusion_final_review

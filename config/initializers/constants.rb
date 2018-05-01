@@ -25,7 +25,7 @@ BLANK_PASSWORD_STALE_DAYS = 3
 # sistema notificará su proximidad
 CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS = 7
 # Expresión regular para validar direcciones de correo
-EMAIL_REGEXP = /\A[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\Z/i
+EMAIL_REGEXP = /\A[a-z0-9'._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\Z/i
 # Cantidad máxima de observaciones por PDF
 FINDING_MAX_PDF_ROWS = 100
 # Cantidad de días anteriores al vencimiento de una observación en los que el

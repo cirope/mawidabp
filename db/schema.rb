@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180313174906) do
+ActiveRecord::Schema.define(version: 20180419170510) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -209,6 +209,7 @@ ActiveRecord::Schema.define(version: 20180313174906) do
     t.text "main_weaknesses_text"
     t.text "corrective_actions"
     t.boolean "affects_compliance", default: false, null: false
+    t.boolean "collapse_control_objectives", default: false, null: false
     t.index ["close_date"], name: "i_con_rev_clo_dat"
     t.index ["issue_date"], name: "i_con_rev_iss_dat"
     t.index ["organization_id"], name: "i_con_rev_org_id"
@@ -2668,6 +2669,70 @@ ActiveRecord::Schema.define(version: 20180313174906) do
     t.index ["plan_item_id"], name: "index_reviews_on_plan_item_id"
   end
 
+  create_table "risk_assessment_items", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "risk", precision: 38, null: false
+    t.integer "order", precision: 38, default: 1, null: false
+    t.integer "business_unit_id", limit: 19, precision: 19
+    t.integer "process_control_id", limit: 19, precision: 19
+    t.integer "risk_assessment_id", limit: 19, precision: 19, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["business_unit_id"], name: "i_ris_ass_ite_bus_uni_id"
+    t.index ["process_control_id"], name: "i_ris_ass_ite_pro_con_id"
+    t.index ["risk_assessment_id"], name: "i_ris_ass_ite_ris_ass_id"
+  end
+
+  create_table "risk_assessment_templates", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "lock_version", precision: 38, default: 0, null: false
+    t.integer "organization_id", limit: 19, precision: 19, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "i_ris_ass_tem_org_id"
+  end
+
+  create_table "risk_assessment_weights", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "weight", precision: 38, null: false
+    t.integer "risk_assessment_template_id", limit: 19, precision: 19, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["risk_assessment_template_id"], name: "i_ris_ass_wei_ris_ass_tem_id"
+  end
+
+  create_table "risk_assessments", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "status", precision: 38, default: 0, null: false
+    t.integer "lock_version", precision: 38, default: 0, null: false
+    t.integer "period_id", limit: 19, precision: 19, null: false
+    t.integer "plan_id", limit: 19, precision: 19
+    t.integer "risk_assessment_template_id", limit: 19, precision: 19, null: false
+    t.integer "organization_id", limit: 19, precision: 19, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "file_model_id", precision: 38
+    t.index ["file_model_id"], name: "i_ris_ass_fil_mod_id"
+    t.index ["organization_id"], name: "i_ris_ass_org_id"
+    t.index ["period_id"], name: "i_risk_assessments_period_id"
+    t.index ["plan_id"], name: "i_risk_assessments_plan_id"
+    t.index ["risk_assessment_template_id"], name: "i_ris_ass_ris_ass_tem_id"
+  end
+
+  create_table "risk_weights", force: :cascade do |t|
+    t.integer "value", precision: 38
+    t.integer "weight", precision: 38, null: false
+    t.integer "risk_assessment_weight_id", limit: 19, precision: 19, null: false
+    t.integer "risk_assessment_item_id", limit: 19, precision: 19, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["risk_assessment_item_id"], name: "i_ris_wei_ris_ass_ite_id"
+    t.index ["risk_assessment_weight_id"], name: "i_ris_wei_ris_ass_wei_id"
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string "name"
     t.integer "role_type", precision: 38
@@ -2988,6 +3053,18 @@ ActiveRecord::Schema.define(version: 20180313174906) do
   add_foreign_key "reviews", "file_models", on_delete: :cascade
   add_foreign_key "reviews", "periods", on_delete: :cascade
   add_foreign_key "reviews", "plan_items", on_delete: :cascade
+  add_foreign_key "risk_assessment_items", "business_units", on_delete: :cascade
+  add_foreign_key "risk_assessment_items", "process_controls", on_delete: :cascade
+  add_foreign_key "risk_assessment_items", "risk_assessments", on_delete: :cascade
+  add_foreign_key "risk_assessment_templates", "organizations", on_delete: :cascade
+  add_foreign_key "risk_assessment_weights", "risk_assessment_templates", on_delete: :cascade
+  add_foreign_key "risk_assessments", "file_models", on_delete: :cascade
+  add_foreign_key "risk_assessments", "organizations", on_delete: :cascade
+  add_foreign_key "risk_assessments", "periods", on_delete: :cascade
+  add_foreign_key "risk_assessments", "plans", on_delete: :cascade
+  add_foreign_key "risk_assessments", "risk_assessment_templates", on_delete: :cascade
+  add_foreign_key "risk_weights", "risk_assessment_items", on_delete: :cascade
+  add_foreign_key "risk_weights", "risk_assessment_weights", on_delete: :cascade
   add_foreign_key "roles", "organizations", on_delete: :cascade
   add_foreign_key "settings", "organizations", on_delete: :cascade
   add_foreign_key "taggings", "tags", on_delete: :cascade

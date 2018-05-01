@@ -7,7 +7,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
   setup do
-    @request.host = "#{organizations(:cirope).prefix}.localhost.i"
+    set_host_for_organization(organizations(:cirope).prefix)
   end
 
   # Prueba que sin realizar autenticación esten accesibles las partes publicas

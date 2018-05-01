@@ -39,7 +39,7 @@ class AuthenticationTest < ActionController::TestCase
   end
 
   test 'no group admin user attempt login in admin mode' do
-    request.host = "#{APP_ADMIN_PREFIXES.first}.localhost.i"
+    request.host = [APP_ADMIN_PREFIXES.first, URL_HOST].join('.')
     @user.update_column :group_admin, false
 
     assert_invalid_authentication admin_mode: true
