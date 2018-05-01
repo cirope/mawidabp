@@ -1,6 +1,6 @@
 module Reports::PlannedCostSummary
   include Reports::Period
-  include Reports::Pdf
+  include Reports::PDF
 
   def planned_cost_summary
     init_planned_cost_summary_vars
