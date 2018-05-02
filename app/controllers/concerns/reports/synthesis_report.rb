@@ -1,5 +1,5 @@
 module Reports::SynthesisReport
-  include Reports::Pdf
+  include Reports::PDF
   include Parameters::Risk
 
   def synthesis_report

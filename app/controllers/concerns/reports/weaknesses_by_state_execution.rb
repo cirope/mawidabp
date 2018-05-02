@@ -1,5 +1,5 @@
 module Reports::WeaknessesByStateExecution
-  include Reports::Pdf
+  include Reports::PDF
 
   def weaknesses_by_state_execution
     init_instance_vars
