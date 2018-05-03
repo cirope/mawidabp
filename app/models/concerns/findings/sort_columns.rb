@@ -120,7 +120,7 @@ module Findings::SortColumns
         order_by_readings << 'END DESC'
 
         {
-          name: 'Tuhna en tanga',
+          name: 'Order by readings',  # translate
           field: order_by_readings,
           extra_joins: [:left_outer_joins, :finding_answers, finding_answers: :readings],
           groups_for_joins: [:id, 'finding_answers.id', 'readings.id']
