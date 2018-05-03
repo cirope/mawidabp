@@ -1,7 +1,7 @@
 module Reports::WeaknessesByMonth
   extend ActiveSupport::Concern
 
-  include Reports::Pdf
+  include Reports::PDF
   include Reports::Period
 
   def weaknesses_by_month
@@ -62,7 +62,7 @@ module Reports::WeaknessesByMonth
         sort_by_conclusion(conclusion_review_per_unit_type).each do |c_r|
           weaknesses = final ? c_r.review.final_weaknesses : c_r.review.weaknesses
           weaknesses = weaknesses.by_risk(risk) if risk.present?
-          report_weaknesses = weaknesses.with_pending_status_for_report
+          report_weaknesses = weaknesses.with_status_for_report
           report_weaknesses = report_weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
           report_weaknesses = report_weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
 
@@ -106,7 +106,12 @@ module Reports::WeaknessesByMonth
 
           weaknesses = data[:weaknesses]
 
-          put_weaknesses_by_month_main_weaknesses_on  pdf, weaknesses
+          if conclusion_review.main_weaknesses_text.present?
+            put_weaknesses_by_month_main_weaknesses_text_on pdf, conclusion_review
+          else
+            put_weaknesses_by_month_main_weaknesses_on  pdf, weaknesses
+          end
+
           put_weaknesses_by_month_other_weaknesses_on pdf, weaknesses
         end
       else
@@ -208,6 +213,28 @@ module Reports::WeaknessesByMonth
       image_y    = pdf.cursor + 1
 
       pdf.image image_path, fit: [10, 10], at: [image_x, image_y]
+    end
+
+    def put_weaknesses_by_month_main_weaknesses_text_on pdf, conclusion_review
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text I18n.t("#{@controller}_committee_report.weaknesses_by_month.main_weaknesses"),
+        style: :bold, size: PDF_FONT_SIZE
+
+      pdf.indent PDF_FONT_SIZE do
+        pdf.move_down (PDF_FONT_SIZE * 0.5).round
+        pdf.text conclusion_review.main_weaknesses_text, align: :justify,
+          inline_format: true
+      end
+
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text ConclusionReview.human_attribute_name('corrective_actions'),
+        style: :bold, size: PDF_FONT_SIZE
+
+      pdf.indent PDF_FONT_SIZE do
+        pdf.move_down (PDF_FONT_SIZE * 0.5).round
+        pdf.text conclusion_review.corrective_actions, align: :justify,
+          inline_format: true
+      end
     end
 
     def put_weaknesses_by_month_main_weaknesses_on pdf, weaknesses

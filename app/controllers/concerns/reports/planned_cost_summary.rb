@@ -1,18 +1,22 @@
 module Reports::PlannedCostSummary
   include Reports::Period
-  include Reports::Pdf
+  include Reports::PDF
 
   def planned_cost_summary
     init_planned_cost_summary_vars
 
     @periods.each do |period|
-      plan_items_by_month = @plan_items.for_period(period).group_by do |plan_item|
-        plan_item.start.beginning_of_month.to_date
+      items               = @plan_items.for_period period
+      plan_items_by_month = items.each_with_object({}) do |plan_item, result|
+        plan_item.month_beginnings.each do |month|
+          result[month] ||= []
+          result[month] <<  plan_item
+        end
       end
 
       @data[period] = {
         data:   planned_cost_summary_data_for(plan_items_by_month),
-        months: plan_items_by_month.keys.sort
+        months: plan_items_by_month.keys.flatten.uniq.sort
       }
     end
   end
@@ -58,48 +62,40 @@ module Reports::PlannedCostSummary
       data = {}
 
       Hash[plan_items_by_month.sort].each do |date, plan_items|
-        planned  = ResourceUtilization.human.joins(:user).items_planned_on  plan_items
-        executed = ResourceUtilization.human.joins(:user).items_executed_on plan_items
+        plan_items.each do |plan_item|
+          put_cost_summary_for data, date, plan_item
+        end
 
-        put_planned_data_on   data, planned, date
-        put_executed_data_on  data, executed, date
         put_deviation_data_on data, date
       end
-
       data
     end
 
-    def put_planned_data_on data, planned, date
-      planned.group(:resource_id, :name, :last_name).sum(:units).each do |user_data, sum|
-        user_id = user_data.first
+    def put_cost_summary_for data, date, plan_item
+      spreads = plan_item.month_spreads
 
-        data[user_id] ||= {
-          name: [user_data.last, user_data.second].join(', '),
-          data: {}
+      plan_item.human_resource_utilizations.each do |hru|
+        units = hru.units * spreads[date]
+
+        data[hru.resource_id] ||= { name: hru.resource.full_name, data: {} }
+
+        data[hru.resource_id][:data][date] ||= {
+          planned_units:  0,
+          executed_units: 0
         }
 
-        data[user_id][:data][date] = { planed_units: sum }
-      end
-    end
+        data[hru.resource_id][:data][date][:planned_units] += units
 
-    def put_executed_data_on data, executed, date
-      executed.group(:resource_id, :name, :last_name).sum(:units).each do |user_data, sum|
-        user_id = user_data.first
-
-        data[user_id] ||= {
-          name: [user_data.last, user_data.second].join(', '),
-          data: {}
-        }
-
-        data[user_id][:data][date] ||= {}
-        data[user_id][:data][date][:executed_units] = sum
+        if plan_item.review
+          data[hru.resource_id][:data][date][:executed_units] += units
+        end
       end
     end
 
     def put_deviation_data_on data, date
       data.each do |user_id, user_data|
         if user_data[:data][date]
-          estimated  = user_data[:data][date][:planed_units] || 0
+          estimated  = user_data[:data][date][:planned_units] || 0
           real       = user_data[:data][date][:executed_units] || 0
           difference = estimated - real
           deviation  = real > 0 ? difference / real.to_f * 100 : (estimated > 0 ? 100 : 0)
@@ -150,7 +146,7 @@ module Reports::PlannedCostSummary
 
         [
           I18n.l(month, format: '%b-%y'),
-          '%.2f' % (month_data[:planed_units] || 0),
+          '%.2f' % (month_data[:planned_units] || 0),
           '%.2f' % (month_data[:executed_units] || 0),
           '%.0f%%' % (month_data[:deviation] || 0)
         ]

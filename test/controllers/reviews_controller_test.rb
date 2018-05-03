@@ -480,6 +480,14 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_redirected_to review_url(reviews(:review_without_conclusion))
   end
 
+  test 'reorder' do
+    login
+
+    patch :reorder, params: { id: reviews(:review_without_conclusion).id }
+
+    assert_redirected_to review_url(reviews(:review_without_conclusion))
+  end
+
   test 'next identification number' do
     login
 
@@ -570,6 +578,42 @@ class ReviewsControllerTest < ActionController::TestCase
     process_controls = ActiveSupport::JSON.decode(@response.body)
 
     assert_equal 0, process_controls.size # None
+  end
+
+  test 'auto complete for best practices' do
+    login
+    get :auto_complete_for_best_practice, xhr: true, params: {
+      q: 'a'
+    }, as: :json
+    assert_response :success
+
+    best_practices = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 2, best_practices.size
+    assert(
+      best_practices.all? { |bp| bp['label'].match /a/i }
+    )
+
+    get :auto_complete_for_best_practice, xhr: true, params: {
+      q: 'iso'
+    }, as: :json
+    assert_response :success
+
+    best_practices = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, best_practices.size
+    assert(
+      best_practices.all? { |bp| bp['label'].match /iso/i }
+    )
+
+    get :auto_complete_for_best_practice, xhr: true, params: {
+      q: 'xyz'
+    }, as: :json
+    assert_response :success
+
+    best_practices = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, best_practices.size # None
   end
 
   test 'auto complete for finding relation' do

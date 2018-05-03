@@ -1,3 +1,5 @@
+@import "bootstrap/variables";
+
 body {
   padding-top: 60px;
   margin-bottom: 20px;
@@ -94,6 +96,17 @@ table th.not_available {
 
 textarea {
   resize: vertical;
+}
+
+:target:before {
+  content: "";
+  display: block;
+  height: 80px;
+  margin: -80px 0 0;
+}
+
+:target table {
+  border: 3px solid $alert-warning-border !important;
 }
 
 [data-controller="best_practices"] {

@@ -69,6 +69,18 @@ module Reports::WeaknessesReport
         weaknesses = weaknesses.where current_situation_verified: verified
       end
 
+      if report_params[:repeated].present?
+        if report_params[:repeated] == 'true'
+          weaknesses = weaknesses.where.not repeated_of: nil
+        else
+          weaknesses = weaknesses.where repeated_of: nil
+        end
+      end
+
+      if report_params[:compliance].present?
+        weaknesses = weaknesses.where compliance: report_params[:compliance]
+      end
+
       if report_params[:finding_title].present?
         weaknesses = weaknesses.with_title report_params[:finding_title]
       end
@@ -230,7 +242,15 @@ module Reports::WeaknessesReport
     end
 
     def add_filter_options_to_pdf pdf
-      value_filter_names = %i(risk priority finding_status finding_current_situation_verified user_in_comments)
+      value_filter_names = %i(
+        risk
+        priority
+        finding_status
+        repeated
+        compliance
+        finding_current_situation_verified
+        user_in_comments
+      )
       filters            = []
       labels             = {
         review:                             Review.model_name.human,
@@ -245,6 +265,8 @@ module Reports::WeaknessesReport
         risk:                               Weakness.human_attribute_name('risk'),
         priority:                           Weakness.human_attribute_name('priority'),
         finding_current_situation_verified: Weakness.human_attribute_name('current_situation_verified'),
+        repeated:                           t('findings.state.repeated'),
+        compliance:                         Weakness.human_attribute_name('compliance'),
         issue_date:                         ConclusionFinalReview.human_attribute_name('issue_date'),
         origination_date:                   Weakness.human_attribute_name('origination_date'),
         follow_up_date:                     Weakness.human_attribute_name('follow_up_date'),
@@ -286,6 +308,14 @@ module Reports::WeaknessesReport
         value == 1 ? t('label.yes') : t('label.no')
       when :finding_current_situation_verified
         t "label.#{params[:weaknesses_report][param_name]}"
+      when :repeated
+        value = params[:weaknesses_report][param_name] == 'true'
+
+        value ? t('label.yes') : t('label.no')
+      when :compliance
+        value = params[:weaknesses_report][param_name] == 'yes'
+
+        value ? t('label.yes') : t('label.no')
       end
     end
 end
