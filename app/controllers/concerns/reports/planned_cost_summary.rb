@@ -51,10 +51,8 @@ module Reports::PlannedCostSummary
       @plan_items = PlanItem.list.where(start: @from_date..@to_date)
 
       @column_order = [
-        ['month', 20],
-        ['estimated_amount', 30],
-        ['real_amount', 30],
-        ['deviation', 20]
+        ['month', 35],
+        ['estimated_amount', 65]
       ]
     end
 
@@ -65,9 +63,8 @@ module Reports::PlannedCostSummary
         plan_items.each do |plan_item|
           put_cost_summary_for data, date, plan_item
         end
-
-        put_deviation_data_on data, date
       end
+
       data
     end
 
@@ -77,48 +74,35 @@ module Reports::PlannedCostSummary
       plan_item.human_resource_utilizations.each do |hru|
         units = hru.units * spreads[date]
 
-        data[hru.resource_id] ||= { name: hru.resource.full_name, data: {} }
-
-        data[hru.resource_id][:data][date] ||= {
-          planned_units:  0,
-          executed_units: 0
+        data[hru.resource_id] ||= {
+          name: hru.resource.full_name,
+          total: 0,
+          data: {}
         }
 
+        data[hru.resource_id][:data][date] ||= { planned_units:  0 }
+
         data[hru.resource_id][:data][date][:planned_units] += units
-
-        if plan_item.review
-          data[hru.resource_id][:data][date][:executed_units] += units
-        end
-      end
-    end
-
-    def put_deviation_data_on data, date
-      data.each do |user_id, user_data|
-        if user_data[:data][date]
-          estimated  = user_data[:data][date][:planned_units] || 0
-          real       = user_data[:data][date][:executed_units] || 0
-          difference = estimated - real
-          deviation  = real > 0 ? difference / real.to_f * 100 : (estimated > 0 ? 100 : 0)
-
-          user_data[:data][date][:deviation] = deviation
-        end
+        data[hru.resource_id][:total] += units
       end
     end
 
     def put_planned_cost_summary_on pdf, period
       @data[period][:data].each do |user_id, data|
+        pdf.move_down PDF_FONT_SIZE
         pdf.text "<b>#{data[:name]}</b>", inline_format: true, font_size: PDF_FONT_SIZE
         pdf.move_down PDF_FONT_SIZE
 
-        put_user_planned_cost_summary_on pdf, data[:data], @data[period][:months]
+        put_user_planned_cost_summary_on pdf,
+          data: data[:data], months: @data[period][:months], total: data[:total]
 
         pdf.move_down PDF_FONT_SIZE
       end
     end
 
-    def put_user_planned_cost_summary_on pdf, data, months
+    def put_user_planned_cost_summary_on pdf, data:, months:, total:
       column_headers, column_widths = [], []
-      table_data = user_planned_cost_summary_table_data data, months
+      table_data = user_planned_cost_summary_table_data data, months, total
 
       @column_order.each do |column|
         column_headers << "<b>#{t("execution_reports.planned_cost_summary.column_#{column.first}")}</b>"
@@ -140,17 +124,20 @@ module Reports::PlannedCostSummary
       end
     end
 
-    def user_planned_cost_summary_table_data data, months
-      months.map do |month|
+    def user_planned_cost_summary_table_data data, months, total
+      result = months.map do |month|
         month_data = data[month] || {}
 
         [
           I18n.l(month, format: '%b-%y'),
-          '%.2f' % (month_data[:planned_units] || 0),
-          '%.2f' % (month_data[:executed_units] || 0),
-          '%.0f%%' % (month_data[:deviation] || 0)
+          '%.2f' % (month_data[:planned_units] || 0)
         ]
       end
+
+      result << [
+        "<b>#{I18n.t 'label.total'}</b>",
+        "<b>#{'%.2f' % total}</b>"
+      ]
     end
 
     def save_and_redirect_to_planned_cost_summary_pdf pdf
