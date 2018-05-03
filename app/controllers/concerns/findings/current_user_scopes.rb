@@ -116,12 +116,44 @@ module Findings::CurrentUserScopes
     end
 
     def filtered_current_user_findings
-      scoped_findings.
+      scope = scoped_findings.
         includes(*current_user_includes).
-        left_joins(:users).
-        where(@conditions).
+        left_joins(:users)
+
+      if @extra_joins
+        (scope = scope.send(*@extra_joins)) rescue nil
+      end
+
+      if @groups_for_joins
+        begin
+          refs = @groups_for_joins
+          refs += includes_to_group(
+            scope.joined_includes_values +
+            scope.includes_values +
+            current_user_references
+          ).flatten.uniq.map do |ref|
+            "#{ref.to_s.singularize.camelize.constantize.table_name}.id"
+          end.flatten.uniq
+
+          scope = scope.group(*refs.uniq)
+        rescue
+          nil
+        end
+      end
+
+      scope.where(@conditions).
         order(@order_by || current_user_default_sort_columns).
         references(*current_user_references)
+    end
+
+    def includes_to_group(includes)
+      [includes].flatten.map do |i|
+        if i.try(:values).present?
+          [i.keys + includes_to_group(i.values)]
+        else
+          i
+        end
+      end.flatten
     end
 
     def current_user_includes

@@ -19,7 +19,8 @@ module Findings::SortColumns
         updated_at_asc:      updated_at_asc_options,
         updated_at_desc:     updated_at_desc_options,
         follow_up_date_asc:  follow_up_date_asc_options,
-        follow_up_date_desc: follow_up_date_desc_options
+        follow_up_date_desc: follow_up_date_desc_options,
+        readings_desc:       readings_desc_options
       )
     end
 
@@ -107,6 +108,24 @@ module Findings::SortColumns
         order_label = { 'ASC' => 'ascendant', 'DESC' => 'descendant' }[order]
 
         " (#{I18n.t "label.#{order_label}"})" if order
+      end
+
+      def readings_desc_options
+        reading_user = 'COUNT(readings.user_id)'
+        finding_user = 'COUNT(finding_answers.user_id)'
+
+        order_by_readings = "CASE \n"
+        order_by_readings << "WHEN (#{reading_user} < #{finding_user}) then (#{finding_user} - #{reading_user}) \n"
+        order_by_readings << "ELSE 0 \n"
+        order_by_readings << 'END DESC'
+
+        {
+          name: 'Tuhna en tanga',
+          field: order_by_readings,
+          extra_joins: [:left_outer_joins, :finding_answers, finding_answers: :readings],
+          groups_for_joins: [:id, 'finding_answers.id', 'readings.id']
+          # groups_for_joins: [:id, 'finding_answers.id', 'readings.id', 'conclusion_reviews.id', 'periods.id', 'plan_items.id', 'tags.id', 'organizations.id'] WTF....
+        }
       end
   end
 end

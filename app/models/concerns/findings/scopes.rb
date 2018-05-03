@@ -90,26 +90,5 @@ module Findings::Scopes
 
       includes(review: :conclusion_final_review).where condition, *[date, date_until].compact
     end
-
-    def ordered_by_readings
-      reading_user = 'COUNT(readings.user_id)'
-      finding_user = 'COUNT(finding_answers.user_id)'
-
-      order_by_readings = "CASE \n"
-      order_by_readings << "WHEN (#{reading_user} < #{finding_user}) then (#{finding_user} - #{reading_user}) \n"
-      order_by_readings << "ELSE 0 \n"
-      order_by_readings << 'END DESC'
-
-      # select(
-      #   "#{table_name}.*, #{finding_user} as answers_count, #{reading_user} as readings_count"
-      # ).
-      left_outer_joins(
-        :finding_answers, finding_answers: :readings
-      ).group(
-        :id, 'finding_answers.id', 'readings.id'
-      ).order(
-        order_by_readings
-      )
-    end
   end
 end
