@@ -23,7 +23,7 @@ module Findings::SortColumns
         updated_at_asc:      updated_at_asc_options,
         updated_at_desc:     updated_at_desc_options,
         follow_up_date_asc:  follow_up_date_asc_options,
-        follow_up_date_desc: follow_up_date_desc_options,
+        follow_up_date_desc: follow_up_date_desc_options
       )
     end
 
