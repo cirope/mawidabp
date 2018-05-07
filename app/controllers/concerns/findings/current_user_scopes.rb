@@ -121,23 +121,22 @@ module Findings::CurrentUserScopes
         left_joins(:users)
 
       if @extra_joins
-        (scope = scope.send(*@extra_joins)) rescue nil
-      end
-
-      if @groups_for_joins
         begin
-          refs = @groups_for_joins
-          refs += includes_to_group(
-            scope.joined_includes_values +
-            scope.includes_values +
-            current_user_references
-          ).flatten.uniq.map do |ref|
-            "#{ref.to_s.singularize.camelize.constantize.table_name}.id"
-          end.flatten.uniq
+          # if any of this raise an exception we don't want to affect the scope
+          new_scope = scope.send(*@extra_joins)
 
-          scope = scope.group(*refs.uniq)
+          refs = [:id]
+          refs += deep_to_a(
+            new_scope.joins_values.to_a +
+            new_scope.includes_values.to_a
+          ).flatten.uniq.map do |ref|
+            # We need the real table name (STI models)
+            "#{ref.to_s.singularize.camelize.constantize.table_name}.id"
+          end
+
+          scope = new_scope.group(*refs.flatten.uniq)
         rescue
-          nil
+          @order_by = nil  # Ensure that the order will not break anything
         end
       end
 
@@ -146,14 +145,12 @@ module Findings::CurrentUserScopes
         references(*current_user_references)
     end
 
-    def includes_to_group(includes)
-      [includes].flatten.map do |i|
-        if i.try(:values).present?
-          [i.keys + includes_to_group(i.values)]
-        else
-          i
-        end
-      end.flatten
+    def deep_to_a(value)
+      return [value] unless value.respond_to?(:to_a)
+
+      value.to_a.map do |v|
+        deep_to_a(v)
+      end
     end
 
     def current_user_includes

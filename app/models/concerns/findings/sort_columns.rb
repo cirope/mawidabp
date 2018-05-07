@@ -13,6 +13,10 @@ module Findings::SortColumns
         priority_desc:       priority_desc_options,
       ) unless HIDE_WEAKNESS_PRIORITY
 
+      columns.merge!(
+        readings_desc: readings_desc_options
+      ) if USING_POSTGRESQL_DB
+
       columns.merge(
         state:               state_options,
         review:              review_options,
@@ -20,7 +24,6 @@ module Findings::SortColumns
         updated_at_desc:     updated_at_desc_options,
         follow_up_date_asc:  follow_up_date_asc_options,
         follow_up_date_desc: follow_up_date_desc_options,
-        readings_desc:       readings_desc_options
       )
     end
 
@@ -120,11 +123,9 @@ module Findings::SortColumns
         order_by_readings << 'END DESC'
 
         {
-          name: 'Tuhna en tanga',
+          name: "#{I18n.t('findings.index.unread_answers_filter')}#{order_label('DESC')}",
           field: order_by_readings,
-          extra_joins: [:left_outer_joins, :finding_answers, finding_answers: :readings],
-          groups_for_joins: [:id, 'finding_answers.id', 'readings.id']
-          # groups_for_joins: [:id, 'finding_answers.id', 'readings.id', 'conclusion_reviews.id', 'periods.id', 'plan_items.id', 'tags.id', 'organizations.id'] WTF....
+          extra_joins: [:left_outer_joins, :finding_answers, finding_answers: :readings]
         }
       end
   end

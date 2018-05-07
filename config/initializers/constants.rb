@@ -79,3 +79,5 @@ SEARCH_ALLOWED_OPERATORS = HashWithIndifferentAccess.new({
     /^\s*(<=|hasta|to)\s+/i => '<=',
     /^\s*[^<>]=\s+/ => '='
 })
+# Booleano para indicar que el adaptador de la DB es PostgreSQL y no otro.
+USING_POSTGRESQL_DB = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
