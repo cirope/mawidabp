@@ -141,7 +141,7 @@ module Findings::CurrentUserScopes
       end
 
       scope.where(@conditions).
-        order(@order_by || current_user_default_sort_columns).
+        order(@order_by || current_user_default_sort_columns, 'findings.id').  # default second order
         references(*current_user_references)
     end
 
