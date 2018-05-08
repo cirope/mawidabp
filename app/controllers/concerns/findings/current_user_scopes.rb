@@ -146,11 +146,11 @@ module Findings::CurrentUserScopes
     end
 
     def deep_to_a(value)
+      # Helper para transformar todos los includes/joins
+      # a un array para poder iterarlos.
       return [value] unless value.respond_to?(:to_a)
 
-      value.to_a.map do |v|
-        deep_to_a(v)
-      end
+      value.to_a.map { |v| deep_to_a(v) }
     end
 
     def current_user_includes

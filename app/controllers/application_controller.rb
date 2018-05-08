@@ -228,7 +228,6 @@ class ApplicationController < ActionController::Base
         @order_by             = order_data[:field]
         @order_by_column_name = order_data[:name]
         @extra_joins          = order_data[:extra_joins]
-        @groups_for_joins     = order_data[:groups_for_joins]
       end
 
       if params[:search] && params[:search][:query].present?
