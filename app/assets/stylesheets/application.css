@@ -19,6 +19,8 @@
  *= require process_controls
  *= require readings
  *= require reports
+ *= require risk_assessments
+ *= require risk_assessment_templates
  *= require roles
  *= require sessions
  *= require tags

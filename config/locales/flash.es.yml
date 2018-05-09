@@ -88,6 +88,28 @@ es:
         notice: 'Clase de recurso eliminada'
         alert: 'La clase de recurso no pudo ser eliminada'
 
+    risk_assessments:
+      create:
+        notice: 'Evaluación de riesgo agregada correctamente'
+      merge_to_plan:
+        notice: 'Plan actualizado correctamente'
+      update:
+        notice: 'Evaluación de riesgo actualizada correctamente'
+        stale: 'La evaluación de riesgo no fue actualizada, intente nuevamente'
+      destroy:
+        notice: 'Evaluación de riesgo eliminada'
+      sort_by_risk:
+        notice: 'Evaluación de riesgo ordenada correctamente'
+
+    risk_assessment_templates:
+      create:
+        notice: 'Plantilla de evaluación de riesgo agregada correctamente'
+      update:
+        notice: 'Plantilla de evaluación de riesgo actualizada correctamente'
+        stale: 'La plantilla de evaluación de riesgo no fue actualizada, intente nuevamente'
+      destroy:
+        notice: 'Plantilla de evaluación de riesgo eliminada'
+
     settings:
       update:
         notice: 'Configuración actualizada correctamente'

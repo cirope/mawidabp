@@ -580,6 +580,42 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 0, process_controls.size # None
   end
 
+  test 'auto complete for best practices' do
+    login
+    get :auto_complete_for_best_practice, xhr: true, params: {
+      q: 'a'
+    }, as: :json
+    assert_response :success
+
+    best_practices = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 2, best_practices.size
+    assert(
+      best_practices.all? { |bp| bp['label'].match /a/i }
+    )
+
+    get :auto_complete_for_best_practice, xhr: true, params: {
+      q: 'iso'
+    }, as: :json
+    assert_response :success
+
+    best_practices = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, best_practices.size
+    assert(
+      best_practices.all? { |bp| bp['label'].match /iso/i }
+    )
+
+    get :auto_complete_for_best_practice, xhr: true, params: {
+      q: 'xyz'
+    }, as: :json
+    assert_response :success
+
+    best_practices = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, best_practices.size # None
+  end
+
   test 'auto complete for finding relation' do
     login
     get :auto_complete_for_finding, xhr: true, params: { q: 'O001' }, as: :json
