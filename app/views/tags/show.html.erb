@@ -5,6 +5,11 @@
   </div>
 </h2>
 
+<p>
+  <strong><%= Tag.human_attribute_name 'shared' %></strong>:
+  <%= t "label.#{@tag.shared ? 'yes' : 'no'}" %>
+</p>
+
 <hr>
 
 <%= link_to_edit [:edit, @tag, kind: @tag.kind] %> |

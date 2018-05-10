@@ -41,6 +41,8 @@
 //= require process_controls
 //= require readings
 //= require reviews
+//= require risk_assessments
+//= require risk_assessment_templates
 //= require sessions
 //= require tags
 //= require touch
