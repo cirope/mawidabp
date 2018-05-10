@@ -1,8 +1,8 @@
-function () {
+(function () {
   $('#planned-items').
     html('<%= j render_business_unit_type_plan_items %>').
     find('.panel').
-    effect('highlight')
+    effect('highlight');
 
-  setTimeout(function () { location.hash = 'planned-items' })
-}()
+  setTimeout(function () { location.hash = 'planned-items' });
+})()
