@@ -292,5 +292,4 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
       coi.control_objective.name
     )
   end
-
 end
