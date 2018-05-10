@@ -7,8 +7,8 @@ module Reviews::Reorder
       pc1 = group1.first
       pc2 = group2.first
 
-      if pc1.name.to_i > 0 && pc2.name.to_i > 0
-        pc1.name.to_i <=> pc2.name.to_i
+      if pc1.name.to_f > 0 && pc2.name.to_f > 0
+        pc1.name.to_f <=> pc2.name.to_f
       else
         pc1.name <=> pc2.name
       end
