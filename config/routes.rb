@@ -311,7 +311,10 @@ Rails.application.routes.draw do
   end
 
   resources :control_objective_items do
-    get :suggest_next_work_paper_code, on: :member
+    member do
+      get :suggest_next_work_paper_code
+      put :recover_original_name
+    end
 
     collection do
       get :auto_complete_for_business_unit

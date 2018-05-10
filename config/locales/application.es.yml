@@ -457,6 +457,7 @@ es:
     not_apply_text: 'No aplica calificación'
     excluded_from_score: "No se tiene en cuenta en la calificación del informe"
     not_applicable: "No aplica"
+    different_name_want_to_change: 'El nombre original del objetivo de control ha cambiado, quiere restaurarlo?'
     errors:
       not_finished: "no está terminado"
       audit_date_ahead_of_issue_date: "la fecha de auditoría es mayor a la fecha de emisión del informe"

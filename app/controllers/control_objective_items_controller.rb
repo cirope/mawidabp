@@ -4,7 +4,7 @@ class ControlObjectiveItemsController < ApplicationController
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_control_objective_item, only: [
-    :show, :edit, :update, :destroy
+    :show, :edit, :update, :destroy, :recover_original_name
   ]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
@@ -115,6 +115,16 @@ class ControlObjectiveItemsController < ApplicationController
       format.html {
         redirect_to(control_objective_items_url)
       }
+    end
+  end
+
+  def recover_original_name
+    @control_objective_item.update(
+      control_objective_text: @control_objective_item.control_objective.name
+    )
+
+    respond_to do |format|
+      format.js
     end
   end
 

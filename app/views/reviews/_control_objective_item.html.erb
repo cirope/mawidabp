@@ -20,6 +20,10 @@
         <%= content_tag :span, control_objective_item.control_objective_text,
           :class => review_control_objective_class(control_objective_item) %>
         <% if !readonly %>
+          <% unless control_objective_item.original_text? %>
+            <span class="text-muted">|</span>
+            <%= link_to_recover_original_control_objective_name(control_objective_item) %>
+          <% end %>
           <span class="text-muted">|</span>
           <%= link_to_move %>
           <span class="text-muted">|</span>

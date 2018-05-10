@@ -1,0 +1,5 @@
+$('.js-control-objective-item-<%= @control_objective_item.id %>').
+  html('<%=j @control_objective_item.control_objective_text %>').
+  effect('highlight').
+  parents('li:first').find('.js-recover-original-name').
+  remove();

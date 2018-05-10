@@ -170,7 +170,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
             ],
             :business_unit_type_ids => [business_unit_types(:consolidated_substantive).id.to_s]
           }
-	      }
+        }
       end
     end
 
@@ -245,4 +245,52 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert_equal 1, business_unit_types.size # One only
     assert business_unit_types.all? { |u| u['label'].match /cycle/i }
   end
+
+  test 'recover original name' do
+    set_organization
+    login
+
+    coi = control_objective_items(:management_dependency_item_editable)
+    coi.update(control_objective_text: 'different text')
+
+    assert_not_equal(
+      coi.reload.control_objective_text,
+      coi.control_objective.name
+    )
+
+    put :recover_original_name, params: { id: coi.id }, as: :js
+    assert_response :success
+
+    assert_equal(
+      coi.reload.control_objective_text,
+      coi.control_objective.name
+    )
+  end
+
+  test 'can not recover original name with freeze obj' do
+    set_organization
+    login
+
+    coi = control_objective_items(:management_dependency_item)
+    coi.update_column(:control_objective_text, 'forced text')
+
+    assert_not_equal(
+      'forced text',
+      coi.control_objective.name
+    )
+
+    assert_not_equal(
+      coi.reload.control_objective_text,
+      coi.control_objective.name
+    )
+
+    put :recover_original_name, params: { id: coi.id }, as: :js
+    assert_response :success
+
+    assert_equal(
+      coi.reload.control_objective_text,
+      coi.control_objective.name
+    )
+  end
+
 end
