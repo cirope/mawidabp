@@ -53,10 +53,10 @@ module ControlObjectiveItemsHelper
 
   def link_to_recover_original_control_objective_name(control_objective_item)
     link_to(
-      content_tag(:span, nil, class: 'glyphicon glyphicon-warning-sign'),
+      content_tag(:span, nil, class: 'glyphicon glyphicon-warning-sign text-danger'),
       recover_original_name_control_objective_item_path(control_objective_item.id),
       title: t('control_objective_item.different_name_want_to_change'),
-      class: 'js-recover-original-name',
+      class: "js-recover-original-name-for-#{control_objective_item.id}",
       data:  {
         remote:  true,
         method:  :put,

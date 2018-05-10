@@ -287,7 +287,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     put :recover_original_name, params: { id: coi.id }, as: :js
     assert_response :success
 
-    assert_equal(
+    assert_not_equal(
       coi.reload.control_objective_text,
       coi.control_objective.name
     )

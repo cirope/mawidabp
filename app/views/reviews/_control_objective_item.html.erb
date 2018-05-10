@@ -21,7 +21,7 @@
           :class => review_control_objective_class(control_objective_item) %>
         <% if !readonly %>
           <% unless control_objective_item.original_text? %>
-            <span class="text-muted">|</span>
+            <span class="text-muted js-recover-original-name-for-<%= control_objective_item.id %>">|</span>
             <%= link_to_recover_original_control_objective_name(control_objective_item) %>
           <% end %>
           <span class="text-muted">|</span>
