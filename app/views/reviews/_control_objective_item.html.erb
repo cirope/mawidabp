@@ -17,11 +17,17 @@
   <% else %>
     <ul>
       <li>
-        <%= content_tag :span, control_objective_item.control_objective_text,
-          :class => review_control_objective_class(control_objective_item) %>
+        <%= content_tag(
+          :span,
+          control_objective_item.control_objective_text,
+          class: review_control_objective_class(control_objective_item),
+          data: {
+            reset_name_for: control_objective_item.id
+          }
+        ) %>
         <% if !readonly %>
           <% unless control_objective_item.original_text? %>
-            <span class="text-muted js-recover-original-name-for-<%= control_objective_item.id %>">|</span>
+            <span class="text-muted">|</span>
             <%= link_to_recover_original_control_objective_name(control_objective_item) %>
           <% end %>
           <span class="text-muted">|</span>

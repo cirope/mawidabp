@@ -178,6 +178,7 @@ es:
         risk: 'Riesgo'
         obsolete: 'Obsoleto'
         support: 'Soporte'
+        control_objective_id: 'Objetivo de control'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
       document:

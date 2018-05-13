@@ -113,7 +113,7 @@ module ReviewsHelper
   end
 
   def review_control_objective_class(control_objective_item)
-    html_classes = ["js-control-objective-item-#{control_objective_item.id}"]
+    html_classes = ["control-objective-item"]
 
     if control_objective_item.finished
       html_classes << 'strike'

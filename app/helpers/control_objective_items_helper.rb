@@ -52,15 +52,22 @@ module ControlObjectiveItemsHelper
   end
 
   def link_to_recover_original_control_objective_name(control_objective_item)
+    icon = content_tag(
+      :span,
+      content_tag(:span, nil, class: 'glyphicon glyphicon-warning-sign'),
+      class: 'text-danger'
+    )
     link_to(
-      content_tag(:span, nil, class: 'glyphicon glyphicon-warning-sign text-danger'),
-      recover_original_name_control_objective_item_path(control_objective_item.id),
-      title: t('control_objective_item.different_name_want_to_change'),
-      class: "js-recover-original-name-for-#{control_objective_item.id}",
+      icon,
+      reset_control_objective_name_review_path(
+        control_objective_item.review.id, control_objective_item_id: control_objective_item.id
+      ),
+      title: t('control_objective_item.outdated_name'),
       data:  {
         remote:  true,
-        method:  :put,
-        confirm: t('messages.confirmation')
+        method:  :patch,
+        confirm: t('messages.confirmation'),
+        reset_name_for: control_objective_item.id
       }
     )
   end

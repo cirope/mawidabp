@@ -269,6 +269,7 @@ Rails.application.routes.draw do
       patch :recode_weaknesses_by_repetition_and_risk
       patch :recode_weaknesses_by_control_objective_order
       patch :reorder
+      patch :reset_control_objective_name
     end
 
     collection do
@@ -311,10 +312,7 @@ Rails.application.routes.draw do
   end
 
   resources :control_objective_items do
-    member do
-      get :suggest_next_work_paper_code
-      put :recover_original_name
-    end
+    get :suggest_next_work_paper_code, on: :member
 
     collection do
       get :auto_complete_for_business_unit

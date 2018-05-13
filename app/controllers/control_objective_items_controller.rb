@@ -4,7 +4,7 @@ class ControlObjectiveItemsController < ApplicationController
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_control_objective_item, only: [
-    :show, :edit, :update, :destroy, :recover_original_name
+    :show, :edit, :update, :destroy
   ]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
@@ -118,17 +118,8 @@ class ControlObjectiveItemsController < ApplicationController
     end
   end
 
-  def recover_original_name
-    @control_objective_item.update(
-      control_objective_text: @control_objective_item.control_objective.name
-    )
-
-    respond_to do |format|
-      format.js
-    end
-  end
-
   private
+
     def set_control_objective_item
       @control_objective_item = ControlObjectiveItem.list.includes(
         :control, :weaknesses, :work_papers
