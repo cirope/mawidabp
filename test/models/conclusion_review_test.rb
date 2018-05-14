@@ -157,6 +157,20 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert_error @conclusion_review, :close_date, :on_or_after, restriction: I18n.l(Date.today)
   end
 
+  test 'conclusion index' do
+    skip unless SHOW_CONCLUSION_AS_OPTIONS
+
+    @conclusion_review.conclusion = CONCLUSION_OPTIONS.last
+
+    assert_nil @conclusion_review.conclusion_index
+
+    @conclusion_review.save!
+
+    assert_not_nil @conclusion_review.conclusion_index
+    assert_equal CONCLUSION_OPTIONS.index(@conclusion_review.conclusion),
+      @conclusion_review.conclusion_index
+  end
+
   test 'send by email' do
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
