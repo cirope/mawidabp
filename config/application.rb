@@ -8,6 +8,16 @@ Bundler.require *Rails.groups
 
 module MawidaBP
   class Application < Rails::Application
+    # Figaro auto-env configuration
+    # config/application.yml is the default config
+    if (type = ENV['CONFIG_TYPE']).present? &&
+        File.exist?(path = Rails.root.join('config', "application.#{type}.yml"))
+
+      config.before_configuration do
+        Figaro.application.path = path
+        Figaro.load
+      end
+    end
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
 
