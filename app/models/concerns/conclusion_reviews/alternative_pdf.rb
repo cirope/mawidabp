@@ -103,6 +103,7 @@ module ConclusionReviews::AlternativePDF
       pdf.text legend, align: :justify
 
       put_conclusion_options_on pdf
+      put_workflow_text_on      pdf, organization
       put_review_scope_on       pdf, organization, options
       put_staff_on              pdf
       put_sectors_on            pdf
@@ -113,6 +114,16 @@ module ConclusionReviews::AlternativePDF
 
       pdf.move_down PDF_FONT_SIZE
       pdf.text text, align: :center, style: :bold
+    end
+
+    def put_workflow_text_on pdf, organization
+      workflow_text = I18n.t 'conclusion_review.annex.workflow_text'
+
+      if show_review_best_practice_comments? organization
+        pdf.move_down PDF_FONT_SIZE * 2
+        pdf.text workflow_text, align: :justify
+        pdf.move_down PDF_FONT_SIZE * 2
+      end
     end
 
     def put_review_scope_on pdf, organization, options
