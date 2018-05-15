@@ -15,9 +15,9 @@ addons:
   postgresql: 9.6
 
 env:
-  - ORGANIZATION_TYPE=type_1
-  - ORGANIZATION_TYPE=type_2
-  - ORGANIZATION_TYPE=type_3
+  - CONFIG_TYPE=normal
+  - CONFIG_TYPE=alternative
+  - CONFIG_TYPE=reviews_scored_by_weakness
 
 before_install:
   - 'gem install bundler'

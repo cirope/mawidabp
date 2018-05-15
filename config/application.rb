@@ -13,7 +13,6 @@ module MawidaBP
     if (type = ENV['CONFIG_TYPE']).present? &&
         File.exist?(path = Rails.root.join('config', "application.#{type}.yml"))
 
-      puts type
       config.before_configuration do
         Figaro.application.path = path
         Figaro.load
