@@ -4,6 +4,7 @@ class ConclusionReview < ApplicationRecord
   include ConclusionReviews::AlternativePDF
   include ConclusionReviews::BundleIndexPDF
   include ConclusionReviews::BundleZip
+  include ConclusionReviews::ConclusionIndex
   include ConclusionReviews::CoverPDF
   include ConclusionReviews::DateColumns
   include ConclusionReviews::DestroyValidation

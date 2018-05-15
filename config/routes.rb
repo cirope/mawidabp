@@ -115,6 +115,7 @@ Rails.application.routes.draw do
     'qa_indicators',
     'weaknesses_by_risk_report',
     'weaknesses_by_month',
+    'weaknesses_current_situation',
     'fixed_weaknesses_report',
     'weaknesses_graphs',
     'auto_complete_for_business_unit',
@@ -142,6 +143,7 @@ Rails.application.routes.draw do
     'create_qa_indicators',
     'create_weaknesses_by_risk_report',
     'create_weaknesses_by_month',
+    'create_weaknesses_current_situation',
     'create_fixed_weaknesses_report'
   ].each do |action|
     post "conclusion_reports/#{action}",
