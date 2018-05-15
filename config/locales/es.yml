@@ -413,9 +413,11 @@
     annex:
       title: "Anexo I"
       legend: "La Auditoría practicada estuvo conformada por distintos controles, los cuales han sido evaluados con relación a los riesgos asociados, por lo que a continuación se detallan con su respectiva calificación, aclarando que dichos conceptos pueden estar vinculados a distintas valoraciones:"
+      workflow_text: "El programa de trabajo elaborado para esta casa, así como su desarrollo y demás elementos, forma parte de los antecedentes obrantes en carpeta de trabajo del presente informe."
       scope: "Alcance de la tarea"
       scope_column: "Alcance de la tarea"
       staff: "Personal interviniente"
+      satisfactory_control_objective_items: "Resto de los Objetivos de Control"
     bundle:
       zip_name: "legajo_%{identification}.zip"
       control_objectives_dir: "%{prefix}_objetivos_de_control"
