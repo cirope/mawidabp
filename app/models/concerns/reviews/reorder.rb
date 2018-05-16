@@ -15,7 +15,9 @@ module Reviews::Reorder
     end
 
     sorted_groups.each do |pc, cois|
-      cois.each { |coi| coi.order_number = order += 1 }
+      cois.sort_by(&:control_objective_text).each do |coi|
+        coi.order_number = order += 1
+      end
     end
 
     save
