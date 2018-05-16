@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180419170510) do
+ActiveRecord::Schema.define(version: 20180514190516) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -210,7 +210,9 @@ ActiveRecord::Schema.define(version: 20180419170510) do
     t.text "corrective_actions"
     t.boolean "affects_compliance", default: false, null: false
     t.boolean "collapse_control_objectives", default: false, null: false
+    t.integer "conclusion_index", precision: 38
     t.index ["close_date"], name: "i_con_rev_clo_dat"
+    t.index ["conclusion_index"], name: "i_con_rev_con_ind"
     t.index ["issue_date"], name: "i_con_rev_iss_dat"
     t.index ["organization_id"], name: "i_con_rev_org_id"
     t.index ["review_id"], name: "i_conclusion_reviews_review_id"

@@ -14,6 +14,7 @@ es:
     logout: 'Salir'
     new: 'Nuevo'
     show: 'Ver'
+    resources: 'Recursos'
     stats: 'Estadísticas'
     warning: 'Advertencia'
     upload: 'Adjuntar'
@@ -246,6 +247,10 @@ es:
       title: 'Plan de auditoría'
       pdf_name: 'plan_periodo_%{period}.pdf'
       resource_utilization: 'Recursos utilizados'
+    resources:
+      show:
+        title: 'Resumen por recurso'
+        empty: 'No hay recursos humanos utilizados en el plan seleccionado'
     stats:
       show:
         title: 'Estadísiticas del plan de auditoría'
