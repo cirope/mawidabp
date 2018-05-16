@@ -33,6 +33,10 @@ module LinksHelper
     link_with_icon({ action: 'stats', icon: 'glyphicon-stats' }, *args)
   end
 
+  def link_to_resources(*args)
+    link_with_icon({ action: 'resources', icon: 'glyphicon-user' }, *args)
+  end
+
   private
 
     def link_with_icon(options = {}, *args)
