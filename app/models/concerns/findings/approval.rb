@@ -41,7 +41,7 @@ module Findings::Approval
     end
 
     def answer_error
-      if being_implemented? && answer.blank?
+      if (awaiting? || being_implemented?) && answer.blank?
         I18n.t "#{class_name}.errors.without_answer"
       end
     end
