@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  namespace :plans do
+    get 'resources/show'
+  end
+
   post '/touch', to: 'touch#create', as: 'touch'
 
   # Sessions
@@ -328,7 +332,10 @@ Rails.application.routes.draw do
   resources :plans do
     resources :plan_items, only: [:new, :edit]
 
-    get :stats, on: :member, to: 'plans/stats#show'
+    member do
+      get :stats, to: 'plans/stats#show'
+      get :resources, to: 'plans/resources#show'
+    end
 
     collection do
       get :auto_complete_for_business_unit
