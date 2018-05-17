@@ -513,8 +513,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :weaknesses_current_situation => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
-        :risk => '1',
-        :finding_status => Finding::STATUS[:being_implemented],
+        :risk => ['', '1', '2'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
         :finding_title => 'a'
       },
       :controller_name => 'follow_up',
