@@ -24,13 +24,24 @@ module Reports::WeaknessesCurrentSituation
       order(order)
 
     if params[:weaknesses_current_situation]
-      risk = params[:weaknesses_current_situation][:risk]
+      risk = Array(params[:weaknesses_current_situation][:risk]).reject(&:blank?)
+      states = Array(params[:weaknesses_current_situation][:finding_status]).reject(&:blank?)
 
-      if params[:weaknesses_current_situation][:finding_status].present?
-        weaknesses_conditions[:state] = params[:weaknesses_current_situation][:finding_status]
-        state_text = t "findings.state.#{Finding::STATUS.invert[weaknesses_conditions[:state].to_i]}"
+      if risk.present?
+        risk_texts = risk.map do |r|
+          t "risk_types.#{Weakness.risks.invert[r.to_i]}"
+        end
 
-        @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text}\""
+        @filters << "<b>#{Finding.human_attribute_name('risk')}</b> = \"#{risk_texts.to_sentence}\""
+      end
+
+      if states.present?
+        weaknesses_conditions[:state] = states
+        state_text = states.map do |s|
+          t "findings.state.#{Finding::STATUS.invert[s.to_i]}"
+        end
+
+        @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text.to_sentence}\""
       end
 
       if params[:weaknesses_current_situation][:finding_title].present?
@@ -42,8 +53,8 @@ module Reports::WeaknessesCurrentSituation
 
     weaknesses = weaknesses.by_risk(risk) if risk.present?
     report_weaknesses = weaknesses.with_status_for_report
-    report_weaknesses = report_weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
-    report_weaknesses = report_weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
+    report_weaknesses = report_weaknesses.where(state: states) if states.present?
+    report_weaknesses = report_weaknesses.with_title(weaknesses_conditions[:title]) if weaknesses_conditions[:title]
 
     @weaknesses = report_weaknesses
   end
@@ -55,13 +66,16 @@ module Reports::WeaknessesCurrentSituation
 
     if @weaknesses.any?
       @weaknesses.each_with_index do |weakness, index|
-        title = "<b>#{index + 1}</b> #{weakness.business_unit}"
+        title = [
+          "<b>#{index + 1}</b>",
+          "<i>#{BusinessUnit.model_name.human}:</i>",
+          weakness.business_unit
+        ].join(' ')
 
-        pdf.text title, size: (PDF_FONT_SIZE * 1.5).round, inline_format: true
-        pdf.move_down PDF_FONT_SIZE * 0.5
+        pdf.text title, size: PDF_FONT_SIZE, inline_format: true, align: :justify
 
         current_situation_pdf_items(weakness).each do |item|
-          text = "<i>#{item.first}</i>: #{item.last}"
+          text = "<i>#{item.first}:</i> #{item.last}"
 
           pdf.text text, size: PDF_FONT_SIZE, inline_format: true, align: :justify
         end
@@ -112,23 +126,23 @@ module Reports::WeaknessesCurrentSituation
           weakness.risk_text
         ],
         [
-          Weakness.human_attribute_name('title'),
-          "<b>#{weakness.title}</b>"
+          "<font size='#{PDF_FONT_SIZE + 2}'>#{Weakness.human_attribute_name('title')}</font>",
+          "<font size='#{PDF_FONT_SIZE + 2}'><b>#{weakness.title}</b></font>"
         ],
         [
-          Weakness.human_attribute_name(weakness.current_situation.present? ? 'current_situation' : 'description'),
+          "<b>#{Weakness.human_attribute_name(weakness.current_situation.present? ? 'current_situation' : 'description')}</b>",
           weakness.current_situation.present? ? weakness.current_situation : weakness.description
         ],
         [
-          Weakness.human_attribute_name('answer'),
+          "<b>#{Weakness.human_attribute_name('answer')}</b>",
           weakness.answer
         ],
         [
-          Weakness.human_attribute_name('state'),
+          "<b>#{Weakness.human_attribute_name('state')}</b>",
           weakness.state_text
         ],
         ([
-          Weakness.human_attribute_name('follow_up_date'),
+          "<b>#{Weakness.human_attribute_name('follow_up_date')}</b>",
           I18n.l(weakness.follow_up_date)
         ] if weakness.follow_up_date)
       ].compact

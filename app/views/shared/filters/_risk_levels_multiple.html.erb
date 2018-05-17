@@ -1,0 +1,13 @@
+<div id="risk_levels_multiple_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <% selected = params[action] ? params[action][:risk] : nil %>
+        <%= f.label :risk, Weakness.human_attribute_name(:risk), class: 'col-md-3' %>
+        <div class="col-md-9">
+          <%= f.input :risk, collection: risks, as: :check_boxes, checked: selected, label: false, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
