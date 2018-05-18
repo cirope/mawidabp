@@ -677,4 +677,55 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_response :success
     assert_equal @response.content_type, Mime[:js]
   end
+
+  test 'recover original control objective name' do
+    set_organization
+    login
+
+    coi = control_objective_items(:management_dependency_item_editable)
+    coi.update!(control_objective_text: 'different text')
+
+    assert_not_equal(
+      coi.reload.control_objective_text,
+      coi.control_objective.name
+    )
+
+    patch :reset_control_objective_name, params: {
+      id: coi.review.id, control_objective_item_id: coi.id
+    }, as: :js
+    assert_response :success
+
+    assert_equal(
+      coi.reload.control_objective_text,
+      coi.control_objective.name
+    )
+  end
+
+  test 'can not recover original name with freeze obj' do
+    set_organization
+    login
+
+    coi = control_objective_items(:management_dependency_item)
+    coi.update!(:control_objective_text, 'forced text')
+
+    assert_not_equal(
+      'forced text',
+      coi.control_objective.name
+    )
+
+    assert_not_equal(
+      coi.reload.control_objective_text,
+      coi.control_objective.name
+    )
+
+    patch :reset_control_objective_name, params: {
+      id: coi.review.id, control_objective_item_id: coi.id
+    }, as: :js
+    assert_response :success
+
+    assert_not_equal(
+      coi.reload.control_objective_text,
+      coi.control_objective.name
+    )
+  end
 end
