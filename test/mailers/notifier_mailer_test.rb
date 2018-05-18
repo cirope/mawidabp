@@ -207,8 +207,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'conclusion review notification' do
-    organization = Organization.find(organizations(
-          :cirope).id)
+    organization = Organization.find(organizations(:cirope).id)
     user = User.find(users(:administrator).id)
     conclusion_review = ConclusionFinalReview.find(conclusion_reviews(
         :conclusion_current_final_review).id)
@@ -234,7 +233,13 @@ class NotifierMailerTest < ActionMailer::TestCase
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
     assert !ActionMailer::Base.deliveries.empty?
-    assert response.subject.include?(title)
+
+    if SHOW_ORGANIZATION_PREFIX_ON_REVIEW_NOTIFICATION.include?(organization.prefix)
+      refute response.subject.include?(title)
+    else
+      assert response.subject.include?(title)
+    end
+
     assert_equal 3, response.attachments.size
     assert_match /textile/, text_part
     assert response.to.include?(user.email)
@@ -253,7 +258,13 @@ class NotifierMailerTest < ActionMailer::TestCase
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
     assert !ActionMailer::Base.deliveries.empty?
-    assert response.subject.include?(title)
+
+    if SHOW_ORGANIZATION_PREFIX_ON_REVIEW_NOTIFICATION.include?(organization.prefix)
+      refute response.subject.include?(title)
+    else
+      assert response.subject.include?(title)
+    end
+
     assert_equal 2, response.attachments.size
     assert response.to.include?(user.email)
 
@@ -274,7 +285,13 @@ class NotifierMailerTest < ActionMailer::TestCase
     elements.delete(I18n.t('conclusion_review.score_sheet'))
 
     assert !ActionMailer::Base.deliveries.empty?
-    assert response.subject.include?(title)
+
+    if SHOW_ORGANIZATION_PREFIX_ON_REVIEW_NOTIFICATION.include?(organization.prefix)
+      refute response.subject.include?(title)
+    else
+      assert response.subject.include?(title)
+    end
+
     assert_equal 1, response.attachments.size
     assert response.to.include?(user.email)
 

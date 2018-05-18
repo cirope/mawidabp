@@ -21,6 +21,10 @@
             { :action => :weaknesses_by_risk_report, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
           <%= link_to t('follow_up_committee_report.benefits_title'),
             { :action => :benefits, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+          <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+            <%= link_to t('follow_up_audit.weaknesses_current_situation_title'),
+              { :action => :weaknesses_current_situation, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+          <% end %>
         </div>
       </div>
       <div class="col-md-6">

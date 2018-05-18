@@ -7,7 +7,6 @@ module ControlObjectiveItems::FindingPDFData
     body << get_initial_finding_attributes(finding, show)
     body << get_weakness_attributes(finding, hide) if finding.kind_of?(Weakness)
     body << get_late_finding_attributes(finding, show)
-    body << get_optional_finding_attributes(finding, hide)
     body << get_audited_data(finding, hide)
     body << get_final_finding_attributes(finding, hide, show)
 
@@ -80,21 +79,6 @@ module ControlObjectiveItems::FindingPDFData
       body
     end
 
-    def get_optional_finding_attributes finding, hide
-      body = ''
-      show_internal_control_components = SHOW_WEAKNESS_EXTRA_ATTRIBUTES &&
-        finding.kind_of?(Weakness) &&
-        hide.exclude?('internal_control_components') &&
-        finding.internal_control_components.any?
-
-      if show_internal_control_components
-        body << "<b>#{finding.class.human_attribute_name('internal_control_components')}:" +
-          "</b> #{finding.internal_control_components.to_sentence}\n"
-      end
-
-      body
-    end
-
     def get_audited_data finding, hide
       body          = ''
       process_owner = FindingUserAssignment.human_attribute_name 'process_owner'
@@ -129,11 +113,6 @@ module ControlObjectiveItems::FindingPDFData
       if finding.business_units.present?
         body << "<b>#{BusinessUnit.model_name.human count: finding.business_units.size}:" +
           "</b> #{finding.business_units.map(&:name).join(', ')}\n"
-      end
-
-      if show.include?('tags') && finding.tags.any?
-        body << "<b>#{Tag.model_name.human count: 0}:</b> " +
-          finding.tags.map(&:name).to_sentence
       end
 
       body

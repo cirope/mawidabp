@@ -59,7 +59,7 @@ module Reports::WeaknessesByMonth
       BusinessUnitType.list.each do |but|
         conclusion_review_per_unit_type = conclusion_reviews.for_month(month).by_business_unit_type(but.id)
 
-        sort_by_conclusion(conclusion_review_per_unit_type).each do |c_r|
+        conclusion_review_per_unit_type.reorder(conclusion_index: :desc).each do |c_r|
           weaknesses = final ? c_r.review.final_weaknesses : c_r.review.weaknesses
           weaknesses = weaknesses.by_risk(risk) if risk.present?
           report_weaknesses = weaknesses.with_status_for_report
@@ -144,23 +144,6 @@ module Reports::WeaknessesByMonth
       end
 
       list
-    end
-
-    def sort_by_conclusion conclusion_reviews
-      conclusions_order = [
-        'No satisfactorio',
-        'Necesita mejorar',
-        'Satisfactorio con salvedades',
-        'Satisfactorio',
-        'No aplica'
-      ]
-
-      conclusion_reviews.to_a.sort do |cr_1, cr_2|
-        index_1 = conclusions_order.index cr_1.conclusion
-        index_2 = conclusions_order.index cr_2.conclusion
-
-        index_1 <=> index_2
-      end
     end
 
     def put_weaknesses_by_month_conclusion_review_on pdf, conclusion_review

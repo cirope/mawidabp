@@ -7,15 +7,17 @@ module Reviews::Reorder
       pc1 = group1.first
       pc2 = group2.first
 
-      if pc1.name.to_i > 0 && pc2.name.to_i > 0
-        pc1.name.to_i <=> pc2.name.to_i
+      if pc1.name.to_f > 0 && pc2.name.to_f > 0
+        pc1.name.to_f <=> pc2.name.to_f
       else
         pc1.name <=> pc2.name
       end
     end
 
     sorted_groups.each do |pc, cois|
-      cois.each { |coi| coi.order_number = order += 1 }
+      cois.sort_by(&:control_objective_text).each do |coi|
+        coi.order_number = order += 1
+      end
     end
 
     save
