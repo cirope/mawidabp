@@ -121,27 +121,23 @@ module Findings::CurrentUserScopes
         left_joins(:users)
 
       if @extra_joins
-        begin
-          # if any of this raise an exception we don't want to affect the scope
-          new_scope = scope.send(*@extra_joins)
+        # if any of this raise an exception we don't want to affect the scope
+        new_scope = scope.send(*@extra_joins)
 
-          refs = [:id]
-          refs += deep_to_a(
-            new_scope.joins_values.to_a +
-            new_scope.includes_values.to_a
-          ).flatten.uniq.map do |ref|
-            # We need the real table name (STI models)
-            "#{ref.to_s.singularize.camelize.constantize.table_name}.id"
-          end
-
-          scope = new_scope.group(*refs.flatten.uniq)
-        rescue
-          @order_by = nil  # Ensure that the order will not break anything
+        refs = [:id]
+        refs += deep_to_a(
+          new_scope.joins_values.to_a +
+          new_scope.includes_values.to_a
+        ).flatten.uniq.map do |ref|
+          # We need the real table name (STI models)
+          "#{ref.to_s.singularize.camelize.constantize.table_name}.id"
         end
+
+        scope = new_scope.group(*refs.flatten.uniq)
       end
 
       scope.where(@conditions).
-        order(@order_by || current_user_default_sort_columns, 'findings.id').  # default second order
+        order(@order_by || current_user_default_sort_columns).
         references(*current_user_references)
     end
 

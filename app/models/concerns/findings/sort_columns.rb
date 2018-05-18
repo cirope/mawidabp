@@ -15,7 +15,7 @@ module Findings::SortColumns
 
       columns.merge!(
         readings_desc: readings_desc_options
-      ) if USING_POSTGRESQL_DB
+      ) if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
 
       columns.merge(
         state:               state_options,
@@ -114,8 +114,8 @@ module Findings::SortColumns
       end
 
       def readings_desc_options
-        reading_user = 'COUNT(readings.user_id)'
-        finding_user = 'COUNT(finding_answers.user_id)'
+        reading_user = "COUNT(#{Reading.table_name}.user_id)"
+        finding_user = "COUNT(#{FindingAnswer.table_name}.user_id)"
 
         order_by_readings = "CASE \n"
         order_by_readings << "WHEN (#{reading_user} < #{finding_user}) then (#{finding_user} - #{reading_user}) \n"
