@@ -223,8 +223,11 @@ class ApplicationController < ActionController::Base
 
     def build_search_conditions(model, default_conditions = {})
       if params[:search] && params[:search][:order].present?
-        @order_by = model.columns_for_sort[params[:search][:order]][:field]
-        @order_by_column_name = model.columns_for_sort[params[:search][:order]][:name]
+        order_data = model.columns_for_sort[params[:search][:order]]
+
+        @order_by             = order_data[:field]
+        @order_by_column_name = order_data[:name]
+        @extra_joins          = order_data[:extra_joins]
       end
 
       if params[:search] && params[:search][:query].present?
