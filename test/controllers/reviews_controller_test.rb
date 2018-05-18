@@ -706,7 +706,7 @@ class ReviewsControllerTest < ActionController::TestCase
     login
 
     coi = control_objective_items(:management_dependency_item)
-    coi.update!(:control_objective_text, 'forced text')
+    coi.update_column(:control_objective_text, 'forced text')
 
     assert_not_equal(
       'forced text',
