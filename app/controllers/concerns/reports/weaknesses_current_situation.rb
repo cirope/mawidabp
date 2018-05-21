@@ -6,11 +6,15 @@ module Reports::WeaknessesCurrentSituation
 
   def weaknesses_current_situation
     @controller = params[:controller_name]
-    final = params[:final] == 'true'
     @title = t("#{@controller}_committee_report.weaknesses_current_situation_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_current_situation])
     @filters = []
+    final = params[:final] == 'true'
     weaknesses_conditions = {}
+    not_muted_states = Finding::EXCLUDE_FROM_REPORTS_STATUS + [:implemented_audited]
+    mute_state_filter_on = Finding::STATUS.except(*not_muted_states).map do |k, v|
+      v.to_s
+    end
     order = [
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
@@ -37,11 +41,14 @@ module Reports::WeaknessesCurrentSituation
 
       if states.present?
         weaknesses_conditions[:state] = states
-        state_text = states.map do |s|
-          t "findings.state.#{Finding::STATUS.invert[s.to_i]}"
-        end
 
-        @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text.to_sentence}\""
+        unless states.sort == mute_state_filter_on.sort
+          state_text = states.map do |s|
+            t "findings.state.#{Finding::STATUS.invert[s.to_i]}"
+          end
+
+          @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text.to_sentence}\""
+        end
       end
 
       if params[:weaknesses_current_situation][:finding_title].present?
@@ -75,7 +82,7 @@ module Reports::WeaknessesCurrentSituation
         pdf.text title, size: PDF_FONT_SIZE, inline_format: true, align: :justify
 
         current_situation_pdf_items(weakness).each do |item|
-          text = "<i>#{item.first}:</i> #{item.last}"
+          text = "<i>#{item.first}:</i> #{item.last.to_s.strip}"
 
           pdf.text text, size: PDF_FONT_SIZE, inline_format: true, align: :justify
         end
@@ -143,7 +150,9 @@ module Reports::WeaknessesCurrentSituation
         ],
         ([
           "<b>#{Weakness.human_attribute_name('follow_up_date')}</b>",
-          I18n.l(weakness.follow_up_date)
+          weakness.follow_up_date < @to_date ?
+            "<color rgb='ff0000'>#{I18n.l(weakness.follow_up_date)}</color>" :
+            I18n.l(weakness.follow_up_date)
         ] if weakness.follow_up_date)
       ].compact
     end
