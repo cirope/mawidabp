@@ -41,10 +41,10 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion',
+        :conclusion => CONCLUSION_OPTIONS.first,
         :recipients => 'John Doe',
         :sectors => 'Area 51',
-        :evolution => 'Do the evolution',
+        :evolution => EVOLUTION_OPTIONS.second,
         :evolution_justification => 'Ok',
         :main_weaknesses_text => 'Some main weakness X',
         :corrective_actions => 'You should do it this way',
@@ -157,10 +157,20 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert_error @conclusion_review, :close_date, :on_or_after, restriction: I18n.l(Date.today)
   end
 
+  test 'validates evolution' do
+    skip unless SHOW_CONCLUSION_ALTERNATIVE_PDF
+
+    @conclusion_review.evolution = 'invalid'
+
+    assert @conclusion_review.invalid?
+    assert_error @conclusion_review, :evolution, :invalid
+  end
+
   test 'conclusion index' do
     skip unless SHOW_CONCLUSION_AS_OPTIONS
 
     @conclusion_review.conclusion = CONCLUSION_OPTIONS.last
+    @conclusion_review.evolution = EVOLUTION_OPTIONS.last
 
     assert_nil @conclusion_review.conclusion_index
 
