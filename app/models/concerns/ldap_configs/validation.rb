@@ -24,7 +24,16 @@ module LdapConfigs::Validation
     def can_connect?
       ldap = ldap test_user, test_password
 
-      errors.add :base, I18n.t('message.ldap_error') unless ldap.bind
+      unless ldap.bind
+        errors.add :base, I18n.t('message.ldap_error')
+        return
+      end
+
+      if service_login.present? && service_password.present?
+        ldap = ldap(service_user, service_password)
+
+        errors.add :service_user, I18n.t('message.ldap_error') unless ldap.bind
+      end
     rescue
       errors.add :base, I18n.t('message.ldap_error')
     end
