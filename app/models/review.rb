@@ -18,6 +18,7 @@ class Review < ApplicationRecord
   include Reviews::IssueDate
   include Reviews::Overrides
   include Reviews::PlanItem
+  include Reviews::Reorder
   include Reviews::Scopes
   include Reviews::Score
   include Reviews::ScoreDetails
@@ -30,6 +31,7 @@ class Review < ApplicationRecord
   include Reviews::UpdateCallbacks
   include Reviews::Users
   include Reviews::Validations
+  include Reviews::WeaknessesBrief
   include Reviews::WorkPapers
   include Reviews::WorkPapersZip
   include Taggable

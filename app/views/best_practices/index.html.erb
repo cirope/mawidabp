@@ -2,7 +2,7 @@
   options: {},
   columns: @query.blank? ? BestPractice::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
-<table class="table table-condensed table-striped">
+<table class="table table-condensed table-striped table-hover">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column BestPractice.human_attribute_name('name'), nil, 'name' %>

@@ -7,6 +7,10 @@ Sidekiq::Testing.inline!
 class ActiveSupport::TestCase
   set_fixture_class versions: PaperTrail::Version
 
+  unless ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+    set_fixture_class co_weakness_template_relations: ControlObjectiveWeaknessTemplateRelation
+  end
+
   fixtures :all
 
   def set_organization organization = organizations(:cirope)
@@ -15,7 +19,7 @@ class ActiveSupport::TestCase
   end
 
   def login user: users(:administrator), prefix: organizations(:cirope).prefix
-    @request.host         = [prefix, ENV['APP_HOST']].join('.')
+    set_host_for_organization(prefix)
     session[:user_id]     = user.id
     session[:last_access] = Time.now
 
@@ -42,5 +46,9 @@ class ActiveSupport::TestCase
     error = model.errors.generate_message attribute, type, options
 
     assert_includes model.errors[attribute], error
+  end
+
+  def set_host_for_organization(prefix)
+    @request.host = [prefix, URL_HOST].join('.')
   end
 end

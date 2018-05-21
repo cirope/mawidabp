@@ -22,6 +22,13 @@ CONCLUSION_IMAGES = {
   'No aplica'                    => 'score_not_apply.png'
 }
 
+CONCLUSION_EVOLUTION_IMAGES = {
+  [
+    'Satisfactorio con salvedades',
+    'Mantiene calificación desfavorable'
+  ] => 'evolution_equal_success.png'
+}
+
 EVOLUTION_OPTIONS = [
   'Mantiene calificación desfavorable',
   'Mantiene calificación favorable',
@@ -40,6 +47,11 @@ EVOLUTION_IMAGES = {
 
 PDF_IMAGE_PATH = Rails.root.join('app', 'assets', 'images', 'pdf').freeze
 PDF_DEFAULT_SCORE_IMAGE = 'score_none.png'
+
+PLAN_ITEM_STATS_EXCLUDED_SCOPES = [
+  'Trabajo especial',
+  'Informe de comité'
+]
 
 REVIEW_SCOPES = [
   'Auditorías/Seguimiento',

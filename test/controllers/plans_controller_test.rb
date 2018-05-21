@@ -17,7 +17,7 @@ class PlansControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'show plan on pdf' do
+  test 'show plan as pdf' do
     get :show, params: { id: @plan }, as: :pdf
     assert_redirected_to @plan.relative_pdf_path
   end
@@ -67,6 +67,7 @@ class PlansControllerTest < ActionController::TestCase
               start: 71.days.from_now.to_date,
               end: 80.days.from_now.to_date,
               order_number: 1,
+              scope: 'committee',
               risk_exposure: 'high',
               business_unit_id: business_units(:business_unit_one).id,
               resource_utilizations_attributes: [
@@ -128,6 +129,7 @@ class PlansControllerTest < ActionController::TestCase
                   start: 55.days.ago.to_date,
                   end: 45.days.ago.to_date,
                   order_number: 1,
+                  scope: 'committee',
                   risk_exposure: 'high',
                   business_unit_id: business_units(:business_unit_one).id,
                   resource_utilizations_attributes: {
@@ -173,6 +175,7 @@ class PlansControllerTest < ActionController::TestCase
             start: 71.days.from_now.to_date,
             end: 80.days.from_now.to_date,
             order_number: 1,
+            scope: 'committee',
             risk_exposure: 'high',
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
@@ -188,6 +191,7 @@ class PlansControllerTest < ActionController::TestCase
             start: 79.days.from_now.to_date,
             end: 90.days.from_now.to_date,
             order_number: 2,
+            scope: 'committee',
             risk_exposure: 'high',
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
@@ -224,6 +228,7 @@ class PlansControllerTest < ActionController::TestCase
             start: 71.days.from_now.to_date,
             end: 80.days.from_now.to_date,
             order_number: 1,
+            scope: 'committee',
             risk_exposure: 'high',
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [
@@ -239,6 +244,7 @@ class PlansControllerTest < ActionController::TestCase
             start: 81.days.from_now.to_date,
             end: 90.days.from_now.to_date,
             order_number: 2,
+            scope: 'committee',
             risk_exposure: 'high',
             business_unit_id: business_units(:business_unit_one).id,
             resource_utilizations_attributes: [

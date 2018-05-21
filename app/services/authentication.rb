@@ -21,8 +21,6 @@ class Authentication
         verify_pending_poll
         verify_if_must_change_the_password
       end
-
-      @message ||= I18n.t 'message.welcome'
     else
       @message ||= I18n.t 'message.invalid_user_or_password'
       @redirect_url = { controller: 'sessions', action: 'new' }

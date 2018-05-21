@@ -238,4 +238,17 @@ class WorkPaperTest < ActiveSupport::TestCase
     @work_paper = other_work_paper.owner.work_papers.detect(&:new_record?)
     assert_error @work_paper, :code, :taken
   end
+
+  test 'mark review with work papers not finished on change' do
+    review = @work_paper.owner.review
+
+    review.work_papers_finished!
+    review.save! validate: false
+
+    assert review.reload.work_papers_finished?
+
+    @work_paper.update! number_of_pages: 20
+
+    assert review.reload.work_papers_not_finished?
+  end
 end

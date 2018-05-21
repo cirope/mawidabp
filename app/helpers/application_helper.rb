@@ -49,7 +49,7 @@ module ApplicationHelper
 
   def super_truncate(text, length = 30)
     unless text.blank?
-      omission = content_tag(:abbr, '...', :title => text)
+      omission = content_tag(:abbr, '...', :title => j(text))
       safe_text = text.gsub '%', '%%'
 
       truncate(safe_text, :length => length, :omission => '%s') % omission
@@ -65,7 +65,7 @@ module ApplicationHelper
   def show_info(text, html_options = {})
     content_tag(:div, text.present? ?
       content_tag(
-        :span, nil, title: text,
+        :span, nil, title: j(text),
         class: "#{html_options[:class]} glyphicon glyphicon-info-sign"
       ) : nil
     ).html_safe

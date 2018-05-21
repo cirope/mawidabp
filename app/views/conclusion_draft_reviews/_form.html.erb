@@ -5,7 +5,7 @@
     <div class="row">
       <div class="col-md-6">
         <% unless @conclusion_draft_review.review %>
-          <%= f.input :review_id, collection: Review.list_without_draft_review.map { |r| [r.identification, r.id] },
+          <%= f.input :review_id, collection: Review.list_without_draft_review.map { |r| [truncate(r.long_identification, length: 50), r.id] },
             prompt: true, input_html: { autofocus: true } %>
         <% else %>
           <%= f.input :review, label: ConclusionDraftReview.human_attribute_name(:review_id),
@@ -25,7 +25,11 @@
       <div class="col-md-6">
         <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
           <% if SHOW_CONCLUSION_AS_OPTIONS %>
-            <%= f.input :conclusion, collection: conclusion_options, prompt: true %>
+            <%= f.input :conclusion, collection: conclusion_options, prompt: true, input_html: {
+              data: {
+                corrective_actions_update_url: corrective_actions_update_conclusion_draft_reviews_path
+              }
+            } %>
           <% else %>
             <%= f.input :conclusion, input_html: { rows: 3 } %>
           <% end %>
@@ -54,9 +58,31 @@
         </div>
       </div>
 
+      <% if show_review_best_practice_comments? %>
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :main_weaknesses_text, input_html: { rows: 4 } %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :corrective_actions, input_html: { rows: 4 } %>
+          </div>
+        </div>
+      <% end %>
+
       <div class="row">
         <div class="col-md-6">
           <%= f.input :observations, input_html: { rows: 4 } %>
+        </div>
+        <div class="col-md-6 toggle-visibility">
+          <% if show_review_best_practice_comments? %>
+            <%= f.input :affects_compliance, input_html: {
+              data: {
+                corrective_actions_update_url: corrective_actions_update_conclusion_draft_reviews_path
+              }
+            } %>
+          <% else %>
+            <%= f.input :collapse_control_objectives %>
+          <% end %>
         </div>
       </div>
     <% end %>

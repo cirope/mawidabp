@@ -11,11 +11,19 @@ module ConclusionReviews::Validations
 
     validates :recipients, :sectors, :evolution, :evolution_justification,
       presence: true, if: :validate_extra_attributes?
+    validates :main_weaknesses_text, presence: true,
+      if: :validate_short_alternative_pdf_attributes?
   end
 
   private
 
     def validate_extra_attributes?
       SHOW_CONCLUSION_ALTERNATIVE_PDF
+    end
+
+    def validate_short_alternative_pdf_attributes?
+      organization = Organization.find Organization.current_id
+
+      ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include? organization.prefix
     end
 end

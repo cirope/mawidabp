@@ -90,10 +90,17 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @control_objective_item.control_objective_text = '  '
     @control_objective_item.control_objective_id = nil
+    @control_objective_item.issues_count = nil
+    @control_objective_item.alerts_count = nil
 
     assert @control_objective_item.invalid?
     assert_error @control_objective_item, :control_objective_text, :blank
     assert_error @control_objective_item, :control_objective_id, :blank
+
+    if validate_counts?
+      assert_error @control_objective_item, :issues_count, :blank
+      assert_error @control_objective_item, :alerts_count, :blank
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -342,6 +349,12 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert @control_objective_item.must_be_approved?
     assert @control_objective_item.approval_errors.blank?
 
+    @control_objective_item.reload
+    @control_objective_item.audit_date =
+      @control_objective_item.review.conclusion_draft_review.issue_date + 1.day
+    assert !@control_objective_item.must_be_approved?
+    assert_equal 1, @control_objective_item.approval_errors.size
+
     assert @control_objective_item.reload.must_be_approved?
     assert @control_objective_item.approval_errors.blank?
   end
@@ -421,7 +434,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'to pdf' do
-    assert !File.exist?(@control_objective_item.absolute_pdf_path)
+    FileUtils.rm_f @control_objective_item.absolute_pdf_path
 
     assert_nothing_raised do
       @control_objective_item.to_pdf(organizations(:cirope))
@@ -439,5 +452,11 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       organization = Organization.find Organization.current_id
 
       ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization.prefix
+    end
+
+    def validate_counts?
+      organization = Organization.find Organization.current_id
+
+      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include? organization.prefix
     end
 end

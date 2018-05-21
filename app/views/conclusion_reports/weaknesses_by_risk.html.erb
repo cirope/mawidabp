@@ -1,12 +1,36 @@
 <%= render :partial => 'shared/filter_form',
-  :locals => {:action => :weaknesses_by_risk, :extra_params => {
-    :controller_name => 'conclusion', :final => true
-  }, :forms => {:date_range => true}} %>
+  :locals => {
+    :action => :weaknesses_by_risk,
+    :extra_params => {
+      :controller_name => 'conclusion',
+      :final => true
+    },
+    :forms => {
+      :date_range => true,
+      :repeated => true,
+      :compliance => SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+    }
+  } %>
 
 <% @periods.each do |period| %>
   <div class="page-header">
     <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
   </div>
+
+  <h3 class="text-center">
+    <%= t('conclusion_committee_report.weaknesses_by_risk.period_summary',
+      :period => period.inspect) %>
+  </h3>
+  <%= render :partial => 'weaknesses_synthesis_table', :locals => {
+    :table_data => @tables_data[period]['total']} %>
+
+  <% if @repeated_counts[period]['total'] > 0 %>
+    <p>
+      <%= t('follow_up_committee_report.repeated_count',
+        :count => @repeated_counts[period]['total']) %>
+    </p>
+  <% end %>
+
   <% @audit_types.each do |audit_type| %>
     <% audit_type_symbol = audit_type.first %>
     <% unless audit_type.last.empty? %>
@@ -21,13 +45,6 @@
       <% end %>
     <% end %>
   <% end %>
-
-  <h3 class="text-center">
-    <%= t('conclusion_committee_report.weaknesses_by_risk.period_summary',
-      :period => period.inspect) %>
-  </h3>
-  <%= render :partial => 'weaknesses_synthesis_table', :locals => {
-    :table_data => @tables_data[period]['total']} %>
 <% end %>
 
 <hr />

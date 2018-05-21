@@ -19,7 +19,7 @@
             <th><%= BusinessUnitType.model_name.human count: 0 %></th>
             <th><%= t '.total' %></th>
             <th><%= t '.planned' %></th>
-            <th><%= t '.executed' %></th>
+            <th><%= t '.concluded' %></th>
             <th><%= t '.on_time' %></th>
             <th><%= t '.compliance' %></th>
             <th><%= t '.progress' %></th>
@@ -28,12 +28,20 @@
 
         <tbody>
           <% plan_business_unit_type_list.each do |business_unit_type, plan_items| %>
-            <%= render 'stat_row', business_unit_type: business_unit_type, plan_items: plan_items if business_unit_type %>
+            <%= render(
+              'stat_row',
+              business_unit_type: business_unit_type,
+              plan_items:         plan_items.reject(&:excluded_from_stats?)
+            ) if business_unit_type %>
           <% end %>
         </tbody>
 
         <tfoot>
-          <%= render 'stat_row', business_unit_type: nil, plan_items: @plan.plan_items %>
+          <%= render(
+            'stat_row',
+            business_unit_type: nil,
+            plan_items:         @plan.plan_items.reject(&:excluded_from_stats?)
+          ) %>
         </tfoot>
       </table>
     </div>

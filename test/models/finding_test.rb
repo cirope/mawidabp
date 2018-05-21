@@ -233,6 +233,68 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.valid?
   end
 
+  test 'validates implemented audited can be back at implemented if comment' do
+    finding                 = findings :being_implemented_weakness_on_final
+    finding.state           = Finding::STATUS[:implemented_audited]
+    finding.solution_date   = Time.zone.today
+    finding.skip_work_paper = true
+
+    Finding.current_user    = users :supervisor
+
+    cfr = finding.review.conclusion_final_review
+
+    def cfr.can_be_destroyed?; true; end
+
+    cfr.destroy!
+
+    finding.save!
+    finding.reload
+
+    finding.state         = Finding::STATUS[:implemented]
+    finding.solution_date = nil
+
+    assert finding.invalid?
+    assert_error finding, :state, :must_have_a_comment
+
+    finding.comments.build(
+      user:    users(:administrator),
+      comment: 'Test comment'
+    )
+
+    assert finding.valid?
+  end
+
+  test 'validates expired can be back at implemented if comment' do
+    finding                = findings :being_implemented_weakness_on_final
+    finding.state          = Finding::STATUS[:expired]
+    finding.follow_up_date = nil
+    finding.solution_date  = Time.zone.today
+    Finding.current_user   = users :supervisor
+
+    cfr = finding.review.conclusion_final_review
+
+    def cfr.can_be_destroyed?; true; end
+
+    cfr.destroy!
+
+    finding.save!
+    finding.reload
+
+    finding.state          = Finding::STATUS[:implemented]
+    finding.follow_up_date = Time.zone.today
+    finding.solution_date  = nil
+
+    assert finding.invalid?
+    assert_error finding, :state, :must_have_a_comment
+
+    finding.comments.build(
+      user:    users(:administrator),
+      comment: 'Test comment'
+    )
+
+    assert finding.valid?
+  end
+
   test 'validates revoked transition is only possible when repeated of' do
     finding       = findings :being_implemented_weakness_on_final
     finding.state = Finding::STATUS[:revoked]

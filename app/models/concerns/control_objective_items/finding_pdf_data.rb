@@ -6,8 +6,7 @@ module ControlObjectiveItems::FindingPDFData
 
     body << get_initial_finding_attributes(finding, show)
     body << get_weakness_attributes(finding, hide) if finding.kind_of?(Weakness)
-    body << get_late_finding_attributes(finding)
-    body << get_optional_finding_attributes(finding, hide)
+    body << get_late_finding_attributes(finding, show)
     body << get_audited_data(finding, hide)
     body << get_final_finding_attributes(finding, hide, show)
 
@@ -20,8 +19,7 @@ module ControlObjectiveItems::FindingPDFData
       body = ''
 
       if finding.review_code.present?
-        body << "<b>#{finding.class.human_attribute_name('review_code')}:</b> " +
-          "#{finding.review_code.chomp}\n"
+        body << finding_review_code_text_for(finding, show)
       end
 
       if finding.title.present?
@@ -58,7 +56,7 @@ module ControlObjectiveItems::FindingPDFData
       body
     end
 
-    def get_late_finding_attributes finding
+    def get_late_finding_attributes finding, show
       body = ''
 
       if finding.origination_date.present?
@@ -71,26 +69,11 @@ module ControlObjectiveItems::FindingPDFData
           "#{finding.answer.chomp}\n"
       end
 
-      body << finding_follow_up_date_text_for(finding)
+      body << finding_follow_up_date_text_for(finding, show)
 
       if finding.solution_date.present?
         body << "<b>#{finding.class.human_attribute_name('solution_date')}:" +
           "</b> #{I18n.l(finding.solution_date, format: :long)}\n"
-      end
-
-      body
-    end
-
-    def get_optional_finding_attributes finding, hide
-      body = ''
-      show_internal_control_components = SHOW_WEAKNESS_EXTRA_ATTRIBUTES &&
-        finding.kind_of?(Weakness) &&
-        hide.exclude?('internal_control_components') &&
-        finding.internal_control_components.any?
-
-      if show_internal_control_components
-        body << "<b>#{finding.class.human_attribute_name('internal_control_components')}:" +
-          "</b> #{finding.internal_control_components.to_sentence}\n"
       end
 
       body
@@ -132,12 +115,19 @@ module ControlObjectiveItems::FindingPDFData
           "</b> #{finding.business_units.map(&:name).join(', ')}\n"
       end
 
-      if show.include?('tags') && finding.tags.any?
-        body << "<b>#{Tag.model_name.human count: 0}:</b> " +
-          finding.tags.map(&:name).to_sentence
-      end
-
       body
+    end
+
+    def finding_review_code_text_for finding, show
+      show_template_code = show.include?('template_code') &&
+                           finding.weakness_template_id.blank?
+      code               = if show_template_code
+                             "#{finding.review_code} <sub><b>(NE)</b></sub>"
+                           else
+                             finding.review_code
+                           end
+
+      "<b>#{finding.class.human_attribute_name 'review_code'}:</b> #{code}\n"
     end
 
     def finding_origination_date_text_for finding
@@ -148,12 +138,15 @@ module ControlObjectiveItems::FindingPDFData
       end
     end
 
-    def finding_follow_up_date_text_for finding
-      show =
+    def finding_follow_up_date_text_for finding, show
+      display =
         (!SHOW_CONCLUSION_ALTERNATIVE_PDF && finding.follow_up_date.present?) ||
         (finding.follow_up_date.present? && !finding.implemented_audited?)
 
-      if show
+      if display && show.include?('estimated_follow_up')
+        "<b>#{I18n.t 'conclusion_review.estimated_follow_up_date'}:</b> " +
+          "#{I18n.l(finding.follow_up_date, format: '%B %Y')}\n"
+      elsif display
         "<b>#{finding.class.human_attribute_name('follow_up_date')}:</b> " +
           "#{I18n.l(finding.follow_up_date, format: :long)}\n"
       else
@@ -168,7 +161,12 @@ module ControlObjectiveItems::FindingPDFData
         label = I18n.t "label.#{repeated ? 'yes' : 'no'}"
 
         if show.include?('repeated_review') && finding.repeated_of
-          label << " (#{finding.repeated_of.review.identification})"
+          review_identification = [
+            I18n.t('conclusion_review.review_repeated_finding_label'),
+            finding.repeated_of.review.identification
+          ].join(' ')
+
+          label << " (#{review_identification})"
         end
 
         "<b>#{I18n.t 'findings.state.repeated'}:</b> #{label}\n"

@@ -13,7 +13,7 @@
 
   <div class="panel-body">
     <div class="table-responsive">
-      <table class="table table-striped table-condensed">
+      <table class="table table-striped table-condensed table-hover">
         <thead>
           <tr>
             <th></th>
@@ -21,6 +21,7 @@
             <th><%= BusinessUnit.model_name.human %></th>
             <th><%= PlanItem.human_attribute_name 'project' %></th>
             <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+              <th><%= PlanItem.human_attribute_name 'scope' %></th>
               <th><%= PlanItem.human_attribute_name 'risk_exposure' %></th>
             <% end %>
             <th><%= Tag.model_name.human count: 0 %></th>
@@ -36,6 +37,7 @@
               <td><%= plan_item.business_unit&.name %></td>
               <td><%= plan_item.project %></td>
               <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+                <td><%= plan_item.scope %></td>
                 <td><%= plan_item.risk_exposure %></td>
               <% end %>
               <td><%= tags plan_item.tags %></td>
@@ -53,7 +55,7 @@
       <% plan_items.each do |plan_item| %>
         <% if plan_item.resource_utilizations.present? %>
           <div class="table-responsive">
-            <table class="table table-striped table-condensed">
+            <table class="table table-striped table-condensed table-hover">
               <caption>
                 <h5>
                   (<%= plan_item.order_number %>)

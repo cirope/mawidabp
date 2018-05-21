@@ -82,8 +82,21 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :best_practices,
         order: 3,
-        controllers: :best_practices,
-        url: { controller: '/best_practices' }
+        url: { controller: '/best_practices' },
+        children: [
+          MenuItem.new(
+            :best_practices,
+            order: 1,
+            controllers: :best_practices,
+            url: { controller: '/best_practices' }
+          ),
+          MenuItem.new(
+            :control_objectives,
+            order: 1,
+            controllers: :control_objectives,
+            url: { controller: '/control_objectives' }
+          )
+        ]
       ),
       MenuItem.new(
         :settings,
@@ -92,38 +105,50 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/settings' }
       ),
       MenuItem.new(
-        :tags,
+        :weakness_templates,
         order: 5,
+        controllers: :weakness_templates,
+        url: { controller: '/weakness_templates' }
+      ),
+      MenuItem.new(
+        :risk_assessment_templates,
+        order: 6,
+        controllers: :risk_assessment_templates,
+        url: { controller: '/risk_assessment_templates' }
+      ),
+      MenuItem.new(
+        :tags,
+        order: 7,
         controllers: :tags,
         url: { controller: '/tags', kind: 'finding' }
       ),
       MenuItem.new(
         :documents,
-        order: 6,
+        order: 8,
         controllers: :documents,
         url: { controller: '/documents' }
       ),
       MenuItem.new(
         :news,
-        order: 7,
+        order: 9,
         controllers: :news,
         url: { controller: '/news' }
       ),
       MenuItem.new(
         :benefits,
-        order: 8,
+        order: 10,
         controllers: :benefits,
         url: { controller: '/benefits' }
       ),
       MenuItem.new(
         :e_mails,
-        order: 9,
+        order: 11,
         controllers: :e_mails,
         url: { controller: '/e_mails' }
       ),
       MenuItem.new(
         :questionnaires,
-        order: 10,
+        order: 12,
         url: { controller: '/questionnaires' },
         children: [
           MenuItem.new(
@@ -166,8 +191,14 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/periods' }
       ),
       MenuItem.new(
-        :plans,
+        :risk_assessments,
         order: 3,
+        controllers: :risk_assessments,
+        url: { controller: '/risk_assessments' }
+      ),
+      MenuItem.new(
+        :plans,
+        order: 4,
         controllers: :plans,
         url: { controller: '/plans' }
       )

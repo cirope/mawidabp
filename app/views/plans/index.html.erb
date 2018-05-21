@@ -1,4 +1,4 @@
-<table class="table table-condensed table-striped">
+<table class="table table-condensed table-striped table-hover">
   <thead>
     <tr>
       <th><%= Period.model_name.human %></th>
@@ -14,7 +14,8 @@
         <td><%= show_period_with_dates_as_abbr plan.period %></td>
         <td class="hidden-xs"><%= l plan.period.start, format: :short %></td>
         <td class="hidden-xs"><%= l plan.period.end, format: :short %></td>
-        <td><%= link_to_stats [:stats, plan] %></td>
+        <td><%= link_to_resources [:resources, plan] %></td>
+        <td><%= link_to_stats [:stats, plan, until: Time.zone.today.to_s(:db)] %></td>
         <td><%= link_to_clone new_plan_path(clone_from: plan.id) %></td>
         <td><%= link_to_show plan %></td>
         <td><%= link_to_edit [:edit, plan] %></td>

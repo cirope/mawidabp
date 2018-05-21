@@ -39,7 +39,7 @@ class AuthenticationTest < ActionController::TestCase
   end
 
   test 'no group admin user attempt login in admin mode' do
-    request.host = "#{APP_ADMIN_PREFIXES.first}.localhost.i"
+    request.host = [APP_ADMIN_PREFIXES.first, URL_HOST].join('.')
     @user.update_column :group_admin, false
 
     assert_invalid_authentication admin_mode: true
@@ -167,7 +167,12 @@ class AuthenticationTest < ActionController::TestCase
       assert_difference 'LoginRecord.count' do
         assert @auth.authenticated?
         assert_equal redirect_url || Hash[controller: 'welcome', action: 'index'], @auth.redirect_url
-        assert_equal I18n.t(*message || 'message.welcome'), @auth.message
+
+        if message
+          assert_equal I18n.t(*message), @auth.message
+        else
+          assert_nil @auth.message
+        end
       end
     end
 

@@ -11,8 +11,13 @@ es:
         reports: 'Reportes de seguridad'
         users: 'Usuarios'
         roles: 'Perfiles y Privilegios'
-      best_practices: 'Buenas prácticas'
+      best_practices_title: 'Buenas prácticas'
+      best_practices:
+        best_practices: 'Gestión'
+        control_objectives: 'Objetivos de control'
       settings: 'Configuraciones'
+      weakness_templates: 'Plantillas de observaciones'
+      risk_assessment_templates: 'Plantillas evaluación de riesgo'
       tags: 'Etiquetas'
       documents: 'Documentos'
       news: 'Noticias'
@@ -27,6 +32,7 @@ es:
     planning:
       periods: 'Periodos'
       resources: 'Recursos'
+      risk_assessments: 'Evaluaciones de riesgo'
       plans: 'Planes de trabajo'
     execution_title: 'Ejecución'
     execution:

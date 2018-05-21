@@ -9,6 +9,8 @@ module Findings::CSV
       review.identification,
       review.plan_item.project,
       review.conclusion_final_review&.summary || '-',
+      business_unit_type.name,
+      business_unit.name,
       review_code,
       id,
       taggings.map(&:tag).to_sentence,
@@ -24,8 +26,10 @@ module Findings::CSV
       control_objective_item.control_objective_text,
       origination_date_text,
       date_text,
+      (rescheduled if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'),
       reiteration_info,
       audit_comments,
+      audit_recommendations,
       answer,
       finding_answers_text
     ].compact
@@ -41,6 +45,14 @@ module Findings::CSV
       date = solution_date || follow_up_date
 
       date ? I18n.l(date, format: :minimal) : '-'
+    end
+
+    def rescheduled
+      if being_implemented? || awaiting?
+        I18n.t "label.#{rescheduled? ? 'yes' : 'no'}"
+      else
+        '-'
+      end
     end
 
     def reiteration_info
@@ -102,6 +114,8 @@ module Findings::CSV
         preload :organization,
           :repeated_of,
           :repeated_in,
+          :business_unit_type,
+          :business_unit,
           finding_answers: :user,
           review: :plan_item,
           finding_user_assignments: :user,
@@ -122,6 +136,8 @@ module Findings::CSV
           Review.model_name.human,
           PlanItem.human_attribute_name('project'),
           ConclusionFinalReview.human_attribute_name('summary'),
+          BusinessUnitType.model_name.human,
+          BusinessUnit.model_name.human,
           Weakness.human_attribute_name('review_code'),
           Finding.human_attribute_name('id'),
           Tag.model_name.human(count: 0),
@@ -137,8 +153,10 @@ module Findings::CSV
           ControlObjectiveItem.human_attribute_name('control_objective_text'),
           Finding.human_attribute_name('origination_date'),
           date_label(completed),
+          (Finding.human_attribute_name('rescheduled') if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'),
           I18n.t('findings.state.repeated'),
           Finding.human_attribute_name('audit_comments'),
+          Finding.human_attribute_name('audit_recommendations'),
           Finding.human_attribute_name('answer'),
           I18n.t('finding.finding_answers')
         ].compact

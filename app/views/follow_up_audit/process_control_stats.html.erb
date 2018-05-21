@@ -19,7 +19,7 @@
       <em><%= t 'follow_up_committee_report.process_control_stats.without_audits_in_the_period' %></em>
     </p>
   <% else %>
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed table-striped table-hover">
       <thead>
         <tr>
           <% @columns.each do |col_name, col_title, col_width| %>
@@ -48,6 +48,11 @@
       'follow_up_committee_report.process_control_stats.review_effectiveness_average',
       score: @reviews_score_data[period]
     ) %>
+  </p>
+
+  <p style="margin: -.75em 0em 1em 0em;">
+    <%= Review.model_name.human(count: 0) %>:
+    <%= @review_identifications[period].to_sentence %>
   </p>
 <% end %>
 

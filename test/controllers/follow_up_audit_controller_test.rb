@@ -10,7 +10,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     private_actions = [
       :index, :synthesis_report, :qa_indicators, :weaknesses_by_state,
       :weaknesses_by_risk, :weaknesses_by_audit_type,
-      :weaknesses_by_risk_report, :fixed_weaknesses_report
+      :weaknesses_by_risk_report, :fixed_weaknesses_report,
+      :weaknesses_by_month, :weaknesses_current_situation
     ]
 
     private_actions.each do |action|
@@ -61,14 +62,15 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
         :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'three'
+        :business_unit => 'three',
+        :scope => 'committee'
       },
       :controller_name => 'follow_up'
     }
 
     assert_response :success
     assert_not_nil assigns(:filters)
-    assert_equal 2, assigns(:filters).count
+    assert_equal 3, assigns(:filters).count
     assert_template 'follow_up_audit/synthesis_report'
   end
 
@@ -242,7 +244,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       get :weaknesses_by_risk, :params => {
         :weaknesses_by_risk => {
           :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+          :to_date => 10.years.from_now.to_date,
+          :compliance => 'yes',
+          :repeated => 'false'
         },
         :controller_name => 'follow_up',
         :final => false
@@ -414,6 +418,132 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_risk_report', 0)
+  end
+
+  test 'weaknesses by month' do
+    login
+
+    get :weaknesses_by_month
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_by_month'
+
+    assert_nothing_raised do
+      get :weaknesses_by_month, :params => {
+        :weaknesses_by_month => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }
+    end
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_by_month'
+  end
+
+  test 'filtered weaknesses by month' do
+    login
+
+    get :weaknesses_by_month, :params => {
+      :weaknesses_by_month => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'three',
+        :risk => '1',
+        :finding_status => Finding::STATUS[:being_implemented],
+        :finding_title => 'a'
+      },
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_by_month'
+  end
+
+  test 'create weaknesses by month' do
+    login
+
+    get :create_weaknesses_by_month, :params => {
+      :weaknesses_by_month => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.weaknesses_by_month.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'weaknesses_by_month', 0)
+  end
+
+  test 'weaknesses current situation' do
+    login
+
+    get :weaknesses_current_situation
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_current_situation'
+
+    assert_nothing_raised do
+      get :weaknesses_current_situation, :params => {
+        :weaknesses_current_situation => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }
+    end
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_current_situation'
+  end
+
+  test 'filtered weaknesses current situation' do
+    login
+
+    get :weaknesses_current_situation, :params => {
+      :weaknesses_current_situation => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :risk => '1',
+        :finding_status => Finding::STATUS[:being_implemented],
+        :finding_title => 'a'
+      },
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_current_situation'
+  end
+
+  test 'create weaknesses current situation' do
+    login
+
+    get :create_weaknesses_current_situation, :params => {
+      :weaknesses_current_situation => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.weaknesses_current_situation.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'weaknesses_current_situation', 0)
   end
 
   test 'fixed weaknesses report' do
@@ -732,6 +862,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
           :finding_title             => '1',
           :risk                      => '1',
           :priority                  => Finding.priorities_values.first,
+          :compliance                => 'yes',
+          :repeated                  => 'false',
           :issue_date                => Date.today.to_s(:db),
           :issue_date_operator       => '=',
           :origination_date          => Date.today.to_s(:db),

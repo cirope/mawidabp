@@ -8,9 +8,10 @@ module Users::ReviewAssignment
     options[:auditor]    = types[:auditor]    if auditor?
     options[:supervisor] = types[:supervisor] if supervisor?
     options[:manager]    = types[:manager]    if manager?
+    options[:viewer]     = types[:viewer]     if committee?
 
     if can_act_as_audited?
-      options[:audited] = types[:audited]   
+      options[:audited] = types[:audited]
       options[:viewer]  = types[:viewer]
     end
 

@@ -776,6 +776,70 @@ class ReviewTest < ActiveSupport::TestCase
     }
   end
 
+  test 'recode findings by repetition and risk' do
+    repeated_column = [
+      Weakness.quoted_table_name,
+      Weakness.qcn('repeated_of_id')
+    ].join('.')
+
+    repeated_order = if Review.connection.adapter_name == 'OracleEnhanced'
+                        "CASE WHEN #{repeated_column} IS NULL THEN 1 ELSE 0 END"
+                      else
+                        "#{repeated_column} IS NULL"
+                      end
+
+    order = [
+      repeated_order,
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
+    ]
+
+    codes = @review.weaknesses.not_revoked.order(order).pluck 'review_code'
+
+    assert codes.each_with_index.any? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i != i.next
+    }
+
+    @review.recode_weaknesses_by_repetition_and_risk
+
+    codes = @review.reload.weaknesses.not_revoked.order(order).
+      pluck 'review_code'
+
+    assert codes.sort.each_with_index.all? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i == i.next
+    }
+  end
+
+  test 'recode weaknesses by control objective order' do
+    codes = @review.grouped_control_objective_items.map do |_pc, cois|
+      cois.map do |coi|
+        findings =
+          coi.weaknesses.order(risk: :desc, review_code: :asc).not_revoked
+
+        findings.pluck 'review_code'
+      end
+    end.flatten
+
+    assert codes.each_with_index.any? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i != i.next
+    }
+
+    @review.recode_weaknesses_by_control_objective_order
+
+    codes = @review.reload.grouped_control_objective_items.map do |_pc, cois|
+      cois.map do |coi|
+        findings =
+          coi.weaknesses.order(risk: :desc, review_code: :asc).not_revoked
+
+        findings.pluck 'review_code'
+      end
+    end.flatten
+
+    assert codes.sort.each_with_index.all? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i == i.next
+    }
+  end
+
   test 'next identification number' do
     assert_equal '001', Review.next_identification_number(2017)
 
@@ -804,6 +868,24 @@ class ReviewTest < ActiveSupport::TestCase
     assert_difference '@review.best_practice_comments.count', -1 do
       @review.save!
     end
+  end
+
+  test 'reorder' do
+    @review.control_objective_items.create!(
+      order_number: -1,
+      control_objective_text: '3.1) Security policy',
+      control_objective_id: control_objectives(:security_policy_3_1).id
+    )
+
+    pcs        = @review.grouped_control_objective_items.map &:first
+    sorted_pcs = pcs.sort_by &:name
+
+    assert_not_equal pcs, sorted_pcs
+    assert @review.reorder
+
+    pcs = @review.grouped_control_objective_items.map &:first
+
+    assert_equal pcs, sorted_pcs
   end
 
   private

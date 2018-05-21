@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  namespace :plans do
+    get 'resources/show'
+  end
+
   post '/touch', to: 'touch#create', as: 'touch'
 
   # Sessions
@@ -9,6 +13,26 @@ Rails.application.routes.draw do
   resources :settings, only: [:index, :show, :edit, :update]
 
   resources :benefits
+
+  resources :risk_assessments do
+    member do
+      get :fetch_item
+      get :new_item
+      get :add_items
+      patch :sort_by_risk
+      post :merge_to_plan
+    end
+
+    collection do
+      get :auto_complete_for_business_unit
+      get :auto_complete_for_business_unit_type
+      get :auto_complete_for_best_practice
+    end
+  end
+
+  resources :risk_assessment_templates
+
+  resources :readings, only: [:create]
 
   resources :documents do
     get :download, on: :member
@@ -55,6 +79,7 @@ Rails.application.routes.draw do
     'weaknesses_by_state_execution',
     'weaknesses_report',
     'detailed_management_report',
+    'planned_cost_summary',
     'reviews_with_incomplete_work_papers_report'
   ].each do |action|
     get "execution_reports/#{action}", to: "execution_reports##{action}", as: action
@@ -63,6 +88,7 @@ Rails.application.routes.draw do
   [
     'create_weaknesses_by_state_execution',
     'create_detailed_management_report',
+    'create_planned_cost_summary',
     'create_weaknesses_report'
   ].each do |action|
     post "execution_reports/#{action}", to: "execution_reports##{action}", as: action
@@ -82,6 +108,7 @@ Rails.application.routes.draw do
   [
     'synthesis_report',
     'review_stats_report',
+    'review_scores_report',
     'weaknesses_by_state',
     'weaknesses_by_risk',
     'weaknesses_by_audit_type',
@@ -91,6 +118,8 @@ Rails.application.routes.draw do
     'process_control_stats',
     'qa_indicators',
     'weaknesses_by_risk_report',
+    'weaknesses_by_month',
+    'weaknesses_current_situation',
     'fixed_weaknesses_report',
     'weaknesses_graphs',
     'auto_complete_for_business_unit',
@@ -107,6 +136,7 @@ Rails.application.routes.draw do
   [
     'create_synthesis_report',
     'create_review_stats_report',
+    'create_review_scores_report',
     'create_weaknesses_by_state',
     'create_weaknesses_by_risk',
     'create_weaknesses_by_audit_type',
@@ -116,6 +146,8 @@ Rails.application.routes.draw do
     'create_process_control_stats',
     'create_qa_indicators',
     'create_weaknesses_by_risk_report',
+    'create_weaknesses_by_month',
+    'create_weaknesses_current_situation',
     'create_fixed_weaknesses_report'
   ].each do |action|
     post "conclusion_reports/#{action}",
@@ -200,7 +232,10 @@ Rails.application.routes.draw do
       post :create_bundle
     end
 
-    get :check_for_approval, on: :collection
+    collection do
+      get :check_for_approval
+      get :corrective_actions_update
+    end
   end
 
   namespace :conclusion_final_reviews do
@@ -236,7 +271,10 @@ Rails.application.routes.draw do
       get :excluded_control_objectives
       patch :finished_work_papers
       patch :recode_findings
-      patch :recode_findings_by_risk
+      patch :recode_weaknesses_by_risk
+      patch :recode_weaknesses_by_repetition_and_risk
+      patch :recode_weaknesses_by_control_objective_order
+      patch :reorder
     end
 
     collection do
@@ -264,7 +302,9 @@ Rails.application.routes.draw do
       get :auto_complete_for_tagging
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
+      get :auto_complete_for_weakness_template
       get :state_changed
+      get :weakness_template_changed
     end
 
     member do
@@ -272,10 +312,17 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :weakness_templates do
+    get :auto_complete_for_control_objective, on: :collection
+  end
+
   resources :control_objective_items do
     get :suggest_next_work_paper_code, on: :member
-    get :auto_complete_for_business_unit, on: :collection
-    get :auto_complete_for_business_unit_type, on: :collection
+
+    collection do
+      get :auto_complete_for_business_unit
+      get :auto_complete_for_business_unit_type
+    end
   end
 
   namespace :plans do
@@ -285,7 +332,10 @@ Rails.application.routes.draw do
   resources :plans do
     resources :plan_items, only: [:new, :edit]
 
-    get :stats, on: :member, to: 'plans/stats#show'
+    member do
+      get :stats, to: 'plans/stats#show'
+      get :resources, to: 'plans/resources#show'
+    end
 
     collection do
       get :auto_complete_for_business_unit
@@ -294,6 +344,8 @@ Rails.application.routes.draw do
   end
 
   resources :resource_classes
+
+  resources :control_objectives, only: [:index, :show]
 
   resources :best_practices do
     resources :process_controls, only: [:new, :edit]
@@ -344,7 +396,7 @@ Rails.application.routes.draw do
     resources :registration_roles, only: [:index]
     resources :releases, only: [:edit, :update]
     resources :roles, only: [:index]
-    resources :status, only: [:show]
+    resources :status, only: [:index, :show, :create, :destroy]
     resources :imports, only: [:new, :create]
   end
 

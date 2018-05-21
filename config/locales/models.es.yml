@@ -105,6 +105,21 @@ es:
       resource_class:
         one: 'Clase de recurso'
         other: 'Clases de recursos'
+      risk_assessment:
+        one: 'Evaluación de riesgo'
+        other: 'Evaluaciones de riesgo'
+      risk_assessment_item:
+        one: 'Ítem evaluado'
+        other: 'Items evaluados'
+      risk_assessment_template:
+        one: 'Plantilla de evaluación de riesgo'
+        other: 'Plantillas de evaluación de riesgo'
+      risk_assessment_weight:
+        one: 'Atributo de evaluación de riesgo'
+        other: 'Atributos de evaluación de riesgo'
+      risk_weight:
+        one: 'Valor de evaluación de riesgo'
+        other: 'Valores de evaluación de riesgo'
       tag:
         one: 'Etiqueta'
         other: 'Etiquetas'
@@ -114,6 +129,9 @@ es:
       weakness:
         one: 'Observación'
         other: 'Observaciones'
+      weakness_template:
+        one: 'Plantilla de observación'
+        other: 'Plantillas de observaciones'
       work_paper:
         one: 'Papel de trabajo'
         other: 'Papeles de trabajo'
@@ -355,6 +373,7 @@ es:
         start: 'Proyecto (inicio)'
         end: 'Proyecto (fin)'
         order_number: 'Proyecto (orden)'
+        scope: 'Proyecto (Alcance auditoría)'
         risk_exposure: 'Proyecto (exposición al riesgo)'
         business_unit_id: 'Proyecto (unidad de negocio)'
         status: 'Proyecto (estado)'
@@ -370,6 +389,7 @@ es:
         start: 'Inicio'
         end: 'Fin'
         order_number: 'Orden'
+        scope: 'Alcance auditoría'
         risk_exposure: 'Exposición al riesgo'
         business_unit_id: 'Unidad de negocio'
         resources: 'Recursos'
@@ -426,6 +446,43 @@ es:
         cost: 'Costo'
         resource: 'Recurso'
         resource_consumer: 'Utilización de recurso'
+      risk_assessment:
+        name: 'Nombre'
+        description: 'Descripción'
+        period: 'Periodo'
+        risk_assessment_template: 'Plantilla de evaluación de riesgo'
+        status: 'Estado'
+        file_model: "Anexo"
+        risk_assessment_weights: 'Ponderadores'
+        risk_assessment_items: 'Ítems'
+      risk_assessment/risk_assessment_items:
+        name: 'Nombre (ítem)'
+        risk: 'Riesgo (ítem)'
+        business_unit: 'Unidad de negocio'
+        risk_weights: 'Valores de la evaluación'
+      risk_assessment/risk_assessment_items/risk_weights:
+        value: 'Valor (ítem)'
+        weight: 'Ponderador (ítem)'
+      risk_assessment_item:
+        name: 'Nombre'
+        risk: 'Riesgo'
+        business_unit: 'Unidad de negocio'
+        process_control: 'Proceso'
+      risk_assessment_template:
+        name: 'Nombre'
+        description: 'Descripción'
+        risk_assessment_weights: 'Atributos de evaluación de riesgo'
+      risk_assessment_template/risk_assessment_weights:
+        name: 'Atributo'
+        description: 'Descripción'
+        weight: 'Ponderador'
+      risk_assessment_weight:
+        name: 'Atributo'
+        description: 'Descripción'
+        weight: 'Ponderador'
+      risk_weight:
+        value: 'Valor'
+        weight: 'Ponderador'
       weakness:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
@@ -447,7 +504,17 @@ es:
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'
+        weakness_template: 'Buscar plantilla por título'
+        weakness_template_from_control_objective: 'Plantilla sugerida por objetivo de control'
         work_papers: 'Papeles de trabajo'
+      weakness_template:
+        title: 'Título'
+        description: 'Observación'
+        risk: 'Riesgo'
+        operational_risk: 'Riesgo operacional'
+        impact: 'Impacto'
+        internal_control_components: 'Componentes de CI'
+        allow_duplication: 'Permitir título duplicado'
 
     errors:
       models:
@@ -478,3 +545,7 @@ es:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
             end:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
+        risk_assessment_template:
+          attributes:
+            risk_assessment_weights:
+              blank: 'debe tener al menos uno'

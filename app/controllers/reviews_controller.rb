@@ -1,5 +1,6 @@
 class ReviewsController < ApplicationController
   include AutoCompleteFor::BestPractice
+  include AutoCompleteFor::ControlObjective
   include AutoCompleteFor::ProcessControl
   include AutoCompleteFor::Tagging
   include SearchableByTag
@@ -7,7 +8,9 @@ class ReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
     :show, :edit, :update, :destroy, :download_work_papers, :survey_pdf,
-    :finished_work_papers, :recode_findings, :recode_findings_by_risk,
+    :finished_work_papers, :recode_findings, :recode_weaknesses_by_risk,
+    :recode_weaknesses_by_repetition_and_risk,
+    :recode_weaknesses_by_control_objective_order, :reorder,
     :excluded_control_objectives
   ]
   before_action :set_review_clone, only: [:new]
@@ -186,6 +189,7 @@ class ReviewsController < ApplicationController
       past_implemented_audited_findings_review_url(id: plan_item.id) if plan_item
 
     render json: {
+      scope: plan_item.scope,
       risk_exposure: plan_item.risk_exposure,
       business_unit_name: name,
       business_unit_type: type,
@@ -335,56 +339,6 @@ class ReviewsController < ApplicationController
     end
   end
 
-  # * GET /reviews/auto_complete_for_control_objective
-  def auto_complete_for_control_objective
-    @tokens = params[:q][0..100].split(/[\s,]/).uniq
-    @tokens.reject! {|t| t.blank?}
-
-    conditions = [
-      [
-        [
-          "#{BestPractice.table_name}.#{BestPractice.qcn 'shared'} = :false",
-          "#{BestPractice.table_name}.#{BestPractice.qcn 'organization_id'} = :organization_id"
-        ].join(' AND '),
-        [
-          "#{BestPractice.table_name}.#{BestPractice.qcn 'shared'} = :true",
-          "#{BestPractice.table_name}.#{BestPractice.qcn 'group_id'} = :group_id"
-        ].join(' AND ')
-      ].map { |c| "(#{c})" }.join(' OR '),
-      "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('obsolete')} = :false"
-    ]
-    parameters = {
-      false:           false,
-      true:            true,
-      organization_id: Organization.current_id,
-      group_id:        Group.current_id
-    }
-
-    @tokens.each_with_index do |t, i|
-      conditions << [
-        "LOWER(#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('name')}) LIKE :control_objective_data_#{i}",
-        "LOWER(#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn('name')}) LIKE :control_objective_data_#{i}"
-      ].join(' OR ')
-
-      parameters[:"control_objective_data_#{i}"] = "%#{t.mb_chars.downcase}%"
-    end
-
-    @control_objectives = ControlObjective.includes(
-      process_control: :best_practice
-    ).where(
-      conditions.map { |c| "(#{c})" }.join(' AND '), parameters
-    ).order(
-      [
-        "#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn('name')} ASC",
-        "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('order')} ASC"
-      ]
-    ).references(:best_practices, :process_control).limit(10)
-
-    respond_to do |format|
-      format.json { render json: @control_objectives }
-    end
-  end
-
   # * GET /reviews/estimated_amount/1
   def estimated_amount
     plan_item = PlanItem.find(params[:id]) unless params[:id].blank?
@@ -420,11 +374,34 @@ class ReviewsController < ApplicationController
     redirect_to @review, notice: t('review.findings_recoded')
   end
 
-  # * PUT /reviews/1/recode_findings_by_risk
-  def recode_findings_by_risk
+  # * PUT /reviews/1/recode_weaknesses_by_risk
+  def recode_weaknesses_by_risk
     @review.recode_weaknesses_by_risk
 
     redirect_to @review, notice: t('review.findings_recoded')
+  end
+
+  # * PUT /reviews/1/recode_weaknesses_by_repetition_and_risk
+  def recode_weaknesses_by_repetition_and_risk
+    @review.recode_weaknesses_by_repetition_and_risk
+
+    redirect_to @review, notice: t('review.findings_recoded')
+  end
+
+  # * PUT /reviews/1/recode_weaknesses_by_control_objective_order
+  def recode_weaknesses_by_control_objective_order
+    @review.recode_weaknesses_by_control_objective_order
+
+    redirect_to @review, notice: t('review.findings_recoded')
+  end
+
+  # * PUT /reviews/1/reorder
+  def reorder
+    if @review.reorder
+      redirect_to @review, notice: t('review.reordered')
+    else
+      redirect_to edit_review_url(@review), alert: t('review.failed_to_reorder')
+    end
   end
 
   # * GET /reviews/next_identification_number
@@ -501,7 +478,9 @@ class ReviewsController < ApplicationController
         excluded_control_objectives: :read,
         finished_work_papers: :modify,
         recode_findings: :modify,
-        recode_findings_by_risk: :modify
+        recode_weaknesses_by_risk: :modify,
+        recode_weaknesses_by_repetition_and_risk: :modify,
+        recode_weaknesses_by_control_objective_order: :modify
       )
     end
 end

@@ -14,6 +14,7 @@ es:
     logout: 'Salir'
     new: 'Nuevo'
     show: 'Ver'
+    resources: 'Recursos'
     stats: 'Estadísticas'
     warning: 'Advertencia'
     upload: 'Adjuntar'
@@ -58,6 +59,10 @@ es:
       new: 'Agregar objetivo'
 
   control_objectives:
+    index:
+      title: 'Listado de objetivos de control'
+    show:
+      title: 'Detalle objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
 
@@ -100,6 +105,9 @@ es:
     index:
       title: 'Listado de hallazgos'
       current_user_answers_count: 'Comentarios propios'
+      unread_answers:
+        one: 'Tiene un comentario sin leer'
+        other: 'Tiene %{count} comentarios sin leer'
     show:
       title: 'Detalles del hallazgo'
     edit:
@@ -130,7 +138,7 @@ es:
       repeated: 'Reiterada'
       revoked: 'Anulada'
       criteria_mismatch: 'Difiere criterio'
-      expired: 'Expirada'
+      expired: 'Desestimada / No aplica'
 
   login_records:
     choose:
@@ -178,7 +186,7 @@ es:
       title: 'Modificar período'
     errors:
       can_not_be_destroyed: 'El período no puede ser eliminado'
-      plans:
+      plan:
         one: 'Tiene un plan asociado'
         other: 'Tiene %{count} planes asociados'
       reviews:
@@ -239,13 +247,17 @@ es:
       title: 'Plan de auditoría'
       pdf_name: 'plan_periodo_%{period}.pdf'
       resource_utilization: 'Recursos utilizados'
+    resources:
+      show:
+        title: 'Resumen por recurso'
+        empty: 'No hay recursos humanos utilizados en el plan seleccionado'
     stats:
       show:
         title: 'Estadísiticas del plan de auditoría'
         now: 'Ahora'
         total: 'Total'
         planned: 'Planificados'
-        executed: 'Ejecutados'
+        concluded: 'Concluidos'
         on_time: 'En fecha'
         progress: 'Avance total'
         compliance: 'Cumplimiento'
@@ -307,6 +319,11 @@ es:
       title: 'Detalles del cuestionario'
     questions:
       new: 'Agregar cuestión'
+
+  readings:
+    reading:
+      mark_as_read: 'Marcar como leído'
+      readed_on: 'Marcado como leído el %{on}'
 
   report:
     index_title: 'Listado de reportes'
@@ -452,6 +469,10 @@ es:
         submit: 'Reasignar'
       must_select_a_user: 'Debe seleccionar un usuario'
 
+    registrations:
+      new:
+        title: 'Registrar nuevo usuario'
+
     releases:
       edit:
         title: 'Liberar responsabilidades'
@@ -460,6 +481,10 @@ es:
         submit: 'Liberar responsabilidades'
 
     status:
+      status_controls:
+        add: 'Agregar usuario a lista de estado de seguimiento'
+        remove: 'Eliminar usuario de lista de estado de seguimiento'
+        list: 'Ver lista de observaciones pendientes de los usuarios seleccionados'
       show:
         title: 'Estado'
         table: 'Ver tabla'
@@ -478,6 +503,62 @@ es:
             one: '*Una* observación solucionada'
             other: '*%{count}* observaciones solucionadas'
 
+  risk_assessments:
+    edit:
+      title: 'Editar evaluación de riesgo'
+      other_actions: 'Acciones'
+      sort_by_risk: 'Ordenar por riesgo descendente'
+    index:
+      new: 'Nueva evaluación de riesgo'
+      title: 'Listado de evaluaciones de riesgo'
+      empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="label label-primary">Nueva evaluación de riesgo</span>'
+      empty_search_html: 'No hay evaluaciones de riesgo que coincidan con el criterio de búsqueda'
+      merge_to_plan: 'Crear proyectos en plan a partir de la evaluación'
+    new:
+      title: 'Crear evaluación de riesgo'
+    show:
+      title: 'Ver evaluación de riesgo'
+      download_pdf: 'Descargar PDF'
+      download_csv: 'Descargar CSV'
+    form:
+      new_risk_assessment_items: 'Luego de crear la evaluación de riesgo podrá agregar items a la misma'
+      add_risk_assessment_item: 'Agregar item'
+      add_best_practice: 'Agregar buena práctica'
+      add_business_unit_type: 'Agregar unidad organizativa'
+      apply: 'Aplicar'
+    risk_weight_risks:
+      none: 'Nulo'
+      low: 'Bajo'
+      medium_low: 'Medio bajo'
+      medium: 'Medio'
+      medium_high: 'Medio alto'
+      high: 'Alto'
+    status:
+      draft: 'Borrador'
+      final: 'Definitiva'
+      merged: 'Planificada'
+    pdf:
+      title: 'Evaluación de riesgo'
+      pdf_name: 'evaluacion_de_riesgo_%{name}.pdf'
+      period:
+        title: "Periodo (%{name})"
+        range: "%{from_date} al %{to_date}"
+
+  risk_assessment_templates:
+    edit:
+      title: 'Editar plantilla de evaluación de riesgo'
+    index:
+      new: 'Nueva plantilla de evaluación de riesgo'
+      title: 'Listado de plantillas de evaluación de riesgo'
+      empty_html: 'No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="label label-primary">Nueva plantilla de evaluación de riesgo</span>'
+      empty_search_html: 'No hay plantillas de evaluación de riesgo que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear plantilla de evaluación de riesgo'
+    show:
+      title: 'Ver plantilla de evaluación de riesgo'
+    form:
+      add_risk_assessment_weight: 'Agregar ponderador'
+
   versions:
     index:
       title: 'Ver reporte de cambios de seguridad'
@@ -495,3 +576,18 @@ es:
     column_old_value: 'Valor anterior'
     without_changes: 'Sin cambios'
     pdf_list_name: 'reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf'
+
+  weakness_templates:
+    edit:
+      title: 'Editar plantilla de observación'
+    index:
+      new: 'Nueva plantilla de observación'
+      title: 'Listado de plantillas de observaciones'
+      empty_html: 'No hay plantillas de observaciones, puede crear una con el botón <span class="label label-primary">Nueva plantilla de observación</span>'
+      empty_search_html: 'No hay plantillas de observaciones que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear plantilla de observación'
+    show:
+      title: 'Ver plantilla de observación'
+    form:
+      add_control_objective: 'Agregar objetivo de control'

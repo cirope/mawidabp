@@ -59,9 +59,27 @@
         </div>
       </div>
 
+      <% if show_review_best_practice_comments? %>
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :main_weaknesses_text, input_html: { rows: 4, readonly: readonly } %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :corrective_actions, input_html: { rows: 4, readonly: readonly } %>
+          </div>
+        </div>
+      <% end %>
+
       <div class="row">
         <div class="col-md-6">
           <%= f.input :observations, input_html: { rows: 4, readonly: readonly } %>
+        </div>
+        <div class="col-md-6 toggle-visibility">
+          <% if show_review_best_practice_comments? %>
+            <%= f.input :affects_compliance, input_html: { disabled: readonly } %>
+          <% else %>
+            <%= f.input :collapse_control_objectives %>
+          <% end %>
         </div>
       </div>
     <% end %>

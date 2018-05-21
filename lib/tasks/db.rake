@@ -1,8 +1,12 @@
 namespace :db do
   desc 'Put records, remove and update the database using current app values'
   task update: :environment do
-    update_organization_settings
-    add_new_answer_options
+    ActiveRecord::Base.transaction do
+      update_organization_settings    # 2017-03-15
+      add_new_answer_options          # 2017-06-29
+      add_best_practice_privilege     # 2018-01-31
+      add_control_objective_privilege # 2018-01-31
+    end
   end
 end
 
@@ -35,4 +39,36 @@ private
       "#{AnswerOption.quoted_table_name}.#{AnswerOption.qcn 'option'} LIKE ?",
       'not_apply'
     ).empty?
+  end
+
+  def add_best_practice_privilege
+    if add_best_practice_privilege?
+      Privilege.where(module: 'administration_best_practices').find_each do |p|
+        attrs = p.attributes.
+          except('id', 'module', 'created_at', 'updated_at').
+          merge(module: 'administration_best_practices_best_practices')
+
+        Privilege.create! attrs
+      end
+    end
+  end
+
+  def add_best_practice_privilege?
+    Privilege.where(module: 'administration_best_practices_best_practices').empty?
+  end
+
+  def add_control_objective_privilege
+    if add_control_objective_privilege?
+      Privilege.where(module: 'administration_best_practices_best_practices').find_each do |p|
+        attrs = p.attributes.
+          except('id', 'module', 'created_at', 'updated_at').
+          merge(module: 'administration_best_practices_control_objectives')
+
+        Privilege.create! attrs
+      end
+    end
+  end
+
+  def add_control_objective_privilege?
+    Privilege.where(module: 'administration_best_practices_control_objectives').empty?
   end

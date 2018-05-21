@@ -1,5 +1,5 @@
 module Reports::ProcessControlStats
-  include Reports::Pdf
+  include Reports::PDF
   include Reports::Period
   include Parameters::Risk
 
@@ -23,6 +23,7 @@ module Reports::ProcessControlStats
     @process_controls = []
     @process_control_data = {}
     @process_control_ids_data = {}
+    @review_identifications = {}
     @reviews_score_data = {}
     reviews_score_data = {}
     weaknesses_conditions = {}
@@ -85,6 +86,7 @@ module Reports::ProcessControlStats
     end
 
     @periods.each do |period|
+      review_identifications = []
       process_controls = {}
       reviews_score_data[period] ||= []
 
@@ -103,10 +105,15 @@ module Reports::ProcessControlStats
           id = coi.review.id
           pc_data[:review_ids] ||= []
           pc_data[:review_ids] << id if pc_data[:review_ids].exclude? id
+          identification = coi.review.identification
           weaknesses_count = {}
           weaknesses = final ? coi.final_weaknesses : coi.weaknesses
           weaknesses = weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
           weaknesses = weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
+
+          if review_identifications.exclude? identification
+            review_identifications << identification
+          end
 
           weaknesses.not_revoked.each do |w|
             @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
@@ -141,6 +148,7 @@ module Reports::ProcessControlStats
         end
       end
 
+      @review_identifications[period] = review_identifications.sort
       @reviews_score_data[period] = reviews_score_data[period].size > 0 ?
         weighted_average(reviews_score_data[period]) : 100
 
@@ -253,6 +261,12 @@ module Reports::ProcessControlStats
         "#{@controller}_committee_report.process_control_stats.review_effectiveness_average",
         :score => @reviews_score_data[period]
       ), :inline_format => true
+
+      pdf.move_down PDF_FONT_SIZE * 0.25
+      pdf.text [
+        Review.model_name.human(count: 0),
+        @review_identifications[period].to_sentence
+      ].join(': ') , :inline_format => true
     end
 
     add_pdf_filters(pdf, @controller, @filters) if @filters.present?

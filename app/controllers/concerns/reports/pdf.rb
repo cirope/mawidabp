@@ -1,4 +1,4 @@
-module Reports::Pdf
+module Reports::PDF
 
   def init_pdf(title, subtitle)
     pdf = Prawn::Document.create_generic_pdf :landscape
@@ -22,8 +22,13 @@ module Reports::Pdf
 
     pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
       (PDF_FONT_SIZE * 1.25).round, align
+  end
 
+  def add_month_title(pdf, month, align = :left)
     pdf.move_down PDF_FONT_SIZE
+
+    pdf.add_title I18n.l(month, format: '%B %Y'), (PDF_FONT_SIZE * 1.5).round,
+      align
   end
 
   def add_weaknesses_synthesis_table(pdf, data, font_size = PDF_FONT_SIZE)

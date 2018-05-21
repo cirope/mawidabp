@@ -118,10 +118,12 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf/1
   def export_to_pdf
+    options = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
+
     if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_final_review.alternative_pdf(current_organization)
+      @conclusion_final_review.alternative_pdf(current_organization, options)
     else
-      @conclusion_final_review.to_pdf(current_organization, params[:export_options]&.to_unsafe_h)
+      @conclusion_final_review.to_pdf(current_organization, options)
     end
 
     respond_to do |format|
@@ -189,7 +191,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     users = []
     users_with_poll = []
-    export_options = params[:export_options] || {}
+    export_options = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
 
     if params[:conclusion_review]
       include_score_sheet = params[:conclusion_review][:include_score_sheet] == '1'
@@ -205,7 +207,7 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
     if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_final_review.alternative_pdf(current_organization)
+      @conclusion_final_review.alternative_pdf(current_organization, export_options)
     else
       @conclusion_final_review.to_pdf(current_organization, export_options)
     end
@@ -384,7 +386,8 @@ class ConclusionFinalReviewsController < ApplicationController
       params.require(:conclusion_final_review).permit(
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
         :summary, :recipients, :evolution, :evolution_justification, :sectors,
-        :observations, :lock_version,
+        :observations, :main_weaknesses_text, :corrective_actions,
+        :affects_compliance, :collapse_control_objectives, :lock_version,
         review_attributes: [
           :id, :manual_score, :lock_version,
           best_practice_comments_attributes: [
