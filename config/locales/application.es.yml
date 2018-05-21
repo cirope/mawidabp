@@ -458,7 +458,6 @@ es:
     not_apply_text: 'No aplica calificación'
     excluded_from_score: "No se tiene en cuenta en la calificación del informe"
     not_applicable: "No aplica"
-    outdated_name: 'El nombre del objetivo de control ha cambiado respecto del definido en la buena práctica, haga click para restaurarlo'
     errors:
       not_finished: "no está terminado"
       audit_date_ahead_of_issue_date: "la fecha de auditoría es mayor a la fecha de emisión del informe"
@@ -906,6 +905,7 @@ es:
     weakness_from_template: "Observación creada de una plantilla"
     repeated_weaknesses: "Reiteradas"
     new_weaknesses: "Nuevas"
+    outdated_control_objective_name: 'El nombre del objetivo de control ha cambiado respecto del definido en la buena práctica, haga click para restaurarlo'
     taken_work_paper_code:
       one: "El código de papel de trabajo %{duplicated_work_papers} está duplicado"
       other: "Los siguientes códigos de papeles de trabajo están duplicados: %{duplicated_work_papers}"
