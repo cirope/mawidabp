@@ -251,7 +251,7 @@
       subtitle: "OBSERVACIONES, SITUACIÓN ACTUAL - INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      origination_year: "Año de antigüedad"
+      origination_year: "Año de origen"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -736,7 +736,7 @@
       subtitle: "SEGUIMIENTO DE OBSERVACIONES, SITUACIÓN ACTUAL - INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      origination_year: "Año de antigüedad"
+      origination_year: "Año de origen"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
