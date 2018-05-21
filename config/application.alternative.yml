@@ -12,8 +12,6 @@ EMAIL_ADDRESS: 'noreply@change.me'
 
 SECRET_KEY_BASE: 'REPLACE with rake secret output'
 NEW_RELIC_LICENSE_KEY: 'REPLACE with the one provided by NewRelic'
-KEY_ENCRYPTER: "kwwOMqMtnYUmh/Qa9/933GpHdQ7ZQhBrPoqPOwiWwpA=\n"
-IV_ENCRYPTER: "ERQUmQQNwzLZI5RSGZ6ifw==\n"
 
 # Extra application options
 ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION: 'true'
