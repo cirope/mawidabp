@@ -120,4 +120,16 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_equal user.id, User.find_by(user: 'new_user').manager_id
     assert_nil user.manager_id
   end
+
+  test 'test encrypt and decrypt with Security lib' do
+    phrase = 'I love dogs'
+    encrypted_phrase = Security.encrypt(phrase)
+
+    assert_not_equal(phrase, encrypted_phrase)
+    assert Base64.decode64(encrypted_phrase)
+
+    decrypted_phrase = Security.decrypt(encrypted_phrase)
+
+    assert_equal(phrase, decrypted_phrase)
+  end
 end
