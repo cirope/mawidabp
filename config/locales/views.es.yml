@@ -105,6 +105,7 @@ es:
     index:
       title: 'Listado de observaciones'
       current_user_answers_count: 'Comentarios propios'
+      unread_answers_filter: 'Comentarios sin leer'
       unread_answers:
         one: 'Tiene un comentario sin leer'
         other: 'Tiene %{count} comentarios sin leer'

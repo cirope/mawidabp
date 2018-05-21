@@ -26,7 +26,39 @@ CONCLUSION_EVOLUTION_IMAGES = {
   [
     'Satisfactorio con salvedades',
     'Mantiene calificación desfavorable'
-  ] => 'evolution_equal_success.png'
+  ] => 'evolution_equal_success.png',
+  [
+    'Satisfactorio con salvedades',
+    'Empeora calficación'
+  ] => 'evolution_down_success.png'
+}
+
+CONCLUSION_EVOLUTION = {
+  'Satisfactorio' => [
+    'Mantiene calificación favorable',
+    'Mejora calificación',
+    'No aplica'
+  ],
+  'Satisfactorio con salvedades' => [
+    'Mantiene calificación desfavorable',
+    'Mejora calificación',
+    'Empeora calficación',
+    'No aplica'
+  ],
+  'Necesita mejorar' => [
+    'Mantiene calificación desfavorable',
+    'Mejora calificación',
+    'Empeora calficación',
+    'No aplica'
+  ],
+  'No satisfactorio' => [
+    'Mantiene calificación desfavorable',
+    'Empeora calficación',
+    'No aplica'
+  ],
+  'No aplica' => [
+    'No aplica'
+  ]
 }
 
 EVOLUTION_OPTIONS = [

@@ -4,12 +4,12 @@ conclusion_current_final_review:
   issue_date: <%= 2.days.ago.to_date.to_s(:db) %>
   close_date: <%= 2.days.from_now.to_date.to_s(:db) %>
   applied_procedures: Current Final Applied Procedures
-  conclusion: Current Final Conclusion
+  conclusion: <%= CONCLUSION_OPTIONS.first %>
   approved: true
   summary: 'ACT 12'
   recipients: 'John Doe'
   sectors: 'Area 51'
-  evolution: 'Do the evolution'
+  evolution: <%= EVOLUTION_OPTIONS.second %>
   evolution_justification: 'Ok'
   main_weaknesses_text: 'Main weakness X'
   corrective_actions: 'You should correct this way'
@@ -22,11 +22,11 @@ conclusion_current_draft_review:
   review: current_review
   issue_date: <%= 2.days.ago.to_date.to_s(:db) %>
   applied_procedures: Current Draft Applied Procedures
-  conclusion: Current Draft Conclusion
+  conclusion: <%= CONCLUSION_OPTIONS.first %>
   approved: true
   recipients: 'John Doe'
   sectors: 'Area 51'
-  evolution: 'Do the evolution'
+  evolution: <%= EVOLUTION_OPTIONS.second %>
   evolution_justification: 'Ok'
   main_weaknesses_text: 'Main weakness X'
   corrective_actions: 'You should correct this way'
@@ -40,12 +40,12 @@ conclusion_past_final_review:
   issue_date: <%= 2.months.ago.to_date.to_s(:db) %>
   close_date: <%= 1.month.ago.to_date.to_s(:db) %>
   applied_procedures: Past Final Applied Procedures
-  conclusion: Past Final Conclusion
+  conclusion: <%= CONCLUSION_OPTIONS.first %>
   approved: true
   summary: 'ACT 12'
   recipients: 'John Doe'
   sectors: 'Area 51'
-  evolution: 'Do the evolution'
+  evolution: <%= EVOLUTION_OPTIONS.second %>
   evolution_justification: 'Ok'
   main_weaknesses_text: 'Main weakness X'
   corrective_actions: 'You should correct this way'
@@ -59,11 +59,11 @@ conclusion_past_draft_review:
   review: past_review
   issue_date: <%= 2.months.ago.to_date.to_s(:db) %>
   applied_procedures: Past Draft Applied Procedures
-  conclusion: Past Draft Conclusion
+  conclusion: <%= CONCLUSION_OPTIONS.first %>
   approved: true
   recipients: 'John Doe'
   sectors: 'Area 51'
-  evolution: 'Do the evolution'
+  evolution: <%= EVOLUTION_OPTIONS.second %>
   evolution_justification: 'Ok'
   main_weaknesses_text: 'Main weakness X'
   corrective_actions: 'You should correct this way'
@@ -76,11 +76,11 @@ conclusion_with_conclusion_draft_review:
   review: review_with_conclusion
   issue_date: <%= 10.days.from_now.to_date.to_s(:db) %>
   applied_procedures: With Conclusion Draft Applied Procedures
-  conclusion: With Conclusion Draft Conclusion
+  conclusion: <%= CONCLUSION_OPTIONS.first %>
   approved: true
   recipients: 'John Doe'
   sectors: 'Area 51'
-  evolution: 'Do the evolution'
+  evolution: <%= EVOLUTION_OPTIONS.second %>
   evolution_justification: 'Ok'
   main_weaknesses_text: 'Main weakness X'
   corrective_actions: 'You should correct this way'
@@ -93,11 +93,11 @@ conclusion_approved_with_conclusion_draft_review:
   review: review_approved_with_conclusion
   issue_date: <%= 2.days.ago.to_date.to_s(:db) %>
   applied_procedures: With Conclusion Draft Applied Procedures
-  conclusion: With Conclusion Draft Conclusion
+  conclusion: <%= CONCLUSION_OPTIONS.first %>
   approved: true
   recipients: 'John Doe'
   sectors: 'Area 51'
-  evolution: 'Do the evolution'
+  evolution: <%= EVOLUTION_OPTIONS.second %>
   evolution_justification: 'Ok'
   main_weaknesses_text: 'Main weakness X'
   corrective_actions: 'You should correct this way'
