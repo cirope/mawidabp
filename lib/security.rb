@@ -10,9 +10,7 @@ module Security
   def self.crypt
     # Secret key with Encryptor defaults
     ActiveSupport::MessageEncryptor.new(
-      Rails.application.secrets.secret_key_base[0..31],
-      cipher: 'aes-256-cbc',
-      digest: 'SHA1'
+      Rails.application.secrets.secret_key_base[0..31]
     )
   end
 end
