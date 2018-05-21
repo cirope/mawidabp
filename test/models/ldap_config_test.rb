@@ -136,12 +136,12 @@ class LdapConfigTest < ActiveSupport::TestCase
   test 'encrypt the same phrase' do
     phrase = 'I love dogs'
 
-    encrypted_phrase = 5.times.map { Security.encrypt(phrase) }
+    encrypted_phrases = 5.times.map { Security.encrypt(phrase) }
 
     # Check all encrypted results are different
-    assert_equal(5, encrypted_phrase.uniq.size)
+    assert_equal(5, encrypted_phrases.uniq.size)
 
-    encrypted_phrase.each do |ep|
+    encrypted_phrases.each do |ep|
       decrypted_phrase = Security.decrypt(ep)
 
       assert_equal(phrase, decrypted_phrase, ep)
