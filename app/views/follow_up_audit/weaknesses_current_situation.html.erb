@@ -77,7 +77,7 @@
     <% if weakness.follow_up_date %>
       <p>
         <strong><%= Weakness.human_attribute_name 'follow_up_date' %></strong>:
-        <% if weakness.follow_up_date < @to_date %>
+        <% if weakness.follow_up_date < Time.zone.today %>
           <span class="text-danger"><%= l weakness.follow_up_date %></span>
         <% else %>
           <%= l weakness.follow_up_date %>
