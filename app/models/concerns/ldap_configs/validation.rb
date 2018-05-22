@@ -27,16 +27,11 @@ module LdapConfigs::Validation
         service_ldap = ldap(service_user, service_password)
 
         errors.add(:service_user, :invalid_credentials) unless service_ldap.bind
-        return
-      end
-
-      if test_user.present? && test_password.present?
+      else
         test_ldap = ldap(test_user, test_password)
 
-        return if test_ldap.bind
+        errors.add :base, I18n.t('message.ldap_error') unless test_ldap.bind
       end
-
-      errors.add :base, I18n.t('message.ldap_error') # si no se "bindea" o no hay credenciales
     rescue
       errors.add :base, I18n.t('message.ldap_error')
     end
