@@ -2,7 +2,7 @@ module LdapConfigs::Validation
   extend ActiveSupport::Concern
 
   included do
-    attr_accessor :test_user, :test_password
+    attr_accessor :test_user, :test_password, :service_password_unmasked
 
     validates :test_user, :test_password, :hostname, :port, :basedn, :filter,
       :login_mask, :username_attribute, :name_attribute,
@@ -16,6 +16,7 @@ module LdapConfigs::Validation
     validates :username_attribute, :name_attribute, :last_name_attribute,
       :email_attribute, :function_attribute, :roles_attribute,
       :manager_attribute, format: /\A\w+\z/, allow_blank: true
+    validates :service_password_unmasked, presence: true, if: ->(ldap) { ldap.service_user.present? }
     validate :can_connect?
   end
 
@@ -29,10 +30,10 @@ module LdapConfigs::Validation
         return
       end
 
-      if service_login.present? && service_password.present?
-        ldap = ldap(service_user, service_password)
+      if service_user.present? && service_password_unmasked.present?
+        ldap = ldap(service_user, service_password_unmasked)
 
-        errors.add :service_user, I18n.t('message.ldap_error') unless ldap.bind
+        errors.add(:service_user, :invalid_credentials) unless ldap.bind
       end
     rescue
       errors.add :base, I18n.t('message.ldap_error')

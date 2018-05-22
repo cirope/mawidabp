@@ -289,6 +289,9 @@ es:
         manager_attribute: 'Atributo con el superior'
         test_user: 'Usuario'
         test_password: 'Contraseña'
+        service_user: 'Usuario de servicio'
+        service_password: 'Contraseña de servicio'
+        service_password_unmasked: 'Contraseña de servicio'
       login_record:
         data: 'Datos'
         end: 'Fin'
@@ -538,6 +541,10 @@ es:
           attributes:
             process_owner:
               invalid: 'solo puede ser asignado a usuarios de tipo auditado'
+        ldap_config:
+          attributes:
+            service_user:
+              invalid_credentials: 'Credenciales invalidas'
         plan:
           attributes:
             plan_items:

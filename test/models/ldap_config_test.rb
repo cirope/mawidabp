@@ -120,4 +120,54 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_equal user.id, User.find_by(user: 'new_user').manager_id
     assert_nil user.manager_id
   end
+
+  test 'service password needed with service user' do
+    @ldap_config.test_user = 'admin'
+    @ldap_config.test_password = 'admin123'
+
+    assert @ldap_config.valid?
+
+    @ldap_config.service_user = 'admin'
+    @ldap_config.service_password_unmasked = ''
+    assert @ldap_config.invalid?
+    assert_error @ldap_config, :service_password_unmasked, :blank
+
+    @ldap_config.service_password_unmasked = 'admin123'
+    assert @ldap_config.valid?
+  end
+
+  test 'service user can connect' do
+    @ldap_config.test_user = 'admin'
+    @ldap_config.test_password = 'admin123'
+
+    assert @ldap_config.valid?
+
+    @ldap_config.service_user = 'admin'
+    @ldap_config.service_password_unmasked = 'adminadmin'
+    assert @ldap_config.invalid?
+    assert_error @ldap_config, :service_user, :invalid_credentials
+
+    @ldap_config.service_password_unmasked = 'admin123'
+    assert @ldap_config.valid?
+  end
+
+  test 'service password saved encrypted' do
+    @ldap_config.update!(
+      test_user: 'admin',
+      test_password: 'admin123',
+      service_user: 'admin',
+      service_password_unmasked: 'admin123'
+    )
+
+    @ldap_config.reload
+    assert @ldap_config.service_password.present?
+    assert_not_equal(
+      @ldap_config.service_password_unmasked,
+      @ldap_config.service_password
+    )
+    assert_equal(
+      @ldap_config.service_password_unmasked,
+      @ldap_config.decrypted_service_password
+    )
+  end
 end
