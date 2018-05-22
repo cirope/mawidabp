@@ -150,7 +150,7 @@ module Reports::WeaknessesCurrentSituation
         ],
         ([
           "<b>#{Weakness.human_attribute_name('follow_up_date')}</b>",
-          weakness.follow_up_date < @to_date ?
+          weakness.follow_up_date < Time.zone.today ?
             "<color rgb='ff0000'>#{I18n.l(weakness.follow_up_date)}</color>" :
             I18n.l(weakness.follow_up_date)
         ] if weakness.follow_up_date)
