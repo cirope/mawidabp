@@ -194,7 +194,7 @@ class LdapConfigTest < ActiveSupport::TestCase
     )
     assert_equal(
       @ldap_config.service_password,
-      @ldap_config.service_decrypted_password
+      @ldap_config.decrypted_service_password
     )
   end
 end

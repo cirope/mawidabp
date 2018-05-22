@@ -12,7 +12,7 @@ module LdapConfigs::LDAPService
     self.encrypted_service_password = Security.encrypt(service_password)
   end
 
-  def service_decrypted_password
+  def decrypted_service_password
     Security.decrypt(encrypted_service_password) if encrypted_service_password.present?
   end
 end
