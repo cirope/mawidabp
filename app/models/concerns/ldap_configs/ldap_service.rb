@@ -2,16 +2,17 @@ module LdapConfigs::LDAPService
   extend ActiveSupport::Concern
 
   included do
-    before_save :encrypt_service_password!, if: ->(ldap) { ldap.service_password_unmasked.present? }
+    # attr_accessor :service_password
+    before_save :encrypt_service_password, if: ->(ldap) { ldap.service_password.present? }
 
-    scope :with_service_user, -> { where.not(service_password: nil) }
+    scope :with_service_user, -> { where.not(encrypted_service_password: nil) }
   end
 
-  def encrypt_service_password!
-    self.service_password = Security.encrypt(service_password_unmasked)
+  def encrypt_service_password
+    self.encrypted_service_password = Security.encrypt(service_password)
   end
 
-  def decrypted_service_password
-    Security.decrypt(service_password) if service_password.present?
+  def service_decrypted_password
+    Security.decrypt(encrypted_service_password) if encrypted_service_password.present?
   end
 end

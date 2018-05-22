@@ -155,11 +155,11 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert @ldap_config.valid?
 
     @ldap_config.service_user = 'admin'
-    @ldap_config.service_password_unmasked = ''
+    @ldap_config.service_password = ''
     assert @ldap_config.invalid?
-    assert_error @ldap_config, :service_password_unmasked, :blank
+    assert_error @ldap_config, :service_password, :blank
 
-    @ldap_config.service_password_unmasked = 'admin123'
+    @ldap_config.service_password = 'admin123'
     assert @ldap_config.valid?
   end
 
@@ -170,11 +170,11 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert @ldap_config.valid?
 
     @ldap_config.service_user = 'admin'
-    @ldap_config.service_password_unmasked = 'adminadmin'
+    @ldap_config.service_password = 'adminadmin'
     assert @ldap_config.invalid?
     assert_error @ldap_config, :service_user, :invalid_credentials
 
-    @ldap_config.service_password_unmasked = 'admin123'
+    @ldap_config.service_password = 'admin123'
     assert @ldap_config.valid?
   end
 
@@ -183,18 +183,18 @@ class LdapConfigTest < ActiveSupport::TestCase
       test_user: 'admin',
       test_password: 'admin123',
       service_user: 'admin',
-      service_password_unmasked: 'admin123'
+      service_password: 'admin123'
     )
 
     @ldap_config.reload
-    assert @ldap_config.service_password.present?
+    assert @ldap_config.encrypted_service_password.present?
     assert_not_equal(
-      @ldap_config.service_password_unmasked,
-      @ldap_config.service_password
+      @ldap_config.service_password,
+      @ldap_config.encrypted_service_password
     )
     assert_equal(
-      @ldap_config.service_password_unmasked,
-      @ldap_config.decrypted_service_password
+      @ldap_config.service_password,
+      @ldap_config.service_decrypted_password
     )
   end
 end
