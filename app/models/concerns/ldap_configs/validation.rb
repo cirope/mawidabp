@@ -23,18 +23,20 @@ module LdapConfigs::Validation
   private
 
     def can_connect?
-      ldap = ldap test_user, test_password
+      if service_user.present? && service_password.present?
+        service_ldap = ldap(service_user, service_password)
 
-      unless ldap.bind
-        errors.add :base, I18n.t('message.ldap_error')
+        errors.add(:service_user, :invalid_credentials) unless service_ldap.bind
         return
       end
 
-      if service_user.present? && service_password.present?
-        ldap = ldap(service_user, service_password)
+      if test_user.present? && test_password.present?
+        test_ldap = ldap(test_user, test_password)
 
-        errors.add(:service_user, :invalid_credentials) unless ldap.bind
+        return if test_ldap.bind
       end
+
+      errors.add :base, I18n.t('message.ldap_error') # si no se "bindea" o no hay credenciales
     rescue
       errors.add :base, I18n.t('message.ldap_error')
     end
