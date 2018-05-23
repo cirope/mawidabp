@@ -4,10 +4,12 @@ module LdapConfigs::Validation
   included do
     attr_accessor :test_user, :test_password, :password
 
-    validates :test_user, :test_password, :hostname, :port, :basedn, :filter,
+    validates :hostname, :port, :basedn, :filter,
       :login_mask, :username_attribute, :name_attribute,
       :last_name_attribute, :email_attribute, :roles_attribute,
       presence: true
+    validates :test_user, :test_password, presence: true,
+      if: ->(ldap) { ldap.user.blank? }
     validates :hostname, :basedn, :filter, :login_mask, :username_attribute,
       :name_attribute, :last_name_attribute, :email_attribute,
       :roles_attribute, length: { maximum: 255 }
