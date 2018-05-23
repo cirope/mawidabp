@@ -69,7 +69,7 @@ class OrganizationsController < ApplicationController
           :username_attribute, :name_attribute, :last_name_attribute,
           :email_attribute, :function_attribute, :roles_attribute,
           :manager_attribute, :test_user, :test_password,
-          :service_user, :service_password
+          :user, :password
         ]
       )
     end
