@@ -8,4 +8,8 @@ module ControlObjectiveItems::ControlObjective
     has_one :process_control, through: :control_objective
     has_one :best_practice, through: :process_control
   end
+
+  def original_text?
+    control_objective_text == control_objective.name
+  end
 end

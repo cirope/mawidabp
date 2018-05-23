@@ -8,7 +8,7 @@ module Periods::DestroyValidation
   private
 
     def can_be_destroyed?
-      [:reviews, :plans, :workflows].each do |method|
+      [:reviews, :plan, :workflows].each do |method|
         collection = send(method)
 
         unless collection.blank?
@@ -20,7 +20,7 @@ module Periods::DestroyValidation
     end
 
     def add_error_for method, collection
-      I18n.t "periods.errors.#{method}", count: collection.size
+      I18n.t "periods.errors.#{method}", count: Array(collection).size
     end
 
     def check_if_can_be_destroyed

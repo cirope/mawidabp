@@ -9,6 +9,8 @@ management_dependency_item:
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false
+  issues_count: 0
+  alerts_count: 0
   control_objective: management_dependency
   review: current_review
   organization: cirope
@@ -24,6 +26,8 @@ impact_analysis_item:
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false
+  issues_count: 0
+  alerts_count: 0
   control_objective: impact_analysis
   review: current_review
   organization: cirope
@@ -39,6 +43,8 @@ security_policy_3_1_item:
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false
+  issues_count: 0
+  alerts_count: 0
   control_objective: security_policy_3_1
   review: past_review
   organization: cirope
@@ -54,6 +60,8 @@ organization_security_4_1_item:
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false
+  issues_count: 0
+  alerts_count: 0
   control_objective: organization_security_4_1
   review: past_review
   organization: cirope
@@ -69,11 +77,14 @@ organization_security_4_2_item:
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: true
+  issues_count: 0
+  alerts_count: 0
   control_objective: organization_security_4_2
   review: past_review
   organization: cirope
 
 management_dependency_item_editable:
+  order_number: 1
   control_objective_text: Dependencia del área responsible
   relevance: <%= ControlObjectiveItem.relevances_values.last %>
   design_score: <%= ControlObjectiveItem.qualifications_values.first %>
@@ -83,11 +94,14 @@ management_dependency_item_editable:
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false
+  issues_count: 0
+  alerts_count: 0
   control_objective: management_dependency
   review: review_with_conclusion
   organization: cirope
 
 impact_analysis_item_editable:
+  order_number: 2
   control_objective_text: Análisis de impacto
   relevance: <%= ControlObjectiveItem.relevances_values.last %>
   design_score: <%= ControlObjectiveItem.qualifications_values.last %>
@@ -97,6 +111,8 @@ impact_analysis_item_editable:
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false
+  issues_count: 0
+  alerts_count: 0
   control_objective: impact_analysis
   review: review_with_conclusion
   organization: cirope
@@ -107,10 +123,12 @@ organization_security_4_2_item_editable:
   design_score: <%= ControlObjectiveItem.qualifications_values.last %>
   compliance_score: <%= ControlObjectiveItem.qualifications_values.last %>
   sustantive_score: <%= ControlObjectiveItem.qualifications_values.last %>
-  audit_date: <%= 1.year.ago.to_date.to_s(:db) %>
+  audit_date: <%= 1.day.ago.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false
+  issues_count: 0
+  alerts_count: 0
   control_objective: organization_security_4_2
   review: review_without_conclusion
   organization: cirope
@@ -125,6 +143,8 @@ organization_security_4_3_item_editable_without_findings:
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false
+  issues_count: 0
+  alerts_count: 0
   control_objective: organization_security_4_3
   review: review_without_conclusion_and_without_findings
   organization: cirope
@@ -139,6 +159,8 @@ management_dependency_item_approved_and_editable:
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false
+  issues_count: 0
+  alerts_count: 0
   control_objective: management_dependency
   review: review_approved_with_conclusion
   organization: cirope
@@ -149,10 +171,12 @@ organization_security_4_4_item:
   design_score: <%= ControlObjectiveItem.qualifications_values.last %>
   compliance_score: <%= ControlObjectiveItem.qualifications_values.last %>
   sustantive_score: <%= ControlObjectiveItem.qualifications_values.last %>
-  audit_date: <%= 1.year.ago.to_date.to_s(:db) %>
+  audit_date: <%= 1.day.ago.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false
+  issues_count: 0
+  alerts_count: 0
   control_objective: organization_security_4_4
   review: review_without_conclusion
   organization: cirope

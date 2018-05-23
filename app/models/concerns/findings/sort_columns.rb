@@ -13,6 +13,10 @@ module Findings::SortColumns
         priority_desc:       priority_desc_options,
       ) unless HIDE_WEAKNESS_PRIORITY
 
+      columns.merge!(
+        readings_desc: readings_desc_options
+      ) if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+
       columns.merge(
         state:               state_options,
         review:              review_options,
@@ -107,6 +111,22 @@ module Findings::SortColumns
         order_label = { 'ASC' => 'ascendant', 'DESC' => 'descendant' }[order]
 
         " (#{I18n.t "label.#{order_label}"})" if order
+      end
+
+      def readings_desc_options
+        reading_user = "COUNT(#{Reading.table_name}.user_id)"
+        finding_user = "COUNT(#{FindingAnswer.table_name}.user_id)"
+
+        order_by_readings = "CASE \n"
+        order_by_readings << "WHEN (#{reading_user} < #{finding_user}) then (#{finding_user} - #{reading_user}) \n"
+        order_by_readings << "ELSE 0 \n"
+        order_by_readings << 'END DESC'
+
+        {
+          name: "#{I18n.t('findings.index.unread_answers_filter')}#{order_label('DESC')}",
+          field: order_by_readings,
+          extra_joins: [:left_outer_joins, :finding_answers, finding_answers: :readings]
+        }
       end
   end
 end

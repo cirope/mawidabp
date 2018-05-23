@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  namespace :plans do
+    get 'resources/show'
+  end
+
   post '/touch', to: 'touch#create', as: 'touch'
 
   # Sessions
@@ -9,6 +13,24 @@ Rails.application.routes.draw do
   resources :settings, only: [:index, :show, :edit, :update]
 
   resources :benefits
+
+  resources :risk_assessments do
+    member do
+      get :fetch_item
+      get :new_item
+      get :add_items
+      patch :sort_by_risk
+      post :merge_to_plan
+    end
+
+    collection do
+      get :auto_complete_for_business_unit
+      get :auto_complete_for_business_unit_type
+      get :auto_complete_for_best_practice
+    end
+  end
+
+  resources :risk_assessment_templates
 
   resources :readings, only: [:create]
 
@@ -97,6 +119,7 @@ Rails.application.routes.draw do
     'qa_indicators',
     'weaknesses_by_risk_report',
     'weaknesses_by_month',
+    'weaknesses_current_situation',
     'fixed_weaknesses_report',
     'weaknesses_graphs',
     'auto_complete_for_business_unit',
@@ -124,6 +147,7 @@ Rails.application.routes.draw do
     'create_qa_indicators',
     'create_weaknesses_by_risk_report',
     'create_weaknesses_by_month',
+    'create_weaknesses_current_situation',
     'create_fixed_weaknesses_report'
   ].each do |action|
     post "conclusion_reports/#{action}",
@@ -250,6 +274,8 @@ Rails.application.routes.draw do
       patch :recode_weaknesses_by_risk
       patch :recode_weaknesses_by_repetition_and_risk
       patch :recode_weaknesses_by_control_objective_order
+      patch :reorder
+      patch :reset_control_objective_name
     end
 
     collection do
@@ -293,8 +319,11 @@ Rails.application.routes.draw do
 
   resources :control_objective_items do
     get :suggest_next_work_paper_code, on: :member
-    get :auto_complete_for_business_unit, on: :collection
-    get :auto_complete_for_business_unit_type, on: :collection
+
+    collection do
+      get :auto_complete_for_business_unit
+      get :auto_complete_for_business_unit_type
+    end
   end
 
   namespace :plans do
@@ -304,7 +333,10 @@ Rails.application.routes.draw do
   resources :plans do
     resources :plan_items, only: [:new, :edit]
 
-    get :stats, on: :member, to: 'plans/stats#show'
+    member do
+      get :stats, to: 'plans/stats#show'
+      get :resources, to: 'plans/resources#show'
+    end
 
     collection do
       get :auto_complete_for_business_unit

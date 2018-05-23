@@ -223,8 +223,11 @@ class ApplicationController < ActionController::Base
 
     def build_search_conditions(model, default_conditions = {})
       if params[:search] && params[:search][:order].present?
-        @order_by = model.columns_for_sort[params[:search][:order]][:field]
-        @order_by_column_name = model.columns_for_sort[params[:search][:order]][:name]
+        order_data = model.columns_for_sort[params[:search][:order]]
+
+        @order_by             = order_data[:field]
+        @order_by_column_name = order_data[:name]
+        @extra_joins          = order_data[:extra_joins]
       end
 
       if params[:search] && params[:search][:query].present?
@@ -247,6 +250,7 @@ class ApplicationController < ActionController::Base
 
               if clean_or_query =~ model.get_column_regexp(column) && (!operator || model.allow_search_operator?(operator, column))
                 index = i * 1000 + j
+                mask = model.get_column_mask(column)
                 conversion_method = model.get_column_conversion_method(column)
                 filter = "#{model.get_column_name(column)} "
                 operator ||= model.get_column_operator(column).kind_of?(Array) ?
@@ -261,7 +265,7 @@ class ApplicationController < ActionController::Base
                   casted_value = clean_or_query.strip.send(conversion_method) rescue nil
                 end
 
-                filters[:"#{column}_filter_#{index}"] = model.get_column_mask(column) % casted_value
+                filters[:"#{column}_filter_#{index}"] = mask ? mask % casted_value : casted_value
               end
             end
           end

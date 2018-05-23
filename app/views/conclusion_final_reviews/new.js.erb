@@ -9,6 +9,7 @@
   $('#conclusion_final_review_corrective_actions').val('<%== j @conclusion_final_review.corrective_actions %>')
   $('#conclusion_final_review_observations').val('<%== j @conclusion_final_review.observations %>')
   $('#conclusion_final_review_affects_compliance').prop('checked', <%= @conclusion_final_review.affects_compliance.inspect %>)
+  $('#conclusion_final_review_collapse_control_objectives').prop('checked', <%= @conclusion_final_review.collapse_control_objectives.inspect %>)
   $('#conclusion_final_review_business_unit').val('<%= j @conclusion_final_review.review.business_unit.name %>')
   $('#conclusion_final_review_project').val('<%= j @conclusion_final_review.review.plan_item.project %>')
   $('#conclusion_final_review_score').val('<%= j @conclusion_final_review.review.score_text %>')
@@ -37,6 +38,7 @@
   })
 
   $('#conclusion_final_review_affects_compliance').prop('checked', false)
+  $('#conclusion_final_review_collapse_control_objectives').prop('checked', false)
 
   $('#best_practice_comments_container').html('')
 <% end %>

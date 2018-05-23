@@ -124,27 +124,7 @@ class ReviewUserAssignment < ApplicationRecord
       end
 
       if transfered
-        notification_title = I18n.t(
-          'review_user_assignment.responsibility_modification.title',
-          review: self.review.try(:identification))
-        notification_body = "#{Review.model_name.human} #{self.review.identification}"
-        notification_content = [
-          I18n.t(
-            'review_user_assignment.responsibility_modification.old_responsible',
-            responsible: old_user.full_name_with_function),
-          I18n.t(
-            'review_user_assignment.responsibility_modification.new_responsible',
-            responsible: new_user.full_name_with_function)
-        ]
-
-        NotifierMailer.changes_notification(
-          [new_user, old_user],
-          title: notification_title, body: notification_body,
-          content: notification_content,
-          organizations: [review.organization]
-        ).deliver_later
-
-        unless unconfirmed_findings.blank?
+        if unconfirmed_findings.present?
           NotifierMailer.reassigned_findings_notification(
             new_user, old_user, unconfirmed_findings
           ).deliver_later

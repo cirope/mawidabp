@@ -1,4 +1,4 @@
-module Reports::Pdf
+module Reports::PDF
 
   def init_pdf(title, subtitle)
     pdf = Prawn::Document.create_generic_pdf :landscape

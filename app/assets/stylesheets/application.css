@@ -14,11 +14,14 @@
  *= require documents
  *= require news
  *= require plans
+ *= require plans/resources
  *= require plans/stats
  *= require plan_items
  *= require process_controls
  *= require readings
  *= require reports
+ *= require risk_assessments
+ *= require risk_assessment_templates
  *= require roles
  *= require sessions
  *= require tags

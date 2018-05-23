@@ -11,11 +11,18 @@ module ConclusionReviews::Validations
 
     validates :recipients, :sectors, :evolution, :evolution_justification,
       presence: true, if: :validate_extra_attributes?
-    validates :main_weaknesses_text, :corrective_actions, presence: true,
+    validates :main_weaknesses_text, presence: true,
       if: :validate_short_alternative_pdf_attributes?
+    validate :evolution_for_conclusion, if: :validate_extra_attributes?
   end
 
   private
+
+    def evolution_for_conclusion
+      allowed = Array(CONCLUSION_EVOLUTION[conclusion])
+
+      errors.add :evolution, :invalid if allowed.exclude?(evolution)
+    end
 
     def validate_extra_attributes?
       SHOW_CONCLUSION_ALTERNATIVE_PDF

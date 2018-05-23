@@ -15,7 +15,7 @@ module Prawn
 
       def path_without_root(filename, sub_directory, id = 0)
         id_path = ('%08d' % id).scan(/\d{4}/)
-        user_path = ('%08d' % (PaperTrail.whodunnit || 0)).scan(/\d{4}/)
+        user_path = ('%08d' % (PaperTrail.request.whodunnit || 0)).scan(/\d{4}/)
         organization_path = ('%08d' %
           (Organization.current_id || 0)).scan(/\d{4}/)
 
