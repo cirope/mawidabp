@@ -3,6 +3,7 @@ class LdapConfig < ApplicationRecord
   include Trimmer
   include LdapConfigs::LDAP
   include LdapConfigs::LDAPImport
+  include LdapConfigs::LDAPService
   include LdapConfigs::Validation
 
   trimmed_fields :hostname, :basedn, :filter, :login_mask, :username_attribute,

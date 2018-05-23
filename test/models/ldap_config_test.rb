@@ -147,4 +147,48 @@ class LdapConfigTest < ActiveSupport::TestCase
       assert_equal(phrase, decrypted_phrase, ep)
     end
   end
+
+  test 'service password needed with service user' do
+    @ldap_config.test_user = 'admin'
+    @ldap_config.test_password = 'admin123'
+
+    assert @ldap_config.valid?
+
+    @ldap_config.user = 'admin'
+    @ldap_config.password = ''
+    assert @ldap_config.invalid?
+    assert_error @ldap_config, :password, :blank
+
+    @ldap_config.password = 'admin123'
+    assert @ldap_config.valid?
+  end
+
+  test 'service user can connect' do
+    @ldap_config.user = 'admin'
+    @ldap_config.password = 'adminadmin'
+
+    assert @ldap_config.invalid?
+    assert_error @ldap_config, :user, :invalid_credentials
+
+    @ldap_config.password = 'admin123'
+    assert @ldap_config.valid?
+  end
+
+  test 'service password saved encrypted' do
+    @ldap_config.update!(
+      user: 'admin',
+      password: 'admin123'
+    )
+
+    @ldap_config.reload
+    assert @ldap_config.encrypted_password.present?
+    assert_not_equal(
+      @ldap_config.password,
+      @ldap_config.encrypted_password
+    )
+    assert_equal(
+      @ldap_config.password,
+      @ldap_config.decrypted_password
+    )
+  end
 end
