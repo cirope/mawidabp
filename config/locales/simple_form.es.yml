@@ -45,7 +45,7 @@ es:
         manager_attribute: 'Por ejemplo: manager'
         test_user: 'Usuario válido en el servidor para probar la conexión'
         test_password: 'Contraseña del usuario para probar la conexión'
-        user: 'Usuario válido en el servidor para la importación de usuarios'
-        password: 'Contraseña del usuario para la importación de usuarios'
+        user: 'Usuario de servicio para la importación automática de usuarios'
+        password: 'Contraseña del usuario de servicio para la importación automática de usuarios'
       import:
         username: 'Usuario con permisos para consultar la base de usuarios LDAP'
