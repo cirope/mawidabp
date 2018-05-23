@@ -2,9 +2,7 @@ module LdapConfigs::LDAPService
   extend ActiveSupport::Concern
 
   included do
-    before_save :encrypt_password, if: ->(ldap) { ldap.password.present? }
-
-    scope :with_user, -> { where.not(encrypted_password: nil) }
+    before_save :encrypt_password, if: :password?
   end
 
   def encrypt_password
@@ -14,4 +12,10 @@ module LdapConfigs::LDAPService
   def decrypted_password
     Security.decrypt(encrypted_password) if encrypted_password.present?
   end
+
+  private
+
+    def password?
+      password.present?
+    end
 end

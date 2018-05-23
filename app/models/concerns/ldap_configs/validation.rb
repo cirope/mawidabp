@@ -8,8 +8,7 @@ module LdapConfigs::Validation
       :login_mask, :username_attribute, :name_attribute,
       :last_name_attribute, :email_attribute, :roles_attribute,
       presence: true
-    validates :test_user, :test_password, presence: true,
-      if: ->(ldap) { ldap.user.blank? }
+    validates :test_user, :test_password, presence: true, unless: :user?
     validates :hostname, :basedn, :filter, :login_mask, :username_attribute,
       :name_attribute, :last_name_attribute, :email_attribute,
       :roles_attribute, length: { maximum: 255 }
@@ -18,7 +17,7 @@ module LdapConfigs::Validation
     validates :username_attribute, :name_attribute, :last_name_attribute,
       :email_attribute, :function_attribute, :roles_attribute,
       :manager_attribute, format: /\A\w+\z/, allow_blank: true
-    validates :password, presence: true, if: ->(ldap) { ldap.user.present? }
+    validates :password, presence: true, if: :user?
     validate :can_connect?
   end
 
@@ -36,5 +35,9 @@ module LdapConfigs::Validation
       end
     rescue
       errors.add :base, I18n.t('message.ldap_error')
+    end
+
+    def user?
+      user.present?
     end
 end
