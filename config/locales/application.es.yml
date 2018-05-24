@@ -26,6 +26,7 @@ es:
     details: "Detalles"
     disable: "Deshabilitar"
     download: "Descargar"
+    download_csv: "Descargar CSV"
     edit: "Editar"
     import: "Importar"
     insert_item: "Insertar ítem"

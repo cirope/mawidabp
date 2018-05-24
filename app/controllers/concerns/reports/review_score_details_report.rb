@@ -5,17 +5,16 @@ module Reports::ReviewScoreDetailsReport
   def review_score_details_report
     init_review_score_details_vars
 
-    if params[:review_score_details_report]
-      review_score_details_business_unit_type_reviews if params[:review_score_details_report][:business_unit_type].present?
-      review_score_details_business_unit_reviews if params[:review_score_details_report][:business_unit].present?
+    respond_to do |format|
+      format.html
+      format.csv do
+        render csv: review_score_details_csv, filename: @title.downcase
+      end
     end
-
-    set_scores_by_scope
-    set_scores_by_evolution
   end
 
   def create_review_score_details_report
-    review_score_details_report
+    init_review_score_details_vars
 
     pdf = init_pdf params[:report_title], params[:report_subtitle]
 
@@ -32,6 +31,14 @@ module Reports::ReviewScoreDetailsReport
 
   private
 
+    def review_score_details_csv
+      CSV.generate(col_sep: ';', force_quotes: true) do |csv|
+        csv << review_score_details_columns.keys
+
+        review_score_details_data_rows.each { |row| csv << row }
+      end
+    end
+
     def init_review_score_details_vars
       @controller = params[:controller_name]
       @title = t("#{@controller}_committee_report.review_score_details_report_title")
@@ -41,6 +48,14 @@ module Reports::ReviewScoreDetailsReport
         includes(:review).
         references(:review).
         list_all_by_date @from_date, @to_date
+
+      if params[:review_score_details_report]
+        review_score_details_business_unit_type_reviews if params[:review_score_details_report][:business_unit_type].present?
+        review_score_details_business_unit_reviews if params[:review_score_details_report][:business_unit].present?
+      end
+
+      set_scores_by_scope
+      set_scores_by_evolution
     end
 
     def review_score_details_business_unit_type_reviews
@@ -224,7 +239,13 @@ module Reports::ReviewScoreDetailsReport
     end
 
     def review_score_details_data pdf
-      data = @conclusion_reviews.map do |conclusion_review|
+      data = review_score_details_data_rows
+
+      data.insert 0, review_score_details_column_headers(pdf)
+    end
+
+    def review_score_details_data_rows
+      @conclusion_reviews.map do |conclusion_review|
         [
           conclusion_review.review.identification,
           conclusion_review.review.plan_item.project,
@@ -237,7 +258,5 @@ module Reports::ReviewScoreDetailsReport
           conclusion_review.review.business_unit.to_s,
         ]
       end
-
-      data.insert 0, review_score_details_column_headers(pdf)
     end
 end

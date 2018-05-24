@@ -22,6 +22,7 @@
     details: "Detalles"
     disable: "Deshabilitar"
     download: "Descargar"
+    download_csv: "Descargar CSV"
     edit: "Editar"
     greater_or_equal_than: "Mayor o igual a"
     import: "Importar"
