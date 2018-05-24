@@ -4,6 +4,11 @@ jQuery(function ($) {
     var repeatedId      = $repeatedSelect.val()
     var urlTemplate     = decodeURI($repeatedSelect.data('repeatedUrl'))
     var url             = urlTemplate.replace('[FINDING_ID]', repeatedId)
+    var checkFields     = [
+      'impact',
+      'operational_risk',
+      'internal_control_components'
+    ]
     var fields          = [
       'title',
       'description',
@@ -12,7 +17,8 @@ jQuery(function ($) {
       'risk',
       'priority',
       'answer',
-      'audit_comments'
+      'audit_comments',
+      'compliance'
     ]
 
     if (repeatedId) {
@@ -32,6 +38,20 @@ jQuery(function ($) {
           $('[name$="[' + dateField + ']"]').datepicker('setDate', date)
         })
 
+        $.each(checkFields, function (i, field) {
+          var values = finding[field] || []
+
+          $('[name$="[' + field + '][]"]').prop('checked', false)
+
+          $.each(values, function (i, value) {
+            var $check = $('[name$="[' + field + '][]"][value="' + value + '"]')
+
+            $check.prop('checked', true)
+          })
+
+          $('[name$="[' + field + ']"]').val(finding[field])
+        })
+
         $('[name$="[origination_date]"]').prop('readonly', true)
       }).always(function () {
         $repeatedSelect.prop('disabled', false)
@@ -39,6 +59,10 @@ jQuery(function ($) {
     } else {
       $.each(fields, function (i, field) {
         $('[name$="[' + field + ']"]').val('')
+      })
+
+      $.each(checkFields, function (i, field) {
+        $('[name$="[' + field + '][]"]').prop('checked', false)
       })
 
       $('[name$="[origination_date]"]').

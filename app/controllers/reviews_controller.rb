@@ -10,7 +10,8 @@ class ReviewsController < ApplicationController
     :show, :edit, :update, :destroy, :download_work_papers, :survey_pdf,
     :finished_work_papers, :recode_findings, :recode_weaknesses_by_risk,
     :recode_weaknesses_by_repetition_and_risk,
-    :recode_weaknesses_by_control_objective_order, :excluded_control_objectives
+    :recode_weaknesses_by_control_objective_order, :reorder,
+    :excluded_control_objectives, :reset_control_objective_name
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -394,12 +395,32 @@ class ReviewsController < ApplicationController
     redirect_to @review, notice: t('review.findings_recoded')
   end
 
+  # * PUT /reviews/1/reorder
+  def reorder
+    if @review.reorder
+      redirect_to @review, notice: t('review.reordered')
+    else
+      redirect_to edit_review_url(@review), alert: t('review.failed_to_reorder')
+    end
+  end
+
   # * GET /reviews/next_identification_number
   def next_identification_number
     @next_number = Review.list.next_identification_number params[:suffix]
   end
 
   def excluded_control_objectives
+  end
+
+  def reset_control_objective_name
+    @control_objective_item = @review.control_objective_items.find(params[:control_objective_item_id])
+    @control_objective_item.update(
+      control_objective_text: @control_objective_item.control_objective.name
+    )
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   private
@@ -470,7 +491,8 @@ class ReviewsController < ApplicationController
         recode_findings: :modify,
         recode_weaknesses_by_risk: :modify,
         recode_weaknesses_by_repetition_and_risk: :modify,
-        recode_weaknesses_by_control_objective_order: :modify
+        recode_weaknesses_by_control_objective_order: :modify,
+        reset_control_objective_name: :modify
       )
     end
 end

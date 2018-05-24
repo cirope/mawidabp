@@ -170,7 +170,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
             ],
             :business_unit_type_ids => [business_unit_types(:consolidated_substantive).id.to_s]
           }
-	      }
+        }
       end
     end
 

@@ -12,4 +12,8 @@ class BusinessUnitType < ApplicationRecord
   alias_attribute :label, :name
 
   belongs_to :organization
+
+  def to_s
+    name
+  end
 end

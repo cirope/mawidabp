@@ -86,18 +86,18 @@
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
 
   business_unit_type:
-    index_title: "Listado de tipos de unidades de negocio"
-    show_title: "Detalle tipo de unidad de negocio"
-    new_title: "Agregar tipo de unidad de negocio"
-    edit_title: "Modificar tipo de unidad de negocio"
-    correctly_created: "Tipo de unidad de negocio agregado correctamente."
-    correctly_updated: "Tipo de unidad de negocio actualizado correctamente."
-    stale_object_error: "El tipo de unidad de negocio no fue actualizado, intente nuevamente."
+    index_title: "Listado de unidades organizativas"
+    show_title: "Detalle unidad organizativa"
+    new_title: "Agregar unidad organizativa"
+    edit_title: "Modificar unidad organizativa"
+    correctly_created: "Unidad organizativa agregada correctamente."
+    correctly_updated: "Unidad organizativa actualizada correctamente."
+    stale_object_error: "La unidad organizativa no fue actualizada, intente nuevamente."
     add_business_unit: "Agregar unidad de negocio"
     internal_audit: "Auditorías realizadas por la entidad"
     external_audit: "Auditorías realizadas por otras entidades"
     errors:
-      can_not_be_destroyed: "El tipo de unidad de negocio no puede ser eliminado"
+      can_not_be_destroyed: "La unidad organizativa no puede ser eliminada"
       business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
 
   conclusion_draft_review:
@@ -122,6 +122,8 @@
     send_by_email: "Enviar por correo electrónico"
     last_verified_date: "La última comprobación se realizó el %{date}"
     has_final_review: "Ya se emitió un informe definitivo y por lo tanto no es posible seguir trabajando con el informe borrador"
+    errors:
+      without_corrective_actions: "no tiene acciones correctivas"
 
   conclusion_report:
     index_title: "Reportes de conclusión"
@@ -133,6 +135,7 @@
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_month_title: "Observaciones por mes"
+    weaknesses_current_situation_title: "Observaciones, situación actual"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     cost_analysis:
       detailed_column_resource: "Recurso"
@@ -170,6 +173,7 @@
     review_scores_report_title: "Calificaciones de informes"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_month_title: "Observaciones por riesgo"
+    weaknesses_current_situation_title: "Observaciones, situación actual"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     qa_indicators_title: "Indicadores de calidad"
     weaknesses_by_state_title: "Hallazgos totales por estado"
@@ -241,6 +245,13 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       year: "Año"
+    weaknesses_current_situation:
+      pdf_name: "observaciones_situacion_actual_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "OBSERVACIONES, SITUACIÓN ACTUAL - INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      origination_year: "Año de origen"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -384,6 +395,7 @@
     add_recipient: "Agregar nuevo destinatario"
     review_sended: "El informe fue enviado a todos los destinatarios indicados"
     review_not_approved: "El informe no fue enviado, debe estar aprobado"
+    review_repeated_finding_label: "Informe nro."
     executive_summary:
       title: "Resumen ejecutivo"
       review_author: "Gerencia de Auditoría Interna"
@@ -401,9 +413,11 @@
     annex:
       title: "Anexo I"
       legend: "La Auditoría practicada estuvo conformada por distintos controles, los cuales han sido evaluados con relación a los riesgos asociados, por lo que a continuación se detallan con su respectiva calificación, aclarando que dichos conceptos pueden estar vinculados a distintas valoraciones:"
+      workflow_text: "El programa de trabajo elaborado para esta casa, así como su desarrollo y demás elementos, forma parte de los antecedentes obrantes en carpeta de trabajo del presente informe."
       scope: "Alcance de la tarea"
       scope_column: "Alcance de la tarea"
       staff: "Personal interviniente"
+      satisfactory_control_objective_items: "Resto de los Objetivos de Control"
     bundle:
       zip_name: "legajo_%{identification}.zip"
       control_objectives_dir: "%{prefix}_objetivos_de_control"
@@ -499,8 +513,6 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       column_month: "Mes"
       column_estimated_amount: "Unidades estimadas"
-      column_real_amount: "Unidades reales"
-      column_deviation: "Desviación"
     planned_cost_summary_title: "Resumen de costos planificados"
     reviews_with_incomplete_work_papers_report_incomplete_title: "Informes cerrados sin conformidad auditor"
     reviews_with_incomplete_work_papers_report_revised_title: "Informes cerrados sin revisión supervisor"
@@ -599,6 +611,7 @@
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_month_title: "Observaciones por mes"
+    weaknesses_current_situation_title: "Observaciones, situación actual"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     cost_analysis:
       column_business_unit: "Unidad de negocio"
@@ -625,6 +638,7 @@
     review_stats_report_title: "Estadísticas de informes"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_month_title: "Observaciones por mes"
+    weaknesses_current_situation_title: "Observaciones, situación actual"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     detailed_report: "Reporte detallado"
     qa_indicators_title: "Indicadores de calidad"
@@ -716,6 +730,13 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       year: "Año"
+    weaknesses_current_situation:
+      pdf_name: "observaciones_situacion_actual_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO DE OBSERVACIONES, SITUACIÓN ACTUAL - INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      origination_year: "Año de origen"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -1190,7 +1211,7 @@
   activerecord:
     models:
       business_unit: "Unidad de negocio"
-      business_unit_type: "Tipo de unidad de negocio"
+      business_unit_type: "Unidad organizativa"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"

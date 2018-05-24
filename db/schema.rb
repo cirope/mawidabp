@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180313174906) do
+ActiveRecord::Schema.define(version: 20180514190516) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -168,7 +168,10 @@ ActiveRecord::Schema.define(version: 20180313174906) do
     t.text "main_weaknesses_text"
     t.text "corrective_actions"
     t.boolean "affects_compliance", default: false, null: false
+    t.boolean "collapse_control_objectives", default: false, null: false
+    t.integer "conclusion_index"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
+    t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
     t.index ["organization_id"], name: "index_conclusion_reviews_on_organization_id"
     t.index ["review_id"], name: "index_conclusion_reviews_on_review_id"
@@ -732,6 +735,70 @@ ActiveRecord::Schema.define(version: 20180313174906) do
     t.index ["plan_item_id"], name: "index_reviews_on_plan_item_id"
   end
 
+  create_table "risk_assessment_items", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "risk", null: false
+    t.integer "order", default: 1, null: false
+    t.bigint "business_unit_id"
+    t.bigint "process_control_id"
+    t.bigint "risk_assessment_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["business_unit_id"], name: "index_risk_assessment_items_on_business_unit_id"
+    t.index ["process_control_id"], name: "index_risk_assessment_items_on_process_control_id"
+    t.index ["risk_assessment_id"], name: "index_risk_assessment_items_on_risk_assessment_id"
+  end
+
+  create_table "risk_assessment_templates", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "lock_version", default: 0, null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_risk_assessment_templates_on_organization_id"
+  end
+
+  create_table "risk_assessment_weights", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "weight", null: false
+    t.bigint "risk_assessment_template_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["risk_assessment_template_id"], name: "index_risk_assessment_weights_on_risk_assessment_template_id"
+  end
+
+  create_table "risk_assessments", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "status", default: 0, null: false
+    t.integer "lock_version", default: 0, null: false
+    t.bigint "period_id", null: false
+    t.bigint "plan_id"
+    t.bigint "risk_assessment_template_id", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "file_model_id"
+    t.index ["file_model_id"], name: "index_risk_assessments_on_file_model_id"
+    t.index ["organization_id"], name: "index_risk_assessments_on_organization_id"
+    t.index ["period_id"], name: "index_risk_assessments_on_period_id"
+    t.index ["plan_id"], name: "index_risk_assessments_on_plan_id"
+    t.index ["risk_assessment_template_id"], name: "index_risk_assessments_on_risk_assessment_template_id"
+  end
+
+  create_table "risk_weights", force: :cascade do |t|
+    t.integer "value"
+    t.integer "weight", null: false
+    t.bigint "risk_assessment_weight_id", null: false
+    t.bigint "risk_assessment_item_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["risk_assessment_item_id"], name: "index_risk_weights_on_risk_assessment_item_id"
+    t.index ["risk_assessment_weight_id"], name: "index_risk_weights_on_risk_assessment_weight_id"
+  end
+
   create_table "roles", id: :serial, force: :cascade do |t|
     t.string "name"
     t.integer "role_type"
@@ -960,6 +1027,18 @@ ActiveRecord::Schema.define(version: 20180313174906) do
   add_foreign_key "reviews", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "reviews", "periods", on_update: :restrict, on_delete: :restrict
   add_foreign_key "reviews", "plan_items", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessment_items", "business_units", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessment_items", "process_controls", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessment_items", "risk_assessments", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessment_templates", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessment_weights", "risk_assessment_templates", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessments", "file_models", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessments", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessments", "periods", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessments", "plans", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessments", "risk_assessment_templates", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_weights", "risk_assessment_items", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_weights", "risk_assessment_weights", on_update: :restrict, on_delete: :restrict
   add_foreign_key "roles", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "settings", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "taggings", "tags", on_update: :restrict, on_delete: :restrict

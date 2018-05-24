@@ -870,6 +870,24 @@ class ReviewTest < ActiveSupport::TestCase
     end
   end
 
+  test 'reorder' do
+    @review.control_objective_items.create!(
+      order_number: -1,
+      control_objective_text: '3.1) Security policy',
+      control_objective_id: control_objectives(:security_policy_3_1).id
+    )
+
+    pcs        = @review.grouped_control_objective_items.map &:first
+    sorted_pcs = pcs.sort_by &:name
+
+    assert_not_equal pcs, sorted_pcs
+    assert @review.reorder
+
+    pcs = @review.grouped_control_objective_items.map &:first
+
+    assert_equal pcs, sorted_pcs
+  end
+
   private
 
     def clone_finding_user_assignments(finding)

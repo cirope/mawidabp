@@ -103,6 +103,7 @@ module ConclusionReviews::AlternativePDF
       pdf.text legend, align: :justify
 
       put_conclusion_options_on pdf
+      put_workflow_text_on      pdf, organization
       put_review_scope_on       pdf, organization, options
       put_staff_on              pdf
       put_sectors_on            pdf
@@ -115,17 +116,30 @@ module ConclusionReviews::AlternativePDF
       pdf.text text, align: :center, style: :bold
     end
 
+    def put_workflow_text_on pdf, organization
+      workflow_text = I18n.t 'conclusion_review.annex.workflow_text'
+
+      if show_review_best_practice_comments? organization
+        pdf.move_down PDF_FONT_SIZE * 2
+        pdf.text workflow_text, align: :justify
+        pdf.move_down PDF_FONT_SIZE * 2
+      end
+    end
+
     def put_review_scope_on pdf, organization, options
       if show_review_best_practice_comments? organization
         pdf.move_down PDF_FONT_SIZE
         put_best_practice_comments_table_on pdf
+      elsif collapse_control_objectives
+        pdf.move_down PDF_FONT_SIZE
+        put_collapsed_control_objective_items_table_on pdf
       else
         pdf.move_down PDF_FONT_SIZE
         put_control_objective_items_table_on pdf, brief: options[:brief]
 
         unless options[:brief]
           pdf.move_down PDF_FONT_SIZE
-          put_control_objective_items_reference_on pdf
+          put_control_objective_items_reference_on pdf, organization
         end
       end
     end
@@ -176,6 +190,28 @@ module ConclusionReviews::AlternativePDF
       end
     end
 
+    def put_collapsed_control_objective_items_table_on pdf
+      row_data = collapsed_control_objectives_row_data
+
+      if row_data.present?
+        data          = row_data.insert 0, control_objective_column_headers
+        column_widths = control_objective_column_widths pdf
+        table_options = pdf.default_table_options column_widths
+
+        pdf.font_size PDF_FONT_SIZE do
+          pdf.table data, table_options do
+            row(0).style(
+              background_color: 'cccccc',
+              padding: [
+                (PDF_FONT_SIZE * 0.5).round,
+                (PDF_FONT_SIZE * 0.3).round
+              ]
+            )
+          end
+        end
+      end
+    end
+
     def put_control_objective_items_table_on pdf, brief: false
       row_data = control_objectives_row_data brief
 
@@ -198,25 +234,24 @@ module ConclusionReviews::AlternativePDF
       end
     end
 
-    def put_control_objective_items_reference_on pdf
+    def put_control_objective_items_reference_on pdf, organization
       count = 0
 
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.sort.each do |coi|
-          put_control_objective_item_reference_on pdf, coi, count += 1
+          put_control_objective_item_reference_on pdf, organization, coi, count += 1
 
           pdf.move_down PDF_FONT_SIZE
         end
       end
     end
 
-    def put_control_objective_item_reference_on pdf, coi, index
-      control_attributes = %i(
-        control
-        design_tests
-        compliance_tests
-        sustantive_tests
-      )
+    def put_control_objective_item_reference_on pdf, organization, coi, index
+      control_attributes = %i(control)
+
+      if show_tests? organization
+        control_attributes += %i(design_tests compliance_tests sustantive_tests)
+      end
 
       pdf.text "<sup>(#{index})</sup> <b>#{coi.control_objective_text}</b>",
         inline_format: true, size: (PDF_FONT_SIZE * 1.1).round, align: :justify
@@ -242,9 +277,9 @@ module ConclusionReviews::AlternativePDF
     def put_detailed_weaknesses_on pdf, organization
       title = Weakness.model_name.human count: 0
       show  = if show_review_best_practice_comments?(organization)
-                %w(tags repeated_review control_objective_title template_code)
+                %w(repeated_review control_objective_title template_code)
               else
-                %w(tags repeated_review)
+                %w(repeated_review)
               end
 
       pdf.move_down PDF_FONT_SIZE * 2
@@ -329,12 +364,11 @@ module ConclusionReviews::AlternativePDF
     end
 
     def put_evolution_table_on pdf
-      image         = EVOLUTION_IMAGES[evolution]
       widths        = [pdf.percent_width(15)]
       table_options = pdf.default_table_options widths
-      data = [
+      data          = [
         [I18n.t('conclusion_review.executive_summary.evolution')],
-        [pdf_score_image_row(image)]
+        [pdf_score_image_row(get_evolution_image)]
       ]
 
       pdf.font_size (PDF_FONT_SIZE * 0.75).round do
@@ -366,12 +400,14 @@ module ConclusionReviews::AlternativePDF
       pdf.move_down PDF_FONT_SIZE
       pdf.text main_weaknesses_text, align: :justify, inline_format: true
 
-      pdf.move_down PDF_FONT_SIZE
-      pdf.add_title self.class.human_attribute_name('corrective_actions'),
-        (PDF_FONT_SIZE * 1.25).round
+      if corrective_actions.present?
+        pdf.move_down PDF_FONT_SIZE
+        pdf.add_title self.class.human_attribute_name('corrective_actions'),
+          (PDF_FONT_SIZE * 1.25).round
 
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text corrective_actions, align: :justify, inline_format: true
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text corrective_actions, align: :justify, inline_format: true
+      end
     end
 
     def put_main_weaknesses_details_on pdf
@@ -536,6 +572,26 @@ module ConclusionReviews::AlternativePDF
       end
     end
 
+    def collapsed_control_objectives_row_data
+      row_data      = []
+      image_options = { vposition: :top, border_widths: [1, 0, 1, 0] }
+      best_comment  = CONCLUSION_OPTIONS.first
+
+      review.grouped_control_objective_items.each do |process_control, cois|
+        if cois.all? { |coi| coi.auditor_comment == best_comment }
+          row_data << satisfactory_process_control_row(process_control, image_options)
+        else
+          row_data << [
+            { content: "<b>#{process_control.name}</b>", colspan: 3 }
+          ]
+
+          row_data += expanded_control_objective_rows(cois, image_options)
+        end
+      end
+
+      row_data
+    end
+
     def control_objectives_row_data brief
       count         = 0
       row_data      = []
@@ -642,10 +698,83 @@ module ConclusionReviews::AlternativePDF
       { image: image_path, fit: fit, position: :center, vposition: :center }
     end
 
+    def expanded_control_objective_rows control_objective_items, image_options
+      result       = []
+      best_comment = CONCLUSION_OPTIONS.first
+
+      offending_cois = control_objective_items.reject do |coi|
+        coi.auditor_comment == best_comment
+      end
+
+      result += offending_control_objective_rows(offending_cois.sort, image_options)
+
+      if control_objective_items.size > offending_cois.size
+        result << satisfactory_control_objectives_row(image_options)
+      end
+
+      result
+    end
+
+    def offending_control_objective_rows control_objective_items, image_options
+      control_objective_items.map do |coi|
+        text  = coi.control_objective_text
+        image = CONCLUSION_SCOPE_IMAGES[coi.auditor_comment] ||
+          'scope_not_apply.png'
+
+        [
+          "#{Prawn::Text::NBSP * 4}#{text}",
+          pdf_score_image_row(image, fit: [12, 12]).merge(image_options),
+          {
+            content:       coi.auditor_comment&.upcase,
+            border_widths: [1, 1, 1, 0]
+          }
+        ]
+      end
+    end
+
+    def satisfactory_process_control_row process_control, image_options
+      best_comment = CONCLUSION_OPTIONS.first
+      image        = CONCLUSION_SCOPE_IMAGES[best_comment]
+
+      [
+        "<b>#{process_control.name}</b>",
+        pdf_score_image_row(image, fit: [12, 12]).merge(image_options),
+        {
+          content:       best_comment.upcase,
+          border_widths: [1, 1, 1, 0]
+        }
+      ]
+    end
+
+    def satisfactory_control_objectives_row image_options
+      best_comment = CONCLUSION_OPTIONS.first
+      image        = CONCLUSION_SCOPE_IMAGES[best_comment]
+      text         =
+        I18n.t 'conclusion_review.annex.satisfactory_control_objective_items'
+
+      [
+        "#{Prawn::Text::NBSP * 4} #{text}",
+        pdf_score_image_row(image, fit: [12, 12]).merge(image_options),
+        {
+          content:       best_comment.upcase,
+          border_widths: [1, 1, 1, 0]
+        }
+      ]
+    end
+
+    def get_evolution_image
+      CONCLUSION_EVOLUTION_IMAGES[[conclusion, evolution]] ||
+        EVOLUTION_IMAGES[evolution]
+    end
+
     def show_review_best_practice_comments? organization
       prefix = organization&.prefix
 
       SHOW_REVIEW_BEST_PRACTICE_COMMENTS &&
         ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(prefix)
+    end
+
+    def show_tests? organization
+      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.exclude? organization.prefix
     end
 end

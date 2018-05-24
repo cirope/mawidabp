@@ -14,6 +14,7 @@ es:
     logout: 'Salir'
     new: 'Nuevo'
     show: 'Ver'
+    resources: 'Recursos'
     stats: 'Estadísticas'
     warning: 'Advertencia'
     upload: 'Adjuntar'
@@ -104,6 +105,7 @@ es:
     index:
       title: 'Listado de hallazgos'
       current_user_answers_count: 'Comentarios propios'
+      unread_answers_filter: 'Comentarios sin leer'
       unread_answers:
         one: 'Tiene un comentario sin leer'
         other: 'Tiene %{count} comentarios sin leer'
@@ -185,7 +187,7 @@ es:
       title: 'Modificar período'
     errors:
       can_not_be_destroyed: 'El período no puede ser eliminado'
-      plans:
+      plan:
         one: 'Tiene un plan asociado'
         other: 'Tiene %{count} planes asociados'
       reviews:
@@ -246,6 +248,10 @@ es:
       title: 'Plan de auditoría'
       pdf_name: 'plan_periodo_%{period}.pdf'
       resource_utilization: 'Recursos utilizados'
+    resources:
+      show:
+        title: 'Resumen por recurso'
+        empty: 'No hay recursos humanos utilizados en el plan seleccionado'
     stats:
       show:
         title: 'Estadísiticas del plan de auditoría'
@@ -497,6 +503,62 @@ es:
           complete:
             one: '*Una* observación solucionada'
             other: '*%{count}* observaciones solucionadas'
+
+  risk_assessments:
+    edit:
+      title: 'Editar evaluación de riesgo'
+      other_actions: 'Acciones'
+      sort_by_risk: 'Ordenar por riesgo descendente'
+    index:
+      new: 'Nueva evaluación de riesgo'
+      title: 'Listado de evaluaciones de riesgo'
+      empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="label label-primary">Nueva evaluación de riesgo</span>'
+      empty_search_html: 'No hay evaluaciones de riesgo que coincidan con el criterio de búsqueda'
+      merge_to_plan: 'Crear proyectos en plan a partir de la evaluación'
+    new:
+      title: 'Crear evaluación de riesgo'
+    show:
+      title: 'Ver evaluación de riesgo'
+      download_pdf: 'Descargar PDF'
+      download_csv: 'Descargar CSV'
+    form:
+      new_risk_assessment_items: 'Luego de crear la evaluación de riesgo podrá agregar items a la misma'
+      add_risk_assessment_item: 'Agregar item'
+      add_best_practice: 'Agregar buena práctica'
+      add_business_unit_type: 'Agregar unidad organizativa'
+      apply: 'Aplicar'
+    risk_weight_risks:
+      none: 'Nulo'
+      low: 'Bajo'
+      medium_low: 'Medio bajo'
+      medium: 'Medio'
+      medium_high: 'Medio alto'
+      high: 'Alto'
+    status:
+      draft: 'Borrador'
+      final: 'Definitiva'
+      merged: 'Planificada'
+    pdf:
+      title: 'Evaluación de riesgo'
+      pdf_name: 'evaluacion_de_riesgo_%{name}.pdf'
+      period:
+        title: "Periodo (%{name})"
+        range: "%{from_date} al %{to_date}"
+
+  risk_assessment_templates:
+    edit:
+      title: 'Editar plantilla de evaluación de riesgo'
+    index:
+      new: 'Nueva plantilla de evaluación de riesgo'
+      title: 'Listado de plantillas de evaluación de riesgo'
+      empty_html: 'No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="label label-primary">Nueva plantilla de evaluación de riesgo</span>'
+      empty_search_html: 'No hay plantillas de evaluación de riesgo que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear plantilla de evaluación de riesgo'
+    show:
+      title: 'Ver plantilla de evaluación de riesgo'
+    form:
+      add_risk_assessment_weight: 'Agregar ponderador'
 
   versions:
     index:

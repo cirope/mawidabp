@@ -14,6 +14,13 @@ module Reviews::Approval
 
     errors << [Review.model_name.human, review_errors] if review_errors.present?
 
+    if conclusion_draft_review && !conclusion_draft_review.must_be_approved?
+      errors << [
+        ConclusionDraftReview.model_name.human,
+        conclusion_draft_review.approval_errors
+      ]
+    end
+
     (@approval_errors = errors).blank?
   end
   alias_method :is_approved?, :must_be_approved?

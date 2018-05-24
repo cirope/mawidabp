@@ -294,7 +294,7 @@ module Findings::FollowUpPDF
     end
 
     def current_version
-      object    = paper_trail.object_attrs_for_paper_trail
+      object    = paper_trail.object_attrs_for_paper_trail false
       use_plain = self.class.connection.adapter_name == 'PostgreSQL'
 
       PaperTrail::Version.new(
