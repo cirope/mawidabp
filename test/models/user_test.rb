@@ -313,6 +313,7 @@ class UserTest < ActiveSupport::TestCase
     )
 
     assert_error user, :organization_roles, :blank
+    assert_error user, :manager_id, :invalid
   end
 
   test 'change user role from auditor to audited' do
@@ -341,6 +342,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     assert @user.update(organization_roles_attributes: roles_attr)
+    assert_empty @user.organization_roles.reload
   end
 
   test 'release for all pending fingings' do
