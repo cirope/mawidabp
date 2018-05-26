@@ -13,9 +13,11 @@ module Findings::SortColumns
         priority_desc:       priority_desc_options,
       ) unless HIDE_WEAKNESS_PRIORITY
 
-      columns.merge!(
-        readings_desc: readings_desc_options
-      ) if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL' &&
+         self == Finding
+
+        columns[:readings_desc] = readings_desc_options
+      end
 
       columns.merge(
         state:               state_options,
