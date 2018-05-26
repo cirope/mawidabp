@@ -627,9 +627,7 @@ class FindingsControllerTest < ActionController::TestCase
     first = findings(:unanswered_for_level_1_notification)
     second = findings(:unanswered_for_level_2_notification)
 
-    # First place
     3.times { create_finding_answers_for(first, destroy_readings: true) }
-    # Second place
     create_finding_answers_for(second, destroy_readings: true)
 
     get :index, params: {
