@@ -649,11 +649,10 @@ class FindingsControllerTest < ActionController::TestCase
     }, as: :csv
     assert_response :success
     # forcing quote_char because of the html response
-    csv = CSV.parse(@response.body, col_sep: ';', quote_char: "'")
-    csv.shift # Drop titles
+    csv = CSV.parse(@response.body, col_sep: ';', quote_char: "'", headers: true)
     csv_findings = []
     csv.each do |row|
-      id = row[6].strip.tr('"', '').to_i
+      id = row['"Id"'].strip.tr('"', '').to_i
       csv_findings << id if id&.positive?
     end
 
