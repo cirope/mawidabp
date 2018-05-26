@@ -37,17 +37,18 @@ module LdapConfigs::LDAPImport
       data       = trivial_data entry
       roles      = clean_roles Role.list_with_corporate.where(name: role_names)
       user       = User.by_email data[:email]
-      new        = !user
 
       data[:manager_id] = nil if manager_dn.blank?
 
       if user
         update_user user: user, data: data, roles: roles
+        state = user.roles.any? ? :updated : :deleted
       else
         user = create_user user: user, data: data, roles: roles
+        state = :created
       end
 
-      { user: user, manager_dn: manager_dn, new: new }
+      { user: user, manager_dn: manager_dn, state: state }
     end
 
     def role_data entry

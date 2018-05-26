@@ -105,15 +105,12 @@ class UserTest < ActiveSupport::TestCase
     @user.last_name = nil
     @user.language = '   '
     @user.email = '  '
-    @user.organization_roles.clear
 
     assert @user.invalid?
     assert_error @user, :name, :blank
     assert_error @user, :last_name, :blank
     assert_error @user, :language, :blank
     assert_error @user, :email, :blank
-    assert_error @user, :manager_id, :invalid
-    assert_error @user, :organization_roles, :blank
   end
 
   test 'validates well formated attributes' do
@@ -299,6 +296,25 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  test 'user role needed at creation ' do
+    user = User.create(
+      name: 'New name',
+      last_name: 'New lastname',
+      language: 'es',
+      email: 'emailxx@emailxx.ccc',
+      function: 'New function',
+      user: 'new_user',
+      enable: true,
+      failed_attempts: 0,
+      logged_in: false,
+      notes: 'Some user notes',
+      manager_id: users(:administrator).id,
+      organization_roles_attributes: []
+    )
+
+    assert_error user, :organization_roles, :blank
+  end
+
   test 'change user role from auditor to audited' do
     auditor = users :auditor
 
@@ -317,6 +333,14 @@ class UserTest < ActiveSupport::TestCase
     auditor.organization_roles.each { |o_r| o_r.role = roles(:audited_role) }
 
     assert auditor.save
+  end
+
+  test 'remove user roles' do
+    roles_attr = @user.organization_roles.map do |o_r|
+      { id: o_r.id, _destroy: '1' }
+    end
+
+    assert @user.update(organization_roles_attributes: roles_attr)
   end
 
   test 'release for all pending fingings' do
