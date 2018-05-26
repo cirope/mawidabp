@@ -119,7 +119,7 @@ module Findings::SortColumns
 
         order_by_readings = "CASE \n"
         order_by_readings << "WHEN (#{reading_user} < #{finding_user}) then (#{finding_user} - #{reading_user}) \n"
-        order_by_readings << "ELSE 0 \n"
+        order_by_readings << "ELSE 0-#{Finding.table_name}.id \n"
         order_by_readings << 'END DESC'
 
         {

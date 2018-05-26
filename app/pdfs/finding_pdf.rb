@@ -59,8 +59,8 @@ class FindingPdf < Prawn::Document
     end
 
     def add_body
-      put_findings @findings.includes(:review, control_objective: {
-        process_control: :best_practice
+      put_findings @findings.preload(:review, control_objective: {
+       process_control: :best_practice
       })
     end
 
