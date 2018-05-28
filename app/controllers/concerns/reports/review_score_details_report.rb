@@ -184,8 +184,8 @@ module Reports::ReviewScoreDetailsReport
     def review_score_by_scope_columns
       {
         Review.human_attribute_name('scope') => 60,
-        I18n.t("#{@controller}_committee_report.review_score_details_report.count") => 20,
-        I18n.t("#{@controller}_committee_report.review_score_details_report.share") => 20
+        t("#{@controller}_committee_report.review_score_details_report.count") => 20,
+        t("#{@controller}_committee_report.review_score_details_report.share") => 20
       }
     end
 
@@ -221,8 +221,8 @@ module Reports::ReviewScoreDetailsReport
     def review_score_by_evolution_columns
       {
         Review.human_attribute_name('evolution') => 60,
-        I18n.t("#{@controller}_committee_report.review_score_details_report.count") => 20,
-        I18n.t("#{@controller}_committee_report.review_score_details_report.share") => 20
+        t("#{@controller}_committee_report.review_score_details_report.count") => 20,
+        t("#{@controller}_committee_report.review_score_details_report.share") => 20
       }
     end
 
