@@ -32,7 +32,6 @@ module Reports::ReviewScoresReport
 
     def init_review_scores_vars
       @controller = params[:controller_name]
-      @final = @controller == 'conclusion'
       @title = t("#{@controller}_committee_report.review_scores_report_title")
       @from_date, @to_date = *make_date_range(params[:review_scores_report])
       @filters = []
