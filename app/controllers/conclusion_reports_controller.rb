@@ -2,6 +2,7 @@ class ConclusionReportsController < ApplicationController
   include Reports::SynthesisReport
   include Reports::ReviewStatsReport
   include Reports::ReviewScoresReport
+  include Reports::ReviewScoreDetailsReport
   include Reports::WeaknessesByState
   include Reports::WeaknessesByRisk
   include Reports::WeaknessesByAuditType
