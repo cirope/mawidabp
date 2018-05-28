@@ -40,13 +40,13 @@ module LdapConfigs::LDAPImport
 
       data[:manager_id] = nil if manager_dn.blank?
 
-      if user
-        update_user user: user, data: data, roles: roles
-        state = user.roles.any? ? :updated : :deleted
-      else
-        user = create_user user: user, data: data, roles: roles
-        state = :created
-      end
+      state = if user
+                update_user user: user, data: data, roles: roles
+                user.roles.any? ? :updated : :deleted
+              else
+                user = create_user user: user, data: data, roles: roles
+                :created
+              end
 
       { user: user, manager_dn: manager_dn, state: state }
     end
