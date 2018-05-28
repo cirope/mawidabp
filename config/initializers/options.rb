@@ -40,7 +40,7 @@ CONCLUSION_EVOLUTION = {
     'No aplica'
   ],
   'Satisfactorio con salvedades' => [
-    'Mantiene calificación desfavorable',
+    'Mantiene calificación favorable',
     'Mejora calificación',
     'Empeora calficación',
     'No aplica'
