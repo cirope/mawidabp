@@ -3,19 +3,21 @@
     action: :weaknesses_current_situation, extra_params: {
       controller_name: 'follow_up', final: false
     },
-    forms: { date_range: true, finding: true, risk_levels: true }
+    forms: { date_range: true, finding_multiple: true, risk_levels_multiple: true }
   }
 %>
 
 <% if @weaknesses.any? %>
   <% @weaknesses.each_with_index do |weakness, index| %>
-    <h4>
+    <br>
+
+    <p>
       <span class="badge badge-default">
         <%= index + 1 %>
       </span>
       <span class="text-muted"><%= BusinessUnit.model_name.human %></span>:
       <%= weakness.business_unit %>
-    </h4>
+    </p>
 
     <p>
       <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
@@ -47,35 +49,39 @@
       <%= weakness.risk_text %>
     </p>
 
-    <p>
+    <p style="font-size: 14px;">
       <span class="text-muted"><%= Weakness.human_attribute_name 'title' %></span>:
       <strong><%= weakness.title %></strong>
     </p>
 
     <p>
       <% if weakness.current_situation.present? %>
-        <span class="text-muted"><%= Weakness.human_attribute_name 'current_situation' %></span>:
+        <strong><%= Weakness.human_attribute_name 'current_situation' %></strong>:
         <%= weakness.current_situation %>
       <% else %>
-        <span class="text-muted"><%= Weakness.human_attribute_name 'description' %></span>:
+        <strong><%= Weakness.human_attribute_name 'description' %></strong>:
         <%= weakness.description %>
       <% end %>
     </p>
 
     <p>
-      <span class="text-muted"><%= Weakness.human_attribute_name 'answer' %></span>:
+      <strong><%= Weakness.human_attribute_name 'answer' %></strong>:
       <%= weakness.answer %>
     </p>
 
     <p>
-      <span class="text-muted"><%= Weakness.human_attribute_name 'state' %></span>:
+      <strong><%= Weakness.human_attribute_name 'state' %></strong>:
       <%= weakness.state_text %>
     </p>
 
     <% if weakness.follow_up_date %>
       <p>
-        <span class="text-muted"><%= Weakness.human_attribute_name 'follow_up_date' %></span>:
-        <%= l weakness.follow_up_date %>
+        <strong><%= Weakness.human_attribute_name 'follow_up_date' %></strong>:
+        <% if weakness.follow_up_date < Time.zone.today %>
+          <span class="text-danger"><%= l weakness.follow_up_date %></span>
+        <% else %>
+          <%= l weakness.follow_up_date %>
+        <% end %>
       </p>
     <% end %>
   <% end %>

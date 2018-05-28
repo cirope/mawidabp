@@ -120,4 +120,75 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_equal user.id, User.find_by(user: 'new_user').manager_id
     assert_nil user.manager_id
   end
+
+  test 'test encrypt and decrypt with Security lib' do
+    phrase = 'I love dogs'
+    encrypted_phrase = Security.encrypt(phrase)
+
+    assert_not_equal(phrase, encrypted_phrase)
+    assert Base64.decode64(encrypted_phrase)
+
+    decrypted_phrase = Security.decrypt(encrypted_phrase)
+
+    assert_equal(phrase, decrypted_phrase)
+  end
+
+  test 'encrypt the same phrase' do
+    phrase = 'I love dogs'
+
+    encrypted_phrases = 5.times.map { Security.encrypt(phrase) }
+
+    # Check all encrypted results are different
+    assert_equal(5, encrypted_phrases.uniq.size)
+
+    encrypted_phrases.each do |ep|
+      decrypted_phrase = Security.decrypt(ep)
+
+      assert_equal(phrase, decrypted_phrase, ep)
+    end
+  end
+
+  test 'service password needed with service user' do
+    @ldap_config.test_user = 'admin'
+    @ldap_config.test_password = 'admin123'
+
+    assert @ldap_config.valid?
+
+    @ldap_config.user = 'admin'
+    @ldap_config.password = ''
+    assert @ldap_config.invalid?
+    assert_error @ldap_config, :password, :blank
+
+    @ldap_config.password = 'admin123'
+    assert @ldap_config.valid?
+  end
+
+  test 'service user can connect' do
+    @ldap_config.user = 'admin'
+    @ldap_config.password = 'adminadmin'
+
+    assert @ldap_config.invalid?
+    assert_error @ldap_config, :user, :invalid_credentials
+
+    @ldap_config.password = 'admin123'
+    assert @ldap_config.valid?
+  end
+
+  test 'service password saved encrypted' do
+    @ldap_config.update!(
+      user: 'admin',
+      password: 'admin123'
+    )
+
+    @ldap_config.reload
+    assert @ldap_config.encrypted_password.present?
+    assert_not_equal(
+      @ldap_config.password,
+      @ldap_config.encrypted_password
+    )
+    assert_equal(
+      @ldap_config.password,
+      @ldap_config.decrypted_password
+    )
+  end
 end

@@ -189,8 +189,10 @@ module Reports::WeaknessesByMonth
     end
 
     def put_weaknesses_by_month_evolution_image_on pdf, conclusion_review
+      image_key  = [conclusion_review.conclusion, conclusion_review.evolution]
+      image      = CONCLUSION_EVOLUTION_IMAGES[image_key]
+      image    ||= EVOLUTION_IMAGES[conclusion_review.evolution]
       text       = "#{ConclusionFinalReview.human_attribute_name 'evolution'}: "
-      image      = EVOLUTION_IMAGES[conclusion_review.evolution]
       image_path = PDF_IMAGE_PATH.join(image || PDF_DEFAULT_SCORE_IMAGE)
       image_x    = pdf.width_of(text, size: PDF_FONT_SIZE, style: :bold)
       image_y    = pdf.cursor + 1
@@ -295,10 +297,6 @@ module Reports::WeaknessesByMonth
         w.title,
         [Weakness.human_attribute_name('risk'), w.risk_text].join(': '),
         [Weakness.human_attribute_name('state'), w.state_text].join(': '),
-        [
-          Weakness.human_attribute_name('origination_date'),
-          w.repeated_of_id ? l(w.origination_date) : t('conclusion_review.new_origination_date')
-        ].join(': '),
         ([
           t("#{@controller}_committee_report.weaknesses_by_month.year"),
           l(w.origination_date, format: '%Y')

@@ -119,6 +119,7 @@ class ControlObjectiveItemsController < ApplicationController
   end
 
   private
+
     def set_control_objective_item
       @control_objective_item = ControlObjectiveItem.list.includes(
         :control, :weaknesses, :work_papers

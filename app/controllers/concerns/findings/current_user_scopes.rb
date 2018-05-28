@@ -116,12 +116,37 @@ module Findings::CurrentUserScopes
     end
 
     def filtered_current_user_findings
-      scoped_findings.
+      scope = scoped_findings.
         includes(*current_user_includes).
-        left_joins(:users).
-        where(@conditions).
+        left_joins(:users)
+
+      if @extra_joins
+        # if any of this raise an exception we don't want to affect the scope
+        new_scope = scope.send(*@extra_joins)
+
+        refs = [:id]
+        refs += deep_to_a(
+          new_scope.joins_values.to_a +
+          new_scope.includes_values.to_a
+        ).flatten.uniq.map do |ref|
+          # We need the real table name (STI models)
+          "#{ref.to_s.singularize.camelize.constantize.table_name}.id"
+        end
+
+        scope = new_scope.group(*refs.flatten.uniq)
+      end
+
+      scope.where(@conditions).
         order(@order_by || current_user_default_sort_columns).
         references(*current_user_references)
+    end
+
+    def deep_to_a(value)
+      # Helper para transformar todos los includes/joins
+      # a un array para poder iterarlos.
+      return [value] unless value.respond_to?(:to_a)
+
+      value.to_a.map { |v| deep_to_a(v) }
     end
 
     def current_user_includes
