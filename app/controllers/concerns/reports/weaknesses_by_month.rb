@@ -297,10 +297,6 @@ module Reports::WeaknessesByMonth
         w.title,
         [Weakness.human_attribute_name('risk'), w.risk_text].join(': '),
         [Weakness.human_attribute_name('state'), w.state_text].join(': '),
-        [
-          Weakness.human_attribute_name('origination_date'),
-          w.repeated_of_id ? l(w.origination_date) : t('conclusion_review.new_origination_date')
-        ].join(': '),
         ([
           t("#{@controller}_committee_report.weaknesses_by_month.year"),
           l(w.origination_date, format: '%Y')
