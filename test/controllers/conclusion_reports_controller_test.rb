@@ -261,15 +261,17 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       :review_score_details_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
-        :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'one'
+        :conclusion => [CONCLUSION_OPTIONS.first],
+        :scope => ['committee'],
+        :business_unit_type => [business_unit_types(:cycle).id],
+        :business_unit => 'one, two'
       },
       :controller_name => 'conclusion'
     }
 
     assert_response :success
     assert_not_nil assigns(:filters)
-    assert_equal 2, assigns(:filters).count
+    assert_equal 4, assigns(:filters).count
     assert_template 'conclusion_reports/review_score_details_report'
   end
 

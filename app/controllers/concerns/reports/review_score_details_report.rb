@@ -50,8 +50,13 @@ module Reports::ReviewScoreDetailsReport
         list_all_by_date @from_date, @to_date
 
       if params[:review_score_details_report]
-        review_score_details_business_unit_type_reviews if params[:review_score_details_report][:business_unit_type].present?
-        review_score_details_business_unit_reviews if params[:review_score_details_report][:business_unit].present?
+        if params[:review_score_details_report][:business_unit].present?
+          review_score_details_business_unit_reviews
+        end
+
+        review_score_details_business_unit_type_reviews
+        review_score_details_reviews_by_conclusion
+        review_score_details_reviews_by_scope
       end
 
       set_scores_by_scope
@@ -59,13 +64,16 @@ module Reports::ReviewScoreDetailsReport
     end
 
     def review_score_details_business_unit_type_reviews
-      @selected_business_unit = BusinessUnitType.find params[:review_score_details_report][:business_unit_type]
-      @conclusion_reviews = @conclusion_reviews.by_business_unit_type @selected_business_unit.id
-      @filters << "<b>#{BusinessUnitType.model_name.human}</b> = \"#{@selected_business_unit.name.strip}\""
+      business_unit_types = Array(params[:review_score_details_report][:business_unit_type]).reject(&:blank?)
+
+      if business_unit_types.any?
+        selected_business_units = BusinessUnitType.list.where(id: business_unit_types)
+        @conclusion_reviews = @conclusion_reviews.by_business_unit_type selected_business_units.ids
+        @filters << "<b>#{BusinessUnitType.model_name.human}</b> = \"#{selected_business_units.pluck('name').to_sentence}\""
+      end
     end
 
     def review_score_details_business_unit_reviews
-      # TODO: split with OR
       business_units = params[:review_score_details_report][:business_unit].split(
         SPLIT_AND_TERMS_REGEXP
       ).uniq.map(&:strip)
@@ -73,6 +81,24 @@ module Reports::ReviewScoreDetailsReport
       if business_units.present?
         @conclusion_reviews = @conclusion_reviews.by_business_unit_names *business_units
         @filters << "<b>#{BusinessUnit.model_name.human}</b> = \"#{params[:review_score_details_report][:business_unit].strip}\""
+      end
+    end
+
+    def review_score_details_reviews_by_conclusion
+      conclusions = Array(params[:review_score_details_report][:conclusion]).reject(&:blank?)
+
+      if conclusions.any?
+        @conclusion_reviews = @conclusion_reviews.where(conclusion: conclusions)
+        @filters << "<b>#{ConclusionFinalReview.human_attribute_name 'conclusion'}</b> = \"#{conclusions.to_sentence}\""
+      end
+    end
+
+    def review_score_details_reviews_by_scope
+      scopes = Array(params[:review_score_details_report][:scope]).reject(&:blank?)
+
+      if scopes.any?
+        @conclusion_reviews = @conclusion_reviews.where(reviews: { scope: scopes })
+        @filters << "<b>#{Review.human_attribute_name 'scope'}</b> = \"#{scopes.to_sentence}\""
       end
     end
 

@@ -1,7 +1,11 @@
 <%= render partial: 'shared/filter_form', locals: {
   action:       :review_score_details_report,
-  forms:        { date_range: true, business_unit: true },
-  extra_params: { controller_name: 'conclusion' }
+  extra_params: { controller_name: 'conclusion' },
+  forms:        {
+    date_range:                    true,
+    business_unit_multiple:        true,
+    conclusion_and_scope_multiple: true
+  }
 } %>
 
 <br>
