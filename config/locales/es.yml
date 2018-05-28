@@ -246,7 +246,7 @@
       without_audits_in_the_month: "Sin auditorías en el mes"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      year: "Año"
+      year: "Año de origen"
     weaknesses_current_situation:
       pdf_name: "observaciones_situacion_actual_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -740,7 +740,7 @@
       without_audits_in_the_month: "Sin auditorías en el mes"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      year: "Año"
+      year: "Año de origen"
     weaknesses_current_situation:
       pdf_name: "observaciones_situacion_actual_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
