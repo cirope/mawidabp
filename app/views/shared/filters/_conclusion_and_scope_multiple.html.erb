@@ -1,0 +1,22 @@
+<div id="conclusion_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+  <div class="row">
+    <div class="col-md-6">
+       <div class="form-group">
+          <% selected = params[action] ? params[action][:conclusion] : nil %>
+          <%= f.label :conclusion, ConclusionFinalReview.human_attribute_name('conclusion'), class: 'col-md-3' %>
+          <div class="col-md-9">
+            <%= f.input :conclusion, collection: CONCLUSION_OPTIONS, as: :check_boxes, checked: selected, label: false, class: 'form-control' %>
+          </div>
+       </div>
+    </div>
+    <div class="col-md-6">
+       <div class="form-group">
+          <% selected = params[action] ? params[action][:scope] : nil %>
+          <%= f.label :scope, Review.human_attribute_name('scope'), class: 'col-md-3' %>
+          <div class="col-md-9">
+            <%= f.input :scope, collection: REVIEW_SCOPES, as: :check_boxes, checked: selected, label: false, class: 'form-control' %>
+          </div>
+       </div>
+    </div>
+  </div>
+</div>
