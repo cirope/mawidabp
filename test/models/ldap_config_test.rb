@@ -121,6 +121,21 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_nil user.manager_id
   end
 
+  test 're-import should not return users' do
+    set_organization organizations(:google)
+
+    imported_users = nil
+    assert_difference 'User.count' do
+      imported_users = @ldap_config.import 'admin', 'admin123'
+    end
+
+    assert_not_empty imported_users
+
+    assert_no_difference 'User.count' do
+      assert_empty @ldap_config.import('admin', 'admin123')
+    end
+  end
+
   test 'test encrypt and decrypt with Security lib' do
     phrase = 'I love dogs'
     encrypted_phrase = Security.encrypt(phrase)
