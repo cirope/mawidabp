@@ -16,7 +16,7 @@
           </span> |
           <%= user.errors.full_messages.to_sentence %>
         <% else %>
-          <span class="label label-success">
+          <span class="label <%= users_import_state_label_class(import[:state]) %>">
             <%= t(".#{import[:state]}") %>
           </span>
         <% end %>
