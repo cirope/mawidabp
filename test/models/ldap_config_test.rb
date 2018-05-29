@@ -121,7 +121,7 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_nil user.manager_id
   end
 
-  test 're-import should not return users' do
+  test 're-import should return all unchanged users' do
     set_organization organizations(:google)
 
     assert_difference 'User.count' do
