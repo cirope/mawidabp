@@ -42,7 +42,11 @@ module LdapConfigs::LDAPImport
 
       state = if user
                 update_user user: user, data: data, roles: roles
-                user.roles.any? ? :updated : :deleted
+                if user.roles.any?
+                  user.saved_changes? ? :updated : :unchanged
+                else
+                  :deleted
+                end
               else
                 user = create_user user: user, data: data, roles: roles
                 :created

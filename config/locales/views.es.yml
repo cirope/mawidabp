@@ -439,6 +439,7 @@ es:
         created: 'Creado'
         updated: 'Actualizado'
         destroyed: 'Eliminado'
+        unchanged: 'Sin cambios'
         error: 'Con errores'
         deprecated_users: 'Usuarios ausentes en el servidor LDAP'
     passwords:
