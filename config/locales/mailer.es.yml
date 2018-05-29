@@ -1,0 +1,18 @@
+---
+es:
+  ldap_mailer:
+    import_notifier:
+      subject: "[%{organization}] Han habido cambios en los usuarios autorizados"
+      body_title: "Se han importado usuarios del servidor principal de LDAP (o AD):"
+      states:
+        created: 'Creados:'
+        updated: 'Actualizados:'
+        deleted: 'Eliminados:'
+    footer:
+      email_label: "Correo (preferentemente)"
+      phone_label: "Teléfono"
+      warning: "Por favor, *no contestar* el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
+      title: "Correo enviado por el sistema 'Mawidabp'. Cualquier inquietud comunicarse al área de soporte:"
+      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 8 o superior*"
+
+
