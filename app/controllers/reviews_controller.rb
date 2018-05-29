@@ -54,6 +54,7 @@ class ReviewsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
+      format.pdf  { redirect_to review_pdf_path }
     end
   end
 
@@ -467,6 +468,12 @@ class ReviewsController < ApplicationController
 
     def set_review_clone
       @review_clone = Review.list.find_by(id: params[:clone_from].try(:to_i))
+    end
+
+    def review_pdf_path
+      @review.to_pdf current_organization
+
+      @review.relative_pdf_path
     end
 
     def load_privileges
