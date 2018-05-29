@@ -596,6 +596,8 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'check order by not readed comments desc' do
+    skip unless ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+
     # we already have a test that checks the response
     get :index, params: { completed: 'incomplete' }
 
@@ -624,6 +626,8 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'check order by not readed comments desc in all formats' do
+    skip unless ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+
     first = findings(:unanswered_for_level_1_notification)
     second = findings(:unanswered_for_level_2_notification)
 
