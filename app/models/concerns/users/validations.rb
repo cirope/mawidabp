@@ -14,7 +14,7 @@ module Users::Validations
     validates :language, length: { maximum: 10 }, presence: true
     validates :email, format: { with: EMAIL_REGEXP }, allow_nil: true, allow_blank: true
     validate :validate_manager
-    validate :validate_roles
+    validate :validate_roles, on: :create
     validate :validate_password
   end
 
