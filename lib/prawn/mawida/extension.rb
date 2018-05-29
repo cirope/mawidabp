@@ -289,6 +289,16 @@ module Prawn
         file_path
       end
 
+      def put_hr
+        self.line_width = 0.5
+
+        move_down 10
+        stroke_horizontal_rule
+        move_down 10
+
+        self.line_width = 1
+      end
+
       private
 
         def show_print_date_on? organization
