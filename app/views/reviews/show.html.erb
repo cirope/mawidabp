@@ -171,5 +171,6 @@
 
 <div>
   <%= link_to_edit edit_review_path(@review) %> |
+  <%= link_to t('label.download'), [@review, format: :pdf] %> |
   <%= link_to_index reviews_path %>
 </div>
