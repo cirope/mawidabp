@@ -11,7 +11,10 @@ module LdapConfigs::LDAPImport
     User.transaction do
       ldap.search(base: basedn, filter: ldap_filter) do |entry|
         if entry[email_attribute].present?
-          users << (result = process_entry entry)
+          result = process_entry entry
+          next unless result[:user].saved_changes?
+
+          users << result
           user   = result[:user]
 
           if user.persisted?
