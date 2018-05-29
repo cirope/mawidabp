@@ -157,7 +157,7 @@ module ConclusionReviews::PDF
       users = users.sort { |rua| rua.assignment_type }
 
       pdf.move_down PDF_FONT_SIZE
-      pdf.add_review_signatures_table users.reverse
+      pdf.add_review_signatures_table users
     end
 
     def put_objective_and_scopes_on pdf, grouped_control_objectives, options
