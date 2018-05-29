@@ -438,7 +438,7 @@ es:
         record_invalid: 'Se produjo un error en la importación, algunos usuarios tienen campos no válidos'
         created: 'Creado'
         updated: 'Actualizado'
-        destroyed: 'Eliminado'
+        deleted: 'Eliminado'
         unchanged: 'Sin cambios'
         error: 'Con errores'
         deprecated_users: 'Usuarios ausentes en el servidor LDAP'
