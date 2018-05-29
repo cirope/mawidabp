@@ -95,9 +95,12 @@ module Reports::WeaknessesByMonth
           conclusion_review = data[:conclusion_review]
           review = conclusion_review.review
 
-          unless last_shown_business_unit_type_id == review.business_unit_type.id
+          if last_shown_business_unit_type_id == review.business_unit_type.id
+            pdf.put_hr
+          else
             pdf.move_down PDF_FONT_SIZE * 1.25
             pdf.add_title review.business_unit_type.name, (PDF_FONT_SIZE * 1.25).round
+            pdf.move_down PDF_FONT_SIZE
 
             last_shown_business_unit_type_id = review.business_unit_type.id
           end
@@ -148,8 +151,6 @@ module Reports::WeaknessesByMonth
 
     def put_weaknesses_by_month_conclusion_review_on pdf, conclusion_review
       review = conclusion_review.review
-
-      pdf.move_down PDF_FONT_SIZE
 
       pdf.add_description_item Review.human_attribute_name('identification'),
         review.identification, 0, false, PDF_FONT_SIZE
