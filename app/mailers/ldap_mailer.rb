@@ -13,6 +13,7 @@ class LdapMailer < ActionMailer::Base
       unchanged: []
     }
     imported_users.each do |d|
+      @organization ||= d[:user].organization
       @users[d[:status]] << d[:user] if d[:status] != :unchanged # no necesario
     end
 
