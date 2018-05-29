@@ -25,7 +25,7 @@ module LdapConfigs::LDAPImport
 
       assign_managers managers, users_by_dn
 
-      users = check_for_late_changes(users)
+      users = check_state_for_late_changes(users)
     end
 
     users
@@ -129,7 +129,7 @@ module LdapConfigs::LDAPImport
       end
     end
 
-    def check_for_late_changes(users)
+    def check_state_for_late_changes(users)
       users.map do |user_data|
         if user_data[:state] == :unchanged && user_data[:user].saved_changes?
           user_data[:state] = :updated
