@@ -24,14 +24,14 @@ module LdapConfigs::LDAPImport
       raise Net::LDAP::Error.new unless ldap.get_operation_result.code == 0
 
       assign_managers managers, users_by_dn
-      users = recheck_unchanged_users(users)
+
+      users = check_for_late_changes(users)
     end
 
     users
   end
 
   private
-
 
     def process_entry entry
       role_names = role_data entry
@@ -129,7 +129,7 @@ module LdapConfigs::LDAPImport
       end
     end
 
-    def recheck_unchanged_users(users)
+    def check_for_late_changes(users)
       users.map do |user_data|
         if user_data[:state] == :unchanged && user_data[:user].saved_changes?
           user_data[:state] = :updated
