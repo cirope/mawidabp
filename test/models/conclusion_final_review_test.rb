@@ -37,7 +37,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
     assert_difference 'ConclusionFinalReview.count' do
       assert_difference 'Finding.count', findings_count do
-        @conclusion_review = ConclusionFinalReview.list.new({
+        @conclusion_review = ConclusionFinalReview.list.new(
           :review => review,
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
@@ -50,7 +50,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
           :affects_compliance => false
-        }, false)
+        )
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
         # Asegurarse que le asigna el tipo correcto
@@ -86,7 +86,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
     assert_difference 'ConclusionFinalReview.count' do
       assert_difference 'Finding.count', findings.size do
-        @conclusion_review = ConclusionFinalReview.list.new({
+        @conclusion_review = ConclusionFinalReview.list.new(
           :review => review,
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
@@ -99,7 +99,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
           :affects_compliance => false
-        }, false)
+        )
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
         # Asegurarse que le asigna el tipo correcto
@@ -158,7 +158,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     weakness = Weakness.find findings(:being_implemented_weakness_on_approved_draft).id
     assert weakness.update_attribute :state, 7
 
-    @conclusion_review = ConclusionFinalReview.list.new({
+    @conclusion_review = ConclusionFinalReview.list.new(
           :review => review,
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
@@ -171,15 +171,12 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
           :affects_compliance => false
-        }, false)
+        )
 
     assert @conclusion_review.save
 
     assert weakness.reload.final
-
   end
-
-
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
@@ -278,7 +275,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     assert_equal 0, final_work_papers_count
 
     assert_difference 'ConclusionFinalReview.count' do
-      @conclusion_review = ConclusionFinalReview.list.new({
+      @conclusion_review = ConclusionFinalReview.list.new(
         :review => review,
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
@@ -291,7 +288,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
         :main_weaknesses_text => 'Some main weakness X',
         :corrective_actions => 'You should do it this way',
         :affects_compliance => false
-      }, false)
+      )
 
       assert @conclusion_review.save,
         @conclusion_review.errors.full_messages.join('; ')
