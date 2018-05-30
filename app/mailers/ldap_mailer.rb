@@ -12,12 +12,18 @@ class LdapMailer < ActionMailer::Base
       deleted:   [],
       unchanged: []
     }
+    if Organization.current_id.present?
+      @organization = Organization.find(Organization.current_id)
+    end
     imported_users.each do |d|
-      @organization ||= d[:user].organization
-      @users[d[:status]] << d[:user] if d[:status] != :unchanged # no necesario
+      @organization ||= d[:user].organizations.first # ???? o se lo pasamos por paramentro?
+      @users[d[:state]] << d[:user] if d[:state] != :unchanged # no necesario
     end
 
-    email = @organization.managers.map(&:email).join(', ')  # check scope
+    email = @organization.users_with_roles(
+      :supervisor, :manager
+    ).pluck(:email)
+
     subject = I18n.t(
       'ldap_mailer.import_notifier.subject',
       organization: @organization.prefix.upcase
