@@ -7,7 +7,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   setup do
     ActionMailer::Base.deliveries.clear
 
-    assert ActionMailer::Base.deliveries.empty?
+    assert_empty ActionMailer::Base.deliveries
   end
 
   teardown do
@@ -15,14 +15,15 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'Notify with imported users' do
-    Organization.current_id = organizations(:google).id
+    org = organizations(:google)
+    Organization.current_id = org.id
 
     ldap_config = ldap_configs(:google_ldap)
     imports = ldap_config.import('admin', 'admin123')
 
-    response = LdapMailer.import_notifier(imports).deliver_now
+    response = LdapMailer.import_notifier(imports, org).deliver_now
 
-    assert !ActionMailer::Base.deliveries.empty?
+    assert_not_empty ActionMailer::Base.deliveries
     assert_includes response.to, users(:supervisor).email
   end
 end

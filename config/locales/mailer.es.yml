@@ -2,12 +2,15 @@
 es:
   ldap_mailer:
     import_notifier:
-      subject: "[%{organization}] Han habido cambios en los usuarios autorizados"
-      body_title: "Se han importado usuarios del servidor principal de LDAP (o AD):"
+      subject: "Han habido cambios en los usuarios"
+      body_title: "Se han sincronizado usuarios, estos son los cambios realizados:"
+      receptors: "Hola,"
       states:
         created: 'Creados:'
         updated: 'Actualizados:'
         deleted: 'Eliminados:'
+
+  common_mailer:
     footer:
       email_label: "Correo (preferentemente)"
       phone_label: "Teléfono"

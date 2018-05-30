@@ -8,18 +8,6 @@ module Organizations::Roles
     has_many :organization_roles, dependent: :destroy
   end
 
-  def users_with_roles(*roles)
-    role_types = roles.map { |role| ::Role::TYPES[role.to_sym] }
-
-    users.includes(
-      organization_roles: :role
-    ).where(
-      roles: {
-        role_type: role_types
-      }
-    ).uniq
-  end
-
   private
 
     def create_initial_roles

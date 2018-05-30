@@ -5,30 +5,19 @@ class LdapMailer < ActionMailer::Base
 
   default from: "#{ENV['EMAIL_NAME'] || I18n.t('app_name')} <#{ENV['EMAIL_ADDRESS']}>"
 
-  def import_notifier(imported_users)
+  def import_notifier(imported_users, organization)
     @users = {
       created:   [],
       updated:   [],
-      deleted:   [],
-      unchanged: []
+      deleted:   []
     }
-    if Organization.current_id.present?
-      @organization = Organization.find(Organization.current_id)
-    end
+
     imported_users.each do |d|
-      @organization ||= d[:user].organizations.first # ???? o se lo pasamos por paramentro?
-      @users[d[:state]] << d[:user] if d[:state] != :unchanged # no necesario
+      @users[d[:state]] << d[:user] unless d[:state] == :unchanged # unused
     end
 
-    email = @organization.users_with_roles(
-      :supervisor, :manager
-    ).pluck(:email)
+    emails = organization.users_with_roles(:supervisor, :manager).pluck(:email)
 
-    subject = I18n.t(
-      'ldap_mailer.import_notifier.subject',
-      organization: @organization.prefix.upcase
-    )
-
-    mail to: email, subject: subject
+    mail to: emails, subject: I18n.t('ldap_mailer.import_notifier.subject')
   end
 end
