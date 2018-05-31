@@ -1,6 +1,6 @@
 module Users::ImportsHelper
   def users_import_state_label_class(state)
-    second_label = {
+    label = {
       created:   'label-success',
       deleted:   'label-warning',
       error:     'label-danger',
@@ -8,6 +8,6 @@ module Users::ImportsHelper
       updated:   'label-info'
     }[state]
 
-    content_tag(:span, t(".#{state}"), class: "label #{second_label}")
+    content_tag(:span, t(".#{state}"), class: "label #{label}")
   end
 end

@@ -44,6 +44,7 @@ module LdapConfigs::LDAPImport
 
       state = if user
                 update_user user: user, data: data, roles: roles
+
                 if user.roles.any?
                   user.saved_changes? ? :updated : :unchanged
                 else
@@ -133,16 +134,13 @@ module LdapConfigs::LDAPImport
 
     def check_state_for_late_changes(users)
       users.map do |u_d|
-        state = case
-                when u_d[:user].errors.any?
-                  :error
-                when u_d[:state] == :unchanged && u_d[:user].saved_changes?
-                  :updated
-                else
-                  u_d[:state]
-                end
+        if u_d[:state] == :unchanged && u_d[:user].saved_changes?
+          u_d[:state] = :updated
+        end
 
-        u_d.merge(state: state)
+        u_d[:state] = :error if u_d[:user].errors.any?
+
+        u_d
       end
     end
 end
