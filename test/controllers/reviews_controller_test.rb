@@ -134,6 +134,15 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/show'
   end
 
+  test 'show review as pdf' do
+    review = reviews :current_review
+
+    login
+
+    get :show, params: { id: review }, as: :pdf
+    assert_redirected_to review.relative_pdf_path
+  end
+
   test 'new review' do
     login
     get :new
