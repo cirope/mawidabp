@@ -515,7 +515,33 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :to_date => 10.years.from_now.to_date,
         :risk => ['', '1', '2'],
         :finding_status => ['', Finding::STATUS[:being_implemented]],
-        :finding_title => 'a'
+        :finding_title => 'a',
+        :compliance => 'no'
+      },
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_current_situation'
+  end
+
+  test 'filtered weaknesses current situation by extra attributes' do
+    skip unless ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+
+    login
+
+    get :weaknesses_current_situation, :params => {
+      :weaknesses_current_situation => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :risk => ['', '1', '2'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
+        :finding_title => 'a',
+        :compliance => 'no',
+        :impact => [WEAKNESS_IMPACT.first],
+        :operational_risk => [WEAKNESS_OPERATIONAL_RISK.first],
+        :internal_control_components => [WEAKNESS_INTERNAL_CONTROL_COMPONENTS.first]
       },
       :controller_name => 'follow_up',
       :final => false
