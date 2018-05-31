@@ -71,18 +71,24 @@ module Reviews::PDF
     end
 
     def pdf_rows
-      control_objective_items.map do |coi|
-        [
-          identification.to_s,
-          plan_item.project.to_s,
-          coi.control_objective_text.to_s,
-          (coi.control.effects.to_s unless HIDE_CONTROL_EFFECTS),
-          coi.control.control.to_s,
-          coi.control.design_tests.to_s,
-          (coi.control.compliance_tests.to_s unless HIDE_CONTROL_COMPLIANCE_TESTS),
-          coi.control.sustantive_tests.to_s,
-          coi.auditor_comment.to_s
-        ].compact
+      rows = []
+
+      grouped_control_objective_items.each do |pc, cois|
+        cois.sort.each do |coi|
+          rows << [
+            identification.to_s,
+            plan_item.project.to_s,
+            coi.control_objective_text.to_s,
+            (coi.control.effects.to_s unless HIDE_CONTROL_EFFECTS),
+            coi.control.control.to_s,
+            coi.control.design_tests.to_s,
+            (coi.control.compliance_tests.to_s unless HIDE_CONTROL_COMPLIANCE_TESTS),
+            coi.control.sustantive_tests.to_s,
+            coi.auditor_comment.to_s
+          ].compact
+        end
       end
+
+      rows
     end
 end
