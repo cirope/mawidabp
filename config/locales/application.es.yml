@@ -26,6 +26,7 @@ es:
     details: "Detalles"
     disable: "Deshabilitar"
     download: "Descargar"
+    download_csv: "Descargar CSV"
     edit: "Editar"
     import: "Importar"
     insert_item: "Insertar ítem"
@@ -180,6 +181,7 @@ es:
     synthesis_report_title: "Informe de síntesis al directorio"
     review_stats_report_title: "Estadísticas de informes"
     review_scores_report_title: "Calificaciones de informes"
+    review_score_details_report_title: "Calificaciones de informes detallado"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -300,6 +302,15 @@ es:
       review_score: "Calificación informes"
       business_unit_score: "Calificación unidades de negocio"
       total_score: "Calificación total"
+      empty: "Sin calificaciones para el filtro aplicado"
+    review_score_details_report:
+      pdf_name: "calificaciones_de_informes_definitivos_detallado_%{from_date}_al_%{to_date}.pdf"
+      title: "CALIFICACIONES DE INFORMES DETALLADO"
+      subtitle: "INFORMES DEFINITIVOS"
+      brief: "Resumen"
+      details: "Detalles"
+      count: "Cantidad"
+      share: "Participación"
       empty: "Sin calificaciones para el filtro aplicado"
     weaknesses_by_state:
       pdf_name: "observaciones_informes_definitivos_por_estado_%{from_date}_al_%{to_date}.pdf"
@@ -905,6 +916,7 @@ es:
     weakness_from_template: "Observación creada de una plantilla"
     repeated_weaknesses: "Reiteradas"
     new_weaknesses: "Nuevas"
+    outdated_control_objective_name: 'El nombre del objetivo de control ha cambiado respecto del definido en la buena práctica, haga click para restaurarlo'
     taken_work_paper_code:
       one: "El código de papel de trabajo %{duplicated_work_papers} está duplicado"
       other: "Los siguientes códigos de papeles de trabajo están duplicados: %{duplicated_work_papers}"
@@ -974,6 +986,8 @@ es:
     review_data:
       close_date: "Fecha de cierre: %{date}"
       without_close_date: "Sin fecha de cierre"
+    pdf:
+      pdf_name: 'informe_%{identification}.pdf'
 
   review_user_assignment:
     responsibility_modification:

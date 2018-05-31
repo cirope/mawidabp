@@ -105,6 +105,7 @@ es:
     index:
       title: 'Listado de hallazgos'
       current_user_answers_count: 'Comentarios propios'
+      unread_answers_filter: 'Comentarios sin leer'
       unread_answers:
         one: 'Tiene un comentario sin leer'
         other: 'Tiene %{count} comentarios sin leer'
@@ -437,6 +438,8 @@ es:
         record_invalid: 'Se produjo un error en la importación, algunos usuarios tienen campos no válidos'
         created: 'Creado'
         updated: 'Actualizado'
+        deleted: 'Eliminado'
+        unchanged: 'Sin cambios'
         error: 'Con errores'
         deprecated_users: 'Usuarios ausentes en el servidor LDAP'
     passwords:

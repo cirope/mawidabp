@@ -1,0 +1,10 @@
++function () {
+  var $link = $('a[data-reset-name-for="<%= @control_objective_item.id %>"]')
+
+  $('[data-control-objective-item-id="<%= @control_objective_item.id %>"]').
+    html('<%= j @control_objective_item.control_objective_text %>').
+    effect('highlight')
+
+  $link.prev('span.text-muted').remove()
+  $link.remove()
+}()

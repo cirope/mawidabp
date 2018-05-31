@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180514190516) do
+ActiveRecord::Schema.define(version: 20180521222237) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -613,6 +613,8 @@ ActiveRecord::Schema.define(version: 20180514190516) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "filter"
+    t.string "user"
+    t.string "encrypted_password"
     t.index ["organization_id"], name: "i_ldap_configs_organization_id"
   end
 

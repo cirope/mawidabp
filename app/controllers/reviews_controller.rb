@@ -11,7 +11,7 @@ class ReviewsController < ApplicationController
     :finished_work_papers, :recode_findings, :recode_weaknesses_by_risk,
     :recode_weaknesses_by_repetition_and_risk,
     :recode_weaknesses_by_control_objective_order, :reorder,
-    :excluded_control_objectives
+    :excluded_control_objectives, :reset_control_objective_name
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -54,6 +54,7 @@ class ReviewsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
+      format.pdf  { redirect_to review_pdf_path }
     end
   end
 
@@ -412,6 +413,17 @@ class ReviewsController < ApplicationController
   def excluded_control_objectives
   end
 
+  def reset_control_objective_name
+    @control_objective_item = @review.control_objective_items.find(params[:control_objective_item_id])
+    @control_objective_item.update(
+      control_objective_text: @control_objective_item.control_objective.name
+    )
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
 
     def review_params
@@ -458,6 +470,12 @@ class ReviewsController < ApplicationController
       @review_clone = Review.list.find_by(id: params[:clone_from].try(:to_i))
     end
 
+    def review_pdf_path
+      @review.to_pdf current_organization
+
+      @review.relative_pdf_path
+    end
+
     def load_privileges
       @action_privileges.update(
         download_work_papers: :read,
@@ -480,7 +498,8 @@ class ReviewsController < ApplicationController
         recode_findings: :modify,
         recode_weaknesses_by_risk: :modify,
         recode_weaknesses_by_repetition_and_risk: :modify,
-        recode_weaknesses_by_control_objective_order: :modify
+        recode_weaknesses_by_control_objective_order: :modify,
+        reset_control_objective_name: :modify
       )
     end
 end

@@ -109,6 +109,7 @@ Rails.application.routes.draw do
     'synthesis_report',
     'review_stats_report',
     'review_scores_report',
+    'review_score_details_report',
     'weaknesses_by_state',
     'weaknesses_by_risk',
     'weaknesses_by_audit_type',
@@ -137,6 +138,7 @@ Rails.application.routes.draw do
     'create_synthesis_report',
     'create_review_stats_report',
     'create_review_scores_report',
+    'create_review_score_details_report',
     'create_weaknesses_by_state',
     'create_weaknesses_by_risk',
     'create_weaknesses_by_audit_type',
@@ -275,6 +277,7 @@ Rails.application.routes.draw do
       patch :recode_weaknesses_by_repetition_and_risk
       patch :recode_weaknesses_by_control_objective_order
       patch :reorder
+      patch :reset_control_objective_name
     end
 
     collection do
