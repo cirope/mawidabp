@@ -28,5 +28,6 @@
   <% if @poll.questionnaire.email_clarification? %>
     <p><%= @poll.questionnaire.email_clarification %></p>
   <% end %>
-  <%= render 'footer' %>
+
+  <%= render 'common_mailer/footer' %>
 </div>
