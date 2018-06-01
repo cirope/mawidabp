@@ -96,7 +96,7 @@ module Findings::CSV
         "[#{date}] #{fa.user.full_name}: #{fa.answer}"
       end
 
-      answers.join LINE_BREAK_REPLACEMENT
+      answers.reverse.join LINE_BREAK_REPLACEMENT
     end
 
   module ClassMethods
