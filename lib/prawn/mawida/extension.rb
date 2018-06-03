@@ -25,10 +25,10 @@ module Prawn
 
       def create_generic_pdf(layout = :landscape, footer = true, hide_brand: false)
         pdf = Prawn::Document.new(
-          page_size: PDF_PAPER,
+          page_size:   PDF_PAPER,
           page_layout: layout,
-          margin: PDF_MARGINS.map(&:mm),
-          info: {Creator: I18n.t(:app_name)}
+          margin:      PDF_MARGINS.map(&:mm),
+          info:        { Creator: I18n.t(:app_name) }
         )
 
         pdf.font 'Helvetica', size: PDF_FONT_SIZE

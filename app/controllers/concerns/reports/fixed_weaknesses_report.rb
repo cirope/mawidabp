@@ -112,9 +112,9 @@ module Reports::FixedWeaknessesReport
         unless column_data.blank?
           @reviews[period] ||= []
           @reviews[period] << {
-            name: name,
-            external: but.external,
-            columns: columns,
+            name:        name,
+            external:    but.external,
+            columns:     columns,
             column_data: column_data
           }
         end

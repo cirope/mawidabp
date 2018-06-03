@@ -73,12 +73,12 @@ class ApplicationController < ActionController::Base
         end
 
         @action_privileges = ActiveSupport::HashWithIndifferentAccess.new(:approval).update(
-          index: :read,
-          show: :read,
-          new: :modify,
-          create: :modify,
-          edit: :modify,
-          update: :modify,
+          index:   :read,
+          show:    :read,
+          new:     :modify,
+          create:  :modify,
+          edit:    :modify,
+          update:  :modify,
           destroy: :erase
         )
 

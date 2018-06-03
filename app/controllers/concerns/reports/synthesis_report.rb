@@ -221,11 +221,11 @@ module Reports::SynthesisReport
     def set_audits_by_business_unit_data(period, but)
       @audits_by_business_unit[period] ||= []
       @audits_by_business_unit[period] << {
-        name: but.name,
-        external: but.external,
-        columns: @columns,
-        column_data: @column_data,
-        review_scores: @review_scores,
+        name:           but.name,
+        external:       but.external,
+        columns:        @columns,
+        column_data:    @column_data,
+        review_scores:  @review_scores,
         repeated_count: @repeated_count
       }
     end

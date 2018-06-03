@@ -6,13 +6,13 @@ class Role < ApplicationRecord
 
   # Constantes
   TYPES = {
-    admin: 0,
-    manager: 1,
-    supervisor: 2,
-    auditor_senior: 3,
-    auditor_junior: 4,
-    committee: 5,
-    audited: 6,
+    admin:             0,
+    manager:           1,
+    supervisor:        2,
+    auditor_senior:    3,
+    auditor_junior:    4,
+    committee:         5,
+    audited:           6,
     executive_manager: 7
   }
 
@@ -97,9 +97,9 @@ class Role < ApplicationRecord
 
     self.privileges.each do |p|
       privileges[p.module] = {
-        read: p.read?,
-        modify: p.modify?,
-        erase: p.erase?,
+        read:     p.read?,
+        modify:   p.modify?,
+        erase:    p.erase?,
         approval: p.approval?
       }
     end

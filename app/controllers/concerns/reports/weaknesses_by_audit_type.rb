@@ -132,15 +132,14 @@ module Reports::WeaknessesByAuditType
                   highest_being_implemented_counts)
 
               business_units[business_unit] = {
-                conclusion_reviews: cfrs,
-                weaknesses_table_data: weaknesses_table_data,
-                oportunities_table_data: oportunities_table_data,
-                repeated_count: repeated_count,
-                awaiting_resume: awaiting_resume,
-                being_implemented_resume: being_implemented_resume,
-                highest_awaiting_resume: highest_awaiting_resume,
-                highest_being_implemented_resume:
-                  highest_being_implemented_resume
+                conclusion_reviews:               cfrs,
+                weaknesses_table_data:            weaknesses_table_data,
+                oportunities_table_data:          oportunities_table_data,
+                repeated_count:                   repeated_count,
+                awaiting_resume:                  awaiting_resume,
+                being_implemented_resume:         being_implemented_resume,
+                highest_awaiting_resume:          highest_awaiting_resume,
+                highest_being_implemented_resume: highest_being_implemented_resume
               }
             end
           end

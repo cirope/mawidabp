@@ -116,9 +116,9 @@ module Reports::WeaknessesByRiskReport
         if column_data.present?
           @notorious_reviews[period] ||= []
           @notorious_reviews[period] << {
-            name: name,
-            external: but.external,
-            columns: columns,
+            name:        name,
+            external:    but.external,
+            columns:     columns,
             column_data: column_data
           }
         end
