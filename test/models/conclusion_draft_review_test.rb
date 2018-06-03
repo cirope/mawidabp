@@ -32,18 +32,18 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'ConclusionDraftReview.count' do
       @conclusion_review = ConclusionDraftReview.list.create(
-        :review => reviews(:review_without_conclusion),
-        :issue_date => Date.today,
-        :close_date => 2.days.from_now.to_date,
-        :applied_procedures => 'New applied procedures',
-        :conclusion => CONCLUSION_OPTIONS.first,
-        :recipients => 'John Doe',
-        :sectors => 'Area 51',
-        :evolution => EVOLUTION_OPTIONS.second,
-        :evolution_justification => 'Ok',
-        :main_weaknesses_text => 'Some main weakness X',
-        :corrective_actions => 'You should do it this way',
-        :affects_compliance => false
+        review: reviews(:review_without_conclusion),
+        issue_date: Date.today,
+        close_date: 2.days.from_now.to_date,
+        applied_procedures: 'New applied procedures',
+        conclusion: CONCLUSION_OPTIONS.first,
+        recipients: 'John Doe',
+        sectors: 'Area 51',
+        evolution: EVOLUTION_OPTIONS.second,
+        evolution_justification: 'Ok',
+        main_weaknesses_text: 'Some main weakness X',
+        corrective_actions: 'You should do it this way',
+        affects_compliance: false
       )
 
       # Asegurarse que le asigna el tipo correcto
@@ -54,7 +54,7 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
   # Prueba de actualización de un informe borrador
   test 'update' do
     assert @conclusion_review.update(
-      :applied_procedures => 'Updated applied procedures'),
+      applied_procedures: 'Updated applied procedures'),
       @conclusion_review.errors.full_messages.join('; ')
     @conclusion_review.reload
     assert_equal 'Updated applied procedures',

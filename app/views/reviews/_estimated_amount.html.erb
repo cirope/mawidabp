@@ -1,6 +1,6 @@
 <% unless plan_item.try(:resource_utilizations).blank? %>
   <%= link_to "#{t('review.estimated_amount')}: #{'%.2f' % plan_item.units}", '#estimated_cost_details',
-    :data => { toggle: 'collapse' } %>
+    data: { toggle: 'collapse' } %>
 
   <div id="estimated_cost_details" class="collapse">
     <div>

@@ -1,6 +1,6 @@
 <% unless menu_item.exclude_from_privileges %>
   <% privilege = @role.privileges.detect {|p| p.module == menu_item.menu_name} ||
-    @role.privileges.build(:module => menu_item.menu_name) %>
+    @role.privileges.build(module: menu_item.menu_name) %>
   <tr id="<%= menu_item.menu_name %>">
     <td>
       <span <%= raw "style=\"padding-left: #{menu_item.self_and_ancestors.size * 2 - 2}em;\"" %>>

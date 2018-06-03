@@ -1,7 +1,7 @@
 <% finding = @finding_answer.finding %>
 <% organization = finding.review.organization %>
 <% finding_url = finding_url(finding.pending? ? 'incomplete' : 'complete',
-  finding, :host => ("#{organization.prefix}.#{URL_HOST}" if organization)) %>
+  finding, host: ("#{organization.prefix}.#{URL_HOST}" if organization)) %>
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
 
@@ -9,8 +9,8 @@
     <%= textilize_without_paragraph(
       t(
         'notifier.notify_new_finding_answer.finding_data',
-        :review => finding.review.to_s,
-        :finding_code => [finding.review_code, finding.title].reject(&:blank?).join(' - ')
+        review: finding.review.to_s,
+        finding_code: [finding.review_code, finding.title].reject(&:blank?).join(' - ')
       )
     ) %>
   </h3>
@@ -26,7 +26,7 @@
   <% if @finding_answer.commitment_date %>
     <p>
       <b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
-      <span style="font-style: italic;"><%= l(@finding_answer.commitment_date, :format => :long) %></span>
+      <span style="font-style: italic;"><%= l(@finding_answer.commitment_date, format: :long) %></span>
     </p>
   <% end %>
   <% if @finding_answer.file_model.try(:file?) %>
@@ -40,5 +40,5 @@
     <%= link_to t('notifier.notify_new_finding_answer.finding_link'),
       finding_url %>
   </p>
-  <%= render :partial => 'footer' %>
+  <%= render partial: 'footer' %>
 </div>

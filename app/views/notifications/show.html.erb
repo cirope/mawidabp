@@ -34,12 +34,12 @@
 
 <p>
   <strong><%= Notification.human_attribute_name :created_at %>:</strong>
-  <%=l @notification.created_at, :format => :long %>
+  <%=l @notification.created_at, format: :long %>
 </p>
 
 <p>
   <strong><%= Notification.human_attribute_name :confirmation_date %>:</strong>
-  <%=l @notification.confirmation_date, :format => :long if @notification.confirmation_date %>
+  <%=l @notification.confirmation_date, format: :long if @notification.confirmation_date %>
 </p>
 
 <div>

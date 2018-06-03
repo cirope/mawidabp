@@ -1,6 +1,6 @@
 module UsersHelper
   def show_user_with_email_as_abbr(user)
-    content_tag(:abbr, h(user.user), :title => user.email)
+    content_tag(:abbr, h(user.user), title: user.email)
   end
 
   def user_language_field(form)

@@ -40,20 +40,20 @@
 
 <p>
   <strong><%= Oportunity.human_attribute_name :origination_date %>:</strong>
-  <%=l @oportunity.origination_date, :format => :long if @oportunity.origination_date %>
+  <%=l @oportunity.origination_date, format: :long if @oportunity.origination_date %>
 </p>
 
 <p>
   <strong><%= Oportunity.human_attribute_name :follow_up_date %>:</strong>
-  <%=l @oportunity.follow_up_date, :format => :long if @oportunity.follow_up_date %>
+  <%=l @oportunity.follow_up_date, format: :long if @oportunity.follow_up_date %>
 </p>
 
 <p>
   <strong><%= Oportunity.human_attribute_name :solution_date %>:</strong>
-  <%=l @oportunity.solution_date, :format => :long if @oportunity.solution_date %>
+  <%=l @oportunity.solution_date, format: :long if @oportunity.solution_date %>
 </p>
 
-<h3><%= t('finding.responsibles', :count => @oportunity.users.size) %></h3>
+<h3><%= t('finding.responsibles', count: @oportunity.users.size) %></h3>
 <%= finding_responsibles_list(@oportunity) %>
 
 <% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
@@ -182,11 +182,11 @@
               link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
           </td>
           <td>
-            <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
+            <%= l(finding_answer.created_at, format: :long) if finding_answer.created_at %>
             <% if finding_answer.commitment_date %>
               <br />
               <br /><strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
-              <br /><%= l(finding_answer.commitment_date, :format => :long) %>
+              <br /><%= l(finding_answer.commitment_date, format: :long) %>
             <% end %>
           </td>
         </tr>

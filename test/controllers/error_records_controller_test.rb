@@ -40,7 +40,7 @@ class ErrorRecordsControllerTest < ActionController::TestCase
     assert_nothing_raised do
       get :index, params: {
         index: { from_date: from, to_date: to }
-      }, :as => :pdf
+      }, as: :pdf
     end
 
     assert_redirected_to Prawn::Document.relative_path(

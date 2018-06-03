@@ -6,14 +6,14 @@ class Role < ApplicationRecord
 
   # Constantes
   TYPES = {
-    :admin => 0,
-    :manager => 1,
-    :supervisor => 2,
-    :auditor_senior => 3,
-    :auditor_junior => 4,
-    :committee => 5,
-    :audited => 6,
-    :executive_manager => 7
+    admin: 0,
+    manager: 1,
+    supervisor: 2,
+    auditor_senior: 3,
+    auditor_junior: 4,
+    committee: 5,
+    audited: 6,
+    executive_manager: 7
   }
 
   # Callbacks
@@ -21,23 +21,23 @@ class Role < ApplicationRecord
   before_save :check_change_in_privileges
 
   # Restricciones
-  validates :name, :organization_id, :role_type, :presence => true
-  validates :name, :length => {:maximum => 255}, :allow_nil => true,
-    :allow_blank => true
-  validates :role_type, :inclusion => {:in => TYPES.values}, :allow_nil => true,
-    :allow_blank => true
-  validates :organization_id, :numericality => {:integer_only => true},
-    :allow_nil => true, :allow_blank => true
-  validates :name, :uniqueness =>
-    {:case_sensitive => false, :scope => :organization_id}
+  validates :name, :organization_id, :role_type, presence: true
+  validates :name, length: {maximum: 255}, allow_nil: true,
+    allow_blank: true
+  validates :role_type, inclusion: {in: TYPES.values}, allow_nil: true,
+    allow_blank: true
+  validates :organization_id, numericality: {integer_only: true},
+    allow_nil: true, allow_blank: true
+  validates :name, uniqueness:
+    {case_sensitive: false, scope: :organization_id}
 
   # Relaciones
   belongs_to :organization
-  has_many :organization_roles, :dependent => :destroy
-  has_many :privileges, :after_add => :assign_role, :dependent => :destroy
-  has_many :users, -> { readonly }, :through => :organization_roles
+  has_many :organization_roles, dependent: :destroy
+  has_many :privileges, after_add: :assign_role, dependent: :destroy
+  has_many :users, -> { readonly }, through: :organization_roles
 
-  accepts_nested_attributes_for :privileges, :allow_destroy => true
+  accepts_nested_attributes_for :privileges, allow_destroy: true
 
   def initialize(attributes = nil)
     super(attributes)
@@ -97,10 +97,10 @@ class Role < ApplicationRecord
 
     self.privileges.each do |p|
       privileges[p.module] = {
-        :read => p.read?,
-        :modify => p.modify?,
-        :erase => p.erase?,
-        :approval => p.approval?
+        read: p.read?,
+        modify: p.modify?,
+        erase: p.erase?,
+        approval: p.approval?
       }
     end
 

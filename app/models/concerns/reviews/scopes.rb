@@ -85,7 +85,7 @@ module Reviews::Scopes
           }
         }
       ).where(
-        :created_at => start..finish,
+        created_at: start..finish,
         ConclusionReview.table_name => { review_id: nil }
       ).order(
         without_final_review_order
@@ -94,7 +94,7 @@ module Reviews::Scopes
 
     def list_all_without_workflow period_id
       list.includes(:workflow).where(
-        :period_id => period_id,
+        period_id: period_id,
         Workflow.table_name => { review_id: nil }
       ).references(:workflows)
     end

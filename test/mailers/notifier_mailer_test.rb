@@ -31,7 +31,7 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.group_welcome_email.title', :name => group.name)
+      I18n.t('notifier.group_welcome_email.title', name: group.name)
     )
     assert_match %r{#{I18n.t('notifier.group_welcome_email.initial_user')}},
       response.body.decoded
@@ -45,7 +45,7 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.welcome_email.title', :name => user.informal_name)
+      I18n.t('notifier.welcome_email.title', name: user.informal_name)
     )
     assert_match Regexp.new(I18n.t('notifier.welcome_email.initial_password')),
       response.body.decoded
@@ -65,7 +65,7 @@ class NotifierMailerTest < ActionMailer::TestCase
       I18n.t('notifier.notify_new_findings.title')
     )
     assert_match Regexp.new(I18n.t('notifier.notify_new_findings.created_title',
-        :count => finding.size)), response.body.decoded
+        count: finding.size)), response.body.decoded
     assert_equal user.email, response.to.first
   end
 
@@ -92,7 +92,7 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert response.subject.include?(
       I18n.t(
         'notifier.notify_new_finding_answer.title',
-        :review => finding_answer.finding.review.to_s
+        review: finding_answer.finding.review.to_s
       )
     )
     assert_match Regexp.new(I18n.t('notifier.notify_new_finding_answer.finding_link')),
@@ -150,10 +150,10 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.reassigned_findings.title', :count => user.findings.size)
+      I18n.t('notifier.reassigned_findings.title', count: user.findings.size)
     )
     assert_match Regexp.new(I18n.t('notifier.reassigned_findings.title',
-        :count => user.findings.size)),
+        count: user.findings.size)),
       response.body.decoded
     assert_equal user.email, response.to.first
   end
@@ -168,7 +168,7 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert response.body.decoded.include?(
       I18n.t(
         'notifier.restore_password.body_title',
-        :user_name => user.informal_name, :user => user.user
+        user_name: user.informal_name, user: user.user
       )
     )
     assert response.to.include?(user.email)
@@ -178,11 +178,11 @@ class NotifierMailerTest < ActionMailer::TestCase
     user = User.find(users(:administrator).id)
     response = NotifierMailer.changes_notification(
       user,
-      :title => 'test title',
-      :content => 'test content',
-      :notification => Notification.create(
-        :user => user,
-        :confirmation_hash => 'test_hash'
+      title: 'test title',
+      content: 'test content',
+      notification: Notification.create(
+        user: user,
+        confirmation_hash: 'test_hash'
       )
     ).deliver_now
 
@@ -197,8 +197,8 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
       response = NotifierMailer.changes_notification(
-        [user, User.find(users(:audited).id)], :title => 'test title',
-        :content => ['test content 1', 'test content 2']).deliver_now
+        [user, User.find(users(:audited).id)], title: 'test title',
+        content: ['test content 1', 'test content 2']).deliver_now
     end
 
     assert_match /test title/, response.body.decoded
@@ -224,12 +224,12 @@ class NotifierMailerTest < ActionMailer::TestCase
     conclusion_review.review.global_score_sheet organization, draft: false
 
     response = NotifierMailer.conclusion_review_notification(user, conclusion_review,
-      :include_score_sheet => true, :include_global_score_sheet => true,
-      :note => 'note in *textile*', :organization_id => Organization.current_id,
-      :user_id => PaperTrail.request.whodunnit).deliver_now
+      include_score_sheet: true, include_global_score_sheet: true,
+      note: 'note in *textile*', organization_id: Organization.current_id,
+      user_id: PaperTrail.request.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
-      :type => I18n.t('notifier.conclusion_review_notification.final'),
-      :review => conclusion_review.review.long_identification)
+      type: I18n.t('notifier.conclusion_review_notification.final'),
+      review: conclusion_review.review.long_identification)
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
     assert !ActionMailer::Base.deliveries.empty?
@@ -249,11 +249,11 @@ class NotifierMailerTest < ActionMailer::TestCase
     end
 
     response = NotifierMailer.conclusion_review_notification(user, conclusion_review,
-      :include_score_sheet => true, :organization_id => Organization.current_id,
-      :user_id => PaperTrail.request.whodunnit).deliver_now
+      include_score_sheet: true, organization_id: Organization.current_id,
+      user_id: PaperTrail.request.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
-      :type => I18n.t('notifier.conclusion_review_notification.final'),
-      :review => conclusion_review.review.long_identification)
+      type: I18n.t('notifier.conclusion_review_notification.final'),
+      review: conclusion_review.review.long_identification)
     elements.delete(I18n.t('conclusion_review.global_score_sheet'))
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
@@ -275,11 +275,11 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert !text_part.include?(I18n.t('conclusion_review.global_score_sheet'))
 
     response = NotifierMailer.conclusion_review_notification(user,
-      conclusion_review, :organization_id => Organization.current_id,
-      :user_id => PaperTrail.request.whodunnit).deliver_now
+      conclusion_review, organization_id: Organization.current_id,
+      user_id: PaperTrail.request.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
-      :type => I18n.t('notifier.conclusion_review_notification.final'),
-      :review => conclusion_review.review.long_identification)
+      type: I18n.t('notifier.conclusion_review_notification.final'),
+      review: conclusion_review.review.long_identification)
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
     elements.delete(I18n.t('conclusion_review.score_sheet'))
@@ -312,7 +312,7 @@ class NotifierMailerTest < ActionMailer::TestCase
       I18n.t('notifier.findings_expiration_warning.title')
     )
     assert_match Regexp.new(I18n.t('notifier.findings_expiration_warning.body_title',
-        :count => user.findings.size)), response.body.decoded
+        count: user.findings.size)), response.body.decoded
     assert_equal user.email, response.to.first
   end
 
@@ -325,7 +325,7 @@ class NotifierMailerTest < ActionMailer::TestCase
       I18n.t('notifier.findings_expired_warning.title')
     )
     assert_match Regexp.new(I18n.t('notifier.findings_expired_warning.body_title',
-        :count => user.findings.size)), response.body.decoded
+        count: user.findings.size)), response.body.decoded
     assert_equal user.email, response.to.first
   end
 

@@ -197,13 +197,13 @@ module Reports::ProcessControlStats
 
    effectiveness_label << t(
       "#{@controller}_committee_report.process_control_stats.average_effectiveness_resume",
-      :effectiveness => "#{'%.2f' % effectiveness}%",
-      :count => review_ids.count
+      effectiveness: "#{'%.2f' % effectiveness}%",
+      count: review_ids.count
     )
 
     effectiveness_label <<  t(
       "#{@controller}_committee_report.process_control_stats.reviews_with_weaknesses",
-      :count => reviews_with_weaknesses.count
+      count: reviews_with_weaknesses.count
     )
 
     effectiveness_label.join(' / ')
@@ -246,8 +246,8 @@ module Reports::ProcessControlStats
 
           pdf.table(column_data.insert(0, column_headers), table_options) do
             row(0).style(
-              :background_color => 'cccccc',
-              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+              background_color: 'cccccc',
+              padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
             )
           end
         end
@@ -259,14 +259,14 @@ module Reports::ProcessControlStats
       pdf.move_down PDF_FONT_SIZE
       pdf.text t(
         "#{@controller}_committee_report.process_control_stats.review_effectiveness_average",
-        :score => @reviews_score_data[period]
-      ), :inline_format => true
+        score: @reviews_score_data[period]
+      ), inline_format: true
 
       pdf.move_down PDF_FONT_SIZE * 0.25
       pdf.text [
         Review.model_name.human(count: 0),
         @review_identifications[period].to_sentence
-      ].join(': ') , :inline_format => true
+      ].join(': ') , inline_format: true
     end
 
     add_pdf_filters(pdf, @controller, @filters) if @filters.present?

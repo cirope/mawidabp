@@ -22,7 +22,7 @@
 <% end %>
 <p>
   <strong><%= ConclusionFinalReview.human_attribute_name(:issue_date) %></strong>:
-  <%= @finding.issue_date ? l(@finding.issue_date, :format => :long) :
+  <%= @finding.issue_date ? l(@finding.issue_date, format: :long) :
     t('finding.without_conclusion_final_review') %>
 </p>
 <div>
@@ -64,18 +64,18 @@
 <% end %>
 <p>
   <strong><%= Finding.human_attribute_name(:origination_date) %></strong>:
-  <%= l(@finding.origination_date, :format => :long) if @finding.origination_date %>
+  <%= l(@finding.origination_date, format: :long) if @finding.origination_date %>
 </p>
 <% if @finding.kind_of? Weakness %>
   <p>
     <strong><%= Weakness.human_attribute_name(:follow_up_date) %></strong>:
-    <%= l(@finding.follow_up_date, :format => :long) if @finding.follow_up_date %>
+    <%= l(@finding.follow_up_date, format: :long) if @finding.follow_up_date %>
   </p>
   <%= show_weakness_previous_follow_up_dates @finding %>
 <% end %>
 <p>
   <strong><%= Finding.human_attribute_name(:solution_date) %></strong>:
-  <%= l(@finding.solution_date, :format => :long) if @finding.solution_date %>
+  <%= l(@finding.solution_date, format: :long) if @finding.solution_date %>
 </p>
 <% unless HIDE_WEAKNESS_EFFECT %>
   <div>
@@ -137,7 +137,7 @@
   </ul>
 <% end %>
 
-<h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
+<h4><%= t('finding.responsibles', count: @finding.users.size) %></h4>
 <%= finding_responsibles_list(@finding) %>
 
 <% unless @finding.taggings.blank? %>
@@ -238,11 +238,11 @@
               link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
           </td>
           <td>
-            <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
+            <%= l(finding_answer.created_at, format: :long) if finding_answer.created_at %>
             <% if finding_answer.commitment_date %>
               <br />
               <br /><strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
-              <br /><%= l(finding_answer.commitment_date, :format => :long) %>
+              <br /><%= l(finding_answer.commitment_date, format: :long) %>
             <% end %>
           </td>
         </tr>
@@ -308,11 +308,11 @@
 <% end %>
 
 <%= textilize t('finding.costs',
-  :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
+  cost: time_in_words_with_abbr((@finding.cost || 0).hours)) %>
 
 <% unless @finding.costs.blank? %>
   <p>
-    <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
+    <%= link_to t('finding.view_cost_details'), '#cost_details', data: { toggle: 'collapse' } %>
   </p>
 
   <div id="cost_details" class="collapse">
@@ -329,7 +329,7 @@
         <tbody>
           <% @finding.costs.each do |cost| %>
             <tr>
-              <td><%= l(cost.created_at, :format => :long) %></td>
+              <td><%= l(cost.created_at, format: :long) %></td>
               <td><%= time_in_words_with_abbr(cost.cost.hours) %></td>
               <td><%= simple_format cost.description.blank? ? '-' : cost.description %></td>
               <td><%= cost.user.full_name %></td>
@@ -346,9 +346,9 @@
 <div>
   <% if @finding.pending? && (!@auth_user.can_act_as_audited? || @finding.users.reload.include?(@auth_user)) %>
     <strong><%= link_to_edit edit_finding_path(params[:completed],
-      @finding, :user_id => params[:user_id]) %></strong> |
+      @finding, user_id: params[:user_id]) %></strong> |
   <% end %>
   <%= link_to t('finding.follow_up_report.download'),
-    follow_up_pdf_finding_path(params[:completed], @finding, :_ts => Time.now.to_i) %> |
-  <%= link_to_index findings_path(params[:completed], :user_id => params[:user_id]) %>
+    follow_up_pdf_finding_path(params[:completed], @finding, _ts: Time.now.to_i) %> |
+  <%= link_to_index findings_path(params[:completed], user_id: params[:user_id]) %>
 </div>

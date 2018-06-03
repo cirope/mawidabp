@@ -17,7 +17,7 @@ class MenuItem
     @extra_conditions = options[:extra_conditions]
     @exclude_from_privileges = options[:exclude_from_privileges]
     @url = options[:url].kind_of?(Hash) ?
-      { :action => :index }.merge(options[:url]) :
+      { action: :index }.merge(options[:url]) :
       options[:url]
 
     @children.each { |child| child.parent ||= self }

@@ -61,7 +61,7 @@ class GroupsController < ApplicationController
         flash.notice = t 'group.correctly_created'
         format.html { redirect_to(groups_url) }
       else
-        format.html { render :action => :new }
+        format.html { render action: :new }
       end
     end
   end
@@ -78,13 +78,13 @@ class GroupsController < ApplicationController
         flash.notice = t 'group.correctly_updated'
         format.html { redirect_to(groups_url) }
       else
-        format.html { render :action => :edit }
+        format.html { render action: :edit }
       end
     end
 
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'group.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to action: :edit
   end
 
   # Elimina un grupo

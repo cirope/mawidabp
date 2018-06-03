@@ -1,8 +1,8 @@
-<%= render :partial => 'shared/filter_form',
-  :locals => {:action => :weaknesses_by_audit_type, :extra_params => {
-    :controller_name => 'follow_up', :final => false
+<%= render partial: 'shared/filter_form',
+  locals: {action: :weaknesses_by_audit_type, extra_params: {
+    controller_name: 'follow_up', final: false
   },
-  :forms => {:date_range => true}} %>
+  forms: {date_range: true}} %>
 
 <% @periods.each do |period| %>
   <div class="page-header">
@@ -28,12 +28,12 @@
 
           <div style="margin-bottom: 1em;">
             <h4><%= t('follow_up_committee_report.weaknesses_by_audit_type.weaknesses') %></h4>
-            <%= render :partial => 'weaknesses_synthesis_table', :locals => {
-              :table_data => bu_data[:weaknesses_table_data],
-              :awaiting_resume => bu_data[:awaiting_resume],
-              :being_implemented_resume => bu_data[:being_implemented_resume],
-              :highest_awaiting_resume => bu_data[:highest_awaiting_resume],
-              :highest_being_implemented_resume => bu_data[:highest_being_implemented_resume]} %>
+            <%= render partial: 'weaknesses_synthesis_table', locals: {
+              table_data: bu_data[:weaknesses_table_data],
+              awaiting_resume: bu_data[:awaiting_resume],
+              being_implemented_resume: bu_data[:being_implemented_resume],
+              highest_awaiting_resume: bu_data[:highest_awaiting_resume],
+              highest_being_implemented_resume: bu_data[:highest_being_implemented_resume]} %>
 
             <% if type == :internal %>
               <h4 style="margin-top: 1em;">
@@ -66,7 +66,7 @@
           <% if bu_data[:repeated_count] > 0 %>
             <p style="margin-bottom: .5em;">
               <%= t('follow_up_committee_report.repeated_count',
-                :count => bu_data[:repeated_count]) %>
+                count: bu_data[:repeated_count]) %>
             </p>
           <% end %>
         <% end %>
@@ -82,22 +82,22 @@
 <hr />
 
 <div>
-  <%= link_to t('label.back'), :action => :index %> |
+  <%= link_to t('label.back'), action: :index %> |
   <%= link_to t('label.download'), '#',
     data: { toggle: 'modal', target: "#customize_report" } %>
 </div>
 
-<%= render :partial => 'shared/customize_report_form', :locals => {
-  :options => {
-    :form_name => 'report',
-    :url => request.query_parameters.merge(
-      {:action => :create_weaknesses_by_audit_type, :_ts => Time.now.to_i}
+<%= render partial: 'shared/customize_report_form', locals: {
+  options: {
+    form_name: 'report',
+    url: request.query_parameters.merge(
+      {action: :create_weaknesses_by_audit_type, _ts: Time.now.to_i}
     ),
-    :fields => [
+    fields: [
       {
-        :name => :report_title,
-        :label => t('customize_report_form.title'),
-        :value => t('follow_up_committee_report.weaknesses_by_audit_type.title')
+        name: :report_title,
+        label: t('customize_report_form.title'),
+        value: t('follow_up_committee_report.weaknesses_by_audit_type.title')
       }
     ]
   }

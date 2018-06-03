@@ -52,14 +52,14 @@ class FileModelTest < ActiveSupport::TestCase
         "#{self.class.fixture_path}/files/test.txt", 'text/plain'
       )
 
-      @file_model = FileModel.create(:file => file)
+      @file_model = FileModel.create(file: file)
     end
 
     assert @file_model.file?
-    assert @file_model.update(:remove_file => '1')
+    assert @file_model.update(remove_file: '1')
     assert !@file_model.file?
 
-    FileUtils.rm_rf File.join("#{TEMP_PATH}file_model_test"), :secure => true
+    FileUtils.rm_rf File.join("#{TEMP_PATH}file_model_test"), secure: true
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

@@ -5,8 +5,8 @@ class NotificationsController < ApplicationController
   # * GET /notifications
   def index
     @title = t 'notification.index_title'
-    @notifications = Notification.where(:user_id => @auth_user.id).order(
-      :status => :asc, :created_at => :desc
+    @notifications = Notification.where(user_id: @auth_user.id).order(
+      status: :asc, created_at: :desc
     ).page(params[:page])
 
     respond_to do |format|
@@ -43,20 +43,20 @@ class NotificationsController < ApplicationController
         flash.notice = t 'notification.correctly_updated'
         format.html { redirect_to(notifications_url) }
       else
-        format.html { render :action => :edit }
+        format.html { render action: :edit }
       end
     end
 
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'notification.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to action: :edit
   end
 
   # * GET /notifications/1/confirm
   def confirm
     @notification.notify! params[:reject].blank? if @notification.unconfirmed?
 
-    redirect_to @notification, :notice => t('notification.confirmed')
+    redirect_to @notification, notice: t('notification.confirmed')
   end
 
   private

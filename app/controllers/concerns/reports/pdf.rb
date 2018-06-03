@@ -56,14 +56,14 @@ module Reports::PDF
 
           pdf.table(column_data.insert(0, column_headers), table_options) do
             row(0).style(
-              :background_color => 'cccccc',
-              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+              background_color: 'cccccc',
+              padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
             )
           end
         end
       end
     else
-      pdf.text data, :style => :italic, :font_size => PDF_FONT_SIZE
+      pdf.text data, style: :italic, font_size: PDF_FONT_SIZE
     end
   end
 
@@ -132,7 +132,7 @@ module Reports::PDF
 
       column_data << column_row
 
-      {:order => column_order, :data => column_data, :columns => columns}
+      {order: column_order, data: column_data, columns: columns}
     else
       t('follow_up_committee_report.without_weaknesses')
     end
@@ -206,8 +206,8 @@ module Reports::PDF
 
           pdf.table(column_data.insert(0, column_headers), table_options) do
             row(0).style(
-              :background_color => 'cccccc',
-              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+              background_color: 'cccccc',
+              padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
             )
           end
         end
@@ -221,11 +221,11 @@ module Reports::PDF
       if repeated_count > 0
         pdf.move_down((PDF_FONT_SIZE * 0.5).round)
         pdf.text t('follow_up_committee_report.repeated_count',
-          :count => repeated_count, :font_size => PDF_FONT_SIZE)
+          count: repeated_count, font_size: PDF_FONT_SIZE)
       end
     else
       pdf.text t('follow_up_committee_report.without_weaknesses'),
-        :font_size => PDF_FONT_SIZE, :style => :italic
+        font_size: PDF_FONT_SIZE, style: :italic
     end
   end
 
@@ -235,7 +235,7 @@ module Reports::PDF
       pdf.move_down PDF_FONT_SIZE if asterisks == 1
 
       pdf.text(('*' * asterisks) + " #{being_implemented_resume}",
-        :font_size => PDF_FONT_SIZE, :inline_format => true)
+        font_size: PDF_FONT_SIZE, inline_format: true)
     end
   end
 
@@ -251,7 +251,7 @@ module Reports::PDF
       sub_status_resume = "<b>#{count}</b> "
       sub_status_resume << t(
         "follow_up_committee_report.weaknesses_being_implemented_#{sub_status}",
-        :count => count)
+        count: count)
       sub_status_resume << " (#{'%.2f' % sub_status_percentage}%)"
 
       being_implemented_resume << sub_status_resume
@@ -266,31 +266,31 @@ module Reports::PDF
     pdf.add_description_item(
       t("#{controller}_committee_report.period.title"),
       t("#{controller}_committee_report.period.range",
-        :from_date => l(from_date, :format => :long),
-        :to_date => l(to_date, :format => :long)))
+        from_date: l(from_date, format: :long),
+        to_date: l(to_date, format: :long)))
   end
 
   def add_pdf_filters(pdf, controller, filters)
     pdf.move_down PDF_FONT_SIZE
     pdf.text t("#{controller}_committee_report.applied_filters",
-      :filters => filters.to_sentence, :count => filters.size),
-      :font_size => (PDF_FONT_SIZE * 0.75).round, :align => :justify,
-      :inline_format => true
+      filters: filters.to_sentence, count: filters.size),
+      font_size: (PDF_FONT_SIZE * 0.75).round, align: :justify,
+      inline_format: true
   end
 
   def save_pdf(pdf, controller, from_date, to_date, sub_directory, id = 0)
     pdf.custom_save_as(
       t("#{controller}_committee_report.#{sub_directory}.pdf_name",
-        :from_date => from_date.to_formatted_s(:db),
-        :to_date => to_date.to_formatted_s(:db)), sub_directory, id
+        from_date: from_date.to_formatted_s(:db),
+        to_date: to_date.to_formatted_s(:db)), sub_directory, id
     )
   end
 
   def redirect_to_pdf(controller, from_date, to_date, sub_directory, id = 0)
     @report_path = Prawn::Document.relative_path(
       t("#{controller}_committee_report.#{sub_directory}.pdf_name",
-        :from_date => from_date.to_formatted_s(:db),
-        :to_date => to_date.to_formatted_s(:db)), sub_directory, id
+        from_date: from_date.to_formatted_s(:db),
+        to_date: to_date.to_formatted_s(:db)), sub_directory, id
     )
 
     respond_to do |format|

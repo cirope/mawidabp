@@ -30,7 +30,7 @@ module ConclusionCommitteeReportsHelper
 
     t(
       'conclusion_committee_report.synthesis_report.organization_score',
-      :score => average_score || 100
+      score: average_score || 100
     )
   end
 
@@ -44,8 +44,8 @@ module ConclusionCommitteeReportsHelper
         risk_text = t("risk_types.#{risk}")
         ids_complete = @control_objectives_data[period][pc][co][risk_text][:complete]
         ids_incomplete = @control_objectives_data[period][pc][co][risk_text][:incomplete]
-        url_complete = weaknesses_path(:ids => ids_complete)
-        url_incomplete = weaknesses_path(:ids => ids_incomplete)
+        url_complete = weaknesses_path(ids: ids_complete)
+        url_incomplete = weaknesses_path(ids: ids_incomplete)
 
         if ids_incomplete.blank? && ids_complete.blank?
           new_data << "#{risk_text}: 0 / 0"
@@ -70,7 +70,7 @@ module ConclusionCommitteeReportsHelper
 
       data['weaknesses_count'].each do |label|
         ids = @process_control_ids_data[data['process_control']][label]
-        url = weaknesses_path(:ids => ids)
+        url = weaknesses_path(ids: ids)
 
         new_data << (ids.blank? ? label : "[\"#{label}\":#{url}]")
       end

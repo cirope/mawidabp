@@ -27,24 +27,24 @@ class ControlObjectiveTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference ['ControlObjective.count', 'Control.count'] do
       @control_objective = ControlObjective.create(
-        :name => 'New name',
-        :control_attributes => {
-          :control => 'New control',
-          :effects => 'New effects',
-          :design_tests => 'New design tests',
-          :compliance_tests => 'New compliance tests',
-          :sustantive_tests => 'New sustantive tests'
+        name: 'New name',
+        control_attributes: {
+          control: 'New control',
+          effects: 'New effects',
+          design_tests: 'New design tests',
+          compliance_tests: 'New compliance tests',
+          sustantive_tests: 'New sustantive tests'
         },
-        :relevance => ControlObjective.relevances_values.first,
-        :risk => ControlObjective.risks_values.first,
-        :order => 1
+        relevance: ControlObjective.relevances_values.first,
+        risk: ControlObjective.risks_values.first,
+        order: 1
       )
     end
   end
 
   # Prueba de actualización de una buena práctica
   test 'update' do
-    assert @control_objective.update(:name => 'Updated name'),
+    assert @control_objective.update(name: 'Updated name'),
       @control_objective.errors.full_messages.join('; ')
     @control_objective.reload
     assert_equal 'Updated name', @control_objective.name

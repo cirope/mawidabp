@@ -29,30 +29,30 @@ class ReviewTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'Review.count' do
       @review = Review.list.create(
-        :identification => 'New Identification',
-        :description => 'New Description',
-        :period_id => periods(:current_period).id,
-        :plan_item_id => plan_items(:past_plan_item_3).id,
-        :scope => 'committee',
-        :risk_exposure => 'high',
-        :manual_score => 800,
-        :include_sox => 'no',
-        :review_user_assignments_attributes => {
+        identification: 'New Identification',
+        description: 'New Description',
+        period_id: periods(:current_period).id,
+        plan_item_id: plan_items(:past_plan_item_3).id,
+        scope: 'committee',
+        risk_exposure: 'high',
+        manual_score: 800,
+        include_sox: 'no',
+        review_user_assignments_attributes: {
             :new_1 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:auditor],
-              :user => users(:first_time)
+              assignment_type: ReviewUserAssignment::TYPES[:auditor],
+              user: users(:first_time)
             },
             :new_2 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:supervisor],
-              :user => users(:supervisor)
+              assignment_type: ReviewUserAssignment::TYPES[:supervisor],
+              user: users(:supervisor)
             },
             :new_3 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:manager],
-              :user => users(:supervisor_second)
+              assignment_type: ReviewUserAssignment::TYPES[:manager],
+              user: users(:supervisor_second)
             },
             :new_4 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:audited],
-              :user => users(:audited)
+              assignment_type: ReviewUserAssignment::TYPES[:audited],
+              user: users(:audited)
             }
           }
       )
@@ -65,7 +65,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un reporte
   test 'update' do
-    assert @review.update(:description => 'New description'),
+    assert @review.update(description: 'New description'),
       @review.errors.full_messages.join('; ')
     @review.reload
     assert_equal 'New description', @review.description
@@ -266,7 +266,7 @@ class ReviewTest < ActiveSupport::TestCase
       clone_finding_user_assignments(review_weakness)
     )
 
-    finding.save!(:validate => false)
+    finding.save!(validate: false)
 
     # High risk counts 12
     assert_equal :require_some_improvements, @review.reload.score_array.first
@@ -277,7 +277,7 @@ class ReviewTest < ActiveSupport::TestCase
 
     @review.finding_review_assignments.create! finding_id: repeated_of.id
 
-    finding.save!(:validate => false)
+    finding.save!(validate: false)
 
     # High risk and repeated counts 20
     assert_equal :require_improvements, @review.reload.score_array.first
@@ -309,7 +309,7 @@ class ReviewTest < ActiveSupport::TestCase
 
     finding.solution_date = nil
 
-    assert finding.save(:validate => false) # Forzado para que no se validen los datos
+    assert finding.save(validate: false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
     def finding.can_be_destroyed?; true; end
@@ -326,7 +326,7 @@ class ReviewTest < ActiveSupport::TestCase
       clone_finding_user_assignments(review_weakness)
     )
 
-    assert finding.save(:validate => false) # Forzado para que no se validen los datos
+    assert finding.save(validate: false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
     def finding.can_be_destroyed?; true; end
@@ -339,7 +339,7 @@ class ReviewTest < ActiveSupport::TestCase
       clone_finding_user_assignments(review_weakness)
     )
 
-    assert finding.save(:validate => false) # Forzado para que no se validen los datos
+    assert finding.save(validate: false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
     def finding.can_be_destroyed?; true; end
@@ -389,7 +389,7 @@ class ReviewTest < ActiveSupport::TestCase
       clone_finding_user_assignments(review_weakness)
     )
 
-    assert finding.save(:validate => false) # Forzado para que no se validen los datos
+    assert finding.save(validate: false) # Forzado para que no se validen los datos
     # La debilidad tiene una fecha de solución
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
@@ -410,12 +410,12 @@ class ReviewTest < ActiveSupport::TestCase
     assert !@review.approval_errors.blank?
 
     assert @review.control_objective_items.where(
-      :finished => false
+      finished: false
     ).first.update_attribute(:finished, true)
     assert @review.reload.must_be_approved?
 
     assert @review.finding_review_assignments.build(
-      :finding_id => findings(:being_implemented_weakness).id
+      finding_id: findings(:being_implemented_weakness).id
     )
     assert !@review.must_be_approved?
     assert @review.approval_errors.flatten.include?(
@@ -476,7 +476,7 @@ class ReviewTest < ActiveSupport::TestCase
 
     finding.solution_date = nil
 
-    assert finding.save(:validate => false) # Forzado para que no se validen los datos
+    assert finding.save(validate: false) # Forzado para que no se validen los datos
     assert !@review.reload.can_be_sended?
   end
 
@@ -604,9 +604,9 @@ class ReviewTest < ActiveSupport::TestCase
   test 'add a related finding from a final review' do
     assert_difference '@review.finding_review_assignments.count' do
       assert @review.update(
-        :finding_review_assignments_attributes => {
+        finding_review_assignments_attributes: {
           :new_1 => {
-            :finding_id => findings(:unanswered_weakness).id.to_s
+            finding_id: findings(:unanswered_weakness).id.to_s
           }
         }
       )
@@ -617,9 +617,9 @@ class ReviewTest < ActiveSupport::TestCase
     assert_no_difference '@review.finding_review_assignments.count' do
       assert_raise RuntimeError do
         @review.update(
-          :finding_review_assignments_attributes => {
+          finding_review_assignments_attributes: {
             :new_1 => {
-              :finding_id => findings(:confirmed_oportunity_on_draft).id.to_s
+              finding_id: findings(:confirmed_oportunity_on_draft).id.to_s
             }
           }
         )

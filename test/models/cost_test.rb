@@ -24,11 +24,11 @@ class CostTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'Cost.count' do
       @cost = Cost.create(
-        :description => 'New description',
-        :cost => '15.50',
-        :cost_type => 'audit',
-        :item => findings(:unconfirmed_weakness),
-        :user => users(:administrator)
+        description: 'New description',
+        cost: '15.50',
+        cost_type: 'audit',
+        item: findings(:unconfirmed_weakness),
+        user: users(:administrator)
       )
     end
 
@@ -37,7 +37,7 @@ class CostTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un costo
   test 'update' do
-    assert @cost.update(:description => 'Updated description'),
+    assert @cost.update(description: 'Updated description'),
       @cost.errors.full_messages.join('; ')
     @cost.reload
     assert_equal 'Updated description', @cost.description

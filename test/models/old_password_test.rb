@@ -22,15 +22,15 @@ class OldPasswordTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'OldPassword.count' do
       @old_password = OldPassword.create(
-        :password => 'New Old Password',
-        :user => users(:administrator)
+        password: 'New Old Password',
+        user: users(:administrator)
       )
     end
   end
 
   # Prueba de actualización de una contraseña antigua
   test 'update' do
-    assert @old_password.update(:password => 'Updated Old Password'),
+    assert @old_password.update(password: 'Updated Old Password'),
       @old_password.errors.full_messages.join('; ')
     @old_password.reload
     assert_equal 'Updated Old Password', @old_password.password

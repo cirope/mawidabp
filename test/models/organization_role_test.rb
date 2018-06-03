@@ -27,9 +27,9 @@ class OrganizationRoleTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'OrganizationRole.count' do
       @organization_role = OrganizationRole.create(
-        :user => users(:administrator),
-        :organization => organizations(:cirope),
-        :role => roles(:empty_admin_role)
+        user: users(:administrator),
+        organization: organizations(:cirope),
+        role: roles(:empty_admin_role)
       )
     end
 
@@ -40,7 +40,7 @@ class OrganizationRoleTest < ActiveSupport::TestCase
   # Prueba de actualización de un rol dentro de la organización
   test 'update' do
     assert @organization_role.update(
-      :role => roles(:empty_admin_role)),
+      role: roles(:empty_admin_role)),
       @organization_role.errors.full_messages.join('; ')
     @organization_role.reload
     assert_equal roles(:empty_admin_role).id, @organization_role.role_id
@@ -88,8 +88,8 @@ class OrganizationRoleTest < ActiveSupport::TestCase
   test 'validates invalid roles' do
     user = User.find users(:administrator_second).id
     organization_role = user.organization_roles.build(
-      :role => roles(:audited_role),
-      :organization => organizations(:google)
+      role: roles(:audited_role),
+      organization: organizations(:google)
     )
 
     assert organization_role.invalid?

@@ -22,10 +22,10 @@ module Reports::WeaknessesByState
 
     @periods.each do |period|
       @weaknesses_counts[period] ||= {}
-      total_awaiting_counts = {:current => 0, :stale => 0,
-                :current_rescheduled => 0, :stale_rescheduled => 0}
-      total_being_implemented_counts = {:current => 0, :stale => 0,
-                :current_rescheduled => 0, :stale_rescheduled => 0}
+      total_awaiting_counts = {current: 0, stale: 0,
+                current_rescheduled: 0, stale_rescheduled: 0}
+      total_being_implemented_counts = {current: 0, stale: 0,
+                current_rescheduled: 0, stale_rescheduled: 0}
 
       @audit_types.each do |audit_type|
         audit_type_symbol = audit_type.first
@@ -60,10 +60,10 @@ module Reports::WeaknessesByState
               @weaknesses_counts[period]['total_oportunities'][state] += count
             end
 
-            awaiting_counts = {:current => 0, :stale => 0,
-              :current_rescheduled => 0, :stale_rescheduled => 0}
-            being_implemented_counts = {:current => 0, :stale => 0,
-              :current_rescheduled => 0, :stale_rescheduled => 0}
+            awaiting_counts = {current: 0, stale: 0,
+              current_rescheduled: 0, stale_rescheduled: 0}
+            being_implemented_counts = {current: 0, stale: 0,
+              current_rescheduled: 0, stale_rescheduled: 0}
 
             @weaknesses_counts[period]['total_repeated'] ||= 0
             @weaknesses_counts[period]['total_repeated'] +=
@@ -126,7 +126,7 @@ module Reports::WeaknessesByState
       pdf.move_down PDF_FONT_SIZE
       pdf.add_title(
         t("#{@controller}_committee_report.weaknesses_by_state.period_summary",
-          :period => period.inspect), (PDF_FONT_SIZE * 1.25).round, :center
+          period: period.inspect), (PDF_FONT_SIZE * 1.25).round, :center
       )
       pdf.move_down PDF_FONT_SIZE
 

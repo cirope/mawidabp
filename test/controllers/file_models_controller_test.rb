@@ -11,7 +11,7 @@ class FileModelsControllerTest < ActionController::TestCase
 
     File.open(file_name, 'w') { |f| f << 'some test text' }
 
-    @file_model = FileModel.create(:file => File.new(file_name))
+    @file_model = FileModel.create(file: File.new(file_name))
   end
 
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
@@ -22,8 +22,8 @@ class FileModelsControllerTest < ActionController::TestCase
       [
         :get,
         :download,
-        :params => {
-          :path => @file_model.file.url.gsub(/^\/private/, "")
+        params: {
+          path: @file_model.file.url.gsub(/^\/private/, "")
         }
       ]
     ]
@@ -42,8 +42,8 @@ class FileModelsControllerTest < ActionController::TestCase
 
   test 'download file' do
     login
-    get :download, :params => {
-      :path => @file_model.file.url.gsub(/^\/private/, "")
+    get :download, params: {
+      path: @file_model.file.url.gsub(/^\/private/, "")
     }
     assert_response :success
     assert_equal 'some test text', @response.body
@@ -51,9 +51,9 @@ class FileModelsControllerTest < ActionController::TestCase
 
   test 'download unauthorized file' do
     login user: users(:administrator_second), prefix: organizations(:google).prefix
-    get :download, :params => {
-      :path => @file_model.file.url.gsub(/^\/private/, "")
+    get :download, params: {
+      path: @file_model.file.url.gsub(/^\/private/, "")
     }
-    assert_redirected_to :controller => :welcome, :action => :index
+    assert_redirected_to controller: :welcome, action: :index
   end
 end

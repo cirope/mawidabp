@@ -141,14 +141,14 @@ module Reports::FollowUpCostAnalysis
 
         pdf.table(@weaknesses_data[period].insert(0, @column_headers), table_options) do
           row(0).style(
-            :background_color => 'cccccc',
-            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            background_color: 'cccccc',
+            padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
           )
         end
       end
     else
       pdf.text t('follow_up_audit.cost_analysis.without_weaknesses'),
-        :font_size => PDF_FONT_SIZE
+        font_size: PDF_FONT_SIZE
     end
 
     pdf.move_down PDF_FONT_SIZE
@@ -164,14 +164,14 @@ module Reports::FollowUpCostAnalysis
 
         pdf.table(@oportunities_data[period].insert(0, @column_headers), table_options) do
           row(0).style(
-            :background_color => 'cccccc',
-            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            background_color: 'cccccc',
+            padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
           )
         end
       end
     else
       pdf.text t('follow_up_audit.cost_analysis.without_oportunities'),
-        :font_size => PDF_FONT_SIZE
+        font_size: PDF_FONT_SIZE
     end
   end
 end

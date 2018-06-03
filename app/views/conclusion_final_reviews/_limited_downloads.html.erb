@@ -1,20 +1,20 @@
 <%= render('shared/downloads',
   right: true,
   links: [
-    link_to(t('label.download'), :action => :export_to_pdf,
-      :id => @conclusion_final_review, :_ts => Time.now.to_i),
+    link_to(t('label.download'), action: :export_to_pdf,
+      id: @conclusion_final_review, _ts: Time.now.to_i),
     link_to(t('conclusion_final_review.download_brief'),
-      :action => :export_to_pdf, :id => @conclusion_final_review,
-      :export_options => {:brief => '1'}, :_ts => Time.now.to_i),
+      action: :export_to_pdf, id: @conclusion_final_review,
+      export_options: {brief: '1'}, _ts: Time.now.to_i),
     link_to(t('conclusion_final_review.download_without_score'),
-      :action => :export_to_pdf, :id => @conclusion_final_review,
-      :export_options => {:hide_score => '1'}, :_ts => Time.now.to_i),
+      action: :export_to_pdf, id: @conclusion_final_review,
+      export_options: {hide_score: '1'}, _ts: Time.now.to_i),
     link_to(t('conclusion_final_review.download_without_control_objectives_excluded_from_score'),
-      :action => :export_to_pdf, :id => @conclusion_final_review,
-      :export_options => {:hide_control_objectives_excluded_from_score => '1'},
-      :_ts => Time.now.to_i),
+      action: :export_to_pdf, id: @conclusion_final_review,
+      export_options: {hide_control_objectives_excluded_from_score: '1'},
+      _ts: Time.now.to_i),
     link_to(t('conclusion_final_review.download_work_papers'),
-      :action => :download_work_papers, :id => @conclusion_final_review,
-      :_ts => Time.now.to_i)
+      action: :download_work_papers, id: @conclusion_final_review,
+      _ts: Time.now.to_i)
   ]
 ) %>

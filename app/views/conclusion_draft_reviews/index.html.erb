@@ -1,6 +1,6 @@
-<%= render :partial => 'shared/search', :locals => {
-  :options => {},
-  :columns => @query.blank? ?
+<%= render partial: 'shared/search', locals: {
+  options: {},
+  columns: @query.blank? ?
     ConclusionDraftReview::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
 <table class="table table-condensed table-striped table-hover">
@@ -9,10 +9,10 @@
       <th></th>
       <%= make_filterable_column Review.human_attribute_name(:period_id), nil, 'period' %>
       <%= make_filterable_column Review.human_attribute_name(:identification), nil, 'identification' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), { :class => 'hidden-xs' }, 'business_unit' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'hidden-xs' }, 'project' %>
-      <%= make_filterable_column raw(ConclusionDraftReview.human_attribute_name(:issue_date)), { :class => 'hidden-xs' }, 'issue_date' %>
-      <%= make_not_available_column raw(ConclusionDraftReview.human_attribute_name(:approved)), :class => 'hidden-xs' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), { class: 'hidden-xs' }, 'business_unit' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), { class: 'hidden-xs' }, 'project' %>
+      <%= make_filterable_column raw(ConclusionDraftReview.human_attribute_name(:issue_date)), { class: 'hidden-xs' }, 'issue_date' %>
+      <%= make_not_available_column raw(ConclusionDraftReview.human_attribute_name(:approved)), class: 'hidden-xs' %>
       <th colspan="3" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -26,10 +26,10 @@
         <td class="nowrap"><%= conclusion_draft_review.review.identification %></td>
         <td class="hidden-xs"><%= super_truncate(conclusion_draft_review.review.plan_item.business_unit.name, 25) %></td>
         <td class="hidden-xs"><%= super_truncate(conclusion_draft_review.review.plan_item.project, 30) %></td>
-        <td class="hidden-xs"><%= l(conclusion_draft_review.issue_date, :format => :short) if conclusion_draft_review.issue_date %></td>
+        <td class="hidden-xs"><%= l(conclusion_draft_review.issue_date, format: :short) if conclusion_draft_review.issue_date %></td>
         <td class="hidden-xs"><%= t conclusion_draft_review.approved? ? 'label.yes' : 'label.no' %></td>
         <td><%= link_to_new_conclusion_final_review new_conclusion_final_review_path(
-              :review => conclusion_draft_review.review_id) if conclusion_draft_review.approved? && !has_final %></td>
+              review: conclusion_draft_review.review_id) if conclusion_draft_review.approved? && !has_final %></td>
         <td><%= link_to_show(conclusion_draft_review) unless has_final %></td>
         <td><%= link_to_edit edit_conclusion_draft_review_path(conclusion_draft_review) unless has_final %></td>
       </tr>

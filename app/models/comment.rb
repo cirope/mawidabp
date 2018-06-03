@@ -6,9 +6,9 @@ class Comment < ApplicationRecord
   }
 
   # Restricciones
-  validates :comment, :presence => true
+  validates :comment, presence: true
 
   # Relaciones
-  belongs_to :commentable, :polymorphic => true, :optional => true
+  belongs_to :commentable, polymorphic: true, optional: true
   belongs_to :user
 end

@@ -36,8 +36,8 @@ module FollowUpCommitteeHelper
         risk_text = t("risk_types.#{risk}")
         ids_complete = @control_objectives_data[period][pc][co][risk_text][:complete]
         ids_incomplete = @control_objectives_data[period][pc][co][risk_text][:incomplete]
-        url_complete = findings_path(:complete, :ids => ids_complete)
-        url_incomplete = findings_path(:incomplete, :ids => ids_incomplete)
+        url_complete = findings_path(:complete, ids: ids_complete)
+        url_incomplete = findings_path(:incomplete, ids: ids_incomplete)
 
         if ids_incomplete.blank? && ids_complete.blank?
           new_data << "#{risk_text}: 0 / 0"
@@ -62,7 +62,7 @@ module FollowUpCommitteeHelper
 
       data['weaknesses_count'].each do |label|
         ids = @process_control_ids_data[data['process_control']][label]
-        url = findings_path('incomplete', :ids => ids)
+        url = findings_path('incomplete', ids: ids)
 
         new_data << (ids.blank? ? label : "[\"#{label}\":#{url}]")
       end

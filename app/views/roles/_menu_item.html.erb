@@ -1,6 +1,6 @@
 <% unless menu_item.exclude_from_privileges %>
   <% privilege = @role.privileges.detect { |p| p.module == menu_item.menu_name } ||
-    @role.privileges.build(:module => menu_item.menu_name) %>
+    @role.privileges.build(module: menu_item.menu_name) %>
   <%= role_form.simple_fields_for :privileges, privilege do |f| %>
     <% parent_name_attribute = "data-parent=\"#{menu_item.parent.menu_name}\"" if menu_item.parent %>
     <tr id="<%= menu_item.menu_name %>" <%= raw parent_name_attribute %>>

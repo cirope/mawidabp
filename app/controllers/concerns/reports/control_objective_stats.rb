@@ -73,8 +73,8 @@ module Reports::ControlObjectiveStats
       pdf.move_down PDF_FONT_SIZE
       pdf.text t(
         "#{@controller}_committee_report.control_objective_stats.review_effectiveness_average",
-        :score => @reviews_score_data[period]
-      ), :inline_format => true
+        score: @reviews_score_data[period]
+      ), inline_format: true
     end
 
     add_pdf_filters(pdf, @controller, @filters) if @filters.present?
@@ -147,13 +147,13 @@ module Reports::ControlObjectiveStats
 
       effectiveness_label << t(
         "#{@controller}_committee_report.control_objective_stats.average_effectiveness_resume",
-        :effectiveness => "#{'%.2f' % effectiveness}%",
-        :count => @coi_data[:review_ids].count
+        effectiveness: "#{'%.2f' % effectiveness}%",
+        count: @coi_data[:review_ids].count
       )
 
       effectiveness_label <<  t(
         "#{@controller}_committee_report.control_objective_stats.reviews_with_weaknesses",
-        :count => @coi_data[:reviews]
+        count: @coi_data[:reviews]
       )
 
       effectiveness_label.join(' / ')

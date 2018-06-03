@@ -4,9 +4,9 @@
     forms: { date_range: true }} %>
 <% end %>
 
-<%= render :partial => 'shared/search', :locals => {
-  :options => {},
-  :columns => @query.blank? ? ErrorRecord::COLUMNS_FOR_SEARCH.keys : @columns
+<%= render partial: 'shared/search', locals: {
+  options: {},
+  columns: @query.blank? ? ErrorRecord::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
 
 <table class="table table-condensed table-striped table-hover">
@@ -14,8 +14,8 @@
     <tr>
       <%= make_filterable_column User.model_name.human, nil, 'user' %>
       <%= make_not_available_column ErrorRecord.human_attribute_name('created_at') %>
-      <%= make_not_available_column ErrorRecord.human_attribute_name('error'), :class => 'hidden-xs' %>
-      <%= make_filterable_column ErrorRecord.human_attribute_name('data'), { :class => 'hidden-xs' }, 'data' %>
+      <%= make_not_available_column ErrorRecord.human_attribute_name('error'), class: 'hidden-xs' %>
+      <%= make_filterable_column ErrorRecord.human_attribute_name('data'), { class: 'hidden-xs' }, 'data' %>
       <th class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>

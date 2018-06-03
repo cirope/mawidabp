@@ -1,5 +1,5 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <h2><%= t 'notifier.welcome_email.title', :name => @user.informal_name %></h2>
+  <h2><%= t 'notifier.welcome_email.title', name: @user.informal_name %></h2>
   <p>
     <strong><%= User.human_attribute_name :user %></strong>:  <%= @user.user %>
   </p>
@@ -9,18 +9,18 @@
   <p>
     <% link_valid_until = (BLANK_PASSWORD_STALE_DAYS - 1).days.from_now %>
     <% edit_password_link = link_to t('notifier.welcome_email.change_password'),
-      edit_users_password_url(@user, :confirmation_hash => @hash,
-        :host => (@user.organizations.blank? ?
+      edit_users_password_url(@user, confirmation_hash: @hash,
+        host: (@user.organizations.blank? ?
             URL_HOST : "#{@user.organizations.first.prefix}.#{URL_HOST}")) %>
   </p>
 
   <%= textilize t('notifier.restore_password.valid_until',
-    :link => edit_password_link,
-    :date => l(link_valid_until, :format => :long).strip) %>
+    link: edit_password_link,
+    date: l(link_valid_until, format: :long).strip) %>
 
   <p>
     <%= t 'notifier.welcome_email.organizations_sites',
-      :count => @user.organizations.to_a.uniq.count %>
+      count: @user.organizations.to_a.uniq.count %>
   </p>
   <ul>
     <% @user.organizations.to_a.uniq.each do |organization| %>
@@ -35,5 +35,5 @@
   <p>
     <%= t('notifier.welcome_email.clarification') %>
   </p>
-  <%= render :partial => 'footer' %>
+  <%= render partial: 'footer' %>
 </div>

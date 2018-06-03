@@ -60,14 +60,14 @@ module Reports::WeaknessesByAuditType
               weaknesses_count = {}
               weaknesses_count_by_risk = {}
               total_oportunities = grouped_oportunities.values.sum(&:size)
-              awaiting_counts = {:current => 0, :stale => 0,
-                :current_rescheduled => 0, :stale_rescheduled => 0}
-              being_implemented_counts = {:current => 0, :stale => 0,
-                :current_rescheduled => 0, :stale_rescheduled => 0}
-              highest_awaiting_counts = {:current => 0, :stale => 0,
-                :current_rescheduled => 0, :stale_rescheduled => 0}
-              highest_being_implemented_counts = {:current => 0, :stale => 0,
-                :current_rescheduled => 0, :stale_rescheduled => 0}
+              awaiting_counts = {current: 0, stale: 0,
+                current_rescheduled: 0, stale_rescheduled: 0}
+              being_implemented_counts = {current: 0, stale: 0,
+                current_rescheduled: 0, stale_rescheduled: 0}
+              highest_awaiting_counts = {current: 0, stale: 0,
+                current_rescheduled: 0, stale_rescheduled: 0}
+              highest_being_implemented_counts = {current: 0, stale: 0,
+                current_rescheduled: 0, stale_rescheduled: 0}
 
               if total_oportunities > 0
                 statuses.each do |s|
@@ -132,22 +132,22 @@ module Reports::WeaknessesByAuditType
                   highest_being_implemented_counts)
 
               business_units[business_unit] = {
-                :conclusion_reviews => cfrs,
-                :weaknesses_table_data => weaknesses_table_data,
-                :oportunities_table_data => oportunities_table_data,
-                :repeated_count => repeated_count,
-                :awaiting_resume => awaiting_resume,
-                :being_implemented_resume => being_implemented_resume,
-                :highest_awaiting_resume => highest_awaiting_resume,
-                :highest_being_implemented_resume =>
+                conclusion_reviews: cfrs,
+                weaknesses_table_data: weaknesses_table_data,
+                oportunities_table_data: oportunities_table_data,
+                repeated_count: repeated_count,
+                awaiting_resume: awaiting_resume,
+                being_implemented_resume: being_implemented_resume,
+                highest_awaiting_resume: highest_awaiting_resume,
+                highest_being_implemented_resume:
                   highest_being_implemented_resume
               }
             end
           end
 
           @data[period][audit_type] << {
-            :title => title,
-            :business_units => business_units
+            title: title,
+            business_units: business_units
           }
         end
       end
@@ -185,7 +185,7 @@ module Reports::WeaknessesByAuditType
               pdf.move_down PDF_FONT_SIZE
 
               pdf.text "<b>#{t('actioncontroller.reviews')}</b>",
-                :inline_format => true
+                inline_format: true
               pdf.move_down PDF_FONT_SIZE
 
               bu_data[:conclusion_reviews].each do |cr|
@@ -205,7 +205,7 @@ module Reports::WeaknessesByAuditType
                   text << " (#{t("#{@controller}_committee_report.weaknesses_by_audit_type.without_weaknesses")})"
                 end
 
-                pdf.text text, :indent_paragraphs => PDF_FONT_SIZE * 2, :inline_format => true
+                pdf.text text, indent_paragraphs: PDF_FONT_SIZE * 2, inline_format: true
               end
 
               pdf.move_down PDF_FONT_SIZE
@@ -253,26 +253,26 @@ module Reports::WeaknessesByAuditType
 
                     pdf.table(bu_data[:oportunities_table_data].insert(0, column_headers), table_options) do
                       row(0).style(
-                        :background_color => 'cccccc',
-                        :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+                        background_color: 'cccccc',
+                        padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
                       )
                     end
                   end
                 else
-                  pdf.text t('follow_up_committee_report.without_oportunities'), :style => :italic
+                  pdf.text t('follow_up_committee_report.without_oportunities'), style: :italic
                 end
               end
 
               if bu_data[:repeated_count] > 0
                 pdf.move_down((PDF_FONT_SIZE * 0.5).round)
                 pdf.text t('follow_up_committee_report.repeated_count',
-                  :count => bu_data[:repeated_count],
-                  :font_size => PDF_FONT_SIZE)
+                  count: bu_data[:repeated_count],
+                  font_size: PDF_FONT_SIZE)
               end
             end
           end
         else
-          pdf.text t('follow_up_committee_report.without_weaknesses'), :style => :italic
+          pdf.text t('follow_up_committee_report.without_weaknesses'), style: :italic
         end
       end
     end

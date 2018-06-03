@@ -39,9 +39,9 @@ module ApplicationHelper
 
   def calendar_text_field(form, attribute, time = false, value = nil, options = {})
     value ||= form.object.send(attribute)
-    default_options = { :class => "#{options.delete(:class)} calendar" }
+    default_options = { class: "#{options.delete(:class)} calendar" }
 
-    default_options[:value] = l(value, :format => time ? :minimal : :default) if value
+    default_options[:value] = l(value, format: time ? :minimal : :default) if value
     default_options['data-time'] = true if time
 
     form.text_field attribute, default_options.merge(options)
@@ -49,17 +49,17 @@ module ApplicationHelper
 
   def super_truncate(text, length = 30)
     unless text.blank?
-      omission = content_tag(:abbr, '...', :title => j(text))
+      omission = content_tag(:abbr, '...', title: j(text))
       safe_text = text.gsub '%', '%%'
 
-      truncate(safe_text, :length => length, :omission => '%s') % omission
+      truncate(safe_text, length: length, omission: '%s') % omission
     end
   end
 
   def time_in_words_with_abbr(time_in_seconds = 0)
     content_tag(:abbr, time_ago_in_words(time_in_seconds.from_now),
-      :title => t('datetime.distance_in_words.x_hours',
-        :count => ('%.2f' % (time_in_seconds / 3600)))).html_safe
+      title: t('datetime.distance_in_words.x_hours',
+        count: ('%.2f' % (time_in_seconds / 3600)))).html_safe
   end
 
   def show_info(text, html_options = {})
@@ -127,16 +127,16 @@ module ApplicationHelper
     end
   end
 
-  # Devuelve el HTML devuelto por un render :partial => 'form', con el texto en
+  # Devuelve el HTML devuelto por un render partial: 'form', con el texto en
   # el botón submit reemplazado por el indicado. El resultado está "envuelto" en
   # un div con la clase "form_container"
   #
   # * _submit_label_::  Etiqueta que se quiere mostrar en el botón submit del
   #                     formulario
   def render_form(submit_label = t('label.save'), locals_extra = {})
-    content_tag :div, render(:partial => 'form',
-      :locals => {:submit_text => submit_label}.merge(locals_extra)),
-      :class => :form_container
+    content_tag :div, render(partial: 'form',
+      locals: {submit_text: submit_label}.merge(locals_extra)),
+      class: :form_container
   end
 
   # Devuelve el HTML de un campo lock_version oculto dentro de un div oculto
@@ -144,7 +144,7 @@ module ApplicationHelper
   # * _form_:: Formulario que se utilizará para generar el campo oculto
   def hidden_lock_version(form)
     content_tag(:div, form.hidden_field(:lock_version),
-      :style => 'display: none;').html_safe
+      style: 'display: none;').html_safe
   end
 
   # Devuelve el nombre de un valor de una lista de opciones para un select.
@@ -164,7 +164,7 @@ module ApplicationHelper
     raise 'Must have at least one column' if columns.empty?
 
     html_classes = []
-    content = content_tag(:span, title, :class => :title)
+    content = content_tag(:span, title, class: :title)
     options ||= {}
 
     html_classes << (@query.blank? || columns.any?{|c| @columns.include?(c)} ?
@@ -176,7 +176,7 @@ module ApplicationHelper
     end
 
     content_tag(:th, content.html_safe,
-      :class => "filterable #{html_classes.join(' ')}")
+      class: "filterable #{html_classes.join(' ')}")
   end
 
   def make_not_available_column(title, options = {})
@@ -186,17 +186,17 @@ module ApplicationHelper
     html_classes << options[:class] if options[:class]
 
     content_tag(:th, title,
-      :class => (html_classes.join(' ') unless html_classes.blank?))
+      class: (html_classes.join(' ') unless html_classes.blank?))
   end
 
   # Devuelve el HTML de un vínculo para mostrar el cuadro de búsqueda
   def link_to_search
-    search_link = link_to t('label.search'), '#', :onclick => 'Search.show(); return false;',
-      :id => :show_search_link, :class => 'btn btn-xs btn-default',
-      :title => t('message.search_link_title')
+    search_link = link_to t('label.search'), '#', onclick: 'Search.show(); return false;',
+      id: :show_search_link, class: 'btn btn-xs btn-default',
+      title: t('message.search_link_title')
 
     @query.blank? ? search_link : content_tag(:span, search_link,
-      :style => 'display: none;')
+      style: 'display: none;')
   end
 
   # Devuelve el HTML de un control para mostrar y ocultar el contenido de un
@@ -207,32 +207,32 @@ module ApplicationHelper
     out = content_tag(:span,
       link_to(
         content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-right'),
-        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
+        '#', onclick: "Helper.showOrHideWithArrow('#{element_id}'); return false;"
       ),
-      :id => "show_element_#{element_id}_content",
-      :class => 'media-object'
+      id: "show_element_#{element_id}_content",
+      class: 'media-object'
     )
     out << content_tag(:span,
       link_to(
         content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-down'),
-        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
+        '#', onclick: "Helper.showOrHideWithArrow('#{element_id}'); return false;"
       ),
-      :id => "hide_element_#{element_id}_content",
-      :style => 'display: none;',
-      :class => 'media-object'
+      id: "hide_element_#{element_id}_content",
+      style: 'display: none;',
+      class: 'media-object'
     )
   end
 
   def link_to_fetch_hide(id, action = :fetch)
-    show_link = link_to('#', :data => { action => id }) do
+    show_link = link_to('#', data: { action => id }) do
       content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-right')
     end
-    hide_link = link_to('#', :data => { :hide => id }) do
+    hide_link = link_to('#', data: { hide: id }) do
       content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-down')
     end
 
-    out  = content_tag(:span, show_link, :class => 'media-object')
-    out << content_tag(:span, hide_link, :class => 'media-object hidden')
+    out  = content_tag(:span, show_link, class: 'media-object')
+    out << content_tag(:span, hide_link, class: 'media-object hidden')
   end
 
   # Devuelve el HTML de un vínculo para mover un ítem.
@@ -240,9 +240,9 @@ module ApplicationHelper
   # * <em>*args</em>:: Las mismas opciones que link_to sin la etiqueta
   def link_to_move(*args)
     options = {
-      :class => 'image_link move',
-      :onclick => 'return false;',
-      :title => t('label.move')
+      class: 'image_link move',
+      onclick: 'return false;',
+      title: t('label.move')
     }
     options.merge!(args.pop) if args.last.kind_of?(Hash)
 
@@ -257,13 +257,13 @@ module ApplicationHelper
     new_record = fields.nil? || fields.object.new_record?
     out = String.new.html_safe
     link_options = {
-      :title => t('label.delete'),
+      title: t('label.delete'),
       'data-target' => ".#{class_for_remove || fields.object.class.name.underscore}",
       'data-event' => (new_record ? 'removeItem' : 'hideItem')
     }
 
-    out << fields.hidden_field(:_destroy, :class => 'destroy',
-      :value => fields.object.marked_for_destruction? ? 1 : 0) unless new_record
+    out << fields.hidden_field(:_destroy, class: 'destroy',
+      value: fields.object.marked_for_destruction? ? 1 : 0) unless new_record
     out << link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-remove-circle'),
       '#', link_options.merge(options))
   end

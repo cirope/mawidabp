@@ -3,16 +3,16 @@ class FindingUserAssignment < ApplicationRecord
   include Comparable
 
   # Scopes
-  scope :owners, -> { where(:process_owner => true) }
-  scope :responsibles, -> { where(:responsible_auditor => true) }
+  scope :owners, -> { where(process_owner: true) }
+  scope :responsibles, -> { where(responsible_auditor: true) }
 
   # Callbacks
   before_save :can_be_modified?, :assign_finding_type, :users_notification
 
   # Restricciones
-  validates :user_id, :presence => true
-  validates :user_id, :numericality => {:only_integer => true},
-    :allow_blank => true, :allow_nil => true
+  validates :user_id, presence: true
+  validates :user_id, numericality: {only_integer: true},
+    allow_blank: true, allow_nil: true
   validates_each :process_owner do |record, attr, value|
     organization_id = record.finding.try(:organization_id)
 
@@ -28,9 +28,9 @@ class FindingUserAssignment < ApplicationRecord
   end
 
   # Relaciones
-  belongs_to :finding, :inverse_of => :finding_user_assignments,
-    :polymorphic => true, :optional => true
-  belongs_to :raw_finding, :foreign_key => :finding_id, :class_name => 'Finding', :optional => true
+  belongs_to :finding, inverse_of: :finding_user_assignments,
+    polymorphic: true, optional: true
+  belongs_to :raw_finding, foreign_key: :finding_id, class_name: 'Finding', optional: true
   belongs_to :user
 
   def <=>(other)

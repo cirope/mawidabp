@@ -6,7 +6,7 @@
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column BestPractice.human_attribute_name('name'), nil, 'name' %>
-      <%= make_not_available_column BestPractice.human_attribute_name('description'), { :class => 'hidden-xs' } %>
+      <%= make_not_available_column BestPractice.human_attribute_name('description'), { class: 'hidden-xs' } %>
       <th colspan="3" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>

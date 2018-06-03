@@ -1,4 +1,4 @@
-<%= simple_form_for @finding, :as => :finding, url: finding_path(params[:completed], @finding),
+<%= simple_form_for @finding, as: :finding, url: finding_path(params[:completed], @finding),
   html: { method: :patch, id: "edit_finding_#{@finding.id}"} do |f| %>
   <%= render 'shared/error_explanation', f: f %>
 
@@ -78,12 +78,12 @@
     <% audited, auditors = *@finding.users.partition(&:audited?) %>
     <% process_owners = @finding.process_owners %>
     <% responsible_auditors = @finding.responsible_auditors %>
-    <h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
+    <h4><%= t('finding.responsibles', count: @finding.users.size) %></h4>
     <table class="table table-condensed table-hover">
       <thead>
         <tr>
-          <th><%= t('finding.audited', :count => audited.size) %></th>
-          <th><%= t('finding.reviewers', :count => auditors.size) %></th>
+          <th><%= t('finding.audited', count: audited.size) %></th>
+          <th><%= t('finding.reviewers', count: auditors.size) %></th>
         </tr>
       </thead>
       <tbody>
@@ -162,7 +162,7 @@
   </div>
 
   <div id="finding_answers">
-    <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
+    <% @finding.finding_answers.build(user: @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
     <%= f.simple_fields_for :finding_answers do |fa_f| %>
       <%= render 'finding_answer', f: fa_f, parent: f %>
     <% end %>
@@ -198,11 +198,11 @@
 
   <br />
   <%= textilize t('finding.costs',
-    :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
+    cost: time_in_words_with_abbr((@finding.cost || 0).hours)) %>
 
   <% unless @finding.costs.blank? %>
     <p style="margin-bottom: 1em;">
-      <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
+      <%= link_to t('finding.view_cost_details'), '#cost_details', data: { toggle: 'collapse' } %>
     </p>
 
     <div id="cost_details" class="collapse">
@@ -219,7 +219,7 @@
           <tbody>
             <% @finding.costs.reject {|f| f.new_record?}.each do |cost| %>
               <tr>
-                <td><%= l(cost.created_at, :format => :long) %></td>
+                <td><%= l(cost.created_at, format: :long) %></td>
                 <td><%= time_in_words_with_abbr(cost.cost.hours) %></td>
                 <td><%= cost.description.blank? ? '-' : cost.description %></td>
                 <td><%= cost.user.full_name %></td>
@@ -242,7 +242,7 @@
 
   <div id="costs">
     <%= f.simple_fields_for :costs, @finding.costs.detect { |c| c.new_record? } ||
-        Cost.new(:user => @auth_user, :cost_type => 'audited') do |c_f| %>
+        Cost.new(user: @auth_user, cost_type: 'audited') do |c_f| %>
       <%= render 'cost', f: c_f %>
     <% end %>
   </div>

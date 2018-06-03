@@ -60,23 +60,23 @@
     data: { toggle: 'modal', target: "#customize_report" } %>
 </div>
 
-<%= render :partial => 'shared/customize_report_form', :locals => {
-  :options => {
-    :form_name => 'report',
-    :url => request.query_parameters.merge(
-      {:action => 'index', :_ts => Time.now.to_i }
+<%= render partial: 'shared/customize_report_form', locals: {
+  options: {
+    form_name: 'report',
+    url: request.query_parameters.merge(
+      {action: 'index', _ts: Time.now.to_i }
     ),
     method: :get,
-    :fields => [
+    fields: [
       {
-        :name => :report_title,
-        :label => t('customize_report_form.title'),
-        :value => t('polls.reports.title').upcase
+        name: :report_title,
+        label: t('customize_report_form.title'),
+        value: t('polls.reports.title').upcase
       },
       {
-        :name => :report_subtitle,
-        :label => t('customize_report_form.subtitle'),
-        :value => t('polls.business_units.index.title').upcase
+        name: :report_subtitle,
+        label: t('customize_report_form.subtitle'),
+        value: t('polls.business_units.index.title').upcase
       }
     ]
   }

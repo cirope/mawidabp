@@ -24,9 +24,9 @@ class FindingRelationTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'FindingRelation.count' do
       @finding_relation = FindingRelation.create(
-        :description => 'Duplicated',
-        :finding_id => findings(:unconfirmed_weakness).id,
-        :related_finding_id => findings(:being_implemented_weakness_on_final).id
+        description: 'Duplicated',
+        finding_id: findings(:unconfirmed_weakness).id,
+        related_finding_id: findings(:being_implemented_weakness_on_final).id
       )
     end
   end
@@ -34,7 +34,7 @@ class FindingRelationTest < ActiveSupport::TestCase
   # Prueba de actualización de un perfil
   test 'update' do
     assert_equal 'Duplicated', @finding_relation.description
-    assert @finding_relation.update(:description => 'Related'),
+    assert @finding_relation.update(description: 'Related'),
       @finding_relation.errors.full_messages.join('; ')
     @finding_relation.reload
     assert_equal 'Related', @finding_relation.description
@@ -69,7 +69,7 @@ class FindingRelationTest < ActiveSupport::TestCase
         :unconfirmed_weakness_related_to_being_implemented_weakness_on_final).id)
 
     finding_relation.finding.finding_relations.build(
-      :related_finding => finding_relation.related_finding)
+      related_finding: finding_relation.related_finding)
 
     assert finding_relation.invalid?
     assert_error finding_relation, :related_finding_id, :taken

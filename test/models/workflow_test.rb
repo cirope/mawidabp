@@ -24,8 +24,8 @@ class WorkflowTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'Workflow.count' do
       Workflow.list.create(
-        :period_id => periods(:current_period).id,
-        :review_id => reviews(:review_without_conclusion).id
+        period_id: periods(:current_period).id,
+        review_id: reviews(:review_without_conclusion).id
       )
     end
   end

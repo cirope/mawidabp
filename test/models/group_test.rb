@@ -21,16 +21,16 @@ class GroupTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'Group.count' do
       @group = Group.create(
-        :name => 'New name',
-        :description => 'New description',
-        :admin_email => 'new_group@test.com'
+        name: 'New name',
+        description: 'New description',
+        admin_email: 'new_group@test.com'
       )
     end
   end
 
   # Prueba de actualización de un grupo
   test 'update' do
-    assert @group.update(:name => 'Updated name'),
+    assert @group.update(name: 'Updated name'),
       @group.errors.full_messages.join('; ')
     @group.reload
     assert_equal 'Updated name', @group.name

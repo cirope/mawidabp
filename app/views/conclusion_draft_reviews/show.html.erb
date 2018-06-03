@@ -10,7 +10,7 @@
 <h4><%= @conclusion_draft_review.review.plan_item.business_unit.name %></h4>
 <p>
   <strong><%= t('conclusion_review.issue_date_title') %></strong>:
-  <%= l(@conclusion_draft_review.issue_date, :format => :long) %>
+  <%= l(@conclusion_draft_review.issue_date, format: :long) %>
 </p>
 <p>
   <strong><%= @conclusion_draft_review.review.business_unit.business_unit_type.business_unit_label %></strong>:
@@ -26,8 +26,8 @@
 <p>
   <strong><%= t('conclusion_review.audit_period_title') %></strong>:
   <%= t('conclusion_review.audit_period',
-      :start => I18n.l(@conclusion_draft_review.review.plan_item.start, :format => :long),
-      :end => I18n.l(@conclusion_draft_review.review.plan_item.end, :format => :long)) %>
+      start: I18n.l(@conclusion_draft_review.review.plan_item.start, format: :long),
+      end: I18n.l(@conclusion_draft_review.review.plan_item.end, format: :long)) %>
 </p>
 
 <br />
@@ -99,7 +99,7 @@ end %>
 <div>
   <% if @conclusion_draft_review.approved? && !@conclusion_draft_review.has_final_review? %>
     <%= link_to t('conclusion_draft_review.new_conclusion_final_review'),
-      new_conclusion_final_review_path(:review => @conclusion_draft_review.review_id) %> |
+      new_conclusion_final_review_path(review: @conclusion_draft_review.review_id) %> |
   <% end %>
   <%= link_to_edit edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
   <%= link_to_index conclusion_draft_reviews_path %> |

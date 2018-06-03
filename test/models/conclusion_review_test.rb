@@ -37,18 +37,18 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'ConclusionReview.count' do
       @conclusion_review = ConclusionFinalReview.list.new({
-        :review => reviews(:review_approved_with_conclusion),
-        :issue_date => Date.today,
-        :close_date => 2.days.from_now.to_date,
-        :applied_procedures => 'New applied procedures',
-        :conclusion => CONCLUSION_OPTIONS.first,
-        :recipients => 'John Doe',
-        :sectors => 'Area 51',
-        :evolution => EVOLUTION_OPTIONS.second,
-        :evolution_justification => 'Ok',
-        :main_weaknesses_text => 'Some main weakness X',
-        :corrective_actions => 'You should do it this way',
-        :affects_compliance => false
+        review: reviews(:review_approved_with_conclusion),
+        issue_date: Date.today,
+        close_date: 2.days.from_now.to_date,
+        applied_procedures: 'New applied procedures',
+        conclusion: CONCLUSION_OPTIONS.first,
+        recipients: 'John Doe',
+        sectors: 'Area 51',
+        evolution: EVOLUTION_OPTIONS.second,
+        evolution_justification: 'Ok',
+        main_weaknesses_text: 'Some main weakness X',
+        corrective_actions: 'You should do it this way',
+        affects_compliance: false
       }, false)
 
       assert @conclusion_review.save
@@ -60,7 +60,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review = ConclusionReview.find(
       conclusion_reviews(:conclusion_past_draft_review).id)
     assert @conclusion_review.update(
-      :applied_procedures => 'Updated applied procedures'),
+      applied_procedures: 'Updated applied procedures'),
       @conclusion_review.errors.full_messages.join('; ')
     @conclusion_review.reload
     assert_equal 'Updated applied procedures',
@@ -124,11 +124,11 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
     @conclusion_review = ConclusionFinalReview.new({
-        :review => reviews(:review_with_conclusion),
-        :issue_date => '13/13/13',
-        :close_date => '13/13/13',
-        :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion'
+        review: reviews(:review_with_conclusion),
+        issue_date: '13/13/13',
+        close_date: '13/13/13',
+        applied_procedures: 'New applied procedures',
+        conclusion: 'New conclusion'
       }, false)
 
     assert @conclusion_review.invalid?
@@ -139,18 +139,18 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
   test 'validates date attributes between boundaries' do
     @conclusion_review = ConclusionFinalReview.new({
-        :review => reviews(:review_with_conclusion),
-        :issue_date => Date.today,
-        :close_date => 2.days.ago.to_date,
-        :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion',
-        :recipients => 'John Doe',
-        :sectors => 'Area 51',
-        :evolution => 'Do the evolution',
-        :evolution_justification => 'Ok',
-        :main_weaknesses_text => 'Some main weakness X',
-        :corrective_actions => 'You should do it this way',
-        :affects_compliance => '0'
+        review: reviews(:review_with_conclusion),
+        issue_date: Date.today,
+        close_date: 2.days.ago.to_date,
+        applied_procedures: 'New applied procedures',
+        conclusion: 'New conclusion',
+        recipients: 'John Doe',
+        sectors: 'Area 51',
+        evolution: 'Do the evolution',
+        evolution_justification: 'Ok',
+        main_weaknesses_text: 'Some main weakness X',
+        corrective_actions: 'You should do it this way',
+        affects_compliance: '0'
       }, false)
 
     assert @conclusion_review.invalid?
@@ -205,7 +205,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
     assert_nothing_raised do
       @conclusion_review.to_pdf(
-        organizations(:cirope), :hide_score => true
+        organizations(:cirope), hide_score: true
       )
     end
 
@@ -216,7 +216,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert_nothing_raised do
       @conclusion_review.to_pdf(
         organizations(:cirope),
-        :hide_control_objectives_excluded_from_score => '1'
+        hide_control_objectives_excluded_from_score: '1'
       )
     end
 
@@ -225,7 +225,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert_not_equal size, new_size
 
     assert_nothing_raised do
-      @conclusion_review.to_pdf organizations(:cirope), :brief => '1'
+      @conclusion_review.to_pdf organizations(:cirope), brief: '1'
     end
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)
@@ -270,7 +270,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert_not_equal size, new_size
 
     assert_nothing_raised do
-      @conclusion_review.alternative_pdf organization, :brief => '1'
+      @conclusion_review.alternative_pdf organization, brief: '1'
     end
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)

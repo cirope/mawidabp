@@ -54,7 +54,7 @@ module Reports::SynthesisReport
           add_repeated_text(pdf, data[:repeated_count]) if @controller == 'follow_up'
         else
           pdf.text t("#{@controller}_committee_report.synthesis_report.without_audits_in_the_period"),
-            :style => :italic
+            style: :italic
         end
       end
     end
@@ -221,12 +221,12 @@ module Reports::SynthesisReport
     def set_audits_by_business_unit_data(period, but)
       @audits_by_business_unit[period] ||= []
       @audits_by_business_unit[period] << {
-        :name => but.name,
-        :external => but.external,
-        :columns => @columns,
-        :column_data => @column_data,
-        :review_scores => @review_scores,
-        :repeated_count => @repeated_count
+        name: but.name,
+        external: but.external,
+        columns: @columns,
+        column_data: @column_data,
+        review_scores: @review_scores,
+        repeated_count: @repeated_count
       }
     end
 
@@ -235,8 +235,8 @@ module Reports::SynthesisReport
         table_options = pdf.default_table_options(@column_widths)
         pdf.table(@column_data.insert(0, @column_headers), table_options) do
           row(0).style(
-            :background_color => 'cccccc',
-            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            background_color: 'cccccc',
+            padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
           )
         end
       end
@@ -261,21 +261,21 @@ module Reports::SynthesisReport
     def add_pdf_references(pdf)
       pdf.move_down PDF_FONT_SIZE
 
-      references = t("#{@controller}_committee_report.synthesis_report.references", :risk_types => @risk_levels.to_sentence)
+      references = t("#{@controller}_committee_report.synthesis_report.references", risk_types: @risk_levels.to_sentence)
 
-      pdf.text references, :font_size => (PDF_FONT_SIZE * 0.75).round,
-        :align => :justify
+      pdf.text references, font_size: (PDF_FONT_SIZE * 0.75).round,
+        align: :justify
     end
 
     def add_repeated_text(pdf, repeated_count)
       pdf.text(t('follow_up_committee_report.synthesis_report.repeated_count',
-        :count => repeated_count), :font_size => PDF_FONT_SIZE) if repeated_count > 0
+        count: repeated_count), font_size: PDF_FONT_SIZE) if repeated_count > 0
     end
 
     def add_score_data(pdf, scores, audit_type_name)
       unless scores.blank?
         title = t("#{@controller}_committee_report.synthesis_report.generic_score_average",
-          :count => scores.size, :audit_type => audit_type_name)
+          count: scores.size, audit_type: audit_type_name)
         text = "<b>#{title}</b>: <i>#{(scores.sum.to_f / scores.size).round}%</i>"
       else
         text = t('conclusion_committee_report.synthesis_report.without_audits_in_the_period')
@@ -283,7 +283,7 @@ module Reports::SynthesisReport
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text text, :font_size => PDF_FONT_SIZE, :inline_format => true
+      pdf.text text, font_size: PDF_FONT_SIZE, inline_format: true
     end
 
     def add_average_score(period, pdf)
@@ -316,17 +316,17 @@ module Reports::SynthesisReport
 
       pdf.add_title(
         t('follow_up_committee_report.synthesis_report.organization_score',
-          :score => average_score || 100), (PDF_FONT_SIZE * 1.5).round)
+          score: average_score || 100), (PDF_FONT_SIZE * 1.5).round)
 
       pdf.move_down((PDF_FONT_SIZE * 0.75).round)
 
       pdf.text(
         t('follow_up_committee_report.synthesis_report.organization_score_note',
-          :audit_types =>
+          audit_types:
             @audits_by_business_unit[period].map { |data|
               data[:name]
             }.to_sentence),
-        :font_size => (PDF_FONT_SIZE * 0.75).round)
+        font_size: (PDF_FONT_SIZE * 0.75).round)
     end
 
     def prepare_synthesis_columns(pdf, columns)

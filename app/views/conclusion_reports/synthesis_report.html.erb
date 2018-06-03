@@ -1,9 +1,9 @@
-<% forms = {:date_range => true, :business_unit => true} %>
+<% forms = {date_range: true, business_unit: true} %>
 <% forms[:scope] = true if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
-<%= render :partial => 'shared/filter_form',
-  :locals => {:action => :synthesis_report, :extra_params => {
-    :controller_name => 'conclusion'
-  }, :forms => forms} %>
+<%= render partial: 'shared/filter_form',
+  locals: {action: :synthesis_report, extra_params: {
+    controller_name: 'conclusion'
+  }, forms: forms} %>
 
 <% @periods.each do |period| %>
   <div class="page-header">
@@ -15,7 +15,7 @@
     </p>
     <p>
       <%= t('conclusion_committee_report.synthesis_report.organization_score_note',
-        :audit_types => @audits_by_business_unit[period].map {|data| data[:name]}.to_sentence) %>
+        audit_types: @audits_by_business_unit[period].map {|data| data[:name]}.to_sentence) %>
     </p>
   <% end %>
 
@@ -56,7 +56,7 @@
         <%= synthesis_report_score_average(
          t(
            'conclusion_committee_report.synthesis_report.generic_score_average',
-           :audit_type => data[:name], :count => data[:review_scores].try(:size) || 0),
+           audit_type: data[:name], count: data[:review_scores].try(:size) || 0),
            data[:review_scores]) %>
       </p>
     <% else %>
@@ -69,33 +69,33 @@
 
 <div style="margin-top: 3em;">
   <%= simple_format t('conclusion_committee_report.synthesis_report.references',
-    :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence) %>
+    risk_types: @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence) %>
 </div>
 
 <hr />
 
 <div>
-  <%= link_to t('label.back'), :action => :index %> |
+  <%= link_to t('label.back'), action: :index %> |
   <%= link_to t('label.download'), '#',
     data: { toggle: 'modal', target: "#customize_report" } %>
 </div>
 
-<%= render :partial => 'shared/customize_report_form', :locals => {
-  :options => {
-    :form_name => 'report',
-    :url => request.query_parameters.merge(
-      {:action => :create_synthesis_report, :_ts => Time.now.to_i}
+<%= render partial: 'shared/customize_report_form', locals: {
+  options: {
+    form_name: 'report',
+    url: request.query_parameters.merge(
+      {action: :create_synthesis_report, _ts: Time.now.to_i}
     ),
-    :fields => [
+    fields: [
       {
-        :name => :report_title,
-        :label => t('customize_report_form.title'),
-        :value => t('conclusion_committee_report.synthesis_report.title')
+        name: :report_title,
+        label: t('customize_report_form.title'),
+        value: t('conclusion_committee_report.synthesis_report.title')
       },
       {
-        :name => :report_subtitle,
-        :label => t('customize_report_form.subtitle'),
-        :value => t('conclusion_committee_report.synthesis_report.subtitle')
+        name: :report_subtitle,
+        label: t('customize_report_form.subtitle'),
+        value: t('conclusion_committee_report.synthesis_report.subtitle')
       }
     ]
   }

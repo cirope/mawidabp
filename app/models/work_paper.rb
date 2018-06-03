@@ -22,18 +22,18 @@ class WorkPaper < ApplicationRecord
   after_destroy :destroy_file_model # TODO: delete when Rails fix gets in stable
 
   # Restricciones
-  validates :organization_id, :name, :code, :presence => true
-  validates :number_of_pages, :numericality =>
-    {:only_integer => true, :less_than => 100000, :greater_than => 0},
-    :allow_nil => true, :allow_blank => true
-  validates :organization_id, :numericality => {:only_integer => true},
-    :allow_nil => true, :allow_blank => true
-  validates :name, :code, :length => {:maximum => 255}, :allow_nil => true,
-    :allow_blank => true
-  validates :code, :uniqueness => { :scope => :owner_id }, :on => :create,
-    :allow_nil => true, :allow_blank => true
-  validates :name, :code, :description, :pdf_encoding => true
-  validates_each :code, :on => :create do |record, attr, value|
+  validates :organization_id, :name, :code, presence: true
+  validates :number_of_pages, numericality:
+    {only_integer: true, less_than: 100000, greater_than: 0},
+    allow_nil: true, allow_blank: true
+  validates :organization_id, numericality: {only_integer: true},
+    allow_nil: true, allow_blank: true
+  validates :name, :code, length: {maximum: 255}, allow_nil: true,
+    allow_blank: true
+  validates :code, uniqueness: { scope: :owner_id }, on: :create,
+    allow_nil: true, allow_blank: true
+  validates :name, :code, :description, pdf_encoding: true
+  validates_each :code, on: :create do |record, attr, value|
     if record.check_code_prefix && !record.marked_for_destruction?
       raise 'No code_prefix is set!' unless record.code_prefix
 
@@ -53,10 +53,10 @@ class WorkPaper < ApplicationRecord
 
   # Relaciones
   belongs_to :organization
-  belongs_to :file_model, :optional => true
-  belongs_to :owner, :polymorphic => true, :optional => true
+  belongs_to :file_model, optional: true
+  belongs_to :owner, polymorphic: true, optional: true
 
-  accepts_nested_attributes_for :file_model, :allow_destroy => true,
+  accepts_nested_attributes_for :file_model, allow_destroy: true,
     reject_if: ->(attrs) { ['file', 'file_cache'].all? { |a| attrs[a].blank? } }
 
   def initialize(attributes = nil)
@@ -98,7 +98,7 @@ class WorkPaper < ApplicationRecord
   end
 
   def pages_to_s
-    I18n.t('work_paper.number_of_pages', :count => self.number_of_pages)
+    I18n.t('work_paper.number_of_pages', count: self.number_of_pages)
   end
 
   def check_for_modifications
@@ -175,8 +175,8 @@ class WorkPaper < ApplicationRecord
         sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
     end
 
-    I18n.t 'work_paper.cover_name', :prefix => "#{short ? short_code : code}-",
-      :filename => File.basename(filename, File.extname(filename))
+    I18n.t 'work_paper.cover_name', prefix: "#{short ? short_code : code}-",
+      filename: File.basename(filename, File.extname(filename))
   end
 
   def absolute_cover_path(filename = nil)

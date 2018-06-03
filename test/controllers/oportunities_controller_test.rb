@@ -12,8 +12,8 @@ class OportunitiesControllerTest < ActionController::TestCase
   # y no accesibles las privadas
   test 'public and private actions' do
     id_param = {
-      :params => {
-        :id => findings(:confirmed_oportunity).to_param
+      params: {
+        id: findings(:confirmed_oportunity).to_param
       }
     }
     public_actions = []
@@ -48,11 +48,11 @@ class OportunitiesControllerTest < ActionController::TestCase
 
   test 'list oportunities with search and sort' do
     login
-    get :index, :params => {
-      :search => {
-        :query => '1 2 4',
-        :columns => ['title', 'review'],
-        :order => 'review'
+    get :index, params: {
+      search: {
+        query: '1 2 4',
+        columns: ['title', 'review'],
+        order: 'review'
       }
     }
 
@@ -69,8 +69,8 @@ class OportunitiesControllerTest < ActionController::TestCase
 
   test 'show oportunity' do
     login
-    get :show, :params => {
-      :id => findings(:confirmed_oportunity).id
+    get :show, params: {
+      id: findings(:confirmed_oportunity).id
     }
     assert_response :success
     assert_not_nil assigns(:oportunity)
@@ -81,10 +81,10 @@ class OportunitiesControllerTest < ActionController::TestCase
     oportunity = findings :confirmed_oportunity
 
     login
-    get :show, :params => {
-      :completed => 'incomplete',
-      :id => oportunity.id
-    }, :as => :json
+    get :show, params: {
+      completed: 'incomplete',
+      id: oportunity.id
+    }, as: :json
     assert_response :success
     assert_not_nil assigns(:oportunity)
 
@@ -95,8 +95,8 @@ class OportunitiesControllerTest < ActionController::TestCase
 
   test 'new oportunity' do
     login
-    get :new, :params => {
-      :control_objective_item => control_objective_items(:management_dependency_item_editable).id
+    get :new, params: {
+      control_objective_item: control_objective_items(:management_dependency_item_editable).id
     }
     assert_response :success
     assert_not_nil assigns(:oportunity)
@@ -114,58 +114,58 @@ class OportunitiesControllerTest < ActionController::TestCase
 
     login
     assert_difference counts_array do
-      post :create, :params => {
-        :oportunity => {
-          :control_objective_item_id =>
+      post :create, params: {
+        oportunity: {
+          control_objective_item_id:
             control_objective_items(:impact_analysis_item_editable).id,
-          :review_code => 'OM020',
-          :title => 'Title',
-          :description => 'New description',
-          :answer => 'New answer',
-          :audit_comments => 'New audit comments',
-          :origination_date => 1.day.ago.to_date.to_s(:db),
-          :state => Finding::STATUS[:being_implemented],
-          :business_unit_ids => [business_units(:business_unit_three).id],
-          :finding_user_assignments_attributes => [
+          review_code: 'OM020',
+          title: 'Title',
+          description: 'New description',
+          answer: 'New answer',
+          audit_comments: 'New audit comments',
+          origination_date: 1.day.ago.to_date.to_s(:db),
+          state: Finding::STATUS[:being_implemented],
+          business_unit_ids: [business_units(:business_unit_three).id],
+          finding_user_assignments_attributes: [
             {
-              :user_id => users(:bare).id, :process_owner => '0'
+              user_id: users(:bare).id, process_owner: '0'
             },
             {
-              :user_id => users(:audited).id, :process_owner => '1'
+              user_id: users(:audited).id, process_owner: '1'
             },
             {
-              :user_id => users(:auditor).id, :process_owner => '0'
+              user_id: users(:auditor).id, process_owner: '0'
             },
             {
-              :user_id => users(:manager).id, :process_owner => '0'
+              user_id: users(:manager).id, process_owner: '0'
             },
             {
-              :user_id => users(:supervisor).id, :process_owner => '0'
+              user_id: users(:supervisor).id, process_owner: '0'
             },
             {
-              :user_id => users(:administrator).id, :process_owner => '0'
+              user_id: users(:administrator).id, process_owner: '0'
             }
           ],
-          :work_papers_attributes => [
+          work_papers_attributes: [
             {
-              :name => 'New workpaper name',
-              :code => 'PTOM 20',
-              :number_of_pages => '10',
-              :description => 'New workpaper description',
-              :file_model_attributes => {:file => Rack::Test::UploadedFile.new(
+              name: 'New workpaper name',
+              code: 'PTOM 20',
+              number_of_pages: '10',
+              description: 'New workpaper description',
+              file_model_attributes: {file: Rack::Test::UploadedFile.new(
                   TEST_FILE_FULL_PATH, 'text/plain')
               }
             }
           ],
-          :finding_relations_attributes => [
+          finding_relations_attributes: [
             {
-              :description => 'Duplicated',
-              :related_finding_id => findings(:unanswered_weakness).id
+              description: 'Duplicated',
+              related_finding_id: findings(:unanswered_weakness).id
             }
           ],
-          :taggings_attributes => [
+          taggings_attributes: [
             {
-              :tag_id => tags(:important).id
+              tag_id: tags(:important).id
             }
           ]
         }
@@ -175,8 +175,8 @@ class OportunitiesControllerTest < ActionController::TestCase
 
   test 'edit oportunity' do
     login
-    get :edit, :params => {
-      :id => findings(:confirmed_oportunity).id
+    get :edit, params: {
+      id: findings(:confirmed_oportunity).id
     }
     assert_response :success
     assert_not_nil assigns(:oportunity)
@@ -187,67 +187,67 @@ class OportunitiesControllerTest < ActionController::TestCase
     login
     assert_no_difference 'Oportunity.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
-        patch :update, :params => {
-          :id => findings(:confirmed_oportunity).id,
-          :oportunity => {
-            :control_objective_item_id =>
+        patch :update, params: {
+          id: findings(:confirmed_oportunity).id,
+          oportunity: {
+            control_objective_item_id:
               control_objective_items(:impact_analysis_item).id,
-            :review_code => 'OM020',
-            :title => 'Title',
-            :description => 'Updated description',
-            :answer => 'Updated answer',
-            :audit_comments => 'Updated audit comments',
-            :state => Finding::STATUS[:confirmed],
-            :origination_date => 1.day.ago.to_date.to_s(:db),
-            :solution_date => '',
-            :finding_user_assignments_attributes => [
+            review_code: 'OM020',
+            title: 'Title',
+            description: 'Updated description',
+            answer: 'Updated answer',
+            audit_comments: 'Updated audit comments',
+            state: Finding::STATUS[:confirmed],
+            origination_date: 1.day.ago.to_date.to_s(:db),
+            solution_date: '',
+            finding_user_assignments_attributes: [
               {
-                :id => finding_user_assignments(:confirmed_oportunity_bare).id,
-                :user_id => users(:bare).id,
-                :process_owner => '0'
+                id: finding_user_assignments(:confirmed_oportunity_bare).id,
+                user_id: users(:bare).id,
+                process_owner: '0'
               },
               {
-                :id => finding_user_assignments(:confirmed_oportunity_audited).id,
-                :user_id => users(:audited).id,
-                :process_owner => '1'
+                id: finding_user_assignments(:confirmed_oportunity_audited).id,
+                user_id: users(:audited).id,
+                process_owner: '1'
               },
               {
-                :id => finding_user_assignments(:confirmed_oportunity_auditor).id,
-                :user_id => users(:auditor).id,
-                :process_owner => '0'
+                id: finding_user_assignments(:confirmed_oportunity_auditor).id,
+                user_id: users(:auditor).id,
+                process_owner: '0'
               },
               {
-                :id => finding_user_assignments(:confirmed_oportunity_manager).id,
-                :user_id => users(:manager).id,
-                :process_owner => '0'
+                id: finding_user_assignments(:confirmed_oportunity_manager).id,
+                user_id: users(:manager).id,
+                process_owner: '0'
               },
               {
-                :id => finding_user_assignments(:confirmed_oportunity_supervisor).id,
-                :user_id => users(:supervisor).id,
-                :process_owner => '0'
+                id: finding_user_assignments(:confirmed_oportunity_supervisor).id,
+                user_id: users(:supervisor).id,
+                process_owner: '0'
               },
               {
-                :id => finding_user_assignments(:confirmed_oportunity_administrator).id,
-                :user_id => users(:administrator).id,
-                :process_owner => '0'
+                id: finding_user_assignments(:confirmed_oportunity_administrator).id,
+                user_id: users(:administrator).id,
+                process_owner: '0'
               }
             ],
-            :work_papers_attributes => [
+            work_papers_attributes: [
               {
-                :name => 'New workpaper name',
-                :code => 'PTOM 20',
-                :number_of_pages => '10',
-                :description => 'New workpaper description',
-                :file_model_attributes => {
-                  :file => Rack::Test::UploadedFile.new(
+                name: 'New workpaper name',
+                code: 'PTOM 20',
+                number_of_pages: '10',
+                description: 'New workpaper description',
+                file_model_attributes: {
+                  file: Rack::Test::UploadedFile.new(
                     TEST_FILE_FULL_PATH, 'text/plain')
                 }
               }
             ],
-            :finding_relations_attributes => [
+            finding_relations_attributes: [
               {
-                :description => 'Duplicated',
-                :related_finding_id => findings(:unanswered_weakness).id
+                description: 'Duplicated',
+                related_finding_id: findings(:unanswered_weakness).id
               }
             ]
           }
@@ -266,7 +266,7 @@ class OportunitiesControllerTest < ActionController::TestCase
 
     assert_difference 'review.finding_review_assignments.count' do
       review.finding_review_assignments.create(
-        :finding_id => findings(:being_implemented_weakness).id
+        finding_id: findings(:being_implemented_weakness).id
       )
     end
 
@@ -275,11 +275,11 @@ class OportunitiesControllerTest < ActionController::TestCase
     repeated_of_original_state = repeated_of.state
 
     assert !repeated_of.repeated?
-    assert oportunity.update(:repeated_of_id => repeated_of.id)
+    assert oportunity.update(repeated_of_id: repeated_of.id)
     assert repeated_of.reload.repeated?
     assert oportunity.reload.repeated_of
 
-    patch :undo_reiteration, :params => { :id => oportunity.to_param }
+    patch :undo_reiteration, params: { id: oportunity.to_param }
     assert_redirected_to edit_oportunity_url(oportunity)
 
     assert !repeated_of.reload.repeated?
@@ -291,11 +291,11 @@ class OportunitiesControllerTest < ActionController::TestCase
     finding = Finding.find(findings(:being_implemented_oportunity).id)
 
     login
-    get :auto_complete_for_finding_relation, :params => {
-      :q => 'O001',
-      :finding_id => finding.id,
-      :review_id => finding.review.id
-    }, :as => :json
+    get :auto_complete_for_finding_relation, params: {
+      q: 'O001',
+      finding_id: finding.id,
+      review_id: finding.review.id
+    }, as: :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -305,11 +305,11 @@ class OportunitiesControllerTest < ActionController::TestCase
 
     finding = Finding.find(findings(:notify_oportunity).id)
 
-    get :auto_complete_for_finding_relation, :params => {
-      :q => 'O001',
-      :finding_id => finding.id,
-      :review_id => finding.review.id
-    }, :as => :json
+    get :auto_complete_for_finding_relation, params: {
+      q: 'O001',
+      finding_id: finding.id,
+      review_id: finding.review.id
+    }, as: :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -317,12 +317,12 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
-    get :auto_complete_for_finding_relation, :params => {
-      :completed => 'incomplete',
-      :q => 'O001, 1 2 3',
-      :finding_id => finding.id,
-      :review_id => finding.review.id
-    }, :as => :json
+    get :auto_complete_for_finding_relation, params: {
+      completed: 'incomplete',
+      q: 'O001, 1 2 3',
+      finding_id: finding.id,
+      review_id: finding.review.id
+    }, as: :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -330,11 +330,11 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_equal 1, findings.size # Solo O01 del informe 1 2 3
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001.*1 2 3/i }
 
-    get :auto_complete_for_finding_relation, :params => {
-      :q => 'x_none',
-      :finding_id => finding.id,
-      :review_id => finding.review.id
-    }, :as => :json
+    get :auto_complete_for_finding_relation, params: {
+      q: 'x_none',
+      finding_id: finding.id,
+      review_id: finding.review.id
+    }, as: :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)
@@ -345,10 +345,10 @@ class OportunitiesControllerTest < ActionController::TestCase
   test 'auto complete for tagging' do
     login
 
-    get :auto_complete_for_tagging, :params => {
-      :q => 'impor',
-      :kind => 'finding'
-    }, :as => :json
+    get :auto_complete_for_tagging, params: {
+      q: 'impor',
+      kind: 'finding'
+    }, as: :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)
@@ -356,10 +356,10 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_equal 1, tags.size
     assert tags.all? { |t| t['label'].match /impor/i }
 
-    get :auto_complete_for_tagging, :params => {
-      :q => 'x_none',
-      :kind => 'finding'
-    }, :as => :json
+    get :auto_complete_for_tagging, params: {
+      q: 'x_none',
+      kind: 'finding'
+    }, as: :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)
@@ -369,10 +369,10 @@ class OportunitiesControllerTest < ActionController::TestCase
 
   test 'auto complete for control objective item' do
     login
-    get :auto_complete_for_control_objective_item, :params => {
-      :q => 'dependencia',
-      :review_id => reviews(:review_with_conclusion).id
-    }, :as => :json
+    get :auto_complete_for_control_objective_item, params: {
+      q: 'dependencia',
+      review_id: reviews(:review_with_conclusion).id
+    }, as: :json
     assert_response :success
 
     cois = ActiveSupport::JSON.decode(@response.body)
@@ -384,10 +384,10 @@ class OportunitiesControllerTest < ActionController::TestCase
       cois.first['id']
     )
 
-    get :auto_complete_for_control_objective_item, :params => {
-      :q => 'x_none',
-      :review_id => reviews(:review_with_conclusion).id
-    }, :as => :json
+    get :auto_complete_for_control_objective_item, params: {
+      q: 'x_none',
+      review_id: reviews(:review_with_conclusion).id
+    }, as: :json
     assert_response :success
 
     cois = ActiveSupport::JSON.decode(@response.body)

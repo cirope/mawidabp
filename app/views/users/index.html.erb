@@ -9,9 +9,9 @@
       <th></th>
       <%= make_filterable_column User.human_attribute_name('user'), nil, 'user' %>
       <%= make_filterable_column User.human_attribute_name('name'), nil, 'name', 'last_name' %>
-      <%= make_filterable_column User.human_attribute_name('function'), { :class => 'hidden-xs'}, 'function' %>
-      <%= make_not_available_column User.human_attribute_name('last_access'), :class => 'hidden-xs' %>
-      <%= make_not_available_column User.human_attribute_name('failed_attempts'), :class => 'hidden-xs' %>
+      <%= make_filterable_column User.human_attribute_name('function'), { class: 'hidden-xs'}, 'function' %>
+      <%= make_not_available_column User.human_attribute_name('last_access'), class: 'hidden-xs' %>
+      <%= make_not_available_column User.human_attribute_name('failed_attempts'), class: 'hidden-xs' %>
       <th colspan="3" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>

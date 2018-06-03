@@ -21,8 +21,8 @@ class BusinessUnitTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'BusinessUnit.count' do
       @business_unit = BusinessUnit.new(
-        :name => 'New name',
-        :business_unit_type => business_unit_types(:cycle)
+        name: 'New name',
+        business_unit_type: business_unit_types(:cycle)
       )
 
       assert @business_unit.save, @business_unit.errors.full_messages.join('; ')
@@ -32,7 +32,7 @@ class BusinessUnitTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una unidad de negocio
   test 'update' do
-    assert @business_unit.update(:name => 'Updated name'),
+    assert @business_unit.update(name: 'Updated name'),
       @business_unit.errors.full_messages.join('; ')
     @business_unit.reload
     assert_equal 'Updated name', @business_unit.name

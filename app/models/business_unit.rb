@@ -13,15 +13,15 @@ class BusinessUnit < ApplicationRecord
   before_destroy :check_if_can_be_destroyed
 
   # Restricciones
-  validates :name, :presence => true
-  validates :name, :length => { :maximum => 255 }, :allow_nil => true,
-    :allow_blank => true
-  validates :name, :uniqueness =>
-    {:case_sensitive => false, :scope => :business_unit_type_id}
+  validates :name, presence: true
+  validates :name, length: { maximum: 255 }, allow_nil: true,
+    allow_blank: true
+  validates :name, uniqueness:
+    {case_sensitive: false, scope: :business_unit_type_id}
 
   # Relaciones
-  belongs_to :business_unit_type, :optional => true
-  has_many :plan_items, :dependent => :destroy
+  belongs_to :business_unit_type, optional: true
+  has_many :plan_items, dependent: :destroy
 
   def to_s
     name
@@ -29,8 +29,8 @@ class BusinessUnit < ApplicationRecord
 
   def as_json(options = nil)
     default_options = {
-      :only => [:id],
-      :methods => [:label, :informal]
+      only: [:id],
+      methods: [:label, :informal]
     }
 
     super(default_options.merge(options || {}))

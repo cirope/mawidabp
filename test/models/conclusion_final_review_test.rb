@@ -38,18 +38,18 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     assert_difference 'ConclusionFinalReview.count' do
       assert_difference 'Finding.count', findings_count do
         @conclusion_review = ConclusionFinalReview.list.new({
-          :review => review,
-          :issue_date => Date.today,
-          :close_date => 2.days.from_now.to_date,
-          :applied_procedures => 'New applied procedures',
-          :conclusion => CONCLUSION_OPTIONS.first,
-          :recipients => 'John Doe',
-          :sectors => 'Area 51',
-          :evolution => EVOLUTION_OPTIONS.second,
-          :evolution_justification => 'Ok',
-          :main_weaknesses_text => 'Some main weakness X',
-          :corrective_actions => 'You should do it this way',
-          :affects_compliance => false
+          review: review,
+          issue_date: Date.today,
+          close_date: 2.days.from_now.to_date,
+          applied_procedures: 'New applied procedures',
+          conclusion: CONCLUSION_OPTIONS.first,
+          recipients: 'John Doe',
+          sectors: 'Area 51',
+          evolution: EVOLUTION_OPTIONS.second,
+          evolution_justification: 'Ok',
+          main_weaknesses_text: 'Some main weakness X',
+          corrective_actions: 'You should do it this way',
+          affects_compliance: false
         }, false)
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
@@ -75,30 +75,30 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
     assert_difference 'Finding.repeated.count' do
       assert review.update!(
-        :finding_review_assignments_attributes => {
-          :new_1 => {:finding_id => repeated_id}
+        finding_review_assignments_attributes: {
+          :new_1 => {finding_id: repeated_id}
         }
       )
       assert findings.detect(&:being_implemented?).update(
-        :repeated_of_id => repeated_id
+        repeated_of_id: repeated_id
       )
     end
 
     assert_difference 'ConclusionFinalReview.count' do
       assert_difference 'Finding.count', findings.size do
         @conclusion_review = ConclusionFinalReview.list.new({
-          :review => review,
-          :issue_date => Date.today,
-          :close_date => 2.days.from_now.to_date,
-          :applied_procedures => 'New applied procedures',
-          :conclusion => CONCLUSION_OPTIONS.first,
-          :recipients => 'John Doe',
-          :sectors => 'Area 51',
-          :evolution => EVOLUTION_OPTIONS.second,
-          :evolution_justification => 'Ok',
-          :main_weaknesses_text => 'Some main weakness X',
-          :corrective_actions => 'You should do it this way',
-          :affects_compliance => false
+          review: review,
+          issue_date: Date.today,
+          close_date: 2.days.from_now.to_date,
+          applied_procedures: 'New applied procedures',
+          conclusion: CONCLUSION_OPTIONS.first,
+          recipients: 'John Doe',
+          sectors: 'Area 51',
+          evolution: EVOLUTION_OPTIONS.second,
+          evolution_justification: 'Ok',
+          main_weaknesses_text: 'Some main weakness X',
+          corrective_actions: 'You should do it this way',
+          affects_compliance: false
         }, false)
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
@@ -117,7 +117,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   # Prueba de actualización de un informe final
   test 'update' do
     assert @conclusion_review.update(
-      :applied_procedures => 'Updated applied procedures'),
+      applied_procedures: 'Updated applied procedures'),
       @conclusion_review.errors.full_messages.join('; ')
     @conclusion_review.reload
     # No se puede modificar ningún dato
@@ -159,18 +159,18 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     assert weakness.update_attribute :state, 7
 
     @conclusion_review = ConclusionFinalReview.list.new({
-          :review => review,
-          :issue_date => Date.today,
-          :close_date => 2.days.from_now.to_date,
-          :applied_procedures => 'New applied procedures',
-          :conclusion => CONCLUSION_OPTIONS.first,
-          :recipients => 'John Doe',
-          :sectors => 'Area 51',
-          :evolution => EVOLUTION_OPTIONS.second,
-          :evolution_justification => 'Ok',
-          :main_weaknesses_text => 'Some main weakness X',
-          :corrective_actions => 'You should do it this way',
-          :affects_compliance => false
+          review: review,
+          issue_date: Date.today,
+          close_date: 2.days.from_now.to_date,
+          applied_procedures: 'New applied procedures',
+          conclusion: CONCLUSION_OPTIONS.first,
+          recipients: 'John Doe',
+          sectors: 'Area 51',
+          evolution: EVOLUTION_OPTIONS.second,
+          evolution_justification: 'Ok',
+          main_weaknesses_text: 'Some main weakness X',
+          corrective_actions: 'You should do it this way',
+          affects_compliance: false
         }, false)
 
     assert @conclusion_review.save
@@ -279,18 +279,18 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
     assert_difference 'ConclusionFinalReview.count' do
       @conclusion_review = ConclusionFinalReview.list.new({
-        :review => review,
-        :issue_date => Date.today,
-        :close_date => 2.days.from_now.to_date,
-        :applied_procedures => 'New applied procedures',
-        :conclusion => CONCLUSION_OPTIONS.first,
-        :recipients => 'John Doe',
-        :sectors => 'Area 51',
-        :evolution => EVOLUTION_OPTIONS.second,
-        :evolution_justification => 'Ok',
-        :main_weaknesses_text => 'Some main weakness X',
-        :corrective_actions => 'You should do it this way',
-        :affects_compliance => false
+        review: review,
+        issue_date: Date.today,
+        close_date: 2.days.from_now.to_date,
+        applied_procedures: 'New applied procedures',
+        conclusion: CONCLUSION_OPTIONS.first,
+        recipients: 'John Doe',
+        sectors: 'Area 51',
+        evolution: EVOLUTION_OPTIONS.second,
+        evolution_justification: 'Ok',
+        main_weaknesses_text: 'Some main weakness X',
+        corrective_actions: 'You should do it this way',
+        affects_compliance: false
       }, false)
 
       assert @conclusion_review.save,

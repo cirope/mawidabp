@@ -7,7 +7,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    id_param = { :params => { :id => business_unit_types(:cycle).to_param } }
+    id_param = { params: { id: business_unit_types(:cycle).to_param } }
     public_actions = []
     private_actions = [
       [:get, :index],
@@ -41,7 +41,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
 
   test 'show business_unit_type' do
     login
-    get :show, :params => { :id => business_unit_types(:cycle).id }
+    get :show, params: { id: business_unit_types(:cycle).id }
     assert_response :success
     assert_not_nil assigns(:business_unit_type)
     assert_template 'business_unit_types/show'
@@ -58,19 +58,19 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
   test 'create business_unit_type' do
     assert_difference ['BusinessUnitType.count', 'BusinessUnit.count'] do
       login
-      post :create, :params => {
-        :business_unit_type => {
-          :name => 'New business unit type',
-          :business_unit_label => 'New business unit label',
-          :project_label => 'New project label',
-          :review_prefix => 'NBU',
-          :recipients => 'John Doe',
-          :sectors => 'Area 51',
-          :external => '0',
-          :require_tag => '0',
-          :business_units_attributes => [
+      post :create, params: {
+        business_unit_type: {
+          name: 'New business unit type',
+          business_unit_label: 'New business unit label',
+          project_label: 'New project label',
+          review_prefix: 'NBU',
+          recipients: 'John Doe',
+          sectors: 'Area 51',
+          external: '0',
+          require_tag: '0',
+          business_units_attributes: [
             {
-              :name => 'New business unit'
+              name: 'New business unit'
             }
           ]
         }
@@ -84,7 +84,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
 
   test 'edit business_unit_type' do
     login
-    get :edit, :params => { :id => business_unit_types(:cycle).id }
+    get :edit, params: { id: business_unit_types(:cycle).id }
     assert_response :success
     assert_not_nil assigns(:business_unit_type)
     assert_template 'business_unit_types/edit'
@@ -93,25 +93,25 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
   test 'update business_unit_type' do
     assert_no_difference ['BusinessUnitType.count', 'BusinessUnit.count'] do
       login
-      patch :update, :params => {
-        :id => business_unit_types(:cycle).id,
-        :business_unit_type => {
-          :name => 'Updated business unit type',
-          :business_unit_label => 'Updated business unit label',
-          :project_label => 'Updated project label',
-          :review_prefix => 'UBU',
-          :recipients => 'John Doe',
-          :sectors => 'Area 51',
-          :external => '0',
-          :require_tag => '0',
-          :business_units_attributes => [
+      patch :update, params: {
+        id: business_unit_types(:cycle).id,
+        business_unit_type: {
+          name: 'Updated business unit type',
+          business_unit_label: 'Updated business unit label',
+          project_label: 'Updated project label',
+          review_prefix: 'UBU',
+          recipients: 'John Doe',
+          sectors: 'Area 51',
+          external: '0',
+          require_tag: '0',
+          business_units_attributes: [
             {
-              :id => business_units(:business_unit_one).id,
-              :name => 'Updated business unit one'
+              id: business_units(:business_unit_one).id,
+              name: 'Updated business unit one'
             },
             {
-              :id => business_units(:business_unit_two).id,
-              :name => 'Updated business unit two'
+              id: business_units(:business_unit_two).id,
+              name: 'Updated business unit two'
             }
           ]
         }
@@ -128,7 +128,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
   test 'destroy business_unit_type' do
     login
     assert_difference 'BusinessUnitType.count', -1 do
-      delete :destroy, :params => { :id => business_unit_types(:bcra).id }
+      delete :destroy, params: { id: business_unit_types(:bcra).id }
     end
 
     assert_redirected_to business_unit_types_url

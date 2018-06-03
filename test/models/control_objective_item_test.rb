@@ -39,22 +39,22 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference ['ControlObjectiveItem.count', 'Control.count'] do
       @control_objective_item = ControlObjectiveItem.list.create(
-        :control_objective_text => 'New text',
-        :relevance => ControlObjectiveItem.relevances_values.last,
-        :design_score => ControlObjectiveItem.qualifications_values.last,
-        :compliance_score => ControlObjectiveItem.qualifications_values.last,
-        :sustantive_score => ControlObjectiveItem.qualifications_values.last,
-        :audit_date => 10.days.from_now.to_date,
-        :auditor_comment => 'New comment',
-        :control_objective_id =>
+        control_objective_text: 'New text',
+        relevance: ControlObjectiveItem.relevances_values.last,
+        design_score: ControlObjectiveItem.qualifications_values.last,
+        compliance_score: ControlObjectiveItem.qualifications_values.last,
+        sustantive_score: ControlObjectiveItem.qualifications_values.last,
+        audit_date: 10.days.from_now.to_date,
+        auditor_comment: 'New comment',
+        control_objective_id:
           control_objectives(:organization_security_4_1).id,
-        :review_id => reviews(:review_with_conclusion).id,
-        :control_attributes => {
-          :control => 'New control',
-          :effects => 'New effects',
-          :design_tests => 'New design tests',
-          :compliance_tests => 'New compliance tests',
-          :sustantive_tests => 'New compliance tests'
+        review_id: reviews(:review_with_conclusion).id,
+        control_attributes: {
+          control: 'New control',
+          effects: 'New effects',
+          design_tests: 'New design tests',
+          compliance_tests: 'New compliance tests',
+          sustantive_tests: 'New compliance tests'
         }
       )
     end
@@ -63,7 +63,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   # Prueba de actualización de un item de objetivo de control
   test 'update' do
     assert @control_objective_item.update(
-      :control_objective_text => 'Updated text'),
+      control_objective_text: 'Updated text'),
       @control_objective_item.errors.full_messages.join('; ')
 
     @control_objective_item.reload
@@ -173,10 +173,10 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_not_equal min_qualification_value,
       @control_objective_item.compliance_score
     assert review.update(
-      :control_objective_items_attributes => {
+      control_objective_items_attributes: {
         @control_objective_item.id => {
-          :id => @control_objective_item.id,
-          :compliance_score => min_qualification_value
+          id: @control_objective_item.id,
+          compliance_score: min_qualification_value
         }
       }
     )
@@ -392,15 +392,15 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_no_difference 'ControlObjectiveItem.count' do
       assert_difference 'WorkPaper.count' do
         uneditable_control_objective_item.update({
-        :work_papers_attributes => {
+        work_papers_attributes: {
             '1_new' => {
-              :name => 'New workpaper name',
-              :code => 'PTOC 20',
-              :number_of_pages => '10',
-              :description => 'New workpaper description',
-              :organization_id => organizations(:cirope).id,
-              :file_model_attributes => {
-                :file => fixture_file_upload(TEST_FILE, 'text/plain')
+              name: 'New workpaper name',
+              code: 'PTOC 20',
+              number_of_pages: '10',
+              description: 'New workpaper description',
+              organization_id: organizations(:cirope).id,
+              file_model_attributes: {
+                file: fixture_file_upload(TEST_FILE, 'text/plain')
               }
             }
           }
@@ -416,15 +416,15 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_no_difference ['ControlObjectiveItem.count', 'WorkPaper.count'] do
       assert_raise(RuntimeError) do
         uneditable_control_objective_item.update({
-        :work_papers_attributes => {
+        work_papers_attributes: {
             '1_new' => {
-              :name => 'New workpaper name',
-              :code => 'New workpaper code',
-              :number_of_pages => '10',
-              :description => 'New post_workpaper description',
-              :organization_id => organizations(:cirope).id,
-              :file_model_attributes => {
-                :file => fixture_file_upload(TEST_FILE, 'text/plain')
+              name: 'New workpaper name',
+              code: 'New workpaper code',
+              number_of_pages: '10',
+              description: 'New post_workpaper description',
+              organization_id: organizations(:cirope).id,
+              file_model_attributes: {
+                file: fixture_file_upload(TEST_FILE, 'text/plain')
               }
             }
           }
