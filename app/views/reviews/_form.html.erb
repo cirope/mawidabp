@@ -61,7 +61,7 @@
         </div>
         <p>
           <%= link_to_unless @review.new_record?, t('review.survey.download'),
-            :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
+            action: :survey_pdf, id: @review, _ts: Time.now.to_i %>
         </p>
         <div id="estimated_amount">
           <%= render partial: 'estimated_amount', locals: { plan_item: @review.plan_item } %>
@@ -168,7 +168,7 @@
             <%= pc.name %> |
             <% unless readonly %>
               <%= link_to_suggested_process_control_findings(pc) %> |
-              <%= link_to_move :class => 'process_control_move' %>
+              <%= link_to_move class: 'process_control_move' %>
             <% end %>
           </h4>
           <%= f.simple_fields_for :control_objective_items, cois.sort do |coi_f| %>
@@ -261,12 +261,12 @@
     <%= link_to_add_fields t('review.add_finding_assignment'), f, :finding_review_assignments %>
     <%= link_to t('review.suggest_findings'), @review.plan_item_id ?
       suggested_findings_review_path(id: @review.plan_item_id) : '#',
-      :remote => true, :id => :link_to_suggested_findings,
-      :class => 'btn btn-default btn-sm' %>
+      remote: true, id: :link_to_suggested_findings,
+      class: 'btn btn-default btn-sm' %>
     <%= link_to t('review.suggest_past_findings'), @review.plan_item_id ?
       past_implemented_audited_findings_review_path(id: @review.plan_item_id) : '#',
-      :remote => true, :id => :link_to_past_implemented_audited_findings,
-      :class => 'btn btn-default btn-sm' %>
+      remote: true, id: :link_to_past_implemented_audited_findings,
+      class: 'btn btn-default btn-sm' %>
   <% end %>
 
   <% if @review.work_papers_finished? %>

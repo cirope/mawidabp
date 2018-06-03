@@ -1,10 +1,10 @@
 <% first_organization = @grouped_findings.keys.first %>
 <% count = @grouped_findings.map(&:second).sum(&:size) %>
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <h2><%= t 'notifier.reassigned_findings.title', :count => count %></h2>
+  <h2><%= t 'notifier.reassigned_findings.title', count: count %></h2>
   <h3 style="text-decoration: underline;">
     <%= t 'notifier.reassigned_findings.the_following_findings_are_now_reassigned',
-      :count => count %>
+      count: count %>
   </h3>
 
   <% @grouped_findings.each do |organization, findings| %>
@@ -14,18 +14,18 @@
         <ul>
           <% unless @new_users.blank? %>
             <li><%= t('notifier.reassigned_findings.new_responsibles',
-                    :count => @new_users.size,
-                    :responsible => @new_users.map(&:full_name_with_function).join('; ')) %></li>
+                    count: @new_users.size,
+                    responsible: @new_users.map(&:full_name_with_function).join('; ')) %></li>
           <% end %>
           <% unless @old_users.blank? %>
             <li><%= t('notifier.reassigned_findings.old_responsibles',
-                    :count => @old_users.size,
-                    :responsible => @old_users.map(&:full_name_with_function).join('; ')) %></li>
+                    count: @old_users.size,
+                    responsible: @old_users.map(&:full_name_with_function).join('; ')) %></li>
           <% end %>
         </ul>
       <% end %>
       <% findings.each do |finding| %>
-        <%= render :partial => 'finding', :locals => {:finding => finding} %><br />
+        <%= render partial: 'finding', locals: {finding: finding} %><br />
       <% end %>
     <% end %>
   <% end %>
@@ -34,8 +34,8 @@
     <p>
       <%= link_to t('notifier.notification.confirm'),
           confirm_notification_url(@notification,
-            :host => ("#{first_organization.prefix}.#{URL_HOST}" if first_organization)) %>
+            host: ("#{first_organization.prefix}.#{URL_HOST}" if first_organization)) %>
     </p>
   <% end %>
-  <%= render :partial => 'footer' %>
+  <%= render partial: 'footer' %>
 </div>

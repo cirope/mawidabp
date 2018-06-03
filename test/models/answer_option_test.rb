@@ -17,15 +17,15 @@ class AnswerOptionTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'AnswerOption.count' do
       AnswerOption.create(
-        :option => 'De acuerdo',
-        :question_id => questions(:question_written).id
+        option: 'De acuerdo',
+        question_id: questions(:question_written).id
       )
     end
   end
 
   # Prueba de actualización de una opción de respuesta
   test 'update' do
-    assert @answer_option.update(:option => 'Updated option'),
+    assert @answer_option.update(option: 'Updated option'),
       @answer_option.errors.full_messages.join('; ')
     @answer_option.reload
     assert_equal 'Updated option', @answer_option.option

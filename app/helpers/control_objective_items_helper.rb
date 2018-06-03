@@ -15,8 +15,8 @@ module ControlObjectiveItemsHelper
       content_tag(
         :abbr,
         "#{control_objective_item.effectiveness}%",
-        :class => 'strike',
-        :title => t('control_objective_item.excluded_from_score')
+        class: 'strike',
+        title: t('control_objective_item.excluded_from_score')
       )
     else
       "#{control_objective_item.effectiveness}%"
@@ -44,7 +44,7 @@ module ControlObjectiveItemsHelper
       control_objective_item.final_weaknesses : control_objective_item.weaknesses
 
     link_to_unless weaknesses.count == 0, weaknesses.count,
-      weaknesses_path(:control_objective => control_objective_item)
+      weaknesses_path(control_objective: control_objective_item)
   end
 
   def auditor_comment_options

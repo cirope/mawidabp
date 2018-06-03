@@ -16,8 +16,8 @@
         <td><%= notification.status_text %></td>
         <td class="hidden-xs"><%= notification.notification_relations.first.try(:model).try(:class).try(:model_name).try(:human) %></td>
         <td class="hidden-xs"><%= notification.user_who_confirm.full_name if notification.user_who_confirm %></td>
-        <td><%= l notification.created_at, :format => :short %></td>
-        <td class="hidden-xs"><%= l notification.confirmation_date, :format => :short if notification.confirmation_date %></td>
+        <td><%= l notification.created_at, format: :short %></td>
+        <td class="hidden-xs"><%= l notification.confirmation_date, format: :short if notification.confirmation_date %></td>
         <td><%= link_to_show notification %></td>
         <td><%= link_to_edit edit_notification_path(notification) %></td>
         <td><%= link_to_confirm notification %></td>

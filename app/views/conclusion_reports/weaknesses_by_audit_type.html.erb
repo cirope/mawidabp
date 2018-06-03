@@ -1,7 +1,7 @@
-<%= render :partial => 'shared/filter_form',
-  :locals => {:action => :weaknesses_by_audit_type, :extra_params => {
-    :controller_name => 'conclusion', :final => true
-  }, :forms => {:date_range => true}} %>
+<%= render partial: 'shared/filter_form',
+  locals: {action: :weaknesses_by_audit_type, extra_params: {
+    controller_name: 'conclusion', final: true
+  }, forms: {date_range: true}} %>
 
 <% @periods.each do |period| %>
   <div class="page-header">
@@ -26,8 +26,8 @@
 
           <div style="margin-bottom: 1em;">
             <h4><%= t('conclusion_committee_report.weaknesses_by_audit_type.weaknesses') %></h4>
-            <%= render :partial => 'weaknesses_synthesis_table', :locals => {
-              :table_data => bu_data[:weaknesses_table_data]} %>
+            <%= render partial: 'weaknesses_synthesis_table', locals: {
+              table_data: bu_data[:weaknesses_table_data]} %>
 
             <% if type == :internal %>
               <h4><%= t('conclusion_committee_report.weaknesses_by_audit_type.oportunities') %></h4>
@@ -68,22 +68,22 @@
 <hr />
 
 <div>
-  <%= link_to t('label.back'), :action => :index %> |
+  <%= link_to t('label.back'), action: :index %> |
   <%= link_to t('label.download'), '#',
     data: { toggle: 'modal', target: "#customize_report" } %>
 </div>
 
-<%= render :partial => 'shared/customize_report_form', :locals => {
-  :options => {
-    :form_name => 'report',
-    :url => request.query_parameters.merge(
-      {:action => :create_weaknesses_by_audit_type, :_ts => Time.now.to_i}
+<%= render partial: 'shared/customize_report_form', locals: {
+  options: {
+    form_name: 'report',
+    url: request.query_parameters.merge(
+      {action: :create_weaknesses_by_audit_type, _ts: Time.now.to_i}
     ),
-    :fields => [
+    fields: [
       {
-        :name => :report_title,
-        :label => t('customize_report_form.title'),
-        :value => t('conclusion_committee_report.weaknesses_by_audit_type.title')
+        name: :report_title,
+        label: t('customize_report_form.title'),
+        value: t('conclusion_committee_report.weaknesses_by_audit_type.title')
       }
     ]
   }

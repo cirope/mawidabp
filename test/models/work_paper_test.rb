@@ -31,15 +31,15 @@ class WorkPaperTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'WorkPaper.count' do
       @work_paper = WorkPaper.list.create(
-        :owner => control_objective_items(:security_policy_3_1_item),
-        :name => 'New name',
-        :code => 'PTOC 20',
-        :number_of_pages => '10',
-        :description => 'New description',
-        :organization => organizations(:cirope),
-        :code_prefix => 'PTOC',
-        :file_model_attributes => {
-          :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
+        owner: control_objective_items(:security_policy_3_1_item),
+        name: 'New name',
+        code: 'PTOC 20',
+        number_of_pages: '10',
+        description: 'New description',
+        organization: organizations(:cirope),
+        code_prefix: 'PTOC',
+        file_model_attributes: {
+          file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
         }
       )
     end
@@ -52,13 +52,13 @@ class WorkPaperTest < ActiveSupport::TestCase
 
     assert_difference ['WorkPaper.count', 'FileModel.count'] do
       @work_paper = WorkPaper.list.create(
-        :owner => control_objective_items(:security_policy_3_1_item),
-        :name => 'New name',
-        :code => 'PTOC 21',
-        :number_of_pages => '10',
-        :description => "New description local://#{file_name}",
-        :organization => organizations(:cirope),
-        :code_prefix => 'PTOC'
+        owner: control_objective_items(:security_policy_3_1_item),
+        name: 'New name',
+        code: 'PTOC 21',
+        number_of_pages: '10',
+        description: "New description local://#{file_name}",
+        organization: organizations(:cirope),
+        code_prefix: 'PTOC'
       )
     end
 
@@ -67,7 +67,7 @@ class WorkPaperTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un papel de trabajo
   test 'update' do
-    assert @work_paper.update(:name => 'New name'),
+    assert @work_paper.update(name: 'New name'),
       @work_paper.errors.full_messages.join('; ')
     @work_paper.reload
     # Todos los atributos son de solo lectura
@@ -128,15 +128,15 @@ class WorkPaperTest < ActiveSupport::TestCase
   test 'zip created' do
     assert_difference 'WorkPaper.count' do
       @work_paper = WorkPaper.create(
-        :owner => control_objective_items(:security_policy_3_1_item),
-        :name => 'New name',
-        :code => 'PTOC 20',
-        :number_of_pages => '10',
-        :description => 'New description',
-        :organization => organizations(:cirope),
-        :code_prefix => 'PTOC',
-        :file_model_attributes => {
-          :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
+        owner: control_objective_items(:security_policy_3_1_item),
+        name: 'New name',
+        code: 'PTOC 20',
+        number_of_pages: '10',
+        description: 'New description',
+        organization: organizations(:cirope),
+        code_prefix: 'PTOC',
+        file_model_attributes: {
+          file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
         }
       )
     end
@@ -146,8 +146,8 @@ class WorkPaperTest < ActiveSupport::TestCase
 
   test 'unzip if necesary' do
     assert @work_paper.update(
-      :file_model_attributes => {
-        :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
+      file_model_attributes: {
+        file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
       }
     )
 
@@ -165,8 +165,8 @@ class WorkPaperTest < ActiveSupport::TestCase
     end
 
     assert @work_paper.update(
-      :file_model_attributes => {
-        :file => Rack::Test::UploadedFile.new(zip_filename)
+      file_model_attributes: {
+        file: Rack::Test::UploadedFile.new(zip_filename)
       }
     )
     assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
@@ -185,15 +185,15 @@ class WorkPaperTest < ActiveSupport::TestCase
     end
 
     assert @work_paper.update(
-      :file_model_attributes => {
-        :file => Rack::Test::UploadedFile.new(zip_filename)
+      file_model_attributes: {
+        file: Rack::Test::UploadedFile.new(zip_filename)
       }
     )
 
     assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
     assert_equal 'application/zip', @work_paper.file_model.file.content_type
-    assert @work_paper.update(:number_of_pages => 1234)
-    assert @work_paper.update(:name => 'Updated test name')
+    assert @work_paper.update(number_of_pages: 1234)
+    assert @work_paper.update(name: 'Updated test name')
     assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
     assert_equal 'application/zip', @work_paper.file_model.file.content_type
     assert_nothing_raised { @work_paper.unzip_if_necesary }
@@ -219,16 +219,16 @@ class WorkPaperTest < ActiveSupport::TestCase
 
     assert_no_difference 'WorkPaper.count' do
       assert !other_work_paper.owner.update(
-        :work_papers_attributes => {
+        work_papers_attributes: {
           :new_1 => {
-            :name => 'New name',
-            :code => other_work_paper.code,
-            :number_of_pages => '10',
-            :description => 'New description',
-            :organization => organizations(:cirope),
-            :code_prefix => 'PTO',
-            :file_model_attributes => {
-              :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
+            name: 'New name',
+            code: other_work_paper.code,
+            number_of_pages: '10',
+            description: 'New description',
+            organization: organizations(:cirope),
+            code_prefix: 'PTO',
+            file_model_attributes: {
+              file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
             }
           }
         }

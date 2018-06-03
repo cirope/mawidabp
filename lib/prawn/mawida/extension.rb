@@ -25,25 +25,25 @@ module Prawn
 
       def create_generic_pdf(layout = :landscape, footer = true, hide_brand: false)
         pdf = Prawn::Document.new(
-          :page_size => PDF_PAPER,
-          :page_layout => layout,
-          :margin => PDF_MARGINS.map(&:mm),
-          :info => {:Creator => I18n.t(:app_name)}
+          page_size:   PDF_PAPER,
+          page_layout: layout,
+          margin:      PDF_MARGINS.map(&:mm),
+          info:        { Creator: I18n.t(:app_name) }
         )
 
-        pdf.font 'Helvetica', :size => PDF_FONT_SIZE
+        pdf.font 'Helvetica', size: PDF_FONT_SIZE
 
         unless hide_brand
           pdf.repeat :all do
             font_size = 6
 
-            pdf.image PDF_LOGO, :at => [pdf.bounds.left, -PDF_LOGO_SIZE.last.pt],
-              :width => PDF_LOGO_SIZE.first, :height => PDF_LOGO_SIZE.last
+            pdf.image PDF_LOGO, at: [pdf.bounds.left, -PDF_LOGO_SIZE.last.pt],
+              width: PDF_LOGO_SIZE.first, height: PDF_LOGO_SIZE.last
 
-            text = I18n.t :'app_copyright', :year => Date.today.year
+            text = I18n.t :'app_copyright', year: Date.today.year
             x_start = pdf.bounds.left + font_size.pt * 1.75 + PDF_LOGO_SIZE.first.pt
-            pdf.draw_text(text, :at => [x_start, -(PDF_LOGO_SIZE.last.pt * 1.75)],
-              :size => font_size)
+            pdf.draw_text(text, at: [x_start, -(PDF_LOGO_SIZE.last.pt * 1.75)],
+              size: font_size)
           end
         end
 
@@ -61,14 +61,14 @@ module Prawn
       def add_title(text, font_size = 18, align = :left, underline = false)
         title_text = underline ? "<u><b>#{text}</b></u>" :  "<b>#{text}</b>"
 
-        self.text "#{title_text}\n", :size => font_size, :align => align,
-          :inline_format => true
+        self.text "#{title_text}\n", size: font_size, align: align,
+          inline_format: true
       end
 
       def add_subtitle(text, margin_top = 0, margin_down = 0, font_size = 12)
         self.move_down margin_top.pt if margin_top != 0
-        self.text "<u><b>#{text.strip}</b></u>", :size => font_size,
-          :inline_format => true
+        self.text "<u><b>#{text.strip}</b></u>", size: font_size,
+          inline_format: true
         self.move_down margin_down.pt if margin_down != 0
       end
 
@@ -78,8 +78,8 @@ module Prawn
           formated_term = underline ? "<u><b>#{term}</b></u>" : "<b>#{term}</b>"
           encoded_text = "#{formated_term}: #{description}".encode 'windows-1252', 'UTF-8', options
 
-          self.text encoded_text, :size => font_size, :align => align,
-            :inline_format => true, :indent_paragraphs => left.pt
+          self.text encoded_text, size: font_size, align: align,
+            inline_format: true, indent_paragraphs: left.pt
         end
       end
 
@@ -89,7 +89,7 @@ module Prawn
 
         self.move_down margin
 
-        self.text string, :indent_paragraphs => left.pt, :inline_format => true
+        self.text string, indent_paragraphs: left.pt, inline_format: true
 
         self.move_down margin
       end
@@ -100,8 +100,8 @@ module Prawn
         if organization_image && File.exists?(organization_image)
           image_geometry = organization.image_model.image_geometry(:pdf_thumb)
           self.image organization_image,
-            :at => [0, self.bounds.top + (font_size.pt * 2) + image_geometry[:height]],
-            :width => image_geometry[:width], :height => image_geometry[:height]
+            at: [0, self.bounds.top + (font_size.pt * 2) + image_geometry[:height]],
+            width: image_geometry[:width], height: image_geometry[:height]
         end
       end
 
@@ -120,12 +120,12 @@ module Prawn
             ]
 
             extra_text = [
-              I18n.t(:'pdf.period_description', :period => period.number),
-              I18n.l(Time.now.to_date, :format => :long)
+              I18n.t(:'pdf.period_description', period: period.number),
+              I18n.l(Time.now.to_date, format: :long)
             ].join("\n")
 
-            self.text_box extra_text, :at => coordinates, :size => font_size,
-              :width => (coordinates[0] - PDF_MARGINS[1].mm), :align => :right
+            self.text_box extra_text, at: coordinates, size: font_size,
+              width: (coordinates[0] - PDF_MARGINS[1].mm), align: :right
           end
 
           self.y = y_pointer
@@ -142,7 +142,7 @@ module Prawn
 
           self.canvas do
             review = identification ? I18n.t(:'pdf.review_identification',
-              :review => identification) : nil
+              review: identification) : nil
             coordinates = [
               self.bounds.width / 2.0,
               self.bounds.top - font_size.pt * 2
@@ -150,8 +150,8 @@ module Prawn
 
             extra_text = [review, project].compact.join("\n")
 
-            self.text_box extra_text, :at => coordinates, :size => font_size,
-              :width => (coordinates[0] - PDF_MARGINS[1].mm), :align => :right
+            self.text_box extra_text, at: coordinates, size: font_size,
+              width: (coordinates[0] - PDF_MARGINS[1].mm), align: :right
           end
 
           self.y = y_pointer
@@ -173,19 +173,19 @@ module Prawn
 
           font_size(((PDF_FONT_SIZE * 0.75).round).pt) do
             table_options = {
-              :header => true,
-              :cell_style => {
-                :padding => (PDF_FONT_SIZE * 0.3).round,
-                :inline_format => true
+              header: true,
+              cell_style: {
+                padding: (PDF_FONT_SIZE * 0.3).round,
+                inline_format: true
               },
-              :width => column_widths.sum,
-              :column_widths => column_widths
+              width: column_widths.sum,
+              column_widths: column_widths
             }
 
             table(column_data.insert(0, column_headers), table_options) do
               row(0).style(
-                :background_color => 'cccccc',
-                :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+                background_color: 'cccccc',
+                padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
               )
             end
           end
@@ -202,16 +202,16 @@ module Prawn
 
           if show_print_date_on? organization
             self.canvas do
-              date_text = I18n.l(date, :format => :long) if date
+              date_text = I18n.l(date, format: :long) if date
               text ||= I18n.t(:'follow_up_committee.print_date',
-                :date => date_text)
+                date: date_text)
               coordinates = [
                 self.bounds.width / 2.0,
                 self.bounds.top - font_size.pt * 2
               ]
 
-              self.text_box text, :at => coordinates, :size => font_size,
-                :width => (coordinates[0] - PDF_MARGINS[1].mm), :align => :right
+              self.text_box text, at: coordinates, size: font_size,
+                width: (coordinates[0] - PDF_MARGINS[1].mm), align: :right
             end
           end
         end
@@ -227,8 +227,8 @@ module Prawn
             fill_color, self.fill_color = self.fill_color, '707070'
 
             self.transparent 0.5, 0.75 do
-              self.text_box text, :align => :center, :valign => :center,
-                :size => font_size
+              self.text_box text, align: :center, valign: :center,
+                size: font_size
             end
 
             self.fill_color fill_color
@@ -239,34 +239,34 @@ module Prawn
       end
 
       def add_page_footer(font_size = 10)
-        self.repeat :all, :dynamic =>  true do
-          string = I18n.t(:'pdf.page_pattern', :page => self.page_number,
-            :total => self.page_count)
+        self.repeat :all, dynamic:  true do
+          string = I18n.t(:'pdf.page_pattern', page: self.page_number,
+            total: self.page_count)
 
-          self.draw_text string, :at =>
+          self.draw_text string, at:
             [self.bounds.right - self.width_of(string), -(font_size.pt * 3)],
-            :size => font_size
+            size: font_size
         end
       end
 
       def add_footnote(text, font_size = 8, style = :normal)
         font_height = self.font.height_at(font_size)
 
-        self.draw_text(text, :size => font_size, :style => style,
-          :at => [self.bounds.left, self.bounds.bottom - font_height * 0.5])
+        self.draw_text(text, size: font_size, style: style,
+          at: [self.bounds.left, self.bounds.bottom - font_height * 0.5])
       end
 
       def default_table_options(column_widths)
         {
-          :cell_style => {
-            :padding => (PDF_FONT_SIZE * 0.3).round,
-            :inline_format => true,
-            :overflow => false
+          cell_style: {
+            padding: (PDF_FONT_SIZE * 0.3).round,
+            inline_format: true,
+            overflow: false
           },
-          :width => column_widths.sum,
-          :row_colors => %w[ffffff ececec],
-          :column_widths => column_widths,
-          :header => true
+          width: column_widths.sum,
+          row_colors: %w[ffffff ececec],
+          column_widths: column_widths,
+          header: true
         }
       end
 

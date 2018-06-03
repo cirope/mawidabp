@@ -23,8 +23,8 @@ class RelatedUserRelationTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'RelatedUserRelation.count' do
       @related_user_relation = RelatedUserRelation.create(
-        :user => users(:plain_manager),
-        :related_user => users(:manager)
+        user: users(:plain_manager),
+        related_user: users(:manager)
       )
     end
   end
@@ -32,7 +32,7 @@ class RelatedUserRelationTest < ActiveSupport::TestCase
   # Prueba de actualización de un perfil
   test 'update' do
     assert @related_user_relation.update(
-      :related_user => users(:manager)
+      related_user: users(:manager)
     ), @related_user_relation.errors.full_messages.join('; ')
 
     @related_user_relation.reload

@@ -16,8 +16,8 @@ class NotificationsControllerTest < ActionController::TestCase
   end
 
   test 'show notification' do
-    get :show, :params => {
-      :id => notifications(:audited_unanswered_weakness_unconfirmed).to_param
+    get :show, params: {
+      id: notifications(:audited_unanswered_weakness_unconfirmed).to_param
     }
     assert_response :success
     assert_not_nil assigns(:notification)
@@ -25,8 +25,8 @@ class NotificationsControllerTest < ActionController::TestCase
   end
 
   test 'edit notification' do
-    get :edit, :params => {
-      :id => notifications(:audited_unanswered_weakness_unconfirmed).to_param
+    get :edit, params: {
+      id: notifications(:audited_unanswered_weakness_unconfirmed).to_param
     }
     assert_response :success
     assert_not_nil assigns(:notification)
@@ -35,10 +35,10 @@ class NotificationsControllerTest < ActionController::TestCase
 
   test 'update notification' do
     assert_no_difference 'User.count' do
-      patch :update, :params => {
-        :id => notifications(:audited_unanswered_weakness_unconfirmed).to_param,
-        :notification => {
-          :notes => 'Updated notes'
+      patch :update, params: {
+        id: notifications(:audited_unanswered_weakness_unconfirmed).to_param,
+        notification: {
+          notes: 'Updated notes'
         }
       }
     end
@@ -53,7 +53,7 @@ class NotificationsControllerTest < ActionController::TestCase
     notification = Notification.find notification_id
 
     assert !notification.notified?
-    get :confirm, :params => { :id => notification.confirmation_hash }
+    get :confirm, params: { id: notification.confirmation_hash }
     assert notification.reload.notified?
     assert notification.confirmed?
   end
@@ -63,9 +63,9 @@ class NotificationsControllerTest < ActionController::TestCase
     notification = Notification.find notification_id
 
     assert !notification.notified?
-    get :confirm, :params => {
-      :id => notification.confirmation_hash,
-      :reject => 1
+    get :confirm, params: {
+      id: notification.confirmation_hash,
+      reject: 1
     }
     assert notification.reload.notified?
     assert notification.rejected?

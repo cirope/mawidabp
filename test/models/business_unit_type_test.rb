@@ -23,22 +23,22 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'BusinessUnitType.count' do
       @business_unit_type = BusinessUnitType.create(
-        :name => 'New business unit type',
-        :business_unit_label => 'New business unit label',
-        :project_label => 'New project label',
-        :review_prefix => 'NBU',
-        :recipients => 'John Doe',
-        :sectors => 'Area 51',
-        :external => false,
-        :require_tag => false,
-        :organization_id => @business_unit_type.organization_id
+        name: 'New business unit type',
+        business_unit_label: 'New business unit label',
+        project_label: 'New project label',
+        review_prefix: 'NBU',
+        recipients: 'John Doe',
+        sectors: 'Area 51',
+        external: false,
+        require_tag: false,
+        organization_id: @business_unit_type.organization_id
       )
     end
   end
 
   # Prueba de actualización de un grupo
   test 'update' do
-    assert @business_unit_type.update(:name => 'Updated name'),
+    assert @business_unit_type.update(name: 'Updated name'),
       @business_unit_type.errors.full_messages.join('; ')
     @business_unit_type.reload
     assert_equal 'Updated name', @business_unit_type.name

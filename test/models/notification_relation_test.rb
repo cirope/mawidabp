@@ -27,8 +27,8 @@ class NotificationRelationTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'NotificationRelation.count' do
       @notification_relation = NotificationRelation.create(
-        :model => Weakness.find(findings(:being_implemented_weakness).id),
-        :notification => Notification.find(notifications(
+        model: Weakness.find(findings(:being_implemented_weakness).id),
+        notification: Notification.find(notifications(
             :bare_unanswered_weakness_unconfirmed).id)
       )
 
@@ -40,7 +40,7 @@ class NotificationRelationTest < ActiveSupport::TestCase
   test 'update' do
     fixture_finding = findings(:unconfirmed_for_notification_weakness)
     assert @notification_relation.update(
-      :model => Weakness.find(fixture_finding.id)),
+      model: Weakness.find(fixture_finding.id)),
       @notification_relation.errors.full_messages.join('; ')
     @notification_relation.reload
     assert_equal fixture_finding.id, @notification_relation.model_id

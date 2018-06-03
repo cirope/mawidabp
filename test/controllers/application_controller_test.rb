@@ -68,7 +68,7 @@ class ApplicationControllerTest < ActionController::TestCase
     #    @controller.send(:headers)
     #
     #    @controller.send(:redirect_to_index)
-    #    assert_redirected_to :controller => :users, :action => :index
+    #    assert_redirected_to controller: :users, action: :index
   end
 
   test 'redirect to login function' do
@@ -129,13 +129,13 @@ class ApplicationControllerTest < ActionController::TestCase
 
     # Fechas inválidas
     assert_equal [from_date, to_date], @controller.send(:make_date_range,
-      {:from_date => 'wrong date', :to_date => 'another wrong date'})
+      {from_date: 'wrong date', to_date: 'another wrong date'})
 
     from_date = Date.parse '2011-10-09'
     to_date = Date.parse '2000-10-09'
 
     generated_range = @controller.send(:make_date_range, {
-        :from_date => '2011-10-09', :to_date => '2000-10-09'
+        from_date: '2011-10-09', to_date: '2000-10-09'
       }).map { |d| d.to_s(:db) }
 
     # Fechas válidas con el orden invertido
@@ -157,8 +157,8 @@ class ApplicationControllerTest < ActionController::TestCase
     filters = {}
     default_conditions = {"#{Organization.quoted_table_name}.organization_id" => 1}
     @controller.send(:params)[:search] = {
-      :query => 'query',
-      :columns => ['name', 'user']
+      query: 'query',
+      columns: ['name', 'user']
     }
 
     generated_search_string = @controller.send(:build_search_conditions, User,

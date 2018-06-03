@@ -77,17 +77,17 @@
 
 <p>
   <strong><%= Weakness.human_attribute_name :origination_date %>:</strong>
-  <%=l @weakness.origination_date, :format => :long if @weakness.origination_date %>
+  <%=l @weakness.origination_date, format: :long if @weakness.origination_date %>
 </p>
 
 <p>
   <strong><%= Weakness.human_attribute_name(:follow_up_date) %>:</strong>
-  <%=l @weakness.follow_up_date, :format => :long if @weakness.follow_up_date %>
+  <%=l @weakness.follow_up_date, format: :long if @weakness.follow_up_date %>
 </p>
 
 <p>
   <strong><%= Weakness.human_attribute_name :solution_date %>:</strong>
-  <%=l @weakness.solution_date, :format => :long if @weakness.solution_date %>
+  <%=l @weakness.solution_date, format: :long if @weakness.solution_date %>
 </p>
 
 <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
@@ -112,7 +112,7 @@
   </p>
 <% end %>
 
-<h3><%= t('finding.responsibles', :count => @weakness.users.size) %></h3>
+<h3><%= t('finding.responsibles', count: @weakness.users.size) %></h3>
 <%= finding_responsibles_list(@weakness) %>
 
 <% unless (repeated_ancestors = @weakness.repeated_ancestors).blank? %>
@@ -241,11 +241,11 @@
               link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
           </td>
           <td>
-            <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
+            <%= l(finding_answer.created_at, format: :long) if finding_answer.created_at %>
             <% if finding_answer.commitment_date %>
               <br />
               <br /><strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
-              <br /><%= l(finding_answer.commitment_date, :format => :long) %>
+              <br /><%= l(finding_answer.commitment_date, format: :long) %>
             <% end %>
           </td>
         </tr>

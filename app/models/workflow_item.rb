@@ -13,12 +13,12 @@ class WorkflowItem < ApplicationRecord
 
   # Restricciones
   validate :check_if_is_frozen
-  validates :task, :order_number, :presence => true
-  validates :task, :pdf_encoding => true
-  validates :order_number, :workflow_id, :numericality =>
-    {:only_integer => true}, :allow_nil => true
+  validates :task, :order_number, presence: true
+  validates :task, pdf_encoding: true
+  validates :order_number, :workflow_id, numericality:
+    {only_integer: true}, allow_nil: true
   validates_date :start
-  validates_date :end, :on_or_after => :start
+  validates_date :end, on_or_after: :start
   validates_each :start, :end do |record, attr, value|
     parent = record.workflow
     period = parent.period if parent
@@ -65,10 +65,10 @@ class WorkflowItem < ApplicationRecord
 
   # Relaciones
   belongs_to :workflow
-  has_many :resource_utilizations, :as => :resource_consumer,
-    :dependent => :destroy
+  has_many :resource_utilizations, as: :resource_consumer,
+    dependent: :destroy
 
-  accepts_nested_attributes_for :resource_utilizations, :allow_destroy => true
+  accepts_nested_attributes_for :resource_utilizations, allow_destroy: true
 
   def <=>(other)
     if other.kind_of?(WorkflowItem)
@@ -129,7 +129,7 @@ class WorkflowItem < ApplicationRecord
     pdf.move_down PDF_FONT_SIZE
 
     pdf.text "<b>#{self.order_number}</b>) #{self.task}",
-      :font_size => PDF_FONT_SIZE, :inline_format => true
+      font_size: PDF_FONT_SIZE, inline_format: true
 
     column_order = [['resource_id', 80], ['units', 20]]
     column_data, column_headers, column_widths = [], [], []
@@ -158,8 +158,8 @@ class WorkflowItem < ApplicationRecord
 
         pdf.table(column_data.insert(0, column_headers), table_options) do
           row(0).style(
-            :background_color => 'cccccc',
-            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            background_color: 'cccccc',
+            padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
           )
         end
       end

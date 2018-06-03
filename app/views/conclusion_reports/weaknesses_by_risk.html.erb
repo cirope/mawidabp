@@ -1,14 +1,14 @@
-<%= render :partial => 'shared/filter_form',
-  :locals => {
-    :action => :weaknesses_by_risk,
-    :extra_params => {
-      :controller_name => 'conclusion',
-      :final => true
+<%= render partial: 'shared/filter_form',
+  locals: {
+    action: :weaknesses_by_risk,
+    extra_params: {
+      controller_name: 'conclusion',
+      final: true
     },
-    :forms => {
-      :date_range => true,
-      :repeated => true,
-      :compliance => SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+    forms: {
+      date_range: true,
+      repeated: true,
+      compliance: SHOW_WEAKNESS_EXTRA_ATTRIBUTES
     }
   } %>
 
@@ -19,15 +19,15 @@
 
   <h3 class="text-center">
     <%= t('conclusion_committee_report.weaknesses_by_risk.period_summary',
-      :period => period.inspect) %>
+      period: period.inspect) %>
   </h3>
-  <%= render :partial => 'weaknesses_synthesis_table', :locals => {
-    :table_data => @tables_data[period]['total']} %>
+  <%= render partial: 'weaknesses_synthesis_table', locals: {
+    table_data: @tables_data[period]['total']} %>
 
   <% if @repeated_counts[period]['total'] > 0 %>
     <p>
       <%= t('follow_up_committee_report.repeated_count',
-        :count => @repeated_counts[period]['total']) %>
+        count: @repeated_counts[period]['total']) %>
     </p>
   <% end %>
 
@@ -40,8 +40,8 @@
       <% audit_type.last.each do |audit_types| %>
         <% key = "#{audit_type_symbol}_#{audit_types.last}" %>
         <h4><%= audit_types.first %></h4>
-        <%= render :partial => 'weaknesses_synthesis_table', :locals => {
-            :table_data => @tables_data[period][key]} %>
+        <%= render partial: 'weaknesses_synthesis_table', locals: {
+            table_data: @tables_data[period][key]} %>
       <% end %>
     <% end %>
   <% end %>
@@ -50,22 +50,22 @@
 <hr />
 
 <div>
-  <%= link_to t('label.back'), :action => :index %> |
+  <%= link_to t('label.back'), action: :index %> |
   <%= link_to t('label.download'), '#',
     data: { toggle: 'modal', target: "#customize_report" } %>
 </div>
 
-<%= render :partial => 'shared/customize_report_form', :locals => {
-  :options => {
-    :form_name => 'report',
-    :url => request.query_parameters.merge(
-      {:action => :create_weaknesses_by_risk, :_ts => Time.now.to_i}
+<%= render partial: 'shared/customize_report_form', locals: {
+  options: {
+    form_name: 'report',
+    url: request.query_parameters.merge(
+      {action: :create_weaknesses_by_risk, _ts: Time.now.to_i}
     ),
-    :fields => [
+    fields: [
       {
-        :name => :report_title,
-        :label => t('customize_report_form.title'),
-        :value => t('conclusion_committee_report.weaknesses_by_risk.title')
+        name: :report_title,
+        label: t('customize_report_form.title'),
+        value: t('conclusion_committee_report.weaknesses_by_risk.title')
       }
     ]
   }

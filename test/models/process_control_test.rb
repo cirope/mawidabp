@@ -23,15 +23,15 @@ class ProcessControlTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'ProcessControl.count' do
       @process_control = ProcessControl.create(
-        :name => 'New name',
-        :order => 1
+        name: 'New name',
+        order: 1
       )
     end
   end
 
   # Prueba de actualización de un proceso de control
   test 'update' do
-    assert @process_control.update(:name => 'Updated name'),
+    assert @process_control.update(name: 'Updated name'),
       @process_control.errors.full_messages.join('; ')
     @process_control.reload
     assert_equal 'Updated name', @process_control.name

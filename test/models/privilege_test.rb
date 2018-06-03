@@ -29,12 +29,12 @@ class PrivilegeTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'Privilege.count' do
       @privilege = Privilege.new(
-        :module => roles(:empty_admin_role).allowed_modules.first.to_s,
-        :approval => true,
-        :erase => true,
-        :modify => true,
-        :read => true,
-        :role_id => roles(:empty_admin_role).id
+        module: roles(:empty_admin_role).allowed_modules.first.to_s,
+        approval: true,
+        erase: true,
+        modify: true,
+        read: true,
+        role_id: roles(:empty_admin_role).id
       )
 
       @privilege.role.inject_auth_privileges(Hash.new(Hash.new(true)))
@@ -46,7 +46,7 @@ class PrivilegeTest < ActiveSupport::TestCase
   # Prueba de actualización de un privilegio
   test 'update' do
     assert @privilege.erase
-    assert @privilege.update(:erase => false),
+    assert @privilege.update(erase: false),
       @privilege.errors.full_messages.join('; ')
     @privilege.reload
     assert_equal false, @privilege.erase

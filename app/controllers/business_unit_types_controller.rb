@@ -61,7 +61,7 @@ class BusinessUnitTypesController < ApplicationController
         flash.notice = t 'business_unit_type.correctly_created'
         format.html { redirect_to(business_unit_types_url) }
       else
-        format.html { render :action => :new }
+        format.html { render action: :new }
       end
     end
   end
@@ -79,13 +79,13 @@ class BusinessUnitTypesController < ApplicationController
         flash.notice = t 'business_unit_type.correctly_updated'
         format.html { redirect_to(business_unit_types_url) }
       else
-        format.html { render :action => :edit }
+        format.html { render action: :edit }
       end
     end
 
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'business_unit_type.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to action: :edit
   end
 
   # Elimina el tipo de unidad de negocio

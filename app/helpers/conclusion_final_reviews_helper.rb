@@ -35,7 +35,7 @@ module ConclusionFinalReviewsHelper
       header << content_tag(:th, (score[0] != review_score ?
             raw("<span style=\"font-weight: normal;\">#{column_text}</span>"):
             raw("<strong>#{column_text.upcase} (#{review.score}%)</strong>")),
-        :style => "width: #{width}%;")
+        style: "width: #{width}%;")
 
       footer << content_tag(:td, "#{max_percentage}% - #{min_percentage}%")
     end
@@ -131,7 +131,7 @@ module ConclusionFinalReviewsHelper
 
     if finding.origination_date.present?
       body_rows << "<strong>#{finding.class.human_attribute_name(:origination_date)}:</strong> " +
-        "#{I18n.l(finding.origination_date, :format => :long)}"
+        "#{I18n.l(finding.origination_date, format: :long)}"
     end
 
     if finding.answer.present?
@@ -142,12 +142,12 @@ module ConclusionFinalReviewsHelper
     if finding.follow_up_date.present?
       body_rows << "<strong>#{finding.class.human_attribute_name(
         :follow_up_date)}:</strong> #{I18n.l(finding.follow_up_date,
-        :format => :long)}"
+        format: :long)}"
     end
 
     if finding.solution_date.present?
       body_rows << "<strong>#{finding.class.human_attribute_name(:solution_date)}:"+
-        "</strong> #{I18n.l(finding.solution_date, :format => :long)}"
+        "</strong> #{I18n.l(finding.solution_date, format: :long)}"
     end
 
     audited_users = finding.users.select(&:can_act_as_audited?)
@@ -220,8 +220,8 @@ module ConclusionFinalReviewsHelper
   end
 
   def show_conclusion_review_issue_date conclusion_final_review
-    issue_date = l(conclusion_final_review.issue_date, :format => :short) if conclusion_final_review.issue_date
-    close_date = l(conclusion_final_review.close_date, :format => :short) if conclusion_final_review.close_date
+    issue_date = l(conclusion_final_review.issue_date, format: :short) if conclusion_final_review.issue_date
+    close_date = l(conclusion_final_review.close_date, format: :short) if conclusion_final_review.close_date
     title      = "#{ConclusionDraftReview.human_attribute_name(:close_date)}: #{close_date}" if close_date
 
     content_tag :abbr, issue_date, title: title if issue_date

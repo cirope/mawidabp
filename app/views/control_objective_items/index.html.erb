@@ -1,18 +1,18 @@
-<%= render :partial => 'shared/search', :locals => {
-  :options => {},
-  :columns => @query.blank? ? ControlObjectiveItem::COLUMNS_FOR_SEARCH.keys : @columns
+<%= render partial: 'shared/search', locals: {
+  options: {},
+  columns: @query.blank? ? ControlObjectiveItem::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
 <table class="table table-condensed table-striped table-hover">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column Review.model_name.human, nil, 'review' %>
-      <%= make_filterable_column ProcessControl.model_name.human, { :class => 'hidden-xs' }, 'process_control' %>
+      <%= make_filterable_column ProcessControl.model_name.human, { class: 'hidden-xs' }, 'process_control' %>
       <%= make_filterable_column ControlObjective.model_name.human, nil, 'control_objective_text' %>
-      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:finished), :class => 'hidden-xs' %>
-      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:relevance), :class => 'hidden-xs' %>
-      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:effectiveness), :class => 'hidden-xs' %>
-      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:weaknesses), :class => 'hidden-xs' %>
-      <%= make_not_available_column WorkPaper.model_name.human(count: 0), :class => 'hidden-xs' %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:finished), class: 'hidden-xs' %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:relevance), class: 'hidden-xs' %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:effectiveness), class: 'hidden-xs' %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:weaknesses), class: 'hidden-xs' %>
+      <%= make_not_available_column WorkPaper.model_name.human(count: 0), class: 'hidden-xs' %>
       <th colspan="3" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>

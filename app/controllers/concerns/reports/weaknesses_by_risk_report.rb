@@ -95,9 +95,9 @@ module Reports::WeaknessesByRiskReport
               "<b>#{Weakness.human_attribute_name(:title)}</b>: #{w.title}",
               "<b>#{Weakness.human_attribute_name(:state)}</b>: #{w.state_text}",
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
-              ("<b>#{Weakness.human_attribute_name(:follow_up_date)}</b>: #{l(w.follow_up_date, :format => :long)}" if w.follow_up_date),
-              ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l(w.origination_date, :format => :long)}" if w.origination_date),
-              "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
+              ("<b>#{Weakness.human_attribute_name(:follow_up_date)}</b>: #{l(w.follow_up_date, format: :long)}" if w.follow_up_date),
+              ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l(w.origination_date, format: :long)}" if w.origination_date),
+              "<b>#{I18n.t('finding.audited', count: audited.size)}</b>: #{audited.join('; ')}",
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}",
               "<b>#{Weakness.human_attribute_name(:audit_comments)}</b>: #{w.audit_comments}",
               "<b>#{Weakness.human_attribute_name(:answer)}</b>: #{w.answer}"
@@ -116,10 +116,10 @@ module Reports::WeaknessesByRiskReport
         if column_data.present?
           @notorious_reviews[period] ||= []
           @notorious_reviews[period] << {
-            :name => name,
-            :external => but.external,
-            :columns => columns,
-            :column_data => column_data
+            name:        name,
+            external:    but.external,
+            columns:     columns,
+            column_data: column_data
           }
         end
       end
@@ -169,10 +169,10 @@ module Reports::WeaknessesByRiskReport
                 column_headers.each_with_index do |header, i|
                   if col_data[i].kind_of? Array
                     col_data[i].each do |data|
-                      pdf.text data, :inline_format => true
+                      pdf.text data, inline_format: true
                     end
                   else
-                    pdf.text "<b>#{header.upcase}</b>: #{col_data[i]}", :inline_format => true
+                    pdf.text "<b>#{header.upcase}</b>: #{col_data[i]}", inline_format: true
                   end
                 end
               end
@@ -180,7 +180,7 @@ module Reports::WeaknessesByRiskReport
           else
             pdf.text(
               t("#{@controller}_committee_report.weaknesses_by_risk_report.without_audits_in_the_period"),
-              :style => :italic
+              style: :italic
             )
           end
         end

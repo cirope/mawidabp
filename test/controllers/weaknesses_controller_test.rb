@@ -101,10 +101,10 @@ class WeaknessesControllerTest < ActionController::TestCase
     weakness = findings :unanswered_weakness
 
     login
-    get :show, :params => {
-      :completed => 'incomplete',
-      :id => weakness.id
-    }, :as => :json
+    get :show, params: {
+      completed: 'incomplete',
+      id: weakness.id
+    }, as: :json
     assert_response :success
     assert_not_nil assigns(:weakness)
 
@@ -409,9 +409,9 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
 
     get :auto_complete_for_tagging, params: {
-      :q => 'impor',
-      :kind => 'finding'
-    }, :as => :json
+      q: 'impor',
+      kind: 'finding'
+    }, as: :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)
@@ -420,9 +420,9 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert tags.all? { |t| t['label'].match /impor/i }
 
     get :auto_complete_for_tagging, params: {
-      :q => 'x_none',
-      :kind => 'finding'
-    }, :as => :json
+      q: 'x_none',
+      kind: 'finding'
+    }, as: :json
     assert_response :success
 
     tags = ActiveSupport::JSON.decode(@response.body)

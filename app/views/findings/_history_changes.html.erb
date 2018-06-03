@@ -7,7 +7,7 @@
           t('message.automatic_by_the_system') %>
         <li>
           <abbr title="<%= title %>"><%= historic_finding.state_text %></abbr>
-          (<%= l(historic_finding.updated_at, :format => :long) %>)
+          (<%= l(historic_finding.updated_at, format: :long) %>)
         </li>
       <% end %>
     </ul>
@@ -25,7 +25,7 @@
         <tbody>
           <% finding.comments.reject(&:new_record?).each do |comment| %>
             <tr>
-              <td><%= l comment.created_at, :format => :minimal %></td>
+              <td><%= l comment.created_at, format: :minimal %></td>
               <td><%= comment.user.try(:full_name) %></td>
               <td><%= comment.comment %></td>
             </tr>

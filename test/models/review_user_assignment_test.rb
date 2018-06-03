@@ -27,9 +27,9 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     assert_difference 'ReviewUserAssignment.count' do
       @review_user_assignment =
         ReviewUserAssignment.create(
-        :assignment_type =>  ReviewUserAssignment::TYPES[:auditor],
-        :user => users(:expired),
-        :review_id => reviews(:review_with_conclusion).id
+        assignment_type:  ReviewUserAssignment::TYPES[:auditor],
+        user: users(:expired),
+        review_id: reviews(:review_with_conclusion).id
       )
     end
   end

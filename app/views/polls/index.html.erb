@@ -1,6 +1,6 @@
-<%= render :partial => 'shared/search', :locals => {
-  :options => {},
-  :columns => @query.blank? ? Poll::COLUMNS_FOR_SEARCH.keys : @columns
+<%= render partial: 'shared/search', locals: {
+  options: {},
+  columns: @query.blank? ? Poll::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
 
 <table class="table table-condensed table-striped table-hover">

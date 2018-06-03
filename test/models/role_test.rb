@@ -23,8 +23,8 @@ class RoleTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'Role.count' do
       @role = Role.list.new(
-        :name => 'New name',
-        :role_type => Role::TYPES[:admin]
+        name: 'New name',
+        role_type: Role::TYPES[:admin]
       )
 
       @role.inject_auth_privileges(Hash.new(Hash.new(true)))
@@ -35,7 +35,7 @@ class RoleTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un perfil
   test 'update' do
-    assert @role.update(:name => 'Updated name'),
+    assert @role.update(name: 'Updated name'),
       @role.errors.full_messages.join('; ')
     @role.reload
     assert_equal 'Updated name', @role.name
@@ -131,8 +131,8 @@ class RoleTest < ActiveSupport::TestCase
     assert @role.privileges.size > 2
     # Para asegurar un negativo
     assert Privilege.find(privileges(:admin_administration_settings).id).
-      update(:read => false, :modify => false, :erase => false,
-      :approval => false)
+      update(read: false, modify: false, erase: false,
+      approval: false)
 
     @role.privileges.reload.each do |p|
       if p.read? || p.modify? || p.erase? || p.approval?
@@ -155,13 +155,13 @@ class RoleTest < ActiveSupport::TestCase
     updated_at = @role.updated_at
 
     assert @role.update(
-      :privileges_attributes => {
+      privileges_attributes: {
         privileges(:admin_administration_settings).id => {
-          :id => privileges(:admin_administration_settings).id,
-          :approval => false,
-          :erase => false,
-          :modify => false,
-          :read => false,
+          id: privileges(:admin_administration_settings).id,
+          approval: false,
+          erase: false,
+          modify: false,
+          read: false,
         }
       }
     )

@@ -10,15 +10,15 @@ class PollTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference ['Poll.count', 'Answer.count'] do
       Poll.list.create(
-        :comments => 'New comments',
-        :answered => false,
-        :pollable_id => ActiveRecord::FixtureSet.identify(:conclusion_current_final_review),
-        :pollable_type => 'ConclusionReview',
-        :questionnaire_id => questionnaires(:questionnaire_one).id,
-        :user_id => users(:poll).id,
-        :answers_attributes => {
+        comments: 'New comments',
+        answered: false,
+        pollable_id: ActiveRecord::FixtureSet.identify(:conclusion_current_final_review),
+        pollable_type: 'ConclusionReview',
+        questionnaire_id: questionnaires(:questionnaire_one).id,
+        user_id: users(:poll).id,
+        answers_attributes: {
           '1' => {
-            :answer => 'Answer'
+            answer: 'Answer'
           }
         }
        )
@@ -27,7 +27,7 @@ class PollTest < ActiveSupport::TestCase
 
   test 'update' do
     assert_equal @poll.answered, false
-    assert @poll.update(:comments => 'Updated comments'),
+    assert @poll.update(comments: 'Updated comments'),
       @poll.errors.full_messages.join('; ')
     @poll.reload
     assert_equal 'Updated comments', @poll.comments

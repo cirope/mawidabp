@@ -19,8 +19,8 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
     assert_difference 'FindingUserAssignment.count' do
       @finding_user_assignment =
         FindingUserAssignment.create(
-          :user => users(:expired),
-          :finding_id => findings(:being_implemented_weakness).id
+          user: users(:expired),
+          finding_id: findings(:being_implemented_weakness).id
         )
     end
   end
@@ -29,13 +29,13 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
   test 'update' do
     assert_enqueued_emails 1 do
       assert @finding_user_assignment.update!(
-        :user_id => users(:supervisor).id
+        user_id: users(:supervisor).id
       )
     end
 
     assert_no_enqueued_emails do
       assert @finding_user_assignment.update!(
-        :responsible_auditor => !@finding_user_assignment.responsible_auditor
+        responsible_auditor: !@finding_user_assignment.responsible_auditor
       )
     end
   end
@@ -72,7 +72,7 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
     # Para que ARel cargue la relación
     finding.finding_user_assignments.map(&:user_id)
     finding_user_assignment = finding.finding_user_assignments.build(
-      :user_id => @finding_user_assignment.user_id
+      user_id: @finding_user_assignment.user_id
     )
     finding_user_assignment.raw_finding = finding
 

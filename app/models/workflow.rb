@@ -18,18 +18,18 @@ class Workflow < ApplicationRecord
   scope :list, -> { where(organization_id: Organization.current_id) }
 
   # Restricciones
-  validates :period_id, :review_id, :organization_id, :presence => true
-  validates :review_id, :uniqueness => true, :allow_nil => true,
-    :allow_blank => true
-  validates :period_id, :review_id, :numericality => {:only_integer => true},
-    :allow_nil => true, :allow_blank => true
+  validates :period_id, :review_id, :organization_id, presence: true
+  validates :review_id, uniqueness: true, allow_nil: true,
+    allow_blank: true
+  validates :period_id, :review_id, numericality: {only_integer: true},
+    allow_nil: true, allow_blank: true
   validate :check_if_is_frozen
 
   # Relaciones
   belongs_to :period
   belongs_to :review
   belongs_to :organization
-  has_one :plan_item, :through => :review
+  has_one :plan_item, through: :review
 
   has_many :workflow_items, -> {
     order(
@@ -37,10 +37,10 @@ class Workflow < ApplicationRecord
       "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('start')} ASC",
       "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('end')} ASC"
     )
-  }, :dependent => :destroy
-  has_many :resource_utilizations, :through => :workflow_items
+  }, dependent: :destroy
+  has_many :resource_utilizations, through: :workflow_items
 
-  accepts_nested_attributes_for :workflow_items, :allow_destroy => true
+  accepts_nested_attributes_for :workflow_items, allow_destroy: true
 
   def initialize(attributes = nil)
     super(attributes)
@@ -109,9 +109,9 @@ class Workflow < ApplicationRecord
       self.review.to_s, 0, false
 
     pdf.add_description_item(I18n.t('workflow.period.title',
-        :name => self.period.name), I18n.t('workflow.period.range',
-        :from_date => I18n.l(self.period.start, :format => :long),
-        :to_date => I18n.l(self.period.end, :format => :long)), 0, false)
+        name: self.period.name), I18n.t('workflow.period.range',
+        from_date: I18n.l(self.period.start, format: :long),
+        to_date: I18n.l(self.period.end, format: :long)), 0, false)
 
     column_order.each do |col_name|
       column_headers << WorkflowItem.human_attribute_name(col_name.first)
@@ -125,8 +125,8 @@ class Workflow < ApplicationRecord
       column_data[workflow_item.order_number] = [
         workflow_item.order_number,
         workflow_item.task,
-        I18n.l(workflow_item.start, :format => :default),
-        I18n.l(workflow_item.end, :format => :default),
+        I18n.l(workflow_item.start, format: :default),
+        I18n.l(workflow_item.end, format: :default),
         resource_text
       ]
     end
@@ -142,8 +142,8 @@ class Workflow < ApplicationRecord
 
         pdf.table(column_data, table_options) do
           row(0).style(
-            :background_color => 'cccccc',
-            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            background_color: 'cccccc',
+            padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
           )
         end
       end
@@ -174,7 +174,7 @@ class Workflow < ApplicationRecord
       pdf.move_down((PDF_FONT_SIZE * 0.5).round)
 
       pdf.text I18n.t('workflow.pdf.planned_resources_utilization_explanation'),
-        :font_size => (PDF_FONT_SIZE * 0.75).round
+        font_size: (PDF_FONT_SIZE * 0.75).round
     end
 
     pdf.custom_save_as(self.pdf_name, Workflow.table_name, self.id)
@@ -190,7 +190,7 @@ class Workflow < ApplicationRecord
 
   def pdf_name
     I18n.t 'workflow.pdf.pdf_name',
-      :review => self.review.sanitized_identification
+      review: self.review.sanitized_identification
   end
 
   def human_units

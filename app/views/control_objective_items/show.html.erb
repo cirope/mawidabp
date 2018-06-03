@@ -62,7 +62,7 @@
 
 <p>
   <strong><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</strong>
-  <%= l(@control_objective_item.audit_date, :format => :long) if @control_objective_item.audit_date %>
+  <%= l(@control_objective_item.audit_date, format: :long) if @control_objective_item.audit_date %>
 </p>
 
 <div>
@@ -82,11 +82,11 @@
   <%= t @control_objective_item.finished? ? 'label.yes' : 'label.no' %>
 </p>
 
-<%= render :partial => 'weaknesses_summary', :locals => {:readonly => readonly, :frozen => frozen} %>
-<%= render :partial => 'oportunities_summary', :locals => {:readonly => readonly, :frozen => frozen} %>
+<%= render partial: 'weaknesses_summary', locals: {readonly: readonly, frozen: frozen} %>
+<%= render partial: 'oportunities_summary', locals: {readonly: readonly, frozen: frozen} %>
 
 <% unless @control_objective_item.business_unit_scores.empty? %>
-  <h3><%= BusinessUnitScore.model_name.human :count => @control_objective_item.business_unit_scores.size %></h3>
+  <h3><%= BusinessUnitScore.model_name.human count: @control_objective_item.business_unit_scores.size %></h3>
   <table class="table table-condensed table-striped table-hover">
     <caption></caption>
     <thead>
@@ -111,7 +111,7 @@
 <% end %>
 
 <% unless @control_objective_item.work_papers.empty? %>
-  <h3><%= WorkPaper.model_name.human :count => @control_objective_item.work_papers.size %></h3>
+  <h3><%= WorkPaper.model_name.human count: @control_objective_item.work_papers.size %></h3>
   <table class="table table-condensed table-striped table-hover">
     <caption></caption>
     <thead>

@@ -12,7 +12,7 @@ module Reports::CostAnalysis
         calculate_total_cost_analysis_data(review, period)
 
         if params[:include_details].present?
-          @data = { :review => review, :data => [] }
+          @data = { review: review, data: [] }
 
           set_estimated_data(review)
           set_real_data
@@ -119,7 +119,7 @@ module Reports::CostAnalysis
       else
         pdf.text(
           t('conclusion_report.cost_analysis.without_audits_in_the_period'),
-            :font_size => PDF_FONT_SIZE)
+            font_size: PDF_FONT_SIZE)
       end
 
       unless @detailed_data[period].blank?
@@ -134,13 +134,13 @@ module Reports::CostAnalysis
   def save_and_redirect_to_cost_analysis_pdf(pdf)
     pdf.custom_save_as(
       t('conclusion_report.cost_analysis.pdf_name',
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'cost_analysis', 0)
+        from_date: @from_date.to_formatted_s(:db),
+        to_date: @to_date.to_formatted_s(:db)), 'cost_analysis', 0)
 
     @report_path = Prawn::Document.relative_path(
       t('conclusion_report.cost_analysis.pdf_name',
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'cost_analysis', 0)
+        from_date: @from_date.to_formatted_s(:db),
+        to_date: @to_date.to_formatted_s(:db)), 'cost_analysis', 0)
 
     respond_to do |format|
       format.html { redirect_to @report_path }
@@ -164,8 +164,8 @@ module Reports::CostAnalysis
 
       pdf.table(@total_cost_data[period].insert(0, @column_headers), table_options) do
         row(0).style(
-          :background_color => 'cccccc',
-          :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          background_color: 'cccccc',
+          padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
         )
       end
     end
@@ -204,15 +204,15 @@ module Reports::CostAnalysis
   def add_detailed_table(pdf, period)
     @detailed_data[period].each do |detailed_data|
       pdf.text "\n<b>#{detailed_data[:review]}</b>\n\n",
-        :font_size => PDF_FONT_SIZE, :inline_format => true
+        font_size: PDF_FONT_SIZE, inline_format: true
 
       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
         table_options = pdf.default_table_options(@column_widths)
 
         pdf.table(detailed_data[:data].insert(0, @column_headers), table_options) do
           row(0).style(
-            :background_color => 'cccccc',
-            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            background_color: 'cccccc',
+            padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
           )
         end
       end

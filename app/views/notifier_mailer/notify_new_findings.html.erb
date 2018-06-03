@@ -7,17 +7,17 @@
     <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
     <h3 style="text-decoration: underline;">
       <%= t('notifier.notify_new_findings.created_title',
-        :count => findings.size) %>
+        count: findings.size) %>
     </h3>
 
     <% findings.each do |finding| %>
-      <%= render :partial => 'finding', :locals => {:finding => finding} %><br />
+      <%= render partial: 'finding', locals: {finding: finding} %><br />
     <% end %>
   <% end %>
 
   <%= link_to t('notifier.notification.confirm'),
         confirm_notification_url(@notification,
-          :host => ("#{first_organization.prefix}.#{URL_HOST}" if first_organization)) %>
+          host: ("#{first_organization.prefix}.#{URL_HOST}" if first_organization)) %>
 
-  <%= render :partial => 'footer' %>
+  <%= render partial: 'footer' %>
 </div>

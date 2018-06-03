@@ -73,23 +73,23 @@ module Reports::QAIndicators
 
     @ancient_medium_risk_label =
       "#{t('follow_up_committee_report.qa_indicators.indicators.ancient_medium_risk_weaknesses')}:
-       #{t('label.day', :count => ancient_medium_risk_weaknesses)}" if ancient_medium_risk_weaknesses
+       #{t('label.day', count: ancient_medium_risk_weaknesses)}" if ancient_medium_risk_weaknesses
 
     @ancient_highest_risk_label =
       "#{t('follow_up_committee_report.qa_indicators.indicators.ancient_highest_risk_weaknesses')}:
-       #{t('label.day', :count => ancient_highest_risk_weaknesses)}" if ancient_highest_risk_weaknesses
+       #{t('label.day', count: ancient_highest_risk_weaknesses)}" if ancient_highest_risk_weaknesses
   end
 
   def calculate_highest_weaknesses_solution_rate
     pending_highest_risk = @cfrs.inject(0.0) do |ct, cr|
       ct + cr.review.weaknesses.with_highest_risk.where(
-        :state => Weakness::STATUS.except(Weakness::EXCLUDE_FROM_REPORTS_STATUS).values
+        state: Weakness::STATUS.except(Weakness::EXCLUDE_FROM_REPORTS_STATUS).values
       ).count
     end
 
     resolved_highest_risk = @cfrs.inject(0.0) do |ct, cr|
       ct + cr.review.weaknesses.with_highest_risk.where(
-        :state => Weakness::STATUS.except(Weakness::EXCLUDE_FROM_REPORTS_STATUS).values - Weakness::PENDING_STATUS
+        state: Weakness::STATUS.except(Weakness::EXCLUDE_FROM_REPORTS_STATUS).values - Weakness::PENDING_STATUS
       ).count
     end
 
@@ -100,13 +100,13 @@ module Reports::QAIndicators
   def calculate_oportunities_solution_rate
     pending_oportunities = @cfrs.inject(0.0) do |ct, cr|
       ct + cr.review.oportunities.where(
-        :state => Oportunity::STATUS.except(Oportunity::EXCLUDE_FROM_REPORTS_STATUS).values
+        state: Oportunity::STATUS.except(Oportunity::EXCLUDE_FROM_REPORTS_STATUS).values
       ).count
     end
 
     resolved_oportunities = @cfrs.inject(0.0) do |ct, cr|
       ct + cr.review.oportunities.where(
-        :state => Oportunity::STATUS.except(Oportunity::EXCLUDE_FROM_REPORTS_STATUS).values - Oportunity::PENDING_STATUS
+        state: Oportunity::STATUS.except(Oportunity::EXCLUDE_FROM_REPORTS_STATUS).values - Oportunity::PENDING_STATUS
       ).count
     end
 
@@ -118,14 +118,14 @@ module Reports::QAIndicators
     pending_medium_risk = @cfrs.inject(0.0) do |ct, cr|
       ct + cr.review.weaknesses.where(
         'state IN(:state) AND (highest_risk - 1) = risk',
-        :state => Weakness::STATUS.except(Weakness::EXCLUDE_FROM_REPORTS_STATUS).values
+        state: Weakness::STATUS.except(Weakness::EXCLUDE_FROM_REPORTS_STATUS).values
       ).count
     end
 
     resolved_medium_risk = @cfrs.inject(0.0) do |ct, cr|
       ct + cr.review.weaknesses.where(
         'state IN(:state) AND (highest_risk - 1) = risk',
-        :state => Weakness::STATUS.except(Weakness::EXCLUDE_FROM_REPORTS_STATUS).values - Weakness::PENDING_STATUS
+        state: Weakness::STATUS.except(Weakness::EXCLUDE_FROM_REPORTS_STATUS).values - Weakness::PENDING_STATUS
       ).count
     end
 
@@ -136,10 +136,10 @@ module Reports::QAIndicators
   def calculate_production_level(period)
     reviews_count = Array(period.plan).sum do |p|
       final_review_count = p.plan_items.joins(
-        :review => :conclusion_final_review
+        review: :conclusion_final_review
       ).with_business_unit.between(@from_date, @to_date).count
       last_day_count = p.plan_items.references(:conclusion_final_review).includes(
-        :review => :conclusion_final_review,
+        review: :conclusion_final_review,
       ).with_business_unit.between(@from_date, @to_date).where(
         "#{ConclusionFinalReview.table_name}.review_id" => nil, end: @to_date
       ).count
@@ -200,7 +200,7 @@ module Reports::QAIndicators
   def add_indicators(period)
     @indicators[period] ||= []
     @indicators[period] << {
-      :column_data => @row_order.map do |mask, i|
+      column_data: @row_order.map do |mask, i|
         {
           'indicator' => t("follow_up_committee_report.qa_indicators.indicators.#{i}"),
           'value' => (mask % @indexes[i] if @indexes[i])
@@ -262,15 +262,15 @@ module Reports::QAIndicators
 
         pdf.table(@column_data.insert(0, @column_headers), table_options) do
         row(0).style(
-          :background_color => 'cccccc',
-          :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          background_color: 'cccccc',
+          padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
         )
         end
       end
     else
       pdf.text(
         t('follow_up_committee_report.qa_indicators.without_audits_in_the_period'),
-        :style => :italic)
+        style: :italic)
     end
   end
 

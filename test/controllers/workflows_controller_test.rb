@@ -8,8 +8,8 @@ class WorkflowsControllerTest < ActionController::TestCase
   # y no accesibles las privadas
   test 'public and private actions' do
     id_param = {
-      :params => {
-        :id => workflows(:current_workflow).to_param
+      params: {
+        id: workflows(:current_workflow).to_param
       }
     }
     public_actions = []
@@ -45,7 +45,7 @@ class WorkflowsControllerTest < ActionController::TestCase
 
   test 'show workflow' do
     login
-    get :show, :params => { :id => workflows(:current_workflow).id }
+    get :show, params: { id: workflows(:current_workflow).id }
     assert_response :success
     assert_not_nil assigns(:workflow)
     assert_template 'workflows/show'
@@ -63,7 +63,7 @@ class WorkflowsControllerTest < ActionController::TestCase
     login
     workflow = Workflow.find workflows(:current_workflow).id
 
-    get :new, :params => { :clone_from => workflow.id }
+    get :new, params: { clone_from: workflow.id }
     assert_response :success
     assert_not_nil assigns(:workflow)
     assert workflow.workflow_items.size > 0
@@ -81,25 +81,25 @@ class WorkflowsControllerTest < ActionController::TestCase
 
     assert_difference counts_array do
       login
-      post :create, :params => {
-        :workflow => {
-          :period_id => periods(:current_period).id,
-          :review_id => reviews(:review_without_conclusion).id,
-          :workflow_items_attributes => [
+      post :create, params: {
+        workflow: {
+          period_id: periods(:current_period).id,
+          review_id: reviews(:review_without_conclusion).id,
+          workflow_items_attributes: [
             {
-              :task => 'New task',
-              :start => Date.today,
-              :end => 10.days.from_now.to_date,
-              :order_number => 1,
-              :resource_utilizations_attributes => [
+              task: 'New task',
+              start: Date.today,
+              end: 10.days.from_now.to_date,
+              order_number: 1,
+              resource_utilizations_attributes: [
                 {
-                  :resource_id => users(:manager).id,
-                  :resource_type => 'User',
-                  :units => '12.21'
+                  resource_id: users(:manager).id,
+                  resource_type: 'User',
+                  units: '12.21'
                 }, {
-                  :resource_id => resources(:laptop_resource).id,
-                  :resource_type => 'Resource',
-                  :units => '2'
+                  resource_id: resources(:laptop_resource).id,
+                  resource_type: 'Resource',
+                  units: '2'
                 }
               ]
             }
@@ -111,7 +111,7 @@ class WorkflowsControllerTest < ActionController::TestCase
 
   test 'edit workflow' do
     login
-    get :edit, params: { :id => workflows(:current_workflow).id }
+    get :edit, params: { id: workflows(:current_workflow).id }
     assert_response :success
     assert_not_nil assigns(:workflow)
     assert_template 'workflows/edit'
@@ -121,29 +121,29 @@ class WorkflowsControllerTest < ActionController::TestCase
     assert_no_difference ['Workflow.count', 'ResourceUtilization.count'] do
       assert_difference 'WorkflowItem.count', -1 do
         login
-        patch :update, :params => {
-          :id => workflows(:with_conclusion_workflow).id,
-          :workflow => {
-            :period_id => periods(:current_period).id,
-            :review_id => reviews(:review_with_conclusion).id,
-            :workflow_items_attributes => {
+        patch :update, params: {
+          id: workflows(:with_conclusion_workflow).id,
+          workflow: {
+            period_id: periods(:current_period).id,
+            review_id: reviews(:review_with_conclusion).id,
+            workflow_items_attributes: {
               '0' => {
-                :id => workflow_items(:with_conclusion_workflow_item_1).id,
-                :task => 'Updated task',
-                :start => 5.days.ago.to_date,
-                :end => 2.days.ago.to_date,
-                :order_number => 1,
-                :resource_utilizations_attributes => [
+                id: workflow_items(:with_conclusion_workflow_item_1).id,
+                task: 'Updated task',
+                start: 5.days.ago.to_date,
+                end: 2.days.ago.to_date,
+                order_number: 1,
+                resource_utilizations_attributes: [
                   {
-                    :id => resource_utilizations(:auditor_for_20_units_with_conclusion_workflow_item_1).id,
-                    :resource_id => users(:manager).id,
-                    :units => '12.21'
+                    id: resource_utilizations(:auditor_for_20_units_with_conclusion_workflow_item_1).id,
+                    resource_id: users(:manager).id,
+                    units: '12.21'
                   }
                 ]
               },
               '1' => {
-                :id => workflow_items(:with_conclusion_workflow_item_3).id,
-                :_destroy => 1
+                id: workflow_items(:with_conclusion_workflow_item_3).id,
+                _destroy: 1
               }
             }
           }
@@ -162,32 +162,32 @@ class WorkflowsControllerTest < ActionController::TestCase
 
   test 'overloaded workflow' do
     values = {
-      :workflow => {
-        :period_id => periods(:current_period).id,
-        :review_id => reviews(:review_without_conclusion).id,
-        :workflow_items_attributes => [
+      workflow: {
+        period_id: periods(:current_period).id,
+        review_id: reviews(:review_without_conclusion).id,
+        workflow_items_attributes: [
           {
-            :task => 'New task',
-            :start => Date.today,
-            :end => 5.days.from_now.to_date,
-            :order_number => 1,
-            :resource_utilizations_attributes => [
+            task: 'New task',
+            start: Date.today,
+            end: 5.days.from_now.to_date,
+            order_number: 1,
+            resource_utilizations_attributes: [
               {
-                :resource_id => users(:manager).id,
-                :resource_type => 'User',
-                :units => '12.21'
+                resource_id: users(:manager).id,
+                resource_type: 'User',
+                units: '12.21'
               }
             ]
           }, {
-            :task => 'New task 2',
-            :start => 4.days.from_now.to_date,
-            :end => 10.days.from_now.to_date,
-            :order_number => 2,
-            :resource_utilizations_attributes => [
+            task: 'New task 2',
+            start: 4.days.from_now.to_date,
+            end: 10.days.from_now.to_date,
+            order_number: 2,
+            resource_utilizations_attributes: [
               {
-                :resource_id => users(:manager).id,
-                :resource_type => 'User',
-                :units => '12.21'
+                resource_id: users(:manager).id,
+                resource_type: 'User',
+                units: '12.21'
               }
             ]
           }
@@ -197,13 +197,13 @@ class WorkflowsControllerTest < ActionController::TestCase
 
     assert_no_difference ['Workflow.count', 'WorkflowItem.count'] do
       login
-      post :create, :params => values
+      post :create, params: values
     end
 
     assert_difference 'WorkflowItem.count', 2 do
       assert_difference 'Workflow.count' do
         values[:workflow][:allow_overload] = '1'
-        post :create, :params => values
+        post :create, params: values
       end
     end
   end
@@ -211,8 +211,8 @@ class WorkflowsControllerTest < ActionController::TestCase
   test 'destroy workflow' do
     login
     assert_difference 'Workflow.count', -1 do
-      delete :destroy, :params => {
-        :id => workflows(:with_conclusion_workflow).id
+      delete :destroy, params: {
+        id: workflows(:with_conclusion_workflow).id
       }
     end
 
@@ -225,7 +225,7 @@ class WorkflowsControllerTest < ActionController::TestCase
     workflow = Workflow.find(workflows(:current_workflow).id)
 
     assert_nothing_raised do
-      get :export_to_pdf, :params => { :id => workflow.id }
+      get :export_to_pdf, params: { id: workflow.id }
     end
 
     assert_redirected_to workflow.relative_pdf_path
@@ -233,8 +233,8 @@ class WorkflowsControllerTest < ActionController::TestCase
 
   test 'reviews for period' do
     login
-    get :reviews_for_period, :params => {
-      :period => periods(:current_period).id
+    get :reviews_for_period, params: {
+      period: periods(:current_period).id
     }
     assert_response :success
 
@@ -251,8 +251,8 @@ class WorkflowsControllerTest < ActionController::TestCase
 
   test 'estimated amount' do
     login
-    get :estimated_amount, :params => {
-      :id => reviews(:current_review).id
+    get :estimated_amount, params: {
+      id: reviews(:current_review).id
     }
 
     assert_response :success

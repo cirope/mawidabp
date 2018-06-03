@@ -23,9 +23,9 @@ class CommentTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'Comment.count' do
       @comment = Comment.new(
-        :comment => 'New comment',
-        :commentable => findings(:unconfirmed_for_notification_weakness),
-        :user => users(:administrator)
+        comment: 'New comment',
+        commentable: findings(:unconfirmed_for_notification_weakness),
+        user: users(:administrator)
       )
 
       assert @comment.save, @comment.errors.full_messages.join('; ')
@@ -35,7 +35,7 @@ class CommentTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un comentario
   test 'update' do
-    assert @comment.update(:comment => 'Updated comment'),
+    assert @comment.update(comment: 'Updated comment'),
       @comment.errors.full_messages.join('; ')
     @comment.reload
     assert_equal 'Updated comment', @comment.comment

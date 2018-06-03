@@ -29,11 +29,11 @@ class WorkflowItemTest < ActiveSupport::TestCase
       workflow = Workflow.find workflows(:with_conclusion_workflow).id
 
       @workflow_item = workflow.workflow_items.build(
-        :task => 'New task',
-        :start => 6.days.from_now.to_date,
-        :end => 7.days.from_now.to_date,
-        :order_number => 4,
-        :workflow => workflow
+        task: 'New task',
+        start: 6.days.from_now.to_date,
+        end: 7.days.from_now.to_date,
+        order_number: 4,
+        workflow: workflow
       )
 
       assert @workflow_item.save, @workflow_item.errors.full_messages.join('; ')
@@ -42,7 +42,7 @@ class WorkflowItemTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un item de plan de trabajo
   test 'update' do
-    assert @workflow_item.update(:task => 'Updated task'),
+    assert @workflow_item.update(task: 'Updated task'),
       @workflow_item.errors.full_messages.join('; ')
     @workflow_item.reload
     assert_equal 'Updated task', @workflow_item.task

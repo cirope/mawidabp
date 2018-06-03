@@ -8,8 +8,8 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   # y no accesibles las privadas
   test 'public and private actions' do
     id_param = {
-      :params => {
-        :id => control_objective_items(:management_dependency_item).to_param
+      params: {
+        id: control_objective_items(:management_dependency_item).to_param
       }
     }
     public_actions = []
@@ -43,10 +43,10 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
   test 'list control objective items with search' do
     login
-    get :index, :params => {
-      :search => {
-        :query => 'seguridad',
-        :columns => ['control_objective_text', 'review']
+    get :index, params: {
+      search: {
+        query: 'seguridad',
+        columns: ['control_objective_text', 'review']
       }
     }
     assert_response :success
@@ -60,8 +60,8 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
   test 'show control_objective_item' do
     login
-    get :show, :params => {
-      :id => control_objective_items(:management_dependency_item).id
+    get :show, params: {
+      id: control_objective_items(:management_dependency_item).id
     }
     assert_response :success
     assert_not_nil assigns(:control_objective_item)
@@ -70,8 +70,8 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
   test 'edit control_objective_item' do
     login
-    get :edit, :params => {
-      :id => control_objective_items(:management_dependency_item_editable).id
+    get :edit, params: {
+      id: control_objective_items(:management_dependency_item_editable).id
     }
     assert_response :success
     assert_not_nil assigns(:control_objective_item)
@@ -82,44 +82,44 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
       assert_difference 'WorkPaper.count', 2 do
         login
-        patch :update, :params => {
-          :id => control_objective_items(:management_dependency_item_editable).id,
-          :control_objective_item => {
-            :control_objective_text => 'Updated text',
-            :relevance => ControlObjectiveItem.relevances_values.last,
-            :control_attributes => {
-              :id => controls(:management_dependency_item_editable_control_1).id,
-              :control => 'Updated control',
-              :effects => 'Updated effects',
-              :design_tests => 'Updated design tests',
-              :compliance_tests => 'Updated compliance tests',
-              :sustantive_tests => 'Updated sustantive tests'
+        patch :update, params: {
+          id: control_objective_items(:management_dependency_item_editable).id,
+          control_objective_item: {
+            control_objective_text: 'Updated text',
+            relevance: ControlObjectiveItem.relevances_values.last,
+            control_attributes: {
+              id: controls(:management_dependency_item_editable_control_1).id,
+              control: 'Updated control',
+              effects: 'Updated effects',
+              design_tests: 'Updated design tests',
+              compliance_tests: 'Updated compliance tests',
+              sustantive_tests: 'Updated sustantive tests'
             },
-            :design_score => ControlObjectiveItem.qualifications_values.last,
-            :compliance_score => ControlObjectiveItem.qualifications_values.last,
-            :audit_date => 10.days.from_now.to_date,
-            :auditor_comment => 'Updated comment',
-            :control_objective_id =>
+            design_score: ControlObjectiveItem.qualifications_values.last,
+            compliance_score: ControlObjectiveItem.qualifications_values.last,
+            audit_date: 10.days.from_now.to_date,
+            auditor_comment: 'Updated comment',
+            control_objective_id:
               control_objectives(:organization_security_4_1).id,
-            :review_id => reviews(:review_with_conclusion).id,
-            :work_papers_attributes => [
+            review_id: reviews(:review_with_conclusion).id,
+            work_papers_attributes: [
               {
-                :name => 'New workpaper name',
-                :code => 'PTOC 20',
-                :number_of_pages => '10',
-                :description => 'New workpaper description',
-                :organization_id => organizations(:cirope).id,
-                :file_model_attributes =>
-                  { :file => fixture_file_upload(TEST_FILE, 'text/plain') }
+                name: 'New workpaper name',
+                code: 'PTOC 20',
+                number_of_pages: '10',
+                description: 'New workpaper description',
+                organization_id: organizations(:cirope).id,
+                file_model_attributes:
+                  { file: fixture_file_upload(TEST_FILE, 'text/plain') }
               },
               {
-                :name => 'New workpaper2 name',
-                :code => 'PTOC 21',
-                :number_of_pages => '10',
-                :description => 'New workpaper2 description',
-                :organization_id => organizations(:cirope).id,
-                :file_model_attributes =>
-                  { :file => fixture_file_upload(TEST_FILE, 'text/plain') }
+                name: 'New workpaper2 name',
+                code: 'PTOC 21',
+                number_of_pages: '10',
+                description: 'New workpaper2 description',
+                organization_id: organizations(:cirope).id,
+                file_model_attributes:
+                  { file: fixture_file_upload(TEST_FILE, 'text/plain') }
               }
             ]
           }
@@ -140,35 +140,35 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
       assert_difference 'BusinessUnitScore.count', 3 do
         login
 
-        patch :update, :params => {
-          :id => control_objective_items(:organization_security_4_4_item).id,
-          :control_objective_item => {
-            :control_objective_text => 'Updated text',
-            :relevance => ControlObjectiveItem.relevances_values.last,
-            :control_attributes => {
-              :id => controls(:organization_security_4_4_item_control_1).id,
-              :control => 'Updated control',
-              :effects => 'Updated effects',
-              :design_tests => 'Updated design tests',
-              :compliance_tests => 'Updated compliance tests',
-              :sustantive_tests => 'Updated sustantive tests'
+        patch :update, params: {
+          id: control_objective_items(:organization_security_4_4_item).id,
+          control_objective_item: {
+            control_objective_text: 'Updated text',
+            relevance: ControlObjectiveItem.relevances_values.last,
+            control_attributes: {
+              id: controls(:organization_security_4_4_item_control_1).id,
+              control: 'Updated control',
+              effects: 'Updated effects',
+              design_tests: 'Updated design tests',
+              compliance_tests: 'Updated compliance tests',
+              sustantive_tests: 'Updated sustantive tests'
             },
-            :design_score => ControlObjectiveItem.qualifications_values.last,
-            :compliance_score => ControlObjectiveItem.qualifications_values.last,
-            :sustantive_score => ControlObjectiveItem.qualifications_values.last,
-            :audit_date => 10.days.from_now.to_date,
-            :auditor_comment => 'Updated comment',
-            :control_objective_id => control_objectives(:organization_security_4_4).id,
-            :review_id => reviews(:review_without_conclusion).id,
-            :business_unit_scores_attributes => [
+            design_score: ControlObjectiveItem.qualifications_values.last,
+            compliance_score: ControlObjectiveItem.qualifications_values.last,
+            sustantive_score: ControlObjectiveItem.qualifications_values.last,
+            audit_date: 10.days.from_now.to_date,
+            auditor_comment: 'Updated comment',
+            control_objective_id: control_objectives(:organization_security_4_4).id,
+            review_id: reviews(:review_without_conclusion).id,
+            business_unit_scores_attributes: [
               {
-                :business_unit_id => business_units(:business_unit_two).id,
-                :design_score => ControlObjectiveItem.qualifications_values.last.to_s,
-                :compliance_score => ControlObjectiveItem.qualifications_values.last.to_s,
-                :sustantive_score => ControlObjectiveItem.qualifications_values.last.to_s
+                business_unit_id: business_units(:business_unit_two).id,
+                design_score: ControlObjectiveItem.qualifications_values.last.to_s,
+                compliance_score: ControlObjectiveItem.qualifications_values.last.to_s,
+                sustantive_score: ControlObjectiveItem.qualifications_values.last.to_s
               }
             ],
-            :business_unit_type_ids => [business_unit_types(:consolidated_substantive).id.to_s]
+            business_unit_type_ids: [business_unit_types(:consolidated_substantive).id.to_s]
           }
         }
       end
@@ -184,8 +184,8 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   test 'destroy control_objective_item' do
     login
     assert_difference 'ControlObjectiveItem.count', -1 do
-      delete :destroy, :params => {
-        :id => control_objective_items(:organization_security_4_3_item_editable_without_findings).id
+      delete :destroy, params: {
+        id: control_objective_items(:organization_security_4_3_item_editable_without_findings).id
       }
     end
 
@@ -194,18 +194,18 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
   test 'auto complete for business unit' do
     login
-    get :auto_complete_for_business_unit, :params => {
-      :q => 'fifth'
-    }, :as => :json
+    get :auto_complete_for_business_unit, params: {
+      q: 'fifth'
+    }, as: :json
     assert_response :success
 
     business_units = ActiveSupport::JSON.decode(@response.body)
 
     assert_equal 0, business_units.size # Fifth is in another organization
 
-    get :auto_complete_for_business_unit, :params => {
-      :q => 'one'
-    }, :as => :json
+    get :auto_complete_for_business_unit, params: {
+      q: 'one'
+    }, as: :json
     assert_response :success
 
     business_units = ActiveSupport::JSON.decode(@response.body)
@@ -213,9 +213,9 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert_equal 1, business_units.size # One only
     assert business_units.all? { |u| (u['label'] + u['informal']).match /one/i }
 
-    get :auto_complete_for_business_unit, :params => {
-      :q => 'business'
-    }, :as => :json
+    get :auto_complete_for_business_unit, params: {
+      q: 'business'
+    }, as: :json
     assert_response :success
 
     business_units = ActiveSupport::JSON.decode(@response.body)
@@ -226,18 +226,18 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
   test 'auto complete for business unit type' do
     login
-    get :auto_complete_for_business_unit_type, :params => {
-      :q => 'noway'
-    }, :as => :json
+    get :auto_complete_for_business_unit_type, params: {
+      q: 'noway'
+    }, as: :json
     assert_response :success
 
     business_unit_types = ActiveSupport::JSON.decode(@response.body)
 
     assert_equal 0, business_unit_types.size # Fifth is in another organization
 
-    get :auto_complete_for_business_unit_type, :params => {
-      :q => 'cycle'
-    }, :as => :json
+    get :auto_complete_for_business_unit_type, params: {
+      q: 'cycle'
+    }, as: :json
     assert_response :success
 
     business_unit_types = ActiveSupport::JSON.decode(@response.body)

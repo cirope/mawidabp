@@ -1,4 +1,4 @@
-<% url = options[:url] || url_for(:action => :index) %>
+<% url = options[:url] || url_for(action: :index) %>
 <% extra_parameters = options[:extra_parameters] || [] %>
 <% columns_for_sort = options[:columns_for_sort] || [] %>
 <% query_string = params[:search] ? params[:search][:query] : nil %>

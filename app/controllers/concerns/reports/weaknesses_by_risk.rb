@@ -45,14 +45,14 @@ module Reports::WeaknessesByRisk
       total_weaknesses_count_by_risk = {}
 
       total_repeated_count = 0
-      total_awaiting_counts = {:current => 0, :stale => 0,
-        :current_rescheduled => 0, :stale_rescheduled => 0}
-      total_being_implemented_counts = {:current => 0, :stale => 0,
-        :current_rescheduled => 0, :stale_rescheduled => 0}
-      total_highest_awaiting_counts = {:current => 0, :stale => 0,
-        :current_rescheduled => 0, :stale_rescheduled => 0}
-      total_highest_being_implemented_counts = {:current => 0, :stale => 0,
-        :current_rescheduled => 0, :stale_rescheduled => 0}
+      total_awaiting_counts = {current: 0, stale: 0,
+        current_rescheduled: 0, stale_rescheduled: 0}
+      total_being_implemented_counts = {current: 0, stale: 0,
+        current_rescheduled: 0, stale_rescheduled: 0}
+      total_highest_awaiting_counts = {current: 0, stale: 0,
+        current_rescheduled: 0, stale_rescheduled: 0}
+      total_highest_being_implemented_counts = {current: 0, stale: 0,
+        current_rescheduled: 0, stale_rescheduled: 0}
 
       @audit_types.each do |audit_type|
         weaknesses_count = {}
@@ -63,14 +63,14 @@ module Reports::WeaknessesByRisk
           audit_type.last.each do |audit_types|
             key = "#{audit_type_symbol}_#{audit_types.last}"
             conditions = {"#{BusinessUnitType.table_name}.id" => audit_types.last}
-            awaiting_counts = {:current => 0, :stale => 0,
-              :current_rescheduled => 0, :stale_rescheduled => 0}
-            being_implemented_counts = {:current => 0, :stale => 0,
-              :current_rescheduled => 0, :stale_rescheduled => 0}
-            highest_awaiting_counts = {:current => 0, :stale => 0,
-              :current_rescheduled => 0, :stale_rescheduled => 0}
-            highest_being_implemented_counts = {:current => 0, :stale => 0,
-              :current_rescheduled => 0, :stale_rescheduled => 0}
+            awaiting_counts = {current: 0, stale: 0,
+              current_rescheduled: 0, stale_rescheduled: 0}
+            being_implemented_counts = {current: 0, stale: 0,
+              current_rescheduled: 0, stale_rescheduled: 0}
+            highest_awaiting_counts = {current: 0, stale: 0,
+              current_rescheduled: 0, stale_rescheduled: 0}
+            highest_being_implemented_counts = {current: 0, stale: 0,
+              current_rescheduled: 0, stale_rescheduled: 0}
             audit_type_symbol = audit_type.kind_of?(Symbol) ?
               audit_type : audit_type.first
 
@@ -96,8 +96,8 @@ module Reports::WeaknessesByRisk
                   audit_type: audit_type_symbol,
                   final: final,
                   conditions: {
-                    :state => s[1],
-                    :risk => rl[1]
+                    state: s[1],
+                    risk: rl[1]
                   }.merge(conditions || {})
                 ).with_status_for_report.count
                 weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
@@ -114,7 +114,7 @@ module Reports::WeaknessesByRisk
                     period: period,
                     audit_type: audit_type_symbol,
                     final: final,
-                    conditions: {:risk => rl[1]}.merge(conditions || {})
+                    conditions: {risk: rl[1]}.merge(conditions || {})
                   ).with_status_for_report.awaiting
 
                   fill_counts_for rl, highest_risk, awaiting, awaiting_counts,
@@ -124,7 +124,7 @@ module Reports::WeaknessesByRisk
                     period: period,
                     audit_type: audit_type_symbol,
                     final: final,
-                    conditions: {:risk => rl[1]}.merge(conditions || {})
+                    conditions: {risk: rl[1]}.merge(conditions || {})
                   ).with_status_for_report.being_implemented
 
                   fill_counts_for rl, highest_risk, being_implemented,
@@ -202,7 +202,7 @@ module Reports::WeaknessesByRisk
       pdf.move_down PDF_FONT_SIZE
       pdf.add_title(
         t("#{@controller}_committee_report.weaknesses_by_risk.period_summary",
-          :period => period.inspect), (PDF_FONT_SIZE * 1.25).round, :center
+          period: period.inspect), (PDF_FONT_SIZE * 1.25).round, :center
       )
       pdf.move_down PDF_FONT_SIZE
 
@@ -220,8 +220,8 @@ module Reports::WeaknessesByRisk
       if @repeated_counts[period]['total'] > 0
         pdf.move_down((PDF_FONT_SIZE * 0.5).round)
         pdf.text t('follow_up_committee_report.repeated_count',
-          :count => @repeated_counts[period]['total'],
-          :font_size => PDF_FONT_SIZE)
+          count: @repeated_counts[period]['total'],
+          font_size: PDF_FONT_SIZE)
       end
 
       @audit_types.each do |audit_type|
@@ -256,8 +256,8 @@ module Reports::WeaknessesByRisk
             if @repeated_counts[period][key] > 0
               pdf.move_down((PDF_FONT_SIZE * 0.5).round)
               pdf.text t('follow_up_committee_report.repeated_count',
-                :count => @repeated_counts[period][key],
-                :font_size => PDF_FONT_SIZE)
+                count: @repeated_counts[period][key],
+                font_size: PDF_FONT_SIZE)
             end
           end
         end

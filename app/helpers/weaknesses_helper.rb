@@ -8,15 +8,15 @@ module WeaknessesHelper
     end
 
     if dates.present?
-      dates.each { |d| list << content_tag(:li, l(d, :format => :long)) }
+      dates.each { |d| list << content_tag(:li, l(d, format: :long)) }
 
-      out << link_to(t('weakness.previous_follow_up_dates'), '#', :onclick =>
+      out << link_to(t('weakness.previous_follow_up_dates'), '#', onclick:
         "$('#previous_follow_up_dates').slideToggle();return false;")
 
       out << content_tag(:div, content_tag(:ol, list),
-        :id => 'previous_follow_up_dates', :style => 'display: none; margin-bottom: 1em;')
+        id: 'previous_follow_up_dates', style: 'display: none; margin-bottom: 1em;')
 
-      content_tag(:div, out, :style => 'margin-bottom: 1em;')
+      content_tag(:div, out, style: 'margin-bottom: 1em;')
     end
   end
 

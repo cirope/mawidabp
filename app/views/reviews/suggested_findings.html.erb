@@ -7,7 +7,7 @@
     <ul class="finding_review_assignment">
       <li>
         <%= hidden_field_tag "review[finding_review_assignments_attributes][#{i + 1000}][finding_id]",
-          finding.id, :id => "hidden_finding_id_#{finding.id}" %>
+          finding.id, id: "hidden_finding_id_#{finding.id}" %>
         <%= finding %> |
         <%= link_to_show finding %> |
         <%= remove_item_link nil, 'finding_review_assignment' %>

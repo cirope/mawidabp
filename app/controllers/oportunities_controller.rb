@@ -26,7 +26,7 @@
         ].join(' AND ')
       ].map {|condition| "(#{condition})"}.join(' OR ')
     ]
-    parameters = { :boolean_true => true, :boolean_false => false }
+    parameters = { boolean_true: true, boolean_false: false }
 
     if params[:control_objective].to_i > 0
       default_conditions << "#{Weakness.quoted_table_name}.#{Weakness.qcn('control_objective_item_id')} = " +
@@ -44,8 +44,8 @@
 
     @oportunities = Oportunity.list.includes(
       :work_papers, :tags,
-      :control_objective_item => {
-        :review => [:period, :plan_item, :conclusion_final_review]
+      control_objective_item: {
+        review: [:period, :plan_item, :conclusion_final_review]
       }
     ).where([@conditions, parameters]).order(
       @order_by || [
@@ -77,7 +77,7 @@
   def new
     @title = t 'oportunity.new_title'
     @oportunity = Oportunity.new(
-      :control_objective_item_id => params[:control_objective_item]
+      control_objective_item_id: params[:control_objective_item]
     )
 
     @oportunity.import_users
@@ -106,7 +106,7 @@
         flash.notice = t 'oportunity.correctly_created'
         format.html { redirect_to(edit_oportunity_url(@oportunity)) }
       else
-        format.html { render :action => :new }
+        format.html { render action: :new }
       end
     end
   end
@@ -124,7 +124,7 @@
           flash.notice = t 'oportunity.correctly_updated'
           format.html { redirect_to(edit_oportunity_url(@oportunity)) }
         else
-          format.html { render :action => :edit }
+          format.html { render action: :edit }
           raise ActiveRecord::Rollback
         end
       end
@@ -132,7 +132,7 @@
 
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'oportunity.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to action: :edit
   end
 
   # Deshace la reiteración de la oportunidad
@@ -150,8 +150,8 @@
     def set_oportunity
       @oportunity = Oportunity.list.includes(
         :finding_relations, :work_papers,
-        {:finding_user_assignments => :user},
-        {:control_objective_item => {:review => :period}}
+        {finding_user_assignments: :user},
+        {control_objective_item: {review: :period}}
       ).find(params[:id])
     end
 
@@ -184,10 +184,10 @@
 
     def load_privileges
       @action_privileges.update(
-        :auto_complete_for_tagging => :read,
-        :auto_complete_for_finding_relation => :read,
-        :auto_complete_for_control_objective_item => :read,
-        :undo_reiteration => :modify
+        auto_complete_for_tagging: :read,
+        auto_complete_for_finding_relation: :read,
+        auto_complete_for_control_objective_item: :read,
+        undo_reiteration: :modify
       )
     end
 end

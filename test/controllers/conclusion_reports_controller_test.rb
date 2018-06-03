@@ -38,17 +38,17 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'synthesis report' do
     login
 
-    get :synthesis_report, :params => { :controller_name => 'conclusion' }
+    get :synthesis_report, params: { controller_name: 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/synthesis_report'
 
     assert_nothing_raised do
-      get :synthesis_report, :params => {
-        :synthesis_report => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :synthesis_report, params: {
+        synthesis_report: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion'
+        controller_name: 'conclusion'
       }
     end
 
@@ -58,15 +58,15 @@ class ConclusionReportsControllerTest < ActionController::TestCase
 
   test 'filtered synthesis report' do
     login
-    get :synthesis_report, :params => {
-      :synthesis_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date,
-        :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'one',
-        :scope => 'committee'
+    get :synthesis_report, params: {
+      synthesis_report: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date,
+        business_unit_type: business_unit_types(:cycle).id,
+        business_unit: 'one',
+        scope: 'committee'
       },
-      :controller_name => 'conclusion'
+      controller_name: 'conclusion'
     }
 
     assert_response :success
@@ -78,37 +78,37 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create synthesis report' do
     login
 
-    post :create_synthesis_report, :params => {
-      :synthesis_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    post :create_synthesis_report, params: {
+      synthesis_report: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion'
+      report_title: 'New title',
+      report_subtitle: 'New subtitle',
+      controller_name: 'conclusion'
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.synthesis_report.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'synthesis_report', 0)
   end
 
   test 'review stats report' do
     login
 
-    get :review_stats_report, :params => { :controller_name => 'conclusion' }
+    get :review_stats_report, params: { controller_name: 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/review_stats_report'
 
     assert_nothing_raised do
-      get :review_stats_report, :params => {
-        :review_stats_report => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :review_stats_report, params: {
+        review_stats_report: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion'
+        controller_name: 'conclusion'
       }
     end
 
@@ -118,14 +118,14 @@ class ConclusionReportsControllerTest < ActionController::TestCase
 
   test 'filtered review stats report' do
     login
-    get :review_stats_report, :params => {
-      :review_stats_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date,
-        :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'one'
+    get :review_stats_report, params: {
+      review_stats_report: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date,
+        business_unit_type: business_unit_types(:cycle).id,
+        business_unit: 'one'
       },
-      :controller_name => 'conclusion'
+      controller_name: 'conclusion'
     }
 
     assert_response :success
@@ -137,37 +137,37 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create review stats report' do
     login
 
-    post :create_review_stats_report, :params => {
-      :review_stats_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    post :create_review_stats_report, params: {
+      review_stats_report: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion'
+      report_title: 'New title',
+      report_subtitle: 'New subtitle',
+      controller_name: 'conclusion'
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.review_stats_report.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'review_stats_report', 0)
   end
 
   test 'review scores report' do
     login
 
-    get :review_scores_report, :params => { :controller_name => 'conclusion' }
+    get :review_scores_report, params: { controller_name: 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/review_scores_report'
 
     assert_nothing_raised do
-      get :review_scores_report, :params => {
-        :review_scores_report => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :review_scores_report, params: {
+        review_scores_report: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion'
+        controller_name: 'conclusion'
       }
     end
 
@@ -177,14 +177,14 @@ class ConclusionReportsControllerTest < ActionController::TestCase
 
   test 'filtered review scores report' do
     login
-    get :review_scores_report, :params => {
-      :review_scores_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date,
-        :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'one'
+    get :review_scores_report, params: {
+      review_scores_report: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date,
+        business_unit_type: business_unit_types(:cycle).id,
+        business_unit: 'one'
       },
-      :controller_name => 'conclusion'
+      controller_name: 'conclusion'
     }
 
     assert_response :success
@@ -196,37 +196,37 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create review scores report' do
     login
 
-    post :create_review_scores_report, :params => {
-      :review_scores_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    post :create_review_scores_report, params: {
+      review_scores_report: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion'
+      report_title: 'New title',
+      report_subtitle: 'New subtitle',
+      controller_name: 'conclusion'
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.review_scores_report.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'review_scores_report', 0)
   end
 
   test 'review score details report' do
     login
 
-    get :review_score_details_report, :params => { :controller_name => 'conclusion' }
+    get :review_score_details_report, params: { controller_name: 'conclusion' }
     assert_response :success
     assert_template 'conclusion_reports/review_score_details_report'
 
     assert_nothing_raised do
-      get :review_score_details_report, :params => {
-        :review_score_details_report => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :review_score_details_report, params: {
+        review_score_details_report: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion'
+        controller_name: 'conclusion'
       }
     end
 
@@ -237,17 +237,17 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'review score details report as CSV' do
     login
 
-    get :review_score_details_report, :params => { :controller_name => 'conclusion' }, as: :csv
+    get :review_score_details_report, params: { controller_name: 'conclusion' }, as: :csv
     assert_response :success
     assert_equal Mime[:csv], @response.content_type
 
     assert_nothing_raised do
-      get :review_score_details_report, :params => {
-        :review_score_details_report => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :review_score_details_report, params: {
+        review_score_details_report: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion', as: :csv
+        controller_name: 'conclusion', as: :csv
       }
     end
 
@@ -257,16 +257,16 @@ class ConclusionReportsControllerTest < ActionController::TestCase
 
   test 'filtered review score details report' do
     login
-    get :review_score_details_report, :params => {
-      :review_score_details_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date,
-        :conclusion => [CONCLUSION_OPTIONS.first],
-        :scope => ['committee'],
-        :business_unit_type => [business_unit_types(:cycle).id],
-        :business_unit => 'one, two'
+    get :review_score_details_report, params: {
+      review_score_details_report: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date,
+        conclusion: [CONCLUSION_OPTIONS.first],
+        scope: ['committee'],
+        business_unit_type: [business_unit_types(:cycle).id],
+        business_unit: 'one, two'
       },
-      :controller_name => 'conclusion'
+      controller_name: 'conclusion'
     }
 
     assert_response :success
@@ -278,20 +278,20 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create review score details report' do
     login
 
-    post :create_review_score_details_report, :params => {
-      :review_score_details_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    post :create_review_score_details_report, params: {
+      review_score_details_report: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion'
+      report_title: 'New title',
+      report_subtitle: 'New subtitle',
+      controller_name: 'conclusion'
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.review_score_details_report.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'review_score_details_report', 0)
   end
 
@@ -303,13 +303,13 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_reports/weaknesses_by_state'
 
     assert_nothing_raised do
-      get :weaknesses_by_state, :params => {
-        :weaknesses_by_state => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :weaknesses_by_state, params: {
+        weaknesses_by_state: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',
-        :final => true
+        controller_name: 'conclusion',
+        final: true
       }
     end
 
@@ -320,20 +320,20 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create weaknesses by state report' do
     login
 
-    post :create_weaknesses_by_state, :params => {
-      :weaknesses_by_state => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    post :create_weaknesses_by_state, params: {
+      weaknesses_by_state: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :controller_name => 'conclusion',
-      :final => true
+      report_title: 'New title',
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_state.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_state', 0)
   end
 
@@ -345,15 +345,15 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_reports/weaknesses_by_risk'
 
     assert_nothing_raised do
-      get :weaknesses_by_risk, :params => {
-        :weaknesses_by_risk => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date,
-          :compliance => 'yes',
-          :repeated => 'false'
+      get :weaknesses_by_risk, params: {
+        weaknesses_by_risk: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date,
+          compliance: 'yes',
+          repeated: 'false'
         },
-        :controller_name => 'conclusion',
-        :final => true
+        controller_name: 'conclusion',
+        final: true
       }
     end
 
@@ -364,20 +364,20 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create weaknesses by risk' do
     login
 
-    post :create_weaknesses_by_risk, :params => {
-      :weaknesses_by_risk => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    post :create_weaknesses_by_risk, params: {
+      weaknesses_by_risk: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :controller_name => 'conclusion',
-      :final => true
+      report_title: 'New title',
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_risk.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_risk', 0)
   end
 
@@ -389,12 +389,12 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_reports/weaknesses_by_audit_type'
 
     assert_nothing_raised do
-      get :weaknesses_by_audit_type, :params => {
-        :weaknesses_by_audit_type => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date,
-          :controller_name => 'conclusion',
-          :final => true
+      get :weaknesses_by_audit_type, params: {
+        weaknesses_by_audit_type: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date,
+          controller_name: 'conclusion',
+          final: true
         }
       }
     end
@@ -406,20 +406,20 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create weaknesses by audit type report' do
     login
 
-    post :create_weaknesses_by_audit_type, :params => {
-      :weaknesses_by_audit_type => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    post :create_weaknesses_by_audit_type, params: {
+      weaknesses_by_audit_type: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :controller_name => 'conclusion',
-      :final => true
+      report_title: 'New title',
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_audit_type.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_audit_type', 0)
   end
 
@@ -433,10 +433,10 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_reports/cost_analysis'
 
     assert_nothing_raised do
-      get :cost_analysis, :params => {
-        :cost_analysis => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :cost_analysis, params: {
+        cost_analysis: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         }
       }
     end
@@ -448,18 +448,18 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create cost analysis report' do
     login
 
-    post :create_cost_analysis, :params => {
-      :cost_analysis => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    post :create_cost_analysis, params: {
+      cost_analysis: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title'
+      report_title: 'New title'
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_report.cost_analysis.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'cost_analysis', 0)
   end
 
@@ -467,17 +467,17 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     login
     expected_title = I18n.t 'conclusion_report.detailed_cost_analysis_title'
 
-    get :cost_analysis, :params => { :include_details => 1 }
+    get :cost_analysis, params: { include_details: 1 }
     assert_response :success
     assert_equal assigns(:title), expected_title
     assert_template 'conclusion_reports/cost_analysis'
 
     assert_nothing_raised do
-      get :cost_analysis, :params => {
-        :include_details => 1,
-        :cost_analysis => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :cost_analysis, params: {
+        include_details: 1,
+        cost_analysis: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         }
       }
     end
@@ -489,19 +489,19 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create detailed cost analysis report' do
     login
 
-    post :create_cost_analysis, :params => {
-      :include_details => 1,
-      :cost_analysis => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    post :create_cost_analysis, params: {
+      include_details: 1,
+      cost_analysis: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title'
+      report_title: 'New title'
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_report.cost_analysis.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'cost_analysis', 0)
   end
 
@@ -515,10 +515,10 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_reports/cost_summary'
 
     assert_nothing_raised do
-      get :cost_summary, :params => {
-        :cost_summary => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :cost_summary, params: {
+        cost_summary: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         }
       }
     end
@@ -530,18 +530,18 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create cost summary report' do
     login
 
-    post :create_cost_summary, :params => {
-      :cost_summary => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    post :create_cost_summary, params: {
+      cost_summary: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title'
+      report_title: 'New title'
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_report.cost_summary.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'cost_summary', 0)
   end
 
@@ -553,13 +553,13 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_reports/weaknesses_by_risk_report'
 
     assert_nothing_raised do
-      get :weaknesses_by_risk_report, :params => {
-        :weaknesses_by_risk_report => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :weaknesses_by_risk_report, params: {
+        weaknesses_by_risk_report: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',
-        :final => true
+        controller_name: 'conclusion',
+        final: true
       }
     end
 
@@ -570,15 +570,15 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'filtered weaknesses by risk report' do
     login
 
-    get :weaknesses_by_risk_report, :params => {
-      :weaknesses_by_risk_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date,
-        :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'one'
+    get :weaknesses_by_risk_report, params: {
+      weaknesses_by_risk_report: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date,
+        business_unit_type: business_unit_types(:cycle).id,
+        business_unit: 'one'
       },
-      :controller_name => 'conclusion',
-      :final => true
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_response :success
@@ -588,21 +588,21 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create weaknesses by risk report' do
     login
 
-    get :create_weaknesses_by_risk_report, :params => {
-      :weaknesses_by_risk_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    get :create_weaknesses_by_risk_report, params: {
+      weaknesses_by_risk_report: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',
-      :final => true
+      report_title: 'New title',
+      report_subtitle: 'New subtitle',
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_risk_report.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_risk_report', 0)
   end
 
@@ -614,13 +614,13 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_reports/weaknesses_by_month'
 
     assert_nothing_raised do
-      get :weaknesses_by_month, :params => {
-        :weaknesses_by_month => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :weaknesses_by_month, params: {
+        weaknesses_by_month: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',
-        :final => false
+        controller_name: 'conclusion',
+        final: false
       }
     end
 
@@ -631,17 +631,17 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'filtered weaknesses by month' do
     login
 
-    get :weaknesses_by_month, :params => {
-      :weaknesses_by_month => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date,
-        :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'three',
-        :finding_status => Finding::STATUS[:being_implemented],
-        :finding_title => 'a'
+    get :weaknesses_by_month, params: {
+      weaknesses_by_month: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date,
+        business_unit_type: business_unit_types(:cycle).id,
+        business_unit: 'three',
+        finding_status: Finding::STATUS[:being_implemented],
+        finding_title: 'a'
       },
-      :controller_name => 'conclusion',
-      :final => false
+      controller_name: 'conclusion',
+      final: false
     }
 
     assert_response :success
@@ -651,21 +651,21 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create weaknesses by month' do
     login
 
-    get :create_weaknesses_by_month, :params => {
-      :weaknesses_by_month => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    get :create_weaknesses_by_month, params: {
+      weaknesses_by_month: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',
-      :final => false
+      report_title: 'New title',
+      report_subtitle: 'New subtitle',
+      controller_name: 'conclusion',
+      final: false
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_month.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_month', 0)
   end
 
@@ -677,13 +677,13 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_reports/fixed_weaknesses_report'
 
     assert_nothing_raised do
-      get :fixed_weaknesses_report, :params => {
-        :fixed_weaknesses_report => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :fixed_weaknesses_report, params: {
+        fixed_weaknesses_report: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',
-        :final => true
+        controller_name: 'conclusion',
+        final: true
       }
     end
 
@@ -694,15 +694,15 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'filtered fixed weaknesses report' do
     login
 
-    get :fixed_weaknesses_report, :params => {
-      :fixed_weaknesses_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date,
-        :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'one'
+    get :fixed_weaknesses_report, params: {
+      fixed_weaknesses_report: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date,
+        business_unit_type: business_unit_types(:cycle).id,
+        business_unit: 'one'
       },
-      :controller_name => 'conclusion',
-      :final => true
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_response :success
@@ -712,21 +712,21 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create fixed weaknesses report' do
     login
 
-    get :create_fixed_weaknesses_report, :params => {
-      :fixed_weaknesses_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    get :create_fixed_weaknesses_report, params: {
+      fixed_weaknesses_report: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',
-      :final => true
+      report_title: 'New title',
+      report_subtitle: 'New subtitle',
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.fixed_weaknesses_report.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'fixed_weaknesses_report', 0)
   end
 
@@ -738,13 +738,13 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_reports/control_objective_stats'
 
     assert_nothing_raised do
-      get :control_objective_stats, :params => {
-        :control_objective_stats => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :control_objective_stats, params: {
+        control_objective_stats: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',
-        :final => true
+        controller_name: 'conclusion',
+        final: true
       }
     end
 
@@ -755,16 +755,16 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'filtered control objective stats report' do
     login
 
-    get :control_objective_stats, :params => {
-      :control_objective_stats => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date,
-        :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'one',
-        :control_objective => 'a',
+    get :control_objective_stats, params: {
+      control_objective_stats: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date,
+        business_unit_type: business_unit_types(:cycle).id,
+        business_unit: 'one',
+        control_objective: 'a',
       },
-      :controller_name => 'conclusion',
-      :final => true
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_response :success
@@ -774,21 +774,21 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create control objective stats report' do
     login
 
-    get :create_control_objective_stats, :params => {
-      :control_objective_stats => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    get :create_control_objective_stats, params: {
+      control_objective_stats: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',
-      :final => true
+      report_title: 'New title',
+      report_subtitle: 'New subtitle',
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.control_objective_stats.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'control_objective_stats', 0)
   end
 
@@ -800,13 +800,13 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_reports/control_objective_stats_by_review'
 
     assert_nothing_raised do
-      get :control_objective_stats_by_review, :params => {
-        :control_objective_stats_by_review => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :control_objective_stats_by_review, params: {
+        control_objective_stats_by_review: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',
-        :final => true
+        controller_name: 'conclusion',
+        final: true
       }
     end
 
@@ -817,16 +817,16 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'filtered control objective stats by review report' do
     login
 
-    get :control_objective_stats_by_review, :params => {
-      :control_objective_stats_by_review => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date,
-        :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'one',
-        :control_objective => 'a'
+    get :control_objective_stats_by_review, params: {
+      control_objective_stats_by_review: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date,
+        business_unit_type: business_unit_types(:cycle).id,
+        business_unit: 'one',
+        control_objective: 'a'
       },
-      :controller_name => 'conclusion',
-      :final => true
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_response :success
@@ -836,21 +836,21 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create control objective stats by review report' do
     login
 
-    get :create_control_objective_stats_by_review, :params => {
-      :control_objective_stats_by_review => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    get :create_control_objective_stats_by_review, params: {
+      control_objective_stats_by_review: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',
-      :final => true
+      report_title: 'New title',
+      report_subtitle: 'New subtitle',
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.control_objective_stats_by_review.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'control_objective_stats_by_review', 0)
   end
 
@@ -862,13 +862,13 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_reports/process_control_stats'
 
     assert_nothing_raised do
-      get :process_control_stats, :params => {
-        :process_control_stats => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :process_control_stats, params: {
+        process_control_stats: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',
-        :final => true
+        controller_name: 'conclusion',
+        final: true
       }
     end
 
@@ -879,17 +879,17 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'filtered process control stats report' do
     login
 
-    get :process_control_stats, :params => {
-      :process_control_stats => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date,
-        :best_practice => 'a',
-        :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'one',
-        :process_control => 'seg'
+    get :process_control_stats, params: {
+      process_control_stats: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date,
+        best_practice: 'a',
+        business_unit_type: business_unit_types(:cycle).id,
+        business_unit: 'one',
+        process_control: 'seg'
       },
-      :controller_name => 'conclusion',
-      :final => true
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_response :success
@@ -899,32 +899,32 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create process control stats report' do
     login
 
-    get :create_process_control_stats, :params => {
-      :process_control_stats => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    get :create_process_control_stats, params: {
+      process_control_stats: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',
-      :final => true
+      report_title: 'New title',
+      report_subtitle: 'New subtitle',
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.process_control_stats.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'process_control_stats', 0)
   end
 
   test 'weaknesses graphs for user' do
     login
 
-    get :weaknesses_graphs, :params => {
-      :weaknesses_graphs => {
-        :user_id => users(:administrator).id
+    get :weaknesses_graphs, params: {
+      weaknesses_graphs: {
+        user_id: users(:administrator).id
       },
-      :final => true
+      final: true
     }
 
     assert_response :success
@@ -934,11 +934,11 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'weaknesses graphs for business unit' do
     login
 
-    get :weaknesses_graphs, :params => {
-      :weaknesses_graphs => {
-        :business_unit_id => business_units(:business_unit_one).id
+    get :weaknesses_graphs, params: {
+      weaknesses_graphs: {
+        business_unit_id: business_units(:business_unit_one).id
       },
-      :final => true
+      final: true
     }
 
     assert_response :success
@@ -948,11 +948,11 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'weaknesses graphs for process control' do
     login
 
-    get :weaknesses_graphs, :params => {
-      :weaknesses_graphs => {
-        :process_control_id => process_controls(:security_policy).id
+    get :weaknesses_graphs, params: {
+      weaknesses_graphs: {
+        process_control_id: process_controls(:security_policy).id
       },
-      :final => true
+      final: true
     }
 
     assert_response :success
@@ -967,13 +967,13 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_reports/benefits'
 
     assert_nothing_raised do
-      get :benefits, :params => {
-        :benefits => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+      get :benefits, params: {
+        benefits: {
+          from_date: 10.years.ago.to_date,
+          to_date: 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',
-        :final => true
+        controller_name: 'conclusion',
+        final: true
       }
     end
 
@@ -984,16 +984,16 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'filtered benefits report' do
     login
 
-    get :benefits, :params => {
-      :benefits => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date,
-        :business_unit_type => business_unit_types(:cycle).id,
-        :business_unit => 'one',
-        :control_objective => 'a'
+    get :benefits, params: {
+      benefits: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date,
+        business_unit_type: business_unit_types(:cycle).id,
+        business_unit: 'one',
+        control_objective: 'a'
       },
-      :controller_name => 'conclusion',
-      :final => true
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_response :success
@@ -1003,21 +1003,21 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   test 'create benefits report' do
     login
 
-    get :create_benefits, :params => {
-      :benefits => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+    get :create_benefits, params: {
+      benefits: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',
-      :final => true
+      report_title: 'New title',
+      report_subtitle: 'New subtitle',
+      controller_name: 'conclusion',
+      final: true
     }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.benefits.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'benefits', 0)
   end
 end

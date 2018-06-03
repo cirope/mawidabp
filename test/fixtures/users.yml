@@ -1,4 +1,4 @@
-<% ::PLAIN_PASSWORDS = { :admin => 'admin123' }.with_indifferent_access %>
+<% ::PLAIN_PASSWORDS = { admin: 'admin123' }.with_indifferent_access %>
 <% salt = Digest::SHA512.hexdigest("admin#{rand}") %>
 administrator:
   name: Administrator

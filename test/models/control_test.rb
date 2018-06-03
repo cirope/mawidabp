@@ -28,13 +28,13 @@ class ControlTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'Control.count' do
       @control = Control.create(
-        :control => 'New control',
-        :effects => 'New effects',
-        :design_tests => 'New design tests',
-        :compliance_tests => 'New compliance tests',
-        :sustantive_tests => 'New sustantive tests',
-        :order => 1,
-        :controllable => control_objectives(:security_policy_3_1)
+        control: 'New control',
+        effects: 'New effects',
+        design_tests: 'New design tests',
+        compliance_tests: 'New compliance tests',
+        sustantive_tests: 'New sustantive tests',
+        order: 1,
+        controllable: control_objectives(:security_policy_3_1)
       )
     end
 
@@ -43,7 +43,7 @@ class ControlTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un control
   test 'update' do
-    assert @control.update(:control => 'Updated control'),
+    assert @control.update(control: 'Updated control'),
       @control.errors.full_messages.join('; ')
     @control.reload
     assert_equal 'Updated control', @control.control

@@ -7,5 +7,5 @@ class NotificationRelation < ApplicationRecord
 
   # Relaciones
   belongs_to :notification
-  belongs_to :model, -> { readonly }, :polymorphic => true, :primary_key => :id
+  belongs_to :model, -> { readonly }, polymorphic: true, primary_key: :id
 end

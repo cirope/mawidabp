@@ -10,15 +10,15 @@ class QuestionTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'Question.count' do
       Question.create(
-        :question => '¿Cual es su edad?',
-        :sort_order => 1,
-        :answer_type => 0
+        question: '¿Cual es su edad?',
+        sort_order: 1,
+        answer_type: 0
        )
     end
   end
 
   test 'update' do
-    assert @question.update(:question => 'Updated question'),
+    assert @question.update(question: 'Updated question'),
       @question.errors.full_messages.join('; ')
     @question.reload
     assert_equal 'Updated question', @question.question

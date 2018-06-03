@@ -2,14 +2,14 @@ module ReviewsHelper
   def show_review_with_close_date_as_abbr(review)
     close_date = review.conclusion_final_review.try(:close_date)
     review_data = close_date ?
-      t('review.review_data.close_date', :date => l(close_date, :format => :long)) :
+      t('review.review_data.close_date', date: l(close_date, format: :long)) :
       t('review.review_data.without_close_date')
 
-    content_tag(:abbr, review.identification, :title => review_data)
+    content_tag(:abbr, review.identification, title: review_data)
   end
 
   def show_review_identification_with_score_as_abbr(review)
-    content_tag :abbr, review.identification, :title => review.score_text
+    content_tag :abbr, review.identification, title: review.score_text
   end
 
   def review_plan_item_field(form, readonly)
@@ -21,12 +21,12 @@ module ReviewsHelper
     business_unit_types = grouped_plan_items.map do |but, plan_items|
       sorted_plan_items = plan_items.sort_by(&:project)
 
-      OpenStruct.new({:name => but.name, :plan_items => sorted_plan_items})
+      OpenStruct.new({name: but.name, plan_items: sorted_plan_items})
     end
 
     form.grouped_collection_select :plan_item_id, business_unit_types,
-      :plan_items, :name, :id, :project, {:prompt => true},
-      {:class => 'form-control', :disabled => readonly}
+      :plan_items, :name, :id, :project, {prompt: true},
+      {class: 'form-control', disabled: readonly}
   end
 
   def review_business_unit_type_text(review)
@@ -58,7 +58,7 @@ module ReviewsHelper
   end
 
   def user_assignment_type_text(type)
-    content_tag(:span, user_assignment_type_name_for(type), :class => :bold)
+    content_tag(:span, user_assignment_type_name_for(type), class: :bold)
   end
 
   def user_assignment_type_name_for(type)
@@ -75,7 +75,7 @@ module ReviewsHelper
   def show_readonly_review_survey(review)
     link_for_download = link_to(
       t('label.download'),
-      :action => :survey_pdf, :id => review, :_ts => Time.now.to_i
+      action: :survey_pdf, id: review, _ts: Time.now.to_i
     ).html_safe
     link_for_download_attachment = link_to(
       t('review.survey.download_attachment'), review.file_model.file.url

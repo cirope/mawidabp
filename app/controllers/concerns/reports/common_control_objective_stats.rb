@@ -61,15 +61,15 @@ module Reports::CommonControlObjectiveStats
 
       @risk_levels.each do |risk|
         risk_text = t("risk_types.#{risk}")
-        text[risk_text] ||= { :complete => 0, :incomplete => 0 }
+        text[risk_text] ||= { complete: 0, incomplete: 0 }
 
         if @weaknesses_status_count[risk_text]
           text[risk_text][:incomplete] = @weaknesses_status_count[risk_text][:incomplete]
           text[risk_text][:complete] = @weaknesses_status_count[risk_text][:complete]
         end
 
-        @control_objectives_data[period][pc][co.name][risk_text] ||= { :complete => [], :incomplete => [] }
-        coi_data[:weaknesses_ids][risk_text] ||= { :complete => [], :incomplete => [] }
+        @control_objectives_data[period][pc][co.name][risk_text] ||= { complete: [], incomplete: [] }
+        coi_data[:weaknesses_ids][risk_text] ||= { complete: [], incomplete: [] }
         @control_objectives_data[period][pc][co.name][risk_text][:complete].concat coi_data[:weaknesses_ids][risk_text][:complete]
         @control_objectives_data[period][pc][co.name][risk_text][:incomplete].concat coi_data[:weaknesses_ids][risk_text][:incomplete]
         @weaknesses_count_text[risk_text.to_sym] = text[risk_text]
@@ -86,8 +86,8 @@ module Reports::CommonControlObjectiveStats
           @weaknesses_count[w.risk_text] ||= 0
           @weaknesses_count[w.risk_text] += 1
 
-          @weaknesses_status_count[w.risk_text] ||= { :incomplete => 0, :complete => 0 }
-          @coi_data[:weaknesses_ids][w.risk_text] ||= { :incomplete => [], :complete => [] }
+          @weaknesses_status_count[w.risk_text] ||= { incomplete: 0, complete: 0 }
+          @coi_data[:weaknesses_ids][w.risk_text] ||= { incomplete: [], complete: [] }
 
           if Finding::PENDING_STATUS.include? w.state
             @weaknesses_status_count[w.risk_text][:incomplete] += 1
@@ -145,8 +145,8 @@ module Reports::CommonControlObjectiveStats
 
         pdf.table(@column_data.insert(0, @column_headers), table_options) do
           row(0).style(
-            :background_color => 'cccccc',
-            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            background_color: 'cccccc',
+            padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
           )
         end
       end

@@ -98,24 +98,24 @@
 
   <div id="approval_text">
     <%= content_tag(:span, t('conclusion_draft_review.approved'),
-      :class => 'label label-success', :id => :approved,
-      :style => ('display: none;' if !@conclusion_draft_review.approved?)) %>
+      class: 'label label-success', id: :approved,
+      style: ('display: none;' if !@conclusion_draft_review.approved?)) %>
     <span id="not_approved" <%= raw 'style="display: none;"' if @conclusion_draft_review.approved? %>>
       <span class="label label-danger">
         <%= t('conclusion_draft_review.not_approved') %>
       </span>&nbsp;
       <% @conclusion_draft_review.review.try(:must_be_approved?) %>
-      <%= link_to t('error.show_details'), '#', :onclick => 'showOrHideErrors(); return false;',
-          :id => :show_or_hide_link %>
+      <%= link_to t('error.show_details'), '#', onclick: 'showOrHideErrors(); return false;',
+          id: :show_or_hide_link %>
     </span> |
     <span>
       <%= link_to t('conclusion_draft_review.check_for_approval'),
-        {:action => :check_for_approval, :format => :json}, {:id => 'check_for_approval'} %>
+        {action: :check_for_approval, format: :json}, {id: 'check_for_approval'} %>
     </span>
     <% if @conclusion_draft_review.updated_at %>
       <span>
         | <%= t('conclusion_draft_review.last_verified_date',
-          :date => l(@conclusion_draft_review.updated_at, :format => :long)) %>
+          date: l(@conclusion_draft_review.updated_at, format: :long)) %>
       </span>
     <% end %>
   </div>
@@ -123,7 +123,7 @@
   <div id="approval_errors_detail" style="display: none;">
     <br />
     <div id="error_list_container">
-      <%= array_to_ul(@conclusion_draft_review.review.try(:approval_errors), :id => :error_list) %>
+      <%= array_to_ul(@conclusion_draft_review.review.try(:approval_errors), id: :error_list) %>
     </div>
 
     <div id="force_approval_prompt" <%== @conclusion_draft_review.review.try(:can_be_approved_by_force) ? '' : 'style="display: none;"' %>>
@@ -155,7 +155,7 @@
 
   $('#check_for_approval').click(function(event) {
     if(parseInt($('#conclusion_draft_review_review_id').val()) > 0) {
-      var url = '<%= url_for({:action => :check_for_approval, :format => :json}) %>';
+      var url = '<%= url_for({action: :check_for_approval, format: :json}) %>';
 
       $.get(url, { id: $('#conclusion_draft_review_review_id').val() }, function(data) {
         if(data.approved) {

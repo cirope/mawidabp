@@ -73,13 +73,13 @@ class ApplicationController < ActionController::Base
         end
 
         @action_privileges = ActiveSupport::HashWithIndifferentAccess.new(:approval).update(
-          :index => :read,
-          :show => :read,
-          :new => :modify,
-          :create => :modify,
-          :edit => :modify,
-          :update => :modify,
-          :destroy => :erase
+          index:   :read,
+          show:    :read,
+          new:     :modify,
+          create:  :modify,
+          edit:    :modify,
+          update:  :modify,
+          destroy: :erase
         )
 
         @auth_privileges = current_organization ?
@@ -124,7 +124,7 @@ class ApplicationController < ActionController::Base
     # _message_:: Mensaje que se mostrará luego de la redirección
     def redirect_to_index(message = nil, type = :notice) #:doc:
       flash[type] = message if message
-      redirect_to :action => :index
+      redirect_to action: :index
     end
 
     # Redirige la navegación a la página de autenticación
@@ -179,8 +179,8 @@ class ApplicationController < ActionController::Base
 
       unless can_perform?(current_action)
         if request.xhr?
-          render :partial => 'shared/ajax_message', :layout => false,
-            :locals => {:message => t('message.insufficient_privileges')}
+          render partial: 'shared/ajax_message', layout: false,
+            locals: {message: t('message.insufficient_privileges')}
         else
           redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
         end
@@ -238,7 +238,7 @@ class ApplicationController < ActionController::Base
         end
         @columns = params[:search][:columns] || []
         search_string = []
-        filters = { :boolean_false => false }
+        filters = { boolean_false: false }
 
 
         @query.each_with_index do |or_queries, i|
