@@ -22,7 +22,6 @@ class Organization < ApplicationRecord
   has_many :business_unit_types, -> { order(name: :asc) }, dependent: :destroy
   has_many :documents, dependent: :destroy
   has_many :error_records, dependent: :destroy
-  has_many :ldap_configs, dependent: :destroy
   has_many :login_records, dependent: :destroy
   has_many :news, dependent: :destroy
   has_many :periods, dependent: :destroy

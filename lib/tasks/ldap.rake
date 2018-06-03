@@ -11,16 +11,15 @@ namespace :ldap do
 
   desc 'Massive Import LDAP users and groups'
   task global_import: :environment do
-    Organization.where(corporate: false).each do |o|
-      o.ldap_configs.with_user.each do |ldap|
-        ::Rails.logger.info("[#{o.prefix.upcase}] Importing users for #{ldap.basedn}")
+    # Organization.where(corporate: false).joins(:ldap_config).each do |o|
+    LdapConfig.with_user.preload(:organization).each do |ldap|
+      ::Rails.logger.info("[#{ldap.organization.prefix.upcase}] Importing users for #{ldap.basedn}")
 
-        begin
-          imports = ldap.service_import
-          # LdapMailer.import_notifier(imports, o).deliver_later
-        rescue ::StandardError=> e
-          ::Rails.logger.error(e)
-        end
+      begin
+        imports = ldap.service_import
+        # LdapMailer.import_notifier(imports, o).deliver_later
+      rescue ::StandardError=> e
+        ::Rails.logger.error(e)
       end
     end
   end
