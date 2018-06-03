@@ -19,7 +19,7 @@ ValidatesTimeliness.setup do |config|
   #
   # Shorthand date and time symbols for restrictions
   # config.restriction_shorthand_symbols.update(
-  #   :now   => lambda { Time.current },
+  #   now:   lambda { Time.current },
   #   today: lambda { Date.current }
   # )
   #

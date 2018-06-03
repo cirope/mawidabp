@@ -878,27 +878,27 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_nothing_raised do
       get :weaknesses_report, params: {
         weaknesses_report: {
-          :review                    => '1',
-          :project                   => '2',
-          :process_control           => '3',
-          :control_objective         => '4',
-          :tags                      => '5',
-          :user_id                   => users(:administrator).id.to_s,
-          :finding_status            => '1',
-          :finding_title             => '1',
-          :risk                      => '1',
-          :priority                  => Finding.priorities_values.first,
-          :compliance                => 'yes',
-          :repeated                  => 'false',
-          :issue_date                => Date.today.to_s(:db),
-          :issue_date_operator       => '=',
-          :origination_date          => Date.today.to_s(:db),
+          review:                     '1',
+          project:                    '2',
+          process_control:            '3',
+          control_objective:          '4',
+          tags:                       '5',
+          user_id:                    users(:administrator).id.to_s,
+          finding_status:             '1',
+          finding_title:              '1',
+          risk:                       '1',
+          priority:                   Finding.priorities_values.first,
+          compliance:                 'yes',
+          repeated:                   'false',
+          issue_date:                 Date.today.to_s(:db),
+          issue_date_operator:        '=',
+          origination_date:           Date.today.to_s(:db),
           origination_date_operator: '>',
-          :follow_up_date            => Date.today.to_s(:db),
-          :follow_up_date_until      => Date.today.to_s(:db),
-          :follow_up_date_operator   => 'between',
-          :solution_date             => Date.today.to_s(:db),
-          :solution_date_operator    => '='
+          follow_up_date:             Date.today.to_s(:db),
+          follow_up_date_until:       Date.today.to_s(:db),
+          follow_up_date_operator:    'between',
+          solution_date:              Date.today.to_s(:db),
+          solution_date_operator:     '='
         }
       }
     end
@@ -913,7 +913,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     get :weaknesses_report, params: {
       weaknesses_report: {
         finding_status: Finding::STATUS[:being_implemented].to_s,
-        :finding_title  => 'a'
+        finding_title:  'a'
       }
     }
 
