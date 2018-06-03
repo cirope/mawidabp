@@ -9,13 +9,19 @@ module Organizations::Scopes
   def users_with_roles(*roles)
     role_types = roles.map { |role| ::Role::TYPES[role.to_sym] }
 
-    users.includes(
+    users = self.users.includes(
       organization_roles: :role
     ).where(
       roles: {
         role_type: role_types
       }
-    ).distinct
+    )
+
+    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      users.distinct
+    else
+      User.where(id: users.pluck(:id).uniq)
+    end
   end
 
   module ClassMethods
