@@ -2,7 +2,7 @@ module ConclusionReviews::WorkflowPdf
   extend ActiveSupport::Concern
 
   def create_workflow_pdf organization = nil
-    pdf        = Prawn::Document.create_generic_pdf :portrait, false
+    pdf        = Prawn::Document.create_generic_pdf :portrait, footer: false
     use_finals = kind_of? ConclusionFinalReview
 
     pdf.add_watermark I18n.t('pdf.draft') unless use_finals

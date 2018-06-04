@@ -3,7 +3,7 @@ module ConclusionReviews::PDF
 
   def to_pdf organization = nil, *args
     options = args.extract_options!
-    pdf     = Prawn::Document.create_generic_pdf :portrait, false
+    pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false
 
     put_cover_on                   pdf, organization
     put_watermark_on               pdf
