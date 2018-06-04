@@ -6,7 +6,7 @@ module ConclusionReviews::FindingsSheetPDF
     weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
 
     if weaknesses.any?
-      pdf = Prawn::Document.create_generic_pdf :portrait, false
+      pdf = Prawn::Document.create_generic_pdf :portrait, footer: false
 
       pdf.add_watermark I18n.t('pdf.draft') if kind_of? ConclusionDraftReview
 
