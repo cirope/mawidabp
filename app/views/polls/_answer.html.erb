@@ -5,7 +5,10 @@
 
   <div class="row form-inputs">
     <div class="col-md-6">
-      <% if question.answer_multi_choice? %>
+      <% if question.answer_yes_no? %>
+        <%= answer_options_collection f %>
+        <%= f.input :type, as: :hidden, input_html: { value: AnswerYesNo.name } %>
+      <% elsif question.answer_multi_choice? %>
         <%= answer_options_collection f %>
         <%= f.input :type, as: :hidden, input_html: { value: AnswerMultiChoice.name } %>
       <% elsif question.answer_written? %>
