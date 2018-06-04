@@ -15,7 +15,8 @@ module Polls::Reports
     polls_answered(polls).each do |poll|
       poll.answers.each do |answer|
         if answer.answer_option.present?
-          value  = Question::ANSWER_OPTION_VALUES[answer.answer_option.option.to_sym]
+          values = answer.question.option_values
+          value  = values[answer.answer_option.option.to_sym]
 
           if value >= 0
             count += value

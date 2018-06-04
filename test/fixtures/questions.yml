@@ -9,3 +9,9 @@ question_written:
   sort_order: 2
   answer_type: 0
   questionnaire: questionnaire_one
+
+question_yes_no:
+  question: ¿De verdad está de acuerdo con las tareas que ud. realiza en la organización?
+  sort_order: 3
+  answer_type: 2
+  questionnaire: questionnaire_one
