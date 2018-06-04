@@ -1,4 +1,6 @@
 <%= simple_form_for(@questionnaire) do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
+
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">

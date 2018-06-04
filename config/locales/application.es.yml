@@ -1436,7 +1436,9 @@ es:
         question:
           attributes:
             question:
-              answered: 'No se pudo actualizar, la pregunta ya tiene respuestas'
+              answered: 'ya tiene respuestas'
+            answer_type:
+              used: 'ya ha sido enviada en al menos un cuestionario'
         review:
           attributes:
             review_user_assignments:

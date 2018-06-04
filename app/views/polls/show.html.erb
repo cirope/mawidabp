@@ -28,7 +28,7 @@
   <% @poll.answers.each do |answer| %>
     <li><strong><%= answer.question.question %></strong>
       <% if @poll.answered? %>
-        <% if answer.question.answer_multi_choice? && answer.answer_option %>
+        <% if answer.question.options.any? && answer.answer_option %>
           <%= ": #{t "answer_options.#{answer.answer_option.option}"}" %>
         <% elsif answer.question.answer_written? %>
           <%= ": #{answer.answer}" %>

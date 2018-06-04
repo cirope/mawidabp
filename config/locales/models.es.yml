@@ -21,6 +21,9 @@ es:
       answer_written:
         one: 'Respuesta escrita'
         other: 'Respuestas escritas'
+      answer_yes_no:
+        one: 'Opción si o no'
+        other: 'Opciones si o no'
       benefit:
         one: 'Beneficio / Perjuicio'
         other: 'Beneficios / Perjuicios'
@@ -434,6 +437,10 @@ es:
         email_link: 'Texto del enlace'
         email_text: 'Texto del correo'
         email_clarification: 'Aclaración del correo'
+      questionnaire/questions:
+        sort_order: 'Orden'
+        question: 'Pregunta'
+        answer_type: 'Tipo de respuesta'
       resource:
         name: 'Recurso'
         description: 'Descripción'
