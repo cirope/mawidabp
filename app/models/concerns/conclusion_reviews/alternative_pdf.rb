@@ -3,7 +3,7 @@ module ConclusionReviews::AlternativePDF
 
   def alternative_pdf organization = nil, *args
     options = args.extract_options!
-    pdf     = Prawn::Document.create_generic_pdf :portrait, false, hide_brand: true
+    pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false, hide_brand: true
 
     put_watermark_on          pdf
     put_alternative_header_on pdf, organization

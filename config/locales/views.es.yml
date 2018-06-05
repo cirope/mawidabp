@@ -28,6 +28,8 @@ es:
     neither_agree_nor_disagree: 'Ni acuerdo ni desacuerdo'
     agree: 'De acuerdo'
     strongly_agree: 'Muy de acuerdo'
+    'yes': 'Si'
+    'no': 'No'
 
   benefits:
     index:

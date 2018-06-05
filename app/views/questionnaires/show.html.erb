@@ -13,18 +13,18 @@
   <%= @questionnaire.email_link %>
 </p>
 
-<% if @questionnaire.email_text? %>
-  <p>
+<% if @questionnaire.email_text.present? %>
+  <div>
     <strong><%= Questionnaire.human_attribute_name 'email_text' %></strong>:
-    <%= @questionnaire.email_text %>
-  </p>
+    <%= simple_format @questionnaire.email_text %>
+  </div>
 <% end %>
 
-<% if @questionnaire.email_clarification? %>
-  <p>
+<% if @questionnaire.email_clarification.present? %>
+  <div>
     <strong><%= Questionnaire.human_attribute_name 'email_clarification' %></strong>:
-    <%= @questionnaire.email_clarification %>
-  </p>
+    <%= simple_format @questionnaire.email_clarification %>
+  </div>
 <% end %>
 
 <% if @questionnaire.pollable_type? %>

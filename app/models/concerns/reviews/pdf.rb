@@ -2,7 +2,7 @@ module Reviews::PDF
   extend ActiveSupport::Concern
 
   def to_pdf organization = nil
-    pdf = Prawn::Document.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape, margins: [25, 5, 20, 5]
 
     pdf.add_generic_report_header organization
     pdf.add_title *pdf_title

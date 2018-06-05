@@ -10,13 +10,14 @@ module Questions::Callbacks
   private
 
     def set_default_answers
-      assign_answer_options if answer_multi_choice?
+      assign_answer_options if options.any?
     end
 
     def verify_multi_choice
-      if answer_type_changed?
-        if answer_multi_choice?
-          assign_answer_options if answer_options.blank?
+      if answer_type_changed? && questionnaire.polls.empty?
+        if options.any?
+          answer_options.clear
+          assign_answer_options
         else
           if answer.blank?
             answer_options.clear
@@ -24,11 +25,13 @@ module Questions::Callbacks
             errors.add :question, :answered
           end
         end
+      elsif answer_type_changed? && questionnaire.polls.any?
+        errors.add :answer_type, :used
       end
     end
 
     def assign_answer_options
-      ANSWER_OPTIONS.each do |option|
+      options.each do |option|
         answer_options << AnswerOption.new(option: option)
       end
     end
