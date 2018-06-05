@@ -20,7 +20,7 @@ module Organizations::Scopes
     if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
       users.distinct
     else
-      User.where(id: users.pluck(:id).uniq)
+      User.where id: users.pluck(:id).uniq
     end
   end
 

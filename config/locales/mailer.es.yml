@@ -4,7 +4,7 @@ es:
     import_notifier:
       subject: "Han habido cambios en los usuarios"
       body_title: "Se han sincronizado usuarios, estos son los cambios realizados:"
-      receptors: "Hola,"
+      greetings: "Hola supervisores"
       states:
         created: 'Creados:'
         updated: 'Actualizados:'
