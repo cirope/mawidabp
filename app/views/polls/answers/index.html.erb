@@ -38,9 +38,9 @@
     <ol>
       <% poll.answers.each do |answer| %>
         <li>
-          <%= answer.question.question %>
+          <%= answer.question.question %>:
           <% if poll.answered? %>
-            <% if answer.question.answer_multi_choice? %>
+            <% if answer.question.options.any? %>
               <strong>
                 <%= t "answer_options.#{answer.answer_option.option}" %>
               </strong>

@@ -1,6 +1,8 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <p><b><%= @user + ', ' %></b></p>
-  <p><%= @poll.questionnaire.email_text %></p>
+  <p><strong><%= @user %></strong>,</p>
+
+  <%= simple_format @poll.questionnaire.email_text %>
+
   <p>
     <%= link_to @poll.questionnaire.email_link,
       edit_poll_url(
@@ -9,6 +11,7 @@
       )
     %>
   </p>
+
   <% if @poll.conclusion_review %>
     <p>
       <%= Poll.human_attribute_name 'pollable' %>:
@@ -17,6 +20,7 @@
       </strong>
     </p>
   <% end %>
+
   <% if @poll.affected_user %>
     <p>
       <%= t(
@@ -25,8 +29,9 @@
       ) %>
     </p>
   <% end %>
-  <% if @poll.questionnaire.email_clarification? %>
-    <p><%= @poll.questionnaire.email_clarification %></p>
+
+  <% if @poll.questionnaire.email_clarification.present? %>
+    <%= simple_format @poll.questionnaire.email_clarification %>
   <% end %>
 
   <%= render 'common_mailer/footer' %>

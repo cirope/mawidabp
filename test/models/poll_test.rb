@@ -36,7 +36,7 @@ class PollTest < ActiveSupport::TestCase
 
   test 'delete' do
     assert_difference 'Poll.count', -1 do
-      assert_difference 'Answer.count', -2 do
+      assert_difference 'Answer.count', -@poll.answers.count do
         @poll.destroy
       end
     end
