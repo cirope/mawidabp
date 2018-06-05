@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class LdapConfigTest < ActiveSupport::TestCase
-  include ActiveJob::TestHelper
-
   setup do
     @ldap_config = ldap_configs :google_ldap
   end
@@ -143,10 +141,8 @@ class LdapConfigTest < ActiveSupport::TestCase
     organization = organizations(:google)
     organization.ldap_config.update!(user: 'admin', password: 'admin123')
 
-    assert_difference 'User.count' do
-      assert_enqueued_jobs 1 do
-        LdapConfig.sync_users
-      end
+    assert_difference ['User.count', 'ActionMailer::Base.deliveries.size'] do
+      LdapConfig.sync_users
     end
   end
 

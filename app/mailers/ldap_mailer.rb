@@ -20,6 +20,7 @@ class LdapMailer < ActionMailer::Base
       organization: organization.prefix.upcase
     )
 
+    byebug
     mail to: emails, subject: subject
   end
 end

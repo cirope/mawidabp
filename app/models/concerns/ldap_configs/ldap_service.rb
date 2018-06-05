@@ -21,14 +21,15 @@ module LdapConfigs::LDAPService
   module ClassMethods
     def sync_users
       all.with_user.preload(:organization).each do |ldap|
-        puts "[#{ldap.organization.prefix.upcase}] Importing users for #{ldap.basedn}"
+        organization = ldap.organization
         ::Rails.logger.info(
-          "[#{ldap.organization.prefix.upcase}] Importing users for #{ldap.basedn}"
+          "[#{organization.prefix.upcase}] Importing users for #{ldap.basedn}"
         )
+        Organization.current_id = organization.id # Roles scope
 
         begin
           imports = ldap.sync
-          LdapMailer.import_notifier(imports, ldap.organization).deliver_later
+          LdapMailer.import_notifier(imports, organization).deliver_now
         rescue ::StandardError=> e
           ::Rails.logger.error(e)
         end
