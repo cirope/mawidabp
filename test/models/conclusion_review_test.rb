@@ -41,10 +41,10 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
-        :conclusion => 'New conclusion',
+        :conclusion => CONCLUSION_OPTIONS.first,
         :recipients => 'John Doe',
         :sectors => 'Area 51',
-        :evolution => 'Do the evolution',
+        :evolution => EVOLUTION_OPTIONS.second,
         :evolution_justification => 'Ok',
         :main_weaknesses_text => 'Some main weakness X',
         :corrective_actions => 'You should do it this way',
@@ -89,7 +89,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review.evolution = '   '
     @conclusion_review.evolution_justification = '   '
     @conclusion_review.main_weaknesses_text = '   '
-    @conclusion_review.corrective_actions = '   '
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
@@ -107,7 +106,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
     if ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(organization.prefix)
       assert_error @conclusion_review, :main_weaknesses_text, :blank
-      assert_error @conclusion_review, :corrective_actions, :blank
     end
   end
 
@@ -157,6 +155,30 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :close_date, :on_or_after, restriction: I18n.l(Date.today)
+  end
+
+  test 'validates evolution' do
+    skip unless SHOW_CONCLUSION_ALTERNATIVE_PDF
+
+    @conclusion_review.evolution = 'invalid'
+
+    assert @conclusion_review.invalid?
+    assert_error @conclusion_review, :evolution, :invalid
+  end
+
+  test 'conclusion index' do
+    skip unless SHOW_CONCLUSION_AS_OPTIONS
+
+    @conclusion_review.conclusion = CONCLUSION_OPTIONS.last
+    @conclusion_review.evolution = EVOLUTION_OPTIONS.last
+
+    assert_nil @conclusion_review.conclusion_index
+
+    @conclusion_review.save!
+
+    assert_not_nil @conclusion_review.conclusion_index
+    assert_equal CONCLUSION_OPTIONS.index(@conclusion_review.conclusion),
+      @conclusion_review.conclusion_index
   end
 
   test 'send by email' do
@@ -223,7 +245,21 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert File.exist?(@conclusion_review.absolute_pdf_path)
     assert (size = File.size(@conclusion_review.absolute_pdf_path)) > 0
 
-    @conclusion_review.update_column :main_weaknesses_text, nil
+    @conclusion_review.update_column :collapse_control_objectives, true
+
+    assert_nothing_raised do
+      @conclusion_review.alternative_pdf organization
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+
+    if ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.exclude?(organization.prefix)
+      assert_not_equal size, new_size
+    end
+
+    @conclusion_review.update_columns collapse_control_objectives: false,
+      main_weaknesses_text: nil
 
     assert_nothing_raised do
       @conclusion_review.alternative_pdf organization

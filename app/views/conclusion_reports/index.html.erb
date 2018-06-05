@@ -92,6 +92,10 @@
         <div class="list-group">
           <%= link_to t('conclusion_committee_report.review_stats_report_title'),
             { action: :review_stats_report, controller_name: 'conclusion' }, class: 'list-group-item' %>
+          <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+            <%= link_to t('conclusion_committee_report.review_score_details_report_title'),
+              { action: :review_score_details_report, controller_name: 'conclusion' }, class: 'list-group-item' %>
+          <% end %>
         </div>
       </div>
     </div>

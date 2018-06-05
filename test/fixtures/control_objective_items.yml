@@ -84,6 +84,7 @@ organization_security_4_2_item:
   organization: cirope
 
 management_dependency_item_editable:
+  order_number: 1
   control_objective_text: Dependencia del área responsible
   relevance: <%= ControlObjectiveItem.relevances_values.last %>
   design_score: <%= ControlObjectiveItem.qualifications_values.first %>
@@ -100,6 +101,7 @@ management_dependency_item_editable:
   organization: cirope
 
 impact_analysis_item_editable:
+  order_number: 2
   control_objective_text: Análisis de impacto
   relevance: <%= ControlObjectiveItem.relevances_values.last %>
   design_score: <%= ControlObjectiveItem.qualifications_values.last %>
@@ -121,7 +123,7 @@ organization_security_4_2_item_editable:
   design_score: <%= ControlObjectiveItem.qualifications_values.last %>
   compliance_score: <%= ControlObjectiveItem.qualifications_values.last %>
   sustantive_score: <%= ControlObjectiveItem.qualifications_values.last %>
-  audit_date: <%= 1.year.ago.to_date.to_s(:db) %>
+  audit_date: <%= 1.day.ago.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false
@@ -169,7 +171,7 @@ organization_security_4_4_item:
   design_score: <%= ControlObjectiveItem.qualifications_values.last %>
   compliance_score: <%= ControlObjectiveItem.qualifications_values.last %>
   sustantive_score: <%= ControlObjectiveItem.qualifications_values.last %>
-  audit_date: <%= 1.year.ago.to_date.to_s(:db) %>
+  audit_date: <%= 1.day.ago.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
   exclude_from_score: false

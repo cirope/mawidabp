@@ -2,7 +2,7 @@ require 'test_helper'
 
 class PollsControllerTest < ActionController::TestCase
   setup do
-    @poll = polls :poll_one
+    @poll = polls(:poll_one)
 
     login
   end
@@ -63,7 +63,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'edit poll' do
-    @request.host = "#{@poll.organization.prefix}.localhost.i"
+    set_host_for_organization(@poll.organization.prefix)
 
     get :edit, params: {
       id: @poll,
@@ -75,7 +75,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'update poll' do
-    @request.host = "#{@poll.organization.prefix}.localhost.i"
+    set_host_for_organization(@poll.organization.prefix)
 
     assert_no_difference ['Poll.count', 'Answer.count'] do
       patch :update, params: {
@@ -108,7 +108,7 @@ class PollsControllerTest < ActionController::TestCase
 
   test 'destroy poll' do
     assert_difference 'Poll.count', -1 do
-      assert_difference 'Answer.count', -2 do
+      assert_difference 'Answer.count', -@poll.answers.count do
         delete :destroy, params: { id: @poll }
       end
     end

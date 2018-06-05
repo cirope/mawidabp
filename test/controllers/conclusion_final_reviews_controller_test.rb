@@ -7,7 +7,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
   setup do
-    @request.host = "#{organizations(:cirope).prefix}.localhost.i"
+    set_host_for_organization(organizations(:cirope).prefix)
   end
 
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
@@ -126,11 +126,11 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :issue_date => Date.today,
           :close_date => Date.tomorrow,
           :applied_procedures => 'New applied procedures',
-          :conclusion => 'New conclusion',
+          :conclusion => CONCLUSION_OPTIONS.first,
           :summary => 'ACT 12',
           :recipients => 'John Doe',
           :sectors => 'Area 51',
-          :evolution => 'Do the evolution',
+          :evolution => EVOLUTION_OPTIONS.second,
           :evolution_justification => 'Ok',
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
@@ -162,11 +162,11 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'Updated applied procedures',
-          :conclusion => 'Updated conclusion',
+          :conclusion => CONCLUSION_OPTIONS.first,
           :summary => 'ACT Updated',
           :recipients => 'John Doe',
           :sectors => 'Area 51',
-          :evolution => 'Do the evolution',
+          :evolution => EVOLUTION_OPTIONS.second,
           :evolution_justification => 'Ok',
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',

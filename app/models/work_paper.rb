@@ -122,7 +122,7 @@ class WorkPaper < ApplicationRecord
     review ||= self.owner.kind_of?(ControlObjectiveItem) ? self.owner.review :
       (self.owner.kind_of?(Finding) ?
         self.owner.try(:control_objective_item).try(:review) : nil)
-    pdf = Prawn::Document.create_generic_pdf(:portrait, false)
+    pdf = Prawn::Document.create_generic_pdf(:portrait, footer: false)
 
     pdf.add_review_header review.try(:organization),
       review.try(:identification), review.try(:plan_item).try(:project)

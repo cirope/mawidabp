@@ -23,6 +23,11 @@
       <% end %>
       <% unless @review.has_final_review? %>
         <li>
+          <%= link_to t('review.reorder'), reorder_review_path(@review, _ts: Time.now.to_i), data: {
+            method: :patch, confirm: t('messages.confirmation')
+          } %>
+        </li>
+        <li>
           <%= link_to t('review.recode_findings'), recode_findings_review_path(@review, _ts: Time.now.to_i), data: {
             method: :patch, confirm: t('messages.confirmation')
           } %>

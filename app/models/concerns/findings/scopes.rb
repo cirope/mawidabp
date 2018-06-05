@@ -85,7 +85,7 @@ module Findings::Scopes
     end
 
     def by_issue_date operator, date, date_until = nil
-      mask      = date_until ? '? AND ?' : '?'
+      mask      = operator.downcase == 'between' && date_until ? '? AND ?' : '?'
       condition = "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} #{operator} #{mask}"
 
       includes(review: :conclusion_final_review).where condition, *[date, date_until].compact

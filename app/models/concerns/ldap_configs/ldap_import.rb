@@ -24,6 +24,8 @@ module LdapConfigs::LDAPImport
       raise Net::LDAP::Error.new unless ldap.get_operation_result.code == 0
 
       assign_managers managers, users_by_dn
+
+      users = check_state_for_late_changes(users)
     end
 
     users
@@ -37,17 +39,25 @@ module LdapConfigs::LDAPImport
       data       = trivial_data entry
       roles      = clean_roles Role.list_with_corporate.where(name: role_names)
       user       = User.by_email data[:email]
-      new        = !user
 
       data[:manager_id] = nil if manager_dn.blank?
 
-      if user
-        update_user user: user, data: data, roles: roles
-      else
-        user = create_user user: user, data: data, roles: roles
-      end
+      state = if user
+                update_user user: user, data: data, roles: roles
 
-      { user: user, manager_dn: manager_dn, new: new }
+                if user.roles.any?
+                  user.saved_changes? ? :updated : :unchanged
+                else
+                  :deleted
+                end
+              else
+                user = create_user user: user, data: data, roles: roles
+                :created
+              end
+
+      state = :error if user.errors.any?
+
+      { user: user, manager_dn: manager_dn, state: state }
     end
 
     def role_data entry
@@ -119,6 +129,18 @@ module LdapConfigs::LDAPImport
                      end
 
         user.reload.update manager_id: manager_id
+      end
+    end
+
+    def check_state_for_late_changes(users)
+      users.map do |u_d|
+        if u_d[:state] == :unchanged && u_d[:user].saved_changes?
+          u_d[:state] = :updated
+        end
+
+        u_d[:state] = :error if u_d[:user].errors.any?
+
+        u_d
       end
     end
 end

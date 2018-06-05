@@ -18,7 +18,9 @@
     <% @reviews[month].each do |data| %>
       <% conclusion_review = data[:conclusion_review] %>
 
-      <% unless last_shown_business_unit_type_id == conclusion_review.review.business_unit_type.id %>
+      <% if last_shown_business_unit_type_id == conclusion_review.review.business_unit_type.id %>
+        <hr>
+      <% else %>
         <h3>
           <%= conclusion_review.review.business_unit_type.name %>
         </h3>
@@ -132,10 +134,6 @@
                   w.title,
                   [Weakness.human_attribute_name('risk'), w.risk_text].join(': '),
                   [Weakness.human_attribute_name('state'), w.state_text].join(': '),
-                  [
-                    Weakness.human_attribute_name('origination_date'),
-                    w.repeated_of_id ? l(w.origination_date) : t('conclusion_review.new_origination_date')
-                  ].join(': '),
                   ([
                     t('conclusion_committee_report.weaknesses_by_month.year'),
                     l(w.origination_date, format: '%Y')
@@ -150,8 +148,6 @@
           <p><em><%= t 'conclusion_committee_report.weaknesses_by_month.without_weaknesses' %></em></p>
         </div>
       <% end %>
-
-      <br>
     <% end %>
   <% else %>
     <p>

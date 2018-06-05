@@ -594,4 +594,94 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_equal 0, tags.size
   end
+
+  test 'check order by not readed comments desc' do
+    skip unless ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+
+    # we already have a test that checks the response
+    get :index, params: { completed: 'incomplete' }
+
+    first = findings(:unanswered_for_level_1_notification)
+    second = findings(:unanswered_for_level_2_notification)
+
+    # ensure first two elements are different than chosen
+    assert_empty(assigns(:findings).first(2).map(&:id) & [first.id, second.id])
+
+    # First place
+    3.times { create_finding_answers_for(first, destroy_readings: true) }
+    # Second place
+    create_finding_answers_for(second, destroy_readings: true)
+
+    get :index, params: {
+      completed: 'incomplete',
+      search: {
+        order: 'readings_desc'
+      }
+    }
+    assert_response :success
+
+    ordered_findings = assigns(:findings)
+    assert_equal first.id, ordered_findings.first.id
+    assert_equal second.id, ordered_findings.second.id
+  end
+
+  test 'check order by not readed comments desc in all formats' do
+    skip unless ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+
+    first = findings(:unanswered_for_level_1_notification)
+    second = findings(:unanswered_for_level_2_notification)
+
+    3.times { create_finding_answers_for(first, destroy_readings: true) }
+    create_finding_answers_for(second, destroy_readings: true)
+
+    get :index, params: {
+      completed: 'incomplete',
+      search: {
+        order: 'readings_desc'
+      }
+    }
+    assert_response :success
+    html_findings = assigns(:findings).pluck(:id)
+
+    get :index, params: {
+      completed: 'incomplete',
+      search: {
+        order: 'readings_desc'
+      }
+    }, as: :csv
+    assert_response :success
+    # forcing quote_char because of the html response
+    csv = CSV.parse(@response.body, col_sep: ';', quote_char: "'", headers: true)
+    csv_findings = []
+    csv.each do |row|
+      id = row['"Id"'].strip.tr('"', '').to_i
+      csv_findings << id if id&.positive?
+    end
+
+    get :index, params: {
+      completed: 'incomplete',
+      search: {
+        order: 'readings_desc'
+      }
+    }, as: :pdf
+    # we can't check the order inside the PDF so...
+    assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
+
+    assert_equal(
+      html_findings,
+      csv_findings[0...html_findings.size] # csv is not paginated
+    )
+  end
+
+  private
+
+  def create_finding_answers_for(finding, destroy_readings: false)
+    finding_answer = finding.finding_answers.create!(
+      answer: 'something',
+      user_id: users(:administrator).id,
+      commitment_date: 1.day.from_now
+    )
+    finding_answer.readings.map(&:destroy!) if destroy_readings
+    finding_answer
+  end
 end

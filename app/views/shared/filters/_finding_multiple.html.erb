@@ -1,0 +1,30 @@
+<% status_options = if action == :fixed_weaknesses_report
+                      finding_fixed_status_options
+                    elsif params[:execution].present?
+                      finding_execution_status_options
+                    else
+                      finding_status_options
+                    end
+%>
+<div id="finding_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+  <div class="row">
+    <div class="col-md-6">
+       <div class="form-group">
+          <% selected = params[action] ? params[action][:finding_status] : nil %>
+          <%= f.label :finding_status, Finding.human_attribute_name('state'), class: 'col-md-3' %>
+          <div class="col-md-9">
+            <%= f.input :finding_status, collection: status_options, as: :check_boxes, checked: selected, label: false, class: 'form-control' %>
+          </div>
+       </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <% finding_title = params[action] ? params[action][:finding_title] : nil %>
+        <%= f.label :finding_title, Finding.human_attribute_name('title'), class: 'col-md-3' %>
+        <div class="col-md-9">
+          <%= f.text_field :finding_title, value: finding_title, maxlength: 255, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

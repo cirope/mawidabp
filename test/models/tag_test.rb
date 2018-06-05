@@ -49,6 +49,15 @@ class TagTest < ActiveSupport::TestCase
     assert_error @tag, :icon, :inclusion
   end
 
+  test 'shared reversion' do
+    @tag.update! shared: true
+
+    @tag.shared = false
+
+    assert @tag.invalid?
+    assert_error @tag, :shared, :invalid
+  end
+
   test 'search' do
     tags = Tag.search query: @tag.name
 

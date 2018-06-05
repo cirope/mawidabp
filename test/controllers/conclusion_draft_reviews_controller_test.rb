@@ -7,7 +7,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
   setup do
-    @request.host = "#{organizations(:cirope).prefix}.localhost.i"
+    set_host_for_organization(organizations(:cirope).prefix)
   end
 
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
@@ -126,10 +126,10 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
-          :conclusion => 'New conclusion',
+          :conclusion => CONCLUSION_OPTIONS.first,
           :recipients => 'John Doe',
           :sectors => 'Area 51',
-          :evolution => 'Do the evolution',
+          :evolution => EVOLUTION_OPTIONS.second,
           :evolution_justification => 'Ok',
           :observations => nil,
           :main_weaknesses_text => 'Some main weakness X',
@@ -162,10 +162,10 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'Updated applied procedures',
-          :conclusion => 'Updated conclusion',
+          :conclusion => CONCLUSION_OPTIONS.first,
           :recipients => 'John Doe',
           :sectors => 'Area 51',
-          :evolution => 'Do the evolution',
+          :evolution => EVOLUTION_OPTIONS.second,
           :evolution_justification => 'Ok',
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
@@ -177,8 +177,8 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     assert_redirected_to edit_conclusion_draft_review_url(assigns(:conclusion_draft_review))
     assert_not_nil assigns(:conclusion_draft_review)
-    assert_equal 'Updated conclusion',
-      assigns(:conclusion_draft_review).conclusion
+    assert_equal 'Updated applied procedures',
+      assigns(:conclusion_draft_review).applied_procedures
   end
 
   test 'export conclusion draft review' do

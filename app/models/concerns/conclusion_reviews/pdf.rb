@@ -3,7 +3,7 @@ module ConclusionReviews::PDF
 
   def to_pdf organization = nil, *args
     options = args.extract_options!
-    pdf     = Prawn::Document.create_generic_pdf :portrait, false
+    pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false
 
     put_cover_on                   pdf, organization
     put_watermark_on               pdf
@@ -153,7 +153,8 @@ module ConclusionReviews::PDF
     end
 
     def put_review_signatures_table_on pdf
-      users = review.review_user_assignments.select &:include_signature
+      users = review.review_user_assignments.select(&:include_signature)
+      users = users.sort { |rua| rua.assignment_type }
 
       pdf.move_down PDF_FONT_SIZE
       pdf.add_review_signatures_table users

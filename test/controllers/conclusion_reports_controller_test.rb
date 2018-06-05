@@ -213,6 +213,88 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       'review_scores_report', 0)
   end
 
+  test 'review score details report' do
+    login
+
+    get :review_score_details_report, :params => { :controller_name => 'conclusion' }
+    assert_response :success
+    assert_template 'conclusion_reports/review_score_details_report'
+
+    assert_nothing_raised do
+      get :review_score_details_report, :params => {
+        :review_score_details_report => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion'
+      }
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/review_score_details_report'
+  end
+
+  test 'review score details report as CSV' do
+    login
+
+    get :review_score_details_report, :params => { :controller_name => 'conclusion' }, as: :csv
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+
+    assert_nothing_raised do
+      get :review_score_details_report, :params => {
+        :review_score_details_report => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion', as: :csv
+      }
+    end
+
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+  end
+
+  test 'filtered review score details report' do
+    login
+    get :review_score_details_report, :params => {
+      :review_score_details_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :conclusion => [CONCLUSION_OPTIONS.first],
+        :scope => ['committee'],
+        :business_unit_type => [business_unit_types(:cycle).id],
+        :business_unit => 'one, two'
+      },
+      :controller_name => 'conclusion'
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:filters)
+    assert_equal 4, assigns(:filters).count
+    assert_template 'conclusion_reports/review_score_details_report'
+  end
+
+  test 'create review score details report' do
+    login
+
+    post :create_review_score_details_report, :params => {
+      :review_score_details_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion'
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.review_score_details_report.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'review_score_details_report', 0)
+  end
+
   test 'weaknesses by state report' do
     login
 
@@ -266,7 +348,9 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       get :weaknesses_by_risk, :params => {
         :weaknesses_by_risk => {
           :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
+          :to_date => 10.years.from_now.to_date,
+          :compliance => 'yes',
+          :repeated => 'false'
         },
         :controller_name => 'conclusion',
         :final => true

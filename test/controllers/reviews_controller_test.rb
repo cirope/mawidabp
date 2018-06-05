@@ -134,6 +134,15 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/show'
   end
 
+  test 'show review as pdf' do
+    review = reviews :current_review
+
+    login
+
+    get :show, params: { id: review }, as: :pdf
+    assert_redirected_to review.relative_pdf_path
+  end
+
   test 'new review' do
     login
     get :new
@@ -480,6 +489,14 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_redirected_to review_url(reviews(:review_without_conclusion))
   end
 
+  test 'reorder' do
+    login
+
+    patch :reorder, params: { id: reviews(:review_without_conclusion).id }
+
+    assert_redirected_to review_url(reviews(:review_without_conclusion))
+  end
+
   test 'next identification number' do
     login
 
@@ -572,6 +589,42 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 0, process_controls.size # None
   end
 
+  test 'auto complete for best practices' do
+    login
+    get :auto_complete_for_best_practice, xhr: true, params: {
+      q: 'a'
+    }, as: :json
+    assert_response :success
+
+    best_practices = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 2, best_practices.size
+    assert(
+      best_practices.all? { |bp| bp['label'].match /a/i }
+    )
+
+    get :auto_complete_for_best_practice, xhr: true, params: {
+      q: 'iso'
+    }, as: :json
+    assert_response :success
+
+    best_practices = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, best_practices.size
+    assert(
+      best_practices.all? { |bp| bp['label'].match /iso/i }
+    )
+
+    get :auto_complete_for_best_practice, xhr: true, params: {
+      q: 'xyz'
+    }, as: :json
+    assert_response :success
+
+    best_practices = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, best_practices.size # None
+  end
+
   test 'auto complete for finding relation' do
     login
     get :auto_complete_for_finding, xhr: true, params: { q: 'O001' }, as: :json
@@ -632,5 +685,56 @@ class ReviewsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_equal @response.content_type, Mime[:js]
+  end
+
+  test 'recover original control objective name' do
+    set_organization
+    login
+
+    coi = control_objective_items(:management_dependency_item_editable)
+    coi.update!(control_objective_text: 'different text')
+
+    assert_not_equal(
+      coi.reload.control_objective_text,
+      coi.control_objective.name
+    )
+
+    patch :reset_control_objective_name, params: {
+      id: coi.review.id, control_objective_item_id: coi.id
+    }, as: :js
+    assert_response :success
+
+    assert_equal(
+      coi.reload.control_objective_text,
+      coi.control_objective.name
+    )
+  end
+
+  test 'can not recover original name with freeze obj' do
+    set_organization
+    login
+
+    coi = control_objective_items(:management_dependency_item)
+    coi.update_column(:control_objective_text, 'forced text')
+
+    assert_not_equal(
+      'forced text',
+      coi.control_objective.name
+    )
+
+    assert_not_equal(
+      coi.reload.control_objective_text,
+      coi.control_objective.name
+    )
+
+    patch :reset_control_objective_name, params: {
+      id: coi.review.id, control_objective_item_id: coi.id
+    }, as: :js
+    assert_response :success
+
+    assert_not_equal(
+      coi.reload.control_objective_text,
+      coi.control_objective.name
+    )
   end
 end
