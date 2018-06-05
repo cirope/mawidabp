@@ -896,11 +896,6 @@
       body_title:
         one: "El siguiente hallazgo está vencido"
         other: "Los siguientes hallazgos están vencidos"
-    footer:
-      email_label: "Correo"
-      warning: "Por favor, *no contestar* el presente correo."
-      title: "Correo enviado por el sistema 'Mawidabp'. Cualquier inquietud comunicarse al área de soporte:"
-      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 8 o superior*"
     notification:
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"
