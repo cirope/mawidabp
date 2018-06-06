@@ -34,24 +34,23 @@
   </p>
 <% end %>
 
-<p>
-  <strong><%= Questionnaire.human_attribute_name 'questions' %></strong>:
-</p>
+<h4>
+  <%= Questionnaire.human_attribute_name 'questions' %>
+</h4>
 
-<ol>
-  <% @questionnaire.questions.each do |question| %>
-    <li>
-      <strong><%= question.question %></strong>
-      <% if question.answer_type %>
-        <ul class="list-padding">
-          <% question.answer_options.each do |ao| %>
-            <li><%= t "answer_options.#{ao.option}" %></li>
-          <% end %>
-        </ul>
+<% @questionnaire.questions.each do |question| %>
+  <div>
+    <%= simple_format "#{question.sort_order}. #{question.question}" %>
+  </div>
+
+  <% if question.answer_type %>
+    <ul class="list-padding">
+      <% question.answer_options.each do |ao| %>
+        <li><%= t "answer_options.#{ao.option}" %></li>
       <% end %>
-    </li>
+    </ul>
   <% end %>
-</ol>
+<% end %>
 
 <hr />
 
