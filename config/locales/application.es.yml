@@ -798,12 +798,6 @@ es:
       body_title: "Se adjuntan los siguientes documentos: %{elements}"
       final: "definitivo"
       draft: "borrador"
-    footer:
-      email_label: "Correo (preferentemente)"
-      phone_label: "Teléfono"
-      warning: "Por favor, *no contestar* el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
-      title: "Correo enviado por el sistema 'Mawidabp'. Cualquier inquietud comunicarse al área de soporte:"
-      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 8 o superior*"
     notification:
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"
