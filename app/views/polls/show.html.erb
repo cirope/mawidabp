@@ -27,7 +27,9 @@
 </h4>
 
 <% @poll.answers.each do |answer| %>
-  <%= simple_format "#{answer.question.sort_order}. #{answer.question.question}" %>
+  <div class="text-bold">
+    <%= simple_format "#{answer.question.sort_order}. #{answer.question.question}" %>
+  </div>
 
   <% if @poll.answered? %>
     <blockquote class="small">

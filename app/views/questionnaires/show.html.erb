@@ -39,7 +39,7 @@
 </h4>
 
 <% @questionnaire.questions.each do |question| %>
-  <div>
+  <div class="text-bold">
     <%= simple_format "#{question.sort_order}. #{question.question}" %>
   </div>
 
