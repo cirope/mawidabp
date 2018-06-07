@@ -59,7 +59,7 @@ module Findings::Expiration
         from = date
         to   = from.wday == 5 ? from + 2.days : from
 
-        finals(false).being_implemented.where follow_up_date: from..to
+        being_implemented.or(awaiting).finals(false).where follow_up_date: from..to
       end
   end
 end
