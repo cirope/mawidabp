@@ -20,7 +20,7 @@ module LdapConfigs::LDAPService
 
   module ClassMethods
     def sync_users
-      all.with_user.preload(:organization).each do |ldap|
+      with_user.preload(:organization).each do |ldap|
         organization = ldap.organization
         ::Rails.logger.info(
           "[#{organization.prefix.upcase}] Importing users for #{ldap.basedn}"
