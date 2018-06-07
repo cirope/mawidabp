@@ -3,6 +3,7 @@ module LdapConfigs::LDAPService
 
   included do
     scope :with_user, -> { where.not(user: nil, encrypted_password: nil) }
+
     before_save :encrypt_password, if: :password?
   end
 
@@ -22,16 +23,18 @@ module LdapConfigs::LDAPService
     def sync_users
       with_user.preload(:organization).each do |ldap|
         organization = ldap.organization
+
+        Organization.current_id = organization.id # Roles scope
+
         ::Rails.logger.info(
           "[#{organization.prefix.upcase}] Importing users for #{ldap.basedn}"
         )
-        Organization.current_id = organization.id # Roles scope
 
         imports = ldap.sync
         filtered_imports = imports.map do |i|
-          next if i[:state] == :unchanged
-
-          { user: { name: i[:user].to_s, errors: i[:errors] }, state: i[:state] }
+          unless i[:state] == :unchanged
+            { user: { name: i[:user].to_s, errors: i[:errors] }, state: i[:state] }
+          end
         end.compact
 
         if filtered_imports.any?
@@ -45,7 +48,7 @@ module LdapConfigs::LDAPService
 
   private
 
-  def password?
-    password.present?
-  end
+    def password?
+      password.present?
+    end
 end

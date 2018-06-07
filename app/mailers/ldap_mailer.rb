@@ -7,10 +7,10 @@ class LdapMailer < ActionMailer::Base
 
   def import_notifier(imported_users_json, organization_id)
     @users = {
-      created:   [],
-      deleted:   [],
-      errored:   [],
-      updated:   []
+      created: [],
+      deleted: [],
+      errored: [],
+      updated: []
     }
 
     organization = Organization.find(organization_id)

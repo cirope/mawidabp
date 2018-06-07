@@ -139,7 +139,8 @@ class LdapConfigTest < ActiveSupport::TestCase
 
   test 'massive import' do
     organization = organizations(:google)
-    organization.ldap_config.update!(user: 'admin', password: 'admin123')
+
+    organization.ldap_config.update! user: 'admin', password: 'admin123'
 
     assert_difference ['User.count', 'ActionMailer::Base.deliveries.size'] do
       LdapConfig.sync_users

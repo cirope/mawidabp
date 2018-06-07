@@ -22,9 +22,9 @@ class NotifierMailerTest < ActionMailer::TestCase
     imports = ldap_config.import('admin', 'admin123')
 
     filtered_imports = imports.map do |i|
-      next if i[:state] == :unchanged
-
-      { user: { name: i[:user].to_s, errors: i[:errors] }, state: i[:state] }
+      unless i[:state] == :unchanged
+        { user: { name: i[:user].to_s, errors: i[:errors] }, state: i[:state] }
+      end
     end.compact
 
     response = LdapMailer.import_notifier(filtered_imports.to_json, org.id).deliver_now

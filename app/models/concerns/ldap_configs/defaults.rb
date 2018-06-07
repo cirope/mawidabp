@@ -8,7 +8,7 @@ module LdapConfigs::Defaults
   private
 
   def nullify_empty_strings
-    self.user     = nil if self.user.blank?
-    self.password = nil if self.password.blank?
+    self.user     = nil if user.blank?
+    self.password = nil if password.blank?
   end
 end
