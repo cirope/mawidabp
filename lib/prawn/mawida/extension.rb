@@ -23,11 +23,11 @@ module Prawn
           [filename]
       end
 
-      def create_generic_pdf(layout = :landscape, footer = true, hide_brand: false)
+      def create_generic_pdf(layout = :landscape, footer: true, hide_brand: false, margins: PDF_MARGINS)
         pdf = Prawn::Document.new(
           :page_size => PDF_PAPER,
           :page_layout => layout,
-          :margin => PDF_MARGINS.map(&:mm),
+          :margin => margins.map(&:mm),
           :info => {:Creator => I18n.t(:app_name)}
         )
 
@@ -125,7 +125,7 @@ module Prawn
             ].join("\n")
 
             self.text_box extra_text, :at => coordinates, :size => font_size,
-              :width => (coordinates[0] - PDF_MARGINS[1].mm), :align => :right
+              :width => (coordinates[0] - self.page.margins[:right]), :align => :right
           end
 
           self.y = y_pointer
@@ -151,7 +151,7 @@ module Prawn
             extra_text = [review, project].compact.join("\n")
 
             self.text_box extra_text, :at => coordinates, :size => font_size,
-              :width => (coordinates[0] - PDF_MARGINS[1].mm), :align => :right
+              :width => (coordinates[0] - self.page.margins[:right]), :align => :right
           end
 
           self.y = y_pointer
@@ -192,7 +192,7 @@ module Prawn
         end
       end
 
-      def add_generic_report_header(organization, date = Date.today, text = nil)
+      def add_generic_report_header(organization, date = Time.zone.today, text = nil)
         y_pointer = self.y
 
         self.repeat :all do
@@ -211,7 +211,7 @@ module Prawn
               ]
 
               self.text_box text, :at => coordinates, :size => font_size,
-                :width => (coordinates[0] - PDF_MARGINS[1].mm), :align => :right
+                :width => (coordinates[0] - self.page.margins[:right]), :align => :right
             end
           end
         end
