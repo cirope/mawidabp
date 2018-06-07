@@ -1,7 +1,8 @@
 <% question = f.object.question %>
 <div class="answer item">
-  <h4><%= "#{question.sort_order} - #{question.question}" %></h4>
-  <br />
+  <div class="lead">
+    <%= simple_format "#{question.sort_order}. #{question.question}" %>
+  </div>
 
   <div class="row form-inputs">
     <div class="col-md-6">

@@ -20,7 +20,7 @@
       <tbody>
         <% @report.questionnaire.questions.multi_choice.each do |question| %>
           <tr>
-            <td><%= question.question %></td>
+            <td><%= simple_format question.question %></td>
             <% Question::ANSWER_OPTIONS.each_index do |i| %>
               <td><%= @report.rates[question.question][i] %> %</td>
             <% end %>
@@ -43,7 +43,7 @@
       <tbody>
         <% @report.questionnaire.questions.yes_no.each do |question| %>
           <tr>
-            <td><%= question.question %></td>
+            <td><%= simple_format question.question %></td>
             <% Question::ANSWER_YES_NO_OPTIONS.each_index do |i| %>
               <td><%= @report.rates[question.question][i] %> %</td>
             <% end %>
@@ -64,7 +64,7 @@
       <tbody>
         <% @report.questionnaire.questions.written.each do |question| %>
           <tr>
-            <td><%= question.question %></td>
+            <td><%= simple_format question.question %></td>
             <td><%= @report.rates[question.question].first %> %</td>
           </tr>
         <% end %>
