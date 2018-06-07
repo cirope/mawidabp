@@ -7,26 +7,71 @@
 <% if @report.polls.blank? %>
   <div class="alert alert-warning"><%= t('polls.without_data') %></div>
 <% else %>
-  <table class="table table-condensed table-striped table-hover">
-    <thead>
-      <tr>
-        <th><%= Question.model_name.human %></th>
-        <% Question::ANSWER_OPTIONS.each do |col_name| %>
-          <th><%= t "answer_options.#{col_name}" %></th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody>
-      <% @report.questionnaire.questions.each do |question| %>
+  <% if @report.questionnaire.questions.multi_choice.any? %>
+    <table class="table table-condensed table-striped table-hover">
+      <thead>
         <tr>
-          <td><%= question.question %></td>
-          <% Question::ANSWER_OPTIONS.each_index do |i| %>
-            <td><%= @report.rates[question.question][i] %> %</td>
+          <th><%= Question.model_name.human %></th>
+          <% Question::ANSWER_OPTIONS.each do |col_name| %>
+            <th><%= t "answer_options.#{col_name}" %></th>
           <% end %>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @report.questionnaire.questions.multi_choice.each do |question| %>
+          <tr>
+            <td><%= simple_format question.question %></td>
+            <% Question::ANSWER_OPTIONS.each_index do |i| %>
+              <td><%= @report.rates[question.question][i] %> %</td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <% if @report.questionnaire.questions.yes_no.any? %>
+    <table class="table table-condensed table-striped table-hover">
+      <thead>
+        <tr>
+          <th><%= Question.model_name.human %></th>
+          <% Question::ANSWER_YES_NO_OPTIONS.each do |col_name| %>
+            <th><%= t "answer_options.#{col_name}" %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @report.questionnaire.questions.yes_no.each do |question| %>
+          <tr>
+            <td><%= simple_format question.question %></td>
+            <% Question::ANSWER_YES_NO_OPTIONS.each_index do |i| %>
+              <td><%= @report.rates[question.question][i] %> %</td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <% if @report.questionnaire.questions.written.any? %>
+    <table class="table table-condensed table-striped table-hover">
+      <thead>
+        <tr>
+          <th><%= Question.model_name.human %></th>
+          <th><%= Poll.human_attribute_name 'answered' %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @report.questionnaire.questions.written.each do |question| %>
+          <tr>
+            <td><%= simple_format question.question %></td>
+            <td><%= @report.rates[question.question].first %> %</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
   <p>
     <strong><%= t 'polls.total_answered' %>:</strong>
     <%= @report.answered %>

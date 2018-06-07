@@ -3,7 +3,13 @@
     action: :weaknesses_current_situation, extra_params: {
       controller_name: 'follow_up', final: false
     },
-    forms: { date_range: true, finding_multiple: true, risk_levels_multiple: true }
+    forms: {
+      date_range: true,
+      finding_multiple: true,
+      risk_levels_multiple: true,
+      compliance: true,
+      weakness_extra_attributes: true
+    }
   }
 %>
 
