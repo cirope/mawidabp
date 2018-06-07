@@ -33,8 +33,13 @@ module LdapConfigs::LDAPService
 
           { user: { name: i[:user].to_s, errors: i[:errors] }, state: i[:state] }
         end.compact
-        LdapMailer.import_notifier(filtered_imports.to_json, organization.id).deliver_later
+
+        if filtered_imports.any?
+          LdapMailer.import_notifier(filtered_imports.to_json, organization.id).deliver_later
+        end
       end
+
+      Organization.current_id = nil
     end
   end
 

@@ -1,13 +1,15 @@
 class LdapMailer < ActionMailer::Base
   include ActionView::Helpers::TextHelper
 
+  helper :application
+
   default from: "#{ENV['EMAIL_NAME'] || I18n.t('app_name')} <#{ENV['EMAIL_ADDRESS']}>"
 
   def import_notifier(imported_users_json, organization_id)
     @users = {
       created:   [],
       deleted:   [],
-      error:     [],
+      errored:   [],
       updated:   []
     }
 
