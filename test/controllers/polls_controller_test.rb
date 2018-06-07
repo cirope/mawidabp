@@ -108,7 +108,7 @@ class PollsControllerTest < ActionController::TestCase
 
   test 'destroy poll' do
     assert_difference 'Poll.count', -1 do
-      assert_difference 'Answer.count', -2 do
+      assert_difference 'Answer.count', -@poll.answers.count do
         delete :destroy, params: { id: @poll }
       end
     end
