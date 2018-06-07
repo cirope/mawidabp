@@ -27,19 +27,20 @@ module LdapConfigs::LDAPService
         )
         Organization.current_id = organization.id # Roles scope
 
-        begin
-          imports = ldap.sync
-          LdapMailer.import_notifier(imports, organization).deliver_now
-        rescue ::StandardError=> e
-          ::Rails.logger.error(e)
-        end
+        imports = ldap.sync
+        filtered_imports = imports.map do |i|
+          next if i[:state] == :unchanged
+
+          { user: { name: i[:user].to_s, errors: i[:errors] }, state: i[:state] }
+        end.compact
+        LdapMailer.import_notifier(filtered_imports.to_json, organization.id).deliver_later
       end
     end
   end
 
   private
 
-    def password?
-      password.present?
-    end
+  def password?
+    password.present?
+  end
 end
