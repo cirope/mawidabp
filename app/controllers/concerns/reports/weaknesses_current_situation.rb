@@ -162,8 +162,8 @@ module Reports::WeaknessesCurrentSituation
           "<font size='#{PDF_FONT_SIZE + 2}'><b>#{weakness.title}</b></font>"
         ],
         [
-          "<b>#{Weakness.human_attribute_name(weakness.current_situation.present? ? 'current_situation' : 'description')}</b>",
-          weakness.current_situation.present? ? weakness.current_situation : weakness.description
+          "<b>#{Weakness.human_attribute_name(show_current_situation?(weakness) ? 'current_situation' : 'description')}</b>",
+          show_current_situation?(weakness) ? weakness.current_situation : weakness.description
         ],
         [
           "<b>#{Weakness.human_attribute_name('answer')}</b>",
@@ -180,5 +180,9 @@ module Reports::WeaknessesCurrentSituation
             I18n.l(weakness.follow_up_date)
         ] if weakness.follow_up_date)
       ].compact
+    end
+
+    def show_current_situation? weakness
+      weakness.current_situation.present? && weakness.current_situation_verified
     end
 end

@@ -61,7 +61,7 @@
     </p>
 
     <p>
-      <% if weakness.current_situation.present? %>
+      <% if weakness.current_situation.present? && weakness.current_situation_verified %>
         <strong><%= Weakness.human_attribute_name 'current_situation' %></strong>:
         <%= weakness.current_situation %>
       <% else %>
