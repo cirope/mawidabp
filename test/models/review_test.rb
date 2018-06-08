@@ -888,6 +888,19 @@ class ReviewTest < ActiveSupport::TestCase
     assert_equal pcs, sorted_pcs
   end
 
+  test 'pdf conversion' do
+    FileUtils.rm @review.absolute_pdf_path if File.exist?(@review.absolute_pdf_path)
+
+    assert_nothing_raised do
+      @review.to_pdf organizations(:cirope)
+    end
+
+    assert File.exist?(@review.absolute_pdf_path)
+    assert File.size(@review.absolute_pdf_path) > 0
+
+    FileUtils.rm @review.absolute_pdf_path
+  end
+
   private
 
     def clone_finding_user_assignments(finding)

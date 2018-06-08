@@ -2,7 +2,7 @@ module ControlObjectiveItems::PDF
   extend ActiveSupport::Concern
 
   def to_pdf organization = nil
-    pdf = Prawn::Document.create_generic_pdf :portrait, false
+    pdf = Prawn::Document.create_generic_pdf :portrait, footer: false
 
     put_header_on pdf, organization
 

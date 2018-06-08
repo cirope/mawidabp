@@ -6,7 +6,8 @@ module Questionnaires::Validations
       presence: true
     validates :name, uniqueness: true, allow_nil: true, allow_blank: true
     validates :name, :email_subject, :email_text, :email_link,
-      :email_clarification, length: { maximum: 255 },
+      :email_clarification, pdf_encoding: true
+    validates :name, :email_subject, :email_link, length: { maximum: 255 },
       allow_nil: true, allow_blank: true
   end
 end

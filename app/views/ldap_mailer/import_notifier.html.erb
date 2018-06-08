@@ -1,0 +1,22 @@
+<div style="font-family: verdana, sans-serif, arial, helvetica;">
+  <p><b><%= t('ldap_mailer.import_notifier.greetings') %>,</b></p>
+
+  <p><%= t('ldap_mailer.import_notifier.body_title') %></p>
+
+  <% @users.each do |state, users| %>
+    <p>
+      <h3><%= t(state, scope: 'ldap_mailer.import_notifier.states') %></h3>
+
+      <ul>
+        <% users.each do |user_data| %>
+          <li>
+            <%= user_data['name'] %>
+            <%= "| #{user_data['errors']}" if state == :error %>
+          </li>
+        <% end %>
+      </ul>
+    </p>
+  <% end %>
+
+  <%= render partial: 'common_mailer/footer' %>
+</div>

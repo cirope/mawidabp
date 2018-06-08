@@ -30,6 +30,9 @@ module Reports::WeaknessesCurrentSituation
     if params[:weaknesses_current_situation]
       risk = Array(params[:weaknesses_current_situation][:risk]).reject(&:blank?)
       states = Array(params[:weaknesses_current_situation][:finding_status]).reject(&:blank?)
+      impact = Array(params[:weaknesses_current_situation][:impact]).reject(&:blank?)
+      operational_risk = Array(params[:weaknesses_current_situation][:operational_risk]).reject(&:blank?)
+      internal_control_components = Array(params[:weaknesses_current_situation][:internal_control_components]).reject(&:blank?)
 
       if risk.present?
         risk_texts = risk.map do |r|
@@ -56,12 +59,34 @@ module Reports::WeaknessesCurrentSituation
 
         @filters << "<b>#{Finding.human_attribute_name('title')}</b> = \"#{weaknesses_conditions[:title]}\""
       end
+
+      if params[:weaknesses_current_situation][:compliance].present?
+        weaknesses_conditions[:compliance] = params[:weaknesses_current_situation][:compliance]
+
+        @filters << "<b>#{Finding.human_attribute_name('compliance')}</b> = \"#{t "label.#{weaknesses_conditions[:compliance]}"}\""
+      end
+
+      if impact.present?
+        @filters << "<b>#{Weakness.human_attribute_name('impact')}</b> = \"#{impact.to_sentence}\""
+      end
+
+      if operational_risk.present?
+        @filters << "<b>#{Weakness.human_attribute_name('operational_risk')}</b> = \"#{operational_risk.to_sentence}\""
+      end
+
+      if internal_control_components.present?
+        @filters << "<b>#{Weakness.human_attribute_name('internal_control_components')}</b> = \"#{internal_control_components.to_sentence}\""
+      end
     end
 
     weaknesses = weaknesses.by_risk(risk) if risk.present?
     report_weaknesses = weaknesses.with_status_for_report
     report_weaknesses = report_weaknesses.where(state: states) if states.present?
     report_weaknesses = report_weaknesses.with_title(weaknesses_conditions[:title]) if weaknesses_conditions[:title]
+    report_weaknesses = report_weaknesses.where(compliance: weaknesses_conditions[:compliance]) if weaknesses_conditions[:compliance]
+    report_weaknesses = report_weaknesses.by_impact(impact) if impact.present?
+    report_weaknesses = report_weaknesses.by_operational_risk(operational_risk) if operational_risk.present?
+    report_weaknesses = report_weaknesses.by_internal_control_components(internal_control_components) if internal_control_components.present?
 
     @weaknesses = report_weaknesses
   end
@@ -137,8 +162,8 @@ module Reports::WeaknessesCurrentSituation
           "<font size='#{PDF_FONT_SIZE + 2}'><b>#{weakness.title}</b></font>"
         ],
         [
-          "<b>#{Weakness.human_attribute_name(weakness.current_situation.present? ? 'current_situation' : 'description')}</b>",
-          weakness.current_situation.present? ? weakness.current_situation : weakness.description
+          "<b>#{Weakness.human_attribute_name(show_current_situation?(weakness) ? 'current_situation' : 'description')}</b>",
+          show_current_situation?(weakness) ? weakness.current_situation : weakness.description
         ],
         [
           "<b>#{Weakness.human_attribute_name('answer')}</b>",
@@ -155,5 +180,9 @@ module Reports::WeaknessesCurrentSituation
             I18n.l(weakness.follow_up_date)
         ] if weakness.follow_up_date)
       ].compact
+    end
+
+    def show_current_situation? weakness
+      weakness.current_situation.present? && weakness.current_situation_verified
     end
 end
