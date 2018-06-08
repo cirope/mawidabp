@@ -26,19 +26,19 @@ module Weaknesses::Scopes
     end
 
     def by_impact impact
-      where "#{quoted_table_name}.#{qcn 'impact'} <@ ARRAY[?]", Array(impact)
+      where "#{quoted_table_name}.#{qcn 'impact'} && ARRAY[?]", Array(impact)
     end
 
     def by_operational_risk operational_risk
       column = "#{quoted_table_name}.#{qcn 'operational_risk'}"
 
-      where "#{column} <@ ARRAY[?]", Array(operational_risk)
+      where "#{column} && ARRAY[?]", Array(operational_risk)
     end
 
     def by_internal_control_components internal_control_components
       column = "#{quoted_table_name}.#{qcn 'internal_control_components'}"
 
-      where "#{column} <@ ARRAY[?]", Array(internal_control_components)
+      where "#{column} && ARRAY[?]", Array(internal_control_components)
     end
   end
 end
