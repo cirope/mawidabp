@@ -31,6 +31,7 @@ module Reports::WeaknessesCurrentSituation
       risk = Array(params[:weaknesses_current_situation][:risk]).reject(&:blank?)
       states = Array(params[:weaknesses_current_situation][:finding_status]).reject(&:blank?)
       impact = Array(params[:weaknesses_current_situation][:impact]).reject(&:blank?)
+      business_unit_types = Array(params[:weaknesses_current_situation][:business_unit_type]).reject(&:blank?)
       operational_risk = Array(params[:weaknesses_current_situation][:operational_risk]).reject(&:blank?)
       internal_control_components = Array(params[:weaknesses_current_situation][:internal_control_components]).reject(&:blank?)
 
@@ -66,6 +67,12 @@ module Reports::WeaknessesCurrentSituation
         @filters << "<b>#{Finding.human_attribute_name('compliance')}</b> = \"#{t "label.#{weaknesses_conditions[:compliance]}"}\""
       end
 
+      if business_unit_types.present?
+        selected_business_units = BusinessUnitType.list.where id: business_unit_types
+
+        @filters << "<b>#{BusinessUnitType.model_name.human}</b> = \"#{selected_business_units.pluck('name').to_sentence}\""
+      end
+
       if impact.present?
         @filters << "<b>#{Weakness.human_attribute_name('impact')}</b> = \"#{impact.to_sentence}\""
       end
@@ -84,6 +91,7 @@ module Reports::WeaknessesCurrentSituation
     report_weaknesses = report_weaknesses.where(state: states) if states.present?
     report_weaknesses = report_weaknesses.with_title(weaknesses_conditions[:title]) if weaknesses_conditions[:title]
     report_weaknesses = report_weaknesses.where(compliance: weaknesses_conditions[:compliance]) if weaknesses_conditions[:compliance]
+    report_weaknesses = report_weaknesses.by_business_unit_type(selected_business_units.ids) if selected_business_units
     report_weaknesses = report_weaknesses.by_impact(impact) if impact.present?
     report_weaknesses = report_weaknesses.by_operational_risk(operational_risk) if operational_risk.present?
     report_weaknesses = report_weaknesses.by_internal_control_components(internal_control_components) if internal_control_components.present?
