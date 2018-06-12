@@ -55,7 +55,7 @@ module LdapConfigs::LDAPImport
                 :created
               end
 
-      state = :error if user.errors.any?
+      state = :errored if user.errors.any?
 
       { user: user, manager_dn: manager_dn, state: state }
     end
@@ -138,7 +138,10 @@ module LdapConfigs::LDAPImport
           u_d[:state] = :updated
         end
 
-        u_d[:state] = :error if u_d[:user].errors.any?
+        if (errors = u_d[:user].errors).any?
+          u_d[:state]  = :errored
+          u_d[:errors] = errors.full_messages.to_sentence
+        end
 
         u_d
       end
