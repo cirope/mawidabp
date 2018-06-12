@@ -5,40 +5,18 @@ module Reports::WeaknessesCurrentSituation
   include Reports::Period
 
   def weaknesses_current_situation
-    @controller = params[:controller_name]
-    @title = t("#{@controller}_committee_report.weaknesses_current_situation_title")
-    @from_date, @to_date = *make_date_range(params[:weaknesses_current_situation])
-    @filters = []
-    final = params[:final] == 'true'
-    order = [
-      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
-      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
-      "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'conclusion_index'} DESC"
-    ]
-    weaknesses = Weakness.
-      with_status_for_report.
-      finals(final).
-      list_with_final_review.
-      by_issue_date('BETWEEN', @from_date, @to_date).
-      includes(:business_unit, :business_unit_type, review: [:plan_item, :conclusion_final_review]).
-      order(order)
+    init_weaknesses_current_situation_vars
 
-    if params[:weaknesses_current_situation]
-      weaknesses = filter_weaknesses_current_situation_by_risk weaknesses
-      weaknesses = filter_weaknesses_current_situation_by_status weaknesses
-      weaknesses = filter_weaknesses_current_situation_by_title weaknesses
-      weaknesses = filter_weaknesses_current_situation_by_compliance weaknesses
-      weaknesses = filter_weaknesses_current_situation_by_business_unit_type weaknesses
-      weaknesses = filter_weaknesses_current_situation_by_impact weaknesses
-      weaknesses = filter_weaknesses_current_situation_by_operational_risk weaknesses
-      weaknesses = filter_weaknesses_current_situation_by_internal_control_components weaknesses
+    respond_to do |format|
+      format.html
+      format.csv do
+        render csv: weaknesses_current_situation_csv, filename: @title.downcase
+      end
     end
-
-    @weaknesses = weaknesses
   end
 
   def create_weaknesses_current_situation
-    self.weaknesses_current_situation
+    init_weaknesses_current_situation_vars
 
     pdf = init_pdf params[:report_title], params[:report_subtitle]
 
@@ -76,6 +54,47 @@ module Reports::WeaknessesCurrentSituation
   end
 
   private
+
+    def init_weaknesses_current_situation_vars
+      @controller = params[:controller_name]
+      @title = t("#{@controller}_committee_report.weaknesses_current_situation_title")
+      @from_date, @to_date = *make_date_range(params[:weaknesses_current_situation])
+      @filters = []
+      final = params[:final] == 'true'
+      order = [
+        "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+        "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'conclusion_index'} DESC"
+      ]
+      weaknesses = Weakness.
+        with_status_for_report.
+        finals(final).
+        list_with_final_review.
+        by_issue_date('BETWEEN', @from_date, @to_date).
+        includes(:business_unit, :business_unit_type, review: [:plan_item, :conclusion_final_review]).
+        order(order)
+
+      if params[:weaknesses_current_situation]
+        weaknesses = filter_weaknesses_current_situation_by_risk weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_status weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_title weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_compliance weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_business_unit_type weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_impact weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_operational_risk weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_internal_control_components weaknesses
+      end
+
+      @weaknesses = weaknesses
+    end
+
+    def weaknesses_current_situation_csv
+      CSV.generate(col_sep: ';', force_quotes: true) do |csv|
+        csv << weaknesses_current_situation_csv_headers
+
+        weaknesses_current_situation_csv_data_rows.each { |row| csv << row }
+      end
+    end
 
     def current_situation_pdf_items weakness
       [
@@ -241,6 +260,45 @@ module Reports::WeaknessesCurrentSituation
         weaknesses.by_internal_control_components internal_control_components
       else
         weaknesses
+      end
+    end
+
+    def weaknesses_current_situation_csv_headers
+      [
+        BusinessUnit.model_name.human,
+        PlanItem.human_attribute_name('project'),
+        Review.model_name.human,
+        BusinessUnitType.model_name.human,
+        t('follow_up_committee_report.weaknesses_current_situation.origination_year'),
+        ConclusionFinalReview.human_attribute_name('conclusion'),
+        Weakness.human_attribute_name('risk'),
+        Weakness.human_attribute_name('title'),
+        [
+          Weakness.human_attribute_name('description'),
+          Weakness.human_attribute_name('current_situation')
+        ].join(' / '),
+        Weakness.human_attribute_name('answer'),
+        Weakness.human_attribute_name('state'),
+        Weakness.human_attribute_name('follow_up_date')
+      ]
+    end
+
+    def weaknesses_current_situation_csv_data_rows
+      @weaknesses.map do |weakness|
+        [
+          weakness.business_unit.to_s,
+          weakness.review.plan_item.project,
+          weakness.review.identification,
+          weakness.business_unit_type.to_s,
+          (l weakness.origination_date, format: '%Y' if weakness.origination_date),
+          weakness.review.conclusion_final_review.conclusion,
+          weakness.risk_text,
+          weakness.title,
+          (weakness.current_situation.present? && weakness.current_situation_verified ? weakness.current_situation : weakness.description),
+          weakness.answer,
+          weakness.state_text,
+          (l weakness.follow_up_date if weakness.follow_up_date)
+        ]
       end
     end
 end
