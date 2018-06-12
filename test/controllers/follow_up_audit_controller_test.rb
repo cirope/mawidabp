@@ -506,6 +506,28 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/weaknesses_current_situation'
   end
 
+  test 'weaknesses current situation as CSV' do
+    login
+
+    get :weaknesses_current_situation, as: :csv
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+
+    assert_nothing_raised do
+      get :weaknesses_current_situation, :params => {
+        :weaknesses_current_situation => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+  end
+
   test 'filtered weaknesses current situation' do
     login
 
