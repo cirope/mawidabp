@@ -545,6 +545,8 @@ es:
               invalid: 'debe contener como mínimo un auditor, un auditado, un gerente y un supervisor'
         finding_user_assignment:
           attributes:
+            user:
+              required: 'no puede estar en blanco'
             process_owner:
               invalid: 'solo puede ser asignado a usuarios de tipo auditado'
         ldap_config:

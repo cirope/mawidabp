@@ -516,6 +516,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :risk => ['', '1', '2'],
         :finding_status => ['', Finding::STATUS[:being_implemented]],
         :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
         :compliance => 'no'
       },
       :controller_name => 'follow_up',
@@ -538,6 +539,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :risk => ['', '1', '2'],
         :finding_status => ['', Finding::STATUS[:being_implemented]],
         :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
         :compliance => 'no',
         :impact => [WEAKNESS_IMPACT.first],
         :operational_risk => [WEAKNESS_OPERATIONAL_RISK.first],
