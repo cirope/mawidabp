@@ -96,5 +96,44 @@ module Findings::Scopes
         where(business_units: { business_unit_type_id: business_unit_type_id }).
         references(:business_units)
     end
+
+    def by_control_objective_tags *tags
+      conditions = []
+      parameters = {}
+
+      tags.flatten.each_with_index do |tag, i|
+        conditions << "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn 'name'}) LIKE :cot_#{i}"
+
+        parameters[:"cot_#{i}"] = "%#{tag.downcase}%"
+      end
+
+      includes(control_objective: :tags).where(conditions.join(' OR '), parameters)
+    end
+
+    def by_wilcard_tags *tags
+      conditions = []
+      parameters = {}
+
+      tags.flatten.each_with_index do |tag, i|
+        conditions << "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn 'name'}) LIKE :wt_#{i}"
+
+        parameters[:"wt_#{i}"] = "%#{tag.downcase}%"
+      end
+
+      includes(:tags).where(conditions.join(' OR '), parameters)
+    end
+
+    def by_review_tags *tags
+      conditions = []
+      parameters = {}
+
+      tags.flatten.each_with_index do |tag, i|
+        conditions << "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn 'name'}) LIKE :rt_#{i}"
+
+        parameters[:"rt_#{i}"] = "%#{tag.downcase}%"
+      end
+
+      includes(review: :tags).where(conditions.join(' OR '), parameters)
+    end
   end
 end

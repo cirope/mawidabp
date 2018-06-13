@@ -539,6 +539,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :finding_status => ['', Finding::STATUS[:being_implemented]],
         :finding_title => 'a',
         :business_unit_type => ['', business_unit_types(:cycle).id],
+        :control_objective_tags => ['one'],
+        :weakness_tags => ['two'],
+        :review_tags => ['three'],
         :compliance => 'no'
       },
       :controller_name => 'follow_up',

@@ -3,8 +3,8 @@
     <div class="col-md-6">
       <div class="form-group">
         <% selected = params[action] ? params[action][:risk] : nil %>
-        <%= f.label :risk, Weakness.human_attribute_name(:risk), class: 'col-md-3' %>
-        <div class="col-md-9">
+        <%= f.label :risk, Weakness.human_attribute_name(:risk), class: 'col-md-4' %>
+        <div class="col-md-8">
           <%= f.select :risk, risks, { selected: selected, include_blank: t('helpers.select.prompt') }, class: 'form-control' %>
         </div>
       </div>
