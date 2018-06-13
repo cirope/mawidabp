@@ -3,14 +3,32 @@
     action: :weaknesses_current_situation, extra_params: {
       controller_name: 'follow_up', final: false
     },
-    forms: {
-      date_range: true,
-      finding_multiple: true,
-      risk_levels_multiple: true,
-      business_unit_type_multiple: true,
-      compliance: true,
-      weakness_extra_attributes: true
-    }
+    forms: [
+      [:date_range, true],
+      [:finding_multiple, true],
+      [:risk_levels_multiple, true],
+      [:business_unit_type_multiple, true],
+      [
+        :tags, {
+          field_name: :control_objective_tags,
+          field_label: t('follow_up_committee_report.weaknesses_current_situation.control_objective_tags')
+        }
+      ],
+      [
+        :tags, {
+          field_name: :weakness_tags,
+          field_label: t('follow_up_committee_report.weaknesses_current_situation.weakness_tags')
+        }
+      ],
+      [
+        :tags, {
+          field_name: :review_tags,
+          field_label: t('follow_up_committee_report.weaknesses_current_situation.review_tags')
+        }
+      ],
+      [:compliance, true],
+      [:weakness_extra_attributes, true]
+    ]
   }
 %>
 
