@@ -1,5 +1,9 @@
+<% group ||= nil %>
+
 <div id="risk_levels_multiple_filter" class="filter" <%== 'style="display: none;"' unless display %>>
-  <div class="row">
+  <% unless group %>
+    <div class="row">
+  <% end %>
     <div class="col-md-6">
       <div class="form-group">
         <% selected = params[action] ? params[action][:risk] : nil %>
@@ -9,5 +13,7 @@
         </div>
       </div>
     </div>
-  </div>
+  <% unless group %>
+    </div>
+  <% end %>
 </div>

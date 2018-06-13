@@ -1,8 +1,11 @@
+<% group       ||= nil %>
 <% field_label ||= Tag.model_name.human %>
 <% field_name  ||= :tags %>
 
 <div id="<%= field_name %>_filter" class="filter" <%== 'style="display: none;"' unless display %>>
-  <div class="row">
+  <% unless group %>
+    <div class="row">
+  <% end %>
     <div class="col-md-6">
       <div class="form-group">
         <% tags_filter = params[action] ? params[action][field_name] : nil %>
@@ -12,5 +15,7 @@
         </div>
       </div>
     </div>
-  </div>
+  <% unless group %>
+    </div>
+  <% end %>
 </div>

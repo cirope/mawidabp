@@ -4,10 +4,23 @@
   <%= simple_form_for action, url: url, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
     <div class="row">
       <div class="col-md-10">
+        <% last_group = nil %>
+
         <% forms.each do |f_name, options| %>
           <% locals = options.kind_of?(Hash) ? options : {} %>
 
+          <% if locals[:group] && locals[:group] != last_group %>
+            <% last_group = locals[:group] %>
+            <div class="row">
+          <% elsif locals[:group] == last_group %>
+            <% last_group = nil %>
+          <% end %>
+
           <%= render "shared/filters/#{f_name}", locals.merge(f: f, display: options, action: action) %>
+
+          <% if locals[:group] && last_group.blank? %>
+            </div>
+          <% end %>
         <% end %>
       </div>
       <div class="filter col-md-2">
