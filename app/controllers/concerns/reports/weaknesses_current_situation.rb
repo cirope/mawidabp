@@ -279,7 +279,10 @@ module Reports::WeaknessesCurrentSituation
         ].join(' / '),
         Weakness.human_attribute_name('answer'),
         Weakness.human_attribute_name('state'),
-        Weakness.human_attribute_name('follow_up_date')
+        Weakness.human_attribute_name('follow_up_date'),
+        Weakness.human_attribute_name('solution_date'),
+        t('finding.audited', count: 0),
+        t('finding.auditors', count: 0)
       ]
     end
 
@@ -297,7 +300,10 @@ module Reports::WeaknessesCurrentSituation
           (weakness.current_situation.present? && weakness.current_situation_verified ? weakness.current_situation : weakness.description),
           weakness.answer,
           weakness.state_text,
-          (l weakness.follow_up_date if weakness.follow_up_date)
+          (l weakness.follow_up_date if weakness.follow_up_date),
+          (l weakness.solution_date if weakness.solution_date),
+          weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; '),
+          weakness.users.reject(&:can_act_as_audited?).map(&:full_name).join('; ')
         ]
       end
     end
