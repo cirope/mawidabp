@@ -3,8 +3,8 @@
     <div class="col-md-6">
       <div class="form-group">
         <% best_practice_filter = params[action] ? params[action][:best_practice] : nil %>
-        <%= f.label :best_practice, BestPractice.model_name.human, class: 'col-md-3' %>
-        <div class="col-md-9">
+        <%= f.label :best_practice, BestPractice.model_name.human, class: 'col-md-4' %>
+        <div class="col-md-8">
           <%= f.text_field :best_practice, value: best_practice_filter, maxlength: 3072, class: 'form-control' %>
         </div>
       </div>

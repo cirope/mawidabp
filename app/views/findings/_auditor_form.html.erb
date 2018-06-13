@@ -91,7 +91,7 @@
         <%= f.input :solution_date, as: :date_picker, label:
           Finding.human_attribute_name(:solution_date) %>
         <%= f.input :id, as: :hidden %>
-        <%= f.input :audit_comments, input_html: { rows: 5 } %>
+        <%= f.input :audit_comments, input_html: { rows: 5, readonly: SHOW_WEAKNESS_EXTRA_ATTRIBUTES } %>
       </div>
     </div>
 

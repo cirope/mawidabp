@@ -1,11 +1,14 @@
-<div id="tags_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+<% field_label ||= Tag.model_name.human %>
+<% field_name  ||= :tags %>
+
+<div id="<%= field_name %>_filter" class="filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
       <div class="form-group">
-        <% tags_filter = params[action] ? params[action][:tags] : nil %>
-        <%= f.label :tags, Tag.model_name.human, class: 'col-md-3' %>
-        <div class="col-md-9">
-          <%= f.text_field :tags, value: tags_filter, maxlength: 3072, class: 'form-control' %>
+        <% tags_filter = params[action] ? params[action][field_name] : nil %>
+        <%= f.label field_name, field_label, class: 'col-md-4' %>
+        <div class="col-md-8">
+          <%= f.text_field field_name, value: tags_filter, maxlength: 3072, class: 'form-control' %>
         </div>
       </div>
     </div>
