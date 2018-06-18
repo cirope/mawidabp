@@ -71,8 +71,7 @@ module Reports::WeaknessesCurrentSituation
         finals(final).
         list_with_final_review.
         by_issue_date('BETWEEN', @from_date, @to_date).
-        includes(:business_unit, :business_unit_type, review: [:plan_item, :conclusion_final_review]).
-        order(order)
+        includes(:business_unit, :business_unit_type, review: [:plan_item, :conclusion_final_review])
 
       if params[:weaknesses_current_situation]
         weaknesses = filter_weaknesses_current_situation_by_risk weaknesses
@@ -86,7 +85,7 @@ module Reports::WeaknessesCurrentSituation
         weaknesses = filter_weaknesses_current_situation_by_tags weaknesses
       end
 
-      @weaknesses = weaknesses
+      @weaknesses = weaknesses.reorder order
     end
 
     def weaknesses_current_situation_csv
