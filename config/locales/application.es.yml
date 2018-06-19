@@ -826,7 +826,7 @@ es:
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables de la siguiente observación / oportunidad de mejora"
       managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
     pending_poll_email:
-      affected_user_html: "Encuesta acerca de <strong>%{user}</strong>"
+      about_for_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:

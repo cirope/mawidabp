@@ -12,8 +12,8 @@
 
 <% if @poll.about %>
   <p>
-    <strong><%= Poll.human_attribute_name :affected_user %>:</strong>
-    <%= @poll.about.informal_name %>
+    <strong><%= Poll.human_attribute_name :about %>:</strong>
+    <%= @poll.about.display_name %>
   </p>
 <% end %>
 

@@ -51,6 +51,10 @@ class BusinessUnit < ApplicationRecord
     end
   end
 
+  def display_name
+    to_s
+  end
+
   private
 
     def check_if_can_be_destroyed

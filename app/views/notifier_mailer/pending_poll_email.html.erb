@@ -24,8 +24,8 @@
   <% if @poll.about %>
     <p>
       <%= t(
-        'notifier.pending_poll_email.affected_user_html',
-        user: @poll.about.full_name
+        'notifier.pending_poll_email.about_for_html',
+        entity: @poll.about.display_name
       ) %>
     </p>
   <% end %>

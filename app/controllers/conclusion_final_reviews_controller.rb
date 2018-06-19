@@ -257,7 +257,7 @@ class ConclusionFinalReviewsController < ApplicationController
         if Poll.list.exists?(poll_attrs)
           users_with_poll << user.informal_name
         else
-          @conclusion_final_review.polls.create!(poll_attrs.except(:pollable_id))
+          @conclusion_final_review.polls.create!(poll_attrs)
         end
       end
     end
@@ -265,7 +265,7 @@ class ConclusionFinalReviewsController < ApplicationController
     if users.present?
       flash.notice = t('conclusion_review.review_sended')
 
-      if users_with_poll.present?
+      if users_with_poll.any?
         flash.notice << ". #{t 'polls.already_exists', user: users_with_poll.uniq.to_sentence}"
       end
 

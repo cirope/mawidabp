@@ -415,10 +415,7 @@ es:
         questionnaire: 'Cuestionario'
         user: 'Usuario'
         pollable: 'Sobre'
-        affected_user: 'Acerca de'
-        lala: 'asd %{tanga}'
-        laala_type.tuhna: "Hola vieja"
-        laala_type/tuhna: "Hola vieja en tanga"
+        about: 'Acerca de'
       poll/answers:
         answer: 'Respuesta'
         answer_option: 'Opción'

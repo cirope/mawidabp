@@ -42,7 +42,7 @@ module Polls::Scopes
       if only_all
         where about_id: nil
       elsif affected_user_id
-        where about_id: affected_user_id, about_type: 'User'
+        where about_id: affected_user_id, about_type: User.name
       else
         all
       end
