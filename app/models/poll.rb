@@ -1,5 +1,6 @@
 class Poll < ApplicationRecord
   include Auditable
+  include Polls::About
   include Polls::Answers
   include Polls::AccessToken
   include Polls::Defaults
@@ -11,6 +12,6 @@ class Poll < ApplicationRecord
 
   belongs_to :questionnaire
   belongs_to :user
-  belongs_to :affected_user, class_name: 'User', optional: true
+  # belongs_to :affected_user, class_name: 'User', optional: true
   belongs_to :organization
 end

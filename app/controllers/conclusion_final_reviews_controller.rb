@@ -238,25 +238,26 @@ class ConclusionFinalReviewsController < ApplicationController
         questionnaire = Questionnaire.find user_data[:questionnaire_id]
         affected_user_id = user_data[:affected_user_id].present? ?
           user_data[:affected_user_id] : nil
-        has_poll = Poll.list.exists?(
-          user_id: user.id,
-          affected_user_id: affected_user_id,
-          questionnaire_id: user_data[:questionnaire_id],
-          organization_id: current_organization.id,
-          pollable_type: questionnaire.pollable_type,
-          pollable_id: @conclusion_final_review
-        )
 
-        if has_poll
+        poll_attrs = {
+          user_id:          user.id,
+          questionnaire_id: user_data[:questionnaire_id],
+          organization_id:  current_organization.id,
+          pollable_type:    questionnaire.pollable_type,
+          pollable_id:      @conclusion_final_review
+        }
+
+        if affected_user_id
+          poll_attrs.merge!(
+            about_id:   affected_user_id,
+            about_type: User.name
+          )
+        end
+
+        if Poll.list.exists?(poll_attrs)
           users_with_poll << user.informal_name
         else
-          @conclusion_final_review.polls.create!(
-            user_id: user.id,
-            affected_user_id: affected_user_id,
-            questionnaire_id: user_data[:questionnaire_id],
-            organization_id: current_organization.id,
-            pollable_type: questionnaire.pollable_type
-          )
+          @conclusion_final_review.polls.create!(poll_attrs.except(:pollable_id))
         end
       end
     end

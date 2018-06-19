@@ -416,6 +416,9 @@ es:
         user: 'Usuario'
         pollable: 'Sobre'
         affected_user: 'Acerca de'
+        lala: 'asd %{tanga}'
+        laala_type.tuhna: "Hola vieja"
+        laala_type/tuhna: "Hola vieja en tanga"
       poll/answers:
         answer: 'Respuesta'
         answer_option: 'Opción'
