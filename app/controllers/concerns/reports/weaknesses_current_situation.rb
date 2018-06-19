@@ -71,8 +71,7 @@ module Reports::WeaknessesCurrentSituation
         finals(final).
         list_with_final_review.
         by_issue_date('BETWEEN', @from_date, @to_date).
-        includes(:business_unit, :business_unit_type, review: [:plan_item, :conclusion_final_review]).
-        order(order)
+        includes(:business_unit, :business_unit_type, review: [:plan_item, :conclusion_final_review])
 
       if params[:weaknesses_current_situation]
         weaknesses = filter_weaknesses_current_situation_by_risk weaknesses
@@ -83,9 +82,10 @@ module Reports::WeaknessesCurrentSituation
         weaknesses = filter_weaknesses_current_situation_by_impact weaknesses
         weaknesses = filter_weaknesses_current_situation_by_operational_risk weaknesses
         weaknesses = filter_weaknesses_current_situation_by_internal_control_components weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_tags weaknesses
       end
 
-      @weaknesses = weaknesses
+      @weaknesses = weaknesses.reorder order
     end
 
     def weaknesses_current_situation_csv
@@ -263,6 +263,55 @@ module Reports::WeaknessesCurrentSituation
       end
     end
 
+    def filter_weaknesses_current_situation_by_tags weaknesses
+      weaknesses = filter_weaknesses_current_situation_by_control_objective_tags weaknesses
+      weaknesses = filter_weaknesses_current_situation_by_weakness_tags weaknesses
+
+      filter_weaknesses_current_situation_by_review_tags weaknesses
+    end
+
+    def filter_weaknesses_current_situation_by_control_objective_tags weaknesses
+      tags = params[:weaknesses_current_situation][:control_objective_tags].to_s.split(
+        SPLIT_AND_TERMS_REGEXP
+      ).uniq.map(&:strip).reject(&:blank?)
+
+      if tags.any?
+        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_current_situation.control_objective_tags'}</b> = \"#{tags.to_sentence}\""
+
+        weaknesses.by_control_objective_tags tags
+      else
+        weaknesses
+      end
+    end
+
+    def filter_weaknesses_current_situation_by_weakness_tags weaknesses
+      tags = params[:weaknesses_current_situation][:weakness_tags].to_s.split(
+        SPLIT_AND_TERMS_REGEXP
+      ).uniq.map(&:strip).reject(&:blank?)
+
+      if tags.any?
+        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_current_situation.weakness_tags'}</b> = \"#{tags.to_sentence}\""
+
+        weaknesses.by_wilcard_tags tags
+      else
+        weaknesses
+      end
+    end
+
+    def filter_weaknesses_current_situation_by_review_tags weaknesses
+      tags = params[:weaknesses_current_situation][:review_tags].to_s.split(
+        SPLIT_AND_TERMS_REGEXP
+      ).uniq.map(&:strip).reject(&:blank?)
+
+      if tags.any?
+        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_current_situation.review_tags'}</b> = \"#{tags.to_sentence}\""
+
+        weaknesses.by_review_tags tags
+      else
+        weaknesses
+      end
+    end
+
     def weaknesses_current_situation_csv_headers
       [
         BusinessUnit.model_name.human,
@@ -279,7 +328,10 @@ module Reports::WeaknessesCurrentSituation
         ].join(' / '),
         Weakness.human_attribute_name('answer'),
         Weakness.human_attribute_name('state'),
-        Weakness.human_attribute_name('follow_up_date')
+        Weakness.human_attribute_name('follow_up_date'),
+        Weakness.human_attribute_name('solution_date'),
+        t('finding.audited', count: 0),
+        t('finding.auditors', count: 0)
       ]
     end
 
@@ -297,7 +349,10 @@ module Reports::WeaknessesCurrentSituation
           (weakness.current_situation.present? && weakness.current_situation_verified ? weakness.current_situation : weakness.description),
           weakness.answer,
           weakness.state_text,
-          (l weakness.follow_up_date if weakness.follow_up_date)
+          (l weakness.follow_up_date if weakness.follow_up_date),
+          (l weakness.solution_date if weakness.solution_date),
+          weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; '),
+          weakness.users.reject(&:can_act_as_audited?).map(&:full_name).join('; ')
         ]
       end
     end
