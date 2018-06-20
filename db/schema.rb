@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180619015853) do
+ActiveRecord::Schema.define(version: 20180620150143) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1018,7 +1018,6 @@ ActiveRecord::Schema.define(version: 20180619015853) do
   add_foreign_key "plans", "periods", on_update: :restrict, on_delete: :restrict
   add_foreign_key "polls", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "polls", "questionnaires", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "polls", "users", column: "about_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "polls", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "privileges", "roles", on_update: :restrict, on_delete: :restrict
   add_foreign_key "process_controls", "best_practices", on_update: :restrict, on_delete: :restrict
