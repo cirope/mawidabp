@@ -1,5 +1,5 @@
 class PollsController < ApplicationController
-  include AutoCompleteFor::BusinessUnitType
+  include AutoCompleteFor::BusinessUnit
 
   before_action :load_privileges, :auth, except: [:edit, :update, :show]
   before_action :check_privileges, except: [:edit, :update, :show]
@@ -103,7 +103,7 @@ class PollsController < ApplicationController
     def load_privileges
       @action_privileges.update(
         reports: :read,
-        auto_complete_for_business_unit_type: :read
+        auto_complete_for_business_unit: :read
       ) if @action_privileges
     end
  end

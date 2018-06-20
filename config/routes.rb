@@ -53,7 +53,7 @@ Rails.application.routes.draw do
   resources :polls do
     collection do
       get :reports
-      get :auto_complete_for_business_unit_type
+      get :auto_complete_for_business_unit
     end
   end
 

@@ -53,13 +53,13 @@
             title: t('label.search'),
             value: @poll.about&.display_name,
             data: {
-              'autocomplete-url' => auto_complete_for_business_unit_type_polls_path,
+              'autocomplete-url' => auto_complete_for_business_unit_polls_path,
               'autocomplete-id-target' => '#poll_about_id'
             }
           } %>
           <%= f.input :about_id, as: :hidden %>
           <%= f.input :about_type, as: :hidden, input_html: {
-            value: BusinessUnitType.name
+            value: BusinessUnit.name
           } %>
         <% else %>
           <%= f.input :comments, label: "#{Poll.human_attribute_name :comments} (#{t 'label.optional'})" %>

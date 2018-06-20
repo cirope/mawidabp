@@ -66,7 +66,7 @@ class PollsControllerTest < ActionController::TestCase
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.deliveries = []
 
-    about = business_unit_types(:cycle)
+    about = business_units(:business_unit_one)
     assert_difference ['Poll.count', 'ActionMailer::Base.deliveries.count'] do
       post :create, params: {
         poll: {

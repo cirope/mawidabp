@@ -16,5 +16,4 @@ class BusinessUnitType < ApplicationRecord
   def to_s
     name
   end
-  alias display_name to_s
 end
