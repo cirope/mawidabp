@@ -282,7 +282,7 @@ es:
     already_exists: 'Alguna de las encuestas para %{user} ya existen y no fueron enviadas nuevamente'
     answer_poll: '¿Contestar encuesta?'
     about: 'Acerca de'
-    about_for_html: 'Acerca de <strong>%{entity}</strong>'
+    about_html: 'Acerca de <strong>%{entity}</strong>'
     answers:
       index:
         title: 'Resumen de respuestas'
