@@ -49,6 +49,15 @@
           <%= f.association :questionnaire,
             collection: Questionnaire.list.not_pollable.pluck(:name, :id), prompt: true
           %>
+          <%= f.input :about, autofocus: true, input_html: {
+            title: t('label.search'),
+            value: @poll.about&.display_name,
+            data: {
+              'autocomplete-url' => auto_complete_for_business_unit_type_polls_path,
+              'autocomplete-id-target' => '#poll_about_id'
+            }
+          } %>
+          <%= f.input :about_id, as: :hidden %>
         <% else %>
           <%= f.input :comments, label: "#{Poll.human_attribute_name :comments} (#{t 'label.optional'})" %>
         <% end %>

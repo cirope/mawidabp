@@ -39,6 +39,26 @@ class PollsControllerTest < ActionController::TestCase
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.deliveries = []
 
+    about = business_unit_types(:cycle)
+    assert_difference ['Poll.count', 'ActionMailer::Base.deliveries.count'] do
+      post :create, params: {
+        poll: {
+          user_id: users(:administrator).id,
+          questionnaire_id: questionnaires(:questionnaire_one).id,
+          about_id: about.id
+        }
+      }
+    end
+
+    assert_equal about.id, assigns(:poll).about_id
+    assert_equal about.class.name, assigns(:poll).about_type
+    assert_redirected_to poll_path(assigns(:poll))
+  end
+
+  test 'create poll about a business unit' do
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.deliveries = []
+
     assert_difference ['Poll.count', 'ActionMailer::Base.deliveries.count'] do
       assert_difference 'Answer.count', 2 do
         post :create, params: {
@@ -61,6 +81,7 @@ class PollsControllerTest < ActionController::TestCase
     end
     assert_redirected_to poll_path(assigns(:poll))
   end
+
 
   test 'edit poll' do
     set_host_for_organization(@poll.organization.prefix)

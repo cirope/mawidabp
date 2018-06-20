@@ -1,4 +1,6 @@
 class PollsController < ApplicationController
+  include AutoCompleteFor::BusinessUnitType
+
   before_action :load_privileges, :auth, except: [:edit, :update, :show]
   before_action :check_privileges, except: [:edit, :update, :show]
   before_action :set_poll, only: [:show, :edit, :update, :destroy]
@@ -77,12 +79,14 @@ class PollsController < ApplicationController
   private
 
     def poll_params
-      params.require(:poll).permit(
-        :user_id, :questionnaire_id, :comments, :lock_version,
+      poll_p = params.require(:poll).permit(
+        :user_id, :questionnaire_id, :comments, :lock_version, :about_id,
         answers_attributes: [
           :id, :answer, :comments, :answer_option_id, :type
         ]
       )
+      poll_p[:about_type] = BusinessUnitType.name if poll_p[:about_id].present?
+      poll_p
     end
 
     def set_questionnaire
@@ -98,6 +102,9 @@ class PollsController < ApplicationController
     end
 
     def load_privileges
-      @action_privileges.update reports: :read if @action_privileges
+      @action_privileges.update(
+        reports: :read,
+        auto_complete_for_business_unit_type: :read
+      ) if @action_privileges
     end
  end
