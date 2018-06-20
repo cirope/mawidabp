@@ -10,5 +10,6 @@ class MigratePollAffectedUserToAbout < ActiveRecord::Migration[5.1]
 
     add_index :polls, [:about_type, :about_id]
     add_index :polls, :about_id
+    add_index :polls, :about_type
   end
 end
