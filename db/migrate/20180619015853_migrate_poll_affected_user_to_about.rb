@@ -8,7 +8,8 @@ class MigratePollAffectedUserToAbout < ActiveRecord::Migration[5.1]
 
     Poll.where.not(about_id: nil).update_all(about_type: User.name)
 
-    add_index :polls, [:about_id, :about_type]
     add_index :polls, [:about_type, :about_id]
+    add_index :polls, :about_id
+    add_index :polls, :about_type
   end
 end
