@@ -19,6 +19,12 @@ module Polls::Scopes
       where answered: answered
     end
 
+    def answer_option option
+      left_joins(answers: :answer_option).
+        references(:answer_options).
+        where(answer_options: { option: option })
+    end
+
     def by_user user_id, include_reviews: false, only_all: false
       result = by_affected_user(user_id, only_all: only_all)
 

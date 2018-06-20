@@ -71,13 +71,25 @@ class ActiveRecord::Base
     end
 
     def self.sanitize_hash attrs
-      table = ActiveRecord::TableMetadata.new(self, arel_table)
-      attrs = table.resolve_column_aliases attrs
-      attrs = expand_hash_conditions_for_aggregates attrs
+      table = ActiveRecord::TableMetadata.new(self, table)
 
-      ActiveRecord::PredicateBuilder.new(table).build_from_hash(attrs.stringify_keys).map do |b|
-        connection.visitor.compile b
-      end.join ' AND '
+      predicate = ActiveRecord::PredicateBuilder.new table
+      conditions = predicate.resolve_column_aliases attrs
+
+      predicate_builder.build_from_hash(conditions.stringify_keys).map do |b|
+        visit_nodes(b)
+      end.join(' AND ')
+    end
+
+    def self.visit_nodes(b)
+      # Rails 5.2 adds a BindParam node that prevents the visitor method from properly compiling the SQL query
+      # Solution taken from https://github.com/CanCanCommunity/cancancan/pull/503/files
+      if ActiveRecord::VERSION::MINOR >= 2
+        collector = Arel::Collectors::SubstituteBinds.new(connection, Arel::Collectors::SQLString.new)
+        connection.visitor.accept(b, collector).value
+      else
+        connection.visitor.compile(b)
+      end
     end
 end
 
