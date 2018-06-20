@@ -8,7 +8,7 @@
       </h1>
     </div>
 
-    <% if @poll.conclusion_review || @poll.affected_user %>
+    <% if @poll.conclusion_review || @poll.about %>
       <ul class="lead list-unstyled">
         <% if @poll.conclusion_review %>
           <li>
@@ -18,8 +18,8 @@
             </strong>
           </li>
         <% end %>
-        <% if @poll.affected_user %>
-          <li><%= t 'polls.affected_user_html', user: @poll.affected_user.full_name %></li>
+        <% if @poll.about %>
+          <li><%= t 'polls.about_html', entity: @poll.about.display_name %></li>
         <% end %>
       </ul>
 

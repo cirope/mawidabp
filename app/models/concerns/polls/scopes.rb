@@ -40,14 +40,15 @@ module Polls::Scopes
 
     def by_review_user user_id
       joins(conclusion_review: { review: :review_user_assignments }).
-        where(affected_user_id: nil, review_user_assignments: { user_id: user_id })
+        by_affected_user(nil, only_all: true).
+        where(review_user_assignments: { user_id: user_id })
     end
 
     def by_affected_user affected_user_id, only_all: false
       if only_all
-        where affected_user_id: nil
+        where about_id: nil
       elsif affected_user_id
-        where affected_user_id: affected_user_id
+        where about_id: affected_user_id, about_type: User.name
       else
         all
       end

@@ -415,7 +415,7 @@ es:
         questionnaire: 'Cuestionario'
         user: 'Usuario'
         pollable: 'Sobre'
-        affected_user: 'Acerca de'
+        about: 'Acerca de'
       poll/answers:
         answer: 'Respuesta'
         answer_option: 'Opción'

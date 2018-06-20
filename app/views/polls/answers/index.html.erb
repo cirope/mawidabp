@@ -20,10 +20,10 @@
       <strong><%= Poll.human_attribute_name 'user' %>:</strong>
       <%= poll.user.informal_name %>
     </p>
-    <% if poll.affected_user %>
+    <% if poll.about %>
       <p>
-        <strong><%= Poll.human_attribute_name :affected_user %>:</strong>
-        <%= poll.affected_user.informal_name %>
+        <strong><%= Poll.human_attribute_name :about %>:</strong>
+        <%= poll.about.display_name %>
       </p>
     <% end %>
     <p>
