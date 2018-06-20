@@ -58,6 +58,9 @@
             }
           } %>
           <%= f.input :about_id, as: :hidden %>
+          <%= f.input :about_type, as: :hidden, input_html: {
+            value: BusinessUnitType.name
+          } %>
         <% else %>
           <%= f.input :comments, label: "#{Poll.human_attribute_name :comments} (#{t 'label.optional'})" %>
         <% end %>

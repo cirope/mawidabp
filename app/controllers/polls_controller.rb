@@ -79,14 +79,13 @@ class PollsController < ApplicationController
   private
 
     def poll_params
-      poll_p = params.require(:poll).permit(
-        :user_id, :questionnaire_id, :comments, :lock_version, :about_id,
+      params.require(:poll).permit(
+        :user_id, :questionnaire_id, :comments, :lock_version,
+        :about_id, :about_type,
         answers_attributes: [
           :id, :answer, :comments, :answer_option_id, :type
         ]
       )
-      poll_p[:about_type] = BusinessUnitType.name if poll_p[:about_id].present?
-      poll_p
     end
 
     def set_questionnaire
