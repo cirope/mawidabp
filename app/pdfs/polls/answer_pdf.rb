@@ -33,14 +33,19 @@ class Polls::AnswerPDF < Prawn::Document
     end
 
     def pdf_add_body
+      pdf.move_down PDF_FONT_SIZE
+
       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-        @report.polls.each do |poll|
+        count = @report.polls.size
+
+        @report.polls.each_with_index do |poll, i|
           pdf_add_user poll
           pdf_add_affected_user poll
           pdf_add_status poll
           pdf_add_answers poll
           pdf_add_comments poll
-          pdf.move_down PDF_FONT_SIZE
+
+          pdf.move_down PDF_FONT_SIZE unless i == count - 1
         end
       end
     end
@@ -71,20 +76,28 @@ class Polls::AnswerPDF < Prawn::Document
     end
 
     def pdf_add_answers poll
-      pdf.text "#{Questionnaire.human_attribute_name :questions}:"
+      pdf.move_down PDF_FONT_SIZE * 0.5
+      pdf.text Questionnaire.human_attribute_name(:questions), style: :bold
 
       poll.answers.each do |answer|
         ans = set_answer(answer) if poll.answered?
-        pdf.text "#{answer.question.question} #{ans}"
 
-        if answer.comments.present?
-          pdf.text "#{Answer.human_attribute_name :comments}: #{answer.comments}"
+        pdf.move_down PDF_FONT_SIZE * 0.25
+        pdf.text answer.question.question
+
+        pdf.indent PDF_FONT_SIZE do
+          pdf.move_down PDF_FONT_SIZE * 0.25
+          pdf.text ans
+
+          if answer.comments.present?
+            pdf.text "#{Answer.human_attribute_name :comments}: <i>#{answer.comments}</i>", inline_format: true
+          end
         end
       end
     end
 
     def set_answer answer
-      if answer.question.answer_multi_choice?
+      if answer.question.options.any?
         "#{I18n.t("answer_options.#{answer.answer_option.option}")}"
       elsif answer.question.answer_written?
         answer.answer

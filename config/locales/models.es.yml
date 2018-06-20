@@ -21,6 +21,9 @@ es:
       answer_written:
         one: 'Respuesta escrita'
         other: 'Respuestas escritas'
+      answer_yes_no:
+        one: 'Opción si o no'
+        other: 'Opciones si o no'
       benefit:
         one: 'Beneficio / Perjuicio'
         other: 'Beneficios / Perjuicios'
@@ -289,8 +292,8 @@ es:
         manager_attribute: 'Atributo con el superior'
         test_user: 'Usuario'
         test_password: 'Contraseña'
-        user: 'Usuario'
-        password: 'Contraseña'
+        user: 'Usuario de servicio'
+        password: 'Contraseña de servicio'
       login_record:
         data: 'Datos'
         end: 'Fin'
@@ -434,6 +437,10 @@ es:
         email_link: 'Texto del enlace'
         email_text: 'Texto del correo'
         email_clarification: 'Aclaración del correo'
+      questionnaire/questions:
+        sort_order: 'Orden'
+        question: 'Pregunta'
+        answer_type: 'Tipo de respuesta'
       resource:
         name: 'Recurso'
         description: 'Descripción'
@@ -538,6 +545,8 @@ es:
               invalid: 'debe contener como mínimo un auditor, un auditado, un gerente y un supervisor'
         finding_user_assignment:
           attributes:
+            user:
+              required: 'no puede estar en blanco'
             process_owner:
               invalid: 'solo puede ser asignado a usuarios de tipo auditado'
         ldap_config:

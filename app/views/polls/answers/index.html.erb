@@ -1,7 +1,15 @@
 <%= render partial: 'shared/filter_form',
-  locals: { action: 'index', extra_params: {},
-  forms: { poll_date_range: true, poll_user: true, questionnaire: true, answered: true }
-} %>
+  locals: {
+    action: 'index',
+    extra_params: {},
+    forms: {
+      poll_date_range: true,
+      poll_user: true,
+      questionnaire: true,
+      answered: true,
+      answer_option: true
+    }
+  } %>
 
 <br />
 <% if @report.polls.blank? %>
@@ -35,27 +43,26 @@
     <p>
       <strong><%= Questionnaire.human_attribute_name 'questions' %>:</strong>
     </p>
-    <ol>
-      <% poll.answers.each do |answer| %>
-        <li>
-          <%= answer.question.question %>
-          <% if poll.answered? %>
-            <% if answer.question.answer_multi_choice? %>
-              <strong>
-                <%= t "answer_options.#{answer.answer_option.option}" %>
-              </strong>
-            <% elsif answer.question.answer_written? %>
-              <%= answer.answer %>
-            <% end %>
-          <% end %>
-          <br>
-          <% if answer.comments.present? %>
-            <%= Answer.human_attribute_name :comments %>:
-            <%= answer.comments %>
-          <% end %>
-        </li>
+
+    <% poll.answers.each do |answer| %>
+      <div class="text-bold">
+        <%= simple_format "#{answer.question.sort_order}. #{answer.question.question}" %>
+      </div>
+
+      <% if poll.answered? %>
+        <% if answer.question.options.any? %>
+          <p><%= t "answer_options.#{answer.answer_option.option}" %></p>
+        <% elsif answer.question.answer_written? %>
+          <%= simple_format answer.answer %>
+        <% end %>
       <% end %>
-    </ol>
+      <% if answer.comments.present? %>
+        <p>
+          <%= Answer.human_attribute_name :comments %>:
+          <em><%= answer.comments %></em>
+        </p>
+      <% end %>
+    <% end %>
 
     <% if poll.comments.present? %>
       <p>

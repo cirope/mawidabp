@@ -1,5 +1,5 @@
 module Questions::Constants
-  ANSWER_TYPES = { written: 0, multi_choice: 1 }
+  ANSWER_TYPES = { written: 0, multi_choice: 1, yes_no: 2 }
 
   ANSWER_OPTIONS = [
     :strongly_agree,
@@ -16,6 +16,18 @@ module Questions::Constants
     neither_agree_nor_disagree: 50,
     disagree: 25,
     strongly_disagree: 0,
+    not_apply: -1
+  }
+
+  ANSWER_YES_NO_OPTIONS = [
+    :yes,
+    :no,
+    :not_apply
+  ]
+
+  ANSWER_YES_NO_OPTION_VALUES = {
+    yes: 100,
+    no: 0,
     not_apply: -1
   }
 

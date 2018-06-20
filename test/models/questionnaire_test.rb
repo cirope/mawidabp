@@ -35,7 +35,7 @@ class QuestionnaireTest < ActiveSupport::TestCase
 
   test 'delete' do
     assert_difference 'Questionnaire.count', -1 do
-      assert_difference 'Question.count', -2 do
+      assert_difference 'Question.count', -@questionnaire.questions.count do
         assert_difference 'AnswerOption.count', -Question::ANSWER_OPTIONS.size do
           @questionnaire.destroy
         end
@@ -55,16 +55,14 @@ class QuestionnaireTest < ActiveSupport::TestCase
   end
 
   test 'validates length of attributes' do
-    @questionnaire.name = @questionnaire.email_subject =
-      @questionnaire.email_text = @questionnaire.email_link =
-        @questionnaire.email_clarification = 'abcde' * 52
+    @questionnaire.name =
+      @questionnaire.email_subject =
+      @questionnaire.email_link = 'abcde' * 52
 
     assert @questionnaire.invalid?
     assert_error @questionnaire, :name, :too_long, count: 255
     assert_error @questionnaire, :email_subject, :too_long, count: 255
-    assert_error @questionnaire, :email_text, :too_long, count: 255
     assert_error @questionnaire, :email_link, :too_long, count: 255
-    assert_error @questionnaire, :email_clarification, :too_long, count: 255
   end
 
   test 'validates unique attributes' do

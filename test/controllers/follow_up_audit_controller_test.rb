@@ -506,6 +506,28 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/weaknesses_current_situation'
   end
 
+  test 'weaknesses current situation as CSV' do
+    login
+
+    get :weaknesses_current_situation, as: :csv
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+
+    assert_nothing_raised do
+      get :weaknesses_current_situation, :params => {
+        :weaknesses_current_situation => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+  end
+
   test 'filtered weaknesses current situation' do
     login
 
@@ -515,7 +537,38 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :to_date => 10.years.from_now.to_date,
         :risk => ['', '1', '2'],
         :finding_status => ['', Finding::STATUS[:being_implemented]],
-        :finding_title => 'a'
+        :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
+        :control_objective_tags => ['one'],
+        :weakness_tags => ['two'],
+        :review_tags => ['three'],
+        :compliance => 'no'
+      },
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_current_situation'
+  end
+
+  test 'filtered weaknesses current situation by extra attributes' do
+    skip unless ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+
+    login
+
+    get :weaknesses_current_situation, :params => {
+      :weaknesses_current_situation => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :risk => ['', '1', '2'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
+        :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
+        :compliance => 'no',
+        :impact => [WEAKNESS_IMPACT.first],
+        :operational_risk => [WEAKNESS_OPERATIONAL_RISK.first],
+        :internal_control_components => [WEAKNESS_INTERNAL_CONTROL_COMPONENTS.first]
       },
       :controller_name => 'follow_up',
       :final => false

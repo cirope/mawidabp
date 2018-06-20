@@ -1,0 +1,14 @@
+<div id="answer_option_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <% selected = params[action] ? params[action][:answer_option] : nil %>
+        <%= f.label :answer_option, Answer.model_name.human, class: 'col-md-4' %>
+        <div class="col-md-8">
+          <%= f.select :answer_option, filter_answer_options,
+            { selected: selected, prompt: true }, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

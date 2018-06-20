@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180521222237) do
+ActiveRecord::Schema.define(version: 20180604183518) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -629,8 +629,8 @@ ActiveRecord::Schema.define(version: 20180521222237) do
     t.string "pollable_type"
     t.string "email_subject"
     t.string "email_link"
-    t.string "email_text"
-    t.string "email_clarification"
+    t.text "email_text"
+    t.text "email_clarification"
     t.index ["name"], name: "index_questionnaires_on_name"
     t.index ["organization_id"], name: "index_questionnaires_on_organization_id"
   end
