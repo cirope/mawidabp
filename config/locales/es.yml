@@ -47,6 +47,7 @@
     es: 'Español'
 
   message:
+    ldap_error: 'El servidor de autenticación no está disponible, intente nuevamente más tarde'
     change_weakness_risk: "El riesgo de la observación ha cambiado"
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
@@ -67,8 +68,8 @@
     session_expires_in_less_than_two_minutes: "Su sesión expira en menos de dos minutos"
     session_time_expired: "Su sesión ha expirado, debe autenticarse nuevamente"
     sort_by: "Ordenar por..."
-    under_construction: "En mantenimiento, disculpe las molestias"
     unsaved_data_warning: "Ha modificado el contenido, si abandona la página perderá todos los cambios"
+    rejected_data_format: "Algún campo contiene la cadena ../ debe eliminarla para poder realizar la acción. Revise los campos resaltados"
     validation_failed_message: "Los datos introducidos no son válidos, revise los campos resaltados"
     you_are_already_logged: "Este usuario ya ha iniciado sesión"
     empty_result: "Sin resultados, modifique el criterio"
