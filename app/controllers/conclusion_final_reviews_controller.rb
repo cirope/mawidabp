@@ -46,7 +46,7 @@ class ConclusionFinalReviewsController < ApplicationController
     unless conclusion_final_review
       @title = t 'conclusion_final_review.new_title'
       @conclusion_final_review =
-        ConclusionFinalReview.new(review_id: params[:review])
+        ConclusionFinalReview.new(review_id: params[:review], import_from_draft: true)
 
       respond_to do |format|
         format.html # new.html.erb
@@ -70,7 +70,7 @@ class ConclusionFinalReviewsController < ApplicationController
   def create
     @title = t 'conclusion_final_review.new_title'
     @conclusion_final_review =
-      ConclusionFinalReview.list.new(conclusion_final_review_params, false)
+      ConclusionFinalReview.list.new(conclusion_final_review_params)
 
     respond_to do |format|
       if @conclusion_final_review.save
