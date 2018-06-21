@@ -29,7 +29,7 @@ module Reviews::FindingCode
       repeated_order,
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
-    ]
+    ].map { |o| Arel.sql o }
   end
 
   def recode_weaknesses_by_control_objective_order

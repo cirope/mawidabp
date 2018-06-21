@@ -7,7 +7,7 @@ module Users::Tree
     acts_as_tree(
       foreign_key: 'manager_id',
       readonly:    true,
-      order:       "#{quoted_table_name}.#{qcn('last_name')} ASC",
+      order:       {last_name: :asc},
       dependent:   :nullify
     )
   end

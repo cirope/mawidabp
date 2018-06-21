@@ -52,7 +52,7 @@ module Findings::SortColumns
             "#{quoted_table_name}.#{qcn('risk')} #{order}",
             "#{quoted_table_name}.#{qcn('priority')} #{order}",
             "#{quoted_table_name}.#{qcn('state')} ASC"
-          ]
+          ].map { |o| Arel.sql o }
         }
       end
 
@@ -71,7 +71,7 @@ module Findings::SortColumns
             "#{quoted_table_name}.#{qcn('priority')} #{order}",
             "#{quoted_table_name}.#{qcn('risk')} #{order}",
             "#{quoted_table_name}.#{qcn('state')} ASC"
-          ]
+          ].map { |o| Arel.sql o }
         }
       end
 
@@ -82,7 +82,7 @@ module Findings::SortColumns
       def review_options
         {
           name: Review.model_name.human,
-          field: "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC"
+          field: Arel.sql("#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC")
         }
       end
 
@@ -105,7 +105,7 @@ module Findings::SortColumns
       def options_for_attribute attribute, order: 'ASC'
         {
           name:  "#{human_attribute_name attribute}#{order_label order}",
-          field: "#{quoted_table_name}.#{qcn(attribute)} #{order || 'ASC'}"
+          field: Arel.sql("#{quoted_table_name}.#{qcn(attribute)} #{order || 'ASC'}")
         }
       end
 
@@ -127,7 +127,7 @@ module Findings::SortColumns
 
         {
           name: "#{I18n.t('findings.index.unread_answers_filter')}#{order_label('DESC')}",
-          field: order_by_readings,
+          field: Arel.sql(order_by_readings),
           extra_joins: [:left_outer_joins, :finding_answers, finding_answers: :readings]
         }
       end

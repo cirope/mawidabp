@@ -18,7 +18,7 @@ class PollsController < ApplicationController
     build_search_conditions Poll
 
     @polls = (@polls || Poll.list).includes(:questionnaire, :user).
-      where(@conditions).order("#{Poll.quoted_table_name}.#{Poll.qcn('created_at')} DESC").
+      where(@conditions).order(Arel.sql("#{Poll.quoted_table_name}.#{Poll.qcn('created_at')} DESC")).
       references(:questionnaire, :user).page(params[:page])
 
     respond_with @polls

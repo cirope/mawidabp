@@ -3,7 +3,7 @@ module Questionnaires::Questions
 
   included do
     has_many :questions, -> {
-      order("#{Question.quoted_table_name}.#{Question.qcn('sort_order')} ASC")
+      order Arel.sql("#{Question.quoted_table_name}.#{Question.qcn('sort_order')} ASC")
     }, dependent: :destroy
 
     accepts_nested_attributes_for :questions, allow_destroy: true

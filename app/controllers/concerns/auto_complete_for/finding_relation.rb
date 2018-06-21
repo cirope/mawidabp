@@ -36,7 +36,7 @@ module AutoCompleteFor::FindingRelation
       [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     ).references(:control_objective_items, :reviews, :periods).limit(5)
 
     respond_to do |format|

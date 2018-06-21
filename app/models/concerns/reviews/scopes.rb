@@ -122,7 +122,7 @@ module Reviews::Scopes
           "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
           "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
           "#{quoted_table_name}.#{qcn('created_at')} ASC"
-        ]
+        ].map { |o| Arel.sql o }
       end
   end
 end
