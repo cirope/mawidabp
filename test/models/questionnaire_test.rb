@@ -71,4 +71,33 @@ class QuestionnaireTest < ActiveSupport::TestCase
     assert @questionnaire.invalid?
     assert_error @questionnaire, :name, :taken
   end
+
+  test 'clone from other questionnaire' do
+    cloned_q = Questionnaire.new
+    cloned_q.clone_from @questionnaire
+    cloned_q.name += ' new' # unique name
+
+    questions_count = @questionnaire.questions.count
+    answer_options_count = [
+      6, # multiple choice
+      0, # written
+      3, # yes_no
+    ].sum
+
+    assert_difference 'Questionnaire.count' do
+      assert_difference 'Question.count', questions_count do
+        assert_difference 'AnswerOption.count', answer_options_count do
+          cloned_q.save
+        end
+      end
+    end
+
+    cloned_q.reload
+    %i[
+      organization_id pollable_type email_text email_link email_subject
+      email_clarification
+    ].each do |attr|
+      assert_equal @questionnaire.send(attr).to_s, cloned_q.send(attr).to_s, attr
+    end
+  end
 end
