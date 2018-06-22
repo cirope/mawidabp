@@ -71,20 +71,19 @@ class ActiveRecord::Base
     end
 
     def self.sanitize_hash attrs
-      table = ActiveRecord::TableMetadata.new(self, table)
-
-      predicate = ActiveRecord::PredicateBuilder.new table
+      table      = ActiveRecord::TableMetadata.new self, table
+      predicate  = ActiveRecord::PredicateBuilder.new table
       conditions = predicate.resolve_column_aliases attrs
 
       predicate_builder.build_from_hash(conditions.stringify_keys).map do |b|
-        visit_nodes(b)
-      end.join(' AND ')
+        visit_nodes b
+      end.join ' AND '
     end
 
     def self.visit_nodes b
       # Taken from https://github.com/CanCanCommunity/cancancan/pull/503/files
       sql_string = Arel::Collectors::SQLString.new
-      collector = Arel::Collectors::SubstituteBinds.new(connection, sql_string)
+      collector  = Arel::Collectors::SubstituteBinds.new connection, sql_string
 
       connection.visitor.accept(b, collector).value
     end
