@@ -81,15 +81,12 @@ class ActiveRecord::Base
       end.join(' AND ')
     end
 
-    def self.visit_nodes(b)
-      # Rails 5.2 adds a BindParam node that prevents the visitor method from properly compiling the SQL query
-      # Solution taken from https://github.com/CanCanCommunity/cancancan/pull/503/files
-      if ActiveRecord::VERSION::MINOR >= 2
-        collector = Arel::Collectors::SubstituteBinds.new(connection, Arel::Collectors::SQLString.new)
-        connection.visitor.accept(b, collector).value
-      else
-        connection.visitor.compile(b)
-      end
+    def self.visit_nodes b
+      # Taken from https://github.com/CanCanCommunity/cancancan/pull/503/files
+      sql_string = Arel::Collectors::SQLString.new
+      collector = Arel::Collectors::SubstituteBinds.new(connection, sql_string)
+
+      connection.visitor.accept(b, collector).value
     end
 end
 
