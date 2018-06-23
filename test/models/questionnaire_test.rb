@@ -86,10 +86,10 @@ class QuestionnaireTest < ActiveSupport::TestCase
     end
 
     cloned.reload
-    %i[
+    %i(
       organization_id pollable_type email_text email_link email_subject
       email_clarification
-    ].each do |attr|
+    ).each do |attr|
       assert_equal @questionnaire.send(attr).to_s, cloned.send(attr).to_s, attr
     end
   end
