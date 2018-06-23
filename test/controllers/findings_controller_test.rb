@@ -684,7 +684,6 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 17, assigns(:findings).count
     assert assigns(:findings).all? { |f| f.updated_at > 4.days.ago.to_date }
 
     get :index, params: {
@@ -697,7 +696,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 0, assigns(:findings).count
+    assert assigns(:findings).all? { |f| f.updated_at < 4.days.ago.to_date }
   end
 
   private
