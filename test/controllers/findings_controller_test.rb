@@ -684,6 +684,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
+    assert_not_empty assigns(:findings)
     assert assigns(:findings).all? { |f| f.updated_at > 4.days.ago.to_date }
 
     get :index, params: {
