@@ -20,8 +20,10 @@ class QuestionnairesController < ApplicationController
   # GET /questionnaires/new.json
   def new
     @questionnaire = Questionnaire.new
+
     if params[:clone_from].present?
-      questionnaire = Questionnaire.list.find_by(id: params[:clone_from])
+      questionnaire = Questionnaire.list.find_by id: params[:clone_from]
+
       @questionnaire.clone_from questionnaire
     end
   end
