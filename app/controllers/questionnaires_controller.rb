@@ -21,8 +21,8 @@ class QuestionnairesController < ApplicationController
   def new
     @questionnaire = Questionnaire.new
     if params[:clone_from].present?
-      questionnaire_clone = Questionnaire.list.find_by(id: params[:clone_from].to_i)
-      @questionnaire.clone_from questionnaire_clone
+      questionnaire = Questionnaire.list.find_by(id: params[:clone_from])
+      @questionnaire.clone_from questionnaire
     end
   end
 

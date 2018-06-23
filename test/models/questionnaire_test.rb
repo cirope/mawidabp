@@ -36,7 +36,7 @@ class QuestionnaireTest < ActiveSupport::TestCase
   test 'delete' do
     assert_difference 'Questionnaire.count', -1 do
       assert_difference 'Question.count', -@questionnaire.questions.count do
-        assert_difference 'AnswerOption.count', -Question::ANSWER_OPTIONS.size do
+        assert_difference 'AnswerOption.count', -@questionnaire.answer_options.count do
           @questionnaire.destroy
         end
       end
@@ -73,31 +73,24 @@ class QuestionnaireTest < ActiveSupport::TestCase
   end
 
   test 'clone from other questionnaire' do
-    cloned_q = Questionnaire.new
-    cloned_q.clone_from @questionnaire
-    cloned_q.name += ' new' # unique name
-
-    questions_count = @questionnaire.questions.count
-    answer_options_count = [
-      6, # multiple choice
-      0, # written
-      3, # yes_no
-    ].sum
+    cloned = Questionnaire.new
+    cloned.clone_from @questionnaire
+    cloned.name += ' cloned' # unique name
 
     assert_difference 'Questionnaire.count' do
-      assert_difference 'Question.count', questions_count do
-        assert_difference 'AnswerOption.count', answer_options_count do
-          cloned_q.save
+      assert_difference 'Question.count', @questionnaire.questions.count do
+        assert_difference 'AnswerOption.count', @questionnaire.answer_options.count do
+          cloned.save
         end
       end
     end
 
-    cloned_q.reload
+    cloned.reload
     %i[
       organization_id pollable_type email_text email_link email_subject
       email_clarification
     ].each do |attr|
-      assert_equal @questionnaire.send(attr).to_s, cloned_q.send(attr).to_s, attr
+      assert_equal @questionnaire.send(attr).to_s, cloned.send(attr).to_s, attr
     end
   end
 end
