@@ -159,6 +159,7 @@ class NotifierMailer < ActionMailer::Base
   def conclusion_review_notification(user, conclusion_review, options = {})
     Current.organization_id = options.delete :organization_id
     PaperTrail.request.whodunnit = options.delete :user_id
+    byebug if $rock
 
     org_prefix = conclusion_review.review.organization.prefix
     prefix = "[#{org_prefix}] "
