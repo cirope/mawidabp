@@ -6,16 +6,6 @@ module Organizations::Current
     after_save :restore_current_organization_id
   end
 
-  module ClassMethods
-    def current_id
-      RequestStore.store[:current_organization_id]
-    end
-
-    def current_id=(organization_id)
-      RequestStore.store[:current_organization_id] = organization_id
-    end
-  end
-
   private
 
     def change_current_organization_id
