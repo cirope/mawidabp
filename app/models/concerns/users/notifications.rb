@@ -7,7 +7,7 @@ module Users::Notifications
 
   def send_notification_if_necesary
     if send_notification_email.present?
-      organization = Organization.find Organization.current_id
+      organization = Organization.find Current.organization_id
 
       reset_password organization, notify: false
 

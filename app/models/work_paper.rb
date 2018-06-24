@@ -6,7 +6,7 @@ class WorkPaper < ApplicationRecord
   include WorkPapers::Review
 
   # Named scopes
-  scope :list, -> { where(organization_id: Organization.current_id) }
+  scope :list, -> { where(organization_id: Current.organization_id) }
   scope :sorted_by_code, -> { order(code: :asc) }
   scope :with_prefix, ->(prefix) {
     where("#{quoted_table_name}.#{qcn 'code'} LIKE ?", "#{prefix}%").sorted_by_code
@@ -62,7 +62,7 @@ class WorkPaper < ApplicationRecord
   def initialize(attributes = nil)
     super(attributes)
 
-    self.organization_id = Organization.current_id
+    self.organization_id = Current.organization_id
   end
 
   def inspect

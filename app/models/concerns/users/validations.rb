@@ -21,7 +21,7 @@ module Users::Validations
   private
 
     def ldap?
-      LdapConfig.exists? organization_id: Organization.current_id
+      LdapConfig.exists? organization_id: Current.organization_id
     end
 
     def validate_manager

@@ -2,7 +2,7 @@ module Questionnaires::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list, -> { where organization_id: Organization.current_id }
+    scope :list, -> { where organization_id: Current.organization_id }
     scope :pollable, -> {
       where.not(pollable_type: nil).where.not(pollable_type: '')
     }

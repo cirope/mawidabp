@@ -11,8 +11,8 @@ module FindingAnswers::Validations
   private
 
     def commitment_date_should_be_present?
-      current_organization = Organization.current_id &&
-        Organization.find(Organization.current_id)
+      current_organization = Current.organization_id &&
+        Organization.find(Current.organization_id)
 
       user&.can_act_as_audited? &&
         requires_commitment_date? &&

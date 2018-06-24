@@ -27,11 +27,11 @@ module Groups::Current
   private
 
     def change_current_group_id
-      @_current_group_id = Group.current_id
-      Group.current_id = id if id
+      @_current_group_id = Current.group_id
+      Current.group_id = id if id
     end
 
     def restore_current_group_id
-      Group.current_id = @_current_group_id
+      Current.group_id = @_current_group_id
     end
 end

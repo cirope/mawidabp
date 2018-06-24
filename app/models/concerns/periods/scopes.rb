@@ -3,7 +3,7 @@ module Periods::Scopes
 
   module ClassMethods
     def list
-      where(organization_id: Organization.current_id).order name: :desc
+      where(organization_id: Current.organization_id).order name: :desc
     end
 
     def list_by_date from_date, to_date

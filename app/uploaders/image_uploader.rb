@@ -7,7 +7,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   def store_dir
     id = ('%08d' % model.id).scan(/\d{4}/).join('/')
     organization_id = (
-      '%08d' % (model.organization_id || Organization.current_id || 0)
+      '%08d' % (model.organization_id || Current.organization_id || 0)
     ).scan(/\d{4}/).join('/')
 
     "private/#{organization_id}/#{model.class.to_s.underscore.pluralize}/#{id}"

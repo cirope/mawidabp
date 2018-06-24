@@ -19,11 +19,11 @@ module Organizations::Current
   private
 
     def change_current_organization_id
-      @_current_organization_id = Organization.current_id
-      Organization.current_id = id if id
+      @_current_organization_id = Current.organization_id
+      Current.organization_id = id if id
     end
 
     def restore_current_organization_id
-      Organization.current_id = @_current_organization_id
+      Current.organization_id = @_current_organization_id
     end
 end

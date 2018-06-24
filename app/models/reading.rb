@@ -1,5 +1,5 @@
 class Reading < ApplicationRecord
-  scope :list, -> { where organization_id: Organization.current_id }
+  scope :list, -> { where organization_id: Current.organization_id }
 
   validates :user, :readable, presence: true
   validates :readable_type, inclusion: { in: %w(FindingAnswer) }

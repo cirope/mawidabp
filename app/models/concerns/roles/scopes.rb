@@ -3,7 +3,7 @@ module Roles::Scopes
 
   module ClassMethods
     def list
-      list_by_organization Organization.current_id
+      list_by_organization Current.organization_id
     end
 
     def list_by_organization organization_id
@@ -20,7 +20,7 @@ module Roles::Scopes
     end
 
     def list_with_corporate
-      organization  = Organization.find Organization.current_id
+      organization  = Organization.find Current.organization_id
       corporate_ids = organization.group.organizations.corporate.pluck 'id'
       ids           = corporate_ids | [organization.id]
 

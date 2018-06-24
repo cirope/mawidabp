@@ -2,7 +2,7 @@ module Users::Authorization
   extend ActiveSupport::Concern
 
   def is_enable?
-    enable? && Organization.current_id && !expired?
+    enable? && Current.organization_id && !expired?
   end
 
   def is_group_admin?

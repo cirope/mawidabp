@@ -21,8 +21,8 @@ module AutoCompleteFor::ProcessControl
     parameters = {
       false:           false,
       true:            true,
-      organization_id: Organization.current_id,
-      group_id:        Group.current_id
+      organization_id: Current.organization_id,
+      group_id:        Current.group_id
     }
 
     @tokens.each_with_index do |t, i|

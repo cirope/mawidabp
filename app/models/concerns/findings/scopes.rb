@@ -2,7 +2,7 @@ module Findings::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list,              -> { where organization_id: Organization.current_id }
+    scope :list,              -> { where organization_id: Current.organization_id }
     scope :sort_by_code,      -> { order review_code: :asc }
     scope :sort_for_review,   -> { order risk: :desc, priority: :desc, review_code: :asc }
     scope :with_achievements, -> { includes(:achievements).where.not achievements: { finding_id: nil } }
@@ -10,7 +10,7 @@ module Findings::Scopes
 
   module ClassMethods
     def group_list
-      organization_ids = Organization.where(group_id: Group.current_id).pluck('id')
+      organization_ids = Organization.where(group_id: Current.group_id).pluck('id')
 
       where organization_id: organization_ids
     end

@@ -3,6 +3,6 @@ module Emails::Scopes
 
   included do
     default_scope { order created_at: :desc }
-    scope :list, -> { where organization_id: Organization.current_id }
+    scope :list, -> { where organization_id: Current.organization_id }
   end
 end

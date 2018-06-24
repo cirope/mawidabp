@@ -12,7 +12,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Organization.current_id = nil
+    Current.organization_id = nil
   end
 
   test 'create' do
@@ -130,7 +130,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'validates can duplicate user if ldap' do
-    Organization.current_id = organizations(:google).id
+    Current.organization_id = organizations(:google).id
 
     @user.user = users(:bare).user
 
@@ -439,7 +439,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'review assignment options' do
-    Organization.current_id = organizations(:google).id
+    Current.organization_id = organizations(:google).id
 
     options = @user.review_assignment_options
 
@@ -455,7 +455,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'notify finding changes function' do
-    Organization.current_id = nil
+    Current.organization_id = nil
     user = users :administrator
 
     assert user.findings.for_notification.any?
@@ -512,7 +512,7 @@ class UserTest < ActiveSupport::TestCase
       affects_compliance: false
     ).save!
 
-    Organization.current_id = nil
+    Current.organization_id = nil
 
     users = User.all_with_conclusion_final_reviews_for_notification 
     assert users.any?

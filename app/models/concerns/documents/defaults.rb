@@ -8,7 +8,7 @@ module Documents::Defaults
   private
 
     def set_defaults
-      self.group_id        = Group.current_id
-      self.organization_id = Organization.current_id
+      self.group_id        = Current.group_id
+      self.organization_id = Current.organization_id
     end
 end

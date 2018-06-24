@@ -14,8 +14,8 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Organization.current_id = nil
-    Group.current_id = nil
+    Current.organization_id = nil
+    Current.group_id = nil
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -449,13 +449,13 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   private
 
     def use_review_weaknesses_score?
-      organization = Organization.find Organization.current_id
+      organization = Organization.find Current.organization_id
 
       ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization.prefix
     end
 
     def validate_counts?
-      organization = Organization.find Organization.current_id
+      organization = Organization.find Current.organization_id
 
       ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include? organization.prefix
     end

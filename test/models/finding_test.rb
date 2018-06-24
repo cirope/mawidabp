@@ -920,7 +920,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'notify for stale and unconfirmed findings' do
-    Organization.current_id = nil
+    Current.organization_id = nil
     # Only if no weekend
     assert_not_includes [0, 6], Date.today.wday
     assert_not_equal 0, Finding.unconfirmed_for_notification.size
@@ -934,7 +934,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'warning users about findings expiration' do
-    Organization.current_id = nil
+    Current.organization_id = nil
     # Only if no weekend
     assert_not_includes [0, 6], Date.today.wday
 
@@ -948,7 +948,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'remember users about expired findings' do
     skip if DISABLE_FINDINGS_EXPIRATION_NOTIFICATION
 
-    Organization.current_id = nil
+    Current.organization_id = nil
     review_codes_by_user    = review_codes_on_findings_by_user :expired
 
     assert_enqueued_emails 6 do
@@ -957,7 +957,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'mark stale and confirmed findings as unanswered' do
-    Organization.current_id = nil
+    Current.organization_id = nil
     # Only if no weekend
     assert_not_includes [0, 6], Date.today.wday
 
@@ -980,7 +980,7 @@ class FindingTest < ActiveSupport::TestCase
       'Finding.where(state: Finding::STATUS[:unanswered]).count'
     ]
 
-    Organization.current_id = nil
+    Current.organization_id = nil
     # Only if no weekend
     assert_not_includes [0, 6], Date.today.wday
     assert Finding.confirmed_and_stale.any?
@@ -1000,7 +1000,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'notify manager if necesary' do
-    Organization.current_id = nil
+    Current.organization_id = nil
     # Only if no weekend
     assert_not_includes [0, 6], Date.today.wday
 

@@ -3,13 +3,13 @@ require 'test_helper'
 class DocumentTest < ActiveSupport::TestCase
   setup do
     @document               = documents :audit_manual
-    Group.current_id        = @document.group_id
-    Organization.current_id = @document.organization_id
+    Current.group_id        = @document.group_id
+    Current.organization_id = @document.organization_id
   end
 
   teardown do
-    Group.current_id        = nil
-    Organization.current_id = nil
+    Current.group_id        = nil
+    Current.organization_id = nil
   end
 
   test 'blank attributes' do

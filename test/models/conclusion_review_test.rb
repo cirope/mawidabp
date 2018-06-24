@@ -13,8 +13,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Group.current_id        = nil
-    Organization.current_id = nil
+    Current.group_id        = nil
+    Current.organization_id = nil
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -78,7 +78,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
-    organization = Organization.find Organization.current_id
+    organization = Organization.find Current.organization_id
 
     @conclusion_review.issue_date = nil
     @conclusion_review.review_id = nil

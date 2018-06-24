@@ -1,7 +1,7 @@
 class OrganizationRole < ApplicationRecord
 
   has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id },
+    organization_id: ->(model) { Current.organization_id },
     important: true
   }
 

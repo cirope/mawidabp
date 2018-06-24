@@ -1,6 +1,6 @@
 module ParameterSelector
   def parameter_in(organization_id, param_name, param_date = nil, show_value = false)
-    organization_id = Organization.current_id unless organization_id
+    organization_id = Current.organization_id unless organization_id
 
     setting = Setting.find_by(
       name: param_name, organization_id: organization_id
