@@ -109,8 +109,9 @@ class ReviewUserAssignment < ApplicationRecord
 
         transfered = findings.all? do |finding|
           finding.avoid_changes_notification = true
+
           finding.users << new_user
-          finding.users.delete old_user
+          finding.reload.users.delete old_user # Reload avoids touch stale error
           unconfirmed_findings << finding if finding.unconfirmed?
 
           finding.valid?
