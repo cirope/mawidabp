@@ -3,6 +3,7 @@ class Finding < ApplicationRecord
   include Auditable
   include Comparable
   include Findings::Achievements
+  include Findings::AttributeTypes
   include Findings::Answers
   include Findings::BusinessUnits
   include Findings::Code
@@ -13,7 +14,6 @@ class Finding < ApplicationRecord
   include Findings::CreateValidation
   include Findings::CSV
   include Findings::CustomAttributes
-  include Findings::DateColumns
   include Findings::Defaults
   include Findings::DestroyValidation
   include Findings::Display

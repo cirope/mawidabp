@@ -1,7 +1,7 @@
 class Period < ApplicationRecord
   include Auditable
   include ParameterSelector
-  include Periods::DateColumns
+  include Periods::AttributeTypes
   include Periods::DestroyValidation
   include Periods::Overrides
   include Periods::Scopes
