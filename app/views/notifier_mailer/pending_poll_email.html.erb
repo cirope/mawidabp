@@ -21,11 +21,11 @@
     </p>
   <% end %>
 
-  <% if @poll.affected_user %>
+  <% if @poll.about %>
     <p>
       <%= t(
-        'notifier.pending_poll_email.affected_user_html',
-        user: @poll.affected_user.full_name
+        'notifier.pending_poll_email.about_html',
+        entity: @poll.about.display_name
       ) %>
     </p>
   <% end %>

@@ -3,9 +3,8 @@
     <div class="col-md-6">
       <div class="form-group">
         <% selected = params[action] ? params[action][:questionnaire] : nil %>
-        <%= f.label :questionnaire, Questionnaire.model_name.human,
-          class: 'col-md-3' %>
-        <div class="col-md-9">
+        <%= f.label :questionnaire, Questionnaire.model_name.human, class: 'col-md-4' %>
+        <div class="col-md-8">
           <%= f.select :questionnaire, @report.questionnaires,
             { selected: selected, prompt: true }, class: 'form-control' %>
         </div>

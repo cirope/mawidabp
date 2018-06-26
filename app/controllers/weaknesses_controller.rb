@@ -53,7 +53,7 @@ class WeaknessesController < ApplicationController
       @order_by || [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     ).references(:periods, :conclusion_reviews)
 
     respond_to do |format|

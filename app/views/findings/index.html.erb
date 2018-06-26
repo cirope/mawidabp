@@ -14,7 +14,11 @@
 <table class="table table-condensed table-striped table-hover">
   <thead id="column_headers">
     <tr>
-      <th></th>
+      <%= make_filterable_column(
+        simple_icon(Finding.human_attribute_name('updated_at'), 'calendar'),
+        nil,
+        'updated_at'
+      ) %>
       <%= make_filterable_column(
         Finding.human_attribute_name('organization'), { class: 'hidden-sm hidden-xs' }, 'organization'
       ) if current_organization.corporate? %>

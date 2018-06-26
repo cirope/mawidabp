@@ -16,7 +16,7 @@ class FindingUserAssignment < ApplicationRecord
   validates_each :process_owner do |record, attr, value|
     organization_id = record.finding.try(:organization_id)
 
-    if value && !record.user.can_act_as_audited? && !record.user.can_act_as_audited_on?(organization_id)
+    if value && !record.user&.can_act_as_audited? && !record.user&.can_act_as_audited_on?(organization_id)
       record.errors.add attr, :invalid
     end
   end
@@ -29,7 +29,7 @@ class FindingUserAssignment < ApplicationRecord
 
   # Relaciones
   belongs_to :finding, :inverse_of => :finding_user_assignments,
-    :polymorphic => true, :optional => true
+    :polymorphic => true, :touch => true, :optional => true
   belongs_to :raw_finding, :foreign_key => :finding_id, :class_name => 'Finding', :optional => true
   belongs_to :user
 

@@ -4,7 +4,7 @@ module Polls::Answers
   included do
     has_many :answers, -> {
       includes(:question).
-        order("#{Question.quoted_table_name}.#{Question.qcn('sort_order')} ASC").
+      order(Arel.sql("#{Question.quoted_table_name}.#{Question.qcn('sort_order')} ASC")).
         references(:questions)
     }, dependent: :destroy
 

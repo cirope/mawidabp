@@ -4,11 +4,11 @@
       <div class="form-group">
         <% user = params[action] && params[action][:user] %>
 
-        <div class="col-md-3">
+        <div class="col-md-4">
           <%= f.label :user, User.model_name.human(count: 1) %>
         </div>
 
-        <div class="col-md-9">
+        <div class="col-md-8">
           <%= f.text_field :user,
             value: user,
             title: t('label.search'),
@@ -25,11 +25,11 @@
     </div>
     <div class="col-md-6">
        <div class="form-group">
-        <div class="col-md-3">
+        <div class="col-md-4">
           <%= f.label :user, t('.user_option') %>
         </div>
 
-        <div class="col-md-9">
+        <div class="col-md-8">
           <%= f.select :user_option,
             %w(only_all include_reviews).map { |option| [t(".#{option}"), option] },
             { include_blank: t('.affected_only'), selected: params[action] && params[action][:user_option] },

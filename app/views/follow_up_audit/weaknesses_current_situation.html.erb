@@ -3,13 +3,35 @@
     action: :weaknesses_current_situation, extra_params: {
       controller_name: 'follow_up', final: false
     },
-    forms: {
-      date_range: true,
-      finding_multiple: true,
-      risk_levels_multiple: true,
-      compliance: true,
-      weakness_extra_attributes: true
-    }
+    forms: [
+      [:date_range, true],
+      [:finding_multiple, true],
+      [:risk_levels_multiple, { group: 1 }],
+      [:business_unit_type_multiple, { group: 1 }],
+      [
+        :tags, {
+          group: 2,
+          field_name: :control_objective_tags,
+          field_label: t('follow_up_committee_report.weaknesses_current_situation.control_objective_tags')
+        }
+      ],
+      [
+        :tags, {
+          group: 2,
+          field_name: :weakness_tags,
+          field_label: t('follow_up_committee_report.weaknesses_current_situation.weakness_tags')
+        }
+      ],
+      [
+        :tags, {
+          group: 3,
+          field_name: :review_tags,
+          field_label: t('follow_up_committee_report.weaknesses_current_situation.review_tags')
+        }
+      ],
+      [:compliance, { group: 3 }],
+      [:weakness_extra_attributes, true]
+    ]
   }
 %>
 
@@ -61,7 +83,7 @@
     </p>
 
     <p>
-      <% if weakness.current_situation.present? %>
+      <% if weakness.current_situation.present? && weakness.current_situation_verified %>
         <strong><%= Weakness.human_attribute_name 'current_situation' %></strong>:
         <%= weakness.current_situation %>
       <% else %>
@@ -101,8 +123,8 @@
 
 <div>
   <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#',
-    data: { toggle: 'modal', target: "#customize_report" } %>
+  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: "#customize_report" } %> |
+  <%= link_to t('label.download_csv'), weaknesses_current_situation_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
 </div>
 
 <%= render partial: 'shared/customize_report_form', locals: {

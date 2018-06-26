@@ -70,8 +70,8 @@ class Polls::AnswerPDF < Prawn::Document
     end
 
     def pdf_add_affected_user poll
-      if poll.affected_user
-        pdf.text "#{Poll.human_attribute_name :affected_user}: #{poll.affected_user.informal_name}", style: :bold
+      if poll.about
+        pdf.text "#{Poll.human_attribute_name :about}: #{poll.about.display_name}", style: :bold
       end
     end
 

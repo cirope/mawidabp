@@ -4,7 +4,7 @@ module RiskAssessmentItems::Weights
   included do
     has_many :risk_weights, -> {
       joins(:risk_assessment_weight).
-        order("#{RiskAssessmentWeight.quoted_table_name}.#{RiskAssessmentWeight.qcn 'id'}")
+        order Arel.sql("#{RiskAssessmentWeight.quoted_table_name}.#{RiskAssessmentWeight.qcn 'id'}")
     }, dependent: :destroy, inverse_of: :risk_assessment_item
 
     accepts_nested_attributes_for :risk_weights, allow_destroy: true, reject_if: :all_blank

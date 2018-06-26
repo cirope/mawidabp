@@ -21,7 +21,13 @@ class NotifierMailerTest < ActionMailer::TestCase
     ldap_config = ldap_configs(:google_ldap)
     imports = ldap_config.import('admin', 'admin123')
 
-    response = LdapMailer.import_notifier(imports, org).deliver_now
+    filtered_imports = imports.map do |i|
+      unless i[:state] == :unchanged
+        { user: { name: i[:user].to_s, errors: i[:errors] }, state: i[:state] }
+      end
+    end.compact
+
+    response = LdapMailer.import_notifier(filtered_imports.to_json, org.id).deliver_now
 
     assert_not_empty ActionMailer::Base.deliveries
     assert_includes response.to, users(:supervisor).email
