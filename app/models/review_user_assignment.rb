@@ -109,13 +109,18 @@ class ReviewUserAssignment < ApplicationRecord
           self.review)
 
         transfered = findings.all? do |finding|
+          fua = finding.finding_user_assignments.detect do |fua|
+            fua.user_id == old_user.id
+          end
+
           finding.avoid_changes_notification = true
 
-          finding.users << new_user
-          finding.reload.users.delete old_user # Reload avoids touch stale error
+          finding.finding_user_assignments.build user_id: new_user.id
+          fua.mark_for_destruction
+
           unconfirmed_findings << finding if finding.unconfirmed?
 
-          finding.valid?
+          finding.save
         end
 
         unless transfered
