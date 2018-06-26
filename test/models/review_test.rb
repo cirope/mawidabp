@@ -792,7 +792,7 @@ class ReviewTest < ActiveSupport::TestCase
       repeated_order,
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
-    ]
+    ].map { |o| Arel.sql o }
 
     codes = @review.weaknesses.not_revoked.order(order).pluck 'review_code'
 

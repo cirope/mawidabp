@@ -7,3 +7,4 @@ poll_one:
   pollable_type: ConclusionReview
   organization: cirope
   access_token: <%= SecureRandom.hex %>
+  about: auditor (User)

@@ -62,6 +62,49 @@ class PollsControllerTest < ActionController::TestCase
     assert_redirected_to poll_path(assigns(:poll))
   end
 
+  test 'create poll about a business unit' do
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.deliveries = []
+
+    about = business_units(:business_unit_one)
+    assert_difference ['Poll.count', 'ActionMailer::Base.deliveries.count'] do
+      post :create, params: {
+        poll: {
+          user_id:          users(:administrator).id,
+          questionnaire_id: questionnaires(:questionnaire_one).id,
+          about_id:         about.id,
+          about_type:       about.class.name
+        }
+      }
+    end
+
+    assert_equal about.id, assigns(:poll).about_id
+    assert_equal about.class.name, assigns(:poll).about_type
+    assert_redirected_to poll_path(assigns(:poll))
+  end
+
+  test 'create poll about a (non) business unit' do
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.deliveries = []
+
+    about = business_unit_types(:cycle)
+    assert_no_difference ['Poll.count', 'ActionMailer::Base.deliveries.count'] do
+      post :create, params: {
+        poll: {
+          user_id:          users(:administrator).id,
+          questionnaire_id: questionnaires(:questionnaire_one).id,
+          about_id:         about.id,
+          about_type:       ''
+        }
+      }
+    end
+
+    # Error
+    assert_response :success
+    assert_not_nil assigns(:poll)
+    assert_template 'polls/new'
+  end
+
   test 'edit poll' do
     set_host_for_organization(@poll.organization.prefix)
 

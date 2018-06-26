@@ -2,11 +2,11 @@ class ConclusionReview < ApplicationRecord
   include Auditable
   include ParameterSelector
   include ConclusionReviews::AlternativePDF
+  include ConclusionReviews::AttributeTypes
   include ConclusionReviews::BundleIndexPDF
   include ConclusionReviews::BundleZip
   include ConclusionReviews::ConclusionIndex
   include ConclusionReviews::CoverPDF
-  include ConclusionReviews::DateColumns
   include ConclusionReviews::DestroyValidation
   include ConclusionReviews::Email
   include ConclusionReviews::FindingsFollowUpPDF

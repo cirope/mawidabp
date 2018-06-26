@@ -65,7 +65,7 @@ module Reports::WeaknessesCurrentSituation
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
         "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'conclusion_index'} DESC"
-      ]
+      ].map { |o| Arel.sql o }
       weaknesses = Weakness.
         with_status_for_report.
         finals(final).

@@ -71,6 +71,13 @@ module ApplicationHelper
     ).html_safe
   end
 
+  def simple_icon(title, icon_type)
+    content_tag(
+      :span, nil, title: j(title),
+      class: "glyphicon glyphicon-#{icon_type}"
+    )
+  end
+
   # Genera un array con pares [[name_field_1, id_field_1],......] para ser
   # utilizados en los selects
   #

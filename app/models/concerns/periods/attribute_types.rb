@@ -1,4 +1,4 @@
-module Periods::DateColumns
+module Periods::AttributeTypes
   extend ActiveSupport::Concern
 
   included do

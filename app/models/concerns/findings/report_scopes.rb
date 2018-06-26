@@ -28,7 +28,7 @@ module Findings::ReportScopes
         order && [
           "#{Period.quoted_table_name}.#{Period.qcn('start')} ASC",
           "#{Period.quoted_table_name}.#{Period.qcn('end')} ASC"
-        ]
+        ].map { |o| Arel.sql o }
       )
     end
 

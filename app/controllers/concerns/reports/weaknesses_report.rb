@@ -107,12 +107,12 @@ module Reports::WeaknessesReport
 
       if params[:execution].blank?
         weaknesses.order [
-          "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC",
+          Arel.sql("#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC"),
           review_code: :asc
         ]
       else
         weaknesses.order [
-          "#{Review.quoted_table_name}.#{Review.qcn 'created_at'} ASC",
+          Arel.sql("#{Review.quoted_table_name}.#{Review.qcn 'created_at'} ASC"),
           review_code: :asc
         ]
       end
