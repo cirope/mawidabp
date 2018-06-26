@@ -2,6 +2,7 @@ class ReviewUserAssignment < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Comparable
+  include ReviewUserAssignments::AttributeTypes
   include ReviewUserAssignments::DestroyCallbacks
   include ReviewUserAssignments::Scopes
 

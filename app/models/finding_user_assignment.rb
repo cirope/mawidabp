@@ -1,6 +1,7 @@
 class FindingUserAssignment < ApplicationRecord
   include Auditable
   include Comparable
+  include FindingUserAssignments::AttributeTypes
 
   # Scopes
   scope :owners, -> { where(:process_owner => true) }

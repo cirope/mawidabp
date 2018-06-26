@@ -4,11 +4,11 @@ class User < ApplicationRecord
   include ParameterSelector
   include SearchCop
   include Trimmer
+  include Users::AttributeTypes
   include Users::Auditable
   include Users::Authorization
   include Users::CloseDateWarning
   include Users::CustomAttributes
-  include Users::DateColumns
   include Users::Defaults
   include Users::DestroyValidation
   include Users::Findings
