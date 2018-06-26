@@ -16,12 +16,19 @@ class Polls::AnswersController < ApplicationController
       end
     end
 
+    def set_answer_option
+      if params[:index] && params[:index][:answer_option].present?
+        @report.answer_option = params[:index][:answer_option]
+      end
+    end
+
     def set_questionnaires
       @report.questionnaires = Questionnaire.list.pluck(:name, :id)
     end
 
     def process_report
       set_answered
+      set_answer_option
 
       if @report.questionnaire
         set_polls
@@ -37,6 +44,7 @@ class Polls::AnswersController < ApplicationController
         by_user(@report.user_id, @report.user_options || {})
 
       @report.polls = @report.polls.answered(@report.answered) unless @report.answered.nil?
+      @report.polls = @report.polls.answer_option(@report.answer_option) unless @report.answer_option.nil?
     end
 
     def create_pdf

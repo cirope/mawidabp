@@ -15,6 +15,14 @@ module Findings::State
   end
 
   module ClassMethods
+    def with_pending_status
+      where state: visible_pending_status
+    end
+
+    def with_pending_status_for_report
+      where state: report_pending_status
+    end
+
     private
 
       def status
@@ -76,8 +84,6 @@ module Findings::State
         scope :not_revoked, -> { where.not state: STATUS[:revoked] }
         scope :assumed_risk,     -> { where     state: STATUS[:assumed_risk] }
         scope :not_assumed_risk, -> { where.not state: STATUS[:assumed_risk] }
-        scope :with_pending_status, -> { where state: visible_pending_status }
-        scope :with_pending_status_for_report, -> { where state: report_pending_status }
       end
 
       def define_state_methods

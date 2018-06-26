@@ -20,10 +20,12 @@ module Users::Scopes
     def all_with_findings_for_notification
       includes(finding_user_assignments: :raw_finding).
         where(findings: { state: Finding::STATUS[:notify], final: false }).
-        order([
-          "#{quoted_table_name}.#{qcn('last_name')} ASC",
-          "#{quoted_table_name}.#{qcn('name')} ASC"
-        ]).
+        order(
+          [
+            "#{quoted_table_name}.#{qcn('last_name')} ASC",
+            "#{quoted_table_name}.#{qcn('name')} ASC"
+          ].map { |o| Arel.sql o }
+        ).
         references(:findings)
     end
 

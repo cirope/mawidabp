@@ -8,7 +8,7 @@ module LoginRecords::Scopes
       list.
       includes(:user).
       where(conditions).
-      order("#{quoted_table_name}.#{qcn('start')} DESC").
+      order(Arel.sql("#{quoted_table_name}.#{qcn('start')} DESC")).
       references(:users)
     }
   end

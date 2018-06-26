@@ -292,8 +292,8 @@ es:
         manager_attribute: 'Atributo con el superior'
         test_user: 'Usuario'
         test_password: 'Contraseña'
-        user: 'Usuario'
-        password: 'Contraseña'
+        user: 'Usuario de servicio'
+        password: 'Contraseña de servicio'
       login_record:
         data: 'Datos'
         end: 'Fin'
@@ -415,7 +415,7 @@ es:
         questionnaire: 'Cuestionario'
         user: 'Usuario'
         pollable: 'Sobre'
-        affected_user: 'Acerca de'
+        about: 'Acerca de'
       poll/answers:
         answer: 'Respuesta'
         answer_option: 'Opción'

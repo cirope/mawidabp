@@ -1,4 +1,5 @@
 class ConclusionFinalReview < ConclusionReview
+  include ConclusionFinalReviews::Defaults
   include ConclusionFinalReviews::Destroy
   include ConclusionFinalReviews::Scopes
   include ConclusionFinalReviews::Search
@@ -13,16 +14,6 @@ class ConclusionFinalReview < ConclusionReview
 
   # Relaciones
   has_one :conclusion_draft_review, through: :review
-
-  def initialize(attributes = nil, import_from_draft = true)
-    super attributes
-
-    if import_from_draft && self.review
-      draft = ConclusionDraftReview.where(review_id: self.review_id).first
-
-      self.attributes = draft.attributes if draft
-    end
-  end
 
   def check_for_approval
     self.approved = self.review && (self.review.is_approved? ||

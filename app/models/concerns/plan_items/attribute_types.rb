@@ -1,4 +1,4 @@
-module WorkflowItems::DateColumns
+module PlanItems::AttributeTypes
   extend ActiveSupport::Concern
 
   included do

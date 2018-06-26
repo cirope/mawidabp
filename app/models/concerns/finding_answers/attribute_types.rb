@@ -1,4 +1,4 @@
-module FindingAnswers::DateColumns
+module FindingAnswers::AttributeTypes
   extend ActiveSupport::Concern
 
   included do

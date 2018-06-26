@@ -42,7 +42,7 @@ module AutoCompleteFor::ControlObjective
       [
         "#{::ProcessControl.quoted_table_name}.#{::ProcessControl.qcn('name')} ASC",
         "#{::ControlObjective.quoted_table_name}.#{::ControlObjective.qcn('order')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     ).references(:best_practices, :process_control).limit(10)
 
     respond_to do |format|

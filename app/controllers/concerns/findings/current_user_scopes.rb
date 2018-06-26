@@ -167,7 +167,7 @@ module Findings::CurrentUserScopes
         "#{Finding.quoted_table_name}.#{Finding.qcn('organization_id')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('state')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     end
 
     def current_user_references

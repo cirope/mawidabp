@@ -2,7 +2,7 @@ class WorkflowItem < ApplicationRecord
   include Auditable
   include Comparable
   include ParameterSelector
-  include WorkflowItems::DateColumns
+  include WorkflowItems::AttributeTypes
 
   # Callbacks para registrar los cambios en los modelos cuando son modificados o
   # creados
