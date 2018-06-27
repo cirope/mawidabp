@@ -117,7 +117,7 @@ module Findings::CSV
           :business_unit_type,
           :business_unit,
           finding_answers: :user,
-          review: :plan_item,
+          review: [:plan_item, :conclusion_final_review],
           finding_user_assignments: :user,
           taggings: :tag,
           users: {

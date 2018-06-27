@@ -23,7 +23,10 @@ module Findings::UserAssignments
   end
 
   def process_owners
-    finding_user_assignments.select(&:process_owner).map &:user
+    # o
+    # users.where(finding_user_assignments: { process_owner: true }
+    # o podemos armar una relacion que se llame owner_users... magic
+    finding_user_assignments.owners.map &:user
   end
 
   def responsible_auditors

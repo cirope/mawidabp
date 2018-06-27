@@ -21,6 +21,7 @@ module Findings::Reiterations
   end
 
   def repeated_root
+    # TODO: no se puede preguntar por parents???
     node = self
     node = node.repeated_of while node.repeated_of
     node
