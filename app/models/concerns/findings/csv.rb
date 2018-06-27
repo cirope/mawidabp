@@ -3,6 +3,7 @@ module Findings::CSV
 
   LINE_BREAK             = "\r\n"
   LINE_BREAK_REPLACEMENT = " | "
+  @@postgres =  ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
 
   def to_csv_a corporate
     row = [
@@ -26,7 +27,7 @@ module Findings::CSV
       control_objective_item.control_objective_text,
       origination_date_text,
       date_text,
-      (rescheduled if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'),
+      (rescheduled if @@postgres), # tira sql extra
       reiteration_info,
       audit_comments,
       audit_recommendations,
@@ -74,8 +75,9 @@ module Findings::CSV
     end
 
     def audited_users
+      po = process_owners
       auditeds = users.select do |u|
-        u.can_act_as_audited? && process_owners.exclude?(u)
+        u.can_act_as_audited? && po.exclude?(u)
       end
 
       auditeds.map &:full_name
@@ -116,14 +118,17 @@ module Findings::CSV
           :repeated_in,
           :business_unit_type,
           :business_unit,
+          :versions,
           finding_answers: :user,
           review: [:plan_item, :conclusion_final_review],
           finding_user_assignments: :user,
+          finding_owner_assignments: :user,
           taggings: :tag,
           users: {
             organization_roles: :role
           },
           control_objective_item: {
+            review: :conclusion_final_review,
             control_objective: {
               process_control: :best_practice
             }

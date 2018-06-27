@@ -8,7 +8,13 @@ module Findings::FollowUp
   end
 
   def rescheduled?
-    all_follow_up_dates.any?
+    # all_follow_up_dates.any?
+    last_date = follow_up_date
+
+    versions_after_final_review(nil).each do |v|
+      date = v.reify&.follow_up_date
+      return true if date.present? && date != last_date
+    end
   end
 
   def all_follow_up_dates end_date = nil, reload = false

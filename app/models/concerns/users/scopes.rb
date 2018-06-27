@@ -8,6 +8,15 @@ module Users::Scopes
         references :organizations
     }
     scope :not_hidden, -> { where hidden: false }
+    scope :can_act_as_audited, -> {
+      includes(organization_roles: :role).where(
+        organization_roles: {
+          roles: {
+            role_type: Role::TYPES.slice(:admin, :audited, :executive_manager).values
+          }
+        }
+      )
+    }
   end
 
   module ClassMethods

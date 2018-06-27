@@ -5,7 +5,14 @@ module Findings::UserAssignments
     has_many :finding_user_assignments, dependent: :destroy, inverse_of: :finding,
       before_add:    :check_for_final_review,
       before_remove: :check_for_final_review
+    has_many :finding_owner_assignments, -> { owners }, foreign_key: :finding_id,
+      class_name: 'FindingUserAssignment'
+    has_many :finding_responsible_assignments, -> { responsibles }, foreign_key: :finding_id,
+      class_name: 'FindingUserAssignment'
     has_many :users, -> { order(last_name: :asc) }, through: :finding_user_assignments
+    # has_many :owner_users, through: :finding_owner_assignments,
+    #   class_name: 'User'
+    #   # foreign_key: :user_id
 
     accepts_nested_attributes_for :finding_user_assignments, allow_destroy: true
   end
@@ -26,11 +33,12 @@ module Findings::UserAssignments
     # o
     # users.where(finding_user_assignments: { process_owner: true }
     # o podemos armar una relacion que se llame owner_users... magic
-    finding_user_assignments.owners.map &:user
+    finding_owner_assignments.map &:user
+    # owner_users
   end
 
   def responsible_auditors
-    finding_user_assignments.responsibles.map &:user
+    finding_responsible_assignments.map &:user
   end
 
   def import_users
