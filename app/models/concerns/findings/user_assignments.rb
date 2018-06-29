@@ -10,9 +10,6 @@ module Findings::UserAssignments
     has_many :finding_responsible_assignments, -> { responsibles }, foreign_key: :finding_id,
       class_name: 'FindingUserAssignment'
     has_many :users, -> { order(last_name: :asc) }, through: :finding_user_assignments
-    # has_many :owner_users, through: :finding_owner_assignments,
-    #   class_name: 'User'
-    #   # foreign_key: :user_id
 
     accepts_nested_attributes_for :finding_user_assignments, allow_destroy: true
   end
@@ -30,11 +27,7 @@ module Findings::UserAssignments
   end
 
   def process_owners
-    # o
-    # users.where(finding_user_assignments: { process_owner: true }
-    # o podemos armar una relacion que se llame owner_users... magic
     finding_owner_assignments.map &:user
-    # owner_users
   end
 
   def responsible_auditors
