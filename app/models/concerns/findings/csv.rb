@@ -17,7 +17,7 @@ module Findings::CSV
       title,
       description,
       state_text,
-      respond_to?(:risk_text) ? risk_text : '',
+      try(:risk_text) || '',
       (respond_to?(:risk_text) ? priority_text : '' unless HIDE_WEAKNESS_PRIORITY),
       auditeds_as_process_owner.join('; '),
       audited_users.join('; '),
@@ -74,6 +74,7 @@ module Findings::CSV
     end
 
     def audited_users
+      process_owners = self.process_owners
       auditeds = users.select do |u|
         u.can_act_as_audited? && process_owners.exclude?(u)
       end
@@ -116,14 +117,17 @@ module Findings::CSV
           :repeated_in,
           :business_unit_type,
           :business_unit,
+          :versions,
           finding_answers: :user,
-          review: :plan_item,
           finding_user_assignments: :user,
+          finding_owner_assignments: :user,
           taggings: :tag,
+          review: [:plan_item, :conclusion_final_review],
           users: {
             organization_roles: :role
           },
           control_objective_item: {
+            review: [:plan_item, :conclusion_final_review],
             control_objective: {
               process_control: :best_practice
             }
