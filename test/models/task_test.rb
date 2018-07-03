@@ -29,4 +29,19 @@ class TaskTest < ActiveSupport::TestCase
     assert @task.invalid?
     assert_error @task, :due_on, :invalid_date
   end
+
+  test 'list all due on dates' do
+    old_date = @task.due_on
+
+    assert @task.all_due_on_dates.blank?
+
+    @task.update! due_on: 10.days.from_now.to_date
+
+    assert @task.all_due_on_dates.include?(old_date)
+
+    @task.update! due_on: 15.days.from_now.to_date
+
+    assert @task.all_due_on_dates.include?(old_date)
+    assert @task.all_due_on_dates.include?(10.days.from_now.to_date)
+  end
 end

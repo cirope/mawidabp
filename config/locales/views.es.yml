@@ -409,6 +409,9 @@ es:
       danger: 'Peligro'
 
   tasks:
+    on_time: 'A tiempo, sin reprogramación'
+    rescheduled: 'A tiempo, reprogramada'
+    expired: 'Fuera de tiempo'
     status:
       pending: 'Pendiente'
       in_progress: 'En proceso'
