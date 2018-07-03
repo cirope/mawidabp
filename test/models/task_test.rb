@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class TaskTest < ActiveSupport::TestCase
+  include ActionMailer::TestHelper
+
   setup do
     @task = tasks :setup_all_things
   end
@@ -43,5 +45,27 @@ class TaskTest < ActiveSupport::TestCase
 
     assert @task.all_due_on_dates.include?(old_date)
     assert @task.all_due_on_dates.include?(10.days.from_now.to_date)
+  end
+
+  test 'warning users about tasks expiration' do
+    Organization.current_id = nil
+    # Only if no weekend
+    assert_not_includes [0, 6], Date.today.wday
+
+    @task.update! due_on: FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date
+
+    assert_enqueued_emails @task.users.size do
+      Task.warning_users_about_expiration
+    end
+  end
+
+  test 'remember users about expired tasks' do
+    Organization.current_id = nil
+
+    @task.update! due_on: Time.zone.yesterday
+
+    assert_enqueued_emails @task.users.size do
+      Task.remember_users_about_expiration
+    end
   end
 end
