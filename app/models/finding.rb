@@ -36,6 +36,7 @@ class Finding < ApplicationRecord
   include Findings::SerializedAttributes
   include Findings::SortColumns
   include Findings::State
+  include Findings::Tasks
   include Findings::Unanswered
   include Findings::Unconfirmed
   include Findings::UpdateCallbacks

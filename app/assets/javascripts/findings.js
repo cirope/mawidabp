@@ -70,4 +70,40 @@ jQuery(function ($) {
         prop('readonly', false)
     }
   })
+
+  var disableFollowUpDate = function () {
+    var hasVisibleTasks = !!$('.task:visible').length
+
+    $('#finding_follow_up_date').prop('readonly', hasVisibleTasks)
+
+    if (hasVisibleTasks)
+      changeFollowUpDate()
+  }
+
+  $(document).on('dynamic-item:added', '[data-association="tasks"]', disableFollowUpDate)
+  $(document).on('dynamic-item:removed dynamic-item:hidden', '[data-dynamic-target=".task"]', disableFollowUpDate)
+
+  var changeFollowUpDate = function () {
+    var lang     = $('html').prop('lang')
+    var format   = $.datepicker.regional[lang].dateFormat
+    var newValue = ''
+    var intValue = 0
+
+    $('[data-override-follow-up-date]:visible').each(function (i, e) {
+      var val = $(e).val()
+      var int = val ? $.datepicker.parseDate(format, val).getTime() : 0
+
+      console.log({val, int})
+
+      if (int && int > intValue) {
+        intValue = int
+        newValue = val
+      }
+    })
+
+    if (newValue)
+      $('#finding_follow_up_date').val(newValue)
+  }
+
+  $(document).on('change', '[data-override-follow-up-date]', changeFollowUpDate)
 })

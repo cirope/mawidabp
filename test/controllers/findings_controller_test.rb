@@ -240,6 +240,7 @@ class FindingsControllerTest < ActionController::TestCase
       'FindingAnswer.count',
       'Cost.count',
       'FindingRelation.count',
+      'Task.count',
       'BusinessUnitFinding.count',
       'Tagging.count'
     ]
@@ -311,6 +312,13 @@ class FindingsControllerTest < ActionController::TestCase
                 {
                   description: 'Duplicated',
                   related_finding_id: findings(:unanswered_weakness).id
+                }
+              ],
+              tasks_attributes: [
+                {
+                  description: 'New task',
+                  status: 'pending',
+                  due_on: I18n.l(Time.zone.tomorrow)
                 }
               ],
               taggings_attributes: [

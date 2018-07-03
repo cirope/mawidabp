@@ -408,6 +408,12 @@ es:
       warning: 'Advertencia'
       danger: 'Peligro'
 
+  tasks:
+    status:
+      pending: 'Pendiente'
+      in_progress: 'En proceso'
+      finished: 'Finalizada'
+
   users:
     index:
       title: 'Listado de usuarios'

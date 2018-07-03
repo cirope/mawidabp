@@ -1,0 +1,26 @@
+<%
+  id = f.object.object_id
+  finding = f.object.finding || parent.object
+  task = f.object
+%>
+<fieldset class="task">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :description, label: false, input_html: { autofocus: task.new_record? } %>
+      </div>
+      <div class="col-md-2">
+        <%= f.input :status, collection: finding_task_status_options, label: false, prompt: false %>
+      </div>
+      <div class="col-md-2">
+        <%= f.input :due_on, as: :date_picker, label: false, input_html: { data: { override_follow_up_date: true } } %>
+      </div>
+      <div class="col-md-2">
+        <div class="toggle-visibility">
+          <%= f.input :finding_id, as: :hidden %>
+          <%= link_to_remove_nested_item(f) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</fieldset>
