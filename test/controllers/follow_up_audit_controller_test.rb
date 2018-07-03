@@ -553,7 +553,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   end
 
   test 'filtered weaknesses current situation by extra attributes' do
-    skip unless ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+    skip unless POSTGRESQL_ADAPTER
 
     login
 
