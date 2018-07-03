@@ -26,7 +26,7 @@ module Findings::CSV
       control_objective_item.control_objective_text,
       origination_date_text,
       date_text,
-      (rescheduled if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'),
+      (rescheduled if POSTGRESQL_ADAPTER),
       reiteration_info,
       audit_comments,
       audit_recommendations,
@@ -112,17 +112,17 @@ module Findings::CSV
     private
 
       def all_with_inclusions
-        preload :organization,
+        preload *[
+          :organization,
           :repeated_of,
           :repeated_in,
           :business_unit_type,
           :business_unit,
-          :versions,
+          (:versions if POSTGRESQL_ADAPTER),
           finding_answers: :user,
           finding_user_assignments: :user,
           finding_owner_assignments: :user,
           taggings: :tag,
-          review: [:plan_item, :conclusion_final_review],
           users: {
             organization_roles: :role
           },
@@ -132,6 +132,7 @@ module Findings::CSV
               process_control: :best_practice
             }
           }
+        ].compact
       end
 
       def column_headers completed, corporate
@@ -157,7 +158,7 @@ module Findings::CSV
           ControlObjectiveItem.human_attribute_name('control_objective_text'),
           Finding.human_attribute_name('origination_date'),
           date_label(completed),
-          (Finding.human_attribute_name('rescheduled') if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'),
+          (Finding.human_attribute_name('rescheduled') if POSTGRESQL_ADAPTER),
           I18n.t('findings.state.repeated'),
           Finding.human_attribute_name('audit_comments'),
           Finding.human_attribute_name('audit_recommendations'),
