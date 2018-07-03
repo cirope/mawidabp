@@ -262,7 +262,7 @@
     </div>
   </div>
 
-  <div id="tasks">
+  <div id="tasks" data-follow-up-date-changed-warning="<%= t 'finding.follow_up_date_changed_warning' %>">
     <%= f.simple_fields_for :tasks do |fr_f| %>
       <%= render 'task', f: fr_f %>
     <% end %>

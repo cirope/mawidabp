@@ -93,16 +93,20 @@ jQuery(function ($) {
       var val = $(e).val()
       var int = val ? $.datepicker.parseDate(format, val).getTime() : 0
 
-      console.log({val, int})
-
       if (int && int > intValue) {
         intValue = int
         newValue = val
       }
     })
 
-    if (newValue)
+    if (newValue && $('#finding_follow_up_date').val() != newValue) {
+      var $warningElement = $('[data-follow-up-date-changed-warning]')
+      var message         = $warningElement.data('followUpDateChangedWarning')
+
       $('#finding_follow_up_date').val(newValue)
+
+      alert(message)
+    }
   }
 
   $(document).on('change', '[data-override-follow-up-date]', changeFollowUpDate)
