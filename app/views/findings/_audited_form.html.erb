@@ -156,13 +156,15 @@
         </tr>
       </thead>
 
-      <% @finding.tasks.each do |task| %>
-        <tr>
-          <td><%= task.description %></td>
-          <td><%= t "tasks.status.#{task.status}" %></td>
-          <td><%= l task.due_on %></td>
-        </tr>
-      <% end %>
+      <tbody>
+        <% @finding.tasks.each do |task| %>
+          <tr>
+            <td><%= task.description %></td>
+            <td><%= t "tasks.status.#{task.status}" %></td>
+            <td><%= l task.due_on %></td>
+          </tr>
+        <% end %>
+      </tbody>
     </table>
   <% end %>
 
