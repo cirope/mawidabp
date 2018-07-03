@@ -80,4 +80,4 @@ SEARCH_ALLOWED_OPERATORS = HashWithIndifferentAccess.new({
     /^\s*[^<>]=\s+/ => '='
 })
 # Adaptador PostgreSQL en uso
-POSTGRESQL_ADAPTER = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+POSTGRESQL_ADAPTER = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL' rescue nil
