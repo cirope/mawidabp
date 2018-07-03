@@ -129,6 +129,9 @@ es:
       tagging:
         one: 'Etiquetado'
         other: 'Etiquetados'
+      task:
+        one: 'Tarea'
+        other: 'Tareas'
       weakness:
         one: 'Observación'
         other: 'Observaciones'
@@ -240,6 +243,10 @@ es:
         other: 'Relaciones'
         related_finding_id: 'Relación (Observación / Oportunidad de mejora relacionada)'
         description: 'Relación (descripción)'
+      finding/tasks:
+        description: 'Descripción'
+        status: 'Estado'
+        due_on: 'Fecha de finalización'
       finding/taggings:
         one: 'Etiqueta'
         other: 'Etiquetas'
@@ -340,6 +347,10 @@ es:
       tagging:
         tag: 'Etiqueta'
         tag_id: 'Etiqueta'
+      task:
+        description: 'Descripción'
+        status: 'Estado'
+        due_on: 'Fecha de finalización'
       user:
         email: 'Correo'
         enable: 'Habilitado'

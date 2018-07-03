@@ -246,7 +246,7 @@ GEM
     ttfunk (1.5.1)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    uglifier (4.1.13)
+    uglifier (4.1.14)
       execjs (>= 0.3.0, < 3)
     unicorn (5.4.0)
       kgio (~> 2.6)
