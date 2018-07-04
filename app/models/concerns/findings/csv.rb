@@ -28,6 +28,7 @@ module Findings::CSV
       date_text,
       (rescheduled if POSTGRESQL_ADAPTER),
       (task_rescheduled if POSTGRESQL_ADAPTER),
+      listed_tasks,
       reiteration_info,
       audit_comments,
       audit_recommendations,
@@ -109,6 +110,10 @@ module Findings::CSV
       answers.reverse.join LINE_BREAK_REPLACEMENT
     end
 
+    def listed_tasks
+      tasks.map { |t| "- #{t.description}" }.join("\n")
+    end
+
   module ClassMethods
     def to_csv completed: 'incomplete', corporate: false
       ::CSV.generate(col_sep: ';', force_quotes: true) do |csv|
@@ -127,6 +132,7 @@ module Findings::CSV
           :repeated_in,
           :business_unit_type,
           :business_unit,
+          :tasks,
           (:versions if POSTGRESQL_ADAPTER),
           ({ tasks: :versions } if POSTGRESQL_ADAPTER),
           finding_answers: :user,
@@ -170,6 +176,7 @@ module Findings::CSV
           date_label(completed),
           (Finding.human_attribute_name('rescheduled') if POSTGRESQL_ADAPTER),
           (Finding.human_attribute_name('task_rescheduled') if POSTGRESQL_ADAPTER),
+          Task.model_name.human(count: 0),
           I18n.t('findings.state.repeated'),
           Finding.human_attribute_name('audit_comments'),
           Finding.human_attribute_name('audit_recommendations'),

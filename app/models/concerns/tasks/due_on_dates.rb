@@ -4,14 +4,11 @@ module Tasks::DueOnDates
   def rescheduled?
     last_date = due_on
 
-    versions.each do |v|
-      # Reify busca el elemento original en la DB sin dup
+    versions.any? do |v|
       date = v.reify(dup: true)&.due_on
 
-      return true if date.present? && date != due_on
+      date.present? && date != due_on
     end
-
-    false
   end
 
   def all_due_on_dates
