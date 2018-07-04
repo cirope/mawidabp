@@ -27,6 +27,7 @@ module Findings::CSV
       origination_date_text,
       date_text,
       (rescheduled if POSTGRESQL_ADAPTER),
+      (task_rescheduled if POSTGRESQL_ADAPTER),
       reiteration_info,
       audit_comments,
       audit_recommendations,
@@ -50,6 +51,14 @@ module Findings::CSV
     def rescheduled
       if being_implemented? || awaiting?
         I18n.t "label.#{rescheduled? ? 'yes' : 'no'}"
+      else
+        '-'
+      end
+    end
+
+    def task_rescheduled
+      if being_implemented? || awaiting?
+        I18n.t "label.#{task_rescheduled? ? 'yes' : 'no'}"
       else
         '-'
       end
@@ -119,6 +128,7 @@ module Findings::CSV
           :business_unit_type,
           :business_unit,
           (:versions if POSTGRESQL_ADAPTER),
+          ({ tasks: :versions } if POSTGRESQL_ADAPTER),
           finding_answers: :user,
           finding_user_assignments: :user,
           finding_owner_assignments: :user,
@@ -159,6 +169,7 @@ module Findings::CSV
           Finding.human_attribute_name('origination_date'),
           date_label(completed),
           (Finding.human_attribute_name('rescheduled') if POSTGRESQL_ADAPTER),
+          (Finding.human_attribute_name('task_rescheduled') if POSTGRESQL_ADAPTER),
           I18n.t('findings.state.repeated'),
           Finding.human_attribute_name('audit_comments'),
           Finding.human_attribute_name('audit_recommendations'),
