@@ -499,6 +499,7 @@ es:
         add: 'Agregar usuario a lista de estado de seguimiento'
         remove: 'Eliminar usuario de lista de estado de seguimiento'
         list: 'Ver lista de observaciones pendientes de los usuarios seleccionados'
+        user_findings: 'Ver lista de observaciones pendientes del usuario y su jerarquía'
       show:
         title: 'Estado'
         table: 'Ver tabla'
