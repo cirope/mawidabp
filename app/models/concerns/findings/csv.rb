@@ -111,7 +111,7 @@ module Findings::CSV
     end
 
     def listed_tasks
-      tasks.map { |t| "- #{t.description}" }.join("\n")
+      tasks.map(&:detailed_description).join(LINE_BREAK_REPLACEMENT)
     end
 
   module ClassMethods

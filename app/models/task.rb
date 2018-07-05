@@ -12,4 +12,12 @@ class Task < ApplicationRecord
   def to_s
     description
   end
+
+  def detailed_description
+    [
+      description,
+      I18n.t("tasks.status.#{status}"),
+      I18n.l(due_on, format: :minimal)
+    ].join(' - ')
+  end
 end
