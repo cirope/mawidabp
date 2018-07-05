@@ -13,14 +13,11 @@ module Findings::FollowUp
     versions_scope = versions if final_review_created_at.blank?
     versions_scope ||= versions_after_final_review
 
-    versions_scope.each do |v|
-      # Reify busca el elemento original en la DB sin dup
+    versions_scope.any? do |v|
       date = v.reify(dup: true)&.follow_up_date
 
-      return true if date.present? && date != last_date
+      date.present? && date != last_date
     end
-
-    false
   end
 
   def all_follow_up_dates end_date = nil, reload = false
