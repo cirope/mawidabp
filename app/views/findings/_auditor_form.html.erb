@@ -102,13 +102,13 @@
       </div>
       <div class="row">
         <div class="col-md-4">
-          <%= f.input :impact, as: :check_boxes, collection: weakness_impact_options, disabled: true %>
+          <%= f.input :impact, as: :check_boxes, collection: weakness_impact_options %>
         </div>
         <div class="col-md-4">
-          <%= f.input :operational_risk, as: :check_boxes, collection: weakness_operational_risk_options, disabled: true %>
+          <%= f.input :operational_risk, as: :check_boxes, collection: weakness_operational_risk_options %>
         </div>
         <div class="col-md-4">
-          <%= f.input :internal_control_components, as: :check_boxes, collection: weakness_internal_control_components_options, disabled: true %>
+          <%= f.input :internal_control_components, as: :check_boxes, collection: weakness_internal_control_components_options %>
         </div>
       </div>
     <% end %>
