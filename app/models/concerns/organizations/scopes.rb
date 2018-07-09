@@ -17,7 +17,7 @@ module Organizations::Scopes
       }
     )
 
-    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+    if POSTGRESQL_ADAPTER
       users.distinct
     else
       User.where id: users.pluck(:id).uniq

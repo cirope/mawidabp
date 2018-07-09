@@ -60,6 +60,9 @@ class FindingsController < ApplicationController
         :audit_comments, :state, :progress, :origination_date, :solution_date,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
         :compliance, :nested_user, :skip_work_paper, :lock_version,
+        impact: [],
+        operational_risk: [],
+        internal_control_components: [],
         users_for_notification: [],
         business_unit_ids: [],
         finding_user_assignments_attributes: [
@@ -75,6 +78,9 @@ class FindingsController < ApplicationController
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
+        ],
+        tasks_attributes: [
+          :id, :description, :status, :due_on, :_destroy
         ],
         taggings_attributes: [
           :id, :tag_id, :_destroy

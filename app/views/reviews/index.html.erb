@@ -13,7 +13,7 @@
       <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), { :class => 'hidden-xs' }, 'business_unit' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'hidden-xs' }, 'project' %>
       <%= make_filterable_column t('review.user_assignment.audit_team'), { :class => 'hidden-xs' }, 'audit_team' %>
-      <% if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'  %>
+      <% if POSTGRESQL_ADAPTER  %>
         <%= make_filterable_column Tag.model_name.human(count: 0), { :class => 'hidden-xs' }, 'tags' %>
       <% else %>
         <%= make_not_available_column Tag.model_name.human(count: 0), { :class => 'hidden-xs' } %>

@@ -190,6 +190,12 @@ module FindingsHelper
       state_errors.any? { |msg| msg[:error] == :must_have_a_work_paper }
   end
 
+  def finding_task_status_options
+    Task.statuses.map do |k, v|
+      [t("tasks.status.#{k}"), k.to_s]
+    end
+  end
+
   private
 
     def finding_state_options_for finding

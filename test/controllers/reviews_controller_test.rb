@@ -59,7 +59,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list reviews with search on tags' do
-    support_tags = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+    support_tags = POSTGRESQL_ADAPTER
 
     skip unless support_tags
 
