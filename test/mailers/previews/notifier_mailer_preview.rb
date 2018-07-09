@@ -108,6 +108,20 @@ class NotifierMailerPreview < ActionMailer::Preview
     NotifierMailer.findings_expired_warning user, user.findings.limit(3)
   end
 
+  # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/tasks_expiration_warning
+  def tasks_expiration_warning
+    user = User.joins(:tasks).take
+
+    NotifierMailer.tasks_expiration_warning user, user.tasks.limit(3)
+  end
+
+  # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/tasks_expired_warning
+  def tasks_expired_warning
+    user = User.joins(:tasks).take
+
+    NotifierMailer.tasks_expired_warning user, user.tasks.limit(3)
+  end
+
   # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/conclusion_final_review_close_date_warning
   def conclusion_final_review_close_date_warning
     user = User.joins(reviews: :conclusion_final_review).take

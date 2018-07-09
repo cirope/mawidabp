@@ -408,6 +408,15 @@ es:
       warning: 'Advertencia'
       danger: 'Peligro'
 
+  tasks:
+    on_time: 'A tiempo, sin reprogramación'
+    rescheduled: 'A tiempo, reprogramada'
+    expired: 'Fuera de tiempo'
+    status:
+      pending: 'Pendiente'
+      in_progress: 'En proceso'
+      finished: 'Finalizada'
+
   users:
     index:
       title: 'Listado de usuarios'
@@ -490,6 +499,7 @@ es:
         add: 'Agregar usuario a lista de estado de seguimiento'
         remove: 'Eliminar usuario de lista de estado de seguimiento'
         list: 'Ver lista de observaciones pendientes de los usuarios seleccionados'
+        user_findings: 'Ver lista de observaciones pendientes del usuario y su jerarquía'
       show:
         title: 'Estado'
         table: 'Ver tabla'
