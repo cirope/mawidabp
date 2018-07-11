@@ -136,8 +136,8 @@
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
-    weaknesses_by_month_title: "Observaciones por mes"
-    weaknesses_current_situation_title: "Observaciones, situación actual"
+    weaknesses_by_month_title: "Informe mensual"
+    weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     cost_analysis:
       detailed_column_resource: "Recurso"
@@ -176,7 +176,7 @@
     review_score_details_report_title: "Calificaciones de informes detallado"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_month_title: "Observaciones por riesgo"
-    weaknesses_current_situation_title: "Observaciones, situación actual"
+    weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     qa_indicators_title: "Indicadores de calidad"
     weaknesses_by_state_title: "Hallazgos totales por estado"
@@ -241,7 +241,7 @@
     weaknesses_by_month:
       pdf_name: "observaciones_por_mes_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "OBSERVACIONES POR MES - INFORMES DEFINITIVOS"
+      subtitle: "INFORME MENSUAL - INFORMES DEFINITIVOS"
       main_weaknesses: "Principales debilidades"
       other_weaknesses: "Otras observaciones"
       without_audits_in_the_month: "Sin auditorías en el mes"
@@ -251,10 +251,13 @@
     weaknesses_current_situation:
       pdf_name: "observaciones_situacion_actual_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "OBSERVACIONES, SITUACIÓN ACTUAL - INFORMES DEFINITIVOS"
+      subtitle: "REPORTE GLOBAL - CUATRIMESTRAL / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       origination_year: "Año de origen"
+      control_objective_tags: "Etiquetas objetivos de control"
+      weakness_tags: "Etiquetas de observación"
+      review_tags: "Etiquetas de informe"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -437,7 +440,7 @@
       create: "Generar"
     bundle_index:
       title: "ÍNDICE"
-      default_items: "PLANILLA DE CALIFICACIÓN GLOBAL\nPLANILLA DE CALIFICACIÓN DETALLADA\nINFORME DEFINITIVO\nRELEVAMIENTO\nDOCUMENTACIÓN DEL TRABAJO REALIZADO\nSEGUIMIENTO DE HALLAZGOS"
+      default_items: "PLANILLA DE CALIFICACIÓN GLOBAL\nPLANILLA DE CALIFICACIÓN DETALLADA\nINFORME DEFINITIVO\nRELEVAMIENTO\nSEGUIMIENTO DE HALLAZGOS"
       items_label: "Entradas en el índice"
       pdf_name: "00_indice_legajo.pdf"
     findings_sheet:
@@ -622,8 +625,8 @@
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
-    weaknesses_by_month_title: "Observaciones por mes"
-    weaknesses_current_situation_title: "Observaciones, situación actual"
+    weaknesses_by_month_title: "Informe mensual"
+    weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     cost_analysis:
       column_business_unit: "Unidad de negocio"
@@ -649,8 +652,8 @@
     synthesis_report_title: "Informe de síntesis al directorio"
     review_stats_report_title: "Estadísticas de informes"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
-    weaknesses_by_month_title: "Observaciones por mes"
-    weaknesses_current_situation_title: "Observaciones, situación actual"
+    weaknesses_by_month_title: "Informe mensual"
+    weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     detailed_report: "Reporte detallado"
     qa_indicators_title: "Indicadores de calidad"
@@ -735,7 +738,7 @@
     weaknesses_by_month:
       pdf_name: "observaciones_por_mes_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "SEGUIMIENTO DE OBSERVACIONES POR MES - INFORMES DEFINITIVOS"
+      subtitle: "SEGUIMIENTO INFORME MENSUAL - INFORMES DEFINITIVOS"
       main_weaknesses: "Principales debilidades"
       other_weaknesses: "Otras observaciones"
       without_audits_in_the_month: "Sin auditorías en el mes"
@@ -745,10 +748,13 @@
     weaknesses_current_situation:
       pdf_name: "observaciones_situacion_actual_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "SEGUIMIENTO DE OBSERVACIONES, SITUACIÓN ACTUAL - INFORMES DEFINITIVOS"
+      subtitle: "SEGUIMIENTO REPORTE GLOBAL - CUATRIMESTRAL / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       origination_year: "Año de origen"
+      control_objective_tags: "Etiquetas objetivos de control"
+      weakness_tags: "Etiquetas de observación"
+      review_tags: "Etiquetas de informe"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -924,7 +930,7 @@
       title: "Notificación de observaciones en proceso de implementación vencidas"
       the_following_finding_is_being_implemented_and_stale: "La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación"
     pending_poll_email:
-      affected_user_html: "Encuesta acerca de <strong>%{user}</strong>"
+      about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables del siguiente hallazgo"

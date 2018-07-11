@@ -2,6 +2,7 @@ class Tag < ApplicationRecord
   include Auditable
   include Trimmer
   include Shareable
+  include Tags::AttributeTypes
   include Tags::Defaults
   include Tags::Icons
   include Tags::JSON

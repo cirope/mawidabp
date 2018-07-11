@@ -2,8 +2,8 @@ class PlanItem < ApplicationRecord
   include Auditable
   include Comparable
   include ParameterSelector
+  include PlanItems::AttributeTypes
   include PlanItems::Comparable
-  include PlanItems::DateColumns
   include PlanItems::DestroyValidation
   include PlanItems::PDF
   include PlanItems::ResourceUtilizations

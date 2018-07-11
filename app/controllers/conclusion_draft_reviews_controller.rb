@@ -27,7 +27,7 @@ class ConclusionDraftReviewsController < ApplicationController
       [
         "#{ConclusionDraftReview.quoted_table_name}.#{ConclusionDraftReview.qcn('issue_date')} DESC",
         "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('created_at')} DESC"
-      ].join(', ')
+      ].map { |o| Arel.sql o }
     ).page(params[:page])
 
     respond_to do |format|

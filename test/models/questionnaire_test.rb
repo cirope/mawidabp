@@ -36,7 +36,7 @@ class QuestionnaireTest < ActiveSupport::TestCase
   test 'delete' do
     assert_difference 'Questionnaire.count', -1 do
       assert_difference 'Question.count', -@questionnaire.questions.count do
-        assert_difference 'AnswerOption.count', -Question::ANSWER_OPTIONS.size do
+        assert_difference 'AnswerOption.count', -@questionnaire.answer_options.count do
           @questionnaire.destroy
         end
       end
@@ -70,5 +70,27 @@ class QuestionnaireTest < ActiveSupport::TestCase
 
     assert @questionnaire.invalid?
     assert_error @questionnaire, :name, :taken
+  end
+
+  test 'clone from other questionnaire' do
+    cloned = Questionnaire.new
+    cloned.clone_from @questionnaire
+    cloned.name += ' cloned' # unique name
+
+    assert_difference 'Questionnaire.count' do
+      assert_difference 'Question.count', @questionnaire.questions.count do
+        assert_difference 'AnswerOption.count', @questionnaire.answer_options.count do
+          cloned.save
+        end
+      end
+    end
+
+    cloned.reload
+    %i(
+      organization_id pollable_type email_text email_link email_subject
+      email_clarification
+    ).each do |attr|
+      assert_equal @questionnaire.send(attr).to_s, cloned.send(attr).to_s, attr
+    end
   end
 end

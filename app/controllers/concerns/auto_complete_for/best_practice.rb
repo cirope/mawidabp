@@ -36,7 +36,7 @@ module AutoCompleteFor::BestPractice
     @best_practice = ::BestPractice.where(
       conditions.map { |c| "(#{c})" }.join(' AND '), parameters
     ).order(
-      "#{::BestPractice.quoted_table_name}.#{::BestPractice.qcn('name')} ASC"
+      Arel.sql("#{::BestPractice.quoted_table_name}.#{::BestPractice.qcn('name')} ASC")
     ).limit(10)
 
     respond_to do |format|

@@ -673,6 +673,33 @@ class FindingsControllerTest < ActionController::TestCase
     )
   end
 
+  test 'list findings with search by updated_at' do
+    get :index, params: {
+      completed: 'incomplete',
+      search: {
+        query:   "> #{I18n.l(4.days.ago.to_date, format: :minimal)}",
+        columns: ['updated_at']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_not_empty assigns(:findings)
+    assert assigns(:findings).all? { |f| f.updated_at > 4.days.ago.to_date }
+
+    get :index, params: {
+      completed: 'incomplete',
+      search: {
+        query:   "< #{I18n.l(2.days.ago.to_date, format: :minimal)}",
+        columns: ['updated_at']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_empty assigns(:findings)
+  end
+
   private
 
   def create_finding_answers_for(finding, destroy_readings: false)

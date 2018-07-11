@@ -26,6 +26,7 @@ class BusinessUnit < ApplicationRecord
   def to_s
     name
   end
+  alias display_name to_s
 
   def as_json(options = nil)
     default_options = {

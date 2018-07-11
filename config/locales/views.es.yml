@@ -281,8 +281,8 @@ es:
     access_denied: 'La encuesta ya ha sido contestada.'
     already_exists: 'Alguna de las encuestas para %{user} ya existen y no fueron enviadas nuevamente'
     answer_poll: '¿Contestar encuesta?'
-    affected_user: 'Acerca de'
-    affected_user_html: 'Acerca de <strong>%{user}</strong>'
+    about: 'Acerca de'
+    about_html: 'Acerca de <strong>%{entity}</strong>'
     answers:
       index:
         title: 'Resumen de respuestas'

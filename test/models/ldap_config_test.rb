@@ -137,6 +137,16 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_equal [:unchanged], @not_imported_users.map { |u| u[:state] }.uniq
   end
 
+  test 'massive import' do
+    organization = organizations(:google)
+
+    organization.ldap_config.update! user: 'admin', password: 'admin123'
+
+    assert_difference ['User.count', 'ActionMailer::Base.deliveries.size'] do
+      LdapConfig.sync_users
+    end
+  end
+
   test 'test encrypt and decrypt with Security lib' do
     phrase = 'I love dogs'
     encrypted_phrase = Security.encrypt(phrase)

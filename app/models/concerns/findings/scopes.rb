@@ -90,5 +90,50 @@ module Findings::Scopes
 
       includes(review: :conclusion_final_review).where condition, *[date, date_until].compact
     end
+
+    def by_business_unit_type business_unit_type_id
+      includes(review: { plan_item: :business_unit }).
+        where(business_units: { business_unit_type_id: business_unit_type_id }).
+        references(:business_units)
+    end
+
+    def by_control_objective_tags *tags
+      conditions = []
+      parameters = {}
+
+      tags.flatten.each_with_index do |tag, i|
+        conditions << "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn 'name'}) LIKE :cot_#{i}"
+
+        parameters[:"cot_#{i}"] = "%#{tag.downcase}%"
+      end
+
+      includes(control_objective: :tags).where(conditions.join(' OR '), parameters)
+    end
+
+    def by_wilcard_tags *tags
+      conditions = []
+      parameters = {}
+
+      tags.flatten.each_with_index do |tag, i|
+        conditions << "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn 'name'}) LIKE :wt_#{i}"
+
+        parameters[:"wt_#{i}"] = "%#{tag.downcase}%"
+      end
+
+      includes(:tags).where(conditions.join(' OR '), parameters)
+    end
+
+    def by_review_tags *tags
+      conditions = []
+      parameters = {}
+
+      tags.flatten.each_with_index do |tag, i|
+        conditions << "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn 'name'}) LIKE :rt_#{i}"
+
+        parameters[:"rt_#{i}"] = "%#{tag.downcase}%"
+      end
+
+      includes(review: :tags).where(conditions.join(' OR '), parameters)
+    end
   end
 end
