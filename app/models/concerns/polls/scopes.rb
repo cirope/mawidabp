@@ -41,7 +41,7 @@ module Polls::Scopes
       end
 
       if self.connection.adapter_name == 'OracleEnhanced'
-        result
+        where(id: result.distinct.ids)
       else
         result.distinct
       end
