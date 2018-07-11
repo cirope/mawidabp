@@ -80,17 +80,22 @@ class Polls::AnswerPDF < Prawn::Document
       pdf.text Questionnaire.human_attribute_name(:questions), style: :bold
 
       poll.answers.each do |answer|
-        ans = set_answer(answer) if poll.answered?
+        show_answer   = !@report.filter_answers
+        show_answer ||= @report.filter_answers && @report.answer_option == answer.answer_option&.option
 
-        pdf.move_down PDF_FONT_SIZE * 0.25
-        pdf.text answer.question.question
+        if show_answer
+          ans = set_answer(answer) if poll.answered?
 
-        pdf.indent PDF_FONT_SIZE do
           pdf.move_down PDF_FONT_SIZE * 0.25
-          pdf.text ans
+          pdf.text answer.question.question
 
-          if answer.comments.present?
-            pdf.text "#{Answer.human_attribute_name :comments}: <i>#{answer.comments}</i>", inline_format: true
+          pdf.indent PDF_FONT_SIZE do
+            pdf.move_down PDF_FONT_SIZE * 0.25
+            pdf.text ans
+
+            if answer.comments.present?
+              pdf.text "#{Answer.human_attribute_name :comments}: <i>#{answer.comments}</i>", inline_format: true
+            end
           end
         end
       end
