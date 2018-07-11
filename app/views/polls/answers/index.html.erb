@@ -45,22 +45,27 @@
     </p>
 
     <% poll.answers.each do |answer| %>
-      <div class="text-bold">
-        <%= simple_format "#{answer.question.sort_order}. #{answer.question.question}" %>
-      </div>
+      <% show_answer   = !@report.filter_answers %>
+      <% show_answer ||= @report.filter_answers && @report.answer_option == answer.answer_option&.option %>
 
-      <% if poll.answered? %>
-        <% if answer.question.options.any? %>
-          <p><%= t "answer_options.#{answer.answer_option.option}" %></p>
-        <% elsif answer.question.answer_written? %>
-          <%= simple_format answer.answer %>
+      <% if show_answer %>
+        <div class="text-bold">
+          <%= simple_format "#{answer.question.sort_order}. #{answer.question.question}" %>
+        </div>
+
+        <% if poll.answered? %>
+          <% if answer.question.options.any? %>
+            <p><%= t "answer_options.#{answer.answer_option.option}" %></p>
+          <% elsif answer.question.answer_written? %>
+            <%= simple_format answer.answer %>
+          <% end %>
         <% end %>
-      <% end %>
-      <% if answer.comments.present? %>
-        <p>
-          <%= Answer.human_attribute_name :comments %>:
-          <em><%= answer.comments %></em>
-        </p>
+        <% if answer.comments.present? %>
+          <p>
+            <%= Answer.human_attribute_name :comments %>:
+            <em><%= answer.comments %></em>
+          </p>
+        <% end %>
       <% end %>
     <% end %>
 
