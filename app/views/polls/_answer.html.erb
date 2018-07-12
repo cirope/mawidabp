@@ -17,13 +17,17 @@
         <%= f.input :type, as: :hidden, input_html: { value: AnswerWritten.name } %>
       <% end %>
     </div>
-    <div class="col-md-6">
-      <%= f.input :comments, label: "#{Answer.human_attribute_name('comments')} (#{t 'label.optional'})",
-        input_html: { id: "answer_comments_#{f.object.id}" }
-      %>
-      <%= f.input :question_id, as: :hidden, input_html: { value: question.id } %>
-      <%= f.input :lock_version, as: :hidden %>
-    </div>
+    <% hidde_comments = SHOW_ALTERNATIVE_QUESTIONNAIRES && question.answer_written? %>
+
+    <% unless hidde_comments %>
+      <div class="col-md-6">
+        <%= f.input :comments, label: "#{Answer.human_attribute_name('comments')} (#{t 'label.optional'})",
+          input_html: { id: "answer_comments_#{f.object.id}" }
+        %>
+        <%= f.input :question_id, as: :hidden, input_html: { value: question.id } %>
+        <%= f.input :lock_version, as: :hidden %>
+      </div>
+    <% end %>
   </div>
 </div>
 <br />
