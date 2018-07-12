@@ -31,7 +31,10 @@ class Polls::AnswersControllerTest < ActionController::TestCase
 
   test 'filtered by answer option report' do
     get :index, params: {
-      index: index_params.merge(answer: Question::ANSWER_OPTIONS.sample.to_s)
+      index: index_params.merge(
+        filter_answers: '1',
+        answer_option: Question::ANSWER_OPTIONS.sample.to_s
+      )
     }
 
     assert_response :success

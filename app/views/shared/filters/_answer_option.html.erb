@@ -10,5 +10,14 @@
         </div>
       </div>
     </div>
+
+    <div class="col-md-6">
+      <div class="checkbox">
+        <% filter_answers = params[action] && params[action][:filter_answers] %>
+        <label>
+          <%= f.check_box :filter_answers, checked: filter_answers == '1' %> <%= t '.filter_answers' %>
+        </label>
+      </div>
+    </div>
   </div>
 </div>

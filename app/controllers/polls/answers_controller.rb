@@ -20,6 +20,10 @@ class Polls::AnswersController < ApplicationController
       if params[:index] && params[:index][:answer_option].present?
         @report.answer_option = params[:index][:answer_option]
       end
+
+      if params[:index] && params[:index][:filter_answers].present?
+        @report.filter_answers = params[:index][:filter_answers] == '1'
+      end
     end
 
     def set_questionnaires
