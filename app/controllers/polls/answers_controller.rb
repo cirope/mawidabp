@@ -49,6 +49,10 @@ class Polls::AnswersController < ApplicationController
 
       @report.polls = @report.polls.answered(@report.answered) unless @report.answered.nil?
       @report.polls = @report.polls.answer_option(@report.answer_option) unless @report.answer_option.nil?
+
+      if ActiveRecord::Base.connection.adapter_name == 'OracleEnhanced'
+        @report.polls = Poll.where id: @report.polls.ids.uniq
+      end
     end
 
     def create_pdf
