@@ -10,6 +10,12 @@ class Polls::AnswersController < ApplicationController
 
   private
 
+    def set_question
+      if params[:index] && params[:index][:question].present?
+        @report.question = params[:index][:question]
+      end
+    end
+
     def set_answered
       if params[:index] && ['true', 'false'].include?(params[:index][:answered])
         @report.answered = params[:index][:answered] == 'true'
@@ -31,6 +37,7 @@ class Polls::AnswersController < ApplicationController
     end
 
     def process_report
+      set_question
       set_answered
       set_answer_option
 
@@ -47,6 +54,7 @@ class Polls::AnswersController < ApplicationController
         by_questionnaire(@report.questionnaire).
         by_user(@report.user_id, @report.user_options || {})
 
+      @report.polls = @report.polls.by_question(@report.question) unless @report.question.nil?
       @report.polls = @report.polls.answered(@report.answered) unless @report.answered.nil?
       @report.polls = @report.polls.answer_option(@report.answer_option) unless @report.answer_option.nil?
 

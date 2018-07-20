@@ -5,6 +5,7 @@
     forms: {
       poll_date_range: true,
       poll_user: true,
+      question: true,
       questionnaire: true,
       answered: true,
       answer_option: true
@@ -16,66 +17,65 @@
   <div class="alert alert-warning"><%= t('polls.without_data') %></div>
 <% else %>
   <% @report.polls.each do |poll| %>
-    <p>
-      <strong><%= Poll.human_attribute_name 'user' %>:</strong>
-      <%= poll.user.informal_name %>
-    </p>
-    <% if poll.about %>
+    <% if show_poll? poll %>
       <p>
-        <strong><%= Poll.human_attribute_name :about %>:</strong>
-        <%= poll.about.display_name %>
+        <strong><%= Poll.human_attribute_name 'user' %>:</strong>
+        <%= poll.user.informal_name %>
       </p>
-    <% end %>
-    <p>
-      <strong><%= Poll.human_attribute_name 'answered' %>:</strong>
-      <%= t_boolean poll.answered %>
-    </p>
-    <p>
-      <strong><%= Poll.human_attribute_name 'send_date' %>:</strong>
-      <%= l poll.created_at.to_date, format: :long %>
-    </p>
-    <% if poll.answered? %>
+      <% if poll.about %>
+        <p>
+          <strong><%= Poll.human_attribute_name :about %>:</strong>
+          <%= poll.about.display_name %>
+        </p>
+      <% end %>
       <p>
-        <strong><%= Poll.human_attribute_name 'answer_date' %>:</strong>
-        <%= l poll.updated_at.to_date, format: :long %>
+        <strong><%= Poll.human_attribute_name 'answered' %>:</strong>
+        <%= t_boolean poll.answered %>
       </p>
-    <% end %>
-    <p>
-      <strong><%= Questionnaire.human_attribute_name 'questions' %>:</strong>
-    </p>
+      <p>
+        <strong><%= Poll.human_attribute_name 'send_date' %>:</strong>
+        <%= l poll.created_at.to_date, format: :long %>
+      </p>
+      <% if poll.answered? %>
+        <p>
+          <strong><%= Poll.human_attribute_name 'answer_date' %>:</strong>
+          <%= l poll.updated_at.to_date, format: :long %>
+        </p>
+      <% end %>
+      <p>
+        <strong><%= Questionnaire.human_attribute_name 'questions' %>:</strong>
+      </p>
 
-    <% poll.answers.each do |answer| %>
-      <% show_answer   = !@report.filter_answers %>
-      <% show_answer ||= @report.filter_answers && @report.answer_option == answer.answer_option&.option %>
+      <% poll.answers.each do |answer| %>
+        <% if show_answer? answer %>
+          <div class="text-bold">
+            <%= simple_format "#{answer.question.sort_order}. #{answer.question.question}" %>
+          </div>
 
-      <% if show_answer %>
-        <div class="text-bold">
-          <%= simple_format "#{answer.question.sort_order}. #{answer.question.question}" %>
-        </div>
-
-        <% if poll.answered? %>
-          <% if answer.question.options.any? %>
-            <p><%= t "answer_options.#{answer.answer_option.option}" %></p>
-          <% elsif answer.question.answer_written? %>
-            <%= simple_format answer.answer %>
+          <% if poll.answered? %>
+            <% if answer.question.options.any? %>
+              <p><%= t "answer_options.#{answer.answer_option.option}" %></p>
+            <% elsif answer.question.answer_written? %>
+              <%= simple_format answer.answer %>
+            <% end %>
+          <% end %>
+          <% if answer.comments.present? %>
+            <p>
+              <%= Answer.human_attribute_name :comments %>:
+              <em><%= answer.comments %></em>
+            </p>
           <% end %>
         <% end %>
-        <% if answer.comments.present? %>
-          <p>
-            <%= Answer.human_attribute_name :comments %>:
-            <em><%= answer.comments %></em>
-          </p>
-        <% end %>
       <% end %>
-    <% end %>
 
-    <% if poll.comments.present? %>
-      <p>
-        <strong><%= Poll.human_attribute_name :comments %>:</strong>
-        <%= poll.comments %>
-      </p>
+      <% if poll.comments.present? %>
+        <p>
+          <strong><%= Poll.human_attribute_name :comments %>:</strong>
+          <%= poll.comments %>
+        </p>
+      <% end %>
+      <hr />
     <% end %>
-    <hr />
   <% end %>
   <p>
     <strong><%= t 'polls.total_answered' %>:</strong>
