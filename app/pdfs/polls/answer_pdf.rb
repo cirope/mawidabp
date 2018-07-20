@@ -39,13 +39,15 @@ class Polls::AnswerPDF < Prawn::Document
         count = @report.polls.size
 
         @report.polls.each_with_index do |poll, i|
-          pdf_add_user poll
-          pdf_add_affected_user poll
-          pdf_add_status poll
-          pdf_add_answers poll
-          pdf_add_comments poll
+          if show_poll? poll
+            pdf_add_user poll
+            pdf_add_affected_user poll
+            pdf_add_status poll
+            pdf_add_answers poll
+            pdf_add_comments poll
 
-          pdf.move_down PDF_FONT_SIZE unless i == count - 1
+            pdf.move_down PDF_FONT_SIZE unless i == count - 1
+          end
         end
       end
     end
@@ -80,10 +82,7 @@ class Polls::AnswerPDF < Prawn::Document
       pdf.text Questionnaire.human_attribute_name(:questions), style: :bold
 
       poll.answers.each do |answer|
-        show_answer   = !@report.filter_answers
-        show_answer ||= @report.filter_answers && @report.answer_option == answer.answer_option&.option
-
-        if show_answer
+        if show_answer? answer
           ans = set_answer(answer) if poll.answered?
 
           pdf.move_down PDF_FONT_SIZE * 0.25
@@ -111,5 +110,25 @@ class Polls::AnswerPDF < Prawn::Document
 
     def save
       pdf.custom_save_as pdf_name, Answer.table_name
+    end
+
+    def show_poll? poll
+      poll.answers.any? { |a| show_answer? a }
+    end
+
+    def show_answer? answer
+      show_answer = show_question?(answer.question) && !@report.filter_answers
+
+      show_answer ||
+        @report.filter_answers &&
+        @report.answer_option == answer.answer_option&.option
+    end
+
+    def show_question? question
+      if @report.question.present?
+        question.question =~ /#{Regexp.escape @report.question}/
+      else
+        true
+      end
     end
 end
