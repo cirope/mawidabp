@@ -126,7 +126,7 @@ class Polls::AnswerPDF < Prawn::Document
 
     def show_question? question
       if @report.question.present?
-        question.question =~ /#{Regexp.escape @report.question}/
+        question.question =~ /#{Regexp.escape @report.question}/i
       else
         true
       end
