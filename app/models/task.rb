@@ -5,7 +5,7 @@ class Task < ApplicationRecord
   include Tasks::Status
   include Tasks::Validations
 
-  belongs_to :finding, touch: true
+  belongs_to :finding, touch: true, optional: true
   has_one :organization, through: :finding
   has_many :users, through: :finding
 

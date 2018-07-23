@@ -286,6 +286,30 @@
   <% end %>
 
   <br />
+  <h4>
+    <%= Task.model_name.human count: 0 %>
+  </h4>
+  <div class="row">
+    <div class="col-md-6">
+      <h5><strong><%= Task.human_attribute_name 'description' %></strong></h5>
+    </div>
+    <div class="col-md-2">
+      <h5><strong><%= Task.human_attribute_name 'status' %></strong></h5>
+    </div>
+    <div class="col-md-2">
+      <h5><strong><%= Task.human_attribute_name 'due_on' %></strong></h5>
+    </div>
+  </div>
+
+  <div id="tasks" data-follow-up-date-changed-warning="<%= t 'finding.follow_up_date_changed_warning' %>">
+    <%= f.simple_fields_for :tasks do |fr_f| %>
+      <%= render 'task', f: fr_f, readonly: readonly %>
+    <% end %>
+
+    <%= link_to_add_fields t('finding.add_task'), f, :tasks unless readonly %>
+  </div>
+
+  <br />
   <h4><%= WorkPaper.model_name.human(count: 0) %></h4>
   <div class="row">
     <div class="col-md-3">

@@ -74,7 +74,7 @@ jQuery(function ($) {
   var disableFollowUpDate = function () {
     var hasVisibleTasks = !!$('.task:visible').length
 
-    $('#finding_follow_up_date').prop('readonly', hasVisibleTasks)
+    $('[name$="[follow_up_date]"]').prop('readonly', hasVisibleTasks)
 
     if (hasVisibleTasks)
       changeFollowUpDate()
@@ -99,11 +99,11 @@ jQuery(function ($) {
       }
     })
 
-    if (newValue && $('#finding_follow_up_date').val() != newValue) {
+    if (newValue && $('[name$="[follow_up_date]"]').val() != newValue) {
       var $warningElement = $('[data-follow-up-date-changed-warning]')
       var message         = $warningElement.data('followUpDateChangedWarning')
 
-      $('#finding_follow_up_date').val(newValue)
+      $('[name$="[follow_up_date]"]').val(newValue)
 
       alert(message)
     }

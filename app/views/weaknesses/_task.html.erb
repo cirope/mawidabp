@@ -2,18 +2,19 @@
   id = f.object.object_id
   finding = f.object.finding
   task = f.object
+  readonly = readonly
 %>
 <fieldset class="task">
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <%= f.input :description, label: false, input_html: { autofocus: task.new_record?, rows: 1 } %>
+        <%= f.input :description, label: false, input_html: { autofocus: task.new_record?, rows: 1, readonly: readonly } %>
       </div>
       <div class="col-md-2">
-        <%= f.input :status, collection: finding_task_status_options, label: false, prompt: false %>
+        <%= f.input :status, collection: finding_task_status_options, label: false, prompt: false, input_html: { readonly: readonly } %>
       </div>
       <div class="col-md-2">
-        <%= f.input :due_on, as: :date_picker, label: false, input_html: { data: { override_follow_up_date: true } } %>
+        <%= f.input :due_on, as: :date_picker, label: false, input_html: { readonly: readonly, data: { override_follow_up_date: true } } %>
       </div>
       <div class="col-md-1">
         <% if task.due_on && task.due_on >= Time.zone.today %>
