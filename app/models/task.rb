@@ -1,5 +1,6 @@
 class Task < ApplicationRecord
   include Auditable
+  include Tasks::AttributeTypes
   include Tasks::DueOnDates
   include Tasks::Expiration
   include Tasks::Status
