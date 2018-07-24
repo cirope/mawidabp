@@ -28,6 +28,7 @@ module Findings::CSV
       date_text,
       (rescheduled if POSTGRESQL_ADAPTER),
       (task_rescheduled if POSTGRESQL_ADAPTER),
+      next_pending_task_date,
       listed_tasks,
       reiteration_info,
       audit_comments,
@@ -110,6 +111,13 @@ module Findings::CSV
       answers.reverse.join LINE_BREAK_REPLACEMENT
     end
 
+    def next_pending_task_date
+      task = tasks.detect { |t| !t.finished? }
+      date = task&.due_on
+
+      date ? I18n.l(date) : ''
+    end
+
     def listed_tasks
       tasks.map(&:detailed_description).join(LINE_BREAK_REPLACEMENT)
     end
@@ -176,6 +184,7 @@ module Findings::CSV
           date_label(completed),
           (Finding.human_attribute_name('rescheduled') if POSTGRESQL_ADAPTER),
           (Finding.human_attribute_name('task_rescheduled') if POSTGRESQL_ADAPTER),
+          I18n.t('finding.next_pending_task_date'),
           Task.model_name.human(count: 0),
           I18n.t('findings.state.repeated'),
           Finding.human_attribute_name('audit_comments'),

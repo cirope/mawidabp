@@ -556,6 +556,7 @@
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
+    next_pending_task_date: "Fecha próxima tarea pendiente"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
     download_csv: "Descargar CSV"
