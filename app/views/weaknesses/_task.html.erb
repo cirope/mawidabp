@@ -17,7 +17,7 @@
         <%= f.input :due_on, as: :date_picker, label: false, input_html: { readonly: readonly, data: { override_follow_up_date: true } } %>
       </div>
       <div class="col-md-1">
-        <% if task.due_on && task.due_on >= Time.zone.today %>
+        <% if task.due_on && !task.finished? && task.due_on >= Time.zone.today %>
           <% if task.all_due_on_dates.empty? %>
             <span class="text-success" title="<%= t 'tasks.on_time' %>">
               <span class="glyphicon glyphicon-ok"></span>
@@ -27,7 +27,7 @@
               <span class="glyphicon glyphicon-repeat"></span>
             </span>
           <% end %>
-        <% elsif task.due_on %>
+        <% elsif task.due_on && !task.finished? %>
           <span class="text-danger" title="<%= t 'tasks.expired' %>">
             <span class="glyphicon glyphicon-time"></span>
           </span>
