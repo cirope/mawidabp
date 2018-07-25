@@ -316,6 +316,7 @@ class FindingsControllerTest < ActionController::TestCase
               ],
               tasks_attributes: [
                 {
+                  code: '01',
                   description: 'New task',
                   status: 'pending',
                   due_on: I18n.l(Time.zone.tomorrow)

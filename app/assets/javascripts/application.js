@@ -46,6 +46,7 @@
 //= require risk_assessment_templates
 //= require sessions
 //= require tags
+//= require tasks
 //= require touch
 //= require users
 //= require weaknesses
