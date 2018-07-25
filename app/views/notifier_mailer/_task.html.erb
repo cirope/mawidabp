@@ -11,6 +11,10 @@
   <b><%= finding.class.model_name.human %></b>:
   <%= [finding.review_code, finding.title].join(' - ') %>
 </p>
+<p style="margin: .1em 0em;">
+  <b><%= task.class.human_attribute_name 'code' %></b>:
+  <%= task.code %>
+</p>
 <div style="margin: .1em 0em;">
   <b><%= task.class.model_name.human %></b>:
   <%= textilize task.description %>

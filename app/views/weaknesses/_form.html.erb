@@ -96,7 +96,7 @@
             disabled: weakness_progress_disabled?(@weakness, readonly) %>
         <% end %>
         <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
-        <%= f.input :follow_up_date, as: :date_picker, input_html: { disabled: @weakness.tasks.any? || readonly } %>
+        <%= f.input :follow_up_date, as: :date_picker, input_html: { readonly: @weakness.tasks.any?, disabled: readonly } %>
         <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>
         <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
       </div>
@@ -290,7 +290,13 @@
     <%= Task.model_name.human count: 0 %>
   </h4>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-1">
+      <h5>
+        <strong><%= Task.human_attribute_name 'code' %></strong>
+        <small><%= link_to_recode_tasks %></small>
+      </h5>
+    </div>
+    <div class="col-md-5">
       <h5><strong><%= Task.human_attribute_name 'description' %></strong></h5>
     </div>
     <div class="col-md-2">

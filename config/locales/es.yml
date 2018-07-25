@@ -567,6 +567,7 @@
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
     add_work_paper: "Agregar papel de trabajo"
+    recode_tasks: "Recodificar tareas"
     follow_up_date_changed_warning: "La fecha de implementación cambió para adecuarse a las tareas"
     repeated_ancestors: "Reiterada de"
     repeated_children: "Reiterada en"

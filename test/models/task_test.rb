@@ -8,11 +8,13 @@ class TaskTest < ActiveSupport::TestCase
   end
 
   test 'blank attributes' do
+    @task.code = ''
     @task.description = ''
     @task.due_on = nil
     @task.status = nil
 
     assert @task.invalid?
+    assert_error @task, :code, :blank
     assert_error @task, :description, :blank
     assert_error @task, :due_on, :blank
     assert_error @task, :status, :blank

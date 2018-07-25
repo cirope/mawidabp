@@ -1069,7 +1069,7 @@ class FindingTest < ActiveSupport::TestCase
     finding              = findings :being_implemented_weakness
 
     assert_difference 'finding.tasks.count' do
-      finding.tasks.create! description: 'Test', due_on: Time.zone.today
+      finding.tasks.create! code: '02', description: 'Test', due_on: Time.zone.today
     end
 
     assert finding.reload.tasks.all? { |t| !t.finished? }

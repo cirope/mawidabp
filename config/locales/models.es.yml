@@ -245,6 +245,7 @@ es:
         related_finding_id: 'Relación (Observación / Oportunidad de mejora relacionada)'
         description: 'Relación (descripción)'
       finding/tasks:
+        code: 'Código'
         description: 'Descripción'
         status: 'Estado'
         due_on: 'Fecha de finalización'
@@ -349,6 +350,7 @@ es:
         tag: 'Etiqueta'
         tag_id: 'Etiqueta'
       task:
+        code: 'Código'
         description: 'Descripción'
         status: 'Estado'
         due_on: 'Fecha de finalización'
