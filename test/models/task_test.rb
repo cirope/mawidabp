@@ -20,13 +20,6 @@ class TaskTest < ActiveSupport::TestCase
     assert_error @task, :status, :blank
   end
 
-  test 'unique attributes' do
-    task = @task.dup
-
-    assert task.invalid?
-    assert_error task, :code, :taken
-  end
-
   test 'validates attributes encoding' do
     @task.description = "\n\t"
 
