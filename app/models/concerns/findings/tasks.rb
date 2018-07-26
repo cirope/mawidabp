@@ -9,10 +9,6 @@ module Findings::Tasks
     accepts_nested_attributes_for :tasks, allow_destroy: true
   end
 
-  def task_rescheduled?
-    tasks.any?(&:rescheduled?)
-  end
-
   private
 
     def mark_tasks_as_finished

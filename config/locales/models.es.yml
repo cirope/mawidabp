@@ -229,7 +229,6 @@ es:
         work_papers: 'Papeles de trabajo'
         finding_answers: 'Respuestas'
         rescheduled: 'Reprogramada'
-        task_rescheduled: 'Tarea reprogramada'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'
