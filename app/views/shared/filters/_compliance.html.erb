@@ -1,13 +1,19 @@
+<% group ||= nil %>
+
 <div id="compliance_filter" class="filter" <%== 'style="display: none;"' unless display %>>
-  <div class="row">
+  <% unless group %>
+    <div class="row">
+  <% end %>
     <div class="col-md-6">
       <div class="form-group">
         <% selected = params[action] ? params[action][:compliance] : nil %>
-        <%= f.label :compliance, Weakness.human_attribute_name('compliance'), class: 'col-md-3' %>
-        <div class="col-md-9">
+        <%= f.label :compliance, Weakness.human_attribute_name('compliance'), class: 'col-md-4' %>
+        <div class="col-md-8">
           <%= f.select :compliance, weakness_compliance_options, { selected: selected, include_blank: t('helpers.select.prompt') }, class: 'form-control' %>
         </div>
       </div>
     </div>
-  </div>
+  <% unless group %>
+    </div>
+  <% end %>
 </div>

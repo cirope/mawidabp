@@ -1,15 +1,17 @@
 <%= simple_form_for(@questionnaire) do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
+
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
         <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
         <%= f.input :email_subject, input_html: { maxlength: 255 } %>
         <%= f.input :email_link, input_html: { maxlength: 255 } %>
+        <%= f.input :pollable_type, collection: pollable_types, prompt: true %>
       </div>
       <div class="col-md-6">
-        <%= f.input :email_text, input_html: { maxlength: 255 } %>
-        <%= f.input :email_clarification, input_html: { maxlength: 255 } %>
-        <%= f.input :pollable_type, collection: pollable_types, prompt: true %>
+        <%= f.input :email_text, input_html: { rows: 4 } %>
+        <%= f.input :email_clarification, input_html: { rows: 4 } %>
       </div>
     </div>
   </div>

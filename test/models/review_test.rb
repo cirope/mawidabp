@@ -792,7 +792,7 @@ class ReviewTest < ActiveSupport::TestCase
       repeated_order,
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
-    ]
+    ].map { |o| Arel.sql o }
 
     codes = @review.weaknesses.not_revoked.order(order).pluck 'review_code'
 
@@ -886,6 +886,19 @@ class ReviewTest < ActiveSupport::TestCase
     pcs = @review.grouped_control_objective_items.map &:first
 
     assert_equal pcs, sorted_pcs
+  end
+
+  test 'pdf conversion' do
+    FileUtils.rm @review.absolute_pdf_path if File.exist?(@review.absolute_pdf_path)
+
+    assert_nothing_raised do
+      @review.to_pdf organizations(:cirope)
+    end
+
+    assert File.exist?(@review.absolute_pdf_path)
+    assert File.size(@review.absolute_pdf_path) > 0
+
+    FileUtils.rm @review.absolute_pdf_path
   end
 
   private

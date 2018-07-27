@@ -31,7 +31,10 @@ module Periods::Scopes
     private
 
       def order_by_dates
-        ["#{quoted_table_name}.#{qcn('start')} ASC", "#{quoted_table_name}.#{qcn('end')} ASC"]
+        [
+          "#{quoted_table_name}.#{qcn('start')} ASC",
+          "#{quoted_table_name}.#{qcn('end')} ASC"
+        ].map { |o| Arel.sql o }
       end
   end
 end

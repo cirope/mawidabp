@@ -131,6 +131,7 @@ class WeaknessesControllerTest < ActionController::TestCase
       'Achievement.count',
       'BusinessUnitFinding.count',
       'Tagging.count',
+      'Task.count',
       'Comment.count'
     ]
 
@@ -202,6 +203,14 @@ class WeaknessesControllerTest < ActionController::TestCase
               related_finding_id: findings(:unanswered_weakness).id
             }
           ],
+          tasks_attributes: [
+            {
+              code: '01',
+              description: 'New task',
+              status: 'pending',
+              due_on: I18n.l(Time.zone.tomorrow)
+            }
+          ],
           comments_attributes: [
             {
               comment: 'Test',
@@ -224,9 +233,15 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'update weakness' do
+    counts_array = [
+      'WorkPaper.count',
+      'FindingRelation.count',
+      'Task.count'
+    ]
+
     login
     assert_no_difference 'Weakness.count' do
-      assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
+      assert_difference counts_array do
         patch :update, params: {
           id: findings(:unanswered_weakness).id,
           weakness: {
@@ -292,6 +307,14 @@ class WeaknessesControllerTest < ActionController::TestCase
               {
                 description: 'Duplicated',
                 related_finding_id: findings(:unanswered_weakness).id
+              }
+            ],
+            tasks_attributes: [
+              {
+                code: '01',
+                description: 'New task',
+                status: 'pending',
+                due_on: I18n.l(Time.zone.tomorrow)
               }
             ]
           }

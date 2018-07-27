@@ -31,13 +31,15 @@
             class: "form-control #{('hidden' if user.new_record?)}" %>
         <% end %>
       </div>
-      <div class="col-md-2">
-        <% if user.can_act_as_audited? || user.new_record? %>
-          <%= select_tag "user[#{id}][affected_user_id]", options_from_collection_for_select(
-            users_for_conclusion_review_questionnaire, :id, :name),
-            prompt: t('label.all'), class: "form-control #{('hidden' if user.new_record?)}" %>
-        <% end %>
-      </div>
+      <% unless SHOW_ALTERNATIVE_QUESTIONNAIRES %>
+        <div class="col-md-2">
+          <% if user.can_act_as_audited? || user.new_record? %>
+            <%= select_tag "user[#{id}][affected_user_id]", options_from_collection_for_select(
+              users_for_conclusion_review_questionnaire, :id, :name),
+              prompt: t('label.all'), class: "form-control #{('hidden' if user.new_record?)}" %>
+          <% end %>
+        </div>
+      <% end %>
       <div class="col-md-1">
         <%= link_to_remove_child_item nil %>
       </div>

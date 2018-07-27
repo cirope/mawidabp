@@ -17,12 +17,12 @@ module Reviews::SortColumns
         [
           "#{Period.quoted_table_name}.#{Period.qcn 'name'} DESC",
           "#{quoted_table_name}.#{qcn 'identification'} ASC"
-        ]
+        ].map { |o| Arel.sql o }
       else
         [
           "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn 'review_id'} IS NOT NULL",
           "#{quoted_table_name}.#{qcn 'identification'} ASC"
-        ]
+        ].map { |o| Arel.sql o }
       end
     end
 
@@ -47,14 +47,14 @@ module Reviews::SortColumns
       def period_sort_options order: 'ASC'
         {
           name:  "#{Period.model_name.human}#{order_label order}",
-          field: "#{Period.quoted_table_name}.#{Period.qcn 'name'} #{order}"
+          field: Arel.sql("#{Period.quoted_table_name}.#{Period.qcn 'name'} #{order}")
         }
       end
 
       def identification_sort_options order: 'ASC'
         {
           name:  "#{human_attribute_name 'identification'}#{order_label order}",
-          field: "#{quoted_table_name}.#{qcn 'identification'} #{order}"
+          field: Arel.sql("#{quoted_table_name}.#{qcn 'identification'} #{order}")
         }
       end
 

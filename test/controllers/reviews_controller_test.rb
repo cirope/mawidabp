@@ -59,7 +59,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list reviews with search on tags' do
-    support_tags = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+    support_tags = POSTGRESQL_ADAPTER
 
     skip unless support_tags
 
@@ -132,6 +132,15 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:review)
     assert_template 'reviews/show'
+  end
+
+  test 'show review as pdf' do
+    review = reviews :current_review
+
+    login
+
+    get :show, params: { id: review }, as: :pdf
+    assert_redirected_to review.relative_pdf_path
   end
 
   test 'new review' do

@@ -1064,6 +1064,30 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
+  test 'validate final state change mark all task as finished' do
+    Finding.current_user = users :supervisor
+    finding              = findings :being_implemented_weakness
+
+    assert_difference 'finding.tasks.count' do
+      finding.tasks.create! code: '02', description: 'Test', due_on: Time.zone.today
+    end
+
+    assert finding.reload.tasks.all? { |t| !t.finished? }
+
+    assert_no_difference 'Task.finished.count' do
+      finding.update! state: Finding::STATUS[:implemented]
+    end
+
+    assert_difference 'Task.finished.count', finding.tasks.count do
+      finding.update!(
+        state:         Finding::STATUS[:implemented_audited],
+        solution_date: 1.month.from_now
+      )
+    end
+
+    assert finding.reload.tasks.all? { |t| t.finished? }
+  end
+
   test 'unconfirmed for notification scope' do
     assert Finding.unconfirmed_for_notification.any?
 

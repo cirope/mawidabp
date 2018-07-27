@@ -1,6 +1,7 @@
 class FindingUserAssignment < ApplicationRecord
   include Auditable
   include Comparable
+  include FindingUserAssignments::AttributeTypes
 
   # Scopes
   scope :owners, -> { where(:process_owner => true) }
@@ -16,7 +17,7 @@ class FindingUserAssignment < ApplicationRecord
   validates_each :process_owner do |record, attr, value|
     organization_id = record.finding.try(:organization_id)
 
-    if value && !record.user.can_act_as_audited? && !record.user.can_act_as_audited_on?(organization_id)
+    if value && !record.user&.can_act_as_audited? && !record.user&.can_act_as_audited_on?(organization_id)
       record.errors.add attr, :invalid
     end
   end

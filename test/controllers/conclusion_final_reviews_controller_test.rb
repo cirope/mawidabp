@@ -407,6 +407,34 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_match /textile/, text_part
   end
 
+  test 'send questionnaire by email' do
+    login
+
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+
+    assert_difference 'ActionMailer::Base.deliveries.size', 2 do
+      assert_difference 'Poll.count' do
+        patch :send_by_email, :params => {
+          :id => conclusion_reviews(:conclusion_current_final_review).id,
+          :user => {
+            users(:administrator).id => {
+              :id => users(:administrator).id,
+              :data => users(:administrator).name,
+              :questionnaire_id => questionnaires(:questionnaire_one),
+              :affected_user_id => users(:auditor).id
+            }
+          }
+        }
+      end
+    end
+
+    text_part = ActionMailer::Base.deliveries.last.body.decoded
+
+    assert_match /Email link/, text_part
+  end
+
   test 'export list to pdf' do
     login
 

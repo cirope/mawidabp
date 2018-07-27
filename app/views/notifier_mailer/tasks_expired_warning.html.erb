@@ -1,0 +1,13 @@
+<div style="font-family: verdana, sans-serif, arial, helvetica;">
+  <% @grouped_tasks.each do |organization, tasks| %>
+    <% Organization.current_id = organization.id %>
+    <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
+    <h3><%= t 'notifier.tasks_expired_warning.body_title', count: tasks.size %></h3>
+
+    <% tasks.each do |task| %>
+      <%= render partial: 'task', locals: { task: task } %><br />
+    <% end %>
+  <% end %>
+
+  <%= render partial: 'common_mailer/footer' %>
+</div>

@@ -119,10 +119,9 @@ class WorkPaper < ApplicationRecord
   end
 
   def create_pdf_cover(filename = nil, review = nil)
-    review ||= self.owner.kind_of?(ControlObjectiveItem) ? self.owner.review :
-      (self.owner.kind_of?(Finding) ?
-        self.owner.try(:control_objective_item).try(:review) : nil)
-    pdf = Prawn::Document.create_generic_pdf(:portrait, false)
+    pdf = Prawn::Document.create_generic_pdf(:portrait, footer: false)
+
+    review ||= owner.review
 
     pdf.add_review_header review.try(:organization),
       review.try(:identification), review.try(:plan_item).try(:project)
@@ -132,6 +131,14 @@ class WorkPaper < ApplicationRecord
     pdf.add_title WorkPaper.model_name.human, PDF_FONT_SIZE * 2
 
     pdf.move_down PDF_FONT_SIZE * 4
+
+    if owner.respond_to?(:pdf_cover_items)
+      owner.pdf_cover_items.each do |label, text|
+        pdf.move_down PDF_FONT_SIZE
+
+        pdf.add_description_item label, text, 0, false
+      end
+    end
 
     unless self.name.blank?
       pdf.move_down PDF_FONT_SIZE

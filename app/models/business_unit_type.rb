@@ -1,5 +1,6 @@
 class BusinessUnitType < ApplicationRecord
   include Auditable
+  include BusinessUnitTypes::AttributeTypes
   include BusinessUnitTypes::BusinessUnits
   include BusinessUnitTypes::DestroyValidation
   include BusinessUnitTypes::JSON

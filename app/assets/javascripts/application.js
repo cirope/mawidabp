@@ -25,8 +25,8 @@
 //= require common
 //= require extensions
 //= require form_modification
+//= require form_submit
 //= require filters
-//= require validation
 //= require file_input
 //= require best_practices
 //= require conclusion_draft_reviews
@@ -46,6 +46,7 @@
 //= require risk_assessment_templates
 //= require sessions
 //= require tags
+//= require tasks
 //= require touch
 //= require users
 //= require weaknesses

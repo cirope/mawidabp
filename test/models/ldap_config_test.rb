@@ -121,6 +121,32 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_nil user.manager_id
   end
 
+  test 're-import should return all unchanged users' do
+    set_organization organizations(:google)
+
+    assert_difference 'User.count' do
+      @imported_users = @ldap_config.import 'admin', 'admin123'
+    end
+
+    assert_not_includes @imported_users.map { |u| u[:state] }, :unchanged
+
+    assert_no_difference 'User.count' do
+      @not_imported_users = @ldap_config.import('admin', 'admin123')
+    end
+
+    assert_equal [:unchanged], @not_imported_users.map { |u| u[:state] }.uniq
+  end
+
+  test 'massive import' do
+    organization = organizations(:google)
+
+    organization.ldap_config.update! user: 'admin', password: 'admin123'
+
+    assert_difference ['User.count', 'ActionMailer::Base.deliveries.size'] do
+      LdapConfig.sync_users
+    end
+  end
+
   test 'test encrypt and decrypt with Security lib' do
     phrase = 'I love dogs'
     encrypted_phrase = Security.encrypt(phrase)

@@ -1,10 +1,11 @@
 class Questionnaire < ApplicationRecord
   include Auditable
-  include Questionnaires::Validations
-  include Questionnaires::Scopes
+  include Questionnaires::Answers
+  include Questionnaires::Clone
   include Questionnaires::Polls
   include Questionnaires::Questions
-  include Questionnaires::Answers
+  include Questionnaires::Scopes
+  include Questionnaires::Validations
 
   POLLABLE_TYPES = ['ConclusionReview']
 

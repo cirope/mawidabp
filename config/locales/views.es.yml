@@ -28,6 +28,8 @@ es:
     neither_agree_nor_disagree: 'Ni acuerdo ni desacuerdo'
     agree: 'De acuerdo'
     strongly_agree: 'Muy de acuerdo'
+    'yes': 'Si'
+    'no': 'No'
 
   benefits:
     index:
@@ -279,8 +281,8 @@ es:
     access_denied: 'La encuesta ya ha sido contestada.'
     already_exists: 'Alguna de las encuestas para %{user} ya existen y no fueron enviadas nuevamente'
     answer_poll: '¿Contestar encuesta?'
-    affected_user: 'Acerca de'
-    affected_user_html: 'Acerca de <strong>%{user}</strong>'
+    about: 'Acerca de'
+    about_html: 'Acerca de <strong>%{entity}</strong>'
     answers:
       index:
         title: 'Resumen de respuestas'
@@ -406,6 +408,15 @@ es:
       warning: 'Advertencia'
       danger: 'Peligro'
 
+  tasks:
+    on_time: 'A tiempo, sin reprogramación'
+    rescheduled: 'A tiempo, reprogramada'
+    expired: 'Fuera de tiempo'
+    status:
+      pending: 'Pendiente'
+      in_progress: 'En proceso'
+      finished: 'Finalizada'
+
   users:
     index:
       title: 'Listado de usuarios'
@@ -438,7 +449,8 @@ es:
         record_invalid: 'Se produjo un error en la importación, algunos usuarios tienen campos no válidos'
         created: 'Creado'
         updated: 'Actualizado'
-        destroyed: 'Eliminado'
+        deleted: 'Eliminado'
+        unchanged: 'Sin cambios'
         error: 'Con errores'
         deprecated_users: 'Usuarios ausentes en el servidor LDAP'
     passwords:

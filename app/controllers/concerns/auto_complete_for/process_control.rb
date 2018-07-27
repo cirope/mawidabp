@@ -39,7 +39,7 @@ module AutoCompleteFor::ProcessControl
     ).where(
       conditions.map { |c| "(#{c})" }.join(' AND '), parameters
     ).order(
-      "#{::ProcessControl.quoted_table_name}.#{::ProcessControl.qcn('name')} ASC"
+      Arel.sql "#{::ProcessControl.quoted_table_name}.#{::ProcessControl.qcn('name')} ASC"
     ).references(:best_practice).limit(10)
 
     respond_to do |format|

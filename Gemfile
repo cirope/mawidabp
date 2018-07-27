@@ -1,8 +1,6 @@
 source 'https://rubygems.org'
 
-git_source(:github) { |r| "https://github.com/#{r}" }
-
-gem 'rails', '~> 5.1.6'
+gem 'rails', '~> 5.2.0'
 
 gem 'pg'
 gem 'jquery-rails'
@@ -11,7 +9,7 @@ gem 'responders'
 gem 'mini_magick'
 gem 'simple_form'
 gem 'newrelic_rpm'
-gem 'validates_timeliness', github: 'francocatena/validates_timeliness'
+gem 'validates_timeliness'
 gem 'RedCloth'
 gem 'redcarpet'
 gem 'whenever'
@@ -53,7 +51,7 @@ group :development do
   gem 'capistrano-rbenv'
 
   # Support for ed25519 ssh keys
-  gem 'rbnacl', '< 5.0' # TODO: check net-ssh dependency to _unleash_
+  gem 'ed25519'
   gem 'bcrypt_pbkdf'
 end
 
