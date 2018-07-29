@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 
   def current_user
     load_user
-    Finding.current_user = @auth_user
+    Current.user = @auth_user
 
     @auth_user.try(:id)
   end

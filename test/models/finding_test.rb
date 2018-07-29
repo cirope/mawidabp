@@ -10,7 +10,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Finding.current_user = nil
+    Current.user = nil
   end
 
   test 'create' do
@@ -239,7 +239,7 @@ class FindingTest < ActiveSupport::TestCase
     finding.solution_date   = Time.zone.today
     finding.skip_work_paper = true
 
-    Finding.current_user    = users :supervisor
+    Current.user = users :supervisor
 
     cfr = finding.review.conclusion_final_review
 
@@ -269,7 +269,8 @@ class FindingTest < ActiveSupport::TestCase
     finding.state          = Finding::STATUS[:expired]
     finding.follow_up_date = nil
     finding.solution_date  = Time.zone.today
-    Finding.current_user   = users :supervisor
+
+    Current.user = users :supervisor
 
     cfr = finding.review.conclusion_final_review
 
@@ -319,7 +320,7 @@ class FindingTest < ActiveSupport::TestCase
     finding.state         = Finding::STATUS[:implemented_audited]
     finding.solution_date = Time.zone.today
 
-    Finding.current_user    = users :supervisor
+    Current.user = users :supervisor
     finding.skip_work_paper = true
 
     assert finding.work_papers.empty?
@@ -359,7 +360,8 @@ class FindingTest < ActiveSupport::TestCase
   test 'validate final state can be changed only by supervisors' do
     skip if DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION
 
-    Finding.current_user  = users :auditor
+    Current.user = users :auditor
+
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
     finding.solution_date = 1.month.from_now
@@ -367,7 +369,7 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.invalid?
     assert_error finding, :state, :must_be_done_by_proper_role
 
-    Finding.current_user  = users :supervisor
+    Current.user = users :supervisor
 
     assert finding.valid?
   end
@@ -375,14 +377,15 @@ class FindingTest < ActiveSupport::TestCase
   test 'validate final state can be changed by any auditor' do
     skip unless DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION
 
-    Finding.current_user  = users :auditor
+    Current.user = users :auditor
+
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
     finding.solution_date = 1.month.from_now
 
     assert finding.valid?
 
-    Finding.current_user  = users :supervisor
+    Current.user = users :supervisor
 
     assert finding.valid?
   end
@@ -570,7 +573,7 @@ class FindingTest < ActiveSupport::TestCase
       @finding.update! audit_comments: 'Updated comments'
     end
 
-    Finding.current_user = users :supervisor
+    Current.user = users :supervisor
 
     assert_difference '@finding.status_change_history.size' do
       @finding.update!(
@@ -579,7 +582,7 @@ class FindingTest < ActiveSupport::TestCase
       )
     end
 
-    Finding.current_user = nil
+    Current.user = nil
   end
 
   test 'mark as unconfirmed' do
@@ -1065,7 +1068,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validate final state change mark all task as finished' do
-    Finding.current_user = users :supervisor
+    Current.user = users :supervisor
     finding              = findings :being_implemented_weakness
 
     assert_difference 'finding.tasks.count' do

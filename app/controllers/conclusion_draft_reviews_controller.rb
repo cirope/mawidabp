@@ -223,10 +223,8 @@ class ConclusionDraftReviewsController < ApplicationController
           include_global_score_sheet: include_global_score_sheet
         }
 
-        byebug if $rock
         if user && !users.include?(user)
           @conclusion_draft_review.send_by_email_to(user, send_options)
-          byebug if $rock
 
           users << user
         end
