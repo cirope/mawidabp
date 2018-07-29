@@ -2,13 +2,19 @@ require 'test_helper'
 
 # Pruebas para el controlador de informes finales
 class ConclusionFinalReviewsControllerTest < ActionController::TestCase
-  fixtures :conclusion_reviews
   include ActiveJob::TestHelper
+
+  fixtures :conclusion_reviews
 
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
   setup do
     set_host_for_organization(organizations(:cirope).prefix)
+  end
+
+  teardown do
+    clear_enqueued_jobs
+    clear_performed_jobs
   end
 
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
@@ -304,8 +310,8 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   test 'send by email' do
     login
 
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
+    # ActionMailer::Base.delivery_method = :test
+    # ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
     # ActiveJob::Base.queue_adapter = :test
 
@@ -326,12 +332,14 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       }
     end
 
-    job = enqueued_jobs.first
-    perform_job_with_current_attributes(job)
+    perform_job_with_current_attributes(enqueued_jobs.first)
 
     assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
     assert_redirected_to :action => :edit, :id => conclusion_reviews(
       :conclusion_current_final_review).id
+
+    clear_enqueued_jobs
+    clear_performed_jobs
 
     assert_enqueued_jobs 2 do
       patch :send_by_email, :params => {
@@ -350,10 +358,10 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       }
     end
 
-    job = enqueued_jobs.first
-    perform_job_with_current_attributes(job)
+    enqueued_jobs.each do |job|
+      perform_job_with_current_attributes(job)
+    end
 
-    byebug
     assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
     assert_redirected_to :action => :edit, :id => conclusion_reviews(
       :conclusion_current_final_review).id
@@ -362,15 +370,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   test 'send by email with multiple attachments' do
     login
 
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    # byebug
-    # Sidekiq::Testing.fake!
-    # assert_difference 'Sidekiq::Extensions::DelayedMailer.jobs.size' do
-    # assert_enqueued_jobs 1 do
-
+    assert_enqueued_jobs 1 do
       patch :send_by_email, :params => {
         :id => conclusion_reviews(:conclusion_current_final_review).id,
         :conclusion_review => {
@@ -384,19 +386,22 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           }
         }
       }
-    # end
+    end
 
-    # assert_equal 2, ActionMailer::Base.deliveries.last.attachments.size
+    perform_job_with_current_attributes(enqueued_jobs.first)
 
-    # text_part = ActionMailer::Base.deliveries.last.parts.detect {
-    #   |p| p.content_type.match(/text/)
-    # }.body.decoded
+    assert_equal 2, ActionMailer::Base.deliveries.last.attachments.size
 
-    # assert_match /textile/, text_part
+    text_part = ActionMailer::Base.deliveries.last.parts.detect {
+      |p| p.content_type.match(/text/)
+    }.body.decoded
 
-    # assert_difference 'ActionMailer::Base.deliveries.size' do
-    # assert_difference 'Sidekiq::Extensions::DelayedMailer.jobs.size' do
-    # assert_enqueued_jobs 1 do
+    assert_match /textile/, text_part
+
+    clear_enqueued_jobs
+    clear_performed_jobs
+
+    assert_enqueued_jobs 1 do
       patch :send_by_email, :params => {
         :id => conclusion_reviews(:conclusion_current_final_review).id,
         :conclusion_review => {
@@ -411,7 +416,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           }
         }
       }
-    # end
+    end
+
+    perform_job_with_current_attributes(enqueued_jobs.first)
 
     assert_equal 3, ActionMailer::Base.deliveries.last.attachments.size
 
@@ -425,11 +432,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   test 'send questionnaire by email' do
     login
 
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_difference 'ActionMailer::Base.deliveries.size', 2 do
+    assert_enqueued_jobs 2 do
       assert_difference 'Poll.count' do
         patch :send_by_email, :params => {
           :id => conclusion_reviews(:conclusion_current_final_review).id,
@@ -443,6 +448,10 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           }
         }
       end
+    end
+
+    enqueued_jobs.each do |job|
+      perform_job_with_current_attributes(job)
     end
 
     text_part = ActionMailer::Base.deliveries.last.body.decoded
