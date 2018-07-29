@@ -57,6 +57,7 @@ GEM
     arel (9.0.0)
     autoprefixer-rails (8.6.3)
       execjs
+    awesome_print (1.8.0)
     bcrypt_pbkdf (1.0.0)
     bindex (0.5.0)
     bootstrap-sass (3.3.7)
@@ -272,6 +273,7 @@ PLATFORMS
 DEPENDENCIES
   RedCloth
   acts_as_tree
+  awesome_print
   bcrypt_pbkdf
   bootstrap-sass
   bootstrap-will_paginate

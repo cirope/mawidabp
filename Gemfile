@@ -63,4 +63,5 @@ end
 
 group :development, :test do
   gem 'byebug'
+  gem 'awesome_print'
 end

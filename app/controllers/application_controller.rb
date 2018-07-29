@@ -8,10 +8,6 @@ class ApplicationController < ActionController::Base
 
   before_action :set_paper_trail_whodunnit
   before_action :scope_current_organization
-  before_action :tanga
-def tanga
-  puts "llamo a tanga"
-end
 
   def current_user
     load_user
@@ -41,7 +37,6 @@ end
   private
 
     def scope_current_organization
-      puts "llamada al scope_current organization"
       Current.group_id        = current_organization&.group_id
       Current.corporate_ids   = current_organization&.group&.organizations&.corporate&.ids
       Current.organization_id = current_organization&.id

@@ -342,7 +342,6 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_redirected_to :action => :edit, :id => conclusion_review.id
     assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
 
-    $rock = true
     assert_difference 'ActionMailer::Base.deliveries.size', 2 do
       patch :send_by_email, :params => {
         :id => conclusion_review.id,
