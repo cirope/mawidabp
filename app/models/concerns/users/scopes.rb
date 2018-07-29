@@ -65,7 +65,7 @@ module Users::Scopes
       def corporate_list_parameters
         {
           organization_id: Current.organization&.id,
-          group_id:        Current.group.id,
+          group_id:        Current.group&.id,
           true:            true
         }
       end

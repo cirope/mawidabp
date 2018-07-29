@@ -22,7 +22,7 @@ module AutoCompleteFor::ProcessControl
       false:           false,
       true:            true,
       organization_id: Current.organization&.id,
-      group_id:        Current.group.id
+      group_id:        Current.group&.id
     }
 
     @tokens.each_with_index do |t, i|

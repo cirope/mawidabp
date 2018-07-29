@@ -10,7 +10,7 @@ module Findings::Scopes
 
   module ClassMethods
     def group_list
-      organization_ids = Organization.where(group_id: Current.group.id).pluck('id')
+      organization_ids = Organization.where(group_id: Current.group&.id).pluck('id')
 
       where organization_id: organization_ids
     end

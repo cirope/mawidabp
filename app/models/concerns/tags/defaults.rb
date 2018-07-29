@@ -8,7 +8,7 @@ module Tags::Defaults
   private
 
     def set_defaults
-      self.group_id        = Current.group.id
+      self.group_id        = Current.group&.id
       self.organization_id = Current.organization&.id
     end
 end
