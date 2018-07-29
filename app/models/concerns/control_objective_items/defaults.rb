@@ -11,7 +11,7 @@ module ControlObjectiveItems::Defaults
     def set_defaults
       self.relevance       ||= control_objective.relevance if control_objective
       self.finished        ||= false
-      self.organization_id ||= Current.organization.id
+      self.organization_id ||= Current.organization&.id
 
       build_control unless control
     end

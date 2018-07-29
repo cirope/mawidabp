@@ -225,7 +225,7 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     response = NotifierMailer.conclusion_review_notification(user, conclusion_review,
       :include_score_sheet => true, :include_global_score_sheet => true,
-      :note => 'note in *textile*', :organization_id => Current.organization.id,
+      :note => 'note in *textile*', :organization_id => Current.organization&.id,
       :user_id => PaperTrail.request.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
       :type => I18n.t('notifier.conclusion_review_notification.final'),
@@ -249,7 +249,7 @@ class NotifierMailerTest < ActionMailer::TestCase
     end
 
     response = NotifierMailer.conclusion_review_notification(user, conclusion_review,
-      :include_score_sheet => true, :organization_id => Current.organization.id,
+      :include_score_sheet => true, :organization_id => Current.organization&.id,
       :user_id => PaperTrail.request.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
       :type => I18n.t('notifier.conclusion_review_notification.final'),
@@ -275,7 +275,7 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert !text_part.include?(I18n.t('conclusion_review.global_score_sheet'))
 
     response = NotifierMailer.conclusion_review_notification(user,
-      conclusion_review, :organization_id => Current.organization.id,
+      conclusion_review, :organization_id => Current.organization&.id,
       :user_id => PaperTrail.request.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
       :type => I18n.t('notifier.conclusion_review_notification.final'),

@@ -1,7 +1,7 @@
 class RelatedUserRelation < ApplicationRecord
 
   has_paper_trail meta: {
-    organization_id: ->(model) { Current.organization.id }
+    organization_id: ->(model) { Current.organization&.id }
   }
 
   # Restricciones

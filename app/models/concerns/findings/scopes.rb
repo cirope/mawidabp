@@ -2,7 +2,7 @@ module Findings::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list,              -> { where organization_id: Current.organization.id }
+    scope :list,              -> { where organization_id: Current.organization&.id }
     scope :sort_by_code,      -> { order review_code: :asc }
     scope :sort_for_review,   -> { order risk: :desc, priority: :desc, review_code: :asc }
     scope :with_achievements, -> { includes(:achievements).where.not achievements: { finding_id: nil } }

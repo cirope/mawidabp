@@ -7,11 +7,11 @@ class FileUploader < CarrierWave::Uploader::Base
 
   private
 
-    def organization_id_path organization_id = Current.organization.id
+    def organization_id_path organization_id = Current.organization&.id
       ('%08d' % (organization_id || 0)).scan(/\d{4}/).join('/')
     end
 
-    def guess_path organization_id = Current.organization.id
+    def guess_path organization_id = Current.organization&.id
       path = path_for model.organization_id || organization_id
 
       File.exist?(path) ? path : try_corporate_path
@@ -34,6 +34,6 @@ class FileUploader < CarrierWave::Uploader::Base
         path = posible_paths.detect { |path| File.exist? path }
       end
 
-      path || path_for(organization.id)
+      path || path_for(organization&.id)
     end
 end

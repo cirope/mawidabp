@@ -21,7 +21,7 @@ module AutoCompleteFor::BestPractice
     parameters = {
       false:           false,
       true:            true,
-      organization_id: Current.organization.id,
+      organization_id: Current.organization&.id,
       group_id:        Current.group.id
     }
 

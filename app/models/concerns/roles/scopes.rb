@@ -3,7 +3,7 @@ module Roles::Scopes
 
   module ClassMethods
     def list
-      list_by_organization Current.organization.id
+      list_by_organization Current.organization&.id
     end
 
     def list_by_organization organization_id

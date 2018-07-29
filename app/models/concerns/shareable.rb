@@ -3,7 +3,7 @@ module Shareable
 
   included do
     scope :on_current_organization, -> {
-      where shared: false, organization_id: Current.organization.id
+      where shared: false, organization_id: Current.organization&.id
     }
     scope :shared_on_current_group, -> {
       where shared: true, group_id: Current.group.id

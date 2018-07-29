@@ -4,7 +4,7 @@ module Users::Scopes
   included do
     scope :list, -> {
       includes(:organizations).
-        where(organizations: { id: Current.organization.id }).
+        where(organizations: { id: Current.organization&.id }).
         references :organizations
     }
     scope :not_hidden, -> { where hidden: false }
@@ -64,7 +64,7 @@ module Users::Scopes
 
       def corporate_list_parameters
         {
-          organization_id: Current.organization.id,
+          organization_id: Current.organization&.id,
           group_id:        Current.group.id,
           true:            true
         }

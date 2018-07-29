@@ -2,7 +2,7 @@ module Polls::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list,      -> { where organization_id: Current.organization.id }
+    scope :list,      -> { where organization_id: Current.organization&.id }
     scope :pollables, -> { where.not pollable_id: nil }
   end
 
