@@ -3,7 +3,7 @@
   <h2><%= t('notifier.notify_new_findings.title') %></h2>
 
   <% @grouped_findings.each do |organization, findings| %>
-    <% Current.organization_id = organization.id %>
+    <% Current.organization = organization %>
     <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
     <h3 style="text-decoration: underline;">
       <%= t('notifier.notify_new_findings.created_title',

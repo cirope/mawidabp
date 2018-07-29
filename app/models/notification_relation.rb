@@ -2,7 +2,7 @@ class NotificationRelation < ApplicationRecord
   include ParameterSelector
 
   has_paper_trail meta: {
-    organization_id: ->(model) { Current.organization_id }
+    organization_id: ->(model) { Current.organization.id }
   }
 
   # Relaciones

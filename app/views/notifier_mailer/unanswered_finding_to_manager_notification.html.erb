@@ -14,7 +14,7 @@
   </h3>
 
   <% if @finding.organization %>
-    <% Current.organization_id = @finding.organization.id %>
+    <% Current.organization = @finding.organization %>
     <h2 style="margin-bottom: 1em;"><%= @finding.organization.name %></h2>
   <% end %>
 

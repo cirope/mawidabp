@@ -12,8 +12,8 @@ module Organizations::Group
   private
 
   def set_group
-    if Organization.exists? Current.organization_id
-      self.group_id = Organization.find(Current.organization_id).group_id
+    if Organization.exists? Current.organization&.id
+      self.group_id = Current.organization.group_id
     end
   end
 end

@@ -13,8 +13,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.group_id        = nil
-    Current.organization_id = nil
+    Current.group        = nil
+    Current.organization = nil
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -78,8 +78,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
-    organization = Organization.find Current.organization_id
-
     @conclusion_review.issue_date = nil
     @conclusion_review.review_id = nil
     @conclusion_review.applied_procedures = '   '
@@ -104,7 +102,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
       assert_error @conclusion_review, :applied_procedures, :blank
     end
 
-    if ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(organization.prefix)
+    if ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(Current.organization.prefix)
       assert_error @conclusion_review, :main_weaknesses_text, :blank
     end
   end

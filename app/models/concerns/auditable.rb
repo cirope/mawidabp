@@ -3,7 +3,7 @@ module Auditable
 
   included do
     has_paper_trail meta: {
-      organization_id: ->(model) { Current.organization_id }
+      organization_id: ->(model) { Current.organization.id }
     }
   end
 end

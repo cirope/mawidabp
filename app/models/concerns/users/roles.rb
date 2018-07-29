@@ -37,7 +37,7 @@ module Users::Roles
   end
 
   def get_type
-    roles(Current.organization_id).max.try(:get_type)
+    roles(Current.organization.id).max.try(:get_type)
   end
 
   def privileges organization
@@ -56,7 +56,7 @@ module Users::Roles
 
   Role::TYPES.each do |type, value|
     define_method("#{type}?") do
-      roles(Current.organization_id).any? { |role| role.role_type == value }
+      roles(Current.organization.id).any? { |role| role.role_type == value }
     end
 
     define_method("#{type}_on?") do |organization_id|

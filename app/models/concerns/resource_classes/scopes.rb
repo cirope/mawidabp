@@ -2,6 +2,6 @@ module ResourceClasses::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list, -> { where organization_id: Current.organization_id }
+    scope :list, -> { where organization_id: Current.organization.id }
   end
 end

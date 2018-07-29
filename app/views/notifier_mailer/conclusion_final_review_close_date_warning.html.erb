@@ -1,6 +1,6 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <% @grouped_conclusion_reviews.each do |organization, conclusion_final_reviews| %>
-    <% Current.organization_id = organization.id %>
+    <% Current.organization = organization %>
     <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
     <h3><%= t 'notifier.conclusion_final_review_close_date_warning.body_title' %></h3>
 

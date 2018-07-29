@@ -10,8 +10,8 @@ class ActiveSupport::TestCase
   fixtures :all
 
   def set_organization organization = organizations(:cirope)
-    Current.group_id        = organization.group_id
-    Current.organization_id = organization.id
+    Current.group        = organization.group
+    Current.organization = organization
   end
 
   def login user: users(:administrator), prefix: organizations(:cirope).prefix

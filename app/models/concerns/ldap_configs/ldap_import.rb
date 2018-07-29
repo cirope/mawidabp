@@ -104,7 +104,7 @@ module LdapConfigs::LDAPImport
       end
       removed_roles = user.organization_roles.map do |o_r|
         if roles.map(&:id).exclude? o_r.role_id
-          { id: o_r.id, _destroy: '1' } if o_r.organization_id == Current.organization_id
+          { id: o_r.id, _destroy: '1' } if o_r.organization_id == Current.organization.id
         end
       end
       data[:organization_roles_attributes] = new_roles.compact + removed_roles.compact

@@ -5,11 +5,11 @@ class AuthenticationTest < ActionController::TestCase
     @user = users :administrator
     @organization = organizations :cirope
     @params = { user: @user.user, password: 'admin123' }
-    Current.organization_id = @organization.id
+    Current.organization = @organization
   end
 
   teardown do
-    Current.organization_id = nil
+    Current.organization = nil
   end
 
   test 'should authenticate' do
@@ -20,7 +20,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should authenticate via ldap' do
     @organization = organizations :google
     @params = { user: @user.user, password: 'admin123' }
-    Current.organization_id = @organization.id
+    Current.organization = @organization
 
     assert_valid_authentication
   end
@@ -31,7 +31,7 @@ class AuthenticationTest < ActionController::TestCase
     username = ldap_config.login_mask % { user: @user.user, basedn: ldap_config.basedn }
     @params = { user: username, password: 'admin123' }
     @organization = organizations :alphabet
-    Current.organization_id = @organization.id
+    Current.organization = @organization
 
     @user.organization_roles.create! role_id: role.id, organization_id: role.organization_id
 
@@ -83,7 +83,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should not authenticate via ldap with invalid password' do
     @organization = organizations :google
     @params = { user: @user.user, password: 'wrong password' }
-    Current.organization_id = @organization.id
+    Current.organization = @organization
 
     assert_invalid_authentication
   end
@@ -91,7 +91,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should show a message when ldap is not reacheble' do
     @organization = organizations :google
     @params = { user: @user.user, password: 'wrong password' }
-    Current.organization_id = @organization.id
+    Current.organization = @organization
 
     @organization.ldap_config.update port: 1
 

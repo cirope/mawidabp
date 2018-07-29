@@ -21,8 +21,8 @@ module AutoCompleteFor::BestPractice
     parameters = {
       false:           false,
       true:            true,
-      organization_id: Current.organization_id,
-      group_id:        Current.group_id
+      organization_id: Current.organization.id,
+      group_id:        Current.group.id
     }
 
     @tokens.each_with_index do |t, i|

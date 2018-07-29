@@ -75,10 +75,7 @@ module ControlObjectiveItems::Validations
     end
 
     def validate_counts?
-      if finished
-        organization = Organization.find Current.organization_id
-
-        ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include? organization.prefix
-      end
+      finished &&
+        ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(Current.organization.prefix)
     end
 end

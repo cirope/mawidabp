@@ -3,7 +3,7 @@ module Reviews::Scopes
 
   included do
     scope :list, -> {
-      where(organization_id: Current.organization_id).order identification: :asc
+      where(organization_id: Current.organization.id).order identification: :asc
     }
   end
 

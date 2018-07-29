@@ -28,7 +28,7 @@ module Reviews::WorkPapersZip
     work_papers_label = WorkPaper.model_name.human count: 0
     filename_prefix   = work_papers_label.downcase.sanitized_for_filename
     path              =
-      ('%08d' % (Current.organization_id || 0)).scan(/\d{4}/) +
+      ('%08d' % (Current.organization&.id || 0)).scan(/\d{4}/) +
       [Review.table_name] +
       ('%08d' % id).scan(/\d{4}/) +
       ["#{filename_prefix}-#{sanitized_identification}.zip"]

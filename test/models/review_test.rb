@@ -12,8 +12,8 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.organization_id = nil
-    Current.group_id = nil
+    Current.organization = nil
+    Current.group = nil
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -910,11 +910,9 @@ class ReviewTest < ActiveSupport::TestCase
     end
 
     def score_type
-      organization = Organization.find Current.organization_id
-
       if SHOW_REVIEW_EXTRA_ATTRIBUTES
         :manual
-      elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization.prefix
+      elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(Current.organization.prefix)
         :weaknesses
       else
         :effectiveness

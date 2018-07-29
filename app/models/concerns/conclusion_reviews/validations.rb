@@ -29,8 +29,6 @@ module ConclusionReviews::Validations
     end
 
     def validate_short_alternative_pdf_attributes?
-      organization = Organization.find Current.organization_id
-
-      ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include? organization.prefix
+      ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include? Current.organization.prefix
     end
 end

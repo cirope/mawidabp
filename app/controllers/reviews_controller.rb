@@ -251,7 +251,7 @@ class ReviewsController < ApplicationController
         "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('process_control_id')} = :process_control_id"
       ].join(' AND '),
       false: false,
-      organization_id: Current.organization_id,
+      organization_id: Current.organization.id,
       states: Finding::PENDING_FOR_REVIEW_STATUS,
       process_control_id: @process_control.id
     ).includes(

@@ -11,12 +11,12 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   teardown do
-    Current.organization_id = nil
+    Current.organization = nil
   end
 
   test 'Notify with imported users' do
     org = organizations(:google)
-    Current.organization_id = org.id
+    Current.organization = org
 
     ldap_config = ldap_configs(:google_ldap)
     imports = ldap_config.import('admin', 'admin123')
