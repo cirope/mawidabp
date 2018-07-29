@@ -194,6 +194,9 @@ class WeaknessesController < ApplicationController
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
         ],
+        tasks_attributes: [
+          :id, :code, :description, :status, :due_on, :_destroy
+        ],
         taggings_attributes: [
           :id, :tag_id, :_destroy
         ],

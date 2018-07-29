@@ -20,9 +20,22 @@ module Polls::Scopes
     end
 
     def answer_option option
-      left_joins(answers: :answer_option).
-        references(:answer_options).
-        where(answer_options: { option: option })
+      query = left_joins(answers: :answer_option).
+        references(:answer_options)
+
+      if self.connection.adapter_name == 'OracleEnhanced'
+        query.where("to_char(#{AnswerOption.quoted_table_name}.#{AnswerOption.qcn 'option'}) = ?", option)
+      else
+        query.where(answer_options: { option: option })
+      end
+    end
+
+    def by_question question
+      column = "#{Question.quoted_table_name}.#{AnswerOption.qcn 'question'}"
+
+      joins(answers: :question).
+        references(:questions).
+        where("LOWER(#{column}) LIKE ?", "%#{question}%".downcase)
     end
 
     def by_user user_id, include_reviews: false, only_all: false
@@ -35,7 +48,11 @@ module Polls::Scopes
           or by_review_user(user_id)
       end
 
-      result.distinct
+      if self.connection.adapter_name == 'OracleEnhanced'
+        where(id: result.distinct.ids)
+      else
+        result.distinct
+      end
     end
 
     def by_review_user user_id

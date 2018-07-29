@@ -240,6 +240,7 @@ class FindingsControllerTest < ActionController::TestCase
       'FindingAnswer.count',
       'Cost.count',
       'FindingRelation.count',
+      'Task.count',
       'BusinessUnitFinding.count',
       'Tagging.count'
     ]
@@ -311,6 +312,14 @@ class FindingsControllerTest < ActionController::TestCase
                 {
                   description: 'Duplicated',
                   related_finding_id: findings(:unanswered_weakness).id
+                }
+              ],
+              tasks_attributes: [
+                {
+                  code: '01',
+                  description: 'New task',
+                  status: 'pending',
+                  due_on: I18n.l(Time.zone.tomorrow)
                 }
               ],
               taggings_attributes: [
@@ -596,7 +605,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'check order by not readed comments desc' do
-    skip unless ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+    skip unless POSTGRESQL_ADAPTER
 
     # we already have a test that checks the response
     get :index, params: { completed: 'incomplete' }
@@ -626,7 +635,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'check order by not readed comments desc in all formats' do
-    skip unless ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+    skip unless POSTGRESQL_ADAPTER
 
     first = findings(:unanswered_for_level_1_notification)
     second = findings(:unanswered_for_level_2_notification)
@@ -684,6 +693,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
+    assert_not_empty assigns(:findings)
     assert assigns(:findings).all? { |f| f.updated_at > 4.days.ago.to_date }
 
     get :index, params: {

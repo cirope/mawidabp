@@ -6,6 +6,7 @@ namespace :db do
       add_new_answer_options          # 2017-06-29
       add_best_practice_privilege     # 2018-01-31
       add_control_objective_privilege # 2018-01-31
+      add_task_codes                  # 2018-07-24
     end
   end
 end
@@ -68,4 +69,24 @@ private
 
   def add_control_objective_privilege?
     Privilege.where(module: 'administration_best_practices_control_objectives').empty?
+  end
+
+  def add_task_codes
+    if add_task_codes?
+      last_finding = nil
+      count = 0
+
+      Task.where(code: nil).order(finding_id: :asc, due_on: :asc).each do |t|
+        if last_finding != t.finding_id
+          last_finding = t.finding_id
+          count = 0
+        end
+
+        t.update_column :code, '%02d' % (count += 1)
+      end
+    end
+  end
+
+  def add_task_codes?
+    Task.where(code: nil).any?
   end

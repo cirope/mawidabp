@@ -1,6 +1,8 @@
 es:
   shared:
     filters:
+      answer_option:
+        filter_answers: 'Mostrar únicamente respuestas coincidentes'
       date_field:
         between: 'Entre'
       user:

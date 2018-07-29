@@ -83,14 +83,16 @@
     </p>
 
     <p>
-      <% if weakness.current_situation.present? && weakness.current_situation_verified %>
+      <strong><%= Weakness.human_attribute_name 'description' %></strong>:
+      <%= weakness.description %>
+    </p>
+
+    <% if weakness.current_situation.present? && weakness.current_situation_verified %>
+      <p>
         <strong><%= Weakness.human_attribute_name 'current_situation' %></strong>:
         <%= weakness.current_situation %>
-      <% else %>
-        <strong><%= Weakness.human_attribute_name 'description' %></strong>:
-        <%= weakness.description %>
-      <% end %>
-    </p>
+      </p>
+    <% end %>
 
     <p>
       <strong><%= Weakness.human_attribute_name 'answer' %></strong>:

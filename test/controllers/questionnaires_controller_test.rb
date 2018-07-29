@@ -92,7 +92,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
   test 'destroy questionnaire' do
     assert_difference ['Questionnaire.count'], -1 do
       assert_difference 'Question.count', -@questionnaire.questions.count do
-        assert_difference ['AnswerOption.count'], -Question::ANSWER_OPTIONS.size do
+        assert_difference ['AnswerOption.count'], -@questionnaire.answer_options.count do
           delete :destroy, params: { id: @questionnaire }
         end
       end

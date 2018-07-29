@@ -3,6 +3,7 @@ class Organization < ApplicationRecord
   include Comparable
   include ParameterSelector
   include Trimmer
+  include Organizations::AttributeTypes
   include Organizations::Current
   include Organizations::DestroyValidation
   include Organizations::Group

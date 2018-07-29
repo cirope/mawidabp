@@ -7,6 +7,7 @@ module ControlObjectiveItems::ControlObjective
     belongs_to :control_objective, inverse_of: :control_objective_items
     has_one :process_control, through: :control_objective
     has_one :best_practice, through: :process_control
+    has_many :tags, through: :control_objective
   end
 
   def original_text?

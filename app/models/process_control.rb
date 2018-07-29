@@ -2,6 +2,7 @@ class ProcessControl < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Comparable
+  include ProcessControls::AttributeTypes
   include ProcessControls::ControlObjectives
   include ProcessControls::DestroyValidation
   include ProcessControls::Obsolecence

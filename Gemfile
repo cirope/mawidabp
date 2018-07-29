@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-git_source(:github) { |r| "https://github.com/#{r}" }
-
 gem 'rails', '~> 5.2.0'
 
 gem 'pg'
@@ -11,7 +9,7 @@ gem 'responders'
 gem 'mini_magick'
 gem 'simple_form'
 gem 'newrelic_rpm'
-gem 'validates_timeliness', github: 'francocatena/validates_timeliness'
+gem 'validates_timeliness'
 gem 'RedCloth'
 gem 'redcarpet'
 gem 'whenever'

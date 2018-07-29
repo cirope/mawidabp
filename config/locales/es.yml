@@ -556,15 +556,19 @@
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
+    next_pending_task_date: "Fecha próxima tarea pendiente"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
     download_csv: "Descargar CSV"
     download_pdf: "Resumen en PDF"
     add_finding_relation: "Agregar relación"
+    add_task: "Agregar tarea"
     add_tagging: "Agregar etiqueta"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
     add_work_paper: "Agregar papel de trabajo"
+    recode_tasks: "Recodificar tareas"
+    follow_up_date_changed_warning: "La fecha de implementación cambió para adecuarse a las tareas"
     repeated_ancestors: "Reiterada de"
     repeated_children: "Reiterada en"
     undo_reiteration: 'Deshacer reiteración'
@@ -903,6 +907,16 @@
       body_title:
         one: "El siguiente hallazgo está vencido"
         other: "Los siguientes hallazgos están vencidos"
+    tasks_expiration_warning:
+      title: "Notificación de tareas cercanas al vencimiento"
+      body_title:
+        one: "La siguiente tarea está próxima a vencer"
+        other: "Las siguientes tareas están próximas a vencer"
+    tasks_expired_warning:
+      title: "Notificación de tareas vencidas"
+      body_title:
+        one: "La siguiente tarea está vencida"
+        other: "Las siguientes tareas están vencidas"
     notification:
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"

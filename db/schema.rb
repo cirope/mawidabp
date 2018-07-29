@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180620150143) do
+ActiveRecord::Schema.define(version: 2018_07_24_214813) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
   enable_extension "btree_gin"
   enable_extension "pg_trgm"
+  enable_extension "plpgsql"
 
   create_table "achievements", id: :serial, force: :cascade do |t|
     t.integer "benefit_id", null: false
@@ -857,6 +857,17 @@ ActiveRecord::Schema.define(version: 20180620150143) do
     t.index ["shared"], name: "index_tags_on_shared"
   end
 
+  create_table "tasks", force: :cascade do |t|
+    t.text "description", null: false
+    t.date "due_on", null: false
+    t.integer "status", default: 0, null: false
+    t.bigint "finding_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "code"
+    t.index ["finding_id"], name: "index_tasks_on_finding_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "name", limit: 100
     t.string "last_name", limit: 100
@@ -1047,6 +1058,7 @@ ActiveRecord::Schema.define(version: 20180620150143) do
   add_foreign_key "taggings", "tags", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "tasks", "findings", on_update: :restrict, on_delete: :restrict
   add_foreign_key "users", "users", column: "manager_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "weakness_templates", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "file_models", on_update: :restrict, on_delete: :restrict

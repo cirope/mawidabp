@@ -54,7 +54,7 @@ class WorkPaper < ApplicationRecord
   # Relaciones
   belongs_to :organization
   belongs_to :file_model, :optional => true
-  belongs_to :owner, :polymorphic => true, :optional => true
+  belongs_to :owner, :polymorphic => true, :touch => true, :optional => true
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true,
     reject_if: ->(attrs) { ['file', 'file_cache'].all? { |a| attrs[a].blank? } }
