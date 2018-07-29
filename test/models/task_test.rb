@@ -50,7 +50,7 @@ class TaskTest < ActiveSupport::TestCase
   end
 
   test 'warning users about tasks expiration' do
-    Organization.current_id = nil
+    Current.organization_id = nil
     # Only if no weekend
     assert_not_includes [0, 6], Date.today.wday
 
@@ -62,7 +62,7 @@ class TaskTest < ActiveSupport::TestCase
   end
 
   test 'remember users about expired tasks' do
-    Organization.current_id = nil
+    Current.organization_id = nil
 
     @task.update! due_on: Time.zone.yesterday
 
