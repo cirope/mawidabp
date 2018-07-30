@@ -53,8 +53,6 @@ class Finding < ApplicationRecord
 
   acts_as_tree
 
-  cattr_accessor :current_user, :current_organization
-
   belongs_to :organization
   has_many :finding_review_assignments, dependent: :destroy, inverse_of: :finding
 end

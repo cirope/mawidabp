@@ -10,8 +10,8 @@ class ActiveSupport::TestCase
   fixtures :all
 
   def set_organization organization = organizations(:cirope)
-    Group.current_id        = organization.group_id
-    Organization.current_id = organization.id
+    Current.group        = organization.group
+    Current.organization = organization
   end
 
   def login user: users(:administrator), prefix: organizations(:cirope).prefix
@@ -46,5 +46,35 @@ class ActiveSupport::TestCase
 
   def set_host_for_organization(prefix)
     @request.host = [prefix, URL_HOST].join('.')
+  end
+
+  def perform_job_with_current_attributes(job)
+    # Situación problematica. Al ejecutar `perform_now/deliver_now`
+    # CurrentAttributes es reseteado por la forma de funcionar de Rails.
+    # En Desarrollo/Produccion esto no es un problema ya que nada es `_now`
+    # pero en modo test al usar helpers "inline" esto sucede.
+    # Para solucionarlo encolamos los trabajos y los ejecutamos en un
+    # "Contexto Controlado" gracias a `Current.set`
+
+    job_class = job[:job]
+    mailer, mail_method, delivery_method, *args = job[:args]
+
+    new_args = args.map do |arg|
+      if arg.is_a?(Hash)
+        if (gid = arg['_aj_globalid']).present?
+          GlobalID::Locator.locate(gid)
+        else
+          arg.with_indifferent_access
+        end
+      else
+        arg
+      end
+    end
+
+    Current.set(Current.instance.attributes) do
+      perform_enqueued_jobs do
+        job_class.perform_now(mailer, mail_method, delivery_method, *new_args)
+      end
+    end
   end
 end

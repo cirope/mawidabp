@@ -2,14 +2,14 @@ require 'test_helper'
 
 class DocumentTest < ActiveSupport::TestCase
   setup do
-    @document               = documents :audit_manual
-    Group.current_id        = @document.group_id
-    Organization.current_id = @document.organization_id
+    @document            = documents :audit_manual
+    Current.group        = @document.group
+    Current.organization = @document.organization
   end
 
   teardown do
-    Group.current_id        = nil
-    Organization.current_id = nil
+    Current.group        = nil
+    Current.organization = nil
   end
 
   test 'blank attributes' do

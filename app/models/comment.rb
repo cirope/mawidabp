@@ -2,7 +2,7 @@ class Comment < ApplicationRecord
   include ParameterSelector
 
   has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
+    organization_id: ->(model) { Current.organization&.id }
   }
 
   # Restricciones
