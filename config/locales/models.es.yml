@@ -129,6 +129,9 @@ es:
       tagging:
         one: 'Etiquetado'
         other: 'Etiquetados'
+      task:
+        one: 'Tarea'
+        other: 'Tareas'
       weakness:
         one: 'Observación'
         other: 'Observaciones'
@@ -240,6 +243,11 @@ es:
         other: 'Relaciones'
         related_finding_id: 'Relación (Observación / Oportunidad de mejora relacionada)'
         description: 'Relación (descripción)'
+      finding/tasks:
+        code: 'Código'
+        description: 'Descripción'
+        status: 'Estado'
+        due_on: 'Fecha de finalización'
       finding/taggings:
         one: 'Etiqueta'
         other: 'Etiquetas'
@@ -340,6 +348,11 @@ es:
       tagging:
         tag: 'Etiqueta'
         tag_id: 'Etiqueta'
+      task:
+        code: 'Código'
+        description: 'Descripción'
+        status: 'Estado'
+        due_on: 'Fecha de finalización'
       user:
         email: 'Correo'
         enable: 'Habilitado'
@@ -415,7 +428,7 @@ es:
         questionnaire: 'Cuestionario'
         user: 'Usuario'
         pollable: 'Sobre'
-        affected_user: 'Acerca de'
+        about: 'Acerca de'
       poll/answers:
         answer: 'Respuesta'
         answer_option: 'Opción'
@@ -541,8 +554,8 @@ es:
               can_not_be_revoked: 'no puede ser "Anulado", posiblemente se deba a una reiteración o a que la observación ya se encuentra en un informe definitivo'
               must_have_a_work_paper: 'debe tener asociado al menos un papel de trabajo'
               must_be_done_by_proper_role: 'solo puede ser cambiado por un usuario supervisor o gerente'
-            users:
-              invalid: 'debe contener como mínimo un auditor, un auditado, un gerente y un supervisor'
+            finding_user_assignments:
+              invalid: 'debe contener como mínimo un auditor, un auditado, un gerente y/o un supervisor'
         finding_user_assignment:
           attributes:
             user:

@@ -5,7 +5,7 @@
   </h3>
   <% @notifications.each do |n| %>
     <% n.findings.unconfirmed_for_notification.group_by(&:organization).each do |organization, findings| %>
-      <% Organization.current_id = organization.id %>
+      <% Current.organization = organization %>
       <h4 style="margin-bottom: 1em;"><%= organization.name %></h4>
       <h5><%= l(n.created_at.to_date, :format => :long) %></h5>
       <% findings.each do |finding| %>

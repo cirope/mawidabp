@@ -45,9 +45,11 @@
     <div class="col-md-3">
       <h5><strong><%= t 'polls.answer_poll' %></strong></h5>
     </div>
-    <div class="col-md-2">
-      <h5><strong><%= t 'polls.affected_user' %></strong></h5>
-    </div>
+    <% unless SHOW_ALTERNATIVE_QUESTIONNAIRES %>
+      <div class="col-md-2">
+        <h5><strong><%= t 'polls.about' %></strong></h5>
+      </div>
+    <% end %>
   </div>
 
   <div id="users">

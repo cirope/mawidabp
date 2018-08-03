@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180604183518) do
+ActiveRecord::Schema.define(version: 2018_07_24_214813) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
   enable_extension "btree_gin"
   enable_extension "pg_trgm"
+  enable_extension "plpgsql"
 
   create_table "achievements", id: :serial, force: :cascade do |t|
     t.integer "benefit_id", null: false
@@ -589,8 +589,10 @@ ActiveRecord::Schema.define(version: 20180604183518) do
     t.datetime "updated_at", null: false
     t.integer "organization_id"
     t.string "access_token"
-    t.integer "affected_user_id"
-    t.index ["affected_user_id"], name: "index_polls_on_affected_user_id"
+    t.integer "about_id"
+    t.string "about_type"
+    t.index ["about_id", "about_type"], name: "index_polls_on_about_id_and_about_type"
+    t.index ["about_type", "about_id"], name: "index_polls_on_about_type_and_about_id"
     t.index ["organization_id"], name: "index_polls_on_organization_id"
     t.index ["pollable_id", "pollable_type"], name: "index_polls_on_pollable_id_and_pollable_type"
     t.index ["questionnaire_id"], name: "index_polls_on_questionnaire_id"
@@ -855,6 +857,17 @@ ActiveRecord::Schema.define(version: 20180604183518) do
     t.index ["shared"], name: "index_tags_on_shared"
   end
 
+  create_table "tasks", force: :cascade do |t|
+    t.text "description", null: false
+    t.date "due_on", null: false
+    t.integer "status", default: 0, null: false
+    t.bigint "finding_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "code"
+    t.index ["finding_id"], name: "index_tasks_on_finding_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "name", limit: 100
     t.string "last_name", limit: 100
@@ -1016,7 +1029,6 @@ ActiveRecord::Schema.define(version: 20180604183518) do
   add_foreign_key "plans", "periods", on_update: :restrict, on_delete: :restrict
   add_foreign_key "polls", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "polls", "questionnaires", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "polls", "users", column: "affected_user_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "polls", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "privileges", "roles", on_update: :restrict, on_delete: :restrict
   add_foreign_key "process_controls", "best_practices", on_update: :restrict, on_delete: :restrict
@@ -1046,6 +1058,7 @@ ActiveRecord::Schema.define(version: 20180604183518) do
   add_foreign_key "taggings", "tags", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "tasks", "findings", on_update: :restrict, on_delete: :restrict
   add_foreign_key "users", "users", column: "manager_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "weakness_templates", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "file_models", on_update: :restrict, on_delete: :restrict

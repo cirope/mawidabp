@@ -4,7 +4,7 @@ module Users::Scopes
   included do
     scope :list, -> {
       includes(:organizations).
-        where(organizations: { id: Organization.current_id }).
+        where(organizations: { id: Current.organization&.id }).
         references :organizations
     }
     scope :not_hidden, -> { where hidden: false }
@@ -20,10 +20,12 @@ module Users::Scopes
     def all_with_findings_for_notification
       includes(finding_user_assignments: :raw_finding).
         where(findings: { state: Finding::STATUS[:notify], final: false }).
-        order([
-          "#{quoted_table_name}.#{qcn('last_name')} ASC",
-          "#{quoted_table_name}.#{qcn('name')} ASC"
-        ]).
+        order(
+          [
+            "#{quoted_table_name}.#{qcn('last_name')} ASC",
+            "#{quoted_table_name}.#{qcn('name')} ASC"
+          ].map { |o| Arel.sql o }
+        ).
         references(:findings)
     end
 
@@ -62,8 +64,8 @@ module Users::Scopes
 
       def corporate_list_parameters
         {
-          organization_id: Organization.current_id,
-          group_id:        Group.current_id,
+          organization_id: Current.organization&.id,
+          group_id:        Current.group&.id,
           true:            true
         }
       end

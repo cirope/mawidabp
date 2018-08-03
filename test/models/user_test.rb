@@ -12,7 +12,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Organization.current_id = nil
+    Current.organization = nil
   end
 
   test 'create' do
@@ -130,7 +130,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'validates can duplicate user if ldap' do
-    Organization.current_id = organizations(:google).id
+    Current.organization = organizations(:google)
 
     @user.user = users(:bare).user
 
@@ -439,7 +439,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'review assignment options' do
-    Organization.current_id = organizations(:google).id
+    Current.organization = organizations(:google)
 
     options = @user.review_assignment_options
 
@@ -455,7 +455,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'notify finding changes function' do
-    Organization.current_id = nil
+    Current.organization = nil
     user = users :administrator
 
     assert user.findings.for_notification.any?
@@ -497,10 +497,10 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'notify conclusion final review close date warning' do
-    ConclusionFinalReview.list.new({
+    ConclusionFinalReview.list.new(
       review_id: reviews(:review_approved_with_conclusion).id,
       issue_date: Date.today,
-      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date,
+      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.business_days.from_now.to_date,
       applied_procedures: 'New applied procedures',
       conclusion: CONCLUSION_OPTIONS.first,
       recipients: 'John Doe',
@@ -510,12 +510,11 @@ class UserTest < ActiveSupport::TestCase
       main_weaknesses_text: 'Some main weakness X',
       corrective_actions: 'You should do it this way',
       affects_compliance: false
-    }, false).save!
+    ).save!
 
-    Organization.current_id = nil
+    Current.organization = nil
 
     users = User.all_with_conclusion_final_reviews_for_notification
-
     assert users.any?
 
     assert_enqueued_emails users.count do

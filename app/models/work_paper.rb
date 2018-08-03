@@ -6,7 +6,7 @@ class WorkPaper < ApplicationRecord
   include WorkPapers::Review
 
   # Named scopes
-  scope :list, -> { where(organization_id: Organization.current_id) }
+  scope :list, -> { where(organization_id: Current.organization&.id) }
   scope :sorted_by_code, -> { order(code: :asc) }
   scope :with_prefix, ->(prefix) {
     where("#{quoted_table_name}.#{qcn 'code'} LIKE ?", "#{prefix}%").sorted_by_code
@@ -54,7 +54,7 @@ class WorkPaper < ApplicationRecord
   # Relaciones
   belongs_to :organization
   belongs_to :file_model, :optional => true
-  belongs_to :owner, :polymorphic => true, :optional => true
+  belongs_to :owner, :polymorphic => true, :touch => true, :optional => true
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true,
     reject_if: ->(attrs) { ['file', 'file_cache'].all? { |a| attrs[a].blank? } }
@@ -62,7 +62,7 @@ class WorkPaper < ApplicationRecord
   def initialize(attributes = nil)
     super(attributes)
 
-    self.organization_id = Organization.current_id
+    self.organization_id = Current.organization&.id
   end
 
   def inspect

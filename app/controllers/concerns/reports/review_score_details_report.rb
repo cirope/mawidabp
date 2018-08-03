@@ -33,9 +33,9 @@ module Reports::ReviewScoreDetailsReport
 
     def review_score_details_csv
       CSV.generate(col_sep: ';', force_quotes: true) do |csv|
-        csv << review_score_details_columns.keys
+        csv << review_score_details_csv_headers
 
-        review_score_details_data_rows.each { |row| csv << row }
+        review_score_details_csv_rows.each { |row| csv << row }
       end
     end
 
@@ -242,6 +242,21 @@ module Reports::ReviewScoreDetailsReport
       data.insert 0, review_score_by_evolution_column_headers(pdf)
     end
 
+    def review_score_details_csv_headers
+      [
+        Review.model_name.human,
+        PlanItem.human_attribute_name('project'),
+        BusinessUnitType.model_name.human,
+        Tag.model_name.human,
+        Review.human_attribute_name('scope'),
+        Review.human_attribute_name('risk_exposure'),
+        ConclusionFinalReview.human_attribute_name('issue_date'),
+        ConclusionFinalReview.human_attribute_name('conclusion'),
+        ConclusionFinalReview.human_attribute_name('evolution'),
+        BusinessUnit.model_name.human
+      ]
+    end
+
     def review_score_details_columns
       {
         Review.model_name.human => 10,
@@ -265,12 +280,24 @@ module Reports::ReviewScoreDetailsReport
     end
 
     def review_score_details_data pdf
-      data = review_score_details_data_rows
+      data = @conclusion_reviews.map do |conclusion_review|
+        [
+          conclusion_review.review.identification,
+          conclusion_review.review.plan_item.project,
+          conclusion_review.review.business_unit_type.to_s,
+          conclusion_review.review.tags.map(&:to_s).to_sentence,
+          conclusion_review.review.scope,
+          l(conclusion_review.issue_date),
+          conclusion_review.conclusion,
+          conclusion_review.evolution,
+          conclusion_review.review.business_unit.to_s,
+        ]
+      end
 
       data.insert 0, review_score_details_column_headers(pdf)
     end
 
-    def review_score_details_data_rows
+    def review_score_details_csv_rows
       @conclusion_reviews.map do |conclusion_review|
         [
           conclusion_review.review.identification,
@@ -278,6 +305,7 @@ module Reports::ReviewScoreDetailsReport
           conclusion_review.review.business_unit_type.to_s,
           conclusion_review.review.tags.map(&:to_s).to_sentence,
           conclusion_review.review.scope,
+          conclusion_review.review.risk_exposure,
           l(conclusion_review.issue_date),
           conclusion_review.conclusion,
           conclusion_review.evolution,

@@ -1,6 +1,7 @@
 class Questionnaire < ApplicationRecord
   include Auditable
   include Questionnaires::Answers
+  include Questionnaires::Clone
   include Questionnaires::Polls
   include Questionnaires::Questions
   include Questionnaires::Scopes

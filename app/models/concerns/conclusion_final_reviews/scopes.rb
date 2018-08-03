@@ -3,7 +3,7 @@ module ConclusionFinalReviews::Scopes
 
   included do
     scope :next_to_expire, -> {
-      date  = CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date
+      date  = CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.business_days.from_now.to_date
       range = if date.wday == 5
                 date..(date + 2.days)
               else
@@ -12,8 +12,6 @@ module ConclusionFinalReviews::Scopes
 
       where close_date: range
     }
-    scope :internal_audit, -> { with_external_business_unit_type_as false }
-    scope :external_audit, -> { with_external_business_unit_type_as true }
   end
 
   module ClassMethods
@@ -25,7 +23,7 @@ module ConclusionFinalReviews::Scopes
           "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
           "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
           "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')}"
-        ]
+        ].map { |o| Arel.sql o }
       )
     end
 
@@ -45,6 +43,14 @@ module ConclusionFinalReviews::Scopes
       ConclusionFinalReview.next_to_expire
     end
 
+    def internal_audit
+      with_external_business_unit_type_as false
+    end
+
+    def external_audit
+      with_external_business_unit_type_as true
+    end
+
     private
 
       def list_all_with_weaknesses_solution_date from, to, relation: :weaknesses
@@ -60,7 +66,7 @@ module ConclusionFinalReviews::Scopes
             "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
             "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
             "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')}"
-          ]
+          ].map { |o| Arel.sql o }
         )
       end
 

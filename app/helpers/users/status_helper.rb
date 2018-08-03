@@ -36,6 +36,13 @@ module Users::StatusHelper
     )
   end
 
+  def self_and_descendants_findings_path
+    findings_path(
+      completed: 'incomplete',
+      user_ids:  @user.self_and_descendants.pluck('id')
+    )
+  end
+
   private
 
     def pending_link

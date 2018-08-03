@@ -17,7 +17,9 @@ module AutoCompleteFor::WeaknessTemplate
 
     @weakness_templates = WeaknessTemplate.list.where(
       conditions.map { |c| "(#{c})" }.join(' AND '), parameters
-    ).order("#{WeaknessTemplate.quoted_table_name}.#{WeaknessTemplate.qcn('title')} ASC").limit(10)
+    ).order(
+      Arel.sql "#{WeaknessTemplate.quoted_table_name}.#{WeaknessTemplate.qcn('title')} ASC"
+    ).limit(10)
 
     respond_to do |format|
       format.json { render json: @weakness_templates }

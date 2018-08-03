@@ -3,7 +3,7 @@ module Reviews::Scopes
 
   included do
     scope :list, -> {
-      where(organization_id: Organization.current_id).order identification: :asc
+      where(organization_id: Current.organization&.id).order identification: :asc
     }
   end
 
@@ -122,7 +122,7 @@ module Reviews::Scopes
           "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
           "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
           "#{quoted_table_name}.#{qcn('created_at')} ASC"
-        ]
+        ].map { |o| Arel.sql o }
       end
   end
 end

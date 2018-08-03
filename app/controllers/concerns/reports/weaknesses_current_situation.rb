@@ -65,7 +65,7 @@ module Reports::WeaknessesCurrentSituation
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
         "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'conclusion_index'} DESC"
-      ]
+      ].map { |o| Arel.sql o }
       weaknesses = Weakness.
         with_status_for_report.
         finals(final).
@@ -127,9 +127,13 @@ module Reports::WeaknessesCurrentSituation
           "<font size='#{PDF_FONT_SIZE + 2}'><b>#{weakness.title}</b></font>"
         ],
         [
-          "<b>#{Weakness.human_attribute_name(show_current_situation?(weakness) ? 'current_situation' : 'description')}</b>",
-          show_current_situation?(weakness) ? weakness.current_situation : weakness.description
+          "<b>#{Weakness.human_attribute_name('description')}</b>",
+          weakness.description
         ],
+        ([
+          "<b>#{Weakness.human_attribute_name('current_situation')}</b>",
+          weakness.current_situation
+        ] if show_current_situation? weakness),
         [
           "<b>#{Weakness.human_attribute_name('answer')}</b>",
           weakness.answer

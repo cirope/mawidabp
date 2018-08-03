@@ -13,7 +13,7 @@ class NotifierMailer < ActionMailer::Base
     email = poll.user.email
     subject = "[#{@organization.prefix.upcase}] #{poll.questionnaire.email_subject}"
 
-    subject << " - #{poll.affected_user.informal_name}" if poll.affected_user
+    subject << " - #{poll.about.display_name}" if poll.about
 
     mail to: email, subject: subject
   end
@@ -149,7 +149,7 @@ class NotifierMailer < ActionMailer::Base
       @notification.findings.map(&:organization).uniq : []
     organizations += option_organizations
 
-    prefixes = organizations.uniq.map {|o| "[#{o.prefix}]" }.join(' ')
+    prefixes = organizations.uniq.map { |o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
     mail to: Array(users).map(&:email),
@@ -157,7 +157,7 @@ class NotifierMailer < ActionMailer::Base
   end
 
   def conclusion_review_notification(user, conclusion_review, options = {})
-    Organization.current_id = options.delete :organization_id
+    Current.organization = Organization.find(options.delete :organization_id)
     PaperTrail.request.whodunnit = options.delete :user_id
 
     org_prefix = conclusion_review.review.organization.prefix
@@ -231,6 +231,26 @@ class NotifierMailer < ActionMailer::Base
 
     mail to: [user.email],
          subject: prefixes.upcase + t('notifier.findings_expired_warning.title')
+  end
+
+  def tasks_expiration_warning(user, tasks)
+    @grouped_tasks = tasks.group_by(&:organization)
+    prefixes = @grouped_tasks.keys.map {|o| "[#{o.prefix}]" }.join(' ')
+
+    prefixes << ' ' unless prefixes.blank?
+
+    mail to: [user.email],
+         subject: prefixes.upcase + t('notifier.tasks_expiration_warning.title')
+  end
+
+  def tasks_expired_warning(user, tasks)
+    @grouped_tasks = tasks.group_by(&:organization)
+    prefixes = @grouped_tasks.keys.map {|o| "[#{o.prefix}]" }.join(' ')
+
+    prefixes << ' ' unless prefixes.blank?
+
+    mail to: [user.email],
+         subject: prefixes.upcase + t('notifier.tasks_expired_warning.title')
   end
 
   def conclusion_final_review_close_date_warning(user, conclusion_final_reviews)

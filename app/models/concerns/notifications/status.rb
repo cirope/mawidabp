@@ -25,6 +25,6 @@ module Notifications::Status
   end
 
   def stale?
-    unconfirmed? && created_at <= NOTIFICATIONS_STALE_DAYS.days.ago_in_business
+    unconfirmed? && created_at <= NOTIFICATIONS_STALE_DAYS.business_days.ago
   end
 end

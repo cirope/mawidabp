@@ -236,7 +236,7 @@ class ReviewsController < ApplicationController
       [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     ).references(:reviews, :periods, :conclusion_reviews, :business_units)
   end
 
@@ -251,7 +251,7 @@ class ReviewsController < ApplicationController
         "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('process_control_id')} = :process_control_id"
       ].join(' AND '),
       false: false,
-      organization_id: Organization.current_id,
+      organization_id: Current.organization&.id,
       states: Finding::PENDING_FOR_REVIEW_STATUS,
       process_control_id: @process_control.id
     ).includes(
@@ -262,7 +262,7 @@ class ReviewsController < ApplicationController
       [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     ).references(:reviews, :conclusion_reviews, :control_objectives)
   end
 
@@ -293,7 +293,7 @@ class ReviewsController < ApplicationController
       [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     ).references(:reviews, :periods, :conclusion_reviews, :business_units)
   end
 
@@ -330,7 +330,7 @@ class ReviewsController < ApplicationController
       [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     ).references(
       :reviews, :control_objective_items, :periods, :conclusion_reviews
     ).limit(5)

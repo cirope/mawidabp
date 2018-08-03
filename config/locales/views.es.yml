@@ -281,8 +281,8 @@ es:
     access_denied: 'La encuesta ya ha sido contestada.'
     already_exists: 'Alguna de las encuestas para %{user} ya existen y no fueron enviadas nuevamente'
     answer_poll: '¿Contestar encuesta?'
-    affected_user: 'Acerca de'
-    affected_user_html: 'Acerca de <strong>%{user}</strong>'
+    about: 'Acerca de'
+    about_html: 'Acerca de <strong>%{entity}</strong>'
     answers:
       index:
         title: 'Resumen de respuestas'
@@ -408,6 +408,15 @@ es:
       warning: 'Advertencia'
       danger: 'Peligro'
 
+  tasks:
+    on_time: 'A tiempo, sin reprogramación'
+    rescheduled: 'A tiempo, reprogramada'
+    expired: 'Fuera de tiempo'
+    status:
+      pending: 'Pendiente'
+      in_progress: 'En proceso'
+      finished: 'Finalizada'
+
   users:
     index:
       title: 'Listado de usuarios'
@@ -490,6 +499,7 @@ es:
         add: 'Agregar usuario a lista de estado de seguimiento'
         remove: 'Eliminar usuario de lista de estado de seguimiento'
         list: 'Ver lista de observaciones pendientes de los usuarios seleccionados'
+        user_findings: 'Ver lista de observaciones pendientes del usuario y su jerarquía'
       show:
         title: 'Estado'
         table: 'Ver tabla'

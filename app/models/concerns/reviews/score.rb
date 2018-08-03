@@ -70,11 +70,7 @@ module Reviews::Score
   private
 
     def guess_score_type
-      if Organization.current_id
-        organization = Organization.find Organization.current_id
-      end
-
-      if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization&.prefix
+      if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? Current.organization&.prefix
         :weaknesses
       elsif SHOW_REVIEW_EXTRA_ATTRIBUTES
         :manual
@@ -90,7 +86,7 @@ module Reviews::Score
       when :weaknesses
         score_by_weaknesses
       when :manual
-				self.score = 100
+        self.score = 100
       end
     end
 

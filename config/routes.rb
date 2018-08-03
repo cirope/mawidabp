@@ -51,7 +51,10 @@ Rails.application.routes.draw do
   end
 
   resources :polls do
-    get :reports, on: :collection
+    collection do
+      get :reports
+      get :auto_complete_for_business_unit
+    end
   end
 
   resources :e_mails, only: [:index, :show]

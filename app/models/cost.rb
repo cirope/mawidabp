@@ -17,7 +17,7 @@ class Cost < ApplicationRecord
 
   # Relaciones
   belongs_to :user
-  belongs_to :item, -> { readonly }, :polymorphic => true
+  belongs_to :item, -> { readonly }, :polymorphic => true, :touch => true
 
   def raw_cost=(raw_cost)
     self.cost = raw_cost.fetch_time / 3600.0 unless raw_cost.blank?

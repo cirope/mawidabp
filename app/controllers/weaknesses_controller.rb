@@ -53,7 +53,7 @@ class WeaknessesController < ApplicationController
       @order_by || [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     ).references(:periods, :conclusion_reviews)
 
     respond_to do |format|
@@ -193,6 +193,9 @@ class WeaknessesController < ApplicationController
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
+        ],
+        tasks_attributes: [
+          :id, :code, :description, :status, :due_on, :_destroy
         ],
         taggings_attributes: [
           :id, :tag_id, :_destroy

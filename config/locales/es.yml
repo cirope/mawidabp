@@ -556,15 +556,20 @@
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
+    next_pending_task_date: "Fecha próxima tarea pendiente"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
     download_csv: "Descargar CSV"
     download_pdf: "Resumen en PDF"
     add_finding_relation: "Agregar relación"
+    add_task: "Agregar tarea"
     add_tagging: "Agregar etiqueta"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
     add_work_paper: "Agregar papel de trabajo"
+    recode_tasks: "Recodificar tareas"
+    follow_up_date_changed_warning: "La fecha de implementación cambió para adecuarse a las tareas"
+    assignment_confirm_message: "No ha seleccionado auditores referentes ni responsables ¿Desea continuar?"
     repeated_ancestors: "Reiterada de"
     repeated_children: "Reiterada en"
     undo_reiteration: 'Deshacer reiteración'
@@ -903,6 +908,16 @@
       body_title:
         one: "El siguiente hallazgo está vencido"
         other: "Los siguientes hallazgos están vencidos"
+    tasks_expiration_warning:
+      title: "Notificación de tareas cercanas al vencimiento"
+      body_title:
+        one: "La siguiente tarea está próxima a vencer"
+        other: "Las siguientes tareas están próximas a vencer"
+    tasks_expired_warning:
+      title: "Notificación de tareas vencidas"
+      body_title:
+        one: "La siguiente tarea está vencida"
+        other: "Las siguientes tareas están vencidas"
     notification:
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"
@@ -930,7 +945,7 @@
       title: "Notificación de observaciones en proceso de implementación vencidas"
       the_following_finding_is_being_implemented_and_stale: "La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación"
     pending_poll_email:
-      affected_user_html: "Encuesta acerca de <strong>%{user}</strong>"
+      about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables del siguiente hallazgo"
