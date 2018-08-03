@@ -49,6 +49,10 @@ jQuery(function ($) {
       event.preventDefault()
 
       alert(State.validationFailedMessage)
+
+      setTimeout(function () {
+        $form.find('input[type="submit"]').removeProp('disabled')
+      }, 300)
     } else if (! $form.data('rejected')) {
       State.unsavedData = false
 
