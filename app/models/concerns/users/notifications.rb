@@ -15,7 +15,7 @@ module Users::Notifications
 
   module ClassMethods
     def notify_new_findings
-      unless [0, 6].include?(Date.today.wday)
+      if Time.zone.today.workday?
         users, findings = [], []
 
         all_with_findings_for_notification.each do |user|

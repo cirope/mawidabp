@@ -3,7 +3,7 @@ module Findings::Unanswered
 
   module ClassMethods
     def mark_as_unanswered_if_necesary
-      unless [0, 6].include?(Time.zone.today.wday)
+      if Time.zone.today.workday?
         findings = []
 
         transaction do

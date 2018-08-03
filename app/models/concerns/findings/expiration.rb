@@ -26,7 +26,7 @@ module Findings::Expiration
 
     def warning_users_about_expiration
       # Sólo si no es sábado o domingo (porque no tiene sentido)
-      if [0, 6].exclude? Time.zone.today.wday
+      if Time.zone.today.workday?
         users = next_to_expire.or(expires_very_soon).inject([]) do |u, finding|
           u | finding.users
         end

@@ -786,7 +786,7 @@ class FindingTest < ActiveSupport::TestCase
 
       until days_to_add == 0
         first_notification_date += 1.day
-        days_to_add -= 1 unless [0, 6].include?(first_notification_date.wday)
+        days_to_add -= 1 if first_notification_date.workday?
       end
 
       assert_equal computed_date, first_notification_date
@@ -925,7 +925,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'notify for stale and unconfirmed findings' do
     Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
     assert_not_equal 0, Finding.unconfirmed_for_notification.size
 
     review_codes_by_user =
@@ -939,7 +939,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'warning users about findings expiration' do
     Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
 
     review_codes_by_user = review_codes_on_findings_by_user :next_to_expire
 
@@ -962,7 +962,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'mark stale and confirmed findings as unanswered' do
     Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
 
     review_codes_by_user = review_codes_on_user_findings_by_user :confirmed_and_stale
     unanswered_count     = Finding.where(state: Finding::STATUS[:unanswered]).count
@@ -985,7 +985,7 @@ class FindingTest < ActiveSupport::TestCase
 
     Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
     assert Finding.confirmed_and_stale.any?
 
     Finding.confirmed_and_stale.each do |finding|
@@ -1005,7 +1005,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'notify manager if necesary' do
     Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
 
     findings_and_users              = unanswered_and_stale_findings_with_users_by_level
     users_by_level_for_notification = findings_and_users[:users_by_level_for_notification]

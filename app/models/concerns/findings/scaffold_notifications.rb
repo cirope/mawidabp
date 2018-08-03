@@ -3,7 +3,7 @@ module Findings::ScaffoldNotifications
 
   module ClassMethods
     def notify_manager_if_necesary
-      notify_managers if [0, 6].exclude? Time.zone.today.wday
+      notify_managers if Time.zone.today.workday?
     end
 
     def unanswered_and_stale factor
@@ -99,7 +99,7 @@ module Findings::ScaffoldNotifications
 
     until days_to_add == 0
       date_for_notification += 1
-      days_to_add -= 1 unless [0, 6].include? date_for_notification.wday
+      days_to_add -= 1 if date_for_notification.workday?
     end
 
     date_for_notification

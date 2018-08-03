@@ -21,7 +21,7 @@ module Findings::Unconfirmed
   module ClassMethods
     def notify_for_unconfirmed_for_notification_findings
       # Sólo si no es sábado o domingo
-      if [0, 6].exclude? Time.zone.today.wday
+      if Time.zone.today.workday?
         Finding.transaction do
           users = Finding.unconfirmed_for_notification.inject([]) do |u, finding|
             u | finding.users.select do |user|

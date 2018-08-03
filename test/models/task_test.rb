@@ -52,7 +52,7 @@ class TaskTest < ActiveSupport::TestCase
   test 'warning users about tasks expiration' do
     Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
 
     @task.update! due_on: FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
 
