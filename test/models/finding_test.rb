@@ -1096,15 +1096,15 @@ class FindingTest < ActiveSupport::TestCase
 
     Finding.unconfirmed_for_notification.each do |finding|
       finding.update_column :first_notification_date,
-        FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.days.ago_in_business.to_date
+        FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.business_days.ago.to_date
     end
 
     refute Finding.unconfirmed_for_notification.any?
   end
 
   test 'next to expire scope' do
-    before_expire = FINDING_WARNING_EXPIRE_DAYS.pred.days.from_now_in_business.to_date
-    expire        = FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date
+    before_expire = FINDING_WARNING_EXPIRE_DAYS.pred.business_days.from_now.to_date
+    expire        = FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
 
     all_findings_are_in_range = Finding.next_to_expire.all? do |finding|
       finding.follow_up_date.between?(before_expire, expire) ||

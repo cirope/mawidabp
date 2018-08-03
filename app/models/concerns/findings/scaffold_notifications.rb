@@ -64,7 +64,7 @@ module Findings::ScaffoldNotifications
 
         stale_parameters.each_with_index do |stale_parameter, i|
           stale_days = stale_parameter[:parameter].to_i
-          parameters[:"stale_unanswered_date_#{i}"] = (stale_days + stale_days * factor).days.ago_in_business.to_date
+          parameters[:"stale_unanswered_date_#{i}"] = (stale_days + stale_days * factor).business_days.ago.to_date
           parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
         end
 

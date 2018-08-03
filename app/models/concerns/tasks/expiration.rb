@@ -14,14 +14,14 @@ module Tasks::Expiration
       date = if Time.zone.now < Time.zone.now.noon
        Time.zone.today
      else
-       1.day.from_now_in_business.to_date
+       1.day.business_days.from_now.to_date
      end
 
       expires_on date
     end
 
     def next_to_expire
-      expires_on FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date
+      expires_on FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
     end
 
     def warning_users_about_expiration

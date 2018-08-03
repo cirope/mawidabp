@@ -12,7 +12,7 @@ module Findings::Unconfirmed
         {
           state: Finding::STATUS[:unconfirmed],
           false: false,
-          stale_unconfirmed_date: FINDING_DAYS_FOR_SECOND_NOTIFICATION.days.ago_in_business.to_date
+          stale_unconfirmed_date: FINDING_DAYS_FOR_SECOND_NOTIFICATION.business_days.ago.to_date
         }
       )
     }

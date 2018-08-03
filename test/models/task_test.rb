@@ -54,7 +54,7 @@ class TaskTest < ActiveSupport::TestCase
     # Only if no weekend
     assert_not_includes [0, 6], Date.today.wday
 
-    @task.update! due_on: FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date
+    @task.update! due_on: FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
 
     assert_enqueued_emails @task.users.size do
       Task.warning_users_about_expiration

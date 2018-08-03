@@ -500,7 +500,7 @@ class UserTest < ActiveSupport::TestCase
     ConclusionFinalReview.list.new(
       review_id: reviews(:review_approved_with_conclusion).id,
       issue_date: Date.today,
-      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date,
+      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.business_days.from_now.to_date,
       applied_procedures: 'New applied procedures',
       conclusion: CONCLUSION_OPTIONS.first,
       recipients: 'John Doe',
