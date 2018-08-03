@@ -2,8 +2,14 @@
 <% review = @weakness.review || @weakness.control_objective_item.try(:review) %>
 <% frozen = review.try(:is_frozen?) || @weakness.repeated? %>
 <% show_history_changes = @weakness.status_change_history.size > 1 %>
+<% form_options = {
+  data: {
+    check_assignment_options: @weakness.new_record?,
+    assignment_confirm_message: t('finding.assignment_confirm_message')
+  }
+} %>
 
-<%= simple_form_for @weakness do |f| %>
+<%= simple_form_for @weakness, form_options do |f| %>
   <% content_for :js_extra do %>
     <%= raw("var lastWorkPaperCode = '#{next_weakness_work_paper_code(@weakness)}';") unless frozen %>
   <% end %>
@@ -293,7 +299,9 @@
     <div class="col-md-1">
       <h5>
         <strong><%= Task.human_attribute_name 'code' %></strong>
-        <small><%= link_to_recode_tasks %></small>
+        <% unless readonly %>
+          <small><%= link_to_recode_tasks %></small>
+        <% end %>
       </h5>
     </div>
     <div class="col-md-5">

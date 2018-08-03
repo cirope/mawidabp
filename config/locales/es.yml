@@ -569,6 +569,7 @@
     add_work_paper: "Agregar papel de trabajo"
     recode_tasks: "Recodificar tareas"
     follow_up_date_changed_warning: "La fecha de implementación cambió para adecuarse a las tareas"
+    assignment_confirm_message: "No ha seleccionado auditores referentes ni responsables ¿Desea continuar?"
     repeated_ancestors: "Reiterada de"
     repeated_children: "Reiterada en"
     undo_reiteration: 'Deshacer reiteración'

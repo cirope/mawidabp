@@ -28,6 +28,29 @@ jQuery(function ($) {
     }
   })
 
+  $(document).on('submit', '[data-check-assignment-options="true"]', function (event) {
+    var $form       = $(this)
+    var message     = $form.data('assignmentConfirmMessage')
+    var showWarning = true
+    var selector    = '[name$="[responsible_auditor]"]:visible, [name$="[process_owner]"]:visible'
+
+    $(selector).each(function (i, e) {
+      console.log(i)
+
+      if ($(e).is(':checked'))
+        showWarning = false
+    })
+
+    if (showWarning && ! confirm(message)) {
+      event.stopPropagation()
+      event.preventDefault()
+
+      setTimeout(function () {
+        $form.find('input[type="submit"][disabled]').removeProp('disabled')
+      }, 150)
+    }
+  })
+
   $(document).on('submit', 'form', function (event) {
     var $form     = $(this)
     var hasErrors = false
@@ -52,7 +75,7 @@ jQuery(function ($) {
 
       setTimeout(function () {
         $form.find('input[type="submit"]').removeProp('disabled')
-      }, 300)
+      }, 150)
     } else if (! $form.data('rejected')) {
       State.unsavedData = false
 
