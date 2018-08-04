@@ -17,6 +17,12 @@ module Users::Scopes
       ).take
     end
 
+    def by_user user
+      where(
+        "LOWER(#{quoted_table_name}.#{qcn 'user'}) = ?", user.downcase
+      ).take
+    end
+
     def all_with_findings_for_notification
       includes(finding_user_assignments: :raw_finding).
         where(findings: { state: Finding::STATUS[:notify], final: false }).

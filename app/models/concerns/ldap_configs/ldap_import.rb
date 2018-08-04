@@ -38,7 +38,7 @@ module LdapConfigs::LDAPImport
       manager_dn = casted_attribute entry, manager_attribute
       data       = trivial_data entry
       roles      = clean_roles Role.list_with_corporate.where(name: role_names)
-      user       = User.by_email data[:email]
+      user       = find_user data
 
       data[:manager_id] = nil if manager_dn.blank?
 
@@ -58,6 +58,10 @@ module LdapConfigs::LDAPImport
       state = :errored if user.errors.any?
 
       { user: user, manager_dn: manager_dn, state: state }
+    end
+
+    def find_user data
+      User.by_email(data[:email]) || User.list.by_user(data[:user])
     end
 
     def role_data entry
