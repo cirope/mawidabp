@@ -8,6 +8,7 @@ Bundler.require(*Rails.groups)
 
 module MawidaBP
   class Application < Rails::Application
+
     # Figaro auto-env configuration // TODO: move to _independent_ file
     # config/application.yml is the default config
     if (type = ENV['CONFIG_TYPE']).present? &&
