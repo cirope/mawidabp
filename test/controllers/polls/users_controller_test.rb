@@ -5,13 +5,8 @@ class Polls::UsersControllerTest < ActionController::TestCase
     login
   end
 
-  test 'auto complete for user' do
-    get :index, xhr: true, params: {
-      search: {
-        query: 'poll',
-        columns: User::COLUMNS_FOR_SEARCH.keys
-      }
-    }, as: :json
+  test 'list admin users' do
+    get :index, xhr: true, params: { q: 'poll' }, as: :json
 
     assert_response :success
     users = ActiveSupport::JSON.decode(@response.body)
@@ -21,12 +16,7 @@ class Polls::UsersControllerTest < ActionController::TestCase
   end
 
   test 'list blank users' do
-    get :index, xhr: true, params: {
-      search: {
-        query: 'blank',
-        columns: User::COLUMNS_FOR_SEARCH.keys
-      }
-    }, as: :json
+    get :index, xhr: true, params: { q: 'blank' }, as: :json
 
     assert_response :success
     users = ActiveSupport::JSON.decode(@response.body)
@@ -36,14 +26,9 @@ class Polls::UsersControllerTest < ActionController::TestCase
   end
 
   test 'list none users' do
-    get :index, xhr: true, params: {
-      search: {
-        query: 'xyz',
-        columns: User::COLUMNS_FOR_SEARCH.keys
-      }
-    }, as: :json
-    assert_response :success
+    get :index, xhr: true, params: { q: 'xyz' }, as: :json
 
+    assert_response :success
     users = ActiveSupport::JSON.decode(@response.body)
 
     assert_equal 0, users.size

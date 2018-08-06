@@ -8,7 +8,11 @@ module Users::Searches
   private
 
     def set_users
-      conditions = build_search_conditions User
+      conditions = complex_search(
+        model: User,
+        raw_query: params[:q],
+        columns: ::User::COLUMNS_FOR_SEARCH.keys
+      )[:conditions]
 
       @users = User.list_with_corporate.not_hidden.where(conditions).limit(10)
     end

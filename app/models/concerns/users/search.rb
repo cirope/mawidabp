@@ -21,10 +21,4 @@ module Users::Search
       }
     )
   end
-
-  def self.tanga
-    COLUMNS_FOR_SEARCH.map do |column, data|
-
-    end
-  end
 end

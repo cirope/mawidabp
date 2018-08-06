@@ -8,12 +8,7 @@ class Oportunities::UsersControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for user' do
-    get :index, xhr: true, params: {
-      search: {
-        query: 'bar',
-        columns: User::COLUMNS_FOR_SEARCH.keys
-      }
-    }, as: :json
+    get :index, xhr: true, params: { q: 'bar' }, as: :json
 
     assert_response :success
     users = ActiveSupport::JSON.decode(@response.body)
@@ -23,12 +18,7 @@ class Oportunities::UsersControllerTest < ActionController::TestCase
   end
 
   test 'list blank users' do
-    get :index, xhr: true, params: {
-      search: {
-        query: 'blank',
-        columns: User::COLUMNS_FOR_SEARCH.keys
-      }
-    }, as: :json
+    get :index, xhr: true, params: { q: 'blank' }, as: :json
 
     assert_response :success
     users = ActiveSupport::JSON.decode(@response.body)
@@ -38,12 +28,7 @@ class Oportunities::UsersControllerTest < ActionController::TestCase
   end
 
   test 'list none users' do
-    get :index, xhr: true, params: {
-      search: {
-        query: 'xyz',
-        columns: User::COLUMNS_FOR_SEARCH.keys
-      }
-    }, as: :json
+    get :index, xhr: true, params: { q: 'xyz' }, as: :json
     assert_response :success
 
     users = ActiveSupport::JSON.decode(@response.body)
