@@ -236,6 +236,7 @@ class ApplicationController < ActionController::Base
         result = complex_search(
           model:              model,
           raw_query:          params[:search][:query],
+          columns:            @columns,
           default_conditions: default_conditions
         )
         @query      = result[:query]
