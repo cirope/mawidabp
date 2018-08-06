@@ -59,8 +59,6 @@ es:
       new: 'Agregar proceso'
     control_objectives:
       new: 'Agregar objetivo'
-    auto_complete_for_tagging:
-      title: 'TANGA'
 
   control_objectives:
     index:
