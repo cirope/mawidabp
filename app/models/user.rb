@@ -2,7 +2,7 @@ class User < ApplicationRecord
   include ActsAsTree
   include Comparable
   include ParameterSelector
-  include SearchCop
+  # include SearchCop
   include Trimmer
   include Users::AttributeTypes
   include Users::Auditable
@@ -30,9 +30,9 @@ class User < ApplicationRecord
 
   trimmed_fields :user, :email, :name, :last_name
 
-  search_scope :search do
-    attributes :user, :name, :last_name, :function
-  end
+  # search_scope :search do
+  #   attributes :user, :name, :last_name, :function
+  # end
 
   has_many :login_records, dependent: :destroy
   has_many :error_records, dependent: :destroy
@@ -42,7 +42,7 @@ class User < ApplicationRecord
   has_many :conclusion_final_reviews, through: :reviews
 
   def <=>(other)
-    other.kind_of?(User) ? id <=> other.id : -1
+    other.is_a?(User) ? id <=> other.id : -1
   end
 
   def to_s

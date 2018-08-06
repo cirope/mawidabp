@@ -8,6 +8,6 @@ module Users::Searches
   private
 
     def set_users
-      @users = User.list_with_corporate.not_hidden.search(params[:q]).limit 10
+      # @users = User.list_with_corporate.not_hidden.search(params[:q]).limit 10
     end
 end
