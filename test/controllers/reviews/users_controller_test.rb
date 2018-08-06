@@ -9,7 +9,7 @@ class Reviews::UsersControllerTest < ActionController::TestCase
     get :index, xhr: true, params: {
       search: {
         query: 'bar',
-        columns: %w[user name last_name function]
+        columns: User::COLUMNS_FOR_SEARCH.keys
       }
     }, as: :json
 
@@ -24,7 +24,7 @@ class Reviews::UsersControllerTest < ActionController::TestCase
     get :index, xhr: true, params: {
       search: {
         query: 'blank',
-        columns: %w[user name last_name function]
+        columns: User::COLUMNS_FOR_SEARCH.keys
       }
     }, as: :json
 
@@ -39,7 +39,7 @@ class Reviews::UsersControllerTest < ActionController::TestCase
     get :index, xhr: true, params: {
       search: {
         query: 'xyz',
-        columns: %w[user name last_name function]
+        columns: User::COLUMNS_FOR_SEARCH.keys
       }
     }, as: :json
     assert_response :success
