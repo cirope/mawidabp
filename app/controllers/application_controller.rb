@@ -273,7 +273,7 @@ class ApplicationController < ActionController::Base
               mask              = model.get_column_mask(column)
               conversion_method = model.get_column_conversion_method(column)
               filter            = "#{model.get_column_name(column)} "
-              operator          ||= if model.get_column_operator(column).is_a?(Array)
+              operator          ||= if model.get_column_operator(column).kind_of?(Array)
                                       '='
                                     else
                                       model.get_column_operator(column)

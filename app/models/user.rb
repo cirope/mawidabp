@@ -37,7 +37,7 @@ class User < ApplicationRecord
   has_many :conclusion_final_reviews, through: :reviews
 
   def <=>(other)
-    other.is_a?(User) ? id <=> other.id : -1
+    other.kind_of?(User) ? id <=> other.id : -1
   end
 
   def to_s
