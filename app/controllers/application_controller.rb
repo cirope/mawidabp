@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   include UpdateResource
   include ParameterSelector
   include CacheControl
+  include FlashResponders
 
   protect_from_forgery
 
