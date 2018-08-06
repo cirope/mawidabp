@@ -8,16 +8,8 @@ module Users::Searches
   private
 
     def set_users
-      @users = User.includes(:organizations).where(users_conditions).not_hidden.order(
-        Arel.sql "#{User.quoted_table_name}.#{User.qcn('user')} ASC"
-      ).references(:organizations).page(params[:page])
-    end
+      conditions = build_search_conditions User
 
-    def users_conditions
-      default_conditions = {
-        organization_roles: { organization_id: current_organization.id }
-      }
-
-      build_search_conditions User, default_conditions
+      @users = User.list_with_corporate.not_hidden.where(conditions).limit(10)
     end
 end

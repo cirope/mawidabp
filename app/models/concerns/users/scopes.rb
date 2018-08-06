@@ -46,6 +46,22 @@ module Users::Scopes
       where(id: ids) # TODO: remove when we don't have to _support_ Oracle
     end
 
+    def list_with_corporate
+      conditions   = [
+        "#{organizations_table}.#{Organization.qcn('id')} = :organization_id",
+        [
+          "#{organizations_table}.#{Organization.qcn('group_id')} = :group_id",
+          "#{organizations_table}.#{Organization.qcn('corporate')} = :true"
+        ].join(' AND ')
+      ].map { |c| "(#{c})" }.join(' OR ')
+
+      joins(:organizations).
+        where(conditions, corporate_list_parameters).
+        references(:organizations).
+        distinct.
+        select(column_names - ['notes'])
+    end
+
     private
 
       def organizations_table

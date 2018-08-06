@@ -21,8 +21,6 @@ class Users::CompletionsControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for corporate user' do
-    login prefix: organizations(:twitter).prefix
-
     get :index, xhr: true, params: {
       search: {
         query: 'corporate',
