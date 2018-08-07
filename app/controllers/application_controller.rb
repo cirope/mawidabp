@@ -234,7 +234,7 @@ class ApplicationController < ActionController::Base
       if params[:search] && params[:search][:query].present?
         @columns = params[:search][:columns] || []
 
-        result = complex_search(
+        result = prepare_search(
           model:              model,
           raw_query:          params[:search][:query],
           columns:            @columns,
@@ -248,7 +248,7 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    def complex_search(model:, raw_query: nil, columns: [], default_conditions: {})
+    def prepare_search(model:, raw_query: nil, columns: [], default_conditions: {})
       raw_query = raw_query.to_s.mb_chars.downcase.to_s
       and_query = raw_query.split(SEARCH_AND_REGEXP).reject(&:blank?)
 

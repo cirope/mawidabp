@@ -8,7 +8,7 @@ module Users::Searches
   private
 
     def set_users
-      conditions = complex_search(
+      conditions = prepare_search(
         model: User,
         raw_query: params[:q],
         columns: ::User::COLUMNS_FOR_SEARCH.keys
