@@ -8,6 +8,12 @@ module Users::Searches
   private
 
     def set_users
-      @users = User.list_with_corporate.not_hidden.search(params[:q]).limit 10
+      conditions = prepare_search(
+        model: User,
+        raw_query: params[:q],
+        columns: ::User::COLUMNS_FOR_SEARCH.keys
+      )[:conditions]
+
+      @users = User.list_with_corporate.not_hidden.where(conditions).limit(10)
     end
 end

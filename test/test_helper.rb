@@ -60,7 +60,7 @@ class ActiveSupport::TestCase
     mailer, mail_method, delivery_method, *args = job[:args]
 
     new_args = args.map do |arg|
-      if arg.is_a?(Hash)
+      if arg.kind_of?(Hash)
         if (gid = arg['_aj_globalid']).present?
           GlobalID::Locator.locate(gid)
         else
