@@ -8,6 +8,16 @@ important:
   organization: cirope
   group: main_group
 
+pending:
+  name: Pending
+  kind: finding
+  style: info
+  icon: tag
+  shared: false
+  options: "{}"
+  organization: cirope
+  group: main_group
+
 extra:
   name: Extra
   kind: plan_item

@@ -14,7 +14,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'create' do
-    assert_difference 'Finding.count' do
+    assert_difference ['Finding.count', 'Tagging.count'] do
       @finding.class.list.create!(
         control_objective_item: control_objective_items(:impact_analysis_item_editable),
         review_code: 'O020',
@@ -43,6 +43,11 @@ class FindingTest < ActiveSupport::TestCase
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
+          }
+        },
+        taggings_attributes: {
+          new_1: {
+            tag_id: tags(:important).id
           }
         }
       )
@@ -78,6 +83,11 @@ class FindingTest < ActiveSupport::TestCase
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
+          }
+        },
+        taggings_attributes: {
+          new_1: {
+            tag_id: tags(:important).id
           }
         }
       )

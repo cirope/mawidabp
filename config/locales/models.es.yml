@@ -228,6 +228,7 @@ es:
         users: 'Responsables'
         work_papers: 'Papeles de trabajo'
         finding_answers: 'Respuestas'
+        tag_ids: 'Etiquetas'
         rescheduled: 'Reprogramada'
         organization: 'Organización'
       finding/achievements:

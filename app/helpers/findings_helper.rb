@@ -196,6 +196,12 @@ module FindingsHelper
     end
   end
 
+  def finding_tag_options
+    Tag.list.for_findings.order(:name).map do |t|
+      [t.name, t.id]
+    end
+  end
+
   def link_to_recode_tasks
     options = {
       class: 'pull-right',

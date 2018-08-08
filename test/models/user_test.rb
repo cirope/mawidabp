@@ -471,6 +471,11 @@ class UserTest < ActiveSupport::TestCase
           fua.dup.attributes.merge('finding_id' => nil)
         end
       )
+      new_finding.taggings.build(
+        finding.taggings.map do |t|
+          t.dup.attributes.merge('id' => nil, 'taggable_id' => nil)
+        end
+      )
 
       assert new_finding.save
     end
