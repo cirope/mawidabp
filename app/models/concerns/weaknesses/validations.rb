@@ -31,8 +31,11 @@ module Weaknesses::Validations
     end
 
     def validate_tags_presence?
-      WEAKNESS_TAG_VALIDATION_START &&
-        (new_record? || created_at >= WEAKNESS_TAG_VALIDATION_START)
+      WEAKNESS_TAG_VALIDATION_START && (
+        new_record? ||
+        review&.conclusion_final_review&.blank? ||
+        created_at >= WEAKNESS_TAG_VALIDATION_START
+      )
     end
 
     def validate_extra_attributes?
