@@ -7,9 +7,7 @@ module Users::Notifications
 
   def send_notification_if_necesary
     if send_notification_email.present?
-      organization = Organization.find Organization.current_id
-
-      reset_password organization, notify: false
+      reset_password Current.organization, notify: false
 
       NotifierMailer.welcome_email(self).deliver_later
     end
@@ -17,7 +15,7 @@ module Users::Notifications
 
   module ClassMethods
     def notify_new_findings
-      unless [0, 6].include?(Date.today.wday)
+      if Time.zone.today.workday?
         users, findings = [], []
 
         all_with_findings_for_notification.each do |user|

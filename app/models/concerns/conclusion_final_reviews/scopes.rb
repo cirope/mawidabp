@@ -3,7 +3,7 @@ module ConclusionFinalReviews::Scopes
 
   included do
     scope :next_to_expire, -> {
-      date  = CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date
+      date  = CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.business_days.from_now.to_date
       range = if date.wday == 5
                 date..(date + 2.days)
               else

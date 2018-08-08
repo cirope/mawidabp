@@ -3,7 +3,7 @@ module BusinessUnitTypes::Scopes
 
   included do
     scope :list, -> {
-      where(organization_id: Organization.current_id).
+      where(organization_id: Current.organization&.id).
         order(external: :asc, name: :asc)
     }
     scope :internal_audit, -> { where external: false }

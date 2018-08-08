@@ -13,6 +13,7 @@ module Weaknesses::Validations
 
     validates :compliance, length: { maximum: 255 },
       allow_nil: true, allow_blank: true
+    validates :tag_ids, presence: true, if: :validate_tags_presence?
     validates :compliance,
               :operational_risk,
               :impact,
@@ -27,6 +28,14 @@ module Weaknesses::Validations
       regex          = /\A#{revoked_prefix}?#{prefix}\d+\Z/
 
       errors.add :review_code, :invalid unless review_code =~ regex
+    end
+
+    def validate_tags_presence?
+      WEAKNESS_TAG_VALIDATION_START && (
+        new_record? ||
+        review&.conclusion_final_review&.blank? ||
+        created_at >= WEAKNESS_TAG_VALIDATION_START
+      )
     end
 
     def validate_extra_attributes?

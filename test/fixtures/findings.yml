@@ -17,7 +17,7 @@ being_implemented_weakness:
   effect: Effect 1w
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
-  follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
+  follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date.to_s(:db) %>
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
   compliance: no
@@ -46,7 +46,7 @@ unconfirmed_for_notification_weakness:
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
-  first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.days.ago_in_business.to_date.to_s(:db) %>
+  first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.business_days.ago.to_date.to_s(:db) %>
   final: false
   compliance: no
   operational_risk: ['internal fraud']
@@ -77,7 +77,7 @@ unanswered_for_level_<%= level %>_notification:
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
   origination_date: <%= 1.year.ago.to_date.to_s(:db) %>
-  first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.days.ago_in_business.to_date.to_s(:db) %>
+  first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.business_days.ago.to_date.to_s(:db) %>
   final: false
   compliance: no
   operational_risk: ['internal fraud']
@@ -136,7 +136,7 @@ other_unconfirmed_for_notification_weakness:
   risk: <%= Finding.risks_values.last %>
   priority: <%= Finding.priorities_values.last %>
   follow_up_date:
-  first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.days.ago_in_business.to_date.to_s(:db) %>
+  first_notification_date: <%= FINDING_DAYS_FOR_SECOND_NOTIFICATION.business_days.ago.to_date.to_s(:db) %>
   final: false
   compliance: no
   operational_risk: ['internal fraud']
@@ -278,8 +278,8 @@ unconfirmed_oportunity:
   progress: 0
   origination_date:
   solution_date:
-  confirmation_date: <%= stale_confirmed_days.pred.days.ago_in_business.to_s(:db) %>
-  first_notification_date: <%= stale_confirmed_days.pred.days.ago_in_business.to_date.to_s(:db) %>
+  confirmation_date: <%= stale_confirmed_days.pred.business_days.ago.to_s(:db) %>
+  first_notification_date: <%= stale_confirmed_days.pred.business_days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
   organization: cirope
@@ -318,7 +318,7 @@ confirmed_oportunity:
   origination_date:
   solution_date:
   confirmation_date: <%= 1.day.ago.to_s(:db) %>
-  first_notification_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
+  first_notification_date: <%= stale_confirmed_days.next.business_days.ago.to_s(:db) %>
   final: false
   notification_level: 0
   organization: cirope

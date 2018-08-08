@@ -52,6 +52,12 @@ class ConclusionFinalReview < ConclusionReview
           )
         end
 
+        f.taggings.each do |t|
+          finding.taggings.build(
+            t.attributes.dup.merge('id' => nil, 'taggable_id' => nil)
+          )
+        end
+
         f.work_papers.each do |wp|
           finding.work_papers.build(
             wp.attributes.dup.merge('id' => nil)

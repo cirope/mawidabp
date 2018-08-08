@@ -316,6 +316,7 @@ class FindingsControllerTest < ActionController::TestCase
               ],
               tasks_attributes: [
                 {
+                  code: '01',
                   description: 'New task',
                   status: 'pending',
                   due_on: I18n.l(Time.zone.tomorrow)
@@ -323,7 +324,11 @@ class FindingsControllerTest < ActionController::TestCase
               ],
               taggings_attributes: [
                 {
+                  id: taggings(:important_unconfirmed_weakness).id,
                   tag_id: tags(:important).id
+                },
+                {
+                  tag_id: tags(:pending).id
                 }
               ],
               costs_attributes: [
@@ -477,6 +482,63 @@ class FindingsControllerTest < ActionController::TestCase
               user_id: users(:bare).id,
               process_owner: '0'
             },
+            {
+              id: finding_user_assignments(:unconfirmed_weakness_audited).id,
+              user_id: users(:audited).id,
+              process_owner: '1'
+            },
+            {
+              id: finding_user_assignments(:unconfirmed_weakness_auditor).id,
+              user_id: users(:auditor).id,
+              process_owner: '0'
+            },
+            {
+              id: finding_user_assignments(:unconfirmed_weakness_supervisor).id,
+              user_id: users(:supervisor).id,
+              process_owner: '0'
+            }
+          ]
+        }
+      }
+    end
+
+    assert_redirected_to edit_finding_url('incomplete', finding)
+    assert_equal 'Updated description', finding.reload.description
+  end
+
+  test 'update finding with tag_ids' do
+    finding = findings :unconfirmed_weakness
+
+    login user: users(:supervisor)
+
+    assert_difference 'Tagging.count' do
+      patch :update, params: {
+        completed: 'incomplete',
+        id: finding,
+        finding: {
+          control_objective_item_id: control_objective_items(:impact_analysis_item).id,
+          review_code: 'O020',
+          title: 'Title',
+          description: 'Updated description',
+          answer: 'Updated answer',
+          current_situation: 'Updated current situation',
+          current_situation_verified: '1',
+          audit_comments: 'Updated audit comments',
+          state: Finding::STATUS[:unconfirmed],
+          origination_date: 1.day.ago.to_date.to_s(:db),
+          audit_recommendations: 'Updated proposed action',
+          effect: 'Updated effect',
+          risk: Finding.risks_values.first,
+          priority: Finding.priorities_values.first,
+          compliance: 'no',
+          operational_risk: ['internal fraud'],
+          impact: ['econimic', 'regulatory'],
+          internal_control_components: ['risk_evaluation', 'monitoring'],
+          tag_ids: [
+            tags(:important).id,
+            tags(:pending).id
+          ],
+          finding_user_assignments_attributes: [
             {
               id: finding_user_assignments(:unconfirmed_weakness_audited).id,
               user_id: users(:audited).id,

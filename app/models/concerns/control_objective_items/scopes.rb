@@ -2,7 +2,7 @@ module ControlObjectiveItems::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list,                    -> { where organization_id: Organization.current_id }
+    scope :list,                    -> { where organization_id: Current.organization&.id }
     scope :not_excluded_from_score, -> { where exclude_from_score: false }
   end
 

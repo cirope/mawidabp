@@ -38,7 +38,7 @@ module LdapConfigs::LDAPImport
       manager_dn = casted_attribute entry, manager_attribute
       data       = trivial_data entry
       roles      = clean_roles Role.list_with_corporate.where(name: role_names)
-      user       = User.by_email data[:email]
+      user       = find_user data
 
       data[:manager_id] = nil if manager_dn.blank?
 
@@ -58,6 +58,10 @@ module LdapConfigs::LDAPImport
       state = :errored if user.errors.any?
 
       { user: user, manager_dn: manager_dn, state: state }
+    end
+
+    def find_user data
+      User.by_email(data[:email]) || User.list.by_user(data[:user])
     end
 
     def role_data entry
@@ -104,7 +108,7 @@ module LdapConfigs::LDAPImport
       end
       removed_roles = user.organization_roles.map do |o_r|
         if roles.map(&:id).exclude? o_r.role_id
-          { id: o_r.id, _destroy: '1' } if o_r.organization_id == Organization.current_id
+          { id: o_r.id, _destroy: '1' } if o_r.organization_id == Current.organization&.id
         end
       end
       data[:organization_roles_attributes] = new_roles.compact + removed_roles.compact

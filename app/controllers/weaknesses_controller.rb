@@ -176,7 +176,7 @@ class WeaknessesController < ApplicationController
         :follow_up_date, :users_for_notification, :compliance, :skip_work_paper,
         :weakness_template_id, :lock_version,
         operational_risk: [], impact: [], internal_control_components: [],
-        business_unit_ids: [],
+        business_unit_ids: [], tag_ids: [],
         achievements_attributes: [
           :id, :benefit_id, :amount, :comment, :_destroy
         ],
@@ -193,6 +193,9 @@ class WeaknessesController < ApplicationController
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
+        ],
+        tasks_attributes: [
+          :id, :code, :description, :status, :due_on, :_destroy
         ],
         taggings_attributes: [
           :id, :tag_id, :_destroy
