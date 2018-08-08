@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_02_175655) do
+ActiveRecord::Schema.define(version: 2018_07_24_214813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -864,6 +864,7 @@ ActiveRecord::Schema.define(version: 2018_07_02_175655) do
     t.bigint "finding_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "code"
     t.index ["finding_id"], name: "index_tasks_on_finding_id"
   end
 

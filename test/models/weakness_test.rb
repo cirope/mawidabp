@@ -38,6 +38,11 @@ class WeaknessTest < ActiveSupport::TestCase
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
           }
+        },
+        taggings_attributes: {
+          new_1: {
+            tag_id: tags(:important).id
+          }
         }
       )
 
@@ -76,6 +81,11 @@ class WeaknessTest < ActiveSupport::TestCase
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
           }
+        },
+        taggings_attributes: {
+          new_1: {
+            tag_id: tags(:important).id
+          }
         }
       )
 
@@ -104,6 +114,11 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.operational_risk = []
     @weakness.impact = []
     @weakness.internal_control_components = []
+    @weakness.tag_ids = []
+
+    if WEAKNESS_TAG_VALIDATION_START
+      @weakness.created_at = WEAKNESS_TAG_VALIDATION_START
+    end
 
     assert @weakness.invalid?
     assert_error @weakness, :control_objective_item_id, :blank
@@ -118,6 +133,24 @@ class WeaknessTest < ActiveSupport::TestCase
       assert_error @weakness, :impact, :blank
       assert_error @weakness, :internal_control_components, :blank
     end
+
+    if WEAKNESS_TAG_VALIDATION_START
+      assert_error @weakness, :tag_ids, :blank
+    end
+  end
+
+  test 'tag presence validation' do
+    skip unless WEAKNESS_TAG_VALIDATION_START
+
+    @weakness.created_at = WEAKNESS_TAG_VALIDATION_START - 1.second
+    @weakness.tag_ids    = []
+
+    assert @weakness.valid?
+
+    @weakness.created_at = WEAKNESS_TAG_VALIDATION_START + 1.second
+
+    assert @weakness.invalid?
+    assert_error @weakness, :tag_ids, :blank
   end
 
   test 'validates duplicated attributes' do

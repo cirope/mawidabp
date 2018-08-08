@@ -2,7 +2,7 @@ class Workflow < ApplicationRecord
   include ParameterSelector
 
   has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
+    organization_id: ->(model) { Current.organization&.id }
   }
 
   # Callbacks
@@ -15,7 +15,7 @@ class Workflow < ApplicationRecord
   attr_readonly :period_id, :review_id
 
   # Scopes
-  scope :list, -> { where(organization_id: Organization.current_id) }
+  scope :list, -> { where(organization_id: Current.organization&.id) }
 
   # Restricciones
   validates :period_id, :review_id, :organization_id, :presence => true

@@ -53,7 +53,7 @@ class Users::PasswordsController < ApplicationController
     end
 
     def load_user_from_hash
-      Organization.current_id = nil
+      Current.organization = nil
       @auth_user = User.with_valid_confirmation_hash(params[:confirmation_hash]).take
     end
 

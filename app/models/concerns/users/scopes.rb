@@ -4,7 +4,7 @@ module Users::Scopes
   included do
     scope :list, -> {
       includes(:organizations).
-        where(organizations: { id: Organization.current_id }).
+        where(organizations: { id: Current.organization&.id }).
         references :organizations
     }
     scope :not_hidden, -> { where hidden: false }
@@ -14,6 +14,12 @@ module Users::Scopes
     def by_email email
       where(
         "LOWER(#{quoted_table_name}.#{qcn 'email'}) = ?", email.downcase
+      ).take
+    end
+
+    def by_user user
+      where(
+        "LOWER(#{quoted_table_name}.#{qcn 'user'}) = ?", user.downcase
       ).take
     end
 
@@ -64,8 +70,8 @@ module Users::Scopes
 
       def corporate_list_parameters
         {
-          organization_id: Organization.current_id,
-          group_id:        Group.current_id,
+          organization_id: Current.organization&.id,
+          group_id:        Current.group&.id,
           true:            true
         }
       end

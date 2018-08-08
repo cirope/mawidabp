@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-git_source(:github) { |r| "https://github.com/#{r}" }
-
 gem 'rails', '~> 5.2.0'
 
 gem 'pg'
@@ -11,7 +9,7 @@ gem 'responders'
 gem 'mini_magick'
 gem 'simple_form'
 gem 'newrelic_rpm'
-gem 'validates_timeliness', github: 'francocatena/validates_timeliness'
+gem 'validates_timeliness'
 gem 'RedCloth'
 gem 'redcarpet'
 gem 'whenever'
@@ -23,15 +21,12 @@ gem 'rubyzip', require: 'zip'
 gem 'prawn'
 gem 'prawn-table'
 gem 'figaro'
-gem 'irreverent'
+gem 'business_time'
 gem 'bootstrap-sass'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
-gem 'search_cop'
 gem 'jbuilder'
 gem 'sidekiq'
-gem 'request_store'
-gem 'request_store-sidekiq'
 gem 'ruby-ntlm'
 gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns

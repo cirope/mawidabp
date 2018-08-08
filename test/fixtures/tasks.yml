@@ -1,4 +1,5 @@
 setup_all_things:
+  code: '01'
   description: Setup all things
   due_on: <%= Time.zone.tomorrow.to_s :db %>
   status: <%= Task.statuses['in_progress'] %>

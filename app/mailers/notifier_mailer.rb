@@ -149,7 +149,7 @@ class NotifierMailer < ActionMailer::Base
       @notification.findings.map(&:organization).uniq : []
     organizations += option_organizations
 
-    prefixes = organizations.uniq.map {|o| "[#{o.prefix}]" }.join(' ')
+    prefixes = organizations.uniq.map { |o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
     mail to: Array(users).map(&:email),
@@ -157,7 +157,7 @@ class NotifierMailer < ActionMailer::Base
   end
 
   def conclusion_review_notification(user, conclusion_review, options = {})
-    Organization.current_id = options.delete :organization_id
+    Current.organization = Organization.find(options.delete :organization_id)
     PaperTrail.request.whodunnit = options.delete :user_id
 
     org_prefix = conclusion_review.review.organization.prefix

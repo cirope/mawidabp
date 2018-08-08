@@ -2,7 +2,7 @@ module Polls::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list,      -> { where organization_id: Organization.current_id }
+    scope :list,      -> { where organization_id: Current.organization&.id }
     scope :pollables, -> { where.not pollable_id: nil }
   end
 
@@ -28,6 +28,14 @@ module Polls::Scopes
       else
         query.where(answer_options: { option: option })
       end
+    end
+
+    def by_question question
+      column = "#{Question.quoted_table_name}.#{AnswerOption.qcn 'question'}"
+
+      joins(answers: :question).
+        references(:questions).
+        where("LOWER(#{column}) LIKE ?", "%#{question}%".downcase)
     end
 
     def by_user user_id, include_reviews: false, only_all: false

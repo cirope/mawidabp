@@ -65,6 +65,7 @@ class FindingsController < ApplicationController
         internal_control_components: [],
         users_for_notification: [],
         business_unit_ids: [],
+        tag_ids: [],
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ],
@@ -80,7 +81,7 @@ class FindingsController < ApplicationController
           :id, :description, :related_finding_id, :_destroy
         ],
         tasks_attributes: [
-          :id, :description, :status, :due_on, :_destroy
+          :id, :code, :description, :status, :due_on, :_destroy
         ],
         taggings_attributes: [
           :id, :tag_id, :_destroy

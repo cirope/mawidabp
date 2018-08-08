@@ -196,6 +196,27 @@ module FindingsHelper
     end
   end
 
+  def finding_tag_options
+    Tag.list.for_findings.order(:name).map do |t|
+      [t.name, t.id]
+    end
+  end
+
+  def link_to_recode_tasks
+    options = {
+      class: 'pull-right',
+      title: t('finding.recode_tasks'),
+      data: {
+        recode_tasks: true,
+        confirm: t('messages.confirmation')
+      }
+    }
+
+    link_to '#', options do
+      content_tag :span, nil, class: 'glyphicon glyphicon-sort-by-order'
+    end
+  end
+
   private
 
     def finding_state_options_for finding

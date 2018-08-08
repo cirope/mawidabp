@@ -114,24 +114,32 @@
     <% end %>
   </div>
 
-  <br />
-  <h4>
-    <%= Tag.model_name.human count: 0 %>
-  </h4>
-
-  <div class="row">
-    <div class="col-md-6">
-      <h5><strong><%= Tag.human_attribute_name :name %></strong></h5>
+  <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+    <div class="row">
+      <div class="col-md-12">
+        <%= f.input :tag_ids, as: :check_boxes, collection: finding_tag_options %>
+      </div>
     </div>
-  </div>
+  <% else %>
+    <br />
+    <h4>
+      <%= Tag.model_name.human count: 0 %>
+    </h4>
 
-  <div id="taggings">
-    <%= f.simple_fields_for :taggings do |t_f| %>
-      <%= render 'findings/tagging', f: t_f, parent: f %>
-    <% end %>
+    <div class="row">
+      <div class="col-md-6">
+        <h5><strong><%= Tag.human_attribute_name :name %></strong></h5>
+      </div>
+    </div>
 
-    <%= link_to_add_fields t('finding.add_tagging'), f, :taggings, 'findings/tagging' %>
-  </div>
+    <div id="taggings">
+      <%= f.simple_fields_for :taggings do |t_f| %>
+        <%= render 'findings/tagging', f: t_f, parent: f %>
+      <% end %>
+
+      <%= link_to_add_fields t('finding.add_tagging'), f, :taggings, 'findings/tagging' %>
+    </div>
+  <% end %>
 
   <% unless @finding.important_dates.blank? %>
     <h4>
@@ -251,7 +259,13 @@
     <%= Task.model_name.human count: 0 %>
   </h4>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-1">
+      <h5>
+        <strong><%= Task.human_attribute_name 'code' %></strong>
+        <small><%= link_to_recode_tasks %></small>
+      </h5>
+    </div>
+    <div class="col-md-5">
       <h5><strong><%= Task.human_attribute_name 'description' %></strong></h5>
     </div>
     <div class="col-md-2">

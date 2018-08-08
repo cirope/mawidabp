@@ -1,8 +1,6 @@
 # Importar Builder si no fue importado previamente
 require 'active_support/builder' unless defined?(Builder)
 
-Numeric.send :include, ActiveSupport::CoreExtensions::Numeric::BusinessTime
-Date.send :include, ActiveSupport::CoreExtensions::Date::BusinessTime
 ActionView::Base.send :include, ActionView::Helpers::DateHelper::CustomExtension
 
 class ActiveRecord::Base

@@ -556,6 +556,7 @@
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
+    next_pending_task_date: "Fecha próxima tarea pendiente"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
     download_csv: "Descargar CSV"
@@ -566,7 +567,9 @@
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
     add_work_paper: "Agregar papel de trabajo"
+    recode_tasks: "Recodificar tareas"
     follow_up_date_changed_warning: "La fecha de implementación cambió para adecuarse a las tareas"
+    assignment_confirm_message: "No ha seleccionado auditores referentes ni responsables ¿Desea continuar?"
     repeated_ancestors: "Reiterada de"
     repeated_children: "Reiterada en"
     undo_reiteration: 'Deshacer reiteración'

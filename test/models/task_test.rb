@@ -8,11 +8,13 @@ class TaskTest < ActiveSupport::TestCase
   end
 
   test 'blank attributes' do
+    @task.code = ''
     @task.description = ''
     @task.due_on = nil
     @task.status = nil
 
     assert @task.invalid?
+    assert_error @task, :code, :blank
     assert_error @task, :description, :blank
     assert_error @task, :due_on, :blank
     assert_error @task, :status, :blank
@@ -48,11 +50,11 @@ class TaskTest < ActiveSupport::TestCase
   end
 
   test 'warning users about tasks expiration' do
-    Organization.current_id = nil
+    Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
 
-    @task.update! due_on: FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date
+    @task.update! due_on: FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
 
     assert_enqueued_emails @task.users.size do
       Task.warning_users_about_expiration
@@ -60,7 +62,7 @@ class TaskTest < ActiveSupport::TestCase
   end
 
   test 'remember users about expired tasks' do
-    Organization.current_id = nil
+    Current.organization = nil
 
     @task.update! due_on: Time.zone.yesterday
 

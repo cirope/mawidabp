@@ -10,11 +10,11 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Finding.current_user = nil
+    Current.user = nil
   end
 
   test 'create' do
-    assert_difference 'Finding.count' do
+    assert_difference ['Finding.count', 'Tagging.count'] do
       @finding.class.list.create!(
         control_objective_item: control_objective_items(:impact_analysis_item_editable),
         review_code: 'O020',
@@ -43,6 +43,11 @@ class FindingTest < ActiveSupport::TestCase
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
+          }
+        },
+        taggings_attributes: {
+          new_1: {
+            tag_id: tags(:important).id
           }
         }
       )
@@ -78,6 +83,11 @@ class FindingTest < ActiveSupport::TestCase
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
+          }
+        },
+        taggings_attributes: {
+          new_1: {
+            tag_id: tags(:important).id
           }
         }
       )
@@ -239,7 +249,7 @@ class FindingTest < ActiveSupport::TestCase
     finding.solution_date   = Time.zone.today
     finding.skip_work_paper = true
 
-    Finding.current_user    = users :supervisor
+    Current.user = users :supervisor
 
     cfr = finding.review.conclusion_final_review
 
@@ -269,7 +279,8 @@ class FindingTest < ActiveSupport::TestCase
     finding.state          = Finding::STATUS[:expired]
     finding.follow_up_date = nil
     finding.solution_date  = Time.zone.today
-    Finding.current_user   = users :supervisor
+
+    Current.user = users :supervisor
 
     cfr = finding.review.conclusion_final_review
 
@@ -319,7 +330,7 @@ class FindingTest < ActiveSupport::TestCase
     finding.state         = Finding::STATUS[:implemented_audited]
     finding.solution_date = Time.zone.today
 
-    Finding.current_user    = users :supervisor
+    Current.user = users :supervisor
     finding.skip_work_paper = true
 
     assert finding.work_papers.empty?
@@ -359,7 +370,8 @@ class FindingTest < ActiveSupport::TestCase
   test 'validate final state can be changed only by supervisors' do
     skip if DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION
 
-    Finding.current_user  = users :auditor
+    Current.user = users :auditor
+
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
     finding.solution_date = 1.month.from_now
@@ -367,7 +379,7 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.invalid?
     assert_error finding, :state, :must_be_done_by_proper_role
 
-    Finding.current_user  = users :supervisor
+    Current.user = users :supervisor
 
     assert finding.valid?
   end
@@ -375,14 +387,15 @@ class FindingTest < ActiveSupport::TestCase
   test 'validate final state can be changed by any auditor' do
     skip unless DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION
 
-    Finding.current_user  = users :auditor
+    Current.user = users :auditor
+
     finding               = findings :being_implemented_weakness
     finding.state         = Finding::STATUS[:implemented_audited]
     finding.solution_date = 1.month.from_now
 
     assert finding.valid?
 
-    Finding.current_user  = users :supervisor
+    Current.user = users :supervisor
 
     assert finding.valid?
   end
@@ -570,7 +583,7 @@ class FindingTest < ActiveSupport::TestCase
       @finding.update! audit_comments: 'Updated comments'
     end
 
-    Finding.current_user = users :supervisor
+    Current.user = users :supervisor
 
     assert_difference '@finding.status_change_history.size' do
       @finding.update!(
@@ -579,7 +592,7 @@ class FindingTest < ActiveSupport::TestCase
       )
     end
 
-    Finding.current_user = nil
+    Current.user = nil
   end
 
   test 'mark as unconfirmed' do
@@ -783,7 +796,7 @@ class FindingTest < ActiveSupport::TestCase
 
       until days_to_add == 0
         first_notification_date += 1.day
-        days_to_add -= 1 unless [0, 6].include?(first_notification_date.wday)
+        days_to_add -= 1 if first_notification_date.workday?
       end
 
       assert_equal computed_date, first_notification_date
@@ -920,9 +933,9 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'notify for stale and unconfirmed findings' do
-    Organization.current_id = nil
+    Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
     assert_not_equal 0, Finding.unconfirmed_for_notification.size
 
     review_codes_by_user =
@@ -934,9 +947,9 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'warning users about findings expiration' do
-    Organization.current_id = nil
+    Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
 
     review_codes_by_user = review_codes_on_findings_by_user :next_to_expire
 
@@ -948,7 +961,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'remember users about expired findings' do
     skip if DISABLE_FINDINGS_EXPIRATION_NOTIFICATION
 
-    Organization.current_id = nil
+    Current.organization = nil
     review_codes_by_user    = review_codes_on_findings_by_user :expired
 
     assert_enqueued_emails 6 do
@@ -957,9 +970,9 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'mark stale and confirmed findings as unanswered' do
-    Organization.current_id = nil
+    Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
 
     review_codes_by_user = review_codes_on_user_findings_by_user :confirmed_and_stale
     unanswered_count     = Finding.where(state: Finding::STATUS[:unanswered]).count
@@ -980,9 +993,9 @@ class FindingTest < ActiveSupport::TestCase
       'Finding.where(state: Finding::STATUS[:unanswered]).count'
     ]
 
-    Organization.current_id = nil
+    Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
     assert Finding.confirmed_and_stale.any?
 
     Finding.confirmed_and_stale.each do |finding|
@@ -1000,9 +1013,9 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'notify manager if necesary' do
-    Organization.current_id = nil
+    Current.organization = nil
     # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+    assert Time.zone.today.workday?
 
     findings_and_users              = unanswered_and_stale_findings_with_users_by_level
     users_by_level_for_notification = findings_and_users[:users_by_level_for_notification]
@@ -1065,11 +1078,11 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validate final state change mark all task as finished' do
-    Finding.current_user = users :supervisor
+    Current.user = users :supervisor
     finding              = findings :being_implemented_weakness
 
     assert_difference 'finding.tasks.count' do
-      finding.tasks.create! description: 'Test', due_on: Time.zone.today
+      finding.tasks.create! code: '02', description: 'Test', due_on: Time.zone.today
     end
 
     assert finding.reload.tasks.all? { |t| !t.finished? }
@@ -1093,15 +1106,15 @@ class FindingTest < ActiveSupport::TestCase
 
     Finding.unconfirmed_for_notification.each do |finding|
       finding.update_column :first_notification_date,
-        FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.days.ago_in_business.to_date
+        FINDING_DAYS_FOR_SECOND_NOTIFICATION.next.business_days.ago.to_date
     end
 
     refute Finding.unconfirmed_for_notification.any?
   end
 
   test 'next to expire scope' do
-    before_expire = FINDING_WARNING_EXPIRE_DAYS.pred.days.from_now_in_business.to_date
-    expire        = FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date
+    before_expire = FINDING_WARNING_EXPIRE_DAYS.pred.business_days.from_now.to_date
+    expire        = FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
 
     all_findings_are_in_range = Finding.next_to_expire.all? do |finding|
       finding.follow_up_date.between?(before_expire, expire) ||

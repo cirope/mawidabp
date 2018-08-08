@@ -12,8 +12,8 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Organization.current_id = nil
-    Group.current_id = nil
+    Current.organization = nil
+    Current.group = nil
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -345,7 +345,7 @@ class ReviewTest < ActiveSupport::TestCase
     def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
-    Finding.current_user = users :supervisor
+    Current.user = users :supervisor
 
     finding = Weakness.new finding.attributes.merge(
       'state' => Finding::STATUS[:assumed_risk]
@@ -353,10 +353,15 @@ class ReviewTest < ActiveSupport::TestCase
     finding.finding_user_assignments.build(
       clone_finding_user_assignments(review_weakness)
     )
+    finding.taggings.build(
+      review_weakness.taggings.take.attributes.dup.merge(
+        'id' => nil, 'taggable_id' => nil
+      )
+    )
 
     assert finding.save
 
-    Finding.current_user = nil
+    Current.user = nil
 
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?
@@ -370,6 +375,11 @@ class ReviewTest < ActiveSupport::TestCase
     )
     finding.finding_user_assignments.build(
       clone_finding_user_assignments(review_weakness)
+    )
+    finding.taggings.build(
+      review_weakness.taggings.take.attributes.dup.merge(
+        'id' => nil, 'taggable_id' => nil
+      )
     )
 
     assert finding.save, finding.errors.full_messages.join('; ')
@@ -910,11 +920,9 @@ class ReviewTest < ActiveSupport::TestCase
     end
 
     def score_type
-      organization = Organization.find Organization.current_id
-
       if SHOW_REVIEW_EXTRA_ATTRIBUTES
         :manual
-      elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization.prefix
+      elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(Current.organization.prefix)
         :weaknesses
       else
         :effectiveness
