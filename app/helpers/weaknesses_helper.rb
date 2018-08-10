@@ -74,15 +74,17 @@ module WeaknessesHelper
   end
 
   def weakness_compliance_options
-    %w(yes no).map { |option| [t("label.#{option}"), option] }
+    COMPLIANCE_OPTIONS.map do |option, options|
+      [t("label.#{option}"), option, options]
+    end
   end
 
   def weakness_operational_risk_options
-    WEAKNESS_OPERATIONAL_RISK.map { |option| [option, option] }
+    WEAKNESS_OPERATIONAL_RISK.map { |option, options| [option, option, options] }
   end
 
   def weakness_impact_options
-    WEAKNESS_IMPACT.map { |option| [option, option] }
+    WEAKNESS_IMPACT.map { |option, options| [option, option, options] }
   end
 
   def weakness_internal_control_components_options
