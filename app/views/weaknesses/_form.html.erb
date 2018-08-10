@@ -112,7 +112,7 @@
       <div class="row">
         <div class="col-md-6">
           <%= f.input :compliance, collection: weakness_compliance_options, prompt: true, disabled: readonly, input_html: {
-            data: { mark_impact_as: WEAKNESS_IMPACT[1], mark_impact_on: 'yes' }
+            data: { tag_modifier: true, mark_impact_as: WEAKNESS_IMPACT.keys[1], mark_impact_on: 'yes' }
           } %>
         </div>
       </div>

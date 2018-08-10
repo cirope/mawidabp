@@ -198,7 +198,14 @@ module FindingsHelper
 
   def finding_tag_options
     Tag.list.for_findings.order(:name).map do |t|
-      [t.name, t.id]
+      options = {
+        data: {
+          name:     t.name,
+          readonly: TAGS_READONLY.include?(t.name)
+        }
+      }
+
+      [t.name, t.id, options]
     end
   end
 

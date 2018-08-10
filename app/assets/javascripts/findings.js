@@ -26,7 +26,7 @@ jQuery(function ($) {
 
       $.getJSON(url, function (finding) {
         $.each(fields, function (i, field) {
-          $('[name$="[' + field + ']"]').val(finding[field])
+          $('[name$="[' + field + ']"]').val(finding[field]).trigger('change')
         })
 
         $.each(['follow_up_date', 'origination_date'], function (i, dateField) {
@@ -41,12 +41,12 @@ jQuery(function ($) {
         $.each(checkFields, function (i, field) {
           var values = finding[field] || []
 
-          $('[name$="[' + field + '][]"]').prop('checked', false)
+          $('[name$="[' + field + '][]"]').prop('checked', false).trigger('custom:change')
 
           $.each(values, function (i, value) {
             var $check = $('[name$="[' + field + '][]"][value="' + value + '"]')
 
-            $check.prop('checked', true)
+            $check.prop('checked', true).trigger('custom:change')
           })
 
           $('[name$="[' + field + ']"]').val(finding[field])
@@ -58,12 +58,14 @@ jQuery(function ($) {
       })
     } else {
       $.each(fields, function (i, field) {
-        $('[name$="[' + field + ']"]').val('')
+        $('[name$="[' + field + ']"]').val('').trigger('change')
       })
 
       $.each(checkFields, function (i, field) {
-        $('[name$="[' + field + '][]"]').prop('checked', false)
+        $('[name$="[' + field + '][]"]').prop('checked', false).trigger('custom:change')
       })
+
+      $('input[type="checkbox"][name$="[tag_ids][]"]').prop('checked', false)
 
       $('[name$="[origination_date]"]').
         datepicker('setDate', new Date).

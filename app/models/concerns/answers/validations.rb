@@ -4,8 +4,6 @@ module Answers::Validations
   included do
     TYPES = ['AnswerMultiChoice', 'AnswerWritten', 'AnswerYesNo']
 
-    validates :comments, length: { maximum: 255 },
-      allow_nil: true, allow_blank: true
     validates :type, inclusion: { in: TYPES }, allow_nil: true,
       allow_blank: true
     validate :answer_options, on: :update

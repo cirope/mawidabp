@@ -5,6 +5,10 @@ body {
   margin-bottom: 20px;
 }
 
+label:has(> input[type="checkbox"][data-readonly="true"]) {
+  color: $text-muted;
+}
+
 .file-container {
   position: relative;
   overflow: hidden;
