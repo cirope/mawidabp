@@ -130,7 +130,6 @@ class WeaknessesControllerTest < ActionController::TestCase
       'FindingRelation.count',
       'Achievement.count',
       'BusinessUnitFinding.count',
-      'Tagging.count',
       'Task.count',
       'Comment.count'
     ]
@@ -138,87 +137,92 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
 
     assert_difference counts_array do
-      post :create, params: {
-        weakness: {
-          control_objective_item_id:
-            control_objective_items(:impact_analysis_item_editable).id,
-          review_code: 'O020',
-          title: 'Title',
-          description: 'New description',
-          answer: 'New answer',
-          audit_comments: 'New audit comments',
-          state: Finding::STATUS[:being_implemented],
-          origination_date: 1.day.ago.to_date.to_s(:db),
-          solution_date: '',
-          audit_recommendations: 'New proposed action',
-          effect: 'New effect',
-          risk: Weakness.risks_values.first,
-          priority: Weakness.priorities_values.first,
-          follow_up_date: 2.days.from_now.to_date,
-          business_unit_ids: [business_units(:business_unit_three).id],
-          compliance: 'no',
-          operational_risk: ['internal fraud'],
-          impact: ['econimic', 'regulatory'],
-          internal_control_components: ['risk_evaluation', 'monitoring'],
-          finding_user_assignments_attributes: [
-            {
-              user_id: users(:bare).id, process_owner: '0'
-            }, {
-              user_id: users(:audited).id, process_owner: '1'
-            }, {
-              user_id: users(:auditor).id, process_owner: '0'
-            }, {
-              user_id: users(:manager).id, process_owner: '0'
-            }, {
-              user_id: users(:supervisor).id, process_owner: '0'
-            }, {
-              user_id: users(:administrator).id, process_owner: '0'
-            }
-          ],
-          achievements_attributes: [
-            {
-              benefit_id: benefits(:productivity).id,
-              amount: '2000.01'
-            }
-          ],
-          work_papers_attributes: [
-            {
-              name: 'New workpaper name',
-              code: 'PTO 20',
-              number_of_pages: '10',
-              description: 'New workpaper description',
-              file_model_attributes: {
-                file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
+      assert_difference 'Tagging.count', 2 do
+        post :create, params: {
+          weakness: {
+            control_objective_item_id:
+              control_objective_items(:impact_analysis_item_editable).id,
+            review_code: 'O020',
+            title: 'Title',
+            description: 'New description',
+            answer: 'New answer',
+            audit_comments: 'New audit comments',
+            state: Finding::STATUS[:being_implemented],
+            origination_date: 1.day.ago.to_date.to_s(:db),
+            solution_date: '',
+            audit_recommendations: 'New proposed action',
+            effect: 'New effect',
+            risk: Weakness.risks_values.first,
+            priority: Weakness.priorities_values.first,
+            follow_up_date: 2.days.from_now.to_date,
+            business_unit_ids: [business_units(:business_unit_three).id],
+            compliance: 'no',
+            operational_risk: ['internal fraud'],
+            impact: ['econimic', 'regulatory'],
+            internal_control_components: ['risk_evaluation', 'monitoring'],
+            finding_user_assignments_attributes: [
+              {
+                user_id: users(:bare).id, process_owner: '0'
+              }, {
+                user_id: users(:audited).id, process_owner: '1'
+              }, {
+                user_id: users(:auditor).id, process_owner: '0'
+              }, {
+                user_id: users(:manager).id, process_owner: '0'
+              }, {
+                user_id: users(:supervisor).id, process_owner: '0'
+              }, {
+                user_id: users(:administrator).id, process_owner: '0'
               }
-            }
-          ],
-          taggings_attributes: [
-            {
-              tag_id: tags(:important).id
-            }
-          ],
-          finding_relations_attributes: [
-            {
-              description: 'Duplicated',
-              related_finding_id: findings(:unanswered_weakness).id
-            }
-          ],
-          tasks_attributes: [
-            {
-              code: '01',
-              description: 'New task',
-              status: 'pending',
-              due_on: I18n.l(Time.zone.tomorrow)
-            }
-          ],
-          comments_attributes: [
-            {
-              comment: 'Test',
-              user_id: users(:administrator).id
-            }
-          ]
+            ],
+            achievements_attributes: [
+              {
+                benefit_id: benefits(:productivity).id,
+                amount: '2000.01'
+              }
+            ],
+            work_papers_attributes: [
+              {
+                name: 'New workpaper name',
+                code: 'PTO 20',
+                number_of_pages: '10',
+                description: 'New workpaper description',
+                file_model_attributes: {
+                  file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
+                }
+              }
+            ],
+            taggings_attributes: [
+              {
+                tag_id: tags(:important).id
+              },
+              {
+                tag_id: tags(:pending).id
+              }
+            ],
+            finding_relations_attributes: [
+              {
+                description: 'Duplicated',
+                related_finding_id: findings(:unanswered_weakness).id
+              }
+            ],
+            tasks_attributes: [
+              {
+                code: '01',
+                description: 'New task',
+                status: 'pending',
+                due_on: I18n.l(Time.zone.tomorrow)
+              }
+            ],
+            comments_attributes: [
+              {
+                comment: 'Test',
+                user_id: users(:administrator).id
+              }
+            ]
+          }
         }
-      }
+      end
     end
   end
 

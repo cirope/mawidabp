@@ -328,7 +328,11 @@ class FindingsControllerTest < ActionController::TestCase
                   tag_id: tags(:important).id
                 },
                 {
+                  id: taggings(:pending_unconfirmed_weakness).id,
                   tag_id: tags(:pending).id
+                },
+                {
+                  tag_id: tags(:follow_up).id
                 }
               ],
               costs_attributes: [
@@ -536,7 +540,8 @@ class FindingsControllerTest < ActionController::TestCase
           internal_control_components: ['risk_evaluation', 'monitoring'],
           tag_ids: [
             tags(:important).id,
-            tags(:pending).id
+            tags(:pending).id,
+            tags(:follow_up).id
           ],
           finding_user_assignments_attributes: [
             {
