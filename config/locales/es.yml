@@ -1476,6 +1476,12 @@
           attributes:
             file:
               without_extension: 'debe tener extensión'
+        finding:
+          attributes:
+            tag_ids:
+              too_short:
+                one: "debe ser una como mínimo"
+                other: "deben ser %{count} como mínimo"
         image_model:
           attributes:
             image_content_type:

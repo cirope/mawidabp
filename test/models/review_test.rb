@@ -354,9 +354,9 @@ class ReviewTest < ActiveSupport::TestCase
       clone_finding_user_assignments(review_weakness)
     )
     finding.taggings.build(
-      review_weakness.taggings.take.attributes.dup.merge(
-        'id' => nil, 'taggable_id' => nil
-      )
+      review_weakness.taggings.map do |t|
+        t.attributes.dup.merge('id' => nil, 'taggable_id' => nil)
+      end
     )
 
     assert finding.save
@@ -377,9 +377,9 @@ class ReviewTest < ActiveSupport::TestCase
       clone_finding_user_assignments(review_weakness)
     )
     finding.taggings.build(
-      review_weakness.taggings.take.attributes.dup.merge(
-        'id' => nil, 'taggable_id' => nil
-      )
+      review_weakness.taggings.map do |t|
+        t.attributes.dup.merge('id' => nil, 'taggable_id' => nil)
+      end
     )
 
     assert finding.save, finding.errors.full_messages.join('; ')
