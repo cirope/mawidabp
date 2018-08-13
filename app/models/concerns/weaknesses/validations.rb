@@ -13,7 +13,9 @@ module Weaknesses::Validations
 
     validates :compliance, length: { maximum: 255 },
       allow_nil: true, allow_blank: true
-    validates :tag_ids, presence: true, if: :validate_tags_presence?
+    validates :tag_ids,
+      presence: true,
+      length: { minimum: 2 }, if: :validate_tags_presence?
     validates :compliance,
               :operational_risk,
               :impact,

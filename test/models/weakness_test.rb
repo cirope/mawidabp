@@ -42,6 +42,9 @@ class WeaknessTest < ActiveSupport::TestCase
         taggings_attributes: {
           new_1: {
             tag_id: tags(:important).id
+          },
+          new_2: {
+            tag_id: tags(:pending).id
           }
         }
       )
@@ -85,6 +88,9 @@ class WeaknessTest < ActiveSupport::TestCase
         taggings_attributes: {
           new_1: {
             tag_id: tags(:important).id
+          },
+          new_2: {
+            tag_id: tags(:pending).id
           }
         }
       )
