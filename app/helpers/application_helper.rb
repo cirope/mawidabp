@@ -18,35 +18,6 @@ module ApplicationHelper
     end
   end
 
-  def textilize(text)
-    if text.blank?
-      ''
-    else
-      # textilized = RedCloth.new(text, [ :hard_breaks ])
-      # textilized.hard_breaks = true if textilized.respond_to?('hard_breaks=')
-      # textilized.to_html.html_safe
-      # markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, hard_wrap: true)
-      # # textilized.hard_breaks = true if textilized.respond_to?('hard_breaks=')
-      # # textilized.to_html.html_safe
-
-      # if textilized.to_html.html_safe != markdown.render(text)
-      #   byebug
-      # end
-
-      # markdown.render(text)
-      Markdown.new(text).to_html.html_safe
-    end
-  end
-
-  def textilize_without_paragraph(text)
-    textiled = textilize(text)
-
-    if textiled[0..2] == '<p>' then textiled = textiled[3..-1] end
-    if textiled[-4..-1] == '</p>' then textiled = textiled[0..-5] end
-
-    textiled.html_safe
-  end
-
   def calendar_text_field(form, attribute, time = false, value = nil, options = {})
     value ||= form.object.send(attribute)
     default_options = { :class => "#{options.delete(:class)} calendar" }
@@ -130,12 +101,12 @@ module ApplicationHelper
       list = array.map do |e|
         if e.kind_of?(Array) && e.first.kind_of?(String) &&
             e.second.kind_of?(Array)
-          content_tag(:li, raw("#{textilize_without_paragraph(e.shift)}\n#{array_to_ul(e)}"))
+          content_tag(:li, raw("#{markdown_without_paragraph(e.shift)}\n#{array_to_ul(e)}"))
         else
           if e.kind_of?(Array)
-            e.map { |item| content_tag(:li, textilize_without_paragraph(item)) }.join("\n")
+            e.map { |item| content_tag(:li, markdown_without_paragraph(item)) }.join("\n")
           else
-            content_tag(:li, textilize_without_paragraph(e))
+            content_tag(:li, markdown_without_paragraph(e))
           end
         end
       end
