@@ -65,9 +65,15 @@ module ConclusionReviews::Scopes
     end
 
     def by_business_unit_type business_unit_type_id
-      includes(review: { plan_item: :business_unit }).
+      ids_by_review = includes(review: { plan_item: :business_unit }).
+        where(business_units: { business_unit_type_id: business_unit_type_id }).
+        references(:business_units).pluck('id')
+
+      ids_by_control_objectives = includes(business_unit_includes).
         where(business_units: { business_unit_type_id: business_unit_type_id }).
         references(:business_units)
+
+      where(id: ids_by_control_objectives | ids_by_review)
     end
 
     def by_business_unit_names(*business_unit_names)
