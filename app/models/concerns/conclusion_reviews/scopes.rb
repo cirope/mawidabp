@@ -71,7 +71,7 @@ module ConclusionReviews::Scopes
 
       ids_by_control_objectives = includes(business_unit_includes).
         where(business_units: { business_unit_type_id: business_unit_type_id }).
-        references(:business_units)
+        references(:business_units).pluck('id')
 
       where(id: ids_by_control_objectives | ids_by_review)
     end
