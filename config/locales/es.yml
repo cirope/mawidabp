@@ -558,7 +558,7 @@
     finding_answers: "Comentarios de seguimiento"
     next_pending_task_date: "Fecha próxima tarea pendiente"
     comments: "Justificación de cambios de estado"
-    costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
+    costs: "Hasta el momento se ha dedicado **%{cost}** al seguimiento de la observación"
     download_csv: "Descargar CSV"
     download_pdf: "Resumen en PDF"
     add_finding_relation: "Agregar relación"
@@ -597,9 +597,9 @@
     responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
     important_dates:
       title: "Fechas a considerar"
-      expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *%{date}* si ningún auditado proporciona una respuesta"
-      notification_date: "Fue notificada por primera vez el día *%{date}*"
-      confirmation_date: "Su notificación fue confirmada el día *%{date}*"
+      expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día **%{date}** si ningún auditado proporciona una respuesta"
+      notification_date: "Fue notificada por primera vez el día **%{date}**"
+      confirmation_date: "Su notificación fue confirmada el día **%{date}**"
     follow_up_report:
       weakness:
         title: "SEGUIMIENTO DE OBSERVACIÓN"
@@ -880,7 +880,7 @@
       created_title: "Nuevo hallazgo"
     notify_new_finding_answer:
       title: "Nuevo comentario en el informe %{review}"
-      finding_data: "Se ha agregado un comentario al hallazgo *%{finding_code}* del informe *%{review}*"
+      finding_data: "Se ha agregado un comentario al hallazgo **%{finding_code}** del informe **%{review}**"
       finding_link: "Ver hallazgo"
     notify_new_findings:
       title: "Notificación de hallazgos"
@@ -939,8 +939,8 @@
     restore_password:
       title: "Restablecer contraseña"
       body_title: "%{user_name}, para restablecer la contraseña de su usuario (%{user}) utilice el siguiente enlace:"
-      valid_until: "%{link} (Usted podrá utilizar este enlace hasta el día *%{date}* inclusive)"
-      clarification: "Si usted *no pidió* el restablecimiento *no haga nada*, su usuario y contraseña siguen vigentes"
+      valid_until: "%{link} (Usted podrá utilizar este enlace hasta el día **%{date}** inclusive)"
+      clarification: "Si usted **no pidió** el restablecimiento **no haga nada**, su usuario y contraseña siguen vigentes"
     being_implemented_and_stale_finding_to_manager:
       title: "Notificación de observaciones en proceso de implementación vencidas"
       the_following_finding_is_being_implemented_and_stale: "La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación"
@@ -953,8 +953,8 @@
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:
-        one: "El siguiente hallazgo ha cambiado su estado a *Sin respuesta*, por no recibir una respuesta"
-        other: "Los siguientes hallazgos han cambiado su estado a *Sin respuesta*, por no recibir una respuesta"
+        one: "El siguiente hallazgo ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
+        other: "Los siguientes hallazgos han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"

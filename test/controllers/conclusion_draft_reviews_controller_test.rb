@@ -388,7 +388,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
         :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
-          :email_note => 'note in *textile* _format_'
+          :email_note => 'note in **textile** _format_'
         },
         :user => {
           users(:administrator).id => {
@@ -418,7 +418,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
         :conclusion_review => {
           :include_score_sheet => '1',
           :include_global_score_sheet => '1',
-          :email_note => 'note in *textile* _format_'
+          :email_note => 'note in **textile** _format_'
         },
         :user => {
           users(:administrator).id => {

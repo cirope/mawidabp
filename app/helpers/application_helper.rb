@@ -22,9 +22,19 @@ module ApplicationHelper
     if text.blank?
       ''
     else
-      textilized = RedCloth.new(text, [ :hard_breaks ])
-      textilized.hard_breaks = true if textilized.respond_to?('hard_breaks=')
-      textilized.to_html.html_safe
+      # textilized = RedCloth.new(text, [ :hard_breaks ])
+      # textilized.hard_breaks = true if textilized.respond_to?('hard_breaks=')
+      # textilized.to_html.html_safe
+      # markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, hard_wrap: true)
+      # # textilized.hard_breaks = true if textilized.respond_to?('hard_breaks=')
+      # # textilized.to_html.html_safe
+
+      # if textilized.to_html.html_safe != markdown.render(text)
+      #   byebug
+      # end
+
+      # markdown.render(text)
+      Markdown.new(text).to_html.html_safe
     end
   end
 
