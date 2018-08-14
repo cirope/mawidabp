@@ -97,7 +97,7 @@
     <% if @finding.kind_of?(Weakness) && SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :compliance, collection: weakness_compliance_options, prompt: true %>
+          <%= f.input :compliance, collection: weakness_compliance_options, prompt: true, data: { tag_modifier: true } %>
         </div>
       </div>
       <div class="row">
