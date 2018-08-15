@@ -23,7 +23,7 @@ class NotifierMailerPreview < ActionMailer::Preview
   # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/findings_briefs
   def findings_briefs
     user = User.includes(:findings).references(:findings).merge(Finding.with_pending_status).take
-    findings = user.findings.with_pending_status
+    findings = user.findings.with_pending_status.finals(false)
 
     NotifierMailer.findings_brief user, findings
   end

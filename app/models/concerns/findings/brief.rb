@@ -13,7 +13,7 @@ module Findings::Brief
           users = organization.users.list_all_with_pending_findings
 
           users.each do |user|
-            findings = user.findings.list.with_pending_status
+            findings = user.findings.list.with_pending_status.finals false
 
             NotifierMailer.findings_brief(user, findings.to_a).deliver_later
           end

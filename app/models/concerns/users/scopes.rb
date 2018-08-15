@@ -47,11 +47,13 @@ module Users::Scopes
     end
 
     def list_all_with_pending_findings
-      includes(finding_user_assignments: :raw_finding).
+      left_joins(finding_user_assignments: :raw_finding).
         where(findings: { final: false }).
         merge(Finding.with_pending_status).
         merge(Finding.list).
-        references(:findings)
+        references(:findings).
+        distinct.
+        select(column_names - ['notes'])
     end
 
     def list_with_corporate
