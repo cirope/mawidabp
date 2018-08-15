@@ -111,7 +111,7 @@ module Findings::Validations
         (new_record? && final) # comes from a final review _clone_
 
       if !skip_validation && state && state_changed? && state.presence_in(Finding::FINAL_STATUS)
-        has_role_to_do_it = current_user.try(:supervisor?) || current_user.try(:manager?)
+        has_role_to_do_it = Current.user.try(:supervisor?) || Current.user.try(:manager?)
 
         errors.add :state, :must_be_done_by_proper_role unless has_role_to_do_it
       end

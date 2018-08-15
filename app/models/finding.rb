@@ -6,6 +6,7 @@ class Finding < ApplicationRecord
   include Findings::AttributeTypes
   include Findings::Answers
   include Findings::BusinessUnits
+  include Findings::Brief
   include Findings::Code
   include Findings::Comments
   include Findings::Confirmation
@@ -36,6 +37,7 @@ class Finding < ApplicationRecord
   include Findings::SerializedAttributes
   include Findings::SortColumns
   include Findings::State
+  include Findings::Tasks
   include Findings::Unanswered
   include Findings::Unconfirmed
   include Findings::UpdateCallbacks
@@ -51,8 +53,6 @@ class Finding < ApplicationRecord
   include Taggable
 
   acts_as_tree
-
-  cattr_accessor :current_user, :current_organization
 
   belongs_to :organization
   has_many :finding_review_assignments, dependent: :destroy, inverse_of: :finding

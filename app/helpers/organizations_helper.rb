@@ -17,7 +17,7 @@ module OrganizationsHelper
 
     def scoped_organization_image thumb_name
       Fiber.new do
-        Organization.current_id = @organization.id
+        Current.organization = @organization
 
         image_tag @organization.image_model.image.url(thumb_name),
           size: @organization.image_model.image_size(thumb_name)

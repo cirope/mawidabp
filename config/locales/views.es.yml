@@ -388,6 +388,7 @@ es:
     session_expire_time: 'Desconexión por inactividad'
     exchange_directory_path: 'Directorio de intercambio de archivos'
     show_print_date_on_pdfs: 'Mostrar fecha de impresión en PDFs'
+    brief_period_in_weeks: 'Periodo de notificación "Resumen de hallazgos" en semanas'
 
   tags:
     edit:
@@ -407,6 +408,15 @@ es:
       info: 'Informativa'
       warning: 'Advertencia'
       danger: 'Peligro'
+
+  tasks:
+    on_time: 'A tiempo, sin reprogramación'
+    rescheduled: 'A tiempo, reprogramada'
+    expired: 'Fuera de tiempo'
+    status:
+      pending: 'Pendiente'
+      in_progress: 'En proceso'
+      finished: 'Finalizada'
 
   users:
     index:
@@ -490,6 +500,7 @@ es:
         add: 'Agregar usuario a lista de estado de seguimiento'
         remove: 'Eliminar usuario de lista de estado de seguimiento'
         list: 'Ver lista de observaciones pendientes de los usuarios seleccionados'
+        user_findings: 'Ver lista de observaciones pendientes del usuario y su jerarquía'
       show:
         title: 'Estado'
         table: 'Ver tabla'

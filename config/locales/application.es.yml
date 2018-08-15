@@ -779,6 +779,8 @@ es:
     type: "Tipo"
 
   notifier:
+    findings_brief:
+      title: "Resumen de hallazgos pendientes"
     notify_new_finding:
       title: "Tiene una nueva observación / oportunidad de mejora"
       created_title: "Nueva observación / oportunidad de mejora"
@@ -1415,6 +1417,12 @@ es:
           attributes:
             file_file_name:
               without_extension: 'debe tener extensión'
+        finding:
+          attributes:
+            tag_ids:
+              too_short:
+                one: "debe ser una como mínimo"
+                other: "deben ser %{count} como mínimo"
         image_model:
           attributes:
             image_content_type:

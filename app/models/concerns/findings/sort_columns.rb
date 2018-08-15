@@ -13,7 +13,7 @@ module Findings::SortColumns
         priority_desc:       priority_desc_options,
       ) unless HIDE_WEAKNESS_PRIORITY
 
-      if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL' &&
+      if POSTGRESQL_ADAPTER &&
          self == Finding
 
         columns[:readings_desc] = readings_desc_options
