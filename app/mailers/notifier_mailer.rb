@@ -66,6 +66,14 @@ class NotifierMailer < ActionMailer::Base
          subject: prefix.upcase + t('notifier.notify_new_finding.title')
   end
 
+  def findings_brief(user, findings)
+    @user, @findings = user, findings
+    prefix = "[#{findings.first.organization.prefix}] "
+
+    mail to: [user.email],
+         subject: prefix.upcase + t('notifier.findings_brief.title')
+  end
+
   def notify_new_finding_answer(users, finding_answer)
     @finding_answer = finding_answer
     prefix = "[#{finding_answer.finding.organization.prefix}] "

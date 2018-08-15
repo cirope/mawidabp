@@ -82,6 +82,19 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert_equal user.email, response.to.first
   end
 
+  test 'findings brief' do
+    user = users :administrator
+    response = NotifierMailer.findings_brief(user, user.findings).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.findings_brief.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier.findings_brief.title')),
+      response.body.decoded
+    assert_equal user.email, response.to.first
+  end
+
   test 'notify new finding answer' do
     user = User.find(users(:administrator).id)
     finding_answer = FindingAnswer.find(finding_answers(:auditor_answer).id)

@@ -6,6 +6,7 @@ class Finding < ApplicationRecord
   include Findings::AttributeTypes
   include Findings::Answers
   include Findings::BusinessUnits
+  include Findings::Brief
   include Findings::Code
   include Findings::Comments
   include Findings::Confirmation

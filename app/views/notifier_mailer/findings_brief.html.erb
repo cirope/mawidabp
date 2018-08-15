@@ -1,0 +1,46 @@
+<% organization = @findings.first.organization %>
+<div style="font-family: verdana, sans-serif, arial, helvetica;">
+  <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
+  <h3 style="text-decoration: underline;">
+    <%= t('notifier.findings_brief.title') %>
+  </h3>
+
+  <% style = "border: 1px #666 solid; padding: 6px 3px;" %>
+  <table style="<%= style %> border-collapse: collapse; width: 100%;">
+    <thead>
+      <tr style="text-align: left;">
+        <th style="<%= style %>"><%= Review.model_name.human %></th>
+        <th style="<%= style %>"><%= Finding.human_attribute_name 'review_code' %></th>
+        <th style="<%= style %>"><%= Finding.human_attribute_name 'title' %></th>
+        <th style="<%= style %>"><%= Finding.human_attribute_name 'state' %></th>
+        <th style="<%= style %>"><%= Finding.human_attribute_name 'follow_up_date' %></th>
+        <th style="<%= style %>"><%= t 'finding.audited', count: 0 %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @findings.order(follow_up_date: :asc).each do |finding| %>
+        <tr>
+          <td style="<%= style %>"><%= finding.review.identification %></td>
+          <td style="<%= style %>"><%= finding.review_code %></td>
+          <td style="<%= style %>"><%= finding.title %></td>
+          <td style="<%= style %>"><%= finding.state_text %></td>
+          <td style="<%= style %>"><%= l finding.follow_up_date, format: :short if finding.follow_up_date %></td>
+          <td style="<%= style %>">
+            <ul style="margin: 0; padding-left: 1em;">
+              <% finding.users.select(&:can_act_as_audited?).each do |user| %>
+                <li><%= user.full_name %></li>
+              <% end %>
+            </ul>
+          </td>
+          <td style="<%= style %>">
+            <%= link_to t('label.show'), finding_url('incomplete', finding, host: "#{organization.prefix}.#{URL_HOST}") %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= render partial: 'common_mailer/footer' %>
+</div>
+
