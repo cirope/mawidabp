@@ -104,6 +104,7 @@ class OrganizationsControllerTest < ActionController::TestCase
     end
 
     assert_equal groups(:main_group).id, assigns(:organization).reload.group_id
+    assert_equal 'admin', assigns(:organization).ldap_config.user
   end
 
   test 'create organization with wrong group' do
