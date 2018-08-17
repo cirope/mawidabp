@@ -779,6 +779,8 @@ es:
     type: "Tipo"
 
   notifier:
+    findings_brief:
+      title: "Resumen de hallazgos pendientes"
     notify_new_finding:
       title: "Tiene una nueva observación / oportunidad de mejora"
       created_title: "Nueva observación / oportunidad de mejora"

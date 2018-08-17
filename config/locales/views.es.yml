@@ -388,6 +388,7 @@ es:
     session_expire_time: 'Desconexión por inactividad'
     exchange_directory_path: 'Directorio de intercambio de archivos'
     show_print_date_on_pdfs: 'Mostrar fecha de impresión en PDFs'
+    brief_period_in_weeks: 'Periodo de notificación "Resumen de hallazgos" en semanas'
 
   tags:
     edit:
