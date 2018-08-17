@@ -238,7 +238,7 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     response = NotifierMailer.conclusion_review_notification(user, conclusion_review,
       :include_score_sheet => true, :include_global_score_sheet => true,
-      :note => 'note in *textile*', :organization_id => Current.organization&.id,
+      :note => 'note in **markdown**', :organization_id => Current.organization&.id,
       :user_id => PaperTrail.request.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
       :type => I18n.t('notifier.conclusion_review_notification.final'),
@@ -254,7 +254,7 @@ class NotifierMailerTest < ActionMailer::TestCase
     end
 
     assert_equal 3, response.attachments.size
-    assert_match /textile/, text_part
+    assert_match /markdown/, text_part
     assert response.to.include?(user.email)
 
     elements.each do |element|
