@@ -8,7 +8,7 @@
       <% end %>
     </ul>
   <% elsif @body.present? %>
-    <p style="margin: 1em 0em;"><%= markdown @body %></p>
+    <p style="margin: 1em 0em;"><%= markdown_without_paragraph @body %></p>
   <% end %>
   <% if @content.kind_of?(Array) && @content.present? %>
     <ul>

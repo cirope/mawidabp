@@ -388,7 +388,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
         :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
-          :email_note => 'note in **textile** _format_'
+          :email_note => 'note in **markdown** _format_'
         },
         :user => {
           users(:administrator).id => {
@@ -407,7 +407,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       |p| p.content_type.match(/text/)
     }.body.decoded
 
-    assert_match /textile/, text_part
+    assert_match /markdown/, text_part
 
     clear_enqueued_jobs
     clear_performed_jobs
@@ -418,7 +418,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
         :conclusion_review => {
           :include_score_sheet => '1',
           :include_global_score_sheet => '1',
-          :email_note => 'note in **textile** _format_'
+          :email_note => 'note in **markdown** _format_'
         },
         :user => {
           users(:administrator).id => {
@@ -437,7 +437,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       |p| p.content_type.match(/text/)
     }.body.decoded
 
-    assert_match /textile/, text_part
+    assert_match /markdown/, text_part
   end
 
   test 'can not send by email with final review' do
