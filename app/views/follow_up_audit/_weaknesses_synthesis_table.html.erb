@@ -22,13 +22,13 @@
     <p>* <%= raw being_implemented_resume %></p>
   <% end %>
   <% if highest_being_implemented_resume.present? %>
-    <p>  * <%= raw highest_being_implemented_resume %></p>
+    <p>** <%= raw highest_being_implemented_resume %></p>
   <% end %>
   <% if awaiting_resume.present? %>
-    <p>    * <%= raw awaiting_resume %></p>
+    <p>*** <%= raw awaiting_resume %></p>
   <% end %>
   <% if highest_awaiting_resume.present? %>
-    <p>      * <%= raw highest_awaiting_resume %></p>
+    <p>**** <%= raw highest_awaiting_resume %></p>
   <% end %>
 <% else %>
   <p style="margin: 1em;"><em><%= table_data %></em></p>
