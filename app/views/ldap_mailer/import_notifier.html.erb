@@ -1,5 +1,5 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <p><b><%= t('ldap_mailer.import_notifier.greetings') %>,</b></p>
+  <h2><%= t('ldap_mailer.import_notifier.greetings') %>,</h3>
 
   <p><%= t('ldap_mailer.import_notifier.body_title') %></p>
 
@@ -11,7 +11,7 @@
         <% users.each do |user_data| %>
           <li>
             <%= user_data['name'] %>
-            <%= "| #{user_data['errors']}" if state == :error %>
+            <%= "| #{user_data['errors']}" if state == :errored %>
           </li>
         <% end %>
       </ul>
