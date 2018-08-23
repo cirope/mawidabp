@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_19_015853) do
+ActiveRecord::Schema.define(version: 2018_07_24_214813) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -2796,6 +2796,17 @@ ActiveRecord::Schema.define(version: 2018_06_19_015853) do
     t.index ["shared"], name: "index_tags_on_shared"
   end
 
+  create_table "tasks", force: :cascade do |t|
+    t.text "description", null: false
+    t.date "due_on", null: false
+    t.integer "status", precision: 38, default: 0, null: false
+    t.integer "finding_id", limit: 19, precision: 19, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "code"
+    t.index ["finding_id"], name: "index_tasks_on_finding_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name", limit: 100
     t.string "last_name", limit: 100
@@ -3076,6 +3087,7 @@ ActiveRecord::Schema.define(version: 2018_06_19_015853) do
   add_foreign_key "taggings", "tags", on_delete: :cascade
   add_foreign_key "tags", "groups", on_delete: :cascade
   add_foreign_key "tags", "organizations", on_delete: :cascade
+  add_foreign_key "tasks", "findings", on_delete: :cascade
   add_foreign_key "users", "users", column: "manager_id", on_delete: :cascade
   add_foreign_key "weakness_templates", "organizations", on_delete: :cascade
   add_foreign_key "work_papers", "file_models", on_delete: :cascade

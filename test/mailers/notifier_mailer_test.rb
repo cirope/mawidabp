@@ -10,7 +10,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   teardown do
-    Organization.current_id = nil
+    Current.organization = nil
   end
 
   test 'pending poll email' do
@@ -78,6 +78,19 @@ class NotifierMailerTest < ActionMailer::TestCase
       I18n.t('notifier.notify_new_finding.title')
     )
     assert_match Regexp.new(I18n.t('notifier.notify_new_finding.title')),
+      response.body.decoded
+    assert_equal user.email, response.to.first
+  end
+
+  test 'findings brief' do
+    user = users :administrator
+    response = NotifierMailer.findings_brief(user, user.findings).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.findings_brief.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier.findings_brief.title')),
       response.body.decoded
     assert_equal user.email, response.to.first
   end
@@ -217,7 +230,7 @@ class NotifierMailerTest < ActionMailer::TestCase
       I18n.t('conclusion_review.global_score_sheet')
     ]
 
-    Organization.current_id = organization.id
+    Current.organization = organization
 
     conclusion_review.to_pdf organization
     conclusion_review.review.score_sheet organization, draft: false
@@ -225,7 +238,7 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     response = NotifierMailer.conclusion_review_notification(user, conclusion_review,
       :include_score_sheet => true, :include_global_score_sheet => true,
-      :note => 'note in *textile*', :organization_id => Organization.current_id,
+      :note => 'note in **markdown**', :organization_id => Current.organization&.id,
       :user_id => PaperTrail.request.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
       :type => I18n.t('notifier.conclusion_review_notification.final'),
@@ -241,7 +254,7 @@ class NotifierMailerTest < ActionMailer::TestCase
     end
 
     assert_equal 3, response.attachments.size
-    assert_match /textile/, text_part
+    assert_match /markdown/, text_part
     assert response.to.include?(user.email)
 
     elements.each do |element|
@@ -249,7 +262,7 @@ class NotifierMailerTest < ActionMailer::TestCase
     end
 
     response = NotifierMailer.conclusion_review_notification(user, conclusion_review,
-      :include_score_sheet => true, :organization_id => Organization.current_id,
+      :include_score_sheet => true, :organization_id => Current.organization&.id,
       :user_id => PaperTrail.request.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
       :type => I18n.t('notifier.conclusion_review_notification.final'),
@@ -275,7 +288,7 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert !text_part.include?(I18n.t('conclusion_review.global_score_sheet'))
 
     response = NotifierMailer.conclusion_review_notification(user,
-      conclusion_review, :organization_id => Organization.current_id,
+      conclusion_review, :organization_id => Current.organization&.id,
       :user_id => PaperTrail.request.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
       :type => I18n.t('notifier.conclusion_review_notification.final'),
@@ -326,6 +339,32 @@ class NotifierMailerTest < ActionMailer::TestCase
     )
     assert_match Regexp.new(I18n.t('notifier.findings_expired_warning.body_title',
         :count => user.findings.size)), response.body.decoded
+    assert_equal user.email, response.to.first
+  end
+
+  test 'deliver tasks expiration warning' do
+    user = User.find(users(:administrator).id)
+    response = NotifierMailer.tasks_expiration_warning(user, user.tasks).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.tasks_expiration_warning.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier.tasks_expiration_warning.body_title',
+        :count => user.tasks.size)), response.body.decoded
+    assert_equal user.email, response.to.first
+  end
+
+  test 'deliver tasks expired warning' do
+    user = User.find(users(:administrator).id)
+    response = NotifierMailer.tasks_expired_warning(user, user.tasks).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.tasks_expired_warning.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier.tasks_expired_warning.body_title',
+        :count => user.tasks.size)), response.body.decoded
     assert_equal user.email, response.to.first
   end
 

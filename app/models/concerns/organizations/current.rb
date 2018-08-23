@@ -2,28 +2,18 @@ module Organizations::Current
   extend ActiveSupport::Concern
 
   included do
-    before_save :change_current_organization_id
-    after_save :restore_current_organization_id
-  end
-
-  module ClassMethods
-    def current_id
-      RequestStore.store[:current_organization_id]
-    end
-
-    def current_id=(organization_id)
-      RequestStore.store[:current_organization_id] = organization_id
-    end
+    before_save :change_current_organization
+    after_save :restore_current_organization
   end
 
   private
 
-    def change_current_organization_id
-      @_current_organization_id = Organization.current_id
-      Organization.current_id = id if id
+    def change_current_organization
+      @_current_organization = ::Current.organization
+      ::Current.organization = self if id
     end
 
-    def restore_current_organization_id
-      Organization.current_id = @_current_organization_id
+    def restore_current_organization
+      ::Current.organization = @_current_organization
     end
 end

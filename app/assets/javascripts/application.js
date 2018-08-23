@@ -17,6 +17,7 @@
 //= require ajax
 //= require jquery.url
 //= require jquery.mw
+//= require checkbox
 //= require dynamic_form
 //= require date_pickers
 //= require fetch
@@ -46,6 +47,7 @@
 //= require risk_assessment_templates
 //= require sessions
 //= require tags
+//= require tasks
 //= require touch
 //= require users
 //= require weaknesses

@@ -36,10 +36,17 @@ module Users::StatusHelper
     )
   end
 
+  def self_and_descendants_findings_path
+    findings_path(
+      completed: 'incomplete',
+      user_ids:  @user.self_and_descendants.pluck('id')
+    )
+  end
+
   private
 
     def pending_link
-      text = textilize_without_paragraph t('.weaknesses.pending', count: pending_count)
+      text = markdown_without_paragraph t('.weaknesses.pending', count: pending_count)
       path = findings_path(completed: 'incomplete', user_id: @user.id)
 
       link_to_unless pending_count == 0, text, path
@@ -47,7 +54,7 @@ module Users::StatusHelper
 
     def complete_link
       complete_count = filtered_weaknesses.count - pending_count
-      text = textilize_without_paragraph t('.weaknesses.complete', count: complete_count)
+      text = markdown_without_paragraph t('.weaknesses.complete', count: complete_count)
       path = findings_path(completed: 'complete', user_id: @user.id)
 
       link_to_unless complete_count == 0, text, path

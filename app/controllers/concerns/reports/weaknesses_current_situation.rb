@@ -127,9 +127,13 @@ module Reports::WeaknessesCurrentSituation
           "<font size='#{PDF_FONT_SIZE + 2}'><b>#{weakness.title}</b></font>"
         ],
         [
-          "<b>#{Weakness.human_attribute_name(show_current_situation?(weakness) ? 'current_situation' : 'description')}</b>",
-          show_current_situation?(weakness) ? weakness.current_situation : weakness.description
+          "<b>#{Weakness.human_attribute_name('description')}</b>",
+          weakness.description
         ],
+        ([
+          "<b>#{Weakness.human_attribute_name('current_situation')}</b>",
+          weakness.current_situation
+        ] if show_current_situation? weakness),
         [
           "<b>#{Weakness.human_attribute_name('answer')}</b>",
           weakness.answer

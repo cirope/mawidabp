@@ -69,7 +69,7 @@
     </h4>
     <ul>
       <% @finding.important_dates.each do |important_date| %>
-        <li><%= textilize_without_paragraph important_date %></li>
+        <li><%= markdown_without_paragraph important_date %></li>
       <% end %>
     </ul>
   <% end %>
@@ -142,6 +142,34 @@
       as: :check_boxes, input_html: { disabled: true } %>
   <% end %>
 
+  <% if @finding.tasks.any? %>
+    <h4>
+      <%= Task.model_name.human count: 0 %>
+    </h4>
+
+    <table class="table table-condensed table-striped table-hover">
+      <thead>
+        <tr>
+          <th><%= Task.human_attribute_name 'code' %></th>
+          <th><%= Task.human_attribute_name 'description' %></th>
+          <th><%= Task.human_attribute_name 'status' %></th>
+          <th><%= Task.human_attribute_name 'due_on' %></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @finding.tasks.each do |task| %>
+          <tr>
+            <td><%= task.code %></td>
+            <td><%= task.description %></td>
+            <td><%= t "tasks.status.#{task.status}" %></td>
+            <td><%= l task.due_on %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
   <h4>
     <%= t('finding.finding_answers') %>
   </h4>
@@ -197,7 +225,7 @@
   <% end %>
 
   <br />
-  <%= textilize t('finding.costs',
+  <%= markdown t('finding.costs',
     :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
 
   <% unless @finding.costs.blank? %>

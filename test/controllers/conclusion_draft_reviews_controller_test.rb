@@ -2,12 +2,22 @@ require 'test_helper'
 
 # Pruebas para el controlador de informes borradores
 class ConclusionDraftReviewsControllerTest < ActionController::TestCase
+  include ActiveJob::TestHelper
+
   fixtures :conclusion_reviews
 
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
   setup do
     set_host_for_organization(organizations(:cirope).prefix)
+    set_organization organizations(:cirope)
+  end
+
+  teardown do
+    Current.organization = nil
+
+    clear_enqueued_jobs
+    clear_performed_jobs
   end
 
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
@@ -313,11 +323,9 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       conclusion_reviews(:conclusion_approved_with_conclusion_draft_review).id
     )
 
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_difference 'ActionMailer::Base.deliveries.size' do
+    assert_enqueued_jobs 1 do
       patch :send_by_email, :params => {
         :id => conclusion_review.id,
         :user => {
@@ -334,10 +342,15 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       }
     end
 
+    perform_job_with_current_attributes(enqueued_jobs.first)
+
     assert_redirected_to :action => :edit, :id => conclusion_review.id
     assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
 
-    assert_difference 'ActionMailer::Base.deliveries.size', 2 do
+    clear_enqueued_jobs
+    clear_performed_jobs
+
+    assert_enqueued_jobs 2 do
       patch :send_by_email, :params => {
         :id => conclusion_review.id,
         :user => {
@@ -354,6 +367,10 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       }
     end
 
+    enqueued_jobs.each do |job|
+      perform_job_with_current_attributes(job)
+    end
+
     assert_redirected_to :action => :edit, :id => conclusion_review.id
     assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
   end
@@ -364,16 +381,14 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       conclusion_reviews(:conclusion_approved_with_conclusion_draft_review).id
     )
 
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_difference 'ActionMailer::Base.deliveries.size' do
+    assert_enqueued_jobs 1 do
       patch :send_by_email, :params => {
         :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
-          :email_note => 'note in *textile* _format_'
+          :email_note => 'note in **markdown** _format_'
         },
         :user => {
           users(:administrator).id => {
@@ -383,6 +398,8 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
         }
       }
     end
+
+    perform_job_with_current_attributes(enqueued_jobs.first)
 
     assert_equal 2, ActionMailer::Base.deliveries.last.attachments.size
 
@@ -390,15 +407,18 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       |p| p.content_type.match(/text/)
     }.body.decoded
 
-    assert_match /textile/, text_part
+    assert_match /markdown/, text_part
 
-    assert_difference 'ActionMailer::Base.deliveries.size' do
+    clear_enqueued_jobs
+    clear_performed_jobs
+
+    assert_enqueued_jobs 1 do
       patch :send_by_email, :params => {
         :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
           :include_global_score_sheet => '1',
-          :email_note => 'note in *textile* _format_'
+          :email_note => 'note in **markdown** _format_'
         },
         :user => {
           users(:administrator).id => {
@@ -409,13 +429,15 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       }
     end
 
+    perform_job_with_current_attributes(enqueued_jobs.first)
+
     assert_equal 3, ActionMailer::Base.deliveries.last.attachments.size
 
     text_part = ActionMailer::Base.deliveries.last.parts.detect {
       |p| p.content_type.match(/text/)
     }.body.decoded
 
-    assert_match /textile/, text_part
+    assert_match /markdown/, text_part
   end
 
   test 'can not send by email with final review' do

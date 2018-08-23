@@ -3,7 +3,7 @@ module Findings::Unanswered
 
   module ClassMethods
     def mark_as_unanswered_if_necesary
-      unless [0, 6].include?(Time.zone.today.wday)
+      if Time.zone.today.workday?
         findings = []
 
         transaction do
@@ -82,7 +82,7 @@ module Findings::Unanswered
 
         stale_parameters.each_with_index do |stale_parameter, i|
           stale_days = stale_parameter[:parameter].to_i
-          parameters[:"stale_first_notification_date_#{i}"] = stale_days.days.ago_in_business.to_date
+          parameters[:"stale_first_notification_date_#{i}"] = stale_days.business_days.ago.to_date
           parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
         end
 
@@ -114,7 +114,7 @@ module Findings::Unanswered
 
         stale_parameters.each_with_index do |stale_parameter, i|
           stale_days = stale_parameter[:parameter].to_i
-          parameters[:"stale_first_notification_date_#{i}"] = stale_days.days.ago_in_business.to_date
+          parameters[:"stale_first_notification_date_#{i}"] = stale_days.business_days.ago.to_date
           parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
         end
 

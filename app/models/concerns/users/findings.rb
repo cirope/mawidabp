@@ -9,6 +9,7 @@ module Users::Findings
       source_type: 'Weakness', source: :finding
     has_many :oportunities, through: :finding_user_assignments,
       source_type: 'Oportunity', source: :finding
+    has_many :tasks, through: :findings
   end
 
   def has_pending_findings?

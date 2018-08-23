@@ -51,13 +51,6 @@ class PollTest < ActiveSupport::TestCase
     assert_error @poll, :organization_id, :blank
   end
 
-  test 'validates length of attributes' do
-    @poll.comments = 'abcde' * 52
-
-    assert @poll.invalid?
-    assert_error @poll, :comments, :too_long, count: 255
-  end
-
   test 'validates pollable_type attribute' do
     assert_equal @poll.pollable_type, @poll.questionnaire.pollable_type
   end

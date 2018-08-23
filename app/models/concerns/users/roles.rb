@@ -17,7 +17,7 @@ module Users::Roles
 
   def roles organization_id = nil
     ors              = organization_roles.reject &:marked_for_destruction?
-    organization_ids = [organization_id] | (Group.corporate_ids || [])
+    organization_ids = [organization_id] | (Current.corporate_ids || [])
 
     ors.select! { |o_r| organization_ids.include?(o_r.organization_id) } if organization_id
 
@@ -37,7 +37,7 @@ module Users::Roles
   end
 
   def get_type
-    roles(Organization.current_id).max.try(:get_type)
+    roles(Current.organization&.id).max.try(:get_type)
   end
 
   def privileges organization
@@ -56,7 +56,7 @@ module Users::Roles
 
   Role::TYPES.each do |type, value|
     define_method("#{type}?") do
-      roles(Organization.current_id).any? { |role| role.role_type == value }
+      roles(Current.organization&.id).any? { |role| role.role_type == value }
     end
 
     define_method("#{type}_on?") do |organization_id|

@@ -553,7 +553,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   end
 
   test 'filtered weaknesses current situation by extra attributes' do
-    skip unless ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+    skip unless POSTGRESQL_ADAPTER
 
     login
 
@@ -566,8 +566,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :finding_title => 'a',
         :business_unit_type => ['', business_unit_types(:cycle).id],
         :compliance => 'no',
-        :impact => [WEAKNESS_IMPACT.first],
-        :operational_risk => [WEAKNESS_OPERATIONAL_RISK.first],
+        :impact => [WEAKNESS_IMPACT.keys.first],
+        :operational_risk => [WEAKNESS_OPERATIONAL_RISK.keys.first],
         :internal_control_components => [WEAKNESS_INTERNAL_CONTROL_COMPONENTS.first]
       },
       :controller_name => 'follow_up',
