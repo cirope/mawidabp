@@ -12,7 +12,7 @@
         <th style="<%= style %>"><%= Review.model_name.human %></th>
         <th style="<%= style %>"><%= Finding.human_attribute_name 'review_code' %></th>
         <th style="<%= style %>"><%= Finding.human_attribute_name 'title' %></th>
-        <th style="<%= style %>"><%= Finding.human_attribute_name 'state' %></th>
+        <th style="<%= style %>"><%= Finding.human_attribute_name 'origination_date' %></th>
         <th style="<%= style %>"><%= Finding.human_attribute_name 'follow_up_date' %></th>
         <th style="<%= style %>"><%= t 'finding.audited', count: 0 %></th>
         <th></th>
@@ -24,7 +24,7 @@
           <td style="<%= style %>"><%= finding.review.identification %></td>
           <td style="<%= style %>"><%= finding.review_code %></td>
           <td style="<%= style %>"><%= finding.title %></td>
-          <td style="<%= style %>"><%= finding.state_text %></td>
+          <td style="<%= style %>"><%= l finding.origination_date, format: :short if finding.origination_date %></td>
           <td style="<%= style %>"><%= l finding.follow_up_date, format: :short if finding.follow_up_date %></td>
           <td style="<%= style %>">
             <ul style="margin: 0; padding-left: 1em;">

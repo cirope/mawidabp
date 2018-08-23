@@ -506,18 +506,18 @@ es:
         table: 'Ver tabla'
         graph: 'Ver gráfico'
         pending_weaknesses:
-          one: '*Una* observación *pendiente*'
-          other: '*%{count}* observaciones *pendientes*'
+          one: '**Una** observación **pendiente**'
+          other: '**%{count}** observaciones **pendientes**'
         high_risk_weaknesses:
-          one: '*Una* observación de *riesgo alto*'
-          other: '*%{count}* observaciones de *riesgo alto*'
+          one: '**Una** observación de **riesgo alto**'
+          other: '**%{count}** observaciones de **riesgo alto**'
         weaknesses:
           pending:
-            one: '*Una* observación pendiente'
-            other: '*%{count}* observaciones pendientes'
+            one: '**Una** observación pendiente'
+            other: '**%{count}** observaciones pendientes'
           complete:
-            one: '*Una* observación solucionada'
-            other: '*%{count}* observaciones solucionadas'
+            one: '**Una** observación solucionada'
+            other: '**%{count}** observaciones solucionadas'
 
   risk_assessments:
     edit:

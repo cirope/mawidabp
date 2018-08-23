@@ -8,16 +8,16 @@
       <% end %>
     </ul>
   <% elsif @body.present? %>
-    <p style="margin: 1em 0em;"><%= textilize @body %></p>
+    <p style="margin: 1em 0em;"><%= markdown_without_paragraph @body %></p>
   <% end %>
   <% if @content.kind_of?(Array) && @content.present? %>
     <ul>
       <% @content.each do |content_item| %>
-        <li><%= textilize_without_paragraph content_item %></li>
+        <li><%= markdown_without_paragraph content_item %></li>
       <% end %>
     </ul>
   <% elsif @content.present? %>
-    <%= textilize @content %>
+    <%= markdown @content %>
   <% end %>
 
   <% if @notification %>
