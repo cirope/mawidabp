@@ -16,11 +16,11 @@ module Reports::FindingsTaggedReport
     pdf_id = rand 1_000_000
     pdf    = init_pdf params[:report_title], params[:report_subtitle]
 
-    add_filter_options_to_pdf pdf
+    add_findings_tagged_filter_options_to_pdf pdf
 
-    add_findings_count_to_pdf pdf
+    add_findings_tagged_count_to_pdf pdf
 
-    add_to_findings_tagged_report_pdf pdf, @findings
+    add_findings_tagged_report_to_pdf pdf, @findings
 
     full_path    = pdf.custom_save_as findings_tagged_report_pdf_name, 'findings_tagged_report', pdf_id
     @report_path = full_path.sub Rails.root.to_s, ''
@@ -72,7 +72,7 @@ module Reports::FindingsTaggedReport
       t("#{main_translation_key}.findings_tagged_report.pdf_name")
     end
 
-    def add_findings_count_to_pdf pdf
+    def add_findings_tagged_count_to_pdf pdf
 
       pdf.text I18n.t(
         "#{main_translation_key}.findings_tagged_report.findings_count",
@@ -82,7 +82,7 @@ module Reports::FindingsTaggedReport
       pdf.move_down PDF_FONT_SIZE
     end
 
-    def add_to_findings_tagged_report_pdf(pdf, findings)
+    def add_findings_tagged_report_to_pdf(pdf, findings)
       column_data = findings.map do |finding|
         [
           finding.organization.prefix,
@@ -106,7 +106,7 @@ module Reports::FindingsTaggedReport
       end
     end
 
-    def add_filter_options_to_pdf pdf
+    def add_findings_tagged_filter_options_to_pdf pdf
       filters = [
         [
           "<b>#{t(main_translation_key + '.findings_tagged_report.tags_count_label')}</b>",
