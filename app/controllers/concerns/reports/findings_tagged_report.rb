@@ -17,10 +17,8 @@ module Reports::FindingsTaggedReport
     pdf    = init_pdf params[:report_title], params[:report_subtitle]
 
     add_findings_tagged_filter_options_to_pdf pdf
-
     add_findings_tagged_count_to_pdf pdf
-
-    add_findings_tagged_report_to_pdf pdf, @findings
+    add_findings_tagged_report_to_pdf pdf
 
     full_path    = pdf.custom_save_as findings_tagged_report_pdf_name, 'findings_tagged_report', pdf_id
     @report_path = full_path.sub Rails.root.to_s, ''
@@ -57,7 +55,7 @@ module Reports::FindingsTaggedReport
     end
 
     def scoped_findings
-      if controller_name.match?(/execution/)
+      if controller_name == 'execution_reports'
         Finding.list_without_final_review
       else
         Finding.list_with_final_review
@@ -65,25 +63,25 @@ module Reports::FindingsTaggedReport
     end
 
     def main_translation_key
-      controller_name
+      @main_translation_key ||= [controller_name, 'findings_tagged_report'].join('.')
     end
 
     def findings_tagged_report_pdf_name
-      t("#{main_translation_key}.findings_tagged_report.pdf_name")
+      t("#{main_translation_key}.pdf_name")
     end
 
     def add_findings_tagged_count_to_pdf pdf
 
       pdf.text I18n.t(
-        "#{main_translation_key}.findings_tagged_report.findings_count",
+        "#{main_translation_key}.findings_count",
         count: @findings.count
       )
 
       pdf.move_down PDF_FONT_SIZE
     end
 
-    def add_findings_tagged_report_to_pdf(pdf, findings)
-      column_data = findings.map do |finding|
+    def add_findings_tagged_report_to_pdf(pdf)
+      column_data = @findings.map do |finding|
         [
           finding.organization.prefix,
           finding.review.identification,
@@ -109,7 +107,7 @@ module Reports::FindingsTaggedReport
     def add_findings_tagged_filter_options_to_pdf pdf
       filters = [
         [
-          "<b>#{t(main_translation_key + '.findings_tagged_report.tags_count_label')}</b>",
+          '<b>' + t("#{main_translation_key}.tags_count_label") + '</b>',
           params[:findings_tagged_report][:tags_count]
         ].join(' ')
       ]

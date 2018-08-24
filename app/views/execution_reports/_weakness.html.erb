@@ -136,7 +136,7 @@
           </tr>
         </thead>
         <tbody>
-          <% weakness.finding_answers.limit(5).each do |finding_answer| %>
+          <% weakness.finding_answers.reload.each do |finding_answer| %>
             <tr>
               <td><%= finding_answer.user.full_name %></td>
               <td><%= simple_format finding_answer.answer %></td>

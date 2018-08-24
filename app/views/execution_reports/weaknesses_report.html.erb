@@ -40,7 +40,7 @@
     <%= t '.weaknesses_count_html', count: @weaknesses.count %>
   </div>
 
-  <% @weaknesses.limit(5).each do |weakness| %>
+  <% @weaknesses.each do |weakness| %>
     <%= render 'weakness', weakness: weakness %>
   <% end %>
 <% else %>
