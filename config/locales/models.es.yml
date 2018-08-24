@@ -567,6 +567,10 @@ es:
           attributes:
             user:
               invalid_credentials: 'Credenciales inválidas'
+        questionnaire:
+          attributes:
+            base:
+              cannot_destroy_with_answered_poll: "Questionario no puede ser eliminado, ya que cuenta con respuestas"
         plan:
           attributes:
             plan_items:

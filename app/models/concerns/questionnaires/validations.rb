@@ -16,7 +16,7 @@ module Questionnaires::Validations
   private
 
     def check_for_answered_polls
-      unless polls.answered(true).count.zero?
+      if polls.answered(true).any?
         errors.add(:base, :cannot_destroy_with_answered_poll)
         throw :abort
       end
