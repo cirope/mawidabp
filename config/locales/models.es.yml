@@ -570,7 +570,7 @@ es:
         questionnaire:
           attributes:
             base:
-              cannot_destroy_with_answered_poll: "Questionario no puede ser eliminado, ya que cuenta con respuestas"
+              cannot_destroy_with_answered_poll: "El cuestionario no puede ser eliminado, tiene encuestas ya contestadas"
         plan:
           attributes:
             plan_items:
