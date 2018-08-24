@@ -1,4 +1,4 @@
-<% url = findings_tagged_report_path execution: params[:execution] %>
+<% translation_key = [controller_name, action_name].join('.') %>
 
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -6,7 +6,7 @@
   </div>
 
   <div class="panel-body">
-    <%= simple_form_for action_name, url: url, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
+    <%= simple_form_for action_name, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
       <% filters = %w[tags_count] %>
       <% filters.each do |filter_name| %>
         <%= render "shared/filters/#{filter_name}", f: f, display: true, action: action_name %>
@@ -16,7 +16,7 @@
       <div class="form-actions">
         <%= hidden_field_tag :execution, params[:execution] %>
         <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-default' %> |
-        <%= link_to t('label.cancel'), url %>
+        <%= link_to t('label.cancel'), action_name %>
       </div>
     <% end %>
   </div>
@@ -24,19 +24,14 @@
 
 <% if @findings.present? %>
   <div class="well well-sm">
-    <%= t '.findings_count_html', count: @findings.count %>
+    <%= t "#{translation_key}.findings_count_html", count: @findings.count %>
   </div>
 
   <table class="table table-condensed table-striped table-hover">
     <thead>
-      <th><%= Organization.model_name.human %></th>
-      <th><%= Review.model_name.human %></th>
-      <th><%= BusinessUnitType.model_name.human %></th>
-      <th><%= Finding.human_attribute_name(:review_code) %></th>
-      <th><%= Finding.human_attribute_name(:title) %></th>
-      <th><%= Finding.human_attribute_name(:state) %></th>
-      <th><%= Finding.human_attribute_name(:auditors) %></th>
-      <th><%= Tag.model_name.human(count: 0) %></th>
+      <% @columns.each do |title| %>
+        <th><%= title %></th>
+      <% end %>
     </thead>
 
     <tbody>
@@ -56,7 +51,7 @@
   </table>
 <% else %>
   <div class="alert alert-info">
-    <%= t '.empty' %>
+    <%= t "#{translation_key}.empty" %>
   </div>
 <% end %>
 

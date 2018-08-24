@@ -7,6 +7,9 @@ module Reports::FindingsTaggedReport
 
   def findings_tagged_report
     @title = t '.title'
+    @columns = column_order.keys
+
+    render 'findings/findings_tagged_report'
   end
 
   def create_findings_tagged_report
@@ -45,7 +48,6 @@ module Reports::FindingsTaggedReport
             .finals(false)
             .includes(:tags).group(:id).having("COUNT(tags.id) < #{n}")
             .unscope(:order) # list_with/without_final_review
-            .limit(100)
             .count('tags.id')
 
       scoped_findings.where(id: @ids_with_count.keys).preload(
@@ -55,12 +57,15 @@ module Reports::FindingsTaggedReport
     end
 
     def scoped_findings
-      params[:execution].present? ?
-        Finding.list_without_final_review : Finding.list_with_final_review
+      if controller_name.match?(/execution/)
+        Finding.list_without_final_review
+      else
+        Finding.list_with_final_review
+      end
     end
 
     def main_translation_key
-      params[:execution].present? ? 'execution_reports' : 'follow_up_audit'
+      controller_name
     end
 
     def findings_tagged_report_pdf_name

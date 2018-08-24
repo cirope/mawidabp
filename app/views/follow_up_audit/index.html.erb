@@ -43,6 +43,8 @@
           <% end %>
           <%= link_to t('follow_up_audit.weaknesses_report.title'),
             { action: :weaknesses_report, controller_name: 'follow_up', final: false }, class: 'list-group-item' %>
+          <%= link_to t('follow_up_audit.findings_tagged_report.title'),
+            { action: :findings_tagged_report }, class: 'list-group-item' %>
         </div>
       </div>
     </div>

@@ -1,10 +1,10 @@
 class ExecutionReportsController < ApplicationController
   include Reports::WeaknessesByStateExecution
   include Reports::WeaknessesReport
-  include Reports::FindingsTaggedReport
   include Reports::PlannedCostSummary
   include Reports::DetailedManagement
   include Reports::ReviewsWithIncompleteWorkPapers
+  include Reports::FindingsTaggedReport
 
   before_action :auth, :load_privileges, :check_privileges
 
