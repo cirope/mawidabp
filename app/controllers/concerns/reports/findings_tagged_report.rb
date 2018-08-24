@@ -1,0 +1,132 @@
+module Reports::FindingsTaggedReport
+  extend ActiveSupport::Concern
+
+  included do
+    before_action :set_findings_tagged_for_report, only: [:findings_tagged_report, :create_findings_tagged_report]
+  end
+
+  def findings_tagged_report
+    @title = t '.title'
+  end
+
+  def create_findings_tagged_report
+    pdf_id = rand 1_000_000
+    pdf    = init_pdf params[:report_title], params[:report_subtitle]
+
+    add_filter_options_to_pdf pdf
+
+    add_findings_count_to_pdf pdf
+
+    add_to_findings_tagged_report_pdf pdf, @findings
+
+    full_path    = pdf.custom_save_as findings_tagged_report_pdf_name, 'findings_tagged_report', pdf_id
+    @report_path = full_path.sub Rails.root.to_s, ''
+
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js   { render 'shared/pdf_report' }
+    end
+  end
+
+  private
+
+    def set_findings_tagged_for_report
+      report_params = params[:findings_tagged_report]
+
+      @findings = if report_params.present?
+                    findings_with_less_than_n_tags(report_params[:tags_count].to_i)
+                  else
+                    Finding.none
+                  end
+    end
+
+    def findings_with_less_than_n_tags(n)
+      @ids_with_count = scoped_findings
+            .finals(false)
+            .includes(:tags).group(:id).having("COUNT(tags.id) < #{n}")
+            .unscope(:order) # list_with/without_final_review
+            .limit(100)
+            .count('tags.id')
+
+      scoped_findings.where(id: @ids_with_count.keys).preload(
+        :organization, :review, :business_unit_type,
+        :users_that_can_act_as_audited
+      )
+    end
+
+    def scoped_findings
+      params[:execution].present? ?
+        Finding.list_without_final_review : Finding.list_with_final_review
+    end
+
+    def main_translation_key
+      params[:execution].present? ? 'execution_reports' : 'follow_up_audit'
+    end
+
+    def findings_tagged_report_pdf_name
+      t("#{main_translation_key}.findings_tagged_report.pdf_name")
+    end
+
+    def add_findings_count_to_pdf pdf
+
+      pdf.text I18n.t(
+        "#{main_translation_key}.findings_tagged_report.findings_count",
+        count: @findings.count
+      )
+
+      pdf.move_down PDF_FONT_SIZE
+    end
+
+    def add_to_findings_tagged_report_pdf(pdf, findings)
+      column_data = findings.map do |finding|
+        [
+          finding.organization.prefix,
+          finding.review.identification,
+          finding.business_unit_type.name,
+          finding.review_code,
+          finding.title,
+          finding.state_text,
+          finding.users_that_can_act_as_audited.map(&:full_name).join('; '),
+          @ids_with_count[finding.id]
+        ]
+      end
+
+      table_options = pdf.default_table_options column_widths(pdf)
+
+      pdf.table(column_data.insert(0, column_order.keys), table_options) do
+        row(0).style(
+          background_color: 'cccccc',
+          padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+        )
+      end
+    end
+
+    def add_filter_options_to_pdf pdf
+      filters = [
+        [
+          "<b>#{t(main_translation_key + '.findings_tagged_report.tags_count_label')}</b>",
+          params[:findings_tagged_report][:tags_count]
+        ].join(' ')
+      ]
+      add_pdf_filters pdf, 'follow_up', filters
+    end
+
+    def column_order
+      @columns_order ||= {
+        Organization.model_name.human => 10,
+        Review.model_name.human => 9,
+        BusinessUnitType.model_name.human => 9,
+        Finding.human_attribute_name(:review_code) => 7,
+        Finding.human_attribute_name(:title) => 40,
+        Finding.human_attribute_name(:state) => 8,
+        Finding.human_attribute_name(:auditors) => 10,
+        Tag.model_name.human(count: 0) => 8
+      }
+    end
+
+    def column_widths(pdf)
+      column_order.values.map do |col_width|
+        pdf.percent_width(col_width)
+      end
+    end
+end

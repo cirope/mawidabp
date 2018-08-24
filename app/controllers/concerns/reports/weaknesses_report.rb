@@ -13,7 +13,7 @@ module Reports::WeaknessesReport
     pdf_id = rand 1_000_000
     pdf    = init_pdf params[:report_title], params[:report_subtitle]
 
-    @weaknesses.each do |weakness|
+    @weaknesses.limit(5).each do |weakness|
       add_to_weakness_report_pdf pdf, weakness
     end
 
@@ -35,7 +35,9 @@ module Reports::WeaknessesReport
       report_params = params[:weaknesses_report]
 
       if report_params.present?
-        @weaknesses = filter_weaknesses_for_report report_params
+        @weaknesses = filter_weaknesses_for_report(report_params).preload(
+          finding_answers: :user
+        )
       else
         @weaknesses = Weakness.none
       end
@@ -210,7 +212,7 @@ module Reports::WeaknessesReport
           column_widths << pdf.percent_width(col_size)
         end
 
-        weakness.finding_answers.reload.each do |finding_answer|
+        weakness.finding_answers.reload.limit(5).each do |finding_answer|
           column_data << [
             finding_answer.answer,
             finding_answer.user.try(:full_name),

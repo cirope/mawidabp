@@ -1,6 +1,7 @@
 class ExecutionReportsController < ApplicationController
   include Reports::WeaknessesByStateExecution
   include Reports::WeaknessesReport
+  include Reports::FindingsTaggedReport
   include Reports::PlannedCostSummary
   include Reports::DetailedManagement
   include Reports::ReviewsWithIncompleteWorkPapers

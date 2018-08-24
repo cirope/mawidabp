@@ -13,6 +13,16 @@ module Users::Roles
     has_many :organizations, through: :organization_roles
     accepts_nested_attributes_for :organization_roles, allow_destroy: true,
       reject_if: :reject_organization_role?
+
+    scope :can_act_as_audited, -> {
+      includes(organization_roles: :role).where(
+        organization_roles: {
+          roles: {
+            role_type: ::Role::TYPES.slice(:audited, :executive_manager, :admin).values
+          }
+        }
+      )
+    }
   end
 
   def roles organization_id = nil
