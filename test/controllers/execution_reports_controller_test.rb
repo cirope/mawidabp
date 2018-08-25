@@ -236,26 +236,26 @@ class ExecutionReportsControllerTest < ActionController::TestCase
   test 'findings tagged report' do
     login
 
-    get :findings_tagged_report
+    get :tagged_findings_report
     assert_response :success
-    assert_template 'findings/findings_tagged_report'
+    assert_template 'findings/tagged_findings_report'
 
     assert_nothing_raised do
-      get :findings_tagged_report, params: {
-        findings_tagged_report: {
+      get :tagged_findings_report, params: {
+        tagged_findings_report: {
           tags_count: 3
         }
       }
     end
 
-    assert_template 'findings/findings_tagged_report'
+    assert_template 'findings/tagged_findings_report'
   end
 
   test 'create findings tagged report' do
     login
 
-    post :create_findings_tagged_report, params: {
-      findings_tagged_report: {
+    post :create_tagged_findings_report, params: {
+      tagged_findings_report: {
         tags_count: 3
       },
       report_title: 'New title',

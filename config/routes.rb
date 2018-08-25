@@ -98,7 +98,7 @@ Rails.application.routes.draw do
   end
 
   %w[
-    findings_tagged_report
+    tagged_findings_report
   ].each do |action|
     get "execution_reports/#{action}", to: "execution_reports##{action}"
     post "execution_reports/create_#{action}", to: "execution_reports#create_#{action}"
@@ -197,7 +197,7 @@ Rails.application.routes.draw do
 
   %w[
     weaknesses_report
-    findings_tagged_report
+    tagged_findings_report
   ].each do |action|
     get "follow_up_audit/#{action}",
       as: "#{action}_follow_up_audit",

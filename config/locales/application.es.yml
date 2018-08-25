@@ -536,7 +536,7 @@ es:
     without_weaknesses: "Sin observaciones en el periodo"
     without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
-    findings_tagged_report:
+    tagged_findings_report:
       empty: 'No hay observaciones para el filtro aplicado'
       findings_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
       findings_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge">%{count}</span>'
@@ -570,7 +570,7 @@ es:
       users: 'Por usuario'
       business_units: 'Por unidad de negocio'
       process_controls: 'Por proceso de negocio'
-    findings_tagged_report:
+    tagged_findings_report:
       empty: 'No hay observaciones para el filtro aplicado'
       findings_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
       findings_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge">%{count}</span>'

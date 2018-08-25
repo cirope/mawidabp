@@ -63,7 +63,7 @@
 <%= render partial: 'shared/customize_report_form', locals: {
   options: {
     form_name: 'report',
-    url:       request.query_parameters.merge(action: :create_findings_tagged_report, _ts: Time.now.to_i),
+    url:       request.query_parameters.merge(action: :create_tagged_findings_report, _ts: Time.now.to_i),
     fields: [
       {
         name:  :report_title,

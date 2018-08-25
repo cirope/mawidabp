@@ -18,7 +18,7 @@ module Users::Roles
       includes(organization_roles: :role).where(
         organization_roles: {
           roles: {
-            role_type: ::Role::TYPES.slice(:audited, :executive_manager, :admin).values
+            role_type: ::Role::ACT_AS[:audited]
           }
         }
       )

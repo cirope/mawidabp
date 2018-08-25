@@ -4,7 +4,7 @@ class ExecutionReportsController < ApplicationController
   include Reports::PlannedCostSummary
   include Reports::DetailedManagement
   include Reports::ReviewsWithIncompleteWorkPapers
-  include Reports::FindingsTaggedReport
+  include Reports::TaggedFindingsReport
 
   before_action :auth, :load_privileges, :check_privileges
 
