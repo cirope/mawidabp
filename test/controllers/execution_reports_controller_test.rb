@@ -232,4 +232,36 @@ class ExecutionReportsControllerTest < ActionController::TestCase
         to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'planned_cost_summary', 0)
   end
+
+  test 'findings tagged report' do
+    login
+
+    get :findings_tagged_report
+    assert_response :success
+    assert_template 'findings/findings_tagged_report'
+
+    assert_nothing_raised do
+      get :findings_tagged_report, params: {
+        findings_tagged_report: {
+          tags_count: 3
+        }
+      }
+    end
+
+    assert_template 'findings/findings_tagged_report'
+  end
+
+  test 'create findings tagged report' do
+    login
+
+    post :create_findings_tagged_report, params: {
+      findings_tagged_report: {
+        tags_count: 3
+      },
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+    }
+
+    assert_response :redirect
+  end
 end

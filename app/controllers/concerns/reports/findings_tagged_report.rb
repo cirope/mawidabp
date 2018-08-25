@@ -7,7 +7,7 @@ module Reports::FindingsTaggedReport
 
   def findings_tagged_report
     @title = t '.title'
-    @columns = column_order.keys
+    @columns = findings_tagged_column_order.keys
 
     render 'findings/findings_tagged_report'
   end
@@ -35,26 +35,26 @@ module Reports::FindingsTaggedReport
       report_params = params[:findings_tagged_report]
 
       @findings = if report_params.present?
-                    findings_with_less_than_n_tags(report_params[:tags_count].to_i)
+                    findings_with_less_than_n_tags report_params[:tags_count].to_i
                   else
                     Finding.none
                   end
     end
 
     def findings_with_less_than_n_tags(n)
-      @ids_with_count = scoped_findings
+      @ids_with_count = scoped_findings_tagged
             .finals(false)
-            .includes(:tags).group(:id).having("COUNT(tags.id) < #{n}")
-            .unscope(:order) # list_with/without_final_review
-            .count('tags.id')
+            .includes(:tags).group(:id).having('COUNT(tags.id) < :n', n: n)
+            .unscope(:order)  # list_with/without_final_review
+            .count 'tags.id'
 
-      scoped_findings.where(id: @ids_with_count.keys).preload(
-        :organization, :review, :business_unit_type,
-        :users_that_can_act_as_audited
-      )
+      scoped_findings_tagged.where(id: @ids_with_count.keys).preload(
+          :organization, :review, :business_unit_type,
+          :users_that_can_act_as_audited
+        )
     end
 
-    def scoped_findings
+    def scoped_findings_tagged
       if controller_name == 'execution_reports'
         Finding.list_without_final_review
       else
@@ -62,18 +62,18 @@ module Reports::FindingsTaggedReport
       end
     end
 
-    def main_translation_key
-      @main_translation_key ||= [controller_name, 'findings_tagged_report'].join('.')
+    def findings_tagged_translation_key
+      @findings_tagged_translation_key ||= [controller_name, 'findings_tagged_report'].join('.')
     end
 
     def findings_tagged_report_pdf_name
-      t("#{main_translation_key}.pdf_name")
+      t "#{findings_tagged_translation_key}.pdf_name"
     end
 
     def add_findings_tagged_count_to_pdf pdf
 
       pdf.text I18n.t(
-        "#{main_translation_key}.findings_count",
+        "#{findings_tagged_translation_key}.findings_count",
         count: @findings.count
       )
 
@@ -94,9 +94,9 @@ module Reports::FindingsTaggedReport
         ]
       end
 
-      table_options = pdf.default_table_options column_widths(pdf)
+      table_options = pdf.default_table_options findings_tagged_column_widths(pdf)
 
-      pdf.table(column_data.insert(0, column_order.keys), table_options) do
+      pdf.table(column_data.insert(0, findings_tagged_column_order.keys), table_options) do
         row(0).style(
           background_color: 'cccccc',
           padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
@@ -107,15 +107,15 @@ module Reports::FindingsTaggedReport
     def add_findings_tagged_filter_options_to_pdf pdf
       filters = [
         [
-          '<b>' + t("#{main_translation_key}.tags_count_label") + '</b>',
+          '<b>' + t("#{findings_tagged_translation_key}.tags_count_label") + '</b>',
           params[:findings_tagged_report][:tags_count]
         ].join(' ')
       ]
       add_pdf_filters pdf, 'follow_up', filters
     end
 
-    def column_order
-      @columns_order ||= {
+    def findings_tagged_column_order
+      @findings_tagged_columns_order ||= {
         Organization.model_name.human => 10,
         Review.model_name.human => 9,
         BusinessUnitType.model_name.human => 9,
@@ -127,9 +127,9 @@ module Reports::FindingsTaggedReport
       }
     end
 
-    def column_widths(pdf)
-      column_order.values.map do |col_width|
-        pdf.percent_width(col_width)
+    def findings_tagged_column_widths(pdf)
+      findings_tagged_column_order.values.map do |col_width|
+        pdf.percent_width col_width
       end
     end
 end
