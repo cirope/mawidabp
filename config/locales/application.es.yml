@@ -541,7 +541,7 @@ es:
       findings_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
       findings_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge">%{count}</span>'
       pdf_name: 'informe_de_seguimiento_de_observaciones_en_ejecucion_etiquetadas.pdf'
-      tags_count_label: "Cantidad máxima de etiquetas"
+      tags_count_label: 'Cantidad máxima de etiquetas'
       title: 'Informe de observaciones en ejecución por cantidad máxima de etiquetas'
     weaknesses_report:
       title: 'Informe de seguimiento de observaciones'
