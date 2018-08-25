@@ -126,7 +126,7 @@ module Reports::TaggedFindingsReport
       }
     end
 
-    def tagged_findings_column_widths(pdf)
+    def tagged_findings_column_widths pdf
       tagged_findings_column_order.values.map do |col_width|
         pdf.percent_width col_width
       end
