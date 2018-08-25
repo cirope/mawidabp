@@ -41,12 +41,12 @@ module Reports::TaggedFindingsReport
                   end
     end
 
-    def findings_with_less_than_n_tags(n)
+    def findings_with_less_than_n_tags n
       @ids_with_count = scoped_tagged_findings
-            .finals(false)
-            .includes(:tags).group(:id).having('COUNT(tags.id) < :n', n: n)
-            .unscope(:order)  # list_with/without_final_review
-            .count 'tags.id'
+        .finals(false)
+        .includes(:tags).group(:id).having("COUNT(#{Tag.quoted_table_name}.#{Tag.qcn 'id'}) < ?", n)
+        .unscope(:order)  # list_with/without_final_review
+        .count "#{Tag.quoted_table_name}.#{Tag.qcn 'id'}"
 
       scoped_tagged_findings.where(id: @ids_with_count.keys).preload(
           :organization, :review, :business_unit_type,
@@ -71,7 +71,6 @@ module Reports::TaggedFindingsReport
     end
 
     def add_tagged_findings_count_to_pdf pdf
-
       pdf.text I18n.t(
         "#{tagged_findings_translation_key}.findings_count",
         count: @findings.count
@@ -80,7 +79,7 @@ module Reports::TaggedFindingsReport
       pdf.move_down PDF_FONT_SIZE
     end
 
-    def add_tagged_findings_report_to_pdf(pdf)
+    def add_tagged_findings_report_to_pdf pdf
       column_data = @findings.map do |finding|
         [
           finding.organization.prefix,
