@@ -536,6 +536,13 @@ es:
     without_weaknesses: "Sin observaciones en el periodo"
     without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
+    tagged_findings_report:
+      empty: 'No hay hallazgos para el filtro aplicado'
+      findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
+      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge">%{count}</span>'
+      pdf_name: 'seguimiento_de_hallazgos_en_ejecucion_etiquetados.pdf'
+      tags_count_label: 'Cantidad máxima de etiquetas'
+      title: 'Hallazgos en ejecución por cantidad máxima de etiquetas'
     weaknesses_report:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
@@ -563,6 +570,13 @@ es:
       users: 'Por usuario'
       business_units: 'Por unidad de negocio'
       process_controls: 'Por proceso de negocio'
+    tagged_findings_report:
+      empty: 'No hay hallazgos para el filtro aplicado'
+      findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
+      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge">%{count}</span>'
+      pdf_name: 'seguimiento_de_hallazgos_etiquetados.pdf'
+      tags_count_label: "Cantidad máxima de etiquetas"
+      title: 'Hallazgos por cantidad máxima de etiquetas'
     weaknesses_report:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'

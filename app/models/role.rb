@@ -16,6 +16,10 @@ class Role < ApplicationRecord
     :executive_manager => 7
   }
 
+  ACT_AS = {
+    audited: TYPES.slice(:admin, :audited, :executive_manager).values
+  }.freeze
+
   # Callbacks
   before_validation :check_auth_privileges
   before_save :check_change_in_privileges

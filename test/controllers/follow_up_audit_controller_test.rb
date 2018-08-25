@@ -1025,4 +1025,36 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'benefits', 0)
   end
+
+  test 'findings tagged report' do
+    login
+
+    get :tagged_findings_report
+    assert_response :success
+    assert_template 'findings/tagged_findings_report'
+
+    assert_nothing_raised do
+      get :tagged_findings_report, params: {
+        tagged_findings_report: {
+          tags_count: 3
+        }
+      }
+    end
+
+    assert_template 'findings/tagged_findings_report'
+  end
+
+  test 'create findings tagged report' do
+    login
+
+    post :create_tagged_findings_report, params: {
+      tagged_findings_report: {
+        tags_count: 3
+      },
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+    }
+
+    assert_response :redirect
+  end
 end
