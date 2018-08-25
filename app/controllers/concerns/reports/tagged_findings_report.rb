@@ -42,9 +42,11 @@ module Reports::TaggedFindingsReport
     end
 
     def findings_with_less_than_n_tags n
+      count_less_than = "COUNT(#{Tag.quoted_table_name}.#{Tag.qcn 'id'}) < ?"
+
       @ids_with_count = scoped_tagged_findings
         .finals(false)
-        .includes(:tags).group(:id).having("COUNT(#{Tag.quoted_table_name}.#{Tag.qcn 'id'}) < ?", n)
+        .includes(:tags).group(:id).having(count_less_than, n)
         .unscope(:order)  # list_with/without_final_review
         .count "#{Tag.quoted_table_name}.#{Tag.qcn 'id'}"
 
@@ -63,7 +65,7 @@ module Reports::TaggedFindingsReport
     end
 
     def tagged_findings_translation_key
-      @tagged_findings_translation_key ||= [controller_name, 'tagged_findings_report'].join('.')
+      [controller_name, 'tagged_findings_report'].join('.')
     end
 
     def tagged_findings_report_pdf_name
@@ -95,7 +97,7 @@ module Reports::TaggedFindingsReport
 
       table_options = pdf.default_table_options tagged_findings_column_widths(pdf)
 
-      pdf.table(column_data.insert(0, tagged_findings_column_order.keys), table_options) do
+      pdf.table column_data.insert(0, tagged_findings_column_order.keys), table_options do
         row(0).style(
           background_color: 'cccccc',
           padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
@@ -110,6 +112,7 @@ module Reports::TaggedFindingsReport
           params[:tagged_findings_report][:tags_count]
         ].join(' ')
       ]
+
       add_pdf_filters pdf, 'follow_up', filters
     end
 
