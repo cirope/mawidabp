@@ -238,7 +238,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
 
     get :tagged_findings_report
     assert_response :success
-    assert_template 'findings/tagged_findings_report'
+    assert_template 'execution_reports/tagged_findings_report'
 
     assert_nothing_raised do
       get :tagged_findings_report, params: {
@@ -248,7 +248,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
       }
     end
 
-    assert_template 'findings/tagged_findings_report'
+    assert_template 'execution_reports/tagged_findings_report'
   end
 
   test 'create findings tagged report' do
