@@ -537,12 +537,12 @@ es:
     without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
     tagged_findings_report:
-      empty: 'No hay hallazgos para el filtro aplicado'
-      findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
-      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge">%{count}</span>'
-      pdf_name: 'seguimiento_de_hallazgos_en_ejecucion_etiquetados.pdf'
+      empty: 'No hay observaciones para el filtro aplicado'
+      findings_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
+      findings_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge">%{count}</span>'
+      pdf_name: 'seguimiento_de_observaciones_en_ejecucion_etiquetadas.pdf'
       tags_count_label: 'Cantidad máxima de etiquetas'
-      title: 'Hallazgos por cantidad máxima de etiquetas'
+      title: 'Observaciones por cantidad máxima de etiquetas'
     weaknesses_report:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
@@ -571,12 +571,12 @@ es:
       business_units: 'Por ciclo'
       process_controls: 'Por proceso de negocio'
     tagged_findings_report:
-      empty: 'No hay hallazgos para el filtro aplicado'
-      findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
-      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge">%{count}</span>'
-      pdf_name: 'seguimiento_de_hallazgos_etiquetados.pdf'
+      empty: 'No hay observaciones para el filtro aplicado'
+      findings_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
+      findings_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge">%{count}</span>'
+      pdf_name: 'seguimiento_de_observaciones_etiquetadas.pdf'
       tags_count_label: "Cantidad máxima de etiquetas"
-      title: 'Hallazgos por cantidad máxima de etiquetas'
+      title: 'Observaciones por cantidad máxima de etiquetas'
     weaknesses_report:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
@@ -794,7 +794,7 @@ es:
 
   notifier:
     findings_brief:
-      title: "Resumen de hallazgos pendientes"
+      title: "Resumen de observaciones pendientes"
     notify_new_finding:
       title: "Tiene una nueva observación / oportunidad de mejora"
       created_title: "Nueva observación / oportunidad de mejora"
