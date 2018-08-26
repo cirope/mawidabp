@@ -9,6 +9,7 @@ User.notify_new_findings
 Finding.mark_as_unanswered_if_necesary
 Finding.warning_users_about_expiration
 Finding.notify_manager_if_necesary
+Finding.send_brief
 
 Task.warning_users_about_expiration
 

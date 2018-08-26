@@ -33,6 +33,8 @@ FINDING_MAX_PDF_ROWS = 100
 FINDING_WARNING_EXPIRE_DAYS = 7
 # Cantidad de días a los que se debe enviar una nueva solicitud de confirmación
 FINDING_DAYS_FOR_SECOND_NOTIFICATION = 1
+# Fecha inicial para el envío de correo con resumen de observaciones
+FINDING_INITIAL_BRIEF_DATE = Date.new 2018, 1, 1
 # Opciones para crear claves foráneas
 FOREIGN_KEY_OPTIONS={ on_delete: :restrict, on_update: :restrict }
 # Días a los que se consideran anticuadas las notificaciones

@@ -20,6 +20,14 @@ class NotifierMailerPreview < ActionMailer::Preview
     # TODO: make the method avoid the creation of a Notification record
   end
 
+  # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/findings_briefs
+  def findings_briefs
+    user = User.includes(:findings).references(:findings).merge(Finding.with_pending_status).take
+    findings = user.findings.with_pending_status.finals(false)
+
+    NotifierMailer.findings_brief user, findings
+  end
+
   # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/notify_new_finding
   def notify_new_finding
     # TODO: make the method avoid the creation of a Notification record

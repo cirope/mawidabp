@@ -536,6 +536,13 @@ es:
     without_weaknesses: "Sin observaciones en el periodo"
     without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
+    tagged_findings_report:
+      empty: 'No hay hallazgos para el filtro aplicado'
+      findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
+      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge">%{count}</span>'
+      pdf_name: 'seguimiento_de_hallazgos_en_ejecucion_etiquetados.pdf'
+      tags_count_label: 'Cantidad máxima de etiquetas'
+      title: 'Hallazgos por cantidad máxima de etiquetas'
     weaknesses_report:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
@@ -563,6 +570,13 @@ es:
       users: 'Por usuario'
       business_units: 'Por ciclo'
       process_controls: 'Por proceso de negocio'
+    tagged_findings_report:
+      empty: 'No hay hallazgos para el filtro aplicado'
+      findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
+      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge">%{count}</span>'
+      pdf_name: 'seguimiento_de_hallazgos_etiquetados.pdf'
+      tags_count_label: "Cantidad máxima de etiquetas"
+      title: 'Hallazgos por cantidad máxima de etiquetas'
     weaknesses_report:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
@@ -779,12 +793,14 @@ es:
     type: "Tipo"
 
   notifier:
+    findings_brief:
+      title: "Resumen de hallazgos pendientes"
     notify_new_finding:
       title: "Tiene una nueva observación / oportunidad de mejora"
       created_title: "Nueva observación / oportunidad de mejora"
     notify_new_finding_answer:
       title: "Nuevo comentario en el informe %{review}"
-      finding_data: "Se ha agregado un comentario a la observación / oportunidad de mejora *%{finding_code}* del informe *%{review}*"
+      finding_data: "Se ha agregado un comentario a la observación / oportunidad de mejora **%{finding_code}** del informe **%{review}**"
       finding_link: "Ver observación / oportunidad de mejora"
     notify_new_findings:
       title: "Notificación de observaciones / oportunidades de mejora"
@@ -820,8 +836,8 @@ es:
     restore_password:
       title: "Restablecer contraseña"
       body_title: "%{user_name}, para restablecer la contraseña de su usuario (%{user}) utilice el siguiente enlace:"
-      valid_until: "%{link} (Usted podrá utilizar este enlace hasta el día *%{date}* inclusive)"
-      clarification: "Si usted *no pidió* el restablecimiento *no haga nada*, su usuario y contraseña siguen vigentes"
+      valid_until: "%{link} (Usted podrá utilizar este enlace hasta el día **%{date}** inclusive)"
+      clarification: "Si usted **no pidió** el restablecimiento **no haga nada**, su usuario y contraseña siguen vigentes"
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables de la siguiente observación / oportunidad de mejora"
@@ -831,8 +847,8 @@ es:
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:
-        one: "La siguiente observación / oportunidad de mejora han cambiado su estado a *Sin respuesta*, por no recibir una respuesta"
-        other: "Las siguientes observaciones / oportunidades de mejora han cambiado su estado a *Sin respuesta*, por no recibir una respuesta"
+        one: "La siguiente observación / oportunidad de mejora han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
+        other: "Las siguientes observaciones / oportunidades de mejora han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"

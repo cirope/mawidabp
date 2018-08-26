@@ -46,6 +46,16 @@ module Users::Scopes
       where(id: ids) # TODO: remove when we don't have to _support_ Oracle
     end
 
+    def list_all_with_pending_findings
+      left_joins(finding_user_assignments: :raw_finding).
+        where(findings: { final: false }).
+        merge(Finding.with_pending_status).
+        merge(Finding.list).
+        references(:findings).
+        distinct.
+        select(column_names - ['notes'])
+    end
+
     def list_with_corporate
       conditions   = [
         "#{organizations_table}.#{Organization.qcn('id')} = :organization_id",

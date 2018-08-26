@@ -147,7 +147,7 @@
     </h4>
     <ul>
       <% @finding.important_dates.each do |important_date| %>
-        <li><%= textilize_without_paragraph important_date %></li>
+        <li><%= markdown_without_paragraph important_date %></li>
       <% end %>
     </ul>
   <% end %>
@@ -346,7 +346,7 @@
   </div>
 
   <br />
-  <%= textilize t('finding.costs',
+  <%= markdown t('finding.costs',
     :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
 
   <% unless @finding.costs.blank? %>
