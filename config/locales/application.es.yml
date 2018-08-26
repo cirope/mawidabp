@@ -542,7 +542,7 @@ es:
       findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge">%{count}</span>'
       pdf_name: 'seguimiento_de_hallazgos_en_ejecucion_etiquetados.pdf'
       tags_count_label: 'Cantidad máxima de etiquetas'
-      title: 'Hallazgos en ejecución por cantidad máxima de etiquetas'
+      title: 'Hallazgos por cantidad máxima de etiquetas'
     weaknesses_report:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
