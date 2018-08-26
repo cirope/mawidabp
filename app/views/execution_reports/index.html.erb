@@ -11,21 +11,14 @@
         <div class="list-group">
           <%= link_to t('execution_reports.weaknesses_by_state_title'),
             { action: :weaknesses_by_state_execution }, class: 'list-group-item' %>
+          <%= link_to t('execution_reports.tagged_findings_report.title'),
+            { action: :tagged_findings_report }, class: 'list-group-item' %>
         </div>
       </div>
       <div class="col-md-6">
         <div class="list-group">
           <%= link_to t('execution_reports.weaknesses_report.title'),
             { action: :weaknesses_report, execution: true }, class: 'list-group-item' %>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-6">
-        <div class="list-group">
-          <%= link_to t('execution_reports.tagged_findings_report.title'),
-            { action: :tagged_findings_report }, class: 'list-group-item' %>
         </div>
       </div>
     </div>
