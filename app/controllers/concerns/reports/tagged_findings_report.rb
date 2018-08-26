@@ -8,8 +8,6 @@ module Reports::TaggedFindingsReport
   def tagged_findings_report
     @title = t '.title'
     @columns = tagged_findings_column_order.keys
-
-    render 'findings/tagged_findings_report'
   end
 
   def create_tagged_findings_report
