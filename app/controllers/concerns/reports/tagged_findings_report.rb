@@ -120,11 +120,11 @@ module Reports::TaggedFindingsReport
       @tagged_findings_columns_order ||= {
         Organization.model_name.human => 10,
         Review.model_name.human => 9,
-        BusinessUnitType.model_name.human => 9,
-        Finding.human_attribute_name(:review_code) => 7,
-        Finding.human_attribute_name(:title) => 40,
-        Finding.human_attribute_name(:state) => 8,
-        Finding.human_attribute_name(:auditors) => 10,
+        BusinessUnitType.model_name.human => 14,
+        Finding.human_attribute_name('review_code') => 7,
+        Finding.human_attribute_name('title') => 30,
+        Finding.human_attribute_name('state') => 13,
+        t('finding.auditors', count: 0) => 10,
         Tag.model_name.human(count: 0) => 8
       }
     end
