@@ -9,6 +9,7 @@ module ControlObjectiveItems::FindingPDFData
     body << get_late_finding_attributes(finding, show)
     body << get_audited_data(finding, hide)
     body << get_final_finding_attributes(finding, hide, show)
+    body << get_tasks_data(finding)
 
     body
   end
@@ -74,6 +75,20 @@ module ControlObjectiveItems::FindingPDFData
       if finding.solution_date.present?
         body << "<b>#{finding.class.human_attribute_name('solution_date')}:" +
           "</b> #{I18n.l(finding.solution_date, format: :long)}\n"
+      end
+
+      body
+    end
+
+    def get_tasks_data finding
+      body = ''
+
+      if finding.tasks.any?
+        body << "<b>#{Task.model_name.human count: 0}</b>\n"
+
+        finding.tasks.each do |task|
+          body << "#{Prawn::Text::NBSP * 2}• #{task.detailed_description}\n"
+        end
       end
 
       body

@@ -1042,6 +1042,35 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
+  test 'send findings brief' do
+    Current.organization = nil
+
+    # Since default settings prevents this from happening
+    assert_no_enqueued_emails do
+      Finding.send_brief
+    end
+
+    organization         = organizations :cirope
+    Current.organization = organization # Since we use list below
+    users                = organization.users.list_all_with_pending_findings
+
+    organization.settings.find_by(name: 'brief_period_in_weeks').update! value: '2'
+
+    assert_not_equal 0, users.size
+
+    Timecop.freeze(FINDING_INITIAL_BRIEF_DATE + 2.weeks) do
+      assert_enqueued_emails users.size do
+        Finding.send_brief
+      end
+    end
+
+    Timecop.freeze(FINDING_INITIAL_BRIEF_DATE + 1.weeks) do
+      assert_no_enqueued_emails do
+        Finding.send_brief
+      end
+    end
+  end
+
   test 'work papers can be added to finding with current close date' do
     uneditable_finding = findings :being_implemented_weakness
 

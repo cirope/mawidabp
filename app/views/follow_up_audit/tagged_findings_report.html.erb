@@ -1,0 +1,74 @@
+<% translation_key = [controller_name, action_name].join('.') %>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title"><%= t 'label.search' %></h4>
+  </div>
+
+  <div class="panel-body">
+    <%= simple_form_for action_name, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
+      <% filters = %w[tags_count] %>
+      <% filters.each do |filter_name| %>
+        <%= render "shared/filters/#{filter_name}", f: f, display: true, action: action_name %>
+      <% end %>
+
+
+      <div class="form-actions">
+        <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-default' %> |
+        <%= link_to t('label.cancel'), action_name %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% if @findings.present? %>
+  <div class="well well-sm">
+    <%= t "#{translation_key}.findings_count_html", count: @findings.count %>
+  </div>
+
+  <table class="table table-condensed table-striped table-hover">
+    <thead>
+      <% @columns.each do |title| %>
+        <th><%= title %></th>
+      <% end %>
+    </thead>
+
+    <tbody>
+      <% @findings.each do |finding| %>
+        <tr>
+          <td><%= finding.organization.prefix %></td>
+          <td><%= finding.review.identification %></td>
+          <td><%= finding.business_unit_type.name %></td>
+          <td><%= finding.review_code %></td>
+          <td><%= finding.title %></td>
+          <td><%= finding.state_text %></td>
+          <td><%= finding.users_that_can_act_as_audited.map(&:full_name).join('; ') %></td>
+          <td><%= @ids_with_count[finding.id] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="alert alert-info">
+    <%= t "#{translation_key}.empty" %>
+  </div>
+<% end %>
+
+<div>
+  <%= link_to t('label.back'), action: :index %> |
+  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %>
+</div>
+
+<%= render partial: 'shared/customize_report_form', locals: {
+  options: {
+    form_name: 'report',
+    url:       request.query_parameters.merge(action: :create_tagged_findings_report, _ts: Time.now.to_i),
+    fields: [
+      {
+        name:  :report_title,
+        label: t('customize_report_form.title'),
+        value: @title
+      }
+    ]
+  }
+} %>
