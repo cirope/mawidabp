@@ -33,25 +33,53 @@ module Reports::TaggedFindingsReport
       report_params = params[:tagged_findings_report]
 
       @findings = if report_params.present?
-                    findings_with_less_than_n_tags report_params[:tags_count].to_i
+                    @filters = []
+                    scope = filter_tagged_findings_report_by_status(
+                      scoped_tagged_findings,
+                      report_params
+                    )
+
+                    findings_with_less_than_n_tags scope, report_params
                   else
                     Finding.none
                   end
     end
 
-    def findings_with_less_than_n_tags n
+    def filter_tagged_findings_report_by_status scope, report_params
+      states = report_params[:finding_status]&.reject(&:blank?) || []
+
+      return scope if states.empty?
+
+      not_muted_states     = Finding::EXCLUDE_FROM_REPORTS_STATUS + [:implemented_audited]
+      mute_state_filter_on = Finding::STATUS.except(*not_muted_states).values.map(&:to_s)
+
+      unless states.sort == mute_state_filter_on.sort
+        state_text = states.map do |s|
+          t "findings.state.#{Finding::STATUS.invert[s.to_i]}"
+        end
+
+        @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text.to_sentence}\""
+      end
+
+      scope.where state: states
+    end
+
+    def findings_with_less_than_n_tags scope, report_params
+      n = report_params[:tags_count].to_i
+      @filters << "<b> #{t(tagged_findings_translation_key + '.tags_count_label')}</b> = #{n}"
+
       count_less_than = "COUNT(#{Tag.quoted_table_name}.#{Tag.qcn 'id'}) < ?"
 
-      @ids_with_count = scoped_tagged_findings
+      @ids_with_count = scope
         .finals(false)
         .includes(:tags).group(:id).having(count_less_than, n)
         .unscope(:order)  # list_with/without_final_review
         .count "#{Tag.quoted_table_name}.#{Tag.qcn 'id'}"
 
-      scoped_tagged_findings.where(id: @ids_with_count.keys).preload(
-          :organization, :review, :business_unit_type,
-          :users_that_can_act_as_audited
-        )
+      scope.where(id: @ids_with_count.keys).preload(
+        :organization, :review, :business_unit_type,
+        :users_that_can_act_as_auditor
+      )
     end
 
     def scoped_tagged_findings
@@ -88,7 +116,7 @@ module Reports::TaggedFindingsReport
           finding.review_code,
           finding.title,
           finding.state_text,
-          finding.users_that_can_act_as_audited.map(&:full_name).join('; '),
+          finding.users_that_can_act_as_auditor.map(&:full_name).join('; '),
           @ids_with_count[finding.id]
         ]
       end
@@ -104,26 +132,19 @@ module Reports::TaggedFindingsReport
     end
 
     def add_tagged_findings_filter_options_to_pdf pdf
-      filters = [
-        [
-          '<b>' + t("#{tagged_findings_translation_key}.tags_count_label") + '</b>',
-          params[:tagged_findings_report][:tags_count]
-        ].join(' ')
-      ]
-
-      add_pdf_filters pdf, 'follow_up', filters
+      add_pdf_filters pdf, 'follow_up', @filters
     end
 
     def tagged_findings_column_order
       @tagged_findings_columns_order ||= {
-        Organization.model_name.human => 10,
-        Review.model_name.human => 9,
-        BusinessUnitType.model_name.human => 14,
+        Organization.model_name.human               => 10,
+        Review.model_name.human                     => 9,
+        BusinessUnitType.model_name.human           => 14,
         Finding.human_attribute_name('review_code') => 7,
-        Finding.human_attribute_name('title') => 30,
-        Finding.human_attribute_name('state') => 13,
-        t('finding.auditors', count: 0) => 10,
-        Tag.model_name.human(count: 0) => 8
+        Finding.human_attribute_name('title')       => 30,
+        Finding.human_attribute_name('state')       => 13,
+        t('finding.auditors', count: 0)             => 10,
+        Tag.model_name.human(count: 0)              => 8
       }
     end
 

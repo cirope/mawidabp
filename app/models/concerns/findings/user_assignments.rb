@@ -10,8 +10,9 @@ module Findings::UserAssignments
     has_many :finding_responsible_assignments, -> { responsibles }, foreign_key: :finding_id,
       class_name: 'FindingUserAssignment'
     has_many :users, -> { order(last_name: :asc) }, through: :finding_user_assignments
-    has_many :users_that_can_act_as_audited,
-      -> { can_act_as_audited },
+    has_many :users_that_can_act_as_audited, -> { can_act_as(:audited) },
+      through: :finding_user_assignments, source: :user
+    has_many :users_that_can_act_as_auditor, -> { can_act_as(:auditor) },
       through: :finding_user_assignments, source: :user
 
     accepts_nested_attributes_for :finding_user_assignments, allow_destroy: true

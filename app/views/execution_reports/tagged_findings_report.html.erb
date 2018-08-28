@@ -7,11 +7,10 @@
 
   <div class="panel-body">
     <%= simple_form_for action_name, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
-      <% filters = %w[tags_count] %>
+      <% filters = %w[tags_count finding_statuses] %>
       <% filters.each do |filter_name| %>
         <%= render "shared/filters/#{filter_name}", f: f, display: true, action: action_name %>
       <% end %>
-
 
       <div class="form-actions">
         <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-default' %> |

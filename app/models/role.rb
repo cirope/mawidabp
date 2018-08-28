@@ -17,7 +17,8 @@ class Role < ApplicationRecord
   }
 
   ACT_AS = {
-    audited: TYPES.slice(:admin, :audited, :executive_manager).values
+    audited: TYPES.slice(:admin, :audited, :executive_manager).values,
+    auditor: TYPES.slice(:auditor_senior, :auditor_junior, :supervisor, :manager).values
   }.freeze
 
   # Callbacks

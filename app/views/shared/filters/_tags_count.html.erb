@@ -6,7 +6,7 @@
   <% unless group %>
     <div class="row">
   <% end %>
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="form-group">
         <% tags_count_filter = params[action] ? params[action][field_name] : nil %>
         <%= f.label field_name, field_label, class: 'col-md-6' %>

@@ -14,11 +14,11 @@ module Users::Roles
     accepts_nested_attributes_for :organization_roles, allow_destroy: true,
       reject_if: :reject_organization_role?
 
-    scope :can_act_as_audited, -> {
+    scope :can_act_as, ->(generic_role) {
       includes(organization_roles: :role).where(
         organization_roles: {
           roles: {
-            role_type: ::Role::ACT_AS[:audited]
+            role_type: ::Role::ACT_AS[generic_role]
           }
         }
       )
