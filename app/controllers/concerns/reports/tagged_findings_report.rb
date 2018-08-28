@@ -8,6 +8,13 @@ module Reports::TaggedFindingsReport
   def tagged_findings_report
     @title = t '.title'
     @columns = tagged_findings_column_order.keys
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        render csv: tagged_findings_report_csv, filename: @title.downcase
+      end
+    end
   end
 
   def create_tagged_findings_report
@@ -107,8 +114,8 @@ module Reports::TaggedFindingsReport
       pdf.move_down PDF_FONT_SIZE
     end
 
-    def add_tagged_findings_report_to_pdf pdf
-      column_data = @findings.map do |finding|
+    def tagged_findings_report_rows
+      @findings.map do |finding|
         [
           finding.organization.prefix,
           finding.review.identification,
@@ -120,7 +127,10 @@ module Reports::TaggedFindingsReport
           @ids_with_count[finding.id]
         ]
       end
+    end
 
+    def add_tagged_findings_report_to_pdf pdf
+      column_data = tagged_findings_report_rows
       table_options = pdf.default_table_options tagged_findings_column_widths(pdf)
 
       pdf.table column_data.insert(0, tagged_findings_column_order.keys), table_options do
@@ -151,6 +161,14 @@ module Reports::TaggedFindingsReport
     def tagged_findings_column_widths pdf
       tagged_findings_column_order.values.map do |col_width|
         pdf.percent_width col_width
+      end
+    end
+
+    def tagged_findings_report_csv
+      CSV.generate(col_sep: ';', force_quotes: true) do |csv|
+        csv << tagged_findings_column_order.keys
+
+        tagged_findings_report_rows.each { |row| csv << row }
       end
     end
 end
