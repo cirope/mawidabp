@@ -249,7 +249,36 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     end
 
     assert_template 'execution_reports/tagged_findings_report'
+
+    assert_nothing_raised do
+      get :tagged_findings_report, params: {
+        tagged_findings_report: {
+          tags_count: 3,
+          finding_status: [Finding::STATUS[:being_implemented]]
+        }
+      }
+    end
+
+    assert_template 'execution_reports/tagged_findings_report'
   end
+
+  test 'findings tagged report csv' do
+    login
+
+    assert_nothing_raised do
+      get :tagged_findings_report, params: {
+        tagged_findings_report: {
+          tags_count: 3,
+          finding_status: [Finding::STATUS[:being_implemented]]
+        }
+      },
+      as: :csv
+    end
+
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+  end
+
 
   test 'create findings tagged report' do
     login
@@ -257,6 +286,17 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     post :create_tagged_findings_report, params: {
       tagged_findings_report: {
         tags_count: 3
+      },
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+    }
+
+    assert_response :redirect
+
+    post :create_tagged_findings_report, params: {
+      tagged_findings_report: {
+        tags_count: 3,
+        finding_status: [Finding::STATUS[:being_implemented]]
       },
       report_title: 'New title',
       report_subtitle: 'New subtitle'
