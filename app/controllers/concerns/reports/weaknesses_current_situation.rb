@@ -83,6 +83,7 @@ module Reports::WeaknessesCurrentSituation
         weaknesses = filter_weaknesses_current_situation_by_operational_risk weaknesses
         weaknesses = filter_weaknesses_current_situation_by_internal_control_components weaknesses
         weaknesses = filter_weaknesses_current_situation_by_tags weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_repeated weaknesses
       end
 
       @weaknesses = weaknesses.reorder order
@@ -171,9 +172,21 @@ module Reports::WeaknessesCurrentSituation
       end
     end
 
+    def filter_weaknesses_current_situation_by_repeated weaknesses
+      repeated = params[:weaknesses_current_situation][:repeated]
+
+      return weaknesses if repeated.blank?
+
+      repeated = repeated == 'true'
+
+      @filters << "<b>#{t 'findings.state.repeated'}</b>: #{t("label.#{repeated ? 'yes' : 'no'}")}"
+
+      repeated ? weaknesses.repeated : weaknesses
+    end
+
     def filter_weaknesses_current_situation_by_status weaknesses
       states               = Array(params[:weaknesses_current_situation][:finding_status]).reject(&:blank?)
-      not_muted_states     = Finding::EXCLUDE_FROM_REPORTS_STATUS + [:implemented_audited] - [:repeated]
+      not_muted_states     = Finding::EXCLUDE_FROM_REPORTS_STATUS + [:implemented_audited]
       mute_state_filter_on = Finding::STATUS.except(*not_muted_states).map do |k, v|
         v.to_s
       end
