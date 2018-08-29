@@ -41,7 +41,7 @@
           <td><%= finding.review_code %></td>
           <td><%= finding.title %></td>
           <td><%= finding.state_text %></td>
-          <td><%= finding.users_that_can_act_as_audited.map(&:full_name).join('; ') %></td>
+          <td><%= finding.users_that_can_act_as_auditor.map(&:full_name).join('; ') %></td>
           <td><%= @ids_with_count[finding.id] %></td>
         </tr>
       <% end %>
