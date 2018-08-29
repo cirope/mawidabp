@@ -1,6 +1,6 @@
 <%
     display ||= nil
-    group ||= nil
+    group   ||= nil
     status_options = if action == :fixed_weaknesses_report
                     finding_fixed_status_options
                   elsif params[:execution].present?
@@ -10,10 +10,10 @@
                   end
 %>
 
-<div id="finding_status_filter" class="filter" <%= 'style="display: none;"' unless display %>>
-  <% unless group %>
+<% unless group %>
+  <div id="finding_status_filter" class="filter" <%= 'style="display: none;"' unless display %>>
     <div class="row">
-  <% end %>
+<% end %>
     <div class="col-md-6">
       <div class="form-group">
          <% selected = params[action] ? params[action][:finding_status] : nil %>
@@ -23,7 +23,7 @@
          </div>
       </div>
     </div>
-  <% unless group %>
+<% unless group %>
     </div>
-  <% end %>
-</div>
+  </div>
+<% end %>
