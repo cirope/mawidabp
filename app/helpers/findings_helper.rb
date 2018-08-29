@@ -167,6 +167,27 @@ module FindingsHelper
     end
   end
 
+  def finding_status_options_with_repeated
+    statuses = Finding::EXCLUDE_FROM_REPORTS_STATUS - [:repeated]
+
+    Finding::STATUS.except(*statuses).map do |k, v|
+      [t("findings.state.#{k}"), v.to_s]
+    end
+  end
+
+  def finding_status_options_by_action(action, params)
+    case
+    when action == :fixed_weaknesses_report
+      finding_fixed_status_options
+    when params[:execution].present?
+      finding_execution_status_options
+    when action == :weaknesses_current_situation && SHOW_CONCLUSION_ALTERNATIVE_PDF
+      finding_status_options_with_repeated
+    else
+      finding_status_options
+    end
+  end
+
   def show_commitment_date? finding_answer
     finding_answer.user.can_act_as_audited? &&
       finding_answer.requires_commitment_date? &&

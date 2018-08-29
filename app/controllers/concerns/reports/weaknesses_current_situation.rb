@@ -173,7 +173,7 @@ module Reports::WeaknessesCurrentSituation
 
     def filter_weaknesses_current_situation_by_status weaknesses
       states               = Array(params[:weaknesses_current_situation][:finding_status]).reject(&:blank?)
-      not_muted_states     = Finding::EXCLUDE_FROM_REPORTS_STATUS + [:implemented_audited]
+      not_muted_states     = Finding::EXCLUDE_FROM_REPORTS_STATUS + [:implemented_audited] - [:repeated]
       mute_state_filter_on = Finding::STATUS.except(*not_muted_states).map do |k, v|
         v.to_s
       end
