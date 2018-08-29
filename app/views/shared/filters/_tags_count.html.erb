@@ -9,7 +9,7 @@
     <div class="col-md-6">
       <div class="form-group">
         <% tags_count_filter = params[action] ? params[action][field_name] : nil %>
-        <%= f.label field_name, field_label, class: 'col-md-6' %>
+        <%= f.label field_name, field_label, class: 'col-md-4' %>
         <div class="col-md-6">
           <%= f.number_field field_name, value: tags_count_filter, class: 'form-control' %>
         </div>
