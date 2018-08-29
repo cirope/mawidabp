@@ -13,16 +13,6 @@ module Users::Roles
     has_many :organizations, through: :organization_roles
     accepts_nested_attributes_for :organization_roles, allow_destroy: true,
       reject_if: :reject_organization_role?
-
-    scope :can_act_as, ->(generic_role) {
-      includes(organization_roles: :role).where(
-        organization_roles: {
-          roles: {
-            role_type: ::Role::ACT_AS[generic_role]
-          }
-        }
-      )
-    }
   end
 
   def roles organization_id = nil
@@ -88,6 +78,18 @@ module Users::Roles
 
   def can_act_as_audited_on? organization_id
     audited_on?(organization_id) || executive_manager_on?(organization_id) || admin_on?(organization_id)
+  end
+
+  module ClassMethods
+    def can_act_as role
+      includes(organization_roles: :role).where(
+        organization_roles: {
+          roles: {
+            role_type: ::Role::ACT_AS[role]
+          }
+        }
+      )
+    end
   end
 
   private
