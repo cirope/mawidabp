@@ -49,6 +49,22 @@ class TaskTest < ActiveSupport::TestCase
     assert @task.all_due_on_dates.include?(10.days.from_now.to_date)
   end
 
+  test 'list no due on dates when in draft' do
+    task = tasks :setup_all_things_on_draft
+
+    old_date = task.due_on
+
+    assert task.all_due_on_dates.blank?
+
+    task.update! due_on: 10.days.from_now.to_date
+
+    assert task.all_due_on_dates.blank?
+
+    task.update! due_on: 15.days.from_now.to_date
+
+    assert task.all_due_on_dates.blank?
+  end
+
   test 'warning users about tasks expiration' do
     Current.organization = nil
     # Only if no weekend
