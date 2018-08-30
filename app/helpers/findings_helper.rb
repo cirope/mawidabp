@@ -167,6 +167,17 @@ module FindingsHelper
     end
   end
 
+  def finding_status_options_by_action(action, params)
+    case
+    when action == :fixed_weaknesses_report
+      finding_fixed_status_options
+    when params[:execution].present?
+      finding_execution_status_options
+    else
+      finding_status_options
+    end
+  end
+
   def show_commitment_date? finding_answer
     finding_answer.user.can_act_as_audited? &&
       finding_answer.requires_commitment_date? &&
