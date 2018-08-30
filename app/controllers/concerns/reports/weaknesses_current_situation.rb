@@ -181,7 +181,7 @@ module Reports::WeaknessesCurrentSituation
 
       @filters << "<b>#{t 'findings.state.repeated'}</b>: #{t("label.#{repeated ? 'yes' : 'no'}")}"
 
-      repeated ? weaknesses.repeated : weaknesses.not_repeated
+      repeated ? weaknesses.with_repeated : weaknesses.without_repeated
     end
 
     def filter_weaknesses_current_situation_by_status weaknesses
