@@ -294,7 +294,8 @@ module Findings::FollowUpPDF
     end
 
     def current_version
-      object    = paper_trail.object_attrs_for_paper_trail false
+      event  = PaperTrail::Events::Base.new self, false
+      object = event.send :object_attrs_for_paper_trail, false
 
       PaperTrail::Version.new(
         item:      self,
