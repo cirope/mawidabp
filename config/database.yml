@@ -4,7 +4,7 @@ default: &default
   pool: 5
   username: <%= ENV['TRAVIS'] ? 'postgres' : 'mawidabp' %>
   password: <%= ENV['TRAVIS'] ? '' : 'mawidabp' %>
-  hostname: localhost
+  host: localhost
   port: 5432
 
 development:
