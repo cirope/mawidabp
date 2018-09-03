@@ -270,9 +270,10 @@ module Findings::FollowUpPDF
     end
 
     def important_changed_versions
-      previous_version   = versions.first
-      important_versions = [PaperTrail::Version.new]
-      next_version       = -> {
+      previous_version     = versions.first
+      important_versions   = [PaperTrail::Version.new]
+      last_checked_version = nil
+      next_version         = -> {
         previous_version&.event && (
           last_checked_version = previous_version&.next || current_version
         )
