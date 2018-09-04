@@ -878,6 +878,7 @@ es:
     errors:
       is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"
+      with_expired_tasks: "tiene tareas pendientes o en proceso vencidas"
       with_follow_up_date: "tiene fecha de implementación (y no debería)"
       with_solution_date: "tiene fecha de solución (y no debería)"
       without_answer: "no tiene respuesta"
@@ -1067,6 +1068,7 @@ es:
     errors:
       is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"
+      with_expired_tasks: "tiene tareas pendientes o en proceso vencidas"
       with_follow_up_date: "tiene fecha de implementación (y no debería)"
       with_solution_date: "tiene fecha de solución (y no debería)"
       without_answer: "no tiene respuesta"
