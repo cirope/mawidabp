@@ -110,10 +110,9 @@ class WorkPaper < ApplicationRecord
   end
 
   def create_cover_and_zip
-    self.file_model.try(:file?).tap do |file|
-      self.create_pdf_cover if @cover_must_be_created && file
-      self.create_zip if @zip_must_be_created || (@cover_must_be_created && file)
-    end
+    self.file_model.try(:file?) &&
+      (@zip_must_be_created || @cover_must_be_created) &&
+      create_zip
 
     true
   end
@@ -221,7 +220,10 @@ class WorkPaper < ApplicationRecord
 
     self.create_pdf_cover
 
+
     if File.file?(original_filename) && File.file?(pdf_filename)
+      FileUtils.rm_f zip_filename
+
       Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
         zipfile.add(self.filename_with_prefix, original_filename) { true }
         zipfile.add(File.basename(pdf_filename), pdf_filename) { true }
