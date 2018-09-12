@@ -52,10 +52,11 @@
               <%= f.simple_fields_for :file_model do |fm_f| %>
                 <div class="file-container pull-left">
                   <%= link_to_upload(fm_f.object) %>
-                  <% unless fm_f.object.file_cache %>
-                    <%= fm_f.input :file, label: false %>
-                  <% else %>
+                  <% if fm_f.object.file_cache %>
                     <%= fm_f.input :file_cache, as: :hidden %>
+                    <%= fm_f.input :file, as: :hidden %>
+                  <% else %>
+                    <%= fm_f.input :file, label: false %>
                   <% end %>
                 </div>
               <% end %>
