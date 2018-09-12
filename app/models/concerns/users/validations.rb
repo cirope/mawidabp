@@ -2,7 +2,6 @@ module Users::Validations
   extend ActiveSupport::Concern
 
   included do
-    validates :email, uniqueness: { case_sensitive: false }
     validates :user, uniqueness: { case_sensitive: false }, unless: :ldap?
     validates :user, length: { in: 3..30 }, pdf_encoding: true
     validates :name, :last_name, :email, presence: true, length: { maximum: 100 },
@@ -16,6 +15,7 @@ module Users::Validations
     validate :validate_manager
     validate :validate_roles, on: :create
     validate :validate_password
+    validate :validate_email_group_uniqueness
   end
 
   private
@@ -47,6 +47,21 @@ module Users::Validations
       if old_user
         errors.add :password, :already_used if repeat_password_from? old_user
         errors.add :password, :too_soon, count: password_min_time if not_in_acceptable_password_change_time?
+      end
+    end
+
+    def validate_email_group_uniqueness
+      if email_changed?
+        email_column = "#{self.class.quoted_table_name}.#{self.class.qcn 'email'}"
+        # Getting group this way only to work also on new records
+        group = organization_roles.take&.organization&.group
+        users_with_same_email = group &&
+          group.
+          users.
+          where.not(id: id).
+          where("LOWER(#{email_column}) = ?", email.downcase)
+
+        errors.add :email, :taken if users_with_same_email.present?
       end
     end
 
