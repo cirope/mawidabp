@@ -51,7 +51,7 @@ module Users::Validations
     end
 
     def validate_email_group_uniqueness
-      if email_changed?
+      if will_save_change_to_email?
         email_column = "#{self.class.quoted_table_name}.#{self.class.qcn 'email'}"
         # Getting group this way only to work also on new records
         group = organization_roles.take&.organization&.group
