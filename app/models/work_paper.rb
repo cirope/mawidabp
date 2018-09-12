@@ -220,9 +220,8 @@ class WorkPaper < ApplicationRecord
 
     self.create_pdf_cover
 
-
     if File.file?(original_filename) && File.file?(pdf_filename)
-      FileUtils.rm_f zip_filename
+      FileUtils.rm zip_filename if File.exists?(zip_filename)
 
       Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
         zipfile.add(self.filename_with_prefix, original_filename) { true }
