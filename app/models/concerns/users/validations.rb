@@ -55,13 +55,13 @@ module Users::Validations
         email_column = "#{self.class.quoted_table_name}.#{self.class.qcn 'email'}"
         # Getting group this way only to work also on new records
         group = organization_roles.take&.organization&.group
-        users_with_same_email = group &&
+        has_users_with_same_email = group &&
           group.
           users.
           where.not(id: id).
-          where("LOWER(#{email_column}) = ?", email.downcase)
+          where("LOWER(#{email_column}) = ?", email.downcase).any?
 
-        errors.add :email, :taken if users_with_same_email.present?
+        errors.add :email, :taken if has_users_with_same_email
       end
     end
 
