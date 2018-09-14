@@ -7,6 +7,11 @@ module Users::Scopes
         where(organizations: { id: Current.organization&.id }).
         references :organizations
     }
+    scope :group_list, -> {
+      includes(:group).
+        where(groups: { id: Current.group&.id }).
+        references :groups
+    }
     scope :not_hidden, -> { where hidden: false }
   end
 

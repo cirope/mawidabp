@@ -9,6 +9,10 @@ module Tasks::Expiration
     }
   end
 
+  def expired?
+    (pending? || in_progress?) && due_on < Time.zone.today
+  end
+
   module ClassMethods
     def expires_very_soon
       date = if Time.zone.now < Time.zone.now.noon

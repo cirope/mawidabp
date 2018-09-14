@@ -180,6 +180,8 @@ module ConclusionReviews::PDF
         put_score_table_on pdf unless options[:hide_score]
       elsif review.score_type == 'weaknesses'
         put_score_text_on pdf unless options[:hide_score]
+      elsif review.score_type == 'none'
+        put_no_score_text_on pdf unless options[:hide_score]
       end
     end
 
@@ -245,6 +247,15 @@ module ConclusionReviews::PDF
     def put_score_text_on pdf
       review_score = review.score_array.first
       score_text   = I18n.t "score_types.#{review_score}"
+
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text "<b>#{score_text.titleize}</b>",
+        align: :justify, inline_format: true
+      pdf.move_down PDF_FONT_SIZE
+    end
+
+    def put_no_score_text_on pdf
+      score_text = I18n.t 'score_types.none'
 
       pdf.move_down PDF_FONT_SIZE
       pdf.text "<b>#{score_text.titleize}</b>",
