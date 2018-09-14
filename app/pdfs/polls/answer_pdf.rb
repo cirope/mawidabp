@@ -101,7 +101,7 @@ class Polls::AnswerPDF < Prawn::Document
     end
 
     def set_answer answer
-      if answer.question.options.any?
+      if answer.question&.options&.any?
         "#{I18n.t("answer_options.#{answer.answer_option.option}")}"
       elsif answer.question.answer_written?
         answer.answer
