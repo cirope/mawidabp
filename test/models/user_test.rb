@@ -45,6 +45,34 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  test 'new user should fail with duplicated email' do
+    role = roles :admin_role
+
+    role.inject_auth_privileges Hash.new(true)
+
+    user = User.new(
+      name: 'New name',
+      last_name: 'New lastname',
+      language: 'es',
+      email: users(:bare).email,
+      function: 'New function',
+      user: 'new_user',
+      enable: true,
+      failed_attempts: 0,
+      logged_in: false,
+      notes: 'Some user notes',
+      organization_roles_attributes: [
+        {
+          organization_id: organizations(:cirope).id,
+          role_id: role.id
+        }
+      ]
+    )
+
+    assert user.invalid?
+    assert_error user, :email, :taken
+  end
+
   test 'update' do
     assert_no_difference 'User.count' do
       @user.update! name: 'Updated name'
@@ -121,12 +149,18 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'validates duplicated attributes' do
-    @user.user = users(:bare).user
-    @user.email = users(:bare).email
+    @user.user = users(:administrator).user
+    @user.email = users(:administrator).email
 
     assert @user.invalid?
     assert_error @user, :user, :taken
     assert_error @user, :email, :taken
+  end
+
+  test 'skip duplicated attributes on different groups' do
+    @user.email = users(:bare).email
+
+    assert @user.valid?
   end
 
   test 'validates can duplicate user if ldap' do

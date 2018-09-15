@@ -984,6 +984,7 @@
     errors:
       is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"
+      with_expired_tasks: "tiene tareas pendientes o en proceso vencidas"
       with_solution_date: "tiene fecha de solución (y no debería)"
       without_answer: "no tiene respuesta"
       without_audited: "no tiene auditado"
@@ -1053,6 +1054,7 @@
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
+    without_score: "No calificar"
     weakness_from_template: "Observación creada de una plantilla"
     repeated_weaknesses: "Reiteradas"
     new_weaknesses: "Nuevas"
@@ -1184,6 +1186,7 @@
     errors:
       is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"
+      with_expired_tasks: "tiene tareas pendientes o en proceso vencidas"
       with_follow_up_date: "tiene fecha de implementación (y no debería)"
       with_solution_date: "tiene fecha de solución (y no debería)"
       without_answer: "no tiene respuesta"

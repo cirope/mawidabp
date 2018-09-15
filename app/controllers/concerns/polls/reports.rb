@@ -14,11 +14,11 @@ module Polls::Reports
 
     polls_answered(polls).each do |poll|
       poll.answers.each do |answer|
-        if answer.answer_option.present?
+        if answer.answer_option.present? && answer.question
           values = answer.question.option_values
           value  = values[answer.answer_option.option.to_sym]
 
-          if value >= 0
+          if value && value >= 0
             count += value
             total += 1
           end

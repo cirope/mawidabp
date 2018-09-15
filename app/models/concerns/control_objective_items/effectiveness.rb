@@ -1,7 +1,6 @@
 module ControlObjectiveItems::Effectiveness
   extend ActiveSupport::Concern
 
-
   def effectiveness
     return 0 if exclude_from_score
 

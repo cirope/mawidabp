@@ -61,7 +61,7 @@ module LdapConfigs::LDAPImport
     end
 
     def find_user data
-      User.by_email(data[:email]) || User.list.by_user(data[:user])
+      User.group_list.by_email(data[:email]) || User.list.by_user(data[:user])
     end
 
     def role_data entry

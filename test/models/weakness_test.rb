@@ -403,6 +403,15 @@ class WeaknessTest < ActiveSupport::TestCase
     end
   end
 
+  test 'must be approved on tasks' do
+    error_messages = [I18n.t('weakness.errors.with_expired_tasks')]
+
+    @weakness.tasks.build(description: 'Test task', due_on: Time.zone.yesterday)
+
+    refute @weakness.must_be_approved?
+    assert_equal error_messages.sort, @weakness.approval_errors.sort
+  end
+
   test 'work papers can be added to weakness with current close date' do
     uneditable_weakness = findings :being_implemented_weakness
 
