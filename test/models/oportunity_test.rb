@@ -233,6 +233,17 @@ class OportunityTest < ActiveSupport::TestCase
     end
   end
 
+  test 'must be approved on tasks' do
+    error_messages = [I18n.t('oportunity.errors.with_expired_tasks')]
+
+    @oportunity.state = Finding::STATUS[:assumed_risk]
+
+    @oportunity.tasks.build(description: 'Test task', due_on: Time.zone.yesterday)
+
+    refute @oportunity.must_be_approved?
+    assert_equal error_messages.sort, @oportunity.approval_errors.sort
+  end
+
   test 'dynamic status functions' do
     Finding::STATUS.each do |status, value|
       @oportunity.state = value

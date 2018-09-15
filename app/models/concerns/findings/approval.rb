@@ -16,7 +16,8 @@ module Findings::Approval
       audited_error,
       auditor_error,
       effect_error,
-      audit_comments_error
+      audit_comments_error,
+      task_error
     ].compact
 
     (@approval_errors = errors).blank?
@@ -86,6 +87,12 @@ module Findings::Approval
     def audit_comments_error
       if audit_comments.blank? && !revoked? && !SHOW_CONCLUSION_ALTERNATIVE_PDF
         I18n.t "#{class_name}.errors.without_audit_comments"
+      end
+    end
+
+    def task_error
+      if tasks.any?(&:expired?)
+        I18n.t "#{class_name}.errors.with_expired_tasks"
       end
     end
 

@@ -15,6 +15,9 @@ module Reviews::Validations
     validates :identification, :description, :survey, :scope, :risk_exposure,
       :include_sox, pdf_encoding: true
     validates :plan_item_id, uniqueness: { case_sensitive: false }
+    validates :score_type, inclusion: {
+      in: %w(effectiveness manual none weaknesses)
+    }, allow_blank: true, allow_nil: true
 
     validates :scope,
               :risk_exposure,

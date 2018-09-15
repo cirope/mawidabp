@@ -65,6 +65,18 @@ class TaskTest < ActiveSupport::TestCase
     assert task.all_due_on_dates.blank?
   end
 
+  test 'expired' do
+    refute @task.expired?
+
+    @task.due_on = Time.zone.yesterday
+
+    assert @task.expired?
+
+    @task.status = 'finished'
+
+    refute @task.expired?
+  end
+
   test 'warning users about tasks expiration' do
     Current.organization = nil
     # Only if no weekend

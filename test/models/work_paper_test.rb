@@ -251,4 +251,38 @@ class WorkPaperTest < ActiveSupport::TestCase
 
     assert review.reload.work_papers_not_finished?
   end
+
+  test 'not save multiple files with same name' do
+    assert @work_paper.update(
+      :file_model_attributes => {
+        :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
+      }
+    )
+
+    assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
+    assert_nothing_raised { @work_paper.unzip_if_necesary }
+    assert_equal '.html', File.extname(@work_paper.file_model.file.path)
+
+    file_name = '/tmp/cirope.ext'
+
+    FileUtils.cp TEST_FILE_FULL_PATH, file_name
+
+    assert @work_paper.update(
+      :file_model_attributes => {
+        :file => Rack::Test::UploadedFile.new(file_name)
+      }
+    )
+
+    assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
+    assert_nothing_raised { @work_paper.unzip_if_necesary }
+    assert_equal '.ext', File.extname(@work_paper.file_model.file.path)
+
+    dir_files = Dir.entries(
+      File.dirname @work_paper.reload.file_model.file.path
+    )
+    basename = File.basename(@work_paper.file_model.file.path, '.ext')
+
+    assert_includes dir_files, "#{basename}.ext"
+    assert_not_includes dir_files, "#{basename}.html"
+  end
 end

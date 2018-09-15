@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_24_214813) do
+ActiveRecord::Schema.define(version: 2018_09_11_004029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -591,8 +591,9 @@ ActiveRecord::Schema.define(version: 2018_07_24_214813) do
     t.string "access_token"
     t.integer "about_id"
     t.string "about_type"
-    t.index ["about_id", "about_type"], name: "index_polls_on_about_id_and_about_type"
+    t.index ["about_id"], name: "index_polls_on_about_id"
     t.index ["about_type", "about_id"], name: "index_polls_on_about_type_and_about_id"
+    t.index ["about_type"], name: "index_polls_on_about_type"
     t.index ["organization_id"], name: "index_polls_on_organization_id"
     t.index ["pollable_id", "pollable_type"], name: "index_polls_on_pollable_id_and_pollable_type"
     t.index ["questionnaire_id"], name: "index_polls_on_questionnaire_id"
@@ -892,7 +893,7 @@ ActiveRecord::Schema.define(version: 2018_07_24_214813) do
     t.datetime "hash_changed"
     t.boolean "hidden", default: false
     t.index ["change_password_hash"], name: "index_users_on_change_password_hash", unique: true
-    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["email"], name: "index_users_on_email"
     t.index ["group_admin"], name: "index_users_on_group_admin"
     t.index ["hidden"], name: "index_users_on_hidden"
     t.index ["manager_id"], name: "index_users_on_manager_id"
