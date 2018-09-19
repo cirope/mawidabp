@@ -19,7 +19,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @findings.sort_by(&:follow_up_date).each do |finding| %>
+      <% @findings.sort_by { |f| f.follow_up_date.to_s }.each do |finding| %>
         <tr>
           <td style="<%= style %>"><%= finding.review.identification %></td>
           <td style="<%= style %>"><%= finding.review_code %></td>
