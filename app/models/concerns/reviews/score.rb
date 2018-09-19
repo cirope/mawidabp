@@ -85,7 +85,7 @@ module Reviews::Score
         effectiveness
       when :weaknesses
         score_by_weaknesses
-      when :manual
+      when :manual, :none
         self.score = 100
       end
     end

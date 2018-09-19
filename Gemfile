@@ -31,7 +31,7 @@ gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 
-gem 'sass-rails'
+gem 'sassc-rails'
 gem 'uglifier'
 gem 'sprockets'
 
