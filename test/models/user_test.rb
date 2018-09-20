@@ -12,7 +12,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Organization.current_id = nil
+    Current.organization = nil
   end
 
   test 'create' do
@@ -43,6 +43,34 @@ class UserTest < ActiveSupport::TestCase
 
       assert_not_nil user.parent
     end
+  end
+
+  test 'new user should fail with duplicated email' do
+    role = roles :admin_role
+
+    role.inject_auth_privileges Hash.new(true)
+
+    user = User.new(
+      name: 'New name',
+      last_name: 'New lastname',
+      language: 'es',
+      email: users(:bare).email,
+      function: 'New function',
+      user: 'new_user',
+      enable: true,
+      failed_attempts: 0,
+      logged_in: false,
+      notes: 'Some user notes',
+      organization_roles_attributes: [
+        {
+          organization_id: organizations(:cirope).id,
+          role_id: role.id
+        }
+      ]
+    )
+
+    assert user.invalid?
+    assert_error user, :email, :taken
   end
 
   test 'update' do
@@ -121,16 +149,22 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'validates duplicated attributes' do
-    @user.user = users(:bare).user
-    @user.email = users(:bare).email
+    @user.user = users(:administrator).user
+    @user.email = users(:administrator).email
 
     assert @user.invalid?
     assert_error @user, :user, :taken
     assert_error @user, :email, :taken
   end
 
+  test 'skip duplicated attributes on different groups' do
+    @user.email = users(:bare).email
+
+    assert @user.valid?
+  end
+
   test 'validates can duplicate user if ldap' do
-    Organization.current_id = organizations(:google).id
+    Current.organization = organizations(:google)
 
     @user.user = users(:bare).user
 
@@ -439,7 +473,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'review assignment options' do
-    Organization.current_id = organizations(:google).id
+    Current.organization = organizations(:google)
 
     options = @user.review_assignment_options
 
@@ -455,7 +489,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'notify finding changes function' do
-    Organization.current_id = nil
+    Current.organization = nil
     user = users :administrator
 
     assert user.findings.for_notification.any?
@@ -469,6 +503,11 @@ class UserTest < ActiveSupport::TestCase
       new_finding.finding_user_assignments.build(
         finding.finding_user_assignments.map do |fua|
           fua.dup.attributes.merge('finding_id' => nil)
+        end
+      )
+      new_finding.taggings.build(
+        finding.taggings.map do |t|
+          t.dup.attributes.merge('id' => nil, 'taggable_id' => nil)
         end
       )
 
@@ -500,7 +539,7 @@ class UserTest < ActiveSupport::TestCase
     ConclusionFinalReview.list.new(
       review_id: reviews(:review_approved_with_conclusion).id,
       issue_date: Date.today,
-      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date,
+      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.business_days.from_now.to_date,
       applied_procedures: 'New applied procedures',
       conclusion: CONCLUSION_OPTIONS.first,
       recipients: 'John Doe',
@@ -512,9 +551,9 @@ class UserTest < ActiveSupport::TestCase
       affects_compliance: false
     ).save!
 
-    Organization.current_id = nil
+    Current.organization = nil
 
-    users = User.all_with_conclusion_final_reviews_for_notification 
+    users = User.all_with_conclusion_final_reviews_for_notification
     assert users.any?
 
     assert_enqueued_emails users.count do

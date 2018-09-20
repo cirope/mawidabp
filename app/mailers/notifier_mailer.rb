@@ -1,7 +1,7 @@
 class NotifierMailer < ActionMailer::Base
   include ActionView::Helpers::TextHelper
 
-  helper :application, :notifier
+  helper :application, :markdown, :notifier
 
   default from: "#{ENV['EMAIL_NAME'] || I18n.t('app_name')} <#{ENV['EMAIL_ADDRESS']}>"
 
@@ -64,6 +64,14 @@ class NotifierMailer < ActionMailer::Base
 
     mail to: [user.email],
          subject: prefix.upcase + t('notifier.notify_new_finding.title')
+  end
+
+  def findings_brief(user, findings)
+    @user, @findings = user, findings
+    prefix = "[#{findings.first.organization.prefix}] "
+
+    mail to: [user.email],
+         subject: prefix.upcase + t('notifier.findings_brief.title')
   end
 
   def notify_new_finding_answer(users, finding_answer)
@@ -149,7 +157,7 @@ class NotifierMailer < ActionMailer::Base
       @notification.findings.map(&:organization).uniq : []
     organizations += option_organizations
 
-    prefixes = organizations.uniq.map {|o| "[#{o.prefix}]" }.join(' ')
+    prefixes = organizations.uniq.map { |o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
     mail to: Array(users).map(&:email),
@@ -157,7 +165,7 @@ class NotifierMailer < ActionMailer::Base
   end
 
   def conclusion_review_notification(user, conclusion_review, options = {})
-    Organization.current_id = options.delete :organization_id
+    Current.organization = Organization.find(options.delete :organization_id)
     PaperTrail.request.whodunnit = options.delete :user_id
 
     org_prefix = conclusion_review.review.organization.prefix
@@ -175,15 +183,15 @@ class NotifierMailer < ActionMailer::Base
       review: conclusion_review.review.long_identification
     )
     elements = [
-      "*#{Review.model_name.human} #{conclusion_review.review.identification}*"
+      "**#{Review.model_name.human} #{conclusion_review.review.identification}**"
     ]
 
     if options[:include_score_sheet]
-      elements << "*#{I18n.t('conclusion_review.score_sheet')}*"
+      elements << "**#{I18n.t('conclusion_review.score_sheet')}**"
     end
 
     if options[:include_global_score_sheet]
-      elements << "*#{I18n.t('conclusion_review.global_score_sheet')}*"
+      elements << "**#{I18n.t('conclusion_review.global_score_sheet')}**"
     end
 
     body_title = I18n.t('notifier.conclusion_review_notification.body_title',

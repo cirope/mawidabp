@@ -5,7 +5,7 @@
 <div class="row">
   <div class="col-lg-4">
     <h5>
-      <%= textilize_without_paragraph t('.high_risk_weaknesses', count: @weaknesses.with_highest_risk.count) %>
+      <%= markdown_without_paragraph t('.high_risk_weaknesses', count: @weaknesses.with_highest_risk.count) %>
     </h5>
     <table class="table table-condensed table-striped table-hover">
       <% labels, values = *Weakness.weaknesses_for_graph(@weaknesses.with_highest_risk).values %>
@@ -47,7 +47,7 @@
 
   <div class="col-lg-4">
     <h5>
-      <%= textilize_without_paragraph t('.pending_weaknesses', count: @weaknesses.with_pending_status.count) %>
+      <%= markdown_without_paragraph t('.pending_weaknesses', count: @weaknesses.with_pending_status.count) %>
     </h5>
     <table class="table table-condensed table-striped table-hover">
       <% labels, values = *Weakness.pending_weaknesses_for_graph(@weaknesses).values %>

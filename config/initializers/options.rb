@@ -1,3 +1,8 @@
+COMPLIANCE_OPTIONS = {
+  'yes' => { data: { tag: 'Compliance' } },
+  'no'  => { data: { tag: 'Compliance', select: 'no' } }
+}
+
 CONCLUSION_OPTIONS = [
   'Satisfactorio',
   'Satisfactorio con salvedades',
@@ -102,19 +107,28 @@ REVIEW_RISK_EXPOSURE = [
   'No aplica'
 ]
 
-WEAKNESS_OPERATIONAL_RISK = [
-  'Debilidad de control/errores',
-  'Fraude interno',
-  'Fraude externo',
-  'Riesgo legal'
+TAGS_READONLY = [
+  'Eficiencia',
+  'Experiencia al Cliente',
+  'Fraude Interno',
+  'Fraude Externo',
+  'Riesgo Legal',
+  'Compliance'
 ]
 
-WEAKNESS_IMPACT = [
-  'Reputacional',
-  'Regulatorio',
-  'Económico',
-  'En el proceso/negocio'
-]
+WEAKNESS_OPERATIONAL_RISK = {
+  'Debilidad de control/errores' => {},
+  'Fraude interno'               => { data: { tag: 'Fraude Interno' } },
+  'Fraude externo'               => { data: { tag: 'Fraude Externo' } },
+  'Riesgo legal'                 => { data: { tag: 'Riesgo Legal' } }
+}
+
+WEAKNESS_IMPACT = {
+  'Reputacional'          => { data: { tag: 'Experiencia al Cliente' } },
+  'Regulatorio'           => {},
+  'Económico'             => { data: { tag: 'Eficiencia' } },
+  'En el proceso/negocio' => {}
+}
 
 WEAKNESS_INTERNAL_CONTROL_COMPONENTS = [
   'Ambiente de control',

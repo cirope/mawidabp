@@ -270,10 +270,16 @@ module Findings::FollowUpPDF
     end
 
     def important_changed_versions
-      previous_version   = versions.first
-      important_versions = [PaperTrail::Version.new]
+      previous_version     = versions.first
+      important_versions   = [PaperTrail::Version.new]
+      last_checked_version = nil
+      next_version         = -> {
+        previous_version&.event && (
+          last_checked_version = previous_version&.next || current_version
+        )
+      }
 
-      while previous_version&.event && last_checked_version = previous_version&.next
+      while next_version.call
         has_important_changes = follow_up_important_attributes.any? do |attribute|
           current_value = last_checked_version.reify(has_one: false) ?
             last_checked_version.reify(has_one: false).send(attribute) : nil
@@ -290,11 +296,12 @@ module Findings::FollowUpPDF
         previous_version = last_checked_version
       end
 
-      important_versions + [current_version]
+      important_versions
     end
 
     def current_version
-      object    = paper_trail.object_attrs_for_paper_trail false
+      event  = PaperTrail::Events::Base.new self, false
+      object = event.send :object_attrs_for_paper_trail, false
 
       PaperTrail::Version.new(
         item:      self,

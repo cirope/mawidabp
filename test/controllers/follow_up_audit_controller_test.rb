@@ -566,8 +566,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :finding_title => 'a',
         :business_unit_type => ['', business_unit_types(:cycle).id],
         :compliance => 'no',
-        :impact => [WEAKNESS_IMPACT.first],
-        :operational_risk => [WEAKNESS_OPERATIONAL_RISK.first],
+        :impact => [WEAKNESS_IMPACT.keys.first],
+        :operational_risk => [WEAKNESS_OPERATIONAL_RISK.keys.first],
         :internal_control_components => [WEAKNESS_INTERNAL_CONTROL_COMPONENTS.first]
       },
       :controller_name => 'follow_up',
@@ -1024,5 +1024,76 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'benefits', 0)
+  end
+
+  test 'findings tagged report' do
+    login
+
+    get :tagged_findings_report
+    assert_response :success
+    assert_template 'follow_up_audit/tagged_findings_report'
+
+    assert_nothing_raised do
+      get :tagged_findings_report, params: {
+        tagged_findings_report: {
+          tags_count: 3
+        }
+      }
+    end
+
+    assert_template 'follow_up_audit/tagged_findings_report'
+
+    assert_nothing_raised do
+      get :tagged_findings_report, params: {
+        tagged_findings_report: {
+          tags_count: 3,
+          finding_status: [Finding::STATUS[:being_implemented]]
+        }
+      }
+    end
+
+    assert_template 'follow_up_audit/tagged_findings_report'
+  end
+
+  test 'findings tagged report csv' do
+    login
+
+    assert_nothing_raised do
+      get :tagged_findings_report, params: {
+        tagged_findings_report: {
+          tags_count: 3,
+          finding_status: [Finding::STATUS[:being_implemented]]
+        }
+      },
+      as: :csv
+    end
+
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+  end
+
+  test 'create findings tagged report' do
+    login
+
+    post :create_tagged_findings_report, params: {
+      tagged_findings_report: {
+        tags_count: 3
+      },
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+    }
+
+    assert_response :redirect
+
+    post :create_tagged_findings_report, params: {
+      tagged_findings_report: {
+        tags_count: 3,
+        finding_status: [Finding::STATUS[:being_implemented]]
+      },
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+    }
+
+    assert_response :redirect
   end
 end

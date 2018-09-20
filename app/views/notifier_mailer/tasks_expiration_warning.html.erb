@@ -1,6 +1,6 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <% @grouped_tasks.each do |organization, tasks| %>
-    <% Organization.current_id = organization.id %>
+    <% Current.organization = organization %>
     <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
     <h3><%= t 'notifier.tasks_expiration_warning.body_title', count: tasks.size %></h3>
 

@@ -83,6 +83,7 @@ module Reports::WeaknessesCurrentSituation
         weaknesses = filter_weaknesses_current_situation_by_operational_risk weaknesses
         weaknesses = filter_weaknesses_current_situation_by_internal_control_components weaknesses
         weaknesses = filter_weaknesses_current_situation_by_tags weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_repeated weaknesses
       end
 
       @weaknesses = weaknesses.reorder order
@@ -169,6 +170,18 @@ module Reports::WeaknessesCurrentSituation
       else
         weaknesses
       end
+    end
+
+    def filter_weaknesses_current_situation_by_repeated weaknesses
+      repeated = params[:weaknesses_current_situation][:repeated]
+
+      return weaknesses if repeated.blank?
+
+      repeated = repeated == 'true'
+
+      @filters << "<b>#{t 'findings.state.repeated'}</b>: #{t("label.#{repeated ? 'yes' : 'no'}")}"
+
+      repeated ? weaknesses.with_repeated : weaknesses.without_repeated
     end
 
     def filter_weaknesses_current_situation_by_status weaknesses

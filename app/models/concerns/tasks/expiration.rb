@@ -9,24 +9,28 @@ module Tasks::Expiration
     }
   end
 
+  def expired?
+    (pending? || in_progress?) && due_on < Time.zone.today
+  end
+
   module ClassMethods
     def expires_very_soon
       date = if Time.zone.now < Time.zone.now.noon
        Time.zone.today
      else
-       1.day.from_now_in_business.to_date
+       1.day.business_days.from_now.to_date
      end
 
       expires_on date
     end
 
     def next_to_expire
-      expires_on FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date
+      expires_on FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
     end
 
     def warning_users_about_expiration
       # Sólo si no es sábado o domingo (porque no tiene sentido)
-      if [0, 6].exclude? Time.zone.today.wday
+      if Time.zone.today.workday?
         users = next_to_expire.or(expires_very_soon).inject([]) do |u, task|
           u | task.users
         end

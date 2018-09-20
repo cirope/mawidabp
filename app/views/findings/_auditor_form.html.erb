@@ -97,7 +97,7 @@
     <% if @finding.kind_of?(Weakness) && SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :compliance, collection: weakness_compliance_options, prompt: true %>
+          <%= f.input :compliance, collection: weakness_compliance_options, prompt: true, input_html: { data: { tag_modifier: true } } %>
         </div>
       </div>
       <div class="row">
@@ -114,24 +114,32 @@
     <% end %>
   </div>
 
-  <br />
-  <h4>
-    <%= Tag.model_name.human count: 0 %>
-  </h4>
-
-  <div class="row">
-    <div class="col-md-6">
-      <h5><strong><%= Tag.human_attribute_name :name %></strong></h5>
+  <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+    <div class="row">
+      <div class="col-md-12">
+        <%= f.input :tag_ids, as: :check_boxes, collection: finding_tag_options %>
+      </div>
     </div>
-  </div>
+  <% else %>
+    <br />
+    <h4>
+      <%= Tag.model_name.human count: 0 %>
+    </h4>
 
-  <div id="taggings">
-    <%= f.simple_fields_for :taggings do |t_f| %>
-      <%= render 'findings/tagging', f: t_f, parent: f %>
-    <% end %>
+    <div class="row">
+      <div class="col-md-6">
+        <h5><strong><%= Tag.human_attribute_name :name %></strong></h5>
+      </div>
+    </div>
 
-    <%= link_to_add_fields t('finding.add_tagging'), f, :taggings, 'findings/tagging' %>
-  </div>
+    <div id="taggings">
+      <%= f.simple_fields_for :taggings do |t_f| %>
+        <%= render 'findings/tagging', f: t_f, parent: f %>
+      <% end %>
+
+      <%= link_to_add_fields t('finding.add_tagging'), f, :taggings, 'findings/tagging' %>
+    </div>
+  <% end %>
 
   <% unless @finding.important_dates.blank? %>
     <h4>
@@ -139,7 +147,7 @@
     </h4>
     <ul>
       <% @finding.important_dates.each do |important_date| %>
-        <li><%= textilize_without_paragraph important_date %></li>
+        <li><%= markdown_without_paragraph important_date %></li>
       <% end %>
     </ul>
   <% end %>
@@ -338,7 +346,7 @@
   </div>
 
   <br />
-  <%= textilize t('finding.costs',
+  <%= markdown t('finding.costs',
     :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
 
   <% unless @finding.costs.blank? %>

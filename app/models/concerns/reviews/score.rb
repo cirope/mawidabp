@@ -17,7 +17,7 @@ module Reviews::Score
       self.class.scores.to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
-    when :weaknesses
+    when :weaknesses, :none
       self.class.scores_by_weaknesses.to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
@@ -70,12 +70,8 @@ module Reviews::Score
   private
 
     def guess_score_type
-      if Organization.current_id
-        organization = Organization.find Organization.current_id
-      end
-
-      if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization&.prefix
-        :weaknesses
+      if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? Current.organization&.prefix
+        score_type&.to_sym == :none ? :none : :weaknesses
       elsif SHOW_REVIEW_EXTRA_ATTRIBUTES
         :manual
       else
@@ -89,8 +85,8 @@ module Reviews::Score
         effectiveness
       when :weaknesses
         score_by_weaknesses
-      when :manual
-				self.score = 100
+      when :manual, :none
+        self.score = 100
       end
     end
 

@@ -35,13 +35,13 @@ module Questionnaires::Answers
     def polls_answers polls, rates
       polls_answered(polls).each do |poll|
         poll.answers.each do |answer|
-          options = answer.question.options
+          options = answer.question&.options
 
-          if options.any? && answer.answer_option
+          if options.present? && answer.answer_option
             option = options.rindex answer.answer_option.option.to_sym
 
-            rates[answer.question.question][option] += 1
-          else options.empty? && answer.answer.present?
+            rates[answer.question.question][option] += 1 if option
+          elsif options.blank? && answer.answer.present? && answer.question
             rates[answer.question.question][0] += 1
           end
         end

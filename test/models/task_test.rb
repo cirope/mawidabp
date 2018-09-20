@@ -49,12 +49,40 @@ class TaskTest < ActiveSupport::TestCase
     assert @task.all_due_on_dates.include?(10.days.from_now.to_date)
   end
 
-  test 'warning users about tasks expiration' do
-    Organization.current_id = nil
-    # Only if no weekend
-    assert_not_includes [0, 6], Date.today.wday
+  test 'list no due on dates when in draft' do
+    task = tasks :setup_all_things_on_draft
 
-    @task.update! due_on: FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date
+    old_date = task.due_on
+
+    assert task.all_due_on_dates.blank?
+
+    task.update! due_on: 10.days.from_now.to_date
+
+    assert task.all_due_on_dates.blank?
+
+    task.update! due_on: 15.days.from_now.to_date
+
+    assert task.all_due_on_dates.blank?
+  end
+
+  test 'expired' do
+    refute @task.expired?
+
+    @task.due_on = Time.zone.yesterday
+
+    assert @task.expired?
+
+    @task.status = 'finished'
+
+    refute @task.expired?
+  end
+
+  test 'warning users about tasks expiration' do
+    Current.organization = nil
+    # Only if no weekend
+    assert Time.zone.today.workday?
+
+    @task.update! due_on: FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
 
     assert_enqueued_emails @task.users.size do
       Task.warning_users_about_expiration
@@ -62,7 +90,7 @@ class TaskTest < ActiveSupport::TestCase
   end
 
   test 'remember users about expired tasks' do
-    Organization.current_id = nil
+    Current.organization = nil
 
     @task.update! due_on: Time.zone.yesterday
 

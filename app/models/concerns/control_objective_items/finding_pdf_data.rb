@@ -69,11 +69,26 @@ module ControlObjectiveItems::FindingPDFData
           "#{finding.answer.chomp}\n"
       end
 
+      body << get_tasks_data(finding)
       body << finding_follow_up_date_text_for(finding, show)
 
       if finding.solution_date.present?
         body << "<b>#{finding.class.human_attribute_name('solution_date')}:" +
           "</b> #{I18n.l(finding.solution_date, format: :long)}\n"
+      end
+
+      body
+    end
+
+    def get_tasks_data finding
+      body = ''
+
+      if finding.tasks.any?
+        body << "<b>#{Task.model_name.human count: 0}</b>\n"
+
+        finding.tasks.each do |task|
+          body << "#{Prawn::Text::NBSP * 2}• #{task.detailed_description}\n"
+        end
       end
 
       body

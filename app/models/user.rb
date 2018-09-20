@@ -2,7 +2,6 @@ class User < ApplicationRecord
   include ActsAsTree
   include Comparable
   include ParameterSelector
-  include SearchCop
   include Trimmer
   include Users::AttributeTypes
   include Users::Auditable
@@ -12,6 +11,7 @@ class User < ApplicationRecord
   include Users::Defaults
   include Users::DestroyValidation
   include Users::Findings
+  include Users::Group
   include Users::MarkChanges
   include Users::Name
   include Users::Notifications
@@ -29,10 +29,6 @@ class User < ApplicationRecord
   include Users::Tree
 
   trimmed_fields :user, :email, :name, :last_name
-
-  search_scope :search do
-    attributes :user, :name, :last_name, :function
-  end
 
   has_many :login_records, dependent: :destroy
   has_many :error_records, dependent: :destroy

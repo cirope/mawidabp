@@ -228,6 +228,7 @@ es:
         users: 'Responsables'
         work_papers: 'Papeles de trabajo'
         finding_answers: 'Respuestas'
+        tag_ids: 'Etiquetas'
         rescheduled: 'Reprogramada'
         organization: 'Organización'
       finding/achievements:
@@ -566,6 +567,10 @@ es:
           attributes:
             user:
               invalid_credentials: 'Credenciales inválidas'
+        questionnaire:
+          attributes:
+            base:
+              cannot_destroy_with_answered_poll: "El cuestionario no puede ser eliminado, tiene encuestas ya contestadas"
         plan:
           attributes:
             plan_items:

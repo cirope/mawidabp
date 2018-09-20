@@ -33,6 +33,7 @@
 
               <% if fm_f.object.file_cache %>
                 <%= fm_f.input :file_cache, as: :hidden %>
+                <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
               <% else %>
                 <%= fm_f.input :file, label: false %>
               <% end %>

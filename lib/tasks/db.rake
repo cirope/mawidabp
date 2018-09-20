@@ -14,17 +14,29 @@ end
 private
 
   def update_organization_settings
-    if add_show_print_date_on_pdfs?
+    if add_show_print_date_on_pdfs? # 2017-03-15
       Organization.all.each do |o|
         o.settings.create! name:        'show_print_date_on_pdfs',
                            value:       DEFAULT_SETTINGS[:show_print_date_on_pdfs][:value],
                            description: I18n.t('settings.show_print_date_on_pdfs')
       end
     end
+
+    if add_brief_period_in_weeks? # 2018-08-14
+      Organization.all.each do |o|
+        o.settings.create! name:        'brief_period_in_weeks',
+                           value:       DEFAULT_SETTINGS[:brief_period_in_weeks][:value],
+                           description: I18n.t('settings.brief_period_in_weeks')
+      end
+    end
   end
 
   def add_show_print_date_on_pdfs?
     Setting.where(name: 'show_print_date_on_pdfs').empty?
+  end
+
+  def add_brief_period_in_weeks?
+    Setting.where(name: 'brief_period_in_weeks').empty?
   end
 
   def add_new_answer_options

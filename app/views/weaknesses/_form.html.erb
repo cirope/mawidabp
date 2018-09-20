@@ -2,8 +2,14 @@
 <% review = @weakness.review || @weakness.control_objective_item.try(:review) %>
 <% frozen = review.try(:is_frozen?) || @weakness.repeated? %>
 <% show_history_changes = @weakness.status_change_history.size > 1 %>
+<% form_options = {
+  data: {
+    check_assignment_options: @weakness.new_record?,
+    assignment_confirm_message: t('finding.assignment_confirm_message')
+  }
+} %>
 
-<%= simple_form_for @weakness do |f| %>
+<%= simple_form_for @weakness, form_options do |f| %>
   <% content_for :js_extra do %>
     <%= raw("var lastWorkPaperCode = '#{next_weakness_work_paper_code(@weakness)}';") unless frozen %>
   <% end %>
@@ -106,7 +112,7 @@
       <div class="row">
         <div class="col-md-6">
           <%= f.input :compliance, collection: weakness_compliance_options, prompt: true, disabled: readonly, input_html: {
-            data: { mark_impact_as: WEAKNESS_IMPACT[1], mark_impact_on: 'yes' }
+            data: { tag_modifier: true, mark_impact_as: WEAKNESS_IMPACT.keys[1], mark_impact_on: 'yes' }
           } %>
         </div>
       </div>
@@ -124,24 +130,32 @@
     <% end %>
   </div>
 
-  <br />
-  <h4>
-    <%= Tag.model_name.human count: 0 %>
-  </h4>
-
-  <div class="row">
-    <div class="col-md-6">
-      <h5><strong><%= Tag.human_attribute_name :name %></strong></h5>
+  <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+    <div class="row">
+      <div class="col-md-12">
+        <%= f.input :tag_ids, as: :check_boxes, collection: finding_tag_options, disabled: readonly %>
+      </div>
     </div>
-  </div>
+  <% else %>
+    <br />
+    <h4>
+      <%= Tag.model_name.human count: 0 %>
+    </h4>
 
-  <div id="taggings">
-    <%= f.simple_fields_for :taggings do |t_f| %>
-      <%= render 'findings/tagging', f: t_f, parent: f %>
-    <% end %>
+    <div class="row">
+      <div class="col-md-6">
+        <h5><strong><%= Tag.human_attribute_name :name %></strong></h5>
+      </div>
+    </div>
 
-    <%= link_to_add_fields(t('finding.add_tagging'), f, :taggings, 'findings/tagging') unless frozen %>
-  </div>
+    <div id="taggings">
+      <%= f.simple_fields_for :taggings do |t_f| %>
+        <%= render 'findings/tagging', f: t_f, parent: f %>
+      <% end %>
+
+      <%= link_to_add_fields(t('finding.add_tagging'), f, :taggings, 'findings/tagging') unless frozen %>
+    </div>
+  <% end %>
 
   <br />
   <h4><%= t 'finding.responsibles', count: @weakness.users.size %></h4>
@@ -293,7 +307,9 @@
     <div class="col-md-1">
       <h5>
         <strong><%= Task.human_attribute_name 'code' %></strong>
-        <small><%= link_to_recode_tasks %></small>
+        <% unless readonly %>
+          <small><%= link_to_recode_tasks %></small>
+        <% end %>
       </h5>
     </div>
     <div class="col-md-5">

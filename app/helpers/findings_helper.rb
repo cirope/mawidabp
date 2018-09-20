@@ -167,6 +167,17 @@ module FindingsHelper
     end
   end
 
+  def finding_status_options_by_action(action, params)
+    case
+    when action == :fixed_weaknesses_report
+      finding_fixed_status_options
+    when params[:execution].present?
+      finding_execution_status_options
+    else
+      finding_status_options
+    end
+  end
+
   def show_commitment_date? finding_answer
     finding_answer.user.can_act_as_audited? &&
       finding_answer.requires_commitment_date? &&
@@ -193,6 +204,19 @@ module FindingsHelper
   def finding_task_status_options
     Task.statuses.map do |k, v|
       [t("tasks.status.#{k}"), k.to_s]
+    end
+  end
+
+  def finding_tag_options
+    Tag.list.for_findings.order(:name).map do |t|
+      options = {
+        data: {
+          name:     t.name,
+          readonly: TAGS_READONLY.include?(t.name)
+        }
+      }
+
+      [t.name, t.id, options]
     end
   end
 

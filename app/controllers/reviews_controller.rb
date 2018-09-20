@@ -251,7 +251,7 @@ class ReviewsController < ApplicationController
         "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('process_control_id')} = :process_control_id"
       ].join(' AND '),
       false: false,
-      organization_id: Organization.current_id,
+      organization_id: Current.organization&.id,
       states: Finding::PENDING_FOR_REVIEW_STATUS,
       process_control_id: @process_control.id
     ).includes(
@@ -430,6 +430,7 @@ class ReviewsController < ApplicationController
       params.require(:review).permit(
         :identification, :description, :survey, :period_id, :plan_item_id,
         :scope, :risk_exposure, :manual_score, :include_sox, :lock_version,
+        :score_type,
         file_model_attributes: [:id, :file, :file_cache, :_destroy],
         finding_review_assignments_attributes: [
           :id, :finding_id, :_destroy, :lock_version

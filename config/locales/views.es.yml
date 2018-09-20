@@ -388,6 +388,7 @@ es:
     session_expire_time: 'Desconexión por inactividad'
     exchange_directory_path: 'Directorio de intercambio de archivos'
     show_print_date_on_pdfs: 'Mostrar fecha de impresión en PDFs'
+    brief_period_in_weeks: 'Periodo de notificación "Resumen de hallazgos" en semanas'
 
   tags:
     edit:
@@ -505,18 +506,18 @@ es:
         table: 'Ver tabla'
         graph: 'Ver gráfico'
         pending_weaknesses:
-          one: '*Una* observación *pendiente*'
-          other: '*%{count}* observaciones *pendientes*'
+          one: '**Una** observación **pendiente**'
+          other: '**%{count}** observaciones **pendientes**'
         high_risk_weaknesses:
-          one: '*Una* observación de *riesgo alto*'
-          other: '*%{count}* observaciones de *riesgo alto*'
+          one: '**Una** observación de **riesgo alto**'
+          other: '**%{count}** observaciones de **riesgo alto**'
         weaknesses:
           pending:
-            one: '*Una* observación pendiente'
-            other: '*%{count}* observaciones pendientes'
+            one: '**Una** observación pendiente'
+            other: '**%{count}** observaciones pendientes'
           complete:
-            one: '*Una* observación solucionada'
-            other: '*%{count}* observaciones solucionadas'
+            one: '**Una** observación solucionada'
+            other: '**%{count}** observaciones solucionadas'
 
   risk_assessments:
     edit:

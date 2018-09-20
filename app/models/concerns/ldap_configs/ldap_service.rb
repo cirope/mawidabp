@@ -24,7 +24,8 @@ module LdapConfigs::LDAPService
       with_user.preload(:organization).each do |ldap|
         organization = ldap.organization
 
-        Organization.current_id = organization.id # Roles scope
+        Current.organization = organization # Role and users scope
+        Current.group = organization.group
 
         ::Rails.logger.info(
           "[#{organization.prefix.upcase}] Importing users for #{ldap.basedn}"
@@ -42,7 +43,8 @@ module LdapConfigs::LDAPService
         end
       end
 
-      Organization.current_id = nil
+      Current.organization = nil
+      Current.group = nil
     end
   end
 

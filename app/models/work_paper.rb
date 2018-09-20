@@ -6,7 +6,7 @@ class WorkPaper < ApplicationRecord
   include WorkPapers::Review
 
   # Named scopes
-  scope :list, -> { where(organization_id: Organization.current_id) }
+  scope :list, -> { where(organization_id: Current.organization&.id) }
   scope :sorted_by_code, -> { order(code: :asc) }
   scope :with_prefix, ->(prefix) {
     where("#{quoted_table_name}.#{qcn 'code'} LIKE ?", "#{prefix}%").sorted_by_code
@@ -62,7 +62,7 @@ class WorkPaper < ApplicationRecord
   def initialize(attributes = nil)
     super(attributes)
 
-    self.organization_id = Organization.current_id
+    self.organization_id = Current.organization&.id
   end
 
   def inspect
@@ -110,10 +110,9 @@ class WorkPaper < ApplicationRecord
   end
 
   def create_cover_and_zip
-    self.file_model.try(:file?).tap do |file|
-      self.create_pdf_cover if @cover_must_be_created && file
-      self.create_zip if @zip_must_be_created || (@cover_must_be_created && file)
-    end
+    self.file_model.try(:file?) &&
+      (@zip_must_be_created || @cover_must_be_created) &&
+      create_zip
 
     true
   end
@@ -222,6 +221,8 @@ class WorkPaper < ApplicationRecord
     self.create_pdf_cover
 
     if File.file?(original_filename) && File.file?(pdf_filename)
+      FileUtils.rm zip_filename if File.exists?(zip_filename)
+
       Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
         zipfile.add(self.filename_with_prefix, original_filename) { true }
         zipfile.add(File.basename(pdf_filename), pdf_filename) { true }

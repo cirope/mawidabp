@@ -38,6 +38,14 @@ class WeaknessTest < ActiveSupport::TestCase
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
           }
+        },
+        taggings_attributes: {
+          new_1: {
+            tag_id: tags(:important).id
+          },
+          new_2: {
+            tag_id: tags(:pending).id
+          }
         }
       )
 
@@ -76,6 +84,14 @@ class WeaknessTest < ActiveSupport::TestCase
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
           }
+        },
+        taggings_attributes: {
+          new_1: {
+            tag_id: tags(:important).id
+          },
+          new_2: {
+            tag_id: tags(:pending).id
+          }
         }
       )
 
@@ -104,6 +120,11 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.operational_risk = []
     @weakness.impact = []
     @weakness.internal_control_components = []
+    @weakness.tag_ids = []
+
+    if WEAKNESS_TAG_VALIDATION_START
+      @weakness.created_at = WEAKNESS_TAG_VALIDATION_START
+    end
 
     assert @weakness.invalid?
     assert_error @weakness, :control_objective_item_id, :blank
@@ -118,6 +139,24 @@ class WeaknessTest < ActiveSupport::TestCase
       assert_error @weakness, :impact, :blank
       assert_error @weakness, :internal_control_components, :blank
     end
+
+    if WEAKNESS_TAG_VALIDATION_START
+      assert_error @weakness, :tag_ids, :blank
+    end
+  end
+
+  test 'tag presence validation' do
+    skip unless WEAKNESS_TAG_VALIDATION_START
+
+    @weakness.created_at = WEAKNESS_TAG_VALIDATION_START - 1.second
+    @weakness.tag_ids    = []
+
+    assert @weakness.valid?
+
+    @weakness.created_at = WEAKNESS_TAG_VALIDATION_START + 1.second
+
+    assert @weakness.invalid?
+    assert_error @weakness, :tag_ids, :blank
   end
 
   test 'validates duplicated attributes' do
@@ -362,6 +401,15 @@ class WeaknessTest < ActiveSupport::TestCase
       refute @weakness.must_be_approved?
       assert_equal error_messages.sort, @weakness.approval_errors.sort
     end
+  end
+
+  test 'must be approved on tasks' do
+    error_messages = [I18n.t('weakness.errors.with_expired_tasks')]
+
+    @weakness.tasks.build(description: 'Test task', due_on: Time.zone.yesterday)
+
+    refute @weakness.must_be_approved?
+    assert_equal error_messages.sort, @weakness.approval_errors.sort
   end
 
   test 'work papers can be added to weakness with current close date' do
