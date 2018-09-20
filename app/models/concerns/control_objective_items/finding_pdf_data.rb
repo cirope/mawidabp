@@ -9,7 +9,6 @@ module ControlObjectiveItems::FindingPDFData
     body << get_late_finding_attributes(finding, show)
     body << get_audited_data(finding, hide)
     body << get_final_finding_attributes(finding, hide, show)
-    body << get_tasks_data(finding)
 
     body
   end
@@ -70,6 +69,7 @@ module ControlObjectiveItems::FindingPDFData
           "#{finding.answer.chomp}\n"
       end
 
+      body << get_tasks_data(finding)
       body << finding_follow_up_date_text_for(finding, show)
 
       if finding.solution_date.present?

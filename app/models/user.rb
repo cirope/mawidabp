@@ -11,6 +11,7 @@ class User < ApplicationRecord
   include Users::Defaults
   include Users::DestroyValidation
   include Users::Findings
+  include Users::Group
   include Users::MarkChanges
   include Users::Name
   include Users::Notifications

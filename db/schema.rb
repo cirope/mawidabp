@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_24_214813) do
+ActiveRecord::Schema.define(version: 2018_09_11_004029) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -2831,7 +2831,7 @@ ActiveRecord::Schema.define(version: 2018_07_24_214813) do
     t.datetime "hash_changed", precision: 6
     t.string "hidden", limit: 1, default: "f"
     t.index ["change_password_hash"], name: "i_users_change_password_hash", unique: true
-    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["email"], name: "index_users_on_email"
     t.index ["group_admin"], name: "index_users_on_group_admin"
     t.index ["hidden"], name: "index_users_on_hidden"
     t.index ["manager_id"], name: "index_users_on_manager_id"

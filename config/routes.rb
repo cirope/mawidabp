@@ -97,6 +97,13 @@ Rails.application.routes.draw do
     post "execution_reports/#{action}", to: "execution_reports##{action}", as: action
   end
 
+  %w[
+    tagged_findings_report
+  ].each do |action|
+    get "execution_reports/#{action}", to: "execution_reports##{action}"
+    post "execution_reports/create_#{action}", to: "execution_reports#create_#{action}"
+  end
+
   resources :versions, only: [:index, :show]
 
   resources :notifications, only: [:index, :show, :edit, :update] do
@@ -188,12 +195,17 @@ Rails.application.routes.draw do
     as: 'create_follow_up_cost_analysis_follow_up_audit',
     to: 'follow_up_audit#create_follow_up_cost_analysis'
 
-  get 'follow_up_audit/weaknesses_report',
-    as: 'weaknesses_report_follow_up_audit',
-    to: 'follow_up_audit#weaknesses_report'
-  post 'follow_up_audit/create_weaknesses_report',
-    as: 'create_weaknesses_report_follow_up_audit',
-    to: 'follow_up_audit#create_weaknesses_report'
+  %w[
+    weaknesses_report
+    tagged_findings_report
+  ].each do |action|
+    get "follow_up_audit/#{action}",
+      as: "#{action}_follow_up_audit",
+      to: "follow_up_audit##{action}"
+    post "follow_up_audit/create_#{action}",
+      as: "create_#{action}_follow_up_audit",
+      to: "follow_up_audit#create_#{action}"
+  end
 
   scope ':completed', completed: /complete|incomplete/ do
     resources :findings, except: [:destroy] do
