@@ -59,7 +59,7 @@ class WeaknessesController < ApplicationController
 
     respond_to do |format|
       format.html { @weaknesses = @weaknesses.page params[:page] }
-      format.csv  { render_or_send_by_mail @weaknesses.limit(101), @title.downcase }
+      format.csv  { render_or_send_by_mail @weaknesses, @title.downcase }
     end
   end
 
