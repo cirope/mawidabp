@@ -3,10 +3,12 @@ class ReportMailer < ActionMailer::Base
 
   helper :markdown
 
-  def csv(user, csv, filename, organization)
+  default from: "#{ENV['EMAIL_NAME'] || I18n.t('app_name')} <#{ENV['EMAIL_ADDRESS']}>"
+
+  def zipped_csv(user, zipped_csv, filename, organization)
     @user = user
 
-    attachments[filename] = { mime_type: Mime[:csv], content: csv }
+    attachments[filename] = { mime_type: 'application/zip', content: zipped_csv }
 
     mail(
       to: user.email,

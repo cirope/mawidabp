@@ -6,13 +6,22 @@ class CsvReportJob < ApplicationJob
       .where(id: ids)
       .to_csv(csv_options)
 
+    # In memory csv compression
+    zip_io = Zip::OutputStream.write_buffer do |zip|
+      zip.put_next_entry filename
+      zip.write csv
+    end
+    zip_io.rewind # reset IOfile read pointer
+
     user = User.find(user_id)
     organization = Organization.find(organization_id)
 
-    ReportMailer.csv(
+    new_filename = filename.gsub(/\.csv$/, '.zip')
+
+    ReportMailer.zipped_csv(
       user,
-      csv,
-      filename,
+      zip_io.read,
+      new_filename,
       organization
     ).deliver_now
   end

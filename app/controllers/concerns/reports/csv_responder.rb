@@ -1,7 +1,7 @@
 module Reports::CSVResponder
 
   def render_or_send_by_mail(collection, filename, csv_options: {})
-    if SEND_REPORT_EMAIL_AFTER_COUNT && collection.count > SEND_REPORT_EMAIL_AFTER_COUNT
+    if SEND_REPORT_EMAIL_AFTER_COUNT && collection.unscope(:group).count > SEND_REPORT_EMAIL_AFTER_COUNT
       CsvReportJob.perform_later(
         model_name:      collection.model_name.name,
         ids:             collection.ids,
