@@ -16,7 +16,9 @@ class Authentication
     authenticate
 
     if @valid && @valid_user
-      unless @current_organization.try(:ldap_config)
+      if @current_organization.try(:ldap_config)
+        verify_pending_poll
+      else
         verify_days_for_password_expiration
         verify_pending_poll
         verify_if_must_change_the_password
@@ -199,7 +201,11 @@ class Authentication
 
     def verify_pending_poll
       if poll = @valid_user.first_pending_poll
-        @message = I18n.t 'polls.must_answer_poll'
+        @message = I18n.t(
+          'polls.has_unanswered',
+          count: @valid_user.list_unanswered_polls.count
+        )
+
         @redirect_url = ['edit', poll, token: poll.access_token]
       end
     end

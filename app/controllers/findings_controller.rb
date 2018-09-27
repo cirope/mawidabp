@@ -41,7 +41,7 @@ class FindingsController < ApplicationController
                  finding_url 'complete', @finding
                end
 
-    respond_with @finding, location: location
+    respond_with @finding, location: location unless performed?
   end
 
   private

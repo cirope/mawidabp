@@ -87,7 +87,8 @@ class ApplicationController < ActionController::Base
           @auth_user.try(:privileges, current_organization) : {}
       else
         go_to = request.fullpath
-        store_go_to = request.get? && !request.xhr?
+        is_html = request.format == Mime[:html]
+        store_go_to = request.get? && is_html && !request.xhr?
         session[:go_to] = go_to if store_go_to
         @auth_user = nil
         redirect_to_login t('message.must_be_authenticated'), :alert
