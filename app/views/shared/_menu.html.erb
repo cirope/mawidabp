@@ -22,6 +22,8 @@
     <div class="collapse navbar-collapse">
       <% if show_menu? %>
         <ul class="nav navbar-nav">
+          <%= show_unanswered_poll_link %>
+
           <%= render(
             partial:    'shared/menu_item',
             collection: @auth_user.get_menu
