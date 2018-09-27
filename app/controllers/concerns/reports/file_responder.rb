@@ -35,10 +35,13 @@ module Reports::FileResponder
         options:         options
       )
 
-      back_url = [
-        request.path,
-        request.query_parameters.except('format')
-      ].join('?')
+      parameters = request.query_parameters.except('format')
+
+      back_url = if parameters.present?
+                   [request.path, parameters.to_param].join '?'
+                 else
+                   request.path
+                 end
 
       redirect_to back_url, notice: t('reports.file_will_be_sent')
     end
