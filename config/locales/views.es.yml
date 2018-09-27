@@ -293,7 +293,9 @@ es:
       title: 'Listado de encuestas'
     edit:
       title: 'Modificar encuesta'
-    must_answer_poll: 'Tiene una encuesta pendiente por responder.'
+    has_unanswered:
+      one: 'Tiene una encuesta pendiente por responder.'
+      other: 'Tiene %{count} encuestas pendientes por responder'
     new:
       title: 'Agregar encuesta'
     not_found: 'No se encontró la encuesta o la misma ya ha sido contestada.'
