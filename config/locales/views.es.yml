@@ -336,7 +336,7 @@ es:
   reports:
     customization_titles: 'Personalización de títulos'
     generating: 'Generando reporte...'
-    file_will_be_sent: "Le enviaremos por email el reporte solicitado"
+    file_will_be_sent: "Le enviaremos por correo el reporte solicitado"
 
   resource_classes:
     edit:

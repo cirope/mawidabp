@@ -3,7 +3,7 @@ class WeaknessesController < ApplicationController
   include AutoCompleteFor::FindingRelation
   include AutoCompleteFor::Tagging
   include AutoCompleteFor::WeaknessTemplate
-  include Reports::CSVResponder
+  include Reports::FileResponder
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_weakness, only: [
@@ -59,7 +59,13 @@ class WeaknessesController < ApplicationController
 
     respond_to do |format|
       format.html { @weaknesses = @weaknesses.page params[:page] }
-      format.csv  { render_or_send_by_mail @weaknesses, @title.downcase }
+      format.csv  do
+        render_or_send_by_mail(
+          collection: @weaknesses,
+          filename: @title.downcase,
+          method_name: :to_csv
+        )
+      end
     end
   end
 

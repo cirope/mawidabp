@@ -5,7 +5,7 @@ class ReportMailer < ActionMailer::Base
 
   default from: "#{ENV['EMAIL_NAME'] || I18n.t('app_name')} <#{ENV['EMAIL_ADDRESS']}>"
 
-  def attached_report(user, zipped_report, filename, organization)
+  def attached_report filename, zipped_report, user, organization
     @user = user
 
     attachments[filename] = { mime_type: 'application/zip', content: zipped_report }

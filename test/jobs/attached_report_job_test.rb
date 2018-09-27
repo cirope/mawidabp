@@ -6,7 +6,7 @@ class AttachedReportJobTest < ActiveJob::TestCase
       model_name:      'Finding',
       ids:             Finding.all.ids,
       filename:        'super_report.csv',
-      method_name:     :to_csv,
+      method_name:     'to_csv',
       user_id:         users(:administrator).id,
       organization_id: organizations(:cirope).id
     )
@@ -21,10 +21,10 @@ class AttachedReportJobTest < ActiveJob::TestCase
     end
 
     csv_report = Zip::File.open(tmp_file, Zip::File::CREATE) do |zipfile|
-      zipfile.read('super_report.csv')
+      zipfile.read 'super_report.csv'
     end
 
-    csv = CSV.parse(csv_report, col_sep: ';', force_quotes: true, headers: true)
+    csv = CSV.parse csv_report, col_sep: ';', force_quotes: true, headers: true
 
     assert_equal csv.size, Finding.all.count
     FileUtils.rm_f tmp_file

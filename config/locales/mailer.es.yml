@@ -20,7 +20,7 @@ es:
       recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 8 o superior*"
 
   report_mailer:
-    zipped_csv:
+    attached_report:
       subject: "[%{organization}] Su reporte está listo"
       body: "El reporte solicitado está adjunto."
       greetings: "Hola %{name}"

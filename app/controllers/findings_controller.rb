@@ -3,7 +3,7 @@ class FindingsController < ApplicationController
   include AutoCompleteFor::Tagging
   include Findings::CurrentUserScopes
   include Findings::SetFinding
-  include Reports::CSVResponder
+  include Reports::FileResponder
 
   respond_to :html
 
@@ -18,7 +18,14 @@ class FindingsController < ApplicationController
 
     respond_to do |format|
       format.html { @findings = @findings.page params[:page] }
-      format.csv  { render_or_send_by_mail @findings, @title.downcase, csv_options: csv_options }
+      format.csv  do
+        render_or_send_by_mail(
+          collection: @findings,
+          filename: @title.downcase,
+          method_name: :to_csv,
+          options: csv_options
+        )
+      end
       format.pdf  { redirect_to pdf.relative_path }
     end
   end
