@@ -294,7 +294,7 @@ es:
     edit:
       title: 'Modificar encuesta'
     has_unanswered:
-      one: 'Tiene una encuesta pendiente por responder.'
+      one: 'Tiene una encuesta pendiente por responder'
       other: 'Tiene %{count} encuestas pendientes por responder'
     new:
       title: 'Agregar encuesta'
