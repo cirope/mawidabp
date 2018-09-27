@@ -1,11 +1,12 @@
 require 'test_helper'
 
-class CsvReportJobTest < ActiveJob::TestCase
+class AttachedReportJobTest < ActiveJob::TestCase
   test 'zip and email collection' do
-    CsvReportJob.perform_now(
+    AttachedReportJob.perform_now(
       model_name:      'Finding',
       ids:             Finding.all.ids,
       filename:        'super_report.csv',
+      method_name:     :to_csv,
       user_id:         users(:administrator).id,
       organization_id: organizations(:cirope).id
     )
@@ -26,5 +27,6 @@ class CsvReportJobTest < ActiveJob::TestCase
     csv = CSV.parse(csv_report, col_sep: ';', force_quotes: true, headers: true)
 
     assert_equal csv.size, Finding.all.count
+    FileUtils.rm_f tmp_file
   end
 end

@@ -21,6 +21,6 @@ es:
 
   report_mailer:
     zipped_csv:
-      subject: "[%{organization}] Su reporte en csv está listo"
-      body_title: "Habías solicitado este reporte, lamentamos la demora."
+      subject: "[%{organization}] Su reporte está listo"
+      body: "El reporte solicitado está adjunto."
       greetings: "Hola %{name}"
