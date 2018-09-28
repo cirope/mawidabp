@@ -158,11 +158,16 @@ class FindingsControllerTest < ActionController::TestCase
 
     sample = Finding.list.first
     users = sample.finding_user_assignments.map { |fua| fua.dup.attributes.except('finding_id') }
+    tag_ids =  [
+      tags(:important).id,
+      tags(:pending).id
+    ]
 
     100.times do |i|
       cloned = sample.dup
       cloned.control_objective_item = control_objective_items(:impact_analysis_item_editable)
       cloned.finding_user_assignments_attributes = users
+      cloned.tag_ids = tag_ids
       cloned.review_code = 'O' + (500 + i).to_s
       cloned.save
     end
