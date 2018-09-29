@@ -156,12 +156,9 @@ class FindingsControllerTest < ActionController::TestCase
   test 'list findings and send CSV by email' do
     set_organization
 
-    sample = Finding.list.first
-    users = sample.finding_user_assignments.map { |fua| fua.dup.attributes.except('finding_id') }
-    tag_ids =  [
-      tags(:important).id,
-      tags(:pending).id
-    ]
+    sample  = findings(:unanswered_weakness)
+    users   = sample.finding_user_assignments.map { |fua| fua.dup.attributes.except('finding_id') }
+    tag_ids = [tags(:important).id, tags(:pending).id]
 
     100.times do |i|
       cloned = sample.dup

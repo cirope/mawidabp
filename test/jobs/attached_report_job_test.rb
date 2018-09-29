@@ -2,14 +2,19 @@ require 'test_helper'
 
 class AttachedReportJobTest < ActiveJob::TestCase
   test 'zip and email collection' do
-    AttachedReportJob.perform_now(
-      model_name:      'Finding',
-      ids:             Finding.all.ids,
-      filename:        'super_report.csv',
-      method_name:     'to_csv',
-      user_id:         users(:administrator).id,
-      organization_id: organizations(:cirope).id
-    )
+    ActionMailer::Base.deliveries = []
+
+    perform_enqueued_jobs do
+      AttachedReportJob.perform_now(
+        model_name:      'Finding',
+        ids:             Finding.all.ids,
+        filename:        'super_report.csv',
+        method_name:     'to_csv',
+        user_id:         users(:administrator).id,
+        organization_id: organizations(:cirope).id
+      )
+    end
+
     assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
     attachment = ActionMailer::Base.deliveries.last.attachments.first
     assert_equal 'super_report.zip', attachment.filename

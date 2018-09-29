@@ -21,6 +21,6 @@ es:
 
   report_mailer:
     attached_report:
-      subject: "[%{organization}] Su reporte está listo"
-      body: "El reporte solicitado está adjunto."
-      greetings: "Hola %{name}"
+      subject: '[%{organization}] Su reporte está listo'
+      body: 'El reporte solicitado está adjunto.'
+      greetings: 'Hola %{name}'
