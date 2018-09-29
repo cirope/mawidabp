@@ -1,7 +1,7 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <h2><%= t('report_mailer.attached_report.greetings', name: @user.informal_name) %>,</h2>
+  <h2><%= t 'report_mailer.attached_report.greetings', name: @user.informal_name %>,</h2>
 
-  <p><%= t('report_mailer.attached_report.body') %></p>
+  <p><%= t 'report_mailer.attached_report.body' %></p>
 
   <%= render partial: 'common_mailer/footer' %>
 </div>

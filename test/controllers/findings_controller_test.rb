@@ -157,7 +157,7 @@ class FindingsControllerTest < ActionController::TestCase
     set_organization
 
     sample  = findings(:unanswered_weakness)
-    users   = sample.finding_user_assignments.map { |fua| fua.dup.attributes.except('finding_id') }
+    users   = sample.finding_user_assignments.map { |fua| fua.dup.attributes.except 'finding_id' }
     tag_ids = [tags(:important).id, tags(:pending).id]
 
     100.times do |i|
