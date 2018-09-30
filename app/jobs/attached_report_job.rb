@@ -12,7 +12,7 @@ class AttachedReportJob < ApplicationJob
 
     report = model.where(id: ids).send method_name, options
 
-    zip_file = zip_report_with_filename(report, filename)
+    zip_file = zip_report_with_filename report, filename
 
     extension = File.extname filename
     new_filename = filename.sub(
@@ -30,7 +30,7 @@ class AttachedReportJob < ApplicationJob
 
   private
 
-    def zip_report_with_filename(report, filename)
+    def zip_report_with_filename report, filename
       # In memory compression
       zip_io = Zip::OutputStream.write_buffer do |zip|
         zip.put_next_entry filename
