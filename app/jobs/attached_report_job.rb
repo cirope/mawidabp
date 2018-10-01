@@ -3,12 +3,12 @@ class AttachedReportJob < ApplicationJob
 
   def perform args
     model           = args.fetch(:model_name).constantize
-    ids             = args.fetch(:ids)
-    filename        = args.fetch(:filename)
-    method_name     = args.fetch(:method_name)
-    options         = args.fetch(:options, {})
-    user_id         = args.fetch(:user_id)
-    organization_id = args.fetch(:organization_id)
+    ids             = args.fetch :ids
+    filename        = args.fetch :filename
+    method_name     = args.fetch :method_name
+    options         = args.fetch :options, {}
+    user_id         = args.fetch :user_id
+    organization_id = args.fetch :organization_id
 
     report = model.where(id: ids).send method_name, options
 
