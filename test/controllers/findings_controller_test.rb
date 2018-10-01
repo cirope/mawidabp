@@ -156,13 +156,13 @@ class FindingsControllerTest < ActionController::TestCase
   test 'list findings and send CSV by email' do
     set_organization
 
-    sample  = findings(:unanswered_weakness)
+    sample  = findings :unanswered_weakness
     users   = sample.finding_user_assignments.map { |fua| fua.dup.attributes.except 'finding_id' }
     tag_ids = [tags(:important).id, tags(:pending).id]
 
     100.times do |i|
       cloned = sample.dup
-      cloned.control_objective_item = control_objective_items(:impact_analysis_item_editable)
+      cloned.control_objective_item = control_objective_items :impact_analysis_item_editable
       cloned.finding_user_assignments_attributes = users
       cloned.tag_ids = tag_ids
       cloned.review_code = 'O' + (500 + i).to_s
@@ -171,7 +171,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     get :index, params: { completed: 'incomplete' }, as: :csv
 
-    assert_redirected_to findings_url(format: :csv, completed: 'incomplete')
+    assert_redirected_to findings_url format: :csv, completed: 'incomplete'
   end
 
   test 'show finding' do
