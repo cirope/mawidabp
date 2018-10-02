@@ -10,7 +10,7 @@ class AttachedReportJob < ApplicationJob
     user_id         = args.fetch :user_id
     organization_id = args.fetch :organization_id
 
-    report = model.where(id: ids).send method_name, options
+    report = model.where(id: ids.uniq).send method_name, options
 
     zip_file = zip_report_with_filename report, filename
 
@@ -31,13 +31,12 @@ class AttachedReportJob < ApplicationJob
   private
 
     def zip_report_with_filename report, filename
-      # In memory compression
-      zip_io = Zip::OutputStream.write_buffer do |zip|
-        zip.put_next_entry filename
-        zip.write report
+      tmp_file = Dir::Tmpname.create(filename) {}
+
+      Zip::File.open(tmp_file, Zip::File::CREATE) do |zip|
+        zip.get_output_stream(filename) { |f| f.write report }
       end
 
-      zip_io.rewind # reset IOfile read pointer
-      zip_io.read
+      tmp_file
     end
 end
