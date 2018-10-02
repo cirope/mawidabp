@@ -67,6 +67,10 @@ module Reviews::Score
     self.score = total <= 50 ? (100 - total * 2).round : 0
   end
 
+  def scored_by_weaknesses?
+    score_type == 'weaknesses'
+  end
+
   private
 
     def guess_score_type
