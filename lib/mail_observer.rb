@@ -1,4 +1,4 @@
-class MailObserver
+class ::MailObserver
   def self.delivered_email(message)
     organization = Organization.find_by_prefix(
       message.subject.match(/\[(\w+\W*\w*)\]/)[1].downcase
