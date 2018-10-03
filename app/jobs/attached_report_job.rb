@@ -9,8 +9,13 @@ class AttachedReportJob < ApplicationJob
     options         = args.fetch :options, {}
     user_id         = args.fetch :user_id
     organization_id = args.fetch :organization_id
+    relation        = model.all
 
-    report = model.where(id: ids.uniq).send method_name, options
+    ids.uniq.each_slice(500) do |id_slice|
+      relation = relation.where id: id_slice
+    end
+
+    report = relation.send method_name, options
 
     zip_file = zip_report_with_filename report, filename
 
