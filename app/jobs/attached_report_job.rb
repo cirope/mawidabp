@@ -9,13 +9,19 @@ class AttachedReportJob < ApplicationJob
     options         = args.fetch :options, {}
     user_id         = args.fetch :user_id
     organization_id = args.fetch :organization_id
-    relation        = model.all
+    condition       = ''
+    conditions      = []
+    parameters      = {}
 
-    ids.uniq.each_slice(500) do |id_slice|
-      relation = relation.where id: id_slice
+    ids.uniq.each_slice(500).each_with_index do |id_slice, i|
+      parameters[:"ids_#{i}"] = id_slice
+
+      conditions << "#{model.quoted_table_name}.id IN (:ids_#{i})"
     end
 
-    report = relation.send method_name, options
+    condition = conditions.map { |c| "(#{c})" }.join ' OR '
+
+    report = model.where(condition, parameters).send method_name, options
 
     zip_file = zip_report_with_filename report, filename
 
