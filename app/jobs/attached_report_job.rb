@@ -4,6 +4,8 @@ class AttachedReportJob < ApplicationJob
   def perform args
     model           = args.fetch(:model_name).constantize
     ids             = args.fetch :ids
+    order           = args.fetch :order, ''
+    includes        = args.fetch :includes, [].to_json
     filename        = args.fetch :filename
     method_name     = args.fetch :method_name
     options         = args.fetch :options, {}
@@ -21,7 +23,12 @@ class AttachedReportJob < ApplicationJob
 
     condition = conditions.map { |c| "(#{c})" }.join ' OR '
 
-    report = model.where(condition, parameters).send method_name, options
+    includes = JSON.parse(includes)
+
+    report = model.includes(includes)
+      .where(condition, parameters)
+      .reorder(order)
+      .send method_name, options
 
     zip_file = zip_report_with_filename report, filename
 
