@@ -23,7 +23,7 @@ class AttachedReportJob < ApplicationJob
 
     condition = conditions.map { |c| "(#{c})" }.join ' OR '
 
-    includes = JSON.parse(includes) rescue []
+    includes = JSON.parse(includes)
 
     report = model.includes(includes)
       .where(condition, parameters)
