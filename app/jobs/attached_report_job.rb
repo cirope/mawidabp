@@ -11,22 +11,11 @@ class AttachedReportJob < ApplicationJob
     options         = args.fetch :options, {}
     user_id         = args.fetch :user_id
     organization_id = args.fetch :organization_id
-    condition       = ''
-    conditions      = []
-    parameters      = {}
 
-    ids.uniq.each_slice(500).each_with_index do |id_slice, i|
-      parameters[:"ids_#{i}"] = id_slice
-
-      conditions << "#{model.quoted_table_name}.id IN (:ids_#{i})"
-    end
-
-    condition = conditions.map { |c| "(#{c})" }.join ' OR '
-
-    includes = JSON.parse(includes)
+    includes = JSON.parse includes
 
     report = model.includes(includes)
-      .where(condition, parameters)
+      .where(*build_conditions_for(model, ids))
       .reorder(order)
       .send method_name, options
 
@@ -47,6 +36,22 @@ class AttachedReportJob < ApplicationJob
   end
 
   private
+
+    def build_conditions_for model, ids
+      conditions = []
+      parameters = {}
+
+      ids.uniq.each_slice(500).each_with_index do |id_slice, i|
+        parameters[:"ids_#{i}"] = id_slice
+
+        conditions << "#{model.quoted_table_name}.id IN (:ids_#{i})"
+      end
+
+      [
+        conditions.map { |c| "(#{c})" }.join(' OR '),
+        parameters
+      ]
+    end
 
     def zip_report_with_filename report, filename
       tmp_file = Dir::Tmpname.create(filename) {}
