@@ -25,16 +25,10 @@ module Reports::FileResponder
       method_name = args.fetch(:method_name).to_s
       options     = args.fetch :options, {}
 
-      includes = (
-        collection.joins_values.to_a +
-        collection.includes_values.to_a
-      )
-
       AttachedReportJob.perform_later(
         model_name:      collection.model_name.name,
         ids:             collection.ids,
-        order:           report_order_for(collection),
-        includes:        includes.to_json,
+        query_methods:   report_query_methods(collection),
         user_id:         Current.user.id,
         organization_id: Current.organization.id,
         filename:        filename,
@@ -53,9 +47,18 @@ module Reports::FileResponder
       redirect_to back_url, notice: t('reports.file_will_be_sent')
     end
 
-    def report_order_for collection
-      @order_by || collection.order_values.map do |node|
+    def report_query_methods collection
+      order = collection.order_values.map do |node|
         node.try(:to_sql) || node.to_s
-      end.join(', ')
+      end.join ', '
+
+      {
+        joins:            collection.joins_values,
+        left_outer_joins: collection.left_outer_joins_values,
+        includes:         collection.includes_values,
+        group:            collection.group_values,
+        reorder:          order,
+        references:       collection.references_values
+      }.to_json
     end
 end
