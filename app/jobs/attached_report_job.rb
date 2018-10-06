@@ -10,20 +10,10 @@ class AttachedReportJob < ApplicationJob
     options         = args.fetch :options, {}
     user_id         = args.fetch :user_id
     organization_id = args.fetch :organization_id
-    conditions      = []
-    parameters      = {}
-
-    ids.uniq.each_slice(500).each_with_index do |id_slice, i|
-      parameters[:"ids_#{i}"] = id_slice
-
-      conditions << "#{model.quoted_table_name}.id IN (:ids_#{i})"
-    end
-
-    condition = conditions.map { |c| "(#{c})" }.join ' OR '
 
     operations = JSON.parse(operations).deep_symbolize_keys
 
-    scope = model.where(condition, parameters)
+    scope = model.where(*build_conditions_for(model, ids))
 
     operations.each do |method, args|
       if args.present?
@@ -43,15 +33,34 @@ class AttachedReportJob < ApplicationJob
       '.zip'
     )
 
-    ReportMailer.attached_report(
-      filename:        new_filename,
-      file:            zip_file,
-      user_id:         user_id,
-      organization_id: organization_id
-    ).deliver_later
+    puts "Report size: #{report.to_s.size}"
+    puts "Record count: #{report.unscope(:group).count}"
+
+    # ReportMailer.attached_report(
+    #   filename:        new_filename,
+    #   file:            zip_file,
+    #   user_id:         user_id,
+    #   organization_id: organization_id
+    # ).deliver_later
   end
 
   private
+
+    def build_conditions_for model, ids
+      conditions = []
+      parameters = {}
+
+      ids.uniq.each_slice(500).each_with_index do |id_slice, i|
+        parameters[:"ids_#{i}"] = id_slice
+
+        conditions << "#{model.quoted_table_name}.id IN (:ids_#{i})"
+      end
+
+      [
+        conditions.map { |c| "(#{c})" }.join(' OR '),
+        parameters
+      ]
+    end
 
     def zip_report_with_filename report, filename
       tmp_file = Dir::Tmpname.create(filename) {}
