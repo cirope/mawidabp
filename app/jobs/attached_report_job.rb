@@ -4,27 +4,25 @@ class AttachedReportJob < ApplicationJob
   def perform args
     model           = args.fetch(:model_name).constantize
     ids             = args.fetch :ids
-    operations      = args.fetch :operations, {}.to_json
+    query_methods   = args.fetch :query_methods, {}.to_json
     filename        = args.fetch :filename
     method_name     = args.fetch :method_name
     options         = args.fetch :options, {}
     user_id         = args.fetch :user_id
     organization_id = args.fetch :organization_id
 
-    operations = JSON.parse(operations).deep_symbolize_keys
+    query_methods = JSON.parse(query_methods).deep_symbolize_keys
 
-    scope = model.where(*build_conditions_for(model, ids))
+    scope = model.where *build_conditions_for(model, ids)
 
-    operations.each do |method, args|
+    query_methods.each do |method, args|
       if args.present?
         arguments = args.is_a?(String) ? args : deep_convert_to_sym(args)
-
-        scope = scope.send method, arguments
+        scope     = scope.send method, arguments
       end
     end
 
-    report = scope.send method_name, options
-
+    report   = scope.send method_name, options
     zip_file = zip_report_with_filename report, filename
 
     extension = File.extname filename
@@ -69,7 +67,7 @@ class AttachedReportJob < ApplicationJob
       tmp_file
     end
 
-    def deep_convert_to_sym(data)
+    def deep_convert_to_sym data
       case data
       when Hash
         data.map { |k, v| [k, deep_convert_to_sym(v)] }.to_h

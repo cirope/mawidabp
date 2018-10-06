@@ -28,7 +28,7 @@ module Reports::FileResponder
       AttachedReportJob.perform_later(
         model_name:      collection.model_name.name,
         ids:             collection.ids,
-        operations:      report_operations(collection),
+        query_methods:      report_query_methods(collection),
         user_id:         Current.user.id,
         organization_id: Current.organization.id,
         filename:        filename,
@@ -47,10 +47,10 @@ module Reports::FileResponder
       redirect_to back_url, notice: t('reports.file_will_be_sent')
     end
 
-    def report_operations collection
+    def report_query_methods collection
       order = collection.order_values.map do |node|
         node.try(:to_sql) || node.to_s
-      end.join(', ')
+      end.join ', '
 
       {
         joins:            collection.joins_values,
