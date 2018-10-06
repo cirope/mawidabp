@@ -25,21 +25,23 @@ module Reports::FileResponder
       method_name = args.fetch(:method_name).to_s
       options     = args.fetch :options, {}
 
-      order = @order_by
-      order ||= collection.order_values.map do |node|
+      order = collection.order_values.map do |node|
         node.try(:to_sql) || node.to_s
       end.join(', ')
 
-      includes = (
-          collection.joins_values.to_a +
-          collection.includes_values.to_a
-      )
+      operations = {
+        joins:            collection.joins_values,
+        left_outer_joins: collection.left_outer_joins_values,
+        includes:         collection.includes_values,
+        group:            collection.group_values,
+        reorder:          order,
+        references:       collection.references_values
+      }
 
       AttachedReportJob.perform_later(
         model_name:      collection.model_name.name,
         ids:             collection.ids,
-        order:           order,
-        includes:        includes.to_json,
+        operations:      operations.to_json,
         user_id:         Current.user.id,
         organization_id: Current.organization.id,
         filename:        filename,

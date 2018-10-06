@@ -4,14 +4,12 @@ class AttachedReportJob < ApplicationJob
   def perform args
     model           = args.fetch(:model_name).constantize
     ids             = args.fetch :ids
-    order           = args.fetch :order, ''
-    includes        = args.fetch :includes, [].to_json
+    operations      = args.fetch :operations, {}.to_json
     filename        = args.fetch :filename
     method_name     = args.fetch :method_name
     options         = args.fetch :options, {}
     user_id         = args.fetch :user_id
     organization_id = args.fetch :organization_id
-    condition       = ''
     conditions      = []
     parameters      = {}
 
@@ -23,12 +21,19 @@ class AttachedReportJob < ApplicationJob
 
     condition = conditions.map { |c| "(#{c})" }.join ' OR '
 
-    includes = JSON.parse(includes)
+    operations = JSON.parse(operations).deep_symbolize_keys
 
-    report = model.includes(includes)
-      .where(condition, parameters)
-      .reorder(order)
-      .send method_name, options
+    scope = model.where(condition, parameters)
+
+    operations.each do |method, args|
+      if args.present?
+        arguments = args.is_a?(String) ? args : deep_convert_to_sym(args)
+
+        scope = scope.send method, arguments
+      end
+    end
+
+    report = scope.send method_name, options
 
     zip_file = zip_report_with_filename report, filename
 
@@ -56,5 +61,18 @@ class AttachedReportJob < ApplicationJob
       end
 
       tmp_file
+    end
+
+    def deep_convert_to_sym(something)
+      case something
+      when Hash
+        something.map { |k, v| [k, deep_convert_to_sym(v)] }.to_h
+      when Array
+        something.map { |e| e.try(:to_sym) || deep_convert_to_sym(e) }
+      when String
+        something.to_sym
+      else
+        something
+      end
     end
 end

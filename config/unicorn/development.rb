@@ -1,3 +1,3 @@
 worker_processes 1
 listen Rack::Server.new.options[:Port]
-timeout 180
+timeout 1800
