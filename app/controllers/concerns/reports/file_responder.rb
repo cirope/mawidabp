@@ -28,7 +28,7 @@ module Reports::FileResponder
       AttachedReportJob.perform_later(
         model_name:      collection.model_name.name,
         ids:             collection.ids,
-        query_methods:      report_query_methods(collection),
+        query_methods:   report_query_methods(collection),
         user_id:         Current.user.id,
         organization_id: Current.organization.id,
         filename:        filename,
