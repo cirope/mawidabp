@@ -33,15 +33,12 @@ class AttachedReportJob < ApplicationJob
       '.zip'
     )
 
-    puts "Report size: #{report.to_s.size}"
-    puts "Record count: #{report.unscope(:group).count}"
-
-    # ReportMailer.attached_report(
-    #   filename:        new_filename,
-    #   file:            zip_file,
-    #   user_id:         user_id,
-    #   organization_id: organization_id
-    # ).deliver_later
+    ReportMailer.attached_report(
+      filename:        new_filename,
+      file:            zip_file,
+      user_id:         user_id,
+      organization_id: organization_id
+    ).deliver_later
   end
 
   private
@@ -72,16 +69,16 @@ class AttachedReportJob < ApplicationJob
       tmp_file
     end
 
-    def deep_convert_to_sym(something)
-      case something
+    def deep_convert_to_sym(data)
+      case data
       when Hash
-        something.map { |k, v| [k, deep_convert_to_sym(v)] }.to_h
+        data.map { |k, v| [k, deep_convert_to_sym(v)] }.to_h
       when Array
-        something.map { |e| e.try(:to_sym) || deep_convert_to_sym(e) }
+        data.map { |e| e.try(:to_sym) || deep_convert_to_sym(e) }
       when String
-        something.to_sym
+        data.to_sym
       else
-        something
+        data
       end
     end
 end
