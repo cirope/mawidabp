@@ -12,9 +12,17 @@ es:
         updated: 'Actualizados:'
 
   common_mailer:
+    alt_footer:
+      warning: "Por favor, **no contestar** el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
+      title_html: "Si usted desea acceder a sus observaciones , haga click en el siguiente enlace e ingrese legajo y contraseña de Windows: %{url}"
     footer:
       email_label: "Correo (preferentemente)"
-      phone_label: "Teléfono"
-      warning: "Por favor, *no contestar* el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
+      warning: "Por favor, **no contestar** el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
       title: "Correo enviado por el sistema 'Mawidabp'. Cualquier inquietud comunicarse al área de soporte:"
       recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 8 o superior*"
+
+  report_mailer:
+    attached_report:
+      subject: '[%{organization}] Su reporte está listo'
+      body: 'El reporte solicitado está adjunto.'
+      greetings: 'Hola %{name}'
