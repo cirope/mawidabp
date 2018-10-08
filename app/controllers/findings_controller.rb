@@ -3,6 +3,7 @@ class FindingsController < ApplicationController
   include AutoCompleteFor::Tagging
   include Findings::CurrentUserScopes
   include Findings::SetFinding
+  include Reports::FileResponder
 
   respond_to :html
 
@@ -17,7 +18,7 @@ class FindingsController < ApplicationController
 
     respond_to do |format|
       format.html { @findings = @findings.page params[:page] }
-      format.csv  { render csv: @findings.to_csv(csv_options), filename: @title.downcase }
+      format.csv  { render_index_csv }
       format.pdf  { redirect_to pdf.relative_path }
     end
   end
@@ -143,5 +144,14 @@ class FindingsController < ApplicationController
         (@auth_user.can_act_as_audited? && @finding.users.exclude?(@auth_user))
 
       raise ActiveRecord::RecordNotFound if not_editable
+    end
+
+    def render_index_csv
+      render_or_send_by_mail(
+        collection: @findings,
+        filename: @title.downcase,
+        method_name: :to_csv,
+        options: csv_options
+      )
     end
 end
