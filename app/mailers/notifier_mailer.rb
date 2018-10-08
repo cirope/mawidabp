@@ -198,8 +198,13 @@ class NotifierMailer < ActionMailer::Base
       elements: elements.to_sentence)
 
     @conclusion_review = conclusion_review
+    @organization = conclusion_review.review.organization
     @body_title = body_title
     @note = options[:note]
+
+    if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(org_prefix)
+      @show_alt_footer = true
+    end
 
     if File.exist?(conclusion_review.absolute_pdf_path)
       attachments[conclusion_review.pdf_name] =
