@@ -96,10 +96,11 @@ class NotifierMailerPreview < ActionMailer::Preview
     user              = User.joins(reviews: :conclusion_final_review).take
     review            = user.reviews.joins(:conclusion_final_review).take
     conclusion_review = review.conclusion_final_review
+    organization      = review.organization
 
     conclusion_review.to_pdf
 
-    NotifierMailer.conclusion_review_notification user, conclusion_review
+    NotifierMailer.conclusion_review_notification user, conclusion_review, organization_id: organization.id
   end
 
   # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/findings_expiration_warning
