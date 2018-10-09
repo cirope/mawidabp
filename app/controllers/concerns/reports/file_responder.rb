@@ -48,16 +48,12 @@ module Reports::FileResponder
     end
 
     def report_query_methods collection
-      order = collection.order_values.map do |node|
-        node.try(:to_sql) || node.to_s
-      end.join ', '
-
       {
         joins:            collection.joins_values,
         left_outer_joins: collection.left_outer_joins_values,
         includes:         collection.includes_values,
         group:            collection.group_values,
-        reorder:          order,
+        reorder:          collection.order_values.map(&:to_s).join(', '),
         references:       collection.references_values
       }.to_json
     end
