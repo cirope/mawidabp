@@ -65,6 +65,12 @@ module Reports::FileResponder
         values[:where] = wheres.map {|w| "(#{w})"}.join(' AND ')
       end
 
+      if (orders = values.delete(:order))
+        values[:order] = orders.map do |o|
+          o.try(:to_sql) || o.to_s # raw order
+        end.join(', ')
+      end
+
       values.to_json
     end
 end

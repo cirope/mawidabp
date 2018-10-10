@@ -38,6 +38,7 @@ class AttachedReportJob < ApplicationJob
 
       query_methods.each do |method, args|
         if args.present?
+          byebug if method == :order || method == 'order'
           arguments = args.is_a?(String) ? args : deep_convert_to_sym(args)
           scope     = scope.send method, arguments
         end
