@@ -87,9 +87,10 @@ module ConclusionReviews::AlternativePDF
       pdf.text legend, align: :justify, style: :italic
 
       put_review_survey_on       pdf
+      put_observations_on        pdf if show_observations_on_top? organization
       put_detailed_weaknesses_on pdf, organization
-      put_observations_on        pdf
-      put_recipients_on          pdf
+      put_observations_on        pdf unless show_observations_on_top? organization
+      put_recipients_on pdf
     end
 
     def put_annex_on pdf, organization, options
@@ -772,6 +773,10 @@ module ConclusionReviews::AlternativePDF
 
       SHOW_REVIEW_BEST_PRACTICE_COMMENTS &&
         ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(prefix)
+    end
+
+    def show_observations_on_top? organization
+      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include? organization.prefix
     end
 
     def show_tests? organization
