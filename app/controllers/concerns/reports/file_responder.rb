@@ -53,7 +53,7 @@ module Reports::FileResponder
         wheres = [ { collection.table_name => where_clause.to_h } ]
 
         where_clause.send(:predicates).map do |predicate|
-          wheres << predicate if predicate.is_a?(String)
+          wheres << predicate if predicate.is_a? String
         end
 
         values[:where] = wheres

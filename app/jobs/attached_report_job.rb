@@ -21,12 +21,12 @@ class AttachedReportJob < ApplicationJob
       '.zip'
     )
 
-    # ReportMailer.attached_report(
-    #   filename:        new_filename,
-    #   file:            zip_file,
-    #   user_id:         user_id,
-    #   organization_id: organization_id
-    # ).deliver_later
+    ReportMailer.attached_report(
+      filename:        new_filename,
+      file:            zip_file,
+      user_id:         user_id,
+      organization_id: organization_id
+    ).deliver_later
   end
 
   private
