@@ -7,7 +7,6 @@ class AttachedReportJobTest < ActiveJob::TestCase
     perform_enqueued_jobs do
       AttachedReportJob.perform_now(
         model_name:      'Finding',
-        ids:             Finding.all.ids,
         filename:        'super_report.csv',
         method_name:     'to_csv',
         user_id:         users(:administrator).id,
