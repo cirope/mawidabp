@@ -25,7 +25,6 @@ module Reports::FileResponder
       method_name = args.fetch(:method_name).to_s
       options     = args.fetch :options, {}
 
-      byebug
       AttachedReportJob.perform_later(
         model_name:      collection.model_name.name,
         query_methods:   report_query_methods(collection),
@@ -51,24 +50,19 @@ module Reports::FileResponder
       values = collection.values
 
       if (where_clause = values.delete(:where))
-        wheres = where_clause.send(:predicates).map do |predicate|
-          if predicate.is_a?(String)
-            predicate
-          else
-            value = predicate.right.value.value_for_database
-            value_for_db = value.is_a?(Numeric) ? value.to_s : ActiveRecord::Base.qcn(value)
+        wheres = [ { collection.table_name => where_clause.to_h } ]
 
-            predicate.to_sql.gsub('$1', value_for_db)
-          end
+        where_clause.send(:predicates).map do |predicate|
+          wheres << predicate if predicate.is_a?(String)
         end
 
-        values[:where] = wheres.map {|w| "(#{w})"}.join(' AND ')
+        values[:where] = wheres
       end
 
       if (orders = values.delete(:order))
         values[:order] = orders.map do |o|
           o.try(:to_sql) || o.to_s # raw order
-        end.join(', ')
+        end
       end
 
       values.to_json

@@ -12,7 +12,7 @@ class AttachedReportJob < ApplicationJob
 
     scope = build_scope_for(model, query_methods)
 
-    report   = scope.limit(100).send method_name, options
+    report   = scope.send method_name, options
     zip_file = zip_report_with_filename report, filename
 
     extension = File.extname filename
@@ -37,14 +37,17 @@ class AttachedReportJob < ApplicationJob
       scope = model.unscoped # remove default orders
 
       query_methods.each do |method, args|
-        if args.present?
-          byebug if method == :order || method == 'order'
-          arguments = args.is_a?(String) ? args : deep_convert_to_sym(args)
-          scope     = scope.send method, arguments
+        if [:where, :order].include? method
+          args.each do |query|
+            arg   = query.is_a?(String) ? query : deep_convert_to_sym(query)
+            scope = scope.send method, arg
+          end
+        else
+          arguments = args.is_a?(String) ? [args] : deep_convert_to_sym(args)
+          scope     = scope.send method, *arguments
         end
       end
 
-      byebug
       scope
     end
 
