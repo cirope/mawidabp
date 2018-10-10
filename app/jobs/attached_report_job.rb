@@ -3,7 +3,6 @@ class AttachedReportJob < ApplicationJob
 
   def perform args
     model           = args.fetch(:model_name).constantize
-    ids             = args.fetch :ids
     query_methods   = args.fetch :query_methods, {}.to_json
     filename        = args.fetch :filename
     method_name     = args.fetch :method_name
@@ -11,18 +10,9 @@ class AttachedReportJob < ApplicationJob
     user_id         = args.fetch :user_id
     organization_id = args.fetch :organization_id
 
-    query_methods = JSON.parse(query_methods).deep_symbolize_keys
+    scope = build_scope_for(model, query_methods)
 
-    scope = model.where *build_conditions_for(model, ids)
-
-    query_methods.each do |method, args|
-      if args.present?
-        arguments = args.is_a?(String) ? args : deep_convert_to_sym(args)
-        scope     = scope.send method, arguments
-      end
-    end
-
-    report   = scope.send method_name, options
+    report   = scope.limit(100).send method_name, options
     zip_file = zip_report_with_filename report, filename
 
     extension = File.extname filename
@@ -31,30 +21,30 @@ class AttachedReportJob < ApplicationJob
       '.zip'
     )
 
-    ReportMailer.attached_report(
-      filename:        new_filename,
-      file:            zip_file,
-      user_id:         user_id,
-      organization_id: organization_id
-    ).deliver_later
+    # ReportMailer.attached_report(
+    #   filename:        new_filename,
+    #   file:            zip_file,
+    #   user_id:         user_id,
+    #   organization_id: organization_id
+    # ).deliver_later
   end
 
   private
 
-    def build_conditions_for model, ids
-      conditions = []
-      parameters = {}
+    def build_scope_for model, raw_query_methods
+      query_methods = JSON.parse(raw_query_methods).deep_symbolize_keys
 
-      ids.uniq.each_slice(500).each_with_index do |id_slice, i|
-        parameters[:"ids_#{i}"] = id_slice
+      scope = model.unscoped # remove default orders
 
-        conditions << "#{model.quoted_table_name}.id IN (:ids_#{i})"
+      query_methods.each do |method, args|
+        if args.present?
+          arguments = args.is_a?(String) ? args : deep_convert_to_sym(args)
+          scope     = scope.send method, arguments
+        end
       end
 
-      [
-        conditions.map { |c| "(#{c})" }.join(' OR '),
-        parameters
-      ]
+      byebug
+      scope
     end
 
     def zip_report_with_filename report, filename
