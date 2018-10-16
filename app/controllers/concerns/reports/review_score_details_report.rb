@@ -156,7 +156,7 @@ module Reports::ReviewScoreDetailsReport
     end
 
     def add_review_score_details_pdf_table pdf
-      pdf.font_size (PDF_FONT_SIZE * 0.6).round do
+      pdf.font_size (PDF_FONT_SIZE * 0.5).round do
         table_options = pdf.default_table_options review_score_details_column_widths(pdf)
 
         pdf.table(review_score_details_data(pdf), table_options) do
@@ -260,10 +260,11 @@ module Reports::ReviewScoreDetailsReport
     def review_score_details_columns
       {
         Review.model_name.human => 10,
-        PlanItem.human_attribute_name('project') => 20,
+        PlanItem.human_attribute_name('project') => 17,
         BusinessUnitType.model_name.human => 10,
-        Tag.model_name.human => 10,
-        Review.human_attribute_name('scope') => 13,
+        Tag.model_name.human => 8,
+        Review.human_attribute_name('scope') => 10,
+        Review.human_attribute_name('risk_exposure') => 8,
         ConclusionFinalReview.human_attribute_name('issue_date') => 7,
         ConclusionFinalReview.human_attribute_name('conclusion') => 10,
         ConclusionFinalReview.human_attribute_name('evolution') => 10,
@@ -287,6 +288,7 @@ module Reports::ReviewScoreDetailsReport
           conclusion_review.review.business_unit_type.to_s,
           conclusion_review.review.tags.map(&:to_s).to_sentence,
           conclusion_review.review.scope,
+          conclusion_review.review.risk_exposure,
           l(conclusion_review.issue_date),
           conclusion_review.conclusion,
           conclusion_review.evolution,

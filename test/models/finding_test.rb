@@ -895,7 +895,17 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     assert File.exist?(@finding.absolute_follow_up_pdf_path)
+    assert (size = File.size(@finding.absolute_follow_up_pdf_path)) > 0
+
+    FileUtils.rm @finding.absolute_follow_up_pdf_path
+
+    assert_nothing_raised do
+      @finding.follow_up_pdf organizations(:cirope), brief: true
+    end
+
+    assert File.exist?(@finding.absolute_follow_up_pdf_path)
     assert File.size(@finding.absolute_follow_up_pdf_path) > 0
+    assert_not_equal size, File.size(@finding.absolute_follow_up_pdf_path)
 
     FileUtils.rm @finding.absolute_follow_up_pdf_path
   end

@@ -608,6 +608,7 @@
         title: "SEGUIMIENTO DE OPORTUNIDAD DE MEJORA"
         subtitle: "Datos de la oportunidad de mejora"
       print_date: "Fecha de impresión: %{date}"
+      download_brief: "Descargar seguimiento"
       download: "Descargar seguimiento completo"
       follow_up_comments: "Comentarios de seguimiento"
       without_important_changes: "Sin cambios importantes hasta la fecha"
