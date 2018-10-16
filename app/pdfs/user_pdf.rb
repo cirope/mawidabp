@@ -76,7 +76,7 @@ class UserPdf < Prawn::Document
           user.last_name,
           user.email,
           user.function,
-          user.roles.map(&:name).join('; '),
+          user.roles(@current_organization.id).map(&:name).join('; '),
           I18n.t(user.enable? ? 'label.yes' : 'label.no'),
           user.password_changed ? I18n.l(user.password_changed, format: :minimal) : '-',
           user.last_access ? I18n.l(user.last_access, format: :minimal) : '-'
