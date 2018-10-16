@@ -27,7 +27,6 @@ module Reports::FileResponder
 
       AttachedReportJob.perform_later(
         model_name:      collection.model_name.name,
-        ids:             collection.ids,
         query_methods:   report_query_methods(collection),
         user_id:         Current.user.id,
         organization_id: Current.organization.id,
@@ -48,13 +47,24 @@ module Reports::FileResponder
     end
 
     def report_query_methods collection
-      {
-        joins:            collection.joins_values,
-        left_outer_joins: collection.left_outer_joins_values,
-        includes:         collection.includes_values,
-        group:            collection.group_values,
-        reorder:          collection.order_values.map(&:to_s).join(', '),
-        references:       collection.references_values
-      }.to_json
+      values = collection.values
+
+      if (where_clause = values.delete(:where))
+        wheres = [ { collection.table_name => where_clause.to_h } ]
+
+        where_clause.send(:predicates).map do |predicate|
+          wheres << predicate if predicate.is_a? String
+        end
+
+        values[:where] = wheres
+      end
+
+      if (orders = values.delete(:order))
+        values[:order] = orders.map do |o|
+          o.try(:to_sql) || o.to_s # raw order
+        end
+      end
+
+      values.to_json
     end
 end
