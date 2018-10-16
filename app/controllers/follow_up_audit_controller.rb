@@ -37,6 +37,8 @@ class FollowUpAuditController < ApplicationController
         create_weaknesses_by_state: :read,
         weaknesses_by_risk: :read,
         create_weaknesses_by_risk: :read,
+        weaknesses_by_risk_report: :read,
+        create_weaknesses_by_risk_report: :read,
         weaknesses_by_audit_type: :read,
         create_weaknesses_by_audit_type: :read,
         weaknesses_report: :read,
