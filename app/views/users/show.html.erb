@@ -43,10 +43,13 @@
     </p>
   </div>
   <div class="col-md-6">
-    <% if @user.organization_roles.any? %>
+    <% organization_ids = current_organization.group.organizations.ids %>
+    <% group_roles = @user.organization_roles.where organization_id: organization_ids %>
+
+    <% if group_roles.any? %>
       <p><strong><%= t '.profiles' %></strong></p>
       <ul>
-        <% @user.organization_roles.each do |organization_role| %>
+        <% group_roles.each do |organization_role| %>
           <li><%= organization_role %></li>
         <% end %>
       </ul>

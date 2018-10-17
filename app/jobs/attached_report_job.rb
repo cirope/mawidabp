@@ -3,7 +3,6 @@ class AttachedReportJob < ApplicationJob
 
   def perform args
     model           = args.fetch(:model_name).constantize
-    ids             = args.fetch :ids
     query_methods   = args.fetch :query_methods, {}.to_json
     filename        = args.fetch :filename
     method_name     = args.fetch :method_name
@@ -11,16 +10,7 @@ class AttachedReportJob < ApplicationJob
     user_id         = args.fetch :user_id
     organization_id = args.fetch :organization_id
 
-    query_methods = JSON.parse(query_methods).deep_symbolize_keys
-
-    scope = model.where *build_conditions_for(model, ids)
-
-    query_methods.each do |method, args|
-      if args.present?
-        arguments = args.is_a?(String) ? args : deep_convert_to_sym(args)
-        scope     = scope.send method, arguments
-      end
-    end
+    scope = build_scope_for(model, query_methods)
 
     report   = scope.send method_name, options
     zip_file = zip_report_with_filename report, filename
@@ -41,20 +31,24 @@ class AttachedReportJob < ApplicationJob
 
   private
 
-    def build_conditions_for model, ids
-      conditions = []
-      parameters = {}
+    def build_scope_for model, raw_query_methods
+      query_methods = JSON.parse(raw_query_methods).deep_symbolize_keys
 
-      ids.uniq.each_slice(500).each_with_index do |id_slice, i|
-        parameters[:"ids_#{i}"] = id_slice
+      scope = model.unscoped # remove default orders
 
-        conditions << "#{model.quoted_table_name}.id IN (:ids_#{i})"
+      query_methods.each do |method, args|
+        if [:where, :order].include? method
+          args.each do |query|
+            arg   = query.is_a?(String) ? query : deep_convert_to_sym(query)
+            scope = scope.send method, arg
+          end
+        else
+          arguments = args.is_a?(String) ? [args] : deep_convert_to_sym(args)
+          scope     = scope.send method, *arguments
+        end
       end
 
-      [
-        conditions.map { |c| "(#{c})" }.join(' OR '),
-        parameters
-      ]
+      scope
     end
 
     def zip_report_with_filename report, filename

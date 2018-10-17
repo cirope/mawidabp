@@ -73,7 +73,7 @@ module Reviews::FindingCode
     def recode_findings findings, order: :review_code
       raise 'Cannot recode if final review' if has_final_review?
 
-      findings = findings.order order
+      findings = findings.reorder order
 
       assign_new_review_code_to_findings findings.not_revoked, findings.revoked
     end

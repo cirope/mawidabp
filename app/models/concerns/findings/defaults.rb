@@ -15,6 +15,14 @@ module Findings::Defaults
       self.state            ||= Finding::STATUS[:incomplete]
       self.final            ||= false
       self.finding_prefix   ||= false
-      self.origination_date ||= Time.zone.today
+      self.origination_date ||= default_origination_date
+    end
+
+    def default_origination_date
+      prefix = Current.organization&.prefix
+
+      if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.exclude? prefix
+        Time.zone.today
+      end
     end
 end
