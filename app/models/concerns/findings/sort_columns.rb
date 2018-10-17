@@ -127,7 +127,7 @@ module Findings::SortColumns
           extra_query_values: {
             select:           "#{quoted_table_name}.*, GREATEST(0, #{finding_user} - #{reading_user}) AS readings_count",
             left_outer_joins: [:finding_answers, { finding_answers: :readings }],
-            group:            "#{quoted_table_name}.id"
+            group:            "#{quoted_table_name}.#{qcn 'id'}"
           }
         }
       end
