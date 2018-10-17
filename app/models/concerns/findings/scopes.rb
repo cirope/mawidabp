@@ -4,7 +4,7 @@ module Findings::Scopes
   included do
     scope :list,              -> { where organization_id: Current.organization&.id }
     scope :sort_by_code,      -> { order review_code: :asc }
-    scope :sort_for_review,   -> { order risk: :desc, priority: :desc, review_code: :asc }
+    scope :sort_for_review,   -> { order *review_sort_options }
     scope :with_achievements, -> { includes(:achievements).where.not achievements: { finding_id: nil } }
   end
 
@@ -135,5 +135,15 @@ module Findings::Scopes
 
       includes(review: :tags).where(conditions.join(' OR '), parameters)
     end
+
+    private
+
+      def review_sort_options
+        if ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY == 'risk'
+          [risk: :desc, review_code: :asc]
+        else
+          [risk: :desc, priority: :desc, review_code: :asc]
+        end
+      end
   end
 end
