@@ -120,20 +120,16 @@ module Findings::CurrentUserScopes
         includes(*current_user_includes).
         left_joins(:users)
 
-      if @extra_joins
-        # if any of this raise an exception we don't want to affect the scope
-        new_scope = scope.send(*@extra_joins)
+      if @extra_query_values
+        # Evitamos el `includes` para no tener los alias de tablas relacionadas
+        # en el `select` de la query, de esta forma no necesitamos hacer
+        # GROUP BY por cada tabla incluida.
+        includes = scope.values[:includes]
+        scope = scope.unscope(:includes).left_joins(*includes)
 
-        refs = [:id]
-        refs += deep_to_a(
-          new_scope.joins_values.to_a +
-          new_scope.includes_values.to_a
-        ).flatten.uniq.map do |ref|
-          # We need the real table name (STI models)
-          "#{ref.to_s.singularize.camelize.constantize.table_name}.id"
+        @extra_query_values.each do |method, args|
+          scope = scope.send(method, args)
         end
-
-        scope = new_scope.group(*refs.flatten.uniq)
       end
 
       scope.where(@conditions).

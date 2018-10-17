@@ -119,16 +119,16 @@ module Findings::SortColumns
         reading_user = "COUNT(#{Reading.table_name}.user_id)"
         finding_user = "COUNT(#{FindingAnswer.table_name}.user_id)"
 
-        order_by_readings = "CASE \n"
-        order_by_readings << "WHEN (#{reading_user} < #{finding_user}) then (#{finding_user} - #{reading_user}) \n"
-        order_by_readings << "ELSE 0 \n"
-        order_by_readings << 'END DESC'
-        order_by_readings << ", #{quoted_table_name}.id DESC"
+        order_by_readings = "readings_count DESC, #{quoted_table_name}.id DESC"
 
         {
           name: "#{I18n.t('findings.index.unread_answers_filter')}#{order_label('DESC')}",
           field: Arel.sql(order_by_readings),
-          extra_joins: [:left_outer_joins, :finding_answers, finding_answers: :readings]
+          extra_query_values: {
+            select:           "#{quoted_table_name}.*, GREATEST(0, #{finding_user} - #{reading_user}) as readings_count",
+            left_outer_joins: [:finding_answers, { finding_answers: :readings }],
+            group:            "#{quoted_table_name}.id"
+          }
         }
       end
   end

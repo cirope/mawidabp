@@ -16,7 +16,11 @@ module Reports::FileResponder
   private
 
     def send_report_by_email? collection
-      collection.unscope(:group).count > SEND_REPORT_EMAIL_AFTER_COUNT
+      collection.unscope(
+        :group, :order, :select, :having, :limit, :offset
+      ).select(
+        "#{collection.model.quoted_table_name}.id"
+      ).distinct.count > SEND_REPORT_EMAIL_AFTER_COUNT
     end
 
     def perform_report_and_redirect_back args
