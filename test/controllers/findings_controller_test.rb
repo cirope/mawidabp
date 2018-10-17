@@ -745,7 +745,6 @@ class FindingsControllerTest < ActionController::TestCase
         order: 'readings_desc'
       }
     }, as: :csv
-
     assert_response :success
     # forcing quote_char because of the html response
     csv = CSV.parse(@response.body, col_sep: ';', quote_char: "'", headers: true)
