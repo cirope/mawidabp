@@ -119,7 +119,7 @@ module Findings::SortColumns
         reading_user = "COUNT(#{Reading.table_name}.user_id)"
         finding_user = "COUNT(#{FindingAnswer.table_name}.user_id)"
 
-        order_by_readings = "readings_count DESC, #{quoted_table_name}.id DESC"
+        order_by_readings = "readings_count DESC, #{quoted_table_name}.#{qcn 'id'} DESC"
 
         {
           name: "#{I18n.t('findings.index.unread_answers_filter')}#{order_label('DESC')}",
