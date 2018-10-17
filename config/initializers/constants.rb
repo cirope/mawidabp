@@ -83,3 +83,5 @@ SEARCH_ALLOWED_OPERATORS = HashWithIndifferentAccess.new({
 })
 # Adaptador PostgreSQL en uso
 POSTGRESQL_ADAPTER = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL' rescue nil
+# Limite de filas en reportes para servir en real-time
+SEND_REPORT_EMAIL_AFTER_COUNT = 100

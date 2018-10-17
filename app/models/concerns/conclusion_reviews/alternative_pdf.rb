@@ -87,9 +87,10 @@ module ConclusionReviews::AlternativePDF
       pdf.text legend, align: :justify, style: :italic
 
       put_review_survey_on       pdf
+      put_observations_on        pdf if show_observations_on_top? organization
       put_detailed_weaknesses_on pdf, organization
-      put_observations_on        pdf
-      put_recipients_on          pdf
+      put_observations_on        pdf unless show_observations_on_top? organization
+      put_recipients_on pdf
     end
 
     def put_annex_on pdf, organization, options
@@ -287,8 +288,8 @@ module ConclusionReviews::AlternativePDF
       pdf.move_down PDF_FONT_SIZE
 
       put_weakness_details_on pdf, all_weaknesses,
-        show:   show + ['estimated_follow_up'],
-        hide:   %w(audited)
+        show: show + ['estimated_follow_up'],
+        hide: %w(audited)
     end
 
     def put_observations_on pdf
@@ -298,13 +299,13 @@ module ConclusionReviews::AlternativePDF
         pdf.move_down PDF_FONT_SIZE * 2
         pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
         pdf.move_down PDF_FONT_SIZE
-        pdf.text observations, align: :justify
+        pdf.text observations, align: :justify, inline_format: true
       end
     end
 
     def put_recipients_on pdf
       pdf.move_down PDF_FONT_SIZE
-      pdf.text recipients, align: :justify
+      pdf.text recipients, align: :justify, inline_format: true
     end
 
     def put_risk_exposure_on pdf
@@ -772,6 +773,10 @@ module ConclusionReviews::AlternativePDF
 
       SHOW_REVIEW_BEST_PRACTICE_COMMENTS &&
         ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(prefix)
+    end
+
+    def show_observations_on_top? organization
+      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include? organization.prefix
     end
 
     def show_tests? organization

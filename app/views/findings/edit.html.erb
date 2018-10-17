@@ -2,8 +2,15 @@
   <%= link_to_show finding_path(params[:completed], @finding,
     :user_id => params[:user_id]) %> |
   <%= link_to_index findings_path(params[:completed], user_id: params[:user_id]) %> |
-  <%= link_to t('finding.follow_up_report.download'),
-    follow_up_pdf_finding_path(params[:completed], @finding, :_ts => Time.now.to_i) %>
+  <%= render('shared/downloads',
+    right: true,
+    links: [
+      link_to(t('finding.follow_up_report.download_brief'),
+              follow_up_pdf_finding_path(params[:completed], @finding, :brief => true, :_ts => Time.now.to_i)),
+      link_to(t('finding.follow_up_report.download'),
+              follow_up_pdf_finding_path(params[:completed], @finding, :_ts => Time.now.to_i))
+    ]
+  ) %>
 <% end %>
 
 <%= render partial: "#{@auth_user.can_act_as_audited? ? 'audited' : 'auditor'}_form" %>
