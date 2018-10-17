@@ -136,14 +136,12 @@ module Findings::Scopes
       includes(review: :tags).where(conditions.join(' OR '), parameters)
     end
 
-    private
-
-      def review_sort_options
-        if ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY == 'risk'
-          [risk: :desc, review_code: :asc]
-        else
-          [risk: :desc, priority: :desc, review_code: :asc]
-        end
+    def review_sort_options
+      if ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY == 'risk'
+        [risk: :desc, review_code: :asc]
+      else
+        [risk: :desc, priority: :desc, review_code: :asc]
       end
+    end
   end
 end
