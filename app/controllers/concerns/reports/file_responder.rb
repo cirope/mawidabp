@@ -19,7 +19,7 @@ module Reports::FileResponder
       collection.unscope(
         :group, :order, :select, :having, :limit, :offset
       ).select(
-        "#{collection.model.quoted_table_name}.id"
+        "#{collection.model.quoted_table_name}.#{collection.model.qcn 'id'}"
       ).distinct.count > SEND_REPORT_EMAIL_AFTER_COUNT
     end
 
