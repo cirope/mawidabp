@@ -125,7 +125,7 @@ module Findings::SortColumns
           name: "#{I18n.t('findings.index.unread_answers_filter')}#{order_label('DESC')}",
           field: Arel.sql(order_by_readings),
           extra_query_values: {
-            select:           "#{quoted_table_name}.*, GREATEST(0, #{finding_user} - #{reading_user}) as readings_count",
+            select:           "#{quoted_table_name}.*, GREATEST(0, #{finding_user} - #{reading_user}) AS readings_count",
             left_outer_joins: [:finding_answers, { finding_answers: :readings }],
             group:            "#{quoted_table_name}.id"
           }
