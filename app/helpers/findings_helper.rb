@@ -69,6 +69,7 @@ module FindingsHelper
   end
 
   def show_finding_review_code_with_decription_as_abbr finding
+    # finding.reload if finding.try(:description).nil?
     content_tag :abbr, finding.review_code, title: j(finding.description)
   end
 
