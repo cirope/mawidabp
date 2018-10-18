@@ -128,7 +128,7 @@ module Findings::SortColumns
           select = "#{quoted_table_name}.*, #{select}"
         else
           group_list = []
-          select_list = []
+          select_list = [select]
           quoted_columns = columns.map do |c|
             column = "#{quoted_table_name}.#{qcn c.name}"
 
@@ -144,7 +144,7 @@ module Findings::SortColumns
           end
 
           group = group_list.join(',')
-          select = "#{select_list.join(',')}, #{select}"
+          select = select_list # "#{select_list.join(',')}, #{select}"
         end
 
         {
