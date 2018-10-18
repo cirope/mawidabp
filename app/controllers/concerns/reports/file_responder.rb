@@ -52,12 +52,12 @@ module Reports::FileResponder
 
     def report_query_methods collection
       values = collection.values
-      values = report_where_clauses(values)
-      values = report_order_clauses(values)
+      values = report_where_clauses values
+      values = report_order_clauses values
       values.to_json
     end
 
-    def report_where_clauses(values)
+    def report_where_clauses values
       if (where_clause = values.delete(:where))
         wheres = []
         where_tables = []
@@ -71,7 +71,7 @@ module Reports::FileResponder
         end
 
         where_hash = where_tables.uniq.each_with_object({}) do |table, memo|
-          memo[table] = where_clause.to_h(table)
+          memo[table] = where_clause.to_h table
         end
 
         wheres << where_hash if where_hash.any?
@@ -82,7 +82,7 @@ module Reports::FileResponder
       values
     end
 
-    def report_order_clauses(values)
+    def report_order_clauses values
       if (orders = values.delete(:order))
         values[:order] = orders.map do |o|
           o.try(:to_sql) || o.to_s # raw order

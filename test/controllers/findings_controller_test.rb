@@ -172,9 +172,11 @@ class FindingsControllerTest < ActionController::TestCase
     findings_count = assigns(:findings).to_a.size
     assert findings_count > 10
 
+    filename = I18n.t('findings.index.title').downcase
+
     assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
     attachment = ActionMailer::Base.deliveries.last.attachments.first
-    assert_equal 'listado de hallazgos.zip', attachment.filename
+    assert_equal "#{filename}.zip", attachment.filename
 
     tmp_file = Tempfile.open do |temp|
       temp.binmode
@@ -183,7 +185,7 @@ class FindingsControllerTest < ActionController::TestCase
     end
 
     csv_report = Zip::File.open(tmp_file, Zip::File::CREATE) do |zipfile|
-      zipfile.read 'listado de hallazgos.csv'
+      zipfile.read "#{filename}.csv"
     end
 
     csv = CSV.parse csv_report, col_sep: ';', force_quotes: true, headers: true
