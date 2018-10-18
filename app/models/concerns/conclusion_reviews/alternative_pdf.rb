@@ -288,8 +288,8 @@ module ConclusionReviews::AlternativePDF
       pdf.move_down PDF_FONT_SIZE
 
       put_weakness_details_on pdf, all_weaknesses,
-        show:   show + ['estimated_follow_up'],
-        hide:   %w(audited)
+        show: show + ['estimated_follow_up'],
+        hide: %w(audited)
     end
 
     def put_observations_on pdf
@@ -299,13 +299,13 @@ module ConclusionReviews::AlternativePDF
         pdf.move_down PDF_FONT_SIZE * 2
         pdf.add_title title, (PDF_FONT_SIZE * 1.75).round
         pdf.move_down PDF_FONT_SIZE
-        pdf.text observations, align: :justify
+        pdf.text observations, align: :justify, inline_format: true
       end
     end
 
     def put_recipients_on pdf
       pdf.move_down PDF_FONT_SIZE
-      pdf.text recipients, align: :justify
+      pdf.text recipients, align: :justify, inline_format: true
     end
 
     def put_risk_exposure_on pdf
