@@ -73,7 +73,13 @@ class ActiveSupport::TestCase
 
     Current.set(Current.instance.attributes) do
       perform_enqueued_jobs do
-        job_class.perform_now(mailer, mail_method, delivery_method, *new_args)
+        ancestors = job_class.ancestors
+
+        if ancestors.include? ActiveJob::Base
+          job_class.perform_now(job[:args])
+        elsif ancestors.include? ActionMailer::Bas
+          job_class.perform_now(mailer, mail_method, delivery_method, *new_args)
+        end
       end
     end
   end

@@ -2,6 +2,7 @@ require 'test_helper'
 
 class FindingsControllerTest < ActionController::TestCase
   include ActionMailer::TestHelper
+  include ActiveJob::TestHelper
 
   setup do
     login
@@ -156,22 +157,40 @@ class FindingsControllerTest < ActionController::TestCase
   test 'list findings and send CSV by email' do
     set_organization
 
-    sample  = findings :unanswered_weakness
-    users   = sample.finding_user_assignments.map { |fua| fua.dup.attributes.except 'finding_id' }
-    tag_ids = [tags(:important).id, tags(:pending).id]
+    old_count = ::SEND_REPORT_EMAIL_AFTER_COUNT
 
-    100.times do |i|
-      cloned = sample.dup
-      cloned.control_objective_item = control_objective_items :impact_analysis_item_editable
-      cloned.finding_user_assignments_attributes = users
-      cloned.tag_ids = tag_ids
-      cloned.review_code = 'O' + (500 + i).to_s
-      cloned.save
+    silence_warnings do
+      ::SEND_REPORT_EMAIL_AFTER_COUNT = 10
     end
 
-    get :index, params: { completed: 'incomplete' }, as: :csv
+    perform_enqueued_jobs do
+      get :index, params: { completed: 'incomplete' }, as: :csv
+    end
 
     assert_redirected_to findings_url format: :csv, completed: 'incomplete'
+
+    findings_count = assigns(:findings).to_a.size
+    assert findings_count > 10
+
+    assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
+    attachment = ActionMailer::Base.deliveries.last.attachments.first
+    assert_equal 'listado de hallazgos.zip', attachment.filename
+
+    tmp_file = Tempfile.open do |temp|
+      temp.binmode
+      temp << attachment.read
+      temp.path
+    end
+
+    csv_report = Zip::File.open(tmp_file, Zip::File::CREATE) do |zipfile|
+      zipfile.read 'listado de hallazgos.csv'
+    end
+
+    csv = CSV.parse csv_report, col_sep: ';', force_quotes: true, headers: true
+
+    assert_equal findings_count, csv.size
+
+    silence_warnings { ::SEND_REPORT_EMAIL_AFTER_COUNT = old_count }
   end
 
   test 'show finding' do

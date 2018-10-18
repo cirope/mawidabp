@@ -52,23 +52,43 @@ module Reports::FileResponder
 
     def report_query_methods collection
       values = collection.values
+      values = report_where_clauses(values)
+      values = report_order_clauses(values)
+      values.to_json
+    end
 
+    def report_where_clauses(values)
       if (where_clause = values.delete(:where))
-        wheres = [ { collection.table_name => where_clause.to_h } ]
+        wheres = []
+        where_tables = []
 
         where_clause.send(:predicates).map do |predicate|
-          wheres << predicate if predicate.is_a? String
+          if predicate.is_a? String
+            wheres << predicate
+          else
+            where_tables << predicate.left.relation.name
+          end
         end
+
+        where_hash = where_tables.uniq.each_with_object({}) do |table, memo|
+          memo[table] = where_clause.to_h(table)
+        end
+
+        wheres << where_hash if where_hash.any?
 
         values[:where] = wheres
       end
 
+      values
+    end
+
+    def report_order_clauses(values)
       if (orders = values.delete(:order))
         values[:order] = orders.map do |o|
           o.try(:to_sql) || o.to_s # raw order
         end
       end
 
-      values.to_json
+      values
     end
 end
