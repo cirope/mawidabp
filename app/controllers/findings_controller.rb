@@ -161,7 +161,7 @@ class FindingsController < ApplicationController
       if ORACLE_ADAPTER
         @findings.total_entries = @findings.unscope(
           :group, :order, :select
-        ).count
+        ).select(:id).distinct.count
       end
 
       @findings
