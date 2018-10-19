@@ -54,12 +54,13 @@ module Reports::FileResponder
       values = collection.values
       values = report_where_clauses values
       values = report_order_clauses values
+
       values.to_json
     end
 
     def report_where_clauses values
-      if (where_clause = values.delete(:where))
-        wheres = []
+      if (where_clause = values.delete :where)
+        wheres       = []
         where_tables = []
 
         where_clause.send(:predicates).map do |predicate|
@@ -83,7 +84,7 @@ module Reports::FileResponder
     end
 
     def report_order_clauses values
-      if (orders = values.delete(:order))
+      if (orders = values.delete :order)
         values[:order] = orders.map do |o|
           o.try(:to_sql) || o.to_s # raw order
         end
