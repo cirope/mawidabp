@@ -42,11 +42,11 @@ module FollowUpCommitteeHelper
         if ids_incomplete.blank? && ids_complete.blank?
           new_data << "#{risk_text}: 0 / 0"
         elsif ids_incomplete.present? && ids_complete.blank?
-          new_data <<  "\"#{risk_text}: #{ids_incomplete.count}\":#{url_incomplete} / 0"
+          new_data <<  "[#{risk_text}: #{ids_incomplete.count}](#{url_incomplete}) / 0"
         elsif ids_incomplete.blank? && ids_complete.present?
-          new_data << "[\"#{risk_text}: 0 / #{ids_complete.count}\":#{url_complete}]"
+          new_data << "[#{risk_text}: 0 / #{ids_complete.count}](#{url_complete})"
         elsif ids_incomplete.present? & ids_complete.present?
-          new_data << "#{risk_text}: \"#{ids_incomplete.count}\":#{url_incomplete} / \"#{ids_complete.count}\":#{url_complete}"
+          new_data << "#{risk_text}: [#{ids_incomplete.count}](#{url_incomplete}) / [#{ids_complete.count}](#{url_complete})"
         end
       end
 
@@ -64,7 +64,7 @@ module FollowUpCommitteeHelper
         ids = @process_control_ids_data[data['process_control']][label]
         url = findings_path('incomplete', :ids => ids)
 
-        new_data << (ids.blank? ? label : "[\"#{label}\":#{url}]")
+        new_data << (ids.blank? ? label : "[#{label}](#{url})")
       end
 
       array_to_ul(new_data, class: 'list-unstyled')
