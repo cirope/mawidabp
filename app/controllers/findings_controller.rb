@@ -157,10 +157,13 @@ class FindingsController < ApplicationController
 
     def paginate_findings
       @findings = @findings.page params[:page]
-      unless POSTGRESQL_ADAPTER
+
+      if ORACLE_ADAPTER
         @findings.total_entries = @findings.unscope(
           :group, :order, :select
         ).count
       end
+
+      @findings
     end
 end

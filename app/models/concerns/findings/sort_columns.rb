@@ -13,11 +13,7 @@ module Findings::SortColumns
         priority_desc:       priority_desc_options,
       ) unless HIDE_WEAKNESS_PRIORITY
 
-      # if POSTGRESQL_ADAPTER &&
-      if self == Finding
-
-        columns[:readings_desc] = readings_desc_options
-      end
+      columns[:readings_desc] = readings_desc_options if self == Finding
 
       columns.merge(
         state:               state_options,
@@ -123,12 +119,10 @@ module Findings::SortColumns
 
         order_by_readings = "readings_count DESC, #{quoted_table_name}.#{qcn 'id'} DESC"
 
-        if POSTGRESQL_ADAPTER
-          group = "#{quoted_table_name}.#{qcn 'id'}"
-          select = "#{quoted_table_name}.*, #{select}"
-        else
+        if ORACLE_ADAPTER
           group_list = []
           select_list = [select]
+
           quoted_columns = columns.map do |c|
             column = "#{quoted_table_name}.#{qcn c.name}"
 
@@ -143,12 +137,15 @@ module Findings::SortColumns
             end
           end
 
-          group = group_list.join(',')
-          select = select_list # "#{select_list.join(',')}, #{select}"
+          group = group_list.join ','
+          select = select_list
+        else
+          group = "#{quoted_table_name}.#{qcn 'id'}"
+          select = "#{quoted_table_name}.*, #{select}"
         end
 
         {
-          name: "#{I18n.t('findings.index.unread_answers_filter')}#{order_label('DESC')}",
+          name: "#{I18n.t('findings.index.unread_answers_filter')}#{order_label 'DESC'}",
           field: Arel.sql(order_by_readings),
           extra_query_values: {
             select:           select,
