@@ -125,10 +125,10 @@ module Findings::CurrentUserScopes
         # en el `select` de la query, de esta forma no necesitamos hacer
         # GROUP BY por cada tabla incluida.
         includes = scope.values[:includes]
-        scope    = scope.unscope(:includes).left_joins(*includes)
+        scope    = scope.unscope(:includes).left_joins(*includes) if includes.present?
 
         @extra_query_values.each do |method, args|
-          scope = scope.send(method, args)
+          scope = scope.send method, args
         end
       end
 

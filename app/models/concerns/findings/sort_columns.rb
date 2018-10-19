@@ -116,8 +116,8 @@ module Findings::SortColumns
       end
 
       def readings_desc_options
-        reading_user = "COUNT(#{Reading.table_name}.user_id)"
-        finding_user = "COUNT(#{FindingAnswer.table_name}.user_id)"
+        reading_user = "COUNT(#{Reading.quoted_table_name}.#{qcn 'user_id'})"
+        finding_user = "COUNT(#{FindingAnswer.quoted_table_name}.#{qcn 'user_id'})"
 
         select = "GREATEST(0, #{finding_user} - #{reading_user}) AS readings_count"
 
