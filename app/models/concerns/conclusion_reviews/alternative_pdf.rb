@@ -776,7 +776,7 @@ module ConclusionReviews::AlternativePDF
     end
 
     def show_observations_on_top? organization
-      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include? organization.prefix
+      ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include? organization.prefix
     end
 
     def show_tests? organization
