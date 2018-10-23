@@ -8,6 +8,7 @@ module Findings::CSV
     row = [
       review.identification,
       review.plan_item.project,
+      issue_date_text,
       review.conclusion_final_review&.summary || '-',
       business_unit_type.name,
       business_unit.name,
@@ -42,6 +43,10 @@ module Findings::CSV
   end
 
   private
+
+    def issue_date_text
+      issue_date ? I18n.l(issue_date, format: :minimal) : '-'
+    end
 
     def date_text
       date = solution_date || follow_up_date
@@ -155,6 +160,7 @@ module Findings::CSV
           (Organization.model_name.human if corporate),
           Review.model_name.human,
           PlanItem.human_attribute_name('project'),
+          ConclusionFinalReview.human_attribute_name('issue_date'),
           ConclusionFinalReview.human_attribute_name('summary'),
           BusinessUnitType.model_name.human,
           BusinessUnit.model_name.human,
