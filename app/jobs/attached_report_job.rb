@@ -36,10 +36,10 @@ class AttachedReportJob < ApplicationJob
 
       scope = model.unscoped # remove default orders
 
-      query_methods.each do |method, args|
-        if [:where, :order].include? method
+      query_methods.reject { |_, args| args.blank? }.each do |method, args|
+        if [:where, :order, :select].include? method
           args.each do |query|
-            arg   = query.is_a?(String) ? query : deep_convert_to_sym(query)
+            arg   = query.is_a?(String) ? Arel.sql(query) : deep_convert_to_sym(query)
             scope = scope.send method, arg
           end
         else
