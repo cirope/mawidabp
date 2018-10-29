@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class AttachedReportJobTest < ActiveJob::TestCase
+  setup do
+    Current.organization = nil
+  end
+
   test 'zip and email collection' do
     ActionMailer::Base.deliveries = []
 
