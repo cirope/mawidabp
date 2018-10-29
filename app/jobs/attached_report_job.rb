@@ -10,12 +10,12 @@ class AttachedReportJob < ApplicationJob
     user_id         = args.fetch :user_id
     organization_id = args.fetch :organization_id
 
-    scope = build_scope_for(model, query_methods)
+    Current.organization = Organization.find organization_id
 
-    report   = scope.send method_name, options
-    zip_file = zip_report_with_filename report, filename
-
-    extension = File.extname filename
+    scope        = build_scope_for model, query_methods
+    report       = scope.send method_name, options
+    zip_file     = zip_report_with_filename report, filename
+    extension    = File.extname filename
     new_filename = filename.sub(
       /#{Regexp.escape extension}$/,
       '.zip'

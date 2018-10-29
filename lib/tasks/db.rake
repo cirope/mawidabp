@@ -29,6 +29,18 @@ private
                            description: I18n.t('settings.brief_period_in_weeks')
       end
     end
+
+    if add_show_follow_up_timestamps? # 2018-10-28
+      Organization.all.each do |o|
+        o.settings.create! name:        'show_follow_up_timestamps',
+                           value:       DEFAULT_SETTINGS[:show_follow_up_timestamps][:value],
+                           description: I18n.t('settings.show_follow_up_timestamps')
+      end
+    end
+  end
+
+  def add_show_follow_up_timestamps?
+    Setting.where(name: 'show_follow_up_timestamps').empty?
   end
 
   def add_show_print_date_on_pdfs?

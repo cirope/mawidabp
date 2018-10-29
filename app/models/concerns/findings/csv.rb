@@ -14,7 +14,7 @@ module Findings::CSV
       business_unit.name,
       review_code,
       id,
-      taggings.map(&:tag).to_sentence,
+      (taggings.map(&:tag).to_sentence if self.class.show_follow_up_timestamps?),
       title,
       description,
       state_text,
@@ -34,7 +34,7 @@ module Findings::CSV
       audit_comments,
       audit_recommendations,
       answer,
-      finding_answers_text
+      (finding_answers_text if self.class.show_follow_up_timestamps?)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -127,6 +127,17 @@ module Findings::CSV
       end
     end
 
+    def show_follow_up_timestamps?
+      if @_show_follow_up_timestamps.nil?
+        setting = Current.organization.settings.find_by name: 'show_follow_up_timestamps'
+        result  = (setting ? setting.value : DEFAULT_SETTINGS[:show_follow_up_timestamps][:value]) != '0'
+
+        @_show_follow_up_timestamps = result
+      else
+        @_show_follow_up_timestamps
+      end
+    end
+
     private
 
       def all_with_inclusions
@@ -166,7 +177,7 @@ module Findings::CSV
           BusinessUnit.model_name.human,
           Weakness.human_attribute_name('review_code'),
           Finding.human_attribute_name('id'),
-          Tag.model_name.human(count: 0),
+          (Tag.model_name.human(count: 0) if show_follow_up_timestamps?),
           Weakness.human_attribute_name('title'),
           Weakness.human_attribute_name('description'),
           Weakness.human_attribute_name('state'),
@@ -186,7 +197,7 @@ module Findings::CSV
           Finding.human_attribute_name('audit_comments'),
           Finding.human_attribute_name('audit_recommendations'),
           Finding.human_attribute_name('answer'),
-          I18n.t('finding.finding_answers')
+          (I18n.t('finding.finding_answers') if show_follow_up_timestamps?)
         ].compact
       end
 

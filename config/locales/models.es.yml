@@ -170,6 +170,8 @@ es:
         name: 'Objetivo de control'
         relevance: 'Objetivo de control (importancia)'
         risk: 'Objetivo de control (riesgo)'
+      best_practice/process_controls/control_objectives/taggings:
+        tag_id: 'Objetivo de control (etiqueta)'
       best_practice_comment:
         auditor_comment: 'Conclusiones del auditor'
         best_practice: 'Buena práctica'
