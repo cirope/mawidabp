@@ -13,11 +13,7 @@ module Findings::SortColumns
         priority_desc:       priority_desc_options,
       ) unless HIDE_WEAKNESS_PRIORITY
 
-      if POSTGRESQL_ADAPTER &&
-         self == Finding
-
-        columns[:readings_desc] = readings_desc_options
-      end
+      columns[:readings_desc] = readings_desc_options if self == Finding
 
       columns.merge(
         state:               state_options,
@@ -119,15 +115,42 @@ module Findings::SortColumns
         reading_user = "COUNT(#{Reading.quoted_table_name}.#{qcn 'user_id'})"
         finding_user = "COUNT(#{FindingAnswer.quoted_table_name}.#{qcn 'user_id'})"
 
+        select = "GREATEST(0, #{finding_user} - #{reading_user}) AS readings_count"
+
         order_by_readings = "readings_count DESC, #{quoted_table_name}.#{qcn 'id'} DESC"
 
+        if ORACLE_ADAPTER
+          group_list = []
+          select_list = [select]
+
+          quoted_columns = columns.map do |c|
+            column = "#{quoted_table_name}.#{qcn c.name}"
+
+            if c.type == :text # Oracle CLOB
+              column = "TO_CHAR(#{column})"
+
+              group_list << column
+              select_list << "#{column} AS #{c.name}"
+            else
+              group_list << column
+              select_list << column
+            end
+          end
+
+          group = group_list.join ','
+          select = select_list
+        else
+          group = "#{quoted_table_name}.#{qcn 'id'}"
+          select = "#{quoted_table_name}.*, #{select}"
+        end
+
         {
-          name: "#{I18n.t('findings.index.unread_answers_filter')}#{order_label('DESC')}",
+          name: "#{I18n.t('findings.index.unread_answers_filter')}#{order_label 'DESC'}",
           field: Arel.sql(order_by_readings),
           extra_query_values: {
-            select:           "#{quoted_table_name}.*, GREATEST(0, #{finding_user} - #{reading_user}) AS readings_count",
+            select:           select,
             left_outer_joins: [:finding_answers, { finding_answers: :readings }],
-            group:            "#{quoted_table_name}.#{qcn 'id'}"
+            group:            group
           }
         }
       end
