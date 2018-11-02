@@ -12,6 +12,14 @@ module ConclusionFinalReviews::Scopes
 
       where close_date: range
     }
+
+    scope :reviews_with_score_type, -> {
+      includes(:review).where(
+        reviews: {
+          score_type: :none
+        }
+      )
+    }
   end
 
   module ClassMethods

@@ -104,7 +104,7 @@ module Reports::ControlObjectiveStats
       ]
       @conclusion_reviews = ConclusionFinalReview.list_all_by_date(
         @from_date, @to_date
-      )
+      ).reviews_with_score_type
       @process_control_data = {}
       @reviews_score_data = {}
       @control_objectives = []

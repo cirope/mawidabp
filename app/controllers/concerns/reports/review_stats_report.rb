@@ -45,7 +45,7 @@ module Reports::ReviewStatsReport
       @weaknesses_by_score = {}
       @total_weaknesses_by_score = {}
       @conclusion_reviews = ConclusionFinalReview.
-        includes(:review).
+        reviews_with_score_type.
         list_all_by_date @from_date, @to_date
     end
 
