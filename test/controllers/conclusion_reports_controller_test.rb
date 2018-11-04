@@ -136,7 +136,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
   end
 
   test 'filtered review stats report for scored reports' do
-    reviews(:past_review).update_column(:score_type, :none)
+    reviews(:past_review).update_column(:score_type, 'none')
 
     login
 
