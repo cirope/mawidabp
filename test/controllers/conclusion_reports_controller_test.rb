@@ -131,6 +131,29 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:filters)
     assert_equal 2, assigns(:filters).count
+    assert_equal 2, assigns(:conclusion_reviews).count
+    assert_template 'conclusion_reports/review_stats_report'
+  end
+
+  test 'filtered review stats report for scored reports' do
+    reviews(:past_review).update_column(:score_type, :none)
+
+    login
+
+    get :review_stats_report, :params => {
+      :review_stats_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'one'
+      },
+      :controller_name => 'conclusion'
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:filters)
+    assert_equal 2, assigns(:filters).count
+    assert_equal 1, assigns(:conclusion_reviews).count
     assert_template 'conclusion_reports/review_stats_report'
   end
 
