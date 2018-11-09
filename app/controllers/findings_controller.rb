@@ -17,7 +17,7 @@ class FindingsController < ApplicationController
     @findings = current_user_findings
 
     respond_to do |format|
-      format.html { @findings = @findings.page params[:page] }
+      format.html { paginate_findings }
       format.csv  { render_index_csv }
       format.pdf  { redirect_to pdf.relative_path }
     end
@@ -153,5 +153,17 @@ class FindingsController < ApplicationController
         method_name: :to_csv,
         options: csv_options
       )
+    end
+
+    def paginate_findings
+      @findings = @findings.page params[:page]
+
+      if ORACLE_ADAPTER
+        @findings.total_entries = @findings.unscope(
+          :group, :order, :select
+        ).select(:id).distinct.count
+      end
+
+      @findings
     end
 end

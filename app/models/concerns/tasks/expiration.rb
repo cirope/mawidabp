@@ -3,7 +3,7 @@ module Tasks::Expiration
 
   included do
     scope :expired, -> {
-      pending.or(in_progress).where(
+      pending.or(in_progress).finals(false).where(
         "#{quoted_table_name}.#{qcn 'due_on'} < ?", Time.zone.today
       )
     }
@@ -26,6 +26,10 @@ module Tasks::Expiration
 
     def next_to_expire
       expires_on FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
+    end
+
+    def finals final
+      includes(:finding).merge(Finding.finals(final)).references :findings
     end
 
     def warning_users_about_expiration
@@ -61,7 +65,7 @@ module Tasks::Expiration
         from = date
         to   = from.wday == 5 ? from + 2.days : from
 
-        pending.or(in_progress).where due_on: from..to
+        pending.or(in_progress).finals(false).where due_on: from..to
       end
   end
 end
