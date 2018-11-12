@@ -17,8 +17,9 @@ module Findings::Validations
     validate :validate_state
     validate :validate_review_code
     validate :validate_finding_user_assignments
-    validate :validate_follow_up_date, if: :check_dates?
-    validate :validate_solution_date,  if: :check_dates?
+    validate :validate_manager_presence, if: :validate_manager_presence?
+    validate :validate_follow_up_date,   if: :check_dates?
+    validate :validate_solution_date,    if: :check_dates?
   end
 
   def is_in_a_final_review?
@@ -156,5 +157,22 @@ module Findings::Validations
 
     def can_not_be_revoked?
       revoked? && state_changed? && (repeated_of || is_in_a_final_review?)
+    end
+
+    def validate_manager_presence
+      users = finding_user_assignments.reject(&:marked_for_destruction?).map &:user
+      has_manager = users.any? { |u| u.manager? || u.manager_on?(organization_id) }
+
+      unless has_manager
+        errors.add :finding_user_assignments, :must_have_a_manager
+      end
+    end
+
+    def validate_manager_presence?
+      setting = organization.settings.find_by name: 'require_manager_on_findings'
+      should_validate = (setting&.value || DEFAULT_SETTINGS[:require_manager_on_findings][:value]) != '0'
+      from = should_validate && setting&.updated_at
+
+      should_validate && from && (new_record? || created_at >= from)
     end
 end

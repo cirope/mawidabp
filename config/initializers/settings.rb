@@ -13,6 +13,7 @@ DEFAULT_SETTINGS = {
   password_expire_time: { value: '30', validates: 'numericality' },
   password_minimum_length: { value: '8', validates: 'numericality' },
   password_minimum_time: { value: '1', validates: 'numericality' },
+  require_manager_on_findings: { value: '0', validates: 'numericality' },
   review_code_expresion: { value: '^(\\d){2}-[A-Z]{2}-(\\d){2}-(\\d){2}$', validates: 'presence' },
   session_expire_time: { value: '15', validates: 'numericality' },
   show_follow_up_timestamps: { value: '1', validates: 'numericality' },
