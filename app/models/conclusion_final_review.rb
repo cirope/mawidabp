@@ -52,6 +52,12 @@ class ConclusionFinalReview < ConclusionReview
           )
         end
 
+        f.tasks.each do |t|
+          finding.tasks.build(
+            t.attributes.dup.merge('id' => nil, 'finding_id' => nil)
+          )
+        end
+
         f.taggings.each do |t|
           finding.taggings.build(
             t.attributes.dup.merge('id' => nil, 'taggable_id' => nil)

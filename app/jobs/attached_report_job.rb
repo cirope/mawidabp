@@ -42,6 +42,8 @@ class AttachedReportJob < ApplicationJob
             arg   = query.is_a?(String) ? Arel.sql(query) : deep_convert_to_sym(query)
             scope = scope.send method, arg
           end
+        elsif method == :group
+          scope     = scope.send method, args
         else
           arguments = args.is_a?(String) ? [args] : deep_convert_to_sym(args)
           scope     = scope.send method, *arguments
