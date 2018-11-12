@@ -37,6 +37,18 @@ private
                            description: I18n.t('settings.show_follow_up_timestamps')
       end
     end
+
+    if add_require_manager_on_findings? # 2018-11-09
+      Organization.all.each do |o|
+        o.settings.create! name:        'require_manager_on_findings',
+                           value:       DEFAULT_SETTINGS[:require_manager_on_findings][:value],
+                           description: I18n.t('settings.require_manager_on_findings')
+      end
+    end
+  end
+
+  def add_require_manager_on_findings?
+    Setting.where(name: 'require_manager_on_findings').empty?
   end
 
   def add_show_follow_up_timestamps?
