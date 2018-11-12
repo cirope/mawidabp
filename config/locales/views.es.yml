@@ -393,6 +393,7 @@ es:
     show_print_date_on_pdfs: 'Mostrar fecha de impresión en PDFs'
     brief_period_in_weeks: 'Periodo de notificación "Resumen de hallazgos" en semanas'
     show_follow_up_timestamps: 'Mostrar marcas de tiempo en seguimiento'
+    require_manager_on_findings: 'Requerir gerente de auditoría en hallazgos'
 
   tags:
     edit:
