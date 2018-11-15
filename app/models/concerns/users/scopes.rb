@@ -12,6 +12,11 @@ module Users::Scopes
         where(groups: { id: Current.group&.id }).
         references :groups
     }
+    scope :without_organization, -> {
+      includes(:organizations).
+        where(organizations: { id: nil }).
+        references :organizations
+    }
     scope :not_hidden, -> { where hidden: false }
   end
 

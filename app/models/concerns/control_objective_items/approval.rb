@@ -47,7 +47,7 @@ module ControlObjectiveItems::Approval
         errors << I18n.t('control_objective_item.errors.without_relevance')
       end
 
-      if audit_date.blank?
+      if audit_date.blank? && !DISABLE_COI_AUDIT_DATE_VALIDATION
         errors << I18n.t('control_objective_item.errors.without_audit_date')
       end
 

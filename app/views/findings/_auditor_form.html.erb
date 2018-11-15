@@ -1,5 +1,5 @@
 <% users_readonly = @finding.implemented_audited? || @finding.assumed_risk? || @finding.repeated? || @finding.expired? %>
-<% show_history_changes = @finding.status_change_history.size > 1 %>
+<% show_history_changes = show_follow_up_timestamps? && @finding.status_change_history.size > 1 %>
 <%= simple_form_for @finding, :as => :finding, :url => finding_path(params[:completed], @finding), :html =>
   {:method => :patch, :id => "edit_finding_#{@finding.id}"} do |f| %>
 
@@ -86,7 +86,9 @@
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
         <%= f.input :answer, input_html: { rows: SHOW_FINDING_CURRENT_SITUATION ? 9 : 5 } %>
         <%= f.input :follow_up_date, as: :date_picker, label: @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: @finding.tasks.any? } %>
-        <%= show_weakness_previous_follow_up_dates(@finding) if @finding.follow_up_date %>
+        <% if @finding.follow_up_date && show_follow_up_timestamps? %>
+          <%= show_weakness_previous_follow_up_dates(@finding) %>
+        <% end %>
         <%= f.input :solution_date, as: :date_picker, label:
           Finding.human_attribute_name(:solution_date) %>
         <%= f.input :id, as: :hidden %>
@@ -141,7 +143,7 @@
     </div>
   <% end %>
 
-  <% unless @finding.important_dates.blank? %>
+  <% if @finding.important_dates.present? && show_follow_up_timestamps? %>
     <h4>
       <%= t('finding.important_dates.title') %>
     </h4>
@@ -346,10 +348,11 @@
   </div>
 
   <br />
-  <%= markdown t('finding.costs',
-    :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
+  <% if show_follow_up_timestamps? %>
+    <%= markdown t('finding.costs', :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
+  <% end %>
 
-  <% unless @finding.costs.blank? %>
+  <% if @finding.costs.present? && show_follow_up_timestamps? %>
     <p>
       <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
     </p>

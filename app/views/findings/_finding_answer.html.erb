@@ -18,7 +18,9 @@
         <%= f.input :answer, label: false %>
       <% else %>
         <%= simple_format finding_answer.answer %>
-        <p class="small text-muted"><%= l(finding_answer.created_at, format: :long) %></p>
+        <% if show_follow_up_timestamps? %>
+          <p class="small text-muted"><%= l(finding_answer.created_at, format: :long) %></p>
+        <% end %>
       <% end %>
     </div>
     <div class="col-md-2">
@@ -49,7 +51,7 @@
     </div>
     <div class="col-md-2">
       <% if finding_answer.persisted? %>
-        <div class="text-right">
+        <div class="<%= show_follow_up_timestamps? ? 'text-right' : 'pull-right' %>">
           <%= render 'readings/reading', finding_answer: finding_answer %>
         </div>
         <% if finding_answer.commitment_date %>
