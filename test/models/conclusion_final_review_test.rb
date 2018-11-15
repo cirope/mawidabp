@@ -35,6 +35,14 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
     assert findings_count > 0
 
+    if DISABLE_COI_AUDIT_DATE_VALIDATION
+      assert review.control_objective_items.all? { |coi| !coi.audit_date.today? }
+
+      coi = review.control_objective_items.take
+
+      coi.update! audit_date: nil
+    end
+
     assert_difference 'ConclusionFinalReview.count' do
       assert_difference 'Finding.count', findings_count do
         @conclusion_review = ConclusionFinalReview.list.new(
@@ -63,6 +71,11 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     assert_equal findings_count, final_findings_count
     assert_not_equal 0, Finding.finals(true).count
     assert Finding.finals(true).all? { |f| f.parent }
+
+    if DISABLE_COI_AUDIT_DATE_VALIDATION
+      assert review.control_objective_items.any? { |coi| coi.audit_date.today? }
+      assert review.control_objective_items.all? { |coi| coi.audit_date.present? }
+    end
   end
 
   # Prueba la creación de un informe final con observaciones reiteradas

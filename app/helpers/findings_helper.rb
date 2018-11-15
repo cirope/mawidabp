@@ -235,6 +235,17 @@ module FindingsHelper
     end
   end
 
+  def show_follow_up_timestamps?
+    if @_show_follow_up_timestamps.nil?
+      setting = current_organization.settings.find_by name: 'show_follow_up_timestamps'
+      result  = (setting ? setting.value : DEFAULT_SETTINGS[:show_follow_up_timestamps][:value]) != '0'
+
+      @_show_follow_up_timestamps = result
+    else
+      @_show_follow_up_timestamps
+    end
+  end
+
   private
 
     def finding_state_options_for finding

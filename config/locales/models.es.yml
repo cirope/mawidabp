@@ -170,6 +170,8 @@ es:
         name: 'Objetivo de control'
         relevance: 'Objetivo de control (clave)'
         risk: 'Objetivo de control (riesgo)'
+      best_practice/process_controls/control_objectives/taggings:
+        tag_id: 'Objetivo de control (etiqueta)'
       best_practice_comment:
         auditor_comment: 'Conclusiones del auditor'
         best_practice: 'Buena práctica'
@@ -557,6 +559,7 @@ es:
               must_be_done_by_proper_role: 'solo puede ser cambiado por un usuario supervisor o gerente'
             finding_user_assignments:
               invalid: 'debe contener como mínimo un auditor, un auditado, un gerente y/o un supervisor'
+              must_have_a_manager: 'debe contener un gerente de auditoría'
         finding_user_assignment:
           attributes:
             user:
