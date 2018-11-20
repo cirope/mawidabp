@@ -236,10 +236,13 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     @control_objective_item.finished = true
 
     assert @control_objective_item.invalid?
-    assert_error @control_objective_item, :audit_date, :blank
     assert_error @control_objective_item, :relevance, :blank
     assert_error @control_objective_item.control, :control, :blank
     assert_error @control_objective_item, :auditor_comment, :blank
+
+    unless DISABLE_COI_AUDIT_DATE_VALIDATION
+      assert_error @control_objective_item, :audit_date, :blank
+    end
 
     unless HIDE_CONTROL_EFFECTS
       assert_error @control_objective_item.control, :effects, :blank
@@ -251,7 +254,13 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
     @control_objective_item.design_score = 0
 
-    expected_error_count = HIDE_CONTROL_EFFECTS ? 5 : 6
+    expected_error_count = if HIDE_CONTROL_EFFECTS && DISABLE_COI_AUDIT_DATE_VALIDATION
+                             4
+                           elsif HIDE_CONTROL_EFFECTS || DISABLE_COI_AUDIT_DATE_VALIDATION
+                             5
+                           else
+                             6
+                           end
 
     assert !@control_objective_item.valid?
     assert_equal expected_error_count, @control_objective_item.errors.count
