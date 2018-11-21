@@ -10,8 +10,9 @@ module ControlObjectiveItems::Validations
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 2147483647
     }, allow_blank: true, allow_nil: true
-    validates :audit_date, timeliness: { type: :date }, allow_nil: true
-    validates :audit_date, :relevance, :auditor_comment, presence: true, if: :finished
+    validates :audit_date, timeliness: { type: :date }, allow_blank: true
+    validates :audit_date, presence: true, if: :require_audit_date?
+    validates :relevance, :auditor_comment, presence: true, if: :finished
     validates :auditor_comment, presence: true, if: :exclude_from_score
     validates :issues_count, :alerts_count, presence: true, if: :validate_counts?
     validate :audit_date_is_on_period
@@ -72,6 +73,10 @@ module ControlObjectiveItems::Validations
           errors.add :sustantive_score, :blank
         end
       end
+    end
+
+    def require_audit_date?
+      finished && !DISABLE_COI_AUDIT_DATE_VALIDATION
     end
 
     def validate_counts?
