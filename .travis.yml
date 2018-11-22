@@ -13,7 +13,7 @@ addons:
     - imagemagick
     - slapd
     - ldap-utils
-  postgresql: 11
+  postgresql: 10
 
 services:
   - postgresql
