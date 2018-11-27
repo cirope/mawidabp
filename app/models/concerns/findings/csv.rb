@@ -120,11 +120,13 @@ module Findings::CSV
 
   module ClassMethods
     def to_csv completed: 'incomplete', corporate: false
-      ::CSV.generate(col_sep: ';', force_quotes: true) do |csv|
+      csv_str = ::CSV.generate(col_sep: ';', force_quotes: true) do |csv|
         csv << column_headers(completed, corporate)
 
         all_with_inclusions.each { |f| csv << f.to_csv_a(corporate) }
       end
+
+      "\uFEFF#{csv_str}"
     end
 
     def show_follow_up_timestamps?
