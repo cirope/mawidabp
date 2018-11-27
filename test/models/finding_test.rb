@@ -925,7 +925,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'to csv' do
     csv  = Finding.all.to_csv
-    rows = CSV.parse csv, col_sep: ';'
+    rows = CSV.parse csv, col_sep: ';', liberal_parsing: true
 
     assert_equal Finding.count + 1, rows.length
   end
