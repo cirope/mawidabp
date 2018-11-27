@@ -925,7 +925,8 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'to csv' do
     csv  = Finding.all.to_csv
-    rows = CSV.parse csv, col_sep: ';', liberal_parsing: true
+    # TODO: change to liberal_parsing: true when 2.3 support is dropped
+    rows = CSV.parse csv.sub("\uFEFF", ''), col_sep: ';', force_quotes: true
 
     assert_equal Finding.count + 1, rows.length
   end
