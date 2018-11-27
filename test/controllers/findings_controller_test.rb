@@ -188,7 +188,7 @@ class FindingsControllerTest < ActionController::TestCase
       zipfile.read "#{filename}.csv"
     end
 
-    csv = CSV.parse csv_report, col_sep: ';', force_quotes: true, headers: true
+    csv = CSV.parse csv_report, col_sep: ';', force_quotes: true, headers: true, liberal_parsing: true
 
     assert_equal findings_count, csv.size
 

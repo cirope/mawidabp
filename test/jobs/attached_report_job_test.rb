@@ -32,7 +32,7 @@ class AttachedReportJobTest < ActiveJob::TestCase
       zipfile.read 'super_report.csv'
     end
 
-    csv = CSV.parse csv_report, col_sep: ';', force_quotes: true, headers: true
+    csv = CSV.parse csv_report, col_sep: ';', force_quotes: true, headers: true, liberal_parsing: true
 
     assert_equal csv.size, Finding.all.count
     FileUtils.rm_f tmp_file
