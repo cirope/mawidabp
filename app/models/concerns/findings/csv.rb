@@ -27,7 +27,7 @@ module Findings::CSV
       control_objective_item.control_objective_text,
       origination_date_text,
       date_text,
-      (rescheduled if POSTGRESQL_ADAPTER),
+      rescheduled_text,
       next_pending_task_date,
       listed_tasks,
       reiteration_info,
@@ -54,7 +54,7 @@ module Findings::CSV
       date ? I18n.l(date, format: :minimal) : '-'
     end
 
-    def rescheduled
+    def rescheduled_text
       if being_implemented? || awaiting?
         I18n.t "label.#{rescheduled? ? 'yes' : 'no'}"
       else
@@ -150,7 +150,6 @@ module Findings::CSV
           :business_unit_type,
           :business_unit,
           :tasks,
-          (:versions if POSTGRESQL_ADAPTER),
           ({ tasks: :versions } if POSTGRESQL_ADAPTER),
           finding_answers: :user,
           finding_user_assignments: :user,
@@ -192,7 +191,7 @@ module Findings::CSV
           ControlObjectiveItem.human_attribute_name('control_objective_text'),
           Finding.human_attribute_name('origination_date'),
           date_label(completed),
-          (Finding.human_attribute_name('rescheduled') if POSTGRESQL_ADAPTER),
+          Finding.human_attribute_name('rescheduled'),
           I18n.t('finding.next_pending_task_date'),
           Task.model_name.human(count: 0),
           I18n.t('findings.state.repeated'),

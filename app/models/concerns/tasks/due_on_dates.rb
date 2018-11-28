@@ -32,7 +32,7 @@ module Tasks::DueOnDates
       if start
         versions.where('created_at >= ?', start)
       else
-        []
+        versions.none
       end
     end
 end
