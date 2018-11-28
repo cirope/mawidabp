@@ -131,7 +131,12 @@ private
   def update_finding_reschedules
     if update_finding_reschedules?
       Finding.where(rescheduled: false).find_each do |finding|
-        finding.update_column :rescheduled, true if finding.mark_as_rescheduled?
+        update = finding.final == false ||
+          finding.repeated_of&.mark_as_rescheduled?
+
+        if update && finding.mark_as_rescheduled?
+          finding.update_column :rescheduled, true
+        end
       end
     end
   end

@@ -12,7 +12,7 @@ module Findings::Reschedule
   end
 
   def mark_as_rescheduled?
-    was_rescheduled? || repeated_of&.mark_as_rescheduled? || false
+    was_rescheduled? || repeated_of&.mark_as_rescheduled?
   end
 
   private
