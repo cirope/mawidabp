@@ -764,7 +764,6 @@
       weakness_tags: "Etiquetas de observación"
       review_tags: "Etiquetas de informe"
     weaknesses_list:
-      pdf_name: "listado_observaciones_%{from_date}_al_%{to_date}.pdf"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       control_objective_tags: "Etiquetas objetivos de control"
