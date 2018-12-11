@@ -32,7 +32,8 @@ class AttachedReportJobTest < ActiveJob::TestCase
       zipfile.read 'super_report.csv'
     end
 
-    csv = CSV.parse csv_report, col_sep: ';', force_quotes: true, headers: true
+    # TODO: change to liberal_parsing: true when 2.3 support is dropped
+    csv = CSV.parse csv_report[3..-1], col_sep: ';', force_quotes: true, headers: true
 
     assert_equal csv.size, Finding.all.count
     FileUtils.rm_f tmp_file

@@ -1,4 +1,5 @@
 language: ruby
+dist: xenial
 cache: bundler
 sudo: false
 rvm:
@@ -10,7 +11,10 @@ addons:
     - imagemagick
     - slapd
     - ldap-utils
-  postgresql: 9.6
+  postgresql: 10
+
+services:
+  - postgresql
 
 env:
   - CONFIG_TYPE=normal

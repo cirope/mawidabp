@@ -324,4 +324,72 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       f.origination_date == @conclusion_review.issue_date
     end)
   end
+
+  test 'recode findings on creation' do
+    skip unless has_extra_sort_method? Current.organization
+
+    review = reviews :review_with_conclusion
+
+    repeated_column = [
+      Weakness.quoted_table_name,
+      Weakness.qcn('repeated_of_id')
+    ].join('.')
+
+    repeated_order = if Review.connection.adapter_name == 'OracleEnhanced'
+                        "CASE WHEN #{repeated_column} IS NULL THEN 1 ELSE 0 END"
+                      else
+                        "#{repeated_column} IS NULL"
+                      end
+
+    order = [
+      repeated_order,
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
+    ].map { |o| Arel.sql o }
+
+    codes = review.weaknesses.not_revoked.reorder(order).pluck 'review_code'
+
+    assert codes.each_with_index.any? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i != i.next
+    }
+
+    review.weaknesses.where(:state => Finding::STATUS[:unconfirmed]).each do |w|
+      assert w.update_columns :state          => Finding::STATUS[:awaiting],
+                              :follow_up_date => 10.days.from_now.to_date
+    end
+
+    review.oportunities.where(:state => Finding::STATUS[:unconfirmed]).each do |o|
+      assert o.update_columns :state          => Finding::STATUS[:awaiting],
+                              :follow_up_date => 10.days.from_now.to_date
+    end
+
+    cfr = ConclusionFinalReview.list.create!(
+      :review => review,
+      :issue_date => Date.today,
+      :close_date => 2.days.from_now.to_date,
+      :applied_procedures => 'New applied procedures',
+      :conclusion => CONCLUSION_OPTIONS.first,
+      :recipients => 'John Doe',
+      :sectors => 'Area 51',
+      :evolution => EVOLUTION_OPTIONS.second,
+      :evolution_justification => 'Ok',
+      :main_weaknesses_text => 'Some main weakness X',
+      :corrective_actions => 'You should do it this way',
+      :affects_compliance => false
+    )
+
+    codes = review.weaknesses.reload.not_revoked.reorder(order).pluck 'review_code'
+
+    assert codes.sort.each_with_index.all? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i == i.next
+    }
+  end
+
+  private
+
+    def has_extra_sort_method? organization
+      methods = JSON.parse ENV['AUTOMATICALLY_SORT_FINDINGS_ON_CONCLUSION'] || '{}'
+
+      organization && methods.present? && methods[organization.prefix]
+    end
 end

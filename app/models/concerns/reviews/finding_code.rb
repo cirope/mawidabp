@@ -81,9 +81,9 @@ module Reviews::FindingCode
     def assign_new_review_code_to_findings not_revoked, revoked
       self.class.transaction do
         revoked.each_with_index do |f, i|
-          unless f.review_code.start_with? revoked_prefix
-            f.update_column :review_code, "#{revoked_prefix}#{f.review_code}"
-          end
+          new_code = "#{revoked_prefix}#{f.prefix}#{'%.3d' % i.next}"
+
+          f.update_column :review_code, new_code
         end
 
         not_revoked.each_with_index do |f, i|

@@ -484,8 +484,14 @@ class UserTest < ActiveSupport::TestCase
     user    = users :supervisor
     options = user.review_assignment_options
 
-    assert_equal 1, options.size
-    assert options[:supervisor]
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+      assert_equal 1, options.size
+      assert options[:supervisor]
+    else
+      assert_equal 2, options.size
+      assert options[:supervisor]
+      assert options[:responsible]
+    end
   end
 
   test 'notify finding changes function' do

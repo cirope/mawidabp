@@ -30,6 +30,7 @@ class Finding < ApplicationRecord
   include Findings::Reiterations
   include Findings::Relations
   include Findings::ReportScopes
+  include Findings::Reschedule
   include Findings::SaveCallbacks
   include Findings::ScaffoldNotifications
   include Findings::Scopes
