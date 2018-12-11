@@ -1,26 +1,26 @@
-module Reports::WeaknessesEvolution
+module Reports::WeaknessesList
   extend ActiveSupport::Concern
 
   include Reports::PDF
   include Reports::Period
 
-  def weaknesses_evolution
-    init_weaknesses_evolution_vars
+  def weaknesses_list
+    init_weaknesses_list_vars
 
     respond_to do |format|
       format.html
       format.csv do
-        render csv: weaknesses_evolution_csv, filename: @title.downcase
+        render csv: weaknesses_list_csv, filename: @title.downcase
       end
     end
   end
 
   private
 
-    def init_weaknesses_evolution_vars
+    def init_weaknesses_list_vars
       @controller = params[:controller_name]
-      @title = t("#{@controller}_committee_report.weaknesses_evolution_title")
-      @from_date, @to_date = *make_date_range(params[:weaknesses_evolution])
+      @title = t("#{@controller}_committee_report.weaknesses_list_title")
+      @from_date, @to_date = *make_date_range(params[:weaknesses_list])
       @filters = []
       final = params[:final] == 'true'
       order = [
@@ -35,32 +35,32 @@ module Reports::WeaknessesEvolution
         by_issue_date('BETWEEN', @from_date, @to_date).
         includes(:business_unit, :business_unit_type, review: [:plan_item, :conclusion_final_review])
 
-      if params[:weaknesses_evolution]
-        weaknesses = filter_weaknesses_evolution_by_risk weaknesses
-        weaknesses = filter_weaknesses_evolution_by_status weaknesses
-        weaknesses = filter_weaknesses_evolution_by_title weaknesses
-        weaknesses = filter_weaknesses_evolution_by_compliance weaknesses
-        weaknesses = filter_weaknesses_evolution_by_business_unit_type weaknesses
-        weaknesses = filter_weaknesses_evolution_by_impact weaknesses
-        weaknesses = filter_weaknesses_evolution_by_operational_risk weaknesses
-        weaknesses = filter_weaknesses_evolution_by_internal_control_components weaknesses
-        weaknesses = filter_weaknesses_evolution_by_tags weaknesses
-        weaknesses = filter_weaknesses_evolution_by_repeated weaknesses
+      if params[:weaknesses_list]
+        weaknesses = filter_weaknesses_list_by_risk weaknesses
+        weaknesses = filter_weaknesses_list_by_status weaknesses
+        weaknesses = filter_weaknesses_list_by_title weaknesses
+        weaknesses = filter_weaknesses_list_by_compliance weaknesses
+        weaknesses = filter_weaknesses_list_by_business_unit_type weaknesses
+        weaknesses = filter_weaknesses_list_by_impact weaknesses
+        weaknesses = filter_weaknesses_list_by_operational_risk weaknesses
+        weaknesses = filter_weaknesses_list_by_internal_control_components weaknesses
+        weaknesses = filter_weaknesses_list_by_tags weaknesses
+        weaknesses = filter_weaknesses_list_by_repeated weaknesses
       end
 
       @weaknesses = weaknesses.reorder order
     end
 
-    def weaknesses_evolution_csv
+    def weaknesses_list_csv
       CSV.generate(col_sep: ';', force_quotes: true) do |csv|
-        csv << weaknesses_evolution_csv_headers
+        csv << weaknesses_list_csv_headers
 
-        weaknesses_evolution_csv_data_rows.each { |row| csv << row }
+        weaknesses_list_csv_data_rows.each { |row| csv << row }
       end
     end
 
-    def filter_weaknesses_evolution_by_risk weaknesses
-      risk = Array(params[:weaknesses_evolution][:risk]).reject(&:blank?)
+    def filter_weaknesses_list_by_risk weaknesses
+      risk = Array(params[:weaknesses_list][:risk]).reject(&:blank?)
 
       if risk.present?
         risk_texts = risk.map do |r|
@@ -75,8 +75,8 @@ module Reports::WeaknessesEvolution
       end
     end
 
-    def filter_weaknesses_evolution_by_repeated weaknesses
-      repeated = params[:weaknesses_evolution][:repeated]
+    def filter_weaknesses_list_by_repeated weaknesses
+      repeated = params[:weaknesses_list][:repeated]
 
       return weaknesses if repeated.blank?
 
@@ -87,8 +87,8 @@ module Reports::WeaknessesEvolution
       repeated ? weaknesses.with_repeated : weaknesses.without_repeated
     end
 
-    def filter_weaknesses_evolution_by_status weaknesses
-      states               = Array(params[:weaknesses_evolution][:finding_status]).reject(&:blank?)
+    def filter_weaknesses_list_by_status weaknesses
+      states               = Array(params[:weaknesses_list][:finding_status]).reject(&:blank?)
       not_muted_states     = Finding::EXCLUDE_FROM_REPORTS_STATUS + [:implemented_audited]
       mute_state_filter_on = Finding::STATUS.except(*not_muted_states).map do |k, v|
         v.to_s
@@ -109,9 +109,9 @@ module Reports::WeaknessesEvolution
       end
     end
 
-    def filter_weaknesses_evolution_by_title weaknesses
-      if params[:weaknesses_evolution][:finding_title].present?
-        title = params[:weaknesses_evolution][:finding_title]
+    def filter_weaknesses_list_by_title weaknesses
+      if params[:weaknesses_list][:finding_title].present?
+        title = params[:weaknesses_list][:finding_title]
 
         @filters << "<b>#{Finding.human_attribute_name('title')}</b> = \"#{title}\""
 
@@ -121,9 +121,9 @@ module Reports::WeaknessesEvolution
       end
     end
 
-    def filter_weaknesses_evolution_by_compliance weaknesses
-      if params[:weaknesses_evolution][:compliance].present?
-        compliance = params[:weaknesses_evolution][:compliance]
+    def filter_weaknesses_list_by_compliance weaknesses
+      if params[:weaknesses_list][:compliance].present?
+        compliance = params[:weaknesses_list][:compliance]
 
         @filters << "<b>#{Finding.human_attribute_name('compliance')}</b> = \"#{t "label.#{compliance}"}\""
 
@@ -133,8 +133,8 @@ module Reports::WeaknessesEvolution
       end
     end
 
-    def filter_weaknesses_evolution_by_business_unit_type weaknesses
-      business_unit_types = Array(params[:weaknesses_evolution][:business_unit_type]).reject(&:blank?)
+    def filter_weaknesses_list_by_business_unit_type weaknesses
+      business_unit_types = Array(params[:weaknesses_list][:business_unit_type]).reject(&:blank?)
 
       if business_unit_types.present?
         selected_business_units = BusinessUnitType.list.where id: business_unit_types
@@ -147,8 +147,8 @@ module Reports::WeaknessesEvolution
       end
     end
 
-    def filter_weaknesses_evolution_by_impact weaknesses
-      impact = Array(params[:weaknesses_evolution][:impact]).reject(&:blank?)
+    def filter_weaknesses_list_by_impact weaknesses
+      impact = Array(params[:weaknesses_list][:impact]).reject(&:blank?)
 
       if impact.present?
         @filters << "<b>#{Weakness.human_attribute_name('impact')}</b> = \"#{impact.to_sentence}\""
@@ -159,8 +159,8 @@ module Reports::WeaknessesEvolution
       end
     end
 
-    def filter_weaknesses_evolution_by_operational_risk weaknesses
-      operational_risk = Array(params[:weaknesses_evolution][:operational_risk]).reject(&:blank?)
+    def filter_weaknesses_list_by_operational_risk weaknesses
+      operational_risk = Array(params[:weaknesses_list][:operational_risk]).reject(&:blank?)
 
       if operational_risk.present?
         @filters << "<b>#{Weakness.human_attribute_name('operational_risk')}</b> = \"#{operational_risk.to_sentence}\""
@@ -171,8 +171,8 @@ module Reports::WeaknessesEvolution
       end
     end
 
-    def filter_weaknesses_evolution_by_internal_control_components weaknesses
-      internal_control_components = Array(params[:weaknesses_evolution][:internal_control_components]).reject(&:blank?)
+    def filter_weaknesses_list_by_internal_control_components weaknesses
+      internal_control_components = Array(params[:weaknesses_list][:internal_control_components]).reject(&:blank?)
 
       if internal_control_components.present?
         @filters << "<b>#{Weakness.human_attribute_name('internal_control_components')}</b> = \"#{internal_control_components.to_sentence}\""
@@ -183,20 +183,20 @@ module Reports::WeaknessesEvolution
       end
     end
 
-    def filter_weaknesses_evolution_by_tags weaknesses
-      weaknesses = filter_weaknesses_evolution_by_control_objective_tags weaknesses
-      weaknesses = filter_weaknesses_evolution_by_weakness_tags weaknesses
+    def filter_weaknesses_list_by_tags weaknesses
+      weaknesses = filter_weaknesses_list_by_control_objective_tags weaknesses
+      weaknesses = filter_weaknesses_list_by_weakness_tags weaknesses
 
-      filter_weaknesses_evolution_by_review_tags weaknesses
+      filter_weaknesses_list_by_review_tags weaknesses
     end
 
-    def filter_weaknesses_evolution_by_control_objective_tags weaknesses
-      tags = params[:weaknesses_evolution][:control_objective_tags].to_s.split(
+    def filter_weaknesses_list_by_control_objective_tags weaknesses
+      tags = params[:weaknesses_list][:control_objective_tags].to_s.split(
         SPLIT_AND_TERMS_REGEXP
       ).uniq.map(&:strip).reject(&:blank?)
 
       if tags.any?
-        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_evolution.control_objective_tags'}</b> = \"#{tags.to_sentence}\""
+        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_list.control_objective_tags'}</b> = \"#{tags.to_sentence}\""
 
         weaknesses.by_control_objective_tags tags
       else
@@ -204,13 +204,13 @@ module Reports::WeaknessesEvolution
       end
     end
 
-    def filter_weaknesses_evolution_by_weakness_tags weaknesses
-      tags = params[:weaknesses_evolution][:weakness_tags].to_s.split(
+    def filter_weaknesses_list_by_weakness_tags weaknesses
+      tags = params[:weaknesses_list][:weakness_tags].to_s.split(
         SPLIT_AND_TERMS_REGEXP
       ).uniq.map(&:strip).reject(&:blank?)
 
       if tags.any?
-        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_evolution.weakness_tags'}</b> = \"#{tags.to_sentence}\""
+        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_list.weakness_tags'}</b> = \"#{tags.to_sentence}\""
 
         weaknesses.by_wilcard_tags tags
       else
@@ -218,13 +218,13 @@ module Reports::WeaknessesEvolution
       end
     end
 
-    def filter_weaknesses_evolution_by_review_tags weaknesses
-      tags = params[:weaknesses_evolution][:review_tags].to_s.split(
+    def filter_weaknesses_list_by_review_tags weaknesses
+      tags = params[:weaknesses_list][:review_tags].to_s.split(
         SPLIT_AND_TERMS_REGEXP
       ).uniq.map(&:strip).reject(&:blank?)
 
       if tags.any?
-        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_evolution.review_tags'}</b> = \"#{tags.to_sentence}\""
+        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_list.review_tags'}</b> = \"#{tags.to_sentence}\""
 
         weaknesses.by_review_tags tags
       else
@@ -232,7 +232,7 @@ module Reports::WeaknessesEvolution
       end
     end
 
-    def weaknesses_evolution_csv_headers
+    def weaknesses_list_csv_headers
       [
         BestPractice.model_name.human,
         ProcessControl.model_name.human,
@@ -248,7 +248,7 @@ module Reports::WeaknessesEvolution
       ]
     end
 
-    def weaknesses_evolution_csv_data_rows
+    def weaknesses_list_csv_data_rows
       @weaknesses.map do |weakness|
         [
           weakness.control_objective_item.best_practice.name,

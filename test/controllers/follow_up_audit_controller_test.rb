@@ -11,7 +11,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :index, :synthesis_report, :qa_indicators, :weaknesses_by_state,
       :weaknesses_by_risk, :weaknesses_by_audit_type,
       :weaknesses_by_risk_report, :fixed_weaknesses_report,
-      :weaknesses_by_month, :weaknesses_current_situation, :weaknesses_evolution
+      :weaknesses_by_month, :weaknesses_current_situation, :weaknesses_list
     ]
 
     private_actions.each do |action|
@@ -599,16 +599,16 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       'weaknesses_current_situation', 0)
   end
 
-  test 'weaknesses evolution' do
+  test 'weaknesses list' do
     login
 
-    get :weaknesses_evolution
+    get :weaknesses_list
     assert_response :success
-    assert_template 'follow_up_audit/weaknesses_evolution'
+    assert_template 'follow_up_audit/weaknesses_list'
 
     assert_nothing_raised do
-      get :weaknesses_evolution, :params => {
-        :weaknesses_evolution => {
+      get :weaknesses_list, :params => {
+        :weaknesses_list => {
           :from_date => 10.years.ago.to_date,
           :to_date => 10.years.from_now.to_date
         },
@@ -618,19 +618,19 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_template 'follow_up_audit/weaknesses_evolution'
+    assert_template 'follow_up_audit/weaknesses_list'
   end
 
-  test 'weaknesses evolution as CSV' do
+  test 'weaknesses list as CSV' do
     login
 
-    get :weaknesses_evolution, as: :csv
+    get :weaknesses_list, as: :csv
     assert_response :success
     assert_equal Mime[:csv], @response.content_type
 
     assert_nothing_raised do
-      get :weaknesses_evolution, :params => {
-        :weaknesses_evolution => {
+      get :weaknesses_list, :params => {
+        :weaknesses_list => {
           :from_date => 10.years.ago.to_date,
           :to_date => 10.years.from_now.to_date
         },
@@ -643,11 +643,11 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_equal Mime[:csv], @response.content_type
   end
 
-  test 'filtered weaknesses evolution' do
+  test 'filtered weaknesses list' do
     login
 
-    get :weaknesses_evolution, :params => {
-      :weaknesses_evolution => {
+    get :weaknesses_list, :params => {
+      :weaknesses_list => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
         :risk => ['', '1', '2'],
@@ -664,16 +664,16 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_response :success
-    assert_template 'follow_up_audit/weaknesses_evolution'
+    assert_template 'follow_up_audit/weaknesses_list'
   end
 
-  test 'filtered weaknesses evolution by extra attributes' do
+  test 'filtered weaknesses list by extra attributes' do
     skip unless POSTGRESQL_ADAPTER
 
     login
 
-    get :weaknesses_evolution, :params => {
-      :weaknesses_evolution => {
+    get :weaknesses_list, :params => {
+      :weaknesses_list => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
         :risk => ['', '1', '2'],
@@ -690,7 +690,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_response :success
-    assert_template 'follow_up_audit/weaknesses_evolution'
+    assert_template 'follow_up_audit/weaknesses_list'
   end
 
   test 'fixed weaknesses report' do

@@ -1,6 +1,6 @@
 <%= render partial: 'shared/filter_form',
   locals: {
-    action: :weaknesses_evolution, extra_params: {
+    action: :weaknesses_list, extra_params: {
       controller_name: 'follow_up', final: false
     },
     forms: [
@@ -12,21 +12,21 @@
         :tags, {
           group: 2,
           field_name: :control_objective_tags,
-          field_label: t('follow_up_committee_report.weaknesses_evolution.control_objective_tags')
+          field_label: t('follow_up_committee_report.weaknesses_list.control_objective_tags')
         }
       ],
       [
         :tags, {
           group: 2,
           field_name: :weakness_tags,
-          field_label: t('follow_up_committee_report.weaknesses_evolution.weakness_tags')
+          field_label: t('follow_up_committee_report.weaknesses_list.weakness_tags')
         }
       ],
       [
         :tags, {
           group: 3,
           field_name: :review_tags,
-          field_label: t('follow_up_committee_report.weaknesses_evolution.review_tags')
+          field_label: t('follow_up_committee_report.weaknesses_list.review_tags')
         }
       ],
       [:compliance, { group: 3 }],
@@ -74,7 +74,7 @@
   </table>
 <% else %>
   <div style="margin-left: 2em">
-    <p><em><%= t 'follow_up_committee_report.weaknesses_evolution.without_weaknesses' %></em></p>
+    <p><em><%= t 'follow_up_committee_report.weaknesses_list.without_weaknesses' %></em></p>
   </div>
 <% end %>
 
@@ -82,5 +82,5 @@
 
 <div>
   <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download_csv'), weaknesses_evolution_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
+  <%= link_to t('label.download_csv'), weaknesses_list_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
 </div>
