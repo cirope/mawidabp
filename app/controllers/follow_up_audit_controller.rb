@@ -11,6 +11,7 @@ class FollowUpAuditController < ApplicationController
   include Reports::WeaknessesByRiskReport
   include Reports::WeaknessesByMonth
   include Reports::WeaknessesCurrentSituation
+  include Reports::WeaknessesEvolution
   include Reports::FixedWeaknessesReport
   include Reports::FollowUpCostAnalysis
   include Reports::WeaknessesGraph
@@ -43,6 +44,9 @@ class FollowUpAuditController < ApplicationController
         create_weaknesses_by_audit_type: :read,
         weaknesses_report: :read,
         create_weaknesses_report: :read,
+        weaknesses_current_situation: :read,
+        create_weaknesses_current_situation: :read,
+        weaknesses_evolution: :read,
         weaknesses_graphs: :read,
         cost_analysis: :read,
         create_cost_analysis: :read,

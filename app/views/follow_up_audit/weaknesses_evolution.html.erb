@@ -1,0 +1,86 @@
+<%= render partial: 'shared/filter_form',
+  locals: {
+    action: :weaknesses_evolution, extra_params: {
+      controller_name: 'follow_up', final: false
+    },
+    forms: [
+      [:date_range, true],
+      [:finding_multiple, true],
+      [:risk_levels_multiple, { group: 1 }],
+      [:business_unit_type_multiple, { group: 1 }],
+      [
+        :tags, {
+          group: 2,
+          field_name: :control_objective_tags,
+          field_label: t('follow_up_committee_report.weaknesses_evolution.control_objective_tags')
+        }
+      ],
+      [
+        :tags, {
+          group: 2,
+          field_name: :weakness_tags,
+          field_label: t('follow_up_committee_report.weaknesses_evolution.weakness_tags')
+        }
+      ],
+      [
+        :tags, {
+          group: 3,
+          field_name: :review_tags,
+          field_label: t('follow_up_committee_report.weaknesses_evolution.review_tags')
+        }
+      ],
+      [:compliance, { group: 3 }],
+      [:repeated, true],
+      [:weakness_extra_attributes, true]
+    ]
+  }
+%>
+
+<% if @weaknesses.any? %>
+  <table class="table table-condensed table-striped table-hover">
+    <thead>
+      <tr>
+        <th><%= BestPractice.model_name.human %></th>
+        <th><%= ProcessControl.model_name.human %></th>
+        <th><%= PlanItem.human_attribute_name 'project' %></th>
+        <th><%= Review.model_name.human %></th>
+        <th><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></th>
+        <th><%= ConclusionFinalReview.human_attribute_name 'conclusion' %></th>
+        <th><%= Weakness.human_attribute_name 'risk' %></th>
+        <th><%= Weakness.human_attribute_name 'title' %></th>
+        <th><%= Weakness.human_attribute_name 'description' %></th>
+        <th><%= Weakness.human_attribute_name 'answer' %></th>
+        <th><%= Weakness.human_attribute_name 'state' %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @weaknesses.each do |weakness| %>
+        <tr>
+          <td><%= weakness.control_objective_item.best_practice.name %></td>
+          <td><%= weakness.control_objective_item.process_control.name %></td>
+          <td><%= weakness.review.plan_item.project %></td>
+          <td><%= weakness.review.identification %></td>
+          <td><%= l weakness.review.conclusion_final_review.issue_date %></td>
+          <td><%= weakness.review.conclusion_final_review.conclusion %></td>
+          <td><%= weakness.risk_text %></td>
+          <td><%= weakness.title %></td>
+          <td><%= weakness.description %></td>
+          <td><%= weakness.answer %></td>
+          <td><%= weakness.state_text %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div style="margin-left: 2em">
+    <p><em><%= t 'follow_up_committee_report.weaknesses_evolution.without_weaknesses' %></em></p>
+  </div>
+<% end %>
+
+<hr />
+
+<div>
+  <%= link_to t('label.back'), action: :index %> |
+  <%= link_to t('label.download_csv'), weaknesses_evolution_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
+</div>
