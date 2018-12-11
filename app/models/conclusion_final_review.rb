@@ -8,6 +8,7 @@ class ConclusionFinalReview < ConclusionReview
 
   # Callbacks
   before_create :check_if_can_be_created,
+                :sort_findings_if_apply,
                 :duplicate_review_findings,
                 :assign_audit_date_to_control_objective_items
 
@@ -28,6 +29,13 @@ class ConclusionFinalReview < ConclusionReview
       self.errors.add :review_id, :invalid
 
       false
+    end
+  end
+
+  def sort_findings_if_apply
+    if method = sort_findings_by_method
+      review.send method
+      review.reload
     end
   end
 
@@ -115,5 +123,11 @@ class ConclusionFinalReview < ConclusionReview
 
     def check_if_can_be_created
       throw :abort unless check_for_approval
+    end
+
+    def sort_findings_by_method
+      methods = JSON.parse ENV['AUTOMATICALLY_SORT_FINDINGS_ON_CONCLUSION'] || '{}'
+
+      methods[organization.prefix] if organization && methods.present?
     end
 end

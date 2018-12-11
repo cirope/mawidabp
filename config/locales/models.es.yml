@@ -376,6 +376,8 @@ es:
         roles: 'Perfiles'
         send_notification_email: 'Enviar notificación'
         user: 'Usuario'
+      user/organization_roles:
+        role_id: 'Perfil'
       paper_trail/version:
         created_at: 'Fecha'
         event: 'Evento'

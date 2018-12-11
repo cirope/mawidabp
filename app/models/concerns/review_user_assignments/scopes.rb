@@ -6,7 +6,8 @@ module ReviewUserAssignments::Scopes
       where assignment_type: [
         ReviewUserAssignment::TYPES[:auditor],
         ReviewUserAssignment::TYPES[:supervisor],
-        ReviewUserAssignment::TYPES[:manager]
+        ReviewUserAssignment::TYPES[:manager],
+        ReviewUserAssignment::TYPES[:responsible]
       ]
     end
   end

@@ -7,6 +7,7 @@ namespace :db do
       add_best_practice_privilege     # 2018-01-31
       add_control_objective_privilege # 2018-01-31
       add_task_codes                  # 2018-07-24
+      update_finding_reschedules      # 2018-11-27
     end
   end
 end
@@ -125,4 +126,21 @@ private
 
   def add_task_codes?
     Task.where(code: nil).any?
+  end
+
+  def update_finding_reschedules
+    if update_finding_reschedules?
+      Finding.where(rescheduled: false).find_each do |finding|
+        update = finding.final == false ||
+          finding.repeated_of&.mark_as_rescheduled?
+
+        if update && finding.mark_as_rescheduled?
+          finding.update_column :rescheduled, true
+        end
+      end
+    end
+  end
+
+  def update_finding_reschedules?
+    Finding.where(rescheduled: true).empty?
   end

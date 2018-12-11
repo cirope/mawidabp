@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_11_004029) do
+ActiveRecord::Schema.define(version: 2018_11_27_122450) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -383,6 +383,7 @@ ActiveRecord::Schema.define(version: 2018_09_11_004029) do
     t.text "impact", default: [], null: false, array: true
     t.text "internal_control_components", default: [], null: false, array: true
     t.bigint "weakness_template_id"
+    t.boolean "rescheduled", default: false, null: false
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
@@ -391,6 +392,7 @@ ActiveRecord::Schema.define(version: 2018_09_11_004029) do
     t.index ["organization_id"], name: "index_findings_on_organization_id"
     t.index ["parent_id"], name: "index_findings_on_parent_id"
     t.index ["repeated_of_id"], name: "index_findings_on_repeated_of_id"
+    t.index ["rescheduled"], name: "index_findings_on_rescheduled"
     t.index ["state"], name: "index_findings_on_state"
     t.index ["title"], name: "index_findings_on_title"
     t.index ["type"], name: "index_findings_on_type"
