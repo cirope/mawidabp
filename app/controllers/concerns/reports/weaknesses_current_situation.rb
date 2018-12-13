@@ -90,11 +90,13 @@ module Reports::WeaknessesCurrentSituation
     end
 
     def weaknesses_current_situation_csv
-      CSV.generate(col_sep: ';', force_quotes: true) do |csv|
+      csv_str = ::CSV.generate(col_sep: ';', force_quotes: true) do |csv|
         csv << weaknesses_current_situation_csv_headers
 
         weaknesses_current_situation_csv_data_rows.each { |row| csv << row }
       end
+
+      "\uFEFF#{csv_str}"
     end
 
     def current_situation_pdf_items weakness
