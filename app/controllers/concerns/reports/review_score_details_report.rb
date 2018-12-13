@@ -32,11 +32,13 @@ module Reports::ReviewScoreDetailsReport
   private
 
     def review_score_details_csv
-      CSV.generate(col_sep: ';', force_quotes: true) do |csv|
+      csv_str = ::CSV.generate(col_sep: ';', force_quotes: true) do |csv|
         csv << review_score_details_csv_headers
 
         review_score_details_csv_rows.each { |row| csv << row }
       end
+
+      "\uFEFF#{csv_str}"
     end
 
     def init_review_score_details_vars

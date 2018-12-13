@@ -2,7 +2,7 @@ module RiskAssessments::CSV
   extend ActiveSupport::Concern
 
   def to_csv completed: 'incomplete', corporate: false
-    ::CSV.generate(col_sep: ';', force_quotes: true) do |csv|
+    csv_str = ::CSV.generate(col_sep: ';', force_quotes: true) do |csv|
       csv << csv_column_headers
       csv << csv_column_sub_headers
 
@@ -10,6 +10,8 @@ module RiskAssessments::CSV
         csv << risk_assessment_item_csv_row(risk_assessment_item)
       end
     end
+
+    "\uFEFF#{csv_str}"
   end
 
   private
