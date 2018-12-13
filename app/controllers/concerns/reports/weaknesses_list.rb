@@ -52,11 +52,13 @@ module Reports::WeaknessesList
     end
 
     def weaknesses_list_csv
-      CSV.generate(col_sep: ';', force_quotes: true) do |csv|
+      csv_str = ::CSV.generate(col_sep: ';', force_quotes: true) do |csv|
         csv << weaknesses_list_csv_headers
 
         weaknesses_list_csv_data_rows.each { |row| csv << row }
       end
+
+      "\uFEFF#{csv_str}"
     end
 
     def filter_weaknesses_list_by_risk weaknesses
