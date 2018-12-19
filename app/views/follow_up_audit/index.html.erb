@@ -24,6 +24,8 @@
           <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
             <%= link_to t('follow_up_audit.weaknesses_current_situation_title'),
               { :action => :weaknesses_current_situation, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+            <%= link_to t('follow_up_audit.weaknesses_list_title'),
+              { :action => :weaknesses_list, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
           <% end %>
         </div>
       </div>
@@ -40,6 +42,8 @@
           <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
             <%= link_to t('follow_up_audit.weaknesses_by_month_title'),
               { :action => :weaknesses_by_month, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+            <%= link_to t('follow_up_audit.weaknesses_evolution_title'),
+              { :action => :weaknesses_evolution, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
           <% end %>
           <%= link_to t('follow_up_audit.weaknesses_report.title'),
             { action: :weaknesses_report, controller_name: 'follow_up', final: false }, class: 'list-group-item' %>

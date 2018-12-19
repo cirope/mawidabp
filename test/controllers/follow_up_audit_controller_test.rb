@@ -11,7 +11,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :index, :synthesis_report, :qa_indicators, :weaknesses_by_state,
       :weaknesses_by_risk, :weaknesses_by_audit_type,
       :weaknesses_by_risk_report, :fixed_weaknesses_report,
-      :weaknesses_by_month, :weaknesses_current_situation
+      :weaknesses_by_month, :weaknesses_current_situation,
+      :weaknesses_evolution, :weaknesses_list
     ]
 
     private_actions.each do |action|
@@ -88,7 +89,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('follow_up_committee.synthesis_report.pdf_name',
+      I18n.t('follow_up_committee_report.synthesis_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'synthesis_report', 0)
@@ -147,7 +148,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('follow_up_committee.review_stats_report.pdf_name',
+      I18n.t('follow_up_committee_report.review_stats_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'review_stats_report', 0)
@@ -186,7 +187,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('follow_up_committee.qa_indicators.pdf_name',
+      I18n.t('follow_up_committee_report.qa_indicators.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'qa_indicators', 0)
@@ -271,7 +272,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('follow_up_committee.weaknesses_by_risk.pdf_name',
+      I18n.t('follow_up_committee_report.weaknesses_by_risk.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_risk', 0)
@@ -414,7 +415,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('conclusion_committee_report.weaknesses_by_risk_report.pdf_name',
+      I18n.t('follow_up_committee_report.weaknesses_by_risk_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_risk_report', 0)
@@ -478,7 +479,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('conclusion_committee_report.weaknesses_by_month.pdf_name',
+      I18n.t('follow_up_committee_report.weaknesses_by_month.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_month', 0)
@@ -593,10 +594,221 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('conclusion_committee_report.weaknesses_current_situation.pdf_name',
+      I18n.t('follow_up_committee_report.weaknesses_current_situation.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_current_situation', 0)
+  end
+
+  test 'weaknesses evolution' do
+    login
+
+    get :weaknesses_evolution
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_evolution'
+
+    assert_nothing_raised do
+      get :weaknesses_evolution, :params => {
+        :weaknesses_evolution => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }
+    end
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_evolution'
+  end
+
+  test 'weaknesses evolution as CSV' do
+    login
+
+    get :weaknesses_evolution, as: :csv
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+
+    assert_nothing_raised do
+      get :weaknesses_evolution, :params => {
+        :weaknesses_evolution => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+  end
+
+  test 'filtered weaknesses evolution' do
+    login
+
+    get :weaknesses_evolution, :params => {
+      :weaknesses_evolution => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :risk => ['', '1', '2'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
+        :finding_status_was => ['', Finding::STATUS[:being_implemented]],
+        :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
+        :control_objective_tags => ['one'],
+        :weakness_tags => ['two'],
+        :review_tags => ['three'],
+        :compliance => 'no'
+      },
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_evolution'
+  end
+
+  test 'filtered weaknesses evolution by extra attributes' do
+    skip unless POSTGRESQL_ADAPTER
+
+    login
+
+    get :weaknesses_evolution, :params => {
+      :weaknesses_evolution => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :risk => ['', '1', '2'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
+        :finding_status_was => ['', Finding::STATUS[:being_implemented]],
+        :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
+        :compliance => 'no',
+        :impact => [WEAKNESS_IMPACT.keys.first],
+        :operational_risk => [WEAKNESS_OPERATIONAL_RISK.keys.first],
+        :internal_control_components => [WEAKNESS_INTERNAL_CONTROL_COMPONENTS.first]
+      },
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_evolution'
+  end
+
+  test 'create weaknesses evolution' do
+    login
+
+    get :create_weaknesses_evolution, :params => {
+      :weaknesses_evolution => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('follow_up_committee_report.weaknesses_evolution.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'weaknesses_evolution', 0)
+  end
+
+  test 'weaknesses list' do
+    login
+
+    get :weaknesses_list
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_list'
+
+    assert_nothing_raised do
+      get :weaknesses_list, :params => {
+        :weaknesses_list => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }
+    end
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_list'
+  end
+
+  test 'weaknesses list as CSV' do
+    login
+
+    get :weaknesses_list, as: :csv
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+
+    assert_nothing_raised do
+      get :weaknesses_list, :params => {
+        :weaknesses_list => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+  end
+
+  test 'filtered weaknesses list' do
+    login
+
+    get :weaknesses_list, :params => {
+      :weaknesses_list => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :risk => ['', '1', '2'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
+        :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
+        :control_objective_tags => ['one'],
+        :weakness_tags => ['two'],
+        :review_tags => ['three'],
+        :compliance => 'no'
+      },
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_list'
+  end
+
+  test 'filtered weaknesses list by extra attributes' do
+    skip unless POSTGRESQL_ADAPTER
+
+    login
+
+    get :weaknesses_list, :params => {
+      :weaknesses_list => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :risk => ['', '1', '2'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
+        :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
+        :compliance => 'no',
+        :impact => [WEAKNESS_IMPACT.keys.first],
+        :operational_risk => [WEAKNESS_OPERATIONAL_RISK.keys.first],
+        :internal_control_components => [WEAKNESS_INTERNAL_CONTROL_COMPONENTS.first]
+      },
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_list'
   end
 
   test 'fixed weaknesses report' do
@@ -656,7 +868,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('conclusion_committee_report.fixed_weaknesses_report.pdf_name',
+      I18n.t('follow_up_committee_report.fixed_weaknesses_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'fixed_weaknesses_report', 0)
@@ -720,7 +932,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('conclusion_committee_report.control_objective_stats.pdf_name',
+      I18n.t('follow_up_committee_report.control_objective_stats.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'control_objective_stats', 0)
@@ -847,7 +1059,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('follow_up_committee.process_control_stats.pdf_name',
+      I18n.t('follow_up_committee_report.process_control_stats.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'process_control_stats', 0)
@@ -1020,7 +1232,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('conclusion_committee_report.benefits.pdf_name',
+      I18n.t('follow_up_committee_report.benefits.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'benefits', 0)

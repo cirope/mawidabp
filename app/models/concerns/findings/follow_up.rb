@@ -7,19 +7,6 @@ module Findings::FollowUp
       follow_up_date < Time.zone.today
   end
 
-  def rescheduled?
-    last_date = follow_up_date
-
-    versions_scope = versions if final_review_created_at.blank?
-    versions_scope ||= versions_after_final_review
-
-    versions_scope.any? do |v|
-      date = v.reify(dup: true)&.follow_up_date
-
-      date.present? && date != last_date
-    end
-  end
-
   def all_follow_up_dates end_date = nil, reload = false
     @all_follow_up_dates = reload ? [] : (@all_follow_up_dates || [])
     last_date            = follow_up_date
@@ -29,8 +16,8 @@ module Findings::FollowUp
         v.reify&.follow_up_date
       end
 
-      dates.each do |d|
-        if d.present? && d != last_date
+      dates.reverse.each do |d|
+        if d.present? && d < last_date
           @all_follow_up_dates << last_date = d
         end
       end

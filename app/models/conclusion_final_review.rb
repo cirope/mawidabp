@@ -7,7 +7,10 @@ class ConclusionFinalReview < ConclusionReview
   include ConclusionFinalReviews::Validations
 
   # Callbacks
-  before_create :check_if_can_be_created, :duplicate_review_findings
+  before_create :check_if_can_be_created,
+                :sort_findings_if_apply,
+                :duplicate_review_findings,
+                :assign_audit_date_to_control_objective_items
 
   # Restricciones de los atributos
   attr_readonly :issue_date, :close_date, :conclusion, :applied_procedures
@@ -26,6 +29,13 @@ class ConclusionFinalReview < ConclusionReview
       self.errors.add :review_id, :invalid
 
       false
+    end
+  end
+
+  def sort_findings_if_apply
+    if method = sort_findings_by_method
+      review.send method
+      review.reload
     end
   end
 
@@ -80,10 +90,28 @@ class ConclusionFinalReview < ConclusionReview
         rf.final = true
         rf.save! validate: false
       end
-    rescue ActiveRecord::RecordInvalid
+    rescue ActiveRecord::RecordInvalid => ex
       errors.add :base, I18n.t('conclusion_final_review.stale_object_error')
 
+      Rails.logger.error ex.inspect
       raise ActiveRecord::Rollback
+    end
+  end
+
+  def assign_audit_date_to_control_objective_items
+    if DISABLE_COI_AUDIT_DATE_VALIDATION
+      begin
+        review.control_objective_items.each do |coi|
+          if coi.audit_date.blank?
+            coi.update! audit_date: issue_date
+          end
+        end
+      rescue ActiveRecord::RecordInvalid => ex
+        errors.add :base, I18n.t('conclusion_final_review.stale_object_error')
+
+        Rails.logger.error ex.inspect
+        raise ActiveRecord::Rollback
+      end
     end
   end
 
@@ -95,5 +123,11 @@ class ConclusionFinalReview < ConclusionReview
 
     def check_if_can_be_created
       throw :abort unless check_for_approval
+    end
+
+    def sort_findings_by_method
+      methods = JSON.parse ENV['AUTOMATICALLY_SORT_FINDINGS_ON_CONCLUSION'] || '{}'
+
+      methods[organization.prefix] if organization && methods.present?
     end
 end

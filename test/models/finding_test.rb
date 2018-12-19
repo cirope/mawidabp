@@ -839,6 +839,7 @@ class FindingTest < ActiveSupport::TestCase
 
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
+    refute finding.rescheduled
     assert_equal repeated_of.origination_date, finding.origination_date
     assert_equal 1, finding.repeated_ancestors.size
     assert_equal 1, repeated_of.repeated_children.size
@@ -864,16 +865,40 @@ class FindingTest < ActiveSupport::TestCase
 
     refute repeated_of.repeated?
 
-    finding.update! repeated_of_id: repeated_of.id
+    finding.update! repeated_of_id: repeated_of.id, rescheduled: true
 
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
+    assert finding.rescheduled
 
     finding.undo_reiteration
 
     refute repeated_of.reload.repeated?
     assert_nil finding.reload.repeated_of
+    refute finding.rescheduled
     assert_equal repeated_of_original_state, repeated_of.state
+  end
+
+  test 'reschedule when mark as duplicated and follow up date differs' do
+    finding     = findings :unanswered_for_level_1_notification
+    repeated_of = findings :being_implemented_weakness
+
+    assert_equal 0, finding.repeated_ancestors.size
+    assert_equal 0, repeated_of.repeated_children.size
+    assert_not_equal repeated_of.origination_date, finding.origination_date
+    refute repeated_of.repeated?
+
+    finding.update! repeated_of_id: repeated_of.id,
+      state: Finding::STATUS[:being_implemented],
+      follow_up_date: repeated_of.follow_up_date + 1.day
+
+    assert repeated_of.reload.repeated?
+    assert finding.reload.repeated_of
+    assert finding.rescheduled
+    assert_equal repeated_of.origination_date, finding.origination_date
+    assert_equal 1, finding.repeated_ancestors.size
+    assert_equal 1, repeated_of.repeated_children.size
+    assert_equal repeated_of, finding.repeated_root
   end
 
   test 'do nothing on repeat if repeated_of is not included on review' do
@@ -925,7 +950,8 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'to csv' do
     csv  = Finding.all.to_csv
-    rows = CSV.parse csv, col_sep: ';'
+    # TODO: change to liberal_parsing: true when 2.3 support is dropped
+    rows = CSV.parse csv.sub("\uFEFF", ''), col_sep: ';', force_quotes: true
 
     assert_equal Finding.count + 1, rows.length
   end

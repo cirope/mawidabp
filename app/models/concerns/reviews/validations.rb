@@ -51,10 +51,12 @@ module Reviews::Validations
     end
 
     def has_valid_users?
+      has_some_manager = has_supervisor? || has_manager? || has_responsible?
+
       if DISABLE_REVIEW_AUDITED_VALIDATION
-        has_auditor? && (has_supervisor? || has_manager?)
+        has_auditor? && has_some_manager
       else
-        has_audited? && has_auditor? && (has_supervisor? || has_manager?)
+        has_audited? && has_auditor? && has_some_manager
       end
     end
 

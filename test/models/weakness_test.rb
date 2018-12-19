@@ -452,10 +452,12 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'list all follow up dates and rescheduled function' do
-    weakness = findings :being_implemented_weakness_on_draft
+    weakness = findings :being_implemented_weakness_on_approved_draft
     old_date = weakness.follow_up_date.clone
 
-    assert weakness.all_follow_up_dates.blank?
+    create_conclusion_final_review_for weakness
+
+    assert weakness.reload.all_follow_up_dates.blank?
     refute weakness.rescheduled?
     assert_not_nil weakness.follow_up_date
 
@@ -469,4 +471,65 @@ class WeaknessTest < ActiveSupport::TestCase
     assert weakness.all_follow_up_dates(nil, true).include?(old_date)
     assert weakness.all_follow_up_dates(nil, true).include?(10.days.from_now.to_date)
   end
+
+  test 'exclude follow up dates when they move sooner than original' do
+    weakness = findings :being_implemented_weakness_on_approved_draft
+    old_date = weakness.follow_up_date.clone
+
+    create_conclusion_final_review_for weakness
+
+    assert weakness.reload.all_follow_up_dates.blank?
+    refute weakness.rescheduled?
+    assert_not_nil weakness.follow_up_date
+
+    # Moving sooner does not _count_
+    weakness.update! follow_up_date: old_date - 1.day
+
+    assert weakness.reload.all_follow_up_dates.blank?
+    refute weakness.rescheduled?
+
+    weakness.update! follow_up_date: 10.days.from_now.to_date
+
+    assert weakness.all_follow_up_dates(nil, true).include?(old_date - 1.day)
+    assert weakness.rescheduled?
+
+    # Moving sooner does not _count_
+    weakness.update! follow_up_date: 7.days.from_now.to_date
+
+    assert weakness.all_follow_up_dates(nil, true).include?(old_date - 1.day)
+    assert weakness.all_follow_up_dates(nil, true).exclude?(7.days.from_now.to_date)
+  end
+
+  test 'do not reschedule or show previous dates if no conclusion final review' do
+    weakness = findings :being_implemented_weakness_on_approved_draft
+    old_date = weakness.follow_up_date.clone
+
+    assert weakness.all_follow_up_dates.blank?
+    refute weakness.rescheduled?
+    assert_not_nil weakness.follow_up_date
+
+    weakness.update! follow_up_date: 10.days.from_now.to_date
+
+    assert weakness.all_follow_up_dates.blank?
+    refute weakness.rescheduled?
+  end
+
+  private
+
+    def create_conclusion_final_review_for weakness
+      ConclusionFinalReview.list.create!(
+        review:                  weakness.review,
+        issue_date:              Time.zone.today,
+        close_date:              2.days.from_now.to_date,
+        applied_procedures:      'New applied procedures',
+        conclusion:              CONCLUSION_OPTIONS.first,
+        recipients:              'John Doe',
+        sectors:                 'Area 51',
+        evolution:               EVOLUTION_OPTIONS.second,
+        evolution_justification: 'Ok',
+        main_weaknesses_text:    'Some main weakness X',
+        corrective_actions:      'You should do it this way',
+        affects_compliance:      false
+      )
+    end
 end

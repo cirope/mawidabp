@@ -223,6 +223,7 @@ es:
         follow_up_date: 'Fecha de implementación'
         audit_comments: 'Comentarios de auditoría'
         state: 'Estado'
+        state_was: 'Estado anterior'
         progress: 'Normalización'
         count: 'Cantidad'
         solution_date: 'Fecha de solución'
@@ -376,6 +377,8 @@ es:
         roles: 'Perfiles'
         send_notification_email: 'Enviar notificación'
         user: 'Usuario'
+      user/organization_roles:
+        role_id: 'Perfil'
       paper_trail/version:
         created_at: 'Fecha'
         event: 'Evento'
@@ -559,7 +562,7 @@ es:
               must_be_done_by_proper_role: 'solo puede ser cambiado por un usuario supervisor o gerente'
             finding_user_assignments:
               invalid: 'debe contener como mínimo un auditor, un auditado, un gerente y/o un supervisor'
-              must_have_a_manager: 'debe contener un gerente'
+              must_have_a_manager: 'debe contener un gerente de auditoría'
         finding_user_assignment:
           attributes:
             user:
