@@ -1,0 +1,9 @@
+<div id="finding_statuses_evolution_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+  <div class="row">
+    <%= render 'shared/filters/finding_statuses',
+      action: action, f: f, display: display, group: true, name: :finding_status_was, label: :state_was %>
+
+    <%= render 'shared/filters/finding_statuses',
+      action: action, f: f, display: display, group: true, name: :finding_status %>
+  </div>
+</div>

@@ -16,8 +16,8 @@ module Findings::FollowUp
         v.reify&.follow_up_date
       end
 
-      dates.each do |d|
-        if d.present? && d != last_date
+      dates.reverse.each do |d|
+        if d.present? && d < last_date
           @all_follow_up_dates << last_date = d
         end
       end

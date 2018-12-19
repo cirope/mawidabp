@@ -472,6 +472,34 @@ class WeaknessTest < ActiveSupport::TestCase
     assert weakness.all_follow_up_dates(nil, true).include?(10.days.from_now.to_date)
   end
 
+  test 'exclude follow up dates when they move sooner than original' do
+    weakness = findings :being_implemented_weakness_on_approved_draft
+    old_date = weakness.follow_up_date.clone
+
+    create_conclusion_final_review_for weakness
+
+    assert weakness.reload.all_follow_up_dates.blank?
+    refute weakness.rescheduled?
+    assert_not_nil weakness.follow_up_date
+
+    # Moving sooner does not _count_
+    weakness.update! follow_up_date: old_date - 1.day
+
+    assert weakness.reload.all_follow_up_dates.blank?
+    refute weakness.rescheduled?
+
+    weakness.update! follow_up_date: 10.days.from_now.to_date
+
+    assert weakness.all_follow_up_dates(nil, true).include?(old_date - 1.day)
+    assert weakness.rescheduled?
+
+    # Moving sooner does not _count_
+    weakness.update! follow_up_date: 7.days.from_now.to_date
+
+    assert weakness.all_follow_up_dates(nil, true).include?(old_date - 1.day)
+    assert weakness.all_follow_up_dates(nil, true).exclude?(7.days.from_now.to_date)
+  end
+
   test 'do not reschedule or show previous dates if no conclusion final review' do
     weakness = findings :being_implemented_weakness_on_approved_draft
     old_date = weakness.follow_up_date.clone

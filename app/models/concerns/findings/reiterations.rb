@@ -19,6 +19,10 @@ module Findings::Reiterations
 
     self.undoing_reiteration = true
 
+    if final_review_created_at.blank? && rescheduled
+      update_column :rescheduled, false
+    end
+
     repeated_of.update_column :state, previous_repeated_of_state
     update_columns repeated_of_id: nil, origination_date: Time.zone.today
   end
