@@ -188,15 +188,10 @@ Rails.application.routes.draw do
     as: 'create_cost_summary_conclusion_reports',
     to: 'conclusion_reports#create_cost_summary'
 
-  get 'follow_up_audit/follow_up_cost_analysis',
-    as: 'follow_up_cost_analysis_follow_up_audit',
-    to: 'follow_up_audit#follow_up_cost_analysis'
-  post 'follow_up_audit/create_follow_up_cost_analysis',
-    as: 'create_follow_up_cost_analysis_follow_up_audit',
-    to: 'follow_up_audit#create_follow_up_cost_analysis'
-
   %w[
+    follow_up_cost_analysis
     weaknesses_report
+    weaknesses_evolution
     weaknesses_list
     tagged_findings_report
   ].each do |action|
