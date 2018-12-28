@@ -52,7 +52,9 @@ module Reports::WeaknessesList
     end
 
     def weaknesses_list_csv
-      csv_str = ::CSV.generate(col_sep: ';', force_quotes: true) do |csv|
+      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+      csv_str = ::CSV.generate(options) do |csv|
         csv << weaknesses_list_csv_headers
 
         weaknesses_list_csv_data_rows.each { |row| csv << row }
