@@ -2,7 +2,9 @@ module RiskAssessments::CSV
   extend ActiveSupport::Concern
 
   def to_csv completed: 'incomplete', corporate: false
-    csv_str = ::CSV.generate(col_sep: ';', force_quotes: true) do |csv|
+    options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+    csv_str = ::CSV.generate(options) do |csv|
       csv << csv_column_headers
       csv << csv_column_sub_headers
 
