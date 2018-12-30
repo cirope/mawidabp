@@ -101,7 +101,9 @@ module Findings::CSV
 
   module ClassMethods
     def to_csv completed: 'incomplete', corporate: false
-      ::CSV.generate(col_sep: ';', force_quotes: true) do |csv|
+      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+      ::CSV.generate(options) do |csv|
         csv << column_headers(completed, corporate)
 
         all_with_inclusions.each { |f| csv << f.to_csv_a(corporate) }

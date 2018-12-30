@@ -32,7 +32,9 @@ module Reports::ReviewScoreDetailsReport
   private
 
     def review_score_details_csv
-      CSV.generate(col_sep: ';', force_quotes: true) do |csv|
+      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+      CSV.generate(options) do |csv|
         csv << review_score_details_columns.keys
 
         review_score_details_data_rows.each { |row| csv << row }
