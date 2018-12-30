@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 git_source(:github) { |r| "https://github.com/#{r}" }
 
-gem 'rails', '~> 5.1.6'
+gem 'rails', '~> 5.1.6.1'
 
 gem 'pg'
 gem 'jquery-rails'
