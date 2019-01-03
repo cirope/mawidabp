@@ -9,7 +9,7 @@ default: &default
 
 development:
   <<: *default
-  database: mawidabp_development
+  database: mawidabp_migration
 
 test:
   <<: *default
