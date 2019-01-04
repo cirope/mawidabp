@@ -1171,6 +1171,23 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.reload.tasks.all? { |t| t.finished? }
   end
 
+  test 'mark all task as finished when repeated' do
+    finding     = findings :unanswered_for_level_1_notification
+    repeated_of = findings :being_implemented_weakness
+
+    assert_difference 'repeated_of.tasks.count' do
+      repeated_of.tasks.create! code: '01', description: 'Test', due_on: Time.zone.today
+    end
+
+    assert repeated_of.reload.tasks.all? { |t| !t.finished? }
+
+    assert_difference 'Task.finished.count', repeated_of.tasks.count do
+      finding.update! repeated_of_id: repeated_of.id
+    end
+
+    assert repeated_of.reload.tasks.all? { |t| t.finished? }
+  end
+
   test 'unconfirmed for notification scope' do
     assert Finding.unconfirmed_for_notification.any?
 

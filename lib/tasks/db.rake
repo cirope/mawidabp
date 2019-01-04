@@ -8,6 +8,7 @@ namespace :db do
       add_control_objective_privilege # 2018-01-31
       add_task_codes                  # 2018-07-24
       update_finding_reschedules      # 2018-11-27
+      mark_tasks_as_finished          # 2019-01-04
     end
   end
 end
@@ -143,4 +144,26 @@ private
 
   def update_finding_reschedules?
     Finding.where(rescheduled: true).empty?
+  end
+
+  def mark_tasks_as_finished
+    if mark_tasks_as_finished?
+      repeated_findings_with_unfinished_tasks.each do |finding|
+        finding.tasks.each &:finished!
+      end
+    end
+  end
+
+  def mark_tasks_as_finished?
+    repeated_findings_with_unfinished_tasks.any?
+  end
+
+  def repeated_findings_with_unfinished_tasks
+    pending_tasks = Task.pending.or Task.in_progress
+
+    Finding.
+      repeated.
+      includes(:tasks).
+      references(:tasks).
+      merge pending_tasks
   end
