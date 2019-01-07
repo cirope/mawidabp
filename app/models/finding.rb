@@ -20,6 +20,7 @@ class Finding < ApplicationRecord
   include Findings::Display
   include Findings::Expiration
   include Findings::FinalReview
+  include Findings::FirstFollowUp
   include Findings::FollowUp
   include Findings::FollowUpPDF
   include Findings::ImportantDates

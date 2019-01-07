@@ -2,13 +2,14 @@ namespace :db do
   desc 'Put records, remove and update the database using current app values'
   task update: :environment do
     ActiveRecord::Base.transaction do
-      update_organization_settings    # 2017-03-15
-      add_new_answer_options          # 2017-06-29
-      add_best_practice_privilege     # 2018-01-31
-      add_control_objective_privilege # 2018-01-31
-      add_task_codes                  # 2018-07-24
-      update_finding_reschedules      # 2018-11-27
-      mark_tasks_as_finished          # 2019-01-04
+      update_organization_settings        # 2017-03-15
+      add_new_answer_options              # 2017-06-29
+      add_best_practice_privilege         # 2018-01-31
+      add_control_objective_privilege     # 2018-01-31
+      add_task_codes                      # 2018-07-24
+      update_finding_reschedules          # 2018-11-27
+      mark_tasks_as_finished              # 2019-01-04
+      update_finding_first_follow_up_date # 2019-01-07
     end
   end
 end
@@ -166,4 +167,24 @@ private
       includes(:tasks).
       references(:tasks).
       merge pending_tasks
+  end
+
+  def update_finding_first_follow_up_date
+    if update_finding_first_follow_up_date?
+      findings = Finding.
+        where(first_follow_up_date: nil).
+        where.not follow_up_date: nil
+
+      findings.each do |finding|
+        first_follow_up_date = finding.first_follow_up_date_on_versions
+
+        finding.update_column :first_follow_up_date, first_follow_up_date
+      end
+    end
+  end
+
+  def update_finding_first_follow_up_date?
+    Finding.
+      where(first_follow_up_date: nil).
+      where.not(follow_up_date: nil).count > 0
   end
