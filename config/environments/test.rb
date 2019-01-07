@@ -46,7 +46,7 @@ Rails.application.configure do
 
   # Set timecop to January 4, 2018 10:05:00 AM UTC
   config.after_initialize do
-    t = Time.utc 2018, 1, 4, 10, 5, 0
+    t = Time.utc 2019, 1, 3, 10, 5, 0
 
     Timecop.travel t
   end
