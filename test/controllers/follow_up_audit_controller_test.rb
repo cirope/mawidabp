@@ -12,7 +12,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :weaknesses_by_risk, :weaknesses_by_audit_type,
       :weaknesses_by_risk_report, :fixed_weaknesses_report,
       :weaknesses_by_month, :weaknesses_current_situation,
-      :weaknesses_evolution, :weaknesses_list
+      :weaknesses_evolution, :weaknesses_list, :weaknesses_brief
     ]
 
     private_actions.each do |action|
@@ -809,6 +809,50 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_template 'follow_up_audit/weaknesses_list'
+  end
+
+  test 'weaknesses brief' do
+    login
+
+    get :weaknesses_brief
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_brief'
+
+    assert_nothing_raised do
+      get :weaknesses_brief, :params => {
+        :weaknesses_brief => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }
+    end
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_brief'
+  end
+
+  test 'weaknesses brief as CSV' do
+    login
+
+    get :weaknesses_brief, as: :csv
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+
+    assert_nothing_raised do
+      get :weaknesses_brief, :params => {
+        :weaknesses_brief => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
   end
 
   test 'fixed weaknesses report' do

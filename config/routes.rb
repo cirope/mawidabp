@@ -193,6 +193,7 @@ Rails.application.routes.draw do
     weaknesses_report
     weaknesses_evolution
     weaknesses_list
+    weaknesses_brief
     tagged_findings_report
   ].each do |action|
     get "follow_up_audit/#{action}",
