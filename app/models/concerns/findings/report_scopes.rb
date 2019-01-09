@@ -4,6 +4,7 @@ module Findings::ReportScopes
   included do
     scope :awaiting,          -> { where state: Finding::STATUS[:awaiting] }
     scope :being_implemented, -> { where state: Finding::STATUS[:being_implemented] }
+    scope :implemented,       -> { where state: Finding::STATUS[:implemented] }
     scope :not_incomplete,    -> { where "state <> ?", Finding::STATUS[:incomplete] }
     scope :internal_audit,    -> { with_business_unit_external false }
     scope :external_audit,    -> { with_business_unit_external true }
