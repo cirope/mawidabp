@@ -1,3 +1,5 @@
+<% hide_comments ||= nil %>
+
 <div id="user_filter" class="filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
@@ -16,20 +18,22 @@
             data: {
               clear: 'user',
               autocomplete_url: users_completions_path,
-              autocomplete_id_target: '#weaknesses_report_user_id'
+              autocomplete_id_target: '[name$="[user_id]"]'
             }
           %>
           <%= f.hidden_field :user_id, value: params[action] && params[action][:user_id] %>
         </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="checkbox">
-        <% user_in_comments = params[action] && params[action][:user_in_comments] %>
-        <label>
-          <%= f.check_box :user_in_comments, checked: user_in_comments == '1' %> <%= t '.user_in_comments' %>
-        </label>
+    <% unless hide_comments %>
+      <div class="col-md-6">
+        <div class="checkbox">
+          <% user_in_comments = params[action] && params[action][:user_in_comments] %>
+          <label>
+            <%= f.check_box :user_in_comments, checked: user_in_comments == '1' %> <%= t '.user_in_comments' %>
+          </label>
+        </div>
       </div>
-    </div>
+    <% end %>
   </div>
 </div>

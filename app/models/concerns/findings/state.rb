@@ -14,6 +14,10 @@ module Findings::State
     define_state_methods
   end
 
+  def has_final_status?
+    FINAL_STATUS.include? state
+  end
+
   module ClassMethods
     def with_pending_status
       where state: visible_pending_status
