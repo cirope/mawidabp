@@ -51,6 +51,8 @@
             { action: :weaknesses_report, controller_name: 'follow_up', final: false }, class: 'list-group-item' %>
           <%= link_to t('follow_up_audit.tagged_findings_report.title'),
             { action: :tagged_findings_report }, class: 'list-group-item' %>
+          <%= link_to t('follow_up_audit.weaknesses_by_user_title'),
+            { :action => :weaknesses_by_user, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
         </div>
       </div>
     </div>

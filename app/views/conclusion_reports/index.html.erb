@@ -37,6 +37,8 @@
             { action: :control_objective_stats_by_review, controller_name: 'conclusion', final: true }, class: 'list-group-item' %>
           <%= link_to t('conclusion_committee_report.benefits_title'),
             { action: :benefits, controller_name: 'conclusion', final: true }, class: 'list-group-item' %>
+          <%= link_to t('conclusion_report.weaknesses_by_user_title'),
+            { action: :weaknesses_by_user, controller_name: 'conclusion', final: true }, class: 'list-group-item' %>
         </div>
       </div>
     </div>
