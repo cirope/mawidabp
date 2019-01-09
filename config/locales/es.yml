@@ -138,6 +138,7 @@
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
+    weaknesses_by_user_title: "Observaciones por usuario"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     cost_analysis:
       detailed_column_resource: "Recurso"
@@ -177,6 +178,7 @@
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_month_title: "Observaciones por riesgo"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
+    weaknesses_by_user_title: "Observaciones por usuario"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     qa_indicators_title: "Indicadores de calidad"
     weaknesses_by_state_title: "Hallazgos totales por estado"
@@ -258,6 +260,12 @@
       control_objective_tags: "Etiquetas objetivos de control"
       weakness_tags: "Etiquetas de observación"
       review_tags: "Etiquetas de informe"
+    weaknesses_by_user:
+      pdf_name: "observaciones_por_usuario_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -633,8 +641,10 @@
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
+    weaknesses_by_user_title: "Observaciones por usuario"
     weaknesses_evolution_title: "Evolución de observaciones"
     weaknesses_list_title: "Listado de observaciones"
+    weaknesses_brief_title: "Resumen de observaciones pendientes"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     cost_analysis:
       column_business_unit: "Unidad de negocio"
@@ -662,8 +672,10 @@
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
+    weaknesses_by_user_title: "Observaciones por usuario"
     weaknesses_evolution_title: "Evolución de observaciones"
     weaknesses_list_title: "Listado de observaciones"
+    weaknesses_brief_title: "Resumen de observaciones pendientes"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     detailed_report: "Reporte detallado"
     qa_indicators_title: "Indicadores de calidad"
@@ -765,6 +777,12 @@
       control_objective_tags: "Etiquetas objetivos de control"
       weakness_tags: "Etiquetas de observación"
       review_tags: "Etiquetas de informe"
+    weaknesses_by_user:
+      pdf_name: "observaciones_por_usuario_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
     weaknesses_evolution:
       pdf_name: "observaciones_evolucion_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -780,6 +798,9 @@
       control_objective_tags: "Etiquetas objetivos de control"
       weakness_tags: "Etiquetas de observación"
       review_tags: "Etiquetas de informe"
+    weaknesses_brief:
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"

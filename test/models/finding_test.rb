@@ -154,13 +154,12 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates special not blank attributes' do
-    finding                = findings :unanswered_weakness
-    finding.follow_up_date = Time.zone.today
-    finding.solution_date  = Time.zone.tomorrow
+    @finding.follow_up_date = Time.zone.today
+    @finding.solution_date  = Time.zone.tomorrow
 
-    assert finding.invalid?
-    assert_error finding, :follow_up_date, :must_be_blank
-    assert_error finding, :solution_date, :must_be_blank
+    assert @finding.invalid?
+    assert_error @finding, :follow_up_date, :must_be_blank
+    assert_error @finding, :solution_date, :must_be_blank
   end
 
   test 'validates duplicated attributes' do
@@ -824,6 +823,18 @@ class FindingTest < ActiveSupport::TestCase
                                      notify_users:    false
 
     assert_equal 20.days.from_now.to_date, @finding.last_commitment_date
+  end
+
+  test 'first follow up date' do
+    @finding.state          = Finding::STATUS[:being_implemented]
+    @finding.follow_up_date = Time.zone.today
+
+    @finding.save!
+
+    assert @finding.reload.first_follow_up_date.present?
+    assert @finding.follow_up_date.present?
+    assert_equal @finding.follow_up_date, @finding.first_follow_up_date
+    assert_equal @finding.first_follow_up_date, @finding.first_follow_up_date_on_versions
   end
 
   test 'mark as duplicated' do
