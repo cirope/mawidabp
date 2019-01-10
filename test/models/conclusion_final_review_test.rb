@@ -337,7 +337,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'recode findings on creation' do
     skip unless has_extra_sort_method? Current.organization
 
-    review = reviews :review_with_conclusion
+    Current.user = users :supervisor
+    review       = reviews :review_with_conclusion
 
     repeated_column = [
       Weakness.quoted_table_name,
