@@ -12,6 +12,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   teardown do
+    Current.user         = nil
     Current.organization = nil
   end
 
@@ -542,6 +543,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'notify conclusion final review close date warning' do
+    Current.user = users :supervisor
+
     ConclusionFinalReview.list.new(
       review_id: reviews(:review_approved_with_conclusion).id,
       issue_date: Date.today,
