@@ -28,6 +28,8 @@
               { :action => :weaknesses_current_situation, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
             <%= link_to t('follow_up_audit.weaknesses_list_title'),
               { :action => :weaknesses_list, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+            <%= link_to t('follow_up_audit.weaknesses_by_business_unit_title'),
+              { :action => :weaknesses_by_business_unit, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
           <% end %>
         </div>
       </div>

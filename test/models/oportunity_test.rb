@@ -7,6 +7,12 @@ class OportunityTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    Current.user         = nil
+    Current.group        = nil
+    Current.organization = nil
+  end
+
   test 'create' do
     assert_difference 'Oportunity.count' do
       @oportunity = Oportunity.list.create!(
@@ -119,7 +125,8 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'review code is updated when control objective is changed' do
-    oportunity = findings :confirmed_oportunity_on_draft
+    Current.user = users :supervisor
+    oportunity   = findings :confirmed_oportunity_on_draft
 
     assert_not_equal 'OM004', oportunity.review_code
 
@@ -141,7 +148,8 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'work paper codes are updated when control objective is changed' do
-    oportunity = findings :confirmed_oportunity_on_draft
+    Current.user = users :supervisor
+    oportunity   = findings :confirmed_oportunity_on_draft
 
     assert_not_equal 'PTOM 004', oportunity.work_papers.first.code
 

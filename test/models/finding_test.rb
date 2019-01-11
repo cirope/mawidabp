@@ -595,8 +595,6 @@ class FindingTest < ActiveSupport::TestCase
         solution_date: Date.today
       )
     end
-
-    Current.user = nil
   end
 
   test 'mark as unconfirmed' do
@@ -1119,6 +1117,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'work papers can be added to finding with current close date' do
+    Current.user       = users :supervisor
     uneditable_finding = findings :being_implemented_weakness
 
     assert_difference 'WorkPaper.count' do
@@ -1160,7 +1159,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'validate final state change mark all task as finished' do
     Current.user = users :supervisor
-    finding              = findings :being_implemented_weakness
+    finding      = findings :being_implemented_weakness
 
     assert_difference 'finding.tasks.count' do
       finding.tasks.create! code: '02', description: 'Test', due_on: Time.zone.today

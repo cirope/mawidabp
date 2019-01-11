@@ -23,6 +23,11 @@
     </p>
 
     <p>
+      <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
+      <%= weakness.review.plan_item.project %>
+    </p>
+
+    <p>
       <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
       <%= l weakness.review.conclusion_final_review.issue_date %>
     </p>
