@@ -118,6 +118,10 @@ module Reports::WeaknessesByUser
           weakness.review.identification
         ],
         [
+          PlanItem.human_attribute_name('project'),
+          weakness.review.plan_item.project
+        ],
+        [
           ConclusionFinalReview.human_attribute_name('issue_date'),
           l(weakness.review.conclusion_final_review.issue_date)
         ],
@@ -188,10 +192,6 @@ module Reports::WeaknessesByUser
           weakness.answer
         ]
       ].compact
-    end
-
-    def show_by_user? weakness
-      weakness.by_user.present? && weakness.by_user_verified
     end
 
     def filter_weaknesses_by_user weaknesses
@@ -276,6 +276,7 @@ module Reports::WeaknessesByUser
     def weaknesses_by_user_csv_headers
       [
         Review.model_name.human,
+        PlanItem.human_attribute_name('project'),
         ConclusionFinalReview.human_attribute_name('issue_date'),
         BusinessUnit.model_name.human,
         Weakness.human_attribute_name('review_code'),
@@ -301,6 +302,7 @@ module Reports::WeaknessesByUser
       @weaknesses.map do |weakness|
         [
           weakness.review.identification,
+          weakness.review.plan_item.project,
           l(weakness.review.conclusion_final_review.issue_date),
           weakness.business_unit,
           weakness.review_code,

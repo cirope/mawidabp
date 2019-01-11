@@ -13,6 +13,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   teardown do
+    Current.user         = nil
     Current.group        = nil
     Current.organization = nil
   end
@@ -35,6 +36,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
   # Prueba la creación de un informe de conclusión
   test 'create' do
+    Current.user = users :supervisor
+
     assert_difference 'ConclusionReview.count' do
       @conclusion_review = ConclusionFinalReview.list.new(
         :review => reviews(:review_approved_with_conclusion),

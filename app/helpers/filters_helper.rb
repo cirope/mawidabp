@@ -17,4 +17,14 @@ module FiltersHelper
       ]
     ]
   end
+
+  def filter_business_unit_options
+    BusinessUnitType.list.map do |business_unit_type|
+      options = business_unit_type.business_units.map do |business_unit|
+        [business_unit.name, business_unit.id]
+      end
+
+      [business_unit_type.name, options]
+    end
+  end
 end

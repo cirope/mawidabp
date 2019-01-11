@@ -7,6 +7,12 @@ class WeaknessTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    Current.user         = nil
+    Current.group        = nil
+    Current.organization = nil
+  end
+
   test 'create' do
     assert_difference 'Weakness.count' do
       weakness = Weakness.list.create!(
@@ -275,7 +281,8 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'work paper codes are updated when control objective is changed' do
-    weakness = findings :unanswered_for_level_1_notification
+    Current.user = users :supervisor
+    weakness     = findings :unanswered_for_level_1_notification
 
     assert_not_equal 'PTO 006', weakness.work_papers.first.code
 
@@ -413,6 +420,7 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'work papers can be added to weakness with current close date' do
+    Current.user        = users :supervisor
     uneditable_weakness = findings :being_implemented_weakness
 
     assert_difference 'WorkPaper.count' do
@@ -452,8 +460,9 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'list all follow up dates and rescheduled function' do
-    weakness = findings :being_implemented_weakness_on_approved_draft
-    old_date = weakness.follow_up_date.clone
+    Current.user = users :supervisor
+    weakness     = findings :being_implemented_weakness_on_approved_draft
+    old_date     = weakness.follow_up_date.clone
 
     create_conclusion_final_review_for weakness
 
@@ -473,6 +482,8 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'exclude follow up dates when they move sooner than original' do
+    Current.user = users :supervisor
+
     weakness = findings :being_implemented_weakness_on_approved_draft
     old_date = weakness.follow_up_date.clone
 

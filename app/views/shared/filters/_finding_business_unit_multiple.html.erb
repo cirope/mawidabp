@@ -1,0 +1,17 @@
+<div id="finding_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+  <div class="row">
+    <%= render 'shared/filters/finding_statuses',
+      action: action, f: f, display: display, group: true %>
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <% selected = params[action] ? params[action][:business_unit_id] : nil %>
+        <%= f.label :business_unit_id, BusinessUnit.model_name.human, class: 'col-md-4' %>
+        <div class="col-md-8">
+          <%= f.select :business_unit_id, filter_business_unit_options,
+            { selected: selected, prompt: true }, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
