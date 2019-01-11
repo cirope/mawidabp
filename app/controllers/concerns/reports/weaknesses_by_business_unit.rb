@@ -21,6 +21,13 @@ module Reports::WeaknessesByBusinessUnit
     pdf = init_pdf params[:report_title], params[:report_subtitle]
 
     if @weaknesses.any?
+      if @business_unit
+        pdf.text @business_unit.business_unit_type.name,
+          size: (PDF_FONT_SIZE * 1.25).round, style: :bold, align: :justify
+
+        pdf.move_down PDF_FONT_SIZE * 1.5
+      end
+
       @weaknesses.each do |weakness|
         by_business_unit_pdf_items(weakness).each do |item|
           text = "<i>#{item.first}:</i> #{item.last.to_s.strip}"
@@ -54,9 +61,9 @@ module Reports::WeaknessesByBusinessUnit
       @filters = []
       final = params[:final] == 'true'
       order = [
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
-        "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
-        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'conclusion_index'} DESC"
+        "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC",
       ].map { |o| Arel.sql o }
       weaknesses = Weakness.
         with_status_for_report.
@@ -148,11 +155,11 @@ module Reports::WeaknessesByBusinessUnit
 
     def filter_weaknesses_by_business_unit weaknesses
       if params[:weaknesses_by_business_unit][:business_unit_id].present?
-        business_unit = BusinessUnit.list.where(id: params[:weaknesses_by_business_unit][:business_unit_id]).take!
+        @business_unit = BusinessUnit.list.where(id: params[:weaknesses_by_business_unit][:business_unit_id]).take!
 
-        @filters << "<b>#{BusinessUnit.model_name.human count: 1}</b> = \"#{business_unit.name}\""
+        @filters << "<b>#{BusinessUnit.model_name.human count: 1}</b> = \"#{@business_unit.name}\""
 
-        weaknesses.where business_units: { id: business_unit.id }
+        weaknesses.where business_units: { id: @business_unit.id }
       else
         weaknesses
       end
