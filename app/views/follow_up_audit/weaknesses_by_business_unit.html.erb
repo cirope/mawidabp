@@ -13,6 +13,10 @@
 %>
 
 <% if @weaknesses.any? %>
+  <% if @business_unit %>
+    <h2><%= @business_unit.business_unit_type.name %></h2>
+  <% end %>
+
   <% @weaknesses.each do |weakness| %>
     <hr>
 
