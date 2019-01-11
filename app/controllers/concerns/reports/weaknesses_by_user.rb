@@ -194,10 +194,6 @@ module Reports::WeaknessesByUser
       ].compact
     end
 
-    def show_by_user? weakness
-      weakness.by_user.present? && weakness.by_user_verified
-    end
-
     def filter_weaknesses_by_user weaknesses
       if params[:weaknesses_by_user][:user_id].present?
         user = User.where(id: params[:weaknesses_by_user][:user_id]).take!
