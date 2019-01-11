@@ -24,9 +24,12 @@ module Findings::Reschedule
     end
 
     def rescheduled_by_repetition?
+      repeated_of&.rescheduled || repeated_of_follow_up_date_changed?
+    end
+
+    def repeated_of_follow_up_date_changed?
       follow_up_date_changed?                       &&
         follow_up_date.present?                     &&
-        repeated_of_id_changed?                     &&
         repeated_of&.follow_up_date.present?        &&
         follow_up_date > repeated_of.follow_up_date
     end
