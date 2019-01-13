@@ -87,6 +87,7 @@ GEM
     concurrent-ruby (1.0.5)
     connection_pool (2.2.2)
     crass (1.0.4)
+    database_cleaner (1.7.0)
     ed25519 (1.2.4)
     erubi (1.7.1)
     execjs (2.7.0)
@@ -276,6 +277,7 @@ DEPENDENCIES
   capistrano-rbenv
   carrierwave
   chartist-rails
+  database_cleaner
   ed25519
   figaro
   jbuilder

@@ -1,20 +1,40 @@
 require 'sequel'
+require 'database_cleaner'
 
 CHECK_RESULTS = ENV['CHECK_RESULTS'].present?
 
 logger = ::Logger.new('log/migration_to_pg.log')
 
-oracle_db = Sequel.oracle "//192.168.0.108:1521/mawidabp", user: 'system', password: 'mawidabp'
-pg_db = Sequel.postgres 'mawidabp_migration',
-  user:     'docker',
-  password: 'docker',
-  host:     'localhost',
-  port:     5432
+unless CHECK_RESULTS
+  logger.info("Cleaning PG_DB")
+  DatabaseCleaner.allow_production = true
+  DatabaseCleaner.strategy = :deletion
+  DatabaseCleaner.clean
+  logger.info("PG_DB clean")
+end
 
+byebug
+config = YAML.load(File.open(Rails.root.join('config', 'migrate_to_pg.yml'))).deep_symbolize_keys
+
+oracle_config = config[:oracle]
+oracle_db     = Sequel.oracle(
+  oracle_config[:url],
+  user:     oracle_config[:username],
+  password: oracle_config[:password]
+)
 oracle_db.extension(:pagination)
 
-Rails.application.eager_load!; nil
-models = (ApplicationRecord.descendants + [PaperTrail::Version]).flatten.uniq { |m| m.table_name }; nil
+pg_config = Rails.configuration.database_configuration[Rails.env].symbolize_keys
+pg_db     = Sequel.postgres(
+  pg_config[:database],
+  user:     pg_config[:username],
+  password: pg_config[:password],
+  host:     pg_config[:host],
+  port:     pg_config[:port]
+)
+
+Rails.application.eager_load!
+models = (ApplicationRecord.descendants + [PaperTrail::Version]).flatten.uniq { |m| m.table_name }
 
 # Ignore ForeignKeyViolation
 pg_db.execute "SET session_replication_role = 'replica';" unless CHECK_RESULTS
@@ -104,11 +124,10 @@ models.each do |model|
           end
 
           unless (pg_a = pg_table.where(id: a[:id]).first) == a
-            # byebug
-            @tanga ||= ::Logger.new('no-iguales-error.log')
-            @tanga.info "============ #{table_name} ==============="
-            @tanga.info a
-            @tanga.info pg_a
+            @checker ||= ::Logger.new('log/pg_oracle_checker.log')
+            @checker.info "============ #{table_name} ==============="
+            @checker.info a
+            @checker.info pg_a
           end
         else
           pg_table.insert(a)

@@ -10,6 +10,7 @@ default: &default
 development:
   <<: *default
   database: mawidabp_migration
+  # database: mawidabp_development
 
 test:
   <<: *default
