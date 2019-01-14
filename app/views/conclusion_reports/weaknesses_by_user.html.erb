@@ -64,6 +64,11 @@
     </p>
 
     <p>
+      <span class="text-muted"><%= t 'finding.auditors', count: 0 %></span>:
+      <%= weakness.users.select(&:auditor?).map(&:full_name).to_sentence %>
+    </p>
+
+    <p>
       <span class="text-muted"><%= t 'finding.responsibles', count: 1 %></span>:
       <%= weakness.process_owners.map(&:full_name).to_sentence %>
     </p>
