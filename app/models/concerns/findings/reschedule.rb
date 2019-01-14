@@ -35,13 +35,13 @@ module Findings::Reschedule
     end
 
     def was_rescheduled?
-      rescheduled = follow_up_date && versions_after_final_review.any? do |v|
+      was_rescheduled = follow_up_date && versions_after_final_review.any? do |v|
         date = v.reify(dup: true)&.follow_up_date
 
         date.present? && date < follow_up_date
       end
 
-      rescheduled || rescheduled_on_repetition?
+      was_rescheduled || rescheduled_on_repetition?
     end
 
     def rescheduled_on_repetition?
