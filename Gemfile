@@ -59,9 +59,10 @@ group :development, :test do
   gem 'byebug'
 end
 
-# Migration
-gem 'database_cleaner'
-gem 'sequel'
-gem 'ruby-oci8'
-gem 'activerecord-oracle_enhanced-adapter'
-
+group :production do
+  # Migration
+  gem 'database_cleaner'
+  gem 'sequel'
+  gem 'ruby-oci8'
+  gem 'activerecord-oracle_enhanced-adapter'
+end
