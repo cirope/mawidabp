@@ -654,7 +654,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :risk => ['', '1', '2'],
         :finding_status => ['', Finding::STATUS[:being_implemented]],
         :business_unit_type => ['', business_unit_types(:cycle).id],
-        :business_unit_id => [business_units(:business_unit_one).id.to_s]
+        :business_unit_id => [business_units(:business_unit_one).id].to_json
       },
       :controller_name => 'follow_up',
       :final => false

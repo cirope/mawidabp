@@ -908,6 +908,11 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 1, finding.repeated_ancestors.size
     assert_equal 1, repeated_of.repeated_children.size
     assert_equal repeated_of, finding.repeated_root
+
+    finding.update! follow_up_date: repeated_of.follow_up_date
+
+    # Should unmark when follow up date has been "restored"
+    refute finding.reload.rescheduled
   end
 
   test 'do nothing on repeat if repeated_of is not included on review' do
