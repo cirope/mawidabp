@@ -154,13 +154,12 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates special not blank attributes' do
-    finding                = findings :unanswered_weakness
-    finding.follow_up_date = Time.zone.today
-    finding.solution_date  = Time.zone.tomorrow
+    @finding.follow_up_date = Time.zone.today
+    @finding.solution_date  = Time.zone.tomorrow
 
-    assert finding.invalid?
-    assert_error finding, :follow_up_date, :must_be_blank
-    assert_error finding, :solution_date, :must_be_blank
+    assert @finding.invalid?
+    assert_error @finding, :follow_up_date, :must_be_blank
+    assert_error @finding, :solution_date, :must_be_blank
   end
 
   test 'validates duplicated attributes' do
@@ -596,8 +595,6 @@ class FindingTest < ActiveSupport::TestCase
         solution_date: Date.today
       )
     end
-
-    Current.user = nil
   end
 
   test 'mark as unconfirmed' do
@@ -824,6 +821,18 @@ class FindingTest < ActiveSupport::TestCase
                                      notify_users:    false
 
     assert_equal 20.days.from_now.to_date, @finding.last_commitment_date
+  end
+
+  test 'first follow up date' do
+    @finding.state          = Finding::STATUS[:being_implemented]
+    @finding.follow_up_date = Time.zone.today
+
+    @finding.save!
+
+    assert @finding.reload.first_follow_up_date.present?
+    assert @finding.follow_up_date.present?
+    assert_equal @finding.follow_up_date, @finding.first_follow_up_date
+    assert_equal @finding.first_follow_up_date, @finding.first_follow_up_date_on_versions
   end
 
   test 'mark as duplicated' do
@@ -1108,6 +1117,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'work papers can be added to finding with current close date' do
+    Current.user       = users :supervisor
     uneditable_finding = findings :being_implemented_weakness
 
     assert_difference 'WorkPaper.count' do
@@ -1149,7 +1159,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'validate final state change mark all task as finished' do
     Current.user = users :supervisor
-    finding              = findings :being_implemented_weakness
+    finding      = findings :being_implemented_weakness
 
     assert_difference 'finding.tasks.count' do
       finding.tasks.create! code: '02', description: 'Test', due_on: Time.zone.today
@@ -1169,6 +1179,23 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     assert finding.reload.tasks.all? { |t| t.finished? }
+  end
+
+  test 'mark all task as finished when repeated' do
+    finding     = findings :unanswered_for_level_1_notification
+    repeated_of = findings :being_implemented_weakness
+
+    assert_difference 'repeated_of.tasks.count' do
+      repeated_of.tasks.create! code: '01', description: 'Test', due_on: Time.zone.today
+    end
+
+    assert repeated_of.reload.tasks.all? { |t| !t.finished? }
+
+    assert_difference 'Task.finished.count', repeated_of.tasks.count do
+      finding.update! repeated_of_id: repeated_of.id
+    end
+
+    assert repeated_of.reload.tasks.all? { |t| t.finished? }
   end
 
   test 'unconfirmed for notification scope' do

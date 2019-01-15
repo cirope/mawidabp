@@ -128,8 +128,10 @@ Rails.application.routes.draw do
     'benefits',
     'process_control_stats',
     'qa_indicators',
-    'weaknesses_by_risk_report',
+    'weaknesses_by_business_unit',
     'weaknesses_by_month',
+    'weaknesses_by_risk_report',
+    'weaknesses_by_user',
     'weaknesses_current_situation',
     'fixed_weaknesses_report',
     'weaknesses_graphs',
@@ -157,8 +159,10 @@ Rails.application.routes.draw do
     'create_benefits',
     'create_process_control_stats',
     'create_qa_indicators',
-    'create_weaknesses_by_risk_report',
+    'create_weaknesses_by_business_unit',
     'create_weaknesses_by_month',
+    'create_weaknesses_by_risk_report',
+    'create_weaknesses_by_user',
     'create_weaknesses_current_situation',
     'create_fixed_weaknesses_report'
   ].each do |action|
@@ -193,6 +197,7 @@ Rails.application.routes.draw do
     weaknesses_report
     weaknesses_evolution
     weaknesses_list
+    weaknesses_brief
     tagged_findings_report
   ].each do |action|
     get "follow_up_audit/#{action}",

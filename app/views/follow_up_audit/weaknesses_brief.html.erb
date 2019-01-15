@@ -1,0 +1,55 @@
+<%= render partial: 'shared/filter_form',
+  locals: {
+    action: :weaknesses_brief, extra_params: {
+      controller_name: 'follow_up', final: false
+    },
+    forms: [
+      [:date_range, true],
+    ]
+  }
+%>
+
+<% if @weaknesses.any? %>
+  <table class="table table-condensed table-striped table-hover">
+    <thead>
+      <tr>
+        <th><%= Review.model_name.human %></th>
+        <th><%= Weakness.human_attribute_name 'title' %></th>
+        <th><%= Weakness.human_attribute_name 'description' %></th>
+        <th><%= Weakness.human_attribute_name 'risk' %></th>
+        <th><%= Weakness.human_attribute_name 'audit_comments' %></th>
+        <th><%= FindingUserAssignment.human_attribute_name 'process_owner' %></th>
+        <th><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></th>
+        <th><%= Weakness.human_attribute_name 'first_follow_up_date' %></th>
+        <th><%= Weakness.human_attribute_name 'follow_up_date' %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @weaknesses.each do |weakness| %>
+        <tr>
+          <td><%= weakness.review.identification %></td>
+          <td><%= weakness.title %></td>
+          <td><%= weakness.description %></td>
+          <td><%= weakness.risk_text %></td>
+          <td><%= weakness.audit_comments %></td>
+          <td><%= array_to_ul weaknesses_brief_audit_users(weakness) %></td>
+          <td><%= l weakness.review.conclusion_final_review.issue_date %></td>
+          <td><%= weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-' %></td>
+          <td><%= weakness.follow_up_date ? l(weakness.follow_up_date) : '-' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div style="margin-left: 2em">
+    <p><em><%= t 'follow_up_committee_report.weaknesses_brief.without_weaknesses' %></em></p>
+  </div>
+<% end %>
+
+<hr />
+
+<div>
+  <%= link_to t('label.back'), action: :index %> |
+  <%= link_to t('label.download_csv'), weaknesses_brief_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
+</div>

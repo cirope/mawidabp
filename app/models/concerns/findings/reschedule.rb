@@ -24,21 +24,24 @@ module Findings::Reschedule
     end
 
     def rescheduled_by_repetition?
+      repeated_of&.rescheduled || repeated_of_follow_up_date_changed?
+    end
+
+    def repeated_of_follow_up_date_changed?
       follow_up_date_changed?                       &&
         follow_up_date.present?                     &&
-        repeated_of_id_changed?                     &&
         repeated_of&.follow_up_date.present?        &&
         follow_up_date > repeated_of.follow_up_date
     end
 
     def was_rescheduled?
-      rescheduled = follow_up_date && versions_after_final_review.any? do |v|
+      was_rescheduled = follow_up_date && versions_after_final_review.any? do |v|
         date = v.reify(dup: true)&.follow_up_date
 
         date.present? && date < follow_up_date
       end
 
-      rescheduled || rescheduled_on_repetition?
+      was_rescheduled || rescheduled_on_repetition?
     end
 
     def rescheduled_on_repetition?

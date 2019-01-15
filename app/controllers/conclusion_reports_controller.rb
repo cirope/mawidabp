@@ -9,8 +9,10 @@ class ConclusionReportsController < ApplicationController
   include Reports::ControlObjectiveStats
   include Reports::ControlObjectiveStatsByReview
   include Reports::ProcessControlStats
-  include Reports::WeaknessesByRiskReport
+  include Reports::WeaknessesByBusinessUnit
   include Reports::WeaknessesByMonth
+  include Reports::WeaknessesByRiskReport
+  include Reports::WeaknessesByUser
   include Reports::FixedWeaknessesReport
   include Reports::CostAnalysis
   include Reports::CostSummary
@@ -43,10 +45,16 @@ class ConclusionReportsController < ApplicationController
         create_weaknesses_by_state: :read,
         weaknesses_by_risk: :read,
         create_weaknesses_by_risk: :read,
+        weaknesses_by_month: :read,
+        create_weaknesses_by_month: :read,
         weaknesses_by_risk_report: :read,
         create_weaknesses_by_risk_report: :read,
         weaknesses_by_audit_type: :read,
         create_weaknesses_by_audit_type: :read,
+        weaknesses_by_business_unit: :read,
+        create_weaknesses_by_business_unit: :read,
+        weaknesses_by_user: :read,
+        create_weaknesses_by_user: :read,
         cost_analysis: :read,
         cost_summary: :read,
         create_cost_analysis: :read,

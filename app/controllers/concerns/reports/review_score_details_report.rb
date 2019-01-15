@@ -257,7 +257,8 @@ module Reports::ReviewScoreDetailsReport
         ConclusionFinalReview.human_attribute_name('issue_date'),
         ConclusionFinalReview.human_attribute_name('conclusion'),
         ConclusionFinalReview.human_attribute_name('evolution'),
-        BusinessUnit.model_name.human
+        BusinessUnit.model_name.human,
+        Review.human_attribute_name('manual_score')
       ]
     end
 
@@ -296,7 +297,7 @@ module Reports::ReviewScoreDetailsReport
           l(conclusion_review.issue_date),
           conclusion_review.conclusion,
           conclusion_review.evolution,
-          conclusion_review.review.business_unit.to_s,
+          conclusion_review.review.business_unit.to_s
         ]
       end
 
@@ -316,6 +317,7 @@ module Reports::ReviewScoreDetailsReport
           conclusion_review.conclusion,
           conclusion_review.evolution,
           conclusion_review.review.business_unit.to_s,
+          conclusion_review.review.manual_score
         ]
       end
     end
