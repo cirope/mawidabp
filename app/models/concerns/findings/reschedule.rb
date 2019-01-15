@@ -7,6 +7,8 @@ module Findings::Reschedule
 
   def mark_as_rescheduled_if_apply
     self.rescheduled ||= just_rescheduled? || rescheduled_by_repetition?
+
+    self.rescheduled = false if unmark_rescheduled?
   end
 
   def mark_as_rescheduled?
@@ -35,18 +37,27 @@ module Findings::Reschedule
     end
 
     def was_rescheduled?
-      rescheduled = follow_up_date && versions_after_final_review.any? do |v|
+      was_rescheduled = follow_up_date && versions_after_final_review.any? do |v|
         date = v.reify(dup: true)&.follow_up_date
 
         date.present? && date < follow_up_date
       end
 
-      rescheduled || rescheduled_on_repetition?
+      was_rescheduled || rescheduled_on_repetition?
     end
 
     def rescheduled_on_repetition?
       follow_up_date.present?                       &&
         repeated_of&.follow_up_date.present?        &&
         follow_up_date > repeated_of.follow_up_date
+    end
+
+    def unmark_rescheduled?
+      follow_up_date_changed?                        &&
+        follow_up_date.present?                      &&
+        final_review_created_at.blank?               &&
+        !repeated_of&.rescheduled                    &&
+        repeated_of&.follow_up_date.present?         &&
+        follow_up_date <= repeated_of.follow_up_date
     end
 end

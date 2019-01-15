@@ -19,12 +19,12 @@ module FiltersHelper
   end
 
   def filter_business_unit_options
-    BusinessUnitType.list.map do |business_unit_type|
-      options = business_unit_type.business_units.map do |business_unit|
-        [business_unit.name, business_unit.id]
-      end
+    bus = BusinessUnit.list.order(:name).each_with_object({}) do |bu, bus|
+      bus[bu.name] ||= []
 
-      [business_unit_type.name, options]
+      bus[bu.name] << bu.id
     end
+
+    bus.map { |name, ids| [name, ids.to_json] }
   end
 end
