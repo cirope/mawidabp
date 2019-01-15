@@ -684,7 +684,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         :finding_status => ['', Finding::STATUS[:being_implemented]],
         :finding_title => 'a',
         :business_unit_type => ['', business_unit_types(:cycle).id],
-        :business_unit_id => [business_units(:business_unit_one).id.to_s]
+        :business_unit_id => [business_units(:business_unit_one).id].to_json
       },
       :controller_name => 'conclusion',
       :final => true

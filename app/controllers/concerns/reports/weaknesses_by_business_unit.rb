@@ -20,22 +20,32 @@ module Reports::WeaknessesByBusinessUnit
 
     pdf = init_pdf params[:report_title], params[:report_subtitle]
 
-    if @weaknesses.any?
-      if @business_unit
-        pdf.text @business_unit.business_unit_type.name,
+    if @business_units.present?
+      @business_units.each do |business_unit|
+        weaknesses = @weaknesses.by_business_unit_ids business_unit.id
+
+        pdf.text business_unit.business_unit_type.name,
           size: (PDF_FONT_SIZE * 1.25).round, style: :bold, align: :justify
 
         pdf.move_down PDF_FONT_SIZE * 1.5
-      end
 
-      @weaknesses.each do |weakness|
-        by_business_unit_pdf_items(weakness).each do |item|
-          text = "<i>#{item.first}:</i> #{item.last.to_s.strip}"
+        if weaknesses.any?
+          weaknesses.each do |weakness|
+            by_business_unit_pdf_items(weakness).each do |item|
+              text = "<i>#{item.first}:</i> #{item.last.to_s.strip}"
 
-          pdf.text text, size: PDF_FONT_SIZE, inline_format: true, align: :justify
+              pdf.text text, size: PDF_FONT_SIZE, inline_format: true, align: :justify
+            end
+
+            pdf.move_down PDF_FONT_SIZE
+          end
+        else
+          pdf.move_down PDF_FONT_SIZE
+          pdf.text(
+            t("#{@controller}_committee_report.weaknesses_by_business_unit.without_weaknesses"),
+            style: :italic
+          )
         end
-
-        pdf.move_down PDF_FONT_SIZE
       end
     else
       pdf.move_down PDF_FONT_SIZE
@@ -83,6 +93,8 @@ module Reports::WeaknessesByBusinessUnit
         weaknesses = filter_weaknesses_by_business_unit_by_status weaknesses
         weaknesses = filter_weaknesses_by_business_unit_by_title weaknesses
         weaknesses = filter_weaknesses_by_business_unit_by_business_unit_type weaknesses
+      else
+        weaknesses = weaknesses.none
       end
 
       @weaknesses = weaknesses.reorder order
@@ -155,13 +167,14 @@ module Reports::WeaknessesByBusinessUnit
 
     def filter_weaknesses_by_business_unit weaknesses
       if params[:weaknesses_by_business_unit][:business_unit_id].present?
-        @business_unit = BusinessUnit.list.where(id: params[:weaknesses_by_business_unit][:business_unit_id]).take!
+        business_unit_ids = JSON.parse params[:weaknesses_by_business_unit][:business_unit_id]
+        @business_units = BusinessUnit.list.where id: business_unit_ids
 
-        @filters << "<b>#{BusinessUnit.model_name.human count: 1}</b> = \"#{@business_unit.name}\""
+        @filters << "<b>#{BusinessUnit.model_name.human count: 1}</b> = \"#{@business_units.take.name}\""
 
-        weaknesses.where business_units: { id: @business_unit.id }
+        weaknesses.by_business_unit_ids @business_units.ids
       else
-        weaknesses
+        weaknesses.none
       end
     end
 
