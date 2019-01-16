@@ -30,15 +30,7 @@ module Reports::WeaknessesByBusinessUnit
         pdf.move_down PDF_FONT_SIZE * 1.5
 
         if weaknesses.any?
-          weaknesses.each do |weakness|
-            by_business_unit_pdf_items(weakness).each do |item|
-              text = "<i>#{item.first}:</i> #{item.last.to_s.strip}"
-
-              pdf.text text, size: PDF_FONT_SIZE, inline_format: true, align: :justify
-            end
-
-            pdf.move_down PDF_FONT_SIZE
-          end
+          put_weaknesses_by_business_unit_on pdf, weaknesses
         else
           pdf.move_down PDF_FONT_SIZE
           pdf.text(
@@ -72,6 +64,7 @@ module Reports::WeaknessesByBusinessUnit
       final = params[:final] == 'true'
       order = [
         "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} DESC",
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'id'} ASC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC",
       ].map { |o| Arel.sql o }
@@ -112,12 +105,8 @@ module Reports::WeaknessesByBusinessUnit
       "\uFEFF#{csv_str}"
     end
 
-    def by_business_unit_pdf_items weakness
+    def by_business_unit_pdf_review_items weakness
       [
-        [
-          PlanItem.human_attribute_name('project'),
-          weakness.review.plan_item.project
-        ],
         [
           Review.model_name.human,
           weakness.review.identification
@@ -125,15 +114,18 @@ module Reports::WeaknessesByBusinessUnit
         [
           ConclusionFinalReview.human_attribute_name('issue_date'),
           l(weakness.review.conclusion_final_review.issue_date)
-        ],
-        [
-          ConclusionFinalReview.human_attribute_name('conclusion'),
-          weakness.review.conclusion_final_review.conclusion
-        ],
-        [
-          Review.human_attribute_name('risk_exposure'),
-          weakness.review.risk_exposure
-        ],
+        ]
+      ]
+    end
+
+    def by_business_unit_pdf_weakness_items weakness
+      origination_date = if weakness.repeated_of_id && weakness.origination_date
+                           l weakness.origination_date, format: '%Y'
+                         else
+                           t 'conclusion_review.new_origination_date'
+                         end
+
+      [
         [
           Weakness.human_attribute_name('title'),
           weakness.title
@@ -142,27 +134,23 @@ module Reports::WeaknessesByBusinessUnit
           Weakness.human_attribute_name('description'),
           weakness.description
         ],
-        [
+        ([
+          Weakness.human_attribute_name('current_situation'),
+          weakness.current_situation
+        ] if weakness.current_situation.present? && weakness.current_situation_verified),
+        ([
           Weakness.human_attribute_name('answer'),
           weakness.answer
-        ],
-        [
-          Weakness.human_attribute_name('risk'),
-          weakness.risk_text
-        ],
+        ] unless weakness.implemented_audited?),
         [
           Weakness.human_attribute_name('state'),
           weakness.state_text
         ],
         [
           t("#{@controller}_committee_report.weaknesses_by_business_unit.year"),
-          (weakness.origination_date ? l(weakness.origination_date, format: '%Y') : '-')
-        ],
-        [
-          Weakness.human_attribute_name('follow_up_date'),
-          (weakness.follow_up_date ? l(weakness.follow_up_date) : '-')
+          origination_date
         ]
-      ]
+      ].compact
     end
 
     def filter_weaknesses_by_business_unit weaknesses
@@ -242,38 +230,77 @@ module Reports::WeaknessesByBusinessUnit
       end
     end
 
+    def put_weaknesses_by_business_unit_on pdf, weaknesses
+      @_review_index        ||= 1
+      @_last_displayed_review = nil
+
+      weaknesses.each do |weakness|
+        unless @_last_displayed_review == weakness.review.id
+          title = [
+            "<b>#{@_review_index}</b>",
+            "<i>#{PlanItem.human_attribute_name 'project'}:</i>",
+            weakness.review.plan_item.project
+          ].join(' ')
+
+          pdf.text title, size: PDF_FONT_SIZE, inline_format: true,
+            align: :justify
+
+          by_business_unit_pdf_review_items(weakness).each do |item|
+            text = "<i>#{item.first}:</i> #{item.last.to_s.strip}"
+
+            pdf.text text, size: PDF_FONT_SIZE, inline_format: true,
+              align: :justify
+          end
+
+          pdf.move_down PDF_FONT_SIZE * 0.5
+
+          @_review_index         += 1
+          @_last_displayed_review = weakness.review.id
+        end
+
+        pdf.indent PDF_FONT_SIZE do
+          by_business_unit_pdf_weakness_items(weakness).each do |item|
+            text = "<i>#{item.first}:</i> #{item.last.to_s.strip}"
+
+            pdf.text text, size: PDF_FONT_SIZE, inline_format: true,
+              align: :justify
+          end
+        end
+
+        pdf.move_down PDF_FONT_SIZE * 0.5
+      end
+    end
+
     def weaknesses_by_business_unit_csv_headers
       [
         PlanItem.human_attribute_name('project'),
         Review.model_name.human,
         ConclusionFinalReview.human_attribute_name('issue_date'),
-        ConclusionFinalReview.human_attribute_name('conclusion'),
-        Review.human_attribute_name('risk_exposure'),
         Weakness.human_attribute_name('title'),
         Weakness.human_attribute_name('description'),
         Weakness.human_attribute_name('answer'),
-        Weakness.human_attribute_name('risk'),
         Weakness.human_attribute_name('state'),
-        t("#{@controller}_committee_report.weaknesses_by_business_unit.year"),
-        Weakness.human_attribute_name('follow_up_date')
+        t("#{@controller}_committee_report.weaknesses_by_business_unit.year")
       ]
     end
 
     def weaknesses_by_business_unit_csv_data_rows
       @weaknesses.map do |weakness|
+      origination_date = if weakness.repeated_of_id && weakness.origination_date
+                           l weakness.origination_date, format: '%Y'
+                         else
+                           t 'conclusion_review.new_origination_date'
+                         end
+
         [
           weakness.review.plan_item.project,
           weakness.review.identification,
           l(weakness.review.conclusion_final_review.issue_date),
-          weakness.review.conclusion_final_review.conclusion,
-          weakness.review.risk_exposure,
           weakness.title,
           weakness.description,
           weakness.answer,
-          weakness.risk_text,
           weakness.state_text,
-          (weakness.origination_date ? l(weakness.origination_date, format: '%Y') : '-'),
-          (weakness.follow_up_date ? l(weakness.follow_up_date) : '-')
+          origination_date
         ]
       end
     end
