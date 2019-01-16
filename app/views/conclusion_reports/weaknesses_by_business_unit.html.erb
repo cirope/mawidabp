@@ -13,6 +13,9 @@
 %>
 
 <% if @business_units.present? %>
+  <% last_displayed_review = nil %>
+  <% review_index = 1 %>
+
   <% @business_units.each do |business_unit| %>
     <% weaknesses = @weaknesses.by_business_unit_ids business_unit.id %>
 
@@ -20,32 +23,30 @@
 
     <% if weaknesses.any? %>
       <% weaknesses.each do |weakness| %>
-        <hr>
+        <% unless last_displayed_review == weakness.review.id %>
+          <hr>
 
-        <p>
-          <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
-          <%= weakness.review.plan_item.project %>
-        </p>
+          <p>
+            <span class="badge badge-default"> <%= review_index %></span>
+            <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
+            <%= weakness.review.plan_item.project %>
+          </p>
 
-        <p>
-          <span class="text-muted"><%= Review.model_name.human %></span>:
-          <%= weakness.review.identification %>
-        </p>
+          <p>
+            <span class="text-muted"><%= Review.model_name.human %></span>:
+            <%= weakness.review.identification %>
+          </p>
 
-        <p>
-          <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
-          <%= l weakness.review.conclusion_final_review.issue_date %>
-        </p>
+          <p>
+            <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
+            <%= l weakness.review.conclusion_final_review.issue_date %>
+          </p>
 
-        <p>
-          <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'conclusion' %></span>:
-          <%= weakness.review.conclusion_final_review.conclusion %>
-        </p>
+          <% review_index += 1 %>
+          <% last_displayed_review = weakness.review.id %>
+        <% end %>
 
-        <p>
-          <span class="text-muted"><%= Review.human_attribute_name 'risk_exposure' %></span>:
-          <%= weakness.review.risk_exposure %>
-        </p>
+        <br>
 
         <p>
           <span class="text-muted"><%= Weakness.human_attribute_name 'title' %></span>:
@@ -58,34 +59,37 @@
 
         <%= simple_format weakness.description %>
 
-        <p>
-          <span class="text-muted"><%= Weakness.human_attribute_name 'answer' %></span>:
-        </p>
+        <% if weakness.current_situation.present? && weakness.current_situation_verified %>
+          <p>
+            <span class="text-muted"><%= Weakness.human_attribute_name 'current_situation' %></span>:
+          </p>
 
-        <%= simple_format weakness.answer %>
+          <%= simple_format weakness.current_situation %>
+        <% end %>
 
-        <p>
-          <span class="text-muted"><%= Weakness.human_attribute_name 'risk' %></span>:
-          <%= weakness.risk_text %>
-        </p>
+        <% unless weakness.implemented_audited? %>
+          <p>
+            <span class="text-muted"><%= Weakness.human_attribute_name 'answer' %></span>:
+          </p>
+
+          <%= simple_format weakness.answer %>
+        <% end %>
 
         <p>
           <span class="text-muted"><%= Weakness.human_attribute_name 'state' %></span>:
           <%= weakness.state_text %>
         </p>
 
-        <p>
-          <span class="text-muted"><%= t("#{@controller}_committee_report.weaknesses_by_business_unit.year") %></span>:
-          <%= l weakness.origination_date, format: '%Y' if weakness.origination_date %>
-        </p>
+        <% origination_date = if weakness.repeated_of_id && weakness.origination_date
+                                l weakness.origination_date, format: '%Y'
+                              else
+                                t 'conclusion_review.new_origination_date'
+                              end
+        %>
 
         <p>
-          <span class="text-muted"><%= Weakness.human_attribute_name 'follow_up_date' %></span>:
-          <% if weakness.follow_up_date && weakness.follow_up_date < Time.zone.today %>
-            <span class="text-danger"><%= l weakness.follow_up_date %></span>
-          <% elsif weakness.follow_up_date %>
-            <%= l weakness.follow_up_date %>
-          <% end %>
+          <span class="text-muted"><%= t "#{@controller}_committee_report.weaknesses_by_business_unit.year" %></span>:
+          <%= origination_date %>
         </p>
       <% end %>
     <% else %>
