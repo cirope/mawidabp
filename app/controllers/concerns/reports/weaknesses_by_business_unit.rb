@@ -20,25 +20,8 @@ module Reports::WeaknessesByBusinessUnit
 
     pdf = init_pdf params[:report_title], params[:report_subtitle]
 
-    if @business_units.present?
-      @business_units.each do |business_unit|
-        weaknesses = @weaknesses.by_business_unit_ids business_unit.id
-
-        pdf.text business_unit.business_unit_type.name,
-          size: (PDF_FONT_SIZE * 1.25).round, style: :bold, align: :justify
-
-        pdf.move_down PDF_FONT_SIZE * 1.5
-
-        if weaknesses.any?
-          put_weaknesses_by_business_unit_on pdf, weaknesses
-        else
-          pdf.move_down PDF_FONT_SIZE
-          pdf.text(
-            t("#{@controller}_committee_report.weaknesses_by_business_unit.without_weaknesses"),
-            style: :italic
-          )
-        end
-      end
+    if @weaknesses.any?
+      put_weaknesses_by_business_unit_on pdf
     else
       pdf.move_down PDF_FONT_SIZE
       pdf.text(
@@ -156,11 +139,11 @@ module Reports::WeaknessesByBusinessUnit
     def filter_weaknesses_by_business_unit weaknesses
       if params[:weaknesses_by_business_unit][:business_unit_id].present?
         business_unit_ids = JSON.parse params[:weaknesses_by_business_unit][:business_unit_id]
-        @business_units = BusinessUnit.list.where id: business_unit_ids
+        business_units = BusinessUnit.list.where id: business_unit_ids
 
-        @filters << "<b>#{BusinessUnit.model_name.human count: 1}</b> = \"#{@business_units.take.name}\""
+        @filters << "<b>#{BusinessUnit.model_name.human count: 1}</b> = \"#{business_units.take.name}\""
 
-        weaknesses.by_business_unit_ids @business_units.ids
+        weaknesses.by_business_unit_ids business_units.ids
       else
         weaknesses.none
       end
@@ -230,11 +213,11 @@ module Reports::WeaknessesByBusinessUnit
       end
     end
 
-    def put_weaknesses_by_business_unit_on pdf, weaknesses
+    def put_weaknesses_by_business_unit_on pdf
       @_review_index        ||= 1
       @_last_displayed_review = nil
 
-      weaknesses.each do |weakness|
+      @weaknesses.each do |weakness|
         unless @_last_displayed_review == weakness.review.id
           title = [
             "<b>#{@_review_index}</b>",
