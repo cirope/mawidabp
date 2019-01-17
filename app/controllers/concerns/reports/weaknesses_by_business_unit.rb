@@ -30,8 +30,6 @@ module Reports::WeaknessesByBusinessUnit
       )
     end
 
-    add_pdf_filters(pdf, @controller, @filters) if @filters.present?
-
     save_pdf(pdf, @controller, @from_date, @to_date, 'weaknesses_by_business_unit')
 
     redirect_to_pdf(@controller, @from_date, @to_date, 'weaknesses_by_business_unit')
@@ -43,7 +41,6 @@ module Reports::WeaknessesByBusinessUnit
       @controller = params[:controller_name]
       @title = t("#{@controller}_committee_report.weaknesses_by_business_unit_title")
       @from_date, @to_date = *make_date_range(params[:weaknesses_by_business_unit])
-      @filters = []
       final = params[:final] == 'true'
       order = [
         "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} DESC",
@@ -141,8 +138,6 @@ module Reports::WeaknessesByBusinessUnit
         business_unit_ids = JSON.parse params[:weaknesses_by_business_unit][:business_unit_id]
         business_units = BusinessUnit.list.where id: business_unit_ids
 
-        @filters << "<b>#{BusinessUnit.model_name.human count: 1}</b> = \"#{business_units.take.name}\""
-
         weaknesses.by_business_unit_ids business_units.ids
       else
         weaknesses.none
@@ -156,8 +151,6 @@ module Reports::WeaknessesByBusinessUnit
         risk_texts = risk.map do |r|
           t "risk_types.#{Weakness.risks.invert[r.to_i]}"
         end
-
-        @filters << "<b>#{Finding.human_attribute_name('risk')}</b> = \"#{risk_texts.to_sentence}\""
 
         weaknesses.by_risk risk
       else
@@ -177,8 +170,6 @@ module Reports::WeaknessesByBusinessUnit
           state_text = states.map do |s|
             t "findings.state.#{Finding::STATUS.invert[s.to_i]}"
           end
-
-          @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text.to_sentence}\""
         end
 
         weaknesses.where state: states
@@ -191,8 +182,6 @@ module Reports::WeaknessesByBusinessUnit
       if params[:weaknesses_by_business_unit][:finding_title].present?
         title = params[:weaknesses_by_business_unit][:finding_title]
 
-        @filters << "<b>#{Finding.human_attribute_name('title')}</b> = \"#{title}\""
-
         weaknesses.with_title title
       else
         weaknesses
@@ -204,8 +193,6 @@ module Reports::WeaknessesByBusinessUnit
 
       if business_unit_types.present?
         selected_business_units = BusinessUnitType.list.where id: business_unit_types
-
-        @filters << "<b>#{BusinessUnitType.model_name.human}</b> = \"#{selected_business_units.pluck('name').to_sentence}\""
 
         weaknesses.by_business_unit_type selected_business_units.ids
       else
