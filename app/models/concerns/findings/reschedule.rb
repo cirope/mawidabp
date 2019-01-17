@@ -22,7 +22,8 @@ module Findings::Reschedule
         follow_up_date.present?             &&
         follow_up_date_was.present?         &&
         follow_up_date > follow_up_date_was &&
-        final_review_created_at.present?
+        final_review_created_at.present?    &&
+        (awaiting? || being_implemented?)
     end
 
     def rescheduled_by_repetition?
