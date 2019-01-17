@@ -99,7 +99,8 @@ module Reports::WeaknessesByBusinessUnit
     end
 
     def by_business_unit_pdf_weakness_items weakness
-      origination_date = if weakness.repeated_of_id && weakness.origination_date
+      show_year        = show_weaknesses_by_business_unit_origination_date? weakness
+      origination_date = if show_year
                            l weakness.origination_date, format: '%Y'
                          else
                            t 'conclusion_review.new_origination_date'
@@ -256,11 +257,12 @@ module Reports::WeaknessesByBusinessUnit
 
     def weaknesses_by_business_unit_csv_data_rows
       @weaknesses.map do |weakness|
-      origination_date = if weakness.repeated_of_id && weakness.origination_date
-                           l weakness.origination_date, format: '%Y'
-                         else
-                           t 'conclusion_review.new_origination_date'
-                         end
+        show_year        = show_weaknesses_by_business_unit_origination_date? weakness
+        origination_date = if show_year
+                             l weakness.origination_date, format: '%Y'
+                           else
+                             t 'conclusion_review.new_origination_date'
+                           end
 
         [
           weakness.review.plan_item.project,
@@ -273,6 +275,11 @@ module Reports::WeaknessesByBusinessUnit
           origination_date
         ]
       end
+    end
+
+    def show_weaknesses_by_business_unit_origination_date? weakness
+      (weakness.repeated_of_id && weakness.origination_date) ||
+        weakness.origination_date < 1.year.ago
     end
 end
 
