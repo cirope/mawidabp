@@ -74,11 +74,12 @@
       <%= weakness.state_text %>
     </p>
 
-    <% origination_date = if weakness.repeated_of_id && weakness.origination_date
-                            l weakness.origination_date, format: '%Y'
-                          else
-                            t 'conclusion_review.new_origination_date'
-                          end
+    <% show_year        = (weakness.repeated_of_id && weakness.origination_date) || weakness.origination_date < 1.year.ago
+       origination_date = if show_year
+                           l weakness.origination_date, format: '%Y'
+                         else
+                           t 'conclusion_review.new_origination_date'
+                         end
     %>
 
     <p>
