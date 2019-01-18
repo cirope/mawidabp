@@ -23,6 +23,7 @@
     disable: "Deshabilitar"
     download: "Descargar"
     download_csv: "Descargar CSV"
+    download_rtf: "Descargar RTF"
     edit: "Editar"
     greater_or_equal_than: "Mayor o igual a"
     import: "Importar"

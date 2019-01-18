@@ -12,6 +12,9 @@ module Reports::WeaknessesByBusinessUnit
       format.csv do
         render csv: weaknesses_by_business_unit_csv, filename: @title.downcase
       end
+      format.rtf do
+        render rtf: weaknesses_by_business_unit_rtf, filename: @title.downcase
+      end
     end
   end
 
@@ -83,6 +86,41 @@ module Reports::WeaknessesByBusinessUnit
       end
 
       "\uFEFF#{csv_str}"
+    end
+
+    def weaknesses_by_business_unit_rtf
+      document           = RTF::Document.new RTF::Font.new(RTF::Font::ROMAN, 'Arial')
+      organization_image = current_organization.image_model&.image&.thumb&.path
+
+      if organization_image && File.exists?(organization_image)
+        header = RTF::HeaderNode.new document
+
+        header.paragraph { |n| n.image(organization_image) }
+
+        document.header = header
+      end
+
+      header_style           = RTF::CharacterStyle.new
+      header_style.bold      = true
+      header_style.font_size = 28
+
+      document.paragraph header_style do |p|
+        p << @title
+      end
+
+      document.line_break
+
+      if @weaknesses.any?
+        put_weaknesses_by_business_unit_paragraphs_on document
+      else
+        document.paragraph do |p|
+          p.italic << t(
+            "#{@controller}_committee_report.weaknesses_by_business_unit.without_weaknesses"
+          )
+        end
+      end
+
+      document.to_rtf
     end
 
     def by_business_unit_pdf_review_items weakness
@@ -239,6 +277,45 @@ module Reports::WeaknessesByBusinessUnit
         end
 
         pdf.move_down PDF_FONT_SIZE * 0.5
+      end
+    end
+
+    def put_weaknesses_by_business_unit_paragraphs_on document
+      @_review_index        ||= 1
+      @_last_displayed_review = nil
+
+      indented_style             = RTF::ParagraphStyle.new
+      indented_style.left_indent = 400
+
+      @weaknesses.each do |weakness|
+        unless @_last_displayed_review == weakness.review.id
+          document.paragraph do |p|
+            p.bold   << "#{@_review_index} "
+            p.italic << "#{PlanItem.human_attribute_name 'project'}: "
+            p        << weakness.review.plan_item.project
+          end
+
+          by_business_unit_pdf_review_items(weakness).each do |item|
+            document.paragraph do |p|
+              p.italic << "#{item.first}: "
+              p        << item.last.to_s.strip
+            end
+          end
+
+          @_review_index         += 1
+          @_last_displayed_review = weakness.review.id
+
+          document.line_break
+        end
+
+        by_business_unit_pdf_weakness_items(weakness).each do |item|
+          document.paragraph indented_style do |p|
+            p.italic << "#{item.first}: "
+            p        << item.last.to_s.strip
+          end
+        end
+
+        document.line_break
       end
     end
 
