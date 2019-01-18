@@ -12,6 +12,12 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    Current.user         = nil
+    Current.group        = nil
+    Current.organization = nil
+  end
+
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of ConclusionFinalReview, @conclusion_review
@@ -30,6 +36,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
   # Prueba la creación de un informe final
   test 'create' do
+    Current.user = users :supervisor
     review = Review.find reviews(:review_approved_with_conclusion).id
     findings_count = (review.weaknesses + review.oportunities).size
 
@@ -80,6 +87,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
   # Prueba la creación de un informe final con observaciones reiteradas
   test 'create with repeated findings' do
+    Current.user = users :supervisor
     review = Review.find reviews(:review_approved_with_conclusion).id
     findings = review.weaknesses + review.oportunities
     repeated_id = findings(:being_implemented_weakness).id
@@ -275,6 +283,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   end
 
   test 'duplicate review findings' do
+    Current.user = users :supervisor
     review = Review.find reviews(:review_approved_with_conclusion).id
     review = review.reload
     findings = review.weaknesses + review.oportunities
@@ -328,7 +337,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'recode findings on creation' do
     skip unless has_extra_sort_method? Current.organization
 
-    review = reviews :review_with_conclusion
+    Current.user = users :supervisor
+    review       = reviews :review_with_conclusion
 
     repeated_column = [
       Weakness.quoted_table_name,

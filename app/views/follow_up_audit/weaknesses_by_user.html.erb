@@ -23,6 +23,11 @@
     </p>
 
     <p>
+      <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
+      <%= weakness.review.plan_item.project %>
+    </p>
+
+    <p>
       <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
       <%= l weakness.review.conclusion_final_review.issue_date %>
     </p>
@@ -56,6 +61,11 @@
     <p>
       <span class="text-muted"><%= Weakness.human_attribute_name 'risk' %></span>:
       <%= weakness.risk_text %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= t 'finding.auditors', count: 0 %></span>:
+      <%= weakness.users.select(&:auditor?).map(&:full_name).to_sentence %>
     </p>
 
     <p>

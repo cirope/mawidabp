@@ -629,6 +629,114 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       'weaknesses_by_risk_report', 0)
   end
 
+  test 'weaknesses by business unit' do
+    login
+
+    get :weaknesses_by_business_unit
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_by_business_unit'
+
+    assert_nothing_raised do
+      get :weaknesses_by_business_unit, :params => {
+        :weaknesses_by_business_unit => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion',
+        :final => true
+      }
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_by_business_unit'
+  end
+
+  test 'weaknesses by business unit as CSV' do
+    login
+
+    get :weaknesses_by_business_unit, as: :csv
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+
+    assert_nothing_raised do
+      get :weaknesses_by_business_unit, :params => {
+        :weaknesses_by_business_unit => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion',
+        :final => true
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+  end
+
+  test 'weaknesses by business unit as RTF' do
+    login
+
+    get :weaknesses_by_business_unit, as: :rtf
+    assert_response :success
+    assert_equal Mime[:rtf], @response.content_type
+
+    assert_nothing_raised do
+      get :weaknesses_by_business_unit, :params => {
+        :weaknesses_by_business_unit => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion',
+        :final => true
+      }, as: :rtf
+    end
+
+    assert_response :success
+    assert_equal Mime[:rtf], @response.content_type
+  end
+
+  test 'filtered weaknesses by business unit' do
+    login
+
+    get :weaknesses_by_business_unit, :params => {
+      :weaknesses_by_business_unit => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :risk => ['', '1', '2'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
+        :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
+        :business_unit_id => [business_units(:business_unit_one).id].to_json
+      },
+      :controller_name => 'conclusion',
+      :final => true
+    }
+
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_by_business_unit'
+  end
+
+  test 'create weaknesses by business unit' do
+    login
+
+    get :create_weaknesses_by_business_unit, :params => {
+      :weaknesses_by_business_unit => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion',
+      :final => true
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.weaknesses_by_business_unit.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'weaknesses_by_business_unit', 0)
+  end
+
   test 'weaknesses by user' do
     login
 

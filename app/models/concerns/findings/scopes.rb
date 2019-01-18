@@ -91,6 +91,12 @@ module Findings::Scopes
       includes(review: :conclusion_final_review).where condition, *[date, date_until].compact
     end
 
+    def by_business_unit_ids business_unit_ids
+      includes(review: :plan_item).
+        where(plan_items: { business_unit_id: Array(business_unit_ids) }).
+        references(:plan_items)
+    end
+
     def by_business_unit_type business_unit_type_id
       includes(review: { plan_item: :business_unit }).
         where(business_units: { business_unit_type_id: business_unit_type_id }).

@@ -595,8 +595,6 @@ class FindingTest < ActiveSupport::TestCase
         solution_date: Date.today
       )
     end
-
-    Current.user = nil
   end
 
   test 'mark as unconfirmed' do
@@ -910,6 +908,11 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 1, finding.repeated_ancestors.size
     assert_equal 1, repeated_of.repeated_children.size
     assert_equal repeated_of, finding.repeated_root
+
+    finding.update! follow_up_date: repeated_of.follow_up_date
+
+    # Should unmark when follow up date has been "restored"
+    refute finding.reload.rescheduled
   end
 
   test 'do nothing on repeat if repeated_of is not included on review' do
@@ -1119,6 +1122,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'work papers can be added to finding with current close date' do
+    Current.user       = users :supervisor
     uneditable_finding = findings :being_implemented_weakness
 
     assert_difference 'WorkPaper.count' do
@@ -1160,7 +1164,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'validate final state change mark all task as finished' do
     Current.user = users :supervisor
-    finding              = findings :being_implemented_weakness
+    finding      = findings :being_implemented_weakness
 
     assert_difference 'finding.tasks.count' do
       finding.tasks.create! code: '02', description: 'Test', due_on: Time.zone.today

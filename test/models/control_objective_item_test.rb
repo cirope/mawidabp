@@ -14,8 +14,9 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   teardown do
+    Current.user         = nil
+    Current.group        = nil
     Current.organization = nil
-    Current.group = nil
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -395,6 +396,8 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'work papers can be added to uneditable control objectives' do
+    Current.user = users(:supervisor)
+
     uneditable_control_objective_item = ControlObjectiveItem.find(
       control_objective_items(:management_dependency_item).id)
 
