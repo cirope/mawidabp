@@ -27,6 +27,7 @@ es:
     disable: "Deshabilitar"
     download: "Descargar"
     download_csv: "Descargar CSV"
+    download_rtf: "Descargar RTF"
     edit: "Editar"
     import: "Importar"
     insert_item: "Insertar ítem"
