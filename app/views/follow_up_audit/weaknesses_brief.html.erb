@@ -5,42 +5,49 @@
     },
     forms: [
       [:date_range, true],
+      [:cut_date, true]
     ]
   }
 %>
 
 <% if @weaknesses.any? %>
-  <table class="table table-condensed table-striped table-hover">
-    <thead>
-      <tr>
-        <th><%= Review.model_name.human %></th>
-        <th><%= Weakness.human_attribute_name 'title' %></th>
-        <th><%= Weakness.human_attribute_name 'description' %></th>
-        <th><%= Weakness.human_attribute_name 'risk' %></th>
-        <th><%= Weakness.human_attribute_name 'audit_comments' %></th>
-        <th><%= FindingUserAssignment.human_attribute_name 'process_owner' %></th>
-        <th><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></th>
-        <th><%= Weakness.human_attribute_name 'first_follow_up_date' %></th>
-        <th><%= Weakness.human_attribute_name 'follow_up_date' %></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @weaknesses.each do |weakness| %>
+  <div class="table-responsive">
+    <table class="table table-condensed table-striped table-hover">
+      <thead>
         <tr>
-          <td><%= weakness.review.identification %></td>
-          <td><%= weakness.title %></td>
-          <td><%= weakness.description %></td>
-          <td><%= weakness.risk_text %></td>
-          <td><%= weakness.audit_comments %></td>
-          <td><%= array_to_ul weaknesses_brief_audit_users(weakness) %></td>
-          <td><%= l weakness.review.conclusion_final_review.issue_date %></td>
-          <td><%= weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-' %></td>
-          <td><%= weakness.follow_up_date ? l(weakness.follow_up_date) : '-' %></td>
+          <th><%= Review.model_name.human %></th>
+          <th><%= PlanItem.human_attribute_name 'project' %></th>
+          <th><%= Weakness.human_attribute_name 'title' %></th>
+          <th><%= Weakness.human_attribute_name 'description' %></th>
+          <th><%= Weakness.human_attribute_name 'risk' %></th>
+          <th><%= Weakness.human_attribute_name 'audit_comments' %></th>
+          <th><%= FindingUserAssignment.human_attribute_name 'process_owner' %></th>
+          <th><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></th>
+          <th><%= Weakness.human_attribute_name 'first_follow_up_date' %></th>
+          <th><%= Weakness.human_attribute_name 'follow_up_date' %></th>
+          <th><%= t 'follow_up_committee_report.weaknesses_brief.distance_to_cut_date' %></th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+
+      <tbody>
+        <% @weaknesses.each do |weakness| %>
+          <tr>
+            <td><%= weakness.review.identification %></td>
+            <td><%= weakness.review.plan_item.project %></td>
+            <td><%= weakness.title %></td>
+            <td><%= weakness.description %></td>
+            <td><%= weakness.risk_text %></td>
+            <td><%= weakness.audit_comments %></td>
+            <td><%= array_to_ul weaknesses_brief_audit_users(weakness) %></td>
+            <td><%= l weakness.review.conclusion_final_review.issue_date %></td>
+            <td><%= weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-' %></td>
+            <td><%= weakness.follow_up_date ? l(weakness.follow_up_date) : '-' %></td>
+            <td><%= distance_in_days_to_cut_date weakness %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 <% else %>
   <div style="margin-left: 2em">
     <p><em><%= t 'follow_up_committee_report.weaknesses_brief.without_weaknesses' %></em></p>

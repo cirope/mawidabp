@@ -12,87 +12,80 @@
   }
 %>
 
-<% if @business_units.present? %>
-  <% @business_units.each do |business_unit| %>
-    <% weaknesses = @weaknesses.by_business_unit_ids business_unit.id %>
+<% if @weaknesses.any? %>
+  <% last_displayed_review = nil %>
+  <% review_index = 1 %>
 
-    <h2><%= business_unit.business_unit_type.name %></h2>
+  <% @weaknesses.each do |weakness| %>
+    <% unless last_displayed_review == weakness.review.id %>
+      <hr>
 
-    <% if weaknesses.any? %>
-      <% weaknesses.each do |weakness| %>
-        <hr>
+      <p>
+        <span class="badge badge-default"> <%= review_index %></span>
+        <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
+        <%= weakness.review.plan_item.project %>
+      </p>
 
-        <p>
-          <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
-          <%= weakness.review.plan_item.project %>
-        </p>
+      <p>
+        <span class="text-muted"><%= Review.model_name.human %></span>:
+        <%= weakness.review.identification %>
+      </p>
 
-        <p>
-          <span class="text-muted"><%= Review.model_name.human %></span>:
-          <%= weakness.review.identification %>
-        </p>
+      <p>
+        <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
+        <%= l weakness.review.conclusion_final_review.issue_date %>
+      </p>
 
-        <p>
-          <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
-          <%= l weakness.review.conclusion_final_review.issue_date %>
-        </p>
-
-        <p>
-          <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'conclusion' %></span>:
-          <%= weakness.review.conclusion_final_review.conclusion %>
-        </p>
-
-        <p>
-          <span class="text-muted"><%= Review.human_attribute_name 'risk_exposure' %></span>:
-          <%= weakness.review.risk_exposure %>
-        </p>
-
-        <p>
-          <span class="text-muted"><%= Weakness.human_attribute_name 'title' %></span>:
-          <%= weakness.title %>
-        </p>
-
-        <p>
-          <span class="text-muted"><%= Weakness.human_attribute_name 'description' %></span>:
-        </p>
-
-        <%= simple_format weakness.description %>
-
-        <p>
-          <span class="text-muted"><%= Weakness.human_attribute_name 'answer' %></span>:
-        </p>
-
-        <%= simple_format weakness.answer %>
-
-        <p>
-          <span class="text-muted"><%= Weakness.human_attribute_name 'risk' %></span>:
-          <%= weakness.risk_text %>
-        </p>
-
-        <p>
-          <span class="text-muted"><%= Weakness.human_attribute_name 'state' %></span>:
-          <%= weakness.state_text %>
-        </p>
-
-        <p>
-          <span class="text-muted"><%= t("#{@controller}_committee_report.weaknesses_by_business_unit.year") %></span>:
-          <%= l weakness.origination_date, format: '%Y' if weakness.origination_date %>
-        </p>
-
-        <p>
-          <span class="text-muted"><%= Weakness.human_attribute_name 'follow_up_date' %></span>:
-          <% if weakness.follow_up_date && weakness.follow_up_date < Time.zone.today %>
-            <span class="text-danger"><%= l weakness.follow_up_date %></span>
-          <% elsif weakness.follow_up_date %>
-            <%= l weakness.follow_up_date %>
-          <% end %>
-        </p>
-      <% end %>
-    <% else %>
-      <div style="margin-left: 2em">
-        <p><em><%= t 'follow_up_committee_report.weaknesses_by_business_unit.without_weaknesses' %></em></p>
-      </div>
+      <% review_index += 1 %>
+      <% last_displayed_review = weakness.review.id %>
     <% end %>
+
+    <br>
+
+    <p>
+      <span class="text-muted"><%= Weakness.human_attribute_name 'title' %></span>:
+      <%= weakness.title %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= Weakness.human_attribute_name 'description' %></span>:
+    </p>
+
+    <%= simple_format weakness.description %>
+
+    <% if weakness.current_situation.present? && weakness.current_situation_verified %>
+      <p>
+        <span class="text-muted"><%= Weakness.human_attribute_name 'current_situation' %></span>:
+      </p>
+
+      <%= simple_format weakness.current_situation %>
+    <% end %>
+
+    <% unless weakness.implemented_audited? %>
+      <p>
+        <span class="text-muted"><%= Weakness.human_attribute_name 'answer' %></span>:
+      </p>
+
+      <%= simple_format weakness.answer %>
+    <% end %>
+
+    <p>
+      <span class="text-muted"><%= Weakness.human_attribute_name 'state' %></span>:
+      <%= weakness.state_text %>
+    </p>
+
+    <% show_year        = (weakness.repeated_of_id && weakness.origination_date) || weakness.origination_date < 1.year.ago
+       origination_date = if show_year
+                           l weakness.origination_date, format: '%Y'
+                         else
+                           t 'conclusion_review.new_origination_date'
+                         end
+    %>
+
+    <p>
+      <span class="text-muted"><%= t "#{@controller}_committee_report.weaknesses_by_business_unit.year" %></span>:
+      <%= origination_date %>
+    </p>
   <% end %>
 <% else %>
   <div style="margin-left: 2em">
@@ -105,7 +98,8 @@
 <div>
   <%= link_to t('label.back'), action: :index %> |
   <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: "#customize_report" } %> |
-  <%= link_to t('label.download_csv'), weaknesses_by_business_unit_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
+  <%= link_to t('label.download_csv'), weaknesses_by_business_unit_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %> |
+  <%= link_to t('label.download_rtf'), weaknesses_by_business_unit_follow_up_audit_path(request.query_parameters.merge(format: :rtf)) %>
 </div>
 
 <%= render partial: 'shared/customize_report_form', locals: {

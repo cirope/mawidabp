@@ -644,6 +644,28 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_equal Mime[:csv], @response.content_type
   end
 
+  test 'weaknesses by business unit as RTF' do
+    login
+
+    get :weaknesses_by_business_unit, as: :rtf
+    assert_response :success
+    assert_equal Mime[:rtf], @response.content_type
+
+    assert_nothing_raised do
+      get :weaknesses_by_business_unit, :params => {
+        :weaknesses_by_business_unit => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }, as: :rtf
+    end
+
+    assert_response :success
+    assert_equal Mime[:rtf], @response.content_type
+  end
+
   test 'filtered weaknesses by business unit' do
     login
 
@@ -994,6 +1016,29 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :weaknesses_brief => {
           :from_date => 10.years.ago.to_date,
           :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }
+    end
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_brief'
+  end
+
+  test 'weaknesses brief with cut date' do
+    login
+
+    get :weaknesses_brief
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_brief'
+
+    assert_nothing_raised do
+      get :weaknesses_brief, :params => {
+        :weaknesses_brief => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date,
+          :cut_date => 10.days.ago.to_date
         },
         :controller_name => 'follow_up',
         :final => false
