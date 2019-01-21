@@ -199,7 +199,6 @@ es:
     weaknesses_graphs: "Gráfico de observaciones"
     from_date: "Desde"
     to_date: "Hasta"
-    invalid_dates: "Verifique el rango de fechas, no es válido."
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
@@ -639,7 +638,6 @@ es:
     not_expired: "No vencida"
     from_date: "Desde"
     to_date: "Hasta"
-    invalid_dates: "Verifique el rango de fechas, no es válido."
     print_date: "Fecha de impresión: %{date}"
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
