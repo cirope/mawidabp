@@ -1,7 +1,6 @@
 module Reports::WeaknessesBrief
   extend ActiveSupport::Concern
 
-  include Reports::PDF
   include Reports::Period
 
   def weaknesses_brief
@@ -21,6 +20,7 @@ module Reports::WeaknessesBrief
       @controller = params[:controller_name]
       @title = t("#{@controller}_committee_report.weaknesses_brief_title")
       @from_date, @to_date = *make_date_range(params[:weaknesses_brief])
+      @cut_date = extract_cut_date params[:weaknesses_brief]
       @filters = []
       final = params[:final] == 'true'
       order = [
@@ -36,7 +36,10 @@ module Reports::WeaknessesBrief
         finals(final).
         list_with_final_review.
         by_issue_date('BETWEEN', @from_date, @to_date).
-        includes(review: :conclusion_final_review, finding_user_assignments: :user)
+        includes(
+          review: [:conclusion_final_review, :plan_item],
+          finding_user_assignments: :user
+        )
 
       @weaknesses = weaknesses.reorder order
     end
@@ -56,6 +59,7 @@ module Reports::WeaknessesBrief
     def weaknesses_brief_csv_headers
       [
         Review.model_name.human,
+        PlanItem.human_attribute_name('project'),
         Weakness.human_attribute_name('title'),
         Weakness.human_attribute_name('description'),
         Weakness.human_attribute_name('risk'),
@@ -63,7 +67,8 @@ module Reports::WeaknessesBrief
         FindingUserAssignment.human_attribute_name('process_owner'),
         ConclusionFinalReview.human_attribute_name('issue_date'),
         Weakness.human_attribute_name('first_follow_up_date'),
-        Weakness.human_attribute_name('follow_up_date')
+        Weakness.human_attribute_name('follow_up_date'),
+        t("#{@controller}_committee_report.weaknesses_brief.distance_to_cut_date")
       ]
     end
 
@@ -71,6 +76,7 @@ module Reports::WeaknessesBrief
       @weaknesses.map do |weakness|
         [
           weakness.review.identification,
+          weakness.review.plan_item.project,
           weakness.title,
           weakness.description,
           weakness.risk_text,
@@ -78,7 +84,8 @@ module Reports::WeaknessesBrief
           weaknesses_brief_audit_users(weakness).join("\n"),
           l(weakness.review.conclusion_final_review.issue_date),
           (weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-'),
-          (weakness.follow_up_date ? l(weakness.follow_up_date) : '-')
+          (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
+          distance_in_days_to_cut_date(weakness)
         ]
       end
     end
@@ -88,6 +95,18 @@ module Reports::WeaknessesBrief
         finding_user_assignments.
         select { |fua| fua.user.can_act_as_audited? }.
         map(&:user).
-        map(&:full_name) 
+        map(&:full_name)
+    end
+
+    def distance_in_days_to_cut_date weakness
+      if weakness.first_follow_up_date
+        ((@cut_date - weakness.first_follow_up_date).days / 1.day).abs.to_i
+      end
+    end
+
+    def extract_cut_date parameters
+      cut_date = Timeliness.parse parameters[:cut_date], :date if parameters
+
+      cut_date&.to_date || Time.zone.today
     end
 end

@@ -199,6 +199,7 @@ es:
     weaknesses_graphs: "Gráfico de observaciones"
     from_date: "Desde"
     to_date: "Hasta"
+    cut_date: "Fecha cierre antigua data"
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
@@ -638,6 +639,7 @@ es:
     not_expired: "No vencida"
     from_date: "Desde"
     to_date: "Hasta"
+    cut_date: "Fecha cierre antigua data"
     print_date: "Fecha de impresión: %{date}"
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
