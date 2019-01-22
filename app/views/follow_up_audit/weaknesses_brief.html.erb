@@ -38,7 +38,7 @@
             <td><%= weakness.description %></td>
             <td><%= weakness.risk_text %></td>
             <td><%= weakness.audit_comments %></td>
-            <td><%= array_to_ul weaknesses_brief_audit_users(weakness) %></td>
+            <td><%= array_to_ul weaknesses_brief_audit_users(weakness), class: 'list-unstyled' %></td>
             <td><%= l weakness.review.conclusion_final_review.issue_date %></td>
             <td><%= weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-' %></td>
             <td><%= weakness.follow_up_date ? l(weakness.follow_up_date) : '-' %></td>
