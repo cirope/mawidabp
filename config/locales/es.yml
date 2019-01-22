@@ -820,7 +820,7 @@
     weaknesses_brief:
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      distance_to_cut_date: "Días de antigüedad"
+      distance_to_cut_date: "Antigua data"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
