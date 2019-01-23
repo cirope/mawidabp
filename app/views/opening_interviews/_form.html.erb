@@ -1,0 +1,55 @@
+<%= simple_form_for @opening_interview do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <% if @opening_interview.new_record? %>
+          <%= opening_interview_review_field f %>
+        <% else %>
+          <%= f.input :review_description, label: OpeningInterviewUser.human_attribute_name('review'),
+            input_html: { value: @opening_interview.review, readonly: true } %>
+        <% end %>
+        <%= f.input :interview_date, as: :date_picker %>
+        <%= f.input :start_date, as: :date_picker %>
+        <%= f.input :end_date, as: :date_picker %>
+        <%= f.input :objective, input_html: { rows: 4 } %>
+        <%= f.input :program, input_html: { rows: 4 } %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :scope, input_html: { rows: 5 } %>
+        <%= f.input :suggestions, input_html: { rows: 5 } %>
+        <%= f.input :comments, input_html: { rows: 6 } %>
+      </div>
+    </div>
+
+    <%= f.input :lock_version, as: :hidden %>
+
+    <h4>
+      <%= OpeningInterviewUser.model_name.human count: 0 %>
+    </h4>
+
+    <div class="row">
+      <div class="col-md-6">
+        <h5><strong><%= OpeningInterviewUser.human_attribute_name 'user' %></strong></h5>
+      </div>
+    </div>
+
+    <div id="opening_interview_users">
+      <%= f.simple_fields_for :opening_interview_users do |oiu_f| %>
+        <%= render 'opening_interview_user', f: oiu_f %>
+      <% end %>
+
+      <p>
+        <%= link_to_add_fields t('.add_opening_interview_user'), f, :opening_interview_users %>
+      </p>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="form-actions">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.button :submit, class: 'btn-primary' %>
+  </div>
+<% end %>

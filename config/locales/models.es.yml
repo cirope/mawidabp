@@ -66,6 +66,12 @@ es:
       news:
         one: 'Noticia'
         other: 'Noticias'
+      opening_interview:
+        one: 'Entrevista de inicio'
+        other: 'Entrevistas de inicio'
+      opening_interview_user:
+        one: 'Asistente a la entrevista'
+        other: 'Asistentes a la entrevista'
       oportunity:
         one: 'Oportunidad de mejora'
         other: 'Oportunidades de mejora'
@@ -318,6 +324,19 @@ es:
         body: 'Cuerpo'
         shared: 'Compartida'
         published_at: 'Fecha de publicación'
+      opening_interview:
+        interview_date: 'Fecha de entrevista'
+        start_date: 'Fecha estimada de inicio'
+        end_date: 'Fecha estimada de cierre'
+        objective: 'Objetivo de la auditoría'
+        program: 'Programa de trabajo'
+        scope: 'Alcance de la auditoría'
+        suggestions: 'Sugerencias e inquietudes'
+        comments: 'Comentarios adicionales'
+        review: 'Informe'
+        review_id: 'Informe'
+      opening_interview_user:
+        user: 'Usuario'
       oportunity:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'

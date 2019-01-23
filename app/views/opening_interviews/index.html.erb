@@ -1,0 +1,35 @@
+<% if @opening_interviews.empty? %>
+  <%= render 'shared/empty_index', message: t('.empty_html') %>
+<% else %>
+  <table class="table table-condensed table-striped table-hover">
+    <thead>
+      <tr>
+        <th><%= OpeningInterview.human_attribute_name 'review_id' %></th>
+        <th><%= OpeningInterview.human_attribute_name 'interview_date' %></th>
+        <th><%= OpeningInterview.human_attribute_name 'start_date' %></th>
+        <th><%= OpeningInterview.human_attribute_name 'end_date' %></th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @opening_interviews.each do |opening_interview| %>
+        <tr>
+          <td><%= opening_interview.review.identification %></td>
+          <td><%= l opening_interview.interview_date %></td>
+          <td><%= l opening_interview.start_date %></td>
+          <td><%= l opening_interview.end_date %></td>
+          <td><%= link_to_show opening_interview %></td>
+          <td><%= link_to_edit [:edit, opening_interview] %></td>
+          <td><%= link_to_destroy opening_interview %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= paginate @opening_interviews %>
+<% end %>
+
+<hr>
+
+<%= link_to_new new_opening_interview_path, class: 'btn btn-primary' %>

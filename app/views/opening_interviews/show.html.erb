@@ -1,0 +1,96 @@
+<h2><%= @opening_interview.review %></h2>
+
+<p>
+  <strong><%= OpeningInterview.human_attribute_name 'interview_date' %></strong>:
+  <%= l @opening_interview.interview_date %>
+</p>
+
+<p>
+  <strong><%= OpeningInterview.human_attribute_name 'start_date' %></strong>:
+  <%= l @opening_interview.start_date %>
+</p>
+
+<p>
+  <strong><%= OpeningInterview.human_attribute_name 'end_date' %></strong>:
+  <%= l @opening_interview.end_date %>
+</p>
+
+<div>
+  <p>
+    <strong><%= OpeningInterview.human_attribute_name 'objective' %></strong>:
+  </p>
+
+  <%= simple_format @opening_interview.objective %>
+</div>
+
+<div>
+  <p>
+    <strong><%= OpeningInterview.human_attribute_name 'program' %></strong>:
+  </p>
+
+  <%= simple_format @opening_interview.program %>
+</div>
+
+<div>
+  <p>
+    <strong><%= OpeningInterview.human_attribute_name 'scope' %></strong>:
+  </p>
+
+  <%= simple_format @opening_interview.scope %>
+</div>
+
+<div>
+  <p>
+    <strong><%= OpeningInterview.human_attribute_name 'suggestions' %></strong>:
+  </p>
+
+  <%= simple_format @opening_interview.suggestions %>
+</div>
+
+<div>
+  <p>
+    <strong><%= OpeningInterview.human_attribute_name 'comments' %></strong>:
+  </p>
+
+  <%= simple_format @opening_interview.comments %>
+</div>
+
+<h4>
+  <%= t '.auditeds' %>
+</h4>
+
+<ul>
+  <% @opening_interview.review.users.select(&:can_act_as_audited?).each do |user| %>
+    <li><%= user.full_name %></li>
+  <% end %>
+</ul>
+
+<h4>
+  <%= t '.auditors' %>
+</h4>
+
+<ul>
+  <% @opening_interview.review.users.reject(&:can_act_as_audited?).each do |user| %>
+    <li><%= user.full_name %></li>
+  <% end %>
+</ul>
+
+<% if @opening_interview.users.any? %>
+  <h4>
+    <%= OpeningInterviewUser.model_name.human count: 0 %>
+  </h4>
+
+  <ul>
+    <% @opening_interview.users.each do |user| %>
+      <li><%= user.full_name %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<hr>
+
+<div>
+  <%= link_to_edit [:edit, @opening_interview] %> |
+  <%= link_to t('.download_pdf'), [@opening_interview, _ts: Time.now.to_i, format: :pdf] %> |
+  <%= link_to_index opening_interviews_path %>
+</div>

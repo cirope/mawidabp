@@ -173,6 +173,26 @@ es:
     show:
       title: 'Ver noticia'
 
+  opening_interviews:
+    edit:
+      title: 'Editar entrevista de inicio'
+    index:
+      new: 'Nueva entrevista de inicio'
+      title: 'Listado de entrevistas de inicio'
+      empty_html: 'No hay entrevistas de inicio, puede crear una con el botón <span class="label label-primary">Nueva entrevista de inicio</span>'
+      empty_search_html: 'No hay entrevistas de inicio que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear entrevista de inicio'
+    form:
+      add_opening_interview_user: 'Agregar asistente'
+    show:
+      title: 'Ver entrevista de inicio'
+      auditeds: 'Responsables del ciclo'
+      auditors: 'Auditores asignados'
+      download_pdf: 'Descargar PDF'
+    pdf:
+      pdf_name: 'entrevista_de_inicio_%{name}.pdf'
+
   organizations:
     index:
       title: 'Listado de organizaciones'

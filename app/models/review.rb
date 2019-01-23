@@ -15,6 +15,7 @@ class Review < ApplicationRecord
   include Reviews::FindingCode
   include Reviews::Findings
   include Reviews::FinishedWorkPapers
+  include Reviews::Interviews
   include Reviews::IssueDate
   include Reviews::Overrides
   include Reviews::PlanItem

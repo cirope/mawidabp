@@ -1,0 +1,78 @@
+require 'test_helper'
+
+class OpeningInterviewsControllerTest < ActionController::TestCase
+  setup do
+    @opening_interview = opening_interviews :current
+
+    login
+  end
+
+  test 'should get index' do
+    get :index
+    assert_response :success
+    assert_not_nil assigns(:opening_interviews)
+  end
+
+  test 'should get new' do
+    get :new
+    assert_response :success
+  end
+
+  test 'should create opening interview' do
+    counts = ['OpeningInterview.count', 'OpeningInterviewUser.count']
+
+    assert_difference counts do
+      post :create, params: {
+        opening_interview: {
+          review_id:      reviews(:current_review).id,
+          interview_date: I18n.l(Time.zone.today),
+          start_date:     I18n.l(2.days.ago.to_date),
+          end_date:       I18n.l(2.days.from_now.to_date),
+          objective:      'Interview objective',
+          program:        'Interview program',
+          scope:          'Interview scope',
+          suggestions:    'Interview suggestions',
+          comments:       'Interview comments',
+          opening_interview_users_attributes: [
+            { user_id: users(:administrator).id }
+          ]
+        }
+      }
+    end
+
+    assert_redirected_to opening_interview_url(assigns(:opening_interview))
+  end
+
+  test 'should show opening interview' do
+    get :show, params: { id: @opening_interview }
+    assert_response :success
+  end
+
+  test 'should show opening interview as PDF' do
+    get :show, params: { id: @opening_interview }, as: :pdf
+    assert_response :redirect
+    assert_equal Mime[:pdf], @response.content_type
+  end
+
+  test 'should get edit' do
+    get :edit, params: { id: @opening_interview }
+    assert_response :success
+  end
+
+  test 'should update opening interview' do
+    patch :update, params: {
+      id: @opening_interview, opening_interview: { objective: 'New objective' }
+    }
+
+    assert_redirected_to opening_interview_url(assigns(:opening_interview))
+    assert_equal 'New objective', @opening_interview.reload.objective
+  end
+
+  test 'should destroy opening interview' do
+    assert_difference 'OpeningInterview.count', -1 do
+      delete :destroy, params: { id: @opening_interview }
+    end
+
+    assert_redirected_to opening_interviews_url
+  end
+end

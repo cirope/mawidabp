@@ -36,6 +36,7 @@
 //= require findings
 //= require news
 //= require organizations
+//= require opening_interviews
 //= require plans
 //= require plans/resources
 //= require plans/stats

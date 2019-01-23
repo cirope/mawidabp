@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_07_151054) do
+ActiveRecord::Schema.define(version: 2019_01_22_193410) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -512,6 +512,33 @@ ActiveRecord::Schema.define(version: 2019_01_07_151054) do
     t.datetime "updated_at", null: false
     t.index ["created_at"], name: "index_old_passwords_on_created_at"
     t.index ["user_id"], name: "index_old_passwords_on_user_id"
+  end
+
+  create_table "opening_interview_users", force: :cascade do |t|
+    t.bigint "opening_interview_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["opening_interview_id"], name: "index_opening_interview_users_on_opening_interview_id"
+    t.index ["user_id"], name: "index_opening_interview_users_on_user_id"
+  end
+
+  create_table "opening_interviews", force: :cascade do |t|
+    t.date "interview_date", null: false
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.text "objective", null: false
+    t.text "program"
+    t.text "scope"
+    t.text "suggestions"
+    t.text "comments"
+    t.integer "lock_version", default: 0, null: false
+    t.bigint "organization_id", null: false
+    t.bigint "review_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_opening_interviews_on_organization_id"
+    t.index ["review_id"], name: "index_opening_interviews_on_review_id"
   end
 
   create_table "organization_roles", id: :serial, force: :cascade do |t|
@@ -1023,6 +1050,10 @@ ActiveRecord::Schema.define(version: 2019_01_07_151054) do
   add_foreign_key "notifications", "users", column: "user_who_confirm_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "notifications", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "old_passwords", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "opening_interview_users", "opening_interviews", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "opening_interview_users", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "opening_interviews", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "opening_interviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "organization_roles", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "organization_roles", "roles", on_update: :restrict, on_delete: :restrict
   add_foreign_key "organization_roles", "users", on_update: :restrict, on_delete: :restrict

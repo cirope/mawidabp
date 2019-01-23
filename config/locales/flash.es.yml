@@ -42,6 +42,13 @@ es:
         notice: 'Noticia eliminada'
         alert: 'La noticia no pudo ser eliminada'
 
+    opening_interviews:
+      create:
+        notice: 'Entrevista de inicio agregada correctamente'
+      update:
+        notice: 'Entrevista de inicio actualizada correctamente'
+        stale: 'La entrevista de inicio no fue actualizada, intente nuevamente'
+
     organizations:
       create:
         notice: 'Organización agregada correctamente'
