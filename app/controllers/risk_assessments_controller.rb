@@ -141,7 +141,9 @@ class RiskAssessmentsController < ApplicationController
     def risk_assessment_pdf_path
       @risk_assessment.to_pdf current_organization
 
-      @risk_assessment.relative_pdf_path
+      @risk_assessment.relative_pdf_path.tap do |path|
+        FileRemoveJob.set(wait: 15.minutes).perform_later path
+      end
     end
 
     def load_privileges

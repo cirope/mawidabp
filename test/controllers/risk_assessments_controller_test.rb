@@ -82,7 +82,8 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
 
   test 'should show risk assessment as PDF' do
     get :show, params: { id: @risk_assessment }, as: :pdf
-    assert_redirected_to @risk_assessment.relative_pdf_path
+    assert_response :redirect
+    assert_equal Mime[:pdf], @response.content_type
   end
 
   test 'should show risk assessment as CSV' do
