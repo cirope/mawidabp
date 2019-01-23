@@ -537,6 +537,7 @@ ActiveRecord::Schema.define(version: 2019_01_22_193410) do
     t.bigint "review_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["interview_date"], name: "index_opening_interviews_on_interview_date"
     t.index ["organization_id"], name: "index_opening_interviews_on_organization_id"
     t.index ["review_id"], name: "index_opening_interviews_on_review_id"
   end

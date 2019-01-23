@@ -29,6 +29,14 @@ class OpeningInterviewTest < ActiveSupport::TestCase
     assert_error @opening_interview, :end_date, :invalid_date
   end
 
+  test 'relative date attributes' do
+    @opening_interview.end_date = @opening_interview.start_date - 1.day
+
+    assert @opening_interview.invalid?
+    assert_error @opening_interview, :end_date, :on_or_after,
+      restriction: I18n.l(@opening_interview.start_date)
+  end
+
   test 'attributes encoding' do
     @opening_interview.objective = "\n\t"
     @opening_interview.program = "\n\t"
