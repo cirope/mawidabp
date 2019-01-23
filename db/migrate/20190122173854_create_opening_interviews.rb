@@ -17,5 +17,7 @@ class CreateOpeningInterviews < ActiveRecord::Migration[5.2]
 
       t.timestamps null: false
     end
+
+    add_index :opening_interviews, :interview_date
   end
 end

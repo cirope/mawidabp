@@ -7,7 +7,14 @@ class OpeningInterviewsController < ApplicationController
 
   # GET /opening_interviews
   def index
-    @opening_interviews = OpeningInterview.list.page params[:page]
+    build_search_conditions OpeningInterview
+
+    @opening_interviews = OpeningInterview.list.
+      includes(review: :plan_item).
+      references(:reviews, :plan_items).
+      where(@conditions).
+      order(interview_date: :desc).
+      page params[:page]
   end
 
   # GET /opening_interviews/1

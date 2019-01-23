@@ -13,6 +13,18 @@ class OpeningInterviewsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:opening_interviews)
   end
 
+  test 'should get filtered index' do
+    get :index, params: {
+      search: {
+        query: '1 2 3',
+        columns: ['review']
+      }
+    }
+    assert_response :success
+    assert_not_nil assigns(:opening_interviews)
+    assert_equal 1, assigns(:opening_interviews).count
+  end
+
   test 'should get new' do
     get :new
     assert_response :success
