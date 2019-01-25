@@ -10,12 +10,12 @@
           <%= f.input :review_description, label: ClosingInterview.human_attribute_name('review'),
             input_html: { value: @closing_interview.review, readonly: true } %>
         <% end %>
-        <%= f.input :interview_date, as: :date_picker %>
         <%= f.input :findings_summary, input_html: { rows: 4 } %>
         <%= f.input :recommendations_summary, input_html: { rows: 4 } %>
+        <%= f.input :suggestions, input_html: { rows: 4 } %>
       </div>
       <div class="col-md-6">
-        <%= f.input :suggestions, input_html: { rows: 4 } %>
+        <%= f.input :interview_date, as: :date_picker %>
         <%= f.input :comments, input_html: { rows: 4 } %>
         <%= f.input :audit_comments, input_html: { rows: 4 } %>
         <%= f.input :responsible_comments, input_html: { rows: 4 } %>
