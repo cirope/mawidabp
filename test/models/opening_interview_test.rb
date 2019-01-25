@@ -21,10 +21,12 @@ class OpeningInterviewTest < ActiveSupport::TestCase
   end
 
   test 'formated attributes' do
+    @opening_interview.interview_date = '13/13/13'
     @opening_interview.start_date = '13/13/13'
     @opening_interview.end_date = '13/13/13'
 
     assert @opening_interview.invalid?
+    assert_error @opening_interview, :interview_date, :invalid_date
     assert_error @opening_interview, :start_date, :invalid_date
     assert_error @opening_interview, :end_date, :invalid_date
   end

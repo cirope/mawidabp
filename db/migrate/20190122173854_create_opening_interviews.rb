@@ -10,9 +10,9 @@ class CreateOpeningInterviews < ActiveRecord::Migration[5.2]
       t.text :suggestions
       t.text :comments
       t.integer :lock_version, null: false, default: 0
-      t.references :organization, null: false, index: true,
-        foreign_key: FOREIGN_KEY_OPTIONS.dup
       t.references :review, null: false, index: true,
+        foreign_key: FOREIGN_KEY_OPTIONS.dup
+      t.references :organization, null: false, index: true,
         foreign_key: FOREIGN_KEY_OPTIONS.dup
 
       t.timestamps null: false

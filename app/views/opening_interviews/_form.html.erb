@@ -7,7 +7,7 @@
         <% if @opening_interview.new_record? %>
           <%= opening_interview_review_field f %>
         <% else %>
-          <%= f.input :review_description, label: OpeningInterviewUser.human_attribute_name('review'),
+          <%= f.input :review_description, label: OpeningInterview.human_attribute_name('review'),
             input_html: { value: @opening_interview.review, readonly: true } %>
         <% end %>
         <%= f.input :interview_date, as: :date_picker %>
