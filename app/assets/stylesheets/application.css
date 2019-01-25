@@ -11,6 +11,7 @@
  *= require autocomplete
  *= require main
  *= require graph
+ *= require closing_interviews
  *= require documents
  *= require news
  *= require opening_interviews

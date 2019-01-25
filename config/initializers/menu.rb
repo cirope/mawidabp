@@ -249,6 +249,12 @@ APP_AUDITOR_MENU_ITEMS = [
             order: 1,
             controllers: :opening_interviews,
             url: { controller: '/opening_interviews' }
+          ),
+          MenuItem.new(
+            :closing_interviews,
+            order: 2,
+            controllers: :closing_interviews,
+            url: { controller: '/closing_interviews' }
           )
         ]
       ),

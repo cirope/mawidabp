@@ -1,0 +1,94 @@
+<h2><%= @closing_interview.review %></h2>
+
+<p>
+  <strong><%= ClosingInterview.human_attribute_name 'interview_date' %></strong>:
+  <%= l @closing_interview.interview_date %>
+</p>
+
+<div>
+  <p>
+    <strong><%= ClosingInterview.human_attribute_name 'findings_summary' %></strong>:
+  </p>
+
+  <%= simple_format @closing_interview.findings_summary %>
+</div>
+
+<div>
+  <p>
+    <strong><%= ClosingInterview.human_attribute_name 'recommendations_summary' %></strong>:
+  </p>
+
+  <%= simple_format @closing_interview.recommendations_summary %>
+</div>
+
+<div>
+  <p>
+    <strong><%= ClosingInterview.human_attribute_name 'suggestions' %></strong>:
+  </p>
+
+  <%= simple_format @closing_interview.suggestions %>
+</div>
+
+<div>
+  <p>
+    <strong><%= ClosingInterview.human_attribute_name 'comments' %></strong>:
+  </p>
+
+  <%= simple_format @closing_interview.comments %>
+</div>
+
+<div>
+  <p>
+    <strong><%= ClosingInterview.human_attribute_name 'audit_comments' %></strong>:
+  </p>
+
+  <%= simple_format @closing_interview.audit_comments %>
+</div>
+
+<div>
+  <p>
+    <strong><%= ClosingInterview.human_attribute_name 'responsible_comments' %></strong>:
+  </p>
+
+  <%= simple_format @closing_interview.responsible_comments %>
+</div>
+
+<h4>
+  <%= t '.auditeds' %>
+</h4>
+
+<ul>
+  <% @closing_interview.review.users.select(&:can_act_as_audited?).each do |user| %>
+    <li><%= user.full_name %></li>
+  <% end %>
+</ul>
+
+<h4>
+  <%= t '.auditors' %>
+</h4>
+
+<ul>
+  <% @closing_interview.review.users.reject(&:can_act_as_audited?).each do |user| %>
+    <li><%= user.full_name %></li>
+  <% end %>
+</ul>
+
+<% if @closing_interview.users.any? %>
+  <h4>
+    <%= ClosingInterviewUser.model_name.human count: 0 %>
+  </h4>
+
+  <ul>
+    <% @closing_interview.users.each do |user| %>
+      <li><%= user.full_name %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<hr>
+
+<div>
+  <%= link_to_edit [:edit, @closing_interview] %> |
+  <%= link_to t('.download_pdf'), [@closing_interview, _ts: Time.now.to_i, format: :pdf] %> |
+  <%= link_to_index closing_interviews_path %>
+</div>

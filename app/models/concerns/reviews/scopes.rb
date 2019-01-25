@@ -105,6 +105,12 @@ module Reviews::Scopes
       ).references(:opening_interviews)
     end
 
+    def list_all_without_closing_interview
+      list.includes(:closing_interviews).where(
+        ClosingInterview.table_name => { review_id: nil }
+      ).references(:closing_interviews)
+    end
+
     def list_by_issue_date_or_creation from_date, to_date
       start  = from_date.to_time.beginning_of_day
       finish = to_date.to_time.end_of_day

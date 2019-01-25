@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_22_193410) do
+ActiveRecord::Schema.define(version: 2019_01_25_151050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -133,6 +133,33 @@ ActiveRecord::Schema.define(version: 2019_01_22_193410) do
     t.datetime "updated_at", null: false
     t.index ["business_unit_type_id"], name: "index_business_units_on_business_unit_type_id"
     t.index ["name"], name: "index_business_units_on_name"
+  end
+
+  create_table "closing_interview_users", force: :cascade do |t|
+    t.bigint "closing_interview_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["closing_interview_id"], name: "index_closing_interview_users_on_closing_interview_id"
+    t.index ["user_id"], name: "index_closing_interview_users_on_user_id"
+  end
+
+  create_table "closing_interviews", force: :cascade do |t|
+    t.date "interview_date", null: false
+    t.text "findings_summary"
+    t.text "recommendations_summary"
+    t.text "suggestions"
+    t.text "comments"
+    t.text "audit_comments"
+    t.text "responsible_comments"
+    t.integer "lock_version", default: 0, null: false
+    t.bigint "review_id", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["interview_date"], name: "index_closing_interviews_on_interview_date"
+    t.index ["organization_id"], name: "index_closing_interviews_on_organization_id"
+    t.index ["review_id"], name: "index_closing_interviews_on_review_id"
   end
 
   create_table "comments", id: :serial, force: :cascade do |t|
@@ -533,8 +560,8 @@ ActiveRecord::Schema.define(version: 2019_01_22_193410) do
     t.text "suggestions"
     t.text "comments"
     t.integer "lock_version", default: 0, null: false
-    t.bigint "organization_id", null: false
     t.bigint "review_id", null: false
+    t.bigint "organization_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["interview_date"], name: "index_opening_interviews_on_interview_date"
@@ -1017,6 +1044,10 @@ ActiveRecord::Schema.define(version: 2019_01_22_193410) do
   add_foreign_key "business_unit_scores", "control_objective_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_types", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_units", "business_unit_types", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "closing_interview_users", "closing_interviews", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "closing_interview_users", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "closing_interviews", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "closing_interviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "comments", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "conclusion_reviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "control_objectives", on_update: :restrict, on_delete: :restrict

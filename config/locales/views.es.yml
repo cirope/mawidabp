@@ -60,6 +60,26 @@ es:
     control_objectives:
       new: 'Agregar objetivo'
 
+  closing_interviews:
+    edit:
+      title: 'Editar entrevista de cierre'
+    index:
+      new: 'Nueva entrevista de cierre'
+      title: 'Listado de entrevistas de cierre'
+      empty_html: 'No hay entrevistas de cierre, puede crear una con el botón <span class="label label-primary">Nueva entrevista de cierre</span>'
+      empty_search_html: 'No hay entrevistas de cierre que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear entrevista de cierre'
+    form:
+      add_closing_interview_user: 'Agregar asistente'
+    show:
+      title: 'Ver entrevista de cierre'
+      auditeds: 'Responsables del ciclo'
+      auditors: 'Auditores asignados'
+      download_pdf: 'Descargar PDF'
+    pdf:
+      pdf_name: 'entrevista_de_cierre_%{name}.pdf'
+
   control_objectives:
     index:
       title: 'Listado de objetivos de control'

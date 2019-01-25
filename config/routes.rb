@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :benefits
 
   resources :opening_interviews
+  resources :closing_interviews
 
   resources :risk_assessments do
     member do

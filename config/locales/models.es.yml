@@ -39,6 +39,12 @@ es:
       business_unit_score:
         one: 'Calificación unidad de negocio'
         other: 'Calificaciones de unidades de negocio'
+      closing_interview:
+        one: 'Entrevista de cierre'
+        other: 'Entrevistas de cierre'
+      closing_interview_user:
+        one: 'Asistente a la entrevista'
+        other: 'Asistentes a la entrevista'
       control_objective:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
@@ -186,6 +192,18 @@ es:
         design_score: 'Calificación pruebas de diseño'
         compliance_score: 'Calificación pruebas de cumplimiento'
         sustantive_score: 'Calificación pruebas sustantivas'
+      closing_interview:
+        interview_date: 'Fecha de entrevista'
+        findings_summary: 'Resumen de hallazgos'
+        recommendations_summary: 'Resumen de recomendaciones'
+        suggestions: 'Sugerencias e inquietudes'
+        comments: 'Comentarios adicionales'
+        audit_comments: 'Comentarios de auditoría'
+        responsible_comments: 'Comentarios del responsable'
+        review: 'Informe'
+        review_id: 'Informe'
+      closing_interview_user:
+        user: 'Usuario'
       control_objective:
         name: 'Objetivo de control'
         relevance: 'Importancia'

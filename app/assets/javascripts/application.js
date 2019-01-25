@@ -30,6 +30,7 @@
 //= require filters
 //= require file_input
 //= require best_practices
+//= require closing_interviews
 //= require conclusion_draft_reviews
 //= require control_objective_items
 //= require documents
