@@ -19,14 +19,14 @@ module ClosingInterviewsHelper
 
   def closing_interview_recommendations_summary
     closing_interview_weaknesses.map do |w|
-      w.audit_recommendations
-    end.join "\n\n"
+      w.audit_recommendations.presence
+    end.compact.join "\n\n"
   end
 
   def closing_interview_suggestions
     closing_interview_weaknesses.map do |w|
-      w.answer
-    end.join "\n\n"
+      w.answer.presence
+    end.compact.join "\n\n"
   end
 
   private
