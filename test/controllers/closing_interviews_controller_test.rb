@@ -30,6 +30,17 @@ class ClosingInterviewsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'should get new as JS' do
+    get :new, params: { review_id: @closing_interview.review_id }, xhr: true,
+      as: :js
+    assert_response :success
+    assert_equal Mime[:js], @response.content_type
+
+    get :new, params: { review_id: nil}, xhr: true, as: :js
+    assert_response :success
+    assert_equal Mime[:js], @response.content_type
+  end
+
   test 'should create closing interview' do
     counts = ['ClosingInterview.count', 'ClosingInterviewUser.count']
 

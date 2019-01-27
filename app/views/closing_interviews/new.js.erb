@@ -1,0 +1,15 @@
++function () {
+  var $findings_summary        = $('#closing_interview_findings_summary')
+  var $recommendations_summary = $('#closing_interview_recommendations_summary')
+  var $suggestions             = $('#closing_interview_suggestions')
+
+  <% if @review %>
+    $findings_summary.val('<%= j closing_interview_findings_summary %>')
+    $recommendations_summary.val('<%= j closing_interview_recommendations_summary %>')
+    $suggestions.val('<%= j closing_interview_suggestions %>')
+  <% else %>
+    $findings_summary.val('')
+    $recommendations_summary.val('')
+    $suggestions.val('')
+  <% end %>
+}()

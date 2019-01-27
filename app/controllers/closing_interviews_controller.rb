@@ -1,5 +1,5 @@
 class ClosingInterviewsController < ApplicationController
-  respond_to :html
+  respond_to :html, :js
 
   before_action :auth, :check_privileges
   before_action :set_closing_interview, only: [:show, :edit, :update, :destroy]
@@ -28,6 +28,11 @@ class ClosingInterviewsController < ApplicationController
   # GET /closing_interviews/new
   def new
     @closing_interview = ClosingInterview.list.new
+
+    respond_to do |format|
+      format.html
+      format.js   { @review = Review.list.find_by id: params[:review_id] }
+    end
   end
 
   # GET /closing_interviews/1/edit
