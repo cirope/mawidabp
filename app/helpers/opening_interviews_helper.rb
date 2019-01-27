@@ -3,13 +3,12 @@ module OpeningInterviewsHelper
     reviews    = Review.list_all_without_opening_interview.order :identification
     collection = reviews.map { |r| [r.identification, r.id] }
 
-    f.input :review_id, collection: collection, prompt: true,
-      input_html: {
-        autofocus: true,
-        data: {
-          opening_interview_review_url: new_opening_interview_path(format: :js)
-        }
+    f.input :review_id, collection: collection, prompt: true, input_html: {
+      autofocus: true,
+      data: {
+        opening_interview_review_url: new_opening_interview_path(format: :js)
       }
+    }
   end
 
   def opening_interview_program
