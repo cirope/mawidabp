@@ -28,6 +28,11 @@ class OpeningInterviewsController < ApplicationController
   # GET /opening_interviews/new
   def new
     @opening_interview = OpeningInterview.list.new
+
+    respond_to do |format|
+      format.html
+      format.js   { @review = Review.list.find_by id: params[:review_id] }
+    end
   end
 
   # GET /opening_interviews/1/edit

@@ -1,0 +1,9 @@
++function () {
+  var $program = $('#opening_interview_program')
+
+  <% if @review %>
+    $program.val('<%= j opening_interview_program %>')
+  <% else %>
+    $program.val('')
+  <% end %>
+}()
