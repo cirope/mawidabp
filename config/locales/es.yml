@@ -818,6 +818,9 @@
       weakness_tags: "Etiquetas de observación"
       review_tags: "Etiquetas de informe"
     weaknesses_brief:
+      pdf_name: "resumen_de_observaciones_pendientes_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "RESUMEN DE OBSERVACIONES PENDIENTES / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       distance_to_cut_date: "Antigua data"
