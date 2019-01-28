@@ -1,0 +1,18 @@
+<% if @oportunity %>
+  $('[name$="[title]"]').val("<%== j @oportunity.title %>").trigger('change')
+  $('[name$="[description]"]').val("<%== j @oportunity.description %>").trigger('change')
+  $('[name$="[answer]"]').val("<%== j @oportunity.answer %>").trigger('change')
+  $('[name$="[audit_comments]"]').val("<%== j @oportunity.audit_comments %>").trigger('change')
+
+  <% %w(follow_up_date origination_date).each do |date_field| %>
+    var <%= date_field %>Date = new Date('<%= @oportunity.attributes[date_field]&.to_s(:db) %>')
+
+    <%= date_field %>Date.setMinutes(new Date().getTimezoneOffset())
+
+    $('[name$="[<%= date_field %>]"]').datepicker()
+    $('[name$="[<%= date_field %>]"]').datepicker('setDate', <%= date_field %>Date)
+  <% end %>
+
+  $('[name$="[origination_date]"]').prop('readonly', true)
+<% end %>
+

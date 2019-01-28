@@ -1,1 +1,0 @@
-json.extract! @weakness, :id, :review_code, :title, :description, :effect, :audit_recommendations, :origination_date, :risk, :priority, :state, :answer, :follow_up_date, :solution_date, :audit_comments, :compliance, :impact, :operational_risk, :internal_control_components

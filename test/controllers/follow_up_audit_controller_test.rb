@@ -1026,6 +1026,29 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/weaknesses_brief'
   end
 
+  test 'weaknesses brief with cut date' do
+    login
+
+    get :weaknesses_brief
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_brief'
+
+    assert_nothing_raised do
+      get :weaknesses_brief, :params => {
+        :weaknesses_brief => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date,
+          :cut_date => 10.days.ago.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }
+    end
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_brief'
+  end
+
   test 'weaknesses brief as CSV' do
     login
 

@@ -195,7 +195,7 @@
     fixed_weaknesses: "Observaciones por riesgo solucionadas"
     from_date: "Desde"
     to_date: "Hasta"
-    invalid_dates: "Verifique el rango de fechas, no es válido."
+    cut_date: "Fecha cierre antigua data"
     applied_filters:
       one: "En este reporte se ha aplicado el siguiente filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
@@ -718,7 +718,7 @@
     not_expired: "No vencida"
     from_date: "Desde"
     to_date: "Hasta"
-    invalid_dates: "Verifique el rango de fechas, no es válido."
+    cut_date: "Fecha cierre antigua data"
     print_date: "Fecha de impresión: %{date}"
     applied_filters:
       one: "En este reporte se ha aplicado el siguiente filtro: %{filters}"
@@ -820,6 +820,7 @@
     weaknesses_brief:
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
+      distance_to_cut_date: "Antigua data"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
