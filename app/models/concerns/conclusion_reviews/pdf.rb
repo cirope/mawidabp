@@ -4,7 +4,7 @@ module ConclusionReviews::PDF
   def to_pdf organization = nil, *args
     type = SHOW_CONCLUSION_ALTERNATIVE_PDF || 'default'
 
-    send "#{SHOW_CONCLUSION_ALTERNATIVE_PDF}_pdf", organization, *args
+    send "#{type}_pdf", organization, *args
   end
 
   def absolute_pdf_path
