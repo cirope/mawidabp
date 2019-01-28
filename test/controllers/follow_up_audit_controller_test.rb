@@ -1071,6 +1071,27 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_equal Mime[:csv], @response.content_type
   end
 
+  test 'create weaknesses brief' do
+    login
+
+    get :create_weaknesses_brief, :params => {
+      :weaknesses_brief => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('follow_up_committee_report.weaknesses_brief.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'weaknesses_brief', 0)
+  end
+
   test 'fixed weaknesses report' do
     login
 

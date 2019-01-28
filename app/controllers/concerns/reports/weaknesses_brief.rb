@@ -1,6 +1,8 @@
 module Reports::WeaknessesBrief
   extend ActiveSupport::Concern
 
+  include ActionView::Helpers::TextHelper
+  include Reports::PDF
   include Reports::Period
 
   def weaknesses_brief
@@ -12,6 +14,21 @@ module Reports::WeaknessesBrief
         render csv: weaknesses_brief_csv, filename: @title.downcase
       end
     end
+  end
+
+  def create_weaknesses_brief
+    init_weaknesses_brief_vars
+
+    pdf = init_pdf params[:report_title], params[:report_subtitle]
+
+    add_pdf_description pdf, @controller, @from_date, @to_date
+
+    add_weaknesses_brief pdf
+
+    add_pdf_filters pdf, @controller, @filters if @filters.present?
+
+    save_pdf pdf, @controller, @from_date, @to_date, 'weaknesses_brief'
+    redirect_to_pdf @controller, @from_date, @to_date, 'weaknesses_brief'
   end
 
   private
@@ -110,5 +127,73 @@ module Reports::WeaknessesBrief
       cut_date = Timeliness.parse parameters[:cut_date], :date if parameters
 
       cut_date&.to_date || Time.zone.today
+    end
+
+    def add_weaknesses_brief pdf
+      pdf.move_down PDF_FONT_SIZE
+
+      if @weaknesses.present?
+        add_weaknesses_brief_table pdf
+      else
+        pdf.text t("#{@controller}_committee_report.weaknesses_brief.without_weaknesses"),
+          style: :italic
+      end
+    end
+
+    def add_weaknesses_brief_table pdf
+      pdf.font_size (PDF_FONT_SIZE * 0.5).round do
+        table_options = pdf.default_table_options weaknesses_brief_column_widths(pdf)
+
+        pdf.table(weaknesses_brief_data(pdf), table_options) do
+          row(0).style(
+            background_color: 'cccccc',
+            padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          )
+        end
+      end
+    end
+
+    def weaknesses_brief_columns
+      {
+        Review.model_name.human => 7,
+        PlanItem.human_attribute_name('project') => 9,
+        Weakness.human_attribute_name('title') => 10,
+        Weakness.human_attribute_name('description') => 15,
+        Weakness.human_attribute_name('risk') => 6,
+        Weakness.human_attribute_name('audit_comments') => 14,
+        FindingUserAssignment.human_attribute_name('process_owner') => 10,
+        ConclusionFinalReview.human_attribute_name('issue_date') => 8,
+        Weakness.human_attribute_name('first_follow_up_date') => 8,
+        Weakness.human_attribute_name('follow_up_date') => 8,
+        t('follow_up_committee_report.weaknesses_brief.distance_to_cut_date') => 5
+      }
+    end
+
+    def weaknesses_brief_column_widths pdf
+      weaknesses_brief_columns.map { |name, width| pdf.percent_width width }
+    end
+
+    def weaknesses_brief_column_headers pdf
+      weaknesses_brief_columns.map { |name, width| "<b>#{name}</b>" }
+    end
+
+    def weaknesses_brief_data pdf
+      data = @weaknesses.map do |weakness|
+        [
+          weakness.review.identification,
+          weakness.review.plan_item.project,
+          weakness.title,
+          truncate(weakness.description, length: 500),
+          weakness.risk_text,
+          truncate(weakness.audit_comments, length: 500),
+          weaknesses_brief_audit_users(weakness).join("\n"),
+          l(weakness.review.conclusion_final_review.issue_date),
+          (weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-'),
+          (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
+          distance_in_days_to_cut_date(weakness)
+        ]
+      end
+
+      data.insert 0, weaknesses_brief_column_headers(pdf)
     end
 end
