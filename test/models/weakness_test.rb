@@ -402,7 +402,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.effect = ' '
     @weakness.audit_comments = '  '
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF && HIDE_WEAKNESS_EFFECT
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal' && HIDE_WEAKNESS_EFFECT
       assert @weakness.must_be_approved?
     else
       refute @weakness.must_be_approved?

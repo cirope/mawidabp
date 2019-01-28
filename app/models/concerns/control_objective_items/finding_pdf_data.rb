@@ -146,7 +146,7 @@ module ControlObjectiveItems::FindingPDFData
     end
 
     def finding_origination_date_text_for finding
-      if !SHOW_CONCLUSION_ALTERNATIVE_PDF || finding.repeated_ancestors.present?
+      if SHOW_CONCLUSION_ALTERNATIVE_PDF != 'gal' || finding.repeated_ancestors.present?
         I18n.l finding.origination_date, format: :long
       else
         I18n.t 'conclusion_review.new_origination_date'
@@ -155,7 +155,7 @@ module ControlObjectiveItems::FindingPDFData
 
     def finding_follow_up_date_text_for finding, show
       display =
-        (!SHOW_CONCLUSION_ALTERNATIVE_PDF && finding.follow_up_date.present?) ||
+        (SHOW_CONCLUSION_ALTERNATIVE_PDF != 'gal' && finding.follow_up_date.present?) ||
         (finding.follow_up_date.present? && !finding.implemented_audited?)
 
       if display && show.include?('estimated_follow_up')
@@ -172,7 +172,7 @@ module ControlObjectiveItems::FindingPDFData
     def finding_repeated_text_for finding, show
       repeated = finding.repeated_ancestors.present?
 
-      if SHOW_CONCLUSION_ALTERNATIVE_PDF
+      if SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal'
         label = I18n.t "label.#{repeated ? 'yes' : 'no'}"
 
         if show.include?('repeated_review') && finding.repeated_of

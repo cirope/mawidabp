@@ -18,10 +18,10 @@
           } %>
         <%= f.input :user_id, as: :hidden, input_html: { id: "auto_user_id_#{id}" } %>
       </div>
-      <div class="col-md-<%= SHOW_CONCLUSION_ALTERNATIVE_PDF ? 5 : 3 %>">
+      <div class="col-md-<%= SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal' ? 5 : 3 %>">
         <%= user_assignment_type_field(f, false, readonly) %>
       </div>
-      <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+      <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal' %>
         <div class="col-md-1">
           <%= f.input :include_signature, label: false, input_html: {
             disabled: readonly,

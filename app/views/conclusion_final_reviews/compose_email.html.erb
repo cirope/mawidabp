@@ -8,7 +8,7 @@
         <div class="form-group">
           <%= select_tag 'conclusion_review[review_type]', send_review_options, class: 'form-control' %>
         </div>
-        <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+        <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal' %>
           <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.exclude?(current_organization.prefix) %>
             <div class="checkbox">
               <label for="conclusion_review_include_global_score_sheet">

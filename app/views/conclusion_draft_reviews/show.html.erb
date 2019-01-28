@@ -55,7 +55,7 @@
 <h4><%= t('conclusion_review.conclusion') %></h4>
 <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) %>
   <%= conclusion_review_score_text @conclusion_draft_review.review %>
-<% elsif !SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+<% elsif SHOW_CONCLUSION_ALTERNATIVE_PDF != 'gal' %>
   <%= conclusion_review_score_details_table @conclusion_draft_review.review %>
   <p><small><%= t('review.review_qualification_explanation') %></small></p>
 <% end %>
@@ -103,7 +103,7 @@ end %>
   <% end %>
   <%= link_to_edit edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
   <%= link_to_index conclusion_draft_reviews_path %> |
-  <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+  <% if SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal' %>
     <%= render 'alternative_downloads' %>
   <% elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) %>
     <%= render 'limited_downloads' %>

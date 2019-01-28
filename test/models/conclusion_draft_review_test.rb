@@ -92,7 +92,7 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
     assert_error @conclusion_review, :issue_date, :blank
     assert_error @conclusion_review, :review_id, :blank
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal'
       assert_error @conclusion_review, :recipients, :blank
       assert_error @conclusion_review, :sectors, :blank
       assert_error @conclusion_review, :evolution, :blank

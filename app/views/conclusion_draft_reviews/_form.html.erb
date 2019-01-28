@@ -23,7 +23,7 @@
           readonly: true } %>
       </div>
       <div class="col-md-6">
-        <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+        <% if SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal' %>
           <% if SHOW_CONCLUSION_AS_OPTIONS %>
             <%= f.input :conclusion, collection: conclusion_options, prompt: true, input_html: {
               data: {
@@ -48,7 +48,7 @@
       </div>
     </div>
 
-    <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+    <% if SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal' %>
       <div class="row">
         <div class="col-md-6">
           <%= f.input :recipients, input_html: { rows: 4 } %>

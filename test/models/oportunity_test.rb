@@ -233,7 +233,7 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.state = Finding::STATUS[:assumed_risk]
     @oportunity.audit_comments = '  '
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal'
       assert @oportunity.must_be_approved?
     else
       refute @oportunity.must_be_approved?
