@@ -144,6 +144,10 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :observations => nil,
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
+          :objective => 'Some objective',
+          :reference => 'Some reference',
+          :observations => 'Some observations',
+          :scope => 'Some scope',
           :affects_compliance => '0'
         }
       }
@@ -179,6 +183,10 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :evolution_justification => 'Ok',
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
+          :objective => 'Some objective',
+          :reference => 'Some reference',
+          :observations => 'Some observations',
+          :scope => 'Some scope',
           :affects_compliance => '0',
           :observations => nil
         }
