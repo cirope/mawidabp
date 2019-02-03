@@ -1193,6 +1193,9 @@ es:
         corrective_actions: "Acciones correctivas"
         affects_compliance: "Afecta compliance"
         collapse_control_objectives: "Agrupar objetivos de control"
+        objective: "Objetivo"
+        scope: "Limitación al alcance"
+        reference: "Marco de referencia"
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:
