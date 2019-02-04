@@ -97,6 +97,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review.objective = '   '
     @conclusion_review.reference = '   '
     @conclusion_review.scope = '   '
+    @conclusion_review.observations = '   '
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
@@ -111,7 +112,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     elsif SHOW_CONCLUSION_ALTERNATIVE_PDF == 'bic'
       assert_error @conclusion_review, :objective, :blank
       assert_error @conclusion_review, :reference, :blank
-      assert_error @conclusion_review, :scope, :blank
+      assert_error @conclusion_review, :observations, :blank
     else
       assert_error @conclusion_review, :applied_procedures, :blank
     end
