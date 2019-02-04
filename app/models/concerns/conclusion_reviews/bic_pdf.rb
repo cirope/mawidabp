@@ -55,7 +55,6 @@ module ConclusionReviews::BicPDF
 
       put_bic_page_header_on          pdf, Review.model_name.human.upcase
       put_bic_review_data_on          pdf
-      put_bic_score_on                pdf
       put_bic_main_recommendations_on pdf
     end
 
@@ -174,11 +173,6 @@ module ConclusionReviews::BicPDF
       end
     end
 
-    def put_bic_score_on pdf
-      pdf.move_down PDF_FONT_SIZE
-      review.put_score_details_table pdf
-    end
-
     def put_bic_main_recommendations_on pdf
       pdf.font_size PDF_FONT_SIZE * 0.75 do
         pdf.move_down PDF_FONT_SIZE
@@ -287,6 +281,17 @@ module ConclusionReviews::BicPDF
               conclusion
             ].join(': '),
             colspan: 3
+          }
+        ],
+        [
+          {
+            content: [
+              self.class.human_attribute_name('conclusion'),
+              "<b>#{review.score_text}</b>"
+            ].join("\n"),
+            colspan: 3,
+            align:   :center,
+            size:    PDF_FONT_SIZE * 0.85
           }
         ]
       ].compact
