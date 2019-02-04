@@ -71,7 +71,9 @@ es:
     new:
       title: 'Crear entrevista de cierre'
     form:
-      add_closing_interview_user: 'Agregar asistente'
+      add_responsible: 'Agregar responsable'
+      add_auditor: 'Agregar auditor'
+      add_assistant: 'Agregar asistente'
     show:
       title: 'Ver entrevista de cierre'
       auditeds: 'Responsables del ciclo'
@@ -204,7 +206,9 @@ es:
     new:
       title: 'Crear entrevista de inicio'
     form:
-      add_opening_interview_user: 'Agregar asistente'
+      add_responsible: 'Agregar responsable'
+      add_auditor: 'Agregar auditor'
+      add_assistant: 'Agregar asistente'
     show:
       title: 'Ver entrevista de inicio'
       auditeds: 'Responsables del ciclo'

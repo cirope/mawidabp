@@ -42,12 +42,19 @@ class ClosingInterviewsControllerTest < ActionController::TestCase
   end
 
   test 'should create closing interview' do
-    counts = ['ClosingInterview.count', 'ClosingInterviewUser.count']
+    review = reviews :current_review
+    ruas   = review.review_user_assignments
+    counts = [
+      'ClosingInterview.count',
+      'ClosingInterviewUser.responsible.count',
+      'ClosingInterviewUser.auditor.count',
+      'ClosingInterviewUser.assistant.count'
+    ]
 
     assert_difference counts do
       post :create, params: {
         closing_interview: {
-          review_id:               reviews(:current_review).id,
+          review_id:               review.id,
           interview_date:          I18n.l(Time.zone.today),
           findings_summary:        'Interview findings summary',
           recommendations_summary: 'Interview recommendations summary',
@@ -55,7 +62,13 @@ class ClosingInterviewsControllerTest < ActionController::TestCase
           comments:                'Interview comments',
           audit_comments:          'Interview audit comments',
           responsible_comments:    'Interview responsible comments',
-          closing_interview_users_attributes: [
+          responsibles_attributes: ruas.select(&:audited?).map do |rua|
+            { user_id: rua.user_id }
+          end,
+          auditors_attributes: ruas.select(&:auditor?).map do |rua|
+            { user_id: rua.user_id }
+          end,
+          assistants_attributes: [
             { user_id: users(:administrator).id }
           ]
         }

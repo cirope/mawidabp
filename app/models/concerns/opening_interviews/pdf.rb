@@ -47,9 +47,9 @@ module OpeningInterviews::PDF
     def description_items
       [
         [self.class.human_attribute_name('review'), review.to_s, 0, false],
-        [I18n.t('opening_interviews.show.auditeds'), auditeds_text, 0, false],
+        [I18n.t('opening_interviews.show.auditeds'), responsibles_text, 0, false],
         [I18n.t('opening_interviews.show.auditors'), auditors_text, 0, false],
-        [OpeningInterviewUser.model_name.human(count: 0), users_text, 0, false],
+        [OpeningInterviewUser.model_name.human(count: 0), assistant_text, 0, false],
         [self.class.human_attribute_name('interview_date'), I18n.l(interview_date), 0, false],
         [self.class.human_attribute_name('start_date'), I18n.l(start_date), 0, false],
         [self.class.human_attribute_name('end_date'), I18n.l(end_date), 0, false],
@@ -61,15 +61,15 @@ module OpeningInterviews::PDF
       ]
     end
 
-    def auditeds_text
-      review.users.select(&:can_act_as_audited?).map(&:full_name).to_sentence
+    def responsibles_text
+      responsible_users.map(&:full_name).to_sentence
     end
 
     def auditors_text
-      review.users.reject(&:can_act_as_audited?).map(&:full_name).to_sentence
+      auditor_users.map(&:full_name).to_sentence
     end
 
-    def users_text
-      users.map(&:full_name).to_sentence
+    def assistant_text
+      assistant_users.map(&:full_name).to_sentence
     end
 end

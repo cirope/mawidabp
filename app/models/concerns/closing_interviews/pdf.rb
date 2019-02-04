@@ -49,7 +49,7 @@ module ClosingInterviews::PDF
         [self.class.human_attribute_name('review'), review.to_s, 0, false],
         [I18n.t('closing_interviews.show.auditeds'), auditeds_text, 0, false],
         [I18n.t('closing_interviews.show.auditors'), auditors_text, 0, false],
-        [ClosingInterviewUser.model_name.human(count: 0), users_text, 0, false],
+        [ClosingInterviewUser.model_name.human(count: 0), assistants_text, 0, false],
         [self.class.human_attribute_name('interview_date'), I18n.l(interview_date), 0, false],
         [self.class.human_attribute_name('findings_summary'), findings_summary, 0, false],
         [self.class.human_attribute_name('recommendations_summary'), recommendations_summary, 0, false],
@@ -61,14 +61,14 @@ module ClosingInterviews::PDF
     end
 
     def auditeds_text
-      review.users.select(&:can_act_as_audited?).map(&:full_name).to_sentence
+      responsible_users.map(&:full_name).to_sentence
     end
 
     def auditors_text
-      review.users.reject(&:can_act_as_audited?).map(&:full_name).to_sentence
+      auditor_users.map(&:full_name).to_sentence
     end
 
-    def users_text
-      users.map(&:full_name).to_sentence
+    def assistants_text
+      assistant_users.map(&:full_name).to_sentence
     end
 end

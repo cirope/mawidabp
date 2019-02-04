@@ -1,8 +1,14 @@
 class ClosingInterviewUser < ApplicationRecord
   include Auditable
 
-  validates :closing_interview, :user, presence: true
+  enum kind: {
+    responsible: 'responsible',
+    auditor:     'auditor',
+    assistant:   'assistant'
+  }
 
-  belongs_to :closing_interview
+  validates :user, presence: true
+
+  belongs_to :closing_interview, optional: true
   belongs_to :user, optional: true
 end

@@ -136,6 +136,7 @@ ActiveRecord::Schema.define(version: 2019_01_25_151050) do
   end
 
   create_table "closing_interview_users", force: :cascade do |t|
+    t.string "kind", null: false
     t.bigint "closing_interview_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
@@ -542,6 +543,7 @@ ActiveRecord::Schema.define(version: 2019_01_25_151050) do
   end
 
   create_table "opening_interview_users", force: :cascade do |t|
+    t.string "kind", null: false
     t.bigint "opening_interview_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false

@@ -72,7 +72,9 @@ class OpeningInterviewsController < ApplicationController
       params.require(:opening_interview).permit :interview_date, :start_date,
         :end_date, :objective, :program, :scope, :suggestions, :comments,
         :review_id, :lock_version,
-        opening_interview_users_attributes: [:id, :user_id, :_destroy]
+        responsibles_attributes: [:id, :kind, :user_id, :_destroy],
+        auditors_attributes: [:id, :kind, :user_id, :_destroy],
+        assistants_attributes: [:id, :kind, :user_id, :_destroy]
     end
 
     def opening_interview_pdf_path

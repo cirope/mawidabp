@@ -42,12 +42,19 @@ class OpeningInterviewsControllerTest < ActionController::TestCase
   end
 
   test 'should create opening interview' do
-    counts = ['OpeningInterview.count', 'OpeningInterviewUser.count']
+    review = reviews :current_review
+    ruas   = review.review_user_assignments
+    counts = [
+      'OpeningInterview.count',
+      'OpeningInterviewUser.responsible.count',
+      'OpeningInterviewUser.auditor.count',
+      'OpeningInterviewUser.assistant.count'
+    ]
 
     assert_difference counts do
       post :create, params: {
         opening_interview: {
-          review_id:      reviews(:current_review).id,
+          review_id:      review.id,
           interview_date: I18n.l(Time.zone.today),
           start_date:     I18n.l(2.days.ago.to_date),
           end_date:       I18n.l(2.days.from_now.to_date),
@@ -56,7 +63,13 @@ class OpeningInterviewsControllerTest < ActionController::TestCase
           scope:          'Interview scope',
           suggestions:    'Interview suggestions',
           comments:       'Interview comments',
-          opening_interview_users_attributes: [
+          responsibles_attributes: ruas.select(&:audited?).map do |rua|
+            { user_id: rua.user_id }
+          end,
+          auditors_attributes: ruas.select(&:auditor?).map do |rua|
+            { user_id: rua.user_id }
+          end,
+          assistants_attributes: [
             { user_id: users(:administrator).id }
           ]
         }

@@ -72,7 +72,9 @@ class ClosingInterviewsController < ApplicationController
       params.require(:closing_interview).permit :interview_date,
         :findings_summary, :recommendations_summary, :suggestions, :comments,
         :audit_comments, :responsible_comments, :review_id, :lock_version,
-        closing_interview_users_attributes: [:id, :user_id, :_destroy]
+        responsibles_attributes: [:id, :kind, :user_id, :_destroy],
+        auditors_attributes: [:id, :kind, :user_id, :_destroy],
+        assistants_attributes: [:id, :kind, :user_id, :_destroy]
     end
 
     def closing_interview_pdf_path

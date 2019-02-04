@@ -6,11 +6,9 @@ class OpeningInterviewUserTest < ActiveSupport::TestCase
   end
 
   test 'blank attributes' do
-    @opening_interview_user.opening_interview = nil
     @opening_interview_user.user = nil
 
     assert @opening_interview_user.invalid?
-    assert_error @opening_interview_user, :opening_interview, :blank
     assert_error @opening_interview_user, :user, :blank
   end
 end
