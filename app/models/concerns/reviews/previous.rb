@@ -13,7 +13,7 @@ module Reviews::Previous
       where(plan_items: { business_unit_id: plan_item.business_unit_id }).
       where("#{issue_date_column} < ?", pretended_issue_date).
       where.not(id: id).
-      order(issue_date_column).
+      order(Arel.sql issue_date_column).
       last
   end
 
