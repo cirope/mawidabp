@@ -105,6 +105,12 @@ module Reviews::Scopes
       ).references(:opening_interviews)
     end
 
+    def with_opening_interview
+      includes(:opening_interviews).where.not(
+        OpeningInterview.table_name => { review_id: nil }
+      ).references(:opening_interviews)
+    end
+
     def list_all_without_closing_interview
       list.includes(:closing_interviews).where(
         ClosingInterview.table_name => { review_id: nil }
