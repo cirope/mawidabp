@@ -145,8 +145,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :reference => 'Some reference',
           :observations => 'Some observations',
           :scope => 'Some scope',
-          :affects_compliance => '0',
-          :observations => nil
+          :affects_compliance => '0'
         }
       }
     end
@@ -185,8 +184,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :reference => 'Some reference',
           :observations => 'Some observations',
           :scope => 'Some scope',
-          :affects_compliance => '0',
-          :observations => nil
+          :affects_compliance => '0'
         }
       }
     end

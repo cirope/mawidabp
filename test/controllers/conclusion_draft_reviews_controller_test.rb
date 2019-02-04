@@ -141,7 +141,6 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :sectors => 'Area 51',
           :evolution => EVOLUTION_OPTIONS.second,
           :evolution_justification => 'Ok',
-          :observations => nil,
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
           :objective => 'Some objective',
@@ -187,8 +186,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :reference => 'Some reference',
           :observations => 'Some observations',
           :scope => 'Some scope',
-          :affects_compliance => '0',
-          :observations => nil
+          :affects_compliance => '0'
         }
       }
     end
