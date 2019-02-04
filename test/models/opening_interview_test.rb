@@ -53,4 +53,20 @@ class OpeningInterviewTest < ActiveSupport::TestCase
     assert_error @opening_interview, :suggestions, :pdf_encoding
     assert_error @opening_interview, :comments, :pdf_encoding
   end
+
+  test 'can be modified' do
+    assert @opening_interview.can_be_modified?
+
+    @opening_interview.update_column :review_id, reviews(:current_review).id
+
+    refute @opening_interview.reload.can_be_modified?
+  end
+
+  test 'can be destroyed' do
+    refute @opening_interview.can_be_destroyed?
+
+    @opening_interview.review.closing_interview.destroy!
+
+    assert @opening_interview.reload.can_be_destroyed?
+  end
 end

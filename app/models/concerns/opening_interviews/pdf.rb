@@ -62,14 +62,14 @@ module OpeningInterviews::PDF
     end
 
     def responsibles_text
-      responsible_users.map(&:full_name).to_sentence
+      responsible_users.map(&:full_name).join '; '
     end
 
     def auditors_text
-      auditor_users.map(&:full_name).to_sentence
+      auditor_users.map(&:full_name).join '; '
     end
 
     def assistant_text
-      assistant_users.map(&:full_name).to_sentence
+      assistant_users.map(&:full_name).join '; '
     end
 end

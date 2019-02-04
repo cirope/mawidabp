@@ -1,3 +1,4 @@
+<% frozen = frozen %>
 <% id = f.object.object_id %>
 <fieldset class="opening_interview_user">
   <div class="form-inputs">
@@ -9,6 +10,7 @@
             value: f.object.try(:user).try(:full_name_with_function, f.object.updated_at),
             id: "opening_interview_user_#{id}",
             title: t('label.search'),
+            readonly: frozen,
             data: {
               autocomplete_url: reviews_users_path,
               autocomplete_id_target: "#user_id_#{id}"

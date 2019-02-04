@@ -1,3 +1,5 @@
+<% frozen = !@opening_interview.can_be_modified? %>
+
 <%= simple_form_for @opening_interview do |f| %>
   <%= render 'shared/error_explanation', f: f %>
 
@@ -10,16 +12,16 @@
           <%= f.input :review_description, label: OpeningInterview.human_attribute_name('review'),
             input_html: { value: @opening_interview.review, readonly: true } %>
         <% end %>
-        <%= f.input :start_date, as: :date_picker %>
-        <%= f.input :objective, input_html: { rows: 4 } %>
-        <%= f.input :program, input_html: { rows: 4 } %>
-        <%= f.input :scope, input_html: { rows: 4 } %>
+        <%= f.input :start_date, as: :date_picker, input_html: { readonly: frozen } %>
+        <%= f.input :objective, input_html: { rows: 4, readonly: frozen } %>
+        <%= f.input :program, input_html: { rows: 4, readonly: frozen } %>
+        <%= f.input :scope, input_html: { rows: 4, readonly: frozen } %>
       </div>
       <div class="col-md-6">
-        <%= f.input :interview_date, as: :date_picker %>
-        <%= f.input :end_date, as: :date_picker %>
-        <%= f.input :suggestions, input_html: { rows: 4 } %>
-        <%= f.input :comments, input_html: { rows: 4 } %>
+        <%= f.input :interview_date, as: :date_picker, input_html: { readonly: frozen } %>
+        <%= f.input :end_date, as: :date_picker, input_html: { readonly: frozen } %>
+        <%= f.input :suggestions, input_html: { rows: 4, readonly: frozen } %>
+        <%= f.input :comments, input_html: { rows: 4, readonly: frozen } %>
       </div>
     </div>
 
@@ -35,11 +37,11 @@
 
     <div id="responsibles">
       <%= f.simple_fields_for :responsibles do |r_f| %>
-        <%= render 'opening_interview_user', f: r_f %>
+        <%= render 'opening_interview_user', f: r_f, frozen: frozen %>
       <% end %>
 
       <p>
-        <%= link_to_add_fields t('.add_responsible'), f, :responsibles, 'opening_interview_user' %>
+        <%= link_to_add_fields t('.add_responsible'), f, :responsibles, 'opening_interview_user' unless frozen %>
       </p>
     </div>
 
@@ -53,11 +55,11 @@
 
     <div id="auditors">
       <%= f.simple_fields_for :auditors do |a_f| %>
-        <%= render 'opening_interview_user', f: a_f %>
+        <%= render 'opening_interview_user', f: a_f, frozen: frozen %>
       <% end %>
 
       <p>
-        <%= link_to_add_fields t('.add_auditor'), f, :auditors, 'opening_interview_user' %>
+        <%= link_to_add_fields t('.add_auditor'), f, :auditors, 'opening_interview_user' unless frozen %>
       </p>
     </div>
 
@@ -71,11 +73,11 @@
 
     <div id="assistants">
       <%= f.simple_fields_for :assistants do |a_f| %>
-        <%= render 'opening_interview_user', f: a_f %>
+        <%= render 'opening_interview_user', f: a_f, frozen: frozen %>
       <% end %>
 
       <p>
-        <%= link_to_add_fields t('.add_assistant'), f, :assistants, 'opening_interview_user' %>
+        <%= link_to_add_fields t('.add_assistant'), f, :assistants, 'opening_interview_user' unless frozen %>
       </p>
     </div>
   </div>
@@ -84,6 +86,6 @@
 
   <div class="form-actions">
     <div class="pull-right"><%= yield :form_actions %></div>
-    <%= f.button :submit, class: 'btn-primary' %>
+    <%= f.button :submit, class: 'btn-primary', disabled: frozen %>
   </div>
 <% end %>

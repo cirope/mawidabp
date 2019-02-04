@@ -16,7 +16,7 @@ class OpeningInterviewsControllerTest < ActionController::TestCase
   test 'should get filtered index' do
     get :index, params: {
       search: {
-        query: '1 2 3',
+        query: '1 2 5',
         columns: ['review']
       }
     }
@@ -42,38 +42,39 @@ class OpeningInterviewsControllerTest < ActionController::TestCase
   end
 
   test 'should create opening interview' do
-    review = reviews :current_review
+    review = reviews :review_with_conclusion
     ruas   = review.review_user_assignments
     counts = [
       'OpeningInterview.count',
       'OpeningInterviewUser.responsible.count',
-      'OpeningInterviewUser.auditor.count',
       'OpeningInterviewUser.assistant.count'
     ]
 
     assert_difference counts do
-      post :create, params: {
-        opening_interview: {
-          review_id:      review.id,
-          interview_date: I18n.l(Time.zone.today),
-          start_date:     I18n.l(2.days.ago.to_date),
-          end_date:       I18n.l(2.days.from_now.to_date),
-          objective:      'Interview objective',
-          program:        'Interview program',
-          scope:          'Interview scope',
-          suggestions:    'Interview suggestions',
-          comments:       'Interview comments',
-          responsibles_attributes: ruas.select(&:audited?).map do |rua|
-            { user_id: rua.user_id }
-          end,
-          auditors_attributes: ruas.select(&:auditor?).map do |rua|
-            { user_id: rua.user_id }
-          end,
-          assistants_attributes: [
-            { user_id: users(:administrator).id }
-          ]
+      assert_difference 'OpeningInterviewUser.auditor.count', 3 do
+        post :create, params: {
+          opening_interview: {
+            review_id:      review.id,
+            interview_date: I18n.l(Time.zone.today),
+            start_date:     I18n.l(2.days.ago.to_date),
+            end_date:       I18n.l(2.days.from_now.to_date),
+            objective:      'Interview objective',
+            program:        'Interview program',
+            scope:          'Interview scope',
+            suggestions:    'Interview suggestions',
+            comments:       'Interview comments',
+            responsibles_attributes: ruas.select(&:audited?).map do |rua|
+              { user_id: rua.user_id }
+            end,
+            auditors_attributes: ruas.select(&:auditor?).map do |rua|
+              { user_id: rua.user_id }
+            end,
+            assistants_attributes: [
+              { user_id: users(:administrator).id }
+            ]
+          }
         }
-      }
+      end
     end
 
     assert_redirected_to opening_interview_url(assigns(:opening_interview))
@@ -105,6 +106,8 @@ class OpeningInterviewsControllerTest < ActionController::TestCase
   end
 
   test 'should destroy opening interview' do
+    @opening_interview.review.closing_interview.destroy!
+
     assert_difference 'OpeningInterview.count', -1 do
       delete :destroy, params: { id: @opening_interview }
     end

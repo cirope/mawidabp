@@ -16,7 +16,7 @@ class ClosingInterviewsControllerTest < ActionController::TestCase
   test 'should get filtered index' do
     get :index, params: {
       search: {
-        query: '1 2 3',
+        query: '1 2 5',
         columns: ['review']
       }
     }
@@ -42,37 +42,38 @@ class ClosingInterviewsControllerTest < ActionController::TestCase
   end
 
   test 'should create closing interview' do
-    review = reviews :current_review
+    review = reviews :review_with_conclusion
     ruas   = review.review_user_assignments
     counts = [
       'ClosingInterview.count',
       'ClosingInterviewUser.responsible.count',
-      'ClosingInterviewUser.auditor.count',
       'ClosingInterviewUser.assistant.count'
     ]
 
     assert_difference counts do
-      post :create, params: {
-        closing_interview: {
-          review_id:               review.id,
-          interview_date:          I18n.l(Time.zone.today),
-          findings_summary:        'Interview findings summary',
-          recommendations_summary: 'Interview recommendations summary',
-          suggestions:             'Interview suggestions',
-          comments:                'Interview comments',
-          audit_comments:          'Interview audit comments',
-          responsible_comments:    'Interview responsible comments',
-          responsibles_attributes: ruas.select(&:audited?).map do |rua|
-            { user_id: rua.user_id }
-          end,
-          auditors_attributes: ruas.select(&:auditor?).map do |rua|
-            { user_id: rua.user_id }
-          end,
-          assistants_attributes: [
-            { user_id: users(:administrator).id }
-          ]
+      assert_difference 'ClosingInterviewUser.auditor.count', 3 do
+        post :create, params: {
+          closing_interview: {
+            review_id:               review.id,
+            interview_date:          I18n.l(Time.zone.today),
+            findings_summary:        'Interview findings summary',
+            recommendations_summary: 'Interview recommendations summary',
+            suggestions:             'Interview suggestions',
+            comments:                'Interview comments',
+            audit_comments:          'Interview audit comments',
+            responsible_comments:    'Interview responsible comments',
+            responsibles_attributes: ruas.select(&:audited?).map do |rua|
+              { user_id: rua.user_id }
+            end,
+            auditors_attributes: ruas.select(&:auditor?).map do |rua|
+              { user_id: rua.user_id }
+            end,
+            assistants_attributes: [
+              { user_id: users(:administrator).id }
+            ]
+          }
         }
-      }
+      end
     end
 
     assert_redirected_to closing_interview_url(assigns(:closing_interview))

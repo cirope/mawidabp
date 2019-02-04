@@ -7,5 +7,5 @@ current:
   scope: Interview scope
   suggestions: Interview suggestions
   comments: Interview comments
-  review: current_review
+  review: review_without_conclusion
   organization: cirope

@@ -61,14 +61,14 @@ module ClosingInterviews::PDF
     end
 
     def auditeds_text
-      responsible_users.map(&:full_name).to_sentence
+      responsible_users.map(&:full_name).join '; '
     end
 
     def auditors_text
-      auditor_users.map(&:full_name).to_sentence
+      auditor_users.map(&:full_name).join '; '
     end
 
     def assistants_text
-      assistant_users.map(&:full_name).to_sentence
+      assistant_users.map(&:full_name).join '; '
     end
 end

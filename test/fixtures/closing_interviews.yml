@@ -6,5 +6,5 @@ current:
   comments: Interview comments
   audit_comments: Interview audit comments
   responsible_comments: Interview responsible comments
-  review: current_review
+  review: review_without_conclusion
   organization: cirope

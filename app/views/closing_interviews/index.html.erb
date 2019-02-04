@@ -27,7 +27,7 @@
             <td><%= l closing_interview.interview_date %></td>
             <td><%= link_to_show closing_interview %></td>
             <td><%= link_to_edit [:edit, closing_interview] %></td>
-            <td><%= link_to_destroy closing_interview %></td>
+            <td><%= link_to_destroy closing_interview if closing_interview.can_be_destroyed? %></td>
           </tr>
         <% end %>
       </tbody>

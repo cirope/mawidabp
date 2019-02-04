@@ -37,4 +37,20 @@ class ClosingInterviewTest < ActiveSupport::TestCase
     assert_error @closing_interview, :audit_comments, :pdf_encoding
     assert_error @closing_interview, :responsible_comments, :pdf_encoding
   end
+
+  test 'can be modified' do
+    assert @closing_interview.can_be_modified?
+
+    @closing_interview.update_column :review_id, reviews(:current_review).id
+
+    refute @closing_interview.reload.can_be_modified?
+  end
+
+  test 'can be destroyed' do
+    assert @closing_interview.can_be_destroyed?
+
+    @closing_interview.update_column :review_id, reviews(:current_review).id
+
+    refute @closing_interview.reload.can_be_destroyed?
+  end
 end

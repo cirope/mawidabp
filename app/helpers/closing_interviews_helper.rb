@@ -2,6 +2,7 @@ module ClosingInterviewsHelper
   def closing_interview_review_field f
     reviews = Review.
       list_all_without_closing_interview.
+      list_without_final_review.
       with_opening_interview.
       order :identification
 

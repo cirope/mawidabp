@@ -31,7 +31,7 @@
             <td class="hidden-xs"><%= l opening_interview.end_date %></td>
             <td><%= link_to_show opening_interview %></td>
             <td><%= link_to_edit [:edit, opening_interview] %></td>
-            <td><%= link_to_destroy opening_interview %></td>
+            <td><%= link_to_destroy opening_interview if opening_interview.can_be_destroyed? %></td>
           </tr>
         <% end %>
       </tbody>

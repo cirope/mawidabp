@@ -50,14 +50,14 @@ module Reviews::Scopes
     def list_without_final_review
       list.
         includes(:conclusion_final_review).
-        where(ConclusionReview.table_name => { review_id: nil }).
+        where(::ConclusionReview.table_name => { review_id: nil }).
         references(:conclusion_reviews)
     end
 
     def list_without_draft_review
       list.
         includes(:conclusion_draft_review).
-        where(ConclusionReview.table_name => { review_id: nil }).
+        where(::ConclusionReview.table_name => { review_id: nil }).
         references(:conclusion_reviews)
     end
 
@@ -100,19 +100,19 @@ module Reviews::Scopes
     end
 
     def list_all_without_opening_interview
-      list.includes(:opening_interviews).where(
+      list.includes(:opening_interview).where(
         OpeningInterview.table_name => { review_id: nil }
       ).references(:opening_interviews)
     end
 
     def with_opening_interview
-      includes(:opening_interviews).where.not(
+      includes(:opening_interview).where.not(
         OpeningInterview.table_name => { review_id: nil }
       ).references(:opening_interviews)
     end
 
     def list_all_without_closing_interview
-      list.includes(:closing_interviews).where(
+      list.includes(:closing_interview).where(
         ClosingInterview.table_name => { review_id: nil }
       ).references(:closing_interviews)
     end
