@@ -52,7 +52,7 @@ module Reports::WeaknessesByBusinessUnit
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC",
       ].map { |o| Arel.sql o }
       weaknesses = Weakness.
-        with_status_for_report.
+        with_repeated_status_for_report.
         finals(final).
         list_with_final_review.
         by_issue_date('BETWEEN', @from_date, @to_date).
@@ -163,7 +163,7 @@ module Reports::WeaknessesByBusinessUnit
         ] unless weakness.implemented_audited?),
         [
           Weakness.human_attribute_name('state'),
-          weakness.state_text
+          weaknesses_by_business_unit_state_text(weakness)
         ],
         [
           t("#{@controller}_committee_report.weaknesses_by_business_unit.year"),
@@ -348,7 +348,7 @@ module Reports::WeaknessesByBusinessUnit
           weakness.title,
           weakness.description,
           weakness.answer,
-          weakness.state_text,
+          weaknesses_by_business_unit_state_text(weakness),
           origination_date
         ]
       end
@@ -358,6 +358,24 @@ module Reports::WeaknessesByBusinessUnit
       (weakness.repeated_of_id && weakness.origination_date) ||
         weakness.origination_date < 1.year.ago
     end
+
+    def weaknesses_by_business_unit_state_text weakness
+      if weakness.repeated? && weakness.repeated_in.present?
+        review           = weakness.repeated_in.review
+        repeated_details = [
+          weakness.repeated_in.review_code,
+          review.identification
+        ].join ' - '
+
+        state_text = if review.has_final_review?
+                       weakness.state_text
+                     else
+                       t 'follow_up_committee_report.weaknesses_current_situation.on_revision'
+                     end
+
+        "#{state_text} (#{repeated_details})"
+      else
+        weakness.state_text
+      end
+    end
 end
-
-

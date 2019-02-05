@@ -67,7 +67,7 @@ module Reports::WeaknessesCurrentSituation
         "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'conclusion_index'} DESC"
       ].map { |o| Arel.sql o }
       weaknesses = Weakness.
-        with_status_for_report.
+        with_repeated_status_for_report.
         finals(final).
         list_with_final_review.
         by_issue_date('BETWEEN', @from_date, @to_date).
@@ -145,7 +145,7 @@ module Reports::WeaknessesCurrentSituation
         ],
         [
           "<b>#{Weakness.human_attribute_name('state')}</b>",
-          weakness.state_text
+          weaknesses_current_situation_state_text(weakness)
         ],
         ([
           "<b>#{Weakness.human_attribute_name('follow_up_date')}</b>",
@@ -369,12 +369,32 @@ module Reports::WeaknessesCurrentSituation
           weakness.title,
           (weakness.current_situation.present? && weakness.current_situation_verified ? weakness.current_situation : weakness.description),
           weakness.answer,
-          weakness.state_text,
+          weaknesses_current_situation_state_text(weakness),
           (l weakness.follow_up_date if weakness.follow_up_date),
           (l weakness.solution_date if weakness.solution_date),
           weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; '),
           weakness.users.reject(&:can_act_as_audited?).map(&:full_name).join('; ')
         ]
+      end
+    end
+
+    def weaknesses_current_situation_state_text weakness
+      if weakness.repeated? && weakness.repeated_in.present?
+        review           = weakness.repeated_in.review
+        repeated_details = [
+          weakness.repeated_in.review_code,
+          review.identification
+        ].join ' - '
+
+        state_text = if review.has_final_review?
+                       weakness.state_text
+                     else
+                       t 'follow_up_committee_report.weaknesses_current_situation.on_revision'
+                     end
+
+        "#{state_text} (#{repeated_details})"
+      else
+        weakness.state_text
       end
     end
 end

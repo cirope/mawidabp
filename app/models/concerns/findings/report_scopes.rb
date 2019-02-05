@@ -8,8 +8,16 @@ module Findings::ReportScopes
     scope :not_incomplete,    -> { where "state <> ?", Finding::STATUS[:incomplete] }
     scope :internal_audit,    -> { with_business_unit_external false }
     scope :external_audit,    -> { with_business_unit_external true }
+
     scope :with_status_for_report, -> {
-      where state: Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).values
+      exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS
+
+      where state: Finding::STATUS.except(*exclude).values
+    }
+    scope :with_repeated_status_for_report, -> {
+      exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS - [:repeated]
+
+      where state: Finding::STATUS.except(*exclude).values
     }
   end
 
