@@ -827,7 +827,11 @@
       subtitle: "RESUMEN DE OBSERVACIONES PENDIENTES / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      distance_to_cut_date: "Antigua data"
+      weakness_title: "Título observación"
+      description: "Detalle observación"
+      first_follow_up_date: "Primer fecha de impl."
+      follow_up_date: "Fecha de impl."
+      distance_to_cut_date: "Días antigua data"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"

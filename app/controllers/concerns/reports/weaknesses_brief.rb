@@ -19,9 +19,9 @@ module Reports::WeaknessesBrief
   def create_weaknesses_brief
     init_weaknesses_brief_vars
 
-    pdf = init_pdf params[:report_title], params[:report_subtitle]
-
-    add_pdf_description pdf, @controller, @from_date, @to_date
+    pdf = init_pdf params[:report_title], params[:report_subtitle], options: {
+      margins: [20, 5, 20, 5]
+    }
 
     add_weaknesses_brief pdf
 
@@ -77,14 +77,14 @@ module Reports::WeaknessesBrief
       [
         Review.model_name.human,
         PlanItem.human_attribute_name('project'),
-        Weakness.human_attribute_name('title'),
-        Weakness.human_attribute_name('description'),
+        t("#{@controller}_committee_report.weaknesses_brief.weakness_title"),
+        t("#{@controller}_committee_report.weaknesses_brief.description"),
         Weakness.human_attribute_name('risk'),
         Weakness.human_attribute_name('audit_comments'),
         FindingUserAssignment.human_attribute_name('process_owner'),
         ConclusionFinalReview.human_attribute_name('issue_date'),
-        Weakness.human_attribute_name('first_follow_up_date'),
-        Weakness.human_attribute_name('follow_up_date'),
+        t("#{@controller}_committee_report.weaknesses_brief.first_follow_up_date"),
+        t("#{@controller}_committee_report.weaknesses_brief.follow_up_date"),
         t("#{@controller}_committee_report.weaknesses_brief.distance_to_cut_date")
       ]
     end
@@ -157,15 +157,15 @@ module Reports::WeaknessesBrief
       {
         Review.model_name.human => 7,
         PlanItem.human_attribute_name('project') => 9,
-        Weakness.human_attribute_name('title') => 10,
-        Weakness.human_attribute_name('description') => 15,
-        Weakness.human_attribute_name('risk') => 6,
-        Weakness.human_attribute_name('audit_comments') => 14,
+        t("#{@controller}_committee_report.weaknesses_brief.weakness_title") => 10,
+        t("#{@controller}_committee_report.weaknesses_brief.description") => 21,
+        Weakness.human_attribute_name('risk') => 4,
+        Weakness.human_attribute_name('audit_comments') => 20,
         FindingUserAssignment.human_attribute_name('process_owner') => 10,
-        ConclusionFinalReview.human_attribute_name('issue_date') => 8,
-        Weakness.human_attribute_name('first_follow_up_date') => 8,
-        Weakness.human_attribute_name('follow_up_date') => 8,
-        t('follow_up_committee_report.weaknesses_brief.distance_to_cut_date') => 5
+        ConclusionFinalReview.human_attribute_name('issue_date') => 5,
+        t("#{@controller}_committee_report.weaknesses_brief.first_follow_up_date") => 5,
+        t("#{@controller}_committee_report.weaknesses_brief.follow_up_date") => 5,
+        t("#{@controller}_committee_report.weaknesses_brief.distance_to_cut_date") => 4
       }
     end
 
@@ -183,9 +183,9 @@ module Reports::WeaknessesBrief
           weakness.review.identification,
           weakness.review.plan_item.project,
           weakness.title,
-          truncate(weakness.description, length: 500),
+          truncate(weakness.description, length: 1000),
           weakness.risk_text,
-          truncate(weakness.audit_comments, length: 500),
+          truncate(weakness.audit_comments, length: 1000),
           weaknesses_brief_audit_users(weakness).join("\n"),
           l(weakness.review.conclusion_final_review.issue_date),
           (weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-'),
