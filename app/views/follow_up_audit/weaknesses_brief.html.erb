@@ -5,6 +5,7 @@
     },
     forms: [
       [:date_range, true],
+      [:user, hide_comments: true],
       [:cut_date, true]
     ]
   }
@@ -17,14 +18,14 @@
         <tr>
           <th><%= Review.model_name.human %></th>
           <th><%= PlanItem.human_attribute_name 'project' %></th>
-          <th><%= Weakness.human_attribute_name 'title' %></th>
-          <th><%= Weakness.human_attribute_name 'description' %></th>
+          <th><%= t 'follow_up_committee_report.weaknesses_brief.weakness_title' %></th>
+          <th><%= t 'follow_up_committee_report.weaknesses_brief.description' %></th>
           <th><%= Weakness.human_attribute_name 'risk' %></th>
           <th><%= Weakness.human_attribute_name 'audit_comments' %></th>
           <th><%= FindingUserAssignment.human_attribute_name 'process_owner' %></th>
           <th><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></th>
-          <th><%= Weakness.human_attribute_name 'first_follow_up_date' %></th>
-          <th><%= Weakness.human_attribute_name 'follow_up_date' %></th>
+          <th><%= t 'follow_up_committee_report.weaknesses_brief.first_follow_up_date' %></th>
+          <th><%= t 'follow_up_committee_report.weaknesses_brief.follow_up_date' %></th>
           <th><%= t 'follow_up_committee_report.weaknesses_brief.distance_to_cut_date' %></th>
         </tr>
       </thead>

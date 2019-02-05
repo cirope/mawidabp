@@ -53,10 +53,15 @@ module Reports::WeaknessesBrief
         finals(final).
         list_with_final_review.
         by_issue_date('BETWEEN', @from_date, @to_date).
-        includes(
-          review: [:conclusion_final_review, :plan_item],
-          finding_user_assignments: :user
-        )
+        includes(review: [:conclusion_final_review, :plan_item]).
+        preload(finding_user_assignments: :user)
+
+      if params[:weaknesses_brief] && params[:weaknesses_brief][:user_id].present?
+        user       = User.find params[:weaknesses_brief][:user_id]
+        weaknesses = weaknesses.by_user_id user.id
+
+        @filters << "<b>#{User.model_name.human}</b> = #{user.full_name}"
+      end
 
       @weaknesses = weaknesses.reorder order
     end

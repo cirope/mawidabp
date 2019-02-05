@@ -1026,7 +1026,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/weaknesses_brief'
   end
 
-  test 'weaknesses brief with cut date' do
+  test 'filtered weaknesses brief' do
     login
 
     get :weaknesses_brief
@@ -1038,7 +1038,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :weaknesses_brief => {
           :from_date => 10.years.ago.to_date,
           :to_date => 10.years.from_now.to_date,
-          :cut_date => 10.days.ago.to_date
+          :cut_date => 10.days.ago.to_date,
+          :user_id => users(:audited).id
         },
         :controller_name => 'follow_up',
         :final => false
