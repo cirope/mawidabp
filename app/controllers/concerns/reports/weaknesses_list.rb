@@ -1,7 +1,6 @@
 module Reports::WeaknessesList
   extend ActiveSupport::Concern
 
-  include Reports::PDF
   include Reports::Period
 
   def weaknesses_list

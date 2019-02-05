@@ -324,11 +324,7 @@
   </div>
 
   <div id="tasks" data-follow-up-date-changed-warning="<%= t 'finding.follow_up_date_changed_warning' %>">
-    <%= f.simple_fields_for :tasks do |fr_f| %>
-      <%= render 'task', f: fr_f, readonly: readonly %>
-    <% end %>
-
-    <%= link_to_add_fields t('finding.add_task'), f, :tasks unless readonly %>
+    <%= render 'tasks', f: f, readonly: readonly %>
   </div>
 
   <br />

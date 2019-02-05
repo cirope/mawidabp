@@ -71,7 +71,19 @@
 
     <p>
       <span class="text-muted"><%= Weakness.human_attribute_name 'state' %></span>:
-      <%= weakness.state_text %>
+      <% if weakness.repeated? && weakness.repeated_in.present? %>
+        <% review = weakness.repeated_in.review %>
+
+        <% if review.has_final_review? %>
+          <%= weakness.state_text %>
+        <% else %>
+          <%= t "#{@controller}_committee_report.weaknesses_by_business_unit.on_revision" %>
+        <% end %>
+
+        (<%= weakness.repeated_in.review_code %> - <%= weakness.repeated_in.review.identification %>)
+      <% else %>
+        <%= weakness.state_text %>
+      <% end %>
     </p>
 
     <% show_year        = (weakness.repeated_of_id && weakness.origination_date) || weakness.origination_date < 1.year.ago
