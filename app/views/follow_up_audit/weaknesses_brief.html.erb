@@ -5,7 +5,9 @@
     },
     forms: [
       [:date_range, true],
-      [:cut_date, true]
+      [:user, hide_comments: true, group: 1],
+      [:cut_date, group: 1],
+      [:order_by, { order_bys: %w(issue_date risk first_follow_up_date) }]
     ]
   }
 %>
@@ -17,14 +19,14 @@
         <tr>
           <th><%= Review.model_name.human %></th>
           <th><%= PlanItem.human_attribute_name 'project' %></th>
-          <th><%= Weakness.human_attribute_name 'title' %></th>
-          <th><%= Weakness.human_attribute_name 'description' %></th>
+          <th><%= t 'follow_up_committee_report.weaknesses_brief.weakness_title' %></th>
+          <th><%= t 'follow_up_committee_report.weaknesses_brief.description' %></th>
           <th><%= Weakness.human_attribute_name 'risk' %></th>
           <th><%= Weakness.human_attribute_name 'audit_comments' %></th>
           <th><%= FindingUserAssignment.human_attribute_name 'process_owner' %></th>
           <th><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></th>
-          <th><%= Weakness.human_attribute_name 'first_follow_up_date' %></th>
-          <th><%= Weakness.human_attribute_name 'follow_up_date' %></th>
+          <th><%= t 'follow_up_committee_report.weaknesses_brief.first_follow_up_date' %></th>
+          <th><%= t 'follow_up_committee_report.weaknesses_brief.follow_up_date' %></th>
           <th><%= t 'follow_up_committee_report.weaknesses_brief.distance_to_cut_date' %></th>
         </tr>
       </thead>
@@ -38,7 +40,7 @@
             <td><%= weakness.description %></td>
             <td><%= weakness.risk_text %></td>
             <td><%= weakness.audit_comments %></td>
-            <td><%= array_to_ul weaknesses_brief_audit_users(weakness) %></td>
+            <td><%= array_to_ul weaknesses_brief_audit_users(weakness), class: 'list-unstyled' %></td>
             <td><%= l weakness.review.conclusion_final_review.issue_date %></td>
             <td><%= weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-' %></td>
             <td><%= weakness.follow_up_date ? l(weakness.follow_up_date) : '-' %></td>
@@ -58,5 +60,27 @@
 
 <div>
   <%= link_to t('label.back'), action: :index %> |
+  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: "#customize_report" } %> |
   <%= link_to t('label.download_csv'), weaknesses_brief_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
 </div>
+
+<%= render partial: 'shared/customize_report_form', locals: {
+  options: {
+    form_name: 'report',
+    url: request.query_parameters.merge(
+      {action: :create_weaknesses_brief, _ts: Time.now.to_i}
+    ),
+    fields: [
+      {
+        name: :report_title,
+        label: t('customize_report_form.title'),
+        value: t('follow_up_committee_report.weaknesses_brief.title')
+      },
+      {
+        name: :report_subtitle,
+        label: t('customize_report_form.subtitle'),
+        value: t('follow_up_committee_report.weaknesses_brief.subtitle')
+      }
+    ]
+  }
+} %>

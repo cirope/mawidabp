@@ -51,6 +51,8 @@ PDF_PAPER = 'A4'.freeze
 PDF_LOGO = File.join(Rails.root, 'app', 'assets', 'images', 'logo_pdf.png').freeze
 # Dimensiones del logo en pixels, primero el ancho y luego el alto
 PDF_LOGO_SIZE = [350, 51].map { |size| (size / 6.0).round }
+# Escala del logo
+PDF_LOGO_FACTOR = 1.0
 # Tamaño de fuente en los PDF
 PDF_FONT_SIZE = 11
 # Tamaño de fuente de lo escrito en la cabecera
