@@ -1,7 +1,7 @@
 module Reports::PDF
 
-  def init_pdf(title, subtitle)
-    pdf = Prawn::Document.create_generic_pdf :landscape
+  def init_pdf(title, subtitle, options: {})
+    pdf = Prawn::Document.create_generic_pdf :landscape, options
 
     pdf.add_generic_report_header current_organization
 

@@ -19,9 +19,9 @@ module Reports::WeaknessesBrief
   def create_weaknesses_brief
     init_weaknesses_brief_vars
 
-    pdf = init_pdf params[:report_title], params[:report_subtitle]
-
-    add_pdf_description pdf, @controller, @from_date, @to_date
+    pdf = init_pdf params[:report_title], params[:report_subtitle], options: {
+      margins: [20, 5, 20, 5]
+    }
 
     add_weaknesses_brief pdf
 
@@ -40,12 +40,6 @@ module Reports::WeaknessesBrief
       @cut_date = extract_cut_date params[:weaknesses_brief]
       @filters = []
       final = params[:final] == 'true'
-      order = [
-        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC",
-        "#{Review.quoted_table_name}.#{Review.qcn 'identification'} ASC",
-        "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} ASC",
-        "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
-      ].map { |o| Arel.sql o }
       weaknesses = Weakness.
         awaiting.
         or(Weakness.being_implemented).
@@ -53,12 +47,17 @@ module Reports::WeaknessesBrief
         finals(final).
         list_with_final_review.
         by_issue_date('BETWEEN', @from_date, @to_date).
-        includes(
-          review: [:conclusion_final_review, :plan_item],
-          finding_user_assignments: :user
-        )
+        includes(review: [:conclusion_final_review, :plan_item]).
+        preload(finding_user_assignments: :user)
 
-      @weaknesses = weaknesses.reorder order
+      if params[:weaknesses_brief] && params[:weaknesses_brief][:user_id].present?
+        user       = User.find params[:weaknesses_brief][:user_id]
+        weaknesses = weaknesses.by_user_id user.id
+
+        @filters << "<b>#{User.model_name.human}</b> = #{user.full_name}"
+      end
+
+      @weaknesses = weaknesses.reorder weaknesses_brief_order
     end
 
     def weaknesses_brief_csv
@@ -77,14 +76,14 @@ module Reports::WeaknessesBrief
       [
         Review.model_name.human,
         PlanItem.human_attribute_name('project'),
-        Weakness.human_attribute_name('title'),
-        Weakness.human_attribute_name('description'),
+        t("#{@controller}_committee_report.weaknesses_brief.weakness_title"),
+        t("#{@controller}_committee_report.weaknesses_brief.description"),
         Weakness.human_attribute_name('risk'),
         Weakness.human_attribute_name('audit_comments'),
         FindingUserAssignment.human_attribute_name('process_owner'),
         ConclusionFinalReview.human_attribute_name('issue_date'),
-        Weakness.human_attribute_name('first_follow_up_date'),
-        Weakness.human_attribute_name('follow_up_date'),
+        t("#{@controller}_committee_report.weaknesses_brief.first_follow_up_date"),
+        t("#{@controller}_committee_report.weaknesses_brief.follow_up_date"),
         t("#{@controller}_committee_report.weaknesses_brief.distance_to_cut_date")
       ]
     end
@@ -157,15 +156,15 @@ module Reports::WeaknessesBrief
       {
         Review.model_name.human => 7,
         PlanItem.human_attribute_name('project') => 9,
-        Weakness.human_attribute_name('title') => 10,
-        Weakness.human_attribute_name('description') => 15,
-        Weakness.human_attribute_name('risk') => 6,
-        Weakness.human_attribute_name('audit_comments') => 14,
+        t("#{@controller}_committee_report.weaknesses_brief.weakness_title") => 10,
+        t("#{@controller}_committee_report.weaknesses_brief.description") => 21,
+        Weakness.human_attribute_name('risk') => 4,
+        Weakness.human_attribute_name('audit_comments') => 20,
         FindingUserAssignment.human_attribute_name('process_owner') => 10,
-        ConclusionFinalReview.human_attribute_name('issue_date') => 8,
-        Weakness.human_attribute_name('first_follow_up_date') => 8,
-        Weakness.human_attribute_name('follow_up_date') => 8,
-        t('follow_up_committee_report.weaknesses_brief.distance_to_cut_date') => 5
+        ConclusionFinalReview.human_attribute_name('issue_date') => 5,
+        t("#{@controller}_committee_report.weaknesses_brief.first_follow_up_date") => 5,
+        t("#{@controller}_committee_report.weaknesses_brief.follow_up_date") => 5,
+        t("#{@controller}_committee_report.weaknesses_brief.distance_to_cut_date") => 4
       }
     end
 
@@ -183,9 +182,9 @@ module Reports::WeaknessesBrief
           weakness.review.identification,
           weakness.review.plan_item.project,
           weakness.title,
-          truncate(weakness.description, length: 500),
+          truncate(weakness.description, length: 1000),
           weakness.risk_text,
-          truncate(weakness.audit_comments, length: 500),
+          truncate(weakness.audit_comments, length: 1000),
           weaknesses_brief_audit_users(weakness).join("\n"),
           l(weakness.review.conclusion_final_review.issue_date),
           (weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-'),
@@ -195,5 +194,32 @@ module Reports::WeaknessesBrief
       end
 
       data.insert 0, weaknesses_brief_column_headers(pdf)
+    end
+
+    def weaknesses_brief_order
+      order_by = params[:weaknesses_brief] && params[:weaknesses_brief][:order_by]
+
+      if order_by == 'risk'
+        [
+          "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+          "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC",
+          "#{Review.quoted_table_name}.#{Review.qcn 'identification'} ASC",
+          "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
+        ].map { |o| Arel.sql o }
+      elsif order_by == 'first_follow_up_date'
+        [
+          "#{Weakness.quoted_table_name}.#{Weakness.qcn 'first_follow_up_date'} DESC",
+          "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC",
+          "#{Review.quoted_table_name}.#{Review.qcn 'identification'} ASC",
+          "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
+        ].map { |o| Arel.sql o }
+      else
+        [
+          "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC",
+          "#{Review.quoted_table_name}.#{Review.qcn 'identification'} ASC",
+          "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+          "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
+        ].map { |o| Arel.sql o }
+      end
     end
 end

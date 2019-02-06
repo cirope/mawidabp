@@ -1,5 +1,8 @@
-<div id="cut_date_filter" class="filter" <%== 'style="display: none;"' unless display %>>
-  <div class="row">
+<% group ||= nil %>
+<% unless group %>
+  <div id="cut_date_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+    <div class="row">
+<% end %>
     <div class="col-md-6">
       <div class="form-group">
         <%= f.label :cut_date,
@@ -10,5 +13,7 @@
         </div>
       </div>
     </div>
+<% unless group %>
+    </div>
   </div>
-</div>
+<% end %>
