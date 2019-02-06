@@ -5,8 +5,9 @@
     },
     forms: [
       [:date_range, true],
-      [:user, hide_comments: true],
-      [:cut_date, true]
+      [:user, hide_comments: true, group: 1],
+      [:cut_date, group: 1],
+      [:order_by, { order_bys: %w(issue_date risk first_follow_up_date) }]
     ]
   }
 %>

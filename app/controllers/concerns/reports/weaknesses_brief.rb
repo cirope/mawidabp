@@ -40,12 +40,6 @@ module Reports::WeaknessesBrief
       @cut_date = extract_cut_date params[:weaknesses_brief]
       @filters = []
       final = params[:final] == 'true'
-      order = [
-        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC",
-        "#{Review.quoted_table_name}.#{Review.qcn 'identification'} ASC",
-        "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} ASC",
-        "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
-      ].map { |o| Arel.sql o }
       weaknesses = Weakness.
         awaiting.
         or(Weakness.being_implemented).
@@ -63,7 +57,7 @@ module Reports::WeaknessesBrief
         @filters << "<b>#{User.model_name.human}</b> = #{user.full_name}"
       end
 
-      @weaknesses = weaknesses.reorder order
+      @weaknesses = weaknesses.reorder weaknesses_brief_order
     end
 
     def weaknesses_brief_csv
@@ -200,5 +194,32 @@ module Reports::WeaknessesBrief
       end
 
       data.insert 0, weaknesses_brief_column_headers(pdf)
+    end
+
+    def weaknesses_brief_order
+      order_by = params[:weaknesses_brief] && params[:weaknesses_brief][:order_by]
+
+      if order_by == 'risk'
+        [
+          "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+          "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC",
+          "#{Review.quoted_table_name}.#{Review.qcn 'identification'} ASC",
+          "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
+        ].map { |o| Arel.sql o }
+      elsif order_by == 'first_follow_up_date'
+        [
+          "#{Weakness.quoted_table_name}.#{Weakness.qcn 'first_follow_up_date'} DESC",
+          "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC",
+          "#{Review.quoted_table_name}.#{Review.qcn 'identification'} ASC",
+          "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
+        ].map { |o| Arel.sql o }
+      else
+        [
+          "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC",
+          "#{Review.quoted_table_name}.#{Review.qcn 'identification'} ASC",
+          "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+          "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
+        ].map { |o| Arel.sql o }
+      end
     end
 end

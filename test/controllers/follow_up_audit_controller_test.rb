@@ -1039,7 +1039,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
           :from_date => 10.years.ago.to_date,
           :to_date => 10.years.from_now.to_date,
           :cut_date => 10.days.ago.to_date,
-          :user_id => users(:audited).id
+          :user_id => users(:audited).id,
+          :order_by => 'risk'
         },
         :controller_name => 'follow_up',
         :final => false
