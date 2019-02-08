@@ -1,8 +1,4 @@
 Rails.application.routes.draw do
-  namespace :plans do
-    get 'resources/show'
-  end
-
   post '/touch', to: 'touch#create', as: 'touch'
 
   # Sessions
@@ -352,8 +348,9 @@ Rails.application.routes.draw do
     resources :plan_items, only: [:new, :edit]
 
     member do
-      get :stats, to: 'plans/stats#show'
+      get :calendar, to: 'plans/calendar#show'
       get :resources, to: 'plans/resources#show'
+      get :stats, to: 'plans/stats#show'
     end
 
     collection do
