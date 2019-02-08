@@ -21,6 +21,12 @@ class ActiveSupport::TestCase
     Current.conclusion_pdf_format ||= 'default'
   end
 
+  def unset_organization
+    Current.group                 = nil
+    Current.organization          = nil
+    Current.conclusion_pdf_format = nil
+  end
+
   def login user: users(:administrator), prefix: organizations(:cirope).prefix
     set_host_for_organization(prefix)
     session[:user_id]     = user.id

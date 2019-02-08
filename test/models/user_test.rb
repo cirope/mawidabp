@@ -12,8 +12,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.user         = nil
-    Current.organization = nil
+    unset_organization
   end
 
   test 'create' do

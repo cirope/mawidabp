@@ -11,6 +11,8 @@ class FindingTest < ActiveSupport::TestCase
 
   teardown do
     Current.user = nil
+
+    unset_organization
   end
 
   test 'create' do
