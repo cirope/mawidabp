@@ -14,6 +14,7 @@ es:
     logout: 'Salir'
     new: 'Nuevo'
     show: 'Ver'
+    calendar: 'Cronograma'
     resources: 'Recursos'
     stats: 'Estadísticas'
     warning: 'Advertencia'
@@ -250,6 +251,11 @@ es:
       title: 'Plan de auditoría'
       pdf_name: 'plan_periodo_%{period}.pdf'
       resource_utilization: 'Recursos utilizados'
+    calendar:
+      show:
+        title: 'Cronograma'
+        empty: 'No hay proyectos en el plan seleccionado'
+        detail: 'Detalle'
     resources:
       show:
         title: 'Resumen por recurso'

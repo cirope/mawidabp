@@ -17,11 +17,16 @@ module Reports::WeaknessesBrief
   end
 
   def create_weaknesses_brief
+    pdf_options = if PDF_LOGO_FACTOR < 1.0
+                    { margins: [20, 5, 20, 5] }
+                  else
+                    { margins: [25, 5, 25, 5] }
+                  end
+
     init_weaknesses_brief_vars
 
-    pdf = init_pdf params[:report_title], params[:report_subtitle], options: {
-      margins: [20, 5, 20, 5]
-    }
+    pdf = init_pdf params[:report_title], params[:report_subtitle],
+      options: pdf_options
 
     add_weaknesses_brief pdf
 
@@ -79,9 +84,9 @@ module Reports::WeaknessesBrief
         t("#{@controller}_committee_report.weaknesses_brief.weakness_title"),
         t("#{@controller}_committee_report.weaknesses_brief.description"),
         Weakness.human_attribute_name('risk'),
-        Weakness.human_attribute_name('audit_comments'),
+        t("#{@controller}_committee_report.weaknesses_brief.audit_comments"),
         FindingUserAssignment.human_attribute_name('process_owner'),
-        ConclusionFinalReview.human_attribute_name('issue_date'),
+        t("#{@controller}_committee_report.weaknesses_brief.issue_date"),
         t("#{@controller}_committee_report.weaknesses_brief.first_follow_up_date"),
         t("#{@controller}_committee_report.weaknesses_brief.follow_up_date"),
         t("#{@controller}_committee_report.weaknesses_brief.distance_to_cut_date")
@@ -159,9 +164,9 @@ module Reports::WeaknessesBrief
         t("#{@controller}_committee_report.weaknesses_brief.weakness_title") => 10,
         t("#{@controller}_committee_report.weaknesses_brief.description") => 21,
         Weakness.human_attribute_name('risk') => 4,
-        Weakness.human_attribute_name('audit_comments') => 20,
+        t("#{@controller}_committee_report.weaknesses_brief.audit_comments") => 20,
         FindingUserAssignment.human_attribute_name('process_owner') => 10,
-        ConclusionFinalReview.human_attribute_name('issue_date') => 5,
+        t("#{@controller}_committee_report.weaknesses_brief.issue_date") => 5,
         t("#{@controller}_committee_report.weaknesses_brief.first_follow_up_date") => 5,
         t("#{@controller}_committee_report.weaknesses_brief.follow_up_date") => 5,
         t("#{@controller}_committee_report.weaknesses_brief.distance_to_cut_date") => 4

@@ -343,10 +343,8 @@ module Reports::WeaknessesCurrentSituation
         ConclusionFinalReview.human_attribute_name('conclusion'),
         Weakness.human_attribute_name('risk'),
         Weakness.human_attribute_name('title'),
-        [
-          Weakness.human_attribute_name('description'),
-          Weakness.human_attribute_name('current_situation')
-        ].join(' / '),
+        Weakness.human_attribute_name('description'),
+        Weakness.human_attribute_name('current_situation'),
         Weakness.human_attribute_name('answer'),
         Weakness.human_attribute_name('state'),
         Weakness.human_attribute_name('follow_up_date'),
@@ -367,7 +365,8 @@ module Reports::WeaknessesCurrentSituation
           weakness.review.conclusion_final_review.conclusion,
           weakness.risk_text,
           weakness.title,
-          (weakness.current_situation.present? && weakness.current_situation_verified ? weakness.current_situation : weakness.description),
+          weakness.description,
+          (weakness.current_situation.present? && weakness.current_situation_verified ? weakness.current_situation : ''),
           weakness.answer,
           weaknesses_current_situation_state_text(weakness),
           (l weakness.follow_up_date if weakness.follow_up_date),

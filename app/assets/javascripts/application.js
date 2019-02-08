@@ -37,6 +37,7 @@
 //= require news
 //= require organizations
 //= require plans
+//= require plans/calendar
 //= require plans/resources
 //= require plans/stats
 //= require plan_items

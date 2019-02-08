@@ -37,6 +37,10 @@ module LinksHelper
     link_with_icon({ action: 'resources', icon: 'glyphicon-user' }, *args)
   end
 
+  def link_to_calendar(*args)
+    link_with_icon({ action: 'calendar', icon: 'glyphicon-calendar' }, *args)
+  end
+
   private
 
     def link_with_icon(options = {}, *args)
