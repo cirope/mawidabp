@@ -39,6 +39,7 @@
 //= require organizations
 //= require opening_interviews
 //= require plans
+//= require plans/calendar
 //= require plans/resources
 //= require plans/stats
 //= require plan_items
