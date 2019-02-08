@@ -94,7 +94,7 @@ module Prawn
         self.move_down margin
       end
 
-      def add_organization_image(organization, font_size = 10, factor: 1)
+      def add_organization_image(organization, font_size = 10, factor: PDF_LOGO_FACTOR)
         organization_image = organization.try(:image_model).try(:image).try(
           :thumb).try(:path)
         if organization_image && File.exists?(organization_image)

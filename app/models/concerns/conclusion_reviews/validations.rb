@@ -27,16 +27,16 @@ module ConclusionReviews::Validations
       errors.add :evolution, :invalid if allowed.exclude?(evolution)
     end
 
-    def validate_extra_gal_attributes?
-      SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal'
+    def validate_extra_attributes?
+      Current.conclusion_pdf_format == 'gal'
     end
 
     def validate_extra_bic_attributes?
-      SHOW_CONCLUSION_ALTERNATIVE_PDF == 'bic'
+      Current.conclusion_pdf_format == 'bic'
     end
 
     def validate_recipients?
-      %w(bic gal).include? SHOW_CONCLUSION_ALTERNATIVE_PDF
+      %w(bic gal).include? Current.conclusion_pdf_format
     end
 
     def validate_short_alternative_pdf_attributes?

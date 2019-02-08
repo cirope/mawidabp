@@ -102,7 +102,19 @@
 
     <p>
       <strong><%= Weakness.human_attribute_name 'state' %></strong>:
-      <%= weakness.state_text %>
+      <% if weakness.repeated? && weakness.repeated_in.present? %>
+        <% review = weakness.repeated_in.review %>
+
+        <% if review.has_final_review? %>
+          <%= weakness.state_text %>
+        <% else %>
+          <%= t 'follow_up_committee_report.weaknesses_current_situation.on_revision' %>
+        <% end %>
+
+        (<%= weakness.repeated_in.review_code %> - <%= weakness.repeated_in.review.identification %>)
+      <% else %>
+        <%= weakness.state_text %>
+      <% end %>
     </p>
 
     <% if weakness.follow_up_date %>

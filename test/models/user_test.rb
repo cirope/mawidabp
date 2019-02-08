@@ -485,7 +485,7 @@ class UserTest < ActiveSupport::TestCase
     user    = users :supervisor
     options = user.review_assignment_options
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal'
+    if Current.conclusion_pdf_format == 'gal'
       assert_equal 1, options.size
       assert options[:supervisor]
     else

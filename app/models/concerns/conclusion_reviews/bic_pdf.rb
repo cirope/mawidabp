@@ -17,7 +17,7 @@ module ConclusionReviews::BicPDF
   private
 
     def put_bic_header_on pdf, organization
-      pdf.add_review_header organization, nil, nil, factor: 0.5
+      pdf.add_review_header organization
 
       pdf.repeat :all do
         pdf.canvas do

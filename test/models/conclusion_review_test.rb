@@ -104,12 +104,12 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert_error @conclusion_review, :review_id, :blank
     assert_error @conclusion_review, :conclusion, :blank
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal'
+    if Current.conclusion_pdf_format == 'gal'
       assert_error @conclusion_review, :recipients, :blank
       assert_error @conclusion_review, :sectors, :blank
       assert_error @conclusion_review, :evolution, :blank
       assert_error @conclusion_review, :evolution_justification, :blank
-    elsif SHOW_CONCLUSION_ALTERNATIVE_PDF == 'bic'
+    elsif Current.conclusion_pdf_format == 'bic'
       assert_error @conclusion_review, :objective, :blank
       assert_error @conclusion_review, :reference, :blank
       assert_error @conclusion_review, :observations, :blank
@@ -175,7 +175,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   test 'validates evolution' do
-    skip unless SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal'
+    skip unless Current.conclusion_pdf_format == 'gal'
 
     @conclusion_review.evolution = 'invalid'
 

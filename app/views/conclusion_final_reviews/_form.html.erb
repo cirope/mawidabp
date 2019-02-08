@@ -25,7 +25,7 @@
         <%= f.input :summary %>
       </div>
       <div class="col-md-6">
-        <% if SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal' %>
+        <% if Current.conclusion_pdf_format == 'gal' %>
           <% if SHOW_CONCLUSION_AS_OPTIONS %>
             <%= f.input :conclusion, collection: conclusion_options, prompt: true,
               input_html: { disabled: readonly } %>
@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <% if SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal' %>
+    <% if Current.conclusion_pdf_format == 'gal' %>
       <div class="row">
         <div class="col-md-6">
           <%= f.input :recipients, input_html: { rows: 4, readonly: readonly } %>
@@ -82,7 +82,7 @@
           <% end %>
         </div>
       </div>
-    <% elsif SHOW_CONCLUSION_ALTERNATIVE_PDF == 'bic' %>
+    <% elsif Current.conclusion_pdf_format == 'bic' %>
       <div class="row">
         <div class="col-md-6">
           <%= f.input :objective, input_html: { rows: 4, readonly: readonly } %>
