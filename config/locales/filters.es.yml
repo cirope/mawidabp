@@ -12,3 +12,7 @@ es:
         affected_only: 'Asignadas'
         only_all: 'Solo a todos'
         include_reviews: 'Asignadas y por informe'
+      order_by:
+        issue_date: 'Fecha de emisión'
+        risk: 'Riesgo'
+        first_follow_up_date: 'Primer fecha de implementación'

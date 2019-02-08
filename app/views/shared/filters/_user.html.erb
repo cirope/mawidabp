@@ -1,7 +1,10 @@
+<% group ||= nil %>
 <% hide_comments ||= nil %>
 
-<div id="user_filter" class="filter" <%== 'style="display: none;"' unless display %>>
-  <div class="row">
+<% unless group %>
+  <div id="user_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+    <div class="row">
+<% end %>
     <div class="col-md-6">
       <div class="form-group">
         <% user = params[action] && params[action][:user] %>
@@ -35,5 +38,7 @@
         </div>
       </div>
     <% end %>
+<% unless group %>
+      </div>
   </div>
-</div>
+<% end %>
