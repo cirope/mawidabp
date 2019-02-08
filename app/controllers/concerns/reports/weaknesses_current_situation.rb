@@ -366,7 +366,7 @@ module Reports::WeaknessesCurrentSituation
           weakness.risk_text,
           weakness.title,
           weakness.description,
-          (weakness.current_situation.present? && weakness.current_situation_verified ? weakness.current_situation : '-'),
+          (weakness.current_situation.present? && weakness.current_situation_verified ? weakness.current_situation : ''),
           weakness.answer,
           weaknesses_current_situation_state_text(weakness),
           (l weakness.follow_up_date if weakness.follow_up_date),
