@@ -27,7 +27,7 @@ module ConclusionReviews::Validations
       errors.add :evolution, :invalid if allowed.exclude?(evolution)
     end
 
-    def validate_extra_attributes?
+    def validate_extra_gal_attributes?
       Current.conclusion_pdf_format == 'gal'
     end
 
