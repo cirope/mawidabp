@@ -1,0 +1,21 @@
+<% group ||= nil %>
+<% order_bys ||= [] %>
+<div id="order_bys_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+  <% unless group %>
+    <div class="row">
+  <% end %>
+    <div class="col-md-6">
+      <div class="form-group">
+        <% selected = params[action] ? params[action][:order_by] : nil %>
+        <%= f.label :order_by, t('message.sort_by').gsub('...', ''), class: 'col-md-4' %>
+        <div class="col-md-8">
+          <%= f.select :order_by, order_bys.map { |s| [t(".#{s}"), s] }, {
+            selected: selected, include_blank: t('message.sort_by')
+          }, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+  <% unless group %>
+    </div>
+  <% end %>
+</div>
