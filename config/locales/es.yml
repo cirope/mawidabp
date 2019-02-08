@@ -829,8 +829,10 @@
       without_weaknesses: "Sin observaciones"
       weakness_title: "Título observación"
       description: "Detalle observación"
-      first_follow_up_date: "Primer fecha de impl."
-      follow_up_date: "Fecha de impl."
+      audit_comments: "Respuesta auditado/Comentario de auditoría"
+      issue_date: "Fecha de emisión informe"
+      first_follow_up_date: "1° fecha probable reg."
+      follow_up_date: "Última fecha propuesta"
       distance_to_cut_date: "Días antigua data"
     period:
       title: "Intervalo"
