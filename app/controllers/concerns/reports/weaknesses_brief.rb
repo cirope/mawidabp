@@ -20,7 +20,7 @@ module Reports::WeaknessesBrief
     pdf_options = if PDF_LOGO_FACTOR < 1.0
                     { margins: [20, 5, 20, 5] }
                   else
-                    {}
+                    { margins: [25, 5, 25, 5] }
                   end
 
     init_weaknesses_brief_vars
