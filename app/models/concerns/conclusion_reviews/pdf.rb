@@ -2,9 +2,7 @@ module ConclusionReviews::PDF
   extend ActiveSupport::Concern
 
   def to_pdf organization = nil, *args
-    type = SHOW_CONCLUSION_ALTERNATIVE_PDF || 'default'
-
-    send "#{type}_pdf", organization, *args
+    send "#{Current.conclusion_pdf_format}_pdf", organization, *args
   end
 
   def absolute_pdf_path

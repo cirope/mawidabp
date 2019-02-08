@@ -25,7 +25,7 @@ module ConclusionReviews::Validations
     end
 
     def validate_extra_attributes?
-      SHOW_CONCLUSION_ALTERNATIVE_PDF == 'gal'
+      Current.conclusion_pdf_format == 'gal'
     end
 
     def validate_short_alternative_pdf_attributes?
