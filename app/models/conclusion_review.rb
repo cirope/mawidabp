@@ -6,6 +6,7 @@ class ConclusionReview < ApplicationRecord
   include ConclusionReviews::BundleZip
   include ConclusionReviews::ConclusionIndex
   include ConclusionReviews::CoverPDF
+  include ConclusionReviews::CroPDF
   include ConclusionReviews::DefaultPDF
   include ConclusionReviews::DestroyValidation
   include ConclusionReviews::Email
