@@ -12,8 +12,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.user         = nil
-    Current.organization = nil
+    unset_organization
   end
 
   test 'create' do
@@ -485,7 +484,7 @@ class UserTest < ActiveSupport::TestCase
     user    = users :supervisor
     options = user.review_assignment_options
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+    if Current.conclusion_pdf_format == 'gal'
       assert_equal 1, options.size
       assert options[:supervisor]
     else

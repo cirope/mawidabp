@@ -8,9 +8,9 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.user         = nil
-    Current.group        = nil
-    Current.organization = nil
+    Current.user = nil
+
+    unset_organization
   end
 
   test 'create' do
@@ -233,7 +233,7 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.state = Finding::STATUS[:assumed_risk]
     @oportunity.audit_comments = '  '
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+    if Current.conclusion_pdf_format == 'gal'
       assert @oportunity.must_be_approved?
     else
       refute @oportunity.must_be_approved?

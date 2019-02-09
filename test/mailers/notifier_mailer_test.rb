@@ -7,10 +7,12 @@ class NotifierMailerTest < ActionMailer::TestCase
     ActionMailer::Base.deliveries.clear
 
     assert ActionMailer::Base.deliveries.empty?
+
+    set_organization
   end
 
   teardown do
-    Current.organization = nil
+    unset_organization
   end
 
   test 'pending poll email' do

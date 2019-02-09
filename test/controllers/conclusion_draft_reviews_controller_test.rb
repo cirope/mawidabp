@@ -14,7 +14,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   teardown do
-    Current.organization = nil
+    unset_organization
 
     clear_enqueued_jobs
     clear_performed_jobs
