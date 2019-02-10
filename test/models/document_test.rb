@@ -8,8 +8,7 @@ class DocumentTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.group        = nil
-    Current.organization = nil
+    unset_organization
   end
 
   test 'blank attributes' do

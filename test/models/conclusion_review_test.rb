@@ -13,9 +13,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.user         = nil
-    Current.group        = nil
-    Current.organization = nil
+    Current.user = nil
+
+    unset_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera

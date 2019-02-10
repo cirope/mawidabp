@@ -8,9 +8,9 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.user         = nil
-    Current.group        = nil
-    Current.organization = nil
+    Current.user = nil
+
+    unset_organization
   end
 
   test 'create' do

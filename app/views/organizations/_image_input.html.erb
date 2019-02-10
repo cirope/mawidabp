@@ -1,16 +1,37 @@
 <% if @organization.persisted? %>
-  <label>
-    <%= Organization.human_attribute_name 'image_model.one' %>
-  </label>
+  <div class="row">
+    <div class="col-md-6">
+      <label>
+        <%= Organization.human_attribute_name 'image_model.one' %>
+      </label>
 
-  <p><%= organization_image_tag %></p>
+      <p><%= organization_image_tag %></p>
 
-  <%= f.simple_fields_for :image_model, organization_image do |im_f| %>
-    <div class="file-container pull-left">
-      <%= link_to_upload im_f.object, :image %>
-      <%= im_f.input :image, label: false %>
+      <%= f.simple_fields_for :image_model, organization_image do |im_f| %>
+        <div class="file-container pull-left">
+          <%= link_to_upload im_f.object, :image %>
+          <%= im_f.input :image, label: false %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
+
+    <div class="col-md-6">
+      <% if @organization.image_model %>
+        <label>
+          <%= Organization.human_attribute_name 'co_brand_image_model.one' %>
+        </label>
+
+        <p><%= organization_image_tag model: :co_brand_image_model %></p>
+
+        <%= f.simple_fields_for :co_brand_image_model, organization_image(:co_brand_image_model) do |im_f| %>
+          <div class="file-container pull-left">
+            <%= link_to_upload im_f.object, :image %>
+            <%= im_f.input :image, label: false %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
 <% else %>
   <div class="alert alert-warning">
     <%= t 'organizations.new_organization_can_not_have_image' %>
