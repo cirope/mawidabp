@@ -1,0 +1,25 @@
+es:
+  conclusion_review:
+    cro:
+      header:
+        legend_html: "<b>Bértora y Asociados</b>\r\nBernardo de Irigoyen 330 Piso 3\r\n\r\nCiudad Autónoma de Buenos Aires\r\nC1072AAF\r\nTeléfono +54 (11)4342 2544\r\n\r\nwww.crowe.com.ar"
+      cover:
+        date: "Ciudad Autónoma de Buenos Aires, %{date}"
+        to_html: "Señores:\r\nIntegrantes del Comité de Auditoría de\r\n<b><u>%{organization}</u></b>"
+        reference: "REF. INFORME CICLO %{business_unit}\r\n– %{business_unit_type}"
+        text: "De mi mayor consideración:\r\n\r\nTengo el agrado de dirigirme a ustedes, a fin de elevarles el presente informe sobre el ciclo de referencia.\r\n\r\nDicha revisión se realizó a efectos de dar cumplimiento a la planificación de Auditoría Interna, de acuerdo con los requerimientos de la Comunicación “A” 5042 del Banco Central de la República Argentina (BCRA).\r\n\r\nSin otro particular y quedando a vuestra disposición, saludo a ustedes muy atentamente."
+        sign: "Federico Miguel Mazzei\r\nBertora y Asociados S.R.L.\r\nAuditoría Interna"
+      index:
+        title: "ÍNDICE"
+      section:
+        objective: "I.%{space}%{space}%{space}OBJETIVO"
+        applied_procedures: "II.%{space}%{space}PROCEDIMIENTOS APLICADOS – ALCANCE"
+        findings: "III.%{space}OBSERVACIONES Y RECOMENDACIONES"
+        follow_up: "IV.%{space}SEGUIMIENTO DE OBSERVACIONES DE INFORMES ANTERIORES"
+        conclusion: "V.%{space}%{space}CONCLUSIÓN"
+      objective:
+        text: "Las tareas desarrolladas tuvieron por objeto evaluar y verificar el cumplimiento de las disposiciones del BCRA, los riesgos inherentes y los controles asociados al ciclo “%{business_unit}”.\r\n\r\nEl marco de referencia aplicado fue definido teniendo en cuenta las normas del BCRA en materia de control interno vigente, como así también las normas internas emitidas por las autoridades de la Entidad."
+      findings:
+        empty: "Sin observaciones."
+      follow_up:
+        empty: "Sin observaciones de seguimiento en informes anteriores."
