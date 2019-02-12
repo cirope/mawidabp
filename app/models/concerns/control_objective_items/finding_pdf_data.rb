@@ -18,6 +18,11 @@ module ControlObjectiveItems::FindingPDFData
     def get_initial_finding_attributes finding, show
       body = ''
 
+      if show.include? 'review'
+        body << "<b>#{Review.model_name.human}:</b> " +
+          "<i>#{finding.review.identification}</i></b>\n"
+      end
+
       if finding.review_code.present?
         body << finding_review_code_text_for(finding, show)
       end

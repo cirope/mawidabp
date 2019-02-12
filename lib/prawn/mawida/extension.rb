@@ -108,11 +108,26 @@ module Prawn
         end
       end
 
-      def add_planning_header(organization, period, factor: 1)
+      def add_organization_co_brand_image(organization, font_size = 10, factor: PDF_LOGO_FACTOR)
+        organization_co_image = organization.try(:co_brand_image_model).
+          try(:image).try(:thumb).try(:path)
+        if organization_co_image && File.exists?(organization_co_image)
+          image_geometry = organization.co_brand_image_model.image_geometry(:pdf_thumb)
+          image_geometry[:height] = image_geometry[:height] * factor
+          image_geometry[:width] = image_geometry[:width] * factor
+
+          self.image organization_co_image, :at => [
+            self.bounds.width - image_geometry[:width],
+            self.bounds.top + (font_size.pt * 2) + image_geometry[:height]
+          ], :width => image_geometry[:width], :height => image_geometry[:height]
+        end
+      end
+
+      def add_planning_header(organization, period)
         self.repeat :all do
           font_size = PDF_HEADER_FONT_SIZE
 
-          self.add_organization_image organization, font_size, factor: factor
+          self.add_organization_image organization, font_size
 
           y_pointer = self.y
 
@@ -135,11 +150,11 @@ module Prawn
         end
       end
 
-      def add_review_header(organization, identification, project, factor: 1)
+      def add_review_header(organization, identification, project)
         self.repeat :all do
           font_size = PDF_HEADER_FONT_SIZE
 
-          self.add_organization_image organization, font_size, factor: factor
+          self.add_organization_image organization, font_size
 
            y_pointer = self.y
 
@@ -195,13 +210,13 @@ module Prawn
         end
       end
 
-      def add_generic_report_header(organization, date = Time.zone.today, text = nil, factor: 1)
+      def add_generic_report_header(organization, date = Time.zone.today, text = nil)
         y_pointer = self.y
 
         self.repeat :all do
           font_size = PDF_HEADER_FONT_SIZE
 
-          self.add_organization_image organization, font_size, factor: factor
+          self.add_organization_image organization, font_size
 
           if show_print_date_on? organization
             self.canvas do
