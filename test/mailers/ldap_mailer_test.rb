@@ -11,7 +11,7 @@ class LdapMailerTest < ActionMailer::TestCase
   end
 
   teardown do
-    Current.organization = nil
+    unset_organization
   end
 
   test 'Notify with imported users' do

@@ -8,7 +8,7 @@
         <div class="form-group">
           <%= select_tag 'conclusion_review[review_type]', send_review_options, class: 'form-control' %>
         </div>
-        <% if !SHOW_CONCLUSION_ALTERNATIVE_PDF && ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.exclude?(current_organization.prefix) %>
+        <% if Current.conclusion_pdf_format != 'gal' && ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.exclude?(current_organization.prefix) %>
           <div class="form-group">
             <%= content_tag :label, t('conclusion_review.include_global_score_sheet'),
               for: :conclusion_review_include_global_score_sheet %>

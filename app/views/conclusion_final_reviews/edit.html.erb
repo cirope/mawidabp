@@ -1,7 +1,7 @@
 <%= content_for :form_actions do %>
   <%= link_to_show @conclusion_final_review %> |
   <%= link_to_index conclusion_final_reviews_path %> |
-  <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+  <% if Current.conclusion_pdf_format == 'gal' %>
     <%= render 'alternative_downloads' %>
   <% elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) %>
     <%= render 'limited_downloads' %>

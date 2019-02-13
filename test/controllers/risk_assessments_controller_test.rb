@@ -9,7 +9,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
   end
 
   teardown do
-    Current.organization = nil
+    unset_organization
   end
 
   test 'should get index' do
