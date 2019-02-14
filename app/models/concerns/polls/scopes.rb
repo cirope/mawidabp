@@ -7,8 +7,14 @@ module Polls::Scopes
   end
 
   module ClassMethods
-    def between_dates from, to
-      where created_at: from..to
+    def between_dates from, to, date_field = 'created_at'
+      if date_field == 'issue_date'
+        joins(:conclusion_review).
+          where(conclusion_reviews: { issue_date: from..to }).
+          references :conclusion_reviews
+      else
+        where created_at: from..to
+      end
     end
 
     def by_questionnaire questionnaire_id
