@@ -3,6 +3,17 @@
   <%= link_to_index conclusion_draft_reviews_path %> |
   <% if Current.conclusion_pdf_format == 'gal' %>
     <%= render 'alternative_downloads' %>
+  <% elsif Current.conclusion_pdf_format != 'default' %>
+    <%= render('shared/downloads',
+      right: true,
+      links: [
+        link_to(t('label.download'), :action => :export_to_pdf,
+          :id => @conclusion_draft_review, :_ts => Time.now.to_i),
+        link_to(t('conclusion_draft_review.download_work_papers'),
+          :action => :download_work_papers, :id => @conclusion_draft_review,
+          :_ts => Time.now.to_i)
+      ]
+    ) %>
   <% elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) %>
     <%= render 'limited_downloads' %>
   <% else %>
