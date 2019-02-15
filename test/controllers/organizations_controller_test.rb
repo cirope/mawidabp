@@ -25,20 +25,27 @@ class OrganizationsControllerTest < ActionController::TestCase
   end
 
   test 'create organization' do
-    assert_difference ['Organization.count', 'ImageModel.count'] do
-      post :create, params: {
-        organization: {
-          name: 'New organization',
-          prefix: 'new-prefix',
-          description: 'New description',
-          group_id: groups(:main_group).id,
-          image_model_attributes: {
-            image: Rack::Test::UploadedFile.new(
-              "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
-            )
+    assert_difference 'ImageModel.count', 2 do
+      assert_difference 'Organization.count' do
+        post :create, params: {
+          organization: {
+            name: 'New organization',
+            prefix: 'new-prefix',
+            description: 'New description',
+            group_id: groups(:main_group).id,
+            image_model_attributes: {
+              image: Rack::Test::UploadedFile.new(
+                "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
+              )
+            },
+            co_brand_image_model_attributes: {
+              image: Rack::Test::UploadedFile.new(
+                "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
+              )
+            }
           }
         }
-      }
+      end
     end
 
     assert_equal groups(:main_group).id, assigns(:organization).reload.group_id

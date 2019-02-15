@@ -50,7 +50,7 @@ class Polls::AnswersController < ApplicationController
 
     def set_polls
       @report.polls = Poll.list.
-        between_dates(@report.from_date.at_beginning_of_day, @report.to_date.end_of_day).
+        between_dates(@report.from_date.at_beginning_of_day, @report.to_date.end_of_day, @report.date_field).
         by_questionnaire(@report.questionnaire).
         by_user(@report.user_id, @report.user_options || {})
 

@@ -120,11 +120,7 @@ class ConclusionFinalReviewsController < ApplicationController
   def export_to_pdf
     options = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_final_review.alternative_pdf(current_organization, options)
-    else
-      @conclusion_final_review.to_pdf(current_organization, options)
-    end
+    @conclusion_final_review.to_pdf(current_organization, options)
 
     respond_to do |format|
       format.html { redirect_to @conclusion_final_review.relative_pdf_path }
@@ -206,11 +202,7 @@ class ConclusionFinalReviewsController < ApplicationController
       end
     end
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_final_review.alternative_pdf(current_organization, export_options)
-    else
-      @conclusion_final_review.to_pdf(current_organization, export_options)
-    end
+    @conclusion_final_review.to_pdf(current_organization, export_options)
 
     if include_score_sheet
       @conclusion_final_review.review.score_sheet current_organization

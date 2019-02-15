@@ -13,7 +13,7 @@
             { action: :weaknesses_by_audit_type, controller_name: 'conclusion', final: true }, class: 'list-group-item' %>
           <%= link_to t('conclusion_committee_report.weaknesses_by_state_title'),
             { action: :weaknesses_by_state, controller_name: 'conclusion', final: true }, class: 'list-group-item' %>
-          <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+          <% if Current.conclusion_pdf_format == 'gal' %>
             <%= link_to t('conclusion_report.weaknesses_by_month_title'),
               { action: :weaknesses_by_month, controller_name: 'conclusion', final: true }, class: 'list-group-item' %>
           <% end %>
@@ -23,7 +23,7 @@
             { action: :control_objective_stats, controller_name: 'conclusion', final: true }, class: 'list-group-item' %>
           <%= link_to t('conclusion_committee_report.process_control_stats_title'),
             { action: :process_control_stats, controller_name: 'conclusion', final: true }, class: 'list-group-item' %>
-          <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+          <% if Current.conclusion_pdf_format == 'gal' %>
             <%= link_to t('conclusion_report.weaknesses_by_business_unit_title'),
               { action: :weaknesses_by_business_unit, controller_name: 'conclusion', final: true }, class: 'list-group-item' %>
           <% end %>
@@ -98,7 +98,7 @@
         <div class="list-group">
           <%= link_to t('conclusion_committee_report.review_stats_report_title'),
             { action: :review_stats_report, controller_name: 'conclusion' }, class: 'list-group-item' %>
-          <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+          <% if Current.conclusion_pdf_format == 'gal' %>
             <%= link_to t('conclusion_committee_report.review_score_details_report_title'),
               { action: :review_score_details_report, controller_name: 'conclusion' }, class: 'list-group-item' %>
           <% end %>

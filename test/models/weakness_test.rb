@@ -8,9 +8,9 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.user         = nil
-    Current.group        = nil
-    Current.organization = nil
+    Current.user = nil
+
+    unset_organization
   end
 
   test 'create' do
@@ -402,7 +402,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.effect = ' '
     @weakness.audit_comments = '  '
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF && HIDE_WEAKNESS_EFFECT
+    if Current.conclusion_pdf_format == 'gal' && HIDE_WEAKNESS_EFFECT
       assert @weakness.must_be_approved?
     else
       refute @weakness.must_be_approved?

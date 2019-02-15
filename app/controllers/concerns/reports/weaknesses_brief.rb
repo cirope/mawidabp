@@ -57,9 +57,11 @@ module Reports::WeaknessesBrief
 
       if params[:weaknesses_brief] && params[:weaknesses_brief][:user_id].present?
         user       = User.find params[:weaknesses_brief][:user_id]
-        weaknesses = weaknesses.by_user_id user.id
+        inverted   = params[:weaknesses_brief][:user_inverted] == '1'
+        method     = inverted ? :excluding_user_id : :by_user_id
+        weaknesses = weaknesses.send method, user.id
 
-        @filters << "<b>#{User.model_name.human}</b> = #{user.full_name}"
+        @filters << "<b>#{User.model_name.human}</b> #{inverted ? '!=' : '='} #{user.full_name}"
       end
 
       @weaknesses = weaknesses.reorder weaknesses_brief_order

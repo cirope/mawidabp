@@ -1,5 +1,6 @@
 <% group ||= nil %>
 <% hide_comments ||= nil %>
+<% check_action ||= :user_in_comments %>
 
 <% unless group %>
   <div id="user_filter" class="filter" <%== 'style="display: none;"' unless display %>>
@@ -31,14 +32,14 @@
     <% unless hide_comments %>
       <div class="col-md-6">
         <div class="checkbox">
-          <% user_in_comments = params[action] && params[action][:user_in_comments] %>
+          <% check_value = params[action] && params[action][check_action] %>
           <label>
-            <%= f.check_box :user_in_comments, checked: user_in_comments == '1' %> <%= t '.user_in_comments' %>
+            <%= f.check_box check_action, checked: check_value == '1' %> <%= t ".#{check_action}" %>
           </label>
         </div>
       </div>
     <% end %>
 <% unless group %>
-      </div>
+    </div>
   </div>
 <% end %>

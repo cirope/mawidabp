@@ -13,9 +13,9 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.user         = nil
-    Current.group        = nil
-    Current.organization = nil
+    Current.user = nil
+
+    unset_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -215,7 +215,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     assert_error @conclusion_review, :review_id, :blank
     assert_error @conclusion_review, :conclusion, :blank
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+    if Current.conclusion_pdf_format == 'gal'
       assert_error @conclusion_review, :recipients, :blank
       assert_error @conclusion_review, :sectors, :blank
       assert_error @conclusion_review, :evolution, :blank
