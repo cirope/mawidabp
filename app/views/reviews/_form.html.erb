@@ -104,10 +104,10 @@
     <div class="col-md-6">
       <h5><strong><%= ReviewUserAssignment.human_attribute_name 'user' %></strong></h5>
     </div>
-    <div class="col-md-<%= SHOW_CONCLUSION_ALTERNATIVE_PDF ? 5 : 3 %>">
+    <div class="col-md-<%= Current.conclusion_pdf_format == 'gal' ? 5 : 3 %>">
       <h5><strong><%= ReviewUserAssignment.human_attribute_name 'assignment_type' %></strong></h5>
     </div>
-    <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+    <% unless Current.conclusion_pdf_format == 'gal' %>
       <div class="col-md-1">
         <h5><strong><%= ReviewUserAssignment.human_attribute_name 'include_signature' %></strong></h5>
       </div>

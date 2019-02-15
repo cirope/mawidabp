@@ -15,9 +15,9 @@ class WorkPaperTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.organization = nil
-    Current.group = nil
     Current.user = nil
+
+    unset_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera

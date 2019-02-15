@@ -31,7 +31,7 @@
         <td class="hidden-xs"><%= conclusion_final_review.review.score.to_s + '%' %>
         <td><%= link_to_show conclusion_final_review %></td>
         <td><%= link_to_edit edit_conclusion_final_review_path(conclusion_final_review) %></td>
-        <td><%= link_to_destroy conclusion_final_review if can_destroy_final_reviews? %></td>
+        <td><%= link_to_destroy conclusion_final_review if can_destroy_final_review? conclusion_final_review %></td>
       </tr>
     <% end %>
   </tbody>

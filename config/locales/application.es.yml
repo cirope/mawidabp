@@ -199,6 +199,9 @@ es:
     weaknesses_graphs: "Gráfico de observaciones"
     from_date: "Desde"
     to_date: "Hasta"
+    date_field: "Fecha a utilizar"
+    created_at: "Fecha de creación"
+    issue_date: "Fecha de emisión"
     cut_date: "Fecha cierre antigua data"
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"

@@ -6,7 +6,7 @@ class RiskAssessmentTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.organization = nil
+    unset_organization
   end
 
   test 'blank attributes' do

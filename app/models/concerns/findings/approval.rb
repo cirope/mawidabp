@@ -85,7 +85,7 @@ module Findings::Approval
     end
 
     def audit_comments_error
-      if audit_comments.blank? && !revoked? && !SHOW_CONCLUSION_ALTERNATIVE_PDF
+      if audit_comments.blank? && !revoked? && Current.conclusion_pdf_format != 'gal'
         I18n.t "#{class_name}.errors.without_audit_comments"
       end
     end

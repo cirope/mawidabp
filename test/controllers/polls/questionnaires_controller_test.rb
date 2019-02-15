@@ -44,6 +44,7 @@ class Polls::QuestionnairesControllerTest < ActionController::TestCase
       {
         from_date: 10.years.ago.to_date,
         to_date: 10.years.from_now.to_date,
+        date_field: %w(created_at issue_date).sample,
         questionnaire: @questionnaire
       }
     end
