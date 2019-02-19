@@ -9,6 +9,7 @@ class ConclusionFinalReview < ConclusionReview
   # Callbacks
   before_create :check_if_can_be_created,
                 :sort_findings_if_apply,
+                :recalculate_score,
                 :duplicate_review_findings,
                 :assign_audit_date_to_control_objective_items
 
@@ -36,6 +37,13 @@ class ConclusionFinalReview < ConclusionReview
     if method = sort_findings_by_method
       review.send method
       review.reload
+    end
+  end
+
+  def recalculate_score
+    unless WEAKNESS_SCORE_OBSOLESCENCE == 0
+      review.score_array date: issue_date
+      review.save!
     end
   end
 
