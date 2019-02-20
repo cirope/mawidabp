@@ -404,6 +404,52 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       'weaknesses_by_risk', 0)
   end
 
+  test 'weaknesses by risk and business unit report' do
+    login
+
+    get :weaknesses_by_risk_and_business_unit
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_by_risk_and_business_unit'
+
+    assert_nothing_raised do
+      get :weaknesses_by_risk_and_business_unit, :params => {
+        :weaknesses_by_risk_and_business_unit => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date,
+          :issue_date => %w(issue_date origination_date).sample,
+          :finding_status => ['', Finding::STATUS[:being_implemented]]
+        },
+        :controller_name => 'conclusion',
+        :final => true
+      }
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/weaknesses_by_risk_and_business_unit'
+  end
+
+  test 'create weaknesses by risk and business unit report' do
+    login
+
+    post :create_weaknesses_by_risk_and_business_unit, :params => {
+      :weaknesses_by_risk_and_business_unit => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :issue_date => %w(issue_date origination_date).sample,
+        :finding_status => ['', Finding::STATUS[:being_implemented]]
+      },
+      :report_title => 'New title',
+      :controller_name => 'conclusion',
+      :final => true
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.weaknesses_by_risk_and_business_unit.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'weaknesses_by_risk_and_business_unit', 0)
+  end
+
   test 'weaknesses by audit type report' do
     login
 
