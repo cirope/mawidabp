@@ -135,7 +135,12 @@ module Reports::WeaknessesByRiskAndBusinessUnit
     end
 
     def put_weaknesses_by_risk_and_business_unit_on pdf
-      widths        = [20, 52, 7, 7, 7, 7].map { |w| pdf.percent_width w }
+      risk_size     = Weakness.risks.size.next
+      risk_width    = risk_size <= 4 ? 32.0 : 50.0
+      risk_widths   = risk_size.times.map { risk_width / risk_size }
+      widths        = [20, 80 - risk_width].concat(risk_widths).map do |w|
+        pdf.percent_width w
+      end
       table_options = pdf.default_table_options widths
 
       pdf.table(weaknesses_by_risk_and_business_unit_pdf_data, table_options) do
