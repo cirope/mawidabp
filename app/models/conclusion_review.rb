@@ -2,6 +2,7 @@ class ConclusionReview < ApplicationRecord
   include Auditable
   include ParameterSelector
   include ConclusionReviews::AttributeTypes
+  include ConclusionReviews::BicPDF
   include ConclusionReviews::BundleIndexPDF
   include ConclusionReviews::BundleZip
   include ConclusionReviews::ConclusionIndex

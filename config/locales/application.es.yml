@@ -199,6 +199,10 @@ es:
     weaknesses_graphs: "Gráfico de observaciones"
     from_date: "Desde"
     to_date: "Hasta"
+    date_field: "Fecha a utilizar"
+    created_at: "Fecha de creación"
+    issue_date: "Fecha de emisión"
+    origination_date: "Fecha de origen"
     cut_date: "Fecha cierre antigua data"
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
@@ -1193,6 +1197,9 @@ es:
         corrective_actions: "Acciones correctivas"
         affects_compliance: "Afecta compliance"
         collapse_control_objectives: "Agrupar objetivos de control"
+        objective: "Objetivo"
+        scope: "Limitación al alcance"
+        reference: "Marco de referencia"
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:

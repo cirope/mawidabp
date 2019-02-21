@@ -286,7 +286,7 @@ class ConclusionDraftReviewsController < ApplicationController
         :recipients, :sectors, :evolution, :evolution_justification,
         :observations, :main_weaknesses_text, :corrective_actions,
         :affects_compliance, :collapse_control_objectives, :force_approval,
-        :lock_version,
+        :objective, :reference, :scope, :lock_version,
         review_attributes: [
           :id, :manual_score, :lock_version,
           best_practice_comments_attributes: [

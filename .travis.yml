@@ -17,7 +17,7 @@ services:
   - postgresql
 
 env:
-  - CONFIG_TYPE=normal
+  - CONFIG_TYPE=bic
 
 before_install:
   - 'gem install bundler'

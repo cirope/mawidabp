@@ -45,8 +45,11 @@ module Polls::Reports
 
     def set_date_range
       @from_date, @to_date = *make_date_range(params[:index])
-      @report.from_date = @from_date
-      @report.to_date = @to_date
+      @report.from_date    = @from_date
+      @report.to_date      = @to_date
+      @report.date_field   = params[:index] && params[:index].fetch(
+        :date_field, 'created_at'
+      )
     end
 
     def set_questionnaire

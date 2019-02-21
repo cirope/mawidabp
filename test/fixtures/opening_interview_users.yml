@@ -1,0 +1,4 @@
+admin_on_current:
+  opening_interview: current
+  user: admin
+  kind: assistant
