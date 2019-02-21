@@ -5,6 +5,7 @@ class ConclusionReportsController < ApplicationController
   include Reports::ReviewScoreDetailsReport
   include Reports::WeaknessesByState
   include Reports::WeaknessesByRisk
+  include Reports::WeaknessesByRiskAndBusinessUnit
   include Reports::WeaknessesByAuditType
   include Reports::ControlObjectiveStats
   include Reports::ControlObjectiveStatsByReview

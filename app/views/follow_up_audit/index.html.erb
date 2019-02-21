@@ -13,6 +13,8 @@
             { :action => :weaknesses_by_audit_type, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
           <%= link_to t('follow_up_audit.weaknesses_by_state_title'),
             { :action => :weaknesses_by_state, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
+          <%= link_to t('follow_up_audit.weaknesses_by_risk_and_business_unit_title'),
+            { :action => :weaknesses_by_risk_and_business_unit, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
           <%= link_to t('follow_up_committee_report.control_objective_stats_title'),
             { :action => :control_objective_stats, :controller_name => 'follow_up', :final => false }, class: 'list-group-item' %>
           <%= link_to t('follow_up_committee_report.process_control_stats_title'),
