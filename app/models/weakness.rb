@@ -5,6 +5,7 @@ class Weakness < Finding
   include Weaknesses::GraphHelpers
   include Weaknesses::Priority
   include Weaknesses::Progress
+  include Weaknesses::Repeated
   include Weaknesses::Risk
   include Weaknesses::Scopes
   include Weaknesses::Tags
