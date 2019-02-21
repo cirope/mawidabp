@@ -1,0 +1,11 @@
+current:
+  interview_date: <%= Time.zone.today.to_s :db %>
+  start_date: <%= 2.days.ago.to_date.to_s :db %>
+  end_date: <%= 2.days.from_now.to_date.to_s :db %>
+  objective: Interview objective
+  program: Interview program
+  scope: Interview scope
+  suggestions: Interview suggestions
+  comments: Interview comments
+  review: review_without_conclusion
+  organization: cirope

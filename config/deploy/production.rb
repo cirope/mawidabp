@@ -1,4 +1,4 @@
-set :branch,    'master'
+set :branch,    'interviews'
 set :stage,     :production
 set :rails_env, 'production'
 

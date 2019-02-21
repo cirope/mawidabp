@@ -97,6 +97,10 @@ module Findings::Scopes
       includes(review: :conclusion_final_review).where condition, *[date, date_until].compact
     end
 
+    def by_origination_date date, date_until
+      where origination_date: date..date_until
+    end
+
     def by_business_unit_ids business_unit_ids
       includes(review: :plan_item).
         where(plan_items: { business_unit_id: Array(business_unit_ids) }).

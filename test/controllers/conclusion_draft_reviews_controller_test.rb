@@ -124,7 +124,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     login
     get :new, xhr: true, as: :js
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_equal Mime[:js], @response.content_type
   end
 
   test 'create conclusion draft review' do
