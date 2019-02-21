@@ -111,6 +111,8 @@ class ConclusionFinalReview < ConclusionReview
       begin
         review.control_objective_items.each do |coi|
           if coi.audit_date.blank?
+            coi.creating_final_review = true
+
             coi.update! audit_date: issue_date
           end
         end
