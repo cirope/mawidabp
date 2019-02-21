@@ -17,9 +17,12 @@ module ConclusionReviews::BicPDF
   private
 
     def put_bic_header_on pdf, organization
-      pdf.add_review_header organization, nil, nil
+      font_size = PDF_HEADER_FONT_SIZE
 
       pdf.repeat :all do
+        pdf.add_organization_image organization, font_size, factor: 0.5
+        pdf.add_organization_co_brand_image organization, factor: 1
+
         pdf.canvas do
           coordinates = [0, pdf.bounds.top - PDF_FONT_SIZE.pt * 2]
           text        = I18n.t('conclusion_review.bic.header',
@@ -309,8 +312,9 @@ module ConclusionReviews::BicPDF
     end
 
     def bic_review_start_date
-      # TODO: implemente when merge with interviews
-      'XX/XX/XX'
+      date = review.opening_interview&.start_date
+
+      date ? I18n.l(date, format: :minimal) : '--/--/--'
     end
 
     def bic_review_end_date
