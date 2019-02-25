@@ -3,6 +3,7 @@ class RiskAssessmentTemplatesController < ApplicationController
 
   before_action :auth, :check_privileges
   before_action :set_risk_assessment_template, only: [:show, :edit, :update, :destroy]
+  before_action :set_clone_from, only: [:new]
   before_action :set_title, except: [:destroy]
 
   # GET /risk_assessment_templates
@@ -19,6 +20,10 @@ class RiskAssessmentTemplatesController < ApplicationController
   # GET /risk_assessment_templates/new
   def new
     @risk_assessment_template = RiskAssessmentTemplate.list.new
+
+    if @clone_from
+      @risk_assessment_template.clone_from @clone_from
+    end
   end
 
   # GET /risk_assessment_templates/1/edit
@@ -49,6 +54,12 @@ class RiskAssessmentTemplatesController < ApplicationController
 
     def set_risk_assessment_template
       @risk_assessment_template = RiskAssessmentTemplate.list.find params[:id]
+    end
+
+    def set_clone_from
+      if params[:clone_from]
+        @clone_from = RiskAssessmentTemplate.list.find params[:clone_from]
+      end
     end
 
     def risk_assessment_template_params
