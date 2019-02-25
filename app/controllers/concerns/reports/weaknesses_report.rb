@@ -1,12 +1,18 @@
 module Reports::WeaknessesReport
+  include Reports::FileResponder
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_weaknesses_for_report, only: [:weaknesses_report, :create_weaknesses_report]
+    before_action :set_weaknesses_for_report,
+                  :set_title,
+                  only: [:weaknesses_report, :create_weaknesses_report]
   end
 
   def weaknesses_report
-    @title = t '.title'
+    respond_to do |format|
+      format.html
+      format.csv  { render_weaknesses_report_csv }
+    end
   end
 
   def create_weaknesses_report
@@ -25,7 +31,7 @@ module Reports::WeaknessesReport
 
     respond_to do |format|
       format.html { redirect_to @report_path }
-      format.js { render 'shared/pdf_report' }
+      format.js   { render 'shared/pdf_report' }
     end
   end
 
@@ -39,6 +45,14 @@ module Reports::WeaknessesReport
       else
         @weaknesses = Weakness.none
       end
+    end
+
+    def set_title
+      @title = if params[:execution].present?
+                 t 'execution_reports.weaknesses_report.title'
+               else
+                 t 'follow_up_audit.weaknesses_report.title'
+               end
     end
 
     def scoped_weaknesses
@@ -129,6 +143,14 @@ module Reports::WeaknessesReport
       date_until ||= date if operator == 'between'
 
       [operator.upcase, date, date_until]
+    end
+
+    def render_weaknesses_report_csv
+      render_or_send_by_mail(
+        collection: @weaknesses,
+        filename: @title.downcase,
+        method_name: :to_csv
+      )
     end
 
     def weaknesses_report_pdf_name
