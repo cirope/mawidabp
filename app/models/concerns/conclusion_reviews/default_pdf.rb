@@ -91,12 +91,13 @@ module ConclusionReviews::DefaultPDF
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
 
       if show_weaknesses_brief?(organization) && weaknesses.not_revoked.any?
+        date  = use_finals ? issue_date : Time.zone.today
         title = I18n.t 'conclusion_review.weaknesses_brief'
 
         pdf.add_subtitle title, PDF_FONT_SIZE, PDF_FONT_SIZE * 0.25
         pdf.move_down PDF_FONT_SIZE
 
-        review.put_weaknesses_brief_table pdf, use_finals
+        review.put_weaknesses_brief_table pdf, use_finals, date
 
         pdf.move_down PDF_FONT_SIZE
       end
