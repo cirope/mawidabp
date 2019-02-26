@@ -592,7 +592,8 @@ es:
       download_pdf: 'Descargar PDF'
       download_csv: 'Descargar CSV'
     form:
-      new_risk_assessment_items: 'Luego de crear la evaluación de riesgo podrá agregar items a la misma'
+      new_risk_assessment_items: 'Luego de crear la evaluación de riesgo podrá agregar ítems a la misma'
+      cloned_risk_assessment_items: 'Luego de crear la evaluación de riesgo verá los ítems copiados y podrá editarlos o agregar nuevos'
       add_risk_assessment_item: 'Agregar item'
       add_best_practice: 'Agregar buena práctica'
       add_business_unit_type: 'Agregar unidad organizativa'

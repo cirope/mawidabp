@@ -21,9 +21,7 @@ class RiskAssessmentTemplatesController < ApplicationController
   def new
     @risk_assessment_template = RiskAssessmentTemplate.list.new
 
-    if @clone_from
-      @risk_assessment_template.clone_from @clone_from
-    end
+    @risk_assessment_template.clone_from @clone_from if @clone_from
   end
 
   # GET /risk_assessment_templates/1/edit

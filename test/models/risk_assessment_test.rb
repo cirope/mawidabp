@@ -139,4 +139,35 @@ class RiskAssessmentTest < ActiveSupport::TestCase
 
     FileUtils.rm @risk_assessment.absolute_pdf_path
   end
+
+  test 'clone from' do
+    new_risk_assessment = RiskAssessment.new
+
+    new_risk_assessment.clone_from @risk_assessment
+
+    all_items_are_equal = new_risk_assessment.risk_assessment_items.all? do |rai|
+      exclusion_list = %w(id risk_assessment_id risk created_at updated_at)
+
+      @risk_assessment.risk_assessment_items.any? do |original_rai|
+        rai_equal = rai.attributes.except(*exclusion_list) ==
+                      original_rai.attributes.except(*exclusion_list)
+
+        original_rai.risk_weights.all? do |orw|
+          w_exclusion_list = %w(
+            id risk_assessment_item_id value created_at updated_at
+          )
+
+          rai.risk_weights.any? do |rw|
+            orw.attributes.except(*w_exclusion_list) ==
+              rw.attributes.except(*w_exclusion_list)
+          end
+        end
+      end
+    end
+
+    assert new_risk_assessment.risk_assessment_items.size > 0
+    assert_equal @risk_assessment.risk_assessment_items.size,
+      new_risk_assessment.risk_assessment_items.size
+    assert all_items_are_equal
+  end
 end

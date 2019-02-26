@@ -1,5 +1,6 @@
 class RiskAssessment < ApplicationRecord
   include Auditable
+  include RiskAssessments::Clone
   include RiskAssessments::CSV
   include RiskAssessments::DestroyValidation
   include RiskAssessments::FileModel

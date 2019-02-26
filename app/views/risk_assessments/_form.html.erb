@@ -10,13 +10,14 @@
         <% else %>
           <%= f.input :period, input_html: { readonly: true } %>
         <% end %>
-        <% if @risk_assessment.new_record? %>
+        <% if @risk_assessment.new_record? && @clone_from.blank? %>
           <%= f.association :risk_assessment_template,
             collection: RiskAssessmentTemplate.list.order(:name),
             prompt:     true
           %>
         <% else %>
           <%= f.input :risk_assessment_template, input_html: { readonly: true } %>
+          <%= f.input :risk_assessment_template_id, as: :hidden %>
         <% end %>
       </div>
       <div class="col-md-6">
@@ -121,11 +122,12 @@
       </div>
     <% else %>
       <div class="alert alert-info">
-        <p><%= t '.new_risk_assessment_items' %></p>
+        <p><%= t @clone_from.blank? ? '.new_risk_assessment_items' : '.cloned_risk_assessment_items' %></p>
       </div>
     <% end %>
 
     <%= f.input :lock_version, as: :hidden %>
+    <%= hidden_field_tag :clone_from, params[:clone_from] %>
   </div>
 
   <hr>

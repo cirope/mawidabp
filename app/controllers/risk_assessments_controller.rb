@@ -7,6 +7,7 @@ class RiskAssessmentsController < ApplicationController
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_title, except: [:destroy]
+  before_action :set_clone_from, only: [:new, :create]
   before_action :set_risk_assessment, only: [
     :show,
     :edit,
@@ -46,6 +47,8 @@ class RiskAssessmentsController < ApplicationController
   # GET /risk_assessments/new
   def new
     @risk_assessment = RiskAssessment.list.new
+
+    @risk_assessment.clone_from @clone_from if @clone_from
   end
 
   # GET /risk_assessments/1/edit
@@ -58,6 +61,8 @@ class RiskAssessmentsController < ApplicationController
   # POST /risk_assessments
   def create
     @risk_assessment = RiskAssessment.list.new risk_assessment_params
+
+    @risk_assessment.clone_from @clone_from if @clone_from
 
     @risk_assessment.save
     respond_with @risk_assessment, location: @risk_assessment.persisted? &&
@@ -123,6 +128,12 @@ class RiskAssessmentsController < ApplicationController
 
     def set_risk_assessment
       @risk_assessment = RiskAssessment.list.find params[:id]
+    end
+
+    def set_clone_from
+      if params[:clone_from]
+        @clone_from = RiskAssessment.list.find params[:clone_from]
+      end
     end
 
     def risk_assessment_params

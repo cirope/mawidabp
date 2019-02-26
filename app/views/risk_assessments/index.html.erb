@@ -15,7 +15,7 @@
           <%= make_filterable_column RiskAssessment.human_attribute_name('period'), { class: 'hidden-xs' }, 'period' %>
           <%= make_filterable_column RiskAssessment.human_attribute_name('name'), nil, 'name' %>
           <%= make_filterable_column RiskAssessment.human_attribute_name('description'), { class: 'hidden-xs hidden-sm' }, 'description' %>
-          <th colspan="4" class="text-right"><%= link_to_search %></th>
+          <th colspan="5" class="text-right"><%= link_to_search %></th>
         </tr>
       </thead>
 
@@ -26,6 +26,7 @@
             <td><%= super_truncate risk_assessment.name, 30 %></td>
             <td class="hidden-xs hidden-sm"><%= super_truncate risk_assessment.description, 30 %></td>
             <td><%= link_to_create_plan risk_assessment %></td>
+            <td><%= link_to_clone new_risk_assessment_path(clone_from: risk_assessment.id) %></td>
             <td><%= link_to_show risk_assessment %></td>
             <td><%= link_to_edit [:edit, risk_assessment] if risk_assessment.can_be_modified? %></td>
             <td><%= link_to_destroy risk_assessment if risk_assessment.can_be_destroyed? %></td>
