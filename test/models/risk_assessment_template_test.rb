@@ -3,6 +3,12 @@ require 'test_helper'
 class RiskAssessmentTemplateTest < ActiveSupport::TestCase
   setup do
     @risk_assessment_template = risk_assessment_templates :sox
+
+    set_organization
+  end
+
+  teardown do
+    unset_organization
   end
 
   test 'blank attributes' do

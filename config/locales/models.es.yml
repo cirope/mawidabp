@@ -527,6 +527,7 @@ es:
         period: 'Periodo'
         risk_assessment_template: 'Plantilla de evaluación de riesgo'
         status: 'Estado'
+        shared: 'Compartida'
         file_model: "Anexo"
         risk_assessment_weights: 'Ponderadores'
         risk_assessment_items: 'Ítems'

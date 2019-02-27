@@ -23,7 +23,10 @@
         <% @risk_assessments.each do |risk_assessment| %>
           <tr <%== 'class="text-muted"' unless risk_assessment.draft? %>>
             <td class="hidden-xs"><%= risk_assessment.period.name %></td>
-            <td><%= super_truncate risk_assessment.name, 30 %></td>
+            <td>
+              <%= risk_assessment_shared_icon risk_assessment %>
+              <%= super_truncate risk_assessment.name, 30 %>
+            </td>
             <td class="hidden-xs hidden-sm"><%= super_truncate risk_assessment.description, 30 %></td>
             <td><%= link_to_create_plan risk_assessment %></td>
             <td><%= link_to_clone new_risk_assessment_path(clone_from: risk_assessment.id) %></td>

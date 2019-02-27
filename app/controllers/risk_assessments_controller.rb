@@ -46,21 +46,21 @@ class RiskAssessmentsController < ApplicationController
 
   # GET /risk_assessments/new
   def new
-    @risk_assessment = RiskAssessment.list.new
+    @risk_assessment = RiskAssessment.organization_scoped.new
 
     @risk_assessment.clone_from @clone_from if @clone_from
   end
 
   # GET /risk_assessments/1/edit
   def edit
-    unless @risk_assessment.draft?
+    unless @risk_assessment.can_be_modified?
       redirect_to risk_assessment_url @risk_assessment
     end
   end
 
   # POST /risk_assessments
   def create
-    @risk_assessment = RiskAssessment.list.new risk_assessment_params
+    @risk_assessment = RiskAssessment.organization_scoped.new risk_assessment_params
 
     @risk_assessment.clone_from @clone_from if @clone_from
 
@@ -131,14 +131,14 @@ class RiskAssessmentsController < ApplicationController
     end
 
     def set_clone_from
-      if params[:clone_from]
+      if params[:clone_from].present?
         @clone_from = RiskAssessment.list.find params[:clone_from]
       end
     end
 
     def risk_assessment_params
       params.require(:risk_assessment).permit :name, :description, :status,
-        :period_id, :risk_assessment_template_id, :lock_version,
+        :period_id, :risk_assessment_template_id, :shared, :lock_version,
         file_model_attributes: [:id, :file, :file_cache, :_destroy],
         risk_assessment_items_attributes: [
           :id, :order, :name, :business_unit_id, :process_control_id, :risk,

@@ -13,10 +13,12 @@ class RiskAssessment < ApplicationRecord
   include RiskAssessments::Status
   include RiskAssessments::UpdateCallbacks
   include RiskAssessments::Validations
+  include Shareable
 
   belongs_to :period, optional: true
   belongs_to :plan, optional: true
   belongs_to :risk_assessment_template, optional: true
   belongs_to :organization
+  belongs_to :group
   has_many :risk_assessment_weights, through: :risk_assessment_template
 end

@@ -10,7 +10,7 @@
         <% else %>
           <%= f.input :period, input_html: { readonly: true } %>
         <% end %>
-        <% if @risk_assessment.new_record? && @clone_from.blank? %>
+        <% if @risk_assessment.new_record? && @risk_assessment.risk_assessment_template.blank? %>
           <%= f.association :risk_assessment_template,
             collection: RiskAssessmentTemplate.list.order(:name),
             prompt:     true
@@ -22,7 +22,15 @@
       </div>
       <div class="col-md-6">
         <%= f.input :description, input_html: { rows: 2 } %>
-        <%= f.input :status, as: :boolean, label: t('risk_assessments.status.final'), checked_value: 'final', unchecked_value: 'draft' %>
+
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :shared, input_html: { disabled: @risk_assessment.shared } %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :status, as: :boolean, label: t('risk_assessments.status.final'), checked_value: 'final', unchecked_value: 'draft' %>
+          </div>
+        </div>
 
         <p><strong><%= RiskAssessment.human_attribute_name 'file_model' %></strong></p>
         <div class="clearfix">
