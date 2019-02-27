@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_02_225253) do
+ActiveRecord::Schema.define(version: 2019_02_26_194649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -850,7 +850,10 @@ ActiveRecord::Schema.define(version: 2019_02_02_225253) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "file_model_id"
+    t.boolean "shared", default: false, null: false
+    t.bigint "group_id", null: false
     t.index ["file_model_id"], name: "index_risk_assessments_on_file_model_id"
+    t.index ["group_id"], name: "index_risk_assessments_on_group_id"
     t.index ["organization_id"], name: "index_risk_assessments_on_organization_id"
     t.index ["period_id"], name: "index_risk_assessments_on_period_id"
     t.index ["plan_id"], name: "index_risk_assessments_on_plan_id"
@@ -1120,6 +1123,7 @@ ActiveRecord::Schema.define(version: 2019_02_02_225253) do
   add_foreign_key "risk_assessment_templates", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessment_weights", "risk_assessment_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "file_models", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessments", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "periods", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "plans", on_update: :restrict, on_delete: :restrict

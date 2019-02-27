@@ -35,6 +35,11 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'should get new with clone from' do
+    get :new, params: { clone_from: @risk_assessment.id }
+    assert_response :success
+  end
+
   test 'should create risk assessment' do
     counts = [
       'FileModel.count',
@@ -68,6 +73,30 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
               ]
             }
           ]
+        }
+      }
+    end
+
+    assert_redirected_to edit_risk_assessment_url(assigns(:risk_assessment))
+  end
+
+  test 'should create risk assessment with clone from' do
+    counts = [
+      'FileModel.count',
+      'RiskAssessment.count',
+      'RiskAssessmentItem.count',
+      'RiskWeight.count'
+    ]
+
+    assert_difference counts do
+      post :create, params: {
+        clone_from: @risk_assessment.id,
+        risk_assessment: {
+          name: 'New risk assessment',
+          period_id: periods(:unused_period).id,
+          file_model_attributes: {
+            file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
+          }
         }
       }
     end
