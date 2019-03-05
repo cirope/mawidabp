@@ -53,7 +53,7 @@ group :development do
 end
 
 group :test do
-  gem 'sqlite3'
+  gem 'sqlite3', '~> 1.3.0'
   gem 'timecop'
 end
 
