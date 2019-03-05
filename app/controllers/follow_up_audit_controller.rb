@@ -4,13 +4,19 @@ class FollowUpAuditController < ApplicationController
   include Reports::QAIndicators
   include Reports::WeaknessesByState
   include Reports::WeaknessesByRisk
+  include Reports::WeaknessesByRiskAndBusinessUnit
   include Reports::WeaknessesByAuditType
   include Reports::ControlObjectiveStats
   include Reports::ControlObjectiveStatsByReview
   include Reports::ProcessControlStats
-  include Reports::WeaknessesByRiskReport
+  include Reports::WeaknessesByBusinessUnit
   include Reports::WeaknessesByMonth
+  include Reports::WeaknessesByRiskReport
+  include Reports::WeaknessesByUser
   include Reports::WeaknessesCurrentSituation
+  include Reports::WeaknessesEvolution
+  include Reports::WeaknessesList
+  include Reports::WeaknessesBrief
   include Reports::FixedWeaknessesReport
   include Reports::FollowUpCostAnalysis
   include Reports::WeaknessesGraph
@@ -37,12 +43,24 @@ class FollowUpAuditController < ApplicationController
         create_weaknesses_by_state: :read,
         weaknesses_by_risk: :read,
         create_weaknesses_by_risk: :read,
+        weaknesses_by_month: :read,
+        create_weaknesses_by_month: :read,
         weaknesses_by_risk_report: :read,
         create_weaknesses_by_risk_report: :read,
         weaknesses_by_audit_type: :read,
         create_weaknesses_by_audit_type: :read,
         weaknesses_report: :read,
         create_weaknesses_report: :read,
+        weaknesses_by_business_unit: :read,
+        create_weaknesses_by_business_unit: :read,
+        weaknesses_by_user: :read,
+        create_weaknesses_by_user: :read,
+        weaknesses_current_situation: :read,
+        create_weaknesses_current_situation: :read,
+        weaknesses_evolution: :read,
+        create_weaknesses_evolution: :read,
+        weaknesses_list: :read,
+        weaknesses_brief: :read,
         weaknesses_graphs: :read,
         cost_analysis: :read,
         create_cost_analysis: :read,
@@ -52,6 +70,8 @@ class FollowUpAuditController < ApplicationController
         create_fixed_weaknesses_report: :read,
         control_objective_stats: :read,
         create_control_objective_stats: :read,
+        control_objective_stats_by_review: :read,
+        create_control_objective_stats_by_review: :read,
         process_control_stats: :read,
         create_process_control_stats: :read,
         benefits: :read,

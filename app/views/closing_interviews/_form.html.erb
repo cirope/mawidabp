@@ -1,0 +1,90 @@
+<% frozen = !@closing_interview.can_be_modified? %>
+
+<%= simple_form_for @closing_interview do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <% if @closing_interview.new_record? %>
+          <%= closing_interview_review_field f %>
+        <% else %>
+          <%= f.input :review_description, label: ClosingInterview.human_attribute_name('review'),
+            input_html: { value: @closing_interview.review, readonly: true } %>
+        <% end %>
+        <%= f.input :findings_summary, input_html: { rows: 4, readonly: frozen } %>
+        <%= f.input :recommendations_summary, input_html: { rows: 4, readonly: frozen } %>
+        <%= f.input :suggestions, input_html: { rows: 4, readonly: frozen } %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :interview_date, as: :date_picker, input_html: { readonly: frozen } %>
+        <%= f.input :comments, input_html: { rows: 4, readonly: frozen } %>
+        <%= f.input :audit_comments, input_html: { rows: 4, readonly: frozen } %>
+        <%= f.input :responsible_comments, input_html: { rows: 4, readonly: frozen } %>
+      </div>
+    </div>
+
+    <%= f.input :lock_version, as: :hidden %>
+
+    <h4><%= t 'closing_interviews.show.auditeds' %></h4>
+
+    <div class="row">
+      <div class="col-md-6">
+        <h5><strong><%= ClosingInterviewUser.human_attribute_name 'user' %></strong></h5>
+      </div>
+    </div>
+
+    <div id="responsibles">
+      <%= f.simple_fields_for :responsibles do |r_f| %>
+        <%= render 'closing_interview_user', f: r_f, frozen: frozen %>
+      <% end %>
+
+      <p>
+        <%= link_to_add_fields t('.add_responsible'), f, :responsibles, 'closing_interview_user' unless frozen %>
+      </p>
+    </div>
+
+    <h4><%= t 'closing_interviews.show.auditors' %></h4>
+
+    <div class="row">
+      <div class="col-md-6">
+        <h5><strong><%= ClosingInterviewUser.human_attribute_name 'user' %></strong></h5>
+      </div>
+    </div>
+
+    <div id="auditors">
+      <%= f.simple_fields_for :auditors do |a_f| %>
+        <%= render 'closing_interview_user', f: a_f, frozen: frozen %>
+      <% end %>
+
+      <p>
+        <%= link_to_add_fields t('.add_auditor'), f, :auditors, 'closing_interview_user' unless frozen %>
+      </p>
+    </div>
+
+    <h4><%= ClosingInterviewUser.model_name.human count: 0 %></h4>
+
+    <div class="row">
+      <div class="col-md-6">
+        <h5><strong><%= ClosingInterviewUser.human_attribute_name 'user' %></strong></h5>
+      </div>
+    </div>
+
+    <div id="assistants">
+      <%= f.simple_fields_for :assistants do |a_f| %>
+        <%= render 'closing_interview_user', f: a_f, frozen: frozen %>
+      <% end %>
+
+      <p>
+        <%= link_to_add_fields t('.add_assistant'), f, :assistants, 'closing_interview_user' unless frozen %>
+      </p>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="form-actions">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.button :submit, class: 'btn-primary', disabled: frozen %>
+  </div>
+<% end %>

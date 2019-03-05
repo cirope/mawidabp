@@ -27,12 +27,12 @@ module Tasks::DueOnDates
   private
 
     def versions_after_final_review
-      start = finding.final_review_created_at
+      start = finding&.final_review_created_at
 
       if start
         versions.where('created_at >= ?', start)
       else
-        []
+        versions.none
       end
     end
 end

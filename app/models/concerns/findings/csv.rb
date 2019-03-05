@@ -27,7 +27,7 @@ module Findings::CSV
       control_objective_item.control_objective_text,
       origination_date_text,
       date_text,
-      (rescheduled if POSTGRESQL_ADAPTER),
+      rescheduled_text,
       next_pending_task_date,
       listed_tasks,
       reiteration_info,
@@ -54,7 +54,7 @@ module Findings::CSV
       date ? I18n.l(date, format: :minimal) : '-'
     end
 
-    def rescheduled
+    def rescheduled_text
       if being_implemented? || awaiting?
         I18n.t "label.#{rescheduled? ? 'yes' : 'no'}"
       else
@@ -120,7 +120,9 @@ module Findings::CSV
 
   module ClassMethods
     def to_csv completed: 'incomplete', corporate: false
-      csv_str = ::CSV.generate(col_sep: ';', force_quotes: true) do |csv|
+      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+      csv_str = ::CSV.generate(options) do |csv|
         csv << column_headers(completed, corporate)
 
         all_with_inclusions.each { |f| csv << f.to_csv_a(corporate) }
@@ -130,14 +132,9 @@ module Findings::CSV
     end
 
     def show_follow_up_timestamps?
-      if @_show_follow_up_timestamps.nil?
-        setting = Current.organization.settings.find_by name: 'show_follow_up_timestamps'
-        result  = (setting ? setting.value : DEFAULT_SETTINGS[:show_follow_up_timestamps][:value]) != '0'
+      setting = Current.organization.settings.reload.find_by name: 'show_follow_up_timestamps'
 
-        @_show_follow_up_timestamps = result
-      else
-        @_show_follow_up_timestamps
-      end
+      (setting ? setting.value : DEFAULT_SETTINGS[:show_follow_up_timestamps][:value]) != '0'
     end
 
     private
@@ -150,7 +147,6 @@ module Findings::CSV
           :business_unit_type,
           :business_unit,
           :tasks,
-          (:versions if POSTGRESQL_ADAPTER),
           ({ tasks: :versions } if POSTGRESQL_ADAPTER),
           finding_answers: :user,
           finding_user_assignments: :user,
@@ -192,7 +188,7 @@ module Findings::CSV
           ControlObjectiveItem.human_attribute_name('control_objective_text'),
           Finding.human_attribute_name('origination_date'),
           date_label(completed),
-          (Finding.human_attribute_name('rescheduled') if POSTGRESQL_ADAPTER),
+          Finding.human_attribute_name('rescheduled'),
           I18n.t('finding.next_pending_task_date'),
           Task.model_name.human(count: 0),
           I18n.t('findings.state.repeated'),

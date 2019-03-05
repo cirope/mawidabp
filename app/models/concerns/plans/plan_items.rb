@@ -5,6 +5,10 @@ module Plans::PlanItems
     has_many :plan_items, -> { order :order_number }, dependent: :destroy
     has_many :resource_utilizations, through: :plan_items
 
+    has_many :business_units, -> {
+      distinct.reorder :name, :business_unit_type_id
+    }, through: :plan_items
+
     accepts_nested_attributes_for :plan_items, allow_destroy: true
   end
 

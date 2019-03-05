@@ -1,0 +1,157 @@
+<%= render partial: 'shared/filter_form',
+  locals: {
+    action: :weaknesses_evolution, extra_params: {
+      controller_name: 'follow_up', final: false
+    },
+    forms: [
+      [:date_range, true],
+      [:finding_title, true],
+      [:finding_statuses_evolution, true],
+      [:risk_levels_multiple, { group: 1 }],
+      [:business_unit_type_multiple, { group: 1 }],
+      [
+        :tags, {
+          group: 2,
+          field_name: :control_objective_tags,
+          field_label: t('follow_up_committee_report.weaknesses_evolution.control_objective_tags')
+        }
+      ],
+      [
+        :tags, {
+          group: 2,
+          field_name: :weakness_tags,
+          field_label: t('follow_up_committee_report.weaknesses_evolution.weakness_tags')
+        }
+      ],
+      [
+        :tags, {
+          group: 3,
+          field_name: :review_tags,
+          field_label: t('follow_up_committee_report.weaknesses_evolution.review_tags')
+        }
+      ],
+      [:compliance, { group: 3 }],
+      [:repeated, true],
+      [:weakness_extra_attributes, true]
+    ]
+  }
+%>
+
+<% if @weaknesses.any? %>
+  <% @weaknesses.each_with_index do |weakness, index| %>
+    <hr>
+
+    <p>
+      <span class="text-muted"><%= Review.model_name.human %></span>:
+      <%= weakness.review.identification %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
+      <%= weakness.review.plan_item.project %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= BusinessUnitType.model_name.human %></span>:
+      <%= weakness.business_unit_type %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= Tag.model_name.human %></span>:
+      <%= weakness.review.tags.pluck('name').to_sentence %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
+      <%= l weakness.review.conclusion_final_review.issue_date %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'conclusion' %></span>:
+      <%= weakness.review.conclusion_final_review.conclusion %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= BusinessUnit.model_name.human %></span>:
+      <%= weakness.business_unit %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= Weakness.human_attribute_name 'title' %></span>:
+      <%= weakness.title %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= Weakness.human_attribute_name 'description' %></span>:
+      <%= weakness.description %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= Weakness.human_attribute_name 'origination_date' %></span>:
+      <%= weakness.origination_date ? l(weakness.origination_date) : '-' %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= t 'findings.state.repeated' %></span>:
+      <%= t "label.#{weakness.repeated_of ? 'yes' : 'no'}" %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= Weakness.human_attribute_name 'risk' %></span>:
+      <%= weakness.risk_text %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= Weakness.human_attribute_name 'state_was' %></span>:
+      <%= weakness.children.take&.state_text %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= Weakness.human_attribute_name 'state' %></span>:
+      <%= weakness.state_text %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= Weakness.human_attribute_name 'follow_up_date' %></span>:
+      <%= weakness.follow_up_date ? l(weakness.follow_up_date) : '-' %>
+    </p>
+
+    <p>
+      <span class="text-muted"><%= Weakness.human_attribute_name 'solution_date' %></span>:
+      <%= weakness.solution_date ? l(weakness.solution_date) : '-' %>
+    </p>
+  <% end %>
+<% else %>
+  <div style="margin-left: 2em">
+    <p><em><%= t 'follow_up_committee_report.weaknesses_evolution.without_weaknesses' %></em></p>
+  </div>
+<% end %>
+
+<hr />
+
+<div>
+  <%= link_to t('label.back'), action: :index %> |
+  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: "#customize_report" } %> |
+  <%= link_to t('label.download_csv'), weaknesses_evolution_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
+</div>
+
+<%= render partial: 'shared/customize_report_form', locals: {
+  options: {
+    form_name: 'report',
+    url: request.query_parameters.merge(
+      {action: :create_weaknesses_evolution, _ts: Time.now.to_i}
+    ),
+    fields: [
+      {
+        name: :report_title,
+        label: t('customize_report_form.title'),
+        value: t('follow_up_committee_report.weaknesses_evolution.title')
+      },
+      {
+        name: :report_subtitle,
+        label: t('customize_report_form.subtitle'),
+        value: t('follow_up_committee_report.weaknesses_evolution.subtitle')
+      }
+    ]
+  }
+} %>

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 5.2.1'
+gem 'rails', '~> 5.2.2'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -18,6 +18,7 @@ gem 'net-ldap'
 gem 'rubyzip', require: 'zip'
 gem 'prawn'
 gem 'prawn-table'
+gem 'clbustos-rtf', require: 'rtf'
 gem 'figaro'
 gem 'business_time'
 gem 'bootstrap-sass'

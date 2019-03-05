@@ -8,6 +8,8 @@ class ConclusionFinalReview < ConclusionReview
 
   # Callbacks
   before_create :check_if_can_be_created,
+                :sort_findings_if_apply,
+                :recalculate_score,
                 :duplicate_review_findings,
                 :assign_audit_date_to_control_objective_items
 
@@ -31,49 +33,63 @@ class ConclusionFinalReview < ConclusionReview
     end
   end
 
+  def sort_findings_if_apply
+    if method = sort_findings_by_method
+      review.send method
+      review.reload
+    end
+  end
+
+  def recalculate_score
+    unless WEAKNESS_SCORE_OBSOLESCENCE == 0
+      review.score_array date: issue_date
+      review.save!
+    end
+  end
+
   def duplicate_review_findings
     findings = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked
 
     begin
-      findings.all? do |f|
-        finding = f.dup
-        finding.final = true
-        finding.parent = f
-        finding.skip_work_paper = f.skip_work_paper = true
-        finding.origination_date ||= f.origination_date ||= self.issue_date
+      findings.all? do |finding|
+        final_finding = finding.dup
+        final_finding.final = true
+        final_finding.parent = finding
+        final_finding.skip_work_paper = finding.skip_work_paper = true
+        final_finding.origination_date ||= finding.origination_date ||= self.issue_date
 
-        f.business_unit_findings.each do |buf|
-          finding.business_unit_findings.build(
+        finding.business_unit_findings.each do |buf|
+          final_finding.business_unit_findings.build(
             buf.attributes.dup.merge('id' => nil, 'finding_id' => nil)
           )
         end
 
-        f.finding_user_assignments.each do |fua|
-          finding.finding_user_assignments.build(
+        finding.finding_user_assignments.each do |fua|
+          final_finding.finding_user_assignments.build(
             fua.attributes.dup.merge('id' => nil, 'finding_id' => nil)
           )
         end
 
-        f.tasks.each do |t|
-          finding.tasks.build(
+        finding.tasks.each do |t|
+          final_finding.tasks.build(
             t.attributes.dup.merge('id' => nil, 'finding_id' => nil)
           )
         end
 
-        f.taggings.each do |t|
-          finding.taggings.build(
+        finding.taggings.each do |t|
+          final_finding.taggings.build(
             t.attributes.dup.merge('id' => nil, 'taggable_id' => nil)
           )
         end
 
-        f.work_papers.each do |wp|
-          finding.work_papers.build(
+        finding.work_papers.each do |wp|
+          final_finding.work_papers.build(
             wp.attributes.dup.merge('id' => nil)
           ).check_code_prefix = false
         end
 
+        final_finding.save!
         finding.save!
-        f.save!
       end
 
       revoked_findings = self.review.weaknesses.revoked + self.review.oportunities.revoked
@@ -95,6 +111,8 @@ class ConclusionFinalReview < ConclusionReview
       begin
         review.control_objective_items.each do |coi|
           if coi.audit_date.blank?
+            coi.creating_final_review = true
+
             coi.update! audit_date: issue_date
           end
         end
@@ -115,5 +133,11 @@ class ConclusionFinalReview < ConclusionReview
 
     def check_if_can_be_created
       throw :abort unless check_for_approval
+    end
+
+    def sort_findings_by_method
+      methods = JSON.parse ENV['AUTOMATICALLY_SORT_FINDINGS_ON_CONCLUSION'] || '{}'
+
+      methods[organization.prefix] if organization && methods.present?
     end
 end

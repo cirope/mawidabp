@@ -20,6 +20,7 @@ class Finding < ApplicationRecord
   include Findings::Display
   include Findings::Expiration
   include Findings::FinalReview
+  include Findings::FirstFollowUp
   include Findings::FollowUp
   include Findings::FollowUpPDF
   include Findings::ImportantDates
@@ -30,6 +31,7 @@ class Finding < ApplicationRecord
   include Findings::Reiterations
   include Findings::Relations
   include Findings::ReportScopes
+  include Findings::Reschedule
   include Findings::SaveCallbacks
   include Findings::ScaffoldNotifications
   include Findings::Scopes

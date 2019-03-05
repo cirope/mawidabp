@@ -27,6 +27,7 @@ es:
     disable: "Deshabilitar"
     download: "Descargar"
     download_csv: "Descargar CSV"
+    download_rtf: "Descargar RTF"
     edit: "Editar"
     import: "Importar"
     insert_item: "Insertar ítem"
@@ -198,7 +199,11 @@ es:
     weaknesses_graphs: "Gráfico de observaciones"
     from_date: "Desde"
     to_date: "Hasta"
-    invalid_dates: "Verifique el rango de fechas, no es válido."
+    date_field: "Fecha a utilizar"
+    created_at: "Fecha de creación"
+    issue_date: "Fecha de emisión"
+    origination_date: "Fecha de origen"
+    cut_date: "Fecha cierre antigua data"
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
@@ -638,7 +643,7 @@ es:
     not_expired: "No vencida"
     from_date: "Desde"
     to_date: "Hasta"
-    invalid_dates: "Verifique el rango de fechas, no es válido."
+    cut_date: "Fecha cierre antigua data"
     print_date: "Fecha de impresión: %{date}"
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
@@ -1192,6 +1197,9 @@ es:
         corrective_actions: "Acciones correctivas"
         affects_compliance: "Afecta compliance"
         collapse_control_objectives: "Agrupar objetivos de control"
+        objective: "Objetivo"
+        scope: "Limitación al alcance"
+        reference: "Marco de referencia"
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:

@@ -32,11 +32,15 @@ module Reports::ReviewScoreDetailsReport
   private
 
     def review_score_details_csv
-      CSV.generate(col_sep: ';', force_quotes: true) do |csv|
+      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+      csv_str = ::CSV.generate(options) do |csv|
         csv << review_score_details_csv_headers
 
         review_score_details_csv_rows.each { |row| csv << row }
       end
+
+      "\uFEFF#{csv_str}"
     end
 
     def init_review_score_details_vars
@@ -253,7 +257,8 @@ module Reports::ReviewScoreDetailsReport
         ConclusionFinalReview.human_attribute_name('issue_date'),
         ConclusionFinalReview.human_attribute_name('conclusion'),
         ConclusionFinalReview.human_attribute_name('evolution'),
-        BusinessUnit.model_name.human
+        BusinessUnit.model_name.human,
+        Review.human_attribute_name('manual_score')
       ]
     end
 
@@ -292,7 +297,7 @@ module Reports::ReviewScoreDetailsReport
           l(conclusion_review.issue_date),
           conclusion_review.conclusion,
           conclusion_review.evolution,
-          conclusion_review.review.business_unit.to_s,
+          conclusion_review.review.business_unit.to_s
         ]
       end
 
@@ -312,6 +317,7 @@ module Reports::ReviewScoreDetailsReport
           conclusion_review.conclusion,
           conclusion_review.evolution,
           conclusion_review.review.business_unit.to_s,
+          conclusion_review.review.manual_score
         ]
       end
     end

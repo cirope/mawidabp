@@ -13,8 +13,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.group        = nil
-    Current.organization = nil
+    Current.user = nil
+
+    unset_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -35,6 +36,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
   # Prueba la creación de un informe de conclusión
   test 'create' do
+    Current.user = users :supervisor
+
     assert_difference 'ConclusionReview.count' do
       @conclusion_review = ConclusionFinalReview.list.new(
         :review => reviews(:review_approved_with_conclusion),
@@ -48,6 +51,10 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :evolution_justification => 'Ok',
         :main_weaknesses_text => 'Some main weakness X',
         :corrective_actions => 'You should do it this way',
+        :objective => 'Some objective',
+        :reference => 'Some reference',
+        :observations => 'Some observations',
+        :scope => 'Some scope',
         :affects_compliance => false
       )
 
@@ -87,17 +94,25 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review.evolution = '   '
     @conclusion_review.evolution_justification = '   '
     @conclusion_review.main_weaknesses_text = '   '
+    @conclusion_review.objective = '   '
+    @conclusion_review.reference = '   '
+    @conclusion_review.scope = '   '
+    @conclusion_review.observations = '   '
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
     assert_error @conclusion_review, :review_id, :blank
     assert_error @conclusion_review, :conclusion, :blank
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+    if Current.conclusion_pdf_format == 'gal'
       assert_error @conclusion_review, :recipients, :blank
       assert_error @conclusion_review, :sectors, :blank
       assert_error @conclusion_review, :evolution, :blank
       assert_error @conclusion_review, :evolution_justification, :blank
+    elsif Current.conclusion_pdf_format == 'bic'
+      assert_error @conclusion_review, :objective, :blank
+      assert_error @conclusion_review, :reference, :blank
+      assert_error @conclusion_review, :observations, :blank
     else
       assert_error @conclusion_review, :applied_procedures, :blank
     end
@@ -148,6 +163,10 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :evolution_justification => 'Ok',
         :main_weaknesses_text => 'Some main weakness X',
         :corrective_actions => 'You should do it this way',
+        :objective => 'Some objective',
+        :reference => 'Some reference',
+        :observations => 'Some observations',
+        :scope => 'Some scope',
         :affects_compliance => '0'
       )
 
@@ -156,7 +175,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   test 'validates evolution' do
-    skip unless SHOW_CONCLUSION_ALTERNATIVE_PDF
+    skip unless Current.conclusion_pdf_format == 'gal'
 
     @conclusion_review.evolution = 'invalid'
 
@@ -191,9 +210,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     end
   end
 
-  test 'pdf conversion' do
+  test 'default pdf conversion' do
     assert_nothing_raised do
-      @conclusion_review.to_pdf(organizations(:cirope))
+      @conclusion_review.default_pdf(organizations(:cirope))
     end
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)
@@ -202,7 +221,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     FileUtils.rm @conclusion_review.absolute_pdf_path
 
     assert_nothing_raised do
-      @conclusion_review.to_pdf(
+      @conclusion_review.default_pdf(
         organizations(:cirope), :hide_score => true
       )
     end
@@ -212,7 +231,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert_not_equal size, new_size
 
     assert_nothing_raised do
-      @conclusion_review.to_pdf(
+      @conclusion_review.default_pdf(
         organizations(:cirope),
         :hide_control_objectives_excluded_from_score => '1'
       )
@@ -223,7 +242,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert_not_equal size, new_size
 
     assert_nothing_raised do
-      @conclusion_review.to_pdf organizations(:cirope), :brief => '1'
+      @conclusion_review.default_pdf organizations(:cirope), :brief => '1'
     end
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)
@@ -233,11 +252,11 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     FileUtils.rm @conclusion_review.absolute_pdf_path
   end
 
-  test 'alternative pdf conversion' do
+  test 'gal pdf conversion' do
     organization = organizations :cirope
 
     assert_nothing_raised do
-      @conclusion_review.alternative_pdf organization
+      @conclusion_review.gal_pdf organization
     end
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)
@@ -246,7 +265,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review.update_column :collapse_control_objectives, true
 
     assert_nothing_raised do
-      @conclusion_review.alternative_pdf organization
+      @conclusion_review.gal_pdf organization
     end
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)
@@ -260,7 +279,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
       main_weaknesses_text: nil
 
     assert_nothing_raised do
-      @conclusion_review.alternative_pdf organization
+      @conclusion_review.gal_pdf organization
     end
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)
@@ -268,7 +287,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert_not_equal size, new_size
 
     assert_nothing_raised do
-      @conclusion_review.alternative_pdf organization, :brief => '1'
+      @conclusion_review.gal_pdf organization, :brief => '1'
     end
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)
@@ -277,6 +296,32 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     if ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.exclude?(organization.prefix)
       assert_not_equal size, new_size
     end
+
+    FileUtils.rm @conclusion_review.absolute_pdf_path
+  end
+
+  test 'bic pdf conversion' do
+    organization = organizations :cirope
+
+    assert_nothing_raised do
+      @conclusion_review.bic_pdf organization
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert File.size(@conclusion_review.absolute_pdf_path) > 0
+
+    FileUtils.rm @conclusion_review.absolute_pdf_path
+  end
+
+  test 'cro pdf conversion' do
+    organization = organizations :cirope
+
+    assert_nothing_raised do
+      @conclusion_review.cro_pdf organization
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert File.size(@conclusion_review.absolute_pdf_path) > 0
 
     FileUtils.rm @conclusion_review.absolute_pdf_path
   end

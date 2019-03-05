@@ -3,10 +3,12 @@ require 'test_helper'
 class RiskAssessmentTest < ActiveSupport::TestCase
   setup do
     @risk_assessment = risk_assessments :sox_current
+
+    set_organization
   end
 
   teardown do
-    Current.organization = nil
+    unset_organization
   end
 
   test 'blank attributes' do
@@ -138,5 +140,86 @@ class RiskAssessmentTest < ActiveSupport::TestCase
     assert File.size(@risk_assessment.absolute_pdf_path) > 0
 
     FileUtils.rm @risk_assessment.absolute_pdf_path
+  end
+
+  test 'clone from' do
+    new_risk_assessment = RiskAssessment.organization_scoped.new
+
+    new_risk_assessment.clone_from @risk_assessment
+
+    all_items_are_equal = new_risk_assessment.risk_assessment_items.all? do |rai|
+      exclusion_list = %w(id risk_assessment_id risk created_at updated_at)
+
+      @risk_assessment.risk_assessment_items.any? do |original_rai|
+        rai_equal = rai.attributes.except(*exclusion_list) ==
+                      original_rai.attributes.except(*exclusion_list)
+
+        original_rai.risk_weights.all? do |orw|
+          w_exclusion_list = %w(
+            id risk_assessment_item_id value created_at updated_at
+          )
+
+          rai.risk_weights.any? do |rw|
+            orw.attributes.except(*w_exclusion_list) ==
+              rw.attributes.except(*w_exclusion_list)
+          end
+        end
+      end
+    end
+
+    assert new_risk_assessment.risk_assessment_items.size > 0
+    assert_equal @risk_assessment.risk_assessment_items.size,
+      new_risk_assessment.risk_assessment_items.size
+    assert all_items_are_equal
+  end
+
+  test 'clone from shared with no shared items' do
+    new_risk_assessment = RiskAssessment.new organization: organizations(:google)
+
+    new_risk_assessment.clone_from @risk_assessment
+
+    assert new_risk_assessment.risk_assessment_template.blank?
+    # Nothing gets copied here
+    assert_equal 0, new_risk_assessment.risk_assessment_items.size
+  end
+
+  test 'clone from shared with shared items' do
+    new_risk_assessment = RiskAssessment.new organization: organizations(:google)
+    item = @risk_assessment.risk_assessment_items.take!
+    process_control = process_controls :security_policy
+
+    process_control.best_practice.update! shared: true
+    item.update! process_control: process_control
+
+    new_risk_assessment.clone_from @risk_assessment
+
+    new_risk_assessment.risk_assessment_template =
+      @risk_assessment.risk_assessment_template
+
+    all_items_are_equal = new_risk_assessment.risk_assessment_items.all? do |rai|
+      exclusion_list = %w(
+        id risk_assessment_id business_unit_id risk created_at updated_at
+      )
+
+      pa = @risk_assessment.risk_assessment_items.any? do |original_rai|
+        rai_equal = rai.attributes.except(*exclusion_list) ==
+                      original_rai.attributes.except(*exclusion_list)
+
+        pall = original_rai.risk_weights.all? do |orw|
+          w_exclusion_list = %w(
+            id risk_assessment_item_id value created_at updated_at
+          )
+
+          # All should be different, at least "on spirit"
+          rai.risk_weights.all? do |rw|
+            orw.attributes.except(*w_exclusion_list) !=
+              rw.attributes.except(*w_exclusion_list)
+          end
+        end
+      end
+    end
+
+    assert new_risk_assessment.risk_assessment_items.size > 0
+    assert all_items_are_equal
   end
 end

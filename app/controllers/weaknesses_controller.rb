@@ -71,7 +71,7 @@ class WeaknessesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json # show.json.jbuilder
+      format.js   # show.js.erb
     end
   end
 

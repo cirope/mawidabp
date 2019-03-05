@@ -31,6 +31,11 @@ class RiskAssessmentTemplatesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'should get new with clone from' do
+    get :new, params: { clone_from: @risk_assessment_template.id }
+    assert_response :success
+  end
+
   test 'should create risk_assessment_template' do
     counts = %w(RiskAssessmentTemplate.count RiskAssessmentWeight.count)
 

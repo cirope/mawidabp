@@ -16,6 +16,19 @@ class ActiveSupport::TestCase
   def set_organization organization = organizations(:cirope)
     Current.group        = organization.group
     Current.organization = organization
+
+    if SHOW_CONCLUSION_ALTERNATIVE_PDF.respond_to?(:[])
+      Current.conclusion_pdf_format =
+        SHOW_CONCLUSION_ALTERNATIVE_PDF[organization&.prefix]
+    end
+
+    Current.conclusion_pdf_format ||= 'default'
+  end
+
+  def unset_organization
+    Current.group                 = nil
+    Current.organization          = nil
+    Current.conclusion_pdf_format = nil
   end
 
   def login user: users(:administrator), prefix: organizations(:cirope).prefix
