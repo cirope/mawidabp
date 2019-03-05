@@ -1,5 +1,6 @@
 class ClosingInterview < ApplicationRecord
   include Auditable
+  include ClosingInterviews::AttributeTypes
   include ClosingInterviews::DestroyValidation
   include ClosingInterviews::PDF
   include ClosingInterviews::Scopes

@@ -1,5 +1,6 @@
 class OpeningInterview < ApplicationRecord
   include Auditable
+  include OpeningInterviews::AttributeTypes
   include OpeningInterviews::DestroyValidation
   include OpeningInterviews::PDF
   include OpeningInterviews::UpdateCallbacks
