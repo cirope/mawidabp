@@ -12,8 +12,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.user         = nil
-    Current.organization = nil
+    unset_organization
   end
 
   test 'create' do
@@ -485,7 +484,7 @@ class UserTest < ActiveSupport::TestCase
     user    = users :supervisor
     options = user.review_assignment_options
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+    if Current.conclusion_pdf_format == 'gal'
       assert_equal 1, options.size
       assert options[:supervisor]
     else
@@ -557,6 +556,10 @@ class UserTest < ActiveSupport::TestCase
       evolution_justification: 'Ok',
       main_weaknesses_text: 'Some main weakness X',
       corrective_actions: 'You should do it this way',
+      :objective => 'Some objective',
+      :reference => 'Some reference',
+      :observations => 'Some observations',
+      :scope => 'Some scope',
       affects_compliance: false
     ).save!
 

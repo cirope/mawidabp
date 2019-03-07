@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_07_151054) do
+ActiveRecord::Schema.define(version: 2019_03_07_134353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -135,6 +135,34 @@ ActiveRecord::Schema.define(version: 2019_01_07_151054) do
     t.index ["name"], name: "index_business_units_on_name"
   end
 
+  create_table "closing_interview_users", force: :cascade do |t|
+    t.string "kind", null: false
+    t.bigint "closing_interview_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["closing_interview_id"], name: "index_closing_interview_users_on_closing_interview_id"
+    t.index ["user_id"], name: "index_closing_interview_users_on_user_id"
+  end
+
+  create_table "closing_interviews", force: :cascade do |t|
+    t.date "interview_date", null: false
+    t.text "findings_summary"
+    t.text "recommendations_summary"
+    t.text "suggestions"
+    t.text "comments"
+    t.text "audit_comments"
+    t.text "responsible_comments"
+    t.integer "lock_version", default: 0, null: false
+    t.bigint "review_id", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["interview_date"], name: "index_closing_interviews_on_interview_date"
+    t.index ["organization_id"], name: "index_closing_interviews_on_organization_id"
+    t.index ["review_id"], name: "index_closing_interviews_on_review_id"
+  end
+
   create_table "comments", id: :serial, force: :cascade do |t|
     t.text "comment"
     t.integer "commentable_id"
@@ -170,6 +198,9 @@ ActiveRecord::Schema.define(version: 2019_01_07_151054) do
     t.boolean "affects_compliance", default: false, null: false
     t.boolean "collapse_control_objectives", default: false, null: false
     t.integer "conclusion_index"
+    t.text "objective"
+    t.text "reference"
+    t.text "scope"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
@@ -385,12 +416,14 @@ ActiveRecord::Schema.define(version: 2019_01_07_151054) do
     t.bigint "weakness_template_id"
     t.boolean "rescheduled", default: false, null: false
     t.date "first_follow_up_date"
+    t.date "last_notification_date"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
     t.index ["first_follow_up_date"], name: "index_findings_on_first_follow_up_date"
     t.index ["first_notification_date"], name: "index_findings_on_first_notification_date"
     t.index ["follow_up_date"], name: "index_findings_on_follow_up_date"
+    t.index ["last_notification_date"], name: "index_findings_on_last_notification_date"
     t.index ["organization_id"], name: "index_findings_on_organization_id"
     t.index ["parent_id"], name: "index_findings_on_parent_id"
     t.index ["repeated_of_id"], name: "index_findings_on_repeated_of_id"
@@ -512,6 +545,35 @@ ActiveRecord::Schema.define(version: 2019_01_07_151054) do
     t.datetime "updated_at", null: false
     t.index ["created_at"], name: "index_old_passwords_on_created_at"
     t.index ["user_id"], name: "index_old_passwords_on_user_id"
+  end
+
+  create_table "opening_interview_users", force: :cascade do |t|
+    t.string "kind", null: false
+    t.bigint "opening_interview_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["opening_interview_id"], name: "index_opening_interview_users_on_opening_interview_id"
+    t.index ["user_id"], name: "index_opening_interview_users_on_user_id"
+  end
+
+  create_table "opening_interviews", force: :cascade do |t|
+    t.date "interview_date", null: false
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.text "objective", null: false
+    t.text "program"
+    t.text "scope"
+    t.text "suggestions"
+    t.text "comments"
+    t.integer "lock_version", default: 0, null: false
+    t.bigint "review_id", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["interview_date"], name: "index_opening_interviews_on_interview_date"
+    t.index ["organization_id"], name: "index_opening_interviews_on_organization_id"
+    t.index ["review_id"], name: "index_opening_interviews_on_review_id"
   end
 
   create_table "organization_roles", id: :serial, force: :cascade do |t|
@@ -790,7 +852,10 @@ ActiveRecord::Schema.define(version: 2019_01_07_151054) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "file_model_id"
+    t.boolean "shared", default: false, null: false
+    t.bigint "group_id", null: false
     t.index ["file_model_id"], name: "index_risk_assessments_on_file_model_id"
+    t.index ["group_id"], name: "index_risk_assessments_on_group_id"
     t.index ["organization_id"], name: "index_risk_assessments_on_organization_id"
     t.index ["period_id"], name: "index_risk_assessments_on_period_id"
     t.index ["plan_id"], name: "index_risk_assessments_on_plan_id"
@@ -989,6 +1054,10 @@ ActiveRecord::Schema.define(version: 2019_01_07_151054) do
   add_foreign_key "business_unit_scores", "control_objective_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_types", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_units", "business_unit_types", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "closing_interview_users", "closing_interviews", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "closing_interview_users", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "closing_interviews", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "closing_interviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "comments", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "conclusion_reviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "control_objectives", on_update: :restrict, on_delete: :restrict
@@ -1023,6 +1092,10 @@ ActiveRecord::Schema.define(version: 2019_01_07_151054) do
   add_foreign_key "notifications", "users", column: "user_who_confirm_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "notifications", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "old_passwords", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "opening_interview_users", "opening_interviews", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "opening_interview_users", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "opening_interviews", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "opening_interviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "organization_roles", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "organization_roles", "roles", on_update: :restrict, on_delete: :restrict
   add_foreign_key "organization_roles", "users", on_update: :restrict, on_delete: :restrict
@@ -1052,6 +1125,7 @@ ActiveRecord::Schema.define(version: 2019_01_07_151054) do
   add_foreign_key "risk_assessment_templates", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessment_weights", "risk_assessment_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "file_models", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "risk_assessments", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "periods", on_update: :restrict, on_delete: :restrict
   add_foreign_key "risk_assessments", "plans", on_update: :restrict, on_delete: :restrict

@@ -1,14 +1,14 @@
 <div id="business_unit_filter" class="filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
-       <div class="form-group">
-          <% selected = params[action] ? params[action][:business_unit_type] : nil %>
-          <%= f.label :business_unit_type, BusinessUnitType.model_name.human, class: 'col-md-4' %>
-          <div class="col-md-8">
-            <%= f.select :business_unit_type, BusinessUnitType.list.map { |but| [but.name, but.id.to_s] },
-              { include_blank: t('helpers.select.prompt'), selected: selected }, class: 'form-control' %>
-          </div>
-       </div>
+      <div class="form-group">
+        <% selected = params[action] ? params[action][:business_unit_type] : nil %>
+        <%= f.label :business_unit_type, BusinessUnitType.model_name.human, class: 'col-md-4' %>
+        <div class="col-md-8">
+          <%= f.select :business_unit_type, BusinessUnitType.list.map { |but| [but.name, but.id.to_s] },
+            { include_blank: t('helpers.select.prompt'), selected: selected }, class: 'form-control' %>
+        </div>
+      </div>
     </div>
     <div class="col-md-6">
       <div class="form-group">

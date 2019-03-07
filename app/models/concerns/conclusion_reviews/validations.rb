@@ -3,17 +3,20 @@ module ConclusionReviews::Validations
 
   included do
     validates :review_id, :organization_id, :issue_date, presence: true
-    validates :applied_procedures, presence: true, unless: :validate_extra_attributes?
+    validates :applied_procedures, presence: true, unless: :validate_extra_gal_attributes?
     validates :conclusion, :applied_procedures, :summary, :recipients, :sectors,
-      pdf_encoding: true
+      :observations, :objective, :reference, :scope, pdf_encoding: true
     validates :type, :summary, :evolution, length: { maximum: 255 }
     validates :issue_date, timeliness: { type: :date }, allow_nil: true
 
-    validates :recipients, :sectors, :evolution, :evolution_justification,
-      presence: true, if: :validate_extra_attributes?
+    validates :sectors, :evolution, :evolution_justification, presence: true,
+      if: :validate_extra_gal_attributes?
+    validates :recipients, presence: true, if: :validate_recipients?
     validates :main_weaknesses_text, presence: true,
       if: :validate_short_alternative_pdf_attributes?
-    validate :evolution_for_conclusion, if: :validate_extra_attributes?
+    validates :objective, :reference, :observations, presence: true,
+      if: :validate_extra_bic_attributes?
+    validate :evolution_for_conclusion, if: :validate_extra_gal_attributes?
   end
 
   private
@@ -24,8 +27,16 @@ module ConclusionReviews::Validations
       errors.add :evolution, :invalid if allowed.exclude?(evolution)
     end
 
-    def validate_extra_attributes?
-      SHOW_CONCLUSION_ALTERNATIVE_PDF
+    def validate_extra_gal_attributes?
+      Current.conclusion_pdf_format == 'gal'
+    end
+
+    def validate_extra_bic_attributes?
+      Current.conclusion_pdf_format == 'bic'
+    end
+
+    def validate_recipients?
+      %w(bic gal).include? Current.conclusion_pdf_format
     end
 
     def validate_short_alternative_pdf_attributes?

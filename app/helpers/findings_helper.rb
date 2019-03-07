@@ -159,6 +159,16 @@ module FindingsHelper
     end
   end
 
+  def weaknesses_by_risk_and_business_unit_status_options
+    exclude = %i(confirmed unconfirmed unanswered notify incomplete)
+
+    Finding::STATUS.except(*exclude).map do |k, v|
+      if Finding::PENDING_STATUS.include? v
+        [t("findings.state.#{k}"), v.to_s]
+      end
+    end.compact
+  end
+
   def finding_execution_status_options
     exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS - [:unconfirmed, :confirmed]
 
@@ -171,6 +181,8 @@ module FindingsHelper
     case
     when action == :fixed_weaknesses_report
       finding_fixed_status_options
+    when action == :weaknesses_by_risk_and_business_unit
+      weaknesses_by_risk_and_business_unit_status_options
     when params[:execution].present?
       finding_execution_status_options
     else

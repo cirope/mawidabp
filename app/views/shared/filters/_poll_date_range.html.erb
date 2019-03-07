@@ -22,3 +22,20 @@
     </div>
   </div>
 </div>
+
+<div class="filter" <%== 'style="display: none;"' unless display %>>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <% selected = params[action] ? params[action][:date_field] : 'created_at' %>
+        <%= f.label :date_field, t('conclusion_committee_report.date_field'), class: 'col-md-4' %>
+        <div class="col-md-8">
+          <%= f.select :date_field, [
+              [t('conclusion_committee_report.created_at'), 'created_at'],
+              [t('conclusion_committee_report.issue_date'), 'issue_date']
+            ], { selected: selected }, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

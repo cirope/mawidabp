@@ -16,8 +16,6 @@ services:
   - postgresql
 
 env:
-  - CONFIG_TYPE=normal
-  - CONFIG_TYPE=alternative
   - CONFIG_TYPE=reviews_scored_by_weakness
 
 before_install:

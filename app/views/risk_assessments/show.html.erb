@@ -75,7 +75,7 @@
 
 <hr>
 
-<% if @risk_assessment.draft? %>
+<% if @risk_assessment.can_be_modified? %>
   <%= link_to_edit [:edit, @risk_assessment] %> |
 <% end %>
 <%= link_to t('.download_pdf'), [@risk_assessment, _ts: Time.now.to_i, format: :pdf] %> |

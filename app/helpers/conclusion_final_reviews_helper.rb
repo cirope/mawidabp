@@ -186,16 +186,16 @@ module ConclusionFinalReviewsHelper
   end
 
   def send_review_options
-    default = if SHOW_CONCLUSION_ALTERNATIVE_PDF && show_brief_download?
+    default = if Current.conclusion_pdf_format == 'gal' && show_brief_download?
                 'brief'
               else
                 'normal'
               end
 
-    options = if SHOW_CONCLUSION_ALTERNATIVE_PDF
-                ['normal', 'brief']
-              else
+    options = if Current.conclusion_pdf_format == 'default'
                 ['normal', 'brief', 'without_score']
+              else
+                ['normal', 'brief']
               end
 
     options.delete 'brief' unless show_brief_download?
@@ -231,7 +231,7 @@ module ConclusionFinalReviewsHelper
     CONCLUSION_OPTIONS.map { |option| [option, option] }
   end
 
-  def can_destroy_final_reviews?
-    ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION && can_perform?(:destroy)
+  def can_destroy_final_review? conclusion_final_review
+    can_perform?(:destroy) && conclusion_final_review.can_be_destroyed?
   end
 end
