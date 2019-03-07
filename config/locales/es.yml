@@ -1040,6 +1040,10 @@
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables del siguiente hallazgo"
       managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables del hallazgo o si se altera el organigrama"
+    expired_finding_to_manager:
+      title: "Hallazgo vencido"
+      the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación del siguiente hallazgo"
+      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:
