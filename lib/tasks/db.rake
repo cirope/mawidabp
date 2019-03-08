@@ -197,7 +197,7 @@ private
   end
 
   def reset_notification_level?
-    findings_for_notification_level_reset.exists?
+    Finding.where(last_notification_date: nil).count == Finding.count
   end
 
   def findings_for_notification_level_reset
