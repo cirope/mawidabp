@@ -44,7 +44,7 @@ DISABLE_FINDINGS_EXPIRATION_NOTIFICATION = ENV['DISABLE_FINDINGS_EXPIRATION_NOTI
 # Cadena para separar las enumeraciones cuando son concatenadas
 APP_ENUM_SEPARATOR = ' / '.freeze
 # Márgenes a dejar en los reportes generados en PDF (T, R, B, L)
-PDF_MARGINS = [25, 20, 20, 25].freeze
+PDF_MARGINS = [25, 20, 30, 25].freeze
 # Tamaño de la página a usar en los reportes generados en PDF
 PDF_PAPER = 'A4'.freeze
 # Logo para el pié de página de los PDFs
