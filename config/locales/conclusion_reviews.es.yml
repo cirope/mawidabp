@@ -11,6 +11,7 @@ es:
         final_html: "<color rgb='ffffff'><b>Versión\nFINAL</b></color>"
         ref_html: "\n<i><b>Ref =</b> Informe de Auditoría N° %{identification}: \"%{project}\"</i>"
         legend: "Nos encontramos a vuestra disposición para aclarar cualquier tema que consideren necesario.\n\nAtentamente,"
+        footer: "(*) Cada Gerencia Auditada deberá dar respuesta a los informes dentro de un plazo de 10 días hábiles de recibidos. Las respuestas deberán contar con el curso de acción comprometido por cada Gerencia, para regularizar las observaciones que se señalen. Además, la Gerencia deberá informar el plazo en el cual procederán a la regularización comprometida."
       review:
         subject: "Tema"
         previous: "Informe previo\n%{review}"

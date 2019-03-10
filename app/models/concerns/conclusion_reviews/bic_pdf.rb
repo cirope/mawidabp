@@ -42,12 +42,34 @@ module ConclusionReviews::BicPDF
         pdf.table bic_cover_data, table_options.merge(row_colors: %w(ffffff))
       end
 
+      put_bic_cover_legend_on     pdf
+      put_bic_cover_recipients_on pdf
+
+      pdf.move_down pdf.cursor - PDF_FONT_SIZE * 4
+      pdf.put_hr
+      pdf.text I18n.t('conclusion_review.bic.cover.footer'),
+        size: PDF_FONT_SIZE * 0.6, align: :justify
+    end
+
+    def put_bic_cover_legend_on pdf
+      manager_rua = review.review_user_assignments.detect(&:manager?) ||
+                    review.review_user_assignments.detect(&:supervisor?)
+
       pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.bic.cover.legend'),
         size: PDF_FONT_SIZE, align: :justify
 
+      if manager_rua
+        pdf.move_down PDF_FONT_SIZE * 4
+        pdf.text manager_rua.user.informal_name, size: PDF_FONT_SIZE,
+          align: :right
+      end
+    end
+
+    def put_bic_cover_recipients_on pdf
       pdf.move_down PDF_FONT_SIZE * 2
-      pdf.text self.class.human_attribute_name('recipients').upcase, style: :bold
+      pdf.text self.class.human_attribute_name('recipients').upcase,
+        style: :bold
 
       pdf.move_down PDF_FONT_SIZE
       pdf.text recipients, align: :justify, inline_format: true
