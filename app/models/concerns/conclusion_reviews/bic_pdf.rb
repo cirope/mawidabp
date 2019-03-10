@@ -5,11 +5,12 @@ module ConclusionReviews::BicPDF
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait
 
-    put_default_watermark_on pdf
-    put_bic_header_on        pdf, organization
-    put_bic_cover_on         pdf
-    put_bic_review_on        pdf
-    put_bic_weaknesses_on    pdf
+    put_default_watermark_on        pdf
+    put_bic_header_on               pdf, organization
+    put_bic_cover_on                pdf
+    put_bic_review_on               pdf
+    put_bic_weaknesses_on           pdf
+    put_bic_weaknesses_on_review_on pdf
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -104,16 +105,32 @@ module ConclusionReviews::BicPDF
           end
         end
       end
+
+      number
     end
 
-    def put_bic_weakness_on pdf, weakness, number
+    def put_bic_weaknesses_on_review_on pdf
+      header_text = I18n.t 'conclusion_review.bic.weaknesses.on_review'
+
+      pdf.start_new_page
+      put_bic_page_header_on pdf, header_text
+
+      review.finding_review_assignments.each do |fra|
+        put_bic_weakness_on pdf, fra.finding, nil, show_review: true
+      end
+    end
+
+    def put_bic_weakness_on pdf, weakness, number, show_review: false
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text I18n.t('conclusion_review.bic.weaknesses.plan', number: number),
-        style: :bold
+      if number
+        pdf.text I18n.t(
+          'conclusion_review.bic.weaknesses.plan', number: number
+        ), style: :bold
+      end
 
       pdf.font_size PDF_FONT_SIZE * 0.75 do
-        data          = bic_weakness_data weakness
+        data          = bic_weakness_data weakness, show_review: show_review
         widths        = bic_weakness_data_column_widths pdf
         table_options = pdf.default_table_options widths
 
@@ -133,11 +150,16 @@ module ConclusionReviews::BicPDF
       [20, 80].map { |width| pdf.percent_width width }
     end
 
-    def bic_weakness_data weakness
+    def bic_weakness_data weakness, show_review:
+      title = [
+        (weakness.review.identification if show_review),
+        weakness.title
+      ].compact.join ' - '
+
       [
         [
           "<b>#{Weakness.human_attribute_name('title').upcase}</b>",
-          "<b>#{weakness.title}</b>"
+          "<b>#{title}</b>"
         ],
         [
           Weakness.human_attribute_name('description').upcase,

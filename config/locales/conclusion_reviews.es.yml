@@ -22,6 +22,7 @@ es:
         main_recommendations: "Principales Recomendaciones de Auditoría"
       weaknesses:
         title: "DETALLE DE OBSERVACIONES - PLANES DE ACCION"
+        on_review: "OBSERVACIONES ANTERIORES"
         plan: "Plan de acción correctiva N° %{number}"
         responsible: "RESPONSABLE DE LA GERENCIA"
     cro:
