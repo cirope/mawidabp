@@ -7,6 +7,10 @@
 
   $('#best_practice_comments_container').html('<%= j best_practice_comments_form(@conclusion_draft_review) %>')
 
+  <% if Current.conclusion_pdf_format == 'bic' %>
+    $('#conclusion_draft_review_applied_procedures').val('<%= j @conclusion_draft_review.suggested_applied_procedures %>')
+  <% end %>
+
   $('#conclusion_draft_review_applied_procedures').focus()
 <% else %>
   $('#conclusion_draft_review_business_unit').val('')
@@ -14,6 +18,10 @@
   $('#conclusion_draft_review_score').val('')
   $('#conclusion_draft_review_recipients').val('')
   $('#conclusion_draft_review_sectors').val('')
+
+  <% if Current.conclusion_pdf_format == 'bic' %>
+    $('#conclusion_draft_review_applied_procedures').val('')
+  <% end %>
 
   $('#best_practice_comments_container').html('')
 <% end %>
