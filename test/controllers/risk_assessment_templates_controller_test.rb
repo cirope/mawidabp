@@ -6,6 +6,11 @@ class RiskAssessmentTemplatesControllerTest < ActionController::TestCase
     @risk_assessment_template = risk_assessment_templates :sox
 
     login
+    set_organization
+  end
+
+  teardown do
+    unset_organization
   end
 
   test 'should get index' do

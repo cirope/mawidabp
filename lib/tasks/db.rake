@@ -10,6 +10,7 @@ namespace :db do
       update_finding_reschedules          # 2018-11-27
       mark_tasks_as_finished              # 2019-01-04
       update_finding_first_follow_up_date # 2019-01-07
+      reset_notification_level            # 2019-03-06
     end
   end
 end
@@ -186,5 +187,27 @@ private
   def update_finding_first_follow_up_date?
     Finding.
       where(first_follow_up_date: nil).
-      where.not(follow_up_date: nil).count > 0
+      where.not(follow_up_date: nil).exists?
+  end
+
+  def reset_notification_level
+    if reset_notification_level?
+      findings_for_notification_level_reset.update_all notification_level: 0
+    end
+  end
+
+  def reset_notification_level?
+    Finding.where(last_notification_date: nil).count == Finding.count
+  end
+
+  def findings_for_notification_level_reset
+    pending_statuses = [
+      Finding::STATUS[:being_implemented],
+      Finding::STATUS[:awaiting]
+    ]
+
+    Finding.
+      finals(false).
+      where(state: pending_statuses).
+      where.not notification_level: 0
   end

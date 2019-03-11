@@ -1,4 +1,5 @@
 class ConclusionDraftReview < ConclusionReview
+  include ConclusionDraftReviews::AppliedProcedures
   include ConclusionDraftReviews::Approval
 
   COLUMNS_FOR_SEARCH = GENERIC_COLUMNS_FOR_SEARCH

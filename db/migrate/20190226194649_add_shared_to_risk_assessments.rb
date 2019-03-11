@@ -16,7 +16,9 @@ class AddSharedToRiskAssessments < ActiveRecord::Migration[5.2]
       RiskAssessment.reset_column_information
 
       risk_assessments.find_each do |risk_assessment|
-        risk_assessment.update! group_id: risk_assessment.organization.group_id
+        group_id = risk_assessment.organization.group_id
+
+        risk_assessment.update_column :group_id, group_id
       end
     end
 

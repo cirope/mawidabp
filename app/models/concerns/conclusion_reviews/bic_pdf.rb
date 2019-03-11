@@ -42,12 +42,34 @@ module ConclusionReviews::BicPDF
         pdf.table bic_cover_data, table_options.merge(row_colors: %w(ffffff))
       end
 
+      put_bic_cover_legend_on     pdf
+      put_bic_cover_recipients_on pdf
+
+      pdf.move_down pdf.cursor - PDF_FONT_SIZE * 4
+      pdf.put_hr
+      pdf.text I18n.t('conclusion_review.bic.cover.footer'),
+        size: PDF_FONT_SIZE * 0.6, align: :justify
+    end
+
+    def put_bic_cover_legend_on pdf
+      manager_rua = review.review_user_assignments.detect(&:manager?) ||
+                    review.review_user_assignments.detect(&:supervisor?)
+
       pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.bic.cover.legend'),
         size: PDF_FONT_SIZE, align: :justify
 
+      if manager_rua
+        pdf.move_down PDF_FONT_SIZE * 4
+        pdf.text manager_rua.user.informal_name, size: PDF_FONT_SIZE,
+          align: :right
+      end
+    end
+
+    def put_bic_cover_recipients_on pdf
       pdf.move_down PDF_FONT_SIZE * 2
-      pdf.text self.class.human_attribute_name('recipients').upcase, style: :bold
+      pdf.text self.class.human_attribute_name('recipients').upcase,
+        style: :bold
 
       pdf.move_down PDF_FONT_SIZE
       pdf.text recipients, align: :justify, inline_format: true
@@ -82,13 +104,16 @@ module ConclusionReviews::BicPDF
           end
         end
       end
+
+      number
     end
 
     def put_bic_weakness_on pdf, weakness, number
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text I18n.t('conclusion_review.bic.weaknesses.plan', number: number),
-        style: :bold
+      pdf.text I18n.t(
+        'conclusion_review.bic.weaknesses.plan', number: number
+      ), style: :bold
 
       pdf.font_size PDF_FONT_SIZE * 0.75 do
         data          = bic_weakness_data weakness
@@ -203,7 +228,7 @@ module ConclusionReviews::BicPDF
           },
           [
             I18n.t('review.user_assignment.type_auditor'),
-            review.review_user_assignments.select(&:auditor?).map(&:user).map(&:full_name).join('; ')
+            bic_review_auditors_text
           ].join(': '),
           {
             content: "<b>#{review.identification}</b>",
@@ -298,6 +323,15 @@ module ConclusionReviews::BicPDF
           }
         ]
       ].compact
+    end
+
+    def bic_review_auditors_text
+      managers    = review.review_user_assignments.select &:manager?
+      supervisors = review.review_user_assignments.select &:supervisor?
+      auditors    = review.review_user_assignments.select &:auditor?
+
+
+      (managers | supervisors | auditors).map(&:user).map(&:full_name).join '; '
     end
 
     def bic_previous_review_text

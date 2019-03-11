@@ -26,6 +26,7 @@ class Finding < ApplicationRecord
   include Findings::ImportantDates
   include Findings::JSON
   include Findings::Notifications
+  include Findings::NotificationLevel
   include Findings::Overrides
   include Findings::PDF
   include Findings::Reiterations
@@ -33,6 +34,7 @@ class Finding < ApplicationRecord
   include Findings::ReportScopes
   include Findings::Reschedule
   include Findings::SaveCallbacks
+  include Findings::ScaffoldFollowUp
   include Findings::ScaffoldNotifications
   include Findings::Scopes
   include Findings::Search
