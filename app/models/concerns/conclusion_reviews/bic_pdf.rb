@@ -26,8 +26,7 @@ module ConclusionReviews::BicPDF
         pdf.canvas do
           coordinates = [0, pdf.bounds.top - PDF_FONT_SIZE.pt * 2]
           text        = I18n.t('conclusion_review.bic.header',
-            identification: review.identification,
-            date:           I18n.l(issue_date)
+            identification: review.identification
           )
 
           pdf.text_box text, at: coordinates, size: PDF_FONT_SIZE, align: :center
@@ -314,8 +313,8 @@ module ConclusionReviews::BicPDF
         [
           {
             content: [
-              self.class.human_attribute_name('conclusion'),
-              "<b>#{review.score_text}</b>"
+              I18n.t('conclusion_review.bic.review.score'),
+              "<b>#{I18n.t "score_types.#{review.score_array.first}"}</b>"
             ].join("\n"),
             colspan: 3,
             align:   :center,

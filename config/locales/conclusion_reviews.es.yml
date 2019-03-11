@@ -1,7 +1,7 @@
 es:
   conclusion_review:
     bic:
-      header: "INFORME DE AUDITORÍA INTERNA\nN° %{identification} del %{date}"
+      header: "INFORME DE AUDITORÍA INTERNA\nN° %{identification}"
       cover:
         title_html: "\n<b><i>DISTRIBUCIÓN INFORME N° %{identification}</i></b>\n%{space}"
         to_html: "\n<i><b>A =</b> Ver lista de Distribución</i>"
@@ -19,6 +19,7 @@ es:
         applied_procedures: "Alcance"
         observations: "Aclaraciones previas"
         conclusion: "Comentarios de auditoría"
+        score: "Evaluación del ciclo"
         main_recommendations: "Principales Recomendaciones de Auditoría"
       weaknesses:
         title: "DETALLE DE OBSERVACIONES - PLANES DE ACCION"
