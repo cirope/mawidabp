@@ -18,20 +18,35 @@ module ConclusionReviews::BicPDF
 
     def put_bic_header_on pdf, organization
       font_size = PDF_HEADER_FONT_SIZE
+      width     = pdf.bounds.width
 
       pdf.repeat :all do
         pdf.add_organization_image organization, font_size, factor: 0.5
         pdf.add_organization_co_brand_image organization, factor: 1
 
         pdf.canvas do
-          coordinates = [0, pdf.bounds.top - PDF_FONT_SIZE.pt * 2]
-          text        = I18n.t('conclusion_review.bic.header',
-            identification: review.identification
-          )
-
-          pdf.text_box text, at: coordinates, size: PDF_FONT_SIZE, align: :center
+          put_bic_header_text_on pdf, organization, width
         end
       end
+    end
+
+    def put_bic_header_text_on pdf, organization, width
+      logo_geometry    = organization.image_model&.image_geometry :pdf_thumb
+      co_logo_geometry = organization.co_brand_image_model&.image_geometry :pdf_thumb
+      max_logo_width   = [
+        Hash(logo_geometry)[:width].to_i,
+        Hash(co_logo_geometry)[:width].to_i
+      ].max
+
+      text_width  = width - max_logo_width - 2
+      coordinates = [max_logo_width - 1, pdf.bounds.top - PDF_FONT_SIZE.pt * 2]
+
+      text = I18n.t(
+        'conclusion_review.bic.header', identification: review.identification
+      )
+
+      pdf.text_box text, at: coordinates, size: PDF_FONT_SIZE, align: :center,
+        width: text_width
     end
 
     def put_bic_cover_on pdf
