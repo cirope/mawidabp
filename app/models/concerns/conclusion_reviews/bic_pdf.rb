@@ -192,7 +192,11 @@ module ConclusionReviews::BicPDF
         ([
           Weakness.human_attribute_name('audit_comments').upcase,
           weakness.audit_comments
-        ] if weakness.audit_comments.present?)
+        ] if weakness.audit_comments.present?),
+        ([
+          I18n.t('finding.repeated_ancestors').upcase,
+          weakness.repeated_of.to_s
+        ] if weakness.repeated_of)
       ].compact
     end
 
