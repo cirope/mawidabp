@@ -65,10 +65,6 @@ label:has(> input[type="checkbox"][data-readonly="true"]) {
   padding-left: 2em;
 }
 
-.nowrap {
-  white-space: nowrap;
-}
-
 .pagination, .pager {
   margin: 0;
 }

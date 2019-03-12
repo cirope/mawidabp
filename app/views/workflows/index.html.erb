@@ -13,7 +13,7 @@
     <%  @workflows.each do |workflow| %>
       <tr>
         <td><%= show_period_with_dates_as_abbr workflow.period %></td>
-        <td class="nowrap"><%= show_review_with_close_date_as_abbr workflow.review %></td>
+        <td><%= show_review_with_close_date_as_abbr workflow.review %></td>
         <td class="hidden-xs"><%= super_truncate workflow.review.plan_item.project, 30 %></td>
         <td class="hidden-xs"><%= l(workflow.created_at, :format => :short) %></td>
         <td><%= link_to_clone new_workflow_path(:clone_from => workflow.id) %></td>
