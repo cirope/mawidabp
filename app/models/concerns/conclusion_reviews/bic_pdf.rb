@@ -38,8 +38,11 @@ module ConclusionReviews::BicPDF
         Hash(co_logo_geometry)[:width].to_i
       ].max
 
-      text_width  = width - max_logo_width - 2
-      coordinates = [max_logo_width - 1, pdf.bounds.top - PDF_FONT_SIZE.pt * 2]
+      text_width  = width - max_logo_width - PDF_FONT_SIZE
+      coordinates = [
+        max_logo_width + PDF_FONT_SIZE / 2.0,
+        pdf.bounds.top - PDF_FONT_SIZE.pt * 2
+      ]
 
       text = I18n.t(
         'conclusion_review.bic.header', identification: review.identification
