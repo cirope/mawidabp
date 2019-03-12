@@ -361,12 +361,11 @@ module ConclusionReviews::BicPDF
     end
 
     def bic_review_auditors_text
-      managers    = review.review_user_assignments.select &:manager?
       supervisors = review.review_user_assignments.select &:supervisor?
       auditors    = review.review_user_assignments.select &:auditor?
 
 
-      (managers | supervisors | auditors).map(&:user).map(&:full_name).join '; '
+      (supervisors | auditors).map(&:user).map(&:full_name).join '; '
     end
 
     def bic_previous_review_text
