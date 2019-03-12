@@ -25,9 +25,9 @@
     <% @weaknesses.each do |weakness| %>
       <tr <%== 'class="text-muted"' if weakness.is_in_a_final_review? %>>
         <td><%= finding_updated_at_text weakness %></td>
-        <td class="nowrap"><%= show_review_with_close_date_as_abbr weakness.review %></td>
+        <td><%= show_review_with_close_date_as_abbr weakness.review %></td>
         <td class="hidden-xs"><%= super_truncate weakness.review.try(:plan_item).try(:project), 20 %></td>
-        <td class="nowrap"><%= show_finding_review_code_with_decription_as_abbr(weakness) %></td>
+        <td><%= show_finding_review_code_with_decription_as_abbr(weakness) %></td>
         <td class="hidden-xs"><%= super_truncate weakness.title, 20 %></td>
         <td class="hidden-xs"><%= super_truncate weakness.state_text, 19 %></td>
         <td class="hidden-xs hidden-sm hidden-md"><%= l weakness.follow_up_date, :format => :short if weakness.follow_up_date %></td>

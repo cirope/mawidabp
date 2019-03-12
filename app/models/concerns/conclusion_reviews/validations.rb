@@ -14,8 +14,7 @@ module ConclusionReviews::Validations
     validates :recipients, presence: true, if: :validate_recipients?
     validates :main_weaknesses_text, presence: true,
       if: :validate_short_alternative_pdf_attributes?
-    validates :objective, :reference, :observations, presence: true,
-      if: :validate_extra_bic_attributes?
+    validates :objective, presence: true, if: :validate_extra_bic_attributes?
     validate :evolution_for_conclusion, if: :validate_extra_gal_attributes?
   end
 
