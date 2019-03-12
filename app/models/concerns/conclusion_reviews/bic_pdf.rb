@@ -97,6 +97,8 @@ module ConclusionReviews::BicPDF
 
       put_bic_page_header_on          pdf, Review.model_name.human.upcase
       put_bic_review_data_on          pdf
+      put_bic_review_text_data_on     pdf
+      put_bic_review_score_on         pdf
       put_bic_main_recommendations_on pdf
     end
 
@@ -207,6 +209,17 @@ module ConclusionReviews::BicPDF
       end
     end
 
+    def put_bic_subtitle_on pdf, text
+      pdf.font_size PDF_FONT_SIZE * 0.75 do
+        table_options = pdf.default_table_options [pdf.percent_width(100)]
+        header_data   = [[
+          content: "<b>#{text}</b>",
+        ]]
+
+        pdf.table header_data, table_options
+      end
+    end
+
     def put_bic_review_data_on pdf
       pdf.move_down PDF_FONT_SIZE
 
@@ -215,6 +228,56 @@ module ConclusionReviews::BicPDF
         table_options = pdf.default_table_options widths
 
         pdf.table bic_review_data, table_options.merge(row_colors: %w(ffffff))
+      end
+    end
+
+    def put_bic_review_text_data_on pdf
+      [
+        [
+          "<b>#{self.class.human_attribute_name 'objective'}</b>",
+          objective
+        ],
+        [
+          "<b>#{I18n.t 'conclusion_review.bic.review.applied_procedures'}</b>",
+          applied_procedures
+        ],
+        ([
+          "<b>#{self.class.human_attribute_name 'scope'}</b>",
+          scope
+        ] if scope.present?),
+        ([
+          "<b>#{I18n.t 'conclusion_review.bic.review.observations'}</b>",
+          observations
+        ] if observations.present?),
+        ([
+          "<b>#{self.class.human_attribute_name 'reference'}</b>",
+          reference
+        ] if reference.present?),
+        [
+          "<b>#{I18n.t 'conclusion_review.bic.review.conclusion'}</b>",
+          conclusion
+        ]
+      ].compact.each do |title, content|
+        pdf.font_size PDF_FONT_SIZE * 0.75 do
+          pdf.move_down PDF_FONT_SIZE
+          put_bic_subtitle_on pdf, title
+
+          pdf.move_down PDF_FONT_SIZE
+          pdf.text content, inline_format: true, align: :justify
+        end
+      end
+    end
+
+    def put_bic_review_score_on pdf
+      pdf.move_down PDF_FONT_SIZE
+
+      pdf.font_size PDF_FONT_SIZE * 0.75 do
+        widths        = bic_review_data_column_widths pdf
+        table_options = pdf.default_table_options widths
+
+        pdf.table bic_review_score_data, table_options.merge(
+          row_colors: %w(ffffff)
+        )
       end
     end
 
@@ -273,61 +336,12 @@ module ConclusionReviews::BicPDF
             ),
             align:   :center
           }
-        ],
-        [
-          {
-            content: [
-              "<b>#{self.class.human_attribute_name 'objective'}</b>",
-              objective
-            ].join(': '),
-            colspan: 3
-          }
-        ],
-        [
-          {
-            content: [
-              "<b>#{I18n.t 'conclusion_review.bic.review.applied_procedures'}</b>",
-              applied_procedures
-            ].join(': '),
-            colspan: 3
-          }
-        ],
-        ([
-          {
-            content: [
-              "<b>#{self.class.human_attribute_name 'scope'}</b>",
-              scope
-            ].join(': '),
-            colspan: 3
-          }
-        ] if scope.present?),
-        ([
-          {
-            content: [
-              "<b>#{I18n.t 'conclusion_review.bic.review.observations'}</b>",
-              observations
-            ].join(': '),
-            colspan: 3
-          }
-        ] if observations.present?),
-        [
-          {
-            content: [
-              "<b>#{self.class.human_attribute_name 'reference'}</b>",
-              reference
-            ].join(': '),
-            colspan: 3
-          }
-        ],
-        [
-          {
-            content: [
-              "<b>#{I18n.t 'conclusion_review.bic.review.conclusion'}</b>",
-              conclusion
-            ].join(': '),
-            colspan: 3
-          }
-        ],
+        ]
+      ].compact
+    end
+
+    def bic_review_score_data
+      [
         [
           {
             content: [

@@ -95,9 +95,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review.evolution_justification = '   '
     @conclusion_review.main_weaknesses_text = '   '
     @conclusion_review.objective = '   '
-    @conclusion_review.reference = '   '
     @conclusion_review.scope = '   '
-    @conclusion_review.observations = '   '
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
@@ -111,8 +109,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
       assert_error @conclusion_review, :evolution_justification, :blank
     elsif Current.conclusion_pdf_format == 'bic'
       assert_error @conclusion_review, :objective, :blank
-      assert_error @conclusion_review, :reference, :blank
-      assert_error @conclusion_review, :observations, :blank
     else
       assert_error @conclusion_review, :applied_procedures, :blank
     end
