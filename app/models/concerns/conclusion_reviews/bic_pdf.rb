@@ -59,13 +59,32 @@ module ConclusionReviews::BicPDF
         pdf.table bic_cover_data, table_options.merge(row_colors: %w(ffffff))
       end
 
+      put_bic_cover_note_on       pdf
       put_bic_cover_legend_on     pdf
       put_bic_cover_recipients_on pdf
 
-      pdf.move_down pdf.cursor - PDF_FONT_SIZE * 4
-      pdf.put_hr
-      pdf.text I18n.t('conclusion_review.bic.cover.footer'),
-        size: PDF_FONT_SIZE * 0.6, align: :justify
+      if kind_of?(ConclusionDraftReview) && review.weaknesses.any?
+        pdf.move_down pdf.cursor - PDF_FONT_SIZE * 4
+        pdf.put_hr
+        pdf.text I18n.t('conclusion_review.bic.cover.footer'),
+          size: PDF_FONT_SIZE * 0.6, align: :justify
+      end
+    end
+
+    def put_bic_cover_note_on pdf
+      note = if kind_of?(ConclusionDraftReview) && review.weaknesses.any?
+               'draft_with_weaknesses'
+             elsif kind_of?(ConclusionFinalReview) && review.weaknesses.any?
+               'final_with_weaknesses'
+             elsif kind_of? ConclusionFinalReview
+               'final_without_weaknesses'
+             end
+
+      if note
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t("conclusion_review.bic.cover.#{note}"), align: :justify,
+          size: PDF_FONT_SIZE, inline_format: true
+      end
     end
 
     def put_bic_cover_legend_on pdf
@@ -363,7 +382,6 @@ module ConclusionReviews::BicPDF
     def bic_review_auditors_text
       supervisors = review.review_user_assignments.select &:supervisor?
       auditors    = review.review_user_assignments.select &:auditor?
-
 
       (supervisors | auditors).map(&:user).map(&:full_name).join '; '
     end

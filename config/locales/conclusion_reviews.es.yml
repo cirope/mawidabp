@@ -11,6 +11,9 @@ es:
         final_html: "<color rgb='ffffff'><b>Versión\nFINAL</b></color>"
         ref_html: "\n<i><b>Ref =</b> Informe de Auditoría N° %{identification}: \"%{project}\"</i>"
         legend: "Nos encontramos a vuestra disposición para aclarar cualquier tema que consideren necesario.\n\nAtentamente,"
+        draft_with_weaknesses: "Adjunto al presente distribuimos el informe de referencia en versión borrador, solicitando tenga a bien considerar las observaciones y <b>responder</b>, conforme lo requerido por el Directorio (*)."
+        final_with_weaknesses: "Adjunto al presente distribuimos la versión Final del Informe de referencia conteniendo las respuestas de cada una de las áreas."
+        final_without_weaknesses: "Adjunto al presente distribuimos la versión Final del Informe de referencia, el que no contiene observaciones de relevancia que formular."
         footer: "(*) Cada Gerencia Auditada deberá dar respuesta a los informes dentro de un plazo de 10 días hábiles de recibidos. Las respuestas deberán contar con el curso de acción comprometido por cada Gerencia, para regularizar las observaciones que se señalen. Además, la Gerencia deberá informar el plazo en el cual procederán a la regularización comprometida."
       review:
         subject: "Tema"
