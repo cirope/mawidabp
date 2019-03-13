@@ -1204,6 +1204,8 @@ es:
         objective: "Objetivo"
         scope: "Limitación al alcance"
         reference: "Marco de referencia"
+        previous_identification: "Informe previo"
+        previous_date: "Fecha de emisión previa"
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:

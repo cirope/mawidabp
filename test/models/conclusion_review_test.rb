@@ -118,16 +118,32 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     end
   end
 
+  test 'conditionally present attributes' do
+    @conclusion_review.previous_identification = 'OLD 1 2 3'
+    @conclusion_review.previous_date = nil
+
+    assert @conclusion_review.invalid?
+    assert_error @conclusion_review, :previous_date, :blank
+
+    @conclusion_review.previous_date = Time.zone.today
+    @conclusion_review.previous_identification = ''
+
+    assert @conclusion_review.invalid?
+    assert_error @conclusion_review, :previous_identification, :blank
+  end
+
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @conclusion_review.type = 'abcdd' * 52
     @conclusion_review.summary = 'abcdd' * 52
     @conclusion_review.evolution = 'abcdd' * 52
+    @conclusion_review.previous_identification = 'abcdd' * 52
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :type, :too_long, count: 255
     assert_error @conclusion_review, :summary, :too_long, count: 255
     assert_error @conclusion_review, :evolution, :too_long, count: 255
+    assert_error @conclusion_review, :previous_identification, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

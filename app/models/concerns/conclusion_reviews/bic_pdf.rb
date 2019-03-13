@@ -2,14 +2,18 @@ module ConclusionReviews::BicPDF
   extend ActiveSupport::Concern
 
   def bic_pdf organization = nil, *args
-    options = args.extract_options!
-    pdf     = Prawn::Document.create_generic_pdf :portrait
+    pdf        = Prawn::Document.create_generic_pdf :portrait
+    weaknesses = if kind_of? ConclusionFinalReview
+                   review.final_weaknesses
+                 else
+                   review.weaknesses
+                 end
 
     put_default_watermark_on pdf
     put_bic_header_on        pdf, organization
     put_bic_cover_on         pdf
     put_bic_review_on        pdf
-    put_bic_weaknesses_on    pdf
+    put_bic_weaknesses_on    pdf if weaknesses.any?
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -114,11 +118,10 @@ module ConclusionReviews::BicPDF
     def put_bic_review_on pdf
       pdf.start_new_page
 
-      put_bic_page_header_on          pdf, Review.model_name.human.upcase
-      put_bic_review_data_on          pdf
-      put_bic_review_text_data_on     pdf
-      put_bic_review_score_on         pdf
-      put_bic_main_recommendations_on pdf
+      put_bic_page_header_on      pdf, Review.model_name.human.upcase
+      put_bic_review_data_on      pdf
+      put_bic_review_text_data_on pdf
+      put_bic_review_score_on     pdf
     end
 
     def put_bic_weaknesses_on pdf
@@ -276,6 +279,10 @@ module ConclusionReviews::BicPDF
           "<b>#{self.class.human_attribute_name 'reference'}</b>",
           reference
         ] if reference.present?),
+        ([
+          "<b>#{I18n.t 'conclusion_review.bic.review.main_recommendations'}</b>",
+          bic_main_recommendations
+        ] if bic_main_recommendations.present?),
         [
           "<b>#{I18n.t 'conclusion_review.bic.review.conclusion'}</b>",
           conclusion
@@ -301,17 +308,6 @@ module ConclusionReviews::BicPDF
         pdf.table bic_review_score_data, table_options.merge(
           row_colors: %w(ffffff)
         )
-      end
-    end
-
-    def put_bic_main_recommendations_on pdf
-      pdf.font_size PDF_FONT_SIZE * 0.75 do
-        pdf.move_down PDF_FONT_SIZE
-        pdf.text I18n.t('conclusion_review.bic.review.main_recommendations'),
-          style: :bold
-        pdf.move_down PDF_FONT_SIZE
-
-        pdf.text bic_main_recommendations, align: :justify
       end
     end
 
@@ -387,7 +383,12 @@ module ConclusionReviews::BicPDF
     end
 
     def bic_previous_review_text
-      if previous = review.previous
+      if previous_identification.present? && previous_date.present?
+        [
+          previous_identification,
+          "(#{I18n.l previous_date})"
+        ].join ' '
+      elsif previous = review.previous
         [
           previous.identification,
           "(#{I18n.l previous.conclusion_final_review.issue_date})"
@@ -463,16 +464,18 @@ module ConclusionReviews::BicPDF
     end
 
     def bic_main_recommendations
-      result = ''
+      result = []
 
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.sort.each do |coi|
           coi.weaknesses.not_revoked.sort_for_review.each do |w|
-            result << "#{w.audit_recommendations}\r\n\r\n"
+            if w.audit_recommendations.present?
+              result << w.audit_recommendations.strip
+            end
           end
         end
       end
 
-      result
+      result.join "\r\n\r\n"
     end
 end
