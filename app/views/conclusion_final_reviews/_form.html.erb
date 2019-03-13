@@ -85,6 +85,15 @@
     <% elsif Current.conclusion_pdf_format == 'bic' %>
       <div class="row">
         <div class="col-md-6">
+          <%= f.input :previous_identification, input_html: { readonly: readonly } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :previous_date, as: :date_picker, input_html: { readonly: readonly } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
           <%= f.input :objective, input_html: { rows: 4, readonly: readonly } %>
         </div>
         <div class="col-md-6">

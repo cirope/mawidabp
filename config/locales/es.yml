@@ -1387,6 +1387,8 @@
         evolution: "Evolución de la calificación"
         evolution_justification: "Justificación de la evolución"
         observations: "Otras consideraciones"
+        previous_identification: "Informe previo"
+        previous_date: "Fecha de emisión previa"
       control:
         order: "Orden"
         control: "Controles"

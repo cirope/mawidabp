@@ -383,7 +383,12 @@ module ConclusionReviews::BicPDF
     end
 
     def bic_previous_review_text
-      if previous = review.previous
+      if previous_identification.present? && previous_date.present?
+        [
+          previous_identification,
+          "(#{I18n.l previous_date})"
+        ].join ' '
+      elsif previous = review.previous
         [
           previous.identification,
           "(#{I18n.l previous.conclusion_final_review.issue_date})"
