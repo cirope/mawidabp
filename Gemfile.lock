@@ -63,7 +63,7 @@ GEM
     business_time (0.9.3)
       activesupport (>= 3.2.0)
       tzinfo
-    byebug (11.0.0)
+    byebug (11.0.1)
     capistrano (3.11.0)
       airbrussh (>= 1.0.0)
       i18n
@@ -133,7 +133,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (5.2.0)
-    newrelic_rpm (6.1.0.352)
+    newrelic_rpm (6.2.0.354)
     nio4r (2.3.1)
     nokogiri (1.10.1)
       mini_portile2 (~> 2.4.0)
