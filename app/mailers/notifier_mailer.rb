@@ -120,6 +120,14 @@ class NotifierMailer < ActionMailer::Base
          subject: prefix + t('notifier.unanswered_finding_to_manager.title')
   end
 
+  def expired_finding_to_manager_notification(finding, users, level)
+    @finding, @level = finding, level
+    prefix = "[#{finding.organization.prefix}] ".upcase
+
+    mail to: users.map(&:email),
+         subject: prefix + t('notifier.expired_finding_to_manager.title')
+  end
+
   def reassigned_findings_notification(new_users, old_users, findings, notify = true)
     findings_array = findings.respond_to?(:each) ? findings.to_a : [findings]
 

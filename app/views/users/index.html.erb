@@ -19,7 +19,7 @@
     <% @users.each do |user| %>
       <tr class="<%= user.enable? ? 'enabled_item' : 'disabled_item' %>">
         <td><%= user_info user %></td>
-        <td class="nowrap"><%= show_user_with_email_as_abbr(user) %></td>
+        <td><%= show_user_with_email_as_abbr(user) %></td>
         <td><%= user.full_name %></td>
         <td class="hidden-xs"><%= super_truncate user.function || '-', 40 %></td>
         <td class="hidden-xs"><%= l user.last_access, format: :minimal if user.last_access %></td>

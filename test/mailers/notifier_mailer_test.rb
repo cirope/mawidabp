@@ -158,6 +158,22 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert users.map(&:email).all? { |email| response.to.include?(email) }
   end
 
+  test 'deliver expired finding to manager notification' do
+    finding = findings(:being_implemented_weakness)
+    users = finding.users_for_scaffold_notification(1)
+    response = NotifierMailer.expired_finding_to_manager_notification(finding, users, 1).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.expired_finding_to_manager.title')
+    )
+    assert_match Regexp.new(
+      I18n.t('notifier.expired_finding_to_manager.the_following_finding_is_expired')
+    ), response.body.decoded
+    assert !users.empty?
+    assert users.map(&:email).all? { |email| response.to.include?(email) }
+  end
+
   test 'deliver reassigned findings notification' do
     user = User.find(users(:administrator).id)
     old = User.find(users(:administrator_second).id)

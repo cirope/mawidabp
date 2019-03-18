@@ -2,14 +2,18 @@ module ConclusionReviews::BicPDF
   extend ActiveSupport::Concern
 
   def bic_pdf organization = nil, *args
-    options = args.extract_options!
-    pdf     = Prawn::Document.create_generic_pdf :portrait
+    pdf        = Prawn::Document.create_generic_pdf :portrait
+    weaknesses = if kind_of? ConclusionFinalReview
+                   review.final_weaknesses
+                 else
+                   review.weaknesses
+                 end
 
     put_default_watermark_on pdf
     put_bic_header_on        pdf, organization
     put_bic_cover_on         pdf
     put_bic_review_on        pdf
-    put_bic_weaknesses_on    pdf
+    put_bic_weaknesses_on    pdf if weaknesses.any?
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -18,21 +22,38 @@ module ConclusionReviews::BicPDF
 
     def put_bic_header_on pdf, organization
       font_size = PDF_HEADER_FONT_SIZE
+      width     = pdf.bounds.width
 
       pdf.repeat :all do
         pdf.add_organization_image organization, font_size, factor: 0.5
         pdf.add_organization_co_brand_image organization, factor: 1
 
         pdf.canvas do
-          coordinates = [0, pdf.bounds.top - PDF_FONT_SIZE.pt * 2]
-          text        = I18n.t('conclusion_review.bic.header',
-            identification: review.identification,
-            date:           I18n.l(issue_date)
-          )
-
-          pdf.text_box text, at: coordinates, size: PDF_FONT_SIZE, align: :center
+          put_bic_header_text_on pdf, organization, width
         end
       end
+    end
+
+    def put_bic_header_text_on pdf, organization, width
+      logo_geometry    = organization.image_model&.image_geometry :pdf_thumb
+      co_logo_geometry = organization.co_brand_image_model&.image_geometry :pdf_thumb
+      max_logo_width   = [
+        Hash(logo_geometry)[:width].to_i,
+        Hash(co_logo_geometry)[:width].to_i
+      ].max
+
+      text_width  = width - max_logo_width - PDF_FONT_SIZE
+      coordinates = [
+        max_logo_width + PDF_FONT_SIZE / 2.0,
+        pdf.bounds.top - PDF_FONT_SIZE.pt * 2
+      ]
+
+      text = I18n.t(
+        'conclusion_review.bic.header', identification: review.identification
+      )
+
+      pdf.text_box text, at: coordinates, size: PDF_FONT_SIZE, align: :center,
+        width: text_width
     end
 
     def put_bic_cover_on pdf
@@ -42,12 +63,53 @@ module ConclusionReviews::BicPDF
         pdf.table bic_cover_data, table_options.merge(row_colors: %w(ffffff))
       end
 
+      put_bic_cover_note_on       pdf
+      put_bic_cover_legend_on     pdf
+      put_bic_cover_recipients_on pdf
+
+      if kind_of?(ConclusionDraftReview) && review.weaknesses.any?
+        pdf.move_down pdf.cursor - PDF_FONT_SIZE * 4
+        pdf.put_hr
+        pdf.text I18n.t('conclusion_review.bic.cover.footer'),
+          size: PDF_FONT_SIZE * 0.6, align: :justify
+      end
+    end
+
+    def put_bic_cover_note_on pdf
+      note = if kind_of?(ConclusionDraftReview) && review.weaknesses.any?
+               'draft_with_weaknesses'
+             elsif kind_of?(ConclusionFinalReview) && review.weaknesses.any?
+               'final_with_weaknesses'
+             elsif kind_of? ConclusionFinalReview
+               'final_without_weaknesses'
+             end
+
+      if note
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t("conclusion_review.bic.cover.#{note}"), align: :justify,
+          size: PDF_FONT_SIZE, inline_format: true
+      end
+    end
+
+    def put_bic_cover_legend_on pdf
+      manager_rua = review.review_user_assignments.detect(&:manager?) ||
+                    review.review_user_assignments.detect(&:supervisor?)
+
       pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.bic.cover.legend'),
         size: PDF_FONT_SIZE, align: :justify
 
+      if manager_rua
+        pdf.move_down PDF_FONT_SIZE * 4
+        pdf.text manager_rua.user.informal_name, size: PDF_FONT_SIZE,
+          align: :right
+      end
+    end
+
+    def put_bic_cover_recipients_on pdf
       pdf.move_down PDF_FONT_SIZE * 2
-      pdf.text self.class.human_attribute_name('recipients').upcase, style: :bold
+      pdf.text self.class.human_attribute_name('recipients').upcase,
+        style: :bold
 
       pdf.move_down PDF_FONT_SIZE
       pdf.text recipients, align: :justify, inline_format: true
@@ -56,9 +118,10 @@ module ConclusionReviews::BicPDF
     def put_bic_review_on pdf
       pdf.start_new_page
 
-      put_bic_page_header_on          pdf, Review.model_name.human.upcase
-      put_bic_review_data_on          pdf
-      put_bic_main_recommendations_on pdf
+      put_bic_page_header_on      pdf, Review.model_name.human.upcase
+      put_bic_review_data_on      pdf
+      put_bic_review_text_data_on pdf
+      put_bic_review_score_on     pdf
     end
 
     def put_bic_weaknesses_on pdf
@@ -82,13 +145,16 @@ module ConclusionReviews::BicPDF
           end
         end
       end
+
+      number
     end
 
     def put_bic_weakness_on pdf, weakness, number
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text I18n.t('conclusion_review.bic.weaknesses.plan', number: number),
-        style: :bold
+      pdf.text I18n.t(
+        'conclusion_review.bic.weaknesses.plan', number: number
+      ), style: :bold
 
       pdf.font_size PDF_FONT_SIZE * 0.75 do
         data          = bic_weakness_data weakness
@@ -148,7 +214,11 @@ module ConclusionReviews::BicPDF
         ([
           Weakness.human_attribute_name('audit_comments').upcase,
           weakness.audit_comments
-        ] if weakness.audit_comments.present?)
+        ] if weakness.audit_comments.present?),
+        ([
+          I18n.t('finding.repeated_ancestors').upcase,
+          weakness.repeated_of.to_s
+        ] if weakness.repeated_of)
       ].compact
     end
 
@@ -159,6 +229,17 @@ module ConclusionReviews::BicPDF
           content:          "<color rgb='ffffff'><b>#{text}</b></color>",
           align:            :center,
           background_color: '17365d'
+        ]]
+
+        pdf.table header_data, table_options
+      end
+    end
+
+    def put_bic_subtitle_on pdf, text
+      pdf.font_size PDF_FONT_SIZE * 0.75 do
+        table_options = pdf.default_table_options [pdf.percent_width(100)]
+        header_data   = [[
+          content: "<b>#{text}</b>",
         ]]
 
         pdf.table header_data, table_options
@@ -176,14 +257,57 @@ module ConclusionReviews::BicPDF
       end
     end
 
-    def put_bic_main_recommendations_on pdf
-      pdf.font_size PDF_FONT_SIZE * 0.75 do
-        pdf.move_down PDF_FONT_SIZE
-        pdf.text I18n.t('conclusion_review.bic.review.main_recommendations'),
-          style: :bold
-        pdf.move_down PDF_FONT_SIZE
+    def put_bic_review_text_data_on pdf
+      [
+        [
+          "<b>#{self.class.human_attribute_name 'objective'}</b>",
+          objective
+        ],
+        [
+          "<b>#{I18n.t 'conclusion_review.bic.review.applied_procedures'}</b>",
+          applied_procedures
+        ],
+        ([
+          "<b>#{self.class.human_attribute_name 'scope'}</b>",
+          scope
+        ] if scope.present?),
+        ([
+          "<b>#{I18n.t 'conclusion_review.bic.review.observations'}</b>",
+          observations
+        ] if observations.present?),
+        ([
+          "<b>#{self.class.human_attribute_name 'reference'}</b>",
+          reference
+        ] if reference.present?),
+        ([
+          "<b>#{I18n.t 'conclusion_review.bic.review.main_recommendations'}</b>",
+          bic_main_recommendations
+        ] if bic_main_recommendations.present?),
+        [
+          "<b>#{I18n.t 'conclusion_review.bic.review.conclusion'}</b>",
+          conclusion
+        ]
+      ].compact.each do |title, content|
+        pdf.font_size PDF_FONT_SIZE * 0.75 do
+          pdf.move_down PDF_FONT_SIZE
+          put_bic_subtitle_on pdf, title
 
-        pdf.text bic_main_recommendations, align: :justify
+          pdf.move_down PDF_FONT_SIZE
+          pdf.text content, inline_format: true, align: :justify
+        end
+      end
+    end
+
+    def put_bic_review_score_on pdf
+      pdf.move_down PDF_FONT_SIZE
+
+      pdf.font_size PDF_FONT_SIZE * 0.75 do
+        widths        = bic_review_data_column_widths pdf
+        table_options = pdf.default_table_options widths
+
+        pdf.table bic_review_score_data, table_options.merge(
+          row_colors: %w(ffffff)
+        )
       end
     end
 
@@ -203,7 +327,7 @@ module ConclusionReviews::BicPDF
           },
           [
             I18n.t('review.user_assignment.type_auditor'),
-            review.review_user_assignments.select(&:auditor?).map(&:user).map(&:full_name).join('; ')
+            bic_review_auditors_text
           ].join(': '),
           {
             content: "<b>#{review.identification}</b>",
@@ -231,66 +355,17 @@ module ConclusionReviews::BicPDF
             ),
             align:   :center
           }
-        ],
+        ]
+      ].compact
+    end
+
+    def bic_review_score_data
+      [
         [
           {
             content: [
-              "<b>#{self.class.human_attribute_name 'objective'}</b>",
-              objective
-            ].join(': '),
-            colspan: 3
-          }
-        ],
-        [
-          {
-            content: [
-              "<b>#{I18n.t 'conclusion_review.bic.review.applied_procedures'}</b>",
-              applied_procedures
-            ].join(': '),
-            colspan: 3
-          }
-        ],
-        ([
-          {
-            content: [
-              "<b>#{self.class.human_attribute_name 'scope'}</b>",
-              scope
-            ].join(': '),
-            colspan: 3
-          }
-        ] if scope.present?),
-        ([
-          {
-            content: [
-              "<b>#{I18n.t 'conclusion_review.bic.review.observations'}</b>",
-              observations
-            ].join(': '),
-            colspan: 3
-          }
-        ] if observations.present?),
-        [
-          {
-            content: [
-              "<b>#{self.class.human_attribute_name 'reference'}</b>",
-              reference
-            ].join(': '),
-            colspan: 3
-          }
-        ],
-        [
-          {
-            content: [
-              "<b>#{I18n.t 'conclusion_review.bic.review.conclusion'}</b>",
-              conclusion
-            ].join(': '),
-            colspan: 3
-          }
-        ],
-        [
-          {
-            content: [
-              self.class.human_attribute_name('conclusion'),
-              "<b>#{review.score_text}</b>"
+              I18n.t('conclusion_review.bic.review.score'),
+              "<b>#{I18n.t "score_types.#{review.score_array.first}"}</b>"
             ].join("\n"),
             colspan: 3,
             align:   :center,
@@ -300,8 +375,20 @@ module ConclusionReviews::BicPDF
       ].compact
     end
 
+    def bic_review_auditors_text
+      supervisors = review.review_user_assignments.select &:supervisor?
+      auditors    = review.review_user_assignments.select &:auditor?
+
+      (supervisors | auditors).map(&:user).map(&:full_name).join '; '
+    end
+
     def bic_previous_review_text
-      if previous = review.previous
+      if previous_identification.present? && previous_date.present?
+        [
+          previous_identification,
+          "(#{I18n.l previous_date})"
+        ].join ' '
+      elsif previous = review.previous
         [
           previous.identification,
           "(#{I18n.l previous.conclusion_final_review.issue_date})"
@@ -377,16 +464,18 @@ module ConclusionReviews::BicPDF
     end
 
     def bic_main_recommendations
-      result = ''
+      result = []
 
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.sort.each do |coi|
           coi.weaknesses.not_revoked.sort_for_review.each do |w|
-            result << "#{w.audit_recommendations}\r\n\r\n"
+            if w.audit_recommendations.present?
+              result << w.audit_recommendations.strip
+            end
           end
         end
       end
 
-      result
+      result.join "\r\n\r\n"
     end
 end

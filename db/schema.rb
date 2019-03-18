@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_26_194649) do
+ActiveRecord::Schema.define(version: 2019_03_13_211418) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -242,6 +242,8 @@ ActiveRecord::Schema.define(version: 2019_02_26_194649) do
     t.text "objective"
     t.text "reference"
     t.text "scope"
+    t.string "previous_identification"
+    t.date "previous_date"
     t.index ["close_date"], name: "i_con_rev_clo_dat"
     t.index ["conclusion_index"], name: "i_con_rev_con_ind"
     t.index ["issue_date"], name: "i_con_rev_iss_dat"
@@ -583,12 +585,14 @@ ActiveRecord::Schema.define(version: 2019_02_26_194649) do
     t.integer "weakness_template_id", precision: 38
     t.string "rescheduled", limit: 1, default: "f", null: false
     t.date "first_follow_up_date"
+    t.date "last_notification_date"
     t.index ["control_objective_item_id"], name: "i_fin_con_obj_ite_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
     t.index ["first_follow_up_date"], name: "i_fin_fir_fol_up_dat"
     t.index ["first_notification_date"], name: "i_fin_fir_not_dat"
     t.index ["follow_up_date"], name: "i_findings_follow_up_date"
+    t.index ["last_notification_date"], name: "i_fin_las_not_dat"
     t.index ["organization_id"], name: "i_findings_organization_id"
     t.index ["parent_id"], name: "index_findings_on_parent_id"
     t.index ["repeated_of_id"], name: "i_findings_repeated_of_id"

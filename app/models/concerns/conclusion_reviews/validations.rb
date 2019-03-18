@@ -6,16 +6,19 @@ module ConclusionReviews::Validations
     validates :applied_procedures, presence: true, unless: :validate_extra_gal_attributes?
     validates :conclusion, :applied_procedures, :summary, :recipients, :sectors,
       :observations, :objective, :reference, :scope, pdf_encoding: true
-    validates :type, :summary, :evolution, length: { maximum: 255 }
-    validates :issue_date, timeliness: { type: :date }, allow_nil: true
+    validates :type, :summary, :evolution, :previous_identification,
+      length: { maximum: 255 }
+    validates :issue_date, :previous_date, timeliness: { type: :date },
+      allow_nil: true
 
     validates :sectors, :evolution, :evolution_justification, presence: true,
       if: :validate_extra_gal_attributes?
     validates :recipients, presence: true, if: :validate_recipients?
     validates :main_weaknesses_text, presence: true,
       if: :validate_short_alternative_pdf_attributes?
-    validates :objective, :reference, :observations, presence: true,
-      if: :validate_extra_bic_attributes?
+    validates :objective, presence: true, if: :validate_extra_bic_attributes?
+    validates :previous_identification, presence: true, if: :previous_date_present?
+    validates :previous_date, presence: true, if: :previous_identification_present?
     validate :evolution_for_conclusion, if: :validate_extra_gal_attributes?
   end
 
@@ -33,6 +36,14 @@ module ConclusionReviews::Validations
 
     def validate_extra_bic_attributes?
       Current.conclusion_pdf_format == 'bic'
+    end
+
+    def previous_date_present?
+      previous_date.present?
+    end
+
+    def previous_identification_present?
+      previous_identification.present?
     end
 
     def validate_recipients?
