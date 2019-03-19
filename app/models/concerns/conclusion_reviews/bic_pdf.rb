@@ -196,6 +196,10 @@ module ConclusionReviews::BicPDF
           weakness.risk_text
         ],
         [
+          Weakness.human_attribute_name('state').upcase,
+          weakness.state_text
+        ],
+        [
           Weakness.human_attribute_name('audit_recommendations').upcase,
           weakness.audit_recommendations
         ],
