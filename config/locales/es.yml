@@ -1032,8 +1032,8 @@
       valid_until: "%{link} (Usted podrá utilizar este enlace hasta el día **%{date}** inclusive)"
       clarification: "Si usted **no pidió** el restablecimiento **no haga nada**, su usuario y contraseña siguen vigentes"
     being_implemented_and_stale_finding_to_manager:
-      title: "Notificación de observaciones en proceso de implementación vencidas"
-      the_following_finding_is_being_implemented_and_stale: "La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación"
+      title: "Notificación de observaciones pendientes vencidas"
+      the_following_finding_is_being_implemented_and_stale: "La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra pendiente"
     pending_poll_email:
       about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_finding_to_manager:
