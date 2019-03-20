@@ -25,6 +25,9 @@ env:
   - CONFIG_TYPE=bic
   - CONFIG_TYPE=reviews_scored_by_weakness
 
+before_install:
+  - 'gem update bundler'
+
 before_script:
   - 'cp config/application.yml.example config/application.yml'
   - "psql -c 'create database mawidabp_test;' -U postgres"
