@@ -92,18 +92,10 @@ module ConclusionReviews::BicPDF
     end
 
     def put_bic_cover_legend_on pdf
-      manager_rua = review.review_user_assignments.detect(&:manager?) ||
-                    review.review_user_assignments.detect(&:supervisor?)
-
       pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.bic.cover.legend'),
         size: PDF_FONT_SIZE, align: :justify
-
-      if manager_rua
-        pdf.move_down PDF_FONT_SIZE * 4
-        pdf.text manager_rua.user.informal_name, size: PDF_FONT_SIZE,
-          align: :right
-      end
+      pdf.move_down PDF_FONT_SIZE * 5
     end
 
     def put_bic_cover_recipients_on pdf
@@ -325,7 +317,7 @@ module ConclusionReviews::BicPDF
           {
             content: [
               I18n.t('conclusion_review.bic.review.subject'),
-              "<b>#{review.business_unit.name}</b>"
+              "<b>#{review.plan_item.project}</b>"
             ].join(': '),
             size: PDF_FONT_SIZE * 0.85
           },
