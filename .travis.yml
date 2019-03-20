@@ -20,7 +20,7 @@ env:
   - CONFIG_TYPE=bic
 
 before_install:
-  - 'gem install bundler'
+  - 'gem update bundler'
 
 before_script:
   - 'cp config/application.yml.example config/application.yml'
