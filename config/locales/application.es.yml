@@ -847,6 +847,10 @@ es:
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables de la siguiente observación / oportunidad de mejora"
       managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
+    expired_finding_to_manager:
+      title: "Observación vencida"
+      the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación de la siguiente observación / oportunidad de mejora"
+      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
     pending_poll_email:
       about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_findings:
@@ -1197,6 +1201,11 @@ es:
         corrective_actions: "Acciones correctivas"
         affects_compliance: "Afecta compliance"
         collapse_control_objectives: "Agrupar objetivos de control"
+        objective: "Objetivo"
+        scope: "Limitación al alcance"
+        reference: "Marco de referencia"
+        previous_identification: "Informe previo"
+        previous_date: "Fecha de emisión previa"
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:

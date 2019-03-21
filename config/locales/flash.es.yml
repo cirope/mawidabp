@@ -26,6 +26,13 @@ es:
         notice: 'Buena práctica eliminada'
         alert: 'La buena práctica no puede ser eliminada, ya ha sido utilizada en informes'
 
+    closing_interviews:
+      create:
+        notice: 'Entrevista de cierre agregada correctamente'
+      update:
+        notice: 'Entrevista de cierre actualizada correctamente'
+        stale: 'La entrevista de cierre no fue actualizada, intente nuevamente'
+
     findings:
       update:
         notice: 'Respuesta a observación actualizada correctamente.'
@@ -41,6 +48,13 @@ es:
       destroy:
         notice: 'Noticia eliminada'
         alert: 'La noticia no pudo ser eliminada'
+
+    opening_interviews:
+      create:
+        notice: 'Entrevista de inicio agregada correctamente'
+      update:
+        notice: 'Entrevista de inicio actualizada correctamente'
+        stale: 'La entrevista de inicio no fue actualizada, intente nuevamente'
 
     organizations:
       create:

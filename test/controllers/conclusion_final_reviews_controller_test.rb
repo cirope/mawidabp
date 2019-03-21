@@ -141,8 +141,11 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :evolution_justification => 'Ok',
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
-          :affects_compliance => '0',
-          :observations => nil
+          :objective => 'Some objective',
+          :reference => 'Some reference',
+          :observations => 'Some observations',
+          :scope => 'Some scope',
+          :affects_compliance => '0'
         }
       }
     end
@@ -177,8 +180,11 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :evolution_justification => 'Ok',
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
-          :affects_compliance => '0',
-          :observations => nil
+          :objective => 'Some objective',
+          :reference => 'Some reference',
+          :observations => 'Some observations',
+          :scope => 'Some scope',
+          :affects_compliance => '0'
         }
       }
     end

@@ -13,6 +13,11 @@
   $('#conclusion_final_review_business_unit').val('<%= j @conclusion_final_review.review.business_unit.name %>')
   $('#conclusion_final_review_project').val('<%= j @conclusion_final_review.review.plan_item.project %>')
   $('#conclusion_final_review_score').val('<%= j @conclusion_final_review.review.score_text %>')
+  $('#conclusion_final_review_previous_identification').val('<%== j @conclusion_final_review.previous_identification %>')
+  $('#conclusion_final_review_previous_date').val('<%== l @conclusion_final_review.previous_date if @conclusion_final_review.previous_date %>')
+  $('#conclusion_final_review_objective').val('<%== j @conclusion_final_review.objective %>')
+  $('#conclusion_final_review_reference').val('<%== j @conclusion_final_review.reference %>')
+  $('#conclusion_final_review_scope').val('<%== j @conclusion_final_review.scope %>')
 
   $('#best_practice_comments_container').html('<%= j best_practice_comments_form(@conclusion_final_review) %>')
 
@@ -30,7 +35,12 @@
     'observations',
     'business_unit',
     'project',
-    'score'
+    'score',
+    'previous_identification',
+    'previous_date',
+    'objective',
+    'reference',
+    'scope'
   ]
 
   $.each(elementsForUpdate, function (i, e) {

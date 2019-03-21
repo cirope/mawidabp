@@ -65,6 +65,8 @@ class ConclusionReportsController < ApplicationController
         create_fixed_weaknesses_report: :read,
         control_objective_stats: :read,
         create_control_objective_stats: :read,
+        control_objective_stats_by_review: :read,
+        create_control_objective_stats_by_review: :read,
         process_control_stats: :read,
         create_process_control_stats: :read,
         benefits: :read,

@@ -41,6 +41,10 @@ es:
       control_objectives: 'Objetivos de control'
       weaknesses: 'Observaciones'
       oportunities: 'Oportunidades de mejora'
+      interviews_title: 'Entrevistas'
+      interviews:
+        opening_interviews: 'Entrevistas de inicio'
+        closing_interviews: 'Entrevistas de cierre'
       reports: 'Reportes'
       findings_title: 'Observaciones'
       findings:

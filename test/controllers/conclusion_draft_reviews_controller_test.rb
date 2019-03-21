@@ -124,7 +124,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     login
     get :new, xhr: true, as: :js
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_equal Mime[:js], @response.content_type
   end
 
   test 'create conclusion draft review' do
@@ -141,9 +141,12 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :sectors => 'Area 51',
           :evolution => EVOLUTION_OPTIONS.second,
           :evolution_justification => 'Ok',
-          :observations => nil,
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
+          :objective => 'Some objective',
+          :reference => 'Some reference',
+          :observations => 'Some observations',
+          :scope => 'Some scope',
           :affects_compliance => '0'
         }
       }
@@ -179,8 +182,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :evolution_justification => 'Ok',
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
-          :affects_compliance => '0',
-          :observations => nil
+          :objective => 'Some objective',
+          :reference => 'Some reference',
+          :observations => 'Some observations',
+          :scope => 'Some scope',
+          :affects_compliance => '0'
         }
       }
     end

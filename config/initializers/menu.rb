@@ -240,6 +240,25 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/oportunities' }
       ) unless HIDE_OPORTUNITIES),
       MenuItem.new(
+        :interviews,
+        order: 6,
+        url: { controller: '/opening_interviews' },
+        children: [
+          MenuItem.new(
+            :opening_interviews,
+            order: 1,
+            controllers: :opening_interviews,
+            url: { controller: '/opening_interviews' }
+          ),
+          MenuItem.new(
+            :closing_interviews,
+            order: 2,
+            controllers: :closing_interviews,
+            url: { controller: '/closing_interviews' }
+          )
+        ]
+      ),
+      MenuItem.new(
         :reports,
         order: 6,
         controllers: :execution_reports,

@@ -5,7 +5,7 @@ module Weaknesses::Repeated
     if WEAKNESS_SCORE_OBSOLESCENCE == 0
       repeated_of
     elsif repeated_of && repeated_of.origination_date
-      expiration_date = WEAKNESS_SCORE_OBSOLESCENCE.months.ago.to_date
+      expiration_date = date - WEAKNESS_SCORE_OBSOLESCENCE.months
       follow_up_date  = repeated_of.all_follow_up_dates.last ||
                         repeated_of.follow_up_date           ||
                         Time.zone.today

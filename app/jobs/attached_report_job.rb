@@ -46,6 +46,7 @@ class AttachedReportJob < ApplicationJob
           scope     = scope.send method, args
         else
           arguments = args.is_a?(String) ? [args] : deep_convert_to_sym(args)
+          arguments = arguments.is_a?(Hash) ? [arguments] : arguments
           scope     = scope.send method, *arguments
         end
       end

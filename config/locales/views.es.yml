@@ -61,6 +61,28 @@ es:
     control_objectives:
       new: 'Agregar objetivo'
 
+  closing_interviews:
+    edit:
+      title: 'Editar entrevista de cierre'
+    index:
+      new: 'Nueva entrevista de cierre'
+      title: 'Listado de entrevistas de cierre'
+      empty_html: 'No hay entrevistas de cierre, puede crear una con el botón <span class="label label-primary">Nueva entrevista de cierre</span>'
+      empty_search_html: 'No hay entrevistas de cierre que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear entrevista de cierre'
+    form:
+      add_responsible: 'Agregar responsable'
+      add_auditor: 'Agregar auditor'
+      add_assistant: 'Agregar asistente'
+    show:
+      title: 'Ver entrevista de cierre'
+      auditeds: 'Responsables del ciclo'
+      auditors: 'Auditores asignados'
+      download_pdf: 'Descargar PDF'
+    pdf:
+      pdf_name: 'entrevista_de_cierre_%{name}.pdf'
+
   control_objectives:
     index:
       title: 'Listado de objetivos de control'
@@ -142,7 +164,7 @@ es:
       repeated: 'Reiterada'
       revoked: 'Anulada'
       criteria_mismatch: 'Difiere criterio'
-      expired: 'Desestimada / No aplica'
+      expired: 'Cerrada / No aplica'
 
   login_records:
     choose:
@@ -173,6 +195,28 @@ es:
       markdown_help_html: '<span class="label label-info">Atención</span> dentro del contenido puedes utilizar %{link}'
     show:
       title: 'Ver noticia'
+
+  opening_interviews:
+    edit:
+      title: 'Editar entrevista de inicio'
+    index:
+      new: 'Nueva entrevista de inicio'
+      title: 'Listado de entrevistas de inicio'
+      empty_html: 'No hay entrevistas de inicio, puede crear una con el botón <span class="label label-primary">Nueva entrevista de inicio</span>'
+      empty_search_html: 'No hay entrevistas de inicio que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear entrevista de inicio'
+    form:
+      add_responsible: 'Agregar responsable'
+      add_auditor: 'Agregar auditor'
+      add_assistant: 'Agregar asistente'
+    show:
+      title: 'Ver entrevista de inicio'
+      auditeds: 'Responsables del ciclo'
+      auditors: 'Auditores asignados'
+      download_pdf: 'Descargar PDF'
+    pdf:
+      pdf_name: 'entrevista_de_inicio_%{name}.pdf'
 
   organizations:
     index:
@@ -548,7 +592,8 @@ es:
       download_pdf: 'Descargar PDF'
       download_csv: 'Descargar CSV'
     form:
-      new_risk_assessment_items: 'Luego de crear la evaluación de riesgo podrá agregar items a la misma'
+      new_risk_assessment_items: 'Luego de crear la evaluación de riesgo podrá agregar ítems a la misma'
+      cloned_risk_assessment_items: 'Luego de crear la evaluación de riesgo verá los ítems copiados y podrá editarlos o agregar nuevos'
       add_risk_assessment_item: 'Agregar item'
       add_best_practice: 'Agregar buena práctica'
       add_business_unit_type: 'Agregar unidad organizativa'
