@@ -6,6 +6,11 @@ class RiskAssessmentTemplatesControllerTest < ActionController::TestCase
     @risk_assessment_template = risk_assessment_templates :sox
 
     login
+    set_organization
+  end
+
+  teardown do
+    unset_organization
   end
 
   test 'should get index' do
@@ -28,6 +33,11 @@ class RiskAssessmentTemplatesControllerTest < ActionController::TestCase
 
   test 'should get new' do
     get :new
+    assert_response :success
+  end
+
+  test 'should get new with clone from' do
+    get :new, params: { clone_from: @risk_assessment_template.id }
     assert_response :success
   end
 

@@ -1503,6 +1503,19 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
+  test 'weaknesses report as CSV' do
+    login
+
+    get :weaknesses_report, :params => {
+      :weaknesses_report => {
+        :finding_status => Finding::STATUS[:being_implemented].to_s
+      }
+    }, as: :csv
+
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+  end
+
   test 'benefits report' do
     login
 

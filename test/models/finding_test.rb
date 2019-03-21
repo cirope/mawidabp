@@ -1094,6 +1094,39 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
+  test 'notify expired follow up' do
+    skip unless NOTIFY_EXPIRED_AND_STALE_FOLLOW_UP
+
+    Current.organization = nil
+    # Only if no weekend
+    assert Time.zone.today.workday?
+
+    finding = findings :being_implemented_weakness
+
+    finding.update! follow_up_date: (1.weeks + 1.day).ago.to_date
+
+    findings_and_users              = expired_findings_with_users_by_level
+    users_by_level_for_notification = findings_and_users[:users_by_level_for_notification]
+    finding_ids                     = findings_and_users[:finding_ids]
+
+
+    assert_enqueued_emails 1 do
+      level_counts = {}
+
+      finding_ids.each do |f_id|
+        level_counts[f_id] = Finding.find(f_id).notification_level
+      end
+
+      Finding.notify_expired_and_stale_follow_up
+
+      finding_ids.each do |f_id|
+        level = Finding.find(f_id).notification_level
+
+        assert level == level_counts[f_id].next || level == -1
+      end
+    end
+  end
+
   test 'send findings brief' do
     Current.organization = nil
 
@@ -1236,6 +1269,15 @@ class FindingTest < ActiveSupport::TestCase
     assert all_follow_up_dates_are_old
   end
 
+  test 'reset notification level on follow up date change' do
+    @finding.update! notification_level: 2
+
+    @finding.update! follow_up_date: Time.zone.today,
+                     state:          Finding::STATUS[:being_implemented]
+
+    assert_equal 0, @finding.reload.notification_level
+  end
+
   private
 
     def review_codes_on_findings_by_user method
@@ -1294,6 +1336,36 @@ class FindingTest < ActiveSupport::TestCase
             end
 
             unless has_audited_comments
+              finding_ids << finding.id
+              users_by_level_for_notification[n] |= finding.users |
+                finding.users_for_scaffold_notification(n)
+            end
+          end
+        end
+      end
+
+      {
+        users_by_level_for_notification: users_by_level_for_notification,
+        finding_ids:                     finding_ids
+      }
+    end
+
+    def expired_findings_with_users_by_level
+      n                               = 0
+      finding_ids                     = []
+      users_by_level_for_notification = {1 => [], 2 => [], 3 => [], 4 => []}
+      deepest_level                   = User.deepest_level
+
+      (1..deepest_level).each do |n|
+        findings = Finding.pending_expired_and_stale n
+
+        findings.each do |finding|
+          # Not for president users since it belongs to another organization
+          if n != 4
+            users = finding.users_for_scaffold_notification(n)
+            commitment_date = finding.last_commitment_date
+
+            if commitment_date.blank? || commitment_date.past?
               finding_ids << finding.id
               users_by_level_for_notification[n] |= finding.users |
                 finding.users_for_scaffold_notification(n)

@@ -34,6 +34,7 @@ module Findings::CSV
       audit_comments,
       audit_recommendations,
       answer,
+      (last_commitment_date_text if self.class.show_follow_up_timestamps?),
       (finding_answers_text if self.class.show_follow_up_timestamps?)
     ].compact
 
@@ -105,6 +106,17 @@ module Findings::CSV
       end
 
       answers.reverse.join LINE_BREAK_REPLACEMENT
+    end
+
+    def last_commitment_date_text
+      commitment_date = finding_answers.map(&:commitment_date).compact.sort.last
+      date            = if follow_up_date && commitment_date
+                          follow_up_date <= commitment_date ? commitment_date : nil
+                        elsif follow_up_date.blank?
+                          commitment_date
+                        end
+
+      date ? I18n.l(date, format: :minimal) : ''
     end
 
     def next_pending_task_date
@@ -195,6 +207,7 @@ module Findings::CSV
           Finding.human_attribute_name('audit_comments'),
           Finding.human_attribute_name('audit_recommendations'),
           Finding.human_attribute_name('answer'),
+          (FindingAnswer.human_attribute_name('commitment_date') if show_follow_up_timestamps?),
           (I18n.t('finding.finding_answers') if show_follow_up_timestamps?)
         ].compact
       end

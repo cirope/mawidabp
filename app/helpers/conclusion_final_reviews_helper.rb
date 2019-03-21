@@ -194,8 +194,10 @@ module ConclusionFinalReviewsHelper
 
     options = if Current.conclusion_pdf_format == 'default'
                 ['normal', 'brief', 'without_score']
-              else
+              elsif Current.conclusion_pdf_format == 'gal'
                 ['normal', 'brief']
+              else
+                ['normal']
               end
 
     options.delete 'brief' unless show_brief_download?

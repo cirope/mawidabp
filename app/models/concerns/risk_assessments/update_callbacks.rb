@@ -6,7 +6,7 @@ module RiskAssessments::UpdateCallbacks
   end
 
   def can_be_modified?
-    draft? || status_was == 'draft'
+    (draft? || status_was == 'draft') && Current.organization == organization
   end
 
   private

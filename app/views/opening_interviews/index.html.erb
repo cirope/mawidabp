@@ -1,0 +1,46 @@
+<% if @opening_interviews.empty? && @query.blank? %>
+  <%= render 'shared/empty_index', message: t('.empty_html') %>
+<% else %>
+  <%= render partial: 'shared/search', locals: {
+    options: {},
+    columns: @query.blank? ? OpeningInterview::COLUMNS_FOR_SEARCH.keys : @columns
+  } %>
+
+  <% if @opening_interviews.empty? %>
+    <%= render 'shared/empty_index', message: t('.empty_search_html') %>
+  <% else %>
+    <table class="table table-condensed table-striped table-hover">
+      <thead id="column_headers">
+        <tr>
+          <%= make_filterable_column OpeningInterview.human_attribute_name('review_id'), nil, 'review' %>
+          <%= make_filterable_column PlanItem.human_attribute_name('project'), { class: 'hidden-xs hidden-sm' }, 'project' %>
+          <%= make_filterable_column OpeningInterview.human_attribute_name('interview_date'), nil, 'interview_date' %>
+          <%= make_filterable_column OpeningInterview.human_attribute_name('start_date'), { class: 'hidden-xs' }, 'start_date' %>
+          <%= make_filterable_column OpeningInterview.human_attribute_name('end_date'), { class: 'hidden-xs' }, 'end_date' %>
+          <th colspan="3" class="text-right"><%= link_to_search %></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @opening_interviews.each do |opening_interview| %>
+          <tr>
+            <td><%= opening_interview.review.identification %></td>
+            <td class="hidden-xs hidden-sm"><%= opening_interview.review.plan_item.project %></td>
+            <td><%= l opening_interview.interview_date %></td>
+            <td class="hidden-xs"><%= l opening_interview.start_date %></td>
+            <td class="hidden-xs"><%= l opening_interview.end_date %></td>
+            <td><%= link_to_show opening_interview %></td>
+            <td><%= link_to_edit [:edit, opening_interview] %></td>
+            <td><%= link_to_destroy opening_interview if opening_interview.can_be_destroyed? %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <%= paginate @opening_interviews %>
+<% end %>
+
+<hr>
+
+<%= link_to_new new_opening_interview_path, class: 'btn btn-primary' %>
