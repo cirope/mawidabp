@@ -3,6 +3,7 @@ class WeaknessesController < ApplicationController
   include AutoCompleteFor::FindingRelation
   include AutoCompleteFor::Tagging
   include AutoCompleteFor::WeaknessTemplate
+  include Reports::FileResponder
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_weakness, only: [
@@ -53,12 +54,12 @@ class WeaknessesController < ApplicationController
       @order_by || [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     ).references(:periods, :conclusion_reviews)
 
     respond_to do |format|
       format.html { @weaknesses = @weaknesses.page params[:page] }
-      format.csv  { render csv: @weaknesses.to_csv, filename: @title.downcase }
+      format.csv  { render_index_csv }
     end
   end
 
@@ -70,7 +71,7 @@ class WeaknessesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json # show.json.jbuilder
+      format.js   # show.js.erb
     end
   end
 
@@ -176,7 +177,7 @@ class WeaknessesController < ApplicationController
         :follow_up_date, :users_for_notification, :compliance, :skip_work_paper,
         :weakness_template_id, :lock_version,
         operational_risk: [], impact: [], internal_control_components: [],
-        business_unit_ids: [],
+        business_unit_ids: [], tag_ids: [],
         achievements_attributes: [
           :id, :benefit_id, :amount, :comment, :_destroy
         ],
@@ -193,6 +194,9 @@ class WeaknessesController < ApplicationController
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
+        ],
+        tasks_attributes: [
+          :id, :code, :description, :status, :due_on, :_destroy
         ],
         taggings_attributes: [
           :id, :tag_id, :_destroy
@@ -219,6 +223,14 @@ class WeaknessesController < ApplicationController
         auto_complete_for_weakness_template: :read,
         state_changed: :read,
         undo_reiteration: :modify
+      )
+    end
+
+    def render_index_csv
+      render_or_send_by_mail(
+        collection: @weaknesses,
+        filename: @title.downcase,
+        method_name: :to_csv
       )
     end
 end

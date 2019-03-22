@@ -1,0 +1,3 @@
+<%= f.simple_fields_for :risk_weights do |rw_f| %>
+  <%= render 'risk_weight', f: rw_f, risk_item_id: f.object.id || f.object.object_id %>
+<% end %>

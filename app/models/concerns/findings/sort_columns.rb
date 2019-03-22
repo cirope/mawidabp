@@ -13,6 +13,8 @@ module Findings::SortColumns
         priority_desc:       priority_desc_options,
       ) unless HIDE_WEAKNESS_PRIORITY
 
+      columns[:readings_desc] = readings_desc_options if self == Finding
+
       columns.merge(
         state:               state_options,
         review:              review_options,
@@ -46,7 +48,7 @@ module Findings::SortColumns
             "#{quoted_table_name}.#{qcn('risk')} #{order}",
             "#{quoted_table_name}.#{qcn('priority')} #{order}",
             "#{quoted_table_name}.#{qcn('state')} ASC"
-          ]
+          ].map { |o| Arel.sql o }
         }
       end
 
@@ -65,7 +67,7 @@ module Findings::SortColumns
             "#{quoted_table_name}.#{qcn('priority')} #{order}",
             "#{quoted_table_name}.#{qcn('risk')} #{order}",
             "#{quoted_table_name}.#{qcn('state')} ASC"
-          ]
+          ].map { |o| Arel.sql o }
         }
       end
 
@@ -76,7 +78,7 @@ module Findings::SortColumns
       def review_options
         {
           name: Review.model_name.human,
-          field: "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC"
+          field: Arel.sql("#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC")
         }
       end
 
@@ -99,7 +101,7 @@ module Findings::SortColumns
       def options_for_attribute attribute, order: 'ASC'
         {
           name:  "#{human_attribute_name attribute}#{order_label order}",
-          field: "#{quoted_table_name}.#{qcn(attribute)} #{order || 'ASC'}"
+          field: Arel.sql("#{quoted_table_name}.#{qcn(attribute)} #{order || 'ASC'}")
         }
       end
 
@@ -107,6 +109,50 @@ module Findings::SortColumns
         order_label = { 'ASC' => 'ascendant', 'DESC' => 'descendant' }[order]
 
         " (#{I18n.t "label.#{order_label}"})" if order
+      end
+
+      def readings_desc_options
+        reading_user = "COUNT(#{Reading.quoted_table_name}.#{qcn 'user_id'})"
+        finding_user = "COUNT(#{FindingAnswer.quoted_table_name}.#{qcn 'user_id'})"
+
+        select = "GREATEST(0, #{finding_user} - #{reading_user}) AS readings_count"
+
+        order_by_readings = "readings_count DESC, #{quoted_table_name}.#{qcn 'id'} DESC"
+
+        if ORACLE_ADAPTER
+          group_list = []
+          select_list = [select]
+
+          quoted_columns = columns.map do |c|
+            column = "#{quoted_table_name}.#{qcn c.name}"
+
+            if c.type == :text # Oracle CLOB
+              column = "TO_CHAR(#{column})"
+
+              group_list << column
+              select_list << "#{column} AS #{c.name}"
+            else
+              group_list << column
+              select_list << column
+            end
+          end
+
+          group = group_list.join ','
+          select = select_list
+        else
+          group = "#{quoted_table_name}.#{qcn 'id'}"
+          select = "#{quoted_table_name}.*, #{select}"
+        end
+
+        {
+          name: "#{I18n.t('findings.index.unread_answers_filter')}#{order_label 'DESC'}",
+          field: Arel.sql(order_by_readings),
+          extra_query_values: {
+            select:           select,
+            left_outer_joins: [:finding_answers, { finding_answers: :readings }],
+            group:            group
+          }
+        }
       end
   end
 end

@@ -6,7 +6,12 @@ module Questionnaires::Answers
 
     questions.each do |question|
       rates[question.question] = []
-      Question::ANSWER_OPTIONS.each { rates[question.question] << 0 }
+
+      if question.options.any?
+        question.options.each { rates[question.question] << 0 }
+      else
+        rates[question.question] << 0
+      end
     end
 
     rates = polls_answers polls, rates
@@ -30,9 +35,14 @@ module Questionnaires::Answers
     def polls_answers polls, rates
       polls_answered(polls).each do |poll|
         poll.answers.each do |answer|
-          if answer.answer_option
-            option = Question::ANSWER_OPTIONS.rindex answer.answer_option.option.to_sym
-            rates[answer.question.question][option] += 1
+          options = answer.question&.options
+
+          if options.present? && answer.answer_option
+            option = options.rindex answer.answer_option.option.to_sym
+
+            rates[answer.question.question][option] += 1 if option
+          elsif options.blank? && answer.answer.present? && answer.question
+            rates[answer.question.question][0] += 1
           end
         end
       end
@@ -41,14 +51,21 @@ module Questionnaires::Answers
     end
 
     def polls_questions polls, rates
+      answered = polls_answered(polls).count
+
       questions.each do |question|
-        question = question.question
-        Question::ANSWER_OPTIONS.each_index do |i|
-          if (answered = polls_answered(polls).count) > 0
-            rates[question][i] = ((rates[question][i] / answered.to_f) * 100).round 2
-          else
-            rates[question][i] = 0
+        text = question.question
+
+        if question.options.any?
+          question.options.each_index do |i|
+            if answered > 0
+              rates[text][i] = ((rates[text][i] / answered.to_f) * 100).round 2
+            else
+              rates[text][i] = 0
+            end
           end
+        elsif answered > 0
+          rates[text][0] = ((rates[text][0] / answered.to_f) * 100).round 2
         end
       end
 

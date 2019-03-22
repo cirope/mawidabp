@@ -1,8 +1,6 @@
 source 'https://rubygems.org'
 
-git_source(:github) { |r| "https://github.com/#{r}" }
-
-gem 'rails', '~> 5.1.5'
+gem 'rails', '~> 5.2.2.1'
 
 gem 'pg'
 gem 'jquery-rails'
@@ -11,8 +9,7 @@ gem 'responders'
 gem 'mini_magick'
 gem 'simple_form'
 gem 'newrelic_rpm'
-gem 'validates_timeliness', github: 'francocatena/validates_timeliness'
-gem 'RedCloth'
+gem 'validates_timeliness'
 gem 'redcarpet'
 gem 'whenever'
 gem 'paper_trail'
@@ -22,23 +19,21 @@ gem 'net-ldap'
 gem 'rubyzip', require: 'zip'
 gem 'prawn'
 gem 'prawn-table'
+gem 'clbustos-rtf', require: 'rtf'
 gem 'figaro'
-gem 'irreverent'
+gem 'business_time'
 gem 'bootstrap-sass'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
-gem 'search_cop'
 gem 'jbuilder'
 gem 'sidekiq'
-gem 'request_store'
-gem 'request_store-sidekiq'
 gem 'ruby-ntlm'
 gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 
-gem 'sass-rails'
+gem 'sassc-rails'
 gem 'uglifier'
 
 gem 'unicorn'
@@ -53,7 +48,7 @@ group :development do
   gem 'capistrano-rbenv'
 
   # Support for ed25519 ssh keys
-  gem 'rbnacl', '< 5.0' # TODO: check net-ssh dependency to _unleash_
+  gem 'ed25519'
   gem 'bcrypt_pbkdf'
 end
 

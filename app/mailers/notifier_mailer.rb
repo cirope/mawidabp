@@ -1,7 +1,7 @@
 class NotifierMailer < ActionMailer::Base
   include ActionView::Helpers::TextHelper
 
-  helper :application, :notifier
+  helper :application, :markdown, :notifier
 
   default from: "#{ENV['EMAIL_NAME'] || I18n.t('app_name')} <#{ENV['EMAIL_ADDRESS']}>"
 
@@ -13,7 +13,7 @@ class NotifierMailer < ActionMailer::Base
     email = poll.user.email
     subject = "[#{@organization.prefix.upcase}] #{poll.questionnaire.email_subject}"
 
-    subject << " - #{poll.affected_user.informal_name}" if poll.affected_user
+    subject << " - #{poll.about.display_name}" if poll.about
 
     mail to: email, subject: subject
   end
@@ -66,6 +66,14 @@ class NotifierMailer < ActionMailer::Base
          subject: prefix.upcase + t('notifier.notify_new_finding.title')
   end
 
+  def findings_brief(user, findings)
+    @user, @findings = user, findings
+    prefix = "[#{findings.first.organization.prefix}] "
+
+    mail to: [user.email],
+         subject: prefix.upcase + t('notifier.findings_brief.title')
+  end
+
   def notify_new_finding_answer(users, finding_answer)
     @finding_answer = finding_answer
     prefix = "[#{finding_answer.finding.organization.prefix}] "
@@ -112,6 +120,14 @@ class NotifierMailer < ActionMailer::Base
          subject: prefix + t('notifier.unanswered_finding_to_manager.title')
   end
 
+  def expired_finding_to_manager_notification(finding, users, level)
+    @finding, @level = finding, level
+    prefix = "[#{finding.organization.prefix}] ".upcase
+
+    mail to: users.map(&:email),
+         subject: prefix + t('notifier.expired_finding_to_manager.title')
+  end
+
   def reassigned_findings_notification(new_users, old_users, findings, notify = true)
     findings_array = findings.respond_to?(:each) ? findings.to_a : [findings]
 
@@ -149,7 +165,7 @@ class NotifierMailer < ActionMailer::Base
       @notification.findings.map(&:organization).uniq : []
     organizations += option_organizations
 
-    prefixes = organizations.uniq.map {|o| "[#{o.prefix}]" }.join(' ')
+    prefixes = organizations.uniq.map { |o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
     mail to: Array(users).map(&:email),
@@ -157,34 +173,46 @@ class NotifierMailer < ActionMailer::Base
   end
 
   def conclusion_review_notification(user, conclusion_review, options = {})
-    Organization.current_id = options.delete :organization_id
-    PaperTrail.whodunnit    = options.delete :user_id
+    Current.organization = Organization.find(options.delete :organization_id)
+    PaperTrail.request.whodunnit = options.delete :user_id
 
-    prefix = "[#{conclusion_review.review.organization.prefix}] "
+    org_prefix = conclusion_review.review.organization.prefix
+    prefix = "[#{org_prefix}] "
     type = conclusion_review.kind_of?(ConclusionDraftReview) ? 'draft' : 'final'
+    type_text = I18n.t "notifier.conclusion_review_notification.#{type}"
+
+    if SHOW_ORGANIZATION_PREFIX_ON_REVIEW_NOTIFICATION.include?(org_prefix)
+      type_text = "#{org_prefix} #{type_text}"
+    end
+
     title = I18n.t(
       'notifier.conclusion_review_notification.title',
-      type: I18n.t("notifier.conclusion_review_notification.#{type}"),
+      type: type_text,
       review: conclusion_review.review.long_identification
     )
     elements = [
-      "*#{Review.model_name.human} #{conclusion_review.review.identification}*"
+      "**#{Review.model_name.human} #{conclusion_review.review.identification}**"
     ]
 
     if options[:include_score_sheet]
-      elements << "*#{I18n.t('conclusion_review.score_sheet')}*"
+      elements << "**#{I18n.t('conclusion_review.score_sheet')}**"
     end
 
     if options[:include_global_score_sheet]
-      elements << "*#{I18n.t('conclusion_review.global_score_sheet')}*"
+      elements << "**#{I18n.t('conclusion_review.global_score_sheet')}**"
     end
 
     body_title = I18n.t('notifier.conclusion_review_notification.body_title',
       elements: elements.to_sentence)
 
     @conclusion_review = conclusion_review
+    @organization = conclusion_review.review.organization
     @body_title = body_title
     @note = options[:note]
+
+    if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(org_prefix)
+      @show_alt_footer = true
+    end
 
     if File.exist?(conclusion_review.absolute_pdf_path)
       attachments[conclusion_review.pdf_name] =
@@ -224,6 +252,26 @@ class NotifierMailer < ActionMailer::Base
 
     mail to: [user.email],
          subject: prefixes.upcase + t('notifier.findings_expired_warning.title')
+  end
+
+  def tasks_expiration_warning(user, tasks)
+    @grouped_tasks = tasks.group_by(&:organization)
+    prefixes = @grouped_tasks.keys.map {|o| "[#{o.prefix}]" }.join(' ')
+
+    prefixes << ' ' unless prefixes.blank?
+
+    mail to: [user.email],
+         subject: prefixes.upcase + t('notifier.tasks_expiration_warning.title')
+  end
+
+  def tasks_expired_warning(user, tasks)
+    @grouped_tasks = tasks.group_by(&:organization)
+    prefixes = @grouped_tasks.keys.map {|o| "[#{o.prefix}]" }.join(' ')
+
+    prefixes << ' ' unless prefixes.blank?
+
+    mail to: [user.email],
+         subject: prefixes.upcase + t('notifier.tasks_expired_warning.title')
   end
 
   def conclusion_final_review_close_date_warning(user, conclusion_final_reviews)

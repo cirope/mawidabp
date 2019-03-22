@@ -6,7 +6,7 @@ class WorkPaper < ApplicationRecord
   include WorkPapers::Review
 
   # Named scopes
-  scope :list, -> { where(organization_id: Organization.current_id) }
+  scope :list, -> { where(organization_id: Current.organization&.id) }
   scope :sorted_by_code, -> { order(code: :asc) }
   scope :with_prefix, ->(prefix) {
     where("#{quoted_table_name}.#{qcn 'code'} LIKE ?", "#{prefix}%").sorted_by_code
@@ -54,7 +54,7 @@ class WorkPaper < ApplicationRecord
   # Relaciones
   belongs_to :organization
   belongs_to :file_model, :optional => true
-  belongs_to :owner, :polymorphic => true, :optional => true
+  belongs_to :owner, :polymorphic => true, :touch => true, :optional => true
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true,
     reject_if: ->(attrs) { ['file', 'file_cache'].all? { |a| attrs[a].blank? } }
@@ -62,7 +62,7 @@ class WorkPaper < ApplicationRecord
   def initialize(attributes = nil)
     super(attributes)
 
-    self.organization_id = Organization.current_id
+    self.organization_id = Current.organization&.id
   end
 
   def inspect
@@ -110,19 +110,17 @@ class WorkPaper < ApplicationRecord
   end
 
   def create_cover_and_zip
-    self.file_model.try(:file?).tap do |file|
-      self.create_pdf_cover if @cover_must_be_created && file
-      self.create_zip if @zip_must_be_created || (@cover_must_be_created && file)
-    end
+    self.file_model.try(:file?) &&
+      (@zip_must_be_created || @cover_must_be_created) &&
+      create_zip
 
     true
   end
 
   def create_pdf_cover(filename = nil, review = nil)
-    review ||= self.owner.kind_of?(ControlObjectiveItem) ? self.owner.review :
-      (self.owner.kind_of?(Finding) ?
-        self.owner.try(:control_objective_item).try(:review) : nil)
-    pdf = Prawn::Document.create_generic_pdf(:portrait, false)
+    pdf = Prawn::Document.create_generic_pdf(:portrait, footer: false)
+
+    review ||= owner.review
 
     pdf.add_review_header review.try(:organization),
       review.try(:identification), review.try(:plan_item).try(:project)
@@ -132,6 +130,14 @@ class WorkPaper < ApplicationRecord
     pdf.add_title WorkPaper.model_name.human, PDF_FONT_SIZE * 2
 
     pdf.move_down PDF_FONT_SIZE * 4
+
+    if owner.respond_to?(:pdf_cover_items)
+      owner.pdf_cover_items.each do |label, text|
+        pdf.move_down PDF_FONT_SIZE
+
+        pdf.add_description_item label, text, 0, false
+      end
+    end
 
     unless self.name.blank?
       pdf.move_down PDF_FONT_SIZE
@@ -215,6 +221,8 @@ class WorkPaper < ApplicationRecord
     self.create_pdf_cover
 
     if File.file?(original_filename) && File.file?(pdf_filename)
+      FileUtils.rm zip_filename if File.exists?(zip_filename)
+
       Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
         zipfile.add(self.filename_with_prefix, original_filename) { true }
         zipfile.add(File.basename(pdf_filename), pdf_filename) { true }

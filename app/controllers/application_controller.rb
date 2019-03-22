@@ -3,15 +3,17 @@ class ApplicationController < ActionController::Base
   include UpdateResource
   include ParameterSelector
   include CacheControl
+  include FlashResponders
 
   protect_from_forgery
 
   before_action :set_paper_trail_whodunnit
   before_action :scope_current_organization
+  before_action :set_conclusion_pdf_format
 
   def current_user
     load_user
-    Finding.current_user = @auth_user
+    Current.user = @auth_user
 
     @auth_user.try(:id)
   end
@@ -37,9 +39,18 @@ class ApplicationController < ActionController::Base
   private
 
     def scope_current_organization
-      Group.current_id        = current_organization&.group_id
-      Group.corporate_ids     = current_organization&.group&.organizations&.corporate&.ids
-      Organization.current_id = current_organization&.id
+      Current.group         = current_organization&.group
+      Current.corporate_ids = current_organization&.group&.organizations&.corporate&.ids
+      Current.organization  = current_organization
+    end
+
+    def set_conclusion_pdf_format
+      if SHOW_CONCLUSION_ALTERNATIVE_PDF.respond_to?(:[])
+        Current.conclusion_pdf_format =
+          SHOW_CONCLUSION_ALTERNATIVE_PDF[current_organization&.prefix]
+      end
+
+      Current.conclusion_pdf_format ||= 'default'
     end
 
     def load_user
@@ -86,7 +97,7 @@ class ApplicationController < ActionController::Base
           @auth_user.try(:privileges, current_organization) : {}
       else
         go_to = request.fullpath
-        store_go_to = request.get? && !request.xhr?
+        store_go_to = request.get? && request.format.html? && !request.xhr?
         session[:go_to] = go_to if store_go_to
         @auth_user = nil
         redirect_to_login t('message.must_be_authenticated'), :alert
@@ -223,62 +234,89 @@ class ApplicationController < ActionController::Base
 
     def build_search_conditions(model, default_conditions = {})
       if params[:search] && params[:search][:order].present?
-        @order_by = model.columns_for_sort[params[:search][:order]][:field]
-        @order_by_column_name = model.columns_for_sort[params[:search][:order]][:name]
+        order_data = model.columns_for_sort[params[:search][:order]]
+
+        @order_by             = order_data[:field]
+        @order_by_column_name = order_data[:name]
+        @extra_query_values   = order_data[:extra_query_values]
       end
 
       if params[:search] && params[:search][:query].present?
-        raw_query = params[:search][:query].to_s.mb_chars.downcase.to_s
-        and_query = raw_query.split(SEARCH_AND_REGEXP).reject(&:blank?)
-        @query = and_query.map do |query|
-          query.split(SEARCH_OR_REGEXP).reject(&:blank?)
-        end
         @columns = params[:search][:columns] || []
-        search_string = []
-        filters = { :boolean_false => false }
 
-
-        @query.each_with_index do |or_queries, i|
-          or_search_string = []
-
-          or_queries.each_with_index do |or_query, j|
-            @columns.each do |column|
-              clean_or_query, operator = *extract_operator(or_query)
-
-              if clean_or_query =~ model.get_column_regexp(column) && (!operator || model.allow_search_operator?(operator, column))
-                index = i * 1000 + j
-                mask = model.get_column_mask(column)
-                conversion_method = model.get_column_conversion_method(column)
-                filter = "#{model.get_column_name(column)} "
-                operator ||= model.get_column_operator(column).kind_of?(Array) ?
-                  '=' : model.get_column_operator(column)
-
-                filter << operator
-                or_search_string << "#{filter} :#{column}_filter_#{index}"
-
-                if conversion_method.respond_to?(:call)
-                  casted_value = conversion_method.call(clean_or_query.strip)
-                else
-                  casted_value = clean_or_query.strip.send(conversion_method) rescue nil
-                end
-
-                filters[:"#{column}_filter_#{index}"] = mask ? mask % casted_value : casted_value
-              end
-            end
-          end
-
-          if or_search_string.present?
-            search_string << "(#{or_search_string.join(' OR ')})"
-          end
-        end
-
-        @conditions = @columns.empty? || search_string.empty? ?
-          default_conditions :
-          model.prepare_search_conditions(default_conditions, [search_string.join(' AND '), filters])
+        result = prepare_search(
+          model:              model,
+          raw_query:          params[:search][:query],
+          columns:            @columns,
+          default_conditions: default_conditions
+        )
+        @query      = result[:query]
+        @conditions = result[:conditions]
       else
-        @columns = []
+        @columns    = []
         @conditions = default_conditions
       end
+    end
+
+    def prepare_search(model:, raw_query: nil, columns: [], default_conditions: {})
+      raw_query = raw_query.to_s.mb_chars.downcase.to_s
+      and_query = raw_query.split(SEARCH_AND_REGEXP).reject(&:blank?)
+
+      query = and_query.map do |q|
+        q.split(SEARCH_OR_REGEXP).reject(&:blank?)
+      end
+
+      search_string = []
+      filters = { boolean_false: false }
+
+      query.each_with_index do |or_queries, i|
+        or_search_string = []
+
+        or_queries.each_with_index do |or_query, j|
+          columns.each do |column|
+            clean_or_query, operator = *extract_operator(or_query)
+
+            if (
+                clean_or_query =~ model.get_column_regexp(column) &&
+                (!operator || model.allow_search_operator?(operator, column))
+            )
+              index = i * 1000 + j
+              mask              = model.get_column_mask(column)
+              conversion_method = model.get_column_conversion_method(column)
+              filter            = "#{model.get_column_name(column)} "
+              operator          ||= if model.get_column_operator(column).kind_of?(Array)
+                                      '='
+                                    else
+                                      model.get_column_operator(column)
+                                    end
+
+              filter << operator
+              or_search_string << "#{filter} :#{column}_filter_#{index}"
+
+              casted_value = if conversion_method.respond_to?(:call)
+                               conversion_method.call(clean_or_query.strip)
+                             else
+                               clean_or_query.strip.send(conversion_method) rescue nil
+                             end
+
+              filters[:"#{column}_filter_#{index}"] = mask ? mask % casted_value : casted_value
+            end
+          end
+        end
+
+        search_string << "(#{or_search_string.join(' OR ')})" if or_search_string.present?
+      end
+
+      conditions = if columns.empty? || search_string.empty?
+                     default_conditions
+                   else
+                     model.prepare_search_conditions(default_conditions, [search_string.join(' AND '), filters])
+                   end
+
+      {
+        query: query,
+        conditions: conditions
+      }
     end
 
     def help

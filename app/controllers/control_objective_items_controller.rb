@@ -22,8 +22,10 @@ class ControlObjectiveItemsController < ApplicationController
       { review: :period },
       { control_objective: :process_control }
     ).where(@conditions).references(:review).order(
-      "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
-      "#{ControlObjectiveItem.quoted_table_name}.#{ControlObjectiveItem.qcn('id')} DESC"
+      [
+        "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
+        "#{ControlObjectiveItem.quoted_table_name}.#{ControlObjectiveItem.qcn('id')} DESC"
+      ].map { |o| Arel.sql o }
     ).page(params[:page])
 
     respond_to do |format|
@@ -119,6 +121,7 @@ class ControlObjectiveItemsController < ApplicationController
   end
 
   private
+
     def set_control_objective_item
       @control_objective_item = ControlObjectiveItem.list.includes(
         :control, :weaknesses, :work_papers

@@ -1,4 +1,3 @@
-PaperTrail.config.track_associations = false
 PaperTrail.serializer = PaperTrail::Serializers::JSON
 
 module PaperTrail::VersionConcern
@@ -40,7 +39,7 @@ end
 # Oracle (or PaperTrail with oracle) put serialized attributes within a hash
 # with a single entry with a 'value' key
 # Visit https://github.com/airblade/paper_trail/blob/master/lib/paper_trail/attribute_serializers/cast_attribute_serializer.rb
-if ActiveRecord::Base.connection.adapter_name == 'OracleEnhanced'
+if (ActiveRecord::Base.connection.adapter_name == 'OracleEnhanced' rescue nil)
   module PaperTrail
     module AttributeSerializers
       class CastAttributeSerializer

@@ -186,17 +186,39 @@ module ConclusionFinalReviewsHelper
   end
 
   def send_review_options
-    options = if SHOW_CONCLUSION_ALTERNATIVE_PDF
+    default = if Current.conclusion_pdf_format == 'gal' && show_brief_download?
+                'brief'
+              else
+                'normal'
+              end
+
+    options = if Current.conclusion_pdf_format == 'default'
+                ['normal', 'brief', 'without_score']
+              elsif Current.conclusion_pdf_format == 'gal'
                 ['normal', 'brief']
               else
-                ['normal', 'brief', 'without_score']
+                ['normal']
               end
+
+    options.delete 'brief' unless show_brief_download?
 
     select_options = options.map do |type|
       [t("conclusion_final_review.send_type.#{type}"), type]
     end
 
-    options_for_select select_options, 'normal'
+    options_for_select select_options, default
+  end
+
+  def show_review_best_practice_comments?
+    prefix = current_organization&.prefix
+
+    SHOW_REVIEW_BEST_PRACTICE_COMMENTS &&
+      ORGANIZATIONS_WITH_BEST_PRACTICE_COMMENTS.include?(prefix)
+  end
+
+  def show_brief_download?
+    !show_review_best_practice_comments? &&
+      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.exclude?(current_organization.prefix)
   end
 
   def show_conclusion_review_issue_date conclusion_final_review
@@ -211,7 +233,7 @@ module ConclusionFinalReviewsHelper
     CONCLUSION_OPTIONS.map { |option| [option, option] }
   end
 
-  def can_destroy_final_reviews?
-    ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION && can_perform?(:destroy)
+  def can_destroy_final_review? conclusion_final_review
+    can_perform?(:destroy) && conclusion_final_review.can_be_destroyed?
   end
 end

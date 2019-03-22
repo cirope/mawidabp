@@ -1,13 +1,15 @@
 source 'https://rubygems.org'
 
-gem 'jekyll'#, '~> 3.4.5'
+gem 'jekyll'
 
 gem 'sass'
 gem 'coffee-script'
 gem 'uglifier'
 gem 'bootstrap-sass'
+# Restricted only to support old node versions on some customers
+gem 'autoprefixer-rails', '< 9'
 
-group :plugins do
+group :jekyll_plugins do
   gem 'jekyll-assets'
   gem 'jekyll-multiple-languages-plugin'
 end

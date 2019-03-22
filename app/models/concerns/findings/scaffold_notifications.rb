@@ -3,7 +3,7 @@ module Findings::ScaffoldNotifications
 
   module ClassMethods
     def notify_manager_if_necesary
-      notify_managers if [0, 6].exclude? Time.zone.today.wday
+      notify_managers if Time.zone.today.workday?
     end
 
     def unanswered_and_stale factor
@@ -64,7 +64,7 @@ module Findings::ScaffoldNotifications
 
         stale_parameters.each_with_index do |stale_parameter, i|
           stale_days = stale_parameter[:parameter].to_i
-          parameters[:"stale_unanswered_date_#{i}"] = (stale_days + stale_days * factor).days.ago_in_business.to_date
+          parameters[:"stale_unanswered_date_#{i}"] = (stale_days + stale_days * factor).business_days.ago.to_date
           parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
         end
 
@@ -99,7 +99,7 @@ module Findings::ScaffoldNotifications
 
     until days_to_add == 0
       date_for_notification += 1
-      days_to_add -= 1 unless [0, 6].include? date_for_notification.wday
+      days_to_add -= 1 if date_for_notification.workday?
     end
 
     date_for_notification
@@ -115,7 +115,8 @@ module Findings::ScaffoldNotifications
     if level_users.any? && !has_audited_comments
       NotifierMailer.unanswered_finding_to_manager_notification(self, level_users | users, level).deliver_later
 
-      update_column :notification_level, level
+      update_columns notification_level:     level,
+                     last_notification_date: Time.zone.today
     else
       update_column :notification_level, -1
     end

@@ -51,7 +51,7 @@
       @order_by || [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
         "#{Oportunity.quoted_table_name}.#{Oportunity.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     ).references(control_objective_item: :review).page(params[:page])
 
     respond_to do |format|
@@ -67,7 +67,7 @@
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json # show.json.jbuilder
+      format.js   # show.js.erb
     end
   end
 

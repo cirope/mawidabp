@@ -116,12 +116,33 @@ module Findings::CurrentUserScopes
     end
 
     def filtered_current_user_findings
-      scoped_findings.
+      scope = scoped_findings.
         includes(*current_user_includes).
-        left_joins(:users).
-        where(@conditions).
+        left_joins(:users)
+
+      if @extra_query_values
+        # Evitamos el `includes` para no tener los alias de tablas relacionadas
+        # en el `select` de la query, de esta forma no necesitamos hacer
+        # GROUP BY por cada tabla incluida.
+        includes = scope.values[:includes]
+        scope    = scope.unscope(:includes).left_joins(*includes) if includes.present?
+
+        @extra_query_values.each do |method, args|
+          scope = scope.send method, args
+        end
+      end
+
+      scope.where(@conditions).
         order(@order_by || current_user_default_sort_columns).
         references(*current_user_references)
+    end
+
+    def deep_to_a(value)
+      # Helper para transformar todos los includes/joins
+      # a un array para poder iterarlos.
+      return [value] unless value.respond_to?(:to_a)
+
+      value.to_a.map { |v| deep_to_a(v) }
     end
 
     def current_user_includes
@@ -142,7 +163,7 @@ module Findings::CurrentUserScopes
         "#{Finding.quoted_table_name}.#{Finding.qcn('organization_id')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('state')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     end
 
     def current_user_references

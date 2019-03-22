@@ -1,17 +1,17 @@
 module Findings::FollowUpPDF
   extend ActiveSupport::Concern
 
-  def follow_up_pdf organization = nil
+  def follow_up_pdf organization = nil, brief: false
     pdf = Prawn::Document.create_generic_pdf :portrait
 
     put_follow_up_cover_on             pdf, organization
     put_follow_up_description_items_on pdf
     put_follow_up_user_data_on         pdf
     put_relation_information_on        pdf
-    put_history_on                     pdf
+    put_history_on                     pdf unless brief
     put_follow_up_comments_on          pdf
     put_follow_up_work_papers_on       pdf
-    put_follow_up_finding_answers_on   pdf
+    put_follow_up_finding_answers_on   pdf unless brief
 
     pdf.custom_save_as follow_up_pdf_name, Finding.table_name, id
   end
@@ -70,6 +70,10 @@ module Findings::FollowUpPDF
 
       if solution_date
         pdf.add_description_item Finding.human_attribute_name(:solution_date), I18n.l(solution_date, format: :long), 0, false
+      end
+
+      if tags.any?
+        pdf.add_description_item Tag.model_name.human(count: 0), tags.map(&:name).join('; '), 0, false
       end
     end
 
@@ -270,10 +274,16 @@ module Findings::FollowUpPDF
     end
 
     def important_changed_versions
-      previous_version   = versions.first
-      important_versions = [PaperTrail::Version.new]
+      previous_version     = versions.first
+      important_versions   = [PaperTrail::Version.new]
+      last_checked_version = nil
+      next_version         = -> {
+        previous_version&.event && (
+          last_checked_version = previous_version&.next || current_version
+        )
+      }
 
-      while previous_version&.event && last_checked_version = previous_version&.next
+      while next_version.call
         has_important_changes = follow_up_important_attributes.any? do |attribute|
           current_value = last_checked_version.reify(has_one: false) ?
             last_checked_version.reify(has_one: false).send(attribute) : nil
@@ -290,16 +300,16 @@ module Findings::FollowUpPDF
         previous_version = last_checked_version
       end
 
-      important_versions + [current_version]
+      important_versions
     end
 
     def current_version
-      object    = paper_trail.object_attrs_for_paper_trail
-      use_plain = self.class.connection.adapter_name == 'PostgreSQL'
+      event  = PaperTrail::Events::Base.new self, false
+      object = event.send :object_attrs_for_paper_trail, false
 
       PaperTrail::Version.new(
         item:      self,
-        object:    use_plain ? object : object.to_json,
+        object:    POSTGRESQL_ADAPTER ? object : object.to_json,
         whodunnit: paper_trail.originator
       )
     end

@@ -1,0 +1,46 @@
+<% if @risk_assessments.empty? && @query.blank? %>
+  <%= render 'shared/empty_index', message: t('.empty_html') %>
+<% else %>
+  <%= render partial: 'shared/search', locals: {
+    options: {},
+    columns: @query.blank? ? RiskAssessment::COLUMNS_FOR_SEARCH.keys : @columns
+  } %>
+
+  <% if @risk_assessments.empty? %>
+    <%= render 'shared/empty_index', message: t('.empty_search_html') %>
+  <% else %>
+    <table class="table table-condensed table-striped table-hover">
+      <thead id="column_headers">
+        <tr>
+          <%= make_filterable_column RiskAssessment.human_attribute_name('period'), { class: 'hidden-xs' }, 'period' %>
+          <%= make_filterable_column RiskAssessment.human_attribute_name('name'), nil, 'name' %>
+          <%= make_filterable_column RiskAssessment.human_attribute_name('description'), { class: 'hidden-xs hidden-sm' }, 'description' %>
+          <th colspan="5" class="text-right"><%= link_to_search %></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @risk_assessments.each do |risk_assessment| %>
+          <tr <%== 'class="text-muted"' unless risk_assessment.draft? %>>
+            <td class="hidden-xs"><%= risk_assessment.period.name %></td>
+            <td>
+              <%= risk_assessment_shared_icon risk_assessment %>
+              <%= super_truncate risk_assessment.name, 30 %>
+            </td>
+            <td class="hidden-xs hidden-sm"><%= super_truncate risk_assessment.description, 30 %></td>
+            <td><%= link_to_create_plan risk_assessment %></td>
+            <td><%= link_to_clone new_risk_assessment_path(clone_from: risk_assessment.id) %></td>
+            <td><%= link_to_show risk_assessment %></td>
+            <td><%= link_to_edit [:edit, risk_assessment] if risk_assessment.can_be_modified? %></td>
+            <td><%= link_to_destroy risk_assessment if risk_assessment.can_be_destroyed? %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>
+
+<hr>
+
+<%= paginate @risk_assessments %>
+<%= link_to_new new_risk_assessment_path, class: 'btn btn-primary' %>

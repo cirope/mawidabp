@@ -1,14 +1,20 @@
-<div id="user_filter" class="filter" <%= 'style="display: none;"' unless display %>>
-  <div class="row">
+<% group ||= nil %>
+<% hide_comments ||= nil %>
+<% check_action ||= :user_in_comments %>
+
+<% unless group %>
+  <div id="user_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+    <div class="row">
+<% end %>
     <div class="col-md-6">
       <div class="form-group">
         <% user = params[action] && params[action][:user] %>
 
-        <div class="col-md-3">
+        <div class="col-md-4">
           <%= f.label :user, User.model_name.human %>
         </div>
 
-        <div class="col-md-9">
+        <div class="col-md-8">
           <%= f.text_field :user,
             value: user,
             title: t('label.search'),
@@ -16,20 +22,24 @@
             data: {
               clear: 'user',
               autocomplete_url: users_completions_path,
-              autocomplete_id_target: '#weaknesses_report_user_id'
+              autocomplete_id_target: '[name$="[user_id]"]'
             }
           %>
           <%= f.hidden_field :user_id, value: params[action] && params[action][:user_id] %>
         </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="checkbox">
-        <% user_in_comments = params[action] && params[action][:user_in_comments] %>
-        <label>
-          <%= f.check_box :user_in_comments, checked: user_in_comments == '1' %> <%= t '.user_in_comments' %>
-        </label>
+    <% unless hide_comments %>
+      <div class="col-md-6">
+        <div class="checkbox">
+          <% check_value = params[action] && params[action][check_action] %>
+          <label>
+            <%= f.check_box check_action, checked: check_value == '1' %> <%= t ".#{check_action}" %>
+          </label>
+        </div>
       </div>
+    <% end %>
+<% unless group %>
     </div>
   </div>
-</div>
+<% end %>

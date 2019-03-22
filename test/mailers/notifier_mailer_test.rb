@@ -7,10 +7,12 @@ class NotifierMailerTest < ActionMailer::TestCase
     ActionMailer::Base.deliveries.clear
 
     assert ActionMailer::Base.deliveries.empty?
+
+    set_organization
   end
 
   teardown do
-    Organization.current_id = nil
+    unset_organization
   end
 
   test 'pending poll email' do
@@ -82,6 +84,19 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert_equal user.email, response.to.first
   end
 
+  test 'findings brief' do
+    user = users :administrator
+    response = NotifierMailer.findings_brief(user, user.findings).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.findings_brief.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier.findings_brief.title')),
+      response.body.decoded
+    assert_equal user.email, response.to.first
+  end
+
   test 'notify new finding answer' do
     user = User.find(users(:administrator).id)
     finding_answer = FindingAnswer.find(finding_answers(:auditor_answer).id)
@@ -138,6 +153,22 @@ class NotifierMailerTest < ActionMailer::TestCase
     )
     assert_match Regexp.new(
       I18n.t('notifier.unanswered_finding_to_manager.the_following_finding_is_stale_and_unanswered')
+    ), response.body.decoded
+    assert !users.empty?
+    assert users.map(&:email).all? { |email| response.to.include?(email) }
+  end
+
+  test 'deliver expired finding to manager notification' do
+    finding = findings(:being_implemented_weakness)
+    users = finding.users_for_scaffold_notification(1)
+    response = NotifierMailer.expired_finding_to_manager_notification(finding, users, 1).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.expired_finding_to_manager.title')
+    )
+    assert_match Regexp.new(
+      I18n.t('notifier.expired_finding_to_manager.the_following_finding_is_expired')
     ), response.body.decoded
     assert !users.empty?
     assert users.map(&:email).all? { |email| response.to.include?(email) }
@@ -207,8 +238,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   test 'conclusion review notification' do
-    organization = Organization.find(organizations(
-          :cirope).id)
+    organization = Organization.find(organizations(:cirope).id)
     user = User.find(users(:administrator).id)
     conclusion_review = ConclusionFinalReview.find(conclusion_reviews(
         :conclusion_current_final_review).id)
@@ -218,7 +248,7 @@ class NotifierMailerTest < ActionMailer::TestCase
       I18n.t('conclusion_review.global_score_sheet')
     ]
 
-    Organization.current_id = organization.id
+    Current.organization = organization
 
     conclusion_review.to_pdf organization
     conclusion_review.review.score_sheet organization, draft: false
@@ -226,17 +256,23 @@ class NotifierMailerTest < ActionMailer::TestCase
 
     response = NotifierMailer.conclusion_review_notification(user, conclusion_review,
       :include_score_sheet => true, :include_global_score_sheet => true,
-      :note => 'note in *textile*', :organization_id => Organization.current_id,
-      :user_id => PaperTrail.whodunnit).deliver_now
+      :note => 'note in **markdown**', :organization_id => Current.organization&.id,
+      :user_id => PaperTrail.request.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
       :type => I18n.t('notifier.conclusion_review_notification.final'),
       :review => conclusion_review.review.long_identification)
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
     assert !ActionMailer::Base.deliveries.empty?
-    assert response.subject.include?(title)
+
+    if SHOW_ORGANIZATION_PREFIX_ON_REVIEW_NOTIFICATION.include?(organization.prefix)
+      refute response.subject.include?(title)
+    else
+      assert response.subject.include?(title)
+    end
+
     assert_equal 3, response.attachments.size
-    assert_match /textile/, text_part
+    assert_match /markdown/, text_part
     assert response.to.include?(user.email)
 
     elements.each do |element|
@@ -244,8 +280,8 @@ class NotifierMailerTest < ActionMailer::TestCase
     end
 
     response = NotifierMailer.conclusion_review_notification(user, conclusion_review,
-      :include_score_sheet => true, :organization_id => Organization.current_id,
-      :user_id => PaperTrail.whodunnit).deliver_now
+      :include_score_sheet => true, :organization_id => Current.organization&.id,
+      :user_id => PaperTrail.request.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
       :type => I18n.t('notifier.conclusion_review_notification.final'),
       :review => conclusion_review.review.long_identification)
@@ -253,7 +289,13 @@ class NotifierMailerTest < ActionMailer::TestCase
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
     assert !ActionMailer::Base.deliveries.empty?
-    assert response.subject.include?(title)
+
+    if SHOW_ORGANIZATION_PREFIX_ON_REVIEW_NOTIFICATION.include?(organization.prefix)
+      refute response.subject.include?(title)
+    else
+      assert response.subject.include?(title)
+    end
+
     assert_equal 2, response.attachments.size
     assert response.to.include?(user.email)
 
@@ -264,8 +306,8 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert !text_part.include?(I18n.t('conclusion_review.global_score_sheet'))
 
     response = NotifierMailer.conclusion_review_notification(user,
-      conclusion_review, :organization_id => Organization.current_id,
-      :user_id => PaperTrail.whodunnit).deliver_now
+      conclusion_review, :organization_id => Current.organization&.id,
+      :user_id => PaperTrail.request.whodunnit).deliver_now
     title = I18n.t('notifier.conclusion_review_notification.title',
       :type => I18n.t('notifier.conclusion_review_notification.final'),
       :review => conclusion_review.review.long_identification)
@@ -274,7 +316,13 @@ class NotifierMailerTest < ActionMailer::TestCase
     elements.delete(I18n.t('conclusion_review.score_sheet'))
 
     assert !ActionMailer::Base.deliveries.empty?
-    assert response.subject.include?(title)
+
+    if SHOW_ORGANIZATION_PREFIX_ON_REVIEW_NOTIFICATION.include?(organization.prefix)
+      refute response.subject.include?(title)
+    else
+      assert response.subject.include?(title)
+    end
+
     assert_equal 1, response.attachments.size
     assert response.to.include?(user.email)
 
@@ -309,6 +357,32 @@ class NotifierMailerTest < ActionMailer::TestCase
     )
     assert_match Regexp.new(I18n.t('notifier.findings_expired_warning.body_title',
         :count => user.findings.size)), response.body.decoded
+    assert_equal user.email, response.to.first
+  end
+
+  test 'deliver tasks expiration warning' do
+    user = User.find(users(:administrator).id)
+    response = NotifierMailer.tasks_expiration_warning(user, user.tasks).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.tasks_expiration_warning.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier.tasks_expiration_warning.body_title',
+        :count => user.tasks.size)), response.body.decoded
+    assert_equal user.email, response.to.first
+  end
+
+  test 'deliver tasks expired warning' do
+    user = User.find(users(:administrator).id)
+    response = NotifierMailer.tasks_expired_warning(user, user.tasks).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.tasks_expired_warning.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier.tasks_expired_warning.body_title',
+        :count => user.tasks.size)), response.body.decoded
     assert_equal user.email, response.to.first
   end
 

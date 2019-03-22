@@ -2,15 +2,15 @@ module Findings::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list,              -> { where organization_id: Organization.current_id }
+    scope :list,              -> { where organization_id: Current.organization&.id }
     scope :sort_by_code,      -> { order review_code: :asc }
-    scope :sort_for_review,   -> { order risk: :desc, priority: :desc, review_code: :asc }
+    scope :sort_for_review,   -> { order *review_sort_options }
     scope :with_achievements, -> { includes(:achievements).where.not achievements: { finding_id: nil } }
   end
 
   module ClassMethods
     def group_list
-      organization_ids = Organization.where(group_id: Group.current_id).pluck('id')
+      organization_ids = Organization.where(group_id: Current.group&.id).pluck('id')
 
       where organization_id: organization_ids
     end
@@ -84,11 +84,80 @@ module Findings::Scopes
       end
     end
 
+    def excluding_user_id user_id
+      ids = includes(:users).where(users: { id: user_id }).references(:users).ids
+
+      where.not id: ids
+    end
+
     def by_issue_date operator, date, date_until = nil
-      mask      = date_until ? '? AND ?' : '?'
+      mask      = operator.downcase == 'between' && date_until ? '? AND ?' : '?'
       condition = "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} #{operator} #{mask}"
 
       includes(review: :conclusion_final_review).where condition, *[date, date_until].compact
+    end
+
+    def by_origination_date date, date_until
+      where origination_date: date..date_until
+    end
+
+    def by_business_unit_ids business_unit_ids
+      includes(review: :plan_item).
+        where(plan_items: { business_unit_id: Array(business_unit_ids) }).
+        references(:plan_items)
+    end
+
+    def by_business_unit_type business_unit_type_id
+      includes(review: { plan_item: :business_unit }).
+        where(business_units: { business_unit_type_id: business_unit_type_id }).
+        references(:business_units)
+    end
+
+    def by_control_objective_tags *tags
+      conditions = []
+      parameters = {}
+
+      tags.flatten.each_with_index do |tag, i|
+        conditions << "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn 'name'}) LIKE :cot_#{i}"
+
+        parameters[:"cot_#{i}"] = "%#{tag.downcase}%"
+      end
+
+      includes(control_objective: :tags).where(conditions.join(' OR '), parameters)
+    end
+
+    def by_wilcard_tags *tags
+      conditions = []
+      parameters = {}
+
+      tags.flatten.each_with_index do |tag, i|
+        conditions << "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn 'name'}) LIKE :wt_#{i}"
+
+        parameters[:"wt_#{i}"] = "%#{tag.downcase}%"
+      end
+
+      includes(:tags).where(conditions.join(' OR '), parameters)
+    end
+
+    def by_review_tags *tags
+      conditions = []
+      parameters = {}
+
+      tags.flatten.each_with_index do |tag, i|
+        conditions << "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn 'name'}) LIKE :rt_#{i}"
+
+        parameters[:"rt_#{i}"] = "%#{tag.downcase}%"
+      end
+
+      includes(review: :tags).where(conditions.join(' OR '), parameters)
+    end
+
+    def review_sort_options
+      if ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY == 'risk'
+        [risk: :desc, review_code: :asc]
+      else
+        [risk: :desc, priority: :desc, review_code: :asc]
+      end
     end
   end
 end

@@ -2,14 +2,18 @@ class ConclusionReportsController < ApplicationController
   include Reports::SynthesisReport
   include Reports::ReviewStatsReport
   include Reports::ReviewScoresReport
+  include Reports::ReviewScoreDetailsReport
   include Reports::WeaknessesByState
   include Reports::WeaknessesByRisk
+  include Reports::WeaknessesByRiskAndBusinessUnit
   include Reports::WeaknessesByAuditType
   include Reports::ControlObjectiveStats
   include Reports::ControlObjectiveStatsByReview
   include Reports::ProcessControlStats
-  include Reports::WeaknessesByRiskReport
+  include Reports::WeaknessesByBusinessUnit
   include Reports::WeaknessesByMonth
+  include Reports::WeaknessesByRiskReport
+  include Reports::WeaknessesByUser
   include Reports::FixedWeaknessesReport
   include Reports::CostAnalysis
   include Reports::CostSummary
@@ -42,8 +46,16 @@ class ConclusionReportsController < ApplicationController
         create_weaknesses_by_state: :read,
         weaknesses_by_risk: :read,
         create_weaknesses_by_risk: :read,
+        weaknesses_by_month: :read,
+        create_weaknesses_by_month: :read,
+        weaknesses_by_risk_report: :read,
+        create_weaknesses_by_risk_report: :read,
         weaknesses_by_audit_type: :read,
         create_weaknesses_by_audit_type: :read,
+        weaknesses_by_business_unit: :read,
+        create_weaknesses_by_business_unit: :read,
+        weaknesses_by_user: :read,
+        create_weaknesses_by_user: :read,
         cost_analysis: :read,
         cost_summary: :read,
         create_cost_analysis: :read,
@@ -53,6 +65,8 @@ class ConclusionReportsController < ApplicationController
         create_fixed_weaknesses_report: :read,
         control_objective_stats: :read,
         create_control_objective_stats: :read,
+        control_objective_stats_by_review: :read,
+        create_control_objective_stats_by_review: :read,
         process_control_stats: :read,
         create_process_control_stats: :read,
         benefits: :read,

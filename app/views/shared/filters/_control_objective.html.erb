@@ -1,10 +1,10 @@
-<div id="control_objective_filter" class="filter" <%= 'style="display: none;"' unless display %>>
+<div id="control_objective_filter" class="filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
       <div class="form-group">
         <% control_objective_filter = params[action] ? params[action][:control_objective] : nil %>
-        <%= f.label :control_objective, ControlObjective.model_name.human, class: 'col-md-3' %>
-        <div class="col-md-9">
+        <%= f.label :control_objective, ControlObjective.model_name.human, class: 'col-md-4' %>
+        <div class="col-md-8">
           <%= f.text_field :control_objective, value: control_objective_filter, maxlength: 3072, class: 'form-control' %>
         </div>
       </div>

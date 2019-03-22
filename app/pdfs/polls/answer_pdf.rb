@@ -33,14 +33,21 @@ class Polls::AnswerPDF < Prawn::Document
     end
 
     def pdf_add_body
+      pdf.move_down PDF_FONT_SIZE
+
       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-        @report.polls.each do |poll|
-          pdf_add_user poll
-          pdf_add_affected_user poll
-          pdf_add_status poll
-          pdf_add_answers poll
-          pdf_add_comments poll
-          pdf.move_down PDF_FONT_SIZE
+        count = @report.polls.size
+
+        @report.polls.each_with_index do |poll, i|
+          if show_poll? poll
+            pdf_add_user poll
+            pdf_add_affected_user poll
+            pdf_add_status poll
+            pdf_add_answers poll
+            pdf_add_comments poll
+
+            pdf.move_down PDF_FONT_SIZE unless i == count - 1
+          end
         end
       end
     end
@@ -65,26 +72,36 @@ class Polls::AnswerPDF < Prawn::Document
     end
 
     def pdf_add_affected_user poll
-      if poll.affected_user
-        pdf.text "#{Poll.human_attribute_name :affected_user}: #{poll.affected_user.informal_name}", style: :bold
+      if poll.about
+        pdf.text "#{Poll.human_attribute_name :about}: #{poll.about.display_name}", style: :bold
       end
     end
 
     def pdf_add_answers poll
-      pdf.text "#{Questionnaire.human_attribute_name :questions}:"
+      pdf.move_down PDF_FONT_SIZE * 0.5
+      pdf.text Questionnaire.human_attribute_name(:questions), style: :bold
 
       poll.answers.each do |answer|
-        ans = set_answer(answer) if poll.answered?
-        pdf.text "#{answer.question.question} #{ans}"
+        if show_answer? answer
+          ans = set_answer(answer) if poll.answered?
 
-        if answer.comments.present?
-          pdf.text "#{Answer.human_attribute_name :comments}: #{answer.comments}"
+          pdf.move_down PDF_FONT_SIZE * 0.25
+          pdf.text answer.question.question
+
+          pdf.indent PDF_FONT_SIZE do
+            pdf.move_down PDF_FONT_SIZE * 0.25
+            pdf.text ans
+
+            if answer.comments.present?
+              pdf.text "#{Answer.human_attribute_name :comments}: <i>#{answer.comments}</i>", inline_format: true
+            end
+          end
         end
       end
     end
 
     def set_answer answer
-      if answer.question.answer_multi_choice?
+      if answer.question&.options&.any?
         "#{I18n.t("answer_options.#{answer.answer_option.option}")}"
       elsif answer.question.answer_written?
         answer.answer
@@ -93,5 +110,25 @@ class Polls::AnswerPDF < Prawn::Document
 
     def save
       pdf.custom_save_as pdf_name, Answer.table_name
+    end
+
+    def show_poll? poll
+      poll.answers.any? { |a| show_answer? a }
+    end
+
+    def show_answer? answer
+      show_answer = show_question?(answer.question) && !@report.filter_answers
+
+      show_answer ||
+        @report.filter_answers &&
+        @report.answer_option == answer.answer_option&.option
+    end
+
+    def show_question? question
+      if @report.question.present?
+        question.question =~ /#{Regexp.escape @report.question}/i
+      else
+        true
+      end
     end
 end

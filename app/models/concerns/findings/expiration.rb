@@ -3,7 +3,7 @@ module Findings::Expiration
 
   included do
     scope :expired, -> {
-      finals(false).being_implemented.where(
+      being_implemented.or(awaiting).finals(false).where(
         "#{quoted_table_name}.#{qcn 'follow_up_date'} < ?", Time.zone.today
       )
     }
@@ -14,19 +14,19 @@ module Findings::Expiration
       date = if Time.zone.now < Time.zone.now.noon
                Time.zone.today
              else
-               1.day.from_now_in_business.to_date
+               1.business_day.from_now.to_date
              end
 
       expires_on date
     end
 
     def next_to_expire
-      expires_on FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date
+      expires_on FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date
     end
 
     def warning_users_about_expiration
       # Sólo si no es sábado o domingo (porque no tiene sentido)
-      if [0, 6].exclude? Time.zone.today.wday
+      if Time.zone.today.workday?
         users = next_to_expire.or(expires_very_soon).inject([]) do |u, finding|
           u | finding.users
         end
@@ -59,7 +59,7 @@ module Findings::Expiration
         from = date
         to   = from.wday == 5 ? from + 2.days : from
 
-        finals(false).being_implemented.where follow_up_date: from..to
+        being_implemented.or(awaiting).finals(false).where follow_up_date: from..to
       end
   end
 end

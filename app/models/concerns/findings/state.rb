@@ -14,7 +14,19 @@ module Findings::State
     define_state_methods
   end
 
+  def has_final_status?
+    FINAL_STATUS.include? state
+  end
+
   module ClassMethods
+    def with_pending_status
+      where state: visible_pending_status
+    end
+
+    def with_pending_status_for_report
+      where state: report_pending_status
+    end
+
     private
 
       def status
@@ -76,8 +88,6 @@ module Findings::State
         scope :not_revoked, -> { where.not state: STATUS[:revoked] }
         scope :assumed_risk,     -> { where     state: STATUS[:assumed_risk] }
         scope :not_assumed_risk, -> { where.not state: STATUS[:assumed_risk] }
-        scope :with_pending_status, -> { where state: visible_pending_status }
-        scope :with_pending_status_for_report, -> { where state: report_pending_status }
       end
 
       def define_state_methods
@@ -133,13 +143,16 @@ module Findings::State
       end
 
       def implemented_transitions final
-        [:implemented, :awaiting, :being_implemented, :implemented_audited, :assumed_risk, :expired, :repeated] |
+        [:implemented, :being_implemented, :implemented_audited, :assumed_risk, :expired, :repeated] |
           (final ? [] : [:revoked]) |
+          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
       end
 
       def implemented_audited_transitions final
-        [:implemented_audited]
+        [:implemented_audited] |
+          (final ? [] : [:implemented, :being_implemented]) |
+          (SHOW_WEAKNESS_PROGRESS && !final ? [:awaiting] : [])
       end
 
       def assumed_risk_transitions final
@@ -174,7 +187,9 @@ module Findings::State
       end
 
       def expired_transitions final
-        [:expired]
+        [:expired] |
+          (final ? [] : [:implemented, :being_implemented]) |
+          (SHOW_WEAKNESS_PROGRESS && !final ? [:awaiting] : [])
       end
 
       def visible_pending_status

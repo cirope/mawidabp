@@ -32,11 +32,10 @@
         <% end %>
       </tbody>
     </table>
-
-    <hr />
-
-    <%= paginate @weakness_templates %>
   <% end %>
 <% end %>
 
+<hr>
+
+<%= paginate @weakness_templates %>
 <%= link_to_new new_weakness_template_path, class: 'btn btn-primary' %>

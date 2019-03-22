@@ -22,6 +22,8 @@
     details: "Detalles"
     disable: "Deshabilitar"
     download: "Descargar"
+    download_csv: "Descargar CSV"
+    download_rtf: "Descargar RTF"
     edit: "Editar"
     greater_or_equal_than: "Mayor o igual a"
     import: "Importar"
@@ -46,6 +48,7 @@
     es: 'Español'
 
   message:
+    ldap_error: 'El servidor de autenticación no está disponible, intente nuevamente más tarde'
     change_weakness_risk: "El riesgo de la observación ha cambiado"
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
@@ -66,8 +69,8 @@
     session_expires_in_less_than_two_minutes: "Su sesión expira en menos de dos minutos"
     session_time_expired: "Su sesión ha expirado, debe autenticarse nuevamente"
     sort_by: "Ordenar por..."
-    under_construction: "En mantenimiento, disculpe las molestias"
     unsaved_data_warning: "Ha modificado el contenido, si abandona la página perderá todos los cambios"
+    rejected_data_format: "Algún campo contiene la cadena ../ debe eliminarla para poder realizar la acción. Revise los campos resaltados"
     validation_failed_message: "Los datos introducidos no son válidos, revise los campos resaltados"
     you_are_already_logged: "Este usuario ya ha iniciado sesión"
     empty_result: "Sin resultados, modifique el criterio"
@@ -86,18 +89,18 @@
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
 
   business_unit_type:
-    index_title: "Listado de tipos de unidades de negocio"
-    show_title: "Detalle tipo de unidad de negocio"
-    new_title: "Agregar tipo de unidad de negocio"
-    edit_title: "Modificar tipo de unidad de negocio"
-    correctly_created: "Tipo de unidad de negocio agregado correctamente."
-    correctly_updated: "Tipo de unidad de negocio actualizado correctamente."
-    stale_object_error: "El tipo de unidad de negocio no fue actualizado, intente nuevamente."
+    index_title: "Listado de unidades organizativas"
+    show_title: "Detalle unidad organizativa"
+    new_title: "Agregar unidad organizativa"
+    edit_title: "Modificar unidad organizativa"
+    correctly_created: "Unidad organizativa agregada correctamente."
+    correctly_updated: "Unidad organizativa actualizada correctamente."
+    stale_object_error: "La unidad organizativa no fue actualizada, intente nuevamente."
     add_business_unit: "Agregar unidad de negocio"
     internal_audit: "Auditorías realizadas por la entidad"
     external_audit: "Auditorías realizadas por otras entidades"
     errors:
-      can_not_be_destroyed: "El tipo de unidad de negocio no puede ser eliminado"
+      can_not_be_destroyed: "La unidad organizativa no puede ser eliminada"
       business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
 
   conclusion_draft_review:
@@ -122,6 +125,8 @@
     send_by_email: "Enviar por correo electrónico"
     last_verified_date: "La última comprobación se realizó el %{date}"
     has_final_review: "Ya se emitió un informe definitivo y por lo tanto no es posible seguir trabajando con el informe borrador"
+    errors:
+      without_corrective_actions: "no tiene acciones correctivas"
 
   conclusion_report:
     index_title: "Reportes de conclusión"
@@ -130,9 +135,13 @@
     detailed_cost_analysis_title: "Análisis de costos detallado"
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
-    weaknesses_by_month_title: "Observaciones por mes"
+    weaknesses_by_month_title: "Informe mensual"
+    weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
+    weaknesses_by_user_title: "Observaciones por usuario"
+    weaknesses_by_business_unit_title: "Observaciones por ciclo"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     cost_analysis:
       detailed_column_resource: "Recurso"
@@ -168,8 +177,13 @@
     synthesis_report_title: "Informe de síntesis al directorio"
     review_stats_report_title: "Estadísticas de informes"
     review_scores_report_title: "Calificaciones de informes"
+    review_score_details_report_title: "Calificaciones de informes detallado"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
     weaknesses_by_month_title: "Observaciones por riesgo"
+    weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
+    weaknesses_by_user_title: "Observaciones por usuario"
+    weaknesses_by_business_unit_title: "Observaciones por ciclo"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     qa_indicators_title: "Indicadores de calidad"
     weaknesses_by_state_title: "Hallazgos totales por estado"
@@ -183,7 +197,7 @@
     fixed_weaknesses: "Observaciones por riesgo solucionadas"
     from_date: "Desde"
     to_date: "Hasta"
-    invalid_dates: "Verifique el rango de fechas, no es válido."
+    cut_date: "Fecha cierre antigua data"
     applied_filters:
       one: "En este reporte se ha aplicado el siguiente filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
@@ -234,13 +248,38 @@
     weaknesses_by_month:
       pdf_name: "observaciones_por_mes_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "OBSERVACIONES POR MES - INFORMES DEFINITIVOS"
+      subtitle: "INFORME MENSUAL - INFORMES DEFINITIVOS"
       main_weaknesses: "Principales debilidades"
       other_weaknesses: "Otras observaciones"
       without_audits_in_the_month: "Sin auditorías en el mes"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      year: "Año"
+      year: "Año de origen"
+    weaknesses_current_situation:
+      pdf_name: "observaciones_situacion_actual_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "REPORTE GLOBAL - CUATRIMESTRAL / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      on_revision: "En revisión"
+      origination_year: "Año de origen"
+      control_objective_tags: "Etiquetas objetivos de control"
+      weakness_tags: "Etiquetas de observación"
+      review_tags: "Etiquetas de informe"
+    weaknesses_by_user:
+      pdf_name: "observaciones_por_usuario_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+    weaknesses_by_business_unit:
+      pdf_name: "observaciones_por_ciclo_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "OBSERVACIONES POR CICLO / INFORMES DEFINITIVOS"
+      on_revision: "En revisión"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      year: "Año de origen"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -305,6 +344,15 @@
       business_unit_score: "Calificación unidades de negocio"
       total_score: "Calificación total"
       empty: "Sin calificaciones para el filtro aplicado"
+    review_score_details_report:
+      pdf_name: "calificaciones_de_informes_definitivos_detallado_%{from_date}_al_%{to_date}.pdf"
+      title: "CALIFICACIONES DE INFORMES DETALLADO"
+      subtitle: "INFORMES DEFINITIVOS"
+      brief: "Resumen"
+      details: "Detalles"
+      count: "Cantidad"
+      share: "Participación"
+      empty: "Sin calificaciones para el filtro aplicado"
     weaknesses_by_state:
       pdf_name: "hallazgos_informes_definitivos_por_estado_%{from_date}_al_%{to_date}.pdf"
       title: "HALLAZGOS INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
@@ -317,6 +365,12 @@
       period_summary: "Resumen del periodo %{period}"
       title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO"
       total: "TOTAL"
+    weaknesses_by_risk_and_business_unit:
+      pdf_name: "observaciones_informes_definitivos_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
+      period_summary: "Resumen del periodo %{period}"
+      title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
+      total: "TOTAL"
+      empty: "Sin observaciones para el filtro aplicado."
     weaknesses_by_audit_type:
       weaknesses: "Observaciones"
       oportunities: "Oportunidades"
@@ -384,6 +438,7 @@
     add_recipient: "Agregar nuevo destinatario"
     review_sended: "El informe fue enviado a todos los destinatarios indicados"
     review_not_approved: "El informe no fue enviado, debe estar aprobado"
+    review_repeated_finding_label: "Informe nro."
     executive_summary:
       title: "Resumen ejecutivo"
       review_author: "Gerencia de Auditoría Interna"
@@ -401,9 +456,11 @@
     annex:
       title: "Anexo I"
       legend: "La Auditoría practicada estuvo conformada por distintos controles, los cuales han sido evaluados con relación a los riesgos asociados, por lo que a continuación se detallan con su respectiva calificación, aclarando que dichos conceptos pueden estar vinculados a distintas valoraciones:"
+      workflow_text: "El programa de trabajo elaborado para esta casa, así como su desarrollo y demás elementos, forma parte de los antecedentes obrantes en carpeta de trabajo del presente informe."
       scope: "Alcance de la tarea"
       scope_column: "Alcance de la tarea"
       staff: "Personal interviniente"
+      satisfactory_control_objective_items: "Resto de los Objetivos de Control"
     bundle:
       zip_name: "legajo_%{identification}.zip"
       control_objectives_dir: "%{prefix}_objetivos_de_control"
@@ -411,7 +468,7 @@
       create: "Generar"
     bundle_index:
       title: "ÍNDICE"
-      default_items: "PLANILLA DE CALIFICACIÓN GLOBAL\nPLANILLA DE CALIFICACIÓN DETALLADA\nINFORME DEFINITIVO\nRELEVAMIENTO\nDOCUMENTACIÓN DEL TRABAJO REALIZADO\nSEGUIMIENTO DE HALLAZGOS"
+      default_items: "PLANILLA DE CALIFICACIÓN GLOBAL\nPLANILLA DE CALIFICACIÓN DETALLADA\nINFORME DEFINITIVO\nRELEVAMIENTO\nSEGUIMIENTO DE HALLAZGOS"
       items_label: "Entradas en el índice"
       pdf_name: "00_indice_legajo.pdf"
     findings_sheet:
@@ -499,8 +556,6 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       column_month: "Mes"
       column_estimated_amount: "Unidades estimadas"
-      column_real_amount: "Unidades reales"
-      column_deviation: "Desviación"
     planned_cost_summary_title: "Resumen de costos planificados"
     reviews_with_incomplete_work_papers_report_incomplete_title: "Informes cerrados sin conformidad auditor"
     reviews_with_incomplete_work_papers_report_revised_title: "Informes cerrados sin revisión supervisor"
@@ -529,15 +584,20 @@
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
+    next_pending_task_date: "Fecha próxima tarea pendiente"
     comments: "Justificación de cambios de estado"
-    costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
+    costs: "Hasta el momento se ha dedicado **%{cost}** al seguimiento de la observación"
     download_csv: "Descargar CSV"
     download_pdf: "Resumen en PDF"
     add_finding_relation: "Agregar relación"
+    add_task: "Agregar tarea"
     add_tagging: "Agregar etiqueta"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
     add_work_paper: "Agregar papel de trabajo"
+    recode_tasks: "Recodificar tareas"
+    follow_up_date_changed_warning: "La fecha de implementación cambió para adecuarse a las tareas"
+    assignment_confirm_message: "No ha seleccionado auditores referentes ni responsables ¿Desea continuar?"
     repeated_ancestors: "Reiterada de"
     repeated_children: "Reiterada en"
     undo_reiteration: 'Deshacer reiteración'
@@ -565,9 +625,9 @@
     responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
     important_dates:
       title: "Fechas a considerar"
-      expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *%{date}* si ningún auditado proporciona una respuesta"
-      notification_date: "Fue notificada por primera vez el día *%{date}*"
-      confirmation_date: "Su notificación fue confirmada el día *%{date}*"
+      expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día **%{date}** si ningún auditado proporciona una respuesta"
+      notification_date: "Fue notificada por primera vez el día **%{date}**"
+      confirmation_date: "Su notificación fue confirmada el día **%{date}**"
     follow_up_report:
       weakness:
         title: "SEGUIMIENTO DE OBSERVACIÓN"
@@ -576,6 +636,7 @@
         title: "SEGUIMIENTO DE OPORTUNIDAD DE MEJORA"
         subtitle: "Datos de la oportunidad de mejora"
       print_date: "Fecha de impresión: %{date}"
+      download_brief: "Descargar seguimiento"
       download: "Descargar seguimiento completo"
       follow_up_comments: "Comentarios de seguimiento"
       without_important_changes: "Sin cambios importantes hasta la fecha"
@@ -596,9 +657,16 @@
     cost_analysis_title: "Análisis de costos"
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
-    weaknesses_by_month_title: "Observaciones por mes"
+    weaknesses_by_month_title: "Informe mensual"
+    weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
+    weaknesses_by_user_title: "Observaciones por usuario"
+    weaknesses_by_business_unit_title: "Observaciones por ciclo"
+    weaknesses_evolution_title: "Evolución de observaciones"
+    weaknesses_list_title: "Listado de observaciones"
+    weaknesses_brief_title: "Resumen de observaciones pendientes"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     cost_analysis:
       column_business_unit: "Unidad de negocio"
@@ -624,7 +692,14 @@
     synthesis_report_title: "Informe de síntesis al directorio"
     review_stats_report_title: "Estadísticas de informes"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
-    weaknesses_by_month_title: "Observaciones por mes"
+    weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
+    weaknesses_by_month_title: "Informe mensual"
+    weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
+    weaknesses_by_user_title: "Observaciones por usuario"
+    weaknesses_by_business_unit_title: "Observaciones por ciclo"
+    weaknesses_evolution_title: "Evolución de observaciones"
+    weaknesses_list_title: "Listado de observaciones"
+    weaknesses_brief_title: "Resumen de observaciones pendientes"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     detailed_report: "Reporte detallado"
     qa_indicators_title: "Indicadores de calidad"
@@ -655,7 +730,7 @@
     not_expired: "No vencida"
     from_date: "Desde"
     to_date: "Hasta"
-    invalid_dates: "Verifique el rango de fechas, no es válido."
+    cut_date: "Fecha cierre antigua data"
     print_date: "Fecha de impresión: %{date}"
     applied_filters:
       one: "En este reporte se ha aplicado el siguiente filtro: %{filters}"
@@ -709,13 +784,66 @@
     weaknesses_by_month:
       pdf_name: "observaciones_por_mes_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "SEGUIMIENTO DE OBSERVACIONES POR MES - INFORMES DEFINITIVOS"
+      subtitle: "SEGUIMIENTO INFORME MENSUAL - INFORMES DEFINITIVOS"
       main_weaknesses: "Principales debilidades"
       other_weaknesses: "Otras observaciones"
       without_audits_in_the_month: "Sin auditorías en el mes"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      year: "Año"
+      year: "Año de origen"
+    weaknesses_current_situation:
+      pdf_name: "observaciones_situacion_actual_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO REPORTE GLOBAL - CUATRIMESTRAL / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      on_revision: "En revisión"
+      origination_year: "Año de origen"
+      control_objective_tags: "Etiquetas objetivos de control"
+      weakness_tags: "Etiquetas de observación"
+      review_tags: "Etiquetas de informe"
+    weaknesses_by_user:
+      pdf_name: "observaciones_por_usuario_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+    weaknesses_by_business_unit:
+      pdf_name: "observaciones_por_ciclo_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO OBSERVACIONES POR CICLO / INFORMES DEFINITIVOS"
+      on_revision: "En revisión"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      year: "Año de origen"
+    weaknesses_evolution:
+      pdf_name: "observaciones_evolucion_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO EVOLUCIÓN OBSERVACIONES / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      control_objective_tags: "Etiquetas objetivos de control"
+      weakness_tags: "Etiquetas de observación"
+      review_tags: "Etiquetas de informe"
+    weaknesses_list:
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      control_objective_tags: "Etiquetas objetivos de control"
+      weakness_tags: "Etiquetas de observación"
+      review_tags: "Etiquetas de informe"
+    weaknesses_brief:
+      pdf_name: "resumen_de_observaciones_pendientes_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "RESUMEN DE OBSERVACIONES PENDIENTES / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      weakness_title: "Título observación"
+      description: "Detalle observación"
+      audit_comments: "Respuesta auditado/Comentario de auditoría"
+      issue_date: "Fecha de emisión informe"
+      first_follow_up_date: "1° fecha probable reg."
+      follow_up_date: "Última fecha propuesta"
+      distance_to_cut_date: "Días antigua data"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -791,6 +919,12 @@
       period_summary: "Resumen del periodo %{period}"
       title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO"
       total: "TOTAL"
+    weaknesses_by_risk_and_business_unit:
+      pdf_name: "observaciones_seguimiento_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
+      period_summary: "Resumen del periodo %{period}"
+      title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
+      total: "TOTAL"
+      empty: "Sin observaciones para el filtro aplicado."
     weaknesses_by_audit_type:
       weaknesses: "Observaciones"
       oportunities: "Oportunidades"
@@ -836,7 +970,7 @@
       created_title: "Nuevo hallazgo"
     notify_new_finding_answer:
       title: "Nuevo comentario en el informe %{review}"
-      finding_data: "Se ha agregado un comentario al hallazgo *%{finding_code}* del informe *%{review}*"
+      finding_data: "Se ha agregado un comentario al hallazgo **%{finding_code}** del informe **%{review}**"
       finding_link: "Ver hallazgo"
     notify_new_findings:
       title: "Notificación de hallazgos"
@@ -864,11 +998,16 @@
       body_title:
         one: "El siguiente hallazgo está vencido"
         other: "Los siguientes hallazgos están vencidos"
-    footer:
-      email_label: "Correo"
-      warning: "Por favor, *no contestar* el presente correo."
-      title: "Correo enviado por el sistema 'Mawidabp'. Cualquier inquietud comunicarse al área de soporte:"
-      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 8 o superior*"
+    tasks_expiration_warning:
+      title: "Notificación de tareas cercanas al vencimiento"
+      body_title:
+        one: "La siguiente tarea está próxima a vencer"
+        other: "Las siguientes tareas están próximas a vencer"
+    tasks_expired_warning:
+      title: "Notificación de tareas vencidas"
+      body_title:
+        one: "La siguiente tarea está vencida"
+        other: "Las siguientes tareas están vencidas"
     notification:
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"
@@ -890,22 +1029,26 @@
     restore_password:
       title: "Restablecer contraseña"
       body_title: "%{user_name}, para restablecer la contraseña de su usuario (%{user}) utilice el siguiente enlace:"
-      valid_until: "%{link} (Usted podrá utilizar este enlace hasta el día *%{date}* inclusive)"
-      clarification: "Si usted *no pidió* el restablecimiento *no haga nada*, su usuario y contraseña siguen vigentes"
+      valid_until: "%{link} (Usted podrá utilizar este enlace hasta el día **%{date}** inclusive)"
+      clarification: "Si usted **no pidió** el restablecimiento **no haga nada**, su usuario y contraseña siguen vigentes"
     being_implemented_and_stale_finding_to_manager:
       title: "Notificación de observaciones en proceso de implementación vencidas"
       the_following_finding_is_being_implemented_and_stale: "La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación"
     pending_poll_email:
-      affected_user_html: "Encuesta acerca de <strong>%{user}</strong>"
+      about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables del siguiente hallazgo"
       managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables del hallazgo o si se altera el organigrama"
+    expired_finding_to_manager:
+      title: "Hallazgo vencido"
+      the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación del siguiente hallazgo"
+      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:
-        one: "El siguiente hallazgo ha cambiado su estado a *Sin respuesta*, por no recibir una respuesta"
-        other: "Los siguientes hallazgos han cambiado su estado a *Sin respuesta*, por no recibir una respuesta"
+        one: "El siguiente hallazgo ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
+        other: "Los siguientes hallazgos han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
@@ -935,6 +1078,7 @@
     errors:
       is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"
+      with_expired_tasks: "tiene tareas pendientes o en proceso vencidas"
       with_solution_date: "tiene fecha de solución (y no debería)"
       without_answer: "no tiene respuesta"
       without_audited: "no tiene auditado"
@@ -1004,6 +1148,7 @@
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
+    without_score: "No calificar"
     weakness_from_template: "Observación creada de una plantilla"
     repeated_weaknesses: "Reiteradas"
     new_weaknesses: "Nuevas"
@@ -1015,6 +1160,7 @@
       type_auditor: "Auditor"
       type_supervisor: "Supervisor"
       type_manager: "Gerente"
+      type_responsible: "Responsable máximo de auditoría interna"
       type_audited: "Auditado"
       audit_team: "Auditoría"
       others: "Usuarios"
@@ -1066,6 +1212,8 @@
     review_data:
       close_date: "Fecha de cierre: %{date}"
       without_close_date: "Sin fecha de cierre"
+    pdf:
+      pdf_name: 'informe_%{identification}.pdf'
 
   review_user_assignment:
     responsibility_modification:
@@ -1133,6 +1281,7 @@
     errors:
       is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"
+      with_expired_tasks: "tiene tareas pendientes o en proceso vencidas"
       with_follow_up_date: "tiene fecha de implementación (y no debería)"
       with_solution_date: "tiene fecha de solución (y no debería)"
       without_answer: "no tiene respuesta"
@@ -1190,7 +1339,7 @@
   activerecord:
     models:
       business_unit: "Unidad de negocio"
-      business_unit_type: "Tipo de unidad de negocio"
+      business_unit_type: "Unidad organizativa"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
@@ -1238,6 +1387,8 @@
         evolution: "Evolución de la calificación"
         evolution_justification: "Justificación de la evolución"
         observations: "Otras consideraciones"
+        previous_identification: "Informe previo"
+        previous_date: "Fecha de emisión previa"
       control:
         order: "Orden"
         control: "Controles"
@@ -1425,6 +1576,12 @@
           attributes:
             file:
               without_extension: 'debe tener extensión'
+        finding:
+          attributes:
+            tag_ids:
+              too_short:
+                one: "debe ser una como mínimo"
+                other: "deben ser %{count} como mínimo"
         image_model:
           attributes:
             image_content_type:
@@ -1441,7 +1598,9 @@
         question:
           attributes:
             question:
-              answered: 'No se pudo actualizar, la pregunta ya tiene respuestas'
+              answered: 'ya tiene respuestas'
+            answer_type:
+              used: 'ya ha sido enviada en al menos un cuestionario'
         review:
           attributes:
             review_user_assignments:

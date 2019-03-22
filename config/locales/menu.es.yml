@@ -17,6 +17,7 @@ es:
         control_objectives: 'Objetivos de control'
       settings: 'Configuraciones'
       weakness_templates: 'Plantillas de observaciones'
+      risk_assessment_templates: 'Plantillas evaluación de riesgo'
       tags: 'Etiquetas'
       documents: 'Documentos'
       news: 'Noticias'
@@ -31,14 +32,19 @@ es:
     planning:
       periods: 'Periodos'
       resources: 'Recursos'
+      risk_assessments: 'Evaluaciones de riesgo'
       plans: 'Planes de trabajo'
     execution_title: 'Ejecución'
     execution:
       reviews: 'Informes'
-      workflows: 'Programa de trabajo'
+      workflows: 'Programas de trabajo'
       control_objectives: 'Objetivos de control'
       weaknesses: 'Observaciones'
       oportunities: 'Oportunidades de mejora'
+      interviews_title: 'Entrevistas'
+      interviews:
+        opening_interviews: 'Entrevistas de inicio'
+        closing_interviews: 'Entrevistas de cierre'
       reports: 'Reportes'
       findings_title: 'Hallazgos'
       findings:

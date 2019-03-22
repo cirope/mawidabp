@@ -1,0 +1,11 @@
+<div style="margin-top: 2em; padding-top: 1em; font-size: .8em; border-top: 1px dotted gray;">
+  <%= markdown t('common_mailer.footer.warning') %>
+
+  <p><%= t 'common_mailer.footer.title' %></p>
+
+  <p>
+    <strong><%= t 'common_mailer.footer.email_label' %></strong>: <%= mail_to SUPPORT_EMAIL %>
+  </p>
+
+  <%= markdown t('common_mailer.footer.recommendations') %>
+</div>

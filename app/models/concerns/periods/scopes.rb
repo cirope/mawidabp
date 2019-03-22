@@ -3,7 +3,7 @@ module Periods::Scopes
 
   module ClassMethods
     def list
-      where(organization_id: Organization.current_id).order name: :desc
+      where(organization_id: Current.organization&.id).order name: :desc
     end
 
     def list_by_date from_date, to_date
@@ -24,14 +24,17 @@ module Periods::Scopes
     end
 
     def list_all_without_plans
-      list.includes(:plans).where(plans: { period_id: nil }).
+      list.includes(:plan).where(plans: { period_id: nil }).
         reorder(order_by_dates).references(:plans)
     end
 
     private
 
       def order_by_dates
-        ["#{quoted_table_name}.#{qcn('start')} ASC", "#{quoted_table_name}.#{qcn('end')} ASC"]
+        [
+          "#{quoted_table_name}.#{qcn('start')} ASC",
+          "#{quoted_table_name}.#{qcn('end')} ASC"
+        ].map { |o| Arel.sql o }
       end
   end
 end

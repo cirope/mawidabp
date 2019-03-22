@@ -1,0 +1,42 @@
+<%= simple_form_for @risk_assessment_template do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
+
+  <div class="form-inputs">
+    <%= f.input :name, input_html: { autofocus: true } %>
+    <%= f.input :description, input_html: { rows: 3 } %>
+    <%= f.input :lock_version, as: :hidden %>
+
+    <h4>
+      <%= RiskAssessmentWeight.model_name.human count: 0 %>
+    </h4>
+
+    <div class="row">
+      <div class="col-md-4">
+        <h5><strong><%= RiskAssessmentWeight.human_attribute_name 'name' %></strong></h5>
+      </div>
+      <div class="col-md-4">
+        <h5><strong><%= RiskAssessmentWeight.human_attribute_name 'description' %></strong></h5>
+      </div>
+      <div class="col-md-3">
+        <h5><strong><%= RiskAssessmentWeight.human_attribute_name 'weight' %></strong></h5>
+      </div>
+    </div>
+
+    <div id="risk_assessment_weights">
+      <%= f.simple_fields_for :risk_assessment_weights do |raw_f| %>
+        <%= render 'risk_assessment_weight', f: raw_f %>
+      <% end %>
+
+      <p>
+        <%= link_to_add_fields t('.add_risk_assessment_weight'), f, :risk_assessment_weights %>
+      </p>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="form-actions">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.button :submit, class: 'btn-primary' %>
+  </div>
+<% end %>

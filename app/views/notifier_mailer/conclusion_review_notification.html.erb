@@ -2,8 +2,12 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <h2><%= organization.name %></h2>
 
-  <%= textilize @body_title %>
-  <%= textilize h(@note) unless @note.blank? %>
+  <%= markdown @body_title %>
+  <%= markdown h(@note) unless @note.blank? %>
 
-  <%= render :partial => 'footer' %>
+  <% if @show_alt_footer %>
+    <%= render partial: 'common_mailer/alt_footer' %>
+  <% else %>
+    <%= render partial: 'common_mailer/footer' %>
+  <% end %>
 </div>

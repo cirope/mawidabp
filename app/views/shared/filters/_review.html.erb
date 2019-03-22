@@ -1,10 +1,10 @@
-<div id="review_filter" class="filter" <%= 'style="display: none;"' unless display %>>
+<div id="review_filter" class="filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
        <div class="form-group">
         <% review_filter = params[action] ? params[action][:review] : nil %>
-        <%= f.label :review, Review.model_name.human, class: 'col-md-3' %>
-        <div class="col-md-9">
+        <%= f.label :review, Review.model_name.human, class: 'col-md-4' %>
+        <div class="col-md-8">
           <%= f.text_field :review, value: review_filter, maxlength: 3072, class: 'form-control' %>
         </div>
       </div>
@@ -12,8 +12,8 @@
     <div class="col-md-6">
       <div class="form-group">
         <% project_filter = params[action] ? params[action][:project] : nil %>
-        <%= f.label :review, Review.human_attribute_name('plan_item'), class: 'col-md-3' %>
-        <div class="col-md-9">
+        <%= f.label :review, Review.human_attribute_name('plan_item'), class: 'col-md-4' %>
+        <div class="col-md-8">
           <%= f.text_field :project, value: project_filter, maxlength: 3072, class: 'form-control' %>
         </div>
       </div>

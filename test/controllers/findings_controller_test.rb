@@ -2,6 +2,7 @@ require 'test_helper'
 
 class FindingsControllerTest < ActionController::TestCase
   include ActionMailer::TestHelper
+  include ActiveJob::TestHelper
 
   setup do
     login
@@ -153,6 +154,48 @@ class FindingsControllerTest < ActionController::TestCase
     assert assigns(:findings).any? { |f| f.organization_id != organization.id }
   end
 
+  test 'list findings and send CSV by email' do
+    set_organization
+
+    old_count = ::SEND_REPORT_EMAIL_AFTER_COUNT
+
+    silence_warnings do
+      ::SEND_REPORT_EMAIL_AFTER_COUNT = 10
+    end
+
+    perform_enqueued_jobs do
+      get :index, params: { completed: 'incomplete' }, as: :csv
+    end
+
+    assert_redirected_to findings_url format: :csv, completed: 'incomplete'
+
+    findings_count = assigns(:findings).to_a.size
+    assert findings_count > 10
+
+    filename = I18n.t('findings.index.title').downcase
+
+    assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
+    attachment = ActionMailer::Base.deliveries.last.attachments.first
+    assert_equal "#{filename}.zip", attachment.filename
+
+    tmp_file = Tempfile.open do |temp|
+      temp.binmode
+      temp << attachment.read
+      temp.path
+    end
+
+    csv_report = Zip::File.open(tmp_file, Zip::File::CREATE) do |zipfile|
+      zipfile.read "#{filename}.csv"
+    end
+
+    # TODO: change to liberal_parsing: true when 2.3 support is dropped
+    csv = CSV.parse csv_report[3..-1], col_sep: ';', force_quotes: true, headers: true
+
+    assert_equal findings_count, csv.size
+
+    silence_warnings { ::SEND_REPORT_EMAIL_AFTER_COUNT = old_count }
+  end
+
   test 'show finding' do
     get :show, params: {
       completed: 'incomplete',
@@ -240,6 +283,7 @@ class FindingsControllerTest < ActionController::TestCase
       'FindingAnswer.count',
       'Cost.count',
       'FindingRelation.count',
+      'Task.count',
       'BusinessUnitFinding.count',
       'Tagging.count'
     ]
@@ -313,9 +357,25 @@ class FindingsControllerTest < ActionController::TestCase
                   related_finding_id: findings(:unanswered_weakness).id
                 }
               ],
+              tasks_attributes: [
+                {
+                  code: '01',
+                  description: 'New task',
+                  status: 'pending',
+                  due_on: I18n.l(Time.zone.tomorrow)
+                }
+              ],
               taggings_attributes: [
                 {
+                  id: taggings(:important_unconfirmed_weakness).id,
                   tag_id: tags(:important).id
+                },
+                {
+                  id: taggings(:pending_unconfirmed_weakness).id,
+                  tag_id: tags(:pending).id
+                },
+                {
+                  tag_id: tags(:follow_up).id
                 }
               ],
               costs_attributes: [
@@ -493,6 +553,64 @@ class FindingsControllerTest < ActionController::TestCase
     assert_equal 'Updated description', finding.reload.description
   end
 
+  test 'update finding with tag_ids' do
+    finding = findings :unconfirmed_weakness
+
+    login user: users(:supervisor)
+
+    assert_difference 'Tagging.count' do
+      patch :update, params: {
+        completed: 'incomplete',
+        id: finding,
+        finding: {
+          control_objective_item_id: control_objective_items(:impact_analysis_item).id,
+          review_code: 'O020',
+          title: 'Title',
+          description: 'Updated description',
+          answer: 'Updated answer',
+          current_situation: 'Updated current situation',
+          current_situation_verified: '1',
+          audit_comments: 'Updated audit comments',
+          state: Finding::STATUS[:unconfirmed],
+          origination_date: 1.day.ago.to_date.to_s(:db),
+          audit_recommendations: 'Updated proposed action',
+          effect: 'Updated effect',
+          risk: Finding.risks_values.first,
+          priority: Finding.priorities_values.first,
+          compliance: 'no',
+          operational_risk: ['internal fraud'],
+          impact: ['econimic', 'regulatory'],
+          internal_control_components: ['risk_evaluation', 'monitoring'],
+          tag_ids: [
+            tags(:important).id,
+            tags(:pending).id,
+            tags(:follow_up).id
+          ],
+          finding_user_assignments_attributes: [
+            {
+              id: finding_user_assignments(:unconfirmed_weakness_audited).id,
+              user_id: users(:audited).id,
+              process_owner: '1'
+            },
+            {
+              id: finding_user_assignments(:unconfirmed_weakness_auditor).id,
+              user_id: users(:auditor).id,
+              process_owner: '0'
+            },
+            {
+              id: finding_user_assignments(:unconfirmed_weakness_supervisor).id,
+              user_id: users(:supervisor).id,
+              process_owner: '0'
+            }
+          ]
+        }
+      }
+    end
+
+    assert_redirected_to edit_finding_url('incomplete', finding)
+    assert_equal 'Updated description', finding.reload.description
+  end
+
   test 'auto complete for finding relation' do
     finding = findings :being_implemented_weakness_on_draft
 
@@ -593,5 +711,122 @@ class FindingsControllerTest < ActionController::TestCase
     tags = ActiveSupport::JSON.decode @response.body
 
     assert_equal 0, tags.size
+  end
+
+  test 'check order by not readed comments desc' do
+    skip unless POSTGRESQL_ADAPTER
+
+    # we already have a test that checks the response
+    get :index, params: { completed: 'incomplete' }
+
+    first = findings(:unanswered_for_level_1_notification)
+    second = findings(:unanswered_for_level_2_notification)
+
+    # ensure first two elements are different than chosen
+    assert_empty(assigns(:findings).first(2).map(&:id) & [first.id, second.id])
+
+    # First place
+    3.times { create_finding_answers_for(first, destroy_readings: true) }
+    # Second place
+    create_finding_answers_for(second, destroy_readings: true)
+
+    get :index, params: {
+      completed: 'incomplete',
+      search: {
+        order: 'readings_desc'
+      }
+    }
+    assert_response :success
+
+    ordered_findings = assigns(:findings)
+    assert_equal first.id, ordered_findings.first.id
+    assert_equal second.id, ordered_findings.second.id
+  end
+
+  test 'check order by not readed comments desc in all formats' do
+    skip unless POSTGRESQL_ADAPTER
+
+    first = findings(:unanswered_for_level_1_notification)
+    second = findings(:unanswered_for_level_2_notification)
+
+    3.times { create_finding_answers_for(first, destroy_readings: true) }
+    create_finding_answers_for(second, destroy_readings: true)
+
+    get :index, params: {
+      completed: 'incomplete',
+      search: {
+        order: 'readings_desc'
+      }
+    }
+    assert_response :success
+    html_findings = assigns(:findings).pluck(:id)
+
+    get :index, params: {
+      completed: 'incomplete',
+      search: {
+        order: 'readings_desc'
+      }
+    }, as: :csv
+    assert_response :success
+    # forcing quote_char because of the html response
+    csv = CSV.parse(@response.body, col_sep: ';', quote_char: "'", headers: true)
+    csv_findings = []
+    csv.each do |row|
+      id = row['"Id"'].strip.tr('"', '').to_i
+      csv_findings << id if id&.positive?
+    end
+
+    get :index, params: {
+      completed: 'incomplete',
+      search: {
+        order: 'readings_desc'
+      }
+    }, as: :pdf
+    # we can't check the order inside the PDF so...
+    assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
+
+    assert_equal(
+      html_findings,
+      csv_findings[0...html_findings.size] # csv is not paginated
+    )
+  end
+
+  test 'list findings with search by updated_at' do
+    get :index, params: {
+      completed: 'incomplete',
+      search: {
+        query:   "> #{I18n.l(4.days.ago.to_date, format: :minimal)}",
+        columns: ['updated_at']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_not_empty assigns(:findings)
+    assert assigns(:findings).all? { |f| f.updated_at > 4.days.ago.to_date }
+
+    get :index, params: {
+      completed: 'incomplete',
+      search: {
+        query:   "< #{I18n.l(2.days.ago.to_date, format: :minimal)}",
+        columns: ['updated_at']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_empty assigns(:findings)
+  end
+
+  private
+
+  def create_finding_answers_for(finding, destroy_readings: false)
+    finding_answer = finding.finding_answers.create!(
+      answer: 'something',
+      user_id: users(:administrator).id,
+      commitment_date: 1.day.from_now
+    )
+    finding_answer.readings.map(&:destroy!) if destroy_readings
+    finding_answer
   end
 end

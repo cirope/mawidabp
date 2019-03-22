@@ -14,6 +14,13 @@ module Reviews::Approval
 
     errors << [Review.model_name.human, review_errors] if review_errors.present?
 
+    if conclusion_draft_review && !conclusion_draft_review.must_be_approved?
+      errors << [
+        ConclusionDraftReview.model_name.human,
+        conclusion_draft_review.approval_errors
+      ]
+    end
+
     (@approval_errors = errors).blank?
   end
   alias_method :is_approved?, :must_be_approved?
@@ -126,7 +133,7 @@ module Reviews::Approval
       finding_review_assignments.each do |fra|
         finding = fra.finding
 
-        if !finding.repeated? && !finding.implemented_audited?
+        if !finding.repeated? && !finding.has_final_status?
           finding_label  = "#{Finding.model_name.human} #{finding.review_code}"
           finding_label += " - #{finding.title} [#{finding.review}]"
 

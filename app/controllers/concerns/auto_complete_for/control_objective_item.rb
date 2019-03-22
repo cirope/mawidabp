@@ -26,7 +26,9 @@ module AutoCompleteFor::ControlObjectiveItem
       review: [:period, :conclusion_final_review]
     ).where(
       conditions.map {|c| "(#{c})"}.join(' AND '), parameters
-    ).order("#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC").references(
+    ).order(
+      Arel.sql "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC"
+    ).references(
       :periods, :conclusion_reviews, :control_objective_items
     ).limit(10)
 

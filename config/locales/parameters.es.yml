@@ -1,0 +1,60 @@
+es:
+  approach_types:
+    control: 'Control'
+    sustantive: 'Sustantivo'
+    control_sustantive: 'Control/Sustantivo'
+  frequency_types:
+    monthly: 'Mensual'
+    biyearly: 'Semestral'
+    yearly: 'Anual'
+  relevance_types:
+    not_rated: 'Nulo'
+    low: 'Bajo'
+    moderate_low: 'Moderado/bajo'
+    moderate: 'Moderado'
+    high: 'Alto'
+    critical: 'Crítico'
+    # Short relevance
+    'yes': 'Si'
+    'no': 'No'
+  qualification_types:
+    not_rated: 'Nulo'
+    very_low: 'Muy bajo'
+    low: 'Bajo'
+    moderately_low: 'Medianamente bajo'
+    medium_low: 'Medio bajo'
+    medium: 'Medio'
+    moderately_high: 'Medianamente alto'
+    medium_high: 'Medio alto'
+    high: 'Alto'
+    very_high: 'Muy alto'
+    excellent: 'Óptimo'
+    # Short qualifications
+    ok: 'OK'
+    observed: 'Observado'
+    not_apply: 'No aplica'
+  risk_types:
+    low: 'Bajo'
+    medium: 'Medio'
+    high: 'Alto'
+    # Extended
+    not_relevant: 'No relevante'
+    medium_high: 'Medio PD'
+    high_medium: 'Alto - Medio'
+  priority_types:
+    low: 'Baja'
+    medium: 'Media'
+    high: 'Alta'
+    # When priority is hidden
+    default: 'Normal'
+  score_types:
+    satisfactory: 'Satisfactorio'
+    improve: 'Necesita mejorar'
+    unsatisfactory: 'No satisfactorio'
+    # When score by weaknesses is used
+    adequate: 'Adecuado'
+    require_some_improvements: 'Requiere ciertas mejoras'
+    require_improvements: 'Requiere mejoras'
+    require_lots_of_improvements: 'Requiere mejoras significativas'
+    inadequate: 'Inadecuado'
+    none: 'No aplica'

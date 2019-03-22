@@ -27,7 +27,7 @@ class ConclusionDraftReviewsController < ApplicationController
       [
         "#{ConclusionDraftReview.quoted_table_name}.#{ConclusionDraftReview.qcn('issue_date')} DESC",
         "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('created_at')} DESC"
-      ].join(', ')
+      ].map { |o| Arel.sql o }
     ).page(params[:page])
 
     respond_to do |format|
@@ -116,11 +116,7 @@ class ConclusionDraftReviewsController < ApplicationController
   def export_to_pdf
     options = params[:export_options]&.to_unsafe_h
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_draft_review.alternative_pdf(current_organization, options)
-    else
-      @conclusion_draft_review.to_pdf(current_organization, options)
-    end
+    @conclusion_draft_review.to_pdf(current_organization, options)
 
     respond_to do |format|
       format.html { redirect_to @conclusion_draft_review.relative_pdf_path }
@@ -201,11 +197,7 @@ class ConclusionDraftReviewsController < ApplicationController
         end
       end
 
-      if SHOW_CONCLUSION_ALTERNATIVE_PDF
-        @conclusion_draft_review.alternative_pdf(current_organization, export_options)
-      else
-        @conclusion_draft_review.to_pdf(current_organization, export_options)
-      end
+      @conclusion_draft_review.to_pdf(current_organization, export_options)
 
       if include_score_sheet
         @conclusion_draft_review.review.score_sheet current_organization, draft: true
@@ -293,7 +285,9 @@ class ConclusionDraftReviewsController < ApplicationController
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
         :recipients, :sectors, :evolution, :evolution_justification,
         :observations, :main_weaknesses_text, :corrective_actions,
-        :affects_compliance, :force_approval, :lock_version,
+        :affects_compliance, :collapse_control_objectives, :force_approval,
+        :objective, :reference, :scope, :previous_identification,
+        :previous_date, :lock_version,
         review_attributes: [
           :id, :manual_score, :lock_version,
           best_practice_comments_attributes: [

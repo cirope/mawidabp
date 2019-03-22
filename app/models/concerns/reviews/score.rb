@@ -17,19 +17,19 @@ module Reviews::Score
       self.class.scores.to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
-    when :weaknesses
+    when :weaknesses, :none
       self.class.scores_by_weaknesses.to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
     end
   end
 
-  def score_array
+  def score_array date: Time.zone.today
     type   = guess_score_type
     scores = sorted_scores type: type
     count  = scores.size + 1
 
-    calculate_score_for type
+    calculate_score_for type, date
 
     score_description = scores.detect do |s|
       count -= 1
@@ -58,24 +58,24 @@ module Reviews::Score
     self.score = relevance_sum > 0 ? (total / relevance_sum.to_f).round : 100.0
   end
 
-  def score_by_weaknesses
+  def score_by_weaknesses date
     weaknesses = has_final_review? ? final_weaknesses : self.weaknesses
 
-    scores = weaknesses.not_revoked.map { |w| score_for w }
+    scores = weaknesses.not_revoked.map { |w| score_for w, date }
     total  = scores.compact.sum
 
     self.score = total <= 50 ? (100 - total * 2).round : 0
   end
 
+  def scored_by_weaknesses?
+    score_type == 'weaknesses'
+  end
+
   private
 
     def guess_score_type
-      if Organization.current_id
-        organization = Organization.find Organization.current_id
-      end
-
-      if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization&.prefix
-        :weaknesses
+      if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? Current.organization&.prefix
+        score_type&.to_sym == :none ? :none : :weaknesses
       elsif SHOW_REVIEW_EXTRA_ATTRIBUTES
         :manual
       else
@@ -83,21 +83,21 @@ module Reviews::Score
       end
     end
 
-    def calculate_score_for type
+    def calculate_score_for type, date
       case type
       when :effectiveness
         effectiveness
       when :weaknesses
-        score_by_weaknesses
-      when :manual
-				self.score = 100
+        score_by_weaknesses date
+      when :manual, :none
+        self.score = 100
       end
     end
 
-    def score_for weakness
+    def score_for weakness, date
       raise 'Not compatible configuration' if SHOW_EXTENDED_RISKS
 
-      if weakness.repeated_of
+      if weakness.take_as_repeated_for_score? date: date
         repeated_score_for weakness
       else
         normal_score_for weakness

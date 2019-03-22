@@ -11,8 +11,8 @@ class ConclusionFinalReviewsController < ApplicationController
 
     build_search_conditions ConclusionFinalReview
 
-    order = @order_by || "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')} DESC"
-    order << ", #{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('created_at')} DESC"
+    order = [@order_by || Arel.sql("#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')} DESC")]
+    order << Arel.sql("#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('created_at')} DESC")
 
     @conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, { plan_item: :business_unit }]
@@ -46,7 +46,7 @@ class ConclusionFinalReviewsController < ApplicationController
     unless conclusion_final_review
       @title = t 'conclusion_final_review.new_title'
       @conclusion_final_review =
-        ConclusionFinalReview.new(review_id: params[:review])
+        ConclusionFinalReview.new(review_id: params[:review], import_from_draft: true)
 
       respond_to do |format|
         format.html # new.html.erb
@@ -70,7 +70,7 @@ class ConclusionFinalReviewsController < ApplicationController
   def create
     @title = t 'conclusion_final_review.new_title'
     @conclusion_final_review =
-      ConclusionFinalReview.list.new(conclusion_final_review_params, false)
+      ConclusionFinalReview.list.new(conclusion_final_review_params)
 
     respond_to do |format|
       if @conclusion_final_review.save
@@ -120,11 +120,7 @@ class ConclusionFinalReviewsController < ApplicationController
   def export_to_pdf
     options = Hash(params[:export_options]&.to_unsafe_h).symbolize_keys
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_final_review.alternative_pdf(current_organization, options)
-    else
-      @conclusion_final_review.to_pdf(current_organization, options)
-    end
+    @conclusion_final_review.to_pdf(current_organization, options)
 
     respond_to do |format|
       format.html { redirect_to @conclusion_final_review.relative_pdf_path }
@@ -206,11 +202,7 @@ class ConclusionFinalReviewsController < ApplicationController
       end
     end
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
-      @conclusion_final_review.alternative_pdf(current_organization, export_options)
-    else
-      @conclusion_final_review.to_pdf(current_organization, export_options)
-    end
+    @conclusion_final_review.to_pdf(current_organization, export_options)
 
     if include_score_sheet
       @conclusion_final_review.review.score_sheet current_organization
@@ -238,25 +230,26 @@ class ConclusionFinalReviewsController < ApplicationController
         questionnaire = Questionnaire.find user_data[:questionnaire_id]
         affected_user_id = user_data[:affected_user_id].present? ?
           user_data[:affected_user_id] : nil
-        has_poll = Poll.list.exists?(
-          user_id: user.id,
-          affected_user_id: affected_user_id,
-          questionnaire_id: user_data[:questionnaire_id],
-          organization_id: current_organization.id,
-          pollable_type: questionnaire.pollable_type,
-          pollable_id: @conclusion_final_review
-        )
 
-        if has_poll
+        poll_attrs = {
+          user_id:          user.id,
+          questionnaire_id: user_data[:questionnaire_id],
+          organization_id:  current_organization.id,
+          pollable_type:    questionnaire.pollable_type,
+          pollable_id:      @conclusion_final_review
+        }
+
+        if affected_user_id
+          poll_attrs.merge!(
+            about_id:   affected_user_id,
+            about_type: User.name
+          )
+        end
+
+        if Poll.list.exists?(poll_attrs)
           users_with_poll << user.informal_name
         else
-          @conclusion_final_review.polls.create!(
-            user_id: user.id,
-            affected_user_id: affected_user_id,
-            questionnaire_id: user_data[:questionnaire_id],
-            organization_id: current_organization.id,
-            pollable_type: questionnaire.pollable_type
-          )
+          @conclusion_final_review.polls.create!(poll_attrs)
         end
       end
     end
@@ -264,7 +257,7 @@ class ConclusionFinalReviewsController < ApplicationController
     if users.present?
       flash.notice = t('conclusion_review.review_sended')
 
-      if users_with_poll.present?
+      if users_with_poll.any?
         flash.notice << ". #{t 'polls.already_exists', user: users_with_poll.uniq.to_sentence}"
       end
 
@@ -283,7 +276,7 @@ class ConclusionFinalReviewsController < ApplicationController
     conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, { plan_item: :business_unit }]
     ).where(@conditions).references(:periods, :reviews, :business_units).order(
-      @order_by || "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')} DESC"
+      @order_by || Arel.sql("#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')} DESC")
     )
 
     pdf = Prawn::Document.create_generic_pdf :landscape
@@ -387,7 +380,9 @@ class ConclusionFinalReviewsController < ApplicationController
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
         :summary, :recipients, :evolution, :evolution_justification, :sectors,
         :observations, :main_weaknesses_text, :corrective_actions,
-        :affects_compliance, :lock_version,
+        :affects_compliance, :collapse_control_objectives, :objective,
+        :reference, :scope, :previous_identification, :previous_date,
+        :lock_version,
         review_attributes: [
           :id, :manual_score, :lock_version,
           best_practice_comments_attributes: [

@@ -20,6 +20,14 @@ class NotifierMailerPreview < ActionMailer::Preview
     # TODO: make the method avoid the creation of a Notification record
   end
 
+  # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/findings_briefs
+  def findings_briefs
+    user = User.includes(:findings).references(:findings).merge(Finding.with_pending_status).take
+    findings = user.findings.with_pending_status.finals(false)
+
+    NotifierMailer.findings_brief user, findings.to_a
+  end
+
   # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/notify_new_finding
   def notify_new_finding
     # TODO: make the method avoid the creation of a Notification record
@@ -57,6 +65,15 @@ class NotifierMailerPreview < ActionMailer::Preview
     NotifierMailer.unanswered_finding_to_manager_notification finding, users, 1
   end
 
+  # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/expired_finding_to_manager_notification
+  def expired_finding_to_manager_notification
+    conditions = { state: Finding::STATUS[:being_implemented] }
+    users      = User.joins(:findings).merge(Finding.where(conditions)).limit(1)
+    finding    = users.take.findings.where(conditions).take
+
+    NotifierMailer.expired_finding_to_manager_notification finding, users, 1
+  end
+
   # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/reassigned_findings_notification
   def reassigned_findings_notification
     new_users = User.last(2)
@@ -88,10 +105,11 @@ class NotifierMailerPreview < ActionMailer::Preview
     user              = User.joins(reviews: :conclusion_final_review).take
     review            = user.reviews.joins(:conclusion_final_review).take
     conclusion_review = review.conclusion_final_review
+    organization      = review.organization
 
     conclusion_review.to_pdf
 
-    NotifierMailer.conclusion_review_notification user, conclusion_review
+    NotifierMailer.conclusion_review_notification user, conclusion_review, organization_id: organization.id
   end
 
   # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/findings_expiration_warning
@@ -106,6 +124,20 @@ class NotifierMailerPreview < ActionMailer::Preview
     user = User.joins(:findings).take
 
     NotifierMailer.findings_expired_warning user, user.findings.limit(3)
+  end
+
+  # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/tasks_expiration_warning
+  def tasks_expiration_warning
+    user = User.joins(:tasks).take
+
+    NotifierMailer.tasks_expiration_warning user, user.tasks.limit(3)
+  end
+
+  # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/tasks_expired_warning
+  def tasks_expired_warning
+    user = User.joins(:tasks).take
+
+    NotifierMailer.tasks_expired_warning user, user.tasks.limit(3)
   end
 
   # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/conclusion_final_review_close_date_warning

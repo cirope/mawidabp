@@ -12,8 +12,7 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Organization.current_id = nil
-    Group.current_id = nil
+    unset_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -345,7 +344,7 @@ class ReviewTest < ActiveSupport::TestCase
     def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
-    Finding.current_user = users :supervisor
+    Current.user = users :supervisor
 
     finding = Weakness.new finding.attributes.merge(
       'state' => Finding::STATUS[:assumed_risk]
@@ -353,10 +352,15 @@ class ReviewTest < ActiveSupport::TestCase
     finding.finding_user_assignments.build(
       clone_finding_user_assignments(review_weakness)
     )
+    finding.taggings.build(
+      review_weakness.taggings.map do |t|
+        t.attributes.dup.merge('id' => nil, 'taggable_id' => nil)
+      end
+    )
 
     assert finding.save
 
-    Finding.current_user = nil
+    Current.user = nil
 
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?
@@ -370,6 +374,11 @@ class ReviewTest < ActiveSupport::TestCase
     )
     finding.finding_user_assignments.build(
       clone_finding_user_assignments(review_weakness)
+    )
+    finding.taggings.build(
+      review_weakness.taggings.map do |t|
+        t.attributes.dup.merge('id' => nil, 'taggable_id' => nil)
+      end
     )
 
     assert finding.save, finding.errors.full_messages.join('; ')
@@ -792,7 +801,7 @@ class ReviewTest < ActiveSupport::TestCase
       repeated_order,
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
       "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
-    ]
+    ].map { |o| Arel.sql o }
 
     codes = @review.weaknesses.not_revoked.order(order).pluck 'review_code'
 
@@ -870,6 +879,37 @@ class ReviewTest < ActiveSupport::TestCase
     end
   end
 
+  test 'reorder' do
+    @review.control_objective_items.create!(
+      order_number: -1,
+      control_objective_text: '3.1) Security policy',
+      control_objective_id: control_objectives(:security_policy_3_1).id
+    )
+
+    pcs        = @review.grouped_control_objective_items.map &:first
+    sorted_pcs = pcs.sort_by &:name
+
+    assert_not_equal pcs, sorted_pcs
+    assert @review.reorder
+
+    pcs = @review.grouped_control_objective_items.map &:first
+
+    assert_equal pcs, sorted_pcs
+  end
+
+  test 'pdf conversion' do
+    FileUtils.rm @review.absolute_pdf_path if File.exist?(@review.absolute_pdf_path)
+
+    assert_nothing_raised do
+      @review.to_pdf organizations(:cirope)
+    end
+
+    assert File.exist?(@review.absolute_pdf_path)
+    assert File.size(@review.absolute_pdf_path) > 0
+
+    FileUtils.rm @review.absolute_pdf_path
+  end
+
   private
 
     def clone_finding_user_assignments(finding)
@@ -879,11 +919,9 @@ class ReviewTest < ActiveSupport::TestCase
     end
 
     def score_type
-      organization = Organization.find Organization.current_id
-
       if SHOW_REVIEW_EXTRA_ATTRIBUTES
         :manual
-      elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization.prefix
+      elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(Current.organization.prefix)
         :weaknesses
       else
         :effectiveness

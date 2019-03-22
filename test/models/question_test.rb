@@ -42,14 +42,6 @@ class QuestionTest < ActiveSupport::TestCase
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'validates length of attributes' do
-    @question.question = 'abcde' * 52
-
-    assert @question.invalid?
-    assert_error @question, :question, :too_long, count: 255
-  end
-
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates formated attributes' do
     @question.sort_order = '1.2'
 

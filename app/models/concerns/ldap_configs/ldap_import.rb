@@ -24,6 +24,8 @@ module LdapConfigs::LDAPImport
       raise Net::LDAP::Error.new unless ldap.get_operation_result.code == 0
 
       assign_managers managers, users_by_dn
+
+      users = check_state_for_late_changes(users)
     end
 
     users
@@ -36,18 +38,32 @@ module LdapConfigs::LDAPImport
       manager_dn = casted_attribute entry, manager_attribute
       data       = trivial_data entry
       roles      = clean_roles Role.list_with_corporate.where(name: role_names)
-      user       = User.by_email data[:email]
-      new        = !user
+      user       = find_user data
 
       data[:manager_id] = nil if manager_dn.blank?
 
-      if user
-        update_user user: user, data: data, roles: roles
-      else
-        user = create_user user: user, data: data, roles: roles
-      end
+      state = if user
+                update_user user: user, data: data, roles: roles
 
-      { user: user, manager_dn: manager_dn, new: new }
+                if user.roles.any?
+                  user.saved_changes? ? :updated : :unchanged
+                else
+                  :deleted
+                end
+              else
+                user = create_user user: user, data: data, roles: roles
+                :created
+              end
+
+      state = :errored if user.errors.any?
+
+      { user: user, manager_dn: manager_dn, state: state }
+    end
+
+    def find_user data
+      User.group_list.by_email(data[:email])             ||
+        User.without_organization.by_email(data[:email]) ||
+        User.list.by_user(data[:user])
     end
 
     def role_data entry
@@ -94,7 +110,7 @@ module LdapConfigs::LDAPImport
       end
       removed_roles = user.organization_roles.map do |o_r|
         if roles.map(&:id).exclude? o_r.role_id
-          { id: o_r.id, _destroy: '1' } if o_r.organization_id == Organization.current_id
+          { id: o_r.id, _destroy: '1' } if o_r.organization_id == Current.organization&.id
         end
       end
       data[:organization_roles_attributes] = new_roles.compact + removed_roles.compact
@@ -119,6 +135,21 @@ module LdapConfigs::LDAPImport
                      end
 
         user.reload.update manager_id: manager_id
+      end
+    end
+
+    def check_state_for_late_changes(users)
+      users.map do |u_d|
+        if u_d[:state] == :unchanged && u_d[:user].saved_changes?
+          u_d[:state] = :updated
+        end
+
+        if (errors = u_d[:user].errors).any?
+          u_d[:state]  = :errored
+          u_d[:errors] = errors.full_messages.to_sentence
+        end
+
+        u_d
       end
     end
 end

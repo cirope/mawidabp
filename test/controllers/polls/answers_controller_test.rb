@@ -29,6 +29,19 @@ class Polls::AnswersControllerTest < ActionController::TestCase
     assert_template 'polls/answers/index'
   end
 
+  test 'filtered by answer option report' do
+    get :index, params: {
+      index: index_params.merge(
+        filter_answers: '1',
+        answer_option: Question::ANSWER_OPTIONS.sample.to_s
+      )
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:report)
+    assert_template 'polls/answers/index'
+  end
+
   test 'report answers pdf' do
     get :index, xhr: true, params: {
       index: index_params.merge(answered: 'false'),
@@ -46,6 +59,7 @@ class Polls::AnswersControllerTest < ActionController::TestCase
       {
         from_date: 10.years.ago.to_date,
         to_date: 10.years.from_now.to_date,
+        date_field: %w(created_at issue_date).sample,
         questionnaire: @questionnaire
       }
     end

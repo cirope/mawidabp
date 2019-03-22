@@ -9,7 +9,7 @@ module NewsModule::Defaults
 
     def set_defaults
       self.published_at  ||= Time.zone.now
-      self.group_id        = Group.current_id
-      self.organization_id = Organization.current_id
+      self.group_id        = Current.group&.id
+      self.organization_id = Current.organization&.id
     end
 end

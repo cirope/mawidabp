@@ -1,10 +1,10 @@
-<div id="process_control_filter" class="filter" <%= 'style="display: none;"' unless display %>>
+<div id="process_control_filter" class="filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
       <div class="form-group">
         <% process_control_filter = params[action] ? params[action][:process_control] : nil %>
-        <%= f.label :process_control, ProcessControl.model_name.human, class: 'col-md-3' %>
-        <div class="col-md-9">
+        <%= f.label :process_control, ProcessControl.model_name.human, class: 'col-md-4' %>
+        <div class="col-md-8">
           <%= f.text_field :process_control, value: process_control_filter, maxlength: 3072, class: 'form-control' %>
         </div>
       </div>

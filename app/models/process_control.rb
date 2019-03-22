@@ -2,6 +2,7 @@ class ProcessControl < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Comparable
+  include ProcessControls::AttributeTypes
   include ProcessControls::ControlObjectives
   include ProcessControls::DestroyValidation
   include ProcessControls::Obsolecence
@@ -10,10 +11,12 @@ class ProcessControl < ApplicationRecord
 
   # Named scopes
   scope :list, -> {
-    order([
-      "#{quoted_table_name}.#{qcn('best_practice_id')} ASC",
-      "#{quoted_table_name}.#{qcn('order')} ASC"
-    ])
+    order(
+      [
+        "#{quoted_table_name}.#{qcn('best_practice_id')} ASC",
+        "#{quoted_table_name}.#{qcn('order')} ASC"
+      ].map { |o| Arel.sql o }
+    )
   }
   scope :list_for_log, ->(id) { where(id: id)  }
 

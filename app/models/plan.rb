@@ -16,4 +16,5 @@ class Plan < ApplicationRecord
 
   belongs_to :period
   belongs_to :organization
+  has_one :risk_assessment, dependent: :nullify
 end

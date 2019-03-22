@@ -12,7 +12,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Organization.current_id = nil
+    unset_organization
   end
 
   test 'create' do
@@ -43,6 +43,34 @@ class UserTest < ActiveSupport::TestCase
 
       assert_not_nil user.parent
     end
+  end
+
+  test 'new user should fail with duplicated email' do
+    role = roles :admin_role
+
+    role.inject_auth_privileges Hash.new(true)
+
+    user = User.new(
+      name: 'New name',
+      last_name: 'New lastname',
+      language: 'es',
+      email: users(:bare).email,
+      function: 'New function',
+      user: 'new_user',
+      enable: true,
+      failed_attempts: 0,
+      logged_in: false,
+      notes: 'Some user notes',
+      organization_roles_attributes: [
+        {
+          organization_id: organizations(:cirope).id,
+          role_id: role.id
+        }
+      ]
+    )
+
+    assert user.invalid?
+    assert_error user, :email, :taken
   end
 
   test 'update' do
@@ -105,15 +133,12 @@ class UserTest < ActiveSupport::TestCase
     @user.last_name = nil
     @user.language = '   '
     @user.email = '  '
-    @user.organization_roles.clear
 
     assert @user.invalid?
     assert_error @user, :name, :blank
     assert_error @user, :last_name, :blank
     assert_error @user, :language, :blank
     assert_error @user, :email, :blank
-    assert_error @user, :manager_id, :invalid
-    assert_error @user, :organization_roles, :blank
   end
 
   test 'validates well formated attributes' do
@@ -124,16 +149,22 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'validates duplicated attributes' do
-    @user.user = users(:bare).user
-    @user.email = users(:bare).email
+    @user.user = users(:administrator).user
+    @user.email = users(:administrator).email
 
     assert @user.invalid?
     assert_error @user, :user, :taken
     assert_error @user, :email, :taken
   end
 
+  test 'skip duplicated attributes on different groups' do
+    @user.email = users(:bare).email
+
+    assert @user.valid?
+  end
+
   test 'validates can duplicate user if ldap' do
-    Organization.current_id = organizations(:google).id
+    Current.organization = organizations(:google)
 
     @user.user = users(:bare).user
 
@@ -299,6 +330,26 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  test 'user role needed at creation ' do
+    user = User.create(
+      name: 'New name',
+      last_name: 'New lastname',
+      language: 'es',
+      email: 'emailxx@emailxx.ccc',
+      function: 'New function',
+      user: 'new_user',
+      enable: true,
+      failed_attempts: 0,
+      logged_in: false,
+      notes: 'Some user notes',
+      manager_id: users(:administrator).id,
+      organization_roles_attributes: []
+    )
+
+    assert_error user, :organization_roles, :blank
+    assert_error user, :manager_id, :invalid
+  end
+
   test 'change user role from auditor to audited' do
     auditor = users :auditor
 
@@ -317,6 +368,15 @@ class UserTest < ActiveSupport::TestCase
     auditor.organization_roles.each { |o_r| o_r.role = roles(:audited_role) }
 
     assert auditor.save
+  end
+
+  test 'remove user roles' do
+    roles_attr = @user.organization_roles.map do |o_r|
+      { id: o_r.id, _destroy: '1' }
+    end
+
+    assert @user.update(organization_roles_attributes: roles_attr)
+    assert_empty @user.organization_roles.reload
   end
 
   test 'release for all pending fingings' do
@@ -413,7 +473,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'review assignment options' do
-    Organization.current_id = organizations(:google).id
+    Current.organization = organizations(:google)
 
     options = @user.review_assignment_options
 
@@ -424,12 +484,18 @@ class UserTest < ActiveSupport::TestCase
     user    = users :supervisor
     options = user.review_assignment_options
 
-    assert_equal 1, options.size
-    assert options[:supervisor]
+    if Current.conclusion_pdf_format == 'gal'
+      assert_equal 1, options.size
+      assert options[:supervisor]
+    else
+      assert_equal 2, options.size
+      assert options[:supervisor]
+      assert options[:responsible]
+    end
   end
 
   test 'notify finding changes function' do
-    Organization.current_id = nil
+    Current.organization = nil
     user = users :administrator
 
     assert user.findings.for_notification.any?
@@ -443,6 +509,11 @@ class UserTest < ActiveSupport::TestCase
       new_finding.finding_user_assignments.build(
         finding.finding_user_assignments.map do |fua|
           fua.dup.attributes.merge('finding_id' => nil)
+        end
+      )
+      new_finding.taggings.build(
+        finding.taggings.map do |t|
+          t.dup.attributes.merge('id' => nil, 'taggable_id' => nil)
         end
       )
 
@@ -471,25 +542,30 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'notify conclusion final review close date warning' do
-    ConclusionFinalReview.list.new({
+    Current.user = users :supervisor
+
+    ConclusionFinalReview.list.new(
       review_id: reviews(:review_approved_with_conclusion).id,
       issue_date: Date.today,
-      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date,
+      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.business_days.from_now.to_date,
       applied_procedures: 'New applied procedures',
-      conclusion: 'New conclusion',
+      conclusion: CONCLUSION_OPTIONS.first,
       recipients: 'John Doe',
       sectors: 'Area 51',
-      evolution: 'Do the evolution',
+      evolution: EVOLUTION_OPTIONS.second,
       evolution_justification: 'Ok',
       main_weaknesses_text: 'Some main weakness X',
       corrective_actions: 'You should do it this way',
+      :objective => 'Some objective',
+      :reference => 'Some reference',
+      :observations => 'Some observations',
+      :scope => 'Some scope',
       affects_compliance: false
-    }, false).save!
+    ).save!
 
-    Organization.current_id = nil
+    Current.organization = nil
 
     users = User.all_with_conclusion_final_reviews_for_notification
-
     assert users.any?
 
     assert_enqueued_emails users.count do

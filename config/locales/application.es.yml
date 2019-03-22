@@ -26,6 +26,8 @@ es:
     details: "Detalles"
     disable: "Deshabilitar"
     download: "Descargar"
+    download_csv: "Descargar CSV"
+    download_rtf: "Descargar RTF"
     edit: "Editar"
     import: "Importar"
     insert_item: "Insertar ítem"
@@ -50,6 +52,7 @@ es:
 
   message:
     ldap_error: 'El servidor de autenticación no está disponible, intente nuevamente más tarde'
+    change_weakness_risk: "El riesgo de la observación ha cambiado"
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
     insufficient_privileges: "No tiene permisos para realizar la operación"
@@ -69,8 +72,8 @@ es:
     session_expires_in_less_than_two_minutes: "Su sesión expira en menos de dos minutos"
     session_time_expired: "Su sesión ha expirado, debe autenticarse nuevamente"
     sort_by: "Ordenar por..."
-    under_construction: "En mantenimiento, disculpe las molestias"
     unsaved_data_warning: "Ha modificado el contenido, si abandona la página perderá todos los cambios"
+    rejected_data_format: "Algún campo contiene la cadena ../ debe eliminarla para poder realizar la acción. Revise los campos resaltados"
     validation_failed_message: "Los datos introducidos no son válidos, revise los campos resaltados"
     you_are_already_logged: "Este usuario ya ha iniciado sesión"
     empty_result: "Sin resultados, modifique el criterio"
@@ -89,18 +92,18 @@ es:
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
 
   business_unit_type:
-    index_title: "Listado de tipos de unidades de negocio"
-    show_title: "Detalle tipo de unidad de negocio"
-    new_title: "Agregar tipo de unidad de negocio"
-    edit_title: "Modificar tipo de unidad de negocio"
-    correctly_created: "Tipo de unidad de negocio agregado correctamente."
-    correctly_updated: "Tipo de unidad de negocio actualizado correctamente."
-    stale_object_error: "El tipo de unidad de negocio no fue actualizado, intente nuevamente."
+    index_title: "Listado de unidades organizativas"
+    show_title: "Detalle unidad organizativa"
+    new_title: "Agregar unidad organizativa"
+    edit_title: "Modificar unidad organizativa"
+    correctly_created: "Unidad organizativa agregada correctamente."
+    correctly_updated: "Unidad organizativa actualizada correctamente."
+    stale_object_error: "La unidad organizativa no fue actualizada, intente nuevamente."
     add_business_unit: "Agregar unidad de negocio"
     internal_audit: "Auditorías realizadas por la entidad"
     external_audit: "Auditorías realizadas por otras entidades"
     errors:
-      can_not_be_destroyed: "El tipo de unidad de negocio no puede ser eliminado"
+      can_not_be_destroyed: "El unidad organizativa no puede ser eliminada"
       business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
 
   conclusion_draft_review:
@@ -125,6 +128,8 @@ es:
     send_by_email: "Enviar por correo electrónico"
     last_verified_date: "La última comprobación se realizó el %{date}"
     has_final_review: "Ya se emitió un informe definitivo y por lo tanto no es posible seguir trabajando con el informe borrador"
+    errors:
+      without_corrective_actions: "no tiene acciones correctivas"
 
   conclusion_report:
     index_title: "Reportes de conclusión"
@@ -178,6 +183,7 @@ es:
     synthesis_report_title: "Informe de síntesis al directorio"
     review_stats_report_title: "Estadísticas de informes"
     review_scores_report_title: "Calificaciones de informes"
+    review_score_details_report_title: "Calificaciones de informes detallado"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -193,7 +199,11 @@ es:
     weaknesses_graphs: "Gráfico de observaciones"
     from_date: "Desde"
     to_date: "Hasta"
-    invalid_dates: "Verifique el rango de fechas, no es válido."
+    date_field: "Fecha a utilizar"
+    created_at: "Fecha de creación"
+    issue_date: "Fecha de emisión"
+    origination_date: "Fecha de origen"
+    cut_date: "Fecha cierre antigua data"
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
@@ -299,6 +309,15 @@ es:
       business_unit_score: "Calificación unidades de negocio"
       total_score: "Calificación total"
       empty: "Sin calificaciones para el filtro aplicado"
+    review_score_details_report:
+      pdf_name: "calificaciones_de_informes_definitivos_detallado_%{from_date}_al_%{to_date}.pdf"
+      title: "CALIFICACIONES DE INFORMES DETALLADO"
+      subtitle: "INFORMES DEFINITIVOS"
+      brief: "Resumen"
+      details: "Detalles"
+      count: "Cantidad"
+      share: "Participación"
+      empty: "Sin calificaciones para el filtro aplicado"
     weaknesses_by_state:
       pdf_name: "observaciones_informes_definitivos_por_estado_%{from_date}_al_%{to_date}.pdf"
       title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
@@ -380,6 +399,7 @@ es:
     add_recipient: "Agregar nuevo destinatario"
     review_sended: "El informe fue enviado a todos los destinatarios indicados"
     review_not_approved: "El informe no fue enviado, debe estar aprobado"
+    review_repeated_finding_label: "Informe nro."
     executive_summary:
       title: "Resumen ejecutivo"
       review_author: "Gerencia de Auditoría Interna"
@@ -397,9 +417,11 @@ es:
     annex:
       title: "Anexo I"
       legend: "La Auditoría practicada estuvo conformada por distintos controles, los cuales han sido evaluados con relación a los riesgos asociados, por lo que a continuación se detallan con su respectiva calificación, aclarando que dichos conceptos pueden estar vinculados a distintas valoraciones:"
+      workflow_text: "El programa de trabajo elaborado para esta casa, así como su desarrollo y demás elementos, forma parte de los antecedentes obrantes en carpeta de trabajo del presente informe."
       scope: "Alcance de la tarea"
       scope_column: "Alcance de la tarea"
       staff: "Personal interviniente"
+      satisfactory_control_objective_items: "Resto de los Objetivos de Control"
     bundle:
       zip_name: "legajo_%{identification}.zip"
       control_objectives_dir: "%{prefix}_objetivos_de_control"
@@ -407,7 +429,7 @@ es:
       create: "Generar"
     bundle_index:
       title: "ÍNDICE"
-      default_items: "PLANILLA DE CALIFICACIÓN GLOBAL\nPLANILLA DE CALIFICACIÓN DETALLADA\nINFORME DEFINITIVO\nRELEVAMIENTO\nDOCUMENTACIÓN DEL TRABAJO REALIZADO\nSEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA"
+      default_items: "PLANILLA DE CALIFICACIÓN GLOBAL\nPLANILLA DE CALIFICACIÓN DETALLADA\nINFORME DEFINITIVO\nRELEVAMIENTO\nSEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA"
       items_label: "Entradas en el índice"
       pdf_name: "00_indice_legajo.pdf"
     findings_sheet:
@@ -496,8 +518,6 @@ es:
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       column_month: "Mes"
       column_estimated_amount: "Unidades estimadas"
-      column_real_amount: "Unidades reales"
-      column_deviation: "Desviación"
     planned_cost_summary_title: "Análisis de costos planificados"
     reviews_with_incomplete_work_papers_report_incomplete_title: "Informes cerrados sin conformidad auditor"
     reviews_with_incomplete_work_papers_report_revised_title: "Informes cerrados sin revisión supervisor"
@@ -521,6 +541,13 @@ es:
     without_weaknesses: "Sin observaciones en el periodo"
     without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
+    tagged_findings_report:
+      empty: 'No hay hallazgos para el filtro aplicado'
+      findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
+      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge">%{count}</span>'
+      pdf_name: 'seguimiento_de_hallazgos_en_ejecucion_etiquetados.pdf'
+      tags_count_label: 'Cantidad máxima de etiquetas'
+      title: 'Hallazgos por cantidad máxima de etiquetas'
     weaknesses_report:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
@@ -548,6 +575,13 @@ es:
       users: 'Por usuario'
       business_units: 'Por unidad de negocio'
       process_controls: 'Por proceso de negocio'
+    tagged_findings_report:
+      empty: 'No hay hallazgos para el filtro aplicado'
+      findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
+      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge">%{count}</span>'
+      pdf_name: 'seguimiento_de_hallazgos_etiquetados.pdf'
+      tags_count_label: "Cantidad máxima de etiquetas"
+      title: 'Hallazgos por cantidad máxima de etiquetas'
     weaknesses_report:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
@@ -609,7 +643,7 @@ es:
     not_expired: "No vencida"
     from_date: "Desde"
     to_date: "Hasta"
-    invalid_dates: "Verifique el rango de fechas, no es válido."
+    cut_date: "Fecha cierre antigua data"
     print_date: "Fecha de impresión: %{date}"
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
@@ -764,12 +798,14 @@ es:
     type: "Tipo"
 
   notifier:
+    findings_brief:
+      title: "Resumen de hallazgos pendientes"
     notify_new_finding:
       title: "Tiene una nueva observación / oportunidad de mejora"
       created_title: "Nueva observación / oportunidad de mejora"
     notify_new_finding_answer:
       title: "Nuevo comentario en el informe %{review}"
-      finding_data: "Se ha agregado un comentario a la observación / oportunidad de mejora *%{finding_code}* del informe *%{review}*"
+      finding_data: "Se ha agregado un comentario a la observación / oportunidad de mejora **%{finding_code}** del informe **%{review}**"
       finding_link: "Ver observación / oportunidad de mejora"
     notify_new_findings:
       title: "Notificación de observaciones / oportunidades de mejora"
@@ -784,12 +820,6 @@ es:
       body_title: "Se adjuntan los siguientes documentos: %{elements}"
       final: "definitivo"
       draft: "borrador"
-    footer:
-      email_label: "Correo (preferentemente)"
-      phone_label: "Teléfono"
-      warning: "Por favor, *no contestar* el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
-      title: "Correo enviado por el sistema 'Mawidabp'. Cualquier inquietud comunicarse al área de soporte:"
-      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 8 o superior*"
     notification:
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"
@@ -811,19 +841,23 @@ es:
     restore_password:
       title: "Restablecer contraseña"
       body_title: "%{user_name}, para restablecer la contraseña de su usuario (%{user}) utilice el siguiente enlace:"
-      valid_until: "%{link} (Usted podrá utilizar este enlace hasta el día *%{date}* inclusive)"
-      clarification: "Si usted *no pidió* el restablecimiento *no haga nada*, su usuario y contraseña siguen vigentes"
+      valid_until: "%{link} (Usted podrá utilizar este enlace hasta el día **%{date}** inclusive)"
+      clarification: "Si usted **no pidió** el restablecimiento **no haga nada**, su usuario y contraseña siguen vigentes"
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables de la siguiente observación / oportunidad de mejora"
       managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
+    expired_finding_to_manager:
+      title: "Hallazgo vencido"
+      the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación de la siguiente observación / oportunidad de mejora"
+      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
     pending_poll_email:
-      affected_user_html: "Encuesta acerca de <strong>%{user}</strong>"
+      about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:
-        one: "La siguiente observación / oportunidad de mejora han cambiado su estado a *Sin respuesta*, por no recibir una respuesta"
-        other: "Las siguientes observaciones / oportunidades de mejora han cambiado su estado a *Sin respuesta*, por no recibir una respuesta"
+        one: "La siguiente observación / oportunidad de mejora han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
+        other: "Las siguientes observaciones / oportunidades de mejora han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
@@ -853,6 +887,7 @@ es:
     errors:
       is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"
+      with_expired_tasks: "tiene tareas pendientes o en proceso vencidas"
       with_follow_up_date: "tiene fecha de implementación (y no debería)"
       with_solution_date: "tiene fecha de solución (y no debería)"
       without_answer: "no tiene respuesta"
@@ -899,9 +934,11 @@ es:
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
+    without_score: "No calificar"
     weakness_from_template: "Observación creada de una plantilla"
     repeated_weaknesses: "Reiteradas"
     new_weaknesses: "Nuevas"
+    outdated_control_objective_name: 'El nombre del objetivo de control ha cambiado respecto del definido en la buena práctica, haga click para restaurarlo'
     taken_work_paper_code:
       one: "El código de papel de trabajo %{duplicated_work_papers} está duplicado"
       other: "Los siguientes códigos de papeles de trabajo están duplicados: %{duplicated_work_papers}"
@@ -910,6 +947,7 @@ es:
       type_auditor: "Auditor"
       type_supervisor: "Supervisor"
       type_manager: "Gerente"
+      type_responsible: "Responsable máximo de auditoría interna"
       type_audited: "Auditado"
       audit_team: "Auditoría"
       others: "Usuarios"
@@ -947,7 +985,10 @@ es:
     recode_weaknesses_by_risk: "Recodificar observaciones por riesgo"
     recode_weaknesses_by_repetition_and_risk: "Recodificar observaciones por reiteración y riesgo"
     recode_weaknesses_by_control_objective_order: "Recodificar observaciones por orden objetivos de control"
+    reorder: "Reordenar procesos por nombre"
     findings_recoded: "Hallazgos recodificados correctamente"
+    reordered: "Procesos ordenados correctamente"
+    failed_to_reorder: "Los procesos no pudieron ser ordenados"
     work_papers_marked_as_finished: "Papeles de trabajo marcados como conforme auditor"
     work_papers_marked_as_revised: "Papeles de trabajo marcados como revisados supervisor"
     review_qualification_explanation: "La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
@@ -968,6 +1009,8 @@ es:
     review_data:
       close_date: "Fecha de cierre: %{date}"
       without_close_date: "Sin fecha de cierre"
+    pdf:
+      pdf_name: 'informe_%{identification}.pdf'
 
   review_user_assignment:
     responsibility_modification:
@@ -1035,6 +1078,7 @@ es:
     errors:
       is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"
+      with_expired_tasks: "tiene tareas pendientes o en proceso vencidas"
       with_follow_up_date: "tiene fecha de implementación (y no debería)"
       with_solution_date: "tiene fecha de solución (y no debería)"
       without_answer: "no tiene respuesta"
@@ -1092,7 +1136,7 @@ es:
   activerecord:
     models:
       business_unit: "Unidad de negocio"
-      business_unit_type: "Tipo de unidad de negocio"
+      business_unit_type: "Unidad organizativa"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
@@ -1156,6 +1200,12 @@ es:
         main_weaknesses_text: "Principales debilidades"
         corrective_actions: "Acciones correctivas"
         affects_compliance: "Afecta compliance"
+        collapse_control_objectives: "Agrupar objetivos de control"
+        objective: "Objetivo"
+        scope: "Limitación al alcance"
+        reference: "Marco de referencia"
+        previous_identification: "Informe previo"
+        previous_date: "Fecha de emisión previa"
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:
@@ -1399,6 +1449,12 @@ es:
           attributes:
             file_file_name:
               without_extension: 'debe tener extensión'
+        finding:
+          attributes:
+            tag_ids:
+              too_short:
+                one: "debe ser una como mínimo"
+                other: "deben ser %{count} como mínimo"
         image_model:
           attributes:
             image_content_type:
@@ -1415,7 +1471,9 @@ es:
         question:
           attributes:
             question:
-              answered: 'No se pudo actualizar, la pregunta ya tiene respuestas'
+              answered: 'ya tiene respuestas'
+            answer_type:
+              used: 'ya ha sido enviada en al menos un cuestionario'
         review:
           attributes:
             review_user_assignments:

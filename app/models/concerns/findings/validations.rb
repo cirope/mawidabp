@@ -17,8 +17,9 @@ module Findings::Validations
     validate :validate_state
     validate :validate_review_code
     validate :validate_finding_user_assignments
-    validate :validate_follow_up_date, if: :check_dates?
-    validate :validate_solution_date,  if: :check_dates?
+    validate :validate_manager_presence, if: :validate_manager_presence?
+    validate :validate_follow_up_date,   if: :check_dates?
+    validate :validate_solution_date,    if: :check_dates?
   end
 
   def is_in_a_final_review?
@@ -27,10 +28,11 @@ module Findings::Validations
 
   def must_have_a_comment?
     has_new_comment = comments.detect { |c| c.new_record? && c.valid? }
+    to_implemented  = implemented? && (was_implemented_audited? || was_expired?)
+    to_pending      = (being_implemented? || awaiting?) &&
+      (was_implemented_audited? || was_implemented? || was_assumed_risk? || was_expired?)
 
-    (being_implemented? || awaiting?) &&
-      (was_implemented? || was_assumed_risk?) &&
-      !has_new_comment
+    (to_pending || to_implemented) && !has_new_comment
   end
 
   private
@@ -110,7 +112,7 @@ module Findings::Validations
         (new_record? && final) # comes from a final review _clone_
 
       if !skip_validation && state && state_changed? && state.presence_in(Finding::FINAL_STATUS)
-        has_role_to_do_it = current_user.try(:supervisor?) || current_user.try(:manager?)
+        has_role_to_do_it = Current.user.try(:supervisor?) || Current.user.try(:manager?)
 
         errors.add :state, :must_be_done_by_proper_role unless has_role_to_do_it
       end
@@ -155,5 +157,22 @@ module Findings::Validations
 
     def can_not_be_revoked?
       revoked? && state_changed? && (repeated_of || is_in_a_final_review?)
+    end
+
+    def validate_manager_presence
+      users = finding_user_assignments.reject(&:marked_for_destruction?).map &:user
+      has_manager = users.any? { |u| u.manager? || u.manager_on?(organization_id) }
+
+      unless has_manager
+        errors.add :finding_user_assignments, :must_have_a_manager
+      end
+    end
+
+    def validate_manager_presence?
+      setting = organization.settings.find_by name: 'require_manager_on_findings'
+      should_validate = (setting&.value || DEFAULT_SETTINGS[:require_manager_on_findings][:value]) != '0'
+      from = should_validate && setting&.updated_at
+
+      should_validate && from && (new_record? || created_at >= from)
     end
 end

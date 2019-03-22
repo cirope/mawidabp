@@ -5,14 +5,19 @@ module Reviews::Validations
     validates :identification, :period_id, :plan_item_id, :organization_id, presence: true
     validates :description, presence: true, unless: -> { HIDE_REVIEW_DESCRIPTION }
     validates :identification,
-      length:     { maximum: 255 },
-      format:     { with: /\A\w([\w\s-]|\/)*\z/ }, allow_nil: true, allow_blank: true
+      length:      { maximum: 255 },
+      format:      { with: /\A\w([.\w\sáéíóúÁÉÍÓÚñÑ-]|\/)*\z/ },
+      allow_nil:   true,
+      allow_blank: true
     validates :identification, uniqueness: {
       case_sensitive: false, scope: :organization_id
     }, unless: -> { SHOW_REVIEW_AUTOMATIC_IDENTIFICATION }
     validates :identification, :description, :survey, :scope, :risk_exposure,
       :include_sox, pdf_encoding: true
     validates :plan_item_id, uniqueness: { case_sensitive: false }
+    validates :score_type, inclusion: {
+      in: %w(effectiveness manual none weaknesses)
+    }, allow_blank: true, allow_nil: true
 
     validates :scope,
               :risk_exposure,
@@ -46,10 +51,12 @@ module Reviews::Validations
     end
 
     def has_valid_users?
+      has_some_manager = has_supervisor? || has_manager? || has_responsible?
+
       if DISABLE_REVIEW_AUDITED_VALIDATION
-        has_auditor? && (has_supervisor? || has_manager?)
+        has_auditor? && has_some_manager
       else
-        has_audited? && has_auditor? && (has_supervisor? || has_manager?)
+        has_audited? && has_auditor? && has_some_manager
       end
     end
 

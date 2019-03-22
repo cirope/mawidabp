@@ -129,6 +129,8 @@ class ExecutionReportsControllerTest < ActionController::TestCase
           finding_status: '1',
           finding_title: '1',
           risk: '1',
+          compliance: 'yes',
+          repeated: 'false',
           priority: Finding.priorities_values.first,
           issue_date: Date.today.to_s(:db),
           issue_date_operator: '=',
@@ -175,6 +177,20 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     }
 
     assert_response :redirect
+  end
+
+  test 'weaknesses report as CSV' do
+    login
+
+    get :weaknesses_report, params: {
+      execution: 'true',
+      weaknesses_report: {
+        finding_status: Finding::STATUS[:being_implemented].to_s
+      }
+    }, as: :csv
+
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
   end
 
   test 'reviews with incomplete work papers' do
@@ -229,5 +245,77 @@ class ExecutionReportsControllerTest < ActionController::TestCase
         from_date: 10.years.ago.to_date.to_formatted_s(:db),
         to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'planned_cost_summary', 0)
+  end
+
+  test 'findings tagged report' do
+    login
+
+    get :tagged_findings_report
+    assert_response :success
+    assert_template 'execution_reports/tagged_findings_report'
+
+    assert_nothing_raised do
+      get :tagged_findings_report, params: {
+        tagged_findings_report: {
+          tags_count: 3
+        }
+      }
+    end
+
+    assert_template 'execution_reports/tagged_findings_report'
+
+    assert_nothing_raised do
+      get :tagged_findings_report, params: {
+        tagged_findings_report: {
+          tags_count: 3,
+          finding_status: [Finding::STATUS[:being_implemented]]
+        }
+      }
+    end
+
+    assert_template 'execution_reports/tagged_findings_report'
+  end
+
+  test 'findings tagged report csv' do
+    login
+
+    assert_nothing_raised do
+      get :tagged_findings_report, params: {
+        tagged_findings_report: {
+          tags_count: 3,
+          finding_status: [Finding::STATUS[:being_implemented]]
+        }
+      },
+      as: :csv
+    end
+
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+  end
+
+
+  test 'create findings tagged report' do
+    login
+
+    post :create_tagged_findings_report, params: {
+      tagged_findings_report: {
+        tags_count: 3
+      },
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+    }
+
+    assert_response :redirect
+
+    post :create_tagged_findings_report, params: {
+      tagged_findings_report: {
+        tags_count: 3,
+        finding_status: [Finding::STATUS[:being_implemented]]
+      },
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+    }
+
+    assert_response :redirect
   end
 end

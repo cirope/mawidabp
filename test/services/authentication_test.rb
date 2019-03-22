@@ -5,11 +5,11 @@ class AuthenticationTest < ActionController::TestCase
     @user = users :administrator
     @organization = organizations :cirope
     @params = { user: @user.user, password: 'admin123' }
-    Organization.current_id = @organization.id
+    Current.organization = @organization
   end
 
   teardown do
-    Organization.current_id = nil
+    unset_organization
   end
 
   test 'should authenticate' do
@@ -20,7 +20,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should authenticate via ldap' do
     @organization = organizations :google
     @params = { user: @user.user, password: 'admin123' }
-    Organization.current_id = @organization.id
+    Current.organization = @organization
 
     assert_valid_authentication
   end
@@ -31,7 +31,7 @@ class AuthenticationTest < ActionController::TestCase
     username = ldap_config.login_mask % { user: @user.user, basedn: ldap_config.basedn }
     @params = { user: username, password: 'admin123' }
     @organization = organizations :alphabet
-    Organization.current_id = @organization.id
+    Current.organization = @organization
 
     @user.organization_roles.create! role_id: role.id, organization_id: role.organization_id
 
@@ -39,7 +39,7 @@ class AuthenticationTest < ActionController::TestCase
   end
 
   test 'no group admin user attempt login in admin mode' do
-    request.host = "#{APP_ADMIN_PREFIXES.first}.localhost.i"
+    request.host = [APP_ADMIN_PREFIXES.first, URL_HOST].join('.')
     @user.update_column :group_admin, false
 
     assert_invalid_authentication admin_mode: true
@@ -65,12 +65,13 @@ class AuthenticationTest < ActionController::TestCase
   end
 
   test 'should show message pending poll' do
-    Poll.first.update_column :user_id, @user.id
+    Poll.answered(false).first.update_column :user_id, @user.id
+
     poll = @user.first_pending_poll
     poll_redirect = ['edit', poll, token: poll.access_token]
 
     assert_valid_authentication redirect_url: poll_redirect,
-      message: 'polls.must_answer_poll'
+      message: ['polls.has_unanswered', count: @user.list_unanswered_polls.count]
   end
 
   test 'should not login with invalid password' do
@@ -83,7 +84,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should not authenticate via ldap with invalid password' do
     @organization = organizations :google
     @params = { user: @user.user, password: 'wrong password' }
-    Organization.current_id = @organization.id
+    Current.organization = @organization
 
     assert_invalid_authentication
   end
@@ -91,7 +92,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should show a message when ldap is not reacheble' do
     @organization = organizations :google
     @params = { user: @user.user, password: 'wrong password' }
-    Organization.current_id = @organization.id
+    Current.organization = @organization
 
     @organization.ldap_config.update port: 1
 

@@ -52,3 +52,22 @@ $(document).on('change', '[data-weakness-template-changed-url]', function () {
     $('#weakness_weakness_template_from_control_objective').prop('disabled', false)
   })
 })
+
+$(document).on('click custom:change', '[data-tag]', function (event) {
+  var $element = $(event.currentTarget)
+  var tagName  = $element.data('tag')
+  var $input   = $('input[name$="[tag_ids][]"][data-name="' + tagName + '"]')
+
+  if ($element.prop('type') === 'checkbox')
+    $input.prop('checked', $element.is(':checked'))
+})
+
+$(document).on('change', '[data-tag-modifier]', function (event) {
+  var $element = $(event.currentTarget)
+  var $option  = $element.find('option:selected')
+  var tagName  = $option.data('tag')
+  var select   = $option.data('select') !== 'no'
+  var $input   = $('input[name$="[tag_ids][]"][data-name="' + tagName + '"]')
+
+  $input.prop('checked', select)
+})

@@ -53,12 +53,12 @@ class Users::PasswordsController < ApplicationController
     end
 
     def load_user_from_hash
-      Organization.current_id = nil
+      Current.organization = nil
       @auth_user = User.with_valid_confirmation_hash(params[:confirmation_hash]).take
     end
 
     def update_password
-      PaperTrail.whodunnit ||= @auth_user.id
+      PaperTrail.request.whodunnit ||= @auth_user.id
 
       save_password
       restart_session

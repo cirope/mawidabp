@@ -111,38 +111,44 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/weakness_templates' }
       ),
       MenuItem.new(
-        :tags,
+        :risk_assessment_templates,
         order: 6,
+        controllers: :risk_assessment_templates,
+        url: { controller: '/risk_assessment_templates' }
+      ),
+      MenuItem.new(
+        :tags,
+        order: 7,
         controllers: :tags,
         url: { controller: '/tags', kind: 'finding' }
       ),
       MenuItem.new(
         :documents,
-        order: 7,
+        order: 8,
         controllers: :documents,
         url: { controller: '/documents' }
       ),
       MenuItem.new(
         :news,
-        order: 8,
+        order: 9,
         controllers: :news,
         url: { controller: '/news' }
       ),
       MenuItem.new(
         :benefits,
-        order: 9,
+        order: 10,
         controllers: :benefits,
         url: { controller: '/benefits' }
       ),
       MenuItem.new(
         :e_mails,
-        order: 10,
+        order: 11,
         controllers: :e_mails,
         url: { controller: '/e_mails' }
       ),
       MenuItem.new(
         :questionnaires,
-        order: 11,
+        order: 12,
         url: { controller: '/questionnaires' },
         children: [
           MenuItem.new(
@@ -185,8 +191,14 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/periods' }
       ),
       MenuItem.new(
-        :plans,
+        :risk_assessments,
         order: 3,
+        controllers: :risk_assessments,
+        url: { controller: '/risk_assessments' }
+      ),
+      MenuItem.new(
+        :plans,
+        order: 4,
         controllers: :plans,
         url: { controller: '/plans' }
       )
@@ -227,6 +239,25 @@ APP_AUDITOR_MENU_ITEMS = [
         controllers: :oportunities,
         url: { controller: '/oportunities' }
       ) unless HIDE_OPORTUNITIES),
+      MenuItem.new(
+        :interviews,
+        order: 6,
+        url: { controller: '/opening_interviews' },
+        children: [
+          MenuItem.new(
+            :opening_interviews,
+            order: 1,
+            controllers: :opening_interviews,
+            url: { controller: '/opening_interviews' }
+          ),
+          MenuItem.new(
+            :closing_interviews,
+            order: 2,
+            controllers: :closing_interviews,
+            url: { controller: '/closing_interviews' }
+          )
+        ]
+      ),
       MenuItem.new(
         :reports,
         order: 6,

@@ -1,0 +1,20 @@
+<% group ||= nil %>
+<div id="repeated_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+  <% unless group %>
+    <div class="row">
+  <% end %>
+    <div class="col-md-6">
+      <div class="form-group">
+        <% selected = params[action] ? params[action][:repeated] : nil %>
+        <%= f.label :repeated, t('findings.state.repeated'), class: 'col-md-4' %>
+        <div class="col-md-8">
+          <%= f.select :repeated, [[t('label.yes'), true], [t('label.no'), false]],
+            { selected: selected, include_blank: t('helpers.select.prompt') },
+            class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+  <% unless group %>
+    </div>
+  <% end %>
+</div>
