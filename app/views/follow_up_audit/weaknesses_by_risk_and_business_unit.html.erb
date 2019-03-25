@@ -6,50 +6,75 @@
       final: false
     },
     forms: {
-      date_range: { date_fields: %w(issue_date origination_date) },
-      finding_statuses: true
+      date_range: {
+        show_mid_date: true
+      }
     }
   } %>
 
-<% if @weaknesses_by_business_unit_types.size > 1 %>
+<% if @weaknesses_by_business_unit_types.first.size > 1 %>
   <table class="table table-condensed table-striped table-hover">
     <thead>
       <tr>
-        <th rowspan="2"><%= BusinessUnitType.model_name.human %></th>
-        <th rowspan="2"><%= BusinessUnit.model_name.human %></th>
-        <th colspan="<%= Weakness.risks.size + 1 %>" class="text-center"><%= Weakness.human_attribute_name 'risk' %></th>
+        <th rowspan="3"><%= BusinessUnitType.model_name.human %></th>
+        <th rowspan="3"><%= BusinessUnit.model_name.human %></th>
+        <th colspan="<%= Weakness.risks.size.next %>">
+          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.being_implemented', date: l(@mid_date, format: :minimal) %>
+        </th>
+        <th colspan="<%= Weakness.risks.size.next %>">
+          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.created', from_date: l(@mid_date, format: :minimal), to_date: l(@to_date, format: :minimal) %>
+        </th>
+        <th colspan="<%= Weakness.risks.size.next %>">
+          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.implemented', from_date: l(@mid_date, format: :minimal), to_date: l(@to_date, format: :minimal) %>
+        </th>
+        <th colspan="<%= Weakness.risks.size.next %>">
+          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.being_implemented', date: l(@to_date, format: :minimal) %>
+        </th>
       </tr>
-      <tr>
-        <% Weakness.risks.keys.each do |risk_type| %>
-          <th class="text-right"><%= t "risk_types.#{risk_type}" %></th>
-        <% end %>
 
-        <th class="text-right"><%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.total' %></th>
+      <tr>
+        <% @weaknesses_by_business_unit_types.size.times do %>
+          <th colspan="<%= Weakness.risks.size %>">
+            <%= Weakness.human_attribute_name 'risk' %>
+          </th>
+
+          <th rowspan="2" class="text-right">
+            <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.total' %>
+          </th>
+        <% end %>
+      </tr>
+
+      <tr>
+        <% @weaknesses_by_business_unit_types.size.times do %>
+          <% Weakness.risks.keys.reverse.each do |risk_type| %>
+            <th class="text-right"><%= t "risk_types.#{risk_type}" %></th>
+          <% end %>
+        <% end %>
       </tr>
     </thead>
 
     <tbody>
-      <% but_names = @weaknesses_by_business_unit_types.keys.reject { |e| e.kind_of? Symbol } %>
-      <% but_names.sort.each do |but_name| %>
-        <% business_units = @weaknesses_by_business_unit_types[but_name] %>
-
-        <% business_units.keys.sort.each_with_index do |bu_name, i| %>
-          <% risk_counts = business_units[bu_name] %>
-
+      <% @business_unit_type_names.sort.each do |but_name| %>
+        <% @business_unit_names[but_name].sort.each_with_index do |bu_name, i| %>
           <tr>
             <% if i == 0 %>
-              <td rowspan="<%= business_units.size %>"><%= but_name %></td>
+              <td rowspan="<%= @business_unit_names[but_name].size %>"><%= but_name %></td>
             <% end %>
 
             <td><%= bu_name %></td>
 
-            <% Weakness.risks.keys.each do |risk_type| %>
-              <td class="text-right"><%= risk_counts[risk_type] %></td>
-            <% end %>
+            <% @weaknesses_by_business_unit_types.each do |weaknesses_by_business_unit_types| %>
+              <% business_units = weaknesses_by_business_unit_types[but_name] || {} %>
+              <% risk_counts = business_units[bu_name] || Hash.new(0) %>
 
-            <td class="text-right">
-              <strong><%= risk_counts[:total] %></strong>
-            </td>
+              <% Weakness.risks.keys.reverse.each do |risk_type| %>
+                <td class="text-right"><%= risk_counts[risk_type] %></td>
+              <% end %>
+
+              <td class="text-right">
+                <strong><%= risk_counts[:total] %></strong>
+              </td>
+            <% end %>
           </tr>
         <% end %>
       <% end %>
@@ -62,19 +87,21 @@
             <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.total' %>
           </strong>
         </td>
-        <% Weakness.risks.keys.each do |risk_type| %>
+        <% @weaknesses_by_business_unit_types.each do |weaknesses_by_business_unit_types| %>
+          <% Weakness.risks.keys.reverse.each do |risk_type| %>
+            <td class="text-right">
+              <strong>
+                <%= weaknesses_by_business_unit_types[:total_by_risk][risk_type] %>
+              </strong>
+            </td>
+          <% end %>
+
           <td class="text-right">
             <strong>
-              <%= @weaknesses_by_business_unit_types[:total_by_risk][risk_type] %>
+              <%= weaknesses_by_business_unit_types[:total_by_risk][:total] %>
             </strong>
           </td>
         <% end %>
-
-        <td class="text-right">
-          <strong>
-            <%= @weaknesses_by_business_unit_types[:total_by_risk][:total] %>
-          </strong>
-        </td>
       </tr>
     </tfoot>
   </table>
