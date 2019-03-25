@@ -19,16 +19,20 @@
         <th rowspan="3"><%= BusinessUnitType.model_name.human %></th>
         <th rowspan="3"><%= BusinessUnit.model_name.human %></th>
         <th colspan="<%= Weakness.risks.size.next %>">
-          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.being_implemented', date: l(@mid_date, format: :minimal) %>
+          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.being_implemented',
+            date: l(@mid_date, format: :minimal) %>
         </th>
         <th colspan="<%= Weakness.risks.size.next %>">
-          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.created', from_date: l(@mid_date, format: :minimal), to_date: l(@to_date, format: :minimal) %>
+          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.created',
+            from_date: l(@mid_date, format: :minimal), to_date: l(@to_date, format: :minimal) %>
         </th>
         <th colspan="<%= Weakness.risks.size.next %>">
-          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.implemented', from_date: l(@mid_date, format: :minimal), to_date: l(@to_date, format: :minimal) %>
+          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.implemented',
+            from_date: l(@mid_date, format: :minimal), to_date: l(@to_date, format: :minimal) %>
         </th>
         <th colspan="<%= Weakness.risks.size.next %>">
-          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.being_implemented', date: l(@to_date, format: :minimal) %>
+          <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.being_implemented',
+            date: l(@to_date, format: :minimal) %>
         </th>
       </tr>
 
