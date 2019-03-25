@@ -198,7 +198,8 @@ module Reports::WeaknessesByRiskAndBusinessUnit
               "#{@controller}_committee_report.weaknesses_by_risk_and_business_unit.being_implemented",
               date: l(@mid_date, format: :minimal)
             ),
-            colspan: Weakness.risks.size.next
+            colspan: Weakness.risks.size.next,
+            align:   :center
           },
           {
             content: t(
@@ -206,7 +207,8 @@ module Reports::WeaknessesByRiskAndBusinessUnit
               from_date: l(@mid_date, format: :minimal),
               to_date: l(@to_date, format: :minimal)
             ),
-            colspan: Weakness.risks.size.next
+            colspan: Weakness.risks.size.next,
+            align:   :center
           },
           {
             content: t(
@@ -214,26 +216,29 @@ module Reports::WeaknessesByRiskAndBusinessUnit
               from_date: l(@mid_date, format: :minimal),
               to_date: l(@to_date, format: :minimal)
             ),
-            colspan: Weakness.risks.size.next
+            colspan: Weakness.risks.size.next,
+            align:   :center
           },
           {
             content: t(
               "#{@controller}_committee_report.weaknesses_by_risk_and_business_unit.being_implemented",
               date: l(@to_date, format: :minimal)
             ),
-            colspan: Weakness.risks.size.next
+            colspan: Weakness.risks.size.next,
+            align:   :center
           }
         ],
         @weaknesses_by_business_unit_types.size.times.map do
           [
             {
               content: Weakness.human_attribute_name('risk'),
-              colspan: Weakness.risks.size
+              colspan: Weakness.risks.size,
+              align:   :center
             },
             {
               content: t("#{@controller}_committee_report.weaknesses_by_risk_and_business_unit.total"),
               rowspan: 2,
-              align:   :right
+              align:   :center
             }
           ]
         end.flatten,
@@ -241,7 +246,7 @@ module Reports::WeaknessesByRiskAndBusinessUnit
           Weakness.risks.keys.reverse.map do |risk_type|
             {
               content: t("risk_types.#{risk_type}"),
-              align:   :right
+              align:   :center
             }
           end
         end.flatten
@@ -273,13 +278,13 @@ module Reports::WeaknessesByRiskAndBusinessUnit
             Weakness.risks.keys.reverse.each do |risk_type|
               row << {
                 content: risk_counts[risk_type].to_s,
-                align:   :right
+                align:   :center
               }
             end
 
             row << {
               content: "<b>#{risk_counts[:total]}</b>",
-              align:   :right
+              align:   :center
             }
           end
 
@@ -301,11 +306,11 @@ module Reports::WeaknessesByRiskAndBusinessUnit
           Weakness.risks.keys.reverse.map do |risk_type|
             {
               content: "<b>#{weaknesses_by_business_unit_types[:total_by_risk][risk_type]}</b>",
-              align:   :right
+              align:   :center
             }
           end.concat([
             content: "<b>#{weaknesses_by_business_unit_types[:total_by_risk][:total]}</b>",
-            align:   :right
+            align:   :center
           ])
         end.flatten
       )

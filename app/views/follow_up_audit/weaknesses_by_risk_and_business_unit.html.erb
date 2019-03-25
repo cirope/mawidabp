@@ -18,19 +18,19 @@
       <tr>
         <th rowspan="3"><%= BusinessUnitType.model_name.human %></th>
         <th rowspan="3"><%= BusinessUnit.model_name.human %></th>
-        <th colspan="<%= Weakness.risks.size.next %>">
+        <th colspan="<%= Weakness.risks.size.next %>" class="text-center">
           <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.being_implemented',
             date: l(@mid_date, format: :minimal) %>
         </th>
-        <th colspan="<%= Weakness.risks.size.next %>">
+        <th colspan="<%= Weakness.risks.size.next %>" class="text-center">
           <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.created',
             from_date: l(@mid_date, format: :minimal), to_date: l(@to_date, format: :minimal) %>
         </th>
-        <th colspan="<%= Weakness.risks.size.next %>">
+        <th colspan="<%= Weakness.risks.size.next %>" class="text-center">
           <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.implemented',
             from_date: l(@mid_date, format: :minimal), to_date: l(@to_date, format: :minimal) %>
         </th>
-        <th colspan="<%= Weakness.risks.size.next %>">
+        <th colspan="<%= Weakness.risks.size.next %>" class="text-center">
           <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.being_implemented',
             date: l(@to_date, format: :minimal) %>
         </th>
@@ -38,11 +38,11 @@
 
       <tr>
         <% @weaknesses_by_business_unit_types.size.times do %>
-          <th colspan="<%= Weakness.risks.size %>">
+          <th colspan="<%= Weakness.risks.size %>" class="text-center">
             <%= Weakness.human_attribute_name 'risk' %>
           </th>
 
-          <th rowspan="2" class="text-right">
+          <th rowspan="2" class="text-center" class="text-center">
             <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.total' %>
           </th>
         <% end %>
@@ -51,7 +51,7 @@
       <tr>
         <% @weaknesses_by_business_unit_types.size.times do %>
           <% Weakness.risks.keys.reverse.each do |risk_type| %>
-            <th class="text-right"><%= t "risk_types.#{risk_type}" %></th>
+            <th class="text-center"><%= t "risk_types.#{risk_type}" %></th>
           <% end %>
         <% end %>
       </tr>
@@ -72,10 +72,10 @@
               <% risk_counts = business_units[bu_name] || Hash.new(0) %>
 
               <% Weakness.risks.keys.reverse.each do |risk_type| %>
-                <td class="text-right"><%= risk_counts[risk_type] %></td>
+                <td class="text-center"><%= risk_counts[risk_type] %></td>
               <% end %>
 
-              <td class="text-right">
+              <td class="text-center">
                 <strong><%= risk_counts[:total] %></strong>
               </td>
             <% end %>
@@ -93,14 +93,14 @@
         </td>
         <% @weaknesses_by_business_unit_types.each do |weaknesses_by_business_unit_types| %>
           <% Weakness.risks.keys.reverse.each do |risk_type| %>
-            <td class="text-right">
+            <td class="text-center">
               <strong>
                 <%= weaknesses_by_business_unit_types[:total_by_risk][risk_type] %>
               </strong>
             </td>
           <% end %>
 
-          <td class="text-right">
+          <td class="text-center">
             <strong>
               <%= weaknesses_by_business_unit_types[:total_by_risk][:total] %>
             </strong>
