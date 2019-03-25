@@ -199,6 +199,7 @@ es:
     weaknesses_graphs: "Gráfico de observaciones"
     from_date: "Desde"
     to_date: "Hasta"
+    mid_date: "Corte"
     date_field: "Fecha a utilizar"
     created_at: "Fecha de creación"
     issue_date: "Fecha de emisión"
@@ -643,6 +644,7 @@ es:
     not_expired: "No vencida"
     from_date: "Desde"
     to_date: "Hasta"
+    mid_date: "Corte"
     cut_date: "Fecha cierre antigua data"
     print_date: "Fecha de impresión: %{date}"
     applied_filters:

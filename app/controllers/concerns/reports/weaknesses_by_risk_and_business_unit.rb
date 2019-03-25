@@ -40,8 +40,10 @@ module Reports::WeaknessesByRiskAndBusinessUnit
       @controller = params[:controller_name]
       @title = t "#{@controller}_committee_report.weaknesses_by_risk_and_business_unit_title"
       @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk_and_business_unit])
+      @mid_date = mid_date params[:weaknesses_by_risk_and_business_unit]
       @filters = []
-      final = params[:final] == 'true'
+      @business_unit_type_names = []
+      @business_unit_names = {}
       exclude = %i(confirmed unconfirmed unanswered notify incomplete)
       states = Finding::STATUS.except(*exclude).values & Finding::PENDING_STATUS
       between = [
@@ -49,24 +51,76 @@ module Reports::WeaknessesByRiskAndBusinessUnit
         [l(@from_date), l(@to_date)].to_sentence
       ].join ' '
       weaknesses = Weakness.
-        finals(final).
         list_with_final_review.
         where(state: states).
-        includes(:business_unit, :business_unit_type, review: :conclusion_final_review)
+        includes(:business_unit, :business_unit_type, review: :conclusion_final_review).
+        by_issue_date 'BETWEEN', @from_date, @to_date
 
-      if params[:weaknesses_by_risk_and_business_unit]
-        weaknesses = filter_weaknesses_by_risk_and_business_unit_by_date   weaknesses, between
-        weaknesses = filter_weaknesses_by_risk_and_business_unit_by_status weaknesses
-      else
-        weaknesses = weaknesses.by_issue_date 'BETWEEN', @from_date, @to_date
+      @weaknesses_by_business_unit_types =
+        weaknesses_by_risk_and_business_unit_types weaknesses
+    end
 
-        @filters << [
-          "<b>#{ConclusionFinalReview.human_attribute_name 'issue_date'}</b>",
-          between
-        ].join(' ')
+    def weaknesses_by_risk_and_business_unit_types weaknesses
+      weaknesses_1 = weaknesses.finals(true).by_issue_date 'BETWEEN', @from_date, @mid_date
+      weaknesses_2 = weaknesses.finals(false).by_issue_date 'BETWEEN', @mid_date, @to_date
+      weaknesses_4 = weaknesses.finals false
+
+      weaknesses_1_table = weaknesses_by_risk_and_business_unit_table weaknesses_1
+      weaknesses_2_table = weaknesses_by_risk_and_business_unit_table weaknesses_2
+      weaknesses_4_table = weaknesses_by_risk_and_business_unit_table weaknesses_4
+      weaknesses_3_table = weaknesses_by_risk_and_business_unit_table_3 weaknesses_1_table,
+                                                                        weaknesses_2_table,
+                                                                        weaknesses_4_table
+
+      [
+        weaknesses_1_table,
+        weaknesses_2_table,
+        weaknesses_3_table,
+        weaknesses_4_table
+      ]
+    end
+
+    def weaknesses_by_risk_and_business_unit_table_3 weaknesses_1_table,
+                                                     weaknesses_2_table,
+                                                     weaknesses_4_table
+      result = { total_by_risk: {} }
+
+      @business_unit_type_names.sort.each do |but_name|
+        result[but_name] ||= {}
+
+        @business_unit_names[but_name].sort.each do |bu_name|
+          result[but_name][bu_name] ||= {}
+
+          business_units_1 = weaknesses_1_table[but_name] || {}
+          business_units_2 = weaknesses_2_table[but_name] || {}
+          business_units_4 = weaknesses_4_table[but_name] || {}
+          risk_counts_1 = business_units_1[bu_name] || Hash.new(0)
+          risk_counts_2 = business_units_2[bu_name] || Hash.new(0)
+          risk_counts_4 = business_units_4[bu_name] || Hash.new(0)
+
+          Weakness.risks.keys.each do |risk_type|
+            result[but_name][bu_name][risk_type] = risk_counts_1[risk_type] +
+                                                   risk_counts_2[risk_type] -
+                                                   risk_counts_4[risk_type]
+          end
+
+          result[but_name][bu_name][:total] = risk_counts_1[:total] +
+                                              risk_counts_2[:total] -
+                                              risk_counts_4[:total]
+        end
       end
 
-      @weaknesses_by_business_unit_types = weaknesses_by_risk_and_business_unit_table weaknesses
+      Weakness.risks.keys.each do |risk_type|
+        result[:total_by_risk][risk_type] = weaknesses_1_table[:total_by_risk][risk_type] +
+                                            weaknesses_2_table[:total_by_risk][risk_type] -
+                                            weaknesses_4_table[:total_by_risk][risk_type]
+      end
+
+      result[:total_by_risk][:total] = weaknesses_1_table[:total_by_risk][:total] +
+                                       weaknesses_2_table[:total_by_risk][:total] -
+                                       weaknesses_4_table[:total_by_risk][:total]
+
+      result
     end
 
     def weaknesses_by_risk_and_business_unit_table weaknesses
@@ -74,16 +128,27 @@ module Reports::WeaknessesByRiskAndBusinessUnit
         total_by_risk: Hash[Weakness.risks.keys.map { |r| [r, 0] }]
       }
 
+      result[:total_by_risk][:total] = 0
+
       weaknesses.find_each do |weakness|
         but_name = weakness.business_unit_type.name
         bu_name  = weakness.business_unit.name
         risk     = Weakness.risks.invert[weakness.risk]
 
+        if @business_unit_type_names.exclude? but_name
+          @business_unit_type_names << but_name
+        end
+
+        @business_unit_names[but_name] ||= []
+
+        if @business_unit_names[but_name].exclude? bu_name
+          @business_unit_names[but_name] << bu_name
+        end
+
         result[but_name]          ||= {}
         result[but_name][bu_name] ||= Hash[Weakness.risks.keys.map { |r| [r, 0] }]
 
         result[but_name][bu_name][:total] ||= 0
-        result[:total_by_risk][:total]    ||= 0
 
         result[:total_by_risk][risk]      += 1
         result[:total_by_risk][:total]    += 1
@@ -94,63 +159,26 @@ module Reports::WeaknessesByRiskAndBusinessUnit
       result
     end
 
-    def filter_weaknesses_by_risk_and_business_unit_by_date weaknesses, between
-      if params[:weaknesses_by_risk_and_business_unit][:date_field] == 'origination_date'
-        @filters << [
-          "<b>#{Weakness.human_attribute_name 'origination_date'}</b>",
-          between
-        ].join(' ')
-
-        weaknesses.by_origination_date @from_date, @to_date
-      else
-        @filters << [
-          "<b>#{ConclusionFinalReview.human_attribute_name 'issue_date'}</b>",
-          between
-        ].join(' ')
-
-        weaknesses.by_issue_date 'BETWEEN', @from_date, @to_date
-      end
-    end
-
-    def filter_weaknesses_by_risk_and_business_unit_by_status weaknesses
-      states               = Array(params[:weaknesses_by_risk_and_business_unit][:finding_status]).reject(&:blank?)
-      not_muted_states     = Finding::EXCLUDE_FROM_REPORTS_STATUS + [:implemented_audited]
-      mute_state_filter_on = Finding::STATUS.except(*not_muted_states).map do |k, v|
-        v.to_s
-      end
-
-      if states.present?
-        unless states.sort == mute_state_filter_on.sort
-          state_text = states.map do |s|
-            t "findings.state.#{Finding::STATUS.invert[s.to_i]}"
-          end
-
-          @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text.to_sentence}\""
-        end
-
-        weaknesses.where state: states
-      else
-        weaknesses
-      end
-    end
-
     def put_weaknesses_by_risk_and_business_unit_on pdf
-      risk_size     = Weakness.risks.size.next
-      risk_width    = risk_size <= 4 ? 32.0 : 50.0
+      risk_size     = Weakness.risks.size.next * @weaknesses_by_business_unit_types.size
+      risk_width    = 65.0
       risk_widths   = risk_size.times.map { risk_width / risk_size }
-      widths        = [20, 80 - risk_width].concat(risk_widths).map do |w|
+      widths        = [15, 85 - risk_width].concat(risk_widths).map do |w|
         pdf.percent_width w
       end
-      table_options = pdf.default_table_options widths
+      table_options = pdf.default_table_options(widths).merge header: 3
 
-      pdf.table(weaknesses_by_risk_and_business_unit_pdf_data, table_options) do
-        header_style = {
-          background_color: 'cccccc',
-          padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-        }
+      pdf.font_size PDF_FONT_SIZE * 0.65 do
+        pdf.table(weaknesses_by_risk_and_business_unit_pdf_data, table_options) do
+          header_style = {
+            background_color: 'cccccc',
+            padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          }
 
-        row(0).style header_style
-        row(1).style header_style
+          row(0).style header_style
+          row(1).style header_style
+          row(2).style header_style
+        end
       end
     end
 
@@ -159,67 +187,101 @@ module Reports::WeaknessesByRiskAndBusinessUnit
         [
           {
             content: BusinessUnitType.model_name.human,
-            rowspan: 2
+            rowspan: 3
           },
           {
             content: BusinessUnit.model_name.human,
-            rowspan: 2
+            rowspan: 3
           },
           {
-            content: Weakness.human_attribute_name('risk'),
-            colspan: Weakness.risks.size + 1,
-            align:   :center
+            content: t(
+              "#{@controller}_committee_report.weaknesses_by_risk_and_business_unit.being_implemented",
+              date: l(@mid_date, format: :minimal)
+            ),
+            colspan: Weakness.risks.size.next
+          },
+          {
+            content: t(
+              "#{@controller}_committee_report.weaknesses_by_risk_and_business_unit.created",
+              from_date: l(@mid_date, format: :minimal),
+              to_date: l(@to_date, format: :minimal)
+            ),
+            colspan: Weakness.risks.size.next
+          },
+          {
+            content: t(
+              "#{@controller}_committee_report.weaknesses_by_risk_and_business_unit.implemented",
+              from_date: l(@mid_date, format: :minimal),
+              to_date: l(@to_date, format: :minimal)
+            ),
+            colspan: Weakness.risks.size.next
+          },
+          {
+            content: t(
+              "#{@controller}_committee_report.weaknesses_by_risk_and_business_unit.being_implemented",
+              date: l(@to_date, format: :minimal)
+            ),
+            colspan: Weakness.risks.size.next
           }
         ],
-        Weakness.risks.keys.map do |risk_type|
-          {
-            content: t("risk_types.#{risk_type}"),
-            align:   :right
-          }
-        end.concat([
-          {
-            content: t("#{@controller}_committee_report.weaknesses_by_risk_and_business_unit.total"),
-            align:   :right
-          }
-        ]),
+        @weaknesses_by_business_unit_types.size.times.map do
+          [
+            {
+              content: Weakness.human_attribute_name('risk'),
+              colspan: Weakness.risks.size
+            },
+            {
+              content: t("#{@controller}_committee_report.weaknesses_by_risk_and_business_unit.total"),
+              rowspan: 2,
+              align:   :right
+            }
+          ]
+        end.flatten,
+        @weaknesses_by_business_unit_types.size.times.map do
+          Weakness.risks.keys.reverse.map do |risk_type|
+            {
+              content: t("risk_types.#{risk_type}"),
+              align:   :right
+            }
+          end
+        end.flatten
       ].concat(
         weaknesses_by_risk_and_business_unit_pdf_rows
       )
     end
 
     def weaknesses_by_risk_and_business_unit_pdf_rows
-      rows      = []
-      but_names = @weaknesses_by_business_unit_types.keys.reject do |e|
-        e.kind_of? Symbol
-      end
+      rows = []
 
-      but_names.sort.each do |but_name|
-        business_units = @weaknesses_by_business_unit_types[but_name]
-
-        business_units.keys.sort.each_with_index do |bu_name, i|
-          row         = []
-          risk_counts = business_units[bu_name]
+      @business_unit_type_names.sort.map do |but_name|
+        @business_unit_names[but_name].sort.each_with_index do |bu_name, i|
+          row = []
 
           if i == 0
             row << {
               content: but_name,
-              rowspan: business_units.size
+              rowspan: @business_unit_names[but_name].size
             }
           end
 
           row << bu_name
 
-          Weakness.risks.keys.each do |risk_type|
+          @weaknesses_by_business_unit_types.each do |weaknesses_by_business_unit_types|
+            business_units = weaknesses_by_business_unit_types[but_name] || {}
+            risk_counts    = business_units[bu_name] || Hash.new(0)
+
+            Weakness.risks.keys.reverse.each do |risk_type|
+              row << {
+                content: risk_counts[risk_type].to_s,
+                align:   :right
+              }
+            end
+
             row << {
-              content: risk_counts[risk_type].to_s,
+              content: "<b>#{risk_counts[:total]}</b>",
               align:   :right
             }
           end
-
-          row << {
-            content: "<b>#{risk_counts[:total]}</b>",
-            align:   :right
-          }
 
           rows << row
         end
@@ -235,15 +297,25 @@ module Reports::WeaknessesByRiskAndBusinessUnit
           colspan: 2
         }
       ].concat(
-        Weakness.risks.keys.map do |risk_type|
-          {
-            content: "<b>#{@weaknesses_by_business_unit_types[:total_by_risk][risk_type]}</b>",
+        @weaknesses_by_business_unit_types.map do |weaknesses_by_business_unit_types|
+          Weakness.risks.keys.reverse.map do |risk_type|
+            {
+              content: "<b>#{weaknesses_by_business_unit_types[:total_by_risk][risk_type]}</b>",
+              align:   :right
+            }
+          end.concat([
+            content: "<b>#{weaknesses_by_business_unit_types[:total_by_risk][:total]}</b>",
             align:   :right
-          }
-        end
-      ).concat([
-        content: "<b>#{@weaknesses_by_business_unit_types[:total_by_risk][:total]}</b>",
-        align:   :right
-      ])
+          ])
+        end.flatten
+      )
+    end
+
+    def mid_date parameters
+      if parameters
+        mid_date = Timeliness.parse parameters[:mid_date], :date
+      end
+
+      mid_date&.to_date || Time.zone.today.at_beginning_of_month + 15.days
     end
 end

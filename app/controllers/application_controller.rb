@@ -218,8 +218,8 @@ class ApplicationController < ActionController::Base
         to_date = Timeliness.parse(parameters[:to_date], :date)
       end
 
-      from_date ||= Date.today.at_beginning_of_month
-      to_date ||= Date.today.at_end_of_month
+      from_date ||= Time.zone.today.at_beginning_of_month
+      to_date ||= Time.zone.today.at_end_of_month
 
       [from_date.to_date, to_date.to_date].sort
     end
