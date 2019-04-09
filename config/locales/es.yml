@@ -372,7 +372,7 @@
       title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
       being_implemented: "'Pendientes' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
-      implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
+      implemented: "'A Revisión Auditoría' entre el %{from_date} y el %{to_date}"
       total: "TOTAL"
       empty: "Sin observaciones para el filtro aplicado."
     weaknesses_by_audit_type:
@@ -930,7 +930,7 @@
       title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
       being_implemented: "'Pendientes' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
-      implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
+      implemented: "'A Revisión Auditoría' entre el %{from_date} y el %{to_date}"
       total: "TOTAL"
       empty: "Sin observaciones para el filtro aplicado."
     weaknesses_by_audit_type:
