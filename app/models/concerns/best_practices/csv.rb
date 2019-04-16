@@ -14,7 +14,7 @@ module BestPractices::CSV
   end
 
   def csv_filename
-    name.downcase.sanitized_for_filename[0..120]
+    name.downcase.gsub('.', '').sanitized_for_filename[0..120]
   end
 
   private
