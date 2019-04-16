@@ -39,7 +39,7 @@
       <div class="col-md-1">
         <div class="toggle-visibility">
           <%= f.input :finding_id, as: :hidden %>
-          <%= link_to_remove_nested_item(f) %>
+          <%= link_to_remove_nested_item(f) unless readonly %>
         </div>
       </div>
     </div>

@@ -93,4 +93,14 @@ class QuestionnaireTest < ActiveSupport::TestCase
       assert_equal @questionnaire.send(attr).to_s, cloned.send(attr).to_s, attr
     end
   end
+
+  test 'cannot destroy with answered polls' do
+    @questionnaire.polls.update_all(answered: true)
+
+    assert_no_difference 'Questionnaire.count' do
+      @questionnaire.destroy
+    end
+
+    assert_error @questionnaire, :base, :cannot_destroy_with_answered_poll
+  end
 end

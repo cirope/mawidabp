@@ -5,6 +5,9 @@ module Findings::Reiterations
     scope :repeated,     -> { where     state: Finding::STATUS[:repeated] }
     scope :not_repeated, -> { where.not state: Finding::STATUS[:repeated] }
 
+    scope :with_repeated,    -> { where.not repeated_of_id: nil }
+    scope :without_repeated, -> { where     repeated_of_id: nil }
+
     before_save :check_for_reiteration
 
     belongs_to :repeated_of, foreign_key: 'repeated_of_id', class_name: 'Finding', autosave: true, optional: true
@@ -15,6 +18,10 @@ module Findings::Reiterations
     raise 'Unknown previous repeated state' if repeated_of_versions_with_state.blank?
 
     self.undoing_reiteration = true
+
+    if final_review_created_at.blank? && rescheduled
+      update_column :rescheduled, false
+    end
 
     repeated_of.update_column :state, previous_repeated_of_state
     update_columns repeated_of_id: nil, origination_date: Time.zone.today

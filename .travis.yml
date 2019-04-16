@@ -1,4 +1,5 @@
 language: ruby
+dist: xenial
 cache: bundler
 sudo: false
 rvm:
@@ -10,15 +11,19 @@ addons:
     - imagemagick
     - slapd
     - ldap-utils
-  postgresql: 9.6
+  postgresql: 10
+
+services:
+  - postgresql
 
 env:
   - CONFIG_TYPE=normal
-  - CONFIG_TYPE=alternative
+  - CONFIG_TYPE=gal
+  - CONFIG_TYPE=bic
   - CONFIG_TYPE=reviews_scored_by_weakness
 
 before_install:
-  - 'gem install bundler'
+  - 'gem update bundler'
 
 before_script:
   - 'cp config/application.yml.example config/application.yml'

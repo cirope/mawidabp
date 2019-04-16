@@ -2,6 +2,7 @@ require 'test_helper'
 
 class FindingsControllerTest < ActionController::TestCase
   include ActionMailer::TestHelper
+  include ActiveJob::TestHelper
 
   setup do
     login
@@ -151,6 +152,48 @@ class FindingsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:findings)
     assert assigns(:findings).any? { |f| f.organization_id != organization.id }
+  end
+
+  test 'list findings and send CSV by email' do
+    set_organization
+
+    old_count = ::SEND_REPORT_EMAIL_AFTER_COUNT
+
+    silence_warnings do
+      ::SEND_REPORT_EMAIL_AFTER_COUNT = 10
+    end
+
+    perform_enqueued_jobs do
+      get :index, params: { completed: 'incomplete' }, as: :csv
+    end
+
+    assert_redirected_to findings_url format: :csv, completed: 'incomplete'
+
+    findings_count = assigns(:findings).to_a.size
+    assert findings_count > 10
+
+    filename = I18n.t('findings.index.title').downcase
+
+    assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
+    attachment = ActionMailer::Base.deliveries.last.attachments.first
+    assert_equal "#{filename}.zip", attachment.filename
+
+    tmp_file = Tempfile.open do |temp|
+      temp.binmode
+      temp << attachment.read
+      temp.path
+    end
+
+    csv_report = Zip::File.open(tmp_file, Zip::File::CREATE) do |zipfile|
+      zipfile.read "#{filename}.csv"
+    end
+
+    # TODO: change to liberal_parsing: true when 2.3 support is dropped
+    csv = CSV.parse csv_report[3..-1], col_sep: ';', force_quotes: true, headers: true
+
+    assert_equal findings_count, csv.size
+
+    silence_warnings { ::SEND_REPORT_EMAIL_AFTER_COUNT = old_count }
   end
 
   test 'show finding' do
@@ -324,7 +367,15 @@ class FindingsControllerTest < ActionController::TestCase
               ],
               taggings_attributes: [
                 {
+                  id: taggings(:important_unconfirmed_weakness).id,
                   tag_id: tags(:important).id
+                },
+                {
+                  id: taggings(:pending_unconfirmed_weakness).id,
+                  tag_id: tags(:pending).id
+                },
+                {
+                  tag_id: tags(:follow_up).id
                 }
               ],
               costs_attributes: [
@@ -478,6 +529,64 @@ class FindingsControllerTest < ActionController::TestCase
               user_id: users(:bare).id,
               process_owner: '0'
             },
+            {
+              id: finding_user_assignments(:unconfirmed_weakness_audited).id,
+              user_id: users(:audited).id,
+              process_owner: '1'
+            },
+            {
+              id: finding_user_assignments(:unconfirmed_weakness_auditor).id,
+              user_id: users(:auditor).id,
+              process_owner: '0'
+            },
+            {
+              id: finding_user_assignments(:unconfirmed_weakness_supervisor).id,
+              user_id: users(:supervisor).id,
+              process_owner: '0'
+            }
+          ]
+        }
+      }
+    end
+
+    assert_redirected_to edit_finding_url('incomplete', finding)
+    assert_equal 'Updated description', finding.reload.description
+  end
+
+  test 'update finding with tag_ids' do
+    finding = findings :unconfirmed_weakness
+
+    login user: users(:supervisor)
+
+    assert_difference 'Tagging.count' do
+      patch :update, params: {
+        completed: 'incomplete',
+        id: finding,
+        finding: {
+          control_objective_item_id: control_objective_items(:impact_analysis_item).id,
+          review_code: 'O020',
+          title: 'Title',
+          description: 'Updated description',
+          answer: 'Updated answer',
+          current_situation: 'Updated current situation',
+          current_situation_verified: '1',
+          audit_comments: 'Updated audit comments',
+          state: Finding::STATUS[:unconfirmed],
+          origination_date: 1.day.ago.to_date.to_s(:db),
+          audit_recommendations: 'Updated proposed action',
+          effect: 'Updated effect',
+          risk: Finding.risks_values.first,
+          priority: Finding.priorities_values.first,
+          compliance: 'no',
+          operational_risk: ['internal fraud'],
+          impact: ['econimic', 'regulatory'],
+          internal_control_components: ['risk_evaluation', 'monitoring'],
+          tag_ids: [
+            tags(:important).id,
+            tags(:pending).id,
+            tags(:follow_up).id
+          ],
+          finding_user_assignments_attributes: [
             {
               id: finding_user_assignments(:unconfirmed_weakness_audited).id,
               user_id: users(:audited).id,

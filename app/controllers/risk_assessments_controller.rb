@@ -7,6 +7,7 @@ class RiskAssessmentsController < ApplicationController
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_title, except: [:destroy]
+  before_action :set_clone_from, only: [:new, :create]
   before_action :set_risk_assessment, only: [
     :show,
     :edit,
@@ -45,23 +46,31 @@ class RiskAssessmentsController < ApplicationController
 
   # GET /risk_assessments/new
   def new
-    @risk_assessment = RiskAssessment.list.new
+    @risk_assessment = RiskAssessment.organization_scoped.new
+
+    @risk_assessment.clone_from @clone_from if @clone_from
   end
 
   # GET /risk_assessments/1/edit
   def edit
-    unless @risk_assessment.draft?
+    unless @risk_assessment.can_be_modified?
       redirect_to risk_assessment_url @risk_assessment
     end
   end
 
   # POST /risk_assessments
   def create
-    @risk_assessment = RiskAssessment.list.new risk_assessment_params
+    @risk_assessment = RiskAssessment.organization_scoped.new risk_assessment_params
+
+    @risk_assessment.clone_from @clone_from if @clone_from
 
     @risk_assessment.save
-    respond_with @risk_assessment, location: @risk_assessment.persisted? &&
-      edit_risk_assessment_url(@risk_assessment)
+
+    if @risk_assessment.persisted?
+      respond_with @risk_assessment, location: edit_risk_assessment_url(@risk_assessment)
+    else
+      respond_with @risk_assessment
+    end
   end
 
   # PATCH/PUT /risk_assessments/1
@@ -125,9 +134,15 @@ class RiskAssessmentsController < ApplicationController
       @risk_assessment = RiskAssessment.list.find params[:id]
     end
 
+    def set_clone_from
+      if params[:clone_from].present?
+        @clone_from = RiskAssessment.list.find params[:clone_from]
+      end
+    end
+
     def risk_assessment_params
       params.require(:risk_assessment).permit :name, :description, :status,
-        :period_id, :risk_assessment_template_id, :lock_version,
+        :period_id, :risk_assessment_template_id, :shared, :lock_version,
         file_model_attributes: [:id, :file, :file_cache, :_destroy],
         risk_assessment_items_attributes: [
           :id, :order, :name, :business_unit_id, :process_control_id, :risk,
@@ -141,7 +156,9 @@ class RiskAssessmentsController < ApplicationController
     def risk_assessment_pdf_path
       @risk_assessment.to_pdf current_organization
 
-      @risk_assessment.relative_pdf_path
+      @risk_assessment.relative_pdf_path.tap do |path|
+        FileRemoveJob.set(wait: 15.minutes).perform_later path
+      end
     end
 
     def load_privileges

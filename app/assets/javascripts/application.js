@@ -17,6 +17,7 @@
 //= require ajax
 //= require jquery.url
 //= require jquery.mw
+//= require checkbox
 //= require dynamic_form
 //= require date_pickers
 //= require fetch
@@ -29,13 +30,16 @@
 //= require filters
 //= require file_input
 //= require best_practices
+//= require closing_interviews
 //= require conclusion_draft_reviews
 //= require control_objective_items
 //= require documents
 //= require findings
 //= require news
 //= require organizations
+//= require opening_interviews
 //= require plans
+//= require plans/calendar
 //= require plans/resources
 //= require plans/stats
 //= require plan_items

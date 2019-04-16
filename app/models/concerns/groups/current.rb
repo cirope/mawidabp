@@ -9,11 +9,11 @@ module Groups::Current
   private
 
     def change_current_group
-      @_current_group = Current.group
-      Current.group = self if id
+      @_current_group = ::Current.group
+      ::Current.group = self if id
     end
 
     def restore_current_group
-      Current.group = @_current_group
+      ::Current.group = @_current_group
     end
 end

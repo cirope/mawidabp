@@ -12,10 +12,16 @@ class ReviewUserAssignment < ApplicationRecord
     audited: -1,
     auditor: 0,
     supervisor: 1,
-    manager: 2
+    manager: 2,
+    responsible: 3
   }
 
-  AUDIT_TEAM_TYPES = [TYPES[:auditor], TYPES[:supervisor], TYPES[:manager]]
+  AUDIT_TEAM_TYPES = [
+    TYPES[:auditor],
+    TYPES[:supervisor],
+    TYPES[:manager],
+    TYPES[:responsible]
+  ]
 
   # Callbacks
   before_validation :check_if_can_modified
@@ -48,6 +54,7 @@ class ReviewUserAssignment < ApplicationRecord
       if (record.auditor? && !user.auditor?) ||
           (record.supervisor? && !user.supervisor?) ||
           (record.manager? && (!user.supervisor? && !user.manager?)) ||
+          (record.responsible? && (!user.supervisor? && !user.manager?)) ||
           (record.audited? && !user.can_act_as_audited?)
         record.errors.add attr, :invalid
       end

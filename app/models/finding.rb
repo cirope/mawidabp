@@ -6,6 +6,7 @@ class Finding < ApplicationRecord
   include Findings::AttributeTypes
   include Findings::Answers
   include Findings::BusinessUnits
+  include Findings::Brief
   include Findings::Code
   include Findings::Comments
   include Findings::Confirmation
@@ -19,17 +20,21 @@ class Finding < ApplicationRecord
   include Findings::Display
   include Findings::Expiration
   include Findings::FinalReview
+  include Findings::FirstFollowUp
   include Findings::FollowUp
   include Findings::FollowUpPDF
   include Findings::ImportantDates
   include Findings::JSON
   include Findings::Notifications
+  include Findings::NotificationLevel
   include Findings::Overrides
   include Findings::PDF
   include Findings::Reiterations
   include Findings::Relations
   include Findings::ReportScopes
+  include Findings::Reschedule
   include Findings::SaveCallbacks
+  include Findings::ScaffoldFollowUp
   include Findings::ScaffoldNotifications
   include Findings::Scopes
   include Findings::Search

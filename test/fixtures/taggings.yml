@@ -1,7 +1,3 @@
-important_finding:
-  tag: important
-  taggable: being_implemented_weakness_on_final (Weakness)
-
 manual_document:
   tag: manual
   taggable: audit_manual (Document)
@@ -21,3 +17,126 @@ for_revision_without_conclusion_review:
 for_security_policy_3_1_control_objective:
   tag: risk_evaluation
   taggable: security_policy_3_1 (ControlObjective)
+
+# All findings must have one on some configurations
+important_being_implemented_weakness:
+  tag: important
+  taggable: being_implemented_weakness (Finding)
+
+pending_being_implemented_weakness:
+  tag: pending
+  taggable: being_implemented_weakness (Finding)
+
+important_unconfirmed_for_notification_weakness:
+  tag: important
+  taggable: unconfirmed_for_notification_weakness (Finding)
+
+pending_unconfirmed_for_notification_weakness:
+  tag: pending
+  taggable: unconfirmed_for_notification_weakness (Finding)
+
+<% (1..4).each do |level| %>
+important_unanswered_for_level_<%= level %>_notification:
+  tag: important
+  taggable: unanswered_for_level_<%= level %>_notification (Finding)
+
+pending_unanswered_for_level_<%= level %>_notification:
+  tag: pending
+  taggable: unanswered_for_level_<%= level %>_notification (Finding)
+<% end %>
+
+important_incomplete_weakness:
+  tag: important
+  taggable: incomplete_weakness (Finding)
+
+pending_incomplete_weakness:
+  tag: pending
+  taggable: incomplete_weakness (Finding)
+
+important_other_unconfirmed_for_notification_weakness:
+  tag: important
+  taggable: other_unconfirmed_for_notification_weakness (Finding)
+
+pending_other_unconfirmed_for_notification_weakness:
+  tag: pending
+  taggable: other_unconfirmed_for_notification_weakness (Finding)
+
+important_notify_oportunity:
+  tag: important
+  taggable: notify_oportunity (Finding)
+
+pending_notify_oportunity:
+  tag: pending
+  taggable: notify_oportunity (Finding)
+
+important_being_implemented_oportunity:
+  tag: important
+  taggable: being_implemented_oportunity (Finding)
+
+pending_being_implemented_oportunity:
+  tag: pending
+  taggable: being_implemented_oportunity (Finding)
+
+important_being_implemented_weakness_on_draft:
+  tag: important
+  taggable: being_implemented_weakness_on_draft (Finding)
+
+pending_being_implemented_weakness_on_draft:
+  tag: pending
+  taggable: being_implemented_weakness_on_draft (Finding)
+
+important_unanswered_weakness:
+  tag: important
+  taggable: unanswered_weakness (Finding)
+
+pending_unanswered_weakness:
+  tag: pending
+  taggable: unanswered_weakness (Finding)
+
+important_unconfirmed_weakness:
+  tag: important
+  taggable: unconfirmed_weakness (Finding)
+
+pending_unconfirmed_weakness:
+  tag: pending
+  taggable: unconfirmed_weakness (Finding)
+
+important_unconfirmed_oportunity:
+  tag: important
+  taggable: unconfirmed_oportunity (Finding)
+
+pending_unconfirmed_oportunity:
+  tag: pending
+  taggable: unconfirmed_oportunity (Finding)
+
+important_confirmed_oportunity_on_draft:
+  tag: important
+  taggable: confirmed_oportunity_on_draft (Finding)
+
+pending_confirmed_oportunity_on_draft:
+  tag: pending
+  taggable: confirmed_oportunity_on_draft (Finding)
+
+important_confirmed_oportunity:
+  tag: important
+  taggable: confirmed_oportunity (Finding)
+
+pending_confirmed_oportunity:
+  tag: pending
+  taggable: confirmed_oportunity (Finding)
+
+important_being_implemented_weakness_on_final:
+  tag: important
+  taggable: being_implemented_weakness_on_final (Finding)
+
+pending_being_implemented_weakness_on_final:
+  tag: pending
+  taggable: being_implemented_weakness_on_final (Finding)
+
+important_being_implemented_weakness_on_approved_draft:
+  tag: important
+  taggable: being_implemented_weakness_on_approved_draft (Finding)
+
+pending_being_implemented_weakness_on_approved_draft:
+  tag: pending
+  taggable: being_implemented_weakness_on_approved_draft (Finding)

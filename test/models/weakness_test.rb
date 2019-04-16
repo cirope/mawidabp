@@ -7,6 +7,12 @@ class WeaknessTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    Current.user = nil
+
+    unset_organization
+  end
+
   test 'create' do
     assert_difference 'Weakness.count' do
       weakness = Weakness.list.create!(
@@ -37,6 +43,14 @@ class WeaknessTest < ActiveSupport::TestCase
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
+          }
+        },
+        taggings_attributes: {
+          new_1: {
+            tag_id: tags(:important).id
+          },
+          new_2: {
+            tag_id: tags(:pending).id
           }
         }
       )
@@ -76,6 +90,14 @@ class WeaknessTest < ActiveSupport::TestCase
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
           }
+        },
+        taggings_attributes: {
+          new_1: {
+            tag_id: tags(:important).id
+          },
+          new_2: {
+            tag_id: tags(:pending).id
+          }
         }
       )
 
@@ -104,6 +126,11 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.operational_risk = []
     @weakness.impact = []
     @weakness.internal_control_components = []
+    @weakness.tag_ids = []
+
+    if WEAKNESS_TAG_VALIDATION_START
+      @weakness.created_at = WEAKNESS_TAG_VALIDATION_START
+    end
 
     assert @weakness.invalid?
     assert_error @weakness, :control_objective_item_id, :blank
@@ -118,6 +145,24 @@ class WeaknessTest < ActiveSupport::TestCase
       assert_error @weakness, :impact, :blank
       assert_error @weakness, :internal_control_components, :blank
     end
+
+    if WEAKNESS_TAG_VALIDATION_START
+      assert_error @weakness, :tag_ids, :blank
+    end
+  end
+
+  test 'tag presence validation' do
+    skip unless WEAKNESS_TAG_VALIDATION_START
+
+    @weakness.created_at = WEAKNESS_TAG_VALIDATION_START - 1.second
+    @weakness.tag_ids    = []
+
+    assert @weakness.valid?
+
+    @weakness.created_at = WEAKNESS_TAG_VALIDATION_START + 1.second
+
+    assert @weakness.invalid?
+    assert_error @weakness, :tag_ids, :blank
   end
 
   test 'validates duplicated attributes' do
@@ -236,7 +281,8 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'work paper codes are updated when control objective is changed' do
-    weakness = findings :unanswered_for_level_1_notification
+    Current.user = users :supervisor
+    weakness     = findings :unanswered_for_level_1_notification
 
     assert_not_equal 'PTO 006', weakness.work_papers.first.code
 
@@ -356,7 +402,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.effect = ' '
     @weakness.audit_comments = '  '
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF && HIDE_WEAKNESS_EFFECT
+    if Current.conclusion_pdf_format == 'gal' && HIDE_WEAKNESS_EFFECT
       assert @weakness.must_be_approved?
     else
       refute @weakness.must_be_approved?
@@ -364,7 +410,17 @@ class WeaknessTest < ActiveSupport::TestCase
     end
   end
 
+  test 'must be approved on tasks' do
+    error_messages = [I18n.t('weakness.errors.with_expired_tasks')]
+
+    @weakness.tasks.build(description: 'Test task', due_on: Time.zone.yesterday)
+
+    refute @weakness.must_be_approved?
+    assert_equal error_messages.sort, @weakness.approval_errors.sort
+  end
+
   test 'work papers can be added to weakness with current close date' do
+    Current.user        = users :supervisor
     uneditable_weakness = findings :being_implemented_weakness
 
     assert_difference 'WorkPaper.count' do
@@ -404,10 +460,13 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'list all follow up dates and rescheduled function' do
-    weakness = findings :being_implemented_weakness_on_draft
-    old_date = weakness.follow_up_date.clone
+    Current.user = users :supervisor
+    weakness     = findings :being_implemented_weakness_on_approved_draft
+    old_date     = weakness.follow_up_date.clone
 
-    assert weakness.all_follow_up_dates.blank?
+    create_conclusion_final_review_for weakness
+
+    assert weakness.reload.all_follow_up_dates.blank?
     refute weakness.rescheduled?
     assert_not_nil weakness.follow_up_date
 
@@ -421,4 +480,71 @@ class WeaknessTest < ActiveSupport::TestCase
     assert weakness.all_follow_up_dates(nil, true).include?(old_date)
     assert weakness.all_follow_up_dates(nil, true).include?(10.days.from_now.to_date)
   end
+
+  test 'exclude follow up dates when they move sooner than original' do
+    Current.user = users :supervisor
+
+    weakness = findings :being_implemented_weakness_on_approved_draft
+    old_date = weakness.follow_up_date.clone
+
+    create_conclusion_final_review_for weakness
+
+    assert weakness.reload.all_follow_up_dates.blank?
+    refute weakness.rescheduled?
+    assert_not_nil weakness.follow_up_date
+
+    # Moving sooner does not _count_
+    weakness.update! follow_up_date: old_date - 1.day
+
+    assert weakness.reload.all_follow_up_dates.blank?
+    refute weakness.rescheduled?
+
+    weakness.update! follow_up_date: 10.days.from_now.to_date
+
+    assert weakness.all_follow_up_dates(nil, true).include?(old_date - 1.day)
+    assert weakness.rescheduled?
+
+    # Moving sooner does not _count_
+    weakness.update! follow_up_date: 7.days.from_now.to_date
+
+    assert weakness.all_follow_up_dates(nil, true).include?(old_date - 1.day)
+    assert weakness.all_follow_up_dates(nil, true).exclude?(7.days.from_now.to_date)
+  end
+
+  test 'do not reschedule or show previous dates if no conclusion final review' do
+    weakness = findings :being_implemented_weakness_on_approved_draft
+    old_date = weakness.follow_up_date.clone
+
+    assert weakness.all_follow_up_dates.blank?
+    refute weakness.rescheduled?
+    assert_not_nil weakness.follow_up_date
+
+    weakness.update! follow_up_date: 10.days.from_now.to_date
+
+    assert weakness.all_follow_up_dates.blank?
+    refute weakness.rescheduled?
+  end
+
+  private
+
+    def create_conclusion_final_review_for weakness
+      ConclusionFinalReview.list.create!(
+        review:                  weakness.review,
+        issue_date:              Time.zone.today,
+        close_date:              2.days.from_now.to_date,
+        applied_procedures:      'New applied procedures',
+        conclusion:              CONCLUSION_OPTIONS.first,
+        recipients:              'John Doe',
+        sectors:                 'Area 51',
+        evolution:               EVOLUTION_OPTIONS.second,
+        evolution_justification: 'Ok',
+        main_weaknesses_text:    'Some main weakness X',
+        corrective_actions:      'You should do it this way',
+        objective:               'Some objective',
+        reference:               'Some reference',
+        observations:            'Some observations',
+        scope:                   'Some scope',
+        affects_compliance:      false
+      )
+    end
 end

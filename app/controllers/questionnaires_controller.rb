@@ -52,6 +52,9 @@ class QuestionnairesController < ApplicationController
   # DELETE /questionnaires/1.json
   def destroy
     @questionnaire.destroy
+
+    flash.alert = @questionnaire.errors.full_messages.to_sentence if @questionnaire.errors.any?
+
     respond_with @questionnaire
   end
 

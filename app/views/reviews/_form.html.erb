@@ -45,19 +45,36 @@
         <%= f.input :survey, label: Review.human_attribute_name(:survey),
           input_html: { readonly: readonly, rows: HIDE_REVIEW_DESCRIPTION ? 8 : 5 } %>
         <% f.object.build_file_model unless f.object.file_model %>
-        <h5><strong><%= Review.human_attribute_name 'file_model_id' %></strong></h5>
-        <div class="clearfix">
-          <%= f.simple_fields_for :file_model do |fm_f| %>
-            <div class="file-container pull-left">
-              <%= link_to_upload(fm_f.object) %>
-              <% unless fm_f.object.file_cache %>
-                <%= fm_f.input :file, label: false %>
-              <% else %>
-                <%= fm_f.input :file_cache, as: :hidden %>
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong><%= Review.human_attribute_name 'file_model_id' %></strong></p>
+            <div class="clearfix">
+              <%= f.simple_fields_for :file_model do |fm_f| %>
+                <div class="file-container pull-left">
+                  <%= link_to_upload(fm_f.object) %>
+                  <% if fm_f.object.file_cache %>
+                    <%= fm_f.input :file_cache, as: :hidden %>
+                    <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
+                  <% else %>
+                    <%= fm_f.input :file, label: false %>
+                  <% end %>
+                </div>
               <% end %>
+              <%= link_to_download f.object %>
+            </div>
+          </div>
+          <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? current_organization.prefix %>
+            <div class="col-md-6">
+              <%= f.input(
+                :score_type,
+                label:           t('review.without_score'),
+                as:              :boolean,
+                checked_value:   'none',
+                unchecked_value: 'weaknesses',
+                input_html:      { disabled: readonly }
+              ) %>
             </div>
           <% end %>
-          <%= link_to_download f.object %>
         </div>
         <p>
           <%= link_to_unless @review.new_record?, t('review.survey.download'),
@@ -87,10 +104,10 @@
     <div class="col-md-6">
       <h5><strong><%= ReviewUserAssignment.human_attribute_name 'user' %></strong></h5>
     </div>
-    <div class="col-md-<%= SHOW_CONCLUSION_ALTERNATIVE_PDF ? 5 : 3 %>">
+    <div class="col-md-<%= Current.conclusion_pdf_format == 'gal' ? 5 : 3 %>">
       <h5><strong><%= ReviewUserAssignment.human_attribute_name 'assignment_type' %></strong></h5>
     </div>
-    <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+    <% unless Current.conclusion_pdf_format == 'gal' %>
       <div class="col-md-1">
         <h5><strong><%= ReviewUserAssignment.human_attribute_name 'include_signature' %></strong></h5>
       </div>

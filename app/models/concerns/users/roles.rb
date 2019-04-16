@@ -80,6 +80,18 @@ module Users::Roles
     audited_on?(organization_id) || executive_manager_on?(organization_id) || admin_on?(organization_id)
   end
 
+  module ClassMethods
+    def can_act_as role
+      includes(organization_roles: :role).where(
+        organization_roles: {
+          roles: {
+            role_type: ::Role::ACT_AS[role]
+          }
+        }
+      )
+    end
+  end
+
   private
 
     def inject_auth_privileges_in_roles

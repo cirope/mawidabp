@@ -1,7 +1,7 @@
 class NotifierMailer < ActionMailer::Base
   include ActionView::Helpers::TextHelper
 
-  helper :application, :notifier
+  helper :application, :markdown, :notifier
 
   default from: "#{ENV['EMAIL_NAME'] || I18n.t('app_name')} <#{ENV['EMAIL_ADDRESS']}>"
 
@@ -66,6 +66,14 @@ class NotifierMailer < ActionMailer::Base
          subject: prefix.upcase + t('notifier.notify_new_finding.title')
   end
 
+  def findings_brief(user, findings)
+    @user, @findings = user, findings
+    prefix = "[#{findings.first.organization.prefix}] "
+
+    mail to: [user.email],
+         subject: prefix.upcase + t('notifier.findings_brief.title')
+  end
+
   def notify_new_finding_answer(users, finding_answer)
     @finding_answer = finding_answer
     prefix = "[#{finding_answer.finding.organization.prefix}] "
@@ -110,6 +118,14 @@ class NotifierMailer < ActionMailer::Base
 
     mail to: users.map(&:email),
          subject: prefix + t('notifier.unanswered_finding_to_manager.title')
+  end
+
+  def expired_finding_to_manager_notification(finding, users, level)
+    @finding, @level = finding, level
+    prefix = "[#{finding.organization.prefix}] ".upcase
+
+    mail to: users.map(&:email),
+         subject: prefix + t('notifier.expired_finding_to_manager.title')
   end
 
   def reassigned_findings_notification(new_users, old_users, findings, notify = true)
@@ -175,23 +191,28 @@ class NotifierMailer < ActionMailer::Base
       review: conclusion_review.review.long_identification
     )
     elements = [
-      "*#{Review.model_name.human} #{conclusion_review.review.identification}*"
+      "**#{Review.model_name.human} #{conclusion_review.review.identification}**"
     ]
 
     if options[:include_score_sheet]
-      elements << "*#{I18n.t('conclusion_review.score_sheet')}*"
+      elements << "**#{I18n.t('conclusion_review.score_sheet')}**"
     end
 
     if options[:include_global_score_sheet]
-      elements << "*#{I18n.t('conclusion_review.global_score_sheet')}*"
+      elements << "**#{I18n.t('conclusion_review.global_score_sheet')}**"
     end
 
     body_title = I18n.t('notifier.conclusion_review_notification.body_title',
       elements: elements.to_sentence)
 
     @conclusion_review = conclusion_review
+    @organization = conclusion_review.review.organization
     @body_title = body_title
     @note = options[:note]
+
+    if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(org_prefix)
+      @show_alt_footer = true
+    end
 
     if File.exist?(conclusion_review.absolute_pdf_path)
       attachments[conclusion_review.pdf_name] =

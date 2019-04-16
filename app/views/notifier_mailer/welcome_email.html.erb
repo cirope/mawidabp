@@ -14,7 +14,7 @@
             URL_HOST : "#{@user.organizations.first.prefix}.#{URL_HOST}")) %>
   </p>
 
-  <%= textilize t('notifier.restore_password.valid_until',
+  <%= markdown t('notifier.restore_password.valid_until',
     :link => edit_password_link,
     :date => l(link_valid_until, :format => :long).strip) %>
 

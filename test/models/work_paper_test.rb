@@ -9,7 +9,15 @@ class WorkPaperTest < ActiveSupport::TestCase
     @work_paper = WorkPaper.find work_papers(:image_work_paper).id
     @work_paper.code_prefix = I18n.t("code_prefixes.work_papers_in_control_objectives")
 
+    Current.user = users :supervisor
+
     set_organization
+  end
+
+  teardown do
+    Current.user = nil
+
+    unset_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -239,8 +247,9 @@ class WorkPaperTest < ActiveSupport::TestCase
     assert_error @work_paper, :code, :taken
   end
 
-  test 'mark review with work papers not finished on change' do
-    review = @work_paper.owner.review
+  test 'mark review with work papers as not finished on change when auditor' do
+    Current.user = users :auditor
+    review       = @work_paper.owner.review
 
     review.work_papers_finished!
     review.save! validate: false
@@ -250,5 +259,52 @@ class WorkPaperTest < ActiveSupport::TestCase
     @work_paper.update! number_of_pages: 20
 
     assert review.reload.work_papers_not_finished?
+  end
+
+  test 'do not mark review with work papers as not finished on change when supervisor' do
+    review = @work_paper.owner.review
+
+    review.work_papers_finished!
+    review.save! validate: false
+
+    assert review.reload.work_papers_finished?
+
+    @work_paper.update! number_of_pages: 20
+
+    assert review.reload.work_papers_finished?
+  end
+
+  test 'not save multiple files with same name' do
+    assert @work_paper.update(
+      :file_model_attributes => {
+        :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
+      }
+    )
+
+    assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
+    assert_nothing_raised { @work_paper.unzip_if_necesary }
+    assert_equal '.html', File.extname(@work_paper.file_model.file.path)
+
+    file_name = '/tmp/cirope.ext'
+
+    FileUtils.cp TEST_FILE_FULL_PATH, file_name
+
+    assert @work_paper.update(
+      :file_model_attributes => {
+        :file => Rack::Test::UploadedFile.new(file_name)
+      }
+    )
+
+    assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
+    assert_nothing_raised { @work_paper.unzip_if_necesary }
+    assert_equal '.ext', File.extname(@work_paper.file_model.file.path)
+
+    dir_files = Dir.entries(
+      File.dirname @work_paper.reload.file_model.file.path
+    )
+    basename = File.basename(@work_paper.file_model.file.path, '.ext')
+
+    assert_includes dir_files, "#{basename}.ext"
+    assert_not_includes dir_files, "#{basename}.html"
   end
 end

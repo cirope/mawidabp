@@ -20,7 +20,7 @@ module Reviews::SortColumns
         ].map { |o| Arel.sql o }
       else
         [
-          "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn 'review_id'} IS NOT NULL",
+          "#{::ConclusionReview.quoted_table_name}.#{::ConclusionReview.qcn 'review_id'} IS NOT NULL",
           "#{quoted_table_name}.#{qcn 'identification'} ASC"
         ].map { |o| Arel.sql o }
       end

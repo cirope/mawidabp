@@ -15,6 +15,9 @@ module Reviews::Validations
     validates :identification, :description, :survey, :scope, :risk_exposure,
       :include_sox, pdf_encoding: true
     validates :plan_item_id, uniqueness: { case_sensitive: false }
+    validates :score_type, inclusion: {
+      in: %w(effectiveness manual none weaknesses)
+    }, allow_blank: true, allow_nil: true
 
     validates :scope,
               :risk_exposure,
@@ -48,10 +51,12 @@ module Reviews::Validations
     end
 
     def has_valid_users?
+      has_some_manager = has_supervisor? || has_manager? || has_responsible?
+
       if DISABLE_REVIEW_AUDITED_VALIDATION
-        has_auditor? && (has_supervisor? || has_manager?)
+        has_auditor? && has_some_manager
       else
-        has_audited? && has_auditor? && (has_supervisor? || has_manager?)
+        has_audited? && has_auditor? && has_some_manager
       end
     end
 

@@ -1,8 +1,4 @@
 Rails.application.routes.draw do
-  namespace :plans do
-    get 'resources/show'
-  end
-
   post '/touch', to: 'touch#create', as: 'touch'
 
   # Sessions
@@ -13,6 +9,9 @@ Rails.application.routes.draw do
   resources :settings, only: [:index, :show, :edit, :update]
 
   resources :benefits
+
+  resources :opening_interviews
+  resources :closing_interviews
 
   resources :risk_assessments do
     member do
@@ -97,6 +96,13 @@ Rails.application.routes.draw do
     post "execution_reports/#{action}", to: "execution_reports##{action}", as: action
   end
 
+  %w[
+    tagged_findings_report
+  ].each do |action|
+    get "execution_reports/#{action}", to: "execution_reports##{action}"
+    post "execution_reports/create_#{action}", to: "execution_reports#create_#{action}"
+  end
+
   resources :versions, only: [:index, :show]
 
   resources :notifications, only: [:index, :show, :edit, :update] do
@@ -115,14 +121,17 @@ Rails.application.routes.draw do
     'review_score_details_report',
     'weaknesses_by_state',
     'weaknesses_by_risk',
+    'weaknesses_by_risk_and_business_unit',
     'weaknesses_by_audit_type',
     'control_objective_stats',
     'control_objective_stats_by_review',
     'benefits',
     'process_control_stats',
     'qa_indicators',
-    'weaknesses_by_risk_report',
+    'weaknesses_by_business_unit',
     'weaknesses_by_month',
+    'weaknesses_by_risk_report',
+    'weaknesses_by_user',
     'weaknesses_current_situation',
     'fixed_weaknesses_report',
     'weaknesses_graphs',
@@ -144,14 +153,17 @@ Rails.application.routes.draw do
     'create_review_score_details_report',
     'create_weaknesses_by_state',
     'create_weaknesses_by_risk',
+    'create_weaknesses_by_risk_and_business_unit',
     'create_weaknesses_by_audit_type',
     'create_control_objective_stats',
     'create_control_objective_stats_by_review',
     'create_benefits',
     'create_process_control_stats',
     'create_qa_indicators',
-    'create_weaknesses_by_risk_report',
+    'create_weaknesses_by_business_unit',
     'create_weaknesses_by_month',
+    'create_weaknesses_by_risk_report',
+    'create_weaknesses_by_user',
     'create_weaknesses_current_situation',
     'create_fixed_weaknesses_report'
   ].each do |action|
@@ -181,19 +193,21 @@ Rails.application.routes.draw do
     as: 'create_cost_summary_conclusion_reports',
     to: 'conclusion_reports#create_cost_summary'
 
-  get 'follow_up_audit/follow_up_cost_analysis',
-    as: 'follow_up_cost_analysis_follow_up_audit',
-    to: 'follow_up_audit#follow_up_cost_analysis'
-  post 'follow_up_audit/create_follow_up_cost_analysis',
-    as: 'create_follow_up_cost_analysis_follow_up_audit',
-    to: 'follow_up_audit#create_follow_up_cost_analysis'
-
-  get 'follow_up_audit/weaknesses_report',
-    as: 'weaknesses_report_follow_up_audit',
-    to: 'follow_up_audit#weaknesses_report'
-  post 'follow_up_audit/create_weaknesses_report',
-    as: 'create_weaknesses_report_follow_up_audit',
-    to: 'follow_up_audit#create_weaknesses_report'
+  %w[
+    follow_up_cost_analysis
+    weaknesses_report
+    weaknesses_evolution
+    weaknesses_list
+    weaknesses_brief
+    tagged_findings_report
+  ].each do |action|
+    get "follow_up_audit/#{action}",
+      as: "#{action}_follow_up_audit",
+      to: "follow_up_audit##{action}"
+    post "follow_up_audit/create_#{action}",
+      as: "create_#{action}_follow_up_audit",
+      to: "follow_up_audit#create_#{action}"
+  end
 
   scope ':completed', completed: /complete|incomplete/ do
     resources :findings, except: [:destroy] do
@@ -339,8 +353,9 @@ Rails.application.routes.draw do
     resources :plan_items, only: [:new, :edit]
 
     member do
-      get :stats, to: 'plans/stats#show'
+      get :calendar, to: 'plans/calendar#show'
       get :resources, to: 'plans/resources#show'
+      get :stats, to: 'plans/stats#show'
     end
 
     collection do

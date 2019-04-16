@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 5.2.0'
+gem 'rails', '~> 5.2.3'
 
 gem 'pg'
 gem 'jquery-rails'
@@ -10,7 +10,6 @@ gem 'mini_magick'
 gem 'simple_form'
 gem 'newrelic_rpm'
 gem 'validates_timeliness'
-gem 'RedCloth'
 gem 'redcarpet'
 gem 'whenever'
 gem 'paper_trail'
@@ -20,13 +19,12 @@ gem 'net-ldap'
 gem 'rubyzip', require: 'zip'
 gem 'prawn'
 gem 'prawn-table'
+gem 'clbustos-rtf', require: 'rtf'
 gem 'figaro'
 gem 'business_time'
-gem 'irreverent'
 gem 'bootstrap-sass'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
-gem 'search_cop'
 gem 'jbuilder'
 gem 'sidekiq'
 gem 'ruby-ntlm'
@@ -35,7 +33,7 @@ gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 
-gem 'sass-rails'
+gem 'sassc-rails'
 gem 'uglifier'
 
 gem 'unicorn'

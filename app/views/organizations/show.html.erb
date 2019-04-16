@@ -10,13 +10,24 @@
   <%= @organization.description %>
 </p>
 
-<p>
-  <strong><%= Organization.human_attribute_name 'image_model' %></strong>:
-</p>
-
 <% if @organization.image_model %>
+  <p>
+    <strong><%= Organization.human_attribute_name 'image_model' %></strong>:
+  </p>
+
   <br />
   <div><%= organization_image_tag %></div>
+<% end %>
+
+<% if @organization.co_brand_image_model %>
+  <br />
+
+  <p>
+    <strong><%= Organization.human_attribute_name 'co_brand_image_model' %></strong>:
+  </p>
+
+  <br />
+  <div><%= organization_image_tag model: :co_brand_image_model %></div>
 <% end %>
 
 <hr />

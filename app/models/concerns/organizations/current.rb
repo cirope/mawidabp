@@ -9,11 +9,11 @@ module Organizations::Current
   private
 
     def change_current_organization
-      @_current_organization = Current.organization
-      Current.organization = self if id
+      @_current_organization = ::Current.organization
+      ::Current.organization = self if id
     end
 
     def restore_current_organization
-      Current.organization = @_current_organization
+      ::Current.organization = @_current_organization
     end
 end

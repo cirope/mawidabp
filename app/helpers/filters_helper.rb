@@ -17,4 +17,14 @@ module FiltersHelper
       ]
     ]
   end
+
+  def filter_business_unit_options
+    bus = BusinessUnit.list.order(:name).each_with_object({}) do |bu, bus|
+      bus[bu.name] ||= []
+
+      bus[bu.name] << bu.id
+    end
+
+    bus.map { |name, ids| [name, ids.to_json] }
+  end
 end

@@ -64,11 +64,13 @@ class OrganizationsController < ApplicationController
       params.require(:organization).permit(
         :name, :prefix, :description, :corporate, :group_id, :lock_version,
         image_model_attributes: [:id, :image, :image_cache],
+        co_brand_image_model_attributes: [:id, :image, :image_cache],
         ldap_config_attributes: [
           :id, :hostname, :port, :basedn, :filter, :login_mask,
           :username_attribute, :name_attribute, :last_name_attribute,
           :email_attribute, :function_attribute, :roles_attribute,
-          :manager_attribute, :test_user, :test_password
+          :manager_attribute, :test_user, :test_password,
+          :user, :password
         ]
       )
     end

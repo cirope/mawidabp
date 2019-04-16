@@ -70,6 +70,7 @@
           <th><%= BusinessUnitType.model_name.human %></th>
           <th><%= Tag.model_name.human %></th>
           <th><%= Review.human_attribute_name 'scope' %></th>
+          <th><%= Review.human_attribute_name 'risk_exposure' %></th>
           <th><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></th>
           <th><%= ConclusionFinalReview.human_attribute_name 'conclusion' %></th>
           <th><%= ConclusionFinalReview.human_attribute_name 'evolution' %></th>
@@ -85,6 +86,7 @@
             <td><%= conclusion_review.review.business_unit_type %></td>
             <td><%= conclusion_review.review.tags.map(&:to_s).to_sentence %></td>
             <td><%= conclusion_review.review.scope %></td>
+            <td><%= conclusion_review.review.risk_exposure %></td>
             <td><%= l conclusion_review.issue_date %></td>
             <td><%= conclusion_review.conclusion %></td>
             <td><%= conclusion_review.evolution %></td>

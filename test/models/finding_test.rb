@@ -11,41 +11,53 @@ class FindingTest < ActiveSupport::TestCase
 
   teardown do
     Current.user = nil
+
+    unset_organization
   end
 
   test 'create' do
     assert_difference 'Finding.count' do
-      @finding.class.list.create!(
-        control_objective_item: control_objective_items(:impact_analysis_item_editable),
-        review_code: 'O020',
-        title: 'Title',
-        description: 'New description',
-        answer: 'New answer',
-        audit_comments: 'New audit comments',
-        state: Finding::STATUS[:notify],
-        origination_date: 1.day.ago.to_date,
-        solution_date: nil,
-        audit_recommendations: 'New proposed action',
-        effect: 'New effect',
-        risk: Finding.risks_values.first,
-        priority: Finding.priorities_values.first,
-        follow_up_date: nil,
-        compliance: 'no',
-        operational_risk: ['internal fraud'],
-        impact: ['econimic', 'regulatory'],
-        internal_control_components: ['risk_evaluation', 'monitoring'],
-        finding_user_assignments_attributes: {
-          new_1: {
-            user_id: users(:audited).id, process_owner: true
+      assert_difference 'Tagging.count', 2 do
+        @finding.class.list.create!(
+          control_objective_item: control_objective_items(:impact_analysis_item_editable),
+          review_code: 'O020',
+          title: 'Title',
+          description: 'New description',
+          answer: 'New answer',
+          audit_comments: 'New audit comments',
+          state: Finding::STATUS[:notify],
+          origination_date: 1.day.ago.to_date,
+          solution_date: nil,
+          audit_recommendations: 'New proposed action',
+          effect: 'New effect',
+          risk: Finding.risks_values.first,
+          priority: Finding.priorities_values.first,
+          follow_up_date: nil,
+          compliance: 'no',
+          operational_risk: ['internal fraud'],
+          impact: ['econimic', 'regulatory'],
+          internal_control_components: ['risk_evaluation', 'monitoring'],
+          finding_user_assignments_attributes: {
+            new_1: {
+              user_id: users(:audited).id, process_owner: true
+            },
+            new_2: {
+              user_id: users(:auditor).id, process_owner: false
+            },
+            new_3: {
+              user_id: users(:supervisor).id, process_owner: false
+            }
           },
-          new_2: {
-            user_id: users(:auditor).id, process_owner: false
-          },
-          new_3: {
-            user_id: users(:supervisor).id, process_owner: false
+          taggings_attributes: {
+            new_1: {
+              tag_id: tags(:important).id
+            },
+            new_2: {
+              tag_id: tags(:pending).id
+            }
           }
-        }
-      )
+        )
+      end
     end
   end
 
@@ -78,6 +90,11 @@ class FindingTest < ActiveSupport::TestCase
           },
           new_3: {
             user_id: users(:supervisor).id, process_owner: false
+          }
+        },
+        taggings_attributes: {
+          new_1: {
+            tag_id: tags(:important).id
           }
         }
       )
@@ -139,13 +156,12 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates special not blank attributes' do
-    finding                = findings :unanswered_weakness
-    finding.follow_up_date = Time.zone.today
-    finding.solution_date  = Time.zone.tomorrow
+    @finding.follow_up_date = Time.zone.today
+    @finding.solution_date  = Time.zone.tomorrow
 
-    assert finding.invalid?
-    assert_error finding, :follow_up_date, :must_be_blank
-    assert_error finding, :solution_date, :must_be_blank
+    assert @finding.invalid?
+    assert_error @finding, :follow_up_date, :must_be_blank
+    assert_error @finding, :solution_date, :must_be_blank
   end
 
   test 'validates duplicated attributes' do
@@ -581,8 +597,6 @@ class FindingTest < ActiveSupport::TestCase
         solution_date: Date.today
       )
     end
-
-    Current.user = nil
   end
 
   test 'mark as unconfirmed' do
@@ -811,6 +825,18 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 20.days.from_now.to_date, @finding.last_commitment_date
   end
 
+  test 'first follow up date' do
+    @finding.state          = Finding::STATUS[:being_implemented]
+    @finding.follow_up_date = Time.zone.today
+
+    @finding.save!
+
+    assert @finding.reload.first_follow_up_date.present?
+    assert @finding.follow_up_date.present?
+    assert_equal @finding.follow_up_date, @finding.first_follow_up_date
+    assert_equal @finding.first_follow_up_date, @finding.first_follow_up_date_on_versions
+  end
+
   test 'mark as duplicated' do
     finding     = findings :unanswered_for_level_1_notification
     repeated_of = findings :being_implemented_weakness
@@ -824,6 +850,7 @@ class FindingTest < ActiveSupport::TestCase
 
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
+    refute finding.rescheduled
     assert_equal repeated_of.origination_date, finding.origination_date
     assert_equal 1, finding.repeated_ancestors.size
     assert_equal 1, repeated_of.repeated_children.size
@@ -849,16 +876,45 @@ class FindingTest < ActiveSupport::TestCase
 
     refute repeated_of.repeated?
 
-    finding.update! repeated_of_id: repeated_of.id
+    finding.update! repeated_of_id: repeated_of.id, rescheduled: true
 
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
+    assert finding.rescheduled
 
     finding.undo_reiteration
 
     refute repeated_of.reload.repeated?
     assert_nil finding.reload.repeated_of
+    refute finding.rescheduled
     assert_equal repeated_of_original_state, repeated_of.state
+  end
+
+  test 'reschedule when mark as duplicated and follow up date differs' do
+    finding     = findings :unanswered_for_level_1_notification
+    repeated_of = findings :being_implemented_weakness
+
+    assert_equal 0, finding.repeated_ancestors.size
+    assert_equal 0, repeated_of.repeated_children.size
+    assert_not_equal repeated_of.origination_date, finding.origination_date
+    refute repeated_of.repeated?
+
+    finding.update! repeated_of_id: repeated_of.id,
+      state: Finding::STATUS[:being_implemented],
+      follow_up_date: repeated_of.follow_up_date + 1.day
+
+    assert repeated_of.reload.repeated?
+    assert finding.reload.repeated_of
+    assert finding.rescheduled
+    assert_equal repeated_of.origination_date, finding.origination_date
+    assert_equal 1, finding.repeated_ancestors.size
+    assert_equal 1, repeated_of.repeated_children.size
+    assert_equal repeated_of, finding.repeated_root
+
+    finding.update! follow_up_date: repeated_of.follow_up_date
+
+    # Should unmark when follow up date has been "restored"
+    refute finding.reload.rescheduled
   end
 
   test 'do nothing on repeat if repeated_of is not included on review' do
@@ -880,7 +936,17 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     assert File.exist?(@finding.absolute_follow_up_pdf_path)
+    assert (size = File.size(@finding.absolute_follow_up_pdf_path)) > 0
+
+    FileUtils.rm @finding.absolute_follow_up_pdf_path
+
+    assert_nothing_raised do
+      @finding.follow_up_pdf organizations(:cirope), brief: true
+    end
+
+    assert File.exist?(@finding.absolute_follow_up_pdf_path)
     assert File.size(@finding.absolute_follow_up_pdf_path) > 0
+    assert_not_equal size, File.size(@finding.absolute_follow_up_pdf_path)
 
     FileUtils.rm @finding.absolute_follow_up_pdf_path
   end
@@ -900,7 +966,8 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'to csv' do
     csv  = Finding.all.to_csv
-    rows = CSV.parse csv, col_sep: ';'
+    # TODO: change to liberal_parsing: true when 2.3 support is dropped
+    rows = CSV.parse csv.sub("\uFEFF", ''), col_sep: ';', force_quotes: true
 
     assert_equal Finding.count + 1, rows.length
   end
@@ -1027,7 +1094,70 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
+  test 'notify expired follow up' do
+    skip unless NOTIFY_EXPIRED_AND_STALE_FOLLOW_UP
+
+    Current.organization = nil
+    # Only if no weekend
+    assert Time.zone.today.workday?
+
+    finding = findings :being_implemented_weakness
+
+    finding.update! follow_up_date: (1.weeks + 1.day).ago.to_date
+
+    findings_and_users              = expired_findings_with_users_by_level
+    users_by_level_for_notification = findings_and_users[:users_by_level_for_notification]
+    finding_ids                     = findings_and_users[:finding_ids]
+
+
+    assert_enqueued_emails 1 do
+      level_counts = {}
+
+      finding_ids.each do |f_id|
+        level_counts[f_id] = Finding.find(f_id).notification_level
+      end
+
+      Finding.notify_expired_and_stale_follow_up
+
+      finding_ids.each do |f_id|
+        level = Finding.find(f_id).notification_level
+
+        assert level == level_counts[f_id].next || level == -1
+      end
+    end
+  end
+
+  test 'send findings brief' do
+    Current.organization = nil
+
+    # Since default settings prevents this from happening
+    assert_no_enqueued_emails do
+      Finding.send_brief
+    end
+
+    organization         = organizations :cirope
+    Current.organization = organization # Since we use list below
+    users                = organization.users.list_all_with_pending_findings
+
+    organization.settings.find_by(name: 'brief_period_in_weeks').update! value: '2'
+
+    assert_not_equal 0, users.size
+
+    Timecop.freeze(FINDING_INITIAL_BRIEF_DATE + 2.weeks) do
+      assert_enqueued_emails users.size do
+        Finding.send_brief
+      end
+    end
+
+    Timecop.freeze(FINDING_INITIAL_BRIEF_DATE + 1.weeks) do
+      assert_no_enqueued_emails do
+        Finding.send_brief
+      end
+    end
+  end
+
   test 'work papers can be added to finding with current close date' do
+    Current.user       = users :supervisor
     uneditable_finding = findings :being_implemented_weakness
 
     assert_difference 'WorkPaper.count' do
@@ -1069,7 +1199,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'validate final state change mark all task as finished' do
     Current.user = users :supervisor
-    finding              = findings :being_implemented_weakness
+    finding      = findings :being_implemented_weakness
 
     assert_difference 'finding.tasks.count' do
       finding.tasks.create! code: '02', description: 'Test', due_on: Time.zone.today
@@ -1089,6 +1219,23 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     assert finding.reload.tasks.all? { |t| t.finished? }
+  end
+
+  test 'mark all task as finished when repeated' do
+    finding     = findings :unanswered_for_level_1_notification
+    repeated_of = findings :being_implemented_weakness
+
+    assert_difference 'repeated_of.tasks.count' do
+      repeated_of.tasks.create! code: '01', description: 'Test', due_on: Time.zone.today
+    end
+
+    assert repeated_of.reload.tasks.all? { |t| !t.finished? }
+
+    assert_difference 'Task.finished.count', repeated_of.tasks.count do
+      finding.update! repeated_of_id: repeated_of.id
+    end
+
+    assert repeated_of.reload.tasks.all? { |t| t.finished? }
   end
 
   test 'unconfirmed for notification scope' do
@@ -1120,6 +1267,15 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     assert all_follow_up_dates_are_old
+  end
+
+  test 'reset notification level on follow up date change' do
+    @finding.update! notification_level: 2
+
+    @finding.update! follow_up_date: Time.zone.today,
+                     state:          Finding::STATUS[:being_implemented]
+
+    assert_equal 0, @finding.reload.notification_level
   end
 
   private
@@ -1180,6 +1336,36 @@ class FindingTest < ActiveSupport::TestCase
             end
 
             unless has_audited_comments
+              finding_ids << finding.id
+              users_by_level_for_notification[n] |= finding.users |
+                finding.users_for_scaffold_notification(n)
+            end
+          end
+        end
+      end
+
+      {
+        users_by_level_for_notification: users_by_level_for_notification,
+        finding_ids:                     finding_ids
+      }
+    end
+
+    def expired_findings_with_users_by_level
+      n                               = 0
+      finding_ids                     = []
+      users_by_level_for_notification = {1 => [], 2 => [], 3 => [], 4 => []}
+      deepest_level                   = User.deepest_level
+
+      (1..deepest_level).each do |n|
+        findings = Finding.pending_expired_and_stale n
+
+        findings.each do |finding|
+          # Not for president users since it belongs to another organization
+          if n != 4
+            users = finding.users_for_scaffold_notification(n)
+            commitment_date = finding.last_commitment_date
+
+            if commitment_date.blank? || commitment_date.past?
               finding_ids << finding.id
               users_by_level_for_notification[n] |= finding.users |
                 finding.users_for_scaffold_notification(n)

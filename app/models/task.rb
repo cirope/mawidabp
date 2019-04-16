@@ -16,7 +16,7 @@ class Task < ApplicationRecord
 
   def detailed_description
     [
-      code,
+      "[#{code}]",
       description,
       I18n.t("tasks.status.#{status}"),
       I18n.l(due_on, format: :minimal)

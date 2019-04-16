@@ -7,13 +7,29 @@ module Users::Scopes
         where(organizations: { id: Current.organization&.id }).
         references :organizations
     }
+    scope :group_list, -> {
+      includes(:group).
+        where(groups: { id: Current.group&.id }).
+        references :groups
+    }
+    scope :without_organization, -> {
+      includes(:organizations).
+        where(organizations: { id: nil }).
+        references :organizations
+    }
     scope :not_hidden, -> { where hidden: false }
   end
 
   module ClassMethods
     def by_email email
       where(
-        "LOWER(#{quoted_table_name}.#{qcn 'email'}) = ?", email.downcase
+        "LOWER(#{quoted_table_name}.#{qcn 'email'}) = ?", email&.downcase
+      ).take
+    end
+
+    def by_user user
+      where(
+        "LOWER(#{quoted_table_name}.#{qcn 'user'}) = ?", user&.downcase
       ).take
     end
 
@@ -38,6 +54,16 @@ module Users::Scopes
                 ids
 
       where(id: ids) # TODO: remove when we don't have to _support_ Oracle
+    end
+
+    def list_all_with_pending_findings
+      left_joins(finding_user_assignments: :raw_finding).
+        where(findings: { final: false }).
+        merge(Finding.with_pending_status).
+        merge(Finding.list).
+        references(:findings).
+        distinct.
+        select(column_names - ['notes'])
     end
 
     def list_with_corporate

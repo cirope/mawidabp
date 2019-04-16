@@ -4,3 +4,10 @@ setup_all_things:
   due_on: <%= Time.zone.tomorrow.to_s :db %>
   status: <%= Task.statuses['in_progress'] %>
   finding: being_implemented_weakness
+
+setup_all_things_on_draft:
+  code: '01'
+  description: Setup all things
+  due_on: <%= Time.zone.tomorrow.to_s :db %>
+  status: <%= Task.statuses['in_progress'] %>
+  finding: being_implemented_weakness_on_draft

@@ -22,7 +22,11 @@ module Findings::Versions
   end
 
   def versions_after_final_review end_date = nil
-    versions_between final_review_created_at, end_date
+    if final_review_created_at.present?
+      versions_between final_review_created_at, end_date
+    else
+      versions.none
+    end
   end
 
   def versions_before_final_review start_date = nil

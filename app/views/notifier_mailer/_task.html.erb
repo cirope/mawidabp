@@ -17,7 +17,7 @@
 </p>
 <div style="margin: .1em 0em;">
   <b><%= task.class.model_name.human %></b>:
-  <%= textilize task.description %>
+  <%= markdown task.description %>
 </div>
 <p style="margin: .1em 0em;">
   <b><%= task.class.human_attribute_name 'status' %></b>:

@@ -14,7 +14,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   teardown do
-    Current.organization = nil
+    unset_organization
 
     clear_enqueued_jobs
     clear_performed_jobs
@@ -124,7 +124,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     login
     get :new, xhr: true, as: :js
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_equal Mime[:js], @response.content_type
   end
 
   test 'create conclusion draft review' do
@@ -141,9 +141,12 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :sectors => 'Area 51',
           :evolution => EVOLUTION_OPTIONS.second,
           :evolution_justification => 'Ok',
-          :observations => nil,
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
+          :objective => 'Some objective',
+          :reference => 'Some reference',
+          :observations => 'Some observations',
+          :scope => 'Some scope',
           :affects_compliance => '0'
         }
       }
@@ -179,8 +182,11 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :evolution_justification => 'Ok',
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
-          :affects_compliance => '0',
-          :observations => nil
+          :objective => 'Some objective',
+          :reference => 'Some reference',
+          :observations => 'Some observations',
+          :scope => 'Some scope',
+          :affects_compliance => '0'
         }
       }
     end
@@ -388,7 +394,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
         :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
-          :email_note => 'note in *textile* _format_'
+          :email_note => 'note in **markdown** _format_'
         },
         :user => {
           users(:administrator).id => {
@@ -407,7 +413,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       |p| p.content_type.match(/text/)
     }.body.decoded
 
-    assert_match /textile/, text_part
+    assert_match /markdown/, text_part
 
     clear_enqueued_jobs
     clear_performed_jobs
@@ -418,7 +424,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
         :conclusion_review => {
           :include_score_sheet => '1',
           :include_global_score_sheet => '1',
-          :email_note => 'note in *textile* _format_'
+          :email_note => 'note in **markdown** _format_'
         },
         :user => {
           users(:administrator).id => {
@@ -437,7 +443,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       |p| p.content_type.match(/text/)
     }.body.decoded
 
-    assert_match /textile/, text_part
+    assert_match /markdown/, text_part
   end
 
   test 'can not send by email with final review' do

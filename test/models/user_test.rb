@@ -12,7 +12,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Current.organization = nil
+    unset_organization
   end
 
   test 'create' do
@@ -43,6 +43,34 @@ class UserTest < ActiveSupport::TestCase
 
       assert_not_nil user.parent
     end
+  end
+
+  test 'new user should fail with duplicated email' do
+    role = roles :admin_role
+
+    role.inject_auth_privileges Hash.new(true)
+
+    user = User.new(
+      name: 'New name',
+      last_name: 'New lastname',
+      language: 'es',
+      email: users(:bare).email,
+      function: 'New function',
+      user: 'new_user',
+      enable: true,
+      failed_attempts: 0,
+      logged_in: false,
+      notes: 'Some user notes',
+      organization_roles_attributes: [
+        {
+          organization_id: organizations(:cirope).id,
+          role_id: role.id
+        }
+      ]
+    )
+
+    assert user.invalid?
+    assert_error user, :email, :taken
   end
 
   test 'update' do
@@ -121,12 +149,18 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'validates duplicated attributes' do
-    @user.user = users(:bare).user
-    @user.email = users(:bare).email
+    @user.user = users(:administrator).user
+    @user.email = users(:administrator).email
 
     assert @user.invalid?
     assert_error @user, :user, :taken
     assert_error @user, :email, :taken
+  end
+
+  test 'skip duplicated attributes on different groups' do
+    @user.email = users(:bare).email
+
+    assert @user.valid?
   end
 
   test 'validates can duplicate user if ldap' do
@@ -450,8 +484,14 @@ class UserTest < ActiveSupport::TestCase
     user    = users :supervisor
     options = user.review_assignment_options
 
-    assert_equal 1, options.size
-    assert options[:supervisor]
+    if Current.conclusion_pdf_format == 'gal'
+      assert_equal 1, options.size
+      assert options[:supervisor]
+    else
+      assert_equal 2, options.size
+      assert options[:supervisor]
+      assert options[:responsible]
+    end
   end
 
   test 'notify finding changes function' do
@@ -469,6 +509,11 @@ class UserTest < ActiveSupport::TestCase
       new_finding.finding_user_assignments.build(
         finding.finding_user_assignments.map do |fua|
           fua.dup.attributes.merge('finding_id' => nil)
+        end
+      )
+      new_finding.taggings.build(
+        finding.taggings.map do |t|
+          t.dup.attributes.merge('id' => nil, 'taggable_id' => nil)
         end
       )
 
@@ -497,6 +542,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'notify conclusion final review close date warning' do
+    Current.user = users :supervisor
+
     ConclusionFinalReview.list.new(
       review_id: reviews(:review_approved_with_conclusion).id,
       issue_date: Date.today,
@@ -509,6 +556,10 @@ class UserTest < ActiveSupport::TestCase
       evolution_justification: 'Ok',
       main_weaknesses_text: 'Some main weakness X',
       corrective_actions: 'You should do it this way',
+      :objective => 'Some objective',
+      :reference => 'Some reference',
+      :observations => 'Some observations',
+      :scope => 'Some scope',
       affects_compliance: false
     ).save!
 

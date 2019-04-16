@@ -141,8 +141,11 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :evolution_justification => 'Ok',
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
-          :affects_compliance => '0',
-          :observations => nil
+          :objective => 'Some objective',
+          :reference => 'Some reference',
+          :observations => 'Some observations',
+          :scope => 'Some scope',
+          :affects_compliance => '0'
         }
       }
     end
@@ -177,8 +180,11 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
           :evolution_justification => 'Ok',
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
-          :affects_compliance => '0',
-          :observations => nil
+          :objective => 'Some objective',
+          :reference => 'Some reference',
+          :observations => 'Some observations',
+          :scope => 'Some scope',
+          :affects_compliance => '0'
         }
       }
     end
@@ -377,7 +383,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
         :id => conclusion_reviews(:conclusion_current_final_review).id,
         :conclusion_review => {
           :include_score_sheet => '1',
-          :email_note => 'note in *textile* _format_'
+          :email_note => 'note in **markdown** _format_'
         },
         :user => {
           users(:administrator).id => {
@@ -396,7 +402,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       |p| p.content_type.match(/text/)
     }.body.decoded
 
-    assert_match /textile/, text_part
+    assert_match /markdown/, text_part
 
     clear_enqueued_jobs
     clear_performed_jobs
@@ -407,7 +413,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
         :conclusion_review => {
           :include_score_sheet => '1',
           :include_global_score_sheet => '1',
-          :email_note => 'note in *textile* _format_'
+          :email_note => 'note in **markdown** _format_'
         },
         :user => {
           users(:administrator).id => {
@@ -426,7 +432,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       |p| p.content_type.match(/text/)
     }.body.decoded
 
-    assert_match /textile/, text_part
+    assert_match /markdown/, text_part
   end
 
   test 'send questionnaire by email' do

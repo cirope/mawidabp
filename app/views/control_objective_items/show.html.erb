@@ -28,6 +28,21 @@
   <%= simple_format @control_objective_item.control.control %>
 </div>
 
+
+<% if @control_objective_item.tags.any? %>
+  <p>
+    <strong><%= Tag.model_name.human count: 0 %>:</strong>
+
+    <% @control_objective_item.tags.each do |tag| %>
+      <span class="label label-<%= tag.style %>">
+        <span class="glyphicon glyphicon-<%= tag.icon %>"></span>
+        <%= tag %>
+      </span>
+      &nbsp;
+    <% end %>
+  </p>
+<% end %>
+
 <p>
   <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
   <%= @control_objective_item.design_score_text %>

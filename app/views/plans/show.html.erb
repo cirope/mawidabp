@@ -14,6 +14,7 @@
 
 <div>
   <%= link_to_edit [:edit, @plan] %> |
+  <%= link_to_calendar [:calendar, @plan] %> |
   <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_s(:db)] %> |
   <%= link_to_index plans_path %> |
   <%= render('shared/downloads',

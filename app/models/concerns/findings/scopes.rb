@@ -4,7 +4,7 @@ module Findings::Scopes
   included do
     scope :list,              -> { where organization_id: Current.organization&.id }
     scope :sort_by_code,      -> { order review_code: :asc }
-    scope :sort_for_review,   -> { order risk: :desc, priority: :desc, review_code: :asc }
+    scope :sort_for_review,   -> { order *review_sort_options }
     scope :with_achievements, -> { includes(:achievements).where.not achievements: { finding_id: nil } }
   end
 
@@ -84,11 +84,23 @@ module Findings::Scopes
       end
     end
 
+    def excluding_user_id user_id
+      ids = includes(:users).where(users: { id: user_id }).references(:users).ids
+
+      where.not id: ids
+    end
+
     def by_issue_date operator, date, date_until = nil
       mask      = operator.downcase == 'between' && date_until ? '? AND ?' : '?'
       condition = "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} #{operator} #{mask}"
 
       includes(review: :conclusion_final_review).where condition, *[date, date_until].compact
+    end
+
+    def by_business_unit_ids business_unit_ids
+      includes(review: :plan_item).
+        where(plan_items: { business_unit_id: Array(business_unit_ids) }).
+        references(:plan_items)
     end
 
     def by_business_unit_type business_unit_type_id
@@ -134,6 +146,14 @@ module Findings::Scopes
       end
 
       includes(review: :tags).where(conditions.join(' OR '), parameters)
+    end
+
+    def review_sort_options
+      if ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY == 'risk'
+        [risk: :desc, review_code: :asc]
+      else
+        [risk: :desc, priority: :desc, review_code: :asc]
+      end
     end
   end
 end

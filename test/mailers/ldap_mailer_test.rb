@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class NotifierMailerTest < ActionMailer::TestCase
+class LdapMailerTest < ActionMailer::TestCase
   fixtures :users, :organizations, :groups, :organization_roles, :roles,
     :ldap_configs
 
@@ -11,7 +11,7 @@ class NotifierMailerTest < ActionMailer::TestCase
   end
 
   teardown do
-    Current.organization = nil
+    unset_organization
   end
 
   test 'Notify with imported users' do

@@ -1,0 +1,21 @@
+<% group       ||= nil %>
+<% field_label ||= t(controller_name + '.tagged_findings_report.tags_count_label') %>
+<% field_name  ||= :tags_count %>
+
+<div id="<%= field_name %>_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+  <% unless group %>
+    <div class="row">
+  <% end %>
+    <div class="col-md-6">
+      <div class="form-group">
+        <% tags_count_filter = params[action] ? params[action][field_name] : nil %>
+        <%= f.label field_name, field_label, class: 'col-md-4' %>
+        <div class="col-md-6">
+          <%= f.number_field field_name, value: tags_count_filter, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+  <% unless group %>
+    </div>
+  <% end %>
+</div>

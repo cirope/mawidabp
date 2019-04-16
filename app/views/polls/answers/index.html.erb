@@ -53,7 +53,7 @@
           </div>
 
           <% if poll.answered? %>
-            <% if answer.question.options.any? %>
+            <% if answer.question&.options&.any? %>
               <p><%= t "answer_options.#{answer.answer_option.option}" %></p>
             <% elsif answer.question.answer_written? %>
               <%= simple_format answer.answer %>

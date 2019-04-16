@@ -5,7 +5,11 @@ module Users::Polls
     has_many :polls, dependent: :destroy
   end
 
+  def list_unanswered_polls
+    polls.list.answered false
+  end
+
   def first_pending_poll
-    polls.list.answered(false).first
+    list_unanswered_polls.order(:created_at).first
   end
 end

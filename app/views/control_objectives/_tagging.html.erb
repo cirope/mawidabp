@@ -19,7 +19,8 @@
             }
           } %>
         <% else %>
-          <%= f.input "control_objective_tagging_#{id}", label: false, input_html: { value: tagging.tag.to_s, readonly: true } %>
+          <% copy_attribute_errors :tag_id, :tag, f %>
+          <%= f.input :tag, label: false, input_html: { readonly: true } %>
         <% end %>
         <%= f.input :tag_id, as: :hidden, input_html: { id: "hidden_tag_#{id}" } %>
       </div>

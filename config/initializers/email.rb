@@ -15,4 +15,4 @@ Rails.application.configure do
   }
 end
 
-ActionMailer::Base.register_observer MailObserver
+ActionMailer::Base.register_observer ::MailObserver

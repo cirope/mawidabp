@@ -1,7 +1,7 @@
 class LdapMailer < ActionMailer::Base
   include ActionView::Helpers::TextHelper
 
-  helper :application
+  helper :markdown
 
   default from: "#{ENV['EMAIL_NAME'] || I18n.t('app_name')} <#{ENV['EMAIL_ADDRESS']}>"
 
