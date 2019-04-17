@@ -6,10 +6,7 @@ plugins:
   - jekyll-assets
   - jekyll-multiple-languages-plugin
 assets:
-  digest: true
-  compress:
-    css: true
-    js: true
+  compression: true
   sources:
     - _assets/images
     - _assets/javascripts

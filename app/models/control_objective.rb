@@ -1,5 +1,6 @@
 class ControlObjective < ApplicationRecord
   include Auditable
+  include ControlObjectives::AttributeTypes
   include ControlObjectives::Control
   include ControlObjectives::Defaults
   include ControlObjectives::DestroyValidation

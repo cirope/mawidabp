@@ -66,7 +66,7 @@ class UsersController < ApplicationController
 
     def users
       User.includes(:organizations).where(conditions).not_hidden.order(
-        "#{User.quoted_table_name}.#{User.qcn('user')} ASC"
+        Arel.sql "#{User.quoted_table_name}.#{User.qcn('user')} ASC"
       ).references(:organizations).page(params[:page])
     end
 

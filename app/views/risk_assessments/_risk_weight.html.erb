@@ -1,0 +1,17 @@
+<fieldset class="risk_weight">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-8">
+        <%= f.input :name, label: false, input_html: { disabled: true } %>
+      </div>
+      <div class="col-md-4">
+        <%= f.input :value, label: false, collection: risk_weight_value_options, prompt: true, input_html: {
+          data: { update_risk_item: risk_item_id }
+        } %>
+      </div>
+    </div>
+    <%= f.input :id, as: :hidden %>
+    <%= f.input :weight, as: :hidden %>
+    <%= f.input :risk_assessment_weight_id, as: :hidden %>
+  </div>
+</fieldset>

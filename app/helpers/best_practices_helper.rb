@@ -6,9 +6,14 @@ module BestPracticesHelper
   end
 
   def best_practice_shared_icon best_practice
-    icon = content_tag :span, nil, class: 'glyphicon glyphicon-eye-open', title: t('activerecord.attributes.best_practice.shared')
+    if best_practice.shared
+      title = [
+        BestPractice.human_attribute_name('shared'),
+        "(#{best_practice.organization.name})"
+      ].join ' '
 
-    best_practice.shared ? icon : ''
+      content_tag :span, nil, class: 'glyphicon glyphicon-eye-open', title: title
+    end
   end
 
   def process_control_path process_control

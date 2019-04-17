@@ -185,7 +185,7 @@ module Users::Reassigns
       content = ''
 
       _unconfirmed_findings.group_by(&:review).each do |r, findings|
-        content << "*#{Review.model_name.human} #{r.identification}*"
+        content << "**#{Review.model_name.human} #{r.identification}**"
         findings.each { |f| content << full_finding_description_for(f) }
         content << "\n\n"
       end
@@ -199,13 +199,13 @@ module Users::Reassigns
 
       content << "\n* #{model.human_attribute_name('review_code')}: "
       content << "_#{finding.review_code}_"
-      content << "\n** #{model.human_attribute_name('title')}: "
+      content << "\n  * #{model.human_attribute_name('title')}: "
       content << "_#{finding.title}_"
-      content << "\n** #{model.human_attribute_name('description')}: "
+      content << "\n  * #{model.human_attribute_name('description')}: "
       content << "_#{finding.description}_"
 
       if finding.respond_to?(:risk_text)
-        content << "\n** #{model.human_attribute_name('risk')}: "
+        content << "\n  * #{model.human_attribute_name('risk')}: "
         content << "_#{finding.risk_text}_"
       end
 

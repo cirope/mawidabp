@@ -14,10 +14,11 @@ module Polls::Reports
 
     polls_answered(polls).each do |poll|
       poll.answers.each do |answer|
-        if answer.answer_option.present?
-          value  = Question::ANSWER_OPTION_VALUES[answer.answer_option.option.to_sym]
+        if answer.answer_option.present? && answer.question
+          values = answer.question.option_values
+          value  = values[answer.answer_option.option.to_sym]
 
-          if value >= 0
+          if value && value >= 0
             count += value
             total += 1
           end
@@ -44,8 +45,11 @@ module Polls::Reports
 
     def set_date_range
       @from_date, @to_date = *make_date_range(params[:index])
-      @report.from_date = @from_date
-      @report.to_date = @to_date
+      @report.from_date    = @from_date
+      @report.to_date      = @to_date
+      @report.date_field   = params[:index] && params[:index].fetch(
+        :date_field, 'created_at'
+      )
     end
 
     def set_questionnaire

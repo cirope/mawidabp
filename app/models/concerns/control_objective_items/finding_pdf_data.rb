@@ -7,7 +7,6 @@ module ControlObjectiveItems::FindingPDFData
     body << get_initial_finding_attributes(finding, show)
     body << get_weakness_attributes(finding, hide) if finding.kind_of?(Weakness)
     body << get_late_finding_attributes(finding, show)
-    body << get_optional_finding_attributes(finding, hide)
     body << get_audited_data(finding, hide)
     body << get_final_finding_attributes(finding, hide, show)
 
@@ -18,6 +17,11 @@ module ControlObjectiveItems::FindingPDFData
 
     def get_initial_finding_attributes finding, show
       body = ''
+
+      if show.include? 'review'
+        body << "<b>#{Review.model_name.human}:</b> " +
+          "<i>#{finding.review.identification}</i></b>\n"
+      end
 
       if finding.review_code.present?
         body << finding_review_code_text_for(finding, show)
@@ -70,6 +74,7 @@ module ControlObjectiveItems::FindingPDFData
           "#{finding.answer.chomp}\n"
       end
 
+      body << get_tasks_data(finding)
       body << finding_follow_up_date_text_for(finding, show)
 
       if finding.solution_date.present?
@@ -80,16 +85,15 @@ module ControlObjectiveItems::FindingPDFData
       body
     end
 
-    def get_optional_finding_attributes finding, hide
+    def get_tasks_data finding
       body = ''
-      show_internal_control_components = SHOW_WEAKNESS_EXTRA_ATTRIBUTES &&
-        finding.kind_of?(Weakness) &&
-        hide.exclude?('internal_control_components') &&
-        finding.internal_control_components.any?
 
-      if show_internal_control_components
-        body << "<b>#{finding.class.human_attribute_name('internal_control_components')}:" +
-          "</b> #{finding.internal_control_components.to_sentence}\n"
+      if finding.tasks.any?
+        body << "<b>#{Task.model_name.human count: 0}</b>\n"
+
+        finding.tasks.each do |task|
+          body << "#{Prawn::Text::NBSP * 2}• #{task.detailed_description}\n"
+        end
       end
 
       body
@@ -131,11 +135,6 @@ module ControlObjectiveItems::FindingPDFData
           "</b> #{finding.business_units.map(&:name).join(', ')}\n"
       end
 
-      if show.include?('tags') && finding.tags.any?
-        body << "<b>#{Tag.model_name.human count: 0}:</b> " +
-          finding.tags.map(&:name).to_sentence
-      end
-
       body
     end
 
@@ -152,7 +151,7 @@ module ControlObjectiveItems::FindingPDFData
     end
 
     def finding_origination_date_text_for finding
-      if !SHOW_CONCLUSION_ALTERNATIVE_PDF || finding.repeated_ancestors.present?
+      if Current.conclusion_pdf_format != 'gal' || finding.repeated_ancestors.present?
         I18n.l finding.origination_date, format: :long
       else
         I18n.t 'conclusion_review.new_origination_date'
@@ -161,7 +160,7 @@ module ControlObjectiveItems::FindingPDFData
 
     def finding_follow_up_date_text_for finding, show
       display =
-        (!SHOW_CONCLUSION_ALTERNATIVE_PDF && finding.follow_up_date.present?) ||
+        (Current.conclusion_pdf_format != 'gal' && finding.follow_up_date.present?) ||
         (finding.follow_up_date.present? && !finding.implemented_audited?)
 
       if display && show.include?('estimated_follow_up')
@@ -178,11 +177,16 @@ module ControlObjectiveItems::FindingPDFData
     def finding_repeated_text_for finding, show
       repeated = finding.repeated_ancestors.present?
 
-      if SHOW_CONCLUSION_ALTERNATIVE_PDF
+      if Current.conclusion_pdf_format == 'gal'
         label = I18n.t "label.#{repeated ? 'yes' : 'no'}"
 
         if show.include?('repeated_review') && finding.repeated_of
-          label << " (#{finding.repeated_of.review.identification})"
+          review_identification = [
+            I18n.t('conclusion_review.review_repeated_finding_label'),
+            finding.repeated_of.review.identification
+          ].join(' ')
+
+          label << " (#{review_identification})"
         end
 
         "<b>#{I18n.t 'findings.state.repeated'}:</b> #{label}\n"

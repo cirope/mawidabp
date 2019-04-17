@@ -10,15 +10,9 @@
       <% user = import[:user] %>
       <li>
         <strong><%= link_to_if user.persisted?, user.full_name, user %></strong>
-        <% if user.errors.present? %>
-          <span class="label label-danger">
-            <%= t '.error' %>
-          </span> |
-          <%= user.errors.full_messages.to_sentence %>
-        <% else %>
-          <span class="label label-success">
-            <%= t import[:new] ? '.created' : '.updated' %>
-          </span>
+        <%= users_import_state_label_class(import[:state]) %>
+        <% if import[:state] == :error %>
+          | <%= user.errors.full_messages.to_sentence %>
         <% end %>
       </li>
     <% end %>

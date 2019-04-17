@@ -7,7 +7,9 @@ module PollsHelper
     )
   end
 
-  def answer_options question
-    question.answer_options.map { |o| [o.id, t("answer_options.#{o.option}")] }
-  end
+  private
+
+    def answer_options question
+      question.answer_options.map { |o| [o.id, t("answer_options.#{o.option}")] }
+    end
 end

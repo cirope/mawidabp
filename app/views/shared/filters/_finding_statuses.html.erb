@@ -1,0 +1,29 @@
+<%
+    display ||= nil
+    group   ||= nil
+    name    ||= :finding_status
+    label   ||= :state
+%>
+
+<% unless group %>
+  <div id="finding_status_filter" class="filter" <%= 'style="display: none;"' unless display %>>
+    <div class="row">
+<% end %>
+    <div class="col-md-6">
+      <div class="form-group">
+         <% selected = params[action] ? params[action][name] : nil %>
+         <%= f.label name, Finding.human_attribute_name(label), class: 'col-md-4', for: nil %>
+         <div class="col-md-8">
+           <%= f.input name,
+             collection: finding_status_options_by_action(action, params),
+             as: :check_boxes,
+             checked: selected,
+             label: false,
+             class: 'form-control' %>
+         </div>
+      </div>
+    </div>
+<% unless group %>
+    </div>
+  </div>
+<% end %>

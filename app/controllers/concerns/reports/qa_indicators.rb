@@ -1,5 +1,5 @@
 module Reports::QAIndicators
-  include Reports::Pdf
+  include Reports::PDF
 
   def qa_indicators
     init_qa_vars
@@ -134,7 +134,7 @@ module Reports::QAIndicators
   end
 
   def calculate_production_level(period)
-    reviews_count = period.plans.to_a.sum do |p|
+    reviews_count = Array(period.plan).sum do |p|
       final_review_count = p.plan_items.joins(
         :review => :conclusion_final_review
       ).with_business_unit.between(@from_date, @to_date).count
@@ -147,7 +147,7 @@ module Reports::QAIndicators
       final_review_count + last_day_count
     end
 
-    plan_items_count = period.plans.to_a.sum do |p|
+    plan_items_count = Array(period.plan).sum do |p|
       p.plan_items.with_business_unit.between(@from_date, @to_date).count
     end
 

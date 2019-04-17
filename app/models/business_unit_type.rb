@@ -1,5 +1,6 @@
 class BusinessUnitType < ApplicationRecord
   include Auditable
+  include BusinessUnitTypes::AttributeTypes
   include BusinessUnitTypes::BusinessUnits
   include BusinessUnitTypes::DestroyValidation
   include BusinessUnitTypes::JSON
@@ -12,4 +13,8 @@ class BusinessUnitType < ApplicationRecord
   alias_attribute :label, :name
 
   belongs_to :organization
+
+  def to_s
+    name
+  end
 end

@@ -22,6 +22,13 @@ class BusinessUnit < ApplicationRecord
   # Relaciones
   belongs_to :business_unit_type, :optional => true
   has_many :plan_items, :dependent => :destroy
+  has_many :business_unit_findings, :dependent => :destroy
+  has_many :business_unit_scores, :dependent => :destroy
+
+  def to_s
+    name
+  end
+  alias display_name to_s
 
   def as_json(options = nil)
     default_options = {
@@ -37,8 +44,11 @@ class BusinessUnit < ApplicationRecord
   end
 
   def can_be_destroyed?
-    if self.plan_items.any?
-      self.errors.add :base,
+    has_any_related_item = plan_items.any? || business_unit_findings.any? ||
+      business_unit_scores.any?
+
+    if has_any_related_item
+      errors.add :base,
         I18n.t('business_unit_type.errors.business_unit_related')
 
       false

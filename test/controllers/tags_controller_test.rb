@@ -39,6 +39,7 @@ class TagsControllerTest < ActionController::TestCase
         tag: {
           name: 'Test tag',
           style: 'default',
+          shared: false,
           icon: 'tag'
         }
       }

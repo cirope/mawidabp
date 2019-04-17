@@ -2,6 +2,8 @@ module ControlObjectiveItems::Validations
   extend ActiveSupport::Concern
 
   included do
+    attr_accessor :creating_final_review
+
     validates :control_objective_text, :control_objective_id,
       :organization_id, presence: true
     validates :control_objective_text, :auditor_comment, pdf_encoding: true
@@ -10,8 +12,9 @@ module ControlObjectiveItems::Validations
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 2147483647
     }, allow_blank: true, allow_nil: true
-    validates :audit_date, timeliness: { type: :date }, allow_nil: true
-    validates :audit_date, :relevance, :auditor_comment, presence: true, if: :finished
+    validates :audit_date, timeliness: { type: :date }, allow_blank: true
+    validates :audit_date, presence: true, if: :require_audit_date?
+    validates :relevance, :auditor_comment, presence: true, if: :finished
     validates :auditor_comment, presence: true, if: :exclude_from_score
     validates :issues_count, :alerts_count, presence: true, if: :validate_counts?
     validate :audit_date_is_on_period
@@ -23,11 +26,17 @@ module ControlObjectiveItems::Validations
   private
 
     def audit_date_is_on_period
-      period = review&.period
+      if validate_on_period?
+        period = review&.period
 
-      if period && audit_date && !audit_date.between?(period.start, period.end)
-        errors.add :audit_date, :out_of_period
+        if period && audit_date && !audit_date.between?(period.start, period.end)
+          errors.add :audit_date, :out_of_period
+        end
       end
+    end
+
+    def validate_on_period?
+      !(DISABLE_COI_AUDIT_DATE_VALIDATION && creating_final_review)
     end
 
     def control_objective_uniqueness
@@ -74,11 +83,12 @@ module ControlObjectiveItems::Validations
       end
     end
 
-    def validate_counts?
-      if finished
-        organization = Organization.find Organization.current_id
+    def require_audit_date?
+      finished && !DISABLE_COI_AUDIT_DATE_VALIDATION
+    end
 
-        ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include? organization.prefix
-      end
+    def validate_counts?
+      finished &&
+        ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(Current.organization.prefix)
     end
 end

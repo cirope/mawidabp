@@ -2,7 +2,7 @@ module ControlObjectiveItems::PDF
   extend ActiveSupport::Concern
 
   def to_pdf organization = nil
-    pdf = Prawn::Document.create_generic_pdf :portrait, false
+    pdf = Prawn::Document.create_generic_pdf :portrait, footer: false
 
     put_header_on pdf, organization
 
@@ -81,7 +81,8 @@ module ControlObjectiveItems::PDF
         [self.class.human_attribute_name('sustantive_score'), sustantive_score_text(show_value: true), 0, false],
         [Control.human_attribute_name('sustantive_tests'), control.sustantive_tests, 0, false],
         [self.class.human_attribute_name('auditor_comment'), auditor_comment, 0, false],
-        [self.class.human_attribute_name('effectiveness'), "#{effectiveness}%", 0, false]
+        [self.class.human_attribute_name('effectiveness'), "#{effectiveness}%", 0, false],
+        [Tag.model_name.human(count: 0), tags.map(&:to_s).to_sentence, 0, false]
       ].compact
     end
 end

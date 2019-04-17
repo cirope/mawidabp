@@ -1,0 +1,5 @@
+sox_404:
+  name: Sox 404
+  description: Sox section 404
+  weight: 80
+  risk_assessment_template: sox

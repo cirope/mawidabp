@@ -1,18 +1,22 @@
 module Reports::PlannedCostSummary
   include Reports::Period
-  include Reports::Pdf
+  include Reports::PDF
 
   def planned_cost_summary
     init_planned_cost_summary_vars
 
     @periods.each do |period|
-      plan_items_by_month = @plan_items.for_period(period).group_by do |plan_item|
-        plan_item.start.beginning_of_month.to_date
+      items               = @plan_items.for_period period
+      plan_items_by_month = items.each_with_object({}) do |plan_item, result|
+        plan_item.month_beginnings.each do |month|
+          result[month] ||= []
+          result[month] <<  plan_item
+        end
       end
 
       @data[period] = {
         data:   planned_cost_summary_data_for(plan_items_by_month),
-        months: plan_items_by_month.keys.sort
+        months: plan_items_by_month.keys.flatten.uniq.sort
       }
     end
   end
@@ -47,10 +51,8 @@ module Reports::PlannedCostSummary
       @plan_items = PlanItem.list.where(start: @from_date..@to_date)
 
       @column_order = [
-        ['month', 20],
-        ['estimated_amount', 30],
-        ['real_amount', 30],
-        ['deviation', 20]
+        ['month', 35],
+        ['estimated_amount', 65]
       ]
     end
 
@@ -58,71 +60,49 @@ module Reports::PlannedCostSummary
       data = {}
 
       Hash[plan_items_by_month.sort].each do |date, plan_items|
-        planned  = ResourceUtilization.human.joins(:user).items_planned_on  plan_items
-        executed = ResourceUtilization.human.joins(:user).items_executed_on plan_items
-
-        put_planned_data_on   data, planned, date
-        put_executed_data_on  data, executed, date
-        put_deviation_data_on data, date
+        plan_items.each do |plan_item|
+          put_cost_summary_for data, date, plan_item
+        end
       end
 
       data
     end
 
-    def put_planned_data_on data, planned, date
-      planned.group(:resource_id, :name, :last_name).sum(:units).each do |user_data, sum|
-        user_id = user_data.first
+    def put_cost_summary_for data, date, plan_item
+      spreads = plan_item.month_spreads
 
-        data[user_id] ||= {
-          name: [user_data.last, user_data.second].join(', '),
+      plan_item.human_resource_utilizations.each do |hru|
+        units = hru.units * spreads[date]
+
+        data[hru.resource_id] ||= {
+          name: hru.resource.full_name,
+          total: 0,
           data: {}
         }
 
-        data[user_id][:data][date] = { planed_units: sum }
-      end
-    end
+        data[hru.resource_id][:data][date] ||= { planned_units:  0 }
 
-    def put_executed_data_on data, executed, date
-      executed.group(:resource_id, :name, :last_name).sum(:units).each do |user_data, sum|
-        user_id = user_data.first
-
-        data[user_id] ||= {
-          name: [user_data.last, user_data.second].join(', '),
-          data: {}
-        }
-
-        data[user_id][:data][date] ||= {}
-        data[user_id][:data][date][:executed_units] = sum
-      end
-    end
-
-    def put_deviation_data_on data, date
-      data.each do |user_id, user_data|
-        if user_data[:data][date]
-          estimated  = user_data[:data][date][:planed_units] || 0
-          real       = user_data[:data][date][:executed_units] || 0
-          difference = estimated - real
-          deviation  = real > 0 ? difference / real.to_f * 100 : (estimated > 0 ? 100 : 0)
-
-          user_data[:data][date][:deviation] = deviation
-        end
+        data[hru.resource_id][:data][date][:planned_units] += units
+        data[hru.resource_id][:total] += units
       end
     end
 
     def put_planned_cost_summary_on pdf, period
       @data[period][:data].each do |user_id, data|
+        pdf.move_down PDF_FONT_SIZE
         pdf.text "<b>#{data[:name]}</b>", inline_format: true, font_size: PDF_FONT_SIZE
         pdf.move_down PDF_FONT_SIZE
 
-        put_user_planned_cost_summary_on pdf, data[:data], @data[period][:months]
+        put_user_planned_cost_summary_on pdf,
+          data: data[:data], months: @data[period][:months], total: data[:total]
 
         pdf.move_down PDF_FONT_SIZE
       end
     end
 
-    def put_user_planned_cost_summary_on pdf, data, months
+    def put_user_planned_cost_summary_on pdf, data:, months:, total:
       column_headers, column_widths = [], []
-      table_data = user_planned_cost_summary_table_data data, months
+      table_data = user_planned_cost_summary_table_data data, months, total
 
       @column_order.each do |column|
         column_headers << "<b>#{t("execution_reports.planned_cost_summary.column_#{column.first}")}</b>"
@@ -144,17 +124,20 @@ module Reports::PlannedCostSummary
       end
     end
 
-    def user_planned_cost_summary_table_data data, months
-      months.map do |month|
+    def user_planned_cost_summary_table_data data, months, total
+      result = months.map do |month|
         month_data = data[month] || {}
 
         [
           I18n.l(month, format: '%b-%y'),
-          '%.2f' % (month_data[:planed_units] || 0),
-          '%.2f' % (month_data[:executed_units] || 0),
-          '%.0f%%' % (month_data[:deviation] || 0)
+          '%.2f' % (month_data[:planned_units] || 0)
         ]
       end
+
+      result << [
+        "<b>#{I18n.t 'label.total'}</b>",
+        "<b>#{'%.2f' % total}</b>"
+      ]
     end
 
     def save_and_redirect_to_planned_cost_summary_pdf pdf

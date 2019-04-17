@@ -21,8 +21,8 @@ module AutoCompleteFor::ProcessControl
     parameters = {
       false:           false,
       true:            true,
-      organization_id: Organization.current_id,
-      group_id:        Group.current_id
+      organization_id: Current.organization&.id,
+      group_id:        Current.group&.id
     }
 
     @tokens.each_with_index do |t, i|
@@ -39,7 +39,7 @@ module AutoCompleteFor::ProcessControl
     ).where(
       conditions.map { |c| "(#{c})" }.join(' AND '), parameters
     ).order(
-      "#{::ProcessControl.quoted_table_name}.#{::ProcessControl.qcn('name')} ASC"
+      Arel.sql "#{::ProcessControl.quoted_table_name}.#{::ProcessControl.qcn('name')} ASC"
     ).references(:best_practice).limit(10)
 
     respond_to do |format|

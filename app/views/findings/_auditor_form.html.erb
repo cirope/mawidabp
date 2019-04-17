@@ -1,5 +1,5 @@
 <% users_readonly = @finding.implemented_audited? || @finding.assumed_risk? || @finding.repeated? || @finding.expired? %>
-<% show_history_changes = @finding.status_change_history.size > 1 %>
+<% show_history_changes = show_follow_up_timestamps? && @finding.status_change_history.size > 1 %>
 <%= simple_form_for @finding, :as => :finding, :url => finding_path(params[:completed], @finding), :html =>
   {:method => :patch, :id => "edit_finding_#{@finding.id}"} do |f| %>
 
@@ -85,62 +85,71 @@
         <%= f.input :origination_date, as: :date_picker,
           label: Finding.human_attribute_name(:origination_date), readonly: true %>
         <%= f.input :answer, input_html: { rows: SHOW_FINDING_CURRENT_SITUATION ? 9 : 5 } %>
-        <%= f.input :follow_up_date, as: :date_picker, label:
-          @finding.class.human_attribute_name(:follow_up_date) %>
-        <%= show_weakness_previous_follow_up_dates(@finding) if @finding.follow_up_date %>
+        <%= f.input :follow_up_date, as: :date_picker, label: @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: @finding.tasks.any? } %>
+        <% if @finding.follow_up_date && show_follow_up_timestamps? %>
+          <%= show_weakness_previous_follow_up_dates(@finding) %>
+        <% end %>
         <%= f.input :solution_date, as: :date_picker, label:
           Finding.human_attribute_name(:solution_date) %>
         <%= f.input :id, as: :hidden %>
-        <%= f.input :audit_comments, input_html: { rows: 5 } %>
+        <%= f.input :audit_comments, input_html: { rows: 5, readonly: SHOW_WEAKNESS_EXTRA_ATTRIBUTES } %>
       </div>
     </div>
 
     <% if @finding.kind_of?(Weakness) && SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :compliance, collection: weakness_compliance_options, prompt: true %>
+          <%= f.input :compliance, collection: weakness_compliance_options, prompt: true, input_html: { data: { tag_modifier: true } } %>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4">
-          <%= f.input :impact, as: :check_boxes, collection: weakness_impact_options, disabled: true %>
+          <%= f.input :impact, as: :check_boxes, collection: weakness_impact_options %>
         </div>
         <div class="col-md-4">
-          <%= f.input :operational_risk, as: :check_boxes, collection: weakness_operational_risk_options, disabled: true %>
+          <%= f.input :operational_risk, as: :check_boxes, collection: weakness_operational_risk_options %>
         </div>
         <div class="col-md-4">
-          <%= f.input :internal_control_components, as: :check_boxes, collection: weakness_internal_control_components_options, disabled: true %>
+          <%= f.input :internal_control_components, as: :check_boxes, collection: weakness_internal_control_components_options %>
         </div>
       </div>
     <% end %>
   </div>
 
-  <br />
-  <h4>
-    <%= Tag.model_name.human count: 0 %>
-  </h4>
-
-  <div class="row">
-    <div class="col-md-6">
-      <h5><strong><%= Tag.human_attribute_name :name %></strong></h5>
+  <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
+    <div class="row">
+      <div class="col-md-12">
+        <%= f.input :tag_ids, as: :check_boxes, collection: finding_tag_options %>
+      </div>
     </div>
-  </div>
+  <% else %>
+    <br />
+    <h4>
+      <%= Tag.model_name.human count: 0 %>
+    </h4>
 
-  <div id="taggings">
-    <%= f.simple_fields_for :taggings do |t_f| %>
-      <%= render 'findings/tagging', f: t_f, parent: f %>
-    <% end %>
+    <div class="row">
+      <div class="col-md-6">
+        <h5><strong><%= Tag.human_attribute_name :name %></strong></h5>
+      </div>
+    </div>
 
-    <%= link_to_add_fields t('finding.add_tagging'), f, :taggings, 'findings/tagging' %>
-  </div>
+    <div id="taggings">
+      <%= f.simple_fields_for :taggings do |t_f| %>
+        <%= render 'findings/tagging', f: t_f, parent: f %>
+      <% end %>
 
-  <% unless @finding.important_dates.blank? %>
+      <%= link_to_add_fields t('finding.add_tagging'), f, :taggings, 'findings/tagging' %>
+    </div>
+  <% end %>
+
+  <% if @finding.important_dates.present? && show_follow_up_timestamps? %>
     <h4>
       <%= t('finding.important_dates.title') %>
     </h4>
     <ul>
       <% @finding.important_dates.each do |important_date| %>
-        <li><%= textilize_without_paragraph important_date %></li>
+        <li><%= markdown_without_paragraph important_date %></li>
       <% end %>
     </ul>
   <% end %>
@@ -249,6 +258,36 @@
 
   <br />
   <h4>
+    <%= Task.model_name.human count: 0 %>
+  </h4>
+  <div class="row">
+    <div class="col-md-1">
+      <h5>
+        <strong><%= Task.human_attribute_name 'code' %></strong>
+        <small><%= link_to_recode_tasks %></small>
+      </h5>
+    </div>
+    <div class="col-md-5">
+      <h5><strong><%= Task.human_attribute_name 'description' %></strong></h5>
+    </div>
+    <div class="col-md-2">
+      <h5><strong><%= Task.human_attribute_name 'status' %></strong></h5>
+    </div>
+    <div class="col-md-2">
+      <h5><strong><%= Task.human_attribute_name 'due_on' %></strong></h5>
+    </div>
+  </div>
+
+  <div id="tasks" data-follow-up-date-changed-warning="<%= t 'finding.follow_up_date_changed_warning' %>">
+    <%= f.simple_fields_for :tasks do |fr_f| %>
+      <%= render 'task', f: fr_f %>
+    <% end %>
+
+    <%= link_to_add_fields(t('finding.add_task'), f, :tasks) %>
+  </div>
+
+  <br />
+  <h4>
     <%= t('finding.finding_answers') %>
   </h4>
   <div class="row">
@@ -309,10 +348,11 @@
   </div>
 
   <br />
-  <%= textilize t('finding.costs',
-    :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
+  <% if show_follow_up_timestamps? %>
+    <%= markdown t('finding.costs', :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
+  <% end %>
 
-  <% unless @finding.costs.blank? %>
+  <% if @finding.costs.present? && show_follow_up_timestamps? %>
     <p>
       <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
     </p>

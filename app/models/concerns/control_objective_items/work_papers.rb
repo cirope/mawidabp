@@ -12,6 +12,14 @@ module ControlObjectiveItems::WorkPapers
     accepts_nested_attributes_for :work_papers, allow_destroy: true
   end
 
+  def pdf_cover_items
+    [
+      [BestPractice.model_name.human, best_practice.name],
+      [ProcessControl.model_name.human, process_control.name],
+      [self.class.human_attribute_name('control_objective_text'), control_objective_text]
+    ]
+  end
+
   private
 
     def set_proper_parent

@@ -71,7 +71,9 @@
     <strong><%= Weakness.human_attribute_name(:follow_up_date) %></strong>:
     <%= l(@finding.follow_up_date, :format => :long) if @finding.follow_up_date %>
   </p>
-  <%= show_weakness_previous_follow_up_dates @finding %>
+  <% if show_follow_up_timestamps? %>
+    <%= show_weakness_previous_follow_up_dates @finding %>
+  <% end %>
 <% end %>
 <p>
   <strong><%= Finding.human_attribute_name(:solution_date) %></strong>:
@@ -132,7 +134,7 @@
   </h4>
   <ul>
     <% @finding.important_dates.each do |important_date| %>
-      <li><%= textilize_without_paragraph important_date %></li>
+      <li><%= markdown_without_paragraph important_date %></li>
     <% end %>
   </ul>
 <% end %>
@@ -210,6 +212,35 @@
   </ul>
 <% end %>
 
+<% if @finding.tasks.any? %>
+  <br />
+  <h4>
+    <%= Task.model_name.human count: 0 %>
+  </h4>
+
+  <table class="table table-condensed table-striped table-hover">
+    <thead>
+      <tr>
+        <th><%= Task.human_attribute_name 'code' %></th>
+        <th><%= Task.human_attribute_name 'description' %></th>
+        <th><%= Task.human_attribute_name 'status' %></th>
+        <th><%= Task.human_attribute_name 'due_on' %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @finding.tasks.each do |task| %>
+        <tr>
+          <td><%= task.code %></td>
+          <td><%= task.description %></td>
+          <td><%= t "tasks.status.#{task.status}" %></td>
+          <td><%= l task.due_on %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
 <% unless @finding.finding_answers.blank? %>
   <h4>
     <%= t('finding.finding_answers') %>
@@ -238,10 +269,15 @@
               link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
           </td>
           <td>
-            <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
+            <% if finding_answer.created_at && show_follow_up_timestamps? %>
+              <%= l(finding_answer.created_at, :format => :long) %>
+            <% end %>
             <% if finding_answer.commitment_date %>
-              <br />
-              <br /><strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
+              <% if show_follow_up_timestamps? %>
+                <br />
+                <br />
+              <% end %>
+              <strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
               <br /><%= l(finding_answer.commitment_date, :format => :long) %>
             <% end %>
           </td>
@@ -307,10 +343,11 @@
   </table>
 <% end %>
 
-<%= textilize t('finding.costs',
-  :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
+<% if show_follow_up_timestamps? %>
+  <%= markdown t('finding.costs', :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
+<% end %>
 
-<% unless @finding.costs.blank? %>
+<% if @finding.costs.present? && show_follow_up_timestamps? %>
   <p>
     <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
   </p>
@@ -348,7 +385,14 @@
     <strong><%= link_to_edit edit_finding_path(params[:completed],
       @finding, :user_id => params[:user_id]) %></strong> |
   <% end %>
-  <%= link_to t('finding.follow_up_report.download'),
-    follow_up_pdf_finding_path(params[:completed], @finding, :_ts => Time.now.to_i) %> |
-  <%= link_to_index findings_path(params[:completed], :user_id => params[:user_id]) %>
+  <%= link_to_index findings_path(params[:completed], :user_id => params[:user_id]) %> |
+  <%= render('shared/downloads',
+    right: true,
+    links: [
+      link_to(t('finding.follow_up_report.download_brief'),
+              follow_up_pdf_finding_path(params[:completed], @finding, :brief => true, :_ts => Time.now.to_i)),
+      (link_to(t('finding.follow_up_report.download'),
+              follow_up_pdf_finding_path(params[:completed], @finding, :_ts => Time.now.to_i)) if show_follow_up_timestamps?)
+    ].compact
+  ) %>
 </div>

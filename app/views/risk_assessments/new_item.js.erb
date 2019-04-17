@@ -1,0 +1,14 @@
++function () {
+  var $container = $('[data-risk-assessment-items-container]')
+
+  <%= simple_fields_for @risk_assessment do |f| %>
+    <%= f.simple_fields_for :risk_assessment_items, @risk_assessment_item, child_index: @risk_assessment_item.object_id do |rai_f| %>
+      $container.
+        append('<%= j render('risk_assessment_item', f: rai_f) %>').
+        find('[autofocus="autofocus"]').
+        focus()
+    <% end %>
+  <% end %>
+
+  $container.find('[name$="[order]"]').each(function (i, e) { $(e).val(i + 1) })
+}()

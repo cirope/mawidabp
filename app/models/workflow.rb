@@ -2,7 +2,7 @@ class Workflow < ApplicationRecord
   include ParameterSelector
 
   has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
+    organization_id: ->(model) { Current.organization&.id }
   }
 
   # Callbacks
@@ -15,7 +15,7 @@ class Workflow < ApplicationRecord
   attr_readonly :period_id, :review_id
 
   # Scopes
-  scope :list, -> { where(organization_id: Organization.current_id) }
+  scope :list, -> { where(organization_id: Current.organization&.id) }
 
   # Restricciones
   validates :period_id, :review_id, :organization_id, :presence => true
@@ -33,9 +33,11 @@ class Workflow < ApplicationRecord
 
   has_many :workflow_items, -> {
     order(
-      "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('order_number')} ASC",
-      "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('start')} ASC",
-      "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('end')} ASC"
+      [
+        "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('order_number')} ASC",
+        "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('start')} ASC",
+        "#{WorkflowItem.quoted_table_name}.#{WorkflowItem.qcn('end')} ASC"
+      ].map { |o| Arel.sql o }
     )
   }, :dependent => :destroy
   has_many :resource_utilizations, :through => :workflow_items

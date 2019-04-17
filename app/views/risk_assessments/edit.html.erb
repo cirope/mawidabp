@@ -1,0 +1,19 @@
+<%= content_for :form_actions do %>
+  <%= link_to_show @risk_assessment %> |
+  <%= link_to_index risk_assessments_path %> |
+  <div class="dropdown dropup inline">
+    <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
+      <%= t '.other_actions' %>
+      <span class="caret"></span>
+    <% end %>
+    <ul class="dropdown-menu dropdown-menu-right">
+      <li>
+        <%= link_to t('.sort_by_risk'), [:sort_by_risk, @risk_assessment], data: {
+          method: :patch, confirm: t('messages.confirmation')
+        } %>
+      </li>
+    </ul>
+  </div>
+<% end %>
+
+<%= render 'form' %>

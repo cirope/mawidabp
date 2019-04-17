@@ -213,6 +213,35 @@
   </ul>
 <% end %>
 
+<% if @weakness.tasks.any? %>
+  <br />
+  <h3>
+    <%= Task.model_name.human count: 0 %>
+  </h3>
+
+  <table class="table table-condensed table-striped table-hover">
+    <thead>
+      <tr>
+        <th><%= Task.human_attribute_name 'code' %></th>
+        <th><%= Task.human_attribute_name 'description' %></th>
+        <th><%= Task.human_attribute_name 'status' %></th>
+        <th><%= Task.human_attribute_name 'due_on' %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @weakness.tasks.each do |task| %>
+        <tr>
+          <td><%= task.code %></td>
+          <td><%= task.description %></td>
+          <td><%= t "tasks.status.#{task.status}" %></td>
+          <td><%= l task.due_on %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
 <% unless @weakness.finding_answers.blank? %>
   <h3>
     <%= t('finding.finding_answers') %>

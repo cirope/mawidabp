@@ -59,7 +59,7 @@ class FindingPdf < Prawn::Document
     end
 
     def add_body
-      put_findings @findings.includes(:review, control_objective: {
+      put_findings @findings.preload(:review, control_objective: {
         process_control: :best_practice
       })
     end
@@ -127,6 +127,7 @@ class FindingPdf < Prawn::Document
         'project'      => PlanItem.human_attribute_name('project'),
         'review_code'  => Finding.human_attribute_name('review_code'),
         'title'        => Finding.human_attribute_name('title'),
+        'updated_at'   => Finding.human_attribute_name('updated_at'),
         'tags'         => Tag.model_name.human(count: 0)
       }
     end

@@ -2,13 +2,13 @@ module LoginRecords::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list, -> { where(organization_id: Organization.current_id) }
+    scope :list, -> { where(organization_id: Current.organization&.id) }
 
     scope :between, ->(conditions) {
       list.
       includes(:user).
       where(conditions).
-      order("#{quoted_table_name}.#{qcn('start')} DESC").
+      order(Arel.sql("#{quoted_table_name}.#{qcn('start')} DESC")).
       references(:users)
     }
   end

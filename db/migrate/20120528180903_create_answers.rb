@@ -8,8 +8,8 @@ class CreateAnswers < ActiveRecord::Migration[4.2]
       t.integer :lock_version, :default => 0
       # AnswerWritten
       t.text :answer
-      # AnswerMultiChoice
-      t.references :answer_option 
+      # AnswerMultiChoice and AnswerYesNo
+      t.references :answer_option
       t.timestamps null: false
     end
 

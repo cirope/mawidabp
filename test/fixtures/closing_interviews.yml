@@ -1,0 +1,10 @@
+current:
+  interview_date: <%= Time.zone.today.to_s :db %>
+  findings_summary: Interview finding summary
+  recommendations_summary: Interview recommendations summary
+  suggestions: Interview suggestions
+  comments: Interview comments
+  audit_comments: Interview audit comments
+  responsible_comments: Interview responsible comments
+  review: review_without_conclusion
+  organization: cirope

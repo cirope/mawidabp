@@ -1,0 +1,5 @@
+sox_section_13_low_risk:
+  value: <%= RiskWeight.risks_values.last %>
+  weight: 30
+  risk_assessment_weight: sox_404
+  risk_assessment_item: sox_section_13

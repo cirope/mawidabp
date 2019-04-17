@@ -1,8 +1,8 @@
 module Reviews::WeaknessesBrief
   extend ActiveSupport::Concern
 
-  def put_weaknesses_brief_table pdf, finals
-    column_data = weaknesses_brief_column_data finals
+  def put_weaknesses_brief_table pdf, finals, date
+    column_data = weaknesses_brief_column_data finals, date
 
     if column_data.present?
       widths        = weaknesses_brief_column_widths pdf
@@ -25,18 +25,18 @@ module Reviews::WeaknessesBrief
 
   private
 
-    def weaknesses_brief_column_data finals
+    def weaknesses_brief_column_data finals, date
       findings = finals ? final_weaknesses : weaknesses
 
       [
-        new_weaknesses_row(findings),
-        repeated_weaknesses_row(findings),
-        total_weaknesses_row(findings)
+        new_weaknesses_row(findings, date),
+        repeated_weaknesses_row(findings, date),
+        total_weaknesses_row(findings, date)
       ]
     end
 
-    def new_weaknesses_row findings
-      counts = new_weaknesses_counts(findings).map do |c|
+    def new_weaknesses_row findings, date
+      counts = new_weaknesses_counts(findings, date).map do |c|
         { content: c.to_s, align: :center }
       end
 
@@ -44,14 +44,14 @@ module Reviews::WeaknessesBrief
         I18n.t('review.new_weaknesses'),
         counts,
         {
-          content: "<b>#{new_weaknesses_counts(findings).sum}</b>",
+          content: "<b>#{new_weaknesses_counts(findings, date).sum}</b>",
           align: :center
         }
       ].flatten
     end
 
-    def repeated_weaknesses_row findings
-      counts = repeated_weaknesses_counts(findings).map do |c|
+    def repeated_weaknesses_row findings, date
+      counts = repeated_weaknesses_counts(findings, date).map do |c|
         { content: c.to_s, align: :center }
       end
 
@@ -59,14 +59,14 @@ module Reviews::WeaknessesBrief
         I18n.t('review.repeated_weaknesses'),
         counts,
         {
-          content: "<b>#{repeated_weaknesses_counts(findings).sum}</b>",
+          content: "<b>#{repeated_weaknesses_counts(findings, date).sum}</b>",
           align: :center
         }
       ].flatten
     end
 
-    def total_weaknesses_row findings
-      counts = total_weaknesses_counts(findings).map do |t|
+    def total_weaknesses_row findings, date
+      counts = total_weaknesses_counts(findings, date).map do |t|
         { content: "<b>#{t}</b>", align: :center }
       end
 
@@ -74,7 +74,7 @@ module Reviews::WeaknessesBrief
         "<b>#{I18n.t('label.total')}</b>",
         counts,
         {
-          content: "<b>#{total_weaknesses_counts(findings).sum}</b>",
+          content: "<b>#{total_weaknesses_counts(findings, date).sum}</b>",
           align: :center
         }
       ].flatten
@@ -98,21 +98,33 @@ module Reviews::WeaknessesBrief
       ].flatten
     end
 
-    def new_weaknesses_counts findings
+    def new_weaknesses_counts findings, date
       self.class.risks.to_a.reverse.map do |risk, value|
-        findings.not_revoked.where(risk: value, repeated_of_id: nil).count
+        count = 0
+
+        findings.not_revoked.where(risk: value).each do |f|
+          count += 1 unless f.take_as_repeated_for_score? date: date
+        end
+
+        count
       end
     end
 
-    def repeated_weaknesses_counts findings
+    def repeated_weaknesses_counts findings, date
       self.class.risks.to_a.reverse.map do |risk, value|
-        findings.not_revoked.where(risk: value).where.not(repeated_of_id: nil).count
+        count = 0
+
+        findings.not_revoked.where(risk: value).each do |f|
+          count += 1 if f.take_as_repeated_for_score? date: date
+        end
+
+        count
       end
     end
 
-    def total_weaknesses_counts findings
-      new_counts      = new_weaknesses_counts findings
-      repeated_counts = repeated_weaknesses_counts findings
+    def total_weaknesses_counts findings, date
+      new_counts      = new_weaknesses_counts findings, date
+      repeated_counts = repeated_weaknesses_counts findings, date
 
       self.class.risks.to_a.each_with_index.map do |risk, index|
         new_counts[index] + repeated_counts[index]

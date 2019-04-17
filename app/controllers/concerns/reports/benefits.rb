@@ -1,5 +1,5 @@
 module Reports::Benefits
-  include Reports::Pdf
+  include Reports::PDF
   include Reports::Period
 
   def benefits

@@ -1,0 +1,2 @@
+module RiskAssessmentTemplatesHelper
+end

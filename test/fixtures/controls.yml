@@ -98,6 +98,16 @@ security_policy_3_1_item_control_1:
   controllable_id: <%= ActiveRecord::FixtureSet.identify(:security_policy_3_1_item) %>
   order: 1
 
+organization_security_4_2_item_editable_control_1:
+  control: "4.2.1 Identificación de riesgos del acceso de terceras partes."
+  design_tests: "Design tests"
+  compliance_tests: "Compliance tests"
+  sustantive_tests: "Proposed sustantive tests"
+  effects: "Effects"
+  controllable_type: ControlObjectiveItem
+  controllable_id: <%= ActiveRecord::FixtureSet.identify(:organization_security_4_2_item_editable) %>
+  order: 1
+
 organization_security_4_1_item_control_1:
   control: "4.1.1	Foro gerencial sobre seguridad de la información."
   design_tests: "Design tests"

@@ -1,12 +1,19 @@
 es:
   shared:
     filters:
+      answer_option:
+        filter_answers: 'Mostrar únicamente respuestas coincidentes'
       date_field:
         between: 'Entre'
       user:
         user_in_comments: 'Incluir usuarios en comentarios'
+        user_inverted: 'Excluir'
       poll_user:
         user_option: 'Ver'
         affected_only: 'Asignadas'
         only_all: 'Solo a todos'
         include_reviews: 'Asignadas y por informe'
+      order_by:
+        issue_date: 'Fecha de emisión'
+        risk: 'Riesgo'
+        first_follow_up_date: 'Primer fecha de implementación'

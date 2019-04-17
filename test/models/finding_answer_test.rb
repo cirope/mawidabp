@@ -88,7 +88,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
   end
 
   test 'validates blank attributes with audited' do
-    Organization.current_id = organizations(:cirope).id
+    Current.organization = organizations(:cirope)
 
     @finding_answer.user = users(:audited)
     @finding_answer.answer = ' '
@@ -99,7 +99,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
     assert_error @finding_answer, :answer, :blank
     assert_error @finding_answer, :commitment_date, :blank
 
-    Organization.current_id = nil
+    Current.organization = nil
   end
 
   test 'validates well formated attributes' do
@@ -110,7 +110,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
   end
 
   test 'requires commitment date' do
-    Organization.current_id = organizations(:cirope).id
+    Current.organization = organizations(:cirope)
 
     @finding_answer.user = users(:audited)
     @finding_answer.finding = findings(:being_implemented_weakness_on_final)
@@ -126,6 +126,6 @@ class FindingAnswerTest < ActiveSupport::TestCase
 
     assert @finding_answer.requires_commitment_date?
 
-    Organization.current_id = nil
+    Current.organization = nil
   end
 end

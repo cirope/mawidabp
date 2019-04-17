@@ -1,0 +1,28 @@
+<div id="weakness_extra_attributes_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+  <div class="row">
+    <div class="col-md-4">
+      <%= f.input(:impact,
+        as:         :check_boxes,
+        label:      Weakness.human_attribute_name('impact'),
+        collection: weakness_impact_options,
+        checked:    params[action] ? params[action][:impact] : nil
+      ) %>
+    </div>
+    <div class="col-md-4">
+      <%= f.input(:operational_risk,
+        as:         :check_boxes,
+        label:      Weakness.human_attribute_name('operational_risk'),
+        collection: weakness_operational_risk_options,
+        checked:    params[action] ? params[action][:operational_risk] : nil
+      ) %>
+    </div>
+    <div class="col-md-4">
+      <%= f.input(:internal_control_components,
+        as:         :check_boxes,
+        label:      Weakness.human_attribute_name('internal_control_components'),
+        collection: weakness_internal_control_components_options,
+        checked:    params[action] ? params[action][:internal_control_components] : nil
+      ) %>
+    </div>
+  </div>
+</div>

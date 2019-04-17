@@ -8,7 +8,7 @@
         <div class="form-group">
           <%= select_tag 'conclusion_review[review_type]', send_review_options, class: 'form-control' %>
         </div>
-        <% unless SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+        <% if Current.conclusion_pdf_format == 'default' %>
           <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.exclude?(current_organization.prefix) %>
             <div class="checkbox">
               <label for="conclusion_review_include_global_score_sheet">
@@ -45,9 +45,11 @@
     <div class="col-md-3">
       <h5><strong><%= t 'polls.answer_poll' %></strong></h5>
     </div>
-    <div class="col-md-2">
-      <h5><strong><%= t 'polls.affected_user' %></strong></h5>
-    </div>
+    <% unless SHOW_ALTERNATIVE_QUESTIONNAIRES %>
+      <div class="col-md-2">
+        <h5><strong><%= t 'polls.about' %></strong></h5>
+      </div>
+    <% end %>
   </div>
 
   <div id="users">

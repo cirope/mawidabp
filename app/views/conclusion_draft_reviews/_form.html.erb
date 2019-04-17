@@ -23,7 +23,7 @@
           readonly: true } %>
       </div>
       <div class="col-md-6">
-        <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+        <% if Current.conclusion_pdf_format == 'gal' %>
           <% if SHOW_CONCLUSION_AS_OPTIONS %>
             <%= f.input :conclusion, collection: conclusion_options, prompt: true, input_html: {
               data: {
@@ -48,7 +48,7 @@
       </div>
     </div>
 
-    <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+    <% if Current.conclusion_pdf_format == 'gal' %>
       <div class="row">
         <div class="col-md-6">
           <%= f.input :recipients, input_html: { rows: 4 } %>
@@ -73,15 +73,50 @@
         <div class="col-md-6">
           <%= f.input :observations, input_html: { rows: 4 } %>
         </div>
-        <% if show_review_best_practice_comments? %>
-          <div class="col-md-6 toggle-visibility">
+        <div class="col-md-6 toggle-visibility">
+          <% if show_review_best_practice_comments? %>
             <%= f.input :affects_compliance, input_html: {
               data: {
                 corrective_actions_update_url: corrective_actions_update_conclusion_draft_reviews_path
               }
             } %>
-          </div>
-        <% end %>
+          <% else %>
+            <%= f.input :collapse_control_objectives %>
+          <% end %>
+        </div>
+      </div>
+    <% elsif Current.conclusion_pdf_format == 'bic' %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :previous_identification %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :previous_date, as: :date_picker %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :objective, input_html: { rows: 4 } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :scope, input_html: { rows: 4 } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :reference, input_html: { rows: 4 } %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :observations, input_html: { rows: 4 } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :recipients, input_html: { rows: 4 } %>
+        </div>
       </div>
     <% end %>
 

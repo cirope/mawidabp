@@ -9,5 +9,12 @@ module Tags::Validation
     validates :style, inclusion: {
       in: %w(default primary success info warning danger)
     }
+    validate :shared_reversion
   end
+
+  private
+
+    def shared_reversion
+      errors.add :shared, :invalid if shared_was && !shared
+    end
 end

@@ -2,12 +2,22 @@ require 'test_helper'
 
 # Pruebas para el controlador de informes borradores
 class ConclusionDraftReviewsControllerTest < ActionController::TestCase
+  include ActiveJob::TestHelper
+
   fixtures :conclusion_reviews
 
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
   setup do
-    @request.host = "#{organizations(:cirope).prefix}.localhost.i"
+    set_host_for_organization(organizations(:cirope).prefix)
+    set_organization organizations(:cirope)
+  end
+
+  teardown do
+    unset_organization
+
+    clear_enqueued_jobs
+    clear_performed_jobs
   end
 
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
@@ -114,7 +124,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     login
     get :new, xhr: true, as: :js
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_equal Mime[:js], @response.content_type
   end
 
   test 'create conclusion draft review' do
@@ -126,14 +136,17 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
-          :conclusion => 'New conclusion',
+          :conclusion => CONCLUSION_OPTIONS.first,
           :recipients => 'John Doe',
           :sectors => 'Area 51',
-          :evolution => 'Do the evolution',
+          :evolution => EVOLUTION_OPTIONS.second,
           :evolution_justification => 'Ok',
-          :observations => nil,
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
+          :objective => 'Some objective',
+          :reference => 'Some reference',
+          :observations => 'Some observations',
+          :scope => 'Some scope',
           :affects_compliance => '0'
         }
       }
@@ -162,23 +175,26 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'Updated applied procedures',
-          :conclusion => 'Updated conclusion',
+          :conclusion => CONCLUSION_OPTIONS.first,
           :recipients => 'John Doe',
           :sectors => 'Area 51',
-          :evolution => 'Do the evolution',
+          :evolution => EVOLUTION_OPTIONS.second,
           :evolution_justification => 'Ok',
           :main_weaknesses_text => 'Some main weakness X',
           :corrective_actions => 'You should do it this way',
-          :affects_compliance => '0',
-          :observations => nil
+          :objective => 'Some objective',
+          :reference => 'Some reference',
+          :observations => 'Some observations',
+          :scope => 'Some scope',
+          :affects_compliance => '0'
         }
       }
     end
 
     assert_redirected_to edit_conclusion_draft_review_url(assigns(:conclusion_draft_review))
     assert_not_nil assigns(:conclusion_draft_review)
-    assert_equal 'Updated conclusion',
-      assigns(:conclusion_draft_review).conclusion
+    assert_equal 'Updated applied procedures',
+      assigns(:conclusion_draft_review).applied_procedures
   end
 
   test 'export conclusion draft review' do
@@ -313,11 +329,9 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       conclusion_reviews(:conclusion_approved_with_conclusion_draft_review).id
     )
 
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_difference 'ActionMailer::Base.deliveries.size' do
+    assert_enqueued_jobs 1 do
       patch :send_by_email, :params => {
         :id => conclusion_review.id,
         :user => {
@@ -334,10 +348,15 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       }
     end
 
+    perform_job_with_current_attributes(enqueued_jobs.first)
+
     assert_redirected_to :action => :edit, :id => conclusion_review.id
     assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
 
-    assert_difference 'ActionMailer::Base.deliveries.size', 2 do
+    clear_enqueued_jobs
+    clear_performed_jobs
+
+    assert_enqueued_jobs 2 do
       patch :send_by_email, :params => {
         :id => conclusion_review.id,
         :user => {
@@ -354,6 +373,10 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       }
     end
 
+    enqueued_jobs.each do |job|
+      perform_job_with_current_attributes(job)
+    end
+
     assert_redirected_to :action => :edit, :id => conclusion_review.id
     assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
   end
@@ -364,16 +387,14 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       conclusion_reviews(:conclusion_approved_with_conclusion_draft_review).id
     )
 
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_difference 'ActionMailer::Base.deliveries.size' do
+    assert_enqueued_jobs 1 do
       patch :send_by_email, :params => {
         :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
-          :email_note => 'note in *textile* _format_'
+          :email_note => 'note in **markdown** _format_'
         },
         :user => {
           users(:administrator).id => {
@@ -383,6 +404,8 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
         }
       }
     end
+
+    perform_job_with_current_attributes(enqueued_jobs.first)
 
     assert_equal 2, ActionMailer::Base.deliveries.last.attachments.size
 
@@ -390,15 +413,18 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       |p| p.content_type.match(/text/)
     }.body.decoded
 
-    assert_match /textile/, text_part
+    assert_match /markdown/, text_part
 
-    assert_difference 'ActionMailer::Base.deliveries.size' do
+    clear_enqueued_jobs
+    clear_performed_jobs
+
+    assert_enqueued_jobs 1 do
       patch :send_by_email, :params => {
         :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
           :include_global_score_sheet => '1',
-          :email_note => 'note in *textile* _format_'
+          :email_note => 'note in **markdown** _format_'
         },
         :user => {
           users(:administrator).id => {
@@ -409,13 +435,15 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       }
     end
 
+    perform_job_with_current_attributes(enqueued_jobs.first)
+
     assert_equal 3, ActionMailer::Base.deliveries.last.attachments.size
 
     text_part = ActionMailer::Base.deliveries.last.parts.detect {
       |p| p.content_type.match(/text/)
     }.body.decoded
 
-    assert_match /textile/, text_part
+    assert_match /markdown/, text_part
   end
 
   test 'can not send by email with final review' do

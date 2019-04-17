@@ -3,6 +3,7 @@ class FindingsController < ApplicationController
   include AutoCompleteFor::Tagging
   include Findings::CurrentUserScopes
   include Findings::SetFinding
+  include Reports::FileResponder
 
   respond_to :html
 
@@ -16,8 +17,8 @@ class FindingsController < ApplicationController
     @findings = current_user_findings
 
     respond_to do |format|
-      format.html { @findings = @findings.page params[:page] }
-      format.csv  { render csv: @findings.to_csv(csv_options), filename: @title.downcase }
+      format.html { paginate_findings }
+      format.csv  { render_index_csv }
       format.pdf  { redirect_to pdf.relative_path }
     end
   end
@@ -34,13 +35,13 @@ class FindingsController < ApplicationController
   def update
     update_resource @finding, finding_params
 
-    location = if @finding.pending?
+    location = if @finding.pending? || @finding.invalid?
                  edit_finding_url params[:completed], @finding
                else
                  finding_url 'complete', @finding
                end
 
-    respond_with @finding, location: location
+    respond_with @finding, location: location unless performed?
   end
 
   private
@@ -60,8 +61,12 @@ class FindingsController < ApplicationController
         :audit_comments, :state, :progress, :origination_date, :solution_date,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
         :compliance, :nested_user, :skip_work_paper, :lock_version,
+        impact: [],
+        operational_risk: [],
+        internal_control_components: [],
         users_for_notification: [],
         business_unit_ids: [],
+        tag_ids: [],
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ],
@@ -75,6 +80,9 @@ class FindingsController < ApplicationController
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
+        ],
+        tasks_attributes: [
+          :id, :code, :description, :status, :due_on, :_destroy
         ],
         taggings_attributes: [
           :id, :tag_id, :_destroy
@@ -136,5 +144,26 @@ class FindingsController < ApplicationController
         (@auth_user.can_act_as_audited? && @finding.users.exclude?(@auth_user))
 
       raise ActiveRecord::RecordNotFound if not_editable
+    end
+
+    def render_index_csv
+      render_or_send_by_mail(
+        collection: @findings,
+        filename: @title.downcase,
+        method_name: :to_csv,
+        options: csv_options
+      )
+    end
+
+    def paginate_findings
+      @findings = @findings.page params[:page]
+
+      if ORACLE_ADAPTER
+        @findings.total_entries = @findings.unscope(
+          :group, :order, :select
+        ).select(:id).distinct.count
+      end
+
+      @findings
     end
 end

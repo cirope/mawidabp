@@ -4,7 +4,7 @@ module ControlObjectives::Scopes
   included do
     scope :list, -> {
       includes(:best_practice).
-        where(best_practices: { organization_id: Organization.current_id }).
+        where(best_practices: { organization_id: Current.organization&.id }).
         references :best_practices
     }
   end

@@ -1,3 +1,6 @@
+<% readonly = @control_objective_item.is_in_a_final_review? %>
+<% frozen = @control_objective_item.review.try(:is_frozen?) %>
+
 <p>
   <strong><%= ProcessControl.model_name.human %>:</strong>
   <%= @control_objective_item.control_objective.process_control.name %>
@@ -24,6 +27,21 @@
   <strong><%= Control.human_attribute_name(:control) %>:</strong>
   <%= simple_format @control_objective_item.control.control %>
 </div>
+
+
+<% if @control_objective_item.tags.any? %>
+  <p>
+    <strong><%= Tag.model_name.human count: 0 %>:</strong>
+
+    <% @control_objective_item.tags.each do |tag| %>
+      <span class="label label-<%= tag.style %>">
+        <span class="glyphicon glyphicon-<%= tag.icon %>"></span>
+        <%= tag %>
+      </span>
+      &nbsp;
+    <% end %>
+  </p>
+<% end %>
 
 <p>
   <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
@@ -79,8 +97,8 @@
   <%= t @control_objective_item.finished? ? 'label.yes' : 'label.no' %>
 </p>
 
-<%= render :partial => 'weaknesses_summary', :locals => {:readonly => true} %>
-<%= render :partial => 'oportunities_summary', :locals => {:readonly => true} %>
+<%= render :partial => 'weaknesses_summary', :locals => {:readonly => readonly, :frozen => frozen} %>
+<%= render :partial => 'oportunities_summary', :locals => {:readonly => readonly, :frozen => frozen} %>
 
 <% unless @control_objective_item.business_unit_scores.empty? %>
   <h3><%= BusinessUnitScore.model_name.human :count => @control_objective_item.business_unit_scores.size %></h3>

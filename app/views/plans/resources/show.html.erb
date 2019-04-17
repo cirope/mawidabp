@@ -1,0 +1,60 @@
+<% if @human_resource_utilizations.any? %>
+  <% @human_resource_utilizations.each do |resource_id, hrus| %>
+    <% total = 0.0 %>
+
+    <table class="table table-condensed table-hover table-striped">
+      <caption>
+        <h3><%= hrus.first.resource.full_name %></h3>
+      </caption>
+
+      <thead>
+        <tr>
+          <th><%= PlanItem.human_attribute_name 'business_unit_id' %></th>
+          <th><%= PlanItem.human_attribute_name 'project' %></th>
+          <th><%= PlanItem.human_attribute_name 'start' %></th>
+          <th><%= PlanItem.human_attribute_name 'end' %></th>
+          <th><%= ResourceUtilization.human_attribute_name 'units' %></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% hrus.sort_by { |hru| hru.resource_consumer.start  }.each do |hru| %>
+          <tr>
+            <td><%= hru.resource_consumer.business_unit %></td>
+            <td><%= hru.resource_consumer.project %></td>
+            <td><%= l hru.resource_consumer.start %></td>
+            <td><%= l hru.resource_consumer.end %></td>
+            <td><%= hru.units %></td>
+          </tr>
+
+          <% total += hru.units %>
+        <% end %>
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td colspan="4">
+            <strong><%= t 'label.total' %></strong>
+          </td>
+          <td>
+            <strong><%= total %></strong>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    <%=  %>
+  <% end %>
+<% else %>
+  <div class="alert alert-info">
+    <p><%= t '.empty' %></p>
+  </div>
+<% end %>
+
+<hr>
+
+<div>
+  <%= link_to_show @plan %> |
+  <%= link_to_edit edit_plan_path(@plan) %> |
+  <%= link_to t('label.download'), [:resources, @plan, format: :pdf] %> |
+  <%= link_to_index plans_path %>
+</div>

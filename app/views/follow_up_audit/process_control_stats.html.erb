@@ -49,6 +49,11 @@
       score: @reviews_score_data[period]
     ) %>
   </p>
+
+  <p style="margin: -.75em 0em 1em 0em;">
+    <%= Review.model_name.human(count: 0) %>:
+    <%= @review_identifications[period].to_sentence %>
+  </p>
 <% end %>
 
 <hr />

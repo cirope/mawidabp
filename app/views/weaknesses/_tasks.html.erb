@@ -1,0 +1,5 @@
+<%= f.simple_fields_for :tasks do |fr_f| %>
+  <%= render 'task', f: fr_f, readonly: readonly %>
+<% end %>
+
+<%= link_to_add_fields t('finding.add_task'), f, :tasks unless readonly %>

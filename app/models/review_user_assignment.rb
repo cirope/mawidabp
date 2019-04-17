@@ -2,6 +2,7 @@ class ReviewUserAssignment < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Comparable
+  include ReviewUserAssignments::AttributeTypes
   include ReviewUserAssignments::DestroyCallbacks
   include ReviewUserAssignments::Scopes
 
@@ -11,10 +12,16 @@ class ReviewUserAssignment < ApplicationRecord
     audited: -1,
     auditor: 0,
     supervisor: 1,
-    manager: 2
+    manager: 2,
+    responsible: 3
   }
 
-  AUDIT_TEAM_TYPES = [TYPES[:auditor], TYPES[:supervisor], TYPES[:manager]]
+  AUDIT_TEAM_TYPES = [
+    TYPES[:auditor],
+    TYPES[:supervisor],
+    TYPES[:manager],
+    TYPES[:responsible]
+  ]
 
   # Callbacks
   before_validation :check_if_can_modified
@@ -47,6 +54,7 @@ class ReviewUserAssignment < ApplicationRecord
       if (record.auditor? && !user.auditor?) ||
           (record.supervisor? && !user.supervisor?) ||
           (record.manager? && (!user.supervisor? && !user.manager?)) ||
+          (record.responsible? && (!user.supervisor? && !user.manager?)) ||
           (record.audited? && !user.can_act_as_audited?)
         record.errors.add attr, :invalid
       end
@@ -108,12 +116,18 @@ class ReviewUserAssignment < ApplicationRecord
           self.review)
 
         transfered = findings.all? do |finding|
+          fua = finding.finding_user_assignments.detect do |fua|
+            fua.user_id == old_user.id
+          end
+
           finding.avoid_changes_notification = true
-          finding.users << new_user
-          finding.users.delete old_user
+
+          finding.finding_user_assignments.build user_id: new_user.id
+          fua.mark_for_destruction
+
           unconfirmed_findings << finding if finding.unconfirmed?
 
-          finding.valid?
+          finding.save
         end
 
         unless transfered

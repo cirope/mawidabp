@@ -9,7 +9,8 @@ module Findings::Search
       project:      project_options,
       review_code:  review_code_options,
       title:        title_options,
-      tags:         tags_options
+      tags:         tags_options,
+      updated_at:   updated_at_options
     }.with_indifferent_access
   end
 
@@ -17,8 +18,16 @@ module Findings::Search
     private
 
       def issue_date_options
+        date_column_options_for "#{ConclusionReview.table_name}.#{ConclusionReview.qcn('issue_date')}"
+      end
+
+      def updated_at_options
+        date_column_options_for "#{quoted_table_name}.#{qcn('updated_at')}"
+      end
+
+      def date_column_options_for(column)
         {
-          column:            "#{ConclusionReview.table_name}.#{ConclusionReview.qcn('issue_date')}",
+          column:            column,
           operator:          SEARCH_ALLOWED_OPERATORS.values,
           mask:              "%s",
           conversion_method: ->(value) { Timeliness.parse(value, :date).to_s(:db) },

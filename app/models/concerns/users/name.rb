@@ -11,6 +11,7 @@ module Users::Name
 
     [version.name, version.last_name].compact.map(&:strip).join(' ')
   end
+  alias display_name informal_name
 
   def full_name from = nil
     version = version_of from

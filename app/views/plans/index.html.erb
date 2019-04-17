@@ -4,7 +4,7 @@
       <th><%= Period.model_name.human %></th>
       <th class="hidden-xs"><%= Period.human_attribute_name 'start' %></th>
       <th class="hidden-xs"><%= Period.human_attribute_name 'end' %></th>
-      <th colspan="5"></th>
+      <th colspan="7"></th>
     </tr>
   </thead>
 
@@ -14,8 +14,10 @@
         <td><%= show_period_with_dates_as_abbr plan.period %></td>
         <td class="hidden-xs"><%= l plan.period.start, format: :short %></td>
         <td class="hidden-xs"><%= l plan.period.end, format: :short %></td>
-        <td><%= link_to_stats [:stats, plan, until: Time.zone.today.to_s(:db)] %></td>
-        <td><%= link_to_clone new_plan_path(clone_from: plan.id) %></td>
+        <td class="hidden-xs"><%= link_to_calendar [:calendar, plan] %></td>
+        <td class="hidden-xs"><%= link_to_resources [:resources, plan] %></td>
+        <td class="hidden-xs"><%= link_to_stats [:stats, plan, until: Time.zone.today.to_s(:db)] %></td>
+        <td class="hidden-xs"><%= link_to_clone new_plan_path(clone_from: plan.id) %></td>
         <td><%= link_to_show plan %></td>
         <td><%= link_to_edit [:edit, plan] %></td>
         <td><%= link_to_destroy plan if plan.can_be_destroyed? %></td>

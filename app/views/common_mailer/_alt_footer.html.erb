@@ -1,0 +1,7 @@
+<div style="margin-top: 2em; padding-top: 1em; font-size: .8em; border-top: 1px dotted gray;">
+  <% url = root_url host: (@organization.blank? ? URL_HOST : "#{@organization.prefix}.#{URL_HOST}") %>
+
+  <p><%= t 'common_mailer.alt_footer.title_html', url: link_to(url, url) %></p>
+
+  <%= markdown t('common_mailer.alt_footer.warning') %>
+</div>

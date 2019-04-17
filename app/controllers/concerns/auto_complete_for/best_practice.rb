@@ -21,8 +21,8 @@ module AutoCompleteFor::BestPractice
     parameters = {
       false:           false,
       true:            true,
-      organization_id: Organization.current_id,
-      group_id:        Group.current_id
+      organization_id: Current.organization&.id,
+      group_id:        Current.group&.id
     }
 
     @tokens.each_with_index do |t, i|
@@ -36,7 +36,7 @@ module AutoCompleteFor::BestPractice
     @best_practice = ::BestPractice.where(
       conditions.map { |c| "(#{c})" }.join(' AND '), parameters
     ).order(
-      "#{::BestPractice.quoted_table_name}.#{::BestPractice.qcn('name')} ASC"
+      Arel.sql("#{::BestPractice.quoted_table_name}.#{::BestPractice.qcn('name')} ASC")
     ).limit(10)
 
     respond_to do |format|

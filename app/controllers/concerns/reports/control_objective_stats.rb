@@ -1,6 +1,6 @@
 module Reports::ControlObjectiveStats
   include Reports::CommonControlObjectiveStats
-  include Reports::Pdf
+  include Reports::PDF
   include Reports::Period
   include Parameters::Risk
 
@@ -104,7 +104,7 @@ module Reports::ControlObjectiveStats
       ]
       @conclusion_reviews = ConclusionFinalReview.list_all_by_date(
         @from_date, @to_date
-      )
+      ).scored_for_report
       @process_control_data = {}
       @reviews_score_data = {}
       @control_objectives = []

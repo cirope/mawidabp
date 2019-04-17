@@ -12,8 +12,8 @@ module PlansHelper
   end
 
   def show_plan_item_info plan_item
-    show_info plan_item.status_text(on: plan_status_date),
-      class: [plan_item.status_color(on: plan_status_date), 'media-object'].join(' ')
+    show_info plan_item.status_text(on: plan_status_info_date),
+      class: [plan_item.status_color(on: plan_status_info_date), 'media-object'].join(' ')
   end
 
   def plan_cost
@@ -76,6 +76,12 @@ module PlansHelper
       plan_items:                business_unit_type_planned_items,
       show_resource_utilization: false
     )
+  end
+
+  def plan_status_info_date
+    date = Timeliness.parse params[:until], :date if params[:until].present?
+
+    date || Time.zone.today
   end
 
   def plan_status_date

@@ -130,4 +130,12 @@ class BestPracticeTest < ActiveSupport::TestCase
       assert co.tags.all?(&:shared)
     end
   end
+
+  test 'to csv' do
+    csv  = @best_practice.to_csv
+    # TODO: change to liberal_parsing: true when 2.3 support is dropped
+    rows = CSV.parse csv.sub("\uFEFF", ''), col_sep: ';', force_quotes: true
+
+    assert_equal @best_practice.control_objectives.count + 1, rows.length
+  end
 end

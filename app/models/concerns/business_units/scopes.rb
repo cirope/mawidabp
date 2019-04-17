@@ -4,7 +4,7 @@ module BusinessUnits::Scopes
   included do
     scope :list, -> {
       joins(:business_unit_type).where(business_unit_types: {
-        organization_id: Organization.current_id
+        organization_id: Current.organization&.id
       }).references(:business_unit_types)
     }
   end

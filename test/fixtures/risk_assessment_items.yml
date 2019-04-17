@@ -1,0 +1,7 @@
+sox_section_13:
+  name: Sox section 13
+  risk: 30
+  order: 1
+  business_unit: business_unit_one
+  process_control:
+  risk_assessment: sox_current

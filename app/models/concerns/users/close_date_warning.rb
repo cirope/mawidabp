@@ -3,7 +3,7 @@ module Users::CloseDateWarning
 
   module ClassMethods
     def notify_auditors_about_close_date
-      if [0, 6].exclude? Date.today.wday
+      if Time.zone.today.workday?
         all_with_conclusion_final_reviews_for_notification.find_each do |user|
           cfrs = user.conclusion_final_reviews.with_near_close_date.to_a
 
@@ -13,7 +13,7 @@ module Users::CloseDateWarning
     end
 
     def notify_new_findings
-      unless [0, 6].include?(Date.today.wday)
+      if Time.zone.today.workday?
         users, findings = [], []
 
         all_with_findings_for_notification.each do |user|

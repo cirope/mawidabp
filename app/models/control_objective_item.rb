@@ -5,10 +5,10 @@ class ControlObjectiveItem < ApplicationRecord
   include Parameters::Qualification
   include ParameterSelector
   include ControlObjectiveItems::Approval
+  include ControlObjectiveItems::AttributeTypes
   include ControlObjectiveItems::BusinessUnitScores
   include ControlObjectiveItems::Control
   include ControlObjectiveItems::ControlObjective
-  include ControlObjectiveItems::DateColumns
   include ControlObjectiveItems::Defaults
   include ControlObjectiveItems::DestroyValidation
   include ControlObjectiveItems::Effectiveness

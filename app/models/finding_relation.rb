@@ -14,7 +14,7 @@ class FindingRelation < ApplicationRecord
   end
 
   # Relaciones
-  belongs_to :finding
+  belongs_to :finding, :touch => true
   belongs_to :related_finding, :class_name => 'Finding'
 
   def to_s

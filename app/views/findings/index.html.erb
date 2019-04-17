@@ -14,7 +14,11 @@
 <table class="table table-condensed table-striped table-hover">
   <thead id="column_headers">
     <tr>
-      <th></th>
+      <%= make_filterable_column(
+        simple_icon(Finding.human_attribute_name('updated_at'), 'calendar'),
+        nil,
+        'updated_at'
+      ) %>
       <%= make_filterable_column(
         Finding.human_attribute_name('organization'), { class: 'hidden-sm hidden-xs' }, 'organization'
       ) if current_organization.corporate? %>
@@ -40,9 +44,9 @@
         <% if current_organization.corporate? %>
           <td><%= finding.organization.prefix %></td>
         <% end %>
-        <td class="nowrap"><%= show_review_with_conclusion_status_as_abbr(finding.review) %></td>
+        <td><%= show_review_with_conclusion_status_as_abbr(finding.review) %></td>
         <td class="hidden-xs hidden-sm"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
-        <td class="nowrap"><%= show_finding_review_code_with_decription_as_abbr(finding) %></td>
+        <td><%= show_finding_review_code_with_decription_as_abbr(finding) %></td>
         <td class="hidden-xs hidden-sm"><%= super_truncate(finding.title, 17) %></td>
         <td class="hidden-xs"><%= super_truncate finding.state_text, 19 %></td>
         <% if params[:completed] == 'complete' %>

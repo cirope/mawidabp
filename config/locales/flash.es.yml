@@ -26,6 +26,13 @@ es:
         notice: 'Buena práctica eliminada'
         alert: 'La buena práctica no puede ser eliminada, ya ha sido utilizada en informes'
 
+    closing_interviews:
+      create:
+        notice: 'Entrevista de cierre agregada correctamente'
+      update:
+        notice: 'Entrevista de cierre actualizada correctamente'
+        stale: 'La entrevista de cierre no fue actualizada, intente nuevamente'
+
     findings:
       update:
         notice: 'Respuesta a hallazgo actualizada correctamente.'
@@ -41,6 +48,13 @@ es:
       destroy:
         notice: 'Noticia eliminada'
         alert: 'La noticia no pudo ser eliminada'
+
+    opening_interviews:
+      create:
+        notice: 'Entrevista de inicio agregada correctamente'
+      update:
+        notice: 'Entrevista de inicio actualizada correctamente'
+        stale: 'La entrevista de inicio no fue actualizada, intente nuevamente'
 
     organizations:
       create:
@@ -87,6 +101,28 @@ es:
       destroy:
         notice: 'Clase de recurso eliminada'
         alert: 'La clase de recurso no pudo ser eliminada'
+
+    risk_assessments:
+      create:
+        notice: 'Evaluación de riesgo agregada correctamente'
+      merge_to_plan:
+        notice: 'Plan actualizado correctamente'
+      update:
+        notice: 'Evaluación de riesgo actualizada correctamente'
+        stale: 'La evaluación de riesgo no fue actualizada, intente nuevamente'
+      destroy:
+        notice: 'Evaluación de riesgo eliminada'
+      sort_by_risk:
+        notice: 'Evaluación de riesgo ordenada correctamente'
+
+    risk_assessment_templates:
+      create:
+        notice: 'Plantilla de evaluación de riesgo agregada correctamente'
+      update:
+        notice: 'Plantilla de evaluación de riesgo actualizada correctamente'
+        stale: 'La plantilla de evaluación de riesgo no fue actualizada, intente nuevamente'
+      destroy:
+        notice: 'Plantilla de evaluación de riesgo eliminada'
 
     settings:
       update:

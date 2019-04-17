@@ -13,7 +13,7 @@ module ConclusionFinalReviews::Sort
       def close_date_sort_options
         {
           name:  ConclusionReview.human_attribute_name('close_date'),
-          field: "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn 'close_date'} ASC"
+          field: Arel.sql("#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn 'close_date'} ASC")
         }
       end
   end

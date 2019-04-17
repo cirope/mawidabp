@@ -25,7 +25,7 @@ BLANK_PASSWORD_STALE_DAYS = 3
 # sistema notificará su proximidad
 CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS = 7
 # Expresión regular para validar direcciones de correo
-EMAIL_REGEXP = /\A[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\Z/i
+EMAIL_REGEXP = /\A[a-z0-9'._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\Z/i
 # Cantidad máxima de observaciones por PDF
 FINDING_MAX_PDF_ROWS = 100
 # Cantidad de días anteriores al vencimiento de una observación en los que el
@@ -33,6 +33,8 @@ FINDING_MAX_PDF_ROWS = 100
 FINDING_WARNING_EXPIRE_DAYS = 7
 # Cantidad de días a los que se debe enviar una nueva solicitud de confirmación
 FINDING_DAYS_FOR_SECOND_NOTIFICATION = 1
+# Fecha inicial para el envío de correo con resumen de observaciones
+FINDING_INITIAL_BRIEF_DATE = Date.new 2018, 1, 1
 # Opciones para crear claves foráneas
 FOREIGN_KEY_OPTIONS={ on_delete: :restrict, on_update: :restrict }
 # Días a los que se consideran anticuadas las notificaciones
@@ -42,13 +44,15 @@ DISABLE_FINDINGS_EXPIRATION_NOTIFICATION = ENV['DISABLE_FINDINGS_EXPIRATION_NOTI
 # Cadena para separar las enumeraciones cuando son concatenadas
 APP_ENUM_SEPARATOR = ' / '.freeze
 # Márgenes a dejar en los reportes generados en PDF (T, R, B, L)
-PDF_MARGINS = [25, 20, 20, 25].freeze
+PDF_MARGINS = [25, 20, 30, 25].freeze
 # Tamaño de la página a usar en los reportes generados en PDF
 PDF_PAPER = 'A4'.freeze
 # Logo para el pié de página de los PDFs
 PDF_LOGO = File.join(Rails.root, 'app', 'assets', 'images', 'logo_pdf.png').freeze
 # Dimensiones del logo en pixels, primero el ancho y luego el alto
 PDF_LOGO_SIZE = [350, 51].map { |size| (size / 6.0).round }
+# Escala del logo
+PDF_LOGO_FACTOR = 1.0
 # Tamaño de fuente en los PDF
 PDF_FONT_SIZE = 11
 # Tamaño de fuente de lo escrito en la cabecera
@@ -79,3 +83,8 @@ SEARCH_ALLOWED_OPERATORS = HashWithIndifferentAccess.new({
     /^\s*(<=|hasta|to)\s+/i => '<=',
     /^\s*[^<>]=\s+/ => '='
 })
+# Adaptador PostgreSQL en uso
+POSTGRESQL_ADAPTER = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL' rescue nil
+ORACLE_ADAPTER = ActiveRecord::Base.connection.adapter_name == 'OracleEnhanced' rescue nil
+# Limite de filas en reportes para servir en real-time
+SEND_REPORT_EMAIL_AFTER_COUNT = 100

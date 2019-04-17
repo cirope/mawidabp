@@ -7,10 +7,6 @@ module Findings::FollowUp
       follow_up_date < Time.zone.today
   end
 
-  def rescheduled?
-    all_follow_up_dates.any?
-  end
-
   def all_follow_up_dates end_date = nil, reload = false
     @all_follow_up_dates = reload ? [] : (@all_follow_up_dates || [])
     last_date            = follow_up_date
@@ -20,8 +16,8 @@ module Findings::FollowUp
         v.reify&.follow_up_date
       end
 
-      dates.each do |d|
-        if d.present? && d != last_date
+      dates.reverse.each do |d|
+        if d.present? && d < last_date
           @all_follow_up_dates << last_date = d
         end
       end

@@ -2,7 +2,7 @@ module ConclusionReviews::CoverPDF
   extend ActiveSupport::Concern
 
   def create_cover_pdf organization = nil, text = nil, pdf_name = 'cover.pdf'
-    pdf = Prawn::Document.create_generic_pdf :portrait, false
+    pdf = Prawn::Document.create_generic_pdf :portrait, footer: false
 
     pdf.add_review_header organization || self.organization,
       review&.identification,

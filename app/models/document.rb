@@ -1,10 +1,11 @@
 class Document < ApplicationRecord
   include Auditable
-  include Documents::Shared
+  include Documents::AttributeTypes
   include Documents::Defaults
   include Documents::FileModel
   include Documents::Scopes
   include Documents::Search
+  include Documents::Shared
   include Documents::Validation
   include Shareable
   include Taggable

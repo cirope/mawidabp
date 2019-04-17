@@ -3,7 +3,7 @@ module Reviews::Scopes
 
   included do
     scope :list, -> {
-      where(organization_id: Organization.current_id).order identification: :asc
+      where(organization_id: Current.organization&.id).order identification: :asc
     }
   end
 
@@ -50,14 +50,14 @@ module Reviews::Scopes
     def list_without_final_review
       list.
         includes(:conclusion_final_review).
-        where(ConclusionReview.table_name => { review_id: nil }).
+        where(::ConclusionReview.table_name => { review_id: nil }).
         references(:conclusion_reviews)
     end
 
     def list_without_draft_review
       list.
         includes(:conclusion_draft_review).
-        where(ConclusionReview.table_name => { review_id: nil }).
+        where(::ConclusionReview.table_name => { review_id: nil }).
         references(:conclusion_reviews)
     end
 
@@ -99,6 +99,24 @@ module Reviews::Scopes
       ).references(:workflows)
     end
 
+    def list_all_without_opening_interview
+      list.includes(:opening_interview).where(
+        OpeningInterview.table_name => { review_id: nil }
+      ).references(:opening_interviews)
+    end
+
+    def with_opening_interview
+      includes(:opening_interview).where.not(
+        OpeningInterview.table_name => { review_id: nil }
+      ).references(:opening_interviews)
+    end
+
+    def list_all_without_closing_interview
+      list.includes(:closing_interview).where(
+        ClosingInterview.table_name => { review_id: nil }
+      ).references(:closing_interviews)
+    end
+
     def list_by_issue_date_or_creation from_date, to_date
       start  = from_date.to_time.beginning_of_day
       finish = to_date.to_time.end_of_day
@@ -122,7 +140,7 @@ module Reviews::Scopes
           "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
           "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
           "#{quoted_table_name}.#{qcn('created_at')} ASC"
-        ]
+        ].map { |o| Arel.sql o }
       end
   end
 end

@@ -20,7 +20,7 @@ module ResourceUtilizations::ResourceConsumers
       joins workflow: { workflow_items: :resource_utilizations }
     }, through: :workflow
 
-    has_one :planed_review, -> {
+    has_one :planned_review, -> {
       joins plan_item: :resource_utilizations
     }, through: :plan_item, source: :review, class_name: 'Review'
   end

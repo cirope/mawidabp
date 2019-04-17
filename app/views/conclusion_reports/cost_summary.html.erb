@@ -30,7 +30,7 @@
             <% month_data = data[:data][month] || {} %>
             <tr>
               <td><%= l month, format: '%b-%y' %></td>
-              <td><%= '%.2f' % (month_data[:planed_units] || 0) %></td>
+              <td><%= '%.2f' % (month_data[:planned_units] || 0) %></td>
               <td><%= '%.2f' % (month_data[:executed_units] || 0) %></td>
               <td><%= '%.0f%%' % (month_data[:deviation] || 0) %></td>
             </tr>

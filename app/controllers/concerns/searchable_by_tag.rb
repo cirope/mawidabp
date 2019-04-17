@@ -21,7 +21,7 @@ module SearchableByTag
   private
 
     def has_tag_query?
-      support_tags = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      support_tags = POSTGRESQL_ADAPTER
 
       support_tags &&
         params[:search] &&

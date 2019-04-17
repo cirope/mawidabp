@@ -4,7 +4,7 @@ module PlanItems::Scopes
   included do
     scope :with_business_unit, -> { where.not business_unit_id: nil }
     scope :list, -> {
-      joins(:plan).where plans: { organization_id: Organization.current_id }
+      joins(:plan).where plans: { organization_id: Current.organization&.id }
     }
   end
 

@@ -14,8 +14,9 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   teardown do
-    Organization.current_id = nil
-    Group.current_id = nil
+    Current.user = nil
+
+    unset_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -236,10 +237,13 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     @control_objective_item.finished = true
 
     assert @control_objective_item.invalid?
-    assert_error @control_objective_item, :audit_date, :blank
     assert_error @control_objective_item, :relevance, :blank
     assert_error @control_objective_item.control, :control, :blank
     assert_error @control_objective_item, :auditor_comment, :blank
+
+    unless DISABLE_COI_AUDIT_DATE_VALIDATION
+      assert_error @control_objective_item, :audit_date, :blank
+    end
 
     unless HIDE_CONTROL_EFFECTS
       assert_error @control_objective_item.control, :effects, :blank
@@ -251,7 +255,13 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
     @control_objective_item.design_score = 0
 
-    expected_error_count = HIDE_CONTROL_EFFECTS ? 5 : 6
+    expected_error_count = if HIDE_CONTROL_EFFECTS && DISABLE_COI_AUDIT_DATE_VALIDATION
+                             4
+                           elsif HIDE_CONTROL_EFFECTS || DISABLE_COI_AUDIT_DATE_VALIDATION
+                             5
+                           else
+                             6
+                           end
 
     assert !@control_objective_item.valid?
     assert_equal expected_error_count, @control_objective_item.errors.count
@@ -386,6 +396,8 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'work papers can be added to uneditable control objectives' do
+    Current.user = users(:supervisor)
+
     uneditable_control_objective_item = ControlObjectiveItem.find(
       control_objective_items(:management_dependency_item).id)
 
@@ -449,14 +461,10 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   private
 
     def use_review_weaknesses_score?
-      organization = Organization.find Organization.current_id
-
-      ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization.prefix
+      ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? Current.organization.prefix
     end
 
     def validate_counts?
-      organization = Organization.find Organization.current_id
-
-      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include? organization.prefix
+      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include? Current.organization.prefix
     end
 end

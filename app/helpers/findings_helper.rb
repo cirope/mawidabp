@@ -167,6 +167,17 @@ module FindingsHelper
     end
   end
 
+  def finding_status_options_by_action(action, params)
+    case
+    when action == :fixed_weaknesses_report
+      finding_fixed_status_options
+    when params[:execution].present?
+      finding_execution_status_options
+    else
+      finding_status_options
+    end
+  end
+
   def show_commitment_date? finding_answer
     finding_answer.user.can_act_as_audited? &&
       finding_answer.requires_commitment_date? &&
@@ -188,6 +199,51 @@ module FindingsHelper
 
     finding.skip_work_paper ||
       state_errors.any? { |msg| msg[:error] == :must_have_a_work_paper }
+  end
+
+  def finding_task_status_options
+    Task.statuses.map do |k, v|
+      [t("tasks.status.#{k}"), k.to_s]
+    end
+  end
+
+  def finding_tag_options
+    Tag.list.for_findings.order(:name).map do |t|
+      options = {
+        data: {
+          name:     t.name,
+          readonly: TAGS_READONLY.include?(t.name)
+        }
+      }
+
+      [t.name, t.id, options]
+    end
+  end
+
+  def link_to_recode_tasks
+    options = {
+      class: 'pull-right',
+      title: t('finding.recode_tasks'),
+      data: {
+        recode_tasks: true,
+        confirm: t('messages.confirmation')
+      }
+    }
+
+    link_to '#', options do
+      content_tag :span, nil, class: 'glyphicon glyphicon-sort-by-order'
+    end
+  end
+
+  def show_follow_up_timestamps?
+    if @_show_follow_up_timestamps.nil?
+      setting = current_organization.settings.find_by name: 'show_follow_up_timestamps'
+      result  = (setting ? setting.value : DEFAULT_SETTINGS[:show_follow_up_timestamps][:value]) != '0'
+
+      @_show_follow_up_timestamps = result
+    else
+      @_show_follow_up_timestamps
+    end
   end
 
   private

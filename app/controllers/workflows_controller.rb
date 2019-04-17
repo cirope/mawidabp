@@ -12,7 +12,8 @@ class WorkflowsController < ApplicationController
   def index
     @title = t 'workflow.index_title'
     @workflows = Workflow.list.includes(:review).order(
-      "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC").page(
+      Arel.sql "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC"
+    ).page(
       params[:page]
     ).references(:reviews)
 

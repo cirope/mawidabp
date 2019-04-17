@@ -1,6 +1,12 @@
+@import "bootstrap/variables";
+
 body {
   padding-top: 60px;
   margin-bottom: 20px;
+}
+
+label:has(> input[type="checkbox"][data-readonly="true"]) {
+  color: $text-muted;
 }
 
 .file-container {
@@ -59,10 +65,6 @@ body {
   padding-left: 2em;
 }
 
-.nowrap {
-  white-space: nowrap;
-}
-
 .pagination, .pager {
   margin: 0;
 }
@@ -73,6 +75,10 @@ body {
 
 .submenu {
   margin-bottom: 15px;
+}
+
+.text-bold {
+  font-weight: bold;
 }
 
 .toggle-visibility {
@@ -94,6 +100,17 @@ table th.not_available {
 
 textarea {
   resize: vertical;
+}
+
+:target:before {
+  content: "";
+  display: block;
+  height: 80px;
+  margin: -80px 0 0;
+}
+
+:target table {
+  border: 3px solid $alert-warning-border !important;
 }
 
 [data-controller="best_practices"] {

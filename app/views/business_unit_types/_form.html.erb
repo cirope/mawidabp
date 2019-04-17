@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <% if SHOW_CONCLUSION_ALTERNATIVE_PDF %>
+    <% if Current.conclusion_pdf_format == 'gal' %>
       <div class="row">
         <div class="col-md-6">
           <%= f.input :recipients, input_html: { rows: 4 } %>

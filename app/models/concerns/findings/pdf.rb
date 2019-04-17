@@ -2,7 +2,7 @@ module Findings::PDF
   extend ActiveSupport::Concern
 
   def to_pdf organization = nil
-    pdf = Prawn::Document.create_generic_pdf :portrait, false
+    pdf = Prawn::Document.create_generic_pdf :portrait, footer: false
 
     put_cover_on pdf, organization
 

@@ -7,6 +7,12 @@ class OportunityTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    Current.user = nil
+
+    unset_organization
+  end
+
   test 'create' do
     assert_difference 'Oportunity.count' do
       @oportunity = Oportunity.list.create!(
@@ -119,7 +125,8 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'review code is updated when control objective is changed' do
-    oportunity = findings :confirmed_oportunity_on_draft
+    Current.user = users :supervisor
+    oportunity   = findings :confirmed_oportunity_on_draft
 
     assert_not_equal 'OM004', oportunity.review_code
 
@@ -141,7 +148,8 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'work paper codes are updated when control objective is changed' do
-    oportunity = findings :confirmed_oportunity_on_draft
+    Current.user = users :supervisor
+    oportunity   = findings :confirmed_oportunity_on_draft
 
     assert_not_equal 'PTOM 004', oportunity.work_papers.first.code
 
@@ -225,12 +233,23 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.state = Finding::STATUS[:assumed_risk]
     @oportunity.audit_comments = '  '
 
-    if SHOW_CONCLUSION_ALTERNATIVE_PDF
+    if Current.conclusion_pdf_format == 'gal'
       assert @oportunity.must_be_approved?
     else
       refute @oportunity.must_be_approved?
       assert_equal error_messages.sort, @oportunity.approval_errors.sort
     end
+  end
+
+  test 'must be approved on tasks' do
+    error_messages = [I18n.t('oportunity.errors.with_expired_tasks')]
+
+    @oportunity.state = Finding::STATUS[:assumed_risk]
+
+    @oportunity.tasks.build(description: 'Test task', due_on: Time.zone.yesterday)
+
+    refute @oportunity.must_be_approved?
+    assert_equal error_messages.sort, @oportunity.approval_errors.sort
   end
 
   test 'dynamic status functions' do

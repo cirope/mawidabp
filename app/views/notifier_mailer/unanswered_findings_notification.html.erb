@@ -1,14 +1,14 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <h2><%= t 'notifier.unanswered_findings.title' %></h2>
   <h3 style="font-weight: normal;">
-    <%= textilize_without_paragraph(
+    <%= markdown_without_paragraph(
       t('notifier.unanswered_findings.the_following_findings_are_now_unanswered',
         :count => @grouped_findings.values.sum(&:size))) %>
   </h3>
 
   <% @grouped_findings.each do |organization, findings| %>
     <% unless findings.empty? %>
-      <% Organization.current_id = organization.id %>
+      <% Current.organization = organization %>
       <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
       <% findings.each do |finding| %>
         <% levels = [] %>
@@ -22,13 +22,13 @@
         <%= render :partial => 'finding', :locals => {:finding => finding} %><br />
 
         <% if levels.any? %>
-          <h3 style="margin-top: 1em;"><%= textilize_without_paragraph(
+          <h3 style="margin-top: 1em;"><%= markdown_without_paragraph(
                 t('notifier.unanswered_findings.if_no_answer_is_given_the_following_users_will_be_notified')) %> (*)</h3>
           <% levels.each do |level| %>
             <% managers = finding.manager_users_for_level(level) %>
             <% unless managers.empty? %>
               <h4><%= l(finding.notification_date_for_level(level), :format => :long) %></h4>
-              <%= textilize_without_paragraph(
+              <%= markdown_without_paragraph(
                 managers.map {|u| "* #{u.full_name_with_function}"}.join("\n")) %>
             <% end %>
           <% end %>
@@ -39,5 +39,5 @@
       <% end %>
     <% end %>
   <% end %>
-  <%= render :partial => 'footer' %>
+  <%= render :partial => 'common_mailer/footer' %>
 </div>

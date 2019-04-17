@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Users::PasswordsControllerTest < ActionController::TestCase
   setup do
-    @request.host = "#{organizations(:cirope).prefix}.localhost.i"
+    set_host_for_organization(organizations(:cirope).prefix)
   end
 
   test 'new password' do

@@ -1,0 +1,78 @@
+<% if @plan.business_units.any? %>
+  <% months = @plan.period.months %>
+
+  <div class="table-responsive">
+    <table class="table table-condensed table-hover">
+      <thead>
+        <tr>
+          <th rowspan="2"><%= t '.detail' %></th>
+          <th colspan="<%= months.size %>" class="text-center"><%= @plan.period.name %></th>
+        </tr>
+        <tr>
+          <% months.each do |month| %>
+            <th><%= l month, format: '%b' %></th>
+          <% end %>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% last_displayed_name = nil %>
+
+        <% @plan.business_units.each do |business_unit| %>
+          <% unless last_displayed_name == business_unit.name %>
+            <tr class="active">
+              <td><strong><%= business_unit.name %></strong></td>
+
+              <% months.each do |month| %>
+                <td>
+                  <table class="table table-weeks">
+                    <tbody>
+                      <% month_in_weeks(month).each do |week| %>
+                        <td>&nbsp;</td>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </td>
+              <% end %>
+            </tr>
+
+            <% last_displayed_name = business_unit.name %>
+          <% end %>
+
+          <tr>
+            <td class="indented"><%= business_unit.business_unit_type.name %></td>
+
+            <% months.each do |month| %>
+              <td>
+                <table class="table table-weeks">
+                  <tbody>
+                    <% month_in_weeks(month).each do |week| %>
+                      <% if business_unit_with_plan_items_in_week? business_unit, week %>
+                        <td class="info">&nbsp;</td>
+                      <% else %>
+                        <td>&nbsp;</td>
+                      <% end %>
+                    <% end %>
+                  </tbody>
+                </table>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="alert alert-info">
+    <p><%= t '.empty' %></p>
+  </div>
+<% end %>
+
+<hr>
+
+<div>
+  <%= link_to_show @plan %> |
+  <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_s(:db)] %> |
+  <%= link_to_edit edit_plan_path(@plan) %> |
+  <%= link_to_index plans_path %>
+</div>

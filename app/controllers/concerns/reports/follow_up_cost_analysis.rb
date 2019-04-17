@@ -1,5 +1,5 @@
 module Reports::FollowUpCostAnalysis
-  include Reports::Pdf
+  include Reports::PDF
 
   def follow_up_cost_analysis
     init_follow_up_cost_vars

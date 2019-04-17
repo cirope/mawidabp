@@ -14,6 +14,8 @@ es:
     logout: 'Salir'
     new: 'Nuevo'
     show: 'Ver'
+    calendar: 'Cronograma'
+    resources: 'Recursos'
     stats: 'Estadísticas'
     warning: 'Advertencia'
     upload: 'Adjuntar'
@@ -27,6 +29,8 @@ es:
     neither_agree_nor_disagree: 'Ni acuerdo ni desacuerdo'
     agree: 'De acuerdo'
     strongly_agree: 'Muy de acuerdo'
+    'yes': 'Si'
+    'no': 'No'
 
   benefits:
     index:
@@ -56,6 +60,28 @@ es:
       new: 'Agregar proceso'
     control_objectives:
       new: 'Agregar objetivo'
+
+  closing_interviews:
+    edit:
+      title: 'Editar entrevista de cierre'
+    index:
+      new: 'Nueva entrevista de cierre'
+      title: 'Listado de entrevistas de cierre'
+      empty_html: 'No hay entrevistas de cierre, puede crear una con el botón <span class="label label-primary">Nueva entrevista de cierre</span>'
+      empty_search_html: 'No hay entrevistas de cierre que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear entrevista de cierre'
+    form:
+      add_responsible: 'Agregar responsable'
+      add_auditor: 'Agregar auditor'
+      add_assistant: 'Agregar asistente'
+    show:
+      title: 'Ver entrevista de cierre'
+      auditeds: 'Responsables del ciclo'
+      auditors: 'Auditores asignados'
+      download_pdf: 'Descargar PDF'
+    pdf:
+      pdf_name: 'entrevista_de_cierre_%{name}.pdf'
 
   control_objectives:
     index:
@@ -104,6 +130,7 @@ es:
     index:
       title: 'Listado de hallazgos'
       current_user_answers_count: 'Comentarios propios'
+      unread_answers_filter: 'Comentarios sin leer'
       unread_answers:
         one: 'Tiene un comentario sin leer'
         other: 'Tiene %{count} comentarios sin leer'
@@ -169,6 +196,28 @@ es:
     show:
       title: 'Ver noticia'
 
+  opening_interviews:
+    edit:
+      title: 'Editar entrevista de inicio'
+    index:
+      new: 'Nueva entrevista de inicio'
+      title: 'Listado de entrevistas de inicio'
+      empty_html: 'No hay entrevistas de inicio, puede crear una con el botón <span class="label label-primary">Nueva entrevista de inicio</span>'
+      empty_search_html: 'No hay entrevistas de inicio que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear entrevista de inicio'
+    form:
+      add_responsible: 'Agregar responsable'
+      add_auditor: 'Agregar auditor'
+      add_assistant: 'Agregar asistente'
+    show:
+      title: 'Ver entrevista de inicio'
+      auditeds: 'Responsables del ciclo'
+      auditors: 'Auditores asignados'
+      download_pdf: 'Descargar PDF'
+    pdf:
+      pdf_name: 'entrevista_de_inicio_%{name}.pdf'
+
   organizations:
     index:
       title: 'Listado de organizaciones'
@@ -185,7 +234,7 @@ es:
       title: 'Modificar período'
     errors:
       can_not_be_destroyed: 'El período no puede ser eliminado'
-      plans:
+      plan:
         one: 'Tiene un plan asociado'
         other: 'Tiene %{count} planes asociados'
       reviews:
@@ -246,6 +295,15 @@ es:
       title: 'Plan de auditoría'
       pdf_name: 'plan_periodo_%{period}.pdf'
       resource_utilization: 'Recursos utilizados'
+    calendar:
+      show:
+        title: 'Cronograma'
+        empty: 'No hay proyectos en el plan seleccionado'
+        detail: 'Detalle'
+    resources:
+      show:
+        title: 'Resumen por recurso'
+        empty: 'No hay recursos humanos utilizados en el plan seleccionado'
     stats:
       show:
         title: 'Estadísiticas del plan de auditoría'
@@ -273,8 +331,8 @@ es:
     access_denied: 'La encuesta ya ha sido contestada.'
     already_exists: 'Alguna de las encuestas para %{user} ya existen y no fueron enviadas nuevamente'
     answer_poll: '¿Contestar encuesta?'
-    affected_user: 'Acerca de'
-    affected_user_html: 'Acerca de <strong>%{user}</strong>'
+    about: 'Acerca de'
+    about_html: 'Acerca de <strong>%{entity}</strong>'
     answers:
       index:
         title: 'Resumen de respuestas'
@@ -285,7 +343,9 @@ es:
       title: 'Listado de encuestas'
     edit:
       title: 'Modificar encuesta'
-    must_answer_poll: 'Tiene una encuesta pendiente por responder.'
+    has_unanswered:
+      one: 'Tiene una encuesta pendiente por responder'
+      other: 'Tiene %{count} encuestas pendientes por responder'
     new:
       title: 'Agregar encuesta'
     not_found: 'No se encontró la encuesta o la misma ya ha sido contestada.'
@@ -326,6 +386,7 @@ es:
   reports:
     customization_titles: 'Personalización de títulos'
     generating: 'Generando reporte...'
+    file_will_be_sent: 'Le enviaremos el reporte por correo, revíselo en unos minutos'
 
   resource_classes:
     edit:
@@ -380,6 +441,9 @@ es:
     session_expire_time: 'Desconexión por inactividad'
     exchange_directory_path: 'Directorio de intercambio de archivos'
     show_print_date_on_pdfs: 'Mostrar fecha de impresión en PDFs'
+    brief_period_in_weeks: 'Periodo de notificación "Resumen de hallazgos" en semanas'
+    show_follow_up_timestamps: 'Mostrar marcas de tiempo en seguimiento'
+    require_manager_on_findings: 'Requerir gerente de auditoría en hallazgos'
 
   tags:
     edit:
@@ -399,6 +463,15 @@ es:
       info: 'Informativa'
       warning: 'Advertencia'
       danger: 'Peligro'
+
+  tasks:
+    on_time: 'A tiempo, sin reprogramación'
+    rescheduled: 'A tiempo, reprogramada'
+    expired: 'Fuera de tiempo'
+    status:
+      pending: 'Pendiente'
+      in_progress: 'En proceso'
+      finished: 'Finalizada'
 
   users:
     index:
@@ -432,6 +505,8 @@ es:
         record_invalid: 'Se produjo un error en la importación, algunos usuarios tienen campos no válidos'
         created: 'Creado'
         updated: 'Actualizado'
+        deleted: 'Eliminado'
+        unchanged: 'Sin cambios'
         error: 'Con errores'
         deprecated_users: 'Usuarios ausentes en el servidor LDAP'
     passwords:
@@ -480,23 +555,81 @@ es:
         add: 'Agregar usuario a lista de estado de seguimiento'
         remove: 'Eliminar usuario de lista de estado de seguimiento'
         list: 'Ver lista de observaciones pendientes de los usuarios seleccionados'
+        user_findings: 'Ver lista de observaciones pendientes del usuario y su jerarquía'
       show:
         title: 'Estado'
         table: 'Ver tabla'
         graph: 'Ver gráfico'
         pending_weaknesses:
-          one: '*Una* observación *pendiente*'
-          other: '*%{count}* observaciones *pendientes*'
+          one: '**Una** observación **pendiente**'
+          other: '**%{count}** observaciones **pendientes**'
         high_risk_weaknesses:
-          one: '*Una* observación de *riesgo alto*'
-          other: '*%{count}* observaciones de *riesgo alto*'
+          one: '**Una** observación de **riesgo alto**'
+          other: '**%{count}** observaciones de **riesgo alto**'
         weaknesses:
           pending:
-            one: '*Una* observación pendiente'
-            other: '*%{count}* observaciones pendientes'
+            one: '**Una** observación pendiente'
+            other: '**%{count}** observaciones pendientes'
           complete:
-            one: '*Una* observación solucionada'
-            other: '*%{count}* observaciones solucionadas'
+            one: '**Una** observación solucionada'
+            other: '**%{count}** observaciones solucionadas'
+
+  risk_assessments:
+    edit:
+      title: 'Editar evaluación de riesgo'
+      other_actions: 'Acciones'
+      sort_by_risk: 'Ordenar por riesgo descendente'
+    index:
+      new: 'Nueva evaluación de riesgo'
+      title: 'Listado de evaluaciones de riesgo'
+      empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="label label-primary">Nueva evaluación de riesgo</span>'
+      empty_search_html: 'No hay evaluaciones de riesgo que coincidan con el criterio de búsqueda'
+      merge_to_plan: 'Crear proyectos en plan a partir de la evaluación'
+    new:
+      title: 'Crear evaluación de riesgo'
+    show:
+      title: 'Ver evaluación de riesgo'
+      download_pdf: 'Descargar PDF'
+      download_csv: 'Descargar CSV'
+    form:
+      new_risk_assessment_items: 'Luego de crear la evaluación de riesgo podrá agregar ítems a la misma'
+      cloned_risk_assessment_items: 'Luego de crear la evaluación de riesgo verá los ítems copiados y podrá editarlos o agregar nuevos'
+      add_risk_assessment_item: 'Agregar item'
+      add_best_practice: 'Agregar buena práctica'
+      add_business_unit_type: 'Agregar unidad organizativa'
+      apply: 'Aplicar'
+    risk_weight_risks:
+      none: 'Nulo'
+      low: 'Bajo'
+      medium_low: 'Medio bajo'
+      medium: 'Medio'
+      medium_high: 'Medio alto'
+      high: 'Alto'
+    status:
+      draft: 'Borrador'
+      final: 'Definitiva'
+      merged: 'Planificada'
+    pdf:
+      title: 'Evaluación de riesgo'
+      pdf_name: 'evaluacion_de_riesgo_%{name}.pdf'
+      period:
+        title: "Periodo (%{name})"
+        range: "%{from_date} al %{to_date}"
+
+  risk_assessment_templates:
+    edit:
+      title: 'Editar plantilla de evaluación de riesgo'
+    index:
+      new: 'Nueva plantilla de evaluación de riesgo'
+      title: 'Listado de plantillas de evaluación de riesgo'
+      empty_html: 'No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="label label-primary">Nueva plantilla de evaluación de riesgo</span>'
+      empty_search_html: 'No hay plantillas de evaluación de riesgo que coincidan con el criterio de búsqueda'
+    new:
+      title: 'Crear plantilla de evaluación de riesgo'
+    show:
+      title: 'Ver plantilla de evaluación de riesgo'
+    form:
+      add_risk_assessment_weight: 'Agregar ponderador'
 
   versions:
     index:

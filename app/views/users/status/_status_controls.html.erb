@@ -1,4 +1,8 @@
 <small class="pull-right" data-status-controls>
+  <%= link_to self_and_descendants_findings_path, title: t('.user_findings') do %>
+    <span class="glyphicon glyphicon-user"></span>
+  <% end %> |
+
   <% if status_session.any? %>
     <%= link_to users_status_index_path, title: t('.list') do %>
       <span class="glyphicon glyphicon-list"></span>

@@ -1,8 +1,8 @@
 class Plans::StatsController < ApplicationController
   respond_to :html
 
-  before_action :auth
-  before_action :set_title, :set_plan, only: [:show]
+  before_action :auth, :check_privileges
+  before_action :set_title, :set_plan
 
   def show
     @until = Timeliness.parse params[:until], :date if params[:until].present?

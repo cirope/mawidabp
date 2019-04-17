@@ -10,7 +10,8 @@ class ReviewsController < ApplicationController
     :show, :edit, :update, :destroy, :download_work_papers, :survey_pdf,
     :finished_work_papers, :recode_findings, :recode_weaknesses_by_risk,
     :recode_weaknesses_by_repetition_and_risk,
-    :recode_weaknesses_by_control_objective_order, :excluded_control_objectives
+    :recode_weaknesses_by_control_objective_order, :reorder,
+    :excluded_control_objectives, :reset_control_objective_name
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -53,6 +54,7 @@ class ReviewsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
+      format.pdf  { redirect_to review_pdf_path }
     end
   end
 
@@ -234,7 +236,7 @@ class ReviewsController < ApplicationController
       [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     ).references(:reviews, :periods, :conclusion_reviews, :business_units)
   end
 
@@ -249,7 +251,7 @@ class ReviewsController < ApplicationController
         "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('process_control_id')} = :process_control_id"
       ].join(' AND '),
       false: false,
-      organization_id: Organization.current_id,
+      organization_id: Current.organization&.id,
       states: Finding::PENDING_FOR_REVIEW_STATUS,
       process_control_id: @process_control.id
     ).includes(
@@ -260,7 +262,7 @@ class ReviewsController < ApplicationController
       [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     ).references(:reviews, :conclusion_reviews, :control_objectives)
   end
 
@@ -291,7 +293,7 @@ class ReviewsController < ApplicationController
       [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     ).references(:reviews, :periods, :conclusion_reviews, :business_units)
   end
 
@@ -328,7 +330,7 @@ class ReviewsController < ApplicationController
       [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
         "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
-      ]
+      ].map { |o| Arel.sql o }
     ).references(
       :reviews, :control_objective_items, :periods, :conclusion_reviews
     ).limit(5)
@@ -394,6 +396,15 @@ class ReviewsController < ApplicationController
     redirect_to @review, notice: t('review.findings_recoded')
   end
 
+  # * PUT /reviews/1/reorder
+  def reorder
+    if @review.reorder
+      redirect_to @review, notice: t('review.reordered')
+    else
+      redirect_to edit_review_url(@review), alert: t('review.failed_to_reorder')
+    end
+  end
+
   # * GET /reviews/next_identification_number
   def next_identification_number
     @next_number = Review.list.next_identification_number params[:suffix]
@@ -402,12 +413,24 @@ class ReviewsController < ApplicationController
   def excluded_control_objectives
   end
 
+  def reset_control_objective_name
+    @control_objective_item = @review.control_objective_items.find(params[:control_objective_item_id])
+    @control_objective_item.update(
+      control_objective_text: @control_objective_item.control_objective.name
+    )
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
 
     def review_params
       params.require(:review).permit(
         :identification, :description, :survey, :period_id, :plan_item_id,
         :scope, :risk_exposure, :manual_score, :include_sox, :lock_version,
+        :score_type,
         file_model_attributes: [:id, :file, :file_cache, :_destroy],
         finding_review_assignments_attributes: [
           :id, :finding_id, :_destroy, :lock_version
@@ -448,6 +471,12 @@ class ReviewsController < ApplicationController
       @review_clone = Review.list.find_by(id: params[:clone_from].try(:to_i))
     end
 
+    def review_pdf_path
+      @review.to_pdf current_organization
+
+      @review.relative_pdf_path
+    end
+
     def load_privileges
       @action_privileges.update(
         download_work_papers: :read,
@@ -470,7 +499,8 @@ class ReviewsController < ApplicationController
         recode_findings: :modify,
         recode_weaknesses_by_risk: :modify,
         recode_weaknesses_by_repetition_and_risk: :modify,
-        recode_weaknesses_by_control_objective_order: :modify
+        recode_weaknesses_by_control_objective_order: :modify,
+        reset_control_objective_name: :modify
       )
     end
 end

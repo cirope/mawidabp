@@ -1,0 +1,147 @@
+<%= simple_form_for @risk_assessment do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :name, input_html: { autofocus: true } %>
+        <% if @risk_assessment.new_record? %>
+          <%= f.association :period, collection: Period.list, prompt: true %>
+        <% else %>
+          <%= f.input :period, input_html: { readonly: true } %>
+        <% end %>
+        <% if @risk_assessment.new_record? && @risk_assessment.risk_assessment_template.blank? %>
+          <%= f.association :risk_assessment_template,
+            collection: RiskAssessmentTemplate.list.order(:name),
+            prompt:     true
+          %>
+        <% else %>
+          <%= f.input :risk_assessment_template, input_html: { readonly: true } %>
+          <%= f.input :risk_assessment_template_id, as: :hidden %>
+        <% end %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :description, input_html: { rows: 2 } %>
+
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :shared, as: :boolean, input_html: { disabled: @risk_assessment.shared } %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :status, as: :boolean, label: t('risk_assessments.status.final'), checked_value: 'final', unchecked_value: 'draft' %>
+          </div>
+        </div>
+
+        <p><strong><%= RiskAssessment.human_attribute_name 'file_model' %></strong></p>
+        <div class="clearfix">
+          <% f.object.build_file_model unless f.object.file_model %>
+
+          <%= f.simple_fields_for :file_model do |fm_f| %>
+            <div class="file-container pull-left">
+              <%= link_to_upload fm_f.object %>
+
+              <% if fm_f.object.file_cache %>
+                <%= fm_f.input :file_cache, as: :hidden %>
+                <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
+              <% else %>
+                <%= fm_f.input :file, label: false %>
+              <% end %>
+            </div>
+          <% end %>
+
+          <%= link_to_download f.object %>
+        </div>
+      </div>
+    </div>
+
+    <% if @risk_assessment.persisted? %>
+      <h4>
+        <%= RiskAssessmentItem.model_name.human count: 0 %>
+      </h4>
+
+      <div class="row">
+        <div class="col-md-3">
+          <h5><strong><%= RiskAssessmentItem.human_attribute_name 'name' %></strong></h5>
+        </div>
+        <div class="col-md-2">
+          <h5><strong><%= BusinessUnitType.model_name.human %></strong></h5>
+        </div>
+        <div class="col-md-3">
+          <h5><strong><%= RiskAssessmentItem.human_attribute_name 'business_unit' %></strong></h5>
+        </div>
+        <div class="col-md-3">
+          <h5><strong><%= RiskAssessmentItem.human_attribute_name 'risk' %></strong></h5>
+        </div>
+      </div>
+
+      <div id="risk_assessment_items">
+        <div data-risk-assessment-items-container>
+          <%= f.simple_fields_for :risk_assessment_items do |co_f| %>
+            <%= render 'risk_assessment_item', f: co_f %>
+          <% end %>
+        </div>
+
+        <p>
+          <%= link_to t('.add_risk_assessment_item'), new_item_risk_assessment_path(@risk_assessment),
+            class: 'btn btn-default btn-sm', data: { remote: true } %>
+        </p>
+
+        <ul class="nav nav-tabs">
+          <li class="active">
+            <a href="#best-practice" data-toggle="tab">
+              <%= BestPractice.model_name.human count: 0 %>
+            </a>
+          </li>
+          <li>
+            <a href="#business-unit-type" data-toggle="tab">
+              <%= BusinessUnitType.model_name.human count: 0 %>
+            </a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane active" id="best-practice">
+            <br>
+
+            <div id="best_practices">
+              <%= link_to_add_fields(
+                t('.add_best_practice'), f, :risk_assessment_items, 'best_practice', disabled_on_apply: true
+              ) %>
+              <%= link_to t('.apply'), '#', class: 'btn btn-default btn-sm', disabled: true, data: {
+                disabled_on_apply: true,
+                add_risk_assessment_items_url: add_items_risk_assessment_path(@risk_assessment, type: 'best_practice')
+              } %>
+            </div>
+          </div>
+          <div class="tab-pane" id="business-unit-type">
+            <br>
+
+            <div id="business_unit_types">
+              <%= link_to_add_fields(
+                t('.add_business_unit_type'), f, :risk_assessment_items, 'business_unit_type', disabled_on_apply: true
+              ) %>
+              <%= link_to t('.apply'), '#', class: 'btn btn-default btn-sm', disabled: true, data: {
+                disabled_on_apply: true,
+                add_risk_assessment_items_url: add_items_risk_assessment_path(@risk_assessment, type: 'business_unit_type')
+              } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <div class="alert alert-info">
+        <p><%= t @clone_from.blank? ? '.new_risk_assessment_items' : '.cloned_risk_assessment_items' %></p>
+      </div>
+    <% end %>
+
+    <%= f.input :lock_version, as: :hidden %>
+    <%= hidden_field_tag :clone_from, params[:clone_from] %>
+  </div>
+
+  <hr>
+
+  <div class="form-actions">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.button :submit, class: 'btn-primary' %>
+  </div>
+<% end %>

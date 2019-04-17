@@ -13,7 +13,7 @@ class PlansController < ApplicationController
   # * GET /plans
   def index
     @plans = Plan.list.includes(:period).references(:period).order(
-      "#{Period.quoted_table_name}.#{Period.qcn('start')} DESC"
+      Arel.sql "#{Period.quoted_table_name}.#{Period.qcn('start')} DESC"
     ).page params[:page]
   end
 
