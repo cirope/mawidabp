@@ -275,14 +275,14 @@ module ConclusionReviews::BicPDF
           "<b>#{self.class.human_attribute_name 'reference'}</b>",
           reference
         ] if reference.present?),
-        ([
-          "<b>#{I18n.t 'conclusion_review.bic.review.main_recommendations'}</b>",
-          bic_main_recommendations
-        ] if bic_main_recommendations.present?),
         [
           "<b>#{I18n.t 'conclusion_review.bic.review.conclusion'}</b>",
           conclusion
-        ]
+        ],
+        ([
+          "<b>#{I18n.t 'conclusion_review.bic.review.main_recommendations'}</b>",
+          bic_main_recommendations
+        ] if bic_main_recommendations.present?)
       ].compact.each do |title, content|
         pdf.font_size PDF_FONT_SIZE * 0.75 do
           pdf.move_down PDF_FONT_SIZE

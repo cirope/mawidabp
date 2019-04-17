@@ -2,7 +2,9 @@
   <%= link_to_show @conclusion_final_review %> |
   <%= link_to_index conclusion_final_reviews_path %> |
   <% if Current.conclusion_pdf_format == 'gal' %>
-    <%= render 'alternative_downloads' %>
+    <%= render 'gal_downloads' %>
+  <% elsif Current.conclusion_pdf_format == 'bic' %>
+    <%= render 'bic_downloads' %>
   <% elsif Current.conclusion_pdf_format != 'default' %>
     <%= render('shared/downloads',
       right: true,

@@ -6,8 +6,7 @@ module ConclusionFinalReviews::Destroy
   end
 
   def can_be_destroyed?
-    ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION &&
-      review.weaknesses.all? { |w| w.repeated_of.blank? }
+    ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION
   end
 
   private

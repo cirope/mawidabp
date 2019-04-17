@@ -17,10 +17,7 @@ services:
   - postgresql
 
 env:
-  - CONFIG_TYPE=normal
   - CONFIG_TYPE=gal
-  - CONFIG_TYPE=bic
-  - CONFIG_TYPE=reviews_scored_by_weakness
 
 before_install:
   - 'gem update bundler'
