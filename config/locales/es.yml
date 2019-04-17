@@ -197,6 +197,7 @@
     fixed_weaknesses: "Observaciones por riesgo solucionadas"
     from_date: "Desde"
     to_date: "Hasta"
+    mid_date: "Corte"
     cut_date: "Fecha cierre antigua data"
     applied_filters:
       one: "En este reporte se ha aplicado el siguiente filtro: %{filters}"
@@ -369,6 +370,9 @@
       pdf_name: "observaciones_informes_definitivos_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
       title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
+      being_implemented: "'En proceso de implementación' al %{date}"
+      created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
+      implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
       total: "TOTAL"
       empty: "Sin observaciones para el filtro aplicado."
     weaknesses_by_audit_type:
@@ -730,6 +734,7 @@
     not_expired: "No vencida"
     from_date: "Desde"
     to_date: "Hasta"
+    mid_date: "Corte"
     cut_date: "Fecha cierre antigua data"
     print_date: "Fecha de impresión: %{date}"
     applied_filters:
@@ -923,6 +928,9 @@
       pdf_name: "observaciones_seguimiento_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
       title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
+      being_implemented: "'En proceso de implementación' al %{date}"
+      created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
+      implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
       total: "TOTAL"
       empty: "Sin observaciones para el filtro aplicado."
     weaknesses_by_audit_type:
