@@ -3,7 +3,7 @@ dist: xenial
 cache: bundler
 sudo: false
 rvm:
-  - 2.3.1
+  - 2.6.3
 
 addons:
   apt:
