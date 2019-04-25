@@ -47,4 +47,5 @@
 <hr />
 
 <%= link_to_edit edit_best_practice_path(@best_practice) %> |
+<%= link_to t('label.download_csv'), best_practice_path(@best_practice, format: :csv) %> |
 <%= link_to_index best_practices_path %>
