@@ -334,7 +334,7 @@ module ConclusionReviews::BicPDF
         [
           [
             ReviewUserAssignment.human_attribute_name('owner'),
-            review.review_user_assignments.select(&:audited?).map(&:user).map(&:full_name).join('; ')
+            bic_review_owners_text
           ].join(': '),
           {
             content: I18n.t(
@@ -376,6 +376,16 @@ module ConclusionReviews::BicPDF
       auditors    = review.review_user_assignments.select &:auditor?
 
       (supervisors | auditors).map(&:user).map(&:full_name).join '; '
+    end
+
+    def bic_review_owners_text
+      auditeds = review.review_user_assignments.select &:audited?
+      auditeds = auditeds.select &:owner if auditeds.select(&:owner).any?
+      names    = auditeds.map(&:user).map do |u|
+        u.full_name_with_function issue_date
+      end
+
+      names.join '; '
     end
 
     def bic_previous_review_text
