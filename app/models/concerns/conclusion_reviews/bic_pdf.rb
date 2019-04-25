@@ -205,7 +205,7 @@ module ConclusionReviews::BicPDF
         ],
         [
           I18n.t('conclusion_review.bic.weaknesses.responsible'),
-          weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; ')
+          bic_weakness_responsible(weakness)
         ],
         ([
           Weakness.human_attribute_name('audit_comments').upcase,
@@ -216,6 +216,20 @@ module ConclusionReviews::BicPDF
           weakness.repeated_of.to_s
         ] if weakness.repeated_of)
       ].compact
+    end
+
+    def bic_weakness_responsible weakness
+      assignments = weakness.finding_user_assignments.select do |fua|
+        fua.user.can_act_as_audited?
+      end
+
+      if assignments.select(&:process_owner).any?
+        assignments = assignments.select &:process_owner
+      end
+
+      assignments.map(&:user).map do |u|
+        u.full_name_with_function issue_date
+      end.join '; '
     end
 
     def put_bic_page_header_on pdf, text
@@ -379,9 +393,9 @@ module ConclusionReviews::BicPDF
     end
 
     def bic_review_owners_text
-      auditeds = review.review_user_assignments.select &:audited?
-      auditeds = auditeds.select &:owner if auditeds.select(&:owner).any?
-      names    = auditeds.map(&:user).map do |u|
+      assignments = review.review_user_assignments.select &:audited?
+      assignments = assignments.select &:owner if assignments.select(&:owner).any?
+      names       = assignments.map(&:user).map do |u|
         u.full_name_with_function issue_date
       end
 
