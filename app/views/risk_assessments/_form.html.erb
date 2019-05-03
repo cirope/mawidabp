@@ -10,18 +10,27 @@
         <% else %>
           <%= f.input :period, input_html: { readonly: true } %>
         <% end %>
-        <% if @risk_assessment.new_record? %>
+        <% if @risk_assessment.new_record? && @risk_assessment.risk_assessment_template.blank? %>
           <%= f.association :risk_assessment_template,
             collection: RiskAssessmentTemplate.list.order(:name),
             prompt:     true
           %>
         <% else %>
           <%= f.input :risk_assessment_template, input_html: { readonly: true } %>
+          <%= f.input :risk_assessment_template_id, as: :hidden %>
         <% end %>
       </div>
       <div class="col-md-6">
         <%= f.input :description, input_html: { rows: 2 } %>
-        <%= f.input :status, as: :boolean, label: t('risk_assessments.status.final'), checked_value: 'final', unchecked_value: 'draft' %>
+
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :shared, as: :boolean, input_html: { disabled: @risk_assessment.shared } %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :status, as: :boolean, label: t('risk_assessments.status.final'), checked_value: 'final', unchecked_value: 'draft' %>
+          </div>
+        </div>
 
         <p><strong><%= RiskAssessment.human_attribute_name 'file_model' %></strong></p>
         <div class="clearfix">
@@ -121,11 +130,12 @@
       </div>
     <% else %>
       <div class="alert alert-info">
-        <p><%= t '.new_risk_assessment_items' %></p>
+        <p><%= t @clone_from.blank? ? '.new_risk_assessment_items' : '.cloned_risk_assessment_items' %></p>
       </div>
     <% end %>
 
     <%= f.input :lock_version, as: :hidden %>
+    <%= hidden_field_tag :clone_from, params[:clone_from] %>
   </div>
 
   <hr>

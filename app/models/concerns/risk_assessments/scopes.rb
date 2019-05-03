@@ -2,6 +2,9 @@ module RiskAssessments::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list, -> { where organization_id: Current.organization&.id }
+    scope :organization_scoped, -> {
+      where organization_id: Current.organization&.id,
+            group_id:        Current.group&.id
+    }
   end
 end

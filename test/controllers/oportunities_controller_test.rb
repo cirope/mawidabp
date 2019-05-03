@@ -77,20 +77,16 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_template 'oportunities/show'
   end
 
-  test 'show oportunity in json' do
+  test 'show oportunity in JS' do
     oportunity = findings :confirmed_oportunity
 
     login
-    get :show, :params => {
-      :completed => 'incomplete',
-      :id => oportunity.id
-    }, :as => :json
+    get :show, :params => { :id => oportunity.id }, :xhr => true, :as => :js
     assert_response :success
     assert_not_nil assigns(:oportunity)
 
-    decoded_oportunity = ActiveSupport::JSON.decode @response.body
-
-    assert_equal oportunity.id, decoded_oportunity['id']
+    assert_equal Mime[:js], @response.content_type
+    assert_template 'oportunities/show'
   end
 
   test 'new oportunity' do

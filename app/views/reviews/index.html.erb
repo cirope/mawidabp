@@ -28,7 +28,7 @@
       <tr <%== 'class="text-muted strike"' if has_final %>>
         <td><%= show_review_finished_work_papers_icon review %></td>
         <td><%= show_period_with_dates_as_abbr review.period %></td>
-        <td class="nowrap"><%= review.identification %></td>
+        <td><%= review.identification %></td>
         <td class="hidden-xs"><%= super_truncate review.plan_item.business_unit.name, 25 %></td>
         <td class="hidden-xs"><%= super_truncate review.plan_item.project, 25 %></td>
         <td class="hidden-xs"><%= audit_team_for review %></td>

@@ -23,13 +23,13 @@ module Users::Scopes
   module ClassMethods
     def by_email email
       where(
-        "LOWER(#{quoted_table_name}.#{qcn 'email'}) = ?", email.downcase
+        "LOWER(#{quoted_table_name}.#{qcn 'email'}) = ?", email&.downcase
       ).take
     end
 
     def by_user user
       where(
-        "LOWER(#{quoted_table_name}.#{qcn 'user'}) = ?", user.downcase
+        "LOWER(#{quoted_table_name}.#{qcn 'user'}) = ?", user&.downcase
       ).take
     end
 

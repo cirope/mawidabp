@@ -2,6 +2,8 @@ module ControlObjectiveItems::Validations
   extend ActiveSupport::Concern
 
   included do
+    attr_accessor :creating_final_review
+
     validates :control_objective_text, :control_objective_id,
       :organization_id, presence: true
     validates :control_objective_text, :auditor_comment, pdf_encoding: true
@@ -24,11 +26,17 @@ module ControlObjectiveItems::Validations
   private
 
     def audit_date_is_on_period
-      period = review&.period
+      if validate_on_period?
+        period = review&.period
 
-      if period && audit_date && !audit_date.between?(period.start, period.end)
-        errors.add :audit_date, :out_of_period
+        if period && audit_date && !audit_date.between?(period.start, period.end)
+          errors.add :audit_date, :out_of_period
+        end
       end
+    end
+
+    def validate_on_period?
+      !(DISABLE_COI_AUDIT_DATE_VALIDATION && creating_final_review)
     end
 
     def control_objective_uniqueness

@@ -3,6 +3,12 @@ require 'test_helper'
 class RiskAssessmentTemplateTest < ActiveSupport::TestCase
   setup do
     @risk_assessment_template = risk_assessment_templates :sox
+
+    set_organization
+  end
+
+  teardown do
+    unset_organization
   end
 
   test 'blank attributes' do
@@ -50,5 +56,25 @@ class RiskAssessmentTemplateTest < ActiveSupport::TestCase
     assert_difference 'RiskAssessmentTemplate.count', -1 do
       @risk_assessment_template.destroy
     end
+  end
+
+  test 'clone from' do
+    new_risk_assessment_template = RiskAssessmentTemplate.new
+
+    new_risk_assessment_template.clone_from @risk_assessment_template
+
+    all_weights_are_equal = new_risk_assessment_template.risk_assessment_weights.all? do |raw|
+      exclusion_list = %w(id risk_assessment_template_id created_at updated_at)
+
+      @risk_assessment_template.risk_assessment_weights.any? do |original_raw|
+        raw.attributes.except(*exclusion_list) ==
+          original_raw.attributes.except(*exclusion_list)
+      end
+    end
+
+    assert new_risk_assessment_template.risk_assessment_weights.size > 0
+    assert_equal @risk_assessment_template.risk_assessment_weights.size,
+      new_risk_assessment_template.risk_assessment_weights.size
+    assert all_weights_are_equal
   end
 end

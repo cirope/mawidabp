@@ -39,6 +39,12 @@ es:
       business_unit_score:
         one: 'Calificación unidad de negocio'
         other: 'Calificaciones de unidades de negocio'
+      closing_interview:
+        one: 'Entrevista de cierre'
+        other: 'Entrevistas de cierre'
+      closing_interview_user:
+        one: 'Asistente a la entrevista'
+        other: 'Asistentes a la entrevista'
       control_objective:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
@@ -66,6 +72,12 @@ es:
       news:
         one: 'Noticia'
         other: 'Noticias'
+      opening_interview:
+        one: 'Entrevista de inicio'
+        other: 'Entrevistas de inicio'
+      opening_interview_user:
+        one: 'Asistente a la entrevista'
+        other: 'Asistentes a la entrevista'
       oportunity:
         one: 'Oportunidad de mejora'
         other: 'Oportunidades de mejora'
@@ -180,6 +192,18 @@ es:
         design_score: 'Calificación pruebas de diseño'
         compliance_score: 'Calificación pruebas de cumplimiento'
         sustantive_score: 'Calificación pruebas sustantivas'
+      closing_interview:
+        interview_date: 'Fecha de entrevista'
+        findings_summary: 'Resumen de hallazgos'
+        recommendations_summary: 'Resumen de recomendaciones'
+        suggestions: 'Sugerencias e inquietudes'
+        comments: 'Comentarios adicionales'
+        audit_comments: 'Comentarios de auditoría'
+        responsible_comments: 'Comentarios del responsable'
+        review: 'Informe'
+        review_id: 'Informe'
+      closing_interview_user:
+        user: 'Usuario'
       control_objective:
         name: 'Objetivo de control'
         relevance: 'Importancia'
@@ -220,9 +244,11 @@ es:
         user_ids: 'Responsables'
         finding_user_assignments: 'Responsables'
         origination_date: 'Fecha de origen'
+        first_follow_up_date: 'Primer fecha de implementación'
         follow_up_date: 'Fecha de implementación'
         audit_comments: 'Comentarios de auditoría'
         state: 'Estado'
+        state_was: 'Estado anterior'
         progress: 'Normalización'
         count: 'Cantidad'
         solution_date: 'Fecha de solución'
@@ -316,6 +342,19 @@ es:
         body: 'Cuerpo'
         shared: 'Compartida'
         published_at: 'Fecha de publicación'
+      opening_interview:
+        interview_date: 'Fecha de entrevista'
+        start_date: 'Fecha estimada de inicio'
+        end_date: 'Fecha estimada de cierre'
+        objective: 'Objetivo de la auditoría'
+        program: 'Programa de trabajo'
+        scope: 'Alcance de la auditoría'
+        suggestions: 'Sugerencias e inquietudes'
+        comments: 'Comentarios adicionales'
+        review: 'Informe'
+        review_id: 'Informe'
+      opening_interview_user:
+        user: 'Usuario'
       oportunity:
         control_objective_item_id: 'Objetivo de control'
         title: 'Título'
@@ -334,11 +373,17 @@ es:
         prefix: 'Prefijo'
         corporate: 'Corporativa'
         image_model: 'Imagen'
+        co_brand_image_model: 'Imagen secundaria'
       organization/image_model:
         image_file_name: 'Isologotipo (nombre de archivo)'
         image_content_type: 'Isologotipo (tipo de archivo)'
         image_file_size: 'Isologotipo (tamaño)'
         one: 'Isologotipo'
+      organization/co_brand_image_model:
+        image_file_name: 'Isologotipo secundario (nombre de archivo)'
+        image_content_type: 'Isologotipo secundario (tipo de archivo)'
+        image_file_size: 'Isologotipo secundario (tamaño)'
+        one: 'Isologotipo secundario'
       setting:
         name: 'Nombre'
         value: 'Valor'
@@ -482,6 +527,7 @@ es:
         period: 'Periodo'
         risk_assessment_template: 'Plantilla de evaluación de riesgo'
         status: 'Estado'
+        shared: 'Compartida'
         file_model: "Anexo"
         risk_assessment_weights: 'Ponderadores'
         risk_assessment_items: 'Ítems'
@@ -526,6 +572,7 @@ es:
         user_ids: 'Responsable'
         finding_user_assignments: 'Responsables'
         origination_date: 'Fecha de origen'
+        first_follow_up_date: 'Primer fecha de implementación'
         follow_up_date: 'Fecha de implementación'
         state: 'Estado'
         progress: 'Normalización'

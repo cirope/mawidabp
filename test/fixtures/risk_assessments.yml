@@ -2,7 +2,9 @@ sox_current:
   name: Sox current period
   description: Sox description
   status: 0
+  shared: false
   period: current_period
   plan:
   risk_assessment_template: sox
   organization: cirope
+  group: main_group

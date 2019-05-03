@@ -8,11 +8,11 @@ module LdapConfigs::LDAPService
   end
 
   def encrypt_password
-    self.encrypted_password = Security.encrypt(password)
+    self.encrypted_password = ::Security.encrypt(password)
   end
 
   def decrypted_password
-    Security.decrypt(encrypted_password) if encrypted_password.present?
+    ::Security.decrypt(encrypted_password) if encrypted_password.present?
   end
 
   def sync

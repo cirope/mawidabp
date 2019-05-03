@@ -7,7 +7,7 @@
     <tr>
       <%= make_filterable_column BestPractice.human_attribute_name('name'), nil, 'name' %>
       <%= make_not_available_column BestPractice.human_attribute_name('description'), { :class => 'hidden-xs' } %>
-      <th colspan="3" class="text-right"><%= link_to_search %></th>
+      <th colspan="4" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
 
@@ -19,6 +19,11 @@
           <%= super_truncate best_practice.name, 40 %>
         </td>
         <td class="hidden-xs"><%= super_truncate(best_practice.description, 40) %></td>
+        <td>
+          <%= link_to [best_practice, format: :csv], title: t('label.download_csv') do %>
+            <span class="glyphicon glyphicon-save-file"></span>
+          <% end %>
+        </td>
         <td><%= link_to_show best_practice %></td>
         <td><%= link_to_edit edit_best_practice_path(best_practice) %></td>
         <td><%= link_to_destroy best_practice %></td>

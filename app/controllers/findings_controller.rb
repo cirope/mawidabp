@@ -35,7 +35,7 @@ class FindingsController < ApplicationController
   def update
     update_resource @finding, finding_params
 
-    location = if @finding.pending?
+    location = if @finding.pending? || @finding.invalid?
                  edit_finding_url params[:completed], @finding
                else
                  finding_url 'complete', @finding

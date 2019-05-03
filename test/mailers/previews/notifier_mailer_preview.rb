@@ -65,6 +65,15 @@ class NotifierMailerPreview < ActionMailer::Preview
     NotifierMailer.unanswered_finding_to_manager_notification finding, users, 1
   end
 
+  # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/expired_finding_to_manager_notification
+  def expired_finding_to_manager_notification
+    conditions = { state: Finding::STATUS[:being_implemented] }
+    users      = User.joins(:findings).merge(Finding.where(conditions)).limit(1)
+    finding    = users.take.findings.where(conditions).take
+
+    NotifierMailer.expired_finding_to_manager_notification finding, users, 1
+  end
+
   # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/reassigned_findings_notification
   def reassigned_findings_notification
     new_users = User.last(2)

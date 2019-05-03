@@ -1,0 +1,45 @@
+<% if @weakness %>
+  $('[name$="[title]"]').val("<%== j @weakness.title %>").trigger('change')
+  $('[name$="[description]"]').val("<%== j @weakness.description %>").trigger('change')
+  $('[name$="[effect]"]').val("<%== j @weakness.effect %>").trigger('change')
+  $('[name$="[audit_recommendations]"]').val("<%== j @weakness.audit_recommendations %>").trigger('change')
+  $('[name$="[risk]"]').val(<%= @weakness.risk %>).trigger('change')
+  $('[name$="[priority]"]').val(<%= @weakness.priority %>).trigger('change')
+  $('[name$="[answer]"]').val("<%== j @weakness.answer %>").trigger('change')
+  $('[name$="[audit_comments]"]').val("<%== j @weakness.audit_comments %>").trigger('change')
+  $('[name$="[compliance]"]').val("<%= @weakness.compliance %>").trigger('change')
+
+  <% %w(follow_up_date origination_date).each do |date_field| %>
+    var <%= date_field %>Date = new Date('<%= @weakness.attributes[date_field]&.to_s(:db) %>')
+
+    <%= date_field %>Date.setMinutes(new Date().getTimezoneOffset())
+
+    $('[name$="[<%= date_field %>]"]').datepicker()
+    $('[name$="[<%= date_field %>]"]').datepicker('setDate', <%= date_field %>Date)
+  <% end %>
+
+  <% %w(impact operational_risk internal_control_components).each do |field| %>
+    var <%= field %>Values = <%== @weakness.attributes[field].inspect %>
+
+    $('[name$="[<%= field %>][]"]').prop('checked', false).trigger('custom:change')
+
+    $.each(<%= field %>Values, function (i, value) {
+      var $check = $('[name$="[<%= field %>][]"][value="' + value + '"]')
+
+      $check.prop('checked', true).trigger('custom:change')
+    })
+  <% end %>
+
+  <% if @weakness.tasks.any? %>
+    <% weakness = @weakness.dup %>
+    <% weakness.tasks.build @weakness.tasks.map { |t| t.dup.attributes } %>
+    <%= simple_fields_for weakness do |f| %>
+      $('#tasks').html('<%= j render('tasks', f: f, readonly: false) %>')
+    <% end %>
+  <% else %>
+    $('#tasks .task').remove().trigger('dynamic-item:removed')
+  <% end %>
+
+  $('[data-association="tasks"]').trigger('dynamic-item:added')
+  $('[name$="[origination_date]"]').prop('readonly', true)
+<% end %>

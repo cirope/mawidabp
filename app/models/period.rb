@@ -3,6 +3,7 @@ class Period < ApplicationRecord
   include ParameterSelector
   include Periods::AttributeTypes
   include Periods::DestroyValidation
+  include Periods::Months
   include Periods::Overrides
   include Periods::Scopes
   include Periods::Validation

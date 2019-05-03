@@ -27,6 +27,7 @@ es:
     disable: "Deshabilitar"
     download: "Descargar"
     download_csv: "Descargar CSV"
+    download_rtf: "Descargar RTF"
     edit: "Editar"
     import: "Importar"
     insert_item: "Insertar ítem"
@@ -198,7 +199,12 @@ es:
     weaknesses_graphs: "Gráfico de observaciones"
     from_date: "Desde"
     to_date: "Hasta"
-    invalid_dates: "Verifique el rango de fechas, no es válido."
+    mid_date: "Corte"
+    date_field: "Fecha a utilizar"
+    created_at: "Fecha de creación"
+    issue_date: "Fecha de emisión"
+    origination_date: "Fecha de origen"
+    cut_date: "Fecha cierre antigua data"
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
@@ -638,7 +644,8 @@ es:
     not_expired: "No vencida"
     from_date: "Desde"
     to_date: "Hasta"
-    invalid_dates: "Verifique el rango de fechas, no es válido."
+    mid_date: "Corte"
+    cut_date: "Fecha cierre antigua data"
     print_date: "Fecha de impresión: %{date}"
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
@@ -841,6 +848,10 @@ es:
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables de la siguiente observación / oportunidad de mejora"
+      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
+    expired_finding_to_manager:
+      title: "Hallazgo vencido"
+      the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación de la siguiente observación / oportunidad de mejora"
       managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
     pending_poll_email:
       about_html: "Encuesta acerca de <strong>%{entity}</strong>"
@@ -1192,6 +1203,11 @@ es:
         corrective_actions: "Acciones correctivas"
         affects_compliance: "Afecta compliance"
         collapse_control_objectives: "Agrupar objetivos de control"
+        objective: "Objetivo"
+        scope: "Limitación al alcance"
+        reference: "Marco de referencia"
+        previous_identification: "Informe previo"
+        previous_date: "Fecha de emisión previa"
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:

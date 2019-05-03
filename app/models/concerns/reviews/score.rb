@@ -24,12 +24,12 @@ module Reviews::Score
     end
   end
 
-  def score_array
+  def score_array date: Time.zone.today
     type   = guess_score_type
     scores = sorted_scores type: type
     count  = scores.size + 1
 
-    calculate_score_for type
+    calculate_score_for type, date
 
     score_description = scores.detect do |s|
       count -= 1
@@ -58,10 +58,10 @@ module Reviews::Score
     self.score = relevance_sum > 0 ? (total / relevance_sum.to_f).round : 100.0
   end
 
-  def score_by_weaknesses
+  def score_by_weaknesses date
     weaknesses = has_final_review? ? final_weaknesses : self.weaknesses
 
-    scores = weaknesses.not_revoked.map { |w| score_for w }
+    scores = weaknesses.not_revoked.map { |w| score_for w, date }
     total  = scores.compact.sum
 
     self.score = total <= 50 ? (100 - total * 2).round : 0
@@ -83,21 +83,21 @@ module Reviews::Score
       end
     end
 
-    def calculate_score_for type
+    def calculate_score_for type, date
       case type
       when :effectiveness
         effectiveness
       when :weaknesses
-        score_by_weaknesses
+        score_by_weaknesses date
       when :manual, :none
         self.score = 100
       end
     end
 
-    def score_for weakness
+    def score_for weakness, date
       raise 'Not compatible configuration' if SHOW_EXTENDED_RISKS
 
-      if weakness.repeated_of
+      if weakness.take_as_repeated_for_score? date: date
         repeated_score_for weakness
       else
         normal_score_for weakness

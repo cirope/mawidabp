@@ -12,8 +12,10 @@ module Findings::Tasks
   private
 
     def mark_tasks_as_finished
-      if state && state_changed? && state.presence_in(Finding::FINAL_STATUS)
-        tasks.each &:finished!
-      end
+      finish_tasks = state &&
+        state_changed? &&
+        (state.presence_in(Finding::FINAL_STATUS) || repeated?)
+
+      tasks.each &:finished! if finish_tasks
     end
 end

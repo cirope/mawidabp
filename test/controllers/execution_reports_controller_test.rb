@@ -179,6 +179,20 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
+  test 'weaknesses report as CSV' do
+    login
+
+    get :weaknesses_report, params: {
+      execution: 'true',
+      weaknesses_report: {
+        finding_status: Finding::STATUS[:being_implemented].to_s
+      }
+    }, as: :csv
+
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+  end
+
   test 'reviews with incomplete work papers' do
     login
 

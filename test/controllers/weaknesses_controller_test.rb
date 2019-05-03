@@ -97,20 +97,16 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_template 'weaknesses/show'
   end
 
-  test 'show weakness in json' do
+  test 'show weakness in JS' do
     weakness = findings :unanswered_weakness
 
     login
-    get :show, :params => {
-      :completed => 'incomplete',
-      :id => weakness.id
-    }, :as => :json
+    get :show, :params => { :id => weakness.id }, :xhr => true, :as => :js
     assert_response :success
     assert_not_nil assigns(:weakness)
 
-    decoded_weakness = ActiveSupport::JSON.decode @response.body
-
-    assert_equal weakness.id, decoded_weakness['id']
+    assert_equal Mime[:js], @response.content_type
+    assert_template 'weaknesses/show'
   end
 
   test 'new weakness' do

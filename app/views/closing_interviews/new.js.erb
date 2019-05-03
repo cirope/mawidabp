@@ -1,0 +1,40 @@
++function () {
+  var $findings_summary        = $('#closing_interview_findings_summary')
+  var $recommendations_summary = $('#closing_interview_recommendations_summary')
+  var $suggestions             = $('#closing_interview_suggestions')
+
+  $('#responsibles fieldset').remove()
+  $('#auditors fieldset').remove()
+
+  <% if @review %>
+    $findings_summary.val('<%= j closing_interview_findings_summary %>')
+    $recommendations_summary.val('<%= j closing_interview_recommendations_summary %>')
+    $suggestions.val('<%= j closing_interview_suggestions %>')
+
+    <%= simple_fields_for ClosingInterview.new do |f| %>
+      <% @review.review_user_assignments.select(&:audited?).each do |rua|
+        f.object.responsibles.build user_id: rua.user_id
+      end %>
+
+      <% responsibles = f.simple_fields_for :responsibles do |r_f| %>
+        <%= render 'closing_interview_user', f: r_f %>
+      <% end %>
+
+      $('#responsibles').prepend('<%= j responsibles %>')
+
+      <% @review.review_user_assignments.select(&:auditor?).each do |rua|
+        f.object.auditors.build user_id: rua.user_id
+      end %>
+
+      <% auditors = f.simple_fields_for :auditors do |r_f| %>
+        <%= render 'closing_interview_user', f: r_f %>
+      <% end %>
+
+      $('#auditors').prepend('<%= j auditors %>')
+    <% end %>
+  <% else %>
+    $findings_summary.val('')
+    $recommendations_summary.val('')
+    $suggestions.val('')
+  <% end %>
+}()

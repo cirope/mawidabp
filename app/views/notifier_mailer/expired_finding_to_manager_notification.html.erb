@@ -1,0 +1,39 @@
+<% levels = [] %>
+<% next_level = @level.next  %>
+
+<% until @finding.manager_users_for_level(next_level).empty? %>
+  <% levels << next_level  %>
+  <% next_level += 1 %>
+<% end %>
+
+<div style="font-family: verdana, sans-serif, arial, helvetica;">
+  <h2><%= t 'notifier.expired_finding_to_manager.title' %></h2>
+  <h3 style="font-weight: normal;">
+    <%= markdown_without_paragraph(
+      t('notifier.expired_finding_to_manager.the_following_finding_is_expired')) %>
+  </h3>
+
+  <% if @finding.organization %>
+    <% Current.organization = @finding.organization %>
+    <h2 style="margin-bottom: 1em;"><%= @finding.organization.name %></h2>
+  <% end %>
+
+  <%= render :partial => 'finding', :locals => {:finding => @finding} %><br />
+
+  <% if levels.any? %>
+    <h3 style="margin-top: 1em;"><%= markdown_without_paragraph(
+          t('notifier.unanswered_findings.if_no_answer_is_given_the_following_users_will_be_notified')) %> (*)</h3>
+    <% levels.each do |level| %>
+      <% managers = @finding.manager_users_for_level(level) %>
+      <% unless managers.empty? %>
+        <h4><%= l(@finding.notification_date_for_level(level), :format => :long) %></h4>
+        <%= markdown_without_paragraph(
+          managers.map {|u| "* #{u.full_name_with_function}"}.join("\n")) %>
+      <% end %>
+    <% end %>
+    <p style="font-size: .8em;">
+      (*) <%= t('notifier.expired_finding_to_manager.managers_clarification') %>
+    </p>
+  <% end %>
+  <%= render :partial => 'common_mailer/footer' %>
+</div>

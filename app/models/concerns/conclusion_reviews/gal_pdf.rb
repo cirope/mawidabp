@@ -1,28 +1,28 @@
-module ConclusionReviews::AlternativePDF
+module ConclusionReviews::GalPDF
   extend ActiveSupport::Concern
 
-  def alternative_pdf organization = nil, *args
+  def gal_pdf organization = nil, *args
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false, hide_brand: true
 
-    put_watermark_on          pdf
-    put_alternative_header_on pdf, organization
-    put_alternative_cover_on  pdf
-    put_executive_summary_on  pdf, organization
-    put_detailed_review_on    pdf, organization
-    put_annex_on              pdf, organization, options
+    put_default_watermark_on pdf
+    put_gal_header_on        pdf, organization
+    put_gal_cover_on         pdf
+    put_executive_summary_on pdf, organization
+    put_detailed_review_on   pdf, organization
+    put_annex_on             pdf, organization, options
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
 
   private
 
-    def put_alternative_header_on pdf, organization
+    def put_gal_header_on pdf, organization
       pdf.add_review_header organization, nil, nil
       pdf.add_page_footer
     end
 
-    def put_alternative_cover_on pdf
+    def put_gal_cover_on pdf
       items_font_size = PDF_FONT_SIZE * 1.5
       business_unit_label =
         review.business_unit.business_unit_type.business_unit_label
@@ -66,10 +66,10 @@ module ConclusionReviews::AlternativePDF
 
       pdf.text "#{project_title} <b>#{project}</b>", inline_format: true
 
-      put_risk_exposure_on     pdf
-      put_alternative_score_on pdf
+      put_risk_exposure_on pdf
+      put_gal_score_on     pdf
 
-      put_main_weaknesses_on   pdf
+      put_main_weaknesses_on pdf
 
       if show_observations_on_top? organization
         put_observations_on pdf
@@ -330,7 +330,7 @@ module ConclusionReviews::AlternativePDF
       }
     end
 
-    def put_alternative_score_on pdf
+    def put_gal_score_on pdf
       score_title = I18n.t 'conclusion_review.executive_summary.score'
 
       pdf.move_down PDF_FONT_SIZE * 2
@@ -339,7 +339,7 @@ module ConclusionReviews::AlternativePDF
 
       cursor = pdf.cursor
 
-      put_alternative_score_table_on pdf
+      put_gal_score_table_on pdf
       pdf.move_cursor_to cursor
       put_evolution_table_on pdf
 
@@ -348,11 +348,11 @@ module ConclusionReviews::AlternativePDF
         evolution_justification, 0, false
     end
 
-    def put_alternative_score_table_on pdf
-      widths        = alternative_score_details_column_widths pdf
+    def put_gal_score_table_on pdf
+      widths        = gal_score_details_column_widths pdf
       table_options = pdf.default_table_options widths
       data          = [
-        alternative_score_details_column_data
+        gal_score_details_column_data
       ]
 
       pdf.font_size (PDF_FONT_SIZE * 0.75).round do
@@ -672,13 +672,13 @@ module ConclusionReviews::AlternativePDF
       [70, 4, 26].map { |percent| pdf.percent_width percent }
     end
 
-    def alternative_score_details_column_widths pdf
+    def gal_score_details_column_widths pdf
       [70, 10].map do |width|
         pdf.percent_width width
       end
     end
 
-    def alternative_score_details_column_data
+    def gal_score_details_column_data
       image      = CONCLUSION_IMAGES[conclusion]
       score_text = [
         I18n.t('conclusion_review.executive_summary.score'), conclusion

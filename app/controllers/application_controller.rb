@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
 
   before_action :set_paper_trail_whodunnit
   before_action :scope_current_organization
+  before_action :set_conclusion_pdf_format
 
   def current_user
     load_user
@@ -41,6 +42,15 @@ class ApplicationController < ActionController::Base
       Current.group         = current_organization&.group
       Current.corporate_ids = current_organization&.group&.organizations&.corporate&.ids
       Current.organization  = current_organization
+    end
+
+    def set_conclusion_pdf_format
+      if SHOW_CONCLUSION_ALTERNATIVE_PDF.respond_to?(:[])
+        Current.conclusion_pdf_format =
+          SHOW_CONCLUSION_ALTERNATIVE_PDF[current_organization&.prefix]
+      end
+
+      Current.conclusion_pdf_format ||= 'default'
     end
 
     def load_user
@@ -208,8 +218,8 @@ class ApplicationController < ActionController::Base
         to_date = Timeliness.parse(parameters[:to_date], :date)
       end
 
-      from_date ||= Date.today.at_beginning_of_month
-      to_date ||= Date.today.at_end_of_month
+      from_date ||= Time.zone.today.at_beginning_of_month
+      to_date ||= Time.zone.today.at_end_of_month
 
       [from_date.to_date, to_date.to_date].sort
     end

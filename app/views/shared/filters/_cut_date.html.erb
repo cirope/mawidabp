@@ -1,0 +1,19 @@
+<% group ||= nil %>
+<% unless group %>
+  <div id="cut_date_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+    <div class="row">
+<% end %>
+    <div class="col-md-6">
+      <div class="form-group">
+        <%= f.label :cut_date,
+          t('conclusion_committee_report.cut_date'), class: 'col-md-4' %>
+        <div class="col-md-8">
+          <%= f.text_field :cut_date, value: l(@cut_date), autocomplete: :off,
+            class: 'form-control', data: { date_picker: true } %>
+        </div>
+      </div>
+    </div>
+<% unless group %>
+    </div>
+  </div>
+<% end %>

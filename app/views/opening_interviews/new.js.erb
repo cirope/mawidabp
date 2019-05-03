@@ -1,0 +1,34 @@
++function () {
+  var $program = $('#opening_interview_program')
+
+  $('#responsibles fieldset').remove()
+  $('#auditors fieldset').remove()
+
+  <% if @review %>
+    $program.val('<%= j opening_interview_program %>')
+
+    <%= simple_fields_for OpeningInterview.new do |f| %>
+      <% @review.review_user_assignments.select(&:audited?).each do |rua|
+        f.object.responsibles.build user_id: rua.user_id
+      end %>
+
+      <% responsibles = f.simple_fields_for :responsibles do |r_f| %>
+        <%= render 'opening_interview_user', f: r_f %>
+      <% end %>
+
+      $('#responsibles').prepend('<%= j responsibles %>')
+
+      <% @review.review_user_assignments.select(&:auditor?).each do |rua|
+        f.object.auditors.build user_id: rua.user_id
+      end %>
+
+      <% auditors = f.simple_fields_for :auditors do |r_f| %>
+        <%= render 'opening_interview_user', f: r_f %>
+      <% end %>
+
+      $('#auditors').prepend('<%= j auditors %>')
+    <% end %>
+  <% else %>
+    $program.val('')
+  <% end %>
+}()

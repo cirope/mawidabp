@@ -35,15 +35,19 @@ module Prawn
 
         unless hide_brand
           pdf.repeat :all do
-            font_size = 6
+            pdf.canvas do
+              font_size = 6
 
-            pdf.image PDF_LOGO, :at => [pdf.bounds.left, -PDF_LOGO_SIZE.last.pt],
-              :width => PDF_LOGO_SIZE.first, :height => PDF_LOGO_SIZE.last
+              pdf.image PDF_LOGO, :at => [margins.last.mm, PDF_LOGO_SIZE.last.pt * 3.5],
+                :width => PDF_LOGO_SIZE.first, :height => PDF_LOGO_SIZE.last
 
-            text = I18n.t :'app_copyright', :year => Date.today.year
-            x_start = pdf.bounds.left + font_size.pt * 1.75 + PDF_LOGO_SIZE.first.pt
-            pdf.draw_text(text, :at => [x_start, -(PDF_LOGO_SIZE.last.pt * 1.75)],
-              :size => font_size)
+              text = I18n.t :'app_copyright', :year => Time.zone.today.year
+              x_start = pdf.page.margins[:left] + font_size.pt * 1.75 +
+                PDF_LOGO_SIZE.first.pt
+
+              pdf.draw_text(text, :at => [x_start, (PDF_LOGO_SIZE.last.pt * 2.75)],
+                :size => font_size)
+            end
           end
         end
 
@@ -94,14 +98,32 @@ module Prawn
         self.move_down margin
       end
 
-      def add_organization_image(organization, font_size = 10)
+      def add_organization_image(organization, font_size = 10, factor: PDF_LOGO_FACTOR)
         organization_image = organization.try(:image_model).try(:image).try(
           :thumb).try(:path)
         if organization_image && File.exists?(organization_image)
           image_geometry = organization.image_model.image_geometry(:pdf_thumb)
+          image_geometry[:height] = image_geometry[:height] * factor
+          image_geometry[:width] = image_geometry[:width] * factor
+
           self.image organization_image,
             :at => [0, self.bounds.top + (font_size.pt * 2) + image_geometry[:height]],
             :width => image_geometry[:width], :height => image_geometry[:height]
+        end
+      end
+
+      def add_organization_co_brand_image(organization, font_size = 10, factor: PDF_LOGO_FACTOR)
+        organization_co_image = organization.try(:co_brand_image_model).
+          try(:image).try(:thumb).try(:path)
+        if organization_co_image && File.exists?(organization_co_image)
+          image_geometry = organization.co_brand_image_model.image_geometry(:pdf_thumb)
+          image_geometry[:height] = image_geometry[:height] * factor
+          image_geometry[:width] = image_geometry[:width] * factor
+
+          self.image organization_co_image, :at => [
+            self.bounds.width - image_geometry[:width],
+            self.bounds.top + (font_size.pt * 2) + image_geometry[:height]
+          ], :width => image_geometry[:width], :height => image_geometry[:height]
         end
       end
 
@@ -240,12 +262,15 @@ module Prawn
 
       def add_page_footer(font_size = 10)
         self.repeat :all, :dynamic =>  true do
-          string = I18n.t(:'pdf.page_pattern', :page => self.page_number,
-            :total => self.page_count)
+          self.canvas do
+            right_margin = self.page.margins[:right]
+            string = I18n.t('pdf.page_pattern', :page => self.page_number,
+              :total => self.page_count)
+            x = self.bounds.right - self.width_of(string) - right_margin
 
-          self.draw_text string, :at =>
-            [self.bounds.right - self.width_of(string), -(font_size.pt * 3)],
-            :size => font_size
+            self.draw_text string, :at => [x, (font_size.pt * 2)],
+              :size => font_size
+          end
         end
       end
 

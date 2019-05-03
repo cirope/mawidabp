@@ -115,7 +115,8 @@ module Findings::ScaffoldNotifications
     if level_users.any? && !has_audited_comments
       NotifierMailer.unanswered_finding_to_manager_notification(self, level_users | users, level).deliver_later
 
-      update_column :notification_level, level
+      update_columns notification_level:     level,
+                     last_notification_date: Time.zone.today
     else
       update_column :notification_level, -1
     end

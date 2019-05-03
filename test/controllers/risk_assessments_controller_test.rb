@@ -9,7 +9,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
   end
 
   teardown do
-    Current.organization = nil
+    unset_organization
   end
 
   test 'should get index' do
@@ -32,6 +32,11 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
 
   test 'should get new' do
     get :new
+    assert_response :success
+  end
+
+  test 'should get new with clone from' do
+    get :new, params: { clone_from: @risk_assessment.id }
     assert_response :success
   end
 
@@ -75,6 +80,30 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     assert_redirected_to edit_risk_assessment_url(assigns(:risk_assessment))
   end
 
+  test 'should create risk assessment with clone from' do
+    counts = [
+      'FileModel.count',
+      'RiskAssessment.count',
+      'RiskAssessmentItem.count',
+      'RiskWeight.count'
+    ]
+
+    assert_difference counts do
+      post :create, params: {
+        clone_from: @risk_assessment.id,
+        risk_assessment: {
+          name: 'New risk assessment',
+          period_id: periods(:unused_period).id,
+          file_model_attributes: {
+            file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
+          }
+        }
+      }
+    end
+
+    assert_redirected_to edit_risk_assessment_url(assigns(:risk_assessment))
+  end
+
   test 'should show risk assessment' do
     get :show, params: { id: @risk_assessment }
     assert_response :success
@@ -82,7 +111,8 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
 
   test 'should show risk assessment as PDF' do
     get :show, params: { id: @risk_assessment }, as: :pdf
-    assert_redirected_to @risk_assessment.relative_pdf_path
+    assert_response :redirect
+    assert_equal Mime[:pdf], @response.content_type
   end
 
   test 'should show risk assessment as CSV' do

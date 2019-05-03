@@ -8,6 +8,14 @@ module RiskAssessmentsHelper
     end
   end
 
+  def risk_assessment_shared_icon risk_assessment
+    title = t 'activerecord.attributes.risk_assessment.shared'
+    icon  = content_tag :span, nil, class: 'glyphicon glyphicon-eye-open',
+                                    title: title
+
+    risk_assessment.shared ? icon : ''
+  end
+
   def should_fetch_risk_weights_for? risk_assessment_item
     is_valid = risk_assessment_item.errors.empty?
     risk_weights_are_unchanged = risk_assessment_item.risk_weights.all? do |rw|

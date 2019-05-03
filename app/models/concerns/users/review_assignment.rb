@@ -15,7 +15,7 @@ module Users::ReviewAssignment
       options[:viewer]  = types[:viewer]
     end
 
-    if (supervisor? || manager?) && !SHOW_CONCLUSION_ALTERNATIVE_PDF
+    if (supervisor? || manager?) && Current.conclusion_pdf_format != 'gal'
       options[:responsible] = types[:responsible]
     end
 
