@@ -3,7 +3,7 @@ dist: xenial
 cache: bundler
 sudo: false
 rvm:
-  - 2.6.2
+  - 2.6.3
 bundler_args: '--without development production'
 
 addons:
@@ -17,7 +17,7 @@ env:
   - CONFIG_TYPE=normal
 
 before_install:
-  - 'gem install bundler'
+  - 'gem update bundler'
 
 before_script:
   - 'cp config/application.yml.example config/application.yml'

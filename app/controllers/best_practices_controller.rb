@@ -18,7 +18,12 @@ class BestPracticesController < ApplicationController
 
   # * GET /best_practices/1
   def show
-    respond_with @best_practice
+    respond_to do |format|
+      format.html
+      format.csv  {
+        render csv: @best_practice.to_csv, filename: @best_practice.csv_filename
+      }
+    end
   end
 
   # * GET /best_practices/new

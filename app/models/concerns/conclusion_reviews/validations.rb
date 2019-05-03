@@ -9,7 +9,7 @@ module ConclusionReviews::Validations
     validates :type, :summary, :evolution, :previous_identification,
       length: { maximum: 255 }
     validates :issue_date, :previous_date, timeliness: { type: :date },
-      allow_nil: true
+      allow_blank: true
 
     validates :sectors, :evolution, :evolution_justification, presence: true,
       if: :validate_extra_gal_attributes?

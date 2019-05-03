@@ -92,18 +92,10 @@ module ConclusionReviews::BicPDF
     end
 
     def put_bic_cover_legend_on pdf
-      manager_rua = review.review_user_assignments.detect(&:manager?) ||
-                    review.review_user_assignments.detect(&:supervisor?)
-
       pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.bic.cover.legend'),
         size: PDF_FONT_SIZE, align: :justify
-
-      if manager_rua
-        pdf.move_down PDF_FONT_SIZE * 4
-        pdf.text manager_rua.user.informal_name, size: PDF_FONT_SIZE,
-          align: :right
-      end
+      pdf.move_down PDF_FONT_SIZE * 5
     end
 
     def put_bic_cover_recipients_on pdf
@@ -196,6 +188,10 @@ module ConclusionReviews::BicPDF
           weakness.risk_text
         ],
         [
+          Weakness.human_attribute_name('state').upcase,
+          weakness.state_text
+        ],
+        [
           Weakness.human_attribute_name('audit_recommendations').upcase,
           weakness.audit_recommendations
         ],
@@ -209,7 +205,7 @@ module ConclusionReviews::BicPDF
         ],
         [
           I18n.t('conclusion_review.bic.weaknesses.responsible'),
-          weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; ')
+          bic_weakness_responsible(weakness)
         ],
         ([
           Weakness.human_attribute_name('audit_comments').upcase,
@@ -220,6 +216,20 @@ module ConclusionReviews::BicPDF
           weakness.repeated_of.to_s
         ] if weakness.repeated_of)
       ].compact
+    end
+
+    def bic_weakness_responsible weakness
+      assignments = weakness.finding_user_assignments.select do |fua|
+        fua.user.can_act_as_audited?
+      end
+
+      if assignments.select(&:process_owner).any?
+        assignments = assignments.select &:process_owner
+      end
+
+      assignments.map(&:user).map do |u|
+        u.full_name_with_function issue_date
+      end.join '; '
     end
 
     def put_bic_page_header_on pdf, text
@@ -279,14 +289,14 @@ module ConclusionReviews::BicPDF
           "<b>#{self.class.human_attribute_name 'reference'}</b>",
           reference
         ] if reference.present?),
-        ([
-          "<b>#{I18n.t 'conclusion_review.bic.review.main_recommendations'}</b>",
-          bic_main_recommendations
-        ] if bic_main_recommendations.present?),
         [
           "<b>#{I18n.t 'conclusion_review.bic.review.conclusion'}</b>",
           conclusion
-        ]
+        ],
+        ([
+          "<b>#{I18n.t 'conclusion_review.bic.review.main_recommendations'}</b>",
+          bic_main_recommendations
+        ] if bic_main_recommendations.present?)
       ].compact.each do |title, content|
         pdf.font_size PDF_FONT_SIZE * 0.75 do
           pdf.move_down PDF_FONT_SIZE
@@ -321,7 +331,7 @@ module ConclusionReviews::BicPDF
           {
             content: [
               I18n.t('conclusion_review.bic.review.subject'),
-              "<b>#{review.business_unit.name}</b>"
+              "<b>#{review.plan_item.project}</b>"
             ].join(': '),
             size: PDF_FONT_SIZE * 0.85
           },
@@ -338,7 +348,7 @@ module ConclusionReviews::BicPDF
         [
           [
             ReviewUserAssignment.human_attribute_name('owner'),
-            review.review_user_assignments.select(&:audited?).map(&:user).map(&:full_name).join('; ')
+            bic_review_owners_text
           ].join(': '),
           {
             content: I18n.t(
@@ -380,6 +390,16 @@ module ConclusionReviews::BicPDF
       auditors    = review.review_user_assignments.select &:auditor?
 
       (supervisors | auditors).map(&:user).map(&:full_name).join '; '
+    end
+
+    def bic_review_owners_text
+      assignments = review.review_user_assignments.select &:audited?
+      assignments = assignments.select &:owner if assignments.select(&:owner).any?
+      names       = assignments.map(&:user).map do |u|
+        u.full_name_with_function issue_date
+      end
+
+      names.join '; '
     end
 
     def bic_previous_review_text
