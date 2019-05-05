@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_13_211418) do
+ActiveRecord::Schema.define(version: 2019_05_05_000651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -198,7 +198,6 @@ ActiveRecord::Schema.define(version: 2019_03_13_211418) do
     t.boolean "affects_compliance", default: false, null: false
     t.boolean "collapse_control_objectives", default: false, null: false
     t.integer "conclusion_index"
-    t.text "objective"
     t.text "reference"
     t.text "scope"
     t.string "previous_identification"

@@ -1203,7 +1203,6 @@ es:
         corrective_actions: "Acciones correctivas"
         affects_compliance: "Afecta compliance"
         collapse_control_objectives: "Agrupar objetivos de control"
-        objective: "Objetivo"
         scope: "Limitación al alcance"
         reference: "Marco de referencia"
         previous_identification: "Informe previo"
