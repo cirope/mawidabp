@@ -1344,7 +1344,7 @@ es:
         resource_id: "Recurso"
       review:
         identification: "Identificación"
-        description: "Descripción"
+        description: "Objetivo"
         survey: "Relevamiento"
         audit_type: "Tipo de auditoría"
         business_unit: "Unidad de negocio"
