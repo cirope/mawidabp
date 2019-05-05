@@ -97,6 +97,7 @@
 
       <div class="row">
         <div class="col-md-6">
+          <% @conclusion_draft_review.build_review unless @conclusion_draft_review.review %>
           <%= f.simple_fields_for :review do |r_f| %>
             <%= r_f.input :description, input_html: { rows: 4 } %>
             <%= r_f.input :lock_version, as: :hidden %>

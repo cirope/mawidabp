@@ -21,8 +21,6 @@
   $('#conclusion_final_review_review_attributes_description').val('<%== j @conclusion_final_review.review.description %>')
 
   $('#best_practice_comments_container').html('<%= j best_practice_comments_form(@conclusion_final_review) %>')
-
-  $('#conclusion_final_review_applied_procedures').focus()
 <% else %>
   var elementsForUpdate = [
     'applied_procedures',
