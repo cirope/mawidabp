@@ -97,7 +97,10 @@
 
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :objective, input_html: { rows: 4 } %>
+          <%= f.simple_fields_for :review do |r_f| %>
+            <%= r_f.input :description, input_html: { rows: 4 } %>
+            <%= r_f.input :lock_version, as: :hidden %>
+          <% end %>
         </div>
         <div class="col-md-6">
           <%= f.input :scope, input_html: { rows: 4 } %>

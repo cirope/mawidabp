@@ -270,8 +270,8 @@ module ConclusionReviews::BicPDF
     def put_bic_review_text_data_on pdf
       [
         [
-          "<b>#{self.class.human_attribute_name 'objective'}</b>",
-          objective
+          "<b>#{Review.human_attribute_name 'description'}</b>",
+          review.description
         ],
         [
           "<b>#{I18n.t 'conclusion_review.bic.review.applied_procedures'}</b>",
