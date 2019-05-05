@@ -17,7 +17,6 @@ module ConclusionReviews::Validations
     validates :main_weaknesses_text, presence: true,
       if: :validate_short_alternative_pdf_attributes?
     validates :previous_identification, presence: true, if: :previous_date_present?
-    validates :previous_date, presence: true, if: :previous_identification_present?
     validate :evolution_for_conclusion, if: :validate_extra_gal_attributes?
   end
 
@@ -35,10 +34,6 @@ module ConclusionReviews::Validations
 
     def previous_date_present?
       previous_date.present?
-    end
-
-    def previous_identification_present?
-      previous_identification.present?
     end
 
     def validate_recipients?

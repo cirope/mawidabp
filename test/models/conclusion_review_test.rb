@@ -115,12 +115,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   test 'conditionally present attributes' do
-    @conclusion_review.previous_identification = 'OLD 1 2 3'
-    @conclusion_review.previous_date = nil
-
-    assert @conclusion_review.invalid?
-    assert_error @conclusion_review, :previous_date, :blank
-
     @conclusion_review.previous_date = Time.zone.today
     @conclusion_review.previous_identification = ''
 
