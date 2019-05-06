@@ -98,7 +98,6 @@
           <%= f.simple_fields_for :review do |r_f| %>
             <%= r_f.input :description, input_html: { rows: 4, readonly: readonly } %>
             <%= r_f.input :id, as: :hidden %>
-            <%= r_f.input :lock_version, as: :hidden %>
           <% end %>
         </div>
         <div class="col-md-6">
