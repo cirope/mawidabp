@@ -228,6 +228,12 @@ es:
     edit:
       title: 'Modificar organización'
     new_organization_can_not_have_image: 'Podrá cargar un isologotipo de la organización luego de haberla creado'
+    logo_styles:
+      default: 'Por defecto'
+      success: 'Exitoso'
+      info: 'Informativo'
+      warning: 'Advertencia'
+      danger: 'Peligro'
 
   periods:
     edit:

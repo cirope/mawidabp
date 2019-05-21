@@ -205,7 +205,7 @@ module ConclusionReviews::BicPDF
         ],
         [
           I18n.t('conclusion_review.bic.weaknesses.responsible'),
-          weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; ')
+          bic_weakness_responsible(weakness)
         ],
         ([
           Weakness.human_attribute_name('audit_comments').upcase,
@@ -216,6 +216,20 @@ module ConclusionReviews::BicPDF
           weakness.repeated_of.to_s
         ] if weakness.repeated_of)
       ].compact
+    end
+
+    def bic_weakness_responsible weakness
+      assignments = weakness.finding_user_assignments.select do |fua|
+        fua.user.can_act_as_audited?
+      end
+
+      if assignments.select(&:process_owner).any?
+        assignments = assignments.select &:process_owner
+      end
+
+      assignments.map(&:user).map do |u|
+        u.full_name_with_function issue_date
+      end.join '; '
     end
 
     def put_bic_page_header_on pdf, text
@@ -256,8 +270,8 @@ module ConclusionReviews::BicPDF
     def put_bic_review_text_data_on pdf
       [
         [
-          "<b>#{self.class.human_attribute_name 'objective'}</b>",
-          objective
+          "<b>#{Review.human_attribute_name 'description'}</b>",
+          review.description
         ],
         [
           "<b>#{I18n.t 'conclusion_review.bic.review.applied_procedures'}</b>",
@@ -334,7 +348,7 @@ module ConclusionReviews::BicPDF
         [
           [
             ReviewUserAssignment.human_attribute_name('owner'),
-            review.review_user_assignments.select(&:audited?).map(&:user).map(&:full_name).join('; ')
+            bic_review_owners_text
           ].join(': '),
           {
             content: I18n.t(
@@ -378,12 +392,24 @@ module ConclusionReviews::BicPDF
       (supervisors | auditors).map(&:user).map(&:full_name).join '; '
     end
 
+    def bic_review_owners_text
+      assignments = review.review_user_assignments.select &:audited?
+      assignments = assignments.select &:owner if assignments.select(&:owner).any?
+      names       = assignments.map(&:user).map do |u|
+        u.full_name_with_function issue_date
+      end
+
+      names.join '; '
+    end
+
     def bic_previous_review_text
       if previous_identification.present? && previous_date.present?
         [
           previous_identification,
           "(#{I18n.l previous_date})"
         ].join ' '
+      elsif previous_identification.present?
+        previous_identification
       elsif previous = review.previous
         [
           previous.identification,
