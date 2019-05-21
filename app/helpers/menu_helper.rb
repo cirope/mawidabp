@@ -1,4 +1,8 @@
 module MenuHelper
+  def header_logo_name
+    "logo_header_#{current_organization&.logo_style || 'default'}"
+  end
+
   def show_menu?
     @auth_user && @auth_user.is_enable? &&
       ((@auth_user.password && current_organization) ||

@@ -1,6 +1,7 @@
 cirope:
   name: Cirope S.A.
   prefix: cirope
+  logo_style: 'default'
   description: ''
   group: main_group
   corporate: false
@@ -8,6 +9,7 @@ cirope:
 twitter:
   name: Twitter Inc.
   prefix: tw
+  logo_style: 'default'
   description: ''
   group: main_group
   corporate: true
@@ -15,6 +17,7 @@ twitter:
 google:
   name: Google Inc.
   prefix: google
+  logo_style: 'default'
   description: ''
   group: second_group
   corporate: false
@@ -22,6 +25,7 @@ google:
 alphabet:
   name: Alphabet Inc.
   prefix: alphabet
+  logo_style: 'default'
   description: ''
   group: second_group
   corporate: true
