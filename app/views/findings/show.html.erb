@@ -255,7 +255,7 @@
           <%= FindingAnswer.human_attribute_name :file_model %>
         </th>
         <th>
-          <%= FindingAnswer.human_attribute_name :created_at %>
+          <%= FindingAnswer.human_attribute_name :created_at if show_follow_up_timestamps? %>
         </th>
       </tr>
     </thead>
@@ -272,6 +272,9 @@
             <% if finding_answer.created_at && show_follow_up_timestamps? %>
               <%= l(finding_answer.created_at, :format => :long) %>
             <% end %>
+            <div class="pull-right">
+              <%= render 'readings/reading', finding_answer: finding_answer %>
+            </div>
             <% if finding_answer.commitment_date %>
               <% if show_follow_up_timestamps? %>
                 <br />
