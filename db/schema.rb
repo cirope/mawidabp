@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_13_211418) do
+ActiveRecord::Schema.define(version: 2019_05_21_185624) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -239,7 +239,6 @@ ActiveRecord::Schema.define(version: 2019_03_13_211418) do
     t.string "affects_compliance", limit: 1, default: "f", null: false
     t.string "collapse_control_objectives", limit: 1, default: "f", null: false
     t.integer "conclusion_index", precision: 38
-    t.text "objective"
     t.text "reference"
     t.text "scope"
     t.string "previous_identification"
@@ -2038,6 +2037,7 @@ ActiveRecord::Schema.define(version: 2019_03_13_211418) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "corporate", limit: 1, default: "f", null: false
+    t.string "logo_style", default: "default", null: false
     t.index ["corporate"], name: "i_organizations_corporate"
     t.index ["group_id"], name: "i_organizations_group_id"
     t.index ["image_model_id"], name: "i_organizations_image_model_id"

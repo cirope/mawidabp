@@ -51,7 +51,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :evolution_justification => 'Ok',
         :main_weaknesses_text => 'Some main weakness X',
         :corrective_actions => 'You should do it this way',
-        :objective => 'Some objective',
         :reference => 'Some reference',
         :observations => 'Some observations',
         :scope => 'Some scope',
@@ -94,7 +93,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review.evolution = '   '
     @conclusion_review.evolution_justification = '   '
     @conclusion_review.main_weaknesses_text = '   '
-    @conclusion_review.objective = '   '
     @conclusion_review.scope = '   '
 
     assert @conclusion_review.invalid?
@@ -107,8 +105,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
       assert_error @conclusion_review, :sectors, :blank
       assert_error @conclusion_review, :evolution, :blank
       assert_error @conclusion_review, :evolution_justification, :blank
-    elsif Current.conclusion_pdf_format == 'bic'
-      assert_error @conclusion_review, :objective, :blank
     else
       assert_error @conclusion_review, :applied_procedures, :blank
     end
@@ -119,12 +115,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   test 'conditionally present attributes' do
-    @conclusion_review.previous_identification = 'OLD 1 2 3'
-    @conclusion_review.previous_date = nil
-
-    assert @conclusion_review.invalid?
-    assert_error @conclusion_review, :previous_date, :blank
-
     @conclusion_review.previous_date = Time.zone.today
     @conclusion_review.previous_identification = ''
 
@@ -175,7 +165,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :evolution_justification => 'Ok',
         :main_weaknesses_text => 'Some main weakness X',
         :corrective_actions => 'You should do it this way',
-        :objective => 'Some objective',
         :reference => 'Some reference',
         :observations => 'Some observations',
         :scope => 'Some scope',

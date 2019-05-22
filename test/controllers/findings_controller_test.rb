@@ -653,7 +653,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     get :auto_complete_for_finding_relation, params: {
       completed: 'incomplete',
-      q: 'O001, 1 2 3',
+      q: 'O001; 1 2 3',
       finding_id: finding.id,
       review_id: finding.review.id
     }, as: :json
