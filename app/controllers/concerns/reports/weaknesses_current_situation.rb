@@ -307,7 +307,7 @@ module Reports::WeaknessesCurrentSituation
 
     def filter_weaknesses_current_situation_by_weakness_tags weaknesses
       tags = params[:weaknesses_current_situation][:weakness_tags].to_s.split(
-        SPLIT_AND_TERMS_REGEXP
+        SPLIT_OR_TERMS_REGEXP
       ).uniq.map(&:strip).reject(&:blank?)
 
       if tags.any?
