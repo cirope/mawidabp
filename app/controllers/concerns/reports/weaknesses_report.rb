@@ -71,7 +71,7 @@ module Reports::WeaknessesReport
 
       if report_params[:tags].present?
         tags = report_params[:tags].to_s.split(
-          SPLIT_AND_TERMS_REGEXP
+          SPLIT_OR_TERMS_REGEXP
         ).uniq.map(&:strip).reject(&:blank?)
 
         weaknesses = weaknesses.by_wilcard_tags tags if tags.any?
