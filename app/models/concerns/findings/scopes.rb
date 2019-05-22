@@ -132,7 +132,7 @@ module Findings::Scopes
         parameters[:"wt_#{i}"] = "%#{tag.downcase}%"
       end
 
-      includes(:tags).where(conditions.join(' OR '), parameters)
+      includes(:tags).references(:tags).where conditions.join(' OR '), parameters
     end
 
     def by_review_tags *tags
