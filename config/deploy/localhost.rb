@@ -1,6 +1,6 @@
 set :stage, :production
 set :rails_env, 'production'
-set :branch, 'c-petersen-test'
+set :branch, 'c-petersen-production'
 set :log_level, :error
 
 set :default_env, {
