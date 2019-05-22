@@ -127,6 +127,13 @@
         <% end %>
       </p>
     <% end %>
+
+    <% weakness.achievements.each do |achievement| %>
+      <p>
+        <strong><%= achievement.benefit %></strong>:
+        <%= achievement.amount ? '%.2f' % achievement.amount : achievement.comment %>
+      </p>
+    <% end %>
   <% end %>
 <% else %>
   <div style="margin-left: 2em">
