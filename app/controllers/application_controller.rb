@@ -196,20 +196,12 @@ class ApplicationController < ActionController::Base
           redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
         end
       end
-
-    rescue ActionController::RedirectBackError
-      restart_session
-      redirect_to_login t('message.insufficient_privileges'), :alert
     end
 
     def check_group_admin
       unless @auth_user.is_group_admin?
         redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
       end
-
-    rescue ActionController::RedirectBackError
-      restart_session
-      redirect_to_login t('message.insufficient_privileges'), :alert
     end
 
     def make_date_range(parameters = nil)
