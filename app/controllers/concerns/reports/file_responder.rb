@@ -40,12 +40,11 @@ module Reports::FileResponder
       )
 
       parameters = request.query_parameters.except 'format'
-
-      back_url = if parameters.present?
-                   [request.path, parameters.to_param].join '?'
-                 else
-                   request.path
-                 end
+      back_url   = if parameters.present?
+                     [request.path, parameters.to_param].join '?'
+                   else
+                     request.path
+                   end
 
       redirect_to back_url, notice: t('reports.file_will_be_sent')
     end
@@ -72,7 +71,8 @@ module Reports::FileResponder
         end
 
         where_hash = where_tables.uniq.each_with_object({}) do |table, memo|
-          memo[table] = where_clause.to_h table
+          clause      = where_clause.to_h table
+          memo[table] = clause if clause.any?
         end
 
         wheres << where_hash if where_hash.any?
