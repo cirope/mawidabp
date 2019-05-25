@@ -408,6 +408,8 @@ module ConclusionReviews::BicPDF
           previous_identification,
           "(#{I18n.l previous_date})"
         ].join ' '
+      elsif previous_identification.present?
+        previous_identification
       elsif previous = review.previous
         [
           previous.identification,

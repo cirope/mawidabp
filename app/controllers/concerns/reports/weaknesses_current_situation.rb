@@ -60,6 +60,7 @@ module Reports::WeaknessesCurrentSituation
       @title = t("#{@controller}_committee_report.weaknesses_current_situation_title")
       @from_date, @to_date = *make_date_range(params[:weaknesses_current_situation])
       @filters = []
+      @benefits = Benefit.list.order kind: :desc, created_at: :asc
       final = params[:final] == 'true'
       order = [
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
@@ -71,7 +72,10 @@ module Reports::WeaknessesCurrentSituation
         finals(final).
         list_with_final_review.
         by_issue_date('BETWEEN', @from_date, @to_date).
-        includes(:business_unit, :business_unit_type, review: [:plan_item, :conclusion_final_review])
+        includes(:business_unit, :business_unit_type,
+          achievements: [:benefit],
+          review: [:plan_item, :conclusion_final_review]
+        )
 
       if params[:weaknesses_current_situation]
         weaknesses = filter_weaknesses_current_situation_by_risk weaknesses
@@ -153,7 +157,16 @@ module Reports::WeaknessesCurrentSituation
             "<color rgb='ff0000'>#{I18n.l(weakness.follow_up_date)}</color>" :
             I18n.l(weakness.follow_up_date)
         ] if weakness.follow_up_date)
-      ].compact
+      ].concat(
+        weakness.achievements.map do |achievement|
+          [
+            achievement.benefit.to_s,
+            achievement.amount ?
+              '%.2f' % achievement.amount :
+              achievement.comment
+          ]
+        end
+      ).compact
     end
 
     def show_current_situation? weakness
@@ -307,7 +320,7 @@ module Reports::WeaknessesCurrentSituation
 
     def filter_weaknesses_current_situation_by_weakness_tags weaknesses
       tags = params[:weaknesses_current_situation][:weakness_tags].to_s.split(
-        SPLIT_AND_TERMS_REGEXP
+        SPLIT_OR_TERMS_REGEXP
       ).uniq.map(&:strip).reject(&:blank?)
 
       if tags.any?
@@ -351,7 +364,7 @@ module Reports::WeaknessesCurrentSituation
         Weakness.human_attribute_name('solution_date'),
         t('finding.audited', count: 0),
         t('finding.auditors', count: 0)
-      ]
+      ].concat @benefits.pluck('name')
     end
 
     def weaknesses_current_situation_csv_data_rows
@@ -373,7 +386,17 @@ module Reports::WeaknessesCurrentSituation
           (l weakness.solution_date if weakness.solution_date),
           weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; '),
           weakness.users.reject(&:can_act_as_audited?).map(&:full_name).join('; ')
-        ]
+        ].concat(@benefits.map do |b|
+          achievement = weakness.achievements.detect do |a|
+            a.benefit_id == b.id
+          end
+
+          if achievement&.amount
+            '%.2f' % achievement.amount
+          else
+            achievement&.comment
+          end
+        end)
       end
     end
 

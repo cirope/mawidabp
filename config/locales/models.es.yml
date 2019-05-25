@@ -371,6 +371,7 @@ es:
         description: 'Descripción'
         name: 'Nombre'
         prefix: 'Prefijo'
+        logo_style: 'Estilo de logo'
         corporate: 'Corporativa'
         image_model: 'Imagen'
         co_brand_image_model: 'Imagen secundaria'

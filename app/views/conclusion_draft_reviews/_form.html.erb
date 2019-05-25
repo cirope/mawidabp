@@ -4,22 +4,22 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <% unless @conclusion_draft_review.review %>
-          <%= f.input :review_id, collection: Review.list_without_draft_review.map { |r| [truncate(r.long_identification, length: 50), r.id] },
-            prompt: true, input_html: { autofocus: true } %>
-        <% else %>
+        <% if @conclusion_draft_review.review&.persisted? %>
           <%= f.input :review, label: ConclusionDraftReview.human_attribute_name(:review_id),
             input_html: { value: @conclusion_draft_review.review.identification, readonly: true } %>
           <%= f.input :review_id, as: :hidden %>
+        <% else %>
+          <%= f.input :review_id, collection: Review.list_without_draft_review.map { |r| [truncate(r.long_identification, length: 50), r.id] },
+            prompt: true, input_html: { autofocus: true } %>
         <% end %>
         <%= f.input :business_unit, input_html: {
-          value: (@conclusion_draft_review.review.business_unit.name if @conclusion_draft_review.review),
+          value: (@conclusion_draft_review.review.business_unit.name if @conclusion_draft_review.review&.persisted?),
           readonly: true } %>
         <%= f.input :project, input_html: {
-          value: (@conclusion_draft_review.review.plan_item.project if @conclusion_draft_review.review),
+          value: (@conclusion_draft_review.review.plan_item.project if @conclusion_draft_review.review&.persisted?),
           readonly: true } %>
         <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
-          value: (@conclusion_draft_review.review.score_text if @conclusion_draft_review.review),
+          value: (@conclusion_draft_review.review.score_text if @conclusion_draft_review.review&.persisted?),
           readonly: true } %>
       </div>
       <div class="col-md-6">
@@ -97,9 +97,10 @@
 
       <div class="row">
         <div class="col-md-6">
+          <% @conclusion_draft_review.build_review unless @conclusion_draft_review.review %>
           <%= f.simple_fields_for :review do |r_f| %>
             <%= r_f.input :description, input_html: { rows: 4 } %>
-            <%= r_f.input :lock_version, as: :hidden %>
+            <%= r_f.input :id, as: :hidden %>
           <% end %>
         </div>
         <div class="col-md-6">
@@ -125,7 +126,7 @@
 
     <% if show_review_best_practice_comments? %>
       <div id="best_practice_comments_container">
-        <% if @conclusion_draft_review.review %>
+        <% if @conclusion_draft_review.review&.persisted? %>
           <%= render 'best_practice_comments', f: f %>
         <% end %>
       </div>

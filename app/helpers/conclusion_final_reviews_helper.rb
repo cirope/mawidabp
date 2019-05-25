@@ -1,7 +1,7 @@
 module ConclusionFinalReviewsHelper
   def conclusion_final_review_review_field(form, review)
     reviews = (Review.list_with_approved_draft - Review.list_with_final_review) |
-      [review]
+      (review&.persisted? ? [review] : [])
     options = reviews.compact.map do |r|
       [truncate(r.long_identification, length: 50), r.id]
     end

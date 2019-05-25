@@ -77,7 +77,9 @@ module Users::Roles
   end
 
   def can_act_as_audited_on? organization_id
-    audited_on?(organization_id) || executive_manager_on?(organization_id) || admin_on?(organization_id)
+    audited_on?(organization_id)             ||
+      executive_manager_on?(organization_id) ||
+      admin_on?(organization_id)
   end
 
   module ClassMethods
