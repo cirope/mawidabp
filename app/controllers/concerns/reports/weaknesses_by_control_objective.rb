@@ -86,7 +86,6 @@ module Reports::WeaknessesByControlObjective
         weaknesses = filter_weaknesses_by_control_objective_by_impact weaknesses
         weaknesses = filter_weaknesses_by_control_objective_by_operational_risk weaknesses
         weaknesses = filter_weaknesses_by_control_objective_by_internal_control_components weaknesses
-        weaknesses = filter_weaknesses_by_control_objective_by_tags weaknesses
         weaknesses = filter_weaknesses_by_control_objective_by_repeated weaknesses
       end
 
@@ -277,55 +276,6 @@ module Reports::WeaknessesByControlObjective
       end
     end
 
-    def filter_weaknesses_by_control_objective_by_tags weaknesses
-      weaknesses = filter_weaknesses_by_control_objective_by_control_objective_tags weaknesses
-      weaknesses = filter_weaknesses_by_control_objective_by_weakness_tags weaknesses
-
-      filter_weaknesses_by_control_objective_by_review_tags weaknesses
-    end
-
-    def filter_weaknesses_by_control_objective_by_control_objective_tags weaknesses
-      tags = params[:weaknesses_by_control_objective][:control_objective_tags].to_s.split(
-        SPLIT_AND_TERMS_REGEXP
-      ).uniq.map(&:strip).reject(&:blank?)
-
-      if tags.any?
-        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_by_control_objective.control_objective_tags'}</b> = \"#{tags.to_sentence}\""
-
-        weaknesses.by_control_objective_tags tags
-      else
-        weaknesses
-      end
-    end
-
-    def filter_weaknesses_by_control_objective_by_weakness_tags weaknesses
-      tags = params[:weaknesses_by_control_objective][:weakness_tags].to_s.split(
-        SPLIT_OR_TERMS_REGEXP
-      ).uniq.map(&:strip).reject(&:blank?)
-
-      if tags.any?
-        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_by_control_objective.weakness_tags'}</b> = \"#{tags.to_sentence}\""
-
-        weaknesses.by_wilcard_tags tags
-      else
-        weaknesses
-      end
-    end
-
-    def filter_weaknesses_by_control_objective_by_review_tags weaknesses
-      tags = params[:weaknesses_by_control_objective][:review_tags].to_s.split(
-        SPLIT_AND_TERMS_REGEXP
-      ).uniq.map(&:strip).reject(&:blank?)
-
-      if tags.any?
-        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_by_control_objective.review_tags'}</b> = \"#{tags.to_sentence}\""
-
-        weaknesses.by_review_tags tags
-      else
-        weaknesses
-      end
-    end
-
     def weaknesses_by_control_objective_csv_headers
       [
         BusinessUnit.model_name.human,
@@ -367,26 +317,6 @@ module Reports::WeaknessesByControlObjective
             []
           end
         )
-      end
-    end
-
-    def weaknesses_by_control_objective_state_text weakness
-      if weakness.repeated? && weakness.repeated_in.present?
-        review           = weakness.repeated_in.review
-        repeated_details = [
-          weakness.repeated_in.review_code,
-          review.identification
-        ].join ' - '
-
-        state_text = if review.has_final_review?
-                       weakness.state_text
-                     else
-                       t 'follow_up_committee_report.weaknesses_by_control_objective.on_revision'
-                     end
-
-        "#{state_text} (#{repeated_details})"
-      else
-        weakness.state_text
       end
     end
 end
