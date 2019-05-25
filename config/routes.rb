@@ -133,6 +133,7 @@ Rails.application.routes.draw do
     'weaknesses_by_risk_report',
     'weaknesses_by_user',
     'weaknesses_current_situation',
+    'weaknesses_by_control_objective',
     'fixed_weaknesses_report',
     'weaknesses_graphs',
     'auto_complete_for_business_unit',
@@ -165,6 +166,7 @@ Rails.application.routes.draw do
     'create_weaknesses_by_risk_report',
     'create_weaknesses_by_user',
     'create_weaknesses_current_situation',
+    'create_weaknesses_by_control_objective',
     'create_fixed_weaknesses_report'
   ].each do |action|
     post "conclusion_reports/#{action}",
