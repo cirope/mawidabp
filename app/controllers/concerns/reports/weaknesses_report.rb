@@ -63,10 +63,18 @@ module Reports::WeaknessesReport
     def filter_weaknesses_for_report report_params
       weaknesses = scoped_weaknesses.finals false
 
-      %i(review project process_control control_objective tags).each do |param|
+      %i(review project process_control control_objective).each do |param|
         if report_params[param].present?
           weaknesses = weaknesses.send "by_#{param}", report_params[param]
         end
+      end
+
+      if report_params[:tags].present?
+        tags = report_params[:tags].to_s.split(
+          SPLIT_OR_TERMS_REGEXP
+        ).uniq.map(&:strip).reject(&:blank?)
+
+        weaknesses = weaknesses.by_wilcard_tags tags if tags.any?
       end
 
       if report_params[:user_id].present?

@@ -635,7 +635,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
-    get :auto_complete_for_finding, xhr: true, params: { q: 'O001, 1 2 3' }, as: :json
+    get :auto_complete_for_finding, xhr: true, params: { q: 'O001; 1 2 3' }, as: :json
     assert_response :success
 
     findings = ActiveSupport::JSON.decode(@response.body)

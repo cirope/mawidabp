@@ -209,7 +209,7 @@ module Reports::WeaknessesList
 
     def filter_weaknesses_list_by_weakness_tags weaknesses
       tags = params[:weaknesses_list][:weakness_tags].to_s.split(
-        SPLIT_AND_TERMS_REGEXP
+        SPLIT_OR_TERMS_REGEXP
       ).uniq.map(&:strip).reject(&:blank?)
 
       if tags.any?
