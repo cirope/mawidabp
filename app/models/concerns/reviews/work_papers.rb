@@ -38,6 +38,10 @@ module Reviews::WorkPapers
       work_papers.concat coi.work_papers
     end
 
+    (weaknesses + final_weaknesses).each do |w|
+      work_papers.concat w.work_papers
+    end
+
     (oportunities + final_oportunities).each do |w|
       work_papers.concat w.work_papers
     end
