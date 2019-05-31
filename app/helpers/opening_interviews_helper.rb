@@ -17,11 +17,17 @@ module OpeningInterviewsHelper
 
   def opening_interview_program
     pcs = @review.grouped_control_objective_items.map do |pc, cois|
-      cois_text = cois.sort.map(&:control_objective_text).map do |text|
-        "- #{text}"
+      program = []
+
+      cois.sort.each do |coi|
+        program << [
+          coi.control.design_tests,
+          coi.control.compliance_tests,
+          coi.control.sustantive_tests
+        ].reject(&:blank?).join("\n")
       end
 
-      "#{pc.name}\n\n#{cois_text.join "\n"}"
+      "#{pc.name}\n\n#{program.join "\n\n"}"
     end
 
     pcs.join "\n\n"
