@@ -282,6 +282,12 @@ class ReviewTest < ActiveSupport::TestCase
     assert_equal :require_improvements, @review.reload.score_array.first
     assert_equal 76, @review.score
 
+    finding.update_column :origination_date, (2.years + 1.day).ago
+
+    # High risk and old counts 21
+    assert_equal :require_improvements, @review.reload.score_array.first
+    assert_equal 75, @review.score
+
     review = Review.new
 
     assert_equal :adequate, review.score_array.first

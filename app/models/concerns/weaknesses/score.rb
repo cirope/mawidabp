@@ -26,6 +26,8 @@ module Weaknesses::Score
     check_obsolescence = WEAKNESS_SCORE_OBSOLESCENCE_START &&
                          WEAKNESS_SCORE_OBSOLESCENCE_START <= date
 
-    check_obsolescence && (origination_date < date - 2.years)
+    check_obsolescence &&
+      origination_date &&
+      (origination_date < date - 2.years)
   end
 end
