@@ -1,10 +1,12 @@
 +function () {
-  var $program = $('#opening_interview_program')
+  var $program   = $('#opening_interview_program')
+  var $objective = $('#opening_interview_objective')
 
   $('#responsibles fieldset').remove()
   $('#auditors fieldset').remove()
 
   <% if @review %>
+    $objective.val('<%= j @review.description %>')
     $program.val('<%= j opening_interview_program %>')
 
     <%= simple_fields_for OpeningInterview.new do |f| %>
