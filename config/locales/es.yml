@@ -1173,6 +1173,7 @@
     without_score: "No calificar"
     weakness_from_template: "Observación creada de una plantilla"
     repeated_weaknesses: "Reiteradas"
+    old_weaknesses: "Antiguas"
     new_weaknesses: "Nuevas"
     taken_work_paper_code:
       one: "El código de papel de trabajo %{duplicated_work_papers} está duplicado"
