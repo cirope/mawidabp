@@ -214,6 +214,7 @@ Rails.application.routes.draw do
   scope ':completed', completed: /complete|incomplete/ do
     resources :findings, except: [:destroy] do
       resources :costs
+      resources :finding_answers, only: [:create], controller: 'findings/answers', as: 'answers'
 
       get :follow_up_pdf, on: :member, to: 'findings/follow_up_pdf#show'
 

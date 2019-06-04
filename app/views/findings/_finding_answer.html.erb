@@ -1,6 +1,5 @@
 <%
-  finding = parent.object
-  finding_answer = f.object
+  finding_answer ||= f.object
   finding_answer.user ||= @auth_user
 %>
 <fieldset class="finding_answer">
@@ -65,8 +64,8 @@
             input_html: { data: { required: true } } %>
         <% end %>
         <%= finding_answer_notification_check(f) %>
+        <%= f.input :user_id, as: :hidden %>
       <% end %>
-      <%= f.input :user_id, as: :hidden %>
     </div>
   </div>
 </fieldset>

@@ -614,6 +614,7 @@
     repeated_children: "Reiterada en"
     undo_reiteration: 'Deshacer reiteración'
     change_history: "Historial de cambios"
+    submit_answer: "Guardar respuesta"
     auditors:
       one: "Auditor"
       other: "Auditores"
