@@ -143,9 +143,9 @@
 <%= finding_responsibles_list(@finding) %>
 
 <% unless @finding.taggings.blank? %>
-  <h3>
+  <h4>
     <%= Tag.model_name.human count: 0 %>
-  </h3>
+  </h4>
 
   <ul class="list-unstyled">
     <% @finding.taggings.each do |tagging| %>
@@ -241,54 +241,44 @@
   </table>
 <% end %>
 
-<% unless @finding.finding_answers.blank? %>
-  <h4>
-    <%= t('finding.finding_answers') %>
-  </h4>
+<h4>
+  <%= t('finding.finding_answers') %>
+</h4>
+<div class="row">
+  <div class="col-md-2">
+    <h5><strong><%= User.model_name.human %></strong></h5>
+  </div>
+  <div class="col-md-6">
+    <h5><strong><%= FindingAnswer.human_attribute_name 'answer' %></strong></h5>
+  </div>
+  <div class="col-md-2">
+    <h5>
+      <strong>
+        <%= FindingAnswer.human_attribute_name 'file_model' %>
+      </strong>
+    </h5>
+  </div>
+</div>
 
-  <table class="table table-condensed table-striped table-hover">
-    <thead>
-      <tr>
-        <th><%= User.model_name.human %></th>
-        <th><%= FindingAnswer.human_attribute_name :answer %></th>
-        <th>
-          <%= FindingAnswer.human_attribute_name :file_model %>
-        </th>
-        <th>
-          <%= FindingAnswer.human_attribute_name :created_at if show_follow_up_timestamps? %>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @finding.finding_answers.each do |finding_answer| %>
-        <tr>
-          <td><%= finding_answer.user.full_name %></td>
-          <td><%= simple_format finding_answer.answer %></td>
-          <td>
-            <%= finding_answer.file_model.try(:file?) ?
-              link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
-          </td>
-          <td>
-            <% if finding_answer.created_at && show_follow_up_timestamps? %>
-              <%= l(finding_answer.created_at, :format => :long) %>
-            <% end %>
-            <div class="pull-right">
-              <%= render 'readings/reading', finding_answer: finding_answer %>
-            </div>
-            <% if finding_answer.commitment_date %>
-              <% if show_follow_up_timestamps? %>
-                <br />
-                <br />
-              <% end %>
-              <strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
-              <br /><%= l(finding_answer.commitment_date, :format => :long) %>
-            <% end %>
-          </td>
-        </tr>
+<div id="finding_answers" class="clearfix">
+  <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
+
+  <% @finding.finding_answers.each do |fa| %>
+    <% if fa.persisted? %>
+      <%= render 'finding_answer', finding_answer: fa %>
+    <% elsif params[:completed] == 'incomplete' %>
+      <%= simple_form_for fa, url: finding_answers_path(params[:completed], @finding) do |f| %>
+        <%= render 'finding_answer', f: f %>
+
+        <div class="text-right">
+          <%= f.submit t('finding.submit_answer'), class: 'btn btn-default' %>
+        </div>
       <% end %>
-    </tbody>
-  </table>
-<% end %>
+    <% end %>
+  <% end %>
+
+  <hr>
+</div>
 
 <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
   <h4><%= t('finding.repeated_ancestors') %></h4>
