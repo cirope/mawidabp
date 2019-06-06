@@ -27,7 +27,7 @@ module OpeningInterviewsHelper
         ].reject(&:blank?).join("\n")
       end
 
-      "#{pc.name}\n\n#{program.join "\n\n"}"
+      "#{pc.name}\n\n#{program.reject(&:blank?).join "\n\n"}"
     end
 
     pcs.join "\n\n"
