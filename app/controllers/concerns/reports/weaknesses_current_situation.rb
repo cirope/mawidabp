@@ -74,7 +74,8 @@ module Reports::WeaknessesCurrentSituation
         by_issue_date('BETWEEN', @from_date, @to_date).
         includes(:business_unit, :business_unit_type,
           achievements: [:benefit],
-          review: [:plan_item, :conclusion_final_review]
+          review: [:plan_item, :conclusion_final_review],
+          taggings: :tag
         )
 
       if params[:weaknesses_current_situation]
@@ -363,7 +364,8 @@ module Reports::WeaknessesCurrentSituation
         Weakness.human_attribute_name('follow_up_date'),
         Weakness.human_attribute_name('solution_date'),
         t('finding.audited', count: 0),
-        t('finding.auditors', count: 0)
+        t('finding.auditors', count: 0),
+        Tag.model_name.human(count: 0)
       ].concat @benefits.pluck('name')
     end
 
@@ -385,7 +387,8 @@ module Reports::WeaknessesCurrentSituation
           (l weakness.follow_up_date if weakness.follow_up_date),
           (l weakness.solution_date if weakness.solution_date),
           weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; '),
-          weakness.users.reject(&:can_act_as_audited?).map(&:full_name).join('; ')
+          weakness.users.reject(&:can_act_as_audited?).map(&:full_name).join('; '),
+          weakness.taggings.map(&:tag).join('; ')
         ].concat(@benefits.map do |b|
           achievement = weakness.achievements.detect do |a|
             a.benefit_id == b.id

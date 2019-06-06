@@ -267,7 +267,7 @@ module Reports::ReviewStatsReport
       columns = { risk_priority => 25 }
 
       Review.scores.keys.each do |score|
-        columns[I18n.t("score_types.#{score}")] = 25
+        columns[I18n.t("score_types.#{score}")] = 75.0 / Review.scores.size
       end
 
       columns

@@ -13,6 +13,7 @@
  *= require graph
  *= require closing_interviews
  *= require documents
+ *= require findings/answers
  *= require news
  *= require opening_interviews
  *= require plans

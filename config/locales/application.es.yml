@@ -939,6 +939,7 @@ es:
     without_score: "No calificar"
     weakness_from_template: "Observación creada de una plantilla"
     repeated_weaknesses: "Reiteradas"
+    old_weaknesses: "Antiguas"
     new_weaknesses: "Nuevas"
     outdated_control_objective_name: 'El nombre del objetivo de control ha cambiado respecto del definido en la buena práctica, haga click para restaurarlo'
     taken_work_paper_code:

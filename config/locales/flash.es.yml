@@ -38,6 +38,10 @@ es:
         notice: 'Respuesta a observación actualizada correctamente.'
         stale: 'La respuesta a la observación no fue actualizada, intente nuevamente.'
 
+    finding_answers:
+      create:
+        notice: 'Respuesta a hallazgo creada correctamente.'
+
     news:
       create:
         notice: 'Noticia creada'
