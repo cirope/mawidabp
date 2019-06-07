@@ -387,7 +387,7 @@ module Reports::WeaknessesCurrentSituation
           weaknesses_current_situation_state_text(weakness),
           (l weakness.follow_up_date if weakness.follow_up_date),
           (l weakness.solution_date if weakness.solution_date),
-          id,
+          weakness.id,
           weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; '),
           weakness.users.reject(&:can_act_as_audited?).map(&:full_name).join('; '),
           weakness.taggings.map(&:tag).join('; ')
