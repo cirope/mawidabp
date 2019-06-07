@@ -14,11 +14,11 @@ module Reviews::Score
   def sorted_scores type: :effectiveness
     case type
     when :effectiveness, :manual
-      self.class.scores.to_a.sort do |s1, s2|
+      self.class.scores(created_at).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
     when :weaknesses, :none
-      self.class.scores_by_weaknesses.to_a.sort do |s1, s2|
+      self.class.scores_by_weaknesses(created_at).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
     end
