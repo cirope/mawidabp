@@ -363,6 +363,7 @@ module Reports::WeaknessesCurrentSituation
         Weakness.human_attribute_name('state'),
         Weakness.human_attribute_name('follow_up_date'),
         Weakness.human_attribute_name('solution_date'),
+        Finding.human_attribute_name('id'),
         t('finding.audited', count: 0),
         t('finding.auditors', count: 0),
         Tag.model_name.human(count: 0)
@@ -386,6 +387,7 @@ module Reports::WeaknessesCurrentSituation
           weaknesses_current_situation_state_text(weakness),
           (l weakness.follow_up_date if weakness.follow_up_date),
           (l weakness.solution_date if weakness.solution_date),
+          id,
           weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; '),
           weakness.users.reject(&:can_act_as_audited?).map(&:full_name).join('; '),
           weakness.taggings.map(&:tag).join('; ')
