@@ -2,7 +2,7 @@ language: ruby
 cache: bundler
 sudo: false
 rvm:
-  - 2.6.1
+  - 2.6.3
 
 addons:
   apt:
@@ -10,7 +10,7 @@ addons:
     - imagemagick
     - slapd
     - ldap-utils
-  postgresql: 9.6
+  postgresql: 10
 
 env:
   - CONFIG_TYPE=normal
