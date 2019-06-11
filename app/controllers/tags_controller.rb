@@ -45,10 +45,11 @@ class TagsController < ApplicationController
     end
 
     def tag_params
-      params.require(:tag).permit :name, :style, :shared, :icon, :lock_version
+      params.require(:tag).permit :name, :style, :shared, :icon, :lock_version,
+        children_attributes: [:id, :name, :_destroy]
     end
 
     def scope
-      Tag.list.where(kind: params[:kind])
+      Tag.list.roots.where kind: params[:kind]
     end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_21_185624) do
+ActiveRecord::Schema.define(version: 2019_06_11_121305) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -921,11 +921,13 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.boolean "shared", default: false, null: false
     t.integer "group_id", null: false
     t.string "icon", default: "tag", null: false
+    t.bigint "parent_id"
     t.index ["group_id"], name: "index_tags_on_group_id"
     t.index ["kind"], name: "index_tags_on_kind"
     t.index ["name"], name: "index_tags_on_name"
     t.index ["options"], name: "index_tags_on_options", using: :gin
     t.index ["organization_id"], name: "index_tags_on_organization_id"
+    t.index ["parent_id"], name: "index_tags_on_parent_id"
     t.index ["shared"], name: "index_tags_on_shared"
   end
 

@@ -454,10 +454,15 @@ es:
   tags:
     edit:
       title: 'Editar etiqueta'
+    form:
+      children: 'Subetiquetas'
+      add_child: 'Agregar subetiqueta'
     index:
       new: 'Nueva etiqueta'
       title: 'Listado de etiquetas'
       empty_html: 'No hay etiquetas, puede crear una con el botón <span class="label label-primary">Nueva etiqueta</span>'
+    list:
+      childless: 'Sin subetiquetas'
     new:
       title: 'Crear etiqueta'
     show:
