@@ -30,6 +30,7 @@
 //= require filters
 //= require file_input
 //= require findings/answers
+//= require findings/work_papers
 //= require best_practices
 //= require closing_interviews
 //= require conclusion_draft_reviews

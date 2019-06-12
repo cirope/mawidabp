@@ -608,6 +608,7 @@
     add_user: "Agregar usuario"
     add_work_paper: "Agregar papel de trabajo"
     recode_tasks: "Recodificar tareas"
+    create_work_paper: "Agregar como papel de trabajo"
     follow_up_date_changed_warning: "La fecha de implementación cambió para adecuarse a las tareas"
     assignment_confirm_message: "No ha seleccionado auditores referentes ni responsables ¿Desea continuar?"
     repeated_ancestors: "Reiterada de"
