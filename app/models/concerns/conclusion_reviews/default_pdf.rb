@@ -38,6 +38,7 @@ module ConclusionReviews::DefaultPDF
       pdf.add_title cover_bottom_text, *title_options
 
       put_default_review_owners_on pdf
+      put_default_recipients_on    pdf
     end
 
     def put_default_watermark_on pdf
@@ -171,17 +172,42 @@ module ConclusionReviews::DefaultPDF
       end
     end
 
+    def default_recipients_margin owners
+      recipients_count = recipients.to_s.lines.reject(&:blank?).size
+
+      if (recipients_count + owners.size) < 19
+        20 - recipients_count - owners.size
+      else
+        2
+      end
+    end
+
     def put_default_review_owners_on pdf
       review_owners = review.review_user_assignments.where owner: true
 
       if review_owners.present?
-        pdf.move_down PDF_FONT_SIZE * 12
+        pdf.move_down PDF_FONT_SIZE * default_recipients_margin(review_owners)
         pdf.add_subtitle I18n.t('conclusion_review.responsibles'),
           PDF_FONT_SIZE, PDF_FONT_SIZE
 
         review_owners.each do |rua|
           pdf.text "• #{rua.user.full_name}", align: :justify,
             inline_format: true
+        end
+      end
+    end
+
+    def put_default_recipients_on pdf
+      review_owners = review.review_user_assignments.where owner: true
+      margin        = review_owners.any? ? 0 : default_recipients_margin([])
+
+      if recipients.present?
+        pdf.move_down PDF_FONT_SIZE * margin
+        pdf.add_subtitle self.class.human_attribute_name('recipients'),
+          PDF_FONT_SIZE, PDF_FONT_SIZE
+
+        recipients.lines.reject(&:blank?).each do |recipient|
+          pdf.text "• #{recipient}", align: :justify, inline_format: true
         end
       end
     end
