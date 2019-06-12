@@ -1,0 +1,8 @@
++function () {
+  <% if @work_paper.persisted? %>
+    lastWorkPaperCode = '<%= @work_paper.code %>'
+
+    $('a[data-association="work_papers"]').
+      before('<%= j render('work_paper_form') %>')
+  <% end %>
+}()

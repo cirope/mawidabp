@@ -215,6 +215,7 @@ Rails.application.routes.draw do
     resources :findings, except: [:destroy] do
       resources :costs
       resources :finding_answers, only: [:create], controller: 'findings/answers', as: 'answers'
+      resources :work_papers, only: [:create], controller: 'findings/work_papers'
 
       get :follow_up_pdf, on: :member, to: 'findings/follow_up_pdf#show'
 

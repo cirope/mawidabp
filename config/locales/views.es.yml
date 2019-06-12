@@ -165,6 +165,9 @@ es:
       revoked: 'Anulada'
       criteria_mismatch: 'Difiere criterio'
       expired: 'Desestimada / No aplica'
+    work_papers:
+      create:
+        from_comment: 'De comentario por %{user} el %{date}'
 
   login_records:
     choose:
