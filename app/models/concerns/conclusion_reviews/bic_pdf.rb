@@ -14,6 +14,7 @@ module ConclusionReviews::BicPDF
     put_bic_cover_on         pdf
     put_bic_review_on        pdf
     put_bic_weaknesses_on    pdf if weaknesses.any?
+    put_bic_images_on        pdf if weaknesses.any? &:image_model
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -137,8 +138,6 @@ module ConclusionReviews::BicPDF
           end
         end
       end
-
-      number
     end
 
     def put_bic_weakness_on pdf, weakness, number
@@ -162,6 +161,39 @@ module ConclusionReviews::BicPDF
             ]
           )
         end
+      end
+    end
+
+    def put_bic_images_on pdf
+      number = 0
+
+      review.grouped_control_objective_items.each do |process_control, cois|
+        cois.sort.each do |coi|
+          weaknesses = if kind_of? ConclusionFinalReview
+                         coi.final_weaknesses
+                       else
+                         coi.weaknesses
+                       end
+
+          weaknesses.not_revoked.sort_for_review.each do |weakness|
+            put_bic_image_on pdf, weakness, number += 1
+          end
+        end
+      end
+    end
+
+    def put_bic_image_on pdf, weakness, number
+      if weakness.image_model
+        pdf.start_new_page
+
+        pdf.text I18n.t(
+          'conclusion_review.bic.images.plan', number: number
+        ), style: :bold
+
+        pdf.move_down PDF_FONT_SIZE
+
+        pdf.image weakness.image_model.image.path, position: :center,
+          fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
       end
     end
 

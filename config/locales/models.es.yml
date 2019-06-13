@@ -585,6 +585,8 @@ es:
         weakness_template: 'Buscar plantilla por título'
         weakness_template_from_control_objective: 'Plantilla sugerida por objetivo de control'
         work_papers: 'Papeles de trabajo'
+      weakness/image_model:
+        image: 'Imagen'
       weakness_template:
         title: 'Título'
         description: 'Observación'

@@ -131,6 +131,7 @@ es:
       too_long: es demasiado largo (%{count} caracteres máximo)
       too_short: es demasiado corto (%{count} caracteres mínimo)
       wrong_length: no tiene la longitud correcta (%{count} caracteres exactos)
+      extension_whitelist_error: no tiene un formato permitido
     template:
       body: ! 'Se encontraron problemas con los siguientes campos:'
       header:

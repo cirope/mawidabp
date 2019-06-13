@@ -58,6 +58,10 @@ class ConclusionFinalReview < ConclusionReview
         final_finding.skip_work_paper = finding.skip_work_paper = true
         final_finding.origination_date ||= finding.origination_date ||= self.issue_date
 
+        final_finding.build_image_model(
+          image: File.open(finding.image_model.image.path)
+        ) if finding.image_model
+
         finding.business_unit_findings.each do |buf|
           final_finding.business_unit_findings.build(
             buf.attributes.dup.merge('id' => nil, 'finding_id' => nil)
