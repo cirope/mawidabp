@@ -60,7 +60,7 @@ class ConclusionFinalReview < ConclusionReview
 
         final_finding.build_image_model(
           image: File.open(finding.image_model.image.path)
-        ) if finding.image_model
+        ) if finding.respond_to?(:image_model) && finding.image_model
 
         finding.business_unit_findings.each do |buf|
           final_finding.business_unit_findings.build(
