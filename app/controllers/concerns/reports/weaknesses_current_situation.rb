@@ -53,13 +53,28 @@ module Reports::WeaknessesCurrentSituation
     redirect_to_pdf(@controller, @from_date, @to_date, 'weaknesses_current_situation')
   end
 
+  def create_weaknesses_current_situation_permalink
+    init_weaknesses_current_situation_vars
+
+    if @weaknesses.any?
+      @permalink = Permalink.list.new action: 'follow_up_audit/weaknesses_current_situation'
+
+      @weaknesses.each do |weakness|
+        @permalink.permalink_models.build model: weakness
+      end
+
+      @permalink.save!
+    end
+  end
+
   private
 
     def init_weaknesses_current_situation_vars
-      @controller = params[:controller_name]
+      @controller = params[:controller_name] || (controller_name.start_with?('follow_up') ? 'follow_up' : 'conclusion')
       @title = t("#{@controller}_committee_report.weaknesses_current_situation_title")
       @from_date, @to_date = *make_date_range(params[:weaknesses_current_situation])
       @filters = []
+      @permalink = Permalink.list.find_by token: params[:permalink_token]
       @benefits = Benefit.list.order kind: :desc, created_at: :asc
       final = params[:final] == 'true'
       order = [
@@ -67,6 +82,28 @@ module Reports::WeaknessesCurrentSituation
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
         "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'conclusion_index'} DESC"
       ].map { |o| Arel.sql o }
+      weaknesses = if @permalink
+                     current_situation_weaknesses_from_permalink final
+                   else
+                     current_situation_weaknesses final
+                   end
+
+      @weaknesses = weaknesses.reorder order
+    end
+
+    def current_situation_weaknesses_from_permalink final
+      Weakness.
+        list_with_final_review.
+        finals(final).
+        where(id: @permalink.permalink_models.pluck('model_id')).
+        includes(:business_unit, :business_unit_type,
+          achievements: [:benefit],
+          review: [:plan_item, :conclusion_final_review],
+          taggings: :tag
+        )
+    end
+
+    def current_situation_weaknesses final
       weaknesses = Weakness.
         with_repeated_status_for_report.
         finals(final).
@@ -91,7 +128,7 @@ module Reports::WeaknessesCurrentSituation
         weaknesses = filter_weaknesses_current_situation_by_repeated weaknesses
       end
 
-      @weaknesses = weaknesses.reorder order
+      weaknesses
     end
 
     def weaknesses_current_situation_csv

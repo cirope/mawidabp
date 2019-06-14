@@ -62,6 +62,8 @@ Rails.application.routes.draw do
 
   resources :groups
 
+  resources :permalinks, only: [:show]
+
   resources :tags, only: [] do
     resources :documents, only: [:index]
   end
@@ -166,6 +168,7 @@ Rails.application.routes.draw do
     'create_weaknesses_by_risk_report',
     'create_weaknesses_by_user',
     'create_weaknesses_current_situation',
+    'create_weaknesses_current_situation_permalink',
     'create_weaknesses_by_control_objective',
     'create_fixed_weaknesses_report'
   ].each do |action|
