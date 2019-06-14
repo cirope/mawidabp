@@ -62,6 +62,8 @@ Rails.application.routes.draw do
 
   resources :groups
 
+  resources :permalinks, only: [:show]
+
   resources :tags, only: [] do
     resources :documents, only: [:index]
   end
@@ -133,6 +135,7 @@ Rails.application.routes.draw do
     'weaknesses_by_risk_report',
     'weaknesses_by_user',
     'weaknesses_current_situation',
+    'weaknesses_by_control_objective',
     'fixed_weaknesses_report',
     'weaknesses_graphs',
     'auto_complete_for_business_unit',
@@ -165,6 +168,8 @@ Rails.application.routes.draw do
     'create_weaknesses_by_risk_report',
     'create_weaknesses_by_user',
     'create_weaknesses_current_situation',
+    'create_weaknesses_current_situation_permalink',
+    'create_weaknesses_by_control_objective',
     'create_fixed_weaknesses_report'
   ].each do |action|
     post "conclusion_reports/#{action}",
@@ -212,6 +217,8 @@ Rails.application.routes.draw do
   scope ':completed', completed: /complete|incomplete/ do
     resources :findings, except: [:destroy] do
       resources :costs
+      resources :finding_answers, only: [:create], controller: 'findings/answers', as: 'answers'
+      resources :work_papers, only: [:create], controller: 'findings/work_papers'
 
       get :follow_up_pdf, on: :member, to: 'findings/follow_up_pdf#show'
 

@@ -35,8 +35,6 @@ jQuery(function ($) {
     var selector    = '[name$="[responsible_auditor]"]:visible, [name$="[process_owner]"]:visible'
 
     $(selector).each(function (i, e) {
-      console.log(i)
-
       if ($(e).is(':checked'))
         showWarning = false
     })

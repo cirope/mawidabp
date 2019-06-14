@@ -3,11 +3,12 @@ class Weakness < Finding
   include Weaknesses::Code
   include Weaknesses::Defaults
   include Weaknesses::GraphHelpers
+  include Weaknesses::Image
   include Weaknesses::Priority
   include Weaknesses::Progress
-  include Weaknesses::Repeated
   include Weaknesses::Risk
   include Weaknesses::Scopes
+  include Weaknesses::Score
   include Weaknesses::Tags
   include Weaknesses::Template
   include Weaknesses::Validations

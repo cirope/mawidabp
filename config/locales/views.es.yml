@@ -165,6 +165,9 @@ es:
       revoked: 'Anulada'
       criteria_mismatch: 'Difiere criterio'
       expired: 'Desestimada / No aplica'
+    work_papers:
+      create:
+        from_comment: 'De comentario por %{user} el %{date}'
 
   login_records:
     choose:
@@ -228,6 +231,12 @@ es:
     edit:
       title: 'Modificar organización'
     new_organization_can_not_have_image: 'Podrá cargar un isologotipo de la organización luego de haberla creado'
+    logo_styles:
+      default: 'Por defecto'
+      success: 'Exitoso'
+      info: 'Informativo'
+      warning: 'Advertencia'
+      danger: 'Peligro'
 
   periods:
     edit:
@@ -448,10 +457,15 @@ es:
   tags:
     edit:
       title: 'Editar etiqueta'
+    form:
+      children: 'Subetiquetas'
+      add_child: 'Agregar subetiqueta'
     index:
       new: 'Nueva etiqueta'
       title: 'Listado de etiquetas'
       empty_html: 'No hay etiquetas, puede crear una con el botón <span class="label label-primary">Nueva etiqueta</span>'
+    list:
+      childless: 'Sin subetiquetas'
     new:
       title: 'Crear etiqueta'
     show:

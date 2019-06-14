@@ -1,0 +1,14 @@
+<hr>
+
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <%= Permalink.model_name.human count: 1 %>
+    </h4>
+  </div>
+  <div class="panel-body">
+    <p>
+      <%= link_to permalink_url(@permalink), @permalink %>
+    </p>
+  </div>
+</div>

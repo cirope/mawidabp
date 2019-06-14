@@ -14,6 +14,7 @@ module ConclusionReviews::BicPDF
     put_bic_cover_on         pdf
     put_bic_review_on        pdf
     put_bic_weaknesses_on    pdf if weaknesses.any?
+    put_bic_images_on        pdf if weaknesses.any? &:image_model
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -137,8 +138,6 @@ module ConclusionReviews::BicPDF
           end
         end
       end
-
-      number
     end
 
     def put_bic_weakness_on pdf, weakness, number
@@ -162,6 +161,39 @@ module ConclusionReviews::BicPDF
             ]
           )
         end
+      end
+    end
+
+    def put_bic_images_on pdf
+      number = 0
+
+      review.grouped_control_objective_items.each do |process_control, cois|
+        cois.sort.each do |coi|
+          weaknesses = if kind_of? ConclusionFinalReview
+                         coi.final_weaknesses
+                       else
+                         coi.weaknesses
+                       end
+
+          weaknesses.not_revoked.sort_for_review.each do |weakness|
+            put_bic_image_on pdf, weakness, number += 1
+          end
+        end
+      end
+    end
+
+    def put_bic_image_on pdf, weakness, number
+      if weakness.image_model
+        pdf.start_new_page
+
+        pdf.text I18n.t(
+          'conclusion_review.bic.images.plan', number: number
+        ), style: :bold
+
+        pdf.move_down PDF_FONT_SIZE
+
+        pdf.image weakness.image_model.image.path, position: :center,
+          fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
       end
     end
 
@@ -205,7 +237,7 @@ module ConclusionReviews::BicPDF
         ],
         [
           I18n.t('conclusion_review.bic.weaknesses.responsible'),
-          weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; ')
+          bic_weakness_responsible(weakness)
         ],
         ([
           Weakness.human_attribute_name('audit_comments').upcase,
@@ -216,6 +248,20 @@ module ConclusionReviews::BicPDF
           weakness.repeated_of.to_s
         ] if weakness.repeated_of)
       ].compact
+    end
+
+    def bic_weakness_responsible weakness
+      assignments = weakness.finding_user_assignments.select do |fua|
+        fua.user.can_act_as_audited?
+      end
+
+      if assignments.select(&:process_owner).any?
+        assignments = assignments.select &:process_owner
+      end
+
+      assignments.map(&:user).map do |u|
+        u.full_name_with_function issue_date
+      end.join '; '
     end
 
     def put_bic_page_header_on pdf, text
@@ -256,8 +302,8 @@ module ConclusionReviews::BicPDF
     def put_bic_review_text_data_on pdf
       [
         [
-          "<b>#{self.class.human_attribute_name 'objective'}</b>",
-          objective
+          "<b>#{Review.human_attribute_name 'description'}</b>",
+          review.description
         ],
         [
           "<b>#{I18n.t 'conclusion_review.bic.review.applied_procedures'}</b>",
@@ -334,7 +380,7 @@ module ConclusionReviews::BicPDF
         [
           [
             ReviewUserAssignment.human_attribute_name('owner'),
-            review.review_user_assignments.select(&:audited?).map(&:user).map(&:full_name).join('; ')
+            bic_review_owners_text
           ].join(': '),
           {
             content: I18n.t(
@@ -378,12 +424,24 @@ module ConclusionReviews::BicPDF
       (supervisors | auditors).map(&:user).map(&:full_name).join '; '
     end
 
+    def bic_review_owners_text
+      assignments = review.review_user_assignments.select &:audited?
+      assignments = assignments.select &:owner if assignments.select(&:owner).any?
+      names       = assignments.map(&:user).map do |u|
+        u.full_name_with_function issue_date
+      end
+
+      names.join '; '
+    end
+
     def bic_previous_review_text
       if previous_identification.present? && previous_date.present?
         [
           previous_identification,
           "(#{I18n.l previous_date})"
         ].join ' '
+      elsif previous_identification.present?
+        previous_identification
       elsif previous = review.previous
         [
           previous.identification,

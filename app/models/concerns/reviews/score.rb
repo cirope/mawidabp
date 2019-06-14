@@ -14,11 +14,11 @@ module Reviews::Score
   def sorted_scores type: :effectiveness
     case type
     when :effectiveness, :manual
-      self.class.scores.to_a.sort do |s1, s2|
+      self.class.scores(created_at).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
     when :weaknesses, :none
-      self.class.scores_by_weaknesses.to_a.sort do |s1, s2|
+      self.class.scores_by_weaknesses(created_at).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
     end
@@ -97,7 +97,9 @@ module Reviews::Score
     def score_for weakness, date
       raise 'Not compatible configuration' if SHOW_EXTENDED_RISKS
 
-      if weakness.take_as_repeated_for_score? date: date
+      if weakness.take_as_old_for_score? date: date
+        old_score_for weakness
+      elsif weakness.take_as_repeated_for_score? date: date
         repeated_score_for weakness
       else
         normal_score_for weakness
@@ -130,6 +132,19 @@ module Reviews::Score
       end
     end
 
+    def old_score_for weakness
+      risks = weakness.class.risks
+
+      case weakness.risk
+      when risks[:high]
+        weakness_weights[:old_high]
+      when risks[:medium]
+        weakness_weights[:old_medium]
+      when risks[:low]
+        weakness_weights[:old_low]
+      end
+    end
+
     def calculate_score
       score_array
     end
@@ -143,7 +158,10 @@ module Reviews::Score
         normal_low:      1.0,
         repeated_high:   10.0,
         repeated_medium: 3.0,
-        repeated_low:    1.5
+        repeated_low:    1.5,
+        old_high:        10.5,
+        old_medium:      8.5,
+        old_low:         7.0
       }.merge scores.symbolize_keys
     end
 end

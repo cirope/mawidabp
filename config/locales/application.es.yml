@@ -28,6 +28,7 @@ es:
     download: "Descargar"
     download_csv: "Descargar CSV"
     download_rtf: "Descargar RTF"
+    create_permalink: "Crear enlace permanente"
     edit: "Editar"
     import: "Importar"
     insert_item: "Insertar ítem"
@@ -939,6 +940,7 @@ es:
     without_score: "No calificar"
     weakness_from_template: "Observación creada de una plantilla"
     repeated_weaknesses: "Reiteradas"
+    old_weaknesses: "Antiguas"
     new_weaknesses: "Nuevas"
     outdated_control_objective_name: 'El nombre del objetivo de control ha cambiado respecto del definido en la buena práctica, haga click para restaurarlo'
     taken_work_paper_code:
@@ -1203,7 +1205,6 @@ es:
         corrective_actions: "Acciones correctivas"
         affects_compliance: "Afecta compliance"
         collapse_control_objectives: "Agrupar objetivos de control"
-        objective: "Objetivo"
         scope: "Limitación al alcance"
         reference: "Marco de referencia"
         previous_identification: "Informe previo"

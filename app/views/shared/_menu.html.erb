@@ -11,10 +11,10 @@
 
       <%= link_to root_url, class: 'navbar-brand', title: t('app_name') do %>
         <!--[if lt IE 9]>
-          <img src="<%= image_path 'logo_header.png'  %>" alt="<%= t 'app_name' %>" height="17">
+          <img src="<%= image_path "#{header_logo_name}.png" %>" alt="<%= t 'app_name' %>" height="17">
         <![endif]-->
         <!--[if gt IE 8]><!-->
-          <img src="<%= image_path 'logo_header.svg' %>" alt="<%= t 'app_name' %>" height="17">
+          <img src="<%= image_path "#{header_logo_name}.svg" %>" alt="<%= t 'app_name' %>" height="17">
         <!--<![endif]-->
       <% end %>
     </div>
