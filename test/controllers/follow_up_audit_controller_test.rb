@@ -554,6 +554,16 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/weaknesses_current_situation'
   end
 
+  test 'weaknesses current situation from permalink' do
+    login
+
+    get :weaknesses_current_situation, :params => {
+      permalink_token: permalinks(:link).token
+    }
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_current_situation'
+  end
+
   test 'weaknesses current situation as CSV' do
     login
 
@@ -629,7 +639,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'create weaknesses current situation' do
     login
 
-    get :create_weaknesses_current_situation, :params => {
+    post :create_weaknesses_current_situation, :params => {
       :weaknesses_current_situation => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -645,6 +655,24 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_current_situation', 0)
+  end
+
+  test 'create weaknesses current situation permalink' do
+    login
+
+    assert_difference 'Permalink.count' do
+      post :create_weaknesses_current_situation_permalink, :params => {
+        :weaknesses_current_situation_permalink => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }, xhr: true, as: :js
+    end
+
+    assert_response :success
+    assert_equal Mime[:js], @response.content_type
   end
 
   test 'weaknesses by control objective' do

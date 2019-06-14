@@ -21,6 +21,9 @@
         <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
           value: (@conclusion_draft_review.review.score_text if @conclusion_draft_review.review&.persisted?),
           readonly: true } %>
+        <% if Current.conclusion_pdf_format == 'default' %>
+          <%= f.input :issue_date, as: :date_picker %>
+        <% end %>
       </div>
       <div class="col-md-6">
         <% if Current.conclusion_pdf_format == 'gal' %>
@@ -44,7 +47,16 @@
           <%= f.input :applied_procedures, input_html: { rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 3 } %>
         <% end %>
 
-        <%= f.input :issue_date, as: :date_picker %>
+      <div class="row">
+        <div class="col-md-6">
+        </div>
+      </div>
+
+        <% if Current.conclusion_pdf_format == 'default' %>
+          <%= f.input :recipients, input_html: { rows: 3 } %>
+        <% else %>
+          <%= f.input :issue_date, as: :date_picker %>
+        <% end %>
       </div>
     </div>
 

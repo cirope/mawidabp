@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_21_185624) do
+ActiveRecord::Schema.define(version: 2019_06_13_181917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -620,6 +620,24 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.index ["start"], name: "index_periods_on_start"
   end
 
+  create_table "permalink_models", force: :cascade do |t|
+    t.bigint "permalink_id", null: false
+    t.string "model_type", null: false
+    t.bigint "model_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["model_type", "model_id"], name: "index_permalink_models_on_model_type_and_model_id"
+    t.index ["permalink_id"], name: "index_permalink_models_on_permalink_id"
+  end
+
+  create_table "permalinks", force: :cascade do |t|
+    t.string "token", null: false
+    t.string "action", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["organization_id"], name: "index_permalinks_on_organization_id"
+    t.index ["token"], name: "index_permalinks_on_token", unique: true
+  end
+
   create_table "plan_items", id: :serial, force: :cascade do |t|
     t.string "project"
     t.date "start"
@@ -921,11 +939,13 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.boolean "shared", default: false, null: false
     t.integer "group_id", null: false
     t.string "icon", default: "tag", null: false
+    t.bigint "parent_id"
     t.index ["group_id"], name: "index_tags_on_group_id"
     t.index ["kind"], name: "index_tags_on_kind"
     t.index ["name"], name: "index_tags_on_name"
     t.index ["options"], name: "index_tags_on_options", using: :gin
     t.index ["organization_id"], name: "index_tags_on_organization_id"
+    t.index ["parent_id"], name: "index_tags_on_parent_id"
     t.index ["shared"], name: "index_tags_on_shared"
   end
 
@@ -1104,6 +1124,8 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
   add_foreign_key "organizations", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "organizations", "image_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "periods", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "permalink_models", "permalinks", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "permalinks", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "plan_items", "business_units", on_update: :restrict, on_delete: :restrict
   add_foreign_key "plan_items", "plans", on_update: :restrict, on_delete: :restrict
   add_foreign_key "plans", "periods", on_update: :restrict, on_delete: :restrict

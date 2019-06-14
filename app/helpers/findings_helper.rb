@@ -235,6 +235,27 @@ module FindingsHelper
     end
   end
 
+  def link_to_create_work_paper finding_answer
+    if action_name == 'edit' && !@auth_user.can_act_as_audited?
+      path    = finding_work_papers_path finding_id:        @finding,
+                                         finding_answer_id: finding_answer
+      options = {
+        class: 'btn btn-default',
+        title: t('finding.create_work_paper'),
+        data: {
+          add_param: 'last_work_paper_code',
+          method:    :post,
+          remote:    true,
+          confirm:   t('messages.confirmation')
+        }
+      }
+
+      link_to path, options do
+        content_tag :span, nil, class: 'glyphicon glyphicon-paperclip'
+      end
+    end
+  end
+
   def show_follow_up_timestamps?
     if @_show_follow_up_timestamps.nil?
       setting = current_organization.settings.find_by name: 'show_follow_up_timestamps'
