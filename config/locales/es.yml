@@ -1408,7 +1408,7 @@
         project: "Proyecto"
         approved: "Aprobado"
         summary: "Acta"
-        recipients: "Destinatarios del informe"
+        recipients: "Con copia"
         sectors: "Sectores/departamentos involucrados"
         evolution: "Evolución de la calificación"
         evolution_justification: "Justificación de la evolución"
