@@ -77,7 +77,7 @@
   <% end %>
 
   <% unless @finding.users.blank? %>
-    <% audited, auditors = *@finding.users.partition(&:audited?) %>
+    <% audited, auditors = *@finding.users.partition(&:can_act_as_audited?) %>
     <% process_owners = @finding.process_owners %>
     <% responsible_auditors = @finding.responsible_auditors %>
     <h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
