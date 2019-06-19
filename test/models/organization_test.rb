@@ -63,19 +63,30 @@ class OrganizationTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @organization.name = nil
     @organization.prefix = nil
+    @organization.logo_style = nil
 
     assert @organization.invalid?
     assert_error @organization, :name, :blank
     assert_error @organization, :prefix, :blank
+    assert_error @organization, :logo_style, :blank
   end
 
   test 'validates length of attributes' do
     @organization.name = 'abcdd' * 52
     @organization.prefix = 'abcdd' * 52
+    @organization.logo_style = 'abcdd' * 52
 
     assert @organization.invalid?
     assert_error @organization, :name, :too_long, count: 255
     assert_error @organization, :prefix, :too_long, count: 255
+    assert_error @organization, :logo_style, :too_long, count: 255
+  end
+
+  test 'validates attributes inclusion' do
+    @organization.logo_style = 'wrong'
+
+    assert @organization.invalid?
+    assert_error @organization, :logo_style, :inclusion
   end
 
   test 'validates formated attributes' do

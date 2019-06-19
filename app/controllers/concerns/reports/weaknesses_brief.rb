@@ -116,9 +116,9 @@ module Reports::WeaknessesBrief
     def weaknesses_brief_audit_users weakness
       weakness.
         finding_user_assignments.
-        select { |fua| fua.user.can_act_as_audited? }.
+        select { |fua| fua.process_owner && fua.user.can_act_as_audited? }.
         map(&:user).
-        map(&:full_name)
+        map(&:full_name_with_function)
     end
 
     def distance_in_days_to_cut_date weakness

@@ -77,7 +77,7 @@
   <% end %>
 
   <% unless @finding.users.blank? %>
-    <% audited, auditors = *@finding.users.partition(&:audited?) %>
+    <% audited, auditors = *@finding.users.partition(&:can_act_as_audited?) %>
     <% process_owners = @finding.process_owners %>
     <% responsible_auditors = @finding.responsible_auditors %>
     <h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
@@ -194,7 +194,7 @@
   <div id="finding_answers">
     <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
     <%= f.simple_fields_for :finding_answers do |fa_f| %>
-      <%= render 'finding_answer', f: fa_f, parent: f %>
+      <%= render 'finding_answer', f: fa_f %>
     <% end %>
   </div>
 

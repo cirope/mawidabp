@@ -44,7 +44,7 @@ DISABLE_FINDINGS_EXPIRATION_NOTIFICATION = ENV['DISABLE_FINDINGS_EXPIRATION_NOTI
 # Cadena para separar las enumeraciones cuando son concatenadas
 APP_ENUM_SEPARATOR = ' / '.freeze
 # Márgenes a dejar en los reportes generados en PDF (T, R, B, L)
-PDF_MARGINS = [25, 20, 20, 25].freeze
+PDF_MARGINS = [25, 20, 30, 25].freeze
 # Tamaño de la página a usar en los reportes generados en PDF
 PDF_PAPER = 'A4'.freeze
 # Logo para el pié de página de los PDFs
@@ -59,8 +59,10 @@ PDF_FONT_SIZE = 11
 PDF_HEADER_FONT_SIZE = 10
 # Prefijo para los archivos que no se pueden acceder sin estar autenticado
 PRIVATE_FILES_PREFIX = 'private'.freeze
-# Expresión regular para dividir términos en una búsqueda
-SPLIT_AND_TERMS_REGEXP = /\s+y\s+|\s*[,;]\s*|\s+AND\s+/i
+# Expresión regular para dividir términos en una búsqueda (operador AND)
+SPLIT_AND_TERMS_REGEXP = /\s+y\s+|\s*[;]\s*|\s+AND\s+/i
+# Expresión regular para dividir términos en una búsqueda (operador OR)
+SPLIT_OR_TERMS_REGEXP = /\s+o\s+|\s*[,]\s*|\s+OR\s+/i
 # Ruta a un archivo para realizar las pruebas
 TEST_FILE = File.join('..', '..', 'public', '500.html').freeze
 # Ruta a un archivo para realizar las pruebas (ruta completa)

@@ -29,6 +29,8 @@
 //= require form_submit
 //= require filters
 //= require file_input
+//= require findings/answers
+//= require findings/work_papers
 //= require best_practices
 //= require closing_interviews
 //= require conclusion_draft_reviews
@@ -38,6 +40,7 @@
 //= require news
 //= require organizations
 //= require opening_interviews
+//= require permalinks
 //= require plans
 //= require plans/calendar
 //= require plans/resources

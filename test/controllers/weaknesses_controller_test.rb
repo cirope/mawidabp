@@ -122,6 +122,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   test 'create weakness' do
     counts_array = [
       'Weakness.count',
+      'ImageModel.count',
       'WorkPaper.count',
       'FindingRelation.count',
       'Achievement.count',
@@ -156,6 +157,11 @@ class WeaknessesControllerTest < ActionController::TestCase
             operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
+            image_model_attributes: {
+              image: Rack::Test::UploadedFile.new(
+                "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
+              )
+            },
             finding_user_assignments_attributes: [
               {
                 user_id: users(:bare).id, process_owner: '0'
@@ -405,7 +411,7 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     get :auto_complete_for_finding_relation, params: {
       completed: 'incomplete',
-      q: 'O001, 1 2 3',
+      q: 'O001; 1 2 3',
       finding_id: finding.id,
       review_id: finding.review.id
     }, as: :json

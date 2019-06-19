@@ -97,10 +97,6 @@ module Findings::Scopes
       includes(review: :conclusion_final_review).where condition, *[date, date_until].compact
     end
 
-    def by_origination_date date, date_until
-      where origination_date: date..date_until
-    end
-
     def by_business_unit_ids business_unit_ids
       includes(review: :plan_item).
         where(plan_items: { business_unit_id: Array(business_unit_ids) }).
@@ -136,7 +132,7 @@ module Findings::Scopes
         parameters[:"wt_#{i}"] = "%#{tag.downcase}%"
       end
 
-      includes(:tags).where(conditions.join(' OR '), parameters)
+      includes(:tags).references(:tags).where conditions.join(' OR '), parameters
     end
 
     def by_review_tags *tags

@@ -14,7 +14,7 @@ module ConclusionReviews::PDF
   end
 
   def pdf_name
-    identification = review.sanitized_identification
+    identification = review.sanitized_identification[0..120]
     model_name     = ConclusionReview.model_name.human.downcase.gsub /\s/, '_'
 
     "#{model_name}-#{identification}.pdf"

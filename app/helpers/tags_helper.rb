@@ -32,4 +32,26 @@ module TagsHelper
 
     tag.shared ? icon : ''
   end
+
+  def has_nested_tags? kind:
+    Tag.list.non_roots.where(kind: kind).any?
+  end
+
+  def grouped_tag_options kind:
+    options = {}
+
+    Tag.list.roots.where(kind: kind).each do |root_tag|
+      if root_tag.children.any?
+        options[root_tag.name] = root_tag.children.map do |tag|
+          [tag.name, tag.id]
+        end
+      else
+        options[t('tags.list.childless')] ||= []
+
+        options[t('tags.list.childless')] << [root_tag.name, root_tag.id]
+      end
+    end
+
+    options
+  end
 end

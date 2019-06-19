@@ -380,10 +380,11 @@ class ConclusionFinalReviewsController < ApplicationController
         :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
         :summary, :recipients, :evolution, :evolution_justification, :sectors,
         :observations, :main_weaknesses_text, :corrective_actions,
-        :affects_compliance, :collapse_control_objectives, :objective,
-        :reference, :scope, :lock_version,
+        :affects_compliance, :collapse_control_objectives,
+        :reference, :scope, :previous_identification, :previous_date,
+        :lock_version,
         review_attributes: [
-          :id, :manual_score, :lock_version,
+          :id, :manual_score, :description, :lock_version,
           best_practice_comments_attributes: [
             :id, :best_practice_id, :auditor_comment
           ]

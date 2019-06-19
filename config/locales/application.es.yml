@@ -28,6 +28,7 @@ es:
     download: "Descargar"
     download_csv: "Descargar CSV"
     download_rtf: "Descargar RTF"
+    create_permalink: "Crear enlace permanente"
     edit: "Editar"
     import: "Importar"
     insert_item: "Insertar ítem"
@@ -199,6 +200,7 @@ es:
     weaknesses_graphs: "Gráfico de observaciones"
     from_date: "Desde"
     to_date: "Hasta"
+    mid_date: "Corte"
     date_field: "Fecha a utilizar"
     created_at: "Fecha de creación"
     issue_date: "Fecha de emisión"
@@ -643,6 +645,7 @@ es:
     not_expired: "No vencida"
     from_date: "Desde"
     to_date: "Hasta"
+    mid_date: "Corte"
     cut_date: "Fecha cierre antigua data"
     print_date: "Fecha de impresión: %{date}"
     applied_filters:
@@ -937,6 +940,7 @@ es:
     without_score: "No calificar"
     weakness_from_template: "Observación creada de una plantilla"
     repeated_weaknesses: "Reiteradas"
+    old_weaknesses: "Antigua data"
     new_weaknesses: "Nuevas"
     outdated_control_objective_name: 'El nombre del objetivo de control ha cambiado respecto del definido en la buena práctica, haga click para restaurarlo'
     taken_work_paper_code:
@@ -1201,9 +1205,10 @@ es:
         corrective_actions: "Acciones correctivas"
         affects_compliance: "Afecta compliance"
         collapse_control_objectives: "Agrupar objetivos de control"
-        objective: "Objetivo"
         scope: "Limitación al alcance"
         reference: "Marco de referencia"
+        previous_identification: "Informe previo"
+        previous_date: "Fecha de emisión previa"
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:

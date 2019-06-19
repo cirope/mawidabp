@@ -196,20 +196,12 @@ class ApplicationController < ActionController::Base
           redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
         end
       end
-
-    rescue ActionController::RedirectBackError
-      restart_session
-      redirect_to_login t('message.insufficient_privileges'), :alert
     end
 
     def check_group_admin
       unless @auth_user.is_group_admin?
         redirect_back fallback_location: login_url, alert: t('message.insufficient_privileges')
       end
-
-    rescue ActionController::RedirectBackError
-      restart_session
-      redirect_to_login t('message.insufficient_privileges'), :alert
     end
 
     def make_date_range(parameters = nil)
@@ -218,8 +210,8 @@ class ApplicationController < ActionController::Base
         to_date = Timeliness.parse(parameters[:to_date], :date)
       end
 
-      from_date ||= Date.today.at_beginning_of_month
-      to_date ||= Date.today.at_end_of_month
+      from_date ||= Time.zone.today.at_beginning_of_month
+      to_date ||= Time.zone.today.at_end_of_month
 
       [from_date.to_date, to_date.to_date].sort
     end

@@ -33,6 +33,12 @@ class BestPracticesControllerTest < ActionController::TestCase
     assert_template 'best_practices/show'
   end
 
+  test 'show best practice as  CSV' do
+    get :show, params: { id: best_practices(:iso_27001).id }, as: :csv
+    assert_response :success
+    assert_equal Mime[:csv], @response.content_type
+  end
+
   test 'new best practice' do
     get :new
     assert_response :success

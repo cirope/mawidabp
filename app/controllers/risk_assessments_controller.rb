@@ -65,8 +65,12 @@ class RiskAssessmentsController < ApplicationController
     @risk_assessment.clone_from @clone_from if @clone_from
 
     @risk_assessment.save
-    respond_with @risk_assessment, location: @risk_assessment.persisted? &&
-      edit_risk_assessment_url(@risk_assessment)
+
+    if @risk_assessment.persisted?
+      respond_with @risk_assessment, location: edit_risk_assessment_url(@risk_assessment)
+    else
+      respond_with @risk_assessment
+    end
   end
 
   # PATCH/PUT /risk_assessments/1

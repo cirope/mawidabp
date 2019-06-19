@@ -35,15 +35,19 @@ module Prawn
 
         unless hide_brand
           pdf.repeat :all do
-            font_size = 6
+            pdf.canvas do
+              font_size = 6
 
-            pdf.image PDF_LOGO, :at => [pdf.bounds.left, -PDF_LOGO_SIZE.last.pt],
-              :width => PDF_LOGO_SIZE.first, :height => PDF_LOGO_SIZE.last
+              pdf.image PDF_LOGO, :at => [margins.last.mm, PDF_LOGO_SIZE.last.pt * 3.5],
+                :width => PDF_LOGO_SIZE.first, :height => PDF_LOGO_SIZE.last
 
-            text = I18n.t :'app_copyright', :year => Date.today.year
-            x_start = pdf.bounds.left + font_size.pt * 1.75 + PDF_LOGO_SIZE.first.pt
-            pdf.draw_text(text, :at => [x_start, -(PDF_LOGO_SIZE.last.pt * 1.75)],
-              :size => font_size)
+              text = I18n.t :'app_copyright', :year => Time.zone.today.year
+              x_start = pdf.page.margins[:left] + font_size.pt * 1.75 +
+                PDF_LOGO_SIZE.first.pt
+
+              pdf.draw_text(text, :at => [x_start, (PDF_LOGO_SIZE.last.pt * 2.75)],
+                :size => font_size)
+            end
           end
         end
 
@@ -258,12 +262,15 @@ module Prawn
 
       def add_page_footer(font_size = 10)
         self.repeat :all, :dynamic =>  true do
-          string = I18n.t(:'pdf.page_pattern', :page => self.page_number,
-            :total => self.page_count)
+          self.canvas do
+            right_margin = self.page.margins[:right]
+            string = I18n.t('pdf.page_pattern', :page => self.page_number,
+              :total => self.page_count)
+            x = self.bounds.right - self.width_of(string) - right_margin
 
-          self.draw_text string, :at =>
-            [self.bounds.right - self.width_of(string), -(font_size.pt * 3)],
-            :size => font_size
+            self.draw_text string, :at => [x, (font_size.pt * 2)],
+              :size => font_size
+          end
         end
       end
 

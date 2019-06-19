@@ -51,7 +51,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :evolution_justification => 'Ok',
         :main_weaknesses_text => 'Some main weakness X',
         :corrective_actions => 'You should do it this way',
-        :objective => 'Some objective',
         :reference => 'Some reference',
         :observations => 'Some observations',
         :scope => 'Some scope',
@@ -94,10 +93,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review.evolution = '   '
     @conclusion_review.evolution_justification = '   '
     @conclusion_review.main_weaknesses_text = '   '
-    @conclusion_review.objective = '   '
-    @conclusion_review.reference = '   '
     @conclusion_review.scope = '   '
-    @conclusion_review.observations = '   '
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :issue_date, :blank
@@ -109,10 +105,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
       assert_error @conclusion_review, :sectors, :blank
       assert_error @conclusion_review, :evolution, :blank
       assert_error @conclusion_review, :evolution_justification, :blank
-    elsif Current.conclusion_pdf_format == 'bic'
-      assert_error @conclusion_review, :objective, :blank
-      assert_error @conclusion_review, :reference, :blank
-      assert_error @conclusion_review, :observations, :blank
     else
       assert_error @conclusion_review, :applied_procedures, :blank
     end
@@ -122,16 +114,26 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     end
   end
 
+  test 'conditionally present attributes' do
+    @conclusion_review.previous_date = Time.zone.today
+    @conclusion_review.previous_identification = ''
+
+    assert @conclusion_review.invalid?
+    assert_error @conclusion_review, :previous_identification, :blank
+  end
+
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @conclusion_review.type = 'abcdd' * 52
     @conclusion_review.summary = 'abcdd' * 52
     @conclusion_review.evolution = 'abcdd' * 52
+    @conclusion_review.previous_identification = 'abcdd' * 52
 
     assert @conclusion_review.invalid?
     assert_error @conclusion_review, :type, :too_long, count: 255
     assert_error @conclusion_review, :summary, :too_long, count: 255
     assert_error @conclusion_review, :evolution, :too_long, count: 255
+    assert_error @conclusion_review, :previous_identification, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -163,7 +165,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :evolution_justification => 'Ok',
         :main_weaknesses_text => 'Some main weakness X',
         :corrective_actions => 'You should do it this way',
-        :objective => 'Some objective',
         :reference => 'Some reference',
         :observations => 'Some observations',
         :scope => 'Some scope',

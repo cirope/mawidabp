@@ -23,7 +23,7 @@
       <tr <%== 'class="text-muted"' if has_final %>>
         <td><%= show_has_final_info if has_final %></td>
         <td><%= show_period_with_dates_as_abbr conclusion_draft_review.review.period %></td>
-        <td class="nowrap"><%= conclusion_draft_review.review.identification %></td>
+        <td><%= conclusion_draft_review.review.identification %></td>
         <td class="hidden-xs"><%= super_truncate(conclusion_draft_review.review.plan_item.business_unit.name, 25) %></td>
         <td class="hidden-xs"><%= super_truncate(conclusion_draft_review.review.plan_item.project, 30) %></td>
         <td class="hidden-xs"><%= l(conclusion_draft_review.issue_date, :format => :short) if conclusion_draft_review.issue_date %></td>

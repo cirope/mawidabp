@@ -103,7 +103,7 @@ class WeaknessesController < ApplicationController
   # * POST /weaknesses
   def create
     @title = t 'weakness.new_title'
-    @weakness = Weakness.list.new(weakness_params)
+    @weakness = Weakness.list.new weakness_params
 
     respond_to do |format|
       if @weakness.save
@@ -203,6 +203,9 @@ class WeaknessesController < ApplicationController
         ],
         comments_attributes: [
           :user_id, :comment
+        ],
+        image_model_attributes: [
+          :id, :image, :image_cache
         ]
       )
     end

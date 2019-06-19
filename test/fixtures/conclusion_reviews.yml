@@ -14,10 +14,11 @@ conclusion_current_final_review:
   main_weaknesses_text: 'Main weakness X'
   corrective_actions: 'You should correct this way'
   affects_compliance: false
-  objective: 'Objective'
   reference: 'Reference'
   observations: 'Observations'
   scope: 'Scope'
+  previous_date:
+  previous_identification:
   organization: cirope
   created_at: <%= 2.days.ago.to_date.to_s(:db) %>
 
@@ -35,10 +36,11 @@ conclusion_current_draft_review:
   main_weaknesses_text: 'Main weakness X'
   corrective_actions: 'You should correct this way'
   affects_compliance: false
-  objective: 'Objective'
   reference: 'Reference'
   observations: 'Observations'
   scope: 'Scope'
+  previous_date:
+  previous_identification:
   organization: cirope
 
 conclusion_past_final_review:
@@ -57,10 +59,11 @@ conclusion_past_final_review:
   main_weaknesses_text: 'Main weakness X'
   corrective_actions: 'You should correct this way'
   affects_compliance: false
-  objective: 'Objective'
   reference: 'Reference'
   observations: 'Observations'
   scope: 'Scope'
+  previous_date:
+  previous_identification:
   organization: cirope
   created_at: <%= 2.months.ago.to_date.to_s(:db) %>
 
@@ -78,10 +81,11 @@ conclusion_past_draft_review:
   main_weaknesses_text: 'Main weakness X'
   corrective_actions: 'You should correct this way'
   affects_compliance: false
-  objective: 'Objective'
   reference: 'Reference'
   observations: 'Observations'
   scope: 'Scope'
+  previous_date:
+  previous_identification:
   organization: cirope
 
 conclusion_with_conclusion_draft_review:
@@ -98,10 +102,11 @@ conclusion_with_conclusion_draft_review:
   main_weaknesses_text: 'Main weakness X'
   corrective_actions: 'You should correct this way'
   affects_compliance: false
-  objective: 'Objective'
   reference: 'Reference'
   observations: 'Observations'
   scope: 'Scope'
+  previous_date:
+  previous_identification:
   organization: cirope
 
 conclusion_approved_with_conclusion_draft_review:
@@ -118,8 +123,9 @@ conclusion_approved_with_conclusion_draft_review:
   main_weaknesses_text: 'Main weakness X'
   corrective_actions: 'You should correct this way'
   affects_compliance: false
-  objective: 'Objective'
   reference: 'Reference'
   observations: 'Observations'
   scope: 'Scope'
+  previous_date:
+  previous_identification:
   organization: cirope

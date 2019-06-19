@@ -1,0 +1,2 @@
+module Findings::AnswersHelper
+end

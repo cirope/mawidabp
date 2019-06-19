@@ -1,4 +1,5 @@
 <% date_fields ||= [] %>
+<% show_mid_date = show_mid_date %>
 
 <div id="date_filter" class="filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
@@ -25,20 +26,34 @@
   </div>
 </div>
 
-<% if date_fields.any? %>
+<% if date_fields.any? || show_mid_date %>
   <div class="filter" <%== 'style="display: none;"' unless display %>>
     <div class="row">
-      <div class="col-md-6">
-        <div class="form-group">
-          <% selected = params[action] ? params[action][:date_field] : date_fields.first %>
-          <%= f.label :date_field, t('conclusion_committee_report.date_field'), class: 'col-md-4' %>
-          <div class="col-md-8">
-            <%= f.select :date_field, date_fields.map { |df|
-              [t("conclusion_committee_report.#{df}"), df]
-            }, { selected: selected }, class: 'form-control' %>
+      <% if show_mid_date %>
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label :mid_date,
+              t('conclusion_committee_report.mid_date'), class: 'col-md-4' %>
+            <div class="col-md-8">
+              <%= f.text_field :mid_date, value: l(@mid_date), autocomplete: :off,
+                class: 'form-control', data: { date_picker: true } %>
+            </div>
           </div>
         </div>
-      </div>
+      <% end %>
+      <% if date_fields.any? %>
+        <div class="col-md-6">
+          <div class="form-group">
+            <% selected = params[action] ? params[action][:date_field] : date_fields.first %>
+            <%= f.label :date_field, t('conclusion_committee_report.date_field'), class: 'col-md-4' %>
+            <div class="col-md-8">
+              <%= f.select :date_field, date_fields.map { |df|
+                [t("conclusion_committee_report.#{df}"), df]
+              }, { selected: selected }, class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
   </div>
 <% end %>
