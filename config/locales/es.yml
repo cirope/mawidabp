@@ -1023,6 +1023,11 @@
       body_title:
         one: "El siguiente hallazgo está vencido"
         other: "Los siguientes hallazgos están vencidos"
+    findings_unanswered_warning:
+      title: "Notificación de hallazgos sin respuesta desatendidos"
+      body_title:
+        one: "El siguiente hallazgo se encuentra sin respuesta"
+        other: "Los siguientes hallazgos están sin respuesta"
     tasks_expiration_warning:
       title: "Notificación de tareas cercanas al vencimiento"
       body_title:

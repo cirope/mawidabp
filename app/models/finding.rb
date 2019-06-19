@@ -43,6 +43,7 @@ class Finding < ApplicationRecord
   include Findings::State
   include Findings::Tasks
   include Findings::Unanswered
+  include Findings::UnansweredNotifications
   include Findings::Unconfirmed
   include Findings::UpdateCallbacks
   include Findings::UserAssignments

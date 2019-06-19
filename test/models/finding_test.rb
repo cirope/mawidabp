@@ -1019,10 +1019,29 @@ class FindingTest < ActiveSupport::TestCase
     skip if DISABLE_FINDINGS_EXPIRATION_NOTIFICATION
 
     Current.organization = nil
-    review_codes_by_user    = review_codes_on_findings_by_user :expired
+    review_codes_by_user = review_codes_on_findings_by_user :expired
 
     assert_enqueued_emails 6 do
       Finding.remember_users_about_expiration
+    end
+  end
+
+  test 'remember users about unanswered findings' do
+    skip if DISABLE_FINDINGS_EXPIRATION_NOTIFICATION
+
+    Current.organization = nil
+    review_codes_by_user = review_codes_on_findings_by_user :expired
+
+    Finding.unanswered.update_all notification_level: -1
+
+    assert Finding.unanswered_disregarded.count > 0
+
+    users = Finding.unanswered_disregarded.inject([]) do |u, finding|
+      u | finding.users
+    end
+
+    assert_enqueued_emails users.size do
+      Finding.remember_users_about_unanswered
     end
   end
 
