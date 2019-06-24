@@ -7,8 +7,7 @@ gem 'coffee-script'
 gem 'uglifier'
 gem 'kramdown'
 gem 'bootstrap-sass'
-# Restricted only to support old node versions on some customers
-gem 'autoprefixer-rails', '< 9'
+gem 'autoprefixer-rails'
 
 group :jekyll_plugins do
   gem 'jekyll-assets'
