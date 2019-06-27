@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_13_181917) do
+ActiveRecord::Schema.define(version: 2019_06_27_235245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -330,7 +330,7 @@ ActiveRecord::Schema.define(version: 2019_06_13_181917) do
   create_table "file_models", id: :serial, force: :cascade do |t|
     t.string "file_file_name"
     t.string "file_content_type"
-    t.integer "file_file_size"
+    t.bigint "file_file_size"
     t.datetime "file_updated_at"
     t.integer "lock_version", default: 0
     t.datetime "created_at", null: false
