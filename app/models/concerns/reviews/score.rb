@@ -24,7 +24,7 @@ module Reviews::Score
     end
   end
 
-  def score_array date: Time.zone.today
+  def score_array date: (conclusion_final_review&.issue_date || Time.zone.today)
     type   = guess_score_type
     scores = sorted_scores type: type
     count  = scores.size + 1
