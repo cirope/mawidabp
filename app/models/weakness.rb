@@ -3,6 +3,7 @@ class Weakness < Finding
   include Weaknesses::Code
   include Weaknesses::Defaults
   include Weaknesses::GraphHelpers
+  include Weaknesses::Image
   include Weaknesses::Priority
   include Weaknesses::Progress
   include Weaknesses::Risk

@@ -14,8 +14,10 @@
  *= require closing_interviews
  *= require documents
  *= require findings/answers
+ *= require findings/work_papers
  *= require news
  *= require opening_interviews
+ *= require permalinks
  *= require plans
  *= require plans/calendar
  *= require plans/resources

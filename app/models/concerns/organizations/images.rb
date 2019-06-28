@@ -2,7 +2,7 @@ module Organizations::Images
   extend ActiveSupport::Concern
 
   included do
-    after_destroy :destroy_image_models # TODO: delete when Rails fix gets in stable
+    before_destroy :destroy_image_models # TODO: delete when Rails fix gets in stable
 
     has_one :image_model, -> { order :created_at }, as: :imageable, dependent: :destroy
     accepts_nested_attributes_for :image_model, allow_destroy: true, reject_if: :image_blank?
