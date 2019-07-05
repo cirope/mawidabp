@@ -43,7 +43,7 @@ module Reports::WeaknessesByRiskAndBusinessUnit
       @mid_date = mid_date params[:weaknesses_by_risk_and_business_unit]
       @filters = []
       @business_unit_type_names = []
-      @business_unit_names = {}
+      @unit_names = {}
       exclude = %i(confirmed unconfirmed unanswered notify incomplete)
       states = Finding::STATUS.except(*exclude).values & Finding::PENDING_STATUS
       between = [
@@ -56,8 +56,20 @@ module Reports::WeaknessesByRiskAndBusinessUnit
         includes(:business_unit, :business_unit_type, review: :conclusion_final_review).
         by_issue_date 'BETWEEN', @from_date, @to_date
 
+      if params[:weaknesses_by_risk_and_business_unit]
+        weaknesses = filter_weaknesses_by_risk_and_business_unit_by_icon weaknesses
+      end
+
       @weaknesses_by_business_unit_types =
         weaknesses_by_risk_and_business_unit_types weaknesses
+    end
+
+    def filter_weaknesses_by_risk_and_business_unit_by_icon weaknesses
+      if @icon = params[:weaknesses_by_risk_and_business_unit][:icon].presence
+        weaknesses.by_tag_icon @icon
+      else
+        weaknesses
+      end
     end
 
     def weaknesses_by_risk_and_business_unit_types weaknesses
@@ -88,25 +100,25 @@ module Reports::WeaknessesByRiskAndBusinessUnit
       @business_unit_type_names.sort.each do |but_name|
         result[but_name] ||= {}
 
-        @business_unit_names[but_name].sort.each do |bu_name|
-          result[but_name][bu_name] ||= {}
+        @unit_names[but_name].sort.each do |unit_name|
+          result[but_name][unit_name] ||= {}
 
           business_units_1 = weaknesses_1_table[but_name] || {}
           business_units_2 = weaknesses_2_table[but_name] || {}
           business_units_4 = weaknesses_4_table[but_name] || {}
-          risk_counts_1 = business_units_1[bu_name] || Hash.new(0)
-          risk_counts_2 = business_units_2[bu_name] || Hash.new(0)
-          risk_counts_4 = business_units_4[bu_name] || Hash.new(0)
+          risk_counts_1 = business_units_1[unit_name] || Hash.new(0)
+          risk_counts_2 = business_units_2[unit_name] || Hash.new(0)
+          risk_counts_4 = business_units_4[unit_name] || Hash.new(0)
 
           Weakness.risks.keys.each do |risk_type|
-            result[but_name][bu_name][risk_type] = risk_counts_1[risk_type] +
-                                                   risk_counts_2[risk_type] -
-                                                   risk_counts_4[risk_type]
+            result[but_name][unit_name][risk_type] = risk_counts_1[risk_type] +
+                                                     risk_counts_2[risk_type] -
+                                                     risk_counts_4[risk_type]
           end
 
-          result[but_name][bu_name][:total] = risk_counts_1[:total] +
-                                              risk_counts_2[:total] -
-                                              risk_counts_4[:total]
+          result[but_name][unit_name][:total] = risk_counts_1[:total] +
+                                                risk_counts_2[:total] -
+                                                risk_counts_4[:total]
         end
       end
 
@@ -131,29 +143,33 @@ module Reports::WeaknessesByRiskAndBusinessUnit
       result[:total_by_risk][:total] = 0
 
       weaknesses.find_each do |weakness|
-        but_name = weakness.business_unit_type.name
-        bu_name  = weakness.business_unit.name
-        risk     = Weakness.risks.invert[weakness.risk]
+        but_name  = weakness.business_unit_type.name
+        risk      = Weakness.risks.invert[weakness.risk]
+        unit_name = if @icon
+                      weakness.taggings.detect { |t| t.tag.icon == @icon }.tag.name
+                    else
+                      weakness.business_unit.name
+                    end
 
         if @business_unit_type_names.exclude? but_name
           @business_unit_type_names << but_name
         end
 
-        @business_unit_names[but_name] ||= []
+        @unit_names[but_name] ||= []
 
-        if @business_unit_names[but_name].exclude? bu_name
-          @business_unit_names[but_name] << bu_name
+        if @unit_names[but_name].exclude? unit_name
+          @unit_names[but_name] << unit_name
         end
 
-        result[but_name]          ||= {}
-        result[but_name][bu_name] ||= Hash[Weakness.risks.keys.map { |r| [r, 0] }]
+        result[but_name]            ||= {}
+        result[but_name][unit_name] ||= Hash[Weakness.risks.keys.map { |r| [r, 0] }]
 
-        result[but_name][bu_name][:total] ||= 0
+        result[but_name][unit_name][:total] ||= 0
 
-        result[:total_by_risk][risk]      += 1
-        result[:total_by_risk][:total]    += 1
-        result[but_name][bu_name][risk]   += 1
-        result[but_name][bu_name][:total] += 1
+        result[:total_by_risk][risk]        += 1
+        result[:total_by_risk][:total]      += 1
+        result[but_name][unit_name][risk]   += 1
+        result[but_name][unit_name][:total] += 1
       end
 
       result
@@ -190,7 +206,7 @@ module Reports::WeaknessesByRiskAndBusinessUnit
             rowspan: 3
           },
           {
-            content: BusinessUnit.model_name.human,
+            content: @icon ? Tag.model_name.human : BusinessUnit.model_name.human,
             rowspan: 3
           },
           {
@@ -259,21 +275,21 @@ module Reports::WeaknessesByRiskAndBusinessUnit
       rows = []
 
       @business_unit_type_names.sort.map do |but_name|
-        @business_unit_names[but_name].sort.each_with_index do |bu_name, i|
+        @unit_names[but_name].sort.each_with_index do |unit_name, i|
           row = []
 
           if i == 0
             row << {
               content: but_name,
-              rowspan: @business_unit_names[but_name].size
+              rowspan: @unit_names[but_name].size
             }
           end
 
-          row << bu_name
+          row << unit_name
 
           @weaknesses_by_business_unit_types.each do |weaknesses_by_business_unit_types|
             business_units = weaknesses_by_business_unit_types[but_name] || {}
-            risk_counts    = business_units[bu_name] || Hash.new(0)
+            risk_counts    = business_units[unit_name] || Hash.new(0)
 
             Weakness.risks.keys.reverse.each do |risk_type|
               row << {
