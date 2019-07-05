@@ -17,7 +17,7 @@ module Reports::WeaknessesByRiskAndBusinessUnit
 
     pdf = init_pdf params[:report_title], params[:report_subtitle]
 
-    if @weaknesses_by_business_unit_types.size > 1
+    if @weaknesses_by_business_unit_types.first.size > 1
       put_weaknesses_by_risk_and_business_unit_on pdf
     else
       pdf.move_down PDF_FONT_SIZE
