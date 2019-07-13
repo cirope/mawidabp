@@ -148,6 +148,10 @@ module Findings::Scopes
       includes(review: :tags).where(conditions.join(' OR '), parameters)
     end
 
+    def by_tag_icon icon
+      includes(:tags).references(:tags).where tags: { icon: icon }
+    end
+
     def review_sort_options
       if ORDER_WEAKNESSES_ON_CONCLUSION_REVIEWS_BY == 'risk'
         [risk: :desc, review_code: :asc]

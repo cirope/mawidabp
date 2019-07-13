@@ -40,9 +40,9 @@ module TagsHelper
   def grouped_tag_options kind:
     options = {}
 
-    Tag.list.roots.where(kind: kind).each do |root_tag|
+    Tag.list.roots.where(kind: kind).order(:name).each do |root_tag|
       if root_tag.children.any?
-        options[root_tag.name] = root_tag.children.map do |tag|
+        options[root_tag.name] = root_tag.children.order(:name).map do |tag|
           [tag.name, tag.id]
         end
       else
