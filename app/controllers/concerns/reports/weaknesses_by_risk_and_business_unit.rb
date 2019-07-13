@@ -179,7 +179,8 @@ module Reports::WeaknessesByRiskAndBusinessUnit
       risk_size     = Weakness.risks.size.next * @weaknesses_by_business_unit_types.size
       risk_width    = 65.0
       risk_widths   = risk_size.times.map { risk_width / risk_size }
-      widths        = [15, 85 - risk_width].concat(risk_widths).map do |w|
+      widths        = @icon ? [100 - risk_width] : [15, 85 - risk_width]
+      widths        = widths.concat(risk_widths).map do |w|
         pdf.percent_width w
       end
       table_options = pdf.default_table_options(widths).merge header: 3
@@ -201,10 +202,10 @@ module Reports::WeaknessesByRiskAndBusinessUnit
     def weaknesses_by_risk_and_business_unit_pdf_data
       [
         [
-          {
+          ({
             content: BusinessUnitType.model_name.human,
             rowspan: 3
-          },
+          } unless @icon),
           {
             content: @icon ? Tag.model_name.human : BusinessUnit.model_name.human,
             rowspan: 3
@@ -243,7 +244,7 @@ module Reports::WeaknessesByRiskAndBusinessUnit
             colspan: Weakness.risks.size.next,
             align:   :center
           }
-        ],
+        ].compact,
         @weaknesses_by_business_unit_types.size.times.map do
           [
             {
@@ -278,7 +279,7 @@ module Reports::WeaknessesByRiskAndBusinessUnit
         @unit_names[but_name].sort.each_with_index do |unit_name, i|
           row = []
 
-          if i == 0
+          if i == 0 && @icon.blank?
             row << {
               content: but_name,
               rowspan: @unit_names[but_name].size
@@ -315,7 +316,7 @@ module Reports::WeaknessesByRiskAndBusinessUnit
       [
         {
           content: "<b>#{t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.total'}",
-          colspan: 2
+          colspan: @icon ? 1 : 2
         }
       ].concat(
         @weaknesses_by_business_unit_types.map do |weaknesses_by_business_unit_types|
