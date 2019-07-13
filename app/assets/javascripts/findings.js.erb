@@ -36,6 +36,8 @@ jQuery(function ($) {
         $('[name$="[' + field + '][]"]').prop('checked', false).trigger('custom:change')
       })
 
+      $('[name$="[state]"]').val('<%= Finding::STATUS[:incomplete] %>').trigger('change')
+
       $('input[type="checkbox"][name$="[tag_ids][]"]').prop('checked', false)
 
       $('#tasks .task').remove()
