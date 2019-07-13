@@ -105,6 +105,27 @@
         <%= f.input :follow_up_date, as: :date_picker, input_html: { readonly: @weakness.tasks.any?, disabled: readonly } %>
         <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>
         <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
+
+        <% if Current.conclusion_pdf_format == 'bic' %>
+          <% @weakness.build_image_model unless @weakness.image_model %>
+
+          <div class="clearfix">
+            <%= f.simple_fields_for :image_model do |im_f| %>
+              <p><strong><%= ImageModel.model_name.human %></strong></p>
+
+              <div class="file-container pull-left">
+                <%= link_to_upload im_f.object, :image %>
+                <% if im_f.object.image_cache %>
+                  <%= im_f.input :image_cache, as: :hidden %>
+                  <%= im_f.input :image, as: :hidden, input_html: { value: nil } %>
+                <% else %>
+                  <%= im_f.input :image, label: false %>
+                <% end %>
+              </div>
+            <% end %>
+            <%= link_to_download_image f.object %>
+          </div>
+        <% end %>
       </div>
     </div>
 

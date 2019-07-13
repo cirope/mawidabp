@@ -2,7 +2,8 @@ module Tags::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :ordered, -> { order name: :asc }
+    scope :ordered,   -> { order name: :asc }
+    scope :non_roots, -> { where.not parent_id: nil }
   end
 
   module ClassMethods

@@ -28,6 +28,7 @@ es:
     download: "Descargar"
     download_csv: "Descargar CSV"
     download_rtf: "Descargar RTF"
+    create_permalink: "Crear enlace permanente"
     edit: "Editar"
     import: "Importar"
     insert_item: "Insertar ítem"
@@ -939,7 +940,7 @@ es:
     without_score: "No calificar"
     weakness_from_template: "Observación creada de una plantilla"
     repeated_weaknesses: "Reiteradas"
-    old_weaknesses: "Antiguas"
+    old_weaknesses: "Antigua data"
     new_weaknesses: "Nuevas"
     outdated_control_objective_name: 'El nombre del objetivo de control ha cambiado respecto del definido en la buena práctica, haga click para restaurarlo'
     taken_work_paper_code:

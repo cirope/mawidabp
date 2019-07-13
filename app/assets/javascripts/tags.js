@@ -7,6 +7,6 @@ jQuery(function ($) {
     $('[data-icon]').closest('li').removeClass('active')
     $('[data-icon="' + icon + '"]').closest('li').addClass('active')
 
-    $('#tag_icon').val(icon)
+    $('[name$="[icon]"]').val(icon)
   })
 })

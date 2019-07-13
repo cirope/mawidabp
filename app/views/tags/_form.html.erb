@@ -13,6 +13,24 @@
 
     <%= f.input :shared, input_html: { disabled: @tag.shared_was } %>
 
+    <h4><%= t '.children' %></h4>
+
+    <div class="row">
+      <div class="col-md-10">
+        <h5><strong><%= Tag.human_attribute_name 'name' %></strong></h5>
+      </div>
+    </div>
+
+    <div id="tags">
+      <%= f.simple_fields_for :children do |c_f| %>
+        <%= render 'child', f: c_f %>
+      <% end %>
+
+      <p>
+        <%= link_to_add_fields t('.add_child'), f, :children %>
+      </p>
+    </div>
+
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">

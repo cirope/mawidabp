@@ -60,6 +60,7 @@ class FollowUpAuditController < ApplicationController
         create_weaknesses_by_user: :read,
         weaknesses_current_situation: :read,
         create_weaknesses_current_situation: :read,
+        create_weaknesses_current_situation_permalink: :read,
         weaknesses_by_control_objective: :read,
         create_weaknesses_by_control_objective: :read,
         weaknesses_evolution: :read,

@@ -13,7 +13,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :weaknesses_by_risk_report, :fixed_weaknesses_report,
       :weaknesses_by_month, :weaknesses_current_situation,
       :weaknesses_by_control_objective, :weaknesses_evolution,
-      :weaknesses_list, :weaknesses_brief
+      :weaknesses_list, :weaknesses_brief, :weaknesses_by_risk_and_business_unit
     ]
 
     private_actions.each do |action|
@@ -291,8 +291,27 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :weaknesses_by_risk_and_business_unit => {
           :from_date => 10.years.ago.to_date,
           :to_date => 10.years.from_now.to_date,
-          :issue_date => %w(issue_date origination_date).sample,
-          :finding_status => ['', Finding::STATUS[:being_implemented]]
+          :mid_date => Time.zone.today
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }
+    end
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_by_risk_and_business_unit'
+  end
+
+  test 'weaknesses by risk and business unit report filtered by icon' do
+    login
+
+    assert_nothing_raised do
+      get :weaknesses_by_risk_and_business_unit, :params => {
+        :weaknesses_by_risk_and_business_unit => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date,
+          :mid_date => Time.zone.today,
+          :icon => 'tag'
         },
         :controller_name => 'follow_up',
         :final => false
@@ -310,8 +329,29 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :weaknesses_by_risk_and_business_unit => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
-        :issue_date => %w(issue_date origination_date).sample,
-        :finding_status => ['', Finding::STATUS[:being_implemented]]
+        :mid_date => Time.zone.today
+      },
+      :report_title => 'New title',
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('follow_up_committee_report.weaknesses_by_risk_and_business_unit.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'weaknesses_by_risk_and_business_unit', 0)
+  end
+
+  test 'create weaknesses by risk and business unit report filtered by icon' do
+    login
+
+    post :create_weaknesses_by_risk_and_business_unit, :params => {
+      :weaknesses_by_risk_and_business_unit => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :mid_date => Time.zone.today,
+        :icon => 'tag'
       },
       :report_title => 'New title',
       :controller_name => 'follow_up',
@@ -554,6 +594,16 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_template 'follow_up_audit/weaknesses_current_situation'
   end
 
+  test 'weaknesses current situation from permalink' do
+    login
+
+    get :weaknesses_current_situation, :params => {
+      permalink_token: permalinks(:link).token
+    }
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_current_situation'
+  end
+
   test 'weaknesses current situation as CSV' do
     login
 
@@ -629,7 +679,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'create weaknesses current situation' do
     login
 
-    get :create_weaknesses_current_situation, :params => {
+    post :create_weaknesses_current_situation, :params => {
       :weaknesses_current_situation => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -645,6 +695,24 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_current_situation', 0)
+  end
+
+  test 'create weaknesses current situation permalink' do
+    login
+
+    assert_difference 'Permalink.count' do
+      post :create_weaknesses_current_situation_permalink, :params => {
+        :weaknesses_current_situation_permalink => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }, xhr: true, as: :js
+    end
+
+    assert_response :success
+    assert_equal Mime[:js], @response.content_type
   end
 
   test 'weaknesses by control objective' do

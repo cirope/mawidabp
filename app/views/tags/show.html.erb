@@ -10,6 +10,20 @@
   <%= t "label.#{@tag.shared ? 'yes' : 'no'}" %>
 </p>
 
+<% if @tag.children.any? %>
+  <h4><%= t 'tags.form.children' %></h4>
+
+  <ul>
+    <% @tag.children.each do |tag| %>
+      <li>
+        <span class="label label-<%= tag.style %>">
+          <%= tag %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
 <hr>
 
 <%= link_to_edit [:edit, @tag, kind: @tag.kind] %> |

@@ -40,6 +40,7 @@
 //= require news
 //= require organizations
 //= require opening_interviews
+//= require permalinks
 //= require plans
 //= require plans/calendar
 //= require plans/resources
