@@ -302,7 +302,7 @@ module Reports::WeaknessesReport
         follow_up_date:                     Weakness.human_attribute_name('follow_up_date'),
         solution_date:                      Weakness.human_attribute_name('solution_date')
       }
-      report_params = params[:weaknesses_report].permit *labels.keys
+      report_params = Hash(params[:weaknesses_report]&.permit *labels.keys)
 
       labels.each do |filter_name, filter_label|
         if report_params[filter_name].present?

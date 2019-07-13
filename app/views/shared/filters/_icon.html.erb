@@ -1,0 +1,21 @@
+<div id="icon_filter" class="panel panel-default filter" <%== 'style="display: none;"' unless display %>>
+  <div class="panel-heading">
+    <h4 class="panel-title"><%= Tag.human_attribute_name 'icon' %></h4>
+  </div>
+
+  <div class="panel-body">
+    <% selected = params[action] ? params[action][:icon] : nil %>
+
+    <ul class="nav nav-pills lead">
+      <% Tag.available_icons.each do |icon| %>
+        <li <%== 'class="active"' if selected == icon %>>
+          <a class="text-muted" href="#" data-icon="<%= icon %>">
+            <span class="glyphicon glyphicon-<%= icon %>"></span>
+          </a>
+        </li>
+      <% end %>
+    </ul>
+
+    <%= f.hidden_field :icon, value: selected %>
+  </div>
+</div>

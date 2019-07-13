@@ -1025,6 +1025,11 @@
       body_title:
         one: "La siguiente observación está vencida"
         other: "Las siguientes observaciones están vencidas"
+    findings_unanswered_warning:
+      title: "Notificación de observaciones sin respuesta desatendidas"
+      body_title:
+        one: "La siguiente observación se encuentra sin respuesta"
+        other: "Las siguientes observaciones están sin respuesta"
     tasks_expiration_warning:
       title: "Notificación de tareas cercanas al vencimiento"
       body_title:
@@ -1178,7 +1183,7 @@
     without_score: "No calificar"
     weakness_from_template: "Observación creada de una plantilla"
     repeated_weaknesses: "Reiteradas"
-    old_weaknesses: "Antiguas"
+    old_weaknesses: "Antigua data"
     new_weaknesses: "Nuevas"
     taken_work_paper_code:
       one: "El código de papel de trabajo %{duplicated_work_papers} está duplicado"
@@ -1415,6 +1420,12 @@
         evolution: "Evolución de la calificación"
         evolution_justification: "Justificación de la evolución"
         observations: "Otras consideraciones"
+        main_weaknesses_text: "Principales debilidades"
+        corrective_actions: "Acciones correctivas"
+        affects_compliance: "Afecta compliance"
+        collapse_control_objectives: "Agrupar objetivos de control"
+        scope: "Limitación al alcance"
+        reference: "Marco de referencia"
         previous_identification: "Informe previo"
         previous_date: "Fecha de emisión previa"
       control:

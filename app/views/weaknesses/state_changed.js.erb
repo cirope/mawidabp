@@ -5,7 +5,12 @@
 <% default  = Weakness.default_progress_for state: @state %>
 <% disabled = !Weakness.allow_progress_edition_for?(@state) %>
 
-$('[name$="[progress]"]').
-  html('<%= j options %>').
-  val('<%= default %>').
-  prop('disabled', <%= disabled.inspect %>)
++function () {
+  var $progress = $('[name$="[progress]"]')
+
+  $progress.
+    html('<%= j options %>').
+    val($progress.data('onChangeValue') || '<%= default %>').
+    prop('disabled', <%= disabled.inspect %>).
+    data('onChangeValue', null)
+}()

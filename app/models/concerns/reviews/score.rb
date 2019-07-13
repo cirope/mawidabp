@@ -12,19 +12,21 @@ module Reviews::Score
   end
 
   def sorted_scores type: :effectiveness
+    date = conclusion_final_review&.issue_date || created_at
+
     case type
     when :effectiveness, :manual
-      self.class.scores(created_at).to_a.sort do |s1, s2|
+      self.class.scores(date).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
     when :weaknesses, :none
-      self.class.scores_by_weaknesses(created_at).to_a.sort do |s1, s2|
+      self.class.scores_by_weaknesses(date).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
     end
   end
 
-  def score_array date: Time.zone.today
+  def score_array date: (conclusion_final_review&.issue_date || Time.zone.today)
     type   = guess_score_type
     scores = sorted_scores type: type
     count  = scores.size + 1

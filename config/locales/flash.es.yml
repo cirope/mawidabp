@@ -40,7 +40,7 @@ es:
 
     finding_answers:
       create:
-        notice: 'Respuesta a hallazgo creada correctamente.'
+        notice: 'Respuesta a observación creada correctamente.'
 
     news:
       create:
