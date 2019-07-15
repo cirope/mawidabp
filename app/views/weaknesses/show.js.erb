@@ -9,6 +9,14 @@
   $('[name$="[audit_comments]"]').val("<%== j @weakness.audit_comments %>").trigger('change')
   $('[name$="[compliance]"]').val("<%= @weakness.compliance %>").trigger('change')
 
+  <% if SHOW_WEAKNESS_PROGRESS %>
+    <% if @weakness.progress %>
+      $('[name$="[progress]"]').data('onChangeValue', '<%= @weakness.progress %>')
+    <% end %>
+
+    $('[name$="[state]"]').val("<%= @weakness.state %>").trigger('change')
+  <% end %>
+
   <% %w(follow_up_date origination_date).each do |date_field| %>
     var <%= date_field %>Date = new Date('<%= @weakness.attributes[date_field]&.to_s(:db) %>')
 
