@@ -26,6 +26,7 @@ class FollowUpAuditController < ApplicationController
   include Reports::TaggedFindingsReport
 
   before_action :auth, :load_privileges, :check_privileges
+  helper_method :weaknesses_current_situation_state_text
 
   def index
     @title = t 'follow_up_audit.index_title'

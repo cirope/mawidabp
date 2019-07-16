@@ -143,7 +143,7 @@ module Reports::WeaknessesByRiskAndBusinessUnit
       result[:total_by_risk][:total] = 0
 
       weaknesses.find_each do |weakness|
-        but_name  = weakness.business_unit_type.name
+        but_name  = @icon ? 'Main' : weakness.business_unit_type.name
         risk      = Weakness.risks.invert[weakness.risk]
         unit_name = if @icon
                       weakness.taggings.detect { |t| t.tag.icon == @icon }.tag.name
