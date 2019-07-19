@@ -45,6 +45,20 @@ module Findings::Reiterations
     nodes
   end
 
+  def repeated_leaf
+    node = self
+
+    while node.repeated_in
+      node = if node.repeated_in.final
+               node.repeated_in.parent
+             else
+               node.repeated_in
+             end
+    end
+
+    node
+  end
+
   private
 
     def repeated_of_versions_with_state

@@ -2,6 +2,7 @@
   id = f.object.object_id
   finding = f.object.taggable || parent.object
   tagging = f.object
+  readonly = readonly
 %>
 <fieldset class="tagging">
   <div class="form-inputs">
@@ -35,7 +36,7 @@
       </div>
       <div class="col-md-2">
         <div class="toggle-visibility">
-          <%= link_to_remove_nested_item f %>
+          <%= link_to_remove_nested_item f unless readonly %>
         </div>
       </div>
     </div>

@@ -444,10 +444,12 @@ module Reports::WeaknessesCurrentSituation
 
     def weaknesses_current_situation_state_text weakness
       if weakness.repeated? && weakness.repeated_in.present?
-        review           = weakness.repeated_in.review
+        repeated_in      = weakness.repeated_leaf
+        review           = repeated_in.review
         repeated_details = [
-          weakness.repeated_in.review_code,
-          review.identification
+          repeated_in.review_code,
+          review.identification,
+          repeated_in.state_text
         ].join ' - '
 
         state_text = if review.has_final_review?
