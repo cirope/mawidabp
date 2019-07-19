@@ -171,10 +171,10 @@
 
     <div id="taggings">
       <%= f.simple_fields_for :taggings do |t_f| %>
-        <%= render 'findings/tagging', f: t_f, parent: f %>
+        <%= render 'findings/tagging', f: t_f, parent: f, readonly: readonly %>
       <% end %>
 
-      <%= link_to_add_fields(t('finding.add_tagging'), f, :taggings, 'findings/tagging') unless frozen %>
+      <%= link_to_add_fields(t('finding.add_tagging'), f, :taggings, 'findings/tagging') unless readonly %>
     </div>
   <% end %>
 

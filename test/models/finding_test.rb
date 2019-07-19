@@ -1257,6 +1257,54 @@ class FindingTest < ActiveSupport::TestCase
     assert repeated_of.reload.tasks.all? { |t| t.finished? }
   end
 
+  test 'sync taggings' do
+    skip unless WEAKNESS_TAG_SYNC
+
+    finding      = findings :being_implemented_weakness_on_approved_draft
+    Current.user = users :supervisor
+
+    ConclusionFinalReview.list.new(
+      review_id: reviews(:review_approved_with_conclusion).id,
+      issue_date: Date.today,
+      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.business_days.from_now.to_date,
+      applied_procedures: 'New applied procedures',
+      conclusion: CONCLUSION_OPTIONS.first,
+      recipients: 'John Doe',
+      sectors: 'Area 51',
+      evolution: EVOLUTION_OPTIONS.second,
+      evolution_justification: 'Ok',
+      main_weaknesses_text: 'Some main weakness X',
+      corrective_actions: 'You should do it this way',
+      :reference => 'Some reference',
+      :observations => 'Some observations',
+      :scope => 'Some scope',
+      affects_compliance: false
+    ).save!
+
+    final_twin = finding.children.take!
+    tag = tags :follow_up
+
+    assert final_twin.taggings.where(tag_id: tag.id).empty?
+
+    assert_difference 'Tagging.count', 2 do
+      finding.taggings.create! tag_id: tag.id
+    end
+
+    assert final_twin.reload.taggings.where(tag_id: tag.id).exists?
+
+    assert_difference 'Tagging.count', -2 do
+      finding.reload.taggings.each do |t|
+        if t.tag_id == tag.id
+          t.mark_for_destruction
+        end
+      end
+
+      finding.save!
+    end
+
+    assert final_twin.reload.taggings.where(tag_id: tag.id).empty?
+  end
+
   test 'unconfirmed for notification scope' do
     assert Finding.unconfirmed_for_notification.any?
 
