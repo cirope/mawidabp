@@ -14,7 +14,7 @@ module Findings::Reschedule
     last_checked_date = follow_up_date
 
     follow_up_dates_to_check_against.each do |date|
-      if date < last_checked_date
+      if last_checked_date && date < last_checked_date
         count            += 1
         last_checked_date = date
       end
