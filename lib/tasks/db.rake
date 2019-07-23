@@ -7,10 +7,10 @@ namespace :db do
       add_best_practice_privilege         # 2018-01-31
       add_control_objective_privilege     # 2018-01-31
       add_task_codes                      # 2018-07-24
-      update_finding_reschedules          # 2018-11-27
       mark_tasks_as_finished              # 2019-01-04
       update_finding_first_follow_up_date # 2019-01-07
       reset_notification_level            # 2019-03-06
+      update_finding_reschedule_count     # 2019-07-19
     end
   end
 end
@@ -131,21 +131,18 @@ private
     Task.where(code: nil).any?
   end
 
-  def update_finding_reschedules
-    if update_finding_reschedules?
-      Finding.where(rescheduled: false).find_each do |finding|
-        update = finding.final == false ||
-          finding.repeated_of&.mark_as_rescheduled?
+  def update_finding_reschedule_count
+    if update_finding_reschedule_count?
+      Finding.where(reschedule_count: 0).find_each do |finding|
+        count = finding.calculate_reschedule_count
 
-        if update && finding.mark_as_rescheduled?
-          finding.update_column :rescheduled, true
-        end
+        finding.update_column :reschedule_count, count if count > 0
       end
     end
   end
 
-  def update_finding_reschedules?
-    Finding.where(rescheduled: true).empty?
+  def update_finding_reschedule_count?
+    Finding.where.not(reschedule_count: 0).empty?
   end
 
   def mark_tasks_as_finished

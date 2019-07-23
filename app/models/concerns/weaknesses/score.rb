@@ -18,7 +18,7 @@ module Weaknesses::Score
       is_obsolete     = repeated_of.origination_date < expiration_date
       has_expired     = follow_up_date < date
 
-      is_obsolete || has_expired || repeated_of.rescheduled
+      is_obsolete || has_expired || repeated_of.rescheduled?
     end
   end
 
