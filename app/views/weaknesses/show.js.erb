@@ -38,6 +38,18 @@
     })
   <% end %>
 
+  <% if @weakness.taggings.any? %>
+    <% weakness = @weakness.dup %>
+    <% weakness.taggings.build @weakness.taggings.map { |t| t.dup.attributes.except *%w(id taggable_id) } %>
+    <%= simple_fields_for weakness do |f| %>
+      $('#tags').html('<%= j render('tags', f: f, readonly: false) %>')
+    <% end %>
+  <% else %>
+    <%= simple_fields_for @weakness.dup do |f| %>
+      $('#tags').html('<%= j render('tags', f: f, readonly: false) %>')
+    <% end %>
+  <% end %>
+
   <% if @weakness.tasks.any? %>
     <% weakness = @weakness.dup %>
     <% weakness.tasks.build @weakness.tasks.map { |t| t.dup.attributes } %>

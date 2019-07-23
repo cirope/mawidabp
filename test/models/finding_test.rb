@@ -850,7 +850,8 @@ class FindingTest < ActiveSupport::TestCase
 
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
-    refute finding.rescheduled
+    refute finding.rescheduled?
+    assert_equal 0, finding.reschedule_count
     assert_equal repeated_of.origination_date, finding.origination_date
     assert_equal 1, finding.repeated_ancestors.size
     assert_equal 1, repeated_of.repeated_children.size
@@ -876,17 +877,19 @@ class FindingTest < ActiveSupport::TestCase
 
     refute repeated_of.repeated?
 
-    finding.update! repeated_of_id: repeated_of.id, rescheduled: true
+    finding.update! repeated_of_id: repeated_of.id, reschedule_count: 1
 
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
-    assert finding.rescheduled
+    assert finding.rescheduled?
+    assert_equal 1, finding.reschedule_count
 
     finding.undo_reiteration
 
     refute repeated_of.reload.repeated?
     assert_nil finding.reload.repeated_of
-    refute finding.rescheduled
+    refute finding.rescheduled?
+    assert_equal 0, finding.reschedule_count
     assert_equal repeated_of_original_state, repeated_of.state
   end
 
@@ -905,7 +908,8 @@ class FindingTest < ActiveSupport::TestCase
 
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
-    assert finding.rescheduled
+    assert finding.rescheduled?
+    assert_equal 1, finding.reschedule_count
     assert_equal repeated_of.origination_date, finding.origination_date
     assert_equal 1, finding.repeated_ancestors.size
     assert_equal 1, repeated_of.repeated_children.size
@@ -914,7 +918,8 @@ class FindingTest < ActiveSupport::TestCase
     finding.update! follow_up_date: repeated_of.follow_up_date
 
     # Should unmark when follow up date has been "restored"
-    refute finding.reload.rescheduled
+    refute finding.reload.rescheduled?
+    assert_equal 0, finding.reschedule_count
   end
 
   test 'do nothing on repeat if repeated_of is not included on review' do

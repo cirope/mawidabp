@@ -177,7 +177,7 @@ module Reports::WeaknessesByUser
         ],
         [
           Weakness.human_attribute_name('rescheduled'),
-          t("label.#{weakness.rescheduled ? 'yes' : 'no'}")
+          t("label.#{weakness.rescheduled? ? 'yes' : 'no'}")
         ],
         [
           t('findings.state.repeated'),
@@ -323,7 +323,7 @@ module Reports::WeaknessesByUser
           (weakness.origination_date ? l(weakness.origination_date) : '-'),
           (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
           (weakness.solution_date ? l(weakness.solution_date) : '-'),
-          t("label.#{weakness.rescheduled ? 'yes' : 'no'}"),
+          t("label.#{weakness.rescheduled? ? 'yes' : 'no'}"),
           t("label.#{weakness.repeated_of_id.present? ? 'yes' : 'no'}"),
           weakness.audit_comments,
           weakness.audit_recommendations,
