@@ -11,6 +11,7 @@ namespace :db do
       update_finding_first_follow_up_date # 2019-01-07
       reset_notification_level            # 2019-03-06
       update_finding_reschedule_count     # 2019-07-19
+      complete_main_recommendations       # 2019-07-23
     end
   end
 end
@@ -207,4 +208,42 @@ private
       finals(false).
       where(state: pending_statuses).
       where.not notification_level: 0
+  end
+
+  def complete_main_recommendations
+    if complete_main_recommendations?
+      SHOW_CONCLUSION_ALTERNATIVE_PDF.each do |prefix, format|
+        if format == 'bic'
+          organization         = Organization.find_by! prefix: prefix
+          Current.organization = organization
+          Current.group        = organization.group
+
+          ConclusionReview.list.where(main_recommendations: nil).each do |cr|
+            review = cr.review
+            result = []
+
+            review.grouped_control_objective_items.each do |process_control, cois|
+              cois.sort.each do |coi|
+                coi.weaknesses.not_revoked.sort_for_review.each do |w|
+                  if w.audit_recommendations.present?
+                    result << w.audit_recommendations.strip
+                  end
+                end
+              end
+            end
+
+            cr.update_column :main_recommendations, result.join("\r\n\r\n")
+          end
+        end
+      end
+
+      Current.organization = nil
+      Current.group        = nil
+    end
+  end
+
+  def complete_main_recommendations?
+    has_format = SHOW_CONCLUSION_ALTERNATIVE_PDF.values.any? { |v| v == 'bic' }
+
+    has_format && ConclusionReview.where.not(main_recommendations: nil).empty?
   end

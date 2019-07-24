@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_19_150203) do
+ActiveRecord::Schema.define(version: 2019_07_23_150725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -202,6 +202,7 @@ ActiveRecord::Schema.define(version: 2019_07_19_150203) do
     t.text "scope"
     t.string "previous_identification"
     t.date "previous_date"
+    t.text "main_recommendations"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"

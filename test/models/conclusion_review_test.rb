@@ -54,6 +54,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :reference => 'Some reference',
         :observations => 'Some observations',
         :scope => 'Some scope',
+        :main_recommendations => 'Some recommendations',
         :affects_compliance => false
       )
 
@@ -168,6 +169,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :reference => 'Some reference',
         :observations => 'Some observations',
         :scope => 'Some scope',
+        :main_recommendations => 'Some recommendations',
         :affects_compliance => '0'
       )
 
