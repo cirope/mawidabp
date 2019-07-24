@@ -38,4 +38,21 @@ module ConclusionDraftReviewsHelper
       render 'best_practice_comments', f: f, readonly: false
     end
   end
+
+  def main_recommendations_for conclusion_review
+    result = []
+    review = conclusion_review.review
+
+    review.grouped_control_objective_items.each do |process_control, cois|
+      cois.sort.each do |coi|
+        coi.weaknesses.not_revoked.sort_for_review.each do |w|
+          if w.audit_recommendations.present?
+            result << w.audit_recommendations.strip
+          end
+        end
+      end
+    end
+
+    result.join "\r\n\r\n"
+  end
 end
