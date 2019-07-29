@@ -109,6 +109,7 @@ module Reports::WeaknessesByRiskAndBusinessUnit
 
     def weaknesses_by_risk_and_business_unit_types_2 weaknesses
       weaknesses.
+        not_repeated.
         by_issue_date 'BETWEEN', @mid_date, @to_date
     end
 
