@@ -49,6 +49,7 @@ module Reports::WeaknessesByRiskAndBusinessUnit
         [l(@from_date), l(@to_date)].to_sentence
       ].join ' '
       weaknesses = Weakness.
+        finals(false).
         list_with_final_review.
         includes :business_unit, :business_unit_type, review: :conclusion_final_review
 
@@ -72,12 +73,13 @@ module Reports::WeaknessesByRiskAndBusinessUnit
       exclude        = %i(confirmed unconfirmed unanswered notify incomplete)
       pending_states = Finding::STATUS.except(*exclude).values & Finding::PENDING_STATUS
 
-      weaknesses_1  = weaknesses_by_risk_and_business_unit_types_1  weaknesses, pending_states
+      weaknesses_1a = weaknesses_by_risk_and_business_unit_types_1a weaknesses, pending_states
+      weaknesses_1b = weaknesses_by_risk_and_business_unit_types_1b weaknesses
       weaknesses_2  = weaknesses_by_risk_and_business_unit_types_2  weaknesses
       weaknesses_4a = weaknesses_by_risk_and_business_unit_types_4a weaknesses, pending_states
       weaknesses_4b = weaknesses_by_risk_and_business_unit_types_4b weaknesses
 
-      weaknesses_1_table = weaknesses_by_risk_and_business_unit_table weaknesses_1
+      weaknesses_1_table = weaknesses_by_risk_and_business_unit_table weaknesses_1a, weaknesses_1b
       weaknesses_2_table = weaknesses_by_risk_and_business_unit_table weaknesses_2
       weaknesses_4_table = weaknesses_by_risk_and_business_unit_table weaknesses_4a, weaknesses_4b
       weaknesses_3_table = weaknesses_by_risk_and_business_unit_table_3 weaknesses_1_table,
@@ -92,30 +94,33 @@ module Reports::WeaknessesByRiskAndBusinessUnit
       ]
     end
 
-    def weaknesses_by_risk_and_business_unit_types_1 weaknesses, pending_states
+    def weaknesses_by_risk_and_business_unit_types_1a weaknesses, pending_states
       weaknesses.
         where(state: pending_states).
-        finals(true).
+        by_issue_date 'BETWEEN', @from_date, @mid_date
+    end
+
+    def weaknesses_by_risk_and_business_unit_types_1b weaknesses
+      weaknesses.
+        where(state: Finding::STATUS[:implemented_audited]).
+        where(solution_date: (@mid_date + 1.day)..Time.zone.today).
         by_issue_date 'BETWEEN', @from_date, @mid_date
     end
 
     def weaknesses_by_risk_and_business_unit_types_2 weaknesses
       weaknesses.
-        finals(false).
         by_issue_date 'BETWEEN', @mid_date, @to_date
     end
 
     def weaknesses_by_risk_and_business_unit_types_4a weaknesses, pending_states
       weaknesses.
         where(state: pending_states).
-        finals(false).
         by_issue_date 'BETWEEN', @from_date, @to_date
     end
 
     def weaknesses_by_risk_and_business_unit_types_4b weaknesses
       weaknesses.
         where(state: Finding::STATUS[:implemented_audited]).
-        finals(false).
         where solution_date: @to_date..Time.zone.today
     end
 
