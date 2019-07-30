@@ -97,26 +97,26 @@ module Reports::WeaknessesByRiskAndBusinessUnit
     def weaknesses_by_risk_and_business_unit_types_1a weaknesses, pending_states
       weaknesses.
         where(state: pending_states).
-        by_issue_date 'BETWEEN', @from_date, @mid_date
+        by_origination_date 'BETWEEN', @from_date, @mid_date
     end
 
     def weaknesses_by_risk_and_business_unit_types_1b weaknesses
       weaknesses.
         where(state: Finding::STATUS[:implemented_audited]).
         where(solution_date: (@mid_date + 1.day)..Time.zone.today).
-        by_issue_date 'BETWEEN', @from_date, @mid_date
+        by_origination_date 'BETWEEN', @from_date, @mid_date
     end
 
     def weaknesses_by_risk_and_business_unit_types_2 weaknesses
       weaknesses.
         not_repeated.
-        by_issue_date 'BETWEEN', @mid_date, @to_date
+        by_origination_date 'BETWEEN', @mid_date, @to_date
     end
 
     def weaknesses_by_risk_and_business_unit_types_4a weaknesses, pending_states
       weaknesses.
         where(state: pending_states).
-        by_issue_date 'BETWEEN', @from_date, @to_date
+        by_origination_date 'BETWEEN', @from_date, @to_date
     end
 
     def weaknesses_by_risk_and_business_unit_types_4b weaknesses
