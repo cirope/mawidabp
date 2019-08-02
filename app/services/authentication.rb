@@ -136,9 +136,9 @@ class Authentication
       verify_if_user_expired
 
       if @valid_user.is_enable? && !@valid_user.hidden && valid_password?
-          register_login
-          @valid = true
-          @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }
+        register_login
+        @valid = true
+        @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }
       end
     end
 
