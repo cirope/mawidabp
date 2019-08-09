@@ -97,6 +97,13 @@ module Findings::Scopes
       includes(review: :conclusion_final_review).where condition, *[date, date_until].compact
     end
 
+    def by_origination_date operator, date, date_until = nil
+      mask      = operator.downcase == 'between' && date_until ? '? AND ?' : '?'
+      condition = "#{quoted_table_name}.#{qcn 'origination_date'} #{operator} #{mask}"
+
+      where condition, *[date, date_until].compact
+    end
+
     def by_business_unit_ids business_unit_ids
       includes(review: :plan_item).
         where(plan_items: { business_unit_id: Array(business_unit_ids) }).

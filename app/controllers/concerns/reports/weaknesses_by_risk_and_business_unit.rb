@@ -44,17 +44,15 @@ module Reports::WeaknessesByRiskAndBusinessUnit
       @filters = []
       @business_unit_type_names = []
       @unit_names = {}
-      exclude = %i(confirmed unconfirmed unanswered notify incomplete)
-      states = Finding::STATUS.except(*exclude).values & Finding::PENDING_STATUS
       between = [
         t('shared.filters.date_field.between').downcase,
         [l(@from_date), l(@to_date)].to_sentence
       ].join ' '
       weaknesses = Weakness.
         list_with_final_review.
-        where(state: states).
-        includes(:business_unit, :business_unit_type, review: :conclusion_final_review).
-        by_issue_date 'BETWEEN', @from_date, @to_date
+        or(Weakness.list_without_final_review.with_repeated).
+        finals(false).
+        includes :business_unit, :business_unit_type, review: :conclusion_final_review
 
       if params[:weaknesses_by_risk_and_business_unit]
         weaknesses = filter_weaknesses_by_risk_and_business_unit_by_icon weaknesses
@@ -73,13 +71,18 @@ module Reports::WeaknessesByRiskAndBusinessUnit
     end
 
     def weaknesses_by_risk_and_business_unit_types weaknesses
-      weaknesses_1 = weaknesses.finals(true).by_issue_date 'BETWEEN', @from_date, @mid_date
-      weaknesses_2 = weaknesses.finals(false).by_issue_date 'BETWEEN', @mid_date, @to_date
-      weaknesses_4 = weaknesses.finals false
+      exclude        = %i(confirmed unconfirmed unanswered notify incomplete)
+      pending_states = Finding::STATUS.except(*exclude).values & Finding::PENDING_STATUS
 
-      weaknesses_1_table = weaknesses_by_risk_and_business_unit_table weaknesses_1
+      weaknesses_1a = weaknesses_by_risk_and_business_unit_types_1a weaknesses, pending_states
+      weaknesses_1b = weaknesses_by_risk_and_business_unit_types_1b weaknesses
+      weaknesses_2  = weaknesses_by_risk_and_business_unit_types_2  weaknesses
+      weaknesses_4a = weaknesses_by_risk_and_business_unit_types_4a weaknesses, pending_states
+      weaknesses_4b = weaknesses_by_risk_and_business_unit_types_4b weaknesses
+
+      weaknesses_1_table = weaknesses_by_risk_and_business_unit_table weaknesses_1a, weaknesses_1b
       weaknesses_2_table = weaknesses_by_risk_and_business_unit_table weaknesses_2
-      weaknesses_4_table = weaknesses_by_risk_and_business_unit_table weaknesses_4
+      weaknesses_4_table = weaknesses_by_risk_and_business_unit_table weaknesses_4a, weaknesses_4b
       weaknesses_3_table = weaknesses_by_risk_and_business_unit_table_3 weaknesses_1_table,
                                                                         weaknesses_2_table,
                                                                         weaknesses_4_table
@@ -90,6 +93,37 @@ module Reports::WeaknessesByRiskAndBusinessUnit
         weaknesses_3_table,
         weaknesses_4_table
       ]
+    end
+
+    def weaknesses_by_risk_and_business_unit_types_1a weaknesses, pending_states
+      weaknesses.
+        where(state: pending_states).
+        by_origination_date 'BETWEEN', @from_date, @mid_date
+    end
+
+    def weaknesses_by_risk_and_business_unit_types_1b weaknesses
+      weaknesses.
+        where(state: Finding::STATUS[:implemented_audited]).
+        where(solution_date: (@mid_date + 1.day)..Time.zone.today).
+        by_origination_date 'BETWEEN', @from_date, @mid_date
+    end
+
+    def weaknesses_by_risk_and_business_unit_types_2 weaknesses
+      weaknesses.
+        not_repeated.
+        by_origination_date 'BETWEEN', @mid_date, @to_date
+    end
+
+    def weaknesses_by_risk_and_business_unit_types_4a weaknesses, pending_states
+      weaknesses.
+        where(state: pending_states).
+        by_origination_date 'BETWEEN', @from_date, @to_date
+    end
+
+    def weaknesses_by_risk_and_business_unit_types_4b weaknesses
+      weaknesses.
+        where(state: Finding::STATUS[:implemented_audited]).
+        where solution_date: @to_date..Time.zone.today
     end
 
     def weaknesses_by_risk_and_business_unit_table_3 weaknesses_1_table,
@@ -135,41 +169,43 @@ module Reports::WeaknessesByRiskAndBusinessUnit
       result
     end
 
-    def weaknesses_by_risk_and_business_unit_table weaknesses
+    def weaknesses_by_risk_and_business_unit_table *weaknesses_scopes
       result = {
         total_by_risk: Hash[Weakness.risks.keys.map { |r| [r, 0] }]
       }
 
       result[:total_by_risk][:total] = 0
 
-      weaknesses.find_each do |weakness|
-        but_name  = @icon ? 'Main' : weakness.business_unit_type.name
-        risk      = Weakness.risks.invert[weakness.risk]
-        unit_name = if @icon
-                      weakness.taggings.detect { |t| t.tag.icon == @icon }.tag.name
-                    else
-                      weakness.business_unit.name
-                    end
+      weaknesses_scopes.each do |weaknesses|
+        weaknesses.find_each do |weakness|
+          but_name  = @icon ? 'Main' : weakness.business_unit_type.name
+          risk      = Weakness.risks.invert[weakness.risk]
+          unit_name = if @icon
+                        weakness.taggings.detect { |t| t.tag.icon == @icon }.tag.name
+                      else
+                        weakness.business_unit.name
+                      end
 
-        if @business_unit_type_names.exclude? but_name
-          @business_unit_type_names << but_name
+          if @business_unit_type_names.exclude? but_name
+            @business_unit_type_names << but_name
+          end
+
+          @unit_names[but_name] ||= []
+
+          if @unit_names[but_name].exclude? unit_name
+            @unit_names[but_name] << unit_name
+          end
+
+          result[but_name]            ||= {}
+          result[but_name][unit_name] ||= Hash[Weakness.risks.keys.map { |r| [r, 0] }]
+
+          result[but_name][unit_name][:total] ||= 0
+
+          result[:total_by_risk][risk]        += 1
+          result[:total_by_risk][:total]      += 1
+          result[but_name][unit_name][risk]   += 1
+          result[but_name][unit_name][:total] += 1
         end
-
-        @unit_names[but_name] ||= []
-
-        if @unit_names[but_name].exclude? unit_name
-          @unit_names[but_name] << unit_name
-        end
-
-        result[but_name]            ||= {}
-        result[but_name][unit_name] ||= Hash[Weakness.risks.keys.map { |r| [r, 0] }]
-
-        result[but_name][unit_name][:total] ||= 0
-
-        result[:total_by_risk][risk]        += 1
-        result[:total_by_risk][:total]      += 1
-        result[but_name][unit_name][risk]   += 1
-        result[but_name][unit_name][:total] += 1
       end
 
       result

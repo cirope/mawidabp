@@ -326,9 +326,9 @@ module ConclusionReviews::BicPDF
           conclusion
         ],
         ([
-          "<b>#{I18n.t 'conclusion_review.bic.review.main_recommendations'}</b>",
-          bic_main_recommendations
-        ] if bic_main_recommendations.present?)
+          "<b>#{self.class.human_attribute_name 'main_recommendations'}</b>",
+          main_recommendations
+        ] if main_recommendations.present?)
       ].compact.each do |title, content|
         pdf.font_size PDF_FONT_SIZE * 0.75 do
           pdf.move_down PDF_FONT_SIZE
@@ -515,21 +515,5 @@ module ConclusionReviews::BicPDF
       else
         I18n.t 'conclusion_review.bic.cover.draft_html'
       end
-    end
-
-    def bic_main_recommendations
-      result = []
-
-      review.grouped_control_objective_items.each do |process_control, cois|
-        cois.sort.each do |coi|
-          coi.weaknesses.not_revoked.sort_for_review.each do |w|
-            if w.audit_recommendations.present?
-              result << w.audit_recommendations.strip
-            end
-          end
-        end
-      end
-
-      result.join "\r\n\r\n"
     end
 end

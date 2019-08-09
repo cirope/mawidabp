@@ -28,6 +28,8 @@ class ControlObjectiveItem < ApplicationRecord
 
   belongs_to :organization
   belongs_to :review, inverse_of: :control_objective_items
+  has_one :business_unit, through: :review
+  has_one :business_unit_type, through: :business_unit
 
   def informal
     review&.to_s

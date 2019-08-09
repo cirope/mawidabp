@@ -2,7 +2,6 @@ module Reports::WeaknessesByControlObjective
   extend ActiveSupport::Concern
 
   include Reports::PDF
-  include Reports::Period
 
   def weaknesses_by_control_objective
     init_weaknesses_by_control_objective_vars

@@ -264,6 +264,7 @@ es:
         finding_answers: 'Respuestas'
         tag_ids: 'Etiquetas'
         rescheduled: 'Reprogramada'
+        reschedule_count: 'Cantidad de reprogramaciones'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'
