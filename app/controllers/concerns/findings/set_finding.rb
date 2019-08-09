@@ -27,7 +27,10 @@ module Findings::SetFinding
         conditions[User.table_name] = { id: user_ids }
       end
 
-      conditions[:state] = Finding::STATUS.values - [Finding::STATUS[:incomplete]]
+      conditions[:state] = Finding::STATUS.values - [
+        Finding::STATUS[:incomplete],
+        Finding::STATUS[:revoked]
+      ]
 
       conditions
     end

@@ -41,6 +41,7 @@ class Finding < ApplicationRecord
   include Findings::SerializedAttributes
   include Findings::SortColumns
   include Findings::State
+  include Findings::Taggable
   include Findings::Tasks
   include Findings::Unanswered
   include Findings::UnansweredNotifications
@@ -55,7 +56,6 @@ class Finding < ApplicationRecord
   include Parameters::Risk
   include Parameters::Priority
   include ParameterSelector
-  include Taggable
 
   acts_as_tree
 

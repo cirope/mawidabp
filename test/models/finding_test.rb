@@ -850,7 +850,8 @@ class FindingTest < ActiveSupport::TestCase
 
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
-    refute finding.rescheduled
+    refute finding.rescheduled?
+    assert_equal 0, finding.reschedule_count
     assert_equal repeated_of.origination_date, finding.origination_date
     assert_equal 1, finding.repeated_ancestors.size
     assert_equal 1, repeated_of.repeated_children.size
@@ -876,17 +877,19 @@ class FindingTest < ActiveSupport::TestCase
 
     refute repeated_of.repeated?
 
-    finding.update! repeated_of_id: repeated_of.id, rescheduled: true
+    finding.update! repeated_of_id: repeated_of.id, reschedule_count: 1
 
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
-    assert finding.rescheduled
+    assert finding.rescheduled?
+    assert_equal 1, finding.reschedule_count
 
     finding.undo_reiteration
 
     refute repeated_of.reload.repeated?
     assert_nil finding.reload.repeated_of
-    refute finding.rescheduled
+    refute finding.rescheduled?
+    assert_equal 0, finding.reschedule_count
     assert_equal repeated_of_original_state, repeated_of.state
   end
 
@@ -905,7 +908,8 @@ class FindingTest < ActiveSupport::TestCase
 
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
-    assert finding.rescheduled
+    assert finding.rescheduled?
+    assert_equal 1, finding.reschedule_count
     assert_equal repeated_of.origination_date, finding.origination_date
     assert_equal 1, finding.repeated_ancestors.size
     assert_equal 1, repeated_of.repeated_children.size
@@ -914,7 +918,8 @@ class FindingTest < ActiveSupport::TestCase
     finding.update! follow_up_date: repeated_of.follow_up_date
 
     # Should unmark when follow up date has been "restored"
-    refute finding.reload.rescheduled
+    refute finding.reload.rescheduled?
+    assert_equal 0, finding.reschedule_count
   end
 
   test 'do nothing on repeat if repeated_of is not included on review' do
@@ -1255,6 +1260,54 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     assert repeated_of.reload.tasks.all? { |t| t.finished? }
+  end
+
+  test 'sync taggings' do
+    skip unless WEAKNESS_TAG_SYNC
+
+    finding      = findings :being_implemented_weakness_on_approved_draft
+    Current.user = users :supervisor
+
+    ConclusionFinalReview.list.new(
+      review_id: reviews(:review_approved_with_conclusion).id,
+      issue_date: Date.today,
+      close_date: CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.business_days.from_now.to_date,
+      applied_procedures: 'New applied procedures',
+      conclusion: CONCLUSION_OPTIONS.first,
+      recipients: 'John Doe',
+      sectors: 'Area 51',
+      evolution: EVOLUTION_OPTIONS.second,
+      evolution_justification: 'Ok',
+      main_weaknesses_text: 'Some main weakness X',
+      corrective_actions: 'You should do it this way',
+      :reference => 'Some reference',
+      :observations => 'Some observations',
+      :scope => 'Some scope',
+      affects_compliance: false
+    ).save!
+
+    final_twin = finding.children.take!
+    tag = tags :follow_up
+
+    assert final_twin.taggings.where(tag_id: tag.id).empty?
+
+    assert_difference 'Tagging.count', 2 do
+      finding.taggings.create! tag_id: tag.id
+    end
+
+    assert final_twin.reload.taggings.where(tag_id: tag.id).exists?
+
+    assert_difference 'Tagging.count', -2 do
+      finding.reload.taggings.each do |t|
+        if t.tag_id == tag.id
+          t.mark_for_destruction
+        end
+      end
+
+      finding.save!
+    end
+
+    assert final_twin.reload.taggings.where(tag_id: tag.id).empty?
   end
 
   test 'unconfirmed for notification scope' do

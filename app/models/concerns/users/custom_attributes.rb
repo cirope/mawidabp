@@ -4,6 +4,6 @@ module Users::CustomAttributes
   included do
     attr_accessor :user_data, :send_notification_email, :reallocation_errors
 
-    alias_attribute :informal, :user
+    alias_attribute :informal, :email
   end
 end

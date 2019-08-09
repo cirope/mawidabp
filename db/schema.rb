@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_27_235245) do
+ActiveRecord::Schema.define(version: 2019_07_23_150725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -202,6 +202,7 @@ ActiveRecord::Schema.define(version: 2019_06_27_235245) do
     t.text "scope"
     t.string "previous_identification"
     t.date "previous_date"
+    t.text "main_recommendations"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
@@ -415,9 +416,9 @@ ActiveRecord::Schema.define(version: 2019_06_27_235245) do
     t.text "impact", default: [], null: false, array: true
     t.text "internal_control_components", default: [], null: false, array: true
     t.bigint "weakness_template_id"
-    t.boolean "rescheduled", default: false, null: false
     t.date "first_follow_up_date"
     t.date "last_notification_date"
+    t.integer "reschedule_count", default: 0, null: false
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
@@ -428,7 +429,7 @@ ActiveRecord::Schema.define(version: 2019_06_27_235245) do
     t.index ["organization_id"], name: "index_findings_on_organization_id"
     t.index ["parent_id"], name: "index_findings_on_parent_id"
     t.index ["repeated_of_id"], name: "index_findings_on_repeated_of_id"
-    t.index ["rescheduled"], name: "index_findings_on_rescheduled"
+    t.index ["reschedule_count"], name: "index_findings_on_reschedule_count"
     t.index ["state"], name: "index_findings_on_state"
     t.index ["title"], name: "index_findings_on_title"
     t.index ["type"], name: "index_findings_on_type"

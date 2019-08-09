@@ -96,6 +96,10 @@
             { action: :synthesis_report, controller_name: 'conclusion' }, class: 'list-group-item' %>
           <%= link_to t('conclusion_committee_report.review_scores_report_title'),
             { action: :review_scores_report, controller_name: 'conclusion' }, class: 'list-group-item' %>
+          <% if Current.conclusion_pdf_format == 'gal' %>
+            <%= link_to t('conclusion_committee_report.control_objective_counts_title'),
+              { :action => :control_objective_counts, :controller_name => 'conclusion'}, class: 'list-group-item' %>
+          <% end %>
         </div>
       </div>
 

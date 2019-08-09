@@ -62,7 +62,7 @@ module Reviews::Scopes
     end
 
     def list_without_final_review_or_not_closed
-      quoted_table = ConclusionReview.quoted_table_name
+      quoted_table = ::ConclusionReview.quoted_table_name
       conditions   = [
         "#{quoted_table}.#{ConclusionReview.qcn('review_id')} IS NULL",
         "#{quoted_table}.#{ConclusionReview.qcn('close_date')} >= :today"
