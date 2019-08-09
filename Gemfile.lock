@@ -167,7 +167,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.1.0)
+    rails-html-sanitizer (1.2.0)
       loofah (~> 2.2, >= 2.2.2)
     railties (5.2.3)
       actionpack (= 5.2.3)
@@ -233,7 +233,7 @@ GEM
     unicorn-rails (2.2.1)
       rack
       unicorn
-    validates_timeliness (4.1.0)
+    validates_timeliness (4.1.1)
       timeliness (>= 0.3.10, < 1)
     web-console (3.7.0)
       actionview (>= 5.0)
