@@ -872,6 +872,9 @@
       first_follow_up_date: "1° fecha probable reg."
       follow_up_date: "Última fecha propuesta"
       distance_to_cut_date: "Días antigua data"
+      implemented_audited_count:
+        one: "Una observación fue regularizada entre el %{from_date} y el %{to_date}"
+        other: "%{count} observaciones fueron regularizadas entre el %{from_date} y el %{to_date}"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
