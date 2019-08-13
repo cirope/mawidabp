@@ -40,6 +40,8 @@
 
 <% if @weaknesses.any? %>
   <% @weaknesses.each_with_index do |weakness, index| %>
+    <% current_weakness = current_weakness_for weakness %>
+
     <br>
 
     <p>
@@ -77,43 +79,43 @@
 
     <p>
       <span class="text-muted"><%= Weakness.human_attribute_name 'risk' %></span>:
-      <%= weakness.risk_text %>
+      <%= current_weakness.risk_text %>
     </p>
 
     <p style="font-size: 14px;">
       <span class="text-muted"><%= Weakness.human_attribute_name 'title' %></span>:
-      <strong><%= weakness.title %></strong>
+      <strong><%= current_weakness.title %></strong>
     </p>
 
     <p>
       <strong><%= Weakness.human_attribute_name 'description' %></strong>:
-      <%= weakness.description %>
+      <%= current_weakness.description %>
     </p>
 
-    <% if weakness.current_situation.present? && weakness.current_situation_verified %>
+    <% if current_weakness.current_situation.present? && current_weakness.current_situation_verified %>
       <p>
         <strong><%= Weakness.human_attribute_name 'current_situation' %></strong>:
-        <%= weakness.current_situation %>
+        <%= current_weakness.current_situation %>
       </p>
     <% end %>
 
     <p>
       <strong><%= Weakness.human_attribute_name 'answer' %></strong>:
-      <%= weakness.answer %>
+      <%= current_weakness.answer %>
     </p>
 
     <p>
       <strong><%= Weakness.human_attribute_name 'state' %></strong>:
-      <%= weaknesses_current_situation_state_text weakness %>
+      <%= weaknesses_current_situation_state_text weakness, current_weakness %>
     </p>
 
-    <% if weakness.follow_up_date %>
+    <% if current_weakness.follow_up_date %>
       <p>
         <strong><%= Weakness.human_attribute_name 'follow_up_date' %></strong>:
-        <% if weakness.follow_up_date < Time.zone.today %>
-          <span class="text-danger"><%= l weakness.follow_up_date %></span>
+        <% if current_weakness.follow_up_date < Time.zone.today %>
+          <span class="text-danger"><%= l current_weakness.follow_up_date %></span>
         <% else %>
-          <%= l weakness.follow_up_date %>
+          <%= l current_weakness.follow_up_date %>
         <% end %>
       </p>
     <% end %>
