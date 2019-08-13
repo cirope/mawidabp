@@ -3,9 +3,9 @@ module ApplicationHelper
 
   def page_title
     @title     ||= t "actioncontroller.#{controller_name}"
-    organization = "&lt;#{current_organization.name}&gt;" if current_organization
+    organization = "| #{current_organization.name} |" if current_organization
 
-    raw [t('app_name'), organization, @title].compact.join(' ')
+    [t('app_name'), organization, @title].compact.join(' ')
   end
 
   def t_boolean field

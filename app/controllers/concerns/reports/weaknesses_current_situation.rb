@@ -144,6 +144,8 @@ module Reports::WeaknessesCurrentSituation
     end
 
     def current_situation_pdf_items weakness
+      current_weakness = current_weakness_for weakness
+
       [
         [
           PlanItem.human_attribute_name('project'),
@@ -167,34 +169,34 @@ module Reports::WeaknessesCurrentSituation
         ],
         [
           Weakness.human_attribute_name('risk'),
-          weakness.risk_text
+          current_weakness.risk_text
         ],
         [
           "<font size='#{PDF_FONT_SIZE + 2}'>#{Weakness.human_attribute_name('title')}</font>",
-          "<font size='#{PDF_FONT_SIZE + 2}'><b>#{weakness.title}</b></font>"
+          "<font size='#{PDF_FONT_SIZE + 2}'><b>#{current_weakness.title}</b></font>"
         ],
         [
           "<b>#{Weakness.human_attribute_name('description')}</b>",
-          weakness.description
+          current_weakness.description
         ],
         ([
           "<b>#{Weakness.human_attribute_name('current_situation')}</b>",
-          weakness.current_situation
-        ] if show_current_situation? weakness),
+          current_weakness.current_situation
+        ] if show_current_situation? current_weakness),
         [
           "<b>#{Weakness.human_attribute_name('answer')}</b>",
-          weakness.answer
+          current_weakness.answer
         ],
         [
           "<b>#{Weakness.human_attribute_name('state')}</b>",
-          weaknesses_current_situation_state_text(weakness)
+          weaknesses_current_situation_state_text(weakness, current_weakness)
         ],
         ([
           "<b>#{Weakness.human_attribute_name('follow_up_date')}</b>",
-          weakness.follow_up_date < Time.zone.today ?
-            "<color rgb='ff0000'>#{I18n.l(weakness.follow_up_date)}</color>" :
-            I18n.l(weakness.follow_up_date)
-        ] if weakness.follow_up_date)
+          current_weakness.follow_up_date < Time.zone.today ?
+            "<color rgb='ff0000'>#{I18n.l(current_weakness.follow_up_date)}</color>" :
+            I18n.l(current_weakness.follow_up_date)
+        ] if current_weakness.follow_up_date)
       ].concat(
         weakness.achievements.map do |achievement|
           [
@@ -409,6 +411,8 @@ module Reports::WeaknessesCurrentSituation
 
     def weaknesses_current_situation_csv_data_rows
       @weaknesses.map do |weakness|
+        current_weakness = current_weakness_for weakness
+
         [
           weakness.business_unit.to_s,
           weakness.review.plan_item.project,
@@ -416,13 +420,13 @@ module Reports::WeaknessesCurrentSituation
           weakness.business_unit_type.to_s,
           (l weakness.origination_date, format: '%Y' if weakness.origination_date),
           weakness.review.conclusion_final_review.conclusion,
-          weakness.risk_text,
-          weakness.title,
-          weakness.description,
-          (weakness.current_situation.present? && weakness.current_situation_verified ? weakness.current_situation : ''),
-          weakness.answer,
-          weaknesses_current_situation_state_text(weakness),
-          (l weakness.follow_up_date if weakness.follow_up_date),
+          current_weakness.risk_text,
+          current_weakness.title,
+          current_weakness.description,
+          (show_current_situation?(current_weakness) ? current_weakness.current_situation : ''),
+          current_weakness.answer,
+          weaknesses_current_situation_state_text(weakness, current_weakness),
+          (l current_weakness.follow_up_date if current_weakness.follow_up_date),
           (l weakness.solution_date if weakness.solution_date),
           weakness.id,
           weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; '),
@@ -442,14 +446,21 @@ module Reports::WeaknessesCurrentSituation
       end
     end
 
-    def weaknesses_current_situation_state_text weakness
+    def current_weakness_for weakness
       if weakness.repeated? && weakness.repeated_in.present?
-        repeated_in      = weakness.repeated_leaf
-        review           = repeated_in.review
+        weakness.repeated_leaf
+      else
+        weakness
+      end
+    end
+
+    def weaknesses_current_situation_state_text weakness, current_weakness
+      if weakness.id != current_weakness.id
+        review           = current_weakness.review
         repeated_details = [
-          repeated_in.review_code,
+          current_weakness.review_code,
           review.identification,
-          repeated_in.state_text
+          current_weakness.state_text
         ].join ' - '
 
         state_text = if review.has_final_review?

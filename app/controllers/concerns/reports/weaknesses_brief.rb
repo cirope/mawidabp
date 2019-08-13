@@ -45,26 +45,38 @@ module Reports::WeaknessesBrief
       @cut_date = extract_cut_date params[:weaknesses_brief]
       @filters = []
       final = params[:final] == 'true'
-      weaknesses = Weakness.
+
+      pending_weaknesses = Weakness.
         awaiting.
         or(Weakness.being_implemented).
         or(Weakness.implemented).
         finals(final).
         list_with_final_review.
-        by_issue_date('BETWEEN', @from_date, @to_date).
+        by_origination_date('BETWEEN', @from_date, @to_date)
+
+      implemented_audited_weaknesses = Weakness.
+        implemented_audited.
+        finals(final).
+        list_with_final_review.
+        where solution_date: @to_date..Time.zone.today
+
+      weaknesses = pending_weaknesses.
+        or(implemented_audited_weaknesses).
         includes(review: [:conclusion_final_review, :plan_item]).
         preload(finding_user_assignments: :user)
 
       if params[:weaknesses_brief] && params[:weaknesses_brief][:user_id].present?
-        user       = User.find params[:weaknesses_brief][:user_id]
-        inverted   = params[:weaknesses_brief][:user_inverted] == '1'
-        method     = inverted ? :excluding_user_id : :by_user_id
-        weaknesses = weaknesses.send method, user.id
+        user                           = User.find params[:weaknesses_brief][:user_id]
+        inverted                       = params[:weaknesses_brief][:user_inverted] == '1'
+        method                         = inverted ? :excluding_user_id : :by_user_id
+        weaknesses                     = weaknesses.send method, user.id
+        implemented_audited_weaknesses = implemented_audited_weaknesses.send method, user.id
 
         @filters << "<b>#{User.model_name.human}</b> #{inverted ? '!=' : '='} #{user.full_name}"
       end
 
-      @weaknesses = weaknesses.reorder weaknesses_brief_order
+      @weaknesses                     = weaknesses.reorder weaknesses_brief_order
+      @implemented_audited_weaknesses = implemented_audited_weaknesses
     end
 
     def weaknesses_brief_csv
@@ -98,7 +110,10 @@ module Reports::WeaknessesBrief
     def weaknesses_brief_csv_data_rows
       @weaknesses.map do |weakness|
         [
-          weakness.review.identification,
+          [
+            weakness.implemented_audited? ? '(*) ': '',
+            weakness.review.identification
+          ].join,
           weakness.review.plan_item.project,
           weakness.title,
           weakness.description,
@@ -139,7 +154,8 @@ module Reports::WeaknessesBrief
       pdf.move_down PDF_FONT_SIZE
 
       if @weaknesses.present?
-        add_weaknesses_brief_table pdf
+        add_weaknesses_brief_table                     pdf
+        add_weaknesses_brief_implemented_audited_count pdf
       else
         pdf.text t("#{@controller}_committee_report.weaknesses_brief.without_weaknesses"),
           style: :italic
@@ -157,6 +173,17 @@ module Reports::WeaknessesBrief
           )
         end
       end
+    end
+
+    def add_weaknesses_brief_implemented_audited_count pdf
+      pdf.move_down PDF_FONT_SIZE
+
+      pdf.text "(*) " + t(
+        'follow_up_committee_report.weaknesses_brief.implemented_audited_count',
+        count: @implemented_audited_weaknesses.count,
+        from_date: l(@to_date),
+        to_date: l(Time.zone.today)
+      ), style: :italic
     end
 
     def weaknesses_brief_columns
@@ -186,7 +213,10 @@ module Reports::WeaknessesBrief
     def weaknesses_brief_data pdf
       data = @weaknesses.map do |weakness|
         [
-          weakness.review.identification,
+          [
+            weakness.implemented_audited? ? '(*) ' : '',
+            weakness.review.identification
+          ].join,
           weakness.review.plan_item.project,
           weakness.title,
           truncate(weakness.description, length: 1000),
