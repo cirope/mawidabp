@@ -60,8 +60,15 @@ module Reports::WeaknessesBrief
         list_with_final_review.
         where solution_date: @to_date..Time.zone.today
 
+      repeated_without_final_review = Weakness.
+        list_without_final_review.
+        with_repeated.
+        finals(final).
+        by_origination_date('BETWEEN', @from_date, @to_date)
+
       weaknesses = pending_weaknesses.
         or(implemented_audited_weaknesses).
+        or(repeated_without_final_review).
         includes(review: [:conclusion_final_review, :plan_item]).
         preload(finding_user_assignments: :user)
 
@@ -120,7 +127,10 @@ module Reports::WeaknessesBrief
           weakness.risk_text,
           weakness.audit_comments,
           weaknesses_brief_audit_users(weakness).join("\n"),
-          l(weakness.review.conclusion_final_review.issue_date),
+          (
+            weakness.review.conclusion_final_review ?
+            l(weakness.review.conclusion_final_review.issue_date) : '-'
+          ),
           (weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-'),
           (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
           distance_in_days_to_cut_date(weakness)
@@ -223,7 +233,10 @@ module Reports::WeaknessesBrief
           weakness.risk_text,
           truncate(weakness.audit_comments, length: 1000),
           weaknesses_brief_audit_users(weakness).join("\n"),
-          l(weakness.review.conclusion_final_review.issue_date),
+          (
+            weakness.review.conclusion_final_review ?
+            l(weakness.review.conclusion_final_review.issue_date) : '-'
+          ),
           (weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-'),
           (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
           distance_in_days_to_cut_date(weakness)
