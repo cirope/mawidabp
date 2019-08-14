@@ -123,6 +123,7 @@ module Reports::WeaknessesByRiskAndBusinessUnit
     def weaknesses_by_risk_and_business_unit_types_4b weaknesses
       weaknesses.
         where(state: Finding::STATUS[:implemented_audited]).
+        by_origination_date('BETWEEN', @from_date, @to_date).
         where solution_date: @to_date..Time.zone.today
     end
 

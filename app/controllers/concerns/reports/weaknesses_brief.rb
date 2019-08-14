@@ -58,6 +58,7 @@ module Reports::WeaknessesBrief
         implemented_audited.
         finals(final).
         list_with_final_review.
+        by_origination_date('BETWEEN', @from_date, @to_date).
         where solution_date: @to_date..Time.zone.today
 
       repeated_without_final_review = Weakness.
