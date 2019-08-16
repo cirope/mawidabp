@@ -34,10 +34,21 @@ module Findings::Reschedule
     end
 
     def calculate_reschedule_count?
-      follow_up_date_changed?             &&
-        follow_up_date.present?           &&
+      recalculate_attributes_changed?     &&
         repeated_or_on_final_review?      &&
         (awaiting? || being_implemented?)
+    end
+
+    def recalculate_attributes_changed?
+      calculate_by_follow_up_date? || calculate_by_state?
+    end
+
+    def calculate_by_follow_up_date?
+      follow_up_date_changed? && follow_up_date.present?
+    end
+
+    def calculate_by_state?
+      state_changed? && follow_up_date.present?
     end
 
     def repeated_or_on_final_review?
