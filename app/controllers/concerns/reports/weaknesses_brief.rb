@@ -108,8 +108,8 @@ module Reports::WeaknessesBrief
         Weakness.human_attribute_name('risk'),
         t("#{@controller}_committee_report.weaknesses_brief.audit_comments"),
         FindingUserAssignment.human_attribute_name('process_owner'),
-        t("#{@controller}_committee_report.weaknesses_brief.issue_date"),
-        t("#{@controller}_committee_report.weaknesses_brief.first_follow_up_date"),
+        t("#{@controller}_committee_report.weaknesses_brief.origination_date"),
+        t("#{@controller}_committee_report.weaknesses_brief.reschedule_count"),
         t("#{@controller}_committee_report.weaknesses_brief.follow_up_date"),
         t("#{@controller}_committee_report.weaknesses_brief.distance_to_cut_date")
       ]
@@ -128,11 +128,8 @@ module Reports::WeaknessesBrief
           weakness.risk_text,
           weakness.audit_comments,
           weaknesses_brief_audit_users(weakness).join("\n"),
-          (
-            weakness.review.conclusion_final_review ?
-            l(weakness.review.conclusion_final_review.issue_date) : '-'
-          ),
-          (weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-'),
+          (weakness.origination_date ? l(weakness.origination_date) : '-'),
+          (weakness.pending? || weakness.awaiting? ? weakness.reschedule_count : '-'),
           (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
           distance_in_days_to_cut_date(weakness)
         ]
@@ -204,10 +201,10 @@ module Reports::WeaknessesBrief
         t("#{@controller}_committee_report.weaknesses_brief.weakness_title") => 10,
         t("#{@controller}_committee_report.weaknesses_brief.description") => 21,
         Weakness.human_attribute_name('risk') => 4,
-        t("#{@controller}_committee_report.weaknesses_brief.audit_comments") => 20,
+        t("#{@controller}_committee_report.weaknesses_brief.audit_comments") => 19,
         FindingUserAssignment.human_attribute_name('process_owner') => 10,
-        t("#{@controller}_committee_report.weaknesses_brief.issue_date") => 5,
-        t("#{@controller}_committee_report.weaknesses_brief.first_follow_up_date") => 5,
+        t("#{@controller}_committee_report.weaknesses_brief.origination_date") => 5,
+        t("#{@controller}_committee_report.weaknesses_brief.reschedule_count") => 6,
         t("#{@controller}_committee_report.weaknesses_brief.follow_up_date") => 5,
         t("#{@controller}_committee_report.weaknesses_brief.distance_to_cut_date") => 4
       }
@@ -234,11 +231,8 @@ module Reports::WeaknessesBrief
           weakness.risk_text,
           truncate(weakness.audit_comments, length: 1000),
           weaknesses_brief_audit_users(weakness).join("\n"),
-          (
-            weakness.review.conclusion_final_review ?
-            l(weakness.review.conclusion_final_review.issue_date) : '-'
-          ),
-          (weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-'),
+          (weakness.origination_date ? l(weakness.origination_date) : '-'),
+          (weakness.pending? || weakness.awaiting? ? weakness.reschedule_count : '-'),
           (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
           distance_in_days_to_cut_date(weakness)
         ]
