@@ -231,10 +231,9 @@ class WorkPaper < ApplicationRecord
       FileUtils.rm pdf_filename if File.exists?(pdf_filename)
       FileUtils.rm original_filename if File.exists?(original_filename)
 
-      self.file_model.file_file_size = File.size(zip_filename)
+      self.file_model.file = File.open(zip_filename)
 
       self.file_model.save!
-      self.file_model.update_column :file_file_name, File.basename(zip_filename)
     end
 
     FileUtils.chmod 0640, zip_filename if File.exist?(zip_filename)
@@ -254,7 +253,6 @@ class WorkPaper < ApplicationRecord
       Zip::File.foreach(zip_path) do |entry|
         if entry.file?
           filename = File.join base_dir, entry.name
-          ext = File.extname(filename)[1..-1]
 
           if filename != zip_path && !File.exist?(filename)
             entry.extract(filename)
@@ -262,18 +260,17 @@ class WorkPaper < ApplicationRecord
 
           if File.basename(filename) != pdf_cover_name &&
               File.basename(filename) != pdf_cover_name(nil, true)
-            self.file_model.update_column :file_file_name, File.basename(filename)
-            self.file_model.file_file_size = File.size(filename)
-            self.file_model.save!
-            self.file_model.reload
+            self.file_model.file = File.open(filename)
           end
         end
       end
 
+      self.file_model.save! if self.file_model.changed?
+
       # Pregunta para evitar eliminar el archivo si es un zip con el mismo
       # nombre
       unless File.basename(zip_path) == self.file_model.identifier
-        FileUtils.rm zip_path
+        FileUtils.rm zip_path if File.exists? zip_path
       end
     end
   end
