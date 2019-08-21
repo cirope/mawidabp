@@ -6,7 +6,7 @@ class Tag < ApplicationRecord
   include Tags::AttributeTypes
   include Tags::Defaults
   include Tags::Icons
-  include Tags::JSON
+  include Tags::Json
   include Tags::Kinds
   include Tags::Options
   include Tags::Scopes

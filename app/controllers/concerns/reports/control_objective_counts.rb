@@ -1,7 +1,7 @@
 module Reports::ControlObjectiveCounts
   extend ActiveSupport::Concern
 
-  include Reports::PDF
+  include Reports::Pdf
   include Reports::Period
 
   def control_objective_counts
@@ -83,7 +83,7 @@ module Reports::ControlObjectiveCounts
     def control_objective_counts_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = ::CSV.generate(options) do |csv|
+      csv_str = CSV.generate(options) do |csv|
         csv << control_objective_counts_csv_headers
 
         control_objective_counts_csv_data_rows.each { |row| csv << row }

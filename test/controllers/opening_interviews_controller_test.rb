@@ -34,11 +34,11 @@ class OpeningInterviewsControllerTest < ActionController::TestCase
     get :new, params: { review_id: @opening_interview.review_id }, xhr: true,
       as: :js
     assert_response :success
-    assert_equal Mime[:js], @response.content_type
+    assert_match Mime[:js].to_s, @response.content_type
 
     get :new, params: { review_id: nil}, xhr: true, as: :js
     assert_response :success
-    assert_equal Mime[:js], @response.content_type
+    assert_match Mime[:js].to_s, @response.content_type
   end
 
   test 'should create opening interview' do
@@ -88,7 +88,7 @@ class OpeningInterviewsControllerTest < ActionController::TestCase
   test 'should show opening interview as PDF' do
     get :show, params: { id: @opening_interview }, as: :pdf
     assert_response :redirect
-    assert_equal Mime[:pdf], @response.content_type
+    assert_match Mime[:pdf].to_s, @response.content_type
   end
 
   test 'should get edit' do

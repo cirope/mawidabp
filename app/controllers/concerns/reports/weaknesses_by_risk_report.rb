@@ -1,7 +1,7 @@
 module Reports::WeaknessesByRiskReport
   extend ActiveSupport::Concern
 
-  include Reports::PDF
+  include Reports::Pdf
   include Reports::Period
 
   def weaknesses_by_risk_report

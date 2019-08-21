@@ -2,7 +2,7 @@ module Reports::WeaknessesBrief
   extend ActiveSupport::Concern
 
   include ActionView::Helpers::TextHelper
-  include Reports::PDF
+  include Reports::Pdf
   include Reports::Period
 
   def weaknesses_brief
@@ -90,7 +90,7 @@ module Reports::WeaknessesBrief
     def weaknesses_brief_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = ::CSV.generate(options) do |csv|
+      csv_str = CSV.generate(options) do |csv|
         csv << weaknesses_brief_csv_headers
 
         weaknesses_brief_csv_data_rows.each { |row| csv << row }

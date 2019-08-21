@@ -20,7 +20,7 @@ module MawidaBP
     end
 
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.2
+    config.load_defaults 6.0
 
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W(#{config.root}/lib)
@@ -33,6 +33,9 @@ module MawidaBP
     # and follow the adapter's specific installation
     # and deployment instructions.
     config.active_job.queue_adapter = :sidekiq
+
+    # Permitted hosts
+    config.hosts << /\A\w+\.#{ENV['APP_HOST']}\z/
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

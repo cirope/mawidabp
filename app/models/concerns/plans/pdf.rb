@@ -1,4 +1,4 @@
-module Plans::PDF
+module Plans::Pdf
   extend ActiveSupport::Concern
 
   def to_pdf organization = nil, include_details: true, business_unit_type: nil

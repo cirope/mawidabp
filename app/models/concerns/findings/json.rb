@@ -1,4 +1,4 @@
-module Findings::JSON
+module Findings::Json
   extend ActiveSupport::Concern
 
   def as_json options = nil

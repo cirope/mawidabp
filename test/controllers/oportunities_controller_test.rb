@@ -85,7 +85,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:oportunity)
 
-    assert_equal Mime[:js], @response.content_type
+    assert_match Mime[:js].to_s, @response.content_type
     assert_template 'oportunities/show'
   end
 
@@ -124,22 +124,22 @@ class OportunitiesControllerTest < ActionController::TestCase
           :business_unit_ids => [business_units(:business_unit_three).id],
           :finding_user_assignments_attributes => [
             {
-              :user_id => users(:bare).id, :process_owner => '0'
+              :user_id => users(:bare).id, :process_owner => ''
             },
             {
               :user_id => users(:audited).id, :process_owner => '1'
             },
             {
-              :user_id => users(:auditor).id, :process_owner => '0'
+              :user_id => users(:auditor).id, :process_owner => ''
             },
             {
-              :user_id => users(:manager).id, :process_owner => '0'
+              :user_id => users(:manager).id, :process_owner => ''
             },
             {
-              :user_id => users(:supervisor).id, :process_owner => '0'
+              :user_id => users(:supervisor).id, :process_owner => ''
             },
             {
-              :user_id => users(:administrator).id, :process_owner => '0'
+              :user_id => users(:administrator).id, :process_owner => ''
             }
           ],
           :work_papers_attributes => [
@@ -200,7 +200,7 @@ class OportunitiesControllerTest < ActionController::TestCase
               {
                 :id => finding_user_assignments(:confirmed_oportunity_bare).id,
                 :user_id => users(:bare).id,
-                :process_owner => '0'
+                :process_owner => ''
               },
               {
                 :id => finding_user_assignments(:confirmed_oportunity_audited).id,
@@ -210,22 +210,22 @@ class OportunitiesControllerTest < ActionController::TestCase
               {
                 :id => finding_user_assignments(:confirmed_oportunity_auditor).id,
                 :user_id => users(:auditor).id,
-                :process_owner => '0'
+                :process_owner => ''
               },
               {
                 :id => finding_user_assignments(:confirmed_oportunity_manager).id,
                 :user_id => users(:manager).id,
-                :process_owner => '0'
+                :process_owner => ''
               },
               {
                 :id => finding_user_assignments(:confirmed_oportunity_supervisor).id,
                 :user_id => users(:supervisor).id,
-                :process_owner => '0'
+                :process_owner => ''
               },
               {
                 :id => finding_user_assignments(:confirmed_oportunity_administrator).id,
                 :user_id => users(:administrator).id,
-                :process_owner => '0'
+                :process_owner => ''
               }
             ],
             :work_papers_attributes => [

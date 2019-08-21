@@ -1,7 +1,7 @@
 module Reports::WeaknessesCurrentSituation
   extend ActiveSupport::Concern
 
-  include Reports::PDF
+  include Reports::Pdf
   include Reports::Period
 
   def weaknesses_current_situation
@@ -134,7 +134,7 @@ module Reports::WeaknessesCurrentSituation
     def weaknesses_current_situation_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = ::CSV.generate(options) do |csv|
+      csv_str = CSV.generate(options) do |csv|
         csv << weaknesses_current_situation_csv_headers
 
         weaknesses_current_situation_csv_data_rows.each { |row| csv << row }

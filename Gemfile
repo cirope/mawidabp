@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 5.2.3'
+gem 'rails', '~> 6.0.0'
 
 gem 'pg'
 gem 'jquery-rails'
@@ -13,7 +13,7 @@ gem 'validates_timeliness'
 gem 'redcarpet'
 gem 'whenever'
 gem 'paper_trail'
-gem 'carrierwave'
+gem 'carrierwave', '~> 1.0'
 gem 'acts_as_tree'
 gem 'net-ldap'
 gem 'rubyzip', require: 'zip'

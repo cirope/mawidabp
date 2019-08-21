@@ -1,4 +1,4 @@
-module ConclusionReviews::BicPDF
+module ConclusionReviews::BicPdf
   extend ActiveSupport::Concern
 
   def bic_pdf organization = nil, *args

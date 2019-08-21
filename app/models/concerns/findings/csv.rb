@@ -1,4 +1,4 @@
-module Findings::CSV
+module Findings::Csv
   extend ActiveSupport::Concern
 
   LINE_BREAK             = "\r\n"
@@ -135,7 +135,7 @@ module Findings::CSV
     def to_csv completed: 'incomplete', corporate: false
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = ::CSV.generate(options) do |csv|
+      csv_str = CSV.generate(options) do |csv|
         csv << column_headers(completed, corporate)
 
         all_with_inclusions.each { |f| csv << f.to_csv_a(corporate) }

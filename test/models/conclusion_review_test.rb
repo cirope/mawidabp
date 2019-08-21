@@ -170,7 +170,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :observations => 'Some observations',
         :scope => 'Some scope',
         :main_recommendations => 'Some recommendations',
-        :affects_compliance => '0'
+        :affects_compliance => ''
       )
 
     assert @conclusion_review.invalid?
