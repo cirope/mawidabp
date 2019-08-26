@@ -7,7 +7,9 @@ class Findings::AnswersController < ApplicationController
   before_action :set_finding, only: [:create]
 
   def create
-    @finding_answer = @finding.finding_answers.create finding_answer_params
+    @finding_answer = @finding.finding_answers.build finding_answer_params
+
+    @finding.save
 
     flash.notice = t 'flash.finding_answers.create.notice' if @finding_answer.persisted?
 
