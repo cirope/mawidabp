@@ -22,11 +22,13 @@ module Findings::Csv
       (respond_to?(:risk_text) ? priority_text : '' unless HIDE_WEAKNESS_PRIORITY),
       auditeds_as_process_owner.join('; '),
       audited_users.join('; '),
+      auditor_users.join('; '),
       best_practice.name,
       process_control.name,
       control_objective_item.control_objective_text,
       origination_date_text,
-      date_text,
+      follow_up_date_text,
+      solution_date_text,
       rescheduled_text,
       being_implemented? || awaiting? ? reschedule_count.to_s : '-',
       next_pending_task_date,
@@ -78,6 +80,14 @@ module Findings::Csv
       origination_date ? I18n.l(origination_date, format: :minimal) : '-'
     end
 
+    def follow_up_date_text
+      follow_up_date ? I18n.l(follow_up_date, format: :minimal) : '-'
+    end
+
+    def solution_date_text
+      solution_date ? I18n.l(solution_date, format: :minimal) : '-'
+    end
+
     def auditeds_as_process_owner
       process_owners.map &:full_name
     end
@@ -89,6 +99,10 @@ module Findings::Csv
       end
 
       auditeds.map &:full_name
+    end
+
+    def auditor_users
+      users.select(&:auditor?).map &:full_name
     end
 
     def process_control
@@ -132,11 +146,11 @@ module Findings::Csv
     end
 
   module ClassMethods
-    def to_csv completed: 'incomplete', corporate: false
+    def to_csv corporate: false
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
       csv_str = CSV.generate(options) do |csv|
-        csv << column_headers(completed, corporate)
+        csv << column_headers(corporate)
 
         all_with_inclusions.each { |f| csv << f.to_csv_a(corporate) }
       end
@@ -177,7 +191,7 @@ module Findings::Csv
         ].compact
       end
 
-      def column_headers completed, corporate
+      def column_headers corporate
         [
           (Organization.model_name.human if corporate),
           Review.model_name.human,
@@ -196,11 +210,13 @@ module Findings::Csv
           (Weakness.human_attribute_name('priority') unless HIDE_WEAKNESS_PRIORITY),
           FindingUserAssignment.human_attribute_name('process_owner'),
           I18n.t('finding.audited', count: 0),
+          I18n.t('finding.auditors', count: 0),
           BestPractice.model_name.human,
           ProcessControl.model_name.human,
           ControlObjectiveItem.human_attribute_name('control_objective_text'),
           Finding.human_attribute_name('origination_date'),
-          date_label(completed),
+          Finding.human_attribute_name('follow_up_date'),
+          Finding.human_attribute_name('solution_date'),
           Finding.human_attribute_name('rescheduled'),
           Finding.human_attribute_name('reschedule_count'),
           I18n.t('finding.next_pending_task_date'),
@@ -212,12 +228,6 @@ module Findings::Csv
           (FindingAnswer.human_attribute_name('commitment_date') if show_follow_up_timestamps?),
           (I18n.t('finding.finding_answers') if show_follow_up_timestamps?)
         ].compact
-      end
-
-      def date_label completed
-        column = completed == 'incomplete' ? 'follow_up_date' : 'solution_date'
-
-        Finding.human_attribute_name column
       end
   end
 end
