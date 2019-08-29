@@ -134,7 +134,6 @@ class FindingsController < ApplicationController
 
     def csv_options
       {
-        completed: params[:completed],
         corporate: current_organization.corporate?
       }
     end
