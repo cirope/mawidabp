@@ -6,6 +6,7 @@ class FindingUserAssignment < ApplicationRecord
   # Scopes
   scope :owners, -> { where(:process_owner => true) }
   scope :responsibles, -> { where(:responsible_auditor => true) }
+  scope :responsible_auditeds, -> { where(:responsible_audited => true) }
 
   # Callbacks
   before_save :can_be_modified?, :assign_finding_type, :users_notification

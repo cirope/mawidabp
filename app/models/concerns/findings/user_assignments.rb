@@ -9,6 +9,8 @@ module Findings::UserAssignments
       class_name: 'FindingUserAssignment'
     has_many :finding_responsible_assignments, -> { responsibles }, foreign_key: :finding_id,
       class_name: 'FindingUserAssignment'
+    has_many :finding_responsible_audited_assignments, -> { responsible_auditeds },
+      foreign_key: :finding_id, class_name: 'FindingUserAssignment'
     has_many :users, -> { order(last_name: :asc) }, through: :finding_user_assignments
     has_many :users_that_can_act_as_audited, -> { can_act_as(:audited) },
       through: :finding_user_assignments, source: :user
@@ -36,6 +38,10 @@ module Findings::UserAssignments
 
   def responsible_auditors
     finding_responsible_assignments.map &:user
+  end
+
+  def responsible_auditeds
+    finding_responsible_audited_assignments.map &:user
   end
 
   def import_users

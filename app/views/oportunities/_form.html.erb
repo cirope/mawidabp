@@ -94,11 +94,16 @@
     <div class="col-md-6">
       <h5><strong><%= User.model_name.human %></strong></h5>
     </div>
-    <div class="col-md-2">
-      <h5><strong><%= FindingUserAssignment.human_attribute_name 'responsible_auditor' %></strong></h5>
-    </div>
-    <div class="col-md-2">
-      <h5><strong><%= FindingUserAssignment.human_attribute_name 'process_owner' %></strong></h5>
+    <div class="col-md-5">
+      <div class="col-md-4">
+        <h5><strong><%= FindingUserAssignment.human_attribute_name 'responsible_auditor' %></strong></h5>
+      </div>
+      <div class="col-md-4">
+        <h5><strong><%= FindingUserAssignment.human_attribute_name 'process_owner' %></strong></h5>
+      </div>
+      <div class="col-md-4">
+        <h5><strong><%= FindingUserAssignment.human_attribute_name 'responsible_audited' %></strong></h5>
+      </div>
     </div>
   </div>
 

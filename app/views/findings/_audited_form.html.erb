@@ -80,6 +80,7 @@
     <% audited, auditors = *@finding.users.partition(&:can_act_as_audited?) %>
     <% process_owners = @finding.process_owners %>
     <% responsible_auditors = @finding.responsible_auditors %>
+    <% responsible_auditeds = @finding.responsible_auditeds %>
     <h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
     <table class="table table-condensed table-hover">
       <thead>
@@ -91,9 +92,16 @@
       <tbody>
         <% [audited.size, auditors.size].max.times do %>
           <tr>
-            <td><%= process_owners.include?(audited.first) ?
-                audited.shift.try(:full_name) + " (#{FindingUserAssignment.human_attribute_name(:process_owner)})" :
-                audited.shift.try(:full_name) %>
+            <td>
+              <%=
+                if process_owners.include?(audited.first)
+                  audited.shift.try(:full_name) + " (#{FindingUserAssignment.human_attribute_name(:process_owner)})"
+                elsif responsible_auditeds.include?(audited.first)
+                  audited.shift.try(:full_name) + " (#{FindingUserAssignment.human_attribute_name(:responsible_audited)})"
+                else
+                  audited.shift.try(:full_name)
+                end
+              %>
             </td>
             <td><%= responsible_auditors.include?(auditors.first) ?
                   auditors.shift.try(:full_name) + " (#{FindingUserAssignment.human_attribute_name(:responsible_auditor)})" :
