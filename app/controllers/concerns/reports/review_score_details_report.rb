@@ -1,5 +1,5 @@
 module Reports::ReviewScoreDetailsReport
-  include Reports::PDF
+  include Reports::Pdf
   include Parameters::Risk
 
   def review_score_details_report
@@ -34,7 +34,7 @@ module Reports::ReviewScoreDetailsReport
     def review_score_details_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = ::CSV.generate(options) do |csv|
+      csv_str = CSV.generate(options) do |csv|
         csv << review_score_details_csv_headers
 
         review_score_details_csv_rows.each { |row| csv << row }

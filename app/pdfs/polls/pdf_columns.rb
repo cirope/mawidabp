@@ -1,4 +1,4 @@
-module Polls::PDFColumns
+module Polls::PdfColumns
   extend ActiveSupport::Concern
 
   def multi_choice_columns_order

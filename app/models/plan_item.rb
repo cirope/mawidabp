@@ -5,7 +5,7 @@ class PlanItem < ApplicationRecord
   include PlanItems::AttributeTypes
   include PlanItems::Comparable
   include PlanItems::DestroyValidation
-  include PlanItems::PDF
+  include PlanItems::Pdf
   include PlanItems::ResourceUtilizations
   include PlanItems::Scopes
   include PlanItems::Spread

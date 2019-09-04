@@ -1,5 +1,5 @@
-module Reports::QAIndicators
-  include Reports::PDF
+module Reports::QaIndicators
+  include Reports::Pdf
 
   def qa_indicators
     init_qa_vars

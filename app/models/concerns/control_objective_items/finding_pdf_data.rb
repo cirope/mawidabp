@@ -1,4 +1,4 @@
-module ControlObjectiveItems::FindingPDFData
+module ControlObjectiveItems::FindingPdfData
   extend ActiveSupport::Concern
 
   def finding_pdf_data finding, hide: [], show: []

@@ -1,8 +1,10 @@
-module LdapConfigs::LDAPService
+module LdapConfigs::LdapService
   extend ActiveSupport::Concern
 
   included do
-    scope :with_user, -> { where.not(user: nil, encrypted_password: nil) }
+    scope :with_user, -> {
+      where.not(user: nil).where.not encrypted_password: nil
+    }
 
     before_save :encrypt_password, if: :password?
   end

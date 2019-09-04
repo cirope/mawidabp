@@ -1,4 +1,4 @@
-module ConclusionReviews::CroPDF
+module ConclusionReviews::CroPdf
   extend ActiveSupport::Concern
 
   def cro_pdf organization = nil, *args

@@ -35,7 +35,7 @@ class Findings::WorkPapersControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:js], @response.content_type
+    assert_match Mime[:js].to_s, @response.content_type
     assert @finding.reload.work_papers.last.file_model
   end
 end

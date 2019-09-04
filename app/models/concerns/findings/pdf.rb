@@ -1,4 +1,4 @@
-module Findings::PDF
+module Findings::Pdf
   extend ActiveSupport::Concern
 
   def to_pdf organization = nil

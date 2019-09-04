@@ -90,7 +90,7 @@ class WorkflowTest < ActiveSupport::TestCase
   test 'allow overload' do
     assert !@workflow.allow_overload?
 
-    @workflow.allow_overload = '0'
+    @workflow.allow_overload = ''
 
     assert !@workflow.allow_overload?
 

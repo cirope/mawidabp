@@ -1,4 +1,4 @@
-module ConclusionReviews::GalPDF
+module ConclusionReviews::GalPdf
   extend ActiveSupport::Concern
 
   def gal_pdf organization = nil, *args

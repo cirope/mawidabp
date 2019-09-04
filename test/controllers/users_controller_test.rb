@@ -60,7 +60,7 @@ class UsersControllerTest < ActionController::TestCase
             manager_id: users(:administrator).id,
             logged_in: false,
             enable: true,
-            send_notification_email: true,
+            send_notification_email: '1',
             organization_roles_attributes: [
               {
                 organization_id: organizations(:cirope).id,
@@ -88,7 +88,7 @@ class UsersControllerTest < ActionController::TestCase
             manager_id: users(:administrator).id,
             logged_in: false,
             enable: true,
-            send_notification_email: false,
+            send_notification_email: '',
             organization_roles_attributes: [
               {
                 organization_id: organizations(:cirope).id,
@@ -124,7 +124,7 @@ class UsersControllerTest < ActionController::TestCase
             language: I18n.available_locales.first.to_s,
             logged_in: false,
             enable: true,
-            send_notification_email: false,
+            send_notification_email: '',
             organization_roles_attributes: [
               {
                 id: organization_roles(:admin_role_for_administrator_in_cirope).id,
@@ -171,7 +171,7 @@ class UsersControllerTest < ActionController::TestCase
               notes: 'Updated user notes',
               logged_in: false,
               enable: true,
-              send_notification_email: true,
+              send_notification_email: '1',
               organization_roles_attributes: [
                 {
                   organization_id: organizations(:google).id,

@@ -1,5 +1,5 @@
 module Reports::WeaknessesByAuditType
-  include Reports::PDF
+  include Reports::Pdf
   include Reports::Period
   include Parameters::Risk
 

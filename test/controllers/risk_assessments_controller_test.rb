@@ -112,14 +112,14 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
   test 'should show risk assessment as PDF' do
     get :show, params: { id: @risk_assessment }, as: :pdf
     assert_response :redirect
-    assert_equal Mime[:pdf], @response.content_type
+    assert_match Mime[:pdf].to_s, @response.content_type
   end
 
   test 'should show risk assessment as CSV' do
     get :show, params: { id: @risk_assessment }, as: :csv
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'should get edit' do
@@ -155,7 +155,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     get :new_item, params: { id: @risk_assessment }, xhr: true, as: :js
 
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_match Mime[:js].to_s, @response.content_type
   end
 
   test 'should get add items for best practices' do
@@ -166,7 +166,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     }, xhr: true, as: :js
 
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_match Mime[:js].to_s, @response.content_type
   end
 
   test 'should get add items for business unit types' do
@@ -177,7 +177,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     }, xhr: true, as: :js
 
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_match Mime[:js].to_s, @response.content_type
   end
 
   test 'should get fetch item' do
@@ -187,7 +187,7 @@ class RiskAssessmentsControllerTest < ActionController::TestCase
     }, xhr: true, as: :js
 
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_match Mime[:js].to_s, @response.content_type
   end
 
   test 'should sort by risk' do
