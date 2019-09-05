@@ -35,7 +35,7 @@ module MawidaBP
     config.active_job.queue_adapter = :sidekiq
 
     # Permitted hosts
-    config.hosts << /\A\w+\.#{ENV['APP_HOST']}\z/
+    config.hosts << /\A[\w\d-]+\.#{ENV['APP_HOST']}\z/
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
