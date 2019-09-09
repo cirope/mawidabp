@@ -122,7 +122,7 @@ module ConclusionReviews::CroPdf
       put_cro_section_dest_on pdf, 'findings'
 
       if review_has_findings
-        put_default_control_objective_findings_on pdf, grouped_objectives,
+        put_cro_default_control_objective_findings_on pdf, grouped_objectives,
           :weaknesses, use_finals
       else
         pdf.move_down PDF_FONT_SIZE
@@ -141,8 +141,9 @@ module ConclusionReviews::CroPdf
           coi     = finding.control_objective_item
 
           pdf.move_down PDF_FONT_SIZE
-          pdf.text coi.finding_pdf_data(finding, show: %w(review)),
-            align: :justify, inline_format: true
+          pdf.text coi.finding_pdf_data(
+            finding, show: %w(review), hide: %(audit_comments)
+          ), align: :justify, inline_format: true
         end
       else
         pdf.move_down PDF_FONT_SIZE
@@ -154,8 +155,6 @@ module ConclusionReviews::CroPdf
     def put_cro_conclusion_section_on pdf
       pdf.move_down PDF_FONT_SIZE
       put_cro_section_dest_on pdf, 'conclusion'
-
-      put_default_score_text_on pdf
 
       if conclusion.present?
         pdf.text conclusion, align: :justify, inline_format: true
@@ -220,5 +219,33 @@ module ConclusionReviews::CroPdf
       end
 
       pdf.y = y_pointer
+    end
+
+    def put_cro_default_control_objective_findings_on pdf, grouped_control_objectives, type, use_finals
+      grouped_control_objectives.each do |process_control, cois|
+        has_findings = has_findings_for_review? cois, type, use_finals
+
+        if has_findings
+          cois.sort.each do |coi|
+            coi_findings = coi_findings_for coi, type, use_finals
+
+            if coi_findings.not_revoked.present?
+              findings = coi_findings.not_revoked.sort_for_review
+
+              findings.each do |f|
+                hide = %w(audit_comments)
+
+                if f.origination_date && review.period.contains?(f.origination_date)
+                  hide << 'origination_date'
+                end
+
+                pdf.move_down PDF_FONT_SIZE
+                pdf.text coi.finding_pdf_data(f, hide: hide), align: :justify,
+                  inline_format: true
+              end
+            end
+          end
+        end
+      end
     end
 end

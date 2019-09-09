@@ -22,4 +22,8 @@ class PlanItem < ApplicationRecord
   has_one :review
   has_one :conclusion_final_review, through: :review
   has_one :business_unit_type, through: :business_unit
+
+  def project_with_dates
+    "#{project} (#{I18n.l(start)} -> #{I18n.l(self.end)})"
+  end
 end

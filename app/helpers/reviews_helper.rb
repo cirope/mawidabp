@@ -25,7 +25,7 @@ module ReviewsHelper
     end
 
     form.grouped_collection_select :plan_item_id, business_unit_types,
-      :plan_items, :name, :id, :project, {:prompt => true},
+      :plan_items, :name, :id, :project_with_dates, {:prompt => true},
       {:class => 'form-control', :disabled => readonly}
   end
 
