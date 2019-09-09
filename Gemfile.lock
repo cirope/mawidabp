@@ -209,7 +209,7 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     ruby-ntlm (0.0.4)
-    ruby-vips (2.0.14)
+    ruby-vips (2.0.15)
       ffi (~> 1.9)
     ruby_dep (1.5.0)
     rubyzip (1.2.4)
@@ -221,11 +221,11 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    sidekiq (5.2.7)
-      connection_pool (~> 2.2, >= 2.2.2)
-      rack (>= 1.5.0)
-      rack-protection (>= 1.5.0)
-      redis (>= 3.3.5, < 5)
+    sidekiq (6.0.0)
+      connection_pool (>= 2.2.2)
+      rack (>= 2.0.0)
+      rack-protection (>= 2.0.0)
+      redis (>= 4.1.0)
     simple_form (4.1.0)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
@@ -308,7 +308,7 @@ DEPENDENCIES
   ruby-ntlm
   rubyzip
   sassc-rails
-  sidekiq (< 6.0)
+  sidekiq
   simple_form
   timecop
   uglifier
