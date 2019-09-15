@@ -1,0 +1,11 @@
+class Registration
+  include ActiveModel::Model
+  include ActiveModel::Validations
+
+  include Users::BaseValidations
+  include Registrations::Persistence
+  include Registrations::Validations
+
+  attr_accessor :organization, :user, :name, :last_name, :email,
+    :language
+end

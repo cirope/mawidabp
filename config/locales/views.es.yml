@@ -389,6 +389,12 @@ es:
       mark_as_read: 'Marcar como leído'
       readed_on: 'Marcado como leído el %{on}'
 
+  registrations:
+    new:
+      title: 'Nueva Organización'
+    created:
+      body: 'Su registro está completo, recibirá un email con instrucciones para ingresar.'
+
   report:
     index_title: 'Listado de reportes'
 
