@@ -12,8 +12,11 @@ module Registrations::Persistence
       NotifierMailer.welcome_email(user).deliver_later
 
       user
-    rescue ActiveRecord::RecordInvalid => e
-      self.errors.add :base, e.message # aca deberiamos poner algo mas onda "contacte a soporte"
+    rescue ActiveRecord::RecordInvalid => ex
+      ::Rails.logger.error ex
+
+      self.errors.add :base, ex.message
+
       raise ActiveRecord::Rollback
     end
   rescue ActiveRecord::Rollback
@@ -26,7 +29,7 @@ module Registrations::Persistence
       Group.create!(
         name:                    organization,
         admin_email:             email,
-        description:             'Registro público',
+        description:             organization,
         send_notification_email: false
       )
     end
@@ -45,7 +48,7 @@ module Registrations::Persistence
         name:      self.name,
         last_name: self.last_name,
         email:     self.email,
-        language:  self.language,
+        language:  'es',
         enable:    true
       )
 

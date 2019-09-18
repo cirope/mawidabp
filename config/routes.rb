@@ -432,7 +432,9 @@ Rails.application.routes.draw do
 
   resources :users
 
-  resources :registrations, only: [:new, :create]
+  resources :registrations, only: [:new, :create] do
+    get :created, on: :collection
+  end
 
   root 'sessions#new'
 
