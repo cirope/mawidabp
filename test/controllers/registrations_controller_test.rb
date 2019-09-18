@@ -25,7 +25,7 @@ class RegistrationsControllerTest < ActionController::TestCase
           }
         }
 
-        assert_redirected_to created_registrations_url
+        assert_redirected_to registration_url 1
       end
     end
   end

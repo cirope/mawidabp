@@ -62,9 +62,13 @@ class Role < ApplicationRecord
     self.touch if !self.new_record? && self.privileges.any?(&:changed?)
   end
 
-  # Definición dinámica de todos los métodos "tipo?"
+  # Definición dinámica de todos los métodos "tipo?" y scopes ".tipo"
   TYPES.each do |type, value|
     define_method(:"#{type}?") { self.role_type == value }
+
+    define_singleton_method type do
+      find_by(role_type: value)
+    end
   end
 
   def get_type

@@ -3,6 +3,9 @@ class RegistrationsController < ApplicationController
 
   respond_to :html
 
+  def show
+  end
+
   def new
     @registration = Registration.new
   end
@@ -12,10 +15,7 @@ class RegistrationsController < ApplicationController
 
     @registration.save
 
-    respond_with @registration, location: created_registrations_path
-  end
-
-  def created
+    respond_with @registration, location: registration_path(1)
   end
 
   private
@@ -28,7 +28,7 @@ class RegistrationsController < ApplicationController
 
     def check_public_registration_enabled?
       unless ENABLE_PUBLIC_REGISTRATION
-        redirect_to root_path, alert: t('message.public_registration_disabled')
+        redirect_to root_path, alert: t('message.insufficient_privileges')
       end
     end
 end

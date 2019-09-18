@@ -12,7 +12,6 @@ es:
     attributes:
       registration:
         email: 'Correo'
-        language: 'Lenguaje'
         last_name: 'Apellido'
         name: 'Nombre'
         organization: 'Organización'

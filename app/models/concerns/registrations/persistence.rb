@@ -5,9 +5,9 @@ module Registrations::Persistence
     return false unless valid?
 
     User.transaction do
-      group = create_group
-      org   = create_organization group
-      user  = create_user org
+      group        = create_group
+      organization = create_organization group
+      user         = create_user organization
 
       NotifierMailer.welcome_email(user).deliver_later
 
@@ -15,7 +15,7 @@ module Registrations::Persistence
     rescue ActiveRecord::RecordInvalid => ex
       ::Rails.logger.error ex
 
-      self.errors.add :base, ex.message
+      errors.add :base, ex.message
 
       raise ActiveRecord::Rollback
     end
@@ -42,7 +42,7 @@ module Registrations::Persistence
       )
     end
 
-    def create_user org
+    def create_user organization
       user = User.new(
         user:      self.user,
         name:      self.name,
@@ -52,7 +52,9 @@ module Registrations::Persistence
         enable:    true
       )
 
-      user.organization_roles.build organization: org, role: org.roles.first
+      role = organization.roles.admin
+
+      user.organization_roles.build organization: organization, role: role
       user.save!
     end
 end

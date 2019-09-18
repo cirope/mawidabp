@@ -14,12 +14,12 @@ module Registrations::Validations
     def organization_uniqueness
       return if errors[:organization].any?
 
-      org_name = organization.downcase
+      name = organization.downcase
 
-      if Group.where('LOWER(name) = :name', name: org_name).exists? ||
-         Organization.where('LOWER(name) = :name', name: org_name).exists?
+      if Group.where('LOWER(name) = :name', name: name).exists? ||
+         Organization.where('LOWER(name) = :name', name: name).exists?
 
-        self.errors.add :organization, :taken
+        errors.add :organization, :taken
       end
     end
 
@@ -29,7 +29,7 @@ module Registrations::Validations
       prefix = organization.parameterize
 
       if APP_ADMIN_PREFIXES.include?(prefix) || Organization.where(prefix: prefix).exists?
-        self.errors.add :organization, :taken # ?
+        errors.add :organization, :taken
       end
     end
 
@@ -37,7 +37,7 @@ module Registrations::Validations
       return if errors[:email].any?
 
       if Group.where('LOWER(admin_email) = :email', email: self.email.downcase).exists?
-        self.errors.add :email, :taken
+        errors.add :email, :taken
       end
     end
 end

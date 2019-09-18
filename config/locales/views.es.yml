@@ -392,7 +392,8 @@ es:
   registrations:
     new:
       title: 'Nueva Organización'
-    created:
+    show:
+      title: 'Organización creada'
       body: 'Su registro está completo, recibirá un correo con instrucciones para ingresar.'
 
   report:
