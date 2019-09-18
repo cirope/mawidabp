@@ -393,7 +393,7 @@ es:
     new:
       title: 'Nueva Organización'
     created:
-      body: 'Su registro está completo, recibirá un email con instrucciones para ingresar.'
+      body: 'Su registro está completo, recibirá un correo con instrucciones para ingresar.'
 
   report:
     index_title: 'Listado de reportes'
