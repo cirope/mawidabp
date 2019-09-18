@@ -9,8 +9,7 @@ class RegistrationTest < ActiveSupport::TestCase
       user:         'public_admin',
       name:         'Jane',
       last_name:    'Doe',
-      email:        'admin@public.org',
-      language:     'es'
+      email:        'admin@public.org'
     )
   end
 
@@ -25,13 +24,11 @@ class RegistrationTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @registration.name = nil
     @registration.last_name = nil
-    @registration.language = '   '
     @registration.email = '  '
 
     assert @registration.invalid?
     assert_error @registration, :name, :blank
     assert_error @registration, :last_name, :blank
-    assert_error @registration, :language, :blank
     assert_error @registration, :email, :blank
   end
 
