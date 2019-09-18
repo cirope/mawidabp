@@ -4,11 +4,15 @@ class RegistrationsControllerTest < ActionController::TestCase
   include ActionMailer::TestHelper
 
   test 'new registration' do
+    skip unless ENABLE_PUBLIC_REGISTRATION
+
     get :new
     assert_response :success
   end
 
   test 'create registration' do
+    skip unless ENABLE_PUBLIC_REGISTRATION
+
     assert_enqueued_emails 1 do
       assert_difference ['Group.count', 'Organization.count', 'User.count'] do
         post :create, params: {
@@ -20,19 +24,21 @@ class RegistrationsControllerTest < ActionController::TestCase
             email:        'admin@public.org'
           }
         }
+
+        assert_redirected_to created_registrations_url
       end
     end
-
-    assert_redirected_to created_registrations_url
   end
 
   test 'incomplete registration' do
+    skip unless ENABLE_PUBLIC_REGISTRATION
+
     assert_enqueued_emails 0 do
       assert_no_difference ['Group.count', 'Organization.count', 'User.count'] do
         post :create, params: {
           registration: {
             organization: 'public org',
-            user:         'public_admin',
+            email:        'admin@public.org',
             name:         'Jane'
           }
         }
@@ -41,5 +47,12 @@ class RegistrationsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_template 'registrations/new'
+  end
+
+  test 'public registration disabled' do
+    skip if ENABLE_PUBLIC_REGISTRATION
+
+    get :new
+    assert_redirected_to root_url
   end
 end

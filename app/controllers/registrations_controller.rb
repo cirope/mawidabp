@@ -1,5 +1,5 @@
 class RegistrationsController < ApplicationController
-  before_action :set_title
+  before_action :check_public_registration_enabled?, :set_title
 
   respond_to :html
 
@@ -24,5 +24,11 @@ class RegistrationsController < ApplicationController
       params.require(:registration).permit(
         :organization, :user, :name, :last_name, :email
       )
+    end
+
+    def check_public_registration_enabled?
+      unless ENABLE_PUBLIC_REGISTRATION
+        redirect_to root_path, alert: t('message.public_registration_disabled')
+      end
     end
 end

@@ -6,6 +6,7 @@ module Users::Validations
     validates :password, length: { maximum: 128 }, allow_nil: true, allow_blank: true
     validates :function, :salt, :change_password_hash, length: { maximum: 255 },
       allow_nil: true, allow_blank: true
+    validates :language, length: { maximum: 10 }, presence: true
     validates :password, confirmation: true, unless: :is_encrypted?
     validate :validate_manager
     validate :validate_roles, on: :create
