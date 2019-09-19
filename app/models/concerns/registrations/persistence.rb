@@ -4,7 +4,7 @@ module Registrations::Persistence
   def save
     return false unless valid?
 
-    User.transaction do
+    ActiveRecord::Base.transaction do
       group        = create_group
       organization = create_organization group
       user         = create_user organization
