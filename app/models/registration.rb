@@ -6,5 +6,5 @@ class Registration
   include Registrations::Persistence
   include Registrations::Validations
 
-  attr_accessor :organization, :user, :name, :last_name, :email
+  attr_accessor :organization_name, :user, :name, :last_name, :email
 end

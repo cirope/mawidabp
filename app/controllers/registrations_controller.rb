@@ -15,14 +15,14 @@ class RegistrationsController < ApplicationController
 
     @registration.save
 
-    respond_with @registration, location: registration_path(1)
+    respond_with @registration, location: registration_path
   end
 
   private
 
     def registration_params
       params.require(:registration).permit(
-        :organization, :user, :name, :last_name, :email
+        :organization_name, :user, :name, :last_name, :email
       )
     end
 

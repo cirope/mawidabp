@@ -17,15 +17,15 @@ class RegistrationsControllerTest < ActionController::TestCase
       assert_difference ['Group.count', 'Organization.count', 'User.count'] do
         post :create, params: {
           registration: {
-            organization: 'public org',
-            user:         'public_admin',
-            name:         'Jane',
-            last_name:    'Doe',
-            email:        'admin@public.org'
+            organization_name: 'public org',
+            user:              'public_admin',
+            name:              'Jane',
+            last_name:         'Doe',
+            email:             'admin@public.org'
           }
         }
 
-        assert_redirected_to registration_url 1
+        assert_redirected_to registration_url
       end
     end
   end
@@ -37,9 +37,9 @@ class RegistrationsControllerTest < ActionController::TestCase
       assert_no_difference ['Group.count', 'Organization.count', 'User.count'] do
         post :create, params: {
           registration: {
-            organization: 'public org',
-            email:        'admin@public.org',
-            name:         'Jane'
+            organization_name: 'public org',
+            email:             'admin@public.org',
+            name:              'Jane'
           }
         }
       end

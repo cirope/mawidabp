@@ -4,6 +4,8 @@ class ApplicationControllerTest < ActionController::TestCase
   fixtures :users, :organizations
 
   setup do
+    @request.host = "#{organizations(:cirope).prefix}.test.host.co"
+
     @controller.send(:reset_session)
     @controller.send(:session)[:user_id] = users(:administrator).id
     @controller.send(:session)[:last_access] = 30.seconds.ago

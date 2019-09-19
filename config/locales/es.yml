@@ -65,7 +65,6 @@
     password_expired_x_days_ago:
       one: "Su contraseña expiró ayer"
       other: "Su contraseña expiró hace %{count} días"
-    public_registration_disabled: 'Registro no habilitado'
     search_link_title: "Filtrar listado (Ctrl + Espacio)"
     session_closed_correctly: "Sesión cerrada correctamente"
     session_expires_in_less_than_two_minutes: "Su sesión expira en menos de dos minutos"

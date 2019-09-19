@@ -27,18 +27,18 @@ module Registrations::Persistence
 
     def create_group
       Group.create!(
-        name:                    organization,
+        name:                    organization_name,
         admin_email:             email,
-        description:             organization,
+        description:             organization_name,
         send_notification_email: false
       )
     end
 
     def create_organization group
       group.organizations.create!(
-        name:        organization,
-        prefix:      organization.parameterize,
-        description: organization
+        name:        organization_name,
+        prefix:      organization_name.parameterize,
+        description: organization_name
       )
     end
 

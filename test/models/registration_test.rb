@@ -5,11 +5,11 @@ class RegistrationTest < ActiveSupport::TestCase
 
   setup do
     @registration = Registration.new(
-      organization: 'public org',
-      user:         'public_admin',
-      name:         'Jane',
-      last_name:    'Doe',
-      email:        'admin@public.org'
+      organization_name: 'public org',
+      user:              'public_admin',
+      name:              'Jane',
+      last_name:         'Doe',
+      email:             'admin@public.org'
     )
   end
 
@@ -22,11 +22,13 @@ class RegistrationTest < ActiveSupport::TestCase
   end
 
   test 'validates blank attributes' do
-    @registration.name = nil
-    @registration.last_name = nil
-    @registration.email = '  '
+    @registration.organization_name = nil
+    @registration.name              = nil
+    @registration.last_name         = nil
+    @registration.email             = '  '
 
     assert @registration.invalid?
+    assert_error @registration, :organization_name, :blank
     assert_error @registration, :name, :blank
     assert_error @registration, :last_name, :blank
     assert_error @registration, :email, :blank
@@ -40,10 +42,22 @@ class RegistrationTest < ActiveSupport::TestCase
   end
 
   test 'validates duplicated attributes' do
-    @registration.email = groups(:main_group).admin_email
+    @registration.email             = groups(:main_group).admin_email
+    @registration.organization_name = groups(:main_group).name
 
     assert @registration.invalid?
     assert_error @registration, :email, :taken
+    assert_error @registration, :organization_name, :taken
+
+    @registration.organization_name = organizations(:cirope).name
+
+    assert @registration.invalid?
+    assert_error @registration, :organization_name, :taken
+
+    @registration.organization_name = organizations(:cirope).prefix
+
+    assert @registration.invalid?
+    assert_error @registration, :organization_name, :taken
   end
 
   test 'validates length of attributes' do

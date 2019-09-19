@@ -432,7 +432,7 @@ Rails.application.routes.draw do
 
   resources :users
 
-  resources :registrations, only: [:show, :new, :create]
+  resource :registration, only: [:show, :new, :create]
 
   root 'sessions#new'
 
