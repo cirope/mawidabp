@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   def current_organization
     @current_organization ||= Organization.by_subdomain(
       request.subdomains.first
-    ) if APP_ADMIN_PREFIXES.exclude?(request.subdomains.first)
+    ) if request.subdomains.any? && APP_ADMIN_PREFIXES.exclude?(request.subdomains.first)
   end
   helper_method :current_organization
 

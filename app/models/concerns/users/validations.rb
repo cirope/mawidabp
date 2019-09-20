@@ -3,15 +3,11 @@ module Users::Validations
 
   included do
     validates :user, uniqueness: { case_sensitive: false }, unless: :ldap?
-    validates :user, length: { in: 3..30 }, pdf_encoding: true
-    validates :name, :last_name, :email, presence: true, length: { maximum: 100 },
-      pdf_encoding: true
     validates :password, length: { maximum: 128 }, allow_nil: true, allow_blank: true
     validates :function, :salt, :change_password_hash, length: { maximum: 255 },
       allow_nil: true, allow_blank: true
-    validates :password, confirmation: true, unless: :is_encrypted?
     validates :language, length: { maximum: 10 }, presence: true
-    validates :email, format: { with: EMAIL_REGEXP }, allow_nil: true, allow_blank: true
+    validates :password, confirmation: true, unless: :is_encrypted?
     validate :validate_manager
     validate :validate_roles, on: :create
     validate :validate_password

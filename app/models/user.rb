@@ -25,6 +25,7 @@ class User < ApplicationRecord
   include Users::Roles
   include Users::Scopes
   include Users::Search
+  include Users::BaseValidations
   include Users::Validations
   include Users::Tree
 

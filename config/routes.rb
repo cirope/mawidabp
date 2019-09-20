@@ -432,6 +432,8 @@ Rails.application.routes.draw do
 
   resources :users
 
+  resource :registration, only: [:show, :new, :create]
+
   root 'sessions#new'
 
   get 'private/:path', to: 'file_models#download', constraints: { path: /.+/ }
