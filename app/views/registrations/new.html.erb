@@ -1,0 +1,34 @@
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= simple_form_for @registration, url: registration_path do |f| %>
+      <div class="panel panel-default">
+        <div class="panel-heading text-center">
+          <!--[if lt IE 9]>
+            <img src="<%= image_path 'logo.png'  %>" alt="<%= t 'app_name' %>" height="40">
+          <![endif]-->
+          <!--[if gt IE 8]><!-->
+            <embed src="<%= image_path 'logo.svg' %>" type="image/svg+xml" height="40">
+          <!--<![endif]-->
+        </div>
+
+        <div class="panel-body">
+          <%= render 'shared/error_explanation', f: f %>
+
+          <div class="form-inputs">
+            <%= f.input :name, input_html: { maxlength: 100, autofocus: true } %>
+            <%= f.input :last_name, input_html: { maxlength: 100 } %>
+            <%= f.input :email, input_html: { maxlength: 100 } %>
+            <%= f.input :user, input_html: { maxlength: 30 } %>
+            <%= f.input :organization_name %>
+          </div>
+        </div>
+
+        <div class="panel-footer text-center">
+          <div class="form-actions">
+            <%= f.submit class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

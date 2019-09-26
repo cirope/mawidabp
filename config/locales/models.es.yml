@@ -4,6 +4,19 @@ es:
     updated_at: 'Última actualización'
     lock_version: 'Versión'
 
+  activemodel:
+    models:
+      registration:
+        one: 'Organización'
+        other: 'Organizaciones'
+    attributes:
+      registration:
+        email: 'Correo'
+        last_name: 'Apellido'
+        name: 'Nombre'
+        organization_name: 'Nombre de la organización'
+        user: 'Nombre de usuario'
+
   activerecord:
     models:
       achievement:
