@@ -1,3 +1,5 @@
+/* global State */
+
 jQuery(function ($) {
   var setExpiration = function (expired) {
     State.sessionExpire = State.sessionExpire || expired
