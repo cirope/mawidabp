@@ -13,8 +13,12 @@ class RegistrationsControllerTest < ActionController::TestCase
   test 'create registration' do
     skip unless ENABLE_PUBLIC_REGISTRATION
 
+    counts = %w[
+      Group.count Organization.count License.count User.count
+    ]
+
     assert_enqueued_emails 1 do
-      assert_difference ['Group.count', 'Organization.count', 'User.count'] do
+      assert_difference counts do
         post :create, params: {
           registration: {
             organization_name: 'public org',

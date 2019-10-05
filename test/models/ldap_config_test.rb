@@ -147,6 +147,24 @@ class LdapConfigTest < ActiveSupport::TestCase
     end
   end
 
+  test 'users limit reached' do
+    set_organization organizations(:google)
+
+    original_limit = Rails.application.credentials.auditors_limit
+
+    Rails.application.credentials.auditors_limit = 1
+
+    assert_no_difference 'User.count' do
+      @import = @ldap_config.import 'admin', 'admin123'
+    end
+
+    assert_includes @import.map { |r| r[:state] }, :errored
+    assert_includes @import.map { |r| r[:errors] },
+      User.new.errors.generate_message(:base, :auditors_limit_reached)
+
+    Rails.application.credentials.auditors_limit = original_limit
+  end
+
   test 'test encrypt and decrypt with Security lib' do
     phrase = 'I love dogs'
     encrypted_phrase = Security.encrypt(phrase)

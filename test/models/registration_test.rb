@@ -4,6 +4,8 @@ class RegistrationTest < ActiveSupport::TestCase
   include ActionMailer::TestHelper
 
   setup do
+    skip unless ENABLE_PUBLIC_REGISTRATION
+
     @registration = Registration.new(
       organization_name: 'public org',
       user:              'public_admin',
@@ -14,7 +16,11 @@ class RegistrationTest < ActiveSupport::TestCase
   end
 
   test 'create' do
-    assert_difference ['Group.count', 'Organization.count', 'User.count'] do
+    counts = %w[
+      Group.count Organization.count License.count User.count
+    ]
+
+    assert_difference counts do
       assert_enqueued_emails 1 do
         assert @registration.save
       end

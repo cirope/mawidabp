@@ -17,6 +17,7 @@ class LdapMailerTest < ActionMailer::TestCase
   test 'Notify with imported users' do
     org = organizations(:google)
     Current.organization = org
+    Current.group        = org.group
 
     ldap_config = ldap_configs(:google_ldap)
     imports = ldap_config.import('admin', 'admin123')
