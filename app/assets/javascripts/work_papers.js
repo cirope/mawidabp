@@ -1,3 +1,6 @@
+/* global lastWorkPaperCode */
+/* eslint-disable no-global-assign */
+
 jQuery(function ($) {
   $(document).on('keyup', '[data-work-paper-description]', function () {
     var description = $(this).val() || ''
@@ -12,10 +15,10 @@ jQuery(function ($) {
       fileInput.addClass('hidden')
   })
 
-  $(document).on('dynamic-item:removed', '.work_paper', function() {
+  $(document).on('dynamic-item:removed', '.work_paper', function () {
     var workPaperCode = $(this).find('input[name$="[code]"]').val()
 
-    if(workPaperCode === lastWorkPaperCode)
+    if (workPaperCode === lastWorkPaperCode)
       lastWorkPaperCode = lastWorkPaperCode.previous(3)
-  });
+  })
 })
