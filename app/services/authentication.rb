@@ -160,7 +160,7 @@ class Authentication
 
         user.is_an_important_change = false
         user.save(validate: false)
-      else
+      elsif @current_organization
         create_error_record user_name: @user.user, error_type: :on_login
       end
     end

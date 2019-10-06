@@ -1,17 +1,7 @@
-/*!
- * jQuery UI Bootstrap (1.0 alpha)
- * http://addyosmani.github.io/jquery-ui-bootstrap/
- *
- * Copyright 2012 - 2013, Addy Osmani
- * Dual licensed under the MIT or GPL Version 2 licenses.
- *
- * Portions copyright jQuery UI & Twitter Bootstrap
- */
+@import "bootstrap_variables";
+@import "bootstrap/functions";
+@import "bootstrap/variables";
 
-/********** VJ - Move to Less - Start *************/
-
-/* Layout helpers
-----------------------------------*/
 .ui-helper-hidden {
 	display: none;
 }
@@ -235,19 +225,19 @@
 ----------------------------------*/
 
 .ui-widget {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: 13px;
+	font-family: $font-family-sans-serif;
+	font-size: $font-size-base;
 }
 
 .ui-widget .ui-widget {
-	font-size: 13px;
+	font-size: $font-size-base;
 }
 
 .ui-widget input,
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family: $font-family-sans-serif;
 	font-size: inherit;
 }
 
@@ -340,7 +330,7 @@
 .ui-state-highlight p,
 .ui-state-error p,
 .ui-state-default p {
-	font-size: 13px;
+	font-size: $font-size-base;
 	font-weight: normal;
 	line-height: 18px;
 	margin:7px 15px;
@@ -797,7 +787,7 @@
 	display: inline-block;
 	padding: 6px 12px;
   	margin-bottom: 0;
-	font-size: 14px;
+	font-size: $font-size-base * 1.1;
 	font-weight: normal;
 	line-height: 1.428571429;
 	text-align: center;
@@ -847,7 +837,7 @@ fieldset[disabled] ui-button.ui-state-active {
 
 .ui-btn-lg{
 	padding: 10px 16px;
-  font-size: 18px;
+  font-size: $font-size-lg;
   line-height: 1.33;
   border-radius: 6px;
 }
@@ -855,7 +845,7 @@ fieldset[disabled] ui-button.ui-state-active {
 .ui-btn-sm,
 .ui-btn-xs {
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: $font-size-sm;
   line-height: 1.5;
   border-radius: 3px;
 }
@@ -892,8 +882,8 @@ input[type="button"].ui-btn-block {
 
 .ui-button-primary {
 	color: #ffffff;
-    background-color: #428bca;
-    border-color: #357ebd;
+    background-color: theme-color("primary");
+    border-color: theme-color-level("primary", $alert-border-level);
 }
 
 .ui-button-warning {
@@ -904,8 +894,8 @@ input[type="button"].ui-btn-block {
 
 .ui-button-info {
   color: #ffffff;
-  background-color: #5bc0de;
-  border-color: #46b8da;
+  background-color: theme-color("info");
+  border-color: theme-color-level("info", $alert-border-level);
 }
 .ui-button-danger {
 	color: #ffffff;
@@ -1072,8 +1062,8 @@ input.ui-button {
 
 .ui-buttonset .ui-state-active {
   color: #ffffff;
-  background-color: #428bca;
-  border-color: #357ebd;
+  background-color: theme-color("primary");
+  border-color: theme-color-level("primary", $alert-border-level);
 }
 
 .ui-buttonset .ui-state-active.ui-state-hover {
@@ -1172,8 +1162,8 @@ button.ui-button::-moz-focus-inner {
 .ui-menu .ui-menu-item a.ui-widget-content{
 	font-weight: bold;
 	margin: 0;
-    background-color: #428BCA;
-    border-color: #357EBD;
+    background-color: theme-color("primary");
+    border-color: theme-color-level("primary", $alert-border-level);
     color: #FFFFFF;
     display: block;
     white-space: nowrap;
@@ -1333,7 +1323,7 @@ button.ui-button::-moz-focus-inner {
 	border: 0 0 0 1px solid;
 	border-color: white;
 	padding: 5px 15px;
-	font-size: 18px;
+	font-size: $font-size-lg;
 	text-decoration: none;
 	-webkit-border-bottom-right-radius: 0; /* Safari 4 */
 	-moz-border-radius-bottomright: 0; /* Firefox 3.6 */
@@ -1363,7 +1353,7 @@ button.ui-button::-moz-focus-inner {
 	margin: -20px 0 0 0;
 	padding: 1px;
 	height: 18px;
-	font-size: 20px;
+	font-size: $font-size-lg;
 	font-weight: bold;
 	line-height: 13.5px;
 	text-shadow: 0 1px 0 #ffffff;
@@ -1441,8 +1431,8 @@ button.ui-button::-moz-focus-inner {
 
 .ui-dialog-buttonpane .ui-dialog-buttonset .ui-button {
     color: #ffffff;
-    background-color: #428bca;
-    border-color: #357ebd;
+    background-color: theme-color("primary");
+    border-color: theme-color-level("primary", $alert-border-level);
 }
 
 .ui-dialog-buttonpane .ui-dialog-buttonset .ui-button.ui-state-hover{
@@ -1476,8 +1466,8 @@ button.ui-button::-moz-focus-inner {
 /* ui-dialog-buttonset UI info */
 .ui-dialog-buttonset .ui-button.ui-button-info{
 	color: #ffffff;
-	background-color: #5bc0de;
-	border-color: #46b8da;
+	background-color: theme-color("info");
+	border-color: theme-color-level("info", $alert-border-level);
 }
 
 .ui-dialog-buttonset .ui-button.ui-button-info.ui-state-hover{
@@ -1760,7 +1750,7 @@ button.ui-button::-moz-focus-inner {
 
 .ui-tooltip {
     display: block;
-    font-size: 11px;
+    font-size: $font-size-sm;
     opacity: 0.8;
     position: absolute;
     visibility: visible;
@@ -2147,8 +2137,8 @@ body .ui-tooltip {
 
 .ui-datepicker td .ui-state-highlight{
 	color: #ffffff;
-	background-color: #5bc0de;
-	border-color: #46b8da;
+	background-color: theme-color("info");
+	border-color: theme-color-level("info", $alert-border-level);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 	-webkit-border-radius: 4px; /* Safari 4 */
@@ -2171,10 +2161,10 @@ body .ui-tooltip {
 
 .ui-datepicker td .ui-state-hover {
 	color: #ffffff;
-	background: #428bca;
-	background-color: #428bca;
+	background: theme-color("primary");
+	background-color: theme-color("primary");
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	border-color: #357ebd;
+	border-color: theme-color-level("primary", $alert-border-level);
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 	-webkit-border-radius: 4px; /* Safari 4 */
 	-moz-border-radius: 4px; /* Firefox 3.6 */
@@ -2218,7 +2208,7 @@ body .ui-tooltip {
 	height: 100%;
 	height:100%;
 	color: #ffffff; /*this can be removed if ui-widget-header is blue*/
-	background-color: #428BCA;
+	background-color: theme-color("primary");
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -2282,7 +2272,7 @@ textarea,
 .uneditable-input {
 	display: inline-block;
 	padding: 4px;
-	font-size: 13px;
+	font-size: $font-size-base;
 	line-height: 18px;
 	color: #555555;
 	border: 1px solid #ccc;
@@ -2330,7 +2320,7 @@ input[type="search"]::-webkit-search-decoration {
 .customfile-button{
     padding: 6px 12px;
     margin-bottom: 0;
-    font-size: 14px;
+    font-size: $font-size-base * 1.1;
     font-weight: normal;
     line-height: 1.428571429;
     text-align: center;
@@ -2390,7 +2380,7 @@ div.wijmo-wijmenu .ui-widget-header h3 {
 	color: #ffffff;
 	display: block;
 	float: left;
-	font-size: 20px;
+	font-size: $font-size-lg;
 	font-weight: 200;
 	line-height: 1;
 	margin-left: -20px;
@@ -2475,7 +2465,7 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
 	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset, 0 1px 0 rgba(255, 255, 255, 0.25); /* Firefox 3.6 */
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset, 0 1px 0 rgba(255, 255, 255, 0.25);
 	color: rgba(255, 255, 255, 0.75);
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family: $font-family-sans-serif;
 	line-height: 1;
 	margin: 5px 10px 0 10px;
 	padding: 4px 9px;

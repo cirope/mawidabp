@@ -1,7 +1,7 @@
 <div id="finding_status_change_history" class="collapse">
   <div>
-    <h4><strong><%= t('finding.status_change_history') %></strong></h4>
-    <ul>
+    <h5><%= t('finding.status_change_history') %></h5>
+    <ul class="mb-1">
       <% finding.status_change_history.each do |historic_finding| %>
         <% title = historic_finding.user_who_make_it.try(:full_name) ||
           t('message.automatic_by_the_system') %>
@@ -13,8 +13,8 @@
     </ul>
 
     <% unless finding.comments.reject(&:new_record?).empty? %>
-      <h4><%= t('finding.comments') %></h4>
-      <table class="table table-condensed table-hover">
+      <h5 class="my-3"><%= t('finding.comments') %></h5>
+      <table class="table table-sm table-hover">
         <thead>
           <tr>
             <th><%= Comment.human_attribute_name :created_at %></th>

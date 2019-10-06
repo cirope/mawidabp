@@ -3,23 +3,17 @@
   <head>
     <meta charset="utf-8">
     <title><%= page_title %></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <%= stylesheet_link_tag 'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
-    <!--[if lt IE 8]>
-      <%= stylesheet_link_tag 'application-ie', media: 'all' %>
-    <![endif]-->
-    <!--[if lt IE 9]>
-      <%= javascript_include_tag 'application-ie' %>
-    <![endif]-->
     <%= csrf_meta_tags %>
     <%= favicon_link_tag 'favicon.ico' %>
     <%= javascript_tag { yield :js_extra } %>
   </head>
 
-  <body data-controller="<%= controller_name %>">
-    <div class="alert alert-warning hidden loading-caption">
+  <body class="pt-5 my-3" data-controller="<%= controller_name %>">
+    <div class="alert alert-warning fixed-top mx-auto text-center border-0 p-3 loading-caption" hidden>
       <strong><%= t 'navigation.loading' %></strong>
     </div>
     <div class="container">

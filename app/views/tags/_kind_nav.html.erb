@@ -1,22 +1,19 @@
-<ul class="nav nav-pills visible-xs visible-sm">
-  <li class="dropdown active">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-      <%= tag_kinds[params[:kind]] %> <span class="caret"></span>
-    </a>
-    <ul class="dropdown-menu">
-      <% tag_kinds.each do |kind, name| %>
-        <%= content_tag :li, class: ('active' if kind.to_s == params[:kind]) do %>
-          <%= link_to name, tags_path(kind: kind) %>
-        <% end %>
-      <% end %>
-    </ul>
-  </li>
-</ul>
+<div class="dropdown d-md-none">
+  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+    <%= tag_kinds[params[:kind]] %>
+  </button>
 
-<ul class="nav nav-tabs visible-md visible-lg">
+  <div class="dropdown-menu">
+    <% tag_kinds.each do |kind, name| %>
+      <%= link_to name, tags_path(kind: kind), class: (kind.to_s == params[:kind] ? 'dropdown-item active' : 'dropdown-item') %>
+    <% end %>
+  </div>
+</div>
+
+<ul class="nav nav-tabs d-none d-md-flex">
   <% tag_kinds.each do |kind, name| %>
-    <%= content_tag :li, class: ('active' if kind.to_s == params[:kind]) do %>
-      <%= link_to name, tags_path(kind: kind) %>
+    <%= content_tag :li, class: 'nav-item' do %>
+      <%= link_to name, tags_path(kind: kind), class: (kind.to_s == params[:kind] ? 'nav-link active' : 'nav-link') %>
     <% end %>
   <% end %>
 </ul>

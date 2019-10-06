@@ -1,17 +1,12 @@
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
+<div class="row justify-content-center">
+  <div class="col-md-6">
     <%= simple_form_for @registration, url: registration_path do |f| %>
-      <div class="panel panel-default">
-        <div class="panel-heading text-center">
-          <!--[if lt IE 9]>
-            <img src="<%= image_path 'logo.png'  %>" alt="<%= t 'app_name' %>" height="40">
-          <![endif]-->
-          <!--[if gt IE 8]><!-->
-            <embed src="<%= image_path 'logo.svg' %>" type="image/svg+xml" height="40">
-          <!--<![endif]-->
+      <div class="card mb-3">
+        <div class="card-header text-center">
+          <%= image_tag 'logo.svg', height: 40 %>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
           <%= render 'shared/error_explanation', f: f %>
 
           <div class="form-inputs">
@@ -23,7 +18,7 @@
           </div>
         </div>
 
-        <div class="panel-footer text-center">
+        <div class="card-footer text-center">
           <div class="form-actions">
             <%= f.submit class: 'btn btn-primary' %>
           </div>

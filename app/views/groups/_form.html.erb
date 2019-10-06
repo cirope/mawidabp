@@ -2,12 +2,10 @@
   <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
-    <div class="row">
-      <%= f.input :name, input_html: { maxlength: 255 } %>
-      <%= f.input :admin_email, input_html: { maxlength: 100 } %>
-      <%= f.input :description %>
-      <%= f.input :send_notification_email, as: :boolean, label: false, inline_label: true %>
-    </div>
+    <%= f.input :name, input_html: { maxlength: 255 } %>
+    <%= f.input :admin_email, input_html: { maxlength: 100 } %>
+    <%= f.input :description %>
+    <%= f.input :send_notification_email, as: :boolean %>
   </div>
 
   <div class="row">
@@ -33,7 +31,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>

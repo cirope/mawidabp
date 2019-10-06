@@ -10,9 +10,9 @@ jQuery(function ($) {
     var fileInput   = $(this).closest('.work_paper').find('[data-file-url]')
 
     if (url)
-      fileInput.prop('href', url).removeClass('hidden')
+      fileInput.prop('href', url).removeAttr('hidden')
     else
-      fileInput.addClass('hidden')
+      fileInput.attr('hidden', true)
   })
 
   $(document).on('dynamic-item:removed', '.work_paper', function () {

@@ -1,13 +1,12 @@
-<div class="modal fade" id="customize_report" tabindex="-1" role="dialog"
-  aria-labelledby="customize_report_label" aria-hidden="true">
+<div class="modal fade" id="customize_report" tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <%= simple_form_for options[:form_name], method: (options[:method] || :post), url: options[:url], remote: true do |f| %>
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h3 class="modal-title" id="customize_report_label">
             <%= t('reports.customization_titles') %>
           </h3>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
           <% options[:fields].each do |field| %>

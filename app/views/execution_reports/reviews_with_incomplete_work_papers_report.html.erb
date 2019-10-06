@@ -1,11 +1,13 @@
 <ul class="nav nav-tabs">
-  <li <%== 'class="active"' if params[:revised].blank?  %>>
+  <li class="nav-item">
     <%= link_to t('execution_reports.reviews_with_incomplete_work_papers_report_incomplete_title'),
-      { action: :reviews_with_incomplete_work_papers_report } %>
+      { action: :reviews_with_incomplete_work_papers_report },
+      class: (params[:revised].blank? ? 'nav-link active' : 'nav-link') %>
   </li>
-  <li <%== 'class="active"' if params[:revised].present?  %>>
+  <li class="nav-item">
     <%= link_to t('execution_reports.reviews_with_incomplete_work_papers_report_revised_title'),
-      { action: :reviews_with_incomplete_work_papers_report, revised: true } %>
+      { action: :reviews_with_incomplete_work_papers_report, revised: true },
+      class: (params[:revised].present? ? 'nav-link active' : 'nav-link') %>
   </li>
 </ul>
 

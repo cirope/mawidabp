@@ -12,60 +12,58 @@
 
 <% if @control_objective_items.any? %>
   <% @control_objective_items.each_with_index do |control_objective_item, index| %>
-    <br>
-
-    <p>
-      <span class="badge badge-default">
+    <p class="mb-1 mt-3">
+      <span class="badge badge-pill badge-secondary">
         <%= index + 1 %>
       </span>
       <span class="text-muted"><%= BusinessUnit.model_name.human %></span>:
       <%= control_objective_item.business_unit %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
       <%= control_objective_item.review.plan_item.project %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <span class="text-muted"><%= Review.model_name.human %></span>:
       <%= control_objective_item.review.identification %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <span class="text-muted"><%= BusinessUnitType.model_name.human %></span>:
       <%= control_objective_item.business_unit_type %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
       <%= l control_objective_item.review.issue_date %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'control_objective_text' %></span>:
       <%= control_objective_item.control_objective_text %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'auditor_comment' %></span>:
       <%= control_objective_item.auditor_comment %>
     </p>
 
     <% if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(current_organization.prefix) %>
-      <p>
+      <p class="mb-1">
         <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'issues_count' %></span>:
         <%= control_objective_item.issues_count %>
       </p>
-      <p>
+      <p class="mb-1">
         <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'alerts_count' %></span>:
         <%= control_objective_item.alerts_count %>
       </p>
     <% end %>
   <% end %>
 <% else %>
-  <div style="margin-left: 2em">
-    <p><em><%= t 'conclusion_committee_report.control_objective_counts.without_control_objective_items' %></em></p>
+  <div class="ml-3">
+    <p class="mb-1"><em><%= t 'conclusion_committee_report.control_objective_counts.without_control_objective_items' %></em></p>
   </div>
 <% end %>
 

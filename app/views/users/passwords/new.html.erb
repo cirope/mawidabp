@@ -1,19 +1,19 @@
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
+<div class="row justify-content-center">
+  <div class="col-md-6">
     <%= simple_form_for :user, url: users_passwords_path, html: { data: { no_observe_changes: true } } do |f| %>
-      <div class="panel panel-default">
-        <div class="panel-heading">
+      <div class="card mb-3">
+        <div class="card-header">
         </div>
-        <div class="panel-body">
+        <div class="card-body">
           <%= render 'shared/flash' if flash_message %>
           <p class="lead text-muted text-center"><%= t('.note') %></p>
           <div class="form-inputs">
-            <%= f.input :email, label: t('.email'), input_html: { maxlength: 100, autofocus: true, class: 'input-lg' } %>
+            <%= f.input :email, label: t('.email'), input_html: { maxlength: 100, autofocus: true, class: 'form-control-lg' } %>
           </div>
         </div>
-        <div class="panel-footer text-center">
+        <div class="card-footer text-center">
           <div class="form-actions">
-            <%= f.submit t('.send_instructions'), class: 'btn btn-lg btn-default' %>
+            <%= f.submit t('.send_instructions'), class: 'btn btn-lg btn-outline-secondary' %>
           </div>
 
           <hr>

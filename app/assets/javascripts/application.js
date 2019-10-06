@@ -14,6 +14,7 @@
 //= require jquery-ui/i18n/datepicker-es
 //= require jquery-ui/widgets/dialog
 //= require jquery-ui/widgets/sortable
+//= require popper
 //= require bootstrap
 //= require autocomplete
 //= require ajax

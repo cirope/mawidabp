@@ -1,13 +1,11 @@
-<div class="page-header">
-  <h2><%= @workflow.review %></h2>
-</div>
+<h3><%= @workflow.review %></h3>
 
-<p>
+<p class="mb-1">
   <strong><%= Workflow.human_attribute_name :period_id %>:</strong>
   <%= @workflow.period.inspect %>
 </p>
 
-<table class="table table-condensed table-striped table-hover">
+<table class="table table-sm table-striped table-hover mt-3">
   <thead>
     <tr>
       <th><%= WorkflowItem.human_attribute_name :order_number %></th>
@@ -23,7 +21,7 @@
     <% @workflow.workflow_items.each do |workflow_item| %>
       <tr>
         <td><%= workflow_item.order_number %></td>
-        <td><%= simple_format workflow_item.task %></td>
+        <td><%= simple_format workflow_item.task, class: 'mb-1' %></td>
         <td><%= l workflow_item.start %></td>
         <td><%= l workflow_item.end %></td>
         <td><%= '%.2f' % workflow_item.human_units %></td>
@@ -39,16 +37,14 @@
 </table>
 
 <% unless @workflow.workflow_items.all? { |wi| wi.resource_utilizations.blank? } %>
-  <div class="page-header">
-    <h2><%= t('workflow.pdf.resources_utilization') %></h2>
-  </div>
+  <h4><%= t('workflow.pdf.resources_utilization') %></h4>
 
   <% @workflow.workflow_items.each do |workflow_item| %>
     <% unless workflow_item.resource_utilizations.blank? %>
-      <h4>
+      <h5>
         (<%= workflow_item.order_number %>) <%= workflow_item.task %>
-      </h4>
-      <table class="table table-condensed table-striped table-hover">
+      </h5>
+      <table class="table table-sm table-striped table-hover">
         <thead>
           <tr>
             <th><%= ResourceUtilization.human_attribute_name :resource %></th>

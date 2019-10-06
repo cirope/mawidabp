@@ -73,21 +73,13 @@ module FindingsHelper
   end
 
   def finding_answer_notification_check form
-    html_class = @auth_user.can_act_as_audited? ? 'hidden' : nil
-    label_text = html_class.blank? &&
-      FindingAnswer.human_attribute_name('notify_users')
-
     form.input :notify_users,
       as:           :boolean,
-      label:        false,
-      inline_label: label_text,
-      input_html:   { class: html_class }
+      wrapper_html: { hidden: @auth_user.can_act_as_audited? }
   end
 
   def finding_show_status_change_history element_id
-    icon = content_tag :span, nil, class: 'glyphicon glyphicon-time'
-
-    link_to icon, "##{element_id}", {
+    link_to icon('fas', 'history'), "##{element_id}", {
       title: t('findings.form.show_status_change_history'),
       data:  { toggle: 'collapse' }
     }
@@ -103,7 +95,7 @@ module FindingsHelper
       end
     end
 
-    array_to_ul users
+    array_to_ul users, class: 'mb-1'
   end
 
   def finding_work_paper_frozen? finding, work_paper
@@ -134,7 +126,7 @@ module FindingsHelper
       title = t '.unread_answers', count: answers_count - readed_count
 
       content_tag(:span, class: 'text-warning', title: title) do
-        content_tag :span, nil, class: 'glyphicon glyphicon-warning-sign'
+        icon 'fas', 'exclamation-triangle'
       end
     end
   end
@@ -222,7 +214,7 @@ module FindingsHelper
 
   def link_to_recode_tasks
     options = {
-      class: 'pull-right',
+      class: 'float-right',
       title: t('finding.recode_tasks'),
       data: {
         recode_tasks: true,
@@ -231,7 +223,7 @@ module FindingsHelper
     }
 
     link_to '#', options do
-      content_tag :span, nil, class: 'glyphicon glyphicon-sort-by-order'
+      icon 'fas', 'sort-numeric-down'
     end
   end
 
@@ -240,7 +232,7 @@ module FindingsHelper
       path    = finding_work_papers_path finding_id:        @finding,
                                          finding_answer_id: finding_answer
       options = {
-        class: 'btn btn-default',
+        class: 'btn btn-outline-secondary',
         title: t('finding.create_work_paper'),
         data: {
           add_param: 'last_work_paper_code',
@@ -250,9 +242,7 @@ module FindingsHelper
         }
       }
 
-      link_to path, options do
-        content_tag :span, nil, class: 'glyphicon glyphicon-paperclip'
-      end
+      link_to icon('fas', 'paperclip'), path, options
     end
   end
 

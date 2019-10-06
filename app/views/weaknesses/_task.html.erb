@@ -23,23 +23,23 @@
         <% if task.due_on && !task.finished? && task.due_on >= Time.zone.today %>
           <% if task.all_due_on_dates.empty? %>
             <span class="text-success" title="<%= t 'tasks.on_time' %>">
-              <span class="glyphicon glyphicon-ok"></span>
+              <%= icon 'fas', 'check' %>
             </span>
           <% else %>
             <span class="text-warning" title="<%= t 'tasks.rescheduled' %>">
-              <span class="glyphicon glyphicon-repeat"></span>
+              <%= icon 'fas', 'redo' %>
             </span>
           <% end %>
         <% elsif task.due_on && !task.finished? %>
           <span class="text-danger" title="<%= t 'tasks.expired' %>">
-            <span class="glyphicon glyphicon-time"></span>
+            <%= icon 'fas', 'clock' %>
           </span>
         <% end %>
       </div>
       <div class="col-md-1">
-        <div class="toggle-visibility">
-          <%= f.input :finding_id, as: :hidden %>
+        <div class="mt-2 text-right">
           <%= link_to_remove_nested_item(f) unless readonly %>
+          <%= f.input :finding_id, as: :hidden %>
         </div>
       </div>
     </div>

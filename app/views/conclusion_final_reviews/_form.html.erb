@@ -84,7 +84,7 @@
         <div class="col-md-6">
           <%= f.input :observations, input_html: { rows: 4, readonly: readonly } %>
         </div>
-        <div class="col-md-6 toggle-visibility">
+        <div class="col-md-6 mt-4">
           <% if show_review_best_practice_comments? %>
             <%= f.input :affects_compliance, input_html: { disabled: readonly } %>
           <% else %>
@@ -146,7 +146,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>

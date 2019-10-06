@@ -9,11 +9,11 @@
   <% if @risk_assessment_templates.empty? %>
     <%= render 'shared/empty_index', message: t('.empty_search_html') %>
   <% else %>
-    <table class="table table-condensed table-striped table-hover">
+    <table class="table table-sm table-striped table-hover">
       <thead id="column_headers">
         <tr>
           <%= make_filterable_column RiskAssessmentTemplate.human_attribute_name('name'), nil, 'name' %>
-          <%= make_filterable_column RiskAssessmentTemplate.human_attribute_name('description'), { class: 'hidden-xs hidden-sm' }, 'description' %>
+          <%= make_filterable_column RiskAssessmentTemplate.human_attribute_name('description'), { class: 'd-none d-md-table-cell' }, 'description' %>
           <th colspan="4" class="text-right"><%= link_to_search %></th>
         </tr>
       </thead>
@@ -22,11 +22,11 @@
         <% @risk_assessment_templates.each do |risk_assessment_template| %>
           <tr>
             <td><%= super_truncate risk_assessment_template.name, 30 %></td>
-            <td class="hidden-xs hidden-sm"><%= super_truncate risk_assessment_template.description, 30 %></td>
-            <td class="hidden-xs"><%= link_to_clone new_risk_assessment_template_path(clone_from: risk_assessment_template.id) %></td>
-            <td><%= link_to_show risk_assessment_template %></td>
-            <td><%= link_to_edit [:edit, risk_assessment_template] %></td>
-            <td><%= link_to_destroy risk_assessment_template if risk_assessment_template.can_be_destroyed? %></td>
+            <td class="d-none d-md-table-cell"><%= super_truncate risk_assessment_template.description, 30 %></td>
+            <td class="text-right"><%= link_to_clone new_risk_assessment_template_path(clone_from: risk_assessment_template.id) %></td>
+            <td class="text-right"><%= link_to_show risk_assessment_template %></td>
+            <td class="text-right"><%= link_to_edit [:edit, risk_assessment_template] %></td>
+            <td class="text-right"><%= link_to_destroy risk_assessment_template if risk_assessment_template.can_be_destroyed? %></td>
           </tr>
         <% end %>
       </tbody>

@@ -12,6 +12,8 @@ namespace :db do
       reset_notification_level            # 2019-03-06
       update_finding_reschedule_count     # 2019-07-19
       complete_main_recommendations       # 2019-07-23
+      update_tag_style                    # 2019-09-26
+      update_tag_icons                    # 2019-09-30
     end
   end
 end
@@ -246,4 +248,46 @@ private
     has_format = SHOW_CONCLUSION_ALTERNATIVE_PDF.values.any? { |v| v == 'bic' }
 
     has_format && ConclusionReview.where.not(main_recommendations: nil).empty?
+  end
+
+  def update_tag_style
+    if update_tag_style?
+      Tag.where(style: 'default').update_all style: 'secondary'
+    end
+  end
+
+  def update_tag_style?
+    Tag.where(style: 'default').any?
+  end
+
+  ICON_EQUIVALENCE = {
+    'alert'            => 'exclamation-triangle',
+    'ban-circle'       => 'ban',
+    'cd'               => 'compact-disc',
+    'compressed'       => 'compress',
+    'exclamation-sign' => 'exclamation-circle',
+    'facetime-video'   => 'video',
+    'fire'             => 'fire-alt',
+    'flash'            => 'bolt',
+    'folder-close'     => 'folder',
+    'info-sign'        => 'info-circle',
+    'phone-alt'        => 'phone',
+    'picture'          => 'image',
+    'pushpin'          => 'thumbtack',
+    'question-sign'    => 'question-circle',
+    'stats'            => 'chart-bar',
+    'tree-deciduous'   => 'tree',
+    'warning-sign'     => 'exclamation-triangle'
+  }
+
+  def update_tag_icons
+    if update_tag_icons?
+      Tag.where(icon: ICON_EQUIVALENCE.keys).each do |tag|
+        tag.update_column :icon, ICON_EQUIVALENCE[tag.icon]
+      end
+    end
+  end
+
+  def update_tag_icons?
+    Tag.where(icon: ICON_EQUIVALENCE.keys).any?
   end

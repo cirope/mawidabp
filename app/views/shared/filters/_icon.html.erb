@@ -1,16 +1,16 @@
-<div id="icon_filter" class="panel panel-default filter" <%== 'style="display: none;"' unless display %>>
-  <div class="panel-heading">
-    <h4 class="panel-title"><%= Tag.human_attribute_name 'icon' %></h4>
+<div id="icon_filter" class="card mb-3" <%== 'style="display: none;"' unless display %>>
+  <div class="card-header">
+    <h5 class="mb-0"><%= Tag.human_attribute_name 'icon' %></h5>
   </div>
 
-  <div class="panel-body">
+  <div class="card-body">
     <% selected = params[action] ? params[action][:icon] : nil %>
 
     <ul class="nav nav-pills lead">
       <% Tag.available_icons.each do |icon| %>
-        <li <%== 'class="active"' if selected == icon %>>
-          <a class="text-muted" href="#" data-icon="<%= icon %>">
-            <span class="glyphicon glyphicon-<%= icon %>"></span>
+        <li class="nav-item">
+          <a class="nav-link<%= ' active' if selected == icon %>" href="#" data-icon="<%= icon %>">
+            <%= icon 'fas', icon %>
           </a>
         </li>
       <% end %>

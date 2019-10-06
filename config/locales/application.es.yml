@@ -79,7 +79,7 @@ es:
     you_are_already_logged: "Este usuario ya ha iniciado sesión"
     empty_result: "Sin resultados, modifique el criterio"
     automatic_by_the_system: "Realizado de forma automática por el sistema"
-    compatibility_warning_html: 'Está usando un navegador <strong>obsoleto</strong>. Por favor considere <a href="http://browsehappy.com/">actualizarlo</a>'
+    compatibility_warning_html: 'Está usando un navegador <strong>obsoleto</strong>. Por favor considere <a href="https://browsehappy.com/">actualizarlo</a>'
 
   error:
     title: "Error"
@@ -546,7 +546,7 @@ es:
     tagged_findings_report:
       empty: 'No hay hallazgos para el filtro aplicado'
       findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
-      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge">%{count}</span>'
+      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
       pdf_name: 'seguimiento_de_hallazgos_en_ejecucion_etiquetados.pdf'
       tags_count_label: 'Cantidad máxima de etiquetas'
       title: 'Hallazgos por cantidad máxima de etiquetas'
@@ -554,7 +554,7 @@ es:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
       weaknesses_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
       pdf_name: 'informe_de_seguimiento_de_observaciones_en_ejecucion.pdf'
 
   finding_relation:
@@ -580,7 +580,7 @@ es:
     tagged_findings_report:
       empty: 'No hay hallazgos para el filtro aplicado'
       findings_count: 'Cantidad de hallazgos que cumplen los criterios: %{count}'
-      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge">%{count}</span>'
+      findings_count_html: 'Cantidad de hallazgos que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
       pdf_name: 'seguimiento_de_hallazgos_etiquetados.pdf'
       tags_count_label: "Cantidad máxima de etiquetas"
       title: 'Hallazgos por cantidad máxima de etiquetas'
@@ -588,7 +588,7 @@ es:
       title: 'Informe de seguimiento de observaciones'
       empty: 'No hay observaciones para el filtro aplicado'
       weaknesses_count: 'Cantidad de observaciones que cumplen los criterios: %{count}'
-      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge">%{count}</span>'
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
       pdf_name: 'informe_de_seguimiento_de_observaciones.pdf'
     others:
       title: 'Otros'
@@ -703,6 +703,7 @@ es:
         one: '%{effectiveness} con observaciones en un informe'
         other: '%{effectiveness} con observaciones en %{count} informes'
       without_weaknesses: 'Sin observaciones'
+      without_audits_in_the_period: 'Sin auditorías en el periodo'
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
     qa_indicators:
       without_data: "Sin datos para el rango de fechas ingresado"
@@ -1402,6 +1403,7 @@ es:
         organization_id: "Organización"
         period_id: "Periodo"
         review_id: "Informe"
+        review: "Informe"
         cost: "Costo"
         units: "Unidades"
         workflow_items_resources: "Recursos"
@@ -1421,6 +1423,7 @@ es:
         cost_per_unit: "Recurso (costo por unidad)"
         cost: "Recurso (costo)"
         resource_id: "Recurso"
+        resource: "Recurso"
       workflow_item:
         task: "Tarea"
         start: "Inicio"

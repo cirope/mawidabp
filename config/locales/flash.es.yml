@@ -41,6 +41,7 @@ es:
     finding_answers:
       create:
         notice: 'Respuesta a hallazgo creada correctamente.'
+        alert: 'La respuesta no pudo agregarse, intente nuevamente.'
 
     news:
       create:
@@ -83,7 +84,7 @@ es:
       create:
         notice: 'La encuesta ha sido agregada correctamente'
       update:
-        notice: 'La encuesta ha sido guardada correctamente. ¡Muchas gracias!'
+        notice: 'La encuesta ha sido guardada correctamente ¡Muchas gracias!'
         stale: 'La encuesta no fue guardada, intente nuevamente'
       destroy:
         notice: 'Encuesta eliminada'

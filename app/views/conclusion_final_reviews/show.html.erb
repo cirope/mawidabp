@@ -1,9 +1,8 @@
-<div class="page-header">
-  <h2>
-    <%= Review.model_name.human %>
-    <%= @conclusion_final_review.review.identification %>
-  </h2>
-</div>
+<h2>
+  <%= Review.model_name.human %>
+  <%= @conclusion_final_review.review.identification %>
+</h2>
+
 <h3><%= @conclusion_final_review.review.plan_item.project %></h3>
 
 <br />
@@ -71,7 +70,7 @@ end %>
   <br />
   <h4><%= t('conclusion_review.weaknesses') %></h4>
 
-  <table class="table table-condensed table-striped table-hover">
+  <table class="table table-sm table-striped table-hover">
     <% grouped_control_objectives.each do |process_control, cois| %>
       <%= conclusion_review_process_control_weakness_details_table(process_control, cois, true) %>
     <% end %>
@@ -86,7 +85,7 @@ end %>
   <br />
   <h4><%= t('conclusion_review.oportunities') %></h4>
 
-  <table class="table table-condensed table-striped table-hover">
+  <table class="table table-sm table-striped table-hover">
     <% grouped_control_objectives.each do |process_control, cois| %>
       <%= conclusion_review_process_control_oportunity_details_table(process_control, cois, true) %>
     <% end %>
@@ -106,11 +105,16 @@ end %>
     <%= render('shared/downloads',
       right: true,
       links: [
-        link_to(t('label.download'), :action => :export_to_pdf,
-          :id => @conclusion_final_review, :_ts => Time.now.to_i),
-        link_to(t('conclusion_final_review.download_work_papers'),
-          :action => :download_work_papers, :id => @conclusion_final_review,
-          :_ts => Time.now.to_i)
+        link_to(
+          t('label.download'), {
+            :action => :export_to_pdf, :id => @conclusion_final_review, :_ts => Time.now.to_i
+          }, :class => 'dropdown-item'
+        ),
+        link_to(
+          t('conclusion_final_review.download_work_papers'), {
+            :action => :download_work_papers, :id => @conclusion_final_review, :_ts => Time.now.to_i
+          }, :class => 'dropdown-item'
+        )
       ]
     ) %>
   <% elsif ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) %>

@@ -9,8 +9,7 @@ module ConclusionDraftReviewsHelper
     html_options.merge!(args.pop) if args.last.kind_of?(Hash)
 
     link_to(
-      content_tag(:span, nil, class: 'icon glyphicon glyphicon-file',
-        title: t('conclusion_draft_review.new_conclusion_final_review')),
+      icon('fas', 'file', title: t('conclusion_draft_review.new_conclusion_final_review')),
       *(args << html_options)
     )
   end

@@ -1,12 +1,12 @@
-<h4><%= BestPractice.model_name.human count: 0 %> </h4>
+<h5><%= BestPractice.model_name.human count: 0 %> </h5>
 <hr>
 
 <div class="row">
   <div class="col-md-6">
-    <h5><strong><%= BestPracticeComment.human_attribute_name 'best_practice' %></strong></h5>
+    <h5 class="h6"><%= BestPracticeComment.human_attribute_name 'best_practice' %></h5>
   </div>
   <div class="col-md-6">
-    <h5><strong><%= BestPracticeComment.human_attribute_name 'auditor_comment' %></strong></h5>
+    <h5 class="h6"><%= BestPracticeComment.human_attribute_name 'auditor_comment' %></h5>
   </div>
 </div>
 
@@ -17,4 +17,5 @@
     <% end %>
   <% end %>
 </div>
+
 <hr>

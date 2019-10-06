@@ -1,20 +1,38 @@
-<div id="conclusion_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+<div id="conclusion_filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
-      <div class="form-group">
+      <div class="form-group row">
         <% selected = params[action] ? params[action][:conclusion] : nil %>
-        <%= f.label :conclusion, ConclusionFinalReview.human_attribute_name('conclusion'), class: 'col-md-4', for: nil %>
+        <%= f.label :conclusion, ConclusionFinalReview.human_attribute_name('conclusion'), class: 'col-md-4 col-form-label', for: nil %>
         <div class="col-md-8">
-          <%= f.input :conclusion, collection: CONCLUSION_OPTIONS, as: :check_boxes, checked: selected, label: false, class: 'form-control' %>
+          <%= f.input :conclusion,
+            collection: CONCLUSION_OPTIONS,
+            as: :check_boxes,
+            label: '&nbsp;'.html_safe,
+            required: false,
+            checked: selected,
+            class: 'form-control',
+            item_wrapper_class: 'custom-control custom-checkbox',
+            wrapper_html: { class: 'mt-n3' }
+          %>
         </div>
       </div>
     </div>
     <div class="col-md-6">
-       <div class="form-group">
+       <div class="form-group row">
           <% selected = params[action] ? params[action][:scope] : nil %>
-          <%= f.label :scope, Review.human_attribute_name('scope'), class: 'col-md-4', for: nil %>
+          <%= f.label :scope, Review.human_attribute_name('scope'), class: 'col-md-4 col-form-label', for: nil %>
           <div class="col-md-8">
-            <%= f.input :scope, collection: REVIEW_SCOPES, as: :check_boxes, checked: selected, label: false, class: 'form-control' %>
+            <%= f.input :scope,
+              collection: REVIEW_SCOPES,
+              as: :check_boxes,
+              label: '&nbsp;'.html_safe,
+              required: false,
+              checked: selected,
+              class: 'form-control',
+              item_wrapper_class: 'custom-control custom-checkbox',
+              wrapper_html: { class: 'mt-n3' }
+            %>
           </div>
        </div>
     </div>
