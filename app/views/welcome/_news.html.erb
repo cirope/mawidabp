@@ -7,7 +7,7 @@
 
   <div class="card-body">
     <% if news.image_models.any? %>
-      <div id="images-<%= news.id %>" class="carousel slide" data-ride="carousel" data-interval="false">
+      <div id="images-<%= news.id %>" class="carousel slide mb-3" data-ride="carousel" data-interval="false">
         <% if news.image_models.size > 1 %>
           <ol class="carousel-indicators">
             <li data-target="#images-<%= news.id %>" data-slide-to="0" class="active"></li>
@@ -35,8 +35,6 @@
           </a>
         <% end %>
       </div>
-
-      <br>
     <% end %>
 
     <p>

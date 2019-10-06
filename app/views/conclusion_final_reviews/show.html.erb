@@ -1,42 +1,44 @@
-<h2>
+<h3>
   <%= Review.model_name.human %>
   <%= @conclusion_final_review.review.identification %>
-</h2>
+</h3>
 
-<h3><%= @conclusion_final_review.review.plan_item.project %></h3>
+<h4><%= @conclusion_final_review.review.plan_item.project %></h4>
 
-<br />
-<h4><%= @conclusion_final_review.review.plan_item.business_unit.name %></h4>
-<p>
+<h5 class="mt-3">
+  <%= @conclusion_final_review.review.plan_item.business_unit.name %>
+</h5>
+
+<p class="mb-1">
   <strong><%= t('conclusion_review.issue_date_title') %></strong>:
   <%= l(@conclusion_final_review.issue_date, :format => :long) %>
 </p>
-<p>
+<p class="mb-1">
   <strong><%= @conclusion_final_review.review.business_unit.business_unit_type.business_unit_label %></strong>:
   <%= @conclusion_final_review.review.business_unit.name %>
 </p>
+
 <% unless @conclusion_final_review.review.business_unit.business_unit_type.project_label.blank? %>
-  <p>
+  <p class="mb-1">
     <strong><%= @conclusion_final_review.review.business_unit.business_unit_type.project_label %></strong>:
     <%= @conclusion_final_review.review.plan_item.project %>
   </p>
 <% end %>
-<p>
+<p class="mb-1">
   <strong><%= t('conclusion_review.audit_period_title') %></strong>:
   <%= t('conclusion_review.audit_period',
       :start => I18n.l(@conclusion_final_review.review.plan_item.start, :format => :long),
       :end => I18n.l(@conclusion_final_review.review.plan_item.end, :format => :long)) %>
 </p>
 
-<br />
-<h4><%= t('conclusion_review.objectives_and_scopes') %></h4>
+<h5 class="mt-3"><%= t('conclusion_review.objectives_and_scopes') %></h5>
 <% grouped_control_objectives = @conclusion_final_review.review.grouped_control_objective_items %>
 <% grouped_control_objectives.each do |process_control, cois| %>
-  <p>
+  <p class="mb-1">
     <strong><%= ProcessControl.model_name.human %></strong>:
     <%= process_control.name %>
   </p>
-  <ul>
+  <ul class="mb-1">
     <% cois.sort.each do |coi| %>
       <li><%= coi.to_s %></li>
     <% end %>
@@ -44,33 +46,30 @@
 <% end %>
 
 <% unless @conclusion_final_review.applied_procedures.blank? %>
-  <br />
-  <h4><%= t('conclusion_review.applied_procedures') %></h4>
-  <p><%= @conclusion_final_review.applied_procedures %></p>
+  <h5 class="mt-3"><%= t('conclusion_review.applied_procedures') %></h5>
+  <%= simple_format @conclusion_final_review.applied_procedures, class: 'mb-1' %>
 <% end %>
 
-<br />
-<h4><%= t('conclusion_review.conclusion') %></h4>
+<h5 class="mt-3"><%= t('conclusion_review.conclusion') %></h5>
 <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include?(current_organization.prefix) %>
   <%= conclusion_review_score_text @conclusion_final_review.review %>
 <% elsif Current.conclusion_pdf_format != 'gal' %>
   <%= conclusion_review_score_details_table @conclusion_final_review.review %>
-  <p><small><%= t('review.review_qualification_explanation') %></small></p>
+  <p class="mb-1 small"><%= t('review.review_qualification_explanation') %></p>
 <% end %>
 
 <% unless @conclusion_final_review.conclusion.blank? %>
-  <p><%= @conclusion_final_review.conclusion %></p>
+  <%= simple_format @conclusion_final_review.conclusion, class: 'mb-1' %>
 <% end %>
 
 <% review_has_observations = grouped_control_objectives.any? do |_, cois|
-  cois.any? { |coi| !coi.final_weaknesses.not_revoked.blank? }
+  cois.any? { |coi| coi.final_weaknesses.not_revoked.present? }
 end %>
 
 <% if review_has_observations %>
-  <br />
-  <h4><%= t('conclusion_review.weaknesses') %></h4>
+  <h5 class="mt-3"><%= t('conclusion_review.weaknesses') %></h5>
 
-  <table class="table table-sm table-striped table-hover">
+  <table class="table table-sm table-hover table-bordered">
     <% grouped_control_objectives.each do |process_control, cois| %>
       <%= conclusion_review_process_control_weakness_details_table(process_control, cois, true) %>
     <% end %>
@@ -78,14 +77,13 @@ end %>
 <% end %>
 
 <% review_has_oportunities = grouped_control_objectives.any? do |_, cois|
-  cois.any? { |coi| !coi.final_oportunities.not_revoked.blank? }
+  cois.any? { |coi| coi.final_oportunities.not_revoked.present? }
 end %>
 
 <% if review_has_oportunities %>
-  <br />
-  <h4><%= t('conclusion_review.oportunities') %></h4>
+  <h5 class="mt-3"><%= t('conclusion_review.oportunities') %></h5>
 
-  <table class="table table-sm table-striped table-hover">
+  <table class="table table-sm table-hover table-bordered">
     <% grouped_control_objectives.each do |process_control, cois| %>
       <%= conclusion_review_process_control_oportunity_details_table(process_control, cois, true) %>
     <% end %>

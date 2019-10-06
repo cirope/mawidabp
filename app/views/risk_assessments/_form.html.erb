@@ -102,9 +102,7 @@
 
         <div class="tab-content">
           <div class="tab-pane active" id="best-practice">
-            <br>
-
-            <div id="best_practices">
+            <div id="best_practices" class="mt-3">
               <%= link_to_add_fields(
                 t('.add_best_practice'), f, :risk_assessment_items, 'best_practice', disabled_on_apply: true
               ) %>
@@ -115,9 +113,7 @@
             </div>
           </div>
           <div class="tab-pane" id="business-unit-type">
-            <br>
-
-            <div id="business_unit_types">
+            <div id="business_unit_types" class="mt-3">
               <%= link_to_add_fields(
                 t('.add_business_unit_type'), f, :risk_assessment_items, 'business_unit_type', disabled_on_apply: true
               ) %>
