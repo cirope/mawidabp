@@ -12,6 +12,7 @@ EMAIL_ADDRESS: 'noreply@change.me'
 
 SECRET_KEY_BASE: 'REPLACE with rake secret output'
 NEW_RELIC_LICENSE_KEY: 'REPLACE with the one provided by NewRelic'
+RAILS_MASTER_KEY: 'REPLACE with THE master key'
 
 # Extra application options
 ALLOW_CONCLUSION_FINAL_REVIEW_DESTRUCTION: 'true'
