@@ -22,14 +22,12 @@ module Users::Licenses
     end
 
     def adding_new_auditor?
-      old_user = nil
+      old_user = User.find id unless new_record?
 
       organization_roles.reject(&:marked_for_destruction?).any? do |organization_role|
         audited = if new_record?
                     true
                   else
-                    old_user ||= User.find id
-
                     old_user.can_act_as_audited_on? organization_role.organization_id
                   end
 

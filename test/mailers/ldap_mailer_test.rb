@@ -15,9 +15,8 @@ class LdapMailerTest < ActionMailer::TestCase
   end
 
   test 'Notify with imported users' do
-    org = organizations(:google)
-    Current.organization = org
-    Current.group        = org.group
+    Current.organization = organizations(:google)
+    Current.group        = Current.organization.group
 
     ldap_config = ldap_configs(:google_ldap)
     imports = ldap_config.import('admin', 'admin123')
@@ -28,7 +27,9 @@ class LdapMailerTest < ActionMailer::TestCase
       end
     end.compact
 
-    response = LdapMailer.import_notifier(filtered_imports.to_json, org.id).deliver_now
+    response = LdapMailer.import_notifier(
+      filtered_imports.to_json, Current.organization.id
+    ).deliver_now
 
     assert_not_empty ActionMailer::Base.deliveries
     assert_includes response.to, users(:supervisor).email
