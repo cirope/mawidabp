@@ -513,6 +513,8 @@ es:
       add_child: 'Agregar persona a cargo'
       add_related_user_relations: 'Agregar usuario relacionado'
       add_organization_role: 'Agregar un nuevo perfil'
+    create:
+      correctly_created_with_count: 'Usuario creado, cantidad de auditores restantes para su licencia: %{count}'
 
     imports:
       new:
