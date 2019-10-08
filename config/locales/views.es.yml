@@ -545,10 +545,10 @@ es:
         email: 'Correo'
         send_instructions: 'Enviar instrucciones'
         back: 'Volver'
-        note: 'Para restablecer su contraseña ingrese su dirección de correo electrónico'
+        note: 'Para restablecer su contraseña, ingrese su dirección de correo electrónico'
       create:
-        success: 'Se enviaron instrucciones a tu correo para restablecer la contraseña'
-        not_found: 'El correo que ingresaste no está registrado, verifica que no esté mal escrito'
+        success: 'Se envió un correo con las instrucciones para restablecer la contraseña'
+        not_found: 'El correo que ingresado no está registrado, verifica que no esté mal escrito'
     profiles:
       edit:
         title: 'Modificar información personal'
