@@ -64,6 +64,6 @@ module Registrations::Persistence
         role:         Current.organization.roles.admin
       )
 
-      user.save!
+      user.save! && user
     end
 end
