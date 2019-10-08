@@ -22,7 +22,7 @@
 
 .loading-caption {
   width: 10em;
-  z-index: 1100;
+  z-index: $zindex-tooltip;
 }
 
 .pulsate {
