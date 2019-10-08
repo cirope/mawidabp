@@ -872,7 +872,7 @@ es:
       title: "%{name}, su cuenta ha sido creada"
       initial_password: "Para comenzar a utilizar el sistema debe primero establecer su contraseña"
       change_password: "Establecer contraseña"
-      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'Mawidabp' del área de Auditoría Interna."
+      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'Mawidabp'."
       organizations_sites:
         one: "Luego puede ingresar en la siguiente dirección:"
         other: "Luego puede ingresar en cualquiera de las siguientes direcciones (dependiendo de la organización que seleccione):"
