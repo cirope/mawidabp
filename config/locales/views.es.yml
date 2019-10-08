@@ -548,7 +548,7 @@ es:
         note: 'Para restablecer su contraseña, ingrese su dirección de correo electrónico'
       create:
         success: 'Se envió un correo con las instrucciones para restablecer la contraseña'
-        not_found: 'El correo que ingresado no está registrado, verifica que no esté mal escrito'
+        not_found: 'El correo ingresado no está registrado, verifica que no esté mal escrito'
     profiles:
       edit:
         title: 'Modificar información personal'
