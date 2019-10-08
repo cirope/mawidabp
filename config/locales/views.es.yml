@@ -389,7 +389,7 @@ es:
       mark_as_read: 'Marcar como leído'
       readed_on: 'Marcado como leído el %{on}'
 
-  registration:
+  registrations:
     new:
       title: 'Nueva Organización'
     show:

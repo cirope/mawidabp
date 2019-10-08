@@ -2,10 +2,10 @@
   <div class="col-md-6">
     <%= form_tag sessions_path, novalidate: 'novalidate', data: { no_observe_changes: true } do %>
       <div class="card mb-3">
-        <div class="card-header text-center">
-          <%= image_tag 'logo.svg', height: 40 %>
+        <div class="card-header text-center bg-white border-white pt-5 pb-4">
+          <%= image_tag 'logo.svg', alt: t('app_name'), height: 40 %>
         </div>
-        <div class="card-body">
+        <div class="card-body py-0 px-5">
           <%= render 'shared/flash' if flash_message %>
 
           <div class="form-inputs">
@@ -27,7 +27,7 @@
           </div>
         </div>
 
-        <div class="card-footer text-center">
+        <div class="card-footer text-center bg-white border-white pb-4">
           <div class="form-actions">
             <%= submit_tag t('.log_in'), class: 'btn btn-lg btn-outline-secondary' %>
           </div>

@@ -97,6 +97,11 @@ es:
         notice: 'El cuestionario ha sido actualizado correctamente'
         stale: 'El cuestionario no fue actualizado, intente nuevamente'
 
+    registrations:
+      create:
+        # With this we skip showing a flash message, the show view is enough
+        notice: ''
+
     resource_classes:
       create:
         notice: 'Clase de recurso agregada correctamente'

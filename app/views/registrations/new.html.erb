@@ -2,11 +2,11 @@
   <div class="col-md-6">
     <%= simple_form_for @registration, url: registration_path do |f| %>
       <div class="card mb-3">
-        <div class="card-header text-center">
-          <%= image_tag 'logo.svg', height: 40 %>
+        <div class="card-header text-center bg-white border-white py-5">
+          <%= image_tag 'logo.svg', alt: t('app_name'), height: 40 %>
         </div>
 
-        <div class="card-body">
+        <div class="card-body py-0 px-5">
           <%= render 'shared/error_explanation', f: f %>
 
           <div class="form-inputs">
@@ -18,7 +18,7 @@
           </div>
         </div>
 
-        <div class="card-footer text-center">
+        <div class="card-footer text-center bg-white border-white pb-4">
           <div class="form-actions">
             <%= f.submit class: 'btn btn-primary' %>
           </div>

@@ -2,11 +2,11 @@
   <div class="row justify-content-center">
     <div class="col-md-6">
       <div class="card mb-3">
-        <div class="card-header text-center">
+        <div class="card-header text-center bg-white border-white pt-5 pb-3">
           <h5 class="mb-0 text-muted"><%= @title %></h5>
         </div>
 
-        <div class="card-body">
+        <div class="card-body py-0 px-5">
           <%= render 'shared/error_explanation', f: f %>
 
           <div class="form-inputs">
@@ -15,7 +15,7 @@
           </div>
         </div>
 
-        <div class="card-footer">
+        <div class="card-footer bg-white border-white pb-4">
           <div class="form-actions text-center">
             <%= hidden_field_tag :confirmation_hash, params[:confirmation_hash] %>
             <%= f.input :lock_version, as: :hidden %>

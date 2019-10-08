@@ -1,10 +1,6 @@
 @import "bootstrap/functions";
 @import "bootstrap/variables";
 
-label:has(> input[type="checkbox"][data-readonly="true"]) {
-  color: $text-muted;
-}
-
 .file-container {
   position: relative;
   overflow: hidden;
@@ -27,6 +23,10 @@ label:has(> input[type="checkbox"][data-readonly="true"]) {
 .loading-caption {
   width: 10em;
   z-index: 1100;
+}
+
+.pulsate {
+  animation: pulsate 0.5s infinite;
 }
 
 .strike {
@@ -65,4 +65,14 @@ textarea {
 
 :target table {
   border: 3px solid theme-color-level("warning", $alert-border-level) !important;
+}
+
+@keyframes pulsate {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: .1;
+  }
 }
