@@ -182,13 +182,13 @@
     <div id="control_objective_items">
       <% @review.grouped_control_objective_items.each do |pc, cois| %>
         <div id="process_control_<%= pc.id %>" class="process_control">
-          <h4>
+          <h5>
             <%= pc.name %> |
             <% unless readonly %>
               <%= link_to_suggested_process_control_findings(pc) %> |
               <%= link_to_move :class => 'process_control_move' %>
             <% end %>
-          </h4>
+          </h5>
           <%= f.simple_fields_for :control_objective_items, cois.sort do |coi_f| %>
             <%= render 'control_objective_item', f: coi_f, readonly: readonly, frozen: frozen %>
           <% end %>
