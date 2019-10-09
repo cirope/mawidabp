@@ -85,7 +85,9 @@ module Findings::Validations
     end
 
     def validate_state_work_paper_presence
-      if implemented_audited? && work_papers.empty? && !skip_work_paper
+      skip_validation = skip_work_paper == true || skip_work_paper == '1'
+
+      if implemented_audited? && work_papers.empty? && !skip_validation
         errors.add :state, :must_have_a_work_paper
       end
     end
