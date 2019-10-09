@@ -939,7 +939,7 @@ es:
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
     without_score: "No calificar"
-    weakness_from_template: "Observación creada de una plantilla"
+    weakness_from_template: "Observación creada a partir de una plantilla"
     repeated_weaknesses: "Reiteradas"
     old_weaknesses: "Antigua data"
     new_weaknesses: "Nuevas"
