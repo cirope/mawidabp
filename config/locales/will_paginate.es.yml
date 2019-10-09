@@ -14,3 +14,5 @@ es:
         zero: 'Sin resultados'
     page_gap: '&hellip;'
     previous_label: '&laquo; Anterior'
+    container_aria_label: 'Paginación'
+    page_aria_label: 'Página %{count}'
