@@ -13,15 +13,13 @@
       <div class="col-md-6">
         <%= f.input :notes, input_html: { rows: 5 } %>
         <%= user_language_field(f) %>
-        <%= f.input :send_notification_email, as: :boolean,
-          checked_value: '1', unchecked_value: '', label: false, inline_label: true %>
+        <%= f.input :send_notification_email, as: :boolean, checked_value: '1', unchecked_value: '' %>
         <%= f.input :lock_version, as: :hidden %>
       </div>
     </div>
   </div>
 
-  <br />
-  <div class="row">
+  <div class="row mt-3">
     <div class="col-md-6">
       <h5>
         <strong><%= OrganizationRole.human_attribute_name 'organization_id' %></strong>

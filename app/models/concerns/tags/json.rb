@@ -1,4 +1,4 @@
-module Tags::JSON
+module Tags::Json
   extend ActiveSupport::Concern
 
   included do

@@ -10,8 +10,7 @@ module RiskAssessmentsHelper
 
   def risk_assessment_shared_icon risk_assessment
     title = t 'activerecord.attributes.risk_assessment.shared'
-    icon  = content_tag :span, nil, class: 'glyphicon glyphicon-eye-open',
-                                    title: title
+    icon  = icon 'fas', 'eye', title: title
 
     risk_assessment.shared ? icon : ''
   end
@@ -37,7 +36,7 @@ module RiskAssessmentsHelper
       }
 
       link_to [:merge_to_plan, risk_assessment], options do
-        content_tag :span, nil, class: 'glyphicon glyphicon-list'
+        icon 'fas', 'list'
       end
     end
   end

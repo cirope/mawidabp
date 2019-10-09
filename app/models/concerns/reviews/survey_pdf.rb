@@ -1,4 +1,4 @@
-module Reviews::SurveyPDF
+module Reviews::SurveyPdf
   extend ActiveSupport::Concern
 
   def survey_pdf organization = nil

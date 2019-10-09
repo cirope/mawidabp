@@ -11,7 +11,7 @@ module TagsHelper
   end
 
   def styles
-    styles = %w(default primary success info warning danger)
+    styles = %w(secondary primary success info warning danger)
 
     styles.map { |k| [t("tags.styles.#{k}"), k] }
   end
@@ -20,7 +20,7 @@ module TagsHelper
     ActiveSupport::SafeBuffer.new.tap do |buffer|
       tags.each do |tag|
         buffer << content_tag(:span, class: "text-#{tag.style}") do
-          content_tag :span, nil, class: "glyphicon glyphicon-#{tag.icon}", title: tag.name
+          icon 'fas', tag.icon, title: tag.name
         end
         buffer << ' '
       end
@@ -28,7 +28,7 @@ module TagsHelper
   end
 
   def tag_shared_icon tag
-    icon = content_tag :span, nil, class: 'glyphicon glyphicon-eye-open', title: t('activerecord.attributes.tag.shared')
+    icon = icon 'fas', 'eye', title: t('activerecord.attributes.tag.shared')
 
     tag.shared ? icon : ''
   end
@@ -40,9 +40,9 @@ module TagsHelper
   def grouped_tag_options kind:
     options = {}
 
-    Tag.list.roots.where(kind: kind).each do |root_tag|
+    Tag.list.roots.where(kind: kind).order(:name).each do |root_tag|
       if root_tag.children.any?
-        options[root_tag.name] = root_tag.children.map do |tag|
+        options[root_tag.name] = root_tag.children.order(:name).map do |tag|
           [tag.name, tag.id]
         end
       else

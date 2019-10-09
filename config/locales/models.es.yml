@@ -4,6 +4,19 @@ es:
     updated_at: 'Última actualización'
     lock_version: 'Versión'
 
+  activemodel:
+    models:
+      registration:
+        one: 'Organización'
+        other: 'Organizaciones'
+    attributes:
+      registration:
+        email: 'Correo'
+        last_name: 'Apellido'
+        name: 'Nombre'
+        organization_name: 'Nombre de la organización'
+        user: 'Nombre de usuario'
+
   activerecord:
     models:
       achievement:
@@ -264,6 +277,7 @@ es:
         finding_answers: 'Respuestas'
         tag_ids: 'Etiquetas'
         rescheduled: 'Reprogramada'
+        reschedule_count: 'Cantidad de reprogramaciones'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'
@@ -651,3 +665,7 @@ es:
           attributes:
             risk_assessment_weights:
               blank: 'debe tener al menos uno'
+        user:
+          attributes:
+            base:
+              auditors_limit_reached: 'Limite de auditores alcanzado, por favor actualice su licencia.'

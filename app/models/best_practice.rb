@@ -1,10 +1,10 @@
 class BestPractice < ApplicationRecord
   include Auditable
   include BestPractices::AttributeTypes
-  include BestPractices::CSV
+  include BestPractices::Csv
   include BestPractices::Defaults
   include BestPractices::DestroyValidation
-  include BestPractices::JSON
+  include BestPractices::Json
   include BestPractices::ProcessControls
   include BestPractices::Search
   include BestPractices::Shared

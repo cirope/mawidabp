@@ -5,23 +5,17 @@
 <% process_control = params[:weaknesses_graphs] && params[:weaknesses_graphs][:process_control] %>
 
 <nav>
-  <ul class="nav nav-tabs">
-    <li <%== 'class="active"' if user.present? || params[:weaknesses_graphs].blank? %>>
-      <a href="#users" data-toggle="tab" data-clear="user">
-        <%= t '.users' %>
-      </a>
-    </li>
-    <li <%== 'class="active"' if business_unit.present? %>>
-      <a href="#business_units" data-toggle="tab" data-clear="business_unit">
-        <%= t '.business_units' %>
-      </a>
-    </li>
-    <li <%== 'class="active"' if process_control.present? %>>
-      <a href="#process_controls" data-toggle="tab" data-clear="process_control">
-        <%= t '.process_controls' %>
-      </a>
-    </li>
-  </ul>
+  <div class="nav nav-tabs">
+    <a class="nav-item nav-link<%= ' active' if user.present? || params[:weaknesses_graphs].blank? %>" href="#users" data-toggle="tab" data-clear="user">
+      <%= t '.users' %>
+    </a>
+    <a class="nav-item nav-link<%= ' active' if business_unit.present? %>" href="#business_units" data-toggle="tab" data-clear="business_unit">
+      <%= t '.business_units' %>
+    </a>
+    <a class="nav-item nav-link<%= ' active' if process_control.present? %>" href="#process_controls" data-toggle="tab" data-clear="process_control">
+      <%= t '.process_controls' %>
+    </a>
+  </div>
 </nav>
 
 <br />
@@ -87,9 +81,9 @@
       </div>
     </div>
 
-    <div class="col-md-2 filter">
+    <div class="col-md-2">
       <%= hidden_field_tag :final, params[:final] %>
-      <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-default' %> |
+      <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-outline-secondary' %> |
       <%= link_to t('label.cancel'), url_params %>
     </div>
   </div>
@@ -97,15 +91,15 @@
   <% if @info.blank? && @weaknesses_data %>
     <div class="row" data-hide-on="tab-change">
       <div class="col-md-6">
-        <div class="panel panel-default">
-          <div class="panel-body">
+        <div class="card mb-3">
+          <div class="card-body p-0">
             <div id="graph" class="ct-chart ct-golden-section" data-graph data-weaknesses="<%= @weaknesses_data.to_json %>">
             </div>
           </div>
         </div>
       </div>
       <div class="col-md-6">
-        <table class="table table-condensed table-striped table-hover">
+        <table class="table table-sm table-striped table-hover">
           <thead>
             <tr>
               <th><%= Finding.human_attribute_name 'state' %></th>
@@ -132,12 +126,12 @@
     </div>
   <% elsif @info.present? %>
     <div class="alert alert-info" data-hide-on="tab-change">
-      <p><%= @info %></p>
+      <p class="mb-0"><%= @info %></p>
     </div>
   <% end %>
 
-  <div class="alert alert-info <%= 'hidden' if @weaknesses_data %>" data-show-on="tab-change">
-    <p><%= t '.hint' %></p>
+  <div class="alert alert-info" data-show-on="tab-change" <%= 'hidden' if @weaknesses_data %>>
+    <p class="mb-0"><%= t '.hint' %></p>
   </div>
 <% end %>
 

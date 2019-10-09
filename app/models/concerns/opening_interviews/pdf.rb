@@ -1,4 +1,4 @@
-module OpeningInterviews::PDF
+module OpeningInterviews::Pdf
   extend ActiveSupport::Concern
 
   def to_pdf organization = Current.organization

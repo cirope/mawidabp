@@ -1,12 +1,12 @@
 <% time_left = parameter_in(current_organization.try(:id), :session_expire_time).to_i %>
 <% if current_organization && time_left > 0 %>
-  <p class="navbar-text hidden" data-time-left>
+  <span class="navbar-text" data-time-left hidden>
     <span data-toggle="popover" data-trigger="hover" data-placement="bottom" title="<%= t 'navigation.warning' %>" data-content="">
       <span class="text-warning pulsate" data-text-style>
-        <span class="glyphicon glyphicon-exclamation-sign"></span>
+        <%= icon 'fas', 'exclamation-circle' %>
       </span>
     </span>
-  </p>
+  </span>
 
   <script type="text/javascript">
     setTimeout(function () {

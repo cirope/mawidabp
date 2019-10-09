@@ -3,9 +3,11 @@ main_group:
   description: Main group description
   admin_email: main@test.com
   admin_hash: <%= SecureRandom.urlsafe_base64 %>
+  licensed: false
 
 second_group:
   name: Second group
   description: Second group description
   admin_email: second@test.com
   admin_hash: <%= SecureRandom.urlsafe_base64 %>
+  licensed: false

@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-1">
       <div class="media">
-        <div class="pull-left">
+        <div class="float-left mr-2 mt-2">
           <%= link_to_show_hide "resource_utilizations_for_#{id}" %>
         </div>
         <div class="media-body">
@@ -22,8 +22,7 @@
       <%= f.input :end, as: :date_picker, label: false %>
     </div>
     <div class="col-md-1">
-      <div class="toggle-visibility">
-        <%= f.input :id, as: :hidden %>
+      <div class="mt-2 text-right text-nowrap">
         <%= link_to_insert_field f %>
         <% unless f.object.try(:review) %>
           <span class="text-muted">|</span>
@@ -31,17 +30,18 @@
         <% end %>
         <span class="text-muted">|</span>
         <%= link_to_move %>
+        <%= f.input :id, as: :hidden %>
       </div>
     </div>
   </div>
 
   <div id="resource_utilizations_for_<%= id %>" style="display: none;">
-    <div class="row nested">
+    <div class="row pl-4" data-nested>
       <div class="col-md-8">
-        <h5><strong><%= ResourceUtilization.human_attribute_name 'resource' %></strong></h5>
+        <h5 class="h6"><%= ResourceUtilization.human_attribute_name 'resource' %></h5>
       </div>
       <div class="col-md-3">
-        <h5><strong><%= ResourceUtilization.human_attribute_name 'units' %></strong></h5>
+        <h5 class="h6"><%= ResourceUtilization.human_attribute_name 'units' %></h5>
       </div>
     </div>
 
@@ -57,7 +57,7 @@
       <% end %>
     </div>
 
-    <p class="nested">
+    <p class="pl-4" data-nested>
       <%= link_to_add_fields(t('workflow.add_material_resource_utilization'), f, :resource_utilizations,
         'material_resource_utilization', {
         insert_into: "#material_resource_utilizations_#{id}", association: 'material_resource_utilizations'

@@ -13,11 +13,13 @@
 
     <%= f.input :shared, input_html: { disabled: @tag.shared_was } %>
 
-    <h4><%= t '.children' %></h4>
+    <h5><%= t '.children' %></h5>
+
+    <hr>
 
     <div class="row">
       <div class="col-md-10">
-        <h5><strong><%= Tag.human_attribute_name 'name' %></strong></h5>
+        <h5 class="h6"><%= Tag.human_attribute_name 'name' %></h5>
       </div>
     </div>
 
@@ -31,19 +33,19 @@
       </p>
     </div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
+    <div class="card mb-3">
+      <div class="card-header">
+        <h5 class="mb-0">
           <%= Tag.human_attribute_name 'icon' %>
-        </h4>
+        </h5>
       </div>
 
-      <div class="panel-body">
+      <div class="card-body">
         <ul class="nav nav-pills lead">
           <% Tag.available_icons.each do |icon| %>
-            <li <%== 'class="active"' if @tag.icon == icon %>>
-              <a class="text-muted" href="#" data-icon="<%= icon %>">
-                <span class="glyphicon glyphicon-<%= icon %>"></span>
+            <li class="nav-item">
+              <a class="nav-link<%= ' active' if @tag.icon == icon %>" href="#" data-icon="<%= icon %>">
+                <%= icon 'fas', icon %>
               </a>
             </li>
           <% end %>

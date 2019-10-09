@@ -132,14 +132,14 @@ class FindingsControllerTest < ActionController::TestCase
     get :index, params: { completed: 'incomplete' }, as: :csv
 
     assert_response :success
-    assert_equal "#{Mime[:csv]}", @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'list findings as PDF' do
     get :index, params: { completed: 'incomplete' }, as: :pdf
 
     assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
-    assert_equal "#{Mime[:pdf]}", @response.content_type
+    assert_match Mime[:pdf].to_s, @response.content_type
   end
 
   test 'list findings as corporate user' do
@@ -324,12 +324,12 @@ class FindingsControllerTest < ActionController::TestCase
                 {
                   id: finding_user_assignments(:unconfirmed_weakness_auditor).id,
                   user_id: users(:auditor).id,
-                  process_owner: '0'
+                  process_owner: ''
                 },
                 {
                   id: finding_user_assignments(:unconfirmed_weakness_supervisor).id,
                   user_id: users(:supervisor).id,
-                  process_owner: '0'
+                  process_owner: ''
                 }
               ],
               work_papers_attributes: [
@@ -445,11 +445,11 @@ class FindingsControllerTest < ActionController::TestCase
               },
               {
                 user_id: users(:auditor).id,
-                process_owner: '0'
+                process_owner: ''
               },
               {
                 user_id: users(:supervisor).id,
-                process_owner: '0'
+                process_owner: ''
               }
             ],
             work_papers_attributes: [
@@ -527,7 +527,7 @@ class FindingsControllerTest < ActionController::TestCase
             {
               id: finding_user_assignments(:unconfirmed_weakness_bare).id,
               user_id: users(:bare).id,
-              process_owner: '0'
+              process_owner: ''
             },
             {
               id: finding_user_assignments(:unconfirmed_weakness_audited).id,
@@ -537,12 +537,12 @@ class FindingsControllerTest < ActionController::TestCase
             {
               id: finding_user_assignments(:unconfirmed_weakness_auditor).id,
               user_id: users(:auditor).id,
-              process_owner: '0'
+              process_owner: ''
             },
             {
               id: finding_user_assignments(:unconfirmed_weakness_supervisor).id,
               user_id: users(:supervisor).id,
-              process_owner: '0'
+              process_owner: ''
             }
           ]
         }
@@ -595,12 +595,12 @@ class FindingsControllerTest < ActionController::TestCase
             {
               id: finding_user_assignments(:unconfirmed_weakness_auditor).id,
               user_id: users(:auditor).id,
-              process_owner: '0'
+              process_owner: ''
             },
             {
               id: finding_user_assignments(:unconfirmed_weakness_supervisor).id,
               user_id: users(:supervisor).id,
-              process_owner: '0'
+              process_owner: ''
             }
           ]
         }

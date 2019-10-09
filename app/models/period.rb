@@ -2,6 +2,7 @@ class Period < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Periods::AttributeTypes
+  include Periods::Contains
   include Periods::DestroyValidation
   include Periods::Months
   include Periods::Overrides

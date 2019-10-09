@@ -1,6 +1,6 @@
 module Reports::ControlObjectiveStatsByReview
   include Reports::CommonControlObjectiveStats
-  include Reports::PDF
+  include Reports::Pdf
   include Reports::Period
   include Parameters::Risk
 

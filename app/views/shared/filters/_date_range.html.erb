@@ -1,12 +1,12 @@
 <% date_fields ||= [] %>
 <% show_mid_date = show_mid_date %>
 
-<div id="date_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+<div id="date_filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
-      <div class="form-group">
+      <div class="form-group row">
         <%= f.label :from_date,
-          t('conclusion_committee_report.from_date'), class: 'col-md-4' %>
+          t('conclusion_committee_report.from_date'), class: 'col-md-4 col-form-label' %>
         <div class="col-md-8">
           <%= f.text_field :from_date, value: l(@from_date), autocomplete: :off,
             class: 'form-control', data: { date_picker: true } %>
@@ -14,9 +14,9 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="form-group">
+      <div class="form-group row">
         <%= f.label :to_date,
-          t('conclusion_committee_report.to_date'), class: 'col-md-4' %>
+          t('conclusion_committee_report.to_date'), class: 'col-md-4 col-form-label' %>
         <div class="col-md-8">
           <%= f.text_field :to_date, value: l(@to_date), autocomplete: :off,
             class: 'form-control', data: { date_picker: true } %>
@@ -27,13 +27,13 @@
 </div>
 
 <% if date_fields.any? || show_mid_date %>
-  <div class="filter" <%== 'style="display: none;"' unless display %>>
+  <div <%== 'style="display: none;"' unless display %>>
     <div class="row">
       <% if show_mid_date %>
         <div class="col-md-6">
-          <div class="form-group">
+          <div class="form-group row">
             <%= f.label :mid_date,
-              t('conclusion_committee_report.mid_date'), class: 'col-md-4' %>
+              t('conclusion_committee_report.mid_date'), class: 'col-md-4 col-form-label' %>
             <div class="col-md-8">
               <%= f.text_field :mid_date, value: l(@mid_date), autocomplete: :off,
                 class: 'form-control', data: { date_picker: true } %>
@@ -43,9 +43,9 @@
       <% end %>
       <% if date_fields.any? %>
         <div class="col-md-6">
-          <div class="form-group">
+          <div class="form-group row">
             <% selected = params[action] ? params[action][:date_field] : date_fields.first %>
-            <%= f.label :date_field, t('conclusion_committee_report.date_field'), class: 'col-md-4' %>
+            <%= f.label :date_field, t('conclusion_committee_report.date_field'), class: 'col-md-4 col-form-label' %>
             <div class="col-md-8">
               <%= f.select :date_field, date_fields.map { |df|
                 [t("conclusion_committee_report.#{df}"), df]

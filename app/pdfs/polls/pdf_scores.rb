@@ -1,4 +1,4 @@
-module Polls::PDFScores
+module Polls::PdfScores
   extend ActiveSupport::Concern
 
   def pdf_add_scores

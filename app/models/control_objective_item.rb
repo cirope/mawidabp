@@ -12,10 +12,10 @@ class ControlObjectiveItem < ApplicationRecord
   include ControlObjectiveItems::Defaults
   include ControlObjectiveItems::DestroyValidation
   include ControlObjectiveItems::Effectiveness
-  include ControlObjectiveItems::FindingPDFData
+  include ControlObjectiveItems::FindingPdfData
   include ControlObjectiveItems::Findings
   include ControlObjectiveItems::Overrides
-  include ControlObjectiveItems::PDF
+  include ControlObjectiveItems::Pdf
   include ControlObjectiveItems::Relevance
   include ControlObjectiveItems::Scopes
   include ControlObjectiveItems::Scores
@@ -28,6 +28,8 @@ class ControlObjectiveItem < ApplicationRecord
 
   belongs_to :organization
   belongs_to :review, inverse_of: :control_objective_items
+  has_one :business_unit, through: :review
+  has_one :business_unit_type, through: :business_unit
 
   def informal
     review&.to_s

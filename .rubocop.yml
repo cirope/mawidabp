@@ -1,0 +1,17 @@
+inherit_gem:
+  rubocop-github:
+    - config/default.yml
+    - config/rails.yml
+
+# why rails, why?
+Style/StringLiterals:
+  Description: "Checks if uses of quotes match the configured preference."
+  Enabled: true
+  StyleGuide: "https://github.com/bbatsov/ruby-style-guide#consistent-string-literals"
+  EnforcedStyle: single_quotes
+
+# Seattle
+Style/MethodDefParentheses:
+  Description: "Checks if the method definitions have or don't have parentheses."
+  Enabled: false
+  StyleGuide: "https://github.com/bbatsov/ruby-style-guide#method-parens"

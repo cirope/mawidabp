@@ -12,55 +12,54 @@
     }
   } %>
 
-<br />
 <% if @report.polls.blank? %>
   <div class="alert alert-warning"><%= t('polls.without_data') %></div>
 <% else %>
   <% @report.polls.each do |poll| %>
     <% if show_poll? poll %>
-      <p>
+      <p class="mb-1">
         <strong><%= Poll.human_attribute_name 'user' %>:</strong>
         <%= poll.user.informal_name %>
       </p>
       <% if poll.about %>
-        <p>
+        <p class="mb-1">
           <strong><%= Poll.human_attribute_name :about %>:</strong>
           <%= poll.about.display_name %>
         </p>
       <% end %>
-      <p>
+      <p class="mb-1">
         <strong><%= Poll.human_attribute_name 'answered' %>:</strong>
         <%= t_boolean poll.answered %>
       </p>
-      <p>
+      <p class="mb-1">
         <strong><%= Poll.human_attribute_name 'send_date' %>:</strong>
         <%= l poll.created_at.to_date, format: :long %>
       </p>
       <% if poll.answered? %>
-        <p>
+        <p class="mb-1">
           <strong><%= Poll.human_attribute_name 'answer_date' %>:</strong>
           <%= l poll.updated_at.to_date, format: :long %>
         </p>
       <% end %>
-      <p>
+      <p class="mb-1">
         <strong><%= Questionnaire.human_attribute_name 'questions' %>:</strong>
       </p>
 
       <% poll.answers.each do |answer| %>
         <% if show_answer? answer %>
-          <div class="text-bold">
-            <%= simple_format "#{answer.question.sort_order}. #{answer.question.question}" %>
+          <div class="font-weight-bold">
+            <%= simple_format "#{answer.question.sort_order}. #{answer.question.question}", class: 'mb-1' %>
           </div>
 
           <% if poll.answered? %>
             <% if answer.question&.options&.any? %>
-              <p><%= t "answer_options.#{answer.answer_option.option}" %></p>
+              <p class="mb-1"><%= t "answer_options.#{answer.answer_option.option}" %></p>
             <% elsif answer.question.answer_written? %>
-              <%= simple_format answer.answer %>
+              <%= simple_format answer.answer, class: 'mb-1' %>
             <% end %>
           <% end %>
           <% if answer.comments.present? %>
-            <p>
+            <p class="mb-1">
               <%= Answer.human_attribute_name :comments %>:
               <em><%= answer.comments %></em>
             </p>
@@ -69,7 +68,7 @@
       <% end %>
 
       <% if poll.comments.present? %>
-        <p>
+        <p class="mb-1">
           <strong><%= Poll.human_attribute_name :comments %>:</strong>
           <%= poll.comments %>
         </p>
@@ -77,15 +76,15 @@
       <hr />
     <% end %>
   <% end %>
-  <p>
+  <p class="mb-1">
     <strong><%= t 'polls.total_answered' %>:</strong>
     <%= @report.answered %>
   </p>
-  <p>
+  <p class="mb-1">
     <strong><%= t 'polls.total_unanswered' %>:</strong>
     <%= @report.unanswered %>
   </p>
-  <p>
+  <p class="mb-1">
     <strong><%= t 'polls.score' %>:</strong>
     <%= number_to_percentage @report.calification, precision: 0 %>
   </p>

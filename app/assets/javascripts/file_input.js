@@ -9,9 +9,9 @@ jQuery(function ($) {
       $cacheInput.val('')
 
       $container.
-        find('span.icon').
-        removeClass('glyphicon-file').
-        addClass('glyphicon-folder-open')
+        find('i.fas').
+        removeClass('fa-file').
+        addClass('fa-folder-open')
     }
   }
 
@@ -24,12 +24,12 @@ jQuery(function ($) {
       var $container = $(this).closest('.file-container')
 
       $container.
-        find('span.icon').
-        removeClass('glyphicon-folder-open').
-        addClass('glyphicon-file')
+        find('i.fas').
+        removeClass('fa-folder-open').
+        addClass('fa-file')
 
       $container.next('[data-clear-file]').
-        removeClass('hidden')
+        removeAttr('hidden')
     }
   })
 
@@ -46,6 +46,6 @@ jQuery(function ($) {
 
     clearFile($fileInput)
 
-    $(this).addClass('hidden')
+    $(this).attr('hidden', true)
   })
 })

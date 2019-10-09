@@ -1,48 +1,50 @@
-<p>
+<p class="mb-1">
   <strong><%= Poll.human_attribute_name :user %>:</strong>
   <%= @poll.user.informal_name  %>
 </p>
 
 <% if @poll.conclusion_review %>
-  <p>
+  <p class="mb-1">
     <strong><%= Poll.human_attribute_name :pollable %>:</strong>
     <%= @poll.conclusion_review.review %>
   </p>
 <% end %>
 
 <% if @poll.about %>
-  <p>
+  <p class="mb-1">
     <strong><%= Poll.human_attribute_name :about %>:</strong>
     <%= @poll.about.display_name %>
   </p>
 <% end %>
 
-<p>
+<p class="mb-1">
   <strong><%= Poll.human_attribute_name :answered %>:</strong>
   <%= t_boolean @poll.answered %>
 </p>
 
-<h4>
+<hr>
+
+<h5 class="mb-2">
   <%= Questionnaire.human_attribute_name :questions %>
-</h4>
+</h5>
 
 <% @poll.answers.each do |answer| %>
-  <div class="text-bold">
-    <%= simple_format "#{answer.question.sort_order}. #{answer.question.question}" %>
+  <div class="font-weight-bold">
+    <%= simple_format "#{answer.question.sort_order}. #{answer.question.question}", class: 'mb-1' %>
   </div>
 
   <% if @poll.answered? %>
-    <blockquote class="small">
+    <blockquote class="blockquote ml-3">
       <% if answer.question&.options&.any? && answer.answer_option %>
-        <p><%= t "answer_options.#{answer.answer_option.option}" %></p>
+        <p class="small mb-1"><%= t "answer_options.#{answer.answer_option.option}" %></p>
       <% elsif answer.question.answer_written? %>
-        <%= simple_format answer.answer %>
+        <%= simple_format answer.answer, class: 'small mb-1' %>
       <% end %>
     </blockquote>
   <% end %>
 
   <% if answer.comments.present? %>
-    <p>
+    <p class="mb-1">
       <%= Answer.human_attribute_name :comments %>:
       <em><%= answer.comments %></em>
     </p>
@@ -50,7 +52,7 @@
 <% end %>
 
 <% if @poll.comments.present? %>
-  <p>
+  <p class="mb-1">
     <strong><%= Poll.human_attribute_name :comments %>: </strong>
     <%= @poll.comments %>
   </p>

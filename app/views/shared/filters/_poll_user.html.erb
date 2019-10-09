@@ -1,11 +1,11 @@
-<div id="poll_user_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+<div id="poll_user_filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
-      <div class="form-group">
+      <div class="form-group row">
         <% user = params[action] && params[action][:user] %>
 
         <div class="col-md-4">
-          <%= f.label :user, User.model_name.human(count: 1) %>
+          <%= f.label :user, User.model_name.human(count: 1), class: 'col-form-label' %>
         </div>
 
         <div class="col-md-8">
@@ -24,9 +24,9 @@
       </div>
     </div>
     <div class="col-md-6">
-       <div class="form-group">
+       <div class="form-group row">
         <div class="col-md-4">
-          <%= f.label :user, t('.user_option') %>
+          <%= f.label :user, t('.user_option'), class: 'col-form-label' %>
         </div>
 
         <div class="col-md-8">

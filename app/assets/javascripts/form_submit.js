@@ -9,8 +9,9 @@ jQuery(function ($) {
     $.each($form.serializeArray(), function (i, element) {
       if (element.value && element.value.match(rejectRegex)) {
         $('[name="' + element.name + '"]').
+          addClass('is-invalid').
           closest('.form-group').
-          addClass('has-error')
+          addClass('form-group-invalid')
 
         $form.data('rejected', true)
       }
@@ -59,9 +60,15 @@ jQuery(function ($) {
       if ($field.val().match(/^\s*$/)) {
         hasErrors = true
 
-        $field.closest('.form-group').addClass('has-error')
+        $field.
+          addClass('is-invalid').
+          closest('.form-group').
+          addClass('form-group-invalid')
       } else {
-        $field.closest('form-group').removeClass('has-error')
+        $field.
+          addClass('is-invalid').
+          closest('.form-group').
+          removeClass('form-group-invalid')
       }
     })
 

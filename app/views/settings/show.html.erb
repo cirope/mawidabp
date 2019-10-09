@@ -1,12 +1,11 @@
-<div class="page-header">
-  <h2><%= t("settings.#{@setting.name}") %></h2>
-</div>
+<h2><%= t("settings.#{@setting.name}") %></h2>
 
-<p>
+<p class="mb-1">
   <strong><%= Setting.human_attribute_name 'description' %></strong>:
   <%= @setting.description %>
 </p>
-<p>
+
+<p class="mb-1">
   <strong><%= Setting.human_attribute_name 'value' %></strong>:
   <%= @setting.value %>
 </p>

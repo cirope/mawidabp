@@ -1,22 +1,18 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h4 class="panel-title">
+<div class="card my-3">
+  <div class="card-header">
+    <h5 class="mb-0">
       <%= BusinessUnitType.model_name.human count: 0 %>
-    </h4>
+    </h5>
   </div>
 
-  <div class="panel-body">
-    <ul class="nav nav-pills nav-stacked">
-      <% plan_business_unit_type_list.each do |but, plan_items| %>
-        <li <%== 'class="disabled"' if @plan.new_record? %>>
-          <%= link_to_plan_business_unit_type but do %>
-            <%= but&.name || t('plans.without_business_unit_type') %>
-            <span class="pull-right">
-              <span class="badge"><%= plan_items&.size || 0 %></span>
-            </span>
-          <% end %>
-        </li>
+  <div class="list-group list-group-flush">
+    <% plan_business_unit_type_list.each do |but, plan_items| %>
+      <%= link_to_plan_business_unit_type but do %>
+        <%= but&.name || t('plans.without_business_unit_type') %>
+        <span class="float-right">
+          <span class="badge badge-pill badge-secondary"><%= plan_items&.size || 0 %></span>
+        </span>
       <% end %>
-    </ul>
+    <% end %>
   </div>
 </div>

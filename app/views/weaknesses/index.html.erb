@@ -4,19 +4,19 @@
     :columns => @query.blank? ? (Weakness::COLUMNS_FOR_SEARCH.keys - ['organization']) : @columns
   } %>
 <% end %>
-<table class="table table-condensed table-striped table-hover">
+<table class="table table-sm table-striped table-hover">
   <thead id="column_headers">
     <tr>
       <th></th>
       <%= make_filterable_column Review.model_name.human, nil, 'review' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'hidden-xs'}, 'project' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'd-none d-sm-table-cell'}, 'project' %>
       <%= make_filterable_column Weakness.human_attribute_name(:review_code), nil, 'review_code' %>
-      <%= make_filterable_column Weakness.human_attribute_name(:title), { :class => 'hidden-xs'}, 'title' %>
-      <%= make_not_available_column Weakness.human_attribute_name(:state), :class => 'hidden-xs' %>
-      <%= make_not_available_column Weakness.human_attribute_name(:follow_up_date), class: 'hidden-xs hidden-sm hidden-md' %>
-      <%= make_not_available_column Weakness.human_attribute_name(:risk), :class => 'hidden-xs' %>
-      <%= make_filterable_column Tag.model_name.human(count: 0), { :class => 'hidden-xs' }, 'tags' %>
-      <%= make_not_available_column WorkPaper.model_name.human(count: 0), :class => 'hidden-xs' %>
+      <%= make_filterable_column Weakness.human_attribute_name(:title), { :class => 'd-none d-sm-table-cell'}, 'title' %>
+      <%= make_not_available_column Weakness.human_attribute_name(:state), :class => 'd-none d-sm-table-cell' %>
+      <%= make_not_available_column Weakness.human_attribute_name(:follow_up_date), class: 'd-none d-lg-table-cell' %>
+      <%= make_not_available_column Weakness.human_attribute_name(:risk), :class => 'd-none d-sm-table-cell' %>
+      <%= make_filterable_column Tag.model_name.human(count: 0), { :class => 'd-none d-sm-table-cell' }, 'tags' %>
+      <%= make_not_available_column WorkPaper.model_name.human(count: 0), :class => 'd-none d-sm-table-cell' %>
       <th colspan="2" class="text-right"><%= link_to_search if params[:control_objective].blank? %></th>
     </tr>
   </thead>
@@ -26,16 +26,16 @@
       <tr <%== 'class="text-muted"' if weakness.is_in_a_final_review? %>>
         <td><%= finding_updated_at_text weakness %></td>
         <td><%= show_review_with_close_date_as_abbr weakness.review %></td>
-        <td class="hidden-xs"><%= super_truncate weakness.review.try(:plan_item).try(:project), 20 %></td>
+        <td class="d-none d-sm-table-cell"><%= super_truncate weakness.review.try(:plan_item).try(:project), 20 %></td>
         <td><%= show_finding_review_code_with_decription_as_abbr(weakness) %></td>
-        <td class="hidden-xs"><%= super_truncate weakness.title, 20 %></td>
-        <td class="hidden-xs"><%= super_truncate weakness.state_text, 19 %></td>
-        <td class="hidden-xs hidden-sm hidden-md"><%= l weakness.follow_up_date, :format => :short if weakness.follow_up_date %></td>
-        <td class="hidden-xs"><%= weakness.risk_text %></td>
-        <td class="hidden-xs"><%= tags weakness.tags.reload %></td>
-        <td class="hidden-xs"><%= t weakness.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
-        <td><%= link_to_show weakness %></td>
-        <td><%= link_to_edit edit_weakness_path(weakness) %></td>
+        <td class="d-none d-sm-table-cell"><%= super_truncate weakness.title, 20 %></td>
+        <td class="d-none d-sm-table-cell"><%= super_truncate weakness.state_text, 19 %></td>
+        <td class="d-none d-lg-table-cell"><%= l weakness.follow_up_date, :format => :short if weakness.follow_up_date %></td>
+        <td class="d-none d-sm-table-cell"><%= weakness.risk_text %></td>
+        <td class="d-none d-sm-table-cell"><%= tags weakness.tags.reload %></td>
+        <td class="d-none d-sm-table-cell"><%= t weakness.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
+        <td class="text-right"><%= link_to_show weakness %></td>
+        <td class="text-right"><%= link_to_edit edit_weakness_path(weakness) %></td>
       </tr>
     <% end %>
   </tbody>

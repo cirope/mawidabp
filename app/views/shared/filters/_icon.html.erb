@@ -1,0 +1,21 @@
+<div id="icon_filter" class="card mb-3" <%== 'style="display: none;"' unless display %>>
+  <div class="card-header">
+    <h5 class="mb-0"><%= Tag.human_attribute_name 'icon' %></h5>
+  </div>
+
+  <div class="card-body">
+    <% selected = params[action] ? params[action][:icon] : nil %>
+
+    <ul class="nav nav-pills lead">
+      <% Tag.available_icons.each do |icon| %>
+        <li class="nav-item">
+          <a class="nav-link<%= ' active' if selected == icon %>" href="#" data-icon="<%= icon %>">
+            <%= icon 'fas', icon %>
+          </a>
+        </li>
+      <% end %>
+    </ul>
+
+    <%= f.hidden_field :icon, value: selected %>
+  </div>
+</div>

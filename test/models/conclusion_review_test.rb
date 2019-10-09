@@ -54,6 +54,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :reference => 'Some reference',
         :observations => 'Some observations',
         :scope => 'Some scope',
+        :main_recommendations => 'Some recommendations',
         :affects_compliance => false
       )
 
@@ -168,7 +169,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :reference => 'Some reference',
         :observations => 'Some observations',
         :scope => 'Some scope',
-        :affects_compliance => '0'
+        :main_recommendations => 'Some recommendations',
+        :affects_compliance => ''
       )
 
     assert @conclusion_review.invalid?

@@ -4,7 +4,7 @@ class ControlObjective < ApplicationRecord
   include ControlObjectives::Control
   include ControlObjectives::Defaults
   include ControlObjectives::DestroyValidation
-  include ControlObjectives::JSON
+  include ControlObjectives::Json
   include ControlObjectives::Risk
   include ControlObjectives::Search
   include ControlObjectives::Scopes

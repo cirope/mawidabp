@@ -66,5 +66,22 @@ module ControlObjectiveItems::Scopes
         all
       end
     end
+
+    def list_with_final_review
+      includes(:review).merge Review.list_with_final_review
+    end
+
+    def by_issue_date operator, date, date_until = nil
+      mask      = operator.downcase == 'between' && date_until ? '? AND ?' : '?'
+      condition = "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} #{operator} #{mask}"
+
+      includes(review: :conclusion_final_review).where condition, *[date, date_until].compact
+    end
+
+    def by_business_unit_type business_unit_type_id
+      includes(review: { plan_item: :business_unit }).
+        where(business_units: { business_unit_type_id: business_unit_type_id }).
+        references :business_units
+    end
   end
 end

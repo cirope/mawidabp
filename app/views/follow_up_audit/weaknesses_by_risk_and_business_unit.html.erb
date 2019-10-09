@@ -8,16 +8,19 @@
     forms: {
       date_range: {
         show_mid_date: true
-      }
+      },
+      icon: true
     }
   } %>
 
 <% if @weaknesses_by_business_unit_types.first.size > 1 %>
-  <table class="table table-condensed table-striped table-hover">
+  <table class="table table-sm table-striped table-hover">
     <thead>
       <tr>
-        <th rowspan="3"><%= BusinessUnitType.model_name.human %></th>
-        <th rowspan="3"><%= BusinessUnit.model_name.human %></th>
+        <% unless @icon %>
+          <th rowspan="3"><%= BusinessUnitType.model_name.human %></th>
+        <% end %>
+        <th rowspan="3"><%= @icon ? Tag.model_name.human : BusinessUnit.model_name.human %></th>
         <th colspan="<%= Weakness.risks.size.next %>" class="text-center">
           <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.being_implemented',
             date: l(@mid_date, format: :minimal) %>
@@ -59,17 +62,17 @@
 
     <tbody>
       <% @business_unit_type_names.sort.each do |but_name| %>
-        <% @business_unit_names[but_name].sort.each_with_index do |bu_name, i| %>
+        <% @unit_names[but_name].sort.each_with_index do |unit_name, i| %>
           <tr>
-            <% if i == 0 %>
-              <td rowspan="<%= @business_unit_names[but_name].size %>"><%= but_name %></td>
+            <% if i == 0 && @icon.blank? %>
+              <td rowspan="<%= @unit_names[but_name].size %>"><%= but_name %></td>
             <% end %>
 
-            <td><%= bu_name %></td>
+            <td><%= unit_name %></td>
 
             <% @weaknesses_by_business_unit_types.each do |weaknesses_by_business_unit_types| %>
               <% business_units = weaknesses_by_business_unit_types[but_name] || {} %>
-              <% risk_counts = business_units[bu_name] || Hash.new(0) %>
+              <% risk_counts = business_units[unit_name] || Hash.new(0) %>
 
               <% Weakness.risks.keys.reverse.each do |risk_type| %>
                 <td class="text-center"><%= risk_counts[risk_type] %></td>
@@ -86,7 +89,7 @@
 
     <tfoot>
       <tr>
-        <td colspan="2">
+        <td colspan="<%= @icon ? 1 : 2 %>">
           <strong>
             <%= t 'follow_up_committee_report.weaknesses_by_risk_and_business_unit.total' %>
           </strong>

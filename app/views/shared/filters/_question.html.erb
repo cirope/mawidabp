@@ -1,9 +1,9 @@
-<div id="question_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+<div id="question_filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
-      <div class="form-group">
+      <div class="form-group row">
         <% question_filter = params[action] ? params[action][:question] : nil %>
-        <%= f.label :question, Question.human_attribute_name(:question), class: 'col-md-4' %>
+        <%= f.label :question, Question.human_attribute_name(:question), class: 'col-md-4 col-form-label' %>
         <div class="col-md-8">
           <%= f.text_field :question, value: question_filter, maxlength: 3072, class: 'form-control' %>
         </div>

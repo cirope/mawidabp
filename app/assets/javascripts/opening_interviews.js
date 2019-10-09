@@ -1,5 +1,5 @@
 jQuery(function ($) {
-  $(document).on('change', '[data-opening-interview-review-url]', function (event) {
+  $(document).on('change', '[data-opening-interview-review-url]', function () {
     var $review = $(this)
     var url     = $review.data('openingInterviewReviewUrl')
 

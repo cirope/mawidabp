@@ -90,3 +90,5 @@ POSTGRESQL_ADAPTER = ActiveRecord::Base.connection.adapter_name == 'PostgreSQL' 
 ORACLE_ADAPTER = ActiveRecord::Base.connection.adapter_name == 'OracleEnhanced' rescue nil
 # Limite de filas en reportes para servir en real-time
 SEND_REPORT_EMAIL_AFTER_COUNT = 100000
+# Planes de licencias
+LICENSE_PLANS = YAML.safe_load(File.read('config/license_plans.yml')).with_indifferent_access.freeze

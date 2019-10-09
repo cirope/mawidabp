@@ -12,10 +12,10 @@
     </div>
   </div>
 
-  <table class="table table-condensed table-striped table-hover">
+  <table class="table table-sm table-striped table-hover my-3">
     <thead>
       <tr>
-        <th class="text-center"><%= Privilege.model_name.human %></th>
+        <th><%= Privilege.model_name.human %></th>
         <th><%= Privilege.human_attribute_name :read %></th>
         <th><%= Privilege.human_attribute_name :modify %></th>
         <th><%= Privilege.human_attribute_name :erase %></th>
@@ -34,7 +34,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>

@@ -6,19 +6,19 @@
     <%= f.input :description, input_html: { rows: 3 } %>
     <%= f.input :lock_version, as: :hidden %>
 
-    <h4>
+    <h5>
       <%= RiskAssessmentWeight.model_name.human count: 0 %>
-    </h4>
+    </h5>
 
     <div class="row">
       <div class="col-md-4">
-        <h5><strong><%= RiskAssessmentWeight.human_attribute_name 'name' %></strong></h5>
+        <h5 class="h6"><%= RiskAssessmentWeight.human_attribute_name 'name' %></h5>
       </div>
       <div class="col-md-4">
-        <h5><strong><%= RiskAssessmentWeight.human_attribute_name 'description' %></strong></h5>
+        <h5 class="h6"><%= RiskAssessmentWeight.human_attribute_name 'description' %></h5>
       </div>
       <div class="col-md-3">
-        <h5><strong><%= RiskAssessmentWeight.human_attribute_name 'weight' %></strong></h5>
+        <h5 class="h6"><%= RiskAssessmentWeight.human_attribute_name 'weight' %></h5>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
   <hr>
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.button :submit, class: 'btn-primary' %>
   </div>
 <% end %>

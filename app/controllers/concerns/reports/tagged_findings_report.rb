@@ -167,7 +167,7 @@ module Reports::TaggedFindingsReport
     def tagged_findings_report_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = ::CSV.generate(options) do |csv|
+      csv_str = CSV.generate(options) do |csv|
         csv << tagged_findings_column_order.keys
 
         tagged_findings_report_rows.each { |row| csv << row }

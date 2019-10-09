@@ -6,6 +6,7 @@ Sidekiq::Testing.inline!
 
 class ActiveSupport::TestCase
   set_fixture_class versions: PaperTrail::Version
+  parallelize(workers: 1)
 
   fixtures :all
 
@@ -72,7 +73,7 @@ class ActiveSupport::TestCase
     job_class = job[:job]
     mailer, mail_method, delivery_method, *args = job[:args]
 
-    new_args = args.map do |arg|
+    new_args = args.first['args'].map do |arg|
       if arg.kind_of?(Hash)
         if (gid = arg['_aj_globalid']).present?
           GlobalID::Locator.locate(gid)
@@ -86,7 +87,7 @@ class ActiveSupport::TestCase
 
     Current.set(Current.instance.attributes) do
       perform_enqueued_jobs do
-        job_class.perform_now(mailer, mail_method, delivery_method, *new_args)
+        job_class.perform_now(mailer, mail_method, delivery_method, args: new_args)
       end
     end
   end

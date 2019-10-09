@@ -1,13 +1,11 @@
-<hr>
-
-<div class="panel panel-info">
-  <div class="panel-heading">
-    <h4 class="panel-title">
+<div class="card border-info my-3">
+  <div class="card-header bg-info text-light">
+    <h5 class="mb-0">
       <%= Permalink.model_name.human count: 1 %>
-    </h4>
+    </h5>
   </div>
-  <div class="panel-body">
-    <p>
+  <div class="card-body">
+    <p class="mb-0">
       <%= link_to permalink_url(@permalink), @permalink %>
     </p>
   </div>
