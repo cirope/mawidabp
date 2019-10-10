@@ -634,40 +634,30 @@
 /* Corner radius */
 
 .ui-corner-all {
-	-webkit-border-radius: 4px; /* Safari 4 */
-	-moz-border-radius: 4px; /* Firefox 3.6 */
 	border-radius: 4px;
 }
 
 .ui-corner-top,
 .ui-corner-left,
 .ui-corner-tl {
-	-webkit-border-top-left-radius: 4px; /* Safari 4 */
-	-moz-border-radius-topleft: 4px; /* Firefox 3.6 */
 	border-top-left-radius: 4px;
 }
 
 .ui-corner-top,
 .ui-corner-right,
 .ui-corner-tr {
-	-webkit-border-top-right-radius: 4px; /* Safari 4 */
-	-moz-border-radius-topright: 4px; /* Firefox 3.6 */
 	border-top-right-radius: 4px;
 }
 
 .ui-corner-bottom,
 .ui-corner-left,
 .ui-corner-bl {
-	-webkit-border-bottom-left-radius: 4px; /* Safari 4 */
-	-moz-border-radius-bottomleft: 4px; /* Firefox 3.6 */
 	border-bottom-left-radius: 4px;
 }
 
 .ui-corner-bottom,
 .ui-corner-right,
 .ui-corner-br {
-	-webkit-border-bottom-right-radius: 4px; /* Safari 4 */
-	-moz-border-radius-bottomright: 4px; /* Firefox 3.6 */
 	border-bottom-right-radius: 4px;
 }
 
@@ -685,8 +675,6 @@
 	background: #aaaaaa url('<%= image_path 'ui-bg_flat_0_aaaaaa_40x100.png' %>') 50% 50% repeat-x;
 	opacity: .30;
 	filter:Alpha(Opacity=30);
-	-webkit-border-radius: 8px; /* Safari 4 */
-	-moz-border-radius: 8px; /* Firefox 3.6 */
 	border-radius: 8px;
 }
 
@@ -795,16 +783,11 @@
 	vertical-align: middle;
 	cursor: pointer;
 	border: 1px solid #ccc;
-	-webkit-user-select: none;
-	 -moz-user-select: none;
-	  -ms-user-select: none;
-	   -o-user-select: none;
-	      user-select: none;
+  user-select: none;
 }
 
 .ui-button:focus {
   outline: thin dotted #333;
-  outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
 
@@ -1077,12 +1060,6 @@ input.ui-button {
 	margin-right: -.4em;
 }
 
-/* reset extra padding in Firefox */
-button.ui-button::-moz-focus-inner {
-	border: 0;
-	padding: 0;
-} 
-
 
 /*
  * jQuery UI Menu 1.10.3
@@ -1152,21 +1129,20 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-menu .ui-menu-item a.ui-corner-all{
-	-webkit-border-radius: 0px; /* Safari 4 */
-    -moz-border-radius: 0px; /* Firefox 3.6 */
-    border-radius: 0px;
+  border-radius: 0px;
 }
 
 .ui-menu .ui-menu-item a.ui-state-focus,
 .ui-menu .ui-menu-item a.ui-state-active,
 .ui-menu .ui-menu-item a.ui-widget-content{
-	font-weight: bold;
-	margin: 0;
-    background-color: theme-color("primary");
-    border-color: theme-color-level("primary", $alert-border-level);
-    color: #FFFFFF;
-    display: block;
-    white-space: nowrap;
+  background-color: theme-color("primary");
+  border-color: theme-color-level("primary", $alert-border-level);
+  color: #FFFFFF;
+  white-space: nowrap;
+
+  .text-muted {
+    color: #dddddd !important;
+  }
 }
 
 /* Fix problem with border in ui-state-active */
@@ -1305,8 +1281,6 @@ button.ui-button::-moz-focus-inner {
 	background-color: #ffffff;
 	border: 1px solid rgba(0, 0, 0, 0.3);
 	border-radius: 6px 6px 6px 6px;
-	-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3); /* Safari 4 */
-	-moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3); /* Firefox 3.6 */
 	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
 	/*left: 50%;
 	margin-left: -280px;*/
@@ -1325,11 +1299,7 @@ button.ui-button::-moz-focus-inner {
 	padding: 5px 15px;
 	font-size: $font-size-lg;
 	text-decoration: none;
-	-webkit-border-bottom-right-radius: 0; /* Safari 4 */
-	-moz-border-radius-bottomright: 0; /* Firefox 3.6 */
 	border-bottom-right-radius: 0;
-	-webkit-border-bottom-left-radius: 0; /* Safari 4 */
-	-moz-border-radius-bottomleft: 0; /* Firefox 3.6 */
 	border-bottom-left-radius: 0;
 	border-bottom: 1px solid #ccc;
 }
@@ -1358,14 +1328,10 @@ button.ui-button::-moz-focus-inner {
 	line-height: 13.5px;
 	text-shadow: 0 1px 0 #ffffff;
 	filter:alpha(opacity=25);
-	-khtml-opacity: 0.25;
-	-moz-opacity: 0.25;
 	opacity: 0.25;
 	background: none;
 	border-width: 0;
 	border: none;
-	-webkit-box-shadow: none; /* Safari 4 */
-	-moz-box-shadow: none; /* Firefox 3.6 */
 	box-shadow: none;
 }
 
@@ -1379,7 +1345,6 @@ button.ui-button::-moz-focus-inner {
 .ui-dialog .ui-dialog-titlebar-close:focus {
 	padding: 1px;
 	filter:alpha(opacity=90);
-	-moz-opacity: 0.90;
 	opacity: 0.90;	 
 }
 
@@ -1399,11 +1364,7 @@ button.ui-button::-moz-focus-inner {
 	background-color: #ffffff;
 	padding: 5px 15px 5px;
 	border-top: 1px solid #ddd;
-	-webkit-border-radius: 0 0 6px 6px; /* Safari 4 */
-	-moz-border-radius: 0 0 6px 6px; /* Firefox 3.6 */
 	border-radius: 0 0 6px 6px;
-	-webkit-box-shadow: inset 0 1px 0 #ffffff; /* Safari 4 */
-	-moz-box-shadow: inset 0 1px 0 #ffffff; /* Firefox 3.6 */
 	box-shadow: inset 0 1px 0 #ffffff;
 	margin-bottom: 0;
 
@@ -1449,9 +1410,6 @@ button.ui-button::-moz-focus-inner {
     color: #333333;
     background-color: #ffffff;
     border: 1px solid #cccccc;
-    -webkit-transition: 0.1s linear all;
-    -moz-transition: 0.1s linear all;
-    -o-transition: 0.1s linear all;
     transition: 0.1s linear all;
     overflow: visible;
 }
@@ -1566,22 +1524,11 @@ button.ui-button::-moz-focus-inner {
 	background-position: 0 0;
 	color: #ffffff;
 	background-color: #0e90d2;
-	background-image: -moz-linear-gradient(to bottom, #149bdf, #0480be);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#149bdf), to(#0480be));
-	background-image: -webkit-linear-gradient(to bottom, #149bdf, #0480be);
-	background-image: -o-linear-gradient(to bottom, #149bdf, #0480be);
 	background-image: linear-gradient(to bottom, #149bdf, #0480be);
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff149bdf', endColorstr='#ff0480be', GradientType=0);
-	-webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-	-moz-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 	box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	-webkit-transition: width 0.6s ease;
-	-moz-transition: width 0.6s ease;
-	-o-transition: width 0.6s ease;
 	transition: width 0.6s ease;
 }
 
@@ -1644,8 +1591,6 @@ button.ui-button::-moz-focus-inner {
 .ui-tabs {
 	position: relative; /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
 	border: 0;
-	-webkit-border-radius: 0; /* Safari 4 */
-	-moz-border-radius: 0; /* Firefox 3.6 */
 	border-radius: 0;
 }
 
@@ -1653,8 +1598,6 @@ button.ui-button::-moz-focus-inner {
 	margin-bottom: 5px;
 	border: solid #ddd;
 	border-width: 0 0 1px 0;
-	-webkit-border-radius: 0; /* Safari 4 */
-	-moz-border-radius: 0; /* Firefox 3.6 */
 	border-radius: 0;
 	background: none;
 }
@@ -1673,8 +1616,6 @@ button.ui-button::-moz-focus-inner {
 
 .ui-tabs-nav .ui-state-default {
 	border: 0;
-	-webkit-box-shadow: none;  /* Safari 4 */
-	-moz-box-shadow: none;  /* Firefox 3.6 */
 	box-shadow: none;
 }
 
@@ -1682,8 +1623,6 @@ button.ui-button::-moz-focus-inner {
 	float: left;
 	border: 1px solid #fff;
 	border-bottom: 1px solid #ddd;
-	-webkit-border-radius: 4px 4px 0 0; /* Safari 4 */
-	-moz-border-radius: 4px 4px 0 0; /* Firefox 3.6 */
 	border-radius: 4px 4px 0 0;
 	padding: 8px 12px;
 	font-weight: normal;
@@ -1722,8 +1661,6 @@ button.ui-button::-moz-focus-inner {
 	display: block;
 	margin: 1em 0;
 	border: 0;
-	-webkit-border-radius: 0; /* Safari 4 */
-	-moz-border-radius: 0; /* Firefox 3.6 */
 	border-radius: 0;
 	padding: 1px 0;
 	background: none;
@@ -1768,8 +1705,6 @@ button.ui-button::-moz-focus-inner {
     padding: 3px 8px;
     text-align: center;
     text-decoration: none;
-    -webkit-box-shadow: inset 0 1px 0 #000000; /* Safari 4 */
-    -moz-box-shadow: inset 0 1px 0 #000000; /* Firefox 3.6 */
     box-shadow: inset 0 1px 0 #000000;
     border-radius: 4px 4px 4px 4px;
 }
@@ -2141,8 +2076,6 @@ body .ui-tooltip {
 	border-color: theme-color-level("info", $alert-border-level);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	-webkit-border-radius: 4px; /* Safari 4 */
-	-moz-border-radius: 4px; /* Firefox 3.6 */
 	border-radius: 4px;
 }
 
@@ -2154,8 +2087,6 @@ body .ui-tooltip {
 	font-size: normal;
 	text-shadow: 0;
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	-webkit-border-radius: 4px; /* Safari 4 */
-	-moz-border-radius: 4px; /* Firefox 3.6 */
 	border-radius: 4px;
 }
 
@@ -2166,8 +2097,6 @@ body .ui-tooltip {
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	border-color: theme-color-level("primary", $alert-border-level);
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	-webkit-border-radius: 4px; /* Safari 4 */
-	-moz-border-radius: 4px; /* Firefox 3.6 */
 	border-radius: 4px;
 }
 
@@ -2188,18 +2117,10 @@ body .ui-tooltip {
 	border:0px;
 	overflow: hidden;
 	background-color: #f7f7f7;
-	background-image: -moz-linear-gradient(to bottom, #f5f5f5, #f9f9f9);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5f5f5), to(#f9f9f9));
-	background-image: -webkit-linear-gradient(to bottom, #f5f5f5, #f9f9f9);
-	background-image: -o-linear-gradient(to bottom, #f5f5f5, #f9f9f9);
 	background-image: linear-gradient(to bottom, #f5f5f5, #f9f9f9);
 	background-repeat: repeat-x;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
 	border-radius: 4px;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#fff9f9f9', GradientType=0);
-	-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-	-moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -2209,23 +2130,13 @@ body .ui-tooltip {
 	height:100%;
 	color: #ffffff; /*this can be removed if ui-widget-header is blue*/
 	background-color: theme-color("primary");
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	-webkit-transition: width 0.6s ease;
 	transition: width 0.6s ease;
 }
 
 .ui-progressbar .ui-progressbar-overlay {
-	background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
-	background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-	background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 	background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 	background-size: 40px 40px;
-	-webkit-animation: progress-bar-stripes 2s linear infinite;
-	-moz-animation: progress-bar-stripes 2s linear infinite;
-	-ms-animation: progress-bar-stripes 2s linear infinite;
-	-o-animation: progress-bar-stripes 2s linear infinite;
 	animation: progress-bar-stripes 2s linear infinite;
 }
 
@@ -2236,9 +2147,6 @@ body .ui-tooltip {
 /*** Input field styling from Bootstrap **/
 
  input, textarea {
-	-webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
-	-moz-transition: border linear 0.2s, box-shadow linear 0.2s;
-	-o-transition: border linear 0.2s, box-shadow linear 0.2s;
 	transition: border linear 0.2s, box-shadow linear 0.2s;
 }
 
@@ -2250,13 +2158,9 @@ textarea {
 input:focus, textarea:focus {
 	outline: 0;
 	border-color: rgba(82, 168, 236, 0.8);
-	-webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6); /* Safari 4 */
-	-moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6); /* Firefox 3.6 */
 	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
 }
 input[type=file]:focus, input[type=checkbox]:focus, select:focus {
-	-webkit-box-shadow: none; /* Safari 4 */
-	-moz-box-shadow: none; /* Firefox 3.6 */
 	box-shadow: none;
 	outline: 1px dotted #666;
 }
@@ -2276,20 +2180,11 @@ textarea,
 	line-height: 18px;
 	color: #555555;
 	border: 1px solid #ccc;
-	-webkit-border-radius: 3px; /* Safari 4 */
-	-moz-border-radius: 3px; /* Firefox 3.6 */
 	border-radius: 3px;
 }
 
 input[type="search"] {
-  -webkit-appearance: textfield;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
   box-sizing: content-box;
-}
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-decoration {
-  -webkit-appearance: none;
 }
 
 /**Toolbar**/
@@ -2299,17 +2194,10 @@ input[type="search"]::-webkit-search-decoration {
 	margin: 0 0 18px;
 	background-color: #f5f5f5;
 	background-repeat: repeat-x;
-	background-image: -webkit-linear-gradient(to bottom, #ffffff, #f5f5f5); /* Safari 5.1+, Chrome 10+ */
-	background-image: -moz-linear-gradient(to bottom, #ffffff, #f5f5f5); /* Firefox 3.6 */
-	background-image: -o-linear-gradient(to bottom, #ffffff, #f5f5f5); /* Opera 11.10+ */
 	background-image: linear-gradient(to bottom, #ffffff, #f5f5f5); /* CSS3 Compliant */
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f5f5f5', GradientType=0); /* IE8 */
 	border: 1px solid #ddd;
-	-webkit-border-radius: 3px; /* Safari 4 */
-	-moz-border-radius: 3px; /* Firefox 3.6 */
 	border-radius: 3px;
-	-webkit-box-shadow: inset 0 1px 0 #ffffff; /* Safari 4 */
-	-moz-box-shadow: inset 0 1px 0 #ffffff; /* Firefox 3.6 */
 	box-shadow: inset 0 1px 0 #ffffff;
 }
 
@@ -2328,10 +2216,6 @@ input[type="search"]::-webkit-search-decoration {
     vertical-align: middle;
     cursor: pointer;
     border: 1px solid #ccc;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
     user-select: none;
 }
 /***Wijmo Theming**/
@@ -2340,19 +2224,12 @@ div.wijmo-wijmenu {
 	padding:0 20px;
 	background-color: #222222;
 	background-repeat: repeat-x;
-	background-image: -webkit-linear-gradient(to bottom, #333333, #222222); /* Safari 5.1+, Chrome 10+ */
-	background-image: -moz-linear-gradient(to bottom, #333333, #222222); /* Firefox 3.6 */
-	background-image: -o-linear-gradient(to bottom, #333333, #222222); /* Opera 11.10+ */
 	background-image: linear-gradient(to bottom, #333333, #222222); /* CSS3 Compliant */
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#333333', endColorstr='#222222', GradientType=0); /* IE8 */
-	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1); /* Safari 4 */
-	-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1); /* Firefox 3.6 */
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
 
 .wijmo-wijmenu .ui-state-default {
-	-webkit-box-shadow: none; /* Safari 4 */
-	-moz-box-shadow: none; /* Firefox 3.6 */
 	box-shadow: none;
 	color: #bfbfbf;
 }
@@ -2408,11 +2285,7 @@ div.wijmo-wijmenu .wijmo-wijmenu-item .wijmo-wijmenu-child {
 	margin: 0;
 	padding: 6px 0;
 	width: 160px;
-	-webkit-border-radius: 0 0 6px 6px; /* Safari 4 */
-	-moz-border-radius: 0 0 6px 6px; /* Firefox 3.6 */
 	border-radius: 0 0 6px 6px;
-	-webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Safari 4 */
-	-moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Firefox 3.6 */
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -2426,8 +2299,6 @@ div.wijmo-wijmenu .wijmo-wijmenu-item {
 	line-height: 19px;
 	padding: 10px 10px 11px;
 	border: 0;
-	-webkit-border-radius: 0; /* Safari 4 */
-	-moz-border-radius: 0; /* Firefox 3.6 */
 	border-radius: 0;
 }
 
@@ -2457,12 +2328,9 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
 }
 
 .wijmo-wijmenu .wijmo-wijmenu-item input {
-	-moz-transition: none 0s ease 0s;
 	background-color: rgba(255, 255, 255, 0.3);
 	border: 1px solid #111111;
 	border-radius: 4px 4px 4px 4px;
-	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset, 0 1px 0 rgba(255, 255, 255, 0.25); /* Safari 4 */
-	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset, 0 1px 0 rgba(255, 255, 255, 0.25); /* Firefox 3.6 */
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset, 0 1px 0 rgba(255, 255, 255, 0.25);
 	color: rgba(255, 255, 255, 0.75);
 	font-family: $font-family-sans-serif;
@@ -2480,8 +2348,6 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
 .wijmo-wijmenu .wijmo-wijmenu-item input:focus {
 	background-color: #ffffff;
 	border: 0 none;
-	-webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.15); /* Safari 4 */
-	-moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.15); /* Firefox 3.6 */
 	box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
 	color: #404040;
 	outline: 0 none;
@@ -2496,8 +2362,6 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
 }
 
 .wijmo-wijmenu .ui-state-default {
-	-webkit-box-shadow: none; /* Safari 4 */
-	-moz-box-shadow: none; /* Firefox 3.6 */
 	box-shadow: none;
 	color: #bfbfbf;
 	filter: none;
