@@ -30,7 +30,7 @@ module Findings::Csv
       follow_up_date_text,
       solution_date_text,
       rescheduled_text,
-      being_implemented? || awaiting? ? reschedule_count.to_s : '-',
+      reschedule_count.to_s,
       next_pending_task_date,
       listed_tasks,
       reiteration_info,
@@ -59,11 +59,7 @@ module Findings::Csv
     end
 
     def rescheduled_text
-      if being_implemented? || awaiting?
-        I18n.t "label.#{rescheduled? ? 'yes' : 'no'}"
-      else
-        '-'
-      end
+      I18n.t "label.#{rescheduled? ? 'yes' : 'no'}"
     end
 
     def reiteration_info
