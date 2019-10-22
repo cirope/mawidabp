@@ -1,7 +1,6 @@
 language: ruby
-dist: xenial
+dist: bionic
 cache: bundler
-sudo: false
 rvm:
   - 2.5.6
   - 2.6.4
