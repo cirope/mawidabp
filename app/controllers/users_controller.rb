@@ -40,6 +40,8 @@ class UsersController < ApplicationController
     @user.send_welcome_email if @user.save
     @user.password = @user.password_confirmation = nil
 
+    notice_users_left
+
     respond_with @user, location: users_url
   end
 
@@ -90,6 +92,12 @@ class UsersController < ApplicationController
     def check_ldap
       if current_organization.ldap_config
         redirect_to_login t('message.insufficient_privileges'), :alert
+      end
+    end
+
+    def notice_users_left
+      if (count = Current.group.users_left_count) && count <= 10
+        flash[:notice] = t '.correctly_created_with_count', count: count - 1
       end
     end
 end

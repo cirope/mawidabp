@@ -4,20 +4,20 @@
       <% tag_id, tag_name, tag_icon, tag_style = *tag_data %>
 
       <div class="col-md-4">
-        <%= link_to tag_documents_path(tag_id), class: "text-#{tag_style == 'default' ? 'muted' : tag_style}" do %>
-          <div class="panel panel-<%= tag_style %>">
-            <div class="panel-heading">
-              <h3 class="panel-title">
+        <%= link_to tag_documents_path(tag_id), class: "text-decoration-none text-#{tag_style}" do %>
+          <div class="card text-<%= tag_style == 'warning' ? 'dark' : 'light' %> border-<%= tag_style %>">
+            <div class="card-header bg-<%= tag_style %>">
+              <h5 class="mb-0">
                 <%= tag_name %>
-                <span class="pull-right">
-                  <span class="badge badge-<%= tag_style %>"><%= count %></span>
+                <span class="float-right">
+                  <span class="badge badge-pill badge-dark"><%= count %></span>
                 </span>
-              </h3>
+              </h5>
             </div>
 
-            <div class="panel-body text-center">
-              <h4 class="icon-lg">
-                <span class="glyphicon glyphicon-<%= tag_icon %>"></span>
+            <div class="card-body text-center text-<%= tag_style %>">
+              <h4 class="display-4">
+                <%= icon 'fas', tag_icon %>
               </h4>
             </div>
           </div>

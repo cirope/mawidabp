@@ -1,7 +1,7 @@
 module Reports::WeaknessesByState
   extend ActiveSupport::Concern
 
-  include Reports::PDF
+  include Reports::Pdf
   include Reports::Period
 
   def weaknesses_by_state

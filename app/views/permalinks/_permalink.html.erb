@@ -1,0 +1,12 @@
+<div class="card border-info my-3">
+  <div class="card-header bg-info text-light">
+    <h5 class="mb-0">
+      <%= Permalink.model_name.human count: 1 %>
+    </h5>
+  </div>
+  <div class="card-body">
+    <p class="mb-0">
+      <%= link_to permalink_url(@permalink), @permalink %>
+    </p>
+  </div>
+</div>

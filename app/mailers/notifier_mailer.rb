@@ -254,6 +254,16 @@ class NotifierMailer < ActionMailer::Base
          subject: prefixes.upcase + t('notifier.findings_expired_warning.title')
   end
 
+  def findings_unanswered_warning(user, findings)
+    @grouped_findings = findings.group_by(&:organization)
+    prefixes = @grouped_findings.keys.map {|o| "[#{o.prefix}]" }.join(' ')
+
+    prefixes << ' ' unless prefixes.blank?
+
+    mail to: [user.email],
+         subject: prefixes.upcase + t('notifier.findings_unanswered_warning.title')
+  end
+
   def tasks_expiration_warning(user, tasks)
     @grouped_tasks = tasks.group_by(&:organization)
     prefixes = @grouped_tasks.keys.map {|o| "[#{o.prefix}]" }.join(' ')

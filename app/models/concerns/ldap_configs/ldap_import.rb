@@ -1,4 +1,4 @@
-module LdapConfigs::LDAPImport
+module LdapConfigs::LdapImport
   extend ActiveSupport::Concern
 
   def import username, password

@@ -262,7 +262,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
 
     get :review_score_details_report, :params => { :controller_name => 'conclusion' }, as: :csv
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
 
     assert_nothing_raised do
       get :review_score_details_report, :params => {
@@ -275,7 +275,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'filtered review score details report' do
@@ -656,7 +656,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
 
     get :weaknesses_by_business_unit, as: :csv
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
 
     assert_nothing_raised do
       get :weaknesses_by_business_unit, :params => {
@@ -670,7 +670,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'weaknesses by business unit as RTF' do
@@ -678,7 +678,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
 
     get :weaknesses_by_business_unit, as: :rtf
     assert_response :success
-    assert_equal Mime[:rtf], @response.content_type
+    assert_match Mime[:rtf].to_s, @response.content_type
 
     assert_nothing_raised do
       get :weaknesses_by_business_unit, :params => {
@@ -692,7 +692,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:rtf], @response.content_type
+    assert_match Mime[:rtf].to_s, @response.content_type
   end
 
   test 'filtered weaknesses by business unit' do
@@ -764,7 +764,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
 
     get :weaknesses_by_user, as: :csv
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
 
     assert_nothing_raised do
       get :weaknesses_by_user, :params => {
@@ -778,7 +778,7 @@ class ConclusionReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'filtered weaknesses by user' do
@@ -1236,5 +1236,83 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'benefits', 0)
+  end
+
+  test 'control objective counts' do
+    login
+
+    get :control_objective_counts
+    assert_response :success
+    assert_template 'conclusion_reports/control_objective_counts'
+
+    assert_nothing_raised do
+      get :control_objective_counts, :params => {
+        :control_objective_counts => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion'
+      }
+    end
+
+    assert_response :success
+    assert_template 'conclusion_reports/control_objective_counts'
+  end
+
+  test 'control objective counts as CSV' do
+    login
+
+    get :control_objective_counts, as: :csv
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :control_objective_counts, :params => {
+        :control_objective_counts => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'conclusion'
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
+  test 'filtered control objective counts' do
+    login
+
+    get :control_objective_counts, :params => {
+      :control_objective_counts => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => ['', business_unit_types(:cycle).id]
+      },
+      :controller_name => 'conclusion'
+    }
+
+    assert_response :success
+    assert_template 'conclusion_reports/control_objective_counts'
+  end
+
+  test 'create control objective counts' do
+    login
+
+    get :create_control_objective_counts, :params => {
+      :control_objective_counts => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion'
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.control_objective_counts.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'control_objective_counts', 0)
   end
 end

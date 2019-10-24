@@ -23,11 +23,12 @@ es:
         observations: "Aclaraciones previas"
         conclusion: "Comentarios de auditoría"
         score: "Evaluación del ciclo"
-        main_recommendations: "Principales Recomendaciones de Auditoría"
       weaknesses:
         title: "DETALLE DE OBSERVACIONES - PLANES DE ACCION"
         plan: "Plan de acción correctiva N° %{number}"
         responsible: "RESPONSABLE DE LA GERENCIA"
+      images:
+        plan: "Evidencia plan de acción correctiva N° %{number}"
     cro:
       header:
         legend_html: "<b>Bértora y Asociados</b>\r\nBernardo de Irigoyen 330 Piso 3\r\n\r\nCiudad Autónoma de Buenos Aires\r\nC1072AAF\r\nTeléfono +54 (11)4342 2544\r\n\r\nwww.crowe.com.ar"

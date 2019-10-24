@@ -11,10 +11,10 @@
   <% if @best_practice.persisted? %>
     <div class="row">
       <div class="col-md-10">
-        <h5><strong><%= ProcessControl.model_name.human count: 0 %></strong></h5>
+        <h5 class="h6 ml-3 pl-1"><%= ProcessControl.model_name.human count: 0 %></h5>
       </div>
       <div class="col-md-1">
-        <h5><strong><%= ProcessControl.human_attribute_name 'obsolete' %></strong></h5>
+        <h5 class="h6"><%= ProcessControl.human_attribute_name 'obsolete' %></h5>
       </div>
     </div>
 
@@ -33,6 +33,6 @@
     <%= f.input :organization_id, as: :hidden %>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
   </div>
 <% end %>

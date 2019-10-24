@@ -3,8 +3,8 @@
   tagging = f.object
 %>
 <fieldset class="tagging">
-  <div class="row nested">
-    <div class="col-md-8">
+  <div class="row" data-nested>
+    <div class="col-md-11">
       <% if tagging.tag.blank? %>
         <%= f.input :tag_id, as: :string, label: false, input_html: {
           value: tagging.tag.to_s,
@@ -21,8 +21,8 @@
       <% end %>
       <%= f.input :tag_id, as: :hidden, input_html: { id: "hidden_tag_#{id}" } %>
     </div>
-    <div class="col-md-2">
-      <div class="toggle-visibility">
+    <div class="col-md-1">
+      <div class="mt-2 text-right">
         <%= link_to_remove_nested_item f %>
       </div>
     </div>

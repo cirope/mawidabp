@@ -1,14 +1,28 @@
 <h2>
-  <div class="label label-<%= @tag.style %>">
-    <span class="glyphicon glyphicon-<%= @tag.icon %>"></span>
+  <div class="badge badge-<%= @tag.style %>">
+    <%= icon 'fas', @tag.icon %>
     <%= @tag %>
   </div>
 </h2>
 
-<p>
+<p class="mb-1">
   <strong><%= Tag.human_attribute_name 'shared' %></strong>:
   <%= t "label.#{@tag.shared ? 'yes' : 'no'}" %>
 </p>
+
+<% if @tag.children.any? %>
+  <h5><%= t 'tags.form.children' %></h5>
+
+  <ul class="lead">
+    <% @tag.children.each do |tag| %>
+      <li>
+        <span class="badge badge-<%= tag.style %>">
+          <%= tag %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
 
 <hr>
 

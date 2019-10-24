@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <table class="table table-condensed table-hover">
+  <table class="table table-sm table-hover mt-3">
     <thead>
       <tr>
         <th></th>
@@ -56,14 +56,14 @@
   </table>
 
   <div class="row">
-    <div class="col-md-6 col-md-offset-1">
-      <h5><strong><%= WorkflowItem.human_attribute_name(:task) %></strong></h5>
+    <div class="col-md-6 offset-md-1">
+      <h5 class="h6"><%= WorkflowItem.human_attribute_name(:task) %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= WorkflowItem.human_attribute_name :start %></strong></h5>
+      <h5 class="h6"><%= WorkflowItem.human_attribute_name :start %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= WorkflowItem.human_attribute_name :end %></strong></h5>
+      <h5 class="h6"><%= WorkflowItem.human_attribute_name :end %></h5>
     </div>
   </div>
 
@@ -72,20 +72,21 @@
       <%= render 'workflow_item', f: wi_f %>
     <% end %>
 
-    <%= link_to_add_fields(t('label.add_item'), f, :workflow_items) %>
+    <p class="mb-1">
+      <%= link_to_add_fields(t('label.add_item'), f, :workflow_items) %>
+    </p>
   </div>
 
   <% if @workflow.overloaded? %>
-    <p>
-      <%= f.input :allow_overload, as: :boolean, label: false,
-        inline_label: t('workflow.allow_overload') %>
+    <p class="mb-1">
+      <%= f.input :allow_overload, as: :boolean, label: t('workflow.allow_overload') %>
     </p>
   <% end %>
 
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>

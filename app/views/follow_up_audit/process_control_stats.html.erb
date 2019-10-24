@@ -10,16 +10,16 @@
 %>
 
 <% @periods.each do |period| %>
-  <div class="page-header">
-    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
-  </div>
+  <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+
+  <hr>
 
   <% if @process_control_data[period].blank? %>
-    <p style="margin: 1em;">
+    <p class="m-2">
       <em><%= t 'follow_up_committee_report.process_control_stats.without_audits_in_the_period' %></em>
     </p>
   <% else %>
-    <table class="table table-condensed table-striped table-hover">
+    <table class="table table-sm table-striped table-hover">
       <thead>
         <tr>
           <% @columns.each do |col_name, col_title, col_width| %>

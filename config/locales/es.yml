@@ -24,6 +24,7 @@
     download: "Descargar"
     download_csv: "Descargar CSV"
     download_rtf: "Descargar RTF"
+    create_permalink: "Crear enlace permanente"
     edit: "Editar"
     greater_or_equal_than: "Mayor o igual a"
     import: "Importar"
@@ -75,7 +76,7 @@
     you_are_already_logged: "Este usuario ya ha iniciado sesión"
     empty_result: "Sin resultados, modifique el criterio"
     automatic_by_the_system: "Realizado de forma automática por el sistema"
-    compatibility_warning_html: 'Está usando un navegador <strong>obsoleto</strong>. Por favor considere <a href="http://browsehappy.com/">actualizarlo</a>'
+    compatibility_warning_html: 'Está usando un navegador <strong>obsoleto</strong>. Por favor considere <a href="https://browsehappy.com/">actualizarlo</a>'
 
   error:
     title: "Error"
@@ -173,6 +174,7 @@
     index_title: "Reportes de conclusión"
     control_objective_stats_title: 'Observaciones por objetivo de control'
     control_objective_stats_by_review_title: 'Observaciones por objetivo de control sin calificación'
+    control_objective_counts_title: "Análisis de objetivos de control"
     benefits_title: 'Beneficios / Perjuicios'
     process_control_stats_title: 'Observaciones por proceso de negocio'
     synthesis_report_title: "Informe de síntesis al directorio"
@@ -230,6 +232,11 @@
       subtitle: 'INFORMES DEFINITIVOS'
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
+    control_objective_counts:
+      pdf_name: "analisis_de_objetivos_de_control_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "ANÁLISIS DE OBJETIVOS DE CONTROL / INFORMES DEFINITIVOS"
+      without_control_objective_items: "Sin objetivos de control"
     fixed_weaknesses_report:
       pdf_name: "observaciones_por_riesgo_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
@@ -608,12 +615,14 @@
     add_user: "Agregar usuario"
     add_work_paper: "Agregar papel de trabajo"
     recode_tasks: "Recodificar tareas"
+    create_work_paper: "Agregar como papel de trabajo"
     follow_up_date_changed_warning: "La fecha de implementación cambió para adecuarse a las tareas"
     assignment_confirm_message: "No ha seleccionado auditores referentes ni responsables ¿Desea continuar?"
     repeated_ancestors: "Reiterada de"
     repeated_children: "Reiterada en"
     undo_reiteration: 'Deshacer reiteración'
     change_history: "Historial de cambios"
+    submit_answer: "Guardar comentario"
     auditors:
       one: "Auditor"
       other: "Auditores"
@@ -859,10 +868,13 @@
       weakness_title: "Título observación"
       description: "Detalle observación"
       audit_comments: "Respuesta auditado/Comentario de auditoría"
-      issue_date: "Fecha de emisión informe"
-      first_follow_up_date: "1° fecha probable reg."
+      origination_date: "Fecha de origen observación"
+      reschedule_count: "Cant. Reprogramac."
       follow_up_date: "Última fecha propuesta"
       distance_to_cut_date: "Días antigua data"
+      implemented_audited_count:
+        one: "Una observación fue regularizada entre el %{from_date} y el %{to_date}."
+        other: "%{count} observaciones fueron regularizadas entre el %{from_date} y el %{to_date}."
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -878,6 +890,7 @@
         one: "%{count} informe con observaciones en el O.C"
         other: "%{count} informes con observaciones en el O.C."
       without_weaknesses: "Sin observaciones"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
     qa_indicators:
       without_data: "Sin datos para el rango de fechas ingresado"
@@ -1020,6 +1033,11 @@
       body_title:
         one: "El siguiente hallazgo está vencido"
         other: "Los siguientes hallazgos están vencidos"
+    findings_unanswered_warning:
+      title: "Notificación de hallazgos sin respuesta desatendidos"
+      body_title:
+        one: "El siguiente hallazgo se encuentra sin respuesta"
+        other: "Los siguientes hallazgos están sin respuesta"
     tasks_expiration_warning:
       title: "Notificación de tareas cercanas al vencimiento"
       body_title:
@@ -1081,7 +1099,7 @@
       title: "%{name}, su cuenta ha sido creada"
       initial_password: "Para comenzar a utilizar el sistema debe primero establecer su contraseña"
       change_password: "Establecer contraseña"
-      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'Mawidabp' del área de Auditoría Interna."
+      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'Mawidabp'."
       organizations_sites:
         one: "Luego puede ingresar en la siguiente dirección:"
         other: "Luego puede ingresar en cualquiera de las siguientes direcciones (dependiendo de la organización que seleccione):"
@@ -1171,8 +1189,9 @@
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
     without_score: "No calificar"
-    weakness_from_template: "Observación creada de una plantilla"
+    weakness_from_template: "Observación creada a partir de una plantilla"
     repeated_weaknesses: "Reiteradas"
+    old_weaknesses: "Antigua data"
     new_weaknesses: "Nuevas"
     taken_work_paper_code:
       one: "El código de papel de trabajo %{duplicated_work_papers} está duplicado"
@@ -1409,8 +1428,15 @@
         evolution: "Evolución de la calificación"
         evolution_justification: "Justificación de la evolución"
         observations: "Otras consideraciones"
+        main_weaknesses_text: "Principales debilidades"
+        corrective_actions: "Acciones correctivas"
+        affects_compliance: "Afecta compliance"
+        collapse_control_objectives: "Agrupar objetivos de control"
+        scope: "Limitación al alcance"
+        reference: "Marco de referencia"
         previous_identification: "Informe previo"
         previous_date: "Fecha de emisión previa"
+        main_recommendations: "Principales Recomendaciones de Auditoría"
       control:
         order: "Orden"
         control: "Controles"

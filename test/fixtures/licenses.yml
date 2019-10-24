@@ -1,0 +1,11 @@
+cirope:
+  group: main_group
+  status: active
+  auditors_limit: 50
+  subscription_id: <%= SecureRandom.uuid %>
+
+public:
+  group: second_group
+  status: active
+  auditors_limit: 1
+  subscription_id: <%= SecureRandom.uuid %>

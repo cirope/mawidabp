@@ -85,7 +85,9 @@ module Findings::Validations
     end
 
     def validate_state_work_paper_presence
-      if implemented_audited? && work_papers.empty? && !skip_work_paper
+      skip_validation = skip_work_paper == true || skip_work_paper == '1'
+
+      if implemented_audited? && work_papers.empty? && !skip_validation
         errors.add :state, :must_have_a_work_paper
       end
     end
@@ -112,7 +114,7 @@ module Findings::Validations
         (new_record? && final) # comes from a final review _clone_
 
       if !skip_validation && state && state_changed? && state.presence_in(Finding::FINAL_STATUS)
-        has_role_to_do_it = Current.user.try(:supervisor?) || Current.user.try(:manager?)
+        has_role_to_do_it = Current.user&.supervisor? || Current.user&.manager?
 
         errors.add :state, :must_be_done_by_proper_role unless has_role_to_do_it
       end

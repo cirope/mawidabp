@@ -308,7 +308,7 @@ class ReviewsControllerTest < ActionController::TestCase
     }, as: :js
 
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_match Mime[:js].to_s, @response.content_type
   end
 
   test 'plan item refresh' do
@@ -320,7 +320,7 @@ class ReviewsControllerTest < ActionController::TestCase
     }, as: :js
 
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_match Mime[:js].to_s, @response.content_type
   end
 
   test 'plan item data' do
@@ -684,7 +684,7 @@ class ReviewsControllerTest < ActionController::TestCase
     }, as: :js
 
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_match Mime[:js].to_s, @response.content_type
   end
 
   test 'recover original control objective name' do

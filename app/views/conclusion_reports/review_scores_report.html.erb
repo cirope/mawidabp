@@ -7,11 +7,9 @@
 <br>
 
 <% if @business_unit_data.present? %>
-  <div class="page-header">
-    <h3><%= BusinessUnit.model_name.human count: 0 %></h3>
-  </div>
+  <h3><%= BusinessUnit.model_name.human count: 0 %></h3>
 
-  <table class="table table-condensed table-striped table-bordered table-hover">
+  <table class="table table-sm table-striped table-bordered table-hover">
     <thead>
       <tr>
         <th><%= BusinessUnit.model_name.human %></th>

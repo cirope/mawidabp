@@ -50,6 +50,7 @@ es:
   score_types:
     satisfactory: 'Satisfactorio'
     improve: 'Necesita mejorar'
+    regular: 'Regular'
     unsatisfactory: 'No satisfactorio'
     # When score by weaknesses is used
     adequate: 'Adecuado'

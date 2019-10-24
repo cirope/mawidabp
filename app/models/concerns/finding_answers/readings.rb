@@ -2,7 +2,7 @@ module FindingAnswers::Readings
   extend ActiveSupport::Concern
 
   included do
-    after_save :create_current_user_reading, on: :create
+    after_create :create_current_user_reading
 
     has_many :readings, as: :readable, dependent: :destroy
   end

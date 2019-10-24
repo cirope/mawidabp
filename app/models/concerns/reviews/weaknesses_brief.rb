@@ -31,8 +31,9 @@ module Reviews::WeaknessesBrief
       [
         new_weaknesses_row(findings, date),
         repeated_weaknesses_row(findings, date),
+        old_weaknesses_row(findings, date),
         total_weaknesses_row(findings, date)
-      ]
+      ].compact
     end
 
     def new_weaknesses_row findings, date
@@ -63,6 +64,25 @@ module Reviews::WeaknessesBrief
           align: :center
         }
       ].flatten
+    end
+
+    def old_weaknesses_row findings, date
+      show = WEAKNESS_SCORE_OBSOLESCENCE_START &&
+        WEAKNESS_SCORE_OBSOLESCENCE_START <= date
+      counts = old_weaknesses_counts(findings, date).map do |c|
+        { content: c.to_s, align: :center }
+      end
+
+      if show
+        [
+          I18n.t('review.old_weaknesses'),
+          counts,
+          {
+            content: "<b>#{old_weaknesses_counts(findings, date).sum}</b>",
+            align: :center
+          }
+        ].flatten
+      end
     end
 
     def total_weaknesses_row findings, date
@@ -103,7 +123,7 @@ module Reviews::WeaknessesBrief
         count = 0
 
         findings.not_revoked.where(risk: value).each do |f|
-          count += 1 unless f.take_as_repeated_for_score? date: date
+          count += 1 if f.take_as_new_for_score? date: date
         end
 
         count
@@ -122,12 +142,25 @@ module Reviews::WeaknessesBrief
       end
     end
 
+    def old_weaknesses_counts findings, date
+      self.class.risks.to_a.reverse.map do |risk, value|
+        count = 0
+
+        findings.not_revoked.where(risk: value).each do |f|
+          count += 1 if f.take_as_old_for_score? date: date
+        end
+
+        count
+      end
+    end
+
     def total_weaknesses_counts findings, date
       new_counts      = new_weaknesses_counts findings, date
       repeated_counts = repeated_weaknesses_counts findings, date
+      old_counts      = old_weaknesses_counts findings, date
 
       self.class.risks.to_a.each_with_index.map do |risk, index|
-        new_counts[index] + repeated_counts[index]
+        new_counts[index] + repeated_counts[index] + old_counts[index]
       end
     end
 end

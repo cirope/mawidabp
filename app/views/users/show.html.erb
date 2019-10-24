@@ -1,43 +1,41 @@
-<div class="page-header">
-  <h1>
-    <%= @user.informal_name %>
-    <small><%= @user %></small>
-  </h1>
-</div>
+<h1>
+  <%= @user.informal_name %>
+  <small class="ml-2 text-muted"><%= @user %></small>
+</h1>
 
 <div class="row">
   <div class="col-md-6">
-    <p>
+    <p class="mb-1">
       <strong><%= User.human_attribute_name 'email' %></strong>:
       <%= @user.email %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <strong><%= User.human_attribute_name 'function' %></strong>:
       <%= @user.function %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <strong><%= User.human_attribute_name 'language' %></strong>:
       <%= @user.language %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <strong><%= User.human_attribute_name 'enable' %></strong>:
       <%= t_boolean @user.enable? %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <strong><%= User.human_attribute_name 'logged_in' %></strong>:
       <%= t_boolean @user.logged_in? %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <strong><%= User.human_attribute_name 'failed_attempts' %></strong>:
       <%= @user.failed_attempts %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <strong><%= User.human_attribute_name 'password_changed' %></strong>:
       <%= l @user.password_changed, format: :long %>
     </p>
@@ -47,7 +45,7 @@
     <% group_roles = @user.organization_roles.where organization_id: organization_ids %>
 
     <% if group_roles.any? %>
-      <p><strong><%= t '.profiles' %></strong></p>
+      <p class="mb-1"><strong><%= t '.profiles' %></strong></p>
       <ul>
         <% group_roles.each do |organization_role| %>
           <li><%= organization_role %></li>
@@ -60,14 +58,14 @@
 <div class="row">
   <div class="col-md-6">
     <% if @user.parent %>
-      <p>
+      <p class="mb-1">
         <strong><%= User.human_attribute_name 'manager_id' %></strong>:
         <%= link_to @user.parent.full_name, @user.parent %>
       </p>
     <% end %>
 
     <% if @user.children.any? %>
-      <p><strong><%= t 'users.form.children' %></strong></p>
+      <p class="mb-1"><strong><%= t 'users.form.children' %></strong></p>
       <ul>
         <% @user.children.each do |child| %>
           <li><%= link_to child.full_name, child %></li>
@@ -77,7 +75,7 @@
   </div>
   <div class="col-md-6">
     <strong><%= User.human_attribute_name 'notes' %></strong>
-    <%= simple_format @user.notes %>
+    <%= simple_format @user.notes, class: 'mb-1' %>
   </div>
 </div>
 

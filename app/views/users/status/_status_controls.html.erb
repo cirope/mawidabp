@@ -1,21 +1,21 @@
-<small class="pull-right" data-status-controls>
-  <%= link_to self_and_descendants_findings_path, title: t('.user_findings') do %>
-    <span class="glyphicon glyphicon-user"></span>
+<div class="float-right" data-status-controls>
+  <%= link_to self_and_descendants_findings_path, title: t('.user_findings'), class: 'text-decoration-none' do %>
+    <%= icon 'fas', 'users' %>
   <% end %> |
 
   <% if status_session.any? %>
-    <%= link_to users_status_index_path, title: t('.list') do %>
-      <span class="glyphicon glyphicon-list"></span>
+    <%= link_to users_status_index_path, title: t('.list'), class: 'text-decoration-none' do %>
+      <%= icon 'fas', 'list' %>
     <% end %> |
   <% end %>
 
   <% if status_session.include?(@user.id) %>
-    <%= link_to users_status_path(id: @user), data: { remote: true, method: :delete }, title: t('.remove') do %>
-      <span class="glyphicon glyphicon-minus-sign"></span>
+    <%= link_to users_status_path(id: @user), data: { remote: true, method: :delete }, title: t('.remove'), class: 'text-decoration-none' do %>
+      <%= icon 'fas', 'minus-circle' %>
     <% end %>
   <% else %>
-    <%= link_to users_status_index_path(id: @user), data: { remote: true, method: :post }, title: t('.add') do %>
-      <span class="glyphicon glyphicon-plus-sign"></span>
+    <%= link_to users_status_index_path(id: @user), data: { remote: true, method: :post }, title: t('.add'), class: 'text-decoration-none' do %>
+      <%= icon 'fas', 'plus-circle' %>
     <% end %>
   <% end %>
-</small>
+</div>

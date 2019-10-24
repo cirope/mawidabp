@@ -23,13 +23,13 @@
           <% end %>
         <% end %>
       </div>
-      <div class="filter col-md-2">
-        <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-default' %> |
+      <div class="col-md-2">
+        <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-outline-secondary' %> |
         <%= link_to t('label.cancel'), url %>
       </div>
     </div>
     <% if extra_params %>
-      <div class="hidden">
+      <div hidden>
         <% extra_params.each do |name, value| %>
           <%= hidden_field_tag name, value %>
         <% end %>

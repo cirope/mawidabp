@@ -1,8 +1,7 @@
 module Reports::WeaknessesByControlObjective
   extend ActiveSupport::Concern
 
-  include Reports::PDF
-  include Reports::Period
+  include Reports::Pdf
 
   def weaknesses_by_control_objective
     init_weaknesses_by_control_objective_vars
@@ -95,7 +94,7 @@ module Reports::WeaknessesByControlObjective
     def weaknesses_by_control_objective_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = ::CSV.generate(options) do |csv|
+      csv_str = CSV.generate(options) do |csv|
         csv << weaknesses_by_control_objective_csv_headers
 
         weaknesses_by_control_objective_csv_data_rows.each { |row| csv << row }

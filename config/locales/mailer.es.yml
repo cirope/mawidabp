@@ -14,12 +14,12 @@ es:
   common_mailer:
     alt_footer:
       warning: "Por favor, **no contestar** el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
-      title_html: "Si usted desea acceder a sus observaciones , haga click en el siguiente enlace e ingrese legajo y contraseña de Windows: %{url}"
+      title_html: "Si usted desea acceder a sus observaciones, haga clic en el siguiente enlace e ingrese legajo y contraseña de Windows: %{url}"
     footer:
-      email_label: "Correo (preferentemente)"
+      email_label: "Correo"
       warning: "Por favor, **no contestar** el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
-      title: "Correo enviado por el sistema 'Mawidabp'. Cualquier inquietud comunicarse al área de soporte:"
-      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 8 o superior*"
+      title: "Correo enviado por el sistema 'Mawidabp', cualquier inquietud comunicarse al área de soporte."
+      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 10 o superior*"
 
   report_mailer:
     attached_report:

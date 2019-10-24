@@ -1,4 +1,4 @@
-module ConclusionReviews::BicPDF
+module ConclusionReviews::BicPdf
   extend ActiveSupport::Concern
 
   def bic_pdf organization = nil, *args
@@ -14,6 +14,7 @@ module ConclusionReviews::BicPDF
     put_bic_cover_on         pdf
     put_bic_review_on        pdf
     put_bic_weaknesses_on    pdf if weaknesses.any?
+    put_bic_images_on        pdf if weaknesses.any? &:image_model
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -137,8 +138,6 @@ module ConclusionReviews::BicPDF
           end
         end
       end
-
-      number
     end
 
     def put_bic_weakness_on pdf, weakness, number
@@ -146,9 +145,9 @@ module ConclusionReviews::BicPDF
 
       pdf.text I18n.t(
         'conclusion_review.bic.weaknesses.plan', number: number
-      ), style: :bold
+      ), style: :bold, size: PDF_FONT_SIZE * 1.2
 
-      pdf.font_size PDF_FONT_SIZE * 0.75 do
+      pdf.font_size PDF_FONT_SIZE * 0.9 do
         data          = bic_weakness_data weakness
         widths        = bic_weakness_data_column_widths pdf
         table_options = pdf.default_table_options widths
@@ -165,8 +164,41 @@ module ConclusionReviews::BicPDF
       end
     end
 
+    def put_bic_images_on pdf
+      number = 0
+
+      review.grouped_control_objective_items.each do |process_control, cois|
+        cois.sort.each do |coi|
+          weaknesses = if kind_of? ConclusionFinalReview
+                         coi.final_weaknesses
+                       else
+                         coi.weaknesses
+                       end
+
+          weaknesses.not_revoked.sort_for_review.each do |weakness|
+            put_bic_image_on pdf, weakness, number += 1
+          end
+        end
+      end
+    end
+
+    def put_bic_image_on pdf, weakness, number
+      if weakness.image_model
+        pdf.start_new_page
+
+        pdf.text I18n.t(
+          'conclusion_review.bic.images.plan', number: number
+        ), style: :bold, size: PDF_FONT_SIZE * 1.2
+
+        pdf.move_down PDF_FONT_SIZE
+
+        pdf.image weakness.image_model.image.path, position: :center,
+          fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
+      end
+    end
+
     def bic_weakness_data_column_widths pdf
-      [20, 80].map { |width| pdf.percent_width width }
+      [30, 70].map { |width| pdf.percent_width width }
     end
 
     def bic_weakness_data weakness
@@ -246,7 +278,7 @@ module ConclusionReviews::BicPDF
     end
 
     def put_bic_subtitle_on pdf, text
-      pdf.font_size PDF_FONT_SIZE * 0.75 do
+      pdf.font_size PDF_FONT_SIZE * 0.9 do
         table_options = pdf.default_table_options [pdf.percent_width(100)]
         header_data   = [[
           content: "<b>#{text}</b>",
@@ -259,7 +291,7 @@ module ConclusionReviews::BicPDF
     def put_bic_review_data_on pdf
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.font_size PDF_FONT_SIZE * 0.75 do
+      pdf.font_size PDF_FONT_SIZE * 0.9 do
         widths        = bic_review_data_column_widths pdf
         table_options = pdf.default_table_options widths
 
@@ -294,11 +326,11 @@ module ConclusionReviews::BicPDF
           conclusion
         ],
         ([
-          "<b>#{I18n.t 'conclusion_review.bic.review.main_recommendations'}</b>",
-          bic_main_recommendations
-        ] if bic_main_recommendations.present?)
+          "<b>#{self.class.human_attribute_name 'main_recommendations'}</b>",
+          main_recommendations
+        ] if main_recommendations.present?)
       ].compact.each do |title, content|
-        pdf.font_size PDF_FONT_SIZE * 0.75 do
+        pdf.font_size PDF_FONT_SIZE * 0.9 do
           pdf.move_down PDF_FONT_SIZE
           put_bic_subtitle_on pdf, title
 
@@ -311,7 +343,7 @@ module ConclusionReviews::BicPDF
     def put_bic_review_score_on pdf
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.font_size PDF_FONT_SIZE * 0.75 do
+      pdf.font_size PDF_FONT_SIZE * 0.9 do
         widths        = bic_review_data_column_widths pdf
         table_options = pdf.default_table_options widths
 
@@ -333,29 +365,36 @@ module ConclusionReviews::BicPDF
               I18n.t('conclusion_review.bic.review.subject'),
               "<b>#{review.plan_item.project}</b>"
             ].join(': '),
-            size: PDF_FONT_SIZE * 0.85
+            size: PDF_FONT_SIZE * 0.95
           },
-          [
-            I18n.t('review.user_assignment.type_auditor'),
-            bic_review_auditors_text
-          ].join(': '),
+          {
+            content: [
+              I18n.t('review.user_assignment.type_auditor'),
+              bic_review_auditors_text
+            ].join(': '),
+            size:    PDF_FONT_SIZE * 0.85
+          },
           {
             content: "<b>#{review.identification}</b>",
             align:   :center,
-            size:    PDF_FONT_SIZE * 0.85
+            size:    PDF_FONT_SIZE * 0.95
           }
         ],
         [
-          [
-            ReviewUserAssignment.human_attribute_name('owner'),
-            bic_review_owners_text
-          ].join(': '),
+          {
+            content: [
+              ReviewUserAssignment.human_attribute_name('owner'),
+              bic_review_owners_text
+            ].join(': '),
+            size:    PDF_FONT_SIZE * 0.85
+          },
           {
             content: I18n.t(
               'conclusion_review.bic.review.previous',
               review: bic_previous_review_text
             ),
             align:   :center,
+            size:    PDF_FONT_SIZE * 0.85
           },
           {
             content: I18n.t(
@@ -363,7 +402,8 @@ module ConclusionReviews::BicPDF
               start: bic_review_start_date,
               end:   bic_review_end_date
             ),
-            align:   :center
+            align:   :center,
+            size:    PDF_FONT_SIZE * 0.85
           }
         ]
       ].compact
@@ -379,7 +419,7 @@ module ConclusionReviews::BicPDF
             ].join("\n"),
             colspan: 3,
             align:   :center,
-            size:    PDF_FONT_SIZE * 0.85
+            size:    PDF_FONT_SIZE
           }
         ]
       ].compact
@@ -483,21 +523,5 @@ module ConclusionReviews::BicPDF
       else
         I18n.t 'conclusion_review.bic.cover.draft_html'
       end
-    end
-
-    def bic_main_recommendations
-      result = []
-
-      review.grouped_control_objective_items.each do |process_control, cois|
-        cois.sort.each do |coi|
-          coi.weaknesses.not_revoked.sort_for_review.each do |w|
-            if w.audit_recommendations.present?
-              result << w.audit_recommendations.strip
-            end
-          end
-        end
-      end
-
-      result.join "\r\n\r\n"
     end
 end

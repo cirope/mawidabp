@@ -4,6 +4,19 @@ es:
     updated_at: 'Última actualización'
     lock_version: 'Versión'
 
+  activemodel:
+    models:
+      registration:
+        one: 'Organización'
+        other: 'Organizaciones'
+    attributes:
+      registration:
+        email: 'Correo'
+        last_name: 'Apellido'
+        name: 'Nombre'
+        organization_name: 'Nombre de la organización'
+        user: 'Nombre de usuario'
+
   activerecord:
     models:
       achievement:
@@ -90,18 +103,18 @@ es:
       plan_item:
         one: 'Proyecto en plan'
         other: 'Proyectos en plan'
-      setting:
-        one: 'Configuración'
-        other: 'Configuraciones'
-      user:
-        one: 'Usuario'
-        other: 'Usuarios'
       paper_trail/version:
         one: 'Versión'
         other: 'Versiones'
       period:
         one: 'Período'
         other: 'Periodos'
+      permalink:
+        one: 'Enlace permanente'
+        other: 'Enlaces permanentes'
+      permalink_model:
+        one: 'Asociación enlace permanente'
+        other: 'Asociaciones enlace permanente'
       poll:
         one: 'Encuesta'
         other: 'Encuestas'
@@ -135,6 +148,9 @@ es:
       risk_weight:
         one: 'Valor de evaluación de riesgo'
         other: 'Valores de evaluación de riesgo'
+      setting:
+        one: 'Configuración'
+        other: 'Configuraciones'
       tag:
         one: 'Etiqueta'
         other: 'Etiquetas'
@@ -144,6 +160,9 @@ es:
       task:
         one: 'Tarea'
         other: 'Tareas'
+      user:
+        one: 'Usuario'
+        other: 'Usuarios'
       weakness:
         one: 'Observación'
         other: 'Observaciones'
@@ -258,6 +277,7 @@ es:
         finding_answers: 'Respuestas'
         tag_ids: 'Etiquetas'
         rescheduled: 'Reprogramada'
+        reschedule_count: 'Cantidad de reprogramaciones'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'
@@ -471,6 +491,11 @@ es:
         material_resource_units: 'Costo recursos materiales'
         total_resource_units: 'Costo total'
         tags: 'Etiquetas'
+      permalink:
+        action: 'Acción'
+        token: 'Código'
+      permalink_model:
+        model: 'Modelo'
       poll:
         comments: 'Comentarios'
         send_date: 'Fecha envío'
@@ -585,6 +610,8 @@ es:
         weakness_template: 'Buscar plantilla por título'
         weakness_template_from_control_objective: 'Plantilla sugerida por objetivo de control'
         work_papers: 'Papeles de trabajo'
+      weakness/image_model:
+        image: 'Imagen'
       weakness_template:
         title: 'Título'
         description: 'Observación'
@@ -638,3 +665,7 @@ es:
           attributes:
             risk_assessment_weights:
               blank: 'debe tener al menos uno'
+        user:
+          attributes:
+            base:
+              auditors_limit_reached: 'Limite de auditores alcanzado, por favor actualice su licencia.'

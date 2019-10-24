@@ -1,19 +1,14 @@
 <%= render 'header' %>
 
-<div class="row help text-center">
-  <div class="col-md-3 col-md-offset-1">
+<div class="row help justify-content-center text-center">
+  <div class="col-md-3">
     <div>
-      <!--[if lt IE 9]>
-        <img src="<%= image_path 'welcome/follow_up.png'  %>" alt="Seguimiento" height="60">
-      <![endif]-->
-      <!--[if gt IE 8]><!-->
-        <embed src="<%= image_path 'welcome/follow_up.svg' %>" type="image/svg+xml" height="60">
-      <!--<![endif]-->
+      <%= image_tag 'welcome/follow_up.svg', alt: 'Hallazgos pendientes', height: 60 %>
     </div>
 
-    <h3>Hallazgos pendientes</h3>
+    <h3 class="my-2">Hallazgos pendientes</h3>
 
-    <p>
+    <p class="text-muted">
       Aquí podrá consultar sus hallazgos pendientes de solución. Para
       contestar algún hallazgo, deberá seleccionar Editar (Lápiz)
     </p>
@@ -21,32 +16,22 @@
 
   <div class="col-md-3">
     <div>
-      <!--[if lt IE 9]>
-        <img src="<%= image_path 'welcome/conclusion.png'  %>" alt="Conclusión" height="60">
-      <![endif]-->
-      <!--[if gt IE 8]><!-->
-        <embed src="<%= image_path 'welcome/conclusion.svg' %>" type="image/svg+xml" height="60">
-      <!--<![endif]-->
+      <%= image_tag 'welcome/conclusion.svg', alt: 'Hallazgos solucionados', height: 60 %>
     </div>
 
-    <h3>Hallazgos solucionados</h3>
+    <h3 class="my-2">Hallazgos solucionados</h3>
 
-    <p>Podrá consultar sus hallazgos solucionados o reiterados</p>
+    <p class="text-muted">Podrá consultar sus hallazgos solucionados o reiterados</p>
   </div>
 
   <div class="col-md-3">
     <div>
-      <!--[if lt IE 9]>
-        <img src="<%= image_path 'welcome/help.png'  %>" alt="Ayuda" height="60">
-      <![endif]-->
-      <!--[if gt IE 8]><!-->
-        <embed src="<%= image_path 'welcome/help.svg' %>" type="image/svg+xml" height="60">
-      <!--<![endif]-->
+      <%= image_tag 'welcome/help.svg', alt: 'Ayuda', height: 60 %>
     </div>
 
-    <h3>Ayuda</h3>
+    <h3 class="my-2">Ayuda</h3>
 
-    <p>
+    <p class="text-muted">
       Si tiene alguna duda sobre alguna funcionalidad o proceso, este es el mejor
       lugar para despejarla
     </p>

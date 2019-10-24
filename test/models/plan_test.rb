@@ -66,7 +66,7 @@ class PlanTest < ActiveSupport::TestCase
   test 'allow overload' do
     assert !@plan.allow_overload?
 
-    @plan.allow_overload = '0'
+    @plan.allow_overload = ''
 
     assert !@plan.allow_overload?
 

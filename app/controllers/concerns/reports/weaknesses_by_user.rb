@@ -1,7 +1,7 @@
 module Reports::WeaknessesByUser
   extend ActiveSupport::Concern
 
-  include Reports::PDF
+  include Reports::Pdf
   include Reports::Period
 
   def weaknesses_by_user
@@ -102,7 +102,7 @@ module Reports::WeaknessesByUser
     def weaknesses_by_user_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = ::CSV.generate(options) do |csv|
+      csv_str = CSV.generate(options) do |csv|
         csv << weaknesses_by_user_csv_headers
 
         weaknesses_by_user_csv_data_rows.each { |row| csv << row }
@@ -177,7 +177,7 @@ module Reports::WeaknessesByUser
         ],
         [
           Weakness.human_attribute_name('rescheduled'),
-          t("label.#{weakness.rescheduled ? 'yes' : 'no'}")
+          t("label.#{weakness.rescheduled? ? 'yes' : 'no'}")
         ],
         [
           t('findings.state.repeated'),
@@ -323,7 +323,7 @@ module Reports::WeaknessesByUser
           (weakness.origination_date ? l(weakness.origination_date) : '-'),
           (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
           (weakness.solution_date ? l(weakness.solution_date) : '-'),
-          t("label.#{weakness.rescheduled ? 'yes' : 'no'}"),
+          t("label.#{weakness.rescheduled? ? 'yes' : 'no'}"),
           t("label.#{weakness.repeated_of_id.present? ? 'yes' : 'no'}"),
           weakness.audit_comments,
           weakness.audit_recommendations,

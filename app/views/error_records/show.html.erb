@@ -1,19 +1,19 @@
-<p>
+<p class="mb-1">
   <strong><%= ErrorRecord.human_attribute_name 'user_id' %></strong>:
   <%= @error_record %>
 </p>
 
-<p>
+<p class="mb-1">
   <strong><%= ErrorRecord.human_attribute_name 'error' %></strong>:
   <%= @error_record.error_text %>
 </p>
 
-<p>
+<p class="mb-1">
   <strong><%= ErrorRecord.human_attribute_name 'data' %></strong>:
   <%= @error_record.data %>
 </p>
 
-<p>
+<p class="mb-1">
   <strong><%= ErrorRecord.human_attribute_name 'created_at' %></strong>:
   <%= l @error_record.created_at, format: :short %>
 </p>

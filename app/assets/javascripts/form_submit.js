@@ -9,8 +9,9 @@ jQuery(function ($) {
     $.each($form.serializeArray(), function (i, element) {
       if (element.value && element.value.match(rejectRegex)) {
         $('[name="' + element.name + '"]').
+          addClass('is-invalid').
           closest('.form-group').
-          addClass('has-error')
+          addClass('form-group-invalid')
 
         $form.data('rejected', true)
       }
@@ -35,8 +36,6 @@ jQuery(function ($) {
     var selector    = '[name$="[responsible_auditor]"]:visible, [name$="[process_owner]"]:visible'
 
     $(selector).each(function (i, e) {
-      console.log(i)
-
       if ($(e).is(':checked'))
         showWarning = false
     })
@@ -61,9 +60,15 @@ jQuery(function ($) {
       if ($field.val().match(/^\s*$/)) {
         hasErrors = true
 
-        $field.closest('.form-group').addClass('has-error')
+        $field.
+          addClass('is-invalid').
+          closest('.form-group').
+          addClass('form-group-invalid')
       } else {
-        $field.closest('form-group').removeClass('has-error')
+        $field.
+          addClass('is-invalid').
+          closest('.form-group').
+          removeClass('form-group-invalid')
       }
     })
 

@@ -1,3 +1,5 @@
+/* eslint-disable spaced-comment */
+
 // This is a manifest file that'll be compiled into including all the files listed below.
 // Add new JavaScript/Coffee code in separate files in this directory and they'll automatically
 // be included in the compiled file accessible from http://example.com/assets/application.js
@@ -12,6 +14,7 @@
 //= require jquery-ui/i18n/datepicker-es
 //= require jquery-ui/widgets/dialog
 //= require jquery-ui/widgets/sortable
+//= require popper
 //= require bootstrap
 //= require autocomplete
 //= require ajax
@@ -29,6 +32,8 @@
 //= require form_submit
 //= require filters
 //= require file_input
+//= require findings/answers
+//= require findings/work_papers
 //= require best_practices
 //= require closing_interviews
 //= require conclusion_draft_reviews
@@ -38,6 +43,7 @@
 //= require news
 //= require organizations
 //= require opening_interviews
+//= require permalinks
 //= require plans
 //= require plans/calendar
 //= require plans/resources

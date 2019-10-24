@@ -1,41 +1,41 @@
 <% readonly = @control_objective_item.is_in_a_final_review? %>
 <% frozen = @control_objective_item.review.try(:is_frozen?) %>
 
-<p>
+<p class="mb-1">
   <strong><%= ProcessControl.model_name.human %>:</strong>
   <%= @control_objective_item.control_objective.process_control.name %>
 </p>
 
 <div>
   <strong><%= ControlObjectiveItem.human_attribute_name :control_objective_text %>:</strong>
-  <%= simple_format @control_objective_item.to_s %>
+  <%= simple_format @control_objective_item.to_s, class: 'mb-1' %>
 </div>
 
 <% unless HIDE_CONTROL_EFFECTS %>
   <div>
     <strong><%= Control.human_attribute_name(:effects) %>:</strong>
-    <%= simple_format @control_objective_item.control.effects %>
+    <%= simple_format @control_objective_item.control.effects, class: 'mb-1' %>
   </div>
 <% end %>
 
-<p>
+<p class="mb-1">
   <strong><%= ControlObjectiveItem.human_attribute_name(:relevance) %>:</strong>
   <%= @control_objective_item.relevance_text %>
 </p>
 
 <div>
   <strong><%= Control.human_attribute_name(:control) %>:</strong>
-  <%= simple_format @control_objective_item.control.control %>
+  <%= simple_format @control_objective_item.control.control, class: 'mb-1' %>
 </div>
 
 
 <% if @control_objective_item.tags.any? %>
-  <p>
+  <p class="mb-1">
     <strong><%= Tag.model_name.human count: 0 %>:</strong>
 
     <% @control_objective_item.tags.each do |tag| %>
-      <span class="label label-<%= tag.style %>">
-        <span class="glyphicon glyphicon-<%= tag.icon %>"></span>
+      <span class="badge badge-<%= tag.style %>">
+        <%= icon 'fas', tag.icon %>
         <%= tag %>
       </span>
       &nbsp;
@@ -43,56 +43,56 @@
   </p>
 <% end %>
 
-<p>
+<p class="mb-1">
   <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
   <%= @control_objective_item.design_score_text %>
 </p>
 
 <div>
   <strong><%= Control.human_attribute_name :design_tests %>:</strong>
-  <%= simple_format @control_objective_item.control.design_tests %>
+  <%= simple_format @control_objective_item.control.design_tests, class: 'mb-1' %>
 </div>
 
 <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
-  <p>
+  <p class="mb-1">
     <strong><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</strong>
     <%= @control_objective_item.compliance_score_text %>
   </p>
 
   <div>
     <strong><%= Control.human_attribute_name :compliance_tests %>:</strong>
-    <%= simple_format @control_objective_item.control.compliance_tests %>
+    <%= simple_format @control_objective_item.control.compliance_tests, class: 'mb-1' %>
   </div>
 <% end %>
 
-<p>
+<p class="mb-1">
   <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
   <%= @control_objective_item.sustantive_score_text %>
 </p>
 
 <div>
   <strong><%= Control.human_attribute_name :sustantive_tests %>:</strong>
-  <%= simple_format @control_objective_item.control.sustantive_tests %>
+  <%= simple_format @control_objective_item.control.sustantive_tests, class: 'mb-1' %>
 </div>
 
-<p>
+<p class="mb-1">
   <strong><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</strong>
   <%= l(@control_objective_item.audit_date, :format => :long) if @control_objective_item.audit_date %>
 </p>
 
 <div>
   <strong><%= ControlObjectiveItem.human_attribute_name :auditor_comment %>:</strong>
-  <%= simple_format @control_objective_item.auditor_comment %>
+  <%= simple_format @control_objective_item.auditor_comment, class: 'mb-1' %>
 </div>
 
 <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
-  <p>
+  <p class="mb-1">
     <strong><%= ControlObjectiveItem.human_attribute_name(:effectiveness) %>:</strong>
     <%= "#{@control_objective_item.effectiveness}%" %>
   </p>
 <% end %>
 
-<p>
+<p class="mb-1">
   <strong><%= ControlObjectiveItem.human_attribute_name(:finished) %>:</strong>
   <%= t @control_objective_item.finished? ? 'label.yes' : 'label.no' %>
 </p>
@@ -101,9 +101,11 @@
 <%= render :partial => 'oportunities_summary', :locals => {:readonly => readonly, :frozen => frozen} %>
 
 <% unless @control_objective_item.business_unit_scores.empty? %>
-  <h3><%= BusinessUnitScore.model_name.human :count => @control_objective_item.business_unit_scores.size %></h3>
-  <table class="table table-condensed table-striped table-hover">
-    <caption></caption>
+  <h5 class="mt-3">
+    <%= BusinessUnitScore.model_name.human :count => @control_objective_item.business_unit_scores.size %>
+  </h5>
+
+  <table class="table table-sm table-striped table-hover">
     <thead>
       <tr>
         <th><%= BusinessUnitScore.human_attribute_name 'business_unit_id' %></th>
@@ -126,9 +128,11 @@
 <% end %>
 
 <% unless @control_objective_item.work_papers.empty? %>
-  <h3><%= WorkPaper.model_name.human :count => @control_objective_item.work_papers.size %></h3>
-  <table class="table table-condensed table-striped table-hover">
-    <caption></caption>
+  <h5 class="mt-3">
+    <%= WorkPaper.model_name.human :count => @control_objective_item.work_papers.size %>
+  </h5>
+
+  <table class="table table-sm table-striped table-hover">
     <thead>
       <tr>
         <th><%= WorkPaper.human_attribute_name :name %></th>
@@ -144,9 +148,9 @@
           <td><%= wp.name %></td>
           <td><%= wp.code %></td>
           <td><%= wp.number_of_pages %></td>
-          <td><%= simple_format wp.description %></td>
+          <td><%= simple_format wp.description, class: 'mb-1' %></td>
           <td><%= wp.file_model.try(:file?) ?
-            link_to(t('label.download'), wp.file_model.file.url) : '---' %></td>
+            link_to(t('label.download'), wp.file_model.file.url) : '-' %></td>
         </tr>
       <% end %>
     </tbody>

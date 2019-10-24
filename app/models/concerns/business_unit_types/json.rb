@@ -1,4 +1,4 @@
-module BusinessUnitTypes::JSON
+module BusinessUnitTypes::Json
   extend ActiveSupport::Concern
 
   def as_json options = nil

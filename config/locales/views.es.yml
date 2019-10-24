@@ -67,7 +67,7 @@ es:
     index:
       new: 'Nueva entrevista de cierre'
       title: 'Listado de entrevistas de cierre'
-      empty_html: 'No hay entrevistas de cierre, puede crear una con el botón <span class="label label-primary">Nueva entrevista de cierre</span>'
+      empty_html: 'No hay entrevistas de cierre, puede crear una con el botón <span class="badge badge-primary">Nueva entrevista de cierre</span>'
       empty_search_html: 'No hay entrevistas de cierre que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear entrevista de cierre'
@@ -97,7 +97,7 @@ es:
     index:
       new: 'Nuevo documento'
       title: 'Listado de documentos'
-      empty_html: 'No hay documentos, puede crear uno con el botón <span class="label label-primary">Nuevo documento</span>'
+      empty_html: 'No hay documentos, puede crear uno con el botón <span class="badge badge-primary">Nuevo documento</span>'
       empty_search_html: 'No hay documentos que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear documento'
@@ -165,6 +165,9 @@ es:
       revoked: 'Anulada'
       criteria_mismatch: 'Difiere criterio'
       expired: 'Desestimada / No aplica'
+    work_papers:
+      create:
+        from_comment: 'De comentario por %{user} el %{date}'
 
   login_records:
     choose:
@@ -185,14 +188,14 @@ es:
     index:
       new: 'Nueva noticia'
       title: 'Listado de noticias'
-      empty_html: 'No hay noticias, puede crear una con el botón <span class="label label-primary">Nueva noticia</span>'
+      empty_html: 'No hay noticias, puede crear una con el botón <span class="badge badge-primary">Nueva noticia</span>'
       empty_search_html: 'No hay noticias que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear noticia'
       tagging: 'Agregar etiqueta'
       image_model: 'Agregar imagen'
     form:
-      markdown_help_html: '<span class="label label-info">Atención</span> dentro del contenido puedes utilizar %{link}'
+      markdown_help_html: '<span class="badge badge-info">Atención</span> dentro del contenido puedes utilizar %{link}'
     show:
       title: 'Ver noticia'
 
@@ -202,7 +205,7 @@ es:
     index:
       new: 'Nueva entrevista de inicio'
       title: 'Listado de entrevistas de inicio'
-      empty_html: 'No hay entrevistas de inicio, puede crear una con el botón <span class="label label-primary">Nueva entrevista de inicio</span>'
+      empty_html: 'No hay entrevistas de inicio, puede crear una con el botón <span class="badge badge-primary">Nueva entrevista de inicio</span>'
       empty_search_html: 'No hay entrevistas de inicio que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear entrevista de inicio'
@@ -386,6 +389,13 @@ es:
       mark_as_read: 'Marcar como leído'
       readed_on: 'Marcado como leído el %{on}'
 
+  registrations:
+    new:
+      title: 'Nueva Organización'
+    show:
+      title: 'Organización creada'
+      body: 'Su registro está completo, recibirá un correo con instrucciones para ingresar.'
+
   report:
     index_title: 'Listado de reportes'
 
@@ -454,16 +464,21 @@ es:
   tags:
     edit:
       title: 'Editar etiqueta'
+    form:
+      children: 'Subetiquetas'
+      add_child: 'Agregar subetiqueta'
     index:
       new: 'Nueva etiqueta'
       title: 'Listado de etiquetas'
-      empty_html: 'No hay etiquetas, puede crear una con el botón <span class="label label-primary">Nueva etiqueta</span>'
+      empty_html: 'No hay etiquetas, puede crear una con el botón <span class="badge badge-primary">Nueva etiqueta</span>'
+    list:
+      childless: 'Sin subetiquetas'
     new:
       title: 'Crear etiqueta'
     show:
       title: 'Ver etiqueta'
     styles:
-      default: 'Por defecto'
+      secondary: 'Por defecto'
       primary: 'Importante'
       success: 'Exitosa'
       info: 'Informativa'
@@ -498,6 +513,8 @@ es:
       add_child: 'Agregar persona a cargo'
       add_related_user_relations: 'Agregar usuario relacionado'
       add_organization_role: 'Agregar un nuevo perfil'
+    create:
+      correctly_created_with_count: 'Usuario creado, cantidad de auditores restantes para su licencia: %{count}'
 
     imports:
       new:
@@ -528,10 +545,10 @@ es:
         email: 'Correo'
         send_instructions: 'Enviar instrucciones'
         back: 'Volver'
-        note: 'Para restablecer su contraseña ingrese su dirección de correo electrónico'
+        note: 'Para restablecer su contraseña, ingrese su dirección de correo electrónico'
       create:
-        success: 'Se enviaron instrucciones a tu correo para restablecer la contraseña'
-        not_found: 'El correo que ingresaste no está registrado, verifica que no esté mal escrito'
+        success: 'Se envió un correo con las instrucciones para restablecer la contraseña'
+        not_found: 'El correo ingresado no está registrado, verifica que no esté mal escrito'
     profiles:
       edit:
         title: 'Modificar información personal'
@@ -588,7 +605,7 @@ es:
     index:
       new: 'Nueva evaluación de riesgo'
       title: 'Listado de evaluaciones de riesgo'
-      empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="label label-primary">Nueva evaluación de riesgo</span>'
+      empty_html: 'No hay evaluaciones de riesgo, puede crear una con el botón <span class="badge badge-primary">Nueva evaluación de riesgo</span>'
       empty_search_html: 'No hay evaluaciones de riesgo que coincidan con el criterio de búsqueda'
       merge_to_plan: 'Crear proyectos en plan a partir de la evaluación'
     new:
@@ -628,7 +645,7 @@ es:
     index:
       new: 'Nueva plantilla de evaluación de riesgo'
       title: 'Listado de plantillas de evaluación de riesgo'
-      empty_html: 'No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="label label-primary">Nueva plantilla de evaluación de riesgo</span>'
+      empty_html: 'No hay plantillas de evaluación de riesgo, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de evaluación de riesgo</span>'
       empty_search_html: 'No hay plantillas de evaluación de riesgo que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear plantilla de evaluación de riesgo'
@@ -661,7 +678,7 @@ es:
     index:
       new: 'Nueva plantilla de observación'
       title: 'Listado de plantillas de observaciones'
-      empty_html: 'No hay plantillas de observaciones, puede crear una con el botón <span class="label label-primary">Nueva plantilla de observación</span>'
+      empty_html: 'No hay plantillas de observaciones, puede crear una con el botón <span class="badge badge-primary">Nueva plantilla de observación</span>'
       empty_search_html: 'No hay plantillas de observaciones que coincidan con el criterio de búsqueda'
     new:
       title: 'Crear plantilla de observación'

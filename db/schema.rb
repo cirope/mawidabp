@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_21_185624) do
+ActiveRecord::Schema.define(version: 2019_09_22_213849) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -243,6 +243,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.text "scope"
     t.string "previous_identification"
     t.date "previous_date"
+    t.text "main_recommendations"
     t.index ["close_date"], name: "i_con_rev_clo_dat"
     t.index ["conclusion_index"], name: "i_con_rev_con_ind"
     t.index ["issue_date"], name: "i_con_rev_iss_dat"
@@ -385,7 +386,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.index ["dblink", "catchup"], name: "def$_calldest_n2"
   end
 
-  create_table "def$_defaultdest", primary_key: "dblink", id: :string, limit: 128, comment: "Default destination", comment: "Default destinations for deferred remote procedure calls", force: :cascade do |t|
+  create_table "def$_defaultdest", primary_key: "dblink", id: :string, limit: 128, comment: "Default destinations for deferred remote procedure calls", force: :cascade do |t|
   end
 
   create_table "def$_destination", primary_key: ["dblink", "catchup"], comment: "Information about propagation to different destinations", force: :cascade do |t|
@@ -413,7 +414,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.decimal "spare4", default: "0.0", comment: "Total time in seconds spent sleeping during push"
   end
 
-  create_table "def$_error", primary_key: "enq_tid", id: :string, limit: 22, comment: "The ID of the transaction that created the error", comment: "Information about all deferred transactions that caused an error", force: :cascade do |t|
+  create_table "def$_error", primary_key: "enq_tid", id: :string, limit: 22, comment: "Information about all deferred transactions that caused an error", force: :cascade do |t|
     t.string "origin_tran_db", limit: 128, comment: "The database originating the deferred transaction"
     t.string "origin_enq_tid", limit: 22, comment: "The original ID of the transaction"
     t.string "destination", limit: 128, comment: "Database link used to address destination"
@@ -424,7 +425,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.string "error_msg", limit: 2000, comment: "Error message text"
   end
 
-  create_table "def$_lob", id: :raw, limit: 16, comment: "Identifier of LOB parameter", comment: "Storage for LOB parameters to deferred RPCs", force: :cascade do |t|
+  create_table "def$_lob", id: :raw, limit: 16, comment: "Storage for LOB parameters to deferred RPCs", force: :cascade do |t|
     t.string "enq_tid", limit: 22, comment: "Transaction identifier for deferred RPC with this LOB parameter"
     t.binary "blob_col", comment: "Binary LOB parameter"
     t.text "clob_col", comment: "Character LOB parameter"
@@ -442,12 +443,12 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.raw "catchup", limit: 16, default: "00", comment: "Used to break transaction into pieces"
   end
 
-  create_table "def$_propagator", primary_key: "userid", id: :decimal, comment: "User ID of the propagator", comment: "The propagator for deferred remote procedure calls", force: :cascade do |t|
+  create_table "def$_propagator", primary_key: "userid", id: :decimal, comment: "The propagator for deferred remote procedure calls", force: :cascade do |t|
     t.string "username", limit: 30, null: false, comment: "User name of the propagator"
     t.date "created", null: false, comment: "The time when the propagator is registered"
   end
 
-  create_table "def$_pushed_transactions", primary_key: "source_site_id", id: :decimal, comment: "Originating database identifier for the deferred transaction", comment: "Information about deferred transactions pushed to this site by RepAPI clients", force: :cascade do |t|
+  create_table "def$_pushed_transactions", primary_key: "source_site_id", id: :decimal, comment: "Information about deferred transactions pushed to this site by RepAPI clients", force: :cascade do |t|
     t.decimal "last_tran_id", default: "0.0", comment: "Last committed transaction"
     t.string "disabled", limit: 1, default: "F", comment: "Disable propagation"
     t.string "source_site", limit: 128, comment: "Obsolete - do not use"
@@ -582,9 +583,9 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.text "internal_control_components", default: "[]", null: false
     t.text "operational_risk", default: "[]"
     t.integer "weakness_template_id", precision: 38
-    t.string "rescheduled", limit: 1, default: "f", null: false
     t.date "first_follow_up_date"
     t.date "last_notification_date"
+    t.integer "reschedule_count", precision: 38, default: 0, null: false
     t.index ["control_objective_item_id"], name: "i_fin_con_obj_ite_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
@@ -595,7 +596,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.index ["organization_id"], name: "i_findings_organization_id"
     t.index ["parent_id"], name: "index_findings_on_parent_id"
     t.index ["repeated_of_id"], name: "i_findings_repeated_of_id"
-    t.index ["rescheduled"], name: "index_findings_on_rescheduled"
+    t.index ["reschedule_count"], name: "i_findings_reschedule_count"
     t.index ["state"], name: "index_findings_on_state"
     t.index ["title"], name: "index_findings_on_title"
     t.index ["type"], name: "index_findings_on_type"
@@ -611,6 +612,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.integer "lock_version", precision: 38, default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "licensed", limit: 1, default: "f"
     t.index ["admin_email"], name: "index_groups_on_admin_email", unique: true
     t.index ["admin_hash"], name: "index_groups_on_admin_hash", unique: true
     t.index ["name"], name: "index_groups_on_name", unique: true
@@ -654,6 +656,19 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.string "user"
     t.string "encrypted_password"
     t.index ["organization_id"], name: "i_ldap_configs_organization_id"
+  end
+
+  create_table "licenses", force: :cascade do |t|
+    t.integer "group_id", precision: 38, null: false
+    t.string "status", default: "trial", null: false
+    t.integer "auditors_limit", precision: 38, null: false
+    t.string "subscription_id"
+    t.datetime "subscribed_until", precision: 6
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["group_id"], name: "index_licenses_on_group_id"
+    t.index ["subscribed_until"], name: "i_licenses_subscribed_until"
+    t.index ["subscription_id"], name: "i_licenses_subscription_id"
   end
 
   create_table "login_records", force: :cascade do |t|
@@ -2059,6 +2074,24 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.index ["start"], name: "index_periods_on_start"
   end
 
+  create_table "permalink_models", force: :cascade do |t|
+    t.integer "permalink_id", precision: 38, null: false
+    t.string "model_type", null: false
+    t.integer "model_id", precision: 38, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.index ["model_type", "model_id"], name: "i_per_mod_mod_typ_mod_id"
+    t.index ["permalink_id"], name: "i_per_mod_per_id"
+  end
+
+  create_table "permalinks", force: :cascade do |t|
+    t.string "token", null: false
+    t.string "action", null: false
+    t.integer "organization_id", precision: 38, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.index ["organization_id"], name: "i_permalinks_organization_id"
+    t.index ["token"], name: "index_permalinks_on_token", unique: true
+  end
+
   create_table "plan_items", force: :cascade do |t|
     t.string "project"
     t.date "start"
@@ -2176,7 +2209,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.index ["user_id", "related_user_id"], name: "ibff96752fbe4d0f3af118e7ce3391"
   end
 
-  create_table "repcat$_audit_attribute", primary_key: "attribute", id: :string, limit: 30, comment: "Description of the attribute", comment: "Information about attributes automatically maintained for replication", force: :cascade do |t|
+  create_table "repcat$_audit_attribute", primary_key: "attribute", id: :string, limit: 30, comment: "Information about attributes automatically maintained for replication", force: :cascade do |t|
     t.integer "data_type_id", precision: 38, null: false, comment: "Datatype of the attribute value"
     t.integer "data_length", precision: 38, comment: "Length of the attribute value in byte"
     t.string "source", limit: 92, null: false, comment: "Name of the function which returns the attribute value"
@@ -2221,7 +2254,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.index ["log_id", "source", "role", "master"], name: "repcat$_ddl_index"
   end
 
-  create_table "repcat$_exceptions", primary_key: "exception_id", id: :decimal, comment: "Internal primary key of the exceptions table.", comment: "Repcat processing exceptions table.", force: :cascade do |t|
+  create_table "repcat$_exceptions", primary_key: "exception_id", id: :decimal, comment: "Repcat processing exceptions table.", force: :cascade do |t|
     t.string "user_name", limit: 30, comment: "User name of user submitting the exception."
     t.text "request", comment: "Originating request containing the exception."
     t.decimal "job", comment: "Originating job containing the exception."
@@ -2231,7 +2264,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.decimal "line_number", comment: "Line number of the exception."
   end
 
-  create_table "repcat$_extension", primary_key: "extension_id", id: :raw, limit: 16, comment: "Globally unique identifier for replication extension", comment: "Information about replication extension requests", force: :cascade do |t|
+  create_table "repcat$_extension", primary_key: "extension_id", id: :raw, limit: 16, comment: "Information about replication extension requests", force: :cascade do |t|
     t.decimal "extension_code", comment: "Kind of replication extension"
     t.string "masterdef", limit: 128, comment: "Master definition site for replication extension"
     t.string "export_required", limit: 1, comment: "YES if this extension requires an export, and NO if no export is required"
@@ -2320,7 +2353,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.index ["template_object_id"], name: "repcat$_object_parms_n2"
   end
 
-  create_table "repcat$_object_types", primary_key: "object_type_id", id: :decimal, comment: "Internal primary key of the template object types table.", comment: "Internal table for template object types.", force: :cascade do |t|
+  create_table "repcat$_object_types", primary_key: "object_type_id", id: :decimal, comment: "Internal table for template object types.", force: :cascade do |t|
     t.string "object_type_name", limit: 200, comment: "Descriptive name for the object type."
     t.raw "flags", limit: 255, comment: "Internal flags for object type processing."
     t.string "spare1", limit: 4000, comment: "Reserved for future use."
@@ -2364,7 +2397,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.index ["sname", "priority_group", "data_type_id", "fixed_data_length"], name: "repcat$_priority_group_u1", unique: true
   end
 
-  create_table "repcat$_refresh_templates", primary_key: "refresh_template_id", id: :decimal, comment: "Internal primary key of the REPCAT$_REFRESH_TEMPLATES table.", comment: "Primary table containing deployment template information.", force: :cascade do |t|
+  create_table "repcat$_refresh_templates", primary_key: "refresh_template_id", id: :decimal, comment: "Primary table containing deployment template information.", force: :cascade do |t|
     t.string "owner", limit: 30, null: false, comment: "Owner of the refresh group template."
     t.string "refresh_group_name", limit: 30, null: false, comment: "Name of the refresh group to create during instantiation."
     t.string "refresh_template_name", limit: 30, null: false, comment: "Name of the refresh group template."
@@ -2588,7 +2621,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.index ["gname", "dblink", "gowner"], name: "i_repcat$_snapgroup1", unique: true
   end
 
-  create_table "repcat$_template_objects", primary_key: "template_object_id", id: :decimal, comment: "Internal primary key of the REPCAT$_TEMPLATE_OBJECTS table.", force: :cascade do |t|
+  create_table "repcat$_template_objects", primary_key: "template_object_id", id: :decimal, force: :cascade do |t|
     t.decimal "refresh_template_id", null: false, comment: "Internal primary key of the REPCAT$_REFRESH_TEMPLATES table."
     t.string "object_name", limit: 30, null: false, comment: "Name of the database object."
     t.decimal "object_type", null: false, comment: "Type of database object."
@@ -2608,7 +2641,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.index ["refresh_template_id", "object_type"], name: "repcat$_template_objects_n1"
   end
 
-  create_table "repcat$_template_parms", primary_key: "template_parameter_id", id: :decimal, comment: "Internal primary key of the REPCAT$_TEMPLATE_PARMS table.", force: :cascade do |t|
+  create_table "repcat$_template_parms", primary_key: "template_parameter_id", id: :decimal, force: :cascade do |t|
     t.decimal "refresh_template_id", null: false, comment: "Internal primary key of the REPCAT$_REFRESH_TEMPLATES table."
     t.string "parameter_name", limit: 30, null: false, comment: "name of the parameter."
     t.text "default_parm_value", comment: "Default value for the parameter."
@@ -2617,7 +2650,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.index ["refresh_template_id", "parameter_name"], name: "repcat$_template_parms_u1", unique: true
   end
 
-  create_table "repcat$_template_refgroups", primary_key: "refresh_group_id", id: :decimal, comment: "Internal primary key of the refresh groups table.", comment: "Table for maintaining refresh group information for template.", force: :cascade do |t|
+  create_table "repcat$_template_refgroups", primary_key: "refresh_group_id", id: :decimal, comment: "Table for maintaining refresh group information for template.", force: :cascade do |t|
     t.string "refresh_group_name", limit: 30, null: false, comment: "Name of the refresh group"
     t.decimal "refresh_template_id", null: false, comment: "Primary key of the template containing the refresh group."
     t.string "rollback_seg", limit: 30, comment: "Name of the rollback segment to use during refresh."
@@ -2627,7 +2660,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.index ["refresh_template_id"], name: "repcat$_template_refgroups_n2"
   end
 
-  create_table "repcat$_template_sites", primary_key: "template_site_id", id: :decimal, comment: "Internal primary key of the REPCAT$_TEMPLATE_SITES table.", force: :cascade do |t|
+  create_table "repcat$_template_sites", primary_key: "template_site_id", id: :decimal, force: :cascade do |t|
     t.string "refresh_template_name", limit: 30, null: false, comment: "Name of the refresh group template."
     t.string "refresh_group_name", limit: 30, comment: "Name of the refresh group to create during instantiation."
     t.string "template_owner", limit: 30, comment: "Owner of the refresh group template."
@@ -2641,11 +2674,11 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.index ["refresh_template_name", "user_name", "site_name", "repapi_site_id"], name: "repcat$_template_sites_u1", unique: true
   end
 
-  create_table "repcat$_template_status", primary_key: "template_status_id", id: :decimal, comment: "Internal primary key for the template status table.", comment: "Table for template status and template status codes.", force: :cascade do |t|
+  create_table "repcat$_template_status", primary_key: "template_status_id", id: :decimal, comment: "Table for template status and template status codes.", force: :cascade do |t|
     t.string "status_type_name", limit: 100, null: false, comment: "User friendly name for the template status."
   end
 
-  create_table "repcat$_template_targets", primary_key: "template_target_id", id: :decimal, comment: "Internal primary key of the template targets table.", comment: "Internal table for tracking potential target databases for templates.", force: :cascade do |t|
+  create_table "repcat$_template_targets", primary_key: "template_target_id", id: :decimal, comment: "Internal table for tracking potential target databases for templates.", force: :cascade do |t|
     t.string "target_database", limit: 128, null: false, comment: "Global identifier of the target database."
     t.string "target_comment", limit: 2000, comment: "Comment on the target database."
     t.string "connect_string", limit: 4000, comment: "The connection descriptor used to connect to the target database."
@@ -2653,20 +2686,20 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.index ["target_database"], name: "repcat$_template_targets_u1", unique: true
   end
 
-  create_table "repcat$_template_types", primary_key: "template_type_id", id: :decimal, comment: "Internal primary key of the template types table.", comment: "Internal table for maintaining types of templates.", force: :cascade do |t|
+  create_table "repcat$_template_types", primary_key: "template_type_id", id: :decimal, comment: "Internal table for maintaining types of templates.", force: :cascade do |t|
     t.string "template_description", limit: 200, comment: "Description of the template type."
     t.raw "flags", limit: 255, comment: "Bitmap flags controlling each type of template."
     t.string "spare1", limit: 4000, comment: "Reserved for future expansion."
   end
 
-  create_table "repcat$_user_authorizations", primary_key: "user_authorization_id", id: :decimal, comment: "Internal primary key of the REPCAT$_USER_AUTHORIZATIONS table.", force: :cascade do |t|
+  create_table "repcat$_user_authorizations", primary_key: "user_authorization_id", id: :decimal, force: :cascade do |t|
     t.decimal "user_id", null: false, comment: "Database user id."
     t.decimal "refresh_template_id", null: false, comment: "Internal primary key of the REPCAT$_REFRESH_TEMPLATES table."
     t.index ["refresh_template_id"], name: "repcat$_user_authorizations_n1"
     t.index ["user_id", "refresh_template_id"], name: "repcat$_user_authorizations_u1", unique: true
   end
 
-  create_table "repcat$_user_parm_values", primary_key: "user_parameter_id", id: :decimal, comment: "Internal primary key of the REPCAT$_USER_PARM_VALUES table.", force: :cascade do |t|
+  create_table "repcat$_user_parm_values", primary_key: "user_parameter_id", id: :decimal, force: :cascade do |t|
     t.decimal "template_parameter_id", null: false, comment: "Internal primary key of the REPCAT$_TEMPLATE_PARMS table."
     t.decimal "user_id", null: false, comment: "Database user id."
     t.text "parm_value", comment: "Value of the parameter for this user."
@@ -2860,10 +2893,12 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
     t.string "shared", limit: 1, default: "f", null: false
     t.integer "group_id", precision: 38, null: false
     t.string "icon", default: "tag", null: false
+    t.integer "parent_id", precision: 38
     t.index ["group_id"], name: "index_tags_on_group_id"
     t.index ["kind"], name: "index_tags_on_kind"
     t.index ["name"], name: "index_tags_on_name"
     t.index ["organization_id"], name: "index_tags_on_organization_id"
+    t.index ["parent_id"], name: "index_tags_on_parent_id"
     t.index ["shared"], name: "index_tags_on_shared"
   end
 
@@ -3026,6 +3061,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
   add_foreign_key "findings", "findings", column: "repeated_of_id", on_delete: :cascade
   add_foreign_key "findings", "weakness_templates", on_delete: :cascade
   add_foreign_key "ldap_configs", "organizations", on_delete: :cascade
+  add_foreign_key "licenses", "groups", on_delete: :cascade
   add_foreign_key "login_records", "organizations", on_delete: :cascade
   add_foreign_key "login_records", "users", on_delete: :cascade
   add_foreign_key "mview$_adv_ajg", "mview$_adv_log", column: "runid#", primary_key: "runid#", name: "mview$_adv_ajg_fk"
@@ -3061,6 +3097,8 @@ ActiveRecord::Schema.define(version: 2019_05_21_185624) do
   add_foreign_key "organizations", "groups", on_delete: :cascade
   add_foreign_key "organizations", "image_models", on_delete: :cascade
   add_foreign_key "periods", "organizations", on_delete: :cascade
+  add_foreign_key "permalink_models", "permalinks", on_delete: :cascade
+  add_foreign_key "permalinks", "organizations", on_delete: :cascade
   add_foreign_key "plan_items", "business_units", on_delete: :cascade
   add_foreign_key "plan_items", "plans", on_delete: :cascade
   add_foreign_key "plans", "periods", on_delete: :cascade

@@ -38,7 +38,7 @@ class TagsControllerTest < ActionController::TestCase
         kind: kind,
         tag: {
           name: 'Test tag',
-          style: 'default',
+          style: 'secondary',
           shared: false,
           icon: 'tag'
         }
@@ -46,6 +46,30 @@ class TagsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to tag_url(Tag.last, kind: kind)
+  end
+
+  test 'should create tag with nested tags' do
+    kind = @tag.kind
+
+    assert_difference 'Tag.where(kind: kind).count', 2 do
+      post :create, params: {
+        kind: kind,
+        tag: {
+          name: 'Test tag',
+          style: 'secondary',
+          shared: false,
+          icon: 'tag',
+          children_attributes: {
+            '0' => {
+              name: 'Test nested tag'
+            }
+          }
+        }
+      }
+    end
+
+    assert_redirected_to tag_url(Tag.roots.last, kind: kind)
+    assert_equal 1, Tag.roots.last.children.count
   end
 
   test 'should show tag' do
@@ -72,6 +96,25 @@ class TagsControllerTest < ActionController::TestCase
         name: 'Updated text tag'
       }
     }
+
+    assert_redirected_to tag_url(@tag, kind: @tag.kind)
+  end
+
+  test 'should update tag and create nested tag' do
+    assert_difference 'Tag.count', 1 do
+      patch :update, params: {
+        kind: @tag.kind,
+        id: @tag,
+        tag: {
+          name: 'Updated text tag',
+          children_attributes: {
+            '0' => {
+              name: 'New nested tag'
+            }
+          }
+        }
+      }
+    end
 
     assert_redirected_to tag_url(@tag, kind: @tag.kind)
   end

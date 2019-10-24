@@ -63,8 +63,7 @@
         <%= finding_status_field(f) %>
 
         <% if show_skip_work_paper_for @finding %>
-          <%= f.input :skip_work_paper, as: :boolean, label: false,
-            inline_label: Finding.human_attribute_name('skip_work_paper') %>
+          <%= f.input :skip_work_paper, as: :boolean %>
         <% end %>
 
         <% if show_history_changes %>
@@ -104,13 +103,25 @@
       </div>
       <div class="row">
         <div class="col-md-4">
-          <%= f.input :impact, as: :check_boxes, collection: weakness_impact_options %>
+          <%= f.input :impact,
+            as: :check_boxes,
+            item_wrapper_class: 'custom-control custom-checkbox',
+            collection: weakness_impact_options
+          %>
         </div>
         <div class="col-md-4">
-          <%= f.input :operational_risk, as: :check_boxes, collection: weakness_operational_risk_options %>
+          <%= f.input :operational_risk,
+            as: :check_boxes,
+            item_wrapper_class: 'custom-control custom-checkbox',
+            collection: weakness_operational_risk_options
+          %>
         </div>
         <div class="col-md-4">
-          <%= f.input :internal_control_components, as: :check_boxes, collection: weakness_internal_control_components_options %>
+          <%= f.input :internal_control_components,
+            as: :check_boxes,
+            item_wrapper_class: 'custom-control custom-checkbox',
+            collection: weakness_internal_control_components_options
+          %>
         </div>
       </div>
     <% end %>
@@ -119,18 +130,21 @@
   <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
     <div class="row">
       <div class="col-md-12">
-        <%= f.input :tag_ids, as: :check_boxes, collection: finding_tag_options %>
+        <%= f.input :tag_ids,
+          as: :check_boxes,
+          item_wrapper_class: 'custom-control custom-checkbox',
+          collection: finding_tag_options
+        %>
       </div>
     </div>
   <% else %>
-    <br />
-    <h4>
+    <h5 class="mt-3">
       <%= Tag.model_name.human count: 0 %>
-    </h4>
+    </h5>
 
     <div class="row">
       <div class="col-md-6">
-        <h5><strong><%= Tag.human_attribute_name :name %></strong></h5>
+        <h5 class="h6"><%= Tag.human_attribute_name :name %></h5>
       </div>
     </div>
 
@@ -144,30 +158,31 @@
   <% end %>
 
   <% if @finding.important_dates.present? && show_follow_up_timestamps? %>
-    <h4>
+    <h5>
       <%= t('finding.important_dates.title') %>
-    </h4>
-    <ul>
+    </h5>
+
+    <ul class="mb-1">
       <% @finding.important_dates.each do |important_date| %>
         <li><%= markdown_without_paragraph important_date %></li>
       <% end %>
     </ul>
   <% end %>
 
-  <br />
-  <h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
+  <h5 class="mt-3"><%= t('finding.responsibles', :count => @finding.users.size) %></h5>
+
   <div class="row">
     <div class="col-md-6">
-      <h5><strong><%= User.model_name.human %></strong></h5>
+      <h5 class="h6"><%= User.model_name.human %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= FindingUserAssignment.human_attribute_name 'responsible_auditor' %></strong></h5>
+      <h5 class="h6"><%= FindingUserAssignment.human_attribute_name 'responsible_auditor' %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= FindingUserAssignment.human_attribute_name 'process_owner' %></strong></h5>
+      <h5 class="h6"><%= FindingUserAssignment.human_attribute_name 'process_owner' %></h5>
     </div>
     <div class="col-md-1">
-      <h5><strong><%= t 'finding.send_notification' %></strong></h5>
+      <h5 class="h6"><%= t 'finding.send_notification' %></h5>
     </div>
   </div>
 
@@ -184,9 +199,9 @@
   </div>
 
   <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
-    <br />
-    <h4><%= t('finding.repeated_ancestors') %></h4>
-    <ul>
+    <h5 class="mt-3"><%= t('finding.repeated_ancestors') %></h5>
+
+    <ul class="mb-1">
       <% repeated_ancestors.each do |repeated_ancestor| %>
         <li><%= repeated_ancestor %></li>
       <% end %>
@@ -194,25 +209,25 @@
   <% end %>
 
   <% unless (repeated_children = @finding.repeated_children).blank? %>
-    <br />
-    <h4><%= t('finding.repeated_children') %></h4>
-    <ul>
+    <h5 class="mt-3"><%= t('finding.repeated_children') %></h5>
+
+    <ul class="mb-1">
       <% repeated_children.each do |repeated_child| %>
         <li><%= repeated_child %></li>
       <% end %>
     </ul>
   <% end %>
 
-  <br />
-  <h4>
+  <h5 class="mt-3">
     <%= t('finding.finding_relations') %>
-  </h4>
+  </h5>
+
   <div class="row">
     <div class="col-md-6">
-      <h5><strong><%= FindingRelation.human_attribute_name 'related_finding_id' %></strong></h5>
+      <h5 class="h6"><%= FindingRelation.human_attribute_name 'related_finding_id' %></h5>
     </div>
-    <div class="col-md-4">
-      <h5><strong><%= FindingRelation.human_attribute_name 'description' %></strong></h5>
+    <div class="col-md-5">
+      <h5 class="h6"><%= FindingRelation.human_attribute_name 'description' %></h5>
     </div>
   </div>
 
@@ -225,12 +240,11 @@
   </div>
 
   <% unless @finding.inverse_finding_relations.blank? %>
-    <br />
-    <h4>
+    <h5 class="mt-3">
       <%= t('finding.inverse_finding_relations') %>
-    </h4>
+    </h5>
 
-    <table class="table table-condensed table-striped table-hover">
+    <table class="table table-sm table-striped table-hover mt-3">
       <thead>
         <tr>
           <th><%= FindingRelation.human_attribute_name 'finding_id' %></th>
@@ -249,32 +263,38 @@
   <% end %>
 
   <% unless @finding.control_objective_item.business_units.empty? %>
-    <br />
-    <h4>
+    <h5 class="mt-3">
       <%= BusinessUnit.model_name.human count: 0 %>
-    </h4>
-    <%=  f.input :business_unit_ids, label: false, collection: @finding.control_objective_item.business_units, as: :check_boxes %>
+    </h5>
+
+    <%= f.input :business_unit_ids,
+      label: '&nbsp;'.html_safe,
+      item_wrapper_class: 'custom-control custom-checkbox',
+      collection: @finding.control_objective_item.business_units,
+      as: :check_boxes,
+      wrapper_html: { class: 'mt-n4' }
+    %>
   <% end %>
 
-  <br />
-  <h4>
+  <h5 class="mt-3">
     <%= Task.model_name.human count: 0 %>
-  </h4>
+  </h5>
+
   <div class="row">
     <div class="col-md-1">
-      <h5>
-        <strong><%= Task.human_attribute_name 'code' %></strong>
-        <small><%= link_to_recode_tasks %></small>
+      <h5 class="h6">
+        <%= Task.human_attribute_name 'code' %>
+        <span class="small"><%= link_to_recode_tasks %></span>
       </h5>
     </div>
     <div class="col-md-5">
-      <h5><strong><%= Task.human_attribute_name 'description' %></strong></h5>
+      <h5 class="h6"><%= Task.human_attribute_name 'description' %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= Task.human_attribute_name 'status' %></strong></h5>
+      <h5 class="h6"><%= Task.human_attribute_name 'status' %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= Task.human_attribute_name 'due_on' %></strong></h5>
+      <h5 class="h6"><%= Task.human_attribute_name 'due_on' %></h5>
     </div>
   </div>
 
@@ -286,22 +306,20 @@
     <%= link_to_add_fields(t('finding.add_task'), f, :tasks) %>
   </div>
 
-  <br />
-  <h4>
+  <h5 class="mt-3">
     <%= t('finding.finding_answers') %>
-  </h4>
+  </h5>
+
   <div class="row">
     <div class="col-md-2">
-      <h5><strong><%= User.model_name.human %></strong></h5>
+      <h5 class="h6"><%= User.model_name.human %></h5>
     </div>
     <div class="col-md-6">
-      <h5><strong><%= FindingAnswer.human_attribute_name 'answer' %></strong></h5>
+      <h5 class="h6"><%= FindingAnswer.human_attribute_name 'answer' %></h5>
     </div>
     <div class="col-md-2">
-      <h5>
-        <strong>
-          <%= FindingAnswer.human_attribute_name 'file_model' %>
-        </strong>
+      <h5 class="h6">
+        <%= FindingAnswer.human_attribute_name 'file_model' %>
       </h5>
     </div>
   </div>
@@ -309,28 +327,27 @@
   <div id="finding_answers">
     <% @finding.finding_answers.build(user: @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
     <%= f.simple_fields_for :finding_answers do |fa_f| %>
-      <%= render 'finding_answer', f: fa_f, parent: f %>
+      <%= render 'finding_answer', f: fa_f %>
     <% end %>
   </div>
 
-  <br />
-  <h4><%= WorkPaper.model_name.human(count: 0) %></h4>
+  <h5 class="mt-3"><%= WorkPaper.model_name.human(count: 0) %></h5>
 
   <div class="row">
     <div class="col-md-3">
-      <h5><strong><%= WorkPaper.human_attribute_name 'name' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'name' %></h5>
     </div>
     <div class="col-md-1">
-      <h5><strong><%= WorkPaper.human_attribute_name 'code' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'code' %></h5>
     </div>
     <div class="col-md-1">
-      <h5><strong><%= WorkPaper.human_attribute_name 'number_of_pages' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'number_of_pages' %></h5>
     </div>
     <div class="col-md-4">
-      <h5><strong><%= WorkPaper.human_attribute_name 'description' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'description' %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= WorkPaper.human_attribute_name 'file_model' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'file_model' %></h5>
     </div>
   </div>
 
@@ -353,13 +370,13 @@
   <% end %>
 
   <% if @finding.costs.present? && show_follow_up_timestamps? %>
-    <p>
+    <p class="mb-1">
       <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
     </p>
 
     <div id="cost_details" class="collapse">
       <div>
-        <table class="table table-condensed table-striped table-hover">
+        <table class="table table-sm table-striped table-hover">
           <thead>
             <tr>
               <th><%= Cost.human_attribute_name 'created_at' %></th>
@@ -385,14 +402,12 @@
 
   <div class="row">
     <div class="col-md-2">
-      <h5>
-        <strong>
-          <%= Cost.human_attribute_name 'cost' %>
-        </strong>
+      <h5 class="h6">
+        <%= Cost.human_attribute_name 'cost' %>
       </h5>
     </div>
     <div class="col-md-10">
-      <h5><strong><%= Cost.human_attribute_name 'description' %></strong></h5>
+      <h5 class="h6"><%= Cost.human_attribute_name 'description' %></h5>
     </div>
   </div>
 
@@ -406,7 +421,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>
