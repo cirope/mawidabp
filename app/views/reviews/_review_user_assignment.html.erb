@@ -23,13 +23,13 @@
       </div>
       <% unless Current.conclusion_pdf_format == 'gal' %>
         <div class="col-md-1">
-          <%= f.input :include_signature, label: '&nbsp;'.html_safe, input_html: {
+          <%= f.input :include_signature, label: '&nbsp;'.html_safe, wrapper_html: { class: 'mt-2' }, input_html: {
             disabled: readonly,
             data: { include_signature: true }
           } %>
         </div>
         <div class="col-md-1">
-          <%= f.input :owner, label: '&nbsp;'.html_safe, input_html: { disabled: readonly } %>
+          <%= f.input :owner, label: '&nbsp;'.html_safe, wrapper_html: { class: 'mt-2' }, input_html: { disabled: readonly } %>
         </div>
       <% end %>
       <div class="col-md-1">
