@@ -66,7 +66,7 @@ GEM
     airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.0)
-    autoprefixer-rails (9.6.5)
+    autoprefixer-rails (9.7.0)
       execjs
     bcrypt_pbkdf (1.0.1)
     bindex (0.8.1)
@@ -246,11 +246,11 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    sidekiq (6.0.2)
-      connection_pool (>= 2.2.2)
-      rack (>= 2.0.0)
-      rack-protection (>= 2.0.0)
-      redis (>= 4.1.0)
+    sidekiq (5.2.7)
+      connection_pool (~> 2.2, >= 2.2.2)
+      rack (>= 1.5.0)
+      rack-protection (>= 1.5.0)
+      redis (>= 3.3.5, < 5)
     simple_form (5.0.1)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
@@ -338,7 +338,7 @@ DEPENDENCIES
   ruby-oci8
   rubyzip
   sassc-rails
-  sidekiq
+  sidekiq (< 6.0)
   simple_form
   sprockets
   sqlite3
