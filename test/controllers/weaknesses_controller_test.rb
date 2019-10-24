@@ -84,7 +84,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     get :index, as: :csv
 
     assert_response :success
-    assert_equal "#{Mime[:csv]}", @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'show weakness' do
@@ -105,7 +105,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:weakness)
 
-    assert_equal Mime[:js], @response.content_type
+    assert_match Mime[:js].to_s, @response.content_type
     assert_template 'weaknesses/show'
   end
 
@@ -122,6 +122,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   test 'create weakness' do
     counts_array = [
       'Weakness.count',
+      'ImageModel.count',
       'WorkPaper.count',
       'FindingRelation.count',
       'Achievement.count',
@@ -156,19 +157,24 @@ class WeaknessesControllerTest < ActionController::TestCase
             operational_risk: ['internal fraud'],
             impact: ['econimic', 'regulatory'],
             internal_control_components: ['risk_evaluation', 'monitoring'],
+            image_model_attributes: {
+              image: Rack::Test::UploadedFile.new(
+                "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
+              )
+            },
             finding_user_assignments_attributes: [
               {
-                user_id: users(:bare).id, process_owner: '0'
+                user_id: users(:bare).id, process_owner: ''
               }, {
                 user_id: users(:audited).id, process_owner: '1'
               }, {
-                user_id: users(:auditor).id, process_owner: '0'
+                user_id: users(:auditor).id, process_owner: ''
               }, {
-                user_id: users(:manager).id, process_owner: '0'
+                user_id: users(:manager).id, process_owner: ''
               }, {
-                user_id: users(:supervisor).id, process_owner: '0'
+                user_id: users(:supervisor).id, process_owner: ''
               }, {
-                user_id: users(:administrator).id, process_owner: '0'
+                user_id: users(:administrator).id, process_owner: ''
               }
             ],
             achievements_attributes: [
@@ -268,7 +274,7 @@ class WeaknessesControllerTest < ActionController::TestCase
               {
                 id: finding_user_assignments(:unanswered_weakness_bare).id,
                 user_id: users(:bare).id,
-                process_owner: '0'
+                process_owner: ''
               }, {
                 id: finding_user_assignments(:unanswered_weakness_audited).id,
                 user_id: users(:audited).id,
@@ -276,19 +282,19 @@ class WeaknessesControllerTest < ActionController::TestCase
               }, {
                 id: finding_user_assignments(:unanswered_weakness_auditor).id,
                 user_id: users(:auditor).id,
-                process_owner: '0'
+                process_owner: ''
               }, {
                 id: finding_user_assignments(:unanswered_weakness_manager).id,
                 user_id: users(:manager).id,
-                process_owner: '0'
+                process_owner: ''
               }, {
                 id: finding_user_assignments(:unanswered_weakness_supervisor).id,
                 user_id: users(:supervisor).id,
-                process_owner: '0'
+                process_owner: ''
               }, {
                 id: finding_user_assignments(:unanswered_weakness_administrator).id,
                 user_id: users(:administrator).id,
-                process_owner: '0'
+                process_owner: ''
               }
             ],
             work_papers_attributes: [
@@ -354,7 +360,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     }, as: :js
 
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_match Mime[:js].to_s, @response.content_type
   end
 
   test 'weakness template changed' do
@@ -365,12 +371,12 @@ class WeaknessesControllerTest < ActionController::TestCase
     }, as: :js
 
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_match Mime[:js].to_s, @response.content_type
 
     get :weakness_template_changed, xhr: true, as: :js
 
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_match Mime[:js].to_s, @response.content_type
   end
 
   test 'auto complete for finding relation' do

@@ -8,6 +8,7 @@ class ConclusionReportsController < ApplicationController
   include Reports::WeaknessesByAuditType
   include Reports::ControlObjectiveStats
   include Reports::ControlObjectiveStatsByReview
+  include Reports::ControlObjectiveCounts
   include Reports::ProcessControlStats
   include Reports::WeaknessesByBusinessUnit
   include Reports::WeaknessesByMonth
@@ -66,6 +67,8 @@ class ConclusionReportsController < ApplicationController
         create_control_objective_stats: :read,
         control_objective_stats_by_review: :read,
         create_control_objective_stats_by_review: :read,
+        control_objective_counts: :read,
+        create_control_objective_counts: :read,
         process_control_stats: :read,
         create_process_control_stats: :read,
         benefits: :read,

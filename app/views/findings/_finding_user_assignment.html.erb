@@ -36,20 +36,21 @@
           value: f.object.user_id, id: "user_id_#{id}" } %>
       </div>
       <div class="col-md-2">
-        <%= f.input :responsible_auditor, as: :boolean, label: false, input_html: {
-          disabled: readonly || (finding_user && finding_user.can_act_as_audited?) } %>
+        <%= f.input :responsible_auditor, as: :boolean, label: '&nbsp;'.html_safe,
+          input_html: { disabled: readonly || (finding_user && finding_user.can_act_as_audited?) },
+          wrapper_html: { class: 'mt-2' } %>
       </div>
       <div class="col-md-2">
-        <%= f.input :process_owner, as: :boolean, label: false, input_html: {
-          disabled: readonly || (finding_user && !finding_user.can_act_as_audited?) } %>
+        <%= f.input :process_owner, as: :boolean, label: '&nbsp;'.html_safe,
+          input_html: { disabled: readonly || (finding_user && !finding_user.can_act_as_audited?) },
+          wrapper_html: { class: 'mt-2' } %>
       </div>
       <div class="col-md-1">
         <% if for_notification && is_a_new_relation %>
             <% if f.object.new_record? %>
-              <div class="form-group">
-                <label class="checkbox">
-                  <%= check_box_tag "user_for_notification", '1', false, data: { user_selector: true } %>
-                </label>
+              <div class="text-left custom-control custom-checkbox mt-2">
+                <%= check_box_tag "user_for_notification", '1', false, class: 'custom-control-input', data: { user_selector: true } %>
+                <label class="custom-control-label" for="user_for_notification"></label>
               </div>
             <% else %>
               --
@@ -57,7 +58,7 @@
         <% end %>
       </div>
       <div class="col-md-1">
-        <div class="toggle-visibility">
+        <div class="mt-2 text-right">
           <%= link_to_remove_nested_item(f) unless readonly %>
         </div>
       </div>

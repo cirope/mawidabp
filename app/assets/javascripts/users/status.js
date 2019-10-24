@@ -1,3 +1,5 @@
+/* global Chartist */
+
 jQuery(function () {
   $('[data-graph]').each(function (i, e) {
     var element = $(e).attr('id')

@@ -121,7 +121,7 @@ class PlansControllerTest < ActionController::TestCase
             id: plan,
             plan: {
               period_id: periods(:past_period).id,
-              new_version: '0',
+              new_version: '',
               plan_items_attributes: {
                 '0' => {
                   id: plan_items(:past_plan_item_1).id,

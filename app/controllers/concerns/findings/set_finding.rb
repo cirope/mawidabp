@@ -18,7 +18,7 @@ module Findings::SetFinding
     end
 
     def find_finding_conditions
-      conditions = { id: params[:id], final: false }
+      conditions = { id: params[:id] || params[:finding_id], final: false }
 
       if scope_current_user_findings?
         user_ids = @auth_user.self_and_descendants.map(&:id) +
@@ -27,7 +27,10 @@ module Findings::SetFinding
         conditions[User.table_name] = { id: user_ids }
       end
 
-      conditions[:state] = Finding::STATUS.values - [Finding::STATUS[:incomplete]]
+      conditions[:state] = Finding::STATUS.values - [
+        Finding::STATUS[:incomplete],
+        Finding::STATUS[:revoked]
+      ]
 
       conditions
     end

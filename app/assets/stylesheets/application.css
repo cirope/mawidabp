@@ -4,6 +4,7 @@
  * the top of the compiled file, but it's generally better to create a new file per style scope.
  *= require_self
  *= require fonts
+ *= require font_awesome
  *= require bootstrap_sass
  *= require jquery-ui
  *= require jquery-ui-theme
@@ -13,8 +14,10 @@
  *= require graph
  *= require closing_interviews
  *= require documents
- *= require news
+ *= require findings/answers
+ *= require findings/work_papers
  *= require opening_interviews
+ *= require permalinks
  *= require plans
  *= require plans/calendar
  *= require plans/resources

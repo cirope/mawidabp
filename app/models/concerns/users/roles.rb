@@ -82,13 +82,15 @@ module Users::Roles
       admin_on?(organization_id)
   end
 
+  def roles_has_changed?
+    roles_changed || organization_roles.any?(&:changed?)
+  end
+
   module ClassMethods
     def can_act_as role
       includes(organization_roles: :role).where(
-        organization_roles: {
-          roles: {
-            role_type: ::Role::ACT_AS[role]
-          }
+        roles:           {
+          role_type: ::Role::ACT_AS[role]
         }
       )
     end
@@ -115,10 +117,6 @@ module Users::Roles
 
     def reject_organization_role? attributes
       attributes['organization_id'].blank? || attributes['role_id'].blank?
-    end
-
-    def roles_has_changed?
-      roles_changed || organization_roles.any?(&:changed?)
     end
 
     def user_act_as_changed?

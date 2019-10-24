@@ -1,10 +1,9 @@
-<div class="page-header">
-  <h2><%= BestPractice.model_name.human %>: <%= @best_practice.name %></h2>
-</div>
+<h3><%= BestPractice.model_name.human %>: <%= @best_practice.name %></h3>
 
 <% @best_practice.process_controls.each do |pc| %>
-  <h4><%= "#{@best_practice.name} (#{pc.name})" %></h4>
-  <table class="table table-condensed table-striped table-hover">
+  <h5 class="my-3"><%= "#{@best_practice.name} (#{pc.name})" %></h5>
+
+  <table class="table table-sm table-striped table-hover">
     <thead>
       <tr>
         <th><%= ControlObjective.human_attribute_name 'name' %></th>
@@ -25,15 +24,15 @@
     <tbody>
       <% pc.control_objectives.each do |co| %>
         <tr <%== 'class="text-muted strike"' if co.obsolete %>>
-          <td><%= simple_format co.name %></td>
-          <td><%= simple_format co.control.control %></td>
-          <td><%= simple_format co.control.design_tests %></td>
+          <td><%= simple_format co.name, class: 'mb-1' %></td>
+          <td><%= simple_format co.control.control, class: 'mb-1' %></td>
+          <td><%= simple_format co.control.design_tests, class: 'mb-1' %></td>
           <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
-            <td><%= simple_format co.control.compliance_tests %></td>
+            <td><%= simple_format co.control.compliance_tests, class: 'mb-1' %></td>
           <% end %>
-          <td><%= simple_format co.control.sustantive_tests %></td>
+          <td><%= simple_format co.control.sustantive_tests, class: 'mb-1' %></td>
           <% unless HIDE_CONTROL_EFFECTS %>
-            <td><%= simple_format co.control.effects %></td>
+            <td><%= simple_format co.control.effects, class: 'mb-1' %></td>
           <% end %>
           <td><%= co.risk_text %></td>
           <td><%= link_to_download_support co %></td>

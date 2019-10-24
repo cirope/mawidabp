@@ -5,9 +5,9 @@
   :forms => {:date_range => true}} %>
 
 <% @periods.each do |period| %>
-  <div class="page-header">
-    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
-  </div>
+  <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+
+  <hr>
 
   <h3 class="text-center">
     <%= t('follow_up_committee_report.weaknesses_by_state.period_summary',

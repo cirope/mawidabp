@@ -1,3 +1,5 @@
+/* global State */
+
 jQuery(function ($) {
   var setExpiration = function (expired) {
     State.sessionExpire = State.sessionExpire || expired
@@ -10,7 +12,7 @@ jQuery(function ($) {
 
   var setMessage = function (message) {
     $('[data-time-left]').
-      removeClass('hidden').
+      removeAttr('hidden').
       find('[data-toggle="popover"]').
       attr('data-content', message)
   }
@@ -20,15 +22,17 @@ jQuery(function ($) {
       setMessage(message.message)
       setExpiration(message.expired)
 
-      $('.navbar.navbar-default').toggleClass('navbar-default navbar-inverse')
+      $('.navbar.bg-light').toggleClass('bg-light bg-dark')
+      $('.navbar.navbar-light').toggleClass('navbar-light navbar-dark')
     }, time * 1000)
   }
 
   var resetTimer = function (message) {
     clearTimeout(message.timerId)
 
-    $('.navbar.navbar-inverse').toggleClass('navbar-default navbar-inverse')
-    $('[data-time-left]').addClass('hidden')
+    $('.navbar.bg-dark').toggleClass('bg-light bg-dark')
+    $('.navbar.navbar-dark').toggleClass('navbar-light navbar-dark')
+    $('[data-time-left]').attr('hidden', true)
   }
 
   var resetTimers = function () {

@@ -1,6 +1,6 @@
 class Polls::BusinessUnitPdf < Prawn::Document
-  include Polls::PDFHeaders
-  include Polls::PDFColumns
+  include Polls::PdfHeaders
+  include Polls::PdfColumns
 
   attr_accessor :relative_path
 

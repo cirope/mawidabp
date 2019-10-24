@@ -1,7 +1,7 @@
 module Reports::WeaknessesCurrentSituation
   extend ActiveSupport::Concern
 
-  include Reports::PDF
+  include Reports::Pdf
   include Reports::Period
 
   def weaknesses_current_situation
@@ -53,13 +53,28 @@ module Reports::WeaknessesCurrentSituation
     redirect_to_pdf(@controller, @from_date, @to_date, 'weaknesses_current_situation')
   end
 
+  def create_weaknesses_current_situation_permalink
+    init_weaknesses_current_situation_vars
+
+    if @weaknesses.any?
+      @permalink = Permalink.list.new action: 'follow_up_audit/weaknesses_current_situation'
+
+      @weaknesses.each do |weakness|
+        @permalink.permalink_models.build model: weakness
+      end
+
+      @permalink.save!
+    end
+  end
+
   private
 
     def init_weaknesses_current_situation_vars
-      @controller = params[:controller_name]
+      @controller = params[:controller_name] || (controller_name.start_with?('follow_up') ? 'follow_up' : 'conclusion')
       @title = t("#{@controller}_committee_report.weaknesses_current_situation_title")
       @from_date, @to_date = *make_date_range(params[:weaknesses_current_situation])
       @filters = []
+      @permalink = Permalink.list.find_by token: params[:permalink_token]
       @benefits = Benefit.list.order kind: :desc, created_at: :asc
       final = params[:final] == 'true'
       order = [
@@ -67,6 +82,28 @@ module Reports::WeaknessesCurrentSituation
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
         "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'conclusion_index'} DESC"
       ].map { |o| Arel.sql o }
+      weaknesses = if @permalink
+                     current_situation_weaknesses_from_permalink final
+                   else
+                     current_situation_weaknesses final
+                   end
+
+      @weaknesses = weaknesses.reorder order
+    end
+
+    def current_situation_weaknesses_from_permalink final
+      Weakness.
+        list_with_final_review.
+        finals(final).
+        where(id: @permalink.permalink_models.pluck('model_id')).
+        includes(:business_unit, :business_unit_type,
+          achievements: [:benefit],
+          review: [:plan_item, :conclusion_final_review],
+          taggings: :tag
+        )
+    end
+
+    def current_situation_weaknesses final
       weaknesses = Weakness.
         with_repeated_status_for_report.
         finals(final).
@@ -74,7 +111,8 @@ module Reports::WeaknessesCurrentSituation
         by_issue_date('BETWEEN', @from_date, @to_date).
         includes(:business_unit, :business_unit_type,
           achievements: [:benefit],
-          review: [:plan_item, :conclusion_final_review]
+          review: [:plan_item, :conclusion_final_review],
+          taggings: :tag
         )
 
       if params[:weaknesses_current_situation]
@@ -90,13 +128,13 @@ module Reports::WeaknessesCurrentSituation
         weaknesses = filter_weaknesses_current_situation_by_repeated weaknesses
       end
 
-      @weaknesses = weaknesses.reorder order
+      weaknesses
     end
 
     def weaknesses_current_situation_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = ::CSV.generate(options) do |csv|
+      csv_str = CSV.generate(options) do |csv|
         csv << weaknesses_current_situation_csv_headers
 
         weaknesses_current_situation_csv_data_rows.each { |row| csv << row }
@@ -106,6 +144,8 @@ module Reports::WeaknessesCurrentSituation
     end
 
     def current_situation_pdf_items weakness
+      current_weakness = current_weakness_for weakness
+
       [
         [
           PlanItem.human_attribute_name('project'),
@@ -129,34 +169,34 @@ module Reports::WeaknessesCurrentSituation
         ],
         [
           Weakness.human_attribute_name('risk'),
-          weakness.risk_text
+          current_weakness.risk_text
         ],
         [
           "<font size='#{PDF_FONT_SIZE + 2}'>#{Weakness.human_attribute_name('title')}</font>",
-          "<font size='#{PDF_FONT_SIZE + 2}'><b>#{weakness.title}</b></font>"
+          "<font size='#{PDF_FONT_SIZE + 2}'><b>#{current_weakness.title}</b></font>"
         ],
         [
           "<b>#{Weakness.human_attribute_name('description')}</b>",
-          weakness.description
+          current_weakness.description
         ],
         ([
           "<b>#{Weakness.human_attribute_name('current_situation')}</b>",
-          weakness.current_situation
-        ] if show_current_situation? weakness),
+          current_weakness.current_situation
+        ] if show_current_situation? current_weakness),
         [
           "<b>#{Weakness.human_attribute_name('answer')}</b>",
-          weakness.answer
+          current_weakness.answer
         ],
         [
           "<b>#{Weakness.human_attribute_name('state')}</b>",
-          weaknesses_current_situation_state_text(weakness)
+          weaknesses_current_situation_state_text(weakness, current_weakness)
         ],
         ([
           "<b>#{Weakness.human_attribute_name('follow_up_date')}</b>",
-          weakness.follow_up_date < Time.zone.today ?
-            "<color rgb='ff0000'>#{I18n.l(weakness.follow_up_date)}</color>" :
-            I18n.l(weakness.follow_up_date)
-        ] if weakness.follow_up_date)
+          current_weakness.follow_up_date < Time.zone.today ?
+            "<color rgb='ff0000'>#{I18n.l(current_weakness.follow_up_date)}</color>" :
+            I18n.l(current_weakness.follow_up_date)
+        ] if current_weakness.follow_up_date)
       ].concat(
         weakness.achievements.map do |achievement|
           [
@@ -362,13 +402,17 @@ module Reports::WeaknessesCurrentSituation
         Weakness.human_attribute_name('state'),
         Weakness.human_attribute_name('follow_up_date'),
         Weakness.human_attribute_name('solution_date'),
+        Finding.human_attribute_name('id'),
         t('finding.audited', count: 0),
-        t('finding.auditors', count: 0)
+        t('finding.auditors', count: 0),
+        Tag.model_name.human(count: 0)
       ].concat @benefits.pluck('name')
     end
 
     def weaknesses_current_situation_csv_data_rows
       @weaknesses.map do |weakness|
+        current_weakness = current_weakness_for weakness
+
         [
           weakness.business_unit.to_s,
           weakness.review.plan_item.project,
@@ -376,16 +420,18 @@ module Reports::WeaknessesCurrentSituation
           weakness.business_unit_type.to_s,
           (l weakness.origination_date, format: '%Y' if weakness.origination_date),
           weakness.review.conclusion_final_review.conclusion,
-          weakness.risk_text,
-          weakness.title,
-          weakness.description,
-          (weakness.current_situation.present? && weakness.current_situation_verified ? weakness.current_situation : ''),
-          weakness.answer,
-          weaknesses_current_situation_state_text(weakness),
-          (l weakness.follow_up_date if weakness.follow_up_date),
+          current_weakness.risk_text,
+          current_weakness.title,
+          current_weakness.description,
+          (show_current_situation?(current_weakness) ? current_weakness.current_situation : ''),
+          current_weakness.answer,
+          weaknesses_current_situation_state_text(weakness, current_weakness),
+          (l current_weakness.follow_up_date if current_weakness.follow_up_date),
           (l weakness.solution_date if weakness.solution_date),
+          weakness.id,
           weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; '),
-          weakness.users.reject(&:can_act_as_audited?).map(&:full_name).join('; ')
+          weakness.users.reject(&:can_act_as_audited?).map(&:full_name).join('; '),
+          weakness.taggings.map(&:tag).join('; ')
         ].concat(@benefits.map do |b|
           achievement = weakness.achievements.detect do |a|
             a.benefit_id == b.id
@@ -400,12 +446,21 @@ module Reports::WeaknessesCurrentSituation
       end
     end
 
-    def weaknesses_current_situation_state_text weakness
+    def current_weakness_for weakness
       if weakness.repeated? && weakness.repeated_in.present?
-        review           = weakness.repeated_in.review
+        weakness.repeated_leaf
+      else
+        weakness
+      end
+    end
+
+    def weaknesses_current_situation_state_text weakness, current_weakness
+      if weakness.id != current_weakness.id
+        review           = current_weakness.review
         repeated_details = [
-          weakness.repeated_in.review_code,
-          review.identification
+          current_weakness.review_code,
+          review.identification,
+          current_weakness.state_text
         ].join ' - '
 
         state_text = if review.has_final_review?

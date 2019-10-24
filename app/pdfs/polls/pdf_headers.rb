@@ -1,4 +1,4 @@
-module Polls::PDFHeaders
+module Polls::PdfHeaders
   extend ActiveSupport::Concern
 
   def pdf_add_header

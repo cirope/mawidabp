@@ -62,6 +62,8 @@ Rails.application.routes.draw do
 
   resources :groups
 
+  resources :permalinks, only: [:show]
+
   resources :tags, only: [] do
     resources :documents, only: [:index]
   end
@@ -119,6 +121,7 @@ Rails.application.routes.draw do
     'review_stats_report',
     'review_scores_report',
     'review_score_details_report',
+    'control_objective_counts',
     'weaknesses_by_state',
     'weaknesses_by_risk',
     'weaknesses_by_risk_and_business_unit',
@@ -152,6 +155,7 @@ Rails.application.routes.draw do
     'create_review_stats_report',
     'create_review_scores_report',
     'create_review_score_details_report',
+    'create_control_objective_counts',
     'create_weaknesses_by_state',
     'create_weaknesses_by_risk',
     'create_weaknesses_by_risk_and_business_unit',
@@ -166,6 +170,7 @@ Rails.application.routes.draw do
     'create_weaknesses_by_risk_report',
     'create_weaknesses_by_user',
     'create_weaknesses_current_situation',
+    'create_weaknesses_current_situation_permalink',
     'create_weaknesses_by_control_objective',
     'create_fixed_weaknesses_report'
   ].each do |action|
@@ -214,6 +219,8 @@ Rails.application.routes.draw do
   scope ':completed', completed: /complete|incomplete/ do
     resources :findings, except: [:destroy] do
       resources :costs
+      resources :finding_answers, only: [:create], controller: 'findings/answers', as: 'answers'
+      resources :work_papers, only: [:create], controller: 'findings/work_papers'
 
       get :follow_up_pdf, on: :member, to: 'findings/follow_up_pdf#show'
 
@@ -424,6 +431,8 @@ Rails.application.routes.draw do
   end
 
   resources :users
+
+  resource :registration, only: [:show, :new, :create]
 
   root 'sessions#new'
 

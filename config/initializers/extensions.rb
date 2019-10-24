@@ -4,16 +4,6 @@ require 'active_support/builder' unless defined?(Builder)
 ActionView::Base.send :include, ActionView::Helpers::DateHelper::CustomExtension
 
 class ActiveRecord::Base
-  def version_of(date = nil)
-    if date && date.to_time <= Time.now && respond_to?(:versions)
-      condition = "#{PaperTrail::Version.quoted_table_name}.#{PaperTrail::Version.qcn 'created_at'} > ?"
-
-      versions.where(condition, date.to_time).first.try(:reify) || self
-    else
-      self
-    end
-  end
-
   def self.qcn(name)
     connection.quote_table_name(name)
   end

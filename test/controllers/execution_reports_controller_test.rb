@@ -190,7 +190,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     }, as: :csv
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'reviews with incomplete work papers' do
@@ -290,7 +290,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
 

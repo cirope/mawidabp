@@ -7,12 +7,11 @@
   }
 } %>
 
-<br />
 <% if @report.polls.blank? %>
   <div class="alert alert-warning"><%= t('polls.without_data') %></div>
 <% else %>
   <% if @report.questionnaire.questions.multi_choice.any? %>
-    <table class="table table-condensed table-striped table-hover">
+    <table class="table table-sm table-striped table-hover my-4">
       <thead>
         <tr>
           <th><%= Question.model_name.human %></th>
@@ -24,7 +23,7 @@
       <tbody>
         <% @report.questionnaire.questions.multi_choice.each do |question| %>
           <tr>
-            <td><%= simple_format question.question %></td>
+            <td><%= simple_format question.question, class: 'mb-1' %></td>
             <% Question::ANSWER_OPTIONS.each_index do |i| %>
               <td><%= @report.rates[question.question][i] %> %</td>
             <% end %>
@@ -35,7 +34,7 @@
   <% end %>
 
   <% if @report.questionnaire.questions.yes_no.any? %>
-    <table class="table table-condensed table-striped table-hover">
+    <table class="table table-sm table-striped table-hover my-4">
       <thead>
         <tr>
           <th><%= Question.model_name.human %></th>
@@ -47,7 +46,7 @@
       <tbody>
         <% @report.questionnaire.questions.yes_no.each do |question| %>
           <tr>
-            <td><%= simple_format question.question %></td>
+            <td><%= simple_format question.question, class: 'mb-1' %></td>
             <% Question::ANSWER_YES_NO_OPTIONS.each_index do |i| %>
               <td><%= @report.rates[question.question][i] %> %</td>
             <% end %>
@@ -58,7 +57,7 @@
   <% end %>
 
   <% if @report.questionnaire.questions.written.any? %>
-    <table class="table table-condensed table-striped table-hover">
+    <table class="table table-sm table-striped table-hover my-4">
       <thead>
         <tr>
           <th><%= Question.model_name.human %></th>
@@ -68,7 +67,7 @@
       <tbody>
         <% @report.questionnaire.questions.written.each do |question| %>
           <tr>
-            <td><%= simple_format question.question %></td>
+            <td><%= simple_format question.question, class: 'mb-1' %></td>
             <td><%= @report.rates[question.question].first %> %</td>
           </tr>
         <% end %>
@@ -76,15 +75,15 @@
     </table>
   <% end %>
 
-  <p>
+  <p class="mb-1">
     <strong><%= t 'polls.total_answered' %>:</strong>
     <%= @report.answered %>
   </p>
-  <p>
+  <p class="mb-1">
     <strong><%= t 'polls.total_unanswered' %>:</strong>
     <%= @report.unanswered %>
   </p>
-  <p>
+  <p class="mb-1">
     <strong><%= t 'polls.score' %>:</strong>
     <%= number_to_percentage @report.calification, precision: 0 %>
   </p>

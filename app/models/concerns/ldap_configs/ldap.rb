@@ -1,4 +1,4 @@
-module LdapConfigs::LDAP
+module LdapConfigs::Ldap
   extend ActiveSupport::Concern
 
   def ldap username, password

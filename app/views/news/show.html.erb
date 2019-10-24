@@ -1,17 +1,13 @@
-<div class="row">
-  <div class="col-md-8 col-md-offset-2">
-    <div class="page-header">
-      <h1><%= @news %></h1>
-    </div>
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h1><%= @news %></h1>
 
-    <h3>
+    <h3 class="mb-4">
       <em><%= @news.description %></em>
     </h3>
 
-    <br>
-
     <% if @news.image_models.any? %>
-      <div class="pull-left image-container">
+      <div class="float-left image-container mr-3 mb-1">
         <div id="images" class="carousel slide" data-ride="carousel" data-interval="false">
           <% if @news.image_models.size > 1 %>
             <ol class="carousel-indicators">
@@ -24,34 +20,34 @@
 
           <div class="carousel-inner">
             <% @news.image_models.each_with_index do |image_model, i| %>
-              <div class="item <%= 'active' if i == 0 %>">
-                <%= image_tag image_model.image.url(:medium), class: 'img-thumbnail img-responsive' %>
+              <div class="carousel-item <%= 'active' if i == 0 %>">
+                <%= image_tag image_model.image.url(:medium), class: 'img-fluid' %>
               </div>
             <% end %>
           </div>
 
           <% if @news.image_models.size > 1 %>
-            <a class="left carousel-control" href="#images" data-slide="prev">
-              <span class="glyphicon glyphicon-chevron-left"></span>
+            <a class="carousel-control-prev" href="#images" data-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
             </a>
 
-            <a class="right carousel-control" href="#images" data-slide="next">
-              <span class="glyphicon glyphicon-chevron-right"></span>
+            <a class="carousel-control-next" href="#images" data-slide="next">
+              <span class="carousel-control-next-icon"></span>
             </a>
           <% end %>
         </div>
       </div>
     <% end %>
 
-    <div class="body clearfix">
+    <div class="lead clearfix">
       <%= markdown @news.body %>
     </div>
 
     <% if @news.taggings.any? %>
-      <ul class="list-inline">
+      <ul class="list-inline lead">
         <% @news.taggings.each do |tagging| %>
           <li>
-            <span class="label label-<%= tagging.tag.style %>"><%= tagging.tag %></span>
+            <span class="badge badge-<%= tagging.tag.style %>"><%= tagging.tag %></span>
           </li>
         <% end %>
       </ul>

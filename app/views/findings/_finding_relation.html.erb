@@ -27,13 +27,13 @@
         <%= f.input :related_finding_id, as: :hidden,
           input_html: { id: "hidden_related_finding_#{id}" } %>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-5">
         <%= f.input :description, label: false %>
       </div>
-      <div class="col-md-2">
-        <div class="toggle-visibility">
-          <%= f.input :finding_id, as: :hidden %>
+      <div class="col-md-1">
+        <div class="mt-2 text-right">
           <%= link_to_remove_nested_item(f) %>
+          <%= f.input :finding_id, as: :hidden %>
         </div>
       </div>
     </div>

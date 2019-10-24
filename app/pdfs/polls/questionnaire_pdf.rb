@@ -1,7 +1,7 @@
 class Polls::QuestionnairePdf < Prawn::Document
-  include Polls::PDFHeaders
-  include Polls::PDFScores
-  include Polls::PDFColumns
+  include Polls::PdfHeaders
+  include Polls::PdfScores
+  include Polls::PdfColumns
 
   attr_accessor :relative_path
 

@@ -1,8 +1,9 @@
 <% unless @notification.findings.blank? %>
-  <div>
+  <p class="mb-1">
     <strong><%= Notification.human_attribute_name :findings %>:</strong>
-  </div>
-  <ul>
+  </p>
+
+  <ul class="mb-1">
     <% @notification.findings.map do |f| %>
       <li><%= link_to_if f.users.include?(@auth_user),
         "#{f.review_code} - #{f.title} (#{f.review.identification})",
@@ -11,10 +12,11 @@
   </ul>
 <% end %>
 <% unless @notification.conclusion_reviews.blank? %>
-  <div>
+  <p class="mb-1">
     <strong><%= Notification.human_attribute_name :conclusion_reviews %>:</strong>
-  </div>
-  <ul>
+  </p>
+
+  <ul class="mb-1">
     <% @notification.conclusion_reviews.map do |cr| %>
       <li><%= link_to cr.review.identification, cr.kind_of?(ConclusionFinalReview) ?
         conclusion_final_review_path(cr) : conclusion_draft_review_path(cr) %></li>
@@ -22,29 +24,29 @@
   </ul>
 <% end %>
 
-<p>
+<p class="mb-1">
   <strong><%= Notification.human_attribute_name :status %>:</strong>
   <%= @notification.status_text %>
 </p>
 
-<p>
+<p class="mb-1">
   <strong><%= Notification.human_attribute_name :user_who_confirm %>:</strong>
   <%= @notification.user_who_confirm.full_name  if @notification.user_who_confirm %>
 </p>
 
-<p>
+<p class="mb-1">
   <strong><%= Notification.human_attribute_name :created_at %>:</strong>
   <%=l @notification.created_at, :format => :long %>
 </p>
 
-<p>
+<p class="mb-1">
   <strong><%= Notification.human_attribute_name :confirmation_date %>:</strong>
   <%=l @notification.confirmation_date, :format => :long if @notification.confirmation_date %>
 </p>
 
 <div>
   <strong><%= Notification.human_attribute_name :notes %>:</strong>
-  <%= simple_format @notification.notes %>
+  <%= simple_format @notification.notes, class: 'mb-1' %>
 </div>
 
 <hr />

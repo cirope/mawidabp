@@ -1,7 +1,7 @@
 <% control_objective_item = f.object %>
 <fieldset class="control_objective_item">
   <% if control_objective_item.new_record? %>
-    <div class="hidden">
+    <div hidden>
       <%= f.input :order_number, as: :hidden %>
       <%= f.input :control_objective_id, as: :hidden %>
       <%= f.input :control_objective_text, as: :hidden %>
@@ -15,7 +15,7 @@
       <% end %>
     </div>
   <% else %>
-    <ul>
+    <ul class="mb-1">
       <li>
         <%= content_tag(
           :span,
@@ -44,8 +44,7 @@
           <% end %>
           <%= f.input :id, as: :hidden %>
           <%= f.input :order_number, as: :hidden, input_html: { class: 'sort_number' } %>
-        <% end %>
-        <% if readonly && !frozen %>
+        <% else %>
           <span class="text-muted">|</span>
           <%= link_to_edit edit_control_objective_item_path(control_objective_item) %>
         <% end %>
@@ -56,7 +55,7 @@
               <li>
                 <% if weakness.weakness_template_id %>
                   <span class="text-success" title="<%= t 'review.weakness_from_template' %>">
-                    <span class="glyphicon glyphicon-duplicate"></span>
+                    <%= icon 'fas', 'copy' %>
                   </span>
                 <% end %>
                 <span class="text-danger">

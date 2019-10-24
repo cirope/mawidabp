@@ -1,4 +1,4 @@
-module WeaknessTemplates::JSON
+module WeaknessTemplates::Json
   extend ActiveSupport::Concern
 
   included do

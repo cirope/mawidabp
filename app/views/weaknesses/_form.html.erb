@@ -82,8 +82,7 @@
         <%= finding_status_field(f, disabled: readonly) %>
 
         <% if show_skip_work_paper_for @weakness %>
-          <%= f.input :skip_work_paper, as: :boolean, label: false,
-            inline_label: Weakness.human_attribute_name('skip_work_paper') %>
+          <%= f.input :skip_work_paper, as: :boolean %>
         <% end %>
 
         <% if show_history_changes %>
@@ -105,6 +104,27 @@
         <%= f.input :follow_up_date, as: :date_picker, input_html: { readonly: @weakness.tasks.any?, disabled: readonly } %>
         <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>
         <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
+
+        <% if Current.conclusion_pdf_format == 'bic' %>
+          <% @weakness.build_image_model unless @weakness.image_model %>
+
+          <div class="clearfix">
+            <%= f.simple_fields_for :image_model do |im_f| %>
+              <p class="mb-1"><%= ImageModel.model_name.human %></p>
+
+              <div class="file-container float-left">
+                <%= link_to_upload im_f.object, :image %>
+                <% if im_f.object.image_cache %>
+                  <%= im_f.input :image_cache, as: :hidden %>
+                  <%= im_f.input :image, as: :hidden, input_html: { value: nil } %>
+                <% else %>
+                  <%= im_f.input :image, label: false %>
+                <% end %>
+              </div>
+            <% end %>
+            <%= link_to_download_image f.object %>
+          </div>
+        <% end %>
       </div>
     </div>
 
@@ -118,57 +138,48 @@
       </div>
       <div class="row">
         <div class="col-md-4">
-          <%= f.input :impact, as: :check_boxes, collection: weakness_impact_options, disabled: readonly %>
+          <%= f.input :impact,
+            as: :check_boxes,
+            item_wrapper_class: 'custom-control custom-checkbox',
+            collection: weakness_impact_options,
+            disabled: readonly
+          %>
         </div>
         <div class="col-md-4">
-          <%= f.input :operational_risk, as: :check_boxes, collection: weakness_operational_risk_options, disabled: readonly %>
+          <%= f.input :operational_risk,
+            as: :check_boxes,
+            item_wrapper_class: 'custom-control custom-checkbox',
+            collection: weakness_operational_risk_options,
+            disabled: readonly
+          %>
         </div>
         <div class="col-md-4">
-          <%= f.input :internal_control_components, as: :check_boxes, collection: weakness_internal_control_components_options, disabled: readonly %>
+          <%= f.input :internal_control_components,
+            as: :check_boxes,
+            item_wrapper_class: 'custom-control custom-checkbox',
+            collection: weakness_internal_control_components_options,
+            disabled: readonly
+          %>
         </div>
       </div>
     <% end %>
   </div>
 
-  <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
-    <div class="row">
-      <div class="col-md-12">
-        <%= f.input :tag_ids, as: :check_boxes, collection: finding_tag_options, disabled: readonly %>
-      </div>
-    </div>
-  <% else %>
-    <br />
-    <h4>
-      <%= Tag.model_name.human count: 0 %>
-    </h4>
+  <div id="tags">
+    <%= render 'tags', f: f, readonly: readonly %>
+  </div>
 
-    <div class="row">
-      <div class="col-md-6">
-        <h5><strong><%= Tag.human_attribute_name :name %></strong></h5>
-      </div>
-    </div>
-
-    <div id="taggings">
-      <%= f.simple_fields_for :taggings do |t_f| %>
-        <%= render 'findings/tagging', f: t_f, parent: f %>
-      <% end %>
-
-      <%= link_to_add_fields(t('finding.add_tagging'), f, :taggings, 'findings/tagging') unless frozen %>
-    </div>
-  <% end %>
-
-  <br />
-  <h4><%= t 'finding.responsibles', count: @weakness.users.size %></h4>
+  <h5 class="mt-3"><%= t 'finding.responsibles', count: @weakness.users.size %></h5>
 
   <div class="row">
     <div class="col-md-6">
-      <h5><strong><%= User.model_name.human %></strong></h5>
+      <h5 class="h6"><%= User.model_name.human %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= FindingUserAssignment.human_attribute_name 'responsible_auditor' %></strong></h5>
+      <h5 class="h6"><%= FindingUserAssignment.human_attribute_name 'responsible_auditor' %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= FindingUserAssignment.human_attribute_name 'process_owner' %></strong></h5>
+      <h5 class="h6"><%= FindingUserAssignment.human_attribute_name 'process_owner' %></h5>
     </div>
   </div>
 
@@ -182,10 +193,9 @@
   </div>
 
   <% unless (repeated_ancestors = @weakness.repeated_ancestors).blank? %>
-    <br />
-    <h4><%= t('finding.repeated_ancestors') %></h4>
+    <h5 class="mt-3"><%= t('finding.repeated_ancestors') %></h5>
 
-    <ul>
+    <ul class="mb-1">
       <% repeated_ancestors.each do |repeated_ancestor| %>
         <li><%= repeated_ancestor %></li>
       <% end %>
@@ -193,28 +203,25 @@
   <% end %>
 
   <% unless (repeated_children = @weakness.repeated_children).blank? %>
-    <br />
-    <h4>
-      <%= t('finding.repeated_children') %>
-    </h4>
+    <h5 class="mt-3"><%= t('finding.repeated_children') %></h5>
 
-    <ul>
+    <ul class="mb-1">
       <% repeated_children.each do |repeated_child| %>
         <li><%= repeated_child %></li>
       <% end %>
     </ul>
   <% end %>
 
-  <br />
-  <h4>
+  <h5 class="mt-3">
     <%= t('finding.finding_relations') %>
-  </h4>
+  </h5>
+
   <div class="row">
     <div class="col-md-6">
-      <h5><strong><%= FindingRelation.human_attribute_name :related_finding_id %></strong></h5>
+      <h5 class="h6"><%= FindingRelation.human_attribute_name :related_finding_id %></h5>
     </div>
-    <div class="col-md-4">
-      <h5><strong><%= FindingRelation.human_attribute_name :description %></strong></h5>
+    <div class="col-md-5">
+      <h5 class="h6"><%= FindingRelation.human_attribute_name :description %></h5>
     </div>
   </div>
 
@@ -228,12 +235,11 @@
   </div>
 
   <% unless @weakness.inverse_finding_relations.blank? %>
-    <br />
-    <h4>
+    <h5 class="mt-3">
       <%= t('finding.inverse_finding_relations') %>
-    </h4>
+    </h5>
 
-    <table class="table table-condensed table-striped table-hover">
+    <table class="table table-sm table-striped table-hover">
       <thead>
         <tr>
           <th><%= FindingRelation.human_attribute_name :finding_id %></th>
@@ -252,27 +258,31 @@
   <% end %>
 
   <% unless weakness_business_units.empty? %>
-    <br />
-    <h4>
+    <h5 class="mt-3">
       <%= BusinessUnit.model_name.human count: 0 %>
-    </h4>
-    <%=  f.input :business_unit_ids, label: false, collection: weakness_business_units, as: :check_boxes, input_html: { disabled: readonly } %>
+    </h5>
+
+    <%= f.input :business_unit_ids,
+      label: '&nbsp;'.html_safe,
+      item_wrapper_class: 'custom-control custom-checkbox',
+      collection: weakness_business_units,
+      as: :check_boxes,
+      input_html: { disabled: readonly },
+      wrapper_html: { class: 'mt-n4' }
+    %>
   <% end %>
 
   <% unless @weakness.finding_answers.blank? %>
-    <br />
-    <h4>
+    <h5 class="mt-3">
       <%= t('finding.finding_answers') %>
-    </h4>
+    </h5>
 
-    <table class="table table-condensed table-striped table-hover">
+    <table class="table table-sm table-striped table-hover mt-3">
       <thead>
         <tr>
           <th><%= User.model_name.human %></th>
           <th><%= FindingAnswer.human_attribute_name :answer %></th>
-          <th>
-            <%= FindingAnswer.human_attribute_name :file_model %>
-          </th>
+          <th><%= FindingAnswer.human_attribute_name :file_model %></th>
           <th><%= FindingAnswer.human_attribute_name :created_at %></th>
         </tr>
       </thead>
@@ -280,17 +290,20 @@
         <% @weakness.finding_answers.each do |finding_answer| %>
           <tr>
             <td><%= finding_answer.user.full_name %></td>
-            <td><%= simple_format finding_answer.answer %></td>
+            <td><%= simple_format finding_answer.answer, class: 'mb-1' %></td>
             <td>
               <%= finding_answer.file_model.try(:file?) ?
-                link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
+                link_to(t('label.download'), finding_answer.file_model.file.url) : '-' %>
             </td>
             <td>
               <%= l(finding_answer.created_at, format: :long) if finding_answer.created_at %>
               <% if finding_answer.commitment_date %>
-                <br />
-                <br /><strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
-                <br /><%= l(finding_answer.commitment_date, format: :long) %>
+                <div class="my-1">
+                  <strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
+                  <span class="d-block">
+                    <%= l(finding_answer.commitment_date, format: :long) %>
+                  </span>
+                </div>
               <% end %>
             </td>
           </tr>
@@ -299,27 +312,25 @@
     </table>
   <% end %>
 
-  <br />
-  <h4>
-    <%= Task.model_name.human count: 0 %>
-  </h4>
+  <h5 class="mt-3"><%= Task.model_name.human count: 0 %></h5>
+
   <div class="row">
     <div class="col-md-1">
-      <h5>
-        <strong><%= Task.human_attribute_name 'code' %></strong>
+      <h5 class="h6">
+        <%= Task.human_attribute_name 'code' %>
         <% unless readonly %>
-          <small><%= link_to_recode_tasks %></small>
+          <span class="small"><%= link_to_recode_tasks %></span>
         <% end %>
       </h5>
     </div>
     <div class="col-md-5">
-      <h5><strong><%= Task.human_attribute_name 'description' %></strong></h5>
+      <h5 class="h6"><%= Task.human_attribute_name 'description' %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= Task.human_attribute_name 'status' %></strong></h5>
+      <h5 class="h6"><%= Task.human_attribute_name 'status' %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= Task.human_attribute_name 'due_on' %></strong></h5>
+      <h5 class="h6"><%= Task.human_attribute_name 'due_on' %></h5>
     </div>
   </div>
 
@@ -327,23 +338,23 @@
     <%= render 'tasks', f: f, readonly: readonly %>
   </div>
 
-  <br />
-  <h4><%= WorkPaper.model_name.human(count: 0) %></h4>
+  <h5 class="mt-3"><%= WorkPaper.model_name.human(count: 0) %></h5>
+
   <div class="row">
     <div class="col-md-3">
-      <h5><strong><%= WorkPaper.human_attribute_name 'name' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'name' %></h5>
     </div>
     <div class="col-md-1">
-      <h5><strong><%= WorkPaper.human_attribute_name 'code' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'code' %></h5>
     </div>
     <div class="col-md-1">
-      <h5><strong><%= WorkPaper.human_attribute_name 'number_of_pages' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'number_of_pages' %></h5>
     </div>
     <div class="col-md-4">
-      <h5><strong><%= WorkPaper.human_attribute_name 'description' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'description' %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= WorkPaper.human_attribute_name 'file_model' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'file_model' %></h5>
     </div>
   </div>
 
@@ -358,36 +369,31 @@
   </div>
 
   <% if benefit_exists? %>
-    <br />
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title" id="achievement-heading">
-          <a data-toggle="collapse" href="#achievements" aria-expanded="true" aria-controls="achievements">
+    <div class="card my-3">
+      <div class="card-header">
+        <h5 class="mb-0" id="achievement-heading">
+          <a class="dropdown-toggle text-reset text-decoration-none d-block" data-toggle="collapse" href="#achievements">
             <%= Benefit.model_name.human count: 0 %>
           </a>
-        </h3>
+        </h5>
       </div>
-      <div id="achievements" class="panel-collapse collapse" role="tabpanel" aria-labelledby="achievement-heading">
-        <div class="panel-body">
+      <div id="achievements" class="collapse">
+        <div class="card-body">
           <% benefit_kinds.each do |name, kind| %>
             <% achievements = weakness_achievements_for kind %>
 
             <% if achievements.present? %>
-              <h4><%= t "benefits.kinds.#{kind}" %></h4>
+              <h5><%= t "benefits.kinds.#{kind}" %></h5>
 
               <div class="row">
                 <div class="col-md-6">
-                  <h5><strong><%= Achievement.human_attribute_name 'benefit' %></strong></h5>
+                  <h5 class="h6"><%= Achievement.human_attribute_name 'benefit' %></h5>
                 </div>
                 <div class="col-md-4">
-                  <h5>
-                    <strong><%= Achievement.human_attribute_name 'comment' %></strong>
-                  </h5>
+                  <h5 class="h6"><%= Achievement.human_attribute_name 'comment' %></h5>
                 </div>
                 <div class="col-md-2">
-                  <h5>
-                    <strong><%= Achievement.human_attribute_name 'amount' %></strong>
-                  </h5>
+                  <h5 class="h6"><%= Achievement.human_attribute_name 'amount' %></h5>
                 </div>
               </div>
 
@@ -404,7 +410,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary', disabled: frozen %>
   </div>

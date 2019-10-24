@@ -32,12 +32,13 @@
           </div>
         </div>
 
-        <p><strong><%= RiskAssessment.human_attribute_name 'file_model' %></strong></p>
+        <p class="mb-1"><%= RiskAssessment.human_attribute_name 'file_model' %></p>
+
         <div class="clearfix">
           <% f.object.build_file_model unless f.object.file_model %>
 
           <%= f.simple_fields_for :file_model do |fm_f| %>
-            <div class="file-container pull-left">
+            <div class="file-container float-left">
               <%= link_to_upload fm_f.object %>
 
               <% if fm_f.object.file_cache %>
@@ -61,16 +62,16 @@
 
       <div class="row">
         <div class="col-md-3">
-          <h5><strong><%= RiskAssessmentItem.human_attribute_name 'name' %></strong></h5>
+          <h5 class="h6 ml-3 pl-3"><%= RiskAssessmentItem.human_attribute_name 'name' %></h5>
         </div>
         <div class="col-md-2">
-          <h5><strong><%= BusinessUnitType.model_name.human %></strong></h5>
+          <h5 class="h6"><%= BusinessUnitType.model_name.human %></h5>
         </div>
         <div class="col-md-3">
-          <h5><strong><%= RiskAssessmentItem.human_attribute_name 'business_unit' %></strong></h5>
+          <h5 class="h6"><%= RiskAssessmentItem.human_attribute_name 'business_unit' %></h5>
         </div>
         <div class="col-md-3">
-          <h5><strong><%= RiskAssessmentItem.human_attribute_name 'risk' %></strong></h5>
+          <h5 class="h6"><%= RiskAssessmentItem.human_attribute_name 'risk' %></h5>
         </div>
       </div>
 
@@ -83,17 +84,17 @@
 
         <p>
           <%= link_to t('.add_risk_assessment_item'), new_item_risk_assessment_path(@risk_assessment),
-            class: 'btn btn-default btn-sm', data: { remote: true } %>
+            class: 'btn btn-outline-secondary btn-sm', data: { remote: true } %>
         </p>
 
         <ul class="nav nav-tabs">
-          <li class="active">
-            <a href="#best-practice" data-toggle="tab">
+          <li class="nav-item">
+            <a class="nav-link active" href="#best-practice" data-toggle="tab">
               <%= BestPractice.model_name.human count: 0 %>
             </a>
           </li>
-          <li>
-            <a href="#business-unit-type" data-toggle="tab">
+          <li class="nav-item">
+            <a class="nav-link" href="#business-unit-type" data-toggle="tab">
               <%= BusinessUnitType.model_name.human count: 0 %>
             </a>
           </li>
@@ -101,26 +102,22 @@
 
         <div class="tab-content">
           <div class="tab-pane active" id="best-practice">
-            <br>
-
-            <div id="best_practices">
+            <div id="best_practices" class="mt-3">
               <%= link_to_add_fields(
                 t('.add_best_practice'), f, :risk_assessment_items, 'best_practice', disabled_on_apply: true
               ) %>
-              <%= link_to t('.apply'), '#', class: 'btn btn-default btn-sm', disabled: true, data: {
+              <%= link_to t('.apply'), '#', class: 'btn btn-outline-secondary btn-sm', disabled: true, data: {
                 disabled_on_apply: true,
                 add_risk_assessment_items_url: add_items_risk_assessment_path(@risk_assessment, type: 'best_practice')
               } %>
             </div>
           </div>
           <div class="tab-pane" id="business-unit-type">
-            <br>
-
-            <div id="business_unit_types">
+            <div id="business_unit_types" class="mt-3">
               <%= link_to_add_fields(
                 t('.add_business_unit_type'), f, :risk_assessment_items, 'business_unit_type', disabled_on_apply: true
               ) %>
-              <%= link_to t('.apply'), '#', class: 'btn btn-default btn-sm', disabled: true, data: {
+              <%= link_to t('.apply'), '#', class: 'btn btn-outline-secondary btn-sm', disabled: true, data: {
                 disabled_on_apply: true,
                 add_risk_assessment_items_url: add_items_risk_assessment_path(@risk_assessment, type: 'business_unit_type')
               } %>
@@ -130,7 +127,9 @@
       </div>
     <% else %>
       <div class="alert alert-info">
-        <p><%= t @clone_from.blank? ? '.new_risk_assessment_items' : '.cloned_risk_assessment_items' %></p>
+        <p class="mb-0">
+          <%= t @clone_from.blank? ? '.new_risk_assessment_items' : '.cloned_risk_assessment_items' %>
+        </p>
       </div>
     <% end %>
 
@@ -141,7 +140,7 @@
   <hr>
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.button :submit, class: 'btn-primary' %>
   </div>
 <% end %>

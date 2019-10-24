@@ -1,14 +1,16 @@
 class Tag < ApplicationRecord
+  include ActsAsTree
   include Auditable
   include Trimmer
   include Shareable
   include Tags::AttributeTypes
   include Tags::Defaults
   include Tags::Icons
-  include Tags::JSON
+  include Tags::Json
   include Tags::Kinds
   include Tags::Options
   include Tags::Scopes
+  include Tags::Subtags
   include Tags::Validation
 
   trimmed_fields :name

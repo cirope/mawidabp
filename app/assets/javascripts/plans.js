@@ -1,3 +1,5 @@
+/* global FormUtil Helper */
+
 jQuery(function () {
   if ($('[data-controller="plans"]').length && $('#plan_items').length) {
     FormUtil.completeSortNumbers()

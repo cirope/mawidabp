@@ -1,5 +1,5 @@
 module Reports::ReviewStatsReport
-  include Reports::PDF
+  include Reports::Pdf
   include Parameters::Risk
 
   def review_stats_report
@@ -267,7 +267,7 @@ module Reports::ReviewStatsReport
       columns = { risk_priority => 25 }
 
       Review.scores.keys.each do |score|
-        columns[I18n.t("score_types.#{score}")] = 25
+        columns[I18n.t("score_types.#{score}")] = 75.0 / Review.scores.size
       end
 
       columns

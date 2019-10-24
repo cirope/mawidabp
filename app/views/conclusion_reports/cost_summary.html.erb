@@ -7,15 +7,15 @@
 <% end %>
 
 <% @periods.each do |period| %>
-  <div class="page-header">
-    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
-  </div>
+  <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+
+  <hr>
 
   <% if @data[period].present? && @data[period][:data].present? %>
     <% @data[period][:data].each do |user_id, data| %>
       <h4><%= data[:name] %></h4>
 
-      <table class="table table-condensed table-hover">
+      <table class="table table-sm table-hover">
         <thead>
           <tr>
             <th><%= t 'conclusion_report.cost_summary.column_month' %></th>

@@ -14,7 +14,7 @@
 
 <% if @weaknesses.any? %>
   <div class="table-responsive">
-    <table class="table table-condensed table-striped table-hover">
+    <table class="table table-sm table-striped table-hover">
       <thead>
         <tr>
           <th><%= Review.model_name.human %></th>
@@ -24,8 +24,8 @@
           <th><%= Weakness.human_attribute_name 'risk' %></th>
           <th><%= t 'follow_up_committee_report.weaknesses_brief.audit_comments' %></th>
           <th><%= FindingUserAssignment.human_attribute_name 'process_owner' %></th>
-          <th><%= t 'follow_up_committee_report.weaknesses_brief.issue_date' %></th>
-          <th><%= t 'follow_up_committee_report.weaknesses_brief.first_follow_up_date' %></th>
+          <th><%= t 'follow_up_committee_report.weaknesses_brief.origination_date' %></th>
+          <th><%= t 'follow_up_committee_report.weaknesses_brief.reschedule_count' %></th>
           <th><%= t 'follow_up_committee_report.weaknesses_brief.follow_up_date' %></th>
           <th><%= t 'follow_up_committee_report.weaknesses_brief.distance_to_cut_date' %></th>
         </tr>
@@ -34,15 +34,18 @@
       <tbody>
         <% @weaknesses.each do |weakness| %>
           <tr>
-            <td><%= weakness.review.identification %></td>
+            <td><%= [
+              weakness.implemented_audited? ? '(*) ' : '',
+              weakness.review.identification
+            ].join %></td>
             <td><%= weakness.review.plan_item.project %></td>
             <td><%= weakness.title %></td>
             <td><%= weakness.description %></td>
             <td><%= weakness.risk_text %></td>
             <td><%= weakness.audit_comments %></td>
             <td><%= array_to_ul weaknesses_brief_audit_users(weakness), class: 'list-unstyled' %></td>
-            <td><%= l weakness.review.conclusion_final_review.issue_date %></td>
-            <td><%= weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-' %></td>
+            <td><%= weakness.origination_date ? l(weakness.origination_date) : '-' %></td>
+            <td><%= weakness.pending? || weakness.awaiting? ? weakness.reschedule_count : '-' %></td>
             <td><%= weakness.follow_up_date ? l(weakness.follow_up_date) : '-' %></td>
             <td><%= distance_in_days_to_cut_date weakness %></td>
           </tr>
@@ -50,6 +53,17 @@
       </tbody>
     </table>
   </div>
+
+  <p>
+    <em>
+      (*) <%= t(
+        'follow_up_committee_report.weaknesses_brief.implemented_audited_count',
+        count: @implemented_audited_weaknesses.count,
+        from_date: l(@to_date),
+        to_date: l(Time.zone.today)
+      ) %>
+    </em>
+  </p>
 <% else %>
   <div style="margin-left: 2em">
     <p><em><%= t 'follow_up_committee_report.weaknesses_brief.without_weaknesses' %></em></p>

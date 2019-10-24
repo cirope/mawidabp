@@ -1,7 +1,7 @@
 <% question = f.object.question %>
-<div class="answer item">
+<div class="answer item mb-3">
   <div class="lead">
-    <%= simple_format "#{question.sort_order}. #{question.question}" %>
+    <%= simple_format "#{question.sort_order}. #{question.question}", class: 'mb-1' %>
   </div>
 
   <div class="row form-inputs">
@@ -30,4 +30,3 @@
     <% end %>
   </div>
 </div>
-<br />

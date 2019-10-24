@@ -13,7 +13,7 @@ class Finding < ApplicationRecord
   include Findings::ControlObjective
   include Findings::Cost
   include Findings::CreateValidation
-  include Findings::CSV
+  include Findings::Csv
   include Findings::CustomAttributes
   include Findings::Defaults
   include Findings::DestroyValidation
@@ -22,13 +22,13 @@ class Finding < ApplicationRecord
   include Findings::FinalReview
   include Findings::FirstFollowUp
   include Findings::FollowUp
-  include Findings::FollowUpPDF
+  include Findings::FollowUpPdf
   include Findings::ImportantDates
-  include Findings::JSON
+  include Findings::Json
   include Findings::Notifications
   include Findings::NotificationLevel
   include Findings::Overrides
-  include Findings::PDF
+  include Findings::Pdf
   include Findings::Reiterations
   include Findings::Relations
   include Findings::ReportScopes
@@ -41,8 +41,10 @@ class Finding < ApplicationRecord
   include Findings::SerializedAttributes
   include Findings::SortColumns
   include Findings::State
+  include Findings::Taggable
   include Findings::Tasks
   include Findings::Unanswered
+  include Findings::UnansweredNotifications
   include Findings::Unconfirmed
   include Findings::UpdateCallbacks
   include Findings::UserAssignments
@@ -54,7 +56,6 @@ class Finding < ApplicationRecord
   include Parameters::Risk
   include Parameters::Priority
   include ParameterSelector
-  include Taggable
 
   acts_as_tree
 

@@ -11,6 +11,5 @@ module Findings::AttributeTypes
     attribute :first_follow_up_date, :date
     attribute :final, :boolean
     attribute :current_situation_verified, :boolean
-    attribute :rescheduled, :boolean
   end
 end

@@ -6,9 +6,10 @@
   }, :forms => forms} %>
 
 <% @periods.each do |period| %>
-  <div class="page-header">
-    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
-  </div>
+  <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+
+  <hr>
+
   <% unless @selected_business_unit %>
     <p class="lead">
       <%= synthesis_report_organization_score_average(@audits_by_business_unit[period]) %>
@@ -33,7 +34,7 @@
     <% end %>
     <h4><%= data[:name] %></h4>
     <% unless data[:column_data].blank? %>
-      <table class="table table-condensed table-striped table-hover">
+      <table class="table table-sm table-striped table-hover">
         <thead>
           <tr>
             <% @column_order.each do |col_name| %>
@@ -69,7 +70,7 @@
 
 <div style="margin-top: 3em;">
   <%= simple_format t('conclusion_committee_report.synthesis_report.references',
-    :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence) %>
+    :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence), class: 'mb-1' %>
 </div>
 
 <hr />

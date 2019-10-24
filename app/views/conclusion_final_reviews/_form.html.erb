@@ -22,7 +22,12 @@
         <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
           value: (@conclusion_final_review.review.score_text if @conclusion_final_review.review&.persisted?),
           readonly: true } %>
-        <%= f.input :summary %>
+        <% if Current.conclusion_pdf_format == 'default' %>
+          <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
+          <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
+        <% else %>
+          <%= f.input :summary %>
+        <% end %>
       </div>
       <div class="col-md-6">
         <% if Current.conclusion_pdf_format == 'gal' %>
@@ -44,8 +49,13 @@
           <% end %>
         <% end %>
 
-        <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
-        <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
+        <% if Current.conclusion_pdf_format == 'default' %>
+          <%= f.input :recipients, input_html: { readonly: readonly, rows: 5 } %>
+          <%= f.input :summary %>
+        <% else %>
+          <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
+          <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
+        <% end %>
       </div>
     </div>
 
@@ -74,7 +84,7 @@
         <div class="col-md-6">
           <%= f.input :observations, input_html: { rows: 4, readonly: readonly } %>
         </div>
-        <div class="col-md-6 toggle-visibility">
+        <div class="col-md-6 mt-4">
           <% if show_review_best_practice_comments? %>
             <%= f.input :affects_compliance, input_html: { disabled: readonly } %>
           <% else %>
@@ -118,6 +128,9 @@
         <div class="col-md-6">
           <%= f.input :recipients, input_html: { rows: 4, readonly: readonly } %>
         </div>
+        <div class="col-md-6">
+          <%= f.input :main_recommendations, input_html: { rows: 4, readonly: readonly } %>
+        </div>
       </div>
     <% end %>
 
@@ -133,7 +146,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>

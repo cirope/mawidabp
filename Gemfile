@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 5.2.3'
+gem 'rails', '~> 6.0.0'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -21,11 +21,12 @@ gem 'prawn-table'
 gem 'clbustos-rtf', require: 'rtf'
 gem 'figaro'
 gem 'business_time'
-gem 'bootstrap-sass'
+gem 'bootstrap'
+gem 'font-awesome-sass'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'jbuilder'
-gem 'sidekiq'
+gem 'sidekiq', '< 6.0'
 gem 'ruby-ntlm'
 gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
@@ -47,13 +48,15 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
 
+  gem 'rubocop-github'
+
   # Support for ed25519 ssh keys
   gem 'ed25519'
   gem 'bcrypt_pbkdf'
 end
 
 group :test do
-  gem 'sqlite3', '~> 1.3.0'
+  gem 'sqlite3'
   gem 'timecop'
 end
 

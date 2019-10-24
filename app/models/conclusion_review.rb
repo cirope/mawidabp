@@ -2,19 +2,19 @@ class ConclusionReview < ApplicationRecord
   include Auditable
   include ParameterSelector
   include ConclusionReviews::AttributeTypes
-  include ConclusionReviews::BicPDF
-  include ConclusionReviews::BundleIndexPDF
+  include ConclusionReviews::BicPdf
+  include ConclusionReviews::BundleIndexPdf
   include ConclusionReviews::BundleZip
   include ConclusionReviews::ConclusionIndex
-  include ConclusionReviews::CoverPDF
-  include ConclusionReviews::CroPDF
-  include ConclusionReviews::DefaultPDF
+  include ConclusionReviews::CoverPdf
+  include ConclusionReviews::CroPdf
+  include ConclusionReviews::DefaultPdf
   include ConclusionReviews::DestroyValidation
   include ConclusionReviews::Email
-  include ConclusionReviews::FindingsFollowUpPDF
-  include ConclusionReviews::FindingsSheetPDF
-  include ConclusionReviews::GalPDF
-  include ConclusionReviews::PDF
+  include ConclusionReviews::FindingsFollowUpPdf
+  include ConclusionReviews::FindingsSheetPdf
+  include ConclusionReviews::GalPdf
+  include ConclusionReviews::Pdf
   include ConclusionReviews::Review
   include ConclusionReviews::Scopes
   include ConclusionReviews::Search

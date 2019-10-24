@@ -1,0 +1,8 @@
+<%= simple_fields_for :finding, @finding do |f| %>
+  <%= f.simple_fields_for :work_papers, @work_paper.reload, child_index: @work_paper.object_id do |wp_f| %>
+    <%= render 'work_papers/work_paper', {
+      f: wp_f,
+      frozen: finding_work_paper_frozen?(@finding, wp_f.object)
+    } %>
+  <% end %>
+<% end %>

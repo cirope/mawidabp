@@ -7,5 +7,6 @@ module Users::AttributeTypes
     attribute :logged_in, :boolean
     attribute :group_admin, :boolean
     attribute :hidden, :boolean
+    attribute :send_notification_email, :boolean
   end
 end

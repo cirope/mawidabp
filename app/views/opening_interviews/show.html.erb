@@ -1,66 +1,66 @@
-<h2><%= @opening_interview.review %></h2>
+<h3><%= @opening_interview.review %></h3>
 
-<p>
+<p class="mb-1">
   <strong><%= OpeningInterview.human_attribute_name 'interview_date' %></strong>:
   <%= l @opening_interview.interview_date %>
 </p>
 
-<p>
+<p class="mb-1">
   <strong><%= OpeningInterview.human_attribute_name 'start_date' %></strong>:
   <%= l @opening_interview.start_date %>
 </p>
 
-<p>
+<p class="mb-1">
   <strong><%= OpeningInterview.human_attribute_name 'end_date' %></strong>:
   <%= l @opening_interview.end_date %>
 </p>
 
 <div>
-  <p>
+  <p class="mb-1">
     <strong><%= OpeningInterview.human_attribute_name 'objective' %></strong>:
   </p>
 
-  <%= simple_format @opening_interview.objective %>
+  <%= simple_format @opening_interview.objective, class: 'mb-1' %>
 </div>
 
 <div>
-  <p>
+  <p class="mb-1">
     <strong><%= OpeningInterview.human_attribute_name 'program' %></strong>:
   </p>
 
-  <%= simple_format @opening_interview.program %>
+  <%= simple_format @opening_interview.program, class: 'mb-1' %>
 </div>
 
 <div>
-  <p>
+  <p class="mb-1">
     <strong><%= OpeningInterview.human_attribute_name 'scope' %></strong>:
   </p>
 
-  <%= simple_format @opening_interview.scope %>
+  <%= simple_format @opening_interview.scope, class: 'mb-1' %>
 </div>
 
 <div>
-  <p>
+  <p class="mb-1">
     <strong><%= OpeningInterview.human_attribute_name 'suggestions' %></strong>:
   </p>
 
-  <%= simple_format @opening_interview.suggestions %>
+  <%= simple_format @opening_interview.suggestions, class: 'mb-1' %>
 </div>
 
 <div>
-  <p>
+  <p class="mb-1">
     <strong><%= OpeningInterview.human_attribute_name 'comments' %></strong>:
   </p>
 
-  <%= simple_format @opening_interview.comments %>
+  <%= simple_format @opening_interview.comments, class: 'mb-1' %>
 </div>
 
 <% if @opening_interview.responsible_users.any? %>
-  <h4>
+  <h5 class="mt-3">
     <%= t '.auditeds' %>
-  </h4>
+  </h5>
 
-  <ul>
+  <ul class="mb-1">
     <% @opening_interview.responsible_users.each do |user| %>
       <li><%= user.full_name %></li>
     <% end %>
@@ -68,11 +68,11 @@
 <% end %>
 
 <% if @opening_interview.auditor_users.any? %>
-  <h4>
+  <h5 class="mt-3">
     <%= t '.auditors' %>
-  </h4>
+  </h5>
 
-  <ul>
+  <ul class="mb-1">
     <% @opening_interview.auditor_users.each do |user| %>
       <li><%= user.full_name %></li>
     <% end %>
@@ -80,11 +80,11 @@
 <% end %>
 
 <% if @opening_interview.assistant_users.any? %>
-  <h4>
+  <h5 class="mt-3">
     <%= OpeningInterviewUser.model_name.human count: 0 %>
-  </h4>
+  </h5>
 
-  <ul>
+  <ul class="mb-1">
     <% @opening_interview.assistant_users.each do |user| %>
       <li><%= user.full_name %></li>
     <% end %>
