@@ -1,7 +1,7 @@
 <div class="row justify-content-center">
   <div class="col-md-6">
     <%= form_tag sessions_path, novalidate: 'novalidate', data: { no_observe_changes: true } do %>
-      <div class="card mb-3<%= current_organization&.ldap_config&.present? ? ' pb-3' %>">
+      <div class="card mb-3<%= ' pb-3' if current_organization&.ldap_config&.present? %>">
         <div class="card-header text-center bg-white border-white pt-5 pb-4">
           <%= image_tag 'logo.svg', alt: t('app_name'), height: 40 %>
         </div>
