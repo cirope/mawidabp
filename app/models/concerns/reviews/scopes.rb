@@ -19,7 +19,7 @@ module Reviews::Scopes
     def list_with_approved_draft
       list.
         includes(:conclusion_draft_review).
-        where(ConclusionReview.table_name => { approved: true }).
+        merge(ConclusionReview.approved).
         references(:conclusion_reviews)
     end
 
