@@ -24,7 +24,6 @@ module RedisClient
   end
 
   def assign_paypal_token token, expire_in
-
     client.setex 'paypal_token', expire_in, token
   end
 end
