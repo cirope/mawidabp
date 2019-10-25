@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_22_213849) do
+ActiveRecord::Schema.define(version: 2019_10_09_001942) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -491,11 +491,11 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.string "status", default: "trial", null: false
     t.integer "auditors_limit", null: false
     t.string "subscription_id"
-    t.datetime "subscribed_until"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "paid_until"
     t.index ["group_id"], name: "index_licenses_on_group_id"
-    t.index ["subscribed_until"], name: "index_licenses_on_subscribed_until"
+    t.index ["paid_until"], name: "index_licenses_on_paid_until"
     t.index ["subscription_id"], name: "index_licenses_on_subscription_id"
   end
 
@@ -1038,6 +1038,17 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_weakness_templates_on_organization_id"
+  end
+
+  create_table "webhooks", force: :cascade do |t|
+    t.string "gateway", null: false
+    t.string "status", null: false
+    t.string "kind", null: false
+    t.string "reference_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gateway"], name: "index_webhooks_on_gateway"
+    t.index ["status"], name: "index_webhooks_on_status"
   end
 
   create_table "work_papers", id: :serial, force: :cascade do |t|
