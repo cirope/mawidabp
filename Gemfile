@@ -22,7 +22,8 @@ gem 'prawn-table'
 gem 'clbustos-rtf', require: 'rtf'
 gem 'figaro'
 gem 'business_time'
-gem 'bootstrap-sass'
+gem 'bootstrap'
+gem 'font-awesome-sass'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'jbuilder'
@@ -46,6 +47,8 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
+
+  gem 'rubocop-github'
 
   # Support for ed25519 ssh keys
   gem 'ed25519'

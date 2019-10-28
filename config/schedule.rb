@@ -16,3 +16,11 @@ end
 every :thursday, at: '08:00' do
   runner_file 'runners/weekly.rb'
 end
+
+every 1.day, at: '03:00' do
+  rake 'licenses:check_subscriptions'
+end
+
+every 1.hour do
+  rake 'licenses:process_webhooks'
+end

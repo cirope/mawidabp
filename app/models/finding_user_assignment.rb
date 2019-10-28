@@ -56,7 +56,7 @@ class FindingUserAssignment < ApplicationRecord
   end
 
   def users_notification
-    if user_id_changed? && persisted?
+    if user_id_changed? && persisted? && !finding.incomplete?
       user_removed = User.find user_id_was
 
       NotifierMailer.reassigned_findings_notification(

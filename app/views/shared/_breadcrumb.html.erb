@@ -1,7 +1,9 @@
-<ol class="breadcrumb">
-  <% crumbs.each_with_index do |crumb, i| %>
-    <li <%== 'class="active"' if i == crumbs.size - 1  %>>
-      <%= crumb %>
-    </li>
-  <% end %>
-</ol>
+<nav>
+  <ol class="breadcrumb py-2">
+    <% crumbs.each_with_index do |crumb, i| %>
+      <li class="breadcrumb-item<%= ' active' if i == crumbs.size - 1  %>">
+        <%= crumb %>
+      </li>
+    <% end %>
+  </ol>
+</nav>

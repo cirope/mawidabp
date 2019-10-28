@@ -6,6 +6,7 @@ Sidekiq::Testing.inline!
 
 class ActiveSupport::TestCase
   set_fixture_class versions: PaperTrail::Version
+  parallelize(workers: 1)
 
   fixtures :all
 

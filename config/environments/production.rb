@@ -23,7 +23,7 @@ Rails.application.configure do
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = Uglifier.new mangle: false # TODO: back to :uglifier when drop support for IE 8
+  config.assets.js_compressor = :uglifier
 
   # Compress CSS using a preprocessor.
   # config.assets.css_compressor = :sass

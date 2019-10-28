@@ -2,23 +2,21 @@
   <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
-    <div class="row">
-      <%= f.input :name, input_html: { maxlength: 255 } %>
-      <%= f.input :admin_email, input_html: { maxlength: 100 } %>
-      <%= f.input :description %>
-      <%= f.input :send_notification_email, as: :boolean, label: false, inline_label: true %>
-    </div>
+    <%= f.input :name, input_html: { maxlength: 255 } %>
+    <%= f.input :admin_email, input_html: { maxlength: 100 } %>
+    <%= f.input :description %>
+    <%= f.input :send_notification_email, as: :boolean %>
   </div>
 
   <div class="row">
     <div class="col-md-4">
-      <h5><strong><%= Organization.human_attribute_name :name %></strong></h5>
+      <h5 class="h6"><%= Organization.human_attribute_name :name %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= Organization.human_attribute_name :prefix %></strong></h5>
+      <h5 class="h6"><%= Organization.human_attribute_name :prefix %></h5>
     </div>
     <div class="col-md-4">
-      <h5><strong><%= Organization.human_attribute_name :description %></strong></h5>
+      <h5 class="h6"><%= Organization.human_attribute_name :description %></h5>
     </div>
   </div>
 
@@ -33,7 +31,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>

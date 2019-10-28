@@ -1,59 +1,59 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h4 class="panel-title">
+<div class="card my-3">
+  <div class="card-header">
+    <h5 class="mb-0">
       <%= Weakness.model_name.human(count: 1) %> / <%= "#{weakness.review_code} - #{weakness.review.identification}" %>
-    </h4>
+    </h5>
   </div>
 
-  <div class="panel-body">
-    <p>
+  <div class="card-body">
+    <p class="mb-1">
       <strong><%= Review.model_name.human %>:</strong>
       <%= weakness.review.identification %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <strong><%= PlanItem.human_attribute_name 'project' %>:</strong>
       <%= weakness.review&.plan_item&.project %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <strong><%= Weakness.human_attribute_name 'review_code' %>:</strong>
       <%= weakness.review_code %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <strong><%= Weakness.human_attribute_name 'title' %>:</strong>
       <%= weakness.title %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <strong><%= ProcessControl.model_name.human %>:</strong>
       <%= weakness.control_objective_item&.process_control&.name %>
     </p>
 
     <div>
       <strong><%= ControlObjective.model_name.human %>:</strong>
-      <%= simple_format weakness.control_objective_item&.to_s %>
+      <%= simple_format weakness.control_objective_item&.to_s, class: 'mb-1' %>
     </div>
 
 
     <div>
       <strong><%= Weakness.human_attribute_name 'description' %>:</strong>
-      <%= simple_format weakness.description %>
+      <%= simple_format weakness.description, class: 'mb-1' %>
     </div>
 
-    <p>
+    <p class="mb-1">
       <strong><%= Weakness.human_attribute_name 'state' %>:</strong>
       <%= weakness.state_text %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <strong><%= Weakness.human_attribute_name 'risk' %>:</strong>
       <%= weakness.risk_text %>
     </p>
 
     <% unless HIDE_WEAKNESS_PRIORITY %>
-      <p>
+      <p class="mb-1">
         <strong><%= Weakness.human_attribute_name 'priority' %>:</strong>
         <%= weakness.priority_text %>
       </p>
@@ -62,24 +62,24 @@
     <% unless HIDE_WEAKNESS_EFFECT %>
       <div>
         <strong><%= Weakness.human_attribute_name 'effect' %>:</strong>
-        <%= simple_format weakness.effect %>
+        <%= simple_format weakness.effect, class: 'mb-1' %>
       </div>
     <% end %>
 
     <div>
       <strong><%= Weakness.human_attribute_name 'audit_recommendations' %>:</strong>
-      <%= simple_format weakness.audit_recommendations %>
+      <%= simple_format weakness.audit_recommendations, class: 'mb-1' %>
     </div>
 
     <div>
       <strong><%= Weakness.human_attribute_name 'answer' %>:</strong>
-      <%= simple_format weakness.answer %>
+      <%= simple_format weakness.answer, class: 'mb-1' %>
     </div>
 
     <% if SHOW_FINDING_CURRENT_SITUATION %>
       <div>
         <strong><%= Finding.human_attribute_name 'current_situation' %></strong>:
-        <%= simple_format weakness.current_situation %>
+        <%= simple_format weakness.current_situation, class: 'mb-1' %>
       </div>
 
       <div>
@@ -88,68 +88,68 @@
       </div>
     <% end %>
 
-    <p>
+    <p class="mb-1">
       <strong><%= Weakness.human_attribute_name 'follow_up_date' %>:</strong>
       <%= l weakness.follow_up_date, format: :long if weakness.follow_up_date %>
     </p>
 
     <div>
       <strong><%= Weakness.human_attribute_name 'audit_comments' %>:</strong>
-      <%= simple_format weakness.audit_comments %>
+      <%= simple_format weakness.audit_comments, class: 'mb-1' %>
     </div>
 
-    <p>
+    <p class="mb-1">
       <strong><%= Weakness.human_attribute_name 'origination_date' %>:</strong>
       <%= l weakness.origination_date, format: :long if weakness.origination_date %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <strong><%= Weakness.human_attribute_name 'solution_date' %>:</strong>
       <%= l weakness.solution_date, format: :long if weakness.solution_date %>
     </p>
 
     <% audited = weakness.users.reload.select(&:can_act_as_audited?) %>
 
-    <h3><%= t 'finding.responsibles', count: audited.size %></h3>
-    <ul>
+    <h5 class="mt-3"><%= t 'finding.responsibles', count: audited.size %></h5>
+
+    <ul class="mb-1">
       <% audited.each do |user| %>
         <li><%= user.full_name_with_function %></li>
       <% end %>
     </ul>
 
     <% if weakness.finding_answers.any? %>
-      <h3>
+      <h5 class="mt-3">
         <%= t 'finding.finding_answers' %>
-      </h3>
+      </h5>
 
-      <table class="table table-condensed table-striped table-hover">
+      <table class="table table-sm table-striped table-hover mt-3">
         <thead>
           <tr>
             <th><%= User.model_name.human %></th>
             <th><%= FindingAnswer.human_attribute_name 'answer' %></th>
-            <th>
-              <%= FindingAnswer.human_attribute_name 'file_model' %>
-            </th>
-            <th>
-              <%= FindingAnswer.human_attribute_name 'created_at' %>
-            </th>
+            <th><%= FindingAnswer.human_attribute_name 'file_model' %></th>
+            <th><%= FindingAnswer.human_attribute_name 'created_at' %></th>
           </tr>
         </thead>
         <tbody>
           <% weakness.finding_answers.reload.each do |finding_answer| %>
             <tr>
               <td><%= finding_answer.user.full_name %></td>
-              <td><%= simple_format finding_answer.answer %></td>
+              <td><%= simple_format finding_answer.answer, class: 'mb-1' %></td>
               <td>
                 <%= finding_answer.file_model&.file? ?
-                  link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
+                  link_to(t('label.download'), finding_answer.file_model.file.url) : '-' %>
               </td>
               <td>
                 <%= l finding_answer.created_at, format: :long if finding_answer.created_at %>
                 <% if finding_answer.commitment_date %>
-                  <br />
-                  <br /><strong><%= FindingAnswer.human_attribute_name 'commitment_date' %></strong>:
-                  <br /><%= l finding_answer.commitment_date, format: :long %>
+                  <div class="my-1">
+                    <strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
+                    <span class="d-block">
+                      <%= l(finding_answer.commitment_date, format: :long) %>
+                    </span>
+                  </div>
                 <% end %>
               </td>
             </tr>

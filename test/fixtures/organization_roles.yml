@@ -162,3 +162,8 @@ admin_role_for_corporate_in_twitter:
   user: corporate
   organization: twitter
   role: admin_role
+
+auditor_role_for_jane_in_alphabet:
+  user: jane
+  organization: alphabet
+  role: auditor_second_alphabet_role

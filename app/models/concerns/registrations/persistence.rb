@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Registrations::Persistence
   extend ActiveSupport::Concern
 
@@ -5,9 +7,11 @@ module Registrations::Persistence
     return false unless valid?
 
     ActiveRecord::Base.transaction do
-      group        = create_group
-      organization = create_organization group
-      user         = create_user organization
+      create_group
+      create_organization
+      create_license
+
+      user = create_user
 
       NotifierMailer.welcome_email(user).deliver_later
 
@@ -26,23 +30,28 @@ module Registrations::Persistence
   private
 
     def create_group
-      Group.create!(
+      Current.group = Group.create!(
         name:                    organization_name,
         admin_email:             email,
         description:             organization_name,
-        send_notification_email: false
+        send_notification_email: false,
+        licensed:                true
       )
     end
 
-    def create_organization group
-      group.organizations.create!(
+    def create_organization
+      Current.organization = Current.group.organizations.create!(
         name:        organization_name,
         prefix:      organization_name.parameterize,
         description: organization_name
       )
     end
 
-    def create_user organization
+    def create_license
+      Current.group.create_license! auditors_limit: 1
+    end
+
+    def create_user
       user = User.new(
         user:      self.user,
         name:      self.name,
@@ -52,9 +61,11 @@ module Registrations::Persistence
         enable:    true
       )
 
-      role = organization.roles.admin
+      user.organization_roles.build(
+        organization: Current.organization,
+        role:         Current.organization.roles.admin
+      )
 
-      user.organization_roles.build organization: organization, role: role
-      user.save!
+      user.save! && user
     end
 end

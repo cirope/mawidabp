@@ -47,10 +47,10 @@
         <% f.object.build_file_model unless f.object.file_model %>
         <div class="row">
           <div class="col-md-6">
-            <p><strong><%= Review.human_attribute_name 'file_model_id' %></strong></p>
+            <p class="mb-1"><%= Review.human_attribute_name 'file_model_id' %></p>
             <div class="clearfix">
               <%= f.simple_fields_for :file_model do |fm_f| %>
-                <div class="file-container pull-left">
+                <div class="file-container float-left">
                   <%= link_to_upload(fm_f.object) %>
                   <% if fm_f.object.file_cache %>
                     <%= fm_f.input :file_cache, as: :hidden %>
@@ -76,7 +76,7 @@
             </div>
           <% end %>
         </div>
-        <p>
+        <p class="mb-1">
           <%= link_to_unless @review.new_record?, t('review.survey.download'),
             :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
         </p>
@@ -100,19 +100,19 @@
     <% end %>
   </div>
 
-  <div class="row">
+  <div class="row mt-3">
     <div class="col-md-6">
-      <h5><strong><%= ReviewUserAssignment.human_attribute_name 'user' %></strong></h5>
+      <h5 class="h6"><%= ReviewUserAssignment.human_attribute_name 'user' %></h5>
     </div>
     <div class="col-md-<%= Current.conclusion_pdf_format == 'gal' ? 5 : 3 %>">
-      <h5><strong><%= ReviewUserAssignment.human_attribute_name 'assignment_type' %></strong></h5>
+      <h5 class="h6"><%= ReviewUserAssignment.human_attribute_name 'assignment_type' %></h5>
     </div>
     <% unless Current.conclusion_pdf_format == 'gal' %>
       <div class="col-md-1">
-        <h5><strong><%= ReviewUserAssignment.human_attribute_name 'include_signature' %></strong></h5>
+        <h5 class="h6"><%= ReviewUserAssignment.human_attribute_name 'include_signature' %></h5>
       </div>
       <div class="col-md-1">
-        <h5><strong><%= ReviewUserAssignment.human_attribute_name 'owner' %></strong></h5>
+        <h5 class="h6"><%= ReviewUserAssignment.human_attribute_name 'owner' %></h5>
       </div>
     <% end %>
   </div>
@@ -121,7 +121,7 @@
     <% audit_team, others = @review.review_user_assignments.partition &:in_audit_team? %>
 
     <% if audit_team.present? %>
-      <h4><%= t 'review.user_assignment.audit_team' %></h4>
+      <h5 class="text-muted"><%= t 'review.user_assignment.audit_team' %></h5>
 
       <%= f.simple_fields_for :review_user_assignments, audit_team do |rua_f| %>
         <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
@@ -129,7 +129,7 @@
     <% end %>
 
     <% if others.present? %>
-      <h4><%= t 'review.user_assignment.others' %></h4>
+      <h5 class="text-muted"><%= t 'review.user_assignment.others' %></h5>
 
       <%= f.simple_fields_for :review_user_assignments, others do |rua_f| %>
         <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
@@ -146,14 +146,13 @@
   </div>
 
   <% if !readonly || @review.taggings.any? %>
-    <br />
-    <h4 <%== @review.errors[:taggings].present? ? 'class="text-danger"' : '' %>>
+    <h4 class="mt-3<%= ' text-danger' if @review.errors[:taggings].present? %>">
       <%= Tag.model_name.human count: 0 %>
     </h4>
 
     <div class="row">
       <div class="col-md-6">
-        <h5><strong><%= Tag.human_attribute_name :name %></strong></h5>
+        <h5 class="h6"><%= Tag.human_attribute_name :name %></h5>
       </div>
     </div>
 
@@ -162,32 +161,34 @@
         <%= render 'reviews/tagging', f: fr_f, readonly: readonly %>
       <% end %>
 
-      <%= link_to_add_fields(t('review.add_tagging'), f, :taggings, 'reviews/tagging', {}, { readonly: readonly }) unless readonly %>
+      <p class="mb-1">
+        <%= link_to_add_fields(t('review.add_tagging'), f, :taggings, 'reviews/tagging', {}, { readonly: readonly }) unless readonly %>
+      </p>
     </div>
   <% end %>
 
   <% if @review.control_objective_items.any? %>
-    <h3>
+    <h4 class="mt-3">
       <%= t('review.control_objective_items_label') %>
       <% if @review.persisted? && !readonly %>
-        <small class="pull-right">
+        <span class="float-right small">
           <%= link_to_excluded_control_objectives %>
-        </small>
+        </span>
       <% end %>
-    </h3>
+    </h4>
 
     <hr />
 
     <div id="control_objective_items">
       <% @review.grouped_control_objective_items.each do |pc, cois| %>
         <div id="process_control_<%= pc.id %>" class="process_control">
-          <h4>
+          <h5>
             <%= pc.name %> |
             <% unless readonly %>
               <%= link_to_suggested_process_control_findings(pc) %> |
               <%= link_to_move :class => 'process_control_move' %>
             <% end %>
-          </h4>
+          </h5>
           <%= f.simple_fields_for :control_objective_items, cois.sort do |coi_f| %>
             <%= render 'control_objective_item', f: coi_f, readonly: readonly, frozen: frozen %>
           <% end %>
@@ -202,30 +203,26 @@
   <% end %>
 
   <% unless readonly %>
-    <br>
-
-    <ul class="nav nav-tabs">
-      <li class="active">
-        <a href="#control-objective" data-toggle="tab">
+    <ul class="nav nav-tabs mt-3">
+      <li class="nav-item">
+        <a class="nav-link active" href="#control-objective" data-toggle="tab">
           <%= ControlObjective.model_name.human %>
         </a>
       </li>
-      <li>
-        <a href="#process-control" data-toggle="tab">
+      <li class="nav-item">
+        <a class="nav-link" href="#process-control" data-toggle="tab">
           <%= ProcessControl.model_name.human %>
         </a>
       </li>
-      <li>
-        <a href="#best-practice" data-toggle="tab">
+      <li class="nav-item">
+        <a class="nav-link" href="#best-practice" data-toggle="tab">
           <%= BestPractice.model_name.human %>
         </a>
       </li>
     </ul>
 
-    <div class="tab-content">
+    <div class="tab-content pt-3">
       <div class="tab-pane active" id="control-objective">
-        <br>
-
         <div id="control_objectives">
           <%= link_to_add_fields(
             t('review.add_control_objective'), f, :control_objective_items, 'control_objective'
@@ -234,8 +231,6 @@
       </div>
 
       <div class="tab-pane" id="process-control">
-        <br>
-
         <div id="process_controls">
           <%= link_to_add_fields(
             t('review.add_process_control'), f, :control_objective_items, 'process_control'
@@ -244,8 +239,6 @@
       </div>
 
       <div class="tab-pane" id="best-practice">
-        <br>
-
         <div id="best_practices">
           <%= link_to_add_fields(
             t('review.add_best_practice'), f, :control_objective_items, 'best_practice'
@@ -255,7 +248,7 @@
     </div>
   <% end %>
 
-  <h3><%= t 'review.findings_label' %></h3>
+  <h4 class="mt-3"><%= t 'review.findings_label' %></h4>
 
   <hr />
 
@@ -271,29 +264,29 @@
   <% end %>
 
   <% unless readonly %>
-    <h5><strong><%= FindingReviewAssignment.human_attribute_name 'finding' %></strong></h5>
+    <h5 class="h6 mt-3"><%= FindingReviewAssignment.human_attribute_name 'finding' %></h5>
 
     <div id="finding_review_assignments"></div>
 
-    <%= link_to_add_fields t('review.add_finding_assignment'), f, :finding_review_assignments %>
-    <%= link_to t('review.suggest_findings'), @review.plan_item_id ?
-      suggested_findings_review_path(id: @review.plan_item_id) : '#',
-      :remote => true, :id => :link_to_suggested_findings,
-      :class => 'btn btn-default btn-sm' %>
-    <%= link_to t('review.suggest_past_findings'), @review.plan_item_id ?
-      past_implemented_audited_findings_review_path(id: @review.plan_item_id) : '#',
-      :remote => true, :id => :link_to_past_implemented_audited_findings,
-      :class => 'btn btn-default btn-sm' %>
+    <p class="mb-1">
+      <%= link_to_add_fields t('review.add_finding_assignment'), f, :finding_review_assignments %>
+      <%= link_to t('review.suggest_findings'), @review.plan_item_id ?
+        suggested_findings_review_path(id: @review.plan_item_id) : '#',
+        :remote => true, :id => :link_to_suggested_findings,
+        :class => 'btn btn-outline-secondary btn-sm' %>
+      <%= link_to t('review.suggest_past_findings'), @review.plan_item_id ?
+        past_implemented_audited_findings_review_path(id: @review.plan_item_id) : '#',
+        :remote => true, :id => :link_to_past_implemented_audited_findings,
+        :class => 'btn btn-outline-secondary btn-sm' %>
+    </p>
   <% end %>
 
   <% if @review.work_papers_finished? %>
-    <p>&nbsp;</p>
-    <div class="alert alert-info">
+    <div class="alert alert-info mt-3">
       <%= t 'review.work_papers_marked_as_finished' %>
     </div>
   <% elsif @review.work_papers_revised? %>
-    <p>&nbsp;</p>
-    <div class="alert alert-success">
+    <div class="alert alert-success mt-3">
       <%= t 'review.work_papers_marked_as_revised' %>
     </div>
   <% end %>
@@ -301,7 +294,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>

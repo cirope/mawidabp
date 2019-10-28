@@ -8,9 +8,9 @@
 %>
 
 <% @months.each do |month| %>
-  <div class="page-header">
-    <h2><%= l month, format: '%B %Y' %></h2>
-  </div>
+  <h3 class="my-3"><%= l month, format: '%B %Y' %></h3>
+
+  <hr>
 
   <% if @reviews[month].present? %>
     <% last_shown_business_unit_type_id = nil %>
@@ -21,51 +21,51 @@
       <% if last_shown_business_unit_type_id == conclusion_review.review.business_unit_type.id %>
         <hr>
       <% else %>
-        <h3>
+        <h4 class="my-3">
           <%= conclusion_review.review.business_unit_type.name %>
-        </h3>
+        </h4>
 
         <% last_shown_business_unit_type_id = conclusion_review.review.business_unit_type.id %>
       <% end %>
 
-      <p>
+      <p class="mb-1">
         <strong><%= Review.human_attribute_name 'identification' %></strong>:
         <%= conclusion_review.review.identification %>
       </p>
 
-      <p>
+      <p class="mb-1">
         <strong><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></strong>:
         <%= l conclusion_review.issue_date %>
       </p>
 
-      <p>
+      <p class="mb-1">
         <strong><%= BusinessUnit.model_name.human %></strong>:
         <%= conclusion_review.review.business_unit.name %>
       </p>
 
-      <p>
+      <p class="mb-1">
         <strong><%= Review.human_attribute_name 'plan_item' %></strong>:
         <%= conclusion_review.review.plan_item.project %>
       </p>
 
-      <p>
+      <p class="mb-1">
         <strong><%= ConclusionFinalReview.human_attribute_name 'conclusion' %></strong>:
         <%= conclusion_review.conclusion %>
       </p>
 
-      <p>
+      <p class="mb-1">
         <strong><%= ConclusionFinalReview.human_attribute_name 'evolution' %></strong>:
         <%= [conclusion_review.evolution, conclusion_review.evolution_justification].join(' - ') %>
       </p>
 
-      <p>
+      <p class="mb-1">
         <strong><%= Review.human_attribute_name 'risk_exposure' %></strong>:
         <%= conclusion_review.review.risk_exposure %>
       </p>
 
       <% weaknesses = data[:weaknesses] %>
 
-      <p>
+      <p class="mb-1">
         <strong>
           <em><%= t 'conclusion_committee_report.weaknesses_by_month.main_weaknesses' %></em>
         </strong>
@@ -74,19 +74,19 @@
       <% main_weaknesses = weaknesses.not_revoked.not_assumed_risk.with_high_risk.sort_by_code %>
 
       <% if main_weaknesses.any? %>
-        <div style="margin-left: 2em;">
+        <div class="ml-3 mb-3">
           <% main_weaknesses.each do |w| %>
-            <p>
+            <p class="mb-1">
               <strong> <%= Weakness.human_attribute_name 'title' %></strong>:
               <%= w.title %>
             </p>
 
-            <p>
+            <p class="mb-1">
               <strong><%= Weakness.human_attribute_name 'risk' %></strong>:
               <%= w.risk_text %>
             </p>
 
-            <p>
+            <p class="mb-1">
               <strong><%= Weakness.human_attribute_name 'origination_date' %></strong>:
               <% if w.repeated_of_id %>
                 <%= l w.origination_date, format: :long %>
@@ -97,27 +97,25 @@
 
             <div>
               <strong><%= Weakness.human_attribute_name 'description' %></strong>:
-              <%= simple_format w.description %>
+              <%= simple_format w.description, class: 'mb-1' %>
             </div>
 
             <div>
               <strong><%= Weakness.human_attribute_name 'answer' %></strong>:
-              <%= simple_format w.answer %>
+              <%= simple_format w.answer, class: 'mb-1' %>
             </div>
 
-            <p>
+            <p class="mb-1">
               <strong><%= t 'conclusion_review.estimated_follow_up_date' %></strong>:
               <%= l w.follow_up_date, format: '%B %Y' if w.follow_up_date %>
             </p>
-
-            <br>
           <% end %>
         </div>
       <% else %>
-        <p><em><%= t 'conclusion_committee_report.weaknesses_by_month.without_weaknesses' %></em></p>
+        <p class="mb-1"><em><%= t 'conclusion_committee_report.weaknesses_by_month.without_weaknesses' %></em></p>
       <% end %>
 
-      <p>
+      <p class="mb-1">
         <strong>
           <em><%= t 'conclusion_committee_report.weaknesses_by_month.other_weaknesses' %></em>
         </strong>
@@ -126,7 +124,7 @@
       <% other_weaknesses = weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_by_code %>
 
       <% if other_weaknesses.any? %>
-        <ul>
+        <ul class="mb-1">
           <% other_weaknesses.each do |w| %>
             <li>
               <%=
@@ -144,13 +142,13 @@
           <% end %>
         </ul>
       <% else %>
-        <div style="margin-left: 2em">
-          <p><em><%= t 'conclusion_committee_report.weaknesses_by_month.without_weaknesses' %></em></p>
+        <div class="ml-3">
+          <p class="mb-1"><em><%= t 'conclusion_committee_report.weaknesses_by_month.without_weaknesses' %></em></p>
         </div>
       <% end %>
     <% end %>
   <% else %>
-    <p>
+    <p class="mb-1">
       <em><%= t 'conclusion_committee_report.weaknesses_by_month.without_audits_in_the_month' %></em>
     </p>
   <% end %>

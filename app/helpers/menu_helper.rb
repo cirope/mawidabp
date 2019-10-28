@@ -20,13 +20,13 @@ module MenuHelper
       poll  = @auth_user.first_pending_poll
       title = t 'polls.has_unanswered', count: count
       path  = edit_poll_path poll, token: poll.access_token
-      link  = link_to path, title: title do
+      link  = link_to path, class: 'nav-link', title: title do
         content_tag :span, class: 'text-primary' do
-          content_tag :span, nil, class: 'glyphicon glyphicon-list-alt'
+          icon 'fas', 'list'
         end
       end
 
-      content_tag :li, link
+      content_tag :li, link, class: 'nav-item'
     end
   end
 end

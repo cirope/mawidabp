@@ -11,21 +11,20 @@
       <div class="col-md-6">
         <%= f.input :published_at, as: :date_picker, input_html: { value: l(@news.published_at.to_date) } %>
       </div>
-      <div class="col-md-6 bottom">
-        <br />
+      <div class="col-md-6 mt-4 pt-2">
         <%= f.input :shared, input_html: { disabled: @news.persisted? && @news.shared } %>
       </div>
     </div>
 
     <div class="row">
       <div class="col-md-6">
-        <div class="panel <%= @news.errors[:tags].blank? ? 'panel-default' : 'panel-danger' %>">
-          <div class="panel-heading">
-            <h3 class="panel-title">
+        <div class="card mb-3 <%= 'border-danger' if @news.errors[:tags].present? %>">
+          <div class="card-header <%= 'bg-danger text-light' if @news.errors[:tags].present? %>">
+            <h5 class="mb-0">
               <%= Tag.model_name.human count: 0 %>
-            </h3>
+            </h5>
           </div>
-          <div class="panel-body">
+          <div class="card-body">
             <% @news.errors.full_messages_for(:tags).each do |error| %>
               <p class="text-danger"><%= error %></p>
             <% end %>
@@ -40,13 +39,13 @@
       </div>
 
       <div class="col-md-6">
-        <div class="panel <%= @news.errors[:image_models].blank? ? 'panel-default' : 'panel-danger' %>">
-          <div class="panel-heading">
-            <h3 class="panel-title">
+        <div class="card <%= 'border-danger' if @news.errors[:image_models].present? %>">
+          <div class="card-header <%= 'bg-danger text-light' if @news.errors[:image_models].present? %>">
+            <h5 class="mb-0">
               <%= ImageModel.model_name.human count: 0 %>
-            </h3>
+            </h5>
           </div>
-          <div class="panel-body">
+          <div class="card-body">
             <% @news.errors.full_messages_for(:image_models).each do |error| %>
               <p class="text-danger"><%= error %></p>
             <% end %>

@@ -3,43 +3,40 @@
 <% check_action ||= :user_in_comments %>
 
 <% unless group %>
-  <div id="user_filter" class="filter" <%== 'style="display: none;"' unless display %>>
-    <div class="row">
+  <div id="user_filter" class="row" <%== 'style="display: none;"' unless display %>>
 <% end %>
+  <div class="col-md-6" <%== 'style="display: none;"' unless display %>>
+    <div class="form-group row">
+      <% user = params[action] && params[action][:user] %>
+
+      <div class="col-md-4">
+        <%= f.label :user, User.model_name.human, class: 'col-form-label' %>
+      </div>
+
+      <div class="col-md-8">
+        <%= f.text_field :user,
+          value: user,
+          title: t('label.search'),
+          class: 'form-control',
+          data: {
+            clear: 'user',
+            autocomplete_url: users_completions_path,
+            autocomplete_id_target: '[name$="[user_id]"]'
+          }
+        %>
+        <%= f.hidden_field :user_id, value: params[action] && params[action][:user_id] %>
+      </div>
+    </div>
+  </div>
+  <% unless hide_comments %>
     <div class="col-md-6">
-      <div class="form-group">
-        <% user = params[action] && params[action][:user] %>
-
-        <div class="col-md-4">
-          <%= f.label :user, User.model_name.human %>
-        </div>
-
-        <div class="col-md-8">
-          <%= f.text_field :user,
-            value: user,
-            title: t('label.search'),
-            class: 'form-control',
-            data: {
-              clear: 'user',
-              autocomplete_url: users_completions_path,
-              autocomplete_id_target: '[name$="[user_id]"]'
-            }
-          %>
-          <%= f.hidden_field :user_id, value: params[action] && params[action][:user_id] %>
-        </div>
+      <div class="custom-control custom-checkbox mt-2">
+        <% check_value = params[action] && params[action][check_action] %>
+        <%= f.check_box check_action, checked: check_value == '1', id: check_action, class: 'custom-control-input' %>
+        <label class="custom-control-label" for="<%= check_action %>"><%= t ".#{check_action}" %></label>
       </div>
     </div>
-    <% unless hide_comments %>
-      <div class="col-md-6">
-        <div class="checkbox">
-          <% check_value = params[action] && params[action][check_action] %>
-          <label>
-            <%= f.check_box check_action, checked: check_value == '1' %> <%= t ".#{check_action}" %>
-          </label>
-        </div>
-      </div>
-    <% end %>
+  <% end %>
 <% unless group %>
-    </div>
   </div>
 <% end %>

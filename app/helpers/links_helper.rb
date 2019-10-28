@@ -6,11 +6,11 @@ module LinksHelper
     options[:data][:method]  ||= :delete
     options[:data][:confirm] ||= t('messages.confirmation')
 
-    link_with_icon({ action: 'destroy', icon: 'glyphicon-trash' }, *(args << options))
+    link_with_icon({ action: 'destroy', icon: 'trash' }, *(args << options))
   end
 
   def link_to_edit(*args)
-    link_with_icon({ action: 'edit', icon: 'glyphicon-pencil' }, *args)
+    link_with_icon({ action: 'edit', icon: 'pen' }, *args)
   end
 
   def link_to_index(*args)
@@ -22,23 +22,23 @@ module LinksHelper
   end
 
   def link_to_show(*args)
-    link_with_icon({ action: 'show', icon: 'glyphicon-search' }, *args)
+    link_with_icon({ action: 'show', icon: 'search' }, *args)
   end
 
   def link_to_clone(*args)
-    link_with_icon({ action: 'copy', icon: 'glyphicon-duplicate' }, *args)
+    link_with_icon({ action: 'copy', icon: 'copy' }, *args)
   end
 
   def link_to_stats(*args)
-    link_with_icon({ action: 'stats', icon: 'glyphicon-stats' }, *args)
+    link_with_icon({ action: 'stats', icon: 'chart-bar' }, *args)
   end
 
   def link_to_resources(*args)
-    link_with_icon({ action: 'resources', icon: 'glyphicon-user' }, *args)
+    link_with_icon({ action: 'resources', icon: 'user' }, *args)
   end
 
   def link_to_calendar(*args)
-    link_with_icon({ action: 'calendar', icon: 'glyphicon-calendar' }, *args)
+    link_with_icon({ action: 'calendar', icon: 'calendar-alt' }, *args)
   end
 
   private
@@ -52,7 +52,7 @@ module LinksHelper
       )
 
       link_to *args, arg_options do
-        content_tag :span, nil, class: "glyphicon #{options.fetch(:icon)}"
+        icon 'fas', options.fetch(:icon)
       end
     end
 end

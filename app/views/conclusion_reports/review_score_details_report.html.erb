@@ -15,7 +15,7 @@
 
   <div class="row">
     <div class="col-md-6">
-      <table class="table table-condensed table-striped table-bordered table-hover">
+      <table class="table table-sm table-striped table-bordered table-hover">
         <thead>
           <tr>
             <th><%= Review.human_attribute_name 'scope' %></th>
@@ -37,7 +37,7 @@
     </div>
 
     <div class="col-md-6">
-      <table class="table table-condensed table-striped table-bordered table-hover">
+      <table class="table table-sm table-striped table-bordered table-hover">
         <thead>
           <tr>
             <th><%= ConclusionFinalReview.human_attribute_name 'evolution' %></th>
@@ -62,7 +62,7 @@
   <h3><%= t 'conclusion_committee_report.review_score_details_report.details' %></h3>
 
   <div class="table-responsive">
-    <table class="table table-condensed table-striped table-bordered table-hover">
+    <table class="table table-sm table-striped table-bordered table-hover">
       <thead>
         <tr>
           <th><%= Review.model_name.human %></th>

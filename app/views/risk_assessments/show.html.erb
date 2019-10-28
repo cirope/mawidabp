@@ -1,26 +1,26 @@
-<p>
+<p class="mb-1">
   <strong><%= RiskAssessment.human_attribute_name 'name' %></strong>:
   <%= @risk_assessment.name %>
 </p>
-<p>
+<p class="mb-1">
   <strong><%= RiskAssessment.human_attribute_name 'description' %></strong>:
   <%= @risk_assessment.description %>
 </p>
-<p>
+<p class="mb-1">
   <strong><%= RiskAssessment.human_attribute_name 'period' %></strong>:
   <%= @risk_assessment.period %>
 </p>
-<p>
+<p class="mb-1">
   <strong><%= RiskAssessment.human_attribute_name 'risk_assessment_template' %></strong>:
   <%= @risk_assessment.risk_assessment_template.name %>
 </p>
-<p>
+<p class="mb-1">
   <strong><%= RiskAssessment.human_attribute_name 'status' %></strong>:
   <%= t "risk_assessments.status.#{@risk_assessment.status}" %>
 </p>
 
 <% if @risk_assessment.risk_assessment_items.any? %>
-  <table class="table table-condensed table-striped table-hover">
+  <table class="table table-sm table-striped table-hover mb-3">
     <caption>
       <h4><%= RiskAssessmentItem.model_name.human count: 0 %></h4>
     </caption>
@@ -48,7 +48,7 @@
 
   <% @risk_assessment.risk_assessment_items.each do |risk_assessment_item| %>
     <div id="risk-assessment-item-detail-<%= risk_assessment_item.id %>">
-      <table class="table table-condensed table-striped table-hover table-bordered">
+      <table class="table table-sm table-striped table-hover table-bordered">
         <caption>
           <h5>
             <%= risk_assessment_item.name %> (<%= risk_assessment_item.business_unit %>)

@@ -1,10 +1,13 @@
 module PollsHelper
   def answer_options_collection form
-    form.collection_radio_buttons(
-      :answer_option_id, answer_options(form.object.question), :first, :last,
-      item_wrapper_tag: :div,
-      item_wrapper_class: :radio
-    )
+    form.input :answer_option_id,
+      as: :radio_buttons,
+      label: '&nbsp;'.html_safe,
+      value_method: :first,
+      label_method: :second,
+      collection: answer_options(form.object.question),
+      wrapper_html: { class: 'mt-n3' },
+      item_wrapper_class: 'custom-control custom-radio'
   end
 
   private
