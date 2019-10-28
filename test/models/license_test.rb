@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 require 'test_helper'
+require 'minitest/mock'
 
 class LicenseTest < ActiveSupport::TestCase
   setup do
@@ -29,21 +32,62 @@ class LicenseTest < ActiveSupport::TestCase
   end
 
   test 'credit card is needed' do
-    refute @license.credit_card_needed?
+    refute @license.payment_needed?
 
     @license.status = :trial
     @license.created_at = License::DEFAULT_TRIAL_PERIOD.ago
 
-    assert @license.credit_card_needed?
+    assert @license.payment_needed?
 
     @license.reload
     @license.status = :unpaid
 
-    assert @license.credit_card_needed?
-
-    @license.reload
-    @license.subscribed_until = 2.days.from_now
-
-    assert @license.credit_card_needed?
+    assert @license.payment_needed?
   end
+
+  test 'update status on payment' do
+    assert_nil @license.paid_until
+
+    check_license_stubbed_for_status :paid
+
+    assert @license.active?
+    assert_equal 1.month.from_now.to_date, @license.paid_until.to_date
+
+    check_license_stubbed_for_status :in_process
+
+    assert @license.active?
+    assert_equal 2.days.from_now.to_date, @license.paid_until.to_date
+
+    # paid until 2 days from now
+    check_license_stubbed_for_status :not_found
+
+    assert @license.active?
+
+    # Expired paid_until
+    @license.update_column :paid_until, 2.seconds.ago
+
+    check_license_stubbed_for_status :not_found
+
+    assert @license.unpaid?
+  end
+
+  private
+
+    def check_license_stubbed_for_status status
+      response = case status
+                 when :paid
+                   {
+                     status:     status,
+                     paid_until: 1.month.from_now
+                   }
+                 when :in_process
+                   { status: status }
+                 else
+                   { status: :not_found }
+                 end
+
+      PaypalClient.stub :get_subscription, response do
+        @license.check_subscription
+      end
+    end
 end

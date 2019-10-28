@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Registrations::Persistence
   extend ActiveSupport::Concern
 
