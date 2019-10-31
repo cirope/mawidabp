@@ -169,6 +169,24 @@ es:
       create:
         from_comment: 'De comentario por %{user} el %{date}'
 
+  licenses:
+    trial_valid_until: 'Fin período de prueba'
+    price_per_month: 'Precio por mes'
+    statuses:
+      unpaid: 'Impago'
+      active: 'Activo'
+      trial: 'En período de prueba'
+      cancelled: 'Cancelado'
+    blocked:
+      show:
+        body: 'Su organización está inhabilitada, contacte sopore@mawidabp.com'
+        check: 'Volver a comprobar pago'
+    license:
+      check: 'Volver a comprobar pago'
+    paypal_button:
+      create: 'Suscribirse'
+      create_error: 'Ha ocurrido un problema, por favor comuníquese con soporte@mawidabp.com para comprobar si el pago está acreditado.'
+
   login_records:
     choose:
       title: 'Reportes de seguridad'

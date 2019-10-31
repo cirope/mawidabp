@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-md-3 text-center">
+    <b><%= t '.create' %>:</b>
+    <div id="paypal-button"></div>
+  </div>
+</div>
+
+<%= content_for :js_extra_bottom do %>
+  script = document.createElement('script')
+
+  script.type   = 'text/javascript'
+  script.async  = true
+  script.src    = '<%= raw paypal_script_source %>'
+  script.onload = function () {
+    paypal.Buttons({
+      style: { color: 'silver', shape: 'pill', label: 'checkout', height: 25 },
+
+      createSubscription: function(_data, actions) {
+        return actions.subscription.create({
+          plan_id: '<%= @license.plan_id %>'
+        });
+      },
+
+      onApprove: function(data, _actions) {
+        $.ajax({
+          url:      '<%= license_path %>',
+          type:     'PUT',
+          dataType: 'script',
+          data:     { license: { subscription_id: data.subscriptionID } },
+          error:    function () { alert('<%= t '.create_error' %>') }
+        })
+      }
+    }).render('#paypal-button')
+  }
+
+  document.getElementsByTagName('head')[0].appendChild(script)
+<% end %>
