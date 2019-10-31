@@ -1,8 +1,6 @@
 # See http://unicorn.bogomips.org/Unicorn/Configurator.html for complete
 # documentation.
 #
-app_path = File.expand_path(File.dirname(__FILE__) + '/../../current')
-
 # Use at least one worker per core if you're on a dedicated server,
 # more will usually help for _short_ waits on databases/caches.
 worker_processes 2
@@ -11,26 +9,27 @@ worker_processes 2
 # worker spawn times
 preload_app true
 
-# Help ensure your application will always spawn in the symlinked
-# "current" directory that Capistrano sets up.
-working_directory app_path
+app_path = File.expand_path('../..', __FILE__)
 
-listen '/run/unicorn/unicorn.sock', backlog: 1024
+working_directory ENV['APP_HOME'] || app_path
+
+if ENV['RAILS_LOG_TO_STDOUT']
+  logger Logger.new($stdout)
+else
+  # By default, the Unicorn logger will write to stderr.
+  # Additionally, ome applications/frameworks log to stderr or stdout,
+  # so prevent them from going to /dev/null when daemonized here:
+  stderr_path "#{app_path}/log/unicorn.stderr.log"
+  stdout_path "#{app_path}/log/unicorn.stdout.log"
+end
+
+listen ENV['PORT'] || '/run/unicorn/unicorn.sock'
 
 # nuke workers after 360 seconds
 timeout 360
 
 pid '/tmp/unicorn.pid'
 
-# By default, the Unicorn logger will write to stderr.
-# Additionally, ome applications/frameworks log to stderr or stdout,
-# so prevent them from going to /dev/null when daemonized here:
-stderr_path "#{app_path}/log/unicorn.stderr.log"
-stdout_path "#{app_path}/log/unicorn.stdout.log"
-
-# combine Ruby 2.0.0dev or REE with "preload_app true" for memory savings
-# http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow
-preload_app true
 GC.respond_to?(:copy_on_write_friendly=) and
   GC.copy_on_write_friendly = true
 
