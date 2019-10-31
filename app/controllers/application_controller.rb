@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   include ParameterSelector
   include CacheControl
   include FlashResponders
+  include LicenseCheck if ENABLE_PUBLIC_REGISTRATION
 
   protect_from_forgery
 

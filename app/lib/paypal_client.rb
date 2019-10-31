@@ -17,7 +17,7 @@ module PaypalClient
   PAYPAL_DOMAIN = ENV['PAYPAL_DOMAIN']
 
   def get_subscription reference_id
-    result = request_get '/v1/billing/subscriptions/' + reference_id
+    result = request_get "/v1/billing/subscriptions/#{reference_id}"
 
     parse_subscription(result) || { status: :no_results }
   end
@@ -26,9 +26,8 @@ module PaypalClient
     case response['status']
     when STATUS[:approved], STATUS[:active]
       {
-        status:      :paid,
-        approved_at: Time.parse(response['billing_info']['last_payment']['time']),
-        paid_until:  Time.parse(response['billing_info']['next_billing_time'])
+        status:     :paid,
+        paid_until: Time.parse(response['billing_info']['next_billing_time'])
       }
     when STATUS[:pending]
       { status: :in_process }
