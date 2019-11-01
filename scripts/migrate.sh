@@ -19,4 +19,7 @@ fi
 echo 'Executing bundle exec rails db:migrate...'
 bundle exec rails db:migrate
 
+echo 'Executing bundle exec rails db:seed...'
+bundle exec rails db:seed
+
 source "$dir/fix_owner.sh"
