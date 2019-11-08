@@ -4,6 +4,9 @@ require 'sidekiq/testing'
 
 Sidekiq::Testing.inline!
 
+Net::LDAP::Connection.send(:remove_const, 'DefaultConnectTimeout')
+Net::LDAP::Connection.const_set('DefaultConnectTimeout', 1)
+
 class ActiveSupport::TestCase
   set_fixture_class versions: PaperTrail::Version
   parallelize(workers: 1)
@@ -90,5 +93,9 @@ class ActiveSupport::TestCase
         job_class.perform_now(mailer, mail_method, delivery_method, args: new_args)
       end
     end
+  end
+
+  def ldap_port
+    ENV['TRAVIS'] ? 3389 : 389
   end
 end
