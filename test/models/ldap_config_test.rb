@@ -131,9 +131,7 @@ class LdapConfigTest < ActiveSupport::TestCase
 
     ldap = @ldap_config.ldap username, 'admin123'
 
-    assert_raise Net::LDAP::Error do
-      ldap.bind
-    end
+    assert_raise(Net::LDAP::Error) { ldap.bind }
 
     ldap = @ldap_config.alternative_ldap.ldap username, 'admin123'
 

@@ -4,8 +4,8 @@ require 'sidekiq/testing'
 
 Sidekiq::Testing.inline!
 
-Net::LDAP::Connection.send(:remove_const, 'DefaultConnectTimeout')
-Net::LDAP::Connection.const_set('DefaultConnectTimeout', 1)
+Net::LDAP::Connection.send :remove_const, 'DefaultConnectTimeout'
+Net::LDAP::Connection::DefaultConnectTimeout = 1
 
 class ActiveSupport::TestCase
   set_fixture_class versions: PaperTrail::Version

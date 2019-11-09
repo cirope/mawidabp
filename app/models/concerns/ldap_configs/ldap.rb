@@ -22,7 +22,7 @@ module LdapConfigs::Ldap
   def alternative_ldap
     return unless try_alternative_ldap?
 
-    @alternative_ldap = true
+    @using_alternative_ldap = true
 
     dup.tap do |alternative|
       alternative.hostname = alternative.alternative_hostname
@@ -31,7 +31,7 @@ module LdapConfigs::Ldap
   end
 
   def try_alternative_ldap?
-    alternative_hostname.present? && @alternative_ldap.nil?
+    alternative_hostname.present? && @using_alternative_ldap.blank?
   end
 
   private
