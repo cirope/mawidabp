@@ -14,12 +14,15 @@ uploads/
 *.sql
 *.txt
 *.xz
+.bundle/
 .byebug_history
 .dockerignore
+.capistrano
 .git/
 .gitignore
 .ruby-gemset
 .ruby-version
+.vagrant/
 Dockerfile*
 Vagrantfile
 docker-compose.yml
