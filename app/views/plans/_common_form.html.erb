@@ -1,14 +1,14 @@
 <div class="form-inputs">
   <div class="row">
     <div class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4 class="panel-title">
+      <div class="card mb-3">
+        <div class="card-header">
+          <h5 class="mb-0">
             <%= Plan.human_attribute_name 'period_id' %>
-          </h4>
+          </h5>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
           <% if @plan.new_record? %>
             <%= f.association :period, collection: Period.list_all_without_plans,
               label_method: :inspect, value_method: :id, prompt: true,
@@ -23,14 +23,14 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4 class="panel-title">
+      <div class="card mb-3">
+        <div class="card-header">
+          <h5 class="mb-0">
             <%= Plan.human_attribute_name 'estimated_amount' %>
-          </h4>
+          </h5>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
           <abbr title="<%= t 'plans.cost.human_resources' %>"><%= t 'plans.cost.human_resources_abbr' %></abbr>:
           <strong><%= plan_cost %></strong>,
           <abbr title="<%= t 'plans.cost.material_resources' %>"><%= t 'plans.cost.material_resources_abbr' %></abbr>:

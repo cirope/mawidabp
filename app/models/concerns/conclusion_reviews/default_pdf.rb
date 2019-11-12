@@ -1,4 +1,4 @@
-module ConclusionReviews::DefaultPDF
+module ConclusionReviews::DefaultPdf
   extend ActiveSupport::Concern
 
   def default_pdf organization = nil, *args

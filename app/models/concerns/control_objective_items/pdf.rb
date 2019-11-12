@@ -1,4 +1,4 @@
-module ControlObjectiveItems::PDF
+module ControlObjectiveItems::Pdf
   extend ActiveSupport::Concern
 
   def to_pdf organization = nil

@@ -316,12 +316,15 @@ module Prawn
 
       def put_hr
         self.line_width = 0.5
+        stroke_color = self.stroke_color
 
         move_down 10
+        self.stroke_color 'cccccc'
         stroke_horizontal_rule
         move_down 10
 
         self.line_width = 1
+        self.stroke_color = stroke_color
       end
 
       private

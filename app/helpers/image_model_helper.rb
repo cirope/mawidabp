@@ -4,13 +4,13 @@ module ImageModelHelper
 
     if image_model && image_model.image? && image_model.image.cached?.blank?
       options = {
-        class: 'btn btn-default',
+        class: 'btn btn-outline-secondary',
         title: image_model.identifier.titleize,
         data:  { ignore_unsaved_data: true }
       }
 
       link_to image_model.image.url, options do
-        content_tag(:span, nil, class: 'icon glyphicon glyphicon-download-alt')
+        icon 'fas', 'download'
       end
     end
   end

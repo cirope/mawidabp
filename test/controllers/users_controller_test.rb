@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
@@ -60,7 +62,7 @@ class UsersControllerTest < ActionController::TestCase
             manager_id: users(:administrator).id,
             logged_in: false,
             enable: true,
-            send_notification_email: true,
+            send_notification_email: '1',
             organization_roles_attributes: [
               {
                 organization_id: organizations(:cirope).id,
@@ -88,7 +90,7 @@ class UsersControllerTest < ActionController::TestCase
             manager_id: users(:administrator).id,
             logged_in: false,
             enable: true,
-            send_notification_email: false,
+            send_notification_email: '',
             organization_roles_attributes: [
               {
                 organization_id: organizations(:cirope).id,
@@ -124,7 +126,7 @@ class UsersControllerTest < ActionController::TestCase
             language: I18n.available_locales.first.to_s,
             logged_in: false,
             enable: true,
-            send_notification_email: false,
+            send_notification_email: '',
             organization_roles_attributes: [
               {
                 id: organization_roles(:admin_role_for_administrator_in_cirope).id,
@@ -171,7 +173,7 @@ class UsersControllerTest < ActionController::TestCase
               notes: 'Updated user notes',
               logged_in: false,
               enable: true,
-              send_notification_email: true,
+              send_notification_email: '1',
               organization_roles_attributes: [
                 {
                   organization_id: organizations(:google).id,
@@ -238,5 +240,41 @@ class UsersControllerTest < ActionController::TestCase
     }, as: :pdf
 
     assert_redirected_to UserPdf.new.relative_path
+  end
+
+  test 'create user with left users count' do
+    set_organization
+
+    original_limit = Rails.application.credentials.auditors_limit
+
+    assert_difference 'User.count' do
+      Rails.application.credentials.auditors_limit = (
+        Current.group.users.can_act_as(:auditor).reload.count + 5
+      )
+
+      post :create, params: {
+        user: {
+          user:                          'new_user',
+          name:                          'New Name',
+          last_name:                     'New Last Name',
+          email:                         'new_user@newemail.net',
+          language:                      I18n.available_locales.last.to_s,
+          notes:                         'Some user notes',
+          enable:                        true,
+          organization_roles_attributes: [
+            {
+              organization_id: Current.organization.id,
+              role_id:         roles(:auditor_senior_role).id
+            }
+          ]
+        }
+      }
+
+      assert_redirected_to users_url
+    end
+
+    assert_equal I18n.t('users.create.correctly_created_with_count', count: 4), flash.notice
+
+    Rails.application.credentials.auditors_limit = original_limit
   end
 end

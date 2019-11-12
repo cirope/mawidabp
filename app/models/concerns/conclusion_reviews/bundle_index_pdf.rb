@@ -1,4 +1,4 @@
-module ConclusionReviews::BundleIndexPDF
+module ConclusionReviews::BundleIndexPdf
   extend ActiveSupport::Concern
 
   def bundle_index_pdf organization = nil, index_items = nil

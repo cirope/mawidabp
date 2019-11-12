@@ -1,10 +1,10 @@
-<div id="date_filter_<%= field_name %>" class="filter" <%== 'style="display: none;"' unless display %>>
+<div id="date_filter_<%= field_name %>" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <div class="col-md-6">
-      <div class="form-group">
+      <div class="form-group row">
         <% field_value = params[action] ? params[action][field_name] : nil %>
         <div class="col-md-4">
-          <%= f.label field_name, field_label %>
+          <%= f.label field_name, field_label, class: 'col-form-label' %>
         </div>
         <div class="col-md-3">
           <% selected = params[action] ? params[action][:"#{field_name}_operator"] : nil %>
@@ -18,14 +18,18 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="form-group">
+      <div class="form-group row">
         <% field_value = params[action] ? params[action]["#{field_name}_until"] : nil %>
-        <% classes = selected == 'between' ? 'form-control' : 'form-control hidden' %>
         <div class="col-md-5">
-          <%= f.text_field "#{field_name}_until", value: field_value, autocomplete: :off, class: classes, data: {
-            date_picker: true,
-            date_until: true
-          } %>
+          <%= f.text_field "#{field_name}_until",
+            value: field_value,
+            autocomplete: 'off',
+            class: 'form-control',
+            hidden: (selected != 'between'),
+            data: {
+              date_picker: true,
+              date_until: true
+            } %>
         </div>
       </div>
     </div>

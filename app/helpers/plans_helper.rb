@@ -62,10 +62,15 @@ module PlansHelper
   end
 
   def link_to_plan_business_unit_type but, &block
+    html_classes  = 'list-group-item list-group-item-action'
+    html_classes << ' disabled' if @plan.new_record?
+
+    options = { class: html_classes }
+
     if @plan.persisted?
-      link_to edit_plan_path(@plan, business_unit_type: but || 'nil'), &block
+      link_to edit_plan_path(@plan, business_unit_type: but || 'nil'), options, &block
     else
-      link_to '#', &block
+      link_to '#', options, &block
     end
   end
 
@@ -103,11 +108,13 @@ module PlansHelper
     options = [
       link_to(
         t('plans.download_global_plan'),
-        [@plan, _ts: Time.now.to_i, format: :pdf]
+        [@plan, _ts: Time.now.to_i, format: :pdf],
+        class: 'dropdown-item'
       ),
       link_to(
         t('plans.download_detailed_plan'),
-        [@plan, include_details: 1, _ts: Time.now.to_i, format: :pdf]
+        [@plan, include_details: 1, _ts: Time.now.to_i, format: :pdf],
+        class: 'dropdown-item'
       )
     ]
 
@@ -131,11 +138,13 @@ module PlansHelper
       [
         link_to(
           t('plans.download_business_unit_type_plan', business_unit_type: @business_unit_type.name),
-          [@plan, business_unit_type: @business_unit_type.id, _ts: Time.now.to_i, format: :pdf]
+          [@plan, business_unit_type: @business_unit_type.id, _ts: Time.now.to_i, format: :pdf],
+          class: 'dropdown-item'
         ),
         link_to(
           t('plans.download_detailed_business_unit_type_plan', business_unit_type: @business_unit_type.name),
-          [@plan, include_details: 1, business_unit_type: @business_unit_type.id, _ts: Time.now.to_i, format: :pdf]
+          [@plan, include_details: 1, business_unit_type: @business_unit_type.id, _ts: Time.now.to_i, format: :pdf],
+          class: 'dropdown-item'
         )
       ]
     end

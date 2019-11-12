@@ -1,4 +1,4 @@
-<table class="table table-condensed table-striped table-hover">
+<table class="table table-sm table-striped table-hover">
   <thead>
     <tr>
       <th><%= Group.human_attribute_name :name %></th>
@@ -12,9 +12,9 @@
       <tr>
         <td><%= super_truncate group.name, 30 %></td>
         <td><%= super_truncate group.description, 30 %></td>
-        <td><%= link_to_show group %></td>
-        <td><%= link_to_edit edit_group_path(group) %></td>
-        <td><%= link_to_destroy group %></td>
+        <td class="text-right"><%= link_to_show group %></td>
+        <td class="text-right"><%= link_to_edit edit_group_path(group) %></td>
+        <td class="text-right"><%= link_to_destroy group %></td>
       </tr>
     <% end %>
   </tbody>

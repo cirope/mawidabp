@@ -1,4 +1,4 @@
-module ConclusionReviews::PDF
+module ConclusionReviews::Pdf
   extend ActiveSupport::Concern
 
   def to_pdf organization = nil, *args

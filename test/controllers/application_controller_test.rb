@@ -4,6 +4,8 @@ class ApplicationControllerTest < ActionController::TestCase
   fixtures :users, :organizations
 
   setup do
+    @request.host = "#{organizations(:cirope).prefix}.test.host.co"
+
     @controller.send(:reset_session)
     @controller.send(:session)[:user_id] = users(:administrator).id
     @controller.send(:session)[:last_access] = 30.seconds.ago
@@ -186,11 +188,21 @@ class ApplicationControllerTest < ActionController::TestCase
     assert_equal 'private, no-store', response.headers['Cache-Control']
   end
 
+  test 'redirect to blocked license' do
+    skip unless ENABLE_PUBLIC_REGISTRATION
+
+    login_admin
+
+    @controller.send :redirect_to_license_blocked
+
+    assert_redirected_to license_blocked_url
+  end
+
   private
 
   def login_admin
-    User.find(users(:administrator).id).update_attribute(:logged_in, true)
+    users(:administrator).update_attribute :logged_in, true
 
-    assert @controller.send(:auth)
+    assert @controller.send :auth
   end
 end

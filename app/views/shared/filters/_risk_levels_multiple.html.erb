@@ -1,19 +1,26 @@
 <% group ||= nil %>
 
-<div id="risk_levels_multiple_filter" class="filter" <%== 'style="display: none;"' unless display %>>
-  <% unless group %>
-    <div class="row">
-  <% end %>
-    <div class="col-md-6">
-      <div class="form-group">
-        <% selected = params[action] ? params[action][:risk] : nil %>
-        <%= f.label :risk, Weakness.human_attribute_name(:risk), class: 'col-md-4', for: nil %>
-        <div class="col-md-8">
-          <%= f.input :risk, collection: risks, as: :check_boxes, checked: selected, label: false, class: 'form-control' %>
-        </div>
+<% unless group %>
+  <div id="risk_levels_multiple_filter" class="row" <%== 'style="display: none;"' unless display %>>
+<% end %>
+  <div class="col-md-6" <%== 'style="display: none;"' unless display %>>
+    <div class="form-group row">
+      <% selected = params[action] ? params[action][:risk] : nil %>
+      <%= f.label :risk, Weakness.human_attribute_name(:risk), class: 'col-md-4 col-form-label', for: nil %>
+      <div class="col-md-8">
+        <%= f.input :risk,
+          collection: risks,
+          as: :check_boxes,
+          label: '&nbsp;'.html_safe,
+          required: false,
+          checked: selected,
+          class: 'form-control',
+          item_wrapper_class: 'custom-control custom-checkbox',
+          wrapper_html: { class: 'mt-n3' }
+        %>
       </div>
     </div>
-  <% unless group %>
-    </div>
-  <% end %>
-</div>
+  </div>
+<% unless group %>
+  </div>
+<% end %>

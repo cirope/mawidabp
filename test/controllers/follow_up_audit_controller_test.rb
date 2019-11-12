@@ -609,7 +609,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_current_situation, as: :csv
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
 
     assert_nothing_raised do
       get :weaknesses_current_situation, :params => {
@@ -623,7 +623,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'filtered weaknesses current situation' do
@@ -712,7 +712,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:js], @response.content_type
+    assert_match Mime[:js].to_s, @response.content_type
   end
 
   test 'weaknesses by control objective' do
@@ -742,7 +742,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_by_control_objective, as: :csv
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
 
     assert_nothing_raised do
       get :weaknesses_by_control_objective, :params => {
@@ -756,7 +756,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'filtered weaknesses by control objective' do
@@ -854,7 +854,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_by_business_unit, as: :csv
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
 
     assert_nothing_raised do
       get :weaknesses_by_business_unit, :params => {
@@ -868,7 +868,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'weaknesses by business unit as RTF' do
@@ -876,7 +876,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_by_business_unit, as: :rtf
     assert_response :success
-    assert_equal Mime[:rtf], @response.content_type
+    assert_match Mime[:rtf].to_s, @response.content_type
 
     assert_nothing_raised do
       get :weaknesses_by_business_unit, :params => {
@@ -890,7 +890,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:rtf], @response.content_type
+    assert_match Mime[:rtf].to_s, @response.content_type
   end
 
   test 'filtered weaknesses by business unit' do
@@ -961,7 +961,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_by_user, as: :csv
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
 
     assert_nothing_raised do
       get :weaknesses_by_user, :params => {
@@ -975,7 +975,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'filtered weaknesses by user' do
@@ -1047,7 +1047,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_evolution, as: :csv
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
 
     assert_nothing_raised do
       get :weaknesses_evolution, :params => {
@@ -1061,7 +1061,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'filtered weaknesses evolution' do
@@ -1164,7 +1164,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_list, as: :csv
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
 
     assert_nothing_raised do
       get :weaknesses_list, :params => {
@@ -1178,7 +1178,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'filtered weaknesses list' do
@@ -1283,7 +1283,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_brief, as: :csv
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
 
     assert_nothing_raised do
       get :weaknesses_brief, :params => {
@@ -1297,7 +1297,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'create weaknesses brief' do
@@ -1694,7 +1694,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }, as: :csv
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'benefits report' do
@@ -1804,7 +1804,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal Mime[:csv], @response.content_type
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'create findings tagged report' do

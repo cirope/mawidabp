@@ -33,7 +33,7 @@ class Users::StatusControllerTest < ActionController::TestCase
   test 'should add user to status via xhr' do
     post :create, params: { id: @user.id }, xhr: true, as: :js
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_match Mime[:js].to_s, @response.content_type
     assert_includes session[:status_user_ids], @user.id
   end
 
@@ -45,7 +45,7 @@ class Users::StatusControllerTest < ActionController::TestCase
     }, xhr: true, as: :js
 
     assert_response :success
-    assert_equal @response.content_type, Mime[:js]
+    assert_match Mime[:js].to_s, @response.content_type
     assert session[:status_user_ids].exclude?(@user.id)
   end
 end

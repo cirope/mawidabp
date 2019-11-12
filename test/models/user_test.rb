@@ -571,4 +571,71 @@ class UserTest < ActiveSupport::TestCase
       User.notify_auditors_about_close_date
     end
   end
+
+  test 'auditor users limit reached' do
+    group = groups :second_group
+
+    group.update_columns licensed: true
+    group.license.update_columns auditors_limit: 4
+
+    set_organization organizations :alphabet
+
+    assert_equal 4, group.users.can_act_as(:auditor).count
+
+    role_id = Current.organization.roles.find_by(
+      role_type: Role::TYPES[:auditor_senior]
+    ).id
+
+    assert_no_difference 'User.count' do
+      user = User.create(
+        name:                          'New name',
+        last_name:                     'New lastname',
+        language:                      'es',
+        email:                         'emailxx@emailxx.ccc',
+        user:                          'new_user',
+        enable:                        true,
+        organization_roles_attributes: [
+          {
+            organization_id: Current.organization.id,
+            role_id:         role_id
+          }
+        ]
+      )
+
+      assert user.new_record?
+      assert_error user, :base, :auditors_limit_reached
+    end
+  end
+
+  test 'not auditor users can be created with license limit' do
+    group = groups :second_group
+
+    group.update_columns licensed: true
+    group.license.update_columns auditors_limit: 4
+
+    set_organization organizations :alphabet
+
+    assert_equal 4, group.users.can_act_as(:auditor).count
+
+    role_id = Current.organization.roles.find_by(
+      role_type: Role::TYPES[:admin]
+    ).id
+
+    assert_difference 'User.count' do
+      User.create(
+        name:                          'New name',
+        last_name:                     'New lastname',
+        language:                      'es',
+        email:                         'emailxx@emailxx.ccc',
+        user:                          'new_user',
+        enable:                        true,
+        organization_roles_attributes: [
+          {
+            organization_id: Current.organization.id,
+            role_id:         role_id
+          }
+        ]
+      )
+    end
+  end
 end

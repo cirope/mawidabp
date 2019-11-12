@@ -1,5 +1,5 @@
 module Reports::ProcessControlStats
-  include Reports::PDF
+  include Reports::Pdf
   include Reports::Period
   include Parameters::Risk
 

@@ -2,7 +2,7 @@ module Reports::WeaknessesBrief
   extend ActiveSupport::Concern
 
   include ActionView::Helpers::TextHelper
-  include Reports::PDF
+  include Reports::Pdf
   include Reports::Period
 
   def weaknesses_brief
@@ -58,10 +58,18 @@ module Reports::WeaknessesBrief
         implemented_audited.
         finals(final).
         list_with_final_review.
+        by_origination_date('BETWEEN', @from_date, @to_date).
         where solution_date: @to_date..Time.zone.today
+
+      repeated_without_final_review = Weakness.
+        list_without_final_review.
+        with_repeated.
+        finals(final).
+        by_origination_date('BETWEEN', @from_date, @to_date)
 
       weaknesses = pending_weaknesses.
         or(implemented_audited_weaknesses).
+        or(repeated_without_final_review).
         includes(review: [:conclusion_final_review, :plan_item]).
         preload(finding_user_assignments: :user)
 
@@ -82,7 +90,7 @@ module Reports::WeaknessesBrief
     def weaknesses_brief_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = ::CSV.generate(options) do |csv|
+      csv_str = CSV.generate(options) do |csv|
         csv << weaknesses_brief_csv_headers
 
         weaknesses_brief_csv_data_rows.each { |row| csv << row }
@@ -100,8 +108,8 @@ module Reports::WeaknessesBrief
         Weakness.human_attribute_name('risk'),
         t("#{@controller}_committee_report.weaknesses_brief.audit_comments"),
         FindingUserAssignment.human_attribute_name('process_owner'),
-        t("#{@controller}_committee_report.weaknesses_brief.issue_date"),
-        t("#{@controller}_committee_report.weaknesses_brief.first_follow_up_date"),
+        t("#{@controller}_committee_report.weaknesses_brief.origination_date"),
+        t("#{@controller}_committee_report.weaknesses_brief.reschedule_count"),
         t("#{@controller}_committee_report.weaknesses_brief.follow_up_date"),
         t("#{@controller}_committee_report.weaknesses_brief.distance_to_cut_date")
       ]
@@ -120,8 +128,8 @@ module Reports::WeaknessesBrief
           weakness.risk_text,
           weakness.audit_comments,
           weaknesses_brief_audit_users(weakness).join("\n"),
-          l(weakness.review.conclusion_final_review.issue_date),
-          (weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-'),
+          (weakness.origination_date ? l(weakness.origination_date) : '-'),
+          (weakness.pending? || weakness.awaiting? ? weakness.reschedule_count : '-'),
           (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
           distance_in_days_to_cut_date(weakness)
         ]
@@ -193,10 +201,10 @@ module Reports::WeaknessesBrief
         t("#{@controller}_committee_report.weaknesses_brief.weakness_title") => 10,
         t("#{@controller}_committee_report.weaknesses_brief.description") => 21,
         Weakness.human_attribute_name('risk') => 4,
-        t("#{@controller}_committee_report.weaknesses_brief.audit_comments") => 20,
+        t("#{@controller}_committee_report.weaknesses_brief.audit_comments") => 19,
         FindingUserAssignment.human_attribute_name('process_owner') => 10,
-        t("#{@controller}_committee_report.weaknesses_brief.issue_date") => 5,
-        t("#{@controller}_committee_report.weaknesses_brief.first_follow_up_date") => 5,
+        t("#{@controller}_committee_report.weaknesses_brief.origination_date") => 5,
+        t("#{@controller}_committee_report.weaknesses_brief.reschedule_count") => 6,
         t("#{@controller}_committee_report.weaknesses_brief.follow_up_date") => 5,
         t("#{@controller}_committee_report.weaknesses_brief.distance_to_cut_date") => 4
       }
@@ -223,8 +231,8 @@ module Reports::WeaknessesBrief
           weakness.risk_text,
           truncate(weakness.audit_comments, length: 1000),
           weaknesses_brief_audit_users(weakness).join("\n"),
-          l(weakness.review.conclusion_final_review.issue_date),
-          (weakness.first_follow_up_date ? l(weakness.first_follow_up_date) : '-'),
+          (weakness.origination_date ? l(weakness.origination_date) : '-'),
+          (weakness.pending? || weakness.awaiting? ? weakness.reschedule_count : '-'),
           (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
           distance_in_days_to_cut_date(weakness)
         ]

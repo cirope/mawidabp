@@ -1,21 +1,21 @@
-<p>
+<p class="mb-1">
   <strong><%= EMail.human_attribute_name 'to' %></strong>:
   <%= @email.to %>
 </p>
 
-<p>
+<p class="mb-1">
   <strong><%= EMail.human_attribute_name 'subject' %></strong>:
   <%= @email.subject %>
 </p>
 
-<p>
-  <strong><%= EMail.human_attribute_name 'body' %></strong>:
-  <%= raw @email.body %>
-</p>
-
-<p>
+<p class="mb-1">
   <strong><%= EMail.human_attribute_name 'attachments' %></strong>:
   <%= @email.attachments %>
+</p>
+
+<p class="mb-1">
+  <strong><%= EMail.human_attribute_name 'body' %></strong>:
+  <%= raw @email.body %>
 </p>
 
 <hr />

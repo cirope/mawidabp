@@ -4,9 +4,10 @@
   }, :forms => {:date_range => true}} %>
 
 <% @periods.each do |period| %>
-  <div class="page-header">
-    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
-  </div>
+  <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+
+  <hr>
+
   <% @audit_types.each do |audit_type| %>
     <% audit_type_symbol = audit_type.first %>
     <% unless audit_type.last.empty? %>

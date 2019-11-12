@@ -3,7 +3,7 @@ class BusinessUnitType < ApplicationRecord
   include BusinessUnitTypes::AttributeTypes
   include BusinessUnitTypes::BusinessUnits
   include BusinessUnitTypes::DestroyValidation
-  include BusinessUnitTypes::JSON
+  include BusinessUnitTypes::Json
   include BusinessUnitTypes::Scopes
   include BusinessUnitTypes::Validations
   include Trimmer

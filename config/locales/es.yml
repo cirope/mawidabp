@@ -76,7 +76,7 @@
     you_are_already_logged: "Este usuario ya ha iniciado sesión"
     empty_result: "Sin resultados, modifique el criterio"
     automatic_by_the_system: "Realizado de forma automática por el sistema"
-    compatibility_warning_html: 'Está usando un navegador <strong>obsoleto</strong>. Por favor considere <a href="http://browsehappy.com/">actualizarlo</a>'
+    compatibility_warning_html: 'Está usando un navegador <strong>obsoleto</strong>. Por favor considere <a href="https://browsehappy.com/">actualizarlo</a>'
 
   error:
     title: "Error"
@@ -177,7 +177,7 @@
     control_objective_counts_title: "Análisis de objetivos de control"
     benefits_title: 'Beneficios / Perjuicios'
     process_control_stats_title: 'Observaciones por proceso de negocio'
-    synthesis_report_title: "Informe de síntesis al directorio"
+    synthesis_report_title: "Resumen ejecutivo"
     review_stats_report_title: "Estadísticas de informes"
     review_scores_report_title: "Calificaciones de informes"
     review_score_details_report_title: "Calificaciones de informes detallado"
@@ -325,8 +325,8 @@
         medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
         digitalized: "Digitalización"
     synthesis_report:
-      pdf_name: "informe_de_sintesis_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
+      pdf_name: "resumen_ejecutivo_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
@@ -335,8 +335,7 @@
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-      without_oportunities: "Sin oportunidades de mejora"
-      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"."
       generic_score_average:
         one: 'Promedio de las calificaciones de %{audit_type} en un informe'
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
@@ -711,7 +710,7 @@
     process_control_stats_title: "Observaciones por proceso de negocio"
     control_effectiveness: "Efectividad del control"
     pending_findings: "Seguimiento de observaciones pendientes"
-    synthesis_report_title: "Informe de síntesis al directorio"
+    synthesis_report_title: "Resumen ejecutivo"
     review_stats_report_title: "Estadísticas de informes"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_risk_and_business_unit_title: "Observaciones totales por riesgo y unidad de negocio"
@@ -870,13 +869,13 @@
       weakness_title: "Título observación"
       description: "Detalle observación"
       audit_comments: "Respuesta auditado/Comentario de auditoría"
-      issue_date: "Fecha de emisión informe"
-      first_follow_up_date: "1° fecha probable reg."
+      origination_date: "Fecha de origen observación"
+      reschedule_count: "Cant. Reprogramac."
       follow_up_date: "Última fecha propuesta"
       distance_to_cut_date: "Días antigua data"
       implemented_audited_count:
-        one: "Una observación fue regularizada entre el %{from_date} y el %{to_date}"
-        other: "%{count} observaciones fueron regularizadas entre el %{from_date} y el %{to_date}"
+        one: "Una observación fue regularizada entre el %{from_date} y el %{to_date}."
+        other: "%{count} observaciones fueron regularizadas entre el %{from_date} y el %{to_date}."
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -892,6 +891,7 @@
         one: "%{count} informe con observaciones en el O.C"
         other: "%{count} informes con observaciones en el O.C."
       without_weaknesses: "Sin observaciones"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
     qa_indicators:
       without_data: "Sin datos para el rango de fechas ingresado"
@@ -911,8 +911,8 @@
         ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Riesgo Medio"
         ancient_highest_risk_weaknesses: "Anticuación de Observaciones de Riesgo Alto"
     synthesis_report:
-      pdf_name: "informe_de_sintesis_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
+      pdf_name: "resumen_ejecutivo_%{from_date}_al_%{to_date}.pdf"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
@@ -929,7 +929,7 @@
         one: "Una observación reiterada"
         other: "%{count} observaciones reiteradas"
       total_score_average: "Total promedio de las calificaciones (%{reference })"
-      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"."
     review_stats_report:
       pdf_name: "estadisticas_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       title: "ESTADÍSTICAS DE INFORMES"
@@ -1100,7 +1100,7 @@
       title: "%{name}, su cuenta ha sido creada"
       initial_password: "Para comenzar a utilizar el sistema debe primero establecer su contraseña"
       change_password: "Establecer contraseña"
-      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'Mawidabp' del área de Auditoría Interna."
+      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'Mawidabp'."
       organizations_sites:
         one: "Luego puede ingresar en la siguiente dirección:"
         other: "Luego puede ingresar en cualquiera de las siguientes direcciones (dependiendo de la organización que seleccione):"
@@ -1190,7 +1190,7 @@
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
     without_score: "No calificar"
-    weakness_from_template: "Observación creada de una plantilla"
+    weakness_from_template: "Observación creada a partir de una plantilla"
     repeated_weaknesses: "Reiteradas"
     old_weaknesses: "Antigua data"
     new_weaknesses: "Nuevas"
@@ -1692,6 +1692,7 @@
     execution_reports: "Reportes de ejecución"
     findings: "Observaciones"
     groups: "Grupos"
+    licenses: "Licencia"
     login_records: "Registros de ingreso"
     notifications: "Notificaciones"
     oportunities: "Oportunidades de mejora"

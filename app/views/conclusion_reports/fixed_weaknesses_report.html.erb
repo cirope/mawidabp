@@ -9,9 +9,9 @@
 
 <% @periods.each do |period| %>
   <% unless @reviews[period].blank? %>
-    <div class="page-header">
-      <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
-    </div>
+    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+
+    <hr>
 
     <% @reviews[period].each do |data| %>
       <% if !data[:external] && !@internal_title_showed %>
@@ -27,7 +27,7 @@
       <% end %>
       <h4><%= data[:name] %></h4>
       <% unless data[:column_data].blank? %>
-        <table class="table table-condensed table-striped table-hover">
+        <table class="table table-sm table-striped table-hover">
           <thead>
             <tr>
               <% @column_order.each do |col_name| %>

@@ -1,5 +1,5 @@
 module Reports::DetailedManagement
-  include Reports::PDF
+  include Reports::Pdf
 
   def detailed_management_report
     init_detailed_management_report_vars

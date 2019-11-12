@@ -1,19 +1,19 @@
 <table class="table table-striped table-hover">
   <caption>
-    <h3>
+    <h4>
       <%= @tag %>
-      <small class="pull-right">
+      <span class="float-right small">
         <%= link_to t('label.back'), documents_path %>
-      </small>
-    </h3>
+      </span>
+    </h4>
   </caption>
   <thead id="column_headers">
     <tr>
       <th colspan="2"></th>
       <%= make_filterable_column Document.human_attribute_name('name'), nil, 'name' %>
-      <%= make_filterable_column Document.human_attribute_name('description'), { class: 'hidden-sm hidden-xs'}, 'description' %>
+      <%= make_filterable_column Document.human_attribute_name('description'), { class: 'd-none d-md-table-cell'}, 'description' %>
       <%= make_not_available_column Document.human_attribute_name('shared') %>
-      <%= make_filterable_column Tag.model_name.human(count: 0), { class: 'hidden-xs' }, 'tags' %>
+      <%= make_filterable_column Tag.model_name.human(count: 0), { class: 'd-none d-sm-table-cell' }, 'tags' %>
       <th colspan="3" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -22,14 +22,14 @@
     <% @documents.each do |document| %>
       <tr>
         <td><%= show_document_info document %></td>
-        <td><%= link_to_download_document document, class: 'btn btn-default btn-xs' %></td>
+        <td><%= link_to_download_document document, class: 'btn btn-outline-secondary btn-sm' %></td>
         <td><%= super_truncate document.name, 25 %></td>
-        <td class="hidden-sm hidden-xs"><%= super_truncate document.description, 25 %></td>
+        <td class="d-none d-md-table-cell"><%= super_truncate document.description, 25 %></td>
         <td><%= t document.shared ? 'label.yes' : 'label.no' %></td>
-        <td class="hidden-xs"><%= tags document.tags %></td>
-        <td><%= link_to_show document %></td>
-        <td><%= link_to_edit [:edit, document] %></td>
-        <td><%= link_to_destroy document %></td>
+        <td class="d-none d-sm-table-cell"><%= tags document.tags %></td>
+        <td class="text-right"><%= link_to_show document %></td>
+        <td class="text-right"><%= link_to_edit [:edit, document] %></td>
+        <td class="text-right"><%= link_to_destroy document %></td>
       </tr>
     <% end %>
   </tbody>

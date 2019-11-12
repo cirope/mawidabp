@@ -2,9 +2,9 @@
   <% @human_resource_utilizations.each do |resource_id, hrus| %>
     <% total = 0.0 %>
 
-    <table class="table table-condensed table-hover table-striped">
+    <table class="table table-sm table-hover table-striped">
       <caption>
-        <h3><%= hrus.first.resource.full_name %></h3>
+        <h4><%= hrus.first.resource.full_name %></h4>
       </caption>
 
       <thead>
@@ -42,11 +42,10 @@
         </tr>
       </tfoot>
     </table>
-    <%=  %>
   <% end %>
 <% else %>
   <div class="alert alert-info">
-    <p><%= t '.empty' %></p>
+    <p class="mb-0"><%= t '.empty' %></p>
   </div>
 <% end %>
 

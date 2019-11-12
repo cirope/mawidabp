@@ -4,11 +4,11 @@ $(document).on('click', '[data-hide]', function (event) {
   var $handle     = $(this)
   var containerId = $handle.data('hide')
   var $target     = $('[data-container-id="' + containerId + '"]')
-  var $altHandle  = $handle.closest('.media-object').siblings('.media-object.hidden')
+  var $altHandle  = $handle.closest('.media-object').siblings('.media-object[hidden]')
 
-  $target.closest('.nested').addClass('hidden')
-  $target.addClass('hidden')
+  $target.closest('[data-nested]').attr('hidden', true)
+  $target.attr('hidden', true)
 
-  $handle.closest('.media-object').addClass('hidden')
-  $altHandle.removeClass('hidden')
+  $handle.closest('.media-object').attr('hidden', true)
+  $altHandle.removeAttr('hidden')
 })

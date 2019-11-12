@@ -41,7 +41,7 @@ module ConclusionFinalReviewsHelper
     end
 
     content_tag(:table, content_tag(:thead, content_tag(:tr, header)) +
-        content_tag(:tbody, content_tag(:tr, footer)), class: 'table table-condensed table-striped')
+        content_tag(:tbody, content_tag(:tr, footer)), class: 'table table-sm table-striped')
   end
 
   def conclusion_review_process_control_weakness_details_table(process_control, cois, use_finals = false)

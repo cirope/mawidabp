@@ -12,10 +12,10 @@ class ControlObjectiveItem < ApplicationRecord
   include ControlObjectiveItems::Defaults
   include ControlObjectiveItems::DestroyValidation
   include ControlObjectiveItems::Effectiveness
-  include ControlObjectiveItems::FindingPDFData
+  include ControlObjectiveItems::FindingPdfData
   include ControlObjectiveItems::Findings
   include ControlObjectiveItems::Overrides
-  include ControlObjectiveItems::PDF
+  include ControlObjectiveItems::Pdf
   include ControlObjectiveItems::Relevance
   include ControlObjectiveItems::Scopes
   include ControlObjectiveItems::Scores

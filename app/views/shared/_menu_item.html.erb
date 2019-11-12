@@ -1,17 +1,17 @@
 <% active = menu_item.submenu_names.include? @current_module %>
 
 <% if menu_item.children.present? %>
-  <li class="dropdown <%= 'active' if active %>">
-    <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
-      <%= menu_item %> <span class="caret"></span>
+  <li class="nav-item dropdown <%= 'active' if active %>">
+    <%= link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do %>
+      <%= menu_item %>
     <% end %>
-    <ul class="dropdown-menu">
+    <div class="dropdown-menu">
       <% menu_item.children.each do |submenu_item| %>
-        <li><%= link_to submenu_item, submenu_item.url %></li>
+        <%= link_to submenu_item, submenu_item.url, class: 'dropdown-item' %>
         <%= render 'shared/submenu', submenu_item: submenu_item %>
       <% end %>
-    </ul>
+    </div>
   </li>
 <% else %>
-  <li><%= link_to menu_item, menu_item.url %></li>
+  <li class="nav-item"><%= link_to menu_item, menu_item.url, class: 'nav-link' %></li>
 <% end %>

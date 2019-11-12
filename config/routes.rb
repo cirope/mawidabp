@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get '/healthy', to: 'health#show', as: 'healthy'
   post '/touch', to: 'touch#create', as: 'touch'
 
   # Sessions
@@ -432,7 +433,16 @@ Rails.application.routes.draw do
 
   resources :users
 
+  resource :registration, only: [:show, :new, :create]
+
+  resource :license, only: [:show, :update] do
+    resource :blocked, only: :show, controller: 'licenses/blocked'
+    resource :check, only: :create, controller: 'licenses/check'
+  end
+
   root 'sessions#new'
+
+  post 'paypal', to: 'paypal#create'
 
   get 'private/:path', to: 'file_models#download', constraints: { path: /.+/ }
 end

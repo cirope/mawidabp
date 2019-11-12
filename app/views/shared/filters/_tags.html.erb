@@ -2,20 +2,18 @@
 <% field_label ||= Tag.model_name.human %>
 <% field_name  ||= :tags %>
 
-<div id="<%= field_name %>_filter" class="filter" <%== 'style="display: none;"' unless display %>>
-  <% unless group %>
-    <div class="row">
-  <% end %>
-    <div class="col-md-6">
-      <div class="form-group">
-        <% tags_filter = params[action] ? params[action][field_name] : nil %>
-        <%= f.label field_name, field_label, class: 'col-md-4' %>
-        <div class="col-md-8">
-          <%= f.text_field field_name, value: tags_filter, maxlength: 3072, class: 'form-control' %>
-        </div>
+<% unless group %>
+  <div id="<%= field_name %>_filter" class="row" <%== 'style="display: none;"' unless display %>>
+<% end %>
+  <div class="col-md-6" <%== 'style="display: none;"' unless display %>>
+    <div class="form-group row">
+      <% tags_filter = params[action] ? params[action][field_name] : nil %>
+      <%= f.label field_name, field_label, class: 'col-md-4 col-form-label' %>
+      <div class="col-md-8">
+        <%= f.text_field field_name, value: tags_filter, maxlength: 3072, class: 'form-control' %>
       </div>
     </div>
-  <% unless group %>
-    </div>
-  <% end %>
-</div>
+  </div>
+<% unless group %>
+  </div>
+<% end %>
