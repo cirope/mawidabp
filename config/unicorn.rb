@@ -74,6 +74,11 @@ end
 
 after_fork do |server, worker|
   # the following is *required* for Rails + "preload_app true",
-  defined?(ActiveRecord::Base) and
-    ActiveRecord::Base.establish_connection
+  defined?(ActiveRecord::Base) and ActiveRecord::Base.establish_connection
+
+  trap :INT do
+    puts Thread.current.backtrace
+
+    Process.kill :KILL, $$
+  end
 end
