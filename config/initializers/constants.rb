@@ -10,7 +10,7 @@ PRIVATE_PATH = File.join(Rails.root, 'private', File::SEPARATOR).freeze
 # Ruta al directorio temporal
 TEMP_PATH = File.join(Rails.root, 'tmp', File::SEPARATOR).freeze
 # Prefijo de la organización para administrar grupos
-APP_ADMIN_PREFIXES = ['admin', 'www'].freeze
+APP_ADMIN_PREFIXES = ['admin', 'www', 'mawida-admin'].freeze
 # Ruta a los archivos subidos a la aplicación
 APP_FILES_PATH = File.join(PRIVATE_PATH, 'file_models', File::SEPARATOR).freeze
 # Ruta a las imágenes subidas a la aplicación
