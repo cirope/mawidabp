@@ -1,12 +1,9 @@
 FROM centos:2.6-alpine
 
-ENV APP_HOME /opt/app
-
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
 ENV RAILS_ENV production
 
-ENV HOME $APP_HOME
 ENV USER_ID 1001
 ENV PORT 3000
 
@@ -24,23 +21,19 @@ RUN yum update -y && \
   tzdata          && \
   yum clean all -y
 
-WORKDIR $APP_HOME
-
 USER $USER_ID
 
-RUN mkdir -p $APP_HOME
-
-ADD Gemfile $APP_HOME/Gemfile
-ADD Gemfile.lock $APP_HOME/Gemfile.lock
+ADD Gemfile $APP_ROOT/Gemfile
+ADD Gemfile.lock $APP_ROOT/Gemfile.lock
 
 RUN bundle install --deployment
 
-ADD . $APP_HOME
-ADD config/application.yml.example $APP_HOME/config/application.yml
+ADD . $APP_ROOT
+ADD config/application.yml.example $APP_ROOT/config/application.yml
 
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
 
-RUN chgrp -R 0 $APP_HOME && chmod -R g+rwX $APP_HOME
+RUN chgrp -R 0 $APP_ROOT && chmod -R g+rwX $APP_ROOT
 
 EXPOSE $PORT
 
