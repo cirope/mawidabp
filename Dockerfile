@@ -23,7 +23,6 @@ RUN yum update -y && \
   tzdata          && \
   yum clean all -y
 
-
 RUN mkdir -p $APP_HOME
 
 WORKDIR $APP_HOME
@@ -31,7 +30,7 @@ WORKDIR $APP_HOME
 ADD Gemfile $APP_HOME/Gemfile
 ADD Gemfile.lock $APP_HOME/Gemfile.lock
 
-RUN bundle install --deployment
+RUN gem install bundler && bundle install --deployment
 
 ADD . $APP_HOME
 ADD config/application.yml.example $APP_HOME/config/application.yml
