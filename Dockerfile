@@ -14,7 +14,6 @@ RUN yum update -y && \
   ImageMagick        \
   openssl-devel      \
   postgresql-devel   \
-  rubygems           \
   tzdata          && \
   yum clean all -y
 
