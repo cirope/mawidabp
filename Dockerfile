@@ -23,9 +23,11 @@ RUN yum update -y && \
   tzdata          && \
   yum clean all -y
 
-RUN mkdir -p $APP_HOME
-
 WORKDIR $APP_HOME
+
+USER $USER_ID
+
+RUN mkdir -p $APP_HOME
 
 ADD Gemfile $APP_HOME/Gemfile
 ADD Gemfile.lock $APP_HOME/Gemfile.lock
@@ -38,8 +40,6 @@ ADD config/application.yml.example $APP_HOME/config/application.yml
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
 
 RUN chgrp -R 0 $APP_HOME && chmod -R g+rwX $APP_HOME
-
-USER $USER_ID
 
 EXPOSE $PORT
 
