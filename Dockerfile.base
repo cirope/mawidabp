@@ -1,0 +1,28 @@
+FROM openshift/jenkins-slave-base-centos7
+
+ENV RUBY_MAJOR_VERSION=2 \
+    RUBY_MINOR_VERSION=5
+
+ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}" \
+    RUBY_SCL_NAME_VERSION="${RUBY_MAJOR_VERSION}${RUBY_MINOR_VERSION}"
+
+ENV RUBY_SCL="rh-ruby${RUBY_SCL_NAME_VERSION}"
+
+RUN yum install -y centos-release-scl-rh && \
+    yum-config-manager --add-repo https://cbs.centos.org/repos/sclo7-rh-ruby25-rh-candidate/x86_64/os/ && \
+    echo gpgcheck=0 >> /etc/yum.repos.d/cbs.centos.org_repos_sclo7-rh-ruby25-rh-candidate_x86_64_os_.repo && \
+    INSTALL_PKGS=" \
+${RUBY_SCL} \
+${RUBY_SCL}-ruby-devel \
+${RUBY_SCL}-rubygem-rake \
+${RUBY_SCL}-rubygem-bundler \
+" && \
+    yum install -y --setopt=tsflags=nodocs ${INSTALL_PKGS} && \
+    yum -y clean all --enablerepo='*' && \
+    rpm -V ${INSTALL_PKGS}
+
+
+RUN chown -R 1001:0 $HOME && \
+    chmod -R g+rw $HOME
+
+USER 1001
