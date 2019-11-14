@@ -9,12 +9,9 @@ ENV PORT 3000
 
 USER root
 
-RUN curl -sL https://rpm.nodesource.com/setup_10.x | bash -
-
 RUN yum update -y && \
   yum install -y     \
   ImageMagick        \
-  nodejs             \
   openssl-devel      \
   postgresql-devel   \
   rubygems           \
