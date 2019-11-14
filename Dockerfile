@@ -33,7 +33,7 @@ RUN mkdir -p $APP_HOME
 ADD Gemfile $APP_HOME/Gemfile
 ADD Gemfile.lock $APP_HOME/Gemfile.lock
 
-RUN gem install bundler && bundle install --deployment
+RUN bundle install --deployment
 
 ADD . $APP_HOME
 ADD config/application.yml.example $APP_HOME/config/application.yml
