@@ -1,4 +1,4 @@
-FROM centos:2.6-alpine
+FROM centos/ruby-25-centos7
 
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
@@ -21,19 +21,19 @@ RUN yum update -y && \
   tzdata          && \
   yum clean all -y
 
-USER $USER_ID
-
 ADD Gemfile $APP_ROOT/Gemfile
 ADD Gemfile.lock $APP_ROOT/Gemfile.lock
 
-RUN bundle install --deployment
+RUN bash -cl "gem install bundler --no-document --force && bundle install --deployment"
 
 ADD . $APP_ROOT
 ADD config/application.yml.example $APP_ROOT/config/application.yml
 
-RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
+RUN bash -cl "bundle exec rails assets:precompile DB_ADAPTER=nulldb"
 
 RUN chgrp -R 0 $APP_ROOT && chmod -R g+rwX $APP_ROOT
+
+USER $USER_ID
 
 EXPOSE $PORT
 
