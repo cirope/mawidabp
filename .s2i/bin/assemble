@@ -1,0 +1,24 @@
+#!/bin/bash -e
+# The assemble script builds the application artifacts from source and
+# places them into appropriate directories inside the image.
+
+if [ -z "$BUNDLER_INSTALL_VERSION" ]; then
+  # If not supplied, assume the bundler version should be the newest
+  # from 2.X. Based on https://bundler.io/guides/bundler_2_upgrade.html,
+  # unless the Gemfile.lock uses a 2.X version, it will fall back to use
+  # the most current 1.X version installed
+  #
+  # Use BUNDLER_INSTALL_VERSION="~>1.0" in your build envionment variables
+  # If you're not using a 2.X in your Gemfile.lock.
+  export BUNDLER_INSTALL_VERSION="~>2.0"
+fi
+
+echo "---> Updating bundler gem to version $BUNDLER_INSTALL_VERSION ..."
+# Override the binary directory to ensure it's outside the $HOME directory
+gem install bundler -v "$BUNDLER_INSTALL_VERSION" --bindir /opt/app-root/bin
+
+# Update PATH to read from the above directory for binaries first
+export PATH=/opt/app-root/bin:$PATH
+
+# Execute the default S2I script
+source ${STI_SCRIPTS_PATH}/assemble
