@@ -20,6 +20,7 @@ RUN yum update -y && \
   nodejs             \
   openssl-devel      \
   postgresql-devel   \
+  rubygems           \
   tzdata          && \
   yum clean all -y
 
