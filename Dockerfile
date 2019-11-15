@@ -61,6 +61,7 @@ ADD config/application.yml.example $APP_ROOT/config/application.yml
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
 
 RUN chgrp -R 0 $APP_ROOT && chmod -R g+rwX $APP_ROOT
+RUN chmod +x scripts/migrate.sh
 
 USER $USER_ID
 
