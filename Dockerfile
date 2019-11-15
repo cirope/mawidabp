@@ -1,4 +1,4 @@
-FROM openshift/ruby
+FROM centos/ruby-25-centos7
 
 ENV APP_ROOT /opt/app
 
