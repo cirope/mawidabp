@@ -46,8 +46,9 @@
           <% data[:column_data].each do |row| %>
             <tr>
               <% @column_order.each_index do |i| %>
-                <td><%= row[i].kind_of?(Array) ?
-                  array_to_ul(row[i], class: 'list-unstyled') : row[i] %></td>
+                <td>
+                  <%= row[i].kind_of?(Array) ? array_to_ul(row[i], class: 'list-unstyled', skip_markdown: true) : row[i] %>
+                </td>
               <% end %>
             </tr>
           <% end %>

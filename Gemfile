@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.0.0'
+gem 'rails', '~> 6.0.1'
 
 gem 'pg'
+gem 'activerecord-nulldb-adapter'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'responders'
@@ -38,9 +39,9 @@ gem 'sassc-rails'
 gem 'uglifier'
 
 gem 'unicorn'
+gem 'unicorn-rails'
 
 group :development do
-  gem 'unicorn-rails'
   gem 'web-console'
   gem 'listen'
   gem 'capistrano'

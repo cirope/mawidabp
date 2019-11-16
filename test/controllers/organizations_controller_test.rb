@@ -55,25 +55,27 @@ class OrganizationsControllerTest < ActionController::TestCase
     assert_difference ['Organization.count', 'LdapConfig.count'] do
       post :create, params: {
         organization: {
-          name: 'New organization',
-          prefix: 'new-prefix',
-          description: 'New description',
-          group_id: groups(:main_group).id,
+          name:                   'New organization',
+          prefix:                 'new-prefix',
+          description:            'New description',
+          group_id:               groups(:main_group).id,
           ldap_config_attributes: {
-            hostname: 'localhost',
-            port: ENV['TRAVIS'] ? 3389 : 389,
-            basedn: 'ou=people,dc=test,dc=com',
-            filter: 'CN=*',
-            login_mask: 'cn=%{user},%{basedn}',
-            username_attribute: 'cn',
-            name_attribute: 'givenname',
-            last_name_attribute: 'sn',
-            email_attribute: 'mail',
-            function_attribute: 'title',
-            roles_attribute: 'description',
-            manager_attribute: 'manager',
-            test_user: 'admin',
-            test_password: 'admin123'
+            hostname:             'localhost',
+            port:                 ldap_port,
+            basedn:               'ou=people,dc=test,dc=com',
+            filter:               'CN=*',
+            login_mask:           'cn=%{user},%{basedn}',
+            username_attribute:   'cn',
+            name_attribute:       'givenname',
+            last_name_attribute:  'sn',
+            email_attribute:      'mail',
+            function_attribute:   'title',
+            roles_attribute:      'description',
+            manager_attribute:    'manager',
+            test_user:            'admin',
+            test_password:        'admin123',
+            alternative_hostname: '127.0.0.1',
+            alternative_port:     ldap_port
           }
         }
       }

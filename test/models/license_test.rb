@@ -46,34 +46,47 @@ class LicenseTest < ActiveSupport::TestCase
   end
 
   test 'update status on payment' do
+    @license.update_columns(
+      status:          :trial,
+      created_at:      32.days.ago,
+      subscription_id: nil
+    )
+
+    assert @license.trial?
+
+    @license.check_subscription
+
+    assert @license.unpaid?
     assert_nil @license.paid_until
 
-    check_license_stubbed_for_status :paid
+    @license.update_column :subscription_id, SecureRandom.uuid
+
+    check_subscription_stubbed_status :paid
 
     assert @license.active?
     assert_equal 1.month.from_now.to_date, @license.paid_until.to_date
 
-    check_license_stubbed_for_status :in_process
+    check_subscription_stubbed_status :in_process
 
     assert @license.active?
     assert_equal 2.days.from_now.to_date, @license.paid_until.to_date
 
     # paid until 2 days from now
-    check_license_stubbed_for_status :not_found
+    check_subscription_stubbed_status :not_found
 
     assert @license.active?
 
     # Expired paid_until
     @license.update_column :paid_until, 2.seconds.ago
 
-    check_license_stubbed_for_status :not_found
+    check_subscription_stubbed_status :not_found
 
     assert @license.unpaid?
   end
 
   private
 
-    def check_license_stubbed_for_status status
+    def check_subscription_stubbed_status status
       response = case status
                  when :paid
                    {

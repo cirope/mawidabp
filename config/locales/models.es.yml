@@ -79,6 +79,9 @@ es:
       ldap_config:
         one: 'Configuración LDAP'
         other: 'Configuraciones LDAP'
+      license:
+        one: 'Licencia'
+        other: 'Licencias'
       login_record:
         one: 'Registro de ingreso'
         other: 'Registros de ingreso'
@@ -337,6 +340,8 @@ es:
       ldap_config:
         hostname: 'Dirección del servidor'
         port: 'Puerto'
+        alternative_hostname: 'Dirección del servidor alternativo'
+        alternative_port: 'Puerto alternativo'
         basedn: 'Nombre distinguido de base'
         filter: 'Filtro'
         login_mask: 'Máscara de autenticación'
@@ -351,6 +356,10 @@ es:
         test_password: 'Contraseña'
         user: 'Usuario de servicio'
         password: 'Contraseña de servicio'
+      license:
+        paid_until: 'Pagada hasta'
+        auditors_limit: 'Limite de usuarios auditores'
+        status: 'Estado'
       login_record:
         data: 'Datos'
         end: 'Fin'

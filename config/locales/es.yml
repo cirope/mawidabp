@@ -177,7 +177,7 @@
     control_objective_counts_title: "Análisis de objetivos de control"
     benefits_title: 'Beneficios / Perjuicios'
     process_control_stats_title: 'Observaciones por proceso de negocio'
-    synthesis_report_title: "Informe de síntesis al directorio"
+    synthesis_report_title: "Resumen ejecutivo"
     review_stats_report_title: "Estadísticas de informes"
     review_scores_report_title: "Calificaciones de informes"
     review_score_details_report_title: "Calificaciones de informes detallado"
@@ -325,7 +325,7 @@
         medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
         digitalized: "Digitalización"
     synthesis_report:
-      pdf_name: "informe_de_sintesis_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "resumen_ejecutivo_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Hallazgos Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -335,8 +335,7 @@
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin hallazgos"
-      without_oportunities: "Sin oportunidades de mejora"
-      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"."
       generic_score_average:
         one: 'Promedio de las calificaciones de %{audit_type} en un informe'
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
@@ -709,7 +708,7 @@
     process_control_stats_title: "Observaciones por proceso de negocio"
     control_effectiveness: "Efectividad del control"
     pending_findings: "Seguimiento de observaciones pendientes"
-    synthesis_report_title: "Informe de síntesis al directorio"
+    synthesis_report_title: "Resumen ejecutivo"
     review_stats_report_title: "Estadísticas de informes"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
@@ -910,7 +909,7 @@
         ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Riesgo Medio"
         ancient_highest_risk_weaknesses: "Anticuación de Observaciones de Riesgo Alto"
     synthesis_report:
-      pdf_name: "informe_de_sintesis_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "resumen_ejecutivo_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Hallazgos Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -928,7 +927,7 @@
         one: "Un hallazgo reiterado"
         other: "%{count} hallazgos reiterados"
       total_score_average: "Total promedio de las calificaciones (%{reference })"
-      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"."
     review_stats_report:
       pdf_name: "estadisticas_de_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       title: "ESTADÍSTICAS DE INFORMES"
@@ -1691,6 +1690,7 @@
     execution_reports: "Reportes de ejecución"
     findings: "Hallazgos"
     groups: "Grupos"
+    licenses: "Licencia"
     login_records: "Registros de ingreso"
     notifications: "Notificaciones"
     oportunities: "Oportunidades de mejora"

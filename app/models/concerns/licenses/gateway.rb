@@ -7,22 +7,38 @@ module Licenses::Gateway
     trial? || active?
   end
 
+  def blocked?
+    unpaid? || cancelled?
+  end
+
   def payment_needed?
     unpaid? || trial_ending?
   end
 
+  def trial_valid_until
+    created_at + License::DEFAULT_TRIAL_PERIOD
+  end
+
   def trial_ending?
-    trial? && (created_at + License::DEFAULT_TRIAL_PERIOD - License::NOTICE_PERIOD) <= Time.zone.now
+    trial? && (trial_valid_until - License::NOTICE_PERIOD) <= Time.zone.now
   end
 
   def price_per_month
     LICENSE_PLANS[auditors_limit]['price'].to_f
   end
 
-  def check_subscription
-    return if cancelled? || subscription_id.blank?
+  def plan_id
+    LICENSE_PLANS[auditors_limit]['plan_id']
+  end
 
-    process_subscription PaypalClient.get_subscription(subscription_id)
+  def check_subscription
+    return if cancelled?
+
+    if subscription_id.blank?
+      unpaid! if trial_valid_until <= Time.zone.now
+    else
+      process_subscription PaypalClient.get_subscription(subscription_id)
+    end
   end
 
   def process_subscription result

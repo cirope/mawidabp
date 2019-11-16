@@ -100,7 +100,13 @@ class Authentication
         @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }
       end
     rescue Net::LDAP::Error
-      @message = I18n.t 'message.ldap_error'
+      if @ldap_config.try_alternative_ldap?
+        @ldap_config = @ldap_config.alternative_ldap
+
+        retry
+      end
+
+      @message = I18n.t('message.ldap_error')
     end
 
     def choose_ldap_config username
