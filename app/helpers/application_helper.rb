@@ -151,7 +151,7 @@ module ApplicationHelper
 
     html_classes = ['filterable']
     content      = content_tag(:span, title, :class => :title)
-    options      ||= {}
+    options    ||= {}
     selected     = search_params[:query].blank? || columns.any? do |c|
       (search_params[:columns] || @columns).include? c
     end

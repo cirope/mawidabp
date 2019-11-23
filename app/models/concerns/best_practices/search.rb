@@ -14,7 +14,7 @@ module BestPractices::Search
       if query.present?
         columns.each do |column|
           if (quoted_column = COLUMNS_FOR_SEARCH[column])
-            result = result.where "#{quoted_column} ILIKE ?", "%#{query.strip}%"
+            result = result.where "LOWER(#{quoted_column}) LIKE ?", "%#{query.strip.downcase}%"
           end
         end
       end
