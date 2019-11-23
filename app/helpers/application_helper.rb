@@ -150,9 +150,11 @@ module ApplicationHelper
     raise 'Must have at least one column' if columns.empty?
 
     html_classes = ['filterable']
-    content = content_tag(:span, title, :class => :title)
-    selected = @query.blank? || columns.any? { |c| @columns.include?(c) }
-    options ||= {}
+    content      = content_tag(:span, title, :class => :title)
+    options      ||= {}
+    selected     = search_params[:query].blank? || columns.any? do |c|
+      (search_params[:columns] || @columns).include? c
+    end
 
     html_classes << 'selected' if selected
     html_classes << options[:class] if options[:class]
@@ -170,7 +172,7 @@ module ApplicationHelper
   def make_not_available_column(title, options = {})
     html_classes = []
 
-    html_classes << 'not-available' unless @query.blank? && @order_by.blank?
+    html_classes << 'not-available' unless search_params[:query].blank? && @order_by.blank?
     html_classes << options[:class] if options[:class]
 
     content_tag(:th, title,
