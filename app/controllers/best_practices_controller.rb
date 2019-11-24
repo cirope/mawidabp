@@ -9,11 +9,7 @@ class BestPracticesController < ApplicationController
 
   # * GET /best_practices
   def index
-    build_search_conditions BestPractice
-
-    @best_practices = BestPractice.list.where(@conditions).reorder(
-      obsolete: :asc, name: :asc
-    ).page(params[:page])
+    @best_practices = BestPractice.list.search(**search_params).ordered.page(params[:page])
   end
 
   # * GET /best_practices/1

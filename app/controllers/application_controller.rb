@@ -37,6 +37,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :can_perform?
 
+  def search_params
+    @search_params ||= params[:search]&.permit(:query, columns: []).to_h.symbolize_keys
+  end
+  helper_method :search_params
+
   private
 
     def scope_current_organization
