@@ -438,7 +438,7 @@ Rails.application.routes.draw do
   resource :license, only: [:show, :update] do
     resource :blocked, only: :show, controller: 'licenses/blocked'
     resource :check, only: :create, controller: 'licenses/check'
-    resource :authorizations, only: [:show, :new, :create], controller: 'licenses/authorizations'
+    resource :authorizations, only: [:new, :create], controller: 'licenses/authorizations'
   end
 
   root 'sessions#new'

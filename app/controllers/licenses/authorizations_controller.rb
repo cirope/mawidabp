@@ -22,6 +22,6 @@ class Licenses::AuthorizationsController < ApplicationController
     end
 
     def authorization_params
-      params.require(:license).permit(:auditors_limit)
+      params.require(:license).permit :auditors_limit
     end
 end

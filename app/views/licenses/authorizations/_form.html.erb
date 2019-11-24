@@ -8,15 +8,16 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <%= license_auditors_limit_input(f) %>
+        <%= license_auditors_limit_input f %>
 
-        <b><%= 'Precio mensual' %>:</b> US$
+        <b><%= t 'licenses.price_per_month' %>:</b> US$
         <span class="monthly-price">
           <%= number_to_currency @license.price_per_month %>
         </span>
       </div>
     </div>
   </div>
+
   <hr>
 
   <div class="form-actions">

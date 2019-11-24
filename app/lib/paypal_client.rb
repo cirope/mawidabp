@@ -28,7 +28,6 @@ module PaypalClient
     parse_revise(result) || { status: :error, response: :general_problem }
   end
 
-
   def parse_subscription response
     case response['status']
     when STATUS[:approved], STATUS[:active]
@@ -47,7 +46,7 @@ module PaypalClient
       link = response['links'].find { |l| l['rel'] == 'approve' }['href']
 
       { status: :success, response: link }
-    elsif (issue = response['details']&.first&.fetch('issue', nil))
+    elsif (issue = response['details']&.first&.fetch 'issue', nil)
       { status: :error, response: issue.downcase }
     end
   end

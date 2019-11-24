@@ -35,7 +35,7 @@ module Licenses::Gateway
     LICENSE_PLANS[auditors_limit]['plan_id']
   end
 
-  def change_auditors_limit(auditors_limit)
+  def change_auditors_limit auditors_limit
     return if self.auditors_limit == auditors_limit
 
     return errors.add :auditors_limit, :invalid if LICENSE_PLANS[auditors_limit].nil?
@@ -44,10 +44,10 @@ module Licenses::Gateway
 
     return errors.add :auditors_limit, :cannot_downgrade if self.auditors_limit > auditors_limit
 
-    authorize_change_of_plan(auditors_limit)
+    authorize_change_of_plan auditors_limit
   end
 
-  def authorize_change_of_plan(auditors_limit)
+  def authorize_change_of_plan auditors_limit
     result = PaypalClient.authorize_change_of_plan subscription_id, LICENSE_PLANS[auditors_limit][:plan_id]
 
     if result[:status] == :success
