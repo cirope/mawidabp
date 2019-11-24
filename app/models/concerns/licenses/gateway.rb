@@ -3,6 +3,10 @@
 module Licenses::Gateway
   extend ActiveSupport::Concern
 
+  included do
+    after_update :clean_vendor_auth_url, if: :saved_change_to_auditors_limit?
+  end
+
   def alive?
     trial? || active?
   end
@@ -31,6 +35,36 @@ module Licenses::Gateway
     LICENSE_PLANS[auditors_limit]['plan_id']
   end
 
+  def change_auditors_limit(auditors_limit)
+    return if self.auditors_limit == auditors_limit
+
+    return errors.add :auditors_limit, :invalid if LICENSE_PLANS[auditors_limit].nil?
+
+    return update auditors_limit: auditors_limit if subscription_id.blank?
+
+    return errors.add :auditors_limit, :cannot_downgrade if self.auditors_limit > auditors_limit
+
+    authorize_change_of_plan(auditors_limit)
+  end
+
+  def authorize_change_of_plan(auditors_limit)
+    result = PaypalClient.authorize_change_of_plan subscription_id, LICENSE_PLANS[auditors_limit][:plan_id]
+
+    if result[:status] == :success
+      self.plan_change_url = result[:response]
+    else
+      errors.add :base, result[:response]
+    end
+  end
+
+  def plan_change_url
+    @plan_change_url ||= RedisClient.license_plan_change_url subscription_id
+  end
+
+  def plan_change_url= url
+    RedisClient.assign_license_plan_change_url subscription_id, url
+  end
+
   def check_subscription
     return if cancelled?
 
@@ -43,11 +77,20 @@ module Licenses::Gateway
 
   def process_subscription result
     if result[:status] == :paid && result[:paid_until] > Time.zone.now
-      update status: :active, paid_until: result[:paid_until]
+      update status: :active, paid_until: result[:paid_until],
+        auditors_limit: auditors_limit_from_plan_id(result[:plan_id])
     elsif result[:status] == :in_process
       update status: :active, paid_until: 2.days.from_now
     elsif !unpaid? && (paid_until.blank? || paid_until < Time.zone.now)
       update status: :unpaid
     end
+  end
+
+  def auditors_limit_from_plan_id(plan_id)
+    LICENSE_PLANS.find { |_k, v| v[:plan_id] == plan_id }.first
+  end
+
+  def clean_vendor_auth_url
+    RedisClient.clean_license_plan_change_url subscription_id
   end
 end

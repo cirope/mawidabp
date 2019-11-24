@@ -21,6 +21,13 @@ class LicenseTest < ActiveSupport::TestCase
     assert_error @license, :auditors_limit, :inclusion
   end
 
+  test 'validates uniqueness for subscription id' do
+    new_license = @license.dup
+
+    assert new_license.invalid?
+    assert_error new_license, :subscription_id, :taken
+  end
+
   test 'should be alive' do
     assert @license.alive?
 
@@ -91,7 +98,8 @@ class LicenseTest < ActiveSupport::TestCase
                  when :paid
                    {
                      status:     status,
-                     paid_until: 1.month.from_now
+                     paid_until: 1.month.from_now,
+                     plan_id:    LICENSE_PLANS[@license.auditors_limit][:plan_id]
                    }
                  when :in_process
                    { status: status }

@@ -1,0 +1,25 @@
+<%= simple_form_for @license,
+  url: license_authorizations_path,
+  method: :post,
+  html: { data: { no_observe_changes: true } } do |f| %>
+
+  <%= render 'shared/error_explanation', f: f %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= license_auditors_limit_input(f) %>
+
+        <b><%= 'Precio mensual' %>:</b> US$
+        <span class="monthly-price">
+          <%= number_to_currency @license.price_per_month %>
+        </span>
+      </div>
+    </div>
+  </div>
+  <hr>
+
+  <div class="form-actions">
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
+<% end %>

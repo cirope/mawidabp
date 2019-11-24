@@ -22,23 +22,49 @@ module PaypalClient
     parse_subscription(result) || { status: :no_results }
   end
 
+  def authorize_change_of_plan reference_id, plan_id
+    result = request_post "/v1/billing/subscriptions/#{reference_id}/revise", plan_id: plan_id
+
+    parse_revise(result) || { status: :error, response: :general_problem }
+  end
+
+
   def parse_subscription response
     case response['status']
     when STATUS[:approved], STATUS[:active]
       {
         status:     :paid,
-        paid_until: Time.parse(response['billing_info']['next_billing_time'])
+        paid_until: Time.parse(response['billing_info']['next_billing_time']),
+        plan_id:    response['plan_id']
       }
     when STATUS[:pending]
       { status: :in_process }
     end
   end
 
+  def parse_revise response
+    if response['links']
+      link = response['links'].find { |l| l['rel'] == 'approve' }['href']
+
+      { status: :success, response: link }
+    elsif (issue = response['details']&.first&.fetch('issue', nil))
+      { status: :error, response: issue.downcase }
+    end
+  end
+
   def request_get path
     uri      = URI(PAYPAL_DOMAIN + path)
-    request  = Net::HTTP::Get.new uri, authorized_request_headers
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-      http.request request
+      http.get uri, authorized_request_headers
+    end
+
+    JSON.parse response.body
+  end
+
+  def request_post path, params
+    uri      = URI(PAYPAL_DOMAIN + path)
+    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+      http.post uri, params.to_json, authorized_request_headers
     end
 
     JSON.parse response.body

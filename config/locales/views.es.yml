@@ -183,6 +183,17 @@ es:
         check: 'Volver a comprobar pago'
     license:
       check: 'Volver a comprobar pago'
+      approve: 'Ir a Paypal'
+      authorize_new_plan:
+        title: 'Autorizar nuevo plan'
+        body: |-
+          Para cambiar de plan, deberá autorizar el nuevo plan mensual.
+          El nuevo plan será facturado en el próximo ciclo de facturación, pero verá reflejada la cantidad deseada de usuarios auditores instantaneamente.'
+    authorizations:
+      new:
+        title: 'Licencia'
+      create:
+        title: 'Licencia'
     paypal_button:
       create: 'Suscribirse'
       create_error: 'Ha ocurrido un problema, por favor comuníquese con soporte@mawidabp.com para comprobar si el pago está acreditado.'
