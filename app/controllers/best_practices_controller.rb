@@ -9,7 +9,7 @@ class BestPracticesController < ApplicationController
 
   # * GET /best_practices
   def index
-    @best_practices = BestPractice.list.search(**search_params).page(params[:page])
+    @best_practices = BestPractice.list.search(**search_params).ordered.page(params[:page])
   end
 
   # * GET /best_practices/1

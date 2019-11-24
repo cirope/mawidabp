@@ -9,7 +9,7 @@ module BestPractices::Search
 
   module ClassMethods
     def search query: nil, columns: []
-      result = ordered
+      result = all
 
       if query.present?
         columns.each do |column|
