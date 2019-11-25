@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class LdapConfigTest < ActiveSupport::TestCase
@@ -53,6 +55,20 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_error @ldap_config, :manager_attribute, :invalid
   end
 
+  test 'validates alternative fields' do
+    @ldap_config.alternative_port     = ldap_port
+    @ldap_config.alternative_hostname = ''
+
+    assert @ldap_config.invalid?
+    assert_error @ldap_config, :alternative_hostname, :blank
+
+    @ldap_config.alternative_hostname = 'localhost'
+    @ldap_config.alternative_port     = 'xx'
+
+    assert @ldap_config.invalid?
+    assert_error @ldap_config, :alternative_port, :not_a_number
+  end
+
   test 'validates port range' do
     @ldap_config.port = 0
 
@@ -63,6 +79,18 @@ class LdapConfigTest < ActiveSupport::TestCase
 
     assert @ldap_config.invalid?
     assert_error @ldap_config, :port, :less_than, count: 65536
+
+    @ldap_config.alternative_hostname = 'localhost'
+
+    @ldap_config.alternative_port = 0
+
+    assert @ldap_config.invalid?
+    assert_error @ldap_config, :alternative_port, :greater_than, count: 0
+
+    @ldap_config.alternative_port = 65536
+
+    assert @ldap_config.invalid?
+    assert_error @ldap_config, :alternative_port, :less_than, count: 65536
   end
 
   test 'validates that can connect' do
@@ -93,6 +121,23 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert ldap.bind
   end
 
+  test 'ldap bind using full name with alternative ldap' do
+    assign_alternative_ldap
+
+    username = @ldap_config.login_mask % {
+      user:   'admin',
+      basedn: @ldap_config.basedn
+    }
+
+    ldap = @ldap_config.ldap username, 'admin123'
+
+    assert_raise(Net::LDAP::Error) { ldap.bind }
+
+    ldap = @ldap_config.alternative_ldap.ldap username, 'admin123'
+
+    assert ldap.bind
+  end
+
   test 'ldap no bind if wrong password' do
     ldap = @ldap_config.ldap 'admin', 'wrong'
 
@@ -110,6 +155,30 @@ class LdapConfigTest < ActiveSupport::TestCase
 
     assert user.organization_roles.map(&:role_id).exclude?(role.id)
     assert user.organization_roles.map(&:role_id).exclude?(corp_role.id)
+
+    assert_difference 'User.count' do
+      @ldap_config.import 'admin', 'admin123'
+    end
+
+    assert user.reload.organization_roles.map(&:role_id).include?(role.id)
+    assert user.organization_roles.map(&:role_id).include?(corp_role.id)
+    assert_equal user.id, User.find_by(user: 'new_user').manager_id
+    assert_nil user.manager_id
+  end
+
+  test 'import with alternative ldap' do
+    set_organization organizations(:google)
+
+    user      = users :administrator
+    role      = roles :admin_second_role
+    corp_role = roles :admin_second_alphabet_role
+
+    user.update! manager_id: users(:corporate).id
+
+    assert user.organization_roles.map(&:role_id).exclude?(role.id)
+    assert user.organization_roles.map(&:role_id).exclude?(corp_role.id)
+
+    assign_alternative_ldap
 
     assert_difference 'User.count' do
       @ldap_config.import 'admin', 'admin123'
@@ -145,6 +214,24 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_difference ['User.count', 'ActionMailer::Base.deliveries.size'] do
       LdapConfig.sync_users
     end
+  end
+
+  test 'users limit reached' do
+    set_organization organizations(:google)
+
+    original_limit = Rails.application.credentials.auditors_limit
+
+    Rails.application.credentials.auditors_limit = 1
+
+    assert_no_difference 'User.count' do
+      @import = @ldap_config.import 'admin', 'admin123'
+    end
+
+    assert_includes @import.map { |r| r[:state] }, :errored
+    assert_includes @import.map { |r| r[:errors] },
+      User.new.errors.generate_message(:base, :auditors_limit_reached)
+
+    Rails.application.credentials.auditors_limit = original_limit
   end
 
   test 'test encrypt and decrypt with Security lib' do
@@ -217,4 +304,30 @@ class LdapConfigTest < ActiveSupport::TestCase
       @ldap_config.decrypted_password
     )
   end
+
+  test 'get alternative ldap only once' do
+    refute @ldap_config.try_alternative_ldap?
+
+    assign_alternative_ldap
+
+    assert @ldap_config.try_alternative_ldap?
+
+    old_config   = @ldap_config
+    @ldap_config = @ldap_config.alternative_ldap
+
+    refute @ldap_config.try_alternative_ldap?
+    refute old_config.try_alternative_ldap?
+
+    assert_nil @ldap_config.alternative_ldap
+  end
+
+  private
+
+    def assign_alternative_ldap
+      @ldap_config.update_columns(
+        hostname:             '0.0.0.1',
+        alternative_hostname: 'localhost',
+        alternative_port:     ldap_port
+      )
+    end
 end

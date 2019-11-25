@@ -4,9 +4,9 @@ jQuery(function ($) {
 
     var icon = $(this).data('icon')
 
-    $('[data-icon]').closest('li').removeClass('active')
-    $('[data-icon="' + icon + '"]').closest('li').addClass('active')
+    $('[data-icon]').closest('.nav-link').removeClass('active')
+    $('[data-icon="' + icon + '"]').closest('.nav-link').addClass('active')
 
-    $('#tag_icon').val(icon)
+    $('[name$="[icon]"]').val(icon)
   })
 })

@@ -64,6 +64,6 @@ class Polls::AnswersController < ApplicationController
     end
 
     def create_pdf
-      @pdf = Polls::AnswerPDF.new @report, current_organization
+      @pdf = Polls::AnswerPdf.new @report, current_organization
     end
 end

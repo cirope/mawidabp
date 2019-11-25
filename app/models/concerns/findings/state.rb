@@ -86,8 +86,11 @@ module Findings::State
       def define_state_scopes
         scope :revoked,     -> { where     state: STATUS[:revoked] }
         scope :not_revoked, -> { where.not state: STATUS[:revoked] }
+
         scope :assumed_risk,     -> { where     state: STATUS[:assumed_risk] }
         scope :not_assumed_risk, -> { where.not state: STATUS[:assumed_risk] }
+
+        scope :implemented_audited, -> { where state: STATUS[:implemented_audited] }
       end
 
       def define_state_methods

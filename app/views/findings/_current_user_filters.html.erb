@@ -1,44 +1,45 @@
 <% if @query.blank? && @order_by.blank? %>
   <% if @self_and_descendants.size > 1 || @related_users.size > 0 || @selected_user %>
     <% if @selected_user %>
-      <div class="page-header">
-        <h3>
-          <%= @selected_user.full_name %>
-          <small>
-            <%= FindingUserAssignment.human_attribute_name('responsible_auditor') if params[:as_responsible].present? %>
-            <%= FindingUserAssignment.human_attribute_name('process_owner')       if params[:as_owner].present? %>
-            <span class="text-muted">|</span>
-            <%= link_to t('label.cancel'), findings_path(params[:completed]) if @selected_user %>
-          </small>
-        </h3>
-      </div>
+      <h4>
+        <%= @selected_user.full_name %>
+        <span class="small ml-2">
+          <%= FindingUserAssignment.human_attribute_name('responsible_auditor') if params[:as_responsible].present? %>
+          <%= FindingUserAssignment.human_attribute_name('process_owner')       if params[:as_owner].present? %>
+          <span class="text-muted">|</span>
+          <%= link_to t('label.cancel'), findings_path(params[:completed]) if @selected_user %>
+        </span>
+      </h4>
     <% else %>
       <div class="row">
-        <div class="col-md-6 form-group">
-          <div class="col-md-2">
-            <%= label_tag :user_id_select, User.model_name.human %>
-          </div>
-          <div class="col-md-10">
-            <%= show_finding_related_users %>
+        <div class="col-md-6">
+          <div class="form-group row">
+            <div class="col-md-2">
+              <%= label_tag :user_id_select, User.model_name.human, class: 'col-form-label' %>
+            </div>
+            <div class="col-md-10">
+              <%= show_finding_related_users %>
+            </div>
           </div>
         </div>
       </div>
     <% end %>
   <% elsif @auth_user.can_act_as_audited? %>
-    <ul class="nav nav-tabs" data-hide-in-search>
-      <li <%== 'class="active"' if params[:as_owner].blank? %>>
+    <ul class="nav nav-tabs mb-3" data-hide-in-search>
+      <li class="nav-item">
         <%= link_to(
           t(".#{params[:completed]}"),
-          findings_path(request.query_parameters.except(:as_owner))
+          findings_path(request.query_parameters.except(:as_owner)),
+          class: (params[:as_owner].blank? ? 'nav-link active' : 'nav-link')
         ) %>
       </li>
-      <li <%== 'class="active"' if params[:as_owner].present? %>>
+      <li class="nav-item">
         <%= link_to(
           t('.as_owner', kind: t(".#{params[:completed]}")),
-          findings_path(request.query_parameters.merge(as_owner: true))
+          findings_path(request.query_parameters.merge(as_owner: true)),
+          class: (params[:as_owner].present? ? 'nav-link active' : 'nav-link')
         ) %>
       </li>
     </ul>
-    <br>
   <% end %>
 <% end %>

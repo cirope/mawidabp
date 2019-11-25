@@ -4,7 +4,7 @@ module Organizations::Group
   included do
     attr_readonly :group_id
 
-    before_save :set_group, on: :create
+    before_create :set_group
 
     belongs_to :group, optional: true
   end

@@ -57,9 +57,15 @@ module Findings::Expiration
 
       def expires_on date
         from = date
-        to   = from.wday == 5 ? from + 2.days : from
+        to   = expires_to_date from
 
         being_implemented.or(awaiting).finals(false).where follow_up_date: from..to
+      end
+
+      def expires_to_date date
+        date = date.next until date.next.workday?
+
+        date
       end
   end
 end

@@ -3,6 +3,6 @@
     var $a     = $(event.currentTarget)
     var params = jQuery.param({ last_work_paper_code: lastWorkPaperCode })
 
-    $a.attr('data-params', params).addClass('hidden')
+    $a.attr('data-params', params).attr('hidden', true)
   })
 }()

@@ -47,11 +47,6 @@
           <%= f.input :applied_procedures, input_html: { rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 3 } %>
         <% end %>
 
-      <div class="row">
-        <div class="col-md-6">
-        </div>
-      </div>
-
         <% if Current.conclusion_pdf_format == 'default' %>
           <%= f.input :recipients, input_html: { rows: 3 } %>
         <% else %>
@@ -85,7 +80,7 @@
         <div class="col-md-6">
           <%= f.input :observations, input_html: { rows: 4 } %>
         </div>
-        <div class="col-md-6 toggle-visibility">
+        <div class="col-md-6 mt-4">
           <% if show_review_best_practice_comments? %>
             <%= f.input :affects_compliance, input_html: {
               data: {
@@ -133,6 +128,9 @@
         <div class="col-md-6">
           <%= f.input :recipients, input_html: { rows: 4 } %>
         </div>
+        <div class="col-md-6">
+          <%= f.input :main_recommendations, input_html: { rows: 4 } %>
+        </div>
       </div>
     <% end %>
 
@@ -147,12 +145,12 @@
 
   <div id="approval_text">
     <%= content_tag(:span, t('conclusion_draft_review.approved'),
-      :class => 'label label-success', :id => :approved,
+      :class => 'badge badge-success mr-1', :id => :approved,
       :style => ('display: none;' if !@conclusion_draft_review.approved?)) %>
     <span id="not_approved" <%= raw 'style="display: none;"' if @conclusion_draft_review.approved? %>>
-      <span class="label label-danger">
+      <span class="badge badge-danger mr-1">
         <%= t('conclusion_draft_review.not_approved') %>
-      </span>&nbsp;
+      </span>
       <% @conclusion_draft_review.review.try(:must_be_approved?) %>
       <%= link_to t('error.show_details'), '#', :onclick => 'showOrHideErrors(); return false;',
           :id => :show_or_hide_link %>
@@ -169,21 +167,20 @@
     <% end %>
   </div>
 
-  <div id="approval_errors_detail" style="display: none;">
-    <br />
+  <div id="approval_errors_detail" class="pt-3" style="display: none;">
     <div id="error_list_container">
       <%= array_to_ul(@conclusion_draft_review.review.try(:approval_errors), :id => :error_list) %>
     </div>
 
     <div id="force_approval_prompt" <%== @conclusion_draft_review.review.try(:can_be_approved_by_force) ? '' : 'style="display: none;"' %>>
-      <%= f.input :force_approval, as: :boolean, label: false, inline_label: true %>
+      <%= f.input :force_approval, as: :boolean %>
     </div>
   </div>
 
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>
@@ -235,7 +232,15 @@
             $('#force_approval_prompt').hide();
           }
 
-          $('#not_approved').find('span').stop(true, true).effect('highlight', {}, 2000);
+          $('#not_approved').
+            find('.badge-danger').
+            toggleClass('badge-danger badge-warning')
+
+          setTimeout(function () {
+            $('#not_approved').
+              find('.badge-warning').
+              toggleClass('badge-warning badge-danger')
+          }, 2000)
         }
       });
     }

@@ -25,7 +25,7 @@ module ReviewsHelper
     end
 
     form.grouped_collection_select :plan_item_id, business_unit_types,
-      :plan_items, :name, :id, :project, {:prompt => true},
+      :plan_items, :name, :id, :project_with_dates, {:prompt => true},
       {:class => 'form-control', :disabled => readonly}
   end
 
@@ -86,7 +86,7 @@ module ReviewsHelper
     out << " | #{link_for_download}" unless review.survey.blank?
     out << " | #{link_for_download_attachment}" if review.file_model.try(:file?)
 
-    raw(out + simple_format(review.survey))
+    raw(out + simple_format(review.survey, class: 'mb-1'))
   end
 
   def link_to_suggested_process_control_findings(process_control)
@@ -96,7 +96,7 @@ module ReviewsHelper
     }
 
     link_to suggested_process_control_findings_review_path(process_control.id), options do
-      content_tag :span, nil, class: 'glyphicon glyphicon-eye-open'
+      icon 'fas', 'eye'
     end
   end
 
@@ -150,10 +150,7 @@ module ReviewsHelper
 
     if review.work_papers_finished? || review.work_papers_revised?
       content_tag(:span, class: wrapper_class) do
-        content_tag(:span, nil,
-          class: 'glyphicon glyphicon-paperclip',
-          title: t('review.work_papers_marked_as_finished')
-        )
+        icon 'fas', 'paperclip', title: t('review.work_papers_marked_as_finished')
       end
     end
   end
@@ -164,8 +161,7 @@ module ReviewsHelper
     ActiveSupport::SafeBuffer.new.tap do |buffer|
       audit_team.each do |rua|
         buffer << content_tag(:span, class: 'text-muted') do
-          content_tag :span, nil, class: 'glyphicon glyphicon-user',
-            title: rua.user.full_name
+          icon 'fas', 'user', title: rua.user.full_name
         end
 
         buffer << ' '
@@ -180,9 +176,7 @@ module ReviewsHelper
       data:  { remote: true }
     }
 
-    link_to path, options do
-      content_tag :span, nil, class: 'glyphicon glyphicon-scissors'
-    end
+    link_to icon('fas', 'cut'), path, options
   end
 
   def excluded_control_objective_class control_objective
@@ -198,9 +192,10 @@ module ReviewsHelper
   def link_to_recover_original_control_objective_name(control_objective_item)
     icon = content_tag(
       :span,
-      content_tag(:span, nil, class: 'glyphicon glyphicon-warning-sign'),
+      icon('fas', 'exclamation-triangle'),
       class: 'text-warning'
     )
+
     link_to(
       icon,
       reset_control_objective_name_review_path(

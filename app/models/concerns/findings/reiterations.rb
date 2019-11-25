@@ -11,7 +11,7 @@ module Findings::Reiterations
     before_save :check_for_reiteration
 
     belongs_to :repeated_of, foreign_key: 'repeated_of_id', class_name: 'Finding', autosave: true, optional: true
-    has_one    :repeated_in, foreign_key: 'repeated_of_id', class_name: 'Finding'
+    has_one    :repeated_in, -> { where final: false }, foreign_key: 'repeated_of_id', class_name: 'Finding'
   end
 
   def undo_reiteration
@@ -19,8 +19,8 @@ module Findings::Reiterations
 
     self.undoing_reiteration = true
 
-    if final_review_created_at.blank? && rescheduled
-      update_column :rescheduled, false
+    if final_review_created_at.blank? && rescheduled?
+      update_column :reschedule_count, 0
     end
 
     repeated_of.update_column :state, previous_repeated_of_state
@@ -43,6 +43,13 @@ module Findings::Reiterations
     node, nodes = self, []
     nodes << node = node.repeated_in while node.repeated_in
     nodes
+  end
+
+  def repeated_leaf
+    node = self
+    node = node.repeated_in while node.repeated_in
+
+    node
   end
 
   private

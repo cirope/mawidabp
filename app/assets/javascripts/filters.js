@@ -1,9 +1,9 @@
 $(document).on('change', '[data-date-operator]', function (event) {
   var operator = $(this).val()
-  var $until   = $(this).closest('.filter').find('[data-date-until]')
+  var $until   = $(this).closest('[data-filter]').find('[data-date-until]')
 
   if (operator === 'between')
-    $until.removeClass('hidden')
+    $until.removeAttr('hidden')
   else
-    $until.addClass('hidden')
+    $until.attr('hidden', true)
 })

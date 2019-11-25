@@ -1,12 +1,12 @@
-<div id="finding_filter" class="filter" <%== 'style="display: none;"' unless display %>>
+<div id="finding_filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <%= render 'shared/filters/finding_statuses',
       action: action, f: f, display: display, group: true %>
 
     <div class="col-md-6">
-      <div class="form-group">
+      <div class="form-group row">
         <% finding_title = params[action] ? params[action][:finding_title] : nil %>
-        <%= f.label :finding_title, Finding.human_attribute_name('title'), class: 'col-md-4' %>
+        <%= f.label :finding_title, Finding.human_attribute_name('title'), class: 'col-md-4 col-form-label' %>
         <div class="col-md-8">
           <%= f.text_field :finding_title, value: finding_title, maxlength: 255, class: 'form-control' %>
         </div>

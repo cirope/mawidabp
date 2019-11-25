@@ -33,6 +33,8 @@ es:
       ldap_config:
         hostname: 'Dominio o dirección IP'
         port: 'Por ejemplo: 389'
+        alternative_hostname: 'Dominio o dirección IP'
+        alternative_port: 'Por ejemplo: 389'
         basedn: 'CN=Users,DC=dominio,DC=com'
         filter: 'CN=*'
         login_mask: '&#37;{user}@dominio.com, Dominio\&#37;{user} o &#37;{user},&#37;{basedn}'

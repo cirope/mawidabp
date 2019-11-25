@@ -5,7 +5,7 @@ class Plan < ApplicationRecord
   include Plans::DestroyValidation
   include Plans::Duplication
   include Plans::Overload
-  include Plans::PDF
+  include Plans::Pdf
   include Plans::PlanItems
   include Plans::Scopes
   include Plans::Units

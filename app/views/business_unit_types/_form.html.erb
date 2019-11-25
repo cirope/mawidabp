@@ -35,15 +35,16 @@
 
     <div class="row">
       <div class="col-md-6">
-        <%= f.input :external, label: false, inline_label: true %>
+        <%= f.input :external %>
       </div>
       <div class="col-md-6">
-        <%= f.input :require_tag, label: false, inline_label: true %>
+        <%= f.input :require_tag %>
       </div>
     </div>
 
     <hr />
-    <h5><strong><%= BusinessUnit.model_name.human %></strong></h5>
+
+    <h5 class="h6"><%= BusinessUnit.model_name.human %></h5>
 
     <div id="business_units">
       <%= f.simple_fields_for :business_units do |bu_f| %>
@@ -57,7 +58,7 @@
   <hr />
 
   <div class="form-inputs">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.submit class: 'btn btn-primary' %>
     <%= f.input :lock_version, as: :hidden %>
   </div>

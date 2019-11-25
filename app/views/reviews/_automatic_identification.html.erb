@@ -3,7 +3,7 @@
 
 <% if @review.new_record? %>
   <div class="row">
-    <div class="col-xs-4">
+    <div class="col-4">
       <%= f.input :identification_prefix,
         label: Review.human_attribute_name('identification'),
         collection: BusinessUnitType.list.pluck('review_prefix'),
@@ -18,12 +18,12 @@
         }
       %>
     </div>
-    <div class="col-xs-4">
+    <div class="col-4">
       <%= f.input :identification_number, label: raw('&nbsp;'), input_html: {
         value: number, readonly: true
       } %>
     </div>
-    <div class="col-xs-4">
+    <div class="col-4">
       <%= f.input :identification_suffix,
         collection: review_year_suffixes,
         label: raw('&nbsp;'),

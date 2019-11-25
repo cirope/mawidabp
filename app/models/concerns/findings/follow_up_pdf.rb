@@ -1,4 +1,4 @@
-module Findings::FollowUpPDF
+module Findings::FollowUpPdf
   extend ActiveSupport::Concern
 
   def follow_up_pdf organization = nil, brief: false

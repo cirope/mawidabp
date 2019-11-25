@@ -11,8 +11,8 @@
       <tr>
         <%= make_filterable_column News.human_attribute_name('title'), nil, 'name' %>
         <%= make_not_available_column News.human_attribute_name('published_at') %>
-        <%= make_not_available_column News.human_attribute_name('shared'), class: 'hidden-xs hidden-sm' %>
-        <%= make_filterable_column Tag.model_name.human(count: 0), { class: 'hidden-xs' }, 'tags' %>
+        <%= make_not_available_column News.human_attribute_name('shared'), class: 'd-none d-md-table-cell' %>
+        <%= make_filterable_column Tag.model_name.human(count: 0), { class: 'd-none d-sm-table-cell' }, 'tags' %>
         <th colspan="3" class="text-right"><%= link_to_search %></th>
       </tr>
     </thead>
@@ -22,11 +22,11 @@
         <tr <%== 'class="text-muted"' if news.published_at.to_date.future? %>>
           <td><%= super_truncate news.title, 25 %></td>
           <td><%= l news.published_at.to_date %></td>
-          <td class="hidden-xs hidden-sm"><%= t news.shared ? 'label.yes' : 'label.no' %></td>
-          <td class="hidden-xs"><%= tags news.tags %></td>
-          <td><%= link_to_show news %></td>
-          <td><%= link_to_edit [:edit, news] %></td>
-          <td><%= link_to_destroy news %></td>
+          <td class="d-none d-md-table-cell"><%= t news.shared ? 'label.yes' : 'label.no' %></td>
+          <td class="d-none d-sm-table-cell"><%= tags news.tags %></td>
+          <td class="text-right"><%= link_to_show news %></td>
+          <td class="text-right"><%= link_to_edit [:edit, news] %></td>
+          <td class="text-right"><%= link_to_destroy news %></td>
         </tr>
       <% end %>
     </tbody>

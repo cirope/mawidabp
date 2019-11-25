@@ -1,4 +1,4 @@
-module BestPractices::JSON
+module BestPractices::Json
   extend ActiveSupport::Concern
 
   included do

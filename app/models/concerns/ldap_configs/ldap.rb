@@ -1,4 +1,4 @@
-module LdapConfigs::LDAP
+module LdapConfigs::Ldap
   extend ActiveSupport::Concern
 
   def ldap username, password
@@ -17,6 +17,21 @@ module LdapConfigs::LDAP
     match = username.match mask_regex
 
     match ? match[1] : username
+  end
+
+  def alternative_ldap
+    return unless try_alternative_ldap?
+
+    @using_alternative_ldap = true
+
+    dup.tap do |alternative|
+      alternative.hostname = alternative.alternative_hostname
+      alternative.port     = alternative.alternative_port
+    end
+  end
+
+  def try_alternative_ldap?
+    alternative_hostname.present? && @using_alternative_ldap.blank?
   end
 
   private

@@ -3,9 +3,9 @@ module ApplicationHelper
 
   def page_title
     @title     ||= t "actioncontroller.#{controller_name}"
-    organization = "&lt;#{current_organization.name}&gt;" if current_organization
+    organization = "| #{current_organization.name} |" if current_organization
 
-    raw [t('app_name'), organization, @title].compact.join(' ')
+    [t('app_name'), organization, @title].compact.join(' ')
   end
 
   def t_boolean field
@@ -44,19 +44,11 @@ module ApplicationHelper
   end
 
   def show_info(text, html_options = {})
-    content_tag(:div, text.present? ?
-      content_tag(
-        :span, nil, title: j(text),
-        class: "#{html_options[:class]} glyphicon glyphicon-info-sign"
-      ) : nil
-    ).html_safe
-  end
+    content = if text.present?
+                icon 'fas', 'info-circle', class: html_options[:class], title: j(text)
+              end
 
-  def simple_icon(title, icon_type)
-    content_tag(
-      :span, nil, title: j(title),
-      class: "glyphicon glyphicon-#{icon_type}"
-    )
+    content_tag(:div, content, class: 'text-muted').html_safe
   end
 
   # Genera un array con pares [[name_field_1, id_field_1],......] para ser
@@ -97,16 +89,22 @@ module ApplicationHelper
   # * _array_:: El arreglo que se quiere convertir a HTML
   # * _options_:: Opciones HTML de la lista principal
   def array_to_ul(array, options = {})
+    text_function = if options.delete(:skip_markdown)
+                      ->(text) { text }
+                    else
+                      ->(text) { markdown_without_paragraph(text) }
+                    end
+
     unless array.blank?
       list = array.map do |e|
         if e.kind_of?(Array) && e.first.kind_of?(String) &&
             e.second.kind_of?(Array)
-          content_tag(:li, raw("#{markdown_without_paragraph(e.shift)}\n#{array_to_ul(e)}"))
+          content_tag(:li, raw("#{text_function.(e.shift)}\n#{array_to_ul(e)}"))
         else
           if e.kind_of?(Array)
-            e.map { |item| content_tag(:li, markdown_without_paragraph(item)) }.join("\n")
+            e.map { |item| content_tag(:li, text_function.(item)) }.join("\n")
           else
-            content_tag(:li, markdown_without_paragraph(e))
+            content_tag(:li, text_function.(e))
           end
         end
       end
@@ -151,12 +149,12 @@ module ApplicationHelper
   def make_filterable_column(title, options = nil, *columns)
     raise 'Must have at least one column' if columns.empty?
 
-    html_classes = []
+    html_classes = ['filterable']
     content = content_tag(:span, title, :class => :title)
+    selected = @query.blank? || columns.any? { |c| @columns.include?(c) }
     options ||= {}
 
-    html_classes << (@query.blank? || columns.any?{|c| @columns.include?(c)} ?
-      'selected' : 'disabled')
+    html_classes << 'selected' if selected
     html_classes << options[:class] if options[:class]
 
     columns.each do |column|
@@ -164,13 +162,15 @@ module ApplicationHelper
     end
 
     content_tag(:th, content.html_safe,
-      :class => "filterable #{html_classes.join(' ')}")
+      :class => html_classes.join(' '),
+      :disabled => !selected
+    )
   end
 
   def make_not_available_column(title, options = {})
     html_classes = []
 
-    html_classes << :not_available unless @query.blank? && @order_by.blank?
+    html_classes << 'not-available' unless @query.blank? && @order_by.blank?
     html_classes << options[:class] if options[:class]
 
     content_tag(:th, title,
@@ -180,7 +180,7 @@ module ApplicationHelper
   # Devuelve el HTML de un vínculo para mostrar el cuadro de búsqueda
   def link_to_search
     search_link = link_to t('label.search'), '#', :onclick => 'Search.show(); return false;',
-      :id => :show_search_link, :class => 'btn btn-xs btn-default',
+      :id => :show_search_link, :class => 'btn btn-sm btn-outline-secondary',
       :title => t('message.search_link_title')
 
     @query.blank? ? search_link : content_tag(:span, search_link,
@@ -194,7 +194,7 @@ module ApplicationHelper
   def link_to_show_hide(element_id)
     out = content_tag(:span,
       link_to(
-        content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-right'),
+        icon('fas', 'arrow-alt-circle-right'),
         '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
       ),
       :id => "show_element_#{element_id}_content",
@@ -202,7 +202,7 @@ module ApplicationHelper
     )
     out << content_tag(:span,
       link_to(
-        content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-down'),
+        icon('fas', 'arrow-alt-circle-down'),
         '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
       ),
       :id => "hide_element_#{element_id}_content",
@@ -213,14 +213,14 @@ module ApplicationHelper
 
   def link_to_fetch_hide(id, action = :fetch)
     show_link = link_to('#', :data => { action => id }) do
-      content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-right')
+      icon('fas', 'arrow-alt-circle-right')
     end
     hide_link = link_to('#', :data => { :hide => id }) do
-      content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-down')
+      icon('fas', 'arrow-alt-circle-down')
     end
 
     out  = content_tag(:span, show_link, :class => 'media-object')
-    out << content_tag(:span, hide_link, :class => 'media-object hidden')
+    out << content_tag(:span, hide_link, :class => 'media-object', :hidden => true)
   end
 
   # Devuelve el HTML de un vínculo para mover un ítem.
@@ -234,8 +234,7 @@ module ApplicationHelper
     }
     options.merge!(args.pop) if args.last.kind_of?(Hash)
 
-    link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-move'), '#',
-      *(args << options))
+    link_to(icon('fas', 'arrows-alt'), '#', *(args << options))
   end
 
   # Devuelve HTML con un link para eliminar un componente de un formulario
@@ -252,7 +251,6 @@ module ApplicationHelper
 
     out << fields.hidden_field(:_destroy, :class => 'destroy',
       :value => fields.object.marked_for_destruction? ? 1 : 0) unless new_record
-    out << link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-remove-circle'),
-      '#', link_options.merge(options))
+    out << link_to(icon('fas', 'times-circle'), '#', link_options.merge(options))
   end
 end

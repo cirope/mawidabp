@@ -38,7 +38,7 @@ class TagsControllerTest < ActionController::TestCase
         kind: kind,
         tag: {
           name: 'Test tag',
-          style: 'default',
+          style: 'secondary',
           shared: false,
           icon: 'tag'
         }
@@ -56,7 +56,7 @@ class TagsControllerTest < ActionController::TestCase
         kind: kind,
         tag: {
           name: 'Test tag',
-          style: 'default',
+          style: 'secondary',
           shared: false,
           icon: 'tag',
           children_attributes: {

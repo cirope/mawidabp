@@ -2,17 +2,15 @@
   <div class="row">
     <% if @plan.has_duplication? %>
       <div class="col-md-6">
-        <div class="alert alert-sm alert-danger">
-          <%= f.input :allow_duplication, as: :boolean, label: false,
-            inline_label: t('.allow_duplication') %>
+        <div class="alert alert-danger py-0 px-2">
+          <%= f.input :allow_duplication, as: :boolean, label: t('.allow_duplication'), wrapper_html: { class: 'my-3' } %>
         </div>
       </div>
     <% end %>
     <% if @plan.overloaded? %>
       <div class="col-md-6">
-        <div class="alert alert-sm alert-danger">
-          <%= f.input :allow_overload, as: :boolean, label: false,
-            inline_label: t('.allow_overload') %>
+        <div class="alert alert-danger py-0 px-2">
+          <%= f.input :allow_overload, as: :boolean, label: t('.allow_overload'), wrapper_html: { class: 'my-3' } %>
         </div>
       </div>
     <% end %>

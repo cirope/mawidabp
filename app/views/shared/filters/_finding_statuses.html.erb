@@ -6,24 +6,25 @@
 %>
 
 <% unless group %>
-  <div id="finding_status_filter" class="filter" <%= 'style="display: none;"' unless display %>>
-    <div class="row">
+  <div id="finding_status_filter" class="row" <%= 'style="display: none;"' unless display %>>
 <% end %>
-    <div class="col-md-6">
-      <div class="form-group">
-         <% selected = params[action] ? params[action][name] : nil %>
-         <%= f.label name, Finding.human_attribute_name(label), class: 'col-md-4', for: nil %>
-         <div class="col-md-8">
-           <%= f.input name,
-             collection: finding_status_options_by_action(action, params),
-             as: :check_boxes,
-             checked: selected,
-             label: false,
-             class: 'form-control' %>
-         </div>
-      </div>
+  <div class="col-md-6" <%= 'style="display: none;"' unless display %>>
+    <div class="form-group row">
+        <% selected = params[action] ? params[action][name] : nil %>
+        <%= f.label name, Finding.human_attribute_name(label), class: 'col-md-4 col-form-label', for: nil %>
+        <div class="col-md-8">
+          <%= f.input name,
+            collection: finding_status_options_by_action(action, params),
+            as: :check_boxes,
+            label: '&nbsp;'.html_safe,
+            required: false,
+            checked: selected,
+            item_wrapper_class: 'custom-control custom-checkbox',
+            wrapper_html: { class: 'mt-n3' }
+          %>
+        </div>
     </div>
+  </div>
 <% unless group %>
-    </div>
   </div>
 <% end %>

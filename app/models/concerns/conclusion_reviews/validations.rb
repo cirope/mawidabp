@@ -5,7 +5,8 @@ module ConclusionReviews::Validations
     validates :review_id, :organization_id, :issue_date, presence: true
     validates :applied_procedures, presence: true, unless: :validate_extra_gal_attributes?
     validates :conclusion, :applied_procedures, :summary, :recipients, :sectors,
-      :observations, :reference, :scope, pdf_encoding: true
+      :observations, :reference, :scope, :main_weaknesses_text,
+      :main_recommendations, pdf_encoding: true
     validates :type, :summary, :evolution, :previous_identification,
       length: { maximum: 255 }
     validates :issue_date, :previous_date, timeliness: { type: :date },
@@ -16,7 +17,8 @@ module ConclusionReviews::Validations
     validates :recipients, presence: true, if: :validate_recipients?
     validates :main_weaknesses_text, presence: true,
       if: :validate_short_alternative_pdf_attributes?
-    validates :previous_identification, presence: true, if: :previous_date_present?
+    validates :previous_identification, presence: true, pdf_encoding: true,
+      if: :previous_date_present?
     validate :evolution_for_conclusion, if: :validate_extra_gal_attributes?
   end
 

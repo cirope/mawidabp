@@ -6,9 +6,10 @@
   }, :forms => forms} %>
 
 <% @periods.each do |period| %>
-  <div class="page-header">
-    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
-  </div>
+  <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+
+  <hr>
+
   <% unless @selected_business_unit %>
     <div style="margin: 1em 0;">
       <p>
@@ -37,7 +38,7 @@
     <% end %>
     <h4><%= data[:name] %></h4>
     <% unless data[:column_data].blank? %>
-      <table class="table table-condensed table-striped table-hover">
+      <table class="table table-sm table-striped table-hover">
         <thead>
           <tr>
             <% @column_order.each do |col_name| %>
@@ -49,8 +50,9 @@
           <% data[:column_data].each do |row| %>
             <tr>
               <% @column_order.each_index do |i| %>
-                <td><%= row[i].kind_of?(Array) ?
-                  array_to_ul(row[i], class: 'list-unstyled') : row[i] %></td>
+                <td>
+                  <%= row[i].kind_of?(Array) ? array_to_ul(row[i], class: 'list-unstyled', skip_markdown: true) : row[i] %>
+                </td>
               <% end %>
             </tr>
           <% end %>
@@ -80,7 +82,7 @@
 
 <div style="margin: 1em 0;">
   <%= simple_format t('follow_up_committee_report.synthesis_report.references',
-    :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence) %>
+    :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence), class: 'mb-1' %>
 </div>
 
 <hr />

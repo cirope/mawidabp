@@ -1,5 +1,5 @@
 module Reports::ReviewScoresReport
-  include Reports::PDF
+  include Reports::Pdf
   include Parameters::Risk
 
   def review_scores_report

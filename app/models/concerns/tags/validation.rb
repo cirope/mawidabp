@@ -7,7 +7,7 @@ module Tags::Validation
     validates :icon, inclusion: { in: :available_icons }
     validates :kind, inclusion: { in: Tag::KINDS }
     validates :style, inclusion: {
-      in: %w(default primary success info warning danger)
+      in: %w(secondary primary success info warning danger)
     }
     validate :shared_reversion
   end

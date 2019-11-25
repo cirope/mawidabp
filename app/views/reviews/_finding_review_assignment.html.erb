@@ -2,7 +2,7 @@
 <fieldset class="finding_review_assignment">
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-10">
+      <div class="col-11">
         <%= f.input 'finding_review_assignment[finding_data]', label: false,
           input_html: {
             value: f.object.try(:finding).try(:to_s),
@@ -17,8 +17,8 @@
         } %>
         <%= f.input :finding_id, as: :hidden, input_html: { id: "hidden_finding_id_#{id}" } %>
       </div>
-      <div class="col-md-2">
-        <div class="toggle-visibility">
+      <div class="col-1">
+        <div class="mt-2 text-right">
           <%= link_to_remove_nested_item(f) %>
         </div>
       </div>

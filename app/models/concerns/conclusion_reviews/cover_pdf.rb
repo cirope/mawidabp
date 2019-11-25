@@ -1,4 +1,4 @@
-module ConclusionReviews::CoverPDF
+module ConclusionReviews::CoverPdf
   extend ActiveSupport::Concern
 
   def create_cover_pdf organization = nil, text = nil, pdf_name = 'cover.pdf'

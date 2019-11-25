@@ -3,9 +3,10 @@
   forms: { date_range: true }} %>
 
 <%  @counts.each do |count_data| %>
-  <div class="page-header">
-    <h2><%= Period.model_name.human %>: <%= count_data[:period].inspect %></h2>
-  </div>
+  <h2><%= Period.model_name.human %>: <%= count_data[:period].inspect %></h2>
+
+  <hr>
+
   <% @audit_types.each do |type| %>
     <h3 class="text-center">
       <%= t "execution_reports.findings_type_#{type}" %>
@@ -20,7 +21,7 @@
         <h4><%= "#{Review.model_name.human}: #{review}" %></h4>
         <% totals = total_weaknesses + total_oportunities %>
         <% unless totals == 0 %>
-          <table class="table table-condensed table-striped table-hover">
+          <table class="table table-sm table-striped table-hover">
             <thead>
               <tr>
                 <th><%= Finding.human_attribute_name 'state' %></th>

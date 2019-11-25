@@ -17,60 +17,58 @@
 
 <% if @weaknesses.any? %>
   <% @weaknesses.each_with_index do |weakness, index| %>
-    <br>
-
-    <p>
-      <span class="badge badge-default">
+    <p class="mb-1 mt-3">
+      <span class="badge badge-pill badge-secondary">
         <%= index + 1 %>
       </span>
       <span class="text-muted"><%= BusinessUnit.model_name.human %></span>:
       <%= weakness.business_unit %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
       <%= weakness.review.plan_item.project %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <span class="text-muted"><%= Review.model_name.human %></span>:
       <%= weakness.review.identification %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <span class="text-muted"><%= BusinessUnitType.model_name.human %></span>:
       <%= weakness.business_unit_type %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <span class="text-muted"><%= t 'follow_up_committee_report.weaknesses_by_control_objective.origination_year' %></span>:
       <%= l weakness.origination_date, format: '%Y' if weakness.origination_date %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <span class="text-muted"><%= Weakness.human_attribute_name 'control_objective_item_id' %></span>:
       <%= weakness.control_objective_item.control_objective_text %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'auditor_comment' %></span>:
       <%= weakness.control_objective_item.auditor_comment %>
     </p>
 
     <% if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(current_organization.prefix) %>
-      <p>
+      <p class="mb-1">
         <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'issues_count' %></span>:
         <%= weakness.control_objective_item.issues_count %>
       </p>
-      <p>
+      <p class="mb-1">
         <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'alerts_count' %></span>:
         <%= weakness.control_objective_item.alerts_count %>
       </p>
     <% end %>
   <% end %>
 <% else %>
-  <div style="margin-left: 2em">
-    <p><em><%= t 'follow_up_committee_report.weaknesses_by_control_objective.without_weaknesses' %></em></p>
+  <div class="ml-3">
+    <p class="mb-1"><em><%= t 'follow_up_committee_report.weaknesses_by_control_objective.without_weaknesses' %></em></p>
   </div>
 <% end %>
 

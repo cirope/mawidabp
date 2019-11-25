@@ -386,6 +386,23 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert_equal user.email, response.to.first
   end
 
+  test 'deliver findings unanswered warning' do
+    user = User.find(users(:administrator).id)
+    response = NotifierMailer.findings_unanswered_warning(user, user.findings).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.findings_unanswered_warning.title')
+    )
+    assert_match Regexp.new(
+      I18n.t(
+        'notifier.findings_unanswered_warning.body_title',
+        :count => user.findings.size
+      )
+    ), response.body.decoded
+    assert_equal user.email, response.to.first
+  end
+
   test 'deliver conclusion final review close date warning' do
     user = User.find(users(:supervisor).id)
     cfrs = user.conclusion_final_reviews

@@ -66,10 +66,11 @@
   </div>
 
   <% if @finding.important_dates.present? && show_follow_up_timestamps? %>
-    <h4>
+    <h5 class="my-3">
       <%= t('finding.important_dates.title') %>
-    </h4>
-    <ul>
+    </h5>
+
+    <ul class="mb-1">
       <% @finding.important_dates.each do |important_date| %>
         <li><%= markdown_without_paragraph important_date %></li>
       <% end %>
@@ -77,11 +78,12 @@
   <% end %>
 
   <% unless @finding.users.blank? %>
-    <% audited, auditors = *@finding.users.partition(&:audited?) %>
+    <% audited, auditors = *@finding.users.partition(&:can_act_as_audited?) %>
     <% process_owners = @finding.process_owners %>
     <% responsible_auditors = @finding.responsible_auditors %>
-    <h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
-    <table class="table table-condensed table-hover">
+    <h5 class="my-3"><%= t('finding.responsibles', :count => @finding.users.size) %></h5>
+
+    <table class="table table-sm table-hover">
       <thead>
         <tr>
           <th><%= t('finding.audited', :count => audited.size) %></th>
@@ -105,11 +107,11 @@
   <% end %>
 
   <% unless @finding.taggings.blank? %>
-    <h4>
+    <h5 class="my-3">
       <%= Tag.model_name.human count: 0 %>
-    </h4>
+    </h5>
 
-    <ul class="list-unstyled">
+    <ul class="list-unstyled lead mb-1">
       <% @finding.taggings.each do |tagging| %>
         <%= tagging_item tagging %>
       <% end %>
@@ -117,8 +119,9 @@
   <% end %>
 
   <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
-    <h4><%= t('finding.repeated_ancestors') %></h4>
-    <ul>
+    <h5 class="my-3"><%= t('finding.repeated_ancestors') %></h5>
+
+    <ul class="mb-1">
       <% repeated_ancestors.each do |repeated_ancestor| %>
         <li><%= repeated_ancestor %></li>
       <% end %>
@@ -126,8 +129,9 @@
   <% end %>
 
   <% unless (repeated_children = @finding.repeated_children).blank? %>
-    <h4><%= t('finding.repeated_children') %></h4>
-    <ul>
+    <h5 class="my-3"><%= t('finding.repeated_children') %></h5>
+
+    <ul class="mb-1">
       <% repeated_children.each do |repeated_child| %>
         <li><%= repeated_child %></li>
       <% end %>
@@ -135,21 +139,26 @@
   <% end %>
 
   <% unless @finding.control_objective_item.business_units.empty? %>
-    <br />
-    <h4>
+    <h5 class="my-3">
       <%= BusinessUnit.model_name.human count: 0 %>
-    </h4>
-    <%=  f.input :business_unit_ids, label: false,
+    </h5>
+
+    <%=  f.input :business_unit_ids,
+      label: '&nbsp;'.html_safe,
+      item_wrapper_class: 'custom-control custom-checkbox',
       collection: @finding.control_objective_item.business_units,
-      as: :check_boxes, input_html: { disabled: true } %>
+      as: :check_boxes,
+      input_html: { disabled: true },
+      wrapper_html: { class: 'mt-n4' }
+    %>
   <% end %>
 
   <% if @finding.tasks.any? %>
-    <h4>
+    <h5 class="my-3">
       <%= Task.model_name.human count: 0 %>
-    </h4>
+    </h5>
 
-    <table class="table table-condensed table-striped table-hover">
+    <table class="table table-sm table-striped table-hover">
       <thead>
         <tr>
           <th><%= Task.human_attribute_name 'code' %></th>
@@ -172,22 +181,19 @@
     </table>
   <% end %>
 
-  <h4>
+  <h5 class="my-3">
     <%= t('finding.finding_answers') %>
-  </h4>
+  </h5>
+
   <div class="row">
     <div class="col-md-2">
-      <h5><strong><%= User.model_name.human %></strong></h5>
+      <h5 class="h6"><%= User.model_name.human %></h5>
     </div>
     <div class="col-md-6">
-      <h5><strong><%= FindingAnswer.human_attribute_name 'answer' %></strong></h5>
+      <h5 class="h6"><%= FindingAnswer.human_attribute_name 'answer' %></h5>
     </div>
     <div class="col-md-2">
-      <h5>
-        <strong>
-          <%= FindingAnswer.human_attribute_name 'file_model' %>
-        </strong>
-      </h5>
+      <h5 class="h6"><%= FindingAnswer.human_attribute_name 'file_model' %></h5>
     </div>
   </div>
 
@@ -199,9 +205,9 @@
   </div>
 
   <% unless @finding.work_papers.blank? %>
-    <h4><%= WorkPaper.model_name.human(count: 0) %></h4>
+    <h5 class="my-3"><%= WorkPaper.model_name.human(count: 0) %></h5>
 
-    <table class="table table-condensed table-striped table-hover">
+    <table class="table table-sm table-striped table-hover">
       <thead>
         <tr>
           <th><%= WorkPaper.human_attribute_name 'name' %></th>
@@ -217,9 +223,9 @@
             <td><%= work_paper.name %></td>
             <td><%= work_paper.code %></td>
             <td><%= work_paper.number_of_pages %></td>
-            <td><%= simple_format work_paper.description %></td>
+            <td><%= simple_format work_paper.description, class: 'mb-1' %></td>
             <td><%= work_paper.file_model.try(:file?) ?
-              link_to(t('label.download'), work_paper.file_model.file.url) : '---' %></td>
+              link_to(t('label.download'), work_paper.file_model.file.url) : '-' %></td>
           </tr>
         <% end %>
       </tbody>
@@ -233,13 +239,13 @@
   <% end %>
 
   <% if @finding.costs.present? && show_follow_up_timestamps? %>
-    <p style="margin-bottom: 1em;">
+    <p class="my-3" >
       <%= link_to t('finding.view_cost_details'), '#cost_details', :data => { :toggle => 'collapse' } %>
     </p>
 
     <div id="cost_details" class="collapse">
       <div>
-        <table class="table table-condensed table-striped table-hover">
+        <table class="table table-sm table-striped table-hover">
           <thead>
             <tr>
               <th><%= Cost.human_attribute_name 'created_at' %></th>
@@ -282,7 +288,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>

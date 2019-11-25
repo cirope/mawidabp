@@ -23,7 +23,6 @@ es:
         observations: "Aclaraciones previas"
         conclusion: "Comentarios de auditoría"
         score: "Evaluación del ciclo"
-        main_recommendations: "Principales Recomendaciones de Auditoría"
       weaknesses:
         title: "DETALLE DE OBSERVACIONES - PLANES DE ACCION"
         plan: "Plan de acción correctiva N° %{number}"

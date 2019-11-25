@@ -4,6 +4,19 @@ es:
     updated_at: 'Última actualización'
     lock_version: 'Versión'
 
+  activemodel:
+    models:
+      registration:
+        one: 'Organización'
+        other: 'Organizaciones'
+    attributes:
+      registration:
+        email: 'Correo'
+        last_name: 'Apellido'
+        name: 'Nombre'
+        organization_name: 'Nombre de la organización'
+        user: 'Nombre de usuario'
+
   activerecord:
     models:
       achievement:
@@ -66,6 +79,9 @@ es:
       ldap_config:
         one: 'Configuración LDAP'
         other: 'Configuraciones LDAP'
+      license:
+        one: 'Licencia'
+        other: 'Licencias'
       login_record:
         one: 'Registro de ingreso'
         other: 'Registros de ingreso'
@@ -264,6 +280,7 @@ es:
         finding_answers: 'Respuestas'
         tag_ids: 'Etiquetas'
         rescheduled: 'Reprogramada'
+        reschedule_count: 'Cantidad de reprogramaciones'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'
@@ -323,6 +340,8 @@ es:
       ldap_config:
         hostname: 'Dirección del servidor'
         port: 'Puerto'
+        alternative_hostname: 'Dirección del servidor alternativo'
+        alternative_port: 'Puerto alternativo'
         basedn: 'Nombre distinguido de base'
         filter: 'Filtro'
         login_mask: 'Máscara de autenticación'
@@ -337,6 +356,10 @@ es:
         test_password: 'Contraseña'
         user: 'Usuario de servicio'
         password: 'Contraseña de servicio'
+      license:
+        paid_until: 'Pagada hasta'
+        auditors_limit: 'Limite de usuarios auditores'
+        status: 'Estado'
       login_record:
         data: 'Datos'
         end: 'Fin'
@@ -651,3 +674,7 @@ es:
           attributes:
             risk_assessment_weights:
               blank: 'debe tener al menos uno'
+        user:
+          attributes:
+            base:
+              auditors_limit_reached: 'Limite de auditores alcanzado, por favor actualice su licencia.'

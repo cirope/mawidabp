@@ -20,7 +20,7 @@ class Review < ApplicationRecord
   include Reviews::Overrides
   include Reviews::PlanItem
   include Reviews::Previous
-  include Reviews::PDF
+  include Reviews::Pdf
   include Reviews::Reorder
   include Reviews::Scopes
   include Reviews::Score
@@ -30,7 +30,7 @@ class Review < ApplicationRecord
   include Reviews::ScoreSheetGlobal
   include Reviews::Search
   include Reviews::SortColumns
-  include Reviews::SurveyPDF
+  include Reviews::SurveyPdf
   include Reviews::UpdateCallbacks
   include Reviews::Users
   include Reviews::Validations

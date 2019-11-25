@@ -20,18 +20,18 @@
     <% unless last_displayed_review == weakness.review.id %>
       <hr>
 
-      <p>
-        <span class="badge badge-default"> <%= review_index %></span>
+      <p class="mb-1">
+        <span class="badge badge-pill badge-secondary"> <%= review_index %></span>
         <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
         <%= weakness.review.plan_item.project %>
       </p>
 
-      <p>
+      <p class="mb-1">
         <span class="text-muted"><%= Review.model_name.human %></span>:
         <%= weakness.review.identification %>
       </p>
 
-      <p>
+      <p class="mb-1">
         <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
         <%= l weakness.review.conclusion_final_review.issue_date %>
       </p>
@@ -40,36 +40,34 @@
       <% last_displayed_review = weakness.review.id %>
     <% end %>
 
-    <br>
-
-    <p>
+    <p class="mt-3 mb-1">
       <span class="text-muted"><%= Weakness.human_attribute_name 'title' %></span>:
       <%= weakness.title %>
     </p>
 
-    <p>
+    <p class="mb-1">
       <span class="text-muted"><%= Weakness.human_attribute_name 'description' %></span>:
     </p>
 
-    <%= simple_format weakness.description %>
+    <%= simple_format weakness.description, class: 'mb-1' %>
 
     <% if weakness.current_situation.present? && weakness.current_situation_verified %>
-      <p>
+      <p class="mb-1">
         <span class="text-muted"><%= Weakness.human_attribute_name 'current_situation' %></span>:
       </p>
 
-      <%= simple_format weakness.current_situation %>
+      <%= simple_format weakness.current_situation, class: 'mb-1' %>
     <% end %>
 
     <% unless weakness.implemented_audited? %>
-      <p>
+      <p class="mb-1">
         <span class="text-muted"><%= Weakness.human_attribute_name 'answer' %></span>:
       </p>
 
-      <%= simple_format weakness.answer %>
+      <%= simple_format weakness.answer, class: 'mb-1' %>
     <% end %>
 
-    <p>
+    <p class="mb-1">
       <span class="text-muted"><%= Weakness.human_attribute_name 'state' %></span>:
       <% if weakness.repeated? && weakness.repeated_in.present? %>
         <% review = weakness.repeated_in.review %>
@@ -94,14 +92,14 @@
                          end
     %>
 
-    <p>
+  <p class="mb-1">
       <span class="text-muted"><%= t "#{@controller}_committee_report.weaknesses_by_business_unit.year" %></span>:
       <%= origination_date %>
     </p>
   <% end %>
 <% else %>
-  <div style="margin-left: 2em">
-    <p><em><%= t 'follow_up_committee_report.weaknesses_by_business_unit.without_weaknesses' %></em></p>
+  <div class="ml-3">
+    <p class="mb-1"><em><%= t 'follow_up_committee_report.weaknesses_by_business_unit.without_weaknesses' %></em></p>
   </div>
 <% end %>
 

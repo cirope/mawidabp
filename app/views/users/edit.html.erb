@@ -1,14 +1,13 @@
 <%= content_for :form_actions do %>
-  <div class="dropdown dropup inline">
+  <div class="dropdown dropup d-inline">
     <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
       <%= t '.other_actions' %>
-      <span class="caret"></span>
     <% end %>
-    <ul class="dropdown-menu dropdown-menu-right">
-      <li><%= link_to t('users.status.show.title'), users_status_path(@user, graph: true) %></li>
-      <li><%= link_to t('users.reassignments.edit.title'), edit_users_reassignment_path(@user) %></li>
-      <li><%= link_to t('users.releases.edit.title'), edit_users_release_path(@user) %></li>
-    </ul>
+    <div class="dropdown-menu dropdown-menu-right">
+      <%= link_to t('users.status.show.title'), users_status_path(@user, graph: true), class: 'dropdown-item' %>
+      <%= link_to t('users.reassignments.edit.title'), edit_users_reassignment_path(@user), class: 'dropdown-item' %>
+      <%= link_to t('users.releases.edit.title'), edit_users_release_path(@user), class: 'dropdown-item' %>
+    </div>
   </div> |
   <%= link_to_destroy @user %> |
   <%= link_to_show @user %> |

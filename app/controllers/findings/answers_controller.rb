@@ -7,11 +7,16 @@ class Findings::AnswersController < ApplicationController
   before_action :set_finding, only: [:create]
 
   def create
-    @finding_answer = @finding.finding_answers.create finding_answer_params
+    @finding_answer = @finding.finding_answers.build finding_answer_params
 
-    flash.notice = t 'flash.finding_answers.create.notice' if @finding_answer.persisted?
+    if @finding.save
+      flash.notice = t 'flash.finding_answers.create.notice'
 
-    respond_with @finding_answer, location: finding_url(params[:completed], @finding)
+      respond_with @finding_answer, location: finding_url(params[:completed], @finding)
+    else
+      redirect_to finding_url(params[:completed], @finding),
+        alert: t('flash.finding_answers.create.alert')
+    end
   end
 
   private

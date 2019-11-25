@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get '/healthy', to: 'health#show', as: 'healthy'
   post '/touch', to: 'touch#create', as: 'touch'
 
   # Sessions
@@ -121,6 +122,7 @@ Rails.application.routes.draw do
     'review_stats_report',
     'review_scores_report',
     'review_score_details_report',
+    'control_objective_counts',
     'weaknesses_by_state',
     'weaknesses_by_risk',
     'weaknesses_by_risk_and_business_unit',
@@ -154,6 +156,7 @@ Rails.application.routes.draw do
     'create_review_stats_report',
     'create_review_scores_report',
     'create_review_score_details_report',
+    'create_control_objective_counts',
     'create_weaknesses_by_state',
     'create_weaknesses_by_risk',
     'create_weaknesses_by_risk_and_business_unit',
@@ -430,7 +433,16 @@ Rails.application.routes.draw do
 
   resources :users
 
+  resource :registration, only: [:show, :new, :create]
+
+  resource :license, only: [:show, :update] do
+    resource :blocked, only: :show, controller: 'licenses/blocked'
+    resource :check, only: :create, controller: 'licenses/check'
+  end
+
   root 'sessions#new'
+
+  post 'paypal', to: 'paypal#create'
 
   get 'private/:path', to: 'file_models#download', constraints: { path: /.+/ }
 end

@@ -1,5 +1,5 @@
 module Reports::ReviewStatsReport
-  include Reports::PDF
+  include Reports::Pdf
   include Parameters::Risk
 
   def review_stats_report

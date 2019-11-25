@@ -1,14 +1,14 @@
-<p>
+<p class="mb-1">
   <strong><%= Questionnaire.human_attribute_name 'name' %></strong>:
   <%= @questionnaire.name %>
 </p>
 
-<p>
+<p class="mb-1">
   <strong><%= Questionnaire.human_attribute_name 'email_subject' %></strong>:
   <%= @questionnaire.email_subject %>
 </p>
 
-<p>
+<p class="mb-1">
   <strong><%= Questionnaire.human_attribute_name 'email_link' %></strong>:
   <%= @questionnaire.email_link %>
 </p>
@@ -16,35 +16,37 @@
 <% if @questionnaire.email_text.present? %>
   <div>
     <strong><%= Questionnaire.human_attribute_name 'email_text' %></strong>:
-    <%= simple_format @questionnaire.email_text %>
+    <%= simple_format @questionnaire.email_text, class: 'mb-1' %>
   </div>
 <% end %>
 
 <% if @questionnaire.email_clarification.present? %>
   <div>
     <strong><%= Questionnaire.human_attribute_name 'email_clarification' %></strong>:
-    <%= simple_format @questionnaire.email_clarification %>
+    <%= simple_format @questionnaire.email_clarification, class: 'mb-1' %>
   </div>
 <% end %>
 
 <% if @questionnaire.pollable_type? %>
-  <p>
+  <p class="mb-1">
     <strong><%= Questionnaire.human_attribute_name 'pollable_type' %></strong>:
     <%= @questionnaire.pollable_type.constantize.model_name.human %>
   </p>
 <% end %>
 
-<h4>
+<hr>
+
+<h5 class="mb-2">
   <%= Questionnaire.human_attribute_name 'questions' %>
-</h4>
+</h5>
 
 <% @questionnaire.questions.each do |question| %>
-  <div class="text-bold">
-    <%= simple_format "#{question.sort_order}. #{question.question}" %>
+  <div class="font-weight-bold">
+    <%= simple_format "#{question.sort_order}. #{question.question}", class: 'mb-1' %>
   </div>
 
   <% if question.answer_type %>
-    <ul class="list-padding">
+    <ul class="mt-1 ml-2">
       <% question.answer_options.each do |ao| %>
         <li><%= t "answer_options.#{ao.option}" %></li>
       <% end %>

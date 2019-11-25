@@ -1,7 +1,6 @@
 language: ruby
-dist: xenial
+dist: bionic
 cache: bundler
-sudo: false
 rvm:
   - 2.6.3
 
@@ -17,7 +16,10 @@ services:
   - postgresql
 
 env:
-  - CONFIG_TYPE=normal
+  global:
+    - secure: PwjUL6m4vu2TzZIiIP/OMzKvnqbSW+TNRkcy6eelNyGwvDUcO6ylRA7xFSQn0P+bulYFWdeQJ/AUcHxu+FvwKJp+0MWf/CvKYlyI1i4+cPNErigUVEY4wmN4UI7JixjUnW1a8/A9a5R5k5wAFHZOYDsRIGX/6FMagU/qAeiyTYQ=
+  matrix:
+    - CONFIG_TYPE=normal
 
 before_install:
   - 'gem update --system && gem update bundler'
@@ -25,6 +27,6 @@ before_install:
 before_script:
   - 'cp config/application.yml.example config/application.yml'
   - "psql -c 'create database mawidabp_test;' -U postgres"
-  - 'bundle exec rake db:migrate'
+  - 'bundle exec rails db:migrate'
   - 'slapd -f test/fixtures/ldap/slapd.conf -h ldap://localhost:3389'
-  - 'bundle exec rake ldap:reset'
+  - 'bundle exec rails ldap:reset'

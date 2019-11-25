@@ -1,13 +1,13 @@
 module Users::ImportsHelper
-  def users_import_state_label_class(state)
-    label = {
-      created:   'label-success',
-      deleted:   'label-warning',
-      error:     'label-danger',
-      unchanged: 'label-default',
-      updated:   'label-info'
+  def users_import_state_badge_class(state)
+    badge = {
+      created:   'badge-success',
+      deleted:   'badge-warning',
+      error:     'badge-danger',
+      unchanged: 'badge-secondary',
+      updated:   'badge-info'
     }[state]
 
-    content_tag(:span, t(".#{state}"), class: "label #{label}")
+    content_tag(:span, t(".#{state}"), class: "badge #{badge}")
   end
 end
