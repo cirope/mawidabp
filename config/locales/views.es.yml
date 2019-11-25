@@ -188,7 +188,7 @@ es:
         title: 'Autorizar nuevo plan'
         body: |-
           Para cambiar de plan, deberá autorizar el nuevo plan mensual.
-          El nuevo plan será facturado en el próximo ciclo de facturación, pero verá reflejada la cantidad deseada de usuarios auditores instantaneamente.'
+          El nuevo plan será facturado en el próximo ciclo, pero verá reflejada la cantidad deseada de usuarios auditores en el momento.'
     authorizations:
       new:
         title: 'Licencia'

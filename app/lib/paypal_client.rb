@@ -25,7 +25,7 @@ module PaypalClient
   def authorize_change_of_plan reference_id, plan_id
     result = request_post "/v1/billing/subscriptions/#{reference_id}/revise", plan_id: plan_id
 
-    parse_revise(result) || { status: :error, response: :general_problem }
+    parse_plan_changed(result) || { status: :error, response: :general_problem }
   end
 
   def parse_subscription response
@@ -41,7 +41,7 @@ module PaypalClient
     end
   end
 
-  def parse_revise response
+  def parse_plan_changed response
     if response['links']
       link = response['links'].find { |l| l['rel'] == 'approve' }['href']
 

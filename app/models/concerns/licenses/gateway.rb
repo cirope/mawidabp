@@ -86,7 +86,7 @@ module Licenses::Gateway
     end
   end
 
-  def auditors_limit_from_plan_id(plan_id)
+  def auditors_limit_from_plan_id plan_id
     LICENSE_PLANS.find { |_k, v| v[:plan_id] == plan_id }.first
   end
 
