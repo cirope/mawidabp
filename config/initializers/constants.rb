@@ -91,9 +91,8 @@ ORACLE_ADAPTER = ActiveRecord::Base.connection.adapter_name == 'OracleEnhanced' 
 # Limite de filas en reportes para servir en real-time
 SEND_REPORT_EMAIL_AFTER_COUNT = 100
 # Planes de licencias
-LICENSE_PLANS = YAML.safe_load(
-  File.read('config/license_plans.yml'),
-  aliases: true
+LICENSE_PLANS = YAML.load(
+  File.read('config/license_plans.yml')
 )[Rails.env].with_indifferent_access.freeze
 # Redis config
 REDIS_HOST = ENV['REDIS_HOST'] || 'localhost'
