@@ -36,15 +36,18 @@ module Licenses::Gateway
   end
 
   def change_auditors_limit auditors_limit
-    return if self.auditors_limit == auditors_limit
-
-    return errors.add :auditors_limit, :invalid if LICENSE_PLANS[auditors_limit].nil?
-
-    return update auditors_limit: auditors_limit if subscription_id.blank?
-
-    return errors.add :auditors_limit, :cannot_downgrade if self.auditors_limit > auditors_limit
-
-    authorize_change_of_plan auditors_limit
+    case
+    when LICENSE_PLANS[auditors_limit].nil?
+      errors.add :auditors_limit, :invalid
+    when (count = group.auditor_users_count) > auditors_limit
+      errors.add :auditors_limit, :greater_than_or_equal_to, count: count
+    when subscription_id.blank?
+      update auditors_limit: auditors_limit
+    when self.auditors_limit > auditors_limit
+      errors.add :auditors_limit, :cannot_downgrade
+    when self.auditors_limit < auditors_limit
+      authorize_change_of_plan auditors_limit
+    end
   end
 
   def authorize_change_of_plan auditors_limit
