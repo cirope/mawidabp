@@ -26,7 +26,7 @@ end
 listen ENV['PORT'] || '/run/unicorn/unicorn.sock'
 
 # nuke workers after 360 seconds
-timeout 360
+timeout 600
 
 pid '/tmp/unicorn.pid'
 
