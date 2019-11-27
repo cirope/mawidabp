@@ -94,7 +94,11 @@ class LicenseTest < ActiveSupport::TestCase
   test 'change auditors limit without subscription' do
     @license.update_column :subscription_id, nil
 
-    @license.change_auditors_limit 2
+    unknown_auditors_plan = 2
+
+    assert_nil LICENSE_PLANS[unknown_auditors_plan]
+
+    @license.change_auditors_limit unknown_auditors_plan
 
     assert_error @license, :auditors_limit, :invalid
 
