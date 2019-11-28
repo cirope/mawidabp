@@ -15,6 +15,7 @@ addons:
 
 services:
   - postgresql
+  - redis-server
 
 env:
   global:
