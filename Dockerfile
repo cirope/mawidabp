@@ -48,6 +48,8 @@ RUN yum update -y && \
   zlib-devel      && \
   yum clean all -y
 
+RUN mkdir -p $APP_ROOT
+
 ADD Gemfile $APP_ROOT/Gemfile
 ADD Gemfile.lock $APP_ROOT/Gemfile.lock
 
