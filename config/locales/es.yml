@@ -265,17 +265,6 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       year: "Año de origen"
-    weaknesses_current_situation:
-      pdf_name: "observaciones_situacion_actual_%{from_date}_al_%{to_date}.pdf"
-      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "REPORTE GLOBAL - CUATRIMESTRAL / INFORMES DEFINITIVOS"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
-      without_weaknesses: "Sin observaciones"
-      on_revision: "En revisión"
-      origination_year: "Año de origen"
-      control_objective_tags: "Etiquetas objetivos de control"
-      weakness_tags: "Etiquetas de observación"
-      review_tags: "Etiquetas de informe"
     weaknesses_by_control_objective:
       pdf_name: "resultado_objetivos_de_control_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -825,6 +814,7 @@
       control_objective_tags: "Etiquetas objetivos de control"
       weakness_tags: "Etiquetas de observación"
       review_tags: "Etiquetas de informe"
+      cut_date: "Fecha de cómputo"
     weaknesses_by_control_objective:
       pdf_name: "resultado_objetivos_de_control_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"

@@ -54,6 +54,11 @@ es:
         notice: 'Noticia eliminada'
         alert: 'La noticia no pudo ser eliminada'
 
+    licenses:
+      authorizations:
+        create:
+          notice: 'Licencia actualizada'
+
     opening_interviews:
       create:
         notice: 'Entrevista de inicio agregada correctamente'

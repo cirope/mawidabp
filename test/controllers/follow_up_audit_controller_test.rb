@@ -633,6 +633,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :weaknesses_current_situation => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
+        :cut_date => 10.days.ago.to_date,
         :risk => ['', '1', '2'],
         :finding_status => ['', Finding::STATUS[:being_implemented]],
         :finding_title => 'a',
@@ -659,6 +660,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :weaknesses_current_situation => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
+        :cut_date => 10.days.ago.to_date,
         :risk => ['', '1', '2'],
         :finding_status => ['', Finding::STATUS[:being_implemented]],
         :finding_title => 'a',
@@ -682,7 +684,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     post :create_weaknesses_current_situation, :params => {
       :weaknesses_current_situation => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :cut_date => 10.days.ago.to_date
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
