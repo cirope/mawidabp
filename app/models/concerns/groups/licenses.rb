@@ -12,7 +12,9 @@ module Groups::Licenses
   end
 
   def auditor_users_count
-    users.can_act_as(:auditor).unscope(:order).distinct.select("#{User.table_name}.id").count
+    users_scope = ENABLE_PUBLIC_REGISTRATION ? users : User.all
+
+    users_scope.can_act_as(:auditor).unscope(:order).distinct.select("#{User.table_name}.id").count
   end
 
   def can_create_auditor?
