@@ -27,7 +27,7 @@ env:
     - CONFIG_TYPE=reviews_scored_by_weakness
 
 before_install:
-  - 'gem update --system && gem update --force bundler'
+  - 'gem update --force --system && gem update --force bundler'
 
 before_script:
   - 'cp config/application.yml.example config/application.yml'
