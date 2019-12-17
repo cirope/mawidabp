@@ -1,5 +1,6 @@
 language: ruby
 dist: bionic
+cache: bundler
 rvm:
   - 2.5.7
   - 2.6.5
@@ -24,9 +25,6 @@ env:
     - CONFIG_TYPE=gal
     - CONFIG_TYPE=bic
     - CONFIG_TYPE=reviews_scored_by_weakness
-
-before_install:
-  - 'gem update --system && gem update --force bundler'
 
 before_script:
   - 'cp config/application.yml.example config/application.yml'
