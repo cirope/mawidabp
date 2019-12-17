@@ -32,7 +32,8 @@ class Licenses::CheckControllerTest < ActionController::TestCase
                          when :paid
                            {
                              status:     status,
-                             paid_until: 1.month.from_now
+                             paid_until: 1.month.from_now,
+                             plan_id:    LICENSE_PLANS[1][:plan_id]
                            }
                          when :in_process
                            { status: status }

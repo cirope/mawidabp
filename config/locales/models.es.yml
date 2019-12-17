@@ -656,6 +656,14 @@ es:
           attributes:
             user:
               invalid_credentials: 'Credenciales inválidas'
+        license:
+          attributes:
+            auditors_limit:
+              cannot_downgrade: 'No puede bajar de plan, por favor contacte a soporte@mawidabp.com'
+            base:
+              general_problem: 'Ha ocurrido un problema, intente nuevamente'
+              subscription_status_invalid: 'La licencia debe estar activa para poder cambiarla'
+              invalid_resource_id: 'La licencia no se encontró'
         questionnaire:
           attributes:
             base:

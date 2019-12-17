@@ -152,12 +152,6 @@ module Reports::WeaknessesBrief
       end
     end
 
-    def extract_cut_date parameters
-      cut_date = Timeliness.parse parameters[:cut_date], :date if parameters
-
-      cut_date&.to_date || Time.zone.today
-    end
-
     def add_weaknesses_brief pdf
       pdf.move_down PDF_FONT_SIZE
 

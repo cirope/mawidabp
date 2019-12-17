@@ -37,6 +37,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :can_perform?
 
+  def search_params
+    @search_params ||= params[:search]&.permit(:query, columns: []).to_h.symbolize_keys
+  end
+  helper_method :search_params
+
   private
 
     def scope_current_organization
@@ -215,6 +220,12 @@ class ApplicationController < ActionController::Base
       to_date ||= Time.zone.today.at_end_of_month
 
       [from_date.to_date, to_date.to_date].sort
+    end
+
+    def extract_cut_date parameters
+      cut_date = Timeliness.parse parameters[:cut_date], :date if parameters
+
+      cut_date&.to_date || Time.zone.today
     end
 
     def extract_operator(search_term)

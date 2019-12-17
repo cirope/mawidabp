@@ -6,6 +6,7 @@ class BestPractice < ApplicationRecord
   include BestPractices::DestroyValidation
   include BestPractices::Json
   include BestPractices::ProcessControls
+  include BestPractices::Scopes
   include BestPractices::Search
   include BestPractices::Shared
   include BestPractices::Validations
