@@ -2,7 +2,8 @@ module FindingAnswers::CommitmentDate
   extend ActiveSupport::Concern
 
   def requires_commitment_date?
-    has_date_required_status? &&
+    ENV['DISABLE_FINDING_ANSWER_COMMITMENT_DATE'].blank? &&
+      has_date_required_status? &&
       has_follow_up_date_blank_or_expired? &&
       has_expired_commitment_date?
   end
