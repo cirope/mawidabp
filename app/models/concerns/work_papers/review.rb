@@ -10,7 +10,7 @@ module WorkPapers::Review
     def skip_mark_as_not_finished?
       review = owner.review
 
-      Current.user.supervisor? && review.work_papers_finished?
+      Current.user&.supervisor? && review.work_papers_finished?
     end
 
     def mark_review_as_not_finished
