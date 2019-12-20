@@ -80,7 +80,7 @@ module Reviews::Validations
       ].join(' AND ')
 
       if suffix.present?
-        is_taken = Review.where(
+        is_taken = Review.unscoped.where(
           conditions,
           organization_id: organization_id,
           identification: "%#{suffix}"
