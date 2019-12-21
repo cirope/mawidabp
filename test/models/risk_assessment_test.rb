@@ -7,10 +7,6 @@ class RiskAssessmentTest < ActiveSupport::TestCase
     set_organization
   end
 
-  teardown do
-    unset_organization
-  end
-
   test 'blank attributes' do
     @risk_assessment.name = ''
     @risk_assessment.description = ''

@@ -154,4 +154,11 @@ class NotifierMailerPreview < ActionMailer::Preview
 
     NotifierMailer.conclusion_final_review_close_date_warning user, cfrs
   end
+
+  # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/new_admin_user
+  def new_admin_user
+    user = User.take
+
+    NotifierMailer.new_admin_user user.organizations.first.id, user.email
+  end
 end

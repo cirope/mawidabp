@@ -12,10 +12,6 @@ class LdapMailerTest < ActionMailer::TestCase
     assert_empty ActionMailer::Base.deliveries
   end
 
-  teardown do
-    unset_organization
-  end
-
   test 'Notify with imported users' do
     Current.organization = organizations(:google)
     Current.group        = Current.organization.group

@@ -21,9 +21,10 @@ env:
   global:
     - secure: PwjUL6m4vu2TzZIiIP/OMzKvnqbSW+TNRkcy6eelNyGwvDUcO6ylRA7xFSQn0P+bulYFWdeQJ/AUcHxu+FvwKJp+0MWf/CvKYlyI1i4+cPNErigUVEY4wmN4UI7JixjUnW1a8/A9a5R5k5wAFHZOYDsRIGX/6FMagU/qAeiyTYQ=
   matrix:
-    - CONFIG_TYPE=normal
-    - CONFIG_TYPE=gal
+    - CONFIG_TYPE=bh
     - CONFIG_TYPE=bic
+    - CONFIG_TYPE=gal
+    - CONFIG_TYPE=normal
     - CONFIG_TYPE=reviews_scored_by_weakness
 
 before_install:

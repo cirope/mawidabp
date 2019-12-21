@@ -21,10 +21,10 @@ class RegistrationTest < ActiveSupport::TestCase
     ]
 
     assert_difference counts do
-      assert_enqueued_emails 1 do
-        assert @registration.save
-      end
+      assert @registration.save
     end
+
+    assert_enqueued_email_with NotifierMailer, :welcome_email, args: [@registration.user]
   end
 
   test 'validates blank attributes' do

@@ -8,10 +8,6 @@ class AuthenticationTest < ActionController::TestCase
     Current.organization = @organization
   end
 
-  teardown do
-    unset_organization
-  end
-
   test 'should authenticate' do
     assert_valid_authentication redirect_url: Group, admin_mode: true
     assert_valid_authentication
