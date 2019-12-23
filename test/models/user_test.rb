@@ -639,10 +639,11 @@ class UserTest < ActiveSupport::TestCase
     skip unless NOTIFY_NEW_ADMIN
 
     set_organization
+
     organization = organizations :cirope
     email        = 'emailxx@emailxx.ccc'
 
-    assert_enqueued_email_with NotifierMailer, :new_admin_user, args: [organization.id, email] do
+    assert_enqueued_emails 1 do
       assert_difference 'User.count' do
         User.create!(
           name:                          'New name',
@@ -675,13 +676,13 @@ class UserTest < ActiveSupport::TestCase
     organization = organizations :cirope
     user         = users :audited
 
-    user.organization_roles.each(&:mark_for_destruction)
+    user.organization_roles.each &:mark_for_destruction
     user.organization_roles.build(
       organization_id: organization.id,
       role_id:         roles(:admin_role).id
     )
 
-    assert_enqueued_email_with NotifierMailer, :new_admin_user, args: [organization.id, user.email] do
+    assert_enqueued_emails 1 do
       user.save!
     end
   end

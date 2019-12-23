@@ -154,10 +154,10 @@ module Users::Roles
       old_user = User.find id unless new_record?
 
       org_ids = organization_roles.reject(&:marked_for_destruction?).map do |organization_role|
-        o_id      = organization_role.organization_id
-        was_admin = old_user&.admin_on? o_id
+        organization_id = organization_role.organization_id
+        was_admin       = old_user&.admin_on? organization_id
 
-        o_id if !was_admin && admin_on?(o_id)
+        organization_id if !was_admin && admin_on?(organization_id)
       end.compact.uniq
 
       org_ids.each do |organization_id|

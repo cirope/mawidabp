@@ -16,15 +16,16 @@ class RegistrationTest < ActiveSupport::TestCase
   end
 
   test 'create' do
-    counts = %w[
+    emails_count = NOTIFY_NEW_ADMIN ? 2 : 1
+    counts       = %w[
       Group.count Organization.count License.count User.count
     ]
 
-    assert_difference counts do
-      assert @registration.save
+    assert_enqueued_emails emails_count do
+      assert_difference counts do
+        assert @registration.save
+      end
     end
-
-    assert_enqueued_email_with NotifierMailer, :welcome_email, args: [@registration.user]
   end
 
   test 'validates blank attributes' do
