@@ -21,8 +21,8 @@ class RegistrationTest < ActiveSupport::TestCase
       Group.count Organization.count License.count User.count
     ]
 
-    assert_enqueued_emails emails_count do
-      assert_difference counts do
+    assert_difference counts do
+      assert_enqueued_emails emails_count do
         assert @registration.save
       end
     end
