@@ -14,12 +14,6 @@ class WorkPaperTest < ActiveSupport::TestCase
     set_organization
   end
 
-  teardown do
-    Current.user = nil
-
-    unset_organization
-  end
-
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of WorkPaper, @work_paper

@@ -12,11 +12,6 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     set_host_for_organization(organizations(:cirope).prefix)
   end
 
-  teardown do
-    clear_enqueued_jobs
-    clear_performed_jobs
-  end
-
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do

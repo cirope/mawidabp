@@ -11,7 +11,7 @@ module Registrations::Persistence
       create_organization
       create_license
 
-      user = create_user
+      self.user = create_user
 
       NotifierMailer.welcome_email(user).deliver_later
 
