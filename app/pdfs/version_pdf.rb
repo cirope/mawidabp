@@ -7,7 +7,7 @@ class VersionPdf < Prawn::Document
   end
 
   def self.create attributes = nil
-    _pdf = new attributes
+    _pdf = new **Hash(attributes)
 
     _pdf.send :generate
 
