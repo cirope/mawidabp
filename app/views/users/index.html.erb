@@ -26,8 +26,8 @@
         <td class="d-none d-sm-table-cell"><%= user.failed_attempts %></td>
         <td class="text-right"><%= link_to_stats users_status_path(user, graph: true) %></td>
         <td class="text-right"><%= link_to_show user %></td>
-        <td class="text-right"><%= link_to_edit [:edit, user] %></td>
-        <td class="text-right"><%= link_to_destroy user, title: t('label.disable') %></td>
+        <td class="text-right"><%= link_to_edit [:edit, user] if can_perform? :edit %></td>
+        <td class="text-right"><%= link_to_destroy user, title: t('label.disable') if can_perform? :destroy %></td>
       </tr>
     <% end %>
   </tbody>
