@@ -135,7 +135,7 @@ class ApplicationControllerTest < ActionController::TestCase
     assert @controller.send(:can_perform?, :edit, :approval)
 
     @controller.instance_variable_set(:@auth_privileges, {
-      'administration' => {
+      'administration_security_users' => {
         approval: false,
         modify:   true
       }
