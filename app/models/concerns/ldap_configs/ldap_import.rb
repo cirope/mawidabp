@@ -23,7 +23,7 @@ module LdapConfigs::LdapImport
 
       raise Net::LDAP::Error.new unless connection.get_operation_result.code == 0
 
-      assign_managers managers, users_by_dn
+      assign_managers managers, users_by_dn unless skip_function_and_manager?
 
       users = check_state_for_late_changes(users)
     end
@@ -88,10 +88,15 @@ module LdapConfigs::LdapImport
         name:      casted_attribute(entry, name_attribute),
         last_name: casted_attribute(entry, last_name_attribute),
         email:     casted_attribute(entry, email_attribute),
-        function:  casted_attribute(entry, function_attribute),
         hidden:    false,
         enable:    true
-      }
+      }.merge(
+        if skip_function_and_manager?
+          {}
+        else
+          { function:  casted_attribute(entry, function_attribute) }
+        end
+      )
     end
 
     def casted_attribute entry, attr_name
@@ -144,6 +149,20 @@ module LdapConfigs::LdapImport
 
         user.reload.update manager_id: manager_id
       end
+    end
+
+    def skip_function_and_manager?
+      @_skip_function_and_manager_setting ||= Current.organization.settings.find_by(
+        name: 'skip_function_and_manager_from_ldap_sync'
+      )
+
+      value = if @_skip_function_and_manager_setting
+                @_skip_function_and_manager_setting.value
+              else
+                DEFAULT_SETTINGS[:skip_function_and_manager_from_ldap_sync][:value]
+              end
+
+      value != '0'
     end
 
     def check_state_for_late_changes(users)

@@ -49,4 +49,11 @@ module UsersHelper
       users_roles_path
     end
   end
+
+  def show_import_from_ldap?
+    setting = current_organization.settings.find_by name: 'hide_import_from_ldap'
+    result  = (setting ? setting.value : DEFAULT_SETTINGS[:hide_import_from_ldap][:value]) != '0'
+
+    !result || can_perform?(:edit, :approval)
+  end
 end

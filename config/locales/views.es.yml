@@ -489,6 +489,8 @@ es:
     brief_period_in_weeks: 'Periodo de notificación "Resumen de hallazgos" en semanas'
     show_follow_up_timestamps: 'Mostrar marcas de tiempo en seguimiento'
     require_manager_on_findings: 'Requerir gerente de auditoría en hallazgos'
+    hide_import_from_ldap: 'Mostrar "Importar desde LDAP" solo a usuarios con permisos de aprobación'
+    skip_function_and_manager_from_ldap_sync: 'No sincronizar los campos "Cargo" y "Superior" con los valores de LDAP'
 
   tags:
     edit:
