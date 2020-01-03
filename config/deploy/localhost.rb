@@ -1,7 +1,7 @@
 set :stage, :production
 set :rails_env, 'production'
 set :branch, 'c-bica'
-set :log_level, :info
+set :log_level, :error
 
 set :default_env, {
   'LANG':     'en_US.UTF-8',
