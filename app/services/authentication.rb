@@ -99,7 +99,9 @@ class Authentication
 
         @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }
       end
-    rescue Net::LDAP::Error
+    rescue Net::LDAP::Error, Errno::ECONNRESET => ex
+      ::Rails.logger.error ex
+
       if @ldap_config.try_alternative_ldap?
         @ldap_config = @ldap_config.alternative_ldap
 
