@@ -45,7 +45,7 @@ GEM
     activerecord (6.0.0)
       activemodel (= 6.0.0)
       activesupport (= 6.0.0)
-    activerecord-oracle_enhanced-adapter (6.0.0)
+    activerecord-oracle_enhanced-adapter (6.0.2)
       activerecord (~> 6.0.0)
       ruby-plsql (>= 0.6.0)
     activestorage (6.0.0)
@@ -147,7 +147,7 @@ GEM
     mini_magick (4.9.5)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.12.2)
+    minitest (5.13.0)
     nakayoshi_fork (0.0.4)
     net-ldap (0.16.1)
     net-scp (2.0.0)
@@ -271,7 +271,7 @@ GEM
     timecop (0.9.1)
     timeliness (0.4.3)
     ttfunk (1.5.1)
-    tzinfo (1.2.5)
+    tzinfo (1.2.6)
       thread_safe (~> 0.1)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
@@ -295,7 +295,7 @@ GEM
     whenever (1.0.0)
       chronic (>= 0.6.3)
     will_paginate (3.2.1)
-    zeitwerk (2.2.0)
+    zeitwerk (2.2.2)
 
 PLATFORMS
   ruby
