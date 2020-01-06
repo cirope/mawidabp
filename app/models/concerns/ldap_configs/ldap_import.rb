@@ -10,8 +10,8 @@ module LdapConfigs::LdapImport
 
     User.transaction do
       ldap.search(base: basedn, filter: ldap_filter) do |entry|
-        if entry[email_attribute].present?
-          users << (result = process_entry entry)
+        if (process_args = process_entry? entry)
+          users << (result = process_entry entry, **process_args)
           user   = result[:user]
 
           if user.persisted?
@@ -33,12 +33,23 @@ module LdapConfigs::LdapImport
 
   private
 
-    def process_entry entry
-      role_names = role_data entry
+    def process_entry? entry
+      if entry[email_attribute].present?
+        role_names = role_data entry
+        roles      = clean_roles Role.list_with_corporate.where(name: role_names)
+        data       = trivial_data entry
+        user       = find_user data
+
+        if user&.roles.blank? && roles.blank?
+          false
+        else
+          { user: user, roles: roles, data: data }
+        end
+      end
+    end
+
+    def process_entry entry, user:, roles:, data:
       manager_dn = casted_attribute entry, manager_attribute
-      data       = trivial_data entry
-      roles      = clean_roles Role.list_with_corporate.where(name: role_names)
-      user       = find_user data
 
       data[:manager_id] = nil if manager_dn.blank?
 
