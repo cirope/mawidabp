@@ -561,7 +561,7 @@ es:
         updated: 'Actualizado'
         deleted: 'Eliminado'
         unchanged: 'Sin cambios'
-        error: 'Con errores'
+        errored: 'Con errores'
         deprecated_users: 'Usuarios ausentes en el servidor LDAP'
     passwords:
       edit:
