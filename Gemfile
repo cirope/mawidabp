@@ -28,7 +28,7 @@ gem 'font-awesome-sass'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'jbuilder'
-gem 'sidekiq'
+gem 'sidekiq', '< 6' # Until update of sidekiq service on customer server
 gem 'ruby-ntlm'
 gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
