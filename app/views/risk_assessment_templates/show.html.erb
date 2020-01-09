@@ -1,18 +1,16 @@
-<p>
+<p class="mb-1">
   <strong><%= RiskAssessmentTemplate.human_attribute_name 'name' %></strong>:
   <%= @risk_assessment_template.name %>
 </p>
-<p>
+<p class="mb-1">
   <strong><%= RiskAssessmentTemplate.human_attribute_name 'description' %></strong>:
   <%= @risk_assessment_template.description %>
 </p>
 
 <% if @risk_assessment_template.risk_assessment_weights.any? %>
-  <table class="table table-condensed table-striped table-hover">
+  <table class="table table-sm table-striped table-hover">
     <caption>
-      <h4>
-        <%= RiskAssessmentWeight.model_name.human count: 0 %>
-      </h4>
+      <h5><%= RiskAssessmentWeight.model_name.human count: 0 %></h5>
     </caption>
     <thead>
       <tr>

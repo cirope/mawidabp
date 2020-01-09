@@ -31,7 +31,7 @@ follow_up:
 extra:
   name: Extra
   kind: plan_item
-  style: default
+  style: secondary
   icon: tag
   shared: false
   options: "{}"
@@ -41,7 +41,7 @@ extra:
 high_priority:
   name: High priority
   kind: review
-  style: default
+  style: secondary
   icon: tag
   shared: false
   options: "{}"
@@ -51,7 +51,7 @@ high_priority:
 for_revision:
   name: For revision
   kind: review
-  style: default
+  style: secondary
   icon: tag
   shared: false
   options: "{}"
@@ -61,7 +61,7 @@ for_revision:
 manual:
   name: Manual
   kind: document
-  style: default
+  style: secondary
   icon: tag
   shared: false
   options: "{}"
@@ -71,7 +71,7 @@ manual:
 breaking:
   name: Breaking
   kind: news
-  style: default
+  style: secondary
   shared: false
   options: "{}"
   organization: cirope
@@ -80,7 +80,7 @@ breaking:
 risk_evaluation:
   name: Risk evaluation
   kind: control_objective
-  style: default
+  style: secondary
   shared: false
   options: "{}"
   organization: cirope

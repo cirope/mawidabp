@@ -1,3 +1,5 @@
+/* global State */
+
 jQuery(function ($) {
   var makeRequest        = false
   var deferEnableRequest = function () {

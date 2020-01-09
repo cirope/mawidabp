@@ -2,7 +2,7 @@ class ClosingInterview < ApplicationRecord
   include Auditable
   include ClosingInterviews::AttributeTypes
   include ClosingInterviews::DestroyValidation
-  include ClosingInterviews::PDF
+  include ClosingInterviews::Pdf
   include ClosingInterviews::Scopes
   include ClosingInterviews::Search
   include ClosingInterviews::UpdateCallbacks

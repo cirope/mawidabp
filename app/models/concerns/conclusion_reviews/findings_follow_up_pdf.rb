@@ -1,4 +1,4 @@
-module ConclusionReviews::FindingsFollowUpPDF
+module ConclusionReviews::FindingsFollowUpPdf
   extend ActiveSupport::Concern
 
   def create_findings_follow_up_pdf organization = nil, index = 1

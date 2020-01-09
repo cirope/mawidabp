@@ -1,7 +1,7 @@
 module Reports::WeaknessesCurrentSituation
   extend ActiveSupport::Concern
 
-  include Reports::PDF
+  include Reports::Pdf
   include Reports::Period
 
   def weaknesses_current_situation
@@ -19,6 +19,17 @@ module Reports::WeaknessesCurrentSituation
     init_weaknesses_current_situation_vars
 
     pdf = init_pdf params[:report_title], params[:report_subtitle]
+
+    unless @cut_date == Time.zone.today
+      pdf.add_description_item(
+        t("#{@controller}_committee_report.weaknesses_current_situation.cut_date"),
+        l(@cut_date),
+        0,
+        false
+      )
+
+      pdf.move_down PDF_FONT_SIZE
+    end
 
     if @weaknesses.any?
       @weaknesses.each_with_index do |weakness, index|
@@ -73,6 +84,7 @@ module Reports::WeaknessesCurrentSituation
       @controller = params[:controller_name] || (controller_name.start_with?('follow_up') ? 'follow_up' : 'conclusion')
       @title = t("#{@controller}_committee_report.weaknesses_current_situation_title")
       @from_date, @to_date = *make_date_range(params[:weaknesses_current_situation])
+      @cut_date = extract_cut_date params[:weaknesses_current_situation]
       @filters = []
       @permalink = Permalink.list.find_by token: params[:permalink_token]
       @benefits = Benefit.list.order kind: :desc, created_at: :asc
@@ -134,7 +146,7 @@ module Reports::WeaknessesCurrentSituation
     def weaknesses_current_situation_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = ::CSV.generate(options) do |csv|
+      csv_str = CSV.generate(options) do |csv|
         csv << weaknesses_current_situation_csv_headers
 
         weaknesses_current_situation_csv_data_rows.each { |row| csv << row }
@@ -193,7 +205,7 @@ module Reports::WeaknessesCurrentSituation
         ],
         ([
           "<b>#{Weakness.human_attribute_name('follow_up_date')}</b>",
-          current_weakness.follow_up_date < Time.zone.today ?
+          current_weakness.follow_up_date < (@cut_date - 30.days) ?
             "<color rgb='ff0000'>#{I18n.l(current_weakness.follow_up_date)}</color>" :
             I18n.l(current_weakness.follow_up_date)
         ] if current_weakness.follow_up_date)

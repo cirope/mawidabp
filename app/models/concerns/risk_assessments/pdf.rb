@@ -1,4 +1,4 @@
-module RiskAssessments::PDF
+module RiskAssessments::Pdf
   extend ActiveSupport::Concern
 
   def to_pdf organization = nil

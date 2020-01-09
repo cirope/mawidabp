@@ -2,7 +2,7 @@
   <% months = @plan.period.months %>
 
   <div class="table-responsive">
-    <table class="table table-condensed table-hover">
+    <table class="table table-sm table-hover">
       <thead>
         <tr>
           <th rowspan="2"><%= t '.detail' %></th>
@@ -48,7 +48,7 @@
                   <tbody>
                     <% month_in_weeks(month).each do |week| %>
                       <% if business_unit_with_plan_items_in_week? business_unit, week %>
-                        <td class="info">&nbsp;</td>
+                        <td class="table-info">&nbsp;</td>
                       <% else %>
                         <td>&nbsp;</td>
                       <% end %>

@@ -1,6 +1,6 @@
-class Polls::AnswerPDF < Prawn::Document
-  include Polls::PDFHeaders
-  include Polls::PDFScores
+class Polls::AnswerPdf < Prawn::Document
+  include Polls::PdfHeaders
+  include Polls::PdfScores
 
   attr_accessor :relative_path
 

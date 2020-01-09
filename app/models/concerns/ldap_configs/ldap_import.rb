@@ -1,15 +1,15 @@
-module LdapConfigs::LDAPImport
+module LdapConfigs::LdapImport
   extend ActiveSupport::Concern
 
   def import username, password
-    ldap        = ldap username, password
-    ldap_filter = Net::LDAP::Filter.construct filter
-    users_by_dn = {}
-    managers    = {}
-    users       = []
+    connection ||= ldap username, password
+    ldap_filter  = Net::LDAP::Filter.construct filter
+    users_by_dn  = {}
+    managers     = {}
+    users        = []
 
     User.transaction do
-      ldap.search(base: basedn, filter: ldap_filter) do |entry|
+      connection.search(base: basedn, filter: ldap_filter) do |entry|
         if entry[email_attribute].present?
           users << (result = process_entry entry)
           user   = result[:user]
@@ -21,7 +21,7 @@ module LdapConfigs::LDAPImport
         end
       end
 
-      raise Net::LDAP::Error.new unless ldap.get_operation_result.code == 0
+      raise Net::LDAP::Error.new unless connection.get_operation_result.code == 0
 
       assign_managers managers, users_by_dn
 
@@ -29,6 +29,14 @@ module LdapConfigs::LDAPImport
     end
 
     users
+  rescue Net::LDAP::Error
+    if try_alternative_ldap?
+      connection = alternative_ldap.ldap username, password
+
+      retry
+    end
+
+    raise
   end
 
   private

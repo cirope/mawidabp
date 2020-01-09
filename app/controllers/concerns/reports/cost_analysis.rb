@@ -1,5 +1,5 @@
 module Reports::CostAnalysis
-  include Reports::PDF
+  include Reports::Pdf
 
   def cost_analysis
     init_cost_analysis_vars

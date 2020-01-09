@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   include ParameterSelector
   include CacheControl
   include FlashResponders
+  include LicenseCheck if ENABLE_PUBLIC_REGISTRATION
 
   protect_from_forgery
 
@@ -21,7 +22,7 @@ class ApplicationController < ActionController::Base
   def current_organization
     @current_organization ||= Organization.by_subdomain(
       request.subdomains.first
-    ) if APP_ADMIN_PREFIXES.exclude?(request.subdomains.first)
+    ) if request.subdomains.any? && APP_ADMIN_PREFIXES.exclude?(request.subdomains.first)
   end
   helper_method :current_organization
 
@@ -35,6 +36,11 @@ class ApplicationController < ActionController::Base
     allowed_by_type && allowed_by_privileges
   end
   helper_method :can_perform?
+
+  def search_params
+    @search_params ||= params[:search]&.permit(:query, columns: []).to_h.symbolize_keys
+  end
+  helper_method :search_params
 
   private
 
@@ -214,6 +220,12 @@ class ApplicationController < ActionController::Base
       to_date ||= Time.zone.today.at_end_of_month
 
       [from_date.to_date, to_date.to_date].sort
+    end
+
+    def extract_cut_date parameters
+      cut_date = Timeliness.parse parameters[:cut_date], :date if parameters
+
+      cut_date&.to_date || Time.zone.today
     end
 
     def extract_operator(search_term)

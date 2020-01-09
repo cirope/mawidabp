@@ -60,8 +60,7 @@
         <%= finding_status_field f, disabled: readonly %>
 
         <% if show_skip_work_paper_for @oportunity %>
-          <%= f.input :skip_work_paper, as: :boolean, label: false,
-            inline_label: Oportunity.human_attribute_name('skip_work_paper') %>
+          <%= f.input :skip_work_paper, as: :boolean %>
         <% end %>
 
         <% if show_history_changes %>
@@ -86,19 +85,19 @@
     </div>
   </div>
 
-  <br />
-  <h4>
+  <h5 class="mt-3">
     <%= t 'finding.responsibles', count: @oportunity.users.size %>
-  </h4>
+  </h5>
+
   <div class="row">
     <div class="col-md-6">
-      <h5><strong><%= User.model_name.human %></strong></h5>
+      <h5 class="h6"><%= User.model_name.human %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= FindingUserAssignment.human_attribute_name 'responsible_auditor' %></strong></h5>
+      <h5 class="h6"><%= FindingUserAssignment.human_attribute_name 'responsible_auditor' %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= FindingUserAssignment.human_attribute_name 'process_owner' %></strong></h5>
+      <h5 class="h6"><%= FindingUserAssignment.human_attribute_name 'process_owner' %></h5>
     </div>
   </div>
 
@@ -113,12 +112,11 @@
   </div>
 
   <% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
-    <br />
-    <h4>
+    <h5 class="mt-3">
       <%= t 'finding.repeated_ancestors' %>
-    </h4>
+    </h5>
 
-    <ul>
+    <ul class="mb-1">
       <% repeated_ancestors.each do |repeated_ancestor| %>
         <li><%= repeated_ancestor %></li>
       <% end %>
@@ -126,26 +124,24 @@
   <% end %>
 
   <% unless (repeated_children = @oportunity.repeated_children).blank? %>
-    <br />
-    <h4>
+    <h5 class="mt-3">
       <%= t('finding.repeated_children') %>
-    </h4>
+    </h5>
 
-    <ul>
+    <ul class="mb-1">
       <% repeated_children.each do |repeated_child| %>
         <li><%= repeated_child %></li>
       <% end %>
     </ul>
   <% end %>
 
-  <br />
-  <h4>
+  <h5 class="mt-3">
     <%= Tag.model_name.human count: 0 %>
-  </h4>
+  </h5>
 
   <div class="row">
     <div class="col-md-6">
-      <h5><strong><%= Tag.human_attribute_name :name %></strong></h5>
+      <h5 class="h6"><%= Tag.human_attribute_name :name %></h5>
     </div>
   </div>
 
@@ -157,16 +153,16 @@
     <%= link_to_add_fields(t('finding.add_tagging'), f, :taggings, 'findings/tagging') unless frozen %>
   </div>
 
-  <br />
-  <h4>
+  <h5 class="mt-3">
     <%= t('finding.finding_relations') %>
-  </h4>
+  </h5>
+
   <div class="row">
     <div class="col-md-6">
-      <h5><strong><%= FindingRelation.human_attribute_name 'related_finding_id' %></strong></h5>
+      <h5 class="h6"><%= FindingRelation.human_attribute_name 'related_finding_id' %></h5>
     </div>
-    <div class="col-md-4">
-      <h5><strong><%= FindingRelation.human_attribute_name 'description' %></strong></h5>
+    <div class="col-md-5">
+      <h5 class="h6"><%= FindingRelation.human_attribute_name 'description' %></h5>
     </div>
   </div>
 
@@ -180,12 +176,11 @@
   </div>
 
   <% unless @oportunity.inverse_finding_relations.blank? %>
-    <br />
-    <h4>
+    <h5 class="mt-3">
       <%= t('finding.inverse_finding_relations') %>
-    </h4>
+    </h5>
 
-    <table class="table table-condensed table-striped table-hover">
+    <table class="table table-sm table-striped table-hover mt-3">
       <thead>
         <tr>
           <th><%= FindingRelation.human_attribute_name :finding_id %></th>
@@ -204,20 +199,26 @@
   <% end %>
 
   <% unless oportunity_business_units.empty? %>
-    <br />
-    <h4>
+    <h5 class="mt-3">
       <%= BusinessUnit.model_name.human count: 0 %>
-    </h4>
-    <%=  f.input :business_unit_ids, label: false, collection: oportunity_business_units, as: :check_boxes, input_html: { disabled: readonly } %>
+    </h5>
+
+    <%= f.input :business_unit_ids,
+      label: '&nbsp;'.html_safe,
+      item_wrapper_class: 'custom-control custom-checkbox',
+      collection: oportunity_business_units,
+      as: :check_boxes,
+      input_html: { disabled: readonly },
+      wrapper_html: { class: 'mt-n4' }
+    %>
   <% end %>
 
   <% unless @oportunity.finding_answers.blank? %>
-    <br />
-    <h4>
+    <h5 class="mt-3">
       <%= t('finding.finding_answers') %>
-    </h4>
+    </h5>
 
-    <table class="table table-condensed table-striped table-hover">
+    <table class="table table-sm table-striped table-hover mt-3">
       <thead>
         <tr>
           <th><%= User.model_name.human %></th>
@@ -230,17 +231,20 @@
         <% @oportunity.finding_answers.each do |finding_answer| %>
           <tr>
             <td><%= finding_answer.user.full_name %></td>
-            <td><%= simple_format finding_answer.answer %></td>
+            <td><%= simple_format finding_answer.answer, class: 'mb-1' %></td>
             <td>
               <%= finding_answer.file_model.try(:file?) ?
-                link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
+                link_to(t('label.download'), finding_answer.file_model.file.url) : '-' %>
             </td>
             <td>
               <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
               <% if finding_answer.commitment_date %>
-                <br />
-                <br /><b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
-                <br /><%= l(finding_answer.commitment_date, :format => :long) %>
+                <div class="my-1">
+                  <strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
+                  <span class="d-block">
+                    <%= l(finding_answer.commitment_date, format: :long) %>
+                  </span>
+                </div>
               <% end %>
             </td>
           </tr>
@@ -249,23 +253,23 @@
     </table>
   <% end %>
 
-  <br />
-  <h4><%= WorkPaper.model_name.human(count: 0) %></h4>
+  <h5 class="mt-3"><%= WorkPaper.model_name.human(count: 0) %></h5>
+
   <div class="row">
     <div class="col-md-3">
-      <h5><strong><%= WorkPaper.human_attribute_name 'name' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'name' %></h5>
     </div>
     <div class="col-md-1">
-      <h5><strong><%= WorkPaper.human_attribute_name 'code' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'code' %></h5>
     </div>
     <div class="col-md-1">
-      <h5><strong><%= WorkPaper.human_attribute_name 'number_of_pages' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'number_of_pages' %></h5>
     </div>
     <div class="col-md-4">
-      <h5><strong><%= WorkPaper.human_attribute_name 'description' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'description' %></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= WorkPaper.human_attribute_name 'file_model' %></strong></h5>
+      <h5 class="h6"><%= WorkPaper.human_attribute_name 'file_model' %></h5>
     </div>
   </div>
 
@@ -282,7 +286,7 @@
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
+    <div class="float-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary', disabled: frozen %>
   </div>

@@ -8,7 +8,7 @@
     <%= f.input :lock_version, as: :hidden %>
 
     <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
-      <div class="file-container text-right <%= 'has-error' if file_model_error f.object %>">
+      <div class="file-container text-right <%= 'form-group-invalid' if file_model_error f.object %>">
         <%= link_to_upload fm_f.object %>
 
         <% if fm_f.object.file_cache %>
@@ -18,17 +18,17 @@
           <%= fm_f.input :file, label: false %>
         <% end %>
 
-        <span class="help-block"><%= file_model_error f.object %></span>
+        <small class="form-text text-muted"><%= file_model_error f.object %></small>
       </div>
     <% end %>
 
-    <div class="panel <%= @document.errors[:tags].blank? ? 'panel-default' : 'panel-danger' %>">
-      <div class="panel-heading">
-        <h3 class="panel-title">
+    <div class="card mb-3 <%= 'border-danger' if @document.errors[:tags].present? %>">
+      <div class="card-header <%= 'bg-danger text-light' if @document.errors[:tags].present? %>">
+        <h5 class="mb-0">
           <%= Tag.model_name.human count: 0 %>
-        </h3>
+        </h5>
       </div>
-      <div class="panel-body">
+      <div class="card-body">
         <% @document.errors.full_messages_for(:tags).each do |error| %>
           <p class="text-danger"><%= error %></p>
         <% end %>

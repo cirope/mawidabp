@@ -1,0 +1,29 @@
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <%= simple_form_for @registration, url: registration_path do |f| %>
+      <div class="card mb-3">
+        <div class="card-header text-center bg-white border-white py-5">
+          <%= image_tag 'logo.svg', alt: t('app_name'), height: 40 %>
+        </div>
+
+        <div class="card-body py-0 px-5">
+          <%= render 'shared/error_explanation', f: f %>
+
+          <div class="form-inputs">
+            <%= f.input :name, input_html: { maxlength: 100, autofocus: true } %>
+            <%= f.input :last_name, input_html: { maxlength: 100 } %>
+            <%= f.input :email, input_html: { maxlength: 100 } %>
+            <%= f.input :user, input_html: { maxlength: 30 } %>
+            <%= f.input :organization_name %>
+          </div>
+        </div>
+
+        <div class="card-footer text-center bg-white border-white pb-4">
+          <div class="form-actions">
+            <%= f.submit class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

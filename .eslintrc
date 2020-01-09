@@ -1,0 +1,31 @@
+# vim:set ft=json:
+
+{
+  "env": {
+    "browser": true,
+    "jquery": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 5,
+    "sourceType": "script"
+  },
+  "rules": {
+    "array-bracket-spacing": ["error", "never"],
+    "brace-style": ["error", "1tbs", {"allowSingleLine": true}],
+    "eqeqeq": ["error", "always"],
+    "indent": ["error", 2],
+    "keyword-spacing": ["error", {"before": true, "after": true}],
+    "linebreak-style": ["error", "unix"],
+    "no-console": "warn",
+    "no-trailing-spaces": "error",
+    "object-curly-spacing": ["error", "always"],
+    "prefer-const": "warn",
+    "quotes": ["error", "single"],
+    "semi": ["error", "never"],
+    "space-before-blocks": ["error", "always"],
+    "space-before-function-paren": ["error", "always"],
+    "space-infix-ops": "error",
+    "spaced-comment": ["error", "always"]
+  }
+}

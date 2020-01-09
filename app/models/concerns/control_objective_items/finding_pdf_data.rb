@@ -1,13 +1,14 @@
-module ControlObjectiveItems::FindingPDFData
+module ControlObjectiveItems::FindingPdfData
   extend ActiveSupport::Concern
 
   def finding_pdf_data finding, hide: [], show: []
     body = ''
 
-    body << get_initial_finding_attributes(finding, show)
+    body << get_initial_finding_attributes(finding, hide, show)
     body << get_weakness_attributes(finding, hide) if finding.kind_of?(Weakness)
-    body << get_late_finding_attributes(finding, show)
+    body << get_finding_answer(finding)
     body << get_audited_data(finding, hide)
+    body << get_late_finding_attributes(finding, show)
     body << get_final_finding_attributes(finding, hide, show)
 
     body
@@ -15,26 +16,31 @@ module ControlObjectiveItems::FindingPDFData
 
   private
 
-    def get_initial_finding_attributes finding, show
+    def get_initial_finding_attributes finding, hide, show
       body = ''
-
-      if show.include? 'review'
-        body << "<b>#{Review.model_name.human}:</b> " +
-          "<i>#{finding.review.identification}</i></b>\n"
-      end
-
-      if finding.review_code.present?
-        body << finding_review_code_text_for(finding, show)
-      end
 
       if finding.title.present?
         body << "<b>#{finding.class.human_attribute_name('title')}: " +
           "<i>#{finding.title.chomp}</i></b>\n"
       end
 
+      if finding.review_code.present?
+        body << finding_review_code_text_for(finding, show)
+      end
+
       if finding.description.present?
         body << "<b>#{finding.class.human_attribute_name('description')}:</b> " +
           "#{finding.description.chomp}\n"
+      end
+
+      if show.include? 'review'
+        body << "<b>#{Review.model_name.human}:</b> " +
+          "<i>#{finding.review.identification}</i></b>\n"
+      end
+
+      if finding.origination_date.present? && hide.exclude?('origination_date')
+        body << "<b>#{finding.class.human_attribute_name('origination_date')}:"+
+          "</b> #{finding_origination_date_text_for finding}\n"
       end
 
       body << finding_repeated_text_for(finding, show)
@@ -61,18 +67,20 @@ module ControlObjectiveItems::FindingPDFData
       body
     end
 
-    def get_late_finding_attributes finding, show
+    def get_finding_answer finding
       body = ''
-
-      if finding.origination_date.present?
-        body << "<b>#{finding.class.human_attribute_name('origination_date')}:"+
-          "</b> #{finding_origination_date_text_for finding}\n"
-      end
 
       if finding.answer.present?
         body << "<b>#{finding.class.human_attribute_name('answer')}:</b> " +
           "#{finding.answer.chomp}\n"
       end
+
+      body
+    end
+
+
+    def get_late_finding_attributes finding, show
+      body = ''
 
       body << get_tasks_data(finding)
       body << finding_follow_up_date_text_for(finding, show)

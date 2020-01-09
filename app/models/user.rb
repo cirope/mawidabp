@@ -12,6 +12,7 @@ class User < ApplicationRecord
   include Users::DestroyValidation
   include Users::Findings
   include Users::Group
+  include Users::Licenses
   include Users::MarkChanges
   include Users::Name
   include Users::Notifications
@@ -25,6 +26,7 @@ class User < ApplicationRecord
   include Users::Roles
   include Users::Scopes
   include Users::Search
+  include Users::BaseValidations
   include Users::Validations
   include Users::Tree
 

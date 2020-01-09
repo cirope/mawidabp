@@ -4,6 +4,19 @@ es:
     updated_at: 'Última actualización'
     lock_version: 'Versión'
 
+  activemodel:
+    models:
+      registration:
+        one: 'Organización'
+        other: 'Organizaciones'
+    attributes:
+      registration:
+        email: 'Correo'
+        last_name: 'Apellido'
+        name: 'Nombre'
+        organization_name: 'Nombre de la organización'
+        user: 'Nombre de usuario'
+
   activerecord:
     models:
       achievement:
@@ -66,6 +79,9 @@ es:
       ldap_config:
         one: 'Configuración LDAP'
         other: 'Configuraciones LDAP'
+      license:
+        one: 'Licencia'
+        other: 'Licencias'
       login_record:
         one: 'Registro de ingreso'
         other: 'Registros de ingreso'
@@ -324,6 +340,8 @@ es:
       ldap_config:
         hostname: 'Dirección del servidor'
         port: 'Puerto'
+        alternative_hostname: 'Dirección del servidor alternativo'
+        alternative_port: 'Puerto alternativo'
         basedn: 'Nombre distinguido de base'
         filter: 'Filtro'
         login_mask: 'Máscara de autenticación'
@@ -338,6 +356,10 @@ es:
         test_password: 'Contraseña'
         user: 'Usuario de servicio'
         password: 'Contraseña de servicio'
+      license:
+        paid_until: 'Pagada hasta'
+        auditors_limit: 'Limite de usuarios auditores'
+        status: 'Estado'
       login_record:
         data: 'Datos'
         end: 'Fin'
@@ -634,6 +656,14 @@ es:
           attributes:
             user:
               invalid_credentials: 'Credenciales inválidas'
+        license:
+          attributes:
+            auditors_limit:
+              cannot_downgrade: 'No puede bajar de plan, por favor contacte a soporte@mawidabp.com'
+            base:
+              general_problem: 'Ha ocurrido un problema, intente nuevamente'
+              subscription_status_invalid: 'La licencia debe estar activa para poder cambiarla'
+              invalid_resource_id: 'La licencia no se encontró'
         questionnaire:
           attributes:
             base:
@@ -652,3 +682,7 @@ es:
           attributes:
             risk_assessment_weights:
               blank: 'debe tener al menos uno'
+        user:
+          attributes:
+            base:
+              auditors_limit_reached: 'Limite de auditores alcanzado, por favor actualice su licencia.'

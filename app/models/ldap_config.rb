@@ -2,9 +2,9 @@ class LdapConfig < ApplicationRecord
   include Auditable
   include Trimmer
   include LdapConfigs::Defaults
-  include LdapConfigs::LDAP
-  include LdapConfigs::LDAPImport
-  include LdapConfigs::LDAPService
+  include LdapConfigs::Ldap
+  include LdapConfigs::LdapImport
+  include LdapConfigs::LdapService
   include LdapConfigs::Validation
 
   trimmed_fields :hostname, :basedn, :filter, :login_mask, :username_attribute,

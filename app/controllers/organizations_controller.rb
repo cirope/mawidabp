@@ -71,7 +71,7 @@ class OrganizationsController < ApplicationController
           :username_attribute, :name_attribute, :last_name_attribute,
           :email_attribute, :function_attribute, :roles_attribute,
           :manager_attribute, :test_user, :test_password,
-          :user, :password
+          :user, :password, :alternative_hostname, :alternative_port
         ]
       )
     end

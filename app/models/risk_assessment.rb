@@ -2,10 +2,10 @@ class RiskAssessment < ApplicationRecord
   include Auditable
   include RiskAssessments::AttributeTypes
   include RiskAssessments::Clone
-  include RiskAssessments::CSV
+  include RiskAssessments::Csv
   include RiskAssessments::DestroyValidation
   include RiskAssessments::FileModel
-  include RiskAssessments::PDF
+  include RiskAssessments::Pdf
   include RiskAssessments::Plan
   include RiskAssessments::RiskAssessmentItems
   include RiskAssessments::Scopes

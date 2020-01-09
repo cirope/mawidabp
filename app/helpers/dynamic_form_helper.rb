@@ -7,7 +7,7 @@ module DynamicFormHelper
     end
 
     link_to(
-      name, '#', class: 'btn btn-default btn-sm', title: name, data: {
+      name, '#', class: 'btn btn-outline-secondary btn-sm', title: name, data: {
         id: id,
         association: association,
         dynamic_form_event: 'addNestedItem',
@@ -19,7 +19,7 @@ module DynamicFormHelper
 
   def link_to_insert_field(form, source = nil)
     link_to(
-      content_tag(:span, nil, class: 'glyphicon glyphicon-indent-left'), '#', data: {
+      icon('fas', 'indent'), '#', data: {
         'id' => form.object.object_id,
         'dynamic-form-event' => 'insertNestedItem',
         'dynamic-source' => "[data-association='#{(source || form.object.class.to_s.tableize)}']",
@@ -33,7 +33,7 @@ module DynamicFormHelper
     template = render(partial, item: new_object)
 
     link_to(
-      name, '#', class: 'btn btn-default btn-sm', title: name, data: {
+      name, '#', class: 'btn btn-outline-secondary btn-sm', title: name, data: {
         'id' => id,
         'dynamic-form-event' => 'addNestedItem',
         'dynamic-template' => template.gsub("\n", ''),
@@ -49,7 +49,7 @@ module DynamicFormHelper
 
     out << form.hidden_field(:_destroy, class: 'destroy', value: destroy, id: "destroy_hidden_#{form.object.id}") unless new_record
     out << link_to(
-      content_tag(:span, nil, class: 'glyphicon glyphicon-remove-circle'), '#',
+      icon('fas', 'times-circle'), '#',
       title: t('label.delete'),
       data: {
         'dynamic-target' => ".#{form.object.class.name.underscore}",
@@ -63,7 +63,7 @@ module DynamicFormHelper
 
   def link_to_remove_child_item(form)
     link_to(
-      content_tag(:span, nil, class: 'glyphicon glyphicon-remove-circle'), '#',
+      icon('fas', 'times-circle'), '#',
       title: t('label.delete'),
       data: {
         'dynamic-target' => '.child',

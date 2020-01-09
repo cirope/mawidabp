@@ -479,3 +479,22 @@ corporate:
   password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   notes: User notes
   hidden: false
+
+<% ::PLAIN_PASSWORDS[:jane] = 'jane123' %>
+<% salt = Digest::SHA512.hexdigest("jane#{rand}") %>
+jane:
+  name: Jane
+  last_name: Doe
+  language: es
+  email: jane@public.com
+  user: jane
+  password: <%= Digest::SHA512.hexdigest("#{salt}-jane123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  logged_in: false
+  group_admin: false
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
+  notes: User notes
+  hidden: false

@@ -1,7 +1,7 @@
 class FollowUpAuditController < ApplicationController
   include Reports::SynthesisReport
   include Reports::ReviewStatsReport
-  include Reports::QAIndicators
+  include Reports::QaIndicators
   include Reports::WeaknessesByState
   include Reports::WeaknessesByRisk
   include Reports::WeaknessesByRiskAndBusinessUnit

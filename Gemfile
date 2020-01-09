@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 5.2.3'
+gem 'rails', '~> 6.0.2.1'
 
 gem 'pg'
+gem 'activerecord-nulldb-adapter'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'responders'
@@ -22,7 +23,8 @@ gem 'prawn-table'
 gem 'clbustos-rtf', require: 'rtf'
 gem 'figaro'
 gem 'business_time'
-gem 'bootstrap-sass'
+gem 'bootstrap'
+gem 'font-awesome-sass'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'jbuilder'
@@ -33,19 +35,22 @@ gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 
+gem 'sassc', '< 2.1.0' # TODO: remove when https://github.com/sass/sassc-ruby/issues/146 gets fixed
 gem 'sassc-rails'
 gem 'uglifier'
 
 gem 'unicorn'
+gem 'unicorn-rails'
 
 group :development do
-  gem 'unicorn-rails'
   gem 'web-console'
   gem 'listen'
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
+
+  gem 'rubocop-github'
 
   # Support for ed25519 ssh keys
   gem 'ed25519'

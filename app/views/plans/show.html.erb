@@ -22,11 +22,13 @@
     links: [
       link_to(
         t('plans.download_global_plan'),
-        [@plan, _ts: Time.now.to_i, format: :pdf]
+        [@plan, _ts: Time.now.to_i, format: :pdf],
+        class: 'dropdown-item'
       ),
       link_to(
         t('plans.download_detailed_plan'),
-        [@plan, include_details: 1, _ts: Time.now.to_i, format: :pdf]
+        [@plan, include_details: 1, _ts: Time.now.to_i, format: :pdf],
+        class: 'dropdown-item'
       )
     ]
   ) %>

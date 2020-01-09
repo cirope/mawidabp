@@ -2,11 +2,11 @@
   <%= content_for :submenu do %>
     <div class="row">
       <div class="col-md-12">
-        <ul class="submenu nav nav-tabs">
+        <ul class="nav nav-tabs mb-3">
           <% submenu_item.children.each do |sub_submenu_item| %>
             <% active = sub_submenu_item.submenu_names.include?(@current_module) %>
-            <li <%== 'class="active"' if active %>>
-              <%= link_to sub_submenu_item, sub_submenu_item.url %>
+            <li class="nav-item">
+              <%= link_to sub_submenu_item, sub_submenu_item.url, class: "nav-link#{' active' if active}" %>
             </li>
           <% end %>
         </ul>

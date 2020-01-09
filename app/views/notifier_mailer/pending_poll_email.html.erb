@@ -1,7 +1,7 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <p><strong><%= @user %></strong>,</p>
 
-  <%= simple_format @poll.questionnaire.email_text %>
+  <%= simple_format @poll.questionnaire.email_text, class: 'mb-1' %>
 
   <p>
     <%= link_to @poll.questionnaire.email_link,
@@ -31,7 +31,7 @@
   <% end %>
 
   <% if @poll.questionnaire.email_clarification.present? %>
-    <%= simple_format @poll.questionnaire.email_clarification %>
+    <%= simple_format @poll.questionnaire.email_clarification, class: 'mb-1' %>
   <% end %>
 
   <%= render 'common_mailer/footer' %>
