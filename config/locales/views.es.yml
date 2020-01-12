@@ -337,6 +337,7 @@ es:
       show:
         title: 'Cronograma'
         empty: 'No hay proyectos en el plan seleccionado'
+        empty_with_no_business_units: 'No hay unidades de negocio seleccionadas'
         detail: 'Detalle'
     resources:
       show:
