@@ -1,9 +1,9 @@
 <% url = options[:url] || url_for(:action => :index) %>
 <% extra_parameters = options[:extra_parameters] || [] %>
 <% columns_for_sort = options[:columns_for_sort] || [] %>
-<% query_string = params[:search] ? params[:search][:query] : nil %>
+<% query_string = search_params[:query] %>
 <% order_field = params[:search] ? params[:search][:order] : nil %>
-<div id="search" <%== "style='display: none;'" if (@query.blank? && @order_by.blank?) %>>
+<div id="search" <%== "style='display: none;'" if (query_string.blank? && @order_by.blank?) %>>
   <%= simple_form_for url, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
     <div class="row">
       <div class="<%= columns_for_sort.empty? ? 'col-7 col-md-10' : 'col-5 col-md-7' %>">
@@ -40,7 +40,7 @@
     <% end %>
   <% end %>
 </div>
-<% unless @query.blank? && @order_by.blank? %>
+<% unless query_string.blank? && @order_by.blank? %>
   <% content_for :js_extra_bottom do %>
     $('search_query').focus();
     Search.observe();

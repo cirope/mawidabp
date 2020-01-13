@@ -22,7 +22,6 @@ module Tags::Icons
       envelope
       exclamation-circle
       exclamation-triangle
-      exclamation-triangle
       file
       film
       fire-alt

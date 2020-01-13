@@ -1,6 +1,5 @@
 class Users::PasswordsController < ApplicationController
   include Users::Finders
-  include Users::Params
 
   before_action :set_title
   before_action :set_user, only: [:edit, :update]
@@ -50,6 +49,10 @@ class Users::PasswordsController < ApplicationController
         restart_session
         redirect_to login_url, alert: t('users.passwords.update.expired')
       end
+    end
+
+    def user_params
+      params.require(:user).permit :email, :password, :password_confirmation, :lock_version
     end
 
     def load_user_from_hash

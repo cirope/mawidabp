@@ -6,6 +6,7 @@
       },
       forms: [
         [:date_range, true],
+        [:cut_date, { label: t('follow_up_committee_report.weaknesses_current_situation.cut_date') }],
         [:finding_multiple, true],
         [:risk_levels_multiple, { group: 1 }],
         [:business_unit_type_multiple, { group: 1 }],
@@ -110,7 +111,7 @@
     <% if current_weakness.follow_up_date %>
       <p class="mb-1">
         <strong><%= Weakness.human_attribute_name 'follow_up_date' %></strong>:
-        <% if current_weakness.follow_up_date < Time.zone.today %>
+        <% if current_weakness.follow_up_date < (@cut_date - 30.days) %>
           <span class="text-danger"><%= l current_weakness.follow_up_date %></span>
         <% else %>
           <%= l current_weakness.follow_up_date %>

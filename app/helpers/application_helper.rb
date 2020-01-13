@@ -89,16 +89,22 @@ module ApplicationHelper
   # * _array_:: El arreglo que se quiere convertir a HTML
   # * _options_:: Opciones HTML de la lista principal
   def array_to_ul(array, options = {})
+    text_function = if options.delete(:skip_markdown)
+                      ->(text) { text }
+                    else
+                      ->(text) { markdown_without_paragraph(text) }
+                    end
+
     unless array.blank?
       list = array.map do |e|
         if e.kind_of?(Array) && e.first.kind_of?(String) &&
             e.second.kind_of?(Array)
-          content_tag(:li, raw("#{markdown_without_paragraph(e.shift)}\n#{array_to_ul(e)}"))
+          content_tag(:li, raw("#{text_function.(e.shift)}\n#{array_to_ul(e)}"))
         else
           if e.kind_of?(Array)
-            e.map { |item| content_tag(:li, markdown_without_paragraph(item)) }.join("\n")
+            e.map { |item| content_tag(:li, text_function.(item)) }.join("\n")
           else
-            content_tag(:li, markdown_without_paragraph(e))
+            content_tag(:li, text_function.(e))
           end
         end
       end
@@ -144,9 +150,11 @@ module ApplicationHelper
     raise 'Must have at least one column' if columns.empty?
 
     html_classes = ['filterable']
-    content = content_tag(:span, title, :class => :title)
-    selected = @query.blank? || columns.any? { |c| @columns.include?(c) }
-    options ||= {}
+    content      = content_tag(:span, title, :class => :title)
+    options    ||= {}
+    selected     = search_params[:query].blank? || columns.any? do |c|
+      (search_params[:columns] || @columns).include? c
+    end
 
     html_classes << 'selected' if selected
     html_classes << options[:class] if options[:class]
@@ -164,7 +172,7 @@ module ApplicationHelper
   def make_not_available_column(title, options = {})
     html_classes = []
 
-    html_classes << 'not-available' unless @query.blank? && @order_by.blank?
+    html_classes << 'not-available' unless search_params[:query].blank? && @order_by.blank?
     html_classes << options[:class] if options[:class]
 
     content_tag(:th, title,

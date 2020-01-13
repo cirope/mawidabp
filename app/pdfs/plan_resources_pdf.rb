@@ -13,7 +13,7 @@ class PlanResourcesPdf < Prawn::Document
   end
 
   def self.create attributes = nil
-    _pdf = new attributes
+    _pdf = new **Hash(attributes)
     path = _pdf.send :generate
 
     FileRemoveJob.set(wait: 30.minutes).perform_later path

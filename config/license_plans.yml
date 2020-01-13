@@ -1,4 +1,22 @@
-1: 1000
-10: 5000
-25: 10000
-50: 15000
+defaults: &defaults
+  1:
+    price: 1000
+    plan_id: P-5LF291149J885932HLWTI36A
+  5:
+    price: 5000
+    plan_id: P-5LF291149J885932HLWTI36A
+  10:
+    price: 8000
+    plan_id: P-5LF291149J885932HLWTI36A
+  50:
+    price: 30000
+    plan_id: P-90G16001RC8238306LWT2CXY
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

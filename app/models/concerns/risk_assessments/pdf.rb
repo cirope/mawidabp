@@ -38,7 +38,7 @@ module RiskAssessments::Pdf
 
     def pdf_period
       period_label = I18n.t 'risk_assessments.pdf.period.title', name: period.name
-      range_label  = I18n.t 'risk_assessments.pdf.period.range', {
+      range_label  = I18n.t 'risk_assessments.pdf.period.range', **{
         from_date: I18n.l(period.start, format: :long),
         to_date:   I18n.l(period.end,   format: :long)
       }

@@ -63,9 +63,15 @@ module Tasks::Expiration
 
       def expires_on date
         from = date
-        to   = from.wday == 5 ? from + 2.days : from
+        to   = expires_to_date from
 
         pending.or(in_progress).finals(false).where due_on: from..to
+      end
+
+      def expires_to_date date
+        date = date.next until date.next.workday?
+
+        date
       end
   end
 end

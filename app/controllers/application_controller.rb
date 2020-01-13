@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   include ParameterSelector
   include CacheControl
   include FlashResponders
+  include LicenseCheck if ENABLE_PUBLIC_REGISTRATION
 
   protect_from_forgery
 
@@ -25,16 +26,25 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_organization
 
-  def can_perform? action
+  def can_perform? action, privilege = nil
     load_current_module
+
+    privilege ||= @action_privileges[action]
+
     allowed_by_type = ALLOWED_MODULES_BY_TYPE[@auth_user.get_type].try(
       :include?, @current_module)
+
     allowed_by_privileges = @auth_privileges[@current_module] &&
-      @auth_privileges[@current_module][@action_privileges[action]]
+      @auth_privileges[@current_module][privilege]
 
     allowed_by_type && allowed_by_privileges
   end
   helper_method :can_perform?
+
+  def search_params
+    @search_params ||= params[:search]&.permit(:query, columns: []).to_h.symbolize_keys
+  end
+  helper_method :search_params
 
   private
 
@@ -214,6 +224,12 @@ class ApplicationController < ActionController::Base
       to_date ||= Time.zone.today.at_end_of_month
 
       [from_date.to_date, to_date.to_date].sort
+    end
+
+    def extract_cut_date parameters
+      cut_date = Timeliness.parse parameters[:cut_date], :date if parameters
+
+      cut_date&.to_date || Time.zone.today
     end
 
     def extract_operator(search_term)

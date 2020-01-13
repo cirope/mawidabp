@@ -7,12 +7,6 @@ class WeaknessTest < ActiveSupport::TestCase
     set_organization
   end
 
-  teardown do
-    Current.user = nil
-
-    unset_organization
-  end
-
   test 'create' do
     assert_difference 'Weakness.count' do
       weakness = Weakness.list.create!(

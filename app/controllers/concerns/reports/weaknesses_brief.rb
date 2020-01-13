@@ -90,7 +90,7 @@ module Reports::WeaknessesBrief
     def weaknesses_brief_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = CSV.generate(options) do |csv|
+      csv_str = CSV.generate(**options) do |csv|
         csv << weaknesses_brief_csv_headers
 
         weaknesses_brief_csv_data_rows.each { |row| csv << row }
@@ -150,12 +150,6 @@ module Reports::WeaknessesBrief
 
         distance.abs.to_i > 365 ? distance.abs.to_i : nil
       end
-    end
-
-    def extract_cut_date parameters
-      cut_date = Timeliness.parse parameters[:cut_date], :date if parameters
-
-      cut_date&.to_date || Time.zone.today
     end
 
     def add_weaknesses_brief pdf

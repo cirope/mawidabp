@@ -12,6 +12,9 @@ addons:
     - slapd
     - ldap-utils
 
+services:
+  - redis-server
+
 env:
   global:
     - secure: PwjUL6m4vu2TzZIiIP/OMzKvnqbSW+TNRkcy6eelNyGwvDUcO6ylRA7xFSQn0P+bulYFWdeQJ/AUcHxu+FvwKJp+0MWf/CvKYlyI1i4+cPNErigUVEY4wmN4UI7JixjUnW1a8/A9a5R5k5wAFHZOYDsRIGX/6FMagU/qAeiyTYQ=
@@ -19,7 +22,7 @@ env:
     - CONFIG_TYPE=normal
 
 before_install:
-  - 'gem update --system && gem update bundler'
+  - 'gem update --force bundler'
 
 before_script:
   - 'cp config/application.yml.example config/application.yml'

@@ -2,6 +2,7 @@
 log/
 private/
 public/help
+scripts/secret
 tmp/
 uploads/
 

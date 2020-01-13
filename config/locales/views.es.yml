@@ -169,6 +169,35 @@ es:
       create:
         from_comment: 'De comentario por %{user} el %{date}'
 
+  licenses:
+    trial_valid_until: 'Fin período de prueba'
+    price_per_month: 'Precio por mes'
+    statuses:
+      unpaid: 'Impago'
+      active: 'Activo'
+      trial: 'En período de prueba'
+      cancelled: 'Cancelado'
+    blocked:
+      show:
+        body: 'Su organización está inhabilitada, contacte sopore@mawidabp.com'
+        check: 'Volver a comprobar pago'
+    license:
+      check: 'Volver a comprobar pago'
+      approve: 'Ir a Paypal'
+      authorize_new_plan:
+        title: 'Autorizar nuevo plan'
+        body: |-
+          Para cambiar de plan, deberá autorizar el nuevo plan mensual.
+          El nuevo plan será facturado en el próximo ciclo, pero verá reflejada la cantidad deseada de usuarios auditores en el momento.'
+    authorizations:
+      new:
+        title: 'Licencia'
+      create:
+        title: 'Licencia'
+    paypal_button:
+      create: 'Suscribirse'
+      create_error: 'Ha ocurrido un problema, por favor comuníquese con soporte@mawidabp.com para comprobar si el pago está acreditado.'
+
   login_records:
     choose:
       title: 'Reportes de seguridad'
@@ -308,6 +337,7 @@ es:
       show:
         title: 'Cronograma'
         empty: 'No hay proyectos en el plan seleccionado'
+        empty_with_no_business_units: 'No hay unidades de negocio seleccionadas'
         detail: 'Detalle'
     resources:
       show:
@@ -460,6 +490,8 @@ es:
     brief_period_in_weeks: 'Periodo de notificación "Resumen de hallazgos" en semanas'
     show_follow_up_timestamps: 'Mostrar marcas de tiempo en seguimiento'
     require_manager_on_findings: 'Requerir gerente de auditoría en hallazgos'
+    hide_import_from_ldap: 'Mostrar "Importar desde LDAP" solo a usuarios con permisos de aprobación'
+    skip_function_and_manager_from_ldap_sync: 'No sincronizar los campos "Cargo" y "Superior" con los valores de LDAP'
 
   tags:
     edit:

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_22_213849) do
+ActiveRecord::Schema.define(version: 2019_11_07_232734) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -655,6 +655,8 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.string "filter"
     t.string "user"
     t.string "encrypted_password"
+    t.string "alternative_hostname"
+    t.integer "alternative_port", precision: 38
     t.index ["organization_id"], name: "i_ldap_configs_organization_id"
   end
 
@@ -663,11 +665,11 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.string "status", default: "trial", null: false
     t.integer "auditors_limit", precision: 38, null: false
     t.string "subscription_id"
-    t.datetime "subscribed_until", precision: 6
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "paid_until", precision: 6
     t.index ["group_id"], name: "index_licenses_on_group_id"
-    t.index ["subscribed_until"], name: "i_licenses_subscribed_until"
+    t.index ["paid_until"], name: "index_licenses_on_paid_until"
     t.index ["subscription_id"], name: "i_licenses_subscription_id"
   end
 
@@ -2973,6 +2975,17 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["organization_id"], name: "i_wea_tem_org_id"
+  end
+
+  create_table "webhooks", force: :cascade do |t|
+    t.string "gateway", null: false
+    t.string "status", null: false
+    t.string "kind", null: false
+    t.string "reference_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gateway"], name: "index_webhooks_on_gateway"
+    t.index ["status"], name: "index_webhooks_on_status"
   end
 
   create_table "work_papers", force: :cascade do |t|

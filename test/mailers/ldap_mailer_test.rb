@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class LdapMailerTest < ActionMailer::TestCase
@@ -8,10 +10,6 @@ class LdapMailerTest < ActionMailer::TestCase
     ActionMailer::Base.deliveries.clear
 
     assert_empty ActionMailer::Base.deliveries
-  end
-
-  teardown do
-    unset_organization
   end
 
   test 'Notify with imported users' do

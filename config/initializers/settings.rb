@@ -17,5 +17,7 @@ DEFAULT_SETTINGS = {
   review_code_expresion: { value: '^(\\d){2}-[A-Z]{2}-(\\d){2}-(\\d){2}$', validates: 'presence' },
   session_expire_time: { value: '15', validates: 'numericality' },
   show_follow_up_timestamps: { value: '1', validates: 'numericality' },
-  show_print_date_on_pdfs: { value: '1', validates: 'numericality' }
+  show_print_date_on_pdfs: { value: '1', validates: 'numericality' },
+  hide_import_from_ldap: { value: '0', validates: 'numericality' },
+  skip_function_and_manager_from_ldap_sync: { value: '0', validates: 'numericality' }
 }.with_indifferent_access.freeze

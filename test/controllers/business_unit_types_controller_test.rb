@@ -10,17 +10,19 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
     id_param = { :params => { :id => business_unit_types(:cycle).to_param } }
     public_actions = []
     private_actions = [
-      [:get, :index],
+      [:get, :index, {}],
       [:get, :show, id_param],
-      [:get, :new],
+      [:get, :new, {}],
       [:get, :edit, id_param],
-      [:post, :create],
+      [:post, :create, {}],
       [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
     private_actions.each do |action|
-      send *action
+      options = action.pop
+
+      send *action, **options
       assert_redirected_to login_url
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
