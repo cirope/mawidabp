@@ -26,8 +26,8 @@
         <td class="d-none d-sm-table-cell"><%= user.failed_attempts %></td>
         <td class="text-right"><%= link_to_stats users_status_path(user, graph: true) %></td>
         <td class="text-right"><%= link_to_show user %></td>
-        <td class="text-right"><%= link_to_edit [:edit, user] %></td>
-        <td class="text-right"><%= link_to_destroy user, title: t('label.disable') %></td>
+        <td class="text-right"><%= link_to_edit [:edit, user] if can_perform? :edit %></td>
+        <td class="text-right"><%= link_to_destroy user, title: t('label.disable') if can_perform? :destroy %></td>
       </tr>
     <% end %>
   </tbody>
@@ -38,9 +38,9 @@
 <div>
   <%= paginate @users %>
 
-  <% if current_organization.ldap_config %>
+  <% if current_organization.ldap_config && show_import_from_ldap? %>
     <%= link_to t('.import_from_ldap'), new_users_import_path %> |
-  <% else %>
+  <% elsif current_organization.ldap_config.blank? %>
     <%= link_to t('label.new'), new_user_path, class: 'btn btn-primary' %> |
   <% end %>
 

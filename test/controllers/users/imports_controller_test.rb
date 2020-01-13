@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class Users::ImportsControllerTest < ActionController::TestCase
+  include ActionMailer::TestHelper
+
   setup do
     set_organization organizations(:google)
     login user: users(:administrator), prefix: organizations(:google).prefix

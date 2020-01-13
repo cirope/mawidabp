@@ -12,6 +12,11 @@ admin_google_role:
   role_type: <%= Role::TYPES[:admin] %>
   organization: google
 
+supervisor_google_role:
+  name: Supervisor Google
+  role_type: <%= Role::TYPES[:supervisor] %>
+  organization: google
+
 admin_second_role:
   name: Administrator Second
   role_type: <%= Role::TYPES[:admin] %>

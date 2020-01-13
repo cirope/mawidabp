@@ -3,12 +3,12 @@ module UsersHelper
     content_tag(:abbr, h(user.user), :title => user.email)
   end
 
-  def user_language_field(form)
+  def user_language_field(form, disabled: false)
     options = AVAILABLE_LOCALES.map do |lang|
       [t("lang.#{lang}"), lang.to_s]
     end.sort{ |a, b| a[0] <=> b[0] }
 
-   form.input :language, collection: options, prompt: true
+   form.input :language, collection: options, prompt: true, input_html: { disabled: disabled }
   end
 
   def user_info user
@@ -48,5 +48,12 @@ module UsersHelper
     else
       users_roles_path
     end
+  end
+
+  def show_import_from_ldap?
+    setting = current_organization.settings.find_by name: 'hide_import_from_ldap'
+    result  = (setting ? setting.value : DEFAULT_SETTINGS[:hide_import_from_ldap][:value]) != '0'
+
+    !result || can_perform?(:edit, :approval)
   end
 end

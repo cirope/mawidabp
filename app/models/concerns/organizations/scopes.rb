@@ -13,7 +13,8 @@ module Organizations::Scopes
       organization_roles: :role
     ).where(
       roles: {
-        role_type: role_types
+        role_type:       role_types,
+        organization_id: id
       }
     )
 

@@ -52,6 +52,30 @@ private
                            description: I18n.t('settings.require_manager_on_findings')
       end
     end
+
+    if add_hide_import_from_ldap? # 2020-01-02
+      Organization.all.each do |o|
+        o.settings.create! name:        'hide_import_from_ldap',
+                           value:       DEFAULT_SETTINGS[:hide_import_from_ldap][:value],
+                           description: I18n.t('settings.hide_import_from_ldap')
+      end
+    end
+
+    if add_skip_function_and_manager_from_ldap_sync? # 2020-01-02
+      Organization.all.each do |o|
+        o.settings.create! name:        'skip_function_and_manager_from_ldap_sync',
+                           value:       DEFAULT_SETTINGS[:skip_function_and_manager_from_ldap_sync][:value],
+                           description: I18n.t('settings.skip_function_and_manager_from_ldap_sync')
+      end
+    end
+  end
+
+  def add_skip_function_and_manager_from_ldap_sync?
+    Setting.where(name: 'skip_function_and_manager_from_ldap_sync').empty?
+  end
+
+  def add_hide_import_from_ldap?
+    Setting.where(name: 'hide_import_from_ldap').empty?
   end
 
   def add_require_manager_on_findings?

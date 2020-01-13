@@ -13,12 +13,6 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       :management_dependency_item_editable).id
   end
 
-  teardown do
-    Current.user = nil
-
-    unset_organization
-  end
-
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     retrived_coi = control_objective_items(:management_dependency_item_editable)
