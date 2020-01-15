@@ -169,7 +169,7 @@ class ApplicationController < ActionController::Base
 
       top_level_menu = true
 
-      until modules.blank?
+      while modules.present?
         selected_module = nil
         modules.each do |mod|
           if mod.controllers.include?(controller_name) && (top_level_menu ||
