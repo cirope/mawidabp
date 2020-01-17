@@ -1,6 +1,7 @@
 <% group ||= nil %>
 <% hide_comments ||= nil %>
 <% check_action ||= :user_in_comments %>
+<% secondary_check_action ||= nil %>
 
 <% unless group %>
   <div id="user_filter" class="row" <%== 'style="display: none;"' unless display %>>
@@ -30,10 +31,23 @@
   </div>
   <% unless hide_comments %>
     <div class="col-md-6">
-      <div class="custom-control custom-checkbox mt-2">
-        <% check_value = params[action] && params[action][check_action] %>
-        <%= f.check_box check_action, checked: check_value == '1', id: check_action, class: 'custom-control-input' %>
-        <label class="custom-control-label" for="<%= check_action %>"><%= t ".#{check_action}" %></label>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="custom-control custom-checkbox mt-lg-2">
+            <% check_value = params[action] && params[action][check_action] %>
+            <%= f.check_box check_action, checked: check_value == '1', id: check_action, class: 'custom-control-input' %>
+            <label class="custom-control-label" for="<%= check_action %>"><%= t ".#{check_action}" %></label>
+          </div>
+        </div>
+        <% if secondary_check_action %>
+          <div class="col-lg-6">
+            <div class="custom-control custom-checkbox mt-lg-2">
+              <% check_value = params[action] && params[action][secondary_check_action] %>
+              <%= f.check_box secondary_check_action, checked: check_value == '1', id: secondary_check_action, class: 'custom-control-input' %>
+              <label class="custom-control-label" for="<%= secondary_check_action %>"><%= t ".#{secondary_check_action}" %></label>
+            </div>
+          </div>
+        <% end %>
       </div>
     </div>
   <% end %>

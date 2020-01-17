@@ -78,7 +78,8 @@ module Reports::WeaknessesReport
       end
 
       if report_params[:user_id].present?
-        weaknesses = weaknesses.by_user_id report_params[:user_id],
+        user_ids   = weaknesses_report_user_ids report_params
+        weaknesses = weaknesses.by_user_id user_ids,
           include_finding_answers: report_params[:user_in_comments] == '1'
       end
 
@@ -280,6 +281,7 @@ module Reports::WeaknessesReport
         compliance
         finding_current_situation_verified
         user_in_comments
+        include_user_tree
       )
       filters            = []
       labels             = {
@@ -290,6 +292,7 @@ module Reports::WeaknessesReport
         tags:                               Tag.model_name.human,
         user:                               User.model_name.human,
         user_in_comments:                   t('shared.filters.user.user_in_comments'),
+        include_user_tree:                  t('shared.filters.user.include_user_tree'),
         finding_status:                     Weakness.human_attribute_name('state'),
         finding_title:                      Weakness.human_attribute_name('title'),
         risk:                               Weakness.human_attribute_name('risk'),
@@ -302,13 +305,20 @@ module Reports::WeaknessesReport
         follow_up_date:                     Weakness.human_attribute_name('follow_up_date'),
         solution_date:                      Weakness.human_attribute_name('solution_date')
       }
-      report_params = Hash(params[:weaknesses_report]&.permit *labels.keys)
+      report_params = Hash(params[:weaknesses_report]&.permit!).with_indifferent_access
 
       labels.each do |filter_name, filter_label|
         if report_params[filter_name].present?
           operator = report_params["#{filter_name}_operator"] || '='
           value = if value_filter_names.include?(filter_name)
-                    value_to_label(filter_name)
+                    weaknesses_report_value_to_label filter_name
+                  elsif operator == 'between'
+                    operator = t('shared.filters.date_field.between').downcase
+
+                    [
+                      report_params[filter_name],
+                      report_params["#{filter_name}_until"]
+                    ].reject(&:blank?).to_sentence
                   else
                     report_params[filter_name]
                   end
@@ -320,7 +330,17 @@ module Reports::WeaknessesReport
       add_pdf_filters pdf, 'follow_up', filters if filters.present?
     end
 
-    def value_to_label param_name
+    def weaknesses_report_user_ids report_params
+      if report_params[:include_user_tree] == '1'
+        user = User.list.find report_params[:user_id]
+
+        user.self_and_descendants.map &:id
+      else
+        report_params[:user_id]
+      end
+    end
+
+    def weaknesses_report_value_to_label param_name
       value = params[:weaknesses_report][param_name].to_i
 
       case param_name
@@ -334,7 +354,7 @@ module Reports::WeaknessesReport
         priority ? t("priority_types.#{priority.first}") : ''
       when :finding_status
         t "findings.state.#{Finding::STATUS.invert[value]}"
-      when :user_in_comments
+      when :user_in_comments, :include_user_tree
         value == 1 ? t('label.yes') : t('label.no')
       when :finding_current_situation_verified
         t "label.#{params[:weaknesses_report][param_name]}"
