@@ -50,17 +50,18 @@ RUN yum update -y && \
 
 RUN mkdir -p $APP_ROOT
 
-ADD Gemfile $APP_ROOT/Gemfile
-ADD Gemfile.lock $APP_ROOT/Gemfile.lock
+COPY Gemfile $APP_ROOT/Gemfile
+COPY Gemfile.lock $APP_ROOT/Gemfile.lock
 
 WORKDIR $APP_ROOT
 
 RUN gem install bundler --no-document --force && bundle install --deployment
 
-ADD . $APP_ROOT
-ADD config/application.yml.example $APP_ROOT/config/application.yml
+COPY . $APP_ROOT
+COPY config/application.yml.example $APP_ROOT/config/application.yml
 
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
+RUN bundle exec rake help:install && bundle exec rake help:generate
 
 RUN chgrp -R 0 $APP_ROOT && chmod -R g+rwX $APP_ROOT
 RUN chmod +x scripts/migrate.sh scripts/wait.sh
