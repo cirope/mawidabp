@@ -1,4 +1,6 @@
-<% if @business_units.any? %>
+<% plan_items = params[:business_unit_type].present? ? plan_items_for_selected_business_unit_type : @plan.plan_items %>
+
+<% if plan_items.any? %>
   <% months = @plan.period.months %>
 
   <div class="table-responsive">
@@ -27,38 +29,25 @@
       </thead>
 
       <tbody>
-        <% last_displayed_name = nil %>
-
-        <% @business_units.each do |business_unit| %>
-          <% unless last_displayed_name == business_unit.name %>
-            <tr class="active">
-              <td><strong><%= business_unit.name %></strong></td>
-
-              <% months.each do |month| %>
-                <td>
-                  <table class="table table-weeks">
-                    <tbody>
-                      <% month_in_weeks(month).each do |week| %>
-                        <td>&nbsp;</td>
-                      <% end %>
-                    </tbody>
-                  </table>
-                </td>
-              <% end %>
-            </tr>
-
-            <% last_displayed_name = business_unit.name %>
-          <% end %>
-
+        <% plan_items_sorted_for_calendar(plan_items).each do |plan_item| %>
           <tr>
-            <td class="pl-4"><%= business_unit.business_unit_type.name %></td>
+            <td>
+
+              <p class="mb-0">
+                <% if params[:business_unit_type].blank? && plan_item.business_unit_type %>
+                  <%= plan_item.business_unit_type.name %> /
+                <% end %>
+                <%= plan_item.business_unit&.name || t('plans.without_business_unit_type') %>
+              </p>
+              <p class="mb-0 small"><%= plan_item.project %></p>
+            </td>
 
             <% months.each do |month| %>
               <td>
                 <table class="table table-weeks">
                   <tbody>
                     <% month_in_weeks(month).each do |week| %>
-                      <% if business_unit_with_plan_items_in_week? business_unit, week %>
+                      <% if week.overlaps? (plan_item.start)..(plan_item.end) %>
                         <td class="table-info">&nbsp;</td>
                       <% else %>
                         <td>&nbsp;</td>
@@ -89,6 +78,6 @@
   <%= link_to_show @plan %> |
   <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_s(:db)] %> |
   <%= link_to_edit edit_plan_path(@plan, business_unit_type: params[:business_unit_type]) %> |
-  <%= link_to t('.by_project'), [:calendar, @plan, business_unit_type: params[:business_unit_type], project: true] %> |
+  <%= link_to t('.by_business_unit'), [:calendar, @plan, business_unit_type: params[:business_unit_type]] %> |
   <%= link_to_index plans_path %>
 </div>
