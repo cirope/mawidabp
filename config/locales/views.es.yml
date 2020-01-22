@@ -339,6 +339,8 @@ es:
         empty: 'No hay proyectos en el plan seleccionado'
         empty_with_no_business_units: 'No hay unidades de negocio seleccionadas'
         detail: 'Detalle'
+        by_business_unit: 'Ver calendario por unidad de negocio'
+        by_project: 'Ver calendario por proyecto'
     resources:
       show:
         title: 'Resumen por recurso'

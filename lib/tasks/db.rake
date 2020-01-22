@@ -14,6 +14,7 @@ namespace :db do
       complete_main_recommendations       # 2019-07-23
       update_tag_style                    # 2019-09-26
       update_tag_icons                    # 2019-09-30
+      update_finding_state_dates          # 2020-01-16
     end
   end
 end
@@ -317,4 +318,22 @@ private
 
   def update_tag_icons?
     Tag.where(icon: ICON_EQUIVALENCE.keys).any?
+  end
+
+  def update_finding_state_dates
+    if update_finding_state_dates?
+      Finding.implemented.find_each do |f|
+        f.update_column :implemented_at, f.version_implemented_at
+      end
+
+      Finding.where(state: Finding::FINAL_STATUS).find_each do |f|
+        f.update_column :implemented_at, f.version_implemented_at
+        f.update_column :closed_at,      f.version_closed_at
+      end
+    end
+  end
+
+  def update_finding_state_dates?
+    Finding.where.not(implemented_at: nil).empty? &&
+      Finding.where.not(closed_at: nil).empty?
   end

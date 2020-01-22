@@ -1344,6 +1344,42 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 0, @finding.reload.notification_level
   end
 
+  test 'put state dates on changes' do
+    @finding.update! state:          Finding::STATUS[:implemented],
+                     follow_up_date: Time.zone.today
+
+    assert_equal Time.zone.today, @finding.reload.implemented_at
+    assert_nil @finding.closed_at
+
+    Current.user = users :supervisor
+
+    @finding.update! state:           Finding::STATUS[:implemented_audited],
+                     solution_date:   Time.zone.today,
+                     skip_work_paper: true
+
+    assert_equal Time.zone.today, @finding.reload.closed_at
+  end
+
+  test 'version implemented at' do
+    Timecop.travel 2.days.ago do
+      @finding.update! state:          Finding::STATUS[:implemented],
+                       follow_up_date: Time.zone.today
+    end
+
+    assert_equal 2.days.ago.to_date, @finding.version_implemented_at
+  end
+
+  test 'version closed at' do
+    Current.user = users :supervisor
+
+    Timecop.travel 2.days.ago do
+      @finding.update! state:         Finding::STATUS[:expired],
+                       solution_date: Time.zone.today
+    end
+
+    assert_equal 2.days.ago.to_date, @finding.version_closed_at
+  end
+
   private
 
     def review_codes_on_findings_by_user method

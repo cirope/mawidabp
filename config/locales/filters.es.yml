@@ -8,6 +8,7 @@ es:
       user:
         user_in_comments: 'Incluir usuarios en comentarios'
         user_inverted: 'Excluir'
+        include_user_tree: 'Incluir personal a cargo'
       poll_user:
         user_option: 'Ver'
         affected_only: 'Asignadas'

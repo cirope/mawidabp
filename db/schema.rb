@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_07_232734) do
+ActiveRecord::Schema.define(version: 2020_01_21_221955) do
 
   create_table "achievements", force: :cascade do |t|
     t.integer "benefit_id", precision: 38, null: false
@@ -153,6 +153,7 @@ ActiveRecord::Schema.define(version: 2019_11_07_232734) do
     t.string "require_tag", limit: 1, default: "f", null: false
     t.text "sectors"
     t.text "recipients"
+    t.string "require_counts", limit: 1, default: "f", null: false
     t.index ["external"], name: "i_business_unit_types_external"
     t.index ["name"], name: "i_business_unit_types_name"
     t.index ["organization_id"], name: "i_bus_uni_typ_org_id"
@@ -586,12 +587,16 @@ ActiveRecord::Schema.define(version: 2019_11_07_232734) do
     t.date "first_follow_up_date"
     t.date "last_notification_date"
     t.integer "reschedule_count", precision: 38, default: 0, null: false
+    t.date "implemented_at"
+    t.date "closed_at"
+    t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "i_fin_con_obj_ite_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
     t.index ["first_follow_up_date"], name: "i_fin_fir_fol_up_dat"
     t.index ["first_notification_date"], name: "i_fin_fir_not_dat"
     t.index ["follow_up_date"], name: "i_findings_follow_up_date"
+    t.index ["implemented_at"], name: "i_findings_implemented_at"
     t.index ["last_notification_date"], name: "i_fin_las_not_dat"
     t.index ["organization_id"], name: "i_findings_organization_id"
     t.index ["parent_id"], name: "index_findings_on_parent_id"

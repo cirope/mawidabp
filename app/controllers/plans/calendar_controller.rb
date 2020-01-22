@@ -8,6 +8,8 @@ class Plans::CalendarController < ApplicationController
                 :set_business_unit_type,
                 :set_business_units
 
+  before_action -> { request.variant = :project if params[:project]  }
+
   def show
   end
 

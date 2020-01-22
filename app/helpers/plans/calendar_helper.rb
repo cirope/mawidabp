@@ -20,4 +20,13 @@ module Plans::CalendarHelper
       end
     end
   end
+
+  def plan_items_sorted_for_calendar plan_items
+    plan_items.sort_by do |pi|
+      but_name = pi.business_unit_type&.name || 'ZZZ'
+      bu_name  = pi.business_unit&.name      || 'ZZZ'
+
+      [but_name, bu_name, pi.project].join('-').downcase
+    end
+  end
 end
