@@ -84,7 +84,7 @@ module Reports::WeaknessesReport
       end
 
       if report_params[:finding_status].present?
-        weaknesses = weaknesses.where state: report_params[:finding_status]
+        weaknesses = weaknesses.where state: report_params[:finding_status].to_i
       end
 
       if report_params[:finding_current_situation_verified].present?
@@ -110,7 +110,7 @@ module Reports::WeaknessesReport
 
       %i(risk priority).each do |param|
         if report_params[param].present?
-          weaknesses = weaknesses.where param => report_params[param]
+          weaknesses = weaknesses.where param => report_params[param].to_i
         end
       end
 
@@ -336,7 +336,7 @@ module Reports::WeaknessesReport
 
         user.self_and_descendants.map &:id
       else
-        report_params[:user_id]
+        report_params[:user_id].to_i
       end
     end
 
