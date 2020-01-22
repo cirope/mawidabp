@@ -155,9 +155,11 @@ module Findings::Csv
     end
 
     def show_follow_up_timestamps?
-      setting = Current.organization.settings.reload.find_by name: 'show_follow_up_timestamps'
+      @show_follow_up_timestamps ||= begin
+        setting = Current.organization.settings.find_by name: 'show_follow_up_timestamps'
 
-      (setting ? setting.value : DEFAULT_SETTINGS[:show_follow_up_timestamps][:value]) != '0'
+        (setting ? setting.value : DEFAULT_SETTINGS[:show_follow_up_timestamps][:value]) != '0'
+      end
     end
 
     private

@@ -62,4 +62,10 @@ Rails.application.configure do
 
   # Enable any domain (Webhooks)
   config.hosts << /.*/
+
+  config.after_initialize do
+    Bullet.enable              = true
+    Bullet.add_footer          = true
+    Bullet.skip_html_injection = false
+  end
 end

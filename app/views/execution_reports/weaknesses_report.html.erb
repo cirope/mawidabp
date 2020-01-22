@@ -37,18 +37,23 @@
   </div>
 </div>
 
-<% if @weaknesses.present? %>
+<% if @weaknesses.try(:total_entries)&.positive? %>
   <div class="card my-3 bg-light">
     <div class="card-body">
+      <div class="float-right">
+        <%= pdf_and_csv_download_links %>
+      </div>
       <p class="mb-0">
-        <%= t '.weaknesses_count_html', count: @weaknesses.count %>
+        <%= t '.weaknesses_count_html', count: @weaknesses.total_entries %>
       </p>
     </div>
   </div>
 
-  <% @weaknesses.each do |weakness| %>
-    <%= render 'weakness', weakness: weakness %>
-  <% end %>
+  <div class="endless-pagination">
+    <%= render partial: 'weakness', collection: @weaknesses, as: :weakness %>
+  </div>
+
+  <%= paginate @weaknesses %>
 <% else %>
   <div class="alert alert-info">
     <%= t '.empty' %>
@@ -57,8 +62,7 @@
 
 <div>
   <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
-  <%= link_to t('label.download_csv'), params: request.query_parameters.merge(format: :csv) %>
+  <%= pdf_and_csv_download_links %>
 </div>
 
 <%= render partial: 'shared/customize_report_form', locals: {
