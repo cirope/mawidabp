@@ -29,7 +29,7 @@ class Finding < ApplicationRecord
   include Findings::NotificationLevel
   include Findings::Overrides
   include Findings::Pdf
-  include Findings::Reiterations
+  include (POSTGRESQL_ADAPTER ? Findings::Reiterations : Findings::ReiterationsAlt)
   include Findings::Relations
   include Findings::ReportScopes
   include Findings::Reschedule
