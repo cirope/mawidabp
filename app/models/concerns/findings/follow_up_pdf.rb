@@ -88,14 +88,14 @@ module Findings::FollowUpPdf
     end
 
     def put_relation_information_on pdf
-      if repeated_ancestors.any?
+      if (ancestors = repeated_ancestors).any?
         pdf.add_title I18n.t('finding.repeated_ancestors'), PDF_FONT_SIZE, :left
-        pdf.add_list repeated_ancestors, PDF_FONT_SIZE * 2
+        pdf.add_list ancestors, PDF_FONT_SIZE * 2
       end
 
-      if repeated_children.any?
+      if (children = repeated_children).any?
         pdf.add_title I18n.t('finding.repeated_children'), PDF_FONT_SIZE, :left
-        pdf.add_list repeated_children, PDF_FONT_SIZE * 2
+        pdf.add_list children, PDF_FONT_SIZE * 2
       end
     end
 

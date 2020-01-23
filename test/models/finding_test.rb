@@ -878,6 +878,11 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.rescheduled?
     assert_equal 1, finding.reschedule_count
 
+    if POSTGRESQL_ADAPTER
+      assert_equal [repeated_of.id], finding.parent_ids
+      assert_empty repeated_of.parent_ids
+    end
+
     finding.undo_reiteration
 
     refute repeated_of.reload.repeated?
@@ -885,6 +890,11 @@ class FindingTest < ActiveSupport::TestCase
     refute finding.rescheduled?
     assert_equal 0, finding.reschedule_count
     assert_equal repeated_of_original_state, repeated_of.state
+
+    if POSTGRESQL_ADAPTER
+      assert_empty finding.parent_ids
+      assert_empty repeated_of.parent_ids
+    end
   end
 
   test 'reschedule when mark as duplicated and follow up date differs' do

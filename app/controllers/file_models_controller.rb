@@ -35,15 +35,16 @@ class FileModelsController < ApplicationController
     end
 
     def organization_paths
-      paths        = [organization_path(current_organization.id)]
-      is_image     = mime_type.to_s =~ /^image\//
-      is_corporate = current_organization.corporate?
+      paths                 = [organization_path(current_organization.id)]
+      is_image              = mime_type.to_s =~ /^image\//
+      is_corporate          = current_organization.corporate?
+      user_organization_ids = @auth_user.organizations.ids
 
-      current_organization.group.organizations.each do |o|
-        has_organization_access = o.id != current_organization.id && @auth_user.organizations.include?(o)
+      current_organization.group.organizations.ids.each do |o_id|
+        has_organization_access = o_id != current_organization.id && user_organization_ids.include?(o_id)
 
         if is_corporate || is_image || has_organization_access
-          paths << organization_path(o.id)
+          paths << organization_path(o_id)
         end
       end
 

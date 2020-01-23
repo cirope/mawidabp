@@ -15,6 +15,7 @@ namespace :db do
       update_tag_style                    # 2019-09-26
       update_tag_icons                    # 2019-09-30
       update_finding_state_dates          # 2020-01-16
+      update_finding_parent_ids           # 2020-01-22
     end
   end
 end
@@ -333,7 +334,37 @@ private
     end
   end
 
+  def update_finding_parent_ids
+    if update_finding_parent_ids?
+      # Root findings
+      Finding.repeated.without_repeated.find_each.each do |f|
+        parent_ids         = []
+        findings_to_update = []
+        repeated_in        = f.repeated_in
+
+        # build the entire "family tree"
+        while repeated_in
+          findings_to_update << repeated_in
+          parent_ids         << repeated_in.repeated_of_id
+
+          repeated_in = repeated_in.repeated_in
+        end
+
+        # From last to first, update parent_ids and delete the "iterated child"
+        # from the parent_ids list
+        findings_to_update.reverse_each do |child|
+          child.update_column :parent_ids, parent_ids
+          parent_ids.pop # or parent_ids.delete(child.repeated_of_id)
+        end
+      end
+    end
+  end
+
   def update_finding_state_dates?
     Finding.where.not(implemented_at: nil).empty? &&
       Finding.where.not(closed_at: nil).empty?
+  end
+
+  def update_finding_parent_ids?
+    POSTGRESQL_ADAPTER && Finding.where("#{Finding.table_name}.parent_ids != '{}'").empty?
   end
