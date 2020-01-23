@@ -1,0 +1,9 @@
+$('.endless-pagination').append(
+  '<%= j render(partial: 'weakness', collection: @weaknesses, as: :weakness) %>'
+)
+
+<% if @weaknesses.next_page %>
+  $('.pagination').replaceWith('<%= j paginate(@weaknesses) %>')
+<% else %>
+  $('.pagination').remove()
+<% end %>
