@@ -2,9 +2,11 @@ module Parameters::Score
   extend ActiveSupport::Concern
 
   DEFAULT_SCORES = {
-    satisfactory: 80,
-    improve: 50,
-    unsatisfactory: 0
+    adequate: 91,
+    require_some_improvements: 76,
+    require_improvements: 61,
+    require_lots_of_improvements: 41,
+    inadequate: 0
   }
 
   DEFAULT_SCORE_BY_WEAKNESSES = {
