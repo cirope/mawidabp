@@ -76,10 +76,13 @@ GEM
     bootstrap-will_paginate (1.0.0)
       will_paginate
     builder (3.2.4)
+    bullet (6.1.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     business_time (0.9.3)
       activesupport (>= 3.2.0)
       tzinfo
-    byebug (11.0.1)
+    byebug (11.1.0)
     capistrano (3.11.2)
       airbrussh (>= 1.0.0)
       i18n
@@ -270,13 +273,14 @@ GEM
       thread_safe (~> 0.1)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
-    unicode-display_width (1.6.0)
+    unicode-display_width (1.6.1)
     unicorn (5.5.2)
       kgio (~> 2.6)
       raindrops (~> 0.7)
     unicorn-rails (2.2.1)
       rack
       unicorn
+    uniform_notifier (1.13.0)
     validates_timeliness (4.1.1)
       timeliness (>= 0.3.10, < 1)
     web-console (4.0.1)
@@ -301,6 +305,7 @@ DEPENDENCIES
   bcrypt_pbkdf
   bootstrap
   bootstrap-will_paginate
+  bullet
   business_time
   byebug
   capistrano
@@ -346,4 +351,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   2.1.2
+   2.1.4

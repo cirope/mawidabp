@@ -11,4 +11,13 @@ class Plans::CalendarControllerTest < ActionController::TestCase
     get :show, params: { id: @plan }
     assert_response :success
   end
+
+  test 'show project variant' do
+    get :show, params: {
+      id: @plan,
+      project: true
+    }
+    assert_response :success
+    assert_equal [:project], @request.variant
+  end
 end

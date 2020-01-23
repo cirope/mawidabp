@@ -7,6 +7,7 @@ class ControlObjectiveItem < ApplicationRecord
   include ControlObjectiveItems::Approval
   include ControlObjectiveItems::AttributeTypes
   include ControlObjectiveItems::BusinessUnitScores
+  include ControlObjectiveItems::Counts
   include ControlObjectiveItems::Control
   include ControlObjectiveItems::ControlObjective
   include ControlObjectiveItems::Defaults

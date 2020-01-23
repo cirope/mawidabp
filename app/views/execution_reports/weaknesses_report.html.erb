@@ -37,18 +37,30 @@
   </div>
 </div>
 
-<% if @weaknesses.present? %>
+<% if @weaknesses.try(:total_entries)&.positive? %>
   <div class="card my-3 bg-light">
     <div class="card-body">
-      <p class="mb-0">
-        <%= t '.weaknesses_count_html', count: @weaknesses.count %>
-      </p>
+      <div class="row">
+        <div class="col-md-8">
+          <p class="mb-0">
+            <%= t '.weaknesses_count_html', count: @weaknesses.total_entries %>
+          </p>
+        </div>
+        <div class="col-md-4 text-md-right mt-2 mt-md-0">
+          <%= pdf_and_csv_download_links %>
+        </div>
+      </div>
     </div>
   </div>
 
-  <% @weaknesses.each do |weakness| %>
-    <%= render 'weakness', weakness: weakness %>
-  <% end %>
+  <div class="endless-pagination">
+    <%= render partial: 'weakness', collection: @weaknesses, as: :weakness %>
+  </div>
+
+  <%= paginate @weaknesses %>
+  <div class="alert alert-warning text-center" hidden data-pagination-loading>
+    <strong><%= t 'navigation.loading' %></strong>
+  </div>
 <% else %>
   <div class="alert alert-info">
     <%= t '.empty' %>
@@ -57,8 +69,7 @@
 
 <div>
   <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
-  <%= link_to t('label.download_csv'), params: request.query_parameters.merge(format: :csv) %>
+  <%= pdf_and_csv_download_links %>
 </div>
 
 <%= render partial: 'shared/customize_report_form', locals: {

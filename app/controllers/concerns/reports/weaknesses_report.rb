@@ -10,7 +10,8 @@ module Reports::WeaknessesReport
 
   def weaknesses_report
     respond_to do |format|
-      format.html
+      format.html { render_paginated_weaknesses }
+      format.js   { render_paginated_weaknesses }
       format.csv  { render_weaknesses_report_csv }
     end
   end
@@ -41,7 +42,22 @@ module Reports::WeaknessesReport
       report_params = params[:weaknesses_report]
 
       if report_params.present?
-        @weaknesses = filter_weaknesses_for_report report_params
+        weaknesses = filter_weaknesses_for_report report_params
+        order      = weaknesses.values[:order]
+
+        # The double where by ids is because the relations are scoped by filters
+        # within filter_weaknesses_for_report.
+        @weaknesses = scoped_weaknesses.where(
+          id: weaknesses.pluck(:id)
+        ).includes(
+          :finding_user_assignments,
+          :repeated_of,
+          :repeated_in,
+          finding_answers: [:file_model, user: { organization_roles: :role }],
+          users: { organization_roles: :role },
+          review: :plan_item,
+          control_objective_item: [:process_control]
+        ).order order
       else
         @weaknesses = Weakness.none
       end
@@ -84,7 +100,7 @@ module Reports::WeaknessesReport
       end
 
       if report_params[:finding_status].present?
-        weaknesses = weaknesses.where state: report_params[:finding_status]
+        weaknesses = weaknesses.where state: report_params[:finding_status].to_i
       end
 
       if report_params[:finding_current_situation_verified].present?
@@ -110,7 +126,7 @@ module Reports::WeaknessesReport
 
       %i(risk priority).each do |param|
         if report_params[param].present?
-          weaknesses = weaknesses.where param => report_params[param]
+          weaknesses = weaknesses.where param => report_params[param].to_i
         end
       end
 
@@ -156,8 +172,8 @@ module Reports::WeaknessesReport
 
     def render_weaknesses_report_csv
       render_or_send_by_mail(
-        collection: @weaknesses,
-        filename: @title.downcase,
+        collection:  @weaknesses,
+        filename:    @title.downcase,
         method_name: :to_csv
       )
     end
@@ -227,7 +243,7 @@ module Reports::WeaknessesReport
         pdf.add_description_item(Weakness.human_attribute_name(:origination_date), l(weakness.origination_date, format: :long), 0, false)
       end
 
-      audited = weakness.users.reload.select(&:can_act_as_audited?)
+      audited = weakness.users.select &:can_act_as_audited?
 
       pdf.add_title t('finding.responsibles', count: audited.size), PDF_FONT_SIZE, :left
       pdf.add_list audited.map(&:full_name), PDF_FONT_SIZE * 2
@@ -241,7 +257,7 @@ module Reports::WeaknessesReport
           column_widths << pdf.percent_width(col_size)
         end
 
-        weakness.finding_answers.reload.each do |finding_answer|
+        weakness.finding_answers.each do |finding_answer|
           column_data << [
             finding_answer.answer,
             finding_answer.user.try(:full_name),
@@ -336,7 +352,7 @@ module Reports::WeaknessesReport
 
         user.self_and_descendants.map &:id
       else
-        report_params[:user_id]
+        report_params[:user_id].to_i
       end
     end
 
@@ -367,5 +383,9 @@ module Reports::WeaknessesReport
 
         value ? t('label.yes') : t('label.no')
       end
+    end
+
+    def render_paginated_weaknesses
+      @weaknesses = @weaknesses.page params[:page]
     end
 end

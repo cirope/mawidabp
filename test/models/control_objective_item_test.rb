@@ -452,6 +452,16 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     FileUtils.rm @control_objective_item.absolute_pdf_path
   end
 
+  test 'show counts' do
+    skip if validate_counts?
+
+    refute @control_objective_item.show_counts?(Current.organization.prefix)
+
+    @control_objective_item.review.business_unit_type.update! require_counts: true
+
+    assert @control_objective_item.show_counts?(Current.organization.prefix)
+  end
+
   private
 
     def use_review_weaknesses_score?

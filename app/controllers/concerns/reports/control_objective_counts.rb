@@ -119,7 +119,7 @@ module Reports::ControlObjectiveCounts
           control_objective_item.auditor_comment
         ]
       ].concat(
-        if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(current_organization.prefix)
+        if control_objective_item.show_counts?(current_organization.prefix)
           [
             [
               ControlObjectiveItem.human_attribute_name('issues_count'),
@@ -158,17 +158,10 @@ module Reports::ControlObjectiveCounts
         BusinessUnitType.model_name.human,
         ConclusionFinalReview.human_attribute_name('issue_date'),
         ControlObjectiveItem.human_attribute_name('control_objective_text'),
-        ControlObjectiveItem.human_attribute_name('auditor_comment')
-      ].concat(
-        if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(current_organization.prefix)
-          [
-            ControlObjectiveItem.human_attribute_name('issues_count'),
-            ControlObjectiveItem.human_attribute_name('alerts_count')
-          ]
-        else
-          []
-        end
-      )
+        ControlObjectiveItem.human_attribute_name('auditor_comment'),
+        ControlObjectiveItem.human_attribute_name('issues_count'),
+        ControlObjectiveItem.human_attribute_name('alerts_count')
+      ]
     end
 
     def control_objective_counts_csv_data_rows
@@ -180,17 +173,10 @@ module Reports::ControlObjectiveCounts
           control_objective_item.business_unit_type.to_s,
           l(control_objective_item.review.issue_date),
           control_objective_item.control_objective_text.to_s,
-          control_objective_item.auditor_comment.to_s
-        ].concat(
-          if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(current_organization.prefix)
-            [
-              control_objective_item.issues_count.to_s,
-              control_objective_item.alerts_count.to_s
-            ]
-          else
-            []
-          end
-        )
+          control_objective_item.auditor_comment.to_s,
+          control_objective_item.issues_count.to_s,
+          control_objective_item.alerts_count.to_s
+        ]
       end
     end
 end

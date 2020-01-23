@@ -783,6 +783,6 @@ module ConclusionReviews::GalPdf
     end
 
     def show_tests? organization
-      ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.exclude? organization.prefix
+      !review.show_counts? organization.prefix
     end
 end

@@ -29,6 +29,8 @@ module Findings::Csv
       origination_date_text,
       follow_up_date_text,
       solution_date_text,
+      implemented_at_text,
+      closed_at_text,
       rescheduled_text,
       reschedule_count.to_s,
       next_pending_task_date,
@@ -82,6 +84,14 @@ module Findings::Csv
 
     def solution_date_text
       solution_date ? I18n.l(solution_date, format: :minimal) : '-'
+    end
+
+    def implemented_at_text
+      implemented_at ? I18n.l(implemented_at, format: :minimal) : '-'
+    end
+
+    def closed_at_text
+      closed_at ? I18n.l(closed_at, format: :minimal) : '-'
     end
 
     def auditeds_as_process_owner
@@ -155,9 +165,11 @@ module Findings::Csv
     end
 
     def show_follow_up_timestamps?
-      setting = Current.organization.settings.reload.find_by name: 'show_follow_up_timestamps'
+      @show_follow_up_timestamps ||= begin
+        setting = Current.organization.settings.find_by name: 'show_follow_up_timestamps'
 
-      (setting ? setting.value : DEFAULT_SETTINGS[:show_follow_up_timestamps][:value]) != '0'
+        (setting ? setting.value : DEFAULT_SETTINGS[:show_follow_up_timestamps][:value]) != '0'
+      end
     end
 
     private
@@ -213,6 +225,8 @@ module Findings::Csv
           Finding.human_attribute_name('origination_date'),
           Finding.human_attribute_name('follow_up_date'),
           Finding.human_attribute_name('solution_date'),
+          Finding.human_attribute_name('implemented_at'),
+          Finding.human_attribute_name('closed_at'),
           Finding.human_attribute_name('rescheduled'),
           Finding.human_attribute_name('reschedule_count'),
           I18n.t('finding.next_pending_task_date'),
