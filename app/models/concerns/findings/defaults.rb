@@ -21,7 +21,7 @@ module Findings::Defaults
     def default_origination_date
       prefix = Current.organization&.prefix
 
-      unless control_objective_item.show_counts? prefix
+      unless control_objective_item&.show_counts? prefix
         Time.zone.today
       end
     end
