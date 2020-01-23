@@ -40,12 +40,16 @@
 <% if @weaknesses.try(:total_entries)&.positive? %>
   <div class="card my-3 bg-light">
     <div class="card-body">
-      <div class="float-right">
-        <%= pdf_and_csv_download_links %>
+      <div class="row">
+        <div class="col-md-8">
+          <p class="mb-0">
+            <%= t '.weaknesses_count_html', count: @weaknesses.total_entries %>
+          </p>
+        </div>
+        <div class="col-md-4 text-md-right mt-2 mt-md-0">
+          <%= pdf_and_csv_download_links %>
+        </div>
       </div>
-      <p class="mb-0">
-        <%= t '.weaknesses_count_html', count: @weaknesses.total_entries %>
-      </p>
     </div>
   </div>
 
@@ -54,6 +58,9 @@
   </div>
 
   <%= paginate @weaknesses %>
+  <div class="alert alert-warning text-center" hidden data-pagination-loading>
+    <strong><%= t 'navigation.loading' %></strong>
+  </div>
 <% else %>
   <div class="alert alert-info">
     <%= t '.empty' %>
