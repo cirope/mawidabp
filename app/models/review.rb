@@ -9,6 +9,7 @@ class Review < ApplicationRecord
   include Reviews::Clone
   include Reviews::ConclusionReview
   include Reviews::ControlObjectiveItems
+  include Reviews::Counts
   include Reviews::DestroyValidation
   include Reviews::FileModel
   include Reviews::FindingAssignments
