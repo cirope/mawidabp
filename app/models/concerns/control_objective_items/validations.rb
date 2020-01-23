@@ -88,7 +88,6 @@ module ControlObjectiveItems::Validations
     end
 
     def validate_counts?
-      finished &&
-        ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(Current.organization.prefix)
+      finished && show_counts?(Current.organization.prefix)
     end
 end

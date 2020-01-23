@@ -210,7 +210,7 @@ class NotifierMailer < ActionMailer::Base
     @body_title = body_title
     @note = options[:note]
 
-    if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(org_prefix)
+    if conclusion_review.review.show_counts?(org_prefix)
       @show_alt_footer = true
     end
 
