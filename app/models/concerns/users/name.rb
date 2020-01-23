@@ -14,19 +14,22 @@ module Users::Name
   alias display_name informal_name
 
   def full_name from = nil
-    version = paper_trail.version_at(from) || self
+    version   = paper_trail.version_at from if from
+    version ||= self
 
     "#{version.last_name}, #{version.name}"
   end
 
   def full_name_with_user from = nil
-    version = paper_trail.version_at(from) || self
+    version   = paper_trail.version_at from if from
+    version ||= self
 
     "#{version.full_name} (#{version.user}) #{version.string_to_append_if_disable}"
   end
 
   def full_name_with_function from = nil
-    version = paper_trail.version_at(from) || self
+    version   = paper_trail.version_at from if from
+    version ||= self
 
     "#{version.full_name}#{version.string_to_append_if_function}#{version.string_to_append_if_disable}"
   end

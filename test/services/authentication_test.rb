@@ -8,10 +8,6 @@ class AuthenticationTest < ActionController::TestCase
     Current.organization = @organization
   end
 
-  teardown do
-    unset_organization
-  end
-
   test 'should authenticate' do
     assert_valid_authentication redirect_url: Group, admin_mode: true
     assert_valid_authentication
@@ -169,7 +165,11 @@ class AuthenticationTest < ActionController::TestCase
         assert @auth.authenticated?
         assert_equal redirect_url || Hash[controller: 'welcome', action: 'index'], @auth.redirect_url
 
-        if message
+        if message && message.respond_to?(:last) && message.last.is_a?(Hash)
+          options = message.pop
+
+          assert_equal I18n.t(*message, **options), @auth.message
+        elsif message
           assert_equal I18n.t(*message), @auth.message
         else
           assert_nil @auth.message

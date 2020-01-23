@@ -1029,6 +1029,10 @@
       body_title:
         one: "La siguiente observación se encuentra sin respuesta"
         other: "Las siguientes observaciones están sin respuesta"
+    new_admin_user:
+      title: "Nuevo administrador"
+      body_title: "Se asigno un nuevo administrador a la organización"
+      body: "%{name} (%{user}) ahora es administrador"
     tasks_expiration_warning:
       title: "Notificación de tareas cercanas al vencimiento"
       body_title:

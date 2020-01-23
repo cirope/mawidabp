@@ -337,7 +337,10 @@ es:
       show:
         title: 'Cronograma'
         empty: 'No hay proyectos en el plan seleccionado'
+        empty_with_no_business_units: 'No hay unidades de negocio seleccionadas'
         detail: 'Detalle'
+        by_business_unit: 'Ver calendario por unidad de negocio'
+        by_project: 'Ver calendario por proyecto'
     resources:
       show:
         title: 'Resumen por recurso'
@@ -489,6 +492,8 @@ es:
     brief_period_in_weeks: 'Periodo de notificación "Resumen de observaciones" en semanas'
     show_follow_up_timestamps: 'Mostrar marcas de tiempo en seguimiento'
     require_manager_on_findings: 'Requerir gerente de auditoría en observaciones'
+    hide_import_from_ldap: 'Mostrar "Importar desde LDAP" solo a usuarios con permisos de aprobación'
+    skip_function_and_manager_from_ldap_sync: 'No sincronizar los campos "Cargo" y "Superior" con los valores de LDAP'
 
   tags:
     edit:
@@ -559,7 +564,7 @@ es:
         updated: 'Actualizado'
         deleted: 'Eliminado'
         unchanged: 'Sin cambios'
-        error: 'Con errores'
+        errored: 'Con errores'
         deprecated_users: 'Usuarios ausentes en el servidor LDAP'
     passwords:
       edit:

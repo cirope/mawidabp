@@ -9,10 +9,6 @@ class RiskAssessmentTemplatesControllerTest < ActionController::TestCase
     set_organization
   end
 
-  teardown do
-    unset_organization
-  end
-
   test 'should get index' do
     get :index
     assert_response :success

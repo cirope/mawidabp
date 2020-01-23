@@ -26,12 +26,16 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_organization
 
-  def can_perform? action
+  def can_perform? action, privilege = nil
     load_current_module
+
+    privilege ||= @action_privileges[action]
+
     allowed_by_type = ALLOWED_MODULES_BY_TYPE[@auth_user.get_type].try(
       :include?, @current_module)
+
     allowed_by_privileges = @auth_privileges[@current_module] &&
-      @auth_privileges[@current_module][@action_privileges[action]]
+      @auth_privileges[@current_module][privilege]
 
     allowed_by_type && allowed_by_privileges
   end
@@ -165,7 +169,7 @@ class ApplicationController < ActionController::Base
 
       top_level_menu = true
 
-      until modules.blank?
+      while modules.present?
         selected_module = nil
         modules.each do |mod|
           if mod.controllers.include?(controller_name) && (top_level_menu ||

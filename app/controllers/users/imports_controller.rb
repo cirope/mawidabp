@@ -29,6 +29,15 @@ class Users::ImportsController < ApplicationController
     end
 
     def load_privileges
-      @action_privileges.update new: :read, create: :read
+      setting            = current_organization.settings.find_by name: 'hide_import_from_ldap'
+      hide               = (setting ? setting.value : DEFAULT_SETTINGS[:hide_import_from_ldap][:value]) != '0'
+      required_privilege = if hide
+                             :approval
+                           else
+                             :read
+                           end
+
+      @action_privileges.update new:    required_privilege,
+                                create: required_privilege
     end
 end

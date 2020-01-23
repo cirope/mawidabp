@@ -145,7 +145,7 @@ module Findings::Csv
     def to_csv corporate: false
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = CSV.generate(options) do |csv|
+      csv_str = CSV.generate(**options) do |csv|
         csv << column_headers(corporate)
 
         all_with_inclusions.each { |f| csv << f.to_csv_a(corporate) }
@@ -155,9 +155,11 @@ module Findings::Csv
     end
 
     def show_follow_up_timestamps?
-      setting = Current.organization.settings.reload.find_by name: 'show_follow_up_timestamps'
+      @show_follow_up_timestamps ||= begin
+        setting = Current.organization.settings.find_by name: 'show_follow_up_timestamps'
 
-      (setting ? setting.value : DEFAULT_SETTINGS[:show_follow_up_timestamps][:value]) != '0'
+        (setting ? setting.value : DEFAULT_SETTINGS[:show_follow_up_timestamps][:value]) != '0'
+      end
     end
 
     private

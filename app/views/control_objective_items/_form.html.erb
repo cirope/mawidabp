@@ -113,7 +113,7 @@
       </div>
     </div>
 
-    <% if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(current_organization.prefix) %>
+    <% if @control_objective_item.show_counts?(current_organization.prefix) %>
       <div class="row">
         <div class="col-md-6">
           <%= f.input :issues_count, input_html: { readonly: readonly } %>

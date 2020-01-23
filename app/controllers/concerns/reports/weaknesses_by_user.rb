@@ -102,7 +102,7 @@ module Reports::WeaknessesByUser
     def weaknesses_by_user_csv
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
-      csv_str = CSV.generate(options) do |csv|
+      csv_str = CSV.generate(**options) do |csv|
         csv << weaknesses_by_user_csv_headers
 
         weaknesses_by_user_csv_data_rows.each { |row| csv << row }

@@ -12,6 +12,9 @@ class ApplicationControllerTest < ActionController::TestCase
     @controller.send('response=', @response)
     @controller.send('request=', @request)
 
+    @controller.class.instance_variable_set(:@controller_name, nil)
+    @controller.class.instance_variable_set(:@controller_path, nil)
+
     set_organization
   end
 
@@ -121,6 +124,25 @@ class ApplicationControllerTest < ActionController::TestCase
     @controller.send(:check_privileges)
     assert_not_nil @controller.send(:flash)[:alert]
     assert_redirected_to login_url
+  end
+
+  test 'check can perform function' do
+    login_admin
+    @controller.instance_variable_set(:@auth_privileges, Hash.new(Hash.new(true)))
+    @controller.class.instance_variable_set(:@controller_name, 'users')
+    @controller.class.instance_variable_set(:@controller_path, 'users')
+
+    assert @controller.send(:can_perform?, :edit, :approval)
+
+    @controller.instance_variable_set(:@auth_privileges, {
+      'administration_security_users' => {
+        approval: false,
+        modify:   true
+      }
+    })
+
+    assert @controller.send(:can_perform?, :edit, :modify)
+    refute @controller.send(:can_perform?, :edit, :approval)
   end
 
   test 'make date range' do

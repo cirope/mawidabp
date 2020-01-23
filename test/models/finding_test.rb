@@ -9,12 +9,6 @@ class FindingTest < ActiveSupport::TestCase
     set_organization
   end
 
-  teardown do
-    Current.user = nil
-
-    unset_organization
-  end
-
   test 'create' do
     assert_difference 'Finding.count' do
       assert_difference 'Tagging.count', 2 do
@@ -884,6 +878,11 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.rescheduled?
     assert_equal 1, finding.reschedule_count
 
+    if POSTGRESQL_ADAPTER
+      assert_equal [repeated_of.id], finding.parent_ids
+      assert_empty repeated_of.parent_ids
+    end
+
     finding.undo_reiteration
 
     refute repeated_of.reload.repeated?
@@ -891,6 +890,11 @@ class FindingTest < ActiveSupport::TestCase
     refute finding.rescheduled?
     assert_equal 0, finding.reschedule_count
     assert_equal repeated_of_original_state, repeated_of.state
+
+    if POSTGRESQL_ADAPTER
+      assert_empty finding.parent_ids
+      assert_empty repeated_of.parent_ids
+    end
   end
 
   test 'reschedule when mark as duplicated and follow up date differs' do
@@ -1348,6 +1352,42 @@ class FindingTest < ActiveSupport::TestCase
                      state:          Finding::STATUS[:being_implemented]
 
     assert_equal 0, @finding.reload.notification_level
+  end
+
+  test 'put state dates on changes' do
+    @finding.update! state:          Finding::STATUS[:implemented],
+                     follow_up_date: Time.zone.today
+
+    assert_equal Time.zone.today, @finding.reload.implemented_at
+    assert_nil @finding.closed_at
+
+    Current.user = users :supervisor
+
+    @finding.update! state:           Finding::STATUS[:implemented_audited],
+                     solution_date:   Time.zone.today,
+                     skip_work_paper: true
+
+    assert_equal Time.zone.today, @finding.reload.closed_at
+  end
+
+  test 'version implemented at' do
+    Timecop.travel 2.days.ago do
+      @finding.update! state:          Finding::STATUS[:implemented],
+                       follow_up_date: Time.zone.today
+    end
+
+    assert_equal 2.days.ago.to_date, @finding.version_implemented_at
+  end
+
+  test 'version closed at' do
+    Current.user = users :supervisor
+
+    Timecop.travel 2.days.ago do
+      @finding.update! state:         Finding::STATUS[:expired],
+                       solution_date: Time.zone.today
+    end
+
+    assert_equal 2.days.ago.to_date, @finding.version_closed_at
   end
 
   private
