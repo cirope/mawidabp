@@ -126,4 +126,23 @@ class FindingAnswerTest < ActiveSupport::TestCase
 
     Current.organization = nil
   end
+
+  test 'commitment date limit' do
+    skip if FINDING_ANSWER_COMMITMENT_DATE_LIMITS.blank?
+
+    finding = findings(:being_implemented_weakness_on_final)
+    risk = Finding.risks.invert[finding.risk]
+
+    expected_limit = eval(
+      FINDING_ANSWER_COMMITMENT_DATE_LIMITS["#{risk}_multi_responsible"]
+    ).from_now.to_date
+
+    @finding_answer.user = users(:audited)
+    @finding_answer.finding = finding
+    @finding_answer.commitment_date = expected_limit + 1.day
+
+    assert @finding_answer.invalid?
+    assert_error @finding_answer, :commitment_date, :on_or_before,
+      restriction: I18n.l(expected_limit)
+  end
 end

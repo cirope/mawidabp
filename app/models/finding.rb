@@ -14,6 +14,8 @@ class Finding < ApplicationRecord
   include Findings::Cost
   include Findings::CreateValidation
   include Findings::Csv
+  include Findings::Current
+  include Findings::CurrentSituationCsv
   include Findings::CustomAttributes
   include Findings::Defaults
   include Findings::DestroyValidation

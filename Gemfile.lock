@@ -82,7 +82,7 @@ GEM
     business_time (0.9.3)
       activesupport (>= 3.2.0)
       tzinfo
-    byebug (11.1.0)
+    byebug (11.1.1)
     capistrano (3.11.2)
       airbrussh (>= 1.0.0)
       i18n
@@ -267,7 +267,7 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.10)
     timecop (0.9.1)
-    timeliness (0.4.3)
+    timeliness (0.4.4)
     ttfunk (1.6.1)
     tzinfo (1.2.6)
       thread_safe (~> 0.1)
