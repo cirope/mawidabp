@@ -15,14 +15,14 @@ module Findings::CurrentSituationCsv
       ].join ' - '
 
       state_text = if review.has_final_review?
-                      state_text
-                    else
-                      I18n.t 'follow_up_committee_report.weaknesses_current_situation.on_revision'
-                    end
+                     self.state_text
+                   else
+                     I18n.t 'follow_up_committee_report.weaknesses_current_situation.on_revision'
+                   end
 
       "#{state_text} (#{repeated_details})"
     else
-      state_text
+      self.state_text
     end
   end
 
