@@ -281,6 +281,8 @@ es:
         tag_ids: 'Etiquetas'
         rescheduled: 'Reprogramada'
         reschedule_count: 'Cantidad de reprogramaciones'
+        implemented_at: 'Fecha de cambio a "Implementada"'
+        closed_at: 'Fecha del último cambio de estado'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'
@@ -619,6 +621,8 @@ es:
         weakness_template: 'Buscar plantilla por título'
         weakness_template_from_control_objective: 'Plantilla sugerida por objetivo de control'
         work_papers: 'Papeles de trabajo'
+        implemented_at: 'Fecha de cambio a "Implementada"'
+        closed_at: 'Fecha del último cambio de estado'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:

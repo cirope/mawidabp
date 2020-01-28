@@ -55,6 +55,8 @@ group :development do
   # Support for ed25519 ssh keys
   gem 'ed25519'
   gem 'bcrypt_pbkdf'
+
+  gem 'bullet'
 end
 
 group :test do

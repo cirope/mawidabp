@@ -14,6 +14,8 @@ namespace :db do
       complete_main_recommendations       # 2019-07-23
       update_tag_style                    # 2019-09-26
       update_tag_icons                    # 2019-09-30
+      update_finding_state_dates          # 2020-01-16
+      update_finding_parent_ids           # 2020-01-22
     end
   end
 end
@@ -52,6 +54,30 @@ private
                            description: I18n.t('settings.require_manager_on_findings')
       end
     end
+
+    if add_hide_import_from_ldap? # 2020-01-02
+      Organization.all.each do |o|
+        o.settings.create! name:        'hide_import_from_ldap',
+                           value:       DEFAULT_SETTINGS[:hide_import_from_ldap][:value],
+                           description: I18n.t('settings.hide_import_from_ldap')
+      end
+    end
+
+    if add_skip_function_and_manager_from_ldap_sync? # 2020-01-02
+      Organization.all.each do |o|
+        o.settings.create! name:        'skip_function_and_manager_from_ldap_sync',
+                           value:       DEFAULT_SETTINGS[:skip_function_and_manager_from_ldap_sync][:value],
+                           description: I18n.t('settings.skip_function_and_manager_from_ldap_sync')
+      end
+    end
+  end
+
+  def add_skip_function_and_manager_from_ldap_sync?
+    Setting.where(name: 'skip_function_and_manager_from_ldap_sync').empty?
+  end
+
+  def add_hide_import_from_ldap?
+    Setting.where(name: 'hide_import_from_ldap').empty?
   end
 
   def add_require_manager_on_findings?
@@ -290,4 +316,52 @@ private
 
   def update_tag_icons?
     Tag.where(icon: ICON_EQUIVALENCE.keys).any?
+  end
+
+  def update_finding_state_dates
+    if update_finding_state_dates?
+      Finding.implemented.find_each do |f|
+        f.update_column :implemented_at, f.version_implemented_at
+      end
+
+      Finding.where(state: Finding::FINAL_STATUS).find_each do |f|
+        f.update_column :implemented_at, f.version_implemented_at
+        f.update_column :closed_at,      f.version_closed_at
+      end
+    end
+  end
+
+  def update_finding_parent_ids
+    if update_finding_parent_ids?
+      # Root findings
+      Finding.repeated.without_repeated.find_each.each do |f|
+        parent_ids         = []
+        findings_to_update = []
+        repeated_in        = f.repeated_in
+
+        # build the entire "family tree"
+        while repeated_in
+          findings_to_update << repeated_in
+          parent_ids         << repeated_in.repeated_of_id
+
+          repeated_in = repeated_in.repeated_in
+        end
+
+        # From last to first, update parent_ids and delete the "iterated child"
+        # from the parent_ids list
+        findings_to_update.reverse_each do |child|
+          child.update_column :parent_ids, parent_ids
+          parent_ids.pop # or parent_ids.delete(child.repeated_of_id)
+        end
+      end
+    end
+  end
+
+  def update_finding_state_dates?
+    Finding.where.not(implemented_at: nil).empty? &&
+      Finding.where.not(closed_at: nil).empty?
+  end
+
+  def update_finding_parent_ids?
+    POSTGRESQL_ADAPTER && Finding.where("#{Finding.table_name}.parent_ids != '{}'").empty?
   end

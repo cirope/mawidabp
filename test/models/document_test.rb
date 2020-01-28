@@ -7,10 +7,6 @@ class DocumentTest < ActiveSupport::TestCase
     Current.organization = @document.organization
   end
 
-  teardown do
-    unset_organization
-  end
-
   test 'blank attributes' do
     @document.name = ''
     @document.group = nil

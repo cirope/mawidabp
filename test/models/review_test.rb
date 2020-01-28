@@ -11,10 +11,6 @@ class ReviewTest < ActiveSupport::TestCase
     set_organization
   end
 
-  teardown do
-    unset_organization
-  end
-
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of Review, @review

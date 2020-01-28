@@ -4,13 +4,32 @@ module Users::Params
   private
 
     def user_params
-      params.require(:user).permit(
+      allowed_params = if can_perform?(:edit, :approval)
+                         admin_user_params
+                       else
+                         editor_user_params
+                       end
+
+      params.require(:user).permit *allowed_params
+    end
+
+    def editor_user_params
+      [
+        :manager_id, :function, :lock_version,
+        child_ids: [],
+        related_user_relations_attributes: [:id, :related_user_id, :_destroy]
+      ]
+    end
+
+    def admin_user_params
+      [
         :user, :name, :last_name, :email, :language, :notes,
         :manager_id, :enable, :logged_in, :password, :password_confirmation,
         :hidden, :function, :send_notification_email, :confirmation_hash,
-        :lock_version, child_ids: [],
+        :lock_version,
+        child_ids: [],
         organization_roles_attributes: [:id, :organization_id, :role_id, :_destroy],
         related_user_relations_attributes: [:id, :related_user_id, :_destroy]
-      )
+      ]
     end
 end

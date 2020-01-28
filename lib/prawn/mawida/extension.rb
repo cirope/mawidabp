@@ -80,7 +80,7 @@ module Prawn
         if term.present? && description.present?
           options = { invalid: :replace, undef: :replace, replace: '?' }
           formated_term = underline ? "<u><b>#{term}</b></u>" : "<b>#{term}</b>"
-          encoded_text = "#{formated_term}: #{description}".encode 'windows-1252', 'UTF-8', options
+          encoded_text = "#{formated_term}: #{description}".encode 'windows-1252', 'UTF-8', **options
 
           self.text encoded_text, :size => font_size, :align => align,
             :inline_format => true, :indent_paragraphs => left.pt

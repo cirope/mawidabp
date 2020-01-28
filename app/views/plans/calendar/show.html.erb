@@ -1,8 +1,19 @@
-<% if @plan.business_units.any? %>
+<% if @business_units.any? %>
   <% months = @plan.period.months %>
 
   <div class="table-responsive">
     <table class="table table-sm table-hover">
+      <% if @business_unit_type || params[:business_unit_type].present? %>
+        <caption>
+          <span class="float-right small">
+            <%= link_to t('label.back'), [:edit, @plan, business_unit_type: @business_unit_type.id] %>
+          </span>
+
+          <h5>
+            <%= @business_unit_type&.name || t('plans.without_business_unit_type') %>
+          </h5>
+        </caption>
+      <% end %>
       <thead>
         <tr>
           <th rowspan="2"><%= t '.detail' %></th>
@@ -18,7 +29,7 @@
       <tbody>
         <% last_displayed_name = nil %>
 
-        <% @plan.business_units.each do |business_unit| %>
+        <% @business_units.each do |business_unit| %>
           <% unless last_displayed_name == business_unit.name %>
             <tr class="active">
               <td><strong><%= business_unit.name %></strong></td>
@@ -40,7 +51,7 @@
           <% end %>
 
           <tr>
-            <td class="indented"><%= business_unit.business_unit_type.name %></td>
+            <td class="pl-4"><%= business_unit.business_unit_type.name %></td>
 
             <% months.each do |month| %>
               <td>
@@ -62,9 +73,13 @@
       </tbody>
     </table>
   </div>
+<% elsif params[:business_unit_type] == 'nil' %>
+  <div class="alert alert-info">
+    <p class="mb-0"><%= t '.empty_with_no_business_units' %></p>
+  </div>
 <% else %>
   <div class="alert alert-info">
-    <p><%= t '.empty' %></p>
+    <p class="mb-0"><%= t '.empty' %></p>
   </div>
 <% end %>
 
@@ -73,6 +88,7 @@
 <div>
   <%= link_to_show @plan %> |
   <%= link_to_stats [:stats, @plan, until: Time.zone.today.to_s(:db)] %> |
-  <%= link_to_edit edit_plan_path(@plan) %> |
+  <%= link_to_edit edit_plan_path(@plan, business_unit_type: params[:business_unit_type]) %> |
+  <%= link_to t('.by_project'), [:calendar, @plan, business_unit_type: params[:business_unit_type], project: true] %> |
   <%= link_to_index plans_path %>
 </div>

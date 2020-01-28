@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_07_232734) do
+ActiveRecord::Schema.define(version: 2020_01_21_221955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(version: 2019_11_07_232734) do
     t.boolean "require_tag", default: false, null: false
     t.text "sectors"
     t.text "recipients"
+    t.boolean "require_counts", default: false, null: false
     t.index ["external"], name: "index_business_unit_types_on_external"
     t.index ["name"], name: "index_business_unit_types_on_name"
     t.index ["organization_id"], name: "index_business_unit_types_on_organization_id"
@@ -420,15 +421,21 @@ ActiveRecord::Schema.define(version: 2019_11_07_232734) do
     t.date "first_follow_up_date"
     t.date "last_notification_date"
     t.integer "reschedule_count", default: 0, null: false
+    t.integer "parent_ids", default: [], array: true
+    t.date "implemented_at"
+    t.date "closed_at"
+    t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
     t.index ["first_follow_up_date"], name: "index_findings_on_first_follow_up_date"
     t.index ["first_notification_date"], name: "index_findings_on_first_notification_date"
     t.index ["follow_up_date"], name: "index_findings_on_follow_up_date"
+    t.index ["implemented_at"], name: "index_findings_on_implemented_at"
     t.index ["last_notification_date"], name: "index_findings_on_last_notification_date"
     t.index ["organization_id"], name: "index_findings_on_organization_id"
     t.index ["parent_id"], name: "index_findings_on_parent_id"
+    t.index ["parent_ids"], name: "index_findings_on_parent_ids", using: :gin
     t.index ["repeated_of_id"], name: "index_findings_on_repeated_of_id"
     t.index ["reschedule_count"], name: "index_findings_on_reschedule_count"
     t.index ["state"], name: "index_findings_on_state"

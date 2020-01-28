@@ -7,6 +7,7 @@ cycle:
   recipients: 'John Doe'
   sectors: 'Area 51'
   require_tag: false
+  require_counts: false
   organization: cirope
 
 consolidated_substantive:
@@ -18,6 +19,7 @@ consolidated_substantive:
   recipients: 'John Doe'
   sectors: 'Area 51'
   require_tag: false
+  require_counts: false
   organization: cirope
 
 bcra:
@@ -29,6 +31,7 @@ bcra:
   recipients: 'John Doe'
   sectors: 'Area 51'
   require_tag: false
+  require_counts: false
   organization: cirope
 
 bcra_google:
@@ -40,4 +43,5 @@ bcra_google:
   recipients: 'John Doe'
   sectors: 'Area 51'
   require_tag: false
+  require_counts: false
   organization: google

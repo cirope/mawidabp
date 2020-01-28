@@ -20,16 +20,16 @@ class FileModelsControllerTest < ActionController::TestCase
     public_actions = []
     private_actions = [
       [
-        :get,
-        :download,
-        :params => {
+        :get, :download, :params => {
           :path => @file_model.file.url.gsub(/^\/private/, "")
         }
       ]
     ]
 
     private_actions.each do |action|
-      send *action
+      options = action.pop
+
+      send *action, **options
       assert_redirected_to login_url
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
