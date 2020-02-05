@@ -45,12 +45,10 @@
   <%= @weakness.risk_text %>
 </p>
 
-<% unless HIDE_WEAKNESS_PRIORITY %>
-  <p class="mb-1">
-    <strong><%= Weakness.human_attribute_name :priority %>:</strong>
-    <%= @weakness.priority_text %>
-  </p>
-<% end %>
+<p class="mb-1">
+  <strong><%= Weakness.human_attribute_name :priority %>:</strong>
+  <%= @weakness.priority_text %>
+</p>
 
 <div>
   <strong><%= Weakness.human_attribute_name :audit_comments %>:</strong>
