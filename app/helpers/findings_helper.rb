@@ -257,6 +257,14 @@ module FindingsHelper
     end
   end
 
+  def disabled_priority finding, readonly
+    if SHOW_CONDENSED_PRIORITIES
+      readonly || finding.risk != Finding.risks[:medium]
+    else
+      readonly
+    end
+  end
+
   private
 
     def finding_state_options_for finding
