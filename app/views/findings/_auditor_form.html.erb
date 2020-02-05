@@ -37,7 +37,7 @@
           }, readonly: true %>
           <%= f.input :control_objective_item_id, as: :hidden %>
         <% end %>
-        <%= f.input :description, label: finding_description_label, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 7 : 5 } %>
+        <%= f.input :description, label: finding_description_label, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 9 : 5 } %>
 
         <% if SHOW_FINDING_CURRENT_SITUATION %>
           <%= f.input :current_situation, input_html: { rows: 3 } %>
@@ -48,7 +48,7 @@
           <% unless HIDE_WEAKNESS_EFFECT %>
             <%= f.input :effect, input_html: { readonly: true, rows: 4 } %>
           <% end %>
-          <%= f.input :audit_recommendations, input_html: { readonly: true, rows: 2 } %>
+          <%= f.input :audit_recommendations, input_html: { readonly: true, rows: HIDE_WEAKNESS_EFFECT ? 5 : 2 } %>
         <% end %>
       </div>
       <div class="col-md-6">
