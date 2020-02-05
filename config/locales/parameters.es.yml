@@ -38,7 +38,7 @@ es:
     medium: 'Medio'
     high: 'Alto'
   priority_types:
-    low: 'Baja'
+    low: 'No aplica'
     medium: 'Media'
     high: 'Alta'
   score_types:
