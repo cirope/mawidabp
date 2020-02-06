@@ -10,7 +10,6 @@ being_implemented_weakness:
   current_situation_verified: false
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:being_implemented] %>
-  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 1w
@@ -38,7 +37,6 @@ unconfirmed_for_notification_weakness:
   current_situation_verified: false
   audit_comments: Audit comments 2w
   state: <%= Finding::STATUS[:unconfirmed] %>
-  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 2w
@@ -68,7 +66,6 @@ unanswered_for_level_<%= level %>_notification:
   current_situation_verified: false
   audit_comments: Audit comments <%= level %>w
   state: <%= Finding::STATUS[:unanswered] %>
-  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 3w
@@ -99,7 +96,6 @@ incomplete_weakness:
   current_situation_verified: false
   audit_comments: Audit comments incomplete_w
   state: <%= Finding::STATUS[:incomplete] %>
-  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 3w
@@ -128,7 +124,6 @@ other_unconfirmed_for_notification_weakness:
   current_situation_verified: false
   audit_comments: Audit comments 3w
   state: <%= Finding::STATUS[:unconfirmed] %>
-  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 1w
@@ -156,7 +151,6 @@ notify_oportunity:
   current_situation_verified: false
   audit_comments: Audit comments 1o
   state: <%= Finding::STATUS[:notify] %>
-  progress: 0
   origination_date:
   solution_date:
   final: false
@@ -174,7 +168,6 @@ being_implemented_oportunity:
   current_situation_verified: false
   audit_comments: Audit comments 1o
   state: <%= Finding::STATUS[:being_implemented] %>
-  progress: 0
   origination_date:
   solution_date:
   effect: Effect 1o
@@ -194,7 +187,6 @@ being_implemented_weakness_on_draft:
   current_situation_verified: false
   audit_comments: Audit comments 3w
   state: <%= Finding::STATUS[:being_implemented] %>
-  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 3w
@@ -221,7 +213,6 @@ unanswered_weakness:
   current_situation_verified: false
   audit_comments: Audit comments 2w
   state: <%= Finding::STATUS[:unanswered] %>
-  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 2w
@@ -248,7 +239,6 @@ unconfirmed_weakness:
   current_situation_verified: false
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:unconfirmed] %>
-  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 1w
@@ -275,7 +265,6 @@ unconfirmed_oportunity:
   current_situation_verified: false
   audit_comments: Audit comments 3o
   state: <%= Finding::STATUS[:unconfirmed] %>
-  progress: 0
   origination_date:
   solution_date:
   confirmation_date: <%= stale_confirmed_days.pred.business_days.ago.to_s(:db) %>
@@ -295,7 +284,6 @@ confirmed_oportunity_on_draft:
   current_situation_verified: false
   audit_comments: Audit comments 3o
   state: <%= Finding::STATUS[:confirmed] %>
-  progress: 0
   origination_date:
   solution_date:
   confirmation_date: <%= Date.today.to_s(:db) %>
@@ -314,7 +302,6 @@ confirmed_oportunity:
   current_situation_verified: false
   audit_comments: Audit comments 2o
   state: <%= Finding::STATUS[:confirmed] %>
-  progress: 0
   origination_date:
   solution_date:
   confirmation_date: <%= 1.day.ago.to_s(:db) %>
@@ -334,7 +321,6 @@ being_implemented_weakness_on_final:
   current_situation_verified: false
   audit_comments: Audit comment 1w
   state: <%= Finding::STATUS[:being_implemented] %>
-  progress: 0
   origination_date: <%= 2.days.ago.to_date.to_s(:db) %>
   solution_date:
   audit_recommendations: Proposed action 1w
@@ -361,7 +347,6 @@ being_implemented_weakness_on_approved_draft:
   current_situation_verified: false
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:being_implemented] %>
-  progress: 0
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 1w

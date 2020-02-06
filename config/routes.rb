@@ -333,7 +333,6 @@ Rails.application.routes.draw do
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
       get :auto_complete_for_weakness_template
-      get :state_changed
       get :weakness_template_changed
     end
 

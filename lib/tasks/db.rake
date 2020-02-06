@@ -17,6 +17,7 @@ namespace :db do
       update_finding_state_dates          # 2020-01-16
       update_finding_parent_ids           # 2020-01-22
       collapse_extended_risks             # 2020-02-04
+      remove_finding_awaiting_state       # 2020-02-05
     end
   end
 end
@@ -228,10 +229,7 @@ private
   end
 
   def findings_for_notification_level_reset
-    pending_statuses = [
-      Finding::STATUS[:being_implemented],
-      Finding::STATUS[:awaiting]
-    ]
+    pending_statuses = [Finding::STATUS[:being_implemented]]
 
     Finding.
       finals(false).
@@ -368,7 +366,7 @@ private
   end
 
   def collapse_extended_risks
-    if ENV['SHOW_EXTENDED_RISKS'] == 'true'
+    if collapse_extended_risks?
       swaps = {
         0 => { risk: 0, priority: 0 },
         1 => { risk: 0, priority: 0 },
@@ -412,4 +410,47 @@ private
         end
       end
     end
+  end
+
+  def collapse_extended_risks?
+    ENV['SHOW_EXTENDED_RISKS'] == 'true' && Finding.where(risk: [3, 4, 5]).any?
+  end
+
+  def remove_finding_awaiting_state
+    if remove_finding_awaiting_state?
+      old_state   = -4
+      replacement = Finding::STATUS[:being_implemented]
+
+      Finding.where(state: old_state).update_all state: replacement
+
+      Finding.find_each do |finding|
+        finding.versions.each do |version|
+          object         = version.object
+          object_changes = version.object_changes
+
+          if (v_state = object && object['state']) && v_state == old_state
+            object['state'] = replacement
+          end
+
+          if (v_states = object_changes && object_changes['state'])
+            object_changes['state'] = v_states.map do |v_state|
+              v_state == old_state ? replacement : v_state
+            end
+
+            if object_changes['state'].uniq.size == 1
+              object_changes.delete 'state'
+            end
+          end
+
+          object.delete         'progress' if object
+          object_changes.delete 'progress' if object_changes
+
+          version.update_columns object: object, object_changes: object_changes
+        end
+      end
+    end
+  end
+
+  def remove_finding_awaiting_state?
+    Finding.where(state: -4).any?
   end

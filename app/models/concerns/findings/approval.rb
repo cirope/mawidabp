@@ -42,9 +42,7 @@ module Findings::Approval
     end
 
     def answer_error
-      check_blank = awaiting? ||
-        being_implemented?    ||
-        SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+      check_blank = being_implemented? || SHOW_WEAKNESS_EXTRA_ATTRIBUTES
 
       if check_blank && answer.blank?
         I18n.t "#{class_name}.errors.without_answer"
@@ -54,7 +52,6 @@ module Findings::Approval
     def valid_state_error
       has_valid_state = implemented_audited? ||
         implemented?                         ||
-        awaiting?                            ||
         being_implemented?                   ||
         unanswered?                          ||
         assumed_risk?                        ||
