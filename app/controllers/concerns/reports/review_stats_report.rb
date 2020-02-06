@@ -102,14 +102,10 @@ module Reports::ReviewStatsReport
 
     def add_total_weaknesses_by_score risk:, r_value:, priority:, p_value:
       score_max = 100
-      label     = if HIDE_WEAKNESS_PRIORITY
-                    I18n.t "risk_types.#{risk}"
-                  else
-                    [
-                      I18n.t("risk_types.#{risk}"),
-                      I18n.t("priority_types.#{priority}")
-                    ].join(' / ')
-                  end
+      label     = [
+                    I18n.t("risk_types.#{risk}"),
+                    I18n.t("priority_types.#{priority}")
+                  ].join(' / ')
 
       @weaknesses_by_score[label] = {}
 
@@ -255,14 +251,10 @@ module Reports::ReviewStatsReport
     end
 
     def weaknesses_by_score_columns
-      risk_priority = if HIDE_WEAKNESS_PRIORITY
-                        Weakness.human_attribute_name('risk')
-                      else
-                        [
-                          Weakness.human_attribute_name('risk'),
-                          Weakness.human_attribute_name('priority')
-                        ].join(' / ')
-                      end
+      risk_priority = [
+                        Weakness.human_attribute_name('risk'),
+                        Weakness.human_attribute_name('priority')
+                      ].join(' / ')
 
       columns = { risk_priority => 25 }
 

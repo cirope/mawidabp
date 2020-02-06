@@ -130,8 +130,11 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_error @weakness, :control_objective_item_id, :blank
     assert_error @weakness, :review_code, :blank
     assert_error @weakness, :risk, :blank
-    assert_error @weakness, :priority, :blank
     assert_error @weakness, :audit_recommendations, :blank
+
+    unless SHOW_CONDENSED_PRIORITIES
+      assert_error @weakness, :priority, :blank
+    end
 
     if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
       assert_error @weakness, :compliance, :blank
