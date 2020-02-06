@@ -354,17 +354,6 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_equal repeated_of_original_state, repeated_of.state
   end
 
-  test 'state changed' do
-    login
-
-    get :state_changed, xhr: true, params: {
-      state: Finding::STATUS[:being_implemented]
-    }, as: :js
-
-    assert_response :success
-    assert_match Mime[:js].to_s, @response.content_type
-  end
-
   test 'weakness template changed' do
     login
 

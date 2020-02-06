@@ -101,14 +101,7 @@ module Reports::WeaknessesByAuditType
                   weaknesses_count[s[1]][rl[1]] = count_for_risk
                   weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
 
-                  if s.first.to_s == 'awaiting'
-                    awaiting = weaknesses_for_status.select do |w|
-                      w.risk == rl[1]
-                    end
-
-                    fill_counts_for rl, highest_risk, awaiting, awaiting_counts,
-                      highest_awaiting_counts
-                  elsif s.first.to_s == 'being_implemented'
+                  if s.first.to_s == 'being_implemented'
                     being_implemented = weaknesses_for_status.select do |w|
                       w.risk == rl[1]
                     end

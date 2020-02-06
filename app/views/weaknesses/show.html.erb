@@ -60,19 +60,6 @@
   <%= @weakness.state_text %>
 </p>
 
-<% if SHOW_WEAKNESS_PROGRESS %>
-  <p class="mb-1">
-    <strong><%= Weakness.human_attribute_name :progress %>:</strong>
-
-  </p>
-
-  <div class="progress">
-    <div class="progress-bar" role="progressbar" style="width: <%= @weakness.progress.to_i %>%;">
-      <%= @weakness.progress.to_i %>%
-    </div>
-  </div>
-<% end %>
-
 <p class="mb-1">
   <strong><%= Weakness.human_attribute_name :origination_date %>:</strong>
   <%=l @weakness.origination_date, :format => :long if @weakness.origination_date %>

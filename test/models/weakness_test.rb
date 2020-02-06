@@ -191,18 +191,6 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_error @weakness, :state, :inclusion
   end
 
-  test 'validates attributes boundaries' do
-    @weakness.progress = -1
-
-    assert @weakness.invalid?
-    assert_error @weakness, :progress, :greater_than_or_equal_to, count: 0
-
-    @weakness.progress = 101
-
-    assert @weakness.invalid?
-    assert_error @weakness, :progress, :less_than_or_equal_to, count: 100
-  end
-
   test 'validates well formated attributes' do
     @weakness.review_code = 'BAD_PREFIX_2'
 
@@ -224,35 +212,6 @@ class WeaknessTest < ActiveSupport::TestCase
 
   test 'last work paper code' do
     assert_equal 'PTO 004', @weakness.last_work_paper_code
-  end
-
-  test 'progress is not updated when state change to awaiting' do
-    skip unless SHOW_WEAKNESS_PROGRESS
-
-    @weakness.update! state:          Finding::STATUS[:awaiting],
-                      follow_up_date: Time.zone.today
-
-    assert_equal 0, @weakness.progress
-  end
-
-  test 'progress is updated to 25 when state change to being implemented' do
-    @weakness.update! state:          Finding::STATUS[:being_implemented],
-                      follow_up_date: Time.zone.today
-
-    assert_equal 25, @weakness.progress
-  end
-
-  test 'progress is updated to 100 when state change to implemented' do
-    @weakness.update! state:          Finding::STATUS[:implemented],
-                      follow_up_date: Time.zone.today
-
-    assert_equal 100, @weakness.progress
-  end
-
-  test 'default progress for' do
-    assert_equal 100, Weakness.default_progress_for(state: Finding::STATUS[:implemented])
-    assert_equal 0,   Weakness.default_progress_for(state: Finding::STATUS[:awaiting])
-    assert_equal 25,  Weakness.default_progress_for(state: Finding::STATUS[:being_implemented])
   end
 
   test 'review code is updated when control objective is changed' do
