@@ -145,7 +145,10 @@ module FindingsHelper
   end
 
   def finding_fixed_status_options
-    Finding::STATUS.slice(:implemented_audited, :assumed_risk, :expired).map do |k, v|
+    slice  = [:implemented_audited, :expired]
+    slice |= [:assumed_risk] unless HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    Finding::STATUS.slice(*slice).map do |k, v|
       [t("findings.state.#{k}"), v.to_s]
     end
   end
