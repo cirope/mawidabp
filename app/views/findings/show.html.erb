@@ -249,8 +249,8 @@
   <% @finding.finding_answers.each do |fa| %>
     <% if fa.persisted? %>
       <%= render 'finding_answer', finding_answer: fa %>
-    <% elsif params[:completed] == 'incomplete' %>
-      <%= simple_form_for fa, url: finding_answers_path(params[:completed], @finding) do |f| %>
+    <% elsif params[:completion_state] == 'incomplete' %>
+      <%= simple_form_for fa, url: finding_answers_path(params[:completion_state], @finding) do |f| %>
         <%= render 'finding_answer', f: f %>
 
         <div class="text-right">
@@ -362,22 +362,22 @@
 
 <div>
   <% if @finding.pending? && (!@auth_user.can_act_as_audited? || @finding.users.reload.include?(@auth_user)) %>
-    <strong><%= link_to_edit edit_finding_path(params[:completed],
+    <strong><%= link_to_edit edit_finding_path(params[:completion_state],
       @finding, :user_id => params[:user_id]) %></strong> |
   <% end %>
-  <%= link_to_index findings_path(params[:completed], :user_id => params[:user_id]) %> |
+  <%= link_to_index findings_path(params[:completion_state], :user_id => params[:user_id]) %> |
   <%= render('shared/downloads',
     right: true,
     links: [
       link_to(
         t('finding.follow_up_report.download_brief'),
-        follow_up_pdf_finding_path(params[:completed], @finding, :brief => true, :_ts => Time.now.to_i),
+        follow_up_pdf_finding_path(params[:completion_state], @finding, :brief => true, :_ts => Time.now.to_i),
         class: 'dropdown-item'
       ),
       (
         link_to(
           t('finding.follow_up_report.download'),
-          follow_up_pdf_finding_path(params[:completed], @finding, :_ts => Time.now.to_i),
+          follow_up_pdf_finding_path(params[:completion_state], @finding, :_ts => Time.now.to_i),
           class: 'dropdown-item'
         ) if show_follow_up_timestamps?
       )

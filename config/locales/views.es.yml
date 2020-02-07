@@ -145,7 +145,8 @@ es:
     current_user_filters:
       as_owner: '%{kind} como responsable'
       incomplete: 'Pendientes'
-      complete: 'Solucionados o reiterados'
+      complete: 'Solucionados'
+      repeated: 'Reiterados'
     state:
       confirmed: 'Confirmada'
       unconfirmed: 'No confirmada'

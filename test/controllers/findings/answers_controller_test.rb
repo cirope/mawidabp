@@ -13,9 +13,9 @@ class Findings::AnswersControllerTest < ActionController::TestCase
     assert_enqueued_emails 1 do
       assert_difference '@finding.finding_answers.count' do
         post :create, params: {
-          finding_id:     @finding.id,
-          completed:      'incomplete',
-          finding_answer: {
+          finding_id:       @finding.id,
+          completion_state: 'incomplete',
+          finding_answer:   {
             answer:                 'New answer',
             user_id:                users(:supervisor).id,
             notify_users:           '1',

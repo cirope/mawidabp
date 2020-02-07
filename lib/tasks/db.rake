@@ -18,6 +18,7 @@ namespace :db do
       update_finding_parent_ids           # 2020-01-22
       collapse_extended_risks             # 2020-02-04
       remove_finding_awaiting_state       # 2020-02-05
+      add_repeated_findings_privilege     # 2020-02-07
     end
   end
 end
@@ -453,4 +454,20 @@ private
 
   def remove_finding_awaiting_state?
     Finding.where(state: -4).any?
+  end
+
+  def add_repeated_findings_privilege
+    if repeated_findings_privilege?
+      Privilege.where(module: 'follow_up_complete_findings').find_each do |p|
+        attrs = p.attributes.
+          except('id', 'module', 'created_at', 'updated_at').
+          merge(module: 'follow_up_repeated_findings')
+
+        Privilege.create! attrs
+      end
+    end
+  end
+
+  def repeated_findings_privilege?
+    Privilege.where(module: 'follow_up_repeated_findings').empty?
   end
