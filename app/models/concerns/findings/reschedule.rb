@@ -58,9 +58,7 @@ module Findings::Reschedule
     def last_being_implemented_follow_up_date
       if implemented? || implemented_audited?
         last_being_implemented = versions.reverse.detect do |v|
-          prev = v.reify dup: true
-
-          prev&.being_implemented?
+          v.reify(dup: true)&.being_implemented?
         end&.reify dup: true
 
         [last_being_implemented&.follow_up_date, follow_up_date].compact.min
