@@ -410,7 +410,6 @@ ActiveRecord::Schema.define(version: 2020_01_21_221955) do
     t.integer "repeated_of_id"
     t.integer "organization_id"
     t.string "title"
-    t.integer "progress"
     t.text "current_situation"
     t.boolean "current_situation_verified", default: false, null: false
     t.string "compliance"

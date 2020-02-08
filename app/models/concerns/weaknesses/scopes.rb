@@ -9,7 +9,7 @@ module Weaknesses::Scopes
       where risk: Finding.risks[:medium], priority: Finding.priorities[:high]
     }
     scope :with_other_risk, -> {
-      where.not(risk: highest_risks).where.not(priority: Finding.priorities[:low])
+      where.not(risk: highest_risks).where.not(priority: Finding.priorities[:high])
     }
     scope :with_highest_risk, -> {
       where "#{quoted_table_name}.#{qcn 'highest_risk'} = #{quoted_table_name}.#{qcn 'risk'}"
