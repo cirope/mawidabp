@@ -334,7 +334,14 @@ private
   def update_finding_parent_ids
     if update_finding_parent_ids?
       Finding.with_repeated.find_each do |finding|
-        finding.update_column :parent_ids, finding.update_parent_ids
+        parent_ids = []
+        current    = finding
+
+        while current.repeated_of
+          parent_ids << (current = current.repeated_of).id
+        end
+
+        finding.update_column :parent_ids, parent_ids.reverse
       end
     end
   end
