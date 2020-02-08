@@ -22,4 +22,7 @@ bundle exec rails db:migrate
 echo 'Executing bundle exec rails db:seed...'
 bundle exec rails db:seed
 
+echo 'Executing bundle exec rails db:update...'
+bundle exec rails db:update
+
 source "$dir/fix_owner.sh"
