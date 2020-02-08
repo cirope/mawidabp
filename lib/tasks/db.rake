@@ -16,6 +16,9 @@ namespace :db do
       update_tag_icons                    # 2019-09-30
       update_finding_state_dates          # 2020-01-16
       update_finding_parent_ids           # 2020-01-22
+      collapse_extended_risks             # 2020-02-04
+      remove_finding_awaiting_state       # 2020-02-05
+      add_repeated_findings_privilege     # 2020-02-07
     end
   end
 end
@@ -227,10 +230,7 @@ private
   end
 
   def findings_for_notification_level_reset
-    pending_statuses = [
-      Finding::STATUS[:being_implemented],
-      Finding::STATUS[:awaiting]
-    ]
+    pending_statuses = [Finding::STATUS[:being_implemented]]
 
     Finding.
       finals(false).
@@ -333,26 +333,8 @@ private
 
   def update_finding_parent_ids
     if update_finding_parent_ids?
-      # Root findings
-      Finding.repeated.without_repeated.find_each.each do |f|
-        parent_ids         = []
-        findings_to_update = []
-        repeated_in        = f.repeated_in
-
-        # build the entire "family tree"
-        while repeated_in
-          findings_to_update << repeated_in
-          parent_ids         << repeated_in.repeated_of_id
-
-          repeated_in = repeated_in.repeated_in
-        end
-
-        # From last to first, update parent_ids and delete the "iterated child"
-        # from the parent_ids list
-        findings_to_update.reverse_each do |child|
-          child.update_column :parent_ids, parent_ids
-          parent_ids.pop # or parent_ids.delete(child.repeated_of_id)
-        end
+      Finding.with_repeated.find_each do |finding|
+        finding.update_column :parent_ids, finding.update_parent_ids
       end
     end
   end
@@ -364,4 +346,110 @@ private
 
   def update_finding_parent_ids?
     POSTGRESQL_ADAPTER && Finding.where("#{Finding.table_name}.parent_ids != '{}'").empty?
+  end
+
+  def collapse_extended_risks
+    if collapse_extended_risks?
+      swaps = {
+        0 => { risk: 0, priority: 0 },
+        1 => { risk: 0, priority: 0 },
+        2 => { risk: 1, priority: 0 },
+        3 => { risk: 1, priority: 2 },
+        4 => { risk: 2, priority: 0 },
+        5 => { risk: 2, priority: 0 }
+      }
+
+      swaps.each do |risk, new_attributes|
+        Finding.where(risk: risk).find_each do |finding|
+          finding.update_columns new_attributes
+
+          finding.versions.each do |version|
+            object         = version.object
+            object_changes = version.object_changes
+
+            if (v_risk = object && object['risk'])
+              new_values = swaps[v_risk]
+
+              object['risk']     = new_values[:risk]
+              object['priority'] = new_values[:priority]
+            end
+
+            if (v_risks = object_changes && object_changes['risk'])
+              object_changes['risk'] = v_risks.map do |v_risk|
+                v_risk && swaps[v_risk][:risk]
+              end
+
+              if v_risks.last == 3
+                prev = v_risks.first.nil? ? nil : 0
+
+                object_changes['priority'] = [prev, swaps[3][:priority]]
+              elsif v_risks.first == 3
+                object_changes['priority'] = [swaps[3][:priority], 0]
+              end
+            end
+
+            version.update_columns object: object, object_changes: object_changes
+          end
+        end
+      end
+    end
+  end
+
+  def collapse_extended_risks?
+    ENV['SHOW_EXTENDED_RISKS'] == 'true' && Finding.where(risk: [3, 4, 5]).any?
+  end
+
+  def remove_finding_awaiting_state
+    if remove_finding_awaiting_state?
+      old_state   = -4
+      replacement = Finding::STATUS[:being_implemented]
+
+      Finding.where(state: old_state).update_all state: replacement
+
+      Finding.find_each do |finding|
+        finding.versions.each do |version|
+          object         = version.object
+          object_changes = version.object_changes
+
+          if (v_state = object && object['state']) && v_state == old_state
+            object['state'] = replacement
+          end
+
+          if (v_states = object_changes && object_changes['state'])
+            object_changes['state'] = v_states.map do |v_state|
+              v_state == old_state ? replacement : v_state
+            end
+
+            if object_changes['state'].uniq.size == 1
+              object_changes.delete 'state'
+            end
+          end
+
+          object.delete         'progress' if object
+          object_changes.delete 'progress' if object_changes
+
+          version.update_columns object: object, object_changes: object_changes
+        end
+      end
+    end
+  end
+
+  def remove_finding_awaiting_state?
+    Finding.where(state: -4).any?
+  end
+
+  def add_repeated_findings_privilege
+    if repeated_findings_privilege?
+      Privilege.where(module: 'follow_up_complete_findings').find_each do |p|
+        attrs = p.attributes.
+          except('id', 'module', 'created_at', 'updated_at').
+          merge(module: 'follow_up_repeated_findings')
+
+        Privilege.create! attrs
+      end
+    end
+  end
+
+  def repeated_findings_privilege?
+    Privilege.where(module: 'follow_up_repeated_findings').empty?
   end

@@ -62,20 +62,20 @@
         </div>
         <%= finding_repeated_of_label(f, readonly: readonly) %>
         <%= finding_repeated_of_if_field(f, readonly: readonly) %>
-        <%= f.input :description, autofocus: true, input_html: { readonly: readonly, rows: HIDE_WEAKNESS_EFFECT ? 13 : 5 } %>
+        <%= f.input :description, autofocus: true, input_html: { readonly: readonly, rows: HIDE_WEAKNESS_EFFECT ? 11 : 5 } %>
         <% unless HIDE_WEAKNESS_EFFECT %>
           <%= f.input :effect, input_html: { readonly: readonly, rows: 5 } %>
         <% end %>
-        <%= f.input :audit_recommendations, input_html: { readonly: readonly, rows: 5 } %>
+        <%= f.input :audit_recommendations, input_html: { readonly: readonly, rows: HIDE_WEAKNESS_EFFECT ? 7 : 5 } %>
       </div>
       <div class="col-md-6">
         <%= f.input :origination_date, as: :date_picker, input_html: {
           readonly: (readonly || @weakness.repeated_of)
         } %>
-        <%= f.input :risk, collection: risks, prompt: true, disabled: readonly %>
-        <% unless HIDE_WEAKNESS_PRIORITY %>
-          <%= f.input :priority, collection: priorities, prompt: true, disabled: readonly %>
-        <% end %>
+        <%= f.input :risk, collection: risks, prompt: true, disabled: readonly, input_html: {
+          data: SHOW_CONDENSED_PRIORITIES ? { toggle_priority: Finding.risks[:medium] } : {}
+        } %>
+        <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES, disabled: disabled_priority(@weakness, readonly) %>
         <%= f.label :state, raw(Weakness.human_attribute_name(:state) + ' ' +
             (show_history_changes ? finding_show_status_change_history(
               :finding_status_change_history) : '')) %>
@@ -95,10 +95,6 @@
             <%= c_f.input :comment %>
             <%= c_f.input :user_id, as: :hidden %>
           <% end %>
-        <% end %>
-        <% if SHOW_WEAKNESS_PROGRESS %>
-          <%= f.input :progress, collection: weakness_progresses(@weakness), prompt: true,
-            disabled: weakness_progress_disabled?(@weakness, readonly) %>
         <% end %>
         <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
         <%= f.input :follow_up_date, as: :date_picker, input_html: { readonly: @weakness.tasks.any?, disabled: readonly } %>

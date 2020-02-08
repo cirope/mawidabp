@@ -2,7 +2,6 @@ module Findings::ReportScopes
   extend ActiveSupport::Concern
 
   included do
-    scope :awaiting,          -> { where state: Finding::STATUS[:awaiting] }
     scope :being_implemented, -> { where state: Finding::STATUS[:being_implemented] }
     scope :implemented,       -> { where state: Finding::STATUS[:implemented] }
     scope :not_incomplete,    -> { where "state <> ?", Finding::STATUS[:incomplete] }

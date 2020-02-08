@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_21_221955) do
+ActiveRecord::Schema.define(version: 2020_02_06_135604) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -410,7 +410,6 @@ ActiveRecord::Schema.define(version: 2020_01_21_221955) do
     t.integer "repeated_of_id"
     t.integer "organization_id"
     t.string "title"
-    t.integer "progress"
     t.text "current_situation"
     t.boolean "current_situation_verified", default: false, null: false
     t.string "compliance"

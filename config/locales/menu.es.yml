@@ -59,6 +59,7 @@ es:
     follow_up:
       pending_findings: 'Hallazgos pendientes'
       complete_findings: 'Hallazgos solucionados'
+      repeated_findings: 'Hallazgos reiterados'
       notifications: 'Notificaciones'
       reports: 'Reportes'
     help_title: 'Ayuda'

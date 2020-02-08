@@ -7,8 +7,7 @@ module FindingsHelper
       label:      false,
       prompt:     true,
       input_html: {
-        disabled: (disabled || finding.unconfirmed?),
-        data: { weakness_state_changed_url: state_changed_weaknesses_path }
+        disabled: (disabled || finding.unconfirmed?)
       }
   end
 
@@ -35,7 +34,7 @@ module FindingsHelper
   def finding_follow_up_date_text finding
     html_classes = []
 
-    if finding.being_implemented? || finding.awaiting?
+    if finding.being_implemented?
       html_classes << 'strike bg-danger' if finding.stale?
       html_classes << 'text-warning'     if finding.rescheduled?
       html_classes << 'text-success'     if html_classes.blank?
@@ -146,7 +145,10 @@ module FindingsHelper
   end
 
   def finding_fixed_status_options
-    Finding::STATUS.slice(:implemented_audited, :assumed_risk, :expired).map do |k, v|
+    slice  = [:implemented_audited, :expired]
+    slice |= [:assumed_risk] unless HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    Finding::STATUS.slice(*slice).map do |k, v|
       [t("findings.state.#{k}"), v.to_s]
     end
   end
@@ -254,6 +256,14 @@ module FindingsHelper
       @_show_follow_up_timestamps = result
     else
       @_show_follow_up_timestamps
+    end
+  end
+
+  def disabled_priority finding, readonly
+    if SHOW_CONDENSED_PRIORITIES
+      readonly || finding.risk != Finding.risks[:medium]
+    else
+      readonly
     end
   end
 

@@ -316,7 +316,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
     get :auto_complete_for_finding_relation, :params => {
-      :completed => 'incomplete',
+      :completion_state => 'incomplete',
       :q => 'O001; 1 2 3',
       :finding_id => finding.id,
       :review_id => finding.review.id

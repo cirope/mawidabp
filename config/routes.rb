@@ -217,7 +217,7 @@ Rails.application.routes.draw do
       to: "follow_up_audit#create_#{action}"
   end
 
-  scope ':completed', completed: /complete|incomplete/ do
+  scope ':completion_state', completion_state: /complete|incomplete|repeated/ do
     resources :findings, except: [:destroy] do
       resources :costs
       resources :finding_answers, only: [:create], controller: 'findings/answers', as: 'answers'
@@ -333,7 +333,6 @@ Rails.application.routes.draw do
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
       get :auto_complete_for_weakness_template
-      get :state_changed
       get :weakness_template_changed
     end
 

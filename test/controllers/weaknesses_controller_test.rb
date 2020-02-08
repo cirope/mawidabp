@@ -354,17 +354,6 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_equal repeated_of_original_state, repeated_of.state
   end
 
-  test 'state changed' do
-    login
-
-    get :state_changed, xhr: true, params: {
-      state: Finding::STATUS[:being_implemented]
-    }, as: :js
-
-    assert_response :success
-    assert_match Mime[:js].to_s, @response.content_type
-  end
-
   test 'weakness template changed' do
     login
 
@@ -412,7 +401,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
     get :auto_complete_for_finding_relation, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       q: 'O001; 1 2 3',
       finding_id: finding.id,
       review_id: finding.review.id

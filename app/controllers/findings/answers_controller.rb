@@ -12,9 +12,9 @@ class Findings::AnswersController < ApplicationController
     if @finding.save
       flash.notice = t 'flash.finding_answers.create.notice'
 
-      respond_with @finding_answer, location: finding_url(params[:completed], @finding)
+      respond_with @finding_answer, location: finding_url(params[:completion_state], @finding)
     else
-      redirect_to finding_url(params[:completed], @finding),
+      redirect_to finding_url(params[:completion_state], @finding),
         alert: t('flash.finding_answers.create.alert')
     end
   end
