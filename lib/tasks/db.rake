@@ -19,6 +19,7 @@ namespace :db do
       collapse_extended_risks             # 2020-02-04
       remove_finding_awaiting_state       # 2020-02-05
       add_repeated_findings_privilege     # 2020-02-07
+      update_latest_on_findings           # 2020-02-08
     end
   end
 end
@@ -333,12 +334,12 @@ private
 
   def update_finding_parent_ids
     if update_finding_parent_ids?
-      Finding.with_repeated.find_each do |finding|
+      Finding.with_repeated.finals(false).find_each do |finding|
         parent_ids = []
-        current    = finding
+        cursor     = finding
 
-        while current.repeated_of
-          parent_ids << (current = current.repeated_of).id
+        while cursor.repeated_of
+          parent_ids << (cursor = cursor.repeated_of).id
         end
 
         finding.update_column :parent_ids, parent_ids.reverse
@@ -459,4 +460,24 @@ private
 
   def repeated_findings_privilege?
     Privilege.where(module: 'follow_up_repeated_findings').empty?
+  end
+
+  def update_latest_on_findings
+    if update_latest_on_findings?
+      Finding.with_repeated.not_repeated.finals(false).find_each do |finding|
+        latest_id = finding.id
+        cursor    = finding
+        findings  = []
+
+        while cursor.repeated_of
+          findings << (cursor = cursor.repeated_of)
+        end
+
+        findings.each { |f| f.update_column :latest_id, latest_id }
+      end
+    end
+  end
+
+  def update_latest_on_findings?
+    Finding.where.not(latest_id: nil).empty?
   end

@@ -53,9 +53,10 @@ module Reports::WeaknessesReport
           :finding_user_assignments,
           :repeated_of,
           :repeated_in,
+          latest: :review,
+          review: :plan_item,
           finding_answers: [:file_model, user: { organization_roles: :role }],
           users: { organization_roles: :role },
-          review: :plan_item,
           control_objective_item: [:process_control]
         ).order order
       else
@@ -213,7 +214,7 @@ module Reports::WeaknessesReport
       pdf.add_description_item(ProcessControl.model_name.human, weakness.control_objective_item.process_control.name, 0, false)
       pdf.add_description_item(Weakness.human_attribute_name(:control_objective_item_id), weakness.control_objective_item.to_s, 0, false)
       pdf.add_description_item(Weakness.human_attribute_name(:description), weakness.description, 0, false)
-      pdf.add_description_item(Weakness.human_attribute_name(:state), weakness.state_text, 0, false)
+      pdf.add_description_item(Weakness.human_attribute_name(:state), weakness.full_state_text, 0, false)
 
       pdf.add_description_item(Weakness.human_attribute_name(:risk), weakness.risk_text, 0, false)
       pdf.add_description_item(Weakness.human_attribute_name(:priority), weakness.priority_text, 0, false)

@@ -17,7 +17,7 @@ module Findings::Csv
       (taggings.map(&:tag).to_sentence if self.class.show_follow_up_timestamps?),
       title,
       description,
-      state_text,
+      full_state_text,
       try(:risk_text) || '',
       respond_to?(:risk_text) ? priority_text : '',
       auditeds_as_process_owner.join('; '),
@@ -40,7 +40,8 @@ module Findings::Csv
       audit_recommendations,
       answer,
       (last_commitment_date_text if self.class.show_follow_up_timestamps?),
-      (finding_answers_text if self.class.show_follow_up_timestamps?)
+      (finding_answers_text if self.class.show_follow_up_timestamps?),
+      latest_answer_text
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -129,6 +130,18 @@ module Findings::Csv
       answers.reverse.join LINE_BREAK_REPLACEMENT
     end
 
+    def latest_answer_text
+      answer = latest&.latest_answer || (latest.nil? && latest_answer)
+
+      if answer
+        date = I18n.l answer.created_at, format: :minimal
+
+        "[#{date}] #{answer.user.full_name}: #{answer.answer}"
+      else
+        '-'
+      end
+    end
+
     def last_commitment_date_text
       commitment_date = finding_answers.map(&:commitment_date).compact.sort.last
       date            = if follow_up_date && commitment_date
@@ -183,6 +196,8 @@ module Findings::Csv
           :business_unit,
           :tasks,
           ({ tasks: :versions } if POSTGRESQL_ADAPTER),
+          :latest_answer,
+          latest: [:review, :latest_answer],
           finding_answers: :user,
           finding_user_assignments: :user,
           finding_owner_assignments: :user,
@@ -236,7 +251,8 @@ module Findings::Csv
           Finding.human_attribute_name('audit_recommendations'),
           Finding.human_attribute_name('answer'),
           (FindingAnswer.human_attribute_name('commitment_date') if show_follow_up_timestamps?),
-          (I18n.t('finding.finding_answers') if show_follow_up_timestamps?)
+          (I18n.t('finding.finding_answers') if show_follow_up_timestamps?),
+          (I18n.t('finding.latest_answer') if show_follow_up_timestamps?)
         ].compact
       end
   end
