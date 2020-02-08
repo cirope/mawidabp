@@ -333,26 +333,8 @@ private
 
   def update_finding_parent_ids
     if update_finding_parent_ids?
-      # Root findings
-      Finding.repeated.without_repeated.find_each.each do |f|
-        parent_ids         = []
-        findings_to_update = []
-        repeated_in        = f.repeated_in
-
-        # build the entire "family tree"
-        while repeated_in
-          findings_to_update << repeated_in
-          parent_ids         << repeated_in.repeated_of_id
-
-          repeated_in = repeated_in.repeated_in
-        end
-
-        # From last to first, update parent_ids and delete the "iterated child"
-        # from the parent_ids list
-        findings_to_update.reverse_each do |child|
-          child.update_column :parent_ids, parent_ids
-          parent_ids.pop # or parent_ids.delete(child.repeated_of_id)
-        end
+      Finding.with_repeated.find_each do |finding|
+        finding.update_column :parent_ids, finding.update_parent_ids
       end
     end
   end
