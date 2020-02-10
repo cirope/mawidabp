@@ -93,7 +93,7 @@ class PollsController < ApplicationController
     end
 
     def set_poll
-      @poll = Poll.list.find params[:id]
+      @poll = Poll.list.preload(answers: { question: :answer_options }).find params[:id]
     end
 
     def set_current_module
