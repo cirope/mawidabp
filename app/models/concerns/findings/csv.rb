@@ -1,4 +1,6 @@
 module Findings::Csv
+  include ActionView::Helpers::TextHelper
+
   extend ActiveSupport::Concern
 
   LINE_BREAK             = "\r\n"
@@ -127,7 +129,11 @@ module Findings::Csv
         "[#{date}] #{fa.user.full_name}: #{fa.answer}"
       end
 
-      answers.reverse.join LINE_BREAK_REPLACEMENT
+      truncate(
+        answers.reverse.join(LINE_BREAK_REPLACEMENT),
+        length:   32767, # To go around the 32767 limit on some spreadsheets
+        omission: "[#{I18n.t('messages.truncated', count: 32767)}]"
+      )
     end
 
     def latest_answer_text

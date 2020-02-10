@@ -2,6 +2,7 @@ es:
   messages:
     confirmation: '¿Está seguro?'
     not_authorized: 'Debe ingresar para ver el contenido'
+    truncated: 'Truncado, cantidad máxima de caracteres %{count}'
 
   navigation:
     back: 'Volver'
