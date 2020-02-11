@@ -17,7 +17,9 @@ class RegistrationsControllerTest < ActionController::TestCase
       Group.count Organization.count License.count User.count
     ]
 
-    assert_enqueued_emails 1 do
+    emails_count = NOTIFY_NEW_ADMIN ? 2 : 1
+
+    assert_enqueued_emails emails_count do
       assert_difference counts do
         post :create, params: {
           registration: {

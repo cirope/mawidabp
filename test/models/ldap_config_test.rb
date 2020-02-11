@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class LdapConfigTest < ActiveSupport::TestCase
+  include ActionMailer::TestHelper
+
   setup do
     @ldap_config = ldap_configs :google_ldap
   end
@@ -207,12 +209,19 @@ class LdapConfigTest < ActiveSupport::TestCase
   end
 
   test 'massive import' do
+    user         = users(:supervisor)
     organization = organizations(:google)
+    emails_count = NOTIFY_NEW_ADMIN ? 2 : 1
 
     organization.ldap_config.update! user: 'admin', password: 'admin123'
 
-    assert_difference ['User.count', 'ActionMailer::Base.deliveries.size'] do
-      LdapConfig.sync_users
+    user.organization_roles.create! organization_id: organizations(:google).id,
+                                    role_id: roles(:supervisor_google_role).id
+
+    assert_enqueued_emails emails_count do
+      assert_difference 'User.count' do
+        LdapConfig.sync_users
+      end
     end
   end
 

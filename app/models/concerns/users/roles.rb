@@ -6,6 +6,7 @@ module Users::Roles
 
     before_validation :inject_auth_privileges_in_roles, :set_proper_parent
     before_update :check_roles_changes
+    before_save :notify_on_new_admin, if: :notify_new_admin?
 
     has_many :organization_roles, dependent: :destroy,
       after_add:    :mark_roles_as_changed,
@@ -90,8 +91,16 @@ module Users::Roles
   module ClassMethods
     def can_act_as role
       includes(organization_roles: :role).where(
-        roles:           {
+        roles: {
           role_type: ::Role::ACT_AS[role]
+        }
+      )
+    end
+
+    def with_role role
+      includes(organization_roles: :role).where(
+        roles: {
+          role_type: ::Role::TYPES[role]
         }
       )
     end
@@ -136,5 +145,24 @@ module Users::Roles
       organization_role.user = self unless organization_role.frozen?
 
       self.roles_changed = true
+    end
+
+    def notify_new_admin?
+      NOTIFY_NEW_ADMIN && roles_has_changed?
+    end
+
+    def notify_on_new_admin
+      old_user = User.find id unless new_record?
+
+      org_ids = organization_roles.reject(&:marked_for_destruction?).map do |organization_role|
+        organization_id = organization_role.organization_id
+        was_admin       = old_user&.admin_on? organization_id
+
+        organization_id if !was_admin && admin_on?(organization_id)
+      end.compact.uniq
+
+      org_ids.each do |organization_id|
+        NotifierMailer.new_admin_user(organization_id, email).deliver_later
+      end
     end
 end

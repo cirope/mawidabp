@@ -14,6 +14,7 @@ addons:
 
 services:
   - postgresql
+  - redis-server
 
 env:
   global:
@@ -22,7 +23,7 @@ env:
     - CONFIG_TYPE=bic
 
 before_install:
-  - 'gem update --system && gem update bundler'
+  - 'gem update --force bundler'
 
 before_script:
   - 'cp config/application.yml.example config/application.yml'

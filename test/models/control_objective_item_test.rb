@@ -13,12 +13,6 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       :management_dependency_item_editable).id
   end
 
-  teardown do
-    Current.user = nil
-
-    unset_organization
-  end
-
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     retrived_coi = control_objective_items(:management_dependency_item_editable)
@@ -456,6 +450,16 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert File.size(@control_objective_item.absolute_pdf_path) > 0
 
     FileUtils.rm @control_objective_item.absolute_pdf_path
+  end
+
+  test 'show counts' do
+    skip if validate_counts?
+
+    refute @control_objective_item.show_counts?(Current.organization.prefix)
+
+    @control_objective_item.review.business_unit_type.update! require_counts: true
+
+    assert @control_objective_item.show_counts?(Current.organization.prefix)
   end
 
   private

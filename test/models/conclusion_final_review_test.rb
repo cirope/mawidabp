@@ -12,12 +12,6 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     set_organization
   end
 
-  teardown do
-    Current.user = nil
-
-    unset_organization
-  end
-
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of ConclusionFinalReview, @conclusion_review
@@ -376,12 +370,12 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     }
 
     review.weaknesses.where(:state => Finding::STATUS[:unconfirmed]).each do |w|
-      assert w.update_columns :state          => Finding::STATUS[:awaiting],
+      assert w.update_columns :state          => Finding::STATUS[:being_implemented],
                               :follow_up_date => 10.days.from_now.to_date
     end
 
     review.oportunities.where(:state => Finding::STATUS[:unconfirmed]).each do |o|
-      assert o.update_columns :state          => Finding::STATUS[:awaiting],
+      assert o.update_columns :state          => Finding::STATUS[:being_implemented],
                               :follow_up_date => 10.days.from_now.to_date
     end
 

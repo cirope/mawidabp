@@ -12,16 +12,16 @@ class LdapMailerTest < ActionMailer::TestCase
     assert_empty ActionMailer::Base.deliveries
   end
 
-  teardown do
-    unset_organization
-  end
-
   test 'Notify with imported users' do
     Current.organization = organizations(:google)
     Current.group        = Current.organization.group
 
     ldap_config = ldap_configs(:google_ldap)
     imports = ldap_config.import('admin', 'admin123')
+    user = users(:supervisor)
+
+    user.organization_roles.create! organization_id: organizations(:google).id,
+                                    role_id: roles(:supervisor_google_role).id
 
     filtered_imports = imports.map do |i|
       unless i[:state] == :unchanged

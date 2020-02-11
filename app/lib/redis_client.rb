@@ -26,4 +26,16 @@ module RedisClient
   def assign_paypal_token token, expire_in
     client.setex 'paypal_token', expire_in, token
   end
+
+  def license_plan_change_url subscription_id
+    client.get "plan_change_url_for_#{subscription_id}"
+  end
+
+  def assign_license_plan_change_url subscription_id, url
+    client.set "plan_change_url_for_#{subscription_id}", url
+  end
+
+  def clean_license_plan_change_url subscription_id
+    client.del "plan_change_url_for_#{subscription_id}"
+  end
 end

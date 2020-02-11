@@ -18,6 +18,7 @@ module Users::Scopes
         references :organizations
     }
     scope :not_hidden, -> { where hidden: false }
+    scope :enabled, -> { where enable: true }
   end
 
   module ClassMethods

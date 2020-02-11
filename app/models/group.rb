@@ -1,5 +1,6 @@
 class Group < ApplicationRecord
   include Trimmer
+  include Groups::AttributeTypes
   include Groups::Auditable
   include Groups::Current
   include Groups::Licenses

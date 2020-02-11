@@ -11,10 +11,6 @@ class NotifierMailerTest < ActionMailer::TestCase
     set_organization
   end
 
-  teardown do
-    unset_organization
-  end
-
   test 'pending poll email' do
     poll = Poll.find(polls(:poll_one).id)
 
@@ -415,5 +411,33 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert_match Regexp.new(I18n.t('notifier.conclusion_final_review_close_date_warning.body_title')),
       response.body.decoded
     assert_equal user.email, response.to.first
+  end
+
+  test 'new admin user for first administrator' do
+    user         = users :administrator
+    organization = organizations :cirope
+
+    organization.organization_roles.where(
+      role_id: roles(:admin_role).id
+    ).where.not(user_id: user.id).delete_all
+
+    response = NotifierMailer.new_admin_user(organization.id, user.email).deliver_now
+
+    assert_nil response
+    assert ActionMailer::Base.deliveries.empty?
+  end
+
+  test 'new admin user' do
+    user         = users :audited
+    organization = organizations :cirope
+
+    user.organization_roles.where(
+      organization_id: organization.id
+    ).update_all role_id: roles(:admin_role).id
+
+    response = NotifierMailer.new_admin_user(organization.id, user.email).deliver_now
+
+    refute ActionMailer::Base.deliveries.empty?
+    assert_not_includes response.to, user.email
   end
 end

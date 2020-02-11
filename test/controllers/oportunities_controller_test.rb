@@ -18,16 +18,18 @@ class OportunitiesControllerTest < ActionController::TestCase
     }
     public_actions = []
     private_actions = [
-      [:get, :index],
+      [:get, :index, {}],
       [:get, :show, id_param],
-      [:get, :new],
+      [:get, :new, {}],
       [:get, :edit, id_param],
-      [:post, :create],
+      [:post, :create, {}],
       [:patch, :update, id_param]
     ]
 
     private_actions.each do |action|
-      send *action
+      options = action.pop
+
+      send *action, **options
       assert_redirected_to login_url
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
@@ -314,7 +316,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
     get :auto_complete_for_finding_relation, :params => {
-      :completed => 'incomplete',
+      :completion_state => 'incomplete',
       :q => 'O001; 1 2 3',
       :finding_id => finding.id,
       :review_id => finding.review.id

@@ -8,10 +8,6 @@ class Findings::WorkPapersControllerTest < ActionController::TestCase
     set_organization
   end
 
-  teardown do
-    unset_organization
-  end
-
   test 'create finding work paper from finding answer' do
     last_work_paper_code =
       @controller.view_context.next_oportunity_work_paper_code @finding
@@ -28,7 +24,7 @@ class Findings::WorkPapersControllerTest < ActionController::TestCase
     assert_difference '@finding.work_papers.count' do
       post :create, params: {
         finding_id:           @finding.id,
-        completed:            'incomplete',
+        completion_state:     'incomplete',
         finding_answer_id:    finding_answer.id,
         last_work_paper_code: last_work_paper_code
       }, xhr: true, as: :js

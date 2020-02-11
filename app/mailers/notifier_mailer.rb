@@ -210,7 +210,7 @@ class NotifierMailer < ActionMailer::Base
     @body_title = body_title
     @note = options[:note]
 
-    if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(org_prefix)
+    if conclusion_review.review.show_counts?(org_prefix)
       @show_alt_footer = true
     end
 
@@ -292,5 +292,20 @@ class NotifierMailer < ActionMailer::Base
 
     mail to: [user.email],
          subject: "#{prefixes.upcase} #{t 'notifier.conclusion_final_review_close_date_warning.title'}"
+  end
+
+  def new_admin_user organization_id, email
+    @organization        = Organization.find organization_id
+    Current.organization = @organization
+
+    @user   = @organization.users.find_by email: email
+    prefix  = @organization.prefix.upcase
+    emails  = @organization.users.not_hidden.enabled.with_role(:admin).distinct.pluck :email
+    emails -= [@user.email]
+
+    return if emails.empty? # only one administrator
+
+    mail to: emails,
+         subject: "[#{prefix}] #{t 'notifier.new_admin_user.title'}"
   end
 end

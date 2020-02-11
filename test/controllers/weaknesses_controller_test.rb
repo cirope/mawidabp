@@ -15,17 +15,19 @@ class WeaknessesControllerTest < ActionController::TestCase
     }
     public_actions = []
     private_actions = [
-      [:get, :index],
+      [:get, :index, {}],
       [:get, :show, id_param],
-      [:get, :new],
+      [:get, :new, {}],
       [:get, :edit, id_param],
-      [:post, :create],
+      [:post, :create, {}],
       [:patch, :update, id_param],
       [:patch, :undo_reiteration, id_param]
     ]
 
     private_actions.each do |action|
-      send *action
+      options = action.pop
+
+      send *action, **options
       assert_redirected_to login_url
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
@@ -352,17 +354,6 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_equal repeated_of_original_state, repeated_of.state
   end
 
-  test 'state changed' do
-    login
-
-    get :state_changed, xhr: true, params: {
-      state: Finding::STATUS[:being_implemented]
-    }, as: :js
-
-    assert_response :success
-    assert_match Mime[:js].to_s, @response.content_type
-  end
-
   test 'weakness template changed' do
     login
 
@@ -410,7 +401,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
     get :auto_complete_for_finding_relation, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       q: 'O001; 1 2 3',
       finding_id: finding.id,
       review_id: finding.review.id

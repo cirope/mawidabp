@@ -9,7 +9,7 @@ class Users::StatusControllerTest < ActionController::TestCase
 
   test 'should get index' do
     get :index, session: { status_user_ids: [@user.id] }
-    assert_redirected_to findings_url(completed: 'incomplete', user_ids: [@user.id])
+    assert_redirected_to findings_url(completion_state: 'incomplete', user_ids: [@user.id])
     assert session[:status_user_ids].empty?
   end
 

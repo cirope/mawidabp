@@ -2,6 +2,7 @@ es:
   messages:
     confirmation: '¿Está seguro?'
     not_authorized: 'Debe ingresar para ver el contenido'
+    truncated: 'Truncado, cantidad máxima de caracteres %{count}'
 
   navigation:
     back: 'Volver'
@@ -145,12 +146,12 @@ es:
     current_user_filters:
       as_owner: '%{kind} como responsable'
       incomplete: 'Pendientes'
-      complete: 'Solucionados o reiterados'
+      complete: 'Solucionados'
+      repeated: 'Reiterados'
     state:
       confirmed: 'Confirmada'
       unconfirmed: 'No confirmada'
       unanswered: 'Sin respuesta'
-      awaiting: 'En espera'
       being_implemented: 'Pendiente'
       being_implemented_current: 'Vigente'
       being_implemented_current_rescheduled: 'Reprogramada vigente'
@@ -183,6 +184,17 @@ es:
         check: 'Volver a comprobar pago'
     license:
       check: 'Volver a comprobar pago'
+      approve: 'Ir a Paypal'
+      authorize_new_plan:
+        title: 'Autorizar nuevo plan'
+        body: |-
+          Para cambiar de plan, deberá autorizar el nuevo plan mensual.
+          El nuevo plan será facturado en el próximo ciclo, pero verá reflejada la cantidad deseada de usuarios auditores en el momento.'
+    authorizations:
+      new:
+        title: 'Licencia'
+      create:
+        title: 'Licencia'
     paypal_button:
       create: 'Suscribirse'
       create_error: 'Ha ocurrido un problema, por favor comuníquese con soporte@mawidabp.com para comprobar si el pago está acreditado.'
@@ -326,7 +338,10 @@ es:
       show:
         title: 'Cronograma'
         empty: 'No hay proyectos en el plan seleccionado'
+        empty_with_no_business_units: 'No hay unidades de negocio seleccionadas'
         detail: 'Detalle'
+        by_business_unit: 'Ver calendario por unidad de negocio'
+        by_project: 'Ver calendario por proyecto'
     resources:
       show:
         title: 'Resumen por recurso'
@@ -478,6 +493,8 @@ es:
     brief_period_in_weeks: 'Periodo de notificación "Resumen de hallazgos" en semanas'
     show_follow_up_timestamps: 'Mostrar marcas de tiempo en seguimiento'
     require_manager_on_findings: 'Requerir gerente de auditoría en hallazgos'
+    hide_import_from_ldap: 'Mostrar "Importar desde LDAP" solo a usuarios con permisos de aprobación'
+    skip_function_and_manager_from_ldap_sync: 'No sincronizar los campos "Cargo" y "Superior" con los valores de LDAP'
 
   tags:
     edit:
@@ -548,7 +565,7 @@ es:
         updated: 'Actualizado'
         deleted: 'Eliminado'
         unchanged: 'Sin cambios'
-        error: 'Con errores'
+        errored: 'Con errores'
         deprecated_users: 'Usuarios ausentes en el servidor LDAP'
     passwords:
       edit:

@@ -53,20 +53,20 @@ class UsersControllerTest < ActionController::TestCase
       assert_difference counts_array do
         post :create, params: {
           user: {
-            user: 'new_user',
-            name: 'New Name',
-            last_name: 'New Last Name',
-            email: 'new_user@newemail.net',
-            language: I18n.available_locales.last.to_s,
-            notes: 'Some user notes',
-            manager_id: users(:administrator).id,
-            logged_in: false,
-            enable: true,
-            send_notification_email: '1',
+            user:                          'new_user',
+            name:                          'New Name',
+            last_name:                     'New Last Name',
+            email:                         'new_user@newemail.net',
+            language:                      I18n.available_locales.last.to_s,
+            notes:                         'Some user notes',
+            manager_id:                    users(:administrator).id,
+            logged_in:                     false,
+            enable:                        true,
+            send_notification_email:       '1',
             organization_roles_attributes: [
               {
                 organization_id: organizations(:cirope).id,
-                role_id: roles(:admin_role).id
+                role_id:         roles(:executive_manager_role).id
               }
             ],
             related_user_relations_attributes: [
@@ -77,24 +77,27 @@ class UsersControllerTest < ActionController::TestCase
       end
     end
 
-    assert_difference ['User.count', 'OrganizationRole.count'] do
-      assert_no_emails do
+    clear_enqueued_jobs
+    clear_performed_jobs
+
+    assert_no_enqueued_emails do
+      assert_difference ['User.count', 'OrganizationRole.count'] do
         post :create, params: {
           user: {
-            user: 'new_user_2',
-            name: 'New Name2',
-            last_name: 'New Last Name2',
-            email: 'new_user2@newemail.net',
-            language: I18n.available_locales.last.to_s,
-            notes: 'Some user notes',
-            manager_id: users(:administrator).id,
-            logged_in: false,
-            enable: true,
-            send_notification_email: '',
+            user:                          'new_user_2',
+            name:                          'New Name2',
+            last_name:                     'New Last Name2',
+            email:                         'new_user2@newemail.net',
+            language:                      I18n.available_locales.last.to_s,
+            notes:                         'Some user notes',
+            manager_id:                    users(:administrator).id,
+            logged_in:                     false,
+            enable:                        true,
+            send_notification_email:       '',
             organization_roles_attributes: [
               {
                 organization_id: organizations(:cirope).id,
-                role_id: roles(:admin_role).id
+                role_id:         roles(:executive_manager_role).id
               }
             ]
           }
@@ -242,7 +245,9 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to UserPdf.new.relative_path
   end
 
-  test 'create user with left users count' do
+  test 'create user with left users count with registration' do
+    skip unless ENABLE_PUBLIC_REGISTRATION
+
     set_organization
 
     original_limit = Rails.application.credentials.auditors_limit
@@ -250,6 +255,44 @@ class UsersControllerTest < ActionController::TestCase
     assert_difference 'User.count' do
       Rails.application.credentials.auditors_limit = (
         Current.group.users.can_act_as(:auditor).reload.count + 5
+      )
+
+      post :create, params: {
+        user: {
+          user:                          'new_user',
+          name:                          'New Name',
+          last_name:                     'New Last Name',
+          email:                         'new_user@newemail.net',
+          language:                      I18n.available_locales.last.to_s,
+          notes:                         'Some user notes',
+          enable:                        true,
+          organization_roles_attributes: [
+            {
+              organization_id: Current.organization.id,
+              role_id:         roles(:auditor_senior_role).id
+            }
+          ]
+        }
+      }
+
+      assert_redirected_to users_url
+    end
+
+    assert_equal I18n.t('users.create.correctly_created_with_count', count: 4), flash.notice
+
+    Rails.application.credentials.auditors_limit = original_limit
+  end
+
+  test 'create user with left users count without registration' do
+    skip if ENABLE_PUBLIC_REGISTRATION
+
+    set_organization
+
+    original_limit = Rails.application.credentials.auditors_limit
+
+    assert_difference 'User.count' do
+      Rails.application.credentials.auditors_limit = (
+        User.can_act_as(:auditor).reload.count + 5
       )
 
       post :create, params: {

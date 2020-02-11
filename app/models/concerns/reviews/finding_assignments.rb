@@ -7,7 +7,8 @@ module Reviews::FindingAssignments
       inverse_of: :review,
       after_add:  :check_if_fra_is_in_a_final_review
 
-    accepts_nested_attributes_for :finding_review_assignments, allow_destroy: true
+    accepts_nested_attributes_for :finding_review_assignments,
+      allow_destroy: true, reject_if: :all_blank
   end
 
   private
