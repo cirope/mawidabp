@@ -66,10 +66,10 @@ class NewsControllerTest < ActionController::TestCase
     }, as: :json
     assert_response :success
 
-    tags = ActiveSupport::JSON.decode @response.body
+    response_tags = ActiveSupport::JSON.decode @response.body
 
-    assert_equal 1, tags.size
-    assert tags.all? { |t| t['label'].match /brea/i }
+    assert_equal 1, response_tags.size
+    assert response_tags.all? { |t| t['label'].match /brea/i }
 
     get :auto_complete_for_tagging, params: {
       q: 'x_none',
@@ -77,8 +77,24 @@ class NewsControllerTest < ActionController::TestCase
     }, as: :json
     assert_response :success
 
-    tags = ActiveSupport::JSON.decode @response.body
+    response_tags = ActiveSupport::JSON.decode @response.body
 
-    assert_equal 0, tags.size
+    assert_equal 0, response_tags.size
+
+    tag = tags :important
+
+    tag.update! obsolete: true
+
+    get :auto_complete_for_tagging, params: {
+      q: 'impor',
+      completion_state: 'incomplete',
+      kind: 'finding'
+    }, as: :json
+
+    assert_response :success
+
+    response_tags = ActiveSupport::JSON.decode @response.body
+
+    assert_equal 0, response_tags.size
   end
 end
