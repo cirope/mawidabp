@@ -40,6 +40,7 @@ class TagsControllerTest < ActionController::TestCase
           name: 'Test tag',
           style: 'secondary',
           shared: false,
+          obsolete: false,
           icon: 'tag'
         }
       }
@@ -58,6 +59,7 @@ class TagsControllerTest < ActionController::TestCase
           name: 'Test tag',
           style: 'secondary',
           shared: false,
+          obsolete: false,
           icon: 'tag',
           children_attributes: {
             '0' => {

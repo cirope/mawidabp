@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Licenses::Constants
   extend ActiveSupport::Concern
 

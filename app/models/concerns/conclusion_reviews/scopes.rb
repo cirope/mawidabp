@@ -3,6 +3,7 @@ module ConclusionReviews::Scopes
 
   included do
     scope :list, -> { where organization_id: Current.organization&.id }
+    scope :approved, -> { where approved: true }
   end
 
   module ClassMethods

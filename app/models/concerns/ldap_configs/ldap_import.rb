@@ -2,16 +2,16 @@ module LdapConfigs::LdapImport
   extend ActiveSupport::Concern
 
   def import username, password
-    ldap        = ldap username, password
-    ldap_filter = Net::LDAP::Filter.construct filter
-    users_by_dn = {}
-    managers    = {}
-    users       = []
+    connection ||= ldap username, password
+    ldap_filter  = Net::LDAP::Filter.construct filter
+    users_by_dn  = {}
+    managers     = {}
+    users        = []
 
     User.transaction do
-      ldap.search(base: basedn, filter: ldap_filter) do |entry|
-        if entry[email_attribute].present?
-          users << (result = process_entry entry)
+      connection.search(base: basedn, filter: ldap_filter) do |entry|
+        if (process_args = process_entry? entry)
+          users << (result = process_entry entry, **process_args)
           user   = result[:user]
 
           if user.persisted?
@@ -21,24 +21,43 @@ module LdapConfigs::LdapImport
         end
       end
 
-      raise Net::LDAP::Error.new unless ldap.get_operation_result.code == 0
+      raise Net::LDAP::Error.new unless connection.get_operation_result.code == 0
 
-      assign_managers managers, users_by_dn
+      assign_managers managers, users_by_dn unless skip_function_and_manager?
 
       users = check_state_for_late_changes(users)
     end
 
     users
+  rescue Net::LDAP::Error
+    if try_alternative_ldap?
+      connection = alternative_ldap.ldap username, password
+
+      retry
+    end
+
+    raise
   end
 
   private
 
-    def process_entry entry
-      role_names = role_data entry
+    def process_entry? entry
+      if entry[email_attribute].present?
+        role_names = role_data entry
+        roles      = clean_roles Role.list_with_corporate.where(name: role_names)
+        data       = trivial_data entry
+        user       = find_user data
+
+        if user&.roles.blank? && roles.blank?
+          false
+        else
+          { user: user, roles: roles, data: data }
+        end
+      end
+    end
+
+    def process_entry entry, user:, roles:, data:
       manager_dn = casted_attribute entry, manager_attribute
-      data       = trivial_data entry
-      roles      = clean_roles Role.list_with_corporate.where(name: role_names)
-      user       = find_user data
 
       data[:manager_id] = nil if manager_dn.blank?
 
@@ -80,10 +99,15 @@ module LdapConfigs::LdapImport
         name:      casted_attribute(entry, name_attribute),
         last_name: casted_attribute(entry, last_name_attribute),
         email:     casted_attribute(entry, email_attribute),
-        function:  casted_attribute(entry, function_attribute),
         hidden:    false,
         enable:    true
-      }
+      }.merge(
+        if skip_function_and_manager?
+          {}
+        else
+          { function:  casted_attribute(entry, function_attribute) }
+        end
+      )
     end
 
     def casted_attribute entry, attr_name
@@ -136,6 +160,20 @@ module LdapConfigs::LdapImport
 
         user.reload.update manager_id: manager_id
       end
+    end
+
+    def skip_function_and_manager?
+      @_skip_function_and_manager_setting ||= Current.organization.settings.find_by(
+        name: 'skip_function_and_manager_from_ldap_sync'
+      )
+
+      value = if @_skip_function_and_manager_setting
+                @_skip_function_and_manager_setting.value
+              else
+                DEFAULT_SETTINGS[:skip_function_and_manager_from_ldap_sync][:value]
+              end
+
+      value != '0'
     end
 
     def check_state_for_late_changes(users)

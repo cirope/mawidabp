@@ -1,11 +1,11 @@
 default: &default
-  adapter: postgresql
+  adapter: <%= ENV['DB_ADAPTER'] || 'postgresql' %>
   encoding: unicode
-  pool: 5
-  username: <%= ENV['TRAVIS'] ? 'postgres' : 'mawidabp' %>
-  password: <%= ENV['TRAVIS'] ? '' : 'mawidabp' %>
-  host: localhost
+  host: <%= ENV['DB_HOST'] || 'localhost' %>
   port: 5432
+  pool: 5
+  username: <%= ENV['TRAVIS'] ? 'postgres' : ENV['DB_USER'] || 'mawidabp' %>
+  password: <%= ENV['TRAVIS'] ? '' : ENV['DB_PASSWORD'] || 'mawidabp' %>
 
 development:
   <<: *default
@@ -17,7 +17,7 @@ test:
 
 production:
   <<: *default
-  database: mawidabp_production
+  database: <%= ENV['DB_NAME'] || 'mawidabp_production' %>
 
 sandbox:
   <<: *default

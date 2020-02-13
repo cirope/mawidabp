@@ -279,7 +279,7 @@ class ReviewsController < ApplicationController
       ].join(' AND '),
       boolean_false: false,
       limit_date: 3.years.ago.to_date,
-      states: [Finding::STATUS[:implemented_audited]],
+      states: [Finding::STATUS[:implemented_audited], Finding::STATUS[:expired]],
       business_unit_id: plan_item.business_unit_id
     ).includes(
       control_objective_item: {

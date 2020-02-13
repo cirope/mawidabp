@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_22_213849) do
+ActiveRecord::Schema.define(version: 2020_02_11_214928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -85,7 +85,6 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.index ["group_id"], name: "index_best_practices_on_group_id"
     t.index ["obsolete"], name: "index_best_practices_on_obsolete"
     t.index ["organization_id"], name: "index_best_practices_on_organization_id"
-    t.index ["shared"], name: "index_best_practices_on_shared"
   end
 
   create_table "business_unit_findings", id: :serial, force: :cascade do |t|
@@ -122,6 +121,7 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.boolean "require_tag", default: false, null: false
     t.text "sectors"
     t.text "recipients"
+    t.boolean "require_counts", default: false, null: false
     t.index ["external"], name: "index_business_unit_types_on_external"
     t.index ["name"], name: "index_business_unit_types_on_name"
     t.index ["organization_id"], name: "index_business_unit_types_on_organization_id"
@@ -166,8 +166,8 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
 
   create_table "comments", id: :serial, force: :cascade do |t|
     t.text "comment"
-    t.string "commentable_type"
     t.integer "commentable_id"
+    t.string "commentable_type"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -267,8 +267,8 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.text "compliance_tests"
     t.text "sustantive_tests"
     t.integer "order"
-    t.string "controllable_type"
     t.integer "controllable_id"
+    t.string "controllable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["controllable_type", "controllable_id"], name: "index_controls_on_controllable_type_and_controllable_id"
@@ -278,8 +278,8 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.text "description"
     t.string "cost_type"
     t.decimal "cost", precision: 15, scale: 2
-    t.string "item_type"
     t.integer "item_id"
+    t.string "item_type"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -372,8 +372,8 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
 
   create_table "finding_user_assignments", id: :serial, force: :cascade do |t|
     t.boolean "process_owner", default: false
-    t.string "finding_type"
     t.integer "finding_id"
+    t.string "finding_type"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -409,7 +409,6 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.integer "repeated_of_id"
     t.integer "organization_id"
     t.string "title"
-    t.integer "progress"
     t.text "current_situation"
     t.boolean "current_situation_verified", default: false, null: false
     t.string "compliance"
@@ -420,15 +419,23 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.date "first_follow_up_date"
     t.date "last_notification_date"
     t.integer "reschedule_count", default: 0, null: false
+    t.date "implemented_at"
+    t.date "closed_at"
+    t.integer "parent_ids", default: [], array: true
+    t.bigint "latest_id"
+    t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
     t.index ["final"], name: "index_findings_on_final"
     t.index ["first_follow_up_date"], name: "index_findings_on_first_follow_up_date"
     t.index ["first_notification_date"], name: "index_findings_on_first_notification_date"
     t.index ["follow_up_date"], name: "index_findings_on_follow_up_date"
+    t.index ["implemented_at"], name: "index_findings_on_implemented_at"
     t.index ["last_notification_date"], name: "index_findings_on_last_notification_date"
+    t.index ["latest_id"], name: "index_findings_on_latest_id"
     t.index ["organization_id"], name: "index_findings_on_organization_id"
     t.index ["parent_id"], name: "index_findings_on_parent_id"
+    t.index ["parent_ids"], name: "index_findings_on_parent_ids", using: :gin
     t.index ["repeated_of_id"], name: "index_findings_on_repeated_of_id"
     t.index ["reschedule_count"], name: "index_findings_on_reschedule_count"
     t.index ["state"], name: "index_findings_on_state"
@@ -460,8 +467,8 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.integer "lock_version", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "imageable_type", null: false
     t.integer "imageable_id", null: false
+    t.string "imageable_type", null: false
     t.index ["imageable_type", "imageable_id"], name: "index_image_models_on_imageable_type_and_imageable_id"
   end
 
@@ -483,6 +490,8 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.string "filter"
     t.string "user"
     t.string "encrypted_password"
+    t.string "alternative_hostname"
+    t.integer "alternative_port"
     t.index ["organization_id"], name: "index_ldap_configs_on_organization_id"
   end
 
@@ -491,11 +500,11 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.string "status", default: "trial", null: false
     t.integer "auditors_limit", null: false
     t.string "subscription_id"
-    t.datetime "subscribed_until"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "paid_until"
     t.index ["group_id"], name: "index_licenses_on_group_id"
-    t.index ["subscribed_until"], name: "index_licenses_on_subscribed_until"
+    t.index ["paid_until"], name: "index_licenses_on_paid_until"
     t.index ["subscription_id"], name: "index_licenses_on_subscription_id"
   end
 
@@ -531,8 +540,8 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
 
   create_table "notification_relations", id: :serial, force: :cascade do |t|
     t.integer "notification_id"
-    t.string "model_type"
     t.integer "model_id"
+    t.string "model_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["model_type", "model_id"], name: "index_notification_relations_on_model_type_and_model_id"
@@ -685,8 +694,8 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.integer "lock_version", default: 0
     t.integer "user_id", null: false
     t.integer "questionnaire_id"
-    t.string "pollable_type"
     t.integer "pollable_id"
+    t.string "pollable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "organization_id"
@@ -784,10 +793,10 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
 
   create_table "resource_utilizations", id: :serial, force: :cascade do |t|
     t.decimal "units", precision: 15, scale: 2
-    t.string "resource_consumer_type"
     t.integer "resource_consumer_id"
-    t.string "resource_type"
+    t.string "resource_consumer_type"
     t.integer "resource_id"
+    t.string "resource_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["resource_consumer_id", "resource_consumer_type"], name: "resource_utilizations_consumer_consumer_type_idx"
@@ -896,7 +905,6 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.index ["period_id"], name: "index_risk_assessments_on_period_id"
     t.index ["plan_id"], name: "index_risk_assessments_on_plan_id"
     t.index ["risk_assessment_template_id"], name: "index_risk_assessments_on_risk_assessment_template_id"
-    t.index ["shared"], name: "index_risk_assessments_on_shared"
   end
 
   create_table "risk_weights", force: :cascade do |t|
@@ -936,8 +944,8 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
 
   create_table "taggings", id: :serial, force: :cascade do |t|
     t.integer "tag_id", null: false
-    t.string "taggable_type", null: false
     t.integer "taggable_id", null: false
+    t.string "taggable_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
@@ -957,9 +965,11 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.integer "group_id", null: false
     t.string "icon", default: "tag", null: false
     t.bigint "parent_id"
+    t.boolean "obsolete", default: false, null: false
     t.index ["group_id"], name: "index_tags_on_group_id"
     t.index ["kind"], name: "index_tags_on_kind"
     t.index ["name"], name: "index_tags_on_name"
+    t.index ["obsolete"], name: "index_tags_on_obsolete"
     t.index ["options"], name: "index_tags_on_options", using: :gin
     t.index ["organization_id"], name: "index_tags_on_organization_id"
     t.index ["parent_id"], name: "index_tags_on_parent_id"
@@ -1009,8 +1019,8 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
   end
 
   create_table "versions", id: :serial, force: :cascade do |t|
-    t.string "item_type"
     t.integer "item_id"
+    t.string "item_type"
     t.string "event", null: false
     t.integer "whodunnit"
     t.datetime "created_at"
@@ -1040,13 +1050,24 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
     t.index ["organization_id"], name: "index_weakness_templates_on_organization_id"
   end
 
+  create_table "webhooks", force: :cascade do |t|
+    t.string "gateway", null: false
+    t.string "status", null: false
+    t.string "kind", null: false
+    t.string "reference_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gateway"], name: "index_webhooks_on_gateway"
+    t.index ["status"], name: "index_webhooks_on_status"
+  end
+
   create_table "work_papers", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "code"
     t.integer "number_of_pages"
     t.text "description"
-    t.string "owner_type"
     t.integer "owner_id"
+    t.string "owner_type"
     t.integer "file_model_id"
     t.integer "organization_id"
     t.integer "lock_version", default: 0
@@ -1120,6 +1141,7 @@ ActiveRecord::Schema.define(version: 2019_09_22_213849) do
   add_foreign_key "finding_user_assignments", "findings", on_update: :restrict, on_delete: :restrict
   add_foreign_key "finding_user_assignments", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "findings", "control_objective_items", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "findings", "findings", column: "latest_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "findings", "findings", column: "repeated_of_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "findings", "weakness_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "ldap_configs", "organizations", on_update: :restrict, on_delete: :restrict

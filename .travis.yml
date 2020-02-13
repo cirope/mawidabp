@@ -1,7 +1,6 @@
 language: ruby
-dist: xenial
+dist: bionic
 cache: bundler
-sudo: false
 rvm:
   - 2.6.5
 
@@ -15,6 +14,7 @@ addons:
 
 services:
   - postgresql
+  - redis-server
 
 env:
   global:
@@ -23,7 +23,7 @@ env:
     - CONFIG_TYPE=reviews_scored_by_weakness
 
 before_install:
-  - 'gem update --system && gem update bundler'
+  - 'gem update --force bundler'
 
 before_script:
   - 'cp config/application.yml.example config/application.yml'

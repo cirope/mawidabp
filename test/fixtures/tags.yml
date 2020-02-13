@@ -4,6 +4,7 @@ important:
   style: danger
   icon: tag
   shared: false
+  obsolete: false
   options: "{}"
   organization: cirope
   group: main_group
@@ -14,6 +15,7 @@ pending:
   style: info
   icon: tag
   shared: false
+  obsolete: false
   options: "{}"
   organization: cirope
   group: main_group
@@ -24,6 +26,7 @@ follow_up:
   style: info
   icon: tag
   shared: false
+  obsolete: false
   options: "{}"
   organization: cirope
   group: main_group
@@ -34,6 +37,7 @@ extra:
   style: secondary
   icon: tag
   shared: false
+  obsolete: false
   options: "{}"
   organization: cirope
   group: main_group
@@ -44,6 +48,7 @@ high_priority:
   style: secondary
   icon: tag
   shared: false
+  obsolete: false
   options: "{}"
   organization: cirope
   group: main_group
@@ -54,6 +59,7 @@ for_revision:
   style: secondary
   icon: tag
   shared: false
+  obsolete: false
   options: "{}"
   organization: cirope
   group: main_group
@@ -64,6 +70,7 @@ manual:
   style: secondary
   icon: tag
   shared: false
+  obsolete: false
   options: "{}"
   organization: cirope
   group: main_group
@@ -73,6 +80,7 @@ breaking:
   kind: news
   style: secondary
   shared: false
+  obsolete: false
   options: "{}"
   organization: cirope
   group: main_group
@@ -82,6 +90,7 @@ risk_evaluation:
   kind: control_objective
   style: secondary
   shared: false
+  obsolete: false
   options: "{}"
   organization: cirope
   group: main_group

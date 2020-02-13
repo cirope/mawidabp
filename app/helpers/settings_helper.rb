@@ -33,8 +33,14 @@ module SettingsHelper
   end
 
   def priorities
-    PRIORITY_TYPES.map do |k, v|
-      [[t("priority_types.#{k}"), "(#{v})"].join(' '), v]
+    if SHOW_CONDENSED_PRIORITIES
+      PRIORITY_TYPES.map do |k, v|
+        [t("priority_types.#{k}"), v]
+      end
+    else
+      PRIORITY_TYPES.map do |k, v|
+        [[t("priority_types.#{k}"), "(#{v})"].join(' '), v]
+      end
     end
   end
 end

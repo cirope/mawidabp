@@ -10,7 +10,8 @@ module Reports::WeaknessesReport
 
   def weaknesses_report
     respond_to do |format|
-      format.html
+      format.html { render_paginated_weaknesses }
+      format.js   { render_paginated_weaknesses }
       format.csv  { render_weaknesses_report_csv }
     end
   end
@@ -41,7 +42,23 @@ module Reports::WeaknessesReport
       report_params = params[:weaknesses_report]
 
       if report_params.present?
-        @weaknesses = filter_weaknesses_for_report report_params
+        weaknesses = filter_weaknesses_for_report report_params
+        order      = weaknesses.values[:order]
+
+        # The double where by ids is because the relations are scoped by filters
+        # within filter_weaknesses_for_report.
+        @weaknesses = scoped_weaknesses.where(
+          id: weaknesses.pluck(:id)
+        ).includes(
+          :finding_user_assignments,
+          :repeated_of,
+          :repeated_in,
+          latest: :review,
+          review: :plan_item,
+          finding_answers: [:file_model, user: { organization_roles: :role }],
+          users: { organization_roles: :role },
+          control_objective_item: [:process_control]
+        ).order order
       else
         @weaknesses = Weakness.none
       end
@@ -78,12 +95,13 @@ module Reports::WeaknessesReport
       end
 
       if report_params[:user_id].present?
-        weaknesses = weaknesses.by_user_id report_params[:user_id],
+        user_ids   = weaknesses_report_user_ids report_params
+        weaknesses = weaknesses.by_user_id user_ids,
           include_finding_answers: report_params[:user_in_comments] == '1'
       end
 
       if report_params[:finding_status].present?
-        weaknesses = weaknesses.where state: report_params[:finding_status]
+        weaknesses = weaknesses.where state: report_params[:finding_status].to_i
       end
 
       if report_params[:finding_current_situation_verified].present?
@@ -109,7 +127,7 @@ module Reports::WeaknessesReport
 
       %i(risk priority).each do |param|
         if report_params[param].present?
-          weaknesses = weaknesses.where param => report_params[param]
+          weaknesses = weaknesses.where param => report_params[param].to_i
         end
       end
 
@@ -155,8 +173,8 @@ module Reports::WeaknessesReport
 
     def render_weaknesses_report_csv
       render_or_send_by_mail(
-        collection: @weaknesses,
-        filename: @title.downcase,
+        collection:  @weaknesses,
+        filename:    @title.downcase,
         method_name: :to_csv
       )
     end
@@ -196,10 +214,10 @@ module Reports::WeaknessesReport
       pdf.add_description_item(ProcessControl.model_name.human, weakness.control_objective_item.process_control.name, 0, false)
       pdf.add_description_item(Weakness.human_attribute_name(:control_objective_item_id), weakness.control_objective_item.to_s, 0, false)
       pdf.add_description_item(Weakness.human_attribute_name(:description), weakness.description, 0, false)
-      pdf.add_description_item(Weakness.human_attribute_name(:state), weakness.state_text, 0, false)
+      pdf.add_description_item(Weakness.human_attribute_name(:state), weakness.full_state_text, 0, false)
 
       pdf.add_description_item(Weakness.human_attribute_name(:risk), weakness.risk_text, 0, false)
-      pdf.add_description_item(Weakness.human_attribute_name(:priority), weakness.priority_text, 0, false) unless HIDE_WEAKNESS_PRIORITY
+      pdf.add_description_item(Weakness.human_attribute_name(:priority), weakness.priority_text, 0, false)
       pdf.add_description_item(Weakness.human_attribute_name(:effect), weakness.effect, 0, false) unless HIDE_WEAKNESS_EFFECT
       pdf.add_description_item(Weakness.human_attribute_name(:audit_recommendations), weakness.audit_recommendations, 0, false)
 
@@ -226,7 +244,7 @@ module Reports::WeaknessesReport
         pdf.add_description_item(Weakness.human_attribute_name(:origination_date), l(weakness.origination_date, format: :long), 0, false)
       end
 
-      audited = weakness.users.reload.select(&:can_act_as_audited?)
+      audited = weakness.users.select &:can_act_as_audited?
 
       pdf.add_title t('finding.responsibles', count: audited.size), PDF_FONT_SIZE, :left
       pdf.add_list audited.map(&:full_name), PDF_FONT_SIZE * 2
@@ -240,7 +258,7 @@ module Reports::WeaknessesReport
           column_widths << pdf.percent_width(col_size)
         end
 
-        weakness.finding_answers.reload.each do |finding_answer|
+        weakness.finding_answers.each do |finding_answer|
           column_data << [
             finding_answer.answer,
             finding_answer.user.try(:full_name),
@@ -280,6 +298,7 @@ module Reports::WeaknessesReport
         compliance
         finding_current_situation_verified
         user_in_comments
+        include_user_tree
       )
       filters            = []
       labels             = {
@@ -290,6 +309,7 @@ module Reports::WeaknessesReport
         tags:                               Tag.model_name.human,
         user:                               User.model_name.human,
         user_in_comments:                   t('shared.filters.user.user_in_comments'),
+        include_user_tree:                  t('shared.filters.user.include_user_tree'),
         finding_status:                     Weakness.human_attribute_name('state'),
         finding_title:                      Weakness.human_attribute_name('title'),
         risk:                               Weakness.human_attribute_name('risk'),
@@ -302,13 +322,20 @@ module Reports::WeaknessesReport
         follow_up_date:                     Weakness.human_attribute_name('follow_up_date'),
         solution_date:                      Weakness.human_attribute_name('solution_date')
       }
-      report_params = Hash(params[:weaknesses_report]&.permit *labels.keys)
+      report_params = Hash(params[:weaknesses_report]&.permit!).with_indifferent_access
 
       labels.each do |filter_name, filter_label|
         if report_params[filter_name].present?
           operator = report_params["#{filter_name}_operator"] || '='
           value = if value_filter_names.include?(filter_name)
-                    value_to_label(filter_name)
+                    weaknesses_report_value_to_label filter_name
+                  elsif operator == 'between'
+                    operator = t('shared.filters.date_field.between').downcase
+
+                    [
+                      report_params[filter_name],
+                      report_params["#{filter_name}_until"]
+                    ].reject(&:blank?).to_sentence
                   else
                     report_params[filter_name]
                   end
@@ -320,7 +347,17 @@ module Reports::WeaknessesReport
       add_pdf_filters pdf, 'follow_up', filters if filters.present?
     end
 
-    def value_to_label param_name
+    def weaknesses_report_user_ids report_params
+      if report_params[:include_user_tree] == '1'
+        user = User.list.find report_params[:user_id]
+
+        user.self_and_descendants.map &:id
+      else
+        report_params[:user_id].to_i
+      end
+    end
+
+    def weaknesses_report_value_to_label param_name
       value = params[:weaknesses_report][param_name].to_i
 
       case param_name
@@ -334,7 +371,7 @@ module Reports::WeaknessesReport
         priority ? t("priority_types.#{priority.first}") : ''
       when :finding_status
         t "findings.state.#{Finding::STATUS.invert[value]}"
-      when :user_in_comments
+      when :user_in_comments, :include_user_tree
         value == 1 ? t('label.yes') : t('label.no')
       when :finding_current_situation_verified
         t "label.#{params[:weaknesses_report][param_name]}"
@@ -347,5 +384,9 @@ module Reports::WeaknessesReport
 
         value ? t('label.yes') : t('label.no')
       end
+    end
+
+    def render_paginated_weaknesses
+      @weaknesses = @weaknesses.page params[:page]
     end
 end

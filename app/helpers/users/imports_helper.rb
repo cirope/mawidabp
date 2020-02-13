@@ -3,7 +3,7 @@ module Users::ImportsHelper
     badge = {
       created:   'badge-success',
       deleted:   'badge-warning',
-      error:     'badge-danger',
+      errored:   'badge-danger',
       unchanged: 'badge-secondary',
       updated:   'badge-info'
     }[state]

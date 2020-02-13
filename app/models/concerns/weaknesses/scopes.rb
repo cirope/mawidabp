@@ -2,8 +2,15 @@ module Weaknesses::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :with_high_risk,    -> { where risk: highest_risks }
-    scope :with_other_risk,   -> { where.not risk: highest_risks }
+    scope :with_high_risk, -> {
+      where(risk: highest_risks).or(with_medium_risk_and_high_priority)
+    }
+    scope :with_medium_risk_and_high_priority, -> {
+      where risk: Finding.risks[:medium], priority: Finding.priorities[:high]
+    }
+    scope :with_other_risk, -> {
+      where.not(risk: highest_risks).where.not(priority: Finding.priorities[:high])
+    }
     scope :with_highest_risk, -> {
       where "#{quoted_table_name}.#{qcn 'highest_risk'} = #{quoted_table_name}.#{qcn 'risk'}"
     }

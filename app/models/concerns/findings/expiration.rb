@@ -3,7 +3,7 @@ module Findings::Expiration
 
   included do
     scope :expired, -> {
-      being_implemented.or(awaiting).finals(false).where(
+      being_implemented.finals(false).where(
         "#{quoted_table_name}.#{qcn 'follow_up_date'} < ?", Time.zone.today
       )
     }
@@ -57,9 +57,15 @@ module Findings::Expiration
 
       def expires_on date
         from = date
-        to   = from.wday == 5 ? from + 2.days : from
+        to   = expires_to_date from
 
-        being_implemented.or(awaiting).finals(false).where follow_up_date: from..to
+        being_implemented.finals(false).where follow_up_date: from..to
+      end
+
+      def expires_to_date date
+        date = date.next until date.next.workday?
+
+        date
       end
   end
 end

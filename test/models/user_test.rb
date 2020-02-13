@@ -11,10 +11,6 @@ class UserTest < ActiveSupport::TestCase
     set_organization
   end
 
-  teardown do
-    unset_organization
-  end
-
   test 'create' do
     assert_difference 'User.count' do
       role = roles :admin_role
@@ -636,6 +632,58 @@ class UserTest < ActiveSupport::TestCase
           }
         ]
       )
+    end
+  end
+
+  test 'notify new admin user on create' do
+    skip unless NOTIFY_NEW_ADMIN
+
+    set_organization
+
+    organization = organizations :cirope
+    email        = 'emailxx@emailxx.ccc'
+
+    assert_enqueued_emails 1 do
+      assert_difference 'User.count' do
+        User.create!(
+          name:                          'New name',
+          last_name:                     'New lastname',
+          language:                      'es',
+          email:                         email,
+          function:                      'New function',
+          user:                          'new_user',
+          enable:                        true,
+          failed_attempts:               0,
+          logged_in:                     false,
+          notes:                         'Some user notes',
+          manager_id:                    users(:administrator).id,
+          organization_roles_attributes: [
+            {
+              organization_id: organization.id,
+              role_id:         roles(:admin_role).id
+            }
+          ]
+        )
+      end
+    end
+  end
+
+  test 'notify new admin user on update' do
+    skip unless NOTIFY_NEW_ADMIN
+
+    set_organization
+
+    organization = organizations :cirope
+    user         = users :audited
+
+    user.organization_roles.each &:mark_for_destruction
+    user.organization_roles.build(
+      organization_id: organization.id,
+      role_id:         roles(:admin_role).id
+    )
+
+    assert_enqueued_emails 1 do
+      user.save!
     end
   end
 end

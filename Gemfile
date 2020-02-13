@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.0.0'
+gem 'rails', '~> 6.0.2.1'
 
 gem 'pg'
+gem 'activerecord-nulldb-adapter'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'responders'
@@ -34,13 +35,14 @@ gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 
+gem 'sassc', '< 2.1.0' # TODO: remove when https://github.com/sass/sassc-ruby/issues/146 gets fixed
 gem 'sassc-rails'
 gem 'uglifier'
 
 gem 'unicorn'
+gem 'unicorn-rails'
 
 group :development do
-  gem 'unicorn-rails'
   gem 'web-console'
   gem 'listen'
   gem 'capistrano'
@@ -53,6 +55,8 @@ group :development do
   # Support for ed25519 ssh keys
   gem 'ed25519'
   gem 'bcrypt_pbkdf'
+
+  gem 'bullet'
 end
 
 group :test do

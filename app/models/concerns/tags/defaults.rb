@@ -16,9 +16,11 @@ module Tags::Defaults
 
     def inherit_parent_attributes
       if parent
-        self.kind  = parent.kind
-        self.icon  = parent.icon
-        self.style = parent.style
+        self.kind     = parent.kind
+        self.icon     = parent.icon
+        self.style    = parent.style
+        self.shared   = parent.shared
+        self.obsolete = parent.obsolete
       end
     end
 end

@@ -4,11 +4,21 @@ require 'sidekiq/testing'
 
 Sidekiq::Testing.inline!
 
+Net::LDAP::Connection.send :remove_const, 'DefaultConnectTimeout'
+Net::LDAP::Connection::DefaultConnectTimeout = 1
+
 class ActiveSupport::TestCase
   set_fixture_class versions: PaperTrail::Version
   parallelize(workers: 1)
 
   fixtures :all
+
+  teardown do
+    clear_current_attributes
+
+    try :clear_enqueued_jobs
+    try :clear_performed_jobs
+  end
 
   def set_organization organization = organizations(:cirope)
     Current.group        = organization.group
@@ -22,10 +32,10 @@ class ActiveSupport::TestCase
     Current.conclusion_pdf_format ||= 'default'
   end
 
-  def unset_organization
-    Current.group                 = nil
-    Current.organization          = nil
-    Current.conclusion_pdf_format = nil
+  def clear_current_attributes
+    Current.attributes.keys.each do |attribute|
+      Current.send "#{attribute}=", nil
+    end
   end
 
   def login user: users(:administrator), prefix: organizations(:cirope).prefix
@@ -90,5 +100,9 @@ class ActiveSupport::TestCase
         job_class.perform_now(mailer, mail_method, delivery_method, args: new_args)
       end
     end
+  end
+
+  def ldap_port
+    ENV['TRAVIS'] ? 3389 : 389
   end
 end

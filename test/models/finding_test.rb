@@ -9,12 +9,6 @@ class FindingTest < ActiveSupport::TestCase
     set_organization
   end
 
-  teardown do
-    Current.user = nil
-
-    unset_organization
-  end
-
   test 'create' do
     assert_difference 'Finding.count' do
       assert_difference 'Tagging.count', 2 do
@@ -231,6 +225,8 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates implemented can be back at being implemented if comment' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
     finding       = findings :being_implemented_weakness_on_final
     finding.state = Finding::STATUS[:implemented]
 
@@ -250,6 +246,8 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates implemented audited can be back at implemented if comment' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
     finding                 = findings :being_implemented_weakness_on_final
     finding.state           = Finding::STATUS[:implemented_audited]
     finding.solution_date   = Time.zone.today
@@ -281,6 +279,8 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates expired can be back at implemented if comment' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
     finding                = findings :being_implemented_weakness_on_final
     finding.state          = Finding::STATUS[:expired]
     finding.follow_up_date = nil
@@ -593,7 +593,7 @@ class FindingTest < ActiveSupport::TestCase
 
     assert_difference '@finding.status_change_history.size' do
       @finding.update!(
-        state:         Finding::STATUS[:assumed_risk],
+        state:         Finding::STATUS[:expired],
         solution_date: Date.today
       )
     end
@@ -843,6 +843,7 @@ class FindingTest < ActiveSupport::TestCase
 
     assert_equal 0, finding.repeated_ancestors.size
     assert_equal 0, repeated_of.repeated_children.size
+    assert_nil repeated_of.latest_id
     assert_not_equal repeated_of.origination_date, finding.origination_date
     refute repeated_of.repeated?
 
@@ -856,6 +857,7 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 1, finding.repeated_ancestors.size
     assert_equal 1, repeated_of.repeated_children.size
     assert_equal repeated_of, finding.repeated_root
+    assert_equal finding.id, repeated_of.latest_id
 
     # After that it can not be destroyed
     assert_no_difference 'Finding.count' do
@@ -883,14 +885,26 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.reload.repeated_of
     assert finding.rescheduled?
     assert_equal 1, finding.reschedule_count
+    assert_equal finding.id, repeated_of.latest_id
+
+    if POSTGRESQL_ADAPTER
+      assert_equal [repeated_of.id], finding.parent_ids
+      assert_empty repeated_of.parent_ids
+    end
 
     finding.undo_reiteration
 
     refute repeated_of.reload.repeated?
     assert_nil finding.reload.repeated_of
+    assert_nil repeated_of.latest_id
     refute finding.rescheduled?
     assert_equal 0, finding.reschedule_count
     assert_equal repeated_of_original_state, repeated_of.state
+
+    if POSTGRESQL_ADAPTER
+      assert_empty finding.parent_ids
+      assert_empty repeated_of.parent_ids
+    end
   end
 
   test 'reschedule when mark as duplicated and follow up date differs' do
@@ -1231,8 +1245,10 @@ class FindingTest < ActiveSupport::TestCase
 
     assert finding.reload.tasks.all? { |t| !t.finished? }
 
-    assert_no_difference 'Task.finished.count' do
-      finding.update! state: Finding::STATUS[:implemented]
+    unless HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+      assert_no_difference 'Task.finished.count' do
+        finding.update! state: Finding::STATUS[:implemented]
+      end
     end
 
     assert_difference 'Task.finished.count', finding.tasks.count do
@@ -1348,6 +1364,46 @@ class FindingTest < ActiveSupport::TestCase
                      state:          Finding::STATUS[:being_implemented]
 
     assert_equal 0, @finding.reload.notification_level
+  end
+
+  test 'put state dates on changes' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    @finding.update! state:          Finding::STATUS[:implemented],
+                     follow_up_date: Time.zone.today
+
+    assert_equal Time.zone.today, @finding.reload.implemented_at
+    assert_nil @finding.closed_at
+
+    Current.user = users :supervisor
+
+    @finding.update! state:           Finding::STATUS[:implemented_audited],
+                     solution_date:   Time.zone.today,
+                     skip_work_paper: true
+
+    assert_equal Time.zone.today, @finding.reload.closed_at
+  end
+
+  test 'version implemented at' do
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
+    Timecop.travel 2.days.ago do
+      @finding.update! state:          Finding::STATUS[:implemented],
+                       follow_up_date: Time.zone.today
+    end
+
+    assert_equal 2.days.ago.to_date, @finding.version_implemented_at
+  end
+
+  test 'version closed at' do
+    Current.user = users :supervisor
+
+    Timecop.travel 2.days.ago do
+      @finding.update! state:         Finding::STATUS[:expired],
+                       solution_date: Time.zone.today
+    end
+
+    assert_equal 2.days.ago.to_date, @finding.version_closed_at
   end
 
   private

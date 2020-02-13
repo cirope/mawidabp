@@ -139,9 +139,9 @@ module Users::Reassigns
     end
 
     def mail_body_from_reviews
-      body =  mail_body_from_review_labels.to_s
-      body << "\n\n" if body.present?
-      body << mail_body_from_reassigned_reviews.to_s
+      body  =  mail_body_from_review_labels.to_s
+      body += "\n\n" if body.present?
+      body += mail_body_from_reassigned_reviews.to_s
     end
 
     def mail_body_from_review_labels

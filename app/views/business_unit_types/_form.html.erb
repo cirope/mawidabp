@@ -34,16 +34,22 @@
     <% end %>
 
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-3">
         <%= f.input :external %>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-3">
         <%= f.input :require_tag %>
       </div>
+      <% if Current.conclusion_pdf_format == 'gal' %>
+        <div class="col-md-6">
+          <%= f.input :require_counts %>
+        </div>
+      <% end %>
     </div>
 
     <hr />
-    <h5><strong><%= BusinessUnit.model_name.human %></strong></h5>
+
+    <h5 class="h6"><%= BusinessUnit.model_name.human %></h5>
 
     <div id="business_units">
       <%= f.simple_fields_for :business_units do |bu_f| %>

@@ -7,6 +7,7 @@ class Finding < ApplicationRecord
   include Findings::Answers
   include Findings::BusinessUnits
   include Findings::Brief
+  include Findings::ByUserCsv
   include Findings::Code
   include Findings::Comments
   include Findings::Confirmation
@@ -14,6 +15,8 @@ class Finding < ApplicationRecord
   include Findings::Cost
   include Findings::CreateValidation
   include Findings::Csv
+  include Findings::Current
+  include Findings::CurrentSituationCsv
   include Findings::CustomAttributes
   include Findings::Defaults
   include Findings::DestroyValidation
@@ -29,7 +32,7 @@ class Finding < ApplicationRecord
   include Findings::NotificationLevel
   include Findings::Overrides
   include Findings::Pdf
-  include Findings::Reiterations
+  include (POSTGRESQL_ADAPTER ? Findings::Reiterations : Findings::ReiterationsAlt)
   include Findings::Relations
   include Findings::ReportScopes
   include Findings::Reschedule
@@ -41,6 +44,7 @@ class Finding < ApplicationRecord
   include Findings::SerializedAttributes
   include Findings::SortColumns
   include Findings::State
+  include Findings::StateDates
   include Findings::Taggable
   include Findings::Tasks
   include Findings::Unanswered

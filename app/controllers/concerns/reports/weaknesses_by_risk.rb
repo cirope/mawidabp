@@ -109,17 +109,7 @@ module Reports::WeaknessesByRisk
                 total_weaknesses_count[s[1]][rl[1]] +=
                   weaknesses_count[s[1]][rl[1]]
 
-                if s.first.to_s == 'awaiting'
-                  awaiting = weaknesses_by_risk_scope(
-                    period: period,
-                    audit_type: audit_type_symbol,
-                    final: final,
-                    conditions: {:risk => rl[1]}.merge(conditions || {})
-                  ).with_status_for_report.awaiting
-
-                  fill_counts_for rl, highest_risk, awaiting, awaiting_counts,
-                    highest_awaiting_counts
-                elsif s.first.to_s == 'being_implemented'
+                if s.first.to_s == 'being_implemented'
                   being_implemented = weaknesses_by_risk_scope(
                     period: period,
                     audit_type: audit_type_symbol,

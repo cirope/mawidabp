@@ -1,7 +1,7 @@
 module Reports::Pdf
 
   def init_pdf(title, subtitle, options: {})
-    pdf = Prawn::Document.create_generic_pdf :landscape, options
+    pdf = Prawn::Document.create_generic_pdf :landscape, **options
 
     pdf.add_generic_report_header current_organization
 
@@ -98,10 +98,6 @@ module Reports::Pdf
             "#{count} (#{'%.2f' % percentage}%)" : '-'
           percentage_total += percentage
 
-          if !final && count > 0 && rl == highest_risk && state[0].to_s == 'awaiting'
-            column_row[rl.first] << '****'
-          end
-
           if !final && count > 0 && rl == highest_risk && state[0].to_s == 'being_implemented'
             column_row[rl.first] << '**'
           end
@@ -109,10 +105,6 @@ module Reports::Pdf
 
         column_row['count'] = sub_total_count > 0 ?
           "<strong>#{sub_total_count} (#{'%.1f' % percentage_total}%)</strong>" : '-'
-
-        if !final && state.first.to_s == 'awaiting' && sub_total_count != 0
-          column_row['count'] << '***'
-        end
 
         if !final && state.first.to_s == 'being_implemented' && sub_total_count != 0
           column_row['count'] << '*'
@@ -180,10 +172,6 @@ module Reports::Pdf
 
         if audit_type_symbol == :internal && !HIDE_OPORTUNITIES
           column_data.last << "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
-        end
-
-        if !final && state.first.to_s == 'awaiting'
-          column_data.last[1] << ' **' if column_data.last[1] != '0 (0.00%)'
         end
 
         if !final && state.first.to_s == 'being_implemented'

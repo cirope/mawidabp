@@ -55,7 +55,7 @@
       <%= weakness.control_objective_item.auditor_comment %>
     </p>
 
-    <% if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(current_organization.prefix) %>
+    <% if weakness.control_objective_item.show_counts? current_organization.prefix %>
       <p class="mb-1">
         <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'issues_count' %></span>:
         <%= weakness.control_objective_item.issues_count %>
