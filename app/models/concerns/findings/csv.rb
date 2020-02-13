@@ -34,7 +34,6 @@ module Findings::Csv
       implemented_at_text,
       closed_at_text,
       rescheduled_text,
-      reschedule_count.to_s,
       next_pending_task_date,
       listed_tasks,
       reiteration_info,
@@ -64,7 +63,11 @@ module Findings::Csv
     end
 
     def rescheduled_text
-      I18n.t "label.#{rescheduled? ? 'yes' : 'no'}"
+      if being_implemented?
+        I18n.t "label.#{rescheduled? ? 'yes' : 'no'}"
+      else
+        '-'
+      end
     end
 
     def reiteration_info
@@ -249,7 +252,6 @@ module Findings::Csv
           Finding.human_attribute_name('implemented_at'),
           Finding.human_attribute_name('closed_at'),
           Finding.human_attribute_name('rescheduled'),
-          Finding.human_attribute_name('reschedule_count'),
           I18n.t('finding.next_pending_task_date'),
           Task.model_name.human(count: 0),
           I18n.t('findings.state.repeated'),
