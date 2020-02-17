@@ -237,6 +237,14 @@ module Findings::State
     state ? I18n.t("findings.state.#{STATUS.invert[state]}") : '-'
   end
 
+  def full_state_text
+    if latest
+      "#{state_text} (#{latest.state_text} - #{latest.review.identification})"
+    else
+      state_text
+    end
+  end
+
   private
 
     def versions_with_state_change

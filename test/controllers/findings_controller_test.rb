@@ -754,6 +754,24 @@ class FindingsControllerTest < ActionController::TestCase
     assert_equal 0, tags.size
   end
 
+  test 'auto complete for obsolete tagging should yield empty results' do
+    tag = tags :important
+
+    tag.update! obsolete: true
+
+    get :auto_complete_for_tagging, params: {
+      q: 'impor',
+      completion_state: 'incomplete',
+      kind: 'finding'
+    }, as: :json
+
+    assert_response :success
+
+    tags = ActiveSupport::JSON.decode @response.body
+
+    assert_equal 0, tags.size
+  end
+
   test 'check order by not readed comments desc' do
     skip unless POSTGRESQL_ADAPTER
 

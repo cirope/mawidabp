@@ -9,7 +9,9 @@ module Findings::ReiterationsAlt
     scope :without_repeated, -> { where     repeated_of_id: nil }
 
     before_save :check_for_reiteration, if: :reiteration?
+    after_save :update_latest, if: :update_latest?
 
+    belongs_to :latest, foreign_key: 'latest_id', class_name: 'Finding', optional: true
     belongs_to :repeated_of, foreign_key: 'repeated_of_id', class_name: 'Finding', autosave: true, optional: true
     has_one    :repeated_in, -> { where final: false }, foreign_key: 'repeated_of_id', class_name: 'Finding'
   end
@@ -24,6 +26,7 @@ module Findings::ReiterationsAlt
     end
 
     repeated_of.update_column :state, previous_repeated_of_state
+    repeated_of.update_latest
     update_columns repeated_of_id: nil, origination_date: Time.zone.today
   end
 
@@ -50,6 +53,18 @@ module Findings::ReiterationsAlt
     node = node.repeated_in while node.repeated_in
 
     node
+  end
+
+  def update_latest
+    cursor   = self
+    findings = []
+
+    while cursor.repeated_of
+      findings << (cursor = cursor.repeated_of)
+    end
+
+    update_column :latest_id, nil
+    findings.each { |f| f.update_column :latest_id, id }
   end
 
   private
@@ -84,5 +99,9 @@ module Findings::ReiterationsAlt
       review.finding_review_assignments.any? do |fra|
         fra.finding_id == repeated_of_id
       end
+    end
+
+    def update_latest?
+      saved_change_to_repeated_of_id? && repeated_of
     end
 end

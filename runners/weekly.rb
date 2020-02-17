@@ -1,4 +1,4 @@
-Rails.logger.info 'Starting weekly runner'
+Rails.logger.info "Starting weekly runner (version #{APP_REVISION[0,8]})"
 
 if Organization.any?
   Finding.remember_users_about_expiration
@@ -8,4 +8,4 @@ if Organization.any?
   Task.remember_users_about_expiration
 end
 
-Rails.logger.info 'Weekly runner finished'
+Rails.logger.info "Weekly runner finished (version #{APP_REVISION[0,8]})"
