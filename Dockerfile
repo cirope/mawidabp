@@ -58,7 +58,7 @@ WORKDIR $APP_ROOT
 RUN gem install bundler --no-document --force && bundle install --deployment
 
 COPY . $APP_ROOT
-COPY config/application.yml.example $APP_ROOT/config/application.yml
+COPY config/application.bh.yml $APP_ROOT/config/application.yml
 
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
 #RUN bundle exec rake help:install && bundle exec rake help:generate
