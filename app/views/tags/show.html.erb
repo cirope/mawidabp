@@ -10,6 +10,11 @@
   <%= t "label.#{@tag.shared ? 'yes' : 'no'}" %>
 </p>
 
+<p class="mb-1">
+  <strong><%= Tag.human_attribute_name 'obsolete' %></strong>:
+  <%= t "label.#{@tag.obsolete ? 'yes' : 'no'}" %>
+</p>
+
 <% if @tag.children.any? %>
   <h5><%= t 'tags.form.children' %></h5>
 

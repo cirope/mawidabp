@@ -3,5 +3,6 @@ module Tags::AttributeTypes
 
   included do
     attribute :shared, :boolean
+    attribute :obsolete, :boolean
   end
 end
