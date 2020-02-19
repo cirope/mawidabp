@@ -15,7 +15,7 @@ module Findings::Reiterations
     scope :without_repeated, -> { where     repeated_of_id: nil }
 
     before_save :check_for_reiteration, if: :reiteration?
-    before_update :update_parent_ids, if: :update_parent_ids?
+    before_save :update_parent_ids, if: :update_parent_ids?
     after_save :update_latest, if: :update_latest?
 
     belongs_to :latest, foreign_key: 'latest_id', class_name: 'Finding', optional: true
@@ -50,24 +50,24 @@ module Findings::Reiterations
   end
 
   def repeated_root
-    parent_ids.any? ? Finding.find(parent_ids.first) : self
+    parent_ids.any? ? Finding.unscoped.find(parent_ids.first) : self
   end
 
   def repeated_leaf
-    Finding.with_parent_id(id).order('array_length(parent_ids, 1) DESC').first if id
+    Finding.unscoped.with_parent_id(id).order('array_length(parent_ids, 1) DESC').first if id
   end
 
   def repeated_ancestors
     if parent_ids.empty?
       self.class.none
     else
-      Finding.where(id: parent_ids).preload *DEFAULT_TO_S_PRELOADS
+      Finding.unscoped.where(id: parent_ids).preload *DEFAULT_TO_S_PRELOADS
     end
   end
 
   def repeated_children
     if id
-      Finding.with_parent_id(id).preload *DEFAULT_TO_S_PRELOADS
+      Finding.unscoped.with_parent_id(id).preload *DEFAULT_TO_S_PRELOADS
     else
       self.class.none
     end
