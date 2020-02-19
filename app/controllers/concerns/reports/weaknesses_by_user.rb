@@ -101,7 +101,7 @@ module Reports::WeaknessesByUser
     def render_weaknesses_by_user_report_csv
       render_or_send_by_mail(
         collection:  @weaknesses,
-        filename:    @title.downcase,
+        filename:    "#{@title.downcase}.csv",
         method_name: :by_user_csv
       )
     end

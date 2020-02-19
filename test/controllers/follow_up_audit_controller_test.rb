@@ -1685,6 +1685,34 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_response :redirect
+
+    assert_match I18n.t('follow_up_audit.weaknesses_report.pdf_name'),
+      @response.body
+  end
+
+  test 'queue async weaknesses report' do
+    login
+
+    old_count = ::SEND_REPORT_EMAIL_AFTER_COUNT
+    back_url  = weaknesses_report_url execution: true
+
+    silence_warnings { ::SEND_REPORT_EMAIL_AFTER_COUNT = 1 }
+
+    request.headers['HTTP_REFERER'] = back_url
+
+    post :create_weaknesses_report, params: {
+      execution: 'true',
+      weaknesses_report: {
+        finding_status: Finding::STATUS[:being_implemented].to_s
+      },
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+    }
+
+    silence_warnings { ::SEND_REPORT_EMAIL_AFTER_COUNT = old_count }
+
+    assert_response :redirect
+    assert_match back_url, @response.body
   end
 
   test 'weaknesses report as CSV' do

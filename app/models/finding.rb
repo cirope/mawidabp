@@ -3,10 +3,10 @@ class Finding < ApplicationRecord
   include Auditable
   include Comparable
   include Findings::Achievements
-  include Findings::AttributeTypes
   include Findings::Answers
-  include Findings::BusinessUnits
+  include Findings::AttributeTypes
   include Findings::Brief
+  include Findings::BusinessUnits
   include Findings::ByUserCsv
   include Findings::Code
   include Findings::Comments
@@ -28,8 +28,8 @@ class Finding < ApplicationRecord
   include Findings::FollowUpPdf
   include Findings::ImportantDates
   include Findings::Json
-  include Findings::Notifications
   include Findings::NotificationLevel
+  include Findings::Notifications
   include Findings::Overrides
   include Findings::Pdf
   include (POSTGRESQL_ADAPTER ? Findings::Reiterations : Findings::ReiterationsAlt)
@@ -53,13 +53,14 @@ class Finding < ApplicationRecord
   include Findings::UpdateCallbacks
   include Findings::UserAssignments
   include Findings::UserScopes
-  include Findings::Validations
   include Findings::ValidationCallbacks
+  include Findings::Validations
   include Findings::Versions
+  include Findings::WeaknessReportPdf
   include Findings::WorkPapers
-  include Parameters::Risk
-  include Parameters::Priority
   include ParameterSelector
+  include Parameters::Priority
+  include Parameters::Risk
 
   acts_as_tree
 
