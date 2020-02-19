@@ -5,7 +5,6 @@ ENV APP_ROOT /opt/app
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
 ENV RAILS_ENV production
-ENV BUNDLE_SILENCE_ROOT_WARNING 1
 
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -59,13 +58,18 @@ COPY Gemfile.lock $APP_ROOT/Gemfile.lock
 
 WORKDIR $APP_ROOT
 
-RUN gem install bundler --no-document --force && bundle install --deployment
+RUN gem install bundler --no-document --force        && \
+    bundle config set deployment 'true'              && \
+    bundle config --global silence_root_warning true && \
+    bundle install
 
 COPY . $APP_ROOT
 COPY config/application.bh.yml $APP_ROOT/config/application.yml
 
 RUN bundle exec rails assets:precompile DB_ADAPTER=nulldb
-RUN bundle exec rake help:install && bundle exec rake help:generate
+RUN bundle config set deployment 'false' && \
+    bundle exec rake help:install        && \
+    bundle exec rake help:generate
 
 RUN chgrp -R 0 $APP_ROOT && chmod -R g+rwX $APP_ROOT
 RUN chmod +x scripts/migrate.sh scripts/wait.sh
