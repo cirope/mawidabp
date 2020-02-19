@@ -79,7 +79,7 @@ module Users::Authorization
     end
 
     def revoke_concurrent_sessions?
-      get_parameter_for_now(:allow_concurrent_sessions).to_i == 0
+      get_parameter(:allow_concurrent_sessions).to_i == 0
     end
 
     def has_a_current_session?

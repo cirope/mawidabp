@@ -71,10 +71,10 @@ module Findings::Csv
     end
 
     def reiteration_info
-      if repeated_ancestors.any?
-        "#{I18n.t('finding.repeated_ancestors')}: #{repeated_ancestors.to_sentence}"
-      elsif repeated_children.any?
-        "#{I18n.t('finding.repeated_children')}: #{repeated_children.to_sentence}"
+      if (ancestors = repeated_ancestors).any?
+        "#{I18n.t('finding.repeated_ancestors')}: #{ancestors.to_sentence}"
+      elsif (children = repeated_children).any?
+        "#{I18n.t('finding.repeated_children')}: #{children.to_sentence}"
       else
         '-'
       end

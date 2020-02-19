@@ -19,6 +19,13 @@
   <%= t "risk_assessments.status.#{@risk_assessment.status}" %>
 </p>
 
+<% if @risk_assessment.file_model&.file %>
+  <p class="mb-1">
+    <strong><%= RiskAssessment.human_attribute_name 'file_model' %></strong>:
+    <%= link_to t('navigation.download'), @risk_assessment.file_model.file.url %>
+  </p>
+<% end %>
+
 <% if @risk_assessment.risk_assessment_items.any? %>
   <table class="table table-sm table-striped table-hover mb-3">
     <caption>
