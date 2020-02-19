@@ -160,10 +160,13 @@ module Findings::CurrentUserScopes
         {
           control_objective_item: {
             review: [:conclusion_final_review, :period, :plan_item]
-          }
+          },
+          review: :conclusion_draft_review,
         },
+        :organization,
+        :taggings,
         :tags,
-        :organization
+        :work_papers
       ]
     end
 
