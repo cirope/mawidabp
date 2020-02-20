@@ -144,7 +144,7 @@ module Reports::WeaknessesCurrentSituation
     def render_current_situation_report_csv
       render_or_send_by_mail(
         collection:  @weaknesses,
-        filename:    @title.downcase,
+        filename:    "#{@title.downcase}.csv",
         method_name: :current_situation_csv
       )
     end
