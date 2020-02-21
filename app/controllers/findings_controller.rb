@@ -154,10 +154,10 @@ class FindingsController < ApplicationController
 
     def render_index_csv
       render_or_send_by_mail(
-        collection: @findings,
-        filename: @title.downcase,
+        collection:  @findings,
+        filename:    "#{@title.downcase}.csv",
         method_name: :to_csv,
-        options: csv_options
+        options:     csv_options
       )
     end
 

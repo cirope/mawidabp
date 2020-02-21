@@ -222,8 +222,8 @@ class WeaknessesController < ApplicationController
 
     def render_index_csv
       render_or_send_by_mail(
-        collection: @weaknesses,
-        filename: @title.downcase,
+        collection:  @weaknesses,
+        filename:    "#{@title.downcase}.csv",
         method_name: :to_csv
       )
     end

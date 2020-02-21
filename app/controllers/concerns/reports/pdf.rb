@@ -1,35 +1,5 @@
 module Reports::Pdf
-
-  def init_pdf(title, subtitle, options: {})
-    pdf = Prawn::Document.create_generic_pdf :landscape, **options
-
-    pdf.add_generic_report_header current_organization
-
-    pdf.add_title title, PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
-
-    if subtitle
-      pdf.add_title subtitle, PDF_FONT_SIZE, :center
-      pdf.move_down PDF_FONT_SIZE * 2
-    end
-
-    pdf
-  end
-
-  def add_period_title(pdf, period, align = :left)
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-      (PDF_FONT_SIZE * 1.25).round, align
-  end
-
-  def add_month_title(pdf, month, align = :left)
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.add_title I18n.l(month, format: '%B %Y'), (PDF_FONT_SIZE * 1.5).round,
-      align
-  end
+  include Reports::BasePdf
 
   def add_weaknesses_synthesis_table(pdf, data, font_size = PDF_FONT_SIZE)
     if data.kind_of?(Hash)
@@ -256,14 +226,6 @@ module Reports::Pdf
       t("#{controller}_committee_report.period.range",
         :from_date => l(from_date, :format => :long),
         :to_date => l(to_date, :format => :long)))
-  end
-
-  def add_pdf_filters(pdf, controller, filters)
-    pdf.move_down PDF_FONT_SIZE
-    pdf.text t("#{controller}_committee_report.applied_filters",
-      :filters => filters.to_sentence, :count => filters.size),
-      :font_size => (PDF_FONT_SIZE * 0.75).round, :align => :justify,
-      :inline_format => true
   end
 
   def save_pdf(pdf, controller, from_date, to_date, sub_directory, id = 0)

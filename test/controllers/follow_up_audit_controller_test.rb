@@ -718,6 +718,88 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     assert_match Mime[:js].to_s, @response.content_type
   end
 
+  test 'weaknesses repeated' do
+    login
+
+    get :weaknesses_repeated
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_repeated'
+
+    assert_nothing_raised do
+      get :weaknesses_repeated, :params => {
+        :weaknesses_repeated => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }
+    end
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_repeated'
+  end
+
+  test 'weaknesses repeated as CSV' do
+    login
+
+    get :weaknesses_repeated, as: :csv
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :weaknesses_repeated, :params => {
+        :weaknesses_repeated => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
+  test 'filtered weaknesses repeated' do
+    login
+
+    get :weaknesses_repeated, :params => {
+      :weaknesses_repeated => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :weakness_tags => ['two']
+      },
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'follow_up_audit/weaknesses_repeated'
+  end
+
+  test 'create weaknesses repeated' do
+    login
+
+    post :create_weaknesses_repeated, :params => {
+      :weaknesses_repeated => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('follow_up_committee_report.weaknesses_repeated.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'weaknesses_repeated', 0)
+  end
+
   test 'weaknesses by control objective' do
     login
 
@@ -1685,6 +1767,34 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     }
 
     assert_response :redirect
+
+    assert_match I18n.t('follow_up_audit.weaknesses_report.pdf_name'),
+      @response.body
+  end
+
+  test 'queue async weaknesses report' do
+    login
+
+    old_count = ::SEND_REPORT_EMAIL_AFTER_COUNT
+    back_url  = weaknesses_report_url execution: true
+
+    silence_warnings { ::SEND_REPORT_EMAIL_AFTER_COUNT = 1 }
+
+    request.headers['HTTP_REFERER'] = back_url
+
+    post :create_weaknesses_report, params: {
+      execution: 'true',
+      weaknesses_report: {
+        finding_status: Finding::STATUS[:being_implemented].to_s
+      },
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
+    }
+
+    silence_warnings { ::SEND_REPORT_EMAIL_AFTER_COUNT = old_count }
+
+    assert_response :redirect
+    assert_match back_url, @response.body
   end
 
   test 'weaknesses report as CSV' do
