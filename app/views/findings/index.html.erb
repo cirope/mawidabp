@@ -1,8 +1,8 @@
 <%= render 'current_user_filters' %>
 <%= render 'shared/search', {
   options: {
-    url:              findings_path(completed: params[:completed]),
-    extra_parameters: { completed: params[:completed] },
+    url:              findings_path(completion_state: params[:completion_state]),
+    extra_parameters: { completion_state: params[:completion_state] },
     columns_for_sort: Finding.columns_for_sort
   },
 
@@ -28,7 +28,7 @@
       <%= make_filterable_column Finding.human_attribute_name('title'), { class: 'd-none d-md-table-cell' }, 'title' %>
       <%= make_not_available_column Finding.human_attribute_name('state'), class: 'd-none d-sm-table-cell' %>
       <%= make_not_available_column Finding.human_attribute_name(
-          params[:completed] == 'incomplete' ? 'follow_up_date' : 'solution_date'), class: 'd-none d-sm-table-cell' %>
+          params[:completion_state] == 'incomplete' ? 'follow_up_date' : 'solution_date'), class: 'd-none d-sm-table-cell' %>
       <%= make_not_available_column Weakness.human_attribute_name('risk'), class: 'd-none d-sm-table-cell' %>
       <%= make_filterable_column Tag.model_name.human(count: 0), { class: 'd-none d-sm-table-cell' }, 'tags' %>
       <%= make_not_available_column Finding.human_attribute_name('finding_answers'), class: 'd-none d-lg-table-cell' %>
@@ -49,16 +49,16 @@
         <td><%= show_finding_review_code_with_decription_as_abbr(finding) %></td>
         <td class="d-none d-md-table-cell"><%= super_truncate(finding.title, 17) %></td>
         <td class="d-none d-sm-table-cell"><%= super_truncate finding.state_text, 19 %></td>
-        <% if params[:completed] == 'complete' %>
-          <td class="d-none d-sm-table-cell"><%= l(finding.solution_date, format: :short) if finding.solution_date %></td>
-        <% else %>
+        <% if params[:completion_state] == 'incomplete' %>
           <td class="d-none d-sm-table-cell"><%= finding_follow_up_date_text(finding) %></td>
+        <% else %>
+          <td class="d-none d-sm-table-cell"><%= l(finding.solution_date, format: :short) if finding.solution_date %></td>
         <% end %>
         <td class="d-none d-sm-table-cell"><%= finding.respond_to?(:risk_text) ? finding.risk_text : '-' %></td>
         <td class="d-none d-sm-table-cell"><%= tags finding.tags.reload %></td>
         <td class="d-none d-lg-table-cell"><%= show_finding_answers_count finding %> <%= show_finding_reading_warning finding %></td>
         <td class="d-none d-lg-table-cell"><%= t finding.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
-        <td class="text-right"><%= link_to_show finding_path(params[:completed], finding, user_id: params[:user_id]) %></td>
+        <td class="text-right"><%= link_to_show finding_path(params[:completion_state], finding, user_id: params[:user_id]) %></td>
         <td class="text-right"><%= link_to_edit(edit_finding_path('incomplete', finding, user_id: params[:user_id])) if finding.pending? && (!@auth_user.can_act_as_audited? || finding.users.reload.include?(@auth_user)) %></td>
       </tr>
     <% end %>
@@ -75,7 +75,7 @@
 <script type="text/javascript">
   $('#user_id_select').change(function() {
     if($(this).val()) {
-      var url = '<%= findings_path(params[:completed]) %>';
+      var url = '<%= findings_path(params[:completion_state]) %>';
 
       BrowserManipulation.changeLocation(url, jQuery.parseJSON($(this).val()));
     }

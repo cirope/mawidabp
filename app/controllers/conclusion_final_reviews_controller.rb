@@ -15,7 +15,7 @@ class ConclusionFinalReviewsController < ApplicationController
     order << Arel.sql("#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('created_at')} DESC")
 
     @conclusion_final_reviews = ConclusionFinalReview.list.includes(
-      review: [:period, { plan_item: :business_unit }]
+      review: [:period, :conclusion_final_review, plan_item: :business_unit]
     ).where(@conditions).order(order).page(params[:page])
     .references(:periods, :reviews, :business_units)
 

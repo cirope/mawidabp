@@ -59,6 +59,7 @@ es:
     follow_up:
       pending_findings: 'Observaciones pendientes'
       complete_findings: 'Observaciones solucionadas'
+      repeated_findings: 'Observaciones reiteradas'
       notifications: 'Notificaciones'
       reports: 'Reportes'
     help_title: 'Ayuda'

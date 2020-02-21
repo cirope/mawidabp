@@ -11,7 +11,7 @@ class Users::StatusController < ApplicationController
 
     status_session.clear
 
-    redirect_to findings_url(completed: 'incomplete', user_ids: user_ids)
+    redirect_to findings_url(completion_state: 'incomplete', user_ids: user_ids)
   end
 
   # * GET /users/status/1

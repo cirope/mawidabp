@@ -19,8 +19,10 @@ class ControlObjectiveItemsController < ApplicationController
     @control_objectives = ControlObjectiveItem.list.includes(
       :weaknesses,
       :work_papers,
-      { review: :period },
-      { control_objective: :process_control }
+      :process_control,
+      :oportunities,
+      review: [:period, :conclusion_final_review],
+      control_objective: :process_control
     ).where(@conditions).references(:review).order(
       [
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",

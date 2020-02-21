@@ -2,6 +2,7 @@ es:
   messages:
     confirmation: '¿Está seguro?'
     not_authorized: 'Debe ingresar para ver el contenido'
+    truncated: 'Truncado, cantidad máxima de caracteres %{count}'
 
   navigation:
     back: 'Volver'
@@ -145,7 +146,8 @@ es:
     current_user_filters:
       as_owner: '%{kind} como responsable'
       incomplete: 'Pendientes'
-      complete: 'Solucionados o reiterados'
+      complete: 'Solucionados'
+      repeated: 'Reiterados'
     state:
       confirmed: 'Confirmada'
       unconfirmed: 'No confirmada'

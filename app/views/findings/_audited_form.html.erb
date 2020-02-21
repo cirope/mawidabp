@@ -1,4 +1,4 @@
-<%= simple_form_for @finding, :as => :finding, url: finding_path(params[:completed], @finding),
+<%= simple_form_for @finding, :as => :finding, url: finding_path(params[:completion_state], @finding),
   html: { method: :patch, id: "edit_finding_#{@finding.id}"} do |f| %>
   <%= render 'shared/error_explanation', f: f %>
 

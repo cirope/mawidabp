@@ -19,12 +19,20 @@ module UsersHelper
     end
   end
 
-  def user_organizations
-    group = current_organization ?
-      current_organization.group :
-      Group.find_by_admin_hash(params[:hash])
+  def user_organizations organization_role
+    group = if current_organization
+              current_organization.group
+            else
+              Group.find_by_admin_hash params[:hash]
+            end
 
-    sorted_options_array_for Organization.with_group(group), :name, :id
+    organizations = if NOTIFY_NEW_ADMIN
+                      Organization.list_with_selected group, organization_role&.organization
+                    else
+                      Organization.with_group group
+                    end
+
+    sorted_options_array_for organizations, :name, :id
   end
 
   def user_organization_roles

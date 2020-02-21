@@ -401,7 +401,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
     get :auto_complete_for_finding_relation, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       q: 'O001; 1 2 3',
       finding_id: finding.id,
       review_id: finding.review.id
@@ -434,10 +434,10 @@ class WeaknessesControllerTest < ActionController::TestCase
     }, :as => :json
     assert_response :success
 
-    tags = ActiveSupport::JSON.decode(@response.body)
+    response_tags = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 1, tags.size
-    assert tags.all? { |t| t['label'].match /impor/i }
+    assert_equal 1, response_tags.size
+    assert response_tags.all? { |t| t['label'].match /impor/i }
 
     get :auto_complete_for_tagging, params: {
       :q => 'x_none',
@@ -445,9 +445,25 @@ class WeaknessesControllerTest < ActionController::TestCase
     }, :as => :json
     assert_response :success
 
-    tags = ActiveSupport::JSON.decode(@response.body)
+    response_tags = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 0, tags.size # No results
+    assert_equal 0, response_tags.size # No results
+
+    tag = tags :important
+
+    tag.update! obsolete: true
+
+    get :auto_complete_for_tagging, params: {
+      q: 'impor',
+      completion_state: 'incomplete',
+      kind: 'finding'
+    }, as: :json
+
+    assert_response :success
+
+    response_tags = ActiveSupport::JSON.decode @response.body
+
+    assert_equal 0, response_tags.size
   end
 
   test 'auto complete for control objective item' do

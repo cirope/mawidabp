@@ -18,6 +18,8 @@ namespace :db do
       update_finding_parent_ids           # 2020-01-22
       collapse_extended_risks             # 2020-02-04
       remove_finding_awaiting_state       # 2020-02-05
+      add_repeated_findings_privilege     # 2020-02-07
+      update_latest_on_findings           # 2020-02-08
     end
   end
 end
@@ -332,26 +334,15 @@ private
 
   def update_finding_parent_ids
     if update_finding_parent_ids?
-      # Root findings
-      Finding.repeated.without_repeated.find_each.each do |f|
-        parent_ids         = []
-        findings_to_update = []
-        repeated_in        = f.repeated_in
+      Finding.with_repeated.finals(false).find_each do |finding|
+        parent_ids = []
+        cursor     = finding
 
-        # build the entire "family tree"
-        while repeated_in
-          findings_to_update << repeated_in
-          parent_ids         << repeated_in.repeated_of_id
-
-          repeated_in = repeated_in.repeated_in
+        while cursor.repeated_of
+          parent_ids << (cursor = cursor.repeated_of).id
         end
 
-        # From last to first, update parent_ids and delete the "iterated child"
-        # from the parent_ids list
-        findings_to_update.reverse_each do |child|
-          child.update_column :parent_ids, parent_ids
-          parent_ids.pop # or parent_ids.delete(child.repeated_of_id)
-        end
+        finding.update_column :parent_ids, parent_ids.reverse
       end
     end
   end
@@ -453,4 +444,40 @@ private
 
   def remove_finding_awaiting_state?
     Finding.where(state: -4).any?
+  end
+
+  def add_repeated_findings_privilege
+    if repeated_findings_privilege?
+      Privilege.where(module: 'follow_up_complete_findings').find_each do |p|
+        attrs = p.attributes.
+          except('id', 'module', 'created_at', 'updated_at').
+          merge(module: 'follow_up_repeated_findings')
+
+        Privilege.create! attrs
+      end
+    end
+  end
+
+  def repeated_findings_privilege?
+    Privilege.where(module: 'follow_up_repeated_findings').empty?
+  end
+
+  def update_latest_on_findings
+    if update_latest_on_findings?
+      Finding.with_repeated.not_repeated.finals(false).find_each do |finding|
+        latest_id = finding.id
+        cursor    = finding
+        findings  = []
+
+        while cursor.repeated_of
+          findings << (cursor = cursor.repeated_of)
+        end
+
+        findings.each { |f| f.update_column :latest_id, latest_id }
+      end
+    end
+  end
+
+  def update_latest_on_findings?
+    Finding.where.not(latest_id: nil).empty?
   end
