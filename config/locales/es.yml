@@ -676,6 +676,7 @@
     weaknesses_evolution_title: "Evolución de observaciones"
     weaknesses_list_title: "Listado de observaciones"
     weaknesses_brief_title: "Resumen de observaciones pendientes"
+    weaknesses_repeated_title: "Observaciones reiteradas"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     cost_analysis:
       column_business_unit: "Unidad de negocio"
@@ -710,6 +711,7 @@
     weaknesses_evolution_title: "Evolución de observaciones"
     weaknesses_list_title: "Listado de observaciones"
     weaknesses_brief_title: "Resumen de observaciones pendientes"
+    weaknesses_repeated_title: "Observaciones reiteradas"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     detailed_report: "Reporte detallado"
     qa_indicators_title: "Indicadores de calidad"
@@ -865,6 +867,14 @@
       implemented_audited_count:
         one: "Una observación fue regularizada entre el %{from_date} y el %{to_date}."
         other: "%{count} observaciones fueron regularizadas entre el %{from_date} y el %{to_date}."
+    weaknesses_repeated:
+      pdf_name: "observaciones_reiteradas_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO DE OBSERVACIONES REITERADAS / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      origination_year: "Año de origen"
+      weakness_tags: "Etiquetas de observación"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"

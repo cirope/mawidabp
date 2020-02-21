@@ -34,6 +34,7 @@ class Finding < ApplicationRecord
   include Findings::Pdf
   include (POSTGRESQL_ADAPTER ? Findings::Reiterations : Findings::ReiterationsAlt)
   include Findings::Relations
+  include Findings::RepeatedCsv
   include Findings::ReportScopes
   include Findings::Reschedule
   include Findings::SaveCallbacks
