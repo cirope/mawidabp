@@ -106,7 +106,7 @@ module Reports::WeaknessesCurrentSituation
         list_with_final_review.
         finals(final).
         where(id: @permalink.permalink_models.pluck('model_id')).
-        includes(:business_unit, :business_unit_type,
+        includes(:business_unit, :business_unit_type, :latest,
           achievements: [:benefit],
           review: [:plan_item, :conclusion_final_review],
           taggings: :tag
@@ -119,7 +119,7 @@ module Reports::WeaknessesCurrentSituation
         finals(final).
         list_with_final_review.
         by_issue_date('BETWEEN', @from_date, @to_date).
-        includes(:business_unit, :business_unit_type,
+        includes(:business_unit, :business_unit_type, :latest,
           achievements: [:benefit],
           review: [:plan_item, :conclusion_final_review],
           taggings: :tag
