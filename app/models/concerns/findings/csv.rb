@@ -5,6 +5,7 @@ module Findings::Csv
 
   LINE_BREAK             = "\r\n"
   LINE_BREAK_REPLACEMENT = " | "
+  OPTIONS = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
   def to_csv_a corporate
     row = [
@@ -172,12 +173,28 @@ module Findings::Csv
 
   module ClassMethods
     def to_csv corporate: false
-      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
-
-      csv_str = CSV.generate(**options) do |csv|
+      csv_str = CSV.generate(**OPTIONS) do |csv|
         csv << column_headers(corporate)
+      end
 
-        all_with_inclusions.each { |f| csv << f.to_csv_a(corporate) }
+      page = 1
+
+      while page
+        cursor = all_with_inclusions.page(page).per_page(300)
+
+        csv_str += CSV.generate(**OPTIONS) do |csv|
+          cursor.each { |f| csv << f.to_csv_a(corporate) }
+        end
+
+        if Sidekiq.server? && (page % 4).zero?
+          # Entire flush of AR
+          ActiveRecord::Base.clear_active_connections!
+          ActiveRecord::Base.connection_pool.flush!
+
+          GC.start
+        end
+
+        page = cursor.next_page
       end
 
       "\uFEFF#{csv_str}"
@@ -201,9 +218,9 @@ module Findings::Csv
           :business_unit_type,
           :business_unit,
           :tasks,
-          ({ tasks: :versions } if POSTGRESQL_ADAPTER),
-          :latest_answer,
-          latest: [:review, :latest_answer],
+          # ({ tasks: :versions } if POSTGRESQL_ADAPTER),
+          latest_answer: :user,
+          latest: [:review, latest_answer: :user],
           finding_answers: :user,
           finding_user_assignments: :user,
           finding_owner_assignments: :user,
