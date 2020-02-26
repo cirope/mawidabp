@@ -20,6 +20,7 @@ namespace :db do
       remove_finding_awaiting_state       # 2020-02-05
       add_repeated_findings_privilege     # 2020-02-07
       update_latest_on_findings           # 2020-02-08
+      update_review_scopes                # 2020-02-20
     end
   end
 end
@@ -480,4 +481,16 @@ private
 
   def update_latest_on_findings?
     Finding.where.not(latest_id: nil).empty?
+  end
+
+  def update_review_scopes
+    if update_review_scopes?
+      PlanItem.where(scope: 'Auditorías/Seguimiento').update_all(scope: 'Auditorías')
+      Review.where(scope: 'Auditorías/Seguimiento').update_all(scope: 'Auditorías')
+    end
+  end
+
+  def update_review_scopes?
+    PlanItem.where(scope: 'Auditorías/Seguimiento').any? ||
+      Review.where(scope: 'Auditorías/Seguimiento').any?
   end
