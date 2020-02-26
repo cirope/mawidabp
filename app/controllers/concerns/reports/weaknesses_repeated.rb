@@ -27,15 +27,7 @@ module Reports::WeaknessesRepeated
           pdf.text text, size: PDF_FONT_SIZE, inline_format: true, align: :justify
         end
 
-        pdf.move_down PDF_FONT_SIZE * 0.5
-
-        pdf.indent PDF_FONT_SIZE do
-          repeated_current_pdf_items(weakness).each do |item|
-            text = "<i>#{item.first}:</i> #{item.last.to_s.strip}"
-
-            pdf.text text, size: PDF_FONT_SIZE, inline_format: true, align: :justify
-          end
-        end
+        put_repeated_current_on pdf, weakness
 
         pdf.move_down PDF_FONT_SIZE
       end
@@ -73,8 +65,7 @@ module Reports::WeaknessesRepeated
     end
 
     def repeated_weaknesses final
-      weaknesses = Weakness.
-        repeated.
+      weaknesses = Weakness.repeated.or(Weakness.being_implemented).
         finals(final).
         list_with_final_review.
         by_issue_date('BETWEEN', @from_date, @to_date).
@@ -99,6 +90,20 @@ module Reports::WeaknessesRepeated
       )
     end
 
+    def put_repeated_current_on pdf, weakness
+      unless weakness == weakness.current
+        pdf.move_down PDF_FONT_SIZE * 0.5
+
+        pdf.indent PDF_FONT_SIZE do
+          repeated_current_pdf_items(weakness).each do |item|
+            text = "<i>#{item.first}:</i> #{item.last.to_s.strip}"
+
+            pdf.text text, size: PDF_FONT_SIZE, inline_format: true, align: :justify
+          end
+        end
+      end
+    end
+
     def repeated_pdf_items weakness
       [
         [
@@ -117,6 +122,10 @@ module Reports::WeaknessesRepeated
           Weakness.human_attribute_name('risk'),
           weakness.risk_text
         ],
+        ([
+          Weakness.human_attribute_name('state'),
+          weakness.state_text
+        ] unless weakness.repeated?),
         [
           Weakness.human_attribute_name('title'),
           weakness.title
@@ -129,7 +138,7 @@ module Reports::WeaknessesRepeated
           Weakness.human_attribute_name('answer'),
           weakness.answer
         ]
-      ]
+      ].compact
     end
 
     def repeated_current_pdf_items weakness

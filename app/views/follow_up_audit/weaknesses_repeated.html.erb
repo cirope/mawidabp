@@ -41,6 +41,13 @@
       <%= weakness.risk_text %>
     </p>
 
+    <% unless weakness.repeated? %>
+      <p class="mb-1">
+        <span class="text-muted"><%= Weakness.human_attribute_name 'state' %></span>:
+        <%= weakness.state_text %>
+      </p>
+    <% end %>
+
     <p class="mb-1">
       <span class="text-muted"><%= Weakness.human_attribute_name 'title' %></span>:
       <%= weakness.title %>
@@ -56,32 +63,34 @@
       <%= weakness.answer %>
     </p>
 
-    <div class="ml-3 mt-2">
-      <p class="mb-1">
-        <span class="text-muted"><%= Review.model_name.human %></span>:
-        <%= current_weakness.review.identification %>
-      </p>
+    <% unless weakness == current_weakness %>
+      <div class="ml-3 mt-2">
+        <p class="mb-1">
+          <span class="text-muted"><%= Review.model_name.human %></span>:
+          <%= current_weakness.review.identification %>
+        </p>
 
-      <p class="mb-1">
-        <span class="text-muted"><%= Weakness.human_attribute_name 'risk' %></span>:
-        <%= current_weakness.risk_text %>
-      </p>
+        <p class="mb-1">
+          <span class="text-muted"><%= Weakness.human_attribute_name 'risk' %></span>:
+          <%= current_weakness.risk_text %>
+        </p>
 
-      <p class="mb-1">
-        <span class="text-muted"><%= Weakness.human_attribute_name 'state' %></span>:
-        <%= current_weakness.state_text %>
-      </p>
+        <p class="mb-1">
+          <span class="text-muted"><%= Weakness.human_attribute_name 'state' %></span>:
+          <%= current_weakness.state_text %>
+        </p>
 
-      <p class="mb-1">
-        <span class="text-muted"><%= Weakness.human_attribute_name 'answer' %></span>:
-        <%= current_weakness.answer %>
-      </p>
+        <p class="mb-1">
+          <span class="text-muted"><%= Weakness.human_attribute_name 'answer' %></span>:
+          <%= current_weakness.answer %>
+        </p>
 
-      <p class="mb-1">
-        <span class="text-muted"><%= Weakness.human_attribute_name 'follow_up_date' %></span>:
-        <%= l current_weakness.follow_up_date if current_weakness.follow_up_date %>
-      </p>
-    </div>
+        <p class="mb-1">
+          <span class="text-muted"><%= Weakness.human_attribute_name 'follow_up_date' %></span>:
+          <%= l current_weakness.follow_up_date if current_weakness.follow_up_date %>
+        </p>
+      </div>
+    <% end %>
   <% end %>
 <% else %>
   <div class="ml-3">
