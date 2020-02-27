@@ -18,13 +18,11 @@ module Findings::WeaknessReportPdf
           count += 1
         end
 
-        if Sidekiq.server? && (page % 4).zero?
-          # Entire flush of AR
-          ActiveRecord::Base.clear_active_connections!
-          ActiveRecord::Base.connection_pool.flush!
+        # Entire flush of AR
+        ActiveRecord::Base.clear_active_connections!
+        ActiveRecord::Base.connection_pool.flush!
 
-          GC.start
-        end
+        GC.start
 
         page = cursor.next_page
       end
