@@ -3,5 +3,6 @@ class Current < ActiveSupport::CurrentAttributes
             :group,
             :corporate_ids,
             :user,
-            :conclusion_pdf_format
+            :conclusion_pdf_format,
+            :settings
 end

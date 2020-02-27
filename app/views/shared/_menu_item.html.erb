@@ -6,10 +6,7 @@
       <%= menu_item %>
     <% end %>
     <div class="dropdown-menu">
-      <% menu_item.children.each do |submenu_item| %>
-        <%= link_to submenu_item, submenu_item.url, class: 'dropdown-item' %>
-        <%= render 'shared/submenu', submenu_item: submenu_item %>
-      <% end %>
+      <%= render partial: 'shared/submenu', collection: menu_item.children, as: :submenu_item %>
     </div>
   </li>
 <% else %>

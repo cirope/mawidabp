@@ -137,6 +137,7 @@ Rails.application.routes.draw do
     'weaknesses_by_risk_report',
     'weaknesses_by_user',
     'weaknesses_current_situation',
+    'weaknesses_repeated',
     'weaknesses_by_control_objective',
     'fixed_weaknesses_report',
     'weaknesses_graphs',
@@ -172,6 +173,7 @@ Rails.application.routes.draw do
     'create_weaknesses_by_user',
     'create_weaknesses_current_situation',
     'create_weaknesses_current_situation_permalink',
+    'create_weaknesses_repeated',
     'create_weaknesses_by_control_objective',
     'create_fixed_weaknesses_report'
   ].each do |action|

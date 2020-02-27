@@ -68,15 +68,15 @@ module Users::Validations
     end
 
     def password_min_length
-      @_pml ||= get_parameter_for_now(:password_minimum_length).to_i
+      @_pml ||= get_parameter(:password_minimum_length).to_i
     end
 
     def password_min_time
-      @_pmt ||= get_parameter_for_now(:password_minimum_time).to_i
+      @_pmt ||= get_parameter(:password_minimum_time).to_i
     end
 
     def password_regex
-      @_pc ||= Regexp.new get_parameter_for_now(:password_constraint)
+      @_pc ||= Regexp.new get_parameter(:password_constraint)
     end
 
     def repeat_password_from? old_user

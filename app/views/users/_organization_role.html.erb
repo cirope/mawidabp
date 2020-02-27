@@ -3,7 +3,7 @@
 <fieldset class="organization_role">
   <div class="row">
     <div class="col-md-6">
-      <%= f.input :organization_id, collection: user_organizations, prompt: true, label: false, input_html: {
+      <%= f.input :organization_id, collection: user_organizations(f.object), prompt: true, label: false, input_html: {
         id: "organization_id_#{id}", disabled: readonly, data: { update_role: "#role_id_#{id}", roles_url: user_roles_path }
       } %>
     </div>

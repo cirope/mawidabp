@@ -6,7 +6,6 @@ namespace :deploy do
         with rails_env: fetch(:rails_env) do
           rake 'help:install'
           rake 'help:generate'
-          rake 'help:link'
         end
       end
     end

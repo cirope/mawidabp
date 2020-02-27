@@ -424,6 +424,7 @@ es:
         style: 'Estilo'
         icon: 'Icono'
         shared: 'Compartida'
+        obsolete: 'Obsoleta'
       tagging:
         tag: 'Etiqueta'
         tag_id: 'Etiqueta'

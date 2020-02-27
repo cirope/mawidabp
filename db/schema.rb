@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_08_181804) do
+ActiveRecord::Schema.define(version: 2020_02_11_214928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -965,9 +965,11 @@ ActiveRecord::Schema.define(version: 2020_02_08_181804) do
     t.integer "group_id", null: false
     t.string "icon", default: "tag", null: false
     t.bigint "parent_id"
+    t.boolean "obsolete", default: false, null: false
     t.index ["group_id"], name: "index_tags_on_group_id"
     t.index ["kind"], name: "index_tags_on_kind"
     t.index ["name"], name: "index_tags_on_name"
+    t.index ["obsolete"], name: "index_tags_on_obsolete"
     t.index ["options"], name: "index_tags_on_options", using: :gin
     t.index ["organization_id"], name: "index_tags_on_organization_id"
     t.index ["parent_id"], name: "index_tags_on_parent_id"

@@ -1,0 +1,128 @@
+<% unless @permalink %>
+  <%= render partial: 'shared/filter_form',
+    locals: {
+      action: :weaknesses_repeated, extra_params: {
+        controller_name: 'follow_up', final: false
+      },
+      forms: [
+        [:date_range, true],
+        [
+          :tags, {
+            field_name: :weakness_tags,
+            field_label: t('follow_up_committee_report.weaknesses_repeated.weakness_tags')
+          }
+        ]
+      ]
+    }
+  %>
+<% end %>
+
+<% if @weaknesses.any? %>
+  <% @weaknesses.each_with_index do |weakness, index| %>
+    <% current_weakness = weakness.current %>
+
+    <p class="mt-3 mb-1">
+      <span class="text-muted"><%= Review.model_name.human %></span>:
+      <%= weakness.review.identification %>
+    </p>
+
+    <p class="mb-1">
+      <span class="text-muted"><%= PlanItem.human_attribute_name 'project' %></span>:
+      <%= weakness.review.plan_item.project %>
+    </p>
+
+    <p class="mb-1">
+      <span class="text-muted"><%= t 'follow_up_committee_report.weaknesses_repeated.origination_year' %></span>:
+      <%= l weakness.origination_date, format: '%Y' if weakness.origination_date %>
+    </p>
+
+    <p class="mb-1">
+      <span class="text-muted"><%= Weakness.human_attribute_name 'risk' %></span>:
+      <%= weakness.risk_text %>
+    </p>
+
+    <% unless weakness.repeated? %>
+      <p class="mb-1">
+        <span class="text-muted"><%= Weakness.human_attribute_name 'state' %></span>:
+        <%= weakness.state_text %>
+      </p>
+    <% end %>
+
+    <p class="mb-1">
+      <span class="text-muted"><%= Weakness.human_attribute_name 'title' %></span>:
+      <%= weakness.title %>
+    </p>
+
+    <p class="mb-1">
+      <span class="text-muted"><%= Weakness.human_attribute_name 'description' %></span>:
+      <%= weakness.description %>
+    </p>
+
+    <p class="mb-1">
+      <span class="text-muted"><%= Weakness.human_attribute_name 'answer' %></span>:
+      <%= weakness.answer %>
+    </p>
+
+    <% unless weakness == current_weakness %>
+      <div class="ml-3 mt-2">
+        <p class="mb-1">
+          <span class="text-muted"><%= Review.model_name.human %></span>:
+          <%= current_weakness.review.identification %>
+        </p>
+
+        <p class="mb-1">
+          <span class="text-muted"><%= Weakness.human_attribute_name 'risk' %></span>:
+          <%= current_weakness.risk_text %>
+        </p>
+
+        <p class="mb-1">
+          <span class="text-muted"><%= Weakness.human_attribute_name 'state' %></span>:
+          <%= current_weakness.state_text %>
+        </p>
+
+        <p class="mb-1">
+          <span class="text-muted"><%= Weakness.human_attribute_name 'answer' %></span>:
+          <%= current_weakness.answer %>
+        </p>
+
+        <p class="mb-1">
+          <span class="text-muted"><%= Weakness.human_attribute_name 'follow_up_date' %></span>:
+          <%= l current_weakness.follow_up_date if current_weakness.follow_up_date %>
+        </p>
+      </div>
+    <% end %>
+  <% end %>
+<% else %>
+  <div class="ml-3">
+    <p class="mb-1"><em><%= t 'follow_up_committee_report.weaknesses_repeated.without_weaknesses' %></em></p>
+  </div>
+<% end %>
+
+<hr />
+
+<div>
+  <%= link_to t('label.back'), action: :index %> |
+  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
+  <%= link_to t('label.download_csv'), weaknesses_repeated_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
+</div>
+
+<%= render partial: 'shared/customize_report_form', locals: {
+  options: {
+    form_name: 'report',
+    url: request.query_parameters.merge(
+      {action: :create_weaknesses_repeated, _ts: Time.now.to_i}
+    ),
+    fields: [
+      {
+        name: :report_title,
+        label: t('customize_report_form.title'),
+        value: t('follow_up_committee_report.weaknesses_repeated.title')
+      },
+      {
+        name: :report_subtitle,
+        label: t('customize_report_form.subtitle'),
+        value: t('follow_up_committee_report.weaknesses_repeated.subtitle')
+      }
+    ]
+  }
+} %>
