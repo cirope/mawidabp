@@ -5,6 +5,7 @@ module Findings::Csv
 
   LINE_BREAK             = "\r\n"
   LINE_BREAK_REPLACEMENT = " | "
+  OPTIONS = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
   def to_csv_a corporate
     row = [
@@ -172,12 +173,14 @@ module Findings::Csv
 
   module ClassMethods
     def to_csv corporate: false
-      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
-
-      csv_str = CSV.generate(**options) do |csv|
+      csv_str = CSV.generate(**OPTIONS) do |csv|
         csv << column_headers(corporate)
+      end
 
-        all_with_inclusions.each { |f| csv << f.to_csv_a(corporate) }
+      SmartIterator.iterate all_with_inclusions do |cursor|
+        csv_str += CSV.generate(**OPTIONS) do |csv|
+          cursor.each { |f| csv << f.to_csv_a(corporate) }
+        end
       end
 
       "\uFEFF#{csv_str}"
@@ -201,9 +204,8 @@ module Findings::Csv
           :business_unit_type,
           :business_unit,
           :tasks,
-          ({ tasks: :versions } if POSTGRESQL_ADAPTER),
-          :latest_answer,
-          latest: [:review, :latest_answer],
+          latest_answer: :user,
+          latest: [:review, latest_answer: :user],
           finding_answers: :user,
           finding_user_assignments: :user,
           finding_owner_assignments: :user,

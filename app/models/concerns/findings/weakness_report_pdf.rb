@@ -8,10 +8,12 @@ module Findings::WeaknessReportPdf
       pdf   = init_pdf opts[:title], opts[:subtitle]
       count = 0
 
-      all.each do |weakness|
-        add_to_weakness_report_pdf pdf, weakness
+      SmartIterator.iterate all do |cursor|
+        cursor.each do |weakness|
+          add_to_weakness_report_pdf pdf, weakness
 
-        count += 1
+          count += 1
+        end
       end
 
       add_weaknesses_count_to_pdf pdf, count
