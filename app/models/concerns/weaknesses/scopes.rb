@@ -32,6 +32,10 @@ module Weaknesses::Scopes
       where risk: risk
     end
 
+    def by_priority priority
+      where priority: priority
+    end
+
     def by_impact impact
       where "#{quoted_table_name}.#{qcn 'impact'} && ARRAY[?]", Array(impact)
     end
