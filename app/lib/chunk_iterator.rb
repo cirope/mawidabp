@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-module SmartIterator
+module ChunkIterator
   module_function
 
-  DEFAULT_PER_PAGE        = ENV['ITERATOR_PER_PAGE'].try(:to_i) || 200
-  DEFAULT_PAGES_FOR_FLUSH = ENV['ITERATOR_PAGES_FOR_FLUSH'].try(:to_i) || 4
+  ITERATOR_CHUNK_SIZE        = ENV['ITERATOR_CHUNK_SIZE'].try(:to_i) || 200
+  ITERATOR_PAGES_UNTIL_FLUSH = ENV['ITERATOR_PAGES_UNTIL_FLUSH'].try(:to_i) || 4
 
-  def iterate scope, per_page: DEFAULT_PER_PAGE, pages_for_flush: DEFAULT_PAGES_FOR_FLUSH
+  def iterate scope, per_page: ITERATOR_CHUNK_SIZE, pages_for_flush: ITERATOR_PAGES_UNTIL_FLUSH
     page = 1
 
     while page

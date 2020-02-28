@@ -8,7 +8,7 @@ module Findings::WeaknessReportPdf
       pdf   = init_pdf opts[:title], opts[:subtitle]
       count = 0
 
-      SmartIterator.iterate all do |cursor|
+      ChunkIterator.iterate all do |cursor|
         cursor.each do |weakness|
           add_to_weakness_report_pdf pdf, weakness
 

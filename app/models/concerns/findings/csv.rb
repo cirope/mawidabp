@@ -5,7 +5,7 @@ module Findings::Csv
 
   LINE_BREAK             = "\r\n"
   LINE_BREAK_REPLACEMENT = " | "
-  OPTIONS = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+  OPTIONS                = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
   def to_csv_a corporate
     row = [
@@ -177,7 +177,7 @@ module Findings::Csv
         csv << column_headers(corporate)
       end
 
-      SmartIterator.iterate all_with_inclusions do |cursor|
+      ChunkIterator.iterate all_with_inclusions do |cursor|
         csv_str += CSV.generate(**OPTIONS) do |csv|
           cursor.each { |f| csv << f.to_csv_a(corporate) }
         end
