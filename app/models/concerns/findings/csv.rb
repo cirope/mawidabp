@@ -1,4 +1,6 @@
 module Findings::Csv
+  include ActionView::Helpers::TextHelper
+
   extend ActiveSupport::Concern
 
   LINE_BREAK             = "\r\n"
@@ -17,7 +19,7 @@ module Findings::Csv
       (taggings.map(&:tag).to_sentence if self.class.show_follow_up_timestamps?),
       title,
       description,
-      state_text,
+      full_state_text,
       try(:risk_text) || '',
       respond_to?(:risk_text) ? priority_text : '',
       auditeds_as_process_owner.join('; '),
@@ -40,7 +42,8 @@ module Findings::Csv
       audit_recommendations,
       answer,
       (last_commitment_date_text if self.class.show_follow_up_timestamps?),
-      (finding_answers_text if self.class.show_follow_up_timestamps?)
+      (finding_answers_text if self.class.show_follow_up_timestamps?),
+      latest_answer_text
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -65,10 +68,10 @@ module Findings::Csv
     end
 
     def reiteration_info
-      if repeated_ancestors.any?
-        "#{I18n.t('finding.repeated_ancestors')}: #{repeated_ancestors.to_sentence}"
-      elsif repeated_children.any?
-        "#{I18n.t('finding.repeated_children')}: #{repeated_children.to_sentence}"
+      if (ancestors = repeated_ancestors).any?
+        "#{I18n.t('finding.repeated_ancestors')}: #{ancestors.to_sentence}"
+      elsif (children = repeated_children).any?
+        "#{I18n.t('finding.repeated_children')}: #{children.to_sentence}"
       else
         '-'
       end
@@ -126,7 +129,23 @@ module Findings::Csv
         "[#{date}] #{fa.user.full_name}: #{fa.answer}"
       end
 
-      answers.reverse.join LINE_BREAK_REPLACEMENT
+      truncate(
+        answers.reverse.join(LINE_BREAK_REPLACEMENT),
+        length:   32767, # To go around the 32767 limit on some spreadsheets
+        omission: "[#{I18n.t('messages.truncated', count: 32767)}]"
+      )
+    end
+
+    def latest_answer_text
+      answer = latest&.latest_answer || (latest.nil? && latest_answer)
+
+      if answer
+        date = I18n.l answer.created_at, format: :minimal
+
+        "[#{date}] #{answer.user.full_name}: #{answer.answer}"
+      else
+        '-'
+      end
     end
 
     def last_commitment_date_text
@@ -183,6 +202,8 @@ module Findings::Csv
           :business_unit,
           :tasks,
           ({ tasks: :versions } if POSTGRESQL_ADAPTER),
+          :latest_answer,
+          latest: [:review, :latest_answer],
           finding_answers: :user,
           finding_user_assignments: :user,
           finding_owner_assignments: :user,
@@ -236,7 +257,8 @@ module Findings::Csv
           Finding.human_attribute_name('audit_recommendations'),
           Finding.human_attribute_name('answer'),
           (FindingAnswer.human_attribute_name('commitment_date') if show_follow_up_timestamps?),
-          (I18n.t('finding.finding_answers') if show_follow_up_timestamps?)
+          (I18n.t('finding.finding_answers') if show_follow_up_timestamps?),
+          (I18n.t('finding.latest_answer') if show_follow_up_timestamps?)
         ].compact
       end
   end

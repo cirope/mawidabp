@@ -3,6 +3,7 @@ module Findings::Answers
 
   included do
     has_many :finding_answers, -> { order created_at: :asc }, dependent: :destroy, after_add: :answer_added
+    has_one :latest_answer, -> { order created_at: :desc }, class_name: 'FindingAnswer'
 
     accepts_nested_attributes_for :finding_answers, allow_destroy: false,
       reject_if: ->(attributes) { attributes['answer'].blank? }

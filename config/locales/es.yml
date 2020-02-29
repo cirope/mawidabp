@@ -591,6 +591,7 @@
     finding_relations: "Relacionada con"
     inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
+    latest_answer: "Último comentario de seguimiento"
     next_pending_task_date: "Fecha próxima tarea pendiente"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado **%{cost}** al seguimiento de la observación"
@@ -622,8 +623,8 @@
       other: "Auditados"
     readonly: "La observación no puede ser creada ni modificada, ya se emitió el informe definitivo"
     responsibles:
-      one: "Responsable"
-      other: "Responsables"
+      one: "Usuario"
+      other: "Usuarios"
     send_notification: "¿Notificar?"
     status_change_history: "Historial de cambios de estado"
     view_completed: "Ver implementadas"
@@ -677,6 +678,7 @@
     weaknesses_evolution_title: "Evolución de observaciones"
     weaknesses_list_title: "Listado de observaciones"
     weaknesses_brief_title: "Resumen de observaciones pendientes"
+    weaknesses_repeated_title: "Observaciones reiteradas"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     cost_analysis:
       column_business_unit: "Ciclo"
@@ -711,6 +713,7 @@
     weaknesses_evolution_title: "Evolución de observaciones"
     weaknesses_list_title: "Listado de observaciones"
     weaknesses_brief_title: "Resumen de observaciones pendientes"
+    weaknesses_repeated_title: "Observaciones reiteradas"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     detailed_report: "Reporte detallado"
     qa_indicators_title: "Indicadores de calidad"
@@ -866,6 +869,14 @@
       implemented_audited_count:
         one: "Una observación fue regularizada entre el %{from_date} y el %{to_date}."
         other: "%{count} observaciones fueron regularizadas entre el %{from_date} y el %{to_date}."
+    weaknesses_repeated:
+      pdf_name: "observaciones_reiteradas_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO DE OBSERVACIONES REITERADAS / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      origination_year: "Año de origen"
+      weakness_tags: "Etiquetas de observación"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
@@ -1050,11 +1061,11 @@
       the_following_findings_are_still_unconfirmed: "Las siguientes observaciones han sido notificadas pero no han recibido una confirmación"
     reassigned_findings:
       new_responsibles:
-        one: "Responsable actual: %{responsible}"
-        other: "Responsables actuales: %{responsible}"
+        one: "Usuario actual: %{responsible}"
+        other: "Usuarios actuales: %{responsible}"
       old_responsibles:
-        one: "Responsable anterior: %{responsible}"
-        other: "Responsables anteriores: %{responsible}"
+        one: "Usuario anterior: %{responsible}"
+        other: "Usuarios anteriores: %{responsible}"
       the_following_findings_are_now_reassigned:
         one: "La siguiente observación ha sido reasignada"
         other: "Las siguientes observaciones han sido reasignadas"
@@ -1073,12 +1084,12 @@
       about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
-      the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables de la siguiente observación"
-      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación o si se altera el organigrama"
+      the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los usuarios de la siguiente observación"
+      managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación o si se altera el organigrama"
     expired_finding_to_manager:
       title: "Observación vencida"
       the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación de la siguiente observación"
-      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
+      managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama"
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:

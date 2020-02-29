@@ -91,7 +91,8 @@ PLAN_ITEM_STATS_EXCLUDED_SCOPES = [
 ]
 
 REVIEW_SCOPES = [
-  'Auditorías/Seguimiento',
+  'Auditorías',
+  'Seguimiento',
   'Trabajo especial',
   'Informe de comité',
   'Auditoría continua'

@@ -7,7 +7,7 @@
           <%= FindingUserAssignment.human_attribute_name('responsible_auditor') if params[:as_responsible].present? %>
           <%= FindingUserAssignment.human_attribute_name('process_owner')       if params[:as_owner].present? %>
           <span class="text-muted">|</span>
-          <%= link_to t('label.cancel'), findings_path(params[:completed]) if @selected_user %>
+          <%= link_to t('label.cancel'), findings_path(params[:completion_state]) if @selected_user %>
         </span>
       </h4>
     <% else %>
@@ -28,14 +28,14 @@
     <ul class="nav nav-tabs mb-3" data-hide-in-search>
       <li class="nav-item">
         <%= link_to(
-          t(".#{params[:completed]}"),
+          t(".#{params[:completion_state]}"),
           findings_path(request.query_parameters.except(:as_owner)),
           class: (params[:as_owner].blank? ? 'nav-link active' : 'nav-link')
         ) %>
       </li>
       <li class="nav-item">
         <%= link_to(
-          t('.as_owner', kind: t(".#{params[:completed]}")),
+          t('.as_owner', kind: t(".#{params[:completion_state]}")),
           findings_path(request.query_parameters.merge(as_owner: true)),
           class: (params[:as_owner].present? ? 'nav-link active' : 'nav-link')
         ) %>

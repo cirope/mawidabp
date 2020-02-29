@@ -36,7 +36,7 @@ class FindingsController < ApplicationController
     update_resource @finding, finding_params
 
     location = if @finding.pending? || @finding.invalid?
-                 edit_finding_url params[:completed], @finding
+                 edit_finding_url params[:completion_state], @finding
                else
                  finding_url 'complete', @finding
                end
@@ -121,7 +121,14 @@ class FindingsController < ApplicationController
     end
 
     def pdf
-      title_partial = params[:completed] == 'incomplete' ? 'pending' : 'complete'
+      title_partial = case params[:completion_state]
+                      when'incomplete'
+                        'pending'
+                      when 'rescheduled'
+                        'rescheduled'
+                      else
+                        'complete'
+                      end
 
       FindingPdf.create(
         title: t("menu.follow_up.#{title_partial}_findings"),
@@ -147,10 +154,10 @@ class FindingsController < ApplicationController
 
     def render_index_csv
       render_or_send_by_mail(
-        collection: @findings,
-        filename: @title.downcase,
+        collection:  @findings,
+        filename:    "#{@title.downcase}.csv",
         method_name: :to_csv,
-        options: csv_options
+        options:     csv_options
       )
     end
 

@@ -101,7 +101,7 @@ module Reports::WeaknessesByUser
     def render_weaknesses_by_user_report_csv
       render_or_send_by_mail(
         collection:  @weaknesses,
-        filename:    @title.downcase,
+        filename:    "#{@title.downcase}.csv",
         method_name: :by_user_csv
       )
     end
@@ -209,11 +209,11 @@ module Reports::WeaknessesByUser
     end
 
     def filter_weaknesses_by_user_by_risk weaknesses
-      risk = Array(params[:weaknesses_by_user][:risk]).reject(&:blank?)
+      risk = Array(params[:weaknesses_by_user][:risk]).reject(&:blank?).map &:to_i
 
       if risk.present?
         risk_texts = risk.map do |r|
-          t "risk_types.#{Weakness.risks.invert[r.to_i]}"
+          t "risk_types.#{Weakness.risks.invert[r]}"
         end
 
         @filters << "<b>#{Finding.human_attribute_name('risk')}</b> = \"#{risk_texts.to_sentence}\""
@@ -225,16 +225,14 @@ module Reports::WeaknessesByUser
     end
 
     def filter_weaknesses_by_user_by_status weaknesses
-      states               = Array(params[:weaknesses_by_user][:finding_status]).reject(&:blank?)
+      states               = Array(params[:weaknesses_by_user][:finding_status]).reject(&:blank?).map &:to_i
       not_muted_states     = Finding::EXCLUDE_FROM_REPORTS_STATUS + [:implemented_audited]
-      mute_state_filter_on = Finding::STATUS.except(*not_muted_states).map do |k, v|
-        v.to_s
-      end
+      mute_state_filter_on = Finding::STATUS.except(*not_muted_states).values
 
       if states.present?
         unless states.sort == mute_state_filter_on.sort
           state_text = states.map do |s|
-            t "findings.state.#{Finding::STATUS.invert[s.to_i]}"
+            t "findings.state.#{Finding::STATUS.invert[s]}"
           end
 
           @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text.to_sentence}\""

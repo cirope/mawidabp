@@ -843,6 +843,7 @@ class FindingTest < ActiveSupport::TestCase
 
     assert_equal 0, finding.repeated_ancestors.size
     assert_equal 0, repeated_of.repeated_children.size
+    assert_nil repeated_of.latest_id
     assert_not_equal repeated_of.origination_date, finding.origination_date
     refute repeated_of.repeated?
 
@@ -856,6 +857,7 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 1, finding.repeated_ancestors.size
     assert_equal 1, repeated_of.repeated_children.size
     assert_equal repeated_of, finding.repeated_root
+    assert_equal finding.id, repeated_of.latest_id
 
     # After that it can not be destroyed
     assert_no_difference 'Finding.count' do
@@ -883,6 +885,7 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.reload.repeated_of
     assert finding.rescheduled?
     assert_equal 1, finding.reschedule_count
+    assert_equal finding.id, repeated_of.latest_id
 
     if POSTGRESQL_ADAPTER
       assert_equal [repeated_of.id], finding.parent_ids
@@ -893,6 +896,7 @@ class FindingTest < ActiveSupport::TestCase
 
     refute repeated_of.reload.repeated?
     assert_nil finding.reload.repeated_of
+    assert_nil repeated_of.latest_id
     refute finding.rescheduled?
     assert_equal 0, finding.reschedule_count
     assert_equal repeated_of_original_state, repeated_of.state

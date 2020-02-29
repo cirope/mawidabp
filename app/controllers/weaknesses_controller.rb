@@ -46,7 +46,8 @@ class WeaknessesController < ApplicationController
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
     @weaknesses = Weakness.list.includes(
-      :work_papers, :tags,
+      :work_papers, :tags, :review,
+      review: [:plan_item, :conclusion_final_review],
       control_objective_item: {
         review: [:period, :plan_item, :conclusion_final_review]
       }
@@ -221,8 +222,8 @@ class WeaknessesController < ApplicationController
 
     def render_index_csv
       render_or_send_by_mail(
-        collection: @weaknesses,
-        filename: @title.downcase,
+        collection:  @weaknesses,
+        filename:    "#{@title.downcase}.csv",
         method_name: :to_csv
       )
     end

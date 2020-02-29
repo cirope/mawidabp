@@ -97,8 +97,11 @@ module Findings::CurrentUserScopes
       if params[:ids]
         conditions[:id] = params[:ids]
       else
-        conditions[:state] = if params[:completed] == 'incomplete'
+        conditions[:state] = case params[:completion_state]
+                             when 'incomplete'
                                incomplete_status_list
+                             when 'repeated'
+                               repeated_status_list
                              else
                                completed_status_list
                              end
@@ -111,8 +114,15 @@ module Findings::CurrentUserScopes
       Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]]
     end
 
+    def repeated_status_list
+      [Finding::STATUS[:repeated]]
+    end
+
     def completed_status_list
-      Finding::STATUS.values - Finding::PENDING_STATUS - [Finding::STATUS[:revoked]]
+      Finding::STATUS.values         -
+        Finding::PENDING_STATUS      -
+        [Finding::STATUS[:revoked]]  -
+        [Finding::STATUS[:repeated]]
     end
 
     def filtered_current_user_findings
@@ -150,10 +160,13 @@ module Findings::CurrentUserScopes
         {
           control_objective_item: {
             review: [:conclusion_final_review, :period, :plan_item]
-          }
+          },
+          review: :conclusion_draft_review,
         },
+        :organization,
+        :taggings,
         :tags,
-        :organization
+        :work_papers
       ]
     end
 
@@ -171,7 +184,7 @@ module Findings::CurrentUserScopes
     end
 
     def current_user_first_sort_column
-      if params[:completed] == 'incomplete'
+      if params[:completion_state] == 'incomplete'
         "#{Finding.quoted_table_name}.#{Finding.qcn 'follow_up_date'} ASC"
       else
         "#{Finding.quoted_table_name}.#{Finding.qcn 'solution_date'} DESC"
