@@ -21,6 +21,14 @@ module Reports::WeaknessesRepeated
 
     if @weaknesses.any?
       @weaknesses.each_with_index do |weakness, index|
+        title = [
+          "<b>#{index + 1}</b>",
+          "<i>#{Review.model_name.human}:</i>",
+          "<b>#{weakness.review.identification}</b>"
+        ].join ' '
+
+        pdf.text title, size: PDF_FONT_SIZE, inline_format: true, align: :justify
+
         repeated_pdf_items(weakness).each do |item|
           text = "<i>#{item.first}:</i> #{item.last.to_s.strip}"
 
@@ -65,7 +73,8 @@ module Reports::WeaknessesRepeated
     end
 
     def repeated_weaknesses final
-      weaknesses = Weakness.repeated.or(Weakness.being_implemented).
+      weaknesses = Weakness.
+        with_repeated_status_for_report.
         finals(final).
         list_with_final_review.
         by_issue_date('BETWEEN', @from_date, @to_date).
@@ -77,6 +86,7 @@ module Reports::WeaknessesRepeated
 
       if params[:weaknesses_repeated]
         weaknesses = filter_weaknesses_repeated_by_weakness_tags weaknesses
+        weaknesses = filter_weaknesses_repeated_by_status weaknesses
       end
 
       weaknesses
@@ -107,10 +117,6 @@ module Reports::WeaknessesRepeated
     def repeated_pdf_items weakness
       [
         [
-          Review.model_name.human,
-          weakness.review.identification
-        ],
-        [
           PlanItem.human_attribute_name('project'),
           weakness.review.plan_item.project
         ],
@@ -128,7 +134,7 @@ module Reports::WeaknessesRepeated
         ] unless weakness.repeated?),
         [
           Weakness.human_attribute_name('title'),
-          weakness.title
+          "<b>#{weakness.title}</b>"
         ],
         [
           Weakness.human_attribute_name('description'),
@@ -158,6 +164,10 @@ module Reports::WeaknessesRepeated
           current_weakness.state_text
         ],
         [
+          Weakness.human_attribute_name('title'),
+          current_weakness.title
+        ],
+        [
           Weakness.human_attribute_name('answer'),
           current_weakness.answer
         ],
@@ -177,6 +187,26 @@ module Reports::WeaknessesRepeated
         @filters << "<b>#{t 'follow_up_committee_report.weaknesses_repeated.weakness_tags'}</b> = \"#{tags.to_sentence}\""
 
         weaknesses.by_wilcard_tags tags
+      else
+        weaknesses
+      end
+    end
+
+    def filter_weaknesses_repeated_by_status weaknesses
+      states               = Array(params[:weaknesses_repeated][:finding_status]).reject(&:blank?).map &:to_i
+      not_muted_states     = Finding::EXCLUDE_FROM_REPORTS_STATUS + [:implemented_audited]
+      mute_state_filter_on = Finding::STATUS.except(*not_muted_states).values
+
+      if states.present?
+        unless states.sort == mute_state_filter_on.sort
+          state_text = states.map do |s|
+            t "findings.state.#{Finding::STATUS.invert[s]}"
+          end
+
+          @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text.to_sentence}\""
+        end
+
+        weaknesses.where state: states
       else
         weaknesses
       end
