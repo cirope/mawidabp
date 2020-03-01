@@ -9,9 +9,11 @@
         [
           :tags, {
             field_name: :weakness_tags,
-            field_label: t('follow_up_committee_report.weaknesses_repeated.weakness_tags')
+            field_label: t('follow_up_committee_report.weaknesses_repeated.weakness_tags'),
+            group: 1
           }
-        ]
+        ],
+        [:finding_statuses, group: 1]
       ]
     }
   %>
@@ -22,8 +24,11 @@
     <% current_weakness = weakness.current %>
 
     <p class="mt-3 mb-1">
+      <span class="badge badge-pill badge-secondary">
+        <%= index + 1 %>
+      </span>
       <span class="text-muted"><%= Review.model_name.human %></span>:
-      <%= weakness.review.identification %>
+      <strong><%= weakness.review.identification %></strong>
     </p>
 
     <p class="mb-1">
@@ -50,7 +55,7 @@
 
     <p class="mb-1">
       <span class="text-muted"><%= Weakness.human_attribute_name 'title' %></span>:
-      <%= weakness.title %>
+      <strong><%= weakness.title %></strong>
     </p>
 
     <p class="mb-1">
@@ -78,6 +83,11 @@
         <p class="mb-1">
           <span class="text-muted"><%= Weakness.human_attribute_name 'state' %></span>:
           <%= current_weakness.state_text %>
+        </p>
+
+        <p class="mb-1">
+          <span class="text-muted"><%= Weakness.human_attribute_name 'title' %></span>:
+          <%= current_weakness.title %>
         </p>
 
         <p class="mb-1">

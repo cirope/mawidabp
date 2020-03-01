@@ -771,7 +771,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :weaknesses_repeated => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
-        :weakness_tags => ['two']
+        :weakness_tags => ['two'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]]
       },
       :controller_name => 'follow_up',
       :final => false
