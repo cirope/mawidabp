@@ -69,26 +69,18 @@ class UsersController < ApplicationController
   private
 
     def users
-      User.includes(:organizations).where(conditions).not_hidden.order(
+      User.list.search(**search_params).not_hidden.order(
         Arel.sql "#{User.quoted_table_name}.#{User.qcn('user')} ASC"
-      ).references(:organizations).page(params[:page])
+      ).page params[:page]
     end
 
     def pdf
       UserPdf.create(
-        columns: @columns,
-        query: @query,
-        users: @users.except(:limit),
+        columns:              search_params[:columns],
+        query:                User.split_terms_in_query(search_params[:query]),
+        users:                @users.except(:limit, :offset),
         current_organization: current_organization
       )
-    end
-
-    def conditions
-      default_conditions = {
-        organization_roles: { organization_id: current_organization.id }
-      }
-
-      build_search_conditions User, default_conditions
     end
 
     def check_ldap
