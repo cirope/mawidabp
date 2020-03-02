@@ -233,16 +233,15 @@ module Reports::WeaknessesCurrentSituation
     end
 
     def filter_weaknesses_current_situation_by_priority weaknesses
-      priority = Array(params[:weaknesses_current_situation][:priority]).reject(&:blank?).map &:to_i
+      priority = params[:weaknesses_current_situation][:priority]
 
       if priority.present?
-        priority_texts = priority.map do |r|
-          t "priority_types.#{Weakness.priorities.invert[r]}"
-        end
+        priority      = priority.to_i
+        priority_text = t "priority_types.#{Weakness.priorities.invert[priority]}"
 
-        @filters << "<b>#{Finding.human_attribute_name('priority')}</b> = \"#{priority_texts.to_sentence}\""
+        @filters << "<b>#{Finding.human_attribute_name('priority')}</b> = \"#{priority_text}\""
 
-        weaknesses.by_priority priority
+        weaknesses.by_priority_on_risk medium: priority
       else
         weaknesses
       end

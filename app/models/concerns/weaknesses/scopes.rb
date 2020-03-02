@@ -32,8 +32,25 @@ module Weaknesses::Scopes
       where risk: risk
     end
 
-    def by_priority priority
-      where priority: priority
+    def by_priority_on_risk conditions
+      result = nil
+
+      risks.each do |risk, value|
+        priority  = conditions[risk]
+        condition = if priority
+                      { risk: value, priority: priority }
+                    else
+                      { risk: value }
+                    end
+
+        if result
+          result = result.or where(condition)
+        else
+          result = where condition
+        end
+      end
+
+      result
     end
 
     def by_impact impact
