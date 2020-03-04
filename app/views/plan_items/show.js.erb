@@ -1,0 +1,10 @@
++function () {
+  var $container = $('tr[data-plan-item-id="<%= @plan_item.id %>"]')
+
+  if ($container.is(':visible')) {
+    $container.attr('hidden', true)
+  } else {
+    $container.find('td').html('<%= j render('show') %>')
+    $container.removeAttr('hidden').find('[autofocus]').focus()
+  }
+}()

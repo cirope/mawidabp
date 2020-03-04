@@ -296,7 +296,7 @@ GEM
     whenever (1.0.0)
       chronic (>= 0.6.3)
     will_paginate (3.3.0)
-    zeitwerk (2.2.2)
+    zeitwerk (2.3.0)
 
 PLATFORMS
   ruby

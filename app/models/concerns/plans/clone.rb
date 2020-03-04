@@ -22,8 +22,9 @@ module Plans::Clone
 
     def plan_item_attributes_for plan_item, diff_in_years
       attributes = plan_item.attributes.merge(
-        'id'                               => nil,
-        'resource_utilizations_attributes' => resource_utilizations_attributes_for(plan_item)
+        'id'                                    => nil,
+        'resource_utilizations_attributes'      => resource_utilizations_attributes_for(plan_item),
+        'control_objective_projects_attributes' => control_objective_projects_attributes_for(plan_item)
       ).with_indifferent_access
 
       complete_start_and_end_attributes attributes, diff_in_years
@@ -32,6 +33,12 @@ module Plans::Clone
     def resource_utilizations_attributes_for plan_item
       plan_item.resource_utilizations.map do |resource_utilization|
         resource_utilization.attributes.merge 'id' => nil
+      end
+    end
+
+    def control_objective_projects_attributes_for plan_item
+      plan_item.control_objective_projects.map do |control_objective_project|
+        control_objective_project.attributes.merge 'id' => nil, 'plan_item_id' => nil
       end
     end
 

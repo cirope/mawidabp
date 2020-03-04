@@ -334,16 +334,7 @@ class ReviewsControllerTest < ActionController::TestCase
       id: plan_items(:current_plan_item_1).id
     }
     assert_response :success
-    assert_nothing_raised do
-      plan_item_data = ActiveSupport::JSON.decode(@response.body)
-    end
-
-    assert_not_nil plan_item_data
-    assert_not_nil plan_item_data['scope']
-    assert_not_nil plan_item_data['risk_exposure']
-    assert_not_nil plan_item_data['business_unit_name']
-    assert_not_nil plan_item_data['business_unit_type']
-    assert_not_nil plan_item_data['business_unit_prefix']
+    assert_includes @response.content_type, 'text/javascript'
   end
 
   test 'survey pdf' do
