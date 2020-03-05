@@ -27,7 +27,9 @@
       else
         $e.before(partial)
 
-      $e.trigger('dynamic-item:added', $e)
+      setTimeout(function () {
+        $e.trigger('dynamic-item:added', $e)
+      })
     },
 
     insertNestedItem: function ($e) {
@@ -38,7 +40,9 @@
 
       $e.closest('fieldset').before(DynamicFormHelper.replaceIds(template, regexp))
 
-      $e.trigger('dynamic-item:added', $e)
+      setTimeout(function () {
+        $e.trigger('dynamic-item:added', $e)
+      })
     },
 
     hideItem: function ($e) {
@@ -96,7 +100,7 @@
     })
 
     $(document).on('dynamic-item:added', linkSelector, function (event, element) {
-      $(element).prev('fieldset').find(
+      $(element).prev('fieldset:not([data-dynamic])').find(
         '[autofocus]:not([readonly]):enabled:visible:first'
       ).focus()
     })

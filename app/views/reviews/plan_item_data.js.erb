@@ -1,0 +1,62 @@
++function () {
+  var $element     = $('#review_plan_item_id')
+  var prefix       = $('#review_identification_prefix').val()
+  var amountUrl    = '<%= estimated_amount_reviews_path %>'
+  var reviewPrefix = '<%= @plan_item&.business_unit&.business_unit_type&.review_prefix %>'
+
+  <% if @plan_item %>
+    Helper.showLoading($element)
+
+    $('#review_scope').val('<%= @plan_item.scope %>')
+    $('#review_risk_exposure').val('<%= @plan_item.risk_exposure %>')
+    $('#review_business_unit').val('<%= @plan_item.business_unit&.name %>')
+    $('#review_audit_type').val('<%= @plan_item.business_unit&.business_unit_type&.name %>')
+
+    if (prefix !== reviewPrefix) {
+      $('#review_identification_prefix').
+        val(reviewPrefix).
+        change().
+        css('border-color', '#47ae00').
+        delay(1000).
+        animate({'border-color': '#c2bfB7'}, 50)
+    }
+
+    <% @plan_item.control_objective_projects.each do |cop| %>
+      $('#control_objectives').find('[data-action="add-control-objective"]').click()
+      $('#control_objectives').find('fieldset.control_objective').attr('data-dynamic', true)
+
+      $('#control_objectives').
+        find('[name="control_objective[control_objective_data]"]:not([value])').
+        last().
+        val('<%= j cop.control_objective.name %>')
+
+      $('#control_objectives').
+        find('[name="review[control_objective_ids][]"]:not([value])').
+        last().
+        val('<%= j cop.control_objective.id %>')
+    <% end %>
+
+    $('#link_to_suggested_findings').attr(
+      'href', '<%= suggested_findings_review_url(id: @plan_item.id) %>'
+    )
+    $('#link_to_suggested_findings').removeClass('link_without_action')
+
+    $('#link_to_past_implemented_audited_findings').attr(
+      'href', '<%= past_implemented_audited_findings_review_url(id: @plan_item.id) %>'
+    )
+    $('#link_to_past_implemented_audited_findings').removeClass('link_without_action')
+
+    $.get(amountUrl, { id: $element.val() }, function (data) {
+      $('#estimated_amount').html(data)
+    }).complete(function () {
+      Helper.hideLoading($element)
+      $('#estimated_amount').effect('highlight', {}, 2000)
+    })
+  <% else %>
+    $('#link_to_suggested_findings').attr('href', '#')
+    $('#link_to_suggested_findings').addClass('link_without_action')
+
+    $('#link_to_past_implemented_audited_findings').attr('href', '#')
+    $('#link_to_past_implemented_audited_findings').addClass('link_without_action')
+  <% end %>
+}()
