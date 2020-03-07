@@ -1,9 +1,8 @@
-<%= render :partial => 'shared/search', :locals => {
-  :options => {
-    :columns_for_sort => ConclusionFinalReview.columns_for_sort
+<%= render partial: 'shared/search', locals: {
+  options: {
+    columns_for_sort: ConclusionFinalReview.columns_for_sort
   },
-  :columns => @query.blank? ?
-    ConclusionFinalReview::COLUMNS_FOR_SEARCH.keys : @columns
+  columns: search_params[:columns] || ConclusionFinalReview::COLUMNS_FOR_SEARCH.keys
 } %>
 <table class="table table-sm table-striped table-hover">
   <thead id="column_headers">

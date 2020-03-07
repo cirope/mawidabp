@@ -1,58 +1,43 @@
 module ConclusionReviews::Search
   extend ActiveSupport::Concern
+  include Searchable
 
   included do
-    GENERIC_COLUMNS_FOR_SEARCH = ActiveSupport::HashWithIndifferentAccess.new(
-      issue_date:     issue_date_options,
-      period:         period_options,
-      identification: identification_options,
-      summary:        summary_options,
-      business_unit:  business_unit_options,
-      project:        project_options
-    )
+    GENERIC_COLUMNS_FOR_SEARCH = {
+      issue_date: {
+        column:            "#{quoted_table_name}.#{qcn 'issue_date'}",
+        conversion_method: -> (value) { Timeliness.parse(value, :date).to_s :db },
+        mask:              '%s',
+        operator:          SEARCH_ALLOWED_OPERATORS.values,
+        regexp:            SEARCH_DATE_REGEXP
+      },
+      period: {
+        column: "LOWER(#{Period.quoted_table_name}.#{Period.qcn 'name'})"
+      },
+      identification: {
+        column: "LOWER(#{::Review.quoted_table_name}.#{::Review.qcn 'identification'})"
+      },
+      summary: {
+        column: "LOWER(#{quoted_table_name}.#{qcn 'summary'})"
+      },
+      business_unit: {
+        column: "LOWER(#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn 'name'})"
+      },
+      project: {
+        column: "LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'project'})"
+      }
+    }.with_indifferent_access
   end
 
   module ClassMethods
-    private
-
-      def issue_date_options
-        {
-          column:            "#{quoted_table_name}.#{qcn 'issue_date'}",
-          mask:              '%s',
-          operator:          SEARCH_ALLOWED_OPERATORS.values,
-          regexp:            SEARCH_DATE_REGEXP,
-          conversion_method: -> (value) { Timeliness.parse(value, :date).to_s :db }
-        }
+    def search query: nil, columns: []
+      if query.present? && columns.any?
+        where(
+          *[prepare_search(raw_query: query, columns: columns)].flatten
+        )
+      else
+        all
       end
-
-      def period_options
-        string_column_options_for "#{Period.quoted_table_name}.#{Period.qcn 'name'}"
-      end
-
-      def identification_options
-        string_column_options_for "#{::Review.quoted_table_name}.#{::Review.qcn 'identification'}"
-      end
-
-      def summary_options
-        string_column_options_for "#{quoted_table_name}.#{qcn 'summary'}"
-      end
-
-      def business_unit_options
-        string_column_options_for "#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn 'name'}"
-      end
-
-      def project_options
-        string_column_options_for "#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'project'}"
-      end
-
-      def string_column_options_for column
-        {
-          column:            "LOWER(#{column})",
-          mask:              '%%%s%%',
-          operator:          'LIKE',
-          regexp:            /.*/,
-          conversion_method: :to_s
-        }
-      end
+    end
   end
 end
