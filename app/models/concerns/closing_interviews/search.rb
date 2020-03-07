@@ -11,26 +11,24 @@ module ClosingInterviews::Search
         conversion_method: ->(value) { Timeliness.parse(value, :date).to_s :db },
         regexp:            SEARCH_DATE_REGEXP
       },
-      review:         {
-        column: "LOWER(#{Review.quoted_table_name}.#{Review.qcn 'identification'})"
-      },
-      project:        {
+      project: {
         column: "LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'project'})"
+      },
+      review: {
+        column: "LOWER(#{Review.quoted_table_name}.#{Review.qcn 'identification'})"
       }
     }.with_indifferent_access
   end
 
   module ClassMethods
     def search query: nil, columns: []
-      result = all
-
       if query.present? && columns.any?
-        result = where(
+        where(
           *[prepare_search(raw_query: query, columns: columns)].flatten
         )
+      else
+        all
       end
-
-      result
     end
   end
 end
