@@ -3,7 +3,7 @@ module Users::Search
   include Searchable
 
   included do
-    COLUMNS_FOR_SEARCH = ActiveSupport::HashWithIndifferentAccess.new(
+    COLUMNS_FOR_SEARCH = {
       user: {
         column: "LOWER(#{quoted_table_name}.#{qcn 'user'})"
       },
@@ -16,7 +16,7 @@ module Users::Search
       function: {
         column: "LOWER(#{quoted_table_name}.#{qcn 'function'})"
       }
-    )
+    }.with_indifferent_access
   end
 
   module ClassMethods

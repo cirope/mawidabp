@@ -1,47 +1,36 @@
 module ClosingInterviews::Search
   extend ActiveSupport::Concern
+  include Searchable
 
   included do
     COLUMNS_FOR_SEARCH = {
-      interview_date: interview_date_options,
-      review:         review_options,
-      project:        project_options
+      interview_date: {
+        column:            "#{quoted_table_name}.#{qcn 'interview_date'}",
+        operator:          SEARCH_ALLOWED_OPERATORS.values,
+        mask:              '%s',
+        conversion_method: ->(value) { Timeliness.parse(value, :date).to_s :db },
+        regexp:            SEARCH_DATE_REGEXP
+      },
+      review:         {
+        column: "LOWER(#{Review.quoted_table_name}.#{Review.qcn 'identification'})"
+      },
+      project:        {
+        column: "LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'project'})"
+      }
     }.with_indifferent_access
   end
 
   module ClassMethods
-    private
+    def search query: nil, columns: []
+      result = all
 
-      def interview_date_options
-        date_column_options_for "#{quoted_table_name}.#{qcn 'interview_date'}"
+      if query.present? && columns.any?
+        result = where(
+          *[prepare_search(raw_query: query, columns: columns)].flatten
+        )
       end
 
-      def review_options
-        string_column_options_for "#{Review.quoted_table_name}.#{Review.qcn 'identification'}"
-      end
-
-      def project_options
-        string_column_options_for "#{PlanItem.quoted_table_name}.#{PlanItem.qcn 'project'}"
-      end
-
-      def date_column_options_for column
-        {
-          column:            column,
-          operator:          SEARCH_ALLOWED_OPERATORS.values,
-          mask:              '%s',
-          conversion_method: ->(value) { Timeliness.parse(value, :date).to_s :db },
-          regexp:            SEARCH_DATE_REGEXP
-        }
-      end
-
-      def string_column_options_for column
-        {
-          column:            "LOWER(#{column})",
-          operator:          'LIKE',
-          mask:              '%%%s%%',
-          conversion_method: :to_s,
-          regexp:            /.*/
-        }
-      end
+      result
+    end
   end
 end

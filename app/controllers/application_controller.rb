@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
   helper_method :can_perform?
 
   def search_params
-    @search_params ||= params[:search]&.permit(:query, columns: []).to_h.symbolize_keys
+    @search_params ||= params[:search]&.permit(:query, :order, columns: []).to_h.symbolize_keys
   end
   helper_method :search_params
 
