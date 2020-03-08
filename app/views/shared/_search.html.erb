@@ -3,11 +3,10 @@
   extra_parameters = options[:extra_parameters] || []
   columns_for_sort = options[:columns_for_sort] || []
   query_string     = search_params[:query]
-  order_field      = search_order_param
-  active_search    = query_string.present? || @order_by.present? || order_field.present?
+  searching        = query_string.present? || @order_by.present? || order_param.present?
 %>
 
-<div id="search" <%== "style='display: none;'" unless active_search %>>
+<div id="search" <%== "style='display: none;'" unless searching %>>
   <%= simple_form_for url, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
     <div class="row">
       <div class="<%= columns_for_sort.empty? ? 'col-7 col-md-10' : 'col-5 col-md-7' %>">
@@ -24,7 +23,7 @@
         <div class="col-3 col-md-3">
           <%= f.input 'search_order', label: false, collection:
             sort_options_array(columns_for_sort.map { |name, p| [p[:name], name.to_s] }),
-            prompt: t('message.sort_by'), selected: order_field, input_html: {
+            prompt: t('message.sort_by'), selected: order_param, input_html: {
               id: 'search_order', name: 'search[order]'
             } %>
         </div>
@@ -45,7 +44,7 @@
   <% end %>
 </div>
 
-<% if active_search %>
+<% if searching %>
   <% content_for :js_extra_bottom do %>
     $('search_query').focus();
     Search.observe();

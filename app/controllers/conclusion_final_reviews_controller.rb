@@ -14,7 +14,7 @@ class ConclusionFinalReviewsController < ApplicationController
     ).search(
       **search_params
     ).order_by(
-      search_order_param
+      order_param
     ).page(
       params[:page]
     ).references(
@@ -273,7 +273,7 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf
   def export_list_to_pdf
-    order_by_column_name = ConclusionFinalReview.order_by_column_name search_order_param
+    order_by_column_name = ConclusionFinalReview.order_by_column_name order_param
     query                = ConclusionFinalReview.split_terms_in_query search_params[:q]
     columns              = search_params[:columns] || []
 
@@ -284,7 +284,7 @@ class ConclusionFinalReviewsController < ApplicationController
     ).references(
       :periods, :reviews, :business_units
     ).order_by(
-      search_order_param
+      order_param
     )
 
     pdf = Prawn::Document.create_generic_pdf :landscape

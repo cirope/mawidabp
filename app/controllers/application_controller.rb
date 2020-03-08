@@ -46,10 +46,10 @@ class ApplicationController < ActionController::Base
   end
   helper_method :search_params
 
-  def search_order_param
-    @search_order_param ||= params[:search]&.permit(:order)&.fetch :order, nil
+  def order_param
+    @order_param ||= params[:search]&.permit(:order)&.fetch :order, nil
   end
-  helper_method :search_order_param
+  helper_method :order_param
 
   private
 

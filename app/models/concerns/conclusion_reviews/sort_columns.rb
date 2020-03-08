@@ -13,7 +13,7 @@ module ConclusionReviews::SortColumns
 
       order_by << Arel.sql("#{quoted_table_name}.#{qcn 'created_at'} DESC")
 
-      order(order_by)
+      order order_by
     end
 
     def order_by_column_name column
