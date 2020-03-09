@@ -1,8 +1,11 @@
-<% url = options[:url] || url_for(:action => :index) %>
-<% extra_parameters = options[:extra_parameters] || [] %>
-<% columns_for_sort = options[:columns_for_sort] || [] %>
-<% query_string = search_params[:query] %>
-<% order_field = params[:search] ? params[:search][:order] : nil %>
+<%
+  url              = options[:url] || url_for(action: :index)
+  extra_parameters = options[:extra_parameters] || []
+  columns_for_sort = options[:columns_for_sort] || []
+  query_string     = search_params[:query]
+  order_field      = search_params[:order]
+%>
+
 <div id="search" <%== "style='display: none;'" if (query_string.blank? && @order_by.blank?) %>>
   <%= simple_form_for url, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
     <div class="row">

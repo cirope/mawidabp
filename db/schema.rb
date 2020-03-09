@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_11_214928) do
+ActiveRecord::Schema.define(version: 2020_03_03_125335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -235,6 +235,15 @@ ActiveRecord::Schema.define(version: 2020_02_11_214928) do
     t.index ["control_objective_id"], name: "index_control_objective_items_on_control_objective_id"
     t.index ["organization_id"], name: "index_control_objective_items_on_organization_id"
     t.index ["review_id"], name: "index_control_objective_items_on_review_id"
+  end
+
+  create_table "control_objective_projects", force: :cascade do |t|
+    t.bigint "control_objective_id", null: false
+    t.bigint "plan_item_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["control_objective_id"], name: "index_control_objective_projects_on_control_objective_id"
+    t.index ["plan_item_id"], name: "index_control_objective_projects_on_plan_item_id"
   end
 
   create_table "control_objective_weakness_template_relations", force: :cascade do |t|
@@ -1122,6 +1131,8 @@ ActiveRecord::Schema.define(version: 2020_02_11_214928) do
   add_foreign_key "conclusion_reviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "control_objectives", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "reviews", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "control_objective_projects", "control_objectives", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "control_objective_projects", "plan_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_weakness_template_relations", "control_objectives", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_weakness_template_relations", "weakness_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objectives", "process_controls", on_update: :restrict, on_delete: :restrict

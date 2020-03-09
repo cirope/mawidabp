@@ -206,7 +206,7 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :plans,
         order: 4,
-        controllers: :plans,
+        controllers: [:plans, :plan_items],
         url: { controller: '/plans' }
       )
     ]
