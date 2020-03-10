@@ -7,16 +7,15 @@ class ControlObjectivesController < ApplicationController
 
   # * GET /control_objectives
   def index
-    build_search_conditions ControlObjective
     order = if ActiveRecord::Base.connection.adapter_name == 'OracleEnhanced'
               [created_at: :asc]
             else
               [name: :asc]
             end
 
-    @control_objectives = ControlObjective.list.where(@conditions).reorder(
+    @control_objectives = ControlObjective.list.search(**search_params).reorder(
       order
-    ).page(params[:page])
+    ).page params[:page]
   end
 
   # * GET /control_objectives/1
