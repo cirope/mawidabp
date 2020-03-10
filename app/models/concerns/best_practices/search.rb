@@ -12,15 +12,13 @@ module BestPractices::Search
 
   module ClassMethods
     def search query: nil, columns: []
-      result = all
-
       if query.present? && columns.any?
-        result = where(
+        where(
           *[prepare_search(raw_query: query, columns: columns)].flatten
         )
+      else
+        all
       end
-
-      result
     end
   end
 end

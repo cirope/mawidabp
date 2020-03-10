@@ -20,7 +20,7 @@ module Users::Search
   end
 
   module ClassMethods
-    def search query: nil, columns: [], organization_id: Current.organization&.id
+    def search query: nil, columns: []
       result = all
 
       if query.present? && columns.any?
