@@ -21,6 +21,7 @@ module ConclusionReviews::SortColumns
     end
 
     private
+
       def columns_for_sort
         @_columns_for_sort ||= {
           issue_date:     issue_date_sort_options,
