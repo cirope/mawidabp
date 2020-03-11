@@ -86,7 +86,7 @@ module ControlObjectiveItems::Scopes
 
     def default_order
       reorder(
-        Arel.sql("#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC"),
+        Arel.sql("#{Review.quoted_table_name}.#{Review.qcn 'identification'} DESC"),
         id: :desc
       )
     end
