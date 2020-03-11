@@ -19,16 +19,4 @@ module ClosingInterviews::Search
       }
     }.with_indifferent_access
   end
-
-  module ClassMethods
-    def search query: nil, columns: []
-      if query.present? && columns.any?
-        where(
-          *[prepare_search(raw_query: query, columns: columns)].flatten
-        )
-      else
-        all
-      end
-    end
-  end
 end

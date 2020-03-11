@@ -18,18 +18,4 @@ module Users::Search
       }
     }.with_indifferent_access
   end
-
-  module ClassMethods
-    def search query: nil, columns: []
-      result = all
-
-      if query.present? && columns.any?
-        result = where(
-          *[prepare_search(raw_query: query, columns: columns)].flatten
-        )
-      end
-
-      result
-    end
-  end
 end
