@@ -21,12 +21,7 @@ class ControlObjectiveItemsController < ApplicationController
       :oportunities,
       review: [:period, :conclusion_final_review],
       control_objective: :process_control
-    ).search(**search_params).references(:review).order(
-      [
-        "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
-        "#{ControlObjectiveItem.quoted_table_name}.#{ControlObjectiveItem.qcn('id')} DESC"
-      ].map { |o| Arel.sql o }
-    ).page params[:page]
+    ).search(**search_params).references(:review).default_order.page params[:page]
 
     respond_to do |format|
       format.html
