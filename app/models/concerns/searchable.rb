@@ -103,5 +103,21 @@ module Searchable
         ]
       end
     end
+
+    def search query: nil, columns: [], default_conditions: {}
+      if query.present? && columns.any?
+        where(
+          *[prepare_search(
+            raw_query:          query,
+            columns:            columns,
+            default_conditions: default_conditions || {}
+          )].flatten
+        )
+      elsif default_conditions.present?
+        where default_conditions
+      else
+        all
+      end
+    end
   end
 end
