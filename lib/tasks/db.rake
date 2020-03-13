@@ -21,6 +21,7 @@ namespace :db do
       add_repeated_findings_privilege     # 2020-02-07
       update_latest_on_findings           # 2020-02-08
       update_review_scopes                # 2020-02-20
+      fix_final_latest_findings           # 2020-03-13
     end
   end
 end
@@ -493,4 +494,23 @@ private
   def update_review_scopes?
     PlanItem.where(scope: 'Auditorías/Seguimiento').any? ||
       Review.where(scope: 'Auditorías/Seguimiento').any?
+  end
+
+  def fix_final_latest_findings
+    if fix_final_latest_findings?
+      final_latest_findings.includes(:latest).find_each do |finding|
+        finding.update_column :latest_id, finding.latest.parent_id
+      end
+    end
+  end
+
+  def fix_final_latest_findings?
+    final_latest_findings.any?
+  end
+
+  def final_latest_findings
+    Finding.
+      joins(:latest).
+      references(:latests_findings).
+      where latests_findings: { final: true }
   end
