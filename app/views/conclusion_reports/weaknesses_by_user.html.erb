@@ -14,6 +14,18 @@
 %>
 
 <% if @weaknesses.any? %>
+  <div class="card my-3 bg-light">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-8">
+          <p class="mb-0">
+            <%= t 'conclusion_committee_report.weaknesses_by_user.weaknesses_count_html', count: @weaknesses.count %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <% @weaknesses.each do |weakness| %>
     <hr>
 

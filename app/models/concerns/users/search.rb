@@ -3,7 +3,7 @@ module Users::Search
   include Searchable
 
   included do
-    COLUMNS_FOR_SEARCH = ActiveSupport::HashWithIndifferentAccess.new(
+    COLUMNS_FOR_SEARCH = {
       user: {
         column: "LOWER(#{quoted_table_name}.#{qcn 'user'})"
       },
@@ -16,20 +16,6 @@ module Users::Search
       function: {
         column: "LOWER(#{quoted_table_name}.#{qcn 'function'})"
       }
-    )
-  end
-
-  module ClassMethods
-    def search query: nil, columns: [], organization_id: Current.organization&.id
-      result = all
-
-      if query.present? && columns.any?
-        result = where(
-          *[prepare_search(raw_query: query, columns: columns)].flatten
-        )
-      end
-
-      result
-    end
+    }.with_indifferent_access
   end
 end

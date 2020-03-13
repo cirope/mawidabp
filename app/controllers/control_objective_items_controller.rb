@@ -14,8 +14,6 @@ class ControlObjectiveItemsController < ApplicationController
   def index
     @title = t 'control_objective_item.index_title'
 
-    build_search_conditions ControlObjectiveItem
-
     @control_objectives = ControlObjectiveItem.list.includes(
       :weaknesses,
       :work_papers,
@@ -23,12 +21,7 @@ class ControlObjectiveItemsController < ApplicationController
       :oportunities,
       review: [:period, :conclusion_final_review],
       control_objective: :process_control
-    ).where(@conditions).references(:review).order(
-      [
-        "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
-        "#{ControlObjectiveItem.quoted_table_name}.#{ControlObjectiveItem.qcn('id')} DESC"
-      ].map { |o| Arel.sql o }
-    ).page(params[:page])
+    ).search(**search_params).references(:review).default_order.page params[:page]
 
     respond_to do |format|
       format.html
