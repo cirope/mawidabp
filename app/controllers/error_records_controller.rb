@@ -7,10 +7,13 @@ class ErrorRecordsController < ApplicationController
 
   # * GET /error_records
   def index
-    @error_records = ErrorRecord.between conditions
+    @error_records = ErrorRecord.list.includes(:user).search(
+      default_conditions: filtered_by_dates,
+      **search_params
+    ).default_order.references :user
 
     respond_to do |format|
-      format.html { @error_records = @error_records.page(params[:page]) }
+      format.html { @error_records = @error_records.page params[:page] }
       format.pdf { redirect_to pdf.relative_path }
     end
   end
@@ -34,17 +37,15 @@ class ErrorRecordsController < ApplicationController
       )
     end
 
-    def conditions
+    def filtered_by_dates
       @from_date, @to_date = *make_date_range(params[:index])
 
       unless params[:search]
-        default_conditions = [
+        [
           "#{ErrorRecord.quoted_table_name}.#{ErrorRecord.qcn('created_at')} BETWEEN :from_date AND :to_date",
           from_date: @from_date.to_time.at_beginning_of_day,
           to_date: @to_date.to_time.at_end_of_day
         ]
       end
-
-      build_search_conditions ErrorRecord, default_conditions
     end
 end

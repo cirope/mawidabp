@@ -6,9 +6,7 @@ class EMailsController < ApplicationController
 
   # GET /emails
   def index
-    build_search_conditions EMail
-
-    @emails = EMail.list.where(@conditions).page params[:page]
+    @emails = EMail.list.search(**search_params).page params[:page]
   end
 
   # GET /emails/1
