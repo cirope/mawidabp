@@ -10,7 +10,12 @@ class DocumentsController < ApplicationController
 
   def index
     if @tag
-      @documents = documents.includes(:tags).search(**search_params).references(:tags).order(:name).page params[:page]
+      @documents = documents.
+        includes(:tags).
+        search(**search_params).
+        references(:tags).
+        order(:name).
+        page params[:page]
     else
       @document_tags   = Tagging.grouped_with_document_count
       @documents_count = @document_tags.values.sum

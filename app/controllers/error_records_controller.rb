@@ -40,7 +40,7 @@ class ErrorRecordsController < ApplicationController
     def filtered_by_dates
       @from_date, @to_date = *make_date_range(params[:index])
 
-      unless params[:search]
+      if params[:search].blank?
         [
           "#{ErrorRecord.quoted_table_name}.#{ErrorRecord.qcn('created_at')} BETWEEN :from_date AND :to_date",
           from_date: @from_date.to_time.at_beginning_of_day,
