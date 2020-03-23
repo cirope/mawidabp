@@ -42,6 +42,16 @@ module Searchable
       self::COLUMNS_FOR_SEARCH[column] || {}
     end
 
+    def date_column_options_for column
+      {
+        column:            column,
+        operator:          SEARCH_ALLOWED_OPERATORS.values,
+        mask:              '%s',
+        conversion_method: ->(value) { Timeliness.parse(value, :date).to_s :db },
+        regexp:            SEARCH_DATE_REGEXP
+      }
+    end
+
     def split_terms_in_query raw_query
       raw_query = raw_query.to_s.mb_chars.downcase.to_s
       and_query = raw_query.split(SEARCH_AND_REGEXP).reject &:blank?
