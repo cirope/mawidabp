@@ -176,7 +176,7 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'validates required tags' do
-    skip if score_type != :manual
+    skip unless score_type == :manual
 
     scope, opts = REVIEW_SCOPES.find { |k, v| v[:require_tags]&.any? }
 
