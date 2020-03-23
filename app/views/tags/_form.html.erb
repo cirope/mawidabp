@@ -14,6 +14,14 @@
     <%= f.input :shared, input_html: { disabled: @tag.shared_was } %>
     <%= f.input :obsolete %>
 
+    <% if SHOW_REVIEW_EXTRA_ATTRIBUTES  %>
+      <%= f.input :options,
+        label: '',
+        as: :check_boxes,
+        item_wrapper_class: 'custom-control custom-checkbox',
+        collection: tags_options_collection %>
+    <% end %>
+
     <h5><%= t '.children' %></h5>
 
     <hr>
