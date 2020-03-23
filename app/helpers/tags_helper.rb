@@ -54,4 +54,8 @@ module TagsHelper
 
     options
   end
+
+  def tags_options_collection
+    TAG_OPTIONS.to_a
+  end
 end

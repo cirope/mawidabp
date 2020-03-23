@@ -681,6 +681,10 @@ es:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
             end:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
+        review:
+          attributes:
+            taggings:
+              missing_tags_for_scope: "Se requiere al menos una etiqueta especial (%{tags}) para los informes con alcance '%{r_scope}'"
         risk_assessment_template:
           attributes:
             risk_assessment_weights:
