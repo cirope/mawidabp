@@ -23,9 +23,7 @@ module Tags::Scopes
 
     if POSTGRESQL_ADAPTER
       def with_option option
-        column = "#{quoted_table_name}.#{qcn 'options'}"
-
-        where "#{column} ? :value", value: option
+        where "#{quoted_table_name}.#{qcn 'options'} ? :value", value: option
       end
     end
   end
