@@ -1,20 +1,18 @@
 module Documents::Search
   extend ActiveSupport::Concern
+  include Searchable
 
   included do
-    COLUMNS_FOR_SEARCH = ActiveSupport::HashWithIndifferentAccess.new(
+    COLUMNS_FOR_SEARCH = {
       name: {
-        column: "LOWER(#{quoted_table_name}.#{qcn('name')})", operator: 'LIKE',
-        mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
+        column: "LOWER(#{quoted_table_name}.#{qcn 'name'})"
       },
       description: {
-        column: "LOWER(#{quoted_table_name}.#{qcn('description')})", operator: 'LIKE',
-        mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
+        column: "LOWER(#{quoted_table_name}.#{qcn 'description'})"
       },
       tags: {
-        column: "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn('name')})", operator: 'LIKE',
-        mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
+        column: "LOWER(#{Tag.quoted_table_name}.#{Tag.qcn 'name'})"
       }
-    )
+    }.with_indifferent_access
   end
 end

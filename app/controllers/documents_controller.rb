@@ -9,10 +9,13 @@ class DocumentsController < ApplicationController
   before_action :set_title, except: [:destroy]
 
   def index
-    build_search_conditions Document
-
     if @tag
-      @documents = documents.includes(:tags).where(@conditions).references(:tags).order(:name).page params[:page]
+      @documents = documents.
+        includes(:tags).
+        search(**search_params).
+        references(:tags).
+        order(:name).
+        page params[:page]
     else
       @document_tags   = Tagging.grouped_with_document_count
       @documents_count = @document_tags.values.sum
