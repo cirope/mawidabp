@@ -178,12 +178,13 @@ class ReviewTest < ActiveSupport::TestCase
   test 'validates required tags' do
     skip if score_type != :manual
 
-    tag        = tags :manual
-    tag_option = 'required_on_special_reviews'
+    scope, opts = REVIEW_SCOPES.find { |k, v| v[:require_tags]&.any? }
+
+    @review.scope = scope
+    tag           = tags :manual
+    tag_option    = opts[:require_tags].first
 
     tag.update! options: [tag_option]
-
-    @review.scope = 'Trabajo especial'
 
     assert @review.invalid?
     assert_error @review, :taggings, :missing_tags_for_scope,

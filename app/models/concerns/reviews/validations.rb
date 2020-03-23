@@ -75,13 +75,13 @@ module Reviews::Validations
 
     def validate_required_tags
       if will_save_change_to_scope?
-        required_tags = REVIEW_SCOPES[scope]&.fetch(:require_tags, nil) || []
-        needed_tags   = required_tags.flat_map { |option| Tag.list.with_option option }.uniq
+        tag_options   = REVIEW_SCOPES[scope]&.fetch(:require_tags, nil) || []
+        required_tags = tag_options.flat_map { |option| Tag.list.with_option option }.uniq
 
-        if needed_tags.any? && (needed_tags & tags).empty?
+        if required_tags.any? && (required_tags & tags).empty?
           errors.add :taggings, :missing_tags_for_scope,
             r_scope: scope,
-            tags:    needed_tags.map(&:to_s).to_sentence
+            tags:    required_tags.map(&:to_s).to_sentence
         end
       end
     end
