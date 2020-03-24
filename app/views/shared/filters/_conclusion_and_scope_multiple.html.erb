@@ -24,7 +24,7 @@
           <%= f.label :scope, Review.human_attribute_name('scope'), class: 'col-md-4 col-form-label', for: nil %>
           <div class="col-md-8">
             <%= f.input :scope,
-              collection: REVIEW_SCOPES,
+              collection: REVIEW_SCOPES.keys,
               as: :check_boxes,
               label: '&nbsp;'.html_safe,
               required: false,

@@ -15,6 +15,15 @@
   <%= t "label.#{@tag.obsolete ? 'yes' : 'no'}" %>
 </p>
 
+<% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
+  <% Array(TAG_OPTIONS[@tag.kind]).each do |title, value| %>
+    <p class="mb-1">
+      <strong><%= title %></strong>:
+      <%= t "label.#{@tag.options&.include?(value) ? 'yes' : 'no'}" %>
+    </p>
+  <% end %>
+<% end %>
+
 <% if @tag.children.any? %>
   <h5><%= t 'tags.form.children' %></h5>
 

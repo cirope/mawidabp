@@ -167,12 +167,28 @@ class ReviewTest < ActiveSupport::TestCase
     assert_error @review, :plan_item_id, :invalid
   end
 
-  test 'validates required tag' do
+  test 'validates required business unit tag' do
     @review.taggings.clear
     @review.business_unit.business_unit_type.update! require_tag: true
 
     assert @review.invalid?
     assert_error @review, :taggings, :blank
+  end
+
+  test 'validates required tags' do
+    skip unless score_type == :manual
+
+    scope, opts = REVIEW_SCOPES.find { |k, v| v[:require_tags]&.any? }
+
+    @review.scope = scope
+    tag           = tags :manual
+    tag_option    = opts[:require_tags].first
+
+    tag.update! options: [tag_option]
+
+    assert @review.invalid?
+    assert_error @review, :taggings, :missing_tags_for_scope,
+      r_scope: @review.scope, tags: tag.to_s
   end
 
   test 'can be modified' do

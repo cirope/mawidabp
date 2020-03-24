@@ -2,8 +2,9 @@ module Polls::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :list,      -> { where organization_id: Current.organization&.id }
-    scope :pollables, -> { where.not pollable_id: nil }
+    scope :list,          -> { where organization_id: Current.organization&.id }
+    scope :pollables,     -> { where.not pollable_id: nil }
+    scope :default_order, -> { reorder created_at: :desc }
   end
 
   module ClassMethods
