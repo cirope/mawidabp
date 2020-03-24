@@ -81,7 +81,7 @@ module Reviews::Validations
         if required_tags.any? && (required_tags & tags).empty?
           errors.add :taggings, :missing_tags_for_scope,
             r_scope: scope,
-            tags:    required_tags.map(&:to_s).to_sentence
+            tags:    required_tags.to_sentence
         end
       end
     end
