@@ -16,7 +16,7 @@
 </p>
 
 <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
-  <% TAG_OPTIONS.each do |title, value| %>
+  <% Array(TAG_OPTIONS[@tag.kind]).each do |title, value| %>
     <p class="mb-1">
       <strong><%= title %></strong>:
       <%= t "label.#{@tag.options&.include?(value) ? 'yes' : 'no'}" %>

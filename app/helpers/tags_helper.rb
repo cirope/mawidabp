@@ -55,7 +55,7 @@ module TagsHelper
     options
   end
 
-  def tags_options_collection
-    TAG_OPTIONS.to_a
+  def tags_options_collection kind:
+    Array(TAG_OPTIONS[kind])
   end
 end

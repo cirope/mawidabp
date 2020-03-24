@@ -684,7 +684,7 @@ es:
         review:
           attributes:
             taggings:
-              missing_tags_for_scope: "Se requiere al menos una etiqueta especial (%{tags}) para los informes con alcance '%{r_scope}'"
+              missing_tags_for_scope: "se requiere al menos una (entre %{tags}) para los informes con alcance '%{r_scope}'"
         risk_assessment_template:
           attributes:
             risk_assessment_weights:

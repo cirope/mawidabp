@@ -118,7 +118,9 @@ TAGS_READONLY = [
 ]
 
 TAG_OPTIONS = {
-  'Requerida en informes `Trabajo especial`' => 'required_on_special_reviews'
+  'review' => {
+    'Requerida en informes `Trabajo especial`' => 'required_on_special_reviews'
+  }
 }
 
 WEAKNESS_OPERATIONAL_RISK = {
