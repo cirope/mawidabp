@@ -40,7 +40,7 @@
       order_param
     ).references(
       control_objective_item: :review
-    ).page(params[:page])
+    ).page params[:page]
 
     respond_to do |format|
       format.html
