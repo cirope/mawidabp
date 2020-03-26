@@ -14,45 +14,33 @@
   # * GET /oportunities
   def index
     @title = t 'oportunity.index_title'
-    default_conditions = [
-      [
-        [
-          "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL",
-          "#{Oportunity.quoted_table_name}.#{Oportunity.qcn('final')} = :boolean_false"
-        ].join(' AND '),
-        [
-          "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL",
-          "#{Oportunity.quoted_table_name}.#{Oportunity.qcn('final')} = :boolean_true"
-        ].join(' AND ')
-      ].map {|condition| "(#{condition})"}.join(' OR ')
-    ]
-    parameters = { :boolean_true => true, :boolean_false => false }
 
-    if params[:control_objective].to_i > 0
-      default_conditions << "#{Weakness.quoted_table_name}.#{Weakness.qcn('control_objective_item_id')} = " +
-        ":control_objective_id"
-      parameters[:control_objective_id] = params[:control_objective].to_i
-    end
-
-    if params[:review].to_i > 0
-      default_conditions << "#{Review.quoted_table_name}.#{Review.qcn('id')} = :review_id"
-      parameters[:review_id] = params[:review].to_i
-    end
-
-    build_search_conditions Oportunity,
-      default_conditions.map { |c| "(#{c})" }.join(' AND ')
-
-    @oportunities = Oportunity.list.includes(
+    default_scope = Oportunity.list.includes(
       :work_papers, :tags,
-      :control_objective_item => {
-        :review => [:period, :plan_item, :conclusion_final_review]
+      control_objective_item: {
+        review: [:period, :plan_item, :conclusion_final_review]
       }
-    ).where([@conditions, parameters]).order(
-      @order_by || [
-        "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
-        "#{Oportunity.quoted_table_name}.#{Oportunity.qcn('review_code')} ASC"
-      ].map { |o| Arel.sql o }
-    ).references(control_objective_item: :review).page(params[:page])
+    ).with_or_without_review
+
+    if (co_id = params[:control_objective].to_i).positive?
+      default_scope = default_scope.where(
+        Weakness.table_name => { control_objective_item_id: co_id }
+      )
+    end
+
+    if (review_id = params[:review].to_i).positive?
+      default_scope = default_scope.where(
+        Review.table_name => { id: review_id }
+      )
+    end
+
+    @oportunities = default_scope.search(
+      **search_params
+    ).order_by(
+      order_param
+    ).references(
+      control_objective_item: :review
+    ).page(params[:page])
 
     respond_to do |format|
       format.html
