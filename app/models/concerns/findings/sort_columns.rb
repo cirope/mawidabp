@@ -22,6 +22,19 @@ module Findings::SortColumns
       )
     end
 
+    def order_by column = nil
+      order_by = if column.present?
+                    columns_for_sort[column][:field]
+                  else
+                    [
+                      "#{Review.quoted_table_name}.#{Review.qcn 'identification'} DESC",
+                      "#{quoted_table_name}.#{qcn 'review_code'} ASC"
+                    ].map { |o| Arel.sql o }
+                  end
+
+      reorder order_by
+    end
+
     private
 
       def risk_asc_options
