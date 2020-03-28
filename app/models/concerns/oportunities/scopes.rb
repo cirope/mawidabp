@@ -9,12 +9,14 @@ module Oportunities::Scopes
       ).order state: :asc
     }
 
-    scope :final_without_review, -> {
+    scope :final_with_conclusion_review, -> {
       where(final: true).where.not ConclusionReview.table_name => { review_id: nil }
     }
-    scope :not_final_with_review, -> {
+    scope :not_final_without_conclusion_review, -> {
       where final: false, ConclusionReview.table_name => { review_id: nil }
     }
-    scope :with_or_without_review, -> { not_final_with_review.or final_without_review }
+    scope :execution_list, -> {
+      not_final_without_conclusion_review.or final_with_conclusion_review
+    }
   end
 end

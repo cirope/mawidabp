@@ -20,12 +20,10 @@
       control_objective_item: {
         review: [:period, :plan_item, :conclusion_final_review]
       }
-    ).with_or_without_review
+    ).execution_list
 
     if (co_id = params[:control_objective].to_i).positive?
-      default_scope = default_scope.where(
-        Weakness.table_name => { control_objective_item_id: co_id }
-      )
+      default_scope = default_scope.where control_objective_item_id: co_id
     end
 
     if (review_id = params[:review].to_i).positive?
