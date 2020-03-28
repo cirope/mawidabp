@@ -32,7 +32,7 @@ module Findings::SortColumns
                     ].map { |o| Arel.sql o }
                   end
 
-      order order_by
+      reorder order_by
     end
 
     private
