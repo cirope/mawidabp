@@ -26,6 +26,12 @@ module Reviews::SortColumns
       end
     end
 
+    def order_by column = nil
+      order_by = column.present? ? columns_for_sort[column][:field] : default_order
+
+      reorder order_by
+    end
+
     private
 
       def period_asc_sort_options

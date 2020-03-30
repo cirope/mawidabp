@@ -48,12 +48,14 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'list reviews with search' do
     login
+
     get :index, params: {
       search: {
         query: '1 2',
         columns: ['identification', 'project']
       }
     }
+
     assert_response :success
     assert_not_nil assigns(:reviews)
     assert_equal 5, assigns(:reviews).count
@@ -61,9 +63,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list reviews with search on tags' do
-    support_tags = POSTGRESQL_ADAPTER
-
-    skip unless support_tags
+    skip unless POSTGRESQL_ADAPTER
 
     login
     get :index, params: {
@@ -76,6 +76,12 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:reviews)
     assert_equal 2, assigns(:reviews).count
     assert_template 'reviews/index'
+  end
+
+  test 'list reviews with search on multiple tags' do
+    skip unless POSTGRESQL_ADAPTER
+
+    login
 
     get :index, params: {
       search: {
@@ -83,14 +89,16 @@ class ReviewsControllerTest < ActionController::TestCase
         columns: ['tags']
       }
     }
+
     assert_response :success
     assert_not_nil assigns(:reviews)
     assert_equal 1, assigns(:reviews).count
     assert_template 'reviews/index'
   end
 
-  test 'list reviews with search on audit team' do
+  test 'list reviews with search on audit team for sup' do
     login
+
     get :index, params: {
       search: {
         query: 'sup',
@@ -101,6 +109,28 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:reviews)
     assert_equal 6, assigns(:reviews).count
     assert_template 'reviews/index'
+  end
+
+  test 'list reviews with search on multiple tags and audit_team' do
+    skip unless POSTGRESQL_ADAPTER
+
+    login
+
+    get :index, params: {
+      search: {
+        query: 'high priority and for rev or sup',
+        columns: ['tags', 'audit_team']
+      }
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:reviews)
+    assert_equal 1, assigns(:reviews).count
+    assert_template 'reviews/index'
+  end
+
+  test 'list reviews with search on audit team for first' do
+    login
 
     get :index, params: {
       search: {
@@ -108,10 +138,15 @@ class ReviewsControllerTest < ActionController::TestCase
         columns: ['audit_team']
       }
     }
+
     assert_response :success
     assert_not_nil assigns(:reviews)
     assert_equal 1, assigns(:reviews).count
     assert_template 'reviews/index'
+  end
+
+  test 'list reviews with search on audit team for audited' do
+    login
 
     # No search by audited kind
     get :index, params: {
@@ -120,6 +155,7 @@ class ReviewsControllerTest < ActionController::TestCase
         columns: ['audit_team']
       }
     }
+
     assert_response :success
     assert_not_nil assigns(:reviews)
     assert_equal 0, assigns(:reviews).count
@@ -502,7 +538,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_match /TS-001\/2017/, @response.body
   end
 
-  test 'auto complete for control objectives' do
+  test 'auto complete for control objectives for access' do
     login
     get :auto_complete_for_control_objective, xhr: true, params: {
       q: 'access'
@@ -517,6 +553,10 @@ class ReviewsControllerTest < ActionController::TestCase
         (co['label'] + co['informal']).match /access/i
       end
     )
+  end
+
+  test 'auto complete for control objectives for dependency' do
+    login
 
     get :auto_complete_for_control_objective, xhr: true, params: {
       q: 'dependency'
@@ -531,6 +571,10 @@ class ReviewsControllerTest < ActionController::TestCase
         (co['label'] + co['informal']).match /dependency/i
       end
     )
+  end
+
+  test 'auto complete for control objectives for unknown' do
+    login
 
     get :auto_complete_for_control_objective, xhr: true, params: {
       q: 'xyz'
@@ -542,8 +586,9 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 0, control_objectives.size # None
   end
 
-  test 'auto complete for process controls' do
+  test 'auto complete for process controls for sec' do
     login
+
     get :auto_complete_for_process_control, xhr: true, params: {
       q: 'sec'
     }, as: :json
@@ -557,6 +602,10 @@ class ReviewsControllerTest < ActionController::TestCase
         (pc['label'] + pc['informal']).match /sec/i
       end
     )
+  end
+
+  test 'auto complete for process controls for data' do
+    login
 
     get :auto_complete_for_process_control, xhr: true, params: {
       q: 'data'
@@ -571,6 +620,10 @@ class ReviewsControllerTest < ActionController::TestCase
         (pc['label'] + pc['informal']).match /data/i
       end
     )
+  end
+
+  test 'auto complete for process controls for unknown' do
+    login
 
     get :auto_complete_for_process_control, xhr: true, params: {
       q: 'xyz'
@@ -582,8 +635,9 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 0, process_controls.size # None
   end
 
-  test 'auto complete for best practices' do
+  test 'auto complete for best practices for a' do
     login
+
     get :auto_complete_for_best_practice, xhr: true, params: {
       q: 'a'
     }, as: :json
@@ -595,6 +649,10 @@ class ReviewsControllerTest < ActionController::TestCase
     assert(
       best_practices.all? { |bp| bp['label'].match /a/i }
     )
+  end
+
+  test 'auto complete for best practices for iso' do
+    login
 
     get :auto_complete_for_best_practice, xhr: true, params: {
       q: 'iso'
@@ -607,6 +665,10 @@ class ReviewsControllerTest < ActionController::TestCase
     assert(
       best_practices.all? { |bp| bp['label'].match /iso/i }
     )
+  end
+
+  test 'auto complete for best practices for unknown' do
+    login
 
     get :auto_complete_for_best_practice, xhr: true, params: {
       q: 'xyz'
@@ -618,8 +680,9 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 0, best_practices.size # None
   end
 
-  test 'auto complete for finding relation' do
+  test 'auto complete for finding relation for O001' do
     login
+
     get :auto_complete_for_finding, xhr: true, params: { q: 'O001' }, as: :json
     assert_response :success
 
@@ -627,6 +690,10 @@ class ReviewsControllerTest < ActionController::TestCase
 
     assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
+  end
+
+  test 'auto complete for finding relation for specific review' do
+    login
 
     get :auto_complete_for_finding, xhr: true, params: { q: 'O001; 1 2 3' }, as: :json
     assert_response :success
@@ -635,6 +702,10 @@ class ReviewsControllerTest < ActionController::TestCase
 
     assert_equal 1, findings.size # Solo O01 del informe 1 2 3
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001.*1 2 3/i }
+  end
+
+  test 'auto complete for finding relation for unknown' do
+    login
 
     get :auto_complete_for_finding, xhr: true, params: { q: 'x_none' }, as: :json
     assert_response :success
@@ -657,6 +728,10 @@ class ReviewsControllerTest < ActionController::TestCase
 
     assert_equal 1, response_tags.size
     assert response_tags.all? { |t| t['label'].match /high priority/i }
+  end
+
+  test 'auto complete for unknown tagging' do
+    login
 
     get :auto_complete_for_tagging, xhr: true, params: {
       q: 'x_none',
@@ -667,6 +742,10 @@ class ReviewsControllerTest < ActionController::TestCase
     response_tags = ActiveSupport::JSON.decode(@response.body)
 
     assert_equal 0, response_tags.size # Sin resultados
+  end
+
+  test 'auto complete for obsolete tagging' do
+    login
 
     tag = tags :important
 

@@ -1,9 +1,9 @@
-<% if @risk_assessments.empty? && @query.blank? %>
+<% if @risk_assessments.empty? && search_params[:query].blank? %>
   <%= render 'shared/empty_index', message: t('.empty_html') %>
 <% else %>
   <%= render partial: 'shared/search', locals: {
     options: {},
-    columns: @query.blank? ? RiskAssessment::COLUMNS_FOR_SEARCH.keys : @columns
+    columns: search_columns_for_model(RiskAssessment)
   } %>
 
   <% if @risk_assessments.empty? %>
