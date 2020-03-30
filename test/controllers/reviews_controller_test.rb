@@ -77,6 +77,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 2, assigns(:reviews).count
     assert_template 'reviews/index'
   end
+
   test 'list reviews with search on multiple tags' do
     skip unless POSTGRESQL_ADAPTER
 
