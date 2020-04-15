@@ -36,7 +36,7 @@
       <%= render(
         'stat_row',
         business_unit_type: nil,
-        plan_items:         @plan.plan_items.reject(&:excluded_from_stats?)
+        plan_items:         @plan.plan_items.reject(&:excluded_from_stats?).select(&:business_unit_id)
       ) %>
     </tfoot>
   </table>
