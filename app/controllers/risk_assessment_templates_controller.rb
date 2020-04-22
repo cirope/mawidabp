@@ -8,9 +8,10 @@ class RiskAssessmentTemplatesController < ApplicationController
 
   # GET /risk_assessment_templates
   def index
-    build_search_conditions RiskAssessmentTemplate
-
-    @risk_assessment_templates = RiskAssessmentTemplate.list.where(@conditions).order(:name).page params[:page]
+    @risk_assessment_templates = RiskAssessmentTemplate.list.
+      search(**search_params).
+      order(:name).
+      page params[:page]
   end
 
   # GET /risk_assessment_templates/1

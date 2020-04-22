@@ -54,4 +54,8 @@ module TagsHelper
 
     options
   end
+
+  def tags_options_collection kind:
+    Array(TAG_OPTIONS[kind])
+  end
 end

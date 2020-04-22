@@ -1,9 +1,9 @@
-<% if @opening_interviews.empty? && @query.blank? %>
+<% if @opening_interviews.empty? && search_params[:query].blank? %>
   <%= render 'shared/empty_index', message: t('.empty_html') %>
 <% else %>
   <%= render partial: 'shared/search', locals: {
     options: {},
-    columns: @query.blank? ? OpeningInterview::COLUMNS_FOR_SEARCH.keys : @columns
+    columns: search_columns_for_model(OpeningInterview)
   } %>
 
   <% if @opening_interviews.empty? %>

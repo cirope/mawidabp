@@ -3,7 +3,6 @@ class ReviewsController < ApplicationController
   include AutoCompleteFor::ControlObjective
   include AutoCompleteFor::ProcessControl
   include AutoCompleteFor::Tagging
-  include SearchableByTag
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
@@ -20,26 +19,18 @@ class ReviewsController < ApplicationController
   #
   # * GET /reviews
   def index
-    @title = t 'review.index_title'
-    scope  = Review.list.
-      includes(:conclusion_final_review, :period, :tags, {
+    @title   = t 'review.index_title'
+    @reviews = Review.list.
+      includes(
+        :conclusion_final_review, :period, :tags,
         plan_item: :business_unit,
         review_user_assignments: :user
-      }).
+      ).
       merge(ReviewUserAssignment.audit_team).
-      references(:periods, :conclusion_final_review, :user)
-
-    tagged_reviews = build_tag_search_for scope
-
-    build_search_conditions Review
-
-    reviews = @columns == ['tags'] ? scope.none : scope.where(@conditions)
-    order = @order_by || Review.default_order
-
-    @reviews = tagged_reviews.
-      or(reviews).
-      reorder(order).
-      page(params[:page])
+      references(:periods, :conclusion_final_review, :user).
+      search(**search_params).
+      order_by(order_param).
+      page params[:page]
 
     respond_to do |format|
       format.html

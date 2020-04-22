@@ -13,8 +13,8 @@ module ConclusionReviews::BicPdf
     put_bic_header_on        pdf, organization
     put_bic_cover_on         pdf
     put_bic_review_on        pdf
-    put_bic_weaknesses_on    pdf if weaknesses.any?
-    put_bic_images_on        pdf if weaknesses.any? &:image_model
+    put_bic_weaknesses_on    pdf if weaknesses.not_revoked.any?
+    put_bic_images_on        pdf if weaknesses.not_revoked.any? &:image_model
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end

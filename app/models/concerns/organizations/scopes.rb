@@ -9,7 +9,7 @@ module Organizations::Scopes
   def users_with_roles(*roles)
     role_types = roles.map { |role| ::Role::TYPES[role.to_sym] }
 
-    users = self.users.includes(
+    users = self.users.not_hidden.enabled.includes(
       organization_roles: :role
     ).where(
       roles: {
