@@ -2,11 +2,7 @@ module LdapConfigs::Ldap
   extend ActiveSupport::Concern
 
   def ldap username, password
-    Net::LDAP.new host: hostname, port: port, auth: {
-      method:   :simple,
-      username: username_for(username),
-      password: password
-    }
+    Net::LDAP.new ldap_options(username, password)
   end
 
   def mask_regex
@@ -35,6 +31,32 @@ module LdapConfigs::Ldap
   end
 
   private
+
+    def ldap_options username, password
+      options = {
+        host: hostname,
+        port: port,
+        auth: {
+          method:   :simple,
+          username: username_for(username),
+          password: password
+        }
+      }
+
+      if ca_path.present? && tls.present?
+        options.merge(
+          encryption: {
+            method:      :simple_tls,
+            tls_options: {
+              ca_file:     ca_path,
+              ssl_version: tls
+            }
+          }
+        )
+      else
+        options
+      end
+    end
 
     def username_for username
       if username =~ mask_regex

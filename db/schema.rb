@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_03_125335) do
+ActiveRecord::Schema.define(version: 2020_04_23_141224) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -501,6 +501,8 @@ ActiveRecord::Schema.define(version: 2020_03_03_125335) do
     t.string "encrypted_password"
     t.string "alternative_hostname"
     t.integer "alternative_port"
+    t.string "tls"
+    t.string "ca_path"
     t.index ["organization_id"], name: "index_ldap_configs_on_organization_id"
   end
 
