@@ -1,9 +1,25 @@
 <br />
 
 <ul class="nav nav-pills nav-stacked">
-  {% assign articles = site.pages | sort: 'article_order' %}
+  {% assign articles = site.pages |where: 'category', page.category |where: 'parent', undefined |sort: 'article_order' %}
   {% for article in articles %}
-    {% if article.category == page.category %}
+    {% if article.has_children %}
+      {% assign children = site.pages |where: 'parent', article.title | sort: 'article_order'  %}
+      <li {% if article.url == page.url or page.parent == article.title %} class="active" {% endif %}>
+        {% if article.skip_link %}
+          <a href="#">{{ article.title }}</a>
+        {% else %}
+          <a href="/help{{ article.url }}">{{ article.title }}</a>
+        {% endif %}
+        <ul>
+          {% for child in children %}
+          <li {% if child.url == page.url %} class="active" {% endif %}>
+            <a href="/help{{ child.url }}">{{ child.title }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% elsif article.parent == undefined %}
       <li {% if article.url == page.url %} class="active" {% endif %}>
         <a href="/help{{ article.url }}">{{ article.title }}</a>
       </li>
