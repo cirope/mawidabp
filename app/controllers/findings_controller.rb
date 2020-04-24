@@ -101,7 +101,8 @@ class FindingsController < ApplicationController
         :id, :lock_version,
         finding_answers_attributes: [
           :answer, :user_id, :commitment_date, :notify_users,
-          file_model_attributes: [:file, :file_cache]
+          file_model_attributes: [:file, :file_cache],
+          commitment_support_attributes: [:id, :reason, :plan, :controls]
         ],
         costs_attributes: [
           :id, :raw_cost, :cost, :cost_type, :description, :user_id
@@ -114,10 +115,6 @@ class FindingsController < ApplicationController
         auto_complete_for_tagging: :read,
         auto_complete_for_finding_relation: :read
       )
-    end
-
-    def scoped_findings
-      current_organization.corporate? ? Finding.group_list : Finding.list
     end
 
     def pdf

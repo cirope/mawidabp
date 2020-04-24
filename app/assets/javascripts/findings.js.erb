@@ -98,4 +98,21 @@ jQuery(function ($) {
       attr('disabled', +$(this).val() !== enabledFor).
       val('<%= Finding.priorities[:low] %>')
   })
+
+  $(document).on('change', '[data-check-commitment-date-url]', function () {
+    var $commitmentDate = $(this)
+    var commitmentDate  = $commitmentDate.val()
+
+    if (commitmentDate && !$('[data-commitment-support]').length) {
+      var commitmentParam = commitmentDate.replace(/\//g, '-')
+      var urlTemplate     = decodeURI($commitmentDate.data('checkCommitmentDateUrl'))
+      var url             = urlTemplate.replace('NEW_DATE', commitmentParam)
+
+      $commitmentDate.prop('disabled', true)
+
+      $.getScript(url).always(function () {
+        $commitmentDate.prop('disabled', false)
+      })
+    }
+  })
 })

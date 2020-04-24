@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_23_141224) do
+ActiveRecord::Schema.define(version: 2020_04_23_171541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -174,6 +174,16 @@ ActiveRecord::Schema.define(version: 2020_04_23_141224) do
     t.index ["commentable_id"], name: "index_comments_on_commentable_id"
     t.index ["commentable_type"], name: "index_comments_on_commentable_type"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "commitment_supports", force: :cascade do |t|
+    t.text "reason", null: false
+    t.text "plan", null: false
+    t.text "controls", null: false
+    t.bigint "finding_answer_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["finding_answer_id"], name: "index_commitment_supports_on_finding_answer_id"
   end
 
   create_table "conclusion_reviews", id: :serial, force: :cascade do |t|
@@ -425,13 +435,13 @@ ActiveRecord::Schema.define(version: 2020_04_23_141224) do
     t.text "impact", default: [], null: false, array: true
     t.text "internal_control_components", default: [], null: false, array: true
     t.bigint "weakness_template_id"
-    t.date "first_follow_up_date"
     t.date "last_notification_date"
     t.integer "reschedule_count", default: 0, null: false
     t.date "implemented_at"
     t.date "closed_at"
     t.integer "parent_ids", default: [], array: true
     t.bigint "latest_id"
+    t.date "first_follow_up_date"
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -1130,6 +1140,7 @@ ActiveRecord::Schema.define(version: 2020_04_23_141224) do
   add_foreign_key "closing_interviews", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "closing_interviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "comments", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "commitment_supports", "finding_answers", on_update: :restrict, on_delete: :restrict
   add_foreign_key "conclusion_reviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "control_objectives", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "reviews", on_update: :restrict, on_delete: :restrict

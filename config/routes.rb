@@ -222,6 +222,7 @@ Rails.application.routes.draw do
   scope ':completion_state', completion_state: /complete|incomplete|repeated/ do
     resources :findings, except: [:destroy] do
       resources :costs
+      resources :commitment_supports, only: [:show], controller: 'findings/commitments', as: 'commitments'
       resources :finding_answers, only: [:create], controller: 'findings/answers', as: 'answers'
       resources :work_papers, only: [:create], controller: 'findings/work_papers'
 
