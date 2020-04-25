@@ -103,7 +103,7 @@ jQuery(function ($) {
     var $commitmentDate = $(this)
     var commitmentDate  = $commitmentDate.val()
 
-    if (commitmentDate && !$('[data-commitment-support]').length) {
+    if (commitmentDate) {
       var commitmentParam = commitmentDate.replace(/\//g, '-')
       var urlTemplate     = decodeURI($commitmentDate.data('checkCommitmentDateUrl'))
       var url             = urlTemplate.replace('NEW_DATE', commitmentParam)

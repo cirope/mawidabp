@@ -9,6 +9,11 @@
     </div>
 
     <div class="card-body">
+      <p class="mb-1">
+        <strong><%= FindingAnswer.human_attribute_name 'commitment_date' %></strong>:
+        <span data-commitment-date><%= l @commitment_date.to_date %></span>
+      </p>
+
       <%= f.input :reason, input_html: { data: { autofocus: true } } %>
       <%= f.input :plan %>
       <%= f.input :controls %>

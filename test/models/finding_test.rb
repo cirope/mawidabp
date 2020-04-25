@@ -1406,6 +1406,15 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 2.days.ago.to_date, @finding.version_closed_at
   end
 
+  test 'require commitment support' do
+    skip unless FINDING_ANSWER_COMMITMENT_SUPPORT
+
+    finding = findings :being_implemented_weakness
+
+    assert finding.require_commitment_support?(finding.follow_up_date + 1.day)
+    refute finding.require_commitment_support?(finding.follow_up_date)
+  end
+
   private
 
     def review_codes_on_findings_by_user method
