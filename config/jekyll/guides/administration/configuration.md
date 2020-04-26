@@ -5,6 +5,7 @@ category: administration
 guide_order: 1
 article_order: 5
 ---
+
 ## Configuraciones
 
 Seleccionamos **Administración -> Configuración**.
