@@ -6,7 +6,11 @@ module Findings::Answers
     has_one :latest_answer, -> { order created_at: :desc }, class_name: 'FindingAnswer'
 
     accepts_nested_attributes_for :finding_answers, allow_destroy: false,
-      reject_if: ->(attributes) { attributes['answer'].blank? && attributes['commitment_date'].blank? }
+      reject_if: ->(attributes) {
+        attributes['endorsements_attributes'].blank? &&
+        attributes['answer'].blank? &&
+        attributes['commitment_date'].blank?
+      }
   end
 
   def answer_added finding_answer

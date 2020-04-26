@@ -4,6 +4,7 @@ class FindingAnswer < ApplicationRecord
   include FindingAnswers::CommitmentDate
   include FindingAnswers::CommitmentSupport
   include FindingAnswers::Defaults
+  include FindingAnswers::Endorsements
   include FindingAnswers::File
   include FindingAnswers::Notifications
   include FindingAnswers::Readings

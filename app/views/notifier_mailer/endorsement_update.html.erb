@@ -1,0 +1,44 @@
+<div style="font-family: verdana, sans-serif, arial, helvetica;">
+  <h2 style="margin-bottom: 1em;"><%= @organization.name %></h2>
+  <h3><%= t 'notifier.endorsement_update.body_title' %></h3>
+
+  <p>
+    <b><%= User.model_name.human count: 1 %></b>:
+    <span style="font-style: italic;"><%= @user.full_name %></span>
+  </p>
+  <p>
+    <b><%= Endorsement.human_attribute_name(:status) %></b>:
+    <span style="font-style: italic;"><%= t "findings.endorsements.status.#{@endorsement.status}" %></span>
+  </p>
+
+  <hr>
+
+  <% if @finding_answer.commitment_date %>
+    <p>
+      <b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
+      <span style="font-style: italic;"><%= l(@finding_answer.commitment_date, :format => :long) %></span>
+    </p>
+  <% end %>
+
+  <% if @finding_answer.commitment_support.present? %>
+    <div>
+      <b><%= CommitmentSupport.human_attribute_name 'reason' %></b>:
+      <%= simple_format @finding_answer.commitment_support.reason, style: 'font-style: italic;'%>
+    </div>
+    <div>
+      <b><%= CommitmentSupport.human_attribute_name 'plan' %></b>:
+      <%= simple_format @finding_answer.commitment_support.plan, style: 'font-style: italic;' %>
+    </div>
+    <div>
+      <b><%= CommitmentSupport.human_attribute_name 'controls' %></b>:
+      <%= simple_format @finding_answer.commitment_support.controls, style: 'font-style: italic;'%>
+    </div>
+  <% end %>
+
+  <hr>
+
+  <%= render partial: 'finding', locals: {finding: @finding} %>
+
+  <%= render partial: 'common_mailer/footer' %>
+</div>
+

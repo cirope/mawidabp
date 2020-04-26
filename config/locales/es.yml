@@ -603,7 +603,9 @@
     add_tagging: "Agregar etiqueta"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
+    add_endorsement: "Agregar revisor"
     add_work_paper: "Agregar papel de trabajo"
+    endorsements: "Revisores"
     recode_tasks: "Recodificar tareas"
     create_work_paper: "Agregar como papel de trabajo"
     follow_up_date_changed_warning: "La fecha de implementación cambió para adecuarse a las tareas"
@@ -1044,6 +1046,12 @@
       title: "Nuevo administrador"
       body_title: "Se asigno un nuevo administrador a la organización"
       body: "%{name} (%{user}) ahora es administrador"
+    new_endorsement:
+      title: "Aprobación requerida"
+      body_title: "Se ha propuesto una nueva fecha de compromiso que requiere su aprobación"
+    endorsement_update:
+      title: "Actualización de aprobación"
+      body_title: "Se actualizó el estado de la solucitud de aprobación"
     tasks_expiration_warning:
       title: "Notificación de tareas cercanas al vencimiento"
       body_title:

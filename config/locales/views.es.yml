@@ -169,6 +169,14 @@ es:
     work_papers:
       create:
         from_comment: 'De comentario por %{user} el %{date}'
+    endorsements:
+      status:
+        pending: 'Pendiente'
+        approved: 'Aprobado'
+        rejected: 'Rechazado'
+    endorsement_item:
+      approve: 'Aprobar'
+      reject: 'Rechazar'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'

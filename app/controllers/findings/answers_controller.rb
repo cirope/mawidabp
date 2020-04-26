@@ -4,7 +4,8 @@ class Findings::AnswersController < ApplicationController
   respond_to :html
 
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_finding, only: [:create]
+  before_action :set_finding, only: [:create, :update]
+  before_action :set_finding_answer, :set_endorsement, only: [:update]
 
   def create
     @finding_answer = @finding.finding_answers.build finding_answer_params
@@ -20,6 +21,14 @@ class Findings::AnswersController < ApplicationController
     end
   end
 
+  def update
+    if params[:approve].present?
+      @endorsement.approved!
+    else
+      @endorsement.rejected!
+    end
+  end
+
   private
 
     def finding_answer_params
@@ -30,7 +39,15 @@ class Findings::AnswersController < ApplicationController
       )
     end
 
+    def set_finding_answer
+      @finding_answer = @finding.finding_answers.find params[:id]
+    end
+
+    def set_endorsement
+      @endorsement = @finding_answer.endorsements.where(user_id: @auth_user.id).take!
+    end
+
     def load_privileges
-      @action_privileges.update create: :read
+      @action_privileges.update create: :read, update: :read
     end
 end

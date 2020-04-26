@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_23_171541) do
+ActiveRecord::Schema.define(version: 2020_04_25_175606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -334,6 +334,16 @@ ActiveRecord::Schema.define(version: 2020_04_23_171541) do
     t.integer "organization_id"
     t.index ["created_at"], name: "index_e_mails_on_created_at"
     t.index ["organization_id"], name: "index_e_mails_on_organization_id"
+  end
+
+  create_table "endorsements", force: :cascade do |t|
+    t.string "status", null: false
+    t.bigint "user_id", null: false
+    t.bigint "finding_answer_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["finding_answer_id"], name: "index_endorsements_on_finding_answer_id"
+    t.index ["user_id"], name: "index_endorsements_on_user_id"
   end
 
   create_table "error_records", id: :serial, force: :cascade do |t|
@@ -1153,6 +1163,8 @@ ActiveRecord::Schema.define(version: 2020_04_23_171541) do
   add_foreign_key "documents", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "documents", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "documents", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "endorsements", "finding_answers", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "endorsements", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "error_records", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "error_records", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "finding_answers", "file_models", on_update: :restrict, on_delete: :restrict

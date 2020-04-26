@@ -161,4 +161,18 @@ class NotifierMailerPreview < ActionMailer::Preview
 
     NotifierMailer.new_admin_user user.organizations.first.id, user.email
   end
+
+  # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/new_endorsement
+  def new_endorsement
+    endorsement = Endorsement.take
+
+    NotifierMailer.new_endorsement endorsement.organization.id, endorsement.id
+  end
+
+  # Preview this email at http://localhost:3000/rails/mailers/notifier_mailer/endorsement_update
+  def endorsement_update
+    endorsement = Endorsement.take
+
+    NotifierMailer.endorsement_update endorsement.organization.id, endorsement.id
+  end
 end

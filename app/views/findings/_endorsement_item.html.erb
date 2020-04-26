@@ -1,0 +1,28 @@
+<li>
+  <% if @finding.being_implemented? && endorsement.pending? && endorsement.user == @auth_user %>
+    <%= endorsement.user.full_name %>
+
+    <span class="mx-1 badge badge-<%= finding_endorsement_class endorsement %>" data-endorsement-status="<%= endorsement.id %>">
+      <%= t "findings.endorsements.status.#{endorsement.status}" %>
+    </span>
+
+    <span data-endorsement-link="<%= endorsement.id %>">
+      <% approve_path = finding_answer_path params[:completion_state], @finding, finding_answer, approve: true %>
+      <% reject_path  = finding_answer_path params[:completion_state], @finding, finding_answer %>
+      <% data_attrs   = { remote: true, method: :patch, confirm: t('messages.confirmation') } %>
+
+      | <%= link_to approve_path, class: 'btn btn-sm btn-success', data: data_attrs do %>
+        <%= t '.approve' %>
+      <% end %>
+      | <%= link_to reject_path, class: 'btn btn-sm btn-danger', data: data_attrs do %>
+        <%= t '.reject' %>
+      <% end %>
+    </span>
+  <% else %>
+    <%= endorsement.user.full_name %>
+
+    <span class="mx-1 badge badge-<%= finding_endorsement_class endorsement %>" data-endorsement-status>
+      <%= t "findings.endorsements.status.#{endorsement.status}" %>
+    </span>
+  <% end %>
+</li>

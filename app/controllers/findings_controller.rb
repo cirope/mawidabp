@@ -75,8 +75,9 @@ class FindingsController < ApplicationController
           file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_answers_attributes: [
-          :answer, :user_id, :notify_users,
-          file_model_attributes: [:file, :file_cache]
+          :id, :answer, :user_id, :notify_users,
+          file_model_attributes: [:file, :file_cache],
+          endorsements_attributes: [:id, :status, :user_id, :_destroy]
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy

@@ -107,5 +107,27 @@
         </div>
       </div>
     </div>
+
+    <% if !show && show_commitment_endorsement_edition?(finding_answer) %>
+      <div id="endorsements" class="mt-1">
+        <%= f.simple_fields_for :endorsements do |e_f| %>
+          <%= render 'endorsement', f: e_f, readonly: readonly %>
+        <% end %>
+
+        <%= link_to_add_fields(
+          t('finding.add_endorsement'), f, :endorsements, nil, {}, { readonly: readonly }
+        ) unless readonly %>
+      </div>
+    <% elsif finding_answer.endorsements.any? %>
+      <h5 class="my-2">
+        <strong><%= t 'finding.endorsements' %></strong>
+      </h5>
+
+      <ul>
+        <% finding_answer.endorsements.each do |endorsement| %>
+          <%= render 'endorsement_item', endorsement: endorsement, finding_answer: finding_answer %>
+        <% end %>
+      </ul>
+    <% end %>
   <% end %>
 </fieldset>

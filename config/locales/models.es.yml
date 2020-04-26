@@ -70,6 +70,9 @@ es:
       e_mail:
         one: 'Correo'
         other: 'Correos'
+      endorsement:
+        one: 'Aprobación'
+        other: 'Aprobaciones'
       error_record:
         one: 'Registro de error'
         other: 'Registros de errores'
@@ -252,6 +255,8 @@ es:
         subject: 'Asunto'
         body: 'Contenido'
         attachments: 'Adjuntos'
+      endorsement:
+        status: 'Estado'
       error_record:
         data: 'Datos'
         error: 'Error'
