@@ -7,7 +7,7 @@
       {% assign children = site.pages |where: 'parent', article.title | sort: 'article_order'  %}
       <li {% if article.url == page.url or page.parent == article.title %} class="active" {% endif %}>
         {% if article.skip_link %}
-          <a href="#">{{ article.title }}</a>
+          <a href="/help{{ children[0].url }}">{{ article.title }}</a>
         {% else %}
           <a href="/help{{ article.url }}">{{ article.title }}</a>
         {% endif %}

@@ -1,11 +1,12 @@
 ---
-title: Roles
+title: Perfiles y privilegios
 layout: articles
 category: administration
 guide_order: 1
 article_order: 3.3
 parent: Seguridad
 ---
+## Seguridad
 
 ### Perfiles y privilegios
 
@@ -52,3 +53,22 @@ Seleccionamos Editar **->** Acciones **->** Estado
 ![]({% asset administration/security/users-16.png @path %}){: class="img-responsive"}
 ![]({% asset administration/security/users-17.png @path %}){: class="img-responsive"}
 
+**Reporte para ver las observaciones pendientes y solucionadas de un usuario y de las personas que tiene a cargo**
+
+**Administración -> Seguridad**.
+
+![]({% asset administration/security/users-18.png @path %}){: class="img-responsive"}
+
+Seleccionamos ¨Editar¨ del usuario que necesitamos, vamos al final de la pantalla y seleccionamos ¨Acciones¨ (podemos observar que el cargo de Supervisor tiene una persona a cargo).
+
+![]({% asset administration/security/users-19.png @path %}){: class="img-responsive"}
+
+Seleccionamos ¨Estado¨, nos muestra la siguiente pantalla.
+
+![]({% asset administration/security/users-20.png @path %}){: class="img-responsive"}
+
+A la derecha de la pantalla muestra un icono **¨Persona¨**, si hacemos clic vemos el listado de todas las observaciones del usuario y las personas que tengan a cargo.
+
+![]({% asset administration/security/users-21.png @path %}){: class="img-responsive"}
+
+Tenemos la posibilidad de ¨Descargar CSV¨ y ¨Resumen en PDF¨
