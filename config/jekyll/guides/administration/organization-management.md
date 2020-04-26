@@ -32,8 +32,6 @@ Luego mostramos los datos en detalle de la organización creada:
 
 ![]({% asset administration/organization/org-4.png @path %}){: class="img-responsive"}
 
-**Configuración LDAP**
-
 #### Configuración LDAP
 
 Esta opción es utilizada cuando el sistema es instalado en la infraestructura de la organización.
