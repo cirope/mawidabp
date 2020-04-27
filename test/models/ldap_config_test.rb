@@ -57,6 +57,13 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_error @ldap_config, :manager_attribute, :invalid
   end
 
+  test 'validates inclusions' do
+    @ldap_config.tls = 'TLSv1_x'
+
+    assert @ldap_config.invalid?
+    assert_error @ldap_config, :tls, :inclusion
+  end
+
   test 'validates alternative fields' do
     @ldap_config.alternative_port     = ldap_port
     @ldap_config.alternative_hostname = ''
@@ -103,6 +110,19 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_equal @ldap_config.errors[:base], [I18n.t('message.ldap_error')]
 
     @ldap_config.test_password = 'admin123'
+    assert @ldap_config.valid?
+  end
+
+  test 'validates CA path' do
+    @ldap_config.test_user = 'admin'
+    @ldap_config.test_password = 'admin123'
+    @ldap_config.ca_path = '/no/file'
+
+    assert @ldap_config.invalid?
+    assert_error @ldap_config, :ca_path, :invalid
+
+    @ldap_config.ca_path = "#{Rails.root}/config.ru"
+
     assert @ldap_config.valid?
   end
 

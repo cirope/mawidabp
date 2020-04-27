@@ -353,6 +353,8 @@ es:
         function_attribute: 'Atributo con el cargo'
         roles_attribute: 'Atributo con los perfiles'
         manager_attribute: 'Atributo con el superior'
+        tls: 'Versión TLS'
+        ca_path: 'Ruta CA'
         test_user: 'Usuario'
         test_password: 'Contraseña'
         user: 'Usuario de servicio'
@@ -681,6 +683,10 @@ es:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
             end:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
+        review:
+          attributes:
+            taggings:
+              missing_tags_for_scope: "se requiere al menos una (entre %{tags}) para los informes con alcance '%{r_scope}'"
         risk_assessment_template:
           attributes:
             risk_assessment_weights:

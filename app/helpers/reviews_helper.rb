@@ -101,7 +101,7 @@ module ReviewsHelper
   end
 
   def review_scope_options
-    REVIEW_SCOPES.map { |scope| [scope, scope] }
+    REVIEW_SCOPES.keys
   end
 
   def review_risk_exposure_options

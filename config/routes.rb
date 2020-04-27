@@ -361,7 +361,9 @@ Rails.application.routes.draw do
   end
 
   resources :plans do
-    resources :plan_items, only: [:new, :edit]
+    resources :plan_items, only: [:show, :new, :edit, :update] do
+      get :auto_complete_for_control_objective, on: :collection
+    end
 
     member do
       get :calendar, to: 'plans/calendar#show'

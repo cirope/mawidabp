@@ -9,15 +9,17 @@ class ConclusionFinalReviewsController < ApplicationController
   def index
     @title = t 'conclusion_final_review.index_title'
 
-    build_search_conditions ConclusionFinalReview
-
-    order = [@order_by || Arel.sql("#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')} DESC")]
-    order << Arel.sql("#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('created_at')} DESC")
-
     @conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, :conclusion_final_review, plan_item: :business_unit]
-    ).where(@conditions).order(order).page(params[:page])
-    .references(:periods, :reviews, :business_units)
+    ).search(
+      **search_params
+    ).order_by(
+      order_param
+    ).page(
+      params[:page]
+    ).references(
+      :periods, :reviews, :business_units
+    )
 
     respond_to do |format|
       format.html
@@ -271,12 +273,18 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf
   def export_list_to_pdf
-    build_search_conditions ConclusionFinalReview
+    order_by_column_name = ConclusionFinalReview.order_by_column_name order_param
+    query                = ConclusionFinalReview.split_terms_in_query search_params[:q]
+    columns              = search_params[:columns] || []
 
     conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, { plan_item: :business_unit }]
-    ).where(@conditions).references(:periods, :reviews, :business_units).order(
-      @order_by || Arel.sql("#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')} DESC")
+    ).search(
+      **search_params
+    ).references(
+      :periods, :reviews, :business_units
+    ).order_by(
+      order_param
     )
 
     pdf = Prawn::Document.create_generic_pdf :landscape
@@ -295,7 +303,6 @@ class ConclusionFinalReviewsController < ApplicationController
       ['score', Review.human_attribute_name(:score), 7]
     ]
 
-    columns = {}
     column_data, column_headers, column_widths = [], [], []
 
     column_order.each do |col_data|
@@ -316,24 +323,24 @@ class ConclusionFinalReviewsController < ApplicationController
       ]
     end
 
-    unless @columns.blank? || @query.blank?
+    unless columns.blank? || query.blank?
       pdf.move_down PDF_FONT_SIZE
       pointer_moved = true
-      filter_columns = @columns.map do |c|
+      filter_columns = columns.map do |c|
         column_name = column_order.detect { |co| co[0] == c }
         "<b>#{column_name[1]}</b>"
       end
 
       pdf.text t('conclusion_final_review.pdf.filtered_by',
-        query: @query.flatten.map { |q| "<b>#{q}</b>"}.join(', '),
-        columns: filter_columns.to_sentence, count: @columns.size),
+        query: query.flatten.map { |q| "<b>#{q}</b>"}.join(', '),
+        columns: filter_columns.to_sentence, count: columns.size),
         font_size: (PDF_FONT_SIZE * 0.75).round, inline_format: true
     end
 
-    unless @order_by_column_name.blank?
+    unless order_by_column_name.blank?
       pdf.move_down PDF_FONT_SIZE unless pointer_moved
       pdf.text t('conclusion_final_review.pdf.sorted_by',
-        column: "<b>#{@order_by_column_name}</b>"),
+        column: "<b>#{order_by_column_name}</b>"),
         font_size: (PDF_FONT_SIZE * 0.75).round
     end
 

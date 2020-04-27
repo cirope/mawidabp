@@ -14,6 +14,18 @@
 %>
 
 <% if @weaknesses.any? %>
+  <div class="card my-3 bg-light">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-8">
+          <p class="mb-0">
+            <%= t 'follow_up_committee_report.weaknesses_by_user.weaknesses_count_html', count: @weaknesses.count %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <% @weaknesses.each do |weakness| %>
     <hr>
 
@@ -154,7 +166,7 @@
 
 <div>
   <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: "#customize_report" } %> |
+  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
   <%= link_to t('label.download_csv'), weaknesses_by_user_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
 </div>
 

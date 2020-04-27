@@ -12,7 +12,7 @@ module LdapConfigs::Validation
     validates :test_user, :test_password, presence: true, unless: :user?
     validates :hostname, :basedn, :filter, :login_mask, :username_attribute,
       :name_attribute, :last_name_attribute, :email_attribute,
-      :roles_attribute, length: { maximum: 255 }
+      :roles_attribute, :ca_path, :tls, length: { maximum: 255 }
     validates :port, numericality: { only_integer: true, greater_than: 0, less_than: 65536 }
     validates :alternative_port, numericality: { only_integer: true, greater_than: 0, less_than: 65536 },
       if: :alternative_hostname?
@@ -20,8 +20,10 @@ module LdapConfigs::Validation
     validates :username_attribute, :name_attribute, :last_name_attribute,
       :email_attribute, :function_attribute, :roles_attribute,
       :manager_attribute, format: /\A\w+\z/, allow_blank: true
+    validates :tls, inclusion: { in: %w(TLSv1_1 TLSv1_2) }, allow_blank: true
     validates :password, presence: true, if: :user?
     validate :can_connect?
+    validate :ca_file_exists?
   end
 
   private
@@ -38,6 +40,12 @@ module LdapConfigs::Validation
       end
     rescue
       errors.add :base, I18n.t('message.ldap_error')
+    end
+
+    def ca_file_exists?
+      if ca_path.present?
+        errors.add :ca_path, :invalid unless File.readable? ca_path
+      end
     end
 
     def user?
