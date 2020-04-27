@@ -17,27 +17,33 @@ module Reports::WeaknessesRepeated
   def create_weaknesses_repeated
     init_weaknesses_repeated_vars
 
-    pdf = init_pdf params[:report_title], params[:report_subtitle]
+    pdf          = init_pdf params[:report_title], params[:report_subtitle]
+    index        = 0
+    included_ids = []
 
     if @weaknesses.any?
-      @weaknesses.each_with_index do |weakness, index|
-        title = [
-          "<b>#{index + 1}</b>",
-          "<i>#{Review.model_name.human}:</i>",
-          "<b>#{weakness.review.identification}</b>"
-        ].join ' '
+      @weaknesses.each do |weakness|
+        if included_ids.exclude?(weakness.current.id)
+          title = [
+            "<b>#{index += 1}</b>",
+            "<i>#{Review.model_name.human}:</i>",
+            "<b>#{weakness.review.identification}</b>"
+          ].join ' '
 
-        pdf.text title, size: PDF_FONT_SIZE, inline_format: true, align: :justify
+          pdf.text title, size: PDF_FONT_SIZE, inline_format: true, align: :justify
 
-        repeated_pdf_items(weakness).each do |item|
-          text = "<i>#{item.first}:</i> #{item.last.to_s.strip}"
+          repeated_pdf_items(weakness).each do |item|
+            text = "<i>#{item.first}:</i> #{item.last.to_s.strip}"
 
-          pdf.text text, size: PDF_FONT_SIZE, inline_format: true, align: :justify
+            pdf.text text, size: PDF_FONT_SIZE, inline_format: true, align: :justify
+          end
+
+          put_repeated_current_on pdf, weakness
+
+          pdf.move_down PDF_FONT_SIZE
+
+          included_ids << weakness.current.id
         end
-
-        put_repeated_current_on pdf, weakness
-
-        pdf.move_down PDF_FONT_SIZE
       end
     else
       pdf.move_down PDF_FONT_SIZE
@@ -65,6 +71,7 @@ module Reports::WeaknessesRepeated
       order = [
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'origination_date'} ASC",
+        "#{Weakness.quoted_table_name}.#{Weakness.qcn 'id'} ASC",
         "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'conclusion_index'} DESC"
       ].map { |o| Arel.sql o }
       weaknesses = repeated_weaknesses final
@@ -206,7 +213,9 @@ module Reports::WeaknessesRepeated
           @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text.to_sentence}\""
         end
 
-        weaknesses.where state: states
+        weaknesses.references(:latest).where(state: states).or(
+          weaknesses.where(latests_findings: { state: states })
+        )
       else
         weaknesses
       end
