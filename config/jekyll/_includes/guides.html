@@ -2,17 +2,6 @@
   <h3 class="text-muted">{% t guides.title %}</h3>
 </div>
 
-{% assign modules = site.pages |where: 'category', 'system_modules' | first %}
-<div class="row">
-  <div class="col-md-offset-4 col-md-4">
-    <div class="alert alert-info text-center">
-      <h2>
-        <a class="alert-link" href="/help{{ modules.url }}">{{ modules.title }}</a>
-      </h2>
-    </div>
-  </div>
-</div>
-
 {% assign pages = site.pages | sort: 'guide_order' | where: 'article_order', 1 %}
 {% for page in pages %}
   {% assign limit = forloop.index0 | modulo: 3 %}
@@ -27,3 +16,14 @@
     </div>
   {% if limit == 2 or forloop.last %}</div>{% endif %}
 {% endfor %}
+
+{% assign modules = site.pages |where: 'category', 'system_modules' | where: 'article_order', 0 | first %}
+<div class="row">
+  <div class="col-md-offset-4 col-md-4">
+    <div class="alert alert-info text-center">
+      <h2>
+        <a class="alert-link" href="/help{{ modules.url }}">{{ modules.title }}</a>
+      </h2>
+    </div>
+  </div>
+</div>
