@@ -61,7 +61,7 @@ module Findings::Answers
   def commitment_date_required_level
     date = last_commitment_date
 
-    if date
+    if date && follow_up_date
       requirements = Array(COMMITMENT_REQUIREMENTS[self.class.risks.invert[risk]])
       required     = requirements.detect do |month_number, level|
         date < (follow_up_date + month_number.months)
