@@ -1,7 +1,7 @@
 <% if params[:control_objective].blank? %>
-  <%= render :partial => 'shared/search', :locals => {
-    :options => {:columns_for_sort => Oportunity.columns_for_sort},
-    :columns => @query.blank? ? (Oportunity::COLUMNS_FOR_SEARCH.keys - ['organization']) : @columns
+  <%= render partial: 'shared/search', locals: {
+    options: { columns_for_sort: Oportunity.columns_for_sort },
+    columns: search_columns_for_model(Oportunity, ['organization'])
   } %>
 <% end %>
 <table class="table table-sm table-striped table-hover">

@@ -124,8 +124,8 @@ class FindingsController < ApplicationController
       title_partial = case params[:completion_state]
                       when'incomplete'
                         'pending'
-                      when 'rescheduled'
-                        'rescheduled'
+                      when 'repeated'
+                        'repeated'
                       else
                         'complete'
                       end

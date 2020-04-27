@@ -353,6 +353,8 @@ es:
         function_attribute: 'Atributo con el cargo'
         roles_attribute: 'Atributo con los perfiles'
         manager_attribute: 'Atributo con el superior'
+        tls: 'Versión TLS'
+        ca_path: 'Ruta CA'
         test_user: 'Usuario'
         test_password: 'Contraseña'
         user: 'Usuario de servicio'

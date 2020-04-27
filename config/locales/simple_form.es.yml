@@ -45,6 +45,8 @@ es:
         function_attribute: 'Por ejemplo: title'
         roles_attribute: 'Por ejemplo: memberof'
         manager_attribute: 'Por ejemplo: manager'
+        tls: 'Valores posibles: TLSv1_1 o TLSv1_2'
+        ca_path: 'Por ejemplo: /tmp/ca.pem'
         test_user: 'Usuario válido en el servidor para probar la conexión'
         test_password: 'Contraseña del usuario para probar la conexión'
         user: 'Usuario de servicio para la importación automática de usuarios'

@@ -1,11 +1,20 @@
 class ::MailObserver
   def self.delivered_email(message)
-    organization = Organization.find_by_prefix(
-      message.subject.match(/\[(\w+\W*\w*)\]/)[1].downcase
-    ) rescue nil
+    match        = message.subject.match(/\[(\w+\W*\w*)\]/)
+    organization = if match && match[1]
+                     Organization.where(
+                       "LOWER(#{Organization.qcn 'prefix'}) = ?",
+                       match[1].downcase
+                     ).take
+                   end
 
-    body = message.body.decoded.present? ? message.body.decoded :
-      message.parts.detect { |p| p.content_type.match(/text/) }.try(:body).try(:decoded)
+    body = if message.body.decoded.present?
+             message.body.decoded
+           else
+             message.parts.detect do |p|
+               p.content_type.match(/text/)
+             end.try(:body).try(:decoded)
+           end
 
     EMail.create!(
       :to => message.to.join(', '),

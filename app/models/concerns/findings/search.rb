@@ -1,5 +1,6 @@
 module Findings::Search
   extend ActiveSupport::Concern
+  include Searchable
 
   included do
     COLUMNS_FOR_SEARCH = {
