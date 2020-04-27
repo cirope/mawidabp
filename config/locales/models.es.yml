@@ -58,6 +58,9 @@ es:
       closing_interview_user:
         one: 'Asistente a la entrevista'
         other: 'Asistentes a la entrevista'
+      commitment_support:
+        one: 'Sustento compromiso'
+        other: 'Sustentos compromiso'
       control_objective:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
@@ -67,6 +70,9 @@ es:
       e_mail:
         one: 'Correo'
         other: 'Correos'
+      endorsement:
+        one: 'Aprobación'
+        other: 'Aprobaciones'
       error_record:
         one: 'Registro de error'
         other: 'Registros de errores'
@@ -226,6 +232,10 @@ es:
         review_id: 'Informe'
       closing_interview_user:
         user: 'Usuario'
+      commitment_support:
+        reason: 'Motivo reprogramación'
+        plan: 'Nuevo plan de acción'
+        controls: 'Controles mitigantes'
       control_objective:
         name: 'Objetivo de control'
         relevance: 'Importancia'
@@ -245,6 +255,8 @@ es:
         subject: 'Asunto'
         body: 'Contenido'
         attachments: 'Adjuntos'
+      endorsement:
+        status: 'Estado'
       error_record:
         data: 'Datos'
         error: 'Error'
@@ -316,6 +328,11 @@ es:
         commitment_date: 'Fecha de compromiso'
         user_id: 'Comentario (usuario)'
         notify_users: 'Comentario (enviar notificación)'
+      finding/finding_answers/commitment_support:
+        one: 'Sustento compromiso'
+        reason: 'Motivo reprogramación'
+        plan: 'Nuevo plan de acción'
+        controls: 'Controles mitigantes'
       finding/finding_answers/file_model:
         one: 'Anexo (archivo)'
         file: 'Anexo (archivo)'

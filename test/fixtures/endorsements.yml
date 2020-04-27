@@ -1,0 +1,4 @@
+reschedule:
+  status: pending
+  user: administrator
+  finding_answer: auditor_answer
