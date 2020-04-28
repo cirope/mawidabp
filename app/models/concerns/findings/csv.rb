@@ -198,8 +198,17 @@ module Findings::Csv
 
         if cs
           date = I18n.l fa.created_at, format: :minimal
+          endorsements = fa.endorsements.map do |e|
+            status = I18n.t "findings.endorsements.status.#{e.status}"
 
-          "[#{date}] #{fa.user.full_name}: #{cs.reason}"
+            "#{e.user.full_name}: #{status}"
+          end.to_sentence
+
+          if endorsements.present?
+            "[#{date}] #{fa.user.full_name}: #{cs.reason} (#{endorsements})"
+          else
+            "[#{date}] #{fa.user.full_name}: #{cs.reason}"
+          end
         end
       end.compact
 
