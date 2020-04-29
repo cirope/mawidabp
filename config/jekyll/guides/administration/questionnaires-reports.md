@@ -15,6 +15,8 @@ Muestra los datos por tipo de cuestionario, por unidad organizativa y resumen de
 
 ![]({% asset administration/questionnaires/report-1.png @path %}){: class="img-responsive"}
 
+<hr>
+
 &nbsp;
 
 &nbsp;
@@ -36,6 +38,8 @@ Tenemos la opción de **Descargar** el reporte en formato pdf, personalizando el
 Seleccionamos **Generar**, luego nos muestra el reporte en formato pdf, en este caso para la empresa Cirope.
 
 ![]({% asset administration/questionnaires/report-5.png @path %}){: class="img-responsive"}
+
+<hr>
 
 &nbsp;
 
@@ -71,6 +75,8 @@ Luego seleccionamos **Generar** (genera el reporte en formato pdf), en este caso
 
 ![]({% asset administration/questionnaires/report-10.png @path %}){: class="img-responsive"}
 
+<hr>
+
 &nbsp;
 
 &nbsp;
@@ -88,6 +94,8 @@ Seleccionamos **aplicar filtro**, muestra el reporte con los siguientes datos.
 Seleccionamos **Descargar**, nos ofrece la posibilidad de personalizar el Título y Subtítulo y obtener el reporte en formato pdf.
 
 Seleccionamos **Generar**, nos genera un documento en formato pdf.
+
+<hr>
 
 &nbsp;
 
@@ -114,6 +122,8 @@ Seleccionamos ¨Resumen de respuestas¨
 Ingresamos los datos y seleccionamos ¨Mostrar únicamente respuestas coincidentes¨, para este ejemplo: ¨De acuerdo¨.
 
 ![]({% asset administration/questionnaires/report-16.png @path %}){: class="img-responsive"}
+
+<hr>
 
 &nbsp;
 
@@ -142,6 +152,8 @@ El informe se muestra en los siguientes lugares:
 Incorporamos la opción "No aplica" (para el tipo de respuesta ¨Múltiple opción¨ como uno de los valores posibles para que el auditado responda, a los efectos de evitar sesgos en la interpretación de los resultados).
 
 ![]({% asset administration/questionnaires/report-20.png @path %}){: class="img-responsive"}
+
+<hr>
 
 &nbsp;
 
@@ -214,6 +226,8 @@ Luego seleccionamos **Generar** (genera el reporte en formato pdf).
 ![]({% asset administration/questionnaires/report-30.png @path %}){: class="img-responsive"}
 
 Nivel de satisfacción promedio: calcula el promedio de las opciones seleccionadas por el usuario (el sistema tiene en cuenta los siguientes datos, Muy de acuerdo:100; De acuerdo: 75; Ni acuerdo ni desacuerdo: 50; En desacuerdo: 25: Muy desacuerdo: 0; Si: 100; No: 0; No aplica: no se tiene en cuenta en el cálculo del promedio).
+
+<hr>
 
 &nbsp;
 
