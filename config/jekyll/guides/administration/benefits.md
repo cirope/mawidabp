@@ -6,6 +6,10 @@ article_order: 11
 ---
 ## Beneficios / Perjuicios
 
+Permite mostrar los beneficios y perjuicios que se evitan/previenen a las distintas áreas y directivos de la organización, informando de una manera transparente (por unidad organizativa y unidades de negocio) los resultados obtenidos por medio de los controles realizados.
+
+&nbsp;
+
 Seleccionamos **Administración -> Beneficios / Perjuicios**. En este caso muestra los que tenemos generados.
 
 ![]({% asset administration/benefits/1.png @path %}){: class="img-responsive"}

@@ -1,5 +1,5 @@
 ---
-title: Conclusión
+title: Seguimiento
 layout: articles
 category: system_modules
 article_order: 6

@@ -10,7 +10,7 @@ parent: Organización
 
 ### Unidades organizativas
 
-Seleccionamos **Administración -> Organización** -> Unidades organizativas**
+Seleccionamos **Administración -> Organización -> Unidades organizativas**
 
 Las unidades organizativas están compuestas por unidades de negocio (por ejemplo, Unidad organizativa: Procesos Centrales, está compuesta por las Unidades de negocio: Préstamos, Depósitos, Finanzas, Comercio Exterior y Cambios, Contabilidad, etc.)
 
