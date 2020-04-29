@@ -19,7 +19,7 @@ class Findings::AnswersControllerTest < ActionController::TestCase
             answer:                 'New answer',
             user_id:                users(:supervisor).id,
             notify_users:           '1',
-            file_model_attributes:  {
+            file_model_attributes: {
               file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
             }
           }
@@ -28,5 +28,28 @@ class Findings::AnswersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to finding_url('incomplete', @finding)
+  end
+
+  test 'update finding answer endorsement' do
+    user           = users :administrator
+    finding        = findings :being_implemented_weakness_on_draft
+    finding_answer = finding.finding_answers.create!(
+      answer: 'Test answer',
+      user:   user
+    )
+
+    endorsement = finding_answer.endorsements.create! user: user
+
+    assert endorsement.pending?
+
+    patch :update, params: {
+      id:               finding_answer.id,
+      finding_id:       finding.id,
+      completion_state: 'incomplete',
+      approve:          true
+    }, xhr: true, as: :js
+
+    assert endorsement.reload.approved?
+    assert_match Mime[:js].to_s, @response.content_type
   end
 end

@@ -6,15 +6,20 @@ module Findings::FirstFollowUp
   end
 
   def store_first_follow_up_date
-    self.first_follow_up_date ||= first_follow_up_date_value
+    self.first_follow_up_date ||= repeated_of&.first_follow_up_date ||
+                                  first_follow_up_date_value
   end
 
   def first_follow_up_date_on_versions
-    version = versions.detect do |v|
-      v.reify&.follow_up_date
-    end
+    if repeated_of
+      repeated_of.first_follow_up_date_on_versions
+    else
+      version = versions.detect do |v|
+        v.reify&.follow_up_date
+      end
 
-    version&.reify&.follow_up_date || follow_up_date
+      version&.reify&.follow_up_date || follow_up_date
+    end
   end
 
   private

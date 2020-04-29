@@ -145,4 +145,20 @@ class FindingAnswerTest < ActiveSupport::TestCase
     assert_error @finding_answer, :commitment_date, :on_or_before,
       restriction: I18n.l(expected_limit)
   end
+
+  test 'commitment date status' do
+    @finding_answer.endorsements.destroy_all
+
+    assert_equal 'approved', @finding_answer.commitment_date_status
+
+    endorsement = @finding_answer.endorsements.create!(
+      user_id: users(:audited).id
+    )
+
+    assert_equal 'pending', @finding_answer.commitment_date_status
+
+    endorsement.rejected!
+
+    assert_equal 'rejected', @finding_answer.commitment_date_status
+  end
 end

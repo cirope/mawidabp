@@ -44,7 +44,10 @@ module Findings::Csv
       answer,
       (last_commitment_date_text if self.class.show_follow_up_timestamps?),
       (finding_answers_text if self.class.show_follow_up_timestamps?),
-      latest_answer_text
+      latest_answer_text,
+      (commitment_support_plans_text if FINDING_ANSWER_COMMITMENT_SUPPORT),
+      (commitment_support_reasons_text if FINDING_ANSWER_COMMITMENT_SUPPORT),
+      (commitment_date_required_level_text if FINDING_ANSWER_COMMITMENT_SUPPORT)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -171,6 +174,51 @@ module Findings::Csv
       tasks.map(&:detailed_description).join(LINE_BREAK_REPLACEMENT)
     end
 
+    def commitment_support_plans_text
+      plans = finding_answers.map do |fa|
+        cs = fa.commitment_support
+
+        if cs
+          date = I18n.l fa.created_at, format: :minimal
+
+          "[#{date}] #{fa.user.full_name}: #{cs.plan}"
+        end
+      end.compact
+
+      truncate(
+        plans.reverse.join(LINE_BREAK_REPLACEMENT),
+        length:   32767, # To go around the 32767 limit on some spreadsheets
+        omission: "[#{I18n.t('messages.truncated', count: 32767)}]"
+      )
+    end
+
+    def commitment_support_reasons_text
+      reasons = finding_answers.map do |fa|
+        cs = fa.commitment_support
+
+        if cs
+          date = I18n.l fa.created_at, format: :minimal
+          endorsements = fa.endorsements.map do |e|
+            status = I18n.t "findings.endorsements.status.#{e.status}"
+
+            "#{e.user.full_name}: #{status}"
+          end.to_sentence
+
+          if endorsements.present?
+            "[#{date}] #{fa.user.full_name}: #{cs.reason} (#{endorsements})"
+          else
+            "[#{date}] #{fa.user.full_name}: #{cs.reason}"
+          end
+        end
+      end.compact
+
+      truncate(
+        reasons.reverse.join(LINE_BREAK_REPLACEMENT),
+        length:   32767, # To go around the 32767 limit on some spreadsheets
+        omission: "[#{I18n.t('messages.truncated', count: 32767)}]"
+      )
+    end
+
   module ClassMethods
     def to_csv corporate: false
       csv_str = CSV.generate(**OPTIONS) do |csv|
@@ -206,7 +254,7 @@ module Findings::Csv
           :tasks,
           latest_answer: :user,
           latest: [:review, latest_answer: :user],
-          finding_answers: :user,
+          finding_answers: [:user, :commitment_support, endorsements: :user],
           finding_user_assignments: :user,
           finding_owner_assignments: :user,
           taggings: :tag,
@@ -260,7 +308,10 @@ module Findings::Csv
           Finding.human_attribute_name('answer'),
           (FindingAnswer.human_attribute_name('commitment_date') if show_follow_up_timestamps?),
           (I18n.t('finding.finding_answers') if show_follow_up_timestamps?),
-          (I18n.t('finding.latest_answer') if show_follow_up_timestamps?)
+          (I18n.t('finding.latest_answer') if show_follow_up_timestamps?),
+          (I18n.t('finding.commitment_support_plans') if FINDING_ANSWER_COMMITMENT_SUPPORT),
+          (I18n.t('finding.commitment_support_reasons') if FINDING_ANSWER_COMMITMENT_SUPPORT),
+          (I18n.t('finding.commitment_date_required_level_title') if FINDING_ANSWER_COMMITMENT_SUPPORT)
         ].compact
       end
   end
