@@ -29,6 +29,12 @@ En el caso de las búsquedas se pueden "desactivar" las columnas por las que no 
 
 Si hacen clic sobre el nombre de la columna, van a ver que cambia a un tono más claro (se torna gris), eso quiere decir que no se va a tener en cuenta (lo mismo que las tachadas).
 
+<hr>
+
+&nbsp;
+
+&nbsp;
+
 **Mejora funcionalidad**
 
 Agregamos el campo **"Título"** en observaciones/oportunidades de mejora.
@@ -37,11 +43,23 @@ Permite agregar un título para luego poder buscar de manera simple y rápida.
 
 ![]({% asset execution/weaknesses/4.png @path %}){: class="img-responsive"}
 
+<hr>
+
+&nbsp;
+
+&nbsp;
+
 **Mejora funcionalidad**
 
 Reconocimiento de **¨enlaces en papeles de trabajo¨** (http y ftp), permite agregar enlaces http y ftp en la descripción.
 
 ![]({% asset execution/weaknesses/5.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -64,6 +82,12 @@ Ingresamos en "Hallazgo relacionado" caracteres, muestra un listado de observaci
 El "Relacionada con" se utiliza cuando la relación es más un apuntador, una ayuda memoria para tener en cuenta una observación si hay un cambio importante en otra.
 
 Es más una nota al estilo de "si esta observación pasa a Implementada / Auditada probablemente esta otra esté también solucionada". Acá el sistema no hace más que llevar la traza.
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -91,25 +115,27 @@ Pueden reiterar tantas veces como quieran, el año que viene la O007 podrá reit
 
 Resumen de los pasos:
 
-1. Dentro de "Ejecución"  -> Informes, seleccionar "editar", agregar dentro de “Agregar hallazgo pendiente” las observaciones que van a reiterar, luego seleccionar actualizar informe.
+1) Dentro de "Ejecución"  -> Informes, seleccionar "editar", agregar dentro de “Agregar hallazgo pendiente” las observaciones que van a reiterar, luego seleccionar actualizar informe.
 
 ![]({% asset execution/weaknesses/8.png @path %}){: class="img-responsive"}
-
 ![]({% asset execution/weaknesses/9.png @path %}){: class="img-responsive"}
-
 ![]({% asset execution/weaknesses/10.png @path %}){: class="img-responsive"}
-
 ![]({% asset execution/weaknesses/11.png @path %}){: class="img-responsive"}
 
-2. Luego crear una observación nueva en el informe y dentro de las opciones seleccionar "Reiterada de", en el desplegable se muestran las incluidas en el punto anterior.
+2) Luego crear una observación nueva en el informe y dentro de las opciones seleccionar "Reiterada de", en el desplegable se muestran las incluidas en el punto anterior.
 
 Editamos un objetivo de control, seleccionamos agregar una observación, seleccionar "Reiterada de", en el desplegable muestra la observación, la seleccionamos, luego seleccionamos “Crear observación”.
 
 ![]({% asset execution/weaknesses/12.png @path %}){: class="img-responsive"}
-
 ![]({% asset execution/weaknesses/13.png @path %}){: class="img-responsive"}
 
-3. Luego de esto la observación anterior queda enlazada a la nueva y por lo tanto la marca como "reiterada".
+3) Luego de esto la observación anterior queda enlazada a la nueva y por lo tanto la marca como "reiterada".
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -119,6 +145,12 @@ Incorporamos un nuevo estado de observaciones **"Difiere criterio"**.
 
 Es un estado definitivo, se usa para aquellas casos que la organización no está de acuerdo con una observación realizada por algún organismo externo, por ejemplo B.C.R.A. y/o Auditoría Externa.
 
+<hr>
+
+&nbsp;
+
+&nbsp;
+
 **Mejora funcionalidad**
 
 Incorporamos la funcionalidad para mejorar los **¨papeles de trabajo¨**.
@@ -126,6 +158,12 @@ Incorporamos la funcionalidad para mejorar los **¨papeles de trabajo¨**.
 Ahora no es obligatorio el campo **"Cantidad de páginas"** en los papeles de trabajo.
 
 Respecto de los papeles y la fecha de cierre del informe, los PTO se pueden editar y reemplazar hasta la ¨fecha de cierre¨ desde ejecución o seguimiento. Una vez cumplida la fecha de cierre solo se pueden editar los archivos PTSO desde seguimiento.
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -137,6 +175,12 @@ Seleccionamos "Observaciones", luego “Descargar CSV”
 
 ![]({% asset execution/weaknesses/14.png @path %}){: class="img-responsive"}
 
+<hr>
+
+&nbsp;
+
+&nbsp;
+
 **Mejora funcionalidad**
 
 Incorporamos **¨Nuevo estado Desestimada / No aplica¨**, para una observación.
@@ -144,6 +188,12 @@ Incorporamos **¨Nuevo estado Desestimada / No aplica¨**, para una observación
 **Ejecución -> Observaciones**
 
 Hay un nuevo estado "Desestimada / No aplica" para las observaciones, se comporta exactamente igual a "Difiere criterio". Se utilizaría en observaciones que se "solucionaron" porque dejó de existir el objeto que observaban, por ejemplo, cuando dan de baja un sistema.
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 

@@ -99,6 +99,12 @@ A continuación mostramos la pantalla con los datos cargados para un informe.
 
 ![]({% asset execution/reviews/5.png @path %}){: class="img-responsive"}
 
+<hr>
+
+&nbsp;
+
+&nbsp;
+
 **Mejora funcionalidad**
 
 Incorporamos la posibilidad de seleccionar etiquetas, se pueden agregar etiquetas para identificar alguna característica que nos interese del informe.

@@ -11,7 +11,7 @@ article_order: 8
 
 El módulo de ejecución cuenta con reportes que permiten realizar una gestión y administración eficiente del trabajo para el gerente de auditoría, supervisores y auditores.
 
-Para todas las opciones de reportes, el sistema se comporta de la misma manera. Tiene pciones de búsquedas, por defecto muestra el mes en curso para la primera búsqueda, luego permite ingresar las fechas que necesitemos, podemos descargar el reporte en formato pdf personalizando el título.
+Para todas las opciones de reportes, el sistema se comporta de la misma manera. Tiene opciones de búsquedas, por defecto muestra el mes en curso para la primera búsqueda, luego permite ingresar las fechas que necesitemos, podemos descargar el reporte en formato pdf personalizando el título.
 
 También dependendiendo del reporte seleccionado, tenemos más opciones de búsquedas y filtros..
 

@@ -166,8 +166,6 @@ Además notifica al resto de los integrantes de la observación por correo, info
 
 Luego de esto el usuario auditor, puede ingresar al sistema o por medio de **Ver hallazgo**, y seguir con el proceso de trabajo en la observación.
 
-![]({% asset execution/reviews/41.png @path %}){: class="img-responsive"}
-
 <hr>
 
 &nbsp;
@@ -182,13 +180,19 @@ Incorporamos la funcionalidad "Hallazgos pendientes".
 
 Seleccionamos "Editar" en un informe.
 
-![]({% asset execution/reviews/42.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/41.png @path %}){: class="img-responsive"}
 
 **"Agregar hallazgo pendiente"**, se ingresan caracteres, muestra un listado de observaciones, seleccionamos una. Luego podemos seguir agregando observaciones realizando los mismos pasos. Para cambiar el estado de la observación, seleccionamos la "Lupa", luego podemos editar la misma.
 
 **"Sugerir hallazgos pendientes"**, muestra las observaciones pendientes para la unidad de negocio que corresponde el proyecto (informe) en el que estamos trabajando. Tenemos la posibilidad de dejar todas o eliminar las que no nos interesan para el informe. Para cambiar el estado de la observación, seleccionamos la "Lupa", luego podemos editar la misma.
 
 **"Sugerir hallazgos solucionados recientes"**, busca observaciones normalizadas generadas en los últimos tres años para la unidad de negocio seleccionada. Solo busca en informes definitivos (consistente con "Sugerir hallazgos pendientes").
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -204,6 +208,12 @@ Básicamente lo que se hace ahí es a todas las observaciones anuladas prefijarl
 
 Las observaciones anuladas son un estado final que no se puede revertir. Ninguna observación anulada sale en los PDFs de los informes. Tampoco se tienen en cuenta para los reportes. Es decir, se comportan bastante similar a una eliminación, con la diferencia que queda la evidencia que se consideró. Se puede "reutilizar" su número, por ejemplo, si tuvieran O001, O002 y O003 y anulan la O002 podrían ir a editar en informe desde ejecución (y luego Acciones -> Recodificar hallazgos) para que queden O001 y O002 (anteriormente O003).
 
+<hr>
+
+&nbsp;
+
+&nbsp;
+
 **Mejora funcionalidad**
 
 Incorporamos la funcionalidad marcar como **"Responsables"** a usuarios en informes.
@@ -216,9 +226,15 @@ Los usuarios de un informe se pueden marcar como **"Responsable"**.
 
 Si tiene responsables se muestran bajo el título "Responsables" al final en la carátula (primera hoja del informe), si no se marcan responsables el informe se muestra sin estos datos
 
+![]({% asset execution/reviews/42.png @path %}){: class="img-responsive"}
+
 ![]({% asset execution/reviews/43.png @path %}){: class="img-responsive"}
 
-![]({% asset execution/reviews/44.png @path %}){: class="img-responsive"}
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -227,6 +243,12 @@ Incorporamos el rol **"Veedor"** para usuarios ¨Auditados¨.
 **Ejecución -> Informes**
 
 El rol veedor se agregó para participar a usuarios de perfil "auditado" en informes que lo ameriten, sin que estos tengan más que una figura de "observador", por ejemplo usuarios que forman parte del comité de auditoría.
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -238,7 +260,13 @@ Hay una nueva opción para recodificar hallazgos desde los informes: "Recodifica
 
 Seleccionamos "Editar" en un informe, al final de la pantalla seleccionamos “Acciones”.
 
-![]({% asset execution/reviews/45.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/44.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -248,13 +276,19 @@ Incorporamos la funcionalidad que permite ordenar los informes de una manera má
 
 El orden de los informes en ejecución muestra primero los sin definitivo, luego los que tienen definitivo, ordenados por identificación en cada caso.
 
-![]({% asset execution/reviews/46.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/45.png @path %}){: class="img-responsive"}
 
 Luego podemos seleccionar "Buscar", para que les permita ordenar tanto de forma ascendente como descendente.
 
 Seleccionamos "Buscar", muestra “Ordenar por”, seleccionamos esta opción y muestra: Identificación Ascendente, Identificación descendente, Período Ascendente, Período Descendente”, seleccionamos “Identificación Ascendente”, luego  “Buscar”.
 
-![]({% asset execution/reviews/47.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/46.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -264,7 +298,15 @@ Incorporamos la funcionalidad que permite separar por roles **¨Auditoría** ((a
 
 En los informes en ejecución ahora se separa el equipo de auditoría del resto de los roles "Auditoría" y “Usuarios”. Además, cuando se selecciona un usuario, el “Rol” que se despliega es solo posible para la persona elegida.
 
-**Mejoras  funcionalidades**
+![]({% asset execution/reviews/47.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
+
+**Mejora  funcionalidad**
 
 Incorporamos la siguientes mejoras referidas a Papeles de trabajo **¨Conforme auditor¨**, **¨Revisado supervisor¨** y **¨Nuevo reporte¨**.
 
@@ -316,6 +358,12 @@ Si seleccionamos "Informes cerrados sin conformidad auditor", se pueden listar l
 
 ![]({% asset execution/reviews/55.png @path %}){: class="img-responsive"}
 
+<hr>
+
+&nbsp;
+
+&nbsp;
+
 **Mejora funcionalidad**
 
 Incorporamos la funcionalidad que permite tener en cuenta el estado **¨Riesgo asumido¨** en las búsquedas de observaciones pendientes.
@@ -325,6 +373,12 @@ Incorporamos la funcionalidad que permite tener en cuenta el estado **¨Riesgo a
 Para la sugerencia de observaciones pendientes dentro de  "Ejecución" -> "Informes" ahora se tienen en cuenta el estado "Riesgo asumido".
 
 ![]({% asset execution/reviews/56.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -336,6 +390,12 @@ Seleccionamos "Informes" nos muestra los informes.
 
 ![]({% asset execution/reviews/57.png @path %}){: class="img-responsive"}
 
+<hr>
+
+&nbsp;
+
+&nbsp;
+
 **Mejora funcionalidad**
 
 Muestra los informes que tienen **¨informe definitivos tachados¨**.
@@ -345,6 +405,12 @@ Muestra los informes que tienen **¨informe definitivos tachados¨**.
 Los informes que se encuentran tachados tienen informe definitivo.
 
 ![]({% asset execution/reviews/58.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -359,6 +425,12 @@ Se agregó la opción "Sugerir hallazgos relacionados recientes" en los informes
 En caso que no existan hallazgos muestra la siguiente pantalla:
 
 ![]({% asset execution/reviews/60.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -378,43 +450,37 @@ El tema de recodificar por riesgo funciona ordenando todas las observaciones por
 
 Después toma cada una y comienza a numerarlas de nuevo, sería por ejemplo:
 
-O001 - Riesgo medio
-
-O002 - Riesgo bajo
-
-O003 - Riesgo medio
-
-O004 - Riesgo alto
+>O001 - Riesgo medio<br>
+>O002 - Riesgo bajo<br>
+>O003 - Riesgo medio<br>
+>O004 - Riesgo alto
 
 Quedaría:
 
-O001 - Riesgo alto (ex O004)
-
-O002 - Riesgo medio (ex O001)
-
-O003 - Riesgo medio (ex O003)
-
-O004 - Riesgo bajo (ex O002)
+>O001 - Riesgo alto (ex O004)<br>
+>O002 - Riesgo medio (ex O001)<br>
+>O003 - Riesgo medio (ex O003)<br>
+>O004 - Riesgo bajo (ex O002)
 
 La otra recodificación sirve para eliminar los huecos en caso de anulaciones. En este caso ignora el campo riesgo, solo tiene en cuenta el código anterior, por ejemplo:
 
-O001 - Riesgo medio
-
-O002 - Riesgo bajo
-
-O003 - Riesgo medio (anulada)
-
-O004 - Riesgo alto
+>O001 - Riesgo medio<br>
+>O002 - Riesgo bajo<br>
+>O003 - Riesgo medio (anulada)<br>
+>O004 - Riesgo alto<br>
 
 Quedaría:
 
-O001 - Riesgo medio (sin cambios)
+>O001 - Riesgo medio (sin cambios)<br>
+>O002 - Riesgo bajo (sin cambios)<br>
+>O003 - Riesgo medio (prefijo A)<br>
+>O003 - Riesgo alto (ex O004)<br>
 
-O002 - Riesgo bajo (sin cambios)
+<hr>
 
-O003 - Riesgo medio (prefijo A)
+&nbsp;
 
-O003 - Riesgo alto (ex O004)
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -428,6 +494,12 @@ Si seleccionamos "buena práctica" nos muestra la siguiente pantalla:
 
 ![]({% asset execution/reviews/62.png @path %}){: class="img-responsive"}
 
+<hr>
+
+&nbsp;
+
+&nbsp;
+
 **Mejora funcionalidad**
 
 Incorporamos **¨mostrar los objetivos de control de una buena práctica no incluidos en el informe¨**.
@@ -438,11 +510,21 @@ Dentro de la edición de un informe, a la derecha del título "Objetivos de cont
 
 Seleccionamos "Ejecución" -> "Informes".
 
+![]({% asset execution/reviews/63.png @path %}){: class="img-responsive"}
+
 Luego "Editar" por ejemplo “Ejercicio 2017” “2017 TI 01 5”.
+
+![]({% asset execution/reviews/64.png @path %}){: class="img-responsive"}
 
 Seleccionamos la **"Tijera"** (en la parte superior de la pantalla a la derecha) nos muestra los objetivos de control por proceso en color celeste que no fueron incorporados en el informe (los cuales se encuentran cargados en la buena práctica).
 
-![]({% asset execution/reviews/63.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/65.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -456,15 +538,21 @@ Permite reasignar los códigos de observaciones por reiteración y riesgo. Toma 
 
 Seleccionamos "Editar" en un informe, al final de la pantalla seleccionamos “Acciones”.
 
-![]({% asset execution/reviews/64.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/66.png @path %}){: class="img-responsive"}
 
 Seleccionamos "Recodificar observaciones por reiteración y riesgo"
 
-![]({% asset execution/reviews/65.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/67.png @path %}){: class="img-responsive"}
 
 Seleccionamos "Aceptar", nos muestra el mensaje “Hallazgos recodificados correctamente” y las observaciones ordenadas primero por reiterada teniendo en cuenta el riesgo (alto, medio, bajo) y luego las observaciones nuevas teniendo en cuenta el riesgo (alto, medio, bajo).
 
-![]({% asset execution/reviews/66.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/68.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -478,15 +566,21 @@ Toma el orden en el que están definidos los objetivos de control dentro del inf
 
 Seleccionamos "Editar" en un informe, al final de la pantalla seleccionamos “Acciones”.
 
-![]({% asset execution/reviews/67.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/69.png @path %}){: class="img-responsive"}
 
 Seleccionamos "Recodificar observaciones por orden objetivos de control"
 
-![]({% asset execution/reviews/68.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/70.png @path %}){: class="img-responsive"}
 
 Seleccionamos "Aceptar", nos muestra el mensaje “Hallazgos recodificados correctamente”  y las observaciones ordenadas por objetivos de control como están en el informe y por riesgo (alto, medio, bajo).
 
-![]({% asset execution/reviews/69.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/71.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -508,23 +602,29 @@ A continuación mostramos un ejemplo:
 
 Este es el informe (tiene una observación en estado "No confirmada" con los integrantes:
 
-![]({% asset execution/reviews/70.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/72.png @path %}){: class="img-responsive"}
 
 Esta es la observación correspondiente al informe en estado "No Confirmada".
 
-![]({% asset execution/reviews/71.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/73.png @path %}){: class="img-responsive"}
 
 Vamos a cambiar el integrante: Moralejo Raúl (Auditor) por Martinez Jose (Auditor). En este caso va generar una notificación a ambos auditores:
 
-![]({% asset execution/reviews/72.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/74.png @path %}){: class="img-responsive"}
 
 Seleccionamos "Actualizar informe"
 
-![]({% asset execution/reviews/73.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/75.png @path %}){: class="img-responsive"}
 
 Luego nos llega un correo, con la reasignación de las observaciones del informe al nuevo miembro y se desafecta al anterior.
 
-![]({% asset execution/reviews/74.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/76.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -534,13 +634,21 @@ Incorporamos un nuevo reporte **"Resumen de costos planificados"**.
 
 Seleccionamos **"Resumen de costos planificados"**.
 
-![]({% asset execution/reviews/75.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/77.png @path %}){: class="img-responsive"}
 
 Muestra las unidades estimadas por recurso y período (según el rango de fecha ingresado en el filtro).
 
-Toma la cantidad de días del intervalo, ve proporcionalmente cuanto corresponde a cada mes y reparte las horas. Por ejemplo: 3 horas entre el 1/3  y el 7/4, sería 2,46 (0,82*3) en marzo y 0,54 (0,18*3 en abril.
+Toma la cantidad de días del intervalo, ve proporcionalmente cuanto corresponde a cada mes y reparte las horas. Por ejemplo: 3 horas entre el 1/3  y el 7/4, sería 2,46 (0,82\*3\) en marzo y 0,54 (0,18\*3\) en abril.
 
 La fecha que se utiliza en el filtro es la de inicio de proyecto (la que se carga en el plan, en la columna "Inicio").
+
+![]({% asset execution/reviews/78.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -556,23 +664,31 @@ Es un reporte completo para poder ver de una manera rápida todo lo realizado pa
 
 Seleccionamos **Ejecución -> Informes**
 
-![]({% asset execution/reviews/76.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/79.png @path %}){: class="img-responsive"}
 
 Seleccionamos la  **"Lupa"** del informe que necesitamos los datos.
 
-![]({% asset execution/reviews/77.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/80.png @path %}){: class="img-responsive"}
 
 Luego van al final de la pantalla tenemos la opción ¨Descargar¨ para verlo en formato PDF.
 
-![]({% asset execution/reviews/78.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/81.png @path %}){: class="img-responsive"}
 
 Si seleccionamos ¨Descargar¨
 
 En la primera página nos muestra la identificación y proyecto.
 
+![]({% asset execution/reviews/82.png @path %}){: class="img-responsive"}
+
 Y a partir de la segunda el detalle de los datos de cada uno de los campos
 
-![]({% asset execution/reviews/79.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/83.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -586,19 +702,25 @@ Seleccionamos **Ejecución -> Informes**
 
 Seleccionamos ¨Editar¨ de un informe, en aquellos objetivos de control que hay un cambio nos muestra una advertencia (el triángulo).
 
-![]({% asset execution/reviews/80.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/84.png @path %}){: class="img-responsive"}
 
-Si posicionamos el mouse encima del triángulo (para el objetivo de control 3.1.1 - Dependencia del Responsable de áreax) informa el siguiente mensaje **¨El nombre del objetivo de control ha cambiado respecto el definido en la buena práctica, haga click para restaurarlo¨**.
+Si posicionamos el mouse encima del triángulo (para el objetivo de control 3.1.1 - Dependencia del Responsable de área) informa el siguiente mensaje **¨El nombre del objetivo de control ha cambiado respecto el definido en la buena práctica, haga click para restaurarlo¨**.
 
 Si hacemos click en el triángulo nos muestra el siguiente mensaje:
 
-![]({% asset execution/reviews/81.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/85.png @path %}){: class="img-responsive"}
 
 Si seleccionamos ¨Aceptar¨ nos trae el texto original del objetivo tal cual está definido en la buena práctica.
 
 En este caso lo hicimos para el objetivo de control 3.1.1 - Dependencia del Responsable del área.
 
-![]({% asset execution/reviews/82.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/86.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -610,19 +732,25 @@ Cuando no se ha seleccionado a nadie como responsable y/o referente van a ver un
 
 Seleccionamos "Informes", luego ¨Editar¨ en un informe, seleccionamos un objetivo de control, luego  agregar una observación.
 
-![]({% asset execution/reviews/83.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/87.png @path %}){: class="img-responsive"}
 
 Seleccionamos ¨Crear observación¨.
 
-![]({% asset execution/reviews/84.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/88.png @path %}){: class="img-responsive"}
 
 Seleccionamos cancelar, agregamos el auditor referente y el auditado responsable.
 
-![]({% asset execution/reviews/85.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/89.png @path %}){: class="img-responsive"}
 
 Seleccionamos ¨Crear observación¨.
 
-![]({% asset execution/reviews/86.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/90.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 **Mejora funcionalidad**
 
@@ -636,4 +764,4 @@ En la actualidad se toma el rol que figura cuando agregan un usuario dentro de �
 
 Ahora, muestra un desplegable con la opción ¨Responsable máximo de auditoría¨ tanto para supervisores como para gerentes.
 
-![]({% asset execution/reviews/87.png @path %}){: class="img-responsive"}
+![]({% asset execution/reviews/91.png @path %}){: class="img-responsive"}
