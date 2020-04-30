@@ -42,6 +42,10 @@ Se cargan los datos de acuerdo a la configuración de Active Directory informado
 
 <hr>
 
+&nbsp;
+
+&nbsp;
+
 **Mejora funcionalidad**
 
 Incorporamos la funcionalidad que permite realizar la autenticación e importación de usuarios en forma diaria de manera automática (es opcional, se puede seguir usando la alternativa de hacerlo en forma manual cuando lo decide la organización).

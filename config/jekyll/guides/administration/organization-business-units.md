@@ -49,6 +49,12 @@ Etiqueta del proyecto en el informe (opcional): es una leyenda que aparece en el
   > **CICLO:** Cumplimiento Comunicación "A" 4609 (corresponde a la descripción de la unidad de negocio).<br>
   > **SUBCICLO:** Sección 4 (corresponde a la descripción del nombre del proyecto cargada en el plan de trabajo).
 
+<hr>
+
+&nbsp;
+
+&nbsp;
+
 **2)** cómo agregar unidades de negocio a una unidad organizativa?
 
 A continuación mostramos como se agrega una unidad de negocio:
@@ -84,6 +90,12 @@ A continuación mostramos la unidad de organizativa Tecnología Informática, co
 
 ![]({% asset administration/organization/bu-7.png @path %}){: class="img-responsive"}
 
+<hr>
+
+&nbsp;
+
+&nbsp;
+
 Ejemplo de la funcionalidad organización corporativa.
 
 **Administración -> Organización**
@@ -117,6 +129,12 @@ Seleccionar Seguimiento -> Hallazgos pendientes¨, muestra los hallazgos pendien
 Si necesitamos ver solo de una organización, seleccionamos ¨Buscar¨, ingresamos el prefijo de la Organización que deseamos consultar (por ejemplo Demo-bi) y luego volvemos a seleccionar ¨Buscar¨.
 
 ![]({% asset administration/organization/bu-11.png @path %}){: class="img-responsive"}
+
+<hr>
+
+&nbsp;
+
+&nbsp;
 
 Campo **¨Requerir etiqueta en informe¨**
 

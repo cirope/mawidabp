@@ -1,5 +1,5 @@
 ---
-title: Objectivos de control
+title: Objetivos de control
 layout: articles
 category: execution
 guide_order: 3
