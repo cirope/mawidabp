@@ -607,6 +607,7 @@
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
     add_endorsement: "Agregar revisor"
+    show_commitment_date: "Nueva fecha de compromiso"
     add_work_paper: "Agregar papel de trabajo"
     endorsements: "Revisores"
     recode_tasks: "Recodificar tareas"

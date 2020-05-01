@@ -15,7 +15,7 @@
     </div>
     <div class="col-md-6">
       <% if finding_answer.new_record? %>
-        <%= f.input :answer, label: false %>
+        <%= f.input :answer, label: false, input_html: { rows: 3 } %>
       <% else %>
         <%= simple_format finding_answer.answer, class: 'mb-1' %>
         <% if show_follow_up_timestamps? %>
@@ -58,13 +58,17 @@
           <br /><%= l(finding_answer.commitment_date, format: :long) %>
         <% end %>
       <% else %>
-        <% if show_commitment_date?(finding_answer) %>
-          <div class="text-left">
+        <% if finding_answer.user.can_act_as_audited? %>
+          <% unless show_commitment_date?(finding_answer) %>
+            <%= link_to t('finding.show_commitment_date'), '#commitment-date', data: { toggle: 'collapse' } %>
+          <% end %>
+
+          <div id="commitment-date" class="text-left mt-1 collapse <%= 'show' if show_commitment_date?(finding_answer) %>">
             <%= f.input :commitment_date, as: :date_picker, label: false,
               hint: FindingAnswer.human_attribute_name(:commitment_date),
               input_html: {
                 data: {
-                  required: true,
+                  required: show_commitment_date?(finding_answer),
                   check_commitment_date_url: finding_commitment_path(
                     'incomplete',
                     finding_answer.finding,
