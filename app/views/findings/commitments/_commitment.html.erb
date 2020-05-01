@@ -15,6 +15,11 @@
         <span data-commitment-date><%= l commitment_date.to_date %></span>
       </p>
 
+      <p class="mb-1">
+        <strong><%= t 'finding.commitment_date_required_level_title' %></strong>:
+        <%= @finding.commitment_date_required_level_text commitment_date %>
+      </p>
+
       <%= f.input :reason, input_html: { data: { autofocus: true } } %>
       <%= f.input :plan %>
       <%= f.input :controls %>

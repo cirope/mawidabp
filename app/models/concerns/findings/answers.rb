@@ -58,8 +58,8 @@ module Findings::Answers
       first&.commitment_date
   end
 
-  def commitment_date_required_level
-    date = last_commitment_date
+  def commitment_date_required_level date = nil
+    date ||= last_commitment_date
 
     if date && follow_up_date
       requirements = Array(COMMITMENT_REQUIREMENTS[self.class.risks.invert[risk]])
@@ -71,8 +71,8 @@ module Findings::Answers
     end
   end
 
-  def commitment_date_required_level_text
-    level = commitment_date_required_level
+  def commitment_date_required_level_text date = nil
+    level = commitment_date_required_level date
 
     I18n.t "finding.commitment_date_required_level.#{level}" if level
   end

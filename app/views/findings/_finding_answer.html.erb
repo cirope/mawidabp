@@ -97,6 +97,10 @@
   <% elsif finding_answer.commitment_support.present? %>
     <div class="row">
       <div class="col">
+        <p class="mb-1">
+          <strong><%= t 'finding.commitment_date_required_level_title' %></strong>:
+          <%= finding_answer.finding.commitment_date_required_level_text finding_answer.commitment_date %>
+        </p>
         <div>
           <strong><%= CommitmentSupport.human_attribute_name 'reason' %></strong>:
           <%= simple_format finding_answer.commitment_support.reason, class: 'mb-1' %>
