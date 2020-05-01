@@ -6,6 +6,10 @@ article_order: 10
 ---
 ## Noticias
 
+Posibilita incorporar novedades para las distintas áreas del equipo de trabajo, por ejemplo informar sobre congresos, cursos, charlas, nuevos procedimientos, etc., el tipo de comunicación a incorporar es abierto y depende de los objetivos que se quieran lograr.
+
+&nbsp;
+
 Seleccionamos **Administración -> Noticias**.
 
 ![]({% asset administration/news/1.png @path %}){: class="img-responsive"}

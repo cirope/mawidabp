@@ -6,7 +6,11 @@ article_order: 8
 ---
 ## Etiquetas
 
-Seleccionamos **Administración**** -> Etiquetas**.
+Permite la generación de etiquetas para objetivos de control, documentos, hallazgos, noticias, proyectos en plan e Informes. Las mismas posibilitan que luego tengamos búsquedas de información clave de una manera rápida/amigable por parte de los usuarios en distintas partes de los módulos del sistema (planificación, ejecución, conclusión y seguimiento).
+
+&nbsp;
+
+Seleccionamos **Administración -> Etiquetas**.
 
 Nos muestra por defecto las Etiquetas creadas para Hallazgos
 

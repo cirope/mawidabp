@@ -6,6 +6,10 @@ article_order: 9
 ---
 ## Documentos
 
+Permite la carga y gestión de documentos, los cuales pueden ser accedidos sin necesidad de salir del sistema, la idea es tener una biblioteca de acceso rápido, incorporando procedimientos, manuales de calidad, normativas específicas, libros, normas del BCRA y otros archivos que consideremos conveniente para soporte en la operatoria diaria del equipo de trabajo.
+
+&nbsp;
+
 Seleccionamos **Administración -> Documentos**.
 
 ![]({% asset administration/documents/1.png @path %}){: class="img-responsive"}
