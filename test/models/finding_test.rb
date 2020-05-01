@@ -1416,26 +1416,26 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'commitment date required level' do
-    finding        = findings :being_implemented_weakness
-    follow_up_date = finding.follow_up_date
-    finding_answer = finding.finding_answers.create!(
+    finding              = findings :being_implemented_weakness
+    first_follow_up_date = finding.first_follow_up_date
+    finding_answer       = finding.finding_answers.create!(
       answer:          'New answer',
       user:            users(:audited),
-      commitment_date: follow_up_date + 10.days,
+      commitment_date: first_follow_up_date + 10.days,
       notify_users:    false
     )
 
     assert_equal :manager, finding.commitment_date_required_level
 
-    finding_answer.update_column :commitment_date, follow_up_date + 4.months
+    finding_answer.update_column :commitment_date, first_follow_up_date + 4.months
 
     assert_equal :management, finding.commitment_date_required_level
 
-    finding_answer.update_column :commitment_date, follow_up_date + 11.months
+    finding_answer.update_column :commitment_date, first_follow_up_date + 11.months
 
     assert_equal :ceo, finding.commitment_date_required_level
 
-    finding_answer.update_column :commitment_date, follow_up_date + 13.months
+    finding_answer.update_column :commitment_date, first_follow_up_date + 13.months
 
     assert_equal :committee, finding.commitment_date_required_level
   end
