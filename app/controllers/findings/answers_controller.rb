@@ -23,9 +23,9 @@ class Findings::AnswersController < ApplicationController
 
   def update
     if params[:approve].present?
-      @endorsement.approved!
+      @endorsement.update! status: 'approved', reason: params[:reason]
     else
-      @endorsement.rejected!
+      @endorsement.update! status: 'rejected', reason: params[:reason]
     end
   end
 

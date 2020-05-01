@@ -11,12 +11,24 @@
     <span style="font-style: italic;"><%= t "findings.endorsements.status.#{@endorsement.status}" %></span>
   </p>
 
+  <p>
+    <b><%= Endorsement.human_attribute_name(:reason) %></b>:
+    <span style="font-style: italic;"><%= @endorsement.reason %></span>
+  </p>
+
   <hr>
 
   <% if @finding_answer.commitment_date %>
     <p>
       <b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
       <span style="font-style: italic;"><%= l(@finding_answer.commitment_date, :format => :long) %></span>
+    </p>
+
+    <p>
+      <b><%= t 'finding.commitment_date_required_level_title' %></b>:
+      <span style="font-style: italic;">
+        <%= @finding_answer.finding.commitment_date_required_level_text @finding_answer.commitment_date %>
+      </span>
     </p>
   <% end %>
 

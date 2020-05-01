@@ -4,4 +4,6 @@
     .text('<%= t "findings.endorsements.status.#{@endorsement.status}" %>')
     .removeClass('badge-secondary')
     .addClass('badge-<%= finding_endorsement_class @endorsement %>')
+  $('[data-endorsement-text="<%= @endorsement.id %>"]')
+    .text('<%= j @endorsement.reason %>')
 }()

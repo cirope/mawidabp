@@ -115,4 +115,24 @@ jQuery(function ($) {
       })
     }
   })
+
+  $(document).on('keyup', '[data-endorsement-reason]', function () {
+    var $reason       = $(this)
+    var reason        = $reason.val() || ''
+    var endorsementId = $reason.data('endorsementReason')
+
+    if (reason.trim()) {
+      $('[data-endorsement-action="' + endorsementId + '"]').each(function (i, e) {
+        var $link = $(e)
+        var href = $link.attr('href')
+        var newHref = href.replace(/reason=[^&]+/, 'reason=' + encodeURI(reason))
+
+        $link.removeClass('disabled').attr('href', newHref)
+      })
+    } else {
+      $('[data-endorsement-action="' + endorsementId + '"]').each(function (i, e) {
+        $(e).addClass('disabled')
+      })
+    }
+  })
 })
