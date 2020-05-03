@@ -1,5 +1,5 @@
 ---
-title: Conclusión
+title: Reportes
 layout: articles
 category: conclusion
 guide_order: 4
