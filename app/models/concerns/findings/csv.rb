@@ -46,6 +46,7 @@ module Findings::Csv
       (finding_answers_text if self.class.show_follow_up_timestamps?),
       latest_answer_text,
       (commitment_support_plans_text if FINDING_ANSWER_COMMITMENT_SUPPORT),
+      (commitment_support_controls_text if FINDING_ANSWER_COMMITMENT_SUPPORT),
       (commitment_support_reasons_text if FINDING_ANSWER_COMMITMENT_SUPPORT),
       (commitment_date_required_level_text if FINDING_ANSWER_COMMITMENT_SUPPORT)
     ].compact
@@ -192,6 +193,24 @@ module Findings::Csv
       )
     end
 
+    def commitment_support_controls_text
+      controls = finding_answers.map do |fa|
+        cs = fa.commitment_support
+
+        if cs
+          date = I18n.l fa.created_at, format: :minimal
+
+          "[#{date}] #{fa.user.full_name}: #{cs.controls}"
+        end
+      end.compact
+
+      truncate(
+        controls.reverse.join(LINE_BREAK_REPLACEMENT),
+        length:   32767, # To go around the 32767 limit on some spreadsheets
+        omission: "[#{I18n.t('messages.truncated', count: 32767)}]"
+      )
+    end
+
     def commitment_support_reasons_text
       reasons = finding_answers.map do |fa|
         cs = fa.commitment_support
@@ -310,6 +329,7 @@ module Findings::Csv
           (I18n.t('finding.finding_answers') if show_follow_up_timestamps?),
           (I18n.t('finding.latest_answer') if show_follow_up_timestamps?),
           (I18n.t('finding.commitment_support_plans') if FINDING_ANSWER_COMMITMENT_SUPPORT),
+          (I18n.t('finding.commitment_support_controls') if FINDING_ANSWER_COMMITMENT_SUPPORT),
           (I18n.t('finding.commitment_support_reasons') if FINDING_ANSWER_COMMITMENT_SUPPORT),
           (I18n.t('finding.commitment_date_required_level_title') if FINDING_ANSWER_COMMITMENT_SUPPORT)
         ].compact
