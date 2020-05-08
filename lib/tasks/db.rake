@@ -549,5 +549,6 @@ private
   end
 
   def follow_up_audited_privilege?
-    Privilege.where(module: 'follow_up_reports_audited').empty?
+    Privilege.where(module: 'follow_up_reports_audited').empty? &&
+      Privilege.where(module: 'follow_up_reports_audit').empty?
   end
