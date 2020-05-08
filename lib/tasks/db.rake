@@ -337,7 +337,7 @@ private
   end
 
   def update_finding_parent_ids
-    if true && update_finding_parent_ids?
+    if true || update_finding_parent_ids?
       Finding.with_repeated.finals(false).find_each do |finding|
         parent_ids = []
         cursor     = finding
