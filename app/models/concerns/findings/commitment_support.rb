@@ -15,4 +15,10 @@ module Findings::CommitmentSupport
       follow_up_date < commitment_date
     end
   end
+
+  module ClassMethods
+    def show_commitment_support?
+      %w(true weak).include? FINDING_ANSWER_COMMITMENT_SUPPORT
+    end
+  end
 end

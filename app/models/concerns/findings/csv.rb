@@ -45,10 +45,10 @@ module Findings::Csv
       (last_commitment_date_text if self.class.show_follow_up_timestamps?),
       (finding_answers_text if self.class.show_follow_up_timestamps?),
       latest_answer_text,
-      (commitment_support_plans_text if FINDING_ANSWER_COMMITMENT_SUPPORT),
-      (commitment_support_controls_text if FINDING_ANSWER_COMMITMENT_SUPPORT),
-      (commitment_support_reasons_text if FINDING_ANSWER_COMMITMENT_SUPPORT),
-      (commitment_date_required_level_text if FINDING_ANSWER_COMMITMENT_SUPPORT)
+      (commitment_support_plans_text if Finding.show_commitment_support?),
+      (commitment_support_controls_text if Finding.show_commitment_support?),
+      (commitment_support_reasons_text if Finding.show_commitment_support?),
+      (commitment_date_required_level_text if Finding.show_commitment_support?)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -328,10 +328,10 @@ module Findings::Csv
           (FindingAnswer.human_attribute_name('commitment_date') if show_follow_up_timestamps?),
           (I18n.t('finding.finding_answers') if show_follow_up_timestamps?),
           (I18n.t('finding.latest_answer') if show_follow_up_timestamps?),
-          (I18n.t('finding.commitment_support_plans') if FINDING_ANSWER_COMMITMENT_SUPPORT),
-          (I18n.t('finding.commitment_support_controls') if FINDING_ANSWER_COMMITMENT_SUPPORT),
-          (I18n.t('finding.commitment_support_reasons') if FINDING_ANSWER_COMMITMENT_SUPPORT),
-          (I18n.t('finding.commitment_date_required_level_title') if FINDING_ANSWER_COMMITMENT_SUPPORT)
+          (I18n.t('finding.commitment_support_plans') if Finding.show_commitment_support?),
+          (I18n.t('finding.commitment_support_controls') if Finding.show_commitment_support?),
+          (I18n.t('finding.commitment_support_reasons') if Finding.show_commitment_support?),
+          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?)
         ].compact
       end
   end
