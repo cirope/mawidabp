@@ -98,4 +98,56 @@ jQuery(function ($) {
       attr('disabled', +$(this).val() !== enabledFor).
       val('<%= Finding.priorities[:low] %>')
   })
+
+  $(document).on('change', '[data-toggle-compliance]', function () {
+    var disabledFor = $(this).data('toggleCompliance')
+    var $compliance = $('select[name$="[compliance]"]')
+
+    if (+$(this).val() === disabledFor) {
+      $compliance.attr('disabled', true).val('no').change()
+    } else {
+      $compliance.removeAttr('disabled')
+    }
+  })
+
+  $(document).on('change', '[name$="[compliance]"]', function () {
+    $('[type="hidden"][name$="[compliance]"]').val($(this).val())
+  })
+
+  $(document).on('change', '[data-check-commitment-date-url]', function () {
+    var $commitmentDate = $(this)
+    var commitmentDate  = $commitmentDate.val()
+
+    if (commitmentDate) {
+      var commitmentParam = commitmentDate.replace(/\//g, '-')
+      var urlTemplate     = decodeURI($commitmentDate.data('checkCommitmentDateUrl'))
+      var url             = urlTemplate.replace('NEW_DATE', commitmentParam)
+
+      $commitmentDate.prop('disabled', true)
+
+      $.getScript(url).always(function () {
+        $commitmentDate.prop('disabled', false)
+      })
+    }
+  })
+
+  $(document).on('keyup', '[data-endorsement-reason]', function () {
+    var $reason       = $(this)
+    var reason        = $reason.val() || ''
+    var endorsementId = $reason.data('endorsementReason')
+
+    if (reason.trim()) {
+      $('[data-endorsement-action="' + endorsementId + '"]').each(function (i, e) {
+        var $link = $(e)
+        var href = $link.attr('href')
+        var newHref = href.replace(/reason=[^&]+/, 'reason=' + encodeURI(reason))
+
+        $link.removeClass('disabled').attr('href', newHref)
+      })
+    } else {
+      $('[data-endorsement-action="' + endorsementId + '"]').each(function (i, e) {
+        $(e).addClass('disabled')
+      })
+    }
+  })
 })

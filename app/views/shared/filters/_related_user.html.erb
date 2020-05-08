@@ -1,0 +1,24 @@
+<% group ||= nil %>
+<% hide_comments ||= nil %>
+<% check_action ||= :user_in_comments %>
+<% secondary_check_action ||= nil %>
+
+<% unless group %>
+  <div id="user_filter" class="row" <%== 'style="display: none;"' unless display %>>
+<% end %>
+  <div class="col-md-6" <%== 'style="display: none;"' unless display %>>
+    <div class="form-group row">
+      <% user_id = params[action] && params[action][:user_id] %>
+
+      <div class="col-md-4">
+        <%= f.label :user, User.model_name.human, class: 'col-form-label' %>
+      </div>
+
+      <div class="col-md-8">
+        <%= f.input :user_id, label: false, collection: @auth_user.self_and_descendants.map { |u| [u.full_name, u.id] }, selected: user_id&.to_i, prompt: true %>
+      </div>
+    </div>
+  </div>
+<% unless group %>
+  </div>
+<% end %>

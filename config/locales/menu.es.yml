@@ -61,5 +61,8 @@ es:
       complete_findings: 'Observaciones solucionadas'
       repeated_findings: 'Observaciones reiteradas'
       notifications: 'Notificaciones'
-      reports: 'Reportes'
+      reports_title: 'Reportes'
+      reports:
+        audited: 'Generales'
+        audit: 'Auditoría'
     help_title: 'Ayuda'

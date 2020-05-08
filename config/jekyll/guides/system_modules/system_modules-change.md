@@ -2,7 +2,7 @@
 title: Modificar información personal
 layout: articles
 category: system_modules
-article_order: 0.2
+article_order: 1.2
 parent: Módulos del sistema
 ---
 # Módulos del sistema

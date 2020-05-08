@@ -107,3 +107,13 @@ committee_<%= privilege %>:
   approval: true
   role: committee_role
 <% end %>
+
+<% ALLOWED_MODULES_BY_TYPE[:executive_manager].each do |privilege| %>
+executive_manager_<%= privilege %>:
+  module: <%= privilege %>
+  read: true
+  modify: true
+  erase: true
+  approval: true
+  role: executive_manager_role
+<% end %>

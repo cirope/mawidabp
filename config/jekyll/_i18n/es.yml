@@ -1,5 +1,5 @@
 app_name: 'MawidaBP Ayuda'
-app_name_html: 'MawidaBP <small>Ayuda</small>'
+app_name_html: 'MawidaBP <small><a href="/help/">Ayuda</a></small>'
 faq: 'FAQ'
 guides:
   title: 'Guías'
@@ -10,3 +10,4 @@ guides:
   follow_up: 'Seguimiento'
   planification: 'Planificación'
   tags: 'Etiquetas'
+  system_modules: 'Módulos del sistema'

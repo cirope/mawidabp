@@ -248,10 +248,10 @@
 
   <% @finding.finding_answers.each do |fa| %>
     <% if fa.persisted? %>
-      <%= render 'finding_answer', finding_answer: fa %>
+      <%= render 'findings/finding_answer', finding_answer: fa, show: true, readonly: true %>
     <% elsif params[:completion_state] == 'incomplete' %>
       <%= simple_form_for fa, url: finding_answers_path(params[:completion_state], @finding) do |f| %>
-        <%= render 'finding_answer', f: f %>
+        <%= render 'findings/finding_answer', f: f, show: true, readonly: true %>
 
         <div class="text-right">
           <%= f.submit t('finding.submit_answer'), class: 'btn btn-outline-secondary' %>

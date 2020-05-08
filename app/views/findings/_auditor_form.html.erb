@@ -55,7 +55,7 @@
         <% if @finding.kind_of?(Weakness) %>
           <%= f.input :risk, collection: risks, prompt: true, input_html: {
             autofocus: true,
-            data: SHOW_CONDENSED_PRIORITIES ? { toggle_priority: Finding.risks[:medium] } : {}
+            data: SHOW_CONDENSED_PRIORITIES ? { toggle_priority: Finding.risks[:medium], toggle_compliance: Finding::risks[:low] } : {}
           } %>
           <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES, disabled: disabled_priority(@finding, false) %>
         <% end %>
@@ -95,7 +95,11 @@
     <% if @finding.kind_of?(Weakness) && SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :compliance, collection: weakness_compliance_options, prompt: true, input_html: { data: { tag_modifier: true } } %>
+          <%= f.input :compliance, collection: weakness_compliance_options,
+                                   prompt: true,
+                                   disabled: (@finding.risk == Finding.risks[:low]),
+                                   input_html: { data: { tag_modifier: true } } %>
+          <%= f.input :compliance, as: :hidden, input_html: { id: 'finding_hidden_compliance' } %>
         </div>
       </div>
       <div class="row">
@@ -324,7 +328,7 @@
   <div id="finding_answers">
     <% @finding.finding_answers.build(user: @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
     <%= f.simple_fields_for :finding_answers do |fa_f| %>
-      <%= render 'finding_answer', f: fa_f %>
+      <%= render 'finding_answer', f: fa_f, readonly: users_readonly %>
     <% end %>
   </div>
 
