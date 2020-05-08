@@ -561,6 +561,9 @@ es:
       related: "Relacionada"
       duplicated: "Duplicada"
 
+  follow_up_audited:
+    index_title: "Reportes generales"
+
   follow_up_audit:
     index_title: "Reportes de auditoría"
     cost_analysis_title: "Análisis de costos"

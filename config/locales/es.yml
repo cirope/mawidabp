@@ -673,6 +673,17 @@
       related: "Relacionada"
       duplicated: "Duplicada"
 
+  follow_up_audited:
+    index_title: "Reportes generales"
+    weaknesses_by_user_title: "Observaciones por usuario"
+    weaknesses_by_user:
+      pdf_name: "observaciones_por_usuario.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+
   follow_up_audit:
     index_title: "Reportes de auditoría"
     cost_analysis_title: "Análisis de costos"

@@ -115,6 +115,25 @@ Rails.application.routes.draw do
   end
 
   get 'conclusion_reports', as: 'conclusion_reports', to: 'conclusion_reports#index'
+
+  get 'follow_up_audited', as: 'follow_up_audited', to: 'follow_up_audited#index'
+
+  [
+    'weaknesses_by_user',
+  ].each do |action|
+    get "follow_up_audited/#{action}",
+      as: "#{action}_follow_up_audited",
+      to: "follow_up_audited##{action}"
+  end
+
+  [
+    'create_weaknesses_by_user',
+  ].each do |action|
+    post "follow_up_audited/#{action}",
+      as: "#{action}_follow_up_audited",
+      to: "follow_up_audited##{action}"
+  end
+
   get 'follow_up_audit', as: 'follow_up_audit', to: 'follow_up_audit#index'
 
   [
