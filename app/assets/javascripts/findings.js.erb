@@ -99,6 +99,21 @@ jQuery(function ($) {
       val('<%= Finding.priorities[:low] %>')
   })
 
+  $(document).on('change', '[data-toggle-compliance]', function () {
+    var disabledFor = $(this).data('toggleCompliance')
+    var $compliance = $('select[name$="[compliance]"]')
+
+    if (+$(this).val() === disabledFor) {
+      $compliance.attr('disabled', true).val('no').change()
+    } else {
+      $compliance.removeAttr('disabled')
+    }
+  })
+
+  $(document).on('change', '[name$="[compliance]"]', function () {
+    $('[type="hidden"][name$="[compliance]"]').val($(this).val())
+  })
+
   $(document).on('change', '[data-check-commitment-date-url]', function () {
     var $commitmentDate = $(this)
     var commitmentDate  = $commitmentDate.val()
