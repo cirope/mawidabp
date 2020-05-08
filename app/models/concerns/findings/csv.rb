@@ -220,7 +220,7 @@ module Findings::Csv
           endorsements = fa.endorsements.map do |e|
             status = I18n.t "findings.endorsements.status.#{e.status}"
 
-            "#{e.user.full_name}: #{status}"
+            "#{e.user.full_name}: #{[status, e.reason].reject(&:blank?).join ' - '}"
           end.to_sentence
 
           if endorsements.present?

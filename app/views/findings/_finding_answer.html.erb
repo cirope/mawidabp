@@ -117,7 +117,7 @@
     </div>
 
     <% if !show && show_commitment_endorsement_edition?(finding_answer) %>
-      <div id="endorsements" class="mt-1">
+      <div id="endorsements-<%= finding_answer.object_id %>" class="mt-1">
         <%= f.simple_fields_for :endorsements do |e_f| %>
           <%= render 'endorsement', f: e_f, readonly: readonly %>
         <% end %>

@@ -256,7 +256,7 @@ es:
         body: 'Contenido'
         attachments: 'Adjuntos'
       endorsement:
-        reason: 'Motivo'
+        reason: 'Incluir comentario'
         status: 'Estado'
       error_record:
         data: 'Datos'
