@@ -1406,6 +1406,40 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 2.days.ago.to_date, @finding.version_closed_at
   end
 
+  test 'require commitment support' do
+    skip unless %(true).include? FINDING_ANSWER_COMMITMENT_SUPPORT
+
+    finding = findings :being_implemented_weakness
+
+    assert finding.require_commitment_support?(finding.follow_up_date + 1.day)
+    refute finding.require_commitment_support?(finding.follow_up_date)
+  end
+
+  test 'commitment date required level' do
+    finding              = findings :being_implemented_weakness
+    first_follow_up_date = finding.first_follow_up_date
+    finding_answer       = finding.finding_answers.create!(
+      answer:          'New answer',
+      user:            users(:audited),
+      commitment_date: first_follow_up_date + 10.days,
+      notify_users:    false
+    )
+
+    assert_equal :manager, finding.commitment_date_required_level
+
+    finding_answer.update_column :commitment_date, first_follow_up_date + 4.months
+
+    assert_equal :management, finding.commitment_date_required_level
+
+    finding_answer.update_column :commitment_date, first_follow_up_date + 11.months
+
+    assert_equal :ceo, finding.commitment_date_required_level
+
+    finding_answer.update_column :commitment_date, first_follow_up_date + 13.months
+
+    assert_equal :committee, finding.commitment_date_required_level
+  end
+
   private
 
     def review_codes_on_findings_by_user method

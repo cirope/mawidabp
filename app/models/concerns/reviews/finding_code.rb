@@ -10,7 +10,11 @@ module Reviews::FindingCode
   end
 
   def recode_weaknesses_by_risk
-    recode_findings weaknesses, order: [risk: :desc, review_code: :asc]
+    recode_findings weaknesses, order: [
+      risk:        :desc,
+      priority:    :desc,
+      review_code: :asc
+    ]
   end
 
   def recode_weaknesses_by_repetition_and_risk

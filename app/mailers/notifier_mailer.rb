@@ -308,4 +308,33 @@ class NotifierMailer < ActionMailer::Base
     mail to: emails,
          subject: "[#{prefix}] #{t 'notifier.new_admin_user.title'}"
   end
+
+  def new_endorsement organization_id, endorsement_id
+    @organization        = Organization.find organization_id
+    @endorsement         = Endorsement.find endorsement_id
+    Current.organization = @organization
+
+    @user           = @endorsement.user
+    @finding        = @endorsement.finding
+    @finding_answer = @endorsement.finding_answer
+    prefix          = @organization.prefix.upcase
+
+    mail to: @user.email,
+         subject: "[#{prefix}] #{t 'notifier.new_endorsement.title'}"
+  end
+
+  def endorsement_update organization_id, endorsement_id
+    @organization        = Organization.find organization_id
+    @endorsement         = Endorsement.find endorsement_id
+    Current.organization = @organization
+
+    @user           = @endorsement.user
+    @finding        = @endorsement.finding
+    @finding_answer = @endorsement.finding_answer
+    prefix          = @organization.prefix.upcase
+    users           = @finding.users - [@user]
+
+    mail to: users.map(&:email),
+         subject: "[#{prefix}] #{t 'notifier.endorsement_update.title'}"
+  end
 end

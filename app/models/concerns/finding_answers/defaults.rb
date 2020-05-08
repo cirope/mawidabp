@@ -8,6 +8,7 @@ module FindingAnswers::Defaults
   private
 
     def set_defaults
+      self.commitment_date_status ||= self.class.default_commitment_date_status
       self.notify_users = true if notify_users.nil?
     end
 end

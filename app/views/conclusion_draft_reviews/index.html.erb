@@ -1,7 +1,6 @@
-<%= render :partial => 'shared/search', :locals => {
-  :options => {},
-  :columns => @query.blank? ?
-    ConclusionDraftReview::COLUMNS_FOR_SEARCH.keys : @columns
+<%= render partial: 'shared/search', locals: {
+  options: {},
+  columns: search_columns_for_model(ConclusionDraftReview)
 } %>
 <table class="table table-sm table-striped table-hover">
   <thead id="column_headers">

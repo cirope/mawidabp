@@ -206,7 +206,7 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :plans,
         order: 4,
-        controllers: :plans,
+        controllers: [:plans, :plan_items],
         url: { controller: '/plans' }
       )
     ]
@@ -333,8 +333,25 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :reports,
         order: 5,
-        controllers: :follow_up_audit,
-        url: { controller: '/follow_up_audit' }
+        url: { controller: '/follow_up_audited' },
+        children: [
+          MenuItem.new(
+            :audited,
+            order: 1,
+            controllers: :follow_up_audited,
+            url: { controller: '/follow_up_audited' },
+            children: [
+            ]
+          ),
+          MenuItem.new(
+            :audit,
+            order: 2,
+            controllers: :follow_up_audit,
+            url: { controller: '/follow_up_audit' },
+            children: [
+            ]
+          )
+        ]
       )
     ]
   )

@@ -8,4 +8,12 @@ module ControlObjectives::Scopes
         references :best_practices
     }
   end
+
+  module ClassMethods
+    def default_order
+      reorder(
+        POSTGRESQL_ADAPTER ? { name: :asc } : { created_at: :asc }
+      )
+    end
+  end
 end

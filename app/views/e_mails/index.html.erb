@@ -1,6 +1,6 @@
 <%= render partial: 'shared/search', locals: {
   options: {},
-  columns: @query.blank? ? EMail::COLUMNS_FOR_SEARCH.keys : @columns
+  columns: search_columns_for_model(EMail)
 } %>
 
 <table class="table table-sm table-striped table-hover">

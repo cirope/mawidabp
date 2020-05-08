@@ -22,12 +22,10 @@ class RiskAssessmentsController < ApplicationController
 
   # GET /risk_assessments
   def index
-    build_search_conditions RiskAssessment
-
     @risk_assessments = RiskAssessment.list.
       includes(:period).
       references(:period).
-      where(@conditions).
+      search(**search_params).
       order(:status, :name).
       page params[:page]
   end

@@ -1,6 +1,7 @@
 <%
   finding_answer ||= f.object
   finding_answer.user ||= @auth_user
+  show = show
 %>
 <fieldset class="finding_answer">
   <hr />
@@ -14,7 +15,7 @@
     </div>
     <div class="col-md-6">
       <% if finding_answer.new_record? %>
-        <%= f.input :answer, label: false %>
+        <%= f.input :answer, label: false, input_html: { rows: 3 } %>
       <% else %>
         <%= simple_format finding_answer.answer, class: 'mb-1' %>
         <% if show_follow_up_timestamps? %>
@@ -57,11 +58,26 @@
           <br /><%= l(finding_answer.commitment_date, format: :long) %>
         <% end %>
       <% else %>
-        <% if show_commitment_date?(finding_answer) %>
-          <div class="text-left">
-            <%= f.input :commitment_date, as: :date_picker, label: false, hint:
-              FindingAnswer.human_attribute_name(:commitment_date),
-              input_html: { data: { required: true } } %>
+        <% if finding_answer.user.can_act_as_audited? %>
+          <% unless show_commitment_date?(finding_answer) %>
+            <%= link_to t('finding.show_commitment_date'), '#commitment-date', data: { toggle: 'collapse' } %>
+          <% end %>
+
+          <div id="commitment-date" class="text-left mt-1 collapse <%= 'show' if show_commitment_date?(finding_answer) %>">
+            <%= f.input :commitment_date, as: :date_picker, label: false,
+              hint: FindingAnswer.human_attribute_name(:commitment_date),
+              input_html: {
+                data: {
+                  required: show_commitment_date?(finding_answer),
+                  check_commitment_date_url: finding_commitment_path(
+                    'incomplete',
+                    finding_answer.finding,
+                    finding_answer.commitment_date&.to_s(:db) || 'NEW_DATE',
+                    index: f.options[:child_index],
+                    show: show
+                  )
+                }
+              } %>
           </div>
         <% end %>
         <%= finding_answer_notification_check(f) %>
@@ -69,4 +85,57 @@
       <% end %>
     </div>
   </div>
+
+  <% if finding_answer.new_record? %>
+    <% if finding_answer.commitment_support.present? %>
+      <%= f.simple_fields_for :commitment_support do |cs_f| %>
+        <%= render 'findings/commitments/commitment', f: cs_f %>
+      <% end %>
+    <% else %>
+      <div data-answer-commitment hidden></div>
+    <% end %>
+  <% elsif finding_answer.commitment_support.present? %>
+    <div class="row">
+      <div class="col">
+        <p class="mb-1">
+          <strong><%= t 'finding.commitment_date_required_level_title' %></strong>:
+          <%= finding_answer.finding.commitment_date_required_level_text finding_answer.commitment_date %>
+        </p>
+        <div>
+          <strong><%= CommitmentSupport.human_attribute_name 'reason' %></strong>:
+          <%= simple_format finding_answer.commitment_support.reason, class: 'mb-1' %>
+        </div>
+        <div>
+          <strong><%= CommitmentSupport.human_attribute_name 'plan' %></strong>:
+          <%= simple_format finding_answer.commitment_support.plan, class: 'mb-1' %>
+        </div>
+        <div>
+          <strong><%= CommitmentSupport.human_attribute_name 'controls' %></strong>:
+          <%= simple_format finding_answer.commitment_support.controls, class: 'mb-1' %>
+        </div>
+      </div>
+    </div>
+
+    <% if !show && show_commitment_endorsement_edition?(finding_answer) %>
+      <div id="endorsements-<%= finding_answer.object_id %>" class="mt-1">
+        <%= f.simple_fields_for :endorsements do |e_f| %>
+          <%= render 'endorsement', f: e_f, readonly: readonly %>
+        <% end %>
+
+        <%= link_to_add_fields(
+          t('finding.add_endorsement'), f, :endorsements, nil, {}, { readonly: readonly }
+        ) unless readonly %>
+      </div>
+    <% elsif finding_answer.endorsements.any? %>
+      <h5 class="my-2">
+        <strong><%= t 'finding.endorsements' %></strong>
+      </h5>
+
+      <ul>
+        <% finding_answer.endorsements.each do |endorsement| %>
+          <%= render 'endorsement_item', endorsement: endorsement, finding_answer: finding_answer %>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
 </fieldset>

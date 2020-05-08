@@ -61,5 +61,8 @@ es:
       complete_findings: 'Hallazgos solucionados'
       repeated_findings: 'Hallazgos reiterados'
       notifications: 'Notificaciones'
-      reports: 'Reportes'
+      reports_title: 'Reportes'
+      reports:
+        audited: 'Generales'
+        audit: 'Auditoría'
     help_title: 'Ayuda'

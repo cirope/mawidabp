@@ -42,8 +42,4 @@ class Findings::WorkPapersController < ApplicationController
     def set_finding_answer
       @finding_answer = @finding.finding_answers.find params[:finding_answer_id]
     end
-
-    def scoped_findings
-      current_organization.corporate? ? Finding.group_list : Finding.list
-    end
 end

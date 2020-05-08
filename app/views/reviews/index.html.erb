@@ -1,8 +1,6 @@
-<%= render :partial => 'shared/search', :locals => {
-  :options => {
-    :columns_for_sort => Review.columns_for_sort
-  },
-  :columns => @query.blank? ? (Review::COLUMNS_FOR_SEARCH.keys + ['tags']) : @columns
+<%= render partial: 'shared/search', locals: {
+  options: { columns_for_sort: Review.columns_for_sort },
+  columns: search_columns_for_model(Review)
 } %>
 <table class="table table-sm table-striped table-hover">
   <thead id="column_headers">

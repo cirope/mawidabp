@@ -2,19 +2,36 @@ module ConclusionReviews::SortColumns
   extend ActiveSupport::Concern
 
   module ClassMethods
+    def order_by column = nil
+      order_by = []
 
-    def columns_for_sort
-      ActiveSupport::HashWithIndifferentAccess.new(
-        issue_date:     issue_date_sort_options,
-        period:         period_sort_options,
-        identification: identification_sort_options
-      )
+      order_by << if column.present?
+                    columns_for_sort[column][:field]
+                  else
+                    Arel.sql "#{quoted_table_name}.#{qcn 'issue_date'} DESC"
+                  end
+
+      order_by << Arel.sql("#{quoted_table_name}.#{qcn 'created_at'} DESC")
+
+      order order_by
+    end
+
+    def order_by_column_name column
+      columns_for_sort[column]&.fetch :name, nil
     end
 
     private
 
+      def columns_for_sort
+        @_columns_for_sort ||= {
+          issue_date:     issue_date_sort_options,
+          period:         period_sort_options,
+          identification: identification_sort_options
+        }.with_indifferent_access
+      end
+
       def issue_date_sort_options
-        field = Arel.sql("#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn 'issue_date'} ASC")
+        field = Arel.sql "#{quoted_table_name}.#{qcn 'issue_date'} ASC"
 
         {
           name:  ConclusionReview.human_attribute_name(:issue_date),

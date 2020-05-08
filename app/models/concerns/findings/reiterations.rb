@@ -126,6 +126,6 @@ module Findings::Reiterations
     end
 
     def update_latest?
-      saved_change_to_repeated_of_id? && repeated_of
+      !final && saved_change_to_repeated_of_id? && repeated_of
     end
 end

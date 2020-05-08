@@ -106,7 +106,7 @@ module Reports::WeaknessesCurrentSituation
         list_with_final_review.
         finals(final).
         where(id: @permalink.permalink_models.pluck('model_id')).
-        includes(:business_unit, :business_unit_type,
+        includes(:business_unit, :business_unit_type, :latest,
           achievements: [:benefit],
           review: [:plan_item, :conclusion_final_review],
           taggings: :tag
@@ -119,7 +119,7 @@ module Reports::WeaknessesCurrentSituation
         finals(final).
         list_with_final_review.
         by_issue_date('BETWEEN', @from_date, @to_date).
-        includes(:business_unit, :business_unit_type,
+        includes(:business_unit, :business_unit_type, :latest,
           achievements: [:benefit],
           review: [:plan_item, :conclusion_final_review],
           taggings: :tag
@@ -127,6 +127,7 @@ module Reports::WeaknessesCurrentSituation
 
       if params[:weaknesses_current_situation]
         weaknesses = filter_weaknesses_current_situation_by_risk weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_priority weaknesses
         weaknesses = filter_weaknesses_current_situation_by_status weaknesses
         weaknesses = filter_weaknesses_current_situation_by_title weaknesses
         weaknesses = filter_weaknesses_current_situation_by_compliance weaknesses
@@ -144,7 +145,7 @@ module Reports::WeaknessesCurrentSituation
     def render_current_situation_report_csv
       render_or_send_by_mail(
         collection:  @weaknesses,
-        filename:    @title.downcase,
+        filename:    "#{@title.downcase}.csv",
         method_name: :current_situation_csv
       )
     end
@@ -226,6 +227,21 @@ module Reports::WeaknessesCurrentSituation
         @filters << "<b>#{Finding.human_attribute_name('risk')}</b> = \"#{risk_texts.to_sentence}\""
 
         weaknesses.by_risk risk
+      else
+        weaknesses
+      end
+    end
+
+    def filter_weaknesses_current_situation_by_priority weaknesses
+      priority = params[:weaknesses_current_situation][:priority]
+
+      if priority.present?
+        priority      = priority.to_i
+        priority_text = t "priority_types.#{Weakness.priorities.invert[priority]}"
+
+        @filters << "<b>#{Finding.human_attribute_name('priority')}</b> = \"#{priority_text}\""
+
+        weaknesses.by_priority_on_risk medium: priority
       else
         weaknesses
       end
