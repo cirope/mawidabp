@@ -30,6 +30,19 @@ APP_AUDITED_MENU_ITEMS = [
         order: 4,
         controllers: :notifications,
         url: { controller: '/notifications' }
+      ),
+      MenuItem.new(
+        :reports,
+        order: 5,
+        url: { controller: '/follow_up_audited' },
+        children: [
+          MenuItem.new(
+            :audited,
+            order: 1,
+            controllers: :follow_up_audited,
+            url: { controller: '/follow_up_audited' }
+          )
+        ]
       )
     ]
   )
