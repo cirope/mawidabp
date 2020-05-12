@@ -24,4 +24,13 @@
       <% end %>
     }
   <% end %>
+
+  var $commitmentDate         = document.querySelector('#message-commitment-date')
+  var $message                = '<%= @limit_date  %>'
+  $commitmentDate.textContent = $message
+
+  $commitmentDate.classList.remove('alert-warning')
+  if ($message) {
+    $commitmentDate.classList.add('alert-warning')
+  }
 }()
