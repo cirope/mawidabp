@@ -64,7 +64,11 @@ module Findings::Answers
     if date && first_follow_up_date
       requirements = Array(COMMITMENT_REQUIREMENTS[self.class.risks.invert[risk]])
       required     = requirements.detect do |month_number, level|
-        date <= (first_follow_up_date + month_number.months)
+        if first_follow_up_date.at_end_of_month == first_follow_up_date
+          date <= (first_follow_up_date + month_number.months).at_end_of_month
+        else
+          date <= (first_follow_up_date + month_number.months)
+        end
       end
 
       required&.last || :committee
