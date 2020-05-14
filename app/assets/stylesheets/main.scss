@@ -20,6 +20,11 @@
   display: none;
 }
 
+.form-group {
+  legend:empty {
+    display: none;
+  }
+}
 .loading-caption {
   width: 10em;
   z-index: $zindex-tooltip;

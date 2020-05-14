@@ -127,6 +127,7 @@ module Reports::WeaknessesCurrentSituation
 
       if params[:weaknesses_current_situation]
         weaknesses = filter_weaknesses_current_situation_by_risk weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_priority weaknesses
         weaknesses = filter_weaknesses_current_situation_by_status weaknesses
         weaknesses = filter_weaknesses_current_situation_by_title weaknesses
         weaknesses = filter_weaknesses_current_situation_by_compliance weaknesses
@@ -226,6 +227,21 @@ module Reports::WeaknessesCurrentSituation
         @filters << "<b>#{Finding.human_attribute_name('risk')}</b> = \"#{risk_texts.to_sentence}\""
 
         weaknesses.by_risk risk
+      else
+        weaknesses
+      end
+    end
+
+    def filter_weaknesses_current_situation_by_priority weaknesses
+      priority = params[:weaknesses_current_situation][:priority]
+
+      if priority.present?
+        priority      = priority.to_i
+        priority_text = t "priority_types.#{Weakness.priorities.invert[priority]}"
+
+        @filters << "<b>#{Finding.human_attribute_name('priority')}</b> = \"#{priority_text}\""
+
+        weaknesses.by_priority_on_risk medium: priority
       else
         weaknesses
       end

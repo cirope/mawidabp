@@ -635,6 +635,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :to_date => 10.years.from_now.to_date,
         :cut_date => 10.days.ago.to_date,
         :risk => ['', '1', '2'],
+        :priority => Finding.priorities_values.last.to_s,
         :finding_status => ['', Finding::STATUS[:being_implemented]],
         :finding_title => 'a',
         :business_unit_type => ['', business_unit_types(:cycle).id],
@@ -662,6 +663,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :to_date => 10.years.from_now.to_date,
         :cut_date => 10.days.ago.to_date,
         :risk => ['', '1', '2'],
+        :priority => Finding.priorities_values.last.to_s,
         :finding_status => ['', Finding::STATUS[:being_implemented]],
         :finding_title => 'a',
         :business_unit_type => ['', business_unit_types(:cycle).id],
@@ -769,7 +771,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :weaknesses_repeated => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
-        :weakness_tags => ['two']
+        :weakness_tags => ['two'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]]
       },
       :controller_name => 'follow_up',
       :final => false

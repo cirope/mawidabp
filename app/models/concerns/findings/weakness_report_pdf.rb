@@ -7,24 +7,13 @@ module Findings::WeaknessReportPdf
     def to_weakness_report_pdf opts
       pdf   = init_pdf opts[:title], opts[:subtitle]
       count = 0
-      page  = 1
 
-      while page
-        cursor = all.page(page).per_page 100
-
+      ChunkIterator.iterate all do |cursor|
         cursor.each do |weakness|
           add_to_weakness_report_pdf pdf, weakness
 
           count += 1
         end
-
-        # Entire flush of AR
-        ActiveRecord::Base.clear_active_connections!
-        ActiveRecord::Base.connection_pool.flush!
-
-        GC.start
-
-        page = cursor.next_page
       end
 
       add_weaknesses_count_to_pdf pdf, count

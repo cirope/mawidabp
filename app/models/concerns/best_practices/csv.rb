@@ -28,7 +28,8 @@ module BestPractices::Csv
         (Control.human_attribute_name('compliance_tests') unless HIDE_CONTROL_COMPLIANCE_TESTS),
         Control.human_attribute_name('sustantive_tests'),
         (Control.human_attribute_name('effects') unless HIDE_CONTROL_EFFECTS),
-        ControlObjective.human_attribute_name('risk')
+        ControlObjective.human_attribute_name('risk'),
+        ControlObjective.human_attribute_name('relevance')
       ].compact
     end
 
@@ -45,7 +46,8 @@ module BestPractices::Csv
             (control_objective.control.compliance_tests.to_s unless HIDE_CONTROL_COMPLIANCE_TESTS),
             control_objective.control.sustantive_tests.to_s,
             (control_objective.control.effects.to_s unless HIDE_CONTROL_EFFECTS),
-            control_objective.risk_text
+            control_objective.risk_text,
+            control_objective.relevance_text
           ].compact
         end
       end

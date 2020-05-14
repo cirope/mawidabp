@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_11_214928) do
+ActiveRecord::Schema.define(version: 2020_05_01_155921) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -176,6 +176,16 @@ ActiveRecord::Schema.define(version: 2020_02_11_214928) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
+  create_table "commitment_supports", force: :cascade do |t|
+    t.text "reason", null: false
+    t.text "plan", null: false
+    t.text "controls", null: false
+    t.bigint "finding_answer_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["finding_answer_id"], name: "index_commitment_supports_on_finding_answer_id"
+  end
+
   create_table "conclusion_reviews", id: :serial, force: :cascade do |t|
     t.string "type"
     t.integer "review_id"
@@ -235,6 +245,15 @@ ActiveRecord::Schema.define(version: 2020_02_11_214928) do
     t.index ["control_objective_id"], name: "index_control_objective_items_on_control_objective_id"
     t.index ["organization_id"], name: "index_control_objective_items_on_organization_id"
     t.index ["review_id"], name: "index_control_objective_items_on_review_id"
+  end
+
+  create_table "control_objective_projects", force: :cascade do |t|
+    t.bigint "control_objective_id", null: false
+    t.bigint "plan_item_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["control_objective_id"], name: "index_control_objective_projects_on_control_objective_id"
+    t.index ["plan_item_id"], name: "index_control_objective_projects_on_plan_item_id"
   end
 
   create_table "control_objective_weakness_template_relations", force: :cascade do |t|
@@ -315,6 +334,17 @@ ActiveRecord::Schema.define(version: 2020_02_11_214928) do
     t.integer "organization_id"
     t.index ["created_at"], name: "index_e_mails_on_created_at"
     t.index ["organization_id"], name: "index_e_mails_on_organization_id"
+  end
+
+  create_table "endorsements", force: :cascade do |t|
+    t.string "status", null: false
+    t.bigint "user_id", null: false
+    t.bigint "finding_answer_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "reason"
+    t.index ["finding_answer_id"], name: "index_endorsements_on_finding_answer_id"
+    t.index ["user_id"], name: "index_endorsements_on_user_id"
   end
 
   create_table "error_records", id: :serial, force: :cascade do |t|
@@ -416,13 +446,13 @@ ActiveRecord::Schema.define(version: 2020_02_11_214928) do
     t.text "impact", default: [], null: false, array: true
     t.text "internal_control_components", default: [], null: false, array: true
     t.bigint "weakness_template_id"
-    t.date "first_follow_up_date"
     t.date "last_notification_date"
     t.integer "reschedule_count", default: 0, null: false
     t.date "implemented_at"
     t.date "closed_at"
     t.integer "parent_ids", default: [], array: true
     t.bigint "latest_id"
+    t.date "first_follow_up_date"
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -492,6 +522,8 @@ ActiveRecord::Schema.define(version: 2020_02_11_214928) do
     t.string "encrypted_password"
     t.string "alternative_hostname"
     t.integer "alternative_port"
+    t.string "tls"
+    t.string "ca_path"
     t.index ["organization_id"], name: "index_ldap_configs_on_organization_id"
   end
 
@@ -1119,9 +1151,12 @@ ActiveRecord::Schema.define(version: 2020_02_11_214928) do
   add_foreign_key "closing_interviews", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "closing_interviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "comments", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "commitment_supports", "finding_answers", on_update: :restrict, on_delete: :restrict
   add_foreign_key "conclusion_reviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "control_objectives", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_items", "reviews", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "control_objective_projects", "control_objectives", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "control_objective_projects", "plan_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_weakness_template_relations", "control_objectives", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objective_weakness_template_relations", "weakness_templates", on_update: :restrict, on_delete: :restrict
   add_foreign_key "control_objectives", "process_controls", on_update: :restrict, on_delete: :restrict
@@ -1129,6 +1164,8 @@ ActiveRecord::Schema.define(version: 2020_02_11_214928) do
   add_foreign_key "documents", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "documents", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "documents", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "endorsements", "finding_answers", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "endorsements", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "error_records", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "error_records", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "finding_answers", "file_models", on_update: :restrict, on_delete: :restrict

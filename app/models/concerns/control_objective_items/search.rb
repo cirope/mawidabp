@@ -1,45 +1,18 @@
 module ControlObjectiveItems::Search
   extend ActiveSupport::Concern
+  include Searchable
 
   included do
-    COLUMNS_FOR_SEARCH = ActiveSupport::HashWithIndifferentAccess.new(
-      review:                 review_options,
-      process_control:        process_control_options,
-      control_objective_text: control_objective_text_options
-    )
-  end
-
-  module ClassMethods
-    private
-
-    def review_options
-      {
-        column:            "LOWER(#{Review.quoted_table_name}.#{Review.qcn('identification')})",
-        operator:          'LIKE',
-        mask:              '%%%s%%',
-        conversion_method: :to_s,
-        regexp:            /.*/
+    COLUMNS_FOR_SEARCH = {
+      review:  {
+        column: "LOWER(#{Review.quoted_table_name}.#{Review.qcn 'identification'})"
+      },
+      process_control: {
+        column: "LOWER(#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn 'name'})"
+      },
+      control_objective_text: {
+        column: "LOWER(#{quoted_table_name}.#{qcn 'control_objective_text'})"
       }
-    end
-
-    def process_control_options
-      {
-        column:            "LOWER(#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn('name')})",
-        operator:          'LIKE',
-        mask:              "%%%s%%",
-        conversion_method: :to_s,
-        regexp:            /.*/
-      }
-    end
-
-    def control_objective_text_options
-      {
-        column:            "LOWER(#{quoted_table_name}.#{qcn('control_objective_text')})",
-        operator:          'LIKE',
-        mask:              "%%%s%%",
-        conversion_method: :to_s,
-        regexp:            /.*/
-      }
-    end
+    }.with_indifferent_access
   end
 end

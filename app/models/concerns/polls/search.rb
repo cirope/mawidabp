@@ -1,25 +1,24 @@
 module Polls::Search
   extend ActiveSupport::Concern
+  include Searchable
 
   included do
-    COLUMNS_FOR_SEARCH = ActiveSupport::HashWithIndifferentAccess.new(
+    COLUMNS_FOR_SEARCH = {
       name: {
-        column: "LOWER(#{User.quoted_table_name}.#{User.qcn('name')})", operator: 'LIKE',
-        mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
+        column: "LOWER(#{User.quoted_table_name}.#{User.qcn 'name'})"
       },
       last_name: {
-        column: "LOWER(#{User.quoted_table_name}.#{User.qcn('last_name')})", operator: 'LIKE',
-        mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
+        column: "LOWER(#{User.quoted_table_name}.#{User.qcn 'last_name'})"
       },
       questionnaire_name: {
-        column: "LOWER(#{Questionnaire.quoted_table_name}.#{Questionnaire.qcn('name')})", operator: 'LIKE',
-        mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
+        column: "LOWER(#{Questionnaire.quoted_table_name}.#{Questionnaire.qcn 'name'})"
       },
       answered: {
-        column: "#{Poll.table_name}.#{Poll.qcn('answered')}", operator: '=',
-        regexp: /\Asi|no\z/i,
+        column:            "#{quoted_table_name}.#{qcn 'answered'}",
+        operator:          '=',
+        regexp:            /\Asi|no\z/i,
         conversion_method: ->(value) { value.downcase == 'si' }
       }
-    )
+    }
   end
 end

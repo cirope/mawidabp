@@ -4,6 +4,7 @@ class PlanItem < ApplicationRecord
   include ParameterSelector
   include PlanItems::AttributeTypes
   include PlanItems::Comparable
+  include PlanItems::ControlObjectives
   include PlanItems::DestroyValidation
   include PlanItems::Pdf
   include PlanItems::ResourceUtilizations

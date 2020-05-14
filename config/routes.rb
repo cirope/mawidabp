@@ -115,6 +115,25 @@ Rails.application.routes.draw do
   end
 
   get 'conclusion_reports', as: 'conclusion_reports', to: 'conclusion_reports#index'
+
+  get 'follow_up_audited', as: 'follow_up_audited', to: 'follow_up_audited#index'
+
+  [
+    'weaknesses_by_user',
+  ].each do |action|
+    get "follow_up_audited/#{action}",
+      as: "#{action}_follow_up_audited",
+      to: "follow_up_audited##{action}"
+  end
+
+  [
+    'create_weaknesses_by_user',
+  ].each do |action|
+    post "follow_up_audited/#{action}",
+      as: "#{action}_follow_up_audited",
+      to: "follow_up_audited##{action}"
+  end
+
   get 'follow_up_audit', as: 'follow_up_audit', to: 'follow_up_audit#index'
 
   [
@@ -222,7 +241,8 @@ Rails.application.routes.draw do
   scope ':completion_state', completion_state: /complete|incomplete|repeated/ do
     resources :findings, except: [:destroy] do
       resources :costs
-      resources :finding_answers, only: [:create], controller: 'findings/answers', as: 'answers'
+      resources :commitment_supports, only: [:show], controller: 'findings/commitments', as: 'commitments'
+      resources :finding_answers, only: [:create, :update], controller: 'findings/answers', as: 'answers'
       resources :work_papers, only: [:create], controller: 'findings/work_papers'
 
       get :follow_up_pdf, on: :member, to: 'findings/follow_up_pdf#show'
@@ -361,7 +381,9 @@ Rails.application.routes.draw do
   end
 
   resources :plans do
-    resources :plan_items, only: [:new, :edit]
+    resources :plan_items, only: [:show, :new, :edit, :update] do
+      get :auto_complete_for_control_objective, on: :collection
+    end
 
     member do
       get :calendar, to: 'plans/calendar#show'

@@ -277,6 +277,7 @@
       subtitle: "OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
     weaknesses_by_business_unit:
       pdf_name: "observaciones_por_ciclo_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -595,6 +596,10 @@
     next_pending_task_date: "Fecha próxima tarea pendiente"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado **%{cost}** al seguimiento de la observación"
+    commitment_support_plans: "Plan de acción"
+    commitment_support_controls: "Controles mitigantes"
+    commitment_support_reasons: "Comentario de las reprogramaciones"
+    commitment_date_required_level_title: "Nivel de aprobación requerido para la reprogramación"
     download_csv: "Descargar CSV"
     download_pdf: "Resumen en PDF"
     add_finding_relation: "Agregar relación"
@@ -602,7 +607,10 @@
     add_tagging: "Agregar etiqueta"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
+    add_endorsement: "Agregar revisor"
+    show_commitment_date: "Nueva fecha de compromiso"
     add_work_paper: "Agregar papel de trabajo"
+    endorsements: "Revisores"
     recode_tasks: "Recodificar tareas"
     create_work_paper: "Agregar como papel de trabajo"
     follow_up_date_changed_warning: "La fecha de implementación cambió para adecuarse a las tareas"
@@ -619,8 +627,8 @@
       one: "Revisor"
       other: "Revisores"
     audited:
-      one: "Auditado"
-      other: "Auditados"
+      one: "Responsable"
+      other: "Responsables"
     readonly: "La observación no puede ser creada ni modificada, ya se emitió el informe definitivo"
     responsibles:
       one: "Usuario"
@@ -631,6 +639,11 @@
     without_conclusion_final_review: "Sin informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
+    commitment_date_required_level:
+      manager: "Jefatura"
+      management: "Gerencia"
+      ceo: "CEO"
+      committee: "Comité"
     important_dates:
       title: "Fechas a considerar"
       expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día **%{date}** si ningún auditado proporciona una respuesta"
@@ -660,6 +673,17 @@
       related: "Relacionada"
       duplicated: "Duplicada"
 
+  follow_up_audited:
+    index_title: "Reportes generales"
+    weaknesses_by_user_title: "Observaciones por usuario"
+    weaknesses_by_user:
+      pdf_name: "observaciones_por_usuario.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+
   follow_up_audit:
     index_title: "Reportes de auditoría"
     cost_analysis_title: "Análisis de costos"
@@ -676,7 +700,7 @@
     weaknesses_evolution_title: "Evolución de observaciones"
     weaknesses_list_title: "Listado de observaciones"
     weaknesses_brief_title: "Resumen de observaciones pendientes"
-    weaknesses_repeated_title: "Observaciones reiteradas"
+    weaknesses_repeated_title: "Observaciones con estado según último seguimiento"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     cost_analysis:
       column_business_unit: "Unidad de negocio"
@@ -711,7 +735,7 @@
     weaknesses_evolution_title: "Evolución de observaciones"
     weaknesses_list_title: "Listado de observaciones"
     weaknesses_brief_title: "Resumen de observaciones pendientes"
-    weaknesses_repeated_title: "Observaciones reiteradas"
+    weaknesses_repeated_title: "Observaciones con estado según último seguimiento"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     detailed_report: "Reporte detallado"
     qa_indicators_title: "Indicadores de calidad"
@@ -828,6 +852,7 @@
       subtitle: "SEGUIMIENTO OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
     weaknesses_by_business_unit:
       pdf_name: "observaciones_por_ciclo_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -868,9 +893,9 @@
         one: "Una observación fue regularizada entre el %{from_date} y el %{to_date}."
         other: "%{count} observaciones fueron regularizadas entre el %{from_date} y el %{to_date}."
     weaknesses_repeated:
-      pdf_name: "observaciones_reiteradas_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_con_estado_segun_ultimo_seguimiento_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "SEGUIMIENTO DE OBSERVACIONES REITERADAS / INFORMES DEFINITIVOS"
+      subtitle: "SEGUIMIENTO DE OBSERVACIONES CON ESTADO SEGÚN ÚLTIMO SEGUIMIENTO / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       origination_year: "Año de origen"
@@ -1042,6 +1067,12 @@
       title: "Nuevo administrador"
       body_title: "Se asigno un nuevo administrador a la organización"
       body: "%{name} (%{user}) ahora es administrador"
+    new_endorsement:
+      title: "Aprobación requerida"
+      body_title: "Se ha propuesto una nueva fecha de compromiso que requiere su aprobación"
+    endorsement_update:
+      title: "Actualización de aprobación"
+      body_title: "Se actualizó el estado de la solucitud de aprobación"
     tasks_expiration_warning:
       title: "Notificación de tareas cercanas al vencimiento"
       body_title:

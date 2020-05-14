@@ -1,13 +1,17 @@
-<div id="priority_filter" <%== 'style="display: none;"' unless display %>>
-  <div class="row">
-    <div class="col-md-6">
-      <div class="form-group row">
-        <% selected = params[action] ? params[action][:priority] : nil %>
-        <%= f.label :priority, Weakness.human_attribute_name('priority'), class: 'col-md-4 col-form-label' %>
-        <div class="col-md-8">
-          <%= f.select :priority, priorities, { selected: selected, include_blank: t('helpers.select.prompt') }, class: 'form-control' %>
-        </div>
+<% group ||= nil %>
+
+<% unless group %>
+  <div id="priority_filter" class="row" <%== 'style="display: none;"' unless display %>>
+<% end %>
+  <div class="col-md-6" <%== 'style="display: none;"' unless display %>>
+    <div class="form-group row">
+      <% selected = params[action] ? params[action][:priority] : nil %>
+      <%= f.label :priority, Weakness.human_attribute_name('priority'), class: 'col-md-4 col-form-label' %>
+      <div class="col-md-8">
+        <%= f.select :priority, priorities, { selected: selected, include_blank: t('helpers.select.prompt') }, class: 'form-control' %>
       </div>
     </div>
   </div>
-</div>
+<% unless group %>
+  </div>
+<% end %>

@@ -75,8 +75,9 @@ class FindingsController < ApplicationController
           file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_answers_attributes: [
-          :answer, :user_id, :notify_users,
-          file_model_attributes: [:file, :file_cache]
+          :id, :answer, :user_id, :notify_users,
+          file_model_attributes: [:file, :file_cache],
+          endorsements_attributes: [:id, :status, :user_id, :_destroy]
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
@@ -101,7 +102,8 @@ class FindingsController < ApplicationController
         :id, :lock_version,
         finding_answers_attributes: [
           :answer, :user_id, :commitment_date, :notify_users,
-          file_model_attributes: [:file, :file_cache]
+          file_model_attributes: [:file, :file_cache],
+          commitment_support_attributes: [:id, :reason, :plan, :controls]
         ],
         costs_attributes: [
           :id, :raw_cost, :cost, :cost_type, :description, :user_id
@@ -116,16 +118,12 @@ class FindingsController < ApplicationController
       )
     end
 
-    def scoped_findings
-      current_organization.corporate? ? Finding.group_list : Finding.list
-    end
-
     def pdf
       title_partial = case params[:completion_state]
                       when'incomplete'
                         'pending'
-                      when 'rescheduled'
-                        'rescheduled'
+                      when 'repeated'
+                        'repeated'
                       else
                         'complete'
                       end

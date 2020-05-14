@@ -15,6 +15,7 @@
  *= require closing_interviews
  *= require documents
  *= require findings/answers
+ *= require findings/commitments
  *= require findings/work_papers
  *= require opening_interviews
  *= require permalinks

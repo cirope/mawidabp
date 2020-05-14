@@ -74,14 +74,21 @@ module Users::Roles
   end
 
   def can_act_as_audited?
-    audited? || executive_manager? || admin? || committee?
+    (audited? || executive_manager? || admin? || committee?) &&
+      !(auditor? || supervisor? || manager?)
   end
 
   def can_act_as_audited_on? organization_id
-    audited_on?(organization_id)             ||
+    (
+      audited_on?(organization_id)           ||
       executive_manager_on?(organization_id) ||
       admin_on?(organization_id)             ||
       committee_on?(organization_id)
+    ) && !(
+      auditor_on?(organization_id)    ||
+      supervisor_on?(organization_id) ||
+      manager_on?(organization_id)
+    )
   end
 
   def roles_has_changed?

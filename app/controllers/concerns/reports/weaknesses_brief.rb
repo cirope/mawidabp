@@ -147,7 +147,7 @@ module Reports::WeaknessesBrief
       if weakness.first_follow_up_date
         distance = (@cut_date - weakness.first_follow_up_date).days / 1.day
 
-        distance.abs.to_i > 365 ? distance.abs.to_i : nil
+        distance.to_i > 365 ? distance.to_i : nil
       end
     end
 
