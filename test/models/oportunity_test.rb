@@ -19,7 +19,7 @@ class OportunityTest < ActiveSupport::TestCase
         state: Finding::STATUS[:being_implemented],
         finding_user_assignments_attributes: {
           new_1: {
-            user_id: users(:audited).id, process_owner: false
+            user_id: users(:audited).id, process_owner: true
           },
           new_2: {
             user_id: users(:auditor).id, process_owner: false
@@ -46,7 +46,7 @@ class OportunityTest < ActiveSupport::TestCase
         state: Finding::STATUS[:being_implemented],
         finding_user_assignments_attributes: {
           new_1: {
-            user_id: users(:audited).id, process_owner: false
+            user_id: users(:audited).id, process_owner: true
           },
           new_2: {
             user_id: users(:auditor).id, process_owner: false

@@ -142,6 +142,12 @@ module Findings::Validations
     def validate_finding_user_assignments
       users = finding_user_assignments.reject(&:marked_for_destruction?).map &:user
 
+      if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+        unless finding_user_assignments.any? &:process_owner
+          errors.add :finding_user_assignments, :required
+        end
+      end
+
       unless all_roles_fullfilled_by? users.compact
         errors.add :finding_user_assignments, :invalid
       end
