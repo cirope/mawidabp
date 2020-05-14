@@ -1440,6 +1440,32 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal :committee, finding.commitment_date_required_level
   end
 
+  test 'commitment limit date message' do
+    @finding.risk           = 2
+    @finding.follow_up_date = Time.zone.today
+    commitment_date         = Time.zone.today + 13.months
+    comment_six_months      = COMMITMENT_DATE_LIMITS['reschedule']['default']['6.months']
+
+    with_follow_up_date     = Finding.commitment_date_message_for commitment_date, @finding
+
+    assert_equal with_follow_up_date, comment_six_months
+
+    comment_one_year        = COMMITMENT_DATE_LIMITS['first_date']['high']['1.year']
+    @finding.follow_up_date = nil
+    without_follow_up_date  = Finding.commitment_date_message_for commitment_date, @finding
+
+    assert_equal without_follow_up_date, comment_one_year
+
+    @finding.risk           = 0
+    @finding.follow_up_date = nil
+    commitment_date         = Time.zone.today + 13.months
+
+    without_message  = Finding.commitment_date_message_for commitment_date, @finding
+
+    assert_equal without_message, nil
+
+  end
+
   private
 
     def review_codes_on_findings_by_user method

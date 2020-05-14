@@ -35,6 +35,29 @@ module Findings::Validations
     (to_pending || to_implemented) && !has_new_comment
   end
 
+  def commitment_date_message_for commitment_date, finding
+    commitment = COMMITMENT_DATE_LIMITS
+    @message   = nil
+
+    if commitment&.fetch('limit_date') == 'true'
+      if finding.follow_up_date.blank?
+        commitment['first_date'].each do |key, value|
+          if finding.risk == RISK_TYPES[key.to_sym] && commitment_date > eval(value.keys.to_sentence).from_now.to_date
+            @message = value.values.to_sentence
+          end
+        end
+      else
+        commitment['reschedule'].each do |key, value|
+          if commitment_date > eval(value.keys.to_sentence).from_now.to_date
+            @message = value.values.to_sentence
+          end
+        end
+      end
+    end
+
+    @message
+  end
+
   private
 
     def audit_comments_should_be_present?

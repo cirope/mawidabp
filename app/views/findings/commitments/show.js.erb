@@ -25,12 +25,13 @@
     }
   <% end %>
 
-  var $commitmentDate         = document.querySelector('#message-commitment-date')
-  var $message                = '<%= @limit_date  %>'
-  $commitmentDate.textContent = $message
+  var $commitmentDate = $('[data-commitment-date-message]')
+  var $message        = '<%= @date_warning_message %>'
 
-  $commitmentDate.classList.remove('alert-warning')
+  $commitmentDate.text($message)
+  $commitmentDate.prop('hidden', true)
+
   if ($message) {
-    $commitmentDate.classList.add('alert-warning')
+    $commitmentDate.removeAttr('hidden')
   }
 }()

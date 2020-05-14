@@ -80,7 +80,7 @@
               } %>
           </div>
         <% end %>
-          <div id="message-commitment-date" class="alert"></div>
+          <div data-commitment-date-message hidden class="alert alert-warning"></div>
         <%= finding_answer_notification_check(f) %>
         <%= f.input :user_id, as: :hidden %>
       <% end %>
