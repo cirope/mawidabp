@@ -76,4 +76,37 @@ module Findings::Answers
 
     I18n.t "finding.commitment_date_required_level.#{level}" if level
   end
+
+  def commitment_date_message_for commitment_date
+    limits  = COMMITMENT_DATE_LIMITS
+    message = nil
+
+    if limits.keys.length > 0
+      if follow_up_date.blank?
+        name_risk = RISK_TYPES.key(risk).to_s
+
+        if limits['first_date']
+          message = limits_date limits['first_date'][name_risk] || limits['first_date']['default'], commitment_date
+        end
+      else
+        if limits['reschedule']
+          message = limits_date limits['reschedule']['default'], commitment_date
+        end
+      end
+    end
+
+    message
+  end
+
+  def limits_date data, commitment_date
+    message = nil
+
+    data&.each do |key, val|
+      if commitment_date > eval(key).from_now.to_date
+        message = val
+      end
+    end
+
+    message
+  end
 end

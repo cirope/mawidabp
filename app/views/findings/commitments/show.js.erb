@@ -26,12 +26,12 @@
   <% end %>
 
   var $commitmentDate = $('[data-commitment-date-message]')
-  var $message        = '<%= @date_warning_message %>'
+  var message         = '<%= j @date_warning_message %>'
 
-  $commitmentDate.text($message)
+  $commitmentDate.text(message)
   $commitmentDate.prop('hidden', true)
 
-  if ($message) {
+  if (message) {
     $commitmentDate.removeAttr('hidden')
   }
 }()

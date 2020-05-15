@@ -10,6 +10,6 @@ class Findings::CommitmentsController < ApplicationController
   def show
     @index                = params[:index].to_i
     @commitment_date      = Timeliness.parse params[:id], :date
-    @date_warning_message = Finding.commitment_date_message_for @commitment_date, @finding
+    @date_warning_message = @finding.commitment_date_message_for @commitment_date
   end
 end
