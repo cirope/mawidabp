@@ -1441,6 +1441,8 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'commitment limit date message' do
+    skip if COMMITMENT_DATE_LIMITS
+
     @finding.risk           = 2
     @finding.follow_up_date = Time.zone.today
     commitment_date         = Time.zone.today + 13.months
@@ -1462,7 +1464,7 @@ class FindingTest < ActiveSupport::TestCase
 
     without_message  = @finding.commitment_date_message_for commitment_date
 
-    assert_equal without_message, nil
+    assert_nil without_message
 
   end
 

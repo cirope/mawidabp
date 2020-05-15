@@ -81,32 +81,31 @@ module Findings::Answers
     limits  = COMMITMENT_DATE_LIMITS
     message = nil
 
-    if limits.keys.length > 0
-      if follow_up_date.blank?
+    if limits.present?
         name_risk = RISK_TYPES.key(risk).to_s
 
-        if limits['first_date']
-          message = limits_date limits['first_date'][name_risk] || limits['first_date']['default'], commitment_date
+      if follow_up_date.blank?
+        if (date_limits = limits['first_date'])
+          message = commitment_message_for date_limits[name_risk] || date_limits['default'], commitment_date
         end
       else
-        if limits['reschedule']
-          message = limits_date limits['reschedule']['default'], commitment_date
+        if (date_limits = limits['reschedule'])
+          message = commitment_message_for date_limits[name_risk] || date_limits['default'], commitment_date
         end
       end
     end
 
     message
   end
+  private
 
-  def limits_date data, commitment_date
-    message = nil
+    def commitment_message_for rules, commitment_date
+      result = nil
 
-    data&.each do |key, val|
-      if commitment_date > eval(key).from_now.to_date
-        message = val
+      Array(rules).each do |limit, message|
+        result = message if commitment_date > eval(limit).from_now.to_date
       end
-    end
 
-    message
-  end
+      result
+    end
 end
