@@ -97,6 +97,7 @@ module Findings::Answers
 
     message
   end
+
   private
 
     def commitment_message_for rules, commitment_date

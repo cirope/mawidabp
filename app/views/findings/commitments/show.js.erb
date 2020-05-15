@@ -27,7 +27,7 @@
 
   var $commitmentDate = $('[data-commitment-date-message]')
 
-  <% if @date_warning_message %>
+  <% if @date_warning_message.present? %>
     var message = '<%= j @date_warning_message %>'
 
     $commitmentDate.text(message)

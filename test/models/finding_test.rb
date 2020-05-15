@@ -1441,9 +1441,9 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'commitment limit date message' do
-    skip if COMMITMENT_DATE_LIMITS
+    skip if COMMITMENT_DATE_LIMITS.blank?
 
-    @finding.risk           = 2
+    @finding.risk           = Finding.risks[:high]
     @finding.follow_up_date = Time.zone.today
     commitment_date         = Time.zone.today + 13.months
     comment_six_months      = COMMITMENT_DATE_LIMITS['reschedule']['default']['6.months']
@@ -1458,14 +1458,13 @@ class FindingTest < ActiveSupport::TestCase
 
     assert_equal without_follow_up_date, comment_one_year
 
-    @finding.risk           = 0
+    @finding.risk           = Finding.risks[:low]
     @finding.follow_up_date = nil
     commitment_date         = Time.zone.today + 13.months
 
     without_message  = @finding.commitment_date_message_for commitment_date
 
     assert_nil without_message
-
   end
 
   private
