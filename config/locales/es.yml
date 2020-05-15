@@ -627,12 +627,12 @@
       one: "Revisor"
       other: "Revisores"
     audited:
-      one: "Responsable"
-      other: "Responsables"
+      one: "Auditado"
+      other: "Auditados"
     readonly: "La observación no puede ser creada ni modificada, ya se emitió el informe definitivo"
     responsibles:
-      one: "Usuario"
-      other: "Usuarios"
+      one: "Responsable"
+      other: "Responsables"
     send_notification: "¿Notificar?"
     status_change_history: "Historial de cambios de estado"
     view_completed: "Ver implementadas"
