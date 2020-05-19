@@ -155,7 +155,7 @@ module Findings::Csv
 
     def last_commitment_date_text
       commitment_date = finding_answers.map(&:commitment_date).compact.sort.last
-      date            = if %w(week true).include? FINDING_ANSWER_COMMITMENT_SUPPORT
+      date            = if %w(weak true).include? FINDING_ANSWER_COMMITMENT_SUPPORT
                           commitment_date
                         elsif follow_up_date && commitment_date
                           follow_up_date <= commitment_date ? commitment_date : nil
