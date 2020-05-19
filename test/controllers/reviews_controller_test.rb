@@ -228,6 +228,7 @@ class ReviewsControllerTest < ActionController::TestCase
                 best_practice_ids: [best_practices(:bcra_A4609).id],
                 process_control_ids: [process_controls(:security_management).id],
                 control_objective_ids: [control_objectives(:security_policy_3_1).id],
+                control_objective_tag_ids: [tags(:risk_evaluation).id],
                 file_model_attributes: {
                   file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
                 },
@@ -755,6 +756,54 @@ class ReviewsControllerTest < ActionController::TestCase
       q: 'impor',
       completion_state: 'incomplete',
       kind: 'finding'
+    }, as: :json
+
+    assert_response :success
+
+    response_tags = ActiveSupport::JSON.decode @response.body
+
+    assert_equal 0, response_tags.size
+  end
+
+  test 'auto complete for control objective tag' do
+    login
+
+    get :auto_complete_for_tagging, xhr: true, params: {
+      q: 'risk evaluation',
+      kind: 'control_objective'
+    }, as: :json
+    assert_response :success
+
+    response_tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, response_tags.size
+    assert response_tags.all? { |t| t['label'].match /risk evaluation/i }
+  end
+
+  test 'auto complete for unknown control objective tag' do
+    login
+
+    get :auto_complete_for_tagging, xhr: true, params: {
+      q: 'x_none',
+      kind: 'control_objetive'
+    }, as: :json
+    assert_response :success
+
+    response_tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, response_tags.size # Sin resultados
+  end
+
+  test 'auto complete for obsolete control objective tag' do
+    login
+
+    tag = tags :risk_evaluation
+
+    tag.update! obsolete: true
+
+    get :auto_complete_for_tagging, params: {
+      q: 'impor',
+      kind: 'control_objective'
     }, as: :json
 
     assert_response :success
