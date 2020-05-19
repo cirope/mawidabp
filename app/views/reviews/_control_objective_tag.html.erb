@@ -1,6 +1,6 @@
 <% id = f.object.object_id %>
 
-<fieldset class="tagging">
+<fieldset class="control_objective_tag">
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
@@ -13,7 +13,7 @@
           autofocus: true,
           data: {
             autocomplete_params: { kind: 'control_objective' },
-            autocomplete_url: url_for([:auto_complete_for_tagging, BestPractice]),
+            autocomplete_url: url_for([:auto_complete_for_tagging, Review]),
             autocomplete_id_target: "#hidden_control_objective_tag_#{id}"
           }
         } %>

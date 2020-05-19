@@ -26,7 +26,7 @@ module Reviews::ControlObjectiveItems
   end
 
   def control_objective_tag_ids= control_objective_tag_ids
-    objective_tags =
+    control_objectives =
       ControlObjective
         .includes(:tags)
         .references(:tags)
@@ -35,7 +35,7 @@ module Reviews::ControlObjectiveItems
           id: control_objective_tag_ids
         })
 
-    Array(objective_tags).uniq.each do |control_objective|
+    Array(control_objectives).uniq.each do |control_objective|
       add_control_objective_item_from control_objective
     end
   end
