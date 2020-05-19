@@ -422,7 +422,8 @@ class ReviewsController < ApplicationController
         ],
         control_objective_ids: [],
         process_control_ids: [],
-        best_practice_ids: []
+        best_practice_ids: [],
+        control_objective_tag_ids: []
       )
     end
 

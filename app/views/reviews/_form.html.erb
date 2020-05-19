@@ -203,7 +203,7 @@
   <% end %>
 
   <% unless readonly %>
-    <ul class="nav nav-tabs mt-3">
+    <ul class="nav nav-tabs mt-4">
       <li class="nav-item">
         <a class="nav-link active" href="#control-objective" data-toggle="tab">
           <%= ControlObjective.model_name.human %>
@@ -219,9 +219,14 @@
           <%= BestPractice.model_name.human %>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#control-objective-tag" data-toggle="tab">
+          <%= t('review.control_objective_tag') %>
+        </a>
+      </li>
     </ul>
 
-    <div class="tab-content pt-3">
+    <div class="tab-content pt-4">
       <div class="tab-pane active" id="control-objective">
         <div id="control_objectives">
           <%= link_to_add_fields(
@@ -243,6 +248,11 @@
           <%= link_to_add_fields(
             t('review.add_best_practice'), f, :control_objective_items, 'best_practice'
           ) %>
+        </div>
+      </div>
+      <div class="tab-pane" id="control-objective-tag">
+        <div id="control_objective_tags">
+          <%= link_to_add_fields t('review.add_control_objective_tag'), f, :control_objective_items, 'control_objective_tag' %>
         </div>
       </div>
     </div>
