@@ -206,11 +206,12 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'create review' do
-    expected_coi_count = ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION ? 5 : 3
+    expected_coi_count = ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION ? 6 : 3
 
     login
     assert_difference ['Review.count', 'FindingReviewAssignment.count', 'Tagging.count'] do
-      # Se crean 2 con 'best_practice_ids', 2 con 'process_control_ids' y uno con 'control_objective_ids'
+      # Se crean 2 con 'best_practice_ids', 2 con 'process_control_ids',
+      # 1 con 'control_objective_ids' y 1 con 'objective control tag'
       assert_difference 'ControlObjectiveItem.count', expected_coi_count do
         assert_difference 'FileModel.count' do
           assert_difference 'ReviewUserAssignment.count', 4 do
