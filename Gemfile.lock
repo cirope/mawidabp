@@ -339,7 +339,7 @@ DEPENDENCIES
   pg
   prawn
   prawn-table
-  rails (~> 6.0.3)
+  rails (~> 6.0.3.1)
   rails-controller-testing
   redcarpet
   responders
