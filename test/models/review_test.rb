@@ -615,7 +615,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.control_objective_items.present?
 
     if ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION
-      assert_difference '@review.control_objective_items.size', 2 do
+      assert_difference '@review.control_objective_items.size', 1 do
         @review.control_objective_tag_ids = [
           tags(:risk_evaluation).id
         ]
