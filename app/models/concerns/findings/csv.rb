@@ -48,7 +48,7 @@ module Findings::Csv
       (commitment_support_plans_text if Finding.show_commitment_support?),
       (commitment_support_controls_text if Finding.show_commitment_support?),
       (commitment_support_reasons_text if Finding.show_commitment_support?),
-      (commitment_date_required_level_text if show_commitment_date_required_level_text)
+      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -57,16 +57,6 @@ module Findings::Csv
   end
 
   private
-
-    def show_commitment_date_required_level_text
-      state = I18n.t('findings.state.being_implemented')
-
-      if (Finding.show_commitment_support?) && (%W(#{state}).include? full_state_text)
-        return true
-      end
-
-      false
-    end
 
     def issue_date_text
       issue_date ? I18n.l(issue_date, format: :minimal) : '-'
