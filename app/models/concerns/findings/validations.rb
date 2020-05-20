@@ -34,7 +34,6 @@ module Findings::Validations
 
     (to_pending || to_implemented) && !has_new_comment
   end
-
   private
 
     def audit_comments_should_be_present?
