@@ -48,7 +48,7 @@ module Findings::Csv
       (commitment_support_plans_text if Finding.show_commitment_support?),
       (commitment_support_controls_text if Finding.show_commitment_support?),
       (commitment_support_reasons_text if Finding.show_commitment_support?),
-      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented)
+      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?)
     ].compact
 
     row.unshift organization.prefix if corporate
