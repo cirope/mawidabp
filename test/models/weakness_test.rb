@@ -30,7 +30,7 @@ class WeaknessTest < ActiveSupport::TestCase
         internal_control_components: ['risk_evaluation', 'monitoring'],
         finding_user_assignments_attributes: {
           new_1: {
-            user_id: users(:audited).id, process_owner: false
+            user_id: users(:audited).id, process_owner: true
           },
           new_2: {
             user_id: users(:auditor).id, process_owner: false
@@ -76,7 +76,7 @@ class WeaknessTest < ActiveSupport::TestCase
         internal_control_components: ['risk_evaluation', 'monitoring'],
         finding_user_assignments_attributes: {
           new_1: {
-            user_id: users(:audited).id, process_owner: false
+            user_id: users(:audited).id, process_owner: true
           },
           new_2: {
             user_id: users(:auditor).id, process_owner: false

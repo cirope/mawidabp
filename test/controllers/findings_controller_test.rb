@@ -322,6 +322,7 @@ class FindingsControllerTest < ActionController::TestCase
     difference_counts = [
       'WorkPaper.count',
       'FindingAnswer.count',
+      'Endorsement.count',
       'Cost.count',
       'FindingRelation.count',
       'Task.count',
@@ -329,7 +330,8 @@ class FindingsControllerTest < ActionController::TestCase
       'Tagging.count'
     ]
 
-    assert_enqueued_emails 1 do
+    # One email on the answer, the other on the endorsement
+    assert_enqueued_emails 2 do
       assert_difference difference_counts do
         assert_difference 'FileModel.count', 2 do
           patch :update, params: {
@@ -382,16 +384,21 @@ class FindingsControllerTest < ActionController::TestCase
                   }
                 }
               ],
-              finding_answers_attributes: [
-                {
+              finding_answers_attributes: {
+                '0' => {
                   answer: 'New answer',
                   user_id: users(:supervisor).id,
                   notify_users: '1',
                   file_model_attributes: {
                     file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
+                  },
+                  endorsements_attributes: {
+                    '0' => {
+                      user_id: users(:administrator).id
+                    }
                   }
                 }
-              ],
+              },
               finding_relations_attributes: [
                 {
                   description: 'Duplicated',

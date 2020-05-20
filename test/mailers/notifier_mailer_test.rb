@@ -440,4 +440,27 @@ class NotifierMailerTest < ActionMailer::TestCase
     refute ActionMailer::Base.deliveries.empty?
     assert_not_includes response.to, user.email
   end
+
+  test 'new endorsement' do
+    endorsement  = endorsements :reschedule
+    organization = endorsement.organization
+    user         = endorsement.user
+
+    response = NotifierMailer.new_endorsement(organization.id, endorsement.id).deliver_now
+
+    refute ActionMailer::Base.deliveries.empty?
+    assert_includes response.to, user.email
+  end
+
+  test 'endorsement update' do
+    endorsement  = endorsements :reschedule
+    organization = endorsement.organization
+    user         = endorsement.user
+    users        = endorsement.finding.users - [user]
+
+    response = NotifierMailer.endorsement_update(organization.id, endorsement.id).deliver_now
+
+    refute ActionMailer::Base.deliveries.empty?
+    assert_equal response.to.sort, users.map(&:email).sort
+  end
 end

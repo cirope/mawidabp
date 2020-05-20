@@ -89,6 +89,12 @@ Mejoramos la funcionalidad, incorporando "Etiquetas" para “objetivos de contro
 
 De esta manera, una etiqueta "normal" de objetivo de control que se utilice en una buena práctica compartida queda automáticamente compartida
 
+<hr>
+
+&nbsp;
+
+&nbsp;
+
 **Administración -> Buenas prácticas**
 
 Para lograr esto, primero en "Administracion" -> "Etiquetas”, debemos crear etiquetas seleccionando “Nueva etiqueta”, para Objetivos de control.

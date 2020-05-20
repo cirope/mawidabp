@@ -1,0 +1,40 @@
+<li>
+  <% if @finding.being_implemented? && endorsement.pending? && endorsement.user == @auth_user %>
+    <%= endorsement.user.full_name %>
+
+    <span class="mx-1 badge badge-<%= finding_endorsement_class endorsement %>" data-endorsement-status="<%= endorsement.id %>">
+      <%= t "findings.endorsements.status.#{endorsement.status}" %>
+    </span>
+
+    <span class="text-muted" data-endorsement-text="<%= endorsement.id %>"></span>
+
+    <span class="form-inline d-inline" data-endorsement-link="<%= endorsement.id %>">
+      <% approve_path = finding_answer_path params[:completion_state], @finding, finding_answer, reason: 'NEW_REASON', approve: true %>
+      <% reject_path  = finding_answer_path params[:completion_state], @finding, finding_answer, reason: 'NEW_REASON' %>
+      <% data_attrs   = { remote: true, endorsement_action: endorsement.id, method: :patch, confirm: t('messages.confirmation') } %>
+
+      <textarea class="form-control form-control-sm ml-2"
+                name="endorsement_reason"
+                rows="1"
+                placeholder="<%= Endorsement.human_attribute_name 'reason' %>"
+                data-endorsement-reason="<%= endorsement.id %>"></textarea>
+
+      <%= link_to approve_path, class: 'btn btn-sm btn-success ml-2 disabled', data: data_attrs do %>
+        <%= t '.approve' %>
+      <% end %>
+      <%= link_to reject_path, class: 'btn btn-sm btn-danger ml-1 disabled', data: data_attrs do %>
+        <%= t '.reject' %>
+      <% end %>
+    </span>
+  <% else %>
+    <%= endorsement.user.full_name %>
+
+    <span class="mx-1 badge badge-<%= finding_endorsement_class endorsement %>">
+      <%= t "findings.endorsements.status.#{endorsement.status}" %>
+    </span>
+
+    <span class="text-muted">
+      <%= endorsement.reason %>
+    </span>
+  <% end %>
+</li>

@@ -122,7 +122,12 @@ class ReviewUserAssignment < ApplicationRecord
 
           finding.avoid_changes_notification = true
 
-          finding.finding_user_assignments.build user_id: new_user.id
+          finding.finding_user_assignments.build(
+            user_id: new_user.id,
+            process_owner: fua.process_owner,
+            responsible_auditor: fua.responsible_auditor
+          )
+
           fua.mark_for_destruction
 
           unconfirmed_findings << finding if finding.unconfirmed?

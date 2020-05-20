@@ -17,8 +17,12 @@ module Findings::SetFinding
       @finding.finding_prefix = true
     end
 
+    def scoped_findings
+      current_organization.corporate? ? Finding.group_list : Finding.list
+    end
+
     def find_finding_conditions
-      conditions = { id: params[:id] || params[:finding_id], final: false }
+      conditions = { id: params[:finding_id] || params[:id], final: false }
 
       if scope_current_user_findings?
         user_ids = @auth_user.self_and_descendants.map(&:id) +

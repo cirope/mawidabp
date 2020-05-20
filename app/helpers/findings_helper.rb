@@ -173,9 +173,25 @@ module FindingsHelper
   end
 
   def show_commitment_date? finding_answer
-    finding_answer.user.can_act_as_audited? &&
+    finding_answer.commitment_date.present? || (
+      finding_answer.user.can_act_as_audited?  &&
       finding_answer.requires_commitment_date? &&
       !current_organization.corporate?
+    )
+  end
+
+  def show_commitment_endorsement_edition? finding_answer
+    !@auth_user.can_act_as_audited? && finding_answer.finding.being_implemented?
+  end
+
+  def finding_endorsement_class endorsement
+    if endorsement.pending?
+      'secondary'
+    elsif endorsement.approved?
+      'success'
+    else
+      'danger'
+    end
   end
 
   def finding_description_label
