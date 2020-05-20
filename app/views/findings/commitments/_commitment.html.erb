@@ -17,7 +17,9 @@
 
       <p class="mb-1">
         <strong><%= t 'finding.commitment_date_required_level_title' %></strong>:
-        <%= @finding.commitment_date_required_level_text commitment_date %>
+        <span data-commitment-date-level>
+          <%= @finding.commitment_date_required_level_text commitment_date %>
+        </span>
       </p>
 
       <%= f.input :reason, input_html: { data: { autofocus: true } } %>
