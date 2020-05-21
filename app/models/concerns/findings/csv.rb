@@ -47,7 +47,7 @@ module Findings::Csv
       (commitment_support_plans_text if Finding.show_commitment_support?),
       (commitment_support_controls_text if Finding.show_commitment_support?),
       (commitment_support_reasons_text if Finding.show_commitment_support?),
-      (commitment_date_required_level_text if Finding.show_commitment_support?)
+      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -157,8 +157,10 @@ module Findings::Csv
     end
 
     def last_commitment_date_text
-      commitment_date = finding_answers.map(&:commitment_date).compact.sort.last
-      date            = if follow_up_date && commitment_date
+      commitment_date = finding_answers.reverse.detect(&:commitment_date)&.commitment_date
+      date            = if %w(weak true).include? FINDING_ANSWER_COMMITMENT_SUPPORT
+                          commitment_date
+                        elsif follow_up_date && commitment_date
                           follow_up_date <= commitment_date ? commitment_date : nil
                         elsif follow_up_date.blank?
                           commitment_date

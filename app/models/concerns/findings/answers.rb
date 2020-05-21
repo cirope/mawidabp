@@ -54,7 +54,7 @@ module Findings::Answers
   def last_commitment_date
     finding_answers.
       where.not(commitment_date: nil).
-      reorder(commitment_date: :desc).
+      reorder(created_at: :desc).
       first&.commitment_date
   end
 
@@ -80,4 +80,37 @@ module Findings::Answers
 
     I18n.t "finding.commitment_date_required_level.#{level}" if level
   end
+
+  def commitment_date_message_for commitment_date
+    limits  = COMMITMENT_DATE_LIMITS
+    message = nil
+
+    if limits.present?
+        name_risk = RISK_TYPES.key(risk).to_s
+
+      if follow_up_date.blank?
+        if (date_limits = limits['first_date'])
+          message = commitment_message_for date_limits[name_risk] || date_limits['default'], commitment_date
+        end
+      else
+        if (date_limits = limits['reschedule'])
+          message = commitment_message_for date_limits[name_risk] || date_limits['default'], commitment_date
+        end
+      end
+    end
+
+    message
+  end
+
+  private
+
+    def commitment_message_for rules, commitment_date
+      result = nil
+
+      Array(rules).each do |limit, message|
+        result = message if commitment_date > eval(limit).from_now.to_date
+      end
+
+      result
+    end
 end
