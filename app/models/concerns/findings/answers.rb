@@ -54,7 +54,7 @@ module Findings::Answers
   def last_commitment_date
     finding_answers.
       where.not(commitment_date: nil).
-      reorder(commitment_date: :desc).
+      reorder(created_at: :desc).
       first&.commitment_date
   end
 

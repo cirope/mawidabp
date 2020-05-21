@@ -2,8 +2,8 @@ module Reviews::ControlObjectiveItems
   extend ActiveSupport::Concern
 
   included do
-    attr_reader   :control_objective_ids, :process_control_ids, :best_practice_ids
-    attr_accessor :control_objective_data, :process_control_data, :best_practice_data
+    attr_reader   :control_objective_ids, :process_control_ids, :best_practice_ids, :control_objective_tag_ids
+    attr_accessor :control_objective_data, :process_control_data, :best_practice_data, :control_objetive_tag_data
 
     has_many :control_objective_items, dependent: :destroy,
       after_add: :assign_review, inverse_of: :review
@@ -22,6 +22,21 @@ module Reviews::ControlObjectiveItems
           add_control_objective_item_from control_objective
         end
       end
+    end
+  end
+
+  def control_objective_tag_ids= control_objective_tag_ids
+    control_objectives =
+      ControlObjective
+      .includes(:tags)
+      .references(:tags)
+      .list
+      .where(tags: {
+        id: control_objective_tag_ids
+    })
+
+    Array(control_objectives).uniq.each do |control_objective|
+      add_control_objective_item_from control_objective
     end
   end
 
