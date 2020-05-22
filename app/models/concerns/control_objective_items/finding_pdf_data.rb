@@ -5,7 +5,7 @@ module ControlObjectiveItems::FindingPdfData
     body = ''
 
     body << get_initial_finding_attributes(finding, hide, show, custom_labels)
-    body << get_weakness_attributes(finding, hide, custom_labels)
+    body << get_weakness_attributes(finding, hide, custom_labels) if finding.kind_of?(Weakness)
     body << get_finding_answer(finding, custom_labels)
     body << get_audited_data(finding, hide, custom_labels)
     body << get_late_finding_attributes(finding, show, custom_labels)
