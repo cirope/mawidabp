@@ -4,6 +4,7 @@ module ConclusionReviews::CroPdf
   def cro_pdf organization = nil, *args
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait,
+      footer: false,
       hide_brand: true,
       margins:    [35, 20, 20, 25]
 
@@ -22,7 +23,7 @@ module ConclusionReviews::CroPdf
       put_first_page_header  pdf, organization
       put_other_pages_header pdf, organization
 
-      pdf.add_page_footer
+      pdf.add_page_footer font_size = 10, skip_first_page = true
     end
 
     def put_cro_cover_on pdf, organization
@@ -137,13 +138,16 @@ module ConclusionReviews::CroPdf
 
       if review.finding_review_assignments.any?
         repeated_findings = review.finding_review_assignments.map do |fra|
-          finding = fra.finding
-          coi     = finding.control_objective_item
+          finding     = fra.finding
+          coi         = finding.control_objective_item
+          hide        = %w(audit_comments title review_code state)
+          change_name = %w(origination_date risk effect audit_recommendations answer user_ids)
+          show        = %w(current_situation)
 
           pdf.move_down PDF_FONT_SIZE
           pdf.text coi.finding_pdf_data(
-            finding, show: %w(review), hide: %(audit_comments)
-          ), align: :justify, inline_format: true
+            finding, show: show, hide: hide,
+            change_name: change_name), align: :justify, inline_format: true
         end
       else
         pdf.move_down PDF_FONT_SIZE
@@ -233,15 +237,16 @@ module ConclusionReviews::CroPdf
               findings = coi_findings.not_revoked.sort_for_review
 
               findings.each do |f|
-                hide = %w(audit_comments)
+                hide        = %w(audit_comments title review_code state)
+                change_name = %w(risk effect audit_recommendations answer user_ids follow_up_date)
 
                 if f.origination_date && review.period.contains?(f.origination_date)
                   hide << 'origination_date'
                 end
 
                 pdf.move_down PDF_FONT_SIZE
-                pdf.text coi.finding_pdf_data(f, hide: hide), align: :justify,
-                  inline_format: true
+                pdf.text coi.finding_pdf_data(f, hide: hide,
+                  change_name: change_name), align: :justify, inline_format: true
               end
             end
           end
