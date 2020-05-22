@@ -54,6 +54,9 @@ es:
         user_ids: "Responsable del comentario"
         origination_date: "Origen"
         estimated_follow_up_date: "Fecha estimada de solución"
+        new_description: "Nuevo comentario de la entidad"
+        new_estimated_follow_up_date: "Nueva fecha estimada de solución"
+
       follow_up:
         empty: "Sin observaciones de seguimiento en informes anteriores."
       weakness:

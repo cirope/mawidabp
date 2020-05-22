@@ -137,17 +137,29 @@ module ConclusionReviews::CroPdf
       put_cro_section_dest_on pdf, 'follow_up'
 
       if review.finding_review_assignments.any?
-        repeated_findings = review.finding_review_assignments.map do |fra|
-          finding     = fra.finding
-          coi         = finding.control_objective_item
-          hide        = %w(audit_comments title review_code state)
-          change_name = %w(origination_date risk effect audit_recommendations answer user_ids)
-          show        = %w(current_situation)
+        review.finding_review_assignments.map do |fra|
+          finding       = fra.finding
+          coi           = finding.control_objective_item
+          hide          = %w(audit_comments title review_code state)
+          show          = %w(current_situation)
+          custom_labels = {
+            'origination_date': I18n.t('conclusion_review.cro.findings.origination_date'),
+            'risk': I18n.t('conclusion_review.cro.weakness.risk'),
+            'effect': I18n.t('conclusion_review.cro.weakness.effect'),
+            'audit_recommendations': I18n.t('conclusion_review.cro.weakness.audit_recommendations'),
+            'answer': I18n.t('conclusion_review.cro.findings.answer'),
+            'user_ids': I18n.t('conclusion_review.cro.findings.user_ids'),
+            'follow_up_date': I18n.t('conclusion_review.cro.findings.estimated_follow_up_date')
+          }
 
           pdf.move_down PDF_FONT_SIZE
           pdf.text coi.finding_pdf_data(
             finding, show: show, hide: hide,
-            change_name: change_name), align: :justify, inline_format: true
+            custom_labels: custom_labels), align: :justify, inline_format: true
+
+            if finding.repeated_in
+              pdf.text coi.put_cro_new_observations(finding), align: :justify, inline_format: true
+            end
         end
       else
         pdf.move_down PDF_FONT_SIZE
@@ -237,8 +249,16 @@ module ConclusionReviews::CroPdf
               findings = coi_findings.not_revoked.sort_for_review
 
               findings.each do |f|
-                hide        = %w(audit_comments title review_code state)
-                change_name = %w(risk effect audit_recommendations answer user_ids follow_up_date)
+                hide          = %w(audit_comments title review_code state repeated)
+                custom_labels = {
+                  'origination_date': I18n.t('conclusion_review.cro.findings.origination_date'),
+                  'risk': I18n.t('conclusion_review.cro.weakness.risk'),
+                  'effect': I18n.t('conclusion_review.cro.weakness.effect'),
+                  'audit_recommendations': I18n.t('conclusion_review.cro.weakness.audit_recommendations'),
+                  'answer': I18n.t('conclusion_review.cro.findings.answer'),
+                  'user_ids': I18n.t('conclusion_review.cro.findings.user_ids'),
+                  'follow_up_date': I18n.t('conclusion_review.cro.findings.estimated_follow_up_date')
+                }
 
                 if f.origination_date && review.period.contains?(f.origination_date)
                   hide << 'origination_date'
@@ -246,7 +266,7 @@ module ConclusionReviews::CroPdf
 
                 pdf.move_down PDF_FONT_SIZE
                 pdf.text coi.finding_pdf_data(f, hide: hide,
-                  change_name: change_name), align: :justify, inline_format: true
+                  custom_labels: custom_labels), align: :justify, inline_format: true
               end
             end
           end

@@ -261,14 +261,14 @@ module Prawn
       end
 
       def add_page_footer(font_size = 10, skip_first_page = false)
-        skip_first_page ?  pages = lambda { |pg| pg > 1 } : pages = :all
+        pages = skip_first_page ? -> (page) { page > 1 } : :all
 
         self.repeat pages, :dynamic =>  true do
           self.canvas do
             right_margin = self.page.margins[:right]
-            string       = I18n.t('pdf.page_pattern', :page => self.page_number,
+            string = I18n.t('pdf.page_pattern', :page => self.page_number,
               :total => self.page_count)
-            x            = self.bounds.right - self.width_of(string) - right_margin
+            x = self.bounds.right - self.width_of(string) - right_margin
 
             self.draw_text string, :at => [x, (font_size.pt * 2)],
               :size => font_size
