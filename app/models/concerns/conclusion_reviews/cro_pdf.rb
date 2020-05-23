@@ -1,12 +1,22 @@
 module ConclusionReviews::CroPdf
   extend ActiveSupport::Concern
 
+    CUSTOM_LABELS = {
+     'origination_date':      I18n.t('conclusion_review.cro.findings.origination_date'),
+     'risk':                  I18n.t('conclusion_review.cro.weakness.risk'),
+     'effect':                I18n.t('conclusion_review.cro.weakness.effect'),
+     'audit_recommendations': I18n.t('conclusion_review.cro.weakness.audit_recommendations'),
+     'answer':                I18n.t('conclusion_review.cro.findings.answer'),
+     'user_ids':              I18n.t('conclusion_review.cro.findings.user_ids'),
+     'follow_up_date':        I18n.t('conclusion_review.cro.findings.estimated_follow_up_date')
+    }
+
   def cro_pdf organization = nil, *args
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait,
-      footer: false,
-      hide_brand: true,
-      margins:    [35, 20, 20, 25]
+                footer:     false,
+                hide_brand: true,
+                margins:    [35, 20, 20, 25]
 
     put_default_watermark_on pdf
     put_cro_header_on        pdf, organization
@@ -137,29 +147,20 @@ module ConclusionReviews::CroPdf
       put_cro_section_dest_on pdf, 'follow_up'
 
       if review.finding_review_assignments.any?
+        hide          = %w(audit_comments title review_code state)
+        show          = %w(current_situation)
         review.finding_review_assignments.map do |fra|
           finding       = fra.finding
           coi           = finding.control_objective_item
-          hide          = %w(audit_comments title review_code state)
-          show          = %w(current_situation)
-          custom_labels = {
-            'origination_date': I18n.t('conclusion_review.cro.findings.origination_date'),
-            'risk': I18n.t('conclusion_review.cro.weakness.risk'),
-            'effect': I18n.t('conclusion_review.cro.weakness.effect'),
-            'audit_recommendations': I18n.t('conclusion_review.cro.weakness.audit_recommendations'),
-            'answer': I18n.t('conclusion_review.cro.findings.answer'),
-            'user_ids': I18n.t('conclusion_review.cro.findings.user_ids'),
-            'follow_up_date': I18n.t('conclusion_review.cro.findings.estimated_follow_up_date')
-          }
 
           pdf.move_down PDF_FONT_SIZE
           pdf.text coi.finding_pdf_data(
-            finding, show: show, hide: hide,
-            custom_labels: custom_labels), align: :justify, inline_format: true
+            finding, show: show, hide: hide, custom_labels: CUSTOM_LABELS
+          ), align: :justify, inline_format: true
 
-            if finding.repeated_in
-              pdf.text coi.put_cro_new_observations(finding), align: :justify, inline_format: true
-            end
+          if finding.repeated_in
+            pdf.text coi.put_cro_new_observations(finding.repeated_in), align: :justify, inline_format: true
+          end
         end
       else
         pdf.move_down PDF_FONT_SIZE
@@ -250,23 +251,15 @@ module ConclusionReviews::CroPdf
 
               findings.each do |f|
                 hide          = %w(audit_comments title review_code state repeated)
-                custom_labels = {
-                  'origination_date': I18n.t('conclusion_review.cro.findings.origination_date'),
-                  'risk': I18n.t('conclusion_review.cro.weakness.risk'),
-                  'effect': I18n.t('conclusion_review.cro.weakness.effect'),
-                  'audit_recommendations': I18n.t('conclusion_review.cro.weakness.audit_recommendations'),
-                  'answer': I18n.t('conclusion_review.cro.findings.answer'),
-                  'user_ids': I18n.t('conclusion_review.cro.findings.user_ids'),
-                  'follow_up_date': I18n.t('conclusion_review.cro.findings.estimated_follow_up_date')
-                }
 
                 if f.origination_date && review.period.contains?(f.origination_date)
                   hide << 'origination_date'
                 end
 
                 pdf.move_down PDF_FONT_SIZE
-                pdf.text coi.finding_pdf_data(f, hide: hide,
-                  custom_labels: custom_labels), align: :justify, inline_format: true
+                pdf.text coi.finding_pdf_data(
+                  f, hide: hide, custom_labels: CUSTOM_LABELS
+                ), align: :justify, inline_format: true
               end
             end
           end

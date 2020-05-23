@@ -50,15 +50,13 @@ module ControlObjectiveItems::FindingPdfData
       end
 
       if finding.origination_date.present? && hide.exclude?('origination_date')
-          body << "<b>#{custom_labels[:origination_date] || finding.class.human_attribute_name('origination_date')}: " +
-            "</b> #{finding_origination_date_text_for finding}\n"
+        body << "<b>#{custom_labels[:origination_date] || finding.class.human_attribute_name('origination_date')}: " +
+        "</b> #{finding_origination_date_text_for finding}\n"
       end
 
-      if hide.exclude?('repeated')
-        body << finding_repeated_text_for(finding, show)
-      end
+      body << finding_repeated_text_for(finding, show) if hide.exclude?('repeated')
 
-       body
+      body
     end
 
     def get_weakness_attributes finding, hide, custom_labels
