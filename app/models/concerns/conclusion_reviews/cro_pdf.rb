@@ -149,6 +149,7 @@ module ConclusionReviews::CroPdf
       if review.finding_review_assignments.any?
         hide          = %w(audit_comments title review_code state)
         show          = %w(current_situation)
+
         review.finding_review_assignments.map do |fra|
           finding       = fra.finding
           coi           = finding.control_objective_item
@@ -243,6 +244,8 @@ module ConclusionReviews::CroPdf
         has_findings = has_findings_for_review? cois, type, use_finals
 
         if has_findings
+          hide = %w(audit_comments title review_code state repeated)
+
           cois.sort.each do |coi|
             coi_findings = coi_findings_for coi, type, use_finals
 
@@ -250,8 +253,6 @@ module ConclusionReviews::CroPdf
               findings = coi_findings.not_revoked.sort_for_review
 
               findings.each do |f|
-                hide          = %w(audit_comments title review_code state repeated)
-
                 if f.origination_date && review.period.contains?(f.origination_date)
                   hide << 'origination_date'
                 end
