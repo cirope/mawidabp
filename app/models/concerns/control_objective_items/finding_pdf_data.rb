@@ -85,7 +85,7 @@ module ControlObjectiveItems::FindingPdfData
 
       if finding.answer.present?
         body << "<b>#{custom_labels[:answer] || finding.class.human_attribute_name('answer')}:</b> " +
-        "#{finding.answer.chomp}\n"
+          "#{finding.answer.chomp}\n"
       end
 
       body
