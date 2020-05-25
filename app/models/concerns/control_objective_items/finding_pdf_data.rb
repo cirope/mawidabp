@@ -50,7 +50,7 @@ module ControlObjectiveItems::FindingPdfData
       end
 
       if finding.origination_date.present? && hide.exclude?('origination_date')
-        body << "<b>#{custom_labels[:origination_date] || finding.class.human_attribute_name('origination_date')}: " +
+        body << "<b>#{custom_labels[:origination_date] || finding.class.human_attribute_name('origination_date')}:" +
         "</b> #{finding_origination_date_text_for finding}\n"
       end
 

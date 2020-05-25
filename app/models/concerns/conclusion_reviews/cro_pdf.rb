@@ -2,13 +2,13 @@ module ConclusionReviews::CroPdf
   extend ActiveSupport::Concern
 
   CUSTOM_LABELS = {
-   'origination_date':      I18n.t('conclusion_review.cro.findings.origination_date'),
-   'risk':                  I18n.t('conclusion_review.cro.weakness.risk'),
-   'effect':                I18n.t('conclusion_review.cro.weakness.effect'),
-   'audit_recommendations': I18n.t('conclusion_review.cro.weakness.audit_recommendations'),
-   'answer':                I18n.t('conclusion_review.cro.findings.answer'),
-   'user_ids':              I18n.t('conclusion_review.cro.findings.user_ids'),
-   'follow_up_date':        I18n.t('conclusion_review.cro.findings.estimated_follow_up_date')
+    origination_date:      I18n.t('conclusion_review.cro.findings.origination_date'),
+    risk:                  I18n.t('conclusion_review.cro.weakness.risk'),
+    effect:                I18n.t('conclusion_review.cro.weakness.effect'),
+    audit_recommendations: I18n.t('conclusion_review.cro.weakness.audit_recommendations'),
+    answer:                I18n.t('conclusion_review.cro.findings.answer'),
+    user_ids:              I18n.t('conclusion_review.cro.findings.user_ids'),
+    follow_up_date:        I18n.t('conclusion_review.cro.findings.estimated_follow_up_date')
   }
 
   def cro_pdf organization = nil, *args
