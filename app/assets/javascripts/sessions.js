@@ -31,7 +31,7 @@ jQuery(function ($) {
     clearTimeout(message.timerId)
 
     $('.navbar.bg-dark').toggleClass('bg-light bg-dark')
-    $('.navbar.navbar-dark').toggleClass('navbar-light navbar-dark')
+    $('.navbar.navbar-dark').toggleClass('navbar-dark navbar-dark')
     $('[data-time-left]').attr('hidden', true)
   }
 
