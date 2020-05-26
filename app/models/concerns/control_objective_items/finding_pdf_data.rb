@@ -51,7 +51,7 @@ module ControlObjectiveItems::FindingPdfData
 
       if finding.origination_date.present? && hide.exclude?('origination_date')
         body << "<b>#{custom_labels[:origination_date] || finding.class.human_attribute_name('origination_date')}:" +
-        "</b> #{finding_origination_date_text_for finding}\n"
+          "</b> #{finding_origination_date_text_for finding}\n"
       end
 
       body << finding_repeated_text_for(finding, show) if hide.exclude?('repeated')
