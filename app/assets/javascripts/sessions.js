@@ -22,16 +22,16 @@ jQuery(function ($) {
       setMessage(message.message)
       setExpiration(message.expired)
 
-      $('.navbar.bg-light').toggleClass('bg-light bg-dark')
-      $('.navbar.navbar-light').toggleClass('navbar-light navbar-dark')
+      $('.navbar.bg-primary').toggleClass('bg-primary bg-light')
+      $('.navbar.navbar-dark').toggleClass('navbar-dark navbar-light')
     }, time * 1000)
   }
 
   var resetTimer = function (message) {
     clearTimeout(message.timerId)
 
-    $('.navbar.bg-dark').toggleClass('bg-light bg-dark')
-    $('.navbar.navbar-dark').toggleClass('navbar-dark navbar-dark')
+    $('.navbar.bg-light').toggleClass('bg-light bg-primary')
+    $('.navbar.navbar-light').toggleClass('navbar-light navbar-dark')
     $('[data-time-left]').attr('hidden', true)
   }
 
