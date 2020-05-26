@@ -129,6 +129,7 @@ module ControlObjectiveItems::FindingPdfData
         users          = audited_users.map do |u|
           u.full_name + (process_owners.include?(u) ? " (#{process_owner})" : '')
         end
+
         body << "<b>#{custom_labels[:user_ids] || finding.class.human_attribute_name('user_ids')}:</b> " +
           "#{users.join('; ')}\n"
       end
