@@ -219,13 +219,18 @@
           <%= BestPractice.model_name.human %>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#control-objective-tag" data-toggle="tab">
+          <%= t('review.control_objective_tag') %>
+        </a>
+      </li>
     </ul>
 
     <div class="tab-content pt-3">
       <div class="tab-pane active" id="control-objective">
         <div id="control_objectives">
           <%= link_to_add_fields(
-            t('review.add_control_objective'), f, :control_objective_items, 'control_objective'
+            t('review.add_control_objective'), f, :control_objective_items, 'control_objective', action: 'add-control-objective'
           ) %>
         </div>
       </div>
@@ -243,6 +248,11 @@
           <%= link_to_add_fields(
             t('review.add_best_practice'), f, :control_objective_items, 'best_practice'
           ) %>
+        </div>
+      </div>
+      <div class="tab-pane" id="control-objective-tag">
+        <div id="control_objective_tags">
+          <%= link_to_add_fields t('review.add_control_objective_tag'), f, :control_objective_items, 'control_objective_tag' %>
         </div>
       </div>
     </div>
@@ -304,11 +314,9 @@
 <% end %>
 <script type="text/javascript">
 jQuery(function() {
-  $('#review_plan_item_id').change(function() {
-    var data_url = '<%= plan_item_data_reviews_path %>';
-    var amount_url = '<%= estimated_amount_reviews_path %>';
-    var element = $(this);
-    var prefix = $('#review_identification_prefix').val();
+  $('#review_plan_item_id').change(function () {
+    var element = $('#review_plan_item_id');
+    var url = '<%= plan_item_data_reviews_path %>';
 
     $('#review_scope').val('');
     $('#review_risk_exposure').val('');
@@ -316,52 +324,17 @@ jQuery(function() {
     $('#review_audit_type').val('');
     $('#estimated_amount').html('');
 
-    if(!$(this).val().match(/^\s*$/)) {
+    if(!element.val().match(/^\s*$/)) {
       Helper.showLoading(element);
 
-      $.get(data_url, { id: element.val(), format: 'json' }, function(data) {
-        $('#review_scope').val(data.scope);
-        $('#review_risk_exposure').val(data.risk_exposure);
-        $('#review_business_unit').val(data.business_unit_name);
-        $('#review_audit_type').val(data.business_unit_type);
-
-        if (prefix !== data.business_unit_prefix) {
-          $('#review_identification_prefix').
-            val(data.business_unit_prefix).
-            change().
-            css('border-color', '#47ae00').
-            delay(1000).
-            animate({'border-color': '#c2bfB7'}, 50)
+      $.ajax({
+        url: url,
+        dataType: 'script',
+        data: {
+          id: element.val()
         }
-
-        if(data.link_to_suggested_findings) {
-          $('#link_to_suggested_findings').attr(
-            'href', data.link_to_suggested_findings
-          );
-          $('#link_to_suggested_findings').removeClass('link_without_action');
-        } else {
-          $('#link_to_suggested_findings').attr('href', '#');
-          $('#link_to_suggested_findings').addClass('link_without_action');
-        }
-
-        if(data.link_to_past_implemented_audited_findings) {
-          $('#link_to_past_implemented_audited_findings').attr(
-            'href', data.link_to_past_implemented_audited_findings
-          );
-          $('#link_to_past_implemented_audited_findings').removeClass('link_without_action');
-        } else {
-          $('#link_to_past_implemented_audited_findings').attr('href', '#');
-          $('#link_to_past_implemented_audited_findings').addClass('link_without_action');
-        }
-      }).complete(function() {
+      }).always(function () {
         Helper.hideLoading(element);
-      });
-
-      $.get(amount_url, { id: element.val() }, function(data) {
-        $('#estimated_amount').html(data);
-      }).complete(function() {
-        Helper.hideLoading(element);
-        $('#estimated_amount').effect('highlight', {}, 2000);
       });
     } else {
       $('#review_identification_prefix').prop('disabled', false).val('');
@@ -370,6 +343,7 @@ jQuery(function() {
       $('#link_to_suggested_findings').addClass('link_without_action');
       $('#link_to_past_implemented_audited_findings').attr('href', '#');
       $('#link_to_past_implemented_audited_findings').addClass('link_without_action');
+      $('#control_objectives').find('fieldset.control_objective[data-dynamic]').remove();
     }
   });
 

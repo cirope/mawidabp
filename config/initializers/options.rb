@@ -90,12 +90,13 @@ PLAN_ITEM_STATS_EXCLUDED_SCOPES = [
   'Informe de comité'
 ]
 
-REVIEW_SCOPES = [
-  'Auditorías/Seguimiento',
-  'Trabajo especial',
-  'Informe de comité',
-  'Auditoría continua'
-]
+REVIEW_SCOPES = {
+  'Auditorías'         => {},
+  'Seguimiento'        => {},
+  'Trabajo especial'   => { require_tags: ['required_on_special_reviews'] },
+  'Informe de comité'  => {},
+  'Auditoría continua' => {}
+}
 
 REVIEW_RISK_EXPOSURE = [
   'Alta',
@@ -115,6 +116,12 @@ TAGS_READONLY = [
   'Riesgo Legal',
   'Compliance'
 ]
+
+TAG_OPTIONS = {
+  'review' => {
+    'Requerida en informes `Trabajo especial`' => 'required_on_special_reviews'
+  }
+}
 
 WEAKNESS_OPERATIONAL_RISK = {
   'Debilidad de control/errores' => {},

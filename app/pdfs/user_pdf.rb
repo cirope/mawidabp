@@ -69,7 +69,7 @@ class UserPdf < Prawn::Document
     end
 
     def make_column_data
-      @users.map do |user|
+      @users.preload(organization_roles: :role).map do |user|
         [
           "<b>#{user.user}</b>",
           user.name,

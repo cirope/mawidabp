@@ -44,7 +44,7 @@
 
     <p class="mb-1">
       <strong><%= Weakness.human_attribute_name 'state' %>:</strong>
-      <%= weakness.state_text %>
+      <%= weakness.full_state_text %>
     </p>
 
     <p class="mb-1">
@@ -52,12 +52,10 @@
       <%= weakness.risk_text %>
     </p>
 
-    <% unless HIDE_WEAKNESS_PRIORITY %>
-      <p class="mb-1">
-        <strong><%= Weakness.human_attribute_name 'priority' %>:</strong>
-        <%= weakness.priority_text %>
-      </p>
-    <% end %>
+    <p class="mb-1">
+      <strong><%= Weakness.human_attribute_name 'priority' %>:</strong>
+      <%= weakness.priority_text %>
+    </p>
 
     <% unless HIDE_WEAKNESS_EFFECT %>
       <div>
@@ -108,7 +106,7 @@
       <%= l weakness.solution_date, format: :long if weakness.solution_date %>
     </p>
 
-    <% audited = weakness.users.reload.select(&:can_act_as_audited?) %>
+    <% audited = weakness.users.select &:can_act_as_audited? %>
 
     <h5 class="mt-3"><%= t 'finding.responsibles', count: audited.size %></h5>
 
@@ -133,7 +131,7 @@
           </tr>
         </thead>
         <tbody>
-          <% weakness.finding_answers.reload.each do |finding_answer| %>
+          <% weakness.finding_answers.each do |finding_answer| %>
             <tr>
               <td><%= finding_answer.user.full_name %></td>
               <td><%= simple_format finding_answer.answer, class: 'mb-1' %></td>

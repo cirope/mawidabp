@@ -1,6 +1,6 @@
 <%= render partial: 'shared/search', locals: {
   options: {},
-  columns: @query.blank? ? User::COLUMNS_FOR_SEARCH.keys : @columns
+  columns: search_columns_for_model(User)
 } %>
 
 <table class="table table-sm table-striped table-hover">

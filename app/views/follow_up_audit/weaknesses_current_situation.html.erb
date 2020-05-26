@@ -32,7 +32,8 @@
           }
         ],
         [:compliance, { group: 3 }],
-        [:repeated, true],
+        [:repeated, { group: 4 }],
+        [:priority, { group: 4 }],
         [:weakness_extra_attributes, true]
       ]
     }
@@ -41,7 +42,7 @@
 
 <% if @weaknesses.any? %>
   <% @weaknesses.each_with_index do |weakness, index| %>
-    <% current_weakness = current_weakness_for weakness %>
+    <% current_weakness = weakness.current %>
 
     <p class="mt-3 mb-1">
       <span class="badge badge-pill badge-secondary">
@@ -91,7 +92,7 @@
       <%= current_weakness.description %>
     </p>
 
-    <% if current_weakness.current_situation.present? && current_weakness.current_situation_verified %>
+    <% if current_weakness.show_current_situation? %>
       <p class="mb-1">
         <strong><%= Weakness.human_attribute_name 'current_situation' %></strong>:
         <%= current_weakness.current_situation %>
@@ -105,7 +106,7 @@
 
     <p class="mb-1">
       <strong><%= Weakness.human_attribute_name 'state' %></strong>:
-      <%= weaknesses_current_situation_state_text weakness, current_weakness %>
+      <%= weakness.weaknesses_current_situation_state_text current_weakness %>
     </p>
 
     <% if current_weakness.follow_up_date %>
@@ -140,7 +141,7 @@
 
 <div>
   <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: "#customize_report" } %> |
+  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
   <%= link_to t('label.download_csv'), weaknesses_current_situation_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
   <% if @permalink.blank? && @weaknesses.any? %>
     <span data-permalink-link>

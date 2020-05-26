@@ -13,22 +13,17 @@ class ConclusionDraftReviewsController < ApplicationController
   def index
     @title = t 'conclusion_draft_review.index_title'
 
-    build_search_conditions ConclusionDraftReview
-
     @conclusion_draft_reviews = ConclusionDraftReview.list.includes(
       review: [
         :period,
         :conclusion_final_review,
-        {plan_item: :business_unit}
+        plan_item: :business_unit
       ]
-    ).where(@conditions).references(
+    ).search(
+      **search_params
+    ).references(
       :reviews, :business_units
-    ).order(
-      [
-        "#{ConclusionDraftReview.quoted_table_name}.#{ConclusionDraftReview.qcn('issue_date')} DESC",
-        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('created_at')} DESC"
-      ].map { |o| Arel.sql o }
-    ).page(params[:page])
+    ).order_by.page params[:page]
 
     respond_to do |format|
       format.html

@@ -36,6 +36,21 @@
     </p>
   <% end %>
 
+  <% if @finding_answer.commitment_support.present? %>
+    <div>
+      <b><%= CommitmentSupport.human_attribute_name 'reason' %></b>:
+      <%= simple_format @finding_answer.commitment_support.reason, style: 'font-style: italic;'%>
+    </div>
+    <div>
+      <b><%= CommitmentSupport.human_attribute_name 'plan' %></b>:
+      <%= simple_format @finding_answer.commitment_support.plan, style: 'font-style: italic;' %>
+    </div>
+    <div>
+      <b><%= CommitmentSupport.human_attribute_name 'controls' %></b>:
+      <%= simple_format @finding_answer.commitment_support.controls, style: 'font-style: italic;'%>
+    </div>
+  <% end %>
+
   <p>
     <%= link_to t('notifier.notify_new_finding_answer.finding_link'),
       finding_url %>

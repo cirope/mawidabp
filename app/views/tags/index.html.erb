@@ -18,7 +18,7 @@
 
     <tbody>
       <% @tags.each do |tag| %>
-        <tr>
+        <tr <%== 'class="text-muted strike"' if tag.obsolete %>>
           <td>
             <span class="text-<%= tag.style %>">
               <%= icon 'fas', tag.icon %>

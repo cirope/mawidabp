@@ -3,7 +3,7 @@ module WeaknessesHelper
     list = String.new.html_safe
     out = String.new.html_safe
 
-    if weakness.being_implemented? || weakness.awaiting?
+    if weakness.being_implemented?
       dates = weakness.all_follow_up_dates
     end
 
@@ -57,20 +57,6 @@ module WeaknessesHelper
 
   def weakness_business_units
     @weakness.control_objective_item.business_units
-  end
-
-  def weakness_progresses weakness
-    values = if weakness.being_implemented?
-               [25, 50, 75]
-             else
-               [0, 25, 50, 75, 100]
-             end
-
-    values.map { |n| ["#{n}%", n] }
-  end
-
-  def weakness_progress_disabled? weakness, readonly = false
-    readonly || !weakness.allow_progress_edition?
   end
 
   def weakness_compliance_options

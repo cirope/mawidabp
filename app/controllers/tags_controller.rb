@@ -6,7 +6,11 @@ class TagsController < ApplicationController
   before_action :set_title, except: [:destroy]
 
   def index
-    @tags = scope.search(query: params[:q]).limit(request.xhr? && 10).order(:name).page params[:page]
+    @tags = scope.
+      search(query: params[:q]).
+      limit(request.xhr? && 10).
+      reorder(:obsolete, :name).
+      page params[:page]
 
     respond_with @tags
   end
@@ -45,8 +49,9 @@ class TagsController < ApplicationController
     end
 
     def tag_params
-      params.require(:tag).permit :name, :style, :shared, :icon, :lock_version,
-        children_attributes: [:id, :name, :_destroy]
+      params.require(:tag).permit :name, :style, :shared, :obsolete, :icon,
+        :lock_version, children_attributes: [:id, :name, :_destroy],
+        options: []
     end
 
     def scope

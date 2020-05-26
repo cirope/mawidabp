@@ -1,11 +1,22 @@
 module ConclusionReviews::CroPdf
   extend ActiveSupport::Concern
 
+  CUSTOM_LABELS = {
+    origination_date:      I18n.t('conclusion_review.cro.findings.origination_date'),
+    risk:                  I18n.t('conclusion_review.cro.weakness.risk'),
+    effect:                I18n.t('conclusion_review.cro.weakness.effect'),
+    audit_recommendations: I18n.t('conclusion_review.cro.weakness.audit_recommendations'),
+    answer:                I18n.t('conclusion_review.cro.findings.answer'),
+    user_ids:              I18n.t('conclusion_review.cro.findings.user_ids'),
+    follow_up_date:        I18n.t('conclusion_review.cro.findings.estimated_follow_up_date')
+  }
+
   def cro_pdf organization = nil, *args
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait,
-      hide_brand: true,
-      margins:    [35, 20, 20, 25]
+                footer:     false,
+                hide_brand: true,
+                margins:    [35, 20, 20, 25]
 
     put_default_watermark_on pdf
     put_cro_header_on        pdf, organization
@@ -22,7 +33,7 @@ module ConclusionReviews::CroPdf
       put_first_page_header  pdf, organization
       put_other_pages_header pdf, organization
 
-      pdf.add_page_footer
+      pdf.add_page_footer font_size = 10, skip_first_page = true
     end
 
     def put_cro_cover_on pdf, organization
@@ -136,14 +147,23 @@ module ConclusionReviews::CroPdf
       put_cro_section_dest_on pdf, 'follow_up'
 
       if review.finding_review_assignments.any?
-        repeated_findings = review.finding_review_assignments.map do |fra|
+        hide = %w(audit_comments title review_code state repeated tasks_data)
+        show = %w(current_situation)
+
+        review.finding_review_assignments.map do |fra|
           finding = fra.finding
           coi     = finding.control_objective_item
 
           pdf.move_down PDF_FONT_SIZE
           pdf.text coi.finding_pdf_data(
-            finding, show: %w(review), hide: %(audit_comments)
+            finding, show: show, hide: hide, custom_labels: CUSTOM_LABELS
           ), align: :justify, inline_format: true
+
+          if finding.repeated_in
+            pdf.text coi.put_cro_new_observations(
+              finding.repeated_in
+            ), align: :justify, inline_format: true
+          end
         end
       else
         pdf.move_down PDF_FONT_SIZE
@@ -226,6 +246,8 @@ module ConclusionReviews::CroPdf
         has_findings = has_findings_for_review? cois, type, use_finals
 
         if has_findings
+          hide = %w(audit_comments title review_code state repeated origination_date tasks_data)
+
           cois.sort.each do |coi|
             coi_findings = coi_findings_for coi, type, use_finals
 
@@ -233,15 +255,10 @@ module ConclusionReviews::CroPdf
               findings = coi_findings.not_revoked.sort_for_review
 
               findings.each do |f|
-                hide = %w(audit_comments)
-
-                if f.origination_date && review.period.contains?(f.origination_date)
-                  hide << 'origination_date'
-                end
-
                 pdf.move_down PDF_FONT_SIZE
-                pdf.text coi.finding_pdf_data(f, hide: hide), align: :justify,
-                  inline_format: true
+                pdf.text coi.finding_pdf_data(
+                  f, hide: hide, custom_labels: CUSTOM_LABELS
+                ), align: :justify, inline_format: true
               end
             end
           end

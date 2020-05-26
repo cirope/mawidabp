@@ -46,7 +46,8 @@ class WeaknessesController < ApplicationController
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
     @weaknesses = Weakness.list.includes(
-      :work_papers, :tags,
+      :work_papers, :tags, :review,
+      review: [:plan_item, :conclusion_final_review],
       control_objective_item: {
         review: [:period, :plan_item, :conclusion_final_review]
       }
@@ -150,15 +151,6 @@ class WeaknessesController < ApplicationController
     end
   end
 
-  # * GET /weaknesses/state_changed
-  def state_changed
-    @state = params[:state].to_i
-
-    respond_to do |format|
-      format.js
-    end
-  end
-
   # * GET /weaknesses/weakness_template_changed
   def weakness_template_changed
     @weakness_template = WeaknessTemplate.list.find_by id: params[:id]
@@ -172,7 +164,7 @@ class WeaknessesController < ApplicationController
     def weakness_params
       params.require(:weakness).permit(
         :control_objective_item_id, :review_code, :title, :description, :answer,
-        :audit_comments, :state, :progress, :origination_date, :solution_date,
+        :audit_comments, :state, :origination_date, :solution_date,
         :repeated_of_id, :audit_recommendations, :effect, :risk, :priority,
         :follow_up_date, :users_for_notification, :compliance, :skip_work_paper,
         :weakness_template_id, :lock_version,
@@ -224,15 +216,14 @@ class WeaknessesController < ApplicationController
         auto_complete_for_finding_relation: :read,
         auto_complete_for_control_objective_item: :read,
         auto_complete_for_weakness_template: :read,
-        state_changed: :read,
         undo_reiteration: :modify
       )
     end
 
     def render_index_csv
       render_or_send_by_mail(
-        collection: @weaknesses,
-        filename: @title.downcase,
+        collection:  @weaknesses,
+        filename:    "#{@title.downcase}.csv",
         method_name: :to_csv
       )
     end

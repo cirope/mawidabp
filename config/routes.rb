@@ -115,6 +115,25 @@ Rails.application.routes.draw do
   end
 
   get 'conclusion_reports', as: 'conclusion_reports', to: 'conclusion_reports#index'
+
+  get 'follow_up_audited', as: 'follow_up_audited', to: 'follow_up_audited#index'
+
+  [
+    'weaknesses_by_user',
+  ].each do |action|
+    get "follow_up_audited/#{action}",
+      as: "#{action}_follow_up_audited",
+      to: "follow_up_audited##{action}"
+  end
+
+  [
+    'create_weaknesses_by_user',
+  ].each do |action|
+    post "follow_up_audited/#{action}",
+      as: "#{action}_follow_up_audited",
+      to: "follow_up_audited##{action}"
+  end
+
   get 'follow_up_audit', as: 'follow_up_audit', to: 'follow_up_audit#index'
 
   [
@@ -137,6 +156,7 @@ Rails.application.routes.draw do
     'weaknesses_by_risk_report',
     'weaknesses_by_user',
     'weaknesses_current_situation',
+    'weaknesses_repeated',
     'weaknesses_by_control_objective',
     'fixed_weaknesses_report',
     'weaknesses_graphs',
@@ -172,6 +192,7 @@ Rails.application.routes.draw do
     'create_weaknesses_by_user',
     'create_weaknesses_current_situation',
     'create_weaknesses_current_situation_permalink',
+    'create_weaknesses_repeated',
     'create_weaknesses_by_control_objective',
     'create_fixed_weaknesses_report'
   ].each do |action|
@@ -217,10 +238,11 @@ Rails.application.routes.draw do
       to: "follow_up_audit#create_#{action}"
   end
 
-  scope ':completed', completed: /complete|incomplete/ do
+  scope ':completion_state', completion_state: /complete|incomplete|repeated/ do
     resources :findings, except: [:destroy] do
       resources :costs
-      resources :finding_answers, only: [:create], controller: 'findings/answers', as: 'answers'
+      resources :commitment_supports, only: [:show], controller: 'findings/commitments', as: 'commitments'
+      resources :finding_answers, only: [:create, :update], controller: 'findings/answers', as: 'answers'
       resources :work_papers, only: [:create], controller: 'findings/work_papers'
 
       get :follow_up_pdf, on: :member, to: 'findings/follow_up_pdf#show'
@@ -333,7 +355,6 @@ Rails.application.routes.draw do
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
       get :auto_complete_for_weakness_template
-      get :state_changed
       get :weakness_template_changed
     end
 
@@ -360,7 +381,9 @@ Rails.application.routes.draw do
   end
 
   resources :plans do
-    resources :plan_items, only: [:new, :edit]
+    resources :plan_items, only: [:show, :new, :edit, :update] do
+      get :auto_complete_for_control_objective, on: :collection
+    end
 
     member do
       get :calendar, to: 'plans/calendar#show'

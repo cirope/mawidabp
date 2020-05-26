@@ -58,6 +58,9 @@ es:
       closing_interview_user:
         one: 'Asistente a la entrevista'
         other: 'Asistentes a la entrevista'
+      commitment_support:
+        one: 'Sustento compromiso'
+        other: 'Sustentos compromiso'
       control_objective:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
@@ -67,6 +70,9 @@ es:
       e_mail:
         one: 'Correo'
         other: 'Correos'
+      endorsement:
+        one: 'Aprobación'
+        other: 'Aprobaciones'
       error_record:
         one: 'Registro de error'
         other: 'Registros de errores'
@@ -226,6 +232,10 @@ es:
         review_id: 'Informe'
       closing_interview_user:
         user: 'Usuario'
+      commitment_support:
+        reason: 'Motivo reprogramación'
+        plan: 'Nuevo plan de acción'
+        controls: 'Controles mitigantes'
       control_objective:
         name: 'Objetivo de control'
         relevance: 'Importancia'
@@ -245,6 +255,9 @@ es:
         subject: 'Asunto'
         body: 'Contenido'
         attachments: 'Adjuntos'
+      endorsement:
+        reason: 'Incluir comentario'
+        status: 'Estado'
       error_record:
         data: 'Datos'
         error: 'Error'
@@ -263,24 +276,25 @@ es:
         effect: 'Efecto'
         risk: 'Riesgo'
         priority: 'Prioridad'
-        user_ids: 'Responsables'
-        finding_user_assignments: 'Responsables'
+        user_ids: 'Usuarios'
+        finding_user_assignments: 'Usuarios'
         origination_date: 'Fecha de origen'
         first_follow_up_date: 'Primer fecha de implementación'
         follow_up_date: 'Fecha de implementación'
         audit_comments: 'Comentarios de auditoría'
         state: 'Estado'
         state_was: 'Estado anterior'
-        progress: 'Normalización'
         count: 'Cantidad'
         solution_date: 'Fecha de solución'
         skip_work_paper: 'No requiere papel de trabajo'
-        users: 'Responsables'
+        users: 'Usuarios'
         work_papers: 'Papeles de trabajo'
         finding_answers: 'Respuestas'
         tag_ids: 'Etiquetas'
         rescheduled: 'Reprogramada'
         reschedule_count: 'Cantidad de reprogramaciones'
+        implemented_at: 'Fecha de cambio a "Implementada"'
+        closed_at: 'Fecha del último cambio de estado'
         organization: 'Organización'
       finding/achievements:
         one: 'Beneficio estimado'
@@ -315,6 +329,11 @@ es:
         commitment_date: 'Fecha de compromiso'
         user_id: 'Comentario (usuario)'
         notify_users: 'Comentario (enviar notificación)'
+      finding/finding_answers/commitment_support:
+        one: 'Sustento compromiso'
+        reason: 'Motivo reprogramación'
+        plan: 'Nuevo plan de acción'
+        controls: 'Controles mitigantes'
       finding/finding_answers/file_model:
         one: 'Anexo (archivo)'
         file: 'Anexo (archivo)'
@@ -352,6 +371,8 @@ es:
         function_attribute: 'Atributo con el cargo'
         roles_attribute: 'Atributo con los perfiles'
         manager_attribute: 'Atributo con el superior'
+        tls: 'Versión TLS'
+        ca_path: 'Ruta CA'
         test_user: 'Usuario'
         test_password: 'Contraseña'
         user: 'Usuario de servicio'
@@ -390,8 +411,8 @@ es:
         description: 'Oportunidad de mejora'
         review_code: 'Código'
         answer: 'Respuesta/Acciones correctivas'
-        user_ids: 'Responsable'
-        finding_user_assignments: 'Responsables'
+        user_ids: 'Usuario'
+        finding_user_assignments: 'Usuarios'
         work_papers: 'Papeles de trabajo'
         state: 'Estado'
         origination_date: 'Fecha de origen'
@@ -423,6 +444,7 @@ es:
         style: 'Estilo'
         icon: 'Icono'
         shared: 'Compartida'
+        obsolete: 'Obsoleta'
       tagging:
         tag: 'Etiqueta'
         tag_id: 'Etiqueta'
@@ -604,13 +626,12 @@ es:
         effect: 'Efecto'
         risk: 'Riesgo'
         priority: 'Prioridad'
-        user_ids: 'Responsable'
-        finding_user_assignments: 'Responsables'
+        user_ids: 'Usuario'
+        finding_user_assignments: 'Usuarios'
         origination_date: 'Fecha de origen'
         first_follow_up_date: 'Primer fecha de implementación'
         follow_up_date: 'Fecha de implementación'
         state: 'Estado'
-        progress: 'Normalización'
         solution_date: 'Fecha de solución'
         compliance: 'Compliance'
         operational_risk: 'Riesgo operacional'
@@ -619,6 +640,8 @@ es:
         weakness_template: 'Buscar plantilla por título'
         weakness_template_from_control_objective: 'Plantilla sugerida por objetivo de control'
         work_papers: 'Papeles de trabajo'
+        implemented_at: 'Fecha de cambio a "Implementada"'
+        closed_at: 'Fecha del último cambio de estado'
       weakness/image_model:
         image: 'Imagen'
       weakness_template:
@@ -645,6 +668,7 @@ es:
               must_be_done_by_proper_role: 'solo puede ser cambiado por un usuario supervisor o gerente'
             finding_user_assignments:
               invalid: 'debe contener como mínimo un auditor, un auditado, un gerente y/o un supervisor'
+              required: 'debe tener un auditado responsable'
               must_have_a_manager: 'debe contener un gerente de auditoría'
         finding_user_assignment:
           attributes:
@@ -678,6 +702,10 @@ es:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
             end:
               resource_overload: 'se superpone con otro ítem que ocupa el mismo recurso'
+        review:
+          attributes:
+            taggings:
+              missing_tags_for_scope: "se requiere al menos una (entre %{tags}) para los informes con alcance '%{r_scope}'"
         risk_assessment_template:
           attributes:
             risk_assessment_weights:

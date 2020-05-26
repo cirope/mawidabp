@@ -1,3 +1,4 @@
+<%= link_to submenu_item, submenu_item.url, class: 'dropdown-item' %>
 <% if submenu_item.children.present? && submenu_item.submenu_names.include?(@current_module) %>
   <%= content_for :submenu do %>
     <div class="row">

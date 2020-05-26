@@ -1,8 +1,11 @@
 module Findings::Csv
+  include ActionView::Helpers::TextHelper
+
   extend ActiveSupport::Concern
 
   LINE_BREAK             = "\r\n"
   LINE_BREAK_REPLACEMENT = " | "
+  OPTIONS                = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
   def to_csv_a corporate
     row = [
@@ -17,9 +20,9 @@ module Findings::Csv
       (taggings.map(&:tag).to_sentence if self.class.show_follow_up_timestamps?),
       title,
       description,
-      state_text,
+      full_state_text,
       try(:risk_text) || '',
-      (respond_to?(:risk_text) ? priority_text : '' unless HIDE_WEAKNESS_PRIORITY),
+      respond_to?(:risk_text) ? priority_text : '',
       auditeds_as_process_owner.join('; '),
       audited_users.join('; '),
       auditor_users.join('; '),
@@ -29,6 +32,8 @@ module Findings::Csv
       origination_date_text,
       follow_up_date_text,
       solution_date_text,
+      implemented_at_text,
+      closed_at_text,
       rescheduled_text,
       reschedule_count.to_s,
       next_pending_task_date,
@@ -38,7 +43,12 @@ module Findings::Csv
       audit_recommendations,
       answer,
       (last_commitment_date_text if self.class.show_follow_up_timestamps?),
-      (finding_answers_text if self.class.show_follow_up_timestamps?)
+      (finding_answers_text if self.class.show_follow_up_timestamps?),
+      latest_answer_text,
+      (commitment_support_plans_text if Finding.show_commitment_support?),
+      (commitment_support_controls_text if Finding.show_commitment_support?),
+      (commitment_support_reasons_text if Finding.show_commitment_support?),
+      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -63,10 +73,10 @@ module Findings::Csv
     end
 
     def reiteration_info
-      if repeated_ancestors.any?
-        "#{I18n.t('finding.repeated_ancestors')}: #{repeated_ancestors.to_sentence}"
-      elsif repeated_children.any?
-        "#{I18n.t('finding.repeated_children')}: #{repeated_children.to_sentence}"
+      if (ancestors = repeated_ancestors).any?
+        "#{I18n.t('finding.repeated_ancestors')}: #{ancestors.to_sentence}"
+      elsif (children = repeated_children).any?
+        "#{I18n.t('finding.repeated_children')}: #{children.to_sentence}"
       else
         '-'
       end
@@ -82,6 +92,14 @@ module Findings::Csv
 
     def solution_date_text
       solution_date ? I18n.l(solution_date, format: :minimal) : '-'
+    end
+
+    def implemented_at_text
+      implemented_at ? I18n.l(implemented_at, format: :minimal) : '-'
+    end
+
+    def closed_at_text
+      closed_at ? I18n.l(closed_at, format: :minimal) : '-'
     end
 
     def auditeds_as_process_owner
@@ -116,12 +134,30 @@ module Findings::Csv
         "[#{date}] #{fa.user.full_name}: #{fa.answer}"
       end
 
-      answers.reverse.join LINE_BREAK_REPLACEMENT
+      truncate(
+        answers.reverse.join(LINE_BREAK_REPLACEMENT),
+        length:   32767, # To go around the 32767 limit on some spreadsheets
+        omission: "[#{I18n.t('messages.truncated', count: 32767)}]"
+      )
+    end
+
+    def latest_answer_text
+      answer = latest&.latest_answer || (latest.nil? && latest_answer)
+
+      if answer
+        date = I18n.l answer.created_at, format: :minimal
+
+        "[#{date}] #{answer.user.full_name}: #{answer.answer}"
+      else
+        '-'
+      end
     end
 
     def last_commitment_date_text
-      commitment_date = finding_answers.map(&:commitment_date).compact.sort.last
-      date            = if follow_up_date && commitment_date
+      commitment_date = finding_answers.reverse.detect(&:commitment_date)&.commitment_date
+      date            = if %w(weak true).include? FINDING_ANSWER_COMMITMENT_SUPPORT
+                          commitment_date
+                        elsif follow_up_date && commitment_date
                           follow_up_date <= commitment_date ? commitment_date : nil
                         elsif follow_up_date.blank?
                           commitment_date
@@ -141,23 +177,90 @@ module Findings::Csv
       tasks.map(&:detailed_description).join(LINE_BREAK_REPLACEMENT)
     end
 
+    def commitment_support_plans_text
+      plans = finding_answers.map do |fa|
+        cs = fa.commitment_support
+
+        if cs
+          date = I18n.l fa.created_at, format: :minimal
+
+          "[#{date}] #{fa.user.full_name}: #{cs.plan}"
+        end
+      end.compact
+
+      truncate(
+        plans.reverse.join(LINE_BREAK_REPLACEMENT),
+        length:   32767, # To go around the 32767 limit on some spreadsheets
+        omission: "[#{I18n.t('messages.truncated', count: 32767)}]"
+      )
+    end
+
+    def commitment_support_controls_text
+      controls = finding_answers.map do |fa|
+        cs = fa.commitment_support
+
+        if cs
+          date = I18n.l fa.created_at, format: :minimal
+
+          "[#{date}] #{fa.user.full_name}: #{cs.controls}"
+        end
+      end.compact
+
+      truncate(
+        controls.reverse.join(LINE_BREAK_REPLACEMENT),
+        length:   32767, # To go around the 32767 limit on some spreadsheets
+        omission: "[#{I18n.t('messages.truncated', count: 32767)}]"
+      )
+    end
+
+    def commitment_support_reasons_text
+      reasons = finding_answers.map do |fa|
+        cs = fa.commitment_support
+
+        if cs
+          date = I18n.l fa.created_at, format: :minimal
+          endorsements = fa.endorsements.map do |e|
+            status = I18n.t "findings.endorsements.status.#{e.status}"
+
+            "#{e.user.full_name}: #{[status, e.reason].reject(&:blank?).join ' - '}"
+          end.to_sentence
+
+          if endorsements.present?
+            "[#{date}] #{fa.user.full_name}: #{cs.reason} (#{endorsements})"
+          else
+            "[#{date}] #{fa.user.full_name}: #{cs.reason}"
+          end
+        end
+      end.compact
+
+      truncate(
+        reasons.reverse.join(LINE_BREAK_REPLACEMENT),
+        length:   32767, # To go around the 32767 limit on some spreadsheets
+        omission: "[#{I18n.t('messages.truncated', count: 32767)}]"
+      )
+    end
+
   module ClassMethods
     def to_csv corporate: false
-      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
-
-      csv_str = CSV.generate(**options) do |csv|
+      csv_str = CSV.generate(**OPTIONS) do |csv|
         csv << column_headers(corporate)
+      end
 
-        all_with_inclusions.each { |f| csv << f.to_csv_a(corporate) }
+      ChunkIterator.iterate all_with_inclusions do |cursor|
+        csv_str += CSV.generate(**OPTIONS) do |csv|
+          cursor.each { |f| csv << f.to_csv_a(corporate) }
+        end
       end
 
       "\uFEFF#{csv_str}"
     end
 
     def show_follow_up_timestamps?
-      setting = Current.organization.settings.reload.find_by name: 'show_follow_up_timestamps'
+      @show_follow_up_timestamps ||= begin
+        setting = Current.organization.settings.find_by name: 'show_follow_up_timestamps'
 
-      (setting ? setting.value : DEFAULT_SETTINGS[:show_follow_up_timestamps][:value]) != '0'
+        (setting ? setting.value : DEFAULT_SETTINGS[:show_follow_up_timestamps][:value]) != '0'
+      end
     end
 
     private
@@ -170,8 +273,9 @@ module Findings::Csv
           :business_unit_type,
           :business_unit,
           :tasks,
-          ({ tasks: :versions } if POSTGRESQL_ADAPTER),
-          finding_answers: :user,
+          latest_answer: :user,
+          latest: [:review, latest_answer: :user],
+          finding_answers: [:user, :commitment_support, endorsements: :user],
           finding_user_assignments: :user,
           finding_owner_assignments: :user,
           taggings: :tag,
@@ -203,7 +307,7 @@ module Findings::Csv
           Weakness.human_attribute_name('description'),
           Weakness.human_attribute_name('state'),
           Weakness.human_attribute_name('risk'),
-          (Weakness.human_attribute_name('priority') unless HIDE_WEAKNESS_PRIORITY),
+          Weakness.human_attribute_name('priority'),
           FindingUserAssignment.human_attribute_name('process_owner'),
           I18n.t('finding.audited', count: 0),
           I18n.t('finding.auditors', count: 0),
@@ -213,6 +317,8 @@ module Findings::Csv
           Finding.human_attribute_name('origination_date'),
           Finding.human_attribute_name('follow_up_date'),
           Finding.human_attribute_name('solution_date'),
+          Finding.human_attribute_name('implemented_at'),
+          Finding.human_attribute_name('closed_at'),
           Finding.human_attribute_name('rescheduled'),
           Finding.human_attribute_name('reschedule_count'),
           I18n.t('finding.next_pending_task_date'),
@@ -222,7 +328,12 @@ module Findings::Csv
           Finding.human_attribute_name('audit_recommendations'),
           Finding.human_attribute_name('answer'),
           (FindingAnswer.human_attribute_name('commitment_date') if show_follow_up_timestamps?),
-          (I18n.t('finding.finding_answers') if show_follow_up_timestamps?)
+          (I18n.t('finding.finding_answers') if show_follow_up_timestamps?),
+          (I18n.t('finding.latest_answer') if show_follow_up_timestamps?),
+          (I18n.t('finding.commitment_support_plans') if Finding.show_commitment_support?),
+          (I18n.t('finding.commitment_support_controls') if Finding.show_commitment_support?),
+          (I18n.t('finding.commitment_support_reasons') if Finding.show_commitment_support?),
+          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?)
         ].compact
       end
   end

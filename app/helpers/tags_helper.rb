@@ -40,11 +40,11 @@ module TagsHelper
   def grouped_tag_options kind:
     options = {}
 
-    Tag.list.roots.where(kind: kind).order(:name).each do |root_tag|
+    Tag.list.roots.where(kind: kind, obsolete: false).order(:name).each do |root_tag|
       if root_tag.children.any?
-        options[root_tag.name] = root_tag.children.order(:name).map do |tag|
-          [tag.name, tag.id]
-        end
+        children = root_tag.children.where(obsolete: false).order :name
+
+        options[root_tag.name] = children.map { |tag| [tag.name, tag.id] }
       else
         options[t('tags.list.childless')] ||= []
 
@@ -53,5 +53,9 @@ module TagsHelper
     end
 
     options
+  end
+
+  def tags_options_collection kind:
+    Array(TAG_OPTIONS[kind])
   end
 end

@@ -13,13 +13,12 @@ class PollsController < ApplicationController
   # GET /polls
   # GET /polls.json
   def index
-    @polls = @questionnaire.polls if @questionnaire
-
-    build_search_conditions Poll
-
-    @polls = (@polls || Poll.list).includes(:questionnaire, :user).
-      where(@conditions).order(Arel.sql("#{Poll.quoted_table_name}.#{Poll.qcn('created_at')} DESC")).
-      references(:questionnaire, :user).page(params[:page])
+    @polls = (@questionnaire&.polls || Poll.list).
+      includes(:questionnaire, :user).
+      search(**search_params).
+      default_order.
+      references(:questionnaire, :user).
+      page params[:page]
 
     respond_with @polls
   end
@@ -93,7 +92,7 @@ class PollsController < ApplicationController
     end
 
     def set_poll
-      @poll = Poll.list.find params[:id]
+      @poll = Poll.list.preload(answers: { question: :answer_options }).find params[:id]
     end
 
     def set_current_module

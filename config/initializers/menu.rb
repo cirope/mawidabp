@@ -8,21 +8,41 @@ APP_AUDITED_MENU_ITEMS = [
         :pending_findings,
         order: 1,
         controllers: :findings,
-        extra_conditions: "params[:completed] == 'incomplete'",
-        url: { controller: '/findings', completed: :incomplete }
+        extra_conditions: "params[:completion_state] == 'incomplete'",
+        url: { controller: '/findings', completion_state: :incomplete }
       ),
       MenuItem.new(
         :complete_findings,
         order: 2,
         controllers: :findings,
-        extra_conditions: "params[:completed] == 'complete'",
-        url: { controller: '/findings', completed: :complete }
+        extra_conditions: "params[:completion_state] == 'complete'",
+        url: { controller: '/findings', completion_state: :complete }
+      ),
+      MenuItem.new(
+        :repeated_findings,
+        order: 3,
+        controllers: :findings,
+        extra_conditions: "params[:completion_state] == 'repeated'",
+        url: { controller: '/findings', completion_state: :repeated }
       ),
       MenuItem.new(
         :notifications,
-        order: 3,
+        order: 4,
         controllers: :notifications,
         url: { controller: '/notifications' }
+      ),
+      MenuItem.new(
+        :reports,
+        order: 5,
+        url: { controller: '/follow_up_audited' },
+        children: [
+          MenuItem.new(
+            :audited,
+            order: 1,
+            controllers: :follow_up_audited,
+            url: { controller: '/follow_up_audited' }
+          )
+        ]
       )
     ]
   )
@@ -199,7 +219,7 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :plans,
         order: 4,
-        controllers: :plans,
+        controllers: [:plans, :plan_items],
         url: { controller: '/plans' }
       )
     ]
@@ -300,27 +320,51 @@ APP_AUDITOR_MENU_ITEMS = [
         :pending_findings,
         order: 1,
         controllers: :findings,
-        extra_conditions: "params[:completed] == 'incomplete'",
-        url: { controller: '/findings', completed: :incomplete }
+        extra_conditions: "params[:completion_state] == 'incomplete'",
+        url: { controller: '/findings', completion_state: :incomplete }
       ),
       MenuItem.new(
         :complete_findings,
         order: 2,
         controllers: :findings,
-        extra_conditions: "params[:completed] == 'complete'",
-        url: { controller: '/findings', completed: :complete }
+        extra_conditions: "params[:completion_state] == 'complete'",
+        url: { controller: '/findings', completion_state: :complete }
+      ),
+      MenuItem.new(
+        :repeated_findings,
+        order: 3,
+        controllers: :findings,
+        extra_conditions: "params[:completion_state] == 'repeated'",
+        url: { controller: '/findings', completion_state: :repeated }
       ),
       MenuItem.new(
         :notifications,
-        order: 3,
+        order: 4,
         controllers: :notifications,
         url: { controller: '/notifications' }
       ),
       MenuItem.new(
         :reports,
-        order: 4,
-        controllers: :follow_up_audit,
-        url: { controller: '/follow_up_audit' }
+        order: 5,
+        url: { controller: '/follow_up_audited' },
+        children: [
+          MenuItem.new(
+            :audited,
+            order: 1,
+            controllers: :follow_up_audited,
+            url: { controller: '/follow_up_audited' },
+            children: [
+            ]
+          ),
+          MenuItem.new(
+            :audit,
+            order: 2,
+            controllers: :follow_up_audit,
+            url: { controller: '/follow_up_audit' },
+            children: [
+            ]
+          )
+        ]
       )
     ]
   )

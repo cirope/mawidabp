@@ -1,4 +1,6 @@
 class Findings::FollowUpPdfController < ApplicationController
+  include Findings::SetFinding
+
   def show
     finding = scoped_findings.find params[:id]
     path    = finding.absolute_follow_up_pdf_path
@@ -9,10 +11,4 @@ class Findings::FollowUpPdfController < ApplicationController
 
     redirect_to finding.relative_follow_up_pdf_path
   end
-
-  private
-
-    def scoped_findings
-      current_organization.corporate? ? Finding.group_list : Finding.list
-    end
 end

@@ -88,14 +88,14 @@ module Findings::FollowUpPdf
     end
 
     def put_relation_information_on pdf
-      if repeated_ancestors.any?
+      if (ancestors = repeated_ancestors).any?
         pdf.add_title I18n.t('finding.repeated_ancestors'), PDF_FONT_SIZE, :left
-        pdf.add_list repeated_ancestors, PDF_FONT_SIZE * 2
+        pdf.add_list ancestors, PDF_FONT_SIZE * 2
       end
 
-      if repeated_children.any?
+      if (children = repeated_children).any?
         pdf.add_title I18n.t('finding.repeated_children'), PDF_FONT_SIZE, :left
-        pdf.add_list repeated_children, PDF_FONT_SIZE * 2
+        pdf.add_list children, PDF_FONT_SIZE * 2
       end
     end
 
@@ -259,18 +259,14 @@ module Findings::FollowUpPdf
     def weakness_follow_up_description_items
       [
         [self.class.human_attribute_name(:risk), risk_text, 0, false],
-        ([self.class.human_attribute_name(:priority), priority_text, 0, false] unless HIDE_WEAKNESS_PRIORITY),
+        [self.class.human_attribute_name(:priority), priority_text, 0, false],
         ([Finding.human_attribute_name(:effect), effect, 0, false] unless HIDE_WEAKNESS_EFFECT),
         [Finding.human_attribute_name(:audit_recommendations), audit_recommendations, 0, false]
       ].compact
     end
 
     def follow_up_important_attributes
-      if HIDE_WEAKNESS_PRIORITY
-        [:state, :risk, :follow_up_date]
-      else
-        [:state, :risk, :priority, :follow_up_date]
-      end
+      [:state, :risk, :priority, :follow_up_date]
     end
 
     def important_changed_versions

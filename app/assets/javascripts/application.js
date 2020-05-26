@@ -30,6 +30,7 @@
 //= require date_pickers
 //= require documents
 //= require dynamic_form
+//= require endless_pagination
 //= require extensions
 //= require fetch
 //= require file_input

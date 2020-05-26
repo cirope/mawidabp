@@ -47,8 +47,7 @@ module Reports::WeaknessesBrief
       final = params[:final] == 'true'
 
       pending_weaknesses = Weakness.
-        awaiting.
-        or(Weakness.being_implemented).
+        being_implemented.
         or(Weakness.implemented).
         finals(final).
         list_with_final_review.
@@ -129,7 +128,7 @@ module Reports::WeaknessesBrief
           weakness.audit_comments,
           weaknesses_brief_audit_users(weakness).join("\n"),
           (weakness.origination_date ? l(weakness.origination_date) : '-'),
-          (weakness.pending? || weakness.awaiting? ? weakness.reschedule_count : '-'),
+          (weakness.pending? ? weakness.reschedule_count : '-'),
           (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
           distance_in_days_to_cut_date(weakness)
         ]
@@ -148,7 +147,7 @@ module Reports::WeaknessesBrief
       if weakness.first_follow_up_date
         distance = (@cut_date - weakness.first_follow_up_date).days / 1.day
 
-        distance.abs.to_i > 365 ? distance.abs.to_i : nil
+        distance.to_i > 365 ? distance.to_i : nil
       end
     end
 
@@ -226,7 +225,7 @@ module Reports::WeaknessesBrief
           truncate(weakness.audit_comments, length: 1000),
           weaknesses_brief_audit_users(weakness).join("\n"),
           (weakness.origination_date ? l(weakness.origination_date) : '-'),
-          (weakness.pending? || weakness.awaiting? ? weakness.reschedule_count : '-'),
+          (weakness.pending? ? weakness.reschedule_count : '-'),
           (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
           distance_in_days_to_cut_date(weakness)
         ]

@@ -1,0 +1,41 @@
++function () {
+  <% if @finding.require_commitment_support? @commitment_date %>
+    var $container = $('[data-answer-commitment]')
+    var $container = $('[data-answer-commitment]')
+
+
+    if ($container.is(':visible')) {
+      $container.find('[data-commitment-date]').text('<%= l @commitment_date.to_date %>')
+      $container.find('[data-commitment-date-level]').text('<%= @finding.commitment_date_required_level_text @commitment_date.to_date %>')
+    } else {
+      <% if params[:show].present? %>
+        <%= simple_fields_for :finding_answer do |f| %>
+          <%= f.simple_fields_for :commitment_support_attributes, CommitmentSupport.new do |cs_f| %>
+            $container.html('<%= j render('commitment', f: cs_f) %>').removeAttr('hidden')
+            $container.find('[data-autofocus]').focus()
+          <% end %>
+        <% end %>
+      <% else %>
+        <%= simple_fields_for :finding, @finding do |f| %>
+          <%= f.simple_fields_for :finding_answers_attributes, FindingAnswer.new, index: @index do |fa_f| %>
+            <%= fa_f.simple_fields_for :commitment_support_attributes, CommitmentSupport.new do |cs_f| %>
+              $container.html('<%= j render('commitment', f: cs_f) %>').removeAttr('hidden')
+              $container.find('[data-autofocus]').focus()
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    }
+  <% end %>
+
+  var $commitmentDate = $('[data-commitment-date-message]')
+
+  <% if @date_warning_message.present? %>
+    var message = '<%= j @date_warning_message %>'
+
+    $commitmentDate.text(message)
+    $commitmentDate.removeAttr('hidden')
+  <% else %>
+    $commitmentDate.prop('hidden', true)
+  <% end %>
+}()

@@ -59,7 +59,7 @@ module LdapConfigs::LdapImport
     def process_entry entry, user:, roles:, data:
       manager_dn = casted_attribute entry, manager_attribute
 
-      data[:manager_id] = nil if manager_dn.blank?
+      data[:manager_id] = nil if manager_dn.blank? && !skip_function_and_manager?
 
       state = if user
                 update_user user: user, data: data, roles: roles

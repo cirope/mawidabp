@@ -1,6 +1,7 @@
 module Reports::WeaknessesByUser
   extend ActiveSupport::Concern
 
+  include Reports::FileResponder
   include Reports::Pdf
   include Reports::Period
 
@@ -9,9 +10,7 @@ module Reports::WeaknessesByUser
 
     respond_to do |format|
       format.html
-      format.csv do
-        render csv: weaknesses_by_user_csv, filename: @title.downcase
-      end
+      format.csv  { render_weaknesses_by_user_report_csv }
     end
   end
 
@@ -99,16 +98,12 @@ module Reports::WeaknessesByUser
       @weaknesses = weaknesses.reorder order
     end
 
-    def weaknesses_by_user_csv
-      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
-
-      csv_str = CSV.generate(**options) do |csv|
-        csv << weaknesses_by_user_csv_headers
-
-        weaknesses_by_user_csv_data_rows.each { |row| csv << row }
-      end
-
-      "\uFEFF#{csv_str}"
+    def render_weaknesses_by_user_report_csv
+      render_or_send_by_mail(
+        collection:  @weaknesses,
+        filename:    "#{@title.downcase}.csv",
+        method_name: :by_user_csv
+      )
     end
 
     def by_user_pdf_items weakness
@@ -205,20 +200,22 @@ module Reports::WeaknessesByUser
         @filters << "<b>#{User.model_name.human count: 1}</b> = \"#{user.full_name}\""
 
         weaknesses.
-          joins(:users).
-          references(:user).
-          where(User.table_name => { id: user.self_and_descendants.map(&:id) })
+          references(:finding_user_assignments).
+          joins(:finding_user_assignments).
+          where FindingUserAssignment.table_name => {
+            user_id: user.self_and_descendants.map(&:id), process_owner: true
+          }
       else
         weaknesses
       end
     end
 
     def filter_weaknesses_by_user_by_risk weaknesses
-      risk = Array(params[:weaknesses_by_user][:risk]).reject(&:blank?)
+      risk = Array(params[:weaknesses_by_user][:risk]).reject(&:blank?).map &:to_i
 
       if risk.present?
         risk_texts = risk.map do |r|
-          t "risk_types.#{Weakness.risks.invert[r.to_i]}"
+          t "risk_types.#{Weakness.risks.invert[r]}"
         end
 
         @filters << "<b>#{Finding.human_attribute_name('risk')}</b> = \"#{risk_texts.to_sentence}\""
@@ -230,16 +227,14 @@ module Reports::WeaknessesByUser
     end
 
     def filter_weaknesses_by_user_by_status weaknesses
-      states               = Array(params[:weaknesses_by_user][:finding_status]).reject(&:blank?)
+      states               = Array(params[:weaknesses_by_user][:finding_status]).reject(&:blank?).map &:to_i
       not_muted_states     = Finding::EXCLUDE_FROM_REPORTS_STATUS + [:implemented_audited]
-      mute_state_filter_on = Finding::STATUS.except(*not_muted_states).map do |k, v|
-        v.to_s
-      end
+      mute_state_filter_on = Finding::STATUS.except(*not_muted_states).values
 
       if states.present?
         unless states.sort == mute_state_filter_on.sort
           state_text = states.map do |s|
-            t "findings.state.#{Finding::STATUS.invert[s.to_i]}"
+            t "findings.state.#{Finding::STATUS.invert[s]}"
           end
 
           @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text.to_sentence}\""
@@ -276,65 +271,4 @@ module Reports::WeaknessesByUser
         weaknesses
       end
     end
-
-    def weaknesses_by_user_csv_headers
-      [
-        Review.model_name.human,
-        PlanItem.human_attribute_name('project'),
-        ConclusionFinalReview.human_attribute_name('issue_date'),
-        BusinessUnit.model_name.human,
-        Weakness.human_attribute_name('review_code'),
-        Weakness.human_attribute_name('title'),
-        Weakness.human_attribute_name('description'),
-        Weakness.human_attribute_name('state'),
-        Weakness.human_attribute_name('risk'),
-        t('finding.auditors', count: 0),
-        t('finding.responsibles', count: 1),
-        t('finding.audited', count: 0),
-        Weakness.human_attribute_name('origination_date'),
-        Weakness.human_attribute_name('follow_up_date'),
-        Weakness.human_attribute_name('solution_date'),
-        Weakness.human_attribute_name('rescheduled'),
-        t('findings.state.repeated'),
-        Weakness.human_attribute_name('audit_comments'),
-        Weakness.human_attribute_name('audit_recommendations'),
-        Weakness.human_attribute_name('answer'),
-        (t('finding.finding_answers') if Weakness.show_follow_up_timestamps?)
-      ].compact
-    end
-
-    def weaknesses_by_user_csv_data_rows
-      @weaknesses.map do |weakness|
-        [
-          weakness.review.identification,
-          weakness.review.plan_item.project,
-          l(weakness.review.conclusion_final_review.issue_date),
-          weakness.business_unit,
-          weakness.review_code,
-          weakness.title,
-          weakness.description,
-          weakness.state_text,
-          weakness.risk_text,
-          weakness.users.select(&:auditor?).map(&:full_name).to_sentence,
-          weakness.process_owners.map(&:full_name).to_sentence,
-          weakness.users.select { |u|
-            u.can_act_as_audited? && weakness.process_owners.exclude?(u)
-          }.map(&:full_name).to_sentence,
-          (weakness.origination_date ? l(weakness.origination_date) : '-'),
-          (weakness.follow_up_date ? l(weakness.follow_up_date) : '-'),
-          (weakness.solution_date ? l(weakness.solution_date) : '-'),
-          t("label.#{weakness.rescheduled? ? 'yes' : 'no'}"),
-          t("label.#{weakness.repeated_of_id.present? ? 'yes' : 'no'}"),
-          weakness.audit_comments,
-          weakness.audit_recommendations,
-          weakness.answer,
-          (weakness.finding_answers.map { |fa|
-            date = l fa.created_at, format: :minimal
-
-            "[#{date}] #{fa.user.full_name}: #{fa.answer}"
-          }.join("\n") if Weakness.show_follow_up_timestamps?)
-        ].compact
-      end
-    end
 end
-

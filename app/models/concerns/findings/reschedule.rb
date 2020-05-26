@@ -11,7 +11,7 @@ module Findings::Reschedule
 
   def calculate_reschedule_count
     count             = 0
-    last_checked_date = follow_up_date
+    last_checked_date = last_being_implemented_follow_up_date
 
     follow_up_dates_to_check_against.each do |date|
       if last_checked_date && date < last_checked_date
@@ -34,9 +34,9 @@ module Findings::Reschedule
     end
 
     def calculate_reschedule_count?
-      recalculate_attributes_changed?     &&
-        repeated_or_on_final_review?      &&
-        (awaiting? || being_implemented?)
+      recalculate_attributes_changed? &&
+        repeated_or_on_final_review?  &&
+        being_implemented?
     end
 
     def recalculate_attributes_changed?
@@ -55,11 +55,24 @@ module Findings::Reschedule
       repeated_of&.follow_up_date.present? || final_review_created_at.present?
     end
 
+    def last_being_implemented_follow_up_date
+      if implemented? || implemented_audited?
+        last_being_implemented = versions.reverse.detect do |v|
+          v.reify(dup: true)&.being_implemented?
+        end&.reify dup: true
+
+        [last_being_implemented&.follow_up_date, follow_up_date].compact.min
+      else
+        follow_up_date
+      end
+    end
+
     def follow_up_dates_to_check_against
       follow_up_dates = [follow_up_date, follow_up_date_was].compact.sort
 
       versions_after_final_review.reverse.each do |v|
-        date = v.reify(dup: true)&.follow_up_date
+        prev = v.reify dup: true
+        date = prev.follow_up_date if prev&.being_implemented?
 
         follow_up_dates << date if date.present?
       end

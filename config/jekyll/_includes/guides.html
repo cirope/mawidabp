@@ -2,15 +2,17 @@
   <h3 class="text-muted">{% t guides.title %}</h3>
 </div>
 
-{% assign pages = site.pages | sort: 'guide_order' | where: 'article_order', 1 %}
+{% assign pages = site.pages | where: 'article_order', 1 | sort: 'guide_order' %}
 {% for page in pages %}
   {% assign limit = forloop.index0 | modulo: 3 %}
   {% if limit == 0 %}<div class="row">{% endif %}
     {% capture guide_name %}guides.{{ page.category }}{% endcapture %}
+    {% assign child = site.pages | where: 'parent', page.title | sort: 'article_order' |first %}
+    {% capture page_url %}{% if page.skip_link == true %}{{ child.url }}{% else %}{{ page.url }}{% endif %}{% endcapture %}
     <div class="col-md-4">
       <div class="alert alert-info text-center">
         <h2>
-          <a class="alert-link" href="/help{{ page.url }}">{% t guide_name %}</a>
+          <a class="alert-link" href="/help{{ page_url }}">{% t guide_name %}</a>
         </h2>
       </div>
     </div>

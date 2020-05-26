@@ -1,0 +1,2 @@
+module Findings::CommitmentsHelper
+end

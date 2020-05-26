@@ -34,7 +34,6 @@ module Findings::State
           confirmed:           -3,
           unconfirmed:         -2,
           unanswered:          -1,
-          awaiting:            -4,
           being_implemented:   0,
           implemented:         1,
           implemented_audited: 2,
@@ -53,7 +52,6 @@ module Findings::State
           confirmed:           confirmed_transitions(final),
           unconfirmed:         unconfirmed_transitions(final),
           unanswered:          unanswered_transitions(final),
-          awaiting:            awaiting_transitions(final),
           being_implemented:   being_implemented_transitions(final),
           implemented:         implemented_transitions(final),
           implemented_audited: implemented_audited_transitions(final),
@@ -69,18 +67,17 @@ module Findings::State
 
       def final_status
         [STATUS[:implemented_audited], STATUS[:revoked], STATUS[:expired]] |
-          (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING ? [] : [STATUS[:assumed_risk]]) |
+          (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING || HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [STATUS[:assumed_risk]]) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [STATUS[:criteria_mismatch]])
       end
 
       def pending_status
         [
-          STATUS[:being_implemented], STATUS[:notify], STATUS[:implemented],
-          STATUS[:unconfirmed], STATUS[:confirmed], STATUS[:unanswered],
-          STATUS[:incomplete]
+          STATUS[:being_implemented], STATUS[:notify], STATUS[:unconfirmed],
+          STATUS[:confirmed], STATUS[:unanswered], STATUS[:incomplete]
         ] |
-        (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING ? [STATUS[:assumed_risk]] : []) |
-        (SHOW_WEAKNESS_PROGRESS ? [STATUS[:awaiting]] : [])
+        (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING && !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [STATUS[:assumed_risk]] : []) |
+        (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [STATUS[:implemented]])
       end
 
       def define_state_scopes
@@ -102,24 +99,23 @@ module Findings::State
 
       def exclude_from_reports_status
         [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked] |
-          (SHOW_WEAKNESS_PROGRESS ? [] : [:awaiting])
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [:implemented, :assumed_risk] : [])
       end
 
       def pending_for_review_status
         [
-          STATUS[:awaiting],
           STATUS[:being_implemented],
-          STATUS[:implemented],
           STATUS[:unanswered],
         ] |
-        (SHOW_ASSUMED_RISK_AS_REVIEW_PENDING ? [STATUS[:assumed_risk]] : [])
+        (SHOW_ASSUMED_RISK_AS_REVIEW_PENDING && !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [STATUS[:assumed_risk]] : []) |
+        (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [STATUS[:implemented]])
       end
 
       def confirmed_transitions final
-        [:confirmed, :unanswered, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :expired] |
+        [:confirmed, :unanswered, :being_implemented, :implemented_audited, :expired] |
           (final ? [] : [:revoked]) |
-          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
-          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
+          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
       end
 
       def unconfirmed_transitions final
@@ -127,55 +123,55 @@ module Findings::State
       end
 
       def unanswered_transitions final
-        [:unanswered, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :expired, :repeated] |
+        [:unanswered, :being_implemented, :implemented_audited, :expired, :repeated] |
           (final ? [] : [:revoked]) |
-          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
-          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
-      end
-
-      def awaiting_transitions final
-        [:awaiting, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :expired, :repeated] |
-          (final ? [] : [:revoked]) |
-          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
+          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
       end
 
       def being_implemented_transitions final
-        [:being_implemented, :implemented, :implemented_audited, :assumed_risk, :expired, :repeated] |
+        [:being_implemented, :implemented_audited, :expired, :repeated] |
           (final ? [] : [:revoked]) |
-          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
-          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
+          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
       end
 
       def implemented_transitions final
-        [:implemented, :being_implemented, :implemented_audited, :assumed_risk, :expired, :repeated] |
+        [:being_implemented, :implemented_audited, :expired, :repeated] |
           (final ? [] : [:revoked]) |
-          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
-          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
+          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
       end
 
       def implemented_audited_transitions final
         [:implemented_audited] |
-          (final ? [] : [:implemented, :being_implemented]) |
-          (SHOW_WEAKNESS_PROGRESS && !final ? [:awaiting] : [])
+          (
+            if final
+              []
+            else
+              [:being_implemented] |
+                (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented])
+            end
+          )
       end
 
       def assumed_risk_transitions final
         [:assumed_risk] |
-          (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING ? [:awaiting, :being_implemented] : [])
+          (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING ? [:being_implemented] : [])
       end
 
       def notify_transitions final
-        [:notify, :incomplete, :confirmed, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :expired] |
+        [:notify, :incomplete, :confirmed, :being_implemented, :implemented_audited, :expired] |
           (final ? [] : [:revoked]) |
-          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
-          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
+          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
       end
 
       def incomplete_transitions final
-        [:incomplete, :notify, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :expired] |
+        [:incomplete, :notify, :being_implemented, :implemented_audited, :expired] |
           (final ? [] : [:revoked]) |
-          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
-          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
+          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
       end
 
       def repeated_transitions final
@@ -192,8 +188,14 @@ module Findings::State
 
       def expired_transitions final
         [:expired] |
-          (final ? [] : [:implemented, :being_implemented]) |
-          (SHOW_WEAKNESS_PROGRESS && !final ? [:awaiting] : [])
+          (
+            if final
+              []
+            else
+              [:being_implemented] |
+                (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented])
+            end
+          )
       end
 
       def visible_pending_status
@@ -233,6 +235,14 @@ module Findings::State
 
   def state_text
     state ? I18n.t("findings.state.#{STATUS.invert[state]}") : '-'
+  end
+
+  def full_state_text
+    if latest
+      "#{state_text} (#{latest.state_text} - #{latest.review.identification})"
+    else
+      state_text
+    end
   end
 
   private

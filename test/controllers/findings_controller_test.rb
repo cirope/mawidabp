@@ -8,23 +8,64 @@ class FindingsControllerTest < ActionController::TestCase
     login
   end
 
-  test 'list findings' do
-    get :index, params: { completed: 'incomplete' }
+  test 'list incomplete findings' do
+    incomplete_status_list = Finding::PENDING_STATUS -
+                             [Finding::STATUS[:incomplete]]
+
+    get :index, params: { completion_state: 'incomplete' }
 
     assert_response :success
+    assert_not_nil assigns(:findings)
+    assert assigns(:findings).any?
+    assert assigns(:findings).all? { |f| incomplete_status_list.include?(f.state) }
+  end
+
+  test 'list completed findings' do
+    finding = findings(:being_implemented_weakness)
+    completed_status_list = Finding::STATUS.values       -
+                            Finding::PENDING_STATUS      -
+                            [Finding::STATUS[:revoked]]  -
+                            [Finding::STATUS[:repeated]]
+
+    Current.user = users :supervisor
+
+    finding.update! state: Finding::STATUS[:implemented_audited],
+                    solution_date: Time.zone.today
+
+    get :index, params: { completion_state: 'complete' }
+
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert assigns(:findings).any?
+    assert assigns(:findings).all? { |f| completed_status_list.include?(f.state) }
+  end
+
+  test 'list repeated findings' do
+    finding = findings :unanswered_for_level_1_notification
+    repeated_of = findings :being_implemented_weakness
+    repeated_status_list = [Finding::STATUS[:repeated]]
+
+    finding.update! repeated_of_id: repeated_of.id
+
+    get :index, params: { completion_state: 'repeated' }
+
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert assigns(:findings).any?
+    assert assigns(:findings).all? { |f| repeated_status_list.include?(f.state) }
   end
 
   test 'list findings for follow_up_committee' do
     login user: users(:committee)
 
-    get :index, params: { completed: 'incomplete' }
+    get :index, params: { completion_state: 'incomplete' }
 
     assert_response :success
   end
 
   test 'list findings with search and sort' do
     get :index, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       search: {
         query:   '1 2 4 y w',
         columns: ['title', 'review'],
@@ -40,7 +81,7 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'list findings sorted with search by date' do
     get :index, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       search: {
         query:   "> #{I18n.l(4.days.ago.to_date, format: :minimal)}",
         columns: ['review', 'issue_date']
@@ -57,8 +98,8 @@ class FindingsControllerTest < ActionController::TestCase
     user = users :first_time
 
     get :index, params: {
-      completed: 'incomplete',
-      user_id:   user.id
+      completion_state: 'incomplete',
+      user_id:          user.id
     }
 
     assert_response :success
@@ -71,8 +112,8 @@ class FindingsControllerTest < ActionController::TestCase
     user = users :first_time
 
     get :index, params: {
-      completed: 'incomplete',
-      user_ids:  [user.id]
+      completion_state: 'incomplete',
+      user_ids:         [user.id]
     }
 
     assert_response :success
@@ -85,9 +126,9 @@ class FindingsControllerTest < ActionController::TestCase
     user = users :first_time
 
     get :index, params: {
-      completed:      'incomplete',
-      user_id:        user.id,
-      as_responsible: true
+      completion_state: 'incomplete',
+      user_id:          user.id,
+      as_responsible:   true
     }
 
     assert_response :success
@@ -102,8 +143,8 @@ class FindingsControllerTest < ActionController::TestCase
     login user: user
 
     get :index, params: {
-      completed: 'incomplete',
-      as_owner:  true
+      completion_state: 'incomplete',
+      as_owner:         true
     }
 
     assert_response :success
@@ -118,8 +159,8 @@ class FindingsControllerTest < ActionController::TestCase
     ]
 
     get :index, params: {
-      completed: 'incomplete',
-      ids:       ids
+      completion_state: 'incomplete',
+      ids:              ids
     }
 
     assert_response :success
@@ -129,14 +170,14 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings as CSV' do
-    get :index, params: { completed: 'incomplete' }, as: :csv
+    get :index, params: { completion_state: 'incomplete' }, as: :csv
 
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'list findings as PDF' do
-    get :index, params: { completed: 'incomplete' }, as: :pdf
+    get :index, params: { completion_state: 'incomplete' }, as: :pdf
 
     assert_redirected_to /\/private\/.*\/findings\/.*\.pdf$/
     assert_match Mime[:pdf].to_s, @response.content_type
@@ -147,7 +188,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     login prefix: organization.prefix
 
-    get :index, params: { completed: 'incomplete' }
+    get :index, params: { completion_state: 'incomplete' }
 
     assert_response :success
     assert_not_nil assigns(:findings)
@@ -164,10 +205,10 @@ class FindingsControllerTest < ActionController::TestCase
     end
 
     perform_enqueued_jobs do
-      get :index, params: { completed: 'incomplete' }, as: :csv
+      get :index, params: { completion_state: 'incomplete' }, as: :csv
     end
 
-    assert_redirected_to findings_url format: :csv, completed: 'incomplete'
+    assert_redirected_to findings_url format: :csv, completion_state: 'incomplete'
 
     findings_count = assigns(:findings).to_a.size
     assert findings_count > 10
@@ -198,8 +239,8 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'show finding' do
     get :show, params: {
-      completed: 'incomplete',
-      id:        findings(:unanswered_weakness)
+      completion_state: 'incomplete',
+      id:               findings(:unanswered_weakness)
     }
 
     assert_response :success
@@ -209,8 +250,8 @@ class FindingsControllerTest < ActionController::TestCase
     login user: users(:committee)
 
     get :show, params: {
-      completed: 'incomplete',
-      id:        findings(:being_implemented_oportunity)
+      completion_state: 'incomplete',
+      id:               findings(:being_implemented_oportunity)
     }
 
     assert_response :success
@@ -220,8 +261,8 @@ class FindingsControllerTest < ActionController::TestCase
     login user: users(:auditor)
 
     get :edit, params: {
-      completed: 'incomplete',
-      id:        findings(:unanswered_weakness)
+      completion_state: 'incomplete',
+      id:               findings(:unanswered_weakness)
     }
 
     assert_response :success
@@ -231,8 +272,8 @@ class FindingsControllerTest < ActionController::TestCase
     login user: users(:audited)
 
     get :edit, params: {
-      completed: 'incomplete',
-      id:        findings(:unanswered_weakness)
+      completion_state: 'incomplete',
+      id:               findings(:unanswered_weakness)
     }
 
     assert_response :success
@@ -243,8 +284,8 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_raise ActiveRecord::RecordNotFound do
       get :edit, params: {
-        completed: 'complete',
-        id:        findings(:being_implemented_weakness_on_final)
+        completion_state: 'complete',
+        id:               findings(:being_implemented_weakness_on_final)
       }
     end
   end
@@ -254,8 +295,8 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_raise ActiveRecord::RecordNotFound do
       get :edit, params: {
-        completed: 'incomplete',
-        id:        findings(:incomplete_weakness)
+        completion_state: 'incomplete',
+        id:               findings(:incomplete_weakness)
       }
     end
   end
@@ -267,8 +308,8 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_raise ActiveRecord::RecordNotFound do
       get :edit, params: {
-        completed: 'complete',
-        id:        finding
+        completion_state: 'complete',
+        id:               finding
       }
     end
   end
@@ -281,6 +322,7 @@ class FindingsControllerTest < ActionController::TestCase
     difference_counts = [
       'WorkPaper.count',
       'FindingAnswer.count',
+      'Endorsement.count',
       'Cost.count',
       'FindingRelation.count',
       'Task.count',
@@ -288,11 +330,12 @@ class FindingsControllerTest < ActionController::TestCase
       'Tagging.count'
     ]
 
-    assert_enqueued_emails 1 do
+    # One email on the answer, the other on the endorsement
+    assert_enqueued_emails 2 do
       assert_difference difference_counts do
         assert_difference 'FileModel.count', 2 do
           patch :update, params: {
-            completed: 'incomplete',
+            completion_state: 'incomplete',
             id: finding,
             finding: {
               control_objective_item_id:
@@ -341,16 +384,21 @@ class FindingsControllerTest < ActionController::TestCase
                   }
                 }
               ],
-              finding_answers_attributes: [
-                {
+              finding_answers_attributes: {
+                '0' => {
                   answer: 'New answer',
                   user_id: users(:supervisor).id,
                   notify_users: '1',
                   file_model_attributes: {
                     file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
+                  },
+                  endorsements_attributes: {
+                    '0' => {
+                      user_id: users(:administrator).id
+                    }
                   }
                 }
-              ],
+              },
               finding_relations_attributes: [
                 {
                   description: 'Duplicated',
@@ -415,7 +463,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert_no_difference no_difference_count do
       assert_difference difference_count do
         patch :update, params: {
-          completed: 'incomplete',
+          completion_state: 'incomplete',
           id: finding,
           finding: {
             control_objective_item_id: control_objective_items(:impact_analysis_item_editable).id,
@@ -501,7 +549,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_enqueued_emails 1 do
       patch :update, params: {
-        completed: 'incomplete',
+        completion_state: 'incomplete',
         id: finding,
         finding: {
           control_objective_item_id: control_objective_items(:impact_analysis_item).id,
@@ -560,7 +608,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_difference 'Tagging.count' do
       patch :update, params: {
-        completed: 'incomplete',
+        completion_state: 'incomplete',
         id: finding,
         finding: {
           control_objective_item_id: control_objective_items(:impact_analysis_item).id,
@@ -615,7 +663,7 @@ class FindingsControllerTest < ActionController::TestCase
     finding = findings :being_implemented_weakness_on_draft
 
     get :auto_complete_for_finding_relation, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       q: 'O001',
       finding_id: finding.id,
       review_id: finding.review.id
@@ -633,7 +681,7 @@ class FindingsControllerTest < ActionController::TestCase
     finding = findings :unconfirmed_for_notification_weakness
 
     get :auto_complete_for_finding_relation, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       q: 'O001',
       finding_id: finding.id,
       review_id: finding.review.id
@@ -652,7 +700,7 @@ class FindingsControllerTest < ActionController::TestCase
     finding = findings :unconfirmed_for_notification_weakness
 
     get :auto_complete_for_finding_relation, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       q: 'O001; 1 2 3',
       finding_id: finding.id,
       review_id: finding.review.id
@@ -671,7 +719,7 @@ class FindingsControllerTest < ActionController::TestCase
     finding = findings :unconfirmed_for_notification_weakness
 
     get :auto_complete_for_finding_relation, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       q: 'x_none',
       finding_id: finding.id,
       review_id: finding.review.id
@@ -687,7 +735,7 @@ class FindingsControllerTest < ActionController::TestCase
   test 'auto complete for tagging' do
     get :auto_complete_for_tagging, params: {
       q: 'impor',
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       kind: 'finding'
     }, as: :json
 
@@ -702,7 +750,25 @@ class FindingsControllerTest < ActionController::TestCase
   test 'auto complete for tagging with empty results' do
     get :auto_complete_for_tagging, params: {
       q: 'x_none',
-      completed: 'incomplete',
+      completion_state: 'incomplete',
+      kind: 'finding'
+    }, as: :json
+
+    assert_response :success
+
+    tags = ActiveSupport::JSON.decode @response.body
+
+    assert_equal 0, tags.size
+  end
+
+  test 'auto complete for obsolete tagging should yield empty results' do
+    tag = tags :important
+
+    tag.update! obsolete: true
+
+    get :auto_complete_for_tagging, params: {
+      q: 'impor',
+      completion_state: 'incomplete',
       kind: 'finding'
     }, as: :json
 
@@ -717,7 +783,7 @@ class FindingsControllerTest < ActionController::TestCase
     skip unless POSTGRESQL_ADAPTER
 
     # we already have a test that checks the response
-    get :index, params: { completed: 'incomplete' }
+    get :index, params: { completion_state: 'incomplete' }
 
     first = findings(:unanswered_for_level_1_notification)
     second = findings(:unanswered_for_level_2_notification)
@@ -731,7 +797,7 @@ class FindingsControllerTest < ActionController::TestCase
     create_finding_answers_for(second, destroy_readings: true)
 
     get :index, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       search: {
         order: 'readings_desc'
       }
@@ -753,7 +819,7 @@ class FindingsControllerTest < ActionController::TestCase
     create_finding_answers_for(second, destroy_readings: true)
 
     get :index, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       search: {
         order: 'readings_desc'
       }
@@ -762,7 +828,7 @@ class FindingsControllerTest < ActionController::TestCase
     html_findings = assigns(:findings).pluck(:id)
 
     get :index, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       search: {
         order: 'readings_desc'
       }
@@ -777,7 +843,7 @@ class FindingsControllerTest < ActionController::TestCase
     end
 
     get :index, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       search: {
         order: 'readings_desc'
       }
@@ -793,7 +859,7 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'list findings with search by updated_at' do
     get :index, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       search: {
         query:   "> #{I18n.l(4.days.ago.to_date, format: :minimal)}",
         columns: ['updated_at']
@@ -806,7 +872,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert assigns(:findings).all? { |f| f.updated_at > 4.days.ago.to_date }
 
     get :index, params: {
-      completed: 'incomplete',
+      completion_state: 'incomplete',
       search: {
         query:   "< #{I18n.l(2.days.ago.to_date, format: :minimal)}",
         columns: ['updated_at']
@@ -820,13 +886,17 @@ class FindingsControllerTest < ActionController::TestCase
 
   private
 
-  def create_finding_answers_for(finding, destroy_readings: false)
-    finding_answer = finding.finding_answers.create!(
-      answer: 'something',
-      user_id: users(:administrator).id,
-      commitment_date: 1.day.from_now
-    )
-    finding_answer.readings.map(&:destroy!) if destroy_readings
-    finding_answer
-  end
+    def create_finding_answers_for(finding, destroy_readings: false)
+      finding_answer = finding.finding_answers.create!(
+        answer: 'something',
+        user_id: users(:administrator).id,
+        commitment_date: 1.day.from_now
+      )
+      finding_answer.readings.map(&:destroy!) if destroy_readings
+      finding_answer
+    end
+
+    def repeated_status_list
+      [Finding::STATUS[:repeated]]
+    end
 end

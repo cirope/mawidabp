@@ -2,6 +2,7 @@ es:
   messages:
     confirmation: '¿Está seguro?'
     not_authorized: 'Debe ingresar para ver el contenido'
+    truncated: 'Truncado, cantidad máxima de caracteres %{count}'
 
   navigation:
     back: 'Volver'
@@ -145,12 +146,12 @@ es:
     current_user_filters:
       as_owner: '%{kind} como responsable'
       incomplete: 'Pendientes'
-      complete: 'Solucionados o reiterados'
+      complete: 'Solucionados'
+      repeated: 'Reiterados'
     state:
       confirmed: 'Confirmada'
       unconfirmed: 'No confirmada'
       unanswered: 'Sin respuesta'
-      awaiting: 'Pendiente'
       being_implemented: 'En proceso de implementación'
       being_implemented_current: 'Vigente'
       being_implemented_current_rescheduled: 'Reprogramada vigente'
@@ -168,6 +169,14 @@ es:
     work_papers:
       create:
         from_comment: 'De comentario por %{user} el %{date}'
+    endorsements:
+      status:
+        pending: 'Pendiente'
+        approved: 'Aprobado'
+        rejected: 'Rechazado'
+    endorsement_item:
+      approve: 'Aprobar'
+      reject: 'Rechazar'
 
   licenses:
     trial_valid_until: 'Fin período de prueba'
@@ -288,6 +297,12 @@ es:
     show:
       title: 'Detalles del período'
 
+  plan_items:
+    show:
+      control_objective_projects:
+        save: 'Asociar objetivo de control'
+        done: 'Guardar'
+
   plans:
     index:
       title: 'Listado de planes de trabajo'
@@ -337,7 +352,10 @@ es:
       show:
         title: 'Cronograma'
         empty: 'No hay proyectos en el plan seleccionado'
+        empty_with_no_business_units: 'No hay unidades de negocio seleccionadas'
         detail: 'Detalle'
+        by_business_unit: 'Ver calendario por unidad de negocio'
+        by_project: 'Ver calendario por proyecto'
     resources:
       show:
         title: 'Resumen por recurso'
@@ -352,6 +370,8 @@ es:
         on_time: 'En fecha'
         progress: 'Avance total'
         compliance: 'Cumplimiento'
+    business_unit_type_plan_items:
+      associate_control_objectives: 'Asociar objetivos de control'
     download_global_plan: 'Descargar plan de auditoria global'
     download_detailed_plan: 'Descargar plan de auditoria detallado'
     download_business_unit_type_plan: 'Descargar plan %{business_unit_type}'

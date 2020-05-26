@@ -50,7 +50,7 @@
       <%= control_objective_item.auditor_comment %>
     </p>
 
-    <% if ORGANIZATIONS_WITH_CONTROL_OBJECTIVE_COUNTS.include?(current_organization.prefix) %>
+    <% if control_objective_item.show_counts? current_organization.prefix %>
       <p class="mb-1">
         <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name 'issues_count' %></span>:
         <%= control_objective_item.issues_count %>
@@ -71,7 +71,7 @@
 
 <div>
   <%= link_to t('label.back'), action: :index %> |
-  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: "#customize_report" } %> |
+  <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
   <%= link_to t('label.download_csv'), control_objective_counts_conclusion_reports_path(request.query_parameters.merge(format: :csv)) %>
 </div>
 

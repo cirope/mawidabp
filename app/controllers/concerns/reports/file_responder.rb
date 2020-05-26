@@ -13,6 +13,27 @@ module Reports::FileResponder
     end
   end
 
+  def redirect_or_send_by_mail args
+    collection  = args.fetch :collection
+    method_name = args.fetch :method_name
+    options     = args.fetch :options
+
+    @report_path = if send_report_by_email? collection
+                     perform_deferred_report args
+
+                     put_will_be_sent_flash_notice
+
+                     request.referrer
+                   else
+                     collection.send method_name, options.merge(filename_only: true)
+                   end
+
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js   { render 'shared/pdf_report' }
+    end
+  end
+
   private
 
     def send_report_by_email? collection
@@ -23,9 +44,9 @@ module Reports::FileResponder
       ).distinct.count > SEND_REPORT_EMAIL_AFTER_COUNT
     end
 
-    def perform_report_and_redirect_back args
+    def perform_deferred_report args
       collection  = args.fetch :collection
-      filename    = [args.fetch(:filename), request.format.symbol].join '.'
+      filename    = args.fetch :filename
       method_name = args.fetch(:method_name).to_s
       options     = args.fetch :options, {}
 
@@ -38,6 +59,14 @@ module Reports::FileResponder
         method_name:     method_name,
         options:         options
       )
+    end
+
+    def put_will_be_sent_flash_notice
+      flash.notice = t 'reports.file_will_be_sent'
+    end
+
+    def perform_report_and_redirect_back args
+      perform_deferred_report args
 
       parameters = request.query_parameters.except 'format'
       back_url   = if parameters.present?
@@ -46,13 +75,17 @@ module Reports::FileResponder
                      request.path
                    end
 
-      redirect_to back_url, notice: t('reports.file_will_be_sent')
+      put_will_be_sent_flash_notice
+
+      redirect_to back_url
     end
 
     def report_query_methods collection
       values = collection.values
       values = report_where_clauses values
       values = report_order_clauses values
+
+      values.delete :reordering
 
       values.to_json
     end

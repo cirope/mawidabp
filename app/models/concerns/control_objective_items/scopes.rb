@@ -83,5 +83,12 @@ module ControlObjectiveItems::Scopes
         where(business_units: { business_unit_type_id: business_unit_type_id }).
         references :business_units
     end
+
+    def default_order
+      reorder(
+        Arel.sql("#{Review.quoted_table_name}.#{Review.qcn 'identification'} DESC"),
+        id: :desc
+      )
+    end
   end
 end

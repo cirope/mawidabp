@@ -46,6 +46,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :search_params
 
+  def order_param
+    @order_param ||= params[:search]&.permit(:order)&.fetch :order, nil
+  end
+  helper_method :order_param
+
   private
 
     def scope_current_organization
@@ -169,7 +174,7 @@ class ApplicationController < ActionController::Base
 
       top_level_menu = true
 
-      until modules.blank?
+      while modules.present?
         selected_module = nil
         modules.each do |mod|
           if mod.controllers.include?(controller_name) && (top_level_menu ||

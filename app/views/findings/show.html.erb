@@ -39,29 +39,15 @@
     <%= @finding.risk_text %>
   </p>
 
-  <% unless HIDE_WEAKNESS_PRIORITY %>
-    <p class="mb-1">
-      <strong><%= Weakness.human_attribute_name :priority %></strong>:
-      <%= @finding.priority_text %>
-    </p>
-  <% end %>
+  <p class="mb-1">
+    <strong><%= Weakness.human_attribute_name :priority %></strong>:
+    <%= @finding.priority_text %>
+  </p>
 <% end %>
 <p class="mb-1">
   <strong><%= Finding.human_attribute_name(:state) %></strong>:
   <%= @finding.state_text %>
 </p>
-<% if SHOW_WEAKNESS_PROGRESS && @finding.kind_of?(Weakness) %>
-  <p class="mb-1">
-    <strong><%= Weakness.human_attribute_name :progress %>:</strong>
-
-  </p>
-
-  <div class="progress">
-    <div class="progress-bar" role="progressbar" style="width: <%= @finding.progress.to_i %>%;">
-      <%= @finding.progress.to_i %>%
-    </div>
-  </div>
-<% end %>
 <p class="mb-1">
   <strong><%= Finding.human_attribute_name(:origination_date) %></strong>:
   <%= l(@finding.origination_date, :format => :long) if @finding.origination_date %>
@@ -262,10 +248,10 @@
 
   <% @finding.finding_answers.each do |fa| %>
     <% if fa.persisted? %>
-      <%= render 'finding_answer', finding_answer: fa %>
-    <% elsif params[:completed] == 'incomplete' %>
-      <%= simple_form_for fa, url: finding_answers_path(params[:completed], @finding) do |f| %>
-        <%= render 'finding_answer', f: f %>
+      <%= render 'findings/finding_answer', finding_answer: fa, show: true, readonly: true %>
+    <% elsif params[:completion_state] == 'incomplete' %>
+      <%= simple_form_for fa, url: finding_answers_path(params[:completion_state], @finding) do |f| %>
+        <%= render 'findings/finding_answer', f: f, show: true, readonly: true %>
 
         <div class="text-right">
           <%= f.submit t('finding.submit_answer'), class: 'btn btn-outline-secondary' %>
@@ -376,22 +362,22 @@
 
 <div>
   <% if @finding.pending? && (!@auth_user.can_act_as_audited? || @finding.users.reload.include?(@auth_user)) %>
-    <strong><%= link_to_edit edit_finding_path(params[:completed],
+    <strong><%= link_to_edit edit_finding_path(params[:completion_state],
       @finding, :user_id => params[:user_id]) %></strong> |
   <% end %>
-  <%= link_to_index findings_path(params[:completed], :user_id => params[:user_id]) %> |
+  <%= link_to_index findings_path(params[:completion_state], :user_id => params[:user_id]) %> |
   <%= render('shared/downloads',
     right: true,
     links: [
       link_to(
         t('finding.follow_up_report.download_brief'),
-        follow_up_pdf_finding_path(params[:completed], @finding, :brief => true, :_ts => Time.now.to_i),
+        follow_up_pdf_finding_path(params[:completion_state], @finding, :brief => true, :_ts => Time.now.to_i),
         class: 'dropdown-item'
       ),
       (
         link_to(
           t('finding.follow_up_report.download'),
-          follow_up_pdf_finding_path(params[:completed], @finding, :_ts => Time.now.to_i),
+          follow_up_pdf_finding_path(params[:completion_state], @finding, :_ts => Time.now.to_i),
           class: 'dropdown-item'
         ) if show_follow_up_timestamps?
       )
