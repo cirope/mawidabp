@@ -1,9 +1,12 @@
 +function () {
   <% if @finding.require_commitment_support? @commitment_date %>
     var $container = $('[data-answer-commitment]')
+    var $container = $('[data-answer-commitment]')
+
 
     if ($container.is(':visible')) {
       $container.find('[data-commitment-date]').text('<%= l @commitment_date.to_date %>')
+      $container.find('[data-commitment-date-level]').text('<%= @finding.commitment_date_required_level_text @commitment_date.to_date %>')
     } else {
       <% if params[:show].present? %>
         <%= simple_fields_for :finding_answer do |f| %>
