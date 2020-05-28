@@ -926,9 +926,9 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'recode work papers' do
-    Current.user = users(:supervisor)
+    Current.user = users :supervisor
 
-    control_objective_items.first
+    control_objective_items(:management_dependency_item_editable)
       .work_papers.create!(
         code: 'PTOC 300',
         name: 'New recode',
