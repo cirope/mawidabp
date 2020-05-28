@@ -54,12 +54,12 @@ module Reviews::WorkPapers
     codes       = {}
 
     WorkPaper.transaction do
-      work_papers.each do |item|
-        prefix, code_number = item.code.split
+      work_papers.each do |work_paper|
+        prefix, code_number = work_paper.code.split
         codes[prefix]     ||= 1
 
         if codes[prefix] != code_number.to_i
-          item.update! code: "#{prefix} #{'%.3d' % codes[prefix]}"
+          work_paper.update! code: "#{prefix} #{'%.3d' % codes[prefix]}"
         end
 
         codes[prefix] += 1
