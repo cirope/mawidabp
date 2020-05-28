@@ -49,6 +49,22 @@ module Reviews::WorkPapers
     work_papers
   end
 
+  def recode_work_papers
+    items  = work_papers
+    values = {}
+
+    items.each do |item|
+      prefix, code_number = item.code.split
+      values[prefix]    ||= 1
+
+      if values[prefix] != code_number.to_i
+        item.update_column :code, "#{prefix} #{'%.3d' % values[prefix]}"
+      end
+
+      values[prefix] += 1
+    end
+  end
+
   private
 
     def last_work_paper_code prefix, work_papers

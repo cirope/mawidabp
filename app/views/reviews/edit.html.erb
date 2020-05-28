@@ -18,6 +18,9 @@
           method: :patch, confirm: t('messages.confirmation')
         }, class: 'dropdown-item' %>
       <% end %>
+      <%= link_to t('review.reorder_work_papers'), recode_work_papers_review_path(@review, _ts: Time.now.to_i), data: {
+        method: :patch, confirm: t('messages.confirmation')
+      }, class: 'dropdown-item' %>
       <% unless @review.has_final_review? %>
         <%= link_to t('review.reorder'), reorder_review_path(@review, _ts: Time.now.to_i), data: {
           method: :patch, confirm: t('messages.confirmation')

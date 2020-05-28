@@ -995,6 +995,7 @@ es:
     recode_weaknesses_by_repetition_and_risk: "Recodificar observaciones por reiteración y riesgo"
     recode_weaknesses_by_control_objective_order: "Recodificar observaciones por orden objetivos de control"
     reorder: "Reordenar procesos por nombre"
+    reorder_work_papers: "Reordenar papeles de trabajo"
     findings_recoded: "Hallazgos recodificados correctamente"
     reordered: "Procesos ordenados correctamente"
     failed_to_reorder: "Los procesos no pudieron ser ordenados"
