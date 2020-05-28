@@ -925,6 +925,22 @@ class ReviewTest < ActiveSupport::TestCase
     assert_equal pcs, sorted_pcs
   end
 
+  test 'recode work papers' do
+    Current.user = users(:supervisor)
+     @review.control_objective_items.find_by(
+      control_objective_text: control_objective_items(:impact_analysis_item).control_objective_text
+    ).work_papers.create!(
+      code: 'PTOC 40',
+      name: 'New recode',
+      description: 'New workpaper description'
+    )
+
+    work_papers        = @review.work_papers.map &:code
+    recode_work_papers = @review.recode_work_papers
+
+    assert_not_equal work_papers , recode_work_papers
+  end
+
   test 'pdf conversion' do
     FileUtils.rm @review.absolute_pdf_path if File.exist?(@review.absolute_pdf_path)
 
