@@ -927,27 +927,28 @@ class ReviewTest < ActiveSupport::TestCase
 
   test 'recode work papers' do
     Current.user = users(:supervisor)
-    co           = control_objectives(:impact_analysis)
-    co.control_objective_items.first
+
+    control_objective_items.first
       .work_papers.create!(
         code: 'PTOC 300',
         name: 'New recode',
         description: 'New workpaper description'
     )
+
     work_papers        = @review.work_papers.map &:code
     recode_work_papers = @review.recode_work_papers.map &:code
-    values             = {}
+    codes              = {}
 
     assert_not_equal work_papers, recode_work_papers
 
     recode_work_papers.sort.each do |wp|
       prefix, code_number = wp.split
-      values[prefix]    ||= 1
-      test_code           = "#{prefix} #{'%.3d' % values[prefix]}"
+      codes[prefix]     ||= 1
+      test_code           = "#{prefix} #{'%.3d' % codes[prefix]}"
 
       assert_equal wp, test_code
 
-      values[prefix] += 1
+      codes[prefix] += 1
     end
   end
 

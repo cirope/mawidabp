@@ -51,18 +51,18 @@ module Reviews::WorkPapers
 
   def recode_work_papers
     work_papers = self.work_papers.sort_by &:code
-    values      = {}
+    codes       = {}
 
     WorkPaper.transaction do
       work_papers.each do |item|
         prefix, code_number = item.code.split
-        values[prefix]    ||= 1
+        codes[prefix]     ||= 1
 
-        if values[prefix] != code_number.to_i
-          item.update! code: "#{prefix} #{'%.3d' % values[prefix]}"
+        if codes[prefix] != code_number.to_i
+          item.update! code: "#{prefix} #{'%.3d' % codes[prefix]}"
         end
 
-        values[prefix] += 1
+        codes[prefix] += 1
       end
     end
   end

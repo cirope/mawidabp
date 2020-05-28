@@ -381,9 +381,9 @@ class ReviewsController < ApplicationController
 
   def recode_work_papers
     if @review.recode_work_papers
-      redirect_to edit_review_url(@review), notice: t('review.recoded_work_papers')
+      redirect_to edit_review_url(@review), notice: t('review.work_papers_recoded')
     else
-      redirect_to edit_review_url(@review), alert: t('review.failed_recode_work_papers')
+      redirect_to edit_review_url(@review), alert: t('review.work_papers_recode_failed')
     end
   end
 
