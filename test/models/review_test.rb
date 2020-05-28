@@ -925,6 +925,33 @@ class ReviewTest < ActiveSupport::TestCase
     assert_equal pcs, sorted_pcs
   end
 
+  test 'recode work papers' do
+    Current.user = users :supervisor
+    cois         = control_objective_items :management_dependency_item_editable
+
+    cois.work_papers.create!(
+        code: 'PTOC 300',
+        name: 'New recode',
+        description: 'New workpaper description'
+    )
+
+    work_papers        = @review.work_papers.map &:code
+    recode_work_papers = @review.recode_work_papers.map &:code
+    codes              = {}
+
+    assert_not_equal work_papers, recode_work_papers
+
+    recode_work_papers.sort.each do |wp|
+      prefix, code_number = wp.split
+      codes[prefix]     ||= 1
+      test_code           = "#{prefix} #{'%.3d' % codes[prefix]}"
+
+      assert_equal wp, test_code
+
+      codes[prefix] += 1
+    end
+  end
+
   test 'pdf conversion' do
     FileUtils.rm @review.absolute_pdf_path if File.exist?(@review.absolute_pdf_path)
 
