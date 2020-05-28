@@ -50,7 +50,7 @@ module Reviews::WorkPapers
   end
 
   def recode_work_papers
-    items  = work_papers
+    items  = work_papers.sort_by(&:code)
     values = {}
 
     items.each do |item|
