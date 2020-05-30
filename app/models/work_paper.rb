@@ -212,25 +212,24 @@ class WorkPaper < ApplicationRecord
   end
 
   def create_zip
-
     self.unzip_if_necesary
 
     if @previous_code
       pre_code = sanitized_previous_code
     end
 
-    original_filename   = self.file_model.file.path
-    directory           = File.dirname original_filename
-    code                = sanitized_code
-    short_code          = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
+    original_filename = self.file_model.file.path
+    directory = File.dirname original_filename
+    code = sanitized_code
+    short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
     prefix, number_code = code.split('_')
-    filename            = File.basename original_filename, File.extname(original_filename)
-    filename            = filename.sanitized_for_filename.
+    filename = File.basename original_filename, File.extname(original_filename)
+    filename = filename.sanitized_for_filename.
       sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
       sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
-    filename            = filename.sub("#{pre_code}-",'') if pre_code
-    zip_filename        = File.join directory, "#{code}-#{filename}.zip"
-    pdf_filename        = self.absolute_cover_path
+    filename = filename.sub("#{pre_code}-",'') if pre_code
+    zip_filename = File.join directory, "#{code}-#{filename}.zip"
+    pdf_filename = self.absolute_cover_path
 
     self.create_pdf_cover
 
