@@ -259,10 +259,7 @@ class WorkPaper < ApplicationRecord
       Zip::File.foreach(zip_path) do |entry|
         if entry.file?
           filename = File.join base_dir, entry.name
-
-          if @previous_code
-            filename = filename.sub(sanitized_previous_code, code)
-          end
+          filename = filename.sub(sanitized_previous_code, code) if @previous_code
 
           if filename != zip_path && !File.exist?(filename)
             entry.extract(filename)
