@@ -182,7 +182,6 @@ class WorkPaper < ApplicationRecord
         sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
         sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
       filename = filename.sub("#{prev_code}-",'') if prev_code
-
     end
 
     I18n.t 'work_paper.cover_name', :prefix => "#{short ? short_code : code}-",
