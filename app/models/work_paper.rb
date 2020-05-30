@@ -252,7 +252,6 @@ class WorkPaper < ApplicationRecord
     code = sanitized_code
 
     if File.extname(file_name) == '.zip' && start_with_code?(file_name)
-
       zip_path = self.file_model.file.path
       base_dir = File.dirname self.file_model.file.path
 
@@ -289,13 +288,13 @@ class WorkPaper < ApplicationRecord
     code = sanitized_code
     short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
     result = file_name.start_with?(code, short_code) &&
-          !file_name.start_with?("#{code}-zip", "#{short_code}-zip")
+              !file_name.start_with?("#{code}-zip", "#{short_code}-zip")
 
     if @previous_code
       prev_code = sanitized_previous_code
       prev_short_code = prev_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
-      result = result || file_name.start_with?(prev_code, prev_short_code) &&
-                        !file_name.start_with?("#{prev_code}-zip", "#{prev_short_code}-zip")
+      result = result || (file_name.start_with?(prev_code, prev_short_code) &&
+                           !file_name.start_with?("#{prev_code}-zip", "#{prev_short_code}-zip"))
     end
 
     result
