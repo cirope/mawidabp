@@ -251,8 +251,7 @@ class WorkPaper < ApplicationRecord
     file_name = self.file_model.try(:identifier) || ''
     code = sanitized_code
 
-    if File.extname(file_name) == '.zip' &&
-        start_with_code(file_name)
+    if File.extname(file_name) == '.zip' && start_with_code?(file_name)
 
       zip_path = self.file_model.file.path
       base_dir = File.dirname self.file_model.file.path
@@ -289,7 +288,7 @@ class WorkPaper < ApplicationRecord
     @previous_code.sanitized_for_filename
   end
 
-  def start_with_code file_name
+  def start_with_code? file_name
     code = sanitized_code
     short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
     result = file_name.start_with?(code, short_code) &&
