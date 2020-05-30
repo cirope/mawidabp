@@ -174,10 +174,7 @@ class WorkPaper < ApplicationRecord
   def pdf_cover_name(filename = nil, short = false)
     code = sanitized_code
     short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
-
-    if @previous_code
-      prev_code = @previous_code.sanitized_for_filename
-    end
+    prev_code = @previous_code.sanitized_for_filename if @previous_code
 
     if self.file_model.try(:file?)
       filename ||= self.file_model.identifier.sanitized_for_filename
@@ -215,7 +212,7 @@ class WorkPaper < ApplicationRecord
     self.unzip_if_necesary
 
     if @previous_code
-      pre_code = sanitized_previous_code
+      prev_code = sanitized_previous_code
     end
 
     original_filename = self.file_model.file.path
@@ -226,7 +223,7 @@ class WorkPaper < ApplicationRecord
     filename = filename.sanitized_for_filename.
       sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
       sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
-    filename = filename.sub("#{pre_code}-",'') if pre_code
+    filename = filename.sub("#{prev_code}-",'') if prev_code
     zip_filename = File.join directory, "#{code}-#{filename}.zip"
     pdf_filename = self.absolute_cover_path
 
@@ -266,8 +263,7 @@ class WorkPaper < ApplicationRecord
           filename = File.join base_dir, entry.name
 
           if @previous_code
-            pre_code = sanitized_previous_code
-            filename = filename.sub(pre_code, code)
+            filename = filename.sub(sanitized_previous_code, code)
           end
 
           if filename != zip_path && !File.exist?(filename)
@@ -297,17 +293,17 @@ class WorkPaper < ApplicationRecord
   def start_with_code file_name
     code = sanitized_code
     short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
-    condition = (file_name.start_with?(code, short_code) &&
-          !file_name.start_with?("#{code}-zip", "#{short_code}-zip"))
+    result = file_name.start_with?(code, short_code) &&
+          !file_name.start_with?("#{code}-zip", "#{short_code}-zip")
 
     if @previous_code
-      pre_code = sanitized_previous_code
-      pre_short_code = pre_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
-      condition  = condition || (file_name.start_with?(pre_code, pre_short_code) &&
-                        !file_name.start_with?("#{pre_code}-zip", "#{pre_short_code}-zip"))
+      prev_code = sanitized_previous_code
+      prev_short_code = prev_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
+      result = result || file_name.start_with?(prev_code, prev_short_code) &&
+                        !file_name.start_with?("#{prev_code}-zip", "#{prev_short_code}-zip")
     end
 
-    condition
+    result
   end
 
   def sanitized_code
