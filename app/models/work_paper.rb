@@ -215,20 +215,20 @@ class WorkPaper < ApplicationRecord
   def create_zip
 
     self.unzip_if_necesary
+    if @previous_code
+      pre_code = sanitized_previous_code
+    end
 
     original_filename   = self.file_model.file.path
     directory           = File.dirname original_filename
     code                = sanitized_code
-    if @previous_code
-      pv_code    = @previous_code.sanitized_for_filename
-    end
     short_code          = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
     prefix, number_code = code.split('_')
     filename            = File.basename original_filename, File.extname(original_filename)
     filename            = filename.sanitized_for_filename.
       sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
       sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
-    filename = filename.sub("#{pv_code}-",'') if pv_code
+    filename            = filename.sub("#{pre_code}-",'') if pre_code
     zip_filename        = File.join directory, "#{code}-#{filename}.zip"
     pdf_filename        = self.absolute_cover_path
 
@@ -260,7 +260,8 @@ class WorkPaper < ApplicationRecord
 
     if File.extname(file_name) == '.zip' &&
         (file_name.start_with?(code, short_code) &&
-         !file_name.start_with?("#{code}-zip", "#{short_code}-zip")) || previous_code_a(file_name)
+          !file_name.start_with?("#{code}-zip", "#{short_code}-zip")) ||
+            check_previous_code(file_name)
 
       zip_path = self.file_model.file.path
       base_dir = File.dirname self.file_model.file.path
@@ -269,9 +270,10 @@ class WorkPaper < ApplicationRecord
         if entry.file?
 
           filename = File.join base_dir, entry.name
+
           if @previous_code
-            pv_code    = @previous_code.sanitized_for_filename
-            filename = filename.sub(pv_code, code)
+            pre_code = sanitized_previous_code
+            filename = filename.sub(pre_code, code)
           end
           if filename != zip_path && !File.exist?(filename)
             entry.extract(filename)
@@ -293,15 +295,20 @@ class WorkPaper < ApplicationRecord
     end
   end
 
-  def previous_code_a file_name
+   def sanitized_previous_code
+     pre_code = @previous_code.sanitized_for_filename
+  end
+
+  def check_previous_code file_name
+    condition = false
 
     if @previous_code
-      pv_code    = @previous_code.sanitized_for_filename
-      sh_code    = pv_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
-
-      @a = (file_name.start_with?(pv_code, sh_code) && !file_name.start_with?("#{pv_code}-zip", "#{sh_code}-zip"))
+      pre_code       = sanitized_previous_code
+      pre_short_code = pre_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
+      condition      = (file_name.start_with?(pre_code, pre_short_code) && !file_name.start_with?("#{pre_code}-zip", "#{pre_short_code}-zip"))
     end
-  @a
+
+    condition
   end
 
   def sanitized_code
