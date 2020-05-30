@@ -102,7 +102,7 @@ class WorkPaper < ApplicationRecord
   end
 
   def check_for_modifications
-    @zip_must_be_created  = self.file_model.try(:file?) ||
+    @zip_must_be_created = self.file_model.try(:file?) ||
       self.file_model.try(:changed?)
     @cover_must_be_created = self.changed?
     @previous_code = self.code_was if self.code_changed?
@@ -222,7 +222,6 @@ class WorkPaper < ApplicationRecord
     directory = File.dirname original_filename
     code = sanitized_code
     short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
-    prefix, number_code = code.split('_')
     filename = File.basename original_filename, File.extname(original_filename)
     filename = filename.sanitized_for_filename.
       sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
@@ -257,7 +256,7 @@ class WorkPaper < ApplicationRecord
     code = sanitized_code
 
     if File.extname(file_name) == '.zip' &&
-            start_with_code(file_name)
+        start_with_code(file_name)
 
       zip_path = self.file_model.file.path
       base_dir = File.dirname self.file_model.file.path
