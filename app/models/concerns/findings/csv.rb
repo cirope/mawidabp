@@ -221,15 +221,17 @@ module Findings::Csv
         cs = fa.commitment_support
 
         if cs
-          date = I18n.l fa.created_at, format: :minimal
-          endorsements = fa.endorsements.map do |e|
+          date         = I18n.l fa.created_at, format: :minimal
+          endorsements = fa.endorsements.sort_by(&:updated_at).reverse.map do |e|
             status = I18n.t "findings.endorsements.status.#{e.status}"
+            e_date = I18n.l e.updated_at, format: :minimal
+            e_text = [e_date, status, e.reason].reject(&:blank?).join ' - '
 
-            "#{e.user.full_name}: #{[status, e.reason].reject(&:blank?).join ' - '}"
+            "#{e.user.full_name}: #{e_text}"
           end.to_sentence
 
           if endorsements.present?
-            "[#{date}] #{fa.user.full_name}: #{cs.reason} (#{endorsements})"
+            "[#{date}] (#{endorsements}) #{fa.user.full_name}: #{cs.reason}"
           else
             "[#{date}] #{fa.user.full_name}: #{cs.reason}"
           end

@@ -325,6 +325,7 @@ Rails.application.routes.draw do
       patch :recode_weaknesses_by_risk
       patch :recode_weaknesses_by_repetition_and_risk
       patch :recode_weaknesses_by_control_objective_order
+      patch :recode_work_papers
       patch :reorder
       patch :reset_control_objective_name
     end
