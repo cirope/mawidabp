@@ -929,13 +929,13 @@ class ReviewTest < ActiveSupport::TestCase
     Current.user = users :supervisor
     cois         = control_objective_items :management_dependency_item_editable
 
-    cois.work_papers.create!(
-        code: 'PTOC 300',
-        name: 'New recode',
-        description: 'New workpaper description',
-        file_model_attributes: {
-          file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
-        }
+    add_wp = cois.work_papers.create!(
+              code: 'PTOC 300',
+              name: 'New recode',
+              description: 'New workpaper description',
+              file_model_attributes: {
+                file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
+              }
     )
 
     work_papers           = @review.work_papers.map &:code
@@ -956,7 +956,8 @@ class ReviewTest < ActiveSupport::TestCase
       if wp.file_model
         code_file = wp.file_model.file_file_name.split('-')
 
-        assert  code_file.include? new_code
+        assert wp.file_model.file_file_name.start_with? new_code
+        assert code_file.exclude? add_wp.code
       end
 
       codes[prefix] += 1
