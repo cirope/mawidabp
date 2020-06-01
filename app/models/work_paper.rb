@@ -181,7 +181,7 @@ class WorkPaper < ApplicationRecord
       filename = filename.sanitized_for_filename.
         sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
         sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
-      filename = filename.sub("#{prev_code}-",'') if prev_code
+      filename = filename.sub("#{prev_code}-", '') if prev_code
     end
 
     I18n.t 'work_paper.cover_name', :prefix => "#{short ? short_code : code}-",
@@ -222,7 +222,7 @@ class WorkPaper < ApplicationRecord
     filename = filename.sanitized_for_filename.
       sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
       sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
-    filename = filename.sub("#{prev_code}-",'') if prev_code
+    filename = filename.sub("#{prev_code}-", '') if prev_code
     zip_filename = File.join directory, "#{code}-#{filename}.zip"
     pdf_filename = self.absolute_cover_path
 
