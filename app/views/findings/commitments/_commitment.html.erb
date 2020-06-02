@@ -1,4 +1,5 @@
 <% commitment_support ||= f.object %>
+<% commitment_date = @commitment_date || commitment_support.finding_answer.commitment_date %>
 
 <fieldset class="commitment_support" data-commitment-support>
   <div class="card my-3">
@@ -11,7 +12,14 @@
     <div class="card-body">
       <p class="mb-1">
         <strong><%= FindingAnswer.human_attribute_name 'commitment_date' %></strong>:
-        <span data-commitment-date><%= l @commitment_date.to_date %></span>
+        <span data-commitment-date><%= l commitment_date.to_date %></span>
+      </p>
+
+      <p class="mb-1">
+        <strong><%= t 'finding.commitment_date_required_level_title' %></strong>:
+        <span data-commitment-date-level>
+          <%= @finding.commitment_date_required_level_text commitment_date %>
+        </span>
       </p>
 
       <%= f.input :reason, input_html: { data: { autofocus: true } } %>

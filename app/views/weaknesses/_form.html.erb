@@ -73,7 +73,7 @@
           readonly: (readonly || @weakness.repeated_of)
         } %>
         <%= f.input :risk, collection: risks, prompt: true, disabled: readonly, input_html: {
-          data: SHOW_CONDENSED_PRIORITIES ? { toggle_priority: Finding.risks[:medium] } : {}
+          data: SHOW_CONDENSED_PRIORITIES ? { toggle_priority: Finding.risks[:medium], toggle_compliance: Finding.risks[:low] } : {}
         } %>
         <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES, disabled: disabled_priority(@weakness, readonly) %>
         <%= f.label :state, raw(Weakness.human_attribute_name(:state) + ' ' +
@@ -127,9 +127,18 @@
     <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
       <div class="row">
         <div class="col-md-6">
-          <%= f.input :compliance, collection: weakness_compliance_options, prompt: true, disabled: readonly, input_html: {
-            data: { tag_modifier: true, mark_impact_as: WEAKNESS_IMPACT.keys[1], mark_impact_on: 'yes' }
-          } %>
+          <%= f.input :compliance, collection: weakness_compliance_options,
+                                   prompt: true,
+                                   disabled: readonly || (@weakness.risk == Finding.risks[:low]),
+                                   input_html: {
+                                     data: {
+                                       tag_modifier: true,
+                                       mark_impact_as: WEAKNESS_IMPACT.keys[1],
+                                       mark_impact_on: 'yes'
+                                     }
+                                   }
+          %>
+          <%= f.input :compliance, as: :hidden, input_html: { id: 'weakness_hidden_compliance' } %>
         </div>
       </div>
       <div class="row">

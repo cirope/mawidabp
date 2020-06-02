@@ -597,6 +597,7 @@
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado **%{cost}** al seguimiento de la observación"
     commitment_support_plans: "Plan de acción"
+    commitment_support_controls: "Controles mitigantes"
     commitment_support_reasons: "Comentario de las reprogramaciones"
     commitment_date_required_level_title: "Nivel de aprobación requerido para la reprogramación"
     download_csv: "Descargar CSV"
@@ -607,6 +608,7 @@
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
     add_endorsement: "Agregar revisor"
+    show_commitment_date: "Nueva fecha de compromiso"
     add_work_paper: "Agregar papel de trabajo"
     endorsements: "Revisores"
     recode_tasks: "Recodificar tareas"
@@ -629,8 +631,8 @@
       other: "Auditados"
     readonly: "La observación no puede ser creada ni modificada, ya se emitió el informe definitivo"
     responsibles:
-      one: "Usuario"
-      other: "Usuarios"
+      one: "Responsable"
+      other: "Responsables"
     send_notification: "¿Notificar?"
     status_change_history: "Historial de cambios de estado"
     view_cost_details: "Listado de actividades anteriores relacionadas al hallazgo"
@@ -670,6 +672,17 @@
     types:
       related: "Relacionada"
       duplicated: "Duplicada"
+
+  follow_up_audited:
+    index_title: "Reportes generales"
+    weaknesses_by_user_title: "Observaciones por usuario"
+    weaknesses_by_user:
+      pdf_name: "observaciones_por_usuario.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
 
   follow_up_audit:
     index_title: "Reportes de auditoría"

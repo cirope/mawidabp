@@ -10,7 +10,8 @@ class ReviewsController < ApplicationController
     :finished_work_papers, :recode_findings, :recode_weaknesses_by_risk,
     :recode_weaknesses_by_repetition_and_risk,
     :recode_weaknesses_by_control_objective_order, :reorder,
-    :excluded_control_objectives, :reset_control_objective_name
+    :excluded_control_objectives, :reset_control_objective_name,
+    :recode_work_papers
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -378,6 +379,14 @@ class ReviewsController < ApplicationController
     end
   end
 
+  def recode_work_papers
+    if @review.recode_work_papers
+      redirect_to edit_review_url(@review), notice: t('review.work_papers_recoded')
+    else
+      redirect_to edit_review_url(@review), alert: t('review.work_papers_recode_failed')
+    end
+  end
+
   # * GET /reviews/next_identification_number
   def next_identification_number
     @next_number = Review.list.next_identification_number params[:suffix]
@@ -422,7 +431,8 @@ class ReviewsController < ApplicationController
         ],
         control_objective_ids: [],
         process_control_ids: [],
-        best_practice_ids: []
+        best_practice_ids: [],
+        control_objective_tag_ids: []
       )
     end
 

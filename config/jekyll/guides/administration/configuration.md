@@ -8,6 +8,10 @@ article_order: 5
 
 ## Configuraciones
 
+Tiene los requisitos mínimos de cumplimiento que requiere una organización (aviso de caducidad de la contraseña, desconexión por inactividad, control de composición de contraseñas, etc.) y parámetros específicos teniendo en cuenta la mayoría de las características de las organizaciones, algunos de ellos opcionales, permitiendo una gestión simple y segura.
+  
+&nbsp;
+
 Seleccionamos **Administración -> Configuración**.
 
 ![]({% asset administration/configuration/1.png @path %}){: class="img-responsive"}
@@ -81,7 +85,7 @@ Si cambiamos el valor a ¨1¨ nos muestra las siguientes pantalla:
 
 ![]({% asset administration/configuration/11.png @path %}){: class="img-responsive"}
 
-**R****equerir gerente de auditoría en hallazgos**
+**Requerir gerente de auditoría en hallazgos**
 
 Primero deben habilitar el parámetro ¨Requerir gerente de auditoría en hallazgos¨ dentro de ¨Administración¨ ->  ¨Configuraciones¨, por defecto está en 0.
 

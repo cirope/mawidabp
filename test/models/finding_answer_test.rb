@@ -157,7 +157,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
 
     assert_equal 'pending', @finding_answer.commitment_date_status
 
-    endorsement.rejected!
+    endorsement.update! status: 'rejected', reason: 'Because I say so'
 
     assert_equal 'rejected', @finding_answer.commitment_date_status
   end

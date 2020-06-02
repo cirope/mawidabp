@@ -23,6 +23,7 @@ namespace :db do
       update_review_scopes                # 2020-02-20
       fix_final_latest_findings           # 2020-03-13
       fix_email_organization              # 2020-04-24
+      add_follow_up_audited_privilege     # 2020-05-08
     end
   end
 end
@@ -534,4 +535,20 @@ private
 
   def fix_email_organization?
     EMail.where(organization_id: nil).any?
+  end
+
+  def add_follow_up_audited_privilege
+    if follow_up_audited_privilege?
+      Privilege.where(module: 'follow_up_reports').find_each do |p|
+        attrs = p.attributes.except 'id', 'module', 'created_at', 'updated_at'
+
+        Privilege.create! attrs.merge(module: 'follow_up_reports_audited')
+        Privilege.create! attrs.merge(module: 'follow_up_reports_audit')
+      end
+    end
+  end
+
+  def follow_up_audited_privilege?
+    Privilege.where(module: 'follow_up_reports_audited').empty? &&
+      Privilege.where(module: 'follow_up_reports_audit').empty?
   end

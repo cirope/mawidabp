@@ -1,4 +1,5 @@
 reschedule:
   status: pending
+  reason:
   user: administrator
   finding_answer: auditor_answer

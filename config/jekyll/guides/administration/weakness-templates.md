@@ -10,6 +10,8 @@ article_order: 6
 
 Podemos cargar observaciones estandarizadas o de migración.
 
+&nbsp;
+
 Seleccionamos **Administración -> Plantillas de observaciones**
 
 Se pueden asociar múltiples objetivos de control por cada observación. El título es único, porque lo usamos para buscar después cuando se va a utilizar la plantilla.

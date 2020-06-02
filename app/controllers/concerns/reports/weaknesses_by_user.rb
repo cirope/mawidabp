@@ -200,9 +200,11 @@ module Reports::WeaknessesByUser
         @filters << "<b>#{User.model_name.human count: 1}</b> = \"#{user.full_name}\""
 
         weaknesses.
-          joins(:users).
-          references(:user).
-          where(User.table_name => { id: user.self_and_descendants.map(&:id) })
+          references(:finding_user_assignments).
+          joins(:finding_user_assignments).
+          where FindingUserAssignment.table_name => {
+            user_id: user.self_and_descendants.map(&:id), process_owner: true
+          }
       else
         weaknesses
       end

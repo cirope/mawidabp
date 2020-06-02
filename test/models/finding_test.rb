@@ -1407,7 +1407,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'require commitment support' do
-    skip unless FINDING_ANSWER_COMMITMENT_SUPPORT
+    skip unless %(true).include? FINDING_ANSWER_COMMITMENT_SUPPORT
 
     finding = findings :being_implemented_weakness
 
@@ -1416,28 +1416,55 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'commitment date required level' do
-    finding        = findings :being_implemented_weakness
-    follow_up_date = finding.follow_up_date
-    finding_answer = finding.finding_answers.create!(
+    finding              = findings :being_implemented_weakness
+    first_follow_up_date = finding.first_follow_up_date
+    finding_answer       = finding.finding_answers.create!(
       answer:          'New answer',
       user:            users(:audited),
-      commitment_date: follow_up_date + 10.days,
+      commitment_date: first_follow_up_date + 10.days,
       notify_users:    false
     )
 
     assert_equal :manager, finding.commitment_date_required_level
 
-    finding_answer.update_column :commitment_date, follow_up_date + 4.months
+    finding_answer.update_column :commitment_date, first_follow_up_date + 4.months
 
     assert_equal :management, finding.commitment_date_required_level
 
-    finding_answer.update_column :commitment_date, follow_up_date + 11.months
+    finding_answer.update_column :commitment_date, first_follow_up_date + 11.months
 
     assert_equal :ceo, finding.commitment_date_required_level
 
-    finding_answer.update_column :commitment_date, follow_up_date + 13.months
+    finding_answer.update_column :commitment_date, first_follow_up_date + 13.months
 
     assert_equal :committee, finding.commitment_date_required_level
+  end
+
+  test 'commitment limit date message' do
+    skip if COMMITMENT_DATE_LIMITS.blank?
+
+    @finding.risk           = Finding.risks[:high]
+    @finding.follow_up_date = Time.zone.today
+    commitment_date         = Time.zone.today + 13.months
+    comment_six_months      = COMMITMENT_DATE_LIMITS['reschedule']['default']['6.months']
+
+    with_follow_up_date     = @finding.commitment_date_message_for commitment_date
+
+    assert_equal with_follow_up_date, comment_six_months
+
+    comment_one_year        = COMMITMENT_DATE_LIMITS['first_date']['high']['1.year']
+    @finding.follow_up_date = nil
+    without_follow_up_date  = @finding.commitment_date_message_for commitment_date
+
+    assert_equal without_follow_up_date, comment_one_year
+
+    @finding.risk           = Finding.risks[:low]
+    @finding.follow_up_date = nil
+    commitment_date         = Time.zone.today + 13.months
+
+    without_message  = @finding.commitment_date_message_for commitment_date
+
+    assert_nil without_message
   end
 
   private

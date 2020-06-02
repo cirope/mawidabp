@@ -46,7 +46,8 @@ class Findings::AnswersControllerTest < ActionController::TestCase
       id:               finding_answer.id,
       finding_id:       finding.id,
       completion_state: 'incomplete',
-      approve:          true
+      approve:          true,
+      reason:           'Should be fine'
     }, xhr: true, as: :js
 
     assert endorsement.reload.approved?

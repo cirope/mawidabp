@@ -260,8 +260,10 @@ module Prawn
         self.y = y_pointer
       end
 
-      def add_page_footer(font_size = 10)
-        self.repeat :all, :dynamic =>  true do
+      def add_page_footer(font_size = 10, skip_first_page = false)
+        pages = skip_first_page ? -> (page) { page > 1 } : :all
+
+        self.repeat pages, :dynamic =>  true do
           self.canvas do
             right_margin = self.page.margins[:right]
             string = I18n.t('pdf.page_pattern', :page => self.page_number,

@@ -7,9 +7,16 @@ class EndorsementTest < ActiveSupport::TestCase
     @endorsement = endorsements :reschedule
   end
 
+  test 'blank attributes' do
+    @endorsement.reason = ''
+
+    assert @endorsement.invalid?
+    assert_error @endorsement, :reason, :blank
+  end
+
   test 'sends notification to all on status change' do
     assert_enqueued_emails 1 do
-      @endorsement.approved!
+      @endorsement.update! status: 'approved', reason: 'I like it'
     end
   end
 

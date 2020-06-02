@@ -45,9 +45,10 @@ module Findings::Csv
       (last_commitment_date_text if self.class.show_follow_up_timestamps?),
       (finding_answers_text if self.class.show_follow_up_timestamps?),
       latest_answer_text,
-      (commitment_support_plans_text if FINDING_ANSWER_COMMITMENT_SUPPORT),
-      (commitment_support_reasons_text if FINDING_ANSWER_COMMITMENT_SUPPORT),
-      (commitment_date_required_level_text if FINDING_ANSWER_COMMITMENT_SUPPORT)
+      (commitment_support_plans_text if Finding.show_commitment_support?),
+      (commitment_support_controls_text if Finding.show_commitment_support?),
+      (commitment_support_reasons_text if Finding.show_commitment_support?),
+      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -153,8 +154,10 @@ module Findings::Csv
     end
 
     def last_commitment_date_text
-      commitment_date = finding_answers.map(&:commitment_date).compact.sort.last
-      date            = if follow_up_date && commitment_date
+      commitment_date = finding_answers.reverse.detect(&:commitment_date)&.commitment_date
+      date            = if %w(weak true).include? FINDING_ANSWER_COMMITMENT_SUPPORT
+                          commitment_date
+                        elsif follow_up_date && commitment_date
                           follow_up_date <= commitment_date ? commitment_date : nil
                         elsif follow_up_date.blank?
                           commitment_date
@@ -192,20 +195,40 @@ module Findings::Csv
       )
     end
 
+    def commitment_support_controls_text
+      controls = finding_answers.map do |fa|
+        cs = fa.commitment_support
+
+        if cs
+          date = I18n.l fa.created_at, format: :minimal
+
+          "[#{date}] #{fa.user.full_name}: #{cs.controls}"
+        end
+      end.compact
+
+      truncate(
+        controls.reverse.join(LINE_BREAK_REPLACEMENT),
+        length:   32767, # To go around the 32767 limit on some spreadsheets
+        omission: "[#{I18n.t('messages.truncated', count: 32767)}]"
+      )
+    end
+
     def commitment_support_reasons_text
       reasons = finding_answers.map do |fa|
         cs = fa.commitment_support
 
         if cs
-          date = I18n.l fa.created_at, format: :minimal
-          endorsements = fa.endorsements.map do |e|
+          date         = I18n.l fa.created_at, format: :minimal
+          endorsements = fa.endorsements.sort_by(&:updated_at).reverse.map do |e|
             status = I18n.t "findings.endorsements.status.#{e.status}"
+            e_date = I18n.l e.updated_at, format: :minimal
+            e_text = [e_date, status, e.reason].reject(&:blank?).join ' - '
 
-            "#{e.user.full_name}: #{status}"
+            "#{e.user.full_name}: #{e_text}"
           end.to_sentence
 
           if endorsements.present?
-            "[#{date}] #{fa.user.full_name}: #{cs.reason} (#{endorsements})"
+            "[#{date}] (#{endorsements}) #{fa.user.full_name}: #{cs.reason}"
           else
             "[#{date}] #{fa.user.full_name}: #{cs.reason}"
           end
@@ -309,9 +332,10 @@ module Findings::Csv
           (FindingAnswer.human_attribute_name('commitment_date') if show_follow_up_timestamps?),
           (I18n.t('finding.finding_answers') if show_follow_up_timestamps?),
           (I18n.t('finding.latest_answer') if show_follow_up_timestamps?),
-          (I18n.t('finding.commitment_support_plans') if FINDING_ANSWER_COMMITMENT_SUPPORT),
-          (I18n.t('finding.commitment_support_reasons') if FINDING_ANSWER_COMMITMENT_SUPPORT),
-          (I18n.t('finding.commitment_date_required_level_title') if FINDING_ANSWER_COMMITMENT_SUPPORT)
+          (I18n.t('finding.commitment_support_plans') if Finding.show_commitment_support?),
+          (I18n.t('finding.commitment_support_controls') if Finding.show_commitment_support?),
+          (I18n.t('finding.commitment_support_reasons') if Finding.show_commitment_support?),
+          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?)
         ].compact
       end
   end

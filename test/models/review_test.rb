@@ -611,6 +611,16 @@ class ReviewTest < ActiveSupport::TestCase
     end
   end
 
+  test 'control objective tag ids' do
+    assert @review.control_objective_items.present?
+
+      assert_difference '@review.control_objective_items.size' do
+        @review.control_objective_tag_ids = [
+          tags(:risk_evaluation).id
+        ]
+      end
+  end
+
   test 'procedure control subitem ids' do
     assert @review.control_objective_items.present?
     assert_difference '@review.control_objective_items.size' do
@@ -913,6 +923,45 @@ class ReviewTest < ActiveSupport::TestCase
     pcs = @review.grouped_control_objective_items.map &:first
 
     assert_equal pcs, sorted_pcs
+  end
+
+  test 'recode work papers' do
+    Current.user = users :supervisor
+    cois         = control_objective_items :management_dependency_item_editable
+
+    add_wp = cois.work_papers.create!(
+              code: 'PTOC 300',
+              name: 'New recode',
+              description: 'New workpaper description',
+              file_model_attributes: {
+                file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
+              }
+    )
+
+    work_papers           = @review.work_papers.map &:code
+    recode_work_papers    = @review.recode_work_papers.map
+    codes                 = {}
+    work_papers_new_codes = recode_work_papers.map &:code
+
+    assert_not_equal work_papers, work_papers_new_codes
+
+    recode_work_papers.sort.each do |wp|
+      prefix, code_number = wp.code.split
+      codes[prefix]     ||= 1
+      test_code           = "#{prefix} #{'%.3d' % codes[prefix]}"
+      new_code            = test_code.sub(/\s/, '_')
+
+      assert_equal wp.code, test_code
+
+      if wp.file_model
+        code_file = wp.file_model.file_file_name.split('-')
+
+        assert wp.file_model.file_file_name.start_with? new_code
+        assert code_file.exclude? add_wp.code
+      end
+
+      codes[prefix] += 1
+    end
   end
 
   test 'pdf conversion' do

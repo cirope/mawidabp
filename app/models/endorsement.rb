@@ -3,6 +3,7 @@ class Endorsement < ApplicationRecord
   include Endorsements::Defaults
   include Endorsements::Notifications
   include Endorsements::Status
+  include Endorsements::Validation
 
   belongs_to :user
   belongs_to :finding_answer, touch: true
