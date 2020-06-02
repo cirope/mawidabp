@@ -18,12 +18,12 @@ module Weaknesses::Validations
               :impact,
               :internal_control_components,
               presence: true, if: :validate_extra_attributes?
-    validates :compliance_observations, presence: true, if: :check_status_compliance?
+    validates :compliance_observations, presence: true, if: :is_true_compliance?
   end
 
   private
 
-    def check_status_compliance?
+    def is_true_compliance?
       compliance == 'yes' if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
     end
 
