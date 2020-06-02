@@ -481,6 +481,18 @@ class WeaknessTest < ActiveSupport::TestCase
     refute weakness.rescheduled?
   end
 
+  test 'compliance observations attribute not be empty when option is yes' do
+    weakness = findings :being_implemented_weakness_on_approved_draft
+
+    assert weakness.update! compliance: 'no'
+
+    weakness.update compliance: 'yes'
+
+    assert weakness.invalid?
+    assert weakness.errors[:compliance_observations].any?
+    assert weakness.update! compliance: 'yes', compliance_observations: 'Fase 2'
+  end
+
   private
 
     def create_conclusion_final_review_for weakness
