@@ -485,8 +485,9 @@ class WeaknessTest < ActiveSupport::TestCase
     skip unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES
     weakness = findings :being_implemented_weakness_on_approved_draft
 
-    weakness.update! compliance: 'yes'
+    weakness.compliance = 'yes'
 
+    assert weakness.invalid?
     assert_error weakness, :compliance_observations, :blank
   end
 
