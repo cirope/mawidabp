@@ -482,15 +482,12 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'compliance observations attribute not be empty when option is yes' do
+    skip unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES
     weakness = findings :being_implemented_weakness_on_approved_draft
 
-    assert weakness.update! compliance: 'no'
+    weakness.update! compliance: 'yes'
 
-    weakness.update compliance: 'yes'
-
-    assert weakness.invalid?
-    assert weakness.errors[:compliance_observations].any?
-    assert weakness.update! compliance: 'yes', compliance_observations: 'Fase 2'
+    assert_error weakness, :compliance_observations, :blank
   end
 
   private

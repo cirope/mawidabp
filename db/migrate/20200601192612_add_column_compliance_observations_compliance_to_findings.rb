@@ -1,5 +1,7 @@
 class AddColumnComplianceObservationsComplianceToFindings < ActiveRecord::Migration[6.0]
   def change
-    add_column :findings, :compliance_observations, :text
+    change_table :findings do |t|
+      t.text :compliance_observations
+    end
   end
 end
