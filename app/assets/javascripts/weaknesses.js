@@ -1,9 +1,22 @@
+$(function(){
+  compliance = $('[data-tag-modifier]').val()
+
+  if (compliance == 'yes'){
+    $('[data-compliance-observations]').removeAttr('hidden')
+  }
+})
+
 $(document).on('change', '[data-mark-impact-as]', function () {
   var impact = $(this).data('markImpactAs')
   var markOn = $(this).data('markImpactOn')
 
-  if ($(this).val() === markOn)
+  if ($(this).val() === markOn){
     $('[id$=_impact_' + impact.toLowerCase() + ']').prop('checked', true)
+    $('[data-compliance-observations]').removeAttr('hidden')
+  }else{
+    $('[data-compliance-observations]').prop('hidden', true)
+    $('[data-compliance-observations-text]').val('')
+  }
 })
 
 $(document).on('change', '#weakness_weakness_template_from_control_objective', function () {
