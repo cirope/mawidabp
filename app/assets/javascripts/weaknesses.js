@@ -1,6 +1,5 @@
 $(document).on('change', '[data-mark-impact-as]', function () {
   var impact = $(this).data('markImpactAs')
-  console.log(impact)
   var markOn = $(this).data('markImpactOn')
 
   if ($(this).val() === markOn) {
