@@ -7,6 +7,7 @@ article_order: 1
 ---
 
 #Introducción
+Flujo del proceso básico
 El sistema cuenta con los módulos de Administración, Planificación, Ejecución, Conclusión y Seguimiento..
 
 
