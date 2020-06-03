@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_01_155921) do
+ActiveRecord::Schema.define(version: 2020_06_01_192612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -453,6 +453,7 @@ ActiveRecord::Schema.define(version: 2020_05_01_155921) do
     t.integer "parent_ids", default: [], array: true
     t.bigint "latest_id"
     t.date "first_follow_up_date"
+    t.text "compliance_observations"
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
