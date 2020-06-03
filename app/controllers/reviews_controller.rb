@@ -10,7 +10,8 @@ class ReviewsController < ApplicationController
     :finished_work_papers, :recode_findings, :recode_weaknesses_by_risk,
     :recode_weaknesses_by_repetition_and_risk,
     :recode_weaknesses_by_control_objective_order, :reorder,
-    :excluded_control_objectives, :reset_control_objective_name
+    :excluded_control_objectives, :reset_control_objective_name,
+    :recode_work_papers
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -375,6 +376,14 @@ class ReviewsController < ApplicationController
       redirect_to @review, notice: t('review.reordered')
     else
       redirect_to edit_review_url(@review), alert: t('review.failed_to_reorder')
+    end
+  end
+
+  def recode_work_papers
+    if @review.recode_work_papers
+      redirect_to edit_review_url(@review), notice: t('review.work_papers_recoded')
+    else
+      redirect_to edit_review_url(@review), alert: t('review.work_papers_recode_failed')
     end
   end
 
