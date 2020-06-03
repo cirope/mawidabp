@@ -6,6 +6,7 @@ $(document).on('change', '[data-mark-impact-as]', function () {
     if (isNaN(impact)) {
       $('[id$=_impact_' + impact.toLowerCase() + ']').prop('checked', true)
     }
+
     $('[data-compliance-observations]').removeAttr('hidden')
   } else {
     $('[data-compliance-observations]').prop('hidden', true)
