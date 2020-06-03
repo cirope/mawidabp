@@ -1406,6 +1406,15 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 2.days.ago.to_date, @finding.version_closed_at
   end
 
+  test 'require commitment support' do
+    skip unless %(true).include? FINDING_ANSWER_COMMITMENT_SUPPORT
+
+    finding = findings :being_implemented_weakness
+
+    assert finding.require_commitment_support?(finding.follow_up_date + 1.day)
+    refute finding.require_commitment_support?(finding.follow_up_date)
+  end
+
   test 'commitment date required level' do
     finding              = findings :being_implemented_weakness
     first_follow_up_date = finding.first_follow_up_date
@@ -1456,16 +1465,6 @@ class FindingTest < ActiveSupport::TestCase
     without_message  = @finding.commitment_date_message_for commitment_date
 
     assert_nil without_message
-  end
-
-  test 'compliance observations attribute not be empty when option is yes' do
-    skip unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES
-
-    finding            = findings :being_implemented_weakness
-    finding.compliance = 'yes'
-
-    assert finding.invalid?
-    assert_error finding, :compliance_observations, :blank
   end
 
   private
