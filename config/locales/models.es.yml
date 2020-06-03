@@ -634,6 +634,7 @@ es:
         state: 'Estado'
         solution_date: 'Fecha de solución'
         compliance: 'Compliance'
+        compliance_observations: 'Norma que impacta'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'

@@ -98,8 +98,19 @@
           <%= f.input :compliance, collection: weakness_compliance_options,
                                    prompt: true,
                                    disabled: (@finding.risk == Finding.risks[:low]),
-                                   input_html: { data: { tag_modifier: true } } %>
+                                   input_html: {
+                                     data: {
+                                       tag_modifier: true,
+                                       mark_impact_as: false,
+                                       mark_impact_on: 'yes'
+                                     }
+                                   } %>
           <%= f.input :compliance, as: :hidden, input_html: { id: 'finding_hidden_compliance' } %>
+          <div data-compliance-observations <%= 'hidden' unless @finding.compliance == 'yes' %>>
+            <%= f.input :compliance_observations, input_html: {
+              data: { compliance_observations_text: true }
+            } %>
+          </div>
         </div>
       </div>
       <div class="row">

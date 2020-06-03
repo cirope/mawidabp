@@ -36,7 +36,8 @@ module Findings::ByUserCsv
         Weakness.human_attribute_name('audit_comments'),
         Weakness.human_attribute_name('audit_recommendations'),
         Weakness.human_attribute_name('answer'),
-        (I18n.t('finding.finding_answers') if Weakness.show_follow_up_timestamps?)
+        (I18n.t('finding.finding_answers') if Weakness.show_follow_up_timestamps?),
+        Weakness.human_attribute_name('compliance_observations')
       ].compact
     end
 
@@ -69,7 +70,8 @@ module Findings::ByUserCsv
             date = I18n.l fa.created_at, format: :minimal
 
             "[#{date}] #{fa.user.full_name}: #{fa.answer}"
-          }.join("\n") if Weakness.show_follow_up_timestamps?)
+          }.join("\n") if Weakness.show_follow_up_timestamps?),
+          weakness.compliance_observations
         ].compact
       end
     end
