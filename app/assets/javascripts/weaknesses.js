@@ -1,9 +1,10 @@
 $(document).on('change', '[data-mark-impact-as]', function () {
   var impact = $(this).data('markImpactAs')
+  console.log(impact)
   var markOn = $(this).data('markImpactOn')
 
   if ($(this).val() === markOn) {
-    if (isNaN(impact)) {
+    if (impact) {
       $('[id$=_impact_' + impact.toLowerCase() + ']').prop('checked', true)
     }
 
