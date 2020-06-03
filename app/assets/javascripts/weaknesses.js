@@ -2,8 +2,10 @@ $(document).on('change', '[data-mark-impact-as]', function () {
   var impact = $(this).data('markImpactAs')
   var markOn = $(this).data('markImpactOn')
 
-  if ($(this).val() === markOn) {
+  if ($(this).val() === markOn)
     $('[id$=_impact_' + impact.toLowerCase() + ']').prop('checked', true)
+
+  if ($(this).val() == 'yes') {
     $('[data-compliance-observations]').removeAttr('hidden')
   } else {
     $('[data-compliance-observations]').prop('hidden', true)
