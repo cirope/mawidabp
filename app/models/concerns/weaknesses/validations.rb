@@ -24,7 +24,7 @@ module Weaknesses::Validations
   private
 
     def compliance_require_observations?
-       SHOW_WEAKNESS_EXTRA_ATTRIBUTES && compliance == 'yes'
+      SHOW_WEAKNESS_EXTRA_ATTRIBUTES && compliance == 'yes'
     end
 
     def review_code_has_valid_prefix

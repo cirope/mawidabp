@@ -112,6 +112,13 @@ jQuery(function ($) {
 
   $(document).on('change', '[name$="[compliance]"]', function () {
     $('[type="hidden"][name$="[compliance]"]').val($(this).val())
+
+    if ($(this).val() === 'yes') {
+      $('[data-compliance-observations]').removeAttr('hidden')
+    } else {
+      $('[data-compliance-observations]').prop('hidden', true)
+      $('[data-compliance-observations-text]').val('')
+    }
   })
 
   $(document).on('change', '[data-check-commitment-date-url]', function () {

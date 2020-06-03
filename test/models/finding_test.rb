@@ -1467,6 +1467,16 @@ class FindingTest < ActiveSupport::TestCase
     assert_nil without_message
   end
 
+  test 'compliance observations attribute not be empty when option is yes' do
+    skip unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+
+    finding            = findings :being_implemented_weakness
+    finding.compliance = 'yes'
+
+    assert finding.invalid?
+    assert_error finding, :compliance_observations, :blank
+  end
+
   private
 
     def review_codes_on_findings_by_user method

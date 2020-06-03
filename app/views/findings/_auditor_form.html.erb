@@ -100,6 +100,11 @@
                                    disabled: (@finding.risk == Finding.risks[:low]),
                                    input_html: { data: { tag_modifier: true } } %>
           <%= f.input :compliance, as: :hidden, input_html: { id: 'finding_hidden_compliance' } %>
+          <div data-compliance-observations <%= 'hidden' unless @finding.compliance == 'yes' %>>
+            <%= f.input :compliance_observations, input_html: {
+              data: { compliance_observations_text: true }
+            } %>
+          </div>
         </div>
       </div>
       <div class="row">
