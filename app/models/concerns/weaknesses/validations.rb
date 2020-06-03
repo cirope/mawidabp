@@ -18,9 +18,14 @@ module Weaknesses::Validations
               :impact,
               :internal_control_components,
               presence: true, if: :validate_extra_attributes?
+    validates :compliance_observations, presence: true, if: :compliance_require_observations?
   end
 
   private
+
+    def compliance_require_observations?
+      SHOW_WEAKNESS_EXTRA_ATTRIBUTES && compliance == 'yes'
+    end
 
     def review_code_has_valid_prefix
       revoked_prefix = I18n.t 'code_prefixes.revoked'
