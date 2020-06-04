@@ -17,7 +17,8 @@ module Findings::Scopes
 
     def list_with_final_review
       includes(control_objective_item: :review).
-        merge(Review.list_with_final_review)
+        merge(Review.list_with_final_review).
+        where conclusion_reviews: { type: ConclusionFinalReview.name }
     end
 
     def list_without_final_review
