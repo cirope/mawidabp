@@ -6,22 +6,29 @@ guide_order: 7
 article_order: 4
 ---
 
-##Ejecución
+## Ejecución
 
 Seleccionamos Ejecución, nos muestra la siguiente pantalla
 
+![]({% asset basic_process_flow/execution.png @path %}){: class="img-responsive"}
 
 
 Tenemos que crear un informe, a partir de los datos generados en los pasos anteriores (etapa planificación)
 
 Y luego agregar observaciones.
 
-Informes
-Seleccionamos Ejecución -> Informes
+#### Informes
+Seleccionamos **Ejecución -> Informes**
+
+![]({% asset basic_process_flow/reviews.png @path %}){: class="img-responsive"}
+
 
 Muestra todos los informes creados para distintos períodos con la identificación, relacionados con la unidad de negocio, proyecto y etiquetas en caso de haber sido creada.
 
-Seleccionamos Nuevo
+
+Seleccionamos **Nuevo**
+
+![]({% asset basic_process_flow/new_review.png @path %}){: class="img-responsive"}
 
 
 Identificación: podemos utilizar la nomenclatura adoptada por la organización (letras, números, guiones, etc.)
@@ -44,12 +51,11 @@ Descripción: el texto incluido en esta parte, formará parte del título del in
 Relevamiento: opcionalmente podemos completar el campo relevamiento y/o subir algún archivo que consideremos importante como anexo al informe.
 
 
-
-
-
-
 A continuación mostramos las pantallas con los datos cargados para el proyecto Acuerdo.
 
+![]({% asset basic_process_flow/new_review-1.png @path %}){: class="img-responsive"}
+![]({% asset basic_process_flow/new_review-2.png @path %}){: class="img-responsive"}
+![]({% asset basic_process_flow/new_review-3.png @path %}){: class="img-responsive"}
 
 
 
@@ -63,6 +69,8 @@ Ver los pasos en Manual de Usuario_Mawidabp_Ejecución página 8 (muestra el cir
 Opción 2 (Ejecución -> Objetivos de control -> Editar)
 Ver los pasos en Manual de Usuario_Mawidabp_Ejecución página 13 (muestra el circuito completo).
 Para el informe creado en  las etapas anteriores se agregaron  2 observaciones, que se muestran a continuación:
+
+![]({% asset basic_process_flow/weaknesses.png @path %}){: class="img-responsive"}
 
 El próximo paso, es crear un informe borrador en la etapa de conclusión, a partir del informe creado en la etapa de ejecución.
 

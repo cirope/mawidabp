@@ -3,20 +3,27 @@ title: Conclusión
 layout: articles
 category: basic_process_flow
 guide_order: 7
-article_order: 3
+article_order: 5
 ---
 
-#Conclusión
+## Conclusión
 Seleccionamos Conclusión, nos muestra la siguiente pantalla
 
+![]({% asset basic_process_flow/conclusion.png @path %}){: class="img-responsive"}
 
-Informe Borrador
+
+#### Informe Borrador
 
 Para cada Informe creado en Ejecución, tenemos que generar un informe borrador, esto permite al auditor revisar todos los datos para luego crear el informe definitivo. 
 
-Seleccionamos Conclusión -> Informe Borrador
+Seleccionamos **Conclusión -> Informe Borrador**
 
-Seleccionamos Nuevo
+![]({% asset basic_process_flow/list_conclusions.png @path %}){: class="img-responsive"}
+
+Seleccionamos **Nuevo**
+
+![]({% asset basic_process_flow/new_conclusion.png @path %}){: class="img-responsive"}
+
 
 
 Seleccionamos de Informe (la lista desplegable) el proyecto que necesitamos generar el informe borrador. 

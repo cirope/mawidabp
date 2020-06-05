@@ -1,29 +1,38 @@
 ---
-title: Flujo del proceso básico
+title: Introducción
 layout: articles
 category: basic_process_flow
 guide_order: 7
 article_order: 1
 ---
 
-#Introducción
-Flujo del proceso básico
-El sistema cuenta con los módulos de Administración, Planificación, Ejecución, Conclusión y Seguimiento..
+# Introducción
 
+El sistema cuenta con los módulos de Administración, Planificación, Ejecución, Conclusión y Seguimiento.
 
+![]({% asset basic_process_flow/main.png @path %}){: class="img-responsive"}
 
 En este documento vemos el flujo de trabajo mínimo en cada una de las etapas para generar un informe con observaciones:
-Administración 
-crear una organización.
-generar unidades organizativas y unidades de negocio.
-carga de una buena práctica.
-Planificación: tomando como base los datos cargadas en la etapa anterior. 
-generar un período
- y el plan de trabajo con un proyecto.
-Ejecución: tomando como base los datos cargados en las dos etapas anteriores. 
-crear un informe.
-agregar observaciones.
-Conclusión: tomando como base los datos cargadas en las tres etapas anteriores.
-crear el informe borrador.
-generar el informe definitivo.
-Seguimiento: Ver las observaciones generadas (Estado: en proceso de implementación) luego de generado el informe definitivo.
+
+#### Administración 
+> 1. Crear una organización.
+> 2. Generar unidades organizativas y unidades de negocio.
+> 3. Carga de una buena práctica.
+
+#### Planificación: 
+**Tomando como base los datos cargadas en la etapa anterior.** 
+> 1. Generar un período
+> 2. Generar plan de trabajo con un proyecto.
+
+#### Ejecución: 
+**Tomando como base los datos cargados en las dos etapas anteriores.**
+> 1. Crear un informe.
+> 2. Agregar observaciones.
+
+#### Conclusión: 
+**Tomando como base los datos cargadas en las tres etapas anteriores.**
+> 1. Crear el informe borrador.
+> 2. Generar el informe definitivo.
+
+#### Seguimiento: 
+Ver las observaciones generadas (Estado: en proceso de implementación) luego de generado el informe definitivo.
