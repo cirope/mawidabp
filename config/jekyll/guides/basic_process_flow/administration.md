@@ -8,7 +8,7 @@ article_order: 2
 
 ## Administración
 
-Seleccionamos Administración, nos muestra la siguiente pantalla.
+Seleccionamos **Administración**, nos muestra la siguiente pantalla.
 
 ![]({% asset administration/menu.png @path %}){: class="img-responsive"}
 
@@ -23,10 +23,10 @@ Se cargan los siguientes datos de la organización: nombre, prefijo, y la descri
 
 ![]({% asset basic_process_flow/new_organization.png @path %}){: class="img-responsive"}
 
-Seleccionamos **Crear organización** para que se genere.
-Luego de creada la organización se puede cargar el isologotipo.
+*Seleccionamos **Crear organización** para que se genere.*
+*Luego de creada la organización se puede cargar el isologotipo.*
 
-A continuación mostramos la vista global de la organización creada (por ejemplo en este caso: Demo):
+A continuación mostramos la vista global de la organización creada *(por ejemplo en este caso: Demo).*
 
 ![]({% asset basic_process_flow/list_organizations.png @path %}){: class="img-responsive"}
 
@@ -122,27 +122,29 @@ Las buenas prácticas son la base del control interno de una organización.
 Una buena práctica se encuentra formada por procesos y estos por objetivos de control.
 En las buenas prácticas se definen los controles a cumplir por la organización en los diferentes procesos. 
 Los controles se revisan (chequean) por medio de pruebas (evaluación de diseño, pruebas de cumplimiento y pruebas sustantivas), las cuales permiten definir un grado de cumplimiento con los controles definidos (10% a 100% de cumplimiento).
+
+
 A continuación mostramos como se carga una Nueva buena práctica:
 
 ![]({% asset basic_process_flow/new_best_practices.png @path %}){: class="img-responsive"}
 
-Nombre: de la buena práctica.
-Descripción: es opcional.
-Obsoleta: si la tildamos, no vamos a poder utilizarla.
-Compartida: si la tildamos, vamos a poder utilizarla en otra organización que pertenezca al mismo grupo (no se puede volver para atrás).
+**Nombre:** de la buena práctica.  
+**Descripción:** es opcional.  
+**Obsoleta:** si la tildamos, no vamos a poder utilizarla.  
+**Compartida:** si la tildamos, vamos a poder utilizarla en otra organización que pertenezca al mismo grupo (no se puede volver para atrás).
 
-Para generar la buena práctica, seleccionamos Crear Buena Práctica
+Para generar la buena práctica, seleccionamos **Crear Buena Práctica**
 
-Proceso: cargamos el proceso (por ejemplo: Operaciones activas).
-Obsoleto: si lo tildamos, no vamos a poder utilizar los controles y pruebas definidos en este proceso.
-Si seleccionamos la Flecha que se encuentra debajo de Procesos, aparece la opción agregar objetivo.
+**Proceso:** cargamos el proceso (por ejemplo: Operaciones activas).  
+**Obsoleto:** si lo tildamos, no vamos a poder utilizar los controles y pruebas definidos en este proceso.  
+Si seleccionamos la Flecha que se encuentra debajo de Procesos, aparece la opción agregar objetivo.  
 
 Si seleccionamos Agregar objetivo muestra los datos a cargar.
 
 ![]({% asset basic_process_flow/processes.png @path %}){: class="img-responsive"}
 
 
-Para que se guarde tenemos que seleccionar Actualizar Buena práctica.
+Para que se guarde tenemos que seleccionar **Actualizar Buena práctica.**
 
 
 A continuación mostramos un ejemplo de Procesos cargados en la Buena práctica Operaciones Activas:
@@ -156,19 +158,42 @@ Luego mostramos, un ejemplo de un objetivo de control para el proceso Controles 
 
 ![]({% asset basic_process_flow/process_control_objective.png @path %}){: class="img-responsive"}
 
-Objetivo de control: el resultado que se desea alcanzar mediante la implementación de procedimientos de control en los procesos de trabajo de una organización. 
-Importancia: del objetivo de control para el proceso en la organización. Los valores que puede tomar son Crítico (5), Alto (4), Moderado (3), Moderado/bajo (2), Bajo (1), Nulo (0). El valor depende de la incidencia que tiene el objetivo de control para cumplir con los objetivos y metas institucionales de la organización.
-Riesgo: es la probabilidad de ocurrencia de un evento no deseado o la falta de ocurrencia de un evento si deseado y su impacto potencial para la organización. Puede tomar el valor Alto, Medio y Bajo. Este valor se obtiene de una evaluación de riesgos de cada objetivo de control para la organización en el momento actual.
-Soporte: permite subir una plantilla de papel de trabajo que se quiera usar cuando se realiza el trabajo de campo. Después cuando los incorporan en un informe tienen para descargar ese archivo (tanto en la edición del informe como en la del objetivo de control).
-Obsoleto: si lo tildamos, no vamos a poder utilizarlo en otros controles a realizar en la organización.
-Controles: apoyan el cumplimento de los objetivos de control. Su ausencia provoca riesgos. Los procedimientos de control (preventivos, detectivos, correctivos, y proactivos) son todos los elementos de administración que una organización establece con la intención de lograr sus objetivos de control.
-Pruebas: evalúan existencia y cumplimiento de controles. Proporcionan conocimiento y evidencia. Luego de realizada colocamos un valor entre 0 a 100% en base a la existencia y cumplimiento de los controles definidos.
-Evaluación de diseño: las pruebas de diseño a realizar para poder revisar que se cumplan los controles definidos.
-Pruebas de cumplimiento: las pruebas a realizar para poder revisar que se cumplan los controles definidos.
-Pruebas sustantivas: las pruebas a realizar para poder revisar que se cumplan los controles definidos.
-Efecto: se definen los temas que se pueden producir al no cumplirse con los controles definidos para cada uno de los objetivos de control (impacto en la organización). Es uno de los componentes del riesgo. Cualquier impacto (económico, patrimonial, en productividad, en servicio al cliente, en normatividad, en desarrollo institucional, posicionamiento competitivo, etc.) que afecte a una organización se refleja en los objetivos y metas de la organización. Es importante analizar el comportamiento del impacto en cada uno de los objetivos de control.
+**Objetivo de control:** el resultado que se desea alcanzar mediante la implementación de procedimientos de control en los procesos de trabajo de una organización.
 
-Etiqueta: podemos agregar etiquetas que han sido definidas en la etapa de Administración - Etiquetas, para luego poder identificar el objetivo de control en un filtro o reporte. 
+
+**Importancia:** del objetivo de control para el proceso en la organización. Los valores que puede tomar son Crítico (5), Alto (4), Moderado (3), Moderado/bajo (2), Bajo (1), Nulo (0). El valor depende de la incidencia que tiene el objetivo de control para cumplir con los objetivos y metas institucionales de la organización.
+
+
+**Riesgo:** es la probabilidad de ocurrencia de un evento no deseado o la falta de ocurrencia de un evento si deseado y su impacto potencial para la organización. Puede tomar el valor Alto, Medio y Bajo. Este valor se obtiene de una evaluación de riesgos de cada objetivo de control para la organización en el momento actual.
+
+
+**Soporte:** permite subir una plantilla de papel de trabajo que se quiera usar cuando se realiza el trabajo de campo. Después cuando los incorporan en un informe tienen para descargar ese archivo (tanto en la edición del informe como en la del objetivo de control).
+
+
+**Obsoleto:** si lo tildamos, no vamos a poder utilizarlo en otros controles a realizar en la organización.
+
+
+**Controles:** apoyan el cumplimento de los objetivos de control. Su ausencia provoca riesgos. Los procedimientos de control (preventivos, detectivos, correctivos, y proactivos) son todos los elementos de administración que una organización establece con la intención de lograr sus objetivos de control.
+
+
+**Pruebas:** evalúan existencia y cumplimiento de controles. Proporcionan conocimiento y evidencia. Luego de realizada colocamos un valor entre 0 a 100% en base a la existencia y cumplimiento de los controles definidos.
+
+
+**Evaluación de diseño:** las pruebas de diseño a realizar para poder revisar que se cumplan los controles definidos.
+
+
+**Pruebas de cumplimiento:** las pruebas a realizar para poder revisar que se cumplan los controles definidos.
+
+
+**Pruebas sustantivas:** las pruebas a realizar para poder revisar que se cumplan los controles definidos.
+
+
+**Efecto:** se definen los temas que se pueden producir al no cumplirse con los controles definidos para cada uno de los objetivos de control (impacto en la organización). Es uno de los componentes del riesgo. Cualquier impacto (económico, patrimonial, en productividad, en servicio al cliente, en normatividad, en desarrollo institucional, posicionamiento competitivo, etc.) que afecte a una organización se refleja en los objetivos y metas de la organización. Es importante analizar el comportamiento del impacto en cada uno de los objetivos de control.
+
+
+**Etiqueta:** podemos agregar etiquetas que han sido definidas en la etapa de Administración - Etiquetas, para luego poder identificar el objetivo de control en un filtro o reporte. 
+
+
 A continuación mostramos un ejemplo de las buenas prácticas cargadas en esta organización:
 
 ![]({% asset basic_process_flow/best_practices.png @path %}){: class="img-responsive"}

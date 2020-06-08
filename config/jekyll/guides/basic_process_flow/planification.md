@@ -8,7 +8,7 @@ article_order: 3
 
 ## Planificación
 
-Seleccionamos Planificación, nos muestra la siguiente pantalla
+Seleccionamos **Planificación**, nos muestra la siguiente pantalla
 
 ![]({% asset basic_process_flow/planifications.png @path %}){: class="img-responsive"}
 
@@ -42,17 +42,19 @@ Aparece la siguiente pantalla:
 ![]({% asset basic_process_flow/new_plan.png @path %}){: class="img-responsive"}
 
 
-Hacemos click en Por favor seleccione, muestra los períodos generados (en el paso anterior), para este caso seleccionamos 2020, luego Crear Plan de trabajo, muestra la siguiente pantalla:
+Hacemos click en Por favor seleccione, muestra los períodos generados (en el paso anterior), para este caso seleccionamos 2020, luego **Crear Plan de trabajo**, muestra la siguiente pantalla:
 
 ![]({% asset basic_process_flow/new_plan-1.png @path %}){: class="img-responsive"}
 
 
 Ahora estamos en condiciones de generar los proyectos (informes) para las unidades organizativas.
+
+
 Seleccionamos una unidad organizativa, por ejemplo Procesos Centrales para generar un proyecto.
 
 ![]({% asset basic_process_flow/new_plan-1.png @path %}){: class="img-responsive"}
 
-**Seleccionamos Agregar proyecto**
+Seleccionamos **Agregar proyecto**
 
 ![]({% asset basic_process_flow/new_process.png @path %}){: class="img-responsive"}
 
@@ -64,4 +66,3 @@ Para que se guarde seleccionamos Actualizar plan de trabajo
 
 
 De esta manera generamos un proyecto (Acuerdos) para  el periodo y plan de trabajo generado, seleccionando la unidad de negocio correspondiente. Ahora estamos en condiciones de crear un informe en la siguiente etapa del proceso de auditoría (ejecución).
-
