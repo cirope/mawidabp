@@ -18,13 +18,13 @@ APP_AUDITED_MENU_ITEMS = [
         extra_conditions: "params[:completion_state] == 'complete'",
         url: { controller: '/findings', completion_state: :complete }
       ),
-      MenuItem.new(
+      (MenuItem.new(
         :repeated_findings,
         order: 3,
         controllers: :findings,
         extra_conditions: "params[:completion_state] == 'repeated'",
         url: { controller: '/findings', completion_state: :repeated }
-      ),
+      ) unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES),
       MenuItem.new(
         :notifications,
         order: 4,
@@ -44,7 +44,7 @@ APP_AUDITED_MENU_ITEMS = [
           )
         ]
       )
-    ]
+    ].compact
   )
 ].freeze
 
