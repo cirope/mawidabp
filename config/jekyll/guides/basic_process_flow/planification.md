@@ -65,4 +65,4 @@ Para que se guarde seleccionamos Actualizar plan de trabajo
 ![]({% asset basic_process_flow/show_process.png @path %}){: class="img-responsive"}
 
 
-De esta manera generamos un proyecto (Acuerdos) para  el periodo y plan de trabajo generado, seleccionando la unidad de negocio correspondiente. Ahora estamos en condiciones de crear un informe en la siguiente etapa del proceso de auditoría (ejecución).
+De esta manera generamos un proyecto (Acuerdos) para  el periodo y plan de trabajo generado, seleccionando la unidad de negocio correspondiente. Ahora estamos en condiciones de crear un informe en la siguiente etapa del proceso de auditoría (ejecución).	
