@@ -10,7 +10,7 @@ article_order: 4
 
 Para ver la calificación de un informe y de los procesos, lo hacemos a través de un informe en el módulo de conclusión
 
-## Conclusión
+#### Conclusión
 
 Seleccionamos **Conclusión**, nos muestra la siguiente pantalla
 
@@ -35,7 +35,7 @@ Seleccionamos **Descargas**
 
 ![]({% asset qualification_methodology/conclusion_final_review_downloads.png @path %}){: class="img-responsive"}
 
-### Calificación del informe y de los procesos a nivel general
+#### Calificación del informe y de los procesos a nivel general
 
 
 Seleccionamos **Descargar Planilla de calificación global**
@@ -49,11 +49,15 @@ Para ver el detalle de cómo se realiza el cálculo tenemos que descargar la **P
 ![]({% asset qualification_methodology/download_detailed_rating_sheet.png @path %}){: class="img-responsive"}	
 
 
-### Calificación del informe y de los procesos a nivel de detalle (peso y efectividad de control)
+#### Calificación del informe y de los procesos a nivel de detalle (peso y efectividad de control)
 
 
 Seleccionamos **Descargar Planilla de calificación detallada**
+
+
 **Muestra la calificación del informe: 79%**
+
+
 La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos. 
 
 
@@ -73,6 +77,4 @@ La calificación del informe se calcula como un promedio ponderado. Se suman las
 
 #### Documentación del sistema: 60%
 
-![]({% asset qualification_methodology/download_detailed_4.png @path %}){: class="img-responsive"}	
-
-
+![]({% asset qualification_methodology/download_detailed_4.png @path %}){: class="img-responsive"}
