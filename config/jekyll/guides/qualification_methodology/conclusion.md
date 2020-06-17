@@ -3,7 +3,7 @@ title: Conclusión
 layout: articles
 category: qualification_methodology
 guide_order: 8
-article_order: 4
+article_order: 3
 ---
 
 ## Ejemplo con un informe
