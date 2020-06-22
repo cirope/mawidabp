@@ -47,9 +47,6 @@
           <td><%= finding.state_text %></td>
           <td><%= finding.users_that_can_act_as_auditor.map(&:full_name).join('; ') %></td>
           <td><%= @ids_with_count[finding.id] %></td>
-          <% if SHOW_WEAKNESS_EXTRA_ATTRIBUTES %>
-            <td><%= finding.compliance_observations %></td>
-          <% end %>
         </tr>
       <% end %>
     </tbody>

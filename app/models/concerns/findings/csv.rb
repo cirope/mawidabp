@@ -48,8 +48,7 @@ module Findings::Csv
       (commitment_support_plans_text if Finding.show_commitment_support?),
       (commitment_support_controls_text if Finding.show_commitment_support?),
       (commitment_support_reasons_text if Finding.show_commitment_support?),
-      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?),
-      (compliance_observations if SHOW_WEAKNESS_EXTRA_ATTRIBUTES)
+      (commitment_date_required_level_text if Finding.show_commitment_support? && being_implemented?)
     ].compact
 
     row.unshift organization.prefix if corporate
@@ -336,8 +335,7 @@ module Findings::Csv
           (I18n.t('finding.commitment_support_plans') if Finding.show_commitment_support?),
           (I18n.t('finding.commitment_support_controls') if Finding.show_commitment_support?),
           (I18n.t('finding.commitment_support_reasons') if Finding.show_commitment_support?),
-          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?),
-          (Weakness.human_attribute_name('compliance_observations') if SHOW_WEAKNESS_EXTRA_ATTRIBUTES)
+          (I18n.t('finding.commitment_date_required_level_title') if Finding.show_commitment_support?)
         ].compact
       end
   end

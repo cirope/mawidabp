@@ -124,8 +124,7 @@ module Reports::TaggedFindingsReport
           finding.title,
           finding.state_text,
           finding.users_that_can_act_as_auditor.map(&:full_name).join('; '),
-          @ids_with_count[finding.id],
-          (finding.compliance_observations if SHOW_WEAKNESS_EXTRA_ATTRIBUTES)
+          @ids_with_count[finding.id]
         ]
       end
     end
@@ -155,9 +154,8 @@ module Reports::TaggedFindingsReport
         Finding.human_attribute_name('title')       => 30,
         Finding.human_attribute_name('state')       => 13,
         t('finding.auditors', count: 0)             => 10,
-        Tag.model_name.human(count: 0)              => 8,
+        Tag.model_name.human(count: 0)              => 8
       }
-      @tagged_findings_columns_order.merge(Weakness.human_attribute_name('compliance_observations') => 30) if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
     end
 
     def tagged_findings_column_widths pdf
