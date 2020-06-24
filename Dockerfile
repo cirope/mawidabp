@@ -18,6 +18,8 @@ ENV LD_LIBRARY_PATH /opt/rh/rh-ruby${RUBY_MAJOR_VERSION}${RUBY_MINOR_VERSION}/ro
 
 USER root
 
+RUN sed 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf > /etc/yum/pluginconf.d/fastestmirror.conf
+
 RUN curl -sL https://rpm.nodesource.com/setup_10.x | bash -
 
 RUN yum update -y && \
