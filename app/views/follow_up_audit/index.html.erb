@@ -52,6 +52,8 @@
               { :action => :weaknesses_evolution, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
             <%= link_to t('follow_up_audit.weaknesses_by_control_objective_title'),
               { :action => :weaknesses_by_control_objective, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
+            <%= link_to t('follow_up_audit.weaknesses_by_control_objective_process_title'),
+              { :action => :weaknesses_by_control_objective_process, :controller_name => 'follow_up', :final => false }, class: 'list-group-item list-group-item-action' %>
           <% end %>
           <%= link_to t('follow_up_audit.weaknesses_report.title'),
             { action: :weaknesses_report, controller_name: 'follow_up', final: false }, class: 'list-group-item list-group-item-action' %>
