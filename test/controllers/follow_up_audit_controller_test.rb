@@ -14,7 +14,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :weaknesses_by_month, :weaknesses_current_situation,
       :weaknesses_by_control_objective, :weaknesses_evolution,
       :weaknesses_list, :weaknesses_brief, :weaknesses_by_risk_and_business_unit,
-      :weaknesses_control_objective_process
+      :weaknesses_by_control_objective_process
     ]
 
     private_actions.each do |action|
