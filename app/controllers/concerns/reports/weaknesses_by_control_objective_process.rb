@@ -118,7 +118,7 @@ module Reports::WeaknessesByControlObjectiveProcess
           weakness.review.plan_item.project
         ],
         [
-          BusinessUnitType.human_attribute_name('business_unit_label'),
+          t('follow_up_committee_report.weaknesses_by_control_objective_process.cycle'),
           weakness.business_unit.business_unit_type.name,
         ],
         [

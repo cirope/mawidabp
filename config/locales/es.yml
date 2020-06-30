@@ -852,7 +852,7 @@
       pdf_name: "Reporte_de_proceso_por_objectivo_de_control_%{from_date}_al_%{to_date}.pdf"
       title: "REPORTE"
       subtitle: "SUB REPORTE"
-      ciclo: "Ciclo"
+      cycle: "Ciclo"
     weaknesses_by_user:
       pdf_name: "observaciones_por_usuario_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"

@@ -18,7 +18,7 @@ module Findings::ByControlObjectiveProcessCsv
       [
         Review.model_name.human,
         PlanItem.human_attribute_name('project'),
-        BusinessUnitType.human_attribute_name('business_unit_label'),
+        I18n.t('follow_up_committee_report.weaknesses_by_control_objective_process.cycle'),
         ProcessControl.model_name.human,
         ControlObjectiveItem.human_attribute_name('control_objective_text'),
         ConclusionFinalReview.human_attribute_name('sectors'),
