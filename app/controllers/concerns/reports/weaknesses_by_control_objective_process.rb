@@ -134,8 +134,8 @@ module Reports::WeaknessesByControlObjectiveProcess
           weakness.business_unit.business_unit_type.name
         ],
         [
-          Weakness.human_attribute_name('origination_date'),
-          (weakness.origination_date ? l(weakness.origination_date) : '-')
+          t('follow_up_committee_report.weaknesses_by_control_objective_process.origination_year'),
+          (weakness.origination_date ? weakness.origination_date.year : '-')
         ],
         [
           ConclusionFinalReview.human_attribute_name('conclusion'),
@@ -144,6 +144,10 @@ module Reports::WeaknessesByControlObjectiveProcess
         [
           Weakness.human_attribute_name('risk'),
           weakness.risk_text
+        ],
+        [
+          Weakness.human_attribute_name('title'),
+          weakness.title
         ],
         [
           Weakness.human_attribute_name('description'),
@@ -174,17 +178,17 @@ module Reports::WeaknessesByControlObjectiveProcess
           weakness.id,
         ],
         [
-          t('finding.auditors', count: 0),
-          weakness.users.select(&:auditor?).map(&:full_name).to_sentence
-        ],
-        [
           t('finding.audited', count: 0),
           weakness.users.select { |u|
             u.can_act_as_audited? && weakness.process_owners.exclude?(u)
           }.map(&:full_name).to_sentence
         ],
         [
-          Tag.model_name.human,
+          t('finding.auditors', count: 0),
+          weakness.users.select(&:auditor?).map(&:full_name).to_sentence
+        ],
+        [
+          Tag.model_name.human(count: 0),
           weakness.review.tags.map(&:name).to_sentence,
         ],
         [

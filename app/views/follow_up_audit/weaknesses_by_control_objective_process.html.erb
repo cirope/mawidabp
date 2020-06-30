@@ -81,8 +81,8 @@
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= Weakness.human_attribute_name('origination_date') %></span>:
-      <%= (weakness.origination_date ? l(weakness.origination_date) : '-') %>
+      <span class="text-muted"><%= t 'follow_up_committee_report.weaknesses_by_control_objective_process.origination_year' %></span>:
+      <%= (weakness.origination_date ? weakness.origination_date.year : '-') %>
     </p>
 
     <p class="mb-1">
@@ -93,6 +93,11 @@
     <p class="mb-1">
       <span class="text-muted"><%= Weakness.human_attribute_name 'risk' %></span>:
       <%= weakness.risk_text %>
+    </p>
+
+    <p class="mb-1">
+      <span class="text-muted"><%= Weakness.human_attribute_name 'title' %></span>:
+      <%= weakness.title %>
     </p>
 
     <p class="mb-1">
@@ -137,11 +142,6 @@
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= t 'finding.auditors', count: 0 %></span>:
-      <%= weakness.users.select(&:auditor?).map(&:full_name).to_sentence %>
-    </p>
-
-    <p class="mb-1">
       <span class="text-muted"><%= t 'finding.audited', count: 0 %></span>:
       <%= weakness.users.select { |u|
         u.can_act_as_audited? && weakness.process_owners.exclude?(u)
@@ -149,7 +149,12 @@
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= Tag.model_name.human %></span>:
+      <span class="text-muted"><%= t 'finding.auditors', count: 0 %></span>:
+      <%= weakness.users.select(&:auditor?).map(&:full_name).to_sentence %>
+    </p>
+
+    <p class="mb-1">
+      <span class="text-muted"><%= Tag.model_name.human(count: 0) %></span>:
       <%= weakness.review.tags.map(&:name).to_sentence %>
     </p>
 

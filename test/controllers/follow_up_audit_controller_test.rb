@@ -1167,8 +1167,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :user_id => [users(:audited).id.to_s],
         :control_objective_tags => ['one'],
         :weakness_tags => ['two'],
-        :review_tags => ['three'],
-
+        :review_tags => ['three']
       },
       :controller_name => 'follow_up',
       :final => false
