@@ -61,23 +61,38 @@
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></span>:
-      <%= l weakness.review.conclusion_final_review.issue_date %>
+      <span class="text-muted"><%= BusinessUnitType.human_attribute_name('business_unit_label') %></span>:
+      <%= weakness.business_unit.business_unit_type.name %>
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= BusinessUnit.model_name.human %></span>:
-      <%= weakness.business_unit %>
+      <span class="text-muted"><%= ProcessControl.model_name.human %></span>:
+      <%= weakness.control_objective_item.control_objective.process_control.name %>
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= Weakness.human_attribute_name 'review_code' %></span>:
-      <%= weakness.review_code %>
+      <span class="text-muted"><%= ControlObjectiveItem.human_attribute_name('control_objective_text') %></span>:
+      <%= weakness.control_objective_item.control_objective_text %>
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= Weakness.human_attribute_name 'title' %></span>:
-      <%= weakness.title %>
+      <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name('sectors') %></span>:
+      <%= (weakness.review.conclusion_final_review.sectors ? weakness.review.conclusion_final_review.sectors : '-') %>
+    </p>
+
+    <p class="mb-1">
+      <span class="text-muted"><%= Weakness.human_attribute_name('origination_date') %></span>:
+      <%= (weakness.origination_date ? l(weakness.origination_date) : '-') %>
+    </p>
+
+    <p class="mb-1">
+      <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name('conclusion') %></span>:
+      <%= weakness.review.conclusion_final_review.conclusion %>
+    </p>
+
+    <p class="mb-1">
+      <span class="text-muted"><%= Weakness.human_attribute_name 'risk' %></span>:
+      <%= weakness.risk_text %>
     </p>
 
     <p class="mb-1">
@@ -87,35 +102,19 @@
     <%= simple_format weakness.description, class: 'mb-1' %>
 
     <p class="mb-1">
+      <span class="text-muted"><%= Weakness.human_attribute_name('current_situation') %></span>:
+      <%= (weakness.current_situation ? weakness.current_situation : '-') %>
+    </p>
+
+    <p class="mb-1">
+      <span class="text-muted"><%= Weakness.human_attribute_name 'answer' %></span>:
+    </p>
+
+    <%= simple_format weakness.answer, class: 'mb-1' %>
+
+    <p class="mb-1">
       <span class="text-muted"><%= Weakness.human_attribute_name 'state' %></span>:
       <%= weakness.state_text %>
-    </p>
-
-    <p class="mb-1">
-      <span class="text-muted"><%= Weakness.human_attribute_name 'risk' %></span>:
-      <%= weakness.risk_text %>
-    </p>
-
-    <p class="mb-1">
-      <span class="text-muted"><%= t 'finding.auditors', count: 0 %></span>:
-      <%= weakness.users.select(&:auditor?).map(&:full_name).to_sentence %>
-    </p>
-
-    <p class="mb-1">
-      <span class="text-muted"><%= t 'finding.responsibles', count: 1 %></span>:
-      <%= weakness.process_owners.map(&:full_name).to_sentence %>
-    </p>
-
-    <p class="mb-1">
-      <span class="text-muted"><%= t 'finding.audited', count: 0 %></span>:
-      <%= weakness.users.select { |u|
-        u.can_act_as_audited? && weakness.process_owners.exclude?(u)
-      }.map(&:full_name).to_sentence %>
-    </p>
-
-    <p class="mb-1">
-      <span class="text-muted"><%= Weakness.human_attribute_name 'origination_date' %></span>:
-      <%= l weakness.origination_date if weakness.origination_date %>
     </p>
 
     <p class="mb-1">
@@ -133,49 +132,31 @@
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= Weakness.human_attribute_name 'rescheduled' %></span>:
-      <%= t "label.#{weakness.rescheduled? ? 'yes' : 'no'}" %>
+      <span class="text-muted"><%= Weakness.human_attribute_name('id') %></span>:
+      <%= weakness.id %>
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= t 'findings.state.repeated' %></span>:
-      <%= t "label.#{weakness.repeated_of_id.present? ? 'yes' : 'no'}" %>
+      <span class="text-muted"><%= t 'finding.auditors', count: 0 %></span>:
+      <%= weakness.users.select(&:auditor?).map(&:full_name).to_sentence %>
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= Weakness.human_attribute_name 'audit_comments' %></span>:
+      <span class="text-muted"><%= t 'finding.audited', count: 0 %></span>:
+      <%= weakness.users.select { |u|
+        u.can_act_as_audited? && weakness.process_owners.exclude?(u)
+      }.map(&:full_name).to_sentence %>
     </p>
-
-    <%= simple_format weakness.audit_comments, class: 'mb-1' %>
 
     <p class="mb-1">
-      <span class="text-muted"><%= Weakness.human_attribute_name 'audit_recommendations' %></span>:
+      <span class="text-muted"><%= Tag.model_name.human %></span>:
+      <%= weakness.review.tags.map(&:name).to_sentence %>
     </p>
-
-    <%= simple_format weakness.audit_recommendations, class: 'mb-1' %>
 
     <p class="mb-1">
-      <span class="text-muted"><%= Weakness.human_attribute_name 'answer' %></span>:
+      <span class="text-muted"><%= Weakness.human_attribute_name('compliance_observations') %></span>:
+      <%= weakness.compliance_observations %>
     </p>
-
-    <%= simple_format weakness.answer, class: 'mb-1' %>
-
-    <p class="mb-1">
-      <span class="text-muted"><%= t('finding.finding_answers') %></span>:
-    </p>
-
-    <% weakness.finding_answers.each do |finding_answer| %>
-      <blockquote class="blockquote ml-3">
-        <%= simple_format finding_answer.answer, class: 'small mb-1' %>
-
-        <footer class="blockquote-footer">
-          <%= finding_answer.user.full_name %>
-          <% if show_follow_up_timestamps? %>
-            - <%= l finding_answer.created_at, format: :minimal %>
-          <% end %>
-        </footer>
-      </blockquote>
-    <% end %>
   <% end %>
 <% else %>
   <div style="margin-left: 2em">
