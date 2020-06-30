@@ -61,8 +61,8 @@
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= t 'follow_up_committee_report.weaknesses_by_control_objective_process.cycle' %></span>:
-      <%= weakness.business_unit.business_unit_type.name %>
+      <span class="text-muted"><%= BusinessUnit.model_name.human %></span>:
+      <%= weakness.business_unit %>
     </p>
 
     <p class="mb-1">
@@ -76,8 +76,8 @@
     </p>
 
     <p class="mb-1">
-      <span class="text-muted"><%= ConclusionFinalReview.human_attribute_name('sectors') %></span>:
-      <%= (weakness.review.conclusion_final_review.sectors ? weakness.review.conclusion_final_review.sectors : '-') %>
+      <span class="text-muted"><%= BusinessUnitType.model_name.human %></span>:
+      <%= weakness.business_unit.business_unit_type.name %>
     </p>
 
     <p class="mb-1">

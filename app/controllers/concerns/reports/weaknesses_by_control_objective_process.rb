@@ -118,8 +118,8 @@ module Reports::WeaknessesByControlObjectiveProcess
           weakness.review.plan_item.project
         ],
         [
-          t('follow_up_committee_report.weaknesses_by_control_objective_process.cycle'),
-          weakness.business_unit.business_unit_type.name,
+          BusinessUnit.model_name.human,
+          weakness.business_unit
         ],
         [
           ProcessControl.model_name.human,
@@ -130,8 +130,8 @@ module Reports::WeaknessesByControlObjectiveProcess
           weakness.control_objective_item.control_objective.process_control.name,
         ],
         [
-          ConclusionFinalReview.human_attribute_name('sectors'),
-          (weakness.review.conclusion_final_review.sectors ? weakness.review.conclusion_final_review.sectors : '-'),
+          BusinessUnitType.model_name.human,
+          weakness.business_unit.business_unit_type.name
         ],
         [
           Weakness.human_attribute_name('origination_date'),
