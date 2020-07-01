@@ -290,7 +290,7 @@ module Reports::WeaknessesByControlObjectiveProcess
       ).uniq.map(&:strip).reject(&:blank?)
 
       if tags.any?
-        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_control_objective_process.control_objective_tags'}</b> = \"#{tags.to_sentence}\""
+        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_by_control_objective_process.control_objective_tags'}</b> = \"#{tags.to_sentence}\""
 
         weaknesses.by_control_objective_tags tags
       else
@@ -304,7 +304,7 @@ module Reports::WeaknessesByControlObjectiveProcess
       ).uniq.map(&:strip).reject(&:blank?)
 
       if tags.any?
-        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_control_objective_process.weakness_tags'}</b> = \"#{tags.to_sentence}\""
+        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_by_control_objective_process.weakness_tags'}</b> = \"#{tags.to_sentence}\""
 
         weaknesses.by_wilcard_tags tags
       else
@@ -318,7 +318,7 @@ module Reports::WeaknessesByControlObjectiveProcess
       ).uniq.map(&:strip).reject(&:blank?)
 
       if tags.any?
-        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_control_objective_process.review_tags'}</b> = \"#{tags.to_sentence}\""
+        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_by_control_objective_process.review_tags'}</b> = \"#{tags.to_sentence}\""
 
         weaknesses.by_review_tags tags
       else

@@ -855,6 +855,9 @@
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
       without_weaknesses: "Sin observaciones"
       origination_year: "Año de origen"
+      control_objective_tags: "Etiquetas objetivos de control"
+      weakness_tags: "Etiquetas de observación"
+      review_tags: "Etiquetas de informe"
     weaknesses_by_user:
       pdf_name: "observaciones_por_usuario_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
