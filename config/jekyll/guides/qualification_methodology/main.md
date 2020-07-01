@@ -14,4 +14,4 @@ El sistema cuenta con los módulos de Administración, Planificación, Ejecució
 ![]({% asset basic_process_flow/main.png @path %}){: class="img-responsive"}
 
 
-En este documento vamos a ver la metodología de calificación de un informe generado por el sistema mawidabp.
+A continuación, informamos en la sección "Metodología de Calificación", la metodología utilizada para la calificación del informe y del proceso).
