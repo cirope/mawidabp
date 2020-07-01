@@ -7,6 +7,7 @@ class Finding < ApplicationRecord
   include Findings::AttributeTypes
   include Findings::Brief
   include Findings::BusinessUnits
+  include Findings::ByControlObjectiveProcessCsv
   include Findings::ByUserCsv
   include Findings::Code
   include Findings::Comments
