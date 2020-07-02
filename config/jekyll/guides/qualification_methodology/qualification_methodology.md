@@ -10,6 +10,9 @@ article_order: 2
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> e0ccc913ed6b4023b84e352818b64ec8448dad5f
 Podemos verla en el sistema en la ¨Planilla de proceso de calificación global¨ y ¨Planilla de proceso de calificación detallada¨ ("Conclusión" -> "Informes definitivos" o ¨Conclusión¨ -> "Informes borradores", dentro de la ¨Edición¨ se puede descargar bajo "Descargas", están los datos necesarios y se menciona que la metodología que se utiliza es el promedio ponderado, luego se da una breve explicación del procedimiento en ¨Notas¨.
 
 *** Notas:*** *La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objectivos de control multiplicada por su peso y el resultado se divide por la suma de los pesos.*
@@ -30,6 +33,7 @@ Como es un instrumento que utilizamos sin ninguna modificación, el mejor lugar 
 
 A continuación, informamos en la sección "Ejemplo con un informe" cómo se calcula:
 la calificación del informe y de los procesos (Planilla de proceso de calificación global).
+<<<<<<< HEAD
 la calificación del informe y de los procesos a nivel de detalle - peso y efectividad de control de cada objetivo de control (Planilla de proceso de calificación detallada).
 =======
 =======
@@ -52,3 +56,6 @@ A continuación mostramos un ejemplo con un informe definitivo generado en el si
 =======
 A continuación mostramos un ejemplo con un informe definitivo generado en el sistema cómo se calcula la calificación del informe y la calificación del proceso a nivel general y detallado.
 >>>>>>> master
+=======
+la calificación del informe y de los procesos a nivel de detalle - peso y efectividad de control de cada objetivo de control (Planilla de proceso de calificación detallada).
+>>>>>>> e0ccc913ed6b4023b84e352818b64ec8448dad5f
