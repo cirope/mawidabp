@@ -1,6 +1,10 @@
 ---
 <<<<<<< HEAD
+<<<<<<< HEAD
 title: Ejemplo de calificación con un informe
+=======
+title: Conclusión
+>>>>>>> master
 =======
 title: Conclusión
 >>>>>>> master
@@ -11,15 +15,21 @@ article_order: 3
 ---
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## Ejemplo de calificación con un informe
 
 Para ver la calificación de un informe y de los procesos, lo hacemos a través de un informe en el módulo de **Conclusión**.
 =======
+=======
+>>>>>>> master
 ## Ejemplo con un informe
 
 Para ver la calificación de un informe y de los procesos, lo hacemos a través de un informe en el módulo de conclusión
 
 #### Conclusión
+<<<<<<< HEAD
+>>>>>>> master
+=======
 >>>>>>> master
 
 Seleccionamos **Conclusión**, nos muestra la siguiente pantalla
@@ -31,9 +41,13 @@ Seleccionamos **Conclusión**, nos muestra la siguiente pantalla
 	
 Seleccionamos **Conclusión -> Informe Definitivos**
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 Muestra los informes generados a la fecha.
+=======
+Muestra los informes generados.
+>>>>>>> master
 =======
 Muestra los informes generados.
 >>>>>>> master
@@ -42,7 +56,12 @@ Muestra los informes generados.
 ![]({% asset basic_process_flow/conclusion_final_reviews_2.png @path %}){: class="img-responsive"}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Seleccionamos **Editar** *(lápiz)* en el informe **2014 P 02 1** *(se encuentra en la quinta fila de la página 2)*
+=======
+
+Seleccionamos **Editar del informe 2014 P 02 1** *(se encuentra en la quinta fila de la página 2)*
+>>>>>>> master
 =======
 
 Seleccionamos **Editar del informe 2014 P 02 1** *(se encuentra en la quinta fila de la página 2)*
@@ -54,10 +73,13 @@ Seleccionamos **Editar del informe 2014 P 02 1** *(se encuentra en la quinta fil
 Seleccionamos **Descargas**
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 Nos muestra: Descargar planilla de calificación global y Descargar planilla de calificación detallada
 
 
+=======
+>>>>>>> master
 =======
 >>>>>>> master
 ![]({% asset qualification_methodology/conclusion_final_review_downloads.png @path %}){: class="img-responsive"}
@@ -68,6 +90,7 @@ Nos muestra: Descargar planilla de calificación global y Descargar planilla de 
 Seleccionamos **Descargar Planilla de calificación global**
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Muestra:
 
 - **Calificación del informe: 79%**
@@ -77,11 +100,16 @@ Muestra:
 - **Notas y resumen de observaciones que sustentan la calificación otorgada.**
 
 =======
+=======
+>>>>>>> master
 **Muestra la calificación del informe: 79%**
 
 **También muestra la calificación de cada proceso** (Normas y procedimientos, Circuito, Logs, Contingencia, Seguridad lógica, Parametría funcional y técnica y documentación del sistema) a nivel general. 
 
 Para ver el detalle de cómo se realiza el cálculo tenemos que descargar la **Planilla de calificación detallada**
+<<<<<<< HEAD
+>>>>>>> master
+=======
 >>>>>>> master
 
 ![]({% asset qualification_methodology/download_detailed_rating_sheet.png @path %}){: class="img-responsive"}	
@@ -93,6 +121,7 @@ Para ver el detalle de cómo se realiza el cálculo tenemos que descargar la **P
 Seleccionamos **Descargar Planilla de calificación detallada**
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 Muestra:
 
@@ -116,6 +145,8 @@ Muestra:
 
 
 =======
+=======
+>>>>>>> master
 **Muestra la calificación del informe: 79%**
 
 
@@ -126,11 +157,15 @@ La calificación del informe se calcula como un promedio ponderado. Se suman las
 
 #### Normas y procedimientos: 76%
 
+<<<<<<< HEAD
+>>>>>>> master
+=======
 >>>>>>> master
 ![]({% asset qualification_methodology/download_detailed.png @path %}){: class="img-responsive"}	
 
 #### Circuito: 80%
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 ![]({% asset qualification_methodology/weighted_average_2	.png @path %}){: class="img-responsive"}
 
@@ -142,6 +177,8 @@ La calificación del informe se calcula como un promedio ponderado. Se suman las
 
 =======
 >>>>>>> master
+=======
+>>>>>>> master
 ![]({% asset qualification_methodology/download_detailed_2.png @path %}){: class="img-responsive"}	
 
 #### Logs: 78%; Contingencia: 80%; Seguridad lógica: 80%; Parametría funcional y técnica: 90%
@@ -151,12 +188,16 @@ La calificación del informe se calcula como un promedio ponderado. Se suman las
 #### Documentación del sistema: 60%
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ![]({% asset qualification_methodology/download_detailed_4.png @path %}){: class="img-responsive"}
 
 - **Notas y resumen de observaciones que sustentan la calificación otorgada.**
 
 
 ![]({% asset qualification_methodology/notes.png @path %}){: class="img-responsive"}
+=======
+![]({% asset qualification_methodology/download_detailed_4.png @path %}){: class="img-responsive"}
+>>>>>>> master
 =======
 ![]({% asset qualification_methodology/download_detailed_4.png @path %}){: class="img-responsive"}
 >>>>>>> master
