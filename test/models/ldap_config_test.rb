@@ -238,6 +238,8 @@ class LdapConfigTest < ActiveSupport::TestCase
     user.organization_roles.create! organization_id: organizations(:google).id,
                                     role_id: roles(:supervisor_google_role).id
 
+    skip if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+
     assert_enqueued_emails emails_count do
       assert_difference 'User.count' do
         LdapConfig.sync_users
