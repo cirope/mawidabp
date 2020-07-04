@@ -231,8 +231,13 @@ class LdapConfigTest < ActiveSupport::TestCase
   test 'massive import' do
     user         = users(:supervisor)
     organization = organizations(:google)
-    emails_count = NOTIFY_NEW_ADMIN ? 2 : 1
-    emails_count = 0 if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+    emails_count = if SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+                    0
+                  elsif NOTIFY_NEW_ADMIN
+                    2
+                  else
+                    1
+                  end
 
     organization.ldap_config.update! user: 'admin', password: 'admin123'
 
