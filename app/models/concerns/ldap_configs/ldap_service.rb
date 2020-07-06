@@ -40,7 +40,7 @@ module LdapConfigs::LdapService
           end
         end.compact
 
-        if filtered_imports.any?
+        if filtered_imports.any? && !SHOW_WEAKNESS_EXTRA_ATTRIBUTES
           LdapMailer.import_notifier(filtered_imports.to_json, organization.id).deliver_later
         end
       end
