@@ -1,37 +1,42 @@
 ---
-title: Conclusión
+title: Ejemplo de calificación con un informe
 layout: articles
 category: qualification_methodology
 guide_order: 8
 article_order: 3
 ---
 
-## Ejemplo con un informe
+## Ejemplo de calificación con un informe
 
-Para ver la calificación de un informe y de los procesos, lo hacemos a través de un informe en el módulo de conclusión
+Para ver la calificación de un informe y de los procesos, lo hacemos a través de un informe en el módulo de **Conclusión**.
 
-#### Conclusión
 
 Seleccionamos **Conclusión**, nos muestra la siguiente pantalla
 
 
 ![]({% asset basic_process_flow/conclusion.png @path %}){: class="img-responsive"}	
 
-
 	
 Seleccionamos **Conclusión -> Informe Definitivos**
-Muestra los informes generados.
+
+
+Muestra los informes generados a la fecha.
+
 
 ![]({% asset basic_process_flow/conclusion_final_reviews.png @path %}){: class="img-responsive"}
 ![]({% asset basic_process_flow/conclusion_final_reviews_2.png @path %}){: class="img-responsive"}
 
+Seleccionamos **Editar** *(lápiz)* en el informe **2014 P 02 1** *(se encuentra en la quinta fila de la página 2)*
 
-Seleccionamos **Editar del informe 2014 P 02 1** *(se encuentra en la quinta fila de la página 2)*
 
 ![]({% asset qualification_methodology/conclusion_final_review_edit.png @path %}){: class="img-responsive"}
 
 
 Seleccionamos **Descargas**
+
+
+Nos muestra: Descargar planilla de calificación global y Descargar planilla de calificación detallada
+
 
 ![]({% asset qualification_methodology/conclusion_final_review_downloads.png @path %}){: class="img-responsive"}
 
@@ -40,11 +45,15 @@ Seleccionamos **Descargas**
 
 Seleccionamos **Descargar Planilla de calificación global**
 
-**Muestra la calificación del informe: 79%**
 
-**También muestra la calificación de cada proceso** (Normas y procedimientos, Circuito, Logs, Contingencia, Seguridad lógica, Parametría funcional y técnica y documentación del sistema) a nivel general. 
+Muestra:
 
-Para ver el detalle de cómo se realiza el cálculo tenemos que descargar la **Planilla de calificación detallada**
+- **Calificación del informe: 79%**
+
+- **Calificación de cada proceso**: Normas y procedimientos (76%), Circuito (80%), Logs (78%), Contingencia (80%), Seguridad lógica (80%), Parametría funcional y técnica (90%) y documentación del sistema (60% a nivel general. 
+
+- **Notas y resumen de observaciones que sustentan la calificación otorgada.**
+
 
 ![]({% asset qualification_methodology/download_detailed_rating_sheet.png @path %}){: class="img-responsive"}	
 
@@ -55,19 +64,40 @@ Para ver el detalle de cómo se realiza el cálculo tenemos que descargar la **P
 Seleccionamos **Descargar Planilla de calificación detallada**
 
 
-**Muestra la calificación del informe: 79%**
+Muestra:
 
 
-La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos. 
+**Calificación del informe: 79%**
+
+![]({% asset qualification_methodology/report_rating.png @path %}){: class="img-responsive"}	
 
 
-**Muestra la calificación de cada proceso** (Normas y procedimientos, Circuito, Logs, Contingencia, Seguridad lógica, Parametría funcional y técnica y documentación del sistema). La calificación del proceso de negocio se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.
+**Calificación de cada proceso a nivel de detalle** (peso y efectividad de control de cada uno de los objetivos de control evaluados por cada proceso)
 
 #### Normas y procedimientos: 76%
+
+
+![]({% asset qualification_methodology/weighted_average_1	.png @path %}){: class="img-responsive"}
+
+**Sumatoria del subtotal dividido la sumatoria de los pesos**
+
+
+#### <div align="center">1220 / 16 = 76% 
+
 
 ![]({% asset qualification_methodology/download_detailed.png @path %}){: class="img-responsive"}	
 
 #### Circuito: 80%
+
+
+![]({% asset qualification_methodology/weighted_average_2	.png @path %}){: class="img-responsive"}
+
+
+**Sumatoria del subtotal dividido la sumatoria de los pesos**
+
+
+#### <div align="center">2329 / 29 = 80% 
+
 
 ![]({% asset qualification_methodology/download_detailed_2.png @path %}){: class="img-responsive"}	
 
@@ -77,4 +107,11 @@ La calificación del informe se calcula como un promedio ponderado. Se suman las
 
 #### Documentación del sistema: 60%
 
+
 ![]({% asset qualification_methodology/download_detailed_4.png @path %}){: class="img-responsive"}
+
+
+- **Notas y resumen de observaciones que sustentan la calificación otorgada.**
+
+
+![]({% asset qualification_methodology/notes.png @path %}){: class="img-responsive"}
