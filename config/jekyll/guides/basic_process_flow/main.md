@@ -20,7 +20,7 @@ En este documento vemos el flujo de trabajo mínimo en cada una de las etapas pa
 3. Carga de una buena práctica.
 
 #### Planificación: 
-*(Tomando como base los datos cargadas en la etapa anterior.)*
+*(Tomando como base los datos cargados en la etapa anterior.)*
 1. Generar un período
 2. Generar plan de trabajo con un proyecto.
 
@@ -30,7 +30,7 @@ En este documento vemos el flujo de trabajo mínimo en cada una de las etapas pa
 2. Agregar observaciones.
 
 #### Conclusión: 
-*(Tomando como base los datos cargadas en las tres etapas anteriores.)*
+*(Tomando como base los datos cargados en las tres etapas anteriores.)*
 1. Crear el informe borrador.
 2. Generar el informe definitivo.
 
