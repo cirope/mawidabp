@@ -265,8 +265,6 @@ Luego podemos ver en el listado de observaciones, como cambio al estado Confirma
 
 ![]({% asset basic_process_flow/control_objective_items_25.png @path %}){: class="img-responsive"}
 
-En el caso de la observación que quedó en estado No confirmada, el sistema envía un correo a las 20 hs. (notificaciones pendientes) a modo de recordatorio a los involucrados en la observación, a continuación mostramos el correo:
-
 
 Para el informe creado en  las etapas anteriores se agregaron  2 observaciones, que se muestran a continuación:
 
