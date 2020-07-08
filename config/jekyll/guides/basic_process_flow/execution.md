@@ -214,7 +214,7 @@ Si la colocamos en estado **Notificar**, el sistema envía un correo en forma au
 
 **Papeles de trabajo**: permite agregar evidencias. Nombre, Código (PTO: papel de trabajo observación, 0001: es el primer papel de trabajo), Páginas (es opcional), Descripción, Archivo (adjuntar un documento).
 
-Al finalizar con la carga de datos seleccionamos **Crear Observación** (si no nos altan datos se guarda la observación), caso contrario nos muestra un mensaje de error con los aspectos faltantes, a continuación mostramos una pantalla con un mensaje de error.
+Al finalizar con la carga de datos seleccionamos **Crear Observación** (si no nos faltan datos se guarda la observación), caso contrario nos muestra un mensaje de error con los aspectos faltantes, a continuación mostramos una pantalla con un mensaje de error.
 
 ![]({% asset basic_process_flow/control_objective_items_17.png @path %}){: class="img-responsive"}
 
@@ -270,6 +270,8 @@ En el caso de la observación que quedó en estado No confirmada, el sistema env
 
 Para el informe creado en  las etapas anteriores se agregaron  2 observaciones, que se muestran a continuación:
 
-![]({% asset basic_process_flow/weaknesses.png @path %}){: class="img-responsive"}
+![]({% asset basic_process_flow/control_objective_items_26.png @path %}){: class="img-responsive"}
+
+En la imagen anterior una de las observaciónes se ha modificado al estado **"En proceso de Implementación"**. Un auditor puede tomar la decisión de cambiar ese estado dependiendo el comentario del usuario auditado. 
 
 El próximo paso, es crear un informe borrador en la etapa de conclusión, a partir del informe creado en la etapa de ejecución.
