@@ -6,6 +6,7 @@ class User < ApplicationRecord
   include Users::AttributeTypes
   include Users::Auditable
   include Users::Authorization
+  include Users::BusinessUnitTypes
   include Users::CloseDateWarning
   include Users::CustomAttributes
   include Users::Defaults

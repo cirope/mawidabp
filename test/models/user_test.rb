@@ -43,6 +43,7 @@ class UserTest < ActiveSupport::TestCase
       )
 
       assert_not_nil user.parent
+      assert user.business_unit_type_users
     end
   end
 
