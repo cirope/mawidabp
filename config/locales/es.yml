@@ -103,7 +103,6 @@
     errors:
       can_not_be_destroyed: "La unidad organizativa no puede ser eliminada"
       business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
-
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
     show_title: "Detalle del informe borrador"
@@ -1428,6 +1427,7 @@
     models:
       business_unit: "Unidad de negocio"
       business_unit_type: "Unidad organizativa"
+      business_unit_type_user: "Unidad organizativa"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
@@ -1453,6 +1453,9 @@
     attributes:
       business_unit:
         name: "Nombre"
+      business_unit_type_user:
+        user_id: "Usuario"
+        business_unit_type_id: "Unidad organizativa"
       comment:
         comment: "Comentario"
         user_id: "Usuario"

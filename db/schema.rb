@@ -108,6 +108,15 @@ ActiveRecord::Schema.define(version: 2020_06_01_192612) do
     t.index ["control_objective_item_id"], name: "index_business_unit_scores_on_control_objective_item_id"
   end
 
+  create_table "business_unit_type_users", force: :cascade do |t|
+    t.bigint "business_unit_type_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["business_unit_type_id"], name: "index_business_unit_type_users_on_business_unit_type_id"
+    t.index ["user_id"], name: "index_business_unit_type_users_on_user_id"
+  end
+
   create_table "business_unit_types", id: :serial, force: :cascade do |t|
     t.string "name"
     t.boolean "external", default: false, null: false
@@ -1147,6 +1156,8 @@ ActiveRecord::Schema.define(version: 2020_06_01_192612) do
   add_foreign_key "business_unit_scores", "control_objective_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_types", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_units", "business_unit_types", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "business_unit_type_users", "business_unit_types"
+  add_foreign_key "business_unit_type_users", "users"
   add_foreign_key "closing_interview_users", "closing_interviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "closing_interview_users", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "closing_interviews", "organizations", on_update: :restrict, on_delete: :restrict

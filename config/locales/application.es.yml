@@ -1149,6 +1149,7 @@ es:
     models:
       business_unit: "Unidad de negocio"
       business_unit_type: "Unidad organizativa"
+      business_unit_type_user: "Unidad organizativa"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
@@ -1188,6 +1189,8 @@ es:
         one: "Unidad de negocio"
         other: "Unidades de negocio"
         name: "Unidad de negocio"
+      business_unit_type_user:
+        business_unit_type_id: "Unidad de negocio"
       comment:
         comment: "Comentario"
         user_id: "Usuario"

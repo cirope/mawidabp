@@ -34,6 +34,11 @@ class UserTest < ActiveSupport::TestCase
             organization_id: organizations(:cirope).id,
             role_id: role.id
           }
+        ],
+        business_unit_type_users_attributes: [
+          {
+            business_unit_type_id: business_unit_types(:cycle).id
+          }
         ]
       )
 
