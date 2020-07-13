@@ -66,8 +66,9 @@
     <%= f.simple_fields_for :business_unit_type_users do |but_u| %>
       <%= render 'business_unit_type_user', f: but_u %>
     <% end %>
-  </div>
+
     <%= link_to_add_fields t('.add_business_unit_type'), f, :business_unit_type_users %>
+  </div>
 
   <h5 class="h6 mt-3">
     <%= RelatedUserRelation.human_attribute_name 'related_user_id' %>
