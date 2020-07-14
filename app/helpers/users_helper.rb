@@ -64,4 +64,8 @@ module UsersHelper
 
     !result || can_perform?(:edit, :approval)
   end
+
+  def business_unit_types
+    BusinessUnitType.list
+  end
 end

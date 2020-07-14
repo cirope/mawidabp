@@ -562,6 +562,7 @@ es:
       unlink_manager: 'Desvincular'
       children: 'Personal a cargo'
       add_child: 'Agregar persona a cargo'
+      add_business_unit_type: 'Agregar unidades organizativas'
       add_related_user_relations: 'Agregar usuario relacionado'
       add_organization_role: 'Agregar un nuevo perfil'
     create:
