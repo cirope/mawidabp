@@ -12,39 +12,37 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'create' do
-    assert_difference 'User.count' do
-      assert_difference 'BusinessUnitTypeUser.count' do
-        role = roles :admin_role
+    assert_difference %w(User.count BusinessUnitTypeUser.count) do
+      role = roles :admin_role
 
-        role.inject_auth_privileges Hash.new(true)
+      role.inject_auth_privileges Hash.new(true)
 
-        user = User.create!(
-          name: 'New name',
-          last_name: 'New lastname',
-          language: 'es',
-          email: 'emailxx@emailxx.ccc',
-          function: 'New function',
-          user: 'new_user',
-          enable: true,
-          failed_attempts: 0,
-          logged_in: false,
-          notes: 'Some user notes',
-          manager_id: users(:administrator).id,
-          organization_roles_attributes: [
-            {
-              organization_id: organizations(:cirope).id,
-              role_id: role.id
-            }
-          ],
-          business_unit_type_users_attributes: [
-            {
-              business_unit_type_id: business_unit_types(:cycle).id
-            }
-          ]
-        )
+      user = User.create!(
+        name: 'New name',
+        last_name: 'New lastname',
+        language: 'es',
+        email: 'emailxx@emailxx.ccc',
+        function: 'New function',
+        user: 'new_user',
+        enable: true,
+        failed_attempts: 0,
+        logged_in: false,
+        notes: 'Some user notes',
+        manager_id: users(:administrator).id,
+        organization_roles_attributes: [
+          {
+            organization_id: organizations(:cirope).id,
+            role_id: role.id
+          }
+        ],
+        business_unit_type_users_attributes: [
+          {
+            business_unit_type_id: business_unit_types(:cycle).id
+          }
+        ]
+      )
 
-        assert_not_nil user.parent
-      end
+      assert_not_nil user.parent
     end
   end
 
