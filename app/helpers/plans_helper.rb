@@ -56,7 +56,7 @@ module PlansHelper
   def plan_business_unit_type_list
     grouped_plan_items = @plan.grouped_plan_items
 
-    (BusinessUnitType.business_unit_type_enabled).map do |but|
+    BusinessUnitType.business_unit_type_enabled.map do |but|
       [but, Array(grouped_plan_items[but])]
     end
   end
