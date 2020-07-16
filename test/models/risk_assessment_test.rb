@@ -72,7 +72,6 @@ class RiskAssessmentTest < ActiveSupport::TestCase
     end
 
     assert @risk_assessment.reload.merged?
-
   ensure
     Current.user = nil
   end
@@ -91,7 +90,6 @@ class RiskAssessmentTest < ActiveSupport::TestCase
     end
 
     assert @risk_assessment.reload.merged?
-
   ensure
     Current.user = nil
   end
