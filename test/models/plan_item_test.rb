@@ -2,9 +2,8 @@ require 'test_helper'
 
 class PlanItemTest < ActiveSupport::TestCase
   setup do
+    @plan_item   = plan_items :current_plan_item_1
     Current.user = users :supervisor
-
-    @plan_item = plan_items :current_plan_item_1
 
     set_organization
   end
