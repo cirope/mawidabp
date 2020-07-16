@@ -11,6 +11,8 @@ class PlanItemTest < ActiveSupport::TestCase
     assert_difference 'PlanItem.count' do
       plan = plans :current_plan
 
+      Current.user = users :supervisor
+
       plan.plan_items.create!(
         project: 'New project',
         start: 6.days.from_now.to_date,
@@ -25,6 +27,8 @@ class PlanItemTest < ActiveSupport::TestCase
   end
 
   test 'update' do
+    Current.user = users :supervisor
+
     assert @plan_item.update(project: 'Updated project'), @plan_item.errors.full_messages.join('; ')
 
     @plan_item.reload
@@ -41,6 +45,9 @@ class PlanItemTest < ActiveSupport::TestCase
   end
 
   test 'delete' do
+
+    Current.user = users :supervisor
+
     assert_no_difference 'PlanItem.count' do
       @plan_item.destroy
     end
@@ -53,6 +60,8 @@ class PlanItemTest < ActiveSupport::TestCase
     @plan_item.order_number = '_1'
     @plan_item.start = '_1'
     @plan_item.end = '_1'
+
+    Current.user = users :supervisor
 
     assert @plan_item.invalid?
     assert_error @plan_item, :order_number, :not_a_number
@@ -67,6 +76,8 @@ class PlanItemTest < ActiveSupport::TestCase
     @plan_item.end = '   '
     @plan_item.scope = '   '
     @plan_item.risk_exposure = '   '
+
+    Current.user = users :supervisor
 
     assert @plan_item.invalid?
     assert_error @plan_item, :project, :blank
@@ -83,6 +94,8 @@ class PlanItemTest < ActiveSupport::TestCase
   test 'validates length of attributes' do
     @plan_item.project = 'abcdd' * 52
 
+    Current.user = users :supervisor
+
     assert @plan_item.invalid?
     assert_error @plan_item, :project, :too_long, count: 255
   end
@@ -90,12 +103,16 @@ class PlanItemTest < ActiveSupport::TestCase
   test 'validates duplicated attributes' do
     plan_item = @plan_item.dup
 
+    Current.user = users :supervisor
+
     assert plan_item.invalid?
     assert_error plan_item, :project, :taken
   end
 
   test 'validates relative date attributes' do
     @plan_item.end = @plan_item.start.yesterday
+
+    Current.user = users :supervisor
 
     assert @plan_item.invalid?
     assert_error @plan_item, :end, :on_or_after, restriction: I18n.l(@plan_item.start)
@@ -105,6 +122,8 @@ class PlanItemTest < ActiveSupport::TestCase
     @plan_item.start = @plan_item.plan.period.start.yesterday
     @plan_item.end = @plan_item.plan.period.end.tomorrow
 
+    Current.user = users :supervisor
+
     assert @plan_item.invalid?
     assert_error @plan_item, :start, :out_of_period
     assert_error @plan_item, :end, :out_of_period
@@ -112,6 +131,8 @@ class PlanItemTest < ActiveSupport::TestCase
 
   test 'resource overload' do
     plan_item_3 = plan_items :current_plan_item_3
+
+    Current.user = users :supervisor
 
     assert plan_item_3.valid?
 

@@ -148,6 +148,8 @@ class PlanTest < ActiveSupport::TestCase
     period   = periods :unused_period
     new_plan = Plan.list.new period_id: period.id
 
+    Current.user = users :supervisor
+
     new_plan.clone_from @plan
 
     all_plan_items_moved_to_new_period = new_plan.plan_items.all? do |pi|
