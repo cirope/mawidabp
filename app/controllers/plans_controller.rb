@@ -56,6 +56,8 @@ class PlansController < ApplicationController
   def update
     update_resource @plan, plan_params
 
+    @business_unit_type =  BusinessUnitType.find(params[:business_unit_type]) if Current.user.business_unit_types.any?
+
     respond_with @plan, location: edit_plan_url(@plan, business_unit_type: params[:business_unit_type])
   end
 

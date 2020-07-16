@@ -33,7 +33,7 @@ class Plans::CalendarController < ApplicationController
                         elsif params[:business_unit_type] == 'nil'
                           @plan.business_units.none
                         else
-                          @plan.business_units_enabled @plan
+                          @plan.business_units_enabled
                         end
     end
 end

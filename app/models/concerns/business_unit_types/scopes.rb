@@ -11,14 +11,15 @@ module BusinessUnitTypes::Scopes
   end
 
   module ClassMethods
-    def business_unit_type_enabled
-      but = BusinessUnitType.list
-      rows = Current.user.business_unit_type_ids
+    def allowed_business_unit_types
 
-      if rows.count > 0
-        but = but.where(id: rows)
+      buts = Current.user.business_unit_types.list
+
+
+      if buts.any?
+        but = BusinessUnitType.list.where(id: buts)
       else
-        but = but + [nil]
+        but = BusinessUnitType.list + [nil]
       end
 
       but

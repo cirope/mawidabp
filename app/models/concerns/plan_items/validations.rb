@@ -13,7 +13,7 @@ module PlanItems::Validations
     validate :dates_are_included_in_period
     validate :not_overloaded_or_allowed
     validate :related_plan_item_dates
-    validates :business_unit_type, presence: true, if: :has_but_assigned?
+    validates :business_unit_type, presence: true, if: :validate_business_unit_type?
   end
 
     private
@@ -102,9 +102,7 @@ module PlanItems::Validations
         SHOW_REVIEW_EXTRA_ATTRIBUTES
       end
 
-      def has_but_assigned?
-        row = Current.user.business_unit_type_ids
-
-        row.count > 0 ? true : false
+      def validate_business_unit_type?
+        row = Current.user.business_unit_types.list.any?
       end
 end
