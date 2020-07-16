@@ -72,6 +72,9 @@ class RiskAssessmentTest < ActiveSupport::TestCase
     end
 
     assert @risk_assessment.reload.merged?
+
+  ensure
+    Current.user = nil
   end
 
   test 'append items to existing plan on merge' do
@@ -88,6 +91,9 @@ class RiskAssessmentTest < ActiveSupport::TestCase
     end
 
     assert @risk_assessment.reload.merged?
+
+  ensure
+    Current.user = nil
   end
 
   test 'sort by risk' do

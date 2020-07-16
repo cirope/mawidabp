@@ -6,12 +6,8 @@ module Plans::Scopes
   end
 
   def allowed_business_units
-    rows = Current.user.business_units
+    bu = Current.user.business_units
 
-    if rows.any?
-      rows
-    else
-      business_units
-    end
+    bu.any? ? bu : business_units
   end
 end

@@ -171,5 +171,8 @@ class PlanTest < ActiveSupport::TestCase
     assert new_plan.allow_duplication?
     assert new_plan.allow_overload?
     assert new_plan.valid?
+
+  ensure
+    Current.user = nil
   end
 end
