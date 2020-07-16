@@ -145,9 +145,8 @@ class PlanTest < ActiveSupport::TestCase
   end
 
   test 'clone from with period' do
-    period   = periods :unused_period
-    new_plan = Plan.list.new period_id: period.id
-
+    period       = periods :unused_period
+    new_plan     = Plan.list.new period_id: period.id
     Current.user = users :supervisor
 
     new_plan.clone_from @plan
