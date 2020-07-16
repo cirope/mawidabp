@@ -103,6 +103,6 @@ module PlanItems::Validations
       end
 
       def validate_business_unit_type?
-        row = Current.user.business_unit_types.list.any?
+        Current.user.business_unit_types.list.any?
       end
 end

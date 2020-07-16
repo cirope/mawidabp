@@ -12,17 +12,13 @@ module BusinessUnitTypes::Scopes
 
   module ClassMethods
     def allowed_business_unit_types
-
       buts = Current.user.business_unit_types.list
 
-
       if buts.any?
-        but = BusinessUnitType.list.where(id: buts)
+        buts
       else
-        but = BusinessUnitType.list + [nil]
+        BusinessUnitType.list + [nil]
       end
-
-      but
     end
   end
 end

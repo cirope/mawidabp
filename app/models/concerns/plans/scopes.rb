@@ -5,13 +5,11 @@ module Plans::Scopes
     scope :list, -> { where organization_id: Current.organization&.id }
   end
 
-  def business_units_enabled
-    rows = Current.user.business_unit_type_ids
+  def allowed_business_units
+    rows = Current.user.business_units
 
     if rows.any?
-      business_units.where(
-        business_unit_type_id: rows
-      )
+      rows
     else
       business_units
     end

@@ -5,7 +5,7 @@ class PlansController < ApplicationController
   respond_to :html, :js
 
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_business_unit_type, only: [:show, :new, :edit]
+  before_action :set_business_unit_type, only: [:show, :new, :edit, :update]
   before_action :set_plan, only: [:show, :edit, :update, :destroy, :export_to_pdf]
   before_action :set_plan_clone, only: [:new, :create]
   before_action :set_title, except: [:destroy]
@@ -55,8 +55,6 @@ class PlansController < ApplicationController
   # * PATCH /plans/1
   def update
     update_resource @plan, plan_params
-
-    @business_unit_type =  BusinessUnitType.find(params[:business_unit_type]) if Current.user.business_unit_types.any?
 
     respond_with @plan, location: edit_plan_url(@plan, business_unit_type: params[:business_unit_type])
   end
