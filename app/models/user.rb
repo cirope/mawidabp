@@ -39,6 +39,7 @@ class User < ApplicationRecord
   has_many :review_user_assignments, dependent: :destroy
   has_many :reviews, through: :review_user_assignments
   has_many :conclusion_final_reviews, through: :reviews
+  has_many :business_units, through: :business_unit_types
 
   def <=>(other)
     other.kind_of?(User) ? id <=> other.id : -1

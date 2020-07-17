@@ -13,6 +13,7 @@ class BusinessUnitType < ApplicationRecord
   alias_attribute :label, :name
 
   belongs_to :organization
+  has_many :business_unit_type_users
   has_many :users, -> { readonly }, through: :business_unit_type_users
 
   def to_s
