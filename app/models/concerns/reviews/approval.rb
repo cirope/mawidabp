@@ -48,7 +48,7 @@ module Reviews::Approval
         review_errors << I18n.t('review.errors.without_survey')
       end
 
-      if file_model.blank? && SHOW_REVIEW_EXTRA_ATTRIBUTES
+      if file_models.any? && SHOW_REVIEW_EXTRA_ATTRIBUTES
         review_errors << I18n.t('review.errors.without_file_model')
       end
 

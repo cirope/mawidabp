@@ -6,7 +6,7 @@ class FileModelsReviewTest < ActiveSupport::TestCase
   end
 
   test 'blank attributes' do
-    @file_model_review.file_mode_id = ''
+    @file_model_review.file_model_id = ''
     @file_model_review.review_id = ''
 
     assert @file_model_review.invalid?
@@ -19,7 +19,5 @@ class FileModelsReviewTest < ActiveSupport::TestCase
 
     assert file_model_review.invalid?
     assert_error file_model_review, :file_model_id, :taken
-    assert_error file_model_review, :review_id, :taken
-
   end
 end

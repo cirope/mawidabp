@@ -1191,6 +1191,8 @@ ActiveRecord::Schema.define(version: 2020_06_01_192612) do
   add_foreign_key "error_records", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "file_model_reviews", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "file_model_reviews", "reviews", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "finding_answers", "file_models", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "finding_answers", "findings", on_update: :restrict, on_delete: :restrict
   add_foreign_key "finding_answers", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "finding_relations", "findings", column: "related_finding_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "finding_relations", "findings", on_update: :restrict, on_delete: :restrict

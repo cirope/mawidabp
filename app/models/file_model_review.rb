@@ -1,5 +1,6 @@
 class FileModelReview < ApplicationRecord
   include Auditable
+  include FileModelReviews::Validations
 
   belongs_to :file_model
   belongs_to :review
