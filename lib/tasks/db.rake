@@ -24,7 +24,7 @@ namespace :db do
       fix_final_latest_findings           # 2020-03-13
       fix_email_organization              # 2020-04-24
       add_follow_up_audited_privilege     # 2020-05-08
-      add_file_model_review           # 2020-07-20
+      add_file_model_review               # 2020-07-20
     end
   end
 end

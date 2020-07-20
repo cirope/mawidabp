@@ -1,6 +1,5 @@
 <% readonly = readonly %>
-<% id = f.object.object_id %>
-
+<% id       = f.object.object_id %>
 
 <fieldset class="file_model_review" id="<%= id %>">
   <div class="col-md-6">
@@ -11,9 +10,9 @@
     <% end %>
 
     <%= link_to_download f.object %>
+
     <% unless readonly %>
       <span class="ml-2">
-
         <%= link_to_remove_nested_item(f) %>
       </span>
     <% end %>
