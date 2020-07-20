@@ -428,7 +428,8 @@ class ReviewsController < ApplicationController
             :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
           ]
         ],
-        file_model_reviews_attributes: [:id, :_destroy,
+        file_model_reviews_attributes: [
+          :id, :_destroy,
           file_model_attributes: [:id, :file, :file_cache, :_destroy]
         ],
         control_objective_ids: [],
