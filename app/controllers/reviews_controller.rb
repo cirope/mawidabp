@@ -413,7 +413,6 @@ class ReviewsController < ApplicationController
         :identification, :description, :survey, :period_id, :plan_item_id,
         :scope, :risk_exposure, :manual_score, :include_sox, :lock_version,
         :score_type,
-        file_model_attributes: [:id, :file, :file_cache, :_destroy],
         finding_review_assignments_attributes: [
           :id, :finding_id, :_destroy, :lock_version
         ],
@@ -428,6 +427,9 @@ class ReviewsController < ApplicationController
           control_attributes: [
             :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
           ]
+        ],
+        file_model_reviews_attributes: [:id, :_destroy,
+          file_model_attributes: [:id, :file, :file_cache, :_destroy]
         ],
         control_objective_ids: [],
         process_control_ids: [],

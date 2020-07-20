@@ -24,6 +24,7 @@ namespace :db do
       fix_final_latest_findings           # 2020-03-13
       fix_email_organization              # 2020-04-24
       add_follow_up_audited_privilege     # 2020-05-08
+      migrate_file_model_review           # 2020-07-20
     end
   end
 end
@@ -551,4 +552,10 @@ private
   def follow_up_audited_privilege?
     Privilege.where(module: 'follow_up_reports_audited').empty? &&
       Privilege.where(module: 'follow_up_reports_audit').empty?
+  end
+
+  def migrate_file_model_review
+    Review.all.each do|r|
+      FileModelReview.create! review_id: r.id, file_model_id: r.file_model_id if r.file_model_id.present?
+    end
   end
