@@ -45,7 +45,7 @@
         <%= f.input :survey, label: Review.human_attribute_name(:survey),
           input_html: { readonly: readonly, rows: HIDE_REVIEW_DESCRIPTION ? 8 : 5 } %>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <p class="mb-1"><%= Review.human_attribute_name 'file_model_id' %></p>
             <div class="clearfix">
               <%= f.simple_fields_for :file_model_reviews do |fm_r| %>
@@ -67,11 +67,11 @@
             </div>
           <% end %>
         </div>
-        <p class="mb-1">
+        <p class="mb-1 mt-2 col-md-8">
           <%= link_to_unless @review.new_record?, t('review.survey.download'),
             :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
         </p>
-        <div id="estimated_amount">
+        <div class="col-md-6" id="estimated_amount">
           <%= render partial: 'estimated_amount', locals: { plan_item: @review.plan_item } %>
         </div>
       </div>
