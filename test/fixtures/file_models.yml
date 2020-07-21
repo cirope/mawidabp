@@ -11,9 +11,10 @@ text_file:
 document_file:
   file_file_name: 'text.txt'
   file_content_type: 'text/plain'
+  file_file_size: 20
 
 text_file_model_review:
   file_file_name: 'text_.txt'
   file_content_type: 'text/plain'
   file_file_size: 20
-  file_file_size: 20
+
