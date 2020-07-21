@@ -558,6 +558,7 @@ private
     if migrate_file_model_review?
       Review.where.not(file_model_id: nil).find_each do |r|
         FileModelReview.create! review_id: r.id, file_model_id: r.file_model_id
+
         r.update_column :file_model_id, nil
       end
     end

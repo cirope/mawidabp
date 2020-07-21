@@ -52,7 +52,7 @@
                 <%= render 'file_model_review', f: fm_r, readonly: readonly %>
               <% end %>
 
-              <%= link_to_add_fields(t('review.add_file_model'), f, :file_model_reviews, 'file_model_review') unless readonly %>
+              <%= link_to_add_fields t('review.add_file_model'), f, :file_model_reviews, 'file_model_review' unless readonly %>
           </div>
           <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? current_organization.prefix %>
             <div class="col-md-6">

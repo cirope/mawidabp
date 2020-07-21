@@ -10,8 +10,8 @@ class FileModelsReviewTest < ActiveSupport::TestCase
     @file_model_review.review_id = ''
 
     assert @file_model_review.invalid?
-    assert_error @file_model_review, :file_model, :blank
-    assert_error @file_model_review, :review, :blank
+    assert_error @file_model_review, :file_model, :required
+    assert_error @file_model_review, :review, :required
   end
 
   test 'unique attributes' do

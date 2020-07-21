@@ -76,7 +76,7 @@ module ReviewsHelper
     link_for_download = link_to(
       t('label.download'),
       :action => :survey_pdf, :id => review, :_ts => Time.now.to_i
-    ).html_safe
+    )
 
     out = "<b>#{Review.human_attribute_name(:survey)}</b>"
 
@@ -86,7 +86,7 @@ module ReviewsHelper
     review.file_models.each do |fm|
       link_for_download_attachment = link_to(
         fm.file_file_name, fm.file.url
-      ).html_safe
+      )
 
       out << "<li>#{link_for_download_attachment}</li>"
     end
