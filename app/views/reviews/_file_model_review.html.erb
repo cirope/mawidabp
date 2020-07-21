@@ -1,0 +1,19 @@
+<% readonly = readonly %>
+<% id       = f.object.object_id %>
+
+<fieldset class="file_model_review" id="<%= id %>">
+  <div class="col-md-6">
+    <% unless readonly %>
+      <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
+        <%= render 'file_model', fm_f: fm_f %>
+      <% end %>
+    <% end %>
+
+    <%= link_to_download f.object %>
+
+    <% unless readonly %>
+      <span class="ml-2">
+        <%= link_to_remove_nested_item f %>
+      </span>
+    <% end %>
+</fieldset>

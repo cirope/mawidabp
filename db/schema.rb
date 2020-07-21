@@ -368,6 +368,15 @@ ActiveRecord::Schema.define(version: 2020_06_01_192612) do
     t.index ["user_id"], name: "index_error_records_on_user_id"
   end
 
+  create_table "file_model_reviews", force: :cascade do |t|
+    t.bigint "file_model_id", null: false
+    t.bigint "review_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["file_model_id"], name: "index_file_model_reviews_on_file_model_id"
+    t.index ["review_id"], name: "index_file_model_reviews_on_review_id"
+  end
+
   create_table "file_models", id: :serial, force: :cascade do |t|
     t.string "file_file_name"
     t.string "file_content_type"
@@ -1180,6 +1189,8 @@ ActiveRecord::Schema.define(version: 2020_06_01_192612) do
   add_foreign_key "endorsements", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "error_records", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "error_records", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "file_model_reviews", "file_models", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "file_model_reviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "finding_answers", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "finding_answers", "findings", on_update: :restrict, on_delete: :restrict
   add_foreign_key "finding_answers", "users", on_update: :restrict, on_delete: :restrict

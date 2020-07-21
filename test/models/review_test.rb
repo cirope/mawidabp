@@ -309,7 +309,7 @@ class ReviewTest < ActiveSupport::TestCase
   test 'must be approved function' do
     @review = reviews(:review_approved_with_conclusion)
 
-    @review.file_model = FileModel.take!
+    @review.file_models << FileModel.take!
     @review.save!
 
     assert @review.must_be_approved?
@@ -463,7 +463,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.approval_errors.blank?
 
     if SHOW_REVIEW_EXTRA_ATTRIBUTES
-      @review.file_model = nil
+      @review.file_models.destroy_all
 
       refute @review.must_be_approved?
       assert @review.can_be_approved_by_force

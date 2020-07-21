@@ -927,6 +927,7 @@ es:
     control_objective_tag: "Objetivos por etiquetas"
     add_control_objective_tag: "Agregar etiqueta de objetivo de control"
     add_tagging: "Agregar etiqueta"
+    add_file_model: "Agregar anexo"
     associated: "Asociados"
     available: "Disponibles"
     bundle: "Legajo"

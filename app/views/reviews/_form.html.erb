@@ -44,24 +44,15 @@
         <% end %>
         <%= f.input :survey, label: Review.human_attribute_name(:survey),
           input_html: { readonly: readonly, rows: HIDE_REVIEW_DESCRIPTION ? 8 : 5 } %>
-        <% f.object.build_file_model unless f.object.file_model %>
         <div class="row">
           <div class="col-md-6">
             <p class="mb-1"><%= Review.human_attribute_name 'file_model_id' %></p>
             <div class="clearfix">
-              <%= f.simple_fields_for :file_model do |fm_f| %>
-                <div class="file-container float-left">
-                  <%= link_to_upload(fm_f.object) %>
-                  <% if fm_f.object.file_cache %>
-                    <%= fm_f.input :file_cache, as: :hidden %>
-                    <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
-                  <% else %>
-                    <%= fm_f.input :file, label: false %>
-                  <% end %>
-                </div>
+              <%= f.simple_fields_for :file_model_reviews do |fm_r| %>
+                <%= render 'file_model_review', f: fm_r, readonly: readonly %>
               <% end %>
-              <%= link_to_download f.object %>
-            </div>
+
+              <%= link_to_add_fields t('review.add_file_model'), f, :file_model_reviews, 'file_model_review' unless readonly %>
           </div>
           <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? current_organization.prefix %>
             <div class="col-md-6">
