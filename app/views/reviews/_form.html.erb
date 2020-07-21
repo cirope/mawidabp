@@ -44,7 +44,6 @@
         <% end %>
         <%= f.input :survey, label: Review.human_attribute_name(:survey),
           input_html: { readonly: readonly, rows: HIDE_REVIEW_DESCRIPTION ? 8 : 5 } %>
-        <% f.object.build_file_model unless f.object.file_models %>
         <div class="row">
           <div class="col-md-6">
             <p class="mb-1"><%= Review.human_attribute_name 'file_model_id' %></p>

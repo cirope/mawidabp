@@ -1293,7 +1293,7 @@
       related_finding_incomplete: "está pendiente y no se ha marcado como reiterada o solucionada"
     survey:
       with_attachment:
-        one: "Con %{count} archivo adjunto"
+        one: "Con un archivo adjunto"
         other: "Con %{count} archivos adjuntos"
       without_attachment: "Sin archivos adjuntos"
       download: "Descargar relevamiento"

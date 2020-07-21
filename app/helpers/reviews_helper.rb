@@ -88,8 +88,8 @@ module ReviewsHelper
         fm.file_file_name, fm.file.url
       ).html_safe
 
-      out << "<li> #{link_for_download_attachment} </li>"
-      end
+      out << "<li>#{link_for_download_attachment}</li>"
+    end
 
     out << "</ul>"
 
