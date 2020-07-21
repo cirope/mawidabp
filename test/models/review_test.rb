@@ -463,7 +463,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.approval_errors.blank?
 
     if SHOW_REVIEW_EXTRA_ATTRIBUTES
-      @review.file_model = nil
+      @review.file_models = []
 
       refute @review.must_be_approved?
       assert @review.can_be_approved_by_force
