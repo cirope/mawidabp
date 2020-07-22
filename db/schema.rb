@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_01_192612) do
+ActiveRecord::Schema.define(version: 2020_07_18_133246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1163,10 +1163,10 @@ ActiveRecord::Schema.define(version: 2020_06_01_192612) do
   add_foreign_key "business_unit_findings", "findings", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_scores", "business_units", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_scores", "control_objective_items", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "business_unit_types", "organizations", on_update: :restrict, on_delete: :restrict
-  add_foreign_key "business_units", "business_unit_types", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_type_users", "business_unit_types", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_type_users", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "business_unit_types", "organizations", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "business_units", "business_unit_types", on_update: :restrict, on_delete: :restrict
   add_foreign_key "closing_interview_users", "closing_interviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "closing_interview_users", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "closing_interviews", "organizations", on_update: :restrict, on_delete: :restrict
