@@ -12,9 +12,19 @@ module PlanItems::Scopes
     def list_unused period_id
       left_joins(:review, :plan).
         where(plans: { period_id: period_id }, reviews: { plan_item_id: nil }).
-        where.not(business_unit_id: nil).
+        allowed_business_units.
         references(:plans, :reviews).
         order(project: :asc)
+    end
+
+    def allowed_business_units
+      bu = Current.user.business_units
+
+      if bu.any?
+        where(business_unit_id: bu)
+      else
+        where.not(business_unit_id: nil)
+      end
     end
 
     def for_business_unit_type business_unit_type

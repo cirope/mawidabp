@@ -41,6 +41,8 @@ module Reviews::Search
         scoped     = scoped.or tags_scope
       end
 
+      scoped = allowed_business_units scoped
+
       scoped
     end
 
@@ -56,6 +58,16 @@ module Reviews::Search
       pluck 'id'
 
       where id: ids
+    end
+
+    def allowed_business_units scoped
+      bu = Current.user.business_units
+
+      if bu.any?
+        scoped = scoped.where plan_item_id: PlanItem.where(business_unit_id: bu.ids)
+      end
+
+      scoped
     end
   end
 end
