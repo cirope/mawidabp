@@ -72,7 +72,7 @@ module Reviews::Scopes
         includes(:conclusion_final_review, :plan_item).
         where(conditions, today: Time.zone.today).
         references(:conclusion_reviews).
-        merge(Review.allowed_by_business_units)
+        allowed_by_business_units
     end
 
     def list_all_without_final_review_by_date from_date, to_date

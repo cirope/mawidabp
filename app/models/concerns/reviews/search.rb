@@ -41,9 +41,7 @@ module Reviews::Search
         scoped     = scoped.or tags_scope
       end
 
-      scoped = scoped.allowed_by_business_units
-
-      scoped
+      scoped.allowed_by_business_units
     end
 
     def search_by_tags tags, min_tag_count
