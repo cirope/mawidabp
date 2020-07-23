@@ -15,8 +15,9 @@ class WorkflowsController < ApplicationController
       Arel.sql "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC"
     ).page(
       params[:page]
-    ).references(:reviews).
-    merge(Review.allowed_by_business_units)
+    ).references(:reviews).merge(
+      Review.allowed_by_business_units
+    )
 
     respond_to do |format|
       format.html # index.html.erb
