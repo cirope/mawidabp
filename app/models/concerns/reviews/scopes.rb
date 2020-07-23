@@ -69,9 +69,10 @@ module Reviews::Scopes
       ].map { |c| "(#{c})" }.join(' OR ')
 
       list.
-        includes(:conclusion_final_review).
+        includes(:conclusion_final_review, :plan_item).
         where(conditions, today: Time.zone.today).
-        references(:conclusion_reviews)
+        references(:conclusion_reviews).
+        allowed_by_business_units
     end
 
     def list_all_without_final_review_by_date from_date, to_date
@@ -129,6 +130,10 @@ module Reviews::Scopes
       )
 
       without_final_review.or with_final_review
+    end
+
+    def allowed_by_business_units
+      merge PlanItem.allowed_by_business_units
     end
 
     private

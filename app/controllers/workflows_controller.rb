@@ -11,11 +11,13 @@ class WorkflowsController < ApplicationController
   # * GET /workflows
   def index
     @title = t 'workflow.index_title'
-    @workflows = Workflow.list.includes(:review).order(
+    @workflows = Workflow.list.includes(review: :plan_item).order(
       Arel.sql "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC"
     ).page(
       params[:page]
-    ).references(:reviews)
+    ).references(:reviews).merge(
+      Review.allowed_by_business_units
+    )
 
     respond_to do |format|
       format.html # index.html.erb
