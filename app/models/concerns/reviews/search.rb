@@ -41,7 +41,7 @@ module Reviews::Search
         scoped     = scoped.or tags_scope
       end
 
-      scoped = allowed_by_business_units
+      scoped = scoped.allowed_by_business_units
 
       scoped
     end
