@@ -1,5 +1,6 @@
 class Workflow < ApplicationRecord
   include ParameterSelector
+  include Workflows::Scopes
 
   has_paper_trail meta: {
     organization_id: ->(model) { Current.organization&.id }
@@ -13,9 +14,6 @@ class Workflow < ApplicationRecord
   attr_accessor :allow_overload
 
   attr_readonly :period_id, :review_id
-
-  # Scopes
-  scope :list, -> { where(organization_id: Current.organization&.id) }
 
   # Restricciones
   validates :period_id, :review_id, :organization_id, :presence => true
