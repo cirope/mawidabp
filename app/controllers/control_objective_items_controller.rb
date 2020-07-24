@@ -21,7 +21,8 @@ class ControlObjectiveItemsController < ApplicationController
       :oportunities,
       review: [:period, :conclusion_final_review, :plan_item],
       control_objective: :process_control
-    ).search(**search_params).
+    ).
+    search(**search_params).
     references(:review).
     merge(Review.allowed_by_business_units).
     default_order.
