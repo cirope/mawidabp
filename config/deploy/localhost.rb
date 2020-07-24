@@ -1,6 +1,6 @@
 set :stage, :production
 set :rails_env, 'production'
-set :branch, 'master'
+set :branch, 'c-nbch'
 set :log_level, :info
 
 set :default_env, {
