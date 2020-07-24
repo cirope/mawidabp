@@ -215,6 +215,9 @@ es:
       best_practice_comment:
         auditor_comment: 'Conclusiones del auditor'
         best_practice: 'Buena práctica'
+      business_unit_type_users:
+        business_unit_type_id: "Unidad organizativa"
+        user_id: "Usuario"
       business_unit_score:
         business_unit_id: 'Unidad de negocio'
         design_score: 'Calificación pruebas de diseño'
@@ -634,6 +637,7 @@ es:
         state: 'Estado'
         solution_date: 'Fecha de solución'
         compliance: 'Compliance'
+        compliance_observations: 'Norma que impacta'
         operational_risk: 'Riesgo operacional'
         impact: 'Impacto'
         internal_control_components: 'Componentes de CI'

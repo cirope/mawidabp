@@ -10,7 +10,8 @@ class ReviewsController < ApplicationController
     :finished_work_papers, :recode_findings, :recode_weaknesses_by_risk,
     :recode_weaknesses_by_repetition_and_risk,
     :recode_weaknesses_by_control_objective_order, :reorder,
-    :excluded_control_objectives, :reset_control_objective_name
+    :excluded_control_objectives, :reset_control_objective_name,
+    :recode_work_papers
   ]
   before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -378,6 +379,14 @@ class ReviewsController < ApplicationController
     end
   end
 
+  def recode_work_papers
+    if @review.recode_work_papers
+      redirect_to edit_review_url(@review), notice: t('review.work_papers_recoded')
+    else
+      redirect_to edit_review_url(@review), alert: t('review.work_papers_recode_failed')
+    end
+  end
+
   # * GET /reviews/next_identification_number
   def next_identification_number
     @next_number = Review.list.next_identification_number params[:suffix]
@@ -404,7 +413,6 @@ class ReviewsController < ApplicationController
         :identification, :description, :survey, :period_id, :plan_item_id,
         :scope, :risk_exposure, :manual_score, :include_sox, :lock_version,
         :score_type,
-        file_model_attributes: [:id, :file, :file_cache, :_destroy],
         finding_review_assignments_attributes: [
           :id, :finding_id, :_destroy, :lock_version
         ],
@@ -419,6 +427,10 @@ class ReviewsController < ApplicationController
           control_attributes: [
             :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
           ]
+        ],
+        file_model_reviews_attributes: [
+          :id, :_destroy,
+          file_model_attributes: [:id, :file, :file_cache, :_destroy]
         ],
         control_objective_ids: [],
         process_control_ids: [],

@@ -63,7 +63,8 @@ module Findings::CurrentSituationCsv
           Finding.human_attribute_name('id'),
           I18n.t('finding.audited', count: 0),
           I18n.t('finding.auditors', count: 0),
-          Tag.model_name.human(count: 0)
+          Tag.model_name.human(count: 0),
+          Weakness.human_attribute_name('compliance_observations')
         ].concat benefits.pluck('name')
       end
 
@@ -89,7 +90,8 @@ module Findings::CurrentSituationCsv
             weakness.id,
             weakness.users.select(&:can_act_as_audited?).map(&:full_name).join('; '),
             weakness.users.reject(&:can_act_as_audited?).map(&:full_name).join('; '),
-            weakness.taggings.map(&:tag).join('; ')
+            weakness.taggings.map(&:tag).join('; '),
+            weakness.compliance_observations
           ].concat(benefits.map do |b|
             achievement = weakness.achievements.detect do |a|
               a.benefit_id == b.id

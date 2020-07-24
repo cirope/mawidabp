@@ -28,8 +28,8 @@ module Reviews::SurveyPdf
   private
 
     def add_survey_body_to pdf
-      footnote_text = if file_model&.file?
-                        I18n.t 'review.survey.with_attachment'
+      footnote_text = if file_models.any?
+                        I18n.t 'review.survey.with_attachment', count: file_models.count
                       else
                         I18n.t 'review.survey.without_attachment'
                       end

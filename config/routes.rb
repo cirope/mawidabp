@@ -161,7 +161,8 @@ Rails.application.routes.draw do
     'fixed_weaknesses_report',
     'weaknesses_graphs',
     'auto_complete_for_business_unit',
-    'auto_complete_for_process_control'
+    'auto_complete_for_process_control',
+    'weaknesses_by_control_objective_process'
   ].each do |action|
     get "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
@@ -194,7 +195,8 @@ Rails.application.routes.draw do
     'create_weaknesses_current_situation_permalink',
     'create_weaknesses_repeated',
     'create_weaknesses_by_control_objective',
-    'create_fixed_weaknesses_report'
+    'create_fixed_weaknesses_report',
+    'create_weaknesses_by_control_objective_process'
   ].each do |action|
     post "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
@@ -325,6 +327,7 @@ Rails.application.routes.draw do
       patch :recode_weaknesses_by_risk
       patch :recode_weaknesses_by_repetition_and_risk
       patch :recode_weaknesses_by_control_objective_order
+      patch :recode_work_papers
       patch :reorder
       patch :reset_control_objective_name
     end

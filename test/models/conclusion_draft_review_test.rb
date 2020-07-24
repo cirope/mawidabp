@@ -126,7 +126,7 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
       :conclusion_approved_with_conclusion_draft_review
     )
 
-    @conclusion_review.review.file_model = FileModel.take!
+    @conclusion_review.review.file_models << FileModel.take!
     @conclusion_review.review.save!
 
     assert @conclusion_review.reload.check_for_approval

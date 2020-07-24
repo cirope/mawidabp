@@ -61,6 +61,8 @@ class RiskAssessmentTest < ActiveSupport::TestCase
   test 'create plan on merge' do
     @risk_assessment.update_column :period_id, periods(:unused_period).id
 
+    Current.user = users :supervisor
+
     assert_difference 'Plan.count' do
       plan = @risk_assessment.merge_to_plan
 
@@ -70,9 +72,13 @@ class RiskAssessmentTest < ActiveSupport::TestCase
     end
 
     assert @risk_assessment.reload.merged?
+  ensure
+    Current.user = nil
   end
 
   test 'append items to existing plan on merge' do
+    Current.user = users :supervisor
+
     assert_no_difference 'Plan.count' do
       expected_count = @risk_assessment.risk_assessment_items.count
 
@@ -84,6 +90,8 @@ class RiskAssessmentTest < ActiveSupport::TestCase
     end
 
     assert @risk_assessment.reload.merged?
+  ensure
+    Current.user = nil
   end
 
   test 'sort by risk' do
