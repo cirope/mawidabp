@@ -101,9 +101,10 @@ module Reviews::Scopes
     end
 
     def list_all_without_opening_interview
-      list.includes(:opening_interview).where(
+      list.includes(:opening_interview, :plan_item).where(
         OpeningInterview.table_name => { review_id: nil }
-      ).references(:opening_interviews)
+      ).allowed_by_business_units.
+      references(:opening_interviews)
     end
 
     def with_opening_interview
@@ -113,9 +114,10 @@ module Reviews::Scopes
     end
 
     def list_all_without_closing_interview
-      list.includes(:closing_interview).where(
+      list.includes(:closing_interview, :plan_item).where(
         ClosingInterview.table_name => { review_id: nil }
-      ).references(:closing_interviews)
+      ).allowed_by_business_units.
+      references(:closing_interviews)
     end
 
     def list_by_issue_date_or_creation from_date, to_date

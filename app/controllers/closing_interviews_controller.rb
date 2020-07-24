@@ -11,6 +11,7 @@ class ClosingInterviewsController < ApplicationController
       includes(review: :plan_item).
       references(:reviews, :plan_items).
       search(**search_params).
+      merge(Review.allowed_by_business_units).
       order(interview_date: :desc).
       page params[:page]
   end
