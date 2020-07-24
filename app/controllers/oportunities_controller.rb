@@ -38,7 +38,8 @@
       order_param
     ).references(
       control_objective_item: :review
-    ).page params[:page]
+    ).
+    merge(Review.allowed_by_business_units).page params[:page]
 
     respond_to do |format|
       format.html
