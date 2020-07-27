@@ -25,7 +25,7 @@ module Plans::StatsHelper
   def plan_stat_concluded_count plan_items
     planned   = plan_stat_planned plan_items
     concluded = planned.select do |plan_item|
-      plan_item.concluded? date_options
+      plan_item.concluded? **date_options
     end
 
     concluded.size
@@ -53,8 +53,8 @@ module Plans::StatsHelper
     items = plan_stat_planned plan_items
 
     items.select do |plan_item|
-      plan_item.concluded?(date_options) ||
-        (plan_item.executed?(date_options) && plan_item.on_time?(date_options))
+      plan_item.concluded?(**date_options) ||
+        (plan_item.executed?(**date_options) && plan_item.on_time?(**date_options))
     end
   end
 
