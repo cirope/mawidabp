@@ -95,8 +95,8 @@ class Workflow < ApplicationRecord
   def to_pdf(organization = nil, include_details = true)
     pdf = Prawn::Document.create_generic_pdf :landscape
     column_order = [
-      ['order_number', 10], ['task', 60], ['start', 10], ['end', 10],
-      ['resources', 10]
+      ['order_number', 10], ['task', 50], ['start', 10], ['end', 10],
+      ['resources', 20]
     ]
     column_data, column_headers, column_widths = [], [], []
 
@@ -121,7 +121,11 @@ class Workflow < ApplicationRecord
     column_data[0] = column_headers
 
     self.workflow_items.sort_by(&:order_number).each do |workflow_item|
-      resource_text = '%.2f' % workflow_item.units
+      resource_text = [
+        "#{I18n.t 'workflow.human_resources_abbr'}: #{'%.2f' % workflow_item.human_units}",
+        "#{I18n.t 'workflow.material_resources_abbr'}: #{'%.2f' % workflow_item.material_units}"
+      ].join "\n"
+
       column_data[workflow_item.order_number] = [
         workflow_item.order_number,
         workflow_item.task,
@@ -131,8 +135,13 @@ class Workflow < ApplicationRecord
       ]
     end
 
+    total_units_text = [
+      "#{I18n.t 'workflow.human_resources_abbr'}: #{'%.2f' % human_units}",
+      "#{I18n.t 'workflow.material_resources_abbr'}: #{'%.2f' % material_units}"
+    ].join "\n"
+
     column_data << [
-      '', '', '', '', "<b>#{'%.2f' % units}</b>"
+      '', '', '', '', "<b>#{total_units_text}</b>"
     ]
 
     unless column_data.blank?
