@@ -47,6 +47,10 @@ module Reports::TaggedFindingsReport
                     )
 
                     findings_with_less_than_n_tags scope, report_params
+
+                    scope.
+                      includes(review: :plan_item).
+                      merge Review.allowed_by_business_units
                   else
                     Finding.none
                   end
