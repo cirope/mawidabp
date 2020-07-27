@@ -50,7 +50,7 @@ module Reports::TaggedFindingsReport
 
                     scope.
                       includes(review: :plan_item).
-                      merge(Review.allowed_by_business_units)
+                      merge Review.allowed_by_business_units
                   else
                     Finding.none
                   end

@@ -91,7 +91,8 @@ module Reviews::Scopes
         ConclusionReview.table_name => { review_id: nil }
       ).order(
         without_final_review_order
-      ).allowed_by_business_units.
+      ).
+      allowed_by_business_units.
       references(:conclusion_reviews, :business_unit_types)
     end
 
