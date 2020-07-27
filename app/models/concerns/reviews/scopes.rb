@@ -41,9 +41,10 @@ module Reviews::Scopes
         "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn 'close_date'} < ?"
 
       initial_scope.
-        includes(:conclusion_final_review).
+        includes(:conclusion_final_review, :plan_item).
         where.not(ConclusionReview.table_name => { review_id: nil }).
         where(close_date_condition, Time.zone.today).
+        allowed_by_business_units.
         references(:conclusion_reviews)
     end
 
@@ -90,7 +91,8 @@ module Reviews::Scopes
         ConclusionReview.table_name => { review_id: nil }
       ).order(
         without_final_review_order
-      ).references(:conclusion_reviews, :business_unit_types)
+      ).allowed_by_business_units.
+      references(:conclusion_reviews, :business_unit_types)
     end
 
     def list_all_without_workflow period_id

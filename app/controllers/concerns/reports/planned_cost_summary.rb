@@ -48,7 +48,8 @@ module Reports::PlannedCostSummary
       @from_date, @to_date = *make_date_range(params[:planned_cost_summary])
       @data = {}
       @periods = periods_for_interval
-      @plan_items = PlanItem.list.where(start: @from_date..@to_date)
+      @plan_items = PlanItem.list.allowed_by_business_units.
+        where(start: @from_date..@to_date)
 
       @column_order = [
         ['month', 35],
