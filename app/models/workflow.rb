@@ -27,6 +27,7 @@ class Workflow < ApplicationRecord
   belongs_to :period
   belongs_to :review
   belongs_to :organization
+  belongs_to :file_model, :optional => true
   has_one :plan_item, :through => :review
 
   has_many :workflow_items, -> {
@@ -41,6 +42,7 @@ class Workflow < ApplicationRecord
   has_many :resource_utilizations, :through => :workflow_items
 
   accepts_nested_attributes_for :workflow_items, :allow_destroy => true
+  accepts_nested_attributes_for :file_model, :allow_destroy => true
 
   def initialize(attributes = nil)
     super(attributes)

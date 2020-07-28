@@ -1418,6 +1418,7 @@ es:
         review: "Informe"
         cost: "Costo"
         units: "Unidades"
+        file_model_id: "Anexo"
         workflow_items_resources: "Recursos"
       workflow/workflow_items:
         one: "Tarea"
