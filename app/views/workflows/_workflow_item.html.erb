@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="col-md-6">
-      <%= f.input :task, label: false, input_html: { autofocus: true } %>
+      <%= f.input :task, label: false, input_html: { autofocus: f.object.new_record? } %>
     </div>
     <div class="col-md-2">
       <%= f.input :start, as: :date_picker, label: false %>

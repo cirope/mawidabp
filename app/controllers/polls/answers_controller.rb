@@ -52,7 +52,7 @@ class Polls::AnswersController < ApplicationController
       @report.polls = Poll.list.
         between_dates(@report.from_date.at_beginning_of_day, @report.to_date.end_of_day, @report.date_field).
         by_questionnaire(@report.questionnaire).
-        by_user(@report.user_id, @report.user_options || {})
+        by_user(@report.user_id, **Hash(@report.user_options))
 
       @report.polls = @report.polls.by_question(@report.question) unless @report.question.nil?
       @report.polls = @report.polls.answered(@report.answered) unless @report.answered.nil?

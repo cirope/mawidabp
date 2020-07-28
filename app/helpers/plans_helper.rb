@@ -7,7 +7,7 @@ module PlansHelper
       label: false,
       prompt: true,
       input_html: {
-        id: "#{id}_resource_id", autofocus: true
+        id: "#{id}_resource_id", autofocus: form.object.new_record?
       }
   end
 
