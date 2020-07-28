@@ -12,7 +12,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'create' do
-    assert_difference 'User.count' do
+    assert_difference %w(User.count BusinessUnitTypeUser.count) do
       role = roles :admin_role
 
       role.inject_auth_privileges Hash.new(true)
@@ -33,6 +33,11 @@ class UserTest < ActiveSupport::TestCase
           {
             organization_id: organizations(:cirope).id,
             role_id: role.id
+          }
+        ],
+        business_unit_type_users_attributes: [
+          {
+            business_unit_type_id: business_unit_types(:cycle).id
           }
         ]
       )

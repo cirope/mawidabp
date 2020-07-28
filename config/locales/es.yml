@@ -103,7 +103,6 @@
     errors:
       can_not_be_destroyed: "El sector no puede ser eliminado"
       business_unit_related: "El ciclo no puede ser eliminado, se encuentra relacionado con al menos un plan de trabajo"
-
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
     show_title: "Detalle del informe borrador"
@@ -1295,7 +1294,9 @@
       without_control_objectives: "no tiene objetivos de control"
       related_finding_incomplete: "está pendiente y no se ha marcado como reiterada o solucionada"
     survey:
-      with_attachment: "Con un archivo adjunto"
+      with_attachment:
+        one: "Con un archivo adjunto"
+        other: "Con %{count} archivos adjuntos"
       without_attachment: "Sin archivos adjuntos"
       download: "Descargar resumen del alcance"
       download_attachment: "Descargar adjunto"
@@ -1430,6 +1431,7 @@
     models:
       business_unit: "Ciclo"
       business_unit_type: "Sector"
+      business_unit_type_user: "Sector"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
@@ -1455,6 +1457,9 @@
     attributes:
       business_unit:
         name: "Nombre"
+      business_unit_type_user:
+        user_id: "Usuario"
+        business_unit_type_id: "Unidad organizativa"
       comment:
         comment: "Comentario"
         user_id: "Usuario"
@@ -1624,6 +1629,7 @@
         review_id: "Informe"
         cost: "Costo"
         units: "Unidades"
+        file_model_id: "Anexo"
         workflow_items_resources: "Recursos"
         workflow_items:
           one: "Tarea"

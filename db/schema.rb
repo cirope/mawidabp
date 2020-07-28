@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_01_192612) do
+ActiveRecord::Schema.define(version: 2020_07_28_190037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -106,6 +106,15 @@ ActiveRecord::Schema.define(version: 2020_06_01_192612) do
     t.datetime "updated_at", null: false
     t.index ["business_unit_id"], name: "index_business_unit_scores_on_business_unit_id"
     t.index ["control_objective_item_id"], name: "index_business_unit_scores_on_control_objective_item_id"
+  end
+
+  create_table "business_unit_type_users", force: :cascade do |t|
+    t.bigint "business_unit_type_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["business_unit_type_id"], name: "index_business_unit_type_users_on_business_unit_type_id"
+    t.index ["user_id"], name: "index_business_unit_type_users_on_user_id"
   end
 
   create_table "business_unit_types", id: :serial, force: :cascade do |t|
@@ -357,6 +366,15 @@ ActiveRecord::Schema.define(version: 2020_06_01_192612) do
     t.index ["created_at"], name: "index_error_records_on_created_at"
     t.index ["organization_id"], name: "index_error_records_on_organization_id"
     t.index ["user_id"], name: "index_error_records_on_user_id"
+  end
+
+  create_table "file_model_reviews", force: :cascade do |t|
+    t.bigint "file_model_id", null: false
+    t.bigint "review_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["file_model_id"], name: "index_file_model_reviews_on_file_model_id"
+    t.index ["review_id"], name: "index_file_model_reviews_on_review_id"
   end
 
   create_table "file_models", id: :serial, force: :cascade do |t|
@@ -1129,6 +1147,8 @@ ActiveRecord::Schema.define(version: 2020_06_01_192612) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "organization_id"
+    t.bigint "file_model_id"
+    t.index ["file_model_id"], name: "index_workflows_on_file_model_id"
     t.index ["organization_id"], name: "index_workflows_on_organization_id"
     t.index ["period_id"], name: "index_workflows_on_period_id"
     t.index ["review_id"], name: "index_workflows_on_review_id"
@@ -1145,6 +1165,8 @@ ActiveRecord::Schema.define(version: 2020_06_01_192612) do
   add_foreign_key "business_unit_findings", "findings", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_scores", "business_units", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_scores", "control_objective_items", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "business_unit_type_users", "business_unit_types", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "business_unit_type_users", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_types", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_units", "business_unit_types", on_update: :restrict, on_delete: :restrict
   add_foreign_key "closing_interview_users", "closing_interviews", on_update: :restrict, on_delete: :restrict
@@ -1169,6 +1191,8 @@ ActiveRecord::Schema.define(version: 2020_06_01_192612) do
   add_foreign_key "endorsements", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "error_records", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "error_records", "users", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "file_model_reviews", "file_models", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "file_model_reviews", "reviews", on_update: :restrict, on_delete: :restrict
   add_foreign_key "finding_answers", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "finding_answers", "findings", on_update: :restrict, on_delete: :restrict
   add_foreign_key "finding_answers", "users", on_update: :restrict, on_delete: :restrict
@@ -1245,6 +1269,7 @@ ActiveRecord::Schema.define(version: 2020_06_01_192612) do
   add_foreign_key "work_papers", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflow_items", "workflows", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "workflows", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflows", "periods", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflows", "reviews", on_update: :restrict, on_delete: :restrict
 end

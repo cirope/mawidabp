@@ -56,7 +56,9 @@ class WeaknessesController < ApplicationController
         "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC",
         "#{Weakness.quoted_table_name}.#{Weakness.qcn('review_code')} ASC"
       ].map { |o| Arel.sql o }
-    ).references(:periods, :conclusion_reviews)
+    ).
+    references(:periods, :conclusion_reviews).
+    merge Review.allowed_by_business_units
 
     respond_to do |format|
       format.html { @weaknesses = @weaknesses.page params[:page] }

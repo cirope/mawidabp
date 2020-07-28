@@ -1,0 +1,3 @@
+file_model_review_relation:
+  file_model: text_file_model_review
+  review: current_review

@@ -42,25 +42,25 @@
           <%= f.input :description, label: Review.human_attribute_name(:description),
             input_html: { readonly: readonly, rows: 5 } %>
         <% end %>
+
         <%= f.input :survey, label: Review.human_attribute_name(:survey),
           input_html: { readonly: readonly, rows: HIDE_REVIEW_DESCRIPTION ? 8 : 5 } %>
-        <% f.object.build_file_model unless f.object.file_model %>
+
+        <p class="mb-1 text-right">
+          <%= link_to_unless @review.new_record?, t('review.survey.download'),
+            :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
+        </p>
+
         <div class="row">
           <div class="col-md-6">
             <p class="mb-1"><%= Review.human_attribute_name 'file_model_id' %></p>
+
             <div class="clearfix">
-              <%= f.simple_fields_for :file_model do |fm_f| %>
-                <div class="file-container float-left">
-                  <%= link_to_upload(fm_f.object) %>
-                  <% if fm_f.object.file_cache %>
-                    <%= fm_f.input :file_cache, as: :hidden %>
-                    <%= fm_f.input :file, as: :hidden, input_html: { value: nil } %>
-                  <% else %>
-                    <%= fm_f.input :file, label: false %>
-                  <% end %>
-                </div>
+              <%= f.simple_fields_for :file_model_reviews do |fm_r| %>
+                <%= render 'file_model_review', f: fm_r, readonly: readonly %>
               <% end %>
-              <%= link_to_download f.object %>
+
+              <%= link_to_add_fields t('review.add_file_model'), f, :file_model_reviews, 'file_model_review' unless readonly %>
             </div>
           </div>
           <% if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? current_organization.prefix %>
@@ -76,11 +76,8 @@
             </div>
           <% end %>
         </div>
-        <p class="mb-1">
-          <%= link_to_unless @review.new_record?, t('review.survey.download'),
-            :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
-        </p>
-        <div id="estimated_amount">
+
+        <div id="estimated_amount" class="mt-3">
           <%= render partial: 'estimated_amount', locals: { plan_item: @review.plan_item } %>
         </div>
       </div>

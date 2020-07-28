@@ -71,6 +71,7 @@ class ApplicationController < ActionController::Base
     def load_user
       if @auth_user.nil? && session[:user_id]
         @auth_user = User.includes(
+          :business_unit_types,
           organization_roles: { role: :privileges }
         ).find(session[:user_id])
       end

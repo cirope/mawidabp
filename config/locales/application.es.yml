@@ -927,6 +927,7 @@ es:
     control_objective_tag: "Objetivos por etiquetas"
     add_control_objective_tag: "Agregar etiqueta de objetivo de control"
     add_tagging: "Agregar etiqueta"
+    add_file_model: "Agregar anexo"
     associated: "Asociados"
     available: "Disponibles"
     bundle: "Legajo"
@@ -1149,6 +1150,7 @@ es:
     models:
       business_unit: "Ciclo"
       business_unit_type: "Sector"
+      business_unit_type_user: "Sector"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
@@ -1188,6 +1190,8 @@ es:
         one: "Ciclo"
         other: "Ciclos"
         name: "Ciclo"
+      business_unit_type_user:
+        business_unit_type_id: "Ciclo"
       comment:
         comment: "Comentario"
         user_id: "Usuario"
@@ -1414,6 +1418,7 @@ es:
         review: "Informe"
         cost: "Costo"
         units: "Unidades"
+        file_model_id: "Anexo"
         workflow_items_resources: "Recursos"
       workflow/workflow_items:
         one: "Tarea"
