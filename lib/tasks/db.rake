@@ -543,7 +543,7 @@ private
         attrs = p.attributes.except 'id', 'module', 'created_at', 'updated_at'
 
         Privilege.create! attrs.merge(module: 'follow_up_reports_audited')
-        Privilege.create! attrs.merge(module: 'follow_up_reports_audit')
+        Privilege.create  attrs.merge(module: 'follow_up_reports_audit')
       end
     end
   end
