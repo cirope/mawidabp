@@ -12,7 +12,7 @@
   } %>
 
 <% if @report.polls.blank? %>
-  <div class="alert alert-warning"><%= t('polls.without_data') %></div>
+  <div class="alert alert-warning"><%= t 'polls.without_data' %></div>
 <% else %>
   <% @report.polls.each do |poll| %>
     <% if show_poll? poll %>

@@ -912,7 +912,7 @@ es:
 
   poll:
     report:
-      review_id: "Nro de informe:"
+      review_id: "Informe:"
   review:
     index_title: "Listado de informes"
     show_title: "Detalles del informes"

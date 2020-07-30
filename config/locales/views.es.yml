@@ -399,7 +399,7 @@ es:
         title: 'Resumen por unidad organizativa'
     reviews:
       index:
-        title: 'Resumen por informes'
+        title: 'Resumen por informe'
     index:
       title: 'Listado de encuestas'
     edit:
