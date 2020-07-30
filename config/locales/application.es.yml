@@ -910,6 +910,9 @@ es:
     review_identification: "Número de informe"
     draft: "Borrador"
 
+  poll:
+    report:
+      review_id: "Nro de informe:"
   review:
     index_title: "Listado de informes"
     show_title: "Detalles del informes"
