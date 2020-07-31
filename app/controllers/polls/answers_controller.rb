@@ -15,6 +15,18 @@ class Polls::AnswersController < ApplicationController
       @report.questionnaires = Questionnaire.list.pluck(:name, :id)
     end
 
+    def process_report
+      set_question
+      set_answered
+      set_answer_option
+
+      if @report.questionnaire
+        set_polls
+        @report.rates, @report.answered, @report.unanswered = @report.questionnaire.answer_rates @report.polls
+        @report.calification = polls_calification(@report.polls)
+      end
+    end
+
     def create_pdf
       @pdf = Polls::AnswerPdf.new @report, current_organization
     end

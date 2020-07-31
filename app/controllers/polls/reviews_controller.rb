@@ -15,6 +15,17 @@ class Polls::ReviewsController < ApplicationController
       @report.questionnaires = Questionnaire.list.where(pollable_type: 'ConclusionReview').pluck(:name, :id)
     end
 
+    def process_report
+      set_question
+      set_answered
+
+      if @report.questionnaire
+        set_polls
+        @report.rates, @report.answered, @report.unanswered = @report.questionnaire.answer_rates @report.polls
+        @report.calification = polls_calification(@report.polls)
+      end
+    end
+
     def create_pdf
       @pdf = Polls::ReviewPdf.new @report, current_organization
     end

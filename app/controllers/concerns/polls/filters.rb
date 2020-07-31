@@ -23,18 +23,6 @@ module Polls::Filters
       end
     end
 
-    def process_report
-      set_question
-      set_answered
-      set_answer_option
-
-      if @report.questionnaire
-        set_polls
-        @report.rates, @report.answered, @report.unanswered = @report.questionnaire.answer_rates @report.polls
-        @report.calification = polls_calification(@report.polls)
-      end
-    end
-
     def set_polls
       @report.polls = Poll.list.
         between_dates(@report.from_date.at_beginning_of_day, @report.to_date.end_of_day, @report.date_field).
