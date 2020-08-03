@@ -1,4 +1,4 @@
-class Polls::AnswersController < ApplicationController
+class Polls::ReviewsController < ApplicationController
   include Polls::Reports
   include Polls::Filters
 
@@ -12,13 +12,12 @@ class Polls::AnswersController < ApplicationController
   private
 
     def set_questionnaires
-      @report.questionnaires = Questionnaire.list.pluck(:name, :id)
+      @report.questionnaires = Questionnaire.list.where(pollable_type: 'ConclusionReview').pluck(:name, :id)
     end
 
     def process_report
       set_question
       set_answered
-      set_answer_option
 
       if @report.questionnaire
         set_polls
@@ -35,7 +34,6 @@ class Polls::AnswersController < ApplicationController
 
       @report.polls = @report.polls.by_question(@report.question) unless @report.question.nil?
       @report.polls = @report.polls.answered(@report.answered) unless @report.answered.nil?
-      @report.polls = @report.polls.answer_option(@report.answer_option) unless @report.answer_option.nil?
 
       if ActiveRecord::Base.connection.adapter_name == 'OracleEnhanced'
         @report.polls = Poll.where id: @report.polls.ids.uniq
@@ -43,6 +41,6 @@ class Polls::AnswersController < ApplicationController
     end
 
     def create_pdf
-      @pdf = Polls::AnswerPdf.new @report, current_organization
+      @pdf = Polls::ReviewPdf.new @report, current_organization
     end
 end
