@@ -53,7 +53,7 @@ class Polls::ReviewPdf < Prawn::Document
     end
 
     def pdf_add_review poll
-      pdf.text "#{I18n.t('poll.report.review_id')}: #{poll.pollable.review_id}", style: :bold
+      pdf.text "#{Review.model_name.human}: #{poll.pollable.review_id}", style: :bold
     end
 
     def pdf_add_user poll

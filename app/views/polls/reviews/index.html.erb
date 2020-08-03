@@ -17,7 +17,7 @@
   <% @report.polls.each do |poll| %>
     <% if show_poll? poll %>
       <p class="mb-1">
-        <strong><%= t 'poll.report.review_id' %>:</strong>
+        <strong><%= Review.model_name.human %>:</strong>
         <%= poll.pollable.review_id %>
       </p>
       <p class="mb-1">
