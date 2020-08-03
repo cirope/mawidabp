@@ -18,7 +18,7 @@
     <% if show_poll? poll %>
       <p class="mb-1">
         <strong><%= Review.model_name.human %>:</strong>
-        <%= poll.pollable.review_id %>
+        <%= poll.pollable.review.identification %>
       </p>
       <p class="mb-1">
         <strong><%= Poll.human_attribute_name 'user' %>:</strong>
