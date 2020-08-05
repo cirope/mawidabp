@@ -44,6 +44,7 @@ class Polls::ReviewsControllerTest < ActionController::TestCase
     get :index, params: {
       index: index_params.merge(answered: 'true')
     }, as: :csv
+
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
   end
