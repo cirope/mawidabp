@@ -40,6 +40,15 @@ class Polls::ReviewsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:report)
   end
 
+  test 'report reviews as CSV' do
+    get :index, params: {
+      index: index_params.merge(answered: 'true')
+    }, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   private
 
     def index_params
