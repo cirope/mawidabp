@@ -6,6 +6,9 @@ class Polls::ReviewsController < ApplicationController
     respond_to do |format|
       format.html
       format.js { create_pdf and render 'shared/pdf_report' }
+      format.csv {
+        render csv: render_index_csv, filename: "#{@title.downcase}.csv"
+      }
     end
   end
 
@@ -42,5 +45,35 @@ class Polls::ReviewsController < ApplicationController
 
     def create_pdf
       @pdf = Polls::ReviewPdf.new @report, current_organization
+    end
+
+    def render_index_csv
+      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+      csv_str = CSV.generate(**options) do |csv|
+        csv << poll_review_csv_headers
+
+        poll_review_details_csv_rows.each { |row| csv << row }
+      end
+
+      "\uFEFF#{csv_str}"
+    end
+
+    def poll_review_csv_headers
+      [
+        Review.model_name.human,
+        Poll.human_attribute_name('user'),
+        Poll.human_attribute_name('send_date')
+      ]
+    end
+
+    def poll_review_details_csv_rows
+      Array(@report.polls).map do |poll_review|
+        [
+          poll_review.pollable.review.identification,
+          poll_review.user.informal_name,
+          (I18n.l poll_review.created_at.to_date, format: :default)
+        ]
+      end
     end
 end
