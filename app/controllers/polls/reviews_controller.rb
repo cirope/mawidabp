@@ -53,7 +53,7 @@ class Polls::ReviewsController < ApplicationController
       csv_str = CSV.generate(**options) do |csv|
         csv << poll_review_csv_headers
 
-        poll_review_details_csv_rows&.each { |row| csv << row }
+        poll_review_details_csv_rows.each { |row| csv << row }
       end
 
       "\uFEFF#{csv_str}"
