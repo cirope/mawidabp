@@ -54,7 +54,7 @@
   <h5 class="h6"><%= t '.children' %></h5>
 
   <div id="children">
-    <%= render partial: 'child', collection: @user.children, locals: { f: f } %>
+    <%= render partial: 'child', collection: @user.children.not_hidden.enabled, locals: { f: f } %>
     <%= link_to_add_fields t('.add_child'), f, :children, 'new_child' %>
   </div>
 
