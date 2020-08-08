@@ -397,6 +397,9 @@ es:
     business_units:
       index:
         title: 'Resumen por unidad organizativa'
+    reviews:
+      index:
+        title: 'Resumen por informe'
     index:
       title: 'Listado de encuestas'
     edit:

@@ -1,4 +1,4 @@
-class Polls::AnswersController < ApplicationController
+class Polls::ReviewsController < ApplicationController
   include Polls::Reports
   include Polls::Filters
 
@@ -6,19 +6,21 @@ class Polls::AnswersController < ApplicationController
     respond_to do |format|
       format.html
       format.js { create_pdf and render 'shared/pdf_report' }
+      format.csv {
+        render csv: render_index_csv, filename: "#{@title.downcase}.csv"
+      }
     end
   end
 
   private
 
     def set_questionnaires
-      @report.questionnaires = Questionnaire.list.pluck(:name, :id)
+      @report.questionnaires = Questionnaire.list.where(pollable_type: 'ConclusionReview').pluck(:name, :id)
     end
 
     def process_report
       set_question
       set_answered
-      set_answer_option
 
       if @report.questionnaire
         set_polls
@@ -35,7 +37,6 @@ class Polls::AnswersController < ApplicationController
 
       @report.polls = @report.polls.by_question(@report.question) unless @report.question.nil?
       @report.polls = @report.polls.answered(@report.answered) unless @report.answered.nil?
-      @report.polls = @report.polls.answer_option(@report.answer_option) unless @report.answer_option.nil?
 
       if ActiveRecord::Base.connection.adapter_name == 'OracleEnhanced'
         @report.polls = Poll.where id: @report.polls.ids.uniq
@@ -43,6 +44,36 @@ class Polls::AnswersController < ApplicationController
     end
 
     def create_pdf
-      @pdf = Polls::AnswerPdf.new @report, current_organization
+      @pdf = Polls::ReviewPdf.new @report, current_organization
+    end
+
+    def render_index_csv
+      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+      csv_str = CSV.generate(**options) do |csv|
+        csv << poll_review_csv_headers
+
+        poll_review_details_csv_rows.each { |row| csv << row }
+      end
+
+      "\uFEFF#{csv_str}"
+    end
+
+    def poll_review_csv_headers
+      [
+        Review.model_name.human,
+        Poll.human_attribute_name('user'),
+        Poll.human_attribute_name('send_date')
+      ]
+    end
+
+    def poll_review_details_csv_rows
+      Array(@report.polls).map do |poll_review|
+        [
+          poll_review.pollable.review.identification,
+          poll_review.user.informal_name,
+          (I18n.l poll_review.created_at.to_date, format: :default)
+        ]
+      end
     end
 end
