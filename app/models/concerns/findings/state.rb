@@ -155,7 +155,7 @@ module Findings::State
 
       def implemented_audited_transitions final
         [:implemented_audited] |
-          (final ? [] : [:implemented, :being_implemented]) |
+          (final ? [] : [:implemented, :being_implemented, :revoked]) |
           (SHOW_WEAKNESS_PROGRESS && !final ? [:awaiting] : [])
       end
 
