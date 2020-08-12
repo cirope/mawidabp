@@ -1,6 +1,10 @@
 module FindingAnswers::CommitmentDate
   extend ActiveSupport::Concern
 
+  included do
+    attribute :skip_commitment_support, :boolean
+  end
+
   def requires_commitment_date?
     has_date_required_status? &&
       has_follow_up_date_blank_or_expired? &&

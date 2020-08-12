@@ -1558,6 +1558,7 @@
         file_model: "Anexo"
         notify_users: "Enviar notificación"
         created_at: "Fecha del comentario"
+        skip_commitment_support: 'Es fecha de solución'
       finding_relation:
         finding_id: 'Hallazgo'
         related_finding_id: 'Hallazgo relacionado'

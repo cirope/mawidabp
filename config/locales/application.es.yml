@@ -1294,6 +1294,7 @@ es:
         file_model: "Anexo"
         notify_users: "Enviar notificación"
         created_at: "Fecha del comentario"
+        skip_commitment_support: 'Es fecha de solución'
       finding_relation:
         finding_id: 'Observación / Oportunidad de mejora'
         related_finding_id: 'Observación / Oportunidad de mejora relacionada'

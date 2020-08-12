@@ -332,6 +332,7 @@ es:
         commitment_date: 'Fecha de compromiso'
         user_id: 'Comentario (usuario)'
         notify_users: 'Comentario (enviar notificación)'
+        skip_commitment_support: 'Es fecha de solución'
       finding/finding_answers/commitment_support:
         one: 'Sustento compromiso'
         reason: 'Motivo reprogramación'

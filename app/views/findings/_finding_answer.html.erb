@@ -78,6 +78,10 @@
                   )
                 }
               } %>
+
+            <% if Finding.show_commitment_support? %>
+              <%= f.input :skip_commitment_support, as: :boolean, input_html: { data: { skip_commitment_support: true } } %>
+            <% end %>
           </div>
         <% end %>
         <div class="alert alert-warning" data-commitment-date-message hidden></div>
