@@ -3,7 +3,7 @@ module Findings::CommitmentSupport
 
   def require_commitment_support? commitment_date
     # TODO: remove "weak" logic when customer ask for
-    if finding_answers.last&.skip_commitment_support.blank?
+    if finding_answers.detect(&:new_record?)&.skip_commitment_support.blank?
       case FINDING_ANSWER_COMMITMENT_SUPPORT
       when 'weak'
         being_implemented?       &&

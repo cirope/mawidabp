@@ -154,7 +154,10 @@ jQuery(function ($) {
   $(document).on('change', '[data-skip-commitment-support]', function () {
     if ($(this).is(':checked')) {
       $('[data-commitment-support]').addClass('d-none')
+      $('[data-check-commitment-date-url]').removeAttr('data-required')
     } else {
+      $('[data-check-commitment-date-url]').attr('data-required', 'true')
+
       if ($('[data-commitment-support]').length) {
         $('[data-commitment-support]').removeClass('d-none')
       } else {
