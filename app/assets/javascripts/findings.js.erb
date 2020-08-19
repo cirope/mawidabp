@@ -154,9 +154,14 @@ jQuery(function ($) {
   $(document).on('change', '[data-skip-commitment-support]', function () {
     if ($(this).is(':checked')) {
       $('[data-commitment-support]').addClass('d-none')
-      $('[data-check-commitment-date-url]').removeAttr('data-required')
+      $('[data-check-commitment-date-url]').
+        removeAttr('data-required').
+        attr('disabled', 'disabled').
+        val('')
     } else {
-      $('[data-check-commitment-date-url]').attr('data-required', 'true')
+      $('[data-check-commitment-date-url]').
+        attr('data-required', 'true').
+        removeAttr('disabled')
 
       if ($('[data-commitment-support]').length) {
         $('[data-commitment-support]').removeClass('d-none')
