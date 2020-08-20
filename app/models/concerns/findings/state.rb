@@ -149,7 +149,7 @@ module Findings::State
             if final
               []
             else
-              [:being_implemented] |
+              [:being_implemented, :revoked] |
                 (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented])
             end
           )

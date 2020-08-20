@@ -5,6 +5,13 @@
   <%= @workflow.period.inspect %>
 </p>
 
+<% if @workflow.file_model %>
+  <p class="mb-1">
+    <strong><%= Workflow.human_attribute_name :file_model_id %>:</strong>
+    <%= link_to_download @workflow, extra_classes: 'btn-sm ml-1' %>
+  </p>
+<% end %>
+
 <table class="table table-sm table-striped table-hover mt-3">
   <thead>
     <tr>

@@ -309,7 +309,7 @@ class ReviewTest < ActiveSupport::TestCase
   test 'must be approved function' do
     @review = reviews(:review_approved_with_conclusion)
 
-    @review.file_model = FileModel.take!
+    @review.file_models << FileModel.take!
     @review.save!
 
     assert @review.must_be_approved?
@@ -463,7 +463,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.approval_errors.blank?
 
     if SHOW_REVIEW_EXTRA_ATTRIBUTES
-      @review.file_model = nil
+      @review.file_models.destroy_all
 
       refute @review.must_be_approved?
       assert @review.can_be_approved_by_force
@@ -930,12 +930,12 @@ class ReviewTest < ActiveSupport::TestCase
     cois         = control_objective_items :management_dependency_item_editable
 
     add_wp = cois.work_papers.create!(
-              code: 'PTOC 300',
-              name: 'New recode',
-              description: 'New workpaper description',
-              file_model_attributes: {
-                file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
-              }
+               code: 'PTOC 300',
+               name: 'New recode',
+               description: 'New workpaper description',
+               file_model_attributes: {
+                 file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
+               }
     )
 
     work_papers           = @review.work_papers.map &:code
@@ -957,7 +957,7 @@ class ReviewTest < ActiveSupport::TestCase
         code_file = wp.file_model.file_file_name.split('-')
 
         assert wp.file_model.file_file_name.start_with? new_code
-        assert code_file.exclude? add_wp.code
+        assert wp.file_model.file_file_name.exclude? add_wp.code
       end
 
       codes[prefix] += 1
