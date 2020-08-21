@@ -7,7 +7,7 @@ module PlansHelper
       label: false,
       prompt: true,
       input_html: {
-        id: "#{id}_resource_id", autofocus: true
+        id: "#{id}_resource_id", autofocus: form.object.new_record?
       }
   end
 
@@ -56,7 +56,7 @@ module PlansHelper
   def plan_business_unit_type_list
     grouped_plan_items = @plan.grouped_plan_items
 
-    (BusinessUnitType.list + [nil]).map do |but|
+    BusinessUnitType.allowed_business_unit_types.map do |but|
       [but, Array(grouped_plan_items[but])]
     end
   end

@@ -118,7 +118,7 @@ jQuery(function ($) {
     var $commitmentDate = $(this)
     var commitmentDate  = $commitmentDate.val()
 
-    if (commitmentDate) {
+    if (commitmentDate && !$('[data-skip-commitment-support]').is(':checked')) {
       var commitmentParam = commitmentDate.replace(/\//g, '-')
       var urlTemplate     = decodeURI($commitmentDate.data('checkCommitmentDateUrl'))
       var url             = urlTemplate.replace('NEW_DATE', commitmentParam)
@@ -148,6 +148,26 @@ jQuery(function ($) {
       $('[data-endorsement-action="' + endorsementId + '"]').each(function (i, e) {
         $(e).addClass('disabled')
       })
+    }
+  })
+
+  $(document).on('change', '[data-skip-commitment-support]', function () {
+    if ($(this).is(':checked')) {
+      $('[data-commitment-support]').addClass('d-none')
+      $('[data-check-commitment-date-url]').
+        removeAttr('data-required').
+        attr('disabled', 'disabled').
+        val('')
+    } else {
+      $('[data-check-commitment-date-url]').
+        attr('data-required', 'true').
+        removeAttr('disabled')
+
+      if ($('[data-commitment-support]').length) {
+        $('[data-commitment-support]').removeClass('d-none')
+      } else {
+        $('[data-check-commitment-date-url]').trigger('change')
+      }
     }
   })
 })

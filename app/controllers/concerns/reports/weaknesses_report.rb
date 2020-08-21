@@ -52,6 +52,8 @@ module Reports::WeaknessesReport
           finding_answers: [:file_model, user: { organization_roles: :role }],
           users: { organization_roles: :role },
           control_objective_item: [:process_control]
+        ).merge(
+          Review.allowed_by_business_units
         ).order order
       else
         @weaknesses = Weakness.none

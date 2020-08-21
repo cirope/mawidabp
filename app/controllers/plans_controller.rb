@@ -5,7 +5,7 @@ class PlansController < ApplicationController
   respond_to :html, :js
 
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_business_unit_type, only: [:show, :new, :edit]
+  before_action :set_business_unit_type, only: [:show, :new, :edit, :update]
   before_action :set_plan, only: [:show, :edit, :update, :destroy, :export_to_pdf]
   before_action :set_plan_clone, only: [:new, :create]
   before_action :set_title, except: [:destroy]
