@@ -592,6 +592,7 @@
     inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
     latest_answer: "Último comentario de seguimiento"
+    state_full: "Estado detallado"
     next_pending_task_date: "Fecha próxima tarea pendiente"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado **%{cost}** al seguimiento de la observación"
