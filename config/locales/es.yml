@@ -373,7 +373,7 @@
       pdf_name: "observaciones_informes_definitivos_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
       title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
-      being_implemented: "'En proceso de implementación' al %{date}"
+      being_implemented: "'En proceso de regularización' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
       implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
       total: "TOTAL"
@@ -991,7 +991,7 @@
       pdf_name: "observaciones_seguimiento_por_riesgo_y_unidades_de_negocio_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
       title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO Y UNIDADES DE NEGOCIO"
-      being_implemented: "'En proceso de implementación' al %{date}"
+      being_implemented: "'En proceso de regularización' al %{date}"
       created: "'Dadas de alta' entre el %{from_date} y el %{to_date}"
       implemented: "'Implementadas' entre el %{from_date} y el %{to_date}"
       total: "TOTAL"
@@ -1118,8 +1118,8 @@
       valid_until: "%{link} (Usted podrá utilizar este enlace hasta el día **%{date}** inclusive)"
       clarification: "Si usted **no pidió** el restablecimiento **no haga nada**, su usuario y contraseña siguen vigentes"
     being_implemented_and_stale_finding_to_manager:
-      title: "Notificación de observaciones en proceso de implementación vencidas"
-      the_following_finding_is_being_implemented_and_stale: "La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación"
+      title: "Notificación de observaciones en proceso de regularización vencidas"
+      the_following_finding_is_being_implemented_and_stale: "La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de regularización"
     pending_poll_email:
       about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_finding_to_manager:
