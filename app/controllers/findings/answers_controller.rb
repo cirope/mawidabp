@@ -33,7 +33,7 @@ class Findings::AnswersController < ApplicationController
 
     def finding_answer_params
       params.require(:finding_answer).permit(
-        :answer, :user_id, :commitment_date, :notify_users,
+        :answer, :user_id, :commitment_date, :notify_users, :skip_commitment_support,
         file_model_attributes: [:file, :file_cache],
         commitment_support_attributes: [:id, :reason, :plan, :controls]
       )
