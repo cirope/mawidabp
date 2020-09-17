@@ -9,6 +9,7 @@ module PlanItems::Validations
     validates :start, timeliness: { type: :date }
     validates :end, timeliness: { type: :date, on_or_after: :start }
     validates :risk_exposure, :scope, presence: true, if: :validate_extra_attributes?
+    validates :business_unit_type, presence: true, if: :validate_business_unit_type?
     validate :project_is_unique
     validate :dates_are_included_in_period
     validate :not_overloaded_or_allowed
@@ -99,5 +100,9 @@ module PlanItems::Validations
 
       def validate_extra_attributes?
         SHOW_REVIEW_EXTRA_ATTRIBUTES
+      end
+
+      def validate_business_unit_type?
+        Current.user&.business_unit_types&.list&.any?
       end
 end

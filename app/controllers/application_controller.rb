@@ -62,7 +62,7 @@ class ApplicationController < ActionController::Base
     def set_conclusion_pdf_format
       if SHOW_CONCLUSION_ALTERNATIVE_PDF.respond_to?(:[])
         Current.conclusion_pdf_format =
-          SHOW_CONCLUSION_ALTERNATIVE_PDF[current_organization&.prefix]
+          SHOW_CONCLUSION_ALTERNATIVE_PDF[current_organization&.prefix&.downcase]
       end
 
       Current.conclusion_pdf_format ||= 'default'
@@ -71,6 +71,7 @@ class ApplicationController < ActionController::Base
     def load_user
       if @auth_user.nil? && session[:user_id]
         @auth_user = User.includes(
+          :business_unit_types,
           organization_roles: { role: :privileges }
         ).find(session[:user_id])
       end

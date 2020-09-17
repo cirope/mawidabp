@@ -13,6 +13,7 @@ class FollowUpAuditController < ApplicationController
   include Reports::WeaknessesByMonth
   include Reports::WeaknessesByRiskReport
   include Reports::WeaknessesByUser
+  include Reports::WeaknessesByControlObjectiveProcess
   include Reports::WeaknessesCurrentSituation
   include Reports::WeaknessesByControlObjective
   include Reports::WeaknessesEvolution
@@ -86,7 +87,9 @@ class FollowUpAuditController < ApplicationController
         benefits: :read,
         create_benefits: :read,
         auto_complete_for_business_unit: :read,
-        auto_complete_for_process_control: :read
+        auto_complete_for_process_control: :read,
+        weaknesses_by_control_objective_process: :read,
+        create_weaknesses_by_control_objective_process: :read
       )
     end
 end

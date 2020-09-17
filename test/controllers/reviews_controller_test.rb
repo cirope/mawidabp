@@ -213,7 +213,7 @@ class ReviewsControllerTest < ActionController::TestCase
       # Se crean 2 con 'best_practice_ids', 2 con 'process_control_ids',
       # 1 con 'control_objective_ids' y 1 con 'objective control tag'
       assert_difference 'ControlObjectiveItem.count', expected_coi_count do
-        assert_difference 'FileModel.count' do
+        assert_difference 'FileModelReview.count' do
           assert_difference 'ReviewUserAssignment.count', 4 do
             post :create, params: {
               review: {
@@ -230,9 +230,13 @@ class ReviewsControllerTest < ActionController::TestCase
                 process_control_ids: [process_controls(:security_management).id],
                 control_objective_ids: [control_objectives(:security_policy_3_1).id],
                 control_objective_tag_ids: [tags(:risk_evaluation).id],
-                file_model_attributes: {
-                  file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
-                },
+                file_model_reviews_attributes: [
+                  {
+                    file_model_attributes: {
+                      file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
+                    },
+                  }
+                ],
                 finding_review_assignments_attributes: [
                   {
                     finding_id: findings(:unanswered_weakness).id.to_s

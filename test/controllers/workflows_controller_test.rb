@@ -78,8 +78,13 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'create workflow' do
-    counts_array = ['Workflow.count', 'WorkflowItem.count',
-      'ResourceUtilization.material.count', 'ResourceUtilization.human.count']
+    counts_array = [
+      'FileModel.count',
+      'Workflow.count',
+      'WorkflowItem.count',
+      'ResourceUtilization.material.count',
+      'ResourceUtilization.human.count'
+    ]
 
     assert_difference counts_array do
       login
@@ -87,6 +92,9 @@ class WorkflowsControllerTest < ActionController::TestCase
         :workflow => {
           :period_id => periods(:current_period).id,
           :review_id => reviews(:review_without_conclusion).id,
+          :file_model_attributes => {
+            :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
+          },
           :workflow_items_attributes => [
             {
               :task => 'New task',

@@ -105,6 +105,7 @@ class WorkPaper < ApplicationRecord
     @zip_must_be_created = self.file_model.try(:file?) ||
       self.file_model.try(:changed?)
     @cover_must_be_created = self.changed?
+    @previous_code = self.code_was if self.code_changed?
 
     true
   end
@@ -173,12 +174,14 @@ class WorkPaper < ApplicationRecord
   def pdf_cover_name(filename = nil, short = false)
     code = sanitized_code
     short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
+    prev_code = @previous_code.sanitized_for_filename if @previous_code
 
     if self.file_model.try(:file?)
       filename ||= self.file_model.identifier.sanitized_for_filename
       filename = filename.sanitized_for_filename.
         sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
         sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
+      filename = filename.sub("#{prev_code}-", '') if prev_code
     end
 
     I18n.t 'work_paper.cover_name', :prefix => "#{short ? short_code : code}-",
@@ -207,6 +210,10 @@ class WorkPaper < ApplicationRecord
   def create_zip
     self.unzip_if_necesary
 
+    if @previous_code
+      prev_code = sanitized_previous_code
+    end
+
     original_filename = self.file_model.file.path
     directory = File.dirname original_filename
     code = sanitized_code
@@ -215,6 +222,7 @@ class WorkPaper < ApplicationRecord
     filename = filename.sanitized_for_filename.
       sub(/^(#{Regexp.quote(code)})?\-?(zip-)*/i, '').
       sub(/^(#{Regexp.quote(short_code)})?\-?(zip-)*/i, '')
+    filename = filename.sub("#{prev_code}-", '') if prev_code
     zip_filename = File.join directory, "#{code}-#{filename}.zip"
     pdf_filename = self.absolute_cover_path
 
@@ -242,22 +250,19 @@ class WorkPaper < ApplicationRecord
   def unzip_if_necesary
     file_name = self.file_model.try(:identifier) || ''
     code = sanitized_code
-    short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
 
-    if File.extname(file_name) == '.zip' &&
-        file_name.start_with?(code, short_code) &&
-        !file_name.start_with?("#{code}-zip", "#{short_code}-zip")
+    if File.extname(file_name) == '.zip' && start_with_code?(file_name)
       zip_path = self.file_model.file.path
       base_dir = File.dirname self.file_model.file.path
 
       Zip::File.foreach(zip_path) do |entry|
         if entry.file?
           filename = File.join base_dir, entry.name
+          filename = filename.sub(sanitized_previous_code, code) if @previous_code
 
           if filename != zip_path && !File.exist?(filename)
             entry.extract(filename)
           end
-
           if File.basename(filename) != pdf_cover_name &&
               File.basename(filename) != pdf_cover_name(nil, true)
             self.file_model.file = File.open(filename)
@@ -273,6 +278,26 @@ class WorkPaper < ApplicationRecord
         FileUtils.rm zip_path if File.exists? zip_path
       end
     end
+  end
+
+  def sanitized_previous_code
+    @previous_code.sanitized_for_filename
+  end
+
+  def start_with_code? file_name
+    code = sanitized_code
+    short_code = sanitized_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
+    result = file_name.start_with?(code, short_code) &&
+              !file_name.start_with?("#{code}-zip", "#{short_code}-zip")
+
+    if @previous_code
+      prev_code = sanitized_previous_code
+      prev_short_code = prev_code.sub(/(\w+_)\d(\d{2})$/, '\1\2')
+      result = result || (file_name.start_with?(prev_code, prev_short_code) &&
+                           !file_name.start_with?("#{prev_code}-zip", "#{prev_short_code}-zip"))
+    end
+
+    result
   end
 
   def sanitized_code

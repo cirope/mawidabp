@@ -1,34 +1,45 @@
 module ControlObjectiveItems::FindingPdfData
   extend ActiveSupport::Concern
 
-  def finding_pdf_data finding, hide: [], show: []
+  def finding_pdf_data finding, hide: [], show: [], custom_labels: {}
     body = ''
 
-    body << get_initial_finding_attributes(finding, hide, show)
-    body << get_weakness_attributes(finding, hide) if finding.kind_of?(Weakness)
-    body << get_finding_answer(finding)
-    body << get_audited_data(finding, hide)
-    body << get_late_finding_attributes(finding, show)
+    body << get_initial_finding_attributes(finding, hide, show, custom_labels)
+    body << get_weakness_attributes(finding, hide, custom_labels) if finding.kind_of?(Weakness)
+    body << get_finding_answer(finding, custom_labels)
+    body << get_audited_data(finding, hide, custom_labels)
+    body << get_late_finding_attributes(finding, hide, show, custom_labels)
     body << get_final_finding_attributes(finding, hide, show)
+
+    body
+  end
+
+  def put_cro_new_observations finding
+    body = ''
+
+    body << "<b>#{I18n.t 'conclusion_review.cro.findings.new_description'}:</b> " +
+      "#{finding.description.chomp}\n"
+    body << "<b>#{I18n.t 'conclusion_review.cro.findings.new_estimated_follow_up_date'}:</b> " +
+      "#{I18n.l(finding.follow_up_date, format: :long)}\n"
 
     body
   end
 
   private
 
-    def get_initial_finding_attributes finding, hide, show
+    def get_initial_finding_attributes finding, hide, show, custom_labels
       body = ''
 
-      if finding.title.present?
+      if finding.title.present? && hide.exclude?('title')
         body << "<b>#{finding.class.human_attribute_name('title')}: " +
           "<i>#{finding.title.chomp}</i></b>\n"
       end
 
-      if finding.review_code.present?
+      if finding.review_code.present? && hide.exclude?('review_code')
         body << finding_review_code_text_for(finding, show)
       end
 
-      if finding.description.present?
+      if finding.description.present? && hide.exclude?('description')
         body << "<b>#{finding.class.human_attribute_name('description')}:</b> " +
           "#{finding.description.chomp}\n"
       end
@@ -39,51 +50,52 @@ module ControlObjectiveItems::FindingPdfData
       end
 
       if finding.origination_date.present? && hide.exclude?('origination_date')
-        body << "<b>#{finding.class.human_attribute_name('origination_date')}:"+
+        body << "<b>#{custom_labels[:origination_date] || finding.class.human_attribute_name('origination_date')}:" +
           "</b> #{finding_origination_date_text_for finding}\n"
       end
 
-      body << finding_repeated_text_for(finding, show)
+      body << finding_repeated_text_for(finding, show) if hide.exclude?('repeated')
+
+      body
     end
 
-    def get_weakness_attributes finding, hide
+    def get_weakness_attributes finding, hide, custom_labels
       body = ''
 
       if finding.risk_text.present?
-        body << "<b>#{Weakness.human_attribute_name('risk')}:</b> " +
+        body << "<b>#{custom_labels[:risk] || Weakness.human_attribute_name('risk')}:</b> " +
           "#{finding.risk_text.chomp}\n"
       end
 
       if !HIDE_WEAKNESS_EFFECT && finding.effect.present?
-        body << "<b>#{Weakness.human_attribute_name('effect')}:</b> " +
+        body << "<b>#{custom_labels[:effect] || Weakness.human_attribute_name('effect')}:</b> " +
           "#{finding.effect.chomp}\n"
       end
 
       if finding.audit_recommendations.present? && hide.exclude?('audit_recommendations')
-        body << "<b>#{Weakness.human_attribute_name('audit_recommendations')}: " +
+        body << "<b>#{custom_labels[:audit_recommendations] || Weakness.human_attribute_name('audit_recommendations')}: " +
           "</b>#{finding.audit_recommendations}\n"
       end
 
       body
     end
 
-    def get_finding_answer finding
+    def get_finding_answer finding, custom_labels
       body = ''
 
       if finding.answer.present?
-        body << "<b>#{finding.class.human_attribute_name('answer')}:</b> " +
+        body << "<b>#{custom_labels[:answer] || finding.class.human_attribute_name('answer')}:</b> " +
           "#{finding.answer.chomp}\n"
       end
 
       body
     end
 
-
-    def get_late_finding_attributes finding, show
+    def get_late_finding_attributes finding, hide, show, custom_labels
       body = ''
 
-      body << get_tasks_data(finding)
-      body << finding_follow_up_date_text_for(finding, show)
+      body << get_tasks_data(finding) if hide.exclude?('tasks_data')
+      body << finding_follow_up_date_text_for(finding, show, custom_labels)
 
       if finding.solution_date.present?
         body << "<b>#{finding.class.human_attribute_name('solution_date')}:" +
@@ -107,7 +119,7 @@ module ControlObjectiveItems::FindingPdfData
       body
     end
 
-    def get_audited_data finding, hide
+    def get_audited_data finding, hide, custom_labels
       body          = ''
       process_owner = FindingUserAssignment.human_attribute_name 'process_owner'
       audited_users = finding.users.select &:can_act_as_audited?
@@ -118,7 +130,7 @@ module ControlObjectiveItems::FindingPdfData
           u.full_name + (process_owners.include?(u) ? " (#{process_owner})" : '')
         end
 
-        body << "<b>#{finding.class.human_attribute_name('user_ids')}:</b> " +
+        body << "<b>#{custom_labels[:user_ids] || finding.class.human_attribute_name('user_ids')}:</b> " +
           "#{users.join('; ')}\n"
       end
 
@@ -128,7 +140,12 @@ module ControlObjectiveItems::FindingPdfData
     def get_final_finding_attributes finding, hide, show
       body = ''
 
-      if finding.state_text.present?
+      if show.include? 'current_situation'
+        body << "<b>#{finding.class.human_attribute_name('current_situation')}:</b> " +
+          "#{finding.current_situation}\n"
+      end
+
+      if finding.state_text.present? && hide.exclude?('state')
         body << "<b>#{finding.class.human_attribute_name('state')}:</b> " +
           "#{finding.state_text.chomp}\n"
       end
@@ -166,7 +183,7 @@ module ControlObjectiveItems::FindingPdfData
       end
     end
 
-    def finding_follow_up_date_text_for finding, show
+    def finding_follow_up_date_text_for finding, show, custom_labels
       display =
         (Current.conclusion_pdf_format != 'gal' && finding.follow_up_date.present?) ||
         (finding.follow_up_date.present? && !finding.implemented_audited?)
@@ -175,7 +192,7 @@ module ControlObjectiveItems::FindingPdfData
         "<b>#{I18n.t 'conclusion_review.estimated_follow_up_date'}:</b> " +
           "#{I18n.l(finding.follow_up_date, format: '%B %Y')}\n"
       elsif display
-        "<b>#{finding.class.human_attribute_name('follow_up_date')}:</b> " +
+        "<b>#{custom_labels[:follow_up_date] || finding.class.human_attribute_name('follow_up_date')}:</b> " +
           "#{I18n.l(finding.follow_up_date, format: :long)}\n"
       else
         ''

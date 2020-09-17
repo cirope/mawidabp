@@ -19,9 +19,14 @@ class ControlObjectiveItemsController < ApplicationController
       :work_papers,
       :process_control,
       :oportunities,
-      review: [:period, :conclusion_final_review],
+      review: [:period, :conclusion_final_review, :plan_item],
       control_objective: :process_control
-    ).search(**search_params).references(:review).default_order.page params[:page]
+    ).
+    search(**search_params).
+    references(:review).
+    merge(Review.allowed_by_business_units).
+    default_order.
+    page params[:page]
 
     respond_to do |format|
       format.html

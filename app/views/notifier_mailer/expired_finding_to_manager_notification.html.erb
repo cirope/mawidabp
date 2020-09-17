@@ -23,10 +23,10 @@
   <% if levels.any? %>
     <h3 style="margin-top: 1em;"><%= markdown_without_paragraph(
           t('notifier.unanswered_findings.if_no_answer_is_given_the_following_users_will_be_notified')) %> (*)</h3>
-    <% levels.each do |level| %>
+    <% levels.each_with_index.each do |level, i| %>
       <% managers = @finding.manager_users_for_level(level) %>
       <% unless managers.empty? %>
-        <h4><%= l(@finding.notification_date_for_level(level), :format => :long) %></h4>
+        <h4><%= l(i.next.weeks.from_now.to_date, :format => :long) %></h4>
         <%= markdown_without_paragraph(
           managers.map {|u| "* #{u.full_name_with_function}"}.join("\n")) %>
       <% end %>

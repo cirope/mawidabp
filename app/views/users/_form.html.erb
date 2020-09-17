@@ -54,7 +54,7 @@
   <h5 class="h6"><%= t '.children' %></h5>
 
   <div id="children">
-    <%= render partial: 'child', collection: @user.children, locals: { f: f } %>
+    <%= render partial: 'child', collection: @user.children.not_hidden.enabled, locals: { f: f } %>
     <%= link_to_add_fields t('.add_child'), f, :children, 'new_child' %>
   </div>
 
@@ -68,6 +68,18 @@
     <% end %>
 
     <%= link_to_add_fields t('.add_related_user_relations'), f, :related_user_relations %>
+  </div>
+
+  <h5 class="h6 mt-3">
+    <%= BusinessUnitTypeUser.human_attribute_name 'business_unit_type_id' %>
+  </h5>
+
+  <div>
+    <%= f.simple_fields_for :business_unit_type_users do |but_u| %>
+      <%= render 'business_unit_type_user', f: but_u %>
+    <% end %>
+
+    <%= link_to_add_fields t('.add_business_unit_type'), f, :business_unit_type_users %>
   </div>
 
   <div class="row mt-3">
