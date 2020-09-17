@@ -5,7 +5,7 @@
         <% selected = params[action] ? params[action][:business_unit_type] : nil %>
         <%= f.label :business_unit_type, BusinessUnitType.model_name.human, class: 'col-md-4 col-form-label' %>
         <div class="col-md-8">
-          <%= f.select :business_unit_type, BusinessUnitType.list.map { |but| [but.name, but.id.to_s] },
+          <%= f.select :business_unit_type, BusinessUnitType.allowed_business_unit_types.compact.map { |but| [but.name, but.id.to_s] },
             { include_blank: t('helpers.select.prompt'), selected: selected }, class: 'form-control' %>
         </div>
       </div>

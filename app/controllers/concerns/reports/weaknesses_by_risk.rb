@@ -12,8 +12,8 @@ module Reports::WeaknessesByRisk
     @periods = periods_for_interval
     @filters = []
     @audit_types = [
-      [:internal, BusinessUnitType.list.internal_audit.map {|but| [but.name, but.id]}],
-      [:external, BusinessUnitType.list.external_audit.map {|but| [but.name, but.id]}]
+      [:internal, BusinessUnitType.list.internal_audit.allowed_business_unit_types.compact.map {|but| [but.name, but.id]}],
+      [:external, BusinessUnitType.list.external_audit.allowed_business_unit_types.compact.map {|but| [but.name, but.id]}]
     ]
     @tables_data = {}
     statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
