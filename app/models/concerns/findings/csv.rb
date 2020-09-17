@@ -20,6 +20,7 @@ module Findings::Csv
       (taggings.map(&:tag).to_sentence if self.class.show_follow_up_timestamps?),
       title,
       description,
+      state_text,
       full_state_text,
       try(:risk_text) || '',
       respond_to?(:risk_text) ? priority_text : '',
@@ -155,7 +156,7 @@ module Findings::Csv
 
     def last_commitment_date_text
       commitment_date = finding_answers.reverse.detect(&:commitment_date)&.commitment_date
-      date            = if %w(weak true).include? FINDING_ANSWER_COMMITMENT_SUPPORT
+      date            = if Finding.show_commitment_support?
                           commitment_date
                         elsif follow_up_date && commitment_date
                           follow_up_date <= commitment_date ? commitment_date : nil
@@ -308,6 +309,7 @@ module Findings::Csv
           Weakness.human_attribute_name('title'),
           Weakness.human_attribute_name('description'),
           Weakness.human_attribute_name('state'),
+          I18n.t('finding.state_full'),
           Weakness.human_attribute_name('risk'),
           Weakness.human_attribute_name('priority'),
           FindingUserAssignment.human_attribute_name('process_owner'),

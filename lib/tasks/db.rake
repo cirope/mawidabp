@@ -521,7 +521,7 @@ private
   def fix_email_organization
     if fix_email_organization?
       EMail.where(organization_id: nil).find_each do |e_mail|
-        match        = e_mail.subject.match /\[(\w+\W*\w*)\]/
+        match        = e_mail.subject.match /\A\[(\w+\W*\w*)\]/
         organization = if match && match[1]
                         Organization.where(
                           "LOWER(#{Organization.qcn 'prefix'}) = ?",

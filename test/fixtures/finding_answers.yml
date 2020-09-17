@@ -4,3 +4,4 @@ auditor_answer:
   finding: confirmed_oportunity
   user: supervisor
   file_model:
+  skip_commitment_support: false

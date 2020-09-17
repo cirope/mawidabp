@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_18_133246) do
+ActiveRecord::Schema.define(version: 2020_08_12_145129) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -395,6 +395,7 @@ ActiveRecord::Schema.define(version: 2020_07_18_133246) do
     t.integer "file_model_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "skip_commitment_support", default: false, null: false
     t.index ["file_model_id"], name: "index_finding_answers_on_file_model_id"
     t.index ["finding_id"], name: "index_finding_answers_on_finding_id"
     t.index ["user_id"], name: "index_finding_answers_on_user_id"
@@ -1147,6 +1148,8 @@ ActiveRecord::Schema.define(version: 2020_07_18_133246) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "organization_id"
+    t.bigint "file_model_id"
+    t.index ["file_model_id"], name: "index_workflows_on_file_model_id"
     t.index ["organization_id"], name: "index_workflows_on_organization_id"
     t.index ["period_id"], name: "index_workflows_on_period_id"
     t.index ["review_id"], name: "index_workflows_on_review_id"
@@ -1267,6 +1270,7 @@ ActiveRecord::Schema.define(version: 2020_07_18_133246) do
   add_foreign_key "work_papers", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflow_items", "workflows", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "workflows", "file_models", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflows", "periods", on_update: :restrict, on_delete: :restrict
   add_foreign_key "workflows", "reviews", on_update: :restrict, on_delete: :restrict
 end
