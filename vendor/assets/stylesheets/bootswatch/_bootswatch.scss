@@ -1,53 +1,70 @@
-// Flatly 4.5.0
+// Superhero 4.5.2
 // Bootswatch
 
 
 // Variables ===================================================================
 
-$web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic&display=swap" !default;
+$web-font-path: "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" !default;
 @import url($web-font-path);
 
-// Navbar =======================================================================
+// Navbar ======================================================================
 
-.bg-primary {
-  .navbar-nav .active > .nav-link {
-    color: $success !important;
-  }
-}
-
-.bg-dark {
-  &.navbar-dark .navbar-nav {
-    .nav-link:focus,
-    .nav-link:hover,
-    .active > .nav-link {
-      color: $primary !important;
-    }
-  }
+.navbar {
+  font-size: $font-size-sm;
 }
 
 // Buttons =====================================================================
 
 .btn {
-  &-secondary,
-  &-secondary:hover,
-  &-warning,
-  &-warning:hover {
-    color: #fff;
+  @each $color, $value in $theme-colors {
+    &-#{$color} {
+      @if $enable-gradients {
+        background: $value linear-gradient(180deg, mix($white, $value, 15%), $value) repeat-x;
+      } @else {
+        background-color: $value;
+      }
+    }
   }
 }
 
 // Typography ==================================================================
 
+.dropdown-menu {
+
+  font-size: $font-size-sm;
+}
+
+.dropdown-header {
+  font-size: $font-size-sm;
+}
+
+.blockquote-footer {
+  color: $body-color;
+}
+
 // Tables ======================================================================
 
 .table {
+  font-size: $font-size-sm;
 
-  &-primary,
-  &-secondary,
-  &-success,
-  &-info,
-  &-warning,
-  &-danger {
+  .thead-dark th {
+    color: $white;
+  }
+
+  a:not(.btn) {
+    color: #fff;
+    text-decoration: underline;
+  }
+
+  .dropdown-menu a {
+    text-decoration: none;
+  }
+
+  .text-muted {
+    color: $text-muted;
+  }
+
+  &-dark {
     color: #fff;
   }
 
@@ -166,43 +183,34 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic&
 
 // Forms =======================================================================
 
+label,
+.radio label,
+.checkbox label,
+.help-block {
+  font-size: $font-size-sm;
+}
+
 // Navs ========================================================================
 
-.nav-tabs {
-  .nav-link.active,
-  .nav-link.active:focus,
-  .nav-link.active:hover,
-  .nav-item.open .nav-link,
-  .nav-item.open .nav-link:focus,
-  .nav-item.open .nav-link:hover {
-    color: $primary;
+.nav-tabs,
+.nav-pills {
+  .nav-link,
+  .nav-link:hover {
+    color: $body-color;
+  }
+
+  .nav-link.disabled {
+    color: $nav-link-disabled-color;
   }
 }
 
-.pagination {
-  a:hover {
-    text-decoration: none;
-  }
+.page-link:hover,
+.page-link:focus {
+  color: #fff;
+  text-decoration: none;
 }
 
 // Indicators ==================================================================
-
-.close {
-  text-decoration: none;
-  opacity: 0.4;
-
-  &:hover,
-  &:focus {
-    opacity: 1;
-  }
-}
-
-.badge {
-  &-secondary,
-  &-warning {
-    color: #fff;
-  }
-}
 
 .alert {
   border: none;
@@ -217,35 +225,46 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic&
   @each $color, $value in $theme-colors {
     &-#{$color} {
       @if $enable-gradients {
-        background: $value linear-gradient(180deg, mix($body-bg, $value, 15%), $value) repeat-x;
+        background: $value linear-gradient(180deg, mix($white, $value, 15%), $value) repeat-x;
       } @else {
         background-color: $value;
       }
     }
   }
+}
 
-  &-light {
-    &,
-    & a,
-    & .alert-link {
-      color: $body-color;
-    }
+.badge {
+  &-warning,
+  &-info {
+    color: $white;
+  }
+}
+
+.close {
+  color: #fff;
+  text-shadow: none;
+  opacity: 0.5;
+
+  &:hover,
+  &:focus {
+    opacity: 1;
   }
 }
 
 // Progress bars ===============================================================
 
+// Popovers      ===============================================================
+
+.popover-header {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
 // Containers ==================================================================
 
-.modal,
-.toast {
-
-  .close {
-    color: $black;
-
-    &:not(:disabled):not(.disabled):hover,
-    &:not(:disabled):not(.disabled):focus {
-      color: $black;
-    }
+.modal {
+  &-header,
+  &-footer {
+    background-color: $table-hover-bg;
   }
 }

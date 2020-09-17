@@ -22,7 +22,7 @@
     <% @documents.each do |document| %>
       <tr>
         <td><%= show_document_info document %></td>
-        <td><%= link_to_download_document document, class: 'btn btn-outline-secondary btn-sm' %></td>
+        <td><%= link_to_download_document document, class: 'btn btn-outline-info btn-sm' %></td>
         <td><%= super_truncate document.name, 25 %></td>
         <td class="d-none d-md-table-cell"><%= super_truncate document.description, 25 %></td>
         <td><%= t document.shared ? 'label.yes' : 'label.no' %></td>

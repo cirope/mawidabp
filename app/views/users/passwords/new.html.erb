@@ -2,16 +2,16 @@
   <div class="col-md-6">
     <%= simple_form_for :user, url: users_passwords_path, html: { data: { no_observe_changes: true } } do |f| %>
       <div class="card mb-3">
-        <div class="card-body pt-5 pb-0 px-5">
+        <div class="card-body bg-dark pt-5 pb-0 px-5">
           <%= render 'shared/flash' if flash_message %>
           <p class="lead text-muted text-center"><%= t('.note') %></p>
           <div class="form-inputs">
             <%= f.input :email, label: t('.email'), input_html: { maxlength: 100, autofocus: true, class: 'form-control-lg' } %>
           </div>
         </div>
-        <div class="card-footer text-center bg-white border-white pb-4">
+        <div class="card-footer text-center bg-dark border-dark pb-4">
           <div class="form-actions">
-            <%= f.submit t('.send_instructions'), class: 'btn btn-lg btn-outline-secondary' %>
+            <%= f.submit t('.send_instructions'), class: 'btn btn-lg btn-primary' %>
           </div>
 
           <hr>

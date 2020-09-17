@@ -20,7 +20,7 @@ jQuery(function ($) {
               $content.append($('<span></span>').text(item.label))
 
               if (item.informal)
-                $content.append($('<span class="text-muted"></span>').html(item.informal))
+                $content.append($('<span class="text-dark"></span>').html(item.informal))
 
               return {
                 label: $content.html(),

@@ -6,7 +6,7 @@ module DocumentsHelper
 
     if url.present?
       default_options = {
-        class: 'btn btn-outline-secondary',
+        class: 'btn btn-outline-info',
         title: title,
         data:  { ignore_unsaved_data: true }
       }

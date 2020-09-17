@@ -7,7 +7,7 @@ module DynamicFormHelper
     end
 
     link_to(
-      name, '#', class: 'btn btn-outline-secondary btn-sm', title: name, data: {
+      name, '#', class: 'btn btn-outline-info btn-sm', title: name, data: {
         id: id,
         association: association,
         dynamic_form_event: 'addNestedItem',
@@ -33,7 +33,7 @@ module DynamicFormHelper
     template = render(partial, item: new_object)
 
     link_to(
-      name, '#', class: 'btn btn-outline-secondary btn-sm', title: name, data: {
+      name, '#', class: 'btn btn-outline-info btn-sm', title: name, data: {
         'id' => id,
         'dynamic-form-event' => 'addNestedItem',
         'dynamic-template' => template.gsub("\n", ''),

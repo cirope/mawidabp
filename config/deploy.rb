@@ -1,4 +1,4 @@
-set :application, 'mawidabp.com'
+set :application, 'bna-upla.mawidabp.com'
 set :user, 'deployer'
 set :repo_url, 'https://github.com/cirope/mawidabp.git'
 
