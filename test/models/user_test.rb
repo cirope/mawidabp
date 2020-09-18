@@ -401,7 +401,10 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'try to release all pending findings for a unique audited' do
-    audited = users :audited
+    Current.organization = organizations(:cirope)
+    Current.user         = users :audited
+    audited              = Current.user
+
     old_findings_count = audited.findings.all_for_reallocation.count
     old_reviews_count = audited.reviews.list_without_final_review.count
 
@@ -417,6 +420,10 @@ class UserTest < ActiveSupport::TestCase
     assert_equal old_findings_count, audited.findings.all_for_reallocation.count
     assert_equal old_reviews_count, audited.reviews.list_without_final_review.count
     assert audited.errors.full_messages.include?(I18n.t('user.user_release_failed'))
+
+  ensure
+    Current.organization = nil
+    Current.user         = nil
   end
 
   test 'send welcome email' do
