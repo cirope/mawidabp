@@ -381,7 +381,9 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'release for all pending fingings' do
-    auditor = users :auditor
+    Current.organization = organizations(:cirope)
+    Current.user         = users :auditor
+    auditor              = Current.user
 
     assert auditor.findings.all_for_reallocation.any?
     assert auditor.reviews.list_without_final_review.any?
@@ -392,6 +394,10 @@ class UserTest < ActiveSupport::TestCase
 
     assert auditor.findings.reload.all_for_reallocation.empty?
     assert auditor.reviews.reload.list_without_final_review.empty?
+
+  ensure
+    Current.organization = nil
+    Current.user         = nil
   end
 
   test 'try to release all pending findings for a unique audited' do
