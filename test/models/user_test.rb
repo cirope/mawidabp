@@ -402,7 +402,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'try to release all pending findings for a unique audited' do
-    Current.organization = organizations(:cirope)
+    Current.organization = organizations :cirope
     Current.user         = users :audited
     audited              = Current.user
 
