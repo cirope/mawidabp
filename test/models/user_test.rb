@@ -386,7 +386,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'release for all pending fingings' do
-    Current.organization = organizations(:cirope)
+    Current.organization = organizations :cirope
     Current.user         = users :auditor
     auditor              = Current.user
 
