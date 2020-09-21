@@ -245,6 +245,7 @@ class NotifierMailerTest < ActionMailer::TestCase
     ]
 
     Current.organization = organization
+    Current.user         = user
 
     conclusion_review.to_pdf organization
     conclusion_review.review.score_sheet organization, draft: false
