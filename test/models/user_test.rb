@@ -11,6 +11,11 @@ class UserTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    Current.organization = nil
+    Current.user         = nil
+  end
+
   test 'create' do
     assert_difference %w(User.count BusinessUnitTypeUser.count) do
       role = roles :admin_role
@@ -394,10 +399,6 @@ class UserTest < ActiveSupport::TestCase
 
     assert auditor.findings.reload.all_for_reallocation.empty?
     assert auditor.reviews.reload.list_without_final_review.empty?
-
-  ensure
-    Current.organization = nil
-    Current.user         = nil
   end
 
   test 'try to release all pending findings for a unique audited' do
@@ -420,10 +421,6 @@ class UserTest < ActiveSupport::TestCase
     assert_equal old_findings_count, audited.findings.all_for_reallocation.count
     assert_equal old_reviews_count, audited.reviews.list_without_final_review.count
     assert audited.errors.full_messages.include?(I18n.t('user.user_release_failed'))
-
-  ensure
-    Current.organization = nil
-    Current.user         = nil
   end
 
   test 'send welcome email' do

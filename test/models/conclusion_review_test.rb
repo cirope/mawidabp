@@ -298,7 +298,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   test 'bic pdf conversion' do
-    Current.organization = organizations(:cirope)
+    Current.organization = organizations :cirope
     Current.user         = users :auditor
     organization         = Current.organization
 
