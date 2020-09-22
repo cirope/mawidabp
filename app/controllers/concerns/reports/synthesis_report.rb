@@ -12,7 +12,7 @@ module Reports::SynthesisReport
     end
 
     @business_unit_types = @selected_business_unit ?
-      [@selected_business_unit] : BusinessUnitType.list
+      [@selected_business_unit] : BusinessUnitType.allowed_business_unit_types.compact
 
     @periods.each do |period|
       @business_unit_types.each do |but|
