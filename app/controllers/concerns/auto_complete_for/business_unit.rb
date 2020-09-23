@@ -23,13 +23,14 @@ module AutoCompleteFor::BusinessUnit
       parameters[:"business_unit_data_#{i}"] = "%#{t.mb_chars.downcase}%"
     end
 
-    @business_units = ::BusinessUnit.includes(:business_unit_type).where(
+    @business_units = ::BusinessUnit.includes(:business_unit_type, :plan_items).where(
       [conditions.map { |c| "(#{c})" }.join(' AND '), parameters]
     ).order(
       [
         "#{::BusinessUnit.quoted_table_name}.#{::BusinessUnit.qcn('name')} ASC",
         "#{::BusinessUnitType.quoted_table_name}.#{::BusinessUnitType.qcn('name')} ASC"
       ].map { |o| Arel.sql o }
+    ).merge(PlanItem.allowed_by_business_units
     ).references(:business_unit_type).limit(10)
 
     respond_to do |format|
