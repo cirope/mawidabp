@@ -128,8 +128,10 @@ module Findings::CurrentUserScopes
     def filtered_current_user_findings
       scope = scoped_findings.
         includes(*current_user_includes).
-        left_joins(:users)
-
+        left_joins(:users).
+        merge(
+          PlanItem.allowed_by_business_units
+        )
       if @extra_query_values
         # Evitamos el `includes` para no tener los alias de tablas relacionadas
         # en el `select` de la query, de esta forma no necesitamos hacer
