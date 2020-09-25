@@ -9,6 +9,7 @@ class ReviewsController < ApplicationController
     :show, :edit, :update, :destroy, :download_work_papers, :survey_pdf,
     :finished_work_papers, :recode_findings, :recode_weaknesses_by_risk,
     :recode_weaknesses_by_repetition_and_risk,
+    :recode_weaknesses_by_risk_and_repetition,
     :recode_weaknesses_by_control_objective_order, :reorder,
     :excluded_control_objectives, :reset_control_objective_name
   ]
@@ -362,6 +363,13 @@ class ReviewsController < ApplicationController
     redirect_to @review, notice: t('review.findings_recoded')
   end
 
+  # * PUT /reviews/1/recode_weaknesses_by_risk_and_repetition
+  def recode_weaknesses_by_risk_and_repetition
+    @review.recode_weaknesses_by_risk_and_repetition
+
+    redirect_to @review, notice: t('review.findings_recoded')
+  end
+
   # * PUT /reviews/1/recode_weaknesses_by_control_objective_order
   def recode_weaknesses_by_control_objective_order
     @review.recode_weaknesses_by_control_objective_order
@@ -472,6 +480,7 @@ class ReviewsController < ApplicationController
         recode_findings: :modify,
         recode_weaknesses_by_risk: :modify,
         recode_weaknesses_by_repetition_and_risk: :modify,
+        recode_weaknesses_by_risk_and_repetition: :modify,
         recode_weaknesses_by_control_objective_order: :modify,
         reset_control_objective_name: :modify
       )

@@ -27,6 +27,8 @@ es:
         title: "DETALLE DE OBSERVACIONES - PLANES DE ACCION"
         plan: "Plan de acción correctiva N° %{number}"
         responsible: "RESPONSABLE DE LA GERENCIA"
+      repeated_weaknesses:
+        title: "DETALLE DE OBSERVACIONES REITERADAS - PLANES DE ACCION"
       images:
         plan: "Evidencia plan de acción correctiva N° %{number}"
     cro:

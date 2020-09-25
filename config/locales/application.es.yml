@@ -991,6 +991,7 @@ es:
     recode_findings: "Recodificar hallazgos"
     recode_weaknesses_by_risk: "Recodificar observaciones por riesgo"
     recode_weaknesses_by_repetition_and_risk: "Recodificar observaciones por reiteración y riesgo"
+    recode_weaknesses_by_risk_and_repetition: "Recodificar observaciones por riesgo y reiteración"
     recode_weaknesses_by_control_objective_order: "Recodificar observaciones por orden objetivos de control"
     reorder: "Reordenar procesos por nombre"
     findings_recoded: "Hallazgos recodificados correctamente"
