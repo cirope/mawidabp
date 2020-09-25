@@ -516,6 +516,14 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_redirected_to review_url(reviews(:review_without_conclusion))
   end
 
+  test 'recode findings by risk and repetition' do
+    login
+
+    patch :recode_weaknesses_by_risk_and_repetition, params: { id: reviews(:review_without_conclusion).id }
+
+    assert_redirected_to review_url(reviews(:review_without_conclusion))
+  end
+
   test 'recode weaknesses by control objective order' do
     login
 
