@@ -319,6 +319,7 @@ Rails.application.routes.draw do
       get :suggested_findings
       get :suggested_process_control_findings
       get :past_implemented_audited_findings
+      get :auto_complete_for_past_implemented_audited_findings
       get :weaknesses_and_oportunities
       get :download_work_papers
       get :estimated_amount
