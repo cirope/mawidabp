@@ -729,6 +729,29 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 0, findings.size # Sin resultados
   end
 
+  test 'auto complete for past implemented audited finding ' do
+    login
+
+    get :auto_complete_for_past_implemented_audited_findings, xhr: true, params: { q: 'Tit' }, as: :json
+    assert_response :success
+
+    findings = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, findings.size
+    assert findings.all? { |f| (f['label'] + f['informal']).match /O002/i }
+  end
+
+  test 'auto complete for past implemented audited finding relation for unknown' do
+    login
+
+    get :auto_complete_for_past_implemented_audited_findings, xhr: true, params: { q: 'x_none' }, as: :json
+    assert_response :success
+
+    findings = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, findings.size # Sin resultados
+  end
+
   test 'auto complete for tagging' do
     login
 
