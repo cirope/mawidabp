@@ -734,8 +734,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
     login
 
-    finding.update_column :state, Finding::STATUS[:implemented_audited]
-    finding.update_column :solution_date, 1.year.ago.to_date.to_s(:db)
+    finding.update_columns state: Finding::STATUS[:implemented_audited], solution_date: 1.year.ago.to_date.to_s(:db)
 
     get :auto_complete_for_past_implemented_audited_findings, xhr: true, params: { q: 'O001' }, as: :json
     assert_response :success
