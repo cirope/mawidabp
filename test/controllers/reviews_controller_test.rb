@@ -729,6 +729,34 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 0, findings.size # Sin resultados
   end
 
+  test 'auto complete for past implemented audited finding ' do
+    finding = findings :being_implemented_weakness_on_final
+
+    login
+
+    finding.update_columns state:         Finding::STATUS[:implemented_audited],
+                           solution_date: 1.year.ago.to_date.to_s(:db)
+
+    get :auto_complete_for_past_implemented_audited_findings, xhr: true, params: { q: 'O001' }, as: :json
+    assert_response :success
+
+    findings = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, findings.size
+    assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
+  end
+
+  test 'auto complete for past implemented audited finding relation for unknown' do
+    login
+
+    get :auto_complete_for_past_implemented_audited_findings, xhr: true, params: { q: 'x_none' }, as: :json
+    assert_response :success
+
+    findings = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, findings.size # Sin resultados
+  end
+
   test 'auto complete for tagging' do
     login
 
