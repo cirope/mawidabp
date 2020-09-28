@@ -362,31 +362,3 @@ being_implemented_weakness_on_approved_draft:
   internal_control_components: ['risk_evaluation', 'monitoring']
   notification_level: 0
   organization: cirope
-
-implemented_audited_finding:
-  type: Weakness
-  control_objective_item: management_dependency_item
-  title: Title 2w
-  review_code: O010
-  description: Description 2w
-  answer: Answer 2w
-  current_situation:
-  current_situation_verified: false
-  audit_comments: Audit comments 2w
-  state: <%= Finding::STATUS[:implemented_audited] %>
-  origination_date:
-  solution_date: <%= 1.year.ago.to_date.to_s(:db) %>
-  audit_recommendations: Proposed action 2w
-  effect: Effect 2w
-  risk: <%= Finding.risks_values.last %>
-  priority: <%= Finding.priorities_values.last %>
-  follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date.to_s(:db) %>
-  first_follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.business_days.from_now.to_date.to_s(:db) %>
-  origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
-  final: false
-  compliance: no
-  operational_risk: ['internal fraud']
-  impact: ['econimic', 'regulatory']
-  internal_control_components: ['risk_evaluation', 'monitoring']
-  notification_level: 0
-  organization: cirope
