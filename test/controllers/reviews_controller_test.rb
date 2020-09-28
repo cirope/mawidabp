@@ -738,7 +738,7 @@ class ReviewsControllerTest < ActionController::TestCase
     findings = ActiveSupport::JSON.decode(@response.body)
 
     assert_equal 1, findings.size
-    assert findings.all? { |f| (f['label'] + f['informal']).match /O002/i }
+    assert findings.all? { |f| (f['label'] + f['informal']).match /O010/i }
   end
 
   test 'auto complete for past implemented audited finding relation for unknown' do
