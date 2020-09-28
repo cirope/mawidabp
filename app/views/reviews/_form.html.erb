@@ -285,7 +285,7 @@
         t('review.add_past_findings'), f,
         :finding_review_assignments,
         'implemented_audited_finding',
-        {insert_into: '#finding_review_dynamic_assignments'}
+        { insert_into: '#finding_review_dynamic_assignments' }
       ) %>
       <%= link_to t('review.suggest_findings'), @review.plan_item_id ?
         suggested_findings_review_path(id: @review.plan_item_id) : '#',
