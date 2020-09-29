@@ -1,0 +1,27 @@
+<% id = @review.plan_item_id %>
+<fieldset class="implemented_audited_findings">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-11">
+        <%= f.input 'implemented_audited_finding[finding_data]', label: false,
+          input_html: {
+            value: f.object.try(:finding).try(:to_s),
+            name: 'implemented_audited_finding[finding_data]',
+            id: "implemented_audited_finding_finding_#{id}",
+            title: t('label.search'),
+            autofocus: true,
+            data: {
+              'autocomplete-url' => auto_complete_for_past_implemented_audited_findings_reviews_path,
+              'autocomplete-id-target' => "#hidden_finding_id_#{id}"
+            }
+          } %>
+        <%= f.input :finding_id, as: :hidden, input_html: { id: "hidden_finding_id_#{id}" } %>
+      </div>
+      <div class="col-1">
+        <div class="mt-2 text-right">
+          <%= link_to_remove_nested_item f %>
+        </div>
+      </div>
+    </div>
+  </div>
+</fieldset>

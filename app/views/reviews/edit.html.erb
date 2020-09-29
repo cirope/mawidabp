@@ -18,11 +18,13 @@
           method: :patch, confirm: t('messages.confirmation')
         }, class: 'dropdown-item' %>
       <% end %>
-      <% unless @review.has_final_review? %>
-        <%= link_to t('review.reorder'), reorder_review_path(@review, _ts: Time.now.to_i), data: {
+      <% unless @review.is_frozen? %>
+        <%= link_to t('review.recode_work_papers'), recode_work_papers_review_path(@review, _ts: Time.now.to_i), data: {
           method: :patch, confirm: t('messages.confirmation')
         }, class: 'dropdown-item' %>
-        <%= link_to t('review.recode_work_papers'), recode_work_papers_review_path(@review, _ts: Time.now.to_i), data: {
+      <% end %>
+      <% unless @review.has_final_review? %>
+        <%= link_to t('review.reorder'), reorder_review_path(@review, _ts: Time.now.to_i), data: {
           method: :patch, confirm: t('messages.confirmation')
         }, class: 'dropdown-item' %>
         <%= link_to t('review.recode_findings'), recode_findings_review_path(@review, _ts: Time.now.to_i), data: {
@@ -34,6 +36,14 @@
         <%= link_to(
           t('review.recode_weaknesses_by_repetition_and_risk'),
           recode_weaknesses_by_repetition_and_risk_review_path(@review, _ts: Time.now.to_i),
+          class: 'dropdown-item',
+          data: {
+            method: :patch, confirm: t('messages.confirmation')
+          }
+        ) %>
+        <%= link_to(
+          t('review.recode_weaknesses_by_risk_and_repetition'),
+          recode_weaknesses_by_risk_and_repetition_review_path(@review, _ts: Time.now.to_i),
           class: 'dropdown-item',
           data: {
             method: :patch, confirm: t('messages.confirmation')
