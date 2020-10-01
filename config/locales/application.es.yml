@@ -1364,7 +1364,7 @@ es:
         identification: "Identificación"
         description: "Descripción"
         survey: "Relevamiento"
-        audit_type: "Tipo de auditoría"
+        audit_type: "Unidad organizativa"
         business_unit: "Unidad de negocio"
         period_id: "Periodo"
         plan_item_id: "Proyecto"
