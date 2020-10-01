@@ -16,8 +16,8 @@ module Reports::WeaknessesByState
     @status = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
         sort { |s1, s2| s1.last <=> s2.last }
     @audit_types = [
-      [:internal, BusinessUnitType.list.internal_audit.map {|but| [but.name, but.id]}],
-      [:external, BusinessUnitType.list.external_audit.map {|but| [but.name, but.id]}]
+      [:internal, BusinessUnitType.list.internal_audit.allowed_business_unit_types.compact.map {|but| [but.name, but.id]}],
+      [:external, BusinessUnitType.list.external_audit.allowed_business_unit_types.compact.map {|but| [but.name, but.id]}]
     ]
 
     @periods.each do |period|
