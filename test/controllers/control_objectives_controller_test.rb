@@ -16,6 +16,7 @@ class ControlObjectivesControllerTest < ActionController::TestCase
 
   test 'list control objectives with search' do
     skip
+
     login
     get :index, params: {
       search: {
