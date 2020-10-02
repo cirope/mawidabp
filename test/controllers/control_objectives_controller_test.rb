@@ -32,6 +32,7 @@ class ControlObjectivesControllerTest < ActionController::TestCase
 
   test 'show control objective' do
     skip
+
     get :show, params: { id: control_objectives(:management_dependency).id }
     assert_response :success
     assert_not_nil assigns(:control_objective)
