@@ -7,6 +7,7 @@ class ControlObjectivesControllerTest < ActionController::TestCase
 
   test 'list control objectives' do
     skip
+
     get :index
     assert_response :success
     assert_not_nil assigns(:control_objectives)
