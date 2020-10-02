@@ -41,6 +41,14 @@
             method: :patch, confirm: t('messages.confirmation')
           }
         ) %>
+        <%= link_to(
+          t('review.recode_weaknesses_by_risk_and_repetition'),
+          recode_weaknesses_by_risk_and_repetition_review_path(@review, _ts: Time.now.to_i),
+          class: 'dropdown-item',
+          data: {
+            method: :patch, confirm: t('messages.confirmation')
+          }
+        ) %>
         <%= link_to t('review.recode_weaknesses_by_control_objective_order'),
           recode_weaknesses_by_control_objective_order_review_path(@review, _ts: Time.now.to_i),
           data: { method: :patch, confirm: t('messages.confirmation') },
