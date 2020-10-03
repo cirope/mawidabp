@@ -759,6 +759,11 @@
 	cursor: default;
 }
 
+.ui-menu-item  .ui-menu-item-wrapper:hover{
+        border: $secondary !important;
+        background-color: $secondary !important;
+        border-color: $secondary !important;
+}
 
 /*
  * jQuery UI Button 1.10.3
@@ -2072,7 +2077,7 @@ body .ui-tooltip {
 
 .ui-datepicker td .ui-state-highlight{
 	color: #ffffff;
-	background-color: theme-color("info");
+	background-color: $info;
 	border-color: theme-color-level("info", $alert-border-level);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
@@ -2081,8 +2086,8 @@ body .ui-tooltip {
 
 .ui-datepicker td .ui-state-active {
 	color: #333333;
-    background-color: #ebebeb;
-    border-color: #adadad;
+        background-color: $primary;
+        border-color: #adadad;
 	margin-bottom: 0;
 	font-size: normal;
 	text-shadow: 0;
@@ -2093,7 +2098,7 @@ body .ui-tooltip {
 .ui-datepicker td .ui-state-hover {
 	color: #ffffff;
 	background: theme-color("primary");
-	background-color: theme-color("primary");
+	background-color: $secondary;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	border-color: theme-color-level("primary", $alert-border-level);
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
