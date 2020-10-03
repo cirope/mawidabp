@@ -1472,7 +1472,7 @@
         issue_date: "Fecha de emisión"
         close_date: "Fecha de cierre"
         applied_procedures: "Procedimientos aplicados"
-        conclusion: "Conclusión"
+        conclusion: "Jefe regional UPLA"
         business_unit: "Unidad de negocio"
         project: "Proyecto"
         approved: "Aprobado"
@@ -1505,8 +1505,8 @@
         design_score: "Calificación pruebas de diseño"
         compliance_score: "Calificación pruebas de cumplimiento"
         sustantive_score: "Calificación pruebas sustantivas"
-        audit_date: "Fecha de auditoría"
-        auditor_comment: "Conclusiones del auditor"
+        audit_date: "Fecha inicio"
+        auditor_comment: "Conclusiones UPLA"
         finished: "Terminado"
         exclude_from_score: "No calificar"
         issues_count: "Casos observados"
@@ -1575,7 +1575,7 @@
         user_id: 'Usuario'
         user: 'Usuario'
         process_owner: 'Responsable'
-        responsible_auditor: 'Auditor referente'
+        responsible_auditor: 'Resp. regional UPLA'
       group:
         name: "Nombre"
         description: "Descripción"
