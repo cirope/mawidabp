@@ -759,12 +759,6 @@
   cursor: default;
 }
 
-.ui-menu-item  .ui-menu-item-wrapper:hover{
-        border: $secondary !important;
-        background-color: $secondary !important;
-        border-color: $secondary !important;
-}
-
 /*
  * jQuery UI Button 1.10.3
  *
@@ -2085,9 +2079,9 @@ body .ui-tooltip {
 }
 
 .ui-datepicker td .ui-state-active {
-  color: #333333;
-      background-color: $primary;
-      border-color: #adadad;
+  color: invert($black, $weight: 100%);
+  background-color: $primary;
+  border-color: #adadad;
   margin-bottom: 0;
   font-size: normal;
   text-shadow: 0;
