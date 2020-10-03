@@ -8,7 +8,7 @@ module FileModelHelper
 
     if file_model && file_model.file? && file_model.file.cached?.blank?
       options = {
-        class: "btn btn-outline-secondary #{extra_classes}",
+        class: "btn btn-outline-info #{extra_classes}",
         title: file_model.identifier.titleize,
         data:  { ignore_unsaved_data: true }
       }
@@ -29,7 +29,7 @@ module FileModelHelper
       title = model.identifier.to_s.titleize
     end
 
-    content_tag :span, class: 'btn btn-outline-secondary file', title: title do
+    content_tag :span, class: 'btn btn-outline-info file', title: title do
       icon 'fas', icon
     end
   end
@@ -38,7 +38,7 @@ module FileModelHelper
     file_url = description.match(/(ftp|file|http|https):\/\/[\\\w\-.:%]+(\/\S*)?/) && $~[0]
     url      = file_url ? file_url.strip : '#'
     options  = {
-      class: 'btn btn-outline-secondary',
+      class: 'btn btn-outline-info',
       target: '_blank',
       hidden: file_url.blank?,
       data: { file_url: true }

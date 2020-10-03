@@ -84,7 +84,7 @@
 
         <p>
           <%= link_to t('.add_risk_assessment_item'), new_item_risk_assessment_path(@risk_assessment),
-            class: 'btn btn-outline-secondary btn-sm', data: { remote: true } %>
+            class: 'btn btn-outline-info btn-sm', data: { remote: true } %>
         </p>
 
         <ul class="nav nav-tabs">
@@ -106,7 +106,7 @@
               <%= link_to_add_fields(
                 t('.add_best_practice'), f, :risk_assessment_items, 'best_practice', disabled_on_apply: true
               ) %>
-              <%= link_to t('.apply'), '#', class: 'btn btn-outline-secondary btn-sm', disabled: true, data: {
+              <%= link_to t('.apply'), '#', class: 'btn btn-outline-info btn-sm', disabled: true, data: {
                 disabled_on_apply: true,
                 add_risk_assessment_items_url: add_items_risk_assessment_path(@risk_assessment, type: 'best_practice')
               } %>
@@ -117,7 +117,7 @@
               <%= link_to_add_fields(
                 t('.add_business_unit_type'), f, :risk_assessment_items, 'business_unit_type', disabled_on_apply: true
               ) %>
-              <%= link_to t('.apply'), '#', class: 'btn btn-outline-secondary btn-sm', disabled: true, data: {
+              <%= link_to t('.apply'), '#', class: 'btn btn-outline-info btn-sm', disabled: true, data: {
                 disabled_on_apply: true,
                 add_risk_assessment_items_url: add_items_risk_assessment_path(@risk_assessment, type: 'business_unit_type')
               } %>

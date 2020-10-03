@@ -290,11 +290,11 @@
       <%= link_to t('review.suggest_findings'), @review.plan_item_id ?
         suggested_findings_review_path(id: @review.plan_item_id) : '#',
         :remote => true, :id => :link_to_suggested_findings,
-        :class => 'btn btn-outline-secondary btn-sm' %>
+        :class => 'btn btn-outline-info btn-sm' %>
       <%= link_to t('review.suggest_past_findings'), @review.plan_item_id ?
         past_implemented_audited_findings_review_path(id: @review.plan_item_id) : '#',
         :remote => true, :id => :link_to_past_implemented_audited_findings,
-        :class => 'btn btn-outline-secondary btn-sm' %>
+        :class => 'btn btn-outline-info btn-sm' %>
     </p>
   <% end %>
 

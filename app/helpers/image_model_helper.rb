@@ -4,7 +4,7 @@ module ImageModelHelper
 
     if image_model && image_model.image? && image_model.image.cached?.blank?
       options = {
-        class: 'btn btn-outline-secondary',
+        class: 'btn btn-outline-info',
         title: image_model.identifier.titleize,
         data:  { ignore_unsaved_data: true }
       }

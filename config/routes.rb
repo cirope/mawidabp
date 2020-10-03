@@ -388,7 +388,10 @@ Rails.application.routes.draw do
 
   resources :plans do
     resources :plan_items, only: [:show, :new, :edit, :update] do
-      get :auto_complete_for_control_objective, on: :collection
+      collection do
+        get :auto_complete_for_best_practice
+        get :auto_complete_for_control_objective
+      end
     end
 
     member do
