@@ -79,7 +79,7 @@ es:
     show:
       title: 'Ver entrevista de cierre'
       auditeds: 'Responsables del ciclo'
-      auditors: 'Auditores asignados'
+      auditors: 'Analistas y/o jefes asignados'
       download_pdf: 'Descargar PDF'
     pdf:
       pdf_name: 'entrevista_de_cierre_%{name}.pdf'
@@ -254,7 +254,7 @@ es:
     show:
       title: 'Ver entrevista de inicio'
       auditeds: 'Responsables del ciclo'
-      auditors: 'Auditores asignados'
+      auditors: 'Responsable unidad organizativa'
       download_pdf: 'Descargar PDF'
     pdf:
       pdf_name: 'entrevista_de_inicio_%{name}.pdf'
