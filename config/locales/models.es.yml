@@ -400,7 +400,7 @@ es:
         interview_date: 'Fecha de inicio de la tarea'
         start_date: 'Fecha estimada de inicio'
         end_date: 'Fecha estimada de cierre'
-        objective: 'Objetivo de la auditoría'
+        objective: 'Objetivo de la tarea'
         program: 'Programa de trabajo'
         scope: 'Alcance de la tarea'
         suggestions: 'Sugerencias e inquietudes'
