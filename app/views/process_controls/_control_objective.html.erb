@@ -8,6 +8,7 @@
         <%= f.input :name, input_html: { rows: 4 } %>
       </div>
       <div class="col-md-1">
+        <%= f.input :relevance, as: :hidden, input_html: { value: RELEVANCE_TYPES[:critical] } %>
         <label for="control_objective_obsolete_<%= id %>">
           <%= ControlObjective.human_attribute_name 'obsolete' %>
         </label>
