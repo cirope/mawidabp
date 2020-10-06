@@ -28,16 +28,13 @@
           <% unless HIDE_CONTROL_EFFECTS %>
             <%= c_f.input :effects, label: Control.human_attribute_name(:effects), input_html: { readonly: readonly, rows: 5 } %>
           <% end %>
-          <%= c_f.input :control, label: Control.human_attribute_name(:control), input_html: { readonly: readonly, rows: 5 } %>
-
-          <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
-            <%= f.input :effectiveness, label: ControlObjectiveItem.human_attribute_name(:effectiveness),
-              input_html: { value: "#{@control_objective_item.effectiveness}%", readonly: true } %>
+          <% content_for :control do %>
+            <%= c_f.input :control, label: Control.human_attribute_name(:control), input_html: { readonly: readonly, rows: 8 } %>
           <% end %>
 
           <% test_rows = HIDE_CONTROL_COMPLIANCE_TESTS ? 7 : 5 %>
           <% content_for :design_tests do %>
-            <%= c_f.input :design_tests, input_html: { readonly: readonly, rows: test_rows } %>
+            <%= c_f.input :design_tests, label: false, input_html: { class: 'd-none', readonly: readonly, rows: test_rows } %>
           <% end %>
           <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
             <% content_for :compliance_tests do %>
@@ -45,16 +42,25 @@
             <% end %>
           <% end %>
           <% content_for :sustantive_tests do %>
-            <%= c_f.input :sustantive_tests, input_html: { readonly: readonly, rows: test_rows } %>
+            <%= c_f.input :sustantive_tests, label: false, input_html: { class: 'd-none', readonly: readonly, rows: test_rows } %>
           <% end %>
         <% end %>
       </div>
       <div class="col-md-6">
+        <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
+          <%= f.input :effectiveness, label: ControlObjectiveItem.human_attribute_name(:effectiveness),
+            input_html: { value: "#{@control_objective_item.effectiveness}%", readonly: true } %>
+        <% end %>
+
+        <%= yield :control %>
+
         <%= f.input :design_score, collection: qualifications,
           include_blank: !SHOW_SHORT_QUALIFICATIONS && t('control_objective_item.not_rated'),
           prompt: SHOW_CONCLUSION_AS_OPTIONS,
+          label: false,
           input_html: {
             disabled: readonly,
+            class: 'd-none',
             data: {
               score_target: 'design',
               update_test: 'design_tests',
@@ -75,8 +81,10 @@
         <%= f.input :sustantive_score, collection: qualifications,
           include_blank: !SHOW_SHORT_QUALIFICATIONS && t('control_objective_item.not_rated'),
           prompt: SHOW_CONCLUSION_AS_OPTIONS,
+          label: false,
           input_html: {
             disabled: readonly,
+            class: 'd-none',
             data: {
               score_target: 'sustantive',
               update_test: 'sustantive_tests',
