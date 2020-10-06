@@ -11,7 +11,7 @@
     $('#review_risk_exposure').val('<%= @plan_item.risk_exposure %>')
     $('#review_business_unit').val('<%= @plan_item.business_unit&.name %>')
     $('#review_audit_type').val('<%= @plan_item.business_unit&.business_unit_type&.name %>')
-    $('.review_user_assignment').html('')
+    $('.review_user_assignment').remove()
 
     <%= simple_fields_for Review.new do |f| %>
       <% @plan_item.human_resource_utilizations.each do |ru|
