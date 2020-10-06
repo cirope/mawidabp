@@ -12,6 +12,18 @@
     $('#review_business_unit').val('<%= @plan_item.business_unit&.name %>')
     $('#review_audit_type').val('<%= @plan_item.business_unit&.business_unit_type&.name %>')
 
+    <%= simple_fields_for Review.new do |f| %>
+      <% @plan_item.human_resource_utilizations.each { |ru|
+          f.object.review_user_assignments.new(user_id: ru.resource_id)
+      } %>
+
+      <%= f.simple_fields_for :review_user_assignments  do |rua_f| %>
+        $('#review_user_assignments').prepend(
+          '<%= j render 'review_user_assignment', f: rua_f, readonly: false %>'
+        )
+      <% end %>
+    <% end %>
+
     if (prefix !== reviewPrefix) {
       $('#review_identification_prefix').
         val(reviewPrefix).
