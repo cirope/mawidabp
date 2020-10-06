@@ -4,7 +4,7 @@
   <% if params[:button] == 'done' %>
     $container.attr('hidden', true)
   <% else %>
-    $container.find('td').html('<%= j render('show') %>')
+    $container.find('td').html('<%= j render(@partial) %>')
     $container.find('[autofocus]').focus()
   <% end %>
 }()
