@@ -19,7 +19,7 @@
 
       <%= f.simple_fields_for :review_user_assignments  do |rua_f| %>
         $('#review_user_assignments').prepend(
-          '<%= j render 'review_user_assignment', f: rua_f, readonly: false %>'
+          '<%= j render('review_user_assignment', f: rua_f, readonly: false) %>'
         )
       <% end %>
     <% end %>
