@@ -25,18 +25,6 @@
       <% end %>
     <% end %>
 
-    <%= simple_fields_for Review.new do |f| %>
-      <% @plan_item.human_resource_utilizations.each do |ru|
-          f.object.review_user_assignments.new(user_id: ru.resource_id)
-      end %>
-
-      <%= f.simple_fields_for :review_user_assignments  do |rua_f| %>
-        $('#review_user_assignments').prepend(
-          '<%= j render('review_user_assignment', f: rua_f, readonly: false) %>'
-        )
-      <% end %>
-    <% end %>
-
     if (prefix !== reviewPrefix) {
       $('#review_identification_prefix').
         val(reviewPrefix).

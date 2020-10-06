@@ -6,7 +6,7 @@ module ControlObjectiveItems::DestroyValidation
   end
 
   def can_be_destroyed?
-    !is_in_a_final_review? && weaknesses.empty? && oportunities.empty?
+    false
   end
 
   private
