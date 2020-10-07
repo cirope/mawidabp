@@ -71,6 +71,15 @@ ActiveRecord::Schema.define(version: 2020_10_06_194334) do
     t.index ["review_id"], name: "index_best_practice_comments_on_review_id"
   end
 
+  create_table "best_practice_projects", force: :cascade do |t|
+    t.bigint "best_practice_id", null: false
+    t.bigint "plan_item_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["best_practice_id"], name: "index_best_practice_projects_on_best_practice_id"
+    t.index ["plan_item_id"], name: "index_best_practice_projects_on_plan_item_id"
+  end
+
   create_table "best_practices", id: :serial, force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -1161,6 +1170,8 @@ ActiveRecord::Schema.define(version: 2020_10_06_194334) do
   add_foreign_key "benefits", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "best_practices", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "reviews", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "best_practice_projects", "best_practices", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "best_practice_projects", "plan_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practices", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practices", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_findings", "business_units", on_update: :restrict, on_delete: :restrict

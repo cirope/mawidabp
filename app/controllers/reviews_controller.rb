@@ -173,6 +173,13 @@ class ReviewsController < ApplicationController
   # * GET /reviews/plan_item_data/1
   def plan_item_data
     @plan_item = PlanItem.find_by id: params[:id]
+    @review = Review.new plan_item: @plan_item,
+                         best_practice_ids: @plan_item.best_practices.ids,
+                         control_objective_ids: @plan_item.control_objectives.ids
+
+    @plan_item.human_resource_utilizations.each do |ru|
+      @review.review_user_assignments.new user_id: ru.resource_id
+    end
   end
 
   # Crea el documento de relevamiento del informe
