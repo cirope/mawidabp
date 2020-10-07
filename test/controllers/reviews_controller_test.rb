@@ -321,7 +321,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'destroy review' do
-    skip if SHOW_REVIEW_AUTOMATIC_IDENTIFICATION
+    skip # only on this branch
 
     login
 
