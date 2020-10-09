@@ -4,7 +4,7 @@
 <fieldset class="review_user_assignment">
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-5">
         <% copy_attribute_errors(:user_id, :auto_user_name, f) %>
         <%= f.input :auto_user_name, label: false, autofocus: f.object.new_record?,
           input_html: {
@@ -38,7 +38,7 @@
         </div>
       <% end %>
       <div class="col-md-1">
-        <div class="mt-2 text-right">
+        <div class="mt-1 text-right">
           <%= link_to_remove_nested_item(f) unless readonly %>
         </div>
       </div>
