@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_01_153552) do
+ActiveRecord::Schema.define(version: 2020_10_06_194334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -882,6 +882,7 @@ ActiveRecord::Schema.define(version: 2020_10_01_153552) do
     t.datetime "updated_at", null: false
     t.boolean "include_signature", default: true, null: false
     t.boolean "owner", default: false, null: false
+    t.boolean "unavailable", default: false, null: false
     t.index ["review_id", "user_id"], name: "index_review_user_assignments_on_review_id_and_user_id"
   end
 
