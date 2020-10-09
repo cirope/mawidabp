@@ -1396,6 +1396,7 @@ es:
         user_id: "Integrante"
         include_signature: "Incluir firma"
         owner: "Responsable"
+        unavailable: "impedir"
       review_user_assignment:
         assignment_type: "Rol"
         user: "Integrante"
@@ -1403,6 +1404,7 @@ es:
         include_signature: "Incluir firma"
         owner: "Responsable"
         review: "Informe"
+        unavailable: "impedir"
       role:
         name: "Perfil"
         role_type: "Tipo perfil"
