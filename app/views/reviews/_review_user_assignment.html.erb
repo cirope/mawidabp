@@ -1,8 +1,10 @@
 <% id = f.object.object_id %>
+<% is_current_user = @auth_user.id == f.object.user_id ? false : true %>
+
 <fieldset class="review_user_assignment">
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-5">
         <% copy_attribute_errors(:user_id, :auto_user_name, f) %>
         <%= f.input :auto_user_name, label: false, autofocus: f.object.new_record?,
           input_html: {
@@ -29,11 +31,14 @@
           } %>
         </div>
         <div class="col-md-1">
-          <%= f.input :owner, label: '&nbsp;'.html_safe, wrapper_html: { class: 'mt-2' }, input_html: { disabled: readonly } %>
+          <%= f.input :owner, label: '&nbsp;'.html_safe, wrapper_html: { class: 'mt-1' }, input_html: { disabled: readonly } %>
+        </div>
+        <div class="col-md-1">
+          <%= f.input :unavailable, label: '&nbsp;'.html_safe, wrapper_html: { class: 'mt-1' }, input_html: { disabled: is_current_user } %>
         </div>
       <% end %>
       <div class="col-md-1">
-        <div class="mt-2 text-right">
+        <div class="mt-1 text-right">
           <%= link_to_remove_nested_item(f) unless readonly %>
         </div>
       </div>
