@@ -490,7 +490,7 @@ class ReviewsController < ApplicationController
           :id, :finding_id, :_destroy, :lock_version
         ],
         review_user_assignments_attributes: [
-          :id, :assignment_type, :user_id, :include_signature, :owner, :unavailable ,:_destroy
+          :id, :assignment_type, :user_id, :include_signature, :owner, :unavailable, :_destroy
         ],
         taggings_attributes: [
           :id, :tag_id, :_destroy
