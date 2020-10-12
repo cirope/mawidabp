@@ -1396,7 +1396,7 @@ es:
         user_id: "Integrante"
         include_signature: "Incluir firma"
         owner: "Responsable"
-        unavailable: "impedir"
+        unavailable: "Impedimento"
       review_user_assignment:
         assignment_type: "Rol"
         user: "Integrante"
