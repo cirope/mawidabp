@@ -1404,7 +1404,7 @@ es:
         include_signature: "Incluir firma"
         owner: "Responsable"
         review: "Informe"
-        unavailable: "impedir"
+        unavailable: "Impedimento"
       role:
         name: "Perfil"
         role_type: "Tipo perfil"
