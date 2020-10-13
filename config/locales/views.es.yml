@@ -91,6 +91,9 @@ es:
       title: 'Detalle objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
+    score_type:
+      option: 'Opciones'
+      percentage: 'Porcentaje'
 
   documents:
     edit:
