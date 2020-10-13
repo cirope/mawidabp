@@ -51,4 +51,19 @@ module ControlObjectiveItemsHelper
   def auditor_comment_options
     CONCLUSION_OPTIONS.map { |option| [option, option] }
   end
+
+  def previous_effectiveness control_objective_id, created_at
+    coi = ControlObjectiveItem.list.
+      includes(
+        :review
+      ).where(
+        control_objective_id: control_objective_id
+      ).where(
+        'created_at < ?', created_at
+    ).order(
+      created_at: :desc
+    ).first
+
+    coi.nil? ? t('message.no_results_found') :  t('control_objective_item.previous_effectiveness', effectiveness: coi.effectiveness)
+  end
 end
