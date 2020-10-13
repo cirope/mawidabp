@@ -69,7 +69,8 @@ class BestPracticesController < ApplicationController
         process_controls_attributes: [
           :id, :name, :order, :obsolete, :_destroy,
           control_objectives_attributes: [
-            :id, :name, :relevance, :risk, :obsolete, :support, :support_cache, :order, :_destroy,
+            :id, :name, :relevance, :risk, :obsolete, :score_type, :support,
+            :support_cache, :order, :_destroy,
             taggings_attributes: [:id, :tag_id, :_destroy],
             control_attributes:  [
               :id, :control, :effects, :design_tests, :compliance_tests, :sustantive_tests, :_destroy,

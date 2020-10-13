@@ -4,9 +4,17 @@
 <fieldset class="control_objective">
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-9">
+      <div class="col-md-5">
         <%= f.input :name, input_html: { rows: 4 } %>
       </div>
+      <div class="col-md-2">
+        <%= f.input :score_type, collection: control_objective_score_types, prompt: true %>
+      </div>
+      <% unless HIDE_CONTROL_OBJECTIVE_RISK %>
+        <div class="col-md-2">
+          <%= f.input :risk, collection: risks, prompt: true %>
+        </div>
+      <% end %>
       <div class="col-md-1">
         <%= f.input :relevance, as: :hidden, input_html: { value: RELEVANCE_TYPES[:critical] } %>
         <label for="control_objective_obsolete_<%= id %>">

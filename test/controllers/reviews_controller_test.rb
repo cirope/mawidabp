@@ -321,8 +321,6 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'destroy review' do
-    skip # only on this branch
-
     login
 
     assert_difference 'Review.count', -1 do

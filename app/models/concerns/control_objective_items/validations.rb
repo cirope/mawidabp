@@ -12,6 +12,11 @@ module ControlObjectiveItems::Validations
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 2147483647
     }, allow_blank: true, allow_nil: true
+    validates :design_score, :compliance_score, :sustantive_score, numericality: {
+      only_integer: true,
+      greater_than_or_equal_to: 0,
+      less_than_or_equal_to: 100
+    }, allow_blank: true, allow_nil: true
     validates :audit_date, timeliness: { type: :date }, allow_blank: true
     validates :audit_date, presence: true, if: :require_audit_date?
     validates :relevance, :auditor_comment, presence: true, if: :finished

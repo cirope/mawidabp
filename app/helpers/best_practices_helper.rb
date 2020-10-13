@@ -16,6 +16,12 @@ module BestPracticesHelper
     end
   end
 
+  def control_objective_score_types
+    ControlObjective.score_types.map do |type, value|
+      [t("control_objectives.score_type.#{type}"), value]
+    end
+  end
+
   def process_control_path process_control
     if process_control.persisted?
       edit_best_practice_process_control_path @best_practice, process_control

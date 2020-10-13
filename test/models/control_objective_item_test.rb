@@ -67,7 +67,6 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de items de objetivos de control
   test 'destroy' do
-    skip # only on this branch
     assert_no_difference 'ControlObjectiveItem.count' do
       @control_objective_item.destroy
     end

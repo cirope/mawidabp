@@ -22,8 +22,8 @@ module Parameters::Qualification
       def qualification_types
         if SHOW_SHORT_QUALIFICATIONS
           {
-            ok: 10,
-            observed: 1,
+            ok: 100,
+            observed: 50,
             not_apply: 0
           }
         else
