@@ -33,7 +33,7 @@
           <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
             <%= f.input :effectiveness, label: ControlObjectiveItem.human_attribute_name(:effectiveness),
               input_html: { value: "#{@control_objective_item.effectiveness}%", readonly: true } %>
-            <small><%= previous_effectiveness f.object.control_objective_id, f.object.created_at %></small>
+            <small><%= previous_effectiveness f.object.review_id, f.object.control_objective_id, f.object.created_at %></small>
           <% end %>
 
           <% test_rows = HIDE_CONTROL_COMPLIANCE_TESTS ? 7 : 5 %>
