@@ -90,22 +90,5 @@ module ControlObjectiveItems::Scopes
         id: :desc
       )
     end
-
-    def previous_effectiveness review_id, control_objective_id, created_at
-      r = Review.list.find(review_id).previous
-
-      if r.present?
-        coi = r.control_objective_items.list.
-          where(
-            control_objective_id: control_objective_id
-          ).where(
-            'created_at = ?', created_at
-          ).order(
-            created_at: :desc
-          ).first
-      end
-
-      coi
-    end
   end
 end
