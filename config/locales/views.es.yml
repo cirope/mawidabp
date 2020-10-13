@@ -91,6 +91,9 @@ es:
       title: 'Detalle objetivo de control'
     new:
       tagging: 'Agregar etiqueta'
+    score_type:
+      option: 'Opciones'
+      percentage: 'Porcentaje'
 
   documents:
     edit:
@@ -298,7 +301,11 @@ es:
       title: 'Detalles del período'
 
   plan_items:
-    show:
+    best_practice:
+      best_practice_projects:
+        save: 'Asociar buena práctica'
+        done: 'Guardar'
+    control_objective:
       control_objective_projects:
         save: 'Asociar objetivo de control'
         done: 'Guardar'
@@ -371,7 +378,8 @@ es:
         progress: 'Avance total'
         compliance: 'Cumplimiento'
     business_unit_type_plan_items:
-      associate_control_objectives: 'Asociar objetivos de control'
+      associate_control_objective: 'Asociar objetivo de control'
+      associate_best_practice: 'Asociar buena práctica'
     download_global_plan: 'Descargar plan de auditoria global'
     download_detailed_plan: 'Descargar plan de auditoria detallado'
     download_business_unit_type_plan: 'Descargar plan %{business_unit_type}'
