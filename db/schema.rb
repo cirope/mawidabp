@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_06_194334) do
+ActiveRecord::Schema.define(version: 2020_10_13_202044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -293,6 +293,7 @@ ActiveRecord::Schema.define(version: 2020_10_06_194334) do
     t.datetime "updated_at", null: false
     t.boolean "obsolete", default: false
     t.string "support"
+    t.string "score_type", default: "option", null: false
     t.index ["obsolete"], name: "index_control_objectives_on_obsolete"
     t.index ["process_control_id"], name: "index_control_objectives_on_process_control_id"
   end
