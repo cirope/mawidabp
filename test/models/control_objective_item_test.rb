@@ -158,20 +158,25 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       skip
     end
 
-    max_qualification_value = ControlObjectiveItem.qualifications_values.max
+    qualification_value = if SHOW_SHORT_QUALIFICATIONS
+                            ControlObjectiveItem.qualifications_values.max
+                          else
+                            ControlObjectiveItem.qualifications_values.min
+                          end
+
     review = @control_objective_item.review
 
     review.save!
 
     old_score = review.score
 
-    assert_not_equal max_qualification_value,
+    assert_not_equal qualification_value,
       @control_objective_item.compliance_score
     assert review.update(
       :control_objective_items_attributes => {
         @control_objective_item.id => {
           :id => @control_objective_item.id,
-          :compliance_score => max_qualification_value
+          :compliance_score => qualification_value
         }
       }
     )
