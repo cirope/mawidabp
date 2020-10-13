@@ -165,7 +165,7 @@ es:
       repeated: 'Reiterada'
       revoked: 'Anulada'
       criteria_mismatch: 'Difiere criterio'
-      expired: 'Desestimada / No aplica'
+      expired: 'Desestimada / No regularizable'
     work_papers:
       create:
         from_comment: 'De comentario por %{user} el %{date}'
