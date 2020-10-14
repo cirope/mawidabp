@@ -327,6 +327,7 @@ Rails.application.routes.draw do
       patch :recode_findings
       patch :recode_weaknesses_by_risk
       patch :recode_weaknesses_by_repetition_and_risk
+      patch :recode_weaknesses_by_risk_and_repetition
       patch :recode_weaknesses_by_control_objective_order
       patch :recode_work_papers
       patch :reorder
@@ -342,6 +343,7 @@ Rails.application.routes.draw do
       get :auto_complete_for_best_practice
       get :auto_complete_for_process_control
       get :auto_complete_for_control_objective
+      get :auto_complete_for_past_implemented_audited_findings
       get :auto_complete_for_tagging
       get :next_identification_number
     end
@@ -386,7 +388,10 @@ Rails.application.routes.draw do
 
   resources :plans do
     resources :plan_items, only: [:show, :new, :edit, :update] do
-      get :auto_complete_for_control_objective, on: :collection
+      collection do
+        get :auto_complete_for_best_practice
+        get :auto_complete_for_control_objective
+      end
     end
 
     member do

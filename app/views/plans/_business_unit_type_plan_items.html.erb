@@ -44,7 +44,7 @@
             <td><%= l plan_item.start, format: :minimal %></td>
             <td><%= l plan_item.end, format: :minimal %></td>
             <td>
-              <%= link_to plan_plan_item_path(@plan, plan_item), title: t('.associate_control_objectives'), data: { remote: true } do %>
+              <%= link_to plan_plan_item_path(@plan, plan_item, partial: 'control_objective'), title: t('.associate_control_objective'), data: { remote: true } do %>
                 <i class="fas fa-ellipsis-v"></i>
               <% end %>
             </td>
