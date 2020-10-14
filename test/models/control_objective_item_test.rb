@@ -67,7 +67,6 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de items de objetivos de control
   test 'destroy' do
-    skip # only on this branch
     assert_no_difference 'ControlObjectiveItem.count' do
       @control_objective_item.destroy
     end
@@ -159,20 +158,25 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       skip
     end
 
-    min_qualification_value = ControlObjectiveItem.qualifications_values.min
+    qualification_value = if SHOW_SHORT_QUALIFICATIONS
+                            ControlObjectiveItem.qualifications_values.max
+                          else
+                            ControlObjectiveItem.qualifications_values.min
+                          end
+
     review = @control_objective_item.review
 
     review.save!
 
     old_score = review.score
 
-    assert_not_equal min_qualification_value,
+    assert_not_equal qualification_value,
       @control_objective_item.compliance_score
     assert review.update(
       :control_objective_items_attributes => {
         @control_objective_item.id => {
           :id => @control_objective_item.id,
-          :compliance_score => min_qualification_value
+          :compliance_score => qualification_value
         }
       }
     )
@@ -281,12 +285,12 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     high_qualification_value = ControlObjectiveItem.qualifications_values.max
 
     @control_objective_item.design_score = 0
-    @control_objective_item.compliance_score = high_qualification_value - 1
+    @control_objective_item.compliance_score = high_qualification_value
     @control_objective_item.sustantive_score = nil
 
     # La calificación de post sólo participa en el 50% del cálculo de
     # efectividad
-    assert_equal (high_qualification_value - 1) * 50 /
+    assert_equal high_qualification_value * 50 /
       high_qualification_value, @control_objective_item.effectiveness
   end
 

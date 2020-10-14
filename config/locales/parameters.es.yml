@@ -30,9 +30,9 @@ es:
     very_high: 'Muy alto'
     excellent: 'Óptimo'
     # Short qualifications
-    ok: 'OK'
-    observed: 'Observado'
-    not_apply: 'No aplica'
+    ok: 'Cumple'
+    observed: 'Cumple medianamente'
+    not_apply: 'No cumple'
   risk_types:
     low: 'Bajo'
     medium: 'Medio'
