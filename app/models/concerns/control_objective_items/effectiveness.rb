@@ -15,10 +15,10 @@ module ControlObjectiveItems::Effectiveness
   end
 
   def previous_effectiveness
-    review_previous = self.review.previous
+    previous_review = self.review.previous
 
-    if review_previous.present?
-      coi = review_previous.control_objective_items.
+    if previous_review.present?
+      coi = previous_review.control_objective_items.
         where(
           control_objective_id: control_objective_id
         ).where(
@@ -27,10 +27,8 @@ module ControlObjectiveItems::Effectiveness
           created_at: :desc
         ).first
 
-      effectiveness = coi.effectiveness if coi.present?
+      coi&.effectiveness
     end
-
-    effectiveness
   end
 
   private

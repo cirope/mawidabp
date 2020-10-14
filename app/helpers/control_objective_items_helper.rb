@@ -55,6 +55,10 @@ module ControlObjectiveItemsHelper
   def previous_effectiveness(control_objective_item)
     effectiveness = control_objective_item.previous_effectiveness
 
-    effectiveness.nil? ? t('message.no_results_found') : t('control_objective_item.previous_effectiveness', effectiveness: effectiveness)
+    if effectiveness
+      t('control_objective_item.previous_effectiveness', effectiveness: effectiveness)
+    else
+      t('message.no_results_found')
+    end
   end
 end
