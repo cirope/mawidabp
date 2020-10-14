@@ -1,6 +1,6 @@
 <% first_organization = @grouped_findings.keys.first %>
 <% count = @grouped_findings.map(&:second).sum(&:size) %>
-<div style="font-family: verdana, sans-serif, arial, helvetica;">
+<div style="font-family: arial, helvetica; font-size: 11px;">
   <h2><%= t 'notifier.reassigned_findings.title', :count => count %></h2>
   <h3 style="text-decoration: underline;">
     <%= t 'notifier.reassigned_findings.the_following_findings_are_now_reassigned',
@@ -9,7 +9,6 @@
 
   <% @grouped_findings.each do |organization, findings| %>
     <% unless findings.empty? %>
-      <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
       <% unless @new_users.blank? && @old_users.blank? %>
         <ul>
           <% unless @new_users.blank? %>

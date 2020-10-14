@@ -6,7 +6,7 @@
   <% next_level += 1 %>
 <% end %>
 
-<div style="font-family: verdana, sans-serif, arial, helvetica;">
+<div style="font-family: arial, helvetica; font-size: 11px;">
   <h2><%= t 'notifier.unanswered_finding_to_manager.title' %></h2>
   <h3 style="font-weight: normal;">
     <%= markdown_without_paragraph(
@@ -15,7 +15,6 @@
 
   <% if @finding.organization %>
     <% Current.organization = @finding.organization %>
-    <h2 style="margin-bottom: 1em;"><%= @finding.organization.name %></h2>
   <% end %>
 
   <%= render :partial => 'finding', :locals => {:finding => @finding} %><br />

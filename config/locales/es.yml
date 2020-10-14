@@ -627,8 +627,8 @@
       one: "Revisor"
       other: "Revisores"
     audited:
-      one: "Auditado"
-      other: "Auditados"
+      one: "Propietario del Proceso - Responsable"
+      other: "Propietario del Proceso - Responsable"
     readonly: "La observación no puede ser creada ni modificada, ya se emitió el informe definitivo"
     responsibles:
       one: "Responsable"
@@ -1043,7 +1043,7 @@
     notify_new_finding_answer:
       title: "Nuevo comentario en el informe %{review}"
       finding_data: "Se ha agregado un comentario al hallazgo **%{finding_code}** del informe **%{review}**"
-      finding_link: "Ver hallazgo"
+      finding_link: "Ver debilidad"
     notify_new_findings:
       title: "Notificación de hallazgos"
       created_title:
@@ -1063,8 +1063,8 @@
     findings_expiration_warning:
       title: "Notificación de hallazgos cercanos al vencimiento"
       body_title:
-        one: "El siguiente hallazgo está próximo a vencer"
-        other: "Los siguientes hallazgos están próximos a vencer"
+        one: "Gestión del Comité de Auditoria - Seguimiento de observaciones"
+        other: "Gestión del Comité de Auditoria - Seguimiento de observaciones"
     findings_expired_warning:
       title: "Notificación de hallazgos vencidos"
       body_title:

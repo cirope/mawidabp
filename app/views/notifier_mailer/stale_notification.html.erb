@@ -1,4 +1,4 @@
-<div style="font-family: verdana, sans-serif, arial, helvetica;">
+<div style="font-family: arial, helvetica; font-size: 11px;">
   <h2><%= t 'notifier.notification.unconfirmed' %></h2>
   <h3 style="text-decoration: underline;">
     <%= t 'notifier.notification.the_following_findings_are_still_unconfirmed' %>
@@ -6,7 +6,6 @@
   <% @notifications.each do |n| %>
     <% n.findings.unconfirmed_for_notification.group_by(&:organization).each do |organization, findings| %>
       <% Current.organization = organization %>
-      <h4 style="margin-bottom: 1em;"><%= organization.name %></h4>
       <h5><%= l(n.created_at.to_date, :format => :long) %></h5>
       <% findings.each do |finding| %>
         <%= render :partial => 'finding', :locals => {:finding => finding} %><br />

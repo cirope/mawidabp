@@ -2,9 +2,7 @@
 <% organization = finding.review.organization %>
 <% finding_url = finding_url(finding.pending? ? 'incomplete' : 'complete',
   finding, :host => ("#{organization.prefix}.#{URL_HOST}" if organization)) %>
-<div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
-
+<div style="font-family: arial, helvetica; font-size: 11px;">
   <h3 style="font-weight: normal;">
     <%= markdown_without_paragraph(
       t(
