@@ -626,7 +626,7 @@ es:
         title: 'Título'
         description: 'Observación'
         review_code: 'Código'
-        audit_recommendations: 'Recomendaciones de auditoría'
+        audit_recommendations: 'Recomendaciones UPLA'
         answer: 'Respuesta/Acciones correctivas'
         effect: 'Efecto'
         risk: 'Riesgo'

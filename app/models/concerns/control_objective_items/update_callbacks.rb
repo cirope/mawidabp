@@ -3,6 +3,7 @@ module ControlObjectiveItems::UpdateCallbacks
 
   included do
     before_validation :check_if_can_be_modified
+    before_validation :add_date
   end
 
   def can_be_modified?
@@ -21,5 +22,9 @@ module ControlObjectiveItems::UpdateCallbacks
 
     def check_if_can_be_modified
       throw :abort unless can_be_modified?
+    end
+
+    def add_date
+      self.audit_date = Date.today.strftime('%Y-%m-%d') if !audit_date && compliance_score
     end
 end
