@@ -27,10 +27,10 @@ module ControlObjectiveItems::Effectiveness
           created_at: :desc
         ).first
 
-        effectiveness = coi.effectiveness if coi.present?
+      effectiveness = coi.effectiveness if coi.present?
     end
 
-   effectiveness
+    effectiveness
   end
 
   private
