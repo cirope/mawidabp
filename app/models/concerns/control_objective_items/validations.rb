@@ -4,8 +4,6 @@ module ControlObjectiveItems::Validations
   included do
     attr_accessor :creating_final_review
 
-    ##before_validation :
-
     validates :control_objective_text, :control_objective_id,
       :organization_id, presence: true
     validates :control_objective_text, :auditor_comment, pdf_encoding: true
