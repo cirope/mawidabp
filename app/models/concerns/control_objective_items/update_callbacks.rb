@@ -24,6 +24,6 @@ module ControlObjectiveItems::UpdateCallbacks
     end
 
     def set_audit_date
-      self.audit_date ||= Time.today.zone if compliance_score
+      self.audit_date ||= Time.zone.today if compliance_score
     end
 end
