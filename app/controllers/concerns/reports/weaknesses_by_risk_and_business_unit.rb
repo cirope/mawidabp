@@ -49,7 +49,7 @@ module Reports::WeaknessesByRiskAndBusinessUnit
         [l(@from_date), l(@to_date)].to_sentence
       ].join ' '
       weaknesses = Weakness.
-        list_with_final_review.
+        list_for_report.
         or(Weakness.list_without_final_review.with_repeated).
         finals(false).
         includes :business_unit, :business_unit_type, review: :conclusion_final_review

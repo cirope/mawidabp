@@ -70,7 +70,7 @@ module Reports::WeaknessesReport
 
     def scoped_weaknesses
       params[:execution].present? ?
-        Weakness.list_without_final_review : Weakness.list_with_final_review
+        Weakness.list_without_final_review : Weakness.list_for_report
     end
 
     def filter_weaknesses_for_report report_params

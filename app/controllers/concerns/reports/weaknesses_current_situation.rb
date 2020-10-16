@@ -103,7 +103,7 @@ module Reports::WeaknessesCurrentSituation
 
     def current_situation_weaknesses_from_permalink final
       Weakness.
-        list_with_final_review.
+        list_for_report.
         finals(final).
         where(id: @permalink.permalink_models.pluck('model_id')).
         includes(:business_unit, :business_unit_type, :latest,
@@ -117,7 +117,7 @@ module Reports::WeaknessesCurrentSituation
       weaknesses = Weakness.
         with_repeated_status_for_report.
         finals(final).
-        list_with_final_review.
+        list_for_report.
         by_issue_date('BETWEEN', @from_date, @to_date).
         includes(:business_unit, :business_unit_type, :latest,
           achievements: [:benefit],
