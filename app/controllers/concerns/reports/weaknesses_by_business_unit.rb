@@ -54,7 +54,7 @@ module Reports::WeaknessesByBusinessUnit
       weaknesses = Weakness.
         with_repeated_status_for_report.
         finals(final).
-        list_with_final_review.
+        list_for_report.
         by_issue_date('BETWEEN', @from_date, @to_date).
         includes(
           :business_unit,
