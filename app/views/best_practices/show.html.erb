@@ -8,11 +8,11 @@
       <tr>
         <th><%= ControlObjective.human_attribute_name 'name' %></th>
         <th><%= Control.human_attribute_name 'control' %></th>
-        <th><%= Control.human_attribute_name 'design_tests' %></th>
+        <th class="d-none"><%= Control.human_attribute_name 'design_tests' %></th>
         <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
           <th><%= Control.human_attribute_name 'compliance_tests' %></th>
         <% end %>
-        <th><%= Control.human_attribute_name 'sustantive_tests' %></th>
+        <th class="d-none"><%= Control.human_attribute_name 'sustantive_tests' %></th>
         <% unless HIDE_CONTROL_EFFECTS %>
           <th><%= Control.human_attribute_name 'effects' %></th>
         <% end %>
@@ -26,11 +26,11 @@
         <tr <%== 'class="text-muted strike"' if co.obsolete %>>
           <td><%= simple_format co.name, class: 'mb-1' %></td>
           <td><%= simple_format co.control.control, class: 'mb-1' %></td>
-          <td><%= simple_format co.control.design_tests, class: 'mb-1' %></td>
+          <td class="d-none"><%= simple_format co.control.design_tests, class: 'mb-1' %></td>
           <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
             <td><%= simple_format co.control.compliance_tests, class: 'mb-1' %></td>
           <% end %>
-          <td><%= simple_format co.control.sustantive_tests, class: 'mb-1' %></td>
+          <td class="d-none"><%= simple_format co.control.sustantive_tests, class: 'mb-1' %></td>
           <% unless HIDE_CONTROL_EFFECTS %>
             <td><%= simple_format co.control.effects, class: 'mb-1' %></td>
           <% end %>

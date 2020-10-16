@@ -43,12 +43,12 @@
   </p>
 <% end %>
 
-<p class="mb-1">
+<p class="mb-1 d-none">
   <strong><%= ControlObjectiveItem.human_attribute_name :design_score %>:</strong>
   <%= @control_objective_item.design_score_text %>
 </p>
 
-<div>
+<div class="d-none">
   <strong><%= Control.human_attribute_name :design_tests %>:</strong>
   <%= simple_format @control_objective_item.control.design_tests, class: 'mb-1' %>
 </div>
@@ -56,7 +56,7 @@
 <% unless HIDE_CONTROL_COMPLIANCE_TESTS %>
   <p class="mb-1">
     <strong><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</strong>
-    <%= @control_objective_item.compliance_score_text %>
+    <%= @control_objective_item.compliance_score_text.presence || @control_objective_item.compliance_score %>
   </p>
 
   <div>
@@ -65,12 +65,12 @@
   </div>
 <% end %>
 
-<p class="mb-1">
+<p class="mb-1 d-none">
   <strong><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</strong>
   <%= @control_objective_item.sustantive_score_text %>
 </p>
 
-<div>
+<div class="d-none">
   <strong><%= Control.human_attribute_name :sustantive_tests %>:</strong>
   <%= simple_format @control_objective_item.control.sustantive_tests, class: 'mb-1' %>
 </div>

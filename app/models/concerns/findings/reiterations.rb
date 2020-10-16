@@ -61,13 +61,13 @@ module Findings::Reiterations
     if parent_ids.empty?
       self.class.none
     else
-      Finding.unscoped.where(id: parent_ids).preload *DEFAULT_TO_S_PRELOADS
+      Finding.unscoped.finals(false).where(id: parent_ids).preload *DEFAULT_TO_S_PRELOADS
     end
   end
 
   def repeated_children
     if id
-      Finding.unscoped.with_parent_id(id).preload *DEFAULT_TO_S_PRELOADS
+      Finding.unscoped.finals(false).with_parent_id(id).preload *DEFAULT_TO_S_PRELOADS
     else
       self.class.none
     end
