@@ -39,7 +39,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     if DISABLE_COI_AUDIT_DATE_VALIDATION
       assert review.control_objective_items.all? { |coi| !coi.audit_date.today? }
 
-      coi                  = review.control_objective_items.take
+      coi = review.control_objective_items.take
 
       coi.update! audit_date: nil
     end
