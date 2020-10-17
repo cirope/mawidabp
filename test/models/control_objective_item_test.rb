@@ -114,8 +114,9 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
     @control_objective_item.relevance = '?123'
-    @control_objective_item.audit_date = '?123'
     @control_objective_item.finished = false
+    @control_objective_item.audit_date = '?123'
+    @control_objective_item.compliance_score = nil
 
     assert @control_objective_item.invalid?
     assert_error @control_objective_item, :relevance, :not_a_number

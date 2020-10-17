@@ -22,7 +22,7 @@
         <%= f.input :relevance, collection: relevances,
           include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
         <%= f.input :audit_date, as: :date_picker, input_html: { disabled: readonly } %>
-        <%= f.input :control_objective_text, input_html: { autofocus: true, readonly: readonly, rows: 5 } %>
+        <%= f.input :control_objective_text, input_html: { autofocus: true, readonly: true, rows: 5 } %>
 
         <%= f.simple_fields_for :control do |c_f| %>
           <% unless HIDE_CONTROL_EFFECTS %>
