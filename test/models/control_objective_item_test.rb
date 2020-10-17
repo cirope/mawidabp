@@ -465,26 +465,12 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   test 'previous effectiveness' do
     Current.user = users :supervisor
 
-    @coi_new = ControlObjectiveItem.list.create(
-      :control_objective_text => 'New text',
-      :relevance => ControlObjectiveItem.relevances_values.first,
-      :design_score => ControlObjectiveItem.qualifications_values.first,
-      :compliance_score => ControlObjectiveItem.qualifications_values.last,
-      :sustantive_score => ControlObjectiveItem.qualifications_values.last,
-      :audit_date => 9.days.from_now.to_date,
-      :auditor_comment => 'New comment',
-      :created_at => 1.days.from_now.to_date,
-      :control_objective_id =>
-      control_objectives(:security_policy_3_1).id,
-        :review_id => reviews(:current_review).id,
-        :control_attributes => {
-          :control => 'New control',
-          :effects => 'New effects',
-          :design_tests => 'New design tests',
-          :compliance_tests => 'New compliance tests',
-          :sustantive_tests => 'New sustantive_tests'
-        }
-    )
+    @coi_new = @control_objective_item
+
+    @coi_new.control_objective_id = control_objectives(:security_policy_3_1).id
+    @coi_new.review_id            = reviews(:current_review).id
+    @coi_new.audit_date           = nil
+    @coi_new.created_at           = 2.days.from_now.to_date
 
     assert_not_nil @coi_new.previous_effectiveness
   end
