@@ -462,8 +462,22 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert @control_objective_item.show_counts?(Current.organization.prefix)
   end
 
-  private
+  test 'previous effectiveness' do
+    Current.user             = users :supervisor
 
+    coi = control_objective_items(:management_dependency_item)
+
+    assert_nil @control_objective_item.previous_effectiveness
+
+    @control_objective_item.reload.review.plan_item.business_unit_id =  coi.review.plan_item.business_unit_id
+    @control_objective_item.created_at = 2.days.from_now.to_date
+
+    assert_equal coi.effectiveness, @control_objective_item.previous_effectiveness
+  ensure
+    Current.user = nil
+  end
+
+  private
     def use_review_weaknesses_score?
       ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? Current.organization.prefix
     end

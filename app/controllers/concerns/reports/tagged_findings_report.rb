@@ -97,7 +97,7 @@ module Reports::TaggedFindingsReport
       if controller_name == 'execution_reports'
         Finding.list_without_final_review
       else
-        Finding.list_with_final_review
+        Finding.list_for_report
       end
     end
 
