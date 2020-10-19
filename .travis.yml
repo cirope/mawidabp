@@ -1,5 +1,5 @@
 language: ruby
-dist: bionic
+dist: focal
 cache: bundler
 rvm:
   - 2.5.8
@@ -12,7 +12,8 @@ addons:
     - imagemagick
     - slapd
     - ldap-utils
-  postgresql: 11
+    - redis-server
+  postgresql: 12
 
 services:
   - postgresql
