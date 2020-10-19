@@ -465,17 +465,14 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   test 'previous effectiveness' do
     Current.user             = users :supervisor
 
-    @coi = ControlObjectiveItem.find control_objective_items(
-      :management_dependency_item).id
+    coi = control_objective_items(:management_dependency_item)
 
     assert_nil @control_objective_item.previous_effectiveness
 
-    @control_objective_item.reload.review.plan_item.business_unit_id =  @coi.review.plan_item.business_unit_id
+    @control_objective_item.reload.review.plan_item.business_unit_id =  coi.review.plan_item.business_unit_id
     @control_objective_item.created_at = 2.days.from_now.to_date
 
-    assert_equal @coi.effectiveness,
-      @control_objective_item.previous_effectiveness
-
+    assert_equal coi.effectiveness, @control_objective_item.previous_effectiveness
   ensure
     Current.user = nil
   end
