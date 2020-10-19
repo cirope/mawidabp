@@ -847,6 +847,41 @@ class ReviewTest < ActiveSupport::TestCase
     }
   end
 
+  test 'recode findings by risk and repetition' do
+    repeated_column = [
+      Weakness.quoted_table_name,
+      Weakness.qcn('repeated_of_id')
+    ].join('.')
+
+    repeated_order = if Review.connection.adapter_name == 'OracleEnhanced'
+                        "CASE WHEN #{repeated_column} IS NULL THEN 0 ELSE 1 END"
+                      else
+                        "#{repeated_column} IS NOT NULL"
+                      end
+
+    order = [
+      repeated_order,
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'priority'} DESC",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
+    ].map { |o| Arel.sql o }
+
+    codes = @review.weaknesses.not_revoked.order(order).pluck 'review_code'
+
+    assert codes.each_with_index.any? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i != i.next
+    }
+
+    @review.recode_weaknesses_by_risk_and_repetition
+
+    codes = @review.reload.weaknesses.not_revoked.order(order).
+      pluck 'review_code'
+
+    assert codes.sort.each_with_index.all? { |c, i|
+      c.match(/\d+\Z/).to_a.first.to_i == i.next
+    }
+  end
+
   test 'recode weaknesses by control objective order' do
     codes = @review.grouped_control_objective_items.map do |_pc, cois|
       cois.map do |coi|

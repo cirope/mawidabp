@@ -23,6 +23,8 @@ class ConclusionDraftReviewsController < ApplicationController
       **search_params
     ).references(
       :reviews, :business_units
+    ).merge(
+      PlanItem.allowed_by_business_units
     ).order_by.page params[:page]
 
     respond_to do |format|

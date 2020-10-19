@@ -23,6 +23,7 @@ ALLOW_FINDING_ASSUMED_RISK_TO_PENDING: 'false'
 ALLOW_REVIEW_CONTROL_OBJECTIVE_DUPLICATION: 'false'
 AUTOMATICALLY_SORT_FINDINGS_ON_CONCLUSION: '{"cirope":"recode_weaknesses_by_repetition_and_risk"}' # In JSON
 COMMITMENT_DATE_LIMITS: '{"first_date": {"high": {"1.year": "Una observación de riesgo alto, no puede tener una fecha estimada de solución mayor a 1 año."}}, "reschedule": {"default": { "6.months": "No se puede reprogramar con una fecha mayor a 6 meses"}}}'
+CONCLUSION_REVIEW_SORT_BY_RISK_START: ''
 DEFAULT_LDAP_ROLES: ''
 DISABLE_COI_AUDIT_DATE_VALIDATION: 'false'
 DISABLE_FINDING_FINAL_STATE_ROLE_VALIDATION: 'false'

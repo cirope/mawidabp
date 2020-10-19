@@ -11,6 +11,11 @@ class NotifierMailerTest < ActionMailer::TestCase
     set_organization
   end
 
+  teardown do
+    Current.organization = nil
+    Current.user         = nil
+  end
+
   test 'pending poll email' do
     poll = Poll.find(polls(:poll_one).id)
 
@@ -245,6 +250,7 @@ class NotifierMailerTest < ActionMailer::TestCase
     ]
 
     Current.organization = organization
+    Current.user         = user
 
     conclusion_review.to_pdf organization
     conclusion_review.review.score_sheet organization, draft: false
