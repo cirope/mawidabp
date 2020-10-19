@@ -57,7 +57,16 @@ class ConclusionFinalReview < ConclusionReview
         final_finding.parent = finding
         final_finding.skip_work_paper = finding.skip_work_paper = true
         final_finding.origination_date ||= finding.origination_date ||= self.issue_date
-        final_finding.first_follow_up_date = finding.first_follow_up_date = finding.follow_up_date
+
+        if finding.repeated_of
+          final_finding.first_follow_up_date ||=
+            finding.first_follow_up_date     ||=
+            finding.follow_up_date
+        else
+          final_finding.first_follow_up_date =
+            finding.first_follow_up_date     =
+            finding.follow_up_date
+        end
 
         final_finding.build_image_model(
           image: File.open(finding.image_model.image.path)
