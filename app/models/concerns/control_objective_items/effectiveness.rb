@@ -22,7 +22,7 @@ module ControlObjectiveItems::Effectiveness
         where(
           control_objective_id: control_objective_id
         ).where(
-          "#{ControlObjectiveItem.quoted_table_name}.#{ControlObjectiveItem.qcn 'created_at'} < ?", created_at
+          "#{ControlObjectiveItem.qcn 'created_at'} < ?", created_at
         ).order(
           created_at: :desc
         ).first
