@@ -2,7 +2,7 @@ module ControlObjectiveItems::UpdateCallbacks
   extend ActiveSupport::Concern
 
   included do
-    before_validation :check_if_can_be_modified
+    before_validation :check_if_can_be_modified, :set_audit_date
   end
 
   def can_be_modified?
@@ -21,5 +21,9 @@ module ControlObjectiveItems::UpdateCallbacks
 
     def check_if_can_be_modified
       throw :abort unless can_be_modified?
+    end
+
+    def set_audit_date
+      self.audit_date ||= Time.zone.today if compliance_score
     end
 end
