@@ -57,8 +57,6 @@ module ControlObjectiveItemsHelper
 
     if effectiveness
       t('control_objective_item.previous_effectiveness', effectiveness: effectiveness)
-    else
-      t('message.no_results_found')
     end
   end
 end
