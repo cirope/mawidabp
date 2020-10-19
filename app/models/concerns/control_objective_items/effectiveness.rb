@@ -14,6 +14,23 @@ module ControlObjectiveItems::Effectiveness
     scores.empty? ? 100 : average.round
   end
 
+  def previous_effectiveness
+    previous_review = self.review.previous
+
+    if previous_review.present?
+      coi = previous_review.control_objective_items.
+        where(
+          control_objective_id: control_objective_id
+        ).where(
+          "#{ControlObjectiveItem.qcn 'created_at'} < ?", created_at
+        ).order(
+          created_at: :desc
+        ).first
+
+      coi&.effectiveness
+    end
+  end
+
   private
 
     def highest_qualification
