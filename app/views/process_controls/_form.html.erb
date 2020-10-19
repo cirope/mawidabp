@@ -4,7 +4,7 @@
 <div data-container-id="<%= params[:container] %>">
   <%= simple_fields_for @best_practice do |f| %>
     <%= f.simple_fields_for :process_controls, process_control, child_index: index do |pc_f| %>
-      <% process_control.control_objectives.each do |control_objective| %>
+      <% process_control.control_objectives.hide_control_objectives_obsolete.each do |control_objective| %>
         <% control_objective_index = process_control.control_objectives.index control_objective %>
         <%= pc_f.simple_fields_for :control_objectives, control_objective, child_index: control_objective_index do |co_f| %>
           <%= render 'process_controls/control_objective', f: co_f, process_control_id: process_control.id %>

@@ -79,6 +79,18 @@ private
                            description: I18n.t('settings.skip_function_and_manager_from_ldap_sync')
       end
     end
+
+    if add_hide_best_practices_obsolete? # 2020-10-19
+      Organization.all.each do |o|
+        o.settings.create! name:        'hide_best_practices_obsolete',
+                           value:       DEFAULT_SETTINGS[:hide_best_practices_obsolete][:value],
+                           description: I18n.t('settings.hide_best_practices_obsolete')
+      end
+    end
+  end
+
+  def add_hide_best_practices_obsolete?
+    Setting.where(name: 'hide_best_practices_obsolete').empty?
   end
 
   def add_skip_function_and_manager_from_ldap_sync?
