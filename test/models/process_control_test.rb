@@ -86,4 +86,20 @@ class ProcessControlTest < ActiveSupport::TestCase
     assert @process_control.invalid?
     assert_error @process_control, :order, :not_a_number
   end
+
+  test 'hide obsolete process controls' do
+    organization         = organizations :cirope
+    Current.organization = organization # Since we use list below
+
+    organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '1'
+    assert_difference 'ProcessControl.visible.count', -1 do
+      @process_control.update!(obsolete: true)
+    end
+
+    organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '0'
+    assert_equal ProcessControl.visible.count, ProcessControl.count
+
+  ensure
+    Current.organization = nil
+  end
 end

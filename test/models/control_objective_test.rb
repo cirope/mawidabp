@@ -98,4 +98,20 @@ class ControlObjectiveTest < ActiveSupport::TestCase
     assert @control_objective.invalid?
     assert_error @control_objective, :control, :blank
   end
+
+  test 'hide obsolete control objectives' do
+    organization         = organizations :cirope
+    Current.organization = organization # Since we use list below
+
+    organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '1'
+    assert_difference 'ControlObjective.visible.count', -1 do
+      @control_objective.update!(obsolete: true)
+    end
+
+    organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '0'
+    assert_equal ControlObjective.visible.count, ControlObjective.count
+
+  ensure
+    Current.organization = nil
+  end
 end

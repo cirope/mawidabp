@@ -4,8 +4,8 @@ module ControlObjectives::Scopes
   included do
     scope :list, -> {
       includes(:best_practice).
-      where(best_practices: { organization_id: Current.organization&.id }).
-      references :best_practices
+        where(best_practices: { organization_id: Current.organization&.id }).
+        references :best_practices
     }
   end
 
@@ -16,10 +16,10 @@ module ControlObjectives::Scopes
       )
     end
 
-    def hide_control_objectives_obsolete
-      setting = Current.organization.settings.find_by name: 'hide_best_practices_obsolete'
+    def visible
+      setting = Current.organization.settings.find_by name: 'hide_obsolete_best_practices'
 
-      if setting.value != DEFAULT_SETTINGS[:hide_best_practices_obsolete][:value]
+      if setting.value != '0'
         where(obsolete: false )
       else
         all

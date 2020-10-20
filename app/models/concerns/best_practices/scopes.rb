@@ -6,10 +6,10 @@ module BestPractices::Scopes
   end
 
   module ClassMethods
-    def hide_best_practices_obsolete
-      setting = Current.organization.settings.find_by name: 'hide_best_practices_obsolete'
+    def visible
+      setting = Current.organization.settings.find_by name: 'hide_obsolete_best_practices'
 
-      if setting.value != DEFAULT_SETTINGS[:hide_best_practices_obsolete][:value]
+      if setting.value != '0'
         where(obsolete: false)
       else
         all

@@ -83,8 +83,8 @@ private
     if add_hide_best_practices_obsolete? # 2020-10-19
       Organization.all.each do |o|
         o.settings.create! name:        'hide_best_practices_obsolete',
-                           value:       DEFAULT_SETTINGS[:hide_best_practices_obsolete][:value],
-                           description: I18n.t('settings.hide_best_practices_obsolete')
+                           value:       DEFAULT_SETTINGS[:hide_obsolete_best_practices][:value],
+                           description: I18n.t('settings.hide_obsolete_best_practices')
       end
     end
   end
