@@ -150,5 +150,8 @@ class BestPracticeTest < ActiveSupport::TestCase
 
     organization.settings.find_by(name: 'hide_best_practices_obsolete').update! value: '0'
     assert_equal BestPractice.hide_best_practices_obsolete.count, BestPractice.count
+
+  ensure
+    Current.organization = nil
   end
 end
