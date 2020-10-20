@@ -29,9 +29,10 @@ module Findings::Reiterations
     self.undoing_reiteration = true
 
     attrs = {
-      origination_date: Time.zone.today,
-      parent_ids:       [],
-      repeated_of_id:   nil
+      origination_date:     Time.zone.today,
+      parent_ids:           [],
+      repeated_of_id:       nil,
+      first_follow_up_date: follow_up_date
     }
 
     attrs[:reschedule_count] = 0 if final_review_created_at.blank? && rescheduled?
