@@ -87,7 +87,7 @@ module AuditedReports::WeaknessesByUser
       weaknesses = Weakness.
         with_status_for_report.
         finals(final).
-        list_with_final_review.
+        list_for_report.
         where(state: [Finding::STATUS[:being_implemented], Finding::STATUS[:unanswered]]).
         references(:finding_user_assignments).
         joins(:finding_user_assignments).
