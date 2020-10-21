@@ -50,6 +50,8 @@
         <% unless HIDE_CONTROL_OBJECTIVE_ITEM_EFFECTIVENESS %>
           <%= f.input :effectiveness, label: ControlObjectiveItem.human_attribute_name(:effectiveness),
             input_html: { value: "#{@control_objective_item.effectiveness}%", readonly: true } %>
+
+          <small><%= previous_effectiveness @control_objective_item %></small>
         <% end %>
 
         <%= yield :control %>
