@@ -93,14 +93,21 @@ class ProcessControlTest < ActiveSupport::TestCase
 
     organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '1'
 
+    @process_control.update! obsolete: true
 
-    assert_difference 'ProcessControl.visible.count', -1 do
-      @process_control.update!(obsolete: true)
-    end
+    assert_equal ProcessControl.visible.count, ProcessControl.count - 1
 
     organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '0'
 
     assert_equal ProcessControl.visible.count, ProcessControl.count
+
+    organization.settings.find_by(name: 'hide_obsolete_best_practices').destroy
+
+    if DEFAULT_SETTINGS[:hide_obsolete_best_practices][:value] == '0'
+      assert_equal ProcessControl.visible.count, ProcessControl.count
+    else
+      assert_equal ProcessControl.visible.count, ProcessControl.count - 1
+    end
   ensure
     Current.organization = nil
   end

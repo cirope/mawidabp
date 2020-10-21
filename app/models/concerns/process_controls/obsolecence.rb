@@ -9,7 +9,7 @@ module ProcessControls::Obsolecence
     def visible
       setting = Current.organization.settings.find_by name: 'hide_obsolete_best_practices'
 
-      if (setting ? setting.value : '0') == '0'
+      if (setting ? setting.value : DEFAULT_SETTINGS[:hide_obsolete_best_practices][:value]) == '0'
         all
       else
         where(obsolete: false)

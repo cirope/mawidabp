@@ -105,14 +105,21 @@ class ControlObjectiveTest < ActiveSupport::TestCase
 
     organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '1'
 
+    @control_objective.update! obsolete: true
 
-    assert_difference 'ControlObjective.visible.count', -1 do
-      @control_objective.update!(obsolete: true)
-    end
+    assert_equal ControlObjective.visible.count,  ControlObjective.count - 1
 
     organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '0'
 
     assert_equal ControlObjective.visible.count, ControlObjective.count
+
+    organization.settings.find_by(name: 'hide_obsolete_best_practices').destroy
+
+    if DEFAULT_SETTINGS[:hide_obsolete_best_practices][:value] == '0'
+      assert_equal ControlObjective.visible.count, ControlObjective.count
+    else
+      assert_equal ControlObjective.visible.count, ControlObjective.count - 1
+    end
   ensure
     Current.organization = nil
   end
