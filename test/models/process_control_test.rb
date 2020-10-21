@@ -92,11 +92,13 @@ class ProcessControlTest < ActiveSupport::TestCase
     Current.organization = organization # Since we use list below
 
     organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '1'
+
     assert_difference 'ProcessControl.visible.count', -1 do
       @process_control.update!(obsolete: true)
     end
 
     organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '0'
+
     assert_equal ProcessControl.visible.count, ProcessControl.count
 
   ensure

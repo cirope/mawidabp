@@ -9,10 +9,10 @@ module BestPractices::Scopes
     def visible
       setting = Current.organization.settings.find_by name: 'hide_obsolete_best_practices'
 
-      if setting.value != '0'
-        where(obsolete: false)
-      else
+      if (setting ? setting.value : '0') == '0'
         all
+      else
+        where(obsolete: false)
       end
     end
   end
