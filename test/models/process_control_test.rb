@@ -88,8 +88,9 @@ class ProcessControlTest < ActiveSupport::TestCase
   end
 
   test 'hide obsolete process controls' do
-    organization         = organizations :cirope
-    Current.organization = organization # Since we use list below
+    organization = organizations :cirope
+
+    set_organization organization
 
     organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '1'
 
@@ -108,7 +109,5 @@ class ProcessControlTest < ActiveSupport::TestCase
     else
       assert_equal ProcessControl.visible.count, ProcessControl.count - 1
     end
-  ensure
-    Current.organization = nil
   end
 end

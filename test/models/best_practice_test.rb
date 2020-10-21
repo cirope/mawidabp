@@ -140,8 +140,9 @@ class BestPracticeTest < ActiveSupport::TestCase
   end
 
   test 'hide obsolete best practices' do
-    organization         = organizations :cirope
-    Current.organization = organization # Since we use list below
+    organization = organizations :cirope
+
+    set_organization organization
 
     organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '1'
 
@@ -160,7 +161,5 @@ class BestPracticeTest < ActiveSupport::TestCase
     else
       assert_equal BestPractice.visible.count, BestPractice.count - 1
     end
-  ensure
-    Current.organization = nil
   end
 end
