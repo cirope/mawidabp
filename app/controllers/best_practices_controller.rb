@@ -69,7 +69,6 @@ class BestPracticesController < ApplicationController
       ).references(
         :process_controls
       ).find params[:id]
-
     end
 
     def best_practice_params

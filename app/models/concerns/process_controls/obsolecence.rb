@@ -12,7 +12,7 @@ module ProcessControls::Obsolecence
       if (setting ? setting.value : '0') == '0'
         all
       else
-        where(obsolete: false )
+        where(obsolete: false)
       end
     end
   end

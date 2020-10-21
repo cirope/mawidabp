@@ -145,6 +145,7 @@ class BestPracticeTest < ActiveSupport::TestCase
 
     organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '1'
 
+
     assert_difference 'BestPractice.visible.count', -1 do
       @best_practice.update!(obsolete: true)
     end
@@ -152,7 +153,6 @@ class BestPracticeTest < ActiveSupport::TestCase
     organization.settings.find_by(name: 'hide_obsolete_best_practices').update! value: '0'
 
     assert_equal BestPractice.visible.count, BestPractice.count
-
   ensure
     Current.organization = nil
   end
