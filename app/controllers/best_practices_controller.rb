@@ -64,7 +64,11 @@ class BestPracticesController < ApplicationController
     def set_best_practice
       @best_practice = BestPractice.list.includes({
         process_controls: :control_objectives
-      }).find params[:id]
+      }).merge(
+        ProcessControl.visible
+      ).references(
+        :process_controls
+      ).find params[:id]
     end
 
     def best_practice_params
