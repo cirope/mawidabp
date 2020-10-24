@@ -93,7 +93,7 @@ class BestPracticesController < ApplicationController
       )
     end
 
-    def default_obsolete
+    def hide_obsolete_best_practices
       setting = Current.organization.settings.find_by name: 'hide_obsolete_best_practices'
 
       if setting
