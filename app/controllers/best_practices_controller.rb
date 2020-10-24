@@ -47,8 +47,14 @@ class BestPracticesController < ApplicationController
   def update
     update_resource @best_practice, best_practice_params
 
+    location = if @best_practice.obsolete == true && default_obsolete == '1'
+                 best_practices_url
+               else
+                 edit_best_practice_url(@best_practice)
+               end
+
     unless response_body
-      respond_with @best_practice, location: edit_best_practice_url(@best_practice)
+      respond_with @best_practice, location: location
     end
   end
 
@@ -64,7 +70,11 @@ class BestPracticesController < ApplicationController
     def set_best_practice
       @best_practice = BestPractice.list.includes({
         process_controls: :control_objectives
-      }).find params[:id]
+      }).merge(
+        ProcessControl.visible
+      ).references(
+        :process_controls
+      ).find params[:id]
     end
 
     def best_practice_params
@@ -81,6 +91,16 @@ class BestPracticesController < ApplicationController
           ]
         ]
       )
+    end
+
+    def default_obsolete
+      setting = Current.organization.settings.find_by name: 'hide_obsolete_best_practices'
+
+      if setting
+        setting.value
+      else
+        DEFAULT_SETTINGS[:hide_obsolete_best_practices][:value]
+      end
     end
 
     def load_privileges
