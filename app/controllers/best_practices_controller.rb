@@ -9,7 +9,11 @@ class BestPracticesController < ApplicationController
 
   # * GET /best_practices
   def index
-    @best_practices = BestPractice.list.search(**search_params).ordered.page params[:page]
+    @best_practices = BestPractice.list.
+      visible.
+      search(**search_params).
+      ordered.
+      page params[:page]
   end
 
   # * GET /best_practices/1
@@ -60,7 +64,11 @@ class BestPracticesController < ApplicationController
     def set_best_practice
       @best_practice = BestPractice.list.includes({
         process_controls: :control_objectives
-      }).find params[:id]
+      }).merge(
+        ProcessControl.visible
+      ).references(
+        :process_controls
+      ).find params[:id]
     end
 
     def best_practice_params
