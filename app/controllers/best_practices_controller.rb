@@ -47,7 +47,7 @@ class BestPracticesController < ApplicationController
   def update
     update_resource @best_practice, best_practice_params
 
-    location = if @best_practice.obsolete == true && default_obsolete == '1'
+    location = if @best_practice.obsolete && !@best_practice.errors.any? && hide_obsolete_best_practices != '0'
                  best_practices_url
                else
                  edit_best_practice_url(@best_practice)
