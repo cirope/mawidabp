@@ -10,7 +10,6 @@ class LdapConfigTest < ActiveSupport::TestCase
   end
 
   test 'validates presence' do
-
     @ldap_config.hostname = ''
     @ldap_config.port = nil
     @ldap_config.basedn = ''
