@@ -47,12 +47,11 @@ class BestPracticesController < ApplicationController
   def update
     update_resource @best_practice, best_practice_params
 
-    redirect_to_index = @best_practice.obsolete && @best_practice.errors.empty? && hide_obsolete_best_practices != '0'
-    location          = if redirect_to_index
-                          best_practices_url
-                        else
-                          edit_best_practice_url(@best_practice)
-                        end
+    redirect_to_index = @best_practice.obsolete &&
+                        @best_practice.errors.empty? &&
+                        hide_obsolete_best_practices != '0'
+
+    location = redirect_to_index ? best_practices_url : edit_best_practice_url(@best_practice)
 
     unless response_body
       respond_with @best_practice, location: location
