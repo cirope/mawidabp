@@ -42,7 +42,7 @@ module Reports::WeaknessesReport
         # The double where by ids is because the relations are scoped by filters
         # within filter_weaknesses_for_report.
         @weaknesses = scoped_weaknesses.where(
-          id: weaknesses.pluck(:id)
+          id: weaknesses.latest.pluck(:id)
         ).includes(
           :finding_user_assignments,
           :repeated_of,
