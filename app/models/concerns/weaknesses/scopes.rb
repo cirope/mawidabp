@@ -2,6 +2,8 @@ module Weaknesses::Scopes
   extend ActiveSupport::Concern
 
   included do
+    attr_accessor :show_latest
+
     scope :with_high_risk, -> {
       where(risk: highest_risks).or(with_medium_risk_and_high_priority)
     }
@@ -22,12 +24,13 @@ module Weaknesses::Scopes
       ).order(risk: :desc, state: :asc)
     }
 
-    scope :latest, -> {
-      where(latest_id: nil)
-    }
+    def self.latest show_latest
+      show_latest == '0' ? all : where(latest_id: nil)
+    end
   end
 
   module ClassMethods
+
     def with_medium_risk risk_delta = 1
       where "#{quoted_table_name}.#{qcn 'risk'} = (#{quoted_table_name}.#{qcn 'highest_risk'} - #{risk_delta})"
     end

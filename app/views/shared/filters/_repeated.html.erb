@@ -1,5 +1,5 @@
 <% group ||= nil %>
-
+<% show_latest =  params[:weaknesses_report].nil? ? true : params[:weaknesses_report][:show_latest].to_s %>
 <% unless group %>
   <div id="repeated_filter" class="row" <%== 'style="display: none;"' unless display %>>
 <% end %>
@@ -13,6 +13,14 @@
           class: 'form-control' %>
       </div>
     </div>
+  </div>
+  <div class="col-md-6" <%== 'style="display: none;"' unless display %>>
+      <div>
+        <%= f.input :show_latest, as: :boolean,
+          label: t('shared.filters.repeated.allow_latest'),
+          wrapper_html: { class: 'my-3' },
+          input_html: { checked: show_latest == '1'}%>
+      </div>
   </div>
 <% unless group %>
   </div>
