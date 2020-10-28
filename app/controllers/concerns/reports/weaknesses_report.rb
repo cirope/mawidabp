@@ -41,7 +41,7 @@ module Reports::WeaknessesReport
 
         # The double where by ids is because the relations are scoped by filters
         # within filter_weaknesses_for_report.
-        @weaknesses = scoped_weaknesses.latest(report_params[:show_latest]).where(
+        @weaknesses = scoped_weaknesses.where(
           id: weaknesses.pluck(:id)
         ).includes(
           :finding_user_assignments,
@@ -139,6 +139,10 @@ module Reports::WeaknessesReport
           condition  = "#{Weakness.qcn date_field} #{operator} #{mask}"
           weaknesses = weaknesses.where condition, *[date, date_until].compact
         end
+      end
+
+      if report_params[:show_latest].present?
+        weaknesses = weaknesses.latest if report_params[:show_latest] == '1'
       end
 
       if params[:execution].blank?

@@ -27,6 +27,7 @@
         } %>
       <% end %>
 
+      <%= render 'shared/filters/latest', f: f, display: true %>
       <div class="form-actions">
         <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-outline-secondary' %> |
         <%= link_to t('label.cancel'), url %>

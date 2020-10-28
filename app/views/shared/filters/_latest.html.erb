@@ -1,0 +1,11 @@
+<% show_latest =  params[:weaknesses_report].nil? ? '1' : params[:weaknesses_report][:show_latest] %>
+
+<div class="col-md-6" <%== 'style="display: none;"' unless display %>>
+  <div>
+    <%= f.input :show_latest, as: :boolean,
+      label: t('shared.filters.repeated.allow_latest'),
+      wrapper_html: { class: 'my-3' },
+      checked_value: true, unchecked_value: false,
+      input_html: { checked: show_latest == '1'}%>
+  </div>
+</div>
