@@ -30,7 +30,6 @@ module Weaknesses::Scopes
   end
 
   module ClassMethods
-
     def with_medium_risk risk_delta = 1
       where "#{quoted_table_name}.#{qcn 'risk'} = (#{quoted_table_name}.#{qcn 'highest_risk'} - #{risk_delta})"
     end

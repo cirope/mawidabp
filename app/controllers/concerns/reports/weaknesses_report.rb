@@ -38,6 +38,7 @@ module Reports::WeaknessesReport
       if report_params.present?
         weaknesses = filter_weaknesses_for_report report_params
         order      = weaknesses.values[:order]
+
         # The double where by ids is because the relations are scoped by filters
         # within filter_weaknesses_for_report.
         @weaknesses = scoped_weaknesses.latest(report_params[:show_latest]).where(
