@@ -1,5 +1,5 @@
 <% group ||= nil %>
-<% show_latest =  params[:weaknesses_report].nil? ? true : params[:weaknesses_report][:show_latest].to_s %>
+<% show_latest =  params[:weaknesses_report].nil? ? '1' : params[:weaknesses_report][:show_latest].to_s %>
 <% unless group %>
   <div id="repeated_filter" class="row" <%== 'style="display: none;"' unless display %>>
 <% end %>
