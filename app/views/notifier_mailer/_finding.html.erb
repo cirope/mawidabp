@@ -39,5 +39,11 @@
 <%= markdown_without_paragraph finding_audited_names(finding).map { |name| "* #{name}" }.join("\n") %>
 
 <p style="margin: .1em 0em;">
+  <%= t('notifier.notify_new_finding_answer.finding_link_guidance') %>:
+
   <%= link_to t('notifier.notify_new_finding_answer.finding_link'), finding_url %>
+
+  (<%= markdown_without_paragraph t('common_mailer.footer.recommendations') %>)
+
+  <%= render 'finding_footer' %>
 </p>

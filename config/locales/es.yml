@@ -1044,6 +1044,7 @@
       title: "Nuevo comentario en el informe %{review}"
       finding_data: "Se ha agregado un comentario al hallazgo **%{finding_code}** del informe **%{review}**"
       finding_link: "Ver debilidad"
+      finding_link_guidance: "Para realizar cualquier interacción debe ingresar al link"
     notify_new_findings:
       title: "Notificación de hallazgos"
       created_title:
