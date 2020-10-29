@@ -9,7 +9,7 @@ class FindingsController < ApplicationController
 
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_finding, only: [:show, :edit, :update]
-  before_action :check_if_editable, only: [:edit, :update]
+  # before_action :check_if_editable, only: [:edit, :update]
   before_action :set_title, except: [:destroy]
 
   # * GET /incomplete/findings
