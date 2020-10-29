@@ -281,7 +281,7 @@ module ConclusionReviews::BicPdf
         ],
         [
           Weakness.human_attribute_name('state').upcase,
-          weakness.state_text
+          bic_weakness_state(weakness)
         ],
         [
           Weakness.human_attribute_name('audit_recommendations').upcase,
@@ -308,6 +308,16 @@ module ConclusionReviews::BicPdf
           weakness.repeated_of.to_s
         ] if weakness.repeated_of)
       ].compact
+    end
+
+    def bic_weakness_state weakness
+      text = weakness.state_text
+
+      if weakness.implemented_audited?
+        "<color rgb='008000'><b>#{text}</b></color>"
+      else
+        text
+      end
     end
 
     def bic_weakness_responsible weakness
