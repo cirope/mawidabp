@@ -19,5 +19,6 @@ DEFAULT_SETTINGS = {
   show_follow_up_timestamps: { value: '1', validates: 'numericality' },
   show_print_date_on_pdfs: { value: '1', validates: 'numericality' },
   hide_import_from_ldap: { value: '0', validates: 'numericality' },
-  skip_function_and_manager_from_ldap_sync: { value: '0', validates: 'numericality' }
+  skip_function_and_manager_from_ldap_sync: { value: '0', validates: 'numericality' },
+  hide_obsolete_best_practices: { value: '0', validates: 'numericality' }
 }.with_indifferent_access.freeze
