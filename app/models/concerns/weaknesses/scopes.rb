@@ -20,7 +20,7 @@ module Weaknesses::Scopes
         final: true
       ).order(risk: :desc, state: :asc)
     }
-    scope :latest, -> { where(latest_id: nil) }
+    scope :latest, -> { where latest_id: nil }
   end
 
   module ClassMethods

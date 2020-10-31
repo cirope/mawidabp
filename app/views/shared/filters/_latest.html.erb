@@ -1,11 +1,18 @@
-<% show_latest =  params[:weaknesses_report].nil? ? '1' : params[:weaknesses_report][:show_latest] %>
+<% show_latest =  params[action] ? params[action][:show_latest] : '1' %>
+<% group ||= nil %>
 
-<div class="col-md-6" <%== 'style="display: none;"' unless display %>>
-  <div>
-    <%= f.input :show_latest, as: :boolean,
-      label: t('shared.filters.repeated.allow_latest'),
-      wrapper_html: { class: 'my-3' },
-      checked_value: true, unchecked_value: false,
-      input_html: { checked: show_latest == '1'}%>
+<% unless group %>
+  <div id="latest_filters" class="row" <%== 'style="display: none;"' unless display %>>
+<% end %>
+  <div class="col-md-6" <%== 'style="display: none;"' unless display %>>
+    <div class="row">
+      <div class="col-lg-6 mt-lg-2">
+        <%= f.input :show_latest, as: :boolean,
+          label: t('shared.filters.repeated.allow_latest'),
+          input_html: { checked: show_latest == '1'}%>
+      </div>
+    </div>
   </div>
-</div>
+<% unless group %>
+  </div>
+<% end %>
