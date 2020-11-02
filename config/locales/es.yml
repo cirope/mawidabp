@@ -1038,18 +1038,18 @@
 
   notifier:
     notify_new_finding:
-      title: "Tiene un nuevo hallazgo"
-      created_title: "Nuevo hallazgo"
+      title: "Tiene una nueva debilidad"
+      created_title: "Nueva debilidad"
     notify_new_finding_answer:
       title: "Nuevo comentario en el informe %{review}"
-      finding_data: "Se ha agregado un comentario al hallazgo **%{finding_code}** del informe **%{review}**"
+      finding_data: "Se ha agregado un comentario a la debilidad **%{finding_code}** del informe **%{review}**"
       finding_link: "Ver debilidad"
       finding_link_guidance: "Para realizar cualquier interacción debe ingresar al link"
     notify_new_findings:
-      title: "Notificación de hallazgos"
+      title: "Notificación de debilidades"
       created_title:
-        one: "Nuevo hallazgo"
-        other: "Nuevos hallazgos"
+        one: "Nueva debilidad"
+        other: "Nuevas debilidades"
     change_password: "Cambiar contraseña"
     changes_notification:
       title: "Notificación de cambios"
@@ -1062,20 +1062,20 @@
       title: "Notificación de informes cercanos al cierre"
       body_title: "Los siguientes informes están próximos al cierre"
     findings_expiration_warning:
-      title: "Notificación de hallazgos cercanos al vencimiento"
+      title: "Notificación de debilidades cercanas al vencimiento"
       body_title:
         one: "Gestión del Comité de Auditoria - Seguimiento de observaciones"
         other: "Gestión del Comité de Auditoria - Seguimiento de observaciones"
     findings_expired_warning:
-      title: "Notificación de hallazgos vencidos"
+      title: "Notificación de debilidades vencidas"
       body_title:
-        one: "El siguiente hallazgo está vencido"
-        other: "Los siguientes hallazgos están vencidos"
+        one: "La siguiente debilidad está vencida"
+        other: "Las siguientes debilidades están vencidas"
     findings_unanswered_warning:
-      title: "Notificación de hallazgos sin respuesta desatendidos"
+      title: "Notificación de debilidades sin respuesta desatendidas"
       body_title:
-        one: "El siguiente hallazgo se encuentra sin respuesta"
-        other: "Los siguientes hallazgos están sin respuesta"
+        one: "La siguiente debilidad se encuentra sin respuesta"
+        other: "Las siguientes debilidades están sin respuesta"
     new_admin_user:
       title: "Nuevo administrador"
       body_title: "Se asigno un nuevo administrador a la organización"
@@ -1100,7 +1100,7 @@
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"
       confirm: "Confirmar notificación"
-      the_following_findings_are_still_unconfirmed: "Los siguientes hallazgos han sido notificados pero no han recibido una confirmación"
+      the_following_findings_are_still_unconfirmed: "Las siguientes debilidades han sido notificadas pero no han recibido una confirmación"
     reassigned_findings:
       new_responsibles:
         one: "Usuario actual: %{responsible}"
@@ -1109,11 +1109,11 @@
         one: "Usuario anterior: %{responsible}"
         other: "Usuarios anteriores: %{responsible}"
       the_following_findings_are_now_reassigned:
-        one: "El siguiente hallazgo ha sido reasignado"
-        other: "Los siguientes hallazgos han sido reasignados"
+        one: "La siguiente debilidad ha sido reasignada"
+        other: "Las siguientes debilidades han sido reasignadas"
       title:
-        one: "Hallazgo reasignado"
-        other: "Hallazgos reasignados"
+        one: "Debilidad reasignada"
+        other: "Debilidades reasignadas"
     restore_password:
       title: "Restablecer contraseña"
       body_title: "%{user_name}, para restablecer la contraseña de su usuario (%{user}) utilice el siguiente enlace:"
@@ -1126,17 +1126,17 @@
       about_html: "Encuesta acerca de <strong>%{entity}</strong>"
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
-      the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los usuarios del siguiente hallazgo"
-      managers_clarification: "Las personas pueden cambiar si se modifican los usuarios del hallazgo o si se altera el organigrama"
+      the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los usuarios de la siguiente debilidad"
+      managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la debilidad o si se altera el organigrama"
     expired_finding_to_manager:
-      title: "Hallazgo vencido"
-      the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación del siguiente hallazgo"
+      title: "Debilidad vencida"
+      the_following_finding_is_expired: "No se ha propuesto una nueva fecha de implementación de la siguiente debilidad"
       managers_clarification: "Las personas pueden cambiar si se modifican los usuarios de la observación / oportunidad de mejora o si se altera el organigrama"
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:
-        one: "El siguiente hallazgo ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
-        other: "Los siguientes hallazgos han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
+        one: "La siguiente debilidad ha cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
+        other: "Las siguientes debilidades han cambiado su estado a **Sin respuesta**, por no recibir una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
