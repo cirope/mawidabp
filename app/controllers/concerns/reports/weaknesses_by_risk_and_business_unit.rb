@@ -50,7 +50,6 @@ module Reports::WeaknessesByRiskAndBusinessUnit
       ].join ' '
       weaknesses = Weakness.
         list_for_report.
-        or(Weakness.list_without_final_review.with_repeated).
         finals(false).
         includes :business_unit, :business_unit_type, review: :conclusion_final_review
 
