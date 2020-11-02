@@ -16,8 +16,11 @@ module Findings::Scopes
     end
 
     def list_for_report
-      list_with_final_review.or(
-        list_without_final_review.with_repeated
+      # TODO: we do it this way so we can serialize it
+      includes(review: :conclusion_final_review).where(
+        id: list_with_final_review.or(
+          list_without_final_review.with_repeated
+        ).pluck('id')
       )
     end
 

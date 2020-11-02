@@ -14,13 +14,13 @@ module Weaknesses::Scopes
     scope :with_highest_risk, -> {
       where "#{quoted_table_name}.#{qcn 'highest_risk'} = #{quoted_table_name}.#{qcn 'risk'}"
     }
-
     scope :all_for_report, -> {
       where(
         state: Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).values,
         final: true
       ).order(risk: :desc, state: :asc)
     }
+    scope :latest, -> { where latest_id: nil }
   end
 
   module ClassMethods
