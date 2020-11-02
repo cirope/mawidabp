@@ -16,9 +16,17 @@ module Findings::Scopes
     end
 
     def list_for_report
-      list_with_final_review.or(
+      # TODO: we do it this way so we can serialize it
+      scope = includes review: :conclusion_final_review
+      ids   = list_with_final_review.or(
         list_without_final_review.with_repeated
-      )
+      ).pluck('id')
+
+      ids.each_slice(1000) do |finding_ids|
+        scope = scope.where id: finding_ids
+      end
+
+      scope
     end
 
     def list_with_final_review
