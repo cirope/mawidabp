@@ -18,20 +18,20 @@ admin_second_role_for_administrator_second_in_google:
   organization: google
   role: admin_second_role
 
-auditor_senior_role_for_bare_in_cirope:
+auditor_role_for_bare_in_cirope:
   user: bare
   organization: cirope
-  role: auditor_senior_role
+  role: auditor_role
 
-auditor_senior_role_for_first_time_in_cirope:
+auditor_role_for_first_time_in_cirope:
   user: first_time
   organization: cirope
-  role: auditor_senior_role
+  role: auditor_role
 
-auditor_senior_role_for_expired_in_cirope:
+auditor_role_for_expired_in_cirope:
   user: expired
   organization: cirope
-  role: auditor_senior_role
+  role: auditor_role
 
 admin_role_for_disabled_in_cirope:
   user: disabled
@@ -143,20 +143,20 @@ committee_role_for_committee_in_cirope:
   organization: cirope
   role: committee_role
 
-auditor_senior_role_for_auditor_in_cirope:
+auditor_role_for_auditor_in_cirope:
   user: auditor
   organization: cirope
-  role: auditor_senior_role
+  role: auditor_role
 
-auditor_senior_role_for_auditor_in_google:
+auditor_role_for_auditor_in_google:
   user: auditor
   organization: google
-  role: auditor_senior_role
+  role: auditor_role
 
-auditor_senior_role_for_poll_in_cirope:
+auditor_role_for_poll_in_cirope:
   user: poll
   organization: cirope
-  role: auditor_senior_role
+  role: auditor_role
 
 admin_role_for_corporate_in_twitter:
   user: corporate

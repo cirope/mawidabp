@@ -11,6 +11,11 @@ class UserTest < ActiveSupport::TestCase
     set_organization
   end
 
+  teardown do
+    Current.organization = nil
+    Current.user         = nil
+  end
+
   test 'create' do
     assert_difference %w(User.count BusinessUnitTypeUser.count) do
       role = roles :admin_role
@@ -381,7 +386,9 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'release for all pending fingings' do
-    auditor = users :auditor
+    Current.organization = organizations :cirope
+    Current.user         = users :auditor
+    auditor              = Current.user
 
     assert auditor.findings.all_for_reallocation.any?
     assert auditor.reviews.list_without_final_review.any?
@@ -395,7 +402,10 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'try to release all pending findings for a unique audited' do
-    audited = users :audited
+    Current.organization = organizations :cirope
+    Current.user         = users :audited
+    audited              = Current.user
+
     old_findings_count = audited.findings.all_for_reallocation.count
     old_reviews_count = audited.reviews.list_without_final_review.count
 
@@ -584,7 +594,7 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 4, group.users.can_act_as(:auditor).count
 
     role_id = Current.organization.roles.find_by(
-      role_type: Role::TYPES[:auditor_senior]
+      role_type: Role::TYPES[:auditor]
     ).id
 
     assert_no_difference 'User.count' do

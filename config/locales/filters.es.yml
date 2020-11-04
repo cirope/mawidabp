@@ -18,3 +18,5 @@ es:
         issue_date: 'Fecha de emisión'
         risk: 'Riesgo'
         first_follow_up_date: 'Primer fecha de implementación'
+      repeated:
+        allow_latest: 'Mostrar últimas reiteradas'

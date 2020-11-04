@@ -1,6 +1,6 @@
 class ::MailObserver
   def self.delivered_email(message)
-    match        = message.subject.match(/\[(\w+\W*\w*)\]/)
+    match        = message.subject.match(/\A\[(\w+\W*\w*)\]/)
     organization = if match && match[1]
                      Organization.where(
                        "LOWER(#{Organization.qcn 'prefix'}) = ?",

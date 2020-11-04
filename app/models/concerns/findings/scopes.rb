@@ -15,6 +15,20 @@ module Findings::Scopes
       where organization_id: organization_ids
     end
 
+    def list_for_report
+      # TODO: we do it this way so we can serialize it
+      scope = includes review: :conclusion_final_review
+      ids   = list_with_final_review.or(
+        list_without_final_review.with_repeated
+      ).pluck('id')
+
+      ids.each_slice(1000) do |finding_ids|
+        scope = scope.where id: finding_ids
+      end
+
+      scope
+    end
+
     def list_with_final_review
       includes(control_objective_item: :review).
         merge(Review.list_with_final_review).

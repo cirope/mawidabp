@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.0.3.2'
+gem 'rails', '~> 6.0.3.4'
 
 gem 'pg'
 gem 'activerecord-nulldb-adapter'
@@ -32,6 +32,7 @@ gem 'sidekiq'
 gem 'ruby-ntlm'
 gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
+gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 

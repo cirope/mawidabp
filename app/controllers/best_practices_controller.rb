@@ -9,7 +9,11 @@ class BestPracticesController < ApplicationController
 
   # * GET /best_practices
   def index
-    @best_practices = BestPractice.list.search(**search_params).ordered.page params[:page]
+    @best_practices = BestPractice.list.
+      visible.
+      search(**search_params).
+      ordered.
+      page params[:page]
   end
 
   # * GET /best_practices/1
@@ -43,8 +47,14 @@ class BestPracticesController < ApplicationController
   def update
     update_resource @best_practice, best_practice_params
 
+    redirect_to_index = @best_practice.obsolete &&
+                        @best_practice.errors.empty? &&
+                        hide_obsolete_best_practices != '0'
+
+    location = redirect_to_index ? best_practices_url : edit_best_practice_url(@best_practice)
+
     unless response_body
-      respond_with @best_practice, location: edit_best_practice_url(@best_practice)
+      respond_with @best_practice, location: location
     end
   end
 
@@ -60,7 +70,11 @@ class BestPracticesController < ApplicationController
     def set_best_practice
       @best_practice = BestPractice.list.includes({
         process_controls: :control_objectives
-      }).find params[:id]
+      }).merge(
+        ProcessControl.visible
+      ).references(
+        :process_controls
+      ).find params[:id]
     end
 
     def best_practice_params
@@ -77,6 +91,16 @@ class BestPracticesController < ApplicationController
           ]
         ]
       )
+    end
+
+    def hide_obsolete_best_practices
+      setting = Current.organization.settings.find_by name: 'hide_obsolete_best_practices'
+
+      if setting
+        setting.value
+      else
+        DEFAULT_SETTINGS[:hide_obsolete_best_practices][:value]
+      end
     end
 
     def load_privileges

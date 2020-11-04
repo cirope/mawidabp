@@ -9,6 +9,7 @@ class ControlObjective < ApplicationRecord
   include ControlObjectives::Risk
   include ControlObjectives::Search
   include ControlObjectives::Scopes
+  include ControlObjectives::ScoreType
   include ControlObjectives::Shared
   include ControlObjectives::Validations
   include Parameters::Relevance

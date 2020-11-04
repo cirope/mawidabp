@@ -19,8 +19,9 @@ class ConclusionFinalReviewsController < ApplicationController
       params[:page]
     ).references(
       :periods, :reviews, :business_units
+    ).merge(
+      PlanItem.allowed_by_business_units
     )
-
     respond_to do |format|
       format.html
     end

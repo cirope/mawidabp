@@ -22,12 +22,8 @@
         <th><%= Privilege.human_attribute_name :approval %></th>
       </tr>
     </thead>
-    <tbody>
-      <% menu_items = @role.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
-
-      <% menu_items.each do |menu_item| %>
-        <%= render 'menu_item', menu_item: menu_item, role_form: f %>
-      <% end %>
+    <tbody data-menu-items>
+      <%= render 'menu_items', f: f %>
     </tbody>
   </table>
 
@@ -105,13 +101,16 @@ jQuery(function() {
   });
 
   $('#role_role_type').change(function() {
-    var selectedType = $(this).val();
-    var url = '<%= @role.new_record? ? new_role_path : edit_role_path(@role) %>';
+    var $select = $(this);
+    var selectedType = $select.val();
+    var url = '<%= @role.new_record? ? new_role_path(role: {role_type: "REPLACE"}) : edit_role_path(@role, role: {role_type: "REPLACE"}) %>';
 
     if(selectedType) {
-      BrowserManipulation.changeLocation(url, {
-        'role[role_type]': selectedType
-      });
+      $select.prop('disabled', true)
+
+      $.getScript(url.replace('REPLACE', selectedType)).always(function () {
+        $select.prop('disabled', false)
+      })
     }
   });
 });

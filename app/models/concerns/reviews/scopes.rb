@@ -18,16 +18,18 @@ module Reviews::Scopes
 
     def list_with_approved_draft
       list.
-        includes(:conclusion_draft_review).
+        includes(:conclusion_draft_review, :plan_item).
         merge(ConclusionReview.approved).
-        references(:conclusion_reviews)
+        references(:conclusion_reviews).
+        allowed_by_business_units
     end
 
     def list_with_final_review
       list.
-        includes(:conclusion_final_review).
+        includes(:conclusion_final_review, :plan_item).
         where.not(ConclusionReview.table_name => { review_id: nil }).
-        references(:conclusion_reviews)
+        references(:conclusion_reviews).
+        allowed_by_business_units
     end
 
     def list_with_work_papers status: :not_finished
@@ -50,16 +52,18 @@ module Reviews::Scopes
 
     def list_without_final_review
       list.
-        includes(:conclusion_final_review).
+        includes(:conclusion_final_review, :plan_item).
         where(::ConclusionReview.table_name => { review_id: nil }).
+        allowed_by_business_units.
         references(:conclusion_reviews)
     end
 
     def list_without_draft_review
       list.
-        includes(:conclusion_draft_review).
+        includes(:conclusion_draft_review, :plan_item).
         where(::ConclusionReview.table_name => { review_id: nil }).
-        references(:conclusion_reviews)
+        references(:conclusion_reviews).
+        allowed_by_business_units
     end
 
     def list_without_final_review_or_not_closed

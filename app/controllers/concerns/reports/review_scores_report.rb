@@ -38,8 +38,14 @@ module Reports::ReviewScoresReport
       @business_unit_scores = {}
       @business_unit_data = []
       @conclusion_reviews = ConclusionFinalReview.
-        includes(:review).
-        list_all_by_date @from_date, @to_date
+        includes(review: [
+          plan_item: :business_unit
+        ]).
+        references(
+          :reviews, :business_units
+        ).merge(
+          PlanItem.allowed_by_business_units
+        ).list_all_by_date @from_date, @to_date
     end
 
     def review_scores_business_unit_type_reviews

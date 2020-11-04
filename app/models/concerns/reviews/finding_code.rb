@@ -36,6 +36,26 @@ module Reviews::FindingCode
     ].map { |o| Arel.sql o }
   end
 
+  def recode_weaknesses_by_risk_and_repetition
+    repeated_column = [
+      Weakness.quoted_table_name,
+      Weakness.qcn('repeated_of_id')
+    ].join('.')
+
+    repeated_order = if self.class.connection.adapter_name == 'OracleEnhanced'
+                        "CASE WHEN #{repeated_column} IS NULL THEN 0 ELSE 1 END"
+                      else
+                        "#{repeated_column} IS NOT NULL"
+                      end
+
+    recode_findings weaknesses, order: [
+      repeated_order,
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'priority'} DESC",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
+    ].map { |o| Arel.sql o }
+  end
+
   def recode_weaknesses_by_control_objective_order
     order      = [risk: :desc, review_code: :asc]
     weaknesses = []

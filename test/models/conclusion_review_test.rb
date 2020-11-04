@@ -298,7 +298,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   test 'bic pdf conversion' do
-    organization = organizations :cirope
+    Current.organization = organizations :cirope
+    Current.user         = users :auditor
+    organization         = Current.organization
 
     assert_nothing_raised do
       @conclusion_review.bic_pdf organization
@@ -308,6 +310,10 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert File.size(@conclusion_review.absolute_pdf_path) > 0
 
     FileUtils.rm @conclusion_review.absolute_pdf_path
+
+  ensure
+    Current.organization = nil
+    Current.user         = nil
   end
 
   test 'cro pdf conversion' do

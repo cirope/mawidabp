@@ -245,6 +245,7 @@ es:
         risk: 'Riesgo'
         obsolete: 'Obsoleto'
         support: 'Soporte'
+        score_type: 'Tipo de calificación'
         control_objective_id: 'Objetivo de control'
       review/control_objective_items:
         control_objective_id: 'Objetivo de control'
@@ -332,6 +333,7 @@ es:
         commitment_date: 'Fecha de compromiso'
         user_id: 'Comentario (usuario)'
         notify_users: 'Comentario (enviar notificación)'
+        skip_commitment_support: 'Tildar si la observación está solucionada'
       finding/finding_answers/commitment_support:
         one: 'Sustento compromiso'
         reason: 'Motivo reprogramación'

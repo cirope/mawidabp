@@ -29,9 +29,10 @@ module Findings::Reiterations
     self.undoing_reiteration = true
 
     attrs = {
-      origination_date: Time.zone.today,
-      parent_ids:       [],
-      repeated_of_id:   nil
+      origination_date:     Time.zone.today,
+      parent_ids:           [],
+      repeated_of_id:       nil,
+      first_follow_up_date: follow_up_date
     }
 
     attrs[:reschedule_count] = 0 if final_review_created_at.blank? && rescheduled?
@@ -61,13 +62,13 @@ module Findings::Reiterations
     if parent_ids.empty?
       self.class.none
     else
-      Finding.unscoped.where(id: parent_ids).preload *DEFAULT_TO_S_PRELOADS
+      Finding.unscoped.finals(false).where(id: parent_ids).preload *DEFAULT_TO_S_PRELOADS
     end
   end
 
   def repeated_children
     if id
-      Finding.unscoped.with_parent_id(id).preload *DEFAULT_TO_S_PRELOADS
+      Finding.unscoped.finals(false).with_parent_id(id).preload *DEFAULT_TO_S_PRELOADS
     else
       self.class.none
     end
