@@ -241,7 +241,7 @@ es:
         controls: 'Controles mitigantes'
       control_objective:
         name: 'Objetivo de control'
-        relevance: 'Importancia'
+        relevance: 'Riesgo'
         risk: 'Riesgo'
         obsolete: 'Obsoleto'
         support: 'Soporte'
