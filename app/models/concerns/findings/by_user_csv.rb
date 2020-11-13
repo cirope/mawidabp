@@ -25,6 +25,9 @@ module Findings::ByUserCsv
         I18n.t('finding.auditors', count: 0),
         I18n.t('finding.responsibles', count: 1),
         I18n.t('finding.audited', count: 0),
+        I18n.t('finding.auditor_users', count: 0),
+        I18n.t('finding.responsible_users', count: 1),
+        I18n.t('finding.audited_users', count: 0),
         Weakness.human_attribute_name('description'),
         Weakness.human_attribute_name('state'),
         Weakness.human_attribute_name('risk'),
@@ -43,6 +46,12 @@ module Findings::ByUserCsv
 
     def weaknesses_by_user_csv_data_rows
       all.map do |weakness|
+        auditors       = weakness.users.select &:auditor?
+        process_owners = weakness.process_owners
+        auditeds       = weakness.users.select do |u|
+          u.can_act_as_audited? && weakness.process_owners.exclude?(u)
+        end
+
         [
           weakness.review.identification,
           weakness.review.plan_item.project,
@@ -50,11 +59,12 @@ module Findings::ByUserCsv
           weakness.business_unit,
           weakness.review_code,
           weakness.title,
-          weakness.users.select(&:auditor?).map(&:full_name).join('; '),
-          weakness.process_owners.map(&:full_name).join('; '),
-          weakness.users.select { |u|
-            u.can_act_as_audited? && weakness.process_owners.exclude?(u)
-          }.map(&:full_name).join('; '),
+          auditors.map(&:full_name).join('; '),
+          process_owners.map(&:full_name).join('; '),
+          auditeds.map(&:full_name).join('; '),
+          auditors.map(&:user).join('; '),
+          process_owners.map(&:user).join('; '),
+          auditeds.map(&:user).join('; '),
           weakness.description,
           weakness.state_text,
           weakness.risk_text,

@@ -623,16 +623,25 @@
     auditors:
       one: "Auditor"
       other: "Auditores"
+    auditor_users:
+      one: "Legajo auditor"
+      other: "Legajos auditores"
     reviewers:
       one: "Revisor"
       other: "Revisores"
     audited:
       one: "Auditado"
       other: "Auditados"
+    audited_users:
+      one: "Legajo auditado"
+      other: "Legajos auditados"
     readonly: "La observación no puede ser creada ni modificada, ya se emitió el informe definitivo"
     responsibles:
       one: "Responsable"
       other: "Responsables"
+    responsible_users:
+      one: "Legajo responsable"
+      other: "Legajos responsables"
     send_notification: "¿Notificar?"
     status_change_history: "Historial de cambios de estado"
     view_cost_details: "Listado de actividades anteriores relacionadas al hallazgo"
