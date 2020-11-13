@@ -70,7 +70,7 @@ module Reports::WeaknessesReport
 
     def scoped_weaknesses
       params[:execution].present? ?
-        Weakness.list_without_final_review : Weakness.list_with_final_review
+        Weakness.list_without_final_review : Weakness.list_for_report
     end
 
     def filter_weaknesses_for_report report_params
@@ -139,6 +139,10 @@ module Reports::WeaknessesReport
           condition  = "#{Weakness.qcn date_field} #{operator} #{mask}"
           weaknesses = weaknesses.where condition, *[date, date_until].compact
         end
+      end
+
+      if report_params[:show_latest].present?
+        weaknesses = weaknesses.latest if report_params[:show_latest] == '1'
       end
 
       if params[:execution].blank?

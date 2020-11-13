@@ -25,6 +25,7 @@ namespace :db do
       fix_email_organization              # 2020-04-24
       add_follow_up_audited_privilege     # 2020-05-08
       add_file_model_review               # 2020-07-20
+      remove_auditor_junior_role          # 2020-11-04
     end
   end
 end
@@ -79,6 +80,18 @@ private
                            description: I18n.t('settings.skip_function_and_manager_from_ldap_sync')
       end
     end
+
+    if add_hide_obsolete_best_practices? # 2020-10-19
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'hide_obsolete_best_practices',
+                           value:       DEFAULT_SETTINGS[:hide_obsolete_best_practices][:value],
+                           description: I18n.t('settings.hide_obsolete_best_practices')
+      end
+    end
+  end
+
+  def add_hide_obsolete_best_practices?
+    Setting.where(name: 'hide_obsolete_best_practices').empty?
   end
 
   def add_skip_function_and_manager_from_ldap_sync?
@@ -521,7 +534,7 @@ private
   def fix_email_organization
     if fix_email_organization?
       EMail.where(organization_id: nil).find_each do |e_mail|
-        match        = e_mail.subject.match /\[(\w+\W*\w*)\]/
+        match        = e_mail.subject.match /\A\[(\w+\W*\w*)\]/
         organization = if match && match[1]
                         Organization.where(
                           "LOWER(#{Organization.qcn 'prefix'}) = ?",
@@ -566,4 +579,14 @@ private
 
   def migrate_file_model_review?
     FileModelReview.count == 0
+  end
+
+  def remove_auditor_junior_role
+    if remove_auditor_junior_role?
+      Role.where(role_type: 4).update_all role_type: 3
+    end
+  end
+
+  def remove_auditor_junior_role?
+    Role.where(role_type: 4).any?
   end

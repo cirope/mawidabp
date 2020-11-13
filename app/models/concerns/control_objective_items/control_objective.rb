@@ -11,6 +11,6 @@ module ControlObjectiveItems::ControlObjective
   end
 
   def original_text?
-    control_objective_text == control_objective.name
+    control_objective_text&.squish == control_objective.name&.squish
   end
 end

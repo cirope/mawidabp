@@ -64,10 +64,10 @@
       </p>
     <% end %>
 
-    <% if @user.children.any? %>
+    <% if @user.children.not_hidden.enabled.any? %>
       <p class="mb-1"><strong><%= t 'users.form.children' %></strong></p>
       <ul>
-        <% @user.children.each do |child| %>
+        <% @user.children.not_hidden.enabled.each do |child| %>
           <li><%= link_to child.full_name, child %></li>
         <% end %>
       </ul>

@@ -56,7 +56,7 @@ class UsersController < ApplicationController
 
     @user.send_notification_if_necesary if @user.errors.empty?
 
-    respond_with @user, location: users_url
+    respond_with @user, location: users_url unless performed?
   end
 
   # * DELETE /users/1

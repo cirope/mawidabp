@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_28_190037) do
+ActiveRecord::Schema.define(version: 2020_10_13_202044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -69,6 +69,15 @@ ActiveRecord::Schema.define(version: 2020_07_28_190037) do
     t.datetime "updated_at", null: false
     t.index ["best_practice_id"], name: "index_best_practice_comments_on_best_practice_id"
     t.index ["review_id"], name: "index_best_practice_comments_on_review_id"
+  end
+
+  create_table "best_practice_projects", force: :cascade do |t|
+    t.bigint "best_practice_id", null: false
+    t.bigint "plan_item_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["best_practice_id"], name: "index_best_practice_projects_on_best_practice_id"
+    t.index ["plan_item_id"], name: "index_best_practice_projects_on_plan_item_id"
   end
 
   create_table "best_practices", id: :serial, force: :cascade do |t|
@@ -284,6 +293,7 @@ ActiveRecord::Schema.define(version: 2020_07_28_190037) do
     t.datetime "updated_at", null: false
     t.boolean "obsolete", default: false
     t.string "support"
+    t.string "score_type", default: "option", null: false
     t.index ["obsolete"], name: "index_control_objectives_on_obsolete"
     t.index ["process_control_id"], name: "index_control_objectives_on_process_control_id"
   end
@@ -395,6 +405,7 @@ ActiveRecord::Schema.define(version: 2020_07_28_190037) do
     t.integer "file_model_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "skip_commitment_support", default: false, null: false
     t.index ["file_model_id"], name: "index_finding_answers_on_file_model_id"
     t.index ["finding_id"], name: "index_finding_answers_on_finding_id"
     t.index ["user_id"], name: "index_finding_answers_on_user_id"
@@ -872,6 +883,7 @@ ActiveRecord::Schema.define(version: 2020_07_28_190037) do
     t.datetime "updated_at", null: false
     t.boolean "include_signature", default: true, null: false
     t.boolean "owner", default: false, null: false
+    t.boolean "unavailable", default: false, null: false
     t.index ["review_id", "user_id"], name: "index_review_user_assignments_on_review_id_and_user_id"
   end
 
@@ -1159,6 +1171,8 @@ ActiveRecord::Schema.define(version: 2020_07_28_190037) do
   add_foreign_key "benefits", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "best_practices", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "reviews", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "best_practice_projects", "best_practices", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "best_practice_projects", "plan_items", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practices", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practices", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "business_unit_findings", "business_units", on_update: :restrict, on_delete: :restrict

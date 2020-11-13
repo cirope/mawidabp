@@ -6,8 +6,10 @@ module Findings::FirstFollowUp
   end
 
   def store_first_follow_up_date
+    self.first_follow_up_date   = nil if repeated_of_id_changed?
     self.first_follow_up_date ||= repeated_of&.first_follow_up_date ||
-                                  first_follow_up_date_value
+                                  first_follow_up_date_value        ||
+                                  first_follow_up_date_on_versions
 
     if follow_up_date && first_follow_up_date && follow_up_date < first_follow_up_date
       self.first_follow_up_date = follow_up_date

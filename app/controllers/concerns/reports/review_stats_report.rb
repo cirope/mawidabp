@@ -45,8 +45,15 @@ module Reports::ReviewStatsReport
       @weaknesses_by_score = {}
       @total_weaknesses_by_score = {}
       @conclusion_reviews = ConclusionFinalReview.
-        scored_for_report.
-        list_all_by_date @from_date, @to_date
+        includes(review: [
+          plan_item: :business_unit
+        ]).
+        references(
+          :reviews, :business_units
+        ).merge(
+          PlanItem.allowed_by_business_units
+        ).scored_for_report
+        .list_all_by_date @from_date, @to_date
     end
 
     def review_stats_business_unit_type_reviews

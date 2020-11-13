@@ -4,7 +4,7 @@
   if ($container.is(':visible')) {
     $container.attr('hidden', true)
   } else {
-    $container.find('td').html('<%= j render('show') %>')
+    $container.find('td').html('<%= j render(@partial) %>')
     $container.removeAttr('hidden').find('[autofocus]').focus()
   }
 }()
