@@ -50,11 +50,11 @@ module Findings::ByUserCsv
           weakness.business_unit,
           weakness.review_code,
           weakness.title,
-          weakness.users.select(&:auditor?).map(&:full_name).to_sentence,
-          weakness.process_owners.map(&:full_name).to_sentence,
+          weakness.users.select(&:auditor?).map(&:full_name).join('; '),
+          weakness.process_owners.map(&:full_name).join('; '),
           weakness.users.select { |u|
             u.can_act_as_audited? && weakness.process_owners.exclude?(u)
-          }.map(&:full_name).to_sentence,
+          }.map(&:full_name).join('; '),
           weakness.description,
           weakness.state_text,
           weakness.risk_text,
