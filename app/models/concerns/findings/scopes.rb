@@ -17,16 +17,20 @@ module Findings::Scopes
 
     def list_for_report
       # TODO: we do it this way so we can serialize it
-      scope = includes review: :conclusion_final_review
-      ids   = list_with_final_review.or(
+      conditions = []
+      parameters = {}
+      ids        = list_with_final_review.or(
         list_without_final_review.with_repeated
       ).pluck('id')
 
-      ids.each_slice(1000) do |finding_ids|
-        scope = scope.where id: finding_ids
+      ids.each_slice(1000).with_index do |finding_ids, i|
+        conditions << "#{quoted_table_name}.#{qcn 'id'} IN (:ids_#{i})"
+        parameters[:"ids_#{i}"] = finding_ids
       end
 
-      scope
+      includes(review: :conclusion_final_review).where(
+        conditions.map { |c| "(#{c})" }.join(' OR '), parameters
+      )
     end
 
     def list_with_final_review
