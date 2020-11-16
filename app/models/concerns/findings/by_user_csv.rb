@@ -55,7 +55,7 @@ module Findings::ByUserCsv
         [
           weakness.review.identification,
           weakness.review.plan_item.project,
-          I18n.l(weakness.review.conclusion_final_review.issue_date),
+          weakness.review.conclusion_final_review ? I18n.l(weakness.review.conclusion_final_review.issue_date) : '-',
           weakness.business_unit,
           weakness.review_code,
           weakness.title,
