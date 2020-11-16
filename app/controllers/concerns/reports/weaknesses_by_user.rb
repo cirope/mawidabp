@@ -118,7 +118,7 @@ module Reports::WeaknessesByUser
         ],
         [
           ConclusionFinalReview.human_attribute_name('issue_date'),
-          l(weakness.review.conclusion_final_review.issue_date)
+          weakness.review.conclusion_final_review ? l(weakness.review.conclusion_final_review.issue_date) : '-'
         ],
         [
           BusinessUnit.model_name.human,
