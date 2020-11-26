@@ -22,10 +22,10 @@
       <%= make_filterable_column(
         Finding.human_attribute_name('organization'), { class: 'd-none d-md-table-cell' }, 'organization'
       ) if current_organization.corporate? %>
-      <%= make_filterable_column Review.model_name.human, nil, 'review', 'issue_date' %>
-      <%= make_filterable_column PlanItem.human_attribute_name('project'), { class: 'd-none d-md-table-cell' }, 'project' %>
-      <%= make_filterable_column Finding.human_attribute_name('review_code'), nil, 'review_code' %>
       <%= make_filterable_column Finding.human_attribute_name('title'), { class: 'd-none d-md-table-cell' }, 'title' %>
+      <%= make_filterable_column PlanItem.human_attribute_name('project'), { class: 'd-none d-md-table-cell' }, 'project' %>
+      <%= make_filterable_column Finding.human_attribute_name('review_code'),{ class: 'd-none' }, 'review_code' %>
+      <%= make_filterable_column Review.model_name.human, nil, 'review', 'issue_date' %>
       <%= make_not_available_column Finding.human_attribute_name('state'), class: 'd-none d-sm-table-cell' %>
       <%= make_not_available_column Finding.human_attribute_name(
           params[:completion_state] == 'incomplete' ? 'follow_up_date' : 'solution_date'), class: 'd-none d-sm-table-cell' %>
@@ -44,10 +44,10 @@
         <% if current_organization.corporate? %>
           <td><%= finding.organization.prefix %></td>
         <% end %>
-        <td><%= show_review_with_conclusion_status_as_abbr(finding.review) %></td>
+        <td class="d-none d-md-table-cell"><%= super_truncate(finding.title, 40) %></td>
         <td class="d-none d-md-table-cell"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
-        <td><%= show_finding_review_code_with_decription_as_abbr(finding) %></td>
-        <td class="d-none d-md-table-cell"><%= super_truncate(finding.title, 17) %></td>
+        <td class="d-none"><%= show_finding_review_code_with_decription_as_abbr(finding) %></td>
+        <td><%= show_review_with_conclusion_status_as_abbr(finding.review) %></td>
         <td class="d-none d-sm-table-cell"><%= super_truncate finding.state_text, 19 %></td>
         <% if params[:completion_state] == 'incomplete' %>
           <td class="d-none d-sm-table-cell"><%= finding_follow_up_date_text(finding) %></td>

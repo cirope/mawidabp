@@ -64,7 +64,7 @@ module FindingsHelper
 
     review_data << " | #{l review.issue_date(include_draft: true), format: :long}"
 
-    content_tag :abbr, h(review.identification), title: review_data
+    content_tag :abbr, h(super_truncate(review.identification, 15)), title: review_data
   end
 
   def show_finding_review_code_with_decription_as_abbr finding
