@@ -57,7 +57,7 @@
 
             <div class="clearfix">
               <%= f.simple_fields_for :file_model_reviews do |fm_r| %>
-                <%= render 'file_model_review', f: fm_r, readonly: readonly %>
+                <%= render 'file_model_review', f: fm_r, frozen: frozen %>
               <% end %>
 
               <%= link_to_add_fields t('review.add_file_model'), f, :file_model_reviews, 'file_model_review' unless frozen %>
