@@ -10,6 +10,14 @@
     $('#review_scope').val('<%= @plan_item.scope %>')
     $('#review_risk_exposure').val('<%= @plan_item.risk_exposure %>')
     $('#review_business_unit').val('<%= @plan_item.business_unit&.name %>')
+    <% description_best_practices = [];
+
+      @plan_item.best_practices&.each do |bp|
+        description_best_practices << bp.description
+      end
+    %>
+
+    $('#review_description').val('<%= j description_best_practices.join("\n") %>')
     $('#review_audit_type').val('<%= @plan_item.business_unit&.business_unit_type&.name %>')
     $('[data-review-user-assignments-container]').html('')
 
