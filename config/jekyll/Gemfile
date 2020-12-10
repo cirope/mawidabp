@@ -9,6 +9,9 @@ gem 'kramdown'
 gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
 
+# Extra gem, explicit for customer (just testing)
+gem 'crass'
+
 group :jekyll_plugins do
   gem 'jekyll-assets'
   gem 'jekyll-multiple-languages-plugin'

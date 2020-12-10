@@ -19,6 +19,7 @@ GEM
     coffee-script-source (1.12.2)
     colorator (1.1.0)
     concurrent-ruby (1.1.6)
+    crass (1.0.6)
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
@@ -111,6 +112,7 @@ DEPENDENCIES
   autoprefixer-rails
   bootstrap-sass
   coffee-script
+  crass
   jekyll (~> 3.8.0)
   jekyll-assets
   jekyll-multiple-languages-plugin
