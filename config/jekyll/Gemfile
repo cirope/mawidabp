@@ -7,6 +7,7 @@ gem 'coffee-script'
 gem 'uglifier'
 gem 'kramdown'
 gem 'bootstrap-sass'
+gem 'bootstrap'
 gem 'autoprefixer-rails'
 
 # Extra gem, explicit for customer (just testing)
