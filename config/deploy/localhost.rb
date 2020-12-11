@@ -2,7 +2,6 @@ set :stage, :production
 set :rails_env, 'production'
 set :branch, 'c-nbch'
 set :log_level, :info
-set :pty, true
 
 set :default_env, {
   'LANG':     'en_US.UTF-8',
