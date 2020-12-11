@@ -3,7 +3,6 @@ namespace :help do
   task :install do
     Dir.chdir Rails.root.join('config/jekyll') do
       Bundler.with_unbundled_env do
-        system 'echo $PWD'
         system 'bundle install' or raise 'install error!'
       end
     end
@@ -13,7 +12,7 @@ namespace :help do
   task :generate do
     Dir.chdir Rails.root.join('config/jekyll') do
       Bundler.with_unbundled_env do
-        system 'bundle exec jekyll build' or raise 'generate error!'
+        system "BUNDLE_GEMFILE=#{Rails.root.join('config/jekyll/Gemfile')} bundle exec jekyll build" or raise 'generate error!'
       end
     end
   end
