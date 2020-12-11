@@ -7,7 +7,6 @@ gem 'coffee-script'
 gem 'uglifier'
 gem 'kramdown'
 gem 'bootstrap-sass'
-gem 'bootstrap'
 gem 'autoprefixer-rails'
 
 group :jekyll_plugins do
