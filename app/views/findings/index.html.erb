@@ -32,7 +32,7 @@
       <%= make_not_available_column Weakness.human_attribute_name('risk'), class: 'd-none d-sm-table-cell' %>
       <%= make_filterable_column Tag.model_name.human(count: 0), { class: 'd-none d-sm-table-cell' }, 'tags' %>
       <%= make_not_available_column Finding.human_attribute_name('finding_answers'), class: 'd-none d-lg-table-cell' %>
-      <%= make_not_available_column WorkPaper.model_name.human(count: 0), class: 'd-none d-lg-table-cell' %>
+      <%= make_not_available_column WorkPaper.model_name.human(count: 0), class: 'd-none' %>
       <th colspan="2" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -44,7 +44,7 @@
         <% if current_organization.corporate? %>
           <td><%= finding.organization.prefix %></td>
         <% end %>
-        <td class="d-none d-md-table-cell"><%= super_truncate(finding.title, 40) %></td>
+        <td class="d-none d-md-table-cell"><%= super_truncate(finding.title, 50) %></td>
         <td class="d-none d-md-table-cell"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
         <td class="d-none"><%= show_finding_review_code_with_decription_as_abbr(finding) %></td>
         <td><%= show_review_with_conclusion_status_as_abbr(finding.review) %></td>
@@ -57,7 +57,7 @@
         <td class="d-none d-sm-table-cell"><%= finding.respond_to?(:risk_text) ? finding.risk_text : '-' %></td>
         <td class="d-none d-sm-table-cell"><%= tags finding.tags.reload %></td>
         <td class="d-none d-lg-table-cell"><%= show_finding_answers_count finding %> <%= show_finding_reading_warning finding %></td>
-        <td class="d-none d-lg-table-cell"><%= t finding.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
+        <td class="d-none"><%= t finding.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td class="text-right"><%= link_to_show finding_path(params[:completion_state], finding, user_id: params[:user_id]) %></td>
         <td class="text-right"><%= link_to_edit(edit_finding_path(finding.pending? ? 'incomplete' : 'complete', finding, user_id: params[:user_id])) if (!@auth_user.can_act_as_audited? || finding.users.reload.include?(@auth_user)) %></td>
       </tr>
