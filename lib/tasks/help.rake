@@ -1,8 +1,9 @@
 namespace :help do
   desc 'Install help dependencies'
   task :install do
-    Dir.chdir('config/jekyll') do
+    Dir.chdir Rails.root.join('config/jekyll') do
       Bundler.with_unbundled_env do
+        system 'echo $PWD'
         system 'bundle install' or raise 'install error!'
       end
     end
@@ -10,7 +11,7 @@ namespace :help do
 
   desc 'Run Jekyll in config/jekyll directory without having to cd there'
   task :generate do
-    Dir.chdir('config/jekyll') do
+    Dir.chdir Rails.root.join('config/jekyll') do
       Bundler.with_unbundled_env do
         system 'bundle exec jekyll build' or raise 'generate error!'
       end
@@ -19,7 +20,7 @@ namespace :help do
 
   desc 'Run Jekyll in config/jekyll directory with --watch'
   task :autogenerate do
-    Dir.chdir('config/jekyll') do
+    Dir.chdir Rails.root.join('config/jekyll') do
       Bundler.with_unbundled_env do
         system 'bundle exec jekyll build --watch' or raise 'autogenerate error!'
       end
