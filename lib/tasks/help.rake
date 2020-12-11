@@ -11,9 +11,7 @@ namespace :help do
   desc 'Run Jekyll in config/jekyll directory without having to cd there'
   task :generate do
     Dir.chdir Rails.root.join('config/jekyll') do
-      Bundler.with_unbundled_env do
-        system "BUNDLE_GEMFILE=#{Rails.root.join('config/jekyll/Gemfile')} bundle exec jekyll build" or raise 'generate error!'
-      end
+      system "BUNDLE_GEMFILE=#{Rails.root.join('config/jekyll/Gemfile')} bundle exec jekyll build" or raise 'generate error!'
     end
   end
 
