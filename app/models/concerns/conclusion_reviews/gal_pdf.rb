@@ -2,7 +2,6 @@ module ConclusionReviews::GalPdf
   extend ActiveSupport::Concern
 
   def gal_pdf organization = nil, *args
-
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false, hide_brand: true
 
