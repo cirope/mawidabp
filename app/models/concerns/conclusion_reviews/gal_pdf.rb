@@ -630,7 +630,7 @@ module ConclusionReviews::GalPdf
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.sort.each do |coi|
           text  = coi.control_objective_text
-          text  = text.split("\n").first.upcase if scope_detail
+          text  = text.lines.first.upcase if scope_detail
           image = CONCLUSION_SCOPE_IMAGES[coi.auditor_comment] ||
             'scope_not_apply.png'
 
