@@ -79,7 +79,7 @@ module ConclusionReviews::GalPdf
         put_other_weaknesses_on  pdf
       end
 
-      if  !(show_review_best_practice_comments? organization) && !collapse_control_objectives
+      if  !show_review_best_practice_comments?(organization) && !collapse_control_objectives
         title = I18n.t 'conclusion_review.scope_detail.title'
 
         pdf.start_new_page
@@ -226,8 +226,8 @@ module ConclusionReviews::GalPdf
       end
     end
 
-    def put_control_objective_items_table_on pdf, brief: false, scope_detail: false
-      row_data = control_objectives_row_data brief, scope_detail
+    def put_control_objective_items_table_on pdf, brief: false
+      row_data = control_objectives_row_data brief, scope_detail: false
 
       if row_data.present?
         data          = row_data.insert 0, control_objective_column_headers
@@ -248,8 +248,8 @@ module ConclusionReviews::GalPdf
       end
     end
 
-    def put_scope_detail_table_on pdf, brief: false
-      row_data = control_objectives_row_data brief, true
+    def put_scope_detail_table_on pdf
+      row_data = control_objectives_row_data false, scope_detail: true
 
       if row_data.present?
         column_widths                              = control_objective_column_widths pdf
@@ -622,15 +622,19 @@ module ConclusionReviews::GalPdf
       row_data
     end
 
-    def control_objectives_row_data brief, scope_detail
+    def control_objectives_row_data brief, scope_detail: false
       count         = 0
       row_data      = []
       image_options = { vposition: :top, border_widths: [1, 0, 1, 0] }
 
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.sort.each do |coi|
-          text  = coi.control_objective_text
-          text  = text.lines.first.upcase if scope_detail
+          text  = if scope_detail
+                    coi.control_objective_text.lines.first.upcase
+                  else
+                    coi.control_objective_text
+                  end
+
           image = CONCLUSION_SCOPE_IMAGES[coi.auditor_comment] ||
             'scope_not_apply.png'
 
