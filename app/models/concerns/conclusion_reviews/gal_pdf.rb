@@ -2,6 +2,7 @@ module ConclusionReviews::GalPdf
   extend ActiveSupport::Concern
 
   def gal_pdf organization = nil, *args
+
     options = args.extract_options!
     pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false, hide_brand: true
 
@@ -77,6 +78,16 @@ module ConclusionReviews::GalPdf
 
       unless show_review_best_practice_comments? organization
         put_other_weaknesses_on  pdf
+      end
+
+      unless (show_review_best_practice_comments? organization) && collapse_control_objectives
+        title = I18n.t 'conclusion_review.scope_detail.title'
+
+        pdf.start_new_page
+        pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
+        pdf.move_down PDF_FONT_SIZE * 2
+
+        put_control_objective_items_table_on pdf, scope_detail: true
       end
     end
 
@@ -216,23 +227,27 @@ module ConclusionReviews::GalPdf
       end
     end
 
-    def put_control_objective_items_table_on pdf, brief: false
-      row_data = control_objectives_row_data brief
+    def put_control_objective_items_table_on pdf, brief: false, scope_detail: false
+      row_data = control_objectives_row_data brief, scope_detail
 
       if row_data.present?
-        data          = row_data.insert 0, control_objective_column_headers
+        data          = scope_detail ? row_data : (row_data.insert 0, control_objective_column_headers)
         column_widths = control_objective_column_widths pdf
         table_options = pdf.default_table_options column_widths
 
+        table_options[:cell_style][:border_widths] = [0,0,1,0] if scope_detail
+
         pdf.font_size PDF_FONT_SIZE do
           pdf.table data, table_options do
-            row(0).style(
-              background_color: 'cccccc',
-              padding: [
-                (PDF_FONT_SIZE * 0.5).round,
-                (PDF_FONT_SIZE * 0.3).round
-              ]
-            )
+            unless scope_detail
+              row(0).style(
+                background_color: 'cccccc',
+                padding: [
+                  (PDF_FONT_SIZE * 0.5).round,
+                  (PDF_FONT_SIZE * 0.3).round
+                ]
+              )
+            end
           end
         end
       end
@@ -597,7 +612,7 @@ module ConclusionReviews::GalPdf
       row_data
     end
 
-    def control_objectives_row_data brief
+    def control_objectives_row_data brief, scope_detail
       count         = 0
       row_data      = []
       image_options = { vposition: :top, border_widths: [1, 0, 1, 0] }
@@ -605,6 +620,7 @@ module ConclusionReviews::GalPdf
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.sort.each do |coi|
           text  = coi.control_objective_text
+          text  = text.split("\n").first.upcase if scope_detail
           image = CONCLUSION_SCOPE_IMAGES[coi.auditor_comment] ||
             'scope_not_apply.png'
 
