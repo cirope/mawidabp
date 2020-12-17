@@ -450,6 +450,8 @@ es:
       control_objective_weaknesses: "Observaciones"
       control_objective_oportunities: "Oportunidades"
       finding_work_papers: "Papeles de trabajo del hallazgo"
+    scope_detail:
+      title: "Aspectos evaluados en el alcance de la Auditoría"
 
   control_objective:
     errors:
