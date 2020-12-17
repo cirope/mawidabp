@@ -254,7 +254,7 @@ module ConclusionReviews::GalPdf
       if row_data.present?
         column_widths                              = control_objective_column_widths pdf
         table_options                              = pdf.default_table_options column_widths
-        table_options[:cell_style][:border_widths] = [0,0,1,0]
+        table_options[:cell_style][:border_widths] = [0, 0, 1, 0]
         table_options[:row_colors]                 = ['ffffff']
 
         pdf.font_size PDF_FONT_SIZE do
