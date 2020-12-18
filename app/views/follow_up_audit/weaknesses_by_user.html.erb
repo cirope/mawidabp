@@ -22,15 +22,16 @@
         <%= link_to t('label.download_csv'), weaknesses_by_user_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
       </div>
       <p class="mb-0">
-      <%= t 'follow_up_committee_report.weaknesses_by_user.weaknesses_count_html', count: @weaknesses.count %>
+        <%= t 'follow_up_committee_report.weaknesses_by_user.weaknesses_count_html', count: @weaknesses.count %>
       </p>
     </div>
   </div>
   <div class="endless-pagination">
-    <%= render partial: 'weaknesses_by_user', collection: @weaknesses, as: :weakness %>
+    <%= render partial: 'weakness_by_user', collection: @weaknesses, as: :weakness %>
   </div>
 
   <%= paginate @weaknesses %>
+
   <div class="alert alert-warning text-center" hidden data-pagination-loading>
     <strong><%= t 'navigation.loading' %></strong>
   </div>
