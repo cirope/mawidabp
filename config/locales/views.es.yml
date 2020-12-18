@@ -291,8 +291,8 @@ es:
         one: 'Tiene un informe asociado'
         other: 'Tiene %{count} informes asociados'
       workflows:
-        one: 'Tiene un programa de trabajo asociado'
-        other: 'Tiene %{count} programas de trabajo asociados'
+        one: 'Tiene un presupuesto asociado'
+        other: 'Tiene %{count} presupuestos asociados'
     index:
       title: 'Listado de periodos'
     new:
