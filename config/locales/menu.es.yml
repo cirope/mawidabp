@@ -35,7 +35,7 @@ es:
     execution_title: 'Ejecución'
     execution:
       reviews: 'Informes'
-      workflows: 'Programas de trabajo'
+      workflows: 'Presupuestos'
       control_objectives: 'Objetivos de control'
       weaknesses: 'Observaciones'
       oportunities: 'Oportunidades de mejora'
