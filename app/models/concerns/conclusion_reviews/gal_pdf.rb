@@ -79,7 +79,6 @@ module ConclusionReviews::GalPdf
         put_other_weaknesses_on  pdf
       end
 
-
       if show_scope_detail?
         title = I18n.t 'conclusion_review.scope_detail.title'
 
