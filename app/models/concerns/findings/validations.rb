@@ -30,7 +30,7 @@ module Findings::Validations
     has_new_comment = comments.detect { |c| c.new_record? && c.valid? }
     to_implemented  = implemented? && (was_implemented_audited? || was_expired?)
     to_pending      = being_implemented? &&
-      (was_implemented_audited? || was_implemented? || was_assumed_risk? || was_expired?)
+      (was_implemented_audited? || was_implemented?)
 
     (to_pending || to_implemented) && !has_new_comment
   end
