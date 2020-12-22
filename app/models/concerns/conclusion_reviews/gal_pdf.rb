@@ -79,10 +79,8 @@ module ConclusionReviews::GalPdf
         put_other_weaknesses_on  pdf
       end
 
-      if  !show_review_best_practice_comments?(organization) &&
-            !collapse_control_objectives &&
-            created_at >= START_SCOPE_DETAIL_IN_CONCLUSION_FROM
 
+      if show_scope_detail?
         title = I18n.t 'conclusion_review.scope_detail.title'
 
         pdf.start_new_page
@@ -818,5 +816,12 @@ module ConclusionReviews::GalPdf
 
     def show_tests? organization
       !review.show_counts? organization.prefix
+    end
+
+    def show_scope_detail?
+      !show_review_best_practice_comments?(organization) &&
+        !collapse_control_objectives &&
+        SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START &&
+        created_at >= SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START
     end
 end
