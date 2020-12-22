@@ -3,6 +3,8 @@ module ConclusionReviews::GalPdf
 
   def gal_pdf organization = nil, *args
     options = args.extract_options!
+
+
     pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false, hide_brand: true
 
     put_default_watermark_on pdf
@@ -56,9 +58,9 @@ module ConclusionReviews::GalPdf
     end
 
     def put_executive_summary_on pdf, organization
-      title = I18n.t 'conclusion_review.executive_summary.title'
+      title         = I18n.t 'conclusion_review.executive_summary.title'
       project_title = I18n.t 'conclusion_review.executive_summary.project'
-      project = review.plan_item.project
+      project       = review.plan_item.project
 
       pdf.start_new_page
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
@@ -79,11 +81,14 @@ module ConclusionReviews::GalPdf
         put_other_weaknesses_on  pdf
       end
 
-      if  !show_review_best_practice_comments?(organization) && !collapse_control_objectives
+      if  !show_review_best_practice_comments?(organization) &&
+            !collapse_control_objectives &&
+            created_at >= START_SCOPE_DETAIL_IN_CONCLUSION_FROM
+
         title = I18n.t 'conclusion_review.scope_detail.title'
 
         pdf.start_new_page
-        pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
+        pdf.add_title title, (PDF_FONT_SIZE).round, :center
         pdf.move_down PDF_FONT_SIZE * 2
 
         put_scope_detail_table_on pdf
