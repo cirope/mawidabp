@@ -28,6 +28,7 @@ module Reports::WeaknessesReschedules
         finals(false).
         where(state: Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]]).
         list_for_report.
+        by_issue_date('BETWEEN', @from_date, @to_date).
         includes(review: [:conclusion_final_review, :plan_item]).
         preload(finding_user_assignments: :user)
 
