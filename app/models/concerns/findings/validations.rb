@@ -37,7 +37,7 @@ module Findings::Validations
   private
 
     def audit_comments_should_be_present?
-      revoked? || criteria_mismatch?
+      revoked? #|| criteria_mismatch?
     end
 
     def check_dates?
@@ -57,8 +57,8 @@ module Findings::Validations
 
     def validate_solution_date
       check_for_blank = implemented_audited? ||
-                        assumed_risk?        ||
-                        criteria_mismatch?   ||
+                       # assumed_risk?        ||
+                       # criteria_mismatch?   ||
                         expired?
 
       errors.add :solution_date, :blank         if check_for_blank  && solution_date.blank?

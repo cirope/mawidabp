@@ -32,8 +32,8 @@ module Findings::State
       def status
         {
           confirmed:           -3,
-          #unconfirmed:        -2,
-          #unanswered:         -1,
+          unconfirmed:        -2,
+          unanswered:         -1,
           being_implemented:   0,
           implemented:         1,
           implemented_audited: 2,
@@ -43,15 +43,15 @@ module Findings::State
           repeated:           6,
           revoked:             7,
           #criteria_mismatch:  8,
-          #expired:            9
+          expired:            9
         }.with_indifferent_access.freeze
       end
 
       def status_transitions final: false
         {
           confirmed:           confirmed_transitions(final),
-          #unconfirmed:         unconfirmed_transitions(final),
-          #unanswered:          unanswered_transitions(final),
+          unconfirmed:         unconfirmed_transitions(final),
+          unanswered:          unanswered_transitions(final),
           being_implemented:   being_implemented_transitions(final),
           implemented:         implemented_transitions(final),
           implemented_audited: implemented_audited_transitions(final),
@@ -61,7 +61,7 @@ module Findings::State
           repeated:            repeated_transitions(final),
           revoked:             revoked_transitions(final),
           #criteria_mismatch:   criteria_mismatch_transitions(final),
-          #expired:             expired_transitions(final)
+          expired:             expired_transitions(final)
         }.with_indifferent_access.freeze
       end
 
