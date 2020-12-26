@@ -194,8 +194,20 @@
   </div>
 
   <div id="finding_user_assignments">
-    <%= f.simple_fields_for :finding_user_assignments do |fua_f| %>
-      <%= render 'findings/finding_user_assignment', f: fua_f, readonly: readonly %>
+    <% others, audit_team = @weakness.finding_user_assignments.partition { |f| f.user.can_act_as_audited? } %>
+
+    <% if audit_team.present? %>
+      <h5 class="text-muted"><%= t 'finding.user_assignment.audit_team' %></h5>
+      <%= f.simple_fields_for :finding_user_assignments, audit_team do |fua_f| %>
+        <%= render 'findings/finding_user_assignment', f: fua_f, readonly: readonly %>
+      <% end %>
+    <% end %>
+
+    <% if others.present? %>
+      <h5 class="text-muted"><%= t 'finding.user_assignment.others' %></h5>
+      <%= f.simple_fields_for :finding_user_assignments, others do |fua_f| %>
+        <%= render 'findings/finding_user_assignment', f: fua_f, readonly: readonly %>
+      <% end %>
     <% end %>
 
     <%= link_to_add_fields(t('finding.add_user'), f,
