@@ -594,7 +594,7 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 4, group.users.can_act_as(:auditor).count
 
     role_id = Current.organization.roles.find_by(
-      role_type: Role::TYPES[:auditor_senior]
+      role_type: Role::TYPES[:auditor]
     ).id
 
     assert_no_difference 'User.count' do

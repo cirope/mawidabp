@@ -141,6 +141,10 @@ module Reports::WeaknessesReport
         end
       end
 
+      if report_params[:show_latest].present?
+        weaknesses = weaknesses.latest if report_params[:show_latest] == '1'
+      end
+
       if params[:execution].blank?
         weaknesses.order [
           Arel.sql("#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn 'issue_date'} ASC"),

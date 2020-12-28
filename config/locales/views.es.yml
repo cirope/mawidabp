@@ -78,8 +78,8 @@ es:
       add_assistant: 'Agregar asistente'
     show:
       title: 'Ver entrevista de cierre'
-      auditeds: 'Responsables del ciclo'
-      auditors: 'Analistas y/o jefes asignados'
+      auditeds: 'Destinatarios'
+      auditors: 'Integrantes UPLA'
       download_pdf: 'Descargar PDF'
     pdf:
       pdf_name: 'entrevista_de_cierre_%{name}.pdf'
@@ -256,8 +256,8 @@ es:
       add_assistant: 'Agregar asistente'
     show:
       title: 'Ver entrevista de inicio'
-      auditeds: 'Responsables del ciclo'
-      auditors: 'Responsable unidad organizativa'
+      auditeds: 'Destinatarios'
+      auditors: 'Integrantes UPLA'
       download_pdf: 'Descargar PDF'
     pdf:
       pdf_name: 'entrevista_de_inicio_%{name}.pdf'
