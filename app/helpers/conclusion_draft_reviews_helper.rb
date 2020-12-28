@@ -54,4 +54,11 @@ module ConclusionDraftReviewsHelper
 
     result.join "\r\n\r\n"
   end
+
+  def recipients_for conclusion_review
+    review  = conclusion_review.review
+    audited = review.review_user_assignments.map(&:user).select &:can_act_as_audited?
+
+    audited.pluck(:user).join "\r\n"
+  end
 end

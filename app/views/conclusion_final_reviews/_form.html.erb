@@ -1,4 +1,5 @@
 <% readonly = !@conclusion_final_review.new_record? %>
+<% limited_edition = readonly ? readonly : !can_perform?(:approval) %>
 
 <%= simple_form_for @conclusion_final_review do |f| %>
   <%= render 'shared/error_explanation', f: f %>
@@ -40,12 +41,12 @@
           <%= f.input :evolution, collection: EVOLUTION_OPTIONS, prompt: true, input_html: { disabled: readonly } %>
           <%= f.input :evolution_justification, input_html: { rows: 1, readonly: readonly } %>
         <% else %>
-          <%= f.input :applied_procedures, input_html: { readonly: readonly, rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 2 } %>
+          <%= f.input :applied_procedures, input_html: { readonly: limited_edition, rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 2 } %>
           <% if SHOW_CONCLUSION_AS_OPTIONS %>
             <%= f.input :conclusion, collection: conclusion_options, prompt: true,
               input_html: { disabled: readonly } %>
           <% else %>
-            <%= f.input :conclusion, input_html: { readonly: readonly, rows: 2 } %>
+            <%= f.input :conclusion, input_html: { readonly: limited_edition, rows: 2 } %>
           <% end %>
         <% end %>
 
