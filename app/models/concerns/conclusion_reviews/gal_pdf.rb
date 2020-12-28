@@ -249,7 +249,7 @@ module ConclusionReviews::GalPdf
     end
 
     def put_scope_detail_table_on pdf
-      row_data = control_objectives_row_data false, scope_detail: true
+      row_data = control_objectives_row_data true, scope_detail: true
 
       if row_data.present?
         column_widths                              = control_objective_column_widths pdf
