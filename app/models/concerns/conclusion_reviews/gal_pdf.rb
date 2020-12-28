@@ -56,9 +56,9 @@ module ConclusionReviews::GalPdf
     end
 
     def put_executive_summary_on pdf, organization
-      title = I18n.t 'conclusion_review.executive_summary.title'
+      title         = I18n.t 'conclusion_review.executive_summary.title'
       project_title = I18n.t 'conclusion_review.executive_summary.project'
-      project = review.plan_item.project
+      project       = review.plan_item.project
 
       pdf.start_new_page
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
@@ -79,11 +79,11 @@ module ConclusionReviews::GalPdf
         put_other_weaknesses_on  pdf
       end
 
-      if  !show_review_best_practice_comments?(organization) && !collapse_control_objectives
+      if show_scope_detail?
         title = I18n.t 'conclusion_review.scope_detail.title'
 
         pdf.start_new_page
-        pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
+        pdf.add_title title, (PDF_FONT_SIZE).round, :center
         pdf.move_down PDF_FONT_SIZE * 2
 
         put_scope_detail_table_on pdf
@@ -249,7 +249,7 @@ module ConclusionReviews::GalPdf
     end
 
     def put_scope_detail_table_on pdf
-      row_data = control_objectives_row_data false, scope_detail: true
+      row_data = control_objectives_row_data true, scope_detail: true
 
       if row_data.present?
         column_widths                              = control_objective_column_widths pdf
@@ -815,5 +815,12 @@ module ConclusionReviews::GalPdf
 
     def show_tests? organization
       !review.show_counts? organization.prefix
+    end
+
+    def show_scope_detail?
+      !show_review_best_practice_comments?(organization) &&
+        !collapse_control_objectives &&
+        SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START &&
+        created_at >= SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START
     end
 end

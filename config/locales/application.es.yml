@@ -451,7 +451,7 @@ es:
       control_objective_oportunities: "Oportunidades"
       finding_work_papers: "Papeles de trabajo del hallazgo"
     scope_detail:
-      title: "Aspectos evaluados en el alcance de la Auditoría"
+      title: "CALIFICACION DE LOS DISTINTOS ITEMS EVALUADOS DENTRO DEL ALCANCE DE ESTA AUDITORIA"
 
   control_objective:
     errors:

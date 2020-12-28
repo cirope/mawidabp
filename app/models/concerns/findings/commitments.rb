@@ -30,7 +30,8 @@ module Findings::Commitments
   private
 
     def register_commitment?
-      Finding.show_commitment_support? && follow_up_date_changed?
+      Finding.show_commitment_support? &&
+        (unmark_rescheduled? || calculate_reschedule_count?)
     end
 
     def register_commitment
