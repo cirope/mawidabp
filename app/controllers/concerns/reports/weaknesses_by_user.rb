@@ -9,7 +9,8 @@ module Reports::WeaknessesByUser
     init_weaknesses_by_user_vars
 
     respond_to do |format|
-      format.html
+      format.html { render_paginated_weaknesses }
+      format.js   { render_paginated_weaknesses }
       format.csv  { render_weaknesses_by_user_report_csv }
     end
   end
@@ -118,7 +119,7 @@ module Reports::WeaknessesByUser
         ],
         [
           ConclusionFinalReview.human_attribute_name('issue_date'),
-          l(weakness.review.conclusion_final_review.issue_date)
+          weakness.review.conclusion_final_review ? l(weakness.review.conclusion_final_review.issue_date) : '-'
         ],
         [
           BusinessUnit.model_name.human,
@@ -270,5 +271,9 @@ module Reports::WeaknessesByUser
       else
         weaknesses
       end
+    end
+
+    def render_paginated_weaknesses
+      @weaknesses = @weaknesses.page params[:page]
     end
 end
