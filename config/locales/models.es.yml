@@ -403,9 +403,9 @@ es:
         end_date: 'Fecha estimada de cierre'
         objective: 'Objetivo de la tarea'
         program: 'Programa de trabajo'
-        scope: 'Alcance de la tarea'
+        scope: 'Comentarios UPLA'
         suggestions: 'Sugerencias e inquietudes'
-        comments: 'Comentarios adicionales'
+        comments: 'Comentarios UPLA'
         review: 'Informe'
         review_id: 'Informe'
       opening_interview_user:
