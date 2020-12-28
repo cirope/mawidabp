@@ -821,6 +821,6 @@ module ConclusionReviews::GalPdf
       !show_review_best_practice_comments?(organization) &&
         !collapse_control_objectives &&
         SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START &&
-        created_at >= SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START
+        review.period.start >= SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START
     end
 end
