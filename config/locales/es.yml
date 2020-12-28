@@ -677,9 +677,6 @@
       filtered_by:
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
         other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
-    user_assignment:
-      audit_team: "Integrantes UPLA"
-      others: "Destinatarios"
 
   finding_relation:
     types:

@@ -102,7 +102,7 @@
   </div>
 
   <div id="finding_user_assignments">
-    <% others, audit_team = @oportunity.finding_user_assignments.partition { |f| f.user.can_act_as_audited? } %>
+    <% others, audit_team = @oportunity.finding_user_assignments.partition { |fua| fua.user.can_act_as_audited? } %>
 
     <% if audit_team.present? %>
       <h5 class="text-muted"><%= t 'finding.user_assignment.audit_team' %></h5>
