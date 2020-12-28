@@ -1275,7 +1275,7 @@
       type_manager: "Gerente"
       type_responsible: "Responsable máximo de auditoría interna"
       type_audited: "Auditado"
-      audit_team: "Auditoría"
+      audit_team: "Integrantes UPLA"
       others: "Usuarios"
       readonly: "Los integrantes no pueden ser modificados, ya se emitió el informe definitivo"
     score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN DETALLADA"
@@ -1303,7 +1303,7 @@
     oportunities_work_papers: "Oportunidades"
     follow_up_work_papers: "Seguimiento de observaciones"
     download_work_papers: "Descargar papeles de trabajo"
-    finished_work_papers: "Papeles de trabajo - Conforme auditor"
+    finished_work_papers: "Papeles de trabajo - Conforme regional UPLA"
     revise_work_papers: "Papeles de trabajo - Revisado supervisor"
     notes: "Notas"
     estimated_amount: "Costo estimado en plan de trabajo"
@@ -1416,13 +1416,13 @@
       other: "%{count} hojas"
 
   workflow:
-    index_title: "Listado de programas de trabajo"
-    show_title: "Detalles del programa de trabajo"
-    new_title: "Agregar programa de trabajo"
-    edit_title: "Modificar programa de trabajo"
-    correctly_created: "Programa de trabajo agregado correctamente."
-    correctly_updated: "Programa de trabajo actualizado correctamente."
-    stale_object_error: "El programa de trabajo no fue actualizado, intente nuevamente."
+    index_title: "Listado de presupuestos"
+    show_title: "Detalles del presupuesto"
+    new_title: "Agregar presupuesto"
+    edit_title: "Modificar presupuesto"
+    correctly_created: "Presupuesto agregado correctamente."
+    correctly_updated: "Presupuesto actualizado correctamente."
+    stale_object_error: "El presupuesto no fue actualizado, intente nuevamente."
     save_as_new_version: "¿Guardar como nueva versión?"
     column_estimated: "Estimado"
     column_real: "Real"
@@ -1439,16 +1439,16 @@
     add_material_resource_utilization: "Agregar recurso material"
     show_resource_utilization: "Mostrar recursos"
     hide_resource_utilization: "Ocultar recursos"
-    download_global_workflow: "Descargar programa de trabajo global"
-    download_detailed_workflow: "Descargar programa de trabajo detallado"
+    download_global_workflow: "Descargar presupuesto global"
+    download_detailed_workflow: "Descargar presupuesto detallado"
     period:
       title: "Periodo (%{name})"
       range: "%{from_date} al %{to_date}"
     pdf:
-      pdf_name: "programa_de_trabajo_%{review}.pdf"
+      pdf_name: "presupuesto_%{review}.pdf"
       resources_utilization: "Recursos utilizados"
       planned_resources_utilization: "Recursos estimados en el plan de trabajo (*)"
-      planned_resources_utilization_explanation: "(*) No forman parte del costo total del programa de trabajo"
+      planned_resources_utilization_explanation: "(*) No forman parte del costo total del presupuesto"
 
   activerecord:
     models:
@@ -1473,7 +1473,7 @@
         other: "Informes"
       review_user_assignment: "Asignación de usuario a informe"
       role: "Perfil"
-      workflow: "Programa de trabajo"
+      workflow: "Presupuesto"
       workflow_item: "Registro de programa de trabajo"
       work_paper: "Papel de trabajo"
 
