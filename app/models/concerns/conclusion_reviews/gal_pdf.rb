@@ -56,9 +56,9 @@ module ConclusionReviews::GalPdf
     end
 
     def put_executive_summary_on pdf, organization
-      title = I18n.t 'conclusion_review.executive_summary.title'
+      title         = I18n.t 'conclusion_review.executive_summary.title'
       project_title = I18n.t 'conclusion_review.executive_summary.project'
-      project = review.plan_item.project
+      project       = review.plan_item.project
 
       pdf.start_new_page
       pdf.add_title title, (PDF_FONT_SIZE * 2).round, :center
@@ -77,6 +77,16 @@ module ConclusionReviews::GalPdf
 
       unless show_review_best_practice_comments? organization
         put_other_weaknesses_on  pdf
+      end
+
+      if show_scope_detail?
+        title = I18n.t 'conclusion_review.scope_detail.title'
+
+        pdf.start_new_page
+        pdf.add_title title, (PDF_FONT_SIZE).round, :center
+        pdf.move_down PDF_FONT_SIZE * 2
+
+        put_scope_detail_table_on pdf
       end
     end
 
@@ -217,7 +227,7 @@ module ConclusionReviews::GalPdf
     end
 
     def put_control_objective_items_table_on pdf, brief: false
-      row_data = control_objectives_row_data brief
+      row_data = control_objectives_row_data brief, scope_detail: false
 
       if row_data.present?
         data          = row_data.insert 0, control_objective_column_headers
@@ -234,6 +244,21 @@ module ConclusionReviews::GalPdf
               ]
             )
           end
+        end
+      end
+    end
+
+    def put_scope_detail_table_on pdf
+      row_data = control_objectives_row_data true, scope_detail: true
+
+      if row_data.present?
+        column_widths                              = control_objective_column_widths pdf
+        table_options                              = pdf.default_table_options column_widths
+        table_options[:cell_style][:border_widths] = [0, 0, 1, 0]
+        table_options[:row_colors]                 = ['ffffff']
+
+        pdf.font_size PDF_FONT_SIZE do
+          pdf.table row_data, table_options.merge(header: false)
         end
       end
     end
@@ -597,14 +622,19 @@ module ConclusionReviews::GalPdf
       row_data
     end
 
-    def control_objectives_row_data brief
+    def control_objectives_row_data brief, scope_detail: false
       count         = 0
       row_data      = []
       image_options = { vposition: :top, border_widths: [1, 0, 1, 0] }
 
       review.grouped_control_objective_items.each do |process_control, cois|
         cois.sort.each do |coi|
-          text  = coi.control_objective_text
+          text  = if scope_detail
+                    coi.control_objective_text.lines.first.upcase
+                  else
+                    coi.control_objective_text
+                  end
+
           image = CONCLUSION_SCOPE_IMAGES[coi.auditor_comment] ||
             'scope_not_apply.png'
 
@@ -785,5 +815,12 @@ module ConclusionReviews::GalPdf
 
     def show_tests? organization
       !review.show_counts? organization.prefix
+    end
+
+    def show_scope_detail?
+      !show_review_best_practice_comments?(organization) &&
+        !collapse_control_objectives &&
+        SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START &&
+        review.period.start >= SCOPE_DETAIL_IN_CONCLUSION_REVIEW_START
     end
 end

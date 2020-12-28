@@ -20,6 +20,7 @@ class FollowUpAuditController < ApplicationController
   include Reports::WeaknessesList
   include Reports::WeaknessesBrief
   include Reports::WeaknessesRepeated
+  include Reports::WeaknessesReschedules
   include Reports::FixedWeaknessesReport
   include Reports::FollowUpCostAnalysis
   include Reports::WeaknessesGraph

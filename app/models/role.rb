@@ -4,13 +4,13 @@ class Role < ApplicationRecord
   include Roles::Scopes
   include ParameterSelector
 
-  # Constantes
+  # REMINDER: DO NOT use 4 until all clients are migrated from "old"
+  # auditor junior role
   TYPES = {
     :admin => 0,
     :manager => 1,
     :supervisor => 2,
-    :auditor_senior => 3,
-    :auditor_junior => 4,
+    :auditor => 3,
     :committee => 5,
     :audited => 6,
     :executive_manager => 7
@@ -18,7 +18,7 @@ class Role < ApplicationRecord
 
   ACT_AS = {
     audited: TYPES.values_at(:admin, :audited, :executive_manager),
-    auditor: TYPES.values_at(:auditor_senior, :auditor_junior, :supervisor, :manager)
+    auditor: TYPES.values_at(:auditor, :supervisor, :manager)
   }.freeze
 
   # Callbacks
