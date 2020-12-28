@@ -16,6 +16,7 @@ class Finding < ApplicationRecord
   include Findings::Cost
   include Findings::CreateValidation
   include Findings::Csv
+  include Findings::Commitments
   include Findings::CommitmentSupport
   include Findings::Current
   include Findings::CurrentSituationCsv

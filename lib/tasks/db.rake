@@ -25,6 +25,8 @@ namespace :db do
       fix_email_organization              # 2020-04-24
       add_follow_up_audited_privilege     # 2020-05-08
       add_file_model_review               # 2020-07-20
+      remove_auditor_junior_role          # 2020-11-04
+      add_commitment_data_on_findings     # 2020-12-01
     end
   end
 end
@@ -578,4 +580,28 @@ private
 
   def migrate_file_model_review?
     FileModelReview.count == 0
+  end
+
+  def remove_auditor_junior_role
+    if remove_auditor_junior_role?
+      Role.where(role_type: 4).update_all role_type: 3
+    end
+  end
+
+  def remove_auditor_junior_role?
+    Role.where(role_type: 4).any?
+  end
+
+  def add_commitment_data_on_findings
+    if add_commitment_data_on_findings?
+      Finding.where.not(reschedule_count: 0).where(commitments: nil).find_each do |finding|
+        commitments = finding.calculate_commitments
+
+        finding.update_column :commitments, commitments if commitments.any?
+      end
+    end
+  end
+
+  def add_commitment_data_on_findings?
+    Endorsement.any? && Finding.where.not(reschedule_count: 0).where(commitments: nil).all?
   end

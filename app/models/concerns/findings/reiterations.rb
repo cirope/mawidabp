@@ -35,7 +35,10 @@ module Findings::Reiterations
       first_follow_up_date: follow_up_date
     }
 
-    attrs[:reschedule_count] = 0 if final_review_created_at.blank? && rescheduled?
+    if final_review_created_at.blank? && rescheduled?
+      attrs[:reschedule_count] = 0
+      attrs[:commitments]      = nil
+    end
 
     repeated_of.update_column :state, previous_repeated_of_state
     repeated_of.update_latest
@@ -112,6 +115,7 @@ module Findings::Reiterations
 
       self.repeated_of.state = Finding::STATUS[:repeated]
       self.origination_date  = repeated_of.origination_date
+      self.commitments       = repeated_of.commitments
     end
 
     def reiteration?
