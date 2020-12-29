@@ -113,7 +113,7 @@ class PlansController < ApplicationController
     end
 
     def plan_csv_path
-      render csv: @plan.to_csv(business_unit_type: @business_unit_type) , filename: @plan.csv_filename
+      render csv: @plan.to_csv(business_unit_type: @business_unit_type), filename: @plan.csv_filename
     end
 
     def load_privileges

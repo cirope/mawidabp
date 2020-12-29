@@ -76,7 +76,7 @@ module Plans::Csv
           '%.2f' % plan_item.human_units,
           '%.2f' % plan_item.material_units,
           '%.2f' % plan_item.units
-        ]
+        ].compact
       end
 
       rows
