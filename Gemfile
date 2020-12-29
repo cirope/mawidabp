@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 6.0.3.4'
 
+gem 'rake', '13.0.1'
 gem 'pg'
 gem 'activerecord-nulldb-adapter'
 gem 'jquery-rails'
