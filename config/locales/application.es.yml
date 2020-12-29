@@ -390,6 +390,7 @@ es:
     applied_procedures: "PROCEDIMIENTOS APLICADOS"
     conclusion: "CONCLUSIÓN"
     weaknesses_brief: "RESUMEN DE OBSERVACIONES"
+    weaknesses_reschedules: "RESUMEN DE OBSERVACIONES / REPROGRAMACIONES"
     weaknesses: "OBSERVACIONES"
     oportunities: "OPORTUNIDADES DE MEJORA"
     finding_review_assignments: "OBSERVACIONES / OPORTUNIDADES DE MEJORA REVISADAS"
@@ -449,6 +450,8 @@ es:
       control_objective_weaknesses: "Observaciones"
       control_objective_oportunities: "Oportunidades"
       finding_work_papers: "Papeles de trabajo de la observación"
+    scope_detail:
+      title: "CALIFICACION DE LOS DISTINTOS ITEMS EVALUADOS DENTRO DEL ALCANCE DE ESTA AUDITORIA"
 
   control_objective:
     errors:
