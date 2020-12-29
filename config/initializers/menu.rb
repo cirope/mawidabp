@@ -384,8 +384,7 @@ ALLOWED_MODULES_BY_TYPE = {
   admin: APP_AUDITOR_MODULES,
   manager: APP_AUDITOR_MODULES,
   supervisor: APP_AUDITOR_MODULES,
-  auditor_senior: APP_AUDITOR_MODULES,
-  auditor_junior: APP_AUDITOR_MODULES,
+  auditor: APP_AUDITOR_MODULES,
   committee: APP_AUDITOR_MODULES,
   audited: APP_AUDITED_MODULES,
   executive_manager: APP_AUDITOR_MODULES

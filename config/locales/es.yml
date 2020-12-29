@@ -435,6 +435,7 @@
     applied_procedures: "PROCEDIMIENTOS APLICADOS"
     conclusion: "CONCLUSIÓN"
     weaknesses_brief: "RESUMEN DE OBSERVACIONES"
+    weaknesses_reschedules: "RESUMEN DE OBSERVACIONES / REPROGRAMACIONES"
     weaknesses: "OBSERVACIONES"
     oportunities: "OPORTUNIDADES DE MEJORA"
     finding_review_assignments: "HALLAZGOS REVISADOS"
@@ -623,16 +624,25 @@
     auditors:
       one: "Auditor"
       other: "Auditores"
+    auditor_users:
+      one: "Legajo auditor"
+      other: "Legajos auditores"
     reviewers:
       one: "Revisor"
       other: "Revisores"
     audited:
       one: "Responsable de la solución"
       other: "Responsables de la solución"
+    audited_users:
+      one: "Legajo auditado"
+      other: "Legajos auditados"
     readonly: "La observación no puede ser creada ni modificada, ya se emitió el informe definitivo"
     responsibles:
       one: "Responsable"
       other: "Responsables"
+    responsible_users:
+      one: "Legajo responsable"
+      other: "Legajos responsables"
     send_notification: "¿Notificar?"
     status_change_history: "Historial de cambios de estado"
     view_cost_details: "Listado de actividades anteriores relacionadas al hallazgo"
@@ -667,6 +677,9 @@
       filtered_by:
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
         other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
+    user_assignment:
+      audit_team: "Auditoría"
+      others: "Usuarios"
 
   finding_relation:
     types:
@@ -701,6 +714,7 @@
     weaknesses_list_title: "Listado de observaciones"
     weaknesses_brief_title: "Resumen de observaciones pendientes"
     weaknesses_repeated_title: "Observaciones con estado según último seguimiento"
+    weaknesses_reschedules_title: "Resumen de observaciones y reprogramaciones"
     weaknesses_by_control_objective_process_title: "Reporte de proceso por objetivos de control"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     cost_analysis:
@@ -737,6 +751,7 @@
     weaknesses_list_title: "Listado de observaciones"
     weaknesses_brief_title: "Resumen de observaciones pendientes"
     weaknesses_repeated_title: "Observaciones con estado según último seguimiento"
+    weaknesses_reschedules_title: "Resumen de observaciones y reprogramaciones"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     detailed_report: "Reporte detallado"
     qa_indicators_title: "Indicadores de calidad"
@@ -904,6 +919,15 @@
       implemented_audited_count:
         one: "Una observación fue regularizada entre el %{from_date} y el %{to_date}."
         other: "%{count} observaciones fueron regularizadas entre el %{from_date} y el %{to_date}."
+    weaknesses_reschedules:
+      pdf_name: "resumen_de_observaciones_reprogramaciones_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "RESUMEN DE OBSERVACIONES / REPROGRAMACIONES / INFORMES DEFINITIVOS"
+      without_weaknesses: "Sin observaciones"
+      reschedule_count_manager: "Cantidad de reprogramaciones aprobadas por Jefatura"
+      reschedule_count_management: "Cantidad de reprogramaciones aprobadas por Gerencia"
+      reschedule_count_ceo: "Cantidad de reprogramaciones aprobadas por CEO"
+      reschedule_count_committee: "Cantidad de reprogramaciones aprobadas por Comité"
     weaknesses_repeated:
       pdf_name: "observaciones_con_estado_segun_ultimo_seguimiento_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -1325,8 +1349,7 @@
     stale_object_error: "El perfil no fue actualizado, intente nuevamente."
     type_admin: "Administrador"
     type_supervisor: "Supervisor"
-    type_auditor_senior: "Auditor Senior"
-    type_auditor_junior: "Auditor Junior"
+    type_auditor: "Auditor"
     type_audited: "Auditado"
     type_committee: "Comité"
     type_manager: "Gerente de auditoría"

@@ -16,8 +16,20 @@ module Findings::Scopes
     end
 
     def list_for_report
-      list_with_final_review.or(
+      # TODO: we do it this way so we can serialize it
+      conditions = []
+      parameters = {}
+      ids        = list_with_final_review.or(
         list_without_final_review.with_repeated
+      ).pluck('id')
+
+      ids.each_slice(1000).with_index do |finding_ids, i|
+        conditions << "#{quoted_table_name}.#{qcn 'id'} IN (:ids_#{i})"
+        parameters[:"ids_#{i}"] = finding_ids
+      end
+
+      includes(review: :conclusion_final_review).where(
+        conditions.map { |c| "(#{c})" }.join(' OR '), parameters
       )
     end
 

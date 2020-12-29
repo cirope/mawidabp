@@ -90,6 +90,10 @@ module Findings::Csv
       origination_date ? I18n.l(origination_date, format: :minimal) : '-'
     end
 
+    def first_follow_up_date_text
+      first_follow_up_date ? I18n.l(first_follow_up_date, format: :minimal) : '-'
+    end
+
     def follow_up_date_text
       follow_up_date ? I18n.l(follow_up_date, format: :minimal) : '-'
     end

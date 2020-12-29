@@ -269,7 +269,7 @@ class UsersControllerTest < ActionController::TestCase
           organization_roles_attributes: [
             {
               organization_id: Current.organization.id,
-              role_id:         roles(:auditor_senior_role).id
+              role_id:         roles(:auditor_role).id
             }
           ]
         }
@@ -307,7 +307,7 @@ class UsersControllerTest < ActionController::TestCase
           organization_roles_attributes: [
             {
               organization_id: Current.organization.id,
-              role_id:         roles(:auditor_senior_role).id
+              role_id:         roles(:auditor_role).id
             }
           ]
         }
