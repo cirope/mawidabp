@@ -6,8 +6,8 @@
   $('#conclusion_draft_review_sectors').val('<%= j @conclusion_draft_review.review.business_unit_type.sectors %>')
   $('#conclusion_draft_review_review_attributes_description').val('<%== j @conclusion_draft_review.review.description %>')
   $('#conclusion_draft_review_review_attributes_id').val('<%= @conclusion_draft_review.review.id %>')
-
   $('#conclusion_draft_review_main_recommendations').val('<%= j main_recommendations_for(@conclusion_draft_review) %>')
+  $('#conclusion_draft_review_recipients').val('<%= j recipients_for(@conclusion_draft_review) %>');
 
   $('#best_practice_comments_container').html('<%= j best_practice_comments_form(@conclusion_draft_review) %>')
 
@@ -22,6 +22,7 @@
   $('#conclusion_draft_review_sectors').val('')
   $('#conclusion_draft_review_review_attributes_description').val('')
   $('#conclusion_draft_review_review_attributes_id').val('')
+  $('#conclusion_draft_review_recipients').val('')
 
   <% if Current.conclusion_pdf_format == 'bic' %>
     $('#conclusion_draft_review_applied_procedures').val('')
