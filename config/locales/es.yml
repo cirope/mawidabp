@@ -476,9 +476,9 @@
       create: "Generar"
     bundle_index:
       title: "ÍNDICE"
-      default_items: "PLANILLA DE CALIFICACIÓN GLOBAL\nPLANILLA DE CALIFICACIÓN DETALLADA\nINFORME DEFINITIVO\nRELEVAMIENTO\nSEGUIMIENTO DE HALLAZGOS"
+      default_items: "PLANILLA DE CALIFICACIÓN GLOBAL\nPLANILLA DE CALIFICACIÓN DETALLADA\nINFORME DEFINITIVO\nUSO INTERNO UPLA\nSEGUIMIENTO DE HALLAZGOS"
       items_label: "Entradas en el índice"
-      pdf_name: "00_indice_legajo.pdf"
+      pdf_name: "00_indice.pdf"
     findings_sheet:
       title: "Observaciones - Papeles de trabajo"
       pdf_name: "%{prefix}_caratula_de_observaciones_y_papeles_de_trabajo.pdf"
@@ -490,7 +490,7 @@
       pdf_name: "%{prefix}_seguimiento_de_observaciones_oportunidades_de_mejora.pdf"
     workflow:
       title: "Documentación del trabajo realizado"
-      pdf_name: "documentacion_del_trabajo_realizado.pdf"
+      pdf_name: "Papeles_de_trabajo.pdf"
       control_objective_work_papers: "Papeles de trabajo del objetivo de control"
       control_objective_weaknesses: "Observaciones"
       control_objective_oportunities: "Oportunidades"
