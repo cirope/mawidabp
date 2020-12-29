@@ -145,6 +145,11 @@ module PlansHelper
           t('plans.download_detailed_business_unit_type_plan', business_unit_type: @business_unit_type.name),
           [@plan, include_details: 1, business_unit_type: @business_unit_type.id, _ts: Time.now.to_i, format: :pdf],
           class: 'dropdown-item'
+        ),
+        link_to(
+          t('plans.download_detailed_business_unit_type_plan_csv', business_unit_type: @business_unit_type.name),
+          [@plan, include_details: 1, business_unit_type: @business_unit_type.id, _ts: Time.now.to_i, format: :csv],
+          class: 'dropdown-item'
         )
       ]
     end

@@ -2,6 +2,7 @@ class Plan < ApplicationRecord
   include Auditable
   include ParameterSelector
   include Plans::Clone
+  include Plans::Csv
   include Plans::DestroyValidation
   include Plans::Duplication
   include Plans::Overload
