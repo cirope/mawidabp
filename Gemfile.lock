@@ -163,7 +163,7 @@ GEM
       activerecord (>= 5.2)
       request_store (~> 1.1)
     parallel (1.20.1)
-    parser (2.7.2.0)
+    parser (3.0.0.0)
       ast (~> 2.4.1)
     pdf-core (0.8.1)
     pg (1.2.3)
@@ -209,7 +209,7 @@ GEM
       thor (>= 0.20.3, < 2.0)
     rainbow (3.0.0)
     raindrops (0.19.1)
-    rake (13.0.3)
+    rake (13.0.1)
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -280,7 +280,7 @@ GEM
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.7.0)
-    unicorn (5.7.0)
+    unicorn (5.8.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
     unicorn-rails (2.2.1)
@@ -339,6 +339,7 @@ DEPENDENCIES
   prawn-table
   rails (~> 6.0.3.4)
   rails-controller-testing
+  rake (= 13.0.1)
   redcarpet
   responders
   rubocop-github
