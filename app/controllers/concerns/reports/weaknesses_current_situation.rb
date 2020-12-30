@@ -179,6 +179,10 @@ module Reports::WeaknessesCurrentSituation
           current_weakness.risk_text
         ],
         [
+          Weakness.human_attribute_name('priority'),
+          current_weakness.priority_text
+        ],
+        [
           "<font size='#{PDF_FONT_SIZE + 2}'>#{Weakness.human_attribute_name('title')}</font>",
           "<font size='#{PDF_FONT_SIZE + 2}'><b>#{current_weakness.title}</b></font>"
         ],
