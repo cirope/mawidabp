@@ -20,7 +20,6 @@ module Plans::Csv
   private
 
     def csv_headers
-      headers =
       [
         PlanItem.human_attribute_name(:order_number),
         PlanItem.human_attribute_name(:status),
@@ -43,7 +42,7 @@ module Plans::Csv
         put_csv_rows_on csv, business_unit_type
       else
         business_unit_types.each do |business_unit_type|
-         put_csv_rows_on csv, business_unit_type
+          put_csv_rows_on csv, business_unit_type
         end
       end
     end
