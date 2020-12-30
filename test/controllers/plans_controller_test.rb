@@ -22,6 +22,12 @@ class PlansControllerTest < ActionController::TestCase
     assert_redirected_to @plan.relative_pdf_path
   end
 
+  test 'show plan as csv' do
+    get :show, params: { id: @plan }, as: :csv
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   test 'show plan on js' do
     business_unit_type = business_unit_types :cycle
 
