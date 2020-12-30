@@ -2,12 +2,9 @@ module Plans::Csv
   extend ActiveSupport::Concern
 
   def to_csv business_unit_type: nil
-    options            = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
-    grouped_plan_items = self.grouped_plan_items
+    options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
     csv_str = CSV.generate(**options) do |csv|
-      csv << csv_title
-      csv << csv_period
       csv << csv_headers
 
       csv_rows(business_unit_type).each { |row| csv << row }
@@ -21,20 +18,6 @@ module Plans::Csv
   end
 
   private
-    def csv_title
-      [I18n.t('plans.csv.title')]
-    end
-
-    def csv_period
-      period_label = I18n.t 'plans.period.title', name: period.name
-      range_label  = I18n.t 'plans.period.range', **{
-        from_date: I18n.l(period.start, format: :long),
-        to_date:   I18n.l(period.end,   format: :long)
-      }
-
-      [period_label, range_label]
-    end
-
     def csv_order
       [
         'order_number',
