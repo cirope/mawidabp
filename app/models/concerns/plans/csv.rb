@@ -19,31 +19,22 @@ module Plans::Csv
 
   private
 
-    def csv_order
-      [
-        'order_number',
-        'status',
-        'business_unit_id',
-        'project',
-        'tags',
-        'start',
-        'end',
-        ('scope' if SHOW_REVIEW_EXTRA_ATTRIBUTES),
-        ('risk_exposure' if SHOW_REVIEW_EXTRA_ATTRIBUTES),
-        'human_resource_units',
-        'material_resource_units',
-        'total_resource_units'
-      ].compact
-    end
-
     def csv_headers
-      headers = []
-
-      csv_order.map do |col_name|
-        headers << PlanItem.human_attribute_name(col_name)
-      end
-
-      headers.insert(2, BusinessUnitType.model_name.human)
+      headers = [
+        PlanItem.human_attribute_name(:order_number),
+        PlanItem.human_attribute_name(:status),
+        BusinessUnitType.model_name.human,
+        PlanItem.human_attribute_name(:business_unit_id),
+        PlanItem.human_attribute_name(:project),
+        PlanItem.human_attribute_name(:tags),
+        PlanItem.human_attribute_name(:start),
+        PlanItem.human_attribute_name(:end),
+        (PlanItem.human_attribute_name(:scope) if SHOW_REVIEW_EXTRA_ATTRIBUTES),
+        (PlanItem.human_attribute_name(:risk_exposure) if SHOW_REVIEW_EXTRA_ATTRIBUTES),
+        PlanItem.human_attribute_name(:human_resource_units),
+        PlanItem.human_attribute_name(:material_resource_units),
+        PlanItem.human_attribute_name(:total_resource_units)
+      ].compact
     end
 
     def csv_put_business_unit_types_on csv, business_unit_type
