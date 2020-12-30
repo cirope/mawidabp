@@ -20,7 +20,8 @@ module Plans::Csv
   private
 
     def csv_headers
-      headers = [
+      headers =
+      [
         PlanItem.human_attribute_name(:order_number),
         PlanItem.human_attribute_name(:status),
         BusinessUnitType.model_name.human,
@@ -39,15 +40,15 @@ module Plans::Csv
 
     def csv_put_business_unit_types_on csv, business_unit_type
       if business_unit_type
-        csv_rows csv, business_unit_type
+        put_csv_rows_on csv, business_unit_type
       else
         business_unit_types.each do |business_unit_type|
-          csv_rows csv, business_unit_type
+         put_csv_rows_on csv, business_unit_type
         end
       end
     end
 
-    def csv_rows csv, business_unit_type
+    def put_csv_rows_on csv, business_unit_type
       plan_items = Array(grouped_plan_items[business_unit_type]).sort
 
       if plan_items.present?

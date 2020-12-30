@@ -28,6 +28,18 @@ class PlansControllerTest < ActionController::TestCase
     assert_match Mime[:csv].to_s, @response.content_type
   end
 
+  test 'show plan as csv with business unit type' do
+    business_unit_type = business_unit_types :cycle
+
+    get :show, params: {
+      id: @plan,
+      business_unit_type: business_unit_type,
+    }, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   test 'show plan on js' do
     business_unit_type = business_unit_types :cycle
 
