@@ -29,6 +29,11 @@
         t('plans.download_detailed_plan'),
         [@plan, include_details: 1, _ts: Time.now.to_i, format: :pdf],
         class: 'dropdown-item'
+      ),
+      link_to(
+        t('plans.download_detailed_business_unit_type_plan_csv'),
+        [@plan, include_details: 1, _ts: Time.now.to_i, format: :csv],
+        class: 'dropdown-item'
       )
     ]
   ) %>
