@@ -387,7 +387,8 @@ es:
     download_detailed_plan: 'Descargar plan de auditoria detallado'
     download_business_unit_type_plan: 'Descargar plan %{business_unit_type}'
     download_detailed_business_unit_type_plan: 'Descargar plan %{business_unit_type} detallado'
-    download_detailed_business_unit_type_plan_csv: 'Descargar plan %{business_unit_type} detallado CSV'
+    download_detailed_business_unit_type_plan_csv: 'Descargar plan %{business_unit_type} en CSV'
+    download_business_unit_type_plan_csv: 'Descargar plan en CSV'
     without_business_unit_type: 'Sin unidad de negocio'
 
   profiles:

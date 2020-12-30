@@ -36,9 +36,13 @@ module Plans::Csv
     end
 
     def csv_headers
+      headers = []
+
       csv_order.map do |col_name|
-        PlanItem.human_attribute_name(col_name)
+        headers << PlanItem.human_attribute_name(col_name)
       end
+
+      headers.insert(2, BusinessUnitType.model_name.human)
     end
 
     def csv_put_business_unit_types_on csv, business_unit_type
@@ -59,6 +63,7 @@ module Plans::Csv
           csv << [
             plan_item.order_number,
             plan_item.status_text(long: false),
+            business_unit_type&.name || '',
             plan_item.business_unit&.name || '',
             plan_item.project,
             plan_item.tags.map(&:to_s).join(';'),
