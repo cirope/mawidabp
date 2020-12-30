@@ -62,8 +62,8 @@ module Plans::Csv
             plan_item.tags.map(&:to_s).join(';'),
             I18n.l(plan_item.start, format: :default),
             I18n.l(plan_item.end, format: :default),
-            (plan_item.scope if SHOW_REVIEW_EXTRA_ATTRIBUTES),
-            (plan_item.risk_exposure if SHOW_REVIEW_EXTRA_ATTRIBUTES),
+            (plan_item&.scope || '' if SHOW_REVIEW_EXTRA_ATTRIBUTES),
+            (plan_item&.risk_exposure || '' if SHOW_REVIEW_EXTRA_ATTRIBUTES),
             '%.2f' % plan_item.human_units,
             '%.2f' % plan_item.material_units,
             '%.2f' % plan_item.units
