@@ -18,6 +18,7 @@ module Plans::Csv
   end
 
   private
+
     def csv_order
       [
         'order_number',
