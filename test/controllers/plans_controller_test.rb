@@ -24,6 +24,7 @@ class PlansControllerTest < ActionController::TestCase
 
   test 'show plan as csv' do
     get :show, params: { id: @plan }, as: :csv
+
     assert_response :success
     assert_match Mime[:csv].to_s, @response.content_type
   end
