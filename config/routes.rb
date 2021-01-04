@@ -70,7 +70,7 @@ Rails.application.routes.draw do
     resources :documents, only: [:index]
   end
 
-  scope ':kind', kind: /control_objective|document|finding|news|plan_item|review/ do
+  scope ':kind', kind: /control_objective|document|finding|news|plan_item|review|business_unit/ do
     resources :tags
   end
 
