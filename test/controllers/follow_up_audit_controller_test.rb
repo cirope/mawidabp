@@ -157,6 +157,29 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       'review_stats_report', 0)
   end
 
+  test 'review stats report as CSV' do
+    login
+
+    get :review_stats_report, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :review_stats_report, :params => {
+        :review_stats_report => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   test 'qa indicators' do
     login
 
