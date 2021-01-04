@@ -14,13 +14,13 @@ module Reports::ReviewStatsReport
     set_reviews_by_tag_data
     set_weaknesses_by_score_data
 
-     respond_to do |format|
-       format.html
-       format.js
-       format.csv do
-         render csv: review_stat_report_csv, filename: @title.downcase
-       end
-     end
+    respond_to do |format|
+      format.html
+      format.js
+      format.csv do
+        render csv: review_stat_report_csv, filename: @title.downcase
+      end
+    end
   end
 
   def create_review_stats_report
