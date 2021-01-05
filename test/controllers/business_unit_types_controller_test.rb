@@ -73,7 +73,10 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :require_counts => '0',
           :business_units_attributes => [
             {
-              :name => 'New business unit'
+              :name => 'New business unit',
+              :taggings_attributes => [
+                :tag_id => tags(:business_unit).id
+              ]
             }
           ]
         }
