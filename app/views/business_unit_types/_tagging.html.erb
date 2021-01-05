@@ -1,5 +1,5 @@
 <%
-  id = f.object.object_id
+  id      = f.object.object_id
   tagging = f.object
 %>
 <fieldset class="tagging">
@@ -15,9 +15,9 @@
           autocomplete_id_target: "#hidden_tag_#{id}"
         }
       } %>
-  <% else %>
-    <%= f.input "business_unit_tagging_#{id}", label: false, input_html: { value: tagging.tag.to_s, readonly: true } %>
-  <% end %>
-  <%= f.input :tag_id, as: :hidden, input_html: { id: "hidden_tag_#{id}" } %>
+    <% else %>
+      <%= f.input "business_unit_tagging_#{id}", label: false, input_html: { value: tagging.tag.to_s, readonly: true } %>
+    <% end %>
+    <%= f.input :tag_id, as: :hidden, input_html: { id: "hidden_tag_#{id}" } %>
   </div>
 </fieldset>
