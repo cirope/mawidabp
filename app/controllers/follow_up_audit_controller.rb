@@ -71,6 +71,7 @@ class FollowUpAuditController < ApplicationController
         weaknesses_list: :read,
         weaknesses_brief: :read,
         weaknesses_graphs: :read,
+        weaknesses_reschedules: :read,
         weaknesses_repeated: :read,
         create_weaknesses_repeated: :read,
         cost_analysis: :read,

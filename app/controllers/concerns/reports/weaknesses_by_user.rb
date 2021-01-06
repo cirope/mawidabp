@@ -146,6 +146,10 @@ module Reports::WeaknessesByUser
           weakness.risk_text
         ],
         [
+          Weakness.human_attribute_name('priority'),
+          weakness.priority_text
+        ],
+        [
           t('finding.auditors', count: 0),
           weakness.users.select(&:auditor?).map(&:full_name).to_sentence
         ],

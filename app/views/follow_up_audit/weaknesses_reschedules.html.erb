@@ -12,12 +12,13 @@
 %>
 
 <% if @weaknesses.any? %>
-  <div class="table-responsive">
+  <div class="table-responsive my-3">
     <table class="table table-sm table-striped table-hover">
       <thead>
         <tr>
           <th><%= Review.model_name.human %></th>
           <th><%= PlanItem.human_attribute_name 'project' %></th>
+          <th><%= Weakness.human_attribute_name 'review_code' %></th>
           <th><%= Weakness.human_attribute_name 'title' %></th>
           <th><%= Weakness.human_attribute_name 'description' %></th>
           <th><%= Weakness.human_attribute_name 'risk' %></th>
@@ -35,6 +36,7 @@
               weakness.review.identification
             ].join %></td>
             <td><%= weakness.review.plan_item.project %></td>
+            <td><%= weakness.review_code %></td>
             <td><%= weakness.title %></td>
             <td><%= weakness.description %></td>
             <td><%= weakness.risk_text %></td>
