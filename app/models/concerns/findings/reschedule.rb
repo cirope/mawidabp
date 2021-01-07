@@ -68,7 +68,7 @@ module Findings::Reschedule
     end
 
     def follow_up_dates_to_check_against
-      follow_up_dates = [follow_up_date, follow_up_date_was].compact.sort
+      follow_up_dates = [follow_up_date, follow_up_date_was].compact.sort.reverse
 
       versions_after_final_review.reverse.each do |v|
         prev = v.reify dup: true

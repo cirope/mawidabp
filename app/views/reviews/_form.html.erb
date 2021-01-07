@@ -57,7 +57,7 @@
 
             <div class="clearfix">
               <%= f.simple_fields_for :file_model_reviews do |fm_r| %>
-                <%= render 'file_model_review', f: fm_r, readonly: readonly %>
+                <%= render 'file_model_review', f: fm_r, frozen: frozen %>
               <% end %>
 
               <%= link_to_add_fields t('review.add_file_model'), f, :file_model_reviews, 'file_model_review' unless frozen %>
@@ -166,11 +166,23 @@
     </div>
   <% end %>
 
-  <div data-control-objective-items-container>
-    <% if @review.control_objective_items.any? %>
-      <%= render 'control_objective_items', f: f, readonly: readonly, frozen: frozen %>
+  <h4 class="mt-3">
+    <%= t('review.control_objective_items_label') %>
+    <% if @review.persisted? && !readonly %>
+      <span class="float-right small">
+        <%= link_to_excluded_control_objectives %>
+      </span>
     <% end %>
+  </h4>
+
+  <hr />
+
+  <div data-control-objective-items-container>
   </div>
+
+  <% if @review.control_objective_items.any? %>
+    <%= render 'control_objective_items', f: f, readonly: readonly, frozen: frozen %>
+  <% end %>
 
   <% unless readonly %>
     <ul class="nav nav-tabs mt-3">

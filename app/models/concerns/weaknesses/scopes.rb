@@ -33,24 +33,27 @@ module Weaknesses::Scopes
     end
 
     def by_priority_on_risk conditions
-      result = nil
+      clauses    = []
+      parameters = {}
 
-      risks.each do |risk, value|
-        priority  = conditions[risk]
+      risks.each_with_index do |values, i|
+        risk      = values.last
+        priority  = conditions[values.first]
         condition = if priority
-                      { risk: value, priority: priority }
-                    else
-                      { risk: value }
-                    end
+                      clauses << [
+                        "#{quoted_table_name}.#{qcn 'risk'} = :risk_#{i}",
+                        "#{quoted_table_name}.#{qcn 'priority'} = :priority_#{i}"
+                      ].join(' AND ')
 
-        if result
-          result = result.or where(condition)
-        else
-          result = where condition
-        end
+                      parameters[:"risk_#{i}"]     = risk
+                      parameters[:"priority_#{i}"] = priority
+                    else
+                      clauses << "#{quoted_table_name}.#{qcn 'risk'} = :risk_#{i}"
+                      parameters[:"risk_#{i}"] = risk
+                    end
       end
 
-      result
+      where clauses.map { |c| "(#{c})" }.join(' OR '), parameters
     end
 
     def by_impact impact

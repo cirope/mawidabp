@@ -20,6 +20,7 @@ class FollowUpAuditController < ApplicationController
   include Reports::WeaknessesList
   include Reports::WeaknessesBrief
   include Reports::WeaknessesRepeated
+  include Reports::WeaknessesReschedules
   include Reports::FixedWeaknessesReport
   include Reports::FollowUpCostAnalysis
   include Reports::WeaknessesGraph
@@ -70,6 +71,7 @@ class FollowUpAuditController < ApplicationController
         weaknesses_list: :read,
         weaknesses_brief: :read,
         weaknesses_graphs: :read,
+        weaknesses_reschedules: :read,
         weaknesses_repeated: :read,
         create_weaknesses_repeated: :read,
         cost_analysis: :read,
