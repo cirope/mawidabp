@@ -23,6 +23,7 @@ class PlansController < ApplicationController
       format.html
       format.js
       format.pdf  { redirect_to plan_pdf_path }
+      format.csv  { plan_csv_path }
     end
   end
 
@@ -109,6 +110,10 @@ class PlansController < ApplicationController
         business_unit_type: @business_unit_type
 
       @plan.relative_pdf_path
+    end
+
+    def plan_csv_path
+      render csv: @plan.to_csv(business_unit_type: @business_unit_type), filename: @plan.csv_filename
     end
 
     def load_privileges
