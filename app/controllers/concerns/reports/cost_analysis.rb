@@ -237,7 +237,7 @@ module Reports::CostAnalysis
         row = []
 
         data.each do |column|
-          row << ((column.start_with? '<b>') ? column.gsub('<b>', '').gsub('</b>','') : column)
+          row << ActionView::Base.full_sanitizer.sanitize(column.to_s)
         end
 
         csv << row
@@ -265,8 +265,37 @@ module Reports::CostAnalysis
       @total_cost_data[period].each do |total_data|
         data << total_data.push(period.inspect)
       end
+
+      unless @detailed_data[period].blank?
+        data << detail_cost_analysis_headers
+
+        detail_cost_analysis_data(period).each do |detail|
+          data << detail
+        end
+      end
     end
 
     data
+  end
+
+  def detail_cost_analysis_headers
+    [
+      t("conclusion_report.cost_analysis.detailed_column_resource"),
+      t("conclusion_report.cost_analysis.detailed_column_estimated_amount"),
+      t("conclusion_report.cost_analysis.detailed_column_real_amount"),
+      t("conclusion_report.cost_analysis.detailed_column_deviation")
+    ]
+  end
+
+  def detail_cost_analysis_data period
+    rows = []
+
+    @detailed_data[period].each do |detailed_data|
+      detailed_data[:data].each do |data|
+        rows.push(data)
+      end
+    end
+
+    rows
   end
 end
