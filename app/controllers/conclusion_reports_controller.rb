@@ -1,4 +1,5 @@
 class ConclusionReportsController < ApplicationController
+  include ActionView::Helpers::SanitizeHelper
   include Reports::SynthesisReport
   include Reports::ReviewStatsReport
   include Reports::ReviewScoresReport

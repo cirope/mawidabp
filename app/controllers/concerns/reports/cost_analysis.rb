@@ -237,7 +237,7 @@ module Reports::CostAnalysis
         row = []
 
         data.each do |column|
-          row << ActionView::Base.full_sanitizer.sanitize(column.to_s)
+          row << strip_tags(column.to_s)
         end
 
         csv << row
