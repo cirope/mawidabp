@@ -327,6 +327,6 @@ module Reports::ReviewScoreDetailsReport
     def auditors_on_user_assignments review
       auditors = review.review_user_assignments.select &:auditor?
 
-      auditors.map(&:user).pluck(:user).join('; ')
+      auditors.map(&:user).join '; '
     end
 end
