@@ -324,7 +324,6 @@ module Reports::ReviewStatsReport
       options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
       csv_str = CSV.generate(**options) do |csv|
-
         csv << review_stats_headers
 
         review_stats_data.each { |row| csv << row }
