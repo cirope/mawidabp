@@ -535,7 +535,7 @@ es:
       poll:
         comments: 'Comentarios'
         send_date: 'Fecha envío'
-        answer_date: 'Fecha contestación'
+        answer_date: 'Fecha respuesta'
         answered: 'Contestada'
         questionnaire: 'Cuestionario'
         user: 'Usuario'
