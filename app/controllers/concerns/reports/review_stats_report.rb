@@ -346,12 +346,11 @@ module Reports::ReviewStatsReport
 
     def weaknesses_by_score_headers
       columns       = []
-      risk_priority = [
-                        Weakness.human_attribute_name('risk'),
-                        Weakness.human_attribute_name('priority')
-                      ].join(' / ')
 
-      columns << risk_priority
+      columns << [
+                   Weakness.human_attribute_name('risk'),
+                   Weakness.human_attribute_name('priority')
+                 ].join(' / ')
 
       Review.scores.keys.each do |score|
         columns << I18n.t("score_types.#{score}")
