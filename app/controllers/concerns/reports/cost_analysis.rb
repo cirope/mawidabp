@@ -237,7 +237,7 @@ module Reports::CostAnalysis
         row = []
 
         data.each do |column|
-          row << strip_tags(column.to_s)
+          row << column.to_s.gsub(/<[^>]*>/, '')
         end
 
         csv << row
