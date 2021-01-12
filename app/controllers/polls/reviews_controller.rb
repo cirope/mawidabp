@@ -74,7 +74,7 @@ class Polls::ReviewsController < ApplicationController
           poll_review.pollable.review.identification,
           poll_review.user.informal_name,
           (I18n.l poll_review.created_at.to_date, format: :default),
-          (poll_review.answered ? (I18n.l poll_review.updated_at.to_date, format: :default) : '')
+          (poll_review.answered ? I18n.l(poll_review.updated_at.to_date, format: :default) : '')
         ]
       end
     end

@@ -325,10 +325,8 @@ module Reports::ReviewScoreDetailsReport
     end
 
     def user_assignment_auditor review
-      users = review.review_user_assignments.select do |u|
-                u.assignment_type == ReviewUserAssignment::TYPES[:auditor]
-              end
+      auditors = review.review_user_assignments.select &:auditor?
 
-      users.map(&:user).pluck(:user).join(', ')
+      auditors.map(&:user).pluck(:user).join('; ')
     end
 end
