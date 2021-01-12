@@ -319,7 +319,7 @@ module Reports::ReviewScoreDetailsReport
           conclusion_review.evolution,
           conclusion_review.review.business_unit.to_s,
           conclusion_review.review.manual_score,
-          user_assignment_auditor(conclusion_review.review)
+          auditors_on_user_assignments(conclusion_review.review)
         ]
       end
     end
