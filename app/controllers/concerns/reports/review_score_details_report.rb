@@ -258,7 +258,8 @@ module Reports::ReviewScoreDetailsReport
         ConclusionFinalReview.human_attribute_name('conclusion'),
         ConclusionFinalReview.human_attribute_name('evolution'),
         BusinessUnit.model_name.human,
-        Review.human_attribute_name('manual_score')
+        Review.human_attribute_name('manual_score'),
+        t('review.user_assignment.type_auditor')
       ]
     end
 
@@ -317,8 +318,17 @@ module Reports::ReviewScoreDetailsReport
           conclusion_review.conclusion,
           conclusion_review.evolution,
           conclusion_review.review.business_unit.to_s,
-          conclusion_review.review.manual_score
+          conclusion_review.review.manual_score,
+          user_assignment_auditor(conclusion_review.review)
         ]
       end
+    end
+
+    def user_assignment_auditor review
+      users = review.review_user_assignments.select do |u|
+                u.assignment_type == ReviewUserAssignment::TYPES[:auditor]
+              end
+
+      users.map(&:user).pluck(:user).join(', ')
     end
 end
