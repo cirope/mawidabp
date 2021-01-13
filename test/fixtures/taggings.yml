@@ -140,23 +140,3 @@ important_being_implemented_weakness_on_approved_draft:
 pending_being_implemented_weakness_on_approved_draft:
   tag: pending
   taggable: being_implemented_weakness_on_approved_draft (Finding)
-
-business_unit_business_unit_one:
-  tag: business_unit
-  taggable: business_unit_one (BusinessUnit)
-
-business_unit_business_unit_two:
-  tag: business_unit
-  taggable: business_unit_two (BusinessUnit)
-
-business_unit_business_unit_three:
-  tag: business_unit
-  taggable: business_unit_three (BusinessUnit)
-
-business_unit_business_unit_four:
-  tag: business_unit
-  taggable: business_unit_foure (BusinessUnit)
-
-business_unit_business_unit_fifth:
-  tag: business_unit
-  taggable: business_unit_fifthe (BusinessUnit)

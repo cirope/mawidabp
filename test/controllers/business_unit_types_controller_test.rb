@@ -140,4 +140,28 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
 
     assert_redirected_to business_unit_types_url
   end
+
+  test 'auto complete for tagging' do
+    login
+    get :auto_complete_for_tagging, params: {
+      q: 'business',
+      kind: 'business_unit'
+    }, as: :json
+    assert_response :success
+
+    response_tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, response_tags.size
+    assert response_tags.all? { |t| t['label'].match /business/i }
+
+    get :auto_complete_for_tagging, params: {
+      q: 'x_none',
+      kind: 'business_unit'
+    }, as: :json
+    assert_response :success
+
+    response_tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, response_tags.size
+  end
 end

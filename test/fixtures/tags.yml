@@ -96,7 +96,7 @@ risk_evaluation:
   group: main_group
 
 business_unit:
-  name: center
+  name: business unit
   kind: business_unit
   style: secondary
   shared: false
