@@ -611,6 +611,27 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       'cost_summary', 0)
   end
 
+  test 'cost summary report as CSV' do
+    login
+
+    get :cost_summary, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :cost_summary, :params => {
+        :cost_summary => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   test 'weaknesses by risk report' do
     login
 

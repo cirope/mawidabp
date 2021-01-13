@@ -168,6 +168,7 @@
       column_estimated_amount: "Unidades estimadas"
       column_real_amount: "Unidades reales"
       column_deviation: "Desviación"
+      column_interval: "Periodo"
 
   conclusion_committee_report:
     index_title: "Reportes de conclusión"
