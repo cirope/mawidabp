@@ -486,6 +486,27 @@ class ConclusionReportsControllerTest < ActionController::TestCase
       'cost_analysis', 0)
   end
 
+  test 'cost analysis report as CSV' do
+    login
+
+    get :cost_analysis, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :cost_analysis, :params => {
+        :cost_analysis => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
   test 'detailed cost analysis report' do
     login
     expected_title = I18n.t 'conclusion_report.detailed_cost_analysis_title'
@@ -526,6 +547,28 @@ class ConclusionReportsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'cost_analysis', 0)
+  end
+
+  test 'detailed cost analysis report as CSV' do
+    login
+
+    get :cost_analysis, :params => { :include_details => 1 }, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :cost_analysis, :params => {
+        :include_details => 1,
+        :cost_analysis => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        }
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'cost summary report' do
