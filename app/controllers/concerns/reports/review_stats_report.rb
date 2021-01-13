@@ -345,7 +345,7 @@ module Reports::ReviewStatsReport
     end
 
     def weaknesses_by_score_headers
-      columns       = []
+      columns = []
 
       columns << [
                    Weakness.human_attribute_name('risk'),
