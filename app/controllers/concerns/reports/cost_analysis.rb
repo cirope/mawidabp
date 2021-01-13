@@ -234,8 +234,6 @@ module Reports::CostAnalysis
       csv << cost_analysis_headers
 
       cost_analysis_data.each do |data|
-        row = []
-
         csv << data.map { |value| value.to_s.gsub /<[^>]*>/, '' }
       end
     end
