@@ -6,7 +6,7 @@
         input_html: { id: "#{id}", autofocus: true } %>
     </div>
     <div class="col-md-5">
-      <%= f.simple_fields_for :taggings, tagging(f.object) do |t| %>
+      <%= f.simple_fields_for :taggings, business_unit_tagging(f.object) do |t| %>
         <%= render 'tagging', f: t, kind: 'business_unit' %>
       <% end %>
     </div>
