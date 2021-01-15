@@ -1133,6 +1133,93 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       'weaknesses_by_user', 0)
   end
 
+  test 'heatmap by weaknesses' do
+    login
+
+    get :heatmap_by_weaknesses
+    assert_response :success
+    assert_template 'follow_up_audit/heatmap_by_weaknesses'
+
+    assert_nothing_raised do
+      get :heatmap_by_weaknesses, :params => {
+        :heatmap_by_weaknesses => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }
+    end
+
+    assert_response :success
+    assert_template 'follow_up_audit/heatmap_by_weaknesses'
+  end
+
+  test 'heatmap by weaknesses as CSV' do
+    login
+
+    get :heatmap_by_weaknesses, as: :csv
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :heatmap_by_weaknesses, :params => {
+        :heatmap_by_weaknesses => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
+  test 'filtered heatmap by weaknesses' do
+    login
+
+    get :heatmap_by_weaknesses, :params => {
+      :heatmap_by_weaknesses => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :risk => ['', '1', '2'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
+        :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
+        :user_id => [users(:audited).id.to_s],
+        :priority => ['', '2']
+      },
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'follow_up_audit/heatmap_by_weaknesses'
+  end
+
+  test 'create heatmap by weaknesses' do
+    login
+
+    get :create_heatmap_by_weaknesses, :params => {
+      :heatmap_by_weaknesses => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up',
+      :final => false
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('follow_up_committee_report.heatmap_by_weaknesses.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'heatmap_by_weaknesses', 0)
+  end
+
   test 'weaknesses by control objective process' do
     login
 
