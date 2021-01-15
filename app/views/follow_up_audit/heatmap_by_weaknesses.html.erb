@@ -9,7 +9,7 @@
       [:finding_multiple, true],
       [:risk_levels_multiple, { group: 1 }],
       [:business_unit_type_multiple, { group: 1 }],
-      [:compliance, true]
+      [:priority, true]
     ]
   }
 %>
@@ -20,7 +20,7 @@
       <div class="float-right">
         <%= link_to t('label.back'), action: :index %> |
         <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
-        <%= link_to t('label.download_csv'), weaknesses_by_user_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
+        <%= link_to t('label.download_csv'), heatmap_by_weaknesses_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
       </div>
       <p class="mb-0">
         <%= t 'follow_up_committee_report.weaknesses_by_user.weaknesses_count_html', count: @weaknesses.count %>
@@ -47,25 +47,25 @@
 <div>
   <%= link_to t('label.back'), action: :index %> |
   <%= link_to t('label.download'), '#', data: { toggle: 'modal', target: '#customize_report' } %> |
-  <%= link_to t('label.download_csv'), weaknesses_by_user_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
+  <%= link_to t('label.download_csv'), heatmap_by_weaknesses_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
 </div>
 
 <%= render partial: 'shared/customize_report_form', locals: {
   options: {
     form_name: 'report',
     url: request.query_parameters.merge(
-      {action: :create_weaknesses_by_user, _ts: Time.now.to_i}
+      {action: :create_heatmap_by_weaknesses, _ts: Time.now.to_i}
     ),
     fields: [
       {
         name: :report_title,
         label: t('customize_report_form.title'),
-        value: t('follow_up_committee_report.weaknesses_by_user.title')
+        value: t('follow_up_committee_report.heatmap_by_weaknesses.title')
       },
       {
         name: :report_subtitle,
         label: t('customize_report_form.subtitle'),
-        value: t('follow_up_committee_report.weaknesses_by_user.subtitle')
+        value: t('follow_up_committee_report.heatmap_by_weaknesses.subtitle')
       }
     ]
   }

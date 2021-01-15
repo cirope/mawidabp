@@ -47,6 +47,11 @@
 </p>
 
 <p class="mb-1">
+  <span class="text-muted"><%= PlanItem.human_attribute_name 'risk_exposure' %></span>:
+  <%= weakness.review.plan_item.risk_exposure %>
+</p>
+
+<p class="mb-1">
   <span class="text-muted"><%= Weakness.human_attribute_name 'priority' %></span>:
   <%= weakness.priority_text %>
 </p>
@@ -131,3 +136,23 @@
     </footer>
   </blockquote>
 <% end %>
+
+<p class="mb-1">
+  <span class="text-muted"><%= ConclusionReview.human_attribute_name 'conclusion' %></span>:
+  <%= weakness.review.conclusion_final_review.conclusion %>
+</p>
+
+<p class="mb-1">
+  <span class="text-muted"><%= ConclusionReview.human_attribute_name 'evolution' %></span>:
+  <%= weakness.review.conclusion_final_review.evolution %>
+</p>
+
+<p class="mb-1">
+  <span class="text-muted"><%= t('follow_up_committee_report.heatmap_by_weaknesses.process_owner') %></span>:
+  <%= user_manager weakness.process_owners  %>
+</p>
+
+<p class="mb-1">
+  <span class="text-muted"><%= t('follow_up_committee_report.heatmap_by_weaknesses.user_root') %></span>:
+  <%= user_root weakness.process_owners  %>
+</p>

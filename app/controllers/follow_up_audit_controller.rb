@@ -92,7 +92,9 @@ class FollowUpAuditController < ApplicationController
         auto_complete_for_business_unit: :read,
         auto_complete_for_process_control: :read,
         weaknesses_by_control_objective_process: :read,
-        create_weaknesses_by_control_objective_process: :read
+        create_weaknesses_by_control_objective_process: :read,
+        heatmap_by_weaknesses: :read,
+        create_heatmap_by_weaknesses: :read
       )
     end
 end
