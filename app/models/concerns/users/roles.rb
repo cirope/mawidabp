@@ -86,6 +86,10 @@ module Users::Roles
     roles_changed || organization_roles.any?(&:changed?)
   end
 
+  def has_supreme_user?
+   root if root && user != root.user
+  end
+
   module ClassMethods
     def can_act_as role
       includes(organization_roles: :role).where(

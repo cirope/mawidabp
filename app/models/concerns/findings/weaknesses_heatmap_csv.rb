@@ -41,8 +41,8 @@ module Findings::WeaknessesHeatmapCsv
       compliance_observations.to_s,
       review.conclusion_final_review.conclusion,
       review.conclusion_final_review.evolution,
-      user_manager(process_owners),
-      user_root(process_owners)
+      user_manager,
+      user_root
     ].compact
   end
 

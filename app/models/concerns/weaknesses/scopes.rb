@@ -22,12 +22,24 @@ module Weaknesses::Scopes
     }
     scope :latest, -> { where latest_id: nil }
 
-    def user_manager process_owners
-      process_owners.map(&:parent).any? ? process_owners.map(&:parent).map(&:full_name).join(', ') : ''
+    def user_manager
+      parent = []
+
+      process_owners.map do |po|
+        parent << po.parent.full_name if po.parent
+      end
+
+      parent.join(', ')
     end
 
-    def user_root process_owners
-      process_owners.map(&:parent).any? ? process_owners.map(&:root).map(&:full_name).join(', ') : ''
+    def user_root
+      parent = []
+
+      process_owners.map do |po|
+        parent << po.has_supreme_user?
+      end
+
+      parent.map(&:full_name).join(', ') if parent.any?
     end
   end
 
