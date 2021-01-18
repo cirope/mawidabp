@@ -22,7 +22,10 @@ class BusinessUnitTest < ActiveSupport::TestCase
     assert_difference 'BusinessUnit.count' do
       @business_unit = BusinessUnit.new(
         :name => 'New name',
-        :business_unit_type => business_unit_types(:cycle)
+        :business_unit_type => business_unit_types(:cycle),
+        :taggings_attributes => [
+          :tag_id => tags(:business_unit).id
+        ]
       )
 
       assert @business_unit.save, @business_unit.errors.full_messages.join('; ')
