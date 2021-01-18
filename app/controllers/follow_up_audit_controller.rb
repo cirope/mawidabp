@@ -27,7 +27,7 @@ class FollowUpAuditController < ApplicationController
   include Reports::WeaknessesReport
   include Reports::Benefits
   include Reports::TaggedFindingsReport
-  include Reports::HeatmapByWeaknesses
+  include Reports::WeaknessesHeatmap
 
   before_action :auth, :load_privileges, :check_privileges
 
@@ -93,8 +93,8 @@ class FollowUpAuditController < ApplicationController
         auto_complete_for_process_control: :read,
         weaknesses_by_control_objective_process: :read,
         create_weaknesses_by_control_objective_process: :read,
-        heatmap_by_weaknesses: :read,
-        create_heatmap_by_weaknesses: :read
+        weaknesses_heatmap: :read,
+        create_weaknesses_heatmap: :read
       )
     end
 end

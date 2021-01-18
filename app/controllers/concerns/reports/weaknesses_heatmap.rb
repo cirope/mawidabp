@@ -1,28 +1,28 @@
-module Reports::HeatmapByWeaknesses
+module Reports::WeaknessesHeatmap
   extend ActiveSupport::Concern
 
   include Reports::FileResponder
   include Reports::Pdf
   include Reports::Period
 
-  def heatmap_by_weaknesses
-    init_heatmap_by_weaknesses_vars
+  def weaknesses_heatmap
+    init_weaknesses_heatmap_vars
 
     respond_to do |format|
       format.html { render_paginated_weaknesses }
       format.js   { render_paginated_weaknesses }
-      format.csv  { render_heatmap_by_weaknesses_report_csv }
+      format.csv  { render_weaknesses_heatmap_report_csv }
     end
   end
 
-  def create_heatmap_by_weaknesses
-    init_heatmap_by_weaknesses_vars
+  def create_weaknesses_heatmap
+    init_weaknesses_heatmap_vars
 
     pdf = init_pdf params[:report_title], params[:report_subtitle]
 
     if @weaknesses.any?
       @weaknesses.each do |weakness|
-        heatmap_by_weaknesses_pdf_items(weakness).each do |item|
+        weaknesses_heatmap_pdf_items(weakness).each do |item|
           text = "<i>#{item.first}:</i> #{item.last.to_s.strip}"
 
           pdf.text text, size: PDF_FONT_SIZE, inline_format: true, align: :justify
@@ -51,24 +51,24 @@ module Reports::HeatmapByWeaknesses
     else
       pdf.move_down PDF_FONT_SIZE
       pdf.text(
-        t("#{@controller}_committee_report.heatmap_by_weaknesses.without_weaknesses"),
+        t("#{@controller}_committee_report.weaknesses_heatmap.without_weaknesses"),
         style: :italic
       )
     end
 
     add_pdf_filters(pdf, @controller, @filters) if @filters.present?
 
-    save_pdf(pdf, @controller, @from_date, @to_date, 'heatmap_by_weaknesses')
+    save_pdf(pdf, @controller, @from_date, @to_date, 'weaknesses_heatmap')
 
-    redirect_to_pdf(@controller, @from_date, @to_date, 'heatmap_by_weaknesses')
+    redirect_to_pdf(@controller, @from_date, @to_date, 'weaknesses_heatmap')
   end
 
   private
 
-    def init_heatmap_by_weaknesses_vars
+    def init_weaknesses_heatmap_vars
       @controller = params[:controller_name]
-      @title = t("#{@controller}_committee_report.heatmap_by_weaknesses_title")
-      @from_date, @to_date = *make_date_range(params[:heatmap_by_weaknesses])
+      @title = t("#{@controller}_committee_report.weaknesses_heatmap_title")
+      @from_date, @to_date = *make_date_range(params[:weaknesses_heatmap])
       @filters = []
       final = params[:final] == 'true'
       order = [
@@ -88,26 +88,26 @@ module Reports::HeatmapByWeaknesses
           review: [:plan_item, :conclusion_final_review]
         )
 
-      if params[:heatmap_by_weaknesses]
-        weaknesses = filter_heatmap_by_weaknesses weaknesses
-        weaknesses = filter_heatmap_by_weaknesses_by_risk weaknesses
-        weaknesses = filter_heatmap_by_weaknesses_by_status weaknesses
-        weaknesses = filter_heatmap_by_weaknesses_by_title weaknesses
-        weaknesses = filter_heatmap_by_weaknesses_by_business_unit_type weaknesses
+      if params[:weaknesses_heatmap]
+        weaknesses = filter_weaknesses_heatmap weaknesses
+        weaknesses = filter_weaknesses_heatmap_by_risk weaknesses
+        weaknesses = filter_weaknesses_heatmap_by_status weaknesses
+        weaknesses = filter_weaknesses_heatmap_by_title weaknesses
+        weaknesses = filter_weaknesses_heatmap_by_business_unit_type weaknesses
       end
 
       @weaknesses = weaknesses.reorder order
     end
 
-    def render_heatmap_by_weaknesses_report_csv
+    def render_weaknesses_heatmap_report_csv
       render_or_send_by_mail(
         collection:  @weaknesses,
         filename:    "#{@title.downcase}.csv",
-        method_name: :heatmap_by_weaknesses_csv
+        method_name: :weaknesses_heatmap_csv
       )
     end
 
-    def heatmap_by_weaknesses_pdf_items weakness
+    def weaknesses_heatmap_pdf_items weakness
       [
         [
           Review.model_name.human,
@@ -208,19 +208,19 @@ module Reports::HeatmapByWeaknesses
           weakness.review.conclusion_final_review.evolution
         ],
         [
-          I18n.t('follow_up_committee_report.heatmap_by_weaknesses.process_owner'),
-          Weakness.user_manager(weakness.process_owners)
+          I18n.t('follow_up_committee_report.weaknesses_heatmap.process_owner'),
+          weakness.user_manager(weakness.process_owners)
         ],
         [
-          I18n.t('follow_up_committee_report.heatmap_by_weaknesses.user_root'),
-          Weakness.user_root(weakness.process_owners)
+          I18n.t('follow_up_committee_report.weaknesses_heatmap.user_root'),
+          weakness.user_root(weakness.process_owners)
         ]
       ].compact
     end
 
-    def filter_heatmap_by_weaknesses weaknesses
-      if params[:heatmap_by_weaknesses][:user_id].present?
-        user = User.where(id: params[:heatmap_by_weaknesses][:user_id]).take!
+    def filter_weaknesses_heatmap weaknesses
+      if params[:weaknesses_heatmap][:user_id].present?
+        user = User.where(id: params[:weaknesses_heatmap][:user_id]).take!
 
         @filters << "<b>#{User.model_name.human count: 1}</b> = \"#{user.full_name}\""
 
@@ -235,8 +235,8 @@ module Reports::HeatmapByWeaknesses
       end
     end
 
-    def filter_heatmap_by_weaknesses_by_risk weaknesses
-      risk = Array(params[:heatmap_by_weaknesses][:risk]).reject(&:blank?).map &:to_i
+    def filter_weaknesses_heatmap_by_risk weaknesses
+      risk = Array(params[:weaknesses_heatmap][:risk]).reject(&:blank?).map &:to_i
 
       if risk.present?
         risk_texts = risk.map do |r|
@@ -251,8 +251,8 @@ module Reports::HeatmapByWeaknesses
       end
     end
 
-    def filter_heatmap_by_weaknesses_by_status weaknesses
-      states               = Array(params[:heatmap_by_weaknesses][:finding_status]).reject(&:blank?).map &:to_i
+    def filter_weaknesses_heatmap_by_status weaknesses
+      states               = Array(params[:weaknesses_heatmap][:finding_status]).reject(&:blank?).map &:to_i
       not_muted_states     = Finding::EXCLUDE_FROM_REPORTS_STATUS + [:implemented_audited]
       mute_state_filter_on = Finding::STATUS.except(*not_muted_states).values
 
@@ -271,9 +271,9 @@ module Reports::HeatmapByWeaknesses
       end
     end
 
-    def filter_heatmap_by_weaknesses_by_title weaknesses
-      if params[:heatmap_by_weaknesses][:finding_title].present?
-        title = params[:heatmap_by_weaknesses][:finding_title]
+    def filter_weaknesses_heatmap_by_title weaknesses
+      if params[:weaknesses_heatmap][:finding_title].present?
+        title = params[:weaknesses_heatmap][:finding_title]
 
         @filters << "<b>#{Finding.human_attribute_name('title')}</b> = \"#{title}\""
 
@@ -283,8 +283,8 @@ module Reports::HeatmapByWeaknesses
       end
     end
 
-    def filter_heatmap_by_weaknesses_by_business_unit_type weaknesses
-      business_unit_types = Array(params[:heatmap_by_weaknesses][:business_unit_type]).reject(&:blank?)
+    def filter_weaknesses_heatmap_by_business_unit_type weaknesses
+      business_unit_types = Array(params[:weaknesses_heatmap][:business_unit_type]).reject(&:blank?)
 
       if business_unit_types.present?
         selected_business_units = BusinessUnitType.list.where id: business_unit_types

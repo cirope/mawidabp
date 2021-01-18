@@ -21,6 +21,14 @@ module Weaknesses::Scopes
       ).order(risk: :desc, state: :asc)
     }
     scope :latest, -> { where latest_id: nil }
+
+    def user_manager process_owners
+      process_owners.map(&:parent).any? ? process_owners.map(&:parent).map(&:full_name).join(', ') : ''
+    end
+
+    def user_root process_owners
+      process_owners.map(&:parent).any? ? process_owners.map(&:root).map(&:full_name).join(', ') : ''
+    end
   end
 
   module ClassMethods
@@ -30,14 +38,6 @@ module Weaknesses::Scopes
 
     def by_risk risk
       where risk: risk
-    end
-
-    def user_manager process_owners
-      process_owners.map(&:parent).any? ? process_owners.map(&:parent).map(&:full_name).join(', ') : ''
-    end
-
-    def user_root process_owners
-      process_owners.map(&:parent).any? ? process_owners.map(&:root).map(&:full_name).join(', ') : ''
     end
 
     def by_priority_on_risk conditions
