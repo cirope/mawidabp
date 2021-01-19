@@ -2,8 +2,8 @@ module Findings::WeaknessesHeatmapCsv
   extend ActiveSupport::Concern
 
   def weaknesses_heatmap_csv_data_rows
-    auditors       = users.select &:auditor?
-    auditeds       = users.select do |u|
+    auditors = users.select &:auditor?
+    auditeds = users.select do |u|
       u.can_act_as_audited? && process_owners.exclude?(u)
     end
 
