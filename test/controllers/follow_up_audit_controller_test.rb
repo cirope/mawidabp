@@ -14,7 +14,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :weaknesses_by_month, :weaknesses_current_situation,
       :weaknesses_by_control_objective, :weaknesses_evolution,
       :weaknesses_list, :weaknesses_brief, :weaknesses_reschedules,
-      :weaknesses_by_risk_and_business_unit,
+      :weaknesses_report, :weaknesses_by_risk_and_business_unit,
       :weaknesses_by_control_objective_process
     ]
 
@@ -155,6 +155,29 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'review_stats_report', 0)
+  end
+
+  test 'review stats report as CSV' do
+    login
+
+    get :review_stats_report, as: :csv
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :review_stats_report, :params => {
+        :review_stats_report => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'follow_up',
+        :final => false
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
   end
 
   test 'qa indicators' do
@@ -1534,6 +1557,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :weaknesses_reschedules => {
           :from_date => 10.years.ago.to_date,
           :to_date => 10.years.from_now.to_date,
+          :review => '1',
+          :project => '2',
           :user_id => users(:audited).id,
           :order_by => 'risk'
         },

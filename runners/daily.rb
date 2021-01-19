@@ -17,4 +17,6 @@ if Organization.any?
   LdapConfig.sync_users
 end
 
+CarrierWave.clean_cached_files!
+
 Rails.logger.info "Daily runner finished (version #{APP_REVISION[0,8]})"

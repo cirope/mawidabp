@@ -13,6 +13,14 @@ module Reports::ReviewStatsReport
     set_reviews_by_score_data
     set_reviews_by_tag_data
     set_weaknesses_by_score_data
+
+    respond_to do |format|
+      format.html
+      format.js
+      format.csv do
+        render csv: review_stat_report_csv, filename: @title.downcase
+      end
+    end
   end
 
   def create_review_stats_report
@@ -310,5 +318,44 @@ module Reports::ReviewStatsReport
           )
         end
       end
+    end
+
+    def review_stat_report_csv
+      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+      csv_str = CSV.generate(**options) do |csv|
+        csv << review_stats_headers
+
+        review_stats_data.each { |row| csv << row }
+
+        csv << []
+        csv << weaknesses_by_score_headers
+
+        weaknesses_by_score_data.each { |row| csv << row }
+      end
+
+      "\uFEFF#{csv_str}"
+    end
+
+    def review_stats_headers
+      [
+        Review.human_attribute_name('score'),
+        I18n.t("#{@controller}_committee_report.review_stats_report.ratio")
+      ]
+    end
+
+    def weaknesses_by_score_headers
+      columns = []
+
+      columns << [
+                   Weakness.human_attribute_name('risk'),
+                   Weakness.human_attribute_name('priority')
+                 ].join(' / ')
+
+      Review.scores.keys.each do |score|
+        columns << I18n.t("score_types.#{score}")
+      end
+
+      columns
     end
 end
