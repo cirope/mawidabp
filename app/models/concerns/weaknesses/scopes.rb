@@ -27,7 +27,7 @@ module Weaknesses::Scopes
     end
 
     def process_owner_roots
-      process_owners.map(&:has_root_user?).compact
+      process_owners.map(&:parent_root).compact
     end
   end
 
