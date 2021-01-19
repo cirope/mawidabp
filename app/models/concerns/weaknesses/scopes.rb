@@ -30,7 +30,7 @@ module Weaknesses::Scopes
 
     def process_owner_roots
       process_owners.map do |po|
-        po.has_user_root?
+        po.has_root_user?
       end.compact
     end
   end
