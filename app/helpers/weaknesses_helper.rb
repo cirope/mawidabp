@@ -89,12 +89,4 @@ module WeaknessesHelper
     control_objective &&
       WeaknessTemplate.list.by_control_objective(control_objective)
   end
-
-  def process_owner_parents weakness
-    weakness.process_owner_parents
-  end
-
-  def process_owner_roots weakness
-    weakness.process_owner_roots
-  end
 end

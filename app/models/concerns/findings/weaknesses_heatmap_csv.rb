@@ -96,8 +96,8 @@ module Findings::WeaknessesHeatmapCsv
         Weakness.human_attribute_name('compliance_observations'),
         ConclusionReview.human_attribute_name('conclusion'),
         ConclusionReview.human_attribute_name('evolution'),
-        I18n.t('follow_up_committee_report.weaknesses_heatmap.process_owner'),
-        I18n.t('follow_up_committee_report.weaknesses_heatmap.user_root'),
+        I18n.t('follow_up_committee_report.weaknesses_heatmap.process_owner_parents'),
+        I18n.t('follow_up_committee_report.weaknesses_heatmap.process_owner_roots'),
       ].compact
     end
 
@@ -106,10 +106,8 @@ module Findings::WeaknessesHeatmapCsv
       def all_with_inclusions
         preload *[
           :repeated_of,
-          :repeated_in,
           :business_unit_type,
           :business_unit,
-          :tasks,
           latest: [:review, latest_answer: :user],
           finding_answers: [:user, :commitment_support, endorsements: :user],
           finding_user_assignments: :user,

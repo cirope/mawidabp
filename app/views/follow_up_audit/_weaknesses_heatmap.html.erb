@@ -148,11 +148,11 @@
 </p>
 
 <p class="mb-1">
-  <span class="text-muted"><%= t('follow_up_committee_report.weaknesses_heatmap.process_owner') %></span>:
-  <%= process_owner_parents(weakness).map(&:full_name).join(', ') %>
+  <span class="text-muted"><%= t('follow_up_committee_report.weaknesses_heatmap.process_owner_parents') %></span>:
+  <%= weakness.process_owner_parents.map(&:full_name).join(', ') %>
 </p>
 
 <p class="mb-1">
-  <span class="text-muted"><%= t('follow_up_committee_report.weaknesses_heatmap.user_root') %></span>:
-  <%= process_owner_roots(weakness).map(&:full_name).join(', ') %>
+  <span class="text-muted"><%= t('follow_up_committee_report.weaknesses_heatmap.process_owner_roots') %></span>:
+  <%= weakness.process_owner_roots.map(&:full_name).join(', ') %>
 </p>

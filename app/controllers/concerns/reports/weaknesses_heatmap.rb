@@ -208,11 +208,11 @@ module Reports::WeaknessesHeatmap
           weakness.review.conclusion_final_review.evolution
         ],
         [
-          I18n.t('follow_up_committee_report.weaknesses_heatmap.process_owner'),
+          I18n.t('follow_up_committee_report.weaknesses_heatmap.process_owner_parents'),
           weakness.process_owner_parents.map(&:full_name).join(', ')
         ],
         [
-          I18n.t('follow_up_committee_report.weaknesses_heatmap.user_root'),
+          I18n.t('follow_up_committee_report.weaknesses_heatmap.process_owner_roots'),
           weakness.process_owner_roots.map(&:full_name).join(', ')
         ]
       ].compact
