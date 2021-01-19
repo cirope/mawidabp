@@ -1189,7 +1189,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :finding_title => 'a',
         :business_unit_type => ['', business_unit_types(:cycle).id],
         :user_id => [users(:audited).id.to_s],
-        :priority => ['', '2']
+        :priority => Finding.priorities_values.last.to_s
       },
       :controller_name => 'follow_up',
       :final => false
