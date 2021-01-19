@@ -897,7 +897,7 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
-      process_owner_parents: "Responsable Observaciones"
+      process_owner_parents: "Superiores directos responsables"
       process_owner_roots: "Responsable Superior"
     weaknesses_evolution:
       pdf_name: "observaciones_evolucion_%{from_date}_al_%{to_date}.pdf"
