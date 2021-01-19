@@ -86,7 +86,7 @@ module Users::Roles
     roles_changed || organization_roles.any?(&:changed?)
   end
 
-  def has_root_user?
+  def parent_root
     root unless root == self
   end
 
