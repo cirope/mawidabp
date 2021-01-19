@@ -90,11 +90,11 @@ module WeaknessesHelper
       WeaknessTemplate.list.by_control_objective(control_objective)
   end
 
-  def user_manager weakness
+  def process_owner_parents weakness
     weakness.process_owner_parents
   end
 
-  def user_root weakness
+  def process_owner_roots weakness
     weakness.process_owner_roots
   end
 end

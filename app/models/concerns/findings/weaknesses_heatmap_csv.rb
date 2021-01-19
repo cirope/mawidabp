@@ -41,8 +41,8 @@ module Findings::WeaknessesHeatmapCsv
       compliance_observations.to_s,
       review.conclusion_final_review.conclusion,
       review.conclusion_final_review.evolution,
-      process_owner_parents.join(', '),
-      (process_owner_roots.map(&:full_name).join(', ') if process_owner_roots.any?)
+      process_owner_parents.map(&:full_name).join(', '),
+      process_owner_roots.map(&:full_name).join(', ')
     ].compact
   end
 
@@ -105,26 +105,20 @@ module Findings::WeaknessesHeatmapCsv
 
       def all_with_inclusions
         preload *[
-          :organization,
           :repeated_of,
           :repeated_in,
           :business_unit_type,
           :business_unit,
           :tasks,
-          latest_answer: :user,
           latest: [:review, latest_answer: :user],
           finding_answers: [:user, :commitment_support, endorsements: :user],
           finding_user_assignments: :user,
           finding_owner_assignments: :user,
-          taggings: :tag,
           users: {
             organization_roles: :role
           },
           control_objective_item: {
-            review: [:plan_item, :conclusion_final_review],
-            control_objective: {
-              process_control: :best_practice
-            }
+            review: [:plan_item, :conclusion_final_review]
           }
         ].compact
       end

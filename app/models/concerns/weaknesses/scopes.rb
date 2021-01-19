@@ -23,23 +23,15 @@ module Weaknesses::Scopes
     scope :latest, -> { where latest_id: nil }
 
     def process_owner_parents
-      parents = []
-
       process_owners.map do |po|
-        parents << po.parent.full_name if po.parent
-      end
-
-      parents
+        po.parent if po.parent
+      end.compact
     end
 
     def process_owner_roots
-      parents = []
-
       process_owners.map do |po|
-        parents << po.has_supreme_user?
-      end
-
-      parents
+        po.has_user_root?
+      end.compact
     end
   end
 
