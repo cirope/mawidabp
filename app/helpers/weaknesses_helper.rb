@@ -91,10 +91,10 @@ module WeaknessesHelper
   end
 
   def user_manager weakness
-    weakness.user_manager
+    weakness.process_owner_parents
   end
 
   def user_root weakness
-    weakness.user_root
+    weakness.process_owner_roots
   end
 end

@@ -209,11 +209,11 @@ module Reports::WeaknessesHeatmap
         ],
         [
           I18n.t('follow_up_committee_report.weaknesses_heatmap.process_owner'),
-          weakness.user_manager
+          weakness.process_owner_parents.join(', ')
         ],
         [
           I18n.t('follow_up_committee_report.weaknesses_heatmap.user_root'),
-          weakness.user_root
+          (weakness.process_owner_roots.map(&:full_name).join(', ') if weakness.process_owner_roots.any?)
         ]
       ].compact
     end

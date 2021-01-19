@@ -41,8 +41,8 @@ module Findings::WeaknessesHeatmapCsv
       compliance_observations.to_s,
       review.conclusion_final_review.conclusion,
       review.conclusion_final_review.evolution,
-      user_manager,
-      user_root
+      process_owner_parents.join(', '),
+      (process_owner_roots.map(&:full_name).join(', ') if process_owner_roots.any?)
     ].compact
   end
 

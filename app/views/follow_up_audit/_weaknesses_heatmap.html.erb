@@ -149,10 +149,10 @@
 
 <p class="mb-1">
   <span class="text-muted"><%= t('follow_up_committee_report.weaknesses_heatmap.process_owner') %></span>:
-  <%= user_manager weakness %>
+  <%= user_manager(weakness).join(', ') %>
 </p>
 
 <p class="mb-1">
   <span class="text-muted"><%= t('follow_up_committee_report.weaknesses_heatmap.user_root') %></span>:
-  <%= user_root weakness %>
+  <%= user_root(weakness).map(&:full_name).join(', ') if user_root(weakness).any? %>
 </p>
