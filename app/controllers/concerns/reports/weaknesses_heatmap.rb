@@ -94,6 +94,7 @@ module Reports::WeaknessesHeatmap
         weaknesses = filter_weaknesses_heatmap_by_status weaknesses
         weaknesses = filter_weaknesses_heatmap_by_title weaknesses
         weaknesses = filter_weaknesses_heatmap_by_business_unit_type weaknesses
+        weaknesses = filter_weaknesses_heatmap_by_priority weaknesses
       end
 
       @weaknesses = weaknesses.reorder order
@@ -292,6 +293,21 @@ module Reports::WeaknessesHeatmap
         @filters << "<b>#{BusinessUnitType.model_name.human}</b> = \"#{selected_business_units.pluck('name').to_sentence}\""
 
         weaknesses.by_business_unit_type selected_business_units.ids
+      else
+        weaknesses
+      end
+    end
+
+    def filter_weaknesses_heatmap_by_priority weaknesses
+      priority = params[:weaknesses_heatmap][:priority]
+
+      if priority.present?
+        priority      = priority.to_i
+        priority_text = t "priority_types.#{Weakness.priorities.invert[priority]}"
+
+        @filters << "<b>#{Finding.human_attribute_name('priority')}</b> = \"#{priority_text}\""
+
+        weaknesses.by_priority_on_risk medium: priority
       else
         weaknesses
       end
