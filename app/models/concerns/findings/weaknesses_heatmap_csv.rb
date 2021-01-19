@@ -109,7 +109,7 @@ module Findings::WeaknessesHeatmapCsv
           :business_unit_type,
           :business_unit,
           latest: [:review, latest_answer: :user],
-          finding_answers: [:user, :commitment_support, endorsements: :user],
+          finding_answers: :user,
           finding_user_assignments: :user,
           finding_owner_assignments: :user,
           users: {
