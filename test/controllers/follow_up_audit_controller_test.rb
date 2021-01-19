@@ -14,7 +14,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :weaknesses_by_month, :weaknesses_current_situation,
       :weaknesses_by_control_objective, :weaknesses_evolution,
       :weaknesses_list, :weaknesses_brief, :weaknesses_reschedules,
-      :weaknesses_by_risk_and_business_unit,
+      :weaknesses_report, :weaknesses_by_risk_and_business_unit,
       :weaknesses_by_control_objective_process
     ]
 
@@ -1557,6 +1557,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :weaknesses_reschedules => {
           :from_date => 10.years.ago.to_date,
           :to_date => 10.years.from_now.to_date,
+          :review => '1',
+          :project => '2',
           :user_id => users(:audited).id,
           :order_by => 'risk'
         },
