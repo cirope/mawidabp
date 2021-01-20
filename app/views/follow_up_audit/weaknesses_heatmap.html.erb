@@ -23,7 +23,7 @@
         <%= link_to t('label.download_csv'), weaknesses_heatmap_follow_up_audit_path(request.query_parameters.merge(format: :csv)) %>
       </div>
       <p class="mb-0">
-        <%= t 'follow_up_committee_report.weaknesses_by_user.weaknesses_count_html', count: @weaknesses.count %>
+        <%= t 'follow_up_committee_report.weaknesses_heatmap.weaknesses_count_html', count: @weaknesses.count %>
       </p>
     </div>
   </div>
