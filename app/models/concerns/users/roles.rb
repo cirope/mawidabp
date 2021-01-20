@@ -86,6 +86,10 @@ module Users::Roles
     roles_changed || organization_roles.any?(&:changed?)
   end
 
+  def parent_root
+    root unless root == self
+  end
+
   module ClassMethods
     def can_act_as role
       includes(organization_roles: :role).where(

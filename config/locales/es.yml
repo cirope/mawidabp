@@ -168,6 +168,7 @@
       column_estimated_amount: "Unidades estimadas"
       column_real_amount: "Unidades reales"
       column_deviation: "Desviación"
+      column_interval: "Periodo"
 
   conclusion_committee_report:
     index_title: "Reportes de conclusión"
@@ -719,6 +720,7 @@
     weaknesses_reschedules_title: "Resumen de observaciones y reprogramaciones"
     weaknesses_by_control_objective_process_title: "Reporte de proceso por objetivos de control"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
+    weaknesses_heatmap_title: "Mapa de calor observaciones"
     cost_analysis:
       column_business_unit: "Ciclo"
       column_project: "Proyecto"
@@ -760,6 +762,7 @@
     weakness_summary: "Resumen de observaciones"
     weaknesses_by_risk: "Observaciones por riesgo"
     fixed_weaknesses: "Observaciones por riesgo solucionadas"
+    weaknesses_heatmap_title: "Mapa de calor observaciones"
     weaknesses_by_control_objective_process_title: "Reporte de proceso por objetivos de control"
     weaknesses_being_implemented_current:
       one: "Vigente"
@@ -890,6 +893,15 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       year: "Año de origen"
+    weaknesses_heatmap:
+      pdf_name: "mapa_de_calor_por_observaciones_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO MAPA DE CALOR OBSERVACIONES / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      process_owner_parents: "Superiores directos responsables"
+      process_owner_roots: "Responsables máximos"
     weaknesses_evolution:
       pdf_name: "observaciones_evolucion_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"

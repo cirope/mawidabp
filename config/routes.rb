@@ -163,7 +163,8 @@ Rails.application.routes.draw do
     'weaknesses_graphs',
     'auto_complete_for_business_unit',
     'auto_complete_for_process_control',
-    'weaknesses_by_control_objective_process'
+    'weaknesses_by_control_objective_process',
+    'weaknesses_heatmap'
   ].each do |action|
     get "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
@@ -197,7 +198,8 @@ Rails.application.routes.draw do
     'create_weaknesses_repeated',
     'create_weaknesses_by_control_objective',
     'create_fixed_weaknesses_report',
-    'create_weaknesses_by_control_objective_process'
+    'create_weaknesses_by_control_objective_process',
+    'create_weaknesses_heatmap'
   ].each do |action|
     post "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
