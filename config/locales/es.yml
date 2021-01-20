@@ -718,7 +718,7 @@
     weaknesses_reschedules_title: "Resumen de observaciones y reprogramaciones"
     weaknesses_by_control_objective_process_title: "Reporte de proceso por objetivos de control"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
-    weaknesses_heatmap_title: "Mapa de calor por observaciones"
+    weaknesses_heatmap_title: "Mapa de calor observaciones"
     cost_analysis:
       column_business_unit: "Unidad de negocio"
       column_project: "Proyecto"
@@ -760,7 +760,7 @@
     weakness_summary: "Resumen de observaciones"
     weaknesses_by_risk: "Observaciones por riesgo"
     fixed_weaknesses: "Observaciones por riesgo solucionadas"
-    weaknesses_heatmap_title: "Mapa de calor por observaciones"
+    weaknesses_heatmap_title: "Mapa de calor observaciones"
     weaknesses_by_control_objective_process_title: "Reporte de proceso por objetivos de control"
     weaknesses_being_implemented_current:
       one: "Vigente"
