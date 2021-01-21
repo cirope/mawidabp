@@ -21,6 +21,14 @@ module Weaknesses::Scopes
       ).order(risk: :desc, state: :asc)
     }
     scope :latest, -> { where latest_id: nil }
+
+    def process_owner_parents
+      process_owners.map(&:parent).compact
+    end
+
+    def process_owner_roots
+      process_owners.map(&:parent_root).compact
+    end
   end
 
   module ClassMethods

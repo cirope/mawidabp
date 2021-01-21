@@ -17,6 +17,14 @@ module Reports::CostSummary
         months: reviews_by_month.keys.sort
       }
     end
+
+    respond_to do |format|
+      format.html
+      format.js
+      format.csv do
+        render csv: cost_summary_report_csv, filename: @title.downcase
+      end
+    end
   end
 
   def create_cost_summary
@@ -171,6 +179,49 @@ module Reports::CostSummary
       respond_to do |format|
         format.html { redirect_to @report_path }
         format.js { render 'shared/pdf_report' }
+      end
+    end
+
+    def cost_summary_report_csv
+      options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+      csv_str = CSV.generate(**options) do |csv|
+        csv << cost_summary_headers
+
+        cost_summary_data csv
+      end
+
+      "\uFEFF#{csv_str}"
+    end
+
+    def cost_summary_headers
+      [
+        t('conclusion_report.cost_summary.column_month'),
+        t('conclusion_report.cost_summary.column_estimated_amount'),
+        t('conclusion_report.cost_summary.column_real_amount'),
+        t('conclusion_report.cost_summary.column_deviation'),
+        t('conclusion_report.cost_summary.column_interval')
+      ]
+    end
+
+    def cost_summary_data csv
+      @periods.each do |period|
+        if @data[period].present? && @data[period][:data].present?
+          @data[period][:data].each do |user_id, data|
+            @data[period][:months].each do |month|
+              month_data = data[:data][month] || {}
+
+              csv << [
+                I18n.l(month, format: '%b-%y'),
+                '%.2f' % (month_data[:planned_units] || 0),
+                '%.2f' % (month_data[:executed_units] || 0),
+                month_data[:deviation],
+                period.inspect,
+                data[:name]
+              ]
+            end
+          end
+        end
       end
     end
 end
