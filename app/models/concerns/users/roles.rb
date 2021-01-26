@@ -95,7 +95,7 @@ module Users::Roles
     intermediate = self.parent
 
     while intermediate&.parent && intermediate.parent != root do
-      intermediate = intermediate&.parent
+      intermediate = intermediate.parent
 
       result << intermediate
     end
