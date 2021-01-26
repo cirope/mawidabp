@@ -26,6 +26,10 @@ module Weaknesses::Scopes
       process_owners.map(&:parent).compact
     end
 
+    def process_owner_intermediates
+      process_owners.map(&:parent_intermediates).compact
+    end
+
     def process_owner_roots
       process_owners.map(&:parent_root).compact
     end

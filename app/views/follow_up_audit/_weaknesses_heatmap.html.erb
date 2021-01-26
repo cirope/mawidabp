@@ -153,6 +153,13 @@
 </p>
 
 <p class="mb-1">
+  <span class="text-muted"><%= t('follow_up_committee_report.weaknesses_heatmap.process_owner_intermediates') %></span>:
+  <%= weakness.process_owner_intermediates.map do |inter|
+    inter.map(&:full_name)
+  end.join('; ') %>
+</p>
+
+<p class="mb-1">
   <span class="text-muted"><%= t('follow_up_committee_report.weaknesses_heatmap.process_owner_roots') %></span>:
   <%= weakness.process_owner_roots.map(&:full_name).join(', ') %>
 </p>
