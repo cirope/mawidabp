@@ -91,16 +91,16 @@ module Users::Roles
   end
 
   def parent_intermediates
-    parent_intermediates = []
-    intermediate         = self.parent
+    result       = []
+    intermediate = self.parent
 
-    while intermediate&.parent && intermediate&.parent != root do
+    while intermediate&.parent && intermediate.parent != root do
       intermediate = intermediate&.parent
 
-      parent_intermediates << intermediate
+      result << intermediate
     end
 
-    parent_intermediates
+    result
   end
 
   module ClassMethods

@@ -27,7 +27,7 @@ module Weaknesses::Scopes
     end
 
     def process_owner_intermediates
-      process_owners.map(&:parent_intermediates).compact
+      process_owners.map(&:parent_intermediates).flatten
     end
 
     def process_owner_roots

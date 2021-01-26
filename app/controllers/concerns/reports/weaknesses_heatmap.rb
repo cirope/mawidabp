@@ -214,9 +214,7 @@ module Reports::WeaknessesHeatmap
         ],
         [
           I18n.t('follow_up_committee_report.weaknesses_heatmap.process_owner_intermediates'),
-          weakness.process_owner_intermediates.map do |inter|
-            inter.map(&:full_name)
-          end.join('; ')
+          weakness.process_owner_intermediates.map(&:full_name).join('; ')
         ],
         [
           I18n.t('follow_up_committee_report.weaknesses_heatmap.process_owner_roots'),
