@@ -42,6 +42,7 @@ module Findings::WeaknessesHeatmapCsv
       review.conclusion_final_review.conclusion,
       review.conclusion_final_review.evolution,
       process_owner_parents.map(&:full_name).join(', '),
+      process_owner_intermediates.map(&:full_name).join('; '),
       process_owner_roots.map(&:full_name).join(', ')
     ].compact
   end
@@ -97,6 +98,7 @@ module Findings::WeaknessesHeatmapCsv
         ConclusionReview.human_attribute_name('conclusion'),
         ConclusionReview.human_attribute_name('evolution'),
         I18n.t('follow_up_committee_report.weaknesses_heatmap.process_owner_parents'),
+        I18n.t('follow_up_committee_report.weaknesses_heatmap.process_owner_intermediates'),
         I18n.t('follow_up_committee_report.weaknesses_heatmap.process_owner_roots'),
       ].compact
     end
