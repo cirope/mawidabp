@@ -90,6 +90,17 @@ module Users::Roles
     root unless root == self
   end
 
+  def parent_intermediates
+    result       = []
+    intermediate = self.parent
+
+    while intermediate&.parent && intermediate.parent != root do
+      result << (intermediate = intermediate.parent)
+    end
+
+    result
+  end
+
   module ClassMethods
     def can_act_as role
       includes(organization_roles: :role).where(
