@@ -36,6 +36,7 @@ module MawidaBP
 
     # Permitted hosts
     config.hosts << /\A[\w\d-]+\.#{ENV['APP_HOST']}\z/
+    config.hosts << "172.25.0.38"
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
