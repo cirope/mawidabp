@@ -15,7 +15,9 @@ module ReviewsHelper
   def review_plan_item_field(form, readonly)
     require 'ostruct' unless defined? OpenStruct
 
-    grouped_plan_items = PlanItem.list_unused(@review.period_id).group_by(
+    period = Period.currents.any? ? Period.currents.first.id : @review.period_id
+
+    grouped_plan_items = PlanItem.list_unused(period).group_by(
       &:business_unit_type)
 
     business_unit_types = grouped_plan_items.map do |but, plan_items|

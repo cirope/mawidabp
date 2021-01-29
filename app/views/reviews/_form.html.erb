@@ -16,9 +16,13 @@
           } %>
         <% end %>
         <% if @review.new_record? %>
-          <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true, input_html: {
-            data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
-          } %>
+          <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] },
+            prompt: true,
+            selected: Period.currents.any? ? Period.currents.first.id : '',
+            input_html: {
+              data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
+            }
+          %>
         <% else %>
           <%= f.input :period_description, label: Review.human_attribute_name('period_id'),
             input_html: { value: @review.period.inspect, readonly: true } %>
