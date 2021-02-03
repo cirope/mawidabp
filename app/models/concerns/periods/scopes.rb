@@ -29,7 +29,7 @@ module Periods::Scopes
     end
 
     def list_all_with_plans
-        left_joins(plan: { plan_items: :review }).
+      list.left_joins(plan: { plan_items: :review }).
         where(reviews: { plan_item_id: nil }).
         where.not(plans: { period_id: nil }).
         uniq

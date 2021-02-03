@@ -64,7 +64,7 @@ class ReviewsController < ApplicationController
                         elsif Period.currents.list_all_with_plans.any?
                           Period.currents.list_all_with_plans.first.id
                         else
-                          Period.currents.list_all_with_plans.first.try(:id)
+                          Period.list_all_with_plans.first.try(:id)
                         end
 
     respond_to do |format|

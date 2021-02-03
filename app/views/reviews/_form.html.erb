@@ -16,7 +16,7 @@
           } %>
         <% end %>
         <% if @review.new_record? %>
-          <%= f.input :period_id, collection: Period.list.list_all_with_plans.map { |p| [p.inspect, p.id] },
+          <%= f.input :period_id, collection: Period.list_all_with_plans.map { |p| [p.inspect, p.id] },
             prompt: true,
             input_html: {
               data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
