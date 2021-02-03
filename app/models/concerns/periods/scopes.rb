@@ -28,10 +28,7 @@ module Periods::Scopes
         reorder(order_by_dates).references(:plans)
     end
 
-    def list_all_with_plans current_period = nil
-      period = current_period == 'current' ? currents : Period.list
-
-      period.
+    def list_all_with_plans
         left_joins(plan: { plan_items: :review }).
         where(reviews: { plan_item_id: nil }).
         where.not(plans: { period_id: nil }).
