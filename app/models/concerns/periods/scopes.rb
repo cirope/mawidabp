@@ -28,12 +28,23 @@ module Periods::Scopes
         reorder(order_by_dates).references(:plans)
     end
 
+    def list_all_with_plans current_period = nil
+      result = []
+      period = current_period == 'current' ? currents : Period.list
+
+      period.map do |r|
+        result << r if PlanItem.list_unused(r.id).any?
+      end
+
+      result
+    end
+
     private
 
       def order_by_dates
         [
-          "#{quoted_table_name}.#{qcn('start')} ASC",
-          "#{quoted_table_name}.#{qcn('end')} ASC"
+          "#{quoted_table_name}.#{qcn('start')} DESC",
+          "#{quoted_table_name}.#{qcn('end')} DESC"
         ].map { |o| Arel.sql o }
       end
   end
