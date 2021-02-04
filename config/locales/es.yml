@@ -690,6 +690,7 @@
   follow_up_audited:
     index_title: "Reportes generales"
     weaknesses_by_user_title: "Observaciones por usuario"
+    process_control_stats_title: "Observaciones por proceso de negocio"
     weaknesses_by_user:
       pdf_name: "observaciones_por_usuario.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -697,6 +698,15 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+
+    process_control_stats:
+      pdf_name: "observaciones_por_proceso_negocio.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO OBSERVACIONES POR PROCESO DE NEGOCIO / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
 
   follow_up_audit:
     index_title: "Reportes de auditoría"
