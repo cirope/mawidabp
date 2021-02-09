@@ -42,6 +42,7 @@ gem 'uglifier'
 
 gem 'unicorn'
 gem 'unicorn-rails'
+gem 'unicorn-worker-killer'
 
 group :development do
   gem 'web-console'
