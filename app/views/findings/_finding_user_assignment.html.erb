@@ -57,7 +57,7 @@
           <% end %>
         <% else %>
           <div class="text-left custom-control custom-checkbox mt-2">
-            <%= f.object.created_at ? I18n.l(f.object.created_at, format: '%d/%m/%Y') : ''  %>
+            <%= f.object.created_at ? I18n.l(f.object.created_at.to_date, format: :minimal) : ''  %>
           </div>
         <% end %>
       </div>
