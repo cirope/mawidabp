@@ -47,14 +47,18 @@
       </div>
       <div class="col-md-1">
         <% if for_notification && is_a_new_relation %>
-            <% if f.object.new_record? %>
-              <div class="text-left custom-control custom-checkbox mt-2">
-                <%= check_box_tag "user_for_notification", '1', false, class: 'custom-control-input', data: { user_selector: true } %>
-                <label class="custom-control-label" for="user_for_notification"></label>
-              </div>
-            <% else %>
-              --
-            <% end %>
+          <% if f.object.new_record? %>
+            <div class="text-left custom-control custom-checkbox mt-2">
+              <%= check_box_tag "user_for_notification", '1', true, class: 'custom-control-input', data: { user_selector: true } %>
+              <label class="custom-control-label" for="user_for_notification"></label>
+            </div>
+          <% else %>
+            --
+          <% end %>
+        <% else %>
+          <div class="text-left custom-control custom-checkbox mt-2">
+            <%= f.object.created_at ? I18n.l(f.object.created_at.to_date, format: :minimal) : ''  %>
+          </div>
         <% end %>
       </div>
       <div class="col-md-1">
