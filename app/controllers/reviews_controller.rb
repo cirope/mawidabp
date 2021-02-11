@@ -61,10 +61,10 @@ class ReviewsController < ApplicationController
     @review.clone_from @review_clone if @review_clone
     @review.period_id = if params[:period]
                           params[:period].to_i
-                        elsif Period.currents.any?
-                          Period.currents.first.id
+                        elsif Period.currents.list_all_with_plans.any?
+                          Period.currents.list_all_with_plans.first.id
                         else
-                          Period.list.first.try(:id)
+                          Period.list_all_with_plans.first.try(:id)
                         end
 
     respond_to do |format|
