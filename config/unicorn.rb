@@ -23,7 +23,7 @@ else
   stdout_path "#{app_path}/log/unicorn.stdout.log"
 end
 
-listen ENV['PORT'] || '/run/unicorn/unicorn.sock'
+listen ENV['PORT'] || 3000
 
 # nuke workers after 360 seconds
 timeout 360
