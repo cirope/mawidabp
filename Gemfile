@@ -29,6 +29,7 @@ gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'jbuilder'
 gem 'sidekiq', '< 6.0'
+gem 'autoprefixer-rails', '< 10'
 gem 'ruby-ntlm'
 gem 'chartist-rails'
 gem 'rails-controller-testing' # TODO: remove after decouple test from assigns

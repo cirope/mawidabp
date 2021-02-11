@@ -65,7 +65,7 @@ GEM
     airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.2)
-    autoprefixer-rails (10.2.4.0)
+    autoprefixer-rails (9.8.6.5)
       execjs
     bcrypt_pbkdf (1.1.0)
     bindex (0.8.1)
@@ -320,6 +320,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-nulldb-adapter
   acts_as_tree
+  autoprefixer-rails (< 10)
   bcrypt_pbkdf
   bootstrap
   bootstrap-will_paginate
