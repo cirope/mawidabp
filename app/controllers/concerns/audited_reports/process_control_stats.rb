@@ -6,49 +6,52 @@ module AuditedReports::ProcessControlStats
   def process_control_stats
     @controller = params[:controller_name]
     final = params[:final] == 'true'
-    @title = t("#{@controller}_committee_report.process_control_stats_title")
+    @title = t("#{@controller}.process_control_stats_title")
     @from_date = 1.year.ago
     @to_date = DateTime.now
     @risk_levels = []
     @filters = []
     @columns = [
       ['process_control', BestPractice.human_attribute_name('process_controls.name'), 60],
-      ['effectiveness', t("#{@controller}_committee_report.process_control_stats.average_effectiveness"), 20],
+      ['effectiveness', t("#{@controller}.process_control_stats.average_effectiveness"), 20],
       ['weaknesses_count', t('review.weaknesses_count'), 20]
     ]
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(
       @from_date, @to_date
     ).scored_for_report
 
-    review_user = Review.includes(:review_user_assignments).
-                    where(
-                      review_user_assignments: {
-                        user_id: Current.user.id
-                      }
-                    ).last
+    review_user                     = Current.user.reviews.last
+    business_unit_type              = review_user.business_unit_type
+    if business_unit_type
+      @business_unit_ids              = business_unit_type.business_units.map(&:id)
+      conclusion_review_by_user       = ConclusionReview.where(review: Current.user.reviews.list_with_final_review.last)
+      @process_control_data,
+      @reviews_score_data_general,
+      @review_identifications_general = process_control_stat_html(final, conclusion_reviews)
+      @process_controls               = review_user.process_controls.uniq.map(&:name)
+      @user_process_control_data,
+      @user_review_score_data,
+      @review_identifications_user    = process_control_stat_html(final, conclusion_review_by_user)
+    end
 
-    @process_control_ids_data                           = []
-    @user_process_control_ids_data                      = []
-    @business_unit_type                                 = review_user.business_unit_type
-    @business_unit_ids                                  = @business_unit_type.business_units.map(&:id)
-    @process_control_data, @reviews_score_data          = process_control_stat_html(final, conclusion_reviews, @process_control_ids_data)
-    @process_controls                                   = review_user.process_controls.uniq.map(&:name)
-    @user_process_control_data, @user_review_score_data = process_control_stat_html(final, conclusion_reviews, @user_process_control_ids_data)
+    respond_to do |format|
+      format.html
+    end
   end
 
-  def process_control_stat_html final, conclusion_reviews, process_control_data
+  def process_control_stat_html final, conclusion_reviews
     @process_control_ids_data = {}
-    @review_identifications   = {}
     @reviews_score_data     ||= {}
     weaknesses_conditions     = {}
     review_identifications    = []
     process_controls          = {}
     reviews_score_data      ||= []
+    process_control_data      = []
 
     conclusion_reviews.each do |c_r|
       control_objective_items = c_r.review.control_objective_items.
         not_excluded_from_score.
-        for_business_units(*@business_units).
+        for_business_units(*@business_units_ids).
         with_process_control_names(*@process_controls)
 
       control_objective_items.each do |coi|
@@ -100,7 +103,6 @@ module AuditedReports::ProcessControlStats
       end
     end
 
-    @review_identifications = review_identifications.sort
     @reviews_score_data = reviews_score_data.size > 0 ?
       weighted_average(reviews_score_data) : 100
 
@@ -114,7 +116,7 @@ module AuditedReports::ProcessControlStats
 
       if weaknesses_count.values.sum == 0
         weaknesses_count_text = t(
-          "#{@controller}_committee_report.process_control_stats.without_weaknesses")
+          "#{@controller}.process_control_stats.without_weaknesses")
       else
         weaknesses_count_text = []
 
@@ -141,20 +143,20 @@ module AuditedReports::ProcessControlStats
 
       ef1 <=> ef2
     end
-    [process_control_data, @reviews_score_data]
+    [process_control_data, @reviews_score_data, review_identifications.sort]
   end
 
   def effectiveness_label(effectiveness, reviews_with_weaknesses, review_ids)
     effectiveness_label = []
 
    effectiveness_label << t(
-      "#{@controller}_committee_report.process_control_stats.average_effectiveness_resume",
+      "#{@controller}.process_control_stats.average_effectiveness_resume",
       :effectiveness => "#{'%.2f' % effectiveness}%",
       :count => review_ids.count
     )
 
     effectiveness_label <<  t(
-      "#{@controller}_committee_report.process_control_stats.reviews_with_weaknesses",
+      "#{@controller}.process_control_stats.reviews_with_weaknesses",
       :count => reviews_with_weaknesses.count
     )
 

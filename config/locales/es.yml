@@ -700,6 +700,13 @@
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
 
     process_control_stats:
+      average_effectiveness: 'Calificación promedio ponderada'
+      average_effectiveness_resume:
+        one: "%{effectiveness} - %{count} informe evaluado"
+        other: "%{effectiveness} - %{count} informes evaluados"
+      reviews_with_weaknesses:
+        one: "%{count} informe con observaciones en el O.C"
+        other: "%{count} informes con observaciones en el O.C."
       pdf_name: "observaciones_por_proceso_negocio.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO OBSERVACIONES POR PROCESO DE NEGOCIO / INFORMES DEFINITIVOS"
