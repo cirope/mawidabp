@@ -7,8 +7,8 @@ module AuditedReports::ProcessControlStats
     @controller = params[:controller_name]
     final = params[:final] == 'true'
     @title = t("#{@controller}_committee_report.process_control_stats_title")
-    @from_date, @to_date = *make_date_range(params[:process_control_stats])
-    @periods = periods_for_interval
+    @from_date = 1.year.ago
+    @to_date = DateTime.now
     @risk_levels = []
     @filters = []
     @columns = [
@@ -19,256 +19,129 @@ module AuditedReports::ProcessControlStats
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(
       @from_date, @to_date
     ).scored_for_report
-    @best_practices = []
-    @process_controls = []
-    @process_control_data = {}
-    @process_control_data_bu = {}
+
+    review_user = Review.includes(:review_user_assignments).
+                    where(
+                      review_user_assignments: {
+                        user_id: Current.user.id
+                      }
+                    ).last
+
+    @process_control_ids_data                           = []
+    @user_process_control_ids_data                      = []
+    @business_unit_type                                 = review_user.business_unit_type
+    @business_unit_ids                                  = @business_unit_type.business_units.map(&:id)
+    @process_control_data, @reviews_score_data          = process_control_stat_html(final, conclusion_reviews, @process_control_ids_data)
+    @process_controls                                   = review_user.process_controls.uniq.map(&:name)
+    @user_process_control_data, @user_review_score_data = process_control_stat_html(final, conclusion_reviews, @user_process_control_ids_data)
+  end
+
+  def process_control_stat_html final, conclusion_reviews, process_control_data
     @process_control_ids_data = {}
-    @process_control_ids_data_bu = {}
-    @review_identifications = {}
-    @reviews_score_data = {}
-    reviews_score_data = {}
-    weaknesses_conditions = {}
+    @review_identifications   = {}
+    @reviews_score_data     ||= {}
+    weaknesses_conditions     = {}
+    review_identifications    = []
+    process_controls          = {}
+    reviews_score_data      ||= []
 
-    if params[:process_control_stats]
-      if params[:process_control_stats][:best_practice].present?
-        @best_practices = params[:process_control_stats][:best_practice].split(
-          SPLIT_AND_TERMS_REGEXP
-        ).uniq.map(&:strip)
+    conclusion_reviews.each do |c_r|
+      control_objective_items = c_r.review.control_objective_items.
+        not_excluded_from_score.
+        for_business_units(*@business_units).
+        with_process_control_names(*@process_controls)
 
-        if @best_practices.present?
-          @filters << "<b>#{BestPractice.model_name.human}</b> = \"#{params[:process_control_stats][:best_practice].strip}\""
+      control_objective_items.each do |coi|
+        coi_effectiveness = effectiveness coi
+        pc_data = process_controls[coi.process_control.name] ||= {}
+        pc_data[:weaknesses_ids] ||= {}
+        pc_data[:reviews_with_weaknesses] ||= []
+        id = coi.review.id
+        pc_data[:review_ids] ||= []
+        pc_data[:review_ids] << id if pc_data[:review_ids].exclude? id
+        identification = coi.review.identification
+        weaknesses_count = {}
+        weaknesses = final ? coi.final_weaknesses : coi.weaknesses
+        weaknesses = weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
+        weaknesses = weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
 
-          conclusion_reviews = conclusion_reviews.by_best_practice_names *@best_practices
+        if review_identifications.exclude? identification
+          review_identifications << identification
         end
-      end
 
-      if params[:process_control_stats][:process_control].present?
-        @process_controls = params[:process_control_stats][:process_control].split(
-          SPLIT_AND_TERMS_REGEXP
-        ).uniq.map(&:strip)
+        weaknesses.not_revoked.each do |w|
+          @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
+          show = @business_unit_ids.blank? ||
+            @business_unit_ids.include?(c_r.review.business_unit.id) ||
+            w.business_unit_ids.any? { |bu_id| @business_unit_ids.include?(bu_id) }
 
-        if @process_controls.present?
-          @filters << "<b>#{ProcessControl.model_name.human}</b> = \"#{params[:process_control_stats][:process_control].strip}\""
-
-          conclusion_reviews = conclusion_reviews.by_process_control_names *@process_controls
+          if show
+            weaknesses_count[w.risk_text] ||= 0
+            weaknesses_count[w.risk_text] += 1
+          end
         end
+
+        if weaknesses.not_revoked.size > 0 && pc_data[:reviews_with_weaknesses].exclude?(id)
+          pc_data[:reviews_with_weaknesses] << id
+        end
+
+        pc_data[:weaknesses] ||= {}
+        pc_data[:effectiveness] ||= []
+        pc_data[:effectiveness] << coi_effectiveness
+
+        reviews_score_data << coi_effectiveness
+
+        weaknesses_count.each do |r, c|
+          pc_data[:weaknesses][r] ||= 0
+          pc_data[:weaknesses][r] += c
+        end
+
+        process_controls[coi.process_control.name] = pc_data
       end
     end
 
-    @periods.each do |period|
-      review_identifications = []
-      process_controls = {}
-      reviews_score_data[period] ||= []
+    @review_identifications = review_identifications.sort
+    @reviews_score_data = reviews_score_data.size > 0 ?
+      weighted_average(reviews_score_data) : 100
 
-      conclusion_reviews.for_period(period).each do |c_r|
-        control_objective_items = c_r.review.control_objective_items.
-          not_excluded_from_score.
-          with_best_practice_names(*@best_practices).
-          with_process_control_names(*@process_controls)
+    process_control_data ||= []
 
-        control_objective_items.each do |coi|
-          coi_effectiveness = effectiveness coi
-          pc_data = process_controls[coi.process_control.name] ||= {}
-          pc_data[:weaknesses_ids] ||= {}
-          pc_data[:reviews_with_weaknesses] ||= []
-          id = coi.review.id
-          pc_data[:review_ids] ||= []
-          pc_data[:review_ids] << id if pc_data[:review_ids].exclude? id
-          identification = coi.review.identification
-          weaknesses_count = {}
-          weaknesses = final ? coi.final_weaknesses : coi.weaknesses
-          weaknesses = weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
-          weaknesses = weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
+    process_controls.each do |pc, pc_data|
+      @process_control_ids_data[pc] ||= {}
+      reviews_count = pc_data[:effectiveness].size
+      effectiveness = reviews_count > 0 ? weighted_average(pc_data[:effectiveness]) : 100
+      weaknesses_count = pc_data[:weaknesses]
 
-          if review_identifications.exclude? identification
-            review_identifications << identification
-          end
+      if weaknesses_count.values.sum == 0
+        weaknesses_count_text = t(
+          "#{@controller}_committee_report.process_control_stats.without_weaknesses")
+      else
+        weaknesses_count_text = []
 
-          weaknesses.not_revoked.each do |w|
-            @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
-            show = @business_unit_ids.blank? ||
-              @business_unit_ids.include?(c_r.review.business_unit.id) ||
-              w.business_unit_ids.any? { |bu_id| @business_unit_ids.include?(bu_id) }
+        @risk_levels.each do |risk|
+          risk_text = t("risk_types.#{risk}")
+          text = "#{risk_text}: #{weaknesses_count[risk_text] || 0}"
 
-            if show
-              weaknesses_count[w.risk_text] ||= 0
-              weaknesses_count[w.risk_text] += 1
-              pc_data[:weaknesses_ids][w.risk_text] ||= []
-              pc_data[:weaknesses_ids][w.risk_text] << w.id
-            end
-          end
+          @process_control_ids_data[pc][text] = pc_data[:weaknesses_ids][risk_text]
 
-          if weaknesses.not_revoked.size > 0 && pc_data[:reviews_with_weaknesses].exclude?(id)
-            pc_data[:reviews_with_weaknesses] << id
-          end
-
-          pc_data[:weaknesses] ||= {}
-          pc_data[:effectiveness] ||= []
-          pc_data[:effectiveness] << coi_effectiveness
-
-          reviews_score_data[period] << coi_effectiveness
-
-          weaknesses_count.each do |r, c|
-            pc_data[:weaknesses][r] ||= 0
-            pc_data[:weaknesses][r] += c
-          end
-
-          process_controls[coi.process_control.name] = pc_data
+          weaknesses_count_text << text
         end
       end
 
-      @review_identifications[period] = review_identifications.sort
-      @reviews_score_data[period] = reviews_score_data[period].size > 0 ?
-        weighted_average(reviews_score_data[period]) : 100
-
-      @process_control_data[period] ||= []
-
-      process_controls.each do |pc, pc_data|
-        @process_control_ids_data[pc] ||= {}
-        reviews_count = pc_data[:effectiveness].size
-        effectiveness = reviews_count > 0 ? weighted_average(pc_data[:effectiveness]) : 100
-        weaknesses_count = pc_data[:weaknesses]
-
-        if weaknesses_count.values.sum == 0
-          weaknesses_count_text = t(
-            "#{@controller}_committee_report.process_control_stats.without_weaknesses")
-        else
-          weaknesses_count_text = []
-
-          @risk_levels.each do |risk|
-            risk_text = t("risk_types.#{risk}")
-            text = "#{risk_text}: #{weaknesses_count[risk_text] || 0}"
-
-            @process_control_ids_data[pc][text] = pc_data[:weaknesses_ids][risk_text]
-
-            weaknesses_count_text << text
-          end
-        end
-
-        @process_control_data[period] << {
-          'process_control' => pc,
-          'effectiveness' => effectiveness_label(effectiveness, pc_data[:reviews_with_weaknesses], pc_data[:review_ids]),
-          'weaknesses_count' => weaknesses_count_text
-        }
-      end
-
-      @process_control_data[period].sort! do |pc_data_1, pc_data_2|
-        ef1 = pc_data_1['effectiveness'].match(/\d+.?\d+/)[0].to_f rescue 0.0
-        ef2 = pc_data_2['effectiveness'].match(/\d+.?\d+/)[0].to_f rescue 0.0
-
-        ef1 <=> ef2
-      end
+      process_control_data << {
+        'process_control' => pc,
+        'effectiveness' => effectiveness_label(effectiveness, pc_data[:reviews_with_weaknesses], pc_data[:review_ids]),
+        'weaknesses_count' => weaknesses_count_text
+      }
     end
 
-    @periods.each do |period|
-      review_identifications = []
-      process_controls = {}
-      reviews_score_data[period] ||= []
+    process_control_data.sort! do |pc_data_1, pc_data_2|
+      ef1 = pc_data_1['effectiveness'].match(/\d+.?\d+/)[0].to_f rescue 0.0
+      ef2 = pc_data_2['effectiveness'].match(/\d+.?\d+/)[0].to_f rescue 0.0
 
-      rua = ReviewUserAssignment.where(user: current_user).last
-      @business_unit_ids = rua.review.business_unit.id
-
-      conclusion_reviews.for_period(period).each do |c_r|
-        control_objective_items = c_r.review.control_objective_items.
-          not_excluded_from_score.
-          for_business_units(*@business_unit_ids).
-          with_best_practice_names(*@best_practices).
-          with_process_control_names(*@process_controls)
-
-        control_objective_items.each do |coi|
-          coi_effectiveness = effectiveness coi
-          pc_data = process_controls[coi.process_control.name] ||= {}
-          pc_data[:weaknesses_ids] ||= {}
-          pc_data[:reviews_with_weaknesses] ||= []
-          id = coi.review.id
-          pc_data[:review_ids] ||= []
-          pc_data[:review_ids] << id if pc_data[:review_ids].exclude? id
-          identification = coi.review.identification
-          weaknesses_count = {}
-          weaknesses = final ? coi.final_weaknesses : coi.weaknesses
-          weaknesses = weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
-          weaknesses = weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
-
-          if review_identifications.exclude? identification
-            review_identifications << identification
-          end
-
-          weaknesses.not_revoked.each do |w|
-            @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
-            show = @business_unit_ids.blank? ||
-              @business_unit_ids.include?(c_r.review.business_unit.id) ||
-              w.business_unit_ids.any? { |bu_id| @business_unit_ids.include?(bu_id) }
-
-            if show
-              weaknesses_count[w.risk_text] ||= 0
-              weaknesses_count[w.risk_text] += 1
-              pc_data[:weaknesses_ids][w.risk_text] ||= []
-              pc_data[:weaknesses_ids][w.risk_text] << w.id
-            end
-          end
-
-          if weaknesses.not_revoked.size > 0 && pc_data[:reviews_with_weaknesses].exclude?(id)
-            pc_data[:reviews_with_weaknesses] << id
-          end
-
-          pc_data[:weaknesses] ||= {}
-          pc_data[:effectiveness] ||= []
-          pc_data[:effectiveness] << coi_effectiveness
-
-          reviews_score_data[period] << coi_effectiveness
-
-          weaknesses_count.each do |r, c|
-            pc_data[:weaknesses][r] ||= 0
-            pc_data[:weaknesses][r] += c
-          end
-
-          process_controls[coi.process_control.name] = pc_data
-        end
-      end
-
-      @review_identifications[period] = review_identifications.sort
-      @reviews_score_data[period] = reviews_score_data[period].size > 0 ?
-        weighted_average(reviews_score_data[period]) : 100
-
-      @process_control_data_bu[period] ||= []
-
-      process_controls.each do |pc, pc_data|
-        @process_control_ids_data_bu[pc] ||= {}
-        reviews_count = pc_data[:effectiveness].size
-        effectiveness = reviews_count > 0 ? weighted_average(pc_data[:effectiveness]) : 100
-        weaknesses_count = pc_data[:weaknesses]
-
-        if weaknesses_count.values.sum == 0
-          weaknesses_count_text = t(
-            "#{@controller}_committee_report.process_control_stats.without_weaknesses")
-        else
-          weaknesses_count_text = []
-
-          @risk_levels.each do |risk|
-            risk_text = t("risk_types.#{risk}")
-            text = "#{risk_text}: #{weaknesses_count[risk_text] || 0}"
-
-            @process_control_ids_data_bu[pc][text] = pc_data[:weaknesses_ids][risk_text]
-
-            weaknesses_count_text << text
-          end
-        end
-
-        @process_control_data_bu[period] << {
-          'process_control' => pc,
-          'effectiveness' => effectiveness_label(effectiveness, pc_data[:reviews_with_weaknesses], pc_data[:review_ids]),
-          'weaknesses_count' => weaknesses_count_text
-        }
-      end
-
-      @process_control_data_bu[period].sort! do |pc_data_1, pc_data_2|
-        ef1 = pc_data_1['effectiveness'].match(/\d+.?\d+/)[0].to_f rescue 0.0
-        ef2 = pc_data_2['effectiveness'].match(/\d+.?\d+/)[0].to_f rescue 0.0
-
-        ef1 <=> ef2
-      end
+      ef1 <=> ef2
     end
+    [process_control_data, @reviews_score_data]
   end
 
   def effectiveness_label(effectiveness, reviews_with_weaknesses, review_ids)
