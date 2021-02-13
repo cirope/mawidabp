@@ -8,7 +8,7 @@ module AuditedReports::ProcessControlStats
     final        = params[:final] == 'true'
     @title       = t("#{@controller}.process_control_stats_title")
     @from_date   = 1.year.ago.to_date
-    @to_date     = Time.zone.now.to_date
+    @to_date     = Time.zone.today.to_date
     @risk_levels = []
     @filters     = []
 
@@ -23,7 +23,7 @@ module AuditedReports::ProcessControlStats
     ).scored_for_report
 
     user_review        = Current.user.reviews.list_with_final_review.last
-    business_unit_type = user_review ? user_review.business_unit_type : nil
+    business_unit_type = user_review&.business_unit_type
 
     if business_unit_type
       @business_unit_type_title = t(
@@ -36,10 +36,7 @@ module AuditedReports::ProcessControlStats
         business_unit: user_review.business_unit.name
       )
 
-      user_conclusion_review = ConclusionFinalReview.list_all_by_date(
-        @from_date, @to_date
-      ).where(review: user_review)
-
+      user_conclusion_review     = ConclusionFinalReview.where(review: user_review)
       @business_unit_ids         = business_unit_type.business_units.map(&:id)
       @process_control_data      = process_control_stats_html(final, conclusion_reviews)
       @process_controls          = user_review.process_controls.uniq.map(&:name)
@@ -313,6 +310,7 @@ module AuditedReports::ProcessControlStats
   end
 
   private
+
     def process_control_stats_header_csv csv
       column_headers = []
 
