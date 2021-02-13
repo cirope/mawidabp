@@ -4,36 +4,44 @@ module AuditedReports::ProcessControlStats
   include Parameters::Risk
 
   def process_control_stats
-    @controller = params[:controller_name]
-    final = params[:final] == 'true'
-    @title = t("#{@controller}.process_control_stats_title")
-    @from_date = 1.year.ago
-    @to_date = Time.zone.now
+    @controller  = params[:controller_name]
+    final        = params[:final] == 'true'
+    @title       = t("#{@controller}.process_control_stats_title")
+    @from_date   = 5.year.ago
+    @to_date   = 4.year.ago
+    #@to_date     = Time.zone.now
     @risk_levels = []
-    @filters = []
+    @filters     = []
+
     @columns = [
       ['process_control', BestPractice.human_attribute_name('process_controls.name'), 60],
       ['effectiveness', t("#{@controller}.process_control_stats.average_effectiveness"), 20],
       ['weaknesses_count', t('review.weaknesses_count'), 20]
     ]
+
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(
       @from_date, @to_date
     ).scored_for_report
 
     review_user               = Current.user.reviews.list_with_final_review.last
     business_unit_type        = review_user.business_unit_type
-    conclusion_review_by_user = ConclusionFinalReview.list.where(review: review_user)
+    conclusion_review_by_user = ConclusionFinalReview.list_all_by_date(
+      @from_date, @to_date
+    ).where(review: review_user)
 
     if business_unit_type
-      @business_unit_ids                = business_unit_type.business_units.map(&:id)
-      @process_control_data =  process_control_stat_html(final, conclusion_reviews)
-      @process_controls                 = review_user.process_controls.uniq.map(&:name)
+      @business_unit_ids         = business_unit_type.business_units.map(&:id)
+      @process_control_data      = process_control_stat_html(final, conclusion_reviews)
+      @process_controls          = review_user.process_controls.uniq.map(&:name)
       @user_process_control_data = process_control_stat_html(final, conclusion_review_by_user)
     end
 
     respond_to do |format|
       format.html
       format.js
+      format.csv do
+        render csv: process_control_stats_csv, filename: @title.downcase
+      end
     end
   end
 
@@ -53,18 +61,19 @@ module AuditedReports::ProcessControlStats
         with_process_control_names(*@process_controls)
 
       control_objective_items.each do |coi|
-        coi_effectiveness = effectiveness coi
-        pc_data = process_controls[coi.process_control.name] ||= {}
-        pc_data[:weaknesses_ids] ||= {}
+        coi_effectiveness                   = effectiveness coi
+        pc_data                             = process_controls[coi.process_control.name] ||= {}
+        pc_data[:weaknesses_ids]          ||= {}
         pc_data[:reviews_with_weaknesses] ||= []
-        id = coi.review.id
-        pc_data[:review_ids] ||= []
+        id                                  = coi.review.id
+        identification                      = coi.review.identification
+        weaknesses_count                    = {}
+        weaknesses                          = final ? coi.final_weaknesses : coi.weaknesses
+        weaknesses                          = weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
+        weaknesses                          = weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
+        pc_data[:review_ids]              ||= []
+
         pc_data[:review_ids] << id if pc_data[:review_ids].exclude? id
-        identification = coi.review.identification
-        weaknesses_count = {}
-        weaknesses = final ? coi.final_weaknesses : coi.weaknesses
-        weaknesses = weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
-        weaknesses = weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
 
         if review_identifications.exclude? identification
           review_identifications << identification
@@ -78,7 +87,7 @@ module AuditedReports::ProcessControlStats
 
           if show
             weaknesses_count[w.risk_text] ||= 0
-            weaknesses_count[w.risk_text] += 1
+            weaknesses_count[w.risk_text]  += 1
           end
         end
 
@@ -86,15 +95,15 @@ module AuditedReports::ProcessControlStats
           pc_data[:reviews_with_weaknesses] << id
         end
 
-        pc_data[:weaknesses] ||= {}
+        pc_data[:weaknesses]    ||= {}
         pc_data[:effectiveness] ||= []
-        pc_data[:effectiveness] << coi_effectiveness
 
+        pc_data[:effectiveness] << coi_effectiveness
         reviews_score_data << coi_effectiveness
 
         weaknesses_count.each do |r, c|
           pc_data[:weaknesses][r] ||= 0
-          pc_data[:weaknesses][r] += c
+          pc_data[:weaknesses][r]  += c
         end
 
         process_controls[coi.process_control.name] = pc_data
@@ -108,9 +117,9 @@ module AuditedReports::ProcessControlStats
 
     process_controls.each do |pc, pc_data|
       process_control_ids_data[pc] ||= {}
-      reviews_count = pc_data[:effectiveness].size
-      effectiveness = reviews_count > 0 ? weighted_average(pc_data[:effectiveness]) : 100
-      weaknesses_count = pc_data[:weaknesses]
+      reviews_count                  = pc_data[:effectiveness].size
+      effectiveness                  = reviews_count > 0 ? weighted_average(pc_data[:effectiveness]) : 100
+      weaknesses_count               = pc_data[:weaknesses]
 
       if weaknesses_count.values.sum == 0
         weaknesses_count_text = t(
@@ -119,9 +128,8 @@ module AuditedReports::ProcessControlStats
         weaknesses_count_text = []
 
         @risk_levels.each do |risk|
-          risk_text = t("risk_types.#{risk}")
-          text = "#{risk_text}: #{weaknesses_count[risk_text] || 0}"
-
+          risk_text                          = t("risk_types.#{risk}")
+          text                               = "#{risk_text}: #{weaknesses_count[risk_text] || 0}"
           process_control_ids_data[pc][text] = pc_data[:weaknesses_ids][risk_text]
 
           weaknesses_count_text << text
@@ -174,7 +182,6 @@ module AuditedReports::ProcessControlStats
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 
     column_data                   = []
-    columns                       = {}
     column_widths, column_headers = [], []
 
     @columns.each do |col_name, col_title, col_width|
@@ -207,7 +214,7 @@ module AuditedReports::ProcessControlStats
       end
     else
       pdf.text(
-        t("#{@controller}.process_control_stats.without_audits_in_the_period"))
+        t("#{@controller}.process_control_stats.without_reviews_in_the_period"))
     end
 
     pdf.move_down PDF_FONT_SIZE
@@ -236,30 +243,71 @@ module AuditedReports::ProcessControlStats
           )
         end
       end
+
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text t(
+        "#{@controller}.process_control_stats.review_effectiveness_average",
+        score: @process_control_data[:reviews_score_data]
+      ), inline_format: true
+
+      pdf.move_down PDF_FONT_SIZE * 0.25
+
+      pdf.text [
+        Review.model_name.human(count: 0),
+        @process_control_data[:review_identifications].to_sentence
+      ].join(': ') , inline_formati: true
     else
       pdf.text(
-        t("#{@controller}.process_control_stats.without_audits_in_the_period"))
+        t("#{@controller}.process_control_stats.without_reviews_in_the_period"))
     end
-
-    pdf.move_down PDF_FONT_SIZE
-    pdf.text t(
-      "#{@controller}.process_control_stats.review_effectiveness_average",
-      :score => @process_control_data[:reviews_score_data]
-    ), :inline_format => true
-
-    pdf.move_down PDF_FONT_SIZE * 0.25
-    pdf.text [
-      Review.model_name.human(count: 0),
-      @process_control_data[:review_identifications].to_sentence
-    ].join(': ') , :inline_format => true
-
 
     save_pdf(pdf, @controller, @from_date, @to_date, 'process_control_stats')
 
     redirect_to_pdf(@controller, @from_date, @to_date, 'process_control_stats')
   end
 
+  def process_control_stats_csv
+    options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
+
+    csv_str = CSV.generate(**options) do |csv|
+      [@user_process_control_data, @process_control_data].each do |value|
+          process_control_stats_header_csv csv
+          process_control_stats_data_csv csv, value
+          csv << []
+      end
+    end
+
+    "\uFEFF#{csv_str}"
+  end
+
   private
+    def process_control_stats_header_csv csv
+      column_headers = []
+
+      @columns.each do |col_name, col_title, col_width|
+        column_headers << col_title
+      end
+
+      csv << column_headers
+    end
+
+    def process_control_stats_data_csv csv, process_control_data
+      if process_control_data[:process_control_data].blank?
+        csv << [t("#{@controller}.process_control_stats.without_reviews_in_the_period")]
+      else
+        process_control_data[:process_control_data].each do |data|
+          row = []
+
+          @columns.each do |col_name, _|
+            row << (data[col_name].kind_of?(Array) ?
+                    data[col_name].map {|l| "  • #{l}"}.join("\n") :
+                    data[col_name])
+          end
+
+          csv << row
+        end
+      end
+    end
 
     def effectiveness coi
       if @business_unit_ids && @business_unit_ids.size == 1
