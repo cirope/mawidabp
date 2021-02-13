@@ -33,6 +33,7 @@ module AuditedReports::ProcessControlStats
 
     respond_to do |format|
       format.html
+      format.js
     end
   end
 
@@ -172,60 +173,86 @@ module AuditedReports::ProcessControlStats
 
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 
-    @periods.each do |period|
-      add_period_title(pdf, period)
+    column_data                   = []
+    columns                       = {}
+    column_widths, column_headers = [], []
 
-      column_data = []
-      columns = {}
-      column_widths, column_headers = [], []
-
-      @columns.each do |col_name, col_title, col_width|
-        column_headers << "<b>#{col_title}</b>"
-        column_widths << pdf.percent_width(col_width)
-      end
-
-      @process_control_data[period].each do |row|
-        new_row = []
-
-        @columns.each do |col_name, _|
-          new_row << (row[col_name].kind_of?(Array) ?
-            row[col_name].map {|l| "  • #{l}"}.join("\n") :
-            row[col_name])
-        end
-
-        column_data << new_row
-      end
-
-      unless column_data.blank?
-        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-          table_options = pdf.default_table_options(column_widths)
-
-          pdf.table(column_data.insert(0, column_headers), table_options) do
-            row(0).style(
-              :background_color => 'cccccc',
-              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-            )
-          end
-        end
-      else
-        pdf.text(
-          t("#{@controller}_committee_report.process_control_stats.without_audits_in_the_period"))
-      end
-
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text t(
-        "#{@controller}_committee_report.process_control_stats.review_effectiveness_average",
-        :score => @reviews_score_data[period]
-      ), :inline_format => true
-
-      pdf.move_down PDF_FONT_SIZE * 0.25
-      pdf.text [
-        Review.model_name.human(count: 0),
-        @review_identifications[period].to_sentence
-      ].join(': ') , :inline_format => true
+    @columns.each do |col_name, col_title, col_width|
+      column_headers << "<b>#{col_title}</b>"
+      column_widths << pdf.percent_width(col_width)
     end
 
-    add_pdf_filters(pdf, @controller, @filters) if @filters.present?
+    @user_process_control_data[:process_control_data].each do |row|
+      new_row = []
+
+      @columns.each do |col_name, _|
+        new_row << (row[col_name].kind_of?(Array) ?
+                    row[col_name].map {|l| "  • #{l}"}.join("\n") :
+                    row[col_name])
+      end
+
+      column_data << new_row
+    end
+
+    unless column_data.blank?
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        table_options = pdf.default_table_options(column_widths)
+
+        pdf.table(column_data.insert(0, column_headers), table_options) do
+          row(0).style(
+            :background_color => 'cccccc',
+            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          )
+        end
+      end
+    else
+      pdf.text(
+        t("#{@controller}.process_control_stats.without_audits_in_the_period"))
+    end
+
+    pdf.move_down PDF_FONT_SIZE
+    column_data = []
+
+    @process_control_data[:process_control_data].each do |row|
+      new_row = []
+
+      @columns.each do |col_name, _|
+        new_row << (row[col_name].kind_of?(Array) ?
+                    row[col_name].map {|l| "  • #{l}"}.join("\n") :
+                    row[col_name])
+      end
+
+      column_data << new_row
+    end
+
+    unless column_data.blank?
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        table_options = pdf.default_table_options(column_widths)
+
+        pdf.table(column_data.insert(0, column_headers), table_options) do
+          row(0).style(
+            :background_color => 'cccccc',
+            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          )
+        end
+      end
+    else
+      pdf.text(
+        t("#{@controller}.process_control_stats.without_audits_in_the_period"))
+    end
+
+    pdf.move_down PDF_FONT_SIZE
+    pdf.text t(
+      "#{@controller}.process_control_stats.review_effectiveness_average",
+      :score => @process_control_data[:reviews_score_data]
+    ), :inline_format => true
+
+    pdf.move_down PDF_FONT_SIZE * 0.25
+    pdf.text [
+      Review.model_name.human(count: 0),
+      @process_control_data[:review_identifications].to_sentence
+    ].join(': ') , :inline_format => true
+
 
     save_pdf(pdf, @controller, @from_date, @to_date, 'process_control_stats')
 

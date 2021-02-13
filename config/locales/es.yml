@@ -698,7 +698,6 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
-
     process_control_stats:
       average_effectiveness: 'Calificación promedio ponderada'
       average_effectiveness_resume:
@@ -710,10 +709,17 @@
       pdf_name: "observaciones_por_proceso_negocio.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO OBSERVACIONES POR PROCESO DE NEGOCIO / INFORMES DEFINITIVOS"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_reviews_in_the_period: "Sin informes en el periodo seleccionado"
       without_weaknesses: "Sin observaciones"
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
+
+  follow_up_audited_committee_report:
+    process_control_stats:
+      pdf_name: "observaciones_por_proceso_negocio.pdf"
+    period:
+      title: "Intervalo"
+      range: "desde el %{from_date} al %{to_date}"
 
   follow_up_audit:
     index_title: "Reportes de auditoría"
