@@ -7,9 +7,8 @@ module AuditedReports::ProcessControlStats
     @controller  = params[:controller_name]
     final        = params[:final] == 'true'
     @title       = t("#{@controller}.process_control_stats_title")
-    @from_date   = 5.year.ago
-    @to_date   = 4.year.ago
-    #@to_date     = Time.zone.now
+    @from_date   = 1.year.ago.to_date
+    @to_date     = Time.zone.now.to_date
     @risk_levels = []
     @filters     = []
 
@@ -23,17 +22,28 @@ module AuditedReports::ProcessControlStats
       @from_date, @to_date
     ).scored_for_report
 
-    review_user               = Current.user.reviews.list_with_final_review.last
-    business_unit_type        = review_user.business_unit_type
-    conclusion_review_by_user = ConclusionFinalReview.list_all_by_date(
-      @from_date, @to_date
-    ).where(review: review_user)
+    user_review        = Current.user.reviews.list_with_final_review.last
+    business_unit_type = user_review ? user_review.business_unit_type : nil
 
     if business_unit_type
+      @business_unit_type_title = t(
+        "#{@controller}.business_unit_type_title",
+        business_unit_type: business_unit_type.name
+      )
+
+      @business_unit_title = t(
+        "#{@controller}.business_unit_title",
+        business_unit: user_review.business_unit.name
+      )
+
+      user_conclusion_review = ConclusionFinalReview.list_all_by_date(
+        @from_date, @to_date
+      ).where(review: user_review)
+
       @business_unit_ids         = business_unit_type.business_units.map(&:id)
-      @process_control_data      = process_control_stat_html(final, conclusion_reviews)
-      @process_controls          = review_user.process_controls.uniq.map(&:name)
-      @user_process_control_data = process_control_stat_html(final, conclusion_review_by_user)
+      @process_control_data      = process_control_stats_html(final, conclusion_reviews)
+      @process_controls          = user_review.process_controls.uniq.map(&:name)
+      @user_process_control_data = process_control_stats_html(final, user_conclusion_review)
     end
 
     respond_to do |format|
@@ -45,14 +55,14 @@ module AuditedReports::ProcessControlStats
     end
   end
 
-  def process_control_stat_html final, conclusion_reviews
-    process_control_ids_data  = {}
-    score_data                = {}
-    weaknesses_conditions     = {}
-    review_identifications    = []
-    process_controls          = {}
-    reviews_score_data        = []
-    process_control_data      = []
+  def process_control_stats_html final, conclusion_reviews
+    process_control_ids_data = {}
+    score_data               = {}
+    weaknesses_conditions    = {}
+    review_identifications   = []
+    process_controls         = {}
+    reviews_score_data       = []
+    process_control_data     = []
 
     conclusion_reviews.each do |c_r|
       control_objective_items = c_r.review.control_objective_items.
@@ -123,7 +133,8 @@ module AuditedReports::ProcessControlStats
 
       if weaknesses_count.values.sum == 0
         weaknesses_count_text = t(
-          "#{@controller}.process_control_stats.without_weaknesses")
+          "#{@controller}.process_control_stats.without_weaknesses"
+        )
       else
         weaknesses_count_text = []
 
@@ -160,7 +171,7 @@ module AuditedReports::ProcessControlStats
   def effectiveness_label(effectiveness, reviews_with_weaknesses, review_ids)
     effectiveness_label = []
 
-   effectiveness_label << t(
+    effectiveness_label << t(
       "#{@controller}.process_control_stats.average_effectiveness_resume",
       :effectiveness => "#{'%.2f' % effectiveness}%",
       :count => review_ids.count
@@ -189,76 +200,94 @@ module AuditedReports::ProcessControlStats
       column_widths << pdf.percent_width(col_width)
     end
 
-    @user_process_control_data[:process_control_data].each do |row|
-      new_row = []
+    if @user_process_control_data
+      @user_process_control_data[:process_control_data].each do |row|
+        new_row = []
 
-      @columns.each do |col_name, _|
-        new_row << (row[col_name].kind_of?(Array) ?
-                    row[col_name].map {|l| "  • #{l}"}.join("\n") :
-                    row[col_name])
-      end
-
-      column_data << new_row
-    end
-
-    unless column_data.blank?
-      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-        table_options = pdf.default_table_options(column_widths)
-
-        pdf.table(column_data.insert(0, column_headers), table_options) do
-          row(0).style(
-            :background_color => 'cccccc',
-            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-          )
+        @columns.each do |col_name, _|
+          new_row << (row[col_name].kind_of?(Array) ?
+                      row[col_name].map {|l| "  • #{l}"}.join("\n") :
+                      row[col_name])
         end
+
+        column_data << new_row
       end
-    else
-      pdf.text(
-        t("#{@controller}.process_control_stats.without_reviews_in_the_period"))
+
+      unless column_data.blank?
+        pdf.text @business_unit_title
+
+        pdf.move_down PDF_FONT_SIZE
+
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
+        end
+
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text [
+          Review.model_name.human(count: 0),
+          @user_process_control_data[:review_identifications].to_sentence
+        ].join(': ') , inline_formati: true
+      else
+        pdf.text(
+          t("#{@controller}.process_control_stats.without_reviews_in_the_period"))
+      end
     end
 
     pdf.move_down PDF_FONT_SIZE
     column_data = []
 
-    @process_control_data[:process_control_data].each do |row|
-      new_row = []
+    if @process_control_data
+      @process_control_data[:process_control_data].each do |row|
+        new_row = []
 
-      @columns.each do |col_name, _|
-        new_row << (row[col_name].kind_of?(Array) ?
-                    row[col_name].map {|l| "  • #{l}"}.join("\n") :
-                    row[col_name])
-      end
-
-      column_data << new_row
-    end
-
-    unless column_data.blank?
-      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-        table_options = pdf.default_table_options(column_widths)
-
-        pdf.table(column_data.insert(0, column_headers), table_options) do
-          row(0).style(
-            :background_color => 'cccccc',
-            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-          )
+        @columns.each do |col_name, _|
+          new_row << (row[col_name].kind_of?(Array) ?
+                      row[col_name].map {|l| "  • #{l}"}.join("\n") :
+                      row[col_name])
         end
+
+        column_data << new_row
       end
 
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text t(
-        "#{@controller}.process_control_stats.review_effectiveness_average",
-        score: @process_control_data[:reviews_score_data]
-      ), inline_format: true
+      unless column_data.blank?
+        pdf.text @business_unit_type_title
 
-      pdf.move_down PDF_FONT_SIZE * 0.25
+        pdf.move_down PDF_FONT_SIZE
 
-      pdf.text [
-        Review.model_name.human(count: 0),
-        @process_control_data[:review_identifications].to_sentence
-      ].join(': ') , inline_formati: true
-    else
-      pdf.text(
-        t("#{@controller}.process_control_stats.without_reviews_in_the_period"))
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
+        end
+
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text t(
+          "#{@controller}.process_control_stats.review_effectiveness_average",
+          score: @process_control_data[:reviews_score_data]
+        ), inline_format: true
+
+        pdf.move_down PDF_FONT_SIZE * 0.25
+
+        pdf.text [
+          Review.model_name.human(count: 0),
+          @process_control_data[:review_identifications].to_sentence
+        ].join(': ') , inline_formati: true
+      else
+        pdf.text(
+          t("#{@controller}.process_control_stats.without_reviews_in_the_period"))
+      end
     end
 
     save_pdf(pdf, @controller, @from_date, @to_date, 'process_control_stats')
@@ -270,10 +299,12 @@ module AuditedReports::ProcessControlStats
     options = { col_sep: ';', force_quotes: true, encoding: 'UTF-8' }
 
     csv_str = CSV.generate(**options) do |csv|
-      [@user_process_control_data, @process_control_data].each do |value|
+      if @process_control_data
+        [@user_process_control_data, @process_control_data].each do |value|
           process_control_stats_header_csv csv
           process_control_stats_data_csv csv, value
           csv << []
+        end
       end
     end
 

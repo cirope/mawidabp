@@ -8,6 +8,10 @@
       <em><%= t 'follow_up_audited.process_control_stats.without_reviews_in_the_period' %></em>
     </p>
   <% else %>
+    <p class="m-2">
+      <em><%= @business_unit_title %></em>
+    </p>
+
     <table class="table table-sm table-striped table-hover">
       <thead>
         <tr>
@@ -30,6 +34,11 @@
         <% end %>
       </tbody>
     </table>
+
+    <p style="margin: -.75em 0em 1em 0em;">
+      <%= Review.model_name.human(count: 0) %>:
+      <%= @user_process_control_data[:review_identifications].to_sentence %>
+    </p>
   <% end %>
 
   <% if @process_control_data[:process_control_data].blank? %>
@@ -37,6 +46,10 @@
       <em><%= t 'follow_up_audited.process_control_stats.without_reviews_in_the_period' %></em>
     </p>
   <% else %>
+    <p class="m-2">
+      <em><%= @business_unit_type_title %></em>
+    </p>
+
     <table class="table table-sm table-striped table-hover">
       <thead>
         <tr>
@@ -61,10 +74,10 @@
     </table>
 
     <p style="margin: 1em 0;">
-    <%= raw t(
-      'follow_up_audited.process_control_stats.review_effectiveness_average',
-      score: @process_control_data[:reviews_score_data]
-    ) %>
+      <%= raw t(
+        'follow_up_audited.process_control_stats.review_effectiveness_average',
+        score: @process_control_data[:reviews_score_data]
+      ) %>
     </p>
 
     <p style="margin: -.75em 0em 1em 0em;">

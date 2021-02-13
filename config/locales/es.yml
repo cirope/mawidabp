@@ -691,6 +691,8 @@
     index_title: "Reportes generales"
     weaknesses_by_user_title: "Observaciones por usuario"
     process_control_stats_title: "Observaciones por proceso de negocio"
+    business_unit_type_title: "Unidad Organizativa: %{business_unit_type}"
+    business_unit_title: "Unidad de Negocio: %{business_unit}"
     weaknesses_by_user:
       pdf_name: "observaciones_por_usuario.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -716,7 +718,7 @@
 
   follow_up_audited_committee_report:
     process_control_stats:
-      pdf_name: "observaciones_por_proceso_negocio.pdf"
+      pdf_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf'
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
