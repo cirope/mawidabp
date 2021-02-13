@@ -303,6 +303,7 @@ module AuditedReports::ProcessControlStats
         [@user_process_control_data, @process_control_data].each do |value|
           process_control_stats_header_csv csv
           process_control_stats_data_csv csv, value
+
           csv << []
         end
       end
