@@ -8,7 +8,7 @@ module AuditedReports::ProcessControlStats
     final = params[:final] == 'true'
     @title = t("#{@controller}.process_control_stats_title")
     @from_date = 1.year.ago
-    @to_date = DateTime.now
+    @to_date = Time.zone.now
     @risk_levels = []
     @filters = []
     @columns = [
@@ -20,18 +20,15 @@ module AuditedReports::ProcessControlStats
       @from_date, @to_date
     ).scored_for_report
 
-    review_user                     = Current.user.reviews.last
-    business_unit_type              = review_user.business_unit_type
+    review_user               = Current.user.reviews.list_with_final_review.last
+    business_unit_type        = review_user.business_unit_type
+    conclusion_review_by_user = ConclusionFinalReview.list.where(review: review_user)
+
     if business_unit_type
-      @business_unit_ids              = business_unit_type.business_units.map(&:id)
-      conclusion_review_by_user       = ConclusionReview.where(review: Current.user.reviews.list_with_final_review.last)
-      @process_control_data,
-      @reviews_score_data_general,
-      @review_identifications_general = process_control_stat_html(final, conclusion_reviews)
-      @process_controls               = review_user.process_controls.uniq.map(&:name)
-      @user_process_control_data,
-      @user_review_score_data,
-      @review_identifications_user    = process_control_stat_html(final, conclusion_review_by_user)
+      @business_unit_ids                = business_unit_type.business_units.map(&:id)
+      @process_control_data =  process_control_stat_html(final, conclusion_reviews)
+      @process_controls                 = review_user.process_controls.uniq.map(&:name)
+      @user_process_control_data = process_control_stat_html(final, conclusion_review_by_user)
     end
 
     respond_to do |format|
@@ -40,12 +37,12 @@ module AuditedReports::ProcessControlStats
   end
 
   def process_control_stat_html final, conclusion_reviews
-    @process_control_ids_data = {}
-    @reviews_score_data     ||= {}
+    process_control_ids_data  = {}
+    score_data                = {}
     weaknesses_conditions     = {}
     review_identifications    = []
     process_controls          = {}
-    reviews_score_data      ||= []
+    reviews_score_data        = []
     process_control_data      = []
 
     conclusion_reviews.each do |c_r|
@@ -103,13 +100,13 @@ module AuditedReports::ProcessControlStats
       end
     end
 
-    @reviews_score_data = reviews_score_data.size > 0 ?
+    score_data = reviews_score_data.size > 0 ?
       weighted_average(reviews_score_data) : 100
 
     process_control_data ||= []
 
     process_controls.each do |pc, pc_data|
-      @process_control_ids_data[pc] ||= {}
+      process_control_ids_data[pc] ||= {}
       reviews_count = pc_data[:effectiveness].size
       effectiveness = reviews_count > 0 ? weighted_average(pc_data[:effectiveness]) : 100
       weaknesses_count = pc_data[:weaknesses]
@@ -124,7 +121,7 @@ module AuditedReports::ProcessControlStats
           risk_text = t("risk_types.#{risk}")
           text = "#{risk_text}: #{weaknesses_count[risk_text] || 0}"
 
-          @process_control_ids_data[pc][text] = pc_data[:weaknesses_ids][risk_text]
+          process_control_ids_data[pc][text] = pc_data[:weaknesses_ids][risk_text]
 
           weaknesses_count_text << text
         end
@@ -143,7 +140,12 @@ module AuditedReports::ProcessControlStats
 
       ef1 <=> ef2
     end
-    [process_control_data, @reviews_score_data, review_identifications.sort]
+
+    {
+      process_control_data: process_control_data,
+      reviews_score_data: score_data,
+      review_identifications: review_identifications.sort
+    }
   end
 
   def effectiveness_label(effectiveness, reviews_with_weaknesses, review_ids)
