@@ -8,7 +8,7 @@ module AuditedReports::ProcessControlStats
     final        = params[:final] == 'true'
     @title       = t("#{@controller}.process_control_stats_title")
     @from_date   = 1.year.ago.to_date
-    @to_date     = Time.zone.today.to_date
+    @to_date     = Time.zone.today
     @risk_levels = []
     @filters     = []
 
@@ -22,22 +22,13 @@ module AuditedReports::ProcessControlStats
       @from_date, @to_date
     ).scored_for_report
 
-    user_review        = Current.user.reviews.list_with_final_review.last
-    business_unit_type = user_review&.business_unit_type
+    user_review         = Current.user.reviews.list_with_final_review.last
+    @business_unit_type = user_review&.business_unit_type
 
-    if business_unit_type
-      @business_unit_type_title = t(
-        "#{@controller}.business_unit_type_title",
-        business_unit_type: business_unit_type.name
-      )
-
-      @business_unit_title = t(
-        "#{@controller}.business_unit_title",
-        business_unit: user_review.business_unit.name
-      )
-
-      user_conclusion_review     = ConclusionFinalReview.where(review: user_review)
-      @business_unit_ids         = business_unit_type.business_units.map(&:id)
+    if @business_unit_type
+      @business_unit             = user_review.business_unit
+      user_conclusion_review     = conclusion_reviews.where(review: user_review)
+      @business_unit_ids         = @business_unit_type.business_units.ids
       @process_control_data      = process_control_stats_html(final, conclusion_reviews)
       @process_controls          = user_review.process_controls.uniq.map(&:name)
       @user_process_control_data = process_control_stats_html(final, user_conclusion_review)
@@ -145,8 +136,8 @@ module AuditedReports::ProcessControlStats
       end
 
       process_control_data << {
-        'process_control' => pc,
-        'effectiveness' => effectiveness_label(effectiveness, pc_data[:reviews_with_weaknesses], pc_data[:review_ids]),
+        'process_control'  => pc,
+        'effectiveness'    => effectiveness_label(effectiveness, pc_data[:reviews_with_weaknesses], pc_data[:review_ids]),
         'weaknesses_count' => weaknesses_count_text
       }
     end
@@ -159,8 +150,8 @@ module AuditedReports::ProcessControlStats
     end
 
     {
-      process_control_data: process_control_data,
-      reviews_score_data: score_data,
+      process_control_data:   process_control_data,
+      reviews_score_data:     score_data,
       review_identifications: review_identifications.sort
     }
   end
@@ -194,7 +185,7 @@ module AuditedReports::ProcessControlStats
 
     @columns.each do |col_name, col_title, col_width|
       column_headers << "<b>#{col_title}</b>"
-      column_widths << pdf.percent_width(col_width)
+      column_widths  << pdf.percent_width(col_width)
     end
 
     if @user_process_control_data
@@ -238,6 +229,7 @@ module AuditedReports::ProcessControlStats
     end
 
     pdf.move_down PDF_FONT_SIZE
+
     column_data = []
 
     if @process_control_data

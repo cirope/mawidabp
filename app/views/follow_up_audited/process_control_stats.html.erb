@@ -1,4 +1,4 @@
-<% if @business_unit_ids.nil? %>
+<% if @business_unit_ids.blank? %>
   <p class="m-2">
     <em><%= t 'follow_up_audited.process_control_stats.without_reviews_in_the_period' %></em>
   </p>
@@ -9,7 +9,7 @@
     </p>
   <% else %>
     <p class="m-2">
-      <em><%= @business_unit_title %></em>
+      <em><%= "#{t 'follow_up_audited.business_unit_title'}: #{@business_unit&.name}" %></em>
     </p>
 
     <table class="table table-sm table-striped table-hover">
@@ -47,7 +47,7 @@
     </p>
   <% else %>
     <p class="m-2">
-      <em><%= @business_unit_type_title %></em>
+      <em><%= "#{t 'follow_up_audited.business_unit_type_title'}: #{@business_unit_type&.name}" %></em>
     </p>
 
     <table class="table table-sm table-striped table-hover">
