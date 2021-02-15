@@ -221,7 +221,7 @@ module AuditedReports::ProcessControlStats
         pdf.text [
           Review.model_name.human(count: 0),
           @user_process_control_data[:review_identifications].to_sentence
-        ].join(': ') , inline_formati: true
+        ].join(': ') , inline_format: true
       else
         pdf.text(
           t("#{@controller}.process_control_stats.without_reviews_in_the_period"))
@@ -272,7 +272,7 @@ module AuditedReports::ProcessControlStats
         pdf.text [
           Review.model_name.human(count: 0),
           @process_control_data[:review_identifications].to_sentence
-        ].join(': ') , inline_formati: true
+        ].join(': ') , inline_format: true
       else
         pdf.text(
           t("#{@controller}.process_control_stats.without_reviews_in_the_period"))
@@ -290,7 +290,7 @@ module AuditedReports::ProcessControlStats
     csv_str = CSV.generate(**options) do |csv|
       if @process_control_data
         [@user_process_control_data, @process_control_data].each do |value|
-          process_control_stats_header_csv csv
+          csv << process_control_stats_header_csv
           process_control_stats_data_csv csv, value
 
           csv << []
@@ -303,14 +303,14 @@ module AuditedReports::ProcessControlStats
 
   private
 
-    def process_control_stats_header_csv csv
+    def process_control_stats_header_csv
       column_headers = []
 
       @columns.each do |col_name, col_title, col_width|
         column_headers << col_title
       end
 
-      csv << column_headers
+      column_headers
     end
 
     def process_control_stats_data_csv csv, process_control_data
