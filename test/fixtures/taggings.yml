@@ -145,6 +145,6 @@ business_unit_business_unit_one:
   tag: business_unit
   taggable: business_unit_one (BusinessUnit)
 
-business_unit_business_unit_three:
+business_unit_business_unit_two:
   tag: business_unit
-  taggable: business_unit_three (BusinessUnit)
+  taggable: business_unit_two (BusinessUnit)

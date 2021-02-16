@@ -97,7 +97,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
   end
 
   test 'update business_unit_type' do
-    assert_no_difference ['BusinessUnitType.count', 'BusinessUnit.count'] do
+    assert_no_difference ['BusinessUnitType.count', 'BusinessUnit.count', 'Tagging.count'] do
       login
       patch :update, :params => {
         :id => business_unit_types(:cycle).id,
@@ -116,14 +116,14 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
               :id => business_units(:business_unit_one).id,
               :name => 'Updated business unit one',
               :taggings_attributes => [
-                :tag_id => tags(:business_unit).id
+                id: taggings(:business_unit_business_unit_one).id
               ]
             },
             {
               :id => business_units(:business_unit_two).id,
               :name => 'Updated business unit two',
               :taggings_attributes => [
-                :tag_id => tags(:business_unit).id
+                id: taggings(:business_unit_business_unit_two).id
               ]
             }
           ]
