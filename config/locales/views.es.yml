@@ -164,7 +164,7 @@ es:
       incomplete: 'Incompleta'
       repeated: 'Reiterada'
       revoked: 'Anulada'
-      criteria_mismatch: 'Difiere criterio'
+      criteria_mismatch: 'Cerrada / Reclasificada'
       expired: 'Desestimada / No regularizable'
     work_papers:
       create:
