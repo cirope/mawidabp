@@ -408,6 +408,9 @@
       normal: "Informe completo"
       brief: "Informe resumido"
       without_score: "Informe sin calificación"
+    downloads:
+      review_objectives: "OBJETIVOS DE LA REVISIÓN"
+      review_objectives_description: "Realizar el seguimiento de regularización a las observaciones realizadas por la Auditoría Interna (AI) en aquellas sucursales calificadas como No Razonables en grado inadecuado o insatisfactorio en el aspecto PLA/FT."
     pdf:
       pdf_name: "listado_de_informes_definitivos.pdf"
       filtered_by:
@@ -430,10 +433,10 @@
     responsibles: "Responsables"
     issue_date_title: "FECHA"
     audit_period: "%{start} al %{end}"
-    audit_period_title: "PERIODO DE LA AUDITORÍA"
-    objectives_and_scopes: "OBJETIVOS Y ALCANCE DEL TRABAJO"
-    applied_procedures: "PROCEDIMIENTOS APLICADOS"
-    conclusion: "CONCLUSIÓN"
+    audit_period_title: "PERIODO DE LA TAREA"
+    objectives_and_scopes: "PROCESOS APLICADOS Y RESULTADOS"
+    applied_procedures: "CONCLUSION DEL ANALISTA UPLA"
+    conclusion: "CONCLUSIÓN DEL JEFE REGIONAL UPLA"
     weaknesses_brief: "RESUMEN DE OBSERVACIONES"
     weaknesses_reschedules: "RESUMEN DE OBSERVACIONES / REPROGRAMACIONES"
     weaknesses: "OBSERVACIONES"
