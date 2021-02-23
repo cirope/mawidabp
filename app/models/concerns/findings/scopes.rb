@@ -65,8 +65,18 @@ module Findings::Scopes
     end
 
     def by_review identification
+      identifications = identification.split(SEARCH_OR_REGEXP).reject(&:blank?)
+      conditions = []
+      parameters = {}
+
+      identifications.each_with_index do |identification, i|
+        conditions << "LOWER(#{Review.quoted_table_name}.#{Review.qcn 'identification'}) LIKE :i_#{i}"
+
+        parameters[:"i_#{i}"] = identification.mb_chars.downcase.strip
+      end
+
       includes(:review).
-        where("LOWER(#{Review.quoted_table_name}.#{Review.qcn 'identification'}) LIKE ?", "%#{identification.mb_chars.downcase}%").
+        where(conditions.join(' OR '), parameters).
         references(:reviews)
     end
 

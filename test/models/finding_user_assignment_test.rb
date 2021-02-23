@@ -74,7 +74,6 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
     finding_user_assignment = finding.finding_user_assignments.build(
       :user_id => @finding_user_assignment.user_id
     )
-    finding_user_assignment.raw_finding = finding
 
     assert finding_user_assignment.invalid?
     assert_error finding_user_assignment, :user_id, :taken
@@ -85,5 +84,23 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
 
     assert @finding_user_assignment.invalid?
     assert_error @finding_user_assignment, :process_owner, :invalid
+  end
+
+  test 'validates duplicated process owner' do
+    skip unless SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+
+    finding_user_assignment =
+      finding_user_assignments :being_implemented_weakness_audited
+
+    finding = finding_user_assignment.finding
+
+
+    new_finding_user_assignment = finding.finding_user_assignments.build(
+      :user_id => users(:audited_second).id,
+      :process_owner => true
+    )
+
+    assert new_finding_user_assignment.invalid?
+    assert_error new_finding_user_assignment, :process_owner, :taken
   end
 end

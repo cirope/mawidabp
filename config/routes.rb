@@ -121,6 +121,7 @@ Rails.application.routes.draw do
 
   [
     'weaknesses_by_user',
+    'process_control_stats'
   ].each do |action|
     get "follow_up_audited/#{action}",
       as: "#{action}_follow_up_audited",
@@ -129,6 +130,7 @@ Rails.application.routes.draw do
 
   [
     'create_weaknesses_by_user',
+    'create_process_control_stats'
   ].each do |action|
     post "follow_up_audited/#{action}",
       as: "#{action}_follow_up_audited",
