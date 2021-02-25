@@ -329,6 +329,64 @@ module Prawn
         self.stroke_color = stroke_color
       end
 
+      def add_conclusion_final_review_header organization
+        self.repeat :all do
+          font_size = PDF_HEADER_FONT_SIZE
+
+          self.add_organization_image organization, font_size
+
+          y_pointer = self.y
+
+          self.canvas do
+            column_width = bounds.width - font_size.pt * 2
+
+            move_down 8
+
+            table_data = [
+              [
+               { content: "", rowspan: 3 }, I18n.t('conclusion_final_review.downloads.pdf_header_title1'),
+               { content: "Numero de Foja", rowspan: 3 }
+              ],
+              [I18n.t('conclusion_final_review.downloads.pdf_header_title2')],
+              [I18n.t('conclusion_final_review.downloads.pdf_header_title3')],
+            ]
+
+            indent(PDF_FONT_SIZE) do
+              table table_data,
+                column_widths: [column_width * 0.45, column_width * 0.4, column_width * 0.15],
+                cell_style: {
+                  :align => :right,
+                  :size => (font_size * 0.75).round
+                }
+            end
+          end
+
+          self.y = y_pointer
+        end
+      end
+
+      def add_conclusion_final_review_page_footer(font_size = 10, skip_first_page = false)
+        pages = skip_first_page ? -> (page) { page > 1 } : :all
+
+        self.repeat pages, :dynamic =>  true do
+          self.canvas do
+            right_margin = self.page.margins[:right]
+            string_title = I18n.t('conclusion_final_review.downloads.pdf_page_footer_title')
+            string_sheet = I18n.t('conclusion_final_review.downloads.pdf_page_footer_sheet')
+            x            = self.bounds.right - self.width_of(string_title)
+
+            stroke do
+              self.horizontal_line (font_size * 2 ), self.bounds.width - (font_size * 2), at: (font_size.pt * 3)
+            end
+
+            self.draw_text string_title, :at => [font_size * 4, (font_size.pt * 1.75)],
+              :size => (font_size * 0.75)
+            self.draw_text string_sheet, :at => [x, (font_size.pt * 1.75)],
+              :size => (font_size * 0.75)
+          end
+        end
+      end
+
       private
 
         def show_print_date_on? organization

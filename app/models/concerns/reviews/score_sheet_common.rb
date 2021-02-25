@@ -131,7 +131,8 @@ module Reviews::ScoreSheetCommon
           coi.to_s,
           coi.effectiveness || 0,
           coi.relevance     || 0,
-          coi.exclude_from_score
+          coi.exclude_from_score,
+          coi.previous_effectiveness
         ]
       end
     end

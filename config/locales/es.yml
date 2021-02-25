@@ -403,6 +403,7 @@
     download_without_control_objectives_excluded_from_score: "Descargar sin objetivos de control no calificados"
     download_without_score: "Descargar sin calificación"
     download_brief: "Descargar resumido"
+    effectiveness_global: "Efectividad global"
     hide_control_objectives_excluded_from_score: "Ocultar objetivos de control no calificados"
     send_type:
       normal: "Informe completo"
@@ -411,6 +412,11 @@
     downloads:
       review_objectives: "OBJETIVOS DE LA REVISIÓN"
       review_objectives_description: "Realizar el seguimiento de regularización a las observaciones realizadas por la Auditoría Interna (AI) en aquellas sucursales calificadas como No Razonables en grado inadecuado o insatisfactorio en el aspecto PLA/FT."
+      pdf_header_title1: 'SubGerencia General de integridad y cumplimiento tt'
+      pdf_header_title2: 'Gerencia departamental de PLAyFT'
+      pdf_header_title3: 'SubGerencia Departamental de PLAyFT en sucursales'
+      pdf_page_footer_title: 'Codificación Uso Interno'
+      pdf_page_footer_sheet: 'Hoja'
     pdf:
       pdf_name: "listado_de_informes_definitivos.pdf"
       filtered_by:
@@ -1291,6 +1297,7 @@
     auditors: "AUDITORES"
     score: "CALIFICACIÓN"
     control_objectives_effectiveness: "Efectividad de control"
+    control_objectives_previous_effectiveness: "Efectividad de control anterior"
     control_objectives_relevance: "Peso"
     oportunities_summary: "Resumen de oportunidades de mejora ordenadas por estado"
     oportunities_count_summary: "Cantidad de oportunidades de mejora ordenadas por estado"

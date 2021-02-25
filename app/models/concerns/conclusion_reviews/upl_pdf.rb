@@ -3,48 +3,42 @@ module ConclusionReviews::UplPdf
 
   def upl_pdf organization = nil, *args
     options = args.extract_options!
-    pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false
+    pdf     = Prawn::Document.create_generic_pdf :portrait, footer: false, hide_brand: true
 
-    put_upl_cover_on                   pdf, organization
-    put_upl_watermark_on               pdf
-    put_upl_header_on                  pdf
-    put_upl_weaknesses_brief_on        pdf, organization
-    put_upl_control_objective_table_on pdf
-    put_upl_findings_on                pdf, :weaknesses, options
-    put_upl_findings_on                pdf, :oportunities, options
-    put_upl_conclusion_on              pdf, options
-    put_upl_finding_assignments_on     pdf
-    put_upl_opening_interviews         pdf
-    put_upl_review_signatures_table_on pdf
+    put_upl_cover_on                       pdf, organization
+    put_upl_watermark_on                   pdf
+    put_upl_header_on                      pdf
+    put_upl_weaknesses_brief_on            pdf, organization
+    put_upl_conclusion_on                  pdf, options
+    put_upl_process_effectiveness_table_on pdf
+    put_upl_findings_on                    pdf, :weaknesses, options
+    put_upl_findings_on                    pdf, :oportunities, options
+    put_upl_applied_procedures             pdf, options
+    put_upl_finding_assignments_on         pdf
+    put_upl_opening_interviews             pdf
+    put_upl_review_signatures_table_on     pdf
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
 
   private
 
-    def put_upl_control_objective_table_on pdf
+    def put_upl_process_effectiveness_table_on pdf
       review.put_control_objective_table_on pdf
     end
 
     def put_upl_cover_on pdf, organization
       title_options     = [(PDF_FONT_SIZE * 1.5).round, :center, false]
       cover_text        = "\n\n\n\n#{::Review.model_name.human.upcase}\n\n"
-
       cover_bottom_text = "#{review.plan_item.business_unit.name}\n\n"
       cover_bottom_text << "#{review.plan_item.business_unit_type.name}\n\n"
-
       cover_bottom_text << I18n.l(issue_date, format: :long)
-
-      pdf.add_review_header organization,
-        review.identification,
-        review.plan_item.project
 
       pdf.add_title cover_text, *title_options
       pdf.add_title cover_bottom_text, *title_options
 
       put_upl_recipients_on    pdf
       put_upl_review_owners_on pdf
-
     end
 
     def put_upl_watermark_on pdf
@@ -59,20 +53,18 @@ module ConclusionReviews::UplPdf
         review.business_unit.business_unit_type.business_unit_label
 
       pdf.start_new_page
-      pdf.add_page_footer
 
-      pdf.add_subtitle  I18n.t 'conclusion_final_review.downloads.review_objectives', PDF_FONT_SIZE
+      pdf.add_conclusion_final_review_header organization
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.text  I18n.t 'conclusion_final_review.downloads.review_objectives_description'
+      pdf.add_conclusion_final_review_page_footer
 
-      unless HIDE_REVIEW_DESCRIPTION
-        #pdf.add_title review.description
-        #pdf.move_down PDF_FONT_SIZE
-      end
+      pdf.add_subtitle I18n.t 'conclusion_final_review.downloads.review_objectives', PDF_FONT_SIZE
 
-      #pdf.add_description_item business_unit_label, review.business_unit.name
+      pdf.move_down PDF_FONT_SIZE
+
+      pdf.text I18n.t 'conclusion_final_review.downloads.review_objectives_description'
 
       pdf.move_down PDF_FONT_SIZE
 
@@ -87,8 +79,6 @@ module ConclusionReviews::UplPdf
 
         pdf.add_description_item project_label, review.plan_item.project
       end
-
-
     end
 
     def put_upl_conclusion_on pdf, options
@@ -98,11 +88,6 @@ module ConclusionReviews::UplPdf
         put_upl_objective_and_scopes_on pdf, grouped_objectives, options
       else
         pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
-      end
-
-      if conclusion.present?
-        pdf.move_down PDF_FONT_SIZE
-        pdf.text conclusion, align: :justify, inline_format: true
       end
     end
 
@@ -167,6 +152,7 @@ module ConclusionReviews::UplPdf
     end
 
     def put_upl_objective_and_scopes_on pdf, grouped_control_objectives, options
+
       if grouped_control_objectives.present?
         objectives_and_scopes = I18n.t 'conclusion_review.objectives_and_scopes'
 
@@ -174,13 +160,20 @@ module ConclusionReviews::UplPdf
 
         put_upl_control_objectives_on pdf, grouped_control_objectives
       end
+    end
 
+    def put_upl_applied_procedures pdf, options
       if applied_procedures.present?
         pdf.add_subtitle I18n.t('conclusion_review.applied_procedures'), PDF_FONT_SIZE
         pdf.text applied_procedures, align: :justify, inline_format: true
       end
 
       pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
+
+      if conclusion.present?
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text conclusion, align: :justify, inline_format: true
+      end
 
       if review.score_type == 'effectiveness'
         put_upl_score_table_on pdf unless options[:hide_score]
@@ -234,8 +227,8 @@ module ConclusionReviews::UplPdf
     def put_upl_period_title_on pdf
       title = I18n.t 'conclusion_review.audit_period_title'
       dates = I18n.t 'conclusion_review.audit_period',
-                     start: I18n.l(review.plan_item.start, format: :long),
-                     end:   I18n.l(review.plan_item.end,   format: :long)
+        start: I18n.l(review.plan_item.start, format: :long),
+        end:   I18n.l(review.plan_item.end,   format: :long)
 
       pdf.add_description_item title, dates
     end
@@ -263,11 +256,19 @@ module ConclusionReviews::UplPdf
     end
 
     def put_upl_score_table_on pdf
-      explanation = I18n.t 'review.review_qualification_explanation'
+      explanation   = I18n.t 'review.review_qualification_explanation'
+      score_global  = review.score_array.last
+      title_options = [(PDF_FONT_SIZE * 1.5).round, :center, false]
+      width         = pdf.bounds.width
+      coordinates   = [0, pdf.y - PDF_FONT_SIZE.pt * 10]
 
-      pdf.move_down PDF_FONT_SIZE
+      pdf.bounding_box coordinates, width: width do
+        pdf.move_down (PDF_FONT_SIZE * 0.75).round
+        pdf.add_title "#{I18n.t 'conclusion_final_review.effectiveness_global'} (#{score_global}%)",
+          *title_options
+          pdf.stroke_bounds
+      end
 
-      review.put_score_details_table pdf
       pdf.move_down (PDF_FONT_SIZE * 0.75).round
 
       pdf.font_size (PDF_FONT_SIZE * 0.6).round do
@@ -297,8 +298,7 @@ module ConclusionReviews::UplPdf
     def put_upl_control_objective_table_on pdf, control_objective_item, process_control
       return if is_last_displayed_control_objective? control_objective_item
 
-      data = upl_control_objective_column_data_for control_objective_item,
-                                                       process_control
+      data = upl_control_objective_column_data_for control_objective_item, process_control
 
       pdf.move_down PDF_FONT_SIZE
 
@@ -471,6 +471,7 @@ module ConclusionReviews::UplPdf
       description_items_interview.each do |args|
         pdf.add_description_item *args
       end
+
       put_signatures_table_on pdf
     end
 

@@ -131,7 +131,7 @@ module Reviews::ScoreSheet
       control_objective_item_data.map do |coi|
         [
           "#{pad}• <i>#{ControlObjectiveItem.model_name.human}: #{coi[0]}</i>",
-          coi[3] ? '-' : "<i>#{coi[2]}</i>",
+          coi[3] ? '-' : "<i>#{coi[4]}</i>",
           coi[3] ? '-' : "<i>#{coi[1].round}%</i>"
         ]
       end
@@ -140,7 +140,7 @@ module Reviews::ScoreSheet
     def control_objective_column_headers
       [
         '',
-        I18n.t('review.control_objectives_relevance'),
+        I18n.t('review.control_objectives_previous_effectiveness'),
         I18n.t('review.control_objectives_effectiveness')
       ]
     end
