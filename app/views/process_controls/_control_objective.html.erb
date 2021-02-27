@@ -38,6 +38,9 @@
               <%= f.input :support_cache, as: :hidden, id: "control_objective_support_#{id}" %>
             <% else %>
               <%= f.input :support, as: :file, label: false, hint: f.object.identifier, id: "control_objective_support_#{id}" %>
+              <% unless f.object.new_record? %>
+                <%= link_to_remove_support_file(f) %>
+              <% end %>
             <% end %>
           </div>
         </div>

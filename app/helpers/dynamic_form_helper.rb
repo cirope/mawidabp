@@ -61,6 +61,26 @@ module DynamicFormHelper
     raw out
   end
 
+  def link_to_remove_support_file(form)
+    new_record = form.object.new_record?
+    id = form.object.object_id
+    out = ''
+    destroy = form.object.marked_for_destruction? ? 1 : 0
+
+    out << form.hidden_field(:remove_support, class: 'destroy', value: destroy, id: "remove_support_hidden_#{form.object.id}") unless new_record
+    out << link_to(
+      icon('fas', 'times-circle'), '#',
+      title: t('label.delete'),
+      data: {
+        'dynamic-target' => "#control_objective_support_#{id}",
+        'dynamic-form-event' => 'hideItem',
+        'show-tooltip' => true
+      }
+    )
+
+    raw out
+  end
+
   def link_to_remove_child_item(form)
     link_to(
       icon('fas', 'times-circle'), '#',
