@@ -412,9 +412,10 @@
     downloads:
       review_objectives: "OBJETIVOS DE LA REVISIÓN"
       review_objectives_description: "Realizar el seguimiento de regularización a las observaciones realizadas por la Auditoría Interna (AI) en aquellas sucursales calificadas como No Razonables en grado inadecuado o insatisfactorio en el aspecto PLA/FT."
-      pdf_header_title1: 'SubGerencia General de integridad y cumplimiento tt'
-      pdf_header_title2: 'Gerencia departamental de PLAyFT'
-      pdf_header_title3: 'SubGerencia Departamental de PLAyFT en sucursales'
+      general_assistant_manager: 'SubGerencia General de Integridad y Cumplimiento'
+      departmental_management: 'Gerencia Departamental de PLAyFT'
+      departmental_assistant_manager: 'SubGerencia Departamental de PLAyFT en Sucursales'
+      page_number: "N° de Foja"
       pdf_page_footer_title: 'Codificación Uso Interno'
       pdf_page_footer_sheet: 'Hoja'
     pdf:

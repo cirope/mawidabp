@@ -8,14 +8,13 @@ module ConclusionReviews::UplPdf
     put_upl_cover_on                       pdf, organization
     put_upl_watermark_on                   pdf
     put_upl_header_on                      pdf
-    put_upl_weaknesses_brief_on            pdf, organization
     put_upl_conclusion_on                  pdf, options
-    put_upl_process_effectiveness_table_on pdf
+    put_upl_process_effectiveness_table_on pdf, options
     put_upl_findings_on                    pdf, :weaknesses, options
     put_upl_findings_on                    pdf, :oportunities, options
     put_upl_applied_procedures             pdf, options
     put_upl_finding_assignments_on         pdf
-    put_upl_opening_interviews             pdf
+    put_upl_closing_interviews             pdf
     put_upl_review_signatures_table_on     pdf
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
@@ -23,15 +22,16 @@ module ConclusionReviews::UplPdf
 
   private
 
-    def put_upl_process_effectiveness_table_on pdf
-      review.put_control_objective_table_on pdf
-    end
-
     def put_upl_cover_on pdf, organization
       title_options     = [(PDF_FONT_SIZE * 1.5).round, :center, false]
-      cover_text        = "\n\n\n\n#{::Review.model_name.human.upcase}\n\n"
-      cover_bottom_text = "#{review.plan_item.business_unit.name}\n\n"
-      cover_bottom_text << "#{review.plan_item.business_unit_type.name}\n\n"
+
+      pdf.move_down PDF_FONT_SIZE * 8
+      cover_text        = Review.model_name.human.upcase
+      pdf.move_down PDF_FONT_SIZE * 3
+      cover_bottom_text = review.plan_item.business_unit.name
+      pdf.move_down PDF_FONT_SIZE * 3
+      cover_bottom_text << review.plan_item.business_unit_type.name
+      pdf.move_down PDF_FONT_SIZE * 3
       cover_bottom_text << I18n.l(issue_date, format: :long)
 
       pdf.add_title cover_text, *title_options
@@ -54,24 +54,20 @@ module ConclusionReviews::UplPdf
 
       pdf.start_new_page
 
-      pdf.add_conclusion_final_review_header organization
+      add_conclusion_final_review_header pdf, organization
 
       pdf.move_down PDF_FONT_SIZE
 
-      pdf.add_conclusion_final_review_page_footer
+      add_conclusion_final_review_page_footer pdf
 
       pdf.add_subtitle I18n.t 'conclusion_final_review.downloads.review_objectives', PDF_FONT_SIZE
-
       pdf.move_down PDF_FONT_SIZE
-
       pdf.text I18n.t 'conclusion_final_review.downloads.review_objectives_description'
-
       pdf.move_down PDF_FONT_SIZE
 
       put_upl_period_title_on pdf
 
       pdf.move_down PDF_FONT_SIZE
-
       pdf.add_description_item issue_date_title, I18n.l(issue_date, format: :long)
 
       if review.business_unit.business_unit_type.project_label.present?
@@ -91,21 +87,8 @@ module ConclusionReviews::UplPdf
       end
     end
 
-    def put_upl_weaknesses_brief_on pdf, organization
-      use_finals = kind_of? ConclusionFinalReview
-      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
-
-      if show_weaknesses_brief?(organization) && weaknesses.not_revoked.any?
-        date  = use_finals ? issue_date : Time.zone.today
-        title = I18n.t 'conclusion_review.weaknesses_brief'
-
-        pdf.add_subtitle title, PDF_FONT_SIZE, PDF_FONT_SIZE * 0.25
-        pdf.move_down PDF_FONT_SIZE
-
-        review.put_weaknesses_brief_table pdf, use_finals, date
-
-        pdf.move_down PDF_FONT_SIZE
-      end
+    def put_upl_process_effectiveness_table_on pdf, options
+      review.put_control_objective_table_on pdf unless options[:hide_score]
     end
 
     def put_upl_findings_on pdf, type, options
@@ -152,7 +135,6 @@ module ConclusionReviews::UplPdf
     end
 
     def put_upl_objective_and_scopes_on pdf, grouped_control_objectives, options
-
       if grouped_control_objectives.present?
         objectives_and_scopes = I18n.t 'conclusion_review.objectives_and_scopes'
 
@@ -418,13 +400,10 @@ module ConclusionReviews::UplPdf
     end
 
     def upl_control_objective_column_data_for control_objective_item, process_control
-      caption = ControlObjective.model_name.human
-      data    = []
-
-      data << upl_finding_column_headers(process_control)
-      data << ["<b>#{caption}:</b> #{control_objective_item.to_s}\n"]
-
-      data
+      [
+        upl_finding_column_headers(process_control),
+        ["<b>#{ControlObjective.model_name.human}:</b> #{control_objective_item.to_s}\n"]
+      ]
     end
 
     def upl_finding_column_headers process_control
@@ -453,41 +432,37 @@ module ConclusionReviews::UplPdf
       )
     end
 
-    def show_weaknesses_brief? organization
-      ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization&.prefix
+    def put_upl_closing_interviews pdf
+      put_upl_closing_interview_items_on pdf if review.closing_interview
     end
 
-    def put_upl_opening_interviews pdf
-      put_items_on pdf if review.closing_interview
-    end
-
-    def put_items_on pdf
+    def put_upl_closing_interview_items_on pdf
       pdf.move_down PDF_FONT_SIZE
 
       pdf.add_subtitle ClosingInterview.model_name.human
 
       pdf.move_down PDF_FONT_SIZE
 
-      description_items_interview.each do |args|
+      upl_description_items_interview.each do |args|
         pdf.add_description_item *args
       end
 
-      put_signatures_table_on pdf
+      put_upl_signatures_table_on pdf
     end
 
-    def put_signatures_table_on pdf
+    def put_upl_signatures_table_on pdf
       users = review.review_user_assignments.select(&:include_signature)
       users = users.sort_by { |rua| rua.assignment_type }
 
       pdf.move_down PDF_FONT_SIZE
     end
 
-    def description_items_interview
+    def upl_description_items_interview
       [
         [ClosingInterview.human_attribute_name('review'), review.to_s, 0, false],
-        [I18n.t('closing_interviews.show.auditeds'), auditeds_text, 0, false],
-        [I18n.t('closing_interviews.show.auditors'), auditors_text, 0, false],
-        [ClosingInterviewUser.model_name.human(count: 0), assistants_text, 0, false],
+        [I18n.t('closing_interviews.show.auditeds'), upl_auditeds_text, 0, false],
+        [I18n.t('closing_interviews.show.auditors'), upl_auditors_text, 0, false],
+        [ClosingInterviewUser.model_name.human(count: 0), upl_assistants_text, 0, false],
         [ClosingInterview.human_attribute_name('interview_date'), I18n.l(review.closing_interview.interview_date), 0, false],
         [ClosingInterview.human_attribute_name('findings_summary'), review.closing_interview.findings_summary, 0, false],
         [ClosingInterview.human_attribute_name('recommendations_summary'), review.closing_interview.recommendations_summary, 0, false],
@@ -498,15 +473,73 @@ module ConclusionReviews::UplPdf
       ]
     end
 
-    def auditeds_text
+    def upl_auditeds_text
       review.closing_interview&.responsible_users.map(&:full_name).join '; '
     end
 
-    def auditors_text
+    def upl_auditors_text
       review.closing_interview&.auditor_users.map(&:full_name).join '; '
     end
 
-    def assistants_text
+    def upl_assistants_text
       review.closing_interview&.assistant_users.map(&:full_name).join '; '
+    end
+
+    def add_conclusion_final_review_header pdf, organization
+      pdf.repeat :all do
+        font_size = PDF_HEADER_FONT_SIZE
+
+        pdf.add_organization_image organization, font_size
+
+        y_pointer = pdf.y
+
+        pdf.canvas do
+          column_width = pdf.bounds.width - font_size.pt * 2
+
+          pdf.move_down 8
+
+          table_data = [
+            [
+              { content: "", rowspan: 3 }, I18n.t('conclusion_final_review.downloads.general_assistant_manager'),
+              { content: I18n.t('conclusion_final_review.downloads.page_number'), rowspan: 3 }
+            ],
+            [I18n.t('conclusion_final_review.downloads.departmental_management')],
+            [I18n.t('conclusion_final_review.downloads.departmental_assistant_manager')],
+          ]
+
+          pdf.indent(PDF_FONT_SIZE) do
+            pdf.table table_data,
+              column_widths: [column_width * 0.45, column_width * 0.4, column_width * 0.15],
+              cell_style: {
+                :align => :right,
+                :size => (font_size * 0.75).round
+              }
+          end
+        end
+
+        pdf.y = y_pointer
+      end
+    end
+
+    def add_conclusion_final_review_page_footer pdf, font_size = 10, skip_first_page = false
+      pages = skip_first_page ? -> (page) { page > 1 } : :all
+
+      pdf.repeat pages, :dynamic =>  true do
+        pdf.canvas do
+          right_margin = pdf.page.margins[:right]
+          string_title = I18n.t('conclusion_final_review.downloads.pdf_page_footer_title')
+          string_sheet = I18n.t('conclusion_final_review.downloads.pdf_page_footer_sheet')
+          x            = pdf.bounds.right - pdf.width_of(string_title)
+
+          pdf.stroke do
+            pdf.horizontal_line (font_size * 2 ), pdf.bounds.width - (font_size * 2), at: (font_size.pt * 3)
+          end
+
+          pdf.draw_text string_title, :at => [font_size * 4, (font_size.pt * 1.75)],
+            :size => (font_size * 0.75)
+          pdf.draw_text string_sheet, :at => [x, (font_size.pt * 1.75)],
+            :size => (font_size * 0.75)
+        end
+      end
     end
 end
