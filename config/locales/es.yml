@@ -192,8 +192,8 @@
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
-    findings_type_internal: "Hallazgos Auditoría Interna"
-    findings_type_external: "Hallazgos Auditorías Externas"
+    findings_type_internal: "Hallazgos Tarea Interna"
+    findings_type_external: "Hallazgos Tarea Externas"
     weaknesses_type_internal: "Observaciones Auditoría Interna"
     weaknesses_type_external: "Observaciones Auditorías Externas"
     weaknesses_by_risk: "Observaciones por riesgo"
@@ -286,7 +286,7 @@
       without_weaknesses: "Sin observaciones"
       year: "Año de origen"
     period:
-      title: "Intervalo"
+      title: "Periodo"
       range: "desde el %{from_date} al %{to_date}"
     process_control_stats:
       pdf_name: "observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf"
@@ -698,12 +698,12 @@
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
 
   follow_up_audit:
-    index_title: "Reportes de auditoría"
+    index_title: "Reportes de UPLA"
     cost_analysis_title: "Análisis de costos"
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
-    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
+    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de tarea"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
@@ -774,8 +774,8 @@
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
-    without_oportunities: "Sin oportunidades en el periodo"
-    without_weaknesses: "Sin observaciones en el periodo"
+    without_oportunities: "Sin oportunidades en el plan"
+    without_weaknesses: "Sin observaciones en el plan"
     repeated_count:
       one: "Un hallazgo reiterado"
       other: "%{count} hallazgos reiterados"
@@ -790,10 +790,11 @@
       one: "En este reporte se ha aplicado el siguiente filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
     benefits:
+      period: 'Plan'
       pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
       title: "Beneficios / Perjuicios"
       subtitle: "SEGUIMIENTO DE INFORMES"
-      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
+      without_audits_in_the_period: 'Sin tareas con beneficios / perjuicios en el plan'
       total: 'Monto total: <b>%{amount}</b>'
     control_objective_stats:
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
@@ -830,7 +831,7 @@
       pdf_name: "observaciones_por_riesgo_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
-      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      title: "RESUMEN DETALLADO DE TAREAS"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES POR RIESGO - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
@@ -911,7 +912,7 @@
       without_weaknesses: "Sin observaciones"
       weakness_title: "Título observación"
       description: "Detalle observación"
-      audit_comments: "Respuesta auditado/Comentario de auditoría"
+      audit_comments: "Respuesta usuario/Comentario UPLA"
       origination_date: "Fecha de origen observación"
       reschedule_count: "Cant. Reprogramac."
       follow_up_date: "Última fecha propuesta"
@@ -937,7 +938,7 @@
       origination_year: "Año de origen"
       weakness_tags: "Etiquetas de observación"
     period:
-      title: "Intervalo"
+      title: "Periodo"
       range: "desde el %{from_date} al %{to_date}"
     process_control_stats:
       pdf_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf'
@@ -1003,13 +1004,15 @@
         title: "Observaciones por riesgo, prioridad y calificación de informe"
         total: "Total"
     weaknesses_by_state:
+      period: "Plan"
       pdf_name: "observaciones_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
-      period_summary: "Resumen del periodo %{period}"
+      period_summary: "Resumen del plan %{period}"
       title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR ESTADO"
       total: "TOTAL"
     weaknesses_by_risk:
+      period: 'Plan'
       pdf_name: "observaciones_seguimiento_por_riesgo_%{from_date}_al_%{to_date}.pdf"
-      period_summary: "Resumen del periodo %{period}"
+      period_summary: "Resumen del plan %{period}"
       title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO"
       total: "TOTAL"
     weaknesses_by_risk_and_business_unit:
@@ -1022,6 +1025,7 @@
       total: "TOTAL"
       empty: "Sin observaciones para el filtro aplicado."
     weaknesses_by_audit_type:
+      period: "Plan"
       weaknesses: "Observaciones"
       oportunities: "Oportunidades"
       without_weaknesses: "Sin hallazgos"
@@ -1449,6 +1453,8 @@
       resources_utilization: "Recursos utilizados"
       planned_resources_utilization: "Recursos estimados en el plan de trabajo (*)"
       planned_resources_utilization_explanation: "(*) No forman parte del costo total del presupuesto"
+  period:
+    name: 'Plan'
 
   activerecord:
     models:
