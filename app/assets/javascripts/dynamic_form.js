@@ -53,6 +53,14 @@
       })
     },
 
+    hideItemAttr: function ($e) {
+      $e.prev('input[type=hidden].destroy').val('1')
+
+      element = $e.data('dynamic-target')
+
+      $(element).next().remove('small')
+    },
+
     removeItem: function ($e) {
       EffectHelper.remove($e.closest('fieldset'), function () {
         $e.trigger('dynamic-item:removed', $e)

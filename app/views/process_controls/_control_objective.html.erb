@@ -30,20 +30,21 @@
         <label>
           <%= ControlObjective.human_attribute_name 'support' %>
         </label>
-        <div>
-          <div class="file-container float-left">
-            <%= link_to_upload f.object, :support %>
+        <div class="file-container float-left">
+          <%= link_to_upload f.object, :support %>
 
-            <% if f.object.support_cache %>
-              <%= f.input :support_cache, as: :hidden, id: "control_objective_support_#{id}" %>
-            <% else %>
-              <%= f.input :support, as: :file, label: false, hint: f.object.identifier, id: "control_objective_support_#{id}" %>
-              <% unless f.object.new_record? %>
-                <%= link_to_remove_support_file(f) %>
-              <% end %>
-            <% end %>
+          <div class="mt-2 col-md-6 float-right">
+            <%= link_to_remove_support_file(f) %>
           </div>
+
+          <% if f.object.support_cache %>
+            <%= f.input :support_cache, as: :hidden, id: "control_objective_support_#{id}" %>
+          <% else %>
+            <%= f.input :support, as: :file, label: false, hint: f.object.identifier,
+              input_html: {id: "control_objective_support_#{id}"} %>
+          <% end %>
         </div>
+
       </div>
       <div class="col-md-1 text-right">
         <div class="mt-2">
