@@ -682,6 +682,7 @@ es:
               required: 'no puede estar en blanco'
             process_owner:
               invalid: 'solo puede ser asignado a usuarios de tipo auditado'
+              taken: 'solo puede haber uno'
         ldap_config:
           attributes:
             user:
