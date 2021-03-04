@@ -56,7 +56,7 @@
     hideItemAttr: function ($e) {
       $e.prev('input[type=hidden].destroy').val('1')
 
-      element = $e.data('dynamic-target')
+      var element = $e.data('dynamic-target')
 
       $(element).next().remove('small')
     },
