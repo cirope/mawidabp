@@ -62,11 +62,10 @@ module DynamicFormHelper
   end
 
   def link_to_remove_support_file(form)
-    new_record = form.object.new_record?
     id         = form.object.object_id
     out        = ''
 
-    unless new_record
+    if form.object.persisted?
       out << form.hidden_field(
         :remove_support,
         class: 'destroy',
