@@ -20,7 +20,7 @@ module Reports::BasePdf
   def add_period_title pdf, period, align = :left
     pdf.move_down PDF_FONT_SIZE
 
-    pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
+    pdf.add_title "#{t('period.name')}: #{period.inspect}",
       (PDF_FONT_SIZE * 1.25).round, align
   end
 

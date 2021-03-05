@@ -10,13 +10,13 @@
 %>
 
 <% @periods.each do |period| %>
-  <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+  <h2><%= "#{t('follow_up_committee_report.benefits.period')}: #{period.inspect}" %></h2>
 
   <hr>
 
   <% if @benefits_data[period].blank? %>
     <p style="margin: 1em;">
-      <em><%= t 'follow_up_committee_report.benefits.without_audits_in_the_period' %></em>
+      <em><%= t('follow_up_committee_report.benefits.without_audits_in_the_period')%></em>
     </p>
   <% else %>
     <table class="table table-sm table-striped table-hover">

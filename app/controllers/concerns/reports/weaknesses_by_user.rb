@@ -146,7 +146,7 @@ module Reports::WeaknessesByUser
           weakness.risk_text
         ],
         [
-          t('finding.auditors', count: 0),
+          t('follow_up_committee_report.weaknesses_by_user.auditors'),
           weakness.users.select(&:auditor?).map(&:full_name).to_sentence
         ],
         [
@@ -154,7 +154,7 @@ module Reports::WeaknessesByUser
           weakness.process_owners.map(&:full_name).to_sentence
         ],
         [
-          t('finding.audited', count: 0),
+          t('follow_up_committee_report.weaknesses_by_user.audited'),
           weakness.users.select { |u|
             u.can_act_as_audited? && weakness.process_owners.exclude?(u)
           }.map(&:full_name).to_sentence
