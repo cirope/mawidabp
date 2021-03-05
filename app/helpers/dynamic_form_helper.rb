@@ -65,7 +65,7 @@ module DynamicFormHelper
     id         = form.object.object_id
     out        = ''
 
-    if form.object.persisted?
+    if form.object.persisted? && form.object.support?
       out << form.hidden_field(
         :remove_support,
         class: 'destroy',
