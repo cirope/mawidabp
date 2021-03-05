@@ -137,6 +137,9 @@ module Reports::WeaknessesCurrentSituation
         weaknesses = filter_weaknesses_current_situation_by_internal_control_components weaknesses
         weaknesses = filter_weaknesses_current_situation_by_tags weaknesses
         weaknesses = filter_weaknesses_current_situation_by_repeated weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_review weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_conclusion weaknesses
+        weaknesses = filter_weaknesses_current_situation_by_scope weaknesses
       end
 
       weaknesses
@@ -177,6 +180,10 @@ module Reports::WeaknessesCurrentSituation
         [
           Weakness.human_attribute_name('risk'),
           current_weakness.risk_text
+        ],
+        [
+          Weakness.human_attribute_name('priority'),
+          current_weakness.priority_text
         ],
         [
           "<font size='#{PDF_FONT_SIZE + 2}'>#{Weakness.human_attribute_name('title')}</font>",
@@ -397,6 +404,47 @@ module Reports::WeaknessesCurrentSituation
         @filters << "<b>#{t 'follow_up_committee_report.weaknesses_current_situation.review_tags'}</b> = \"#{tags.to_sentence}\""
 
         weaknesses.by_review_tags tags
+      else
+        weaknesses
+      end
+    end
+
+    def filter_weaknesses_current_situation_by_review weaknesses
+      {
+        review: Review.model_name.human,
+        project: Review.human_attribute_name('plan_item_id')
+      }.each do |field, label|
+        if params[:weaknesses_current_situation][field].present?
+          filter = params[:weaknesses_current_situation][field]
+
+          @filters << "<b>#{label}</b> = \"#{filter}\""
+
+          weaknesses = weaknesses.send "by_#{field}", filter
+        end
+      end
+
+      weaknesses
+    end
+
+    def filter_weaknesses_current_situation_by_conclusion weaknesses
+      conclusions = Array(params[:weaknesses_current_situation][:conclusion]).reject(&:blank?)
+
+      if conclusions.any?
+        @filters << "<b>#{ConclusionFinalReview.human_attribute_name 'conclusion'}</b> = \"#{conclusions.to_sentence}\""
+
+        weaknesses.where(conclusion_reviews: { type: 'ConclusionFinalReview', conclusion: conclusions })
+      else
+        weaknesses
+      end
+    end
+
+    def filter_weaknesses_current_situation_by_scope weaknesses
+      scopes = Array(params[:weaknesses_current_situation][:scope]).reject(&:blank?)
+
+      if scopes.any?
+        @filters << "<b>#{Review.human_attribute_name 'scope'}</b> = \"#{scopes.to_sentence}\""
+
+        weaknesses.where(reviews: { scope: scopes })
       else
         weaknesses
       end

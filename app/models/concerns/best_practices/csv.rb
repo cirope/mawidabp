@@ -29,7 +29,8 @@ module BestPractices::Csv
         Control.human_attribute_name('sustantive_tests'),
         (Control.human_attribute_name('effects') unless HIDE_CONTROL_EFFECTS),
         ControlObjective.human_attribute_name('risk'),
-        ControlObjective.human_attribute_name('relevance')
+        ControlObjective.human_attribute_name('relevance'),
+        ControlObjective.human_attribute_name('obsolete')
       ].compact
     end
 
@@ -47,7 +48,8 @@ module BestPractices::Csv
             control_objective.control.sustantive_tests.to_s,
             (control_objective.control.effects.to_s unless HIDE_CONTROL_EFFECTS),
             control_objective.risk_text,
-            control_objective.relevance_text
+            control_objective.relevance_text,
+            I18n.t(control_objective.obsolete ? 'label.yes' : 'label.no')
           ].compact
         end
       end

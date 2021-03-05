@@ -157,6 +157,8 @@ es:
       general_title: "ANÁLISIS DE COSTOS\nDE AUDÍTORIA INTERNA"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      period:
+        title: "Intervalo"
     cost_summary:
       pdf_name: "resumen_de_costos_%{from_date}_al_%{to_date}.pdf"
       title: "RESUMEN DE COSTOS\nDE AUDITORÍA INTERNA"
@@ -390,6 +392,7 @@ es:
     applied_procedures: "PROCEDIMIENTOS APLICADOS"
     conclusion: "CONCLUSIÓN"
     weaknesses_brief: "RESUMEN DE OBSERVACIONES"
+    weaknesses_reschedules: "RESUMEN DE OBSERVACIONES / REPROGRAMACIONES"
     weaknesses: "OBSERVACIONES"
     oportunities: "OPORTUNIDADES DE MEJORA"
     finding_review_assignments: "OBSERVACIONES / OPORTUNIDADES DE MEJORA REVISADAS"
@@ -449,6 +452,8 @@ es:
       control_objective_weaknesses: "Observaciones"
       control_objective_oportunities: "Oportunidades"
       finding_work_papers: "Papeles de trabajo del hallazgo"
+    scope_detail:
+      title: "CALIFICACION DE LOS DISTINTOS ITEMS EVALUADOS DENTRO DEL ALCANCE DE ESTA AUDITORIA"
 
   control_objective:
     errors:
@@ -1046,8 +1051,7 @@ es:
     stale_object_error: "El perfil no fue actualizado, intente nuevamente."
     type_admin: "Administrador"
     type_supervisor: "Supervisor"
-    type_auditor_senior: "Auditor Senior"
-    type_auditor_junior: "Auditor Junior"
+    type_auditor: "Auditor"
     type_audited: "Auditado"
     type_committee: "Comité"
     type_manager: "Gerente de auditoría"

@@ -121,6 +121,7 @@ Rails.application.routes.draw do
 
   [
     'weaknesses_by_user',
+    'process_control_stats'
   ].each do |action|
     get "follow_up_audited/#{action}",
       as: "#{action}_follow_up_audited",
@@ -129,6 +130,7 @@ Rails.application.routes.draw do
 
   [
     'create_weaknesses_by_user',
+    'create_process_control_stats'
   ].each do |action|
     post "follow_up_audited/#{action}",
       as: "#{action}_follow_up_audited",
@@ -163,7 +165,8 @@ Rails.application.routes.draw do
     'weaknesses_graphs',
     'auto_complete_for_business_unit',
     'auto_complete_for_process_control',
-    'weaknesses_by_control_objective_process'
+    'weaknesses_by_control_objective_process',
+    'weaknesses_heatmap'
   ].each do |action|
     get "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
@@ -197,7 +200,8 @@ Rails.application.routes.draw do
     'create_weaknesses_repeated',
     'create_weaknesses_by_control_objective',
     'create_fixed_weaknesses_report',
-    'create_weaknesses_by_control_objective_process'
+    'create_weaknesses_by_control_objective_process',
+    'create_weaknesses_heatmap'
   ].each do |action|
     post "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
@@ -231,6 +235,7 @@ Rails.application.routes.draw do
     weaknesses_evolution
     weaknesses_list
     weaknesses_brief
+    weaknesses_reschedules
     tagged_findings_report
   ].each do |action|
     get "follow_up_audit/#{action}",

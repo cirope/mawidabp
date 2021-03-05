@@ -168,6 +168,7 @@
       column_estimated_amount: "Unidades estimadas"
       column_real_amount: "Unidades reales"
       column_deviation: "Desviación"
+      column_interval: "Periodo"
 
   conclusion_committee_report:
     index_title: "Reportes de conclusión"
@@ -435,6 +436,7 @@
     applied_procedures: "PROCEDIMIENTOS APLICADOS"
     conclusion: "CONCLUSIÓN"
     weaknesses_brief: "RESUMEN DE OBSERVACIONES"
+    weaknesses_reschedules: "RESUMEN DE OBSERVACIONES / REPROGRAMACIONES"
     weaknesses: "OBSERVACIONES"
     oportunities: "OPORTUNIDADES DE MEJORA"
     finding_review_assignments: "HALLAZGOS REVISADOS"
@@ -623,16 +625,25 @@
     auditors:
       one: "Auditor"
       other: "Auditores"
+    auditor_users:
+      one: "Legajo auditor"
+      other: "Legajos auditores"
     reviewers:
       one: "Revisor"
       other: "Revisores"
     audited:
       one: "Propietario del Proceso - Responsable"
       other: "Propietario del Proceso - Responsable"
+    audited_users:
+      one: "Legajo auditado"
+      other: "Legajos auditados"
     readonly: "La observación no puede ser creada ni modificada, ya se emitió el informe definitivo"
     responsibles:
       one: "Responsable"
       other: "Responsables"
+    responsible_users:
+      one: "Legajo responsable"
+      other: "Legajos responsables"
     send_notification: "¿Notificar?"
     status_change_history: "Historial de cambios de estado"
     view_cost_details: "Listado de actividades anteriores relacionadas al hallazgo"
@@ -667,6 +678,9 @@
       filtered_by:
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
         other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
+    user_assignment:
+      audit_team: "Auditoría"
+      others: "Usuarios"
 
   finding_relation:
     types:
@@ -676,6 +690,9 @@
   follow_up_audited:
     index_title: "Reportes generales"
     weaknesses_by_user_title: "Observaciones por usuario"
+    process_control_stats_title: "Observaciones por proceso de negocio"
+    business_unit_type_title: "Unidad organizativa"
+    business_unit_title: "Unidad de negocio"
     weaknesses_by_user:
       pdf_name: "observaciones_por_usuario.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -683,6 +700,28 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+    process_control_stats:
+      average_effectiveness: 'Calificación promedio ponderada'
+      average_effectiveness_resume:
+        one: "%{effectiveness} - %{count} informe evaluado"
+        other: "%{effectiveness} - %{count} informes evaluados"
+      reviews_with_weaknesses:
+        one: "%{count} informe con observaciones en el O.C"
+        other: "%{count} informes con observaciones en el O.C."
+      pdf_name: "observaciones_por_proceso_negocio.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO OBSERVACIONES POR PROCESO DE NEGOCIO / INFORMES DEFINITIVOS"
+      without_reviews_in_the_period: "Sin informes en el periodo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
+
+  follow_up_audited_committee_report:
+    process_control_stats:
+      pdf_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf'
+    period:
+      title: "Intervalo"
+      range: "desde el %{from_date} al %{to_date}"
 
   follow_up_audit:
     index_title: "Reportes de auditoría"
@@ -701,8 +740,10 @@
     weaknesses_list_title: "Listado de observaciones"
     weaknesses_brief_title: "Resumen de observaciones pendientes"
     weaknesses_repeated_title: "Observaciones con estado según último seguimiento"
+    weaknesses_reschedules_title: "Resumen de observaciones y reprogramaciones"
     weaknesses_by_control_objective_process_title: "Reporte de proceso por objetivos de control"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
+    weaknesses_heatmap_title: "Mapa de calor observaciones"
     cost_analysis:
       column_business_unit: "Unidad de negocio"
       column_project: "Proyecto"
@@ -737,12 +778,14 @@
     weaknesses_list_title: "Listado de observaciones"
     weaknesses_brief_title: "Resumen de observaciones pendientes"
     weaknesses_repeated_title: "Observaciones con estado según último seguimiento"
+    weaknesses_reschedules_title: "Resumen de observaciones y reprogramaciones"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     detailed_report: "Reporte detallado"
     qa_indicators_title: "Indicadores de calidad"
     weakness_summary: "Resumen de observaciones"
     weaknesses_by_risk: "Observaciones por riesgo"
     fixed_weaknesses: "Observaciones por riesgo solucionadas"
+    weaknesses_heatmap_title: "Mapa de calor observaciones"
     weaknesses_by_control_objective_process_title: "Reporte de proceso por objetivos de control"
     weaknesses_being_implemented_current:
       one: "Vigente"
@@ -873,6 +916,16 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       year: "Año de origen"
+    weaknesses_heatmap:
+      pdf_name: "mapa_de_calor_por_observaciones_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO MAPA DE CALOR OBSERVACIONES / INFORMES DEFINITIVOS"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      process_owner_parents: "Superiores directos responsables"
+      process_owner_intermediates: "Responsables intermedios"
+      process_owner_roots: "Responsables máximos"
     weaknesses_evolution:
       pdf_name: "observaciones_evolucion_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -904,6 +957,15 @@
       implemented_audited_count:
         one: "Una observación fue regularizada entre el %{from_date} y el %{to_date}."
         other: "%{count} observaciones fueron regularizadas entre el %{from_date} y el %{to_date}."
+    weaknesses_reschedules:
+      pdf_name: "resumen_de_observaciones_reprogramaciones_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "RESUMEN DE OBSERVACIONES / REPROGRAMACIONES / INFORMES DEFINITIVOS"
+      without_weaknesses: "Sin observaciones"
+      reschedule_count_manager: "Cantidad de reprogramaciones aprobadas por Jefatura"
+      reschedule_count_management: "Cantidad de reprogramaciones aprobadas por Gerencia"
+      reschedule_count_ceo: "Cantidad de reprogramaciones aprobadas por CEO"
+      reschedule_count_committee: "Cantidad de reprogramaciones aprobadas por Comité"
     weaknesses_repeated:
       pdf_name: "observaciones_con_estado_segun_ultimo_seguimiento_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -1326,8 +1388,7 @@
     stale_object_error: "El perfil no fue actualizado, intente nuevamente."
     type_admin: "Administrador"
     type_supervisor: "Supervisor"
-    type_auditor_senior: "Auditor Senior"
-    type_auditor_junior: "Auditor Junior"
+    type_auditor: "Auditor"
     type_audited: "Auditado"
     type_committee: "Comité"
     type_manager: "Gerente de auditoría"
