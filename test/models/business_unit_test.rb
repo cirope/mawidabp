@@ -38,7 +38,7 @@ class BusinessUnitTest < ActiveSupport::TestCase
     assert @business_unit.update(
       :name => 'Updated name'
     ),
-    @business_unit.errors.full_messages.join('; ')
+
     @business_unit.reload
     assert_equal 'Updated name', @business_unit.name
   end
