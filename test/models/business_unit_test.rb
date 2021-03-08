@@ -37,7 +37,7 @@ class BusinessUnitTest < ActiveSupport::TestCase
   test 'update' do
     assert @business_unit.update(
       :name => 'Updated name'
-    ),
+    )
 
     @business_unit.reload
     assert_equal 'Updated name', @business_unit.name
