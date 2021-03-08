@@ -60,7 +60,9 @@ Rails.application.routes.draw do
 
   resources :e_mails, only: [:index, :show]
 
-  resources :business_unit_types
+  resources :business_unit_types do
+    get :auto_complete_for_tagging, on: :collection
+  end
 
   resources :groups
 
@@ -70,7 +72,7 @@ Rails.application.routes.draw do
     resources :documents, only: [:index]
   end
 
-  scope ':kind', kind: /control_objective|document|finding|news|plan_item|review/ do
+  scope ':kind', kind: /control_objective|document|finding|news|plan_item|review|business_unit/ do
     resources :tags
   end
 

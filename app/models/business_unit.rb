@@ -19,6 +19,7 @@ class BusinessUnit < ApplicationRecord
     :allow_blank => true
   validates :name, :uniqueness =>
     {:case_sensitive => false, :scope => :business_unit_type_id}
+  validates_presence_of :taggings
 
   # Relaciones
   belongs_to :business_unit_type, :optional => true
