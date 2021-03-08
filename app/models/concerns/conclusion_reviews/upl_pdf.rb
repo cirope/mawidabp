@@ -27,14 +27,17 @@ module ConclusionReviews::UplPdf
 
       pdf.move_down PDF_FONT_SIZE * 10
       pdf.add_title Review.model_name.human.upcase, *title_options
-      pdf.move_down PDF_FONT_SIZE * 3
+      pdf.move_down PDF_FONT_SIZE * 2
+      pdf.add_title review.identification, *title_options
+      pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title review.plan_item.business_unit.name, *title_options
-      pdf.move_down PDF_FONT_SIZE * 3
+      pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title review.plan_item.business_unit_type.name, *title_options
-      pdf.move_down PDF_FONT_SIZE * 3
+      pdf.move_down PDF_FONT_SIZE * 2
+      pdf.add_title review.plan_item.business_unit&.tags.map(&:name).join, *title_options
+      pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title I18n.l(issue_date, format: :long), *title_options
-
-      pdf.move_down PDF_FONT_SIZE * 3
+      pdf.move_down PDF_FONT_SIZE
 
       put_upl_recipients_on    pdf
       put_upl_review_owners_on pdf
@@ -65,8 +68,6 @@ module ConclusionReviews::UplPdf
       put_default_period_title_on pdf
 
       pdf.move_down PDF_FONT_SIZE
-
-
       pdf.add_description_item issue_date_title, I18n.l(issue_date, format: :long)
 
       if review.business_unit.business_unit_type.project_label.present?
