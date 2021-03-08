@@ -1525,6 +1525,7 @@
         previous_identification: "Informe previo"
         previous_date: "Fecha de emisión previa"
         main_recommendations: "Principales Recomendaciones de Auditoría"
+        effectiveness_notes: "Nota efectividad"
       control:
         order: "Orden"
         control: "Controles"

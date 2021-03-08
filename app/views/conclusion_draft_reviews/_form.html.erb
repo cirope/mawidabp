@@ -24,6 +24,7 @@
         <% if Current.conclusion_pdf_format == 'default' %>
           <%= f.input :issue_date, as: :date_picker %>
         <% end %>
+        <%= f.input :effectiveness_notes, input_html: { rows: 3 } %>
       </div>
       <div class="col-md-6">
         <% if Current.conclusion_pdf_format == 'gal' %>

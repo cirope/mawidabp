@@ -204,6 +204,10 @@ module ConclusionReviews::UplPdf
       pdf.font_size (PDF_FONT_SIZE * 0.6).round do
         pdf.text "<i>#{explanation}</i>", align: :justify, inline_format: true
       end
+
+      pdf.move_down (PDF_FONT_SIZE * 0.75).round
+
+      pdf.text effectiveness_notes
     end
 
     def put_upl_control_objective_findings_on pdf, grouped_control_objectives, type, use_finals
