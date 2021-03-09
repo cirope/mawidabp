@@ -18,16 +18,6 @@ module ConclusionReviews::DefaultPdf
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
 
-  def is_last_displayed_control_objective? control_objective_item
-    if @__last_displayed_control_objective_id == control_objective_item.id
-      true
-    else
-      @__last_displayed_control_objective_id = control_objective_item.id
-
-      false
-    end
-  end
-
   def put_default_period_title_on pdf
     title = I18n.t 'conclusion_review.audit_period_title'
     dates = I18n.t 'conclusion_review.audit_period',
@@ -436,5 +426,15 @@ module ConclusionReviews::DefaultPdf
 
     def show_weaknesses_brief? organization
       ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? organization&.prefix
+    end
+
+    def is_last_displayed_control_objective? control_objective_item
+      if @__last_displayed_control_objective_id == control_objective_item.id
+        true
+      else
+        @__last_displayed_control_objective_id = control_objective_item.id
+
+        false
+      end
     end
 end
