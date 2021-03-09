@@ -195,7 +195,7 @@ module ConclusionReviews::UplPdf
       pdf.bounding_box coordinates, width: width do
         pdf.move_down (PDF_FONT_SIZE * 0.75).round
 
-        pdf.add_title "#{I18n.t 'conclusion_final_review.effectiveness_global'} (#{score_global}%)",
+        pdf.add_title "#{I18n.t 'conclusion_final_review.global_effectiveness'} (#{score_global}%)",
           *title_options
           pdf.stroke_bounds
       end

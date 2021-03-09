@@ -18,127 +18,127 @@ module ConclusionReviews::DefaultPdf
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
 
-  def put_default_period_title_on pdf
-    title = I18n.t 'conclusion_review.audit_period_title'
-    dates = I18n.t 'conclusion_review.audit_period',
-      start: I18n.l(review.plan_item.start, format: :long),
-      end:   I18n.l(review.plan_item.end,   format: :long)
+  private
 
-    pdf.add_description_item title, dates
-  end
+    def put_default_period_title_on pdf
+      title = I18n.t 'conclusion_review.audit_period_title'
+      dates = I18n.t 'conclusion_review.audit_period',
+        start: I18n.l(review.plan_item.start, format: :long),
+        end:   I18n.l(review.plan_item.end,   format: :long)
 
-  def put_default_watermark_on pdf
-    if instance_of? ConclusionDraftReview
-      pdf.add_watermark ConclusionDraftReview.model_name.human
+      pdf.add_description_item title, dates
     end
-  end
 
-  def put_default_finding_assignments_on pdf
-    title = I18n.t 'conclusion_review.finding_review_assignments'
-
-    if review.finding_review_assignments.any?
-      pdf.add_subtitle title, PDF_FONT_SIZE, PDF_FONT_SIZE * 0.25
-
-      repeated_findings = review.finding_review_assignments.map do |fra|
-        "#{fra.finding.to_s} [<b>#{fra.finding.state_text}</b>]"
+    def put_default_watermark_on pdf
+      if instance_of? ConclusionDraftReview
+        pdf.add_watermark ConclusionDraftReview.model_name.human
       end
-
-      pdf.add_list repeated_findings, PDF_FONT_SIZE
     end
-  end
 
-  def put_default_review_signatures_table_on pdf
-    users = review.review_user_assignments.select(&:include_signature)
-    users = users.sort_by { |rua| rua.assignment_type }
+    def put_default_finding_assignments_on pdf
+      title = I18n.t 'conclusion_review.finding_review_assignments'
 
-    pdf.move_down PDF_FONT_SIZE
-    pdf.add_review_signatures_table users
-  end
+      if review.finding_review_assignments.any?
+        pdf.add_subtitle title, PDF_FONT_SIZE, PDF_FONT_SIZE * 0.25
 
-  def put_default_control_objectives_on pdf, grouped_control_objectives
-    grouped_control_objectives.each do |process_control, cois|
-      coi_data              = cois.sort.map { |coi| ['• ', coi.to_s] }
-      process_control_text  = "<b>#{ProcessControl.model_name.human}: "
-      process_control_text << "<i>#{process_control.name}</i></b>"
+        repeated_findings = review.finding_review_assignments.map do |fra|
+          "#{fra.finding.to_s} [<b>#{fra.finding.state_text}</b>]"
+        end
 
-      pdf.text process_control_text, align: :justify, inline_format: true
+        pdf.add_list repeated_findings, PDF_FONT_SIZE
+      end
+    end
 
-      if coi_data.present?
-        pdf.indent PDF_FONT_SIZE do
-          pdf.table coi_data, {
-            cell_style: {
-              align:        :justify,
-              border_width: 0,
-              padding:      [0, 0, 5, 0]
+    def put_default_review_signatures_table_on pdf
+      users = review.review_user_assignments.select(&:include_signature)
+      users = users.sort_by { |rua| rua.assignment_type }
+
+      pdf.move_down PDF_FONT_SIZE
+      pdf.add_review_signatures_table users
+    end
+
+    def put_default_control_objectives_on pdf, grouped_control_objectives
+      grouped_control_objectives.each do |process_control, cois|
+        coi_data              = cois.sort.map { |coi| ['• ', coi.to_s] }
+        process_control_text  = "<b>#{ProcessControl.model_name.human}: "
+        process_control_text << "<i>#{process_control.name}</i></b>"
+
+        pdf.text process_control_text, align: :justify, inline_format: true
+
+        if coi_data.present?
+          pdf.indent PDF_FONT_SIZE do
+            pdf.table coi_data, {
+              cell_style: {
+                align:        :justify,
+                border_width: 0,
+                padding:      [0, 0, 5, 0]
+              }
             }
-          }
+          end
         end
       end
     end
-  end
 
-  def default_recipients_margin owners
-    recipients_count = recipients.to_s.lines.reject(&:blank?).size
+    def default_recipients_margin owners
+      recipients_count = recipients.to_s.lines.reject(&:blank?).size
 
-    if (recipients_count + owners.size) < 19
-      20 - recipients_count - owners.size
-    else
-      2
-    end
-  end
-
-  def default_finding_column_widths pdf
-    [pdf.percent_width(100)]
-  end
-
-  def has_findings_for_review? control_objective_items, type, use_finals
-    control_objective_items.any? do |coi|
-      findings = coi_findings_for coi, type, use_finals
-
-      findings.not_revoked.present?
-    end
-  end
-
-  def put_default_control_objective_table_on pdf, control_objective_item, process_control
-    return if is_last_displayed_control_objective? control_objective_item
-
-    data = default_control_objective_column_data_for control_objective_item,
-      process_control
-
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.font_size (PDF_FONT_SIZE * 0.75).round do
-      table_options = pdf.default_table_options default_finding_column_widths(pdf)
-
-      pdf.table data, table_options do
-        row(0).style(
-          background_color: 'cccccc',
-          padding: [
-            (PDF_FONT_SIZE * 0.5).round,
-            (PDF_FONT_SIZE * 0.3).round
-          ]
-        )
+      if (recipients_count + owners.size) < 19
+        20 - recipients_count - owners.size
+      else
+        2
       end
     end
-  end
 
-  def coi_findings_for control_objective_item, type, use_finals
-    if use_finals
-      control_objective_item.send :"final_#{type}"
-    else
-      control_objective_item.send type
+    def default_finding_column_widths pdf
+      [pdf.percent_width(100)]
     end
-  end
 
-  def grouped_control_objectives options
-    hide_excluded = options[:hide_control_objectives_excluded_from_score] == '1'
+    def has_findings_for_review? control_objective_items, type, use_finals
+      control_objective_items.any? do |coi|
+        findings = coi_findings_for coi, type, use_finals
 
-    review.grouped_control_objective_items(
-      hide_excluded_from_score: hide_excluded
-    )
-  end
+        findings.not_revoked.present?
+      end
+    end
 
-  private
+    def put_default_control_objective_table_on pdf, control_objective_item, process_control
+      return if is_last_displayed_control_objective? control_objective_item
+
+      data = default_control_objective_column_data_for control_objective_item,
+        process_control
+
+      pdf.move_down PDF_FONT_SIZE
+
+      pdf.font_size (PDF_FONT_SIZE * 0.75).round do
+        table_options = pdf.default_table_options default_finding_column_widths(pdf)
+
+        pdf.table data, table_options do
+          row(0).style(
+            background_color: 'cccccc',
+            padding: [
+              (PDF_FONT_SIZE * 0.5).round,
+              (PDF_FONT_SIZE * 0.3).round
+            ]
+          )
+        end
+      end
+    end
+
+    def coi_findings_for control_objective_item, type, use_finals
+      if use_finals
+        control_objective_item.send :"final_#{type}"
+      else
+        control_objective_item.send type
+      end
+    end
+
+    def grouped_control_objectives options
+      hide_excluded = options[:hide_control_objectives_excluded_from_score] == '1'
+
+      review.grouped_control_objective_items(
+        hide_excluded_from_score: hide_excluded
+      )
+    end
 
     def put_default_cover_on pdf, organization
       title_options     = [(PDF_FONT_SIZE * 1.5).round, :center, false]

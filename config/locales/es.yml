@@ -403,7 +403,7 @@
     download_without_control_objectives_excluded_from_score: "Descargar sin objetivos de control no calificados"
     download_without_score: "Descargar sin calificación"
     download_brief: "Descargar resumido"
-    effectiveness_global: "Efectividad global"
+    global_effectiveness: "Efectividad global"
     hide_control_objectives_excluded_from_score: "Ocultar objetivos de control no calificados"
     send_type:
       normal: "Informe completo"
