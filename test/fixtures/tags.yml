@@ -94,3 +94,13 @@ risk_evaluation:
   options: "{}"
   organization: cirope
   group: main_group
+
+business_unit:
+  name: business unit
+  kind: business_unit
+  style: secondary
+  shared: false
+  obsolete: false
+  options: "{}"
+  organization: cirope
+  group: main_group

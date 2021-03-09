@@ -58,7 +58,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
   end
 
   test 'create business_unit_type' do
-    assert_difference ['BusinessUnitType.count', 'BusinessUnit.count'] do
+    assert_difference ['BusinessUnitType.count', 'BusinessUnit.count', 'Tagging.count'] do
       login
       post :create, :params => {
         :business_unit_type => {
@@ -73,7 +73,10 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :require_counts => '0',
           :business_units_attributes => [
             {
-              :name => 'New business unit'
+              :name => 'New business unit',
+              :taggings_attributes => [
+                :tag_id => tags(:business_unit).id
+              ]
             }
           ]
         }
@@ -94,7 +97,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
   end
 
   test 'update business_unit_type' do
-    assert_no_difference ['BusinessUnitType.count', 'BusinessUnit.count'] do
+    assert_no_difference ['BusinessUnitType.count', 'BusinessUnit.count', 'Tagging.count'] do
       login
       patch :update, :params => {
         :id => business_unit_types(:cycle).id,
@@ -111,11 +114,17 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :business_units_attributes => [
             {
               :id => business_units(:business_unit_one).id,
-              :name => 'Updated business unit one'
+              :name => 'Updated business unit one',
+              :taggings_attributes => [
+                id: taggings(:business_unit_business_unit_one).id
+              ]
             },
             {
               :id => business_units(:business_unit_two).id,
-              :name => 'Updated business unit two'
+              :name => 'Updated business unit two',
+              :taggings_attributes => [
+                id: taggings(:business_unit_business_unit_two).id
+              ]
             }
           ]
         }
@@ -136,5 +145,32 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to business_unit_types_url
+  end
+
+  test 'auto complete for tagging' do
+    login
+
+    get :auto_complete_for_tagging, params: {
+      q: 'business',
+      kind: 'business_unit'
+    }, as: :json
+
+    assert_response :success
+
+    response_tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, response_tags.size
+    assert response_tags.all? { |t| t['label'].match /business/i }
+
+    get :auto_complete_for_tagging, params: {
+      q: 'x_none',
+      kind: 'business_unit'
+    }, as: :json
+
+    assert_response :success
+
+    response_tags = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, response_tags.size
   end
 end
