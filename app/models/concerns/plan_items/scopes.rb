@@ -19,7 +19,7 @@ module PlanItems::Scopes
     end
 
     def allowed_by_business_units
-      business_units = Current.user.business_units
+      business_units = Current.user&.business_units || []
 
       if business_units.any?
         where business_unit_id: business_units
