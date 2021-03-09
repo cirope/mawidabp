@@ -734,6 +734,8 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'score sheet pdf' do
+    Current.user = users :supervisor
+
     assert_nothing_raised do
       @review.score_sheet(organizations(:cirope))
     end
@@ -742,9 +744,13 @@ class ReviewTest < ActiveSupport::TestCase
     assert File.size(@review.absolute_score_sheet_path) > 0
 
     FileUtils.rm @review.absolute_score_sheet_path
+
+    Current.user = nil
   end
 
   test 'global score sheet pdf' do
+    Current.user = users :supervisor
+
     assert_nothing_raised do
       @review.global_score_sheet(organizations(:cirope))
     end
@@ -753,6 +759,8 @@ class ReviewTest < ActiveSupport::TestCase
     assert File.size(@review.absolute_global_score_sheet_path) > 0
 
     FileUtils.rm @review.absolute_global_score_sheet_path
+
+    Current.user = nil
   end
 
   test 'zip all work papers' do
