@@ -330,8 +330,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   test 'upl pdf conversion' do
-    Current.user = users :supervisor
-
     assert_nothing_raised do
       @conclusion_review.upl_pdf(organizations(:cirope))
     end
@@ -360,8 +358,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert_not_equal size, new_size
 
     FileUtils.rm @conclusion_review.absolute_pdf_path
-
-    Current.user = nil
   end
 
   test 'create bundle zip' do
