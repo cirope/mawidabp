@@ -297,8 +297,8 @@ module ConclusionReviews::UplPdf
             pdf.table table_data,
               column_widths: [column_width * 0.45, column_width * 0.4, column_width * 0.15],
               cell_style: {
-                :align => :right,
-                :size => (font_size * 0.75).round
+                align: :right,
+                size: (font_size * 0.75).round
               }
           end
         end
@@ -321,7 +321,7 @@ module ConclusionReviews::UplPdf
     def add_upl_conclusion_final_review_page_footer pdf, font_size = 10, skip_first_page = false
       pages = skip_first_page ? -> (page) { page > 1 } : :all
 
-      pdf.repeat pages, :dynamic =>  true do
+      pdf.repeat pages, dynamic: true do
         pdf.canvas do
           right_margin = pdf.page.margins[:right]
           string_title = I18n.t('conclusion_final_review.downloads.pdf_page_footer_title')
@@ -329,13 +329,13 @@ module ConclusionReviews::UplPdf
           x            = pdf.bounds.right - pdf.width_of(string_title)
 
           pdf.stroke do
-            pdf.horizontal_line (font_size * 2 ), pdf.bounds.width - (font_size * 2), at: (font_size.pt * 3)
+            pdf.horizontal_line (font_size * 2), pdf.bounds.width - (font_size * 2), at: (font_size.pt * 3)
           end
 
-          pdf.draw_text string_title, :at => [font_size * 4, (font_size.pt * 1.75)],
-            :size => (font_size * 0.75)
-          pdf.draw_text string_sheet, :at => [x, (font_size.pt * 1.75)],
-            :size => (font_size * 0.75)
+          pdf.draw_text string_title, at: [font_size * 4, (font_size.pt * 1.75)],
+            size: (font_size * 0.75)
+          pdf.draw_text string_sheet, at: [x, (font_size.pt * 1.75)],
+            size: (font_size * 0.75)
         end
       end
     end
