@@ -3,7 +3,7 @@
   forms: { date_range: true }} %>
 
 <%  @counts.each do |count_data| %>
-  <h2><%= Period.model_name.human %>: <%= count_data[:period].inspect %></h2>
+  <h2><%= t('period.name') %>: <%= count_data[:period].inspect %></h2>
 
   <hr>
 
