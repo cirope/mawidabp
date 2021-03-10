@@ -837,7 +837,6 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     weaknesses_by_risk_report:
-      period: "Plan"
       pdf_name: "observaciones_por_riesgo_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Tarea/Proceso Interno"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
