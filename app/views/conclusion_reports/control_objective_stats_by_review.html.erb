@@ -10,7 +10,7 @@
 %>
 
 <% @periods.each do |period| %>
-  <h2 class="mb-3"><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+  <h2 class="mb-3"><%= "#{t('period.name')}: #{period.inspect}" %></h2>
 
   <% if @process_control_data[period].blank? %>
     <p class="m-2">

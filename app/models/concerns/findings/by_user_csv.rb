@@ -23,7 +23,7 @@ module Findings::ByUserCsv
         Weakness.human_attribute_name('review_code'),
         Weakness.human_attribute_name('title'),
         I18n.t('finding.by_user.auditors'),
-        I18n.t('finding.responsibles', count: 1),
+        I18n.t('finding.by_user.responsibles'),
         I18n.t('finding.by_user.audited'),
         I18n.t('finding.auditor_users', count: 0),
         I18n.t('finding.responsible_users', count: 1),

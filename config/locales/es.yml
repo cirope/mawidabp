@@ -153,21 +153,21 @@
       general_column_review: "Informe"
       general_column_estimated_amount: "Costo estimado (planificado)"
       general_column_real_amount: "Costo real (ejecutado)"
-      general_column_deviation: "Desviación"
+      general_column_deviation: "Desvio"
       pdf_name: "analisis_de_costos_%{from_date}_al_%{to_date}.pdf"
-      detailed_title: "ANÁLISIS DE COSTOS\nDETALLADO POR INFORME\nDE AUDITORÍA INTERNA"
-      general_title: "ANÁLISIS DE COSTOS\nDE AUDÍTORIA INTERNA"
+      detailed_title: "RESUMEN DE COSTOS\nDE TAREAS DETALLADO POR INFORME"
+      general_title: "ANÁLISIS DE COSTOS DE TAREAS"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
     cost_summary:
       pdf_name: "resumen_de_costos_%{from_date}_al_%{to_date}.pdf"
-      title: "RESUMEN DE COSTOS\nDE AUDITORÍA INTERNA"
-      without_audits_in_the_period: "Sin auditorías en el periodo"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      title: "RESUMEN DE COSTOS DE TAREA"
+      without_audits_in_the_period: "Sin tareas en el plan"
+      without_audits_in_the_interval: "Sin tareas en el periodo seleccionado"
       column_month: "Mes"
-      column_estimated_amount: "Unidades estimadas"
-      column_real_amount: "Unidades reales"
-      column_deviation: "Desviación"
+      column_estimated_amount: "Días planificados"
+      column_real_amount: "Días ejecutados"
+      column_deviation: "Desvio"
 
   conclusion_committee_report:
     index_title: "Reportes de conclusión"
@@ -191,11 +191,11 @@
     qa_indicators_title: "Indicadores de calidad"
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
-    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
+    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de tarea"
     findings_type_internal: "Hallazgos Tarea Interna"
-    findings_type_external: "Hallazgos Tarea Externas"
-    weaknesses_type_internal: "Observaciones Auditoría Interna"
-    weaknesses_type_external: "Observaciones Auditorías Externas"
+    findings_type_external: "Hallazgos Tareas Externas"
+    weaknesses_type_internal: "Observaciones Tarea Interna"
+    weaknesses_type_external: "Observaciones Tareas Externas"
     weaknesses_by_risk: "Observaciones por riesgo"
     fixed_weaknesses: "Observaciones por riesgo solucionadas"
     from_date: "Desde"
@@ -209,7 +209,7 @@
       pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
       title: "Beneficios / Perjuicios"
       subtitle: "INFORMES DEFINITIVOS"
-      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
+      without_audits_in_the_period: 'Sin tareas con beneficios / perjuicios en el plan'
       total: 'Monto total: <b>%{amount}</b>'
     control_objective_stats:
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
@@ -247,12 +247,12 @@
       without_weaknesses: "Sin observaciones"
     weaknesses_by_risk_report:
       pdf_name: "observaciones_por_riesgo_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
-      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      internal_audit_weaknesses: "Observaciones Tarea Interna"
+      external_audit_weaknesses: "Observaciones de Tareas Externas"
+      title: "RESUMEN DETALLADO DE LA TAREA"
       subtitle: "OBSERVACIONES POR RIESGO - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías en el periodo"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_audits_in_the_period: "Sin auditorías en el plan"
+      without_audits_in_the_interval: "Sin auditorías en el periodo seleccionado"
       without_weaknesses: "Sin observaciones"
       audited:
         one: "Usuario"
@@ -275,13 +275,11 @@
       origination_year: "Año de origen"
     weaknesses_by_user:
       pdf_name: "observaciones_por_usuario_%{from_date}_al_%{to_date}.pdf"
-      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      title: "RESUMEN DETALLADO DE TAREAS"
       subtitle: "OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
-      auditors: "Integrantes UPLA"
-      audited: "Usuarios"
     weaknesses_by_business_unit:
       pdf_name: "observaciones_por_ciclo_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -322,7 +320,7 @@
       pdf_name: "resumen_ejecutivo_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Hallazgos Tarea Interna"
       external_audit_weaknesses: "Observaciones de Tareas Externas"
-      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      title: "RESUMEN DETALLADO DE TAREA"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
       organization_score: "Calificación de la organización: %{score}% (*)"
       organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de tarea (%{audit_types})."
@@ -367,11 +365,11 @@
       title: "HALLAZGOS INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
       weaknesses_column: "Observaciones"
       oportunities_column: "Oportunidades de Mejora"
-      period_summary: "Resumen del periodo %{period}"
+      period_summary: "Resumen del plan %{period}"
       total: "TOTAL"
     weaknesses_by_risk:
       pdf_name: "observaciones_informes_definitivos_por_riesgo_%{from_date}_al_%{to_date}.pdf"
-      period_summary: "Resumen del periodo %{period}"
+      period_summary: "Resumen del plan %{period}"
       title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO"
       total: "TOTAL"
     weaknesses_by_risk_and_business_unit:
@@ -388,7 +386,7 @@
       oportunities: "Oportunidades"
       without_weaknesses: "Sin hallazgos"
       pdf_name: "observaciones_informes_definitivos_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
-      title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA"
+      title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE TAREA"
       total: "TOTAL"
 
   conclusion_final_review:
@@ -639,6 +637,7 @@
     by_user:
       auditors: "Integrantes UPLA"
       audited: "Usuarios"
+      responsibles: "Responsable unidad de negocio"
     auditors:
       one: "Auditor"
       other: "Auditores"
