@@ -295,9 +295,9 @@ module ConclusionReviews::UplPdf
           pdf.indent(PDF_FONT_SIZE) do
             pdf.table table_data,
               column_widths: [column_width * 0.45, column_width * 0.4, column_width * 0.15],
-              cell_style: {
+              cell_style:    {
                 align: :right,
-                size: (font_size * 0.75).round
+                size:  (font_size * 0.75).round
               }
           end
         end
