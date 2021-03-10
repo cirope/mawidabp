@@ -150,7 +150,7 @@ module Reports::WeaknessesByUser
           weakness.users.select(&:auditor?).map(&:full_name).to_sentence
         ],
         [
-          t('finding.responsibles', count: 1),
+          t('finding.by_user.responsibles'),
           weakness.process_owners.map(&:full_name).to_sentence
         ],
         [

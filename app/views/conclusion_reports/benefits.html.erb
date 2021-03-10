@@ -10,7 +10,7 @@
 %>
 
 <% @periods.each do |period| %>
-  <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+  <h2><%= "#{t('period.name')}: #{period.inspect}" %></h2>
 
   <hr>
 
