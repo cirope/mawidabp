@@ -215,8 +215,8 @@ module ConclusionReviews::DefaultPdf
     def put_default_period_title_on pdf
       title = I18n.t 'conclusion_review.audit_period_title'
       dates = I18n.t 'conclusion_review.audit_period',
-        start: I18n.l(review.plan_item.start, format: :long),
-        end:   I18n.l(review.plan_item.end,   format: :long)
+                     start: I18n.l(review.plan_item.start, format: :long),
+                     end:   I18n.l(review.plan_item.end,   format: :long)
 
       pdf.add_description_item title, dates
     end
@@ -279,7 +279,7 @@ module ConclusionReviews::DefaultPdf
       return if is_last_displayed_control_objective? control_objective_item
 
       data = default_control_objective_column_data_for control_objective_item,
-        process_control
+                                                       process_control
 
       pdf.move_down PDF_FONT_SIZE
 
