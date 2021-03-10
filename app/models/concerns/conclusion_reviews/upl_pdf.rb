@@ -288,10 +288,9 @@ module ConclusionReviews::UplPdf
 
         pdf.canvas do
           column_width = pdf.bounds.width - font_size.pt * 2
+          table_data   = upl_table_data_header
 
           pdf.move_down PDF_FONT_SIZE
-
-          table_data = upl_table_data_header
 
           pdf.indent(PDF_FONT_SIZE) do
             pdf.table table_data,
