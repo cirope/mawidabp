@@ -4,7 +4,7 @@
   :forms => {:date_range => true}} %>
 
 <% @periods.each do |period| %>
-  <h2 class="mb-3"><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+  <h2 class="mb-3"><%= "#{t('period.name')}: #{period.inspect}" %></h2>
 
   <% unless @total_cost_data[period].blank? %>
     <table class="table table-sm table-striped table-hover">

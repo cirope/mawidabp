@@ -329,6 +329,37 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     FileUtils.rm @conclusion_review.absolute_pdf_path
   end
 
+  test 'upl pdf conversion' do
+    assert_nothing_raised do
+      @conclusion_review.upl_pdf(organizations(:cirope))
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+
+    FileUtils.rm @conclusion_review.absolute_pdf_path
+
+    assert_nothing_raised do
+      @conclusion_review.upl_pdf(
+        organizations(:cirope), :hide_score => true
+      )
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+    assert_not_equal size, new_size
+
+    assert_nothing_raised do
+      @conclusion_review.upl_pdf organizations(:cirope), :brief => '1'
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+    assert_not_equal size, new_size
+
+    FileUtils.rm @conclusion_review.absolute_pdf_path
+  end
+
   test 'create bundle zip' do
     if File.exist?(@conclusion_review.absolute_bundle_zip_path)
       FileUtils.rm @conclusion_review.absolute_bundle_zip_path

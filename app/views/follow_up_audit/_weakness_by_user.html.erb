@@ -47,7 +47,7 @@
 </p>
 
 <p class="mb-1">
-  <span class="text-muted"><%= t 'finding.auditors', count: 0 %></span>:
+  <span class="text-muted"><%= t 'follow_up_committee_report.weaknesses_by_user.auditors' %></span>:
   <%= weakness.users.select(&:auditor?).map(&:full_name).to_sentence %>
 </p>
 
@@ -57,7 +57,7 @@
 </p>
 
 <p class="mb-1">
-  <span class="text-muted"><%= t 'finding.audited', count: 0 %></span>:
+  <span class="text-muted"><%= t 'follow_up_committee_report.weaknesses_by_user..audited' %></span>:
   <%= weakness.users.select { |u|
     u.can_act_as_audited? && weakness.process_owners.exclude?(u)
   }.map(&:full_name).to_sentence %>

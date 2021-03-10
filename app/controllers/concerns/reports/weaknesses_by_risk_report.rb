@@ -97,7 +97,7 @@ module Reports::WeaknessesByRiskReport
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
               ("<b>#{Weakness.human_attribute_name(:follow_up_date)}</b>: #{l(w.follow_up_date, :format => :long)}" if w.follow_up_date),
               ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l(w.origination_date, :format => :long)}" if w.origination_date),
-              "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
+              "<b>#{I18n.t("#{@controller}_committee_report.weaknesses_by_risk_report.audited", :count => audited.size)}</b>: #{audited.join('; ')}",
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}",
               "<b>#{Weakness.human_attribute_name(:audit_comments)}</b>: #{w.audit_comments}",
               "<b>#{Weakness.human_attribute_name(:answer)}</b>: #{w.answer}"
