@@ -192,8 +192,8 @@
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
-    findings_type_internal: "Hallazgos Auditoría Interna"
-    findings_type_external: "Hallazgos Auditorías Externas"
+    findings_type_internal: "Hallazgos Tarea Interna"
+    findings_type_external: "Hallazgos Tarea Externas"
     weaknesses_type_internal: "Observaciones Auditoría Interna"
     weaknesses_type_external: "Observaciones Auditorías Externas"
     weaknesses_by_risk: "Observaciones por riesgo"
@@ -254,6 +254,9 @@
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
+      audited:
+        one: "Usuario"
+        other: "Usuarios"
     weaknesses_by_month:
       pdf_name: "observaciones_por_mes_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -277,6 +280,8 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      auditors: "Integrantes UPLA"
+      audited: "Usuarios"
     weaknesses_by_business_unit:
       pdf_name: "observaciones_por_ciclo_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -286,7 +291,7 @@
       without_weaknesses: "Sin observaciones"
       year: "Año de origen"
     period:
-      title: "Intervalo"
+      title: "Periodo"
       range: "desde el %{from_date} al %{to_date}"
     process_control_stats:
       pdf_name: "observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf"
@@ -315,14 +320,14 @@
         digitalized: "Digitalización"
     synthesis_report:
       pdf_name: "resumen_ejecutivo_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Hallazgos Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Hallazgos Tarea Interna"
+      external_audit_weaknesses: "Observaciones de Tareas Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
       organization_score: "Calificación de la organización: %{score}% (*)"
-      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})."
-      without_audits_in_the_period: "Sin auditorías en el periodo"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de tarea (%{audit_types})."
+      without_audits_in_the_period: "Sin tareas en el periodo"
+      without_audits_in_the_interval: "Sin tareas en el intervalo seleccionado"
       without_weaknesses: "Sin hallazgos"
       references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Objetivos y alcance del trabajo: lista los procedimientos y objetivos de control evaluados.\n(4) Observaciones: lista los títulos de las observaciones detectadas. En caso de no tener observaciones se muestra la leyenda \"Sin observaciones\"."
       generic_score_average:
@@ -621,6 +626,9 @@
     undo_reiteration: 'Deshacer reiteración'
     change_history: "Historial de cambios"
     submit_answer: "Guardar comentario"
+    by_user:
+      auditors: "Integrantes UPLA"
+      audited: "Usuarios"
     auditors:
       one: "Auditor"
       other: "Auditores"
@@ -698,12 +706,12 @@
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
 
   follow_up_audit:
-    index_title: "Reportes de auditoría"
+    index_title: "Reportes de UPLA"
     cost_analysis_title: "Análisis de costos"
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_risk_and_business_unit_title: "Hallazgos totales por riesgo y unidad de negocio"
-    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
+    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de tarea"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     weaknesses_by_month_title: "Informe mensual"
     weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
@@ -759,6 +767,8 @@
     weaknesses_by_risk: "Observaciones por riesgo"
     fixed_weaknesses: "Observaciones por riesgo solucionadas"
     weaknesses_by_control_objective_process_title: "Reporte de proceso por objetivos de control"
+    tagged_findings_report:
+      auditors: "Integrantes UPLA"
     weaknesses_being_implemented_current:
       one: "Vigente"
       other: "Vigentes"
@@ -774,8 +784,8 @@
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
-    without_oportunities: "Sin oportunidades en el periodo"
-    without_weaknesses: "Sin observaciones en el periodo"
+    without_oportunities: "Sin oportunidades en el plan"
+    without_weaknesses: "Sin observaciones en el plan"
     repeated_count:
       one: "Un hallazgo reiterado"
       other: "%{count} hallazgos reiterados"
@@ -793,7 +803,7 @@
       pdf_name: 'beneficios_perjuicios_%{from_date}_al_%{to_date}.pdf'
       title: "Beneficios / Perjuicios"
       subtitle: "SEGUIMIENTO DE INFORMES"
-      without_audits_in_the_period: 'Sin auditorías con beneficios / perjuicios en el periodo'
+      without_audits_in_the_period: 'Sin tareas con beneficios / perjuicios en el plan'
       total: 'Monto total: <b>%{amount}</b>'
     control_objective_stats:
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
@@ -828,13 +838,16 @@
       without_weaknesses: "Sin observaciones"
     weaknesses_by_risk_report:
       pdf_name: "observaciones_por_riesgo_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones Auditoría Interna"
+      internal_audit_weaknesses: "Observaciones Tarea/Proceso Interno"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
-      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      title: "RESUMEN DETALLADO DE TAREAS"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES POR RIESGO - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías en el periodo"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_audits_in_the_period: "Sin auditorías en el plan"
+      without_audits_in_the_interval: "Sin auditorías en el periodo seleccionado"
       without_weaknesses: "Sin observaciones"
+      audited:
+        one: "Usuario"
+        other: "Usuarios"
     weaknesses_by_month:
       pdf_name: "observaciones_por_mes_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -875,11 +888,13 @@
       review_tags: "Etiquetas de informe"
     weaknesses_by_user:
       pdf_name: "observaciones_por_usuario_%{from_date}_al_%{to_date}.pdf"
-      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      title: "RESUMEN DETALLADO DE TAREAS"
       subtitle: "SEGUIMIENTO OBSERVACIONES POR USUARIO / INFORMES DEFINITIVOS"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      auditors: "Integrantes UPLA"
+      audited: "Usuarios"
     weaknesses_by_business_unit:
       pdf_name: "observaciones_por_ciclo_%{from_date}_al_%{to_date}.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -911,7 +926,7 @@
       without_weaknesses: "Sin observaciones"
       weakness_title: "Título observación"
       description: "Detalle observación"
-      audit_comments: "Respuesta auditado/Comentario de auditoría"
+      audit_comments: "Respuesta usuario/comentario UPLA"
       origination_date: "Fecha de origen observación"
       reschedule_count: "Cant. Reprogramac."
       follow_up_date: "Última fecha propuesta"
@@ -937,7 +952,7 @@
       origination_year: "Año de origen"
       weakness_tags: "Etiquetas de observación"
     period:
-      title: "Intervalo"
+      title: "Periodo"
       range: "desde el %{from_date} al %{to_date}"
     process_control_stats:
       pdf_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf'
@@ -955,7 +970,7 @@
       review_effectiveness_average: 'Promedio ponderado de calificaciones de los procesos de negocio: <b>%{score}%</b>'
     qa_indicators:
       without_data: "Sin datos para el rango de fechas ingresado"
-      title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
+      title: "Sistema de Gestión de la Calidad - Indicadores de Calidad"
       subtitle: ""
       indicator: "Indicador"
       value: "Valor"
@@ -974,12 +989,12 @@
       pdf_name: "resumen_ejecutivo_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Hallazgos Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
-      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      title: "RESUMEN DETALLADO DE TAREAS"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
       organization_score: "Calificación de la organización: %{score}% (*)"
-      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})."
-      without_audits_in_the_period: "Sin auditorías en el periodo"
-      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de tarea (%{audit_types})."
+      without_audits_in_the_period: "Sin tareas en el periodo"
+      without_audits_in_the_interval: "Sin tareas en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
       generic_score_average:
@@ -1004,12 +1019,12 @@
         total: "Total"
     weaknesses_by_state:
       pdf_name: "observaciones_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
-      period_summary: "Resumen del periodo %{period}"
+      period_summary: "Resumen del plan %{period}"
       title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR ESTADO"
       total: "TOTAL"
     weaknesses_by_risk:
       pdf_name: "observaciones_seguimiento_por_riesgo_%{from_date}_al_%{to_date}.pdf"
-      period_summary: "Resumen del periodo %{period}"
+      period_summary: "Resumen del plan %{period}"
       title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO"
       total: "TOTAL"
     weaknesses_by_risk_and_business_unit:
@@ -1026,7 +1041,7 @@
       oportunities: "Oportunidades"
       without_weaknesses: "Sin hallazgos"
       pdf_name: "observaciones_seguimiento_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
-      title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR TIPO DE AUDITORÍA"
+      title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR TIPO DE TAREA/PROCESO"
       total: "TOTAL"
 
   follow_up_management:
@@ -1449,6 +1464,8 @@
       resources_utilization: "Recursos utilizados"
       planned_resources_utilization: "Recursos estimados en el plan de trabajo (*)"
       planned_resources_utilization_explanation: "(*) No forman parte del costo total del presupuesto"
+  period:
+    name: 'Plan'
 
   activerecord:
     models:

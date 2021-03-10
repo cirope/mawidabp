@@ -3,7 +3,7 @@
   :forms => {:date_range => true}} %>
 <% if @periods.present? %>
   <% @periods.each do |period| %>
-    <h2 class="mb-3"><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+    <h2 class="mb-3"><%= "#{t('period.name')}: #{period.inspect}" %></h2>
 
     <% @indicators[period].each do |data| %>
       <% unless data[:column_data].blank? %>
