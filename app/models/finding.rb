@@ -47,7 +47,7 @@ class Finding < ApplicationRecord
   include Findings::Search
   include Findings::SerializedAttributes
   include Findings::SortColumns
-  include Findings::State
+  include Findings::StateAlt
   include Findings::StateDates
   include Findings::Taggable
   include Findings::Tasks

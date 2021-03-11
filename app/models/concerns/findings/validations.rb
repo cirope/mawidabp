@@ -28,7 +28,7 @@ module Findings::Validations
 
   def must_have_a_comment?
     has_new_comment = comments.detect { |c| c.new_record? && c.valid? }
-    to_implemented  = implemented? && (was_implemented_audited? || was_expired?)
+    to_implemented  = implemented? && (was_implemented_audited?) #|| was_expired?)
     to_pending      = being_implemented? &&
       (was_implemented_audited? || was_implemented?)
 
@@ -56,10 +56,10 @@ module Findings::Validations
     end
 
     def validate_solution_date
-      check_for_blank = implemented_audited? ||
+      check_for_blank = implemented_audited? #||
                        # assumed_risk?        ||
                        # criteria_mismatch?   ||
-                        expired?
+                       # expired?
 
       errors.add :solution_date, :blank         if check_for_blank  && solution_date.blank?
       errors.add :solution_date, :must_be_blank if !check_for_blank && solution_date.present?
