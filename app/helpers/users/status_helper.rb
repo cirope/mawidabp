@@ -1,6 +1,6 @@
 module Users::StatusHelper
   def user_weaknesses_links
-    [pending_link, complete_link, repeated_link].join ' | '
+    [pending_link, repeated_link, complete_link].join ' | '
   end
 
   def high_risk_weaknesses_graph_placeholder
