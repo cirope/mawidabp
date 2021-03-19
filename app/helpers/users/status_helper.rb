@@ -53,7 +53,7 @@ module Users::StatusHelper
     end
 
     def complete_link
-      complete_count = filtered_weaknesses.count - (pending_count + repeated_count)
+      complete_count = filtered_weaknesses.count - pending_count - repeated_count
       text = markdown_without_paragraph t('.weaknesses.complete', count: complete_count)
       path = findings_path(completion_state: 'complete', user_id: @user.id)
 
