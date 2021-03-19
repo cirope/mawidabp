@@ -1,6 +1,6 @@
 module Users::StatusHelper
   def user_weaknesses_links
-    [pending_link, complete_link].join ' | '
+    [pending_link, complete_link, repeated_link].join ' | '
   end
 
   def high_risk_weaknesses_graph_placeholder
@@ -53,15 +53,26 @@ module Users::StatusHelper
     end
 
     def complete_link
-      complete_count = filtered_weaknesses.count - pending_count
+      complete_count = filtered_weaknesses.count - (pending_count + repeated_count)
       text = markdown_without_paragraph t('.weaknesses.complete', count: complete_count)
       path = findings_path(completion_state: 'complete', user_id: @user.id)
 
       link_to_unless complete_count == 0, text, path
     end
 
+    def repeated_link
+      text = markdown_without_paragraph t('.weaknesses.repeated', count: repeated_count)
+      path = findings_path(completion_state: 'repeated', user_id: @user.id)
+
+      link_to_unless repeated_count == 0, text, path
+    end
+
     def pending_count
       filtered_weaknesses.with_pending_status.count
+    end
+
+    def repeated_count
+      filtered_weaknesses.with_repeated_status.count
     end
 
     def filtered_weaknesses
