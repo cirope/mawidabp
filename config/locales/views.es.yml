@@ -665,6 +665,9 @@ es:
           complete:
             one: '**Una** observación solucionada'
             other: '**%{count}** observaciones solucionadas'
+          repeated:
+            one: '**Una** observación reiterada'
+            other: '**%{count}** observaciones reiteradas'
 
   risk_assessments:
     edit:
