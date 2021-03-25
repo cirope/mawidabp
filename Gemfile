@@ -36,6 +36,8 @@ gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 
+gem 'ruby-saml'
+
 gem 'sassc'
 gem 'sassc-rails'
 gem 'uglifier'

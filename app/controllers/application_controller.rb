@@ -93,6 +93,7 @@ class ApplicationController < ActionController::Base
         session[:back_to] = nil if action == :index
 
         if current_organization.try(:ldap_config).blank? &&
+            current_organization.try(:saml_provider).blank? &&
             @auth_user.try(:must_change_the_password?) &&
             ![:edit_password, :update_password].include?(action)
           flash.notice ||= t 'message.must_change_the_password'
@@ -156,9 +157,9 @@ class ApplicationController < ActionController::Base
 
     # Redirige la navegación a la página de autenticación
     # _message_:: Mensaje que se mostrará luego de la redirección
-    def redirect_to_login(message = nil, type = :notice) #:doc:
+    def redirect_to_login(message = nil, type = :notice, params = nil) #:doc:
       flash[type] = message if message
-      redirect_to login_url
+      redirect_to login_url(params)
     end
 
     # Reinicia la sessión (conservando el contenido de flash)

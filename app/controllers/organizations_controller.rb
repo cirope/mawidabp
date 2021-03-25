@@ -63,7 +63,7 @@ class OrganizationsController < ApplicationController
     def organization_params
       params.require(:organization).permit(
         :name, :prefix, :description, :corporate, :logo_style, :group_id,
-        :lock_version,
+        :saml_provider, :lock_version,
         image_model_attributes: [:id, :image, :image_cache],
         co_brand_image_model_attributes: [:id, :image, :image_cache],
         ldap_config_attributes: [
