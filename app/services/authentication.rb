@@ -58,7 +58,7 @@ class Authentication
 
     def saml_user_for email, attributes
       pruned_attributes = send("prune_#{@current_organization.saml_provider}_attributes", attributes)
-      @params[:user] = pruned_attributes[:user]
+      @params[:user]    = pruned_attributes[:user]
 
       if user = @current_organization.users.readonly(false).find_by(email: email)
         update_user user, pruned_attributes
