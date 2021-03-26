@@ -114,7 +114,7 @@ class Authentication
 
     def prune_azure_attributes attributes
       {
-        user: attributes['http://schemas.microsoft.com/identity/claims/displayname'],
+        user: String(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).sub(/@.+/, ''),
         name: attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
         last_name: attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname'],
         roles: attributes['http://schemas.microsoft.com/ws/2008/06/identity/claims/groups']
@@ -173,7 +173,7 @@ class Authentication
     end
 
     def saml_auth
-      if @user
+      if @user&.valid?
         @valid        = true
         @valid_user   = @user
         @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }

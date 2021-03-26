@@ -48,6 +48,6 @@ class SamlSessionsController < ApplicationController
       session[:last_access] = Time.zone.now
       session[:user_id]     = user.id
 
-      user.logged_in! session[:last_access]
+      user.logged_in! session[:last_access] if user.persisted?
     end
 end
