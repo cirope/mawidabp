@@ -114,9 +114,9 @@ class Authentication
 
     def prune_azure_attributes attributes
       {
-        user: String(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).sub(/@.+/, ''),
-        name: attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
-        last_name: attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname'],
+        user: Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first.to_s.sub(/@.+/, ''),
+        name: Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first,
+        last_name: Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first,
         roles: attributes['http://schemas.microsoft.com/ws/2008/06/identity/claims/groups']
       }
     end
