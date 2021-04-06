@@ -88,6 +88,7 @@ Rails.application.routes.draw do
 
   [
     'weaknesses_by_state_execution',
+    'weaknesses_current_situation',
     'weaknesses_report',
     'detailed_management_report',
     'planned_cost_summary',
@@ -98,6 +99,8 @@ Rails.application.routes.draw do
 
   [
     'create_weaknesses_by_state_execution',
+    'create_weaknesses_current_situation',
+    'create_weaknesses_current_situation_permalink',
     'create_detailed_management_report',
     'create_planned_cost_summary',
     'create_weaknesses_report'

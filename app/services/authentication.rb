@@ -102,11 +102,11 @@ class Authentication
 
       if roles.any?
         User.create!(
-          name: attributes[:name],
-          last_name: attributes[:last_name],
-          email: attributes[:email],
-          user: attributes[:user],
-          enable: true,
+          name:                          attributes[:name],
+          last_name:                     attributes[:last_name],
+          email:                         attributes[:email],
+          user:                          attributes[:user],
+          enable:                        true,
           organization_roles_attributes: roles.map do |r|
             { organization_id: r.organization_id, role_id: r.id }
           end
@@ -116,11 +116,11 @@ class Authentication
 
     def prune_azure_attributes attributes
       {
-        user: Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first.to_s.sub(/@.+/, ''),
-        name: Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first,
-        email: Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']).first,
+        user:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']).first.to_s.sub(/@.+/, ''),
+        name:      Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']).first,
+        email:     Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']).first,
         last_name: Array(attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']).first,
-        roles: attributes['http://schemas.microsoft.com/ws/2008/06/identity/claims/groups']
+        roles:     attributes['http://schemas.microsoft.com/ws/2008/06/identity/claims/groups']
       }
     end
 

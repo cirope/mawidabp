@@ -9,7 +9,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     public_actions = []
     private_actions = [
       :index, :weaknesses_by_state_execution, :detailed_management_report,
-      :planned_cost_summary
+      :planned_cost_summary, :weaknesses_current_situation
     ]
 
     private_actions.each do |action|
@@ -345,5 +345,156 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     }
 
     assert_response :redirect
+  end
+
+  test 'weaknesses current situation' do
+    login
+
+    get :weaknesses_current_situation
+    assert_response :success
+    assert_template 'execution_reports/weaknesses_current_situation'
+
+    assert_nothing_raised do
+      get :weaknesses_current_situation, :params => {
+        :weaknesses_current_situation => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'execution',
+        :final => false
+      }
+    end
+
+    assert_response :success
+    assert_template 'execution_reports/weaknesses_current_situation'
+  end
+
+  test 'weaknesses current situation from permalink' do
+    login
+
+    get :weaknesses_current_situation, :params => {
+      permalink_token: permalinks(:execution_link).token
+    }
+    assert_response :success
+    assert_template 'execution_reports/weaknesses_current_situation'
+  end
+
+  test 'weaknesses current situation as CSV' do
+    login
+
+    get :weaknesses_current_situation, as: :csv
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+
+    assert_nothing_raised do
+      get :weaknesses_current_situation, :params => {
+        :weaknesses_current_situation => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'execution',
+        :final => false
+      }, as: :csv
+    end
+
+    assert_response :success
+    assert_match Mime[:csv].to_s, @response.content_type
+  end
+
+  test 'filtered weaknesses current situation' do
+    login
+
+    get :weaknesses_current_situation, :params => {
+      :weaknesses_current_situation => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :cut_date => 10.days.ago.to_date,
+        :review => '1',
+        :project => '2',
+        :risk => ['', '1', '2'],
+        :priority => Finding.priorities_values.last.to_s,
+        :scope => ['committee'],
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
+        :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
+        :control_objective_tags => ['one'],
+        :weakness_tags => ['two'],
+        :review_tags => ['three'],
+        :compliance => 'no'
+      },
+      :controller_name => 'execution',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'execution_reports/weaknesses_current_situation'
+  end
+
+  test 'filtered weaknesses current situation by extra attributes' do
+    skip unless POSTGRESQL_ADAPTER
+
+    login
+
+    get :weaknesses_current_situation, :params => {
+      :weaknesses_current_situation => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :cut_date => 10.days.ago.to_date,
+        :risk => ['', '1', '2'],
+        :priority => Finding.priorities_values.last.to_s,
+        :finding_status => ['', Finding::STATUS[:being_implemented]],
+        :finding_title => 'a',
+        :business_unit_type => ['', business_unit_types(:cycle).id],
+        :compliance => 'no',
+        :impact => [WEAKNESS_IMPACT.keys.first],
+        :operational_risk => [WEAKNESS_OPERATIONAL_RISK.keys.first],
+        :internal_control_components => [WEAKNESS_INTERNAL_CONTROL_COMPONENTS.first]
+      },
+      :controller_name => 'execution',
+      :final => false
+    }
+
+    assert_response :success
+    assert_template 'execution_reports/weaknesses_current_situation'
+  end
+
+  test 'create weaknesses current situation' do
+    login
+
+    post :create_weaknesses_current_situation, :params => {
+      :weaknesses_current_situation => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :cut_date => 10.days.ago.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'execution',
+      :final => false
+    }
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('execution_committee_report.weaknesses_current_situation.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'weaknesses_current_situation', 0)
+  end
+
+  test 'create weaknesses current situation permalink' do
+    login
+
+    assert_difference 'Permalink.count' do
+      post :create_weaknesses_current_situation_permalink, :params => {
+        :weaknesses_current_situation => {
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
+        },
+        :controller_name => 'execution',
+        :final => false
+      }, xhr: true, as: :js
+    end
+
+    assert_response :success
+    assert_match Mime[:js].to_s, @response.content_type
   end
 end
