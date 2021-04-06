@@ -61,7 +61,7 @@ class Authentication
       email             = pruned_attributes[:email] || email
       @params[:user]    = pruned_attributes[:user]
 
-      if user = @current_organization.users.readonly(false).find_by(user: @params[:user])
+      if user = User.find_by(user: @params[:user])
         update_user user, pruned_attributes.merge(email: email)
       else
         create_user email, pruned_attributes.merge(email: email)
