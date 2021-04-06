@@ -64,7 +64,7 @@ class Authentication
       if user = User.find_by(user: @params[:user])
         update_user user, pruned_attributes.merge(email: email)
       else
-        create_user email, pruned_attributes.merge(email: email)
+        create_user pruned_attributes.merge(email: email)
       end
     end
 
@@ -88,6 +88,7 @@ class Authentication
         end
 
         user.update! user:      attributes[:user],
+                     email:     attributes[:email],
                      name:      attributes[:name],
                      last_name: attributes[:last_name],
                      enable:    true
@@ -96,14 +97,14 @@ class Authentication
       user if user.organization_roles.where(organization_id: @current_organization.id).any?
     end
 
-    def create_user email, attributes
+    def create_user attributes
       roles = Role.where organization_id: @current_organization.id, name: attributes[:roles]
 
       if roles.any?
         User.create!(
           name: attributes[:name],
           last_name: attributes[:last_name],
-          email: email,
+          email: attributes[:email],
           user: attributes[:user],
           enable: true,
           organization_roles_attributes: roles.map do |r|

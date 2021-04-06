@@ -492,7 +492,7 @@ es:
       user: 'Usuario'
       password: 'Contraseña'
       remember_me: 'Recordarme'
-      try_again: 'Igresar nuevamente'
+      try_again: 'Ingresar nuevamente'
       forgot_password: '¿Olvidaste tu contraseña?'
     create:
       invalid: 'Tu correo y/o contraseña no están bien =('
