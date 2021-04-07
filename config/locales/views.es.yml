@@ -492,6 +492,7 @@ es:
       user: 'Usuario'
       password: 'Contraseña'
       remember_me: 'Recordarme'
+      try_again: 'Ingresar nuevamente'
       forgot_password: '¿Olvidaste tu contraseña?'
     create:
       invalid: 'Tu correo y/o contraseña no están bien =('
@@ -665,6 +666,9 @@ es:
           complete:
             one: '**Una** observación solucionada'
             other: '**%{count}** observaciones solucionadas'
+          repeated:
+            one: '**Una** observación reiterada'
+            other: '**%{count}** observaciones reiteradas'
 
   risk_assessments:
     edit:

@@ -79,7 +79,7 @@ module Findings::CurrentSituationCsv
             weakness.review.identification,
             weakness.business_unit_type.to_s,
             (I18n.l weakness.origination_date, format: '%Y' if weakness.origination_date),
-            weakness.review.conclusion_final_review.conclusion,
+            weakness.review.conclusion_final_review&.conclusion,
             current_weakness.risk_text,
             current_weakness.priority_text,
             current_weakness.title,
