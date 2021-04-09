@@ -572,18 +572,18 @@ module ConclusionReviews::GalPdf
     end
 
     def main_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_high_risk.sort_by_code
+      weaknesses.not_revoked.with_high_risk.sort_by_code
     end
 
     def other_weaknesses
-      weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_by_code
+      weaknesses.not_revoked.with_other_risk.sort_by_code
     end
 
     def other_not_assumed_risk_weaknesses
       risks      = [Finding.risks[:medium], Finding.risks[:low]]
       priorities = [Finding.priorities[:low]]
 
-      weaknesses.not_revoked.not_assumed_risk.where(risk: risks, priority: priorities).sort_by_code
+      weaknesses.not_revoked.where(risk: risks, priority: priorities).sort_by_code
     end
 
     def assumed_risk_weaknesses

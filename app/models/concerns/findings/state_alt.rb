@@ -39,7 +39,7 @@ module Findings::StateAlt
           implemented_audited: 2,
           notify:              4,
           incomplete:          5,
-          repeated:           6,
+          repeated:            6,
           revoked:             7
         }.with_indifferent_access.freeze
       end

@@ -71,7 +71,7 @@
         </strong>
       </p>
 
-      <% main_weaknesses = weaknesses.not_revoked.not_assumed_risk.with_high_risk.sort_by_code %>
+      <% main_weaknesses = weaknesses.not_revoked.with_high_risk.sort_by_code %>
 
       <% if main_weaknesses.any? %>
         <div class="ml-3 mb-3">
@@ -121,7 +121,7 @@
         </strong>
       </p>
 
-      <% other_weaknesses = weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_by_code %>
+      <% other_weaknesses = weaknesses.not_revoked.with_other_risk.sort_by_code %>
 
       <% if other_weaknesses.any? %>
         <ul class="mb-1">

@@ -6,7 +6,7 @@ module Findings::Approval
   end
 
   def must_be_approved?
-    return true if revoked? #|| criteria_mismatch?
+    return true if revoked?
 
     errors = [
       solution_date_error,
@@ -36,8 +36,6 @@ module Findings::Approval
     def follow_up_date_error
       if (implemented? || being_implemented?) && follow_up_date.blank?
         I18n.t "#{class_name}.errors.without_follow_up_date"
-      elsif follow_up_date.present?
-        I18n.t "#{class_name}.errors.with_follow_up_date"
       end
     end
 
