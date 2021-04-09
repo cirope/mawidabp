@@ -95,12 +95,13 @@ module LdapConfigs::LdapImport
 
     def trivial_data entry
       {
-        user:      casted_attribute(entry, username_attribute),
-        name:      casted_attribute(entry, name_attribute),
-        last_name: casted_attribute(entry, last_name_attribute),
-        email:     casted_attribute(entry, email_attribute),
-        hidden:    false,
-        enable:    true
+        user:                casted_attribute(entry, username_attribute),
+        name:                casted_attribute(entry, name_attribute),
+        last_name:           casted_attribute(entry, last_name_attribute),
+        email:               casted_attribute(entry, email_attribute),
+        organizational_unit: organizational_unit(entry),
+        hidden:              false,
+        enable:              true
       }.merge(
         if skip_function_and_manager?
           {}
@@ -112,6 +113,12 @@ module LdapConfigs::LdapImport
 
     def casted_attribute entry, attr_name
       attr_name && entry[attr_name].first&.force_encoding('UTF-8')&.to_s
+    end
+
+    def organizational_unit entry
+      casted_ou = casted_attribute(entry, 'dn')
+
+      casted_ou&.gsub /\Acn=[\w\s]+,/i, ''
     end
 
     def clean_roles roles

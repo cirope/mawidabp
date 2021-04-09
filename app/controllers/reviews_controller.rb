@@ -59,8 +59,13 @@ class ReviewsController < ApplicationController
     @review = Review.new
 
     @review.clone_from @review_clone if @review_clone
-    @review.period_id = params[:period] ?
-      params[:period].to_i : Period.list.first.try(:id)
+    @review.period_id = if params[:period]
+                          params[:period].to_i
+                        elsif Period.currents.list_all_with_plans.any?
+                          Period.currents.list_all_with_plans.first.id
+                        else
+                          Period.list_all_with_plans.first.try(:id)
+                        end
 
     respond_to do |format|
       format.html # new.html.erb

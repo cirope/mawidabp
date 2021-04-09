@@ -157,6 +157,8 @@ es:
       general_title: "ANÁLISIS DE COSTOS\nDE AUDÍTORIA INTERNA"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      period:
+        title: "Intervalo"
     cost_summary:
       pdf_name: "resumen_de_costos_%{from_date}_al_%{to_date}.pdf"
       title: "RESUMEN DE COSTOS\nDE AUDITORÍA INTERNA"

@@ -84,7 +84,7 @@ class BestPracticesController < ApplicationController
           :id, :name, :order, :obsolete, :_destroy,
           control_objectives_attributes: [
             :id, :name, :relevance, :risk, :obsolete, :score_type, :support,
-            :support_cache, :order, :_destroy,
+            :support_cache, :order, :remove_support, :_destroy,
             taggings_attributes: [:id, :tag_id, :_destroy],
             control_attributes:  [
               :id, :control, :effects, :design_tests, :compliance_tests, :sustantive_tests, :_destroy,

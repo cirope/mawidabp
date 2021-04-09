@@ -355,6 +355,9 @@ es:
       title: 'Plan de auditoría'
       pdf_name: 'plan_periodo_%{period}.pdf'
       resource_utilization: 'Recursos utilizados'
+    csv:
+      title: 'Plan de auditoría'
+      csv_name: 'plan_periodo_%{period}.csv'
     calendar:
       show:
         title: 'Cronograma'
@@ -384,6 +387,8 @@ es:
     download_detailed_plan: 'Descargar plan de auditoria detallado'
     download_business_unit_type_plan: 'Descargar plan %{business_unit_type}'
     download_detailed_business_unit_type_plan: 'Descargar plan %{business_unit_type} detallado'
+    download_detailed_business_unit_type_plan_csv: 'Descargar plan %{business_unit_type} en CSV'
+    download_business_unit_type_plan_csv: 'Descargar plan en CSV'
     without_business_unit_type: 'Sin unidad de negocio'
 
   profiles:
@@ -487,6 +492,7 @@ es:
       user: 'Usuario'
       password: 'Contraseña'
       remember_me: 'Recordarme'
+      try_again: 'Ingresar nuevamente'
       forgot_password: '¿Olvidaste tu contraseña?'
     create:
       invalid: 'Tu correo y/o contraseña no están bien =('
@@ -660,6 +666,9 @@ es:
           complete:
             one: '**Una** observación solucionada'
             other: '**%{count}** observaciones solucionadas'
+          repeated:
+            one: '**Una** observación reiterada'
+            other: '**%{count}** observaciones reiteradas'
 
   risk_assessments:
     edit:

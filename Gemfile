@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.0.3.4'
+gem 'rails', '~> 6.0.3.6'
 
 gem 'pg'
 gem 'activerecord-nulldb-adapter'
@@ -36,12 +36,15 @@ gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
 
+gem 'ruby-saml'
+
 gem 'sassc'
 gem 'sassc-rails'
 gem 'uglifier'
 
 gem 'unicorn'
 gem 'unicorn-rails'
+gem 'unicorn-worker-killer'
 
 group :development do
   gem 'web-console'
