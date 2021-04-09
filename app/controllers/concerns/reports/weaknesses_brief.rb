@@ -144,8 +144,8 @@ module Reports::WeaknessesBrief
     end
 
     def distance_in_days_to_cut_date weakness
-      if weakness.first_follow_up_date
-        distance = (@cut_date - weakness.first_follow_up_date).days / 1.day
+      if weakness.origination_date
+        distance = (@cut_date - weakness.origination_date).days / 1.day
 
         distance.to_i > 365 ? distance.to_i : nil
       end

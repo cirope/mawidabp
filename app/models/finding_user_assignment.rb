@@ -27,6 +27,7 @@ class FindingUserAssignment < ApplicationRecord
 
     record.errors.add attr, :taken if users.select { |u| u == value }.size > 1
   end
+  validate :process_owner_uniqueness, if: :validate_process_owner_uniqueness?
 
   # Relaciones
   belongs_to :finding, :inverse_of => :finding_user_assignments,
@@ -64,4 +65,20 @@ class FindingUserAssignment < ApplicationRecord
       ).deliver_later
     end
   end
+
+  private
+
+    def validate_process_owner_uniqueness?
+      finding && SHOW_WEAKNESS_EXTRA_ATTRIBUTES
+    end
+
+    def process_owner_uniqueness
+      process_owners = finding.finding_user_assignments.
+        reject(&:marked_for_destruction?).
+        select(&:process_owner)
+
+      if process_owners.size > 1 && process_owner
+        errors.add :process_owner, :taken
+      end
+    end
 end

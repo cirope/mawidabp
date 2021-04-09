@@ -7,6 +7,11 @@ Rails.application.routes.draw do
   post   'sessions', to: 'sessions#create',  as: 'sessions'
   delete 'logout',   to: 'sessions#destroy', as: 'logout'
 
+  # SAML
+  get 'saml/auth', to: 'saml_sessions#new', as: :new_saml_session
+  post 'saml/callback', to: 'saml_sessions#create', as: :saml_session
+  get 'saml/metadata', to: 'saml_sessions#metadata', as: :saml_metadata
+
   resources :settings, only: [:index, :show, :edit, :update]
 
   resources :benefits
@@ -85,6 +90,7 @@ Rails.application.routes.draw do
 
   [
     'weaknesses_by_state_execution',
+    'weaknesses_current_situation',
     'weaknesses_report',
     'detailed_management_report',
     'planned_cost_summary',
@@ -95,6 +101,8 @@ Rails.application.routes.draw do
 
   [
     'create_weaknesses_by_state_execution',
+    'create_weaknesses_current_situation',
+    'create_weaknesses_current_situation_permalink',
     'create_detailed_management_report',
     'create_planned_cost_summary',
     'create_weaknesses_report'
@@ -123,6 +131,7 @@ Rails.application.routes.draw do
 
   [
     'weaknesses_by_user',
+    'process_control_stats'
   ].each do |action|
     get "follow_up_audited/#{action}",
       as: "#{action}_follow_up_audited",
@@ -131,6 +140,7 @@ Rails.application.routes.draw do
 
   [
     'create_weaknesses_by_user',
+    'create_process_control_stats'
   ].each do |action|
     post "follow_up_audited/#{action}",
       as: "#{action}_follow_up_audited",
@@ -165,7 +175,8 @@ Rails.application.routes.draw do
     'weaknesses_graphs',
     'auto_complete_for_business_unit',
     'auto_complete_for_process_control',
-    'weaknesses_by_control_objective_process'
+    'weaknesses_by_control_objective_process',
+    'weaknesses_heatmap'
   ].each do |action|
     get "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",
@@ -199,7 +210,8 @@ Rails.application.routes.draw do
     'create_weaknesses_repeated',
     'create_weaknesses_by_control_objective',
     'create_fixed_weaknesses_report',
-    'create_weaknesses_by_control_objective_process'
+    'create_weaknesses_by_control_objective_process',
+    'create_weaknesses_heatmap'
   ].each do |action|
     post "conclusion_reports/#{action}",
       as: "#{action}_conclusion_reports",

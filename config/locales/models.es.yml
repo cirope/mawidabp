@@ -430,6 +430,7 @@ es:
         corporate: 'Corporativa'
         image_model: 'Imagen'
         co_brand_image_model: 'Imagen secundaria'
+        saml_provider: 'Proveedor SAML'
       organization/image_model:
         image_file_name: 'Isologotipo (nombre de archivo)'
         image_content_type: 'Isologotipo (tipo de archivo)'
@@ -535,7 +536,7 @@ es:
       poll:
         comments: 'Comentarios'
         send_date: 'Fecha envío'
-        answer_date: 'Fecha contestación'
+        answer_date: 'Fecha respuesta'
         answered: 'Contestada'
         questionnaire: 'Cuestionario'
         user: 'Usuario'
@@ -682,6 +683,7 @@ es:
               required: 'no puede estar en blanco'
             process_owner:
               invalid: 'solo puede ser asignado a usuarios de tipo auditado'
+              taken: 'solo puede haber uno'
         ldap_config:
           attributes:
             user:

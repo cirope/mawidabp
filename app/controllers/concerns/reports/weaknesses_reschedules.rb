@@ -32,11 +32,9 @@ module Reports::WeaknessesReschedules
         includes(review: [:conclusion_final_review, :plan_item]).
         preload(finding_user_assignments: :user)
 
-      if params[:weaknesses_reschedules] && params[:weaknesses_reschedules][:user_id].present?
-        user       = User.find params[:weaknesses_reschedules][:user_id]
-        inverted   = params[:weaknesses_reschedules][:user_inverted] == '1'
-        method     = inverted ? :excluding_user_id : :by_user_id
-        weaknesses = weaknesses.send method, user.id
+      if params[:weaknesses_reschedules]
+        weaknesses = filter_weaknesses_reschedules_by_review weaknesses
+        weaknesses = filter_weaknesses_reschedules_by_user weaknesses
       end
 
       @weaknesses = weaknesses.reorder weaknesses_reschedules_order
@@ -130,6 +128,28 @@ module Reports::WeaknessesReschedules
           "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
           "#{Weakness.quoted_table_name}.#{Weakness.qcn 'review_code'} ASC"
         ].map { |o| Arel.sql o }
+      end
+    end
+
+    def filter_weaknesses_reschedules_by_review weaknesses
+      %i(review project).each do |field|
+        if params[:weaknesses_reschedules][field].present?
+          weaknesses = weaknesses.send "by_#{field}", params[:weaknesses_reschedules][field]
+        end
+      end
+
+      weaknesses
+    end
+
+    def filter_weaknesses_reschedules_by_user weaknesses
+      if params[:weaknesses_reschedules][:user_id].present?
+        user     = User.find params[:weaknesses_reschedules][:user_id]
+        inverted = params[:weaknesses_reschedules][:user_inverted] == '1'
+        method   = inverted ? :excluding_user_id : :by_user_id
+
+        weaknesses.send method, user.id
+      else
+        weaknesses
       end
     end
 end
