@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_23_133434) do
+ActiveRecord::Schema.define(version: 2021_04_09_150136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1075,6 +1075,7 @@ ActiveRecord::Schema.define(version: 2021_03_23_133434) do
     t.datetime "updated_at", null: false
     t.datetime "hash_changed"
     t.boolean "hidden", default: false
+    t.string "organizational_unit"
     t.index ["change_password_hash"], name: "index_users_on_change_password_hash", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["group_admin"], name: "index_users_on_group_admin"

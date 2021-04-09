@@ -197,6 +197,7 @@ class UserTest < ActiveSupport::TestCase
     @user.email = "#{'abcde' * 21}@email.com"
     @user.password = 'aB1d_' * 26
     @user.function = 'abcde' * 52
+    @user.organizational_unit = 'abcde' * 52
     @user.salt = 'abcde' * 52
     @user.change_password_hash = 'abcde' * 52
 
@@ -207,6 +208,7 @@ class UserTest < ActiveSupport::TestCase
     assert_error @user, :email, :too_long, count: 100
     assert_error @user, :password, :too_long, count: 128
     assert_error @user, :function, :too_long, count: 255
+    assert_error @user, :organizational_unit, :too_long, count: 255
     assert_error @user, :salt, :too_long, count: 255
     assert_error @user, :change_password_hash, :too_long, count: 255
   end
