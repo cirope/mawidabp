@@ -7,6 +7,7 @@ module Findings::StateAlt
     STATUS_TRANSITIONS_WITH_FINAL_REVIEW = status_transitions final: true
     FINAL_STATUS                         = final_status
     PENDING_STATUS                       = pending_status
+    REPEATED_STATUS                      = repeated_status
     EXCLUDE_FROM_REPORTS_STATUS          = exclude_from_reports_status
     PENDING_FOR_REVIEW_STATUS            = pending_for_review_status
 
@@ -21,6 +22,10 @@ module Findings::StateAlt
   module ClassMethods
     def with_pending_status
       where state: visible_pending_status
+    end
+
+    def with_repeated_status
+      where state: REPEATED_STATUS
     end
 
     def with_pending_status_for_report
@@ -68,6 +73,10 @@ module Findings::StateAlt
           STATUS[:being_implemented], STATUS[:notify], STATUS[:unconfirmed],
           STATUS[:confirmed], STATUS[:unanswered], STATUS[:incomplete], STATUS[:implemented]
         ]
+      end
+
+      def repeated_status
+        STATUS[:repeated]
       end
 
       def define_state_scopes
