@@ -1380,16 +1380,17 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 2.days.ago.to_date, @finding.version_implemented_at
   end
 
-  # test 'version closed at' do
-  #   Current.user = users :supervisor
+  test 'version closed at' do
+    skip
+    Current.user = users :supervisor
 
-  #   Timecop.travel 2.days.ago do
-  #     @finding.update! state:         Finding::STATUS[:expired],
-  #                      solution_date: Time.zone.today
-  #   end
+    Timecop.travel 2.days.ago do
+      @finding.update! state:         Finding::STATUS[:expired],
+                       solution_date: Time.zone.today
+    end
 
-  #   assert_equal 2.days.ago.to_date, @finding.version_closed_at
-  # end
+    assert_equal 2.days.ago.to_date, @finding.version_closed_at
+  end
 
   test 'require commitment support' do
     skip unless %(true).include? FINDING_ANSWER_COMMITMENT_SUPPORT

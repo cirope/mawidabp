@@ -51,10 +51,7 @@ module Findings::Approval
       has_valid_state = implemented_audited? ||
         implemented?                         ||
         being_implemented?                   ||
-        unanswered?                          #||
-        #assumed_risk?                        ||
-        #criteria_mismatch?                   ||
-        #expired?
+        unanswered?
 
       unless has_valid_state
         I18n.t "#{class_name}.errors.not_valid_state"
