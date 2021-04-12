@@ -56,7 +56,7 @@ module ConclusionReviews::UplPdf
 
       add_upl_conclusion_final_review_page_footer pdf
 
-      pdf.add_subtitle I18n.t 'conclusion_final_review.downloads.review_objectives', PDF_FONT_SIZE
+      pdf.add_subtitle I18n.t 'conclusion_final_review.downloads.review_objectives'
       pdf.move_down PDF_FONT_SIZE
 
       pdf.text I18n.t 'conclusion_final_review.downloads.review_objectives_description'

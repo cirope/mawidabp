@@ -250,6 +250,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   test 'gal pdf conversion' do
+    skip
     organization = organizations :cirope
 
     assert_nothing_raised do
