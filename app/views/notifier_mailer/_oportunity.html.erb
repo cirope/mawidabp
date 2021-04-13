@@ -1,0 +1,57 @@
+<% organization = oportunity.organization %>
+<% oportunity_url = oportunity_url(
+  oportunity, host: ("#{organization.prefix}.#{URL_HOST}" if organization)) %>
+<p style="margin: .1em 0em;">
+  <b><%= Review.model_name.human %></b>:
+  <%= oportunity.review %>
+</p>
+<p style="margin: .1em 0em;">
+  <b><%= ControlObjective.model_name.human %></b>:
+  <%= oportunity.control_objective_item.control_objective_text %>
+</p>
+<p style="margin: .1em 0em;">
+  <b><%= oportunity.class.human_attribute_name 'review_code' %></b>:
+  <%= oportunity.review_code %>
+</p>
+<p style="margin: .1em 0em;">
+  <b><%= oportunity.class.human_attribute_name 'title' %></b>:
+  <%= oportunity.title %>
+</p>
+<div style="margin: .1em 0em;">
+  <b><%= oportunity.class.human_attribute_name 'description' %></b>:
+  <%= markdown oportunity.description %>
+</div>
+<p style="margin: .1em 0em;">
+  <b><%= oportunity.class.human_attribute_name 'state' %></b>:
+  <%= oportunity.state_text %>
+</p>
+<% unless oportunity.follow_up_date.blank? %>
+  <p style="margin: .1em 0em;">
+    <b><%= oportunity.class.human_attribute_name 'follow_up_date' %></b>:
+    <%= l oportunity.follow_up_date, format: :long %>
+  </p>
+<% end %>
+<% unless oportunity.solution_date.blank? %>
+  <p style="margin: .1em 0em;">
+    <b><%= oportunity.class.human_attribute_name 'solution_date' %></b>:
+    <%= l oportunity.solution_date, format: :long %>
+  </p>
+<% end %>
+
+<% audited, auditors = *oportunity.users.partition(&:can_act_as_audited?) %>
+
+<p style="margin: .1em 0em;">
+  <b><%= t 'finding.audited', count: audited.size %></b>:
+</p>
+
+<%= markdown_without_paragraph finding_audited_names(oportunity).map { |name| "* #{name}" }.join("\n") %>
+
+<p style="margin: .1em 0em;">
+  <b><%= t('finding.reviewers', count: auditors.size) %></b>:
+</p>
+
+<%= markdown_without_paragraph auditors.map { |u| "* #{u.full_name}" }.join("\n") %>
+
+<p style="margin: .1em 0em;">
+  <%= link_to t('notifier.notify_new_oportunity.oportunity_link'), oportunity_url %>
+</p>

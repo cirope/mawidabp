@@ -85,6 +85,19 @@ class NotifierMailerTest < ActionMailer::TestCase
     assert_equal user.email, response.to.first
   end
 
+  test 'notify new oportunity' do
+    user     = users :supervisor
+    response = NotifierMailer.notify_new_oportunity([user], user.oportunities.first).deliver_now
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.notify_new_oportunity.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier.notify_new_oportunity.title')),
+      response.body.decoded
+    assert_equal user.email, response.to.first
+  end
+
   test 'findings brief' do
     user = users :administrator
     response = NotifierMailer.findings_brief(user, user.findings).deliver_now
