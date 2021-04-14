@@ -250,7 +250,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   test 'gal pdf conversion' do
-    skip
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
+
     organization = organizations :cirope
 
     assert_nothing_raised do

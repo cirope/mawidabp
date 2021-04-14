@@ -289,7 +289,7 @@ module FindingsHelper
       statuses = finding_state_list_for finding
       excluded = []
 
-      excluded << :repeated unless finding.repeated? || finding.was_repeated?
+      excluded << :repeated unless  finding.repeated?  || finding.was_repeated?
       excluded << :confirmed unless finding.confirmed? || finding.was_confirmed?
 
       options = statuses.except(*excluded).map do |k, v|

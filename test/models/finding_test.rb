@@ -279,10 +279,25 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates expired can be back at implemented if comment' do
-    skip
+    skip if HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK
 
     finding                = findings :being_implemented_weakness_on_final
-    finding.state          = Finding::STATUS[:being_implemented]
+    finding.state          = Finding::STATUS[:expired]
+    finding.follow_up_date = nil
+    finding.solution_date  = Time.zone.today
+
+    Finding.current_user   = users :supervisor
+
+    cfr = finding.review.conclusion_final_review
+
+    def cfr.can_be_destroyed?; true; end
+
+    cfr.destroy!
+
+    finding.save!
+    finding.reload
+
+    finding.state          = Finding::STATUS[:implemented]
     finding.follow_up_date = Time.zone.today
     finding.solution_date  = nil
 
@@ -578,7 +593,7 @@ class FindingTest < ActiveSupport::TestCase
 
     assert_difference '@finding.status_change_history.size' do
       @finding.update!(
-        state:         Finding::STATUS[:implemented],
+        state:          Finding::STATUS[:implemented],
         follow_up_date: Time.zone.today
       )
     end
@@ -1381,12 +1396,13 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'version closed at' do
-    skip
     Current.user = users :supervisor
 
     Timecop.travel 2.days.ago do
-      @finding.update! state:         Finding::STATUS[:expired],
-                       solution_date: Time.zone.today
+      @finding.update! state:           Finding::STATUS[:implemented_audited],
+                       solution_date:   Time.zone.today,
+                       follow_up_date:  Time.zone.today,
+                       skip_work_paper: true
     end
 
     assert_equal 2.days.ago.to_date, @finding.version_closed_at

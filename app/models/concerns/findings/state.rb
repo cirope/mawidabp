@@ -36,9 +36,9 @@ module Findings::State
 
       def status
         {
-          confirmed:          -3,
-          unconfirmed:        -2,
-          unanswered:         -1,
+          confirmed:           -3,
+          unconfirmed:         -2,
+          unanswered:          -1,
           being_implemented:   0,
           implemented:         1,
           implemented_audited: 2,
