@@ -13,10 +13,10 @@ module Oportunities::Defaults
     end
 
     def send_mail_to_supervisor
-      supervisors = self.finding_user_assignments.map(&:user).select {|u| u.manager? || u.supervisor?}
+      supervisors = users.select { |u| u.manager? || u.supervisor? }
 
       if supervisors.any?
-        NotifierMailer.notify_new_oportunity(supervisors, self).deliver_now
+        NotifierMailer.notify_new_oportunity(supervisors, self).deliver_later
       end
     end
 end

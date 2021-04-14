@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class OportunityTest < ActiveSupport::TestCase
+  include ActionMailer::TestHelper
+
   setup do
     @oportunity = findings :confirmed_oportunity
 
@@ -8,29 +10,31 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'create' do
-    assert_difference 'Oportunity.count' do
-      @oportunity = Oportunity.list.create!(
-        control_objective_item: control_objective_items(:impact_analysis_item_editable),
-        review_code: 'OM20',
-        title: 'Title',
-        description: 'New description',
-        answer: 'New answer',
-        audit_comments: 'New audit comments',
-        state: Finding::STATUS[:being_implemented],
-        finding_user_assignments_attributes: {
-          new_1: {
-            user_id: users(:audited).id, process_owner: true
-          },
-          new_2: {
-            user_id: users(:auditor).id, process_owner: false
-          },
-          new_3: {
-            user_id: users(:supervisor).id, process_owner: false
+    assert_enqueued_emails 1 do
+      assert_difference 'Oportunity.count' do
+        @oportunity = Oportunity.list.create!(
+          control_objective_item: control_objective_items(:impact_analysis_item_editable),
+          review_code: 'OM20',
+          title: 'Title',
+          description: 'New description',
+          answer: 'New answer',
+          audit_comments: 'New audit comments',
+          state: Finding::STATUS[:being_implemented],
+          finding_user_assignments_attributes: {
+            new_1: {
+              user_id: users(:audited).id, process_owner: true
+            },
+            new_2: {
+              user_id: users(:auditor).id, process_owner: false
+            },
+            new_3: {
+              user_id: users(:supervisor).id, process_owner: false
+            }
           }
-        }
-      )
+        )
 
-      assert_equal 'OM20', @oportunity.review_code
+        assert_equal 'OM20', @oportunity.review_code
+      end
     end
   end
 

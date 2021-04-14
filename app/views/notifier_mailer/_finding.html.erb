@@ -1,6 +1,12 @@
 <% organization = finding.review.period.organization %>
-<% finding_url = finding_url(finding.pending? ? 'incomplete' : 'complete',
-  finding, host: ("#{organization.prefix}.#{URL_HOST}" if organization)) %>
+<% if finding.type == Oportunity.name %>
+  <% oportunity_url = oportunity_url(
+    finding, host: ("#{organization.prefix}.#{URL_HOST}" if organization)) %>
+<% else %>
+  <% finding_url = finding_url(finding.pending? ? 'incomplete' : 'complete',
+      finding, host: ("#{organization.prefix}.#{URL_HOST}" if organization)) %>
+<% end %>
+
 <p style="margin: .1em 0em;">
   <b><%= Review.model_name.human %></b>:
   <%= finding.review %>
@@ -53,5 +59,9 @@
 <%= markdown_without_paragraph auditors.map { |u| "* #{u.full_name}" }.join("\n") %>
 
 <p style="margin: .1em 0em;">
+<% if finding.type == Oportunity.name %>
+  <%= link_to t('notifier.notify_new_oportunity.oportunity_link'), oportunity_url %>
+<% else %>
   <%= link_to t('notifier.notify_new_finding_answer.finding_link'), finding_url %>
+<% end %>
 </p>

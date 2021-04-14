@@ -5,7 +5,7 @@
     <%= t('notifier.notify_new_oportunity.title') %>
   </h3>
 
-  <%= render partial: 'oportunity', locals: {oportunity: @oportunity} %>
+  <%= render partial: 'finding', locals: {finding: @oportunity} %>
 
   <% if @notification.present? %>
     <p>
