@@ -2,6 +2,7 @@ class LdapConfig < ApplicationRecord
   include Auditable
   include Trimmer
   include LdapConfigs::Defaults
+  include LdapConfigs::ExtraUsersInfo
   include LdapConfigs::Ldap
   include LdapConfigs::LdapImport
   include LdapConfigs::LdapService

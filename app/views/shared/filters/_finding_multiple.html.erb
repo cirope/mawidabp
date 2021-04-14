@@ -1,7 +1,8 @@
+<% execution = execution %>
 <div id="finding_filter" <%== 'style="display: none;"' unless display %>>
   <div class="row">
     <%= render 'shared/filters/finding_statuses',
-      action: action, f: f, display: display, group: true %>
+      action: action, f: f, display: display, execution: execution, group: true %>
 
     <div class="col-md-6">
       <div class="form-group row">

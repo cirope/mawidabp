@@ -120,7 +120,7 @@ module Reports::WeaknessesCurrentSituation
 
     def current_situation_weaknesses final
       weaknesses = current_situation_weaknesses_scope.
-        with_repeated_status_for_report.
+        with_repeated_status_for_report(execution: @controller == 'execution').
         finals(final).
         includes(:business_unit, :business_unit_type, :latest,
           achievements: [:benefit],
