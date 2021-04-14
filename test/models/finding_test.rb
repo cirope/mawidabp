@@ -286,7 +286,7 @@ class FindingTest < ActiveSupport::TestCase
     finding.follow_up_date = nil
     finding.solution_date  = Time.zone.today
 
-    Finding.current_user   = users :supervisor
+    Current.user   = users :supervisor
 
     cfr = finding.review.conclusion_final_review
 
