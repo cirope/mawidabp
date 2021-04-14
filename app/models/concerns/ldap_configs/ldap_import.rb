@@ -26,6 +26,8 @@ module LdapConfigs::LdapImport
       assign_managers managers, users_by_dn unless skip_function_and_manager?
 
       users = check_state_for_late_changes(users)
+
+      import_extra_users_info
     end
 
     users
