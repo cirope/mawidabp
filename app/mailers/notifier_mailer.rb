@@ -339,8 +339,8 @@ class NotifierMailer < ActionMailer::Base
   end
 
   def notify_new_oportunity(users, oportunity)
-    @oportunity   = oportunity
-    prefix        = "[#{@oportunity.organization.prefix}]"
+    @oportunity = oportunity
+    prefix      = "[#{@oportunity.organization.prefix}]"
 
     mail to: users.map(&:email),
          subject: prefix.upcase + t('notifier.notify_new_oportunity.title')
