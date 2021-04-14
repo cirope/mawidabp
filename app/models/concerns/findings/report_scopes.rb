@@ -13,11 +13,6 @@ module Findings::ReportScopes
 
       where state: Finding::STATUS.except(*exclude).values
     }
-    scope :with_repeated_status_for_report, -> {
-      exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS - [:repeated]
-
-      where state: Finding::STATUS.except(*exclude).values
-    }
   end
 
   module ClassMethods
@@ -66,6 +61,18 @@ module Findings::ReportScopes
       ).where(
         "#{BusinessUnitType.table_name}.external" => external
       ).references(:business_unit_types)
+    end
+
+    def with_repeated_status_for_report(execution: false)
+      except = if execution
+                 [:incomplete, :notify, :unconfirmed, :confirmed, :repeated]
+               else
+                 [:repeated]
+               end
+
+      exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS - except
+
+      where state: Finding::STATUS.except(*exclude).values
     end
 
     def for_user user_id
