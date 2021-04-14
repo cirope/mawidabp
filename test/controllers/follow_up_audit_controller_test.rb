@@ -736,7 +736,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_difference 'Permalink.count' do
       post :create_weaknesses_current_situation_permalink, :params => {
-        :weaknesses_current_situation_permalink => {
+        :weaknesses_current_situation => {
           :from_date => 10.years.ago.to_date,
           :to_date => 10.years.from_now.to_date
         },

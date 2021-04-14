@@ -5,7 +5,18 @@ default: &default
   port: 5432
   pool: 5
   username: <%= ENV['TRAVIS'] ? 'postgres' : ENV['DB_USER'] || 'mawidabp' %>
-  password: <%= ENV['TRAVIS'] ? '' : ENV['DB_PASSWORD'] || 'mawidabp' %>
+  password: <%= if ENV['TRAVIS']
+                  ''
+                elsif ENV['ENCRYPTED_DB_PASSWORD']
+                  ActiveSupport::MessageEncryptor.new(
+                    Rails.application.secrets.secret_key_base[0..31],
+                    # TODO: change on Rails 5.2 migration since it's the new default
+                    cipher: 'aes-256-gcm'
+                  ).decrypt_and_verify(ENV['ENCRYPTED_DB_PASSWORD'])
+                else
+                  ENV['DB_PASSWORD'] || 'mawidabp'
+                end
+              %>
 
 development:
   <<: *default

@@ -67,7 +67,13 @@ module Reports::WeaknessesCurrentSituation
     init_weaknesses_current_situation_vars
 
     if @weaknesses.any?
-      @permalink = Permalink.list.new action: 'follow_up_audit/weaknesses_current_situation'
+      action = if @controller == 'follow_up'
+                 'follow_up_audit/weaknesses_current_situation'
+               else
+                 'execution_reports/weaknesses_current_situation'
+               end
+
+      @permalink = Permalink.list.new action: action
 
       @weaknesses.each do |weakness|
         @permalink.permalink_models.build model: weakness
@@ -80,12 +86,12 @@ module Reports::WeaknessesCurrentSituation
   private
 
     def init_weaknesses_current_situation_vars
-      @controller = params[:controller_name] || (controller_name.start_with?('follow_up') ? 'follow_up' : 'conclusion')
+      @permalink = Permalink.list.find_by token: params[:permalink_token]
+      @controller = weaknesses_current_situation_controller
       @title = t("#{@controller}_committee_report.weaknesses_current_situation_title")
       @from_date, @to_date = *make_date_range(params[:weaknesses_current_situation])
       @cut_date = extract_cut_date params[:weaknesses_current_situation]
       @filters = []
-      @permalink = Permalink.list.find_by token: params[:permalink_token]
       final = params[:final] == 'true'
       order = [
         "#{Weakness.quoted_table_name}.#{Weakness.qcn 'risk'} DESC",
@@ -102,8 +108,7 @@ module Reports::WeaknessesCurrentSituation
     end
 
     def current_situation_weaknesses_from_permalink final
-      Weakness.
-        list_for_report.
+      current_situation_weaknesses_scope.
         finals(final).
         where(id: @permalink.permalink_models.pluck('model_id')).
         includes(:business_unit, :business_unit_type, :latest,
@@ -114,11 +119,9 @@ module Reports::WeaknessesCurrentSituation
     end
 
     def current_situation_weaknesses final
-      weaknesses = Weakness.
-        with_repeated_status_for_report.
+      weaknesses = current_situation_weaknesses_scope.
+        with_repeated_status_for_report(execution: @controller == 'execution').
         finals(final).
-        list_for_report.
-        by_issue_date('BETWEEN', @from_date, @to_date).
         includes(:business_unit, :business_unit_type, :latest,
           achievements: [:benefit],
           review: [:plan_item, :conclusion_final_review],
@@ -143,6 +146,22 @@ module Reports::WeaknessesCurrentSituation
       end
 
       weaknesses
+    end
+
+    def current_situation_weaknesses_scope
+      scoped = if @controller == 'follow_up'
+        Weakness.list_for_report
+      elsif @controller == 'execution'
+        Weakness.list_without_final_review
+      end
+
+      if @permalink
+        scoped
+      elsif @controller == 'follow_up'
+        scoped.by_issue_date 'BETWEEN', @from_date, @to_date
+      elsif @controller == 'execution'
+        scoped.by_origination_date 'BETWEEN', @from_date, @to_date
+      end
     end
 
     def render_current_situation_report_csv
@@ -170,12 +189,12 @@ module Reports::WeaknessesCurrentSituation
           weakness.business_unit_type
         ],
         [
-          I18n.t('follow_up_committee_report.weaknesses_current_situation.origination_year'),
+          I18n.t("#{@controller}_committee_report.weaknesses_current_situation.origination_year"),
           (l(weakness.origination_date, format: '%Y') if weakness.origination_date)
         ],
         [
           ConclusionFinalReview.human_attribute_name('conclusion'),
-          weakness.review.conclusion_final_review.conclusion
+          weakness.review.conclusion_final_review&.conclusion
         ],
         [
           Weakness.human_attribute_name('risk'),
@@ -373,7 +392,7 @@ module Reports::WeaknessesCurrentSituation
       ).uniq.map(&:strip).reject(&:blank?)
 
       if tags.any?
-        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_current_situation.control_objective_tags'}</b> = \"#{tags.to_sentence}\""
+        @filters << "<b>#{t "#{@controller}_committee_report.weaknesses_current_situation.control_objective_tags"}</b> = \"#{tags.to_sentence}\""
 
         weaknesses.by_control_objective_tags tags
       else
@@ -387,7 +406,7 @@ module Reports::WeaknessesCurrentSituation
       ).uniq.map(&:strip).reject(&:blank?)
 
       if tags.any?
-        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_current_situation.weakness_tags'}</b> = \"#{tags.to_sentence}\""
+        @filters << "<b>#{t "#{@controller}_committee_report.weaknesses_current_situation.weakness_tags"}</b> = \"#{tags.to_sentence}\""
 
         weaknesses.by_wilcard_tags tags
       else
@@ -401,7 +420,7 @@ module Reports::WeaknessesCurrentSituation
       ).uniq.map(&:strip).reject(&:blank?)
 
       if tags.any?
-        @filters << "<b>#{t 'follow_up_committee_report.weaknesses_current_situation.review_tags'}</b> = \"#{tags.to_sentence}\""
+        @filters << "<b>#{t "#{@controller}_committee_report.weaknesses_current_situation.review_tags"}</b> = \"#{tags.to_sentence}\""
 
         weaknesses.by_review_tags tags
       else
@@ -447,6 +466,16 @@ module Reports::WeaknessesCurrentSituation
         weaknesses.where(reviews: { scope: scopes })
       else
         weaknesses
+      end
+    end
+
+    def weaknesses_current_situation_controller
+      if @permalink && @permalink.action.start_with?('execution_reports')
+        'execution'
+      elsif (params[:controller_name] || controller_name).start_with?('follow_up')
+        'follow_up'
+      else
+        'execution'
       end
     end
 end

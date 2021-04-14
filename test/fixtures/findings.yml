@@ -67,7 +67,6 @@ unanswered_for_level_<%= level %>_notification:
   current_situation_verified: false
   audit_comments: Audit comments <%= level %>w
   state: <%= Finding::STATUS[:unanswered] %>
-  origination_date:
   solution_date:
   audit_recommendations: Proposed action 3w
   effect: Effect <%= level %>w
@@ -97,7 +96,6 @@ incomplete_weakness:
   current_situation_verified: false
   audit_comments: Audit comments incomplete_w
   state: <%= Finding::STATUS[:incomplete] %>
-  origination_date:
   solution_date:
   audit_recommendations: Proposed action 3w
   effect: Effect incomplete_w

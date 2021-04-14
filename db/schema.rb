@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_30_215908) do
+ActiveRecord::Schema.define(version: 2021_04_09_150136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -687,6 +687,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_215908) do
     t.datetime "updated_at", null: false
     t.boolean "corporate", default: false, null: false
     t.string "logo_style", default: "default", null: false
+    t.string "saml_provider"
     t.index ["corporate"], name: "index_organizations_on_corporate"
     t.index ["group_id"], name: "index_organizations_on_group_id"
     t.index ["image_model_id"], name: "index_organizations_on_image_model_id"
@@ -1074,6 +1075,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_215908) do
     t.datetime "updated_at", null: false
     t.datetime "hash_changed"
     t.boolean "hidden", default: false
+    t.string "organizational_unit"
     t.index ["change_password_hash"], name: "index_users_on_change_password_hash", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["group_admin"], name: "index_users_on_group_admin"

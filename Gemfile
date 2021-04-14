@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.0.3.4'
+gem 'rails', '~> 6.0.3.6'
 
 gem 'rake', '13.0.1'
 gem 'pg'
@@ -36,6 +36,8 @@ gem 'rails-controller-testing' # TODO: remove after decouple test from assigns
 gem 'autoprefixer-rails', '< 10' # TODO: remove when all customers have node > 8
 
 gem 'nakayoshi_fork' # TODO: remove when MRI GC gets fixed, see https://github.com/ko1/nakayoshi_fork
+
+gem 'ruby-saml'
 
 gem 'sassc'
 gem 'sassc-rails'
