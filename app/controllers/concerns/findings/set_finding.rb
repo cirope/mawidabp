@@ -31,12 +31,20 @@ module Findings::SetFinding
         conditions[User.table_name] = { id: user_ids }
       end
 
-      conditions[:state] = Finding::STATUS.values - [
-        Finding::STATUS[:incomplete],
-        Finding::STATUS[:revoked]
-      ]
+      conditions[:state] = Finding::STATUS.values - excluded_state
 
       conditions
+    end
+
+    def excluded_state
+      if @auth_user.supervisor? || @auth_user.manager?
+        []
+      else
+        [
+          Finding::STATUS[:incomplete],
+          Finding::STATUS[:revoked]
+        ]
+      end
     end
 
     def scope_current_user_findings?
