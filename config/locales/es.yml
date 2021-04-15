@@ -1118,6 +1118,9 @@
     notify_new_finding:
       title: "Tiene un nuevo hallazgo"
       created_title: "Nuevo hallazgo"
+    notify_new_oportunity:
+      title: "Tiene una nueva oportunidad de mejora"
+      oportunity_link: "Ver oportunidad de mejora"
     notify_new_finding_answer:
       title: "Nuevo comentario en el informe %{review}"
       finding_data: "Se ha agregado un comentario al hallazgo **%{finding_code}** del informe **%{review}**"
