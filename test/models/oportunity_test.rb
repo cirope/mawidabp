@@ -32,8 +32,6 @@ class OportunityTest < ActiveSupport::TestCase
             }
           }
         )
-
-
       end
     end
 
