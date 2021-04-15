@@ -286,7 +286,7 @@ class FindingTest < ActiveSupport::TestCase
     finding.follow_up_date = nil
     finding.solution_date  = Time.zone.today
 
-    Current.user   = users :supervisor
+    Current.user = users :supervisor
 
     cfr = finding.review.conclusion_final_review
 
@@ -1410,6 +1410,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'require commitment support' do
     skip unless %(true).include? FINDING_ANSWER_COMMITMENT_SUPPORT
+
     finding = findings :being_implemented_weakness
 
     assert finding.require_commitment_support?(finding.follow_up_date + 1.day)

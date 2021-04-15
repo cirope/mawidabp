@@ -366,7 +366,7 @@ class ReviewTest < ActiveSupport::TestCase
     Current.user = users :supervisor
 
     finding = Weakness.new finding.attributes.merge(
-      'state'            => Finding::STATUS[:implemented_audited],
+       'state'           => Finding::STATUS[:implemented_audited],
        'follow_up_date'  => Time.zone.today,
        'skip_work_paper' => true
     )
@@ -421,7 +421,6 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert finding.save(:validate => false) # Forzado para que no se validen los datos
     # La debilidad tiene una fecha de solución
-
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
 
