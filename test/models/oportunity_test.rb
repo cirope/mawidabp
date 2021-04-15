@@ -33,9 +33,11 @@ class OportunityTest < ActiveSupport::TestCase
           }
         )
 
-        assert_equal 'OM20', @oportunity.review_code
+
       end
     end
+
+    assert_equal 'OM20', @oportunity.review_code
   end
 
   test 'control objective from final review can not be used to create new oportunity' do

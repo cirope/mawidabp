@@ -31,12 +31,12 @@ module Findings::SetFinding
         conditions[User.table_name] = { id: user_ids }
       end
 
-      conditions[:state] = Finding::STATUS.values - excluded_state
+      conditions[:state] = Finding::STATUS.values - excluded_states
 
       conditions
     end
 
-    def excluded_state
+    def excluded_states
       if @auth_user.supervisor? || @auth_user.manager?
         []
       else
