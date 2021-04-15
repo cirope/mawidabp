@@ -89,7 +89,7 @@ class NotifierMailerTest < ActionMailer::TestCase
     user     = users :supervisor
     response = NotifierMailer.notify_new_oportunity([user], user.oportunities.first).deliver_now
 
-    assert !ActionMailer::Base.deliveries.empty?
+    refute ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
       I18n.t('notifier.notify_new_oportunity.title')
     )
