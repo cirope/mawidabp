@@ -36,6 +36,8 @@ module Findings::State
 
       def status
         {
+          failure:             -5,
+          awaiting:            -4,
           confirmed:           -3,
           unconfirmed:         -2,
           unanswered:          -1,
@@ -57,6 +59,7 @@ module Findings::State
           confirmed:           confirmed_transitions(final),
           unconfirmed:         unconfirmed_transitions(final),
           unanswered:          unanswered_transitions(final),
+          awaiting:            awaiting_transitions(final),
           being_implemented:   being_implemented_transitions(final),
           implemented:         implemented_transitions(final),
           implemented_audited: implemented_audited_transitions(final),
@@ -66,7 +69,8 @@ module Findings::State
           repeated:            repeated_transitions(final),
           revoked:             revoked_transitions(final),
           criteria_mismatch:   criteria_mismatch_transitions(final),
-          expired:             expired_transitions(final)
+          expired:             expired_transitions(final),
+          failure:             failure_transitions(final)
         }.with_indifferent_access.freeze
       end
 
@@ -82,7 +86,8 @@ module Findings::State
           STATUS[:confirmed], STATUS[:unanswered], STATUS[:incomplete]
         ] |
         (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING && !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [STATUS[:assumed_risk]] : []) |
-        (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [STATUS[:implemented]])
+        (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [STATUS[:implemented]]) |
+        (SHOW_WEAKNESS_PROGRESS ? [STATUS[:awaiting]] : [])
       end
 
       def repeated_status
@@ -138,9 +143,16 @@ module Findings::State
           (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
       end
 
+      def awaiting_transitions final
+        [:awaiting, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :expired, :repeated] |
+          (final ? [] : [:revoked]) |
+          (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
+      end
+
       def being_implemented_transitions final
         [:being_implemented, :implemented_audited, :expired, :repeated] |
           (final ? [] : [:revoked]) |
+          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
           (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
       end
@@ -148,6 +160,7 @@ module Findings::State
       def implemented_transitions final
         [:being_implemented, :implemented_audited, :expired, :repeated] |
           (final ? [] : [:revoked]) |
+          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
           (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
       end
@@ -179,6 +192,8 @@ module Findings::State
       def incomplete_transitions final
         [:incomplete, :notify, :being_implemented, :implemented_audited, :expired] |
           (final ? [] : [:revoked]) |
+          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
+          (SHOW_WEAKNESS_PROGRESS ? [:failure] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
           (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
       end
@@ -205,6 +220,10 @@ module Findings::State
                 (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented])
             end
           )
+      end
+
+      def failure_transitions final
+        [:failure]
       end
 
       def visible_pending_status
