@@ -697,8 +697,8 @@
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
         other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
     user_assignment:
-      audit_team: "Auditoría"
-      others: "Usuarios"
+      audit_team: "Integrantes UPLA"
+      others: "Destinatarios"
 
   finding_relation:
     types:
@@ -1353,7 +1353,7 @@
       type_manager: "Gerente"
       type_responsible: "Responsable máximo de auditoría interna"
       type_audited: "Auditado"
-      audit_team: "Integrantes UPLA"
+      audit_team: "Responsables"
       others: "Usuarios"
       readonly: "Los integrantes no pueden ser modificados, ya se emitió el informe definitivo"
     score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN DETALLADA"
@@ -1679,7 +1679,7 @@
         finding_id: 'Hallazgo'
         user_id: 'Usuario'
         user: 'Usuario'
-        process_owner: 'Responsable'
+        process_owner: 'Responsables'
         responsible_auditor: 'Resp. regional UPLA'
       group:
         name: "Nombre"
