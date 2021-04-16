@@ -236,6 +236,14 @@ class WeaknessTest < ActiveSupport::TestCase
     end
   end
 
+  test 'progress is not updated when state change to awaiting' do
+    skip unless SHOW_WEAKNESS_PROGRESS
+
+    @weakness.update! state: Finding::STATUS[:awaiting]
+
+    assert_equal @weakness.state, Finding::STATUS[:awaiting]
+  end
+
   test 'work paper codes are updated when control objective is changed' do
     Current.user = users :supervisor
     weakness     = findings :unanswered_for_level_1_notification

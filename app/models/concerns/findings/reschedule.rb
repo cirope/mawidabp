@@ -36,7 +36,7 @@ module Findings::Reschedule
     def calculate_reschedule_count?
       recalculate_attributes_changed? &&
         repeated_or_on_final_review?  &&
-        being_implemented?
+        (awaiting? && being_implemented?)
     end
 
     def recalculate_attributes_changed?
@@ -58,6 +58,9 @@ module Findings::Reschedule
     def last_being_implemented_follow_up_date
       if implemented? || implemented_audited?
         last_being_implemented = versions.reverse.detect do |v|
+          prev = v.reify dup: true
+
+          prev&.being_implemented? || prev.awaiting?
           v.reify(dup: true)&.being_implemented?
         end&.reify dup: true
 
@@ -72,7 +75,7 @@ module Findings::Reschedule
 
       versions_after_final_review.reverse.each do |v|
         prev = v.reify dup: true
-        date = prev.follow_up_date if prev&.being_implemented?
+        date = prev.follow_up_date if prev&.being_implemented? || prev&.awaiting?
 
         follow_up_dates << date if date.present?
       end

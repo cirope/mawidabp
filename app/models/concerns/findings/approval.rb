@@ -16,7 +16,7 @@ module Findings::Approval
       audited_error,
       auditor_error,
       effect_error,
-      audit_comments_error,
+      (audit_comments_error unless SHOW_WEAKNESS_PROGRESS),
       task_error
     ].compact
 
@@ -84,10 +84,8 @@ module Findings::Approval
     end
 
     def audit_comments_error
-      unless SHOW_WEAKNESS_PROGRESS
-        if audit_comments.blank? && !revoked? && Current.conclusion_pdf_format != 'gal'
-          I18n.t "#{class_name}.errors.without_audit_comments"
-        end
+      if audit_comments.blank? && !revoked? && Current.conclusion_pdf_format != 'gal'
+        I18n.t "#{class_name}.errors.without_audit_comments"
       end
     end
 

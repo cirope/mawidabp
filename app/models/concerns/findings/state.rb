@@ -38,7 +38,7 @@ module Findings::State
         {
           failure:             -5,
           awaiting:            -4,
-          confirmed:           -3,
+          confirmed:           -2,
           unconfirmed:         -2,
           unanswered:          -1,
           being_implemented:   0,
@@ -87,7 +87,7 @@ module Findings::State
         ] |
         (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING && !HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [STATUS[:assumed_risk]] : []) |
         (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [STATUS[:implemented]]) |
-        (SHOW_WEAKNESS_PROGRESS ? [STATUS[:awaiting]] : [])
+        (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : [])
       end
 
       def repeated_status
@@ -113,11 +113,13 @@ module Findings::State
 
       def exclude_from_reports_status
         [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked] |
-          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [:implemented, :assumed_risk] : [])
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [:implemented, :assumed_risk] : []) |
+          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : [])
       end
 
       def pending_for_review_status
         [
+          STATUS[:awaiting],
           STATUS[:being_implemented],
           STATUS[:unanswered],
         ] |
@@ -129,7 +131,8 @@ module Findings::State
         [:confirmed, :unanswered, :being_implemented, :implemented_audited, :expired] |
           (final ? [] : [:revoked]) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
-          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
+          (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk]) |
+          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : [])
       end
 
       def unconfirmed_transitions final
@@ -139,12 +142,13 @@ module Findings::State
       def unanswered_transitions final
         [:unanswered, :being_implemented, :implemented_audited, :expired, :repeated] |
           (final ? [] : [:revoked]) |
+          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
           (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
       end
 
       def awaiting_transitions final
-        [:awaiting, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :expired, :repeated] |
+        [:awaiting, :being_implemented, :implemented, :implemented_audited, :assumed_risk, :expired, :repeated, :unanswered] |
           (final ? [] : [:revoked]) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch])
       end
@@ -172,19 +176,22 @@ module Findings::State
               []
             else
               [:being_implemented, :revoked] |
-                (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented])
+                (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented]) |
+                (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : [])
             end
+
           )
       end
 
       def assumed_risk_transitions final
         [:assumed_risk] |
-          (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING ? [:being_implemented] : [])
+          (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING ? [:awaiting, :being_implemented] : [])
       end
 
       def notify_transitions final
         [:notify, :incomplete, :confirmed, :being_implemented, :implemented_audited, :expired] |
           (final ? [] : [:revoked]) |
+          (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [:criteria_mismatch]) |
           (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented, :assumed_risk])
       end
@@ -217,7 +224,9 @@ module Findings::State
               []
             else
               [:being_implemented] |
-                (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented])
+                (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
+                (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented]) |
+                (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : [])
             end
           )
       end
