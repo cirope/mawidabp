@@ -225,14 +225,13 @@ module Findings::State
             else
               [:being_implemented] |
                 (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : []) |
-                (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented]) |
-                (SHOW_WEAKNESS_PROGRESS ? [:awaiting] : [])
+                (HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [:implemented])
             end
           )
       end
 
       def failure_transitions final
-        [:failure]
+        [:failure] | (final ? [] : [:revoked])
       end
 
       def visible_pending_status
