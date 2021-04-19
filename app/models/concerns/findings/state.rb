@@ -38,7 +38,7 @@ module Findings::State
         {
           failure:             -5,
           awaiting:            -4,
-          confirmed:           -2,
+          confirmed:           -3,
           unconfirmed:         -2,
           unanswered:          -1,
           being_implemented:   0,
