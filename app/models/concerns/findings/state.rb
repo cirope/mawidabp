@@ -75,7 +75,7 @@ module Findings::State
       end
 
       def final_status
-        [STATUS[:implemented_audited], STATUS[:revoked], STATUS[:expired]] |
+        [STATUS[:implemented_audited], STATUS[:revoked], STATUS[:expired], STATUS[:failure]] |
           (ALLOW_FINDING_ASSUMED_RISK_TO_PENDING || HIDE_FINDING_IMPLEMENTED_AND_ASSUMED_RISK ? [] : [STATUS[:assumed_risk]]) |
           (HIDE_FINDING_CRITERIA_MISMATCH ? [] : [STATUS[:criteria_mismatch]])
       end
