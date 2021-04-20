@@ -6,7 +6,7 @@ current_review:
   plan_item: current_plan_item_1
   scope: committee
   risk_exposure: high
-  manual_score: 800
+  manual_score: 80
   manual_score_alt:
   include_sox: yes
   finished_work_papers: 0
@@ -76,7 +76,7 @@ review_approved_with_conclusion:
   plan_item: current_plan_item_5
   scope: committee
   risk_exposure: high
-  manual_score: 800
+  manual_score: 80
   manual_score_alt:
   include_sox: yes
   finished_work_papers: 0
