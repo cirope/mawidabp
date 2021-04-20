@@ -16,7 +16,7 @@ module Findings::Approval
       audited_error,
       auditor_error,
       effect_error,
-      audit_comments_error,
+      (audit_comments_error unless SHOW_WEAKNESS_PROGRESS),
       task_error
     ].compact
 
@@ -52,6 +52,8 @@ module Findings::Approval
     def valid_state_error
       has_valid_state = implemented_audited? ||
         implemented?                         ||
+        awaiting?                            ||
+        failure?                             ||
         being_implemented?                   ||
         unanswered?                          ||
         assumed_risk?                        ||

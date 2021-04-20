@@ -13,6 +13,7 @@
   $('#conclusion_final_review_business_unit').val('<%= j @conclusion_final_review.review.business_unit.name %>')
   $('#conclusion_final_review_project').val('<%= j @conclusion_final_review.review.plan_item.project %>')
   $('#conclusion_final_review_score').val('<%= j @conclusion_final_review.review.score_text %>')
+  $('#conclusion_final_review_score_alt').val('<%= j @conclusion_final_review.review.score_alt_text %>')
   $('#conclusion_final_review_previous_identification').val('<%== j @conclusion_final_review.previous_identification %>')
   $('#conclusion_final_review_previous_date').val('<%== l @conclusion_final_review.previous_date if @conclusion_final_review.previous_date %>')
   $('#conclusion_final_review_reference').val('<%== j @conclusion_final_review.reference %>')
@@ -37,6 +38,7 @@
     'business_unit',
     'project',
     'score',
+    'score_alt',
     'previous_identification',
     'previous_date',
     'reference',

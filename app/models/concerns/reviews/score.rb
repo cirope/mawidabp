@@ -2,20 +2,18 @@ module Reviews::Score
   extend ActiveSupport::Concern
 
   def score_text
-    score = score_array
+    _score_text score_array
+  end
 
-    if SHOW_REVIEW_EXTRA_ATTRIBUTES
-      (manual_score || '-').to_s
-    else score
-      [I18n.t("score_types.#{score.first}"), "(#{score.last}%)"].join(' ')
-    end
+  def score_alt_text
+    scored_by_splitted_weaknesses? ? _score_text(score_array alt: true) : '-'
   end
 
   def sorted_scores type: :effectiveness
     date = conclusion_final_review&.issue_date || created_at
 
     case type
-    when :effectiveness, :manual
+    when :effectiveness, :manual, :splitted_weaknesses
       self.class.scores(date).to_a.sort do |s1, s2|
         s2[1].to_i <=> s1[1].to_i
       end
@@ -26,12 +24,18 @@ module Reviews::Score
     end
   end
 
-  def score_array date: (conclusion_final_review&.issue_date || Time.zone.today)
+  def score_array date: (conclusion_final_review&.issue_date || Time.zone.today), alt: false
     type   = guess_score_type
     scores = sorted_scores type: type
     count  = scores.size + 1
 
     calculate_score_for type, date
+
+    score  = if alt
+               (manual_score_alt || score_alt).to_i
+             else
+               (manual_score || self.score).to_i
+             end
 
     score_description = scores.detect do |s|
       count -= 1
@@ -69,14 +73,53 @@ module Reviews::Score
     self.score = total <= 50 ? (100 - total * 2).round : 0
   end
 
+  def score_by_splitted_weaknesses date
+    weaknesses = has_final_review? ? final_weaknesses : self.weaknesses
+
+    grouped_weaknesses = weaknesses.not_revoked.group_by do |w|
+      w.design? ? :design : :sustantive
+    end
+
+    grouped_weaknesses.each do |type, weaknesses|
+      scores = weaknesses.map { |w| score_for w, date }
+      total  = scores.compact.sum
+      score  = total <= 50 ? (100 - total * 2).round : 0
+
+      if type == :design
+        self.score = score
+      else
+        self.score_alt = score
+      end
+    end
+  end
+
   def scored_by_weaknesses?
     score_type == 'weaknesses'
   end
 
+  def scored_by_splitted_weaknesses?
+    score_type == 'splitted_weaknesses'
+  end
+
   private
 
+    def _score_text score
+      if SHOW_REVIEW_EXTRA_ATTRIBUTES
+        (manual_score || '-').to_s
+      elsif score
+        [I18n.t("score_types.#{score.first}"), "(#{score.last}%)"].join(' ')
+      end
+    end
+
     def guess_score_type
-      if ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? Current.organization&.prefix
+      by_weaknesses = ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? Current.organization&.prefix
+      splitted_weaknesses = by_weaknesses &&
+                              USE_SCOPE_CYCLE &&
+                              REVIEW_SCOPES[plan_item.scope]&.fetch(:type, nil) == :cycle
+
+      if splitted_weaknesses
+        :splitted_weaknesses
+      elsif by_weaknesses
         score_type&.to_sym == :none ? :none : :weaknesses
       elsif SHOW_REVIEW_EXTRA_ATTRIBUTES
         :manual
@@ -91,6 +134,8 @@ module Reviews::Score
         effectiveness
       when :weaknesses
         score_by_weaknesses date
+      when :splitted_weaknesses
+        score_by_splitted_weaknesses date
       when :manual, :none
         self.score = 100
       end
