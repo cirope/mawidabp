@@ -115,7 +115,7 @@ module Reviews::Score
       by_weaknesses = ORGANIZATIONS_WITH_REVIEW_SCORE_BY_WEAKNESS.include? Current.organization&.prefix
       splitted_weaknesses = by_weaknesses &&
                               USE_SCOPE_CYCLE &&
-                              REVIEW_SCOPES[plan_item.scope]&.fetch(:type, nil) == :cycle
+                              REVIEW_SCOPES[plan_item&.scope]&.fetch(:type, nil) == :cycle
 
       if splitted_weaknesses
         :splitted_weaknesses
