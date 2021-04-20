@@ -35,7 +35,7 @@ es:
     not_apply: 'No aplica'
   risk_types:
     low: 'Bajo'
-    medium: 'Moderado'
+    medium: 'Medio'
     high: 'Alto'
     none: 'Organismo contralor'
   priority_types:
