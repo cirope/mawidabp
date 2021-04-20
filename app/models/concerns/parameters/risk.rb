@@ -3,6 +3,7 @@ module Parameters::Risk
 
   included do
     ::RISK_TYPES = risk_types unless defined? ::RISK_TYPES
+    ::RISK_TYPES[:none] = 3 if USE_SCOPE_CYCLE
   end
 
   module ClassMethods

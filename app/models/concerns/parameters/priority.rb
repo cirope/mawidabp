@@ -3,6 +3,7 @@ module Parameters::Priority
 
   included do
     ::PRIORITY_TYPES = priority_types unless defined? ::PRIORITY_TYPES
+    ::PRIORITY_TYPES['none'] = '3' if USE_SCOPE_CYCLE
   end
 
   module ClassMethods
