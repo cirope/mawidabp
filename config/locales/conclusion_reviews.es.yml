@@ -65,3 +65,25 @@ es:
         risk: "Importancia"
         effect: "Riesgo"
         audit_recommendations: "Recomendación"
+    pat:
+      cover:
+        from: "Banco Patagonia S.A.\nGerencia de Auditoría Interna\nAuditoría de Riesgos y Subsidiarias y Sistemas"
+        to: "A: %{recipients}\nComité de Auditoría"
+        business_unit: "Ciclo %{business_unit}"
+        scope: "1.\t\tTareas y Alcance."
+        details: "Se detalla el programa de trabajo"
+        conclusion: "2.\t\tConclusión."
+        owners: "Las observaciones que surgen de nuestro trabajo, y que se detallan en el Anexo I adjunto, fueron comentadas con %{owners}."
+        auditors: "Auditores intervinientes:"
+        supervisors: "Supervisado por:"
+        organization: "Banco Patagonia S.A."
+      weaknesses:
+        previous_title: "A. Seguimiento de las observaciones de ciclo de acuerdo a nuestro informe anterior."
+        current_title: "B. Observaciones surgidas durante la revisión correspondiente al año %{year}."
+        current_situation: "Situación Actual:"
+        risk: "<b>Nivel de riesgo</b>: %{risk}"
+        follow_up_date: "Fecha estimada de regularización:"
+        effect: "Efecto:"
+        audit_recommendations: "Recomendación:"
+      footer:
+        text: "Auditoría"

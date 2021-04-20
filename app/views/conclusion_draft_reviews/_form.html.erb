@@ -26,7 +26,7 @@
             value: (@conclusion_draft_review.review.score_alt_text if @conclusion_draft_review.review&.persisted?),
             readonly: true } %>
         <% end %>
-        <% if Current.conclusion_pdf_format == 'default' %>
+        <% if %(default pat).include? Current.conclusion_pdf_format %>
           <%= f.input :issue_date, as: :date_picker %>
         <% end %>
       </div>
@@ -47,12 +47,12 @@
           <% if SHOW_CONCLUSION_AS_OPTIONS %>
             <%= f.input :conclusion, collection: conclusion_options, prompt: true %>
           <% else %>
-            <%= f.input :conclusion, input_html: { rows: USE_SCOPE_CYCLE ? 5 : 3 } %>
+            <%= f.input :conclusion, input_html: { rows: USE_SCOPE_CYCLE ? 7 : 3 } %>
           <% end %>
           <%= f.input :applied_procedures, input_html: { rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 3 } %>
         <% end %>
 
-        <% if Current.conclusion_pdf_format == 'default' %>
+        <% if %w(default pat).include? Current.conclusion_pdf_format %>
           <%= f.input :recipients, input_html: { rows: 3 } %>
         <% else %>
           <%= f.input :issue_date, as: :date_picker %>

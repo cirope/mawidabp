@@ -27,7 +27,7 @@
             value: (@conclusion_final_review.review.score_alt_text if @conclusion_final_review.review&.persisted?),
             readonly: true } %>
         <% end %>
-        <% if Current.conclusion_pdf_format == 'default' %>
+        <% if %w(default pat).include? Current.conclusion_pdf_format %>
           <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
           <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
         <% else %>
@@ -54,7 +54,7 @@
           <% end %>
         <% end %>
 
-        <% if Current.conclusion_pdf_format == 'default' %>
+        <% if %w(default pat).include? Current.conclusion_pdf_format %>
           <%= f.input :recipients, input_html: { readonly: readonly, rows: 5 } %>
           <%= f.input :summary %>
         <% else %>
