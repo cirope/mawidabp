@@ -149,14 +149,18 @@ class ReviewTest < ActiveSupport::TestCase
     skip unless SHOW_REVIEW_EXTRA_ATTRIBUTES
 
     @review.manual_score = -1
+    @review.manual_score_alt = -1
 
     assert @review.invalid?
     assert_error @review, :manual_score, :greater_than_or_equal_to, count: 0
+    assert_error @review, :manual_score_alt, :greater_than_or_equal_to, count: 0
 
     @review.manual_score = 1001
+    @review.manual_score = 101
 
     assert @review.invalid?
     assert_error @review, :manual_score, :less_than_or_equal_to, count: 1000
+    assert_error @review, :manual_score_alt, :less_than_or_equal_to, count: 100
   end
 
   test 'validates valid attributes' do
@@ -259,6 +263,14 @@ class ReviewTest < ActiveSupport::TestCase
 
     new_average = (total / cois_count.to_f).round
     assert_not_equal average, new_average
+
+    manual_score = 50
+
+    assert_not_equal manual_score, @review.score_array.last
+
+    @review.manual_score = manual_score
+
+    assert_equal manual_score, @review.score_array.last
   end
 
   test 'review score by weaknesses' do
@@ -304,6 +316,36 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert_equal :adequate, review.score_array.first
     assert_equal 100, review.score
+  end
+
+  test 'review score by splitted weaknesses' do
+    skip if !USE_SCOPE_CYCLE || score_type != :weaknesses
+
+    scope = REVIEW_SCOPES.detect { |_, v| v[:type] == :cycle }
+
+    @review.plan_item.update! scope: scope.first
+
+    # With two low risk on design
+    assert_equal :satisfactory, @review.score_array.first
+    assert_equal 96, @review.score
+    assert_equal 100, @review.score_alt
+    assert_equal 'splitted_weaknesses', @review.score_type
+
+    coi = @review.weaknesses.first.control_objective_item
+
+    coi.update! design_score:       nil,
+                sustantive_score:   1,
+                control_attributes: {
+                  id:               coi.control.id,
+                  design_tests:     nil,
+                  sustantive_tests: 'Some'
+                }
+
+    # With one low risk on design and one on sustantive
+    assert_equal :satisfactory, @review.score_array.first
+    assert_equal 98, @review.score
+    assert_equal 98, @review.score_alt
+    assert_equal 'splitted_weaknesses', @review.score_type
   end
 
   test 'must be approved function' do
@@ -464,6 +506,8 @@ class ReviewTest < ActiveSupport::TestCase
 
     if SHOW_REVIEW_EXTRA_ATTRIBUTES
       @review.file_models.destroy_all
+
+      @review.manual_score = 800
 
       refute @review.must_be_approved?
       assert @review.can_be_approved_by_force

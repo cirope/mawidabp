@@ -22,6 +22,11 @@
         <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
           value: (@conclusion_final_review.review.score_text if @conclusion_final_review.review&.persisted?),
           readonly: true } %>
+        <% if USE_SCOPE_CYCLE %>
+          <%= f.input :score_alt, label: Review.human_attribute_name(:score_alt), input_html: {
+            value: (@conclusion_final_review.review.score_alt_text if @conclusion_final_review.review&.persisted?),
+            readonly: true } %>
+        <% end %>
         <% if Current.conclusion_pdf_format == 'default' %>
           <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>
           <%= f.input :close_date, as: :date_picker, input_html: { readonly: readonly } %>
