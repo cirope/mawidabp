@@ -99,6 +99,14 @@ jQuery(function ($) {
       val('<%= Finding.priorities[:low] %>')
   })
 
+  $(document).on('change', '[data-copy-priority]', function () {
+    var risk_value = $(this).val();
+
+    $('[name$="[priority]"]').
+      attr('readonly', true).
+      val(risk_value)
+  })
+
   $(document).on('change', '[data-toggle-compliance]', function () {
     var disabledFor = $(this).data('toggleCompliance')
     var $compliance = $('select[name$="[compliance]"]')
