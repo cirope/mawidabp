@@ -55,7 +55,12 @@
         <% end %>
 
         <% if %w(default pat).include? Current.conclusion_pdf_format %>
-          <%= f.input :recipients, input_html: { readonly: readonly, rows: 5 } %>
+          <%= f.input :recipients, input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 2 : 5 } %>
+
+          <% if USE_SCOPE_CYCLE %>
+            <%= f.input :additional_comments, input_html: { readonly: readonly, rows: 2 } %>
+          <% end %>
+
           <%= f.input :summary %>
         <% else %>
           <%= f.input :issue_date, as: :date_picker, input_html: { readonly: readonly } %>

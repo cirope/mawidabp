@@ -75,6 +75,7 @@ es:
         details: "Se detalla el programa de trabajo"
         conclusion: "%{prefix} Conclusión."
         objective: "%{prefix} Objetivo."
+        additional_comments: "Comentarios adicionales."
         owners:
           cycle: "Las observaciones que surgen de nuestro trabajo, y que se detallan en el Anexo I adjunto, fueron comentadas con %{owners}."
           sustantive: "En el Anexo I se describen las observaciones surgidas de la revisión efectuada, así como las implicancias de las mismas. Dichas observaciones han sido comentadas con %{owners}"

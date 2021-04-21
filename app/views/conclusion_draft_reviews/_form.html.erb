@@ -47,13 +47,17 @@
           <% if SHOW_CONCLUSION_AS_OPTIONS %>
             <%= f.input :conclusion, collection: conclusion_options, prompt: true %>
           <% else %>
-            <%= f.input :conclusion, input_html: { rows: USE_SCOPE_CYCLE ? 7 : 3 } %>
+            <%= f.input :conclusion, input_html: { rows: 3 } %>
           <% end %>
           <%= f.input :applied_procedures, input_html: { rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 3 } %>
         <% end %>
 
         <% if %w(default pat).include? Current.conclusion_pdf_format %>
-          <%= f.input :recipients, input_html: { rows: 3 } %>
+          <%= f.input :recipients, input_html: { rows: USE_SCOPE_CYCLE ? 2 : 3 } %>
+
+          <% if USE_SCOPE_CYCLE %>
+            <%= f.input :additional_comments, input_html: { rows: 2 } %>
+          <% end %>
         <% else %>
           <%= f.input :issue_date, as: :date_picker %>
         <% end %>

@@ -19,6 +19,7 @@
   $('#conclusion_final_review_reference').val('<%== j @conclusion_final_review.reference %>')
   $('#conclusion_final_review_scope').val('<%== j @conclusion_final_review.scope %>')
   $('#conclusion_final_review_main_recommendations').val('<%== j @conclusion_final_review.main_recommendations %>')
+  $('#conclusion_final_review_additional_comments').val('<%== j @conclusion_final_review.additional_comments %>')
 
   $('#conclusion_final_review_review_attributes_description').val('<%== j @conclusion_final_review.review.description %>')
   $('#conclusion_final_review_review_attributes_id').val('<%= @conclusion_final_review.review.id %>')
@@ -42,7 +43,9 @@
     'previous_identification',
     'previous_date',
     'reference',
-    'scope'
+    'scope',
+    'main_recommendations',
+    'additional_comments'
   ]
 
   $.each(elementsForUpdate, function (i, e) {

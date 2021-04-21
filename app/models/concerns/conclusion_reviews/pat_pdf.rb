@@ -75,11 +75,24 @@ module ConclusionReviews::PatPdf
       pdf.text notice, style: :bold, align: :justify, size: (PDF_FONT_SIZE * 0.8).round
       pdf.put_hr
 
-      pdf.text "<b><u>#{I18n.t('conclusion_review.pat.cover.conclusion', prefix: '')}</u></b>\n\n", inline_format: true
-      pdf.text conclusion, style: :italic, align: :justify
-
+      put_pat_brief_conclusion_on         pdf
       put_pat_brief_weaknesses_section_on pdf
       put_pat_brief_footer_on             pdf
+    end
+
+    def put_pat_brief_conclusion_on pdf
+      title = I18n.t 'conclusion_review.pat.cover.conclusion', prefix: ''
+
+      if additional_comments.present?
+        additional_comments_title = I18n.t 'conclusion_review.pat.cover.additional_comments'
+
+        pdf.text "<b><u>#{additional_comments_title}</u></b>\n\n", inline_format: true
+        pdf.text additional_comments, align: :justify
+        pdf.move_down PDF_FONT_SIZE
+      end
+
+      pdf.text "<b><u>#{title}</u></b>\n\n", inline_format: true
+      pdf.text conclusion, style: :italic, align: :justify
     end
 
     def put_pat_extra_cover_info_on pdf
@@ -108,6 +121,14 @@ module ConclusionReviews::PatPdf
 
       pdf.text "\n#{I18n.t('conclusion_review.pat.cover.details').upcase}\n\n\n",
         align: :center, inline_format: true
+
+      if additional_comments.present?
+        pdf.text "\n<u>#{I18n.t 'conclusion_review.pat.cover.additional_comments'}</u>\n\n",
+          inline_format: true
+        pdf.text additional_comments, align: :justify
+        pdf.move_down PDF_FONT_SIZE
+      end
+
       pdf.text "<u>#{I18n.t 'conclusion_review.pat.cover.conclusion', prefix: '2.'}</u>\n\n",
         inline_format: true
       pdf.text conclusion, align: :justify
@@ -123,6 +144,12 @@ module ConclusionReviews::PatPdf
       pdf.text "\n<u><i>#{I18n.t 'conclusion_review.pat.cover.scope.sustantive', prefix: 'II.'}</i></u>\n\n",
         inline_format: true
       pdf.text applied_procedures, align: :justify
+
+      if additional_comments.present?
+        pdf.text "\n<u>#{I18n.t 'conclusion_review.pat.cover.additional_comments'}</u>\n\n",
+          inline_format: true
+        pdf.text additional_comments, align: :justify
+      end
 
       pdf.text "\n<u><i>#{I18n.t 'conclusion_review.pat.cover.conclusion', prefix: 'III.'}</i></u>\n\n",
         inline_format: true
