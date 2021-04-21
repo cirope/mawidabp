@@ -908,6 +908,7 @@ es:
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_recommendations: "no tiene recomendaciones de auditoria"
 
   pdf:
     export: "Exportar"
@@ -1107,6 +1108,7 @@ es:
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_recommendations: "no tiene recomendaciones de auditoria"
 
   welcome:
     index_title: "Bienvenido"

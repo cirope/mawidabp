@@ -1253,6 +1253,7 @@
       without_auditor: "no tiene auditor"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_recommendations: "no tiene recomendaciones de auditoria"
 
   organization:
     index_title: "Listado de organizaciones"
