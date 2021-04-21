@@ -83,14 +83,6 @@ module ConclusionReviews::PatPdf
     def put_pat_brief_conclusion_on pdf
       title = I18n.t 'conclusion_review.pat.cover.conclusion', prefix: ''
 
-      if additional_comments.present?
-        additional_comments_title = I18n.t 'conclusion_review.pat.cover.additional_comments'
-
-        pdf.text "<b><u>#{additional_comments_title}</u></b>\n\n", inline_format: true
-        pdf.text additional_comments, align: :justify
-        pdf.move_down PDF_FONT_SIZE
-      end
-
       pdf.text "<b><u>#{title}</u></b>\n\n", inline_format: true
       pdf.text conclusion, style: :italic, align: :justify
     end
