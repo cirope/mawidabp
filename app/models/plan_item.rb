@@ -9,6 +9,7 @@ class PlanItem < ApplicationRecord
   include PlanItems::DestroyValidation
   include PlanItems::Pdf
   include PlanItems::ResourceUtilizations
+  include PlanItems::Scope
   include PlanItems::Scopes
   include PlanItems::Spread
   include PlanItems::Stats

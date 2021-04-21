@@ -124,8 +124,8 @@ module ConclusionReviews::PatPdf
     end
 
     def add_review_signatures_table pdf, review_user_assignments
-      if review_user_assignments.present?
-        column_data = []
+      if review_user_assignments.size > 0
+        column_data   = []
         column_widths = []
 
         review_user_assignments.each do |rua, i|
@@ -135,18 +135,18 @@ module ConclusionReviews::PatPdf
             I18n.t('conclusion_review.pat.cover.organization')
           ].reject(&:blank?).join "\n"
 
-          column_data <<  ["\n\n\n\n#{data}"]
+          column_data   << ["\n\n\n\n#{data}"]
           column_widths << pdf.percent_width(100.0 / review_user_assignments.size)
         end
 
         table_options = {
           cell_style: {
-            borders: [],
-            padding: (PDF_FONT_SIZE * 0.3).round,
-            align: :center,
+            borders:       [],
+            padding:       (PDF_FONT_SIZE * 0.3).round,
+            align:         :center,
             inline_format: true
           },
-          width: column_widths.sum,
+          width:         column_widths.sum,
           column_widths: column_widths
         }
 

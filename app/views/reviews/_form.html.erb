@@ -91,9 +91,11 @@
         <div class="col-md-6">
           <%= f.input :manual_score, input_html: { min: 0, max: 100, step: 1, disabled: readonly } %>
         </div>
-        <div class="col-md-6">
-          <%= f.input :manual_score_alt, input_html: { min: 0, max: 100, step: 1, disabled: readonly } %>
-        </div>
+        <% if @review.new_record? || @review.plan_item&.cycle? %>
+          <div class="col-md-6" data-manual-score-alt>
+            <%= f.input :manual_score_alt, input_html: { min: 0, max: 100, step: 1, disabled: readonly } %>
+          </div>
+        <% end %>
       </div>
     <% end %>
 
@@ -352,6 +354,7 @@ jQuery(function() {
       $('#control_objectives').find('fieldset.control_objective[data-dynamic]').remove();
       $('[data-review-user-assignments-container]').html('')
       $('[data-control-objective-items-container]').html('')
+      $('[data-manual-score-alt]').removeClass('d-none')
     }
   });
 
