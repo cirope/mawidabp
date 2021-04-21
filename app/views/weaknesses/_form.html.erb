@@ -73,10 +73,7 @@
           readonly: (readonly || @weakness.repeated_of)
         } %>
         <%= f.input :risk, collection: risks, prompt: true, disabled: readonly, input_html: {
-          data:
-          SHOW_CONDENSED_PRIORITIES ? {
-            toggle_priority: Finding.risks[:medium], toggle_compliance: Finding.risks[:low]
-          } : USE_SCOPE_CYCLE ? { copy_priority: true } : {}
+          data: weakness_risk_types
         } %>
       <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES,
         disabled: disabled_priority(@weakness, readonly),

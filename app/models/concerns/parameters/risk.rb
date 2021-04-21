@@ -21,9 +21,11 @@ module Parameters::Risk
     private
 
       def risk_types
-        risk_types = { low: 0, medium: 1, high: 2 }
-
-        risk_types.merge(none: 3) if USE_SCOPE_CYCLE
+        if USE_SCOPE_CYCLE
+          { none: 0, low: 1, medium: 2, high: 3 }
+        else
+          { low: 0, medium: 1, high: 2 }
+        end
       end
   end
 end

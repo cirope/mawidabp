@@ -100,11 +100,9 @@ jQuery(function ($) {
   })
 
   $(document).on('change', '[data-copy-priority]', function () {
-    var risk_value = $(this).val();
+    var risk_value = $(this).val()
 
-    $('[name$="[priority]"]').
-      attr('readonly', true).
-      val(risk_value)
+    $('[name$="[priority]"]').val(risk_value)
   })
 
   $(document).on('change', '[data-toggle-compliance]', function () {
