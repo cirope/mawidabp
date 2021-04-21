@@ -80,6 +80,10 @@ module Reviews::Score
       w.design? ? :design : :sustantive
     end
 
+    # Must always have a key, so it "calculates" the score
+    grouped_weaknesses[:design]     ||= []
+    grouped_weaknesses[:sustantive] ||= []
+
     grouped_weaknesses.each do |type, weaknesses|
       scores = weaknesses.map { |w| score_for w, date }
       total  = scores.compact.sum
