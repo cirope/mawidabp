@@ -1353,7 +1353,7 @@
       type_manager: "Gerente"
       type_responsible: "Responsable máximo de auditoría interna"
       type_audited: "Auditado"
-      audit_team: "Responsables"
+      audit_team: "Integrantes UPLA"
       others: "Usuarios"
       readonly: "Los integrantes no pueden ser modificados, ya se emitió el informe definitivo"
     score_sheet_title: "PLANILLA DE PROCESO DE CALIFICACIÓN DETALLADA"
