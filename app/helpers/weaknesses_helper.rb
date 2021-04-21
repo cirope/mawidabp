@@ -90,7 +90,7 @@ module WeaknessesHelper
       WeaknessTemplate.list.by_control_objective(control_objective)
   end
 
-  def weakness_risk_types
+  def weakness_risk_data_options
     if SHOW_CONDENSED_PRIORITIES
       { toggle_priority: Finding.risks[:medium], toggle_compliance: Finding.risks[:low] }
     elsif USE_SCOPE_CYCLE
