@@ -84,6 +84,13 @@ es:
         business_unit:
           cycle: "Ciclo %{business_unit}"
           sustantive: "Pruebas sustantivas sobre %{business_unit}"
+        brief:
+          title: "Ref: %{business_unit}\nInforme de Auditoría N° %{review}"
+          notice:
+            one: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el N° %{review}, consta de %{count} página."
+            other: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el N° %{review}, consta de %{count} páginas."
+          details_title: "A continuación se detallan las principales debilidades observadas, así como su situación al momento de emitir el respectivo informe:"
+          weaknesses_title: "Observaciones del presente período:"
       weaknesses:
         title: "Anexo I"
         previous_title: "A. Seguimiento de las observaciones de ciclo de acuerdo a nuestro informe anterior."

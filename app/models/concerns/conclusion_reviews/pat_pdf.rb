@@ -2,39 +2,52 @@ module ConclusionReviews::PatPdf
   extend ActiveSupport::Concern
 
   def pat_pdf organization = nil, *args
-    options = args.extract_options!
+    options = args.extract_options!.with_indifferent_access
     pdf     = Prawn::Document.create_generic_pdf :portrait, hide_brand: true, footer: false
 
-    put_pat_cover_on     pdf, organization
+    put_pat_cover_on     pdf, organization, brief: options[:brief]
     put_pat_watermark_on pdf
 
-    pdf.add_page_footer 10, false, I18n.t('conclusion_review.pat.footer.text')
+    unless options[:brief]
+      pdf.add_page_footer 10, false, I18n.t('conclusion_review.pat.footer.text')
 
-    put_pat_weaknesses_section_on pdf
-    put_pat_workflow_on           pdf if review.plan_item.sustantive?
+      put_pat_weaknesses_section_on pdf
+      put_pat_workflow_on           pdf if review.plan_item.sustantive?
+    end
 
-    pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
+    if options[:return_object]
+      pdf
+    else
+      pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
+    end
   end
 
   private
 
-    def put_pat_cover_on pdf, organization
+    def put_pat_cover_on pdf, organization, brief: false
       pdf.add_organization_image organization
 
-      put_pat_cover_header_on pdf
-      put_pat_extra_cover_info_on pdf
+      put_pat_cover_header_on pdf, brief: brief
 
-      put_pat_review_owners_on pdf
-      put_pat_auditors_on pdf
-      put_pat_supervisors_on pdf
-      put_pat_signature_on pdf
+      if brief
+        put_pat_extra_brief_info_on pdf, organization
+      else
+        put_pat_extra_cover_info_on pdf
+        put_pat_review_owners_on    pdf
+        put_pat_auditors_on         pdf
+        put_pat_supervisors_on      pdf
+        put_pat_signature_on        pdf
+      end
     end
 
-    def put_pat_cover_header_on pdf
+    def put_pat_cover_header_on pdf, brief: false
       to_text = I18n.t 'conclusion_review.pat.cover.to', recipients: recipients
 
-      pdf.text "#{Review.model_name.human} #{review.identification}\n\n",
-        size: PDF_FONT_SIZE * 1.1, style: :bold, align: :right
+      unless brief
+        pdf.text "#{Review.model_name.human} #{review.identification}\n\n",
+          size: PDF_FONT_SIZE * 1.1, style: :bold, align: :right
+      end
+
       pdf.text I18n.l(issue_date, format: :long), align: :right
       pdf.text "<i><b>#{I18n.t 'conclusion_review.pat.cover.from'}</b></i>",
         inline_format: true
@@ -42,6 +55,31 @@ module ConclusionReviews::PatPdf
       pdf.move_down PDF_FONT_SIZE
 
       pdf.text "<i><b>#{to_text}</b></i>", inline_format: true
+    end
+
+    def put_pat_extra_brief_info_on pdf, organization
+      title = I18n.t(
+        'conclusion_review.pat.cover.brief.title',
+        business_unit: review.business_unit.name,
+        review: review.identification
+      )
+      notice = I18n.t(
+        'conclusion_review.pat.cover.brief.notice',
+        review: review.identification,
+        count: pat_pdf(organization, return_object: true).page_count
+      )
+
+      pdf.text "<u><i><b>#{title}</b></i></u>", align: :center, inline_format: true
+
+      pdf.put_hr
+      pdf.text notice, style: :bold, align: :justify, size: (PDF_FONT_SIZE * 0.8).round
+      pdf.put_hr
+
+      pdf.text "<b><u>#{I18n.t('conclusion_review.pat.cover.conclusion', prefix: '')}</u></b>\n\n", inline_format: true
+      pdf.text conclusion, style: :italic, align: :justify
+
+      put_pat_brief_weaknesses_section_on pdf
+      put_pat_brief_footer_on             pdf
     end
 
     def put_pat_extra_cover_info_on pdf
@@ -174,6 +212,35 @@ module ConclusionReviews::PatPdf
         }
 
         pdf.table column_data, table_options
+      end
+    end
+
+    def put_pat_brief_weaknesses_section_on pdf
+      use_finals = kind_of? ConclusionFinalReview
+      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
+
+      if weaknesses.not_revoked.any?
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t('conclusion_review.pat.cover.brief.details_title'), align: :justify
+
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t('conclusion_review.pat.cover.brief.weaknesses_title'), align: :justify
+
+        weaknesses.not_revoked.each do |weakness|
+          pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief}", align: :justify
+        end
+      end
+    end
+
+    def put_pat_brief_footer_on pdf
+      manager = User.list.managers.not_hidden.take
+
+      pdf.put_hr
+      pdf.move_down PDF_FONT_SIZE * 8
+
+      if manager
+        pdf.text manager.informal_name, style: :italic
+        pdf.text manager.function, style: :italic
       end
     end
 
