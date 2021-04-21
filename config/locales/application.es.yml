@@ -1380,7 +1380,7 @@ es:
         file_model_id: "Anexos"
         score: "Calificación"
         score_alt: "Calificación cumplimiento"
-        scope: "Tipo auditoría"
+        scope: "Tipo proyecto"
         risk_exposure: "Exposición al riesgo"
         manual_score: "Calificación auditoría"
         manual_score_alt: "Calificación auditoría cumplimiento"
