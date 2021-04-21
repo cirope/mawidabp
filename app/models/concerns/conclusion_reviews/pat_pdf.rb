@@ -41,7 +41,9 @@ module ConclusionReviews::PatPdf
     end
 
     def put_pat_cover_header_on pdf, brief: false
-      to_text = I18n.t 'conclusion_review.pat.cover.to', recipients: recipients
+      to_text   = I18n.t 'conclusion_review.pat.cover.to'
+      from_text = I18n.t 'conclusion_review.pat.cover.from',
+        business_unit_types: review.business_unit_type.name
 
       unless brief
         pdf.text "#{Review.model_name.human} #{review.identification}\n\n",
@@ -49,8 +51,7 @@ module ConclusionReviews::PatPdf
       end
 
       pdf.text I18n.l(issue_date, format: :long), align: :right
-      pdf.text "<i><b>#{I18n.t 'conclusion_review.pat.cover.from'}</b></i>",
-        inline_format: true
+      pdf.text "<i><b>#{from_text}</b></i>", inline_format: true
 
       pdf.move_down PDF_FONT_SIZE
 
@@ -60,7 +61,7 @@ module ConclusionReviews::PatPdf
     def put_pat_extra_brief_info_on pdf, organization
       title = I18n.t(
         'conclusion_review.pat.cover.brief.title',
-        business_unit: review.business_unit.name,
+        description: review.description,
         review: review.identification
       )
       notice = I18n.t(
@@ -90,12 +91,12 @@ module ConclusionReviews::PatPdf
     def put_pat_extra_cover_info_on pdf
       method   = review.plan_item.cycle? ? :upcase : :to_s
       i18n_key = if review.plan_item.cycle?
-                   'conclusion_review.pat.cover.business_unit.cycle'
+                   'conclusion_review.pat.cover.description.cycle'
                  else
-                   'conclusion_review.pat.cover.business_unit.sustantive'
+                   'conclusion_review.pat.cover.description.sustantive'
                  end
 
-      pdf.text "\n<i>#{I18n.t(i18n_key, business_unit: review.business_unit.name).send method}</i>",
+      pdf.text "\n<i>#{I18n.t(i18n_key, description: review.description).send method}</i>",
         align: :center, inline_format: true
       pdf.put_hr
 
