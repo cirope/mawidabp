@@ -69,21 +69,34 @@ es:
       cover:
         from: "Banco Patagonia S.A.\nGerencia de Auditoría Interna\nAuditoría de Riesgos y Subsidiarias y Sistemas"
         to: "A: %{recipients}\nComité de Auditoría"
-        business_unit: "Ciclo %{business_unit}"
-        scope: "1.\t\tTareas y Alcance."
+        scope:
+          cycle: "%{prefix} Tareas y Alcance."
+          sustantive: "%{prefix} Alcance de las Tareas."
         details: "Se detalla el programa de trabajo"
-        conclusion: "2.\t\tConclusión."
-        owners: "Las observaciones que surgen de nuestro trabajo, y que se detallan en el Anexo I adjunto, fueron comentadas con %{owners}."
+        conclusion: "%{prefix} Conclusión."
+        objective: "%{prefix} Objetivo."
+        owners:
+          cycle: "Las observaciones que surgen de nuestro trabajo, y que se detallan en el Anexo I adjunto, fueron comentadas con %{owners}."
+          sustantive: "En el Anexo I se describen las observaciones surgidas de la revisión efectuada, así como las implicancias de las mismas. Dichas observaciones han sido comentadas con %{owners}"
         auditors: "Auditores intervinientes:"
         supervisors: "Supervisado por:"
         organization: "Banco Patagonia S.A."
+        business_unit:
+          cycle: "Ciclo %{business_unit}"
+          sustantive: "Pruebas sustantivas sobre %{business_unit}"
       weaknesses:
+        title: "Anexo I"
         previous_title: "A. Seguimiento de las observaciones de ciclo de acuerdo a nuestro informe anterior."
-        current_title: "B. Observaciones surgidas durante la revisión correspondiente al año %{year}."
+        current_title:
+          cycle: "B. Observaciones surgidas durante la revisión correspondiente al año %{year}."
+          sustantive: "A. Observaciones del ciclo surgidas durante la revisión correspondiente al Plan %{year}."
         current_situation: "Situación Actual:"
         risk: "<b>Nivel de riesgo</b>: %{risk}"
         follow_up_date: "Fecha estimada de regularización:"
         effect: "Efecto:"
         audit_recommendations: "Recomendación:"
+      workflow:
+        title: "Anexo II"
+        subtitle: "Programa de Trabajo"
       footer:
         text: "Auditoría"

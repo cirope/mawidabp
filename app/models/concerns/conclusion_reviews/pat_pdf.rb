@@ -10,15 +10,8 @@ module ConclusionReviews::PatPdf
 
     pdf.add_page_footer 10, false, I18n.t('conclusion_review.pat.footer.text')
 
-    if pat_has_some_weakness?
-      pdf.start_new_page
-
-      pdf.text Weakness.model_name.human(count: 0).upcase, align: :center, style: :bold
-      pdf.move_down PDF_FONT_SIZE * 2
-
-      put_pat_previous_weaknesses_on pdf
-      put_pat_weaknesses_on          pdf
-    end
+    put_pat_weaknesses_section_on pdf
+    put_pat_workflow_on           pdf if review.plan_item.sustantive?
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, id
   end
@@ -52,22 +45,48 @@ module ConclusionReviews::PatPdf
     end
 
     def put_pat_extra_cover_info_on pdf
-      business_unit_text = I18n.t(
-        'conclusion_review.pat.cover.business_unit',
-        business_unit: review.business_unit.name
-      )
+      method   = review.plan_item.cycle? ? :upcase : :to_s
+      i18n_key = if review.plan_item.cycle?
+                   'conclusion_review.pat.cover.business_unit.cycle'
+                 else
+                   'conclusion_review.pat.cover.business_unit.sustantive'
+                 end
 
-      pdf.text "\n<i>#{business_unit_text.upcase}</i>", align: :center,
-        inline_format: true
+      pdf.text "\n<i>#{I18n.t(i18n_key, business_unit: review.business_unit.name).send method}</i>",
+        align: :center, inline_format: true
       pdf.put_hr
 
-      pdf.text "<u>#{I18n.t 'conclusion_review.pat.cover.scope'}</u>\n\n",
+      if review.plan_item.cycle?
+        put_pat_cycle_cover_info_on pdf
+      else
+        put_pat_sustantive_cover_info_on pdf
+      end
+    end
+
+    def put_pat_cycle_cover_info_on pdf
+      pdf.text "<u>#{I18n.t 'conclusion_review.pat.cover.scope.cycle', prefix: '1.'}</u>\n\n",
         inline_format: true
       pdf.text applied_procedures, align: :justify
 
       pdf.text "\n#{I18n.t('conclusion_review.pat.cover.details').upcase}\n\n\n",
         align: :center, inline_format: true
-      pdf.text "<u>#{I18n.t 'conclusion_review.pat.cover.conclusion'}</u>\n\n",
+      pdf.text "<u>#{I18n.t 'conclusion_review.pat.cover.conclusion', prefix: '2.'}</u>\n\n",
+        inline_format: true
+      pdf.text conclusion, align: :justify
+    end
+
+    def put_pat_sustantive_cover_info_on pdf
+      if review.description.present?
+        pdf.text "<u><i>#{I18n.t 'conclusion_review.pat.cover.objective', prefix: 'I.'}</i></u>\n\n",
+          inline_format: true
+        pdf.text review.description, align: :justify
+      end
+
+      pdf.text "\n<u><i>#{I18n.t 'conclusion_review.pat.cover.scope.sustantive', prefix: 'II.'}</i></u>\n\n",
+        inline_format: true
+      pdf.text applied_procedures, align: :justify
+
+      pdf.text "\n<u><i>#{I18n.t 'conclusion_review.pat.cover.conclusion', prefix: 'III.'}</i></u>\n\n",
         inline_format: true
       pdf.text conclusion, align: :justify
     end
@@ -80,6 +99,11 @@ module ConclusionReviews::PatPdf
 
     def put_pat_review_owners_on pdf
       review_owners = review.review_user_assignments.where owner: true
+      i18n_key      = if review.plan_item.cycle?
+                        'conclusion_review.pat.cover.owners.cycle'
+                      else
+                        'conclusion_review.pat.cover.owners.sustantive'
+                      end
 
       if review_owners.present?
         owners = review_owners.map do |ro|
@@ -87,7 +111,7 @@ module ConclusionReviews::PatPdf
         end
 
         pdf.move_down PDF_FONT_SIZE
-        pdf.text I18n.t('conclusion_review.pat.cover.owners', owners: owners.to_sentence)
+        pdf.text I18n.t(i18n_key, owners: owners.to_sentence)
       end
     end
 
@@ -146,11 +170,24 @@ module ConclusionReviews::PatPdf
             align:         :center,
             inline_format: true
           },
-          width:         column_widths.sum,
           column_widths: column_widths
         }
 
         pdf.table column_data, table_options
+      end
+    end
+
+    def put_pat_weaknesses_section_on pdf
+      if pat_has_some_weakness?
+        pdf.start_new_page
+
+        pdf.text "<i><b>#{I18n.t 'conclusion_review.pat.weaknesses.title'}</b></i>",
+          align: :right, inline_format: true
+        pdf.text Weakness.model_name.human(count: 0).upcase, align: :center, style: :bold
+        pdf.move_down PDF_FONT_SIZE * 2
+
+        put_pat_previous_weaknesses_on pdf if review.plan_item.cycle?
+        put_pat_weaknesses_on          pdf
       end
     end
 
@@ -193,7 +230,13 @@ module ConclusionReviews::PatPdf
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
 
       if weaknesses.not_revoked.any?
-        pdf.text I18n.t('conclusion_review.pat.weaknesses.current_title', year: issue_date.year), style: :bold
+        i18n_key_suffix = review.plan_item.cycle? ? 'cycle' : 'sustantive'
+
+        pdf.text I18n.t(
+          "conclusion_review.pat.weaknesses.current_title.#{i18n_key_suffix}",
+          year: issue_date.year
+        ), style: :bold
+
         pdf.move_down PDF_FONT_SIZE * 2
 
         weaknesses.not_revoked.each_with_index do |weakness, i|
@@ -233,6 +276,24 @@ module ConclusionReviews::PatPdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
 
-      weaknesses.not_revoked.any? || review.previous&.final_weaknesses&.any?
+      weaknesses.not_revoked.any? ||
+        (review.plan_item.sustantive? && review.previous&.final_weaknesses&.any?)
+    end
+
+    def put_pat_workflow_on pdf
+      if review.control_objective_items.any?
+        pdf.start_new_page
+
+        pdf.text I18n.t('conclusion_review.pat.workflow.title'), align: :right, style: :bold
+        pdf.move_down PDF_FONT_SIZE
+
+        pdf.text "<u><b>#{I18n.t 'conclusion_review.pat.workflow.subtitle'}</b></u>",
+          align: :center, inline_format: true
+        pdf.move_down PDF_FONT_SIZE
+
+        review.control_objective_items.each_with_index do |coi, i|
+          pdf.text "#{i.next}. #{coi.control_objective_text}\n\n", align: :justify
+        end
+      end
     end
 end

@@ -337,8 +337,21 @@ class ConclusionReviewTest < ActiveSupport::TestCase
       @conclusion_review.pat_pdf organization
     end
 
+    size = File.size @conclusion_review.absolute_pdf_path
+
     assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert size > 0
+
+    scope = REVIEW_SCOPES.detect { |_, v| v[:type] == :cycle }
+
+    @conclusion_review.review.plan_item.update! scope: scope.first
+
+    assert_nothing_raised do
+      @conclusion_review.pat_pdf organization
+    end
+
     assert File.size(@conclusion_review.absolute_pdf_path) > 0
+    assert_not_equal File.size(@conclusion_review.absolute_pdf_path), size
 
     FileUtils.rm @conclusion_review.absolute_pdf_path
   ensure

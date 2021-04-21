@@ -31,11 +31,11 @@ module Reviews::Score
 
     calculate_score_for type, date
 
-    score  = if alt
-               (manual_score_alt || score_alt).to_i
-             else
-               (manual_score || self.score).to_i
-             end
+    score = if alt
+              (manual_score_alt || score_alt).to_i
+            else
+              (manual_score || self.score).to_i
+            end
 
     score_description = scores.detect do |s|
       count -= 1
@@ -159,7 +159,7 @@ module Reviews::Score
         weakness_weights[:normal_high]
       when risks[:medium]
         weakness_weights[:normal_medium]
-      when risks[:low]
+      when risks[:low], risks[:none]
         weakness_weights[:normal_low]
       end
     end
@@ -172,7 +172,7 @@ module Reviews::Score
         weakness_weights[:repeated_high]
       when risks[:medium]
         weakness_weights[:repeated_medium]
-      when risks[:low]
+      when risks[:low], risks[:none]
         weakness_weights[:repeated_low]
       end
     end
@@ -185,7 +185,7 @@ module Reviews::Score
         weakness_weights[:old_high]
       when risks[:medium]
         weakness_weights[:old_medium]
-      when risks[:low]
+      when risks[:low], risks[:none]
         weakness_weights[:old_low]
       end
     end
