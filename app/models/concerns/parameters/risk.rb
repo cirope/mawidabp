@@ -21,7 +21,11 @@ module Parameters::Risk
     private
 
       def risk_types
-        { low: 0, medium: 1, high: 2 }
+        if USE_SCOPE_CYCLE
+          { none: 0, low: 1, medium: 2, high: 3 }
+        else
+          { low: 0, medium: 1, high: 2 }
+        end
       end
   end
 end
