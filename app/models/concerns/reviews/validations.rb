@@ -27,10 +27,10 @@ module Reviews::Validations
     validates :manual_score, numericality: {
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: USE_SCOPE_CYCLE ? 100 : 1000,
-    }, allow_nil: true, if: :validate_extra_attributes?
+    }, allow_nil: true, if: :validate_manual_score?
     validates :manual_score_alt, numericality: {
       greater_than_or_equal_to: 0, less_than_or_equal_to: 100
-    }, allow_nil: true, if: :validate_extra_attributes?
+    }, allow_nil: true, if: :validate_manual_score?
 
     validate :validate_user_roles
     validate :validate_plan_item
@@ -63,6 +63,10 @@ module Reviews::Validations
       else
         has_audited? && has_auditor? && has_some_manager
       end
+    end
+
+    def validate_manual_score?
+      SHOW_REVIEW_EXTRA_ATTRIBUTES || USE_SCOPE_CYCLE
     end
 
     def validate_extra_attributes?

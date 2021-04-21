@@ -30,7 +30,7 @@ class ReviewTest < ActiveSupport::TestCase
         :plan_item_id => plan_items(:past_plan_item_3).id,
         :scope => 'committee',
         :risk_exposure => 'high',
-        :manual_score => 800,
+        :manual_score => 80,
         :include_sox => 'no',
         :review_user_assignments_attributes => {
             :new_1 => {
@@ -156,10 +156,10 @@ class ReviewTest < ActiveSupport::TestCase
     assert_error @review, :manual_score_alt, :greater_than_or_equal_to, count: 0
 
     @review.manual_score = 1001
-    @review.manual_score = 101
+    @review.manual_score_alt = 101
 
     assert @review.invalid?
-    assert_error @review, :manual_score, :less_than_or_equal_to, count: 1000
+    assert_error @review, :manual_score, :less_than_or_equal_to, count: (USE_SCOPE_CYCLE ? 100 : 1000)
     assert_error @review, :manual_score_alt, :less_than_or_equal_to, count: 100
   end
 

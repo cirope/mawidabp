@@ -329,6 +329,22 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     FileUtils.rm @conclusion_review.absolute_pdf_path
   end
 
+  test 'pat pdf conversion' do
+    Current.user = users :auditor
+    organization = organizations :cirope
+
+    assert_nothing_raised do
+      @conclusion_review.pat_pdf organization
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert File.size(@conclusion_review.absolute_pdf_path) > 0
+
+    FileUtils.rm @conclusion_review.absolute_pdf_path
+  ensure
+    Current.user = nil
+  end
+
   test 'create bundle zip' do
     if File.exist?(@conclusion_review.absolute_bundle_zip_path)
       FileUtils.rm @conclusion_review.absolute_bundle_zip_path
