@@ -63,8 +63,11 @@
         <%= finding_repeated_of_label(f, readonly: readonly) %>
         <%= finding_repeated_of_if_field(f, readonly: readonly) %>
         <%= f.input :description, autofocus: true, input_html: { readonly: readonly, rows: HIDE_WEAKNESS_EFFECT ? 11 : 5 } %>
+        <% if USE_SCOPE_CYCLE %>
+          <%= f.input :brief, input_html: { readonly: readonly, rows: 1 } %>
+        <% end %>
         <% unless HIDE_WEAKNESS_EFFECT %>
-          <%= f.input :effect, input_html: { readonly: readonly, rows: 5 } %>
+          <%= f.input :effect, input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 4 : 5 } %>
         <% end %>
         <%= f.input :audit_recommendations, input_html: { readonly: readonly, rows: HIDE_WEAKNESS_EFFECT ? 7 : 5 } %>
       </div>
@@ -73,9 +76,12 @@
           readonly: (readonly || @weakness.repeated_of)
         } %>
         <%= f.input :risk, collection: risks, prompt: true, disabled: readonly, input_html: {
-          data: SHOW_CONDENSED_PRIORITIES ? { toggle_priority: Finding.risks[:medium], toggle_compliance: Finding.risks[:low] } : {}
+          data: weakness_risk_data_options
         } %>
-        <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES, disabled: disabled_priority(@weakness, readonly) %>
+      <%= f.input :priority, collection: priorities, prompt: !SHOW_CONDENSED_PRIORITIES,
+        disabled: disabled_priority(@weakness, readonly),
+        readonly: !!USE_SCOPE_CYCLE
+      %>
         <%= f.label :state, raw(Weakness.human_attribute_name(:state) + ' ' +
             (show_history_changes ? finding_show_status_change_history(
               :finding_status_change_history) : '')) %>
@@ -96,7 +102,7 @@
             <%= c_f.input :user_id, as: :hidden %>
           <% end %>
         <% end %>
-        <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
+        <%= f.input :answer, input_html: { readonly: readonly, rows: USE_SCOPE_CYCLE ? 10 : 5 } %>
         <%= f.input :follow_up_date, as: :date_picker, input_html: { readonly: @weakness.tasks.any?, disabled: readonly } %>
         <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>
         <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>

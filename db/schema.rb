@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_09_150136) do
+ActiveRecord::Schema.define(version: 2021_04_21_094050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -232,6 +232,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.string "previous_identification"
     t.date "previous_date"
     t.text "main_recommendations"
+    t.text "effectiveness_notes"
+    t.text "additional_comments"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
     t.index ["issue_date"], name: "index_conclusion_reviews_on_issue_date"
@@ -484,6 +486,7 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.date "first_follow_up_date"
     t.text "compliance_observations"
     t.jsonb "commitments"
+    t.text "brief"
     t.index ["closed_at"], name: "index_findings_on_closed_at"
     t.index ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id"
     t.index ["created_at"], name: "index_findings_on_created_at"
@@ -909,6 +912,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_150136) do
     t.string "include_sox"
     t.integer "finished_work_papers", default: 0, null: false
     t.string "score_type", default: "effectiveness", null: false
+    t.integer "score_alt", default: 100, null: false
+    t.decimal "manual_score_alt", precision: 6, scale: 2
     t.index ["file_model_id"], name: "index_reviews_on_file_model_id"
     t.index ["identification"], name: "index_reviews_on_identification"
     t.index ["organization_id"], name: "index_reviews_on_organization_id"
