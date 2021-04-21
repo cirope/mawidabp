@@ -79,7 +79,7 @@ module Findings::Approval
     end
 
     def audit_recommendation_errors
-      if USE_SCOPE_CYCLE
+      if USE_SCOPE_CYCLE && audit_recommendations.blank?
         I18n.t "#{class_name}.errors.without_audit_recommendations"
       end
     end
