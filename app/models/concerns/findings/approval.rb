@@ -15,6 +15,7 @@ module Findings::Approval
       valid_state_error,
       audited_error,
       auditor_error,
+      audit_recommendation_errors,
       effect_error,
       (audit_comments_error unless SHOW_WEAKNESS_PROGRESS),
       task_error
@@ -77,9 +78,15 @@ module Findings::Approval
       end
     end
 
+    def audit_recommendation_errors
+      if USE_SCOPE_CYCLE
+        I18n.t "#{class_name}.errors.without_audit_recommendations"
+      end
+    end
+
     def effect_error
       if kind_of?(Weakness) && !HIDE_WEAKNESS_EFFECT && effect.blank?
-        if !USE_SCOPE_CYCLE && risk != RISK_TYPES[:none]
+        if !USE_SCOPE_CYCLE || (USE_SCOPE_CYCLE && risk != RISK_TYPES[:none])
           I18n.t "#{class_name}.errors.without_effect"
         end
       end
