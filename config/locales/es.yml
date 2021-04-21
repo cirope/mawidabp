@@ -1254,7 +1254,6 @@
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
 
-
   organization:
     index_title: "Listado de organizaciones"
     show_title: "Detalles de la organización"
