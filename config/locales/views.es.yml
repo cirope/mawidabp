@@ -588,6 +588,10 @@ es:
     create:
       correctly_created_with_count: 'Usuario creado, cantidad de auditores restantes para su licencia: %{count}'
 
+  reviews:
+    form:
+      add_business_unit_type: 'Agregar unidad organizativa'
+
     imports:
       new:
         title: 'Importar usuarios desde LDAP'
