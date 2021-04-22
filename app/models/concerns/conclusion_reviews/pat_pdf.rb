@@ -9,6 +9,8 @@ module ConclusionReviews::PatPdf
     put_pat_watermark_on pdf
 
     unless options[:brief]
+      @_next_prefix = 'A'
+
       pdf.add_page_footer 10, false, I18n.t('conclusion_review.pat.footer.text')
 
       put_pat_weaknesses_section_on pdf
@@ -273,7 +275,7 @@ module ConclusionReviews::PatPdf
         pdf.text Weakness.model_name.human(count: 0).upcase, align: :center, style: :bold
         pdf.move_down PDF_FONT_SIZE * 2
 
-        put_pat_previous_weaknesses_on pdf if review.plan_item.cycle?
+        put_pat_previous_weaknesses_on pdf
         put_pat_weaknesses_on          pdf
       end
     end
@@ -282,13 +284,20 @@ module ConclusionReviews::PatPdf
       previous = review.previous
 
       if previous&.weaknesses&.with_pending_status&.any?
-        pdf.text I18n.t('conclusion_review.pat.weaknesses.previous_title'), style: :bold
+        previous_title = I18n.t(
+          'conclusion_review.pat.weaknesses.previous_title',
+          prefix: "#{@_next_prefix}."
+        )
+
+        pdf.text previous_title, style: :bold
         pdf.move_down PDF_FONT_SIZE * 2
 
         previous.weaknesses.each_with_index do |weakness, i|
           put_pat_previous_weakness_on pdf, weakness, i.next
           pdf.move_down PDF_FONT_SIZE * 2
         end
+
+        @_next_prefix = @_next_prefix.next
       end
     end
 
@@ -321,7 +330,8 @@ module ConclusionReviews::PatPdf
 
         pdf.text I18n.t(
           "conclusion_review.pat.weaknesses.current_title.#{i18n_key_suffix}",
-          year: issue_date.year
+          prefix: "#{@_next_prefix}.",
+          year: review.period.name
         ), style: :bold
 
         pdf.move_down PDF_FONT_SIZE * 2
@@ -330,6 +340,8 @@ module ConclusionReviews::PatPdf
           put_pat_weakness_on pdf, weakness, i.next
           pdf.move_down PDF_FONT_SIZE * 2
         end
+
+        @_next_prefix = @_next_prefix.next
       end
     end
 

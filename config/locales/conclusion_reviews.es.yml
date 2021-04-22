@@ -94,10 +94,10 @@ es:
           weaknesses_title: "Observaciones del presente período:"
       weaknesses:
         title: "Anexo I"
-        previous_title: "A. Seguimiento de las observaciones de ciclo de acuerdo a nuestro informe anterior."
+        previous_title: "%{prefix} Seguimiento de las observaciones de ciclo de acuerdo a nuestro informe anterior."
         current_title:
-          cycle: "B. Observaciones surgidas durante la revisión correspondiente al año %{year}."
-          sustantive: "A. Observaciones del ciclo surgidas durante la revisión correspondiente al Plan %{year}."
+          cycle: "%{prefix} Observaciones surgidas durante la revisión correspondiente al año %{year}."
+          sustantive: "%{prefix} Observaciones del ciclo surgidas durante la revisión correspondiente al Plan %{year}."
         current_situation: "Situación Actual:"
         risk: "<b>Nivel de riesgo</b>: %{risk}"
         follow_up_date: "Fecha estimada de regularización:"
