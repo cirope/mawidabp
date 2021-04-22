@@ -17,7 +17,7 @@ module Findings::Approval
       auditor_error,
       audit_recommendation_errors,
       effect_error,
-      (audit_comments_error unless SHOW_WEAKNESS_PROGRESS),
+      audit_comments_error,
       task_error
     ].compact
 

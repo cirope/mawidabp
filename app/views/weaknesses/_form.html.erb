@@ -107,7 +107,7 @@
         <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>
         <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
 
-        <% if Current.conclusion_pdf_format == 'bic' %>
+        <% if %w(bic pat).include? Current.conclusion_pdf_format %>
           <% @weakness.build_image_model unless @weakness.image_model %>
 
           <div class="clearfix">

@@ -241,16 +241,17 @@ module ConclusionReviews::PatPdf
     def put_pat_brief_weaknesses_section_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
+      filtered   = weaknesses.not_revoked.where.not risk: Finding.risks[:none]
 
-      if weaknesses.not_revoked.any?
+      if filtered.any?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.cover.brief.details_title'), align: :justify
 
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.cover.brief.weaknesses_title'), align: :justify
 
-        weaknesses.not_revoked.each do |weakness|
-          pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief}", align: :justify
+        filtered.each do |weakness|
+          pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.risk_text})", align: :justify
         end
       end
     end
@@ -351,6 +352,12 @@ module ConclusionReviews::PatPdf
     def put_pat_weakness_on pdf, weakness, i
       pdf.text "#{i}. #{weakness.title}\n\n", align: :justify, style: :bold
       pdf.text weakness.description, align: :justify
+
+      if weakness.image_model
+        pdf.move_down PDF_FONT_SIZE
+        pdf.image weakness.image_model.image.path, position: :center,
+          fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
+      end
 
       if weakness.effect.present?
         pdf.move_down PDF_FONT_SIZE
