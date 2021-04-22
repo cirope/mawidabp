@@ -238,7 +238,7 @@ module Reports::WeaknessesByMonth
       pdf.text I18n.t("#{@controller}_committee_report.weaknesses_by_month.main_weaknesses"),
         style: :bold, size: PDF_FONT_SIZE
 
-      main_weaknesses = weaknesses.not_revoked.not_assumed_risk.with_high_risk.sort_by_code
+      main_weaknesses = weaknesses.not_revoked.with_high_risk.sort_by_code
 
       pdf.indent PDF_FONT_SIZE do
         if main_weaknesses.any?
@@ -284,7 +284,7 @@ module Reports::WeaknessesByMonth
       pdf.text I18n.t("#{@controller}_committee_report.weaknesses_by_month.other_weaknesses"),
         style: :bold, size: PDF_FONT_SIZE
 
-      other_weaknesses = weaknesses.not_revoked.not_assumed_risk.with_other_risk.sort_by_code
+      other_weaknesses = weaknesses.not_revoked.with_other_risk.sort_by_code
 
       pdf.indent PDF_FONT_SIZE do
         if other_weaknesses.any?

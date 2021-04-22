@@ -247,7 +247,8 @@ class OportunityTest < ActiveSupport::TestCase
                        [I18n.t('oportunity.errors.without_audited')]
                      end
 
-    @oportunity.state = Finding::STATUS[:assumed_risk]
+    @oportunity.state                    = Finding::STATUS[:implemented]
+    @oportunity.follow_up_date           = 2.days.from_now.to_date
     @oportunity.finding_user_assignments =
       @oportunity.finding_user_assignments.reject do |fua|
         fua.user.can_act_as_audited?
@@ -274,7 +275,8 @@ class OportunityTest < ActiveSupport::TestCase
                        [I18n.t('oportunity.errors.without_audit_comments')]
                      end
 
-    @oportunity.state = Finding::STATUS[:assumed_risk]
+    @oportunity.state          = Finding::STATUS[:implemented]
+    @oportunity.follow_up_date = 2.days.from_now.to_date
     @oportunity.audit_comments = '  '
 
     if Current.conclusion_pdf_format == 'gal'
@@ -295,7 +297,8 @@ class OportunityTest < ActiveSupport::TestCase
                        [I18n.t('oportunity.errors.with_expired_tasks')]
                      end
 
-    @oportunity.state = Finding::STATUS[:assumed_risk]
+    @oportunity.state          = Finding::STATUS[:implemented]
+    @oportunity.follow_up_date = 2.days.from_now.to_date
 
     @oportunity.tasks.build(description: 'Test task', due_on: Time.zone.yesterday)
 

@@ -1317,7 +1317,7 @@ es:
         finding_id: 'Observación / Oportunidad de mejora'
         user_id: 'Usuario'
         user: 'Usuario'
-        process_owner: 'Responsable'
+        process_owner: 'Responsables'
         responsible_auditor: 'Auditor referente'
       group:
         name: "Nombre"

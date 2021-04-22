@@ -408,7 +408,9 @@ class ReviewTest < ActiveSupport::TestCase
     Current.user = users :supervisor
 
     finding = Weakness.new finding.attributes.merge(
-      'state' => Finding::STATUS[:assumed_risk]
+      'state'           => Finding::STATUS[:implemented_audited],
+      'follow_up_date'  => Time.zone.today,
+      'skip_work_paper' => true
     )
     finding.finding_user_assignments.build(
       clone_finding_user_assignments(review_weakness)
