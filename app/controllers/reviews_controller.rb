@@ -511,8 +511,7 @@ class ReviewsController < ApplicationController
           file_model_attributes: [:id, :file, :file_cache, :_destroy]
         ],
         business_unit_type_reviews_attributes: [
-          :id, :business_unit_type_id,
-          :_destroy
+          :id, :business_unit_type_id, :_destroy
         ],
         control_objective_ids: [],
         process_control_ids: [],
