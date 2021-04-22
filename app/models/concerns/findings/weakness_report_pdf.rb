@@ -71,7 +71,10 @@ module Findings::WeaknessReportPdf
         current_situation_verified = I18n.t "label.#{weakness.current_situation_verified ? 'yes' : 'no'}"
 
         pdf.add_description_item Weakness.human_attribute_name(:current_situation), weakness.current_situation, 0, false
-        pdf.add_description_item Weakness.human_attribute_name(:current_situation_verified), current_situation_verified, 0, false
+
+        unless USE_SCOPE_CYCLE
+          pdf.add_description_item Weakness.human_attribute_name(:current_situation_verified), current_situation_verified, 0, false
+        end
       end
 
       if weakness.follow_up_date

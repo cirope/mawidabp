@@ -21,7 +21,12 @@
         <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
           value: (@conclusion_draft_review.review.score_text if @conclusion_draft_review.review&.persisted?),
           readonly: true } %>
-        <% if Current.conclusion_pdf_format == 'default' %>
+        <% if USE_SCOPE_CYCLE %>
+          <%= f.input :score_alt, label: Review.human_attribute_name(:score_alt), input_html: {
+            value: (@conclusion_draft_review.review.score_alt_text if @conclusion_draft_review.review&.persisted?),
+            readonly: true } %>
+        <% end %>
+        <% if %(default pat).include? Current.conclusion_pdf_format %>
           <%= f.input :issue_date, as: :date_picker %>
         <% end %>
         <%= f.input :effectiveness_notes, input_html: { rows: 3 } %>
@@ -48,8 +53,12 @@
           <%= f.input :applied_procedures, input_html: { rows: SHOW_CONCLUSION_AS_OPTIONS ? 4 : 3 } %>
         <% end %>
 
-        <% if Current.conclusion_pdf_format == 'default' %>
-          <%= f.input :recipients, input_html: { rows: 3 } %>
+        <% if %w(default pat).include? Current.conclusion_pdf_format %>
+          <%= f.input :recipients, input_html: { rows: USE_SCOPE_CYCLE ? 2 : 3 } %>
+
+          <% if USE_SCOPE_CYCLE %>
+            <%= f.input :additional_comments, input_html: { rows: 2 } %>
+          <% end %>
         <% else %>
           <%= f.input :issue_date, as: :date_picker %>
         <% end %>

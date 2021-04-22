@@ -6,7 +6,8 @@ current_review:
   plan_item: current_plan_item_1
   scope: committee
   risk_exposure: high
-  manual_score: 800
+  manual_score: 80
+  manual_score_alt:
   include_sox: yes
   finished_work_papers: 0
   organization: cirope
@@ -19,7 +20,8 @@ past_review:
   plan_item: past_plan_item_1
   scope: committee
   risk_exposure: high
-  manual_score: 800
+  manual_score:
+  manual_score_alt:
   include_sox: yes
   finished_work_papers: 0
   organization: cirope
@@ -32,7 +34,8 @@ review_with_conclusion:
   plan_item: current_plan_item_2
   scope: committee
   risk_exposure: high
-  manual_score: 800
+  manual_score:
+  manual_score_alt:
   include_sox: yes
   finished_work_papers: 0
   organization: cirope
@@ -45,7 +48,8 @@ review_without_conclusion:
   plan_item: current_plan_item_3
   scope: committee
   risk_exposure: high
-  manual_score: 800
+  manual_score:
+  manual_score_alt:
   include_sox: yes
   finished_work_papers: 0
   organization: cirope
@@ -58,7 +62,8 @@ review_without_conclusion_and_without_findings:
   plan_item: current_plan_item_4
   scope: committee
   risk_exposure: high
-  manual_score: 800
+  manual_score:
+  manual_score_alt:
   include_sox: yes
   finished_work_papers: 0
   organization: cirope
@@ -71,7 +76,8 @@ review_approved_with_conclusion:
   plan_item: current_plan_item_5
   scope: committee
   risk_exposure: high
-  manual_score: 800
+  manual_score: 80
+  manual_score_alt:
   include_sox: yes
   finished_work_papers: 0
   organization: cirope

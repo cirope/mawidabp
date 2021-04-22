@@ -16,7 +16,7 @@ module Reviews::Validations
       :include_sox, pdf_encoding: true
     validates :plan_item_id, uniqueness: { case_sensitive: false }
     validates :score_type, inclusion: {
-      in: %w(effectiveness manual none weaknesses)
+      in: %w(effectiveness manual none weaknesses splitted_weaknesses)
     }, allow_blank: true, allow_nil: true
 
     validates :scope,
@@ -25,8 +25,12 @@ module Reviews::Validations
               presence: true, if: :validate_extra_attributes?
 
     validates :manual_score, numericality: {
-      greater_than_or_equal_to: 0, less_than_or_equal_to: 1000
-    }, allow_nil: true, if: :validate_extra_attributes?
+      greater_than_or_equal_to: 0,
+      less_than_or_equal_to: USE_SCOPE_CYCLE ? 100 : 1000,
+    }, allow_nil: true, if: :validate_manual_score?
+    validates :manual_score_alt, numericality: {
+      greater_than_or_equal_to: 0, less_than_or_equal_to: 100
+    }, allow_nil: true, if: :validate_manual_score?
 
     validate :validate_user_roles
     validate :validate_plan_item
@@ -59,6 +63,10 @@ module Reviews::Validations
       else
         has_audited? && has_auditor? && has_some_manager
       end
+    end
+
+    def validate_manual_score?
+      SHOW_REVIEW_EXTRA_ATTRIBUTES || USE_SCOPE_CYCLE
     end
 
     def validate_extra_attributes?

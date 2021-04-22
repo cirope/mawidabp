@@ -337,4 +337,12 @@ class NotifierMailer < ActionMailer::Base
     mail to: users.map(&:email),
          subject: "[#{prefix}] #{t 'notifier.endorsement_update.title'}"
   end
+
+  def notify_new_oportunity(users, oportunity)
+    @oportunity = oportunity
+    prefix      = "[#{@oportunity.organization.prefix}]"
+
+    mail to: users.map(&:email),
+         subject: prefix.upcase + t('notifier.notify_new_oportunity.title')
+  end
 end

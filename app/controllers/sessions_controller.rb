@@ -27,7 +27,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    logout_params = { saml_logout: true } if current_organization.saml_provider.present?
+    logout_params = { saml_logout: true } if current_organization&.saml_provider.present?
 
     if session[:record_id] && LoginRecord.exists?(session[:record_id])
       LoginRecord.find(session[:record_id]).end!

@@ -360,6 +360,45 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     FileUtils.rm @conclusion_review.absolute_pdf_path
   end
 
+  test 'pat pdf conversion' do
+    Current.user = users :auditor
+    organization = organizations :cirope
+
+    assert_nothing_raised do
+      @conclusion_review.pat_pdf organization
+    end
+
+    size = File.size @conclusion_review.absolute_pdf_path
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert size > 0
+
+    assert_nothing_raised do
+      @conclusion_review.pat_pdf organization, :brief => '1'
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+    assert_not_equal size, new_size
+
+    if USE_SCOPE_CYCLE
+      scope = REVIEW_SCOPES.detect { |_, v| v[:type] == :cycle }
+
+      @conclusion_review.review.plan_item.update! scope: scope.first
+
+      assert_nothing_raised do
+        @conclusion_review.pat_pdf organization
+      end
+
+      assert File.size(@conclusion_review.absolute_pdf_path) > 0
+      assert_not_equal File.size(@conclusion_review.absolute_pdf_path), size
+    end
+
+    FileUtils.rm @conclusion_review.absolute_pdf_path
+  ensure
+    Current.user = nil
+  end
+
   test 'create bundle zip' do
     if File.exist?(@conclusion_review.absolute_bundle_zip_path)
       FileUtils.rm @conclusion_review.absolute_bundle_zip_path

@@ -19,6 +19,13 @@ module Users::Scopes
     }
     scope :not_hidden, -> { where hidden: false }
     scope :enabled, -> { where enable: true }
+    scope :managers, -> {
+      includes(organization_roles: :role).where(
+        roles: {
+          role_type: ::Role::TYPES[:manager]
+        }
+      )
+    }
   end
 
   module ClassMethods

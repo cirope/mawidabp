@@ -14,6 +14,12 @@
     $('#review_audit_type').val('<%= @plan_item.business_unit&.business_unit_type&.name %>')
     $('[data-review-user-assignments-container]').html('')
 
+    <% if USE_SCOPE_CYCLE && @plan_item.sustantive? %>
+      $('[data-manual-score-alt]').addClass('d-none')
+    <% elsif USE_SCOPE_CYCLE %>
+      $('[data-manual-score-alt]').removeClass('d-none')
+    <% end %>
+
     <%= simple_fields_for @review do |f| %>
       $('[data-control-objective-items-container]').html(
         '<%= j render('control_objective_items', f: f, readonly: false, frozen: false) %>'
