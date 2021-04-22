@@ -220,7 +220,7 @@ es:
         user_id: "Usuario"
       business_unit_type_reviews:
         business_unit_type_id: "Unidad organizativa"
-        user_id: "Informe"
+        review_id: "Informe"
       business_unit_score:
         business_unit_id: 'Unidad de negocio'
         design_score: 'Calificación pruebas de diseño'
