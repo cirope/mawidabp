@@ -93,7 +93,7 @@ module Findings::StateAlt
       end
 
       def exclude_from_reports_status
-        [:unconfirmed, :confirmed, :notify, :incomplete, :revoked, :repeated, :implemented]
+        [:unconfirmed, :confirmed, :notify, :incomplete, :repeated, :unanswered]
       end
 
       def pending_for_review_status

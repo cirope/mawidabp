@@ -16,7 +16,7 @@ module Reports::WeaknessesByStateExecution
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state_execution])
     @audit_types = [:internal, :external]
     @counts = []
-    @status = Finding::STATUS.except(:repeated, :revoked).sort do |s1, s2|
+    @status = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).sort do |s1, s2|
       s1.last <=> s2.last
     end
     @reviews = Review.list_all_without_final_review_by_date(
