@@ -6,6 +6,10 @@ module Reviews::FindingAssignments
       dependent:  :destroy,
       inverse_of: :review,
       after_add:  :check_if_fra_is_in_a_final_review
+    has_many :assigned_weaknesses,
+      -> { where type: Weakness.name },
+      through: :finding_review_assignments,
+      source:  :finding
 
     accepts_nested_attributes_for :finding_review_assignments,
       allow_destroy: true, reject_if: :all_blank

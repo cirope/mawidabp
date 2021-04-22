@@ -98,10 +98,12 @@ es:
         current_title:
           cycle: "%{prefix} Observaciones surgidas durante la revisión correspondiente al año %{year}."
           sustantive: "%{prefix} Observaciones del ciclo surgidas durante la revisión correspondiente al Plan %{year}."
+        follow_up: "%{prefix} Seguimiento de aspectos observados en otras inspecciones."
         current_situation: "Situación Actual:"
         risk: "<b>Nivel de riesgo</b>: %{risk}"
         follow_up_date: "Fecha estimada de regularización:"
         effect: "Efecto:"
+        answer: "Comentario del Sector:"
         audit_recommendations: "Recomendación:"
       workflow:
         title: "Anexo II"
