@@ -6,8 +6,8 @@ class BusinessUnitTypeReviewTest < ActiveSupport::TestCase
   end
 
   test 'blank attributes' do
-    @business_unit_type_review.review_id = ''
-    @business_unit_type_review.business_unit_type_id = ''
+    @business_unit_type_review.review_id = nil
+    @business_unit_type_review.business_unit_type_id = nil
 
     assert @business_unit_type_review.invalid?
     assert_error @business_unit_type_review, :review, :blank
