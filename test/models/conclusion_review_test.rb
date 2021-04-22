@@ -342,6 +342,14 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert File.exist?(@conclusion_review.absolute_pdf_path)
     assert size > 0
 
+    assert_nothing_raised do
+      @conclusion_review.pat_pdf organization, :brief => '1'
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+    assert_not_equal size, new_size
+
     if USE_SCOPE_CYCLE
       scope = REVIEW_SCOPES.detect { |_, v| v[:type] == :cycle }
 
