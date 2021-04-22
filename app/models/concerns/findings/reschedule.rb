@@ -60,7 +60,7 @@ module Findings::Reschedule
         last_being_implemented = versions.reverse.detect do |v|
           prev = v.reify dup: true
 
-          prev&.being_implemented? || prev&.awaiting?
+          prev&.being_implemented?
           v.reify(dup: true)&.being_implemented?
         end&.reify dup: true
 
@@ -75,7 +75,7 @@ module Findings::Reschedule
 
       versions_after_final_review.reverse.each do |v|
         prev = v.reify dup: true
-        date = prev.follow_up_date if prev&.being_implemented? || prev&.awaiting?
+        date = prev.follow_up_date if prev&.being_implemented?
 
         follow_up_dates << date if date.present?
       end

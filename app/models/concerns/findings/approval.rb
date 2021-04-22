@@ -51,8 +51,6 @@ module Findings::Approval
     def valid_state_error
       has_valid_state = implemented_audited? ||
         implemented?                         ||
-        awaiting?                            ||
-        failure?                             ||
         being_implemented?                   ||
         unanswered?
 

@@ -3,7 +3,7 @@ module WeaknessesHelper
     list = String.new.html_safe
     out = String.new.html_safe
 
-    if weakness.being_implemented? || weakness.awaiting?
+    if weakness.being_implemented?
       dates = weakness.all_follow_up_dates
     end
 
