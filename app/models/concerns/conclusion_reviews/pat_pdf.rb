@@ -438,7 +438,7 @@ module ConclusionReviews::PatPdf
     end
 
     def put_pat_workflow_on pdf
-      if review.control_objective_items.any?
+      if review.workflow
         pdf.start_new_page
 
         pdf.text I18n.t('conclusion_review.pat.workflow.title'), align: :right, style: :bold
@@ -448,8 +448,8 @@ module ConclusionReviews::PatPdf
           align: :center, inline_format: true
         pdf.move_down PDF_FONT_SIZE
 
-        review.control_objective_items.each_with_index do |coi, i|
-          pdf.text "#{i.next}. #{coi.control_objective_text}\n\n", align: :justify
+        review.workflow.workflow_items.each_with_index do |wi, i|
+          pdf.text "#{i.next}. #{wi.task}\n\n", align: :justify
         end
       end
     end
