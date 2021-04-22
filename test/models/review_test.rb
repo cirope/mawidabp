@@ -22,7 +22,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   # Prueba la creación de un reporte
   test 'create' do
-    assert_difference 'Review.count' do
+    assert_difference %w(Review.count BusinessUnitTypeReview.count) do
       @review = Review.list.create(
         :identification => 'New Identification',
         :description => 'New Description',
@@ -33,23 +33,28 @@ class ReviewTest < ActiveSupport::TestCase
         :manual_score => 80,
         :include_sox => 'no',
         :review_user_assignments_attributes => {
-            :new_1 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:auditor],
-              :user => users(:first_time)
-            },
-            :new_2 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:supervisor],
-              :user => users(:supervisor)
-            },
-            :new_3 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:manager],
-              :user => users(:supervisor_second)
-            },
-            :new_4 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:audited],
-              :user => users(:audited)
-            }
+          :new_1 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:auditor],
+            :user => users(:first_time)
+          },
+          :new_2 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:supervisor],
+            :user => users(:supervisor)
+          },
+          :new_3 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:manager],
+            :user => users(:supervisor_second)
+          },
+          :new_4 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:audited],
+            :user => users(:audited)
           }
+        },
+        :business_unit_type_reviews_attributes: [
+          {
+            :business_unit_type_id => business_unit_types(:cycle).id
+          }
+        ]
       )
     end
 
