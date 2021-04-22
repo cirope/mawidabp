@@ -50,7 +50,7 @@ class ReviewTest < ActiveSupport::TestCase
             :user => users(:audited)
           }
         },
-        :business_unit_type_reviews_attributes: [
+        :business_unit_type_reviews_attributes => [
           {
             :business_unit_type_id => business_unit_types(:cycle).id
           }
