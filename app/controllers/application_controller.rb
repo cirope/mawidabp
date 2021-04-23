@@ -115,7 +115,7 @@ class ApplicationController < ActionController::Base
       else
         go_to = request.fullpath
         store_go_to = request.get? && request.format.html? && !request.xhr?
-        session[:go_to] = go_to if store_go_to
+        session[:go_to] = go_to if store_go_to && go_to !~ /\A\/sessions/
         @auth_user = nil
         redirect_to_login t('message.must_be_authenticated'), :alert
       end

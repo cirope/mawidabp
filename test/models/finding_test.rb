@@ -17,6 +17,7 @@ class FindingTest < ActiveSupport::TestCase
           review_code: 'O020',
           title: 'Title',
           description: 'New description',
+          brief: 'New brief',
           answer: 'New answer',
           audit_comments: 'New audit comments',
           state: Finding::STATUS[:notify],
@@ -62,6 +63,7 @@ class FindingTest < ActiveSupport::TestCase
         review_code: 'O020',
         title: 'Title',
         description: 'New description',
+        brief: 'New brief',
         answer: 'New answer',
         audit_comments: 'New audit comments',
         state: Finding::STATUS[:notify],
@@ -112,6 +114,7 @@ class FindingTest < ActiveSupport::TestCase
     @finding.review_code               = '   '
     @finding.title                     = '   '
     @finding.description               = '   '
+    @finding.brief                     = '   '
 
     assert @finding.invalid?
     assert_error @finding, :control_objective_item_id, :blank
@@ -119,6 +122,12 @@ class FindingTest < ActiveSupport::TestCase
     assert_error @finding, :review_code, :invalid
     assert_error @finding, :title, :blank
     assert_error @finding, :description, :blank
+
+    if USE_SCOPE_CYCLE
+      assert_error @finding, :brief, :blank
+    else
+      assert @finding.errors[:brief].blank?
+    end
   end
 
   test 'validates special blank attributes' do

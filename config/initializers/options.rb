@@ -90,13 +90,20 @@ PLAN_ITEM_STATS_EXCLUDED_SCOPES = [
   'Informe de comité'
 ]
 
-REVIEW_SCOPES = {
-  'Auditorías'         => {},
-  'Seguimiento'        => {},
-  'Trabajo especial'   => { require_tags: ['required_on_special_reviews'] },
-  'Informe de comité'  => {},
-  'Auditoría continua' => {}
-}
+REVIEW_SCOPES = if USE_SCOPE_CYCLE
+                  {
+                    'Ciclo'      => { type: :cycle },
+                    'Sustantivo' => { type: :sustantive }
+                  }
+                else
+                  {
+                    'Auditorías'         => {},
+                    'Seguimiento'        => {},
+                    'Trabajo especial'   => { require_tags: ['required_on_special_reviews'] },
+                    'Informe de comité'  => {},
+                    'Auditoría continua' => {}
+                  }
+                end
 
 REVIEW_RISK_EXPOSURE = [
   'Alta',

@@ -37,10 +37,12 @@ es:
     low: 'Bajo'
     medium: 'Medio'
     high: 'Alto'
+    none: 'Organismo contralor'
   priority_types:
     low: 'Baja'
     medium: 'Media'
     high: 'Alta'
+    none: 'Organismo contralor'
   score_types:
     satisfactory: 'Satisfactorio'
     improve: 'Necesita mejorar'

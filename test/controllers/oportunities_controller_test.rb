@@ -119,6 +119,7 @@ class OportunitiesControllerTest < ActionController::TestCase
           :review_code => 'OM020',
           :title => 'Title',
           :description => 'New description',
+          :brief => 'New brief',
           :answer => 'New answer',
           :audit_comments => 'New audit comments',
           :origination_date => 1.day.ago.to_date.to_s(:db),

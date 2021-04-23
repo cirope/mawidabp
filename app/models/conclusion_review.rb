@@ -15,6 +15,7 @@ class ConclusionReview < ApplicationRecord
   include ConclusionReviews::FindingsFollowUpPdf
   include ConclusionReviews::FindingsSheetPdf
   include ConclusionReviews::GalPdf
+  include ConclusionReviews::PatPdf
   include ConclusionReviews::Pdf
   include ConclusionReviews::Review
   include ConclusionReviews::Scopes
