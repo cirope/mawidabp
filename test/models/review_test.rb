@@ -331,26 +331,25 @@ class ReviewTest < ActiveSupport::TestCase
     @review.plan_item.update! scope: scope.first
 
     # With two low risk on design
-    assert_equal :satisfactory, @review.score_array.first
-    assert_equal 96, @review.score
-    assert_equal 100, @review.score_alt
-    assert_equal 'splitted_weaknesses', @review.score_type
+    assert_equal :improve, @review.score_array.first
+    assert_equal 50, @review.score
+    assert_equal 75, @review.score_alt
+    assert_equal 'splitted_effectiveness', @review.score_type
 
     coi = @review.weaknesses.first.control_objective_item
 
-    coi.update! design_score:       nil,
+    coi.update! design_score:       1,
                 sustantive_score:   1,
                 control_attributes: {
                   id:               coi.control.id,
-                  design_tests:     nil,
                   sustantive_tests: 'Some'
                 }
 
     # With one low risk on design and one on sustantive
-    assert_equal :satisfactory, @review.score_array.first
-    assert_equal 98, @review.score
-    assert_equal 98, @review.score_alt
-    assert_equal 'splitted_weaknesses', @review.score_type
+    assert_equal :unsatisfactory, @review.reload.score_array.first
+    assert_equal 5, @review.score
+    assert_equal 53, @review.score_alt
+    assert_equal 'splitted_effectiveness', @review.score_type
   end
 
   test 'must be approved function' do
