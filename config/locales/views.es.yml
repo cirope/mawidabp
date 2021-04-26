@@ -587,6 +587,9 @@ es:
       add_organization_role: 'Agregar un nuevo perfil'
     create:
       correctly_created_with_count: 'Usuario creado, cantidad de auditores restantes para su licencia: %{count}'
+    profiles:
+      edit:
+        title: 'Mis datos'
 
   reviews:
     form:
