@@ -9,6 +9,9 @@ module ConclusionReviews::PatPdf
     put_pat_watermark_on pdf
 
     unless options[:brief]
+      @_next_prefix = 'A'
+      @_next_index  = 0
+
       pdf.add_page_footer 10, false, I18n.t('conclusion_review.pat.footer.text')
 
       put_pat_weaknesses_section_on pdf
@@ -41,7 +44,9 @@ module ConclusionReviews::PatPdf
     end
 
     def put_pat_cover_header_on pdf, brief: false
-      to_text = I18n.t 'conclusion_review.pat.cover.to', recipients: recipients
+      but_names = [review.business_unit_type.name] + review.business_unit_types.map(&:name)
+      to_text   = I18n.t 'conclusion_review.pat.cover.to'
+      from_text = I18n.t 'conclusion_review.pat.cover.from', business_unit_types: but_names.to_sentence
 
       unless brief
         pdf.text "#{Review.model_name.human} #{review.identification}\n\n",
@@ -49,8 +54,7 @@ module ConclusionReviews::PatPdf
       end
 
       pdf.text I18n.l(issue_date, format: :long), align: :right
-      pdf.text "<i><b>#{I18n.t 'conclusion_review.pat.cover.from'}</b></i>",
-        inline_format: true
+      pdf.text "<i><b>#{from_text}</b></i>", inline_format: true
 
       pdf.move_down PDF_FONT_SIZE
 
@@ -60,7 +64,7 @@ module ConclusionReviews::PatPdf
     def put_pat_extra_brief_info_on pdf, organization
       title = I18n.t(
         'conclusion_review.pat.cover.brief.title',
-        business_unit: review.business_unit.name,
+        description: review.description,
         review: review.identification
       )
       notice = I18n.t(
@@ -83,14 +87,6 @@ module ConclusionReviews::PatPdf
     def put_pat_brief_conclusion_on pdf
       title = I18n.t 'conclusion_review.pat.cover.conclusion', prefix: ''
 
-      if additional_comments.present?
-        additional_comments_title = I18n.t 'conclusion_review.pat.cover.additional_comments'
-
-        pdf.text "<b><u>#{additional_comments_title}</u></b>\n\n", inline_format: true
-        pdf.text additional_comments, align: :justify
-        pdf.move_down PDF_FONT_SIZE
-      end
-
       pdf.text "<b><u>#{title}</u></b>\n\n", inline_format: true
       pdf.text conclusion, style: :italic, align: :justify
     end
@@ -98,12 +94,12 @@ module ConclusionReviews::PatPdf
     def put_pat_extra_cover_info_on pdf
       method   = review.plan_item.cycle? ? :upcase : :to_s
       i18n_key = if review.plan_item.cycle?
-                   'conclusion_review.pat.cover.business_unit.cycle'
+                   'conclusion_review.pat.cover.description.cycle'
                  else
-                   'conclusion_review.pat.cover.business_unit.sustantive'
+                   'conclusion_review.pat.cover.description.sustantive'
                  end
 
-      pdf.text "\n<i>#{I18n.t(i18n_key, business_unit: review.business_unit.name).send method}</i>",
+      pdf.text "\n<i>#{I18n.t(i18n_key, description: review.description).send method}</i>",
         align: :center, inline_format: true
       pdf.put_hr
 
@@ -245,16 +241,17 @@ module ConclusionReviews::PatPdf
     def put_pat_brief_weaknesses_section_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
+      filtered   = weaknesses.not_revoked.where.not risk: Finding.risks[:none]
 
-      if weaknesses.not_revoked.any?
+      if filtered.any?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.cover.brief.details_title'), align: :justify
 
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.cover.brief.weaknesses_title'), align: :justify
 
-        weaknesses.not_revoked.each do |weakness|
-          pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief}", align: :justify
+        filtered.each do |weakness|
+          pdf.text "\n• #{Prawn::Text::NBSP * 2} #{weakness.brief} (#{weakness.risk_text})", align: :justify
         end
       end
     end
@@ -280,8 +277,9 @@ module ConclusionReviews::PatPdf
         pdf.text Weakness.model_name.human(count: 0).upcase, align: :center, style: :bold
         pdf.move_down PDF_FONT_SIZE * 2
 
-        put_pat_previous_weaknesses_on pdf if review.plan_item.cycle?
-        put_pat_weaknesses_on          pdf
+        put_pat_previous_weaknesses_on  pdf
+        put_pat_weaknesses_on           pdf
+        put_pat_weaknesses_follow_up_on pdf
       end
     end
 
@@ -289,13 +287,20 @@ module ConclusionReviews::PatPdf
       previous = review.previous
 
       if previous&.weaknesses&.with_pending_status&.any?
-        pdf.text I18n.t('conclusion_review.pat.weaknesses.previous_title'), style: :bold
+        previous_title = I18n.t(
+          'conclusion_review.pat.weaknesses.previous_title',
+          prefix: "#{@_next_prefix}."
+        )
+
+        pdf.text previous_title, style: :bold
         pdf.move_down PDF_FONT_SIZE * 2
 
-        previous.weaknesses.each_with_index do |weakness, i|
-          put_pat_previous_weakness_on pdf, weakness, i.next
+        previous.weaknesses.each do |weakness|
+          put_pat_previous_weakness_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
+
+        @_next_prefix = @_next_prefix.next
       end
     end
 
@@ -303,10 +308,10 @@ module ConclusionReviews::PatPdf
       pdf.text "#{i}. #{weakness.title}\n\n", align: :justify, style: :bold
       pdf.text weakness.description, align: :justify
 
-      if weakness.answer.present?
+      if weakness.current_situation.present?
         pdf.move_down PDF_FONT_SIZE
         pdf.text I18n.t('conclusion_review.pat.weaknesses.current_situation'), style: :bold
-        pdf.text weakness.answer
+        pdf.text weakness.current_situation
       end
 
       pdf.move_down PDF_FONT_SIZE
@@ -322,27 +327,37 @@ module ConclusionReviews::PatPdf
     def put_pat_weaknesses_on pdf
       use_finals = kind_of? ConclusionFinalReview
       weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
+      filtered   = weaknesses.not_revoked.where.not risk: Finding.risks[:none]
 
-      if weaknesses.not_revoked.any?
+      if filtered.any?
         i18n_key_suffix = review.plan_item.cycle? ? 'cycle' : 'sustantive'
 
         pdf.text I18n.t(
           "conclusion_review.pat.weaknesses.current_title.#{i18n_key_suffix}",
-          year: issue_date.year
+          prefix: "#{@_next_prefix}.",
+          year: review.period.name
         ), style: :bold
 
         pdf.move_down PDF_FONT_SIZE * 2
 
-        weaknesses.not_revoked.each_with_index do |weakness, i|
-          put_pat_weakness_on pdf, weakness, i.next
+        filtered.each do |weakness|
+          put_pat_weakness_on pdf, weakness, (@_next_index += 1)
           pdf.move_down PDF_FONT_SIZE * 2
         end
+
+        @_next_prefix = @_next_prefix.next
       end
     end
 
     def put_pat_weakness_on pdf, weakness, i
       pdf.text "#{i}. #{weakness.title}\n\n", align: :justify, style: :bold
       pdf.text weakness.description, align: :justify
+
+      if weakness.image_model
+        pdf.move_down PDF_FONT_SIZE
+        pdf.image weakness.image_model.image.path, position: :center,
+          fit: [pdf.bounds.width, pdf.bounds.height - PDF_FONT_SIZE * 3]
+      end
 
       if weakness.effect.present?
         pdf.move_down PDF_FONT_SIZE
@@ -358,6 +373,61 @@ module ConclusionReviews::PatPdf
 
       pdf.move_down PDF_FONT_SIZE
       pdf.text I18n.t('conclusion_review.pat.weaknesses.risk', risk: weakness.risk_text), inline_format: true
+
+      if weakness.answer.present?
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t('conclusion_review.pat.weaknesses.answer'), style: :bold
+        pdf.text weakness.answer
+      end
+
+      if weakness.follow_up_date
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t('conclusion_review.pat.weaknesses.follow_up_date'), style: :bold
+        pdf.text I18n.l(weakness.follow_up_date, format: :minimal)
+      end
+    end
+
+    def put_pat_weaknesses_follow_up_on pdf
+      use_finals = kind_of? ConclusionFinalReview
+      weaknesses = use_finals ? review.final_weaknesses : review.weaknesses
+      filtered   = weaknesses.not_revoked.where risk: Finding.risks[:none]
+      assigned   = review.assigned_weaknesses
+
+      if filtered.any? || assigned.any?
+        pdf.text I18n.t(
+          'conclusion_review.pat.weaknesses.follow_up',
+          prefix: "#{@_next_prefix}.",
+          year: review.period.name
+        ), style: :bold
+
+        pdf.move_down PDF_FONT_SIZE * 2
+
+        filtered.each do |weakness|
+          put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
+          pdf.move_down PDF_FONT_SIZE * 2
+        end
+
+        assigned.each do |weakness|
+          put_pat_weakness_follow_up_on pdf, weakness, (@_next_index += 1)
+          pdf.move_down PDF_FONT_SIZE * 2
+        end
+
+        @_next_prefix = @_next_prefix.next
+      end
+    end
+
+    def put_pat_weakness_follow_up_on pdf, weakness, i
+      pdf.text "#{i}. #{weakness.title}\n\n", align: :justify, style: :bold
+      pdf.text weakness.description, align: :justify
+
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text I18n.t('conclusion_review.pat.weaknesses.risk', risk: weakness.risk_text), inline_format: true
+
+      if weakness.current_situation.present?
+        pdf.move_down PDF_FONT_SIZE
+        pdf.text I18n.t('conclusion_review.pat.weaknesses.current_situation'), style: :bold
+        pdf.text weakness.current_situation
+      end
 
       if weakness.follow_up_date
         pdf.move_down PDF_FONT_SIZE
@@ -375,7 +445,7 @@ module ConclusionReviews::PatPdf
     end
 
     def put_pat_workflow_on pdf
-      if review.control_objective_items.any?
+      if review.workflow
         pdf.start_new_page
 
         pdf.text I18n.t('conclusion_review.pat.workflow.title'), align: :right, style: :bold
@@ -385,8 +455,8 @@ module ConclusionReviews::PatPdf
           align: :center, inline_format: true
         pdf.move_down PDF_FONT_SIZE
 
-        review.control_objective_items.each_with_index do |coi, i|
-          pdf.text "#{i.next}. #{coi.control_objective_text}\n\n", align: :justify
+        review.workflow.workflow_items.each_with_index do |wi, i|
+          pdf.text "#{i.next}. #{wi.task}\n\n", align: :justify
         end
       end
     end

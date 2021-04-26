@@ -22,7 +22,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   # Prueba la creación de un reporte
   test 'create' do
-    assert_difference 'Review.count' do
+    assert_difference %w(Review.count BusinessUnitTypeReview.count) do
       @review = Review.list.create(
         :identification => 'New Identification',
         :description => 'New Description',
@@ -33,23 +33,28 @@ class ReviewTest < ActiveSupport::TestCase
         :manual_score => 80,
         :include_sox => 'no',
         :review_user_assignments_attributes => {
-            :new_1 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:auditor],
-              :user => users(:first_time)
-            },
-            :new_2 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:supervisor],
-              :user => users(:supervisor)
-            },
-            :new_3 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:manager],
-              :user => users(:supervisor_second)
-            },
-            :new_4 => {
-              :assignment_type => ReviewUserAssignment::TYPES[:audited],
-              :user => users(:audited)
-            }
+          :new_1 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:auditor],
+            :user => users(:first_time)
+          },
+          :new_2 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:supervisor],
+            :user => users(:supervisor)
+          },
+          :new_3 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:manager],
+            :user => users(:supervisor_second)
+          },
+          :new_4 => {
+            :assignment_type => ReviewUserAssignment::TYPES[:audited],
+            :user => users(:audited)
           }
+        },
+        :business_unit_type_reviews_attributes => [
+          {
+            :business_unit_type_id => business_unit_types(:cycle).id
+          }
+        ]
       )
     end
 
@@ -326,26 +331,25 @@ class ReviewTest < ActiveSupport::TestCase
     @review.plan_item.update! scope: scope.first
 
     # With two low risk on design
-    assert_equal :satisfactory, @review.score_array.first
-    assert_equal 96, @review.score
-    assert_equal 100, @review.score_alt
-    assert_equal 'splitted_weaknesses', @review.score_type
+    assert_equal :improve, @review.score_array.first
+    assert_equal 50, @review.score
+    assert_equal 75, @review.score_alt
+    assert_equal 'splitted_effectiveness', @review.score_type
 
     coi = @review.weaknesses.first.control_objective_item
 
-    coi.update! design_score:       nil,
+    coi.update! design_score:       1,
                 sustantive_score:   1,
                 control_attributes: {
                   id:               coi.control.id,
-                  design_tests:     nil,
                   sustantive_tests: 'Some'
                 }
 
     # With one low risk on design and one on sustantive
-    assert_equal :satisfactory, @review.score_array.first
-    assert_equal 98, @review.score
-    assert_equal 98, @review.score_alt
-    assert_equal 'splitted_weaknesses', @review.score_type
+    assert_equal :unsatisfactory, @review.reload.score_array.first
+    assert_equal 5, @review.score
+    assert_equal 53, @review.score_alt
+    assert_equal 'splitted_effectiveness', @review.score_type
   end
 
   test 'must be approved function' do

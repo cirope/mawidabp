@@ -67,8 +67,8 @@ es:
         audit_recommendations: "Recomendación"
     pat:
       cover:
-        from: "Banco Patagonia S.A.\nGerencia de Auditoría Interna\nAuditoría de Riesgos y Subsidiarias y Sistemas"
-        to: "A: %{recipients}\nComité de Auditoría"
+        from: "Banco Patagonia S.A.\nGerencia de Auditoría Interna\n%{business_unit_types}"
+        to: "A: Comité de Auditoría"
         scope:
           cycle: "%{prefix} Tareas y Alcance."
           sustantive: "%{prefix} Alcance de las Tareas."
@@ -82,11 +82,11 @@ es:
         auditors: "Auditores intervinientes:"
         supervisors: "Supervisado por:"
         organization: "Banco Patagonia S.A."
-        business_unit:
-          cycle: "Ciclo %{business_unit}"
-          sustantive: "Pruebas sustantivas sobre %{business_unit}"
+        description:
+          cycle: "Ciclo %{description}"
+          sustantive: "Pruebas sustantivas sobre %{description}"
         brief:
-          title: "Ref: %{business_unit}\nInforme de Auditoría N° %{review}"
+          title: "Ref: %{description}\nInforme de Auditoría N° %{review}"
           notice:
             one: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el N° %{review}, consta de %{count} página."
             other: "El siguiente informe resume los puntos observados en la auditoría de referencia. Su objeto es permitir una lectura rápida en los máximos niveles. El informe completo que será copiado a libros bajo el N° %{review}, consta de %{count} páginas."
@@ -94,14 +94,16 @@ es:
           weaknesses_title: "Observaciones del presente período:"
       weaknesses:
         title: "Anexo I"
-        previous_title: "A. Seguimiento de las observaciones de ciclo de acuerdo a nuestro informe anterior."
+        previous_title: "%{prefix} Seguimiento de las observaciones de ciclo de acuerdo a nuestro informe anterior."
         current_title:
-          cycle: "B. Observaciones surgidas durante la revisión correspondiente al año %{year}."
-          sustantive: "A. Observaciones del ciclo surgidas durante la revisión correspondiente al Plan %{year}."
+          cycle: "%{prefix} Observaciones surgidas durante la revisión correspondiente al año %{year}."
+          sustantive: "%{prefix} Observaciones del ciclo surgidas durante la revisión correspondiente al Plan %{year}."
+        follow_up: "%{prefix} Seguimiento de aspectos observados en otras inspecciones."
         current_situation: "Situación Actual:"
         risk: "<b>Nivel de riesgo</b>: %{risk}"
         follow_up_date: "Fecha estimada de regularización:"
         effect: "Efecto:"
+        answer: "Comentario del Sector:"
         audit_recommendations: "Recomendación:"
       workflow:
         title: "Anexo II"

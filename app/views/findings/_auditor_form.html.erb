@@ -40,8 +40,8 @@
         <%= f.input :description, label: finding_description_label, input_html: { readonly: true, rows: 5 } %>
 
         <% if SHOW_FINDING_CURRENT_SITUATION %>
-          <%= f.input :current_situation, input_html: { rows: 3 } %>
-          <%= f.input :current_situation_verified %>
+          <%= f.input :current_situation, input_html: { rows: USE_SCOPE_CYCLE ? 4 : 3 } %>
+          <%= f.input :current_situation_verified unless USE_SCOPE_CYCLE %>
         <% end %>
 
         <% if @finding.kind_of?(Weakness) %>

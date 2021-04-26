@@ -90,10 +90,12 @@
     <%= simple_format @finding.current_situation, class: 'mb-1' %>
   </div>
 
-  <div>
-    <strong><%= Finding.human_attribute_name :current_situation_verified %></strong>:
-    <%= t "label.#{@finding.current_situation_verified ? 'yes' : 'no'}" %>
-  </div>
+  <% unless USE_SCOPE_CYCLE %>
+    <div>
+      <strong><%= Finding.human_attribute_name :current_situation_verified %></strong>:
+      <%= t "label.#{@finding.current_situation_verified ? 'yes' : 'no'}" %>
+    </div>
+  <% end %>
 <% end %>
 
 <div>

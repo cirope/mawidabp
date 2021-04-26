@@ -37,6 +37,14 @@ module ReviewsHelper
     review.plan_item.try(:business_unit).try(:name)
   end
 
+  def review_business_unit_types
+    if @review&.business_unit_type
+      BusinessUnitType.list.where.not(id: @review.business_unit_type.id).order :name
+    else
+      BusinessUnitType.list.order :name
+    end
+  end
+
   def user_assignment_type_field(form, inline = true, disabled = false)
     input_options = { disabled: disabled, data: { review_role: true } }
     options = user_assignment_type_options_for form.object.user
