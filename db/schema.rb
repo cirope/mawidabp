@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_22_194021) do
+ActiveRecord::Schema.define(version: 2021_04_23_194445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -242,7 +242,6 @@ ActiveRecord::Schema.define(version: 2021_04_22_194021) do
     t.string "previous_identification"
     t.date "previous_date"
     t.text "main_recommendations"
-    t.text "effectiveness_notes"
     t.text "additional_comments"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
@@ -568,6 +567,8 @@ ActiveRecord::Schema.define(version: 2021_04_22_194021) do
     t.integer "alternative_port"
     t.string "tls"
     t.string "ca_path"
+    t.string "organizational_unit_attribute"
+    t.string "organizational_unit_default"
     t.index ["organization_id"], name: "index_ldap_configs_on_organization_id"
   end
 

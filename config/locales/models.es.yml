@@ -386,6 +386,8 @@ es:
         test_password: 'Contraseña'
         user: 'Usuario de servicio'
         password: 'Contraseña de servicio'
+        organizational_unit_attribute: "Unidad organizacional (OU)"
+        organizational_unit_default: "Unidad organizacional por defecto (OU)"
       license:
         paid_until: 'Pagada hasta'
         auditors_limit: 'Limite de usuarios auditores'
