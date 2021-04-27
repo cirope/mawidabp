@@ -118,7 +118,7 @@ module LdapConfigs::LdapImport
     end
 
     def organizational_unit entry
-      casted_ou = casted_attribute(entry, organization_unit_attribute)
+      casted_ou = casted_attribute(entry, organizational_unit_attribute)
 
       casted_ou&.gsub /\Acn=[\w\s]+,/i, ''
     end
