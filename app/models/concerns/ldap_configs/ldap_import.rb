@@ -101,7 +101,7 @@ module LdapConfigs::LdapImport
         name:                casted_attribute(entry, name_attribute),
         last_name:           casted_attribute(entry, last_name_attribute),
         email:               casted_attribute(entry, email_attribute),
-        organizational_unit: organizational_unit(entry),
+        organizational_unit: casted_organizational_unit(entry),
         hidden:              false,
         enable:              true
       }.merge(
@@ -117,7 +117,7 @@ module LdapConfigs::LdapImport
       attr_name && entry[attr_name].first&.force_encoding('UTF-8')&.to_s
     end
 
-    def organizational_unit entry
+    def casted_organizational_unit entry
       casted_ou = casted_attribute(entry, organizational_unit_attribute)
 
       casted_ou&.gsub /\Acn=[\w\s]+,/i, ''

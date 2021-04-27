@@ -72,7 +72,7 @@ class OrganizationsController < ApplicationController
           :email_attribute, :function_attribute, :roles_attribute,
           :manager_attribute, :tls, :ca_path, :test_user, :test_password,
           :user, :password, :alternative_hostname, :alternative_port,
-          :organizational_unit_attribute, :organizational_unit_default
+          :organizational_unit_attribute, :organizational_unit
         ]
       )
     end
