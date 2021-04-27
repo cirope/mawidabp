@@ -98,6 +98,9 @@ module Reports::WeaknessesReport
 
       if report_params[:finding_status].present?
         weaknesses = weaknesses.where state: report_params[:finding_status].to_i
+      else
+        states     = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).values
+        weaknesses = weaknesses.where state: states
       end
 
       if report_params[:finding_current_situation_verified].present?

@@ -58,6 +58,7 @@ module Reports::TaggedFindingsReport
 
     def filter_tagged_findings_report_by_status scope, report_params
       states = report_params[:finding_status]&.reject(&:blank?) || []
+      states = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).values if states.empty?
 
       return scope if states.empty?
 
