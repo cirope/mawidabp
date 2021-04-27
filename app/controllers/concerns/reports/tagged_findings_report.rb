@@ -57,15 +57,12 @@ module Reports::TaggedFindingsReport
     end
 
     def filter_tagged_findings_report_by_status scope, report_params
-      if report_params[:finding_status] && report_params[:finding_status]&.reject(&:blank?).any?
-        states = report_params[:finding_status]&.reject(&:blank?)
-      else
-        states = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).values
-      end
+      states = report_params[:finding_status]&.reject(&:blank?) || []
+      states = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).values if states.empty?
 
       return scope if states.empty?
 
-      not_muted_states     = Finding::EXCLUDE_FROM_REPORTS_STATUS
+      not_muted_states     = Finding::EXCLUDE_FROM_REPORTS_STATUS + [:implemented_audited]
       mute_state_filter_on = Finding::STATUS.except(*not_muted_states).values.map(&:to_s)
 
       unless states.sort == mute_state_filter_on.sort
