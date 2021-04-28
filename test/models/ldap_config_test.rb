@@ -179,10 +179,25 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert user.organization_roles.map(&:role_id).exclude?(role.id)
     assert user.organization_roles.map(&:role_id).exclude?(corp_role.id)
 
-    user_count = SKIP_VALIDATION_CREATE_OR_UPDATE_USER ? 'User.count -1' : 'User.count'
+    file_info  = JSON.parse ENV['EXTRA_USERS_INFO'] rescue {} if ENV['EXTRA_USERS_INFO'].present?
+    user_count = file_info.empty? ? 1 : 0
 
-    assert_difference user_count do
-      @ldap_config.import 'admin', 'admin123'
+    assert_difference 'User.count', user_count do
+      if file_info.empty?
+        @ldap_config.import 'admin', 'admin123'
+      else
+        user_auditor    = users :auditor
+        user_jane       = users :jane
+        user_jane.email = nil
+
+        user_jane.save validate: false
+
+        refute user_jane.email.present?
+
+        @ldap_config.import 'admin', 'admin123'
+
+        assert user_auditor.email, 'test@example.com'
+      end
     end
 
     assert user.reload.organization_roles.map(&:role_id).include?(role.id)

@@ -2,12 +2,12 @@ module LdapConfigs::LdapImport
   extend ActiveSupport::Concern
 
   def import username, password
-    connection     ||= ldap username, password
-    ldap_filter      = Net::LDAP::Filter.construct filter
-    users_by_dn      = {}
-    managers         = {}
-    users            = []
-    one_minute_to_go = Time.zone.now
+    connection ||= ldap username, password
+    ldap_filter  = Net::LDAP::Filter.construct filter
+    users_by_dn  = {}
+    managers     = {}
+    users        = []
+    start_date   = Time.zone.now
 
     User.transaction do
       connection.search(base: basedn, filter: ldap_filter) do |entry|
@@ -30,7 +30,7 @@ module LdapConfigs::LdapImport
 
       import_extra_users_info
 
-      cleanup_users_with_email_null(one_minute_to_go) if SKIP_VALIDATION_CREATE_OR_UPDATE_USER
+      remove_invalid_users(start_date) if import_extra_users_info?
     end
 
     users
@@ -47,7 +47,7 @@ module LdapConfigs::LdapImport
   private
 
     def process_entry? entry
-      if SKIP_VALIDATION_CREATE_OR_UPDATE_USER || entry[email_attribute].present?
+      if import_extra_users_info? || entry[email_attribute].present?
         role_names = role_data entry
         roles      = clean_roles Role.list_with_corporate.where(name: role_names)
         data       = trivial_data entry
@@ -153,10 +153,10 @@ module LdapConfigs::LdapImport
 
       data[:organization_roles_attributes] = new_roles.compact + removed_roles.compact
 
-      if SKIP_VALIDATION_CREATE_OR_UPDATE_USER
+      if import_extra_users_info?
 
         user.assign_attributes data
-        user.save! validate: false
+        user.save validate: false
       else
         user.update data
       end
@@ -169,10 +169,10 @@ module LdapConfigs::LdapImport
         { organization_id: r.organization_id, role_id: r.id }
       end.compact
 
-      if SKIP_VALIDATION_CREATE_OR_UPDATE_USER
+      if import_extra_users_info?
         user = User.new data
 
-        user.save! validate: false
+        user.save validate: false
       else
         user = User.create data
       end
@@ -221,9 +221,9 @@ module LdapConfigs::LdapImport
       end
     end
 
-    def cleanup_users_with_email_null one_minute_to_go
+    def remove_invalid_users start_date
       User.where(email: nil).
-        where('updated_at >= ?', one_minute_to_go).
+        where('updated_at::date >= ?', start_date).
         destroy_all
     end
 end

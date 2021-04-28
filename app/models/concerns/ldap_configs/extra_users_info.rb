@@ -14,11 +14,17 @@ module LdapConfigs::ExtraUsersInfo
         hierarchy = row[6].split(/\W/).reject &:blank?
         manager   = User.list.by_user hierarchy.first
         user      = manager && User.list.where(
-          "LOWER(#{User.qcn 'name'}) = ? AND LOWER(#{User.qcn 'last_name'}) = ?",
+          "LOWER(#{User.quoted_table_name}.#{User.qcn 'name'}) = ? AND
+          LOWER(#{User.quoted_table_name}.#{User.qcn 'last_name'}) = ?",
           row[2].downcase, row[1].downcase
         ).take
 
-        user.update manager_id: manager.id if user
+        user.update(
+          {
+            manager_id: manager.id,
+            email: row[4].downcase
+          }
+        ) if user
       end
     end
 
