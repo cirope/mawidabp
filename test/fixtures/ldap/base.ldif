@@ -67,3 +67,17 @@ objectClass: groupOfUniqueNames
 objectClass: top
 uniqueMember: cn=general_manager,ou=people,dc=test,dc=com
 cn: users
+
+dn: cn=manager,ou=people,dc=test,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+sn: New
+givenname: User
+title: This should be imported as new
+description: cn=Auditor Second,ou=people,dc=test,dc=com
+manager: cn=admin,ou=people,dc=test,dc=com
+uid: manager@test.com
+cn: manager
+userPassword: {SSHA}pULtb+MrlssbA09LY4j5OfaVWI8NUC0k

@@ -179,7 +179,9 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert user.organization_roles.map(&:role_id).exclude?(role.id)
     assert user.organization_roles.map(&:role_id).exclude?(corp_role.id)
 
-    assert_difference 'User.count' do
+    user_count = SKIP_VALIDATION_CREATE_OR_UPDATE_USER ? 'User.count -1' : 'User.count'
+
+    assert_difference user_count do
       @ldap_config.import 'admin', 'admin123'
     end
 

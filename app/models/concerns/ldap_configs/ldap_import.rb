@@ -47,7 +47,7 @@ module LdapConfigs::LdapImport
   private
 
     def process_entry? entry
-      if entry[email_attribute].present?
+      if SKIP_VALIDATION_CREATE_OR_UPDATE_USER || entry[email_attribute].present?
         role_names = role_data entry
         roles      = clean_roles Role.list_with_corporate.where(name: role_names)
         data       = trivial_data entry
@@ -154,6 +154,7 @@ module LdapConfigs::LdapImport
       data[:organization_roles_attributes] = new_roles.compact + removed_roles.compact
 
       if SKIP_VALIDATION_CREATE_OR_UPDATE_USER
+
         user.assign_attributes data
         user.save! validate: false
       else
@@ -222,7 +223,7 @@ module LdapConfigs::LdapImport
 
     def cleanup_users_with_email_null one_minute_to_go
       User.where(email: nil).
-        where(created_at: one_minute_to_go..Time.zone.now).
+        where('updated_at >= ?', one_minute_to_go).
         destroy_all
     end
 end
