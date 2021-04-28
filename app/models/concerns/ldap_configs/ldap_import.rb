@@ -2,11 +2,12 @@ module LdapConfigs::LdapImport
   extend ActiveSupport::Concern
 
   def import username, password
-    connection ||= ldap username, password
-    ldap_filter  = Net::LDAP::Filter.construct filter
-    users_by_dn  = {}
-    managers     = {}
-    users        = []
+    connection     ||= ldap username, password
+    ldap_filter      = Net::LDAP::Filter.construct filter
+    users_by_dn      = {}
+    managers         = {}
+    users            = []
+    one_minute_to_go = Time.zone.now
 
     User.transaction do
       connection.search(base: basedn, filter: ldap_filter) do |entry|
@@ -28,6 +29,8 @@ module LdapConfigs::LdapImport
       users = check_state_for_late_changes(users)
 
       import_extra_users_info
+
+      cleanup_users_with_email_null(one_minute_to_go) if SKIP_VALIDATION_CREATE_OR_UPDATE_USER
     end
 
     users
@@ -141,14 +144,23 @@ module LdapConfigs::LdapImport
           { organization_id: r.organization_id, role_id: r.id }
         end
       end
+
       removed_roles = user.organization_roles.map do |o_r|
         if roles.map(&:id).exclude? o_r.role_id
           { id: o_r.id, _destroy: '1' } if o_r.organization_id == Current.organization&.id
         end
       end
+
       data[:organization_roles_attributes] = new_roles.compact + removed_roles.compact
 
-      user.update data
+      if SKIP_VALIDATION_CREATE_OR_UPDATE_USER
+        user.assign_attributes data
+        user.save! validate: false
+      else
+        user.update data
+      end
+
+      user
     end
 
     def create_user user: nil, data: nil, roles: nil
@@ -156,7 +168,15 @@ module LdapConfigs::LdapImport
         { organization_id: r.organization_id, role_id: r.id }
       end.compact
 
-      user = User.create data
+      if SKIP_VALIDATION_CREATE_OR_UPDATE_USER
+        user = User.new data
+
+        user.save! validate: false
+      else
+        user = User.create data
+      end
+
+      user
     end
 
     def assign_managers managers, users_by_dn
@@ -198,5 +218,11 @@ module LdapConfigs::LdapImport
 
         u_d
       end
+    end
+
+    def cleanup_users_with_email_null one_minute_to_go
+      User.where(email: nil).
+        where(created_at: one_minute_to_go..Time.zone.now).
+        destroy_all
     end
 end
