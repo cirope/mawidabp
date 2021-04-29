@@ -177,9 +177,9 @@ module ApplicationHelper
     html_title = options[:title] if options[:title]
 
     content_tag(:th, title,
-                 :class => (html_classes.join(' ') unless html_classes.blank?),
-                 :title => (html_title unless html_title.blank?)
-               )
+      :class => (html_classes.join(' ') unless html_classes.blank?),
+      :title => (html_title unless html_title.blank?)
+    )
   end
 
   # Devuelve el HTML de un vínculo para mostrar el cuadro de búsqueda
