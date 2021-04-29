@@ -174,12 +174,10 @@ module ApplicationHelper
 
     html_classes << 'not-available' unless search_params[:query].blank? && @order_by.blank?
     html_classes << options[:class] if options[:class]
-    html_title = options[:title] if options[:title]
 
-    content_tag(:th, title,
-      :class => (html_classes.join(' ') unless html_classes.blank?),
-      :title => (html_title unless html_title.blank?)
-    )
+    title = content_tag(:abbr, title, :title => options[:title]) if options[:title]
+
+    content_tag(:th, title, :class => (html_classes.join(' ') unless html_classes.blank?))
   end
 
   # Devuelve el HTML de un vínculo para mostrar el cuadro de búsqueda
