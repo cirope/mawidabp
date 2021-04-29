@@ -175,6 +175,8 @@ module ApplicationHelper
     html_classes << 'not-available' unless search_params[:query].blank? && @order_by.blank?
     html_classes << options[:class] if options[:class]
 
+    title = content_tag(:abbr, title, :title => options[:title]) if options[:title]
+
     content_tag(:th, title,
       :class => (html_classes.join(' ') unless html_classes.blank?))
   end
