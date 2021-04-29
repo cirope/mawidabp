@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   resources :settings, only: [:index, :show, :edit, :update]
 
+  resources :activity_groups
   resources :benefits
 
   resources :opening_interviews

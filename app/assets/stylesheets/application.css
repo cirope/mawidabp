@@ -12,6 +12,7 @@
  *= require autocomplete
  *= require main
  *= require graph
+ *= require activity_groups
  *= require closing_interviews
  *= require documents
  *= require findings/answers

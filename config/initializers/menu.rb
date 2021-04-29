@@ -167,8 +167,14 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/e_mails' }
       ),
       MenuItem.new(
-        :questionnaires,
+        :activity_groups,
         order: 12,
+        controllers: :activity_groups,
+        url: { controller: '/activity_groups' }
+      ),
+      MenuItem.new(
+        :questionnaires,
+        order: 13,
         url: { controller: '/questionnaires' },
         children: [
           MenuItem.new(

@@ -23,6 +23,7 @@ es:
       news: 'Noticias'
       benefits: 'Beneficios / Perjuicios'
       e_mails: 'Correos'
+      activity_groups: 'Actividades'
       questionnaires_title: 'Cuestionarios'
       questionnaires:
         definition: 'Definición'
