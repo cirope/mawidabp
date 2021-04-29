@@ -7,7 +7,7 @@ module LdapConfigs::LdapImport
     users_by_dn  = {}
     managers     = {}
     users        = []
-    start_date   = Time.zone.now
+    start_date   = 5.seconds.ago
 
     User.transaction do
       connection.search(base: basedn, filter: ldap_filter) do |entry|
@@ -154,8 +154,8 @@ module LdapConfigs::LdapImport
       data[:organization_roles_attributes] = new_roles.compact + removed_roles.compact
 
       if import_extra_users_info?
-
         user.assign_attributes data
+
         user.save validate: false
       else
         user.update data
@@ -223,7 +223,7 @@ module LdapConfigs::LdapImport
 
     def remove_invalid_users start_date
       User.where(email: nil).
-        where('updated_at::date >= ?', start_date).
+        where('updated_at >= ?', start_date).
         destroy_all
     end
 end

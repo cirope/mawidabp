@@ -179,12 +179,13 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert user.organization_roles.map(&:role_id).exclude?(role.id)
     assert user.organization_roles.map(&:role_id).exclude?(corp_role.id)
 
-    file_info  = JSON.parse ENV['EXTRA_USERS_INFO'] rescue {} if ENV['EXTRA_USERS_INFO'].present?
-    user_count = file_info.empty? ? 1 : 0
+    file_info  = JSON.parse ENV['EXTRA_USERS_INFO'] if ENV['EXTRA_USERS_INFO'].present?
 
-    assert_difference 'User.count', user_count do
+
       if file_info.empty?
-        @ldap_config.import 'admin', 'admin123'
+        assert_difference 'User.count' do
+          @ldap_config.import 'admin', 'admin123'
+        end
       else
         user_auditor    = users :auditor
         user_jane       = users :jane
@@ -193,11 +194,13 @@ class LdapConfigTest < ActiveSupport::TestCase
         user_jane.save validate: false
 
         refute user_jane.email.present?
+        assert_not_equal user_auditor.email, 'test@example.com'
 
         @ldap_config.import 'admin', 'admin123'
 
-        assert user_auditor.email, 'test@example.com'
-      end
+        assert_nil User.find_by(user: 'jane')
+        assert_equal user_auditor.reload.email, 'test@example.com'
+
     end
 
     assert user.reload.organization_roles.map(&:role_id).include?(role.id)
@@ -243,7 +246,7 @@ class LdapConfigTest < ActiveSupport::TestCase
       @not_imported_users = @ldap_config.import('admin', 'admin123')
     end
 
-    assert_equal [:unchanged], @not_imported_users.map { |u| u[:state] }.uniq
+    assert_includes @not_imported_users.map { |u| u[:state] }.uniq, :unchanged
   end
 
   test 'massive import' do

@@ -10,14 +10,16 @@ module LdapConfigs::ExtraUsersInfo
       field_pattern = "A#{fields.join 'A'}"
 
       File.foreach(extra_users_info_file) do |line|
-        row       = line.unpack field_pattern
-        hierarchy = row[6].split(/\W/).reject &:blank?
-        manager   = User.list.by_user hierarchy.first
-        user      = manager && User.list.where(
-          "LOWER(#{User.quoted_table_name}.#{User.qcn 'name'}) = ? AND
-          LOWER(#{User.quoted_table_name}.#{User.qcn 'last_name'}) = ?",
-          row[2].downcase, row[1].downcase
-        ).take
+        row        = line.unpack field_pattern
+        hierarchy  = row[6].split(/\W/).reject &:blank?
+        manager    = User.list.by_user hierarchy.first
+        conditions = [
+          "LOWER(#{User.quoted_table_name}.#{User.qcn 'name'}) = ?",
+          "LOWER(#{User.quoted_table_name}.#{User.qcn 'last_name'}) = ?"
+        ].join ' AND '
+
+        user = manager &&
+                 User.list.where(conditions, row[2].downcase, row[1].downcase).take
 
         user.update(
           {
