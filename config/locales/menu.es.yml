@@ -39,6 +39,7 @@ es:
     execution:
       reviews: 'Informes'
       workflows: 'Programas de trabajo'
+      time_summary: 'Resumen horario'
       control_objectives: 'Objetivos de control'
       weaknesses: 'Observaciones'
       oportunities: 'Oportunidades de mejora'

@@ -501,6 +501,13 @@ es:
       material: 'Materiales'
 
   reviews:
+    index:
+      control_objective_items_open:
+        title: 'Objetivos de control abiertos'
+        label: 'OCA'
+      control_objective_items_finished:
+        title: 'Objetivos de control finalizados'
+        label: 'OCF'
     form:
       add_business_unit_type: 'Agregar unidad organizativa'
 
@@ -583,16 +590,12 @@ es:
       in_progress: 'En proceso'
       finished: 'Finalizada'
 
-  reviews:
+  time_summary:
     index:
-      control_objective_items_open:
-        title: 'Objetivos de control abiertos'
-        label: 'OCA'
-      control_objective_items_finished:
-        title: 'Objetivos de control finalizados'
-        label: 'OCF'
-    form:
-      add_business_unit_type: 'Agregar unidad organizativa'
+      title: 'Resumen horario'
+      period: 'Desde el %{start} al %{end}'
+      current_week: 'Semana actual'
+      empty: 'Sin registros'
 
   users:
     index:

@@ -78,6 +78,10 @@ class WorkflowItem < ApplicationRecord
     end
   end
 
+  def to_s
+    task
+  end
+
   def start
     super.try :to_date
   end

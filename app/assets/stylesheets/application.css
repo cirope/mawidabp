@@ -33,6 +33,7 @@
  *= require roles
  *= require sessions
  *= require tags
+ *= require time_summary
  *= require weakness_templates
  *= require welcome
 */
