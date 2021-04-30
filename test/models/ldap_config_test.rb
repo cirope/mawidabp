@@ -185,7 +185,8 @@ class LdapConfigTest < ActiveSupport::TestCase
       if file_info.empty?
         @ldap_config.import 'admin', 'admin123'
       else
-        user_auditor    = users :auditor
+        user_auditor = users :auditor
+
         assert_not_equal user_auditor.email, 'test@example.com'
 
         @ldap_config.import 'admin', 'admin123'
