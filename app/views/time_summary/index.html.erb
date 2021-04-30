@@ -24,7 +24,7 @@
       <ul>
         <% @items[date].each do |item, hours| %>
           <li>
-            <%= item %>: <%= hours.round(1) %>
+            <%= item %>: <%= number_with_precision hours, precision: 1 %>
           </li>
         <% end %>
       </ul>

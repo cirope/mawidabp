@@ -4,8 +4,9 @@ class TimeSummaryController < ApplicationController
   before_action :auth, :check_privileges, :set_title
 
   def index
-    @start_date = start_date
-    @end_date   = end_date
+    @start_date         = start_date
+    @end_date           = end_date
+    @work_hours_per_day = work_hours_per_day
 
     set_items
   end
@@ -64,15 +65,14 @@ class TimeSummaryController < ApplicationController
     end
 
     def split_resource resource_utilization
-      hours_per_day      = {}
-      work_hours_per_day = 7
-      wi                 = resource_utilization.resource_consumer
-      units              = resource_utilization.units
+      hours_per_day = {}
+      wi            = resource_utilization.resource_consumer
+      units         = resource_utilization.units
 
       (wi.start..wi.end).each do |date|
         if date.workday? && units > 0
-          if units >= work_hours_per_day
-            hours_per_day[date] = [wi, work_hours_per_day]
+          if units >= @work_hours_per_day
+            hours_per_day[date] = [wi, @work_hours_per_day]
           else
             hours_per_day[date] = [wi, units]
           end
@@ -82,5 +82,12 @@ class TimeSummaryController < ApplicationController
       end
 
       hours_per_day
+    end
+
+    def work_hours_per_day
+      setting = current_organization.settings.find_by name: 'hours_of_work_per_day'
+      value   = setting&.value.to_f
+
+      value > 0 ? value : 8
     end
 end
