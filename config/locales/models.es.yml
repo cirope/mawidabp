@@ -22,6 +22,9 @@ es:
       achievement:
         one: 'Beneficio / perjuicio estimado'
         other: 'Beneficios / perjuicios estimados'
+      activity:
+        one: 'Actividad'
+        other: 'Actividades'
       activity_group:
         one: 'Grupo actividad'
         other: 'Grupo de actividades'
@@ -190,6 +193,8 @@ es:
         benefit: 'Nombre'
         amount: 'Monto'
         comment: 'Comentario'
+      activity:
+        name: 'Nombre'
       activity_group:
         name: 'Nombre'
       answer:

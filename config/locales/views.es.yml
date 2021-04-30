@@ -34,6 +34,8 @@ es:
       title: 'Crear grupo de actividades'
     show:
       title: 'Ver grupo de actividades'
+    form:
+      add_activity: 'Agregar actividad'
 
   answer_options:
     not_apply: 'No aplica'

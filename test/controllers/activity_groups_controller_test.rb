@@ -22,10 +22,15 @@ class ActivityGroupsControllerTest < ActionController::TestCase
   end
 
   test 'should create activity_group' do
-    assert_difference 'ActivityGroup.count' do
+    assert_difference %w(ActivityGroup.count Activity.count) do
       post :create, params: {
         activity_group: {
-          name: 'New activity group'
+          name: 'New activity group',
+          activities_attributes: {
+            '0' => {
+              name: 'New activity'
+            }
+          }
         }
       }
     end
@@ -46,11 +51,23 @@ class ActivityGroupsControllerTest < ActionController::TestCase
   end
 
   test 'should update activity_group' do
-    patch :update, params: {
-      id: @activity_group, activity_group: { name: 'Updated name' }
-    }
+    assert_no_difference 'Activity.count' do
+      activity = activities :special_activity
 
-    assert_redirected_to activity_group_url(assigns(:activity_group))
+      patch :update, params: {
+        id: @activity_group, activity_group: {
+          name: 'Updated name',
+          activities_attributes: {
+            activity.id => {
+              id:   activity.id,
+              name: activity.name
+            }
+          }
+        }
+      }
+    end
+
+    assert_redirected_to activity_group_url(@activity_group)
   end
 
   test 'should destroy activity_group' do

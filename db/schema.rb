@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_29_195515) do
+ActiveRecord::Schema.define(version: 2021_04_29_224853) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -26,6 +26,14 @@ ActiveRecord::Schema.define(version: 2021_04_29_195515) do
     t.datetime "updated_at", null: false
     t.index ["benefit_id"], name: "index_achievements_on_benefit_id"
     t.index ["finding_id"], name: "index_achievements_on_finding_id"
+  end
+
+  create_table "activities", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "activity_group_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["activity_group_id"], name: "index_activities_on_activity_group_id"
   end
 
   create_table "activity_groups", force: :cascade do |t|
@@ -1195,6 +1203,7 @@ ActiveRecord::Schema.define(version: 2021_04_29_195515) do
 
   add_foreign_key "achievements", "benefits", on_update: :restrict, on_delete: :restrict
   add_foreign_key "achievements", "findings", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "activities", "activity_groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "activity_groups", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "benefits", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "best_practice_comments", "best_practices", on_update: :restrict, on_delete: :restrict

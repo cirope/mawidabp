@@ -1,5 +1,19 @@
 <h2><%= @activity_group %></h2>
 
+<% if @activity_group.activities.any? %>
+  <h5 class="h5 my-3">
+    <%= Activity.model_name.human count: @activity_group.activities.size %>
+  </h5>
+
+  <ul>
+    <% @activity_group.activities.each do |activity| %>
+      <li>
+        <%= activity.name %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
 <hr />
 
 <%= link_to_edit [:edit, @activity_group] %> |
