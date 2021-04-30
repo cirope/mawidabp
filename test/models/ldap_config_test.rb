@@ -181,24 +181,17 @@ class LdapConfigTest < ActiveSupport::TestCase
 
     file_info  = JSON.parse ENV['EXTRA_USERS_INFO'] if ENV['EXTRA_USERS_INFO'].present?
 
-    if file_info.empty?
-      assert_difference 'User.count' do
+    assert_difference 'User.count' do
+      if file_info.empty?
         @ldap_config.import 'admin', 'admin123'
+      else
+        user_auditor    = users :auditor
+        assert_not_equal user_auditor.email, 'test@example.com'
+
+        @ldap_config.import 'admin', 'admin123'
+
+        assert_equal user_auditor.reload.email, 'test@example.com'
       end
-    else
-      user_auditor    = users :auditor
-      user_jane       = users :jane
-      user_jane.email = nil
-
-      user_jane.save validate: false
-
-      refute user_jane.email.present?
-      assert_not_equal user_auditor.email, 'test@example.com'
-
-      @ldap_config.import 'admin', 'admin123'
-
-      assert_nil User.find_by(user: 'jane')
-      assert_equal user_auditor.reload.email, 'test@example.com'
     end
 
     assert user.reload.organization_roles.map(&:role_id).include?(role.id)
