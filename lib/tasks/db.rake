@@ -89,6 +89,18 @@ private
                            description: I18n.t('settings.hide_obsolete_best_practices')
       end
     end
+
+    if hours_of_work_per_day? # 2021-04-30
+      Organization.all.find_each do |o|
+        o.settings.create! name:        'hours_of_work_per_day',
+                           value:       DEFAULT_SETTINGS[:hours_of_work_per_day][:value],
+                           description: I18n.t('settings.hours_of_work_per_day')
+      end
+    end
+  end
+
+  def hours_of_work_per_day?
+    Setting.where(name: 'hours_of_work_per_day').empty?
   end
 
   def add_hide_obsolete_best_practices?
