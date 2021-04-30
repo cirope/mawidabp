@@ -225,4 +225,8 @@ module ReviewsHelper
       }
     )
   end
+
+  def count_control_objective_items_by_finished_status review, finished: false
+    review.control_objective_items.select { |coi| coi.finished == finished }.count
+  end
 end
