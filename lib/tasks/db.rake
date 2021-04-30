@@ -90,7 +90,7 @@ private
       end
     end
 
-    if hours_of_work_per_day? # 2021-04-30
+    if set_hours_of_work_per_day? # 2021-04-30
       Organization.all.find_each do |o|
         o.settings.create! name:        'hours_of_work_per_day',
                            value:       DEFAULT_SETTINGS[:hours_of_work_per_day][:value],
@@ -99,7 +99,7 @@ private
     end
   end
 
-  def hours_of_work_per_day?
+  def set_hours_of_work_per_day?
     Setting.where(name: 'hours_of_work_per_day').empty?
   end
 
