@@ -242,6 +242,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_194445) do
     t.string "previous_identification"
     t.date "previous_date"
     t.text "main_recommendations"
+    t.text "effectiveness_notes"
     t.text "additional_comments"
     t.index ["close_date"], name: "index_conclusion_reviews_on_close_date"
     t.index ["conclusion_index"], name: "index_conclusion_reviews_on_conclusion_index"
