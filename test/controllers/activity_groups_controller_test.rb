@@ -21,7 +21,7 @@ class ActivityGroupsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should create activity_group' do
+  test 'should create activity group' do
     assert_difference %w(ActivityGroup.count Activity.count) do
       post :create, params: {
         activity_group: {
@@ -38,7 +38,7 @@ class ActivityGroupsControllerTest < ActionController::TestCase
     assert_redirected_to activity_group_url(assigns(:activity_group))
   end
 
-  test 'should show activity_group' do
+  test 'should show activity group' do
     get :show, params: { id: @activity_group }
 
     assert_response :success
@@ -50,7 +50,7 @@ class ActivityGroupsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should update activity_group' do
+  test 'should update activity group' do
     assert_no_difference 'Activity.count' do
       activity = activities :special_activity
 
@@ -70,7 +70,7 @@ class ActivityGroupsControllerTest < ActionController::TestCase
     assert_redirected_to activity_group_url(@activity_group)
   end
 
-  test 'should destroy activity_group' do
+  test 'should destroy activity group' do
     assert_difference 'ActivityGroup.count', -1 do
       delete :destroy, params: { id: @activity_group }
     end

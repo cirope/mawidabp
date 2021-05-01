@@ -11,7 +11,28 @@ class TimeSummaryController < ApplicationController
     set_items
   end
 
+  def new
+    @time_consumption = TimeConsumption.new date: params[:date]
+  end
+
+  def create
+    @time_consumption = TimeConsumption.new time_consumption_params.merge(
+      user: @auth_user
+    )
+
+    @time_consumption.save
+
+    respond_with @time_consumption, location: time_summary_index_url(
+      start_date: @time_consumption.date.at_beginning_of_week,
+      end_date:   @time_consumption.date.at_end_of_week
+    )
+  end
+
   private
+
+    def time_consumption_params
+      params.require(:time_consumption).permit :amount, :date, :activity_id
+    end
 
     def start_date
       if params[:start_date]
@@ -32,16 +53,25 @@ class TimeSummaryController < ApplicationController
     def set_items
       @items = {}
 
+      set_resource_utilization
+      set_time_consumption
+    end
+
+    def set_resource_utilization
       resource_utilizations.each do |ru|
         split_resource(ru).each do |date, rh|
           if date.between?(@start_date, @end_date)
-            items = @items[date] || []
-
-            items << [rh.first, rh.last]
-
-            @items[date] = items
+            @items[date] ||= []
+            @items[date]  << [rh.first, rh.last]
           end
         end
+      end
+    end
+
+    def set_time_consumption
+      @auth_user.time_consumptions.between(@start_date, @end_date).each do |tc|
+        @items[tc.date] ||= []
+        @items[tc.date]  << [tc.activity, tc.amount]
       end
     end
 

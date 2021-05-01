@@ -175,6 +175,9 @@ es:
       task:
         one: 'Tarea'
         other: 'Tareas'
+      time_consumption:
+        one: 'Actividad'
+        other: 'Actividades'
       user:
         one: 'Usuario'
         other: 'Usuarios'
@@ -474,6 +477,11 @@ es:
         description: 'Descripción'
         status: 'Estado'
         due_on: 'Fecha de finalización'
+      time_consumption:
+        date: 'Fecha'
+        activity: 'Actividad'
+        activity_id: 'Actividad'
+        amount: 'Tiempo en horas'
       user:
         email: 'Correo'
         enable: 'Habilitado'

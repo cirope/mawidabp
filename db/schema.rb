@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_29_224853) do
+ActiveRecord::Schema.define(version: 2021_04_30_173526) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -1084,6 +1084,17 @@ ActiveRecord::Schema.define(version: 2021_04_29_224853) do
     t.index ["finding_id"], name: "index_tasks_on_finding_id"
   end
 
+  create_table "time_consumptions", force: :cascade do |t|
+    t.date "date", null: false
+    t.decimal "amount", precision: 3, scale: 1, null: false
+    t.bigint "activity_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["activity_id"], name: "index_time_consumptions_on_activity_id"
+    t.index ["user_id"], name: "index_time_consumptions_on_user_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "name", limit: 100
     t.string "last_name", limit: 100
@@ -1317,6 +1328,8 @@ ActiveRecord::Schema.define(version: 2021_04_29_224853) do
   add_foreign_key "tags", "groups", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tags", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "tasks", "findings", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "time_consumptions", "activities", on_update: :restrict, on_delete: :restrict
+  add_foreign_key "time_consumptions", "users", on_update: :restrict, on_delete: :restrict
   add_foreign_key "users", "users", column: "manager_id", on_update: :restrict, on_delete: :restrict
   add_foreign_key "weakness_templates", "organizations", on_update: :restrict, on_delete: :restrict
   add_foreign_key "work_papers", "file_models", on_update: :restrict, on_delete: :restrict

@@ -597,6 +597,9 @@ es:
       period: 'Desde el %{start} al %{end}'
       current_week: 'Semana actual'
       empty: 'Sin registros'
+      add: 'Agregar actividad'
+    new:
+      title: 'Nueva actividad'
 
   users:
     index:
