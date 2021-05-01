@@ -26,11 +26,13 @@ module LdapConfigs::LdapImport
 
       assign_managers managers, users_by_dn unless skip_function_and_manager?
 
-      users = check_state_for_late_changes(users)
-
       import_extra_users_info
 
-      remove_invalid_users(start_date) if import_extra_users_info?
+      invalid_users = import_extra_users_info? ? remove_invalid_users(start_date) : []
+
+      users = check_state_for_late_changes(users, invalid_users)
+
+      invalid_users.destroy_all if invalid_users.any?
     end
 
     users
@@ -160,8 +162,6 @@ module LdapConfigs::LdapImport
       else
         user.update data
       end
-
-      user
     end
 
     def create_user user: nil, data: nil, roles: nil
@@ -206,24 +206,24 @@ module LdapConfigs::LdapImport
       value != '0'
     end
 
-    def check_state_for_late_changes(users)
-      users.map do |u_d|
-        if u_d[:state] == :unchanged && u_d[:user].saved_changes?
-          u_d[:state] = :updated
-        end
+    def check_state_for_late_changes(users, invalid_users)
+      users.map! do |u_d|
+        unless invalid_users.include? u_d[:user]
+          if u_d[:state] == :unchanged && u_d[:user].saved_changes?
+            u_d[:state] = :updated
+          end
 
-        if (errors = u_d[:user].errors).any?
-          u_d[:state]  = :errored
-          u_d[:errors] = errors.full_messages.to_sentence
+          if (errors = u_d[:user].errors).any?
+            u_d[:state]  = :errored
+            u_d[:errors] = errors.full_messages.to_sentence
+          end
+          u_d
         end
-
-        u_d
-      end
+      end.compact
     end
 
     def remove_invalid_users start_date
       User.where(email: nil).
-        where('updated_at >= ?', start_date).
-        destroy_all
+        where('updated_at >= ?', start_date)
     end
 end

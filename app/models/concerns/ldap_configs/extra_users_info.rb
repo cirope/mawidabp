@@ -21,10 +21,7 @@ module LdapConfigs::ExtraUsersInfo
         user = manager &&
                  User.list.where(conditions, row[2].downcase, row[1].downcase).take
 
-        user.update(
-          manager_id: manager.id,
-          email: row[4].downcase
-        ) if user
+        user.update(manager_id: manager.id, email: row[4].downcase) if user
       end
     end
 

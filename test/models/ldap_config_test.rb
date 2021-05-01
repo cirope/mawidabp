@@ -238,7 +238,7 @@ class LdapConfigTest < ActiveSupport::TestCase
       @not_imported_users = @ldap_config.import('admin', 'admin123')
     end
 
-    assert_includes @not_imported_users.map { |u| u[:state] }.uniq, :unchanged
+    assert :unchanged, @not_imported_users.map { |u| u[:state] }.uniq
   end
 
   test 'massive import' do
