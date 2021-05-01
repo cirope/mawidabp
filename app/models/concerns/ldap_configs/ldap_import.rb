@@ -28,9 +28,8 @@ module LdapConfigs::LdapImport
 
       import_extra_users_info
 
-      invalid_users = import_extra_users_info? ? remove_invalid_users(start_date) : []
-
-      users = check_state_for_late_changes(users, invalid_users)
+      invalid_users = import_extra_users_info? ? check_users_without_email(start_date) : []
+      users         = check_state_for_late_changes(users, invalid_users)
 
       invalid_users.destroy_all if invalid_users.any?
     end
@@ -222,7 +221,7 @@ module LdapConfigs::LdapImport
       end.compact
     end
 
-    def remove_invalid_users start_date
+    def check_users_without_email start_date
       User.where(email: nil).
         where('updated_at >= ?', start_date)
     end
