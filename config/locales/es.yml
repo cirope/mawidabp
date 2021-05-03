@@ -545,6 +545,7 @@
 
   execution_reports:
     cost_analysis_title: "Análisis de costos"
+    weaknesses_current_situation_title: "Reporte global - Cuatrimestral"
     detailed_management_report:
       pdf_name: "informe_gerencial_detallado_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Hallazgos Auditoría Interna"
@@ -690,6 +691,9 @@
   follow_up_audited:
     index_title: "Reportes generales"
     weaknesses_by_user_title: "Observaciones por usuario"
+    process_control_stats_title: "Observaciones por proceso de negocio"
+    business_unit_type_title: "Unidad organizativa"
+    business_unit_title: "Unidad de negocio"
     weaknesses_by_user:
       pdf_name: "observaciones_por_usuario.pdf"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -697,6 +701,28 @@
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+    process_control_stats:
+      average_effectiveness: 'Calificación promedio ponderada'
+      average_effectiveness_resume:
+        one: "%{effectiveness} - %{count} informe evaluado"
+        other: "%{effectiveness} - %{count} informes evaluados"
+      reviews_with_weaknesses:
+        one: "%{count} informe con observaciones en el O.C"
+        other: "%{count} informes con observaciones en el O.C."
+      pdf_name: "observaciones_por_proceso_negocio.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO OBSERVACIONES POR PROCESO DE NEGOCIO / INFORMES DEFINITIVOS"
+      without_reviews_in_the_period: "Sin informes en el periodo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
+      review_effectiveness_average: 'Promedio ponderado de calificaciones de los objetivos de control: <b>%{score}%</b>'
+
+  follow_up_audited_committee_report:
+    process_control_stats:
+      pdf_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf'
+    period:
+      title: "Intervalo"
+      range: "desde el %{from_date} al %{to_date}"
 
   follow_up_audit:
     index_title: "Reportes de auditoría"
@@ -731,6 +757,21 @@
       without_weaknesses: "Sin Observaciones en el periodo"
       without_oportunities: "Sin Oportunidades de Mejora en el periodo"
       pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
+
+  execution_committee_report:
+    weaknesses_current_situation_title: "Reporte global - Cuatrimestral borradores"
+    weaknesses_current_situation:
+      pdf_name: "observaciones_situacion_actual_borrador_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
+      subtitle: "SEGUIMIENTO REPORTE GLOBAL - CUATRIMESTRAL / INFORMES BORRADORES"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_weaknesses: "Sin observaciones"
+      on_revision: "En revisión"
+      origination_year: "Año de origen"
+      control_objective_tags: "Etiquetas objetivos de control"
+      weakness_tags: "Etiquetas de observación"
+      review_tags: "Etiquetas de informe"
+      cut_date: "Fecha de cómputo"
 
   follow_up_committee_report:
     index_title: "Reportes de comité"
@@ -899,6 +940,7 @@
       without_weaknesses: "Sin observaciones"
       weaknesses_count_html: 'Cantidad de observaciones que cumplen los criterios: <span class="badge badge-pill badge-secondary">%{count}</span>'
       process_owner_parents: "Superiores directos responsables"
+      process_owner_intermediates: "Responsables intermedios"
       process_owner_roots: "Responsables máximos"
     weaknesses_evolution:
       pdf_name: "observaciones_evolucion_%{from_date}_al_%{to_date}.pdf"
@@ -1076,6 +1118,9 @@
     notify_new_finding:
       title: "Tiene un nuevo hallazgo"
       created_title: "Nuevo hallazgo"
+    notify_new_oportunity:
+      title: "Tiene una nueva oportunidad de mejora"
+      oportunity_link: "Ver oportunidad de mejora"
     notify_new_finding_answer:
       title: "Nuevo comentario en el informe %{review}"
       finding_data: "Se ha agregado un comentario al hallazgo **%{finding_code}** del informe **%{review}**"
@@ -1208,6 +1253,7 @@
       without_auditor: "no tiene auditor"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_recommendations: "no tiene recomendaciones de auditoria"
 
   organization:
     index_title: "Listado de organizaciones"
@@ -1417,6 +1463,7 @@
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_recommendations: "no tiene recomendaciones de auditoria"
 
   welcome:
     index_title: "Bienvenido"
@@ -1467,6 +1514,7 @@
       business_unit: "Unidad de negocio"
       business_unit_type: "Unidad organizativa"
       business_unit_type_user: "Unidad organizativa"
+      business_unit_type_review: "Unidad organizativa"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
@@ -1494,6 +1542,9 @@
         name: "Nombre"
       business_unit_type_user:
         user_id: "Usuario"
+        business_unit_type_id: "Unidad organizativa"
+      business_unit_type_review:
+        review_id: "Informe"
         business_unit_type_id: "Unidad organizativa"
       comment:
         comment: "Comentario"
@@ -1526,6 +1577,7 @@
         previous_identification: "Informe previo"
         previous_date: "Fecha de emisión previa"
         main_recommendations: "Principales Recomendaciones de Auditoría"
+        additional_comments: "Comentarios adicionales"
       control:
         order: "Orden"
         control: "Controles"

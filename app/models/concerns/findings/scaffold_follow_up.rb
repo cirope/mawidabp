@@ -18,7 +18,10 @@ module Findings::ScaffoldFollowUp
 
     def pending_expired_and_stale n
       follow_up_column = "#{quoted_table_name}.#{qcn 'follow_up_date'}"
-      pending_statuses = [Finding::STATUS[:being_implemented]]
+      pending_statuses = [
+        Finding::STATUS[:being_implemented],
+        Finding::STATUS[:awaiting]
+      ]
 
       Finding.
         not_notified_today.

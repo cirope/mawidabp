@@ -16,9 +16,12 @@
           } %>
         <% end %>
         <% if @review.new_record? %>
-          <%= f.input :period_id, collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true, input_html: {
-            data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
-          } %>
+          <%= f.input :period_id, collection: Period.list_all_with_plans.map { |p| [p.inspect, p.id] },
+            prompt: true,
+            input_html: {
+              data: { plan_item_refresh_url: plan_item_refresh_reviews_path }
+            }
+          %>
         <% else %>
           <%= f.input :period_description, label: Review.human_attribute_name('period_id'),
             input_html: { value: @review.period.inspect, readonly: true } %>
@@ -82,6 +85,31 @@
         </div>
       </div>
     </div>
+
+    <% if USE_SCOPE_CYCLE %>
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <%= f.input :manual_score, input_html: { min: 0, max: 100, step: 1, disabled: readonly } %>
+        </div>
+        <% if @review.new_record? || @review.plan_item&.cycle? %>
+          <div class="col-md-6" data-manual-score-alt>
+            <%= f.input :manual_score_alt, input_html: { min: 0, max: 100, step: 1, disabled: readonly } %>
+          </div>
+        <% end %>
+      </div>
+
+      <h5 class="h6 mt-3">
+        <%= BusinessUnitTypeReview.human_attribute_name 'business_unit_type_id' %>
+      </h5>
+
+      <div>
+        <%= f.simple_fields_for :business_unit_type_reviews do |but_r| %>
+          <%= render 'business_unit_type_review', f: but_r %>
+        <% end %>
+
+        <%= link_to_add_fields t('.add_business_unit_type'), f, :business_unit_type_reviews %>
+      </div>
+    <% end %>
 
     <% if SHOW_REVIEW_EXTRA_ATTRIBUTES %>
       <div class="row">
@@ -338,6 +366,7 @@ jQuery(function() {
       $('#control_objectives').find('fieldset.control_objective[data-dynamic]').remove();
       $('[data-review-user-assignments-container]').html('')
       $('[data-control-objective-items-container]').html('')
+      $('[data-manual-score-alt]').removeClass('d-none')
     }
   });
 

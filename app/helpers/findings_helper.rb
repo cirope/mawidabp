@@ -34,7 +34,7 @@ module FindingsHelper
   def finding_follow_up_date_text finding
     html_classes = []
 
-    if finding.being_implemented?
+    if finding.being_implemented? || finding.awaiting?
       html_classes << 'strike bg-danger' if finding.stale?
       html_classes << 'text-warning'     if finding.rescheduled?
       html_classes << 'text-success'     if html_classes.blank?
@@ -154,7 +154,7 @@ module FindingsHelper
   end
 
   def finding_execution_status_options
-    exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS - [:unconfirmed, :confirmed]
+    exclude = Finding::EXCLUDE_FROM_REPORTS_STATUS - [:unconfirmed, :confirmed, :notify, :incomplete]
 
     Finding::STATUS.except(*exclude).map do |k, v|
       [t("findings.state.#{k}"), v.to_s]

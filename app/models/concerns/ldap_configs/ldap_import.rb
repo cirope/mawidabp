@@ -7,9 +7,15 @@ module LdapConfigs::LdapImport
     users_by_dn  = {}
     managers     = {}
     users        = []
+    search_options = {
+      base:                     basedn,
+      filter:                   ldap_filter,
+      ignore_server_caps:       true,
+      paged_searches_supported: true
+    }
 
     User.transaction do
-      connection.search(base: basedn, filter: ldap_filter) do |entry|
+      connection.search(search_options) do |entry|
         if (process_args = process_entry? entry)
           users << (result = process_entry entry, **process_args)
           user   = result[:user]
@@ -26,6 +32,8 @@ module LdapConfigs::LdapImport
       assign_managers managers, users_by_dn unless skip_function_and_manager?
 
       users = check_state_for_late_changes(users)
+
+      import_extra_users_info
     end
 
     users
@@ -95,12 +103,13 @@ module LdapConfigs::LdapImport
 
     def trivial_data entry
       {
-        user:      casted_attribute(entry, username_attribute),
-        name:      casted_attribute(entry, name_attribute),
-        last_name: casted_attribute(entry, last_name_attribute),
-        email:     casted_attribute(entry, email_attribute),
-        hidden:    false,
-        enable:    true
+        user:                casted_attribute(entry, username_attribute),
+        name:                casted_attribute(entry, name_attribute),
+        last_name:           casted_attribute(entry, last_name_attribute),
+        email:               casted_attribute(entry, email_attribute),
+        organizational_unit: organizational_unit(entry),
+        hidden:              false,
+        enable:              true
       }.merge(
         if skip_function_and_manager?
           {}
@@ -112,6 +121,12 @@ module LdapConfigs::LdapImport
 
     def casted_attribute entry, attr_name
       attr_name && entry[attr_name].first&.force_encoding('UTF-8')&.to_s
+    end
+
+    def organizational_unit entry
+      casted_ou = casted_attribute(entry, 'dn')
+
+      casted_ou&.gsub /\Acn=[\w\s]+,/i, ''
     end
 
     def clean_roles roles
