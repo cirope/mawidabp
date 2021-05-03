@@ -16,7 +16,7 @@ module Reviews::Validations
       :include_sox, pdf_encoding: true
     validates :plan_item_id, uniqueness: { case_sensitive: false }
     validates :score_type, inclusion: {
-      in: %w(effectiveness manual none weaknesses splitted_weaknesses)
+      in: %w(effectiveness manual none weaknesses splitted_effectiveness)
     }, allow_blank: true, allow_nil: true
 
     validates :scope,

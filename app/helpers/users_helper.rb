@@ -65,7 +65,7 @@ module UsersHelper
     !result || can_perform?(:edit, :approval)
   end
 
-  def business_unit_types
-    BusinessUnitType.list
+  def user_business_unit_types
+    BusinessUnitType.list.order :name
   end
 end

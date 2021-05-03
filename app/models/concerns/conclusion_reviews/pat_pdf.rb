@@ -44,9 +44,9 @@ module ConclusionReviews::PatPdf
     end
 
     def put_pat_cover_header_on pdf, brief: false
+      but_names = [review.business_unit_type.name] + review.business_unit_types.map(&:name)
       to_text   = I18n.t 'conclusion_review.pat.cover.to'
-      from_text = I18n.t 'conclusion_review.pat.cover.from',
-        business_unit_types: review.business_unit_type.name
+      from_text = I18n.t 'conclusion_review.pat.cover.from', business_unit_types: but_names.to_sentence
 
       unless brief
         pdf.text "#{Review.model_name.human} #{review.identification}\n\n",
