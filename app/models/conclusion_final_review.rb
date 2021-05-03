@@ -102,6 +102,13 @@ class ConclusionFinalReview < ConclusionReview
           ).check_code_prefix = false
         end
 
+        code_weakness_final = weakness_final_last&.review_code || 0
+
+        if SEQUENTIAL_REVIEW_CODE && final_finding.type == 'Weakness'
+          new_code                  =  code_weakness_final.next
+          final_finding.review_code = new_code
+        end
+
         final_finding.save!
         finding.save!
       end
@@ -118,6 +125,10 @@ class ConclusionFinalReview < ConclusionReview
       Rails.logger.error ex.inspect
       raise ActiveRecord::Rollback
     end
+  end
+
+  def weakness_final_last
+    Weakness.list.where(final: true).order(:review_code).last
   end
 
   def assign_audit_date_to_control_objective_items
