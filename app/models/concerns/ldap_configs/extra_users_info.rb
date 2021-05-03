@@ -18,10 +18,14 @@ module LdapConfigs::ExtraUsersInfo
           "LOWER(#{User.quoted_table_name}.#{User.qcn 'last_name'}) = ?"
         ].join ' AND '
 
-        user = manager &&
-                 User.list.where(conditions, row[2].downcase, row[1].downcase).take
+        user = User.list.where(conditions, row[2].downcase, row[1].downcase).take
 
-        user.update(manager_id: manager.id, email: row[4].downcase) if user
+        if user
+          user.email      = row[4].downcase
+          user.manager_id = manager.id if manager
+
+          user.save
+        end
       end
     end
 
