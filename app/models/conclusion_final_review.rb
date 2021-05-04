@@ -102,7 +102,7 @@ class ConclusionFinalReview < ConclusionReview
           ).check_code_prefix = false
         end
 
-        code_weakness_final = weakness_final_last&.review_code || 0
+        code_weakness_final = weakness_final_last&.review_code.to_i || 0
 
         if SEQUENTIAL_REVIEW_CODE && final_finding.type == 'Weakness'
           new_code                  =  code_weakness_final.next
