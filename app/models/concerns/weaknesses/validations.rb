@@ -29,7 +29,7 @@ module Weaknesses::Validations
 
     def review_code_has_valid_prefix
       if SEQUENTIAL_REVIEW_CODE && final
-        regex          = /\d+\Z/
+        regex          = /\A\d+\Z/
       else
         revoked_prefix = I18n.t 'code_prefixes.revoked'
         regex          = /\A#{revoked_prefix}?#{prefix}\d+\Z/
