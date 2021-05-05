@@ -80,6 +80,10 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       assert review.control_objective_items.any? { |coi| coi.audit_date.today? }
       assert review.control_objective_items.all? { |coi| coi.audit_date.present? }
     end
+
+    if USE_GLOBAL_WEAKNESS_REVIEW_CODE
+      assert_match /\A\d+\Z/, findings.last.review_code
+    end
   end
 
   # Prueba la creación de un informe final con observaciones reiteradas

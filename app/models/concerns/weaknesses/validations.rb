@@ -28,7 +28,7 @@ module Weaknesses::Validations
     end
 
     def review_code_has_valid_prefix
-      if SEQUENTIAL_REVIEW_CODE && final
+      if USE_GLOBAL_WEAKNESS_REVIEW_CODE && (parent || children.any?)
         regex          = /\A\d+\Z/
       else
         revoked_prefix = I18n.t 'code_prefixes.revoked'
@@ -36,7 +36,6 @@ module Weaknesses::Validations
       end
 
       errors.add :review_code, :invalid unless review_code =~ regex
-
     end
 
     def validate_tags_presence?
