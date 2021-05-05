@@ -23,6 +23,20 @@ es:
     _yes: 'Si'
     _no: 'No'
 
+  activity_groups:
+    edit:
+      title: 'Editar grupo de actividades'
+    index:
+      new: 'Nuevo grupo de actividades'
+      title: 'Listado de grupos de actividades'
+      empty_html: 'No hay grupos de actividades, puede crear uno con el botón <span class="badge badge-primary">Nuevo grupo de actividades</span>'
+    new:
+      title: 'Crear grupo de actividades'
+    show:
+      title: 'Ver grupo de actividades'
+    form:
+      add_activity: 'Agregar actividad'
+
   answer_options:
     not_apply: 'No aplica'
     strongly_disagree: 'Muy en desacuerdo'
@@ -486,6 +500,17 @@ es:
       human: 'Personas'
       material: 'Materiales'
 
+  reviews:
+    index:
+      control_objective_items_open:
+        title: 'Objetivos de control abiertos'
+        label: 'OCA'
+      control_objective_items_finished:
+        title: 'Objetivos de control finalizados'
+        label: 'OCF'
+    form:
+      add_business_unit_type: 'Agregar unidad organizativa'
+
   sessions:
     new:
       title: 'Ingreso'
@@ -566,16 +591,15 @@ es:
       in_progress: 'En proceso'
       finished: 'Finalizada'
 
-  reviews:
+  time_summary:
     index:
-      control_objective_items_open:
-        title: 'Objetivos de control abiertos'
-        label: 'OCA'
-      control_objective_items_finished:
-        title: 'Objetivos de control finalizados'
-        label: 'OCF'
-    form:
-      add_business_unit_type: 'Agregar unidad organizativa'
+      title: 'Resumen horario'
+      period: 'Desde el %{start} al %{end}'
+      current_week: 'Semana actual'
+      empty: 'Sin registros'
+      add: 'Agregar actividad'
+    new:
+      title: 'Nueva actividad'
 
   users:
     index:
@@ -599,9 +623,6 @@ es:
       add_organization_role: 'Agregar un nuevo perfil'
     create:
       correctly_created_with_count: 'Usuario creado, cantidad de auditores restantes para su licencia: %{count}'
-    profiles:
-      edit:
-        title: 'Mis datos'
     imports:
       new:
         title: 'Importar usuarios desde LDAP'

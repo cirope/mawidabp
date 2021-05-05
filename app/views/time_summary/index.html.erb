@@ -1,0 +1,43 @@
+<h2 class="h1">
+  <%= @title %>
+</h2>
+
+<h3 class="h4">
+  <%= t '.period', start: l(@start_date, format: :minimal), end: l(@end_date, format: :minimal) %>
+</h3>
+
+<div class="btn-group" role="group">
+  <%= link_to raw("&laquo; #{t 'label.previous'}"), time_summary_prev_week_path, class: 'btn btn-secondary' %>
+  <%= link_to t('.current_week'), time_summary_index_path, class: 'btn btn-secondary' %>
+  <%= link_to raw("&raquo; #{t 'label.next'}"), time_summary_next_week_path, class: 'btn btn-secondary' %>
+</div>
+
+<hr>
+
+<% (@start_date..@end_date).each do |date| %>
+  <% if date.workday? %>
+    <h4 class="h5">
+      <%= l date, format: :minimal %>
+
+      <% unless time_summary_completed? date %>
+        <%= link_to new_time_summary_path(date: date), title: t('.add'), class: 'ml-1 h6' do %>
+          <i class="fas fa-plus-circle"></i>
+        <% end %>
+      <% end %>
+    </h4>
+
+    <% if @items[date].present? %>
+      <ul>
+        <% @items[date].each do |item, hours| %>
+          <li>
+            <%= item %>: <%= number_with_precision hours, precision: 1 %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="mb-3">
+        <%= t '.empty' %>
+      </p>
+    <% end %>
+  <% end %>
+<% end %>

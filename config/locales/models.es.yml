@@ -22,6 +22,12 @@ es:
       achievement:
         one: 'Beneficio / perjuicio estimado'
         other: 'Beneficios / perjuicios estimados'
+      activity:
+        one: 'Actividad'
+        other: 'Actividades'
+      activity_group:
+        one: 'Grupo actividad'
+        other: 'Grupo de actividades'
       answer:
         one: 'Respuesta'
         other: 'Respuestas'
@@ -169,6 +175,9 @@ es:
       task:
         one: 'Tarea'
         other: 'Tareas'
+      time_consumption:
+        one: 'Actividad'
+        other: 'Actividades'
       user:
         one: 'Usuario'
         other: 'Usuarios'
@@ -187,6 +196,10 @@ es:
         benefit: 'Nombre'
         amount: 'Monto'
         comment: 'Comentario'
+      activity:
+        name: 'Nombre'
+      activity_group:
+        name: 'Nombre'
       answer:
         answer: 'Respuesta'
         comments: 'Comentarios respuesta'
@@ -464,6 +477,11 @@ es:
         description: 'Descripción'
         status: 'Estado'
         due_on: 'Fecha de finalización'
+      time_consumption:
+        date: 'Fecha'
+        activity: 'Actividad'
+        activity_id: 'Actividad'
+        amount: 'Tiempo en horas'
       user:
         email: 'Correo'
         enable: 'Habilitado'

@@ -1,0 +1,5 @@
+special_activity:
+  date: <%= Time.zone.today.to_s :db %>
+  amount: 12.2
+  user: admin
+  activity: special_activity
