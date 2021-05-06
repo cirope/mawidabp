@@ -1194,6 +1194,7 @@ es:
         external: "Externo"
         require_tag: "Requerir etiqueta en informe"
         require_counts: "Requerir cantidades en objetivos de control"
+        hide_review_logo: "Ocultar logo en informes"
       business_unit_type/business_units:
         one: "Unidad de negocio"
         other: "Unidades de negocio"

@@ -312,7 +312,7 @@ class Authentication
           count: @valid_user.list_unanswered_polls.count
         )
 
-        @redirect_url = ['edit', poll, token: poll.access_token]
+        @redirect_url = [:edit, poll, token: poll.access_token]
       end
     end
 

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.0.3.6'
+gem 'rails', '~> 6.0.3.7'
 
 gem 'pg'
 gem 'activerecord-nulldb-adapter'
@@ -23,7 +23,7 @@ gem 'prawn-table'
 gem 'clbustos-rtf', require: 'rtf'
 gem 'figaro'
 gem 'business_time'
-gem 'bootstrap'
+gem 'bootstrap', '< 5'
 gem 'font-awesome-sass'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
