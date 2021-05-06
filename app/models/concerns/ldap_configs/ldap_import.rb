@@ -31,7 +31,7 @@ module LdapConfigs::LdapImport
       invalid_users = import_extra_users_info? ? check_users_without_email(start_date) : []
       users         = check_state_for_late_changes(users, invalid_users)
 
-      invalid_users.destroy_all if invalid_users.any?
+      destroy_invalid_users(invalid_users) if invalid_users.any?
     end
 
     users
@@ -207,7 +207,7 @@ module LdapConfigs::LdapImport
 
     def check_state_for_late_changes(users, invalid_users)
       users.map do |u_d|
-        unless invalid_users.include? u_d[:user]
+        if invalid_users.exclude? u_d[:user]
           if u_d[:state] == :unchanged && u_d[:user].saved_changes?
             u_d[:state] = :updated
           end
@@ -223,6 +223,10 @@ module LdapConfigs::LdapImport
 
     def check_users_without_email start_date
       User.where(email: nil).
-        where('updated_at >= ?', start_date)
+        where('updated_at >= ?', start_date).pluck(:id)
+    end
+
+    def destroy_invalid_users invalid_users
+      User.where(id: invalid_users).destroy_all
     end
 end
