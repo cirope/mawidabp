@@ -223,7 +223,7 @@ module LdapConfigs::LdapImport
 
     def check_users_without_email start_date
       User.where(email: nil).
-        where('updated_at >= ?', start_date).pluck(:id)
+        where('updated_at >= ?', start_date).ids
     end
 
     def destroy_invalid_users invalid_users

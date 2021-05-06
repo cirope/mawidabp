@@ -179,7 +179,7 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert user.organization_roles.map(&:role_id).exclude?(role.id)
     assert user.organization_roles.map(&:role_id).exclude?(corp_role.id)
 
-    file_info  = JSON.parse ENV['EXTRA_USERS_INFO'] if ENV['EXTRA_USERS_INFO'].present?
+    file_info = JSON.parse ENV['EXTRA_USERS_INFO'] if ENV['EXTRA_USERS_INFO'].present?
 
     assert_difference 'User.count' do
       if file_info.empty?
@@ -195,8 +195,11 @@ class LdapConfigTest < ActiveSupport::TestCase
       end
     end
 
+    user.reload.update! organizational_unit: 'dn'
+
     assert user.reload.organization_roles.map(&:role_id).include?(role.id)
     assert user.organization_roles.map(&:role_id).include?(corp_role.id)
+    assert user.organizational_unit.present?
     assert_equal user.id, User.find_by(user: 'new_user').manager_id
     assert_nil user.manager_id
   end
