@@ -207,7 +207,7 @@ module LdapConfigs::LdapImport
 
     def check_state_for_late_changes(users, invalid_users)
       users.map do |u_d|
-        if invalid_users.exclude? u_d[:user]
+        if invalid_users.exclude? u_d[:user].id
           if u_d[:state] == :unchanged && u_d[:user].saved_changes?
             u_d[:state] = :updated
           end
