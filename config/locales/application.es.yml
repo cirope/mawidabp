@@ -908,6 +908,7 @@ es:
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_recommendations: "no tiene recomendaciones de auditoria"
 
   pdf:
     export: "Exportar"
@@ -1107,6 +1108,7 @@ es:
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_recommendations: "no tiene recomendaciones de auditoria"
 
   welcome:
     index_title: "Bienvenido"
@@ -1192,6 +1194,7 @@ es:
         external: "Externo"
         require_tag: "Requerir etiqueta en informe"
         require_counts: "Requerir cantidades en objetivos de control"
+        hide_review_logo: "Ocultar logo en informes"
       business_unit_type/business_units:
         one: "Ciclo"
         other: "Ciclos"
@@ -1229,6 +1232,7 @@ es:
         previous_identification: "Informe previo"
         previous_date: "Fecha de emisión previa"
         main_recommendations: "Principales Recomendaciones de Auditoría"
+        additional_comments: "Comentarios adicionales"
       conclusion_review/review/best_practice_comments:
         auditor_comment: "Conclusiones del auditor (proceso)"
       control:
@@ -1376,9 +1380,11 @@ es:
         plan_item: "Proyecto"
         file_model_id: "Anexos"
         score: "Calificación"
+        score_alt: "Calificación cumplimiento"
         scope: "Alcance auditoría"
         risk_exposure: "Exposición al riesgo"
         manual_score: "Puntaje de auditoría"
+        manual_score_alt: "Puntaje de auditoría cumplimiento"
         include_sox: "Incluye prueba SOX"
         work_papers: "Papeles de trabajo"
         review_user_assignments: "Integrantes"

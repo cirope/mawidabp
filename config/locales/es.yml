@@ -1120,6 +1120,9 @@
     notify_new_finding:
       title: "Tiene una nueva observación"
       created_title: "Nueva observación"
+    notify_new_oportunity:
+      title: "Tiene una nueva oportunidad de mejora"
+      oportunity_link: "Ver oportunidad de mejora"
     notify_new_finding_answer:
       title: "Nuevo comentario en el informe %{review}"
       finding_data: "Se ha agregado un comentario a la observación **%{finding_code}** del informe **%{review}**"
@@ -1252,6 +1255,7 @@
       without_auditor: "no tiene auditor"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_recommendations: "no tiene recomendaciones de auditoria"
 
   organization:
     index_title: "Listado de organizaciones"
@@ -1461,6 +1465,7 @@
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_recommendations: "no tiene recomendaciones de auditoria"
 
   welcome:
     index_title: "Bienvenido"
@@ -1511,6 +1516,7 @@
       business_unit: "Ciclo"
       business_unit_type: "Sector"
       business_unit_type_user: "Sector"
+      business_unit_type_review: "Sector"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
@@ -1538,6 +1544,9 @@
         name: "Nombre"
       business_unit_type_user:
         user_id: "Usuario"
+        business_unit_type_id: "Unidad organizativa"
+      business_unit_type_review:
+        review_id: "Informe"
         business_unit_type_id: "Unidad organizativa"
       comment:
         comment: "Comentario"
@@ -1570,6 +1579,7 @@
         previous_identification: "Informe previo"
         previous_date: "Fecha de emisión previa"
         main_recommendations: "Principales Recomendaciones de Auditoría"
+        additional_comments: "Comentarios adicionales"
       control:
         order: "Orden"
         control: "Detalle objetivo de control"

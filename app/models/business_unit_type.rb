@@ -14,6 +14,7 @@ class BusinessUnitType < ApplicationRecord
 
   belongs_to :organization
   has_many :business_unit_type_users
+  has_many :business_unit_type_reviews
   has_many :users, -> { readonly }, through: :business_unit_type_users
 
   def to_s

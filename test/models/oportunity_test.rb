@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class OportunityTest < ActiveSupport::TestCase
+  include ActionMailer::TestHelper
+
   setup do
     @oportunity = findings :confirmed_oportunity
 
@@ -8,30 +10,33 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'create' do
-    assert_difference 'Oportunity.count' do
-      @oportunity = Oportunity.list.create!(
-        control_objective_item: control_objective_items(:impact_analysis_item_editable),
-        review_code: 'OM20',
-        title: 'Title',
-        description: 'New description',
-        answer: 'New answer',
-        audit_comments: 'New audit comments',
-        state: Finding::STATUS[:being_implemented],
-        finding_user_assignments_attributes: {
-          new_1: {
-            user_id: users(:audited).id, process_owner: true
-          },
-          new_2: {
-            user_id: users(:auditor).id, process_owner: false
-          },
-          new_3: {
-            user_id: users(:supervisor).id, process_owner: false
+    assert_enqueued_emails 1 do
+      assert_difference 'Oportunity.count' do
+        @oportunity = Oportunity.list.create!(
+          control_objective_item: control_objective_items(:impact_analysis_item_editable),
+          review_code: 'OM20',
+          title: 'Title',
+          description: 'New description',
+          brief: 'New brief',
+          answer: 'New answer',
+          audit_comments: 'New audit comments',
+          state: Finding::STATUS[:being_implemented],
+          finding_user_assignments_attributes: {
+            new_1: {
+              user_id: users(:audited).id, process_owner: true
+            },
+            new_2: {
+              user_id: users(:auditor).id, process_owner: false
+            },
+            new_3: {
+              user_id: users(:supervisor).id, process_owner: false
+            }
           }
-        }
-      )
-
-      assert_equal 'OM20', @oportunity.review_code
+        )
+      end
     end
+
+    assert_equal 'OM20', @oportunity.review_code
   end
 
   test 'control objective from final review can not be used to create new oportunity' do
@@ -41,6 +46,7 @@ class OportunityTest < ActiveSupport::TestCase
         review_code: 'OM20',
         title: 'Title',
         description: 'New description',
+        brief: 'New brief',
         answer: 'New answer',
         audit_comments: 'New audit comments',
         state: Finding::STATUS[:being_implemented],
@@ -156,7 +162,14 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'must be approved on implemented audited' do
-    error_messages = [I18n.t('oportunity.errors.without_solution_date')]
+    error_messages = if USE_SCOPE_CYCLE
+                       [
+                         I18n.t('oportunity.errors.without_solution_date'),
+                         I18n.t('oportunity.errors.without_audit_recommendations')
+                       ]
+                     else
+                       [I18n.t('oportunity.errors.without_solution_date')]
+                     end
 
     @oportunity.state = Finding::STATUS[:implemented_audited]
     @oportunity.solution_date = nil
@@ -166,10 +179,18 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'must be approved on implemented' do
-    error_messages = [
-      I18n.t('oportunity.errors.with_solution_date'),
-      I18n.t('oportunity.errors.without_follow_up_date')
-    ]
+    error_messages = if USE_SCOPE_CYCLE
+                       [
+                         I18n.t('oportunity.errors.with_solution_date'),
+                         I18n.t('oportunity.errors.without_follow_up_date'),
+                         I18n.t('oportunity.errors.without_audit_recommendations')
+                       ]
+                     else
+                       [
+                         I18n.t('oportunity.errors.with_solution_date'),
+                         I18n.t('oportunity.errors.without_follow_up_date')
+                       ]
+                     end
 
     @oportunity.state = Finding::STATUS[:implemented]
     @oportunity.solution_date = 2.days.from_now.to_date
@@ -180,10 +201,18 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'must be approved on being implemented' do
-    error_messages = [
-      I18n.t('oportunity.errors.without_answer'),
-      I18n.t('oportunity.errors.without_follow_up_date')
-    ]
+    error_messages = if USE_SCOPE_CYCLE
+                       [
+                         I18n.t('oportunity.errors.without_answer'),
+                         I18n.t('oportunity.errors.without_follow_up_date'),
+                         I18n.t('oportunity.errors.without_audit_recommendations')
+                       ]
+                     else
+                       [
+                         I18n.t('oportunity.errors.without_answer'),
+                         I18n.t('oportunity.errors.without_follow_up_date')
+                       ]
+                     end
 
     @oportunity.state = Finding::STATUS[:being_implemented]
     @oportunity.answer = ' '
@@ -193,7 +222,14 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'must be approved invalid state' do
-    error_messages = [I18n.t('oportunity.errors.not_valid_state')]
+    error_messages = if USE_SCOPE_CYCLE
+                       [
+                         I18n.t('oportunity.errors.not_valid_state'),
+                         I18n.t('oportunity.errors.without_audit_recommendations')
+                       ]
+                     else
+                       [I18n.t('oportunity.errors.not_valid_state')]
+                     end
 
     @oportunity.state = Finding::STATUS[:notify]
 
@@ -202,7 +238,14 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'must be approved on users' do
-    error_messages = [I18n.t('oportunity.errors.without_audited')]
+    error_messages = if USE_SCOPE_CYCLE
+                       [
+                         I18n.t('oportunity.errors.without_audited'),
+                         I18n.t('oportunity.errors.without_audit_recommendations')
+                       ]
+                     else
+                       [I18n.t('oportunity.errors.without_audited')]
+                     end
 
     @oportunity.state = Finding::STATUS[:assumed_risk]
     @oportunity.finding_user_assignments =
@@ -222,7 +265,14 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'must be approved on required attributes' do
-    error_messages = [I18n.t('oportunity.errors.without_audit_comments')]
+    error_messages = if USE_SCOPE_CYCLE
+                       [
+                         I18n.t('oportunity.errors.without_audit_comments'),
+                         I18n.t('oportunity.errors.without_audit_recommendations')
+                       ]
+                     else
+                       [I18n.t('oportunity.errors.without_audit_comments')]
+                     end
 
     @oportunity.state = Finding::STATUS[:assumed_risk]
     @oportunity.audit_comments = '  '
@@ -236,7 +286,14 @@ class OportunityTest < ActiveSupport::TestCase
   end
 
   test 'must be approved on tasks' do
-    error_messages = [I18n.t('oportunity.errors.with_expired_tasks')]
+    error_messages = if USE_SCOPE_CYCLE
+                       [
+                         I18n.t('oportunity.errors.with_expired_tasks'),
+                         I18n.t('oportunity.errors.without_audit_recommendations')
+                       ]
+                     else
+                       [I18n.t('oportunity.errors.with_expired_tasks')]
+                     end
 
     @oportunity.state = Finding::STATUS[:assumed_risk]
 

@@ -165,8 +165,8 @@ class WeaknessesController < ApplicationController
   private
     def weakness_params
       params.require(:weakness).permit(
-        :control_objective_item_id, :review_code, :title, :description, :answer,
-        :audit_comments, :state, :origination_date, :solution_date,
+        :control_objective_item_id, :review_code, :title, :description, :brief,
+        :answer, :audit_comments, :state, :origination_date, :solution_date,
         :repeated_of_id, :audit_recommendations, :effect, :risk, :priority,
         :follow_up_date, :users_for_notification, :compliance, :skip_work_paper,
         :weakness_template_id, :lock_version, :compliance_observations,

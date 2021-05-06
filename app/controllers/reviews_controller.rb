@@ -489,8 +489,8 @@ class ReviewsController < ApplicationController
     def review_params
       params.require(:review).permit(
         :identification, :description, :survey, :period_id, :plan_item_id,
-        :scope, :risk_exposure, :manual_score, :include_sox, :lock_version,
-        :score_type,
+        :scope, :risk_exposure, :manual_score, :manual_score_alt, :include_sox,
+        :score_type, :lock_version,
         finding_review_assignments_attributes: [
           :id, :finding_id, :_destroy, :lock_version
         ],
@@ -509,6 +509,9 @@ class ReviewsController < ApplicationController
         file_model_reviews_attributes: [
           :id, :_destroy,
           file_model_attributes: [:id, :file, :file_cache, :_destroy]
+        ],
+        business_unit_type_reviews_attributes: [
+          :id, :business_unit_type_id, :_destroy
         ],
         control_objective_ids: [],
         process_control_ids: [],

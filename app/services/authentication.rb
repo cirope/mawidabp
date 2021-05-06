@@ -168,7 +168,7 @@ class Authentication
     def authenticate
       if @current_organization.try(:ldap_config)
         ldap_auth
-      elsif @current_organization.saml_provider.present?
+      elsif @current_organization&.saml_provider.present?
         saml_auth
       else
         local_auth
@@ -312,7 +312,7 @@ class Authentication
           count: @valid_user.list_unanswered_polls.count
         )
 
-        @redirect_url = ['edit', poll, token: poll.access_token]
+        @redirect_url = [:edit, poll, token: poll.access_token]
       end
     end
 

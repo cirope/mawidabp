@@ -41,8 +41,11 @@
         <%= f.input :require_tag %>
       </div>
       <% if Current.conclusion_pdf_format == 'gal' %>
-        <div class="col-md-6">
+        <div class="col-md-3">
           <%= f.input :require_counts %>
+        </div>
+        <div class="col-md-3">
+          <%= f.input :hide_review_logo %>
         </div>
       <% end %>
     </div>

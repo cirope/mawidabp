@@ -144,6 +144,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             review_code: 'O020',
             title: 'Title',
             description: 'New description',
+            brief: 'New brief',
             answer: 'New answer',
             audit_comments: 'New audit comments',
             state: Finding::STATUS[:being_implemented],

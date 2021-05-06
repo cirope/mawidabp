@@ -1,10 +1,14 @@
 module ControlObjectiveItems::Effectiveness
   extend ActiveSupport::Concern
 
-  def effectiveness
+  def effectiveness exclude_design_score: false, exclude_non_design_scores: false
     return 0 if exclude_from_score
 
-    scores = [design_score, compliance_score, sustantive_score].compact
+    scores = [
+      (design_score unless exclude_design_score),
+      (compliance_score unless exclude_non_design_scores),
+      (sustantive_score unless exclude_non_design_scores)
+    ].compact
 
     if highest_qualification > 0 && scores.size > 0
       sum     = scores.sum { |s| s * 100.0 / highest_qualification }

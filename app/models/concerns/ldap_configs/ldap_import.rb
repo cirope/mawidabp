@@ -7,9 +7,15 @@ module LdapConfigs::LdapImport
     users_by_dn  = {}
     managers     = {}
     users        = []
+    search_options = {
+      base:                     basedn,
+      filter:                   ldap_filter,
+      ignore_server_caps:       true,
+      paged_searches_supported: true
+    }
 
     User.transaction do
-      connection.search(base: basedn, filter: ldap_filter) do |entry|
+      connection.search(search_options) do |entry|
         if (process_args = process_entry? entry)
           users << (result = process_entry entry, **process_args)
           user   = result[:user]

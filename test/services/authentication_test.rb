@@ -64,7 +64,7 @@ class AuthenticationTest < ActionController::TestCase
     Poll.answered(false).first.update_column :user_id, @user.id
 
     poll = @user.first_pending_poll
-    poll_redirect = ['edit', poll, token: poll.access_token]
+    poll_redirect = [:edit, poll, token: poll.access_token]
 
     assert_valid_authentication redirect_url: poll_redirect,
       message: ['polls.has_unanswered', count: @user.list_unanswered_polls.count]
