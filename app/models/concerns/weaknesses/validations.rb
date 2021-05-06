@@ -29,11 +29,12 @@ module Weaknesses::Validations
 
     def review_code_has_valid_prefix
       if USE_GLOBAL_WEAKNESS_REVIEW_CODE && (parent || children.any?)
-        regex          = /\A\d+\Z/
+        revoked_prefix = I18n.t 'code_prefixes.weaknesses'
       else
         revoked_prefix = I18n.t 'code_prefixes.revoked'
-        regex          = /\A#{revoked_prefix}?#{prefix}\d+\Z/
       end
+
+      regex = /\A#{revoked_prefix}?#{prefix}\d+\Z/
 
       errors.add :review_code, :invalid unless review_code =~ regex
     end

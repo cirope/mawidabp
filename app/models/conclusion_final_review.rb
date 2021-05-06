@@ -102,11 +102,9 @@ class ConclusionFinalReview < ConclusionReview
           ).check_code_prefix = false
         end
 
-        if USE_GLOBAL_WEAKNESS_REVIEW_CODE && final_finding.type == 'Weakness'
-          last_used_code            = weakness_final_last&.review_code.to_i || 0
-          next_code                 = last_used_code.next
-          final_finding.review_code = next_code
-          finding.review_code       = next_code
+        if USE_GLOBAL_WEAKNESS_REVIEW_CODE && finding.kind_of?(Weakness)
+          next_code                 = mask_final_finding finding
+          final_finding.review_code = finding.review_code = next_code
         end
 
         final_finding.save!
@@ -127,12 +125,16 @@ class ConclusionFinalReview < ConclusionReview
     end
   end
 
-  def weakness_final_last
-    weaknesses = Weakness.list.finals(true).reorder(review_code: :desc)
+  def last_final_weakness
+    Weakness.list.finals(true).reorder(review_code: :desc).first
+  end
 
-    weaknesses.sort do |f1, f2|
-      f1.review_code.to_i <=> f2.review_code.to_i
-    end.last
+  def mask_final_finding finding
+    prefix         = finding.prefix
+    last_used_code = last_final_weakness&.review_code || '0'
+    next_code      = last_used_code.next.match(/\d+\Z/).to_a.first.to_i
+
+    "#{prefix}#{'%.7d' % next_code}".strip
   end
 
   def assign_audit_date_to_control_objective_items

@@ -82,7 +82,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     end
 
     if USE_GLOBAL_WEAKNESS_REVIEW_CODE
-      assert_match /\A\d+\Z/, findings.last.review_code
+      assert_equal 'O0000001', findings.last.review_code
     end
   end
 
