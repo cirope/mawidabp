@@ -34,6 +34,13 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     review = Review.find reviews(:review_approved_with_conclusion).id
     findings_count = (review.weaknesses + review.oportunities).size
 
+    if USE_GLOBAL_WEAKNESS_REVIEW_CODE
+      last_weakness  = Weakness.finals(true).reorder(review_code: :desc).first
+      prefix         = I18n.t 'code_prefixes.weaknesses'
+      last_used_code = last_weakness&.review_code || '0'
+      number_code    = last_used_code.match(/\d+\Z/).to_a.first.to_i
+    end
+
     assert findings_count > 0
 
     if DISABLE_COI_AUDIT_DATE_VALIDATION
@@ -81,8 +88,12 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       assert review.control_objective_items.all? { |coi| coi.audit_date.present? }
     end
 
+
     if USE_GLOBAL_WEAKNESS_REVIEW_CODE
-      assert_equal 'O0000001', findings.last.review_code
+      total_weaknesses = number_code + review.final_weaknesses.count
+      last_review_code = "#{prefix}#{'%.7d' % total_weaknesses}".strip
+
+      assert_equal last_review_code, findings.last.review_code
     end
   end
 

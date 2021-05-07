@@ -48,7 +48,8 @@ class ConclusionFinalReview < ConclusionReview
   end
 
   def duplicate_review_findings
-    findings = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked
+    findings  = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked
+    next_code = mask_final_finding
 
     begin
       findings.all? do |finding|
@@ -103,7 +104,8 @@ class ConclusionFinalReview < ConclusionReview
         end
 
         if USE_GLOBAL_WEAKNESS_REVIEW_CODE && finding.kind_of?(Weakness)
-          next_code                 = mask_final_finding finding
+          next_code = next_code.next
+
           final_finding.review_code = finding.review_code = next_code
         end
 
@@ -129,12 +131,12 @@ class ConclusionFinalReview < ConclusionReview
     Weakness.list.finals(true).reorder(review_code: :desc).first
   end
 
-  def mask_final_finding finding
-    prefix         = finding.prefix
+  def mask_final_finding
+    prefix         = I18n.t 'code_prefixes.weaknesses'
     last_used_code = last_final_weakness&.review_code || '0'
-    next_code      = last_used_code.next.match(/\d+\Z/).to_a.first.to_i
+    number_code    = last_used_code.match(/\d+\Z/).to_a.first.to_i
 
-    "#{prefix}#{'%.7d' % next_code}".strip
+    "#{prefix}#{'%.7d' % number_code}".strip
   end
 
   def assign_audit_date_to_control_objective_items
