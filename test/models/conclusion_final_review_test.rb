@@ -471,7 +471,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
         :affects_compliance => false,
         :approved => true,
         :force_approval =>true
-
+      )
 
       conclusion_draft_review_dup.save 
       review_dup.reload
