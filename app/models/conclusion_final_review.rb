@@ -49,7 +49,7 @@ class ConclusionFinalReview < ConclusionReview
 
   def duplicate_review_findings
     findings  = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked
-    next_code = mask_final_finding
+    last_code = latest_final_weakness_review_code if USE_GLOBAL_WEAKNESS_REVIEW_CODE
 
     begin
       findings.all? do |finding|
@@ -104,9 +104,8 @@ class ConclusionFinalReview < ConclusionReview
         end
 
         if USE_GLOBAL_WEAKNESS_REVIEW_CODE && finding.kind_of?(Weakness)
-          next_code = next_code.next
-
-          final_finding.review_code = finding.review_code = next_code
+          last_code                 = last_code.next
+          final_finding.review_code = finding.review_code = last_code
         end
 
         final_finding.save!
@@ -131,7 +130,7 @@ class ConclusionFinalReview < ConclusionReview
     Weakness.list.finals(true).reorder(review_code: :desc).first
   end
 
-  def mask_final_finding
+  def latest_final_weakness_review_code
     prefix         = I18n.t 'code_prefixes.weaknesses'
     last_used_code = last_final_weakness&.review_code || '0'
     number_code    = last_used_code.match(/\d+\Z/).to_a.first.to_i
