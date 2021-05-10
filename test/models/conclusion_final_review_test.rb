@@ -30,10 +30,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
   # Prueba la creación de un informe final
   test 'create' do
-    Current.user = users :supervisor
-    review = Review.find reviews(:review_approved_with_conclusion).id
-    review_dup = review.dup
-
+    Current.user   = users :supervisor
+    review         = Review.find reviews(:review_approved_with_conclusion).id
     findings_count = (review.weaknesses + review.oportunities).size
 
     assert findings_count > 0
@@ -85,6 +83,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
     if USE_GLOBAL_WEAKNESS_REVIEW_CODE
       last_weakness  = Weakness.finals(true).reorder(review_code: :desc).first
+
       assert_equal last_weakness.review_code, findings.last.review_code
 
       new_conclusion_final_review review
@@ -448,7 +447,9 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           }
         }
 
-      review_dup.control_objective_item_ids = control_objective_items(:management_dependency_item_approved_and_editable).id  
+      review_dup.control_objective_item_ids = control_objective_items(
+        :management_dependency_item_approved_and_editable
+      ).id  
 
       review_dup.save
 
@@ -470,7 +471,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
         :affects_compliance => false,
         :approved => true,
         :force_approval =>true
-      )
+
 
       conclusion_draft_review_dup.save 
       review_dup.reload
