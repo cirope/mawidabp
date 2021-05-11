@@ -84,7 +84,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     if USE_GLOBAL_WEAKNESS_REVIEW_CODE
       last_weakness  = Weakness.finals(true).reorder(review_code: :desc).first
 
-      assert_equal last_weakness.review_code, findings.last.review_code
+      assert_equal last_weakness.review_code, Finding.where(final: true).last.review_code
 
       new_conclusion_final_review review
 
