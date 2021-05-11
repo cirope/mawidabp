@@ -425,9 +425,9 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     def new_conclusion_final_review review
       review_dup = review.dup
 
-      review_dup[:identification]                   = '2 3 4'     
-      review_dup[:period_id]                        = periods(:current_period).id
-      review_dup[:plan_item_id]                     = plan_items(:past_plan_item_2).id
+      review_dup.identification                     = '2 3 4'     
+      review_dup.period_id                          = periods(:current_period).id
+      review_dup.plan_item_id                       = plan_items(:past_plan_item_2).id
       review_dup.review_user_assignments_attributes = {
           :new_1 => {
             :assignment_type => ReviewUserAssignment::TYPES[:auditor],
